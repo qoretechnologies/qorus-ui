@@ -1,0 +1,6 @@
+# Webapp
+node_modules
+dist/
+src/components
+src/css/components.min.css
+src/js/main.build.js
