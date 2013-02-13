@@ -1,0 +1,45 @@
+<div id="workflows">
+	<h2>Workflows Overview</h2>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Version</th>
+			<th>In-Progress</th>
+	        <th>Complete</th>
+	        <th>Error</th>
+            <th>Async-Waiting</th>
+            <th>Waiting</th>
+            <th>Incomplete</th>
+            <th>Canceled</th>
+            <th>Retry</th>
+            <th>Ready</th>
+            <th>Blocked</th>
+            <th>Event-Waiting</th>
+            <th>Scheduled</th>
+		</tr>
+		</thead>
+		<tbody>
+	        <% _.each( workflows, function( workflow ){ %>
+	  			<tr class="workflow-row">
+	  				<td class="instances"><%= workflow.get('workflowid') %></td>
+	  				<td class="name"><%= workflow.get('name') %></td>
+	  				<td class="version"><%= workflow.get('version') %></td>
+	  				<td class="IN-PROGRESS"><%= workflow.get('IN-PROGRESS') ? workflow.get('IN-PROGRESS') : 0 %></td>
+	  				<td class="COMPLETE"><%= workflow.get('COMPLETE') ? '<span class="badge badge-success">'+workflow.get('COMPLETE')+'</span>' : 0 %></td>
+	  				<td class="ERROR"><%= workflow.get('ERROR') ? '<span class="badge badge-important">'+workflow.get('ERROR')+'</span>' : 0 %></td>
+	  				<td class="ASYNC-WAITING"><%= workflow.get('ASYNC-WAITING') ? workflow.get('ASYNC-WAITING') : 0 %></td>
+	  				<td class="WAITING"><%= workflow.get('IN-PROGRESS') ? workflow.get('IN-PROGRESS') : 0 %></td>
+	  				<td class="INCOMPLETE"><%= workflow.get('INCOMPLETE') ? workflow.get('INCOMPLETE') : 0 %></td>
+	  				<td class="CANCELED"><%= workflow.get('CANCELED') ? workflow.get('CANCELED') : 0 %></td>
+	  				<td class="RETRY"><%= workflow.get('RETRY') ? workflow.get('RETRY') : 0 %></td>
+	  				<td class="READY"><%= workflow.get('READY') ? workflow.get('READY') : 0 %></td>
+	  				<td class="BLOCKED"><%= workflow.get('BLOCKED') ? workflow.get('BLOCKED') : 0 %></td>
+	  				<td class="EVENT-WAITING"><%= workflow.get('EVENT-WAITING') ? workflow.get('EVENT-WAITING') : 0 %></td>
+	  				<td class="SCHEDULED"><%= workflow.get('SCHEDULED') ? workflow.get('SCHEDULED') : 0 %></td>
+	  			</tr>
+	        <% }); %>
+		</tbody>
+	</table>
+</div>

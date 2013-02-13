@@ -1,0 +1,29 @@
+<div id="jobs">
+	<h2>Jobs Overview</h2>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Version</th>
+	        <th>Complete</th>
+            <th>Error</th>
+            <th>In-progress</th>
+            <th>Crash</th>
+		</tr>
+		</thead>
+		<tbody>
+	        <% _.each( jobs, function( item ){ %>
+	  			<tr class="job-row">
+	  				<td class="id"><%= item.get('jobid') %></td>
+	  				<td class="name"><%= item.get('name') %></td>
+	  				<td class="version"><%= item.get('version') %></td>
+	  				<td class="complete"><%= item.get('COMPLETE') ? '<span class="badge badge-success">'+item.get('COMPLETE')+'</span>' : 0 %></td>
+	  				<td class="error"><%= item.get('ERROR') ? '<span class="badge badge-important">'+item.get('ERROR')+'</span>' : 0 %></td>
+	  				<td class="in-progress"><%= item.get('IN-PROGRESS') ? item.get('IN-PROGRESS') : 0 %></td>
+	  				<td class="crash"><%= item.get('CRASH') ? item.get('CRASH') : 0 %></td>
+	  			</tr>
+	        <% }); %>
+		</tbody>
+	</table>
+</div>
