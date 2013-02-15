@@ -326,7 +326,7 @@ IN THE SOFTWARE.*/
                 // walk through the methods
                 _.each(this.methods, _.bind(function (method, signature) {
                     // check if we have a 'non standard' signature
-                    if ({'read': 1, 'create': 1, 'remove': 1, 'update': 1}[signature] !== 1) {
+                    if ({'read': 1, 'create': 1, 'remove': 1, 'update': 1, 'params': 1}[signature] !== 1) {
                         // generate the method for the signature
                         this[signature] = _.bind(function (options) {
                             // invoke the dynamicly created method

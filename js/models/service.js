@@ -4,6 +4,7 @@ define([
   'libs/backbone.rpc'
 ], function(_, Backbone, Rpc){
   var ServiceModel = Backbone.Model.extend({
+	idAttribute: "serviceid",
   	url: '/JSON',
   	rpc: new Backbone.Rpc({
   		 namespaceDelimiter: ''

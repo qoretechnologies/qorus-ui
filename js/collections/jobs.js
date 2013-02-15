@@ -12,8 +12,9 @@ define([
   	}),	
     model: Model,
 	methods: {
-		read: ['omq.system.service.webapp.getJobOverview']
+		// read: ['omq.system.service.webapp.getJobOverview']
   		// read: ['omq.system.service.webapp.getJobMetadata']
+		read: ['omq.system.service.webapp.getJobOverview']
 	}
   });
   // You don't usually return a collection instantiated

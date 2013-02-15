@@ -4,6 +4,7 @@ define([
   'libs/backbone.rpc'
 ], function(_, Backbone, Rpc){
   var Model = Backbone.Model.extend({
+    idAttribute: "jobid",
   	url: '/JSON',
   	rpc: new Backbone.Rpc({
   		 namespaceDelimiter: ''
