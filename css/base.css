@@ -1,0 +1,29 @@
+/* @override http://localhost:8001/gui/css/base.css */
+
+table th {
+	font-size: 80%;;
+}
+
+#workflows {
+	overflow: hidden;
+}
+
+.table td, .table th {
+	text-align: center;
+}
+
+.table .name, .table .description {
+	text-align: left;
+}
+
+.table .name {
+	font-weight: bold;
+}
+
+.dropdown-menu li {
+	text-align: left;
+}
+
+.icon-box {
+  background-position: -384px -168px;
+}

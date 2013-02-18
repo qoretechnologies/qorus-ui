@@ -1,0 +1,41 @@
+<div id="services">
+	<h2>Services Overview</h2>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th class="name">Name</th>
+			<th>Version</th>
+			<th class="description">Description</th>
+			<th>Type</th>
+			<th>Autostart</th>
+			<th>Status</th>
+		</tr>
+		</thead>
+		<tbody>
+	        <% _.each( services, function( item ){ %>
+	  			<tr class="service-row">
+	  				<td class="id"><%= item.get('serviceid') %></td>
+	  				<td class="name"><strong><%= item.get('name') %></strong></td>
+	  				<td class="version"><%= item.get('version') %></td>
+	  				<td class="description"><%= item.get('desc') %></td>
+	  				<td class="service_type"><%= item.get('type') %></td>
+	  				<td class="autostart">
+						<% if (item.get('autostart')===true){ %>
+							<span class="label label-success"><i class="icon-ok icon-white"></i></span>
+						<% } else { %>
+							<span class="label"><i class="icon-off icon-white"></i></span>
+						<% } %>
+					</td>
+	  				<td class="status">
+						<% if (item.get('status')=='loaded'){ %>
+							<span class="label label-success"><%= item.get('status') %></label>
+						<% } else { %>
+							<%= item.get('status') %>
+						<% } %>
+					</td>
+	  			</tr>
+	        <% }); %>
+		</tbody>
+	</table>
+</div>
