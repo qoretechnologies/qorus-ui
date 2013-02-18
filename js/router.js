@@ -3,13 +3,15 @@ define([
   'underscore',
   'backbone',
   'views/workflows/workflows',
+  'views/workflows/workflow',
   'views/services/services',
   'views/jobs/jobs',
-], function($, _, Backbone, WorkflowListView, ServiceListView, JobListView){
+], function($, _, Backbone, WorkflowListView, WorkflowView, ServiceListView, JobListView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
       'workflows': 'showWorkflows',
+	  'workflows/:id': 'showWorkflow',
 	  'services': 'showServices',
 	  'jobs': 'showJobs',
 	  // 'system': 'showSystem',
@@ -27,6 +29,10 @@ define([
       var workflowListView = new WorkflowListView();
 	  workflowListView.render();
     });
+	app_router.on('route:showWorkflow', function(id){
+	  var workflowView =  new WorkflowView({id: id});
+	  workflowView.render();
+	});
     app_router.on('route:showServices', function(){
       // Call render on the module we loaded in via the dependency array
       // 'views/projects/list'

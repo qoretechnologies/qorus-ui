@@ -7,11 +7,8 @@ define([
   	rpc: new Backbone.Rpc({
   		 namespaceDelimiter: ''
   	}),
-	mrdat: function () {
-		return 'calimero';
-	},
   	methods: {
-  		read: ['omq.system.service.info.getWFIAllInfo'],
+  		read: ['omq.system.service.webapp.getWorkflowDetail', 'id'],
 		start: ['omq.system.start-workflow', 'params'],
 		stop: ['omq.system.stop-workflow', 'name', 'version'],
 		reset: ['omq.system.reset-workflow', 'name', 'version']

@@ -2,7 +2,7 @@ define([
   'underscore',
   'libs/backbone.rpc',
   // Pull in the Model module from above
-  'models/workflow'
+  'models/instance'
 ], function(_, Backbone, Model){
   var Collection = Backbone.Collection.extend({
   	url: '/JSON',
@@ -11,8 +11,9 @@ define([
   	}),	
     model: Model,
 	methods: {
-		read: ['omq.system.service.webapp.getWorkflowOverview']
+		read: ['omq.system.service.info.getWorkflowInstances', 'workflowid']
 	}
+
   });
   // You don't usually return a collection instantiated
   return Collection;

@@ -28,20 +28,20 @@
 	  			<tr class="workflow-row" id="workflow-<%= workflow.get('workflowid') %>">
 					<td><i class="icon-box check"></i></td>
 	  				<td class="instances"><%= workflow.get('workflowid') %></td>
-	  				<td class="name"><%= workflow.get('name') %></td>
+	  				<td class="name"><a href="#/workflows/<%= workflow.get('workflowid') %>"><%= workflow.get('name') %></td>
 	  				<td class="version"><%= workflow.get('version') %></td>
-	  				<td class="in-progress"><%= workflow.get('IN-PROGRESS') ? workflow.get('IN-PROGRESS') : 0 %></td>
+	  				<td class="in-progress"><%= workflow.get('IN-PROGRESS') ? '<span class="badge badge-warning">'+workflow.get('IN-PROGRESS')+'</span>' : 0 %></td>
 	  				<td class="complete"><%= workflow.get('COMPLETE') ? '<span class="badge badge-success">'+workflow.get('COMPLETE')+'</span>' : 0 %></td>
 	  				<td class="error"><%= workflow.get('ERROR') ? '<span class="badge badge-important">'+workflow.get('ERROR')+'</span>' : 0 %></td>
-	  				<td class="async-waiting"><%= workflow.get('ASYNC-WAITING') ? workflow.get('ASYNC-WAITING') : 0 %></td>
-	  				<td class="waiting"><%= workflow.get('IN-PROGRESS') ? workflow.get('IN-PROGRESS') : 0 %></td>
-	  				<td class="incomplete"><%= workflow.get('INCOMPLETE') ? workflow.get('INCOMPLETE') : 0 %></td>
-	  				<td class="canceled"><%= workflow.get('CANCELED') ? workflow.get('CANCELED') : 0 %></td>
-	  				<td class="retry"><%= workflow.get('RETRY') ? workflow.get('RETRY') : 0 %></td>
-	  				<td class="ready"><%= workflow.get('READY') ? workflow.get('READY') : 0 %></td>
-	  				<td class="blocked"><%= workflow.get('BLOCKED') ? workflow.get('BLOCKED') : 0 %></td>
-	  				<td class="event-waiting"><%= workflow.get('EVENT-WAITING') ? workflow.get('EVENT-WAITING') : 0 %></td>
-	  				<td class="scheduled"><%= workflow.get('SCHEDULED') ? workflow.get('SCHEDULED') : 0 %></td>
+	  				<td class="async-waiting"><%= workflow.get('ASYNC-WAITING') ? '<span class="badge badge-waiting">'+workflow.get('ASYNC-WAITING')+'</span>' : 0 %></td>
+	  				<td class="waiting"><%= workflow.get('WAITING') ?'<span class="badge badge-waiting">'+ workflow.get('WAITING')+'</span>' : 0 %></td>
+	  				<td class="incomplete"><%= workflow.get('INCOMPLETE') ? '<span class="badge badge-info">'+workflow.get('INCOMPLETE')+'</span>' : 0 %></td>
+	  				<td class="canceled"><%= workflow.get('CANCELED') ? '<span class="badge badge-canceled">'+workflow.get('CANCELED')+'</span>' : 0 %></td>
+	  				<td class="retry"><%= workflow.get('RETRY') ? '<span class="badge badge-error">'+workflow.get('RETRY')+'</span>' : 0 %></td>
+	  				<td class="ready"><%= workflow.get('READY') ? '<span class="badge badge-ready">'+ workflow.get('READY')+'</span>' : 0 %></td>
+	  				<td class="blocked"><%= workflow.get('BLOCKED') ? '<span class="badge">'+workflow.get('BLOCKED')+'</span>' : 0 %></td>
+	  				<td class="event-waiting"><%= workflow.get('EVENT-WAITING') ? '<span class="badge badge-waiting">'+workflow.get('EVENT-WAITING')+'</span>' : 0 %></td>
+	  				<td class="scheduled"><%= workflow.get('SCHEDULED') ? '<span class="badge badge-info">'+workflow.get('SCHEDULED')+'</span>' : 0 %></td>
 					<td>
 						<div class="btn-group">
 						    <button class="btn dropdown-toggle" data-toggle="dropdown">

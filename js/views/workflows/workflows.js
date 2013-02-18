@@ -6,7 +6,7 @@ define([
   'collections/workflows',
   'text!/gui/templates/workflow/list.html'
 ], function($, _, Backbone, WorkflowCollection, workflowsTemplate){
-  var WorkflowListView = Backbone.View.extend({
+  var ListView = Backbone.View.extend({
     el: $("#content"),
 	events: {
 		'click .start': 'start',
@@ -84,5 +84,5 @@ define([
 	}
   });
   // Returning instantiated views can be quite useful for having "state"
-  return WorkflowListView;
+  return ListView;
 });

@@ -15,7 +15,7 @@
 		</thead>
 		<tbody>
 	        <% _.each( jobs, function( item ){ %>
-	  			<tr class="job-row">
+	  			<tr class="job-row" id="job-<%= item.get('jobid') %>">
 	  				<td class="id"><%= item.get('jobid') %></td>
 	  				<td class="name"><%= item.get('name') %></td>œ
 	  				<td class="version"><%= item.get('version') %></td>

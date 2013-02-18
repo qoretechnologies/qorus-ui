@@ -27,3 +27,19 @@ table th {
 .icon-box {
   background-position: -384px -168px;
 }
+
+.badge-ready {
+  background-color: #aded9b;
+}
+
+.badge-waiting {
+  background-color: #fcf8e3;
+}
+
+.badge-canceled {
+  background-color: #f2dede;
+}
+
+.badge-info2 {
+  background-color: #d9edf7;
+}
