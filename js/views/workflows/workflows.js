@@ -9,7 +9,10 @@ define([
   var WorkflowListView = Backbone.View.extend({
     el: $("#content"),
 	events: {
-		'click .start': 'start'
+		'click .start': 'start',
+		'click .check': 'highlight',
+		'click .check-all': 'checkall',
+		'click .uncheck-all': 'checkall',
 	},
     initialize: function(){
       this.collection = new WorkflowCollection();
@@ -55,6 +58,29 @@ define([
 		var workflowid = e.currentTarget.dataset.id;
 		var wfl = this.collection.get(workflowid);
 		wfl.reset();
+	},
+	// toggle select row
+	highlight: function(e){
+		var el = e.currentTarget;
+		$(el).toggleClass('icon-box').toggleClass('icon-check');
+		$(el).parents('.workflow-row').toggleClass('warning');
+	},
+	// toggle select on all rows
+	checkall: function(e){
+		var el = e.currentTarget;
+
+		// behaviour switcher
+		if ($(el).hasClass('check-all')){
+			$(el).toggleClass('icon-box').toggleClass('icon-check')
+				.toggleClass('check-all').toggleClass('uncheck-all');
+			$('.workflow-row').addClass('warning').addClass('checked');
+			$('.workflow-row .check').removeClass('icon-box').addClass('icon-check');
+		} else {
+			$(el).toggleClass('icon-box').toggleClass('icon-check')
+				.toggleClass('check-all').toggleClass('uncheck-all');
+			$('.workflow-row').removeClass('warning').removeClass('checked');
+			$('.workflow-row .check').removeClass('icon-check').addClass('icon-box');
+		}
 	}
   });
   // Returning instantiated views can be quite useful for having "state"
