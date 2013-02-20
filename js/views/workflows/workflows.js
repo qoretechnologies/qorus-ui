@@ -15,20 +15,16 @@ define([
 		'click .uncheck-all': 'checkall',
 	},
     initialize: function(){
+	  _.bindAll(this, 'render');
       this.collection = new WorkflowCollection();
-      // Compile the template using Underscores micro-templating
-	  var view = this;
-	  this.collection.fetch({
-		  success: function(collection){
-		      var compiledTemplate = _.template( workflowsTemplate, { workflows: collection.models } );
-		      view.$el.html(compiledTemplate);
-			  // set params as a workaround for backbone.rpc call of actions 
-			  _.each(collection.models, function(el){
-				  el.set('params', {'name': el.get('name'), 'version': el.get('version')});
-			  })
-		  }
-	  });
+	  this.collection.on('reset', this.render);
+	  this.collection.fetch()
     },
+	render: function(){
+        var compiledTemplate = _.template( workflowsTemplate, { workflows: this.collection.models } );
+        this.$el.html(compiledTemplate);
+		return this;
+	},
 	// starts workflow
 	start : function(e){
 		e.preventDefault();

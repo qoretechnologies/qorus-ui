@@ -6,7 +6,8 @@ define([
   'views/workflows/workflow',
   'views/services/services',
   'views/jobs/jobs',
-], function($, _, Backbone, WorkflowListView, WorkflowView, ServiceListView, JobListView){
+  'views/workflows/instances',
+], function($, _, Backbone, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
@@ -30,7 +31,7 @@ define([
 	  workflowListView.render();
     });
 	app_router.on('route:showWorkflow', function(id){
-	  var workflowView =  new WorkflowView({id: id});
+	  var workflowView = new WorkflowView({id: id});
 	  workflowView.render();
 	});
     app_router.on('route:showServices', function(){

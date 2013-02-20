@@ -15,6 +15,7 @@ define([
 		success: function (){
 			$('.version').text(qorus.get('omq-version'));
 			$('.instance-key').text(qorus.get('instance-key'));
+			$('title').text('Qorus - ' + qorus.get('omq-version') + ' - ' + qorus.get('instance-key'));
 		}
 	});
 	
