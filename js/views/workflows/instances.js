@@ -4,7 +4,7 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'collections/instances',
-  'text!/gui/templates/workflow/instances.html'
+  'text!/templates/workflow/instances.html'
 ], function($, _, Backbone, Collection, Template){
   var ListView = Backbone.View.extend({
     // el: $("#instances"),

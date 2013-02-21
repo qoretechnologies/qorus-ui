@@ -4,7 +4,7 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'collections/services',
-  'text!/gui/templates/service/list.html'
+  'text!/templates/service/list.html'
 ], function($, _, Backbone, ServiceCollection, servicesTemplate){
   var ServiceListView = Backbone.View.extend({
     el: $("#content"),

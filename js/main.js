@@ -3,7 +3,7 @@
 // Require.js allows us to configure shortcut alias
 // There usage will become more apparent further along in the tutorial.
 require.config({
-  baseUrl: '/gui/js',
+  baseUrl: '/js',
   paths: {
     jquery: 'libs/jquery',
     underscore: 'libs/underscore',

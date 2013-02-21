@@ -4,7 +4,7 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'models/workflow',
-  'text!/gui/templates/workflow/detail.html',
+  'text!/templates/workflow/detail.html',
   'views/workflows/instances'
 ], function($, _, Backbone, Workflow, Template, InstanceListView){
   var ModelView = Backbone.View.extend({

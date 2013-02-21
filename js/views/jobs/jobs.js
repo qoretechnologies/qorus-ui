@@ -4,7 +4,7 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'collections/jobs',
-  'text!/gui/templates/job/list.html'
+  'text!/templates/job/list.html'
 ], function($, _, Backbone, Collection, Template){
   var ListView = Backbone.View.extend({
     el: $("#content"),
