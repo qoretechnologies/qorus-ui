@@ -63,7 +63,15 @@ define([
             
 			this.trigger('reset', this, {});
         }
-	}
+	},
+    search: function(query){
+        if(query == "") return this;
+ 
+		var pattern = new RegExp(query,"gi");
+		return _(this.filter(function(data) {
+		  	return pattern.test(data.get("name"));
+		}));
+    }
   });
   // You don't usually return a collection instantiated
   return Collection;

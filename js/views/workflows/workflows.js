@@ -20,6 +20,8 @@ define([
       this.collection = new WorkflowCollection();
       this.collection.on('reset add', this.render);
       this.collection.fetch();
+      
+      // TODO: find proper location
       this.on('render', function(c){
           var key = c.collection.sort_by;
           var order = c.collection.sort_order;
@@ -27,9 +29,9 @@ define([
           c.$el.find('th i').remove();
 
           if (order == 'des'){
-                el.append('<i class="icon-chevron-down"></i> ');
+            el.append('<i class="icon-chevron-up"></i>');
           }else{
-                el.append('<i class="icon-chevron-up"></i> ');
+            el.append('<i class="icon-chevron-down"></i>');
           }
       });
     },
