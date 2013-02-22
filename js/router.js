@@ -24,6 +24,7 @@ define([
 
   var initialize = function(){
     var app_router = new AppRouter;
+	
     app_router.on('route:showWorkflows', function(){
       // Call render on the module we loaded in via the dependency array
       // 'views/projects/list'
@@ -50,6 +51,12 @@ define([
       // We have no matching route, lets just log what the URL was
       console.log('No route:', actions);
     });
+	
+	app_router.on('route', function(e){
+		var hash = Backbone.history.location.hash;
+		$('#nav-main li').removeClass('active');
+		$('#nav-main li a[href=\''+hash+'\']').parent().addClass('active');
+	})
     Backbone.history.start();
   };
   return {

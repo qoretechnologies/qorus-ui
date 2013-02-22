@@ -1,25 +1,32 @@
 <div id="workflows">
 	<h2>Workflows Overview</h2>
-	<form >
+    <div class="container-fluid">
+        <form class="form-search row-fluid">
+          <div class="input-append offset8">
+            <input type="text" class="span8 search-query">
+            <button type="submit" class="btn">Search</button>
+          </div>
+        </form>
+    </div>
 	<table class="table table-striped table-hover">
 		<thead>
 		<tr>
 			<th><i class="icon-box check-all"></i></th>
-			<th>ID</th>
-			<th class="name">Name</th>
-			<th>Version</th>
-			<th>In-Progress</th>
-	        <th>Complete</th>
-	        <th>Error</th>
-            <th>Async-Waiting</th>
-            <th>Waiting</th>
-            <th>Incomplete</th>
-            <th>Canceled</th>
-            <th>Retry</th>
-            <th>Ready</th>
-            <th>Blocked</th>
-            <th>Event-Waiting</th>
-            <th>Scheduled</th>
+			<th data-sort="workflowid">ID</th>
+			<th data-sort="name" class="name sort">Name</th>
+			<th data-sort="version">Version</th>
+			<th data-sort="IN-PROGRESS">In-Progress</th>
+	        <th data-sort="COMPLETE">Complete</th>
+	        <th data-sort="ERROR">Error</th>
+            <th data-sort="ASYNC-WAITINg">Async-Waiting</th>
+            <th data-sort="WAITING">Waiting</th>
+            <th data-sort="INCOMPLETE">Incomplete</th>
+            <th data-sort="CANCELED">Canceled</th>
+            <th data-sort="RETRY">Retry</th>
+            <th data-sort="READY">Ready</th>
+            <th data-sort="BLOCKED">Blocked</th>
+            <th data-sort="EVENT-WAITING">Event-Waiting</th>
+            <th data-sort="SCHEDULED">Scheduled</th>
 			<th></th>
 		</tr>
 		</thead>

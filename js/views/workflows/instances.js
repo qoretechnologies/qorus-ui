@@ -17,7 +17,6 @@ define([
 	render: function(){
         var compiledTemplate = _.template( Template, { items: this.collection.models } );
         this.$el.html(compiledTemplate);
-		console.log(this.el, compiledTemplate);
 		return this;
 	},
   });

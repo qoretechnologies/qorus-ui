@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
+  'libs/backbone.rpc',
   // Pull in the Collection module from above
   'collections/workflows',
   'text!/templates/workflow/list.html'
@@ -13,16 +13,30 @@ define([
 		'click .check': 'highlight',
 		'click .check-all': 'checkall',
 		'click .uncheck-all': 'checkall',
+        'click th': 'sortView'
 	},
     initialize: function(){
 	  _.bindAll(this, 'render');
       this.collection = new WorkflowCollection();
-	  this.collection.on('reset', this.render);
-	  this.collection.fetch()
+      this.collection.on('reset add', this.render);
+      this.collection.fetch();
+      this.on('render', function(c){
+          var key = c.collection.sort_by;
+          var order = c.collection.sort_order;
+          var el = c.$el.find('th[data-sort="'+key+'"]');
+          c.$el.find('th i').remove();
+
+          if (order == 'des'){
+                el.append('<i class="icon-chevron-down"></i> ');
+          }else{
+                el.append('<i class="icon-chevron-up"></i> ');
+          }
+      });
     },
 	render: function(){
         var compiledTemplate = _.template( workflowsTemplate, { workflows: this.collection.models } );
         this.$el.html(compiledTemplate);
+        this.trigger('render', this, {});
 		return this;
 	},
 	// starts workflow
@@ -77,7 +91,13 @@ define([
 			$('.workflow-row').removeClass('warning').removeClass('checked');
 			$('.workflow-row .check').removeClass('icon-check').addClass('icon-box');
 		}
-	}
+	},
+    sortView: function(e){
+        var el = $(e.currentTarget);
+        if (el.data('sort')){
+            this.collection.sortByKey(el.data('sort'));
+        }
+    }
   });
   // Returning instantiated views can be quite useful for having "state"
   return ListView;

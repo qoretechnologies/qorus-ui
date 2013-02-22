@@ -13,8 +13,8 @@ define([
 	
 	qorus.fetch({ 
 		success: function (){
-			$('.version').text(qorus.get('omq-version'));
-			$('.instance-key').text(qorus.get('instance-key'));
+			$('header .version').text(qorus.get('omq-version'));
+			$('header .instance-key').text(qorus.get('instance-key'));
 			$('title').text('Qorus - ' + qorus.get('omq-version') + ' - ' + qorus.get('instance-key'));
 		}
 	});
