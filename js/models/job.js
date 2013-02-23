@@ -10,7 +10,7 @@ define([
   		 namespaceDelimiter: ''
   	}),
   	methods: {
-  		read: ['omq.system.service.webapp.getJobOverview']
+  		read: ['omq.system.service.webapp.getJobMetadata']
   	}
   });
   // Return the model for the module
