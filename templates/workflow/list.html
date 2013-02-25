@@ -3,7 +3,7 @@
     <div class="container-fluid"> 
         <div class="row-fluid">
             <div class="span2">
-            <div class="input-prepend date" id="dp" data-date="<%= date %>" data-date-format="dd-mm-yyyy">
+            <div class="input-prepend date" id="dp" data-date="<%= date %>" data-date-format="yyyy-mm-dd">
               <span class="add-on"><i class="icon-th"></i></span>
               <input type="text" class="span8" size="16" value="<%= date %>">
             </div>
@@ -56,7 +56,7 @@
 	  			<tr class="workflow-row" id="workflow-<%= workflow.get('workflowid') %>">
 					<td><i class="icon-box check"></i></td>
 	  				<td class="instances"><%= workflow.get('workflowid') %></td>
-	  				<td class="name"><a href="#/workflows/<%= workflow.get('workflowid') %>"><%= workflow.get('name') %></td>
+	  				<td class="name"><a href="#/workflow/<%= workflow.get('workflowid') %>"><%= workflow.get('name') %></td>
 	  				<td class="version"><%= workflow.get('version') %></td>
 	  				<td class="in-progress"><%= workflow.get('IN-PROGRESS') ? '<span class="badge badge-warning">'+workflow.get('IN-PROGRESS')+'</span>' : 0 %></td>
 	  				<td class="complete"><%= workflow.get('COMPLETE') ? '<span class="badge badge-success">'+workflow.get('COMPLETE')+'</span>' : 0 %></td>

@@ -2,17 +2,18 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'moment',
   'views/workflows/workflows',
   'views/workflows/workflow',
   'views/services/services',
   'views/jobs/jobs',
   'views/workflows/instances',
-], function($, _, Backbone, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView){
+], function($, _, Backbone, moment, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
-      'workflows': 'showWorkflows',
-	  'workflows/:id': 'showWorkflow',
+      'workflows(/:date)': 'showWorkflows',
+	  'workflow/:id': 'showWorkflow',
 	  'services': 'showServices',
 	  'jobs': 'showJobs',
 	  // 'system': 'showSystem',
@@ -25,11 +26,12 @@ define([
   var initialize = function(){
     var app_router = new AppRouter;
 	
-    app_router.on('route:showWorkflows', function(){
-      // Call render on the module we loaded in via the dependency array
-      // 'views/projects/list'
-      var workflowListView = new WorkflowListView();
+    app_router.on('route:showWorkflows', function(date){
+      var workflowListView = new WorkflowListView({date: date});
 	  workflowListView.render();
+      workflowListView.on('dateChanged', function(date){
+          app_router.navigate('/workflows/' + moment(date).format('YYYY-MM-DD'));
+      });
     });
 	app_router.on('route:showWorkflow', function(id){
 	  var workflowView = new WorkflowView({id: id});
