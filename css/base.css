@@ -83,3 +83,7 @@ table th {
     bottom: 1em;
     right: 0;
 }
+
+.datepicker {
+    width: 200px;
+}

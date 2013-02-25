@@ -8,7 +8,12 @@ require.config({
     jquery: 'libs/jquery',
     underscore: 'libs/underscore',
     backbone: 'libs/backbone',
-	bootstrap: 'libs/bootstrap/js/bootstrap.min'
+	bootstrap: 'libs/bootstrap/js/bootstrap.min',
+    moment: "libs/moment",
+    later: "libs/later/later.min",
+    "later.recur": "libs/later/later-recur.min",
+    "later.cron": "libs/later/later-cron.min",
+    datepicker: "libs/datepicker/js/bootstrap-datepicker",
   },
   shim: {
       /* Set bootstrap dependencies (just jQuery) */
@@ -22,7 +27,12 @@ require.config({
      "bootstrap": {
 		 deps: ['jquery']
      },
-	 "backbone.rpc": ['backbone']
+	 "backbone.rpc": ['backbone'],
+     "later": ['underscore'],
+     "later.cron": {
+         deps: ['later', 'later.recur'],
+         exports: 'cron'
+     },
   },
   templates: '../templates'
 });

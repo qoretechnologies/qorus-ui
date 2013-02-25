@@ -6,6 +6,9 @@
 			<th>ID</th>
 			<th class="name">Name</th>
 			<th>Version</th>
+            <th>Active</th>
+            <th>Last</th>
+            <th>Next</th>
 	        <th>Complete</th>
             <th>Error</th>
             <th>In-progress</th>
@@ -17,8 +20,17 @@
 	        <% _.each( jobs, function( item ){ %>
 	  			<tr class="job-row" id="job-<%= item.get('jobid') %>">
 	  				<td class="id"><%= item.get('jobid') %></td>
-	  				<td class="name"><%= item.get('name') %></td>
+	  				<td class="name"><a href="#/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
 	  				<td class="version"><%= item.get('version') %></td>
+	  				<td class="version">
+						<% if (item.get('active')===true){ %>
+							<span class="label label-success"><i class="icon-off icon-white"></i></span>
+						<% } else { %>
+							<span class="label"><i class="icon-off icon-white"></i></span>
+						<% } %>
+                    </td>
+	  				<td class="last"><%=  item.get('last_executed') %></td>
+	  				<td class="next"><%= item.get('next') %></td>
 	  				<td class="complete"><%= item.get('COMPLETE') ? '<span class="badge badge-success">'+item.get('COMPLETE')+'</span>' : 0 %></td>
 	  				<td class="error"><%= item.get('ERROR') ? '<span class="badge badge-important">'+item.get('ERROR')+'</span>' : 0 %></td>
 	  				<td class="in-progress"><%= item.get('IN-PROGRESS') ? item.get('IN-PROGRESS') : 0 %></td>

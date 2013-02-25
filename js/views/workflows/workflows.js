@@ -4,8 +4,10 @@ define([
   'libs/backbone.rpc',
   // Pull in the Collection module from above
   'collections/workflows',
-  'text!/templates/workflow/list.html'
-], function($, _, Backbone, WorkflowCollection, workflowsTemplate){
+  'text!/templates/workflow/list.html',
+  'datepicker',
+  'moment'
+], function($, _, Backbone, WorkflowCollection, workflowsTemplate, date, moment){
   var ListView = Backbone.View.extend({
     el: $("#content"),
 	events: {
@@ -13,13 +15,16 @@ define([
 		'click .check': 'highlight',
 		'click .check-all': 'checkall',
 		'click .uncheck-all': 'checkall',
-        'click th': 'sortView'
+        'click th': 'sortView',
 	},
     initialize: function(){
 	  _.bindAll(this, 'render');
       this.collection = new WorkflowCollection();
       this.collection.on('reset add', this.render);
       this.collection.fetch();
+      
+      this.date_format = 'DD-MM-YYYY';
+      this.date = moment().format(this.date_format);
       
       // TODO: find proper location
       this.on('render', function(c){
@@ -34,9 +39,12 @@ define([
             el.append('<i class="icon-chevron-down"></i>');
           }
       });
+      this.on('render', this.datePicker);
+
+      // this.on('render', $('th').tooltip());
     },
 	render: function(){
-        var compiledTemplate = _.template( workflowsTemplate, { workflows: this.collection.models } );
+        var compiledTemplate = _.template( workflowsTemplate, { date: this.date, workflows: this.collection.models } );
         this.$el.html(compiledTemplate);
         this.trigger('render', this, {});
 		return this;
@@ -94,12 +102,17 @@ define([
 			$('.workflow-row .check').removeClass('icon-check').addClass('icon-box');
 		}
 	},
+    // sort view
     sortView: function(e){
         var el = $(e.currentTarget);
         if (el.data('sort')){
             this.collection.sortByKey(el.data('sort'));
         }
-    }
+    },
+    // filter by date init
+    datePicker: function(){
+        $('#dp').datepicker();
+    },
   });
   // Returning instantiated views can be quite useful for having "state"
   return ListView;

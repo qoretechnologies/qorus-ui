@@ -33,22 +33,25 @@ define([
 	initialize: function(){
 		this.sort_by = 'name';
 		this.sort_order = 'asc';
+        this.sort_history = ['',];
 		// this.on('all', function(e){ console.log(e)});
 	},
   	url: '/JSON',
   	rpc: new Backbone.Rpc({
   		 namespaceDelimiter: ''
-  	}),	
+  	}),
+    date: null,
     model: Model,
 	methods: {
-		read: ['omq.system.service.webapp.getWorkflows'],
+		read: ['omq.system.service.webapp.getWorkflows', 'date'],
 	},
 	comparator: function(collection){
-		return (collection.get(this.sort_by));
+		return (collection.get(this.sort_by), collection.get(this.sort_history[0]));
 	},
 	sortByKey: function(key, cb){
         if (key){
             var old_key = this.sort_by;
+            this.sort_history.prepend(old_key);
             this.sort_by = key;
             this.sort({ silent: true });
             
