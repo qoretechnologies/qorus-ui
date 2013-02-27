@@ -44,7 +44,16 @@ define([
       });
       this.on('render', this.datePicker);
 
-      // this.on('render', $('th').tooltip());
+      this.on('render', function(){
+          $('th').hover(
+              function(){ 
+                  $(this).tooltip('show'); 
+              }, 
+              function(){ 
+                  $(this).tooltip('hide');
+              }
+          )
+      });
     },
 	render: function(){
         var compiledTemplate = _.template( workflowsTemplate, { date: this.date, workflows: this.collection.models } );
