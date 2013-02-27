@@ -3,26 +3,26 @@
 	<table class="table table-striped">
 		<thead>
 		<tr>
-			<th>ID</th>
-			<th class="name">Name</th>
-			<th>Version</th>
-            <th>Active</th>
-            <th>Last</th>
-            <th>Next</th>
-	        <th>Complete</th>
-            <th>Error</th>
-            <th>In-progress</th>
-            <th>Crash</th>
+			<th data-sort="jobid">ID</th>
+			<th class="name" data-sort="name">Name</th>
+			<th data-sort="version">Version</th>
+      <th data-sort="active">Active</th>
+      <th data-sort="last_executed">Last</th>
+      <th data-sort="next">Next</th>
+      <th data-sort="COMPLETE">Complete</th>
+      <th data-sort="ERROR">Error</th>
+      <th data-sort="IN-PROGRESS">In-progress</th>
+      <th data-sort="CRASH">Crash</th>
 			<th></th>
 		</tr>
 		</thead>
 		<tbody>
-	        <% _.each( jobs, function( item ){ %>
+	        <% _.each( items, function( item ){ %>
 	  			<tr class="job-row" id="job-<%= item.get('jobid') %>">
 	  				<td class="id"><%= item.get('jobid') %></td>
-	  				<td class="name"><a href="#/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
+	  				<td class="name" ><a href="#/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
 	  				<td class="version"><%= item.get('version') %></td>
-	  				<td class="version">
+	  				<td class="status">
 						<% if (item.get('active')===true){ %>
 							<span class="label label-success"><i class="icon-off icon-white"></i></span>
 						<% } else { %>

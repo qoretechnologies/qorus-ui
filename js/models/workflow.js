@@ -1,12 +1,9 @@
 define([
-  'libs/backbone.rpc'
-], function(Backbone){
-  var WorkflowModel = Backbone.Model.extend({
+  'libs/backbone.rpc',
+  'qorus/qorus'
+], function(Backbone, Qorus){
+  var Model = Qorus.Model.extend({
 	idAttribute: "workflowid",
-  	url: '/JSON',
-  	rpc: new Backbone.Rpc({
-  		 namespaceDelimiter: ''
-  	}),
   	methods: {
   		read: ['omq.system.service.webapp.getWorkflowDetail', 'id'],
 		start: ['omq.system.start-workflow', 'params'],
@@ -15,5 +12,5 @@ define([
   	}
   });
   // Return the model for the module
-  return WorkflowModel;
+  return Model;
 });

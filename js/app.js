@@ -6,18 +6,24 @@ define([
   'router', // Request router.js
   'bootstrap',
   'models/system'
-], function($, _, Backbone, Router, _bootstrap, Qorus){
+], function($, _, Backbone, Router, _bootstrap, System){
   var initialize = function(){
     // Pass in our Router module and call it's initialize function
-	var qorus = new Qorus();
+	var system = new System.Info();
+    var user = new System.User();
 	
-	qorus.fetch({ 
+    // TODO: create custom views
+	system.fetch({ 
 		success: function (){
-			$('header .version').text(qorus.get('omq-version'));
-			$('header .instance-key').text(qorus.get('instance-key'));
-			$('title').text('Qorus - ' + qorus.get('omq-version') + ' - ' + qorus.get('instance-key'));
+			$('header .version').text(system.get('omq-version'));
+			$('header .instance-key').text(system.get('instance-key'));
+			$('title').text('Qorus - ' + system.get('omq-version') + ' - ' + system.get('instance-key'));
 		}
 	});
+    
+    user.fetch().done(function (){
+       $('#user-info .username').text(user.get('name'));
+    });
 	
     Router.initialize();
   }

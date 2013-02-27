@@ -73,12 +73,12 @@ table th {
 	margin: 20px 0;
 }
 
-#workflows th {
+th {
     position: relative;
     padding-right: 16px;
 }
 
-#workflows th i {
+th i {
     position: absolute;
     bottom: 1em;
     right: 0;
@@ -86,4 +86,15 @@ table th {
 
 .datepicker {
     width: 200px;
+}
+
+.navbar-text {
+    margin: 0;
+}
+
+.form-search {
+    overflow: hidden;
+}
+.search-box {
+    float: right;
 }

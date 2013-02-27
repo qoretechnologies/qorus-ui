@@ -1,23 +1,16 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
+  'qorus/qorus',
   // Pull in the Collection module from above
   'collections/jobs',
   'text!/templates/job/list.html'
-], function($, _, Backbone, Collection, Template){
-  var ListView = Backbone.View.extend({
+], function($, _, Qorus, Collection, Template){
+  var ListView = Qorus.ListView.extend({
     el: $("#content"),
     initialize: function(){
-      this.collection = new Collection();
-      // Compile the template using Underscores micro-templating
-	  var view = this;
-	  this.collection.fetch({
-		  success: function(collection){
-		      var compiledTemplate = _.template( Template, { jobs: collection.models } );
-		      view.$el.html(compiledTemplate);
-		  }
-	  });
+      this.template = Template;
+      ListView.__super__.initialize.call(this, Collection);
     }
   });
   // Returning instantiated views can be quite useful for having "state"

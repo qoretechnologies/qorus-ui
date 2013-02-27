@@ -1,24 +1,17 @@
 define([
   'underscore',
-  'backbone',
-  'libs/backbone.rpc',
+  'qorus/qorus',
   // Pull in the Model module from above
   'models/service'
-], function(_, Backbone, Rpc, Model){
-  var Collection = Backbone.Collection.extend({
-  	url: '/JSON',
-  	rpc: new Backbone.Rpc({
-  		 namespaceDelimiter: ''
-  	}),	
+], function(_, Qorus, Model){
+  var Collection = Qorus.SortedCollection.extend({
     model: Model,
 	methods: {
 		read: [
-			['omq.system.service.webapp.getServiceMetadata'],
-			// ['omq.system.service.webapp.getServiceOverview'],
+            // ['omq.system.service.webapp.getServices'],
+            ['omq.system.list-all-services'],
 		]
-		// read: ['omq.system.list-all-services']
 	}
   });
-  // You don't usually return a collection instantiated
   return Collection;
 });

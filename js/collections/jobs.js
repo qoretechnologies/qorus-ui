@@ -1,15 +1,10 @@
 define([
   'underscore',
-  'backbone',
-  'libs/backbone.rpc',
+  'qorus/qorus',
   // Pull in the Model module from above
   'models/job'
-], function(_, Backbone, Rpc, Model){
-  var Collection = Backbone.Collection.extend({
-  	url: '/JSON',
-  	rpc: new Backbone.Rpc({
-  		 namespaceDelimiter: ''
-  	}),	
+], function(_, Qorus, Model){
+  var Collection = Qorus.SortedCollection.extend({
     model: Model,
 	methods: {
   		read: ['omq.system.service.webapp.getJobs']

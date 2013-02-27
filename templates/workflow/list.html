@@ -4,13 +4,13 @@
         <div class="row-fluid">
             <div class="span2">
             <div class="input-prepend date" id="dp" data-date="<%= date %>" data-date-format="yyyy-mm-dd">
-              <span class="add-on"><i class="icon-th"></i></span>
+              <span class="add-on"><i class="icon-calendar"></i></span>
               <input type="text" class="span8" size="16" value="<%= date %>">
             </div>
             </div>
             <div class="offset9">
             <form class="form-search">
-              <div class="input-append">
+              <div class="input-append search-box">
                 <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
                 <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
               </div>
@@ -52,7 +52,7 @@
 		</tr>
 		</thead>
 		<tbody>
-	        <% _.each( workflows, function( workflow ){ %>
+	        <% _.each( items, function( workflow ){ %>
 	  			<tr class="workflow-row" id="workflow-<%= workflow.get('workflowid') %>">
 					<td><i class="icon-box check"></i></td>
 	  				<td class="instances"><%= workflow.get('workflowid') %></td>

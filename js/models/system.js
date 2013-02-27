@@ -1,17 +1,17 @@
 define([
   'underscore',
-  'backbone',
-  'libs/backbone.rpc'
-], function(_, Backbone, Rpc){
-  var Model = Backbone.Model.extend({
-  	url: '/JSON',
-  	rpc: new Backbone.Rpc({
-  		 namespaceDelimiter: ''
-  	}),
+  'qorus/qorus'
+], function(_, Qorus){
+    var System = {};
+  System.Info = Qorus.Model.extend({
   	methods: {
   		read: ['omq.system.get-status']
   	}
   });
-  // Return the model for the module
-  return Model;
+  System.User = Qorus.Model.extend({
+  	methods: {
+  		read: ['omq.system.get-current-user-info']
+  	}
+  });
+  return System;
 });
