@@ -3,17 +3,17 @@
 	<table class="table table-striped">
 		<thead>
 		<tr>
-			<th>ID</th>
-			<th class="name">Name</th>
-			<th>Version</th>
-			<th class="description">Description</th>
-			<th>Type</th>
-			<th>Autostart</th>
-			<th>Status</th>
+			<th data-sort="serviceid">ID</th>
+			<th class="name" data-sort="name">Name</th>
+			<th data-sort="version">Version</th>
+			<th class="description" data-sort="description">Description</th>
+			<th data-sort="type">Type</th>
+			<th data-sort="autostart">Autostart</th>
+			<th data-sort="status">Status</th>
 		</tr>
 		</thead>
 		<tbody>
-	        <% _.each( services, function( item ){ %>
+	        <% _.each( items, function( item ){ %>
 	  			<tr class="service-row">
 	  				<td class="id"><%= item.get('serviceid') %></td>
 	  				<td class="name"><strong><%= item.get('name') %></strong></td>
