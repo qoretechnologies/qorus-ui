@@ -31,12 +31,12 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
   });
 
   Qorus.SortedCollection = Qorus.Collection.extend({
-    initialize: function(date) {
+    initialize: function(opts) {
       this.sort_by = 'name';
       this.sort_order = 'asc';
       this.sort_history = ['', ];
-      if (date) {
-        this.date = date;
+      if (opts) {
+        this.date = opts.date;
       }
     },
     comparator: function(collection) {
@@ -78,14 +78,14 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(collection, date) {
-      this.date_format = 'YYYY-MM-DD';     
+      this.date_format = 'DD-MM-YYYY HH:mm:ss';
       if(date===undefined){
           this.date = moment().format(this.date_format);
       } else {
           this.date = date;
       }
       _.bindAll(this, 'render');
-      this.collection = new collection(this.date);
+      this.collection = new collection({date: this.date});
       this.collection.on('reset add', this.render);
       this.collection.fetch();
     },

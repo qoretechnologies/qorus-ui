@@ -10,12 +10,12 @@ define([
 	methods: {
 		read: ['omq.system.service.webapp.getWorkflows', 'date'],
 	},
-	initialize: function(date){
+	initialize: function(opts){
 		this.sort_by = 'name';
 		this.sort_order = 'asc';
         this.sort_history = ['',];
-        if(date){
-            this.date = date;
+        if(opts){
+            this.date = opts.date;
         }
 	}
   });

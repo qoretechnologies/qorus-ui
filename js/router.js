@@ -2,7 +2,8 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
-      'workflows(/:date)': 'showWorkflows',
+      'workflows/:date': 'showWorkflows',
+      'workflows': 'showWorkflows',
       'workflow/:id': 'showWorkflow',
       'services': 'showServices',
       'jobs': 'showJobs',
@@ -18,13 +19,14 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
     var loader = Qorus.Loader;
 
     app_router.on('route:showWorkflows', function(date) {
-      var workflowListView = new WorkflowListView(date);
-      var loader = new Qorus.Loader(workflowListView.el);
+      var workflowListView = new WorkflowListView({}, date);
+      // var loader = new Qorus.Loader(workflowListView.el);
       workflowListView.render();
-      workflowListView.on('render', loader.remove());
+      // workflowListView.on('render', loader.remove());
       workflowListView.on('dateChanged', function(date) {
-        app_router.navigate('/workflows/' + moment(date)
-          .format('YYYY-MM-DD'));
+        moment().utc();
+        app_router.navigate('/workflows/' + moment(date).utc()
+          .format('DD-MM-YYYY HH:mm:ss'), {trigger: true});
       });
     });
     app_router.on('route:showWorkflow', function(id) {
