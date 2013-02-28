@@ -6,28 +6,20 @@ define([
   'collections/workflows',
   'text!/templates/workflow/list.html',
   'datepicker',
-  'moment'
+  'moment',
+  'router'
 ], function($, _, Backbone, Qorus, Collection, Template, date, moment){
   var ListView = Qorus.ListView.extend({
     el: $("#content"),
     additionalEvents: {
 		    'click .start': 'start',
     },
-    initialize: function(collection, date){
+    initialize: function(collection, date, router){
+      this.router = router;
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
       
       this.on('render', this.datePicker);
-      // this.on('render', function(){
-      //     $('th').hover(
-      //         function(){ 
-      //             $(this).tooltip('show'); 
-      //         }, 
-      //         function(){ 
-      //             $(this).tooltip('hide');
-      //         }
-      //     )
-      // });
     },
 	// starts workflow
 	start : function(e){
@@ -66,9 +58,13 @@ define([
             format: 'dd-MM-yyyy hh:mm:ss',
         })
         .on('changeDate', function(e){
-            view.trigger('dateChanged', e.date.toISOString(), {});
+            view.onDateChanged(e.date.toISOString(), {});
         });
     },
+    onDateChanged: function(date) {
+        this.router.navigate('/workflows/' + moment(date).utc()
+            .format('DD-MM-YYYY HH:mm:ss'), {trigger: true});
+    }
   });
   // Returning instantiated views can be quite useful for having "state"
   return ListView;

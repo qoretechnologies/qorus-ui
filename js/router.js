@@ -14,20 +14,14 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
     }
   });
 
+  var app_router = new AppRouter;
+
   var initialize = function() {
-    var app_router = new AppRouter;
     var loader = Qorus.Loader;
 
     app_router.on('route:showWorkflows', function(date) {
-      var workflowListView = new WorkflowListView({}, date);
-      // var loader = new Qorus.Loader(workflowListView.el);
+      var workflowListView = new WorkflowListView({}, date, app_router);
       workflowListView.render();
-      // workflowListView.on('render', loader.remove());
-      workflowListView.on('dateChanged', function(date) {
-        moment().utc();
-        app_router.navigate('/workflows/' + moment(date).utc()
-          .format('DD-MM-YYYY HH:mm:ss'), {trigger: true});
-      });
     });
     app_router.on('route:showWorkflow', function(id) {
       var workflowView = new WorkflowView({
@@ -63,6 +57,7 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
     Backbone.history.start();
   };
   return {
-    initialize: initialize
+    initialize: initialize,
+    router: app_router
   };
 });

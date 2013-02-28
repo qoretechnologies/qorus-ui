@@ -64,6 +64,20 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
       }
     }
   });
+  
+  Qorus.Loader = Backbone.View.extend({
+    template: '<div class="loader">Loading</div>',
+    initialize: function(el){
+      this.el = el;
+      this.render();
+    },
+    render: function(){
+      $(this.el).before(this.template);
+    },
+    destroy: function(){
+      $(this.el).parent().find('.loader').remove();
+    }
+  });
 
   Qorus.ListView = Backbone.View.extend({
     defaultEvents: {
@@ -95,8 +109,8 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
         items: this.collection.models
       });
       this.$el.html(compiledTemplate);
-      this.trigger('render', this, {});
       this.sortIcon();
+      this.trigger('render', this, {});
       return this;
     },
     // toggle select row
@@ -162,21 +176,7 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
           el.append('<i class="icon-chevron-down"></i>');
         }
     }
-  })
-  
-  Qorus.Loader = Backbone.View.extend({
-    template: '<div class="loader">Loading</div>',
-    initialize: function(el){
-      this.el = el;
-      this.render();
-    },
-    render: function(){
-      this.$el.append(this.template);
-    },
-    destroy: function(){
-      this.$el.find('.loader').remove();
-    }
-  })
+  });
 
   return Qorus;
 });
