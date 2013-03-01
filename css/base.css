@@ -73,12 +73,16 @@ table th {
 	margin: 20px 0;
 }
 
+.table-fixed thead tr {
+  background-color: #fff;
+}
+
 th {
     position: relative;
     padding-right: 16px;
 }
 
-th i {
+i.sort {
     position: absolute;
     bottom: 1em;
     right: 0;
@@ -106,14 +110,37 @@ th i {
 }
 
 .loader {
-    background-color: rgba(100,100,100,.5);
+    background-color: rgba(100,100,100,.8);
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(100,100,100,.5);
     color: #fff;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 150px;
+    height: 50px;
+    margin: -50px 0 0 -75px;
     text-align: center;
     vertical-align: center;
     z-index: 9999;
+}
+
+.loader p {
+    margin: 15px;
+}
+
+table .header-fixed {
+  position: fixed;
+  top: 40px;
+  /*left: 0;*/
+  /*right: 0;*/
+  z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+  border-bottom: 1px solid #d5d5d5;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+
+#dp {
+  margin-bottom: 0;
 }

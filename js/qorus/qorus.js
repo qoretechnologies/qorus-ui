@@ -1,5 +1,5 @@
 // Qorus core objects definition
-define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
+define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _, Backbone, settings) {
   var Qorus = {};
 
   Qorus.Model = Backbone.Model.extend({
@@ -20,6 +20,10 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
         this.date = date;
       }
     },
+    // fetch: function(opts){
+    //   Qorus.Collection.__super__.fetch(this, opts);
+    //   this.trigger('fetch');
+    // },
     search: function(query) {
       if (query == "") return this;
 
@@ -66,9 +70,11 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
   });
   
   Qorus.Loader = Backbone.View.extend({
-    template: '<div class="loader">Loading</div>',
-    initialize: function(el){
-      this.el = el;
+    template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
+    initialize: function(opts){
+      this.el = opts.el;
+      _.bindAll(this, 'render');
+      _.bindAll(this, 'destroy');
       this.render();
     },
     render: function(){
@@ -92,25 +98,37 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(collection, date) {
-      this.date_format = 'DD-MM-YYYY HH:mm:ss';
+      // add element loader
+      this.loader = new Qorus.Loader({ el: this.el });
+
+      // set DATE format and init date
+      this.date_format = settings.DATE_DISPLAY;      
       if(date===undefined){
           this.date = moment().format(this.date_format);
+      } else if(date=='all') {
+          this.date = moment(settings.DATE_FROM).format(this.date_format);
       } else {
           this.date = date;
       }
+      
       _.bindAll(this, 'render');
       this.collection = new collection({date: this.date});
-      this.collection.on('reset add', this.render);
+      this.collection.on('reset', this.render );
       this.collection.fetch();
+      
+      // this.on('render', this.fixHeader );
     },
     render: function() {
-      var compiledTemplate = _.template(this.template, {
-        date: this.date,
-        items: this.collection.models
-      });
-      this.$el.html(compiledTemplate);
-      this.sortIcon();
-      this.trigger('render', this, {});
+      if (this.template){
+        var tpl = _.template(this.template,{
+          date: this.date,
+          items: this.collection.models
+        });
+        this.$el.html(tpl);
+        this.sortIcon();  
+        this.loader.destroy();
+        this.trigger('render', this, {});
+      }
       return this;
     },
     // toggle select row
@@ -122,6 +140,9 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
       $(el)
         .parents('.workflow-row')
         .toggleClass('warning');
+    },
+    fixHeader: function(){
+      $(this.el).find('table').fixedHeaderTable();
     },
     // toggle select on all rows
     checkall: function(e) {
@@ -167,13 +188,13 @@ define(['underscore', 'libs/backbone.rpc', ], function(_, Backbone) {
         var key = c.collection.sort_by;
         var order = c.collection.sort_order;
         var el = c.$el.find('th[data-sort="' + key + '"]');
-        c.$el.find('th i')
+        c.$el.find('th i.sort')
           .remove();
 
         if (order == 'des') {
-          el.append('<i class="icon-chevron-up"></i>');
+          el.append('<i class="sort icon-chevron-up"></i>');
         } else {
-          el.append('<i class="icon-chevron-down"></i>');
+          el.append('<i class="sort icon-chevron-down"></i>');
         }
     }
   });

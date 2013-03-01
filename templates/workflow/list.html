@@ -1,14 +1,26 @@
-<div class="loader">Loading</div>
 <div id="workflows">
 	<h2>Workflows Overview</h2>
     <div class="container-fluid"> 
         <div class="row-fluid">
-            <div class="span2">
-            <div class="input-prepend date" id="dp" data-date="<%= date %>" data-format="dd/MM/yyyy hh:mm:ss">
-              <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar">
-      </i></span>
-              <input type="text" class="span12" size="16" value="<%= date %>">
+            <div class="span1">
+              <div class="btn-group">
+    				    <button class="btn dropdown-toggle" data-toggle="dropdown">
+    				      <i class="icon-box check-all"></i>
+    				      <span class="caret"></span>
+                </button>
+      			    <ul class="dropdown-menu">
+        					<li><a href="#" class="all">All</a></li>
+        					<li><a href="#" class="none">None</a></li>
+        					<li><a href="#" class="invert">Invert</a></li>
+      			    </ul>
+              </div>
             </div>
+            <div class="span4">
+              <div class="input-prepend date" id="dp" data-date="<%= date %>" data-format="dd/MM/yyyy hh:mm:ss">
+                <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                <input type="text" class="span10" value="<%= date %>">
+              </div>
+              <button class="btn"><a href="#/workflows/all" class="button">All</a></button>
             </div>
             <div class="offset9">
             <form class="form-search">
@@ -20,74 +32,69 @@
             </div>
         </div>
     </div>
-	<table class="table table-striped table-hover">
-		<thead>
+	<table class="table table-striped table-hover table-fixed">
+		<thead class="header">
 		<tr>
-			<th><div class="btn-group">
-				    <button class="btn dropdown-toggle" data-toggle="dropdown">
-				      <i class="icon-box check-all"></i>
-				      <span class="caret"></span>
-                     </button>
-			    <ul class="dropdown-menu">
-					<li><a href="#" class="all">All</a></li>
-					<li><a href="#" class="none">None</a></li>
-					<li><a href="#" class="invert">Invert</a></li>
-			    </ul>
-                </div>
-            </th>
+			<th></th>
 			<th data-sort="workflowid">ID</th>
 			<th data-sort="name" class="name sort">Name</th>
 			<th data-sort="version">Version</th>
 			<th data-sort="IN-PROGRESS" data-toggle="tooltip" title="In Progress">P</th>
-	        <th data-sort="COMPLETE" data-toggle="tooltip" title="Complete">C</th>
-	        <th data-sort="ERROR" title="Error">E</th>
-            <th data-sort="ASYNC-WAITING" title="Async Waiting">A</th>
-            <th data-sort="WAITING" title="Waiting">W</th>
-            <th data-sort="INCOMPLETE" title="Incomplete">I</th>
-            <th data-sort="CANCELED" title="Canceled">C</th>
-            <th data-sort="RETRY" title="Retry">R</th>
-            <th data-sort="READY" title="Ready">Y</th>
-            <th data-sort="BLOCKED" title="Blocked">B</th>
-            <th data-sort="EVENT-WAITING" title="Event Waiting">E</th>
-            <th data-sort="SCHEDULED" title="Scheduled">S</th>
+      <th data-sort="COMPLETE" data-toggle="tooltip" title="Complete">C</th>
+      <th data-sort="ERROR" title="Error">E</th>
+      <th data-sort="ASYNC-WAITING" title="Async Waiting">A</th>
+      <th data-sort="WAITING" title="Waiting">W</th>
+      <th data-sort="INCOMPLETE" title="Incomplete">I</th>
+      <th data-sort="CANCELED" title="Canceled">C</th>
+      <th data-sort="RETRY" title="Retry">R</th>
+      <th data-sort="READY" title="Ready">Y</th>
+      <th data-sort="BLOCKED" title="Blocked">B</th>
+      <th data-sort="EVENT-WAITING" title="Event Waiting">E</th>
+      <th data-sort="SCHEDULED" title="Scheduled">S</th>
 			<th></th>
 		</tr>
 		</thead>
 		<tbody>
-	        <% _.each( items, function( workflow ){ %>
-	  			<tr class="workflow-row" id="workflow-<%= workflow.get('workflowid') %>">
-					<td><i class="icon-box check"></i></td>
-	  				<td class="instances"><%= workflow.get('workflowid') %></td>
-	  				<td class="name"><a href="#/workflow/<%= workflow.get('workflowid') %>"><%= workflow.get('name') %></td>
-	  				<td class="version"><%= workflow.get('version') %></td>
-	  				<td class="in-progress"><%= workflow.get('IN-PROGRESS') ? '<span class="badge badge-warning">'+workflow.get('IN-PROGRESS')+'</span>' : 0 %></td>
-	  				<td class="complete"><%= workflow.get('COMPLETE') ? '<span class="badge badge-success">'+workflow.get('COMPLETE')+'</span>' : 0 %></td>
-	  				<td class="error"><%= workflow.get('ERROR') ? '<span class="badge badge-important">'+workflow.get('ERROR')+'</span>' : 0 %></td>
-	  				<td class="async-waiting"><%= workflow.get('ASYNC-WAITING') ? '<span class="badge badge-waiting">'+workflow.get('ASYNC-WAITING')+'</span>' : 0 %></td>
-	  				<td class="waiting"><%= workflow.get('WAITING') ?'<span class="badge badge-waiting">'+ workflow.get('WAITING')+'</span>' : 0 %></td>
-	  				<td class="incomplete"><%= workflow.get('INCOMPLETE') ? '<span class="badge badge-info">'+workflow.get('INCOMPLETE')+'</span>' : 0 %></td>
-	  				<td class="canceled"><%= workflow.get('CANCELED') ? '<span class="badge badge-canceled">'+workflow.get('CANCELED')+'</span>' : 0 %></td>
-	  				<td class="retry"><%= workflow.get('RETRY') ? '<span class="badge badge-error">'+workflow.get('RETRY')+'</span>' : 0 %></td>
-	  				<td class="ready"><%= workflow.get('READY') ? '<span class="badge badge-ready">'+ workflow.get('READY')+'</span>' : 0 %></td>
-	  				<td class="blocked"><%= workflow.get('BLOCKED') ? '<span class="badge">'+workflow.get('BLOCKED')+'</span>' : 0 %></td>
-	  				<td class="event-waiting"><%= workflow.get('EVENT-WAITING') ? '<span class="badge badge-waiting">'+workflow.get('EVENT-WAITING')+'</span>' : 0 %></td>
-	  				<td class="scheduled"><%= workflow.get('SCHEDULED') ? '<span class="badge badge-info">'+workflow.get('SCHEDULED')+'</span>' : 0 %></td>
-					<td>
-						<div class="btn-group">
-						    <button class="btn dropdown-toggle" data-toggle="dropdown">
-						      <i class="icon-cog"></i>
-						      <span class="caret"></span>
-                             </button>
-					    <ul class="dropdown-menu pull-right">
-							<li><a href="#" class="start" data-id="<%= workflow.get('workflowid') %>"><i class="icon-off"></i> Start</a></li>
-							<li><a href="#" class="start" data-id="<%= workflow.get('workflowid') %>"><i class="icon-off"></i> Start Custom</a></li>
-							<li><a href="#" class="reset" data-id="<%= workflow.get('workflowid') %>"><i class="icon-refresh"></i> Reset</a></li>
-							<li><a href="#" class="stop" data-id="<%= workflow.get('workflowid') %>"><i class="icon-remove"></i> Stop</a></li>
-					    </ul>
-           </div>
-					</td>
+	        <% _.each( items, function( workflow ){ 
+            var workflow = workflow.toJSON();
+            %>
+	  			<tr class="workflow-row" id="workflow-<%= workflow.workflowid %>">
+  					<td><i class="icon-box check"></i></td>
+    				<td class="instances"><%= workflow.workflowid %></td>
+    				<td class="name"><a href="#/workflow/<%= workflow.workflowid %>"><%= workflow.name %></td>
+    				<td class="version"><%= workflow.version %></td>
+    				<td class="in-progress" data-badge="badge-warning"><%= workflow['IN-PROGRESS'] %></td>
+    				<td class="complete" data-badge="badge-success"><%= workflow.COMPLETE %></td>
+    				<td class="error" data-badge="badge-importang"><%= workflow.ERROR %></td>
+    				<td class="async-waiting" data-badge="badge-waiting"><%= workflow['ASYNC-WAITING'] %></td>
+    				<td class="waiting" data-badge="badge-waiting"><%= workflow.WAITING %></td>
+    				<td class="incomplete" data-badge="badge-info"><%= workflow.INCOMPLETE %></td>
+    				<td class="canceled" data-badge="badge-canceled"><%= workflow.CANCELED %></td>
+    				<td class="retry" data-badge="badge-error"><%= workflow.RETRY %></td>
+    				<td class="ready" data-badge="badge-ready"><%= workflow.READY %></td>
+    				<td class="blocked" data-badge=""><%= workflow.BLOCKED %></td>
+    				<td class="event-waiting" data-badge="badge-waiting"><%= workflow['EVENT-WAITING'] %></td>
+    				<td class="scheduled" data-badge="badge-info"><%= workflow.SCHEDULED %></td>
+  					<td>
+  						<div class="btn-group">
+  						    <button class="btn dropdown-toggle" data-toggle="dropdown">
+  						      <i class="icon-cog"></i>
+  						      <span class="caret"></span>
+                               </button>
+  					    <ul class="dropdown-menu pull-right">
+  							<li><a href="#" class="start" data-id="<%= workflow.workflowid %>"><i class="icon-off"></i> Start</a></li>
+  							<li><a href="#" class="start" data-id="<%= workflow.workflowid %>"><i class="icon-off"></i> Start Custom</a></li>
+  							<li><a href="#" class="reset" data-id="<%= workflow.workflowid %>"><i class="icon-refresh"></i> Reset</a></li>
+  							<li><a href="#" class="stop" data-id="<%= workflow.workflowid %>"><i class="icon-remove"></i> Stop</a></li>
+  					    </ul>
+             </div>
+  					</td>
 	  			</tr>
 	        <% }); %>
 		</tbody>
 	</table>
+  <script type="text/javascript" charset="utf-8">
+
+  </script>
+  </div>
 </div>
