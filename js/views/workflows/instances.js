@@ -8,15 +8,15 @@ define([
 ], function($, _, Backbone, Collection, Template){
   var ListView = Backbone.View.extend({
     // el: $("#instances"),
-    initialize: function(){
-	  _.bindAll(this, 'render');
-      this.collection = new Collection();
-	  this.collection.on('reset', this.render);
-	  this.collection.fetch();
+    initialize: function(date, opts){
+  	  _.bindAll(this, 'render');
+      this.collection = new Collection(date, opts);
+  	  this.collection.on('reset', this.render);
+  	  this.collection.fetch();
     },
 	render: function(){
-        var compiledTemplate = _.template( Template, { items: this.collection.models } );
-        this.$el.html(compiledTemplate);
+    var compiledTemplate = _.template( Template, { items: this.collection.models } );
+    this.$el.html(compiledTemplate);
 		return this;
 	},
   });

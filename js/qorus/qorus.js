@@ -20,10 +20,6 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.date = date;
       }
     },
-    // fetch: function(opts){
-    //   Qorus.Collection.__super__.fetch(this, opts);
-    //   this.trigger('fetch');
-    // },
     search: function(query) {
       if (query == "") return this;
 

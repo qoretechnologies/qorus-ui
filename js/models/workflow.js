@@ -26,7 +26,7 @@ define([
       return [this.id,];
     },
   	methods: {
-    	read: ['omq.system.service.webapp.getWorkflows', 'date', 'wflid'],
+    	read: ['omq.system.service.webapp.getWorkflow', 'id'],
     	start: ['omq.system.start-workflow', 'params'],
     	stop: ['omq.system.stop-workflow', 'name', 'version'],
     	reset: ['omq.system.reset-workflow', 'name', 'version'],

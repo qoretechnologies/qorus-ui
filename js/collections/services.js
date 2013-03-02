@@ -6,12 +6,11 @@ define([
 ], function(_, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
     model: Model,
-	methods: {
-		read: [
-            // ['omq.system.service.webapp.getServices'],
-            ['omq.system.list-all-services'],
-		]
-	}
+  	methods: {
+  		read: [
+        ['omq.system.list-all-services'],
+  		]
+  	}
   });
   return Collection;
 });
