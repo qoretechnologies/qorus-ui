@@ -211,7 +211,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       } else {
         $(this.el).find('tbody tr').hide();
         $(this.el).find("tbody td:icontains('" + query + "')").parent().show();
-        // e.preventDefault();
+      }
+      
+      // prevent reload if submited by form
+      if (e.type=="submit"){
+        e.preventDefault();
       }
     }
   });

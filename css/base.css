@@ -131,7 +131,7 @@ i.sort {
 
 table .header-fixed {
   position: fixed;
-  top: 40px;
+  top: 80px;
   /*left: 0;*/
   /*right: 0;*/
   z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
@@ -141,6 +141,13 @@ table .header-fixed {
           border-radius: 0;
 }
 
-#dp {
+.sticker {
+  position: fixed;
+  background-color: #fff;
+  padding-top: 5px;
+  z-index: 1021; /* 10 less than .navbar-fixed to prevent any overlap */
+}
+
+.dp {
   margin-bottom: 0;
 }

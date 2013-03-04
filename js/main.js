@@ -10,7 +10,8 @@ require.config({
     "later.recur": "libs/later/later-recur.min",
     "later.cron": "libs/later/later-cron.min",
     datepicker: "libs/datetime-picker/bootstrap-datetimepicker",
-    "jquery.fixedheader": "libs/fixedheader"
+    "jquery.fixedheader": "libs/fixedheader",
+    "jquery.sticky": "libs/jquery.sticky"
   },
   shim: { 
     "backbone": {
@@ -32,6 +33,10 @@ require.config({
     "jquery.fixedheader": {
       deps: ['jquery'],
       exports: 'jQuery.fn.fixedHeader'
+    },
+    "jquery.sticky": {
+      deps: ['jquery'],
+      exports: 'jQuery.fn.sticky'
     }
   },
   templates: '../templates'

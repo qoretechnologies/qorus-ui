@@ -7,7 +7,8 @@ define([
   'text!/templates/workflow/list.html',
   'datepicker',
   'moment',
-  'jquery.fixedheader'
+  'jquery.fixedheader',
+  'jquery.sticky',
 ], function($, _, Backbone, Qorus, Collection, Template, date, moment){
   var ListView = Qorus.ListView.extend({
     el: $("#content"),
@@ -33,16 +34,19 @@ define([
   		e.preventDefault();
   		var workflowid = e.currentTarget.dataset.id;
   		var wfl = this.collection.get(workflowid);
-  		wfl.start({
-  			success: function(el, xhr){
-  				console.log(xhr)
-  				$('#alert-info').children('.alert-heading').html('Workflow: '+el.get('name') + ' started');
-  				$('#alert-info').alert().addClass('in');
-  				window.setTimeout(function(){
-  					$('#alert-info').removeClass('in');	
-  				}, 2000);
-  			}
-  		});
+  		wfl.start();
+      
+      // todo
+      // {
+      //         success: function(el, xhr){
+      //           console.log(xhr)
+      //           $('#alert-info').children('.alert-heading').html('Workflow: '+el.get('name') + ' started');
+      //           $('#alert-info').alert().addClass('in');
+      //           window.setTimeout(function(){
+      //             $('#alert-info').removeClass('in');  
+      //           }, 2000);
+      //         }
+      //       }
   	},
   	// stops workflow
   	stop : function(e){
@@ -61,7 +65,7 @@ define([
     // filter by date init
     datePicker: function(){
         var view = this;
-        $('#dp').datetimepicker({
+        $('.dp').datetimepicker({
             format: 'dd-MM-yyyy hh:mm:ss',
         })
         .on('changeDate', function(e){
@@ -78,7 +82,8 @@ define([
           $(this).wrapInner('<span class="badge '+$(this).data('badge')+'" />' );
         }
       });
-      $('.table-fixed').fixedHeader();
+      $('.table-fixed').fixedHeader({ topOffset: 80 });
+      $('.sticky').sticky();
     }
   });
   // Returning instantiated views can be quite useful for having "state"
