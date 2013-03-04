@@ -1,5 +1,13 @@
 // Qorus core objects definition
 define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _, Backbone, settings) {
+  $.extend($.expr[':'], {
+    'icontains': function(elem, i, match, array)
+    {
+      return (elem.textContent || elem.innerText || '').toLowerCase()
+      .indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+  });
+  
   var Qorus = {};
 
   Qorus.Model = Backbone.Model.extend({
@@ -87,6 +95,8 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       'click .check-all': 'checkall',
       'click .uncheck-all': 'checkall',
       'click th': 'sortView',
+      'submit .form-search': 'search',
+      'keyup .search-query': 'search'
     },
     additionalEvents: {  
     },
@@ -192,6 +202,17 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         } else {
           el.append('<i class="sort icon-chevron-down"></i>');
         }
+    },
+    search: function(e){
+      var el = this.el;
+      var query = $(this.el).find('.search-query').val();
+      if (query.length<1){
+        $(this.el).find('tbody tr').show();
+      } else {
+        $(this.el).find('tbody tr').hide();
+        $(this.el).find("tbody td:icontains('" + query + "')").parent().show();
+        // e.preventDefault();
+      }
     }
   });
 
