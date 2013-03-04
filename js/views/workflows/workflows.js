@@ -66,7 +66,7 @@ define([
     datePicker: function(){
         var view = this;
         $('.dp').datetimepicker({
-            format: 'dd-MM-yyyy hh:mm:ss',
+            format: 'yyyy-MM-dd hh:mm:ss',
         })
         .on('changeDate', function(e){
             view.onDateChanged(e.date.toISOString(), {});
@@ -74,7 +74,7 @@ define([
     },
     onDateChanged: function(date) {
         this.router.navigate('/workflows/' + moment(date).utc()
-            .format('DD-MM-YYYY HH:mm:ss'), {trigger: true});
+            .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
     },
     addBadges: function(){
       $(this.el).find('td[data-badge]').each(function() {

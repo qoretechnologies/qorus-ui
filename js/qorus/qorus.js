@@ -122,7 +122,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;      
       if(date===undefined){
-          this.date = moment().format(this.date_format);
+          this.date = moment().days(0).format(this.date_format);
       } else if(date=='all') {
           this.date = moment(settings.DATE_FROM).format(this.date_format);
       } else {
