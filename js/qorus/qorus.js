@@ -8,6 +8,15 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     }
   });
   
+  function prep(val){
+    if (_.isNumber(val)){
+      return String('00000000000000' + val).slice(-14);
+    } else  if (_.isString(val)){
+      return val.toLowerCase();
+    }
+    return val;
+  }
+  
   var Qorus = {};
 
   Qorus.Model = Backbone.Model.extend({
@@ -48,7 +57,10 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
     },
     comparator: function(collection) {
-      return (collection.get(this.sort_by), collection.get(this.sort_history[0]));
+      var key_1 = collection.get(this.sort_by);
+      var key_2 = collection.get(this.sort_history[0]);
+      
+      return [prep(key_1), prep(key_2)];
     },
     sortByKey: function(key, cb) {
       if (key) {
