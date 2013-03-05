@@ -8,7 +8,7 @@ define([
     model: Model,
   	methods: {
   		read: [
-        ['omq.system.list-all-services'],
+        ['omq.system.service.webapp.getAllServiceInfo'],
   		]
   	}
   });
