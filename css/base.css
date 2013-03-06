@@ -148,6 +148,7 @@ table .header-fixed {
 .row-fluid .page {
   padding-left: 8.333333333%;
   margin-left: 0;
+  width: 99%;
 }
 
 aside {
@@ -189,4 +190,8 @@ aside {
 #nav-main i {
   display: inline-block;
   margin: 5px 30px;
+}
+
+.nav-list a:hover .icon-white {
+  background-image: url(../js/libs/bootstrap/img/glyphicons-halflings.png);
 }
