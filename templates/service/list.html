@@ -21,18 +21,26 @@
 	  				<td class="description"><%= item.get('desc') %></td>
 	  				<td class="service_type"><%= item.get('type') %></td>
 	  				<td class="autostart">
+              <div class="btn-group">
 						<% if (item.get('autostart')===true){ %>
-							<span class="label label-success"><i class="icon-ok icon-white"></i></span>
+                <button class="btn btn-mini active btn-success" data-id="<%= item.get('serviceid') %>" data-action="autostart">On</button>
+                <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-action="autostart">Off</button>
 						<% } else { %>
-							<span class="label"><i class="icon-off icon-white"></i></span>
+              <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-action="autostart">On</button>
+              <button class="btn btn-mini active btn-danger" data-id="<%= item.get('serviceid') %>" data-action="autostart">Off</button>
 						<% } %>
+              </div>
 					</td>
-	  				<td class="status">
+	  			<td class="status">
+              <div class="btn-group btn-mini">
 						<% if (item.get('status')=='loaded'){ %>
-							<span class="label label-success"><%= item.get('status') %></label>
+                <button class="btn active btn-mini btn-success" data-id="<%= item.get('serviceid') %>" data-action="status">On</button>
+                <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-action="status">Off</button>
 						<% } else { %>
-							<%= item.get('status') %>
+              <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-action="status">On</button>
+              <button class="btn btn-mini active btn-danger" data-id="<%= item.get('serviceid') %>" data-action="status">Off</button>
 						<% } %>
+              </div>
 					</td>
 	  			</tr>
 	        <% }); %>

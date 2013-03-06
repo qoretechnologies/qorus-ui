@@ -23,12 +23,16 @@
 	  				<td class="name" ><a href="#/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
 	  				<td class="version"><%= item.get('version') %></td>
 	  				<td class="status">
-						<% if (item.get('active')===true){ %>
-							<span class="label label-success"><i class="icon-off icon-white"></i></span>
-						<% } else { %>
-							<span class="label"><i class="icon-off icon-white"></i></span>
-						<% } %>
-                    </td>
+              <div class="btn-group">
+  						<% if (item.get('active')===true){ %>
+                  <button class="btn btn-mini active btn-success" data-id="<%= item.get('jobid') %>" data-action="active">On</button>
+                  <button class="btn btn-mini" data-id="<%= item.get('jobid') %>" data-action="active">Off</button>
+  						<% } else { %>
+                <button class="btn btn-mini" data-id="<%= item.get('jobid') %>" data-action="active">On</button>
+                <button class="btn btn-mini active btn-danger" data-id="<%= item.get('jobid') %>" data-action="active">Off</button>
+  						<% } %>
+              </div>
+            </td>
 	  				<td class="last"><%=  item.get('last_executed') %></td>
 	  				<td class="next"><%= item.get('next') %></td>
 	  				<td class="complete"><%= item.get('COMPLETE') ? '<span class="badge badge-success">'+item.get('COMPLETE')+'</span>' : 0 %></td>
@@ -42,7 +46,6 @@
 								  <span class="caret"></span>
 							</button>
 						    <ul class="dropdown-menu pull-right">
-								<li><a href="#" class="start" data-id="<%= item.get('jobid') %>"><i class="icon-off"></i> Deactivate</a></li>
 								<li><a href="#" class="start" data-id="<%= item.get('jobid') %>"><i class="icon-play"></i> Run</a></li>
 								<li><a href="#" class="reset" data-id="<%= item.get('jobid') %>"><i class="icon-time"></i> Reschedule</a></li>
 								<li><a href="#" class="stop" data-id="<%= item.get('jobid') %>"><i class="icon-refresh"></i> Reset</a></li>
