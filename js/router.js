@@ -2,9 +2,10 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
+      'workflows/view/:id': 'showWorkflow',
       'workflows/:date': 'showWorkflows',
       'workflows': 'showWorkflows',
-      'workflow/:id': 'showWorkflow',
+
       'services': 'showServices',
       'jobs': 'showJobs',
       // 'system': 'showSystem',
@@ -31,13 +32,9 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
       });
     });
     app_router.on('route:showServices', function() {
-      // Call render on the module we loaded in via the dependency array
-      // 'views/projects/list'
       var serviceListView = new ServiceListView();
     });
     app_router.on('route:showJobs', function() {
-      // Call render on the module we loaded in via the dependency array
-      // 'views/projects/list'
       var jobListView = new JobListView();
     });
     app_router.on('route:defaultAction', function(actions) {
@@ -48,8 +45,10 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
   };
   
   app_router.on('route', function(e){
+    // update menu and make active item based on fragment
+    var fragment = Backbone.history.fragment.split('/')[0];
     $('.nav a').removeClass('active');
-    $('.nav a[href*="'+ Backbone.history.fragment +'"]').addClass('active');
+    $('.nav a[href*="'+ fragment +'"]').addClass('active');
   });
   
   return {
