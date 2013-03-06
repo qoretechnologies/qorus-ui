@@ -8,10 +8,6 @@ table th {
 	font-size: 70%;;
 }
 
-/*#workflows {
-    overflow: hidden;
-}*/
-
 .table td, .table th {
 	text-align: center;
 }
@@ -48,8 +44,8 @@ table th {
   background-color: #d9edf7;
 }
 
-#wrap > .container, #wrap > .container-fluid {
-	padding-top: 60px;
+#wrap > .container, #wrap > .section {
+	padding-top: 40px;
 }
 
 #wrap {
@@ -59,14 +55,15 @@ table th {
 	margin: 0 auto -4em;
 }
 
-.footer, .push {
+#footer, .push {
 	clear: both;
 	height: 4em;
 }
 
-.footer {
+#footer {
 	background-color: #f5f5f5;
 	height: 60px;
+  z-index: 1031;
 }
 
 .credit {
@@ -87,10 +84,6 @@ i.sort {
     bottom: 1em;
     right: 0;
 }
-/*
-.datepicker {
-    width: 200px;
-}*/
 
 .bootstrap-datetimepicker-widget ul, .bootstrap-datetimepicker-widget li {
     list-style: none;
@@ -150,4 +143,50 @@ table .header-fixed {
 
 .dp {
   margin-bottom: 0;
+}
+
+.row-fluid .page {
+  padding-left: 8.333333333%;
+  margin-left: 0;
+}
+
+aside {
+  z-index: 1020;
+}
+
+#nav-main {
+  background-color: #333;
+  font-size: 80%;
+  height: 2000px;
+}
+
+#nav-main ul, #nav-main li {
+  text-align: center;
+  padding: 0;
+}
+
+#nav-main li {
+  padding: 0 15px;
+}
+
+#nav-main li {
+  border-bottom: 1px solid rgba(0,0,0,.8);
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+#nav-main a {
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 0 #000;
+  padding: 0;
+}
+
+#nav-main a:hover {
+  color: #333;
+  text-shadow: none;
+}
+
+#nav-main i {
+  display: inline-block;
+  margin: 5px 30px;
 }

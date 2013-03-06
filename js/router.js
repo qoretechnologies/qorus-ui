@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/workflows/workflows', 'views/workflows/workflow', 'views/services/services', 'views/jobs/jobs', 'views/workflows/instances', ], function($, _, Backbone, moment, Qorus, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView) {
+define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/system', 'views/workflows/workflows', 'views/workflows/workflow', 'views/services/services', 'views/jobs/jobs', 'views/workflows/instances', ], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView) {
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Define some URL routes
@@ -14,7 +14,10 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
     }
   });
 
+  var systeminfoview = new SystemInfoView();
+
   var app_router = new AppRouter;
+  
 
   var initialize = function() {
     var loader = Qorus.Loader;
@@ -41,15 +44,6 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/work
       // We have no matching route, lets just log what the URL was
       console.log('No route:', actions);
     });
-
-    app_router.on('route', function(e) {
-      var hash = Backbone.history.location.hash;
-      $('#nav-main li')
-        .removeClass('active');
-      $('#nav-main li a[href=\'' + hash + '\']')
-        .parent()
-        .addClass('active');
-    })
     Backbone.history.start();
   };
   return {
