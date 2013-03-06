@@ -35,18 +35,6 @@ define([
   		var workflowid = e.currentTarget.dataset.id;
   		var wfl = this.collection.get(workflowid);
   		wfl.start();
-      
-      // todo
-      // {
-      //         success: function(el, xhr){
-      //           console.log(xhr)
-      //           $('#alert-info').children('.alert-heading').html('Workflow: '+el.get('name') + ' started');
-      //           $('#alert-info').alert().addClass('in');
-      //           window.setTimeout(function(){
-      //             $('#alert-info').removeClass('in');  
-      //           }, 2000);
-      //         }
-      //       }
   	},
   	// stops workflow
   	stop : function(e){
@@ -86,6 +74,5 @@ define([
       $('.sticky').sticky();
     }
   });
-  // Returning instantiated views can be quite useful for having "state"
   return ListView;
 });

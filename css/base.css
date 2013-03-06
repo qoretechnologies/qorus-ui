@@ -179,7 +179,7 @@ aside {
   color: #fff;
   font-weight: bold;
   text-shadow: 0 1px 0 #000;
-  padding: 0;
+  padding: 10px 0;
 }
 
 #nav-main a:hover {
@@ -194,4 +194,19 @@ aside {
 
 .nav-list a:hover .icon-white {
   background-image: url(../js/libs/bootstrap/img/glyphicons-halflings.png);
+}
+
+.nav li {
+  position: relative;
+}
+
+.nav a.active:after {
+  content: "";
+  display: block;
+  border: 11px solid transparent;
+  border-right: 11px solid #fff;
+  margin-top: -11px;
+  position: absolute;
+  right: -1px;
+  top: 50%;
 }

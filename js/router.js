@@ -46,6 +46,12 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     });
     Backbone.history.start();
   };
+  
+  app_router.on('route', function(e){
+    $('.nav a').removeClass('active');
+    $('.nav a[href*="'+ Backbone.history.fragment +'"]').addClass('active');
+  });
+  
   return {
     initialize: initialize,
     router: app_router
