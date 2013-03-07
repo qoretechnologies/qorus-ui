@@ -4,12 +4,10 @@ define([
   'qorus/qorus',
   'models/workflow'
 ], function(_, Backbone, Qorus, Model){
-  var Collection = Qorus.SortedCollection.extend({
+  var Collection = Qorus.SortedCollectionBase.extend({
+    url: '/rest/workflows/',
     date: null,
     model: Model,
-  	methods: {
-  		read: ['omq.system.service.webapp.getWorkflows', 'date'],
-  	},
   	initialize: function(opts){
   		this.sort_by = 'name';
   		this.sort_order = 'asc';

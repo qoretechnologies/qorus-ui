@@ -2,7 +2,14 @@ define([
   'libs/backbone.rpc',
   'qorus/qorus'
 ], function(Backbone, Qorus){
-  var Model = Qorus.Model.extend({
+  var Model = Qorus.ModelBase.extend({
+    initialize: function(opts){
+      Model.__super__.initialize.call(this, opts);
+      if (opts.id){
+        this.id = opts.id;
+      }
+    },
+    urlRoot: "/rest/workflows/",
     defaults: {
       'name': "Workflow name",
       'IN-PROGRESS': 0,
@@ -24,13 +31,7 @@ define([
     date: null,
     wflid: function(){
       return [this.id,];
-    },
-  	methods: {
-    	read: ['omq.system.service.webapp.getWorkflow', 'id'],
-    	start: ['omq.system.start-workflow', 'params'],
-    	stop: ['omq.system.stop-workflow', 'name', 'version'],
-    	reset: ['omq.system.reset-workflow', 'name', 'version'],
-  	}
+    } 
   });
   // Return the model for the module
   return Model;

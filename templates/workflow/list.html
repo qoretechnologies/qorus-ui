@@ -40,6 +40,7 @@
 		<tr>
 			<th></th>
 			<th data-sort="workflowid">ID</th>
+			<th data-sort="exec_count">Exec Count</th>
 			<th data-sort="name" class="name sort">Name</th>
 			<th data-sort="version">Version</th>
 			<th data-sort="IN-PROGRESS" data-toggle="tooltip" title="In Progress">P</th>
@@ -64,6 +65,7 @@
 	  			<tr class="workflow-row" id="workflow-<%= workflow.workflowid %>">
   					<td><i class="icon-box check"></i></td>
     				<td class="instances"><%= workflow.workflowid %></td>
+    				<td class="instances"><%= workflow.exec_count %></td>
     				<td class="name" data-search="<%= workflow.name.toLowerCase() %>"><a href="#/workflows/view/<%= workflow.workflowid %>"><%= workflow.name %></td>
     				<td class="version"><%= workflow.version %></td>
     				<td class="in-progress" data-badge="badge-warning"><%= workflow['IN-PROGRESS'] %></td>

@@ -11,7 +11,7 @@ define([
     el: $("#content"), 
     initialize: function(id){
   	  _.bindAll(this, 'render');
-      this.model = new Workflow({id: id});
+      this.model = new Workflow(id);
   	  this.model.fetch()
   	  this.model.on('change', this.render);
   	  this.on('render', this.onRender);
