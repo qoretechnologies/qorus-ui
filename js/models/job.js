@@ -6,13 +6,7 @@ define([
 ], function(_, moment, Rpc, utils){
   var Model = Backbone.Model.extend({
     idAttribute: "jobid",
-  	url: '/JSON',
-  	rpc: new Backbone.Rpc({
-  		 namespaceDelimiter: ''
-  	}),
-  	methods: {
-  		read: ['omq.system.service.webapp.getJobMetadata']
-  	},
+    urlRoot: '/rest/jobs/',
     initialize: function(){
         if (this.has('last_executed')) {
             this.last = utils.parseDate(this.get('last_executed'));

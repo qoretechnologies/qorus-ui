@@ -18,17 +18,10 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   }
   
   var Qorus = {};
+  
+  Qorus.Model = Backbone.Model;
 
-  Qorus.ModelBase = Backbone.Model.extend();
-
-  Qorus.Model = Qorus.ModelBase.extend({
-    url: '/JSON',
-    rpc: new Backbone.Rpc({
-      namespaceDelimiter: ''
-    }),
-  });
-
-  Qorus.CollectionBase = Backbone.Collection.extend({
+  Qorus.Collection = Backbone.Collection.extend({
     date: null,
     initialize: function(date) {
       if (date) {
@@ -45,14 +38,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     }
   });
   
-  Qorus.Collection = Qorus.CollectionBase.extend({
-    url: '/JSON',
-    rpc: new Backbone.Rpc({
-      namespaceDelimiter: ''
-    })
-  })
-  
-  Qorus.SortedCollectionBase = Qorus.CollectionBase.extend({
+  Qorus.SortedCollection = Qorus.Collection.extend({
     initialize: function(opts) {
       this.sort_by = 'name';
       this.sort_order = 'asc';
@@ -93,16 +79,9 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         options = {};
       }
       _.extend(options, { data: { date: this.date }});
-      Qorus.SortedCollectionBase.__super__.fetch.call(this, options);
+      Qorus.SortedCollection.__super__.fetch.call(this, options);
     }
   });
-  
-  Qorus.SortedCollection = Qorus.SortedCollectionBase.extend({
-    url: '/JSON',
-    rpc: new Backbone.Rpc({
-      namespaceDelimiter: ''
-    })
-  })
   
   Qorus.Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
@@ -147,13 +126,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       } else {
           this.date = date;
       }
-      console.log(this.date);
+
       _.bindAll(this, 'render');
       this.collection = new collection({date: this.date});
       this.collection.on('reset', this.render );
       this.collection.fetch();
-      
-      // this.on('render', this.fixHeader );
     },
     render: function() {
       if (this.template){

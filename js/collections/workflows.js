@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'models/workflow'
 ], function(_, Backbone, Qorus, Model){
-  var Collection = Qorus.SortedCollectionBase.extend({
+  var Collection = Qorus.SortedCollection.extend({
     url: '/rest/workflows/',
     date: null,
     model: Model,

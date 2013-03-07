@@ -5,12 +5,8 @@ define([
   'models/service'
 ], function(_, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
-    model: Model,
-  	methods: {
-  		read: [
-        ['omq.system.service.webapp.getAllServiceInfo'],
-  		]
-  	}
+    url: "/rest/services/",
+    model: Model
   });
   return Collection;
 });

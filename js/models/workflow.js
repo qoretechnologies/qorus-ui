@@ -2,7 +2,7 @@ define([
   'libs/backbone.rpc',
   'qorus/qorus'
 ], function(Backbone, Qorus){
-  var Model = Qorus.ModelBase.extend({
+  var Model = Backbone.Model.extend({
     initialize: function(opts){
       Model.__super__.initialize.call(this, opts);
       if (opts.id){

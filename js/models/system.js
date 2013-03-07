@@ -4,14 +4,10 @@ define([
 ], function(_, Qorus){
     var System = {};
   System.Info = Qorus.Model.extend({
-  	methods: {
-  		read: ['omq.system.get-status']
-  	}
+    url: '/rest/system/'
   });
   System.User = Qorus.Model.extend({
-  	methods: {
-  		read: ['omq.system.get-current-user-info']
-  	}
+    url: '/rest/users/'
   });
   return System;
 });
