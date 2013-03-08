@@ -1,12 +1,12 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
+  'qorus/qorus',
   // Pull in the Collection module from above
   'collections/instances',
   'text!/templates/workflow/instances.html'
-], function($, _, Backbone, Collection, Template){
-  var ListView = Backbone.View.extend({
+], function($, _, Qorus, Collection, Template){
+  var ListView = Qorus.ListView.extend({
     // el: $("#instances"),
     initialize: function(date, opts){
   	  _.bindAll(this, 'render');
@@ -14,12 +14,11 @@ define([
   	  this.collection.on('reset', this.render);
   	  this.collection.fetch();
     },
-	render: function(){
-    var compiledTemplate = _.template( Template, { items: this.collection.models } );
-    this.$el.html(compiledTemplate);
-		return this;
-	},
+  	render: function(){
+      var compiledTemplate = _.template( Template, { items: this.collection.models } );
+      this.$el.html(compiledTemplate);
+  		return this;
+  	},
   });
-  // Returning instantiated views can be quite useful for having "state"
   return ListView;
 });

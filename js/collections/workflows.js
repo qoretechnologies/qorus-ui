@@ -9,9 +9,9 @@ define([
     date: null,
     model: Model,
   	initialize: function(opts){
-  		this.sort_by = 'name';
-  		this.sort_order = 'asc';
-      this.sort_history = ['',];
+  		this.sort_key = 'exec_count';
+  		this.sort_order = 'des';
+      this.sort_history = ['name',];
       if(opts){
           this.date = opts.date;
       }

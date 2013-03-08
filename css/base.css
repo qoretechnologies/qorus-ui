@@ -59,6 +59,16 @@ table th {
 	clear: both;
 	height: 4em;
 }
+.name {
+  position: relative;
+}
+
+.unfold {
+  position: absolute;
+  top: 50%;
+  margin-top: -7px;
+  right: 0;
+}
 
 #footer {
 	background-color: #f5f5f5;

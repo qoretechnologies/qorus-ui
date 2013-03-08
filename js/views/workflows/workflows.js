@@ -7,14 +7,17 @@ define([
   'text!/templates/workflow/list.html',
   'datepicker',
   'moment',
+  'views/workflows/instances',
   'jquery.fixedheader',
   'jquery.sticky',
-], function($, _, Backbone, Qorus, Collection, Template, date, moment){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView){
   var ListView = Qorus.ListView.extend({
     el: $("#content"),
     additionalEvents: {
 		    'click .action': 'runAction',
+        'click .unfold': 'showInstances'
     },
+    subviews: {},
     initialize: function(collection, date, router){
       this.router = router;
       this.template = Template;
@@ -60,6 +63,25 @@ define([
       });
       $('.table-fixed').fixedHeader({ topOffset: 80 });
       $('.sticky').sticky();
+    },
+    showInstances: function(e){
+  		e.preventDefault();
+      var view = this;
+      var data = e.currentTarget.dataset;
+      if (data.id){
+        if(!view.subviews[data.id]){
+          var ilv = new InstanceListView({ date: view.date, workflowid: data.id })
+          view.subviews[data.id] = ilv;
+          var sv = view.subviews[data.id];
+          var el = $('<tr class="instances" />');
+          el.append('<td colspan="18" />');
+          $(e.currentTarget).parents('.workflow-row').after(el);
+          sv.setElement($(el).children('td'));
+        } else {
+          $(e.currentTarget).parents('.workflow-row').next().remove();
+          delete view.subviews[data.id]
+        }
+      }
     }
   });
   return ListView;

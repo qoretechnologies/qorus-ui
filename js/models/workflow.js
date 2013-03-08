@@ -32,9 +32,6 @@ define([
     },
   	idAttribute: "workflowid",
     date: null,
-    wflid: function(){
-      return [this.id,];
-    },
     doAction: function(action, opts){
       var wflid = this.id;
       $.get(this.url(), { 'action': action}).done(

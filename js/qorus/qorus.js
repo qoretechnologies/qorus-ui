@@ -8,11 +8,14 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     }
   });
   
-  function prep(val){
+  function prep(val, des){
     if (_.isNumber(val)){
-      return String('00000000000000' + val).slice(-14);
+      val = String('00000000000000' + val).slice(-14);
     } else  if (_.isString(val)){
-      return val.toLowerCase();
+      val = val.toLowerCase();
+    }
+    if(des===true){
+      return '-'+val;
     }
     return val;
   }
@@ -40,36 +43,36 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   
   Qorus.SortedCollection = Qorus.Collection.extend({
     initialize: function(opts) {
-      this.sort_by = 'name';
+      this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = ['', ];
       if (opts) {
         this.date = opts.date;
       }
     },
-    comparator: function(collection) {
-      var key_1 = collection.get(this.sort_by);
-      var key_2 = collection.get(this.sort_history[0]);
+    comparator: function(c1, c2) {
+      // needs fix
+      var r = (this.sort_order == 'des') ? -1 : 1;
+      var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
+      var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
       
-      return [prep(key_1), prep(key_2)];
+      if (k1[0] < k2[0]) return -1 * r;
+      if (k1[0] > k2[0]) return 1 * r;
+      if (k1[1] > k2[1]) return -1 * r;
+      if (k1[1] < k2[1]) return 1 * r;
+      return 0;
     },
-    sortByKey: function(key, cb) {
+    sortByKey: function(key, ord, cb) {
       if (key) {
-        var old_key = this.sort_by;
-        this.sort_history.unshift(old_key);
-        this.sort_by = key;
+        var old_key = this.sort_key;
+        if (old_key!=key){
+          this.sort_history.unshift(old_key); 
+        }
+        this.sort_order = ord;
+        this.sort_key = key;
         this.sort({
           silent: true
         });
-
-        if (old_key == key) {
-          this.sort_order = (this.sort_order == 'asc') ? 'des' : 'asc';
-          if (this.sort_order == 'des') {
-            this.models = this.models.reverse();
-          }
-        } else {
-          this.sort_order = 'asc';
-        }
 
         this.trigger('reset', this, {});
       }
@@ -196,21 +199,23 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     sortView: function(e) {
       var el = $(e.currentTarget);
       if (el.data('sort')) {
-        this.collection.sortByKey(el.data('sort'));
+        this.collection.sortByKey(el.data('sort'), el.data('order'));
       }
     },
     sortIcon: function() {
         var c = this;
-        var key = c.collection.sort_by;
+        var key = c.collection.sort_key;
         var order = c.collection.sort_order;
         var el = c.$el.find('th[data-sort="' + key + '"]');
         c.$el.find('th i.sort')
           .remove();
 
         if (order == 'des') {
-          el.append('<i class="sort icon-chevron-up"></i>');
-        } else {
+          el.attr('data-order', 'asc');
           el.append('<i class="sort icon-chevron-down"></i>');
+        } else {
+          el.attr('data-order', 'des');
+          el.append('<i class="sort icon-chevron-up"></i>');
         }
     },
     search: function(e){

@@ -7,10 +7,10 @@ define([
     url: function() {
       return '/rest/workflows/'+ this.workflowid + '/instances/'
     },
-    initialize: function(date, opts){
+    initialize: function(opts){
       this.opts = opts;
       this.workflowid = opts.workflowid;
-      Collection.__super__.initialize.call(this, date, opts);
+      Collection.__super__.initialize.call(this, opts);
     },
     model: Model,
   });
