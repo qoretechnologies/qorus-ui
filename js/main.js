@@ -11,7 +11,9 @@ require.config({
     "later.cron": "libs/later/later-cron.min",
     datepicker: "libs/datetime-picker/bootstrap-datetimepicker",
     "jquery.fixedheader": "libs/fixedheader",
-    "jquery.sticky": "libs/jquery.sticky"
+    "jquery.sticky": "libs/jquery.sticky",
+    "messenger": "libs/messenger/js/messenger.min",
+    sprintf: "libs/sprintf-0.7-beta1"
   },
   shim: { 
     "backbone": {
@@ -37,6 +39,15 @@ require.config({
     "jquery.sticky": {
       deps: ['jquery'],
       exports: 'jQuery.fn.sticky'
+    },
+    "messenger": {
+      deps: ['jquery', 'backbone'],
+      exports: 'jQuery.fn.messenger',
+      init: function(m){
+        $._messengerDefaults = {
+        	extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
+        }
+      }
     }
   },
   templates: '../templates'

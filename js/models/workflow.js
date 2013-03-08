@@ -1,8 +1,11 @@
 define([
-  'libs/backbone.rpc',
-  'qorus/qorus'
-], function(Backbone, Qorus){
-  var Model = Backbone.Model.extend({
+  'jquery',
+  'messenger',
+  'backbone',
+  'qorus/qorus',
+  'sprintf'
+], function($, messenger, Backbone, Qorus){
+  var Model = Qorus.Model.extend({
     initialize: function(opts){
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
@@ -32,12 +35,14 @@ define([
     wflid: function(){
       return [this.id,];
     },
-    start: function(){
-      $.get(this.url(), { 'action': 'start'}).done({
-        success: function (e, ee, eee){
-          console.log(e, ee, eee);
+    doAction: function(action, opts){
+      var wflid = this.id;
+      $.get(this.url(), { 'action': action}).done(
+        function (e, ee, eee){
+          var msg = sprintf('Workflow %d %s done', wflid, action);
+          $.globalMessenger().post(msg);
         }
-      });
+      );      
     }
   });
   // Return the model for the module

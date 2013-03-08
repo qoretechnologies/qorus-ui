@@ -13,7 +13,7 @@ define([
   var ListView = Qorus.ListView.extend({
     el: $("#content"),
     additionalEvents: {
-		    'click .start': 'start',
+		    'click .action': 'runAction',
     },
     initialize: function(collection, date, router){
       this.router = router;
@@ -30,25 +30,13 @@ define([
       });
     },
   	// starts workflow
-  	start : function(e){
+  	runAction: function(e){
   		e.preventDefault();
-  		var workflowid = e.currentTarget.dataset.id;
-  		var wfl = this.collection.get(workflowid);
-  		wfl.start();
-  	},
-  	// stops workflow
-  	stop : function(e){
-  		e.preventDefault();
-  		var workflowid = e.currentTarget.dataset.id;
-  		var wfl = this.collection.get(workflowid);
-  		wfl.stop();
-  	},
-  	// reset workflow
-  	reset : function(e){
-  		e.preventDefault();
-  		var workflowid = e.currentTarget.dataset.id;
-  		var wfl = this.collection.get(workflowid);
-  		wfl.reset();
+      var data = e.currentTarget.dataset;
+      if (data.id && data.action){
+    		var wfl = this.collection.get(data.id);
+    		wfl.doAction(data.action); 
+      }
   	},
     // filter by date init
     datePicker: function(){
