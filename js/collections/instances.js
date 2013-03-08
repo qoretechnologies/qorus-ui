@@ -3,7 +3,7 @@ define([
   'qorus/qorus',
   'models/instance'
 ], function(_, Qorus, Model){
-  var Collection = Qorus.Collection.extend({
+  var Collection = Qorus.SortedCollection.extend({
     url: function() {
       return '/rest/workflows/'+ this.workflowid + '/instances/'
     },

@@ -1,28 +1,28 @@
+<% if (items.length > 0) { %>
 <table class="table table-fixed table-striped">
   <thead>
     <tr>
       <th>Status</th>
-      <th>IID</th>
-      <th>Scheduled</th>
+      <th>EID</th>
+      <th>Mode</th>
       <th>Started</th>
-      <th>Modified</th>
       <th>Errors</th>
       <th>Warnings</th>
-      <th>Business</th>
     </tr>
   </thead>
   <tbody>
   <% _.each(items, function (item) { %>  
     <tr>
-	    <td><span class="label"><%= item.get('workflowstatus') %></span></td>
-      <td><%= item.get('workflow_instanceid') %></td>
-      <td><%= item.get('scheduled') %></td>
-      <td><%= item.get('started') %></td>
-      <td><%= item.get('modified') %></td>
-      <td><%= item.get('error_count') %></td>
-      <td><%= item.get('warning_count') %></td>
-      <td><%= item.get('business_error') %></td>
+	    <td><span class="label"><%= item.get('status') %></span></td>
+      <td><%= item.get('executionID') %></td>
+      <td><%= item.get('mode') %></td>
+      <td><%= item.get('starttime') %></td>
+      <td><%= item.get('errors') %></td>
+      <td><%= item.get('warnings') %></td>
     </tr>
     <% }); %>
     </tbody>
 </table>
+<% } else { %>
+  <p>Any running</p>
+<% } %>

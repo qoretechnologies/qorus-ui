@@ -78,7 +78,9 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       if (!options) {
         options = {};
       }
-      _.extend(options, { data: { date: this.date }});
+      if (this.date!==null) {
+        _.extend(options, { data: { date: this.date }}); 
+      }
       Qorus.SortedCollection.__super__.fetch.call(this, options);
     }
   });

@@ -31,7 +31,14 @@ define([
     date: null,
     wflid: function(){
       return [this.id,];
-    } 
+    },
+    start: function(){
+      $.get(this.url(), { 'action': 'start'}).done({
+        success: function (e, ee, eee){
+          console.log(e, ee, eee);
+        }
+      });
+    }
   });
   // Return the model for the module
   return Model;

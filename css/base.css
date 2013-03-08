@@ -187,9 +187,9 @@ aside {
   text-shadow: none;
 }
 
-#nav-main i {
-  display: inline-block;
-  margin: 5px 30px;
+#nav-main span {
+	display: block;
+	width: 100%;
 }
 
 .nav-list a:hover .icon-white {
