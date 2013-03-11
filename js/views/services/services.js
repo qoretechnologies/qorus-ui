@@ -20,7 +20,12 @@ define([
       var svc = this.collection.get(data.id);
       var opts = {};
       opts[data.option] = data.value;
-      $.put(svc.url(), opts, null, 'application/json');
+      $.put(svc.url(), opts, null, 'application/json')
+      .done(
+        function(res){
+          console.log(res);
+        }
+      );
       this.collection.fetch();
     }
   });

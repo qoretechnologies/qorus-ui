@@ -20,7 +20,7 @@ define([
       this.info.fetch();
     },
     renderUser: function(){
-      $('#user-info .username').text(this.user.get('name'));
+      $('#user-info .username').text(this.user.get(0).name);
     },
     renderInfo: function(){
 			$('header .version').text(this.info.get('omq-version'));

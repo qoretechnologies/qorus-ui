@@ -10,6 +10,7 @@
 			<th data-sort="type">Type</th>
 			<th data-sort="autostart">Autostart</th>
 			<th data-sort="status">Status</th>
+      <th></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -42,6 +43,9 @@
 						<% } %>
               </div>
 					</td>
+          <td>
+            <button class="btn btn-mini btn-inverse" data-id="<%= item.get('serviceid') %>" data-option="reset" data-value="true">Reset</button>
+          </td>
 	  			</tr>
 	        <% }); %>
 		</tbody>
