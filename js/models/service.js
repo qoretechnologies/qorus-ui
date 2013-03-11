@@ -1,11 +1,15 @@
 define([
+  'jquery',
   'underscore',
-  'backbone',
-  'libs/backbone.rpc'
-], function(_, Backbone, Rpc){
-  var ServiceModel = Backbone.Model.extend({
+  'qorus/qorus',
+  'sprintf'
+], function($, _, Qorus){
+  var ServiceModel = Qorus.Model.extend({
     urlRoot: '/rest/services/',
     idAttribute: "serviceid",
+    initialize: function(){
+      this.on('change', console.log(sprintf('changed %s', this.id)));
+    }
   });
   return ServiceModel;
 });

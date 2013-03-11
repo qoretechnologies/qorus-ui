@@ -12,6 +12,7 @@ require.config({
     datepicker: "libs/datetime-picker/bootstrap-datetimepicker",
     "jquery.fixedheader": "libs/fixedheader",
     "jquery.sticky": "libs/jquery.sticky",
+    "jquery.rest": "libs/jquery.rest",
     "messenger": "libs/messenger/js/messenger.min",
     sprintf: "libs/sprintf-0.7-beta1"
   },
@@ -39,6 +40,9 @@ require.config({
     "jquery.sticky": {
       deps: ['jquery'],
       exports: 'jQuery.fn.sticky'
+    },
+    "jquery.rest": {
+      deps: ['jquery']
     },
     "messenger": {
       deps: ['jquery', 'backbone'],

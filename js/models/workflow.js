@@ -3,7 +3,8 @@ define([
   'messenger',
   'backbone',
   'qorus/qorus',
-  'sprintf'
+  'sprintf',
+  'jquery.rest'
 ], function($, messenger, Backbone, Qorus){
   var Model = Qorus.Model.extend({
     initialize: function(opts){
@@ -32,14 +33,18 @@ define([
     },
   	idAttribute: "workflowid",
     date: null,
+    allowedActions: ['start','stop','reset'],
     doAction: function(action, opts){
-      var wflid = this.id;
-      $.get(this.url(), { 'action': action}).done(
-        function (e, ee, eee){
-          var msg = sprintf('Workflow %d %s done', wflid, action);
-          $.globalMessenger().post(msg);
-        }
-      );      
+      if(_.indexOf(this.allowedActions, action) != -1){
+        var wflid = this.id;
+        $.put(this.url(), {'action': action }, null, 'application/json')
+        .done(
+          function (e, ee, eee){
+            var msg = sprintf('Workflow %d %s done', wflid, action);
+            $.globalMessenger().post(msg);
+          }
+        );        
+      }
     }
   });
   // Return the model for the module
