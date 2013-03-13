@@ -220,3 +220,15 @@ aside {
   right: -1px;
   top: 50%;
 }
+
+.bottom-bar {
+  display: none;
+  position: fixed;
+  background: #fff;
+  height: 150px;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  width: 100%;
+}

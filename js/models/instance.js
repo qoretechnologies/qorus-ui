@@ -4,6 +4,6 @@ define([
   var Model = Qorus.Model.extend({
     urlRoot: '/rest/instances/',
     idAttribute: "executionID",
-  });
+  }); 
   return Model;
 });

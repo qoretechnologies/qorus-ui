@@ -62,11 +62,11 @@
 	        <% _.each( items, function( workflow ){ 
             var workflow = workflow.toJSON();
             %>
-	  			<tr class="workflow-row" id="workflow-<%= workflow.workflowid %>">
+	  			<tr class="workflow-row" id="workflow-<%= workflow.workflowid %>" data-id="<%= workflow.workflowid %>">
   					<td><i class="icon-box check"></i></td>
     				<td class="instances"><%= workflow.workflowid %></td>
     				<td class="instances"><%= workflow.exec_count %></td>
-    				<td class="name" data-search="<%= workflow.name.toLowerCase() %>"><a href="#/workflows/view/<%= workflow.workflowid %>"><%= workflow.name %></a> <small class="unfold" data-id="<%= workflow.workflowid %>"><i class="icon-circle-arrow-down"></i></small></td>
+    				<td class="name" data-search="<%= workflow.name.toLowerCase() %>"><a href="#/workflows/view/<%= workflow.workflowid %>"><%= workflow.name %></a></td>
     				<td class="version"><%= workflow.version %></td>
     				<td class="in-progress" data-badge="badge-warning"><%= workflow['IN-PROGRESS'] %></td>
     				<td class="complete" data-badge="badge-success"><%= workflow.COMPLETE %></td>
@@ -98,5 +98,10 @@
 	        <% }); %>
 		</tbody>
 	</table>
+  </div>
+</div>
+<div class="bottom-bar">
+  <div class="row-fluid">
+    <div id="instances" class="span12 page"></div>
   </div>
 </div>

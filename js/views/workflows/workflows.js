@@ -15,7 +15,7 @@ define([
     el: $("#content"),
     additionalEvents: {
 		    'click .action': 'runAction',
-        'click .unfold': 'showInstances'
+        'click tbody tr': 'showInstances'
     },
     subviews: {},
     initialize: function(collection, date, router){
@@ -69,17 +69,32 @@ define([
       var view = this;
       var data = e.currentTarget.dataset;
       if (data.id){
+        var el = $('#instances');
+        var parent =el.parents('.bottom-bar').show();
+        $(e.currentTarget).parent().find('tr').removeClass('info');
+        
         if(!view.subviews[data.id]){
-          var ilv = new InstanceListView({ date: view.date, workflowid: data.id })
+          var ilv = new InstanceListView({ date: view.date, workflowid: data.id });
+          parent.data('view', ilv.cid);
+          ilv.setElement(el);
+          ilv.collection.on('reset', function() { ilv.$el.slideDown('slow'); });
           view.subviews[data.id] = ilv;
+          $(e.currentTarget).addClass('info');
           var sv = view.subviews[data.id];
-          var el = $('<tr class="instances" />');
-          el.append('<td colspan="18" />');
-          $(e.currentTarget).parents('.workflow-row').after(el);
-          sv.setElement($(el).children('td'));
         } else {
-          $(e.currentTarget).parents('.workflow-row').next().remove();
-          delete view.subviews[data.id]
+          var ilv = view.subviews[data.id];
+          
+          // toggle show
+          if(parent.data('view') != ilv.cid ){
+            ilv.render();
+            el.parents('.bottom-bar').show();
+            $(e.currentTarget).addClass('info');
+          } else {
+            el.parents('.bottom-bar').hide();
+            ilv.$el.html('');
+            // TODO: replace later with events updates
+            delete view.subviews[data.id];                      
+          }
         }
       }
     }
