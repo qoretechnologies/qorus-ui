@@ -14,7 +14,7 @@
   			data: JSON.stringify(data),
   			success: callback,
         dataType: 'json',
-        contentType: type,
+        contentType: 'application/json',
         processData: false
   		});
   	};

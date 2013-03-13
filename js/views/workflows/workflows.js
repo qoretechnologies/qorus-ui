@@ -65,7 +65,7 @@ define([
       $('.sticky').sticky();
     },
     showInstances: function(e){
-      // fire event only if click on td
+      // fire event only if clicked on td
       if (e.target.localName == 'td'){
         e.preventDefault();
         var view = this;

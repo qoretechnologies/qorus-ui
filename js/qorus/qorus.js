@@ -103,8 +103,42 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       $(this.el).parent().find('.loader').remove();
     }
   });
+  
+  Qorus.View = Backbone.View.extend({
+    events : function(){
+       return _.extend({},this.defaultEvents,this.additionalEvents);
+    },
+    initialize: function(options){
+      this.bindings = [];
+      this.additionalEvents = {};
+      this.defaultEvents = {};
+      Qorus.View.__super__.initialize.call(this, [options]);
+    },
+    bindTo: function (model, ev, callback) {
+        model.bind(ev, callback, this);
+        this.bindings.push({ model: model, ev: ev, callback: callback });
+    },
 
-  Qorus.ListView = Backbone.View.extend({
+    unbindFromAll: function () {
+        _.each(this.bindings, function (binding) {
+          if(binding){
+            binding.model.unbind(binding.ev, binding.callback);
+          }
+        });
+        this.bindings = [];
+    },
+
+    dispose: function () {
+        this.unbindFromAll(); // Will unbind all events this view has bound to
+        this.unbind();        // This will unbind all listeners to events from 
+                              // this view. This is probably not necessary 
+                              // because this view will be garbage collected.
+        this.remove(); // Uses the default Backbone.View.remove() method which
+                       // removes this.el from the DOM and removes DOM events.
+    }
+  })
+
+  Qorus.ListView = Qorus.View.extend({
     defaultEvents: {
       'click .check': 'highlight',
       'click .check-all': 'checkall',
@@ -113,12 +147,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       'submit .form-search': 'search',
       'keyup .search-query': 'search'
     },
-    additionalEvents: {  
-    },
-    events : function() {
+    events : function(){
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(collection, date) {
+      Qorus.ListView.__super__.initialize.call(this);
       // add element loader
       this.loader = new Qorus.Loader({ el: this.el });
 
@@ -134,7 +167,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
 
       _.bindAll(this, 'render');
       this.collection = new collection({date: this.date});
-      this.collection.on('reset', this.render );
+      this.collection.on('reset', this.render);
       this.collection.fetch();
     },
     render: function() {

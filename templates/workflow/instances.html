@@ -8,17 +8,24 @@
       <th>Started</th>
       <th>Errors</th>
       <th>Warnings</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-  <% _.each(items, function (item) { %>  
+  <% _.each(items, function (item) {   
+    var item = item.toJSON(); %>
     <tr>
-	    <td><span class="label"><%= item.get('status') %></span></td>
-      <td><%= item.get('executionID') %></td>
-      <td><%= item.get('mode') %></td>
-      <td><%= item.get('starttime') %></td>
-      <td><%= item.get('errors') %></td>
-      <td><%= item.get('warnings') %></td>
+	    <td><span class="label"><%= item.status %></span></td>
+      <td><%= item.executionID %></td>
+      <td><%= item.mode %></td>
+      <td><%= item.starttime %></td>
+      <td><%= item.errors %></td>
+      <td><%= item.warnings %></td>
+      <td>
+        <div class="btn_group">
+          <button class="btn-mini btn-danger" data-id="<%= item.executionID %>" data-action="stop">Stop</button>
+        </div>
+      </td>
     </tr>
     <% }); %>
     </tbody>
