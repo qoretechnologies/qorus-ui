@@ -159,6 +159,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       $(el)
         .parents('.workflow-row')
         .toggleClass('warning');
+      e.stopPropagation();
     },
     fixHeader: function(){
       $(this.el).find('table').fixedHeaderTable();
@@ -194,6 +195,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           .removeClass('icon-check')
           .addClass('icon-box');
       }
+      e.stopPropagation();
     },
     // sort view
     sortView: function(e) {
