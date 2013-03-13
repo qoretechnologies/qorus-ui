@@ -8,9 +8,9 @@ define([
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
     // el: $("#instances"),
-    initialize: function(date, opts){
+    initialize: function(opts){
   	  _.bindAll(this, 'render');
-      this.collection = new Collection(date, opts);
+      this.collection = new Collection(opts);
   	  this.collection.on('reset', this.render);
   	  this.collection.fetch();
     },

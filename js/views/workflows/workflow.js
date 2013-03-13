@@ -23,7 +23,7 @@ define([
   	  return this;
   	},
   	onRender: function(){
-  		var ilv = new InstanceListView(this.date, { workflowid: this.model.id });
+  		var ilv = new InstanceListView({ date: this.date, workflowid: this.model.id });
   		ilv.setElement('#instances');
   	}
   });
