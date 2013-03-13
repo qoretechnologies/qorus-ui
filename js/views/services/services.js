@@ -7,7 +7,6 @@ define([
   'sprintf'
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
-    el: $("#content"),
     initialize: function(){
         this.template = Template;
         ListView.__super__.initialize.call(this, Collection);

@@ -8,7 +8,6 @@ define([
   'views/workflows/instances'
 ], function($, _, Backbone, Workflow, Template, InstanceListView){
   var ModelView = Backbone.View.extend({
-    el: $("#content"), 
     initialize: function(id){
   	  _.bindAll(this, 'render');
       this.model = new Workflow(id);

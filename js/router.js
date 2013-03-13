@@ -2,7 +2,6 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
   var AppRouter = Backbone.Router.extend({
     initialize: function(opts){
       this.currentView = null;
-      this.on('route', this.clean );
     },
     routes: {
       // Define some URL routes
@@ -19,26 +18,37 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     },
     clean: function(){
       if (this.currentView){
-        this.currentView.dispose();
+        this.currentView.undelegateEvents();
+        this.currentView.remove();
+        this.currentView.off();
       }
     },
     showWorkflows: function(date){
+      this.clean();
       var view = new WorkflowListView({}, date);      
       this.currentView = view;
+      $('#content').html(view.el);
     },
     showWorkflow: function(id) {
+      this.clean();
       var view = new WorkflowView({ id: id });
       this.currentView = view;
+      $('#content').html(view.el);
     },
     showServices: function() {
+      this.clean();
       var view = new ServiceListView();
       this.currentView = view;
+      $('#content').html(view.el);
     },
     showJobs: function() {
+      this.clean();
       var view = new JobListView();
       this.currentView = view;
+      $('#content').html(view.el);
     },
     default: function(actions) {
+      this.clean();
       console.log('No route:', actions);
     }
   });

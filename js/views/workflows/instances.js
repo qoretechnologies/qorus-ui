@@ -7,7 +7,6 @@ define([
   'text!/templates/workflow/instances.html'
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
-    // el: $("#instances"),
     additionalEvents: {
 		  'click button[data-action]': 'runAction',
     },

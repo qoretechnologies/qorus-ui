@@ -105,13 +105,13 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   });
   
   Qorus.View = Backbone.View.extend({
+    additionalEvents: {},
+    bindings: [],
+    defaultEvents: {},
     events : function(){
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(options){
-      this.bindings = [];
-      this.additionalEvents = {};
-      this.defaultEvents = {};
       Qorus.View.__super__.initialize.call(this, [options]);
     },
     bindTo: function (model, ev, callback) {

@@ -12,7 +12,7 @@ define([
   'jquery.sticky',
 ], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView){
   var ListView = Qorus.ListView.extend({
-    el: $("#content"),
+    // el: $("#content"),
     additionalEvents: {
 		    'click .action': 'runAction',
         'click tbody tr': 'showInstances'
@@ -78,10 +78,10 @@ define([
           if(!view.subviews[data.id]){
             var ilv = new InstanceListView({ date: view.date, workflowid: data.id });
             parent.data('view', ilv.cid);
-            ilv.setElement(el);
             ilv.collection.on('reset', function() { ilv.$el.slideDown('slow'); });
             view.subviews[data.id] = ilv;
             $(e.currentTarget).addClass('info');
+            el.html(ilv.el);
             var sv = view.subviews[data.id];
           } else {
             var ilv = view.subviews[data.id];
@@ -94,7 +94,9 @@ define([
               $(e.currentTarget).addClass('info');
             } else {
               el.parents('.bottom-bar').hide();
-              ilv.$el.html('');
+              ilv.undelegateEvents();
+              ilv.remove();
+              ilv.off();
               // TODO: replace later with events updates
               delete view.subviews[data.id];                      
             }
