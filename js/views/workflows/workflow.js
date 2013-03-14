@@ -9,6 +9,9 @@ define([
   'views/workflows/orders',
 ], function($, _, Backbone, Workflow, Template, InstanceListView, OrderListView){
   var ModelView = Backbone.View.extend({
+    url: function() {
+     return '#/workflows/view/' + this.opts.id;  
+    },
     initialize: function(opts){
       this.opts = opts;
   	  _.bindAll(this, 'render');
@@ -25,10 +28,10 @@ define([
   	},
   	onRender: function(){
       if (!this.opts.inst) {
-    		var ilv = new InstanceListView({ date: this.date, workflowid: this.model.id });
+    		var ilv = new InstanceListView({ date: this.date, workflowid: this.model.id, url: this.url() });
         $('#instances').html(ilv.el);        
       } else if (this.opts.inst == 'orders'){
-    		var ilv = new OrderListView({ date: this.date, workflowid: this.model.id, statuses: this.opts.filter });
+    		var ilv = new OrderListView({ date: this.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() });
         $('#instances').html(ilv.el);                
       } 
   	}

@@ -22,7 +22,21 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   
   var Qorus = {};
   
-  Qorus.Model = Backbone.Model;
+  Qorus.Model = Backbone.Model.extend({
+    dateAttributes: {},
+    initialize: function(opts){
+      Qorus.Model.__super__.initialize.call(this, opts);
+      // this.parseDates();
+    },
+    parse: function(response, options){
+      _.each(this.dateAttributes, function(date){
+        if (response[date]){
+         response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+        }
+      });
+      return response;
+    }
+  });
 
   Qorus.Collection = Backbone.Collection.extend({
     date: null,
@@ -106,37 +120,18 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   });
   
   Qorus.View = Backbone.View.extend({
+    url: '#',
     additionalEvents: {},
     bindings: [],
     defaultEvents: {},
+    context: {},
     events : function(){
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(options){
       Qorus.View.__super__.initialize.call(this, [options]);
-    },
-    // bindTo: function (model, ev, callback) {
-    //     model.bind(ev, callback, this);
-    //     this.bindings.push({ model: model, ev: ev, callback: callback });
-    // },
-    // 
-    // unbindFromAll: function () {
-    //     _.each(this.bindings, function (binding) {
-    //       if(binding){
-    //         binding.model.unbind(binding.ev, binding.callback);
-    //       }
-    //     });
-    //     this.bindings = [];
-    // },
-    // 
-    // dispose: function () {
-    //     this.unbindFromAll(); // Will unbind all events this view has bound to
-    //     this.unbind();        // This will unbind all listeners to events from 
-    //                           // this view. This is probably not necessary 
-    //                           // because this view will be garbage collected.
-    //     this.remove(); // Uses the default Backbone.View.remove() method which
-    //                    // removes this.el from the DOM and removes DOM events.
-    // }
+      _.extend(this.context, options);
+    }
   })
 
   Qorus.ListView = Qorus.View.extend({
@@ -173,10 +168,13 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     },
     render: function() {
       if (this.template){
-        var tpl = _.template(this.template,{
+        var ctx = {
           date: this.date,
           items: this.collection.models
-        });
+        };
+        _.extend(this.context, ctx);
+        
+        var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
         this.sortIcon();  
         if(this.loader)

@@ -7,11 +7,25 @@ define([
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,
+    context: {
+      predefined_statuses: [
+        'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
+        'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
+        'Blocked', 'Crash'
+      ],      
+      action_css: {
+        'block': 'btn-inverse',
+        'cancel': 'btn-danger',
+        'retry': 'btn-success'
+      }
+    },
     additionalEvents: {
 		  'click button[data-action]': 'runAction',
     },
     initialize: function(opts){
   	  _.bindAll(this, 'render');
+      _.extend(this.context, opts);
+      
       this.collection = new Collection(opts);
   	  this.collection.on('reset', this.render);
   	  this.collection.fetch();

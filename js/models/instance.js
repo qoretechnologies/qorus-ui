@@ -6,6 +6,7 @@ define([
     urlRoot: '/rest/exec/',
     idAttribute: "executionID",
     allowedActions: ['stop'],
+    dateAttributes: ['starttime'],
     doAction: function(action, opts){
       if(_.indexOf(this.allowedActions, action) != -1){
         var wflid = this.id;

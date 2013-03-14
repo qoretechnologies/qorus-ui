@@ -10,6 +10,8 @@ define([
     initialize: function(opts){
       this.opts = opts;
       this.workflowid = opts.workflowid;
+      delete this.opts.workflowid;
+      delete this.opts.url;
       Collection.__super__.initialize.call(this, opts);
     },
     model: Model,

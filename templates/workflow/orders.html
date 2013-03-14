@@ -1,4 +1,17 @@
 <h4>Order Instances</h4>
+<div class="row-fluid">
+  <div class="btn-group">
+  <button class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    <%= statuses %>
+     <span class="caret"></span>
+   </button>
+   <ul class="dropdown-menu">
+     <% _.each(predefined_statuses, function(error){ %>
+       <li><a href="<%= url + '/orders/' + error.toLowerCase() %>"><%= error %></a></li>
+     <% }) %>
+   </ul>
+ </div>
+</div>
 <% if (items.length > 0) { %>
 <table class="table table-fixed table-striped">
   <thead>
@@ -21,9 +34,9 @@
 	    <td><span class="label"><%= item.workflowstatus %></span></td>
       <td>
         <% if(item.business_error ) {%>
-          <span class="btn btn-mini btn-danger"><i class="icon-remove icon-white"></i></span>
+          <span class="label label-important"><i class="icon-remove icon-white"></i></span>
         <% } else {%>
-          <span class="btn btn-mini"><i class="icon-ok"></i></span>
+          <span class="label label-success"><i class="icon-ok icon-white"></i></span>
         <% } %>
       </td>
       <td><%= item.workflow_instanceid %></td>
@@ -33,11 +46,16 @@
       <td><%= item.error_count %></td>
       <td><%= (item.warning_count) ? item.warning.count : 0 %></td>
       <td>
+        <div class="btn-group">
+          <% _.each(item.actions, function(action) { %>
+            <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
+          <% }); %>
+        </div>
       </td>
     </tr>
     <% }); %>
     </tbody>
 </table>
 <% } else { %>
-  <p>Any running</p>
+  <p>Any</p>
 <% } %>
