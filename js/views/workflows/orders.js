@@ -2,8 +2,8 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'collections/instances',
-  'text!/templates/workflow/instances.html'
+  'collections/orders',
+  'text!/templates/workflow/orders.html'
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,

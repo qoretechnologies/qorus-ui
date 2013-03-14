@@ -33,7 +33,7 @@ table th {
 }
 
 .badge-waiting {
-  background-color: #fcf8e3;
+  background-color: #e5c737;
 }
 
 .badge-canceled {
@@ -231,4 +231,16 @@ aside {
   overflow-y: auto;
   box-shadow: rgba(0,0,0,.5) 0 0 10px;
   width: 100%;
+}
+
+#workflows .err a {
+  color: #000;
+}
+
+#workflows .err a:hover {
+  text-decoration: none;
+}
+
+#workflows .badge a {
+  color: #fff;
 }

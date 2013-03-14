@@ -5,12 +5,14 @@ define([
   // Pull in the Collection module from above
   'models/workflow',
   'text!/templates/workflow/detail.html',
-  'views/workflows/instances'
-], function($, _, Backbone, Workflow, Template, InstanceListView){
+  'views/workflows/instances',
+  'views/workflows/orders',
+], function($, _, Backbone, Workflow, Template, InstanceListView, OrderListView){
   var ModelView = Backbone.View.extend({
-    initialize: function(id){
+    initialize: function(opts){
+      this.opts = opts;
   	  _.bindAll(this, 'render');
-      this.model = new Workflow(id);
+      this.model = new Workflow({ id: opts.id });
   	  this.model.fetch()
   	  this.model.on('change', this.render);
   	  this.on('render', this.onRender);
@@ -22,8 +24,13 @@ define([
   	  return this;
   	},
   	onRender: function(){
-  		var ilv = new InstanceListView({ date: this.date, workflowid: this.model.id });
-  		ilv.setElement('#instances');
+      if (!this.opts.inst) {
+    		var ilv = new InstanceListView({ date: this.date, workflowid: this.model.id });
+        $('#instances').html(ilv.el);        
+      } else if (this.opts.inst == 'orders'){
+    		var ilv = new OrderListView({ date: this.date, workflowid: this.model.id, statuses: this.opts.filter });
+        $('#instances').html(ilv.el);                
+      } 
   	}
   });
   return ModelView;

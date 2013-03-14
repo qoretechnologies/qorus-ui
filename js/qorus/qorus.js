@@ -46,6 +46,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = ['', ];
+      this.opts = opts;
       if (opts) {
         this.date = opts.date;
       }
@@ -78,12 +79,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
     },
     fetch: function(options){
+      
       if (!options) {
         options = {};
       }
-      if (this.date!==null) {
-        _.extend(options, { data: { date: this.date }}); 
-      }
+      _.extend(options, { data: this.opts});
+      
       Qorus.SortedCollection.__super__.fetch.call(this, options);
     }
   });
@@ -114,28 +115,28 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     initialize: function(options){
       Qorus.View.__super__.initialize.call(this, [options]);
     },
-    bindTo: function (model, ev, callback) {
-        model.bind(ev, callback, this);
-        this.bindings.push({ model: model, ev: ev, callback: callback });
-    },
-
-    unbindFromAll: function () {
-        _.each(this.bindings, function (binding) {
-          if(binding){
-            binding.model.unbind(binding.ev, binding.callback);
-          }
-        });
-        this.bindings = [];
-    },
-
-    dispose: function () {
-        this.unbindFromAll(); // Will unbind all events this view has bound to
-        this.unbind();        // This will unbind all listeners to events from 
-                              // this view. This is probably not necessary 
-                              // because this view will be garbage collected.
-        this.remove(); // Uses the default Backbone.View.remove() method which
-                       // removes this.el from the DOM and removes DOM events.
-    }
+    // bindTo: function (model, ev, callback) {
+    //     model.bind(ev, callback, this);
+    //     this.bindings.push({ model: model, ev: ev, callback: callback });
+    // },
+    // 
+    // unbindFromAll: function () {
+    //     _.each(this.bindings, function (binding) {
+    //       if(binding){
+    //         binding.model.unbind(binding.ev, binding.callback);
+    //       }
+    //     });
+    //     this.bindings = [];
+    // },
+    // 
+    // dispose: function () {
+    //     this.unbindFromAll(); // Will unbind all events this view has bound to
+    //     this.unbind();        // This will unbind all listeners to events from 
+    //                           // this view. This is probably not necessary 
+    //                           // because this view will be garbage collected.
+    //     this.remove(); // Uses the default Backbone.View.remove() method which
+    //                    // removes this.el from the DOM and removes DOM events.
+    // }
   })
 
   Qorus.ListView = Qorus.View.extend({
@@ -178,7 +179,8 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         });
         this.$el.html(tpl);
         this.sortIcon();  
-        this.loader.destroy();
+        if(this.loader)
+          this.loader.destroy();
         this.trigger('render', this, {});
       }
       return this;

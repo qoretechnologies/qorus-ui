@@ -12,6 +12,7 @@ define([
   		this.sort_key = 'exec_count';
   		this.sort_order = 'des';
       this.sort_history = ['name',];
+      this.opts = opts;
       if(opts){
           this.date = opts.date;
       }

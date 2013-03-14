@@ -5,7 +5,7 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     },
     routes: {
       // Define some URL routes
-      'workflows/view/:id': 'showWorkflow',
+      'workflows/view/:id(/:inst)(/)(:filter)': 'showWorkflow',
       'workflows/:date': 'showWorkflows',
       'workflows': 'showWorkflows',
 
@@ -29,9 +29,9 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
       this.currentView = view;
       $('#content').html(view.el);
     },
-    showWorkflow: function(id) {
+    showWorkflow: function(id, inst, filter) {
       this.clean();
-      var view = new WorkflowView({ id: id });
+      var view = new WorkflowView({ id: id, inst: inst, filter: filter });
       this.currentView = view;
       $('#content').html(view.el);
     },

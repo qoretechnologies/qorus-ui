@@ -60,26 +60,27 @@
 		</thead>
 		<tbody>
 	        <% _.each( items, function( workflow ){ 
-            var workflow = workflow.toJSON();
+            var wfl = workflow.toJSON();
+            var url = '#/workflows/view/' + wfl.workflowid;
             %>
-	  			<tr class="workflow-row" id="workflow-<%= workflow.workflowid %>" data-id="<%= workflow.workflowid %>">
+	  			<tr class="workflow-row" id="workflow-<%= wfl.workflowid %>" data-id="<%= wfl.workflowid %>">
   					<td><i class="icon-box check"></i></td>
-    				<td class="instances"><%= workflow.workflowid %></td>
-    				<td class="instances"><%= workflow.exec_count %></td>
-    				<td class="name" data-search="<%= workflow.name.toLowerCase() %>"><a href="#/workflows/view/<%= workflow.workflowid %>"><%= workflow.name %></a></td>
-    				<td class="version"><%= workflow.version %></td>
-    				<td class="in-progress" data-badge="badge-warning"><%= workflow['IN-PROGRESS'] %></td>
-    				<td class="complete" data-badge="badge-success"><%= workflow.COMPLETE %></td>
-    				<td class="error" data-badge="badge-importang"><%= workflow.ERROR %></td>
-    				<td class="async-waiting" data-badge="badge-waiting"><%= workflow['ASYNC-WAITING'] %></td>
-    				<td class="waiting" data-badge="badge-waiting"><%= workflow.WAITING %></td>
-    				<td class="incomplete" data-badge="badge-info"><%= workflow.INCOMPLETE %></td>
-    				<td class="canceled" data-badge="badge-canceled"><%= workflow.CANCELED %></td>
-    				<td class="retry" data-badge="badge-error"><%= workflow.RETRY %></td>
-    				<td class="ready" data-badge="badge-ready"><%= workflow.READY %></td>
-    				<td class="blocked" data-badge=""><%= workflow.BLOCKED %></td>
-    				<td class="event-waiting" data-badge="badge-waiting"><%= workflow['EVENT-WAITING'] %></td>
-    				<td class="scheduled" data-badge="badge-info"><%= workflow.SCHEDULED %></td>
+    				<td class="instances"><%= wfl.workflowid %></td>
+    				<td class="instances"><%= wfl.exec_count %></td>
+    				<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= url %>"><%= wfl.name %></a></td>
+    				<td class="version"><%= wfl.version %></td>
+    				<td class="err in-progress" data-badge="badge-warning"><a href="<%= url + '/orders/in-progress' %>"><%= wfl['IN-PROGRESS'] %></a></td>
+    				<td class="err complete" data-badge="badge-success"><a href="<%= url + '/orders/complete' %>"><%= wfl.COMPLETE %></a></td>
+    				<td class="err error" data-badge="badge-important"><a href="<%= url + '/orders/error' %>"><%= wfl.ERROR %></a></td>
+    				<td class="err async-waiting" data-badge="badge-waiting"><a href="<%= url + '/orders/async-waiting' %>"><%= wfl['ASYNC-WAITING'] %></a></td>
+    				<td class="err waiting" data-badge="badge-waiting"><a href="<%= url + '/orders/waiting' %>"><%= wfl.WAITING %></a></td>
+    				<td class="err incomplete" data-badge="badge-info"><a href="<%= url + '/orders/in-progress' %>"><%= wfl.INCOMPLETE %></a></td>
+    				<td class="err canceled" data-badge="badge-canceled"><a href="<%= url + '/orders/in-progress' %>"><%= wfl.CANCELED %></a></td>
+    				<td class="err retry" data-badge="badge-error"><a href="<%= url + '/orders/retry' %>"><%= wfl.RETRY %></a></td>
+    				<td class="err ready" data-badge="badge-ready"><a href="<%= url + '/orders/ready' %>"><%= wfl.READY %></a></td>
+    				<td class="err blocked" data-badge=""><a href="<%= url + '/orders/blocked' %>"><%= wfl.BLOCKED %></a></td>
+    				<td class="err event-waiting" data-badge="badge-waiting"><a href="<%= url + '/orders/evemt-waiting' %>"><%= wfl['EVENT-WAITING'] %></a></td>
+    				<td class="err scheduled" data-badge="badge-info"><a href="<%= url + '/orders/scheduled' %>"><%= wfl.SCHEDULED %></a></td>
   					<td>
   						<div class="btn-group">
   						    <button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -87,10 +88,10 @@
   						      <span class="caret"></span>
                                </button>
   					    <ul class="dropdown-menu pull-right">
-  							<li><a href="#" class="action" data-action="start" data-id="<%= workflow.workflowid %>"><i class="icon-off"></i> Start</a></li>
-  							<li><a href="#" class="action" data-action="start" data-id="<%= workflow.workflowid %>"><i class="icon-off"></i> Start Custom</a></li>
-  							<li><a href="#" class="action" data-action="reset" data-id="<%= workflow.workflowid %>"><i class="icon-refresh"></i> Reset</a></li>
-  							<li><a href="#" class="action" data-action="stop" data-id="<%= workflow.workflowid %>"><i class="icon-remove"></i> Stop</a></li>
+  							<li><a href="#" class="action" data-action="start" data-id="<%= wfl.workflowid %>"><i class="icon-off"></i> Start</a></li>
+  							<li><a href="#" class="action" data-action="start" data-id="<%= wfl.workflowid %>"><i class="icon-off"></i> Start Custom</a></li>
+  							<li><a href="#" class="action" data-action="reset" data-id="<%= wfl.workflowid %>"><i class="icon-refresh"></i> Reset</a></li>
+  							<li><a href="#" class="action" data-action="stop" data-id="<%= wfl.workflowid %>"><i class="icon-remove"></i> Stop</a></li>
   					    </ul>
              </div>
   					</td>
