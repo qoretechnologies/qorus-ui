@@ -5,7 +5,7 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     },
     routes: {
       // Define some URL routes
-      'workflows/view/:id(/:inst)(/)(:filter)': 'showWorkflow',
+      'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)': 'showWorkflow',
       'workflows/:date': 'showWorkflows',
       'workflows': 'showWorkflows',
 
@@ -23,28 +23,30 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
         this.currentView.off();
       }
     },
+    setView: function(view){
+      if(this.currentView!=view){
+        this.clean();
+        this.currentView = view;
+      }
+    },
     showWorkflows: function(date){
-      this.clean();
       var view = new WorkflowListView({}, date, this);      
-      this.currentView = view;
+      this.setView(view);
       $('#content').html(view.el);
     },
-    showWorkflow: function(id, inst, filter) {
-      this.clean();
-      var view = new WorkflowView({ id: id, inst: inst, filter: filter });
-      this.currentView = view;
+    showWorkflow: function(id, inst, filter, date) {
+      var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
+      this.setView(view);
       $('#content').html(view.el);
     },
     showServices: function() {
-      this.clean();
       var view = new ServiceListView();
-      this.currentView = view;
+      this.setView(view);
       $('#content').html(view.el);
     },
     showJobs: function() {
-      this.clean();
       var view = new JobListView();
-      this.currentView = view;
+      this.setView(view);
       $('#content').html(view.el);
     },
     default: function(actions) {

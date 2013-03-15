@@ -52,7 +52,7 @@ define([
         });
     },
     onDateChanged: function(date) {
-        this.router.navigate('/workflows/' + moment(date).utc()
+        Backbone.history.navigate('/workflows/' + moment(date).utc()
             .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
     },
     addBadges: function(){

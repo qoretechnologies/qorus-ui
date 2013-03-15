@@ -7,6 +7,7 @@ define([
   'views/workflows/toolbar'
 ], function($, _, Qorus, Collection, Template, Toolbar){
   var ListView = Qorus.ListView.extend({
+    name: 'orders',
     template: Template,
     context: {
       action_css: {
@@ -22,6 +23,11 @@ define([
     initialize: function(opts){
   	  _.bindAll(this, 'render');
       _.extend(this.context, opts);
+      
+      if (opts.url){
+        this.url = opts.url + '/' + this.name;
+        opts.url = this.url;
+      }
       
       this.subviews['toolbar'] = new Toolbar(opts);
       this.collection = new Collection(opts);
