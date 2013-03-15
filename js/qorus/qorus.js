@@ -122,7 +122,6 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   Qorus.View = Backbone.View.extend({
     url: '#',
     additionalEvents: {},
-    bindings: [],
     defaultEvents: {},
     context: {},
     events : function(){
@@ -131,8 +130,34 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     initialize: function(options){
       Qorus.View.__super__.initialize.call(this, [options]);
       _.extend(this.context, options);
-    }
-  })
+    },
+    // manages subviews
+    assign : function (selector, view) {
+        var selectors;
+        if (_.isObject(selector)) {
+            selectors = selector;
+        }
+        else {
+            selectors = {};
+            selectors[selector] = view;
+        }
+        if (!selectors) return;
+        _.each(selectors, function (view, selector) {
+            view.setElement(this.$(selector)).render();
+        }, this);
+    },
+    render: function() {
+      if (this.template){
+        var ctx = {};
+        _.extend(this.context, ctx);
+        
+        var tpl = _.template(this.template, this.context);
+        this.$el.html(tpl);
+        this.trigger('render', this, {});
+      }
+      return this;
+    },
+  });
 
   Qorus.ListView = Qorus.View.extend({
     defaultEvents: {

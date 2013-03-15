@@ -3,22 +3,19 @@ define([
   'underscore',
   'qorus/qorus',
   'collections/orders',
-  'text!/templates/workflow/orders.html'
-], function($, _, Qorus, Collection, Template){
+  'text!/templates/workflow/orders.html',
+  'views/workflows/toolbar'
+], function($, _, Qorus, Collection, Template, Toolbar){
   var ListView = Qorus.ListView.extend({
     template: Template,
     context: {
-      predefined_statuses: [
-        'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
-        'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
-        'Blocked', 'Crash'
-      ],      
       action_css: {
         'block': 'btn-inverse',
         'cancel': 'btn-danger',
         'retry': 'btn-success'
       }
     },
+    subviews: {},
     additionalEvents: {
 		  'click button[data-action]': 'runAction',
     },
@@ -26,6 +23,7 @@ define([
   	  _.bindAll(this, 'render');
       _.extend(this.context, opts);
       
+      this.subviews['toolbar'] = new Toolbar(opts);
       this.collection = new Collection(opts);
   	  this.collection.on('reset', this.render);
   	  this.collection.fetch();
@@ -38,6 +36,11 @@ define([
     		inst.doAction(data.action); 
       }
   	},
+    render: function(){
+      ListView.__super__.render.call(this);
+      this.assign('.toolbar', this.subviews['toolbar']);
+      return this;
+    }
   });
   return ListView;
 });
