@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     },
     showWorkflows: function(date){
       this.clean();
-      var view = new WorkflowListView({}, date);      
+      var view = new WorkflowListView({}, date, this);      
       this.currentView = view;
       $('#content').html(view.el);
     },

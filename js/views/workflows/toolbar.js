@@ -13,8 +13,7 @@ define([
       ]
     },
     initialize: function(opts){
-  	  _.bindAll(this, 'render');
-      _.extend(this.context, opts);
+      Toolbar.__super__.initialize.call(this, opts);
 
       this.template = Template;
     },

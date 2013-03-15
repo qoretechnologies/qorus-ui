@@ -124,11 +124,22 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     additionalEvents: {},
     defaultEvents: {},
     context: {},
+    subviews: {},
     events : function(){
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(options){
       Qorus.View.__super__.initialize.call(this, [options]);
+      // set DATE format and init date
+      this.date_format = settings.DATE_DISPLAY;
+      if (_.isObject(options)){
+        if(options.date===undefined){
+          options.date = moment().add('days',-1).format(this.date_format);
+        } else if(options.date=='all') {
+          options.date = moment(settings.DATE_FROM).format(this.date_format);
+        }        
+      }
+      
       _.extend(this.context, options);
     },
     // manages subviews
@@ -146,10 +157,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
             view.setElement(this.$(selector)).render();
         }, this);
     },
-    render: function() {
+    render: function(ctx) {
       if (this.template){
-        var ctx = {};
-        _.extend(this.context, ctx);
+        if (ctx){
+          _.extend(this.context, ctx); 
+        }
         
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
