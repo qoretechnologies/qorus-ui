@@ -23,13 +23,11 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
       _.bindAll(this, 'datePicker');
-      _.bindAll(this, 'addBadges');
       
       this.on('render', function() {
         this.datePicker();
-      });
-      this.on('render', function() {
-        this.addBadges();
+        $('.table-fixed').fixedHeader({ topOffset: 80 });
+        $('.sticky').sticky();
       });
     },
   	// starts workflow
@@ -54,15 +52,6 @@ define([
     onDateChanged: function(date) {
         Backbone.history.navigate('/workflows/' + moment(date).utc()
             .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
-    },
-    addBadges: function(){
-      $(this.el).find('td[data-badge]').each(function() {
-        if ($(this).text() !== '0'){
-          $(this).wrapInner('<span class="badge '+$(this).data('badge')+'" />' );
-        }
-      });
-      $('.table-fixed').fixedHeader({ topOffset: 80 });
-      $('.sticky').sticky();
     },
     showInstances: function(e){
       // fire event only if clicked on td
