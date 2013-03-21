@@ -14,7 +14,8 @@ require.config({
     "jquery.sticky": "libs/jquery.sticky",
     "jquery.rest": "libs/jquery.rest",
     "messenger": "libs/messenger/js/messenger.min",
-    sprintf: "libs/sprintf-0.7-beta1"
+    sprintf: "libs/sprintf-0.7-beta1",
+    "bootstrap.multiselect": "libs/bootstrap-multiselect"
   },
   shim: { 
     "backbone": {
@@ -26,6 +27,10 @@ require.config({
     },
     "bootstrap": {
       deps: ['jquery']
+    },
+    "bootstrap.mulitselect": {
+      deps: ['bootstrap'],
+      exports: 'jQuery.fn.multiselect'
     },
     "backbone.rpc": ['backbone'],
     "later": ['underscore'],

@@ -23,9 +23,10 @@ define([
   	  this.model.on('change', this.render);
       
       // init subviews
-      this.subviews['instances'] = new InstanceListView({ 
-          date: this.opts.date, workflowid: this.model.id, url: this.url() 
-        });
+      // to be removed?
+      // this.subviews['instances'] = new InstanceListView({ 
+      //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
+      //   });
       this.subviews['orders'] = new OrderListView({ 
           date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
         });

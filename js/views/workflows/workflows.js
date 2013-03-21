@@ -23,13 +23,21 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
       _.bindAll(this, 'datePicker');
-      var _this = this;
     },
-    afterRender: function(){
-      console.log('Post rendering');
-      this.datePicker();
-      $('.table-fixed').fixedHeader({ topOffset: 80 });
+    // 
+    off: function(){
+      // removes date picker from DOM
+      this.dp.remove();
+      ListView.__super__.off.call(this);
+    },
+    // render after attaching to DOM
+    afterRender: function(start){
+      console.log((new Date() - start)/1000);
       $('.sticky').sticky();
+      console.log((new Date() - start)/1000);
+      $('.table-fixed').fixedHeader({ topOffset: 80 });
+      console.log((new Date() - start)/1000);
+      this.datePicker();
     },
   	// starts workflow
   	runAction: function(e){
@@ -43,10 +51,10 @@ define([
     // filter by date init
     datePicker: function(){
         var view = this;
-        $('.dp').datetimepicker({
+        this.dp = $('.dp').datetimepicker({
             format: 'yyyy-MM-dd hh:mm:ss',
-        })
-        .on('changeDate', function(e){
+        });
+        this.on('changeDate', function(e){
             view.onDateChanged(e.date.toISOString(), {});
         });
     },

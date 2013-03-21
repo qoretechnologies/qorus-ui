@@ -61,36 +61,36 @@
 		<tbody>
 	        <% _.each( items, function( workflow ){ 
             var wfl = workflow.toJSON();
-            var url = '#/workflows/view/' + wfl.workflowid;
-            
+            var url = ['#/workflows/view', wfl.workflowid, 'orders' ].join('/');
+            function getUrl(s){
+              return [url,s,date].join('/');
+            };
             function wrapBadge(v, u, e){
               var res = '<a href="' + u +'">'+ v +'</a>';
-
               if (v < 1) {
                 return res;
               }
-              
               return '<span class="badge ' + e + '">' + res + '</span>';
-            }
+            };
             %>
 	  			<tr class="workflow-row" id="workflow-<%= wfl.workflowid %>" data-id="<%= wfl.workflowid %>">
   					<td><i class="icon-box check"></i></td>
     				<td class="instances"><%= wfl.workflowid %></td>
     				<td class="instances"><%= wfl.exec_count %></td>
-    				<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= url %>"><%= wfl.name %></a></td>
+    				<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all') %>"><%= wfl.name %></a></td>
     				<td class="version"><%= wfl.version %></td>
-    				<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], url + '/orders/in-progress', 'badge-warning') %></td>
-    				<td class="err complete"><%= wrapBadge(wfl.COMPLETE, url + '/orders/complete', 'badge-success') %></td>
-    				<td class="err error"><%= wrapBadge(wfl.ERROR, url + '/orders/error', 'badge-important') %></td>
-    				<td class="err async-waiting"><%= wrapBadge(wfl['ASYNC-WAITING'], url + '/orders/async-waiting', 'badge-waiting') %></td>
-    				<td class="err waiting"><%= wrapBadge(wfl.WAITING, url + '/orders/waiting', 'badge-waiting') %></td>
-    				<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, url + '/orders/incomplete', 'badge-info') %></td>
-    				<td class="err canceled"><%= wrapBadge(wfl.CANCELED, url + '/orders/canceled', 'badge-canceled') %></td>
-    				<td class="err retry"><%= wrapBadge(wfl.RETRY, url + '/orders/retry', 'badge-error') %></td>
-    				<td class="err ready"><%= wrapBadge(wfl.READY, url + '/orders/ready', 'badge-ready') %></td>
-    				<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, url + '/orders/blocked', '') %></td>
-    				<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], url + '/orders/event-waiting', 'badge-waiting') %></td>
-    				<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, url + '/orders/scheduled', 'badge-info') %></td>
+    				<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], url + '/in-progress', 'badge-warning') %></td>
+    				<td class="err complete"><%= wrapBadge(wfl.COMPLETE, url + '/complete', 'badge-success') %></td>
+    				<td class="err error"><%= wrapBadge(wfl.ERROR, url + '/error', 'badge-important') %></td>
+    				<td class="err async-waiting"><%= wrapBadge(wfl['ASYNC-WAITING'], url + '/async-waiting', 'badge-waiting') %></td>
+    				<td class="err waiting"><%= wrapBadge(wfl.WAITING, url + '/waiting', 'badge-waiting') %></td>
+    				<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, url + '/incomplete', 'badge-info') %></td>
+    				<td class="err canceled"><%= wrapBadge(wfl.CANCELED, url + '/canceled', 'badge-canceled') %></td>
+    				<td class="err retry"><%= wrapBadge(wfl.RETRY, url + '/retry', 'badge-error') %></td>
+    				<td class="err ready"><%= wrapBadge(wfl.READY, url + '/ready', 'badge-ready') %></td>
+    				<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, url + '/blocked', '') %></td>
+    				<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], url + '/event-waiting', 'badge-waiting') %></td>
+    				<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, url + '/scheduled', 'badge-info') %></td>
   					<td>
   						<div class="btn-group">
   						    <button class="btn dropdown-toggle" data-toggle="dropdown">

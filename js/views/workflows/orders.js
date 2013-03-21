@@ -21,18 +21,25 @@ define([
 		  'click button[data-action]': 'runAction',
     },
     initialize: function(opts){
-  	  _.bindAll(this, 'render');
+  	  _.bindAll(this);
       _.extend(this.context, opts);
       
       if (opts.url){
         this.url = opts.url + '/' + this.name;
         opts.url = this.url;
       }
-      
+            
       this.subviews['toolbar'] = new Toolbar(opts);
       this.collection = new Collection(opts);
-  	  this.collection.on('reset', this.render);
-  	  this.collection.fetch();
+      this.collection.on('reset', this.render);
+      this.collection.fetch();
+      
+      var view = this;
+      // attach the event later
+      this.subviews['toolbar'].on('filter', function(statuses){
+        var url = [view.url, statuses, view.options.date].join('/');
+        Backbone.history.navigate(url);
+      });
     },
   	runAction: function(e){
   		e.preventDefault();

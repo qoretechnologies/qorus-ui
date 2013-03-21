@@ -220,10 +220,15 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           this.loader.destroy();
         this.trigger('render', this, {});
       }
+      console.log(this.el);
+      console.log(this.$el);
+      // this.$el.live(function(){ 'i am live'});
       if(_.isFunction(this.afterRender)){
         // Run afterRender when attached to DOM
         var _this = this;
-        _.defer(function(){ _this.afterRender(); });
+        var date =  new Date();
+        setTimeout(function(){ _this.afterRender(date); }, 0);
+        // _.defer(function(){ _this.afterRender(); });
       }
       console.log('Finished rendering');
       return this;
