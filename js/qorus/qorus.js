@@ -41,6 +41,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   Qorus.Collection = Backbone.Collection.extend({
     date: null,
     initialize: function(date) {
+      _.bindAll(this)
       if (date) {
         this.date = date;
       }
@@ -93,12 +94,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
     },
     fetch: function(options){
-      
+      console.log('fetching collection');
       if (!options) {
         options = {};
       }
-      _.extend(options, { data: this.opts});
-      
+      _.extend(options, { data: this.opts });
+       
       Qorus.SortedCollection.__super__.fetch.call(this, options);
     }
   });
@@ -107,8 +108,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function(opts){
       this.el = opts.el;
-      _.bindAll(this, 'render');
-      _.bindAll(this, 'destroy');
+      _.bindAll(this);
       this.render();
     },
     render: function(){
@@ -184,6 +184,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
        return _.extend({},this.defaultEvents,this.additionalEvents);
     },
     initialize: function(collection, date) {
+      _.bindAll(this);
       Qorus.ListView.__super__.initialize.call(this);
       // add element loader
       this.loader = new Qorus.Loader({ el: this.el });
@@ -198,12 +199,13 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           this.date = date;
       }
 
-      _.bindAll(this, 'render');
       this.collection = new collection({date: this.date});
       this.collection.on('reset', this.render);
+      this.collection.on('change', function(){ console.log('changed listview')});
       this.collection.fetch();
     },
     render: function() {
+      console.log('Starts rendering');
       if (this.template){
         var ctx = {
           date: this.date,
@@ -218,6 +220,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           this.loader.destroy();
         this.trigger('render', this, {});
       }
+      if(_.isFunction(this.afterRender)){
+        // Run afterRender when attached to DOM
+        var _this = this;
+        _.defer(function(){ _this.afterRender(); });
+      }
+      console.log('Finished rendering');
       return this;
     },
     // toggle select row

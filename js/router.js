@@ -30,7 +30,10 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
       }
     },
     showWorkflows: function(date){
-      var view = new WorkflowListView({}, date, this);      
+      var view = new WorkflowListView({}, date, this);
+      // setInterval(function() {
+      //   view.collection.fetch({ add: true });
+      // }, 5000);
       this.setView(view);
       $('#content').html(view.el);
     },

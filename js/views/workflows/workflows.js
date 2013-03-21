@@ -23,12 +23,13 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
       _.bindAll(this, 'datePicker');
-      
-      this.on('render', function() {
-        this.datePicker();
-        $('.table-fixed').fixedHeader({ topOffset: 80 });
-        $('.sticky').sticky();
-      });
+      var _this = this;
+    },
+    afterRender: function(){
+      console.log('Post rendering');
+      this.datePicker();
+      $('.table-fixed').fixedHeader({ topOffset: 80 });
+      $('.sticky').sticky();
     },
   	// starts workflow
   	runAction: function(e){
