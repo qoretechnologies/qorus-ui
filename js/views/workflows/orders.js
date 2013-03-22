@@ -37,8 +37,8 @@ define([
       var view = this;
       // attach the event later
       this.subviews['toolbar'].on('filter', function(statuses){
-        var url = [view.url, statuses, view.options.date].join('/');
-        Backbone.history.navigate(url);
+        // var url = [view.url, statuses, view.options.date].join('/');
+        // Backbone.history.navigate(url);
       });
     },
   	runAction: function(e){

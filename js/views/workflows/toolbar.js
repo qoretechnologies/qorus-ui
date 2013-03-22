@@ -16,6 +16,9 @@ define([
         'Blocked', 'Crash'
       ],
     },
+    events: {
+      "click button#status-filter": "statusFilter",
+    },
     initialize: function(opts){
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
@@ -26,43 +29,15 @@ define([
       var _this = this;
       
       // add multiselect to statuses
-      this.on('render', function() {
-        $('.multiselect').multiselect({
-          onChange: function(el, checked){
-            var sl = [], val = $(el).val();
-            if(_this.options.statuses){
-              sl = _this.options.statuses.split(',');
-            }
-            
-            if(checked){
-              sl.push(val);
-              if(val=='all'){
-                $('option[value!="all"]', $(el).parent()).removeAttr('selected');
-                sl = ['all'];
-                // $('.multiselect').multiselect('refresh');
-              }
-            } else {
-              if(val=='all'){
-                $('option', $(el).parent()).removeAttr('selected');
-                // $('.multiselect').multiselect('refresh');
-              }else{
-               sl = _.without(sl, val); 
-               console.log(sl);
-              }
-            }
-
-            _this.options.statuses = sl.join(',');
-            _this.trigger('filter', _this.options.statuses);
-          }
-        });
-      }, this);
-      this.url = this.options.url;
+      this.on('render', function(){});
+      this.baseUrl = this.options.url;
 
       if (this.options.statuses){
-        this.url += '/' + this.options.statuses;
+        this.url = [this.baseUrl, this.options.statuses].join('/');
       }
       this.context.url = this.url;
       this.context.hasStatus = this.hasStatus;
+      this.on('render', this.addMultiSelect);
     },
     // check the statuses for given status
     hasStatus: function (status){
@@ -81,10 +56,49 @@ define([
           view.onDateChanged(e.date.toISOString(), {});
       });
     },
+    statusFilter: function(){
+      var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
+      Backbone.history.navigate(url);
+    },
     onDateChanged: function(date) {
       var url = this.url + '/' + moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
       Backbone.history.navigate(url);
     },
+    addMultiSelect: function(){
+      var _this = this;
+      // apply bootstrap multiselect to #statuses element
+      $('#statuses').multiselect({
+        onChange: function(el, checked){
+          var sl = [], val = $(el).val();
+          if(_this.options.statuses){
+            sl = _this.options.statuses.split(',');
+          }
+          
+          if(checked){
+            sl.push(val);
+
+            // check if alias for all and than check/uncheck all statuses
+            if(val=='all'){
+              $('option[value!="all"]', $(el).parent()).removeAttr('selected');
+              sl = ['all'];
+            } else {
+              $('option[value="all"]', $(el).parent()).removeAttr('selected');
+              sl = _.without(sl, 'all');
+            }
+          } else {
+            if(val=='all'){
+              $('option', $(el).parent()).removeAttr('selected');
+            }else{
+             sl = _.without(sl, val); 
+            }
+          }
+          // refresh valudes
+          $('#statuses').multiselect('refresh');
+          _this.options.statuses = sl.join(',');
+          _this.trigger('filter', _this.options.statuses);
+        }
+      });
+    }
   });
   return Toolbar;
 });

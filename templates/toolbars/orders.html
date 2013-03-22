@@ -23,12 +23,13 @@
             <button class="btn"><a href="<%= obj.url %>" class="button">Today</a></button>
           </div>
         </div>
-        <select class="multiselect" multiple="multiple">
+        <select id='statuses' class="multiselect" multiple="multiple">
           <option value="all"<% if(obj.statuses=='all') { %> selected <% } %> >All</option>
            <% _.each(obj.predefined_statuses, function(error){ %>
              <option value="<%= error.toLowerCase() %>"<% if(obj.hasStatus(error.toLowerCase())) { %> selected <% } %> ><%= error %></option>
            <% }) %>
          </select>
+         <button id="status-filter" class="btn btn-primary">Filter</button>
        </div>
         <div class="pull-right">
         <form class="form-search">
