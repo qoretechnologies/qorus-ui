@@ -53,7 +53,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       return _(this.filter(function(data) {
         return pattern.test(data.get("name"));
       }));
+    },
+    update: function(){
+      // noop
     }
+    
   });
   
   Qorus.SortedCollection = Qorus.Collection.extend({
@@ -144,18 +148,18 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     },
     // manages subviews
     assign : function (selector, view) {
-        var selectors;
-        if (_.isObject(selector)) {
-            selectors = selector;
-        }
-        else {
-            selectors = {};
-            selectors[selector] = view;
-        }
-        if (!selectors) return;
-        _.each(selectors, function (view, selector) {
-            view.setElement(this.$(selector)).render();
-        }, this);
+      var selectors;
+      if (_.isObject(selector)) {
+          selectors = selector;
+      }
+      else {
+          selectors = {};
+          selectors[selector] = view;
+      }
+      if (!selectors) return;
+      _.each(selectors, function (view, selector) {
+          view.setElement(this.$(selector)).render();
+      }, this);
     },
     render: function(ctx) {
       if (this.template){
@@ -220,15 +224,13 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           this.loader.destroy();
         this.trigger('render', this, {});
       }
-      console.log(this.el);
-      console.log(this.$el);
-      // this.$el.live(function(){ 'i am live'});
+
       if(_.isFunction(this.afterRender)){
         // Run afterRender when attached to DOM
         var _this = this;
         var date =  new Date();
-        setTimeout(function(){ _this.afterRender(date); }, 0);
-        // _.defer(function(){ _this.afterRender(); });
+        // setTimeout(function(){ _this.afterRender(date); }, 0);
+        _.defer(function(){ _this.afterRender(); });
       }
       console.log('Finished rendering');
       return this;

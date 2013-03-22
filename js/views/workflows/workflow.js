@@ -22,14 +22,7 @@ define([
   	  this.model.fetch()
   	  this.model.on('change', this.render);
       
-      // init subviews
-      // to be removed?
-      // this.subviews['instances'] = new InstanceListView({ 
-      //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
-      //   });
-      this.subviews['orders'] = new OrderListView({ 
-          date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
-        });
+      this.createSubviews();
     },
   	render: function(ctx){
       var mctx = { item: this.model };
@@ -46,7 +39,15 @@ define([
       } else if (this.opts.inst == 'orders') {
         this.assign('#instances', this.subviews['orders']);
       } 
-  	}
+  	},
+    createSubviews: function(){
+      this.subviews['instances'] = new InstanceListView({ 
+          date: this.opts.date, workflowid: this.model.id, url: this.url() 
+        });
+      this.subviews['orders'] = new OrderListView({ 
+          date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
+        });
+    }
   });
   return ModelView;
 });

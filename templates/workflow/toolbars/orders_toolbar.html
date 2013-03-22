@@ -1,0 +1,43 @@
+<div class="container-fluid sticky"> 
+    <div class="row-fluid">
+        <div class="span1">
+          <div class="btn-group">
+				    <button class="btn dropdown-toggle" data-toggle="dropdown">
+				      <i class="icon-box check-all"></i>
+				      <span class="caret"></span>
+            </button>
+  			    <ul class="dropdown-menu above">
+    					<li><a href="#" class="all">All</a></li>
+    					<li><a href="#" class="none">None</a></li>
+    					<li><a href="#" class="invert">Invert</a></li>
+  			    </ul>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="input-prepend date dp" data-date="<%= obj.date %>" data-format="yyyy-mm-dd hh:ii:ss">
+            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+            <input type="text" class="span10" value="<%= obj.date %>">
+          </div>
+          <div class="btn-group">
+            <button class="btn"><a href="<%= obj.url + '/all' %>" class="button">All</a></button>
+            <button class="btn"><a href="<%= obj.url %>" class="button">Today</a></button>
+          </div>
+        </div>
+        <select id='statuses' class="multiselect" multiple="multiple">
+          <option value="all"<% if(obj.statuses=='all') { %> selected <% } %> >All</option>
+           <% _.each(obj.predefined_statuses, function(error){ %>
+             <option value="<%= error.toLowerCase() %>"<% if(obj.hasStatus(error.toLowerCase())) { %> selected <% } %> ><%= error %></option>
+           <% }) %>
+         </select>
+         <button id="status-filter" class="btn btn-primary">Filter</button>
+       </div>
+        <div class="pull-right">
+        <form class="form-search">
+          <div class="input-append search-box">
+            <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
+            <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+          </div>
+        </form>
+        </div>
+    </div>
+</div>

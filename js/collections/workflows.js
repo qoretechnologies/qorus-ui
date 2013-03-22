@@ -9,13 +9,16 @@ define([
     date: null,
     model: Model,
   	initialize: function(opts){
-  		this.sort_key = 'exec_count';
-  		this.sort_order = 'des';
+      this.sort_key = 'exec_count';
+      this.sort_order = 'des';
       this.sort_history = ['name',];
       this.opts = opts;
+
       if(opts){
           this.date = opts.date;
       }
+
+      this.on('update', function(){ console.log('collection update') });
   	}
   });
   return Collection;

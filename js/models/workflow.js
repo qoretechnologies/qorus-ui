@@ -31,17 +31,19 @@ define([
       'BLOCKED': 0,
       'CRASH': 0
     },
-  	idAttribute: "workflowid",
+    idAttribute: "workflowid",
     date: null,
     allowedActions: ['start','stop','reset'],
     doAction: function(action, opts){
       if(_.indexOf(this.allowedActions, action) != -1){
         var wflid = this.id;
+        var _this = this;
         $.put(this.url(), {'action': action }, null, 'application/json')
         .done(
           function (e, ee, eee){
             var msg = sprintf('Workflow %d %s done', wflid, action);
             $.globalMessenger().post(msg);
+            _this.fetch();
           }
         );        
       }

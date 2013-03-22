@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'collections/orders',
   'text!/templates/workflow/orders.html',
-  'views/workflows/toolbar'
+  'views/workflows/orders_toolbar'
 ], function($, _, Qorus, Collection, Template, Toolbar){
   var ListView = Qorus.ListView.extend({
     name: 'orders',

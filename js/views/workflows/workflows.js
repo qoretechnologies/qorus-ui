@@ -8,9 +8,10 @@ define([
   'datepicker',
   'moment',
   'views/workflows/instances',
+  'views/workflows/workflows_toolbar',
   'jquery.fixedheader',
   'jquery.sticky',
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar){
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
@@ -19,25 +20,29 @@ define([
     },
     subviews: {},
     initialize: function(collection, date, router){
+      _.bindAll(this);
       this.router = router;
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
-      _.bindAll(this, 'datePicker');
+      this.subviews['toolbar'] = new Toolbar({ date: date });
+      var _this = this;
+      this.on('render', function(){       
+        _this.assign('.toolbar', _this.subviews['toolbar']);
+      });
     },
     // 
     off: function(){
       // removes date picker from DOM
-      this.dp.remove();
+      if (this.dp){
+        this.dp.remove();        
+      }
       ListView.__super__.off.call(this);
     },
     // render after attaching to DOM
     afterRender: function(start){
-      console.log((new Date() - start)/1000);
-      $('.sticky').sticky();
-      console.log((new Date() - start)/1000);
+      // console.log((new Date() - start)/1000);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
-      console.log((new Date() - start)/1000);
-      this.datePicker();
+      // console.log((new Date() - start)/1000);
     },
   	// starts workflow
   	runAction: function(e){
@@ -48,20 +53,6 @@ define([
     		wfl.doAction(data.action); 
       }
   	},
-    // filter by date init
-    datePicker: function(){
-        var view = this;
-        this.dp = $('.dp').datetimepicker({
-            format: 'yyyy-MM-dd hh:mm:ss',
-        });
-        this.on('changeDate', function(e){
-            view.onDateChanged(e.date.toISOString(), {});
-        });
-    },
-    onDateChanged: function(date) {
-        Backbone.history.navigate('/workflows/' + moment(date).utc()
-            .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
-    },
     showInstances: function(e){
       // fire event only if clicked on td
       if (e.target.localName == 'td'){

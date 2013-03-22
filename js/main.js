@@ -9,7 +9,7 @@ require.config({
     later: "libs/later/later.min",
     "later.recur": "libs/later/later-recur.min",
     "later.cron": "libs/later/later-cron.min",
-    datepicker: "libs/datetime-picker/bootstrap-datetimepicker",
+    datepicker: "libs/datetime-picker-2/bootstrap-datetimepicker.min",
     "jquery.fixedheader": "libs/fixedheader",
     "jquery.sticky": "libs/jquery.sticky",
     "jquery.rest": "libs/jquery.rest",
