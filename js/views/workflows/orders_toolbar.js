@@ -18,6 +18,7 @@ define([
     },
     events: {
       "click button#status-filter": "statusFilter",
+      "click button[data-action='open']": "navigateTo"
     },
     initialize: function(opts){
       _.bindAll(this);
@@ -100,6 +101,12 @@ define([
           _this.trigger('filter', _this.options.statuses);
         }
       });
+    },
+    navigateTo: function(e){
+      var el = $(e.currentTarget);
+      if (el.data('url')){
+        Backbone.history.navigate(el.data('url'), {trigger: true});       
+      }
     }
   });
   return Toolbar;
