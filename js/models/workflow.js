@@ -50,6 +50,15 @@ define([
         );        
       }
     },
+    fetch: function(options){
+      console.log(this);
+      if (!options) options = {};
+      if (!this.date){
+        this.date = this.collection.date;
+        _.extend(options, { date: this.date });
+      }
+      Model.__super__.fetch.call(this, options);
+    }
   });
   // Return the model for the module
   return Model;
