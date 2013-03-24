@@ -51,9 +51,8 @@ define([
       }
     },
     fetch: function(options){
-      console.log(this);
       if (!options) options = {};
-      if (!this.date){
+      if (!this.date && this.collection){
         this.date = this.collection.date;
         _.extend(options, { date: this.date });
       }
