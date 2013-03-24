@@ -68,7 +68,6 @@ define([
     },
     addMultiSelect: function(){
       var _this = this;
-      console.log('inside addMultiSelect');
       // apply bootstrap multiselect to #statuses element
       $('#statuses').multiselect({
         onChange: function(el, checked){

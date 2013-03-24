@@ -12,6 +12,8 @@ define([
       if (opts.id){
         this.id = opts.id;
       }
+      // reset collection on sync
+      this.on('sync', function(m, r){ m.collection.trigger('reset'); }, this);
     },
     urlRoot: "/rest/workflows/",
     defaults: {
@@ -47,7 +49,7 @@ define([
           }
         );        
       }
-    }
+    },
   });
   // Return the model for the module
   return Model;
