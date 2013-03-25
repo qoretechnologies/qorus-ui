@@ -18,6 +18,7 @@ define([
     },
     events: {
       "click button#status-filter": "statusFilter",
+      "click button#business-error": "filterBE",
       "click button[data-action='open']": "navigateTo"
     },
     initialize: function(opts){
@@ -61,6 +62,14 @@ define([
     statusFilter: function(){
       var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
       Backbone.history.navigate(url);
+    },
+    filterBE: function(e){
+      var el = $(e.currentTarget);
+      if(el.hasClass('active')){
+        console.log(this.url);
+      } else {
+        console.log([this.url, 'true'].join('/'));
+      }
     },
     onDateChanged: function(date) {
       var url = this.url + '/' + moment(date).utc().format('YYYY-MM-DD HH:mm:ss');

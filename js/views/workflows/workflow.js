@@ -34,11 +34,11 @@ define([
   	  return this;
   	},
   	onRender: function(){
-      if (!this.opts.inst) {
-        this.assign('#instances', this.subviews['instances']);
-      } else if (this.opts.inst == 'orders') {
-        this.assign('#instances', this.subviews['orders']);
-      } 
+      var inst  = this.opts.inst || null;
+      
+      if (_.indexOf(this.subviews, inst)){
+        this.assign('#instances', this.subviews[inst]);
+      }
   	},
     createSubviews: function(){
       this.subviews['instances'] = new InstanceListView({ 

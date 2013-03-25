@@ -12,7 +12,6 @@ define([
       if (opts.id){
         this.id = opts.id;
       }
-      console.log(this);
       
       // TODO: find proper place/way within the view
       this.on('sync', function(m, r){ 

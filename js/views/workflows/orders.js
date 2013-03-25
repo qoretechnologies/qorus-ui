@@ -33,13 +33,6 @@ define([
       this.collection = new Collection(opts);
       this.collection.on('reset', this.render);
       this.collection.fetch();
-      
-      var view = this;
-      // attach the event later
-      this.subviews['toolbar'].on('filter', function(statuses){
-        // var url = [view.url, statuses, view.options.date].join('/');
-        // Backbone.history.navigate(url);
-      });
     },
   	runAction: function(e){
   		e.preventDefault();
