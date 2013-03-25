@@ -12,8 +12,14 @@ define([
       if (opts.id){
         this.id = opts.id;
       }
-      // reset collection on sync
-      this.on('sync', function(m, r){ m.collection.trigger('reset'); }, this);
+      console.log(this);
+      
+      // TODO: find proper place/way within the view
+      this.on('sync', function(m, r){ 
+        if (m.collection){
+          m.collection.trigger('reset');
+        }
+      }, this);
     },
     urlRoot: "/rest/workflows/",
     defaults: {

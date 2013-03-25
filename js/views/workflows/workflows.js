@@ -64,6 +64,7 @@ define([
           var parent =el.parents('.bottom-bar').show();
           $(e.currentTarget).parent().find('tr').removeClass('info');
         
+          // TODO: rewrite
           if(!view.subviews[data.id]){
             var ilv = new InstanceListView({ date: view.date, workflowid: data.id });
             parent.data('view', ilv.cid);
