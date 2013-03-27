@@ -9,9 +9,10 @@ define([
   'moment',
   'views/workflows/instances',
   'views/workflows/workflows_toolbar',
+  'views/common/bottom_bar',
   'jquery.fixedheader',
   'jquery.sticky',
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView){
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
@@ -26,13 +27,14 @@ define([
       ListView.__super__.initialize.call(this, Collection, date);
       this.options.date = date;
       var _this = this;
+      this.createSubviews();
       this.on('render', function(){       
         _this.assign('.toolbar', _this.subviews['toolbar']);
       });
     },
     createSubviews: function(){
       this.subviews['bottombar'] = new BottomBarView();
-      this.subviews['toolbar'] = new Toolbar({ date: this.date });
+      this.subviews['toolbar'] = new Toolbar({ date: date });
     },
     clean: function(){
       // removes date picker from DOM
@@ -60,7 +62,8 @@ define([
         var view = this;
         var data = e.currentTarget.dataset;
         if (data.id){
-          this.assign('#bottom-bar', this.subviews['bottombar']);
+          var el = $('#instances');
+          var parent =el.parents('.bottom-bar').show();
           $(e.currentTarget).parent().find('tr').removeClass('info');
         
           // TODO: rewrite
@@ -90,6 +93,17 @@ define([
               delete view.subviews[data.id];                      
             }
           }
+        }
+      }
+    },
+    showInstancesNew: function(e){
+      // fire event only if clicked on td
+      if (e.target.localName == 'td'){
+        e.preventDefault();
+        var view = this;
+        var data = e.currentTarget.dataset;
+        if (data.id){
+          var ilv = new InstanceListView({ date: this.options.date, workflowid: data.id });
         }
       }
     }
