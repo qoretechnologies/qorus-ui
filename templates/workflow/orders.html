@@ -1,5 +1,3 @@
-<h4>Order Instances</h4>
-<div id="orders-toolbar" class="toolbar"></div>
 <% if (items.length > 0) { %>
 <table class="table table-fixed table-striped">
   <thead>
@@ -20,7 +18,7 @@
   <tbody>
   <% _.each(items, function (item) {   
     var item = item.toJSON(); %>
-    <tr>
+    <tr data-id="<%= item.workflow_instanceid %>">
 	    <td><span class="label"><%= item.workflowstatus %></span></td>
       <td>
         <% if(item.business_error ) {%>

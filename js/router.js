@@ -18,9 +18,9 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
     },
     clean: function(){
       if (this.currentView){
+        this.currentView.off();
         this.currentView.undelegateEvents();
         this.currentView.remove();
-        this.currentView.off();
       }
     },
     setView: function(view){

@@ -6,10 +6,15 @@ define([
   'text!/templates/workflow/detail.html',
   'views/workflows/instances',
   'views/workflows/orders',
-], function($, _, Qorus, Workflow, Template, InstanceListView, OrderListView){
+  'views/common/bottom_bar',
+  'views/workflows/orders_toolbar',
+], function($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar){
   var ModelView = Qorus.View.extend({
     url: function() {
-     return '#/workflows/view/' + this.opts.id;  
+     return '#/workflows/view/' + this.opts.id; 
+    },
+    additionalEvents: {
+      'click tbody tr': 'loadInfo'
     },
     initialize: function(opts){
       this.opts = opts;
@@ -34,12 +39,24 @@ define([
   	  return this;
   	},
   	onRender: function(){
-      var inst  = this.opts.inst || null;
-      
-      if (_.indexOf(this.subviews, inst)){
-        this.assign('#instances', this.subviews[inst]);
+      // render instance/order data grid with toolbar
+      var dataview = this.currentDataView();
+      var toolbar = this.subviews['toolbar'];
+      if (dataview){
+        this.assign('#instances', dataview);
+        // update toolbar url with current order/instance url
+        toolbar.updateUrl(dataview.url, dataview.options.statuses);
+        this.assign('#toolbar', toolbar);
       }
+      this.assign('#bottom-bar', this.subviews['bottombar']);
   	},
+    currentDataView: function(){
+      var inst  = this.opts.inst || null;
+      if (_.indexOf(this.subviews, inst)){
+        return this.subviews[inst];
+      }
+      return null;
+    },
     createSubviews: function(){
       this.subviews['instances'] = new InstanceListView({ 
           date: this.opts.date, workflowid: this.model.id, url: this.url() 
@@ -47,6 +64,31 @@ define([
       this.subviews['orders'] = new OrderListView({ 
           date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
         });
+      this.subviews['bottombar'] = new BottomBarView({});
+      this.subviews['toolbar'] = new OrdersToolbar(this.opts);
+    },
+    loadInfo: function(e){
+      var el = $(e.currentTarget);
+      e.stopPropagation();
+      
+      var dataview = this.currentDataView();
+      
+      var m = dataview.collection.get(el.data('id'));
+      var _this = this;
+      m.fetch().done(function (){
+        var bar = _this.subviews['bottombar'];
+        bar.render();
+        $('.bottom-bar').show();
+        var txt = $('<ul />');
+        console.log(m.attributes);
+        for (var obj in m.attributes){
+          txt.append('<li><strong>' + obj + '</strong>: ' + m.get(obj) + '</li>');
+        }
+        console.log(txt);
+        $('#bottom-content', bar.$el).html(txt.html());
+        $('tr', el.parent()).removeClass('info');
+        el.addClass('info');
+      });
     }
   });
   return ModelView;

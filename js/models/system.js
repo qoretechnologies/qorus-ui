@@ -4,10 +4,10 @@ define([
 ], function(_, Qorus){
     var System = {};
   System.Info = Qorus.Model.extend({
-    url: '/rest/system/'
+    url: '/rest/system'
   });
   System.User = Qorus.Model.extend({
-    url: '/rest/users/'
+    url: '/rest/users'
   });
   return System;
 });

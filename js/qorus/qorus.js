@@ -146,6 +146,18 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       
       _.extend(this.context, options);
     },
+    off: function(){
+      if(_.isFunction(this.clean)){
+        this.clean();
+      }
+      _.each(this.subviews, function(view){
+        if(_.isFunction(view.clean)){
+          view.clean();
+        }
+        view.undelegateEvents();
+        view.remove();
+      });
+    },
     // manages subviews
     assign : function (selector, view) {
       var selectors;

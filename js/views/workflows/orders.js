@@ -18,7 +18,7 @@ define([
     },
     subviews: {},
     additionalEvents: {
-		  'click button[data-action]': 'runAction',
+		  'click button[data-action]': 'runAction'
     },
     initialize: function(opts){
   	  _.bindAll(this);
@@ -29,7 +29,7 @@ define([
         opts.url = this.url;
       }
             
-      this.subviews['toolbar'] = new Toolbar(opts);
+      // this.subviews['toolbar'] = new Toolbar(opts);
       this.collection = new Collection(opts);
       this.collection.on('reset', this.render);
       this.collection.fetch();
@@ -42,11 +42,11 @@ define([
     		inst.doAction(data.action); 
       }
   	},
-    render: function(){
-      ListView.__super__.render.call(this);
-      this.assign('.toolbar', this.subviews['toolbar']);
-      return this;
-    }
+    // render: function(){
+    //   ListView.__super__.render.call(this);
+    //   this.assign('.toolbar', this.subviews['toolbar']);
+    //   return this;
+    // }
   });
   return ListView;
 });

@@ -14,7 +14,7 @@ define([
         'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
         'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
         'Blocked', 'Crash'
-      ],
+      ]
     },
     events: {
       "click button#status-filter": "statusFilter",
@@ -26,21 +26,29 @@ define([
       Toolbar.__super__.initialize.call(this, opts);
       
       this.template = Template;
-      this.on('render', this.datePicker, this);
-      
-      var _this = this;
-      
-      // add multiselect to statuses
-      this.on('render', function(){});
-      this.baseUrl = this.options.url;
-
-      if (this.options.statuses){
-        this.url = [this.baseUrl, this.options.statuses].join('/');
-      }
-      this.context.url = this.url;
       this.context.hasStatus = this.hasStatus;
+      this.updateUrl();
+      this.on('render', this.datePicker, this);
       this.on('render', this.addMultiSelect);
-      this.on('render', console.log('render multiselect'));
+    },
+    clean: function(){
+      $('.dp').datetimepicker('remove');
+    },
+    updateStatuses: function(statuses){
+      this.options.statuses = statuses;
+    },
+    updateUrl: function(url, statuses){
+      var baseUrl = url || this.options.url;
+      this.baseUrl = baseUrl;
+      var statuses = statuses || this.options.statuses;
+      this.updateStatuses(statuses);
+      this.url = baseUrl;
+
+      if (statuses){
+        this.url = [baseUrl, statuses].join('/');
+      }
+      
+      this.context.url = this.url;
     },
     // check the statuses for given status
     hasStatus: function (status){
@@ -107,6 +115,7 @@ define([
           $('#statuses').multiselect('refresh');
           _this.options.statuses = sl.join(',');
           _this.trigger('filter', _this.options.statuses);
+          console.log(_this.options);
         }
       });
     },

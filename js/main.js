@@ -13,6 +13,7 @@ require.config({
     "jquery.fixedheader": "libs/fixedheader",
     "jquery.sticky": "libs/jquery.sticky",
     "jquery.rest": "libs/jquery.rest",
+    "jquery.ui": "libs/jquery.ui.min",
     "messenger": "libs/messenger/js/messenger.min",
     sprintf: "libs/sprintf-0.7-beta1",
     "bootstrap.multiselect": "libs/bootstrap-multiselect"
@@ -47,6 +48,9 @@ require.config({
       exports: 'jQuery.fn.sticky'
     },
     "jquery.rest": {
+      deps: ['jquery']
+    },
+    "jquery.ui": {
       deps: ['jquery']
     },
     "messenger": {

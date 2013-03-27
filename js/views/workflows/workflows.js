@@ -24,19 +24,19 @@ define([
       this.router = router;
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection, date);
-      this.subviews['toolbar'] = new Toolbar({ date: date });
+      this.options.date = date;
       var _this = this;
       this.on('render', function(){       
         _this.assign('.toolbar', _this.subviews['toolbar']);
       });
     },
-    // 
-    off: function(){
+    createSubviews: function(){
+      this.subviews['bottombar'] = new BottomBarView();
+      this.subviews['toolbar'] = new Toolbar({ date: this.date });
+    },
+    clean: function(){
       // removes date picker from DOM
-      if (this.dp){
-        this.dp.remove();        
-      }
-      ListView.__super__.off.call(this);
+      $('.dp').datetimepicker('remove');
     },
     // render after attaching to DOM
     afterRender: function(start){
@@ -60,8 +60,7 @@ define([
         var view = this;
         var data = e.currentTarget.dataset;
         if (data.id){
-          var el = $('#instances');
-          var parent =el.parents('.bottom-bar').show();
+          this.assign('#bottom-bar', this.subviews['bottombar']);
           $(e.currentTarget).parent().find('tr').removeClass('info');
         
           // TODO: rewrite

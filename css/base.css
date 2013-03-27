@@ -55,6 +55,10 @@ table th {
 	margin: 0 auto -4em;
 }
 
+#content {
+  position: relative;
+}
+
 #footer, .push {
 	clear: both;
 	height: 4em;
@@ -221,16 +225,43 @@ aside {
   top: 50%;
 }
 
+#bottom-bar {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
 .bottom-bar {
   display: none;
   position: fixed;
   background: #fff;
-  height: 120px;
+  height: 150px;
   bottom: 0;
   left: 0;
-  overflow-y: auto;
+  padding-top: 20px;
   box-shadow: rgba(0,0,0,.5) 0 0 10px;
   width: 100%;
+}
+
+.bottom-bar .handler {
+  display: block;
+  background-color: #fff;
+  position: absolute;
+  cursor: move;
+  height: 20px;
+  padding: 5px 0;
+  text-align: center;
+  z-index: 1190;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#bottom-content {
+  padding-top: 30px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
 }
 
 #workflows .err a {
