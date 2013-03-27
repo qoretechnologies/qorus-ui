@@ -18,6 +18,7 @@ define([
           this.date = opts.date;
       }
 
+      this.opts.page = 1;
       this.on('update', function(){ console.log('collection update') });
   	}
   });
