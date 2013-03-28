@@ -41,6 +41,7 @@ define([
       View.__super__.render.call(this);
       // reset element height
       $('.bottom-bar', this.$el).height(this.height);
+      return this;
     }
   });
   return View;

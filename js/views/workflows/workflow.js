@@ -8,13 +8,14 @@ define([
   'views/workflows/orders',
   'views/common/bottom_bar',
   'views/workflows/orders_toolbar',
-], function($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar){
+  'text!/templates/workflow/orders/detail.html',
+], function($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate){
   var ModelView = Qorus.View.extend({
     url: function() {
      return '#/workflows/view/' + this.opts.id; 
     },
     additionalEvents: {
-      'click tbody tr': 'loadInfo'
+      'click #instances tbody tr': 'loadInfo'
     },
     initialize: function(opts){
       this.opts = opts;
@@ -67,6 +68,8 @@ define([
       this.subviews['bottombar'] = new BottomBarView({});
       this.subviews['toolbar'] = new OrdersToolbar(this.opts);
     },
+    
+    // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function(e){
       var el = $(e.currentTarget);
       e.stopPropagation();
@@ -80,14 +83,20 @@ define([
         var bar = _this.subviews['bottombar'];
         bar.render();
         $('.bottom-bar').show();
-        var txt = $('<ul />');
-        for (var obj in m.attributes){
-          txt.append('<li><strong>' + obj + '</strong>: ' + m.get(obj) + '</li>');
-        }
-        $('#bottom-content', bar.$el).html(txt.html());
+        $('#bottom-content', bar.$el).html(_this.orderDetail(m));
+        $('#bottom-content .nav-tabs a').click(function(e){
+          e.preventDefault();
+          $(this).tab('show');
+        })
+        
+        // highlite/unhighlite selected row
         $('tr', el.parent()).removeClass('info');
-        $('tr[data-id='+ m.id +']').addClass('info')
+        $('tr[data-id='+ m.id +']').addClass('info');
       });
+    },
+    orderDetail: function(m) {
+      var tpl = _.template(OrderDetailTemplate, { item: m });
+      return tpl;
     }
   });
   return ModelView;
