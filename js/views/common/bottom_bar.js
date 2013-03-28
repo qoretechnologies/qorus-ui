@@ -15,32 +15,49 @@ define([
       this.height = 150;
     },
     addSizeHandler: function(){
+      var offset = $('#split-panes').offset();
       $('.handler').draggable({
         axis : 'y',
         containment: [
-          null,
-          
+          offset.left,
+          offset.top + 200,
+          offset.top + $('#split-panes').width(),
+          offset.top + $('#split-panes').height() - 200
         ],
-        drag : this.resize
+        drag : this.resize,
+        refreshPositions: true,
+        scroll: true
       });
     },
     resize: function(event, ui){
-      var parent = $('.bottom-bar');
-
-      // fix height without padding
-      var padding = parseInt(parent.css('padding-top')) + parseInt(parent.css('padding-bottom'));
+      var parent = $('#bottom-bar');
+      var bpos = ui.position.top + $('.handler').height();
+      var height = $('#split-panes').height();
       
-      // save the current height
-      this.height = $(window).height() - ui.offset.top - padding;
-      
-      // update element height
-      parent.height(this.height);
-      ui.position.top = 0;
+      // set heights
+      this.height = height - bpos;
+      $('#bottom-bar').height(this.height);
+      $('#bottom-bar').css('top', bpos);
+      $('.handler').prev().height(ui.position.top);
     },
     render: function(){
       View.__super__.render.call(this);
+      var h = $(window).height() - $('#header').height() - $('#footer').height();
+      
+      var bpos = h - this.height;
+      
+      $('#split-panes').height(h);
+
+      $('#bottom-bar').hide();
+      $('#split-panes .handler').hide();
+      
       // reset element height
-      $('.bottom-bar', this.$el).height(this.height);
+      $('#bottom-bar', this.$el).height(this.height);
+      
+      // set positions
+      $('#bottom-bar').css('top', bpos);
+      $('#split-panes .handler').css('top', bpos - $('#split-panes .handler').height());
+
       return this;
     }
   });

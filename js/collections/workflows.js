@@ -17,8 +17,6 @@ define([
       if(opts){
           this.date = opts.date;
       }
-
-      this.on('update', function(){ console.log('collection update') });
   	}
   });
   return Collection;

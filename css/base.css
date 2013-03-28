@@ -225,31 +225,47 @@ aside {
   top: 50%;
 }
 
-#bottom-bar {
+
+#split-panes {
   position: relative;
-  height: 400px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.pane {
+  left: 0;
+  top: 0;
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
   width: 100%;
+}
+
+#bottom-bar {
+  background-color: #fff;
+  position: relative;
+  padding: 20px 0;
+/*  width: 100%;*/
 }
 
 .bottom-bar {
-  display: none;
-  position: fixed;
   background: #fff;
-  height: 150px;
+  height: 100%;
   bottom: 0;
   left: 0;
-  padding-top: 20px;
-  box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  overflow: hidden;
   width: 100%;
 }
 
-.bottom-bar .handler {
+.handler {
   display: block;
-  background-color: #fff;
-  position: absolute;
+  background-color: #333;
+  box-shadow: rgba(0,0,0,.5) 0 0 5px;
   cursor: move;
-  height: 20px;
-  padding: 5px 0;
+  height: 18px;
+  padding: 0;
+  position: absolute;
   text-align: center;
   z-index: 1000;
   top: 0;
@@ -258,7 +274,6 @@ aside {
 }
 
 #bottom-content {
-  padding-top: 30px;
   overflow-x: hidden;
   overflow-y: auto;
   height: 100%;

@@ -82,11 +82,20 @@ define([
       m.fetch().done(function (){
         var bar = _this.subviews['bottombar'];
         bar.render();
-        $('.bottom-bar').show();
+        
         $('#bottom-content', bar.$el).html(_this.orderDetail(m));
+        $('#bottom-bar').show();
+        $('#split-panes .handler').show();        
+        
+        if (bar.activeTab){
+          $('a[href="#'+ bar.activeTab +'"]').tab('show');
+        }
+        
         $('#bottom-content .nav-tabs a').click(function(e){
           e.preventDefault();
           $(this).tab('show');
+          var active = $('.tab-pane.active');
+          bar.activeTab = active.attr('id');
         })
         
         // highlite/unhighlite selected row
