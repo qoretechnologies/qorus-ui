@@ -24,10 +24,18 @@ define([
       _.bindAll(this);
       this.router = router;
       this.template = Template;
+      
+      // call super method
       ListView.__super__.initialize.call(this, Collection, date);
+
+      // pass date to options object
       this.options.date = date;
-      var _this = this;
+
+      // initialize subviews
       this.createSubviews();
+
+      // assign toolbar to .toolbar element on render
+      var _this = this;
       this.on('render', function(){       
         _this.assign('.toolbar', _this.subviews['toolbar']);
       });
@@ -42,9 +50,7 @@ define([
     },
     // render after attaching to DOM
     afterRender: function(start){
-      // console.log((new Date() - start)/1000);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
-      // console.log((new Date() - start)/1000);
     },
   	// starts workflow
   	runAction: function(e){
@@ -106,6 +112,8 @@ define([
           var ilv = new InstanceListView({ date: this.options.date, workflowid: data.id });
         }
       }
+    },
+    loadNextPage: function(e){
     }
   });
   return ListView;

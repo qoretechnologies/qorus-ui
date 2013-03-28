@@ -75,19 +75,18 @@ define([
       
       var m = dataview.collection.get(el.data('id'));
       var _this = this;
+      
       m.fetch().done(function (){
         var bar = _this.subviews['bottombar'];
         bar.render();
         $('.bottom-bar').show();
         var txt = $('<ul />');
-        console.log(m.attributes);
         for (var obj in m.attributes){
           txt.append('<li><strong>' + obj + '</strong>: ' + m.get(obj) + '</li>');
         }
-        console.log(txt);
         $('#bottom-content', bar.$el).html(txt.html());
         $('tr', el.parent()).removeClass('info');
-        el.addClass('info');
+        $('tr[data-id='+ m.id +']').addClass('info')
       });
     }
   });
