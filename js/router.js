@@ -70,6 +70,5 @@ define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/syst
   });
   
   Backbone.history.start();
-  
   return app_router;
 });

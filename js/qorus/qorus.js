@@ -40,6 +40,10 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
 
   Qorus.Collection = Backbone.Collection.extend({
     date: null,
+    limit: 100,
+    offset: 1,
+    page: 1,
+    
     initialize: function(date) {
       _.bindAll(this)
       if (date) {
@@ -54,8 +58,46 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         return pattern.test(data.get("name"));
       }));
     },
-    update: function(){
-      // noop
+    hasNextPage: function(){
+      return (this.offset + this.limit - 2 < this.models.length); 
+    },
+    loadNextPage: function(){
+      console.log(this, this.size(), this.hasNextPage(), this.offset + this.limit, this.models.length);
+      if (this.hasNextPage()) {
+
+        this.offset = this.page * this.limit + this.offset;
+        this.page++;
+        console.log('loading page', this.page);
+
+        var _this = this;
+        this.fetch({ 
+          add: true, 
+          remove: false, 
+          update: true,
+          success: function(){
+            console.log(_this.size());
+            _this.trigger('reset');
+          }
+        })
+      }
+    },
+    fetch: function(options){
+      this.opts.limit = this.limit;
+      this.opts.offset = this.offset;
+
+      var data = this.opts;      
+
+      if (!options) {
+        options = {};
+      }
+
+      if (options.data){
+        _.extend(data, options.data);
+      }
+      
+      _.extend(options, { data: data });
+       
+      Qorus.Collection.__super__.fetch.call(this, options);
     }
     
   });
@@ -96,15 +138,6 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
 
         this.trigger('reset', this, {});
       }
-    },
-    fetch: function(options){
-      console.log('fetching collection');
-      if (!options) {
-        options = {};
-      }
-      _.extend(options, { data: this.opts });
-       
-      Qorus.SortedCollection.__super__.fetch.call(this, options);
     }
   });
   
@@ -178,7 +211,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         if (ctx){
           _.extend(this.context, ctx); 
         }
-        
+
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
         this.trigger('render', this, {});
@@ -219,9 +252,15 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       this.collection.on('reset', this.render);
       this.collection.on('change', function(){ console.log('changed listview')});
       this.collection.fetch();
+      
+      this.context.page = {
+        current_page: this.collection.page,
+        has_next: this.collection.hasNextPage(),
+        has_prev: null
+      }
     },
     render: function() {
-      console.log('Starts rendering');
+      // console.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template){
         var ctx = {
           date: this.date,

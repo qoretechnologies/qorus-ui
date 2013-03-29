@@ -84,8 +84,7 @@ define([
         bar.render();
         
         $('#bottom-content', bar.$el).html(_this.orderDetail(m));
-        $('#bottom-bar').show();
-        $('#split-panes .handler').show();        
+        bar.show();
         
         if (bar.activeTab){
           $('a[href="#'+ bar.activeTab +'"]').tab('show');
@@ -104,7 +103,8 @@ define([
       });
     },
     orderDetail: function(m) {
-      var tpl = _.template(OrderDetailTemplate, { item: m });
+      console.log(this.model);
+      var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
       return tpl;
     }
   });

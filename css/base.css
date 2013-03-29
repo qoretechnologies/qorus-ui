@@ -254,6 +254,7 @@ aside {
   height: 100%;
   bottom: 0;
   left: 0;
+  position: relative;
   overflow: hidden;
   width: 100%;
 }
@@ -261,16 +262,21 @@ aside {
 .handler {
   display: block;
   background-color: #333;
-  box-shadow: rgba(0,0,0,.5) 0 0 5px;
+  box-shadow: rgba(0,0,0,.5) 0 0 10px;
   cursor: move;
   height: 18px;
   padding: 0;
   position: absolute;
   text-align: center;
-  z-index: 1000;
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 1000;
+}
+
+.bottom-bar .hide {
+  position: absolute;
+  top: 5px;
 }
 
 #bottom-content {

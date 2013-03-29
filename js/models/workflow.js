@@ -62,6 +62,12 @@ define([
         _.extend(options, { date: this.date });
       }
       Model.__super__.fetch.call(this, options);
+    },
+    parse: function(response, options){
+      // rewrite stepmap
+      response.stepmap = _.invert(response.stepmap);
+      
+      return Model.__super__.parse.call(this, response, options);
     }
   });
   // Return the model for the module

@@ -2,6 +2,7 @@
 <table class="table table-fixed table-striped">
   <thead>
     <tr>
+      <th></ht>
       <th>Status</th>
       <th>Bus. Err.</th>
       <th>WFLIID</th>
@@ -16,9 +17,11 @@
     </tr>
   </thead>
   <tbody>
+  <% var counter = 1; %>
   <% _.each(items, function (item) {   
     var item = item.toJSON(); %>
     <tr data-id="<%= item.workflow_instanceid %>">
+      <td><%= counter %>.</td>
 	    <td><span class="label"><%= item.workflowstatus %></span></td>
       <td>
         <% if(item.business_error ) {%>
@@ -41,9 +44,13 @@
         </div>
       </td>
     </tr>
-    <% }); %>
+    <% counter++;
+     }); %>
     </tbody>
 </table>
+<% if (obj.page) { %>
+<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>
+<% } %>
 <% } else { %>
   <p>Any</p>
 <% } %>

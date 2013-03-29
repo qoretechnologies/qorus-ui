@@ -7,6 +7,9 @@ define([
   'jquery.ui'
 ], function($, _, Qorus, Template){
   var View = Qorus.View.extend({
+    additionalEvents: {
+      "click button[data-hide]": 'hide'
+    },
     initialize: function(opts){
       _.bindAll(this);
       this.template = Template;
@@ -40,16 +43,15 @@ define([
       $('#bottom-bar').css('top', bpos);
       $('.handler').prev().height(ui.position.top);
     },
-    render: function(){
-      View.__super__.render.call(this);
+    render: function(ctx){
+      View.__super__.render.call(this, ctx);
       var h = $(window).height() - $('#header').height() - $('#footer').height();
       
       var bpos = h - this.height;
       
       $('#split-panes').height(h);
 
-      $('#bottom-bar').hide();
-      $('#split-panes .handler').hide();
+      this.hide();
       
       // reset element height
       $('#bottom-bar', this.$el).height(this.height);
@@ -59,6 +61,14 @@ define([
       $('#split-panes .handler').css('top', bpos - $('#split-panes .handler').height());
 
       return this;
+    },
+    show: function(){
+      $('#bottom-bar').show();
+      $('#split-panes .handler').show();
+    },
+    hide: function(){
+      $('#bottom-bar').hide();
+      $('#split-panes .handler').hide();
     }
   });
   return View;
