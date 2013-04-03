@@ -45,13 +45,24 @@ define([
     },
     render: function(ctx){
       View.__super__.render.call(this, ctx);
+      this.hide();
+      this.setHeights();
+      
+      // reset size when window size 
+      var _this = this;
+      $(window).resize(function(){
+        console.log($(window).height());
+        _this.setHeights();
+      })
+
+      return this;
+    },
+    setHeights: function (){
       var h = $(window).height() - $('#header').height() - $('#footer').height();
       
       var bpos = h - this.height;
       
       $('#split-panes').height(h);
-
-      this.hide();
       
       // reset element height
       $('#bottom-bar', this.$el).height(this.height);
@@ -59,8 +70,6 @@ define([
       // set positions
       $('#bottom-bar').css('top', bpos);
       $('#split-panes .handler').css('top', bpos - $('#split-panes .handler').height());
-
-      return this;
     },
     show: function(){
       $('#bottom-bar').show();
