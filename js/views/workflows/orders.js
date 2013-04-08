@@ -38,7 +38,7 @@ define([
       this.collection.fetch();
     },
   	runAction: function(e){
-  		e.preventDefault();
+  		e.stopPropagation();
       var data = e.currentTarget.dataset;
       if (data.id && data.action){
     		var inst = this.collection.get(data.id);

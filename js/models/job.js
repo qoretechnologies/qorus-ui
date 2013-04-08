@@ -1,10 +1,10 @@
 define([
   'underscore',
   'moment',
-  'libs/backbone.rpc',
+  'qorus/qorus',
   'utils'
-], function(_, moment, Rpc, utils){
-  var Model = Backbone.Model.extend({
+], function(_, moment, Qorus, utils){
+  var Model = Qorus.Model.extend({
     idAttribute: "jobid",
     urlRoot: '/rest/jobs/',
     initialize: function(){

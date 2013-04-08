@@ -1,4 +1,19 @@
-define(['jquery', 'underscore', 'backbone', 'moment', 'qorus/qorus', 'views/system', 'views/workflows/workflows', 'views/workflows/workflow', 'views/services/services', 'views/jobs/jobs', 'views/workflows/instances', ], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView) {
+define([
+  'jquery', 
+  'underscore', 
+  'backbone', 
+  'moment', 
+  'qorus/qorus', 
+  'views/system', 
+  'views/workflows/workflows', 
+  'views/workflows/workflow', 
+  'views/services/services', 
+  'views/jobs/jobs', 
+  'views/workflows/instances',
+  'collections/events',
+], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView, EventCollection) {
+  window.myE = new EventCollection();
+  
   var AppRouter = Backbone.Router.extend({
     initialize: function(opts){
       this.currentView = null;

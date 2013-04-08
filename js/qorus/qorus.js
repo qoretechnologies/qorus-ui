@@ -141,6 +141,27 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     }
   });
   
+  Qorus.WSCollection = Backbone.Collection.extend({
+    initialize: function (models, options) {
+      _.bindAll(this);
+      this.socket = new WebSocket("ws://localhost:8001");
+      this.socket.onmessage = this.wsAdd;
+    },
+    wsAdd: function(e){
+      var _this = this;
+      var models = JSON.parse(e.data);
+      _.each(models, function(model){
+        var mdl = new _this.model(model);
+        console.log("Adding -> ", mdl);
+        _this.add(mdl);
+      })
+    },
+    sync: function() {
+    },
+    fetch: function() {
+    }
+  });
+  
   Qorus.Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function(opts){
