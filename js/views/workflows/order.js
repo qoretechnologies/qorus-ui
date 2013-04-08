@@ -6,15 +6,15 @@ define([
 ], function($, _, Qorus, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,
-    // additionalEvents: {
-    //       'click button[data-action]': 'runAction',
-    // },
+    additionalEvents: {
+      // 'click button[data-action]': 'runAction',
+    },
     initialize: function(opts){
   	  _.bindAll(this, 'render');
       this.collection = new Collection(opts);
   	  this.collection.on('reset', this.render);
   	  this.collection.fetch();
-    },
+    }
     // runAction: function(e){
     //   e.preventDefault();
     //       var data = e.currentTarget.dataset;

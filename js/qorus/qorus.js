@@ -31,7 +31,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     parse: function(response, options){
       _.each(this.dateAttributes, function(date){
         if (response[date]){
-         response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+          response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
         }
       });
       return response;
@@ -96,7 +96,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
       
       _.extend(options, { data: data });
-       
+
       Qorus.Collection.__super__.fetch.call(this, options);
     }
     
@@ -249,6 +249,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
 
       this.collection = new collection({date: this.date});
+      this.collection.on('all', function(e, ee){ console.log(e, ee); });
       this.collection.on('reset', this.render);
       this.collection.on('change', function(){ console.log('changed listview')});
       this.collection.fetch();
