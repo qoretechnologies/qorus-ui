@@ -4,12 +4,10 @@ define([
   'qorus/qorus',
   'models/event'
 ], function(_, Backbone, Qorus, Model){
-  console.log(Model.prototype.idAttribute);
-  var Collection = Qorus.Collection.extend({
-    // url: "/rest/events/",
+  var Collection = Backbone.Collection.extend({
     model: Model,
     initialize: function () {
-      _.bindAll(this);
+      _.bindAll(this, 'wsAdd');
       this.socket = new WebSocket("ws://localhost:8001");
       this.socket.onmessage = this.wsAdd;
     },
