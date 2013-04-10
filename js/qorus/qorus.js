@@ -45,7 +45,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     page: 1,
     
     initialize: function(date) {
-      _.bindAll(this)
+      // _.bindAll(this);
       if (date) {
         this.date = date;
       }
@@ -62,7 +62,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       return (this.offset + this.limit - 2 < this.models.length); 
     },
     loadNextPage: function(){
-      console.log(this, this.size(), this.hasNextPage(), this.offset + this.limit, this.models.length);
+      console.log(this, this.length, this.hasNextPage(), this.offset + this.limit, this.models.length);
       if (this.hasNextPage()) {
 
         this.offset = this.page * this.limit + this.offset;
@@ -75,7 +75,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           remove: false, 
           update: true,
           success: function(){
-            console.log(_this.size());
+            console.log(_this.length);
             _this.trigger('reset');
           }
         })
@@ -268,17 +268,19 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       } else {
           this.date = date;
       }
-
-      this.collection = new collection({date: this.date});
-      this.collection.on('all', function(e, ee){ console.log(e, ee); });
-      this.collection.on('reset', this.render);
-      this.collection.on('change', function(){ console.log('changed listview')});
-      this.collection.fetch();
       
-      this.context.page = {
-        current_page: this.collection.page,
-        has_next: this.collection.hasNextPage(),
-        has_prev: null
+      if (collection) {
+        this.collection = new collection({date: this.date});
+        this.collection.on('all', function(e, ee){ console.log(e, ee); });
+        this.collection.on('reset', this.render);
+        this.collection.on('change', function(){ console.log('changed listview')});
+        this.collection.fetch();
+      
+        this.context.page = {
+          current_page: this.collection.page,
+          has_next: this.collection.hasNextPage(),
+          has_prev: null
+        }        
       }
     },
     render: function() {

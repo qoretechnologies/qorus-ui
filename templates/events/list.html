@@ -1,0 +1,28 @@
+<div id="events">
+	<h2>Recent Event log</h2>
+    <% if (items.length > 0) { %>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th data-sort="timestamp">Timestamp</th>
+			<th class="severity" data-sort="severity">Severity</th>
+			<th data-sort="event">Event</th>
+			<th data-sort="info">Info</th>
+      <th></th>
+		</tr>
+		</thead>
+		<tbody>
+	        <% _.each( items, function( item ){ %>
+	  			<tr class="event-row">
+	  				<td class="timestamp"><%= item.get('time') %></td>
+	  				<td class="severity"><strong><%= item.get('compositeseveritystr') %></strong></td>
+	  				<td class="event"><%= item.get('eventstr') %></td>
+	  				<td class="info"><%= item.get('info').name %></td>
+	  			</tr>
+	        <% }); %>
+		</tbody>
+	</table>
+    <% } else { %>
+        <p>Waiting for events...</p>
+    <% } %>
+</div>

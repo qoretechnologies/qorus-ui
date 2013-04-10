@@ -11,8 +11,10 @@ define([
   'views/jobs/jobs', 
   'views/workflows/instances',
   'collections/events',
-], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, ServiceListView, JobListView, InstanceListView, EventCollection) {
-  window.myE = new EventCollection();
+  'views/events/events',
+], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
+  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView) {
+  window.qorusEventCollection = new EventCollection();
   
   var AppRouter = Backbone.Router.extend({
     initialize: function(opts){
@@ -26,6 +28,7 @@ define([
 
       'services': 'showServices',
       'jobs': 'showJobs',
+      'events': 'showEvents',
       // 'system': 'showSystem',
 
       // Default
@@ -64,6 +67,11 @@ define([
     },
     showJobs: function() {
       var view = new JobListView();
+      this.setView(view);
+      $('#content').html(view.el);
+    },
+    showEvents: function() {
+      var view = new EventListView(window.qorusEventCollection);
       this.setView(view);
       $('#content').html(view.el);
     },
