@@ -22,7 +22,7 @@ define([
       
       // drop older messages
       if (this.length > this.log_size - 1){
-        this.slice(0, this.log_size - models.length);
+        this.models = this.slice(0, this.log_size - models.length);
       }
       
       _.each(models, function(model){

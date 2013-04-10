@@ -7,7 +7,12 @@
 			<th data-sort="timestamp">Timestamp</th>
 			<th class="severity" data-sort="severity">Severity</th>
 			<th data-sort="event">Event</th>
-			<th data-sort="info">Info</th>
+			<th class="info" data-sort="class">Class</th>
+			<th class="info" data-sort="id">ID</th>
+			<th class="info" data-sort="instanceid">Instance/Exec    ID</th>
+			<th class="info" data-sort="name">Name</th>
+			<th class="info" data-sort="status">Status</th>
+			<th class="info" data-sort="error">Error</th>
       <th></th>
 		</tr>
 		</thead>
@@ -17,7 +22,12 @@
 	  				<td class="timestamp"><%= item.get('time') %></td>
 	  				<td class="severity"><strong><%= item.get('compositeseveritystr') %></strong></td>
 	  				<td class="event"><%= item.get('eventstr') %></td>
-	  				<td class="info"><%= item.get('info').name %></td>
+	  				<td class="class info"><%= item.get('info').cls %></td>
+	  				<td class="id info"><%= item.get('info').id %></td>
+	  				<td class="instanceid info"><%= item.get('info').instanceid %></td>
+	  				<td class="info name"><%= item.get('info').name %></td>
+	  				<td class="info status"><%= item.get('info').status %></td>
+	  				<td class="info error"><%= item.get('info').desc %></td>
 	  			</tr>
 	        <% }); %>
 		</tbody>
