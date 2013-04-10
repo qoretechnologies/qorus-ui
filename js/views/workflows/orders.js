@@ -57,13 +57,12 @@ define([
       }
       this.render();
     },
-    loadNext: function(){
-      console.log('scrolling');
-      console.log($('body').offset());
-    },
     scroll: function(){
-      var pos = this.$el.height() + this.$el.offset().top;
-      console.log(pos, this.$el.offset().top, this.$el.children('button[data-pagination]').offset().top);
+      var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+      if(pos < 100){
+        this.nextPage(); 
+        this.$el.children('button[data-pagination]').html("Loading...");
+      }
     },
     render: function(){
       ListView.__super__.render.call(this);

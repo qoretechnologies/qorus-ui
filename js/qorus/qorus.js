@@ -63,23 +63,26 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       return (this.offset + this.limit - 2 < this.models.length); 
     },
     loadNextPage: function(){
-      console.log(this, this.length, this.hasNextPage(), this.offset + this.limit, this.models.length);
-      if (this.hasNextPage()) {
+      if(!this.loading){
+        this.loading = true;
+        if (this.hasNextPage()) {
 
-        this.offset = this.page * this.limit + this.offset;
-        this.page++;
-        console.log('loading page', this.page);
+          this.offset = this.page * this.limit + this.offset;
+          this.page++;
+          console.log('loading page', this.page);
 
-        var _this = this;
-        this.fetch({ 
-          add: true, 
-          remove: false, 
-          update: true,
-          success: function(){
-            console.log(_this.length);
-            _this.trigger('reset');
-          }
-        })
+          var _this = this;
+          this.fetch({ 
+            add: true, 
+            remove: false, 
+            update: true,
+            success: function(){
+              console.log(_this.length);
+              _this.trigger('reset');
+              _this.loading = false;
+            }
+          })
+        }        
       }
     },
     fetch: function(options){
