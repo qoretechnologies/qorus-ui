@@ -18,8 +18,8 @@ define([
       if(response.info){
         response.info.id = response.info[cls + 'id'];
         response.info.cls = cls;
-        response.info.status = response.info.status || "N/A";
-        response.info.instanceid = response.info[cls + '_instanceid'] || response.info['execid'] || "N/A";
+        response.info.status = response.info.status || "";
+        response.info.instanceid = response.info[cls + '_instanceid'] || response.info['execid'] || "";
         response.info.desc = response.info.err || "";
         if(response.info.error){
           response.info.desc = response.info.error.err || "";

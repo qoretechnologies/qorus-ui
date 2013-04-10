@@ -59,6 +59,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }));
     },
     hasNextPage: function(){
+      console.log("Has next page", (this.offset + this.limit - 2 < this.models.length));
       return (this.offset + this.limit - 2 < this.models.length); 
     },
     loadNextPage: function(){
@@ -275,10 +276,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.collection.on('reset', this.render);
         this.collection.on('change', function(){ console.log('changed listview')});
         this.collection.fetch();
+        
+        var _c = this.collection;
       
         this.context.page = {
-          current_page: this.collection.page,
-          has_next: this.collection.hasNextPage(),
+          current_page: _c.page,
+          has_next: _c.hasNextPage,
           has_prev: null
         }        
       }
