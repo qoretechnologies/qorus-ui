@@ -2,20 +2,21 @@ define([
   'underscore',
   'moment',
   'qorus/qorus',
-  'utils'
+  'utils',
+  'later.recur',
+  'later.cron'
 ], function(_, moment, Qorus, utils){
   var Model = Qorus.Model.extend({
     idAttribute: "jobid",
     urlRoot: '/rest/jobs/',
-    initialize: function(){
-        if (this.has('last_executed')) {
-            this.last = utils.parseDate(this.get('last_executed'));
-            this.set('last_executed', utils.formatDate(this.last));
-        }
-        // get next schedule time
-        var next = [this.get('minute'), this.get('hour'), this.get('day'), this.get('month'), this.get('wday')]
-        var next_value = utils.getNextDate(next.join(' '), this.last);
-        this.set('next', utils.formatDate(next_value));
+    dateAttributes: ['last_executed'],
+    parse: function(response, options){
+      var next, next_value;
+      next = [response['minute'], response['hour'], response['day'], response['month'], response['wday']];
+      
+      next_value = later().getNext(cronParser().parse(next.join(' ')));
+      response['next'] = moment(next_value).format(utils.settings.DATE_DISPLAY);
+      return Model.__super__.parse.call(this, response, options);
     }
   });
   // Return the model for the module

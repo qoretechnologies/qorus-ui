@@ -6,31 +6,37 @@ define([
   'settings',
   'later.recur',
   'later.cron'
-], function($, _, Backbone, moment, settings, c){
-    var utils = {
-        parseDate: function(date, format){
-            if (format===undefined){
-                var d = moment(date, settings.DATE_FORMAT);
-            } else if (format===null){
-                var d = moment(date);
-            } else {
-                var d = moment(date, format);
-            }
+], function($, _, Backbone, moment, settings){
+  var utils = {
+    settings: settings,
+    parseDate: function(date, format){
+      var d;
+      if (format===undefined){
+          d = moment(date, settings.DATE_FORMAT);
+      } else if (format===null){
+          d = moment(date);
+      } else {
+          d = moment(date, format);
+      }
             
-            return d;
-        },
-        formatDate: function(date){
-            return date.format(settings.DATE_DISPLAY);
-        },
-        getNextDate: function(cron_time, last_time){
-            var cron = cronParser;
-            var last;
-            if(last_time){
-                last = last_time.toDate();
-            }
-            var next = later().getNext(cron().parse(cron_time, true), last);
-            return this.parseDate(next, format=null);
+      return d;
+    },
+    formatDate: function(date){
+        return date.format(settings.DATE_DISPLAY);
+    },
+    getNextDate: function(cron_time, last_time){
+        var cron = cronParser;
+        var last;
+
+        if(_.isString(last_time)){
+            last = moment(last_time, settings.DATE_DISPLAY).toDate();
         }
+            
+        var next = later().getNext(cronParser().parse(cron_time), last);
+            
+        return this.parseDate(next, null);
     }
-    return utils;
+  };
+    
+  return utils;
 });
