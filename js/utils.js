@@ -24,15 +24,8 @@ define([
     formatDate: function(date){
         return date.format(settings.DATE_DISPLAY);
     },
-    getNextDate: function(cron_time, last_time){
-        var cron = cronParser;
-        var last;
-
-        if(_.isString(last_time)){
-            last = moment(last_time, settings.DATE_DISPLAY).toDate();
-        }
-            
-        var next = later().getNext(cronParser().parse(cron_time), last);
+    getNextDate: function(cron_time){
+        var next = later().getNext(cronParser().parse(cron_time));
             
         return this.parseDate(next, null);
     }

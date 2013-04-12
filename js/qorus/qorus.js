@@ -1,7 +1,7 @@
 // Qorus core objects definition
 define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _, Backbone, settings) {
   $.extend($.expr[':'], {
-    'icontains': function(elem, i, match, array)
+    'icontains': function(elem, i, match) //, array)
     {
       return (elem.textContent || elem.innerText || '').toLowerCase()
       .indexOf((match[3] || "").toLowerCase()) >= 0;
@@ -51,7 +51,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
     },
     search: function(query) {
-      if (query == "") return this;
+      if (query === "") return this;
 
       var pattern = new RegExp(query, "gi");
       return _(this.filter(function(data) {
@@ -81,7 +81,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
               _this.trigger('reset');
               _this.loading = false;
             }
-          })
+          });
         }        
       }
     },
@@ -110,7 +110,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     initialize: function(opts) {
       this.sort_key = 'name';
       this.sort_order = 'asc';
-      this.sort_history = ['', ];
+      this.sort_history = [''];
       this.opts = opts;
       if (opts) {
         this.date = opts.date;
@@ -158,7 +158,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         var mdl = new _this.model(model);
         console.log("Adding -> ", mdl);
         _this.add(mdl);
-      })
+      });
     },
     sync: function() {
     },
@@ -242,7 +242,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.trigger('render', this, {});
       }
       return this;
-    },
+    }
   });
 
   Qorus.ListView = Qorus.View.extend({
@@ -277,7 +277,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.collection = new collection({date: this.date});
         this.collection.on('all', function(e, ee){ console.log(e, ee); });
         this.collection.on('reset', this.render);
-        this.collection.on('change', function(){ console.log('changed listview')});
+        this.collection.on('change', function(){ console.log('changed listview'); });
         this.collection.fetch();
         
         var _c = this.collection;
@@ -286,7 +286,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           current_page: _c.page,
           has_next: _c.hasNextPage,
           has_prev: null
-        }        
+        };        
       }
     },
     render: function() {
@@ -309,8 +309,6 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       if(_.isFunction(this.afterRender)){
         // Run afterRender when attached to DOM
         var _this = this;
-        var date =  new Date();
-        // setTimeout(function(){ _this.afterRender(date); }, 0);
         _.defer(function(){ _this.afterRender(); });
       }
       console.log('Finished rendering');

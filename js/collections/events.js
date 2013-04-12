@@ -11,7 +11,7 @@ define([
       _.bindAll(this, 'wsAdd');
       this.sort_key = 'time';
       this.sort_order = 'des';
-      this.sort_history = ['',];
+      this.sort_history = [''];
       this.socket = new WebSocket("ws://localhost:8001");
       this.socket.onmessage = this.wsAdd;
       Qorus.SortedCollection.__super__.initialize.call(this, opts);

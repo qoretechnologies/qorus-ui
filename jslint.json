@@ -1,14 +1,15 @@
 {
     "predef": {
-        "$": true,  
+        "$": true, 
+        "console": true, 
         "define": true, 
         "jQuery": true, 
+        "window": true,
         "later": true,
         "cronParser": true,
+        "WebSocket": true,
         "moment": true
     },
     "strict": false,
-    "unused": false,
-    "browser": true,
-    "devel": true
+    "unparam": false
 }

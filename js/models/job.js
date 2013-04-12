@@ -11,11 +11,9 @@ define([
     urlRoot: '/rest/jobs/',
     dateAttributes: ['last_executed'],
     parse: function(response, options){
-      var next, next_value;
-      next = [response['minute'], response['hour'], response['day'], response['month'], response['wday']];
-      
-      next_value = later().getNext(cronParser().parse(next.join(' ')));
-      response['next'] = moment(next_value).format(utils.settings.DATE_DISPLAY);
+      // get date from cronÒ
+      var next = [response.minute, response.hour, response.day, response.month, response.wday];
+      response.next = utils.formatDate(utils.getNextDate(next.join(' ')));
       return Model.__super__.parse.call(this, response, options);
     }
   });
