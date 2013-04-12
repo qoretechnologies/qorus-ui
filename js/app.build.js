@@ -65,6 +65,7 @@
         }
       }
     },
+    removeCombined: true,
     templates: '../templates',
     modules: [
       { name: 'main' }
