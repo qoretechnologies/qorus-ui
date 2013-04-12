@@ -3,7 +3,7 @@ define([
   'underscore',
   'qorus/qorus',
   'collections/instances',
-  'text!/templates/workflow/instances.html'
+  'text!../../../templates/workflow/instances.html'
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,

@@ -4,6 +4,7 @@ define([
   'backbone',
   'moment',
   'settings',
+  'later.recur',
   'later.cron'
 ], function($, _, Backbone, moment, settings, c){
     var utils = {

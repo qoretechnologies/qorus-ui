@@ -4,7 +4,7 @@ define([
   'backbone',
   'qorus/qorus',
   'collections/workflows',
-  'text!/templates/workflow/list.html',
+  'text!../../../templates/workflow/list.html',
   'datepicker',
   'moment',
   'views/workflows/instances',

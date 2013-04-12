@@ -3,7 +3,7 @@ define([
   'underscore',
   'qorus/qorus',
   'collections/services',
-  'text!/templates/service/list.html',
+  'text!../../../templates/service/list.html',
   'sprintf'
 ], function($, _, Qorus, Collection, Template){
   var ListView = Qorus.ListView.extend({

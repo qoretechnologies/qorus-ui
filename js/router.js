@@ -1,3 +1,4 @@
+/*global window, console, define */
 define([
   'jquery', 
   'underscore', 
@@ -12,12 +13,13 @@ define([
   'views/workflows/instances',
   'collections/events',
   'views/events/events',
+  'views/workflows/orders'
 ], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
-  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView) {
+  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView) {
   window.qorusEventCollection = new EventCollection();
   
   var AppRouter = Backbone.Router.extend({
-    initialize: function(opts){
+    initialize: function(){
       this.currentView = null;
     },
     routes: {
@@ -29,6 +31,7 @@ define([
       'services': 'showServices',
       'jobs': 'showJobs',
       'events': 'showEvents',
+      'search(/)(:id)(/)(:key)': 'showSearch',
       // 'system': 'showSystem',
 
       // Default
@@ -75,17 +78,22 @@ define([
       this.setView(view);
       $('#content').html(view.el);
     },
-    default: function(actions) {
+    showSearch: function(id, key) {
+      var view = new OrderListView(key);
+      this.setView(view);
+      $('#content').html(view.el);
+    },
+    defaultAction: function(actions) {
       this.clean();
       console.log('No route:', actions);
     }
   });
 
-  var systeminfoview = new SystemInfoView();
+  new SystemInfoView();
 
-  var app_router = new AppRouter;
+  var app_router = new AppRouter();
   
-  app_router.on('route', function(e){
+  app_router.on('route', function(){
     // update menu and make active item based on fragment
     var fragment = Backbone.history.fragment.split('/')[0];
     $('.nav a').removeClass('active');

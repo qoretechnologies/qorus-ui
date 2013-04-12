@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!/templates/common/bottom_bar.html',
+  'text!../../../templates/common/bottom_bar.html',
   'sprintf',
   'jquery.ui'
 ], function($, _, Qorus, Template){

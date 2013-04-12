@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!/templates/events/list.html'
+  'text!../../../templates/events/list.html'
 ], function($, _, Qorus, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,

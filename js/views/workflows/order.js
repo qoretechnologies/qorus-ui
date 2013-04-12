@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!/templates/workflow/order_data.html'
+  'text!../../../templates/workflow/order_data.html'
 ], function($, _, Qorus, Template){
   var ListView = Qorus.ListView.extend({
     template: Template,

@@ -3,12 +3,12 @@ define([
   'underscore',
   'qorus/qorus',
   'models/workflow',
-  'text!/templates/workflow/detail.html',
+  'text!../../../templates/workflow/detail.html',
   'views/workflows/instances',
   'views/workflows/orders',
   'views/common/bottom_bar',
   'views/workflows/orders_toolbar',
-  'text!/templates/workflow/orders/detail.html',
+  'text!../../../templates/workflow/orders/detail.html',
 ], function($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate){
   var ModelView = Qorus.View.extend({
     url: function() {
