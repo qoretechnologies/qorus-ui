@@ -1,7 +1,7 @@
 // Qorus core objects definition
-define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _, Backbone, settings) {
+define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _, Backbone, settings) {
   $.extend($.expr[':'], {
-    'icontains': function(elem, i, match) //, array)
+    'icontains': function (elem, i, match) //, array)
     {
       return (elem.textContent || elem.innerText || '').toLowerCase()
       .indexOf((match[3] || "").toLowerCase()) >= 0;
@@ -24,12 +24,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
-    initialize: function(opts) {
+    initialize: function (opts) {
       Qorus.Model.__super__.initialize.call(this, opts);
       // this.parseDates();
     },
-    parse: function(response, options) {
-      _.each(this.dateAttributes, function(date) {
+    parse: function (response, options) {
+      _.each(this.dateAttributes, function (date) {
         if (response[date]) {
           response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
         }
@@ -44,25 +44,25 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     offset: 1,
     page: 1,
     
-    initialize: function(date) {
+    initialize: function (date) {
       // _.bindAll(this);
       if (date) {
         this.date = date;
       }
     },
-    search: function(query) {
+    search: function (query) {
       if (query === "") return this;
 
       var pattern = new RegExp(query, "gi");
-      return _(this.filter(function(data) {
+      return _(this.filter(function (data) {
         return pattern.test(data.get("name"));
       }));
     },
-    hasNextPage: function() {
+    hasNextPage: function () {
       console.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
       return (this.offset + this.limit - 2 < this.models.length); 
     },
-    loadNextPage: function() {
+    loadNextPage: function () {
       if (!this.loading) {
         this.loading = true;
         if (this.hasNextPage()) {
@@ -76,7 +76,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
             add: true, 
             remove: false, 
             update: true,
-            success: function() {
+            success: function () {
               console.log("Fetched ->", _this.length);
               _this.trigger('reset');
               _this.loading = false;
@@ -85,7 +85,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         }        
       }
     },
-    fetch: function(options) {
+    fetch: function (options) {
       this.opts.limit = this.limit;
       this.opts.offset = this.offset;
 
@@ -107,7 +107,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   });
   
   Qorus.SortedCollection = Qorus.Collection.extend({
-    initialize: function(opts) {
+    initialize: function (opts) {
       this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = [''];
@@ -116,7 +116,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.date = opts.date;
       }
     },
-    comparator: function(c1, c2) {
+    comparator: function (c1, c2) {
       // needs fix
       var r = (this.sort_order == 'des') ? -1 : 1;
       var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
@@ -128,7 +128,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       if (k1[1] < k2[1]) return 1 * r;
       return 0;
     },
-    sortByKey: function(key, ord, cb) {
+    sortByKey: function (key, ord, cb) {
       if (key) {
         var old_key = this.sort_key;
         if (old_key != key) {
@@ -146,37 +146,37 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
   });
   
   Qorus.WSCollection = Backbone.Collection.extend({
-    initialize: function(models, options) {
+    initialize: function (models, options) {
       _.bindAll(this);
       this.socket = new WebSocket("ws://localhost:8001");
       this.socket.onmessage = this.wsAdd;
     },
-    wsAdd: function(e) {
+    wsAdd: function (e) {
       var _this = this;
       var models = JSON.parse(e.data);
-      _.each(models, function(model) {
+      _.each(models, function (model) {
         var mdl = new _this.model(model);
         console.log("Adding -> ", mdl);
         _this.add(mdl);
       });
     },
-    sync: function() {
+    sync: function () {
     },
-    fetch: function() {
+    fetch: function () {
     }
   });
   
   Qorus.Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
-    initialize: function(opts) {
+    initialize: function (opts) {
       this.el = opts.el;
       _.bindAll(this);
       this.render();
     },
-    render: function() {
+    render: function () {
       $(this.el).before(this.template);
     },
-    destroy: function() {
+    destroy: function () {
       $(this.el).parent().find('.loader').remove();
     }
   });
@@ -187,10 +187,10 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
     defaultEvents: {},
     context: {},
     subviews: {},
-    events : function() {
+    events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
-    initialize: function(options) {
+    initialize: function (options) {
       Qorus.View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -204,12 +204,12 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       
       _.extend(this.context, options);
     },
-    off: function() {
-      if (_.isFunction(this.clean)) {
+    off: function () {
+      if (_.isfunction (this.clean)) {
         this.clean();
       }
-      _.each(this.subviews, function(view) {
-        if (_.isFunction(view.clean)) {
+      _.each(this.subviews, function (view) {
+        if (_.isfunction (view.clean)) {
           view.clean();
         }
         view.undelegateEvents();
@@ -217,7 +217,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       });
     },
     // manages subviews
-    assign : function(selector, view) {
+    assign : function (selector, view) {
       var selectors;
       if (_.isObject(selector)) {
         selectors = selector;
@@ -227,11 +227,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         selectors[selector] = view;
       }
       if (!selectors) return;
-      _.each(selectors, function(view, selector) {
-          view.function ((this.$(selector)).render();
+      _.each(selectors, function (view, selector) {
+          view.setElement(this.$(selector)).render();
         }, this);
     },
-    render: function(ctx) {
+    render: function (ctx) {
       if (this.template) {
         if (ctx) {
           _.extend(this.context, ctx); 
@@ -254,10 +254,10 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       'submit .form-search': 'search',
       'keyup .search-query': 'search'
     },
-    events : function() {
+    events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
-    initialize: function(collection, date) {
+    initialize: function (collection, date) {
       _.bindAll(this);
       Qorus.ListView.__super__.initialize.call(this);
       // add element loader
@@ -288,7 +288,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         };
       }
     },
-    render: function() {
+    render: function () {
       // console.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
         var ctx = {
@@ -305,16 +305,16 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         this.trigger('render', this, {});
       }
 
-      if (_.isFunction(this.afterRender)) {
+      if (_.isfunction (this.afterRender)) {
         // Run afterRender when attached to DOM
         var _this = this;
-        _.defer(function() { _this.afterRender(); });
+        _.defer(function () { _this.afterRender(); });
       }
       console.log('Finished rendering');
       return this;
     },
     // toggle select row
-    highlight: function(e) {
+    highlight: function (e) {
       var el = e.currentTarget;
       $(el)
         .toggleClass('icon-box')
@@ -324,11 +324,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
         .toggleClass('warning');
       e.stopPropagation();
     },
-    fixHeader: function() {
+    fixHeader: function () {
       $(this.el).find('table').fixedHeaderTable();
     },
     // toggle select on all rows
-    checkall: function(e) {
+    checkall: function (e) {
       var el = e.currentTarget;
 
       // behaviour switcher
@@ -361,13 +361,13 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       e.stopPropagation();
     },
     // sort view
-    sortView: function(e) {
+    sortView: function (e) {
       var el = $(e.currentTarget);
       if (el.data('sort')) {
         this.collection.sortByKey(el.data('sort'), el.data('order'));
       }
     },
-    sortIcon: function() {
+    sortIcon: function () {
         var c = this;
         var key = c.collection.sort_key;
         var order = c.collection.sort_order;
@@ -383,8 +383,8 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
           el.append('<i class="sort icon-chevron-up"></i>');
         }
     },
-    search: function(e) {
-      var el = this.el;
+    search: function (e) {
+      // var el = this.el;
       var query = $(this.el).find('.search-query').val();
       if (query.length < 1) {
         $(this.el).find('tbody tr').show();
