@@ -228,7 +228,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function($, _,
       }
       if (!selectors) return;
       _.each(selectors, function(view, selector) {
-          view.setElement(this.$(selector)).render();
+          view.function ((this.$(selector)).render();
         }, this);
     },
     render: function(ctx) {
