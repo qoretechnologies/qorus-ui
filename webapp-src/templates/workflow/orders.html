@@ -1,0 +1,58 @@
+<% if (items.length > 0) { %>
+<table class="table table-fixed table-striped">
+  <thead>
+    <tr>
+      <th></ht>
+      <th data-sort="status">Status</th>
+      <th data-sort="business_error">Bus. Err.</th>
+      <th data-sort="workflow_instanceid">WFLIID</th>
+      <th data-sort="started">Started</th>
+      <th data-sort="completed">Completed</th>
+      <th data-sort="modified">Modified</th>
+      <th data-sort="error_count">Errors</th>
+      <th data-sort="warning_count">Warnings</th>
+      <th data-sort='createdby'>Created by</th>
+      <th data-sort+'modifiedby'>Modified by</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% var counter = 1; %>
+  <% _.each(items, function (item) {   
+    var item = item.toJSON(); %>
+    <tr data-id="<%= item.workflow_instanceid %>">
+      <td><%= counter %>.</td>
+	    <td><span class="label"><%= item.workflowstatus %></span></td>
+      <td>
+        <% if(item.business_error ) {%>
+          <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
+        <% } %>
+      </td>
+      <td><%= item.workflow_instanceid %></td>
+      <td><%= item.started %></td>
+      <td><%= item.completed %></td>
+      <td><%= item.modified %></td>
+      <td><%= item.error_count %></td>
+      <td><%= (item.warning_count) ? item.warning.count : 0 %></td>
+      <td><%= item.createdby %></td>
+      <td><%= item.modifiedby %></td>
+      <td>
+        <div class="btn-group">
+          <% _.each(item.actions, function(action) { %>
+            <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
+          <% }); %>
+        </div>
+      </td>
+    </tr>
+    <% counter++;
+     }); %>
+    </tbody>
+</table>
+<% if (obj.page) { %>
+    <% if (obj.page.has_next) { %>
+<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>
+    <% } %>
+<% } %>
+<% } else { %>
+  <p>Any</p>
+<% } %>

@@ -1,0 +1,14 @@
+{
+    "predef": {
+        "$": true,  
+        "define": true, 
+        "jQuery": true, 
+        "later": true,
+        "cronParser": true,
+        "moment": true
+    },
+    "strict": false,
+    "unused": false,
+    "browser": true,
+    "devel": true
+}

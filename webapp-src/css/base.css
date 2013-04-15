@@ -1,0 +1,298 @@
+/* @override http://localhost:8001/css/base.css */
+
+html, body {
+	height: 100%;
+}
+
+table th {
+	font-size: 70%;;
+}
+
+.table td, .table th {
+	text-align: center;
+}
+
+.table .name, .table .description {
+	text-align: left;
+}
+
+.table .name {
+	font-weight: bold;
+}
+
+.dropdown-menu li {
+	text-align: left;
+}
+
+.icon-box {
+  background-position: -384px -168px;
+}
+
+.badge-ready {
+  background-color: #aded9b;
+}
+
+.badge-waiting {
+  background-color: #e5c737;
+}
+
+.badge-canceled {
+  background-color: #f2dede;
+}
+
+.badge-info2 {
+  background-color: #d9edf7;
+}
+
+#wrap > .container, #wrap > .section {
+	padding-top: 40px;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
+}
+
+#content {
+  position: relative;
+}
+
+#footer, .push {
+	clear: both;
+	height: 4em;
+}
+.name {
+  position: relative;
+}
+
+.unfold {
+  position: absolute;
+  top: 50%;
+  margin-top: -7px;
+  right: 0;
+}
+
+#footer {
+	background-color: #f5f5f5;
+	height: 60px;
+  z-index: 1031;
+}
+
+.credit {
+	margin: 20px 0;
+}
+
+.table-fixed thead tr {
+  background-color: #fff;
+}
+
+th {
+    position: relative;
+    padding-right: 16px;
+}
+
+i.sort {
+    position: absolute;
+    bottom: 1em;
+    right: 0;
+}
+
+.bootstrap-datetimepicker-widget ul, .bootstrap-datetimepicker-widget li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-text {
+    margin: 0;
+}
+
+.form-search {
+    float: left;
+}
+.search-box {
+    float: right;
+}
+
+.loader {
+    background-color: rgba(100,100,100,.8);
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(100,100,100,.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    margin: -50px 0 0 -75px;
+    text-align: center;
+    vertical-align: center;
+    z-index: 9999;
+}
+
+.loader p {
+    margin: 15px;
+}
+
+table .header-fixed {
+  position: fixed;
+  top: 80px;
+  /*left: 0;*/
+  /*right: 0;*/
+  z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+  border-bottom: 1px solid #d5d5d5;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+
+.sticker {
+  position: fixed;
+  background-color: #fff;
+  padding-top: 5px;
+  z-index: 1021; /* 10 less than .navbar-fixed to prevent any overlap */
+}
+
+.dp {
+  margin-bottom: 0;
+}
+
+.row-fluid .page {
+  padding-left: 8.333333333%;
+  margin-left: 0;
+  width: 99%;
+}
+
+aside {
+  z-index: 1020;
+}
+
+#nav-main {
+  background-color: #333;
+  font-size: 80%;
+  height: 2000px;
+}
+
+#nav-main ul, #nav-main li {
+  text-align: center;
+  padding: 0;
+}
+
+#nav-main li {
+  padding: 0 15px;
+}
+
+#nav-main li {
+  border-bottom: 1px solid rgba(0,0,0,.8);
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+#nav-main a {
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 0 #000;
+  padding: 10px 0;
+}
+
+#nav-main a:hover {
+  color: #333;
+  text-shadow: none;
+}
+
+#nav-main span {
+	display: block;
+	width: 100%;
+}
+
+.nav-list a:hover .icon-white {
+  background-image: url(../js/libs/bootstrap/img/glyphicons-halflings.png);
+}
+
+.nav li {
+  position: relative;
+}
+
+.nav a.active:after {
+  content: "";
+  display: block;
+  border: 11px solid transparent;
+  border-right: 11px solid #fff;
+  margin-top: -11px;
+  position: absolute;
+  right: -1px;
+  top: 50%;
+}
+
+
+#split-panes {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.pane {
+  left: 0;
+  top: 0;
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}
+
+#bottom-bar {
+  background-color: #fff;
+  position: relative;
+  padding: 20px 0;
+/*  width: 100%;*/
+}
+
+.bottom-bar {
+  background: #fff;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.handler {
+  display: block;
+  background-color: #333;
+  box-shadow: rgba(0,0,0,.5) 0 0 10px;
+  cursor: move;
+  height: 18px;
+  padding: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.bottom-bar .hide {
+  position: absolute;
+  top: 5px;
+}
+
+#bottom-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+}
+
+#workflows .err a {
+  color: #000;
+}
+
+#workflows .err a:hover {
+  text-decoration: none;
+}
+
+#workflows .badge a {
+  color: #fff;
+}
