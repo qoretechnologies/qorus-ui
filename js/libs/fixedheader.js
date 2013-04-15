@@ -2,7 +2,8 @@
 
 $.fn.fixedHeader = function (options) {
  var config = {
-   topOffset: 40
+   topOffset: 40,
+   el: window
    //bgColor: 'white'
  };
  if (options){ $.extend(config, options); }
@@ -10,7 +11,7 @@ $.fn.fixedHeader = function (options) {
  return this.each( function() {
   var o = $(this);
 
-  var $win = $(window)
+  var $win = $(config.el)
     , $head = $('thead.header', o)
     , isFixed = 0;
   var headTop = $head.length && $head.offset().top - config.topOffset;
@@ -20,6 +21,7 @@ $.fn.fixedHeader = function (options) {
     if ($('thead.header-copy').size())
     var i, scrollTop = $win.scrollTop();
     var t = $head.length && $head.offset().top - config.topOffset;
+
     if (!isFixed && headTop != t) { headTop = t; }
     if (scrollTop >= headTop && !isFixed) {
       isFixed = 1;
