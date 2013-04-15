@@ -205,11 +205,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
       _.extend(this.context, options);
     },
     off: function () {
-      if (_.isfunction (this.clean)) {
+      if (_.isFunction(this.clean)) {
         this.clean();
       }
       _.each(this.subviews, function (view) {
-        if (_.isfunction (view.clean)) {
+        if (_.isFunction(view.clean)) {
           view.clean();
         }
         view.undelegateEvents();
@@ -305,7 +305,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         this.trigger('render', this, {});
       }
 
-      if (_.isfunction (this.afterRender)) {
+      if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
         var _this = this;
         _.defer(function () { _this.afterRender(); });
