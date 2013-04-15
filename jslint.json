@@ -11,5 +11,7 @@
         "moment": true
     },
     "strict": false,
-    "unparam": false
+    "unparam": false,
+    "ident": 2,
+    "white": false
 }

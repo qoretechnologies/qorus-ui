@@ -10,5 +10,7 @@
     "strict": false,
     "unused": false,
     "browser": true,
-    "devel": true
+    "devel": true,
+    "indent": 2,
+    "white": false
 }
