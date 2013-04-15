@@ -24,7 +24,7 @@
           </div>
         </div>
         <select id='statuses' class="multiselect" multiple="multiple">
-          <option value="all"<% if(obj.statuses=='all') { %> selected <% } %> >All</option>
+          <option value="all"<% if(obj.hasStatus('all')) { %> selected <% } %> >All</option>
            <% _.each(obj.predefined_statuses, function(error){ %>
              <option value="<%= error.toLowerCase() %>"<% if(obj.hasStatus(error.toLowerCase())) { %> selected <% } %> ><%= error %></option>
            <% }) %>
