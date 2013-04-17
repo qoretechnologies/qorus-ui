@@ -29,7 +29,6 @@ $.fn.fixedHeader = function (options) {
     } else if (scrollTop <= headTop && isFixed) {
       isFixed = 0;
     }
-    console.log("Scrolling", scrollTop, headTop, isFixed);
     isFixed ? $('thead.header-copy', o).removeClass('hide')
             : $('thead.header-copy', o).addClass('hide');
   }
