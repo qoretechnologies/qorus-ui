@@ -384,7 +384,6 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         }
     },
     search: function (e) {
-      var separator = /[ ,]+/;
       var $target = $(e.currentTarget);
       var $el = $(this.el);
       var query = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val();
@@ -393,7 +392,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         $el.find('tbody tr').show();
       } else {
         $el.find('tbody tr').hide();
-        _.each(query.split(separator), function(keyword){
+        _.each(query.split(settings.SEARCH_SEPARATOR), function(keyword){
           $el.find("tbody td:icontains('" + keyword + "')").parent().show();
         });
       }

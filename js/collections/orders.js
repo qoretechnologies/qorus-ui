@@ -9,13 +9,33 @@ define([
     },
     initialize: function(opts){
       this.opts = opts;
-      this.workflowid = opts.workflowid;
+      
+      if (opts.workflowid){
+        this.workflowid = opts.workflowid; 
+        delete this.opts.workflowid;
+      } else {
+        this.url = '/rest/orders/';
+      }
 
-      if(this.opts.statuses == 'all'){
+      if (this.opts.statuses == 'all') {
         delete this.opts.statuses;
       }
       
-      delete this.opts.workflowid;
+      // parse search values
+      if (this.opts.search) {
+        var keywords = this.opts.search.split(/[, ]+/);
+        var ids = _.filter(keywords, function(key) { return !isNaN(parseInt(key)) });
+        var keyvalues = _.filter(keywords, function(key) { return isNaN(parseInt(key)) });
+        
+        if (ids.length > 0)
+          this.opts.ids = ids.join(',');
+        
+        if (keyvalues.length > 0) 
+          this.opts.keyvalue = keyvalues.join(',');
+        
+        delete this.opts.search;  
+      }
+
       delete this.opts.url;
       Collection.__super__.initialize.call(this, opts);
     },

@@ -2,35 +2,36 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
+  'settings',
   'models/workflow',
-  'text!../../../templates/workflow/detail.html',
+  'text!../../../templates/search/detail.html',
   'views/workflows/instances',
   'views/workflows/orders',
   'views/common/bottom_bar',
-  'views/toolbars/orders_toolbar',
+  'views/toolbars/search_toolbar',
   'text!../../../templates/workflow/orders/detail.html'
-], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate) {
+], function ($, _, Qorus, settings, Workflow, Template, InstanceListView, 
+  OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate) {
+    
   var ModelView = Qorus.View.extend({
     url: function () {
-     return '#/workflows/view/' + this.opts.id; 
+     return '#/search/'; 
     },
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
-      'keyup .search-query': 'search'
+      // 'keyup .search-query': 'search'
     },
     initialize: function (opts){
-      this.opts = opts;
+      this.opts = opts || {};
+      this.opts.date = this.opts.date || settings.DATE_FROM;
+      
       _.bindAll(this, 'render');
       
       this.template = Template;
-      
-      // init model
-      this.model = new Workflow({ id: opts.id });
-      this.model.fetch();
-      this.model.on('change', this.render);
-      
       this.createSubviews();
+      
+      _.defer(this.render);
     },
     render: function (ctx){
       var mctx = { item: this.model };
@@ -45,31 +46,25 @@ define([
       // render instance/order data grid with toolbar
       var dataview = this.currentDataView();
       var toolbar = this.subviews.toolbar;
-      if (dataview){
-        this.assign('#instances', dataview);
-        // update toolbar url with current order/instance url
-        toolbar.updateUrl(dataview.url, dataview.options.statuses);
-        this.assign('#toolbar', toolbar);
-      }
+
+      // // update toolbar url with current order/instance url
+      // toolbar.updateUrl(dataview.url, dataview.options.statuses);
+
+      this.assign('#instances', dataview);
+      this.assign('#toolbar', toolbar);
       this.assign('#bottom-bar', this.subviews.bottombar);
     },
     currentDataView: function (){
-      var inst  = this.opts.inst || null;
-      if (_.indexOf(this.subviews, inst)){
-        return this.subviews[inst];
-      }
-      return null;
+      return this.subviews.orders;
     },
     createSubviews: function (){
-      this.subviews.instances = new InstanceListView({ 
-          date: this.opts.date, workflowid: this.model.id, url: this.url() 
-        });
-      this.subviews.orders = new OrderListView({ 
-          date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
-        });
+      // this.subviews.instances = new InstanceListView({ 
+      //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
+      //   });
+
+      this.subviews.orders = new OrderListView({ date: this.opts.date, search: this.opts.search });
       this.subviews.bottombar = new BottomBarView({});
       this.subviews.toolbar = new OrdersToolbar(this.opts);
-      console.log("This opts ->", this.opts);
     },
     
     // opens the bottom bar with detail info about the Instance/Order
@@ -111,9 +106,10 @@ define([
     },
     // delegate search to current dataview
     search: function (e) {
-      var dataview = this.currentDataView();
-      console.log("Delegating search to ", dataview);
-      dataview.search(e);
+      e.preventDefault();
+      var $target = $(e.currentTarget);
+      var query = $target.hasClass('.search-query') ? $target.val() : $target.find('.search-query').val();
+      Backbone.history.navigate(this.url() + query);
     }
   });
   return ModelView;

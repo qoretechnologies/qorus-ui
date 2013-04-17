@@ -13,9 +13,10 @@ define([
   'views/workflows/instances',
   'collections/events',
   'views/events/events',
-  'views/workflows/orders'
+  'views/workflows/orders',
+  'views/workflows/search'
 ], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
-  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView) {
+  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView, SearchListView) {
   window.qorusEventCollection = new EventCollection();
   
   var AppRouter = Backbone.Router.extend({
@@ -31,7 +32,7 @@ define([
       'services': 'showServices',
       'jobs': 'showJobs',
       'events': 'showEvents',
-      'search(/)(:id)(/)(:key)': 'showSearch',
+      'search(/)(:search)': 'showSearch',
       // 'system': 'showSystem',
 
       // Default
@@ -47,41 +48,33 @@ define([
     setView: function(view){
       if(this.currentView!=view){
         this.clean();
-        this.currentView = view;
+        this.currentView = view;        
       }
+      $('#content').html(view.el);
     },
     showWorkflows: function(date){
       var view = new WorkflowListView({}, date, this);
-      // setInterval(function() {
-      //   view.collection.update();
-      // }, 5000);
       this.setView(view);
-      $('#content').html(view.el);
     },
     showWorkflow: function(id, inst, filter, date) {
       var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
       this.setView(view);
-      $('#content').html(view.el);
     },
     showServices: function() {
       var view = new ServiceListView();
       this.setView(view);
-      $('#content').html(view.el);
     },
     showJobs: function() {
       var view = new JobListView();
       this.setView(view);
-      $('#content').html(view.el);
     },
     showEvents: function() {
       var view = new EventListView(window.qorusEventCollection);
       this.setView(view);
-      $('#content').html(view.el);
     },
-    showSearch: function(id, key) {
-      var view = new OrderListView(key);
+    showSearch: function(search) {
+      var view = new SearchListView({ search: search });
       this.setView(view);
-      $('#content').html(view.el);
     },
     defaultAction: function(actions) {
       this.clean();

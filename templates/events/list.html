@@ -1,5 +1,17 @@
 <div id="events">
 	<h2>Recent Event log</h2>
+    <div class="container-fluid sticky"> 
+        <div class="row-fluid">
+            <div>
+            <form class="form-search">
+              <div class="input-append search-box">
+                <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
+                <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+              </div>
+            </form>
+            </div>
+        </div>
+    </div>
     <% if (items.length > 0) { %>
 	<table class="table table-striped">
 		<thead>

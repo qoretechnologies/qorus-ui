@@ -8,7 +8,7 @@ define([
   'datepicker',
   'moment',
   'views/workflows/instances',
-  'views/workflows/workflows_toolbar',
+  'views/toolbars/workflows_toolbar',
   'views/common/bottom_bar',
   'jquery.fixedheader',
   'jquery.sticky',
