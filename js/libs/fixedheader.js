@@ -21,13 +21,15 @@ $.fn.fixedHeader = function (options) {
     if ($('thead.header-copy').size())
     var i, scrollTop = $win.scrollTop();
     var t = $head.length && $head.offset().top - config.topOffset;
+    headTop = t;
 
-    if (!isFixed && headTop != t) { headTop = t; }
+    // if (!isFixed && headTop != t) { headTop = t; }
     if (scrollTop >= headTop && !isFixed) {
       isFixed = 1;
     } else if (scrollTop <= headTop && isFixed) {
       isFixed = 0;
     }
+    console.log("Scrolling", scrollTop, headTop, isFixed);
     isFixed ? $('thead.header-copy', o).removeClass('hide')
             : $('thead.header-copy', o).addClass('hide');
   }

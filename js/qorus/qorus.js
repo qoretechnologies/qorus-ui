@@ -384,8 +384,9 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         }
     },
     search: function (e) {
-      // var el = this.el;
-      var query = $(this.el).find('.search-query').val();
+      var $target = $(e.currentTarget);
+      var query = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val();
+      
       if (query.length < 1) {
         $(this.el).find('tbody tr').show();
       } else {
