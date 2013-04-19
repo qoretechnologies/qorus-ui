@@ -11,8 +11,6 @@
       <th data-sort="modified">Modified</th>
       <th data-sort="error_count">Errors</th>
       <th data-sort="warning_count">Warnings</th>
-      <th data-sort='createdby'>Created by</th>
-      <th data-sort+'modifiedby'>Modified by</th>
       <th></th>
     </tr>
   </thead>
@@ -34,8 +32,6 @@
       <td><%= item.modified %></td>
       <td><%= (item.error_count) ? item.error_count : 0 %></td>
       <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
-      <td><%= item.createdby %></td>
-      <td><%= item.modifiedby %></td>
       <td>
         <div class="btn-group">
           <% _.each(item.actions, function(action) { %>
