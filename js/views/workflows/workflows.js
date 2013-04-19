@@ -17,7 +17,7 @@ define([
     // el: $("#content"),
     additionalEvents: {
 		    'click .action': 'runAction',
-        'click tbody tr': 'showInstances'
+        // 'click tbody tr': 'showInstances'
     },
     subviews: {},
     initialize: function(collection, date, router){

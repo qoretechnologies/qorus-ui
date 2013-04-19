@@ -2,27 +2,24 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!../../../templates/workflow/order_data.html'
-], function($, _, Qorus, Template){
-  var ListView = Qorus.ListView.extend({
+  'models/order',
+  'text!../../../templates/workflow/orders/detail.html'
+], function($, _, Qorus, Model, Template){
+  var ModelView = Qorus.View.extend({
     template: Template,
-    additionalEvents: {
-      // 'click button[data-action]': 'runAction',
-    },
-    initialize: function(opts){
+    
+    initialize: function (opts) {
+      ModelView.__super__.initialize.call(this, opts);
   	  _.bindAll(this, 'render');
-      this.collection = new Collection(opts);
-  	  this.collection.on('reset', this.render);
-  	  this.collection.fetch();
+      this.model = new Model({ id: opts.id });
+      this.model.fetch();
+      this.model.on('change', this.render, this);
+    },
+    
+    render: function (ctx) {
+      this.context.item = this.model;
+      ModelView.__super__.render.call(this, ctx);
     }
-    // runAction: function(e){
-    //   e.preventDefault();
-    //       var data = e.currentTarget.dataset;
-    //       if (data.id && data.action){
-    //         var inst = this.collection.get(data.id);
-    //         inst.doAction(data.action); 
-    //       }
-    // },
   });
-  return ListView;
+  return ModelView;
 });

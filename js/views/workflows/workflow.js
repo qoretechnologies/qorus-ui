@@ -8,8 +8,10 @@ define([
   'views/workflows/orders',
   'views/common/bottom_bar',
   'views/toolbars/orders_toolbar',
-  'text!../../../templates/workflow/orders/detail.html'
-], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate) {
+  'views/workflows/order',
+  'views/steps/function'
+], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, 
+  BottomBarView, OrdersToolbar, OrderView, FunctionView) {
   var ModelView = Qorus.View.extend({
     url: function () {
      return '#/workflows/view/' + this.opts.id; 
@@ -19,7 +21,7 @@ define([
       'submit .form-search': 'search',
       'keyup .search-query': 'search'
     },
-    initialize: function (opts){
+    initialize: function (opts) {
       this.opts = opts;
       _.bindAll(this, 'render');
       
@@ -32,7 +34,7 @@ define([
       
       this.createSubviews();
     },
-    render: function (ctx){
+    render: function (ctx) {
       var mctx = { item: this.model };
       if (ctx){
         _.extend(mctx, ctx);
@@ -41,7 +43,7 @@ define([
       this.onRender();
       return this;
     },
-    onRender: function (){
+    onRender: function () {
       // render instance/order data grid with toolbar
       var dataview = this.currentDataView();
       var toolbar = this.subviews.toolbar;
@@ -53,14 +55,14 @@ define([
       }
       this.assign('#bottom-bar', this.subviews.bottombar);
     },
-    currentDataView: function (){
+    currentDataView: function () {
       var inst  = this.opts.inst || null;
       if (_.indexOf(this.subviews, inst)){
         return this.subviews[inst];
       }
       return null;
     },
-    createSubviews: function (){
+    createSubviews: function () {
       this.subviews.instances = new InstanceListView({ 
           date: this.opts.date, workflowid: this.model.id, url: this.url() 
         });
@@ -69,40 +71,28 @@ define([
         });
       this.subviews.bottombar = new BottomBarView({});
       this.subviews.toolbar = new OrdersToolbar(this.opts);
-      console.log("This opts ->", this.opts);
     },
     
     // opens the bottom bar with detail info about the Instance/Order
-    loadInfo: function (e){
+    loadInfo: function (e) {
       var el = $(e.currentTarget);
-      e.stopPropagation();
-      
       var dataview = this.currentDataView();
-      
-      var m = dataview.collection.get(el.data('id'));
+      var bar = this.subviews.bottombar;
+      var oview = new OrderView({ id: el.data('id') });
       var _this = this;
       
-      m.fetch().done(function (){
-        var bar = _this.subviews.bottombar;
+      e.stopPropagation();
+      
+      // this.subviews.order = oview;
+      
+      oview.model.on('change', function () {
         bar.render();
-        
-        $('#bottom-content', bar.$el).html(_this.orderDetail(m));
+        _this.assign('#bottom-bar', oview);
         bar.show();
-        
-        if (bar.activeTab){
-          $('a[href="#'+ bar.activeTab +'"]').tab('show');
-        }
-        
-        $('#bottom-content .nav-tabs a').click(function (e){
-          e.preventDefault();
-          $(this).tab('show');
-          var active = $('.tab-pane.active');
-          bar.activeTab = active.attr('id');
-        });
-        
+
         // highlite/unhighlite selected row
         $('tr', el.parent()).removeClass('info');
-        $('tr[data-id='+ m.id +']').addClass('info');
+        $('tr[data-id='+ el.data('id') +']').addClass('info');
       });
     },
     orderDetail: function (m) {

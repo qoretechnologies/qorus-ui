@@ -8,16 +8,19 @@ define([
 ], function($, _, Qorus, Template){
   var View = Qorus.View.extend({
     additionalEvents: {
-      "click button[data-hide]": 'hide'
+      "click button[data-hide]": 'hide',
+      "click .nav-tabs a": 'tabToggle'
     },
-    initialize: function(opts){
+        
+    initialize: function (opts) {
       _.bindAll(this);
       this.template = Template;
       View.__super__.initialize.call(this, opts);
       this.on('render', this.addSizeHandler);
       this.height = 150;
     },
-    addSizeHandler: function(){
+    
+    addSizeHandler: function () {
       var offset = $('#split-panes').offset();
       $('.handler').draggable({
         axis : 'y',
@@ -32,7 +35,8 @@ define([
         scroll: true
       });
     },
-    resize: function(event, ui){
+    
+    resize: function (event, ui) {
       var parent = $('#bottom-bar');
       var bpos = ui.position.top + $('.handler').height();
       var height = $('#split-panes').height();
@@ -43,7 +47,8 @@ define([
       $('#bottom-bar').css('top', bpos);
       $('.handler').prev().height(ui.position.top);
     },
-    render: function(ctx){
+    
+    render: function (ctx) {
       View.__super__.render.call(this, ctx);
       this.hide();
       this.setHeights();
@@ -53,11 +58,12 @@ define([
       $(window).resize(function(){
         console.log($(window).height());
         _this.setHeights();
-      })
+      });
 
       return this;
     },
-    setHeights: function (){
+    
+    setHeights: function () {
       var h = $(window).height() - $('#header').height() - $('#footer').height();
       
       var bpos = h - this.height;
@@ -71,13 +77,28 @@ define([
       $('#bottom-bar').css('top', bpos);
       $('#split-panes .handler').css('top', bpos - $('#split-panes .handler').height());
     },
-    show: function(){
+    
+    show: function () {
       $('#bottom-bar').show();
       $('#split-panes .handler').show();
     },
-    hide: function(){
+    
+    hide: function () {
       $('#bottom-bar').hide();
       $('#split-panes .handler').hide();
+    },
+    
+    tabToggle: function (e) {
+      var $target = $(e.currentTarget);
+      e.preventDefault();
+
+      var active = $('.tab-pane.active');
+      $target.tab('show');
+      
+      // // move this part to BottomBarView
+      // if (bar.activeTab){
+      //   $('a[href="#'+ bar.activeTab +'"]').tab('show');
+      // }
     }
   });
   return View;

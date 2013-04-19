@@ -7,7 +7,14 @@ define([
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
     dateAttributes: ['started', 'completed', 'modified'],
+    
     initialize: function(opts){
+      // set id if in opts
+      if (opts.id){
+        this.id = opts.id;
+        delete opts.id;
+      }
+      
       Model.__super__.initialize.call(this, opts);
       // TODO: find proper place/way within the view
       this.on('sync', function(m, r){ 
@@ -17,6 +24,7 @@ define([
         }
       }, this);
     },
+    
     doAction: function(action, opts){
       if(_.indexOf(this.allowedActions, action) != -1){
         var id = this.id;

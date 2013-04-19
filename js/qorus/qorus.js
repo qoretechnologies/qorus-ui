@@ -26,6 +26,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
     dateAttributes: {},
     initialize: function (opts) {
       Qorus.Model.__super__.initialize.call(this, opts);
+      this.opts = opts;
       // this.parseDates();
     },
     parse: function (response, options) {
@@ -35,6 +36,20 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         }
       });
       return response;
+    },
+    fetch: function (options) {
+      var data = this.opts;      
+
+      if (!options) {
+        options = {};
+      }
+
+      if (options.data) {
+        _.extend(data, options.data);
+      }
+      
+      _.extend(options, { data: data });
+      Qorus.Model.__super__.fetch.call(this, options);
     }
   });
 

@@ -4,13 +4,13 @@ define([
   'models/order'
 ], function(_, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
-    url: function() {
-      return '/rest/workflows/'+ this.workflowid + '/orders/'
+    url: function () {
+      return '/rest/workflows/'+ this.workflowid + '/orders/';
     },
-    initialize: function(opts){
+    initialize: function (opts) {
       this.opts = opts;
       
-      if (opts.workflowid){
+      if (opts.workflowid) {
         this.workflowid = opts.workflowid; 
         delete this.opts.workflowid;
       } else {
@@ -24,7 +24,7 @@ define([
       // parse search values
       if (this.opts.search) {
         var keywords = this.opts.search.split(/[, ]+/);
-        var ids = _.filter(keywords, function(key) { return !isNaN(parseInt(key)) });
+        var ids = _.filter(keywords, function(key) { return !isNaN(parseInt(key)); });
         var keyvalues = _.filter(keywords, function(key) { return isNaN(parseInt(key)) });
         
         if (ids.length > 0)
