@@ -45,7 +45,7 @@
             };
             %>
 	  			<tr class="workflow-row" id="workflow-<%= wfl.workflowid %>" data-id="<%= wfl.workflowid %>">
-  					<td><i class="icon-box check"></i></td>
+  					<td><i class="icon-check-empty check"></i></td>
     				<td class="id"><%= wfl.workflowid %></td>
     				<td class="err instances"><%= wrapBadge(wfl.exec_count, ['#/workflows/view', wfl.workflowid, 'instances'].join('/'), 'badge-success') %></td>
     				<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all') %>"><%= wfl.name %></a></td>

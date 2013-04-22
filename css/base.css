@@ -300,7 +300,24 @@ aside {
 
 #msg {
     position: fixed;
-    bottom: 40px;
+    bottom: 20px;
     right: 20px;
     width: 300px;
+    z-index: 1000;
+}
+
+.qorus-icon {
+    display: inline-block;
+    margin-right: 3px;
+    height: 22px;
+    vertical-align: middle;
+    width: 22px;
+}
+
+.qorus-icon.qorus-icon-warning {
+    background: url(../imgs/icon-warning.png) no-repeat;
+}
+
+.qorus-icon.qorus-icon-white {
+    background: url(../imgs/icon-warning-white.png) no-repeat;
 }

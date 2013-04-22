@@ -332,7 +332,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
     highlight: function (e) {
       var el = e.currentTarget;
       $(el)
-        .toggleClass('icon-box')
+        .toggleClass('icon-check-empty')
         .toggleClass('icon-check');
       $(el)
         .parents('.workflow-row')
@@ -350,7 +350,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
       if ($(el)
         .hasClass('check-all')) {
         $(el)
-          .toggleClass('icon-box')
+          .toggleClass('icon-check-empty')
           .toggleClass('icon-check')
           .toggleClass('check-all')
           .toggleClass('uncheck-all');
@@ -358,11 +358,11 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
           .addClass('warning')
           .addClass('checked');
         $('.workflow-row .check')
-          .removeClass('icon-box')
+          .removeClass('icon-check-empty')
           .addClass('icon-check');
       } else {
         $(el)
-          .toggleClass('icon-box')
+          .toggleClass('icon-check-empty')
           .toggleClass('icon-check')
           .toggleClass('check-all')
           .toggleClass('uncheck-all');
@@ -371,7 +371,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
           .removeClass('checked');
         $('.workflow-row .check')
           .removeClass('icon-check')
-          .addClass('icon-box');
+          .addClass('icon-check-empty');
       }
       e.stopPropagation();
     },
