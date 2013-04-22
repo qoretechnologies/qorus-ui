@@ -5,7 +5,9 @@ define([
   'models/event',
   'messenger'
 ], function(_, Backbone, Qorus, Model, Messenger){
+  var dispatcher = window.qorusDispatcher;
   var msngr = $('#msg').messenger();
+  
   var Collection = Qorus.SortedCollection.extend({
     model: Model,
     log_size: 1000,
@@ -30,8 +32,8 @@ define([
       _.each(models, function (model) {
         var m = new Model(model);
         _this.add(m);
+        window.qorusDispatcher.dispatch(m);
       });
-
       this.trigger('update', this);
     },
     wsOpen: function () {

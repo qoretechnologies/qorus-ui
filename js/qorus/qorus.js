@@ -418,6 +418,16 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
       }
     }
   });
+  
+  Qorus.Dispatcher = Backbone.Model.extend({
+    add: function (e) {
+      this.dispatch(e);
+    },
+    dispatch: function (e) {
+      e = e.toJSON();
+      this.trigger(e.eventstr, e);
+    }
+  })
 
   return Qorus;
 });
