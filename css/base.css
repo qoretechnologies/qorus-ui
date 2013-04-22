@@ -160,6 +160,11 @@ table .header-fixed {
   margin-bottom: 0;
 }
 
+.dp .icon-th {
+    display: inline-block;
+    margin-top: 10%;
+}
+
 .row-fluid .page {
   padding-left: 8.333333333%;
   margin-left: 0;
@@ -265,6 +270,7 @@ aside {
   background-color: #333;
   box-shadow: rgba(0,0,0,.5) 0 0 10px;
   cursor: move;
+  color: #fff;
   height: 18px;
   padding: 0;
   position: absolute;

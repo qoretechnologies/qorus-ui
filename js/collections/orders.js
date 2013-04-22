@@ -23,9 +23,8 @@ define([
       
       // parse search values
       if (this.opts.search) {
-        var keywords = this.opts.search.split(/[, ]+/);
-        var ids = _.filter(keywords, function(key) { return !isNaN(parseInt(key)); });
-        var keyvalues = _.filter(keywords, function(key) { return isNaN(parseInt(key)) });
+        var ids = this.opts.search.ids ? this.opts.search.ids.split(/[, ]+/) : '';
+        var keyvalues = this.opts.search.keyvalues ? this.opts.search.keyvalues.split(/[, ]+/) : '';
         
         if (ids.length > 0)
           this.opts.ids = ids.join(',');

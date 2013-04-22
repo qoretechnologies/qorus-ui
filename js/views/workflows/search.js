@@ -15,7 +15,7 @@ define([
     
   var ModelView = Qorus.View.extend({
     url: function () {
-     return '#/search/'; 
+     return '#/search'; 
     },
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
@@ -108,8 +108,9 @@ define([
     search: function (e) {
       e.preventDefault();
       var $target = $(e.currentTarget);
-      var query = $target.hasClass('.search-query') ? $target.val() : $target.find('.search-query').val();
-      Backbone.history.navigate(this.url() + query);
+      var ids = $target.hasClass('.search-query-ids') ? $target.val() : $target.find('.search-query-ids').val();
+      var keyvalues = $target.hasClass('.search-query-keyvalues') ? $target.val() : $target.find('.search-query-keyvalues').val();
+      Backbone.history.navigate([this.url(), ids, keyvalues].join("/"));
     }
   });
   return ModelView;

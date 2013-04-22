@@ -35,7 +35,7 @@ define([
       'services': 'showServices',
       'jobs': 'showJobs',
       'events': 'showEvents',
-      'search(/)(:search)': 'showSearch',
+      'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
       // 'system': 'showSystem',
 
       // Default
@@ -75,8 +75,8 @@ define([
       var view = new EventListView(window.qorusEventCollection);
       this.setView(view);
     },
-    showSearch: function(search) {
-      var view = new SearchListView({ search: search });
+    showSearch: function(ids, keyvalues) {
+      var view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues } });
       this.setView(view);
     },
     defaultAction: function(actions) {

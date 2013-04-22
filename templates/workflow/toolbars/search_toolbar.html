@@ -1,8 +1,11 @@
 <div class="span12">
     <form class="form-search">
+    <div class="row-fluid">
       <div class="input-append search-box">
-        <input type="text" class="span10 search-query appendInputButton" placeholder="Instance ID or keyvalue"<%= (obj.search) ? ' value="' + obj.search +'"' : '' %>>
+        <input type="text" class="span10 search-query-ids" placeholder="Instance ID"<%= (obj.search.ids) ? ' value="' + obj.search.ids +'"' : '' %>>
+        <input type="text" class="span10 search-query-keyvalues appendInputButton" placeholder="Keyvalue"<%= (obj.search.keyvalues) ? ' value="' + obj.search.keyvalues +'"' : '' %>>
         <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
       </div>
+    </div>
     </form>
 </div>
