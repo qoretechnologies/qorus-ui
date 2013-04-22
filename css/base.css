@@ -297,3 +297,10 @@ aside {
 #workflows .badge a {
   color: #fff;
 }
+
+#msg {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 300px;
+}

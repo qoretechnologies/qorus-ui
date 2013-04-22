@@ -3,7 +3,8 @@ define([
   'jquery', 
   'underscore', 
   'backbone', 
-  'moment', 
+  'moment',
+  'messenger',
   'qorus/qorus', 
   'views/system', 
   'views/workflows/workflows', 
@@ -14,11 +15,13 @@ define([
   'collections/events',
   'views/events/events',
   'views/workflows/orders',
-  'views/workflows/search'
-], function($, _, Backbone, moment, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
+  'views/workflows/search',
+  'messenger'
+], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView, SearchListView) {
+  console.log(messenger, window.ActionMessenger, window.Messenger);
   window.qorusEventCollection = new EventCollection();
-  
+    
   var AppRouter = Backbone.Router.extend({
     initialize: function(){
       this.currentView = null;
