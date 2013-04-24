@@ -1,7 +1,9 @@
-<%= if (item.get('id')) { %>
+<% if (item.get('id')) { %>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#instance-info">Info</a></li>
   <li><a href="#order">Order</a></li>
+  <li><a href="#staticdata">Static Data</a></li>
+  <li><a href="#dynamicdata">Dynamic Data</a></li>
   <li><a href="#steps">Steps</a></li>
   <li><a href="#errors">Errors</a></li>
   <li><a href="#hierarchy">Hierarchy</a></li>
@@ -42,6 +44,10 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="staticdata">
+    <div class="row-fluid">
       <div class="span4">
         <h3>Static data</h3>
         <table class="table table-striped table-hover">
@@ -55,6 +61,10 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="dynamicdata">
+    <div class="row-fluid">
       <div class="span4">
         <h3>Dynamic data</h3>
         <table class="table table-striped table-hover">

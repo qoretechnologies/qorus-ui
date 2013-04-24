@@ -7,6 +7,9 @@ define([
 ], function($, _, Qorus, Model, Template){
   var ModelView = Qorus.View.extend({
     template: Template,
+    additionalEvents: {
+      "click .nav-tabs a": 'tabToggle'
+    },
     
     initialize: function (opts) {
       ModelView.__super__.initialize.call(this, opts);
@@ -19,6 +22,14 @@ define([
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
+    },    
+
+    tabToggle: function(e){
+      var $target = $(e.currentTarget);
+      e.preventDefault();
+
+      var active = $('.tab-pane.active');
+      $target.tab('show');
     }
   });
   return ModelView;

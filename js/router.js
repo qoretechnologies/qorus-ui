@@ -89,7 +89,7 @@ define([
       this.setView(view);
     },
     showOrder: function(wfiid){
-      var view = new OrderView({ workflow_instanceid: wfiid });
+      var view = new OrderView({ id: wfiid });
       this.setView(view);
     },
     defaultAction: function(actions) {

@@ -7,7 +7,7 @@ define([
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
     dateAttributes: ['started', 'completed', 'modified'],
-    
+
     initialize: function(opts){
       // set id if in opts
       if (opts.id){
