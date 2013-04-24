@@ -67,6 +67,7 @@
     <div class="row-fluid">
       <div class="span4">
         <h3>Dynamic data</h3>
+        <% if (it.OrderInfo.dynamicdata) { %>
         <table class="table table-striped table-hover">
           <tbody>
             <% for (var val in it.OrderInfo.dynamicdata) { %>
@@ -77,6 +78,9 @@
             <% } %>
           </tbody>
         </table>
+        <% } else { %>
+        <p>No data</p>
+        <% } %>
       </div>
     </div>
   </div>

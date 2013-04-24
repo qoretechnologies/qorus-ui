@@ -29,14 +29,17 @@ define([
       opts = opts || {};
 
       _.bindAll(this);
-      _.extend(this.context, opts);
       
       if (opts.url) {
-        this.url = opts.url + '/' + this.name;
+        this.url = [opts.url, this.name, opts.statuses, opts.date].join('/');
         opts.url = this.url;
-        delete opts.url;
+        // delete opts.url;
       }
 
+      _.extend(this.context, opts);
+      
+      console.log(opts, this.opts);
+      
       this.collection = new Collection(opts);
       this.collection.on('reset', this.updateContext, this);
       this.collection.fetch();
@@ -74,8 +77,8 @@ define([
         this.$el.children('button[data-pagination]').html("Loading...");
       }
     },
-    render: function () {
-      ListView.__super__.render.call(this);
+    render: function (ctx) {
+      ListView.__super__.render.call(this, ctx);
       this.onRender();
       return this;
     },
