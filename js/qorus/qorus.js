@@ -56,7 +56,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
   Qorus.Collection = Backbone.Collection.extend({
     date: null,
     limit: 100,
-    offset: 1,
+    offset: 0,
     page: 1,
     
     initialize: function (date) {
@@ -74,7 +74,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
       }));
     },
     hasNextPage: function () {
-      console.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
+      // console.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
       return (this.offset + this.limit - 2 < this.models.length); 
     },
     loadNextPage: function () {
@@ -82,7 +82,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         this.loading = true;
         if (this.hasNextPage()) {
 
-          this.offset = this.page * this.limit + 1;
+          this.offset = this.page * this.limit;
           this.page++;
           console.log('loading page', this.page, this.limit, this.offset);
 
@@ -285,6 +285,8 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         this.date = moment().add('days', -1).format(this.date_format);
       } else if (date == 'all') {
         this.date = moment(settings.DATE_FROM).format(this.date_format);
+      // } else if (date.match(/[0-9]+/)) {
+      //   this.date = moment(date, 'YYYYMMDDHHmmss');
       } else {
         this.date = date;
       }

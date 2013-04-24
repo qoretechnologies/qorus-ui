@@ -41,6 +41,10 @@ define([
       this.socket.onmessage = this.wsAdd;
       this.socket.onclose = this.wsRetry;
       this.socket.onopen = this.wsOpened;
+      this.socket.onerror = this.wsError;
+    },
+    wsError: function (e) {
+      console.log(e);
     },
     wsOpened: function () {
       this.counter++;

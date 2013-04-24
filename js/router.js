@@ -16,9 +16,11 @@ define([
   'views/events/events',
   'views/workflows/orders',
   'views/workflows/search',
+  'views/workflows/order',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
-  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView, SearchListView) {
+  ServiceListView, JobListView, InstanceListView, EventCollection, EventListView, OrderListView, SearchListView,
+  OrderView) {
 
   window.qorusEventCollection = new EventCollection();
   window.qorusDispatcher = new Qorus.Dispatcher();
@@ -29,9 +31,11 @@ define([
     },
     routes: {
       // Define some URL routes
-      'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)': 'showWorkflow',
+      'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
       'workflows/:date': 'showWorkflows',
       'workflows': 'showWorkflows',
+
+      'order/view/:wfiid': 'showOrder',
 
       'services': 'showServices',
       'jobs': 'showJobs',
@@ -60,9 +64,13 @@ define([
       var view = new WorkflowListView({}, date, this);
       this.setView(view);
     },
-    showWorkflow: function(id, inst, filter, date) {
-      var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
-      this.setView(view);
+    showWorkflow: function(id, inst, filter, date, wfiid) {
+      if (wfiid){
+        this.showOrder(wfiid);
+      } else {
+        var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
+        this.setView(view);        
+      }
     },
     showServices: function() {
       var view = new ServiceListView();
@@ -78,6 +86,10 @@ define([
     },
     showSearch: function(ids, keyvalues) {
       var view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues } });
+      this.setView(view);
+    },
+    showOrder: function(wfiid){
+      var view = new OrderView({ workflow_instanceid: wfiid });
       this.setView(view);
     },
     defaultAction: function(actions) {
