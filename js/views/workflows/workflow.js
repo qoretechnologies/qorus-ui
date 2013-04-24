@@ -78,22 +78,28 @@ define([
       var el = $(e.currentTarget);
       var dataview = this.currentDataView();
       var bar = this.subviews.bottombar;
-      var oview = new OrderView({ id: el.data('id') });
-      var _this = this;
       
-      e.stopPropagation();
+      if (el.hasClass('info')) {
+        bar.hide();
+        el.removeClass('info');
+      } else {
+        var oview = new OrderView({ id: el.data('id') });
+        var _this = this;
       
-      // this.subviews.order = oview;
+        e.stopPropagation();
       
-      oview.model.on('change', function () {
-        bar.render();
-        _this.assign('#bottom-bar', oview);
-        bar.show();
+        // this.subviews.order = oview;
+      
+        oview.model.on('change', function () {
+          bar.render();
+          _this.assign('#bottom-content', oview);
+          bar.show();
 
-        // highlite/unhighlite selected row
-        $('tr', el.parent()).removeClass('info');
-        $('tr[data-id='+ el.data('id') +']').addClass('info');
-      });
+          // highlite/unhighlite selected row
+          $('tr', el.parent()).removeClass('info');
+          $('tr[data-id='+ el.data('id') +']').addClass('info');
+        });        
+      }
     },
     orderDetail: function (m) {
       var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });

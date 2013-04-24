@@ -17,7 +17,7 @@ define([
       this.template = Template;
       View.__super__.initialize.call(this, opts);
       this.on('render', this.addSizeHandler);
-      this.height = 150;
+      this.height = 200;
     },
     
     addSizeHandler: function () {
@@ -48,10 +48,15 @@ define([
       $('.handler').prev().height(ui.position.top);
     },
     
+    // resets heights of top pane
+    reset: function() {
+      var h = $('#split-panes').height();
+      $('.handler').prev().height(h);
+    },
+    
     render: function (ctx) {
       View.__super__.render.call(this, ctx);
       this.hide();
-      this.setHeights();
       
       // reset size when window size 
       var _this = this;
@@ -79,6 +84,7 @@ define([
     },
     
     show: function () {
+      this.setHeights();
       $('#bottom-bar').show();
       $('#split-panes .handler').show();
     },
@@ -86,6 +92,7 @@ define([
     hide: function () {
       $('#bottom-bar').hide();
       $('#split-panes .handler').hide();
+      this.reset();
     },
     
     tabToggle: function (e) {
