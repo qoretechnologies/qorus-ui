@@ -30,7 +30,6 @@
   
   <div class="tab-pane" id="order">
     <div class="row-fluid">
-      <div class="span4">
         <h3>Order Info</h3>
         <table class="table table-striped table-hover">
           <tbody>
@@ -38,17 +37,19 @@
               if (!(k == 'dynamicdata' || k == 'staticdata')){ %>
               <tr>
                 <td class="name"><%= k %></td>
+                <% if (k != 'keys') { %>
                 <td><%= it.OrderInfo[k] %></td>
+                <% } else { %>
+                <td><%= createNestedList(it.OrderInfo[k]) %></td>
+                <% } %>
               </tr>
             <% }} %>
           </tbody>
         </table>
-      </div>
     </div>
   </div>
   <div class="tab-pane" id="staticdata">
     <div class="row-fluid">
-      <div class="span4">
         <h3>Static data</h3>
         <% if (it.OrderInfo.staticdata) { %>
           <div class="treeview">
@@ -57,12 +58,10 @@
         <% } else { %>
         <p>No data</p>
         <% } %>
-      </div>
     </div>
   </div>
   <div class="tab-pane" id="dynamicdata">
     <div class="row-fluid">
-      <div class="span4">
         <h3>Dynamic data</h3>
         <% if (it.OrderInfo.dynamicdata) { %>
           <div class="treeview">
@@ -71,7 +70,6 @@
         <% } else { %>
         <p>No data</p>
         <% } %>
-      </div>
     </div>
   </div>
 
