@@ -31,14 +31,16 @@ define([
       _.bindAll(this);
       
       if (opts.url) {
-        this.url = [opts.url, this.name, opts.statuses, opts.date].join('/');
+        this.url = [opts.url, this.name].join('/');
         opts.url = this.url;
         // delete opts.url;
       }
-
-      _.extend(this.context, opts);
       
-      console.log(opts, this.opts);
+      if (opts.date) {
+        this.date = opts.date;
+      }
+      
+      _.extend(this.context, opts);
       
       this.collection = new Collection(opts);
       this.collection.on('reset', this.updateContext, this);
@@ -78,6 +80,7 @@ define([
       }
     },
     render: function (ctx) {
+      
       ListView.__super__.render.call(this, ctx);
       this.onRender();
       return this;
