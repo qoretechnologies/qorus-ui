@@ -9,9 +9,9 @@ define([
   'views/workflows/orders',
   'views/common/bottom_bar',
   'views/toolbars/search_toolbar',
-  'text!../../../templates/workflow/orders/detail.html'
+  'views/workflows/order'
 ], function ($, _, Qorus, settings, Workflow, Template, InstanceListView, 
-  OrderListView, BottomBarView, OrdersToolbar, OrderDetailTemplate) {
+  OrderListView, BottomBarView, OrdersToolbar, OrderView) {
     
   var ModelView = Qorus.View.extend({
     url: function () {
@@ -70,35 +70,30 @@ define([
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e){
       var el = $(e.currentTarget);
-      e.stopPropagation();
-      
       var dataview = this.currentDataView();
+      var bar = this.subviews.bottombar;
       
-      var m = dataview.collection.get(el.data('id'));
-      var _this = this;
+      if (el.hasClass('info')) {
+        bar.hide();
+        el.removeClass('info');
+      } else {
+        var oview = new OrderView({ id: el.data('id') });
+        var _this = this;
       
-      m.fetch().done(function (){
-        var bar = _this.subviews.bottombar;
-        bar.render();
-        
-        $('#bottom-content', bar.$el).html(_this.orderDetail(m));
-        bar.show();
-        
-        if (bar.activeTab){
-          $('a[href="#'+ bar.activeTab +'"]').tab('show');
-        }
-        
-        $('#bottom-content .nav-tabs a').click(function (e){
-          e.preventDefault();
-          $(this).tab('show');
-          var active = $('.tab-pane.active');
-          bar.activeTab = active.attr('id');
-        });
-        
-        // highlite/unhighlite selected row
-        $('tr', el.parent()).removeClass('info');
-        $('tr[data-id='+ m.id +']').addClass('info');
-      });
+        e.stopPropagation();
+      
+        // this.subviews.order = oview;
+      
+        oview.model.on('change', function () {
+          bar.render();
+          _this.assign('#bottom-content', oview);
+          bar.show();
+
+          // highlite/unhighlite selected row
+          $('tr', el.parent()).removeClass('info');
+          $('tr[data-id='+ el.data('id') +']').addClass('info');
+        });        
+      }
     },
     orderDetail: function (m) {
       var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
