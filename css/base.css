@@ -28,19 +28,19 @@ table th {
   background-position: -384px -168px;
 }
 
-.badge-ready {
+.badge-ready, .label-ready {
   background-color: #aded9b;
 }
 
-.badge-waiting {
+.badge-waiting, .label-waiting {
   background-color: #e5c737;
 }
 
-.badge-canceled {
+.badge-canceled, .label-canceled {
   background-color: #f2dede;
 }
 
-.badge-info2 {
+.badge-info2, .label-info2 {
   background-color: #d9edf7;
 }
 

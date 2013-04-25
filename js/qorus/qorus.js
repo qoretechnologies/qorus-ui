@@ -1,5 +1,11 @@
 // Qorus core objects definition
-define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _, Backbone, settings) {
+define([
+  'jquery',
+  'underscore',
+  'libs/backbone.rpc',
+  'settings',
+  'utils'
+], function ($, _, Backbone, settings, utils) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -251,6 +257,8 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
         if (ctx) {
           _.extend(this.context, ctx); 
         }
+        
+        _.extend(this.context, Qorus.ViewHelpers);
 
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
@@ -312,7 +320,7 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
           date: this.date,
           items: this.collection.models
         };
-        _.extend(this.context, ctx);
+        _.extend(this.context, ctx, Qorus.ViewHelpers);
         
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
@@ -430,6 +438,15 @@ define(['jquery', 'underscore', 'libs/backbone.rpc', 'settings'], function ($, _
       this.trigger(e.eventstr, e);
     }
   })
+  
+  Qorus.ViewHelpers = {
+    getStatusCSS: function (status) {
+      if (status) {
+        status = status.toLowerCase();
+        return utils.status_map[status];        
+      }
+    }
+  }
 
   return Qorus;
 });

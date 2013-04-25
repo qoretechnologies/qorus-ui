@@ -57,9 +57,9 @@
     				<td class="err waiting"><%= wrapBadge(wfl.WAITING, getUrl('waiting'), 'badge-waiting') %></td>
     				<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, getUrl('incomplete'), 'badge-info') %></td>
     				<td class="err canceled"><%= wrapBadge(wfl.CANCELED, getUrl('canceled'), 'badge-canceled') %></td>
-    				<td class="err retry"><%= wrapBadge(wfl.RETRY, getUrl('/retry'), 'badge-error') %></td>
+    				<td class="err retry"><%= wrapBadge(wfl.RETRY, getUrl('retry'), 'badge-error') %></td>
     				<td class="err ready"><%= wrapBadge(wfl.READY, getUrl('ready'), 'badge-ready') %></td>
-    				<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, getUrl('/blocked'), '') %></td>
+    				<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, getUrl('blocked'), '') %></td>
     				<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting'), 'badge-waiting') %></td>
     				<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled'), 'badge-info') %></td>
   					<td>
