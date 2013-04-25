@@ -61,14 +61,8 @@ define([
       // reset size when window size 
       var _this = this;
       $(window).resize(function(){
-        console.log($(window).height());
         _this.setHeights();
       });
-
-      console.log('Active Tab -> ', this.activeTab, this);
-      if (this.activeTab){
-        $('a[href="#'+ this.activeTab +'"]').tab('show');
-      }
 
       return this;
     },
@@ -90,6 +84,9 @@ define([
     
     show: function () {
       this.setHeights();
+      if (this.activeTab){
+        $('a[href="' + this.activeTab + '"]').tab('show');
+      }
       $('#bottom-bar').show();
       $('#split-panes .handler').show();
     },
@@ -106,8 +103,7 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
-      console.log('Tabtoggle', this);
-      this.activeTab = $target.id;
+      this.activeTab = $target.attr('href');
     }
   });
   return View;
