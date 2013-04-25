@@ -65,6 +65,11 @@ define([
         _this.setHeights();
       });
 
+      console.log('Active Tab -> ', this.activeTab, this);
+      if (this.activeTab){
+        $('a[href="#'+ this.activeTab +'"]').tab('show');
+      }
+
       return this;
     },
     
@@ -101,11 +106,8 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
-      
-      // // move this part to BottomBarView
-      // if (bar.activeTab){
-      //   $('a[href="#'+ bar.activeTab +'"]').tab('show');
-      // }
+      console.log('Tabtoggle', this);
+      this.activeTab = $target.id;
     }
   });
   return View;

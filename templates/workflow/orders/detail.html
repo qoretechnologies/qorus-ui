@@ -51,7 +51,9 @@
       <div class="span4">
         <h3>Static data</h3>
         <% if (it.OrderInfo.staticdata) { %>
+          <div class="treeview">
         <%= createNestedList(it.OrderInfo.staticdata) %>  
+          </div>
         <% } else { %>
         <p>No data</p>
         <% } %>
@@ -63,7 +65,9 @@
       <div class="span4">
         <h3>Dynamic data</h3>
         <% if (it.OrderInfo.dynammicdata) { %>
+          <div class="treeview">
         <%= createNestedList(it.OrderInfo.dynamicdata) %>  
+          </div>
         <% } else { %>
         <p>No data</p>
         <% } %>

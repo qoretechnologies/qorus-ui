@@ -453,7 +453,6 @@ define([
         var html = '<ul>';      
       }
       _.each(obj, function (k, v) {
-        console.log(k,v);
         html += '<li>';
         html += '<strong>' + v + '</strong> ';
         if (_.isObject(obj[v])) {
