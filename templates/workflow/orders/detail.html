@@ -51,20 +51,10 @@
       <div class="span4">
         <h3>Static data</h3>
         <% if (it.OrderInfo.staticdata) { %>
-        <table class="table table-striped table-hover">
-          <tbody>
-            <% for (var val in it.OrderInfo.staticdata) { %>
-              <tr>
-                <td class="name"><%= val %></td>
-                <td><%= it.OrderInfo.staticdata[val] %></td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
+        <%= createNestedList(it.OrderInfo.staticdata) %>  
         <% } else { %>
         <p>No data</p>
         <% } %>
- 
       </div>
     </div>
   </div>
@@ -72,17 +62,8 @@
     <div class="row-fluid">
       <div class="span4">
         <h3>Dynamic data</h3>
-        <% if (it.OrderInfo.dynamicdata) { %>
-        <table class="table table-striped table-hover">
-          <tbody>
-            <% for (var val in it.OrderInfo.dynamicdata) { %>
-              <tr>
-                <td class="name"><%= val %></td>
-                <td><%= it.OrderInfo.dynamicdata[val] %></td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
+        <% if (it.OrderInfo.dynammicdata) { %>
+        <%= createNestedList(it.OrderInfo.dynamicdata) %>  
         <% } else { %>
         <p>No data</p>
         <% } %>

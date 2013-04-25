@@ -445,6 +445,27 @@ define([
         status = status.toLowerCase();
         return utils.status_map[status];        
       }
+    },
+    createNestedList: function (obj, css) {
+      if(css) {
+        var html = '<ul class='+ css +'>';
+      } else {
+        var html = '<ul>';      
+      }
+      _.each(obj, function (k, v) {
+        console.log(k,v);
+        html += '<li>';
+        html += '<strong>' + v + '</strong> ';
+        if (_.isObject(obj[v])) {
+          html += Qorus.ViewHelpers.createNestedList(obj[v]);
+        } else {
+          html += k;
+        }
+        html += '</li>';
+      });
+      html += '</ul>';
+    
+      return html;
     }
   }
 

@@ -42,9 +42,6 @@ define([
         var next = later().getNext(cronParser().parse(cron_time));
             
         return this.parseDate(next, null);
-    },
-    getStatusClass: function (status) {
-      return this.status_map[status];
     }
   };
     
