@@ -5,6 +5,7 @@ define([
   'models/event',
   'messenger'
 ], function(_, Backbone, Qorus, Model, Messenger){
+  var host = window.location.host;
   var dispatcher = window.qorusDispatcher;
   var msngr = $('#msg').messenger();
   
@@ -37,10 +38,15 @@ define([
       this.trigger('update', this);
     },
     wsOpen: function () {
-      this.socket = new WebSocket("ws://localhost:8001");
-      this.socket.onmessage = this.wsAdd;
-      this.socket.onclose = this.wsRetry;
-      this.socket.onopen = this.wsOpened;
+      try {
+        this.socket = new WebSocket("ws://" + host); 
+        this.socket.onmessage = this.wsAdd;
+        this.socket.onclose = this.wsRetry;
+        this.socket.onopen = this.wsOpened;
+        this.socket.onerror = this.wsError;
+      } catch (e) {
+        console.log(e);
+      }
       this.socket.onerror = this.wsError;
     },
     wsError: function (e) {
