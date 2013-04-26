@@ -42,6 +42,7 @@ define([
       'events': 'showEvents',
       'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
       // 'system': 'showSystem',
+      '': 'redirectToWorkflows',
 
       // Default
       '*actions': 'defaultAction'
@@ -59,6 +60,9 @@ define([
         this.currentView = view;        
       }
       $('#content').html(view.el);
+    },
+    redirectToWorkflows: function() {
+      Backbone.history.navigate('#/workflows');
     },
     showWorkflows: function(date){
       var view = new WorkflowListView({}, date, this);
