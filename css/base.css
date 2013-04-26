@@ -330,3 +330,27 @@ aside {
 .qorus-icon.qorus-icon-white {
     background: url(../imgs/icon-warning-white.png) no-repeat;
 }
+
+.treeview {
+	 position: relative;
+}
+
+.treeview ul {
+	list-style: none;
+	text-indent: 0;
+	margin-left: 0;
+	width: 100%;
+}
+
+.treeview ul ul {
+	list-style: none;
+	text-indent: 0;
+}
+
+.treeview li {	
+	border-top: 1px solid #eee;
+}
+
+.treeview ul ul li {
+	margin-left: 4em;
+}

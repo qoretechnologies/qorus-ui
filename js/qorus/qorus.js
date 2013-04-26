@@ -28,6 +28,23 @@ define([
   }
   
   var Qorus = {};
+
+  
+  var setNested = function (obj, path, fn){
+    var terms = path.split('.');
+    console.log(obj);
+    if (terms.length > 1 && _.has(obj, terms[0])){
+      terms.pop();
+      setNested(obj[terms[0]], terms.join('.'), fn);
+    } else if(_.isObject(obj)) {
+      _.each(_.values(obj), function(v, k) {
+        if (k == terms[0]) {
+          console.log("Hello Kitty", v, k);
+          fn(obj[k][terms[0]]); 
+        }
+      });
+    }
+  };
   
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
@@ -38,14 +55,18 @@ define([
     },
     parse: function (response, options) {
       _.each(this.dateAttributes, function (date) {
-        if (response[date]) {
-          response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+        if (date.search(/\./) > -1) {
+          setNested(response, date, function(val) { moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); })
+        } else {
+          if (response[date]) {
+            response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+          }          
         }
       });
       return response;
     },
     fetch: function (options) {
-      var data = this.opts;      
+      var data = this.opts;  
 
       if (!options) {
         options = {};

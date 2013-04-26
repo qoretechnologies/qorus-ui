@@ -6,7 +6,10 @@ define([
     urlRoot: '/rest/orders/',
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
-    dateAttributes: ['started', 'completed', 'modified'],
+    dateAttributes: ['started', 'completed', 'modified', 
+      'HierarchyInfo.completed', 
+      'HierarchyInfo.modified',
+      'HierarchyInfo.started' ],
 
     initialize: function(opts){
       // set id if in opts
