@@ -1,3 +1,5 @@
-<ul>
-    <li><%= obj.key %>: <% if (_.isObject(obj.val)) { return obj.template; } else { return obj.val' } %></li>
+<ul<% if (obj.css) return 'css="'+ obj.css +'"' %>>
+<% _.each(obj.items, function(k, v) { %>
+    <li><strong><%= v %></strong>: <% if (_.isObject(k)) { %><%= obj.createNestedList(k) %><%} else {%> <%= k %><% } %></li>
+<% }) %>
 </ul>

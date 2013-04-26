@@ -10,6 +10,11 @@ define([
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle'
     },
+    dateAttributes: [
+      'HierarchyInfo.completed', 
+      'HierarchyInfo.modified',
+      'HierarchyInfo.started',       
+    ],
     
     initialize: function (opts) {
       ModelView.__super__.initialize.call(this, opts);

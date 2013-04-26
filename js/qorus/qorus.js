@@ -4,8 +4,9 @@ define([
   'underscore',
   'libs/backbone.rpc',
   'settings',
-  'utils'
-], function ($, _, Backbone, settings, utils) {
+  'utils',
+  'qorus/helpers'
+], function ($, _, Backbone, settings, utils, Helpers) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -438,35 +439,8 @@ define([
       this.trigger(e.eventstr, e);
     }
   })
-  
-  Qorus.ViewHelpers = {
-    getStatusCSS: function (status) {
-      if (status) {
-        status = status.toLowerCase();
-        return utils.status_map[status];        
-      }
-    },
-    createNestedList: function (obj, css) {
-      if(css) {
-        var html = '<ul class='+ css +'>';
-      } else {
-        var html = '<ul>';      
-      }
-      _.each(obj, function (k, v) {
-        html += '<li>';
-        html += '<strong>' + v + '</strong> ';
-        if (_.isObject(obj[v])) {
-          html += Qorus.ViewHelpers.createNestedList(obj[v]);
-        } else {
-          html += k;
-        }
-        html += '</li>';
-      });
-      html += '</ul>';
-    
-      return html;
-    }
-  }
+
+  Qorus.ViewHelpers = Helpers;
 
   return Qorus;
 });
