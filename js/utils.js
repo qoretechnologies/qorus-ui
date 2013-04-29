@@ -22,6 +22,7 @@ define([
       "ready": "ready",
       "incomplete": "info",
       "scheduled": "info",
+      "success": "success"
     },
     parseDate: function (date, format) {
       var d;

@@ -83,7 +83,7 @@ define([
         bar.hide();
         el.removeClass('info');
       } else {
-        var oview = new OrderView({ id: el.data('id') });
+        var oview = new OrderView({ id: el.data('id'), workflow: this.model });
         var _this = this;
       
         e.stopPropagation();

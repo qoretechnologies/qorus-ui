@@ -342,19 +342,48 @@ aside {
 .treeview ul {
 	list-style: none;
 	text-indent: 0;
+	position: relative;
 	margin-left: 0;
 	width: 100%;
 }
 
 .treeview ul ul {
+	/*border-left:  1px solid #eee;*/
+	margin: .3em;
 	list-style: none;
 	text-indent: 0;
+	
 }
 
 .treeview li {	
 	border-top: 1px solid #eee;
+	margin-left: 15px;
+}
+
+.treeview li:first-child {
+	border-top: 0;
 }
 
 .treeview ul ul li {
-	margin-left: 4em;
+	margin-left: 1em;
+}
+
+.treeview li.parent:before {
+	content:  "-";
+	position: absolute;
+	margin-left: -15px;
+}
+
+.treeview li.clps:before {
+	content:  "+";
+	position: absolute;
+	margin-left: -15px;
+}
+
+.icon-error {
+    color: #b94a48;
+}
+
+.icon-success {
+    color: #468847;
 }
