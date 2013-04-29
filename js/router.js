@@ -70,7 +70,7 @@ define([
     },
     showWorkflow: function(id, inst, filter, date, wfiid) {
       if (wfiid){
-        this.showOrder(wfiid);
+        this.showOrder(id, wfiid);
       } else {
         var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
         this.setView(view);        
@@ -92,8 +92,8 @@ define([
       var view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues } });
       this.setView(view);
     },
-    showOrder: function(wfiid){
-      var view = new OrderView({ id: wfiid });
+    showOrder: function(id, wfiid){
+      var view = new OrderView({ id: wfiid, workflow_id: id });
       this.setView(view);
     },
     defaultAction: function(actions) {

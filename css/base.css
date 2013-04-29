@@ -356,16 +356,17 @@ aside {
 }
 
 .treeview li {	
+    background-color: #fff;
 	border-top: 1px solid #eee;
-	margin-left: 15px;
+	padding-left: 15px;
+}
+
+.treeview li:nth-child(odd) {
+	background-color: #f9f9f9;
 }
 
 .treeview li:first-child {
 	border-top: 0;
-}
-
-.treeview ul ul li {
-	margin-left: 1em;
 }
 
 .treeview li.parent:before {
