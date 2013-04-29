@@ -9,7 +9,18 @@ define([
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
       'HierarchyInfo.modified',
-      'HierarchyInfo.started' ],
+      'HierarchyInfo.started',
+      'ErrorInstances.created',
+      'StepInstances.started',
+      'StepInstances.completed',
+      'OrderInfo.created',
+      'OrderInfo.modified',
+      'InstanceInfo.created',
+      'InstanceInfo.modified',
+      'InstanceInfo.started',
+      'InstanceInfo.completed',
+      'AuditEvents.created'
+    ],
 
     initialize: function(opts){
       // set id if in opts

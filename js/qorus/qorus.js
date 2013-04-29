@@ -30,19 +30,25 @@ define([
   var Qorus = {};
 
   
+  // this function pass function to nested objects
   var setNested = function (obj, path, fn){
     var terms = path.split('.');
-    console.log(obj);
     if (terms.length > 1 && _.has(obj, terms[0])){
-      terms.pop();
-      setNested(obj[terms[0]], terms.join('.'), fn);
+      var t = terms.shift();
+      setNested(obj[t], terms.join('.'), fn);
     } else if(_.isObject(obj)) {
-      _.each(_.values(obj), function(v, k) {
-        if (k == terms[0]) {
-          console.log("Hello Kitty", v, k);
-          fn(obj[k][terms[0]]); 
-        }
-      });
+      var term = terms[0];
+      if (_.has(obj, term)) {
+        obj[term] = fn(obj[term]); 
+      } else {
+        _.each(_.values(obj), function(v, k, l) {
+          if (_.isObject(v)) {
+            if (_.has(v, term)) {
+              v[term] = fn(v[term]); 
+            }
+          }
+        });        
+      }
     }
   };
   
@@ -56,7 +62,7 @@ define([
     parse: function (response, options) {
       _.each(this.dateAttributes, function (date) {
         if (date.search(/\./) > -1) {
-          setNested(response, date, function(val) { moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); })
+          setNested(response, date, function(val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); })
         } else {
           if (response[date]) {
             response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
