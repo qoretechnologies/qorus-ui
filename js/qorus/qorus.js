@@ -62,7 +62,7 @@ define([
     parse: function (response, options) {
       _.each(this.dateAttributes, function (date) {
         if (date.search(/\./) > -1) {
-          setNested(response, date, function(val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); })
+            setNested(response, date, function(val) { if (val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); }})
         } else {
           if (response[date]) {
             response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
