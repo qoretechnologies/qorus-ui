@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'models/function',
   'text!../../../templates/steps/function_modal.html',
-], function ($, _, Qorus, Function, Template) {
+], function ($, _, Qorus, Model, Template) {
   var ModelView = Qorus.View.extend({
     initialize: function (opts) {
       this.opts = opts;
@@ -13,10 +13,13 @@ define([
       this.template = Template;
       
       // init model
-      this.model = new Function({ id: opts.id });
+      this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render);
-      this.on('render', $(this.el).modal());
+    },
+    render: function (ctx) {
+      ModelView.__super__.render.call(this, ctx);
+      console.log(this.model);
     }
   });
   return ModelView;

@@ -25,6 +25,7 @@ define([
       'th[data-sort]': 'fetchSorted',
       'scroll': 'scroll'
     },
+    
     initialize: function (opts) {
       opts = opts || {};
 
@@ -46,6 +47,7 @@ define([
       this.collection.on('reset', this.updateContext, this);
       this.collection.fetch();
     },
+    
     runAction: function (e) {
       e.stopPropagation();
       var data = e.currentTarget.dataset;
@@ -69,7 +71,7 @@ define([
     fetchSorted: function (e) {
       var el = e.currentTarget;
       var sort = el.data('sort');
-      console.log("Fetching sorted", sort);
+      // console.log("Fetching sorted", sort);
       e.stopPropagation();
     },
     scroll: function () {

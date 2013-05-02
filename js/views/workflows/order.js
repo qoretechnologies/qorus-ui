@@ -3,19 +3,21 @@ define([
   'underscore',
   'qorus/qorus',
   'models/order',
-  'text!../../../templates/workflow/orders/detail.html'
-], function($, _, Qorus, Model, Template){
+  'text!../../../templates/workflow/orders/detail.html',
+  'views/steps/function'
+], function($, _, Qorus, Model, Template, FunctionView){
   var ModelView = Qorus.View.extend({
     template: Template,
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle',
-      'click .treeview li': 'toggleRow'
+      "click .treeview li": "toggleRow",
+      "click .showstep": 'stepDetail',
     },
     
     initialize: function (opts) {
-      console.log(opts);
       ModelView.__super__.initialize.call(this, opts);
   	  _.bindAll(this, 'render');
+  	  _.bindAll(this, 'stepDetail');
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render, this);
@@ -43,8 +45,22 @@ define([
     },
     
     onRender: function(){
-      console.log($('li:has(li)'));
       $('li:has(li)').addClass('parent');
+    },
+    
+    stepDetail: function(e){
+      var $target = $(e.currentTarget);
+      e.stopPropagation();
+      
+      if ($target.data('id')) {
+        var sd = this.subviews.stepdetail;
+        sd = new FunctionView({ id: $target.data('id') });
+        this.assign('#stepdetail', sd);
+        sd.on('render', function(){
+          // console.log(JSON.stringify(sd.model));
+          $('#stepdetail').modal();
+        });
+      }
     }
   });
   return ModelView;

@@ -22,7 +22,7 @@ define([
       'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },
-    initialize: function (opts){
+    initialize: function (opts) {
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
       
@@ -33,7 +33,7 @@ define([
       
       _.defer(this.render);
     },
-    render: function (ctx){
+    render: function (ctx) {
       var mctx = { item: this.model };
       if (ctx){
         _.extend(mctx, ctx);
@@ -42,7 +42,7 @@ define([
       this.onRender();
       return this;
     },
-    onRender: function (){
+    onRender: function () {
       // render instance/order data grid with toolbar
       var dataview = this.currentDataView();
       var toolbar = this.subviews.toolbar;
@@ -54,10 +54,10 @@ define([
       this.assign('#toolbar', toolbar);
       this.assign('#bottom-bar', this.subviews.bottombar);
     },
-    currentDataView: function (){
+    currentDataView: function () {
       return this.subviews.orders;
     },
-    createSubviews: function (){
+    createSubviews: function () {
       // this.subviews.instances = new InstanceListView({ 
       //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
       //   });
@@ -68,7 +68,7 @@ define([
     },
     
     // opens the bottom bar with detail info about the Instance/Order
-    loadInfo: function (e){
+    loadInfo: function (e) {
       var el = $(e.currentTarget);
       var dataview = this.currentDataView();
       var bar = this.subviews.bottombar;

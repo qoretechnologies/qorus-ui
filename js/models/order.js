@@ -32,7 +32,7 @@ define([
       Model.__super__.initialize.call(this, opts);
       // TODO: find proper place/way within the view
       this.on('sync', function(m, r){ 
-        console.log('Orders->Syncing', m.id, m.collection);
+        // console.log('Orders->Syncing', m.id, m.collection);
         if (m.collection){
           m.collection.trigger('reset');
         }

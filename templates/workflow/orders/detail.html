@@ -74,12 +74,12 @@
   </div>
 
   <div class="tab-pane" id="steps">
-    <table class="table table-striped table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>Status</th> 
           <th class="name">Name</th>
-          <th>Business Error</th>
+          <th>Error Type</th>
           <th>Custom Status</th>
           <th>Ind</th>
           <th>Retries</th>
@@ -91,14 +91,14 @@
       </thead>
       <tbody>
         <% _.each(it.StepInstances, function(step) { %>
-        <tr>
+        <tr class="<%= step.stepname %><% if (step.ind > 0) { %> substep<% } %>">
           <td><%= wrapStatus(step.stepstatus) %></td> 
-          <td class="name"><%= (wfl) ? wfl.stepmap[step.stepid] : step.stepid %></td>
+          <td class="name showstep" data-id="<%= step.function_instanceid %>"><%= step.stepname %></td>
           <td><%= (step.business_error) ? 'Business' : 'Other' %></td>
           <td><%= step.custom_status %></td>
           <td><%= step.ind %></td>
           <td><%= step.retries %></td>
-          <td><%= step.skip %></td>
+          <td><%= statusIcon(step.skip) %></td>
           <td><%= step.started %></td>
           <td><%= step.completed %></td>
           <td><%= step.subworkflow_instanceid %></td>
@@ -149,8 +149,8 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-          <th>Workflow ID</th>
-          <th>Workflow status orig</th>
+          <th>Status</th>
+          <th>Status orig</th>
           <th>Archive</th>
           <th>Error Type</th>
           <th>Custom Status</th>
@@ -228,6 +228,9 @@
       </tbody>
     </table>
   </div>
+</div>
+<!-- Modal -->
+<div id="stepdetail" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true">
 </div>
 <div class="push"></div>
 <% } %>
