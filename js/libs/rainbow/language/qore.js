@@ -14,11 +14,22 @@ Rainbow.extend( "qore", [
       1: "keyword",
       2: "support.namespace"
     },
-    pattern: /(require|package)\s(.+)/g
+    pattern: /(requires)\s(.+)/g
+  },
+  {
+    matches: {
+      1: 'variable.dollar-sign',
+      2: 'variable'
+    },
+    pattern: /(\$)(\w+)\b/g
+  },
+  {
+    name: 'keyword.dot',
+    pattern: /\./g
   },
   {
     name: "keyword",
-    pattern: /\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\b/g
+    pattern: /\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|my|native|new|our|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\b/g
   },
   {
     name: "string",
@@ -42,6 +53,19 @@ Rainbow.extend( "qore", [
     },
     pattern: /([^@\.\s]+)\(/g
   },
+  {
+    matches: {
+      1: 'storage.function',
+      2: 'support.magic'
+    },
+    pattern: /(sub)\s+(\w+)(?=\()/g
+  },
+  // {
+  //   matches: {
+  //     1: 'support.method'
+  //   },
+  //   pattern: /\.(?=\()/g
+  // },
   {
     name: "entity.class",
     pattern: /\b([A-Z]\w*)\b/g
