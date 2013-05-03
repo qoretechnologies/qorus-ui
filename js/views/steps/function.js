@@ -19,7 +19,6 @@ define([
     },
     render: function (ctx) {
       ModelView.__super__.render.call(this, ctx);
-      console.log(this.model);
     }
   });
   return ModelView;
