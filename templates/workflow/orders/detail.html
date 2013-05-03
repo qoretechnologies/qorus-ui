@@ -1,4 +1,10 @@
 <% if (item.get('id')) { %>
+<%  if (!obj.workflow) {  
+      var itm = item.toJSON();
+%>
+  <h3><%= itm.InstanceInfo.name %> <small><%= itm.InstanceInfo.version%></small></h3>
+  <p><%= wrapStatus(itm.InstanceInfo.workflowstatus) %> Workflow Instance ID: <%= itm.InstanceInfo.workflow_instanceid %></p>
+<% } %>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#instance-info">Info</a></li>
   <li><a href="#order">Order</a></li>
@@ -131,7 +137,7 @@
           <td><%= error.severity %></td> 
           <td><%= error.error %></td>
           <td><%= error.description %></td>
-          <td><%= (wfl) ? wfl.stepmap[error.stepid] : error.stepid %></td>
+          <td><%= getStepName(error.stepid) %></td>
           <td><%= error.ind %></td>  
           <td><%= error.created %></td>
           <td><%= (error.business_error) ? 'Business' : 'Other' %></td>

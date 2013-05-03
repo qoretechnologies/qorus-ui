@@ -26,6 +26,16 @@ define([
     
     render: function (ctx) {
       this.context.item = this.model;
+      var _this = this;
+      var getStepName = function (id) {
+        var steps = _.filter(_this.model.get('StepInstances'), function (s) {
+          if (s.stepid == id)
+            return s;
+        });
+        console.log("steps", steps);
+        return steps[0].stepname;
+      }
+      _.extend(this.context, { getStepName: getStepName }); 
       ModelView.__super__.render.call(this, ctx);
       this.onRender();
     },    
