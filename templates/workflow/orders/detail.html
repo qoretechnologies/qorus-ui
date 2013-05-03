@@ -5,6 +5,7 @@
   <h3><%= itm.InstanceInfo.name %> <small><%= itm.InstanceInfo.version%></small></h3>
   <p><%= wrapStatus(itm.InstanceInfo.workflowstatus) %> Workflow Instance ID: <%= itm.InstanceInfo.workflow_instanceid %></p>
 <% } %>
+
 <ul class="nav nav-tabs">
   <li class="active"><a href="#instance-info">Info</a></li>
   <li><a href="#order">Order</a></li>
@@ -107,7 +108,10 @@
           <td><%= statusIcon(step.skip) %></td>
           <td><%= step.started %></td>
           <td><%= step.completed %></td>
-          <td><%= step.subworkflow_instanceid %></td>
+          <td><% if (step.subworkflow_instanceid) { %>
+            <a href="#/orders/view/<%= step.subworkflow_instanceid %>"><%= step.subworkflow_instanceid %></a>
+            <% } %>
+          </td>
         </tr>
         <% }) %>
       </tbody>
