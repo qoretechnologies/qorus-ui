@@ -4,7 +4,8 @@ define([
   'qorus/qorus',
   'models/order',
   'text!../../../templates/workflow/orders/detail.html',
-  'views/steps/function'
+  'views/steps/function',
+  'rainbow.qore'
 ], function($, _, Qorus, Model, Template, FunctionView){
   var ModelView = Qorus.View.extend({
     template: Template,
@@ -59,6 +60,7 @@ define([
         sd.on('render', function(){
           // console.log(JSON.stringify(sd.model));
           $('#stepdetail').modal();
+          Rainbow.color();
         });
       }
     }

@@ -285,14 +285,6 @@ aside {
   z-index: 999;
 }
 
-#bottom-bar .close {
-  left: 50%;
-  margin-left: -25px;
-  position: absolute;
-  top: 5px;
-  width: 50px;
-}
-
 #bottom-content {
   overflow-x: hidden;
   overflow-y: auto;
@@ -387,4 +379,17 @@ aside {
 
 .icon-success {
     color: #468847;
+}
+
+#stepdetail {
+    margin-left: -360px;
+    width: 720px;
+}
+
+#stepdetail .modal-body {
+    max-height: 500px;
+}
+
+.table-vertical th, .table-vertical td {
+    text-align: left;
 }
