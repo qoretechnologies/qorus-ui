@@ -16,9 +16,13 @@ define([
     },
     
     initialize: function (opts) {
+      if (!_.has(opts, 'show_header'))
+        opts.show_header = true;
+      
       ModelView.__super__.initialize.call(this, opts);
   	  _.bindAll(this, 'render');
   	  _.bindAll(this, 'stepDetail');
+      _.bindAll(this, 'getStepName');
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render, this);
@@ -26,19 +30,18 @@ define([
     
     render: function (ctx) {
       this.context.item = this.model;
-      var _this = this;
-      var getStepName = function (id) {
-        var steps = _.filter(_this.model.get('StepInstances'), function (s) {
-          if (s.stepid == id)
-            return s;
-        });
-        console.log("steps", steps);
-        return steps[0].stepname;
-      }
-      _.extend(this.context, { getStepName: getStepName }); 
+      _.extend(this.context, { getStepName: this.getStepName }); 
       ModelView.__super__.render.call(this, ctx);
       this.onRender();
     },    
+
+    getStepName: function (id) {
+      var steps = _.filter(this.model.get('StepInstances'), function (s) {
+        if (s.stepid == id)
+          return s;
+      });
+      return steps[0].stepname;
+    },
 
     tabToggle: function(e){
       var $target = $(e.currentTarget);

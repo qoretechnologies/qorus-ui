@@ -1,5 +1,5 @@
 <% if (item.get('id')) { %>
-<%  if (!obj.workflow) {  
+<%  if (show_header) {  
       var itm = item.toJSON();
 %>
   <h3><%= itm.InstanceInfo.name %> <small><%= itm.InstanceInfo.version%></small></h3>
