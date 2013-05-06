@@ -2,7 +2,6 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  // Pull in the Collection module from above
   'collections/jobs',
   'text!../../../templates/job/list.html',
   'qorus/dispatcher'
@@ -12,11 +11,13 @@ define([
     initialize: function(){
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
-      dispatcher.on('JOB_INSTANCE_START', function (e) {
-        console.log("JOB_INSTANCE_START", e);
-      })
+      var _this = this;
+      this.listenTo(dispatcher, 'JOB_INSTANCE_START', function (e) {
+        console.log(e, _this);
+        _this.collection.fetch();
+      });
     }
   });
-  // Returning instantiated views can be quite useful for having "state"
+
   return ListView;
 });
