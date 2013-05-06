@@ -15,7 +15,7 @@ define([
     
   var ModelView = Qorus.View.extend({
     url: function () {
-     return '#/search'; 
+     return '/search'; 
     },
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',

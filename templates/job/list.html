@@ -20,7 +20,7 @@
 	        <% _.each( items, function( item ){ %>
 	  			<tr class="job-row" id="job-<%= item.get('jobid') %>">
 	  				<td class="id"><%= item.get('jobid') %></td>
-	  				<td class="name" ><a href="#/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
+	  				<td class="name" ><a href="/job/<%= item.get('jobid') %>"><%= item.get('name') %></a></td>
 	  				<td class="version"><%= item.get('version') %></td>
 	  				<td class="status">
               <div class="btn-group">

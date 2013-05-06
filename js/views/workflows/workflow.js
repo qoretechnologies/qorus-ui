@@ -14,7 +14,7 @@ define([
   BottomBarView, OrdersToolbar, OrderView, FunctionView) {
   var ModelView = Qorus.View.extend({
     url: function () {
-     return '#/workflows/view/' + this.opts.id; 
+     return '/workflows/view/' + this.opts.id; 
     },
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',

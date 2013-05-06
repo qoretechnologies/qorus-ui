@@ -113,6 +113,20 @@ define([
     $('.nav a[href*="'+ fragment +'"]').addClass('active');
   });
   
-  Backbone.history.start();
+  // apply push state
+  
+  // $('a').click(function (e) {
+  //   var href = a.attr('href');
+  //   if (href.match(/^#.*|^\//)){
+  //     e.preventDefault();
+  //   if (href.match(/^#.*/)) {
+  //     href = href.slice(1);
+  //   }
+  //     Backbone.navigate(href);
+  //   }
+  // })
+  
+  Backbone.history.start({ pushState: true });
+  // Backbone.history.start();
   return app_router;
 });

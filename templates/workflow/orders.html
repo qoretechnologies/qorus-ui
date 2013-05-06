@@ -26,7 +26,7 @@
           <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
         <% } %>
       </td>
-      <% var order_url = (obj.url) ? [obj.url,obj.statuses,obj.date,item.workflow_instanceid].join('/') : '#/orders/view/' + item.workflow_instanceid %>
+      <% var order_url = (obj.url) ? [obj.url,obj.statuses,obj.date,item.workflow_instanceid].join('/') : '/orders/view/' + item.workflow_instanceid %>
       <td><a href="<%= order_url %>"><%= item.workflow_instanceid %></a></td>
       <td><%= item.started %></td>
       <td><%= item.completed %></td>

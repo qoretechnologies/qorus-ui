@@ -27,10 +27,10 @@
 		<tbody>
 	        <% _.each( items, function( workflow ){ 
             var wfl = workflow.toJSON();
-            var url = ['#/workflows/view', wfl.workflowid, 'orders'].join('/');
+            var url = ['/workflows/view', wfl.workflowid, 'orders'].join('/');
             var date = wfl.date || workflow.collection.date || none;
             function getUrl(s){
-              var params = ['#/workflows/view', wfl.workflowid, 'orders', s];
+              var params = ['/workflows/view', wfl.workflowid, 'orders', s];
               if (date){
                 params.push(date);
               }
@@ -47,7 +47,7 @@
 	  			<tr class="workflow-row" id="workflow-<%= wfl.workflowid %>" data-id="<%= wfl.workflowid %>">
   					<td><i class="icon-check-empty check"></i></td>
     				<td class="id"><%= wfl.workflowid %></td>
-    				<td class="err instances"><%= wrapBadge(wfl.exec_count, ['#/workflows/view', wfl.workflowid, 'instances'].join('/'), 'badge-success') %></td>
+    				<td class="err instances"><%= wrapBadge(wfl.exec_count, ['/workflows/view', wfl.workflowid, 'instances'].join('/'), 'badge-success') %></td>
     				<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all') %>"><%= wfl.name %></a></td>
     				<td class="version"><%= wfl.version %></td>
     				<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], getUrl('in-progress'), 'badge-warning') %></td>

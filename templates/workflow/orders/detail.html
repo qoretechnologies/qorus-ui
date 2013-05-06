@@ -109,7 +109,7 @@
           <td><%= step.started %></td>
           <td><%= step.completed %></td>
           <td><% if (step.subworkflow_instanceid) { %>
-            <a href="#/orders/view/<%= step.subworkflow_instanceid %>"><%= step.subworkflow_instanceid %></a>
+            <a href="/orders/view/<%= step.subworkflow_instanceid %>"><%= step.subworkflow_instanceid %></a>
             <% } %>
           </td>
         </tr>
