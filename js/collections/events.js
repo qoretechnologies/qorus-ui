@@ -3,10 +3,11 @@ define([
   'backbone',
   'qorus/qorus',
   'models/event',
+  'qorus/dispatcher',
   'messenger'
-], function(_, Backbone, Qorus, Model, Messenger){
+], function(_, Backbone, Qorus, Model, Dispatcher, Messenger){
   var host = window.location.host;
-  var dispatcher = window.qorusDispatcher;
+  var dispatcher = Dispatcher;
   var msngr = $('#msg').messenger();
   
   var Collection = Qorus.SortedCollection.extend({
@@ -33,7 +34,7 @@ define([
       _.each(models, function (model) {
         var m = new Model(model);
         _this.add(m);
-        window.qorusDispatcher.dispatch(m);
+        dispatcher.dispatch(m);
       });
       this.trigger('update', this);
     },
