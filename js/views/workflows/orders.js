@@ -89,6 +89,11 @@ define([
     onRender: function () {
       this.$el.parent('.pane').scroll(this.scroll);
       $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+    },
+    hello: function(e) {
+      e.stopPropagation();
+      // e.preventDefault();
+      console.log("tutudu", e.currentTarget);
     }
   });
   return ListView;

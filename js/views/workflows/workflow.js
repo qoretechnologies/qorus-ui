@@ -79,26 +79,30 @@ define([
       var dataview = this.currentDataView();
       var bar = this.subviews.bottombar;
       
-      if (el.hasClass('info')) {
-        bar.hide();
-        el.removeClass('info');
-      } else {
-        var oview = new OrderView({ id: el.data('id'), workflow: this.model });
-        var _this = this;
-      
+      if (e.target.localName == 'tr' || e.target.localName == 'td') {
         e.stopPropagation();
+        e.preventDefault();
+        if (el.hasClass('info')) {
+          bar.hide();
+          el.removeClass('info');
+        } else {
+          var oview = new OrderView({ id: el.data('id'), workflow: this.model });
+          var _this = this;
       
-        // this.subviews.order = oview;
+          e.stopPropagation();
       
-        oview.model.on('change', function () {
-          bar.render();
-          _this.assign('#bottom-content', oview);
-          bar.show();
+          // this.subviews.order = oview;
+      
+          oview.model.on('change', function () {
+            bar.render();
+            _this.assign('#bottom-content', oview);
+            bar.show();
 
-          // highlite/unhighlite selected row
-          $('tr', el.parent()).removeClass('info');
-          $('tr[data-id='+ el.data('id') +']').addClass('info');
-        });        
+            // highlite/unhighlite selected row
+            $('tr', el.parent()).removeClass('info');
+            $('tr[data-id='+ el.data('id') +']').addClass('info');
+          });        
+        }
       }
     },
     orderDetail: function (m) {

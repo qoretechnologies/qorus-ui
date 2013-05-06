@@ -197,7 +197,8 @@ define([
   Qorus.WSCollection = Backbone.Collection.extend({
     initialize: function (models, options) {
       _.bindAll(this);
-      this.socket = new WebSocket("ws://localhost:8001");
+      var host = window.location.host
+      this.socket = new WebSocket("ws://" + host);
       this.socket.onmessage = this.wsAdd;
     },
     wsAdd: function (e) {
@@ -231,9 +232,11 @@ define([
   });
   
   Qorus.View = Backbone.View.extend({
-    url: '#',
+    url: '/',
     additionalEvents: {},
-    defaultEvents: {},
+    defaultEvents: {
+      // "click a[href^='/']": 'catchAClick'
+    },
     context: {},
     subviews: {},
     events : function () {

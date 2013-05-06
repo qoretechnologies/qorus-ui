@@ -61,11 +61,9 @@ define([
     
     stepDetail: function(e){
       var $target = $(e.currentTarget);
-      e.stopPropagation();
-
-      console.log('Clicked Stepname', e);
-      console.log('Step ID', $target.data('id'));      
+    
       if ($target.data('id')) {
+        e.stopPropagation();
         var sd = this.subviews.stepdetail;
         sd = new FunctionView({ id: $target.data('id') });
         this.assign('#stepdetail', sd);
