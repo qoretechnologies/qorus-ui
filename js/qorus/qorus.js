@@ -459,16 +459,6 @@ define([
       }
     }
   });
-  
-  Qorus.Dispatcher = Backbone.Model.extend({
-    add: function (e) {
-      this.dispatch(e);
-    },
-    dispatch: function (e) {
-      e = e.toJSON();
-      this.trigger(e.eventstr, e);
-    }
-  })
 
   Qorus.ViewHelpers = Helpers;
 

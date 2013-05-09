@@ -12,7 +12,8 @@ define([
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle',
       "click .treeview li": "toggleRow",
-      "click .showstep": 'stepDetail',
+      "click .showstep": "stepDetail",
+      "click tr.parent": "showSubSteps"
     },
     
     initialize: function (opts) {
@@ -60,6 +61,29 @@ define([
     
     onRender: function(){
       $('li:has(li)').addClass('parent');
+      
+      // hide substeps and add plus sign icon
+      $('.substep', this.$el).each(function () { 
+        var $this = $(this);
+        $this.hide();
+        if ($this.prev('.parent')) {
+          $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
+        }
+      });
+    },
+    
+    showSubSteps: function (e) {
+      var $target = $(e.currentTarget);
+      
+      if($target.hasClass('parent')) {
+        if ($target.hasClass('collapse')) {
+          $target.nextUntil('.parent').hide();
+        } else {
+          $target.nextUntil('.parent').show(); 
+        }
+        $target.toggleClass('collapse');
+        $('td:first-child i', $target).toggleClass('icon-minus-sign').toggleClass('icon-plus-sign');
+      }
     },
     
     stepDetail: function(e){

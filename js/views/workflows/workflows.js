@@ -10,9 +10,10 @@ define([
   'views/workflows/instances',
   'views/toolbars/workflows_toolbar',
   'views/common/bottom_bar',
+  'qorus/dispatcher',
   'jquery.fixedheader',
   'jquery.sticky',
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView, Dispatcher){
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
@@ -39,6 +40,8 @@ define([
       this.on('render', function(){       
         _this.assign('.toolbar', _this.subviews['toolbar']);
       });
+      
+      this.listenTo(Dispatcher, 'workflow', this.collection.fetch);
     },
     createSubviews: function(){
       this.subviews['bottombar'] = new BottomBarView();

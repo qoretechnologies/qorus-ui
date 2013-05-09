@@ -8,9 +8,7 @@
 
 <ul class="nav nav-tabs">
   <li class="active"><a href="#instance-info">Info</a></li>
-  <li><a href="#order">Order</a></li>
-  <li><a href="#staticdata">Static Data</a></li>
-  <li><a href="#dynamicdata">Dynamic Data</a></li>
+  <li><a href="#data">Data</a></li>
   <li><a href="#steps">Steps</a></li>
   <li><a href="#errors">Errors</a></li>
   <li><a href="#hierarchy">Hierarchy</a></li>
@@ -35,55 +33,79 @@
     </table>
   </div>
   
-  <div class="tab-pane" id="order">
-    <div class="row-fluid">
-        <h3>Order Info</h3>
-        <table class="table table-striped table-hover table-align-left">
-          <tbody>
-            <% for (var k in it.OrderInfo) { 
-              if (!(k == 'dynamicdata' || k == 'staticdata')){ %>
-              <tr>
-                <td class="name"><%= k %></td>
-                <% if (k != 'keys') { %>
-                <td><%= it.OrderInfo[k] %></td>
-                <% } else { %>
-                <td><%= createNestedList(it.OrderInfo[k]) %></td>
-                <% } %>
-              </tr>
-            <% }} %>
-          </tbody>
-        </table>
-    </div>
-  </div>
-  <div class="tab-pane" id="staticdata">
-    <div class="row-fluid">
-        <h3>Static data</h3>
-        <% if (it.OrderInfo.staticdata) { %>
-          <div class="treeview">
-        <%= createNestedList(it.OrderInfo.staticdata) %>  
+  <div class="tab-pane" id="data">
+      <div class="accordion" id="accordion">
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+              Order Info
+            </a>
           </div>
-        <% } else { %>
-        <p>No data</p>
-        <% } %>
-    </div>
-  </div>
-  <div class="tab-pane" id="dynamicdata">
-    <div class="row-fluid">
-        <h3>Dynamic data</h3>
-        <% if (it.OrderInfo.dynamicdata) { %>
-          <div class="treeview">
-        <%= createNestedList(it.OrderInfo.dynamicdata) %>  
+          <div id="collapse1" class="accordion-body collapse in">
+            <div class="accordion-inner">
+                <table class="table table-striped table-hover table-align-left">
+                  <tbody>
+                    <% for (var k in it.OrderInfo) { 
+                      if (!(k == 'dynamicdata' || k == 'staticdata')){ %>
+                      <tr>
+                        <td class="name"><%= k %></td>
+                        <% if (k != 'keys') { %>
+                        <td><%= it.OrderInfo[k] %></td>
+                        <% } else { %>
+                        <td><%= createNestedList(it.OrderInfo[k]) %></td>
+                        <% } %>
+                      </tr>
+                    <% }} %>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+            Static data
+          </a>
+        </div>
+        <div id="collapse2" class="accordion-body collapse">
+          <div class="accordion-inner">
+              <% if (it.OrderInfo.staticdata) { %>
+                <div class="treeview">
+              <%= createNestedList(it.OrderInfo.staticdata) %>  
+                </div>
+              <% } else { %>
+              <p>No data</p>
+              <% } %>
           </div>
-        <% } else { %>
-        <p>No data</p>
-        <% } %>
+        </div>
+      </div>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+            Dynamic data
+          </a>
+        </div>
+        <div id="collapse3" class="accordion-body collapse">
+          <div class="accordion-inner">
+              <% if (it.OrderInfo.dynamicdata) { %>
+                <div class="treeview">
+              <%= createNestedList(it.OrderInfo.dynamicdata) %>  
+                </div>
+              <% } else { %>
+              <p>No data</p>
+              <% } %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
 
   <div class="tab-pane" id="steps">
     <table class="table table-hover">
       <thead>
         <tr>
+          <th></th>
           <th>Status</th> 
           <th class="name">Name</th>
           <th>Error Type</th>
@@ -98,7 +120,8 @@
       </thead>
       <tbody>
         <% _.each(it.StepInstances, function(step) { %>
-        <tr class="<%= step.stepname %><% if (step.ind > 0) { %> substep<% } %>">
+        <tr class="<%= step.stepname %><% if (step.ind > 0) { %> substep<% } else { %> parent <% } %>"<% if (step.ind > 0) { %> data-parent="<%= step.stepname %>"<% } %>>
+          <td><% if (step.ind > 0) { %>|<% } %></td>
           <td><%= wrapStatus(step.stepstatus) %></td> 
           <td class="name showstep" data-id="<%= step.function_instanceid %>"><%= step.stepname %></td>
           <td><%= (step.business_error) ? 'Business' : 'Other' %></td>

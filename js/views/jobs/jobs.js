@@ -12,8 +12,7 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       var _this = this;
-      this.listenTo(dispatcher, 'JOB_INSTANCE_START', function (e) {
-        console.log(e, _this);
+      this.listenTo(dispatcher, 'job', function (e) {
         _this.collection.fetch();
       });
     }
