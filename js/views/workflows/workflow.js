@@ -11,17 +11,20 @@ define([
   'views/workflows/order',
   'views/steps/function'
 ], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, 
-  BottomBarView, OrdersToolbar, OrderView, FunctionView) {
+  BottomBarView, OrdersToolbar, OrderView) {
   var ModelView = Qorus.View.extend({
     url: function () {
      return '/workflows/view/' + this.opts.id; 
     },
+    
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
       'keyup .search-query': 'search'
     },
+    
     initialize: function (opts) {
+      console.log("workflow opts", this.opts);
       this.opts = opts;
       _.bindAll(this, 'render');
       
@@ -34,6 +37,7 @@ define([
       
       this.createSubviews();
     },
+    
     render: function (ctx) {
       var mctx = { item: this.model };
       if (ctx){
@@ -43,6 +47,7 @@ define([
       this.onRender();
       return this;
     },
+    
     onRender: function () {
       // render instance/order data grid with toolbar
       var dataview = this.currentDataView();
@@ -55,6 +60,7 @@ define([
       }
       this.assign('#bottom-bar', this.subviews.bottombar);
     },
+    
     currentDataView: function () {
       var inst  = this.opts.inst || null;
       if (_.indexOf(this.subviews, inst)){
@@ -62,6 +68,7 @@ define([
       }
       return null;
     },
+    
     createSubviews: function () {
       this.subviews.instances = new InstanceListView({ 
           date: this.opts.date, workflowid: this.model.id, url: this.url() 
@@ -76,7 +83,7 @@ define([
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
       var el = $(e.currentTarget);
-      var dataview = this.currentDataView();
+      // var dataview = this.currentDataView();
       var bar = this.subviews.bottombar;
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
@@ -105,10 +112,12 @@ define([
         }
       }
     },
-    orderDetail: function (m) {
-      var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
-      return tpl;
-    },
+    
+    // orderDetail: function (m) {
+    //   var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
+    //   return tpl;
+    // },
+    
     // delegate search to current dataview
     search: function (e) {
       var dataview = this.currentDataView();

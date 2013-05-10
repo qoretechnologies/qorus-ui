@@ -62,6 +62,7 @@ define([
       Backbone.history.navigate('#/workflows');
     },
     showWorkflows: function(date){
+      console.log("date", date);
       var view = new WorkflowListView({}, date, this);
       this.setView(view);
     },
@@ -69,6 +70,7 @@ define([
       if (wfiid){
         this.showOrder(wfiid, id);
       } else {
+        console.log("route opts", inst, filter, date, wfiid);
         var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
         this.setView(view);        
       }

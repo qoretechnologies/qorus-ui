@@ -17,29 +17,41 @@ define([
         'Blocked', 'Crash'
       ]
     },
+    
     events: {
       "click button#status-filter": "statusFilter",
       "click button[data-action='open']": "navigateTo",
       // 'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },
-    initialize: function(opts){
+    
+    initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
+      
+      if (!_.has(opts, 'statuses')) {
+        this.options.statuses = 'all';
+      }
       
       this.template = Template;
       this.context.hasStatus = this.hasStatus;
       this.updateUrl();
-      this.on('render', this.datePicker, this);
-      this.on('render', this.addMultiSelect);
-      this.on('render', function(e, o){ console.log($('.sticky')); $('.sticky').sticky({ el: $('.sticky').parents('.pane') }); });
     },
+        
+    onRender: function () {
+      this.datePicker();
+      this.addMultiSelect();
+      $('.sticky').sticky({ el: $('.sticky').parents('.pane') });
+    },
+    
     clean: function(){
       $('.dp').datetimepicker('remove');
     },
+    
     updateStatuses: function(statuses){
       this.options.statuses = statuses;
     },
+    
     updateUrl: function(url, statuses){
       var baseUrl = url || this.options.url;
       this.baseUrl = baseUrl;
@@ -53,6 +65,7 @@ define([
       
       this.context.url = this.url;
     },
+    
     // check the statuses for given status
     hasStatus: function (status){
       if (this.options.filter){
@@ -60,6 +73,7 @@ define([
       }
       return false;
     },
+    
     // filter by date init
     datePicker: function(){
       var view = this;
@@ -70,10 +84,12 @@ define([
           view.onDateChanged(e.date.toISOString(), {});
       });
     },
+    
     statusFilter: function(){
       var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
-      Backbone.history.navigate(url);
+      Backbone.history.navigate(url, { trigger: true });
     },
+    
     filterBE: function(e){
       var el = $(e.currentTarget);
       if(el.hasClass('active')){
@@ -82,10 +98,13 @@ define([
         console.log([this.url, 'true'].join('/'));
       }
     },
+    
     onDateChanged: function(date) {
       var url = this.url + '/' + moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
-      Backbone.history.navigate(url);
+      console.log('date changed');
+      Backbone.history.navigate(url, { trigger: true });
     },
+    
     addMultiSelect: function(){
       var _this = this;
       // apply bootstrap multiselect to #statuses element
@@ -122,12 +141,14 @@ define([
         }
       });
     },
+    
     navigateTo: function (e) {
       var el = $(e.currentTarget);
       if (el.data('url')){
         Backbone.history.navigate(el.data('url'), {trigger: true});       
       }
     },
+    
     search: function (e) {
       if (this.collection){
         this.collection.search(e); 

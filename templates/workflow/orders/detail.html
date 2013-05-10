@@ -123,7 +123,7 @@
         <tr class="<%= step.stepname %><% if (step.ind > 0) { %> substep<% } else { %> parent <% } %>"<% if (step.ind > 0) { %> data-parent="<%= step.stepname %>"<% } %>>
           <td><% if (step.ind > 0) { %>|<% } %></td>
           <td><%= wrapStatus(step.stepstatus) %></td> 
-          <td class="name showstep" data-id="<%= step.function_instanceid %>"><%= step.stepname %></td>
+          <td class="name showstep" data-id="<%= step.stepid %>"><%= step.stepname %></td>
           <td><%= (step.business_error) ? 'Business' : 'Other' %></td>
           <td><%= step.custom_status %></td>
           <td><%= step.ind %></td>

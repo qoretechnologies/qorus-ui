@@ -26,11 +26,11 @@ define([
       this.router = router;
       this.template = Template;
       
-      // call super method
-      ListView.__super__.initialize.call(this, Collection, date);
-
       // pass date to options object
       this.options.date = date;
+      
+      // call super method
+      ListView.__super__.initialize.call(this, Collection, date);
 
       // initialize subviews
       this.createSubviews();
@@ -45,7 +45,7 @@ define([
     },
     createSubviews: function(){
       this.subviews['bottombar'] = new BottomBarView();
-      this.subviews['toolbar'] = new Toolbar({ date: date });
+      this.subviews['toolbar'] = new Toolbar({ date: this.options.date });
     },
     clean: function(){
       // removes date picker from DOM

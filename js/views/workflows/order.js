@@ -4,9 +4,9 @@ define([
   'qorus/qorus',
   'models/order',
   'text!../../../templates/workflow/orders/detail.html',
-  'views/steps/function',
+  'views/steps/step',
   'rainbow.qore'
-], function($, _, Qorus, Model, Template, FunctionView){
+], function($, _, Qorus, Model, Template, StepView){
   var ModelView = Qorus.View.extend({
     template: Template,
     additionalEvents: {
@@ -69,7 +69,7 @@ define([
         if ($this.prev('.parent')) {
           $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
         }
-      });
+      });      
     },
     
     showSubSteps: function (e) {
@@ -92,7 +92,7 @@ define([
       if ($target.data('id')) {
         e.stopPropagation();
         var sd = this.subviews.stepdetail;
-        sd = new FunctionView({ id: $target.data('id') });
+        sd = new StepView({ id: $target.data('id') });
         this.assign('#stepdetail', sd);
         sd.on('render', function(){
           // console.log(JSON.stringify(sd.model));

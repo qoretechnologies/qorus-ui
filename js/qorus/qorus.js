@@ -246,6 +246,7 @@ define([
       Qorus.View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
+      console.log(options);
       if (_.isObject(options)) {
         if (options.date === undefined) {
           options.date = moment().add('days', -1).format(this.date_format);
@@ -295,7 +296,11 @@ define([
         this.$el.html(tpl);
         this.trigger('render', this, {});
       }
+      this.onRender();
       return this;
+    },
+    onRender: function () {
+      console.log("Default on render", this);
     }
   });
 
@@ -366,6 +371,7 @@ define([
         var _this = this;
         _.defer(function () { _this.afterRender(); });
       }
+      this.onRender();
       console.log('Finished rendering');
       return this;
     },

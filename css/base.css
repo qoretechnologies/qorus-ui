@@ -385,10 +385,23 @@ aside {
     width: 720px;
 }
 
+/* modal window */
+
 #stepdetail .modal-body {
     max-height: 500px;
 }
 
+/*.ui-resizable-s {
+  bottom: 0;
+}
+.ui-resizable-e {
+  right: 0;
+}*/
+
 .table-vertical th, .table-vertical td {
     text-align: left;
+}
+
+.nav-tabs a {
+    text-transform: capitalize;
 }
