@@ -4,10 +4,10 @@
 		<thead>
 		<tr>
 			<th data-sort="serviceid">ID</th>
+			<th data-sort="type">Type</th>
 			<th class="name" data-sort="name">Name</th>
 			<th data-sort="version">Version</th>
 			<th class="description" data-sort="description">Description</th>
-			<th data-sort="type">Type</th>
 			<th data-sort="autostart">Autostart</th>
 			<th data-sort="status">Status</th>
       <th></th>
@@ -15,12 +15,17 @@
 		</thead>
 		<tbody>
 	        <% _.each( items, function( item ){ %>
-	  			<tr class="service-row">
+	  			<tr class="service-row" data-id="<%= item.get('serviceid') %>">
 	  				<td class="id"><%= item.get('serviceid') %></td>
+	  				<td class="service_type"><% if (item.get('type') == 'system') { %>
+                        <i class="icon-cog" data-toggle="tooltip" title="System"></i>
+                        <% } else { %>
+                        <i class="icon-user" data-toggle="tooltip" title="User"></i>
+                        <% } %>
+                   </td>
 	  				<td class="name"><strong><%= item.get('name') %></strong></td>
 	  				<td class="version"><%= item.get('version') %></td>
 	  				<td class="description"><%= item.get('desc') %></td>
-	  				<td class="service_type"><%= item.get('type') %></td>
 	  				<td class="autostart">
               <div class="btn-group">
 						<% if (item.get('autostart')===true){ %>
@@ -51,3 +56,4 @@
 		</tbody>
 	</table>
 </div>
+<div id="service-detail" class="pageslide left"></div>

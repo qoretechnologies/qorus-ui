@@ -14,6 +14,7 @@ require.config({
     "jquery.sticky": "libs/jquery.sticky",
     "jquery.rest": "libs/jquery.rest",
     "jquery.ui": "libs/jquery.ui.min",
+    "jquery.pageslide": "libs/jquery.pageslide.min",
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
     "bootstrap.multiselect": "libs/bootstrap-multiselect",
@@ -54,6 +55,9 @@ require.config({
       deps: ['jquery']
     },
     "jquery.ui": {
+      deps: ['jquery']
+    },
+    "jquery.pageslide": {
       deps: ['jquery']
     },
     "messenger": {
