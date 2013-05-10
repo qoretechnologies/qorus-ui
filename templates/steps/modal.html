@@ -1,0 +1,43 @@
+<% var item = obj.toJSON() %>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="modalHeader"><%= item.name %></h3>
+</div>
+<div class="modal-body">
+    <ul class="nav nav-tabs">
+        <% var counter = 0; %>
+        <% _.each(item.functions, function (func) { %>
+        <li<% if (counter == 0) { %> class="active"<% } %>><a href="#<%= func.type %>"><%= func.type %></a></li>
+        <% counter++; %>
+        <% }) %>
+    </ul>
+
+    <div class="tab-content">
+    <% counter = 0; %>
+    <% _.each(item.functions, function (func) { %>
+        <div class="tab-pane<% if (counter == 0) { %> active<% } %>" id="<%= func.type %>">
+            <table class="table table-vertical">
+                <tr>
+                    <th>Version</th>
+                    <td><%= func.version %></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td><%= func.description %></td>
+                </tr>
+                <tr>
+                    <th>Source</th>
+                    <td><%= func.source %></td>
+                </tr>
+                <tr>
+                    <th>Code</th>
+                    <td>
+                    <pre><code data-language="qore"><%= func.body %></code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>        
+    <% counter++; %>
+    <% }) %>
+</div>
+</div>
