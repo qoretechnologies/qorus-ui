@@ -1,2 +1,37 @@
-<h3><%= obj.item.get('name') %></h3>
-<p><%= JSON.stringify(obj) %></p>
+<% var item = obj.item.toJSON(); %>
+<h3><%= item.name %> <small><%= item.version %></small></h3>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#info">Info</a></li>
+    <li><a href="#methods">Methods</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="info">
+        <p><%= item.description %></p>
+        <p>Type: <%= item.type %></p>
+        <p>Status: <%= powerButton((item.status == 'loaded'), { option: 'status', on: 'loaded', off: 'unloaded', id: item.id }) %></p>
+        <p>Autostart: <%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></p>
+    </div>
+    <div class="tab-pane" id="methods">
+        <table class="table table-striped">
+            <thead>
+                <th class="name">Name</th>
+                <th class="name">Description</th>
+                <th>Lock</th>
+                <th>Internal</th>
+                <th>Write</th>
+            </thead>
+            <tbody>
+            <% _.each(item.methods, function (method) { %>
+                <tr>
+                    <td class="name"><%= method.name %></td>
+                    <td class="name"><%= method.description %></td>
+                    <td><%= statusIcon(method.locked) %></td>
+                    <td><%= statusIcon(method.internal) %></td>
+                    <td><%= statusIcon(method.write) %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>

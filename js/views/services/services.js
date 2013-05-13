@@ -20,6 +20,8 @@ define([
 
     onRender: function () {
       $('[data-toggle="tooltip"]').tooltip();
+      var w = $(document).width() - $('[data-sort="version"]').offset().left;
+      $('#service-detail').outerWidth(w);
     },
 
     setOption: function (e) {
@@ -37,34 +39,36 @@ define([
     },
     
     showDetail: function (e) {
+      var _this = this;
       var $target = $(e.currentTarget);
       var $detail = $('#service-detail');
+      var top = $target.offset().top; // + $target.height()/2;
       
       if ($target.data('id')) {
         e.stopPropagation();
         
-        console.log($detail.data('id'),$target.data('id'));
+        // remove info class on each row
+        $('tr', $target.parent()).removeClass('info');
+        
         if ($detail.data('id') == $target.data('id')) {
            $("#service-detail").removeClass('show'); 
            $detail.data('id', null);
         } else {
+          // add info class to selected row
+          $target.addClass('info');
+
+          // set current row id
           $detail.data('id', $target.data('id'));
-          var detail = new ServiceView({ id: $target.data('id') });          
           
-          console.log(detail != this.subviews.detail, detail, this.subviews.detail)
+          // init detail view
+          var detail = new ServiceView({ id: $target.data('id') });
           
           if (detail != this.subviews.detail) {
             if (this.subviews.detail){
-             this.subviews.detail.undelegateEvents(); 
+             this.subviews.detail.undelegateEvents();
             }
             
             this.subviews.detail = detail;
-        
-            var _this = this;
-            
-            console.log(this.subviews.detail.model);
-            this.subviews.detail.model.on('all', function(e) { console.log(e)});
-            
             this.subviews.detail.model.on('sync', function () {
               _this.assign('#service-detail', _this.subviews.detail);
               $('#service-detail').addClass('show');

@@ -5,6 +5,7 @@
 		<tr>
 			<th data-sort="serviceid">ID</th>
 			<th data-sort="type">Type</th>
+			<th data-sort="threads">Threads</th>
 			<th class="name" data-sort="name">Name</th>
 			<th data-sort="version">Version</th>
 			<th class="description" data-sort="description">Description</th>
@@ -15,45 +16,29 @@
 		</thead>
 		<tbody>
 	        <% _.each( items, function( item ){ %>
-	  			<tr class="service-row" data-id="<%= item.get('serviceid') %>">
-	  				<td class="id"><%= item.get('serviceid') %></td>
-	  				<td class="service_type"><% if (item.get('type') == 'system') { %>
-                        <i class="icon-cog" data-toggle="tooltip" title="System"></i>
-                        <% } else { %>
-                        <i class="icon-user" data-toggle="tooltip" title="User"></i>
-                        <% } %>
-                   </td>
-	  				<td class="name"><strong><%= item.get('name') %></strong></td>
-	  				<td class="version"><%= item.get('version') %></td>
-	  				<td class="description"><%= item.get('desc') %></td>
-	  				<td class="autostart">
-              <div class="btn-group">
-						<% if (item.get('autostart')===true){ %>
-                <button class="btn btn-mini active btn-success" data-id="<%= item.get('serviceid') %>" data-option="autostart" data-value="true">On</button>
-                <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-option="autostart" data-value="false">Off</button>
-						<% } else { %>
-              <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-option="autostart" data-value="true">On</button>
-              <button class="btn btn-mini active btn-danger" data-id="<%= item.get('serviceid') %>" data-option="autostart" data-value="false">Off</button>
-						<% } %>
-              </div>
-					</td>
-	  			<td class="status">
-              <div class="btn-group btn-mini">
-						<% if (item.get('status')=='loaded'){ %>
-                <button class="btn active btn-mini btn-success" data-id="<%= item.get('serviceid') %>" data-option="status" data-value="loaded">On</button>
-                <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-option="status" data-value="unloaded">Off</button>
-						<% } else { %>
-              <button class="btn btn-mini" data-id="<%= item.get('serviceid') %>" data-option="status" data-value="loaded">On</button>
-              <button class="btn btn-mini active btn-danger" data-id="<%= item.get('serviceid') %>" data-option="status" data-value="unloaded">Off</button>
-						<% } %>
-              </div>
-					</td>
-          <td>
-            <button class="btn btn-mini btn-inverse" data-id="<%= item.get('serviceid') %>" data-option="reset" data-value="true">Reset</button>
-          </td>
-	  			</tr>
+                <% 
+                    var item = item.toJSON(); 
+                    item.id = item.serviceid;
+                %>
+            <tr class="service-row" data-id="<%= item.serviceid %>">
+                <td class="id"><%= item.id %></td>
+                <td class="service_type"><% if (item.type == 'system') { %>
+                    <i class="icon-cog" data-toggle="tooltip" title="System"></i>
+                    <% } else { %>
+                    <i class="icon-user" data-toggle="tooltip" title="User"></i>
+                    <% } %>
+                </td>
+                <td><%= item.threads %></td>                
+                <td class="name"><strong><%= item.name %></strong></td>
+                <td class="version"><%= item.version %></td>
+                <td class="description"><%= item.desc %></td>
+                <td class="autostart"><%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
+                <td class="status"><%= powerButton((item.status == 'loaded' || item.status == 'running'), { option: 'status', on: 'loaded', off: 'unloaded', id: item.id }) %></td>
+                <td><button class="btn btn-mini btn-inverse" data-id="<%= item.id %>" data-option="reset" data-value="true">Reset</button></td>
+            </tr>
 	        <% }); %>
 		</tbody>
 	</table>
 </div>
-<div id="service-detail" class="pageslide left"></div>
+<div id="service-detail" class="pageslide left">
+</div>

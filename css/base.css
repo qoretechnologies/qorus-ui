@@ -414,7 +414,6 @@ aside {
 /* PageSlider */
 .pageslide {
     /* These styles MUST be included. Do not change. */
-    display: none;
     position: absolute;
     position: fixed;
     top: 0;
@@ -422,26 +421,56 @@ aside {
     z-index: 1000;
     
     /* Specify the width of your pageslide here */
-    min-width: 260px;
     max-width: 80%;
+    /*min-width: 60%;*/
+
     padding: 40px 20px;
     
     /* These styles are optional, and describe how the pageslide will look */
-    background-color: #333;
-    color: #FFF;
-    -webkit-box-shadow: inset 0 0 5px 5px #222;
-    -moz-box-shadow: inset 0 0 5px 5px #222;
-    box-shadow: inset 0 0 5px 5px #222;
+    background-color: rgba(82,82,82,0.9);
+    color: #feffff;
+    -webkit-box-shadow: inset 0 0 5px 5px rgba(0,0,0,.4);
+    -moz-box-shadow: inset 0 0 5px 5px rgba(0,0,0,.4);
+    box-shadow: inset 0 0 5px 5px rgba(0,0,0,.4);
+    -webkit-transition: all 0.6s ease-in-out;
+       -moz-transition: all 0.6s ease-in-out;
+         -o-transition: all 0.6s ease-in-out;
+            transition: all 0.6s ease-in-out;
 }
 
 .pageslide.left {
-    right: 0;
+    right: -100%;
 }
 
 .pageslide.show {
-    display: block;
-    -webkit-transition: 0.6s ease-in-out left;
-       -moz-transition: 0.6s ease-in-out left;
-         -o-transition: 0.6s ease-in-out left;
-            transition: 0.6s ease-in-out left;
+    right: 0;
+}
+
+.pageslide > .nav > li > a {
+	color: #ccc;
+}
+
+.pageslide > .nav > li > a:hover {
+	color: #1589c9;
+}
+
+.pageslide > .nav > li.active > a {
+	background-color: #666;
+	color: #fff;
+}
+
+/*.pageslide table {
+	background-color: #fff;
+}*/
+
+.pageslide th {
+	color: #fff;
+}
+
+.pageslide .table-striped tr:nth-child(even) {
+	color:  #fff;
+}
+
+.pageslide .table-striped > tbody > tr:nth-child(odd) {
+	background-color: blue;
 }

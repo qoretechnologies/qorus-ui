@@ -5,8 +5,9 @@ define([
   'settings',
   'utils',
   'text!../../templates/common/nested_list.html',
-  'text!../../templates/common/wrap_label.html'
-], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl) {
+  'text!../../templates/common/wrap_label.html',
+  'text!../../templates/common/power_button.html'
+], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl, PwrBtnTpl) {
   var Helpers = {
     getStatusCSS: function (status) {
       if (status) {
@@ -27,6 +28,10 @@ define([
       } else {
         return '<i class="icon icon-minus-sign icon-error"></i>';
       }
+    },
+    powerButton: function (status, data, tpl) {
+      var tpl_html = tpl || PwrBtnTpl;
+      return _.template(tpl_html, { status: status, data: data });
     }
   }
   
