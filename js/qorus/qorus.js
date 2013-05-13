@@ -91,6 +91,7 @@ define([
       
       _.extend(options, { data: data });
       Qorus.Model.__super__.fetch.call(this, options);
+      this.trigger('fetch', this);
     }
   });
 
