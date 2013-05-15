@@ -20,6 +20,8 @@ define([
       'click .action': 'runAction'
     },
     
+    title: "Workflows",
+    
     subviews: {},
     
     initialize: function (collection, date, router) {
@@ -52,13 +54,9 @@ define([
     onRender: function () {
       // assign toolbar to .toolbar element on render
       this.assign('.toolbar', this.subviews.toolbar);
-    },
-    
-    // render after attaching to DOM
-    afterRender: function () {
       $('.table-fixed').fixedHeader({ topOffset: 80 });
     },
-    
+        
     // starts workflow
     runAction: function (e) {
       e.preventDefault();

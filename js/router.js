@@ -84,7 +84,7 @@ define([
       this.setView(view);
     },
     showEvents: function() {
-      var view = new EventListView(Events);
+      var view = new EventListView();
       this.setView(view);
     },
     showSearch: function(ids, keyvalues) {

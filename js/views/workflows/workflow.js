@@ -17,6 +17,10 @@ define([
      return '/workflows/view/' + this.opts.id; 
     },
     
+    title: function () {
+      return this.model.get('name');
+    },
+    
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
@@ -24,7 +28,7 @@ define([
     },
     
     initialize: function (opts) {
-      console.log("workflow opts", this.opts);
+      // console.log("workflow opts", this.opts);
       this.opts = opts;
       _.bindAll(this, 'render');
       

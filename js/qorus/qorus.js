@@ -247,14 +247,16 @@ define([
     },
     context: {},
     subviews: {},
+    
     events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
+    
     initialize: function (options) {
       Qorus.View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
-      console.log(options);
+
       if (_.isObject(options)) {
         if (options.date === undefined) {
           options.date = moment().add('days', -1).format(this.date_format);
@@ -265,6 +267,7 @@ define([
       
       _.extend(this.context, options);
     },
+    
     off: function () {
       if (_.isFunction(this.clean)) {
         this.clean();
@@ -277,6 +280,7 @@ define([
         view.remove();
       });
     },
+    
     // manages subviews
     assign : function (selector, view) {
       var selectors;
@@ -292,6 +296,7 @@ define([
           view.setElement(this.$(selector)).render();
         }, this);
     },
+    
     render: function (ctx) {
       if (this.template) {
         if (ctx) {
@@ -304,11 +309,19 @@ define([
         this.$el.html(tpl);
         this.trigger('render', this, {});
       }
+      this.setTitle();
       this.onRender();
       return this;
     },
+    
     onRender: function () {
-      console.log("Default on render", this);
+    },
+    
+    // sets document title if defined in view
+    setTitle: function () {
+      if (!_.isUndefined(this.title)) {
+        document.title = _.isFunction(this.title) ? this.title() : this.title; 
+      }
     }
   });
 
@@ -357,7 +370,7 @@ define([
         };
       }
     },
-    render: function () {
+    render: function (ctx) {
       // console.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
         var ctx = {
@@ -373,12 +386,14 @@ define([
           this.loader.destroy();
         this.trigger('render', this, {});
       }
-
+    
       if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
         var _this = this;
         _.defer(function () { _this.afterRender(); });
       }
+      
+      this.setTitle();
       this.onRender();
       console.log('Finished rendering');
       return this;

@@ -17,6 +17,18 @@ define([
     url: function () {
      return '/search'; 
     },
+    
+    title: function () {
+      var title = "Search";
+      
+      if (this.opts.search) {
+        title += ": ";
+        title += this.opts.search.ids;
+      }
+      
+      return title;
+    },
+    
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
@@ -33,15 +45,19 @@ define([
       
       _.defer(this.render);
     },
+    
     render: function (ctx) {
       var mctx = { item: this.model };
       if (ctx){
         _.extend(mctx, ctx);
       }
       ModelView.__super__.render.call(this, mctx);
+      
+      this.setTitle();
       this.onRender();
       return this;
     },
+    
     onRender: function () {
       // render instance/order data grid with toolbar
       var dataview = this.currentDataView();
@@ -54,9 +70,11 @@ define([
       this.assign('#toolbar', toolbar);
       this.assign('#bottom-bar', this.subviews.bottombar);
     },
+    
     currentDataView: function () {
       return this.subviews.orders;
     },
+    
     createSubviews: function () {
       // this.subviews.instances = new InstanceListView({ 
       //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
@@ -95,17 +113,19 @@ define([
         });        
       }
     },
+    
     orderDetail: function (m) {
       var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
       return tpl;
     },
+    
     // delegate search to current dataview
     search: function (e) {
       e.preventDefault();
       var $target = $(e.currentTarget);
       var ids = $target.hasClass('.search-query-ids') ? $target.val() : $target.find('.search-query-ids').val();
       var keyvalues = $target.hasClass('.search-query-keyvalues') ? $target.val() : $target.find('.search-query-keyvalues').val();
-      Backbone.history.navigate([this.url(), ids, keyvalues].join("/"));
+      Backbone.history.navigate([this.url(), ids, keyvalues].join("/"), { trigger: true });
     }
   });
   return ModelView;

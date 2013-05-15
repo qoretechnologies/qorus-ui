@@ -12,6 +12,8 @@ define([
       "click button[data-option]": "setOption",
       "click tr": "showDetail"
     },
+    
+    title: "Services",
 
     initialize: function () {
       this.template = Template;

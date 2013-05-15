@@ -2,17 +2,22 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!../../../templates/events/list.html'
-], function($, _, Qorus, Template){
+  'text!../../../templates/events/list.html',
+  'qorus/events'
+], function($, _, Qorus, Template, Events){
   var ListView = Qorus.ListView.extend({
     template: Template,
-    initialize: function(collection){
+    
+    title: "Events",
+    
+    initialize: function () {
       Qorus.ListView.__super__.initialize.call(this);
-      this.collection = collection;
-      this.collection.on('update', this.render, this);
+
+      this.collection = Events;
+      this.listenTo(this.collection, 'update', this.render);
       this.render();
     }
   });
-  // Returning instantiated views can be quite useful for having "state"
+
   return ListView;
 });

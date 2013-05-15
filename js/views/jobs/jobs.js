@@ -8,11 +8,13 @@ define([
 ], function($, _, Qorus, Collection, Template, Dispatcher){
   var dispatcher = Dispatcher;
   var ListView = Qorus.ListView.extend({
-    initialize: function(){
+    title: "Jobs",
+    
+    initialize: function () {
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       var _this = this;
-      this.listenTo(dispatcher, 'job', function (e) {
+      this.listenTo(dispatcher, 'job', function () {
         _this.collection.fetch();
       });
     }
