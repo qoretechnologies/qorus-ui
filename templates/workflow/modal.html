@@ -1,0 +1,24 @@
+<% var item = obj.toJSON() %>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="modalHeader">Start workflow</h3>
+</div>
+<div class="modal-body">
+    <h3><%= item.name %> <small><%= item.version %></h3>
+    <p><%= item.desc %><p>
+    <form>
+        <label for="mode"></label>
+        <select id="mode" name="mode">
+            <option value="NORMAL">Normal</option>
+            <option value="RECOVERY">Recovery</option>
+        </select>
+        <label for="count"></label>
+        <input type="number" name="count" id="count">
+        
+        <% _.each(item.options, function(option, key) { %>
+            <label for="<%= key %>"></label>
+            <input type="text" name="<%= key %>" id="<%= key %>"><span class="help-inline"><%= option %></span>
+        <% }) %>
+    </form>
+</div>
+</div>
