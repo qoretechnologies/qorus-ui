@@ -424,7 +424,8 @@ aside {
     max-width: 80%;
     /*min-width: 60%;*/
 
-    padding: 40px 20px;
+    padding: 0;
+	overflow-y: auto;
     
     /* These styles are optional, and describe how the pageslide will look */
     background-color: rgba(82,82,82,0.9);
@@ -446,15 +447,15 @@ aside {
     right: 0;
 }
 
-.pageslide > .nav > li > a {
+.pageslide .nav > li > a {
 	color: #ccc;
 }
 
-.pageslide > .nav > li > a:hover {
+.pageslide .nav > li > a:hover {
 	color: #1589c9;
 }
 
-.pageslide > .nav > li.active > a {
+.pageslide .nav > li.active > a {
 	background-color: #666;
 	color: #fff;
 }
@@ -467,10 +468,14 @@ aside {
 	color: #fff;
 }
 
-.pageslide .table-striped tr:nth-child(even) {
+.pageslide .table-striped tr {
 	color:  #fff;
 }
 
-.pageslide .table-striped > tbody > tr:nth-child(odd) {
-	background-color: blue;
+.pageslide .table-striped > tbody > tr:nth-child(odd) > td {
+	background-color: #444;
+}
+
+.pageslide .content {
+	padding: 40px 20px;
 }

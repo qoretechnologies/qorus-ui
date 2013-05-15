@@ -20,6 +20,8 @@ define([
 
     onRender: function () {
       $('[data-toggle="tooltip"]').tooltip();
+      
+      // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
       var w = $(document).width() - $('[data-sort="version"]').offset().left;
       $('#service-detail').outerWidth(w);
     },
@@ -70,7 +72,7 @@ define([
             
             this.subviews.detail = detail;
             this.subviews.detail.model.on('sync', function () {
-              _this.assign('#service-detail', _this.subviews.detail);
+              _this.assign('#service-detail .content', _this.subviews.detail);
               $('#service-detail').addClass('show');
             });
           }

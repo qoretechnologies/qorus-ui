@@ -3,6 +3,12 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#info">Info</a></li>
     <li><a href="#methods">Methods</a></li>
+    <% if (item.lib) { %>
+    <li><a href="#lib">Library</a></li>
+    <% } %>
+    <% if (item.groups) { %>
+    <li><a href="#groups">Groups</a></li>
+    <% } %>
 </ul>
 
 <div class="tab-content">
@@ -34,4 +40,17 @@
             </tbody>
         </table>
     </div>
+    <% if (item.lib) { %>
+        <div class="tab-pane" id="lib">
+            <%= createNestedList(item.lib) %>
+        </div>
+    <% } %>
+    <% if (item.groups) { %>
+        <div class="tab-pane" id="groups">
+            <% _.each(item.groups, function (g) { %>
+                <span class="label"><%= g %></span>
+            <% }) %>
+        </div>
+    <% } %>
+
 </div>
