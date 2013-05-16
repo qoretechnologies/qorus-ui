@@ -11,12 +11,14 @@ define([
   'views/toolbars/workflows_toolbar',
   'views/common/bottom_bar',
   'qorus/dispatcher',
+  'views/workflows/modal',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView, Dispatcher){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal){
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
+      'click .action-modal': 'openModal',
       'click .action': 'runAction'
     },
     
@@ -65,6 +67,21 @@ define([
         var wfl = this.collection.get(data.id);
         wfl.doAction(data.action); 
       }
+    },
+    
+    // edit action with Modal window form
+    openModal: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      var $target = $(e.currentTarget);
+      
+      if ($target.data) {
+        this.subviews.modal = new Modal({ workflow: this.collection.get($target.data('id')) });
+        this.assign('#modal', this.subviews.modal);
+        this.subviews.modal.open();
+      }
+      
     },
     
     loadNextPage: function(){

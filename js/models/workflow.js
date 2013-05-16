@@ -7,19 +7,6 @@ define([
   'jquery.rest'
 ], function($, messenger, Backbone, Qorus){
   var Model = Qorus.Model.extend({
-    initialize: function(opts){
-      Model.__super__.initialize.call(this, opts);
-      if (opts.id){
-        this.id = opts.id;
-      }
-      
-      // TODO: find proper place/way within the view
-      this.on('sync', function(m, r){ 
-        if (m.collection){
-          m.collection.trigger('reset');
-        }
-      }, this);
-    },
     urlRoot: "/rest/workflows/",
     defaults: {
       'name': "Workflow name",
@@ -41,7 +28,22 @@ define([
     idAttribute: "workflowid",
     date: null,
     allowedActions: ['start','stop','reset'],
-    doAction: function(action, opts){
+
+    initialize: function (opts) {
+      Model.__super__.initialize.call(this, opts);
+      if (opts.id){
+        this.id = opts.id;
+      }
+      
+      // TODO: find proper place/way within the view
+      this.on('sync', function(m, r){ 
+        if (m.collection){
+          m.collection.trigger('reset');
+        }
+      }, this);
+    },
+    
+    doAction: function (action, opts) {
       if(_.indexOf(this.allowedActions, action) != -1){
         var wflid = this.id;
         var _this = this;
@@ -55,7 +57,8 @@ define([
         );        
       }
     },
-    fetch: function(options){
+    
+    fetch: function (options) {
       if (!options) options = {};
       if (!this.date && this.collection){
         this.date = this.collection.date;
@@ -63,13 +66,14 @@ define([
       }
       Model.__super__.fetch.call(this, options);
     },
-    parse: function(response, options){
+    
+    parse: function (response, options) {
       // rewrite stepmap
       // response.stepmap = _.invert(response.stepmap);
       
       return Model.__super__.parse.call(this, response, options);
     }
   });
-  // Return the model for the module
+
   return Model;
 });
