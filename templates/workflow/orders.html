@@ -8,7 +8,6 @@
       <th data-sort="workflow_instanceid">WFLIID</th>
       <th data-sort="started">Started</th>
       <th data-sort="completed">Completed</th>
-      <th data-sort="modified">Modified</th>
       <th data-sort="error_count">Errors</th>
       <th data-sort="warning_count">Warnings</th>
       <th></th>
@@ -30,7 +29,6 @@
       <td><a href="<%= order_url %>"><%= item.workflow_instanceid %></a></td>
       <td><%= item.started %></td>
       <td><%= item.completed %></td>
-      <td><%= item.modified %></td>
       <td><%= (item.error_count) ? item.error_count : 0 %></td>
       <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
       <td>
