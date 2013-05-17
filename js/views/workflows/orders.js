@@ -81,11 +81,6 @@ define([
         this.$el.children('button[data-pagination]').html("Loading...");
       }
     },
-    render: function (ctx) {
-      ListView.__super__.render.call(this, ctx);
-      this.onRender();
-      return this;
-    },
     onRender: function () {
       this.$el.parent('.pane').scroll(this.scroll);
       $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
