@@ -270,6 +270,7 @@ aside {
   left: 0;
   position: relative;
   overflow: hidden;
+  overflow-y: auto;
   width: 100%;
 }
 

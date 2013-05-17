@@ -46,6 +46,7 @@ define([
       $('#bottom-bar').height(this.height);
       $('#bottom-bar').css('top', bpos);
       $('.handler').prev().height(ui.position.top);
+      $('.handler').next().height(height - ui.position.bottom);
     },
     
     // resets heights of top pane
@@ -70,7 +71,6 @@ define([
     
     setHeights: function () {
       var h = $(window).height() - $('#header').height() - $('#footer').height();
-      console.log(h);
       
       var bpos = h - this.height;
       

@@ -1,4 +1,3 @@
-/*global window, console, define */
 define([
   'jquery',
   'underscore',
@@ -56,9 +55,11 @@ define([
         inst.doAction(data.action); 
       }
     },
+    
     nextPage: function () {
       this.collection.loadNextPage();
     },
+    
     updateContext: function () {
       // update actual pages
       this.context.page = {
@@ -67,13 +68,15 @@ define([
       };
       this.render();
     },
+    
     // fetches the collection from server presorted by key
     fetchSorted: function (e) {
       var el = e.currentTarget;
-      var sort = el.data('sort');
+      // var sort = el.data('sort');
       // console.log("Fetching sorted", sort);
       e.stopPropagation();
     },
+    
     scroll: function () {
       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
       if (pos < 100) {
@@ -81,15 +84,13 @@ define([
         this.$el.children('button[data-pagination]').html("Loading...");
       }
     },
+    
     onRender: function () {
       this.$el.parent('.pane').scroll(this.scroll);
       $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
-    },
-    hello: function(e) {
-      e.stopPropagation();
-      // e.preventDefault();
-      console.log("tutudu", e.currentTarget);
     }
+    
   });
+  
   return ListView;
 });
