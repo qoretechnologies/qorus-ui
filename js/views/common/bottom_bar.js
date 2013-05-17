@@ -50,6 +50,7 @@ define([
     
     // resets heights of top pane
     reset: function() {
+      this.setHeights();
       var h = $('#split-panes').height();
       $('.handler').prev().height(h);
     },
@@ -69,6 +70,7 @@ define([
     
     setHeights: function () {
       var h = $(window).height() - $('#header').height() - $('#footer').height();
+      console.log(h);
       
       var bpos = h - this.height;
       

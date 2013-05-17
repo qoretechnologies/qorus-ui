@@ -48,7 +48,8 @@ define([
         _.extend(mctx, ctx);
       }
       ModelView.__super__.render.call(this, mctx);
-      this.onRender();
+      console.log("rendering workflow", this);
+      // this.onRender();
       return this;
     },
     
