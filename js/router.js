@@ -1,4 +1,3 @@
-/*global window, console, define */
 define([
   'jquery', 
   'underscore', 
@@ -16,86 +15,90 @@ define([
   'views/workflows/orders',
   'views/workflows/search',
   'views/workflows/order',
-  'qorus/events',
+  'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, Events) {
+  OrderView, Urls) {
     
   var AppRouter = Backbone.Router.extend({
-    initialize: function(){
+    routes: Urls.routes,
+
+    initialize: function () {
       this.currentView = null;
     },
-    routes: {
-      // Define some URL routes
-      'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
-      'workflows/:date': 'showWorkflows',
-      'workflows': 'showWorkflows',
-
-      'orders/view/:wfiid': 'showOrder',
-
-      'services': 'showServices',
-      'jobs': 'showJobs',
-      'events': 'showEvents',
-      'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
-      // 'system': 'showSystem',
-      '': 'redirectToWorkflows',
-
-      // Default
-      '*actions': 'defaultAction'
-    },
-    clean: function(){
+        
+    // cleans viewport from zombies
+    clean: function () {
       if (this.currentView){
         this.currentView.off();
         this.currentView.undelegateEvents();
         this.currentView.remove();
       }
     },
-    setView: function(view){
+    
+    // resets current view
+    setView: function (view) {
       if(this.currentView!=view){
         this.clean();
         this.currentView = view;        
       }
       $('#content').html(view.el);
     },
+    
+    // redirects to workflows page
     redirectToWorkflows: function() {
-      Backbone.history.navigate('#/workflows');
+      Backbone.history.navigate('/workflows', { trigger: true });
     },
-    showWorkflows: function(date){
-      console.log("date", date);
+    
+    // workflow list 
+    showWorkflows: function (date) {
       var view = new WorkflowListView({}, date, this);
       this.setView(view);
     },
-    showWorkflow: function(id, inst, filter, date, wfiid) {
-      if (wfiid){
+    
+    // workflow detail
+    showWorkflow: function (id, inst, filter, date, wfiid) {
+      if (wfiid) {
         this.showOrder(wfiid, id);
       } else {
-        console.log("route opts", inst, filter, date, wfiid);
         var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
         this.setView(view);        
       }
     },
-    showServices: function() {
+    
+    // servicee list
+    showServices: function () {
       var view = new ServiceListView();
       this.setView(view);
     },
-    showJobs: function() {
+    
+    // job list
+    showJobs: function () {
       var view = new JobListView();
       this.setView(view);
     },
-    showEvents: function() {
+    
+    // event list
+    showEvents: function () {
       var view = new EventListView();
       this.setView(view);
     },
-    showSearch: function(ids, keyvalues) {
+    
+    // search
+    showSearch: function (ids, keyvalues) {
       var view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues } });
       this.setView(view);
     },
-    showOrder: function(wfiid, id){
+    
+    // order detail
+    showOrder: function (wfiid, id){
       var view = new OrderView({ id: wfiid, workflow_id: id });
       this.setView(view);
     },
-    defaultAction: function(actions) {
+    
+    //d efault
+    defaultAction: function (actions) {
       this.clean();
       console.log('No route:', actions);
     }
@@ -105,7 +108,7 @@ define([
 
   var app_router = new AppRouter();
   
-  app_router.on('route', function(){
+  app_router.on('route', function () {
     // update menu and make active item based on fragment
     var fragment = Backbone.history.fragment.split('/')[0];
     $('.nav a').removeClass('active');
@@ -122,6 +125,6 @@ define([
   });
   
   Backbone.history.start({ pushState: true });
-  // Backbone.history.start();
+
   return app_router;
 });

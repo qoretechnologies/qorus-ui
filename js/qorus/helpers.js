@@ -6,8 +6,11 @@ define([
   'utils',
   'text!../../templates/common/nested_list.html',
   'text!../../templates/common/wrap_label.html',
-  'text!../../templates/common/power_button.html'
-], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl, PwrBtnTpl) {
+  'text!../../templates/common/power_button.html',
+  'urls'
+], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl, PwrBtnTpl, Urls) { 
+  console.log(Urls);
+
   var Helpers = {
     getStatusCSS: function (status) {
       if (status) {
@@ -32,6 +35,10 @@ define([
     powerButton: function (status, data, tpl) {
       var tpl_html = tpl || PwrBtnTpl;
       return _.template(tpl_html, { status: status, data: data });
+    },
+    getUrl: function (route, params) {
+      var urls = Urls.urls;
+      return sprintf(urls[route], params);
     }
   }
   

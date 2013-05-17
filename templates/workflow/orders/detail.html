@@ -219,8 +219,8 @@
           <td><%= statusIcon(ha.subworkflow) %></td>
           <td><%= ha.synchronous %></td>
           <td><%= ha.warnings %></td>
-          <td><%= ha.workflowid %></td>
-          <td><%= ha.workflow_instanceid %></td>
+          <td><a href="<%= getUrl('showWorkflow', { id : ha.workflowid }) %>"><%= ha.workflowid %></a></td>
+          <td><a href="<%= getUrl('showOrder', { id : ha.workflow_instanceid }) %>"><%= ha.workflow_instanceid %></a></td>
           <td><%= ha.parent_workflow_instanceid %></td>           
           <td><%= ha.started %></td>          
           <td><%= ha.modified %></td>
