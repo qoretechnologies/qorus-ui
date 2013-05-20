@@ -5,6 +5,9 @@ define([
   'sprintf'
 ], function($, _, Qorus){
   var ServiceModel = Qorus.Model.extend({
+    defaults: {
+      threads: '-',
+    },
     urlRoot: '/rest/services/',
     idAttribute: "serviceid",
     // initialize: function(){

@@ -30,7 +30,6 @@ define([
       route = route.replace(/(\:)(.*)/, '%(\$2)s');
       rts[k] = "/" + route;
     });
-    console.log('routes', rts);
     return rts;
   }
   

@@ -12,9 +12,13 @@ define([
   'views/common/bottom_bar',
   'qorus/dispatcher',
   'views/workflows/modal',
+  'text!../../../templates/workflow/table.html',
+  'text!../../../templates/workflow/row.html',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal){
+], function($, _, Backbone, Qorus, Collection, Template, date, moment, 
+  InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl){
+    
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
@@ -40,12 +44,18 @@ define([
       // initialize subviews
       this.createSubviews();
       
-      this.listenTo(Dispatcher, 'workflow', this.collection.fetch);
+      // this.listenTo(Dispatcher, 'workflow', this.collection.fetch);
     },
     
     createSubviews: function () {
       this.subviews.bottombar = new BottomBarView();
       this.subviews.toolbar = new Toolbar({ date: this.options.date });
+      this.subviews.table = new Qorus.TableView({ 
+          collection: this.collection, 
+          template: TableTpl,
+          row_template: RowTpl,
+          helpers: this.helpers
+      });
     },
     
     clean: function () {
@@ -56,6 +66,7 @@ define([
     onRender: function () {
       // assign toolbar to .toolbar element on render
       this.assign('.toolbar', this.subviews.toolbar);
+      this.assign('.workflows', this.subviews.table);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
     },
         
@@ -84,9 +95,31 @@ define([
       
     },
     
-    loadNextPage: function(){
+    helpers: {
+      getUrl: function (s, id, date) {
+        var date = date || this.date || null;
+        var params = ['/workflows/view', id, 'orders', s];
+    
+        if (date) {
+          params.push(date);
+        }
+    
+        return params.join('/');
+      },
+      
+      wrapBadge: function (v, u, e){
+        var res = '<a href="' + u +'">'+ v +'</a>';
+        if (v < 1) {
+          return res;
+        }
+        return '<span class="badge ' + e + '">' + res + '</span>';
+      }
+    },
+    
+    loadNextPage: function () {
     }
   });
   
   return ListView;
+
 });

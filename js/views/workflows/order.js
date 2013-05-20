@@ -33,7 +33,6 @@ define([
       this.context.item = this.model;
       _.extend(this.context, { getStepName: this.getStepName }); 
       ModelView.__super__.render.call(this, ctx);
-      this.onRender();
     },    
 
     getStepName: function (id) {

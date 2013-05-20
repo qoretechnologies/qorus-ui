@@ -48,6 +48,7 @@ define([
     
     // redirects to workflows page
     redirectToWorkflows: function() {
+      console.log('Going to workflows');
       Backbone.history.navigate('/workflows', { trigger: true });
     },
     
