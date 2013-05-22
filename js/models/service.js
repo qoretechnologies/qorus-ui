@@ -10,9 +10,20 @@ define([
     },
     urlRoot: '/rest/services/',
     idAttribute: "serviceid",
-    // initialize: function(){
-    //   this.on('change', console.log(sprintf('changed %s', this.id)));
-    // }
+
+	// get available actions
+	actions: function () {
+		var status = this.get('status');
+		var actions = []
+		if (status == 'unloaded') {
+			actions.push('load');
+		} else {
+			actions.push('unload');
+		}
+		actions.push('reset');
+
+		return actions;
+	}
   });
   return ServiceModel;
 });

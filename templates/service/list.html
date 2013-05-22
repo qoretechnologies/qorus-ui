@@ -5,18 +5,19 @@
 		<tr>
 			<th data-sort="serviceid">ID</th>
 			<th data-sort="type">Type</th>
+			<th data-sort="status">Status</th>
 			<th data-sort="threads">Threads</th>
 			<th class="name" data-sort="name">Name</th>
 			<th data-sort="version">Version</th>
 			<th class="description" data-sort="description">Description</th>
 			<th data-sort="autostart">Autostart</th>
-			<th data-sort="status">Status</th>
       <th></th>
 		</tr>
 		</thead>
 		<tbody>
 	        <% _.each( items, function( item ){ %>
                 <% 
+					var orig_item = item;
                     var item = item.toJSON(); 
                     item.id = item.serviceid;
                 %>
@@ -28,13 +29,19 @@
                     <i class="icon-user" data-toggle="tooltip" title="User"></i>
                     <% } %>
                 </td>
+                <td class="status"><span class="label <%= status_label[item.status] %>"><%= item.status %></label></td>
                 <td class="threads"><%= item.threads %></td>                
                 <td class="name"><strong><%= item.name %></strong></td>
                 <td class="version"><%= item.version %></td>
                 <td class="description"><%= item.desc %></td>
                 <td class="autostart"><%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
-                <td class="status"><%= powerButton((item.status == 'loaded' || item.status == 'running'), { option: 'status', on: 'loaded', off: 'unloaded', id: item.id }) %></td>
-                <td><button class="btn btn-mini btn-inverse" data-id="<%= item.id %>" data-option="reset" data-value="true">Reset</button></td>
+                <td>
+					<div class="btn-group">
+			            <% _.each(orig_item.actions(), function(action) { %>
+			              <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
+			            <% }); %>
+					</div>
+				</td>
             </tr>
 	        <% }); %>
 		</tbody>

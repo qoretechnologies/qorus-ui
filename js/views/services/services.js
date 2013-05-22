@@ -12,6 +12,18 @@ define([
       "click button[data-option]": "setOption",
       "click tr": "showDetail"
     },
+    context: {
+      action_css: {
+        'reset': 'btn-inverse',
+        'load': 'btn-success',
+        'unload': 'btn-danger'
+      },
+	  status_label: {
+		  'loaded': 'label-warning',
+		  'unloaded': '',
+		  'running': 'label-success'
+	  }
+    },
     
     title: "Services",
 
