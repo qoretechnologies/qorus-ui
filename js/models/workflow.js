@@ -23,7 +23,8 @@ define([
       'EVENT-WAITING': 0,
       'IN-PROGRESS': 0,
       'BLOCKED': 0,
-      'CRASH': 0
+      'CRASH': 0,
+	  'TOTAL': 0
     },
     idAttribute: "workflowid",
     date: null,
