@@ -20,8 +20,8 @@ define([
 			actions.push('load');
 		} else {
 			actions.push('unload');
+			actions.push('reset');
 		}
-		actions.push('reset');
 
 		return actions;
 	},
