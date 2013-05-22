@@ -10,6 +10,7 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
+      'click button[data-action]': 'runAction',
       "click tr": "showDetail"
     },
     context: {
@@ -52,6 +53,15 @@ define([
         }
       );
       this.collection.fetch();
+    },
+	
+    runAction: function (e) {
+      e.stopPropagation();
+      var data = e.currentTarget.dataset;
+      if (data.id && data.action) {
+        var inst = this.collection.get(data.id);
+        inst.doAction(data.action); 
+      }
     },
     
     showDetail: function (e) {

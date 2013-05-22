@@ -10,6 +10,7 @@ define([
     },
     urlRoot: '/rest/services/',
     idAttribute: "serviceid",
+    allowedActions: ['load','unload','reset'],
 
 	// get available actions
 	actions: function () {
@@ -23,7 +24,27 @@ define([
 		actions.push('reset');
 
 		return actions;
-	}
+	},
+
+    doAction: function(action, opts){
+      if(_.indexOf(this.allowedActions, action) != -1){
+        var id = this.id;
+        var _this = this;
+        $.put(this.url(), {'action': action })
+        .done(
+          function (e, ee, eee){
+            var msg = sprintf('Service %d %s done', id, action);
+            $.globalMessenger().post(msg);
+            _this.fetch();
+          }
+        ).fail(
+          function(e, ee, eee){
+            var msg = sprintf('Service %d %s failed', id, action);
+            $.globalMessenger().post({ message: msg, type: 'error' });
+          }
+        );        
+      }
+    }
   });
   return ServiceModel;
 });
