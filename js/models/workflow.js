@@ -71,8 +71,8 @@ define([
     parse: function (response, options) {
       // rewrite stepmap
       // response.stepmap = _.invert(response.stepmap);
-      
-      return Model.__super__.parse.call(this, response, options);
+      response = Model.__super__.parse.call(this, response, options);
+      return response;
     }
   });
 
