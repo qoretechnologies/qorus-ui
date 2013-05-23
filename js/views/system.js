@@ -7,17 +7,14 @@ define([
 ], function($, _, Backbone, Qorus, System){
   var SystemInfoView = Backbone.View.extend({
     initialize: function () {
-      this.user = new System.User();
-      this.info = new System.Info();
+      this.user = System.User;
+      this.info = System.Info;
       
       _.bindAll(this, 'renderUser');
       _.bindAll(this, 'renderInfo');
       
       this.user.on('change', this.renderUser);
       this.info.on('change', this.renderInfo);
-      
-      this.user.fetch();
-      this.info.fetch();
     },
     
     renderUser: function () {

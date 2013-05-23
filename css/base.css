@@ -480,3 +480,17 @@ aside {
 .pageslide .content {
 	padding: 40px 20px;
 }
+
+.modal.wider {
+    margin-left: -360px;
+    width: 720px;
+}
+
+.modal-body form, .modal-body .form-actions {
+    margin-bottom: 0;
+}
+
+.modal-body .help-inline {
+    float: left;
+    clear: both;
+}

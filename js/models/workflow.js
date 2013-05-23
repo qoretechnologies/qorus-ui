@@ -3,9 +3,10 @@ define([
   'messenger',
   'backbone',
   'qorus/qorus',
+  'models/system',
   'sprintf',
   'jquery.rest'
-], function($, messenger, Backbone, Qorus){
+], function($, messenger, Backbone, Qorus, System){
   var Model = Qorus.Model.extend({
     urlRoot: "/rest/workflows/",
     defaults: {
@@ -48,7 +49,7 @@ define([
       if(_.indexOf(this.allowedActions, action) != -1){
         var wflid = this.id;
         var _this = this;
-        $.put(this.url(), {'action': action }, null, 'application/json')
+        $.put(this.url(), {'action': action, 'options': opts }, null, 'application/json')
         .done(
           function (e, ee, eee){
             var msg = sprintf('Workflow %d %s done', wflid, action);
@@ -73,6 +74,16 @@ define([
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
       return response;
+    },
+    
+    // return all options for starting workflow
+    getOptions: function () {
+      var opts = this.get('options') || {};
+      var sysopts = System.Options.getFor('workflow');
+      
+      console.log(opts, sysopts);
+
+      return _.extend(opts, sysopts);
     }
   });
 

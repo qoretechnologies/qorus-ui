@@ -70,6 +70,7 @@ define([
       _.each(this.subviews, function (view) {
         if (_.isArray(view)) {
           console.log(view.length);
+          
           // _.each(view, function (v) {
           //   console.log("off", v);
           //   v.off();

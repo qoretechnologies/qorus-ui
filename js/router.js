@@ -98,7 +98,7 @@ define([
       this.setView(view);
     },
     
-    //d efault
+    // default
     defaultAction: function (actions) {
       this.clean();
       console.log('No route:', actions);

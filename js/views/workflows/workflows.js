@@ -88,6 +88,7 @@ define([
       var $target = $(e.currentTarget);
       
       if ($target.data) {
+        console.log(this.collection.get($target.data('id')).getOptions());
         this.subviews.modal = new Modal({ workflow: this.collection.get($target.data('id')) });
         this.assign('#modal', this.subviews.modal);
         this.subviews.modal.open();
