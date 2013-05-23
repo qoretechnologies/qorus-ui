@@ -2,14 +2,15 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
+  'qorus/dispatcher',
   'collections/services',
   'text!../../../templates/service/list.html',
   'views/services/service',
   'sprintf'
-], function($, _, Qorus, Collection, Template, ServiceView){
+], function($, _, Qorus, Dispatcher, Collection, Template, ServiceView){
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
-      "click button[data-option]": "setOption",
+      // "click button[data-option]": "setOption",
       'click button[data-action]': 'runAction',
       "click tr": "showDetail"
     },
@@ -31,6 +32,11 @@ define([
     initialize: function () {
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
+      
+      var _this = this;
+      this.listenTo(Dispatcher, 'service:start service:stop', function () {
+        _this.collection.fetch();
+      });
     },
 
     onRender: function () {
@@ -57,8 +63,10 @@ define([
 	
     runAction: function (e) {
       e.stopPropagation();
+      var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
+        $target.text(data.msg.toUpperCase());
         var inst = this.collection.get(data.id);
         inst.doAction(data.action); 
       }

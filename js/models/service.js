@@ -12,19 +12,19 @@ define([
     idAttribute: "serviceid",
     allowedActions: ['load','unload','reset'],
 
-	// get available actions
-	actions: function () {
-		var status = this.get('status');
-		var actions = []
-		if (status == 'unloaded') {
-			actions.push('load');
-		} else {
-			actions.push('unload');
-			actions.push('reset');
-		}
+  	// get available actions
+  	actions: function () {
+  		var status = this.get('status');
+  		var actions = []
+  		if (status == 'unloaded') {
+  			actions.push('load');
+  		} else {
+  			actions.push('unload');
+  			actions.push('reset');
+  		}
 
-		return actions;
-	},
+  		return actions;
+  	},
 
     doAction: function(action, opts){
       if(_.indexOf(this.allowedActions, action) != -1){
