@@ -54,7 +54,8 @@ define([
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
-          helpers: this.helpers
+          helpers: this.helpers,
+          dispatcher: Dispatcher
       });
     },
     

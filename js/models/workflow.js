@@ -8,6 +8,7 @@ define([
   'jquery.rest'
 ], function($, messenger, Backbone, Qorus, System){
   var Model = Qorus.Model.extend({
+    _name: 'workflow',
     urlRoot: "/rest/workflows/",
     defaults: {
       'name': "Workflow name",

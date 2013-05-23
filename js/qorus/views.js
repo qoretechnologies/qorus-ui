@@ -42,6 +42,7 @@ define([
     context: {},
     subviews: {},
     helpers: {},
+    options: {},
     
     events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
@@ -166,7 +167,11 @@ define([
       
       if (collection) {
         this.collection = new collection({date: this.date});
-        this.collection.on('reset', this.render);
+        
+        var _this = this;
+        this.listenToOnce(this.collection, 'sync', function (e) {
+          _this.render();
+        });
         this.collection.fetch();
         
         var _c = this.collection;
@@ -310,6 +315,7 @@ define([
   var TableView = View.extend({
     template: TableTpl,
     row_template: undefined,
+    dispatcher: undefined,
     
     initialize: function (opts) {
       this.collection = opts.collection;
@@ -324,6 +330,10 @@ define([
       
       if (_.has(opts, 'helpers')) {
         this.helpers = opts.helpers
+      }
+      
+      if (_.has(opts, 'dispatcher')) {
+        this.dispatcher = opts.dispatcher;
       }
     },
     
@@ -340,16 +350,29 @@ define([
       this.createRows();
     },
     
+    getRow: function (id) {
+      return this.subviews.rows(id);
+    },
+    
     addRow: function (m) {
-      var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers });
+      var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
       this.$el.find('tbody').append(row.$el.html());
       this.subviews.rows[m.id] = row;
+
+      if (this.dispatcher) {
+        row.listenTo(this.dispatcher, row.model._name, function (e) {
+          if (e.info.id == row.model.id) {
+            row.model.fetch();
+          }
+        })
+      }
     }
   });
 
   var RowView = View.extend({
     template: TableRowTpl,
     initialize: function (opts) {
+      _.bindAll(this);
       this.model = opts.model;
       if (_.has(opts, 'cols')) {
         this.cols = cols; 
@@ -363,6 +386,17 @@ define([
         this.helpers = opts.helpers
       }
       
+      if (_.has(opts, 'parent')) {
+        this.parent = opts.parent;
+      }
+      
+      // this.model.on('all', function (e) {
+      //   console.log(e);
+      // })
+      
+      // update row on model change
+      this.model.on('sync', this.update);
+      
       this.render();
     },
     
@@ -370,6 +404,11 @@ define([
       this.context.item = this.model;
       RowView.__super__.render.call(this, ctx);
       return this;
+    },
+    
+    update: function(ctx) {
+      this.render();
+      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith(this.$el.html());
     }
   });
 
