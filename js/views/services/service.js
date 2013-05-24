@@ -17,6 +17,10 @@ define([
       
       this.template = Template;
       
+      if (_.has(opts, 'context')) {
+        _.extend(this.context, opts.context);
+      }
+      
       // init model
       this.model = new Model({ id: opts.id });
       this.model.fetch();

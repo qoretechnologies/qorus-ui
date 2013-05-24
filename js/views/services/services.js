@@ -20,11 +20,11 @@ define([
         'load': 'btn-success',
         'unload': 'btn-danger'
       },
-	  status_label: {
-		  'loaded': 'label-warning',
-		  'unloaded': '',
-		  'running': 'label-success'
-	  }
+      status_label: {
+        'loaded': 'label-warning',
+        'unloaded': '',
+        'running': 'label-success'
+      }
     },
     
     title: "Services",
@@ -95,7 +95,7 @@ define([
           $detail.data('id', $target.data('id'));
           
           // init detail view
-          var detail = new ServiceView({ id: $target.data('id') });
+          var detail = new ServiceView({ id: $target.data('id'), context: this.context });
           
           if (detail != this.subviews.detail) {
             if (this.subviews.detail){

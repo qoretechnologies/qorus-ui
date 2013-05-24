@@ -2,12 +2,11 @@
 <% var item = obj.item.toJSON() %>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-  <h3 id="modalHeader">Start workflow</h3>
+  <h3 id="modalHeader">Start <%= item.name %> <small><%= item.version %></small></h3>
 </div>
 <form class="form-horizontal">
 <div class="modal-body">
-    <h3><%= item.name %> <small><%= item.version %></small></h3>
-    <p><%= item.desc %><p>
+    <p><em><%= item.description %></em><p>
         <div class="control-group">
             <label class="control-label" for="mode">Mode</label>
             <div class="controls">
@@ -28,7 +27,7 @@
         <div class="control-group">
             <label class="control-label" for="<%= key %>"><%= key %> </label>
             <div class="controls">
-                <input type="text" name="<%= key %>" id="<%= key %>"><span class="help-inline"><%= option %></span>
+                <input type="text" name="<%= key %>" id="<%= key %>"><span class="help-inline"><i class="icon-question-sign" data-toggle="tooltip" title="<%= option %>"></i></span>
             </div>
         </div>
         <% }) %>

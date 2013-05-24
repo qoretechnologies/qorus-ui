@@ -24,9 +24,12 @@ define([
     },
     
     render: function () {
-      console.log(this.model);
       var ctx = { item: this.model };
       View.__super__.render.call(this, ctx);
+    },
+    
+    onRender: function () {
+      $('[data-toggle="tooltip"]').tooltip();
     },
     
     open: function () {
@@ -51,7 +54,6 @@ define([
         params[v.name] = v.value;
       });
       
-      console.log('starting workflow');
       this.model.doAction('start', params);
       this.close();
       return this;
