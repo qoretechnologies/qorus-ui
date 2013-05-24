@@ -62,6 +62,7 @@ define([
       }
       
       _.extend(this.context, options);
+      _.extend(this.options, options);
     },
     
     off: function () {
@@ -166,11 +167,15 @@ define([
       }
       
       if (collection) {
-        this.collection = new collection({date: this.date});
+        this.collection = new collection({ date: this.date });
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', function (e) {
+          console.log(_this);
           _this.render();
+        });
+        this.listenTo(this.collection, 'all', function (e) {
+          console.log(_this, e);
         });
         this.collection.fetch();
         
@@ -194,7 +199,6 @@ define([
 
         // adding template helpers
         _.extend(this.context, ctx, Helpers, this.helpers);
-        console.log(this.context);
         
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);

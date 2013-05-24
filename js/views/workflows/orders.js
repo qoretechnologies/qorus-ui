@@ -42,8 +42,9 @@ define([
       
       _.extend(this.context, opts);
       
+      var _this = this;
       this.collection = new Collection(opts);
-      this.collection.on('reset', this.updateContext, this);
+      this.collection.on('sync', this.updateContext, this);
       this.collection.fetch();
     },
     

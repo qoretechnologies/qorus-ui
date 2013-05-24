@@ -37,7 +37,6 @@ define([
       }
 
       delete this.opts.url;
-      console.log("Orders optinons -> ", this.opts);
       Collection.__super__.initialize.call(this, opts);
     },
     model: Model,

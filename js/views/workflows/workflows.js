@@ -36,7 +36,7 @@ define([
       this.template = Template;
       
       // pass date to options object
-      this.options.date = date;
+      this.date = date;
       
       // call super method
       ListView.__super__.initialize.call(this, Collection, date);
@@ -44,12 +44,12 @@ define([
       // initialize subviews
       this.createSubviews();
       
-      // this.listenTo(Dispatcher, 'workflow', this.collection.fetch);
+      console.log(this.date);
     },
     
     createSubviews: function () {
       this.subviews.bottombar = new BottomBarView();
-      this.subviews.toolbar = new Toolbar({ date: this.options.date });
+      this.subviews.toolbar = new Toolbar({ date: this.date });
       this.subviews.table = new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,

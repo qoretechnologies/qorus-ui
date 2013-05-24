@@ -107,6 +107,7 @@ define([
         this.date = date;
       }
     },
+    
     search: function (query) {
       if (query === "") return this;
 
@@ -115,10 +116,12 @@ define([
         return pattern.test(data.get("name"));
       }));
     },
+    
     hasNextPage: function () {
       // console.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
       return (this.offset + this.limit - 2 < this.models.length); 
     },
+    
     loadNextPage: function () {
       if (!this.loading) {
         this.loading = true;
@@ -142,6 +145,7 @@ define([
         }        
       }
     },
+    
     fetch: function (options) {
       this.opts.limit = this.limit;
       this.opts.offset = this.offset;
@@ -173,6 +177,7 @@ define([
         this.date = opts.date;
       }
     },
+    
     comparator: function (c1, c2) {
       // needs fix
       var r = (this.sort_order == 'des') ? -1 : 1;
@@ -185,6 +190,7 @@ define([
       if (k1[1] < k2[1]) return 1 * r;
       return 0;
     },
+    
     sortByKey: function (key, ord, cb) {
       if (key) {
         var old_key = this.sort_key;
