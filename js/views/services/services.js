@@ -5,16 +5,12 @@ define([
   'qorus/dispatcher',
   'collections/services',
   'text!../../../templates/service/list.html',
+  'text!../../../templates/service/table.html',
+  'text!../../../templates/service/row.html',
   'views/services/service',
   'sprintf'
-], function($, _, Qorus, Dispatcher, Collection, Template, ServiceView){
-  var ListView = Qorus.ListView.extend({
-    additionalEvents: {
-      // "click button[data-option]": "setOption",
-      'click button[data-action]': 'runAction',
-      "click tr": "showDetail"
-    },
-    context: {
+], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, ServiceView){
+  var context = {
       action_css: {
         'reset': 'btn-inverse',
         'load': 'btn-success',
@@ -25,7 +21,16 @@ define([
         'unloaded': '',
         'running': 'label-success'
       }
+  };
+  
+  
+  var ListView = Qorus.ListView.extend({
+    additionalEvents: {
+      // "click button[data-option]": "setOption",
+      'click button[data-action]': 'runAction',
+      "click tr": "showDetail"
     },
+    context: context,
     
     title: "Services",
 
@@ -37,14 +42,30 @@ define([
       this.listenTo(Dispatcher, 'service:start service:stop', function () {
         _this.collection.fetch();
       });
+      
+      this.createSubviews();
+      this.listenTo(this.collection, 'sync', this.render);
+    },
+    
+    createSubviews: function () {
+      this.subviews.table = new Qorus.TableView({ 
+          collection: this.collection, 
+          template: TableTpl,
+          row_template: RowTpl,
+          helpers: this.helpers,
+          dispatcher: Dispatcher
+      });
     },
 
     onRender: function () {
+      this.assign('#service-list', this.subviews.table);
       $('[data-toggle="tooltip"]').tooltip();
       
       // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
-      var w = $(document).width() - $('[data-sort="version"]').offset().left;
-      $('#service-detail').outerWidth(w);
+      if ($('[data-sort="version"]')) {
+        var w = $(document).width() - $('[data-sort="version"]').offset().left;
+        $('#service-detail').outerWidth(w);        
+      }
     },
 
     setOption: function (e) {
@@ -52,12 +73,7 @@ define([
       var svc = this.collection.get(data.id);
       var opts = {};
       opts[data.option] = data.value;
-      $.put(svc.url(), opts, null, 'application/json')
-      .done(
-        function(res){
-          console.log(res);
-        }
-      );
+      $.put(svc.url(), opts, null, 'application/json');
       this.collection.fetch();
     },
 	
@@ -113,6 +129,13 @@ define([
       }
       
     },
+    
+    helpers:  {
+      getLabel: function (status) {
+        return context.status_label[status];
+      },
+      action_css: context.action_css
+    }
     
     
   });

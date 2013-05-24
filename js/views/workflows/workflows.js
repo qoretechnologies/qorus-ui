@@ -43,8 +43,6 @@ define([
 
       // initialize subviews
       this.createSubviews();
-      
-      console.log(this.date);
     },
     
     createSubviews: function () {
