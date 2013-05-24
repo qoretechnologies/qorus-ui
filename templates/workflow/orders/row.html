@@ -1,0 +1,24 @@
+<% var item = item.toJSON(); %>
+  <tr data-id="<%= item.workflow_instanceid %>">
+    <td></td>
+    <td><%= item.workflow_instanceid %></td>
+    <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
+    <td>
+      <% if(item.business_error ) {%>
+        <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
+      <% } %>
+    </td>
+    <% var order_url = (obj.url) ? [obj.url,obj.statuses,obj.date,item.workflow_instanceid].join('/') : '/orders/view/' + item.workflow_instanceid %>
+    <td class="name"><a href="<%= order_url %>"><%= item.name %></a></td>
+    <td><%= item.started %></td>
+    <td><%= item.completed %></td>
+    <td><%= (item.error_count) ? item.error_count : 0 %></td>
+    <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
+    <td>
+      <div class="btn-group">
+        <% _.each(item.actions, function(action) { %>
+          <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
+        <% }); %>
+      </div>
+    </td>
+  </tr>

@@ -2,21 +2,26 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
+  'qorus/dispatcher',
   'collections/orders',
   'text!../../../templates/workflow/orders.html',
+  'text!../../../templates/workflow/orders/table.html',
+  'text!../../../templates/workflow/orders/row.html',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Qorus, Collection, Template){
+], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
+  var context = {
+    action_css: {
+      'block': 'btn-inverse',
+      'cancel': 'btn-danger',
+      'retry': 'btn-success'
+    }
+  };
+  
   var ListView = Qorus.ListView.extend({
     name: 'orders',
     template: Template,
-    context: {
-      action_css: {
-        'block': 'btn-inverse',
-        'cancel': 'btn-danger',
-        'retry': 'btn-success'
-      }
-    },
+    context: context,
     subviews: {},
     additionalEvents: {
       'click button[data-action]': 'runAction',
@@ -46,6 +51,18 @@ define([
       this.collection = new Collection(opts);
       this.collection.on('sync', this.updateContext, this);
       this.collection.fetch();
+      this.createSubviews();
+    },
+    
+    createSubviews: function () {
+      this.subviews.table = new Qorus.TableView({ 
+          collection: this.collection, 
+          template: TableTpl,
+          row_template: RowTpl,
+          helpers: this.helpers,
+          dispatcher: Dispatcher
+      });
+      console.log(this.helpers);
     },
     
     runAction: function (e) {
@@ -87,8 +104,13 @@ define([
     },
     
     onRender: function () {
+      this.assign('#order-list', this.subviews.table);
       this.$el.parent('.pane').scroll(this.scroll);
       $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+    },
+    
+    helpers: {
+      action_css: context.action_css
     }
     
   });
