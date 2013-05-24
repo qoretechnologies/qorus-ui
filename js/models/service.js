@@ -30,6 +30,7 @@ define([
       if(_.indexOf(this.allowedActions, action) != -1){
         var id = this.id;
         var _this = this;
+        console.log(this.url(), action);
         $.put(this.url(), {'action': action })
         .done(
           function (e, ee, eee){

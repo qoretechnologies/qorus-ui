@@ -26,7 +26,7 @@ define([
       'IN-PROGRESS': 0,
       'BLOCKED': 0,
       'CRASH': 0,
-	  'TOTAL': 0
+      'TOTAL': 0
     },
     idAttribute: "workflowid",
     date: null,
@@ -81,8 +81,6 @@ define([
     getOptions: function () {
       var opts = this.get('options') || {};
       var sysopts = System.Options.getFor('workflow');
-      
-      console.log(opts, sysopts);
 
       return _.extend(opts, sysopts);
     }

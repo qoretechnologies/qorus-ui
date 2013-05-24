@@ -79,7 +79,7 @@ define([
       return response;
     },
     fetch: function (options) {
-      var data = this.opts;  
+      var data = {}; //this.opts;  
 
       if (!options) {
         options = {};
@@ -138,7 +138,7 @@ define([
             update: true,
             success: function () {
               console.log("Fetched ->", _this.length);
-              _this.trigger('reset');
+              _this.trigger('sync');
               _this.loading = false;
             }
           });
@@ -203,7 +203,7 @@ define([
           silent: true
         });
 
-        this.trigger('reset', this, {});
+        this.trigger('resort', this, {});
       }
     }
   });

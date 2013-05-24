@@ -170,10 +170,11 @@ define([
         this.collection = new collection({ date: this.date });
         
         var _this = this;
-        this.listenToOnce(this.collection, 'sync', function (e) {
-          console.log(_this);
-          _this.render();
-        });
+        this.listenToOnce(this.collection, 'sync', this.render);
+        
+        // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
+        this.listenTo(this.collection, 'resort', this.render);
+        
         this.listenTo(this.collection, 'all', function (e) {
           console.log(_this, e);
         });
@@ -202,7 +203,6 @@ define([
         
         var tpl = _.template(this.template, this.context);
         this.$el.html(tpl);
-        this.sortIcon();
         if (this.loader && this.collection.size() > 0)
           this.loader.destroy();
         this.trigger('render', this, {});
@@ -216,6 +216,7 @@ define([
       
       this.setTitle();
       this.onRender();
+      this.sortIcon();
       console.log('Finished rendering');
       return this;
     },

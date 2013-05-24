@@ -39,12 +39,9 @@ define([
       ListView.__super__.initialize.call(this, Collection);
       
       var _this = this;
-      this.listenTo(Dispatcher, 'service:start service:stop', function () {
-        _this.collection.fetch();
-      });
       
       this.createSubviews();
-      this.listenTo(this.collection, 'sync', this.render);
+      this.listenToOnce(this.collection, 'sync', this.render);
     },
     
     createSubviews: function () {
