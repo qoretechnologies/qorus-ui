@@ -1,11 +1,12 @@
 define([
+  'settings',
   'underscore',
   'qorus/qorus'
-], function(_, Qorus){
+], function(settings, _, Qorus){
   var System = {};
 
   var Info = Qorus.Model.extend({
-    url: '/rest/system',
+    url: settings.REST_API_PREFIX + '/system',
 
     initialize: function (options) {
       this.fetch();
@@ -13,7 +14,7 @@ define([
   });
 
   var User = Qorus.Model.extend({
-    url: '/rest/users',
+    url: settings.REST_API_PREFIX + '/users',
 
     initialize: function (options) {
       this.fetch();
@@ -21,9 +22,9 @@ define([
   });
 
   var Options = Qorus.Model.extend({
-    url: '/rest/system/options',
+    url: settings.REST_API_PREFIX + '/system/options',
     
-    initialize: function (options) {
+    initialize: function (options) {  
       this.fetch();
     },
     

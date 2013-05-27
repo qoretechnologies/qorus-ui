@@ -1,11 +1,12 @@
 define([
+  'settings',
   'underscore',
   'libs/backbone.rpc',
   'qorus/qorus',
   'models/workflow'
-], function(_, Backbone, Qorus, Model){
+], function(settings, _, Backbone, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
-    url: '/rest/workflows/',
+    url: settings.REST_API_PREFIX + '/workflows/',
     date: null,
     model: Model,
   	initialize: function(opts){

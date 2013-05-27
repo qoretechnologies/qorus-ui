@@ -1,14 +1,15 @@
 define([
+  'settings',
   'jquery',
   'underscore',
   'qorus/qorus',
   'sprintf'
-], function($, _, Qorus){
+], function(settings, $, _, Qorus){
   var ServiceModel = Qorus.Model.extend({
     defaults: {
       threads: '-',
     },
-    urlRoot: '/rest/services/',
+    urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
     allowedActions: ['load','unload','reset'],
 

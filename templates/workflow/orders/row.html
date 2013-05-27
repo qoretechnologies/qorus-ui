@@ -1,6 +1,6 @@
 <% var item = item.toJSON(); %>
   <tr data-id="<%= item.workflow_instanceid %>">
-    <td></td>
+    <td><%= JSON.stringify() %></td>
     <td><%= item.workflow_instanceid %></td>
     <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
     <td>

@@ -1,9 +1,10 @@
 define([
+  'settings',
   'jquery',
   'qorus/qorus'
-], function($, Qorus){
+], function(settings, $, Qorus){
   var Model = Qorus.Model.extend({
-    urlRoot: '/rest/exec/',
+    urlRoot: settings.REST_API_PREFIX + '/exec/',
     idAttribute: "executionID",
     allowedActions: ['stop'],
     dateAttributes: ['starttime'],

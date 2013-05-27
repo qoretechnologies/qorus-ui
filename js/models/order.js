@@ -1,9 +1,10 @@
 define([
+  'settings',
   'jquery',
   'qorus/qorus'
-], function($, Qorus){
+], function(settings, $, Qorus){
   var Model = Qorus.Model.extend({
-    urlRoot: '/rest/orders/',
+    urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
     dateAttributes: ['started', 'completed', 'modified', 

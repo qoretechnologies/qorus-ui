@@ -1,10 +1,11 @@
 define([
+  'settings',
   'underscore',
   'qorus/qorus'
-], function(_, Qorus){
+], function(settings, _, Qorus){
   var Model = Qorus.Model.extend({
     idAttribute: "function_instanceid",
-    urlRoot: '/rest/functions/',
+    urlRoot: settings.REST_API_PREFIX + '/functions/',
     dateAttributes: ['created', 'modified'],
     
     initialize: function (opts) {

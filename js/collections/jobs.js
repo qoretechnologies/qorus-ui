@@ -1,11 +1,12 @@
 define([
+  'settings',
   'underscore',
   'qorus/qorus',
   // Pull in the Model module from above
   'models/job'
-], function(_, Qorus, Model){
+], function(settings, _, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
-    url: '/rest/jobs/',
+    url: settings.REST_API_PREFIX + '/jobs/',
     model: Model,
   });
   // You don't usually return a collection instantiated

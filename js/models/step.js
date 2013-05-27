@@ -1,10 +1,11 @@
 define([
+  'settings',
   'underscore',
   'qorus/qorus'
-], function(_, Qorus){
+], function(settings, _, Qorus){
   var Model = Qorus.Model.extend({
     idAttribute: "stepid",
-    urlRoot: '/rest/steps/',
+    urlRoot: settings.REST_API_PREFIX + '/steps/',
     dateAttributes: ['last_executed'],
     
     initialize: function (opts) {

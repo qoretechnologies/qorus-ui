@@ -375,6 +375,7 @@ define([
   });
 
   var RowView = View.extend({
+    context: {},
     template: TableRowTpl,
     initialize: function (opts) {
       _.bindAll(this);
@@ -388,11 +389,15 @@ define([
       }
       
       if (_.has(opts, 'helpers')) {
-        this.helpers = opts.helpers
+        this.helpers = opts.helpers;
       }
       
       if (_.has(opts, 'parent')) {
         this.parent = opts.parent;
+      }
+      
+      if (_.has(opts, 'context')) {
+        _.extends(this.context, opts.context); 
       }
       
       // this.model.on('all', function (e) {
@@ -407,6 +412,7 @@ define([
     
     render: function(ctx) {
       this.context.item = this.model;
+      _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
       return this;
     },

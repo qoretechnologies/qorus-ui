@@ -1,10 +1,11 @@
 define([
+  'settings',
   'jquery',
   'backbone',
   'qorus/qorus',
   'sprintf',
   'jquery.rest'
-], function($, Backbone, Qorus){
+], function(settings, $, Backbone, Qorus){
   var Model = Qorus.Model.extend({
     dateAttributes: ['time',],
     set: function(attributes, options){

@@ -60,6 +60,7 @@ define([
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
+          context: { url: this.url },
           dispatcher: Dispatcher
       });
       console.log(this.helpers);

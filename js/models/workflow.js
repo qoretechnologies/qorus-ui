@@ -1,4 +1,5 @@
 define([
+  'settings',
   'jquery',
   'messenger',
   'backbone',
@@ -6,10 +7,10 @@ define([
   'models/system',
   'sprintf',
   'jquery.rest'
-], function($, messenger, Backbone, Qorus, System){
+], function(settings, $, messenger, Backbone, Qorus, System){
   var Model = Qorus.Model.extend({
     _name: 'workflow',
-    urlRoot: "/rest/workflows/",
+    urlRoot: settings.REST_API_PREFIX + '/workflows/',
     defaults: {
       'name': "Workflow name",
       'IN-PROGRESS': 0,

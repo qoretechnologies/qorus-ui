@@ -1,14 +1,15 @@
 define([
+  'settings',
   'underscore',
   'moment',
   'qorus/qorus',
   'utils',
   'later.recur',
   'later.cron'
-], function(_, moment, Qorus, utils){
+], function(settings, _, moment, Qorus, utils){
   var Model = Qorus.Model.extend({
     idAttribute: "jobid",
-    urlRoot: '/rest/jobs/',
+    urlRoot: settings.REST_API_PREFIX + '/jobs/',
     dateAttributes: ['last_executed'],
     parse: function(response, options){
       // get date from cronÒ

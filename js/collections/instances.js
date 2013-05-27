@@ -1,11 +1,12 @@
 define([
+  'settings',
   'underscore',
   'qorus/qorus',
   'models/instance'
-], function(_, Qorus, Model){
+], function(settings, _, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
     url: function() {
-      return '/rest/workflows/'+ this.workflowid + '/instances/'
+      return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/instances/'
     },
     initialize: function(opts){
       this.opts = opts;

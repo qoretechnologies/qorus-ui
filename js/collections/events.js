@@ -1,11 +1,12 @@
 define([
+  'settings',
   'underscore',
   'backbone',
   'qorus/qorus',
   'models/event',
   'qorus/dispatcher',
   'messenger'
-], function(_, Backbone, Qorus, Model, Dispatcher, Messenger){
+], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
   var host = window.location.host;
   var dispatcher = Dispatcher;
   var msngr = $('#msg').messenger();
