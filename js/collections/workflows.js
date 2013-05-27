@@ -1,7 +1,7 @@
 define([
   'settings',
   'underscore',
-  'libs/backbone.rpc',
+  'backbone',
   'qorus/qorus',
   'models/workflow'
 ], function(settings, _, Backbone, Qorus, Model){

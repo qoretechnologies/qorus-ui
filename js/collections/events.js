@@ -41,7 +41,7 @@ define([
     },
     wsOpen: function () {
       try {
-        this.socket = new WebSocket("ws://" + host); 
+        this.socket = new WebSocket("ws://" + host + settings.WS_PREFIX); 
         this.socket.onmessage = this.wsAdd;
         this.socket.onclose = this.wsRetry;
         this.socket.onopen = this.wsOpened;

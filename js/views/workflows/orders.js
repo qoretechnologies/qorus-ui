@@ -63,7 +63,6 @@ define([
           context: { url: this.url },
           dispatcher: Dispatcher
       });
-      console.log(this.helpers);
     },
     
     runAction: function (e) {

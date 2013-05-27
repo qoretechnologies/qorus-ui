@@ -133,9 +133,7 @@ define([
 
           var _this = this;
           this.fetch({ 
-            add: true, 
-            remove: false, 
-            update: true,
+            remove: false,
             success: function () {
               console.log("Fetched ->", _this.length);
               _this.trigger('sync');
@@ -161,7 +159,9 @@ define([
       }
       
       _.extend(options, { data: data });
-
+      
+      console.log(this, options);
+      
       Qorus.Collection.__super__.fetch.call(this, options);
     }
     
@@ -169,6 +169,7 @@ define([
   
   Qorus.SortedCollection = Qorus.Collection.extend({
     initialize: function (opts) {
+      console.log(this);
       this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = [''];

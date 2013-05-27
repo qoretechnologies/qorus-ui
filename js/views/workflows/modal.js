@@ -38,7 +38,6 @@ define([
     },
     
     close: function () {
-      console.log('closing');
       this.$el.modal('hide');
     },
     

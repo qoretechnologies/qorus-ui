@@ -35,7 +35,6 @@
         deps: ['bootstrap'],
         exports: 'jQuery.fn.multiselect'
       },
-      "backbone.rpc": ['backbone'],
       "later": ['underscore'],
       "later.cron": {
         deps: ['later', 'later.recur'],

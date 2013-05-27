@@ -9,7 +9,9 @@ define([
   'text!../../../templates/service/row.html',
   'views/services/service',
   'sprintf'
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, ServiceView){
+], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, 
+  RowTpl, ServiceView){
+  
   var context = {
       action_css: {
         'reset': 'btn-inverse',
@@ -35,10 +37,10 @@ define([
     title: "Services",
 
     initialize: function () {
+      _.bindAll(this);
+      
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
-      
-      var _this = this;
       
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);

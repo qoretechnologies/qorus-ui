@@ -8,8 +8,8 @@ define([
       DATE_DISPLAY: 'YYYY-MM-DD HH:mm:ss',    
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
-      REST_API_PREFIX: '/api',
-      WS_PREFIX: '/apievents'
+      REST_API_PREFIX: '/rest',
+      WS_PREFIX: ''
   };
   
   return settings;

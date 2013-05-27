@@ -494,3 +494,11 @@ aside {
     float: left;
     clear: both;
 }*/
+
+.table tr.changed td {
+    background-color: pink;
+    -webkit-transition: all 5s ease-in-out;
+       -moz-transition: all 5s ease-in-out;
+         -o-transition: all 5s ease-in-out;
+            transition: all 5s ease-in-out;
+}

@@ -364,6 +364,7 @@ define([
       this.$el.find('tbody').append(row.$el.html());
       this.subviews.rows[m.id] = row;
 
+      // TODO: move to model itself???
       if (this.dispatcher) {
         row.listenTo(this.dispatcher, row.model._name, function (e) {
           if (e.info.id == row.model.id) {
@@ -400,9 +401,10 @@ define([
         _.extends(this.context, opts.context); 
       }
       
+      // var _this = this;
       // this.model.on('all', function (e) {
-      //   console.log(e);
-      // })
+      //   console.log(e, _this);
+      // });
       
       // update row on model change
       this.model.on('sync', this.update);
@@ -419,7 +421,9 @@ define([
     
     update: function(ctx) {
       this.render();
-      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith(this.$el.html());
+      var $html = $(this.$el.html());
+      $html.addClass('changed');
+      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith($html);
     }
   });
 

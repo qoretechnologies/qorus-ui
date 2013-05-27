@@ -1,8 +1,10 @@
 define([
   'settings',
   'jquery',
-  'qorus/qorus'
-], function(settings, $, Qorus){
+  'qorus/qorus',
+  'qorus/dispatcher'
+], function(settings, $, Qorus, Dispatcher){
+  
   var Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
@@ -23,7 +25,7 @@ define([
       'AuditEvents.created'
     ],
 
-    initialize: function(opts){
+    initialize: function(opts){      
       // set id if in opts
       if (opts.id){
         this.id = opts.id;
@@ -31,13 +33,23 @@ define([
       }
       
       Model.__super__.initialize.call(this, opts);
-      // TODO: find proper place/way within the view
-      this.on('sync', function(m, r){ 
-        // console.log('Orders->Syncing', m.id, m.collection);
-        if (m.collection){
-          m.collection.trigger('reset');
+
+      // // TODO: find proper place/way within the view
+      // this.on('sync', function(m, r){ 
+      //   // console.log('Orders->Syncing', m.id, m.collection);
+      //   if (m.collection){
+      //     m.collection.trigger('reset');
+      //   }
+      // }, this);
+      // 
+    
+      // update on dispatcher event
+      var _this = this;
+      this.listenTo(Dispatcher, 'workflow:status_changed', function (e) {
+        if (e.info.instanceid == _this.id) {
+          _this.fetch();
         }
-      }, this);
+      });
     },
     
     doAction: function(action, opts){

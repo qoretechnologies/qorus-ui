@@ -17,13 +17,15 @@ define([
     },
     
     initialize: function (opts) {
+  	  _.bindAll(this, 'render');
+  	  _.bindAll(this, 'stepDetail');
+      _.bindAll(this, 'getStepName');
+      
       if (!_.has(opts, 'show_header'))
         opts.show_header = true;
       
       ModelView.__super__.initialize.call(this, opts);
-  	  _.bindAll(this, 'render');
-  	  _.bindAll(this, 'stepDetail');
-      _.bindAll(this, 'getStepName');
+
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render, this);
@@ -40,7 +42,14 @@ define([
         if (s.stepid == id)
           return s;
       });
-      return steps[0].stepname;
+      
+      if (steps.length > 0) {
+        return steps[0].stepname; 
+      } else {
+        return id;
+      }
+      
+      
     },
 
     tabToggle: function(e){
