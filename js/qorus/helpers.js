@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'libs/backbone.rpc',
+  'backbone',
   'settings',
   'utils',
   'text!../../templates/common/nested_list.html',

@@ -2,7 +2,7 @@
 define([
   'jquery',
   'underscore',
-  'libs/backbone.rpc',
+  'backbone',
   'settings',
   'utils',
   'qorus/helpers',
