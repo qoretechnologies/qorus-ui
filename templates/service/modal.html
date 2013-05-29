@@ -1,0 +1,24 @@
+<% console.log("modal obj ->", obj) %>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="modalHeader">Method execution</h3>
+</div>
+<form>
+<div class="modal-body">
+    <label for="method">Method</label>
+    <input type="hidden" value="<%= service_name %>" name="service_name" id="service_name" />
+    <select name="method" id="method">
+        <% _.each(obj.methods, function(method) { %>
+            <option value="<%= method.name %>" <% if (method.name == obj.name) { %>selected<% } %>><%= method.name %></option>
+        <% }) %>
+    </select>
+    <label for="args">Arguments</label>
+    <textarea id="args" name="args" class="span12"></textarea>
+    <label for="response">Response</label>
+    <textarea id="response" name="response" class="span12" disabled></textarea>
+</div>
+<div class="modal-footer">
+      <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button type="submit" class="btn btn-success">Call</button>
+</div>
+</form>

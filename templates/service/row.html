@@ -19,9 +19,9 @@
       <td class="autostart"><%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
       <td>
       	<div class="btn-group">
-                <% _.each(orig_item.actions(), function(action) { %>
-                  <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-msg="<%= action %>ing..." data-action="<%= action %>"><%= action.toUpperCase() %></button>
-                <% }); %>
+            <% _.each(orig_item.actions(), function(action) { %>
+              <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-msg="<%= action %>ing..." data-action="<%= action %>"><%= action.toUpperCase() %></button>
+            <% }); %>
       	</div>
     </td>
   </tr>

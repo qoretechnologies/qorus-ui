@@ -47,9 +47,7 @@ define([
         return steps[0].stepname; 
       } else {
         return id;
-      }
-      
-      
+      } 
     },
 
     tabToggle: function(e){

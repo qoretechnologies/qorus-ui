@@ -57,10 +57,6 @@
             <td><%= it.modified %></td>
           </tr>
           <tr>
-            <td class="name">Modified</td>
-            <td><%= it.modified %></td>
-          </tr>
-          <tr>
             <td class="name">Parent Instance</td>
             <td><%= it.parent_workflow_instanceid %></td>
           </tr>
@@ -78,11 +74,11 @@
           </tr>
           <tr>
             <td class="name">Warnings</td>
-            <td><%= it.warnings %></td>
+            <td><%= it.warning_count %></td>
           </tr>
           <tr>
             <td class="name">Errors</td>
-            <td><%= it.errors %></td>
+            <td><%= it.error_count %></td>
           </tr>
           <tr>
             <td class="name">Custom Status</td>

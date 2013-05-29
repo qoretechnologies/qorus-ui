@@ -8,9 +8,10 @@ define([
   'text!../../../templates/service/table.html',
   'text!../../../templates/service/row.html',
   'views/services/service',
+  'views/services/modal',
   'sprintf'
 ], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, 
-  RowTpl, ServiceView){
+  RowTpl, ServiceView, ModalView){
   
   var context = {
       action_css: {
@@ -29,8 +30,9 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       // "click button[data-option]": "setOption",
-      'click button[data-action]': 'runAction',
-      "click tr": "showDetail"
+      "click button[data-action!='execute']": "runAction",
+      "click tr": "showDetail",
+      "click button[data-action='execute']": "openExecuteModal"
     },
     context: context,
     
@@ -134,6 +136,17 @@ define([
         return context.status_label[status];
       },
       action_css: context.action_css
+    },
+    
+    openExecuteModal: function (e) {
+      var $target = $(e.currentTarget);
+
+      var svc = this.collection.get($target.data('serviceid'));
+      var method = svc.get('methods')[$target.data('id')];
+
+      var modal_view = new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') });
+      
+      this.assign('#function-execute', modal_view);
     }
     
     

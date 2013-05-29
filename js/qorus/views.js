@@ -61,7 +61,7 @@ define([
         }        
       }
       
-      _.extend(this.context, options);
+      // _.extend(this.context, options);
       _.extend(this.options, options);
     },
     

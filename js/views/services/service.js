@@ -40,6 +40,7 @@ define([
       var active = $('.tab-pane.active');
       $target.tab('show');
     }
+    
   });
   
   return ModelView;

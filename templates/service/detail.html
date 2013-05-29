@@ -33,15 +33,17 @@
                 <th>Lock</th>
                 <th>Internal</th>
                 <th>Write</th>
+                <th></th>
             </thead>
             <tbody>
-            <% _.each(item.methods, function (method) { %>
+            <% _.each(item.methods, function (method, id) { %>
                 <tr>
                     <td class="name"><%= method.name %></td>
                     <td class="name"><%= method.description %></td>
                     <td><%= statusIcon(method.locked) %></td>
                     <td><%= statusIcon(method.internal) %></td>
                     <td><%= statusIcon(method.write) %></td>
+                    <td><button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= id %>" data-action="execute">Execute</button></td>
                 </tr>
             <% }) %>
             </tbody>
@@ -59,5 +61,4 @@
             <% }) %>
         </div>
     <% } %>
-
 </div>
