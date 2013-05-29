@@ -3,9 +3,8 @@ define([
   'underscore',
   'settings',
   'qorus/qorus',
-  'models/method',
   'text!../../../templates/service/modal.html',
-], function ($, _, settings, Qorus, ModelFunction, Template) {
+], function ($, _, settings, Qorus, Template) {
   var View = Qorus.View.extend({
     context: {},
     additionalEvents: {
@@ -37,7 +36,7 @@ define([
       e.preventDefault();
       $target = $(e.currentTarget);
       
-      this.methodCall($('#service_name', $target).val(), $('#method', $target).val(), $('#arguments', $target).val());
+      this.methodCall($('#service_name', $target).val(), $('#method', $target).val(), $('#args', $target).val());
       return this;
     },
     
@@ -46,16 +45,19 @@ define([
       
       var _this = this;
       
-      $.put(url, { action: 'call', args: args })
-      .done( 
-        function (e, ee) {
-          _this.updateResponse(e, ee);
+      $.put(url, { action: 'call', parse_args: args })
+      .always( 
+        function (e) {
+          _this.updateResponse(e);
         }
       )
     },
     
-    updateResponse: function (e, ee) {
-      $('#response', this.$el).html(e);
+    updateResponse: function (response) {
+      if (_.isObject(response)) {
+        response = JSON.stringify(response);
+      }
+      $('#response', this.$el).text(response);
     }
     
   });
