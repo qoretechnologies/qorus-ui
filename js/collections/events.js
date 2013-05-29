@@ -8,6 +8,12 @@ define([
   'messenger'
 ], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
   var host = window.location.host;
+  
+  var re_up = window.location.href.match(/\/\/(.*):(.*)@/);
+  
+  var username = re_up ? re_up[1] : null;
+  var password = re_up ? re_up[2] : null;
+
   var dispatcher = Dispatcher;
   var msngr = $('#msg').messenger();
   
@@ -40,8 +46,14 @@ define([
       this.trigger('update', this);
     },
     wsOpen: function () {
+      if (username) {
+        var url = "ws://" + username + ':' + password + '@' + host + settings.WS_PREFIX; 
+      } else {
+        var url = "ws://" + host + settings.WS_PREFIX;         
+      }
+      
       try {
-        this.socket = new WebSocket("ws://" + host + settings.WS_PREFIX); 
+        this.socket = new WebSocket(url); 
         this.socket.onmessage = this.wsAdd;
         this.socket.onclose = this.wsRetry;
         this.socket.onopen = this.wsOpened;
