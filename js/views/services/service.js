@@ -24,7 +24,6 @@ define([
       // init model
       this.model = new Model({ id: opts.id });
       this.model.fetch();
-      this.model.on('change', this.render);
     },
 
     render: function (ctx) {

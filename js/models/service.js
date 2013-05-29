@@ -3,8 +3,9 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
+  'qorus/dispatcher',
   'sprintf'
-], function(settings, $, _, Qorus){
+], function(settings, $, _, Qorus, Dispatcher){
   var ServiceModel = Qorus.Model.extend({
     defaults: {
       threads: '-',
@@ -12,6 +13,15 @@ define([
     urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
     allowedActions: ['load','unload','reset'],
+    
+    initialize: function (opts) {
+      ServiceModel.__super__.initialize.call(this, opts);
+      
+      var _this = this;
+      this.listenTo(Dispatcher, 'service:' + this.id, function (e) {
+        _this.fetch();
+      });
+    },
 
   	// get available actions
   	actions: function () {
@@ -37,7 +47,6 @@ define([
           function (e, ee, eee){
             var msg = sprintf('Service %d %s done', id, action);
             $.globalMessenger().post(msg);
-            _this.fetch();
           }
         ).fail(
           function(e, ee, eee){

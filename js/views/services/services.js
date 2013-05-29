@@ -120,7 +120,7 @@ define([
             }
             
             this.subviews.detail = detail;
-            this.subviews.detail.model.on('sync', function () {
+            this.subviews.detail.listenToOnce(this.subviews.detail.model, 'sync', function () {
               _this.assign('#service-detail .content', _this.subviews.detail);
               $('#service-detail').addClass('show');
             });

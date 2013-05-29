@@ -12,7 +12,10 @@ define([
       var ev = this.eventParse(e.eventstr);
       this.trigger(ev[0], e);
       this.trigger(ev.join(':'), e);
-      console.log('Dispatching ->', ev.join(':'));
+      this.trigger(e.info.cls + ':' + e.info.id, e);
+      this.trigger(e.info.cls + ':' + e.info.id + ':' + e.eventstr, e);
+      
+      console.log('Dispatching ->', ev.join(':'), e.info.cls + ':' + e.info.id + ':' + e.eventstr, e);
     },
     eventParse: function(name) {
       var pos = name.indexOf('_');

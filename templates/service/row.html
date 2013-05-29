@@ -3,9 +3,10 @@
   var item = item.toJSON(); 
   item.id = item.serviceid;
 %>
-  <tr class="service-row" data-id="<%= item.serviceid %>">
+  <tr class="service-row" data-id="<%= item.id %>">
       <td class="id"><%= item.id %></td>
-      <td class="service_type"><% if (item.type == 'system') { %>
+      <td class="service_type">
+          <% if (item.type == 'system') { %>
           <i class="icon-cog" data-toggle="tooltip" title="System"></i>
           <% } else { %>
           <i class="icon-user" data-toggle="tooltip" title="User"></i>
@@ -23,5 +24,5 @@
               <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-msg="<%= action %>ing..." data-action="<%= action %>"><%= action.toUpperCase() %></button>
             <% }); %>
       	</div>
-    </td>
+      </td>
   </tr>

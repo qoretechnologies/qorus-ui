@@ -1,7 +1,7 @@
 <% console.log("modal obj ->", obj) %>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-  <h3 id="modalHeader">Method execution</h3>
+  <h3 id="modalHeader">Method execution for <%= service_name %></h3>
 </div>
 <form>
 <div class="modal-body">
@@ -13,9 +13,9 @@
         <% }) %>
     </select>
     <label for="args">Arguments</label>
-    <textarea id="args" name="args" class="span12"></textarea>
+    <textarea id="args" name="args" class="span12" rows=5></textarea>
     <label for="response">Response</label>
-    <textarea id="response" name="response" class="span12" disabled></textarea>
+    <textarea id="response" name="response" class="span12" disabled rows=5></textarea>
 </div>
 <div class="modal-footer">
       <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

@@ -420,10 +420,13 @@ define([
     },
     
     update: function(ctx) {
+      var _this = this;
       this.render();
-      var $html = $(this.$el.html());
-      $html.addClass('changed');
-      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith($html);
+      $('tr', this.$el).addClass('changed');
+      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith(this.$el.html());
+      setTimeout(function() {
+        _this.parent.$el.find('[data-id=' + _this.model.id + ']').removeClass('changed');
+      }, 5000);
     }
   });
 
