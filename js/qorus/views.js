@@ -43,6 +43,7 @@ define([
     subviews: {},
     helpers: {},
     options: {},
+    model_name: null,
     
     events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
@@ -64,7 +65,7 @@ define([
       _.extend(this.context, options);
       _.extend(this.options, options);
     },
-    
+        
     off: function () {
       if (_.isFunction(this.clean)) {
         this.clean();
@@ -84,6 +85,17 @@ define([
           view.remove();      
         }
       });
+      
+      if (_.has(this, 'collection')) {
+        _.each(this.collection.models, function (model){
+          console.log("stop listening", model);
+          model.stopListening();
+        });
+      }
+      
+      if (_.has(this, 'model')) {
+        this.model.stopListening();
+      }
     },
     
     // manages subviews
@@ -173,9 +185,6 @@ define([
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
         this.listenTo(this.collection, 'resort', this.render);
         
-        this.listenTo(this.collection, 'all', function (e) {
-          console.log(_this, e);
-        });
         this.collection.fetch();
         
         var _c = this.collection;
@@ -399,17 +408,12 @@ define([
         _.extends(this.context, opts.context); 
       }
       
-      // var _this = this;
-      // this.model.on('all', function (e) {
-      //   console.log(e, _this);
-      // });
-      
       // update row on model change
       this.model.on('sync', this.update);
       
       this.render();
     },
-    
+        
     render: function(ctx) {
       this.context.item = this.model;
       _.extend(this.context, this.options);

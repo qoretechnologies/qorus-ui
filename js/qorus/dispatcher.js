@@ -10,12 +10,19 @@ define([
     dispatch: function (e) {
       e = e.toJSON();
       var ev = this.eventParse(e.eventstr);
-      this.trigger(ev[0], e);
-      this.trigger(ev.join(':'), e);
-      this.trigger(e.info.cls + ':' + e.info.id, e);
-      this.trigger(e.info.cls + ':' + e.info.id + ':' + ev[1], e);
       
-      console.log('Dispatching ->', ev.join(':'), e.info.cls + ':' + e.info.id + ':' + e.eventstr, e);
+      var events = [ 
+        ev[0],
+        ev.join(':'),
+        e.info.cls + ':' + e.info.id,
+        e.info.cls + ':' + e.info.id + ':' + ev[1]
+      ];
+      
+      var _this = this;
+      _.each(events, function(evt){
+        _this.trigger(evt, e);
+        console.log("Dispatching", evt);
+      })
     },
     eventParse: function(name) {
       var pos = name.indexOf('_');

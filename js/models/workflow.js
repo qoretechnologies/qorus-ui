@@ -4,10 +4,11 @@ define([
   'messenger',
   'backbone',
   'qorus/qorus',
+  'qorus/dispatcher',
   'models/system',
   'sprintf',
   'jquery.rest'
-], function(settings, $, messenger, Backbone, Qorus, System){
+], function(settings, $, messenger, Backbone, Qorus, Dispatcher, System){
   var Model = Qorus.Model.extend({
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
@@ -39,12 +40,15 @@ define([
         this.id = opts.id;
       }
       
-      // TODO: find proper place/way within the view
-      this.on('sync', function(m, r){ 
-        if (m.collection){
-          m.collection.trigger('reset');
-        }
-      }, this);
+      // // TODO: find proper place/way within the view
+      // this.on('sync', function(m, r){ 
+      //   if (m.collection){
+      //     m.collection.trigger('reset');
+      //   }
+      // }, this);
+      
+      // sync on event change
+      this.listenTo(Dispatcher, 'workflow:' + this.id, this.fetch);
     },
     
     doAction: function (action, opts) {

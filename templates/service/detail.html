@@ -36,14 +36,14 @@
                 <th></th>
             </thead>
             <tbody>
-            <% _.each(item.methods, function (method, id) { %>
+            <% _.each(item.methods, function (method) { %>
                 <tr>
                     <td class="name"><%= method.name %></td>
                     <td class="name"><%= method.description %></td>
                     <td><%= statusIcon(method.locked) %></td>
                     <td><%= statusIcon(method.internal) %></td>
                     <td><%= statusIcon(method.write) %></td>
-                    <td><button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= id %>" data-action="execute">Execute</button></td>
+                    <td><button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= method.service_methodid %>" data-action="execute">Execute</button></td>
                 </tr>
             <% }) %>
             </tbody>
