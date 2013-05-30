@@ -18,7 +18,7 @@ define([
     counter: 0,
 
     initialize: function (opts) {
-      _.bindAll(this, 'wsAdd', 'wsRetry', 'wsOpen', 'wsOpened');
+      _.bindAll(this, 'wsAdd', 'wsRetry', 'wsOpen', 'wsOpened', 'connect');
       this.sort_key = 'time';
       this.sort_order = 'des';
       this.sort_history = [''];
@@ -29,11 +29,17 @@ define([
     },
 
     connect: function () {
+      console.log('Connecting to WS');
       var _this = this;
       
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
         .done(function (response) {
-          _this.wsOpen(response);
+          _this.token = response;
+          _this.wsOpen();
+        })
+        .fail(function () {
+          console.log('Failed to get token. Retrying.', _this);
+          _this.wsRetry();
         });
     },
 
@@ -54,8 +60,8 @@ define([
       this.trigger('update', this);
     },
 
-    wsOpen: function (token) {      
-      var url = "ws://" + host + '?token=' + token;
+    wsOpen: function () {      
+      var url = "ws://" + host + '?token=' + this.token;
       
       try {
         this.socket = new WebSocket(url); 
@@ -89,7 +95,7 @@ define([
     wsRetry: function () {
       msngr.post({ message: "<i class=\"icon-warning-sign icon-large\"></i> Qorus instance is down!", type: "error", id: 'ws-connection' }); 
       this.trigger('ws-closed', this);
-      setTimeout(this.wsOpen, 5000);
+      setTimeout(this.connect, 5000);
     }
   });
   return Collection;
