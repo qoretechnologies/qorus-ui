@@ -129,6 +129,17 @@ define([
       if (!_.isUndefined(this.title)) {
         document.title = _.isFunction(this.title) ? this.title() : this.title; 
       }
+    },
+    
+    clean: function () {
+      this.stopListening();
+    },
+    
+    updateModels: function (e) {
+      if (e.info) {
+        var m = this.collection.get(e.info.id);
+        m.fetch();
+      }
     }
   });
 
