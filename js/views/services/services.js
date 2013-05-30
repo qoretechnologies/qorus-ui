@@ -144,9 +144,15 @@ define([
       var svc = this.collection.get($target.data('serviceid'));
       var method = svc.get('methods')[$target.data('id')];
 
-      var modal_view = new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') });
+      var modal = new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') });
       
-      this.assign('#function-execute', modal_view);
+      if (this.subviews.modal) {
+        this.subviews.modal.undelegateEvents();  
+      }
+      
+      this.subviews.modal = modal;
+      
+      this.assign('#function-execute', modal);
     }
     
     

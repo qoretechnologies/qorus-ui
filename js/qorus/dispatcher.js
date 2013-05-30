@@ -13,7 +13,7 @@ define([
       this.trigger(ev[0], e);
       this.trigger(ev.join(':'), e);
       this.trigger(e.info.cls + ':' + e.info.id, e);
-      this.trigger(e.info.cls + ':' + e.info.id + ':' + e.eventstr, e);
+      this.trigger(e.info.cls + ':' + e.info.id + ':' + ev[1], e);
       
       console.log('Dispatching ->', ev.join(':'), e.info.cls + ':' + e.info.id + ':' + e.eventstr, e);
     },
