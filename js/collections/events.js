@@ -8,11 +8,6 @@ define([
   'messenger'
 ], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
   var host = window.location.host;
-  
-  var re_up = window.location.href.match(/\/\/(.*):(.*)@/);
-  
-  var username = re_up ? re_up[1] : null;
-  var password = re_up ? re_up[2] : null;
 
   var dispatcher = Dispatcher;
   var msngr = $('#msg').messenger();
@@ -21,14 +16,27 @@ define([
     model: Model,
     log_size: 1000,
     counter: 0,
+
     initialize: function (opts) {
       _.bindAll(this, 'wsAdd', 'wsRetry', 'wsOpen', 'wsOpened');
       this.sort_key = 'time';
       this.sort_order = 'des';
       this.sort_history = [''];
-      this.wsOpen();
+      
+      this.connect();
+      
       Qorus.SortedCollection.__super__.initialize.call(this, opts);
     },
+
+    connect: function () {
+      var _this = this;
+      
+      $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
+        .done(function (response) {
+          _this.wsOpen(response);
+        });
+    },
+
     wsAdd: function (e) {
       var _this = this;
       var models = JSON.parse(e.data);
@@ -45,12 +53,9 @@ define([
       });
       this.trigger('update', this);
     },
-    wsOpen: function () {
-      if (username) {
-        var url = "ws://" + username + ':' + password + '@' + host + settings.WS_PREFIX; 
-      } else {
-        var url = "ws://" + host + settings.WS_PREFIX;         
-      }
+
+    wsOpen: function (token) {      
+      var url = "ws://" + host + '?token=' + token;
       
       try {
         this.socket = new WebSocket(url); 
@@ -63,9 +68,11 @@ define([
       }
       this.socket.onerror = this.wsError;
     },
+
     wsError: function (e) {
       console.log(e);
     },
+
     wsOpened: function () {
       this.counter++;
       this.trigger('ws-opened', this); 
@@ -78,6 +85,7 @@ define([
       
       msngr.post({ message: msg, type: "success", hideAfter: 5, id: 'ws-connection' }); 
     },
+
     wsRetry: function () {
       msngr.post({ message: "<i class=\"icon-warning-sign icon-large\"></i> Qorus instance is down!", type: "error", id: 'ws-connection' }); 
       this.trigger('ws-closed', this);
