@@ -13,15 +13,6 @@ define([
     urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
     allowedActions: ['load','unload','reset'],
-    
-    initialize: function (opts) {
-      ServiceModel.__super__.initialize.call(this, opts);
-      
-      var _this = this;
-      this.listenTo(Dispatcher, 'service:' + this.id, function (e) {
-        _this.fetch();
-      });
-    },
 
   	// get available actions
   	actions: function () {

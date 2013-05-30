@@ -85,17 +85,6 @@ define([
           view.remove();      
         }
       });
-      
-      if (_.has(this, 'collection')) {
-        _.each(this.collection.models, function (model){
-          console.log("stop listening", model);
-          model.stopListening();
-        });
-      }
-      
-      if (_.has(this, 'model')) {
-        this.model.stopListening();
-      }
     },
     
     // manages subviews

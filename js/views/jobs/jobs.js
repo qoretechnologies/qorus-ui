@@ -22,7 +22,9 @@ define([
       ListView.__super__.initialize.call(this, Collection);
       
       this.createSubviews();
-      this.bindEvents();
+      this.listenToOnce(this.collection, 'sync', this.render);
+
+      this.listenTo(Dispatcher, 'job:instance_start job:instance_stop', this.updateModels);
     },
   
     createSubviews: function () {
@@ -34,21 +36,7 @@ define([
           dispatcher: Dispatcher
       });
     },
-    
-    bindEvents: function () {
-        this.listenToOnce(this.collection, 'sync', this.render);
-    },
-    
-    unbindEvents: function () {
-      _.each(this.collection.models, function (model) {
-        model.stopListening(Dispatcher);
-      });
-    },
-    
-    clean: function () {
-      this.unbindEvents();
-    },
-    
+
     onRender: function () {
       this.assign('#job-list', this.subviews.table); 
     },

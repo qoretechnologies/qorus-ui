@@ -46,9 +46,6 @@ define([
       //     m.collection.trigger('reset');
       //   }
       // }, this);
-      
-      // sync on event change
-      this.listenTo(Dispatcher, 'workflow:' + this.id, this.fetch);
     },
     
     doAction: function (action, opts) {

@@ -56,5 +56,6 @@ define([
       }
     }
   });
+  
   return Toolbar;
 });

@@ -19,16 +19,6 @@ define([
 
     initialize: function (options) {
       Model.__super__.initialize.call(this, options);
-
-      var _this = this;
-      // sync on event change
-      this.listenTo(Dispatcher, 'job:' + this.id, function () {
-        _this.fetch();
-      });
-      
-      this.on('sync', function () {
-        console.log(this.id, _this.collection);
-      })
     },
 
     parse: function(response, options){
