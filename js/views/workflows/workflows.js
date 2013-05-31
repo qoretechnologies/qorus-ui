@@ -43,6 +43,9 @@ define([
 
       // initialize subviews
       this.createSubviews();
+      
+      // listen to events
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', this.updateModels);
     },
     
     createSubviews: function () {

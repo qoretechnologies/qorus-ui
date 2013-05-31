@@ -232,6 +232,73 @@ define([
     }
   });
   
+  Qorus.SortedWSCollection = Qorus.SortedCollection.extend({
+    model: null,
+    log_size: 1000,
+    counter: 0,
+    socket_url: null,
+
+    initialize: function (opts) {
+      _.bindAll(this);
+      this.sort_key = 'time';
+      this.sort_order = 'des';
+      this.sort_history = [''];
+      
+      this.connect();
+      
+      Qorus.SortedWSCollection.__super__.initialize.call(this, opts);
+    },
+
+    connect: function () {
+      console.log('Connecting to WS');
+      var _this = this;
+      
+      $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
+        .done(function (response) {
+          _this.token = response;
+          _this.wsOpen();
+        })
+        .fail(function () {
+          console.log('Failed to get token. Retrying.', _this);
+          _this.wsRetry();
+        });
+    },
+
+    wsOpen: function () {
+      if (this.socket_url) {
+        var url = this.socket_url + '?token=' + this.token;
+      
+        try {
+          this.socket = new WebSocket(url); 
+          this.socket.onmessage = this.wsAdd;
+          this.socket.onclose = this.wsRetry;
+          this.socket.onopen = this.wsOpened;
+          this.socket.onerror = this.wsError;
+        } catch (e) {
+          console.log(e);
+        }
+        this.socket.onerror = this.wsError;        
+      }
+    },
+
+    wsAdd: function (e) {
+      this.trigger('update', this);
+    },
+
+    wsError: function (e) {
+      console.log(e);
+    },
+
+    wsOpened: function () {
+      this.trigger('ws-opened', this); 
+    },
+
+    wsRetry: function () {
+      this.trigger('ws-closed', this);
+      setTimeout(this.connect, 5000);
+    }
+  });
+  
   _.extend(Qorus, Views);
 
   return Qorus;
