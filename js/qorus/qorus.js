@@ -263,6 +263,10 @@ define([
           _this.wsRetry();
         });
     },
+    
+    wsClose: function () {
+      this.socket.close();
+    },
 
     wsOpen: function () {
       if (this.socket_url) {

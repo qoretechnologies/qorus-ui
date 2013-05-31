@@ -509,3 +509,17 @@ aside {
 .align-middle {
   margin-top: 20px;
 }
+
+/* ellipsis */
+.table .info {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space:nowrap; 
+  width:12em; 
+  overflow:hidden;
+  max-width: 200px;
+}
+
+.table .info:hover {
+  white-space: normal;
+}

@@ -134,7 +134,7 @@
           <th>Ind</th>
           <th>Created</th>
           <th>Error Type</th>
-          <th class="description">Info</th>
+          <th class="info">Info</th>
           <th>Retry</th>
         </tr>
       </thead>
@@ -148,7 +148,7 @@
           <td><%= error.ind %></td>  
           <td><%= error.created %></td>
           <td><%= (error.business_error) ? 'Business' : 'Other' %></td>
-          <td class="description"><%= error.info %></td>
+          <td class="info"><%= error.info %></td>
           <td><%= error.retry %></td>
         </tr>
         <% }) %>
