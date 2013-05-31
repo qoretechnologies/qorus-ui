@@ -31,8 +31,8 @@ define([
     additionalEvents: {
       // "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
-      "click tr": "showDetail",
-      "click button[data-action='execute']": "openExecuteModal"
+      "click button[data-action='execute']": "openExecuteModal",
+      "click tr": "showDetail"
     },
     context: context,
     

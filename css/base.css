@@ -505,3 +505,7 @@ aside {
 #content .table-striped tr.changed td {
     background-color: #dff0d8;
 }
+
+.align-middle {
+  margin-top: 15px;
+}

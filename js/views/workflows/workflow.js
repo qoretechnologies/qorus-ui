@@ -9,9 +9,9 @@ define([
   'views/common/bottom_bar',
   'views/toolbars/orders_toolbar',
   'views/workflows/order',
-  'views/steps/function'
+  'views/workflows/modal'
 ], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, 
-  BottomBarView, OrdersToolbar, OrderView) {
+  BottomBarView, OrdersToolbar, OrderView, Modal) {
   var ModelView = Qorus.View.extend({
     url: function () {
      return '/workflows/view/' + this.opts.id; 
@@ -24,13 +24,16 @@ define([
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
-      'keyup .search-query': 'search'
+      'keyup .search-query': 'search',
+      'click .action-modal': 'openModal',
+      'click .action': 'runAction'
     },
     
     initialize: function (opts) {
       // console.log("workflow opts", this.opts);
+      _.bindAll(this);
+
       this.opts = opts;
-      _.bindAll(this, 'render');
       
       this.template = Template;
       
@@ -126,6 +129,31 @@ define([
       var dataview = this.currentDataView();
       console.log("Delegating search to ", dataview);
       dataview.search(e);
+    },
+    
+    // starts workflow
+    runAction: function (e) {
+      e.preventDefault();
+      var data = e.currentTarget.dataset;
+      if (data.id && data.action) {
+        var wfl = this.model;
+        wfl.doAction(data.action); 
+      }
+    },
+    
+    // edit action with Modal window form
+    openModal: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      var $target = $(e.currentTarget);
+      
+      if ($target.data) {
+        this.subviews.modal = new Modal({ workflow: this.model });
+        this.assign('#modal', this.subviews.modal);
+        this.subviews.modal.open();
+      }
+      
     }
   });
   return ModelView;
