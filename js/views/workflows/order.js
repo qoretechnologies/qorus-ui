@@ -80,7 +80,8 @@ define([
       
       // init popover on info text
       $('td.info').each(function () {
-        $(this).popover({ content: $(this).text(), title: "Info", placement: "left", container: "body"});
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "body", html: true});
       });
     },
     

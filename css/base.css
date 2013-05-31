@@ -517,4 +517,19 @@ aside {
   white-space:nowrap; 
   width:12em; 
   overflow:hidden;
+  max-width: 200px;
+}
+
+.popover {
+  max-width: 800px;
+}
+
+.popover-content {
+  height: 200px;
+  width: 800px;
+}
+
+.popover-content textarea {
+  height: 180px;
+  width: 760px;
 }
