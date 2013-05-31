@@ -517,9 +517,4 @@ aside {
   white-space:nowrap; 
   width:12em; 
   overflow:hidden;
-  max-width: 200px;
-}
-
-.table .info:hover {
-  white-space: normal;
 }

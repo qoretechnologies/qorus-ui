@@ -13,7 +13,8 @@ define([
       "click .nav-tabs a": 'tabToggle',
       "click .treeview li": "toggleRow",
       "click .showstep": "stepDetail",
-      "click tr.parent": "showSubSteps"
+      "click tr.parent": "showSubSteps",
+      "click td.info": "showInfo"
     },
     
     initialize: function (opts) {
@@ -75,7 +76,12 @@ define([
         if ($this.prev('.parent')) {
           $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
         }
-      });      
+      });
+      
+      // init popover on info text
+      $('td.info').each(function () {
+        $(this).popover({ content: $(this).text(), title: "Info", placement: "left", container: "body"});
+      });
     },
     
     showSubSteps: function (e) {
@@ -92,7 +98,7 @@ define([
       }
     },
     
-    stepDetail: function(e){
+    stepDetail: function(e) {
       var $target = $(e.currentTarget);
     
       if ($target.data('id')) {
