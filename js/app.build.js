@@ -18,7 +18,11 @@
       "jquery.ui": "libs/jquery.ui.min",
       "messenger": "libs/messenger/js/messenger.min",
       sprintf: "libs/sprintf-0.7-beta1",
-      "bootstrap.multiselect": "libs/bootstrap-multiselect"
+      "bootstrap.multiselect": "libs/bootstrap-multiselect",
+      "rainbow": "libs/rainbow/rainbow.min",
+      "rainbow.generic": "libs/rainbow/language/generic",
+      "rainbow.qore": "libs/rainbow/language/qore",
+
     },
     shim: { 
       "backbone": {
@@ -62,6 +66,15 @@
           	extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
           }
         }
+      },
+      "rainbow": {
+        exports: "Rainbow"
+      },
+      "rainbow.generic": {
+        deps: ['rainbow']
+      },
+      "rainbow.qore": {
+        deps: ['rainbow']
       }
     },
     removeCombined: true,

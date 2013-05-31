@@ -44,8 +44,13 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       
+      var _this = this
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
+      this.listenTo(Dispatcher, 'service:start service:error service:stop', function (e) {
+        console.log('hovno', e);
+        _this.updateModels(e);
+      });
     },
     
     createSubviews: function () {
@@ -120,7 +125,7 @@ define([
             }
             
             this.subviews.detail = detail;
-            this.subviews.detail.listenToOnce(this.subviews.detail.model, 'sync', function () {
+            detail.listenToOnce(detail.model, 'sync', function () {
               _this.assign('#service-detail .content', _this.subviews.detail);
               $('#service-detail').addClass('show');
             });

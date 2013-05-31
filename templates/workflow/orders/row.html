@@ -4,7 +4,7 @@
     <td><%= item.workflow_instanceid %></td>
     <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
     <td>
-      <% if(item.business_error ) {%>
+      <% if (item.business_error) { %>
         <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
       <% } %>
     </td>

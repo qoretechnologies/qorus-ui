@@ -55,6 +55,7 @@ define([
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
     initialize: function (opts) {
+      _.bindAll(this);
       opts = opts || {};
 
       if (_.has(opts, 'id')) {

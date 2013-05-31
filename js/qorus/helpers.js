@@ -21,9 +21,9 @@ define([
     wrapStatus: function (status) {
       return _.template(WrapLabelTpl, { value: status, label: this.getStatusCSS(status) });
     },
-    createNestedList: function (obj, css, tpl) {
+    createNestedList: function (obj, css, tpl, preformatted) {
       var tpl_html = tpl || NestedListTpl;
-      return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList });
+      return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList, preformatted: preformatted });
     },
     statusIcon: function(status) {
       if (status === true) {

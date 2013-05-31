@@ -6,8 +6,8 @@ define([
   'settings',
   'utils',
   'qorus/helpers',
-  'text!../../../templates/common/table.html',
-  'text!../../../templates/common/tablerow.html',
+  'text!../../templates/common/table.html',
+  'text!../../templates/common/tablerow.html',
 ], function ($, _, Backbone, settings, utils, Helpers, TableTpl, TableRowTpl) {
 
   $.extend($.expr[':'], {
@@ -50,6 +50,7 @@ define([
     },
     
     initialize: function (options) {
+      _.bindAll(this);
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -138,10 +139,11 @@ define([
     updateModels: function (e) {
       if (e.info) {
         var m = this.collection.get(e.info.id);
+        console.log('Updating model', m);
         m.fetch();
       }
     }
-  });
+   });
 
    var ListView = View.extend({
     defaultEvents: {
