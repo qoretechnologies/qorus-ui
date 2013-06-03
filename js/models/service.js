@@ -16,9 +16,6 @@ define([
     
     initialize: function (opts) {
       ServiceModel.__super__.initialize.call(this, opts);
-      this.on('all', function (e, ee) {
-        console.log('event', e, ee);
-      });
     },
 
   	// get available actions

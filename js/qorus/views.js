@@ -72,7 +72,11 @@ define([
         this.clean();
       }
       _.each(this.subviews, function (view) {
-        if (_.isArray(view)) {          
+        console.log('view', view);
+        if (_.isArray(view)) {
+          _.each(view, function (v) {
+            console.log(v);
+          });
           // _.each(view, function (v) {
           //   console.log("off", v);
           //   v.off();
@@ -84,7 +88,9 @@ define([
           }
           view.undelegateEvents();
           view.remove();      
-        }
+        } // else {
+//           view.off();
+//         }
       });
     },
     

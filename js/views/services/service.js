@@ -5,12 +5,13 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'models/service',
+  'views/log',
   'text!../../../templates/service/detail.html',
   'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Model, Template) {
+], function ($, _, Qorus, Dispatcher, Model, LogView, Template) {
   var ModelView = Qorus.View.extend({
     additionalEvents: {
-      "click .nav-tabs a": 'tabToggle',
+      "click .nav-tabs a": 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -27,14 +28,17 @@ define([
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       
-      this.listenTo(Dispatcher, 'service:start service:error service:stop', this.model.fetch);
+      this.listenTo(Dispatcher, 'service:start service:error service:stop', function (e, obj) {
+        console.log(e, obj);
+      });
       this.model.on('sync', this.render);
+
+      this.createSubviews();
     },
 
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
-      this.onRender();
     }, 
 
     tabToggle: function(e){
@@ -43,6 +47,24 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
+    },
+    
+    createSubviews: function () {
+      var url = '/service/' + this.model.id;
+      this.subviews.log = new LogView({ socket_url: url });
+    },
+    
+    onRender: function () {
+      this.assign('#log', this.subviews.log);
+    },
+    
+    clean: function () {
+      console.log("Cleaning", this, this.subviews, this.subviews.log, this.subviews.log.sss);
+      if (this.subviews.log) {
+        this.subviews.log.clean();
+      }
+      this.undelegateEvents();
+      this.stopListening();
     }
     
   });

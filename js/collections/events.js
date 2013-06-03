@@ -18,14 +18,11 @@ define([
     socket_url: "ws://" + host,
 
     initialize: function (opts) {
-      _.bindAll(this, 'wsAdd', 'wsRetry', 'wsOpen', 'wsOpened', 'connect');
       this.sort_key = 'time';
       this.sort_order = 'des';
       this.sort_history = [''];
       
-      this.connect();
-      
-      Qorus.SortedCollection.__super__.initialize.call(this, opts);
+      Collection.__super__.initialize.call(this, opts);
     },
 
     wsAdd: function (e) {

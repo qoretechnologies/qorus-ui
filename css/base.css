@@ -533,3 +533,8 @@ aside {
   height: 180px;
   width: 760px;
 }
+
+.row-fluid textarea.log {
+  min-height: 400px;
+  height: 100%;
+}

@@ -217,6 +217,7 @@ define([
       this.socket = new WebSocket("ws://" + host);
       this.socket.onmessage = this.wsAdd;
     },
+    
     wsAdd: function (e) {
       var _this = this;
       var models = JSON.parse(e.data);
@@ -226,14 +227,15 @@ define([
         _this.add(mdl);
       });
     },
+    
     sync: function () {
     },
+    
     fetch: function () {
     }
   });
   
   Qorus.SortedWSCollection = Qorus.SortedCollection.extend({
-    model: null,
     log_size: 1000,
     counter: 0,
     socket_url: null,
@@ -245,12 +247,9 @@ define([
       this.sort_history = [''];
       
       this.connect();
-      
-      Qorus.SortedWSCollection.__super__.initialize.call(this, opts);
     },
 
     connect: function () {
-      console.log('Connecting to WS');
       var _this = this;
       
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
@@ -265,7 +264,11 @@ define([
     },
     
     wsClose: function () {
-      this.socket.close();
+      if (this.socket) {
+        console.log("Closing WS", this.socket_url, this.socket);
+        this.socket.onclose = function () {};
+        this.socket.close(); 
+      }
     },
 
     wsOpen: function () {
@@ -273,6 +276,7 @@ define([
         var url = this.socket_url + '?token=' + this.token;
       
         try {
+          console.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
@@ -281,7 +285,7 @@ define([
         } catch (e) {
           console.log(e);
         }
-        this.socket.onerror = this.wsError;        
+        this.socket.onerror = this.wsError; 
       }
     },
 
@@ -300,6 +304,12 @@ define([
     wsRetry: function () {
       this.trigger('ws-closed', this);
       setTimeout(this.connect, 5000);
+    },
+    
+    sync: function () {
+    },
+    
+    fetch: function () {
     }
   });
   

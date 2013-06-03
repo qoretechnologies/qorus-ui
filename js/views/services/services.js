@@ -47,10 +47,7 @@ define([
       var _this = this
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
-      this.listenTo(Dispatcher, 'service:start service:error service:stop', function (e) {
-        console.log('hovno', e);
-        _this.updateModels(e);
-      });
+      this.listenTo(Dispatcher, 'service:start service:error service:stop', this.updateModels);
     },
     
     createSubviews: function () {
@@ -115,21 +112,21 @@ define([
 
           // set current row id
           $detail.data('id', $target.data('id'));
+
+          // clean prev view
+          if (this.subviews.detail){
+            this.subviews.detail.clean();
+          }
           
           // init detail view
           var detail = new ServiceView({ id: $target.data('id'), context: this.context });
+                      
+          this.subviews.detail = detail;
+          this.assign('#service-detail .content', detail);
           
-          if (detail != this.subviews.detail) {
-            if (this.subviews.detail){
-             this.subviews.detail.undelegateEvents();
-            }
-            
-            this.subviews.detail = detail;
-            detail.listenToOnce(detail.model, 'sync', function () {
-              _this.assign('#service-detail .content', _this.subviews.detail);
-              $('#service-detail').addClass('show');
-            });
-          }
+          detail.listenTo(detail.model, 'sync', function () {
+            $('#service-detail').addClass('show');
+          });
           
         }
       }

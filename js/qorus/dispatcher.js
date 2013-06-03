@@ -21,7 +21,7 @@ define([
       var _this = this;
       _.each(events, function(evt){
         _this.trigger(evt, e);
-        console.log("Dispatching", evt);
+        // console.log("Dispatching", evt);
       })
     },
     eventParse: function(name) {
