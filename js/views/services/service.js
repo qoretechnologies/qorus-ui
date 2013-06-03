@@ -50,7 +50,7 @@ define([
     },
     
     createSubviews: function () {
-      var url = '/service/' + this.model.id;
+      var url = '/services/' + this.model.id;
       this.subviews.log = new LogView({ socket_url: url });
     },
     
