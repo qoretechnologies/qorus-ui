@@ -24,6 +24,12 @@ define([
       "scheduled": "info",
       "success": "success"
     },
+    action_icons: {
+      "unload": "remove-circle",
+      "load": "off",
+      "reset": "refresh"
+    },
+    
     parseDate: function (date, format) {
       var d;
       if (format===undefined){
@@ -36,9 +42,11 @@ define([
             
       return d;
     },
+    
     formatDate: function (date) {
         return date.format(settings.DATE_DISPLAY);
     },
+    
     getNextDate: function (cron_time) {
         var next = later().getNext(cronParser().parse(cron_time));
             

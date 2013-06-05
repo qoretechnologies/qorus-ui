@@ -49,13 +49,20 @@ define([
     
     statusActions: function (status, data, tpl) {
       var tpl_html = tpl || StatusActionTpl;
-      var context = _.extend(data, { status: status });
+      var context = _.extend(this, data, { status: status });
     
       // exted this context
       if (data.obj) {
         _.extend(context, data);
       }
       return _.template(tpl_html, context);
+    },
+    
+    getActionIcon: function (action) {
+      if (_.has(utils.action_icons, action)) {
+        return "icon-" + utils.action_icons[action];
+      }
+      return '';
     }
     
   }
