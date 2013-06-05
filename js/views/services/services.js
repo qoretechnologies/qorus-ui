@@ -9,9 +9,10 @@ define([
   'text!../../../templates/service/row.html',
   'views/services/service',
   'views/services/modal',
+  'views/toolbars/services_toolbar',
   'sprintf'
 ], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, 
-  RowTpl, ServiceView, ModalView){
+  RowTpl, ServiceView, ModalView, Toolbar){
   
   var context = {
       action_css: {
@@ -30,7 +31,8 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
-      "click a[data-action] button[data-action]": "runAction",
+      "click a[data-action]": "runAction",
+      "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click tr": "showDetail"
     },
@@ -59,10 +61,12 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       });
+      this.subviews.toolbar = new Toolbar();
     },
 
     onRender: function () {
       this.assign('#service-list', this.subviews.table);
+      this.assign('#service-toolbar', this.subviews.toolbar);
       $('[data-toggle="tooltip"]').tooltip();
       
       // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
@@ -85,6 +89,7 @@ define([
       e.stopPropagation();
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
+      console.log('running action', data.id, data.action);
       if (data.id && data.action) {
         $target.text(data.msg.toUpperCase());
         var inst = this.collection.get(data.id);
