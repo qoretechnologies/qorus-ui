@@ -27,15 +27,13 @@ define([
 
     appendText: function (t, text) {
       // this.messages += text;
-      console.log(t, text);
       $('textarea.log', this.$el).val(function (i, val) {
-        return val + text + "\n";
+        return val + text;
       });
       // console.log(this.messages);
     },
     
     clean: function () {
-      console.log("Cleaning log", this.collection);
       this.collection.wsClose();
       this.stopListening();
       this.undelegateEvents();

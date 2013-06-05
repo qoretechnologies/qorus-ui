@@ -12,17 +12,10 @@
           <i class="icon-user" data-toggle="tooltip" title="User"></i>
           <% } %>
       </td>
-      <td class="status"><span class="label <%= getLabel(item.status) %>"><%= item.status %></span></td>
+      <td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %></td>
       <td class="threads"><%= item.threads %></td>                
       <td class="name"><strong><%= item.name %></strong></td>
       <td class="version"><%= item.version %></td>
       <td class="description"><%= item.desc %></td>
       <td class="autostart"><%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
-      <td>
-      	<div class="btn-group">
-            <% _.each(orig_item.actions(), function(action) { %>
-              <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-msg="<%= action %>ing..." data-action="<%= action %>"><%= action.toUpperCase() %></button>
-            <% }); %>
-      	</div>
-      </td>
   </tr>

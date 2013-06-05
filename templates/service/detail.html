@@ -1,6 +1,9 @@
 <% var orig_item = obj.item; %>
 <% var item = obj.item.toJSON(); %>
-<h3><%= item.name %> <small><%= item.version %></small> <span class="label <%= status_label[item.status] %>"><%= item.status %></span></h3>
+<div class="btn-toolbar">
+    <h3><%= item.name %> <small><%= item.version %></small></h3>
+    <%= statusActions(item.status, { status_label: getLabel(status_label), id: item.id, actions: orig_item.actions() }) %>
+</div>
 <ul class="nav nav-tabs">
     <li class="active"><a href="#info">Info</a></li>
     <li><a href="#methods">Methods</a></li>
@@ -17,14 +20,9 @@
     <div class="tab-pane active" id="info">
         <p><%= item.description %></p>
         <p>Type: <%= item.type %></p>
-        <p>Autostart: <%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></p>
-        <p>Actions: 
-			<div class="btn-group">
-	            <% _.each(orig_item.actions(), function(action) { %>
-	              <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.id %>" data-msg="<%= action %>ing..." data-action="<%= action %>"><%= action.toUpperCase() %></button>
-	            <% }); %>
-			</div>
-		</p>
+        <p>
+            <div>Autostart: <%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></div>
+        </p>
     </div>
     <div class="tab-pane" id="methods">
         <table class="table table-striped">

@@ -11,7 +11,8 @@ define([
 ], function ($, _, Qorus, Dispatcher, Model, LogView, Template) {
   var ModelView = Qorus.View.extend({
     additionalEvents: {
-      "click .nav-tabs a": 'tabToggle'
+      "click .nav-tabs a": "tabToggle",
+      "close": "close"
     },
     
     initialize: function (opts) {
@@ -47,6 +48,8 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
+      console.log(active, $target);
+      this.active_tab = active;
     },
     
     createSubviews: function () {
@@ -65,6 +68,14 @@ define([
       }
       this.undelegateEvents();
       this.stopListening();
+    },
+    
+    close: function () {
+      this.$el.parent()
+        .removeClass('show')
+        .data('id', null);
+
+      this.clean();
     }
     
   });

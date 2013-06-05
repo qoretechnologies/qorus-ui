@@ -20,20 +20,21 @@ define([
         'unload': 'btn-danger'
       },
       status_label: {
-        'loaded': 'label-warning',
+        'loaded': 'warning',
         'unloaded': '',
-        'running': 'label-success'
+        'running': 'success'
       }
   };
   
   
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
-      // "click button[data-option]": "setOption",
-      "click button[data-action!='execute']": "runAction",
+      "click button[data-option]": "setOption",
+      "click a[data-action] button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click tr": "showDetail"
     },
+    
     context: context,
     
     title: "Services",
@@ -74,10 +75,10 @@ define([
     setOption: function (e) {
       var data = $(e.currentTarget).data();
       var svc = this.collection.get(data.id);
-      var opts = {};
+
+      var opts = data.action ? { 'action': data.action } : {};
       opts[data.option] = data.value;
       $.put(svc.url(), opts, null, 'application/json');
-      this.collection.fetch();
     },
 	
     runAction: function (e) {
@@ -92,20 +93,22 @@ define([
     },
     
     showDetail: function (e) {
+      console.log(e);
       var _this = this;
       var $target = $(e.currentTarget);
       var $detail = $('#service-detail');
       var top = $target.offset().top; // + $target.height()/2;
       
-      if ($target.data('id')) {
+      if ($target.data('id') && e.target.localName == "td") {
         e.stopPropagation();
         
         // remove info class on each row
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
-           $("#service-detail").removeClass('show'); 
-           $detail.data('id', null);
+          if (this.subviews.detail) {
+            this.subviews.detail.close();
+          }
         } else {
           // add info class to selected row
           $target.addClass('info');
@@ -156,7 +159,6 @@ define([
       
       this.assign('#function-execute', modal);
     }
-    
     
   });
 

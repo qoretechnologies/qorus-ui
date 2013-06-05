@@ -480,6 +480,7 @@ aside {
 
 .pageslide .content {
     padding: 40px 20px;
+    height: 90%;
 }
 .modal.wider {
   margin-left: -360px;
@@ -532,6 +533,14 @@ aside {
 .popover-content textarea {
   height: 180px;
   width: 760px;
+}
+
+#service-detail .tab-content {
+    height: 80%;
+}
+
+#service-detail .tab-pane {
+    height: 100%;
 }
 
 .row-fluid textarea.log {
