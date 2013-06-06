@@ -12,7 +12,8 @@ define([
   var ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
-      "close": "close"
+      "click .nav-tabs a.log": "scroll",
+      "click a.close-detail": "close"
     },
     
     initialize: function (opts) {
@@ -70,12 +71,21 @@ define([
       this.stopListening();
     },
     
-    close: function () {
+    close: function (e) {
+      if (e) {
+        e.preventDefault();  
+      }
+      
       this.$el.parent()
         .removeClass('show')
         .data('id', null);
+      $('.info').removeClass('info');
 
       this.clean();
+    },
+    
+    scroll: function () {
+      this.subviews.log.scroll();
     }
     
   });

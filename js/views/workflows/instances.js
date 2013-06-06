@@ -10,12 +10,14 @@ define([
     additionalEvents: {
 		  'click button[data-action]': 'runAction',
     },
+    
     initialize: function(opts){
   	  _.bindAll(this, 'render');
       this.collection = new Collection(opts);
   	  this.collection.on('sync', this.render);
   	  this.collection.fetch();
     },
+    
   	runAction: function(e){
   		e.preventDefault();
       var data = e.currentTarget.dataset;

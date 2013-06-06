@@ -4,12 +4,13 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/orders',
+  'views/toolbars/orders_toolbar',
   'text!../../../templates/workflow/orders.html',
   'text!../../../templates/workflow/orders/table.html',
   'text!../../../templates/workflow/orders/row.html',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
+], function($, _, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
   var context = {
     action_css: {
       'block': 'btn-inverse',
@@ -31,6 +32,7 @@ define([
     },
     
     initialize: function (opts) {
+      console.log("Options", opts);
       opts = opts || {};
 
       _.bindAll(this);
@@ -45,6 +47,7 @@ define([
         this.date = opts.date;
       }
       
+      _.extend(this.options, opts)
       _.extend(this.context, opts);
       
       var _this = this;
@@ -63,6 +66,9 @@ define([
           context: { url: this.url },
           dispatcher: Dispatcher
       });
+      // this should be placed inside instances/orders view
+      console.log(this.options);
+      this.subviews.toolbar = new OrdersToolbar(this.options);
     },
     
     runAction: function (e) {
@@ -104,9 +110,13 @@ define([
     },
     
     onRender: function () {
-      this.assign('#order-list', this.subviews.table);
-      this.$el.parent('.pane').scroll(this.scroll);
-      $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+      if (this.collection.length > 0) {
+        this.subviews.toolbar.updateUrl(this.url, this.options.statuses);
+        this.assign('#toolbar', this.subviews.toolbar);
+        this.assign('#order-list', this.subviews.table);
+        this.$el.parent('.pane').scroll(this.scroll);
+        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });        
+      }
     },
     
     helpers: {

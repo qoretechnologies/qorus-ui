@@ -26,11 +26,20 @@ define([
     },
 
     appendText: function (t, text) {
-      // this.messages += text;
       $('textarea.log', this.$el).val(function (i, val) {
         return val + text;
       });
-      // console.log(this.messages);
+      this.scroll();
+    },
+    
+    scroll: function () {
+      $('textarea.log', this.$el).scrollTop(function (v) {
+        console.log(this.scrollHeight - this.scrollTop === this.clientHeight || this.scrollTop == 0, this.scrollHeight, 
+          this.scrollTop, this.clientHeight);
+        // if (this.scrollHeight - this.scrollTop === this.clientHeight || this.scrollTop == 0) {
+          return this.scrollHeight;
+        // }
+      });
     },
     
     clean: function () {

@@ -1,5 +1,8 @@
 <% var orig_item = obj.item; %>
 <% var item = obj.item.toJSON(); %>
+<div class="close-top-right">
+  <a href="#" class="close-detail"><i class="icon icon-remove"></i> Close</a>
+</div>
 <div class="btn-toolbar">
     <h3><%= item.name %> <small><%= item.version %></small></h3>
     <%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %>

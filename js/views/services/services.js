@@ -98,7 +98,6 @@ define([
     },
     
     showDetail: function (e) {
-      console.log(e);
       var _this = this;
       var $target = $(e.currentTarget);
       var $detail = $('#service-detail');

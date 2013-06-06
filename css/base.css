@@ -419,7 +419,7 @@ aside {
     position: fixed;
     top: 0;
     height: 100%;
-    z-index: 1000;
+    z-index: 1022;
     
     /* Specify the width of your pageslide here */
     max-width: 80%;
@@ -546,4 +546,10 @@ aside {
 .row-fluid textarea.log {
   min-height: 400px;
   height: 100%;
+}
+
+.close-top-right {
+  position: absolute;
+  top: 60px;
+  right: 20px;
 }

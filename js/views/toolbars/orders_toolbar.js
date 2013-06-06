@@ -68,8 +68,8 @@ define([
     
     // check the statuses for given status
     hasStatus: function (status){
-      if (this.options.filter){
-        return _.indexOf(this.options.filter.split(','), status) > -1;        
+      if (this.options.statuses){
+        return _.indexOf(this.options.statuses.split(','), status) > -1;        
       }
       return false;
     },
