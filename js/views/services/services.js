@@ -91,7 +91,7 @@ define([
       var data = e.currentTarget.dataset;
       console.log('running action', data.id, data.action);
       if (data.id && data.action) {
-        $target.text(data.msg.toUpperCase());
+        // $target.text(data.msg.toUpperCase());
         var inst = this.collection.get(data.id);
         inst.doAction(data.action); 
       }

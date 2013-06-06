@@ -17,5 +17,5 @@
       <td class="name"><strong><%= item.name %></strong></td>
       <td class="version"><%= item.version %></td>
       <td class="description"><%= item.desc %></td>
-      <td class="autostart"><%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
+      <td class="autostart"><%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
   </tr>

@@ -266,7 +266,7 @@ define([
     wsClose: function () {
       if (this.socket) {
         console.log("Closing WS", this.socket_url, this.socket);
-        this.socket.onclose = function () {};
+        this.socket.onclose = function (e) { console.log('Closed', e); };
         this.socket.close(); 
       }
     },
