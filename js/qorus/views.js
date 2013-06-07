@@ -425,9 +425,9 @@ define([
       
       // update row on model change
       this.listenTo(this.model, 'change', this.update);
-      this.listenTo(this.model, 'all', function (e, ee) {
-        console.log(e, ee);
-      });
+      // this.listenTo(this.model, 'all', function (e, ee) {
+      //   console.log(e, ee);
+      // });
       
       this.render();
     },

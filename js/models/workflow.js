@@ -46,6 +46,9 @@ define([
       //     m.collection.trigger('reset');
       //   }
       // }, this);
+      
+      // listen to events
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', this.fetch);
     },
     
     doAction: function (action, opts) {

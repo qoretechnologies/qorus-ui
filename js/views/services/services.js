@@ -124,7 +124,7 @@ define([
           
           // init detail view
           var detail = new ServiceView({ model: this.collection.get($target.data('id')), context: this.context });
-                      
+
           this.subviews.detail = detail;
           this.assign('#service-detail .content', detail);
           $('#service-detail').addClass('show');

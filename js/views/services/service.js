@@ -36,8 +36,7 @@ define([
         this.model = new Model();
       }
       
-      this.model.on('sync', this.render);
-      this.createSubviews();
+      this.model.on('change', this.render);
     },
 
     render: function (ctx) {
@@ -51,17 +50,18 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
-      console.log(active, $target);
-      this.active_tab = active;
-    },
-    
-    createSubviews: function () {
-      var url = '/services/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url });
+
+      this.active_tab = $target.attr('href');
     },
     
     onRender: function () {
+      var url = '/services/' + this.model.id;
+      this.subviews.log = new LogView({ socket_url: url });
       this.assign('#log', this.subviews.log);
+      
+      if (this.active_tab) {
+        $('a[href='+ this.active_tab + ']').tab('show');
+      }
     },
     
     clean: function () {
