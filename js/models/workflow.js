@@ -48,7 +48,12 @@ define([
       // }, this);
       
       // listen to events
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', this.fetch);
+      var _this = this;
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
+        if (e.info.id == _this.id) {
+          _this.fetch();
+        }
+      });
     },
     
     doAction: function (action, opts) {
