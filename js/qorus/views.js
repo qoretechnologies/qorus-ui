@@ -74,9 +74,9 @@ define([
       _.each(this.subviews, function (view) {
         console.log('view', view);
         if (_.isArray(view)) {
-          _.each(view, function (v) {
-            console.log(v);
-          });
+          // _.each(view, function (v) {
+          //   v.off();
+          // });
           // _.each(view, function (v) {
           //   console.log("off", v);
           //   v.off();
@@ -394,6 +394,16 @@ define([
       //     }
       //   })
       // }
+    },
+    
+    clean: function () {
+      console.log("Cleaning table");
+      _.each(this.subviews, function (sbv) {
+        if (_.has(sbv, "clean")) {
+          sbv.clean();
+          sbv.remove();
+        }
+      })
     }
   });
 
@@ -461,6 +471,12 @@ define([
       setTimeout(function() {
         _this.parent.$el.find('[data-id=' + _this.model.id + ']').removeClass('changed');
       }, 5000);
+    },
+    
+    clean: function () {
+      console.log("Cleaning row");
+      this.stopListening();
+      this.undelegateEvents();
     }
   });
 

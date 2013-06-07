@@ -49,6 +49,14 @@ define([
       
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
+      
+      var _this = this;
+      this.listenTo(Dispatcher, 'service:start service:stop service:error', function (e) {
+        var m = _this.collection.get(e.info.id);
+        if (m) {
+          m.fetch();
+        }
+      });
     },
     
     createSubviews: function () {

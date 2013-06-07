@@ -43,6 +43,14 @@ define([
 
       // initialize subviews
       this.createSubviews();
+      
+      var _this = this;
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
+        var m = _this.collection.get(e.info.id);
+        if (m) {
+          m.fetch();
+        }
+      });
     },
     
     createSubviews: function () {

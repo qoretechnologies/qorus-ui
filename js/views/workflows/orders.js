@@ -66,8 +66,8 @@ define([
           context: { url: this.url },
           dispatcher: Dispatcher
       });
+
       // this should be placed inside instances/orders view
-      console.log(this.options);
       this.subviews.toolbar = new OrdersToolbar(this.options);
     },
     

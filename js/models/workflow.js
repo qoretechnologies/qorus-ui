@@ -47,13 +47,14 @@ define([
       //   }
       // }, this);
       
+      // changed add to views to simpler management
       // listen to events
-      var _this = this;
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
-        if (e.info.id == _this.id) {
-          _this.fetch();
-        }
-      });
+      // var _this = this;
+      // this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
+      //   if (e.info.id == _this.id) {
+      //     _this.fetch();
+      //   }
+      // });
     },
     
     doAction: function (action, opts) {
