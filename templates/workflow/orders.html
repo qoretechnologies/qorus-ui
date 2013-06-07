@@ -2,3 +2,8 @@
 <div id="order-list">
     <p>No data found</p>
 </div>
+<% if (obj.page) { %>
+    <% if (obj.page.has_next) { %>
+<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>
+    <% } %>
+<% } %>

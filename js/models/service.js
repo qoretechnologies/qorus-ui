@@ -16,6 +16,16 @@ define([
     
     initialize: function (opts) {
       ServiceModel.__super__.initialize.call(this, opts);
+
+      // listen to dispatcher
+      var _this = this;
+      this.listenTo(Dispatcher, "service:start service:stop service:error", function (e) {
+        // fetch only if event.info.id equals this model
+        if (e.info.id == _this.id) {
+          console.log('Updating/fetching', _this.id, _this);
+          _this.fetch();
+        }
+      });
     },
 
   	// get available actions

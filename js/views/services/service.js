@@ -27,14 +27,16 @@ define([
       }
       
       // init model
-      this.model = new Model({ id: opts.id });
-      this.model.fetch();
+      if (_.has(opts, "model")) {
+        this.model = opts.model;
+      } else if (_.has(opts, "id")) {
+        this.model = new Model({ id: opts.id });
+        this.model.fetch();        
+      } else {
+        this.model = new Model();
+      }
       
-      this.listenTo(Dispatcher, 'service:start service:error service:stop', function (e, obj) {
-        console.log(e, obj);
-      });
       this.model.on('sync', this.render);
-
       this.createSubviews();
     },
 

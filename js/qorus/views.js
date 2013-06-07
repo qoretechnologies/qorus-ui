@@ -366,6 +366,13 @@ define([
       });
     },
     
+    appendRows: function (models) {
+      var tv = this;
+      _.each(models, function (m) {
+        tv.addRow(m);
+      });
+    },
+    
     onRender: function () {
       this.createRows();
     },
@@ -380,13 +387,13 @@ define([
       this.subviews.rows[m.id] = row;
 
       // TODO: move to model itself???
-      if (this.dispatcher) {
-        row.listenTo(this.dispatcher, row.model._name, function (e) {
-          if (e.info.id == row.model.id) {
-            row.model.fetch();
-          }
-        })
-      }
+      // if (this.dispatcher) {
+      //   row.listenTo(this.dispatcher, row.model._name, function (e) {
+      //     if (e.info.id == row.model.id) {
+      //       row.model.fetch();
+      //     }
+      //   })
+      // }
     }
   });
 
@@ -417,7 +424,10 @@ define([
       }
       
       // update row on model change
-      this.model.on('sync', this.update);
+      this.listenTo(this.model, 'change', this.update);
+      this.listenTo(this.model, 'all', function (e, ee) {
+        console.log(e, ee);
+      });
       
       this.render();
     },
@@ -431,9 +441,23 @@ define([
     
     update: function(ctx) {
       var _this = this;
+      var $previous_el = this.parent.$el.find('[data-id=' + this.model.id + ']');
+      var css_classes = $previous_el.attr('class').split(/\s+/);
+      
       this.render();
-      $('tr', this.$el).addClass('changed');
-      this.parent.$el.find('[data-id=' + this.model.id + ']').replaceWith(this.$el.html());
+      
+      var $el = this.$el.find('tr');
+      
+      console.log(this, $el);
+      
+      // restore previous classes
+      _.each(css_classes, function (cls) {
+        $el.addClass(cls);
+      })
+      
+      $el.addClass('changed');
+      
+      $previous_el.replaceWith($el);
       setTimeout(function() {
         _this.parent.$el.find('[data-id=' + _this.model.id + ']').removeClass('changed');
       }, 5000);

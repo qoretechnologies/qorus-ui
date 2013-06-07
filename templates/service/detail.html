@@ -1,5 +1,8 @@
 <% var orig_item = obj.item; %>
-<% var item = obj.item.toJSON(); %>
+<% 
+  var item = obj.item.toJSON(); 
+  item.id = item.serviceid;
+%>
 <div class="close-top-right">
   <a href="#" class="close-detail"><i class="icon icon-remove"></i> Close</a>
 </div>

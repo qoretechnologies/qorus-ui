@@ -47,10 +47,8 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       
-      var _this = this
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
-      this.listenTo(Dispatcher, 'service:start service:error service:stop', this.updateModels);
     },
     
     createSubviews: function () {
@@ -86,10 +84,9 @@ define([
     },
 	
     runAction: function (e) {
-      e.stopPropagation();
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
-      console.log('running action', data.id, data.action);
+      
       if (data.id && data.action) {
         // $target.text(data.msg.toUpperCase());
         var inst = this.collection.get(data.id);
@@ -103,7 +100,7 @@ define([
       var $detail = $('#service-detail');
       var top = $target.offset().top; // + $target.height()/2;
       
-      if ($target.data('id') && e.target.localName == "td") {
+      if ($target.data('id') && !e.target.localName.match(/(button|a)/)) {
         e.stopPropagation();
         
         // remove info class on each row
@@ -126,14 +123,15 @@ define([
           }
           
           // init detail view
-          var detail = new ServiceView({ id: $target.data('id'), context: this.context });
+          var detail = new ServiceView({ model: this.collection.get($target.data('id')), context: this.context });
                       
           this.subviews.detail = detail;
           this.assign('#service-detail .content', detail);
+          $('#service-detail').addClass('show');
           
-          detail.listenTo(detail.model, 'sync', function () {
-            $('#service-detail').addClass('show');
-          });
+          // detail.listenTo(detail.model, 'sync', function () {
+          //   $('#service-detail').addClass('show');
+          // });
           
         }
       }
