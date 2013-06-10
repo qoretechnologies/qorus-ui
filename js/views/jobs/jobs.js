@@ -7,7 +7,8 @@ define([
   'text!../../../templates/job/list.html',
   'text!../../../templates/job/table.html',
   'text!../../../templates/job/row.html',
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
+  'views/toolbars/jobs_toolbar'
+], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar){
 
   var ListView = Qorus.ListView.extend({
     title: "Jobs",
@@ -35,10 +36,12 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       });
+      this.subviews.toolbar = new Toolbar();
     },
 
     onRender: function () {
       this.assign('#job-list', this.subviews.table); 
+      this.assign('#job-toolbar', this.subviews.toolbar);
     },
     
     runAction: function (e) {
