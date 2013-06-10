@@ -12,7 +12,6 @@ define([
   var ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
-      "click .nav-tabs a.log": "scroll",
       "click a.close-detail": "close"
     },
     
@@ -84,10 +83,6 @@ define([
       $('.info').removeClass('info');
 
       this.clean();
-    },
-    
-    scroll: function () {
-      this.subviews.log.scroll();
     }
     
   });

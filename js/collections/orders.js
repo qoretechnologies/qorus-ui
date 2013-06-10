@@ -19,7 +19,7 @@ define([
         this.url = '/rest/orders/';
       }
 
-      if (this.opts.statuses == 'all') {
+      if (this.opts.statuses == 'all' || !this.opts.statuses) {
         delete this.opts.statuses;
       }
       

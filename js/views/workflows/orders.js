@@ -103,6 +103,7 @@ define([
     
     scroll: function () {
       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+      console.log('scrolling');
       if (pos < 100) {
         this.nextPage(); 
         this.$el.children('button[data-pagination]').html("Loading...");

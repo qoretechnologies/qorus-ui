@@ -355,6 +355,10 @@ define([
       if (_.has(opts, 'dispatcher')) {
         this.dispatcher = opts.dispatcher;
       }
+      
+      this.collection.on('sync', function (e, ee) {
+        console.log(e, ee);
+      });
     },
     
     createRows: function () {

@@ -24,6 +24,10 @@ define([
       this.collection = new Collection({ socket_url: opts.socket_url });
       this.collection.on('message', this.appendText);
     },
+    
+    onRender: function () {
+      this.scroll();
+    },
 
     appendText: function (t, text) {
       $('textarea.log', this.$el).val(function (i, val) {

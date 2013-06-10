@@ -8,9 +8,10 @@ define([
   'views/workflows/orders',
   'views/common/bottom_bar',
   'views/workflows/order',
-  'views/workflows/modal'
+  'views/workflows/modal',
+  'views/log'
 ], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, 
-  BottomBarView, OrderView, Modal) {
+  BottomBarView, OrderView, Modal, LogView) {
   var ModelView = Qorus.View.extend({
     url: function () {
      return '/workflows/view/' + this.opts.id; 
@@ -25,7 +26,8 @@ define([
       'submit .form-search': 'search',
       'keyup .search-query': 'search',
       'click .action-modal': 'openModal',
-      'click .action': 'runAction'
+      'click .action': 'runAction',
+      'click .tab': 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -58,6 +60,7 @@ define([
       var dataview = this.currentDataView();
       this.assign('#instances', dataview);
       this.assign('#bottom-bar', this.subviews.bottombar);
+      this.assign('#log', this.subviews.log);
     },
     
     currentDataView: function () {
@@ -78,6 +81,8 @@ define([
           date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
         });
       this.subviews.bottombar = new BottomBarView({});
+      var url = '/workflows/' + this.model.id;
+      this.subviews.log = new LogView({ socket_url: url });
     },
     
     // opens the bottom bar with detail info about the Instance/Order
@@ -146,8 +151,28 @@ define([
         this.assign('#modal', this.subviews.modal);
         this.subviews.modal.open();
       }
-      
+
+    },
+    
+    tabToggle: function(e){
+      var $target = $(e.currentTarget);
+      e.preventDefault();
+
+      var active = $('.tab-pane.active');
+      $target.tab('show');
+
+      this.active_tab = $target.attr('href');
+    },
+    
+    clean: function () {
+      console.log("Cleaning", this, this.subviews, this.subviews.log, this.subviews.log.sss);
+      if (this.subviews.log) {
+        this.subviews.log.clean();
+      }
+      this.undelegateEvents();
+      this.stopListening();
     }
+    
   });
   return ModelView;
 });
