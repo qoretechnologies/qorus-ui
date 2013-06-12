@@ -9,8 +9,6 @@
       <th>Interval</th>      
       <th>Job</th>
       <th>Service</th>
-      <th>Workflow</th>
-      <th>Startup Only</th>
       <th>Value</th>
     </tr>
   </thead>
@@ -27,7 +25,6 @@
     <td><%= statusIcon(it.job) %></td>
     <td><%= statusIcon(it.service) %></td>
     <td><%= statusIcon(it.workflow) %></td>
-    <td><%= it["startup-only"] %></td>
     <td class="text-left"><%= it.value %></td>
   </tr>
 <% }) %>
