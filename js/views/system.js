@@ -31,12 +31,14 @@ define([
     
     createSubviews: function () {
       this.subviews.log = new LogView({ socket_url: "/system", parent: this });
+      this.subviews.audit = new LogView({ socket_url: "/audit", parent: this });
       this.subviews.options = new OptionsView();
     },
     
     onRender: function () {
       this.assign('#options', this.subviews.options);
-      this.assign('#log', this.subviews.log)
+      this.assign('#log', this.subviews.log);
+      this.assign('#audit-log', this.subviews.audit);
     },
      
     tabToggle: function(e){
