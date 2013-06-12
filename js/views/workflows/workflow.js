@@ -82,7 +82,7 @@ define([
         });
       this.subviews.bottombar = new BottomBarView({});
       var url = '/workflows/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url });
+      this.subviews.log = new LogView({ socket_url: url, parent: this });
     },
     
     // opens the bottom bar with detail info about the Instance/Order

@@ -9,12 +9,16 @@ define([
 ], function ($, _, Qorus, Dispatcher, Collection, Template) {
   var View = Qorus.View.extend({
     messages: "",
+    // additionalEvents: {
+    //   'click a': function (e) { console.log('Log tab', e); }
+    // },
     
     initialize: function (opts) {
       this.opts = opts;
       _.bindAll(this);
       
       this.template = Template;
+      this.parent = opts.parent;
       
       if (_.has(opts, 'context')) {
         _.extend(this.context, opts.context);
@@ -23,13 +27,23 @@ define([
       // init model
       this.collection = new Collection({ socket_url: opts.socket_url });
       this.collection.on('message', this.appendText);
+      
     },
     
     onRender: function () {
-      this.scroll();
+      // hack
+      var lv = this;
+      $('a[href=#log]').click(function (e) {
+        _.defer(lv.scroll);
+      });
     },
 
+    isScrollable: function () {
+      return (this.$el.find('#log-scroll').val() == 'on');
+    },
+    
     appendText: function (t, text) {
+      var _this = this;
       $('textarea.log', this.$el).val(function (i, val) {
         return val + text;
       });
@@ -37,13 +51,11 @@ define([
     },
     
     scroll: function () {
-      $('textarea.log', this.$el).scrollTop(function (v) {
-        console.log(this.scrollHeight - this.scrollTop === this.clientHeight || this.scrollTop == 0, this.scrollHeight, 
-          this.scrollTop, this.clientHeight);
-        // if (this.scrollHeight - this.scrollTop === this.clientHeight || this.scrollTop == 0) {
+      if (this.isScrollable()) {
+        $('textarea.log', this.$el).scrollTop(function (v) {
           return this.scrollHeight;
-        // }
-      });
+        });        
+      }
     },
     
     clean: function () {
