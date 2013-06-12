@@ -39,7 +39,6 @@ define([
       _.each(opts, function(opt) {
         options[opt.name] = opt.desc;
       });
-      
       return options;
     }
   });

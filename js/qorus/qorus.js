@@ -241,12 +241,18 @@ define([
     log_size: 1000,
     counter: 0,
     socket_url: null,
+    auto_reconnect: true,
 
     initialize: function (opts) {
+      opts = opts || {};
       _.bindAll(this);
       this.sort_key = 'time';
       this.sort_order = 'des';
       this.sort_history = [''];
+      
+      if (opts.auto_reconnect === false) {
+        this.auto_reconnect = opts.auto_reconnect;
+      }
       
       this.connect();
     },
@@ -305,7 +311,10 @@ define([
 
     wsRetry: function () {
       this.trigger('ws-closed', this);
-      setTimeout(this.connect, 5000);
+      
+      if (this.auto_reconnect) {
+        setTimeout(this.connect, 5000); 
+      }
     },
     
     sync: function () {

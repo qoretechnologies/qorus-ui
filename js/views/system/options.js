@@ -4,29 +4,23 @@ define([
   'backbone',
   'qorus/qorus',
   'models/system',
+  'collections/options',
   'text!../../../templates/system/options.html'
-], function($, _, Backbone, Qorus, System, Template){
-  var ModelView = Qorus.View.extend({
+], function($, _, Backbone, Qorus, System, Collection, Template){
+  var ListView = Qorus.ListView.extend({
+    
     initialize: function (opts) {
-      ModelView.__super__.initialize.call(this, opts);
+      _.bindAll(this);
+      this.opts = opts || {};
+      ListView.__super__.initialize.call(this, opts);
       
-      this.model = System.Options;
+      this.collection = new Collection(this.opts);
       this.template = Template;
  
-      this.model.fetch();
-      this.listenToOnce(this.model, 'sync', this.render);
-    },
-    
-    render: function (ctx) {
-      var mctx = { item: this.model };
-      if (ctx){
-        _.extend(mctx, ctx);
-      }
-      ModelView.__super__.render.call(this, mctx);
-      return this;
-    },
-    
+      this.collection.fetch();
+      this.listenToOnce(this.collection, 'sync', this.render);
+    }
   });
   
-  return ModelView;
+  return ListView;
 });

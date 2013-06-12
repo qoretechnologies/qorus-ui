@@ -1,10 +1,8 @@
-<% var item = obj.item.toJSON(); %>
-
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Status</th>
-      <th class="name">Name</th>
+      <th data-sort="status">Status</th>
+      <th class="name" data-sort="name">Name</th>
       <th class="description">Description</th>
       <th>Default</th>
       <th>Expects</th>
@@ -17,10 +15,11 @@
     </tr>
   </thead>
   <tbody>
-<% _.each(item, function (it, key) { %>
+<% _.each(items, function (it, key) { %>
+  <% var it = it.toJSON(); %>
   <tr>
     <td><i class="icon icon-<%= (it.status == 'locked') ? 'lock' : 'unlock'  %>"></i></td>
-    <td class="name"><%= key %></td>
+    <td class="name"><%= it.name %></td>
     <td class="description"><%= it.desc %></td>
     <td><%= it.default %></td>
     <td><%= it.expects %></td>

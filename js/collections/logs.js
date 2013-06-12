@@ -24,15 +24,9 @@ define([
       
       this.socket_url += opts.socket_url;
       
+      console.log("Logs opts", opts);
+      
       Collection.__super__.initialize.call(this, opts);
-    },
-
-    wsAdd: function (e) {
-      this.trigger('message', this, e.data);
-    },
-
-    wsRetry: function () {
-      setTimeout(this.connect, 5000);
     }
   });
   

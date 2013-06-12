@@ -25,7 +25,11 @@ define([
       }
       
       // init model
-      this.collection = new Collection({ socket_url: opts.socket_url });
+      this.collection = new Collection({ 
+        socket_url: opts.socket_url, 
+        auto_reconnect: opts.auto_reconnect 
+      });
+      
       this.collection.on('message', this.appendText);
       
     },

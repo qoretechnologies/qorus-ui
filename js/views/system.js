@@ -31,7 +31,7 @@ define([
     
     createSubviews: function () {
       this.subviews.log = new LogView({ socket_url: "/system", parent: this });
-      this.subviews.audit = new LogView({ socket_url: "/audit", parent: this });
+      this.subviews.audit = new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false });
       this.subviews.options = new OptionsView();
     },
     
