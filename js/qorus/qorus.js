@@ -67,6 +67,7 @@ define([
       this.opts = opts;
       // this.parseDates();
     },
+    
     parse: function (response, options) {
       _.each(this.dateAttributes, function (date) {
         if (date.search(/\./) > -1) {
@@ -79,6 +80,7 @@ define([
       });
       return response;
     },
+    
     fetch: function (options) {
       var data = {}; //this.opts;  
 

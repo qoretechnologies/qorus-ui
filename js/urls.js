@@ -15,7 +15,7 @@ define([
     'jobs': 'showJobs',
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
-    // 'system': 'showSystem',
+    'system': 'showSystem',
     '': 'redirectToWorkflows',
 
     // Default

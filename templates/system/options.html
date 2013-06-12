@@ -1,0 +1,36 @@
+<% var item = obj.item.toJSON(); %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th class="name">Name</th>
+      <th class="description">Description</th>
+      <th>Default</th>
+      <th>Expects</th>
+      <th>Interval</th>      
+      <th>Job</th>
+      <th>Service</th>
+      <th>Workflow</th>
+      <th>Startup Only</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+<% _.each(item, function (it, key) { %>
+  <tr>
+    <td><i class="icon icon-<%= (it.status == 'locked') ? 'lock' : 'unlock'  %>"></i></td>
+    <td class="name"><%= key %></td>
+    <td class="description"><%= it.desc %></td>
+    <td><%= it.default %></td>
+    <td><%= it.expects %></td>
+    <td><%= it.interval %></td>
+    <td><%= statusIcon(it.job) %></td>
+    <td><%= statusIcon(it.service) %></td>
+    <td><%= statusIcon(it.workflow) %></td>
+    <td><%= it["startup-only"] %></td>
+    <td class="text-left"><%= it.value %></td>
+  </tr>
+<% }) %>
+  </tbody>
+</table>

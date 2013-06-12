@@ -48,7 +48,6 @@ define([
     
     // redirects to workflows page
     redirectToWorkflows: function() {
-      console.log('Going to workflows');
       Backbone.history.navigate('/workflows', { trigger: true });
     },
     
@@ -95,6 +94,12 @@ define([
     // order detail
     showOrder: function (wfiid, id){
       var view = new OrderView({ id: wfiid, workflow_id: id });
+      this.setView(view);
+    },
+    
+    // system detail
+    showSystem: function() {
+      var view = new SystemInfoView();
       this.setView(view);
     },
     
