@@ -33,9 +33,11 @@ define([
     onRender: function () {
       // hack
       var lv = this;
-      $('a[href=#log]').click(function (e) {
-        _.defer(lv.scroll);
-      });
+      if (this.parent) {
+        $('a[href=#log]', this.parent.$el).click(function (e) {
+          _.defer(lv.scroll);
+        });
+      }
     },
 
     isScrollable: function () {

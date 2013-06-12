@@ -52,6 +52,19 @@ define([
       });
     },
     
+    parse: function (response, options) {
+      // unescape info string
+      console.log("Kalimero", response);
+      _.each(response.ErrorInstances, function (err) {
+        // is it safe?
+        err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\"");
+        console.log(unescape(err.info));
+      });
+      
+      response = Model.__super__.parse.call(this, response, options);
+      return response
+    },
+    
     doAction: function(action, opts){
       if(_.indexOf(this.allowedActions, action) != -1){
         var id = this.id;

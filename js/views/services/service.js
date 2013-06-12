@@ -55,7 +55,7 @@ define([
     
     onRender: function () {
       var url = '/services/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url });
+      this.subviews.log = new LogView({ socket_url: url, parent: this });
       this.assign('#log', this.subviews.log);
       
       if (this.active_tab) {
