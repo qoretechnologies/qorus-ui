@@ -45,8 +45,6 @@ define([
       }
 
       delete this.opts.url;
-      
-      console.log("Collection", this.opts, this.date);
     },
     model: Model,
   });

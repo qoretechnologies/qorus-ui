@@ -341,6 +341,7 @@ define([
     dispatcher: undefined,
     
     initialize: function (opts) {
+      _.bindAll(this);
       this.collection = opts.collection;
       
       if (_.has(opts, 'template')) {
@@ -358,10 +359,6 @@ define([
       if (_.has(opts, 'dispatcher')) {
         this.dispatcher = opts.dispatcher;
       }
-      
-      // this.collection.on('sync', function (e, ee) {
-      //   console.log(e, ee);
-      // });
     },
     
     createRows: function () {
@@ -382,6 +379,15 @@ define([
     
     onRender: function () {
       this.createRows();
+      $('.pane').scroll(this.scroll);
+    },
+    
+    scroll: function (ev) {
+       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+       if (pos < 100) {
+         this.collection.loadNextPage(); 
+         this.$el.children('button[data-pagination]').html("Loading...");
+       }
     },
     
     getRow: function (id) {
@@ -389,9 +395,12 @@ define([
     },
     
     addRow: function (m) {
-      var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
-      this.$el.find('tbody').append(row.$el.html());
-      this.subviews.rows[m.id] = row;
+      
+      if (!_.has(this.subviews.rows, m.id)) {
+        var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
+        this.$el.find('tbody').append(row.$el.html());
+        this.subviews.rows[m.id] = row;        
+      }
 
       // TODO: move to model itself???
       // if (this.dispatcher) {
@@ -401,6 +410,13 @@ define([
       //     }
       //   })
       // }
+    },
+    
+    update: function () {
+      var tv = this;
+      _.each(this.collection.models, function (m) {
+        tv.addRow(m);
+      });
     },
     
     clean: function () {

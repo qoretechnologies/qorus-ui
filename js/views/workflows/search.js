@@ -47,6 +47,7 @@ define([
     },
     
     initialize: function (opts) {
+      _.bindAll(this);
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
       
@@ -100,7 +101,7 @@ define([
         current_page: this.collection.page,
         has_next: this.collection.hasNextPage()
       };
-      this.render();
+      this.subviews.table.render();
     },
 
     // fetches the collection from server presorted by key
@@ -111,21 +112,17 @@ define([
       e.stopPropagation();
     },
     
-    scroll: function () {
-      var pos = this.$el.height() + this.$el.offset().top - $(window).height();
-      if (pos < 100) {
-        this.nextPage(); 
-        this.$el.children('button[data-pagination]').html("Loading...");
-      }
-    },    
+    scroll: function (e) {
+      var $target = $(e.currentTarget).find('#instances');
+      var pos = this.$el.height() + $target.offset().top - $(window).height();
+      console.log(pos, $target.height(), $target.offset().top, $(window).height());
+      // if (pos < 100) {
+      //   this.nextPage(); 
+      //   this.$el.children('button[data-pagination]').html("Loading...");
+      // }
+    },
     
-    createSubviews: function () {
-      // this.subviews.instances = new InstanceListView({ 
-      //     date: this.opts.date, workflowid: this.model.id, url: this.url() 
-      //   });
-
-      // this.subviews.orders = new OrderListView({ date: this.opts.date, search: this.opts.search });
-      
+    createSubviews: function () {      
       this.subviews.table = new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
