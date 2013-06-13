@@ -50,6 +50,7 @@ define([
     
     appendText: function (t, text) {
       var _this = this;
+      
       $('textarea.log', this.$el).val(function (i, val) {
         return val + text;
       });

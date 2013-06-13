@@ -57,8 +57,9 @@ define([
       console.log("Kalimero", response);
       _.each(response.ErrorInstances, function (err) {
         // is it safe?
-        err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\"");
-        console.log(unescape(err.info));
+        if (err.info) {
+          err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\""); 
+        }
       });
       
       response = Model.__super__.parse.call(this, response, options);
