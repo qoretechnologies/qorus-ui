@@ -27,6 +27,10 @@ define([
       console.log("Logs opts", opts);
       
       Collection.__super__.initialize.call(this, opts);
+    },
+    
+    wsAdd: function (e) {
+      this.trigger('message', this, e.data);
     }
   });
   
