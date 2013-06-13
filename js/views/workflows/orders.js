@@ -27,14 +27,13 @@ define([
     additionalEvents: {
       'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
-      'th[data-sort]': 'fetchSorted',
+      'click th[data-sort]': 'fetchSorted',
       'scroll': 'scroll'
     },
     
     initialize: function (opts) {
       console.log("Options", opts);
       opts = opts || {};
-
       _.bindAll(this);
       
       if (opts.url) {
@@ -45,15 +44,18 @@ define([
       
       if (opts.date) {
         this.date = opts.date;
+      } else {
+        opts.date = this.date;
       }
       
-      _.extend(this.options, opts)
+      this.opts = opts;
+      _.extend(this.options, opts);
       _.extend(this.context, opts);
-      
-      var _this = this;
-      this.collection = new Collection(opts);
+
+      this.collection = new Collection(this.opts);
       this.collection.on('sync', this.updateContext, this);
       this.collection.fetch();
+
       this.createSubviews();
     },
     
@@ -68,7 +70,8 @@ define([
       });
 
       // this should be placed inside instances/orders view
-      this.subviews.toolbar = new OrdersToolbar(this.options);
+      console.log("Orders options", this.options, this.opts, this.date);
+      this.subviews.toolbar = new OrdersToolbar(_.extend(this.options, { date: this.date }));
     },
     
     runAction: function (e) {
@@ -81,6 +84,7 @@ define([
     },
     
     nextPage: function () {
+      console.log("Clicked next page", this.collection.date, this.collection.opts);
       this.collection.loadNextPage();
     },
     
@@ -95,9 +99,10 @@ define([
     
     // fetches the collection from server presorted by key
     fetchSorted: function (e) {
-      var el = e.currentTarget;
-      // var sort = el.data('sort');
-      // console.log("Fetching sorted", sort);
+      // TODO
+      var $el = $(e.currentTarget);
+      var sort = $el.data('sort');
+      console.log("Fetching sorted", sort);
       e.stopPropagation();
     },
     
@@ -111,9 +116,10 @@ define([
     },
     
     onRender: function () {
+      this.subviews.toolbar.updateUrl(this.url, this.options.statuses);
+      this.assign('#toolbar', this.subviews.toolbar);
+      
       if (this.collection.length > 0) {
-        this.subviews.toolbar.updateUrl(this.url, this.options.statuses);
-        this.assign('#toolbar', this.subviews.toolbar);
         this.assign('#order-list', this.subviews.table);
         this.$el.parent('.pane').scroll(this.scroll);
         $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });        

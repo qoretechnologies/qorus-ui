@@ -56,7 +56,7 @@ define([
       this.date_format = settings.DATE_DISPLAY;
 
       if (_.isObject(options)) {
-        if (options.date === undefined) {
+        if (options.date === undefined || options.date === null) {
           options.date = moment().add('days', -1).format(this.date_format);
         } else if (options.date == 'all') {
           options.date = moment(settings.DATE_FROM).format(this.date_format);
@@ -174,7 +174,7 @@ define([
 
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;      
-      if (date === undefined) {
+      if (date === undefined || date === null) {
         this.date = moment().add('days', -1).format(this.date_format);
       } else if (date == 'all') {
         this.date = moment(settings.DATE_FROM).format(this.date_format);
@@ -182,13 +182,16 @@ define([
       //   this.date = moment(date, 'YYYYMMDDHHmmss');
       } else {
         this.date = date;
-      }
+      }    
       
       if (collection) {
         this.collection = new collection({ date: this.date });
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', this.render);
+        this.listenTo(this.collection, 'all', function (e) {
+          console.log(e)
+        });
         
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
         this.listenTo(this.collection, 'resort', this.render);
@@ -356,9 +359,9 @@ define([
         this.dispatcher = opts.dispatcher;
       }
       
-      this.collection.on('sync', function (e, ee) {
-        console.log(e, ee);
-      });
+      // this.collection.on('sync', function (e, ee) {
+      //   console.log(e, ee);
+      // });
     },
     
     createRows: function () {

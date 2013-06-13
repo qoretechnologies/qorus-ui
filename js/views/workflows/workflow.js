@@ -32,7 +32,8 @@ define([
     
     initialize: function (opts) {
       // console.log("workflow opts", this.opts);
-      _.bindAll(this);
+      ModelView.__super__.initialize.call(this, opts);
+      // _.bindAll(this);
 
       this.opts = opts;
       
@@ -44,6 +45,7 @@ define([
       this.model.on('change', this.render);
       
       this.createSubviews();
+      console.log("Workflow options", this.opts);
     },
     
     render: function (ctx) {
@@ -74,6 +76,7 @@ define([
     },
     
     createSubviews: function () {
+      console.log("Workflow date", this.opts, this.date);
       this.subviews.instances = new InstanceListView({ 
           date: this.opts.date, workflowid: this.model.id, url: this.url() 
         });

@@ -2,8 +2,17 @@
 <%  if (show_header) {  
       var itm = item.toJSON();
 %>
-  <h3><%= itm.name %> <small><%= itm.version%></small></h3>
-  <p><%= wrapStatus(itm.workflowstatus) %> Workflow Instance ID: <%= itm.workflow_instanceid %></p>
+<div class="row-fluid relative">
+    <div class="span6">
+        <h3><%= itm.name %> <small><%= itm.version%></small></h3>
+        <p><%= wrapStatus(itm.workflowstatus) %> Workflow Instance ID: <%= itm.workflow_instanceid %></p>
+    </div>
+    <div class="btn-group pull-right align-middle">
+        <% _.each(itm.actions, function(action) { %>
+          <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= itm.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
+        <% }); %>
+    </div>
+</div>
 <% } %>
 
 <ul class="nav nav-tabs">
@@ -170,8 +179,8 @@
           <th>Subworkflow</th>
           <th>Synchronous</th>
           <th>Warnings</th>
-          <th>Workflow ID</th>
-          <th>Workflow IID</th>
+          <th>Workflow</th>
+          <th>Order</th>
           <th>Parent Workflow IID</th>
           <th>Started</th>
           <th>Completed</th>
@@ -195,7 +204,7 @@
           <td><%= ha.synchronous %></td>
           <td><%= ha.warnings %></td>
           <td><a href="<%= getUrl('showWorkflow', { id : ha.workflowid }) %>"><%= ha.name %></a></td>
-          <td><a href="<%= getUrl('showOrder', { id : ha.workflow_instanceid }) %>"><%= ha.workflow_instanceid %></a></td>
+          <td><a href="<%= getUrl('showOrder', { id : ha.workflow_instanceid }) %>"><%= ha.name %> <small>v<%= ha.version %>, ID#<%= ha.workflow_instanceid %></small></a></td>
           <td><%= ha.parent_workflow_instanceid %></td>           
           <td><%= ha.started %></td>          
           <td><%= ha.completed %></td>

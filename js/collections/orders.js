@@ -9,6 +9,13 @@ define([
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
     initialize: function (opts) {
+      Collection.__super__.initialize.call(this, opts);
+      
+      if (!opts.date) {
+        opts.date = this.date;
+      }
+      
+      
       this.opts = opts;
       this.opts.sort = 'started';
       
@@ -38,7 +45,8 @@ define([
       }
 
       delete this.opts.url;
-      Collection.__super__.initialize.call(this, opts);
+      
+      console.log("Collection", this.opts, this.date);
     },
     model: Model,
   });

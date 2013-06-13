@@ -54,8 +54,6 @@ define([
     
     parse: function (response, options) {
       // unescape info string
-      console.log("Kalimero", response);
-      
       _.each(response.ErrorInstances, function (err) {
         // is it safe?
         if (err.info) {
@@ -64,7 +62,6 @@ define([
       });
       
       response = Model.__super__.parse.call(this, response, options);
-      console.log(response);
       return response
     },
     
