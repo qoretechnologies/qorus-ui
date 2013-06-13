@@ -553,3 +553,16 @@ aside {
   top: 60px;
   right: 20px;
 }
+
+/* fix treeview pre */
+
+/*.treeview pre {
+    display: block;
+    background: inherit;
+    word-wrap: break-word;
+    margin: 0 0 0 auto;
+    padding: 10px;
+    color: #000;
+    font-size: 14px;
+    margin-bottom: 20px;
+}*/

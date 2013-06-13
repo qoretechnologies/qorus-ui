@@ -67,7 +67,12 @@ define([
     
     escapeHtml: function (html) {
       if (_.isString(html)) {
-        return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var new_html;
+        new_html = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        if (html.search(/^<\?xml/) != -1) {
+          return '<pre><code data-language="xml">' + new_html + '</code></pre>';
+        } 
+        return new_html;
       }
       return html;
     }
