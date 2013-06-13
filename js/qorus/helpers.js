@@ -26,7 +26,7 @@ define([
 
     createNestedList: function (obj, css, tpl, preformatted) {
       var tpl_html = tpl || NestedListTpl;
-      return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList, preformatted: preformatted });
+      return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList, escapeHtml: Helpers.escapeHtml, preformatted: preformatted });
     },
 
     statusIcon: function(status) {
@@ -63,6 +63,13 @@ define([
         return "icon-" + utils.action_icons[action];
       }
       return '';
+    },
+    
+    escapeHtml: function (html) {
+      if (_.isString(html)) {
+        return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+      return html;
     }
     
   }
