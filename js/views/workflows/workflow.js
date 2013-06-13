@@ -45,7 +45,6 @@ define([
       this.model.on('change', this.render);
       
       this.createSubviews();
-      console.log("Workflow options", this.opts);
     },
     
     render: function (ctx) {

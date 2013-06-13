@@ -32,7 +32,6 @@ define([
     },
     
     initialize: function (opts) {
-      console.log("Options", opts);
       opts = opts || {};
       _.bindAll(this);
       
@@ -84,7 +83,6 @@ define([
     },
     
     nextPage: function () {
-      console.log("Clicked next page", this.collection.date, this.collection.opts);
       this.collection.loadNextPage();
     },
     
@@ -94,7 +92,7 @@ define([
         current_page: this.collection.page,
         has_next: this.collection.hasNextPage()
       };
-      this.render();
+      this.subviews.table.render();
     },
     
     // fetches the collection from server presorted by key
@@ -108,7 +106,6 @@ define([
     
     scroll: function () {
       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
-      console.log('scrolling');
       if (pos < 100) {
         this.nextPage(); 
         this.$el.children('button[data-pagination]').html("Loading...");
@@ -122,7 +119,8 @@ define([
       if (this.collection.length > 0) {
         this.assign('#order-list', this.subviews.table);
         this.$el.parent('.pane').scroll(this.scroll);
-        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });        
+        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+        $('.pane').scroll(this.scroll);
       }
     },
     
