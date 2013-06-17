@@ -8,6 +8,7 @@ define([
     url: function () {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
+    
     initialize: function (opts) {
       Collection.__super__.initialize.call(this, opts);
       
@@ -23,7 +24,7 @@ define([
         this.workflowid = opts.workflowid; 
         delete this.opts.workflowid;
       } else {
-        this.url = '/rest/orders/';
+        this.url = settings.REST_API_PREFIX + '/orders/';
       }
 
       if (this.opts.statuses == 'all' || !this.opts.statuses) {

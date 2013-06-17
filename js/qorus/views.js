@@ -83,9 +83,9 @@ define([
           // });
           
         } else if (_.isObject(view)) {
-          if (_.isFunction(view.clean)) {
-            view.clean();
-          }
+          // if (_.isFunction(view.clean)) {
+          //   view.clean();
+          // }
           view.undelegateEvents();
           view.remove();      
         } // else {
@@ -148,6 +148,12 @@ define([
         console.log('Updating model', m);
         m.fetch();
       }
+    },
+    
+    doNothing: function (e) {
+      console.log('Do nothing', e);
+      e.preventDefault();
+      e.stopPropagation();
     }
    });
 
@@ -239,6 +245,10 @@ define([
       return this;
     },
     
+    isEnabled: function (e) {
+      return !$(e.currentTarget).hasClass('disabled');
+    },
+    
     // toggle select row
     highlight: function (e) {
       var el = e.currentTarget;
@@ -246,7 +256,7 @@ define([
         .toggleClass('icon-check-empty')
         .toggleClass('icon-check');
       $(el)
-        .parents('.workflow-row')
+        .parents('.table-row')
         .toggleClass('warning');
       e.stopPropagation();
     },
@@ -395,7 +405,7 @@ define([
     },
     
     addRow: function (m) {
-      
+      console.log('adding row', this.subviews.rows, _.has(this.subviews.rows, m.id));
       if (!_.has(this.subviews.rows, m.id)) {
         var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
         this.$el.find('tbody').append(row.$el.html());

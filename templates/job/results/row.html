@@ -1,0 +1,17 @@
+<% var item = item.toJSON(); %>
+<tr data-id="<%= item.job_instanceid %>">
+  <td></td>
+  <td></td>
+  <td><%= item.job_instanceid %></td>
+  <td><span class="label label-<%= getStatusCSS(item.jobstatus) %>"><%= item.jobstatus %></span></td>
+  <td>
+    <% if (item.business_error) { %>
+        <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
+    <% } %>
+  </td>
+  <td><%= item.name %></td>
+  <td><%= item.started %></td>
+  <td><%= item.modified %></td>
+  <td><%= item.sessionid %></td>
+  <td></td>
+</tr>

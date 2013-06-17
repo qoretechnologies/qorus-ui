@@ -3,7 +3,7 @@
     var wfl = obj.item.toJSON(); 
     wfl.id = wfl.workflowid;
 %>
-<tr class="workflow-row" id="workflow-<%= wfl.id %>" data-id="<%= wfl.id %>">
+<tr class="table-row workflow-row" id="workflow-<%= wfl.id %>" data-id="<%= wfl.id %>">
 	<td><i class="icon-check-empty check"></i></td>
 	<td class="id"><%= wfl.workflowid %></td>
 	<td class="err instances"><%= wrapBadge(wfl.exec_count, ['/workflows/view', wfl.id, 'instances'].join('/'), 'badge-success') %></td>

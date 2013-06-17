@@ -116,6 +116,7 @@ i.sort {
 
 .form-search {
     float: left;
+    margin-bottom: 0;
 }
 .search-box {
     float: right;

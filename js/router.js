@@ -10,6 +10,7 @@ define([
   'views/workflows/workflow', 
   'views/services/services', 
   'views/jobs/jobs', 
+  'views/jobs/job', 
   'views/workflows/instances',
   'views/events/events',
   'views/workflows/orders',
@@ -18,7 +19,7 @@ define([
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
-  ServiceListView, JobListView, InstanceListView, EventListView, OrderListView, SearchListView,
+  ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
   OrderView, Urls) {
     
   var AppRouter = Backbone.Router.extend({
@@ -79,6 +80,12 @@ define([
       this.setView(view);
     },
     
+    // result list
+    showJob: function (id) {
+      var view = new JobView({ jobid: id });
+      this.setView(view);
+    },
+    
     // event list
     showEvents: function () {
       var view = new EventListView();
@@ -102,6 +109,7 @@ define([
       var view = new SystemInfoView();
       this.setView(view);
     },
+    
     
     // default
     defaultAction: function (actions) {

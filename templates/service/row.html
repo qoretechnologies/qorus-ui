@@ -3,7 +3,8 @@
   var item = item.toJSON(); 
   item.id = item.serviceid;
 %>
-  <tr class="service-row" data-id="<%= item.id %>">
+  <tr class="table-row service-row" data-id="<%= item.id %>">
+    	<td><i class="icon-check-empty check"></i></td>
       <td class="id"><%= item.id %></td>
       <td class="service_type">
           <% if (item.type == 'system') { %>

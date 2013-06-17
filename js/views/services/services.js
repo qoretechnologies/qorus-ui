@@ -10,6 +10,8 @@ define([
   'views/services/service',
   'views/services/modal',
   'views/toolbars/services_toolbar',
+  'jquery.fixedheader',
+  'jquery.sticky',
   'sprintf'
 ], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, 
   RowTpl, ServiceView, ModalView, Toolbar){
@@ -80,6 +82,7 @@ define([
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
         $('#service-detail').outerWidth(w);        
       }
+      $('.table-fixed').fixedHeader({ topOffset: 80 });
     },
 
     setOption: function (e) {
@@ -95,11 +98,16 @@ define([
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
-      if (data.id && data.action) {
-        // $target.text(data.msg.toUpperCase());
-        var inst = this.collection.get(data.id);
-        inst.doAction(data.action); 
+      if (this.isEnabled(e) && data.action) {
+        if (_.isNumber(data.id) ) {
+          // $target.text(data.msg.toUpperCase());
+          var inst = this.collection.get(data.id);
+          inst.doAction(data.action); 
+        } else if (data.id == 'selected') {
+          
+        }
       }
+      
     },
     
     showDetail: function (e) {
@@ -168,6 +176,17 @@ define([
       this.subviews.modal = modal;
       
       this.assign('#function-execute', modal);
+    },
+    
+    highlight: function (ev) {
+      console.log("service highlite");
+      ListView.__super__.highlight.call(this, ev);
+      this.enableActions();
+    },
+    
+    enableActions: function (e) {
+      console.log('Enabling actions');
+      this.$el.find('#service-toolbar button[data-action]').toggleClass('disabled');
     }
     
   });
