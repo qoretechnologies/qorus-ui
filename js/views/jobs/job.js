@@ -10,6 +10,7 @@ define([
   'jquery.ui'
 ], function ($, _, Qorus, Dispatcher, Model, Log, Template, ResultsView) {
   var ModelView = Qorus.View.extend({
+    title: "Job",
     template: Template,
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
@@ -26,7 +27,7 @@ define([
       
       this.model = new Model({ id: opts.id });
       this.model.fetch();
-      this.listenToOnce(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'sync', this.render);
       this.createSubviews();
     },
     

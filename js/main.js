@@ -82,7 +82,10 @@ require.config({
       deps: ['rainbow']
     }
   },
-  templates: '../templates'
+  templates: '../templates',
+  config: {
+    'REST_API_PREFIX': '/test'
+  }
 });
 
 require([

@@ -15,7 +15,9 @@ define([
     model_name: 'job',
     
     additionalEvents: {
-      "click button[data-action]": "runAction",
+      'click a[data-action="set-expiry"]': 'setExpiration',
+      'click a[data-action="schedule"]': 'reSchedule',
+      "click a[data-action]": "runAction",
     },
     
     initialize: function () {
@@ -25,7 +27,7 @@ define([
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
 
-      this.listenTo(Dispatcher, 'job:instance_start job:instance_stop', this.updateModels);
+      this.listenTo(Dispatcher, 'job:instance_start job:instance_stop', this.updateModels);    
     },
   
     createSubviews: function () {
@@ -47,16 +49,33 @@ define([
     runAction: function (e) {
       e.stopPropagation();
       
-      console.log('Running action', e);
-      
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
-        $target.text(data.msg.toUpperCase());
+        
+        // update text message
+        if (data.msg) {
+          $target.text(data.msg.toUpperCase());          
+        }
+
         var inst = this.collection.get(data.id);
         inst.doAction(data.action); 
       }
-    }
+    },
+    
+    reSchedule: function (ev) {
+      console.log("reschedule", ev);
+      ev.stopPropagation();
+      ev.preventDefault();
+    },
+    
+    setExpiration: function (ev) {
+      console.log('set expiry', ev);
+      ev.stopPropagation();
+      ev.preventDefault();
+    },
+    
+    
     
   });
 

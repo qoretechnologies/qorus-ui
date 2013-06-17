@@ -576,3 +576,8 @@ aside {
     content: counter(line-number) ".";
     counter-increment: line-number;
 }
+
+.toolbar {
+  margin: 0;
+  padding-bottom: 5px;
+}

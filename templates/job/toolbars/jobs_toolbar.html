@@ -1,25 +1,27 @@
-<div class="container-fluid sticky"> 
-    <div class="row-fluid">
-        <div class="span1">
-          <div class="btn-group">
-				    <button class="btn dropdown-toggle" data-toggle="dropdown">
-				      <i class="icon-check-empty check-all"></i>
-				      <span class="caret"></span>
-            </button>
-  			    <ul class="dropdown-menu above">
-    					<li><a href="#" class="all">All</a></li>
-    					<li><a href="#" class="none">None</a></li>
-    					<li><a href="#" class="invert">Invert</a></li>
-  			    </ul>
-          </div>
-        </div>
-        <div class="pull-right">
-        <form class="form-search">
-          <div class="input-append search-box">
-            <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
-            <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
-          </div>
-        </form>
-        </div>
-    </div>
+<div class="btn-toolbar sticky toolbar">
+  <div class="btn-group">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-check-empty check-all"></i>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu above">
+			<li><a href="#" class="all">All</a></li>
+			<li><a href="#" class="none">None</a></li>
+			<li><a href="#" class="invert">Invert</a></li>
+    </ul>
+  </div>
+  <div class="btn-group hide toolbar-actions">
+    <button class="btn" data-id="selected" data-action="run"><i class="icon-play"></i> Run</button>
+    <button class="btn" data-id="selected" data-action="schedule"><i class="icon-time"></i> Reschedule</button>
+    <button class="btn" data-id="selected" data-action="reset"><i class="icon-refresh"></i> Reset</button>
+    <button class="btn" data-id="selected" data-action="set-expiry"><i class="icon-tag"></i> Set Expiration</button>
+  </div>
+  <div class="pull-right">
+    <form class="form-search">
+      <div class="input-append search-box">
+        <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
+        <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+      </div>
+    </form>
+  </div>
 </div>

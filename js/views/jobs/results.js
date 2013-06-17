@@ -11,7 +11,6 @@ define([
 
   var ListView = Qorus.ListView.extend({
     template: Template,
-    title: "Job result",
     model_name: 'result',
     subviews: {},
     

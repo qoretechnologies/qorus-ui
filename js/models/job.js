@@ -13,7 +13,7 @@ define([
     model_cls: 'job',
     idAttribute: "jobid",
     urlRoot: settings.REST_API_PREFIX + '/jobs/',
-    dateAttributes: ['last_executed'],
+    dateAttributes: ['last_executed', 'next'],
     allowed_actions: ['run', 'reset', 'set-expire', 'schedule'],
 
 
@@ -22,17 +22,20 @@ define([
     },
 
     parse: function(response, options){
-      // get date from cronÒ
-      var next = [response.minute, response.hour, response.day, response.month, response.wday];
-      response.next = utils.formatDate(utils.getNextDate(next.join(' ')));
+      // get date from cron
+      if (!response.next) {
+        var next = [response.minute, response.hour, response.day, response.month, response.wday];
+        response.next = utils.formatDate(utils.getNextDate(next.join(' ')));        
+      }
       return Model.__super__.parse.call(this, response, options);
     },
     
     doAction: function(action, opts){
-      if(_.indexOf(this.allowedActions, action) != -1){
+      console.log('doing action', action);
+      if(_.indexOf(this.allowed_actions, action) != -1){
         var id = this.id;
         var _this = this;
-        
+        console.log(this.url());
         $.put(this.url(), {'action': action })
         .done(
           function (e, ee, eee){
