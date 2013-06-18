@@ -33,7 +33,7 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
-      "click a[data-action]": "runAction",
+      "click a[data-action^='execute']": "runAction",
       "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click tr": "showDetail"
@@ -95,16 +95,17 @@ define([
     },
 	
     runAction: function (e) {
+      console.log('running action', e, this.isEnabled(e));
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
       if (this.isEnabled(e) && data.action) {
-        if (_.isNumber(data.id) ) {
+        if (data.id == 'selected') {
+        } else if (data.id) {
+          console.log("data action", data.id, data.action);
           // $target.text(data.msg.toUpperCase());
           var inst = this.collection.get(data.id);
-          inst.doAction(data.action); 
-        } else if (data.id == 'selected') {
-          
+          inst.doAction(data.action);           
         }
       }
       
