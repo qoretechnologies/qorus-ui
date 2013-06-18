@@ -58,7 +58,7 @@ define([
     renderInfo: function () {
 			$('header .version').text(this.info.get('omq-version'));
 			$('header .instance-key').text(this.info.get('instance-key'));
-			$('title').text('Qorus - ' + this.info.get('omq-version') + ' - ' + this.info.get('instance-key'));
+			$('title').text(this.info.get('instance-key') + " | " + this.info.get('omq-version'));
       $('#build').text(this.info.get('omq-version') + '.' + this.info.get('omq-build'));
       $('#schema').text(this.info.get('omq-schema'));
     },

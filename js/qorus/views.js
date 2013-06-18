@@ -134,8 +134,10 @@ define([
     // sets document title if defined in view
     setTitle: function () {
       if (!_.isUndefined(this.title)) {
-        var inst_title = Qorus.System.
-        document.title = _.isFunction(this.title) ? this.title() : this.title; 
+        var title = _.isFunction(this.title) ? this.title() : this.title;
+        var inst = document.title.match(/(.*)\| /g);
+        document.title = inst[0];
+        document.title += " " + title; 
       }
     },
     
