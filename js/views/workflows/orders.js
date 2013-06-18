@@ -126,6 +126,11 @@ define([
     
     helpers: {
       action_css: context.action_css
+    },
+    
+    render: function (ctx) {
+      ListView.__super__.render.call(this, ctx);
+      console.log("Rendering context", this.context, this.helpers);
     }
     
   });

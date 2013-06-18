@@ -33,9 +33,9 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
-      "click a[data-action^='execute']": "runAction",
-      "click button[data-action]": "runAction",
+      "click button[data-action^='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
+      "click a[data-action]": "runAction",
       "click tr": "showDetail"
     },
     
@@ -177,6 +177,7 @@ define([
       this.subviews.modal = modal;
       
       this.assign('#function-execute', modal);
+      e.stopPropagation();
     },
     
     highlight: function (ev) {

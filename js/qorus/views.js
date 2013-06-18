@@ -5,11 +5,11 @@ define([
   'backbone',
   'settings',
   'utils',
+  'qorus/qorus',
   'qorus/helpers',
   'text!../../templates/common/table.html',
   'text!../../templates/common/tablerow.html',
-], function ($, _, Backbone, settings, utils, Helpers, TableTpl, TableRowTpl) {
-
+], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -134,6 +134,7 @@ define([
     // sets document title if defined in view
     setTitle: function () {
       if (!_.isUndefined(this.title)) {
+        var inst_title = Qorus.System.
         document.title = _.isFunction(this.title) ? this.title() : this.title; 
       }
     },

@@ -8,8 +8,11 @@
 </div>
 <div class="btn-toolbar">
     <h3><%= item.name %> <small><%= item.version %></small></h3>
-    <%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %>
+    <div class="pull-right">
+    <!-- <%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %> -->
+    </div>
 </div>
+<p class="muted"><em><%= item.desc %></em></p>
 <ul class="nav nav-tabs">
     <li class="active"><a href="#info">Info</a></li>
     <li><a href="#methods">Methods</a></li>

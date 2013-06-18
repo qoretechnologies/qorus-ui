@@ -14,6 +14,15 @@ table th {
 
 .table .name, .table .description {
 	text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table .description div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 400px;
 }
 
 .table .name {
@@ -353,7 +362,7 @@ aside {
 }
 
 .treeview li {	
-    background-color: #fff;
+  background-color: #fff;
 	border-top: 1px solid #eee;
 	padding-left: 15px;
 }

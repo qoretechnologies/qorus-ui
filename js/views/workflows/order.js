@@ -7,6 +7,14 @@ define([
   'views/steps/step',
   'rainbow.qore'
 ], function($, _, Qorus, Model, Template, StepView){
+  var context = {
+    action_css: {
+      'block': 'btn-inverse',
+      'cancel': 'btn-danger',
+      'retry': 'btn-success'
+    }
+  };
+  
   var ModelView = Qorus.View.extend({
     template: Template,
     additionalEvents: {
@@ -14,7 +22,8 @@ define([
       "click .treeview li": "toggleRow",
       "click .showstep": "stepDetail",
       "click tr.parent": "showSubSteps",
-      "click td.info": "showInfo"
+      "click td.info": "showInfo",
+      'click button[data-action]': 'runAction',
     },
     
     initialize: function (opts) {
@@ -35,6 +44,7 @@ define([
     render: function (ctx) {
       this.context.item = this.model;
       _.extend(this.context, { getStepName: this.getStepName }); 
+      console.log("helpers", this.helpers);
       ModelView.__super__.render.call(this, ctx);
     },    
 
@@ -85,6 +95,15 @@ define([
       });
     },
     
+    runAction: function (e) {
+      e.stopPropagation();
+      var data = e.currentTarget.dataset;
+      if (data.id && data.action) {
+        var inst = this.model;
+        inst.doAction(data.action); 
+      }
+    },
+    
     showSubSteps: function (e) {
       var $target = $(e.currentTarget);
       
@@ -113,7 +132,12 @@ define([
           Rainbow.color();
         });
       }
+    },
+    
+    helpers: {
+      action_css: context.action_css
     }
+    
   });
   return ModelView;
 });
