@@ -10,9 +10,9 @@ define([
       DATE_DISPLAY: 'YYYY-MM-DD HH:mm:ss',    
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
-      REST_API_PREFIX: '/rest',
+      REST_API_PREFIX: '/api',
       WS_PREFIX: '',
-      EVENTS_WS_URL: 'ws://' + host // + '/apievents'
+      EVENTS_WS_URL: 'ws://' + host + '/apievents'
   };
   
   return settings;
