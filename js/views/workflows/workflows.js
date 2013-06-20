@@ -23,7 +23,8 @@ define([
     // el: $("#content"),
     additionalEvents: {
       'click .action-modal': 'openModal',
-      'click .action': 'runAction'
+      'click .action': 'runAction',
+      contextmenu: 'onRightClick'
     },
     
     title: "Workflows",
@@ -124,6 +125,15 @@ define([
     },
     
     loadNextPage: function () {
+    },
+    
+    onRightClick: function (e) {
+      if (e.target.localName == 'td') {
+        var $el = $(e.target);
+        e.preventDefault();
+        console.log($('.dropdown-menu', $el.parent()));
+        $('.dropdown-menu', $el.parent()).dropdown('toggle');
+      }
     }
   });
   

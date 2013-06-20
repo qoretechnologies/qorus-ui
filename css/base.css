@@ -590,3 +590,11 @@ aside {
   margin: 0;
   padding-bottom: 5px;
 }
+
+.table-condensed td {
+    padding: 0 5px;
+}
+
+.table-condensed td.narrow, .table-condensed th.narrow {
+    width: 4em;
+}
