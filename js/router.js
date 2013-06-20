@@ -21,7 +21,14 @@ define([
 ], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
   OrderView, Urls) {
-    
+
+  Messenger.options = {
+  	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+  	theme: 'qore',
+    showCloseButton: true
+  }
+
+
   var AppRouter = Backbone.Router.extend({
     routes: Urls.routes,
 

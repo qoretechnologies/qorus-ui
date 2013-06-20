@@ -137,12 +137,17 @@ define([
       
       $('a', $menu)
         .attr('data-id', dataId)
+        .unbind('click')
         .click(function (ev) {
           if ($(this).hasClass('action')) {
             _this.runAction(ev);
           } else if ($(this).hasClass('action-modal')) {
             _this.openModal(ev);
           }
+
+          _.defer(function () {
+            $menu.parent().removeClass('open');
+          });
         });
       
       $menu.offset({ left: ev.pageX, top: ev.pageY });
