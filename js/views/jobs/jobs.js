@@ -75,6 +75,10 @@ define([
       ev.preventDefault();
     },
     
+    highlight: function (ev) {
+      this.showActionToolbar
+      ListView.__super__.highlight(ev);
+    }
     
     
   });
