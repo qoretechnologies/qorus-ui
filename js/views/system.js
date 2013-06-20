@@ -4,7 +4,7 @@ define([
   'backbone',
   'qorus/qorus',
   'models/system',
-  'text!../../../templates/system/detail.html',
+  'text!../../templates/system/detail.html',
   'views/log',
   'views/system/options'
 ], function($, _, Backbone, Qorus, System, Template, LogView, OptionsView){

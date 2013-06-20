@@ -24,7 +24,7 @@ define([
     additionalEvents: {
       'click .action-modal': 'openModal',
       'click .action': 'runAction',
-      contextmenu: 'onRightClick'
+      'contextmenu tr': 'onRightClick'
     },
     
     title: "Workflows",
@@ -127,13 +127,15 @@ define([
     loadNextPage: function () {
     },
     
-    onRightClick: function (e) {
-      if (e.target.localName == 'td') {
-        var $el = $(e.target);
-        e.preventDefault();
-        console.log($('.dropdown-menu', $el.parent()));
-        $('.dropdown-menu', $el.parent()).dropdown('toggle');
-      }
+    onRightClick: function (ev) {
+
+      ev.preventDefault();
+      var $el = $(ev.currentTarget);
+      var $menu = $('.context-menu', this.$el);
+      var dataId = $el.data('id');
+      console.log(dataId);
+      $menu.offset({ left: ev.pageX, top: ev.pageY });
+      $menu.dropdown('toggle');
     }
   });
   

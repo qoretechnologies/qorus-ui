@@ -10,7 +10,7 @@ define([
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
       REST_API_PREFIX: '/rest',
-      WS_PREFIX: ''
+      WS_PREFIX: '/apievents'
   };
   
   return settings;

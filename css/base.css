@@ -598,3 +598,8 @@ aside {
 .table-condensed td.narrow, .table-condensed th.narrow {
     width: 4em;
 }
+
+.context-menu {
+    position: fixed;
+    width: 150px;
+}
