@@ -216,7 +216,7 @@ define([
     initialize: function (models, options) {
       _.bindAll(this);
       var host = window.location.host
-      this.socket = new WebSocket("ws://" + host);
+      this.socket = new WebSocket(settings.EVENTS_WS_URL);
       this.socket.onmessage = this.wsAdd;
     },
     
