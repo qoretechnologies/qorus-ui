@@ -80,7 +80,6 @@ define([
         
     // starts workflow
     runAction: function (e) {
-      console.log('run action', e);
       e.preventDefault();
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
@@ -129,13 +128,22 @@ define([
     },
     
     onRightClick: function (ev) {
-
       ev.preventDefault();
+      var _this = this;
       var $el = $(ev.currentTarget);
       var $menu = $('.context-menu', this.$el);
       var dataId = $el.data('id');
       
-      $('a', $menu).attr('data-id', dataId);
+      
+      $('a', $menu)
+        .attr('data-id', dataId)
+        .click(function (ev) {
+          if ($(this).hasClass('action')) {
+            _this.runAction(ev);
+          } else if ($(this).hasClass('action-modal')) {
+            _this.openModal(ev);
+          }
+        });
       
       $menu.offset({ left: ev.pageX, top: ev.pageY });
       $menu.dropdown('toggle');

@@ -12,7 +12,7 @@ define([
       SEARCH_SEPARATOR: /[ ,]+/,
       REST_API_PREFIX: '/rest',
       WS_PREFIX: '',
-      EVENTS_WS_URL: 'ws://' + host + '/apievents'
+      EVENTS_WS_URL: 'ws://' + host // + '/apievents'
   };
   
   return settings;
