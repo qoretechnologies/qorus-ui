@@ -7,15 +7,13 @@ define([
   'qorus/dispatcher',
   'messenger'
 ], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
-  var host = window.location.host;
-
   var msngr = $('#msg').messenger();
   
   var Collection = Qorus.SortedWSCollection.extend({
     model: Model,
     log_size: 1000,
     counter: 0,
-    socket_url: "ws://" + host,
+    socket_url: settings.EVENTS_WS_URL,
 
     initialize: function (opts) {
       this.sort_key = 'time';

@@ -80,6 +80,7 @@ define([
         
     // starts workflow
     runAction: function (e) {
+      console.log('run action', e);
       e.preventDefault();
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
@@ -133,9 +134,13 @@ define([
       var $el = $(ev.currentTarget);
       var $menu = $('.context-menu', this.$el);
       var dataId = $el.data('id');
-      console.log(dataId);
+      
+      $('a', $menu).attr('data-id', dataId);
+      
       $menu.offset({ left: ev.pageX, top: ev.pageY });
       $menu.dropdown('toggle');
+      
+      
     }
   });
   

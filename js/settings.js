@@ -3,6 +3,7 @@ define([
   'underscore', // lib/underscore/underscore
   'backbone'    // lib/backbone/backbone
 ], function($, _, Backbone){
+  var host = window.location.host;
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
@@ -10,7 +11,8 @@ define([
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
       REST_API_PREFIX: '/rest',
-      WS_PREFIX: '/apievents'
+      WS_PREFIX: '',
+      EVENTS_WS_URL: 'ws://' + host + '/apievents'
   };
   
   return settings;
