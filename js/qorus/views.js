@@ -515,6 +515,34 @@ define([
       this.undelegateEvents();
     }
   });
+  
+  var ServiceView = View.extend({
+    initialize: function (opts) {
+      _.bindAll(this);
+      this.opts = opts || {};
+      
+      this.on('fetch', this.render);
+      this.getData();
+    },
+    
+    getData: function () {
+      var _this = this;
+      var url = [settings.REST_API_PREFIX, 'services', this.name, this.methods.getData].join('/');
+      
+      $.put(url, { action: 'call'})
+        .done(function (data) {
+          _this.data = data;
+          _this.trigger('fetch');
+        });
+    },
+    
+    render: function (ctx) {
+      _.extend(this.context, { data: this.data });
+      
+      ServiceView.__super__.render.call(this, ctx);
+    }
+    
+  });
 
   var Views = {
     View: View,
@@ -522,7 +550,8 @@ define([
     Loader: Loader,
     ViewHelpers: Helpers,
     TableView: TableView,
-    RowView: RowView
+    RowView: RowView,
+    ServiceView: ServiceView
   }
 
   return Views;

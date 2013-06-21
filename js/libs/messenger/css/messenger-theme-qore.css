@@ -48,4 +48,8 @@ ul.messenger.messenger-theme-qore.messenger-fixed .messenger-message {
 ul.messenger.messenger-theme-qore.messenger-fixed .messenger-message .alert {
   margin-bottom: 0;
 }
+ul.messenger .message {
+  padding: 8px 35px;
+  text-align: center;
+}
 

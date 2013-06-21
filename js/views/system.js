@@ -6,8 +6,10 @@ define([
   'models/system',
   'text!../../templates/system/detail.html',
   'views/log',
-  'views/system/options'
-], function($, _, Backbone, Qorus, System, Template, LogView, OptionsView){
+  'views/system/options',
+  'views/system/datasources',
+  'views/system/prop',
+], function($, _, Backbone, Qorus, System, Template, LogView, OptionsView, DatasourceView, PropView){
   var SystemInfoView = Qorus.View.extend({
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
@@ -33,12 +35,16 @@ define([
       this.subviews.log = new LogView({ socket_url: "/system", parent: this });
       this.subviews.audit = new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false });
       this.subviews.options = new OptionsView();
+      this.subviews.datasources = new DatasourceView();
+      this.subviews.props = new PropView();
     },
     
     onRender: function () {
       this.assign('#options', this.subviews.options);
       this.assign('#log', this.subviews.log);
       this.assign('#audit-log', this.subviews.audit);
+      this.assign('#datasources', this.subviews.datasources);
+      this.assign('#prop', this.subviews.props);
     },
      
     tabToggle: function(e){
