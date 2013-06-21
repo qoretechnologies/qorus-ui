@@ -5,6 +5,7 @@ define([
   'moment',
   'messenger',
   'qorus/qorus', 
+  'views/info',
   'views/system', 
   'views/workflows/workflows', 
   'views/workflows/workflow', 
@@ -18,7 +19,7 @@ define([
   'views/workflows/order',
   'urls',
   'messenger'
-], function($, _, Backbone, moment, messenger, Qorus, SystemInfoView, WorkflowListView, WorkflowView, 
+], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
   OrderView, Urls) {
 
@@ -113,7 +114,8 @@ define([
     
     // system detail
     showSystem: function() {
-      var view = new SystemInfoView();
+      var query = window.location.search.slice(1);
+      var view = new SystemInfoView({ query: query });
       this.setView(view);
     },
     
@@ -125,7 +127,7 @@ define([
     }
   });
 
-  new SystemInfoView();
+  new InfoView();
 
   var app_router = new AppRouter();
   

@@ -603,3 +603,12 @@ aside {
     position: fixed;
     width: 150px;
 }
+
+.table td.property-key, .table td.property-value {
+  text-align: left;
+}
+
+.table td.property-key {
+  font-weight: bold;
+  width: 20%;
+}

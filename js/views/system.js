@@ -15,15 +15,10 @@ define([
       'click .nav-tabs a': 'tabToggle'
     },
     
-    initialize: function () {
-      this.user = System.User;
+    initialize: function (opts) {
+      this.opts = opts || {};
       this.info = System.Info;
       
-      _.bindAll(this, 'renderUser');
-      _.bindAll(this, 'renderInfo');
-      
-      this.user.on('change', this.renderUser);
-      this.info.on('change', this.renderInfo);
       this.listenTo(this.info, 'sync', this.render);
       this.template = Template;
       
@@ -45,6 +40,17 @@ define([
       this.assign('#audit-log', this.subviews.audit);
       this.assign('#datasources', this.subviews.datasources);
       this.assign('#prop', this.subviews.props);
+      
+      console.log("Props el", 
+        this.subviews.props.el, 
+        this.subviews.props.$el, 
+        this.subviews.props.events(),
+        $._data(this.subviews.props.el, 'events')
+      );
+      
+      if (_.has(this.opts, 'query')) {
+        $('a[href=#'+ this.opts.query +']').tab('show');
+      } 
     },
      
     tabToggle: function(e){
@@ -55,18 +61,6 @@ define([
       $target.tab('show');
 
       this.active_tab = $target.attr('href');
-    },
-    
-    renderUser: function () {
-      $('#user-info .username').text(this.user.get(0).name);
-    },
-    
-    renderInfo: function () {
-			$('header .version').text(this.info.get('omq-version'));
-			$('header .instance-key').text(this.info.get('instance-key'));
-			$('title').text(this.info.get('instance-key') + " | " + this.info.get('omq-version'));
-      $('#build').text(this.info.get('omq-version') + '.' + this.info.get('omq-build'));
-      $('#schema').text(this.info.get('omq-schema'));
     },
     
     clean: function () {

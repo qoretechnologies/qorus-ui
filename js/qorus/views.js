@@ -37,6 +37,7 @@ define([
     url: '/',
     additionalEvents: {},
     defaultEvents: {
+      "submit": "doNothing"
       // "click a[href^='/']": 'catchAClick'
     },
     context: {},
@@ -156,7 +157,7 @@ define([
     doNothing: function (e) {
       console.log('Do nothing', e);
       e.preventDefault();
-      e.stopPropagation();
+      // e.stopPropagation();
     }
    });
 
@@ -408,7 +409,7 @@ define([
     },
     
     addRow: function (m) {
-      console.log('adding row', this.subviews.rows, _.has(this.subviews.rows, m.id));
+      // console.log('adding row', this.subviews.rows, _.has(this.subviews.rows, m.id));
       if (!_.has(this.subviews.rows, m.id)) {
         var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
         this.$el.find('tbody').append(row.$el.html());
@@ -517,17 +518,28 @@ define([
   });
   
   var ServiceView = View.extend({
+    defaultEvents: {
+      'submit': 'doAction',
+      'click a[data-action]': 'doAction',
+      'click button[data-action]': 'doAction'
+    },
+    
     initialize: function (opts) {
       _.bindAll(this);
       this.opts = opts || {};
       
       this.on('fetch', this.render);
       this.getData();
+      console.log('Events', this.events(), this.$el, this.el);
+    },
+    
+    getUrl: function () {
+      return [settings.REST_API_PREFIX, 'services', this.name].join('/');
     },
     
     getData: function () {
       var _this = this;
-      var url = [settings.REST_API_PREFIX, 'services', this.name, this.methods.getData].join('/');
+      var url = [this.getUrl(), this.methods.getData].join('/');
       
       $.put(url, { action: 'call'})
         .done(function (data) {
@@ -537,9 +549,51 @@ define([
     },
     
     render: function (ctx) {
+      console.log('ServiceView', this.el, this.$el);
       _.extend(this.context, { data: this.data });
       
       ServiceView.__super__.render.call(this, ctx);
+    },
+    
+    doAction: function (ev) {
+      var params = {};
+      var $target = $(ev.currentTarget);
+      ev.preventDefault();
+      
+      if ($target.attr('type') == 'submit') {
+        var $f = $target.parents('form');
+
+        var vals = $f.serializeArray();
+        var params = {};
+      
+        _.each(vals, function (v) {
+          params[v.name] = v.value;
+        });
+        
+        // close modal
+        $f.parents('.modal').modal('hide');
+      }
+      
+      this.runAction($target.data('action'), params);
+    },
+    
+    runAction: function (action, data) {
+      var url = [this.getUrl(), action].join('/');
+      var args = _.values(data);
+      
+      $.put(url, { action: 'call', args: args })
+        .done(function (resp) {
+          console.log(resp);
+        })
+        .fail(function (resp) {
+          console.log(resp);
+        });
+    },
+    
+    sayHello: function (ev) {
+      console.log('say hello', ev);
+      ev.stopPropagation();
+      ev.preventDefault();
     }
     
   });
