@@ -77,16 +77,6 @@ define([
       this.assign('.workflows', this.subviews.table);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
     },
-        
-    // starts workflow
-    runAction: function (e) {
-      e.preventDefault();
-      var data = e.currentTarget.dataset;
-      if (data.id && data.action) {
-        var wfl = this.collection.get(data.id);
-        wfl.doAction(data.action); 
-      }
-    },
     
     // edit action with Modal window form
     openModal: function (e) {

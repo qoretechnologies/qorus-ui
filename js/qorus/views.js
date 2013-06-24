@@ -169,7 +169,11 @@ define([
       'click .invert': 'invert',
       'click th': 'sortView',
       'submit .form-search': 'search',
-      'keyup .search-query': 'search'
+      'keyup .search-query': 'search',
+      "click button[data-option]": "setOption",
+      "click button[data-action!='execute']": "runAction",
+      "click button[data-action='execute']": "openExecuteModal",
+      "click a[data-action]": "runAction",
     },
     
     events : function () {
@@ -217,6 +221,8 @@ define([
           has_prev: null
         };
       }
+      
+      this.on('highlight', this.enableActions);
     },
     
     render: function (ctx) {
@@ -262,6 +268,11 @@ define([
         .parents('.table-row')
         .toggleClass('warning')
         .toggleClass('checked');
+      
+      $('i.checker', this.$el)
+        .removeClass('icon-check')
+        .removeClass('icon-check-empty')
+        .addClass('icon-check-minus');
 
       e.stopPropagation();
       this.trigger('highlight');
@@ -292,23 +303,22 @@ define([
           .removeClass('icon-check')
           .addClass('icon-check-empty');
       }
-      
-      if (e.currentTarget.localName == 'i') {
-        $el
-          .toggleClass('icon-check-empty')
-          .toggleClass('icon-check')
-          .toggleClass('check-all')
-          .toggleClass('uncheck-all');          
-          e.stopPropagation();
-      }
-      
+
+      $('i.checker', this.$el)
+        .toggleClass('icon-check')
+        .toggleClass('icon-check-empty')
+        .toggleClass('check-all')
+        .toggleClass('uncheck-all');
+
       this.trigger('highlight');
     },
     
     invert: function (e) {
-      $('i.check-all', this.$el)
-        .toggleClass('icon-check')
-        .toggleClass('icon-check-empty');
+      // $('i.checker', this.$el)
+      //   .toggleClass('icon-check')
+      //   .toggleClass('icon-check-empty')
+      //   .toggleClass('check-all')
+      //   .toggleClass('uncheck-all');
       
       $('.table-row .check', this.$el)
         .toggleClass('icon-check')
@@ -353,7 +363,35 @@ define([
         });
     },
     
+    enableActions: function (e) {
+      var ids = this.getCheckedIds();
+      
+      if (ids.length > 0) {
+        $('.toolbar-actions', this.$el).removeClass('hide');
+      } else {
+        $('.toolbar-actions', this.$el).addClass('hide');
+      }
+    },
+    
     // end batch section definition
+    
+    runAction: function (e) {
+      console.log('running action', e);
+      var $target = $(e.currentTarget);
+      var data = e.currentTarget.dataset;
+      
+      if (data.action) {
+        if (data.id == 'selected') {
+          this.runBatchAction(data.action, data.method);
+        } else if (data.id) {
+          console.log("data action", data.id, data.action);
+          // $target.text(data.msg.toUpperCase());
+          var inst = this.collection.get(data.id);
+          inst.doAction(data.action);           
+        }
+      }
+      
+    },
     
     // enable table fixed header
     fixHeader: function () {

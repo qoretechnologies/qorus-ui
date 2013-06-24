@@ -59,8 +59,6 @@ define([
           m.fetch();
         }
       });
-      
-      this.on('highlight', this.enableActions);
     },
     
     createSubviews: function () {

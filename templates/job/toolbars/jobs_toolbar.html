@@ -1,20 +1,18 @@
 <div class="btn-toolbar sticky toolbar">
   <div class="btn-group">
     <button class="btn dropdown-toggle" data-toggle="dropdown">
-      <i class="icon-check-empty check-all"></i>
+      <i class="icon-check-empty check-all checker"></i>
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu above">
-			<li><a href="#" class="all">All</a></li>
-			<li><a href="#" class="none">None</a></li>
-			<li><a href="#" class="invert">Invert</a></li>
+		<li><a href="#" class="check-all">All</a></li>
+		<li><a href="#" class="uncheck-all">None</a></li>
+		<li><a href="#" class="invert">Invert</a></li>
     </ul>
   </div>
   <div class="btn-group hide toolbar-actions">
-    <button class="btn" data-id="selected" data-action="run"><i class="icon-play"></i> Run</button>
-    <button class="btn" data-id="selected" data-action="schedule"><i class="icon-time"></i> Reschedule</button>
-    <button class="btn" data-id="selected" data-action="reset"><i class="icon-refresh"></i> Reset</button>
-    <button class="btn" data-id="selected" data-action="set-expiry"><i class="icon-tag"></i> Set Expiration</button>
+    <button class="btn" data-id="selected" data-action="run" data-method="put"><i class="icon-play"></i> Run</button>
+    <button class="btn" data-id="selected" data-action="reset" data-method="put"><i class="icon-refresh"></i> Reset</button>
   </div>
   <div class="pull-right">
     <form class="form-search">

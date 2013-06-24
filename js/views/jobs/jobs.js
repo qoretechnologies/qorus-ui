@@ -46,23 +46,6 @@ define([
       this.assign('#job-toolbar', this.subviews.toolbar);
     },
     
-    runAction: function (e) {
-      e.stopPropagation();
-      
-      var $target = $(e.currentTarget);
-      var data = e.currentTarget.dataset;
-      if (data.id && data.action) {
-        
-        // update text message
-        if (data.msg) {
-          $target.text(data.msg.toUpperCase());          
-        }
-
-        var inst = this.collection.get(data.id);
-        inst.doAction(data.action); 
-      }
-    },
-    
     reSchedule: function (ev) {
       console.log("reschedule", ev);
       ev.stopPropagation();
