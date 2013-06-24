@@ -612,3 +612,7 @@ aside {
   font-weight: bold;
   width: 20%;
 }
+
+.table td.property-actions {
+    width: 100px;
+}

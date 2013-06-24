@@ -11,6 +11,8 @@
     <tr>
       <td class="property-key"><%= pkey %></td>
       <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>
+      <td class="property-actions"><a class="btn btn-small btn-warning edit-modal" data-toggle="modal" data-target="#prop-editor" 
+          data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i> Edit</a></td>
     </tr>
   <% }) %>
     </tbody>
@@ -37,3 +39,13 @@
   </div>
   </form>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+// plugin showcase
+$('.edit-modal').click(function (e) {
+   var $target = $(e.currentTarget);
+   $('#key').val($target.data('key'));
+   $('#value').val($target.data('value'));
+   $('#domain').val($target.data('domain'));
+});
+</script>
