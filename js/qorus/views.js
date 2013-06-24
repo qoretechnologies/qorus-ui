@@ -578,12 +578,14 @@ define([
     },
     
     runAction: function (action, data) {
+      var _this = this;
       var url = [this.getUrl(), action].join('/');
       var args = _.values(data);
       
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
           console.log(resp);
+          _this.getData();
         })
         .fail(function (resp) {
           console.log(resp);
