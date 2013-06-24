@@ -2,6 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'utils',
   'qorus/qorus',
   'models/system',
   'text!../../templates/system/detail.html',
@@ -9,7 +10,7 @@ define([
   'views/system/options',
   'views/system/datasources',
   'views/system/prop',
-], function($, _, Backbone, Qorus, System, Template, LogView, OptionsView, DatasourceView, PropView){
+], function($, _, Backbone, utils, Qorus, System, Template, LogView, OptionsView, DatasourceView, PropView){
   var SystemInfoView = Qorus.View.extend({
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
@@ -61,6 +62,8 @@ define([
       $target.tab('show');
 
       this.active_tab = $target.attr('href');
+      
+      Backbone.history.navigate(utils.getCurrentLocationPath() + $target.attr('href'));
     },
     
     clean: function () {

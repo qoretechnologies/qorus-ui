@@ -51,6 +51,14 @@ define([
         var next = later().getNext(cronParser().parse(cron_time));
             
         return this.parseDate(next, null);
+    },
+    
+    getCurrentLocation: function () {
+      return window.location.href;
+    },
+    
+    getCurrentLocationPath: function () {
+      return window.location.pathname;
     }
   };
     
