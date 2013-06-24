@@ -33,7 +33,7 @@ define([
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
-      "click button[data-action^='execute']": "runAction",
+      "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
       "click tr": "showDetail"
@@ -59,6 +59,8 @@ define([
           m.fetch();
         }
       });
+      
+      this.on('highlight', this.enableActions);
     },
     
     createSubviews: function () {
@@ -95,12 +97,13 @@ define([
     },
 	
     runAction: function (e) {
-      console.log('running action', e, this.isEnabled(e));
+      console.log('running action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
-      if (this.isEnabled(e) && data.action) {
+      if (data.action) {
         if (data.id == 'selected') {
+          this.runBatchAction(data.action, data.method);
         } else if (data.id) {
           console.log("data action", data.id, data.action);
           // $target.text(data.msg.toUpperCase());
@@ -180,15 +183,14 @@ define([
       e.stopPropagation();
     },
     
-    highlight: function (ev) {
-      console.log("service highlite");
-      ListView.__super__.highlight.call(this, ev);
-      this.enableActions();
-    },
-    
     enableActions: function (e) {
-      console.log('Enabling actions');
-      this.$el.find('#service-toolbar button[data-action]').toggleClass('disabled');
+      var ids = this.getCheckedIds();
+      
+      if (ids.length > 0) {
+        $('.toolbar-actions', this.$el).removeClass('hide');
+      } else {
+        $('.toolbar-actions', this.$el).addClass('hide');
+      }
     }
     
   });

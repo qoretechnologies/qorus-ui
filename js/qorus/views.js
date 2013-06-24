@@ -166,6 +166,7 @@ define([
       'click .check': 'highlight',
       'click .check-all': 'checkall',
       'click .uncheck-all': 'checkall',
+      'click .invert': 'invert',
       'click th': 'sortView',
       'submit .form-search': 'search',
       'keyup .search-query': 'search'
@@ -199,9 +200,9 @@ define([
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', this.render);
-        this.listenTo(this.collection, 'all', function (e) {
-          console.log(e)
-        });
+        // this.listenTo(this.collection, 'all', function (e) {
+        //   console.log(e)
+        // });
         
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
         this.listenTo(this.collection, 'resort', this.render);
@@ -249,58 +250,114 @@ define([
       return this;
     },
     
-    isEnabled: function (e) {
-      return !$(e.currentTarget).hasClass('disabled');
-    },
-    
     // toggle select row
     highlight: function (e) {
-      var el = e.currentTarget;
-      $(el)
+      var $el = $(e.currentTarget);
+      
+      $el
         .toggleClass('icon-check-empty')
         .toggleClass('icon-check');
-      $(el)
+
+      $el
         .parents('.table-row')
-        .toggleClass('warning');
+        .toggleClass('warning')
+        .toggleClass('checked');
+
       e.stopPropagation();
+      this.trigger('highlight');
     },
-    
-    fixHeader: function () {
-      $(this.el).find('table').fixedHeaderTable();
-    },
-    
+
+    // start batch actions definition
+
     // toggle select on all rows
     checkall: function (e) {
-      var el = e.currentTarget;
+      var $el = $(e.currentTarget);
 
       // behaviour switcher
-      if ($(el)
-        .hasClass('check-all')) {
-        $(el)
-          .toggleClass('icon-check-empty')
-          .toggleClass('icon-check')
-          .toggleClass('check-all')
-          .toggleClass('uncheck-all');
-        $('.workflow-row')
+      if ($el.hasClass('check-all')) {
+        $('.table-row')
           .addClass('warning')
           .addClass('checked');
-        $('.workflow-row .check')
+
+        $('.table-row .check')
           .removeClass('icon-check-empty')
           .addClass('icon-check');
+
       } else {
-        $(el)
-          .toggleClass('icon-check-empty')
-          .toggleClass('icon-check')
-          .toggleClass('check-all')
-          .toggleClass('uncheck-all');
-        $('.workflow-row')
+        $('.table-row')
           .removeClass('warning')
           .removeClass('checked');
-        $('.workflow-row .check')
+
+        $('.table-row .check')
           .removeClass('icon-check')
           .addClass('icon-check-empty');
       }
-      e.stopPropagation();
+      
+      if (e.currentTarget.localName == 'i') {
+        $el
+          .toggleClass('icon-check-empty')
+          .toggleClass('icon-check')
+          .toggleClass('check-all')
+          .toggleClass('uncheck-all');          
+          e.stopPropagation();
+      }
+      
+      this.trigger('highlight');
+    },
+    
+    invert: function (e) {
+      $('i.check-all', this.$el)
+        .toggleClass('icon-check')
+        .toggleClass('icon-check-empty');
+      
+      $('.table-row .check', this.$el)
+        .toggleClass('icon-check')
+        .toggleClass('icon-check-empty');
+      
+      $('.table-row')
+        .toggleClass('warning')
+        .toggleClass('checked');
+
+      this.trigger('highlight');
+    },
+    
+    // get all visible checked rows and its data-id attribute
+    getCheckedIds: function () {
+      var $checked_rows = $('.icon-check').parents('tr:visible');
+      var ids = [];
+      
+      _.each($checked_rows, function (row) {
+        ids.push($(row).data('id'));
+      })
+
+      return ids;
+    },
+    
+    // do batch action
+    runBatchAction: function (action, method) {
+      console.log(action, method);
+      method = method || 'get';
+      var ids = this.getCheckedIds();
+      
+      if (method == 'get') {
+        $request = $.get(this.collection.url, { action: action, ids: ids.join(',') });
+      } else if (method == 'put') {
+        $request = $.put(this.collection.url, { action: action, ids: ids.join(',') })
+      } else if (method == 'dekete') {
+        $request = $.put(this.collection.url, { action: action, ids: ids.join(',') })
+      }
+      
+      $request
+        .done(function (resp){
+          console.log(resp);
+        });
+    },
+    
+    // end batch section definition
+    
+    // enable table fixed header
+    fixHeader: function () {
+      $(this.el).find('table').fixedHeaderTable();
     },
     
     // sort view
@@ -495,12 +552,14 @@ define([
       
       var $el = this.$el.find('tr');
       
-      console.log(this, $el);
-      
       // restore previous classes
       _.each(css_classes, function (cls) {
         $el.addClass(cls);
-      })
+      });
+      
+      // restore check
+      var check_classes = $('i.check', $previous_el).attr('class');
+      $('i.check', $el).attr('class', check_classes);
       
       $el.addClass('changed');
       
