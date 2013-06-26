@@ -9,7 +9,8 @@ define([
   'qorus/helpers',
   'text!../../templates/common/table.html',
   'text!../../templates/common/tablerow.html',
-], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl) {
+  'text!../../templates/common/nodata.html'
+], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -451,6 +452,8 @@ define([
     
     initialize: function (opts) {
       _.bindAll(this);
+      this.opts = opts || {};
+      
       this.collection = opts.collection;
       
       if (_.has(opts, 'template')) {
@@ -468,6 +471,19 @@ define([
       if (_.has(opts, 'dispatcher')) {
         this.dispatcher = opts.dispatcher;
       }
+      
+      this.opts.template = this.template;
+    },
+    
+    render: function (ctx) {
+      if (this.collection.size() < 1) {
+        this.template = NoDataTpl;
+      } else {
+        this.opts.template = this.opts.template;
+      }
+      
+      TableView.__super__.render.call(this, ctx);
+      return this;
     },
     
     createRows: function () {

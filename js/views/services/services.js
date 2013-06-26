@@ -53,7 +53,7 @@ define([
       this.listenToOnce(this.collection, 'sync', this.render);
       
       var _this = this;
-      this.listenTo(Dispatcher, 'service:start service:stop service:error', function (e) {
+      this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
         var m = _this.collection.get(e.info.id);
         if (m) {
           m.fetch();
