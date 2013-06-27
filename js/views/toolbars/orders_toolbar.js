@@ -78,7 +78,8 @@ define([
     datePicker: function(){
       var view = this;
       $('.dp').datetimepicker({
-          format: 'yyyy-MM-dd hh:mm:ss',
+          format: 'yyyy-MM-dd hh:ii:ss',
+          autoclose: true
       })
       .on('changeDate', function(e){
           view.onDateChanged(e.date.toISOString(), {});

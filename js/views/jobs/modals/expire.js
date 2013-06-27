@@ -48,7 +48,8 @@ define([
     datePicker: function () {
       var view = this;
       this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-mm-dd hh:mm:ss'
+          format: 'yyyy-mm-dd hh:ii:ss',
+          autoclose: true
       });
     },
     
