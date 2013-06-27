@@ -59,6 +59,19 @@ define([
     
     getCurrentLocationPath: function () {
       return window.location.pathname;
+    },
+    
+    flattenSerializedArray: function (object, except) {
+      var exclude = _.isArray(except) ? except : [except];
+      
+      var data = {};
+      _.each(object, function(obj) {
+        if (_.indexOf(exclude, obj.name) === -1) {
+          data[obj.name] = obj.value; 
+        }
+      });
+      
+      return data;
     }
   };
     

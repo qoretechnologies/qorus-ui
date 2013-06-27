@@ -158,7 +158,7 @@ define([
     doNothing: function (e) {
       console.log('Do nothing', e);
       e.preventDefault();
-      // e.stopPropagation();
+      e.stopPropagation();
     }
    });
 

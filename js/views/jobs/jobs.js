@@ -8,8 +8,9 @@ define([
   'text!../../../templates/job/table.html',
   'text!../../../templates/job/row.html',
   'views/toolbars/jobs_toolbar',
-  'views/jobs/modals/reschedule'
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar, RescheduleModal){
+  'views/jobs/modals/reschedule',
+  'views/jobs/modals/expire'
+], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar, RescheduleModal, ExpireModal){
 
   var ListView = Qorus.ListView.extend({
     title: "Jobs",
@@ -62,7 +63,17 @@ define([
     },
     
     setExpiration: function (ev) {
-      console.log('set expiry', ev);
+      var $target = $(ev.currentTarget);
+      var job = this.collection.get($target.data('id'));
+      var view = new ExpireModal({ job: job });
+      
+      if (this.subviews.modal) {
+        this.subviews.modal.off();
+      }
+      
+      this.subviews.modal = view;
+      this.assign('#jobs-modal', view);
+      
       ev.preventDefault();
     },
     

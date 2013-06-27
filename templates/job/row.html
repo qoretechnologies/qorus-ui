@@ -7,6 +7,7 @@
 	<td class="status"><%= powerButton(item.active, { option: 'active', on: 'true', off: 'false', id: item.jobid }) %></td>
   <td class="last"><%= item.last_executed %></td>
   <td class="next"><%= item.next %></td>
+  <td class="expiry"><%= item.expiry_date %></td>
   <td class="complete"><%= item.COMPLETE ? '<span class="badge badge-success">'+ item.COMPLETE +'</span>' : 0 %></td>
   <td class="error"><%= item.ERROR ? '<span class="badge badge-important">'+item.ERROR +'</span>' : 0 %></td>
   <td class="in-progress"><%= item['IN-PROGRESS'] ? item['IN-PROGRESS'] : 0 %></td>

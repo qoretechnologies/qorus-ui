@@ -4,7 +4,7 @@ define([
   'settings',
   'utils',
   'qorus/qorus',
-  'text!../../../../templates/job/modals/reschedule.html',
+  'text!../../../../templates/job/modals/expire.html',
   'datepicker'
 ], function ($, _, settings, utils, Qorus, Template) {
   var View = Qorus.View.extend({
@@ -24,6 +24,7 @@ define([
         
     onRender: function () {
       $(this.$el).modal();
+      this.datePicker();
     },
     
     render: function (ctx) {
@@ -43,6 +44,13 @@ define([
     close: function () {
       this.$el.modal('hide');
     },
+
+    datePicker: function () {
+      var view = this;
+      this.dp = $('.dp').datetimepicker({
+          format: 'yyyy-mm-dd hh:mm:ss'
+      });
+    },
     
     runAction: function (ev) {
       ev.preventDefault();
@@ -50,15 +58,15 @@ define([
       var $form = $(ev.target);
       var id = $('#jobid', $form).val();
       var url = this.url + id;
-      var data = utils.flattenSerializedArray($form.serializeArray(), 'jobid');
+
       var params = { 
-        action: 'schedule', 
-        schedule: _.values(data).join(' ')
+        action: 'setExpire', 
+        date: $('#expiry_date', $form).val()
       };
       
       $.put(url, params)
         .done(function (resp) {
-           $.globalMessenger().post("Job " + id + " rescheduled");
+           $.globalMessenger().post("Job " + id + " set expiry");
         });
           
       this.close();

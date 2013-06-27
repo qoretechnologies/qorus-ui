@@ -14,20 +14,11 @@ define([
     idAttribute: "jobid",
     urlRoot: settings.REST_API_PREFIX + '/jobs/',
     dateAttributes: ['last_executed', 'next'],
-    allowed_actions: ['run', 'reset', 'set-expire', 'schedule'],
+    allowed_actions: ['run', 'reset', 'set-expire', 'schedule', 'expiry_date'],
 
 
     initialize: function (options) {
       Model.__super__.initialize.call(this, options);
-    },
-
-    parse: function(response, options){
-      // get date from cron
-      if (!response.next) {
-        var next = [response.minute, response.hour, response.day, response.month, response.wday];
-        response.next = utils.formatDate(utils.getNextDate(next.join(' ')));        
-      }
-      return Model.__super__.parse.call(this, response, options);
     },
     
     doAction: function(action, opts){

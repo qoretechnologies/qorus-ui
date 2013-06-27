@@ -7,10 +7,14 @@
 <form class="form-horizontal">
 <div class="modal-body">
     <p><em><%= item.description %></em><p>
+        <input type="hidden" name="jobid" id="jobid" value="<%= item.jobid %>" />
         <div class="control-group">
-            <label class="control-label" for="count">Set expiration </label>
+            <label class="control-label" for="expiry_date">Set expiration</label>
             <div class="controls">
-                <input type="number" name="count" id="count" value="1" />
+              <div class="input-prepend date dp" data-date="<%= item.expiry_date %>" data-format="yyyy-mm-dd hh:ii:ss">
+                <span class="add-on"><i class="icon-th"></i></span>
+                <input type="text" id='expiry_date' name="expiry_date" value="<%= item.expiry_date %>" />
+              </div>
             </div>
         </div>
     </div>
