@@ -142,8 +142,6 @@ define([
       
       $menu.offset({ left: ev.pageX, top: ev.pageY });
       $menu.dropdown('toggle');
-      
-      
     }
   });
   

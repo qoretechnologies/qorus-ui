@@ -388,7 +388,7 @@ define([
           console.log("data action", data.id, data.action);
           // $target.text(data.msg.toUpperCase());
           var inst = this.collection.get(data.id);
-          inst.doAction(data.action);           
+          inst.doAction(data.action, data);           
         }
       }
       

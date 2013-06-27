@@ -32,7 +32,7 @@ define([
     },
     idAttribute: "workflowid",
     date: null,
-    allowedActions: ['start','stop','reset'],
+    allowedActions: ['start','stop','reset', 'setDeprecated'],
 
     initialize: function (opts) {
       Model.__super__.initialize.call(this, opts);
@@ -59,16 +59,24 @@ define([
     
     doAction: function (action, opts) {
       if(_.indexOf(this.allowedActions, action) != -1){
+        var params;
         var wflid = this.id;
         var _this = this;
-        $.put(this.url(), {'action': action, 'options': opts }, null, 'application/json')
-        .done(
-          function (e, ee, eee){
-            var msg = sprintf('Workflow %d %s done', wflid, action);
-            $.globalMessenger().post(msg);
-            _this.fetch();
-          }
-        );        
+        
+        if (action == 'setDeprecated') {
+          params = {'action': action, 'deprecated': opts.value }
+        } else {
+          params = {'action': action, 'options': opts }
+        }
+        
+        $.put(this.url(), params, null, 'application/json')
+          .done(
+            function (e, ee, eee){
+              var msg = sprintf('Workflow %d %s done', wflid, action);
+              $.globalMessenger().post(msg);
+              _this.fetch();
+            }
+          );        
       }
     },
     
