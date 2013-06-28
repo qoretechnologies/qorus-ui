@@ -19,6 +19,8 @@ define([
     }
   });
   
+  
+  
   var Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function (opts) {
@@ -33,6 +35,8 @@ define([
       $(this.el).parent().find('.loader').remove();
     }
   });
+  
+  
   
   var View = Backbone.View.extend({
     url: '/',
@@ -161,6 +165,8 @@ define([
       e.stopPropagation();
     }
    });
+   
+
 
    var ListView = View.extend({
     defaultEvents: {

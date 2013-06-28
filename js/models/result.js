@@ -6,7 +6,7 @@ define([
   var Model = Qorus.Model.extend({
     idAttribute: 'job_instanceid',
     urlRoot: settings.REST_API_PREFIX + '/jobresults/',
-    dateAttributes: ['started', 'modified', "errors.created"],
+    dateAttributes: ['started', 'modified', "errors.created", "audit.created"],
   });
   // Return the model for the module
   return Model;
