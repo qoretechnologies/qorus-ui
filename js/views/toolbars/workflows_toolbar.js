@@ -12,11 +12,6 @@ define([
     context: {
     },
     
-    events: {
-      // "click button.date": "setDate",
-      "click button[data-action='open']": "navigateTo"
-    },
-    
     initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
@@ -47,14 +42,7 @@ define([
       $('.datetimepicker').remove();
       this.dp.remove();
       Backbone.history.navigate('/workflows/' + moment(date).utc()
-          .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
-    },
-    
-    navigateTo: function (e) {
-      var el = $(e.currentTarget);
-      if (el.data('url')) {
-        Backbone.history.navigate(el.data('url'), {trigger: true});       
-      }
+          .format('YYYYMMDDHHmmss'), {trigger: true});
     }
   });
   

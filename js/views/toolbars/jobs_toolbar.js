@@ -21,6 +21,8 @@ define([
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
+      console.log("Job toolbar", this.options, opts);
+      
       this.context.date = this.options.date;
       this.template = Template;
     },
@@ -46,8 +48,8 @@ define([
     onDateChanged: function (date) {
       $('.datetimepicker').remove();
       this.dp.remove();
-      Backbone.history.navigate('/workflows/' + moment(date).utc()
-          .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
+      Backbone.history.navigate('/jobs/' + moment(date).utc()
+          .format('YYYYMMDDHHmmss'), {trigger: true});
     },
     
     navigateTo: function (e) {

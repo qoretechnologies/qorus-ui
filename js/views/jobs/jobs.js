@@ -21,9 +21,13 @@ define([
       'click a[data-action="schedule"]': 'reSchedule'
     },
     
-    initialize: function () {
+    initialize: function (collection, date) {
       this.template = Template;
-      ListView.__super__.initialize.call(this, Collection);
+      
+      // pass date to options object
+      this.date = date;
+      
+      ListView.__super__.initialize.call(this, Collection, date);
       
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
@@ -39,7 +43,7 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       });
-      this.subviews.toolbar = new Toolbar();
+      this.subviews.toolbar = new Toolbar({ date: this.date });
     },
 
     onRender: function () {

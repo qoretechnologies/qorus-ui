@@ -83,8 +83,8 @@ define([
     },
     
     // job list
-    showJobs: function () {
-      var view = new JobListView();
+    showJobs: function (date) {
+      var view = new JobListView({}, date, this);
       this.setView(view);
     },
     

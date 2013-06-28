@@ -200,11 +200,13 @@ define([
         this.date = moment().add('days', -1).format(this.date_format);
       } else if (date == 'all') {
         this.date = moment(settings.DATE_FROM).format(this.date_format);
-      // } else if (date.match(/[0-9]+/)) {
-      //   this.date = moment(date, 'YYYYMMDDHHmmss');
+      } else if (date.match(/^[0-9]+$/)) {
+        console.log(date);
+        this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
       } else {
         this.date = date;
-      }    
+      }
+      console.log(this.date);
       
       if (collection) {
         this.collection = new collection({ date: this.date });
@@ -383,11 +385,10 @@ define([
     // end batch section definition
     
     runAction: function (e) {
-      console.log('running action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
-      if (data.action) {
+      if (data.action && data.action != 'open') {
         if (data.id == 'selected') {
           this.runBatchAction(data.action, data.method);
         } else if (data.id) {
@@ -396,6 +397,8 @@ define([
           var inst = this.collection.get(data.id);
           inst.doAction(data.action, data);           
         }
+      } else if (data.action == 'open') {
+        this.openURL($target.data('url') || $target.attr('href'));
       }
       
     },
@@ -448,6 +451,10 @@ define([
       if (e.type == "submit") {
         e.preventDefault();
       }
+    },
+    
+    openURL: function (url) {
+      Backbone.history.navigate(url, { trigger: true });
     }
   });
 

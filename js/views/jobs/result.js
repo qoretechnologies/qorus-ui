@@ -2,11 +2,10 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'qorus/helpers',
   'models/result',
   'text!../../../templates/job/results/detail.html',
   'rainbow.qore'
-], function($, _, Qorus, Helpers, Model, Template, StepView){
+], function($, _, Qorus, Model, Template, StepView){
   var context = {};
   
   var ModelView = Qorus.View.extend({

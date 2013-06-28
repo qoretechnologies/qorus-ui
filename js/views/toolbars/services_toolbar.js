@@ -47,7 +47,7 @@ define([
       $('.datetimepicker').remove();
       this.dp.remove();
       Backbone.history.navigate('/workflows/' + moment(date).utc()
-          .format('YYYY-MM-DD HH:mm:ss'), {trigger: true});
+          .format('YYYYMMDDHHmmss'), {trigger: true});
     },
     
     navigateTo: function (e) {

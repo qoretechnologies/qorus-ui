@@ -101,7 +101,7 @@ define([
     },
     
     onDateChanged: function(date) {
-      var url = this.url + '/' + moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+      var url = this.url + '/' + moment(date).utc().format('YYYYMMDDHHmmss');
       console.log('date changed');
       Backbone.history.navigate(url, { trigger: true });
     },
