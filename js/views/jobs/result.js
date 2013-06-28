@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'qprus/helpers',
+  'qorus/helpers',
   'models/result',
   'text!../../../templates/job/results/detail.html',
   'rainbow.qore'
