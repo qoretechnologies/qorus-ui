@@ -32,7 +32,7 @@ define([
     },
     idAttribute: "workflowid",
     date: null,
-    allowedActions: ['start','stop','reset', 'setDeprecated'],
+    allowedActions: ['start','stop','reset', 'show', 'hide'],
 
     initialize: function (opts) {
       Model.__super__.initialize.call(this, opts);
@@ -63,10 +63,12 @@ define([
         var wflid = this.id;
         var _this = this;
         
-        if (action == 'setDeprecated') {
-          params = {'action': action, 'deprecated': opts.value }
+        if (action == 'hide') {
+          params = { action: 'setDeprecated', deprecated: true }
+        } else if (action == 'show')  {
+          params = { action: 'setDeprecated', deprecated: false }
         } else {
-          params = {'action': action, 'options': opts }
+          params = { action: action }
         }
         
         $.put(this.url(), params, null, 'application/json')

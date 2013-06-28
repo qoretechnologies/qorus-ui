@@ -23,7 +23,6 @@ define([
     // el: $("#content"),
     additionalEvents: {
       'click .action-modal': 'openModal',
-      'click .action': 'runAction',
       'contextmenu tr': 'onRightClick'
     },
     
@@ -91,6 +90,30 @@ define([
         this.subviews.modal.open();
       }
       
+    },
+    
+    // do batch action
+    runBatchAction: function (action, method, params) {
+      var method = method || 'get';
+      var ids = this.getCheckedIds();
+      var params = { action: action, ids: ids.join(',') };
+      
+      if (action == 'show' || action == 'hide') {
+        params = { action: 'setDeprecated', ids: ids.join(','), deprecated: (action=='hide') }
+      }
+      
+      if (method == 'get') {
+        $request = $.get(this.collection.url, params);
+      } else if (method == 'put') {
+        $request = $.put(this.collection.url, params);
+      } else if (method == 'dekete') {
+        $request = $.put(this.collection.url, params);
+      }
+      
+      $request
+        .done(function (resp){
+          console.log(resp);
+        });
     },
     
     helpers: {

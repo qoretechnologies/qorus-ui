@@ -10,18 +10,22 @@
 			<li><a href="#" class="invert">Invert</a></li>
 	    </ul>
     </div>
-    <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-mm-dd hh:ii:ss">
-      <span class="add-on"><i class="icon-th"></i></span>
-      <input type="text" class="span10" value="<%= date %>">
-    </div>
-    <div class="btn-group">
-      <button class="btn" data-action="open" data-url="/workflows/all">All</button>
-      <button class="btn" data-action="open" data-url="/workflows">24 h</button>
-    </div>
     <div class="btn-group hide toolbar-actions">
       <button class="btn" data-id="selected" data-action="start" data-method="put"><i class="icon-play"></i> Start</button>
       <button class="btn" data-id="selected" data-action="stop" data-method="put"><i class="icon-remove-circle"></i> Stop</button>
       <button class="btn" data-id="selected" data-action="reset" data-method="put"><i class="icon-refresh"></i> Reset</button>
+      <button class="btn" data-id="selected" data-action="hide" data-method="put"><i class="icon-flag-alt"></i> Hide</button>
+      <button class="btn" data-id="selected" data-action="show" data-method="put"><i class="icon-flag"></i> Show</button>
+    </div>
+    <div class="btn-group">
+        <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-mm-dd hh:ii:ss">
+          <span class="add-on"><i class="icon-th"></i></span>
+          <input type="text" class="span10" value="<%= date %>">
+        </div>
+        <div class="btn-group">
+          <button class="btn" data-action="open" data-url="/workflows/all">All</button>
+          <button class="btn" data-action="open" data-url="/workflows">24 h</button>
+        </div>
     </div>
     <div class="pull-right">
     <form class="form-search">

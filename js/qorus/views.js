@@ -345,17 +345,17 @@ define([
     },
     
     // do batch action
-    runBatchAction: function (action, method) {
-      console.log(action, method);
-      method = method || 'get';
+    runBatchAction: function (action, method, params) {
+      var method = method || 'get';
       var ids = this.getCheckedIds();
+      var params = { action: action, ids: ids.join(',') };
       
       if (method == 'get') {
-        $request = $.get(this.collection.url, { action: action, ids: ids.join(',') });
+        $request = $.get(this.collection.url, params);
       } else if (method == 'put') {
-        $request = $.put(this.collection.url, { action: action, ids: ids.join(',') })
+        $request = $.put(this.collection.url, params);
       } else if (method == 'dekete') {
-        $request = $.put(this.collection.url, { action: action, ids: ids.join(',') })
+        $request = $.put(this.collection.url, params);
       }
       
       $request

@@ -22,7 +22,7 @@
 	<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting', wfl.id), 'badge-waiting') %></td>
 	<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled', wfl.id), 'badge-info') %></td>
 	<td><%= wfl.TOTAL %></td>
-	<td><%= powerButton(wfl.deprecated, { action: 'setDeprecated', option: 'deprecated', on: 'true', off: 'false', id: wfl.id }) %></td>
+	<td><%= statusIcon(wfl.deprecated) %></td>
 	<td>
         <div class="btn-group">
             <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
@@ -34,6 +34,11 @@
                 <li><a href="#" class="action-modal" data-action="start" data-id="<%= wfl.id %>"><i class="icon-off"></i> Start Custom</a></li>
                 <li><a href="#" class="action" data-action="reset" data-id="<%= wfl.id %>"><i class="icon-refresh"></i> Reset</a></li>
                 <li><a href="#" class="action" data-action="stop" data-id="<%= wfl.id %>"><i class="icon-remove"></i> Stop</a></li>
+                <% if (wfl.deprecated) { %>
+                <li><a href="#" class="action" data-action="show" data-id="<%= wfl.id %>"><i class="icon-flag"></i> Show</a></li>
+                <% } else { %>
+                <li><a href="#" class="action" data-action="hide" data-id="<%= wfl.id %>"><i class="icon-flag-alt"></i> Hide</a></li>                
+                <% } %>
             </ul>
         </div>
 	</td>
