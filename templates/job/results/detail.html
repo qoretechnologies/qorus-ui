@@ -1,0 +1,48 @@
+<% if (item.get('id')) { %>
+<% var it = item.toJSON() %>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="?errors" data-target="#errors">Errors</a></li>
+  <li><a href="?audit" data-target="#audit">Audit</a></li>
+  <li><a href="?info" data-target="#info">Info</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="errors">
+      <table class="table table-condensed table-numbered">
+          <thead>
+              <tr>
+                  <th class="narrow"></th>
+                  <th class="narrow">ID</th>
+                  <th>Severity</th>
+                  <th class="name">Error</th>
+                  <th class="description">Description</th>
+                  <th>Bus. Err</th>
+                  <th>Created</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% _.each(it.errors, function (err) { %>
+              <tr>
+                  <td></td>
+                  <td><%= err.job_errorid %></td>
+                  <td><%= err.severity %></td>
+                  <td class="name"><%= err.error %></td>
+                  <td class="description"><%= err.description %></td>
+                  <td><%= err.business_error %></td>
+                  <td><%= err.created %></td>
+              </tr>
+              <% }) %>
+          </tbody>
+      </table>
+  </div>
+
+  <div class="tab-pane" id="audit">
+      <%= JSON.stringify(it.audit) %>
+  </div>
+
+  <div class="tab-pane" id="info">
+      <%= JSON.stringify(it.info) %>
+  </div>
+
+</div>
+<% } %>

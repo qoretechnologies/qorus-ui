@@ -13,6 +13,9 @@ define([
     template: Template,
     model_name: 'result',
     subviews: {},
+    additionalEvents: {
+      'click th[data-sort]': 'fetchSorted',
+    },
     
     initialize: function (opts) {
       _.bindAll(this);
@@ -53,6 +56,11 @@ define([
       // this.subviews.table.render();
       this.subviews.table.render();
     },
+    
+    fetchSorted: function (e) {
+      var $target = $(e.currentTarget);
+      var sort = $target.data('sort');
+    }
   }); 
 
   return ListView;
