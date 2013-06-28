@@ -30,10 +30,14 @@ define([
     
     subviews: {},
     
-    initialize: function (collection, date, router) {
+    initialize: function (collection, date, router, deprecated) {
       _.bindAll(this);
+      this.opts = {};
+
       this.router = router;
       this.template = Template;
+
+      this.opts.deprecated = deprecated;
       
       // pass date to options object
       this.date = date;

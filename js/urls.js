@@ -6,7 +6,7 @@ define([
   var routes = {
     // Define some URL routes
     'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
-    'workflows/:date': 'showWorkflows',
+    'workflows/:date(/)(:deprecated)': 'showWorkflows',
     'workflows': 'showWorkflows',
 
     'orders/view/:id': 'showOrder',

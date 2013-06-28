@@ -151,7 +151,9 @@ define([
       this.opts.limit = this.limit;
       this.opts.offset = this.offset;
 
-      var data = this.opts;      
+      var data = this.opts;
+      
+      console.log("COllection data", data, this.opts);
 
       if (!options) {
         options = {};

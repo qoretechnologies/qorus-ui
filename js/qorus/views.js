@@ -209,7 +209,7 @@ define([
       console.log(this.date);
       
       if (collection) {
-        this.collection = new collection({ date: this.date });
+        this.collection = new collection({ date: this.date, opts: this.opts });
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', this.render);
