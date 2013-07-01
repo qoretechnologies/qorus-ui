@@ -62,6 +62,7 @@ define([
     
     // workflow list 
     showWorkflows: function (date, deprecated) {
+      console.log(date, deprecated);
       var view = new WorkflowListView({}, date, this, deprecated);
       this.setView(view);
     },

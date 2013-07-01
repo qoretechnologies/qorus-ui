@@ -15,8 +15,6 @@ define([
       this.sort_order = 'des';
       this.sort_history = ['name',];
       this.opts = {};
-      
-      console.log(opts);
 
       if (opts) {
           this.date = opts.date;

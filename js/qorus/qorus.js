@@ -153,7 +153,9 @@ define([
 
       var data = this.opts;
       
-      console.log("COllection data", data, this.opts);
+      if (this.date) {
+        this.opts.date = this.date;
+      }
 
       if (!options) {
         options = {};
