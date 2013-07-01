@@ -10,7 +10,9 @@ define([
   'views/system/options',
   'views/system/datasources',
   'views/system/prop',
-], function($, _, Backbone, utils, Qorus, System, Template, LogView, OptionsView, DatasourceView, PropView){
+  'views/system/http'
+], function($, _, Backbone, utils, Qorus, System, Template, LogView, OptionsView, 
+  DatasourceView, PropView, HttpServicesView){
   var SystemInfoView = Qorus.View.extend({
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
@@ -33,6 +35,7 @@ define([
       this.subviews.options = new OptionsView();
       this.subviews.datasources = new DatasourceView();
       this.subviews.props = new PropView();
+      this.subviews.httpservices = new HttpServicesView();
     },
     
     onRender: function () {
@@ -41,6 +44,7 @@ define([
       this.assign('#audit-log', this.subviews.audit);
       this.assign('#datasources', this.subviews.datasources);
       this.assign('#prop', this.subviews.props);
+      this.assign('#http', this.subviews.httpservices);
       
       console.log("Props el", 
         this.subviews.props.el, 
@@ -50,7 +54,7 @@ define([
       );
       
       if (_.has(this.opts, 'query')) {
-        $('a[href=#'+ this.opts.query +']').tab('show');
+        $('a[data-target=#'+ this.opts.query +']').tab('show');
       } 
     },
      

@@ -616,3 +616,7 @@ aside {
 .table td.property-actions {
     width: 100px;
 }
+
+.table td.text-left {
+    text-align: left;
+}
