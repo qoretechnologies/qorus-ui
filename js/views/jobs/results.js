@@ -6,8 +6,9 @@ define([
   'collections/results',
   'text!../../../templates/job/results/list.html',
   'text!../../../templates/job/results/table.html',
-  'text!../../../templates/job/results/row.html'
-], function ($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl) {
+  'text!../../../templates/job/results/row.html',
+  'views/toolbars/results_toolbar'
+], function ($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar) {
 
   var ListView = Qorus.ListView.extend({
     template: Template,
@@ -19,12 +20,14 @@ define([
     
     initialize: function (opts) {
       _.bindAll(this);
-         
+      
       this.opts = opts;
       _.extend(this.options, opts);
       _.extend(this.context, opts);
 
-      this.collection = new Collection(this.opts);
+      this.opts.url = '/jobs/view/' + opts.jobid;
+
+      this.collection = new Collection(opts);
       this.collection.on('sync', this.updateContext, this);
       this.collection.fetch();
       
@@ -34,6 +37,7 @@ define([
 
     onRender: function () {
       this.assign('#result-list', this.subviews.table);
+      this.assign('#toolbar', this.subviews.toolbar);
     },
 
     createSubviews: function () {
@@ -44,7 +48,9 @@ define([
         helpers: this.helpers,
         context: { url: this.url },
         dispatcher: Dispatcher
-      })
+      });
+      
+      this.subviews.toolbar = new Toolbar({ date: this.date, url: this.opts.url });
     },
     
     updateContext: function () {

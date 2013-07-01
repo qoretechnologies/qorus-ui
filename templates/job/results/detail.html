@@ -79,7 +79,11 @@
   </div>
 
   <div class="tab-pane" id="info">
+      <% if (it.info) { %>
       <%= createNestedList(it.info) %>
+      <% } else { %>
+          <p>No data found</p>
+      <% } %>
   </div>
 
 </div>

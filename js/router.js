@@ -90,8 +90,9 @@ define([
     },
     
     // result list
-    showJob: function (id) {
-      var view = new JobView({ jobid: id });
+    showJob: function (id, date) {
+      console.log("showing job", id, date);
+      var view = new JobView({ jobid: id, date: date });
       this.setView(view);
     },
     

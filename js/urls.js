@@ -12,7 +12,7 @@ define([
     'orders/view/:id': 'showOrder',
 
     'services': 'showServices',
-    'jobs/view/:id': 'showJob',
+    'jobs/view/:id(/:date)': 'showJob',
     'jobs/:date': 'showJobs',
     'jobs': 'showJobs',
     'events': 'showEvents',

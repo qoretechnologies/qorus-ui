@@ -181,6 +181,7 @@ define([
       "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
+      "click a[data-back]": "historyBack"
     },
     
     events : function () {
@@ -263,6 +264,12 @@ define([
       this.sortIcon();
       console.log('Finished rendering');
       return this;
+    },
+    
+    historyBack: function (e) {
+      e.preventDefault();
+      console.log("back button", e);
+      window.history.back();
     },
     
     // toggle select row
@@ -612,8 +619,12 @@ define([
     
     update: function(ctx) {
       var _this = this;
+      var css_classes = [];
       var $previous_el = this.parent.$el.find('[data-id=' + this.model.id + ']');
-      var css_classes = $previous_el.attr('class').split(/\s+/);
+      
+      if ($previous_el.attr('class')) {
+        css_classes = $previous_el.attr('class').split(/\s+/); 
+      }
       
       this.render();
       

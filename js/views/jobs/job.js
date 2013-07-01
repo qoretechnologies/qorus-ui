@@ -24,8 +24,8 @@ define([
         opts.id = opts.jobid;
         delete opts.jobid;
       }
+      this.opts = opts;
       
-      console.log(opts);
       ModelView.__super__.initialize.call(this, opts);
       
       this.model = new Model({ id: opts.id });
@@ -35,10 +35,13 @@ define([
     },
     
     createSubviews: function (args) {
-      var socket_url = '/jobs/' + this.model.id;
+      var socket_url = '/jobs/' + this.opts.id;
+      
+      console.log(this.opts.id);
       
       this.subviews.results = new ResultsView({
-        jobid: this.model.id
+        jobid: this.opts.id, 
+        date: this.opts.date
       });
       this.subviews.log = new Log({ socket_url: socket_url, parent: this });
       this.subviews.bottombar = new BottomBarView({});

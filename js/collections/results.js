@@ -14,6 +14,7 @@ define([
     
     initialize: function (opts) {
       Collection.__super__.initialize.call(this, opts);
+      this.opts.sort = 'started';
       
       if (_.has(opts, 'jobid')) {
         this.jobid = opts.jobid;
