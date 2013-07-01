@@ -727,14 +727,7 @@ define([
         .fail(function (resp) {
           console.log(resp);
         });
-    },
-    
-    sayHello: function (ev) {
-      console.log('say hello', ev);
-      ev.stopPropagation();
-      ev.preventDefault();
     }
-    
   });
 
   var Views = {

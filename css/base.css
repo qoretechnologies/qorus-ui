@@ -614,9 +614,15 @@ aside {
 }
 
 .table td.property-actions {
-    width: 100px;
+    width: 50px;
 }
 
 .table td.text-left {
     text-align: left;
+}
+
+.table thead.extra-padding td {
+    font-size: 120%;
+    padding-top: 20px;
+    padding-bottom: 10px;    
 }
