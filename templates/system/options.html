@@ -27,7 +27,7 @@
     <td><%= statusIcon(it.service) %></td>
     <td><%= statusIcon(it.workflow) %></td>
     <% if (it.status != 'locked') { %>
-    <td class="text-left" data-editable="edit" data-value="<%= it.value %>" data-type="<%= it.expects %>" data-name="<%= it.name %>"><%= it.value %></td>
+    <td class="text-left editable" data-editable="edit" data-value="<%= it.value %>" data-type="<%= it.expects %>" data-name="<%= it.name %>"><%= it.value %></td>
     <% } else { %>
     <td class="text-left"><%= it.value %></td>
     <% } %>

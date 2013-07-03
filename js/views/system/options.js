@@ -51,10 +51,12 @@ define([
         });
         
         $tpl = template;
+        $target.toggleClass('editable');
         $target.html($tpl);
         
         $('button[data-action=cancel]', $target).click(function () {
           $target.html(value);
+          $target.toggleClass('editable');
         });
         
         $('button[data-action=set]').click(function () {
@@ -75,6 +77,7 @@ define([
       $.put(url, { action: 'set', value: value})
         .done(function (data) {
           target.html(value);
+          target.toggleClass('editable');
         });
     }
   });

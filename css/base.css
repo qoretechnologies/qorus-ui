@@ -630,3 +630,14 @@ aside {
 #options td.description div {
   max-width: 200px;
 }
+
+.editable:hover:after {
+  content: "\f040";
+  color: '#000';
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  margin-left: .3em;
+}
