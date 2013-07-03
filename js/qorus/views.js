@@ -417,6 +417,7 @@ define([
     
     // sort view
     sortView: function (e) {
+      console.log("Sort by ", e);
       var el = $(e.currentTarget);
       if (el.data('sort')) {
         this.collection.sortByKey(el.data('sort'), el.data('order'));

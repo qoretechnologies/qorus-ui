@@ -36,7 +36,12 @@ define([
     },
 
     onRender: function () {
-      this.assign('#result-list', this.subviews.table);
+      if (this.collection.length > 0) {
+        this.assign('#result-list', this.subviews.table);
+        this.$el.parent('.pane').scroll(this.scroll);
+        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+        $('.pane').scroll(this.scroll);
+      }
       this.assign('#toolbar', this.subviews.toolbar);
     },
 
@@ -61,6 +66,14 @@ define([
       };
       // this.subviews.table.render();
       this.subviews.table.render();
+    },
+    
+    scroll: function () {
+      var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+      if (pos < 100) {
+        this.nextPage(); 
+        this.$el.children('button[data-pagination]').html("Loading...");
+      }
     },
     
     fetchSorted: function (e) {

@@ -617,7 +617,7 @@ aside {
     width: 50px;
 }
 
-.table td.text-left {
+.table td.text-left, .table th.text-left {
     text-align: left;
 }
 
@@ -625,4 +625,8 @@ aside {
     font-size: 120%;
     padding-top: 20px;
     padding-bottom: 10px;    
+}
+
+#options td.description div {
+  max-width: 200px;
 }
