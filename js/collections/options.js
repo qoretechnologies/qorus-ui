@@ -10,13 +10,10 @@ define([
     model: Model,
     sort_key: 'status',
     sort_order: 'des',
+    sort_history: ['name'],
     
-  	initialize: function(opts){
-      this.sort_key = 'status';
-      this.sort_order = 'des';
-      this.sort_history = ['name',];
+    initialize: function (opts) {
       this.opts = opts || {};
-      console.log("Sorting:", this.sort_key, opts);
     }
   });
   // You don't usually return a collection instantiated

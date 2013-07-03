@@ -2,12 +2,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'utils',
   'qorus/qorus',
   'text!../../../templates/workflow/toolbars/workflows_toolbar.html',
   'datepicker',
   'moment',
   'bootstrap.multiselect'
-], function($, _, Backbone, Qorus, Template, date, moment){
+], function($, _, Backbone, utils, Qorus, Template, date, moment){
+  
   var Toolbar = Qorus.View.extend({
     context: {
     },
@@ -18,6 +20,7 @@ define([
       
       this.context.date = this.options.date;
       this.template = Template;
+      this.getHiddenURL();
     },
     
     onRender: function () {
@@ -43,6 +46,20 @@ define([
       this.dp.remove();
       Backbone.history.navigate('/workflows/' + moment(date).utc()
           .format('YYYYMMDDHHmmss'), {trigger: true});
+    },
+    
+    getHiddenURL: function () {
+      var path = utils.getCurrentLocationPath().slice(1);
+      var parts = path.split('/');
+      
+      if (parts.length > 2) {
+        this.context.url = [parts[0], parts[1]].join('/');
+        this.context.deprecated = true;
+      } else {
+        this.context.url = [parts[0], parts[1], 'hidden'].join('/');
+        this.context.deprecated = false;
+      }
+
     }
   });
   

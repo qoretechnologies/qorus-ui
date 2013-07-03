@@ -196,8 +196,8 @@ define([
       this.loader.render();
 
       // set DATE format and init date
-      this.date_format = settings.DATE_DISPLAY;      
-      if (date === undefined || date === null) {
+      this.date_format = settings.DATE_DISPLAY;
+      if (date === undefined || date === null || date === '24h') {
         this.date = moment().add('days', -1).format(this.date_format);
       } else if (date == 'all') {
         this.date = moment(settings.DATE_FROM).format(this.date_format);
