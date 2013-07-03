@@ -202,21 +202,16 @@ define([
       } else if (date == 'all') {
         this.date = moment(settings.DATE_FROM).format(this.date_format);
       } else if (date.match(/^[0-9]+$/)) {
-        console.log(date);
         this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
       } else {
         this.date = date;
       }
-      console.log(this.date);
       
       if (collection) {
         this.collection = new collection({ date: this.date, opts: this.opts });
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', this.render);
-        // this.listenTo(this.collection, 'all', function (e) {
-        //   console.log(e)
-        // });
         
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
         this.listenTo(this.collection, 'resort', this.render);
@@ -233,6 +228,7 @@ define([
       }
       
       this.on('highlight', this.enableActions);
+      this.on('highlight', this.updateCheckIcon);
     },
     
     render: function (ctx) {
@@ -320,22 +316,40 @@ define([
           .addClass('icon-check-empty');
       }
 
-      $('i.checker', this.$el)
-        .toggleClass('icon-check')
-        .toggleClass('icon-check-empty')
-        .toggleClass('check-all')
-        .toggleClass('uncheck-all');
-
       this.trigger('highlight');
     },
     
-    invert: function (e) {
-      // $('i.checker', this.$el)
-      //   .toggleClass('icon-check')
-      //   .toggleClass('icon-check-empty')
-      //   .toggleClass('check-all')
-      //   .toggleClass('uncheck-all');
+    updateCheckIcon: function () {
+      var $checker = $('i.checker', this.$el);
+      var total = $('tbody tr', this.$el).size();
+      var selected = this.getCheckedIds().length;
+
+      if (selected == 0) {
+        $checker
+          .removeClass('icon-check')
+          .removeClass('icon-check-minus')
+          .removeClass('uncheck-all')
+          .addClass('icon-check-empty')
+          .addClass('check-all')
+      } else if (selected == total) {
+        $checker
+          .removeClass('icon-check-minus')
+          .removeClass('icon-check-empty')
+          .removeClass('uncheck-all')
+          .addClass('icon-check')
+          .addClass('uncheck-all')
+      } else {
+        $checker
+          .removeClass('icon-check')
+          .removeClass('icon-check-empty')
+          .removeClass('uncheck-all')
+          .addClass('icon-check-minus')
+          .addClass('check-all')        
+      }
       
+    },
+    
+    invert: function (e) {      
       $('.table-row .check', this.$el)
         .toggleClass('icon-check')
         .toggleClass('icon-check-empty');
@@ -381,6 +395,8 @@ define([
     
     enableActions: function (e) {
       var ids = this.getCheckedIds();
+      
+      console.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
       
       if (ids.length > 0) {
         $('.toolbar-actions', this.$el).removeClass('hide');

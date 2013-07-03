@@ -79,12 +79,12 @@ define([
       this.assign('#jobs-modal', view);
       
       ev.preventDefault();
-    },
-    
-    highlight: function (ev) {
-      this.showActionToolbar
-      ListView.__super__.highlight(ev);
-    },
+    },    // 
+    // 
+    // highlight: function (ev) {
+    //   this.showActionToolbar
+    //   ListView.__super__.highlight(ev);
+    // },
     
     // override the parent runAction to prevent run it on set-expiry and schedule
     runAction: function (ev) {
