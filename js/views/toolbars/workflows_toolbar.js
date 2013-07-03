@@ -52,11 +52,16 @@ define([
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
       
+      console.log(parts.length);
+      
       if (parts.length > 2) {
         this.context.url = [parts[0], parts[1]].join('/');
         this.context.deprecated = true;
-      } else {
+      } else if (parts.length == 2) {
         this.context.url = [parts[0], parts[1], 'hidden'].join('/');
+        this.context.deprecated = false;
+      } else {
+        this.context.url = [parts[0], '24h', 'hidden'].join('/');
         this.context.deprecated = false;
       }
 
