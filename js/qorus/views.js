@@ -321,6 +321,10 @@ define([
           .addClass('icon-check-empty');
       }
 
+      if (e.target.localName == "i") {
+        e.stopPropagation();        
+      }
+
       this.trigger('highlight');
     },
     
@@ -340,7 +344,7 @@ define([
         $checker
           .removeClass('icon-check-minus')
           .removeClass('icon-check-empty')
-          .removeClass('uncheck-all')
+          .removeClass('check-all')
           .addClass('icon-check')
           .addClass('uncheck-all')
       } else {

@@ -75,7 +75,6 @@ define([
     },
     
     encodeDate: function (date) {
-      console.log("encoding date", date, moment(date));
       return moment(date, settings.DATE_DISPLAY)
               .format('YYYYMMDDHHmmss');
     }
