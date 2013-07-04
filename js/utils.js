@@ -6,7 +6,7 @@ define([
   'settings',
   'later.recur',
   'later.cron'
-], function($, _, Backbone, moment, settings){
+], function ($, _, Backbone, moment, settings) {
   var utils = {
     settings: settings,
     status_map: {
@@ -72,6 +72,12 @@ define([
       });
       
       return data;
+    },
+    
+    encodeDate: function (date) {
+      console.log("encoding date", date, moment(date));
+      return moment(date, settings.DATE_DISPLAY)
+              .format('YYYYMMDDHHmmss');
     }
   };
     

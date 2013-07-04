@@ -24,7 +24,8 @@ define([
         opts.id = opts.jobid;
         delete opts.jobid;
       }
-      this.opts = opts;
+      this.opts = opts || {};
+      this.date = this.opts.date;
       
       ModelView.__super__.initialize.call(this, opts);
       

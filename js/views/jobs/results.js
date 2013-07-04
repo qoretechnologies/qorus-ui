@@ -21,9 +21,11 @@ define([
     initialize: function (opts) {
       _.bindAll(this);
       
-      this.opts = opts;
-      _.extend(this.options, opts);
-      _.extend(this.context, opts);
+      this.opts = opts || {};
+
+      ListView.__super__.initialize.call(this, Collection, this.opts.date);
+      // _.extend(this.options, opts);
+      // _.extend(this.context, opts);
 
       this.opts.url = '/jobs/view/' + opts.jobid;
 

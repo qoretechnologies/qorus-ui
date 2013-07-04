@@ -2,7 +2,7 @@
 <tr class="table-row job-row" data-id="<%= item.jobid %>">
 	<td><i class="icon-check-empty check"></i></td>>
 	<td class="id"><%= item.jobid %></td>
-	<td class="name" ><a href="/jobs/view/<%= item.jobid %>"><%= item.name %></a></td>
+	<td class="name" ><a href="<%= getUrl(item.jobid,date) %>"><%= item.name %></a></td>
 	<td class="version"><%= item.version %></td>
 	<td class="status"><%= powerButton(item.active, { option: 'active', on: 'true', off: 'false', id: item.jobid }) %></td>
   <td class="last"><%= item.last_executed %></td>

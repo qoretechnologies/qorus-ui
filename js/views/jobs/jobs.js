@@ -1,6 +1,7 @@
 define([
   'jquery',
   'underscore',
+  'utils',
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/jobs',
@@ -10,7 +11,7 @@ define([
   'views/toolbars/jobs_toolbar',
   'views/jobs/modals/reschedule',
   'views/jobs/modals/expire'
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar, RescheduleModal, ExpireModal){
+], function($, _, utils, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar, RescheduleModal, ExpireModal){
 
   var ListView = Qorus.ListView.extend({
     title: "Jobs",
@@ -96,9 +97,20 @@ define([
       } else {
         ListView.__super__.runAction.call(this, ev);
       }
+    },
+    
+    helpers: {
+      getUrl: function (id, date) {
+        var date = date || this.date || null;
+        var params = ['/jobs/view', id];
+    
+        if (date) {
+          params.push(utils.encodeDate(date));
+        }
+        
+        return params.join('/');
+      }
     }
-    
-    
   });
 
   return ListView;
