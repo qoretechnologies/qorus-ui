@@ -69,7 +69,6 @@ define([
       });
 
       // this should be placed inside instances/orders view
-      console.log("Orders options", this.options, this.opts, this.date);
       this.subviews.toolbar = new OrdersToolbar(_.extend(this.options, { date: this.date }));
     },
     
@@ -122,6 +121,12 @@ define([
         $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
         $('.pane').scroll(this.scroll);
       }
+      
+      // init popover on info text
+      $('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "body", html: true});
+      });
     },
     
     helpers: {

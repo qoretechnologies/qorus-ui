@@ -16,9 +16,9 @@
                   <th class="narrow">ID</th>
                   <th>Severity</th>
                   <th class="name">Error</th>
-                  <th class="description">Description</th>
                   <th>Bus. Err</th>
                   <th>Created</th>
+                  <th class="description">Description</th>
               </tr>
           </thead>
           <tbody>
@@ -28,9 +28,9 @@
                   <td><%= err.job_errorid %></td>
                   <td><%= err.severity %></td>
                   <td class="name"><%= err.error %></td>
-                  <td class="description"><%= err.description %></td>
                   <td><%= err.business_error %></td>
                   <td><%= err.created %></td>
+                  <td class="info"><%= err.description %></td>
               </tr>
               <% }) %>
           </tbody>

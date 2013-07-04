@@ -621,6 +621,10 @@ aside {
     text-align: left;
 }
 
+.table td.text-right, .table th.text-right {
+    text-align: right;
+}
+
 .table thead.extra-padding td {
     font-size: 120%;
     padding-top: 20px;

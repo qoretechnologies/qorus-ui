@@ -91,7 +91,7 @@ define([
       // init popover on info text
       $('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "body", html: true});
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
       });
     },
     

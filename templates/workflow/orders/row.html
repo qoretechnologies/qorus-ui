@@ -14,7 +14,7 @@
     <td><%= item.completed %></td>
     <td><%= (item.error_count) ? item.error_count : 0 %></td>
     <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
-    <td>
+    <td class="text-right">
       <div class="btn-group">
         <% _.each(item.actions, function(action) { %>
           <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>

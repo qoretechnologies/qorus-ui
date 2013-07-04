@@ -42,8 +42,15 @@ define([
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
+    },
+    
+    onRender: function () {
+      // init popover on info text
+      $('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+      });
     }
-        
   });
   return ModelView;
 });
