@@ -510,6 +510,9 @@ define([
       }
       
       this.opts.template = this.template;
+      
+      _.extend(this.context, opts);
+      _.extend(this.options, opts);
     },
     
     render: function (ctx) {

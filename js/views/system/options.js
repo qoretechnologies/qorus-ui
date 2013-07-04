@@ -79,6 +79,7 @@ define([
         .done(function (data) {
           target.html(value);
           target.toggleClass('editable');
+          target.data('value', value);
         });
     }
   });

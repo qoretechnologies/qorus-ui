@@ -1,4 +1,3 @@
-<%= JSON.stringify(obj.item) %>
 <% 
     var wfl = obj.item.toJSON(); 
     wfl.id = wfl.workflowid;
@@ -22,6 +21,9 @@
 	<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting', wfl.id), 'badge-waiting') %></td>
 	<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled', wfl.id), 'badge-info') %></td>
 	<td><%= wfl.TOTAL %></td>
+  <% if (obj.deprecated) { %>
+  <td><%= wfl.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
+  <% } %>
 	<td>
         <div class="btn-group">
             <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">

@@ -65,7 +65,8 @@ define([
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
-          dispatcher: Dispatcher
+          dispatcher: Dispatcher,
+          deprecated: this.opts.deprecated
       });
     },
     

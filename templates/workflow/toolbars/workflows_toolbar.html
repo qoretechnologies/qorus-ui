@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="btn-group">
-        <button class="btn" data-action="open" data-url="<%= url %>"><%= (deprecated) ? 'Hide hidden' : 'Show hidden' %></button>
+        <button class="btn" data-action="open" data-url="<%= url %>"><i class="icon-<%= (deprecated) ? 'flag' : 'flag-alt' %>"></i> <%= (deprecated) ? 'Only visible' : 'Show hidden' %></button>
     </div>
     <div class="pull-right">
     <form class="form-search">
