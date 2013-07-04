@@ -142,7 +142,12 @@ define([
       if (!_.isUndefined(this.title)) {
         var title = _.isFunction(this.title) ? this.title() : this.title;
         var inst = document.title.match(/(.*)\| /g);
-        document.title = inst[0];
+        if (inst) {
+          document.title = inst[0];
+        } else {
+          document.title = "";
+        }
+
         document.title += " " + title; 
       }
     },
