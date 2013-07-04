@@ -290,7 +290,8 @@ define([
         .removeClass('icon-check')
         .removeClass('icon-check-empty')
         .addClass('icon-check-minus');
-
+        
+      console.log("highlight stop propagation");
       e.stopPropagation();
       this.trigger('highlight');
     },
@@ -322,6 +323,7 @@ define([
       }
 
       if (e.target.localName == "i") {
+        console.log("checkall stop propagation");
         e.stopPropagation();        
       }
 

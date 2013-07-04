@@ -94,6 +94,7 @@ define([
       var bar = this.subviews.bottombar;
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
+        console.log('load info stop propagation');
         e.stopPropagation();
         e.preventDefault();
         if (el.hasClass('info')) {
@@ -102,8 +103,6 @@ define([
         } else {
           var oview = new OrderView({ id: el.data('id'), workflow: this.model, show_header: false });
           var _this = this;
-      
-          e.stopPropagation();
       
           // this.subviews.order = oview;
       
@@ -143,6 +142,7 @@ define([
     
     // edit action with Modal window form
     openModal: function (e) {
+      console.log('openModal stop propagation');
       e.preventDefault();
       e.stopPropagation();
       

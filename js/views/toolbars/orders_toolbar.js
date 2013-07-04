@@ -2,13 +2,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'utils',
   'qorus/qorus',
   'text!../../../templates/workflow/toolbars/orders_toolbar.html',
   'datepicker',
   'moment',
   'bootstrap.multiselect',
   'jquery.sticky'
-], function($, _, Backbone, Qorus, Template, date, moment){
+], function($, _, Backbone, utils, Qorus, Template, date, moment){
   var Toolbar = Qorus.View.extend({
     context: {
       predefined_statuses: [
@@ -20,9 +21,7 @@ define([
     
     events: {
       "click button#status-filter": "statusFilter",
-      "click button[data-action='open']": "navigateTo",
-      // 'submit .form-search': 'search',
-      // 'keyup .search-query': 'search'
+      "click button[data-action='open']": "navigateTo"
     },
     
     initialize: function (opts) {
@@ -36,6 +35,7 @@ define([
       this.template = Template;
       this.context.hasStatus = this.hasStatus;
       this.updateUrl();
+      this.date = this.options.date;
     },
         
     onRender: function () {
@@ -55,7 +55,7 @@ define([
     updateUrl: function(url, statuses){
       var baseUrl = url || this.options.url;
       this.baseUrl = baseUrl;
-      var statuses = statuses || this.options.statuses;
+      statuses = statuses || this.options.statuses;
       this.updateStatuses(statuses);
       this.url = baseUrl;
 
@@ -67,7 +67,7 @@ define([
     },
     
     // check the statuses for given status
-    hasStatus: function (status){
+    hasStatus: function (status) {
       if (this.options.statuses){
         return _.indexOf(this.options.statuses.split(','), status) > -1;        
       }
@@ -75,7 +75,7 @@ define([
     },
     
     // filter by date init
-    datePicker: function(){
+    datePicker: function () {
       var view = this;
       $('.dp').datetimepicker({
           format: 'yyyy-MM-dd hh:ii:ss',
@@ -86,12 +86,12 @@ define([
       });
     },
     
-    statusFilter: function(){
-      var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
+    statusFilter: function () {
+      var url = [this.baseUrl, this.options.statuses, utils.encodeDate(this.date)].join('/');
       Backbone.history.navigate(url, { trigger: true });
     },
     
-    filterBE: function(e){
+    filterBE: function (e) {
       var el = $(e.currentTarget);
       if(el.hasClass('active')){
         console.log(this.url);
@@ -100,15 +100,14 @@ define([
       }
     },
     
-    onDateChanged: function(date) {
+    onDateChanged: function (date) {
       var url = this.url + '/' + moment(date).utc().format('YYYYMMDDHHmmss');
-      console.log('date changed');
       Backbone.history.navigate(url, { trigger: true });
     },
     
-    addMultiSelect: function(){
+    addMultiSelect: function () {
       var _this = this;
-      // apply bootstrap multiselect to #statuses element
+      // apply bootstrap multiselect to #statuses element      
       $('#statuses').multiselect({
         onChange: function(el, checked){
           var sl = [], val = $(el).val();
@@ -138,7 +137,7 @@ define([
           $('#statuses').multiselect('refresh');
           _this.options.statuses = sl.join(',');
           _this.trigger('filter', _this.options.statuses);
-          console.log(_this.options);
+          console.log("multiselect", _this.options);
         }
       });
     },
@@ -154,7 +153,6 @@ define([
       if (this.collection){
         this.collection.search(e); 
       }
-      console.log(this.options);
     }
   });
   return Toolbar;

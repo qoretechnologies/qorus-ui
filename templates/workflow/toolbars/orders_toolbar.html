@@ -1,43 +1,40 @@
-<div class="container-fluid"> 
-    <div class="row-fluid">
-        <div class="span1">
-          <div class="btn-group">
-				    <button class="btn dropdown-toggle" data-toggle="dropdown">
-				      <i class="icon-check-empty check-all"></i>
-				      <span class="caret"></span>
-            </button>
-  			    <ul class="dropdown-menu above">
-    					<li><a href="#" class="all">All</a></li>
-    					<li><a href="#" class="none">None</a></li>
-    					<li><a href="#" class="invert">Invert</a></li>
-  			    </ul>
-          </div>
-        </div>
-        <div class="span4">
-          <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-mm-dd hh:ii:ss">
-            <span class="add-on"><i class="icon-th"></i></span>
-            <input type="text" class="span10" value="<%= date %>">
-          </div>
-          <div class="btn-group">
-            <button class="btn" data-action="open" data-url="<%= obj.url %>/all">All</button>
-            <button class="btn" data-action="open" data-url="<%= obj.url %>">24 h</button>
-          </div>
-        </div>
-        <select id='statuses' class="multiselect" multiple="multiple">
-          <option value="all"<% if(obj.hasStatus('all')) { %> selected <% } %> >All</option>
-           <% _.each(obj.predefined_statuses, function(error){ %>
-             <option value="<%= error.toLowerCase() %>"<% if(obj.hasStatus(error.toLowerCase())) { %> selected <% } %> ><%= error %></option>
-           <% }) %>
-         </select>
-         <button id="status-filter" class="btn btn-primary">Filter</button>
-         <div class="pull-right">
-         <form class="form-search">
-           <div class="input-append search-box">
-             <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
-             <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
-           </div>
-         </form>
-         </div>
-       </div>
+<div class="btn-toolbar sticky toolbar"> 
+  <!-- <div class="btn-group">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-check-empty check-all"></i>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu above">
+      <li><a href="#" class="all">All</a></li>
+      <li><a href="#" class="none">None</a></li>
+      <li><a href="#" class="invert">Invert</a></li>
+    </ul>
+  </div> -->
+  <div class="btn-group">
+    <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-mm-dd hh:ii:ss">
+      <span class="add-on"><i class="icon-th"></i></span>
+      <input type="text" class="span10" value="<%= date %>">
     </div>
+    <div class="btn-group">
+      <button class="btn" data-action="open" data-url="<%= obj.url %>/all">All</button>
+      <button class="btn" data-action="open" data-url="<%= obj.url %>">24 h</button>
+    </div>
+  </div>
+  <div class="btn-group">
+    <select id='statuses' class="multiselect" multiple="multiple">
+      <option value="all"<% if(obj.hasStatus('all')) { %> selected <% } %> >All</option>
+       <% _.each(obj.predefined_statuses, function(error){ %>
+         <option value="<%= error.toLowerCase() %>"<% if(obj.hasStatus(error.toLowerCase())) { %> selected <% } %> ><%= error %></option>
+       <% }) %>
+    </select>
+    <button id="status-filter" class="btn btn-primary">Filter</button>
+  </div>
+   <div class="pull-right">
+     <form class="form-search">
+       <div class="input-append search-box">
+         <input type="text" class="span8 search-query appendInputButton" placeholder="Search...">
+         <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+       </div>
+     </form>
+   </div>
 </div>

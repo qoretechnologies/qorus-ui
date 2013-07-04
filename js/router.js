@@ -69,6 +69,8 @@ define([
     
     // workflow detail
     showWorkflow: function (id, inst, filter, date, wfiid) {
+      console.log(date);
+
       if (wfiid) {
         this.showOrder(wfiid, id);
       } else {
@@ -91,7 +93,6 @@ define([
     
     // result list
     showJob: function (id, date) {
-      console.log("showing job", id, date);
       var view = new JobView({ jobid: id, date: date });
       this.setView(view);
     },

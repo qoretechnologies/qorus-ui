@@ -96,6 +96,7 @@ define([
     },
     
     runAction: function (e) {
+      console.log('run action stop propagation');
       e.stopPropagation();
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {

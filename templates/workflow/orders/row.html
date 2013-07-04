@@ -1,7 +1,7 @@
 <% var item = item.toJSON(); %>
   <tr data-id="<%= item.workflow_instanceid %>">
     <td></td>
-    <td><i class="icon-check-empty check"></i></td>
+    <td><!-- <i class="icon-check-empty check"></i> --></td>
     <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
     <td>
       <% if (item.business_error) { %>

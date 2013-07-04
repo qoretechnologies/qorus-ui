@@ -1,6 +1,7 @@
 define([
   'jquery',
   'underscore',
+  'settings',
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/orders',
@@ -10,7 +11,7 @@ define([
   'text!../../../templates/workflow/orders/row.html',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
+], function($, _, settings, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
   var context = {
     action_css: {
       'block': 'btn-inverse',
@@ -40,16 +41,32 @@ define([
         opts.url = this.url;
         // delete opts.url;
       }
-      
-      if (opts.date) {
-        this.date = opts.date;
+
+
+      // set DATE format and init date
+      var date = opts.date;
+      this.date_format = settings.DATE_DISPLAY;
+      if (date === undefined || date === null || date === '24h') {
+        this.date = moment().add('days', -1).format(this.date_format);
+      } else if (date == 'all') {
+        this.date = moment(settings.DATE_FROM).format(this.date_format);
+      } else if (date.match(/^[0-9]+$/)) {
+        this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
       } else {
-        opts.date = this.date;
+        this.date = date;
       }
+      
+      opts.date = this.date;
       
       this.opts = opts;
       _.extend(this.options, opts);
       _.extend(this.context, opts);
+
+      // call super method
+      // ListView.__super__.initialize.call(this, Collection, opts.date);
+      // add element loader
+      this.loader = new Qorus.Loader({ el: $('#wrap') });
+      this.loader.render();
 
       this.collection = new Collection(this.opts);
       this.collection.on('sync', this.updateContext, this);
@@ -69,13 +86,13 @@ define([
       });
 
       // this should be placed inside instances/orders view
-      this.subviews.toolbar = new OrdersToolbar(_.extend(this.options, { date: this.date }));
+      this.subviews.toolbar = new OrdersToolbar(this.options);
     },
     
-    runAction: function (e) {
-      e.stopPropagation();
+    runAction: function (e) {      
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
+        e.stopPropagation();
         var inst = this.collection.get(data.id);
         inst.doAction(data.action); 
       }
@@ -99,7 +116,7 @@ define([
       // TODO
       var $el = $(e.currentTarget);
       var sort = $el.data('sort');
-      console.log("Fetching sorted", sort);
+      // console.log("Fetching sorted", sort);
       e.stopPropagation();
     },
     
@@ -131,12 +148,12 @@ define([
     
     helpers: {
       action_css: context.action_css
-    },
-    
-    render: function (ctx) {
-      ListView.__super__.render.call(this, ctx);
-      console.log("Rendering context", this.context, this.helpers);
     }
+    
+    // render: function (ctx) {
+    //   ListView.__super__.render.call(this, ctx);
+    //   // console.log("Rendering context", this.context, this.helpers);
+    // }
     
   });
   
