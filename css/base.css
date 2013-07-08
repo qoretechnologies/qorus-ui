@@ -645,3 +645,13 @@ aside {
   -webkit-font-smoothing: antialiased;
   margin-left: .3em;
 }
+
+#output {
+  display: block;
+  overflow-x: auto;
+  height: 200px;
+}
+
+#output .error {
+  color: red;
+}

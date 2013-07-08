@@ -17,11 +17,12 @@ define([
   'views/workflows/orders',
   'views/workflows/search',
   'views/workflows/order',
+  'views/system/ocmd',
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, Urls) {
+  OrderView, OcmdView, Urls) {
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -122,6 +123,10 @@ define([
       this.setView(view);
     },
     
+    showOcmd: function () {
+      var view = new OcmdView();
+      this.setView(view);
+    },
     
     // default
     defaultAction: function (actions) {

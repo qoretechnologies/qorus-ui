@@ -10,7 +10,6 @@ define([
   'text!../../templates/common/action_status.html',
   'urls'
 ], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
-  console.log(Urls);
 
   var Helpers = {
     getStatusCSS: function (status) {

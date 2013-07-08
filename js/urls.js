@@ -18,6 +18,7 @@ define([
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
     'system': 'showSystem',
+    'ocmd': 'showOcmd',
     '': 'redirectToWorkflows',
 
     // Default
