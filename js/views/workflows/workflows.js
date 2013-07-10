@@ -177,6 +177,9 @@ define([
     highlightRunning: function (e) {
       var _this = this;
       e.preventDefault();
+
+      this.uncheckAll();
+
       $('.workflow-row .instances').each(function () {
         var $this = $(this);
         
@@ -190,6 +193,9 @@ define([
     highlightStopped: function (e) {
       var _this = this;
       e.preventDefault();
+      
+      this.uncheckAll();
+      
       $('.workflow-row .instances').each(function () {
         var $this = $(this);
         

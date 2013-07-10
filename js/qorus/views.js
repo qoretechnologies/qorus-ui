@@ -309,13 +309,7 @@ define([
           .addClass('icon-check');
 
       } else {
-        $('.table-row')
-          .removeClass('warning')
-          .removeClass('checked');
-
-        $('.table-row .check')
-          .removeClass('icon-check')
-          .addClass('icon-check-empty');
+        this.uncheckAll();
       }
 
       if (e.target.localName == "i") {
@@ -323,6 +317,16 @@ define([
       }
 
       this.trigger('highlight');
+    },
+    
+    uncheckAll: function () {
+      $('.table-row')
+        .removeClass('warning')
+        .removeClass('checked');
+
+      $('.table-row .check')
+        .removeClass('icon-check')
+        .addClass('icon-check-empty');
     },
     
     checkRow: function (id) {
