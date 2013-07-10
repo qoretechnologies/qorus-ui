@@ -10,13 +10,17 @@ define([
   var url = settings.REST_API_PREFIX + '/system/api';
 
   var View = Qorus.View.extend({
+    history: [],
+    
     template: Template,
     additionalEvents: {
       'submit': 'doAction',
-      'keypress input[type=text]': 'doAction'
+      'keypress input[type=text]': 'doAction',
+      'keydown #command': 'browseHistory'
     },
     
     initialize: function (opts) {
+      _.bindAll(this);
       this.template = Template;
       this.render();
       $(window).bind("resize.app", _.bind(this.setHeight, this));
@@ -28,29 +32,9 @@ define([
     },
     
     doAction: function (e) {
-      var _this = this;
-      
+      console.log('really?', e.keyCode);
       if (e.keyCode == 13) {
-        var cmd = $('#command').val();
-        var params = { 
-          action: "call",
-          method: cmd.split(/\s+/, 1)[0],
-          parse_arg: cmd.split(/\s+/, 1)[1]
-        };
-      
-        $('#command').val('');
-        _this.addResponse(params.method);
-      
-        $.put(url, params)
-          .done(function (data) {
-            _this.addResponse(data);
-          })
-          .fail(function (data) {
-            console.log(data);
-            var resp = JSON.parse(data.responseText);
-            
-            _this.addResponse("<span class=\"error\">" + resp.desc + "</span>");
-          });
+        this.execute(e);
       }
     },
     
@@ -75,6 +59,51 @@ define([
         $(window).unbind("resize.app");
         // don't forget to call the original remove() function
         Backbone.View.prototype.remove.call(this);
+    },
+    
+    execute: function () {
+      var _this = this;
+      var cmd = $('#command').val();
+      var params = { 
+        action: "call",
+        method: cmd.split(/\s+/, 1)[0],
+        parse_arg: cmd.split(/\s+/, 1)[1]
+      };
+    
+      $('#command').val('');
+      this.addToHistory(cmd);
+      this.addResponse(params.method);
+    
+      $.put(url, params)
+        .done(function (data) {
+          _this.addResponse(data);
+        })
+        .fail(function (data) {
+          var resp = JSON.parse(data.responseText);
+          _this.addResponse("<span class=\"error\">" + resp.desc + "</span>");
+        });
+    },
+    
+    addToHistory: function (val) {
+      this.history.push(val);
+      this.historyTarget = this.history.length - 1;
+    },
+    
+    browseHistory: function (e) {
+      console.log(e.keyCode, this.historyTarget, this.history[this.historyTarget]);
+      
+      if (e.keyCode == 40) {
+        if (this.historyTarget < this.history.length - 1) {
+          this.historyTarget += 1;
+          $('#command').val(this.history[this.historyTarget]);          
+        } else {
+          $('#command').val('');
+        }
+      } else if (e.keyCode == 38) {
+        $('#command').val(this.history[this.historyTarget]);
+        this.historyTarget -= (this.historyTarget > 0) ? 1 : 0;
+      }
+      e.stopPropagation();
     }
     
   });

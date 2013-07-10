@@ -646,6 +646,8 @@ aside {
   margin-left: .3em;
 }
 
+/* ocmd */
+
 #output {
   display: block;
   overflow-x: auto;
@@ -654,4 +656,13 @@ aside {
 
 #output .error {
   color: red;
+}
+
+#output ul, #output li {
+  list-style: none;
+  text-indent: 0;
+}
+
+#output > ul {
+  margin-left: 0;
 }
