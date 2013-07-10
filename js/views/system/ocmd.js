@@ -32,7 +32,6 @@ define([
     },
     
     doAction: function (e) {
-      console.log('really?', e.keyCode);
       if (e.keyCode == 13) {
         this.execute(e);
       }
@@ -89,9 +88,7 @@ define([
       this.historyTarget = this.history.length - 1;
     },
     
-    browseHistory: function (e) {
-      console.log(e.keyCode, this.historyTarget, this.history[this.historyTarget]);
-      
+    browseHistory: function (e) {      
       if (e.keyCode == 40) {
         if (this.historyTarget < this.history.length - 1) {
           this.historyTarget += 1;

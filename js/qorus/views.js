@@ -286,12 +286,8 @@ define([
         .toggleClass('warning')
         .toggleClass('checked');
       
-      $('i.checker', this.$el)
-        .removeClass('icon-check')
-        .removeClass('icon-check-empty')
-        .addClass('icon-check-minus');
+      this.updateCheckIcon();
         
-      console.log("highlight stop propagation");
       e.stopPropagation();
       this.trigger('highlight');
     },
@@ -323,11 +319,22 @@ define([
       }
 
       if (e.target.localName == "i") {
-        console.log("checkall stop propagation");
         e.stopPropagation();        
       }
 
       this.trigger('highlight');
+    },
+    
+    checkRow: function (id) {
+      var $row = $('.table-row[data-id='+ id +']');
+      
+      $row
+        .addClass('warning')
+        .addClass('checked');
+
+      $('.check', $row)
+        .removeClass('icon-check-empty')
+        .addClass('icon-check');
     },
     
     updateCheckIcon: function () {

@@ -23,6 +23,8 @@ define([
     // el: $("#content"),
     additionalEvents: {
       'click .action-modal': 'openModal',
+      'click .running': 'highlightRunning',
+      'click .stopped': 'highlightStopped',
       'contextmenu tr': 'onRightClick'
     },
     
@@ -170,6 +172,32 @@ define([
       
       $menu.offset({ left: ev.pageX, top: ev.pageY });
       $menu.dropdown('toggle');
+    },
+    
+    highlightRunning: function (e) {
+      var _this = this;
+      e.preventDefault();
+      $('.workflow-row .instances').each(function () {
+        var $this = $(this);
+        
+        if (parseInt($this.text()) > 0) {
+          var id = $this.parent().data('id');
+          _this.checkRow(id);
+        }
+      });
+    },
+    
+    highlightStopped: function (e) {
+      var _this = this;
+      e.preventDefault();
+      $('.workflow-row .instances').each(function () {
+        var $this = $(this);
+        
+        if (parseInt($this.text()) == 0) {
+          var id = $this.parent().data('id');
+          _this.checkRow(id);
+        }
+      });
     }
   });
   
