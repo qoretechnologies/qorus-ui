@@ -65,8 +65,8 @@ define([
       var cmd = $('#command').val();
       var params = { 
         action: "call",
-        method: cmd.split(/\s+/, 1)[0],
-        parse_arg: cmd.split(/\s+/, 1)[1]
+        method: cmd.split(/\s+/, 2)[0],
+        parse_args: cmd.split(/\s+/, 2)[1]
       };
     
       $('#command').val('');
