@@ -1,0 +1,7 @@
+<h3>Extensions</h3>
+<ul>
+<% _.each(obj.items, function (item) { %>
+  <% var item = item.toJSON() %>
+  <li><a href="/extensions/<%= item.name %>"><%= item.name %></a> <small><%= item.properties %></li>
+<% })%>
+</ul>

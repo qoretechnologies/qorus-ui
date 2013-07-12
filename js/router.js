@@ -18,11 +18,13 @@ define([
   'views/workflows/search',
   'views/workflows/order',
   'views/system/ocmd',
+  'views/extensions/extensions',
+  'views/extensions/extension',
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, OcmdView, Urls) {
+  OrderView, OcmdView, ExtensionListView, ExtensionView, Urls) {
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -63,15 +65,12 @@ define([
     
     // workflow list 
     showWorkflows: function (date, deprecated) {
-      console.log(date, deprecated);
       var view = new WorkflowListView({}, date, this, deprecated);
       this.setView(view);
     },
     
     // workflow detail
-    showWorkflow: function (id, inst, filter, date, wfiid) {
-      console.log(date);
-
+    showWorkflow: function (id, inst, filter, date, wfiid) {ssss
       if (wfiid) {
         this.showOrder(wfiid, id);
       } else {
@@ -79,7 +78,7 @@ define([
         this.setView(view);        
       }
     },
-    
+
     // servicee list
     showServices: function () {
       var view = new ServiceListView();
@@ -125,6 +124,15 @@ define([
     
     showOcmd: function () {
       var view = new OcmdView();
+      this.setView(view);
+    },
+    
+    showExtension: function (extension, path) {
+      if (!extension) {
+        var view = new ExtensionListView();
+      } else {
+        var view = new ExtensionView({}, extension, path);
+      }
       this.setView(view);
     },
     

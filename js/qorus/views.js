@@ -709,7 +709,84 @@ define([
       
       this.on('fetch', this.render);
       this.getData();
-      console.log('Events', this.events(), this.$el, this.el);
+      // console.log('Events', this.events(), this.$el, this.el);
+    },
+    
+    getUrl: function () {
+      return [settings.REST_API_PREFIX, 'services', this.name].join('/');
+    },
+    
+    getData: function () {
+      var _this = this;
+      var url = [this.getUrl(), this.methods.getData].join('/');
+      
+      $.put(url, { action: 'call'})
+        .done(function (data) {
+          _this.data = data;
+          _this.trigger('fetch');
+        });
+    },
+    
+    render: function (ctx) {
+      console.log('ServiceView', this.el, this.$el);
+      _.extend(this.context, { data: this.data });
+      
+      ServiceView.__super__.render.call(this, ctx);
+    },
+    
+    doAction: function (ev) {
+      var params = {};
+      var $target = $(ev.currentTarget);
+      ev.preventDefault();
+      
+      if ($target.attr('type') == 'submit') {
+        var $f = $target.parents('form');
+
+        var vals = $f.serializeArray();
+        var params = {};
+      
+        _.each(vals, function (v) {
+          params[v.name] = v.value;
+        });
+        
+        // close modal
+        $f.parents('.modal').modal('hide');
+      }
+      
+      this.runAction($target.data('action'), params);
+    },
+    
+    runAction: function (action, data) {
+      var _this = this;
+      var url = [this.getUrl(), action].join('/');
+      var args = _.values(data);
+      
+      $.put(url, { action: 'call', args: args })
+        .done(function (resp) {
+          console.log(resp);
+          _this.getData();
+        })
+        .fail(function (resp) {
+          console.log(resp);
+        });
+    }
+  });
+
+
+  var PluginView = View.extend({
+    defaultEvents: {
+      'submit': 'doAction',
+      'click a[data-action]': 'doAction',
+      'click button[data-action]': 'doAction'
+    },
+    
+    initialize: function (opts) {
+      _.bindAll(this);
+      this.opts = opts || {};
+      
+      this.on('fetch', this.render);
+      this.getData();
+      // console.log('Events', this.events(), this.$el, this.el);
     },
     
     getUrl: function () {
