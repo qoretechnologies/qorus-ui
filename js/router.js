@@ -70,7 +70,7 @@ define([
     },
     
     // workflow detail
-    showWorkflow: function (id, inst, filter, date, wfiid) {ssss
+    showWorkflow: function (id, inst, filter, date, wfiid) {
       if (wfiid) {
         this.showOrder(wfiid, id);
       } else {
