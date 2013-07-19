@@ -14,7 +14,8 @@ define([
     
   _.extend(Extension.prototype, Backbone.Events, {
     initialize: function (extension, path) {
-      this.url = [settings.REST_API_PREFIX, 'services', extension].join('/');
+      console.log(extension);
+      this.url = [settings.REST_API_PREFIX, 'system', 'ui', 'extensions', extension].join('/');
     },
     
     get: function (key) {
@@ -22,12 +23,12 @@ define([
     },
     
     fetch: function () {
-      var url = this.url + '/waExtension';
+      var url = this.url;
       var _this = this;
       
-      $.put(url, { action: 'call' })
+      $.get(url, { action: 'renderTemplate' })
         .done(function (resp) {
-          _this.data = resp;
+          _this.template = resp;
           _this.trigger('fetch');
           _this.trigger('sync');
         });
@@ -35,7 +36,7 @@ define([
     
     renderTpl: function (tpl) {
       tpl = tpl || 'main';
-      var tmpl = _.template(this.data.templates[tpl], this.data);
+      var tmpl = _.template(this.template);
       return tmpl;
     }
   });

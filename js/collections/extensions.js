@@ -6,7 +6,7 @@ define([
   // 'models/extension'
 ], function(settings, _, Qorus, Model){
   var Collection = Qorus.Collection.extend({
-    url: settings.REST_API_PREFIX + '/system/props/qorus.wa.extensions',
+    url: settings.REST_API_PREFIX + '/system/ui/extensions',
     // sort_key: 'status',
     // sort_order: 'des',
     // sort_history: ['name'],
@@ -15,17 +15,17 @@ define([
       this.opts = opts || {};
     },
     
-    parse: function (response) {
-      var keys = _.keys(response);
-      var models = [];
-      
-      _.each(keys, function(key) {
-        var model = { name: key, properties: response[key] };
-        models.push(model);
-      });
-      
-      return models;
-    }
+    // parse: function (response) {
+    //   var keys = _.keys(response);
+    //   var models = [];
+    //   
+    //   _.each(keys, function(key) {
+    //     var model = { name: key, properties: response[key] };
+    //     models.push(model);
+    //   });
+    //   
+    //   return models;
+    // }
   });
   // You don't usually return a collection instantiated
   return Collection;
