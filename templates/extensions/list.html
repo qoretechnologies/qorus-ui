@@ -2,6 +2,6 @@
 <ul>
 <% _.each(obj.items, function (item) { %>
   <% var item = item.toJSON() %>
-  <li><a href="/extensions/<%= item.name %>"><%= item.name %></a> <small><%= item.properties %></li>
+  <li><a href="/extensions/<%= item.name %>"><%= item.name %></a> <small><%= item.properties %></small></li>
 <% })%>
 </ul>
