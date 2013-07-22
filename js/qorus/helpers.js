@@ -5,11 +5,12 @@ define([
   'settings',
   'utils',
   'text!../../templates/common/nested_list.html',
+  'text!../../templates/common/nested_list_text.html',
   'text!../../templates/common/wrap_label.html',
   'text!../../templates/common/power_button.html',
   'text!../../templates/common/action_status.html',
   'urls'
-], function ($, _, Backbone, settings, utils, NestedListTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
+], function ($, _, Backbone, settings, utils, NestedListTpl, NestedListTextTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
 
   var Helpers = {
     getStatusCSS: function (status) {
@@ -26,6 +27,14 @@ define([
     createNestedList: function (obj, css, tpl, preformatted) {
       var tpl_html = tpl || NestedListTpl;
       return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList, escapeHtml: Helpers.escapeHtml, preformatted: preformatted });
+    },
+    
+    createNestedListAsText: function (obj, tpl, level) {
+      var tpl_html = tpl || NestedListTextTpl;
+      level = level || 0;
+      var output = _.template(tpl_html, { items: obj, createNestedListAsText: Helpers.createNestedListAsText, level: level, escapeHtml: Helpers.escapeHtml });
+      
+      return output.replace(/\n{2,}/gm,"\n");
     },
 
     statusIcon: function(status) {

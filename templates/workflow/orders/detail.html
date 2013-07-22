@@ -83,8 +83,12 @@
           <div id="collapse1" class="accordion-body collapse in">
             <div class="accordion-inner">
                 <% if (it.keys) { %>
+                  <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                   <div class="treeview">
-                <%= createNestedList(it.keys) %>  
+                      <%= createNestedList(it.keys) %>  
+                  </div>
+                  <div class="textview">
+                      <textarea class="span12"><%= createNestedListAsText(it.keys) %></textarea>
                   </div>
                 <% } else { %>
                 <p>No data</p>
@@ -102,8 +106,12 @@
         <div id="collapse2" class="accordion-body collapse">
           <div class="accordion-inner">
               <% if (it.staticdata) { %>
+                <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                 <div class="treeview">
-              <%= createNestedList(it.staticdata) %>  
+                    <%= createNestedList(it.staticdata) %>  
+                </div>
+                <div class="textview">
+                    <textarea class="span12"><%= createNestedListAsText(it.staticdata) %></textarea>
                 </div>
               <% } else { %>
               <p>No data</p>
@@ -120,8 +128,12 @@
         <div id="collapse3" class="accordion-body collapse">
           <div class="accordion-inner">
               <% if (it.dynamicdata) { %>
+                <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                 <div class="treeview">
-              <%= createNestedList(it.dynamicdata) %>  
+                    <%= createNestedList(it.dynamicdata) %>  
+                </div>
+                <div class="textview">
+                    <textarea class="span12"><%= createNestedListAsText(it.dynamicdata) %></textarea>
                 </div>
               <% } else { %>
               <p>No data</p>

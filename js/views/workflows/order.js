@@ -24,6 +24,7 @@ define([
       "click tr.parent": "showSubSteps",
       "click td.info": "showInfo",
       'click button[data-action]': 'runAction',
+      "click .copy-paste": 'enableCopyMode'
     },
     
     initialize: function (opts) {
@@ -133,6 +134,17 @@ define([
           Rainbow.color();
         });
       }
+    },
+    
+    enableCopyMode: function (e) {
+      var $el = $(e.currentTarget);
+      var $parent = $el.parent();
+      
+      $('.treeview', $parent).toggle();
+      $('.textview', $parent).toggle();
+      $el.toggleClass('on');
+      $el.text($el.hasClass('on') ? $el.data('msg-on') : $el.data('msg-off'));
+      e.preventDefault();
     },
     
     helpers: {

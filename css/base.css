@@ -387,6 +387,23 @@ aside {
 	margin-left: -15px;
 }
 
+.textview {
+    display: none;
+    height: auto;
+}
+
+.row-fluid .textview textarea {
+    min-height: 400px;
+    height: auto;
+}
+
+.copy-paste {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 100;
+}
+
 .icon-error {
     color: #b94a48;
 }
