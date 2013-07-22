@@ -82,5 +82,6 @@
     modules: [
       { name: 'main' }
     ],
+    logLevel: 3
     // optimize: "none"
 })
