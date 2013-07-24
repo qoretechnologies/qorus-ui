@@ -14,8 +14,7 @@ define([
     
   _.extend(Extension.prototype, Backbone.Events, {
     initialize: function (extension, path) {
-      console.log(extension);
-      this.url = [settings.REST_API_PREFIX, 'system', 'ui', 'extensions', extension].join('/');
+      this.url = '/' + ['UIExtension', extension].join('/');
     },
     
     get: function (key) {
@@ -26,7 +25,7 @@ define([
       var url = this.url;
       var _this = this;
       
-      $.get(url, { action: 'renderTemplate' })
+      $.get(url)
         .done(function (resp) {
           _this.template = resp;
           _this.trigger('fetch');
