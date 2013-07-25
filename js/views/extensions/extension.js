@@ -47,10 +47,10 @@ define([
     title: "Extension",
     context: {},
     
-    initialize: function (options, extension, path) {
+    initialize: function (options, extension, query) {
       this.template = Template;
       
-      this.extension = new Extension(extension);
+      this.extension = new Extension(extension, query);
       this.extension.fetch();
       
       // this.createSubviews();

@@ -132,7 +132,8 @@ define([
         var view = new ExtensionListView();
       } else {
         var query = window.location.search.slice(1);
-        var view = new ExtensionView({}, extension, query);
+        console.log(query);
+        var view = new ExtensionView({}, extension, query);        
       }
       this.setView(view);
     },
