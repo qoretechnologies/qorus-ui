@@ -14,16 +14,18 @@ define([
     
   _.extend(Extension.prototype, Backbone.Events, {
     initialize: function (extension, query) {
-      this.url = '/' + ['UIExtension', extension].join('/');
-      this.url += '?' + query; 
+      this.baseUrl = '/' + ['UIExtension', extension].join('/');
+      this.query = query; 
     },
     
     get: function (key) {
       return this.data[key];
     },
     
-    fetch: function () {
-      var url = this.url;
+    fetch: function (query) {
+      var query = query || this.query;
+      
+      var url = this.baseUrl + '?' + query;
       var _this = this;
       
       console.log("fetching ->" , url);
@@ -46,6 +48,9 @@ define([
   var View = Qorus.View.extend({
     title: "Extension",
     context: {},
+    additionalEvents: {
+      "click a": "catchClick"
+    },
     
     initialize: function (options, extension, query) {
       this.template = Template;
@@ -65,6 +70,16 @@ define([
     
     onRender: function () {
       $('#extension-home', this.$el).html(this.extension.renderTpl());
+    },
+    
+    catchClick: function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      $target = $(e.currentTarget);
+      this.extension.fetch($target.attr('href'));
+      
+      var url = utils.getCurrentLocation() + $target.attr('href');
+      Backbone.history.navigate(url, { trigger: false });
     }
   });
 
