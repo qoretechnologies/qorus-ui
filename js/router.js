@@ -127,11 +127,12 @@ define([
       this.setView(view);
     },
     
-    showExtension: function (extension, path) {
+    showExtension: function (extension) {
       if (!extension) {
         var view = new ExtensionListView();
       } else {
-        var view = new ExtensionView({}, extension, path);
+        var query = window.location.search.slice(1);
+        var view = new ExtensionView({}, extension, query);
       }
       this.setView(view);
     },

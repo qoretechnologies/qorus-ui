@@ -19,7 +19,7 @@ define([
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
     'system': 'showSystem',
     'ocmd': 'showOcmd',
-    'extensions(/)(:extension)(/)(:path)': 'showExtension',
+    'extensions(/)(:extension)': 'showExtension',
     '': 'redirectToWorkflows',
 
     // Default

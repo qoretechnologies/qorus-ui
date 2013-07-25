@@ -13,8 +13,9 @@ define([
   };
     
   _.extend(Extension.prototype, Backbone.Events, {
-    initialize: function (extension, path) {
+    initialize: function (extension, query) {
       this.url = '/' + ['UIExtension', extension].join('/');
+      this.url += '?' + query; 
     },
     
     get: function (key) {
@@ -24,6 +25,8 @@ define([
     fetch: function () {
       var url = this.url;
       var _this = this;
+      
+      console.log("fetching ->" , url);
       
       $.get(url)
         .done(function (resp) {
