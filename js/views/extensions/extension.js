@@ -24,6 +24,7 @@ define([
     
     fetch: function (query) {
       var query = query || this.query;
+      query = query.replace(/^\?/, "");
       
       var url = this.baseUrl + '?' + query;
       var _this = this;
@@ -59,7 +60,7 @@ define([
       this.extension.fetch();
       
       // this.createSubviews();
-      this.listenToOnce(this.extension, 'fetch', this.render);
+      this.listenTo(this.extension, 'fetch', this.render);
     },
     
     render: function (ctx) {
@@ -78,7 +79,7 @@ define([
       $target = $(e.currentTarget);
       this.extension.fetch($target.attr('href'));
       
-      var url = utils.getCurrentLocation() + $target.attr('href');
+      var url = utils.getCurrentLocationPath() + $target.attr('href');
       Backbone.history.navigate(url, { trigger: false });
     }
   });
