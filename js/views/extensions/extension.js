@@ -74,13 +74,15 @@ define([
     },
     
     catchClick: function (e) {
-      e.stopPropagation();
-      e.preventDefault();
       $target = $(e.currentTarget);
-      this.extension.fetch($target.attr('href'));
-      
-      var url = utils.getCurrentLocationPath() + $target.attr('href');
-      Backbone.history.navigate(url, { trigger: false });
+      if ($target.data('toggle') != 'dropdown' || !$target.data('nofetch')) {
+        e.stopPropagation();
+        e.preventDefault();
+	      this.extension.fetch($target.attr('href'));
+
+	      var url = utils.getCurrentLocationPath() + $target.attr('href');
+	      Backbone.history.navigate(url, { trigger: false });      	
+      }
     }
   });
 

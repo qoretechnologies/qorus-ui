@@ -26,7 +26,7 @@ define([
     context: context,
     subviews: {},
     additionalEvents: {
-      'click button[data-action]': 'runAction',
+      // 'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
       'click th[data-sort]': 'fetchSorted',
       'scroll': 'scroll'
