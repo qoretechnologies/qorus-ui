@@ -75,9 +75,12 @@ define([
     
     catchClick: function (e) {
       $target = $(e.currentTarget);
-      if ($target.data('toggle') != 'dropdown' || !$target.data('nofetch')) {
+      if ($target.data('toggle') != 'dropdown') {
         e.stopPropagation();
         e.preventDefault();
+      }
+
+      if ($target.data('toggle') != 'dropdown' && !$target.data('action')) {
 	      this.extension.fetch($target.attr('href'));
 
 	      var url = utils.getCurrentLocationPath() + $target.attr('href');
