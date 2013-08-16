@@ -22,6 +22,7 @@ require.config({
     "rainbow.generic": "libs/rainbow/language/generic",
     "rainbow.qore": "libs/rainbow/language/qore",
     "rainbow.html": "libs/rainbow/language/html",
+    "rainbow.sql": "libs/rainbow/language/sql",
   },
   shim: { 
     "backbone": {
@@ -79,6 +80,9 @@ require.config({
       deps: ['rainbow']
     },
     "rainbow.html": {
+      deps: ['rainbow']
+    },
+    "rainbow.sql": {
       deps: ['rainbow']
     }
   },
