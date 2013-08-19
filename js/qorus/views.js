@@ -217,6 +217,7 @@ define([
         
         var _this = this;
         this.listenToOnce(this.collection, 'sync', this.render);
+        this.listenToOnce(this.collection, 'error', this.render);
         
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
         this.listenTo(this.collection, 'resort', this.render);

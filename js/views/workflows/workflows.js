@@ -14,14 +14,16 @@ define([
   'views/workflows/modal',
   'text!../../../templates/workflow/table.html',
   'text!../../../templates/workflow/row.html',
+  'views/workflows/detail',
   'jquery.fixedheader',
   'jquery.sticky'
 ], function($, _, Backbone, Qorus, Collection, Template, date, moment, 
-  InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl){
+  InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl, WorkflowView){
     
   var ListView = Qorus.ListView.extend({
     // el: $("#content"),
     additionalEvents: {
+      'click tbody tr': 'showDetail',
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
@@ -82,6 +84,11 @@ define([
       this.assign('.toolbar', this.subviews.toolbar);
       this.assign('.workflows', this.subviews.table);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
+      
+      if ($('[data-sort="version"]')) {
+        var w = $(document).width() - $('[data-sort="version"]').offset().left;
+        $('#workflow-detail').outerWidth(w);        
+      }
     },
     
     // edit action with Modal window form
@@ -204,7 +211,46 @@ define([
           _this.checkRow(id);
         }
       });
-    }
+    },
+    
+    showDetail: function (e) {
+      var _this = this;
+      var $target = $(e.currentTarget);
+      var $detail = $('#workflow-detail');
+      var top = $target.offset().top; // + $target.height()/2;
+      
+      if ($target.data('id') && !e.target.localName.match(/(button|a)/)) {
+        e.stopPropagation();
+        
+        // remove info class on each row
+        $('tr', $target.parent()).removeClass('info');
+        
+        if ($detail.data('id') == $target.data('id')) {
+          if (this.subviews.detail) {
+            this.subviews.detail.close();
+          }
+        } else {
+          // add info class to selected row
+          $target.addClass('info');
+
+          // set current row id
+          $detail.data('id', $target.data('id'));
+
+          // clean prev view
+          if (this.subviews.detail){
+            this.subviews.detail.clean();
+          }
+          
+          // init detail view
+          var detail = new WorkflowView({ model: this.collection.get($target.data('id')), context: this.context });
+
+          this.subviews.detail = detail;
+          this.assign('#workflow-detail .content', detail);
+          $('#workflow-detail').addClass('show');          
+        }
+      }
+      
+    },
   });
   
   return ListView;

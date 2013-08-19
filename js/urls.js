@@ -20,6 +20,7 @@ define([
     'system': 'showSystem',
     'ocmd': 'showOcmd',
     'extensions(/)(:extension)': 'showExtension',
+    'functions': 'showFunctions',
     '': 'redirectToWorkflows',
 
     // Default

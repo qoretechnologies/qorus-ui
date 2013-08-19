@@ -20,11 +20,12 @@ define([
   'views/system/ocmd',
   'views/extensions/extensions',
   'views/extensions/extension',
+  'views/functions/functions',
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, OcmdView, ExtensionListView, ExtensionView, Urls) {
+  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, Urls) {
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -135,6 +136,11 @@ define([
         console.log(query);
         var view = new ExtensionView({}, extension, query);        
       }
+      this.setView(view);
+    },
+    
+    showFunctions: function () {
+      var view = new FunctionListView();
       this.setView(view);
     },
     
