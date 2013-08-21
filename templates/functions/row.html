@@ -1,0 +1,13 @@
+<% var item = obj.item.toJSON(); %>
+<tr class="table-row function-row" data-id="<%= item.function_instanceid %>">
+    <td></td>
+    <td data-sort="function_instanceid"><%= item.function_instanceid %></th>
+    <td class="name" data-sort="name"><%= item.name %></th>
+    <td data-sort="version"><%= item.version %></th>
+    <td data-sort="function_type"><%= item.function_type %></th>
+    <td data-sort="description" class="text-left"><%= item.description %></th>
+    <td data-sort="author"><%= item.author %></th>
+    <td data-sort="created"><%= item.created %></th>
+    <td data-sort="modified"><%= item.modified %></th>
+    <td data-sort="source" class="text-left"><%= item.source %></th>
+</tr>

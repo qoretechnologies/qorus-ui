@@ -2,19 +2,25 @@
 <h3><%= item.name %> <small><%= item.version %></h3>
 <p class="muted"><em><%= item.description %></em></p>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#info">Info</a></li>
+    <li class="active"><a href="#options">Options</a></li>
     <li><a href="#library">Library</a></li>
     <li><a href="#steps" class="steps">Steps</a></li>
+    <li><a href="#log" class="log">Log</a></li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="info">
-        <p>TODO info</p>
+    <div class="tab-pane active" id="options">
+        <% _.each(item.options, function (option) { %>
+        <p><%= option %></p>
+        <% }) %>
     </div>
     <div class="tab-pane" id="library">
-        <p>TODO library</p>
+        <%= createNestedList(item.lib) %>
     </div>
     <div class="tab-pane" id="steps">
         <p>TODO steps</p>
+    </div>
+    <div class="tab-pane" id="log">
+        <p>TODO log</p>
     </div>
 </div>
