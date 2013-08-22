@@ -45,7 +45,7 @@ define([
     render: function (ctx) {
       this.context.item = this.model;
       _.extend(this.context, { getStepName: this.getStepName }); 
-      console.log("helpers", this.helpers);
+
       ModelView.__super__.render.call(this, ctx);
     },    
 
@@ -127,7 +127,8 @@ define([
         e.stopPropagation();
         var sd = this.subviews.stepdetail;
         sd = new StepView({ id: $target.data('id') });
-        this.assign('#stepdetail', sd);
+        this.assign('#stepdetail', sd);        
+        
         sd.on('render', function(){
           // console.log(JSON.stringify(sd.model));
           $('#stepdetail').modal();

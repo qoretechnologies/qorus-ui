@@ -30,15 +30,14 @@ define([
       var active = $('.tab-pane.active');
       $target.tab('show');
     },    
-    
-    render: function (ctx) {
-      ModelView.__super__.render.call(this, ctx);
-      
-      // enable resizable modal window
-      $(".modal").on("resize", function(event, ui) {
+
+    onRender: function () {
+      this.clean();
+      // enable resizable modal window      
+      $('.modal').on("resize", function(event, ui) {
           ui.element.css("margin-left", -ui.size.width/2);
-          ui.element.css("margin-top", -ui.size.height/2);
-          ui.element.css("top", "50%");
+          // ui.element.css("margin-top", -ui.size.height/2);
+          // ui.element.css("top", "50%");
           ui.element.css("left", "50%");
       
           $(ui.element).find(".modal-body").each(function() {
@@ -46,9 +45,29 @@ define([
           });
       });
       
-      $(".modal").resizable();
-      console.log($(".modal"));
+      $('.modal').on('shown', function () {
+        $(this).resizable();
+      });
+
+    },
+    
+    clean: function () {
+      $('.modal')
+        .css('width', '')
+        .css('height', '')
+        .css('left', '')
+        .css('top', '')
+        .css('margin-top', '')
+        .css('margin-left', '')
+        // .css('margin-top', -$('.modal').height()/2)
+        // .css('margin-left', -$('.modal').width()/2)
+        .unbind();
+      
+        if ($('.modal').hasClass('ui-resizable')) {
+          $('.modal').resizable('destroy');
+        }
     }
   });
+  
   return ModelView;
 });
