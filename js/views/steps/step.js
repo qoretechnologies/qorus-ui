@@ -3,9 +3,11 @@ define([
   'underscore',
   'qorus/qorus',
   'models/step',
+  'views/common/modal',
   'text!../../../templates/steps/modal.html',
-  'jquery.ui'
-], function ($, _, Qorus, Model, Template) {
+  'jquery.ui',
+  'rainbow.qore'
+], function ($, _, Qorus, Model, Modal, Template) {
   var ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle',
@@ -21,53 +23,29 @@ define([
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render);
+      
+      this.on('render', function () { Rainbow.color() });
     },
-
+    
+    render: function (ctx) {
+      ModelView.__super__.render.call(this, ctx);
+    },
+    
     tabToggle: function(e){
       var $target = $(e.currentTarget);
       e.preventDefault();
 
       var active = $('.tab-pane.active');
       $target.tab('show');
-    },    
-
-    onRender: function () {
-      this.clean();
-      // enable resizable modal window      
-      $('.modal').on("resize", function(event, ui) {
-          ui.element.css("margin-left", -ui.size.width/2);
-          // ui.element.css("margin-top", -ui.size.height/2);
-          // ui.element.css("top", "50%");
-          ui.element.css("left", "50%");
-      
-          $(ui.element).find(".modal-body").each(function() {
-            $(this).css("max-height", 400 + ui.size.height - ui.originalSize.height);
-          });
-      });
-      
-      $('.modal').on('shown', function () {
-        $(this).resizable();
-      });
-
-    },
-    
-    clean: function () {
-      $('.modal')
-        .css('width', '')
-        .css('height', '')
-        .css('left', '')
-        .css('top', '')
-        .css('margin-top', '')
-        .css('margin-left', '')
-        // .css('margin-top', -$('.modal').height()/2)
-        // .css('margin-left', -$('.modal').width()/2)
-        .unbind();
-      
-        if ($('.modal').hasClass('ui-resizable')) {
-          $('.modal').resizable('destroy');
-        }
     }
   });
   
-  return ModelView;
+  var ModalView = Modal.extend({
+    initialize: function (opts) {
+      ModalView.__super__.initialize.call(this, opts);
+      this.subviews.content = new ModelView(this.opts);
+    }
+  });
+  
+  return ModalView;
 });

@@ -4,8 +4,7 @@ define([
   'qorus/qorus',
   'models/order',
   'text!../../../templates/workflow/orders/detail.html',
-  'views/steps/step',
-  'rainbow.qore'
+  'views/steps/step'
 ], function($, _, Qorus, Model, Template, StepView){
   var context = {
     action_css: {
@@ -128,12 +127,6 @@ define([
         var sd = this.subviews.stepdetail;
         sd = new StepView({ id: $target.data('id') });
         this.assign('#stepdetail', sd);        
-        
-        sd.on('render', function(){
-          // console.log(JSON.stringify(sd.model));
-          $('#stepdetail').modal();
-          Rainbow.color();
-        });
       }
     },
     

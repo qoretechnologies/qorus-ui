@@ -420,8 +420,7 @@ aside {
 /* modal window */
 
 #stepdetail .modal-body {
-/*    height: auto;*/
-    max-height: 100%;
+    max-height: none;
 }
 
 .table-vertical th, .table-vertical td {
