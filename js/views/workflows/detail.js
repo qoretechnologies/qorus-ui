@@ -3,7 +3,7 @@ define([
   'underscore',
   'qorus/qorus',
   'qorus/dispatcher',
-  'models/service',
+  'models/workflow',
   'views/log',
   'text!../../../templates/workflow/meta.html',
   'jquery.ui'
@@ -24,15 +24,8 @@ define([
         _.extend(this.context, opts.context);
       }
       
-      // init model
-      if (_.has(opts, "model")) {
-        this.model = opts.model;
-      } else if (_.has(opts, "id")) {
-        this.model = new Model({ id: opts.id });
-        this.model.fetch();        
-      } else {
-        this.model = new Model();
-      }
+      this.model = new Model({ id: this.opts.model.id });
+      this.model.fetch();
       
       this.model.on('change', this.render);
     },
