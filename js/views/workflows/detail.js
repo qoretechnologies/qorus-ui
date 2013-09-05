@@ -5,9 +5,11 @@ define([
   'qorus/dispatcher',
   'models/workflow',
   'views/log',
+  'views/common/diagram',
   'text!../../../templates/workflow/meta.html',
   'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Model, LogView, Template) {
+], function ($, _, Qorus, Dispatcher, Model, LogView, DiagramView, Template) {
+  
   var ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
@@ -33,16 +35,6 @@ define([
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
-    }, 
-
-    tabToggle: function(e){
-      var $target = $(e.currentTarget);
-      e.preventDefault();
-
-      var active = $('.tab-pane.active');
-      $target.tab('show');
-
-      this.active_tab = $target.attr('href');
     },
     
     onRender: function () {
@@ -51,6 +43,29 @@ define([
       if (this.active_tab) {
         $('a[href='+ this.active_tab + ']').tab('show');
       }
+    },
+    
+    createDiagram: function () {
+      if (this.subviews.step_diagram) {
+        this.subviews.step_diagram.off();
+      }
+      
+      var step = this.subviews.step_diagram = new DiagramView({ steps: this.model.mapSteps() });
+      this.assign('#steps', step);
+    },
+
+    tabToggle: function(e){
+      var $target = $(e.currentTarget);
+      e.preventDefault();
+
+      var active = $('.tab-pane.active');
+      $target.tab('show');
+      
+      if ($target.hasClass('steps')) {
+        this.createDiagram();
+      }
+
+      this.active_tab = $target.attr('href');
     },
     
     clean: function () {

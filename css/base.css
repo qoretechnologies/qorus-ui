@@ -736,3 +736,58 @@ aside {
 .step-normal {
   background-color: '#fff';
 }
+
+/* diagram */ 
+
+#canvas-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+}
+
+#canvas-container { 
+  position: relative; 
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden; 
+  position: relative; 
+}
+
+#canvas { 
+  position: absolute; 
+}
+
+.level {
+  text-align: center;
+  overflow: hidden;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.box {
+  display: inline-block;
+  border: 1px solid;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  min-height: 40px;
+  margin: 0 5px;
+  min-width: 150px;
+}
+
+.box a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 10% 0;
+}
+
+.box.process {
+  border-radius: 5px;
+}
+
+.box.start {
+  padding: 0;
+  border-radius: 75px / 20px;
+}

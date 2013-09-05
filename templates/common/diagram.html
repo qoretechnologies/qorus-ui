@@ -1,0 +1,12 @@
+<div id="canvas-wrapper">
+<canvas id="canvas"></canvas>
+<div id="canvas-container" class="canvas">
+  <% _.each(obj.steps, function (steps) { %>
+    <div class="level">
+      <% _.each(steps, function (step) { %>
+        <div class="box <%= step.type %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>"><a href="#"><%= step.name || step.id %></a></div>
+      <% }) %>
+    </div>
+  <% }) %>
+</div>
+</div>
