@@ -77,6 +77,9 @@ define([
       $target = $(e.currentTarget);
       
       if ($target.attr('target')) {
+        window.open($target.attr('href'), $target.attr('target'));
+        e.stopPropagation();
+        e.preventDefault();
         return;
       }
 
