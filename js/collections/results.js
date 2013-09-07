@@ -9,7 +9,7 @@ define([
     model: Model,
     
     url: function () {
-      return settings.REST_API_PREFIX + '/jobs/'+ this.jobid + '/results/';
+      return settings.REST_API_PREFIX + '/jobs/'+ this.jobid + '/results/?sort=job_instanceid;desc=true';
     },
     
     initialize: function (opts) {
