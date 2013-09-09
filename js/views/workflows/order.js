@@ -3,9 +3,11 @@ define([
   'underscore',
   'qorus/qorus',
   'models/order',
+  'models/workflow',
   'text!../../../templates/workflow/orders/detail.html',
-  'views/steps/step'
-], function($, _, Qorus, Model, Template, StepView){
+  'views/steps/step',
+  'views/common/diagram'
+], function($, _, Qorus, Model, Workflow, Template, StepView, DiagramView){
   var context = {
     action_css: {
       'block': 'btn-inverse',
@@ -46,7 +48,45 @@ define([
       _.extend(this.context, { getStepName: this.getStepName }); 
 
       ModelView.__super__.render.call(this, ctx);
-    },    
+    },
+    
+    onRender: function(){
+      $('li:has(li)').addClass('parent');
+      
+      // hide substeps and add plus sign icon
+      $('.substep', this.$el).each(function () { 
+        var $this = $(this);
+        $this.hide();
+        if ($this.prev('.parent')) {
+          $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
+        }
+      });
+      
+      // init popover on info text
+      $('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+      });
+      
+      this.createDiagram();
+    },
+    
+    createDiagram: function () {
+      var _this = this;
+      var dia;
+      if (this.subviews.step_diagram) {
+        this.subviews.step_diagram.off();
+      }
+      
+      var wfl = new Workflow({ id: this.model.get('workflowid') });
+      wfl.on('sync', function () {
+        dia = _this.subviews.step_diagram = new DiagramView({ steps: wfl.mapSteps() });
+        console.log(dia.render());
+        _this.assign('#steps-diagram', dia);
+      });
+      
+      wfl.fetch();
+    },
 
     getStepName: function (id) {
       var steps = _.filter(this.model.get('StepInstances'), function (s) {
@@ -74,25 +114,6 @@ define([
       e.stopPropagation();
       $('ul', $target).toggle();
       $target.toggleClass('clps');
-    },
-    
-    onRender: function(){
-      $('li:has(li)').addClass('parent');
-      
-      // hide substeps and add plus sign icon
-      $('.substep', this.$el).each(function () { 
-        var $this = $(this);
-        $this.hide();
-        if ($this.prev('.parent')) {
-          $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
-        }
-      });
-      
-      // init popover on info text
-      $('td.info').each(function () {
-        var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
-      });
     },
     
     runAction: function (e) {

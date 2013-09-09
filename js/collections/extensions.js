@@ -5,11 +5,11 @@ define([
   // Pull in the Model module from above
   // 'models/extension'
 ], function(settings, _, Qorus, Model){
-  var Collection = Qorus.Collection.extend({
+  var Collection = Qorus.SortedCollection.extend({
     url: settings.REST_API_PREFIX + '/system/ui/extensions',
-    // sort_key: 'status',
-    // sort_order: 'des',
-    // sort_history: ['name'],
+    sort_key: 'group',
+    sort_order: 'asc',
+    sort_history: ['menuname'],
     
     initialize: function (opts) {
       this.opts = opts || {};
@@ -26,6 +26,21 @@ define([
     //   
     //   return models;
     // }
+    getGroups: function () {
+      return _.uniq(this.pluck('group'));
+    },
+    
+    grouped: function () {
+      var models = this;
+      var groups = this.getGroups();
+      var glist = {};
+      
+      _.each(groups, function (group) {
+        glist[group] = models.where({ group: group });
+      });
+      console.log(glist);
+      return glist;
+    }
   });
   // You don't usually return a collection instantiated
   return Collection;

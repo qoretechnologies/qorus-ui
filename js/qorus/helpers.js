@@ -83,6 +83,21 @@ define([
         return new_html;
       }
       return html;
+    },
+    
+    createDiagram: function (step_list, node) {
+        var n = node || $('<div class="row" />');
+    
+        _.each(step_list, function (step) {
+            if (_.isArray(step)) {
+                var sw = 12 / step.length;
+                n.append(Helpers.createDiagram(step, $('<div />').addClass("span"+ sw)));
+            } else {
+                n.append($('<div class="row" />').text(step));
+            }
+        });
+
+        return n;
     }
     
   }

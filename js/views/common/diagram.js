@@ -56,7 +56,6 @@ define([
       cdrs1.center = cdrs1.left + $el1.outerWidth(true) / 2;
       cdrs2.center = cdrs2.left + $el2.outerWidth(true) / 2;
       cdrs2.bottom = cdrs2.bottom || cdrs2.top + $el2.outerHeight(true);
-      console.log(coords, cdrs1, cdrs2);
     
       ctx.moveTo(cdrs1.center, cdrs1.top);
       ctx.lineTo(cdrs1.center, cdrs1.top - 20);

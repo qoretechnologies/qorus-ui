@@ -20,6 +20,12 @@ define([
       
       // this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
+    },
+    
+    render: function (ctx) {
+      this.context.col = this.collection;
+      ListView.__super__.render.apply(this, ctx);
+      return this;
     }
   });
 
