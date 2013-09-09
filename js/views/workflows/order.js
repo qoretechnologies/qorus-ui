@@ -68,7 +68,7 @@ define([
         $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
       });
       
-      this.createDiagram();
+      // this.createDiagram();
     },
     
     createDiagram: function () {
