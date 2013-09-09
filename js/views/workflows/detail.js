@@ -30,6 +30,7 @@ define([
       this.model.fetch();
       
       this.model.on('change', this.render);
+      this.createSubviews();
     },
 
     render: function (ctx) {
@@ -38,16 +39,20 @@ define([
     },
     
     onRender: function () {
-      var url = '/workflows/' + this.model.id;
-
       if (this.active_tab) {
         $('a[href='+ this.active_tab + ']').tab('show');
       }
+      this.assign('#log', this.subviews.log);
+    },
+    
+    createSubviews: function () {
+      var url = '/workflows/' + this.model.id;
+      this.subviews.log = new LogView({ socket_url: url, parent: this });
     },
     
     createDiagram: function () {
       if (this.subviews.step_diagram) {
-        this.subviews.step_diagram.off();
+        this.subviews.step_diagram.clean();
       }
       
       var step = this.subviews.step_diagram = new DiagramView({ steps: this.model.mapSteps() });
