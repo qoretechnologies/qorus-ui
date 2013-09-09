@@ -32,6 +32,7 @@ define([
     createSubviews: function () {
       this.subviews.log = new LogView({ socket_url: "/system", parent: this });
       this.subviews.audit = new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false });
+      this.subviews.http_log = new LogView({ socket_url: "/http", parent: this, auto_reconnect: false });
       this.subviews.options = new OptionsView();
       this.subviews.datasources = new DatasourceView();
       this.subviews.props = new PropView();
@@ -42,6 +43,7 @@ define([
       this.assign('#options', this.subviews.options);
       this.assign('#log', this.subviews.log);
       this.assign('#audit-log', this.subviews.audit);
+      this.assign('#http-log', this.subviews.http_log);
       this.assign('#datasources', this.subviews.datasources);
       this.assign('#prop', this.subviews.props);
       this.assign('#http', this.subviews.httpservices);
