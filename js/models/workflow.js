@@ -36,29 +36,64 @@ define([
       },
     
       toArray: function (buffer, level) {
-          var children = [];
+          // var children = [];
+          // var n;
+          // 
+          // buffer = buffer || [];
+          // level = level || 0;
+          //         
+          // _.each(this.children, function (c) {
+          //     children.push(c.id);
+          //     c.toArray(buffer, level+1);
+          // });
+          //         
+          // n = { 
+          //   id: this.id, 
+          //   links_to: this.depends_on, 
+          //   name: this.name,
+          //   type: this.type
+          // };
+          //         
+          // if (!buffer[level]) {
+          //     buffer[level] = [n];
+          // } else {
+          //     buffer[level].push(n);
+          // }
+          //         
+          // return buffer;
           var n;
+          var children = [];
+          var children_sorted = _.sortBy(this.children, function (c) { return c.children.length; });
+          var first_child = children_sorted[0];
+          
+          console.log(this.children,children_sorted);
 
           buffer = buffer || [];
-          level = level || 0;
+          level = level || 1;
+        
+          if (first_child) {
+            first_child.toArray(buffer, level+1);
+          }
         
           _.each(this.children, function (c) {
-              children.push(c.id);
-              c.toArray(buffer, level+1);
+              children.push({
+                id: c.id, 
+                links_to: c.depends_on,
+                name: c.name,
+                type: c.type
+              });
           });
-        
-          n = { 
-            id: this.id, 
-            links_to: this.depends_on, 
-            name: this.name,
-            type: this.type
-          };
-        
-          if (!buffer[level]) {
-              buffer[level] = [n];
-          } else {
-              buffer[level].push(n);
+
+          if (!this.parent_id) {
+              buffer[0] = [{ 
+                id: this.id, 
+                links_to: this.depends_on,
+                name: this.name,
+                type: this.type
+              }];
           }
+
+          buffer[level] = children;
         
           return buffer;
       }
@@ -191,17 +226,19 @@ define([
           step_list.push(node);
       });
 
-
-      // find parent steps
       _.each(step_list, function (step) {
-          if (step.depends_on.length > 0) {
-              var parent = _.find(step_list, function (n) { return n.id == step.depends_on[0]; });
+          var parent;
+    
+          _.each(step.depends_on, function (dep) {
+              parent = _.find(step_list, function (n) { return n.id == dep; });
         
               if (parent) {
                   parent.addChild(step);
               }
-          }
+          });
       });
+      
+      
       return step_list[0].toArray();
     }
   });
