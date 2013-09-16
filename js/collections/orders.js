@@ -4,7 +4,9 @@ define([
   'qorus/qorus',
   'models/order'
 ], function(settings, _, Qorus, Model){
+  
   var Collection = Qorus.SortedCollection.extend({
+    model: Model,
     url: function () {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
@@ -46,8 +48,7 @@ define([
       }
 
       delete this.opts.url;
-    },
-    model: Model,
+    }
   });
   return Collection;
 });

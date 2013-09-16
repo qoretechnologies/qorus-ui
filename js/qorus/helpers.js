@@ -98,6 +98,13 @@ define([
         });
 
         return n;
+    },
+    
+    nl2br: function (text) {
+      if (_.isString(text)) {
+        return text.replace(/\n/gi,'<br />');
+      }
+      return text;
     }
     
   }
