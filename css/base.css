@@ -5,7 +5,7 @@ html, body {
 }
 
 table th {
-	font-size: 80%;;
+	font-size: 80%;
 }
 
 .table td, .table th {
@@ -797,4 +797,9 @@ aside {
   padding: 0;
   border-radius: 50%;
   background-color: red;
+}
+
+.indent {
+  display: inline-block;
+  width: 1em;
 }
