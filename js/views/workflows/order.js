@@ -25,7 +25,8 @@ define([
       "click tr.parent": "showSubSteps",
       "click td.info": "showInfo",
       'click button[data-action]': 'runAction',
-      "click .copy-paste": 'enableCopyMode'
+      "click .copy-paste": 'enableCopyMode',
+      "click .tree-caret": 'toggleTree'
     },
     
     initialize: function (opts) {
@@ -160,6 +161,22 @@ define([
       $el.toggleClass('on');
       $el.text($el.hasClass('on') ? $el.data('msg-on') : $el.data('msg-off'));
       e.preventDefault();
+    },
+    
+    toggleTree: function (e) {
+      var $el = $(e.currentTarget),
+        branch = $el.data('branch-id');
+        
+        console.log($el.data);
+      $el.children('i')
+        .toggleClass('icon-caret-down')
+        .toggleClass('icon-caret-right');
+        
+      this.$('[data-tree-id*='+ branch +'-]').toggle();
+      console.log('[data-tree-id*='+ branch +'-]', this.$('[data-tree-id*='+ branch +'-]'));
+
+      e.preventDefault();
+      e.stopPropagation();
     },
     
     helpers: {
