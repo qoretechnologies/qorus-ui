@@ -2,8 +2,9 @@ define([
   'settings',
   'jquery',
   'qorus/qorus',
-  'qorus/dispatcher'
-], function(settings, $, Qorus, Dispatcher){
+  'qorus/dispatcher',
+  'qorus/tree'
+], function(settings, $, Qorus, Dispatcher, Tree){
   
   var Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/orders/',
@@ -53,6 +54,7 @@ define([
     },
     
     parse: function (response, options) {
+      var step_groups = {};
       // unescape info string
       _.each(response.ErrorInstances, function (err) {
         // is it safe?
@@ -60,8 +62,26 @@ define([
           err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\""); 
         }
       });
+
+      // group StepInstances
+      _.each(response.StepInstances, function (step) {
+        var name = step.stepname;
+        var group = step_groups[name] = step_groups[name] || { steps: [], name: name, status: 'COMPLETE' };
+        
+        group.steps.push(step);
+        
+        if (step.stepstatus !== 'COMPLETE') {
+          group.status = step.stepstatus;
+        } 
+        
+      });
+      response.step_groups = step_groups;
+      
+      // create Hierarchy Tree from Hierarchy Info
+      response.hierarchy_tree = Tree.createTree(response.HierarchyInfo, 'parent_workflow_instanceid');
       
       response = Model.__super__.parse.call(this, response, options);
+      
       return response
     },
     

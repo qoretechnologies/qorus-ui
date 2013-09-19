@@ -16,7 +16,7 @@ define([
     additionalEvents: {
       'submit': 'doAction',
       'keypress input[type=text]': 'doAction',
-      'keydown #command': 'browseHistory'
+      'keydown #command': 'keyDown'
     },
     
     initialize: function (opts) {
@@ -29,6 +29,7 @@ define([
     onRender: function () {
       $('#command', this.$el).focus();
       this.setHeight();
+      this.getCommands();
     },
     
     doAction: function (e) {
@@ -88,6 +89,16 @@ define([
       this.historyTarget = this.history.length - 1;
     },
     
+    keyDown: function (e) {
+      console.log(e.keyCode);
+      if (e.keyCode == 38 || e.keyCode == 40) {
+        this.browseHistory(e);
+      // } else if (e.keyCode == 9) {
+      //   console.log('going autocomplete');
+      //   this.autocomplete(e);
+      }
+    }, 
+    
     browseHistory: function (e) {      
       if (e.keyCode == 40) {
         if (this.historyTarget < this.history.length - 1) {
@@ -101,7 +112,27 @@ define([
         this.historyTarget -= (this.historyTarget > 0) ? 1 : 0;
       }
       e.stopPropagation();
+    },
+    
+    autocomplete: function (e) {
+
+      e.preventDefault();
+    },
+    
+    getCommands: function () {
+      var view = this;
+      var params = {
+        action: 'call',
+        method: 'help'
+      }
+      $.put(url, params)
+        .done(view.initTypeahead);
+    },
+    
+    initTypeahead: function (data) {
+      this.$('#command').typeahead({ source: _.keys(data)  });
     }
+    
     
   });
   
