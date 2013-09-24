@@ -22,7 +22,9 @@
       "rainbow": "libs/rainbow/rainbow.min",
       "rainbow.generic": "libs/rainbow/language/generic",
       "rainbow.qore": "libs/rainbow/language/qore",
-
+      "rainbow.html": "libs/rainbow/language/html",
+      "rainbow.sql": "libs/rainbow/language/sql",
+      "chart": "libs/chart"
     },
     shim: { 
       "backbone": {
@@ -74,6 +76,12 @@
         deps: ['rainbow']
       },
       "rainbow.qore": {
+        deps: ['rainbow']
+      },
+      "rainbow.html": {
+        deps: ['rainbow']
+      },
+      "rainbow.sql": {
         deps: ['rainbow']
       }
     },

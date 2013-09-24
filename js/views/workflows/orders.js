@@ -71,7 +71,7 @@ define([
       this.collection = new Collection(this.opts);
       this.collection.on('sync', this.updateContext, this);
       this.collection.fetch();
-
+      
       this.createSubviews();
     },
     

@@ -51,13 +51,15 @@ define([
       var coords = el_ids.split(',');
       var $el1 = this.$('#ds-'+coords[0]);
       var $el2 = this.$('#ds-'+coords[1]);
+      var pad = parseInt($el1.css('margin-top'));
       var cdrs1 = $el1.position();
       var cdrs2 = $el2.position();
+      
       cdrs1.center = cdrs1.left + $el1.outerWidth(true) / 2;
       cdrs2.center = cdrs2.left + $el2.outerWidth(true) / 2;
-      cdrs2.bottom = cdrs2.bottom || cdrs2.top + $el2.outerHeight(true);
+      cdrs2.bottom = cdrs2.bottom || cdrs2.top + $el2.outerHeight();
     
-      ctx.moveTo(cdrs1.center, cdrs1.top);
+      ctx.moveTo(cdrs1.center, cdrs1.top + pad);
       ctx.lineTo(cdrs1.center, cdrs1.top - 20);
       ctx.lineTo(cdrs2.center, cdrs1.top - 20);
       ctx.lineTo(cdrs2.center, cdrs2.bottom);

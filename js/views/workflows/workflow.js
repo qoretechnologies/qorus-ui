@@ -9,9 +9,12 @@ define([
   'views/common/bottom_bar',
   'views/workflows/order',
   'views/workflows/modal',
+  'collections/stats',
+  'views/common/chart',
   'views/log'
 ], function ($, _, Qorus, Workflow, Template, InstanceListView, OrderListView, 
-  BottomBarView, OrderView, Modal, LogView) {
+  BottomBarView, OrderView, Modal, StatsCollection, ChartView, LogView) {
+
   var ModelView = Qorus.View.extend({
     url: function () {
      return '/workflows/view/' + this.opts.id; 
@@ -43,6 +46,10 @@ define([
       this.model = new Workflow({ id: opts.id });
       this.model.fetch();
       this.model.on('change', this.render);
+      
+      this.stats_collection = new StatsCollection({ id: this.id });
+      this.stats_collection.on('sync', this.drawCharts, this);
+      this.stats_collection.fetch();
       
       this.createSubviews();
     },
@@ -164,6 +171,11 @@ define([
       $target.tab('show');
 
       this.active_tab = $target.attr('href');
+    },
+    
+    drawCharts: function () {
+      this.subviews.chart = new ChartView({ dataset: this.stats_collection.getDataset() });
+      this.assign('#stats', this.subviews.chart);
     },
     
     clean: function () {

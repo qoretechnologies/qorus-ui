@@ -773,7 +773,7 @@ aside {
   font-weight: bold;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
   min-height: 40px;
-  margin: 0 5px;
+  margin: 5px;
   min-width: 150px;
   overflow: hidden;
 }

@@ -27,6 +27,7 @@ define([
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
+      'keydown window': function (e) { console.log(e); },
       'contextmenu tr': 'onRightClick'
     },
     
@@ -53,7 +54,7 @@ define([
       this.createSubviews();
       
       var _this = this;
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited workflow:status_changed workflow:data_released', function (e) {
         var m = _this.collection.get(e.info.id);
         if (m) {
           m.fetch();
