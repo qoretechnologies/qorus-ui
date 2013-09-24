@@ -30,7 +30,7 @@ define([
       'keyup .search-query': 'search',
       'click .action-modal': 'openModal',
       'click .action': 'runAction',
-      'click .tab': 'tabToggle'
+      'click .nav a': 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -65,9 +65,6 @@ define([
       this.assign('#instances', dataview);
       this.assign('#bottom-bar', this.subviews.bottombar);
       this.assign('#log', this.subviews.log);
-      this.assign('#stats-day', this.subviews.chart.day);
-      this.assign('#stats-week', this.subviews.chart.week);
-      this.assign('#stats-month', this.subviews.chart.month);
     },
     
     currentDataView: function () {
@@ -90,12 +87,6 @@ define([
       this.subviews.bottombar = new BottomBarView({});
       var url = '/workflows/' + this.model.id;
       this.subviews.log = new LogView({ socket_url: url, parent: this });
-      
-      // add preformance chart subviews
-      this.subviews.chart = {};
-      this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));
-      this.subviews.chart.week = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 }));
-      this.subviews.chart.month = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 }));      
     },
     
     // opens the bottom bar with detail info about the Instance/Order
@@ -173,7 +164,25 @@ define([
       var active = $('.tab-pane.active');
       $target.tab('show');
 
+      if ($target.attr('href') == '#stats') {
+        console.log('drawing charts');
+        this.drawCharts();
+      }
+
       this.active_tab = $target.attr('href');
+    },
+    
+    drawCharts: function () {
+      // add preformance chart subviews
+      if (!this.subviews.chart) {
+        this.subviews.chart = {};
+        this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));
+        this.subviews.chart.week = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 }));
+        this.subviews.chart.month = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 }));
+        this.assign('#stats-day', this.subviews.chart.day);
+        this.assign('#stats-week', this.subviews.chart.week);
+        this.assign('#stats-month', this.subviews.chart.month);
+      }
     },
         
     clean: function () {

@@ -1,4 +1,7 @@
-/* @override http://localhost:8001/css/base.css */
+/* @override 
+	http://localhost:8001/css/base.css
+	http://localhost:8002/css/base.css
+*/
 
 html, body {
 	height: 100%;
@@ -805,6 +808,34 @@ aside {
 }
 
 /* chart styling */
+
+.chart-box {
+  float: left;
+  position: relative;
+  overflow: hidden;
+  width: auto;
+}
+
+.chart {
+  margin: 0 0 30px 50px;
+}
+
+.chart-left-axis-label {
+  position: absolute;
+  transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -webkig-font-smoothing: antialiased;
+  top: 35%;
+  left: 0;
+}
+
+.chart-bottom-axis-label {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: 0; 
+}
 
 .chart-legend {
   list-style: none;

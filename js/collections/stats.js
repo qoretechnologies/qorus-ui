@@ -9,11 +9,11 @@ define([
   var datasets = [
     'avgduration',
     'avgprocessing',
-    // 'count',
     'maxduration',
     'maxprocessing',
     'minduration',
     'minprocessing'
+    // 'count',
   ];
   
   var Collection = Qorus.Collection.extend({
