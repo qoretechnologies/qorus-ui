@@ -441,12 +441,12 @@ define([
           console.log("data action", data.id, data.action);
           // $target.text(data.msg.toUpperCase());
           var inst = this.collection.get(data.id);
-          inst.doAction(data.action, data);           
+          inst.doAction(data.action, data);
         }
       } else if (data.action == 'open') {
         this.openURL($target.data('url') || $target.attr('href'));
       }
-      
+      e.preventDefault();
     },
     
     // enable table fixed header

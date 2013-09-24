@@ -47,10 +47,6 @@ define([
       this.model.fetch();
       this.model.on('change', this.render);
       
-      this.stats_collection = new StatsCollection({ id: this.id });
-      this.stats_collection.on('sync', this.drawCharts, this);
-      this.stats_collection.fetch();
-      
       this.createSubviews();
     },
     
@@ -69,6 +65,9 @@ define([
       this.assign('#instances', dataview);
       this.assign('#bottom-bar', this.subviews.bottombar);
       this.assign('#log', this.subviews.log);
+      this.assign('#stats-day', this.subviews.chart.day);
+      this.assign('#stats-week', this.subviews.chart.week);
+      this.assign('#stats-month', this.subviews.chart.month);
     },
     
     currentDataView: function () {
@@ -82,7 +81,6 @@ define([
     },
     
     createSubviews: function () {
-      console.log("Workflow date", this.opts, this.date);
       this.subviews.instances = new InstanceListView({ 
           date: this.opts.date, workflowid: this.model.id, url: this.url() 
         });
@@ -92,6 +90,12 @@ define([
       this.subviews.bottombar = new BottomBarView({});
       var url = '/workflows/' + this.model.id;
       this.subviews.log = new LogView({ socket_url: url, parent: this });
+      
+      // add preformance chart subviews
+      this.subviews.chart = {};
+      this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));
+      this.subviews.chart.week = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 }));
+      this.subviews.chart.month = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 }));      
     },
     
     // opens the bottom bar with detail info about the Instance/Order
@@ -149,7 +153,6 @@ define([
     
     // edit action with Modal window form
     openModal: function (e) {
-      console.log('openModal stop propagation');
       e.preventDefault();
       e.stopPropagation();
       
@@ -172,14 +175,8 @@ define([
 
       this.active_tab = $target.attr('href');
     },
-    
-    drawCharts: function () {
-      this.subviews.chart = new ChartView({ dataset: this.stats_collection.getDataset() });
-      this.assign('#stats', this.subviews.chart);
-    },
-    
+        
     clean: function () {
-      console.log("Cleaning", this, this.subviews, this.subviews.log, this.subviews.log.sss);
       if (this.subviews.log) {
         this.subviews.log.clean();
       }

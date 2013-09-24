@@ -803,3 +803,19 @@ aside {
   display: inline-block;
   width: 1em;
 }
+
+/* chart styling */
+
+.chart-legend {
+  list-style: none;
+  text-indent: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.chart-legend-box {
+  display: inline-block;
+  width: 20px; 
+  height: 10px; 
+}

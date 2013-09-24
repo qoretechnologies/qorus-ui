@@ -1,1 +1,10 @@
-<canvas id="<%= obj.chart.id %>" width="<%= obj.chart.width %>" height="<%= obj.chart.height %>"></canvas>
+<% if (obj.legend) { %>
+<div class="span2">
+  <ul class="chart-legend">
+    <% _.each(obj.legend, function (l) { %> 
+      <li><div class="chart-legend-box" style="background-color: <%= l.color %>;"></div> <%= l.name %></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>
+<div class="span10"><canvas class="chart" id="<%= obj.chart.id %>" width="<%= obj.chart.width %>" height="<%= obj.chart.height %>"></canvas></div>

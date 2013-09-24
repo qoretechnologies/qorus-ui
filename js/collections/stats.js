@@ -5,6 +5,17 @@ define([
   'qorus/qorus',
   'utils'
 ], function(settings, $, _, Qorus, utils){
+  
+  var datasets = [
+    'avgduration',
+    'avgprocessing',
+    // 'count',
+    'maxduration',
+    'maxprocessing',
+    'minduration',
+    'minprocessing'
+  ];
+  
   var Collection = Qorus.Collection.extend({
     step: 1,
     params: { 
@@ -41,14 +52,19 @@ define([
       var _this = this;
       _.each(this.getLabels(), function (d) {
         var m = _this.findWhere({ grouping: d});
-        if (m) {
-          console.log(d, m.toJSON());
-          data.push(m.get('count'));
-        } else {
-          data.push(0);
-        }
+        
+        _.each(datasets, function (d) {
+          data[d] = data[d] || { data: [], desc: d };
+
+          if (m) {
+            data[d].data.push(m.get(d));
+          } else {
+            data[d].data.push(0);
+          }
+        })
+        
       });
-      return [ { data: data }];
+      return _.values(data);
     },
     
     getDataset: function () {
@@ -56,8 +72,7 @@ define([
         labels: _.map(this.getLabels(), function (l) { return l.slice(-2); }),
         datasets: this.createDataset()
       };
-      
-      console.log(data);
+
       return data;
     },
     

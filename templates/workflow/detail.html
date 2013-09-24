@@ -15,7 +15,7 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#instances" data-toggle="tab">List</a></li>
     <li><a href="#log" data-toggle="tab">Log</a></li>
-    <li><a href="#stats" data-toggle="tab">Stats</a></li>
+    <li><a href="#stats" data-toggle="tab">Performance</a></li>
   </ul>
   <div class="tab-content">
       <div id='instances' class="tab-pane active">
@@ -25,6 +25,18 @@
           <p>Log</p>
       </div>
       <div class="tab-pane" id="stats">
+        <div class="row-fluid">
+          <h3>Last 24 hours</h3>
+          <div id="stats-day"></div>
+        </div>
+        <div class="row-fluid">
+          <h3>Last 7 days</h3>
+          <div id="stats-week"></div>
+        </div>
+        <div class="row-fluid">
+          <h3>Last 30 days</h3>
+          <div id="stats-month"></div>
+        </div>
       </div>
   </div>
 </div>
