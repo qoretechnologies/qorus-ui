@@ -9,7 +9,7 @@ define([
 ], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
   var msngr = $('#msg').messenger();
   
-  var Collection = Qorus.SortedWSCollection.extend({
+  var Collection = Qorus.WSCollection.extend({
     model: Model,
     log_size: 1000,
     counter: 0,
@@ -22,7 +22,7 @@ define([
       
       Collection.__super__.initialize.call(this, opts);
     },
-
+    
     wsAdd: function (e) {
       var _this = this;
       var models = JSON.parse(e.data);
@@ -30,14 +30,17 @@ define([
       // drop older messages
       if (this.length > this.log_size - 1) {
         this.models = this.slice(0, this.log_size - models.length);
+        console.log(this.length > this.log_size, this.length, this.log_size);
       }
-      
       _.each(models, function (model) {
+        console.log('adding', model);
         var m = new Model(model);
         _this.add(m);
         Dispatcher.dispatch(m);
       });
-      this.trigger('update', this);
+      console.log(this.length);
+      
+      // this.trigger('update');
     },
 
     wsOpened: function () {

@@ -173,7 +173,7 @@ define([
     },
     
     drawCharts: function () {
-      // add preformance chart subviews
+      // add performance chart subviews
       if (!this.subviews.chart) {
         this.subviews.chart = {};
         this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));

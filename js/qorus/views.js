@@ -78,26 +78,14 @@ define([
         this.clean();
       }
       _.each(this.subviews, function (view) {
-        console.log('view', view);
-        if (_.isArray(view)) {
-          // _.each(view, function (v) {
-          //   v.off();
-          // });
-          // _.each(view, function (v) {
-          //   console.log("off", v);
-          //   v.off();
-          // });
-          
-        } else if (_.isObject(view)) {
-          // if (_.isFunction(view.clean)) {
-          //   view.clean();
-          // }
+        // console.log('view', view);
+        if (view instanceof Backbone.View) {
           view.undelegateEvents();
-          view.remove();      
-        } // else {
-//           view.off();
-//         }
+          view.remove();          
+        }
       });
+      this.undelegateEvents();
+      this.remove();
     },
     
     // manages subviews
@@ -264,7 +252,7 @@ define([
       this.setTitle();
       this.onRender();
       this.sortIcon();
-      console.log('Finished rendering');
+      console.log('Finished rendering', this);
       return this;
     },
     
@@ -567,7 +555,7 @@ define([
     
     onRender: function () {
       this.createRows();
-      $('.pane').scroll(this.scroll);
+      this.$el.scroll(this.scroll);
     },
     
     scroll: function (ev) {
