@@ -11,16 +11,14 @@ define([
   
   var Collection = Qorus.WSCollection.extend({
     model: Model,
-    log_size: 1000,
+    log_size: 500,
     counter: 0,
     socket_url: settings.EVENTS_WS_URL,
+    timeout_buffer: 0,
+    timeout_buffer_max: 50,
 
-    initialize: function (opts) {
-      this.sort_key = 'time';
-      this.sort_order = 'des';
-      this.sort_history = [''];
-      
-      Collection.__super__.initialize.call(this, opts);
+    comparator: function (m) {
+      return -m.get('time');
     },
     
     wsAdd: function (e) {
@@ -28,19 +26,33 @@ define([
       var models = JSON.parse(e.data);
       
       // drop older messages
-      if (this.length > this.log_size - 1) {
-        this.models = this.slice(0, this.log_size - models.length);
-        console.log(this.length > this.log_size, this.length, this.log_size);
+      if (this.length + models.length > this.log_size - 1) {
+        var len = this.log_size - models.length;
+        this.reset(this.slice(-len));
       }
+      
       _.each(models, function (model) {
-        console.log('adding', model);
         var m = new Model(model);
         _this.add(m);
         Dispatcher.dispatch(m);
       });
-      console.log(this.length);
+      // console.log(this.models.length, this.length, this.models);
       
-      // this.trigger('update');
+      this.timeout_buffer++;
+      clearTimeout(this.timeout);
+      
+      // waiting for triggering events update for a while
+      if (this.timeout_buffer >= this.timeout_buffer_max) {
+        this.timeout_buffer = 0;
+        this.trigger('update');
+        console.log('empting buffer');
+      } else {
+        this.timeout = setTimeout(function () {
+          _this.trigger('update');
+          _this.timeout_buffer = 0;
+          console.log('executing timeout function');
+        }, 5*1000);
+      }    
     },
 
     wsOpened: function () {
