@@ -7,24 +7,23 @@ define([
     add: function (e) {
       this.dispatch(e);
     },
-    dispatch: function (e) {},
-    // dispatch: function (e) {
-    //   e = e.toJSON();
-    //   var ev = this.eventParse(e.eventstr);
-    //   
-    //   var events = [ 
-    //     ev[0],
-    //     ev.join(':'),
-    //     e.info.cls + ':' + e.info.id,
-    //     e.info.cls + ':' + e.info.id + ':' + ev[1]
-    //   ];
-    //   
-    //   var _this = this;
-    //   _.each(events, function(evt){
-    //     _this.trigger(evt, e);
-    //     // console.log("Dispatching", evt);
-    //   })
-    // },
+    dispatch: function (e) {
+      e = e.toJSON();
+      var ev = this.eventParse(e.eventstr);
+      
+      var events = [ 
+        ev[0],
+        ev.join(':'),
+        e.info.cls + ':' + e.info.id,
+        e.info.cls + ':' + e.info.id + ':' + ev[1]
+      ];
+      
+      var _this = this;
+      _.each(events, function(evt){
+        _this.trigger(evt, e);
+        // console.log("Dispatching", evt);
+      })
+    },
     eventParse: function(name) {
       var pos = name.indexOf('_');
       
