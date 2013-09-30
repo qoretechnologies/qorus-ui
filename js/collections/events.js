@@ -17,8 +17,10 @@ define([
     timeout_buffer: 0,
     timeout_buffer_max: 50,
 
-    comparator: function (m) {
-      return -m.get('time');
+    comparator: function (m1, m2) {
+      if (m1.get('time') > m2.get('time')) return -1;
+      if (m2.get('time') > m1.get('time')) return 1;
+      return 0;
     },
     
     wsAdd: function (e) {

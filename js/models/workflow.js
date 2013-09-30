@@ -1,5 +1,6 @@
 define([
   'settings',
+  'underscore',
   'jquery',
   'messenger',
   'backbone',
@@ -8,7 +9,7 @@ define([
   'models/system',
   'sprintf',
   'jquery.rest'
-], function(settings, $, messenger, Backbone, Qorus, Dispatcher, System){
+], function(settings, _, $, messenger, Backbone, Qorus, Dispatcher, System){
   var StepBase = {
       initialize: function (id, depends_on, name, type) {
           this.name = name;
@@ -36,37 +37,11 @@ define([
       },
     
       toArray: function (buffer, level) {
-          // var children = [];
-          // var n;
-          // 
-          // buffer = buffer || [];
-          // level = level || 0;
-          //         
-          // _.each(this.children, function (c) {
-          //     children.push(c.id);
-          //     c.toArray(buffer, level+1);
-          // });
-          //         
-          // n = { 
-          //   id: this.id, 
-          //   links_to: this.depends_on, 
-          //   name: this.name,
-          //   type: this.type
-          // };
-          //         
-          // if (!buffer[level]) {
-          //     buffer[level] = [n];
-          // } else {
-          //     buffer[level].push(n);
-          // }
-          //         
-          // return buffer;
-          var n;
           var children = [];
           var children_sorted = _.sortBy(this.children, function (c) { return c.children.length; });
           var first_child = children_sorted[0];
           
-          console.log(this.children,children_sorted);
+          // console.log(this.children,children_sorted);
 
           buffer = buffer || [];
           level = level || 1;
@@ -110,7 +85,6 @@ define([
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
     defaults: {
-      'name': "Workflow name",
       'IN-PROGRESS': 0,
       'READY': 0,
       'SCHEDULED': 0,
@@ -129,33 +103,17 @@ define([
     },
     idAttribute: "workflowid",
     date: null,
-    allowedActions: ['start','stop','reset', 'show', 'hide'],
+    allowedActions: ['start','stop','reset', 'show', 'hide','autostart'],
 
     initialize: function (opts) {
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
         this.id = opts.id;
       }
-      
-      // // TODO: find proper place/way within the view
-      // this.on('sync', function(m, r){ 
-      //   if (m.collection){
-      //     m.collection.trigger('reset');
-      //   }
-      // }, this);
-      
-      // changed add to views to simpler management
-      // listen to events
-      // var _this = this;
-      // this.listenTo(Dispatcher, 'workflow:start workflow:stop worfklow:data_submited', function (e) {
-      //   if (e.info.id == _this.id) {
-      //     _this.fetch();
-      //   }
-      // });
     },
     
     doAction: function (action, opts) {
-      if(_.indexOf(this.allowedActions, action) != -1){
+      if (_.indexOf(this.allowedActions, action) != -1) {
         var params;
         var wflid = this.id;
         var _this = this;
@@ -166,6 +124,10 @@ define([
           params = { action: 'setDeprecated', deprecated: false }
         } else {
           params = { action: action }
+        }
+        
+        if (opts) {
+          _.extend(params, opts);
         }
         
         $.put(this.url(), params, null, 'application/json')
@@ -201,6 +163,10 @@ define([
       var sysopts = System.Options.getFor('workflow');
 
       return _.extend(opts, sysopts);
+    },
+    
+    setAutostart: function (as) {
+      this.doAction('autostart', { autostart: as });
     },
     
     mapSteps: function () {

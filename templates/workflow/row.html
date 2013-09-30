@@ -8,6 +8,7 @@
 	<td class="err instances"><%= wrapBadge(wfl.exec_count, ['/workflows/view', wfl.id, 'instances'].join('/'), 'badge-success') %></td>
 	<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all', wfl.id) %>"><%= wfl.name %></a></td>
 	<td class="version"><%= wfl.version %></td>
+	<td class="autostart"><%= (wfl.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= wfl.autostart %></td>
 	<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], getUrl('in-progress', wfl.id), 'badge-warning') %></td>
 	<td class="err complete"><%= wrapBadge(wfl.COMPLETE, getUrl('complete', wfl.id), 'badge-success') %></td>
 	<td class="err error"><%= wrapBadge(wfl.ERROR, getUrl('error', wfl.id), 'badge-important') %></td>

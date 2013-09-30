@@ -165,7 +165,6 @@ define([
       $target.tab('show');
 
       if ($target.attr('href') == '#stats') {
-        console.log('drawing charts');
         this.drawCharts();
       }
 
@@ -175,6 +174,7 @@ define([
     drawCharts: function () {
       // add performance chart subviews
       if (!this.subviews.chart) {
+        console.log('drawing charts');
         this.subviews.chart = {};
         this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));
         this.subviews.chart.week = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 }));

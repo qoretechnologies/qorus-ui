@@ -28,7 +28,7 @@ define([
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
       'keydown window': function (e) { console.log(e); },
-      'contextmenu tr': 'onRightClick'
+      'contextmenu tbody tr': 'onRightClick'
     },
     
     title: "Workflows",
@@ -54,7 +54,7 @@ define([
       this.createSubviews();
       
       var _this = this;
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted', function (e) {
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e) {
         var m = _this.collection.get(e.info.id);
         if (m) {
           m.fetch();

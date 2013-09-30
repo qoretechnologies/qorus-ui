@@ -3,24 +3,55 @@
 <h3><%= item.name %> <small><%= item.version %></small></h3>
 <p class="muted"><em><%= item.description %></em></p>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#options">Options</a></li>
+    <li class="active"><a href="#details">Details</a></li>
     <li><a href="#library">Library</a></li>
     <li><a href="#steps" class="steps">Steps</a></li>
     <li><a href="#log" class="log">Log</a></li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="options">
-        <% _.each(item.options, function (option) { %>
-        <p><%= option %></p>
-        <% }) %>
+  <div class="tab-pane active" id="details">
+    <div class="row-fluid">
+      <table class='table table-align-left'>
+        <tbody>
+          <tr>
+            <td><strong>Autostart</strong></td>
+            <td><%= (item.manual_autostart) ? '<i class="icon-asterisk"></i>' : '' %><%= item.autostart %></td>
+            <td><a href="#" data-action="autostart"><i class="icon-edit"></i></a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="tab-pane" id="library">
-        <%= createNestedList(item.lib) %>
+    <div class="row-fuild">
+      <h4>Options</h4>
+      <% if (item.options) { %>
+      <table class="table table-condensed table-stripped table-align-left">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+      <% _.each(item.options, function (option, idx) { %>
+          <tr>
+            <td class="name"><%= idx %></td>
+            <td><%= option %></td>
+          </tr>
+      <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <p>No options</p>
+      <% } %>
     </div>
-    <div class="tab-pane" id="steps">
-    </div>
-    <div class="tab-pane" id="log">
-        <p>TODO log</p>
-    </div>
+  </div>
+  <div class="tab-pane" id="library">
+      <%= createNestedList(item.lib) %>
+  </div>
+  <div class="tab-pane" id="steps">
+  </div>
+  <div class="tab-pane" id="log">
+      <p>TODO log</p>
+  </div>
 </div>
