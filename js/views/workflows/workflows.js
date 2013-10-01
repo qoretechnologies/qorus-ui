@@ -58,14 +58,24 @@ define([
       this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e) {
         var m = _this.collection.get(e.info.id);
         if (m) {
+          m._timer_counter = m._timer_counter || 0;
+          m._timer_counter++;
+
           if (m._timer) {
             clearTimeout(m._timer);
             m._timer = null;
           }
-          m._timer = setTimeout(function () {
+          
+          if (m._timer_counter >= 100) {
+            m._timer_counter = 0;
             m.fetch();
-            console.log('fetching workflow', e.info.id);
-          }, 2000);
+            console.log('update workflow', m._timer_counter);
+          } else {
+            m._timer = setTimeout(function () {
+              m.fetch();
+              // console.log('fetching workflow', e.info.id);
+            }, 2000);            
+          }
         }          
       });
     },
