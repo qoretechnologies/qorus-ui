@@ -16,12 +16,13 @@ define([
     socket_url: settings.EVENTS_WS_URL,
     timeout_buffer: 0,
     timeout_buffer_max: 50,
+    events_received: 0,
 
-    comparator: function (m1, m2) {
-      if (m1.get('time') > m2.get('time')) return -1;
-      if (m2.get('time') > m1.get('time')) return 1;
-      return 0;
-    },
+    // comparator: function (m1, m2) {
+    //   if (m1.get('time') > m2.get('time')) return -1;
+    //   if (m2.get('time') > m1.get('time')) return 1;
+    //   return 0;
+    // },
     
     wsAdd: function (e) {
       var _this = this;
@@ -36,6 +37,7 @@ define([
       _.each(models, function (model) {
         var m = new Model(model);
         _this.add(m);
+        _this.events_received++;
         Dispatcher.dispatch(m);
       });
       // console.log(this.models.length, this.length, this.models);
@@ -47,14 +49,15 @@ define([
       if (this.timeout_buffer >= this.timeout_buffer_max) {
         this.timeout_buffer = 0;
         this.trigger('update');
-        console.log('empting buffer');
+        // console.log('empting buffer');
       } else {
         this.timeout = setTimeout(function () {
           _this.trigger('update');
           _this.timeout_buffer = 0;
-          console.log('executing timeout function');
+          // console.log('executing timeout function');
         }, 5*1000);
-      }    
+      }
+      // console.log('Total events received: ', _this.events_received);
     },
 
     wsOpened: function () {

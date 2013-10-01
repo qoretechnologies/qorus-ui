@@ -21,6 +21,7 @@ define([
   InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl, WorkflowView){
     
   var ListView = Qorus.ListView.extend({
+    timers: [],
     // el: $("#content"),
     additionalEvents: {
       'click tbody tr': 'showDetail',
@@ -57,8 +58,15 @@ define([
       this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e) {
         var m = _this.collection.get(e.info.id);
         if (m) {
-          m.fetch();
-        }
+          if (m._timer) {
+            clearTimeout(m._timer);
+            m._timer = null;
+          }
+          m._timer = setTimeout(function () {
+            m.fetch();
+            console.log('fetching workflow', e.info.id);
+          }, 2000);
+        }          
       });
     },
     
