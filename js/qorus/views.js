@@ -81,11 +81,11 @@ define([
         // console.log('view', view);
         if (view instanceof Backbone.View) {
           view.undelegateEvents();
-          view.remove();          
+          // view.remove();          
         }
       });
       this.undelegateEvents();
-      this.remove();
+      // this.remove();
     },
     
     // manages subviews
@@ -171,7 +171,7 @@ define([
       'submit .form-search': 'search',
       'keyup .search-query': 'search',
       "click button[data-option]": "setOption",
-      "click button[data-action!='execute']": "runAction",
+      "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
       "click a[data-back]": "historyBack"
@@ -419,17 +419,20 @@ define([
     // end batch section definition
     
     runAction: function (e) {
+      console.log('run action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
-      if (data.action && data.action != 'open') {
+      if (data.action && data.action != 'open' && data.action !== 'execute') {
         if (data.id == 'selected') {
           this.runBatchAction(data.action, data.method);
         } else if (data.id) {
-          console.log("data action", data.id, data.action);
-          // $target.text(data.msg.toUpperCase());
-          var inst = this.collection.get(data.id);
-          inst.doAction(data.action, data);
+          if (!$target.hasClass('action-modal')) {
+            console.log("data action", data.id, data.action);
+            // $target.text(data.msg.toUpperCase());
+            var inst = this.collection.get(data.id);
+            inst.doAction(data.action, data);            
+          }
         }
       } else if (data.action == 'open') {
         this.openURL($target.data('url') || $target.attr('href'));

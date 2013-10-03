@@ -106,6 +106,7 @@ define([
     allowedActions: ['start','stop','reset', 'show', 'hide','autostart'],
 
     initialize: function (opts) {
+      _.bindAll(this);
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
         this.id = opts.id;
@@ -135,7 +136,7 @@ define([
             function (e, ee, eee){
               var msg = sprintf('Workflow %d %s done', wflid, action);
               $.globalMessenger().post(msg);
-              _this.fetch();
+              // _this.fetch();
             }
           );        
       }
@@ -204,8 +205,20 @@ define([
           });
       });
       
-      
       return step_list[0].toArray();
+    },
+    
+    incr: function (attr, val) {
+      val = val || 1;
+      var value = parseInt(this.get(attr));
+      this.set(attr, value+val);
+    },
+    
+    decr: function (attr, val) {
+      val = val || 1;
+      var value = parseInt(this.get(attr)) - val;
+      
+      this.set(attr, value);
     }
   });
 

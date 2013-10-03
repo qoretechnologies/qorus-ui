@@ -20,7 +20,7 @@ define([
       
       var _this = this;
       _.each(events, function(evt){
-        _this.trigger(evt, e);
+        _this.trigger(evt, e, evt);
         // console.log("Dispatching", evt);
       })
     },

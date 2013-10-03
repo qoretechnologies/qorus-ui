@@ -28,7 +28,6 @@ define([
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
-      'keydown window': function (e) { console.log(e); },
       'contextmenu tbody tr': 'onRightClick'
     },
     
@@ -55,28 +54,44 @@ define([
       this.createSubviews();
       
       var _this = this;
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e) {
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e, evt) {
+        console.log('Event', evt, e);
         var m = _this.collection.get(e.info.id);
+        
         if (m) {
-          m._timer_counter = m._timer_counter || 0;
-          m._timer_counter++;
-
-          if (m._timer) {
-            clearTimeout(m._timer);
-            m._timer = null;
+          console.log(m.attributes);
+          if (evt == 'workflow:start') {
+            m.incr('exec_count');
+          } else if (evt == 'workflow:stop') {
+            m.set('exec_count', 0);
+          } else if (evt == 'workflow:data_submitted') {
+            m.incr(e.info.status);
+            m.incr('TOTAL');
+          } else if (evt == 'workflow:status_changed') {
+            m.incr(e.info.info.new);
+            m.decr(e.info.info.old);
           }
-          
-          if (m._timer_counter >= 100) {
-            m._timer_counter = 0;
-            m.fetch();
-            console.log('update workflow', m._timer_counter);
-          } else {
-            m._timer = setTimeout(function () {
-              m.fetch();
-              // console.log('fetching workflow', e.info.id);
-            }, 2000);            
-          }
-        }          
+          console.log(m.attributes);
+          m.trigger('fetch');
+        }
+        // if (m) {
+        //   m._timer_counter = m._timer_counter || 0;
+        //   m._timer_counter++;
+        // 
+        //   if (m._timer) {
+        //     clearTimeout(m._timer);
+        //     m._timer = null;
+        //   }
+        //   
+        //   if (m._timer_counter >= 100) {
+        //     m._timer_counter = 0;
+        //     m.fetch();
+        //   } else {
+        //     m._timer = setTimeout(function () {
+        //       m.fetch();
+        //     }, 2000);            
+        //   }
+        // }          
       });
     },
     
@@ -118,6 +133,10 @@ define([
       var $target = $(e.currentTarget);
       
       if ($target.data) {
+        if (this.subviews.modal) {
+          this.subviews.modal.off();
+        }
+        
         this.subviews.modal = new Modal({ workflow: this.collection.get($target.data('id')) });
         this.assign('#modal', this.subviews.modal);
         this.subviews.modal.open();
@@ -185,6 +204,7 @@ define([
         .attr('data-id', dataId)
         .unbind('click')
         .click(function (ev) {
+          console.log($(this).attr('class'));
           if ($(this).hasClass('action')) {
             _this.runAction(ev);
           } else if ($(this).hasClass('action-modal')) {
