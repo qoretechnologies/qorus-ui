@@ -218,7 +218,7 @@ define([
       val = val || 1;
       var value = parseInt(this.get(attr)) - val;
       
-      this.set(attr, value);
+      this.set(attr, (value > 0) ? value : 0);
     }
   });
 

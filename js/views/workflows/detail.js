@@ -69,6 +69,10 @@ define([
       if ($target.hasClass('steps')) {
         this.createDiagram();
       }
+      
+      if ($target.hasClass('log')) {
+        this.subviews.log.fixHeight();
+      }
 
       this.active_tab = $target.attr('href');
     },

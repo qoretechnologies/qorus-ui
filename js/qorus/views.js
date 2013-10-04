@@ -635,8 +635,26 @@ define([
         _.extends(this.context, opts.context); 
       }
       
+      var model = this.model
+        , _this = this;
       // update row on model change
-      this.listenTo(this.model, 'change', this.update);
+      this.listenTo(this.model, 'change', function () {
+        var timeout = 500;
+        _this._rtimer_buffer = _this._rtimer_buffer || 0;
+        
+        if (_this._rtimer) {
+          clearTimeout(_this._rtimer);
+          _this._rtimer_buffer++;
+        }
+
+        if (_this._rtimer_buffer >= 50) timeout = 0;
+
+        _this._rtimer = setTimeout(function () {
+          console.log('delayed render of row', _this.model.id, new Date());
+          _this.update();
+          _this._rtimer_buffer = 0;
+        }, timeout);
+      });
       // this.listenTo(this.model, 'all', function (e, ee) {
       //   console.log(e, ee);
       // });

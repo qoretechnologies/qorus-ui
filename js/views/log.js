@@ -5,8 +5,9 @@ define([
   'qorus/dispatcher',
   'collections/logs',
   'text!../../templates/common/log.html',
+  'text!../../templates/common/log_pre.html',
   'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Collection, Template) {
+], function ($, _, Qorus, Dispatcher, Collection, Template, TemplatePre) {
   var View = Qorus.View.extend({
     messages: "",
     // additionalEvents: {
@@ -17,7 +18,7 @@ define([
       this.opts = opts;
       _.bindAll(this);
       
-      this.template = Template;
+      this.template = TemplatePre;
       this.parent = opts.parent;
       
       if (_.has(opts, 'context')) {
@@ -30,7 +31,7 @@ define([
         auto_reconnect: opts.auto_reconnect 
       });
       
-      this.collection.on('message', this.appendText);
+      this.collection.on('message', this.appendTextPre);
       
     },
     
@@ -42,6 +43,7 @@ define([
           _.defer(lv.scroll);
         });
       }
+      this.fixHeight();
     },
 
     isScrollable: function () {
@@ -49,17 +51,39 @@ define([
     },
     
     appendText: function (t, text) {
-      var _this = this;
+      var lines_text = text.split('\n').length;
+      var lines = this.messages.split('\n').length;
       
-      $('textarea.log', this.$el).val(function (i, val) {
-        return val + text;
-      });
+      if (lines + lines_text > this.collection.log_size) {
+        this.messages = this.messages.slice(-lines_text);
+      }
+      
+      this.messages += text;
+      
+      $('textarea.log', this.$el).val(this.messages);
+      this.scroll();
+    },
+    
+    appendTextPre: function (t, text) {
+      var html = $('<pre />').text(text);
+      console.log(this.$('.log-area'));
+      $('.log-area', this.$el).append(html);
+      
+      var log = $('.log-area', this.$el).get(0);
+
+      if (log) {
+        while (log.childNodes.length > this.collection.log_size) {
+          log.removeChild(log.firstChild);
+        }
+      }
+      
       this.scroll();
     },
     
     scroll: function () {
       if (this.isScrollable()) {
-        $('textarea.log', this.$el).scrollTop(function (v) {
+        $('.log', this.$el).scrollTop(function (v) {
+          console.log(this.scrollHeight);
           return this.scrollHeight;
         });        
       }
@@ -69,6 +93,13 @@ define([
       this.collection.wsClose();
       this.stopListening();
       this.undelegateEvents();
+    },
+    
+    fixHeight: function () {
+      // maintain the height of log area
+      var $parent = this.$el.parents('.content');
+      var $log = this.$('.log-area');
+      $log.height($parent.height() - $log.position().top);
     }
     
   });

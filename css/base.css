@@ -850,3 +850,23 @@ aside {
   width: 20px; 
   height: 10px; 
 }
+
+#log {
+	overflow: hidden;
+}
+
+.log-area, .log-area.span12 {
+	background-color: #0a0f21;
+	overflow: auto;
+	padding: 1%;
+	height: 400px;
+	min-height: 400px;
+	margin: 0;
+}
+
+.log-area pre {
+	font-size: 80%;
+	margin: 0;
+	border-radius: 0;
+	padding: 0;
+}

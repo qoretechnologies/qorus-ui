@@ -217,11 +217,20 @@ define([
   });
   
   Qorus.WSCollection = Backbone.Collection.extend({
-    initialize: function (models, options) {
+    log_size: 1000,
+    counter: 0,
+    socket_url: null,
+    auto_reconnect: true,
+    
+    initialize: function (opts) {
+      opts = opts || {};
       _.bindAll(this);
-      var host = window.location.host
-      this.socket = new WebSocket(settings.EVENTS_WS_URL);
-      this.socket.onmessage = this.wsAdd;
+      
+      if (opts.auto_reconnect === false) {
+        this.auto_reconnect = opts.auto_reconnect;
+      }
+      
+      this.connect();
     },
     
     wsAdd: function (e) {
@@ -238,6 +247,61 @@ define([
     },
     
     fetch: function () {
+    },
+    
+    connect: function () {
+      var _this = this;
+      
+      $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
+        .done(function (response) {
+          _this.token = response;
+          _this.wsOpen();
+        })
+        .fail(function () {
+          console.log('Failed to get token. Retrying.', _this);
+          _this.wsRetry();
+        });
+    },
+    
+    wsClose: function () {
+      if (this.socket) {
+        console.log("Closing WS", this.socket_url, this.socket);
+        this.socket.onclose = function (e) { console.log('Closed', e); };
+        this.socket.close(); 
+      }
+    },
+
+    wsOpen: function () {
+      if (this.socket_url) {
+        var url = this.socket_url + '?token=' + this.token;
+      
+        try {
+          console.log('Connecting to WS', url);
+          this.socket = new WebSocket(url); 
+          this.socket.onmessage = this.wsAdd;
+          this.socket.onclose = this.wsRetry;
+          this.socket.onopen = this.wsOpened;
+          this.socket.onerror = this.wsError;
+        } catch (e) {
+          console.log(e);
+        }
+        this.socket.onerror = this.wsError; 
+      }
+    },
+    wsError: function (e) {
+      console.log(e);
+    },
+
+    wsOpened: function () {
+      this.trigger('ws-opened', this); 
+    },
+
+    wsRetry: function () {
+      this.trigger('ws-closed', this);
+      
+      if (this.auto_reconnect) {
+        setTimeout(this.connect, 5000); 
+      }
     }
   });
   

@@ -55,11 +55,11 @@ define([
       
       var _this = this;
       this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e, evt) {
-        console.log('Event', evt, e);
+        // console.log('Event', evt, e);
         var m = _this.collection.get(e.info.id);
         
         if (m) {
-          console.log(m.attributes);
+          // console.log(m.attributes);
           if (evt == 'workflow:start') {
             m.incr('exec_count');
           } else if (evt == 'workflow:stop') {
@@ -71,7 +71,7 @@ define([
             m.incr(e.info.info.new);
             m.decr(e.info.info.old);
           }
-          console.log(m.attributes);
+          // console.log(m.attributes);
           m.trigger('fetch');
         }
         // if (m) {
