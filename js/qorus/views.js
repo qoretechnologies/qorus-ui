@@ -647,7 +647,7 @@ define([
           _this._rtimer_buffer++;
         }
 
-        if (_this._rtimer_buffer >= 50) timeout = 0;
+        if (_this._rtimer_buffer >= 100) timeout = 0;
 
         _this._rtimer = setTimeout(function () {
           console.log('delayed render of row', _this.model.id, new Date());

@@ -66,8 +66,12 @@ define([
     
     appendTextPre: function (t, text) {
       var html = $('<pre />').text(text);
+      var $el = this.$el;
       console.log(this.$('.log-area'));
-      $('.log-area', this.$el).append(html);
+      
+      setTimeout(function () {
+        $('.log-area', $el).append(html);
+      }, 100);
       
       var log = $('.log-area', this.$el).get(0);
 
