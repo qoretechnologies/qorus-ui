@@ -9,18 +9,18 @@
 	<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all', wfl.id) %>"><%= wfl.name %></a></td>
 	<td class="version"><%= wfl.version %></td>
 	<td class="autostart"><%= (wfl.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= wfl.autostart %></td>
-	<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], getUrl('in-progress', wfl.id), 'badge-warning') %></td>
 	<td class="err complete"><%= wrapBadge(wfl.COMPLETE, getUrl('complete', wfl.id), 'badge-success') %></td>
-	<td class="err error"><%= wrapBadge(wfl.ERROR, getUrl('error', wfl.id), 'badge-important') %></td>
+	<td class="err ready"><%= wrapBadge(wfl.READY, getUrl('ready', wfl.id), 'badge-ready') %></td>
+	<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled', wfl.id), 'badge-info') %></td>
+	<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, getUrl('incomplete', wfl.id), 'badge-info') %></td>
+	<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting', wfl.id), 'badge-waiting') %></td>
 	<td class="err async-waiting"><%= wrapBadge(wfl['ASYNC-WAITING'], getUrl('async-waiting', wfl.id), 'badge-waiting') %></td>
 	<td class="err waiting"><%= wrapBadge(wfl.WAITING, getUrl('waiting', wfl.id), 'badge-waiting') %></td>
-	<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, getUrl('incomplete', wfl.id), 'badge-info') %></td>
-	<td class="err canceled"><%= wrapBadge(wfl.CANCELED, getUrl('canceled', wfl.id), 'badge-canceled') %></td>
 	<td class="err retry"><%= wrapBadge(wfl.RETRY, getUrl('retry', wfl.id), 'badge-error') %></td>
-	<td class="err ready"><%= wrapBadge(wfl.READY, getUrl('ready', wfl.id), 'badge-ready') %></td>
+	<td class="err error"><%= wrapBadge(wfl.ERROR, getUrl('error', wfl.id), 'badge-important') %></td>
+	<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], getUrl('in-progress', wfl.id), 'badge-warning') %></td>
+	<td class="err canceled"><%= wrapBadge(wfl.CANCELED, getUrl('canceled', wfl.id), 'badge-canceled') %></td>
 	<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, getUrl('blocked', wfl.id), '') %></td>
-	<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting', wfl.id), 'badge-waiting') %></td>
-	<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled', wfl.id), 'badge-info') %></td>
 	<td><%= wfl.TOTAL %></td>
   <% if (obj.deprecated) { %>
   <td><%= wfl.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
