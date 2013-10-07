@@ -23,6 +23,7 @@ define([
     },
     
     initialize: function (collection, date) {
+      _.bindAll(this);
       this.template = Template;
       
       // pass date to options object
@@ -33,7 +34,7 @@ define([
       this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
 
-      this.listenTo(Dispatcher, 'job:instance_start job:instance_stop', this.updateModels);    
+      this.listenTo(Dispatcher, 'job:instance_stop', this.updateModels);    
     },
   
     createSubviews: function () {
@@ -96,6 +97,22 @@ define([
         ev.preventDefault();
       } else {
         ListView.__super__.runAction.call(this, ev);
+      }
+    },
+    
+    updateModels: function (e, evt) {
+      var m = this.collection.get(e.info.id);
+      
+      console.log(evt, e, m);
+      
+      // evt job:instance_start job:instance_stop job:error
+      
+      if (m) {
+        if (evt == 'job:instance_stop') {
+          m.incr(e.info.status);
+        }
+        // console.log(m.attributes);
+        m.trigger('fetch');
       }
     },
     

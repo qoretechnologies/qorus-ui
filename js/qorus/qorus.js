@@ -95,6 +95,19 @@ define([
       _.extend(options, { data: data });
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
+    },
+    
+    incr: function (attr, val) {
+      val = val || 1;
+      var value = parseInt(this.get(attr));
+      this.set(attr, value+val);
+    },
+    
+    decr: function (attr, val) {
+      val = val || 1;
+      var value = parseInt(this.get(attr)) - val;
+      
+      this.set(attr, (value > 0) ? value : 0);
     }
   });
 

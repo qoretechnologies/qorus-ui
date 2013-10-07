@@ -209,19 +209,6 @@ define([
       });
       
       return step_list[0].toArray();
-    },
-    
-    incr: function (attr, val) {
-      val = val || 1;
-      var value = parseInt(this.get(attr));
-      this.set(attr, value+val);
-    },
-    
-    decr: function (attr, val) {
-      val = val || 1;
-      var value = parseInt(this.get(attr)) - val;
-      
-      this.set(attr, (value > 0) ? value : 0);
     }
   });
 
