@@ -67,7 +67,6 @@ define([
     appendTextPre: function (t, text) {
       var html = $('<pre />').text(text);
       var $el = this.$el;
-      console.log(this.$('.log-area'));
       
       setTimeout(function () {
         $('.log-area', $el).append(html);
@@ -87,7 +86,7 @@ define([
     scroll: function () {
       if (this.isScrollable()) {
         $('.log', this.$el).scrollTop(function (v) {
-          console.log(this.scrollHeight);
+          // console.log(this.scrollHeight);
           return this.scrollHeight;
         });        
       }

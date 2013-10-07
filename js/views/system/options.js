@@ -3,19 +3,14 @@ define([
   'underscore',
   'backbone',
   'settings',
+  'utils',
   'qorus/qorus',
   'models/system',
   'collections/options',
   'text!../../../templates/system/options.html',
   'text!../../../templates/common/option_edit.html',
   'jquery.ui'
-], function($, _, Backbone, settings, Qorus, System, Collection, Template, EditTemplate){
-  var input_map = {
-    'integer': ['input', 'number'],
-    'bool': ['input', 'text'],
-    'string': ['input', 'text'],
-    'string': ['input', 'text'],
-  }
+], function($, _, Backbone, settings, utils, Qorus, System, Collection, Template, EditTemplate){
   
   var EDIT_URL = settings.REST_API_PREFIX + '/system/options';
   
@@ -47,7 +42,7 @@ define([
         var name = $target.data('name');
         var template = _.template(EditTemplate, { 
           value: value,
-          type: input_map[obj_type][1],
+          type: utils.input_map[obj_type][1],
           name: name
         });
         

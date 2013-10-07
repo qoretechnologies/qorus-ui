@@ -637,6 +637,7 @@ define([
       
       var model = this.model
         , _this = this;
+
       // update row on model change
       this.listenTo(this.model, 'change', function () {
         var timeout = 500;
@@ -650,14 +651,12 @@ define([
         if (_this._rtimer_buffer >= 100) timeout = 0;
 
         _this._rtimer = setTimeout(function () {
-          console.log('delayed render of row', _this.model.id, new Date());
+          // console.log('delayed render of row', _this.model.id, new Date());
           _this.update();
           _this._rtimer_buffer = 0;
         }, timeout);
       });
-      // this.listenTo(this.model, 'all', function (e, ee) {
-      //   console.log(e, ee);
-      // });
+
       
       this.render();
     },

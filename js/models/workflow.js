@@ -103,7 +103,7 @@ define([
     },
     idAttribute: "workflowid",
     date: null,
-    allowedActions: ['start','stop','reset', 'show', 'hide','autostart'],
+    allowedActions: ['start','stop','reset','show','hide','setAutostart'],
 
     initialize: function (opts) {
       _.bindAll(this);
@@ -113,7 +113,8 @@ define([
       }
     },
     
-    doAction: function (action, opts) {
+    doAction: function (action, opts, callback) {
+      console.log("Doing action", action);
       if (_.indexOf(this.allowedActions, action) != -1) {
         var params;
         var wflid = this.id;
@@ -134,9 +135,11 @@ define([
         $.put(this.url(), params, null, 'application/json')
           .done(
             function (e, ee, eee){
-              var msg = sprintf('Workflow %d %s done', wflid, action);
+              var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
               $.globalMessenger().post(msg);
-              // _this.fetch();
+              if (_.isFunction(callback)) {
+                callback();
+              }
             }
           );        
       }

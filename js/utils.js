@@ -30,6 +30,13 @@ define([
       "reset": "refresh"
     },
     
+    input_map: {
+      'integer': ['input', 'number'],
+      'bool': ['input', 'text'],
+      'string': ['input', 'text'],
+      'string': ['input', 'text'],
+    },
+    
     parseDate: function (date, format) {
       var d;
       if (format===undefined){
