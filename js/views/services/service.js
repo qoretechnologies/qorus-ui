@@ -34,7 +34,7 @@ define([
         this.model = new Model();
       }
       
-      this.model.on('change', this.render);
+      this.listenTo(this.model, 'change', this.render);
     },
 
     render: function (ctx) {
@@ -62,11 +62,8 @@ define([
       }
     },
     
-    clean: function () {
-      console.log("Cleaning", this, this.subviews, this.subviews.log, this.subviews.log.sss);
-      if (this.subviews.log) {
-        this.subviews.log.clean();
-      }
+    off: function () {
+      this.removeViews();
       this.undelegateEvents();
       this.stopListening();
     },

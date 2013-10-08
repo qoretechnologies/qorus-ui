@@ -37,6 +37,7 @@ define([
     
     initialize: function (collection, date, router, deprecated) {
       _.bindAll(this);
+      this.views = {};
       this.opts = {};
 
       this.router = router;
@@ -49,9 +50,6 @@ define([
       
       // call super method
       ListView.__super__.initialize.call(this, Collection, date);
-
-      // initialize subviews
-      this.createSubviews();
       
       var _this = this;
       this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e, evt) {
@@ -73,39 +71,21 @@ define([
           }
           // console.log(m.attributes);
           m.trigger('fetch');
-        }
-        // if (m) {
-        //   m._timer_counter = m._timer_counter || 0;
-        //   m._timer_counter++;
-        // 
-        //   if (m._timer) {
-        //     clearTimeout(m._timer);
-        //     m._timer = null;
-        //   }
-        //   
-        //   if (m._timer_counter >= 100) {
-        //     m._timer_counter = 0;
-        //     m.fetch();
-        //   } else {
-        //     m._timer = setTimeout(function () {
-        //       m.fetch();
-        //     }, 2000);            
-        //   }
-        // }          
+        } 
       });
     },
     
-    createSubviews: function () {
-      this.subviews.bottombar = new BottomBarView();
-      this.subviews.toolbar = new Toolbar({ date: this.date });
-      this.subviews.table = new Qorus.TableView({ 
+    preRender: function () {
+      // this.setView(new BottomBarView(), 'bottombar');
+      this.setView(new Toolbar({ date: this.date }), '.toolbar');
+      this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated
-      });
+      }), '.workflows');
     },
     
     clean: function () {
@@ -114,9 +94,6 @@ define([
     },
     
     onRender: function () {
-      // assign toolbar to .toolbar element on render
-      this.assign('.toolbar', this.subviews.toolbar);
-      this.assign('.workflows', this.subviews.table);
       $('.table-fixed').fixedHeader({ topOffset: 80 });
       
       if ($('[data-sort="version"]')) {
@@ -127,19 +104,18 @@ define([
     
     // edit action with Modal window form
     openModal: function (e) {
+      var view;
       e.preventDefault();
       e.stopPropagation();
       
       var $target = $(e.currentTarget);
       
       if ($target.data) {
-        if (this.subviews.modal) {
-          this.subviews.modal.off();
-        }
+        this.removeView('#modal')
         
-        this.subviews.modal = new Modal({ workflow: this.collection.get($target.data('id')) });
-        this.assign('#modal', this.subviews.modal);
-        this.subviews.modal.open();
+        view = this.setView(new Modal({ workflow: this.collection.get($target.data('id')) }), '#modal', true);
+        view.render();
+        view.open();
       }
       
     },
@@ -253,7 +229,7 @@ define([
     },
     
     showDetail: function (e) {
-      var _this = this;
+      var view = this.getView('#workflow-detail .content');;
       var $target = $(e.currentTarget);
       var $detail = $('#workflow-detail');
       var top = $target.offset().top; // + $target.height()/2;
@@ -265,27 +241,21 @@ define([
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
-          if (this.subviews.detail) {
-            this.subviews.detail.close();
+          if (view) {
+            view.close();
           }
         } else {
+          this.removeView('#worfklow-detail .content');
           // add info class to selected row
           $target.addClass('info');
 
           // set current row id
           $detail.data('id', $target.data('id'));
-
-          // clean prev view
-          if (this.subviews.detail){
-            this.subviews.detail.clean();
-          }
           
           // init detail view
-          var detail = new WorkflowView({ model: this.collection.get($target.data('id')), context: this.context });
-
-          this.subviews.detail = detail;
-          this.assign('#workflow-detail .content', detail);
-          $('#workflow-detail').addClass('show');          
+          // console.log(this.$('#workflow-detail'), this.$('#workflow-detail .content'));
+          view = this.setView(new WorkflowView({ model: this.collection.get($target.data('id')), context: this.context }), '#workflow-detail .content', true);
+          this.$('#workflow-detail').addClass('show');
         }
       }
       

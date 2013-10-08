@@ -49,9 +49,6 @@ define([
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       
-      this.createSubviews();
-      this.listenToOnce(this.collection, 'sync', this.render);
-      
       var _this = this;
       this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
         var m = _this.collection.get(e.info.id);
@@ -61,20 +58,18 @@ define([
       });
     },
     
-    createSubviews: function () {
-      this.subviews.table = new Qorus.TableView({ 
+    preRender: function () {
+      this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
           dispatcher: Dispatcher
-      });
-      this.subviews.toolbar = new Toolbar();
+      }), '#service-list');
+      this.setView(new Toolbar(), '#service-toolbar');
     },
 
     onRender: function () {
-      this.assign('#service-list', this.subviews.table);
-      this.assign('#service-toolbar', this.subviews.toolbar);
       $('[data-toggle="tooltip"]').tooltip();
       
       // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
@@ -117,6 +112,7 @@ define([
       var $target = $(e.currentTarget);
       var $detail = $('#service-detail');
       var top = $target.offset().top; // + $target.height()/2;
+      var view = this.getView('#service-detail .content');
       
       if ($target.data('id') && !e.target.localName.match(/(button|a)/)) {
         e.stopPropagation();
@@ -125,10 +121,11 @@ define([
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
-          if (this.subviews.detail) {
-            this.subviews.detail.close();
+          if (view) {
+            view.close();
           }
         } else {
+          this.removeView('#service-detail .content');
           // add info class to selected row
           $target.addClass('info');
 
@@ -141,16 +138,9 @@ define([
           }
           
           // init detail view
-          var detail = new ServiceView({ model: this.collection.get($target.data('id')), context: this.context });
+          view = this.setView(new ServiceView({ model: this.collection.get($target.data('id')), context: this.context }), '#service-detail .content', true);
 
-          this.subviews.detail = detail;
-          this.assign('#service-detail .content', detail);
           $('#service-detail').addClass('show');
-          
-          // detail.listenTo(detail.model, 'sync', function () {
-          //   $('#service-detail').addClass('show');
-          // });
-          
         }
       }
       
@@ -164,20 +154,15 @@ define([
     },
     
     openExecuteModal: function (e) {
+      this.removeView('#function-execute');
+      
       var $target = $(e.currentTarget);
 
       var svc = this.collection.get($target.data('serviceid'));
       var method = svc.get('methods')[$target.data('id')];
 
-      var modal = new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') });
+      var modal = this.setView(new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') }), '#function-execute', true);
       
-      if (this.subviews.modal) {
-        this.subviews.modal.undelegateEvents();  
-      }
-      
-      this.subviews.modal = modal;
-      
-      this.assign('#function-execute', modal);
       e.stopPropagation();
     },
     

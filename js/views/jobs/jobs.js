@@ -31,28 +31,22 @@ define([
       
       ListView.__super__.initialize.call(this, Collection, date);
       
-      this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
 
       this.listenTo(Dispatcher, 'job:instance_stop', this.updateModels);    
     },
   
-    createSubviews: function () {
-      this.subviews.table = new Qorus.TableView({ 
+    preRender: function () {
+      this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
           dispatcher: Dispatcher
-      });
-      this.subviews.toolbar = new Toolbar({ date: this.date });
+      }), '#job-list');
+      this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
     },
 
-    onRender: function () {
-      this.assign('#job-list', this.subviews.table); 
-      this.assign('#job-toolbar', this.subviews.toolbar);
-    },
-    
     reSchedule: function (ev) {
       var $target = $(ev.currentTarget);
       var job = this.collection.get($target.data('id'));
@@ -102,10 +96,6 @@ define([
     
     updateModels: function (e, evt) {
       var m = this.collection.get(e.info.id);
-      
-      console.log(evt, e, m);
-      
-      // evt job:instance_start job:instance_stop job:error
       
       if (m) {
         if (evt == 'job:instance_stop') {

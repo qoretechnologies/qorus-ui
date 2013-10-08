@@ -69,7 +69,7 @@ define([
       this.loader.render();
 
       this.collection = new Collection(this.opts);
-      this.collection.on('sync', this.updateContext, this);
+      this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();
       
       this.createSubviews();

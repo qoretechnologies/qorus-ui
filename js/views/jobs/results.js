@@ -30,7 +30,7 @@ define([
       this.opts.url = '/jobs/view/' + opts.jobid;
 
       this.collection = new Collection(opts);
-      this.collection.on('sync', this.updateContext, this);
+      this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();
       
       this.createSubviews();

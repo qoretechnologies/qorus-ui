@@ -31,7 +31,7 @@ define([
         auto_reconnect: opts.auto_reconnect 
       });
       
-      this.collection.on('message', this.appendTextPre);
+      this.listenTo(this.collection, 'message', this.appendTextPre);
       
     },
     
@@ -77,6 +77,7 @@ define([
       if (log) {
         while (log.childNodes.length > this.collection.log_size) {
           log.removeChild(log.firstChild);
+          this.scroll();
         }
       }
       

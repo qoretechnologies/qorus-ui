@@ -14,8 +14,8 @@ define([
       _.bindAll(this, 'renderUser');
       _.bindAll(this, 'renderInfo');
       
-      this.user.on('change', this.renderUser);
-      this.info.on('change', this.renderInfo);
+      this.listenTo(this.user, 'change', this.renderUser);
+      this.listenTo(this.info, 'change', this.renderInfo);
     },
     
     renderUser: function () {

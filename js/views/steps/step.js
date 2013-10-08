@@ -21,8 +21,8 @@ define([
       
       // init model
       this.model = new Model({ id: opts.id });
+      this.listenTo(this.model, 'change', this.render);      
       this.model.fetch();
-      this.model.on('change', this.render);
       
       this.on('render', function () { Rainbow.color() });
     },

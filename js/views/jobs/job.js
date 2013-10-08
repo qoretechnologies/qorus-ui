@@ -95,15 +95,15 @@ define([
           el.removeClass('info');
         } else {
           var oview = new ResultView({ id: el.data('id') });
-          var _this = this;
+          var self = this;
       
           e.stopPropagation();
       
           // this.subviews.order = oview;
       
-          oview.model.on('change', function () {
+          oview.listenTo(oview.model, 'change', function () {
             bar.render();
-            _this.assign('#bottom-content', oview);
+            self.assign('#bottom-content', oview);
             bar.show();
 
             // highlite/unhighlite selected row

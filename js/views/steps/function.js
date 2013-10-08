@@ -14,8 +14,8 @@ define([
       
       // init model
       this.model = new Model({ id: opts.id });
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
-      this.model.on('change', this.render);
     },
     render: function (ctx) {
       ModelView.__super__.render.call(this, ctx);

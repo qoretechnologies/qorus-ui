@@ -20,7 +20,6 @@ define([
   });
   
   
-  
   var Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function (opts) {
@@ -37,7 +36,6 @@ define([
   });
   
   
-  
   var View = Backbone.View.extend({
     url: '/',
     additionalEvents: {},
@@ -46,7 +44,8 @@ define([
       // "click a[href^='/']": 'catchAClick'
     },
     context: {},
-    subviews: {},
+    views: {},
+    subviews: [],
     helpers: {},
     options: {},
     model_name: null,
@@ -57,6 +56,7 @@ define([
     
     initialize: function (options) {
       _.bindAll(this);
+      this.views = {};
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -73,19 +73,24 @@ define([
       _.extend(this.options, options);
     },
         
-    off: function () {
+    off: function (level) {
+      this.removeViews();
+      
       if (_.isFunction(this.clean)) {
         this.clean();
       }
-      _.each(this.subviews, function (view) {
-        // console.log('view', view);
-        if (view instanceof Backbone.View) {
-          view.undelegateEvents();
-          // view.remove();          
+      
+      var arr = _.values(this.subviews), ctr = 0;
+      
+      _.each(this.subviews, function (o) {
+        // console.log(typeof o);
+        if (o instanceof Backbone.View) {
+          o.off();
         }
       });
+
       this.undelegateEvents();
-      // this.remove();
+      this.remove();
     },
     
     // manages subviews
@@ -105,6 +110,10 @@ define([
     },
     
     render: function (ctx) {
+      // destroy views
+      this.removeViews();
+      
+      this.preRender();
       if (this.template) {
         if (ctx) {
           _.extend(this.context, ctx); 
@@ -117,12 +126,81 @@ define([
         this.$el.html(tpl);
         this.trigger('render', this, {});
       }
+      this.renderViews();
       this.setTitle();
       this.onRender();
       return this;
     },
     
+    removeView: function (id) {
+      var view = this.getView(id);
+      if (view) {
+        view.off();
+      }
+    },
+    
+    removeViews: function () {
+      _.each(_.flatten(this.views), function (view) {
+        view.off();
+      });
+    },
+    
+    getView: function (id) {
+      return this.views[id];
+    },
+    
+    renderViews: function () {
+      var self = this;
+      _.each(self.views, function (view, idx) {
+        if (view instanceof Backbone.View) {
+          view.setElement(self.$(idx)).render();
+        } else if (_.isArray(view)) {
+          var frag = document.createDocumentFragment();
+          _.each(view, function (v) {
+            var fc = v.render().el.firstElementChild;
+            frag.appendChild(fc);
+          });
+          this.$(idx).empty().append(frag);
+        }
+      });
+    },
+    
+    preRender: function () {
+    },
+    
     onRender: function () {
+    },
+    
+    insertView: function (view, el) {
+      var views;
+      
+      if (this.views[el]) {
+        views = this.views[el];
+      } else {
+        views = this.views[el] = [];
+      }
+      
+      el = el || '';
+
+      if (views instanceof Backbone.View) {
+        var old_view = views;
+        views = [old_view];
+      }
+        
+      views.push(view);
+
+      return view;
+    },
+    
+    setView: function (view, el, set) {
+      this.views[el] = view;
+      // console.log('setting view', view, el, set);
+      if (set === true) {
+        // console.log('setting element on view', el, this.$(el));
+        view.setElement(this.$(el)).render();
+      }
+      
+      return view;
     },
     
     // sets document title if defined in view
@@ -141,6 +219,7 @@ define([
     },
     
     clean: function () {
+      // console.log('called stop listening on', this.cid);
       this.stopListening();
     },
     
@@ -162,6 +241,7 @@ define([
 
 
    var ListView = View.extend({
+    subviews: [],
     defaultEvents: {
       'click .check': 'highlight',
       'click .check-all': 'checkall',
@@ -203,8 +283,8 @@ define([
       if (collection) {
         this.collection = new collection({ date: this.date, opts: this.opts });
         
-        var _this = this;
-        this.listenToOnce(this.collection, 'sync', this.render);
+        var self = this;
+        this.listenToOnce(this.collection, 'sync', function () { self.collection.trigger('resort') });
         this.listenToOnce(this.collection, 'error', this.render);
         
         // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
@@ -226,6 +306,8 @@ define([
     },
     
     render: function (ctx) {
+      this.removeViews();
+      this.preRender();
       // console.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
         var ctx = {
@@ -245,10 +327,10 @@ define([
     
       if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
-        var _this = this;
-        _.defer(function () { _this.afterRender(); });
+        var self = this;
+        _.defer(function () { self.afterRender(); });
       }
-      
+      this.renderViews();
       this.setTitle();
       this.onRender();
       this.sortIcon();
@@ -503,6 +585,7 @@ define([
     
     initialize: function (opts) {
       _.bindAll(this);
+      this.views = {};
       this.opts = opts || {};
       
       this.collection = opts.collection;
@@ -540,24 +623,23 @@ define([
       return this;
     },
     
-    createRows: function () {
-      var tv = this;
-      this.subviews.rows = [];
-      
-      _.each(this.collection.models, function (m) {
-        tv.addRow(m);
-      });
-    },
-    
     appendRows: function (models) {
-      var tv = this;
+      var self = this;
+      var frag = document.createDocumentFragment();
       _.each(models, function (m) {
-        tv.addRow(m);
+        var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }));
+        frag.appendChild($(view.render().$el.html()));
       });
+      this.$('tbody').append(frag);
     },
     
+    preRender: function () {
+      this.update(false);
+    },
+       
     onRender: function () {
-      this.createRows();
+      // this.createRows();
+      // this.update();
       this.$el.scroll(this.scroll);
     },
     
@@ -570,42 +652,28 @@ define([
     },
     
     getRow: function (id) {
-      return this.subviews.rows(id);
+      return this.subviews.rows[id];
     },
-    
-    addRow: function (m) {
-      // console.log('adding row', this.subviews.rows, _.has(this.subviews.rows, m.id));
-      if (!_.has(this.subviews.rows, m.id)) {
-        var row = new RowView({ model: m, template: this.row_template, helpers: this.helpers, parent: this });
-        this.$el.find('tbody').append(row.$el.html());
-        this.subviews.rows[m.id] = row;        
-      }
-
-      // TODO: move to model itself???
-      // if (this.dispatcher) {
-      //   row.listenTo(this.dispatcher, row.model._name, function (e) {
-      //     if (e.info.id == row.model.id) {
-      //       row.model.fetch();
-      //     }
-      //   })
-      // }
-    },
-    
-    update: function () {
-      var tv = this;
+        
+    update: function (render) {
+      if (render === undefined) render = true;
+      var self = this;
       _.each(this.collection.models, function (m) {
-        tv.addRow(m);
+        var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');
       });
+      if (render) {
+        this.render();
+      }
     },
     
     clean: function () {
       console.log("Cleaning table");
+      console.log('Table subviews', this);
+      var self = this;
       _.each(this.subviews, function (sbv) {
-        if (_.has(sbv, "clean")) {
-          sbv.clean();
-          sbv.remove();
-        }
-      })
+        sbv.off();          
+      });
+      this.stopListening();
     }
   });
 
@@ -614,6 +682,7 @@ define([
     template: TableRowTpl,
     initialize: function (opts) {
       _.bindAll(this);
+      this.views =[];
       this.model = opts.model;
       if (_.has(opts, 'cols')) {
         this.cols = cols; 
@@ -636,24 +705,24 @@ define([
       }
       
       var model = this.model
-        , _this = this;
+        , self = this;
 
       // update row on model change
       this.listenTo(this.model, 'change', function () {
         var timeout = 500;
-        _this._rtimer_buffer = _this._rtimer_buffer || 0;
+        self._rtimer_buffer = self._rtimer_buffer || 0;
         
-        if (_this._rtimer) {
-          clearTimeout(_this._rtimer);
-          _this._rtimer_buffer++;
+        if (self._rtimer) {
+          clearTimeout(self._rtimer);
+          self._rtimer_buffer++;
         }
 
-        if (_this._rtimer_buffer >= 100) timeout = 0;
+        if (self._rtimer_buffer >= 100) timeout = 0;
 
-        _this._rtimer = setTimeout(function () {
-          // console.log('delayed render of row', _this.model.id, new Date());
-          _this.update();
-          _this._rtimer_buffer = 0;
+        self._rtimer = setTimeout(function () {
+          // console.log('delayed render of row', self.model.id, new Date());
+          self.update();
+          self._rtimer_buffer = 0;
         }, timeout);
       });
 
@@ -669,7 +738,7 @@ define([
     },
     
     update: function(ctx) {
-      var _this = this;
+      var self = this;
       var css_classes = [];
       var $previous_el = this.parent.$el.find('[data-id=' + this.model.id + ']');
       
@@ -694,15 +763,14 @@ define([
       
       $previous_el.replaceWith($el);
       setTimeout(function() {
-        _this.parent.$el.find('[data-id=' + _this.model.id + ']').removeClass('changed');
+        self.parent.$el.find('[data-id=' + self.model.id + ']').removeClass('changed');
       }, 5000);
     },
-    
-    clean: function () {
-      console.log("Cleaning row");
-      this.stopListening();
-      this.undelegateEvents();
-    }
+    // 
+    // clean: function () {
+    //   console.log("Cleaning row");
+    //   this.undelegateEvents();
+    // }
   });
   
   var ServiceView = View.extend({
@@ -726,13 +794,13 @@ define([
     },
     
     getData: function () {
-      var _this = this;
+      var self = this;
       var url = [this.getUrl(), this.methods.getData].join('/');
       
       $.put(url, { action: 'call'})
         .done(function (data) {
-          _this.data = data;
-          _this.trigger('fetch');
+          self.data = data;
+          self.trigger('fetch');
         });
     },
     
@@ -766,14 +834,14 @@ define([
     },
     
     runAction: function (action, data) {
-      var _this = this;
+      var self = this;
       var url = [this.getUrl(), action].join('/');
       var args = _.values(data);
       
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
           console.log(resp);
-          _this.getData();
+          self.getData();
         })
         .fail(function (resp) {
           console.log(resp);
@@ -803,13 +871,13 @@ define([
     },
     
     getData: function () {
-      var _this = this;
+      var self = this;
       var url = [this.getUrl(), this.methods.getData].join('/');
       
       $.put(url, { action: 'call'})
         .done(function (data) {
-          _this.data = data;
-          _this.trigger('fetch');
+          self.data = data;
+          self.trigger('fetch');
         });
     },
     
@@ -843,14 +911,14 @@ define([
     },
     
     runAction: function (action, data) {
-      var _this = this;
+      var self = this;
       var url = [this.getUrl(), action].join('/');
       var args = _.values(data);
       
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
           console.log(resp);
-          _this.getData();
+          self.getData();
         })
         .fail(function (resp) {
           console.log(resp);

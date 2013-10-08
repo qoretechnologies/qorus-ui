@@ -14,7 +14,7 @@ define([
     initialize: function(opts){
   	  _.bindAll(this, 'render');
       this.collection = new Collection(opts);
-  	  this.collection.on('sync', this.render);
+  	  this.listenTo(this.collection, 'sync', this.render);
   	  this.collection.fetch();
     },
     

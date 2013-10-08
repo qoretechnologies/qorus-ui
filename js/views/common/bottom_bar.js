@@ -16,7 +16,6 @@ define([
       _.bindAll(this);
       this.template = Template;
       View.__super__.initialize.call(this, opts);
-      this.on('render', this.addSizeHandler);
       this.height = 200;
     },
     
@@ -56,17 +55,15 @@ define([
       $('.handler').prev().height(h);
     },
     
-    render: function (ctx) {
-      View.__super__.render.call(this, ctx);
-      this.hide();
-      
-      // reset size when window size 
-      var _this = this;
-      $(window).resize(function(){
-        _this.setHeights();
-      });
+    onRender: function () {
+      var self = this;
 
-      return this;
+      self.hide();
+      // reset size when window size 
+      $(window).resize(function(){
+        self.setHeights();
+      });
+      self.addSizeHandler();
     },
     
     setHeights: function () {

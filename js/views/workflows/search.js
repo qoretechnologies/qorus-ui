@@ -48,6 +48,7 @@ define([
     
     initialize: function (opts) {
       _.bindAll(this);
+      this.views = {};
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
       
@@ -55,9 +56,8 @@ define([
       
       this.collection = new Collection({ date: this.opts.date, search: this.opts.search });
       this.template = Template;
-      this.collection.on('sync', this.updateContext, this);
+      this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();
-      this.createSubviews();
       
       _.extend(this.options, this.opts);
       _.extend(this.context, this.opts);
@@ -70,16 +70,20 @@ define([
         _.extend(mctx, ctx);
       }
       View.__super__.render.call(this, mctx);
-      
-      this.setTitle();
-      this.onRender();
       return this;
     },
     
-    onRender: function () {
-      this.assign('#instances', this.subviews.table);
-      this.assign('#toolbar', this.subviews.toolbar);
-      this.assign('#bottom-bar', this.subviews.bottombar);
+    preRender: function () {      
+      this.setView(new Qorus.TableView({ 
+          collection: this.collection, 
+          template: TableTpl,
+          row_template: RowTpl,
+          helpers: this.helpers,
+          context: { url: this.url },
+          dispatcher: Dispatcher
+      }), '#instances');
+      this.setView(new BottomBarView({}), '#bottom-bar');
+      this.setView(new OrdersToolbar(this.opts), '#toolbar');
     },
     
     runAction: function (e) {
@@ -95,13 +99,15 @@ define([
       this.collection.loadNextPage();
     },
     
-    updateContext: function () {
+    updateContext: function (render) {
+      var view = this.getView('#instances');
       // update actual pages
       this.context.page = {
         current_page: this.collection.page,
         has_next: this.collection.hasNextPage()
       };
-      this.subviews.table.render();
+
+      if (view) view.render();
     },
 
     // fetches the collection from server presorted by key
@@ -122,39 +128,26 @@ define([
       // }
     },
     
-    createSubviews: function () {      
-      this.subviews.table = new Qorus.TableView({ 
-          collection: this.collection, 
-          template: TableTpl,
-          row_template: RowTpl,
-          helpers: this.helpers,
-          context: { url: this.url },
-          dispatcher: Dispatcher
-      });
-      this.subviews.bottombar = new BottomBarView({});
-      this.subviews.toolbar = new OrdersToolbar(this.opts);
-    },
-    
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
+      var self = this;
       var el = $(e.currentTarget);
-      var dataview = this.currentDataView();
-      var bar = this.subviews.bottombar;
+      var dataview = this.getView('#instances');
+      var bar = this.getView('#bottom-bar');
       
       if (el.hasClass('info')) {
         bar.hide();
         el.removeClass('info');
+        this.removeView('#bottom-content');
       } else {
-        var oview = new OrderView({ id: el.data('id') });
-        var _this = this;
-      
         e.stopPropagation();
+        var oview = this.setView(new OrderView({ id: el.data('id') }), '#bottom-content');
       
         // this.subviews.order = oview;
       
-        oview.model.on('change', function () {
+        oview.listenTo(oview.model, 'change', function () {
           bar.render();
-          _this.assign('#bottom-content', oview);
+          oview.setElement(self.$('#bottom-content')).render();
           bar.show();
 
           // highlite/unhighlite selected row

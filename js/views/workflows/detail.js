@@ -21,6 +21,7 @@ define([
     
     initialize: function (opts) {
       this.opts = opts;
+      this.views = {};
       _.bindAll(this);
       
       this.template = Template;
@@ -30,10 +31,8 @@ define([
       }
       
       this.model = new Model({ id: this.opts.model.id });
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
-      
-      this.model.on('change', this.render);
-      this.createSubviews();
     },
 
     render: function (ctx) {
@@ -45,21 +44,19 @@ define([
       if (this.active_tab) {
         $('a[href='+ this.active_tab + ']').tab('show');
       }
-      this.assign('#log', this.subviews.log);
     },
     
-    createSubviews: function () {
+    preRender: function () {
       var url = '/workflows/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url, parent: this });
+      // this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
     
     createDiagram: function () {
-      if (this.subviews.step_diagram) {
-        this.subviews.step_diagram.clean();
-      }
+      var view;
+      this.removeView('#steps');
       
-      var step = this.subviews.step_diagram = new DiagramView({ steps: this.model.mapSteps() });
-      this.assign('#steps', step);
+      view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
+      view.render();
     },
 
     tabToggle: function(e){
@@ -74,20 +71,12 @@ define([
       }
       
       if ($target.hasClass('log')) {
-        this.subviews.log.fixHeight();
+        this.getViews('#log').fixHeight();
       }
 
       this.active_tab = $target.attr('href');
     },
-    
-    clean: function () {
-      if (this.subviews.log) {
-        this.subviews.log.clean();
-      }
-      this.undelegateEvents();
-      this.stopListening();
-    },
-    
+        
     close: function (e) {
       if (e) {
         e.preventDefault();  
@@ -99,6 +88,12 @@ define([
       $('.info').removeClass('info');
 
       this.clean();
+    },
+    
+    off: function () {
+      this.removeViews();
+      this.undelegateEvents();
+      this.stopListening;
     },
     
     editOption: function (e) {

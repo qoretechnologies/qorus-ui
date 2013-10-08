@@ -62,7 +62,7 @@ define([
 
       // set collection and collection events
       this.collection = collection;
-      this.collection.on('sync', this.updateDataset);
+      this.listenTo(this.collection, 'sync', this.updateDataset);
       this.collection.fetch();
       
       var chart = {

@@ -20,8 +20,8 @@ define([
       ModelView.__super__.initialize.call(this, opts);
 
       this.model = new Model({ id: opts.id });
+      this.listenTo(this.model, 'change', this.render, this);
       this.model.fetch();
-      this.model.on('change', this.render, this);
     },
 
     tabToggle: function(e){

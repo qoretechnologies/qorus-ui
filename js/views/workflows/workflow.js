@@ -44,10 +44,8 @@ define([
       
       // init model
       this.model = new Workflow({ id: opts.id });
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
-      this.model.on('change', this.render);
-      
-      this.createSubviews();
     },
     
     render: function (ctx) {
@@ -59,58 +57,44 @@ define([
       return this;
     },
     
-    onRender: function () {
-      // render instance/order data grid with toolbar
-      var dataview = this.currentDataView();
-      this.assign('#instances', dataview);
-      this.assign('#bottom-bar', this.subviews.bottombar);
-      this.assign('#log', this.subviews.log);
-    },
-    
-    currentDataView: function () {
-      var inst  = this.opts.inst || null;
-      
-      if (_.indexOf(this.subviews, inst)){
-        return this.subviews[inst];
-      }
-      
-      return null;
-    },
-    
-    createSubviews: function () {
-      this.subviews.instances = new InstanceListView({ 
-          date: this.opts.date, workflowid: this.model.id, url: this.url() 
-        });
-      this.subviews.orders = new OrderListView({ 
-          date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
-        });
-      this.subviews.bottombar = new BottomBarView({});
+    preRender: function () {
       var url = '/workflows/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url, parent: this });
+      
+      if (this.opts.inst == 'instances') {
+        this.setView(new InstanceListView({ 
+            date: this.opts.date, workflowid: this.model.id, url: this.url() 
+          }), '#instances');
+      } else {
+        this.setView(new OrderListView({ 
+            date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
+          }), '#instances');
+      }
+        
+      this.setView(new BottomBarView({}), '#bottom-bar');
+      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
     
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
+      var self = this;
       var el = $(e.currentTarget);
       // var dataview = this.currentDataView();
-      var bar = this.subviews.bottombar;
+      var bar = this.getView('#bottom-bar');
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
         console.log('load info stop propagation');
         e.stopPropagation();
         e.preventDefault();
+
         if (el.hasClass('info')) {
           bar.hide();
           el.removeClass('info');
         } else {
-          var oview = new OrderView({ id: el.data('id'), workflow: this.model, show_header: false });
-          var _this = this;
+          var oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content', true);
       
-          // this.subviews.order = oview;
-      
-          oview.model.on('change', function () {
+          oview.listenTo(oview.model, 'change', function () {
             bar.render();
-            _this.assign('#bottom-content', oview);
+            oview.render();
             bar.show();
 
             // highlite/unhighlite selected row
@@ -150,9 +134,9 @@ define([
       var $target = $(e.currentTarget);
       
       if ($target.data) {
-        this.subviews.modal = new Modal({ workflow: this.model });
-        this.assign('#modal', this.subviews.modal);
-        this.subviews.modal.open();
+        this.removeView('#modal');
+        var view = this.setView(new Modal({ workflow: this.model }), '#modal', true);
+        view.open();
       }
 
     },
@@ -173,22 +157,15 @@ define([
     
     drawCharts: function () {
       // add performance chart subviews
-      if (!this.subviews.chart) {
-        console.log('drawing charts');
-        this.subviews.chart = {};
-        this.subviews.chart.day = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id }));
-        this.subviews.chart.week = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 }));
-        this.subviews.chart.month = new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 }));
-        this.assign('#stats-day', this.subviews.chart.day);
-        this.assign('#stats-week', this.subviews.chart.week);
-        this.assign('#stats-month', this.subviews.chart.month);
-      }
+      this.removeView('#stats-day');
+      this.removeView('#stats-week');
+      this.removeView('#stats-month');
+      this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id })), '#stats-day', true);
+      this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 })), '#stats-week', true);
+      this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 })), '#stats-month', true);
     },
         
     clean: function () {
-      if (this.subviews.log) {
-        this.subviews.log.clean();
-      }
       this.undelegateEvents();
       this.stopListening();
     }
