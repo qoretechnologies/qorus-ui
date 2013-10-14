@@ -22,21 +22,21 @@ define([
     },
     
     doAction: function(action, opts){
-      console.log('doing action', action);
+      debug.log('doing action', action);
       if(_.indexOf(this.allowed_actions, action) != -1){
         var id = this.id;
         var _this = this;
-        console.log(this.url());
+        debug.log(this.url());
         $.put(this.url(), {'action': action })
         .done(
           function (e, ee, eee){
             var msg = sprintf('Job %d %s done', id, action);
-            $.globalMessenger().post(msg);
+            // $.globalMessenger().post(msg);
           }
         ).fail(
           function(e, ee, eee){
             var msg = sprintf('Job %d %s failed', id, action);
-            $.globalMessenger().post({ message: msg, type: 'error' });
+            // $.globalMessenger().post({ message: msg, type: 'error' });
           }
         );        
       }

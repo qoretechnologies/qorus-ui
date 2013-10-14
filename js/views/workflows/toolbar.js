@@ -65,39 +65,39 @@ define([
       Backbone.history.navigate(url);
     },
     addMultiSelect: function(){
-      var _this = this;
-      // apply bootstrap multiselect to #statuses element
-      $('#statuses').multiselect({
-        onChange: function(el, checked){
-          var sl = [], val = $(el).val();
-          if(_this.options.statuses){
-            sl = _this.options.statuses.split(',');
-          }
-          
-          if(checked){
-            sl.push(val);
-
-            // check if alias for all and than check/uncheck all statuses
-            if(val=='all'){
-              $('option[value!="all"]', $(el).parent()).removeAttr('selected');
-              sl = ['all'];
-            } else {
-              $('option[value="all"]', $(el).parent()).removeAttr('selected');
-              sl = _.without(sl, 'all');
-            }
-          } else {
-            if(val=='all'){
-              $('option', $(el).parent()).removeAttr('selected');
-            }else{
-             sl = _.without(sl, val); 
-            }
-          }
-          // refresh valudes
-          $('#statuses').multiselect('refresh');
-          _this.options.statuses = sl.join(',');
-          _this.trigger('filter', _this.options.statuses);
-        }
-      });
+      // var _this = this;
+      // // apply bootstrap multiselect to #statuses element
+      // $('#statuses').multiselect({
+      //   onChange: function(el, checked){
+      //     var sl = [], val = $(el).val();
+      //     if(_this.options.statuses){
+      //       sl = _this.options.statuses.split(',');
+      //     }
+      //     
+      //     if(checked){
+      //       sl.push(val);
+      // 
+      //       // check if alias for all and than check/uncheck all statuses
+      //       if(val=='all'){
+      //         $('option[value!="all"]', $(el).parent()).removeAttr('selected');
+      //         sl = ['all'];
+      //       } else {
+      //         $('option[value="all"]', $(el).parent()).removeAttr('selected');
+      //         sl = _.without(sl, 'all');
+      //       }
+      //     } else {
+      //       if(val=='all'){
+      //         $('option', $(el).parent()).removeAttr('selected');
+      //       }else{
+      //        sl = _.without(sl, val); 
+      //       }
+      //     }
+      //     // refresh valudes
+      //     $('#statuses').multiselect('refresh');
+      //     _this.options.statuses = sl.join(',');
+      //     _this.trigger('filter', _this.options.statuses);
+      //   }
+      // });
     }
   });
   return Toolbar;

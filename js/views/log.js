@@ -11,7 +11,7 @@ define([
   var View = Qorus.View.extend({
     messages: "",
     // additionalEvents: {
-    //   'click a': function (e) { console.log('Log tab', e); }
+    //   'click a': function (e) { debug.log('Log tab', e); }
     // },
     
     initialize: function (opts) {
@@ -87,7 +87,7 @@ define([
     scroll: function () {
       if (this.isScrollable()) {
         $('.log', this.$el).scrollTop(function (v) {
-          // console.log(this.scrollHeight);
+          // debug.log(this.scrollHeight);
           return this.scrollHeight;
         });        
       }

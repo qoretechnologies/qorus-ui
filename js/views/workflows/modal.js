@@ -43,7 +43,7 @@ define([
     
     // starts workflow with params from form
     startWorkflow: function (e) {
-      console.log("Submit", e);
+      debug.log("Submit", e);
       e.preventDefault();
 
       var vals = $(e.target).serializeArray();

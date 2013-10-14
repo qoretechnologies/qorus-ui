@@ -34,9 +34,9 @@ define([
     },
     
     initialize: function (opts) {
-      // console.log("workflow opts", this.opts);
+      // debug.log("workflow opts", this.opts);
       ModelView.__super__.initialize.call(this, opts);
-      // _.bindAll(this);
+      _.bindAll(this);
 
       this.opts = opts;
       
@@ -82,7 +82,7 @@ define([
       var bar = this.getView('#bottom-bar');
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
-        console.log('load info stop propagation');
+        debug.log('load info stop propagation');
         e.stopPropagation();
         e.preventDefault();
 

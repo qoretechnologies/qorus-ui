@@ -21,7 +21,7 @@ define([
       var _this = this;
       _.each(events, function(evt){
         _this.trigger(evt, e, evt);
-        // console.log("Dispatching", evt);
+        // debug.log("Dispatching", evt);
       })
     },
     eventParse: function(name) {
@@ -36,8 +36,6 @@ define([
       return [name.toLowerCase()];
     }
   })
-  
-  var dispatcher = new Dispatcher();
 
-  return dispatcher;
+  return new Dispatcher();
 });

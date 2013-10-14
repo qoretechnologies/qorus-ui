@@ -33,10 +33,9 @@ define([
     
     title: "Workflows",
     
-    subviews: {},
-    
     initialize: function (collection, date, router, deprecated) {
-      _.bindAll(this);
+      var self = this;
+      _.bindAll(this, 'render');
       this.views = {};
       this.opts = {};
 
@@ -51,13 +50,19 @@ define([
       // call super method
       ListView.__super__.initialize.call(this, Collection, date);
       
-      var _this = this;
+      // reassign listening events to collection
+      this.stopListening(this.collection);
+      
+      debug.log(this.views);
+      
+      this.listenToOnce(this.collection, 'sync', self.render);
+      
       this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e, evt) {
-        // console.log('Event', evt, e);
-        var m = _this.collection.get(e.info.id);
+        // debug.log('Event', evt, e);
+        var m = self.collection.get(e.info.id);
         
         if (m) {
-          // console.log(m.attributes);
+          // debug.log(m.attributes);
           if (evt == 'workflow:start') {
             m.incr('exec_count');
           } else if (evt == 'workflow:stop') {
@@ -69,7 +74,7 @@ define([
             m.incr(e.info.info.new);
             m.decr(e.info.info.old);
           }
-          // console.log(m.attributes);
+          // debug.log(m.attributes);
           m.trigger('fetch');
         } 
       });
@@ -77,7 +82,6 @@ define([
     
     preRender: function () {
       // this.setView(new BottomBarView(), 'bottombar');
-      this.setView(new Toolbar({ date: this.date }), '.toolbar');
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
@@ -86,15 +90,18 @@ define([
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated
       }), '.workflows');
+      this.setView(new Toolbar({ date: this.date }), '.toolbar');
     },
     
     clean: function () {
       // removes date picker from DOM
       $('.dp').datetimepicker('remove');
+      this.$('.table-fixed').fixedHeader('remove');
     },
     
     onRender: function () {
-      $('.table-fixed').fixedHeader({ topOffset: 80 });
+      debug.log(this.views);
+      this.$('.table-fixed').fixedHeader({ topOffset: 80 });
       
       if ($('[data-sort="version"]')) {
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
@@ -140,7 +147,7 @@ define([
       
       $request
         .done(function (resp){
-          console.log(resp);
+          debug.log(resp);
         });
     },
     
@@ -180,7 +187,7 @@ define([
         .attr('data-id', dataId)
         .unbind('click')
         .click(function (ev) {
-          console.log($(this).attr('class'));
+          debug.log($(this).attr('class'));
           if ($(this).hasClass('action')) {
             _this.runAction(ev);
           } else if ($(this).hasClass('action-modal')) {
@@ -253,7 +260,7 @@ define([
           $detail.data('id', $target.data('id'));
           
           // init detail view
-          // console.log(this.$('#workflow-detail'), this.$('#workflow-detail .content'));
+          // debug.log(this.$('#workflow-detail'), this.$('#workflow-detail .content'));
           view = this.setView(new WorkflowView({ model: this.collection.get($target.data('id')), context: this.context }), '#workflow-detail .content', true);
           this.$('#workflow-detail').addClass('show');
         }

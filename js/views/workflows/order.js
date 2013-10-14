@@ -30,9 +30,7 @@ define([
     },
     
     initialize: function (opts) {
-  	  _.bindAll(this, 'render');
-  	  _.bindAll(this, 'stepDetail');
-      _.bindAll(this, 'getStepName');
+  	  _.bindAll(this);
       
       if (!_.has(opts, 'show_header'))
         opts.show_header = true;
@@ -73,17 +71,12 @@ define([
     },
     
     createDiagram: function () {
-      var _this = this;
-      var dia;
-      if (this.subviews.step_diagram) {
-        this.subviews.step_diagram.off();
-      }
+      var self = this,
+        dia,
+        wfl = new Workflow({ id: this.model.get('workflowid') });
       
-      var wfl = new Workflow({ id: this.model.get('workflowid') });
-      wfl.on('sync', function () {
-        dia = _this.subviews.step_diagram = new DiagramView({ steps: wfl.mapSteps() });
-        console.log(dia.render());
-        _this.assign('#steps-diagram', dia);
+      self.listenTo(wfl, 'sync', function () {
+        self.setview(new DiagramView({ steps: wfl.mapSteps() }), '#steps-diagram', true);
       });
       
       wfl.fetch();
@@ -118,7 +111,7 @@ define([
     },
     
     runAction: function (e) {
-      console.log('run action stop propagation');
+      debug.log('run action stop propagation');
       e.stopPropagation();
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
@@ -146,9 +139,7 @@ define([
     
       if ($target.data('id')) {
         e.stopPropagation();
-        var sd = this.subviews.stepdetail;
-        sd = new StepView({ id: $target.data('id') });
-        this.assign('#stepdetail', sd);        
+        this.setView(new StepView({ id: $target.data('id') }), '#stepdetail', true);
       }
     },
     
@@ -167,13 +158,13 @@ define([
       var $el = $(e.currentTarget),
         branch = $el.data('branch-id');
         
-        console.log($el.data);
+        debug.log($el.data);
       $el.children('i')
         .toggleClass('icon-caret-down')
         .toggleClass('icon-caret-right');
         
       this.$('[data-tree-id*='+ branch +'-]').toggle();
-      console.log('[data-tree-id*='+ branch +'-]', this.$('[data-tree-id*='+ branch +'-]'));
+      debug.log('[data-tree-id*='+ branch +'-]', this.$('[data-tree-id*='+ branch +'-]'));
 
       e.preventDefault();
       e.stopPropagation();

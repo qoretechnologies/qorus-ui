@@ -40,7 +40,7 @@ define([
         _this.events_received++;
         Dispatcher.dispatch(m);
       });
-      // console.log(this.models.length, this.length, this.models);
+      // debug.log(this.models.length, this.length, this.models);
       
       this.timeout_buffer++;
       clearTimeout(this.timeout);
@@ -49,15 +49,15 @@ define([
       if (this.timeout_buffer >= this.timeout_buffer_max) {
         this.timeout_buffer = 0;
         this.trigger('update');
-        // console.log('empting buffer');
+        // debug.log('empting buffer');
       } else {
         this.timeout = setTimeout(function () {
           _this.trigger('update');
           _this.timeout_buffer = 0;
-          // console.log('executing timeout function');
+          // debug.log('executing timeout function');
         }, 5*1000);
       }
-      // console.log('Total events received: ', _this.events_received);
+      // debug.log('Total events received: ', _this.events_received);
     },
 
     wsOpened: function () {

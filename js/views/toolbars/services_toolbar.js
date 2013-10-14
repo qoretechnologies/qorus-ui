@@ -31,6 +31,10 @@ define([
       $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     
+    clean: function () {
+      this.$('.sticky').sticky('remove');
+    },
+    
     // filter by date init
     datePicker: function () {
       var view = this;

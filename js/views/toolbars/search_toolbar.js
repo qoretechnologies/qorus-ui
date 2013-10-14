@@ -32,7 +32,7 @@ define([
       if (this.collection){
         this.collection.search(e); 
       }
-      console.log(this.options);
+      debug.log(this.options);
     }
   });
   return Toolbar;

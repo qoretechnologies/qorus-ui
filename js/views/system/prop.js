@@ -79,7 +79,7 @@ define([
             _this.getData();
           })
           .fail(function (resp) {
-            console.log(resp);
+            debug.log(resp);
           });        
       } else if (action == 'delete') {
         $.delete(url)
@@ -87,7 +87,7 @@ define([
             _this.getData();
           })
           .fail(function (resp) {
-            console.log(resp);
+            debug.log(resp);
           });
       }
     }

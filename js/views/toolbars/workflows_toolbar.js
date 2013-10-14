@@ -29,6 +29,10 @@ define([
       $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     
+    clean: function () {
+      this.$('.sticky').sticky('remove');
+    },
+    
     // filter by date init
     datePicker: function () {
       var view = this;
@@ -52,7 +56,7 @@ define([
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
       
-      console.log(parts.length);
+      debug.log(parts.length);
       
       if (parts.length > 2) {
         this.context.url = [parts[0], parts[1]].join('/');

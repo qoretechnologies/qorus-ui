@@ -118,7 +118,7 @@ define([
     page: 1,
     
     initialize: function (date) {
-      // _.bindAll(this);
+      _.bindAll(this);
       if (date) {
         this.date = date;
       }
@@ -134,7 +134,7 @@ define([
     },
     
     hasNextPage: function () {
-      // console.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
+      // debug.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
       return (this.offset + this.limit - 2 < this.models.length); 
     },
     
@@ -145,13 +145,13 @@ define([
 
           this.offset = this.page * this.limit;
           this.page++;
-          console.log('loading page', this.page, this.limit, this.offset);
+          debug.log('loading page', this.page, this.limit, this.offset);
 
           var _this = this;
           this.fetch({ 
             remove: false,
             success: function () {
-              console.log("Fetched ->", _this.length);
+              debug.log("Fetched ->", _this.length);
               _this.trigger('sync');
               _this.loading = false;
             }
@@ -180,7 +180,7 @@ define([
       
       _.extend(options, { data: data });
       
-      console.log(this, options);
+      debug.log(this, options);
       
       Qorus.Collection.__super__.fetch.call(this, options);
     }
@@ -189,7 +189,7 @@ define([
   
   Qorus.SortedCollection = Qorus.Collection.extend({
     initialize: function (opts) {
-      console.log(this);
+      debug.log(this);
       this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = [''];
@@ -200,30 +200,33 @@ define([
     },
     
     comparator: function (c1, c2) {
-      // needs fix
-      var r = (this.sort_order == 'des') ? -1 : 1;
-      var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
-      var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
-      
-      if (k1[0] < k2[0]) return -1 * r;
-      if (k1[0] > k2[0]) return 1 * r;
-      if (k1[1] > k2[1]) return -1 * r;
-      if (k1[1] < k2[1]) return 1 * r;
       return 0;
     },
+    // comparator: function (c1, c2) {
+    //   // needs fix
+    //   var r = (this.sort_order == 'des') ? -1 : 1;
+    //   var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
+    //   var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
+    //   
+    //   if (k1[0] < k2[0]) return -1 * r;
+    //   if (k1[0] > k2[0]) return 1 * r;
+    //   if (k1[1] > k2[1]) return -1 * r;
+    //   if (k1[1] < k2[1]) return 1 * r;
+    //   return 0;
+    // },
     
     sortByKey: function (key, ord, cb) {
       if (key) {
         var old_key = this.sort_key;
         if (old_key != key) {
-          this.sort_history.unshift(old_key); 
+          this.sort_history.unshift(old_key);
         }
         this.sort_order = ord;
         this.sort_key = key;
         this.sort({
           silent: true
         });
-
+        debug.log('sorting');
         this.trigger('resort', this, {});
       }
     }
@@ -251,7 +254,7 @@ define([
       var models = JSON.parse(e.data);
       _.each(models, function (model) {
         var mdl = new _this.model(model);
-        console.log("Adding -> ", mdl);
+        debug.log("Adding -> ", mdl);
         _this.add(mdl);
       });
     },
@@ -271,15 +274,15 @@ define([
           _this.wsOpen();
         })
         .fail(function () {
-          console.log('Failed to get token. Retrying.', _this);
+          debug.log('Failed to get token. Retrying.', _this);
           _this.wsRetry();
         });
     },
     
     wsClose: function () {
       if (this.socket) {
-        console.log("Closing WS", this.socket_url, this.socket);
-        this.socket.onclose = function (e) { console.log('Closed', e); };
+        debug.log("Closing WS", this.socket_url, this.socket);
+        this.socket.onclose = function (e) { debug.log('Closed', e); };
         this.socket.close(); 
       }
     },
@@ -289,20 +292,20 @@ define([
         var url = this.socket_url + '?token=' + this.token;
       
         try {
-          console.log('Connecting to WS', url);
+          debug.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
           this.socket.onerror = this.wsError;
         } catch (e) {
-          console.log(e);
+          debug.log(e);
         }
         this.socket.onerror = this.wsError; 
       }
     },
     wsError: function (e) {
-      console.log(e);
+      debug.log(e);
     },
 
     wsOpened: function () {
@@ -347,15 +350,15 @@ define([
           _this.wsOpen();
         })
         .fail(function () {
-          console.log('Failed to get token. Retrying.', _this);
+          debug.log('Failed to get token. Retrying.', _this);
           _this.wsRetry();
         });
     },
     
     wsClose: function () {
       if (this.socket) {
-        console.log("Closing WS", this.socket_url, this.socket);
-        this.socket.onclose = function (e) { console.log('Closed', e); };
+        debug.log("Closing WS", this.socket_url, this.socket);
+        this.socket.onclose = function (e) { debug.log('Closed', e); };
         this.socket.close(); 
       }
     },
@@ -365,14 +368,14 @@ define([
         var url = this.socket_url + '?token=' + this.token;
       
         try {
-          console.log('Connecting to WS', url);
+          debug.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
           this.socket.onerror = this.wsError;
         } catch (e) {
-          console.log(e);
+          debug.log(e);
         }
         this.socket.onerror = this.wsError; 
       }
@@ -383,7 +386,7 @@ define([
     },
 
     wsError: function (e) {
-      console.log(e);
+      debug.log(e);
     },
 
     wsOpened: function () {

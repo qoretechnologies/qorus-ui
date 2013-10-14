@@ -44,14 +44,14 @@ define([
     title: "Services",
 
     initialize: function () {
+      var self = this;
       _.bindAll(this);
       
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       
-      var _this = this;
       this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
-        var m = _this.collection.get(e.info.id);
+        var m = self.collection.get(e.info.id);
         if (m) {
           m.fetch();
         }
@@ -75,9 +75,9 @@ define([
       // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
       if ($('[data-sort="version"]')) {
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
-        $('#service-detail').outerWidth(w);        
+        this.$('#service-detail').outerWidth(w);        
       }
-      $('.table-fixed').fixedHeader({ topOffset: 80 });
+      this.$('.table-fixed').fixedHeader({ topOffset: 80 });
     },
 
     setOption: function (e) {
@@ -90,7 +90,7 @@ define([
     },
 	
     runAction: function (e) {
-      console.log('running action', e);
+      debug.log('running action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
@@ -98,7 +98,7 @@ define([
         if (data.id == 'selected') {
           this.runBatchAction(data.action, data.method);
         } else if (data.id) {
-          console.log("data action", data.id, data.action);
+          debug.log("data action", data.id, data.action);
           // $target.text(data.msg.toUpperCase());
           var inst = this.collection.get(data.id);
           inst.doAction(data.action);           
@@ -132,13 +132,11 @@ define([
           // set current row id
           $detail.data('id', $target.data('id'));
 
-          // clean prev view
-          if (this.subviews.detail){
-            this.subviews.detail.clean();
-          }
-          
           // init detail view
-          view = this.setView(new ServiceView({ model: this.collection.get($target.data('id')), context: this.context }), '#service-detail .content', true);
+          view = this.setView(new ServiceView({ 
+              model: this.collection.get($target.data('id')), 
+              context: this.context 
+            }), '#service-detail .content', true);
 
           $('#service-detail').addClass('show');
         }
@@ -147,10 +145,22 @@ define([
     },
     
     helpers:  {
+      // getLabel: function (status) {
+      //   return context.status_label[status];
+      // },
       getLabel: function (status) {
-        return context.status_label[status];
+        var status_label = {
+          'loaded': 'warning',
+          'unloaded': '',
+          'running': 'success'
+        };
+        return status_label[status];
       },
-      action_css: context.action_css
+      action_css: {
+        'reset': 'btn-inverse',
+        'load': 'btn-success',
+        'unload': 'btn-danger'
+      }
     },
     
     openExecuteModal: function (e) {
@@ -161,7 +171,11 @@ define([
       var svc = this.collection.get($target.data('serviceid'));
       var method = svc.get('methods')[$target.data('id')];
 
-      var modal = this.setView(new ModalView({ name: $target.data('methodname'), methods: svc.get('methods'), service_name: svc.get('name') }), '#function-execute', true);
+      var modal = this.setView(new ModalView({ 
+          name: $target.data('methodname'), 
+          methods: svc.get('methods'), 
+          service_name: svc.get('name') 
+        }), '#function-execute', true);
       
       e.stopPropagation();
     },
@@ -174,6 +188,10 @@ define([
       } else {
         $('.toolbar-actions', this.$el).addClass('hide');
       }
+    },
+    
+    clean: function () {
+      this.$('.table-fixed').fixedHeader('remove');
     }
     
   });

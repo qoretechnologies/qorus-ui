@@ -6,6 +6,11 @@ $.fn.fixedHeader = function (options) {
    el: window
    //bgColor: 'white'
  };
+ if (options === 'remove') {
+   $(config.el).off('scroll');
+   $('thead.header').off('click');
+   return this;
+ }
  if (options){ $.extend(config, options); }
 
  return this.each( function() {

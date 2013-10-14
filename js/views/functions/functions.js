@@ -22,22 +22,17 @@ define([
       
       ListView.__super__.initialize.call(this, Collection, date);
       
-      this.createSubviews();
       this.listenToOnce(this.collection, 'sync', this.render);
     },
   
-    createSubviews: function () {
-      this.subviews.table = new Qorus.TableView({ 
+    preRender: function () {
+      this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
           dispatcher: Dispatcher
-      });
-    },
-
-    onRender: function () {
-      this.assign('#function-list', this.subviews.table);
+      }), '#function-list');
     }
   });
 

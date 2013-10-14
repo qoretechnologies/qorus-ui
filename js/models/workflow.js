@@ -41,7 +41,7 @@ define([
           var children_sorted = _.sortBy(this.children, function (c) { return c.children.length; });
           var first_child = children_sorted[0];
           
-          // console.log(this.children,children_sorted);
+          // debug.log(this.children,children_sorted);
 
           buffer = buffer || [];
           level = level || 1;
@@ -114,7 +114,7 @@ define([
     },
     
     doAction: function (action, opts, callback) {
-      console.log("Doing action", action);
+      debug.log("Doing action", action);
       if (_.indexOf(this.allowedActions, action) != -1) {
         var params;
         var wflid = this.id;
@@ -133,19 +133,20 @@ define([
         }
         
         $.put(this.url(), params, null, 'application/json')
-          .done(
-            function (e, ee, eee){
-              var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
-              $.globalMessenger().post(msg);
-              if (_.isFunction(callback)) {
-                callback();
-              }
-            }
-          );        
+          // .done(
+          //   function (e, ee, eee){
+          //     var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
+          //     // $.globalMessenger().post(msg);
+          //     if (_.isFunction(callback)) {
+          //       callback();
+          //     }
+          //   }
+          // );        
       }
     },
     
     fetch: function (options) {
+      debug.log('fetching workflow', this.get('name'));
       if (!options) options = {};
       if (!this.date && this.collection){
         this.date = this.collection.date;

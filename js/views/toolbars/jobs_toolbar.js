@@ -21,7 +21,7 @@ define([
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
-      console.log("Job toolbar", this.options, opts);
+      debug.log("Job toolbar", this.options, opts);
       
       this.context.date = this.options.date;
       this.template = Template;

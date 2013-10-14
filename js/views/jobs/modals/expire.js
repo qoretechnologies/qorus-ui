@@ -67,7 +67,7 @@ define([
       
       $.put(url, params)
         .done(function (resp) {
-           $.globalMessenger().post("Job " + id + " set expiry");
+           // $.globalMessenger().post("Job " + id + " set expiry");
         });
           
       this.close();

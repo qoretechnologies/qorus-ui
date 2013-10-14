@@ -24,7 +24,7 @@ define([
           }
       }
       
-      console.log("deprecated",this.opts.deprecated, this.opts);
+      debug.log("deprecated",this.opts.deprecated, this.opts);
   	}
   });
   return Collection;

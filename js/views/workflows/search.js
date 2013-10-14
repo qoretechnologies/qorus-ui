@@ -114,14 +114,14 @@ define([
     fetchSorted: function (e) {
       var el = e.currentTarget;
       // var sort = el.data('sort');
-      // console.log("Fetching sorted", sort);
+      // debug.log("Fetching sorted", sort);
       e.stopPropagation();
     },
     
     scroll: function (e) {
       var $target = $(e.currentTarget).find('#instances');
       var pos = this.$el.height() + $target.offset().top - $(window).height();
-      console.log(pos, $target.height(), $target.offset().top, $(window).height());
+      debug.log(pos, $target.height(), $target.offset().top, $(window).height());
       // if (pos < 100) {
       //   this.nextPage(); 
       //   this.$el.children('button[data-pagination]').html("Loading...");

@@ -90,6 +90,9 @@
     modules: [
       { name: 'main' }
     ],
-    logLevel: 3
+    logLevel: 3,
+    onBuildRead: function (moduleName, path, contents) {
+        return contents.replace(/debug.log(.*);/g, '');
+    }
     // optimize: "none"
 })

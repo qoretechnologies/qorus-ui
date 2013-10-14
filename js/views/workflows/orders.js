@@ -24,7 +24,6 @@ define([
     name: 'orders',
     template: Template,
     context: context,
-    subviews: {},
     additionalEvents: {
       // 'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
@@ -71,22 +70,38 @@ define([
       this.collection = new Collection(this.opts);
       this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();
-      
-      this.createSubviews();
     },
     
-    createSubviews: function () {
-      this.subviews.table = new Qorus.TableView({ 
+    preRender: function () {
+      debug.log('orders prerender', this, this.url, this.options);
+      var toolbar = this.setView(new OrdersToolbar(this.options), '#toolbar');
+      
+      this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
           context: { url: this.url },
           dispatcher: Dispatcher
+      }), '#order-list');
+    },
+    
+    onRender: function () {
+      var toolbar = this.getView('#toolbar');
+      toolbar.updateUrl(this.url, this.options.statuses);
+      
+      if (this.collection.length > 0) {
+        this.$el.parent('.pane').scroll(this.scroll);
+        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+        $('.pane').scroll(this.scroll);
+      }
+      
+      // init popover on info text
+      $('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "body", html: true});
       });
-
-      // this should be placed inside instances/orders view
-      this.subviews.toolbar = new OrdersToolbar(this.options);
+      
     },
     
     runAction: function (e) {      
@@ -108,7 +123,7 @@ define([
         current_page: this.collection.page,
         has_next: this.collection.hasNextPage()
       };
-      this.subviews.table.render();
+      this.getView('#order-list').render();
     },
     
     // fetches the collection from server presorted by key
@@ -116,7 +131,7 @@ define([
       // TODO
       var $el = $(e.currentTarget);
       var sort = $el.data('sort');
-      // console.log("Fetching sorted", sort);
+      // debug.log("Fetching sorted", sort);
       e.stopPropagation();
     },
     
@@ -128,31 +143,13 @@ define([
       }
     },
     
-    onRender: function () {
-      this.subviews.toolbar.updateUrl(this.url, this.options.statuses);
-      this.assign('#toolbar', this.subviews.toolbar);
-      
-      if (this.collection.length > 0) {
-        this.assign('#order-list', this.subviews.table);
-        this.$el.parent('.pane').scroll(this.scroll);
-        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
-        $('.pane').scroll(this.scroll);
-      }
-      
-      // init popover on info text
-      $('td.info').each(function () {
-        var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "body", html: true});
-      });
-    },
-    
     helpers: {
       action_css: context.action_css
     }
     
     // render: function (ctx) {
     //   ListView.__super__.render.call(this, ctx);
-    //   // console.log("Rendering context", this.context, this.helpers);
+    //   // debug.log("Rendering context", this.context, this.helpers);
     // }
     
   });

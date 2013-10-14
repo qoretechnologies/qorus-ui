@@ -33,7 +33,7 @@ define([
       // });
       
       // $(".modal").resizable();
-      console.log($(".modal"));
+      debug.log($(".modal"));
     }
   });
   return ModelView;

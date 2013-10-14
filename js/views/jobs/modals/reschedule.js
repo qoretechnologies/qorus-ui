@@ -58,7 +58,7 @@ define([
       
       $.put(url, params)
         .done(function (resp) {
-           $.globalMessenger().post("Job " + id + " rescheduled");
+           // $.globalMessenger().post("Job " + id + " rescheduled");
         });
           
       this.close();

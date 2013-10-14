@@ -29,7 +29,7 @@ define([
       var url = this.baseUrl + '?' + query;
       var _this = this;
       
-      console.log("fetching ->" , url);
+      debug.log("fetching ->" , url);
       
       $.get(url)
         .done(function (resp) {
@@ -97,6 +97,6 @@ define([
     }
   });
 
-  // return function (extension, path) { console.log(extension) };
+  // return function (extension, path) { debug.log(extension) };
   return View;
 });

@@ -13,8 +13,18 @@ define([
       SEARCH_SEPARATOR: /[ ,]+/,
       REST_API_PREFIX: '/api',
       WS_PREFIX: '',
-      EVENTS_WS_URL: 'ws://' + host + '/apievents'
+      EVENTS_WS_URL: 'ws://' + host + '/apievents',
+      DEBUG: false
   };
+  
+  if (settings.DEBUG && window.console && console.log) {
+    window.debug = window.console;
+  } else {
+    window.debug = {
+      'log': function () {}
+    }
+  }
+  window.debug.log('shit');
   
   return settings;
 });

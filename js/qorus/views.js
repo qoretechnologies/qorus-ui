@@ -19,7 +19,6 @@ define([
     }
   });
   
-  
   var Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function (opts) {
@@ -45,7 +44,6 @@ define([
     },
     context: {},
     views: {},
-    subviews: [],
     helpers: {},
     options: {},
     model_name: null,
@@ -55,7 +53,6 @@ define([
     },
     
     initialize: function (options) {
-      _.bindAll(this);
       this.views = {};
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
@@ -73,24 +70,20 @@ define([
       _.extend(this.options, options);
     },
         
-    off: function (level) {
+    off: function (remove) {
       this.removeViews();
       
       if (_.isFunction(this.clean)) {
         this.clean();
       }
-      
-      var arr = _.values(this.subviews), ctr = 0;
-      
-      _.each(this.subviews, function (o) {
-        // console.log(typeof o);
-        if (o instanceof Backbone.View) {
-          o.off();
-        }
-      });
 
       this.undelegateEvents();
-      this.remove();
+      this.stopListening();
+      this.views = {};
+      // this.context = null;
+      
+      View.__super__.off.call(this);
+      if (remove !== false) this.remove();
     },
     
     // manages subviews
@@ -110,9 +103,6 @@ define([
     },
     
     render: function (ctx) {
-      // destroy views
-      this.removeViews();
-      
       this.preRender();
       if (this.template) {
         if (ctx) {
@@ -134,15 +124,29 @@ define([
     
     removeView: function (id) {
       var view = this.getView(id);
-      if (view) {
+      if (view instanceof Backbone.View) {
         view.off();
+      } else if (_.isArray(view)) {
+        _.each(view, function (v) {
+          v.off
+        });
       }
     },
     
     removeViews: function () {
-      _.each(_.flatten(this.views), function (view) {
-        view.off();
+      _.each(this.views, function (view) {
+        debug.log('removing subviews');
+        if (_.isArray(view)) {
+          _.each(view, function (v) {
+            // debug.log('removing view from array', v.cid);
+            v.off();
+          });
+        } else if (view instanceof Backbone.View) {
+          // debug.log('removing view', view.cid);
+          view.off();
+        }
       });
+      // this.views = {};
     },
     
     getView: function (id) {
@@ -157,10 +161,12 @@ define([
         } else if (_.isArray(view)) {
           var frag = document.createDocumentFragment();
           _.each(view, function (v) {
-            var fc = v.render().el.firstElementChild;
-            frag.appendChild(fc);
+            var fc = v.el.firstElementChild;
+            frag.appendChild(v.setElement(fc).el);
+            // self.$(idx).append(v.render().$el.html());
           });
-          this.$(idx).empty().append(frag);
+          self.$(idx).append(frag);
+          frag = null;
         }
       });
     },
@@ -193,10 +199,12 @@ define([
     },
     
     setView: function (view, el, set) {
+      this.removeView(el);
       this.views[el] = view;
-      // console.log('setting view', view, el, set);
+
+      // debug.log('setting view', view, el, set);
       if (set === true) {
-        // console.log('setting element on view', el, this.$(el));
+        // debug.log('setting element on view', el, this.$(el));
         view.setElement(this.$(el)).render();
       }
       
@@ -219,20 +227,20 @@ define([
     },
     
     clean: function () {
-      // console.log('called stop listening on', this.cid);
+      // debug.log('called stop listening on', this.cid);
       this.stopListening();
     },
     
     updateModels: function (e) {
       if (e.info) {
         var m = this.collection.get(e.info.id);
-        console.log('Updating model', m);
+        debug.log('Updating model', m);
         m.fetch();
       }
     },
     
     doNothing: function (e) {
-      console.log('Do nothing', e);
+      debug.log('Do nothing', e);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -241,7 +249,6 @@ define([
 
 
    var ListView = View.extend({
-    subviews: [],
     defaultEvents: {
       'click .check': 'highlight',
       'click .check-all': 'checkall',
@@ -262,6 +269,7 @@ define([
     },
     
     initialize: function (collection, date) {
+      var self = this;
       _.bindAll(this);
       ListView.__super__.initialize.call(this);
       // add element loader
@@ -283,7 +291,6 @@ define([
       if (collection) {
         this.collection = new collection({ date: this.date, opts: this.opts });
         
-        var self = this;
         this.listenToOnce(this.collection, 'sync', function () { self.collection.trigger('resort') });
         this.listenToOnce(this.collection, 'error', this.render);
         
@@ -301,14 +308,14 @@ define([
         };
       }
       
-      this.on('highlight', this.enableActions);
-      this.on('highlight', this.updateCheckIcon);
+      // this.on('highlight', this.enableActions);
+      // this.on('highlight', this.updateCheckIcon);
     },
     
     render: function (ctx) {
       this.removeViews();
       this.preRender();
-      // console.log('Starts rendering with context ->', this.context.page.has_next);
+      // debug.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
         var ctx = {
           date: this.date,
@@ -334,13 +341,13 @@ define([
       this.setTitle();
       this.onRender();
       this.sortIcon();
-      console.log('Finished rendering', this);
+      debug.log('Finished rendering', this);
       return this;
     },
     
     historyBack: function (e) {
       e.preventDefault();
-      console.log("back button", e);
+      debug.log("back button", e);
       window.history.back();
     },
     
@@ -482,14 +489,14 @@ define([
       
       $request
         .done(function (resp){
-          console.log(resp);
+          debug.log(resp);
         });
     },
     
     enableActions: function (e) {
       var ids = this.getCheckedIds();
       
-      console.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
+      debug.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
       
       if (ids.length > 0) {
         $('.toolbar-actions', this.$el).removeClass('hide');
@@ -501,7 +508,7 @@ define([
     // end batch section definition
     
     runAction: function (e) {
-      console.log('run action', e);
+      debug.log('run action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
@@ -510,7 +517,7 @@ define([
           this.runBatchAction(data.action, data.method);
         } else if (data.id) {
           if (!$target.hasClass('action-modal')) {
-            console.log("data action", data.id, data.action);
+            debug.log("data action", data.id, data.action);
             // $target.text(data.msg.toUpperCase());
             var inst = this.collection.get(data.id);
             inst.doAction(data.action, data);            
@@ -529,7 +536,7 @@ define([
     
     // sort view
     sortView: function (e) {
-      console.log("Sort by ", e);
+      debug.log("Sort by ", e);
       var el = $(e.currentTarget);
       if (el.data('sort')) {
         this.collection.sortByKey(el.data('sort'), el.data('order'));
@@ -575,7 +582,11 @@ define([
     
     openURL: function (url) {
       Backbone.history.navigate(url, { trigger: true });
-    }
+    },
+    // 
+    // clean: function () {
+    //   this.collection = null;
+    // }
   });
 
   var TableView = View.extend({
@@ -588,7 +599,9 @@ define([
       this.views = {};
       this.opts = opts || {};
       
+      debug.log('table view collection', this.collection);
       this.collection = opts.collection;
+      this.listenTo(this.collection, 'resort', this.render);
       
       if (_.has(opts, 'template')) {
         this.template = opts.template;
@@ -613,6 +626,7 @@ define([
     },
     
     render: function (ctx) {
+      debug.log(this, this.colleciton);
       if (this.collection.size() < 1) {
         this.template = NoDataTpl;
       } else {
@@ -623,15 +637,16 @@ define([
       return this;
     },
     
-    appendRows: function (models) {
-      var self = this;
-      var frag = document.createDocumentFragment();
-      _.each(models, function (m) {
-        var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }));
-        frag.appendChild($(view.render().$el.html()));
-      });
-      this.$('tbody').append(frag);
-    },
+    // appendRows: function (models) {
+    //   console.log('appending rows');
+    //   var self = this;
+    //   var frag = document.createDocumentFragment();
+    //   _.each(models, function (m) {
+    //     var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }));
+    //     frag.appendChild($(view.render().$el.html()));
+    //   });
+    //   this.$('tbody').append(frag);
+    // },
     
     preRender: function () {
       this.update(false);
@@ -656,32 +671,43 @@ define([
     },
         
     update: function (render) {
-      if (render === undefined) render = true;
       var self = this;
+      var ctr = 0;
+      if (render === undefined) render = true;
+      this.removeView('tbody');
+      debug.log('TableView views ->', this.views);
+      
       _.each(this.collection.models, function (m) {
-        var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');
+        // if (ctr <= 2) {
+          var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');          
+        // }
+        ctr++;
       });
       if (render) {
         this.render();
       }
     },
     
+    
     clean: function () {
-      console.log("Cleaning table");
-      console.log('Table subviews', this);
-      var self = this;
-      _.each(this.subviews, function (sbv) {
-        sbv.off();          
-      });
-      this.stopListening();
+      this.collection = null; 
     }
+    // clean: function () {
+    //   debug.log("Cleaning table");
+    //   debug.log('Table subviews', this);
+    //   var self = this;
+    //   _.each(this.subviews, function (sbv) {
+    //     sbv.off();          
+    //   });
+    //   this.stopListening();
+    // }
   });
 
   var RowView = View.extend({
     context: {},
     template: TableRowTpl,
     initialize: function (opts) {
-      _.bindAll(this);
+      // _.bindAll(this);
       this.views =[];
       this.model = opts.model;
       if (_.has(opts, 'cols')) {
@@ -708,23 +734,23 @@ define([
         , self = this;
 
       // update row on model change
-      this.listenTo(this.model, 'change', function () {
-        var timeout = 500;
-        self._rtimer_buffer = self._rtimer_buffer || 0;
-        
-        if (self._rtimer) {
-          clearTimeout(self._rtimer);
-          self._rtimer_buffer++;
-        }
-
-        if (self._rtimer_buffer >= 100) timeout = 0;
-
-        self._rtimer = setTimeout(function () {
-          // console.log('delayed render of row', self.model.id, new Date());
-          self.update();
-          self._rtimer_buffer = 0;
-        }, timeout);
-      });
+      // this.listenTo(this.model, 'change', function () {
+      //   var timeout = 500;
+      //   self._rtimer_buffer = self._rtimer_buffer || 0;
+      //   
+      //   if (self._rtimer) {
+      //     clearTimeout(self._rtimer);
+      //     self._rtimer_buffer++;
+      //   }
+      // 
+      //   if (self._rtimer_buffer >= 100) timeout = 0;
+      // 
+      //   self._rtimer = setTimeout(function () {
+      //     // debug.log('delayed render of row', self.model.id, new Date());
+      //     self.update();
+      //     self._rtimer_buffer = 0;
+      //   }, timeout);
+      // });
 
       
       this.render();
@@ -768,7 +794,14 @@ define([
     },
     // 
     // clean: function () {
-    //   console.log("Cleaning row");
+    //   debug.log('cleaning model');
+    //   this.stopListening();
+    //   this.model = null;
+    //   this.parent = null;
+    // }
+    // 
+    // clean: function () {
+    //   debug.log("Cleaning row");
     //   this.undelegateEvents();
     // }
   });
@@ -786,7 +819,7 @@ define([
       
       this.on('fetch', this.render);
       this.getData();
-      // console.log('Events', this.events(), this.$el, this.el);
+      // debug.log('Events', this.events(), this.$el, this.el);
     },
     
     getUrl: function () {
@@ -805,7 +838,7 @@ define([
     },
     
     render: function (ctx) {
-      console.log('ServiceView', this.el, this.$el);
+      debug.log('ServiceView', this.el, this.$el);
       _.extend(this.context, { data: this.data });
       
       ServiceView.__super__.render.call(this, ctx);
@@ -840,11 +873,11 @@ define([
       
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
-          console.log(resp);
+          debug.log(resp);
           self.getData();
         })
         .fail(function (resp) {
-          console.log(resp);
+          debug.log(resp);
         });
     }
   });
@@ -863,7 +896,7 @@ define([
       
       this.on('fetch', this.render);
       this.getData();
-      // console.log('Events', this.events(), this.$el, this.el);
+      // debug.log('Events', this.events(), this.$el, this.el);
     },
     
     getUrl: function () {
@@ -882,7 +915,7 @@ define([
     },
     
     render: function (ctx) {
-      console.log('ServiceView', this.el, this.$el);
+      debug.log('ServiceView', this.el, this.$el);
       _.extend(this.context, { data: this.data });
       
       ServiceView.__super__.render.call(this, ctx);
@@ -917,11 +950,11 @@ define([
       
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
-          console.log(resp);
+          debug.log(resp);
           self.getData();
         })
         .fail(function (resp) {
-          console.log(resp);
+          debug.log(resp);
         });
     }
   });

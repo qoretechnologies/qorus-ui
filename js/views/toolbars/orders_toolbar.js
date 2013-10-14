@@ -28,6 +28,8 @@ define([
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
+      debug.log('initializing toolbar', this.cid);
+      
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
       }
@@ -94,9 +96,9 @@ define([
     filterBE: function (e) {
       var el = $(e.currentTarget);
       if(el.hasClass('active')){
-        console.log(this.url);
+        debug.log(this.url);
       } else {
-        console.log([this.url, 'true'].join('/'));
+        debug.log([this.url, 'true'].join('/'));
       }
     },
     
@@ -137,7 +139,7 @@ define([
           $('#statuses').multiselect('refresh');
           _this.options.statuses = sl.join(',');
           _this.trigger('filter', _this.options.statuses);
-          console.log("multiselect", _this.options);
+          debug.log("multiselect", _this.options);
         }
       });
     },

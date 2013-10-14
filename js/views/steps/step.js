@@ -27,10 +27,6 @@ define([
       this.on('render', function () { Rainbow.color() });
     },
     
-    render: function (ctx) {
-      ModelView.__super__.render.call(this, ctx);
-    },
-    
     tabToggle: function(e){
       var $target = $(e.currentTarget);
       e.preventDefault();
@@ -43,7 +39,7 @@ define([
   var ModalView = Modal.extend({
     initialize: function (opts) {
       ModalView.__super__.initialize.call(this, opts);
-      this.subviews.content = new ModelView(this.opts);
+      this.setView(new ModelView(this.opts), '.content');
     }
   });
   

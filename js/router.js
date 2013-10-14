@@ -35,28 +35,33 @@ define([
 
 
   var AppRouter = Backbone.Router.extend({
+    currentView: null,
     routes: Urls.routes,
 
     initialize: function () {
-      this.currentView = null;
+      _.bindAll(this);
+      debug.log('init');
     },
         
     // cleans viewport from zombies
     clean: function () {
-      if (this.currentView){
+      debug.log('cleaning', this.currentView);
+      if (this.currentView) {
+        debug.log('cleaning current view');
         this.currentView.off();
         this.currentView.undelegateEvents();
         this.currentView.remove();
+        // console.log(this.currentView.el.parentNode, this.currentView.el.children, this.currentView._events);
+        debug.log('removed view', this.currentView);
       }
     },
     
     // resets current view
     setView: function (view) {
-      if(this.currentView!=view){
-        this.clean();
-        this.currentView = view;        
-      }
-      $('#content').html(view.el);
+      this.clean();
+      this.currentView = view;
+      // $('#content').html(view.el);
+      view.$el.appendTo('#content');
     },
     
     // redirects to workflows page
@@ -133,7 +138,7 @@ define([
         var view = new ExtensionListView();
       } else {
         var query = window.location.search.slice(1);
-        console.log(query);
+        debug.log(query);
         var view = new ExtensionView({}, extension, query);        
       }
       this.setView(view);
@@ -147,7 +152,7 @@ define([
     // default
     defaultAction: function (actions) {
       this.clean();
-      console.log('No route:', actions);
+      debug.log('No route:', actions);
     }
   });
 

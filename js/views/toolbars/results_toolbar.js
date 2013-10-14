@@ -68,7 +68,7 @@ define([
     },
     
     render: function(ctx) {
-      console.log('context', this.context);
+      debug.log('context', this.context);
       Toolbar.__super__.render.call(this, ctx);
     },
     
@@ -100,15 +100,15 @@ define([
     filterBE: function(e){
       var el = $(e.currentTarget);
       if(el.hasClass('active')){
-        console.log(this.url);
+        debug.log(this.url);
       } else {
-        console.log([this.url, 'true'].join('/'));
+        debug.log([this.url, 'true'].join('/'));
       }
     },
     
     onDateChanged: function(date) {
       var url = this.url + '/' + moment(date).utc().format('YYYYMMDDHHmmss');
-      console.log('date changed');
+      debug.log('date changed');
       Backbone.history.navigate(url, { trigger: true });
     },
     
@@ -144,7 +144,7 @@ define([
           $('#statuses').multiselect('refresh');
           _this.options.statuses = sl.join(',');
           _this.trigger('filter', _this.options.statuses);
-          console.log(_this.options);
+          debug.log(_this.options);
         }
       });
     },

@@ -28,7 +28,7 @@ define([
       this.template = Template;
  
       this.collection.fetch();
-      // this.listenTo(this.collection, 'all', function (e) { console.log('options', e)});
+      // this.listenTo(this.collection, 'all', function (e) { debug.log('options', e)});
       this.listenTo(this.collection, 'sync resort', this.render);
     },
     

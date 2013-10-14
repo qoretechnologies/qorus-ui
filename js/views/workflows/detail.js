@@ -60,6 +60,7 @@ define([
     },
 
     tabToggle: function(e){
+      debug.log(e, $(e.currentTarget));
       var $target = $(e.currentTarget);
       e.preventDefault();
 

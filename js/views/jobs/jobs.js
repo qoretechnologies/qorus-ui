@@ -50,14 +50,8 @@ define([
     reSchedule: function (ev) {
       var $target = $(ev.currentTarget);
       var job = this.collection.get($target.data('id'));
-      var view = new RescheduleModal({ job: job });
-      
-      if (this.subviews.modal) {
-        this.subviews.modal.off();
-      }
-      
-      this.subviews.modal = view;
-      this.assign('#jobs-modal', view);
+
+      this.setView(new RescheduleModal({ job: job }), '#jobs-modal', true);
       
       ev.preventDefault();
     },
@@ -65,14 +59,8 @@ define([
     setExpiration: function (ev) {
       var $target = $(ev.currentTarget);
       var job = this.collection.get($target.data('id'));
-      var view = new ExpireModal({ job: job });
-      
-      if (this.subviews.modal) {
-        this.subviews.modal.off();
-      }
-      
-      this.subviews.modal = view;
-      this.assign('#jobs-modal', view);
+
+      this.setView(new ExpireModal({ job: job }), '#jobs-modal', true);
       
       ev.preventDefault();
     },    // 
@@ -101,7 +89,7 @@ define([
         if (evt == 'job:instance_stop') {
           m.incr(e.info.status);
         }
-        // console.log(m.attributes);
+        // debug.log(m.attributes);
         m.trigger('fetch');
       }
     },

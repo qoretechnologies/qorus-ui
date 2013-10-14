@@ -39,7 +39,7 @@ define([
         } else {
           path = this.parent_id || 0;
         }
-        console.log(path, this.id);
+        debug.log(path, this.id);
                 
         if (level !== 0) {
           el_list.push({ 

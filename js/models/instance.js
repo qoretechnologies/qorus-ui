@@ -15,7 +15,7 @@ define([
         .done(
           function (e, ee, eee){
             var msg = sprintf('Instance %d %s done', wflid, action);
-            $.globalMessenger().post(msg);
+            // $.globalMessenger().post(msg);
           }
         );        
       }

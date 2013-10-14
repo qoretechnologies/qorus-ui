@@ -13,7 +13,6 @@ define([
   var ListView = Qorus.ListView.extend({
     template: Template,
     model_name: 'result',
-    subviews: {},
     additionalEvents: {
       'click th[data-sort]': 'fetchSorted',
     },
@@ -33,31 +32,28 @@ define([
       this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();
       
-      this.createSubviews();
       this.render();
     },
 
     onRender: function () {
       if (this.collection.length > 0) {
-        this.assign('#result-list', this.subviews.table);
         this.$el.parent('.pane').scroll(this.scroll);
         $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
         $('.pane').scroll(this.scroll);
       }
-      this.assign('#toolbar', this.subviews.toolbar);
     },
 
-    createSubviews: function () {
-      this.subviews.table = new Qorus.TableView({
+    preRender: function () {
+      this.setView(new Qorus.TableView({
         collection: this.collection, 
         template: TableTpl,
         row_template: RowTpl,
         helpers: this.helpers,
         context: { url: this.url },
         dispatcher: Dispatcher
-      });
+      }), '#result-list');
       
-      this.subviews.toolbar = new Toolbar({ date: this.date, url: this.opts.url });
+      this.setView(new Toolbar({ date: this.date, url: this.opts.url }), '#toolbar');
     },
     
     updateContext: function () {
@@ -67,7 +63,7 @@ define([
         has_next: this.collection.hasNextPage()
       };
       // this.subviews.table.render();
-      this.subviews.table.render();
+      this.getView('#result-list').render();
     },
     
     scroll: function () {

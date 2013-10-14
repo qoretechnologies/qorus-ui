@@ -32,20 +32,17 @@ define([
       this.model = new Model({ id: opts.id });
       this.model.fetch();
       this.listenTo(this.model, 'sync', this.render);
-      this.createSubviews();
     },
     
-    createSubviews: function (args) {
+    preRender: function (args) {
       var socket_url = '/jobs/' + this.opts.id;
       
-      console.log(this.opts.id);
-      
-      this.subviews.results = new ResultsView({
+      this.setView(new ResultsView({
         jobid: this.opts.id, 
         date: this.opts.date
-      });
-      this.subviews.log = new Log({ socket_url: socket_url, parent: this });
-      this.subviews.bottombar = new BottomBarView({});
+      }), '#results');
+      this.setView(new Log({ socket_url: socket_url, parent: this }), '#log');
+      this.setView(new BottomBarView({}), '#bottom-bar');
     },
     
     render: function (ctx) {
@@ -55,20 +52,6 @@ define([
       }
       ModelView.__super__.render.call(this, mctx);
       return this;
-    },
-    
-    onRender: function () {
-      this.assign('#results', this.subviews.results);
-      this.assign('#log', this.subviews.log);
-      this.assign('#bottom-bar', this.subviews.bottombar);
-    },
-    
-    clean: function () {
-      if (this.subviews.log) {
-        this.subviews.log.clean();
-      }
-      this.undelegateEvents();
-      this.stopListening();
     },
 
     tabToggle: function(e){
@@ -85,25 +68,21 @@ define([
     loadInfo: function (e) {
       var el = $(e.currentTarget);
       // var dataview = this.currentDataView();
-      var bar = this.subviews.bottombar;
+      var bar = this.getView('#bottom-bar');
+      var self = this;
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
         e.stopPropagation();
         e.preventDefault();
+
         if (el.hasClass('info')) {
           bar.hide();
           el.removeClass('info');
         } else {
-          var oview = new ResultView({ id: el.data('id') });
-          var self = this;
-      
-          e.stopPropagation();
-      
-          // this.subviews.order = oview;
+          var oview = this.setView(new ResultView({ id: el.data('id') }), '#bottom-content', true);
       
           oview.listenTo(oview.model, 'change', function () {
             bar.render();
-            self.assign('#bottom-content', oview);
             bar.show();
 
             // highlite/unhighlite selected row

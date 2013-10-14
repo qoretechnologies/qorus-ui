@@ -16,10 +16,8 @@ define([
     },
                 
     onRender: function () {
-      var _this = this;
+      var slef = this;
       var $modal = this.$('.modal');
-      
-      this.assign('.modal', this.subviews.content);
       
       this.fixHeight();
       
@@ -32,7 +30,7 @@ define([
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
 
-          _this.fixHeight();
+          self.fixHeight();
       });
 
       // assign attributes on modal shown event
@@ -40,7 +38,7 @@ define([
         var max_height = $(window).innerHeight() - $('.modal').position().top * 2;
         var max_width = $(window).innerWidth() - $('.modal').position().top * 2;
         
-        _this.fixHeight();
+        self.fixHeight();
         
         // enable resizable
         $(this).resizable({
@@ -66,7 +64,7 @@ define([
         var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
 
         $body.height(h);
-        console.log(cor, h, $body.height(), $modal.height());
+        debug.log(cor, h, $body.height(), $modal.height());
       }
     },
         

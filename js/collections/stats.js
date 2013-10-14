@@ -34,7 +34,7 @@ define([
       this.params.global = (this.opts.id) ? false : true;
       this.params.grouping = (this.step > 1) ? 'daily' : 'hourly';  
       
-      console.log(this.params.global);
+      debug.log(this.params.global);
     },
     
     url: function () {

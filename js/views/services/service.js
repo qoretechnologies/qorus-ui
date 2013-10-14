@@ -52,21 +52,22 @@ define([
       this.active_tab = $target.attr('href');
     },
     
-    onRender: function () {
+    preRender: function () {
       var url = '/services/' + this.model.id;
-      this.subviews.log = new LogView({ socket_url: url, parent: this });
-      this.assign('#log', this.subviews.log);
+      
+      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       
       if (this.active_tab) {
-        $('a[href='+ this.active_tab + ']').tab('show');
+        this.$('a[href='+ this.active_tab + ']').tab('show');
       }
     },
     
-    off: function () {
-      this.removeViews();
-      this.undelegateEvents();
-      this.stopListening();
-    },
+    // off: function () {
+    //   this.removeViews();
+    //   this.undelegateEvents();
+    //   this.stopListening();
+    //   this.$el.empty();
+    // },
     
     close: function (e) {
       if (e) {
@@ -76,7 +77,7 @@ define([
       this.$el.parent()
         .removeClass('show')
         .data('id', null);
-      $('.info').removeClass('info');
+      this.$('.info').removeClass('info');
 
       this.clean();
     }

@@ -12,7 +12,7 @@ define([
     },
     
     initialize: function (opts) {
-      _.bindAll(this, 'render');
+      _.bindAll(this);
       this.template = Template;
 
       this.opts = opts;      

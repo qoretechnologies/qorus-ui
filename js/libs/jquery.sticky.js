@@ -4,6 +4,12 @@ $.fn.sticky = function(options){
     top: 40,
     el: $(window)
   };
+
+  if (options === 'remove') {
+    $(opts.el).off('scroll');
+    return this;
+  }
+  
   if (options){ $.extend(opts, options); }
   return this.each(function (){
     var o = $(this);
@@ -11,12 +17,10 @@ $.fn.sticky = function(options){
     var oclone = o.clone();
     var $el = $(opts.el);
     
-    console.log("Sticky opts", opts);
-    
     // just added for smooth scrolling
     oclone.addClass('sticky-clone');
     
-    $el.scroll(function(){
+    $el.on('scroll', function(){
         if($el.scrollTop() > pos)
         {
           o.after(oclone);

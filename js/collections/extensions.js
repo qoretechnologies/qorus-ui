@@ -38,7 +38,7 @@ define([
       _.each(groups, function (group) {
         glist[group] = models.where({ group: group });
       });
-      console.log(glist);
+      debug.log(glist);
       return glist;
     }
   });

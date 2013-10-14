@@ -37,7 +37,7 @@ define([
 
       // // TODO: find proper place/way within the view
       // this.on('sync', function(m, r){ 
-      //   // console.log('Orders->Syncing', m.id, m.collection);
+      //   // debug.log('Orders->Syncing', m.id, m.collection);
       //   if (m.collection){
       //     m.collection.trigger('reset');
       //   }
@@ -93,13 +93,13 @@ define([
         .done(
           function (e, ee, eee){
             var msg = sprintf('Order Instance %d %s done', id, action);
-            $.globalMessenger().post(msg);
+            // $.globalMessenger().post(msg);
             _this.fetch();
           }
         ).fail(
           function(e, ee, eee){
             var msg = sprintf('Order Instance %d %s failed', id, action);
-            $.globalMessenger().post({ message: msg, type: 'error' });
+            // $.globalMessenger().post({ message: msg, type: 'error' });
           }
         );        
       }

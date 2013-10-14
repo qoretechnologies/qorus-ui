@@ -23,7 +23,7 @@ define([
       // this.listenTo(Dispatcher, "service:start service:stop service:error", function (e) {
       //   // fetch only if event.info.id equals this model
       //   if (e.info.id == _this.id) {
-      //     console.log('Updating/fetching', _this.id, _this);
+      //     debug.log('Updating/fetching', _this.id, _this);
       //     _this.fetch();
       //   }
       // });
@@ -47,19 +47,19 @@ define([
       if(_.indexOf(this.allowedActions, action) != -1){
         var id = this.id;
         var _this = this;
-        console.log(this.url(), action);
+        debug.log(this.url(), action);
         $.put(this.url(), {'action': action })
-        .done(
-          function (e, ee, eee){
-            var msg = sprintf('Service %d %s done', id, action);
-            $.globalMessenger().post(msg);
-          }
-        ).fail(
-          function(e, ee, eee){
-            var msg = sprintf('Service %d %s failed', id, action);
-            $.globalMessenger().post({ message: msg, type: 'error' });
-          }
-        );        
+          // .done(
+          //   function (e, ee, eee){
+          //     var msg = sprintf('Service %d %s done', id, action);
+          //     // $.globalMessenger().post(msg);
+          //   }
+          // ).fail(
+          //   function(e, ee, eee){
+          //     var msg = sprintf('Service %d %s failed', id, action);
+          //     // $.globalMessenger().post({ message: msg, type: 'error' });
+          //   }
+          // );        
       }
     }
   });

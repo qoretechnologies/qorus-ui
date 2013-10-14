@@ -1,13 +1,11 @@
 // Filename: app.js
 define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'router',
-  'bootstrap',
-  'models/system'
-], function($, _, Backbone, Router, _bootstrap, System){
-  var initialize = function(){	
+  'settings',
+  'router'
+], function(settings, Router){  
+  
+  var initialize = function(){
+    debug.log('initializing router');
     Router.initialize();
   }
 

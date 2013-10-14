@@ -90,11 +90,11 @@ define([
     },
     
     keyDown: function (e) {
-      console.log(e.keyCode);
+      debug.log(e.keyCode);
       if (e.keyCode == 38 || e.keyCode == 40) {
         this.browseHistory(e);
       // } else if (e.keyCode == 9) {
-      //   console.log('going autocomplete');
+      //   debug.log('going autocomplete');
       //   this.autocomplete(e);
       }
     }, 
