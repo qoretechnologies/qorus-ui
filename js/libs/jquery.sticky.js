@@ -6,6 +6,7 @@ $.fn.sticky = function(options){
   };
 
   if (options === 'remove') {
+    $('.sticky-clone').remove();
     $(opts.el).off('scroll');
     return this;
   }

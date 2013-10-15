@@ -33,6 +33,8 @@ define([
     
     clean: function () {
       this.$('.sticky').sticky('remove');
+      $('.datetimepicker').remove();
+      this.dp.remove();
     },
     
     // filter by date init
