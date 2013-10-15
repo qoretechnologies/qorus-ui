@@ -15,16 +15,16 @@ $.fn.sticky = function(options){
   return this.each(function (){
     var o = $(this);
     var pos = o.offset().top - opts.top;
-    var oclone = o.clone();
+    o._clone = o.clone();
     var $el = $(opts.el);
     
     // just added for smooth scrolling
-    oclone.addClass('sticky-clone');
+    o._clone.addClass('sticky-clone');
     
     $el.on('scroll', function(){
         if($el.scrollTop() > pos)
         {
-          o.after(oclone);
+          o.after(o._clone);
           o.width(o.width())
             .addClass('affix')
             .addClass('sticker')

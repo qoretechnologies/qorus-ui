@@ -46,8 +46,11 @@ define([
       $('.sticky').sticky({ el: $('.sticky').parents('.pane') });
     },
     
-    clean: function(){
+    clean: function () {
+      debug.error('cleaning toolbar', this.dp);
       $('.dp').datetimepicker('remove');
+      this.dp.remove();
+      $('.sticky').sticky('remove');
     },
     
     updateStatuses: function(statuses){
@@ -79,7 +82,7 @@ define([
     // filter by date init
     datePicker: function () {
       var view = this;
-      $('.dp').datetimepicker({
+      this.dp = $('.dp').datetimepicker({
           format: 'yyyy-MM-dd hh:ii:ss',
           autoclose: true
       })
@@ -105,6 +108,7 @@ define([
     onDateChanged: function (date) {
       var url = this.url + '/' + moment(date).utc().format('YYYYMMDDHHmmss');
       Backbone.history.navigate(url, { trigger: true });
+      this.off();
     },
     
     addMultiSelect: function () {

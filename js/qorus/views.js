@@ -9,7 +9,8 @@ define([
   'qorus/helpers',
   'text!../../templates/common/table.html',
   'text!../../templates/common/tablerow.html',
-  'text!../../templates/common/nodata.html'
+  'text!../../templates/common/nodata.html',
+  'bootstrap'
 ], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -47,6 +48,7 @@ define([
     helpers: {},
     options: {},
     model_name: null,
+    opts: {},
     
     events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
@@ -86,21 +88,21 @@ define([
       if (remove !== false) this.remove();
     },
     
-    // manages subviews
-    assign : function (selector, view) {
-      var selectors;
-      if (_.isObject(selector)) {
-        selectors = selector;
-      }
-      else {
-        selectors = {};
-        selectors[selector] = view;
-      }
-      if (!selectors) return;
-      _.each(selectors, function (view, selector) {
-          view.setElement(this.$(selector)).render();
-        }, this);
-    },
+    // // manages subviews
+    // assign : function (selector, view) {
+    //   var selectors;
+    //   if (_.isObject(selector)) {
+    //     selectors = selector;
+    //   }
+    //   else {
+    //     selectors = {};
+    //     selectors[selector] = view;
+    //   }
+    //   if (!selectors) return;
+    //   _.each(selectors, function (view, selector) {
+    //       view.setElement(this.$(selector)).render();
+    //     }, this);
+    // },
     
     render: function (ctx) {
       this.preRender();
@@ -128,7 +130,7 @@ define([
         view.off();
       } else if (_.isArray(view)) {
         _.each(view, function (v) {
-          v.off
+          v.off();
         });
       }
     },
@@ -160,12 +162,12 @@ define([
           view.setElement(self.$(idx)).render();
         } else if (_.isArray(view)) {
           var frag = document.createDocumentFragment();
+          debug.log('creating fragment', idx, frag);
           _.each(view, function (v) {
             var fc = v.el.firstElementChild;
             frag.appendChild(v.setElement(fc).el);
-            // self.$(idx).append(v.render().$el.html());
           });
-          self.$(idx).append(frag);
+          $(frag).appendTo(self.$(idx));
           frag = null;
         }
       });
@@ -288,8 +290,10 @@ define([
         this.date = date;
       }
       
+      this.opts.date = this.date;
+      
       if (collection) {
-        this.collection = new collection({ date: this.date, opts: this.opts });
+        this.collection = new collection(this.opts);
         
         this.listenToOnce(this.collection, 'sync', function () { self.collection.trigger('resort') });
         this.listenToOnce(this.collection, 'error', this.render);
@@ -627,7 +631,7 @@ define([
     
     render: function (ctx) {
       debug.log(this, this.colleciton);
-      if (this.collection.size() < 1) {
+      if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
       } else {
         this.opts.template = this.opts.template;
@@ -679,28 +683,14 @@ define([
       
       _.each(this.collection.models, function (m) {
         // if (ctr <= 2) {
-          var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');          
+          var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');
         // }
         ctr++;
       });
       if (render) {
         this.render();
       }
-    },
-    
-    
-    clean: function () {
-      this.collection = null; 
     }
-    // clean: function () {
-    //   debug.log("Cleaning table");
-    //   debug.log('Table subviews', this);
-    //   var self = this;
-    //   _.each(this.subviews, function (sbv) {
-    //     sbv.off();          
-    //   });
-    //   this.stopListening();
-    // }
   });
 
   var RowView = View.extend({
@@ -734,23 +724,23 @@ define([
         , self = this;
 
       // update row on model change
-      // this.listenTo(this.model, 'change', function () {
-      //   var timeout = 500;
-      //   self._rtimer_buffer = self._rtimer_buffer || 0;
-      //   
-      //   if (self._rtimer) {
-      //     clearTimeout(self._rtimer);
-      //     self._rtimer_buffer++;
-      //   }
-      // 
-      //   if (self._rtimer_buffer >= 100) timeout = 0;
-      // 
-      //   self._rtimer = setTimeout(function () {
-      //     // debug.log('delayed render of row', self.model.id, new Date());
-      //     self.update();
-      //     self._rtimer_buffer = 0;
-      //   }, timeout);
-      // });
+      this.listenTo(this.model, 'change', function () {
+        var timeout = 500;
+        self._rtimer_buffer = self._rtimer_buffer || 0;
+        
+        if (self._rtimer) {
+          clearTimeout(self._rtimer);
+          self._rtimer_buffer++;
+        }
+      
+        if (self._rtimer_buffer >= 100) timeout = 0;
+      
+        self._rtimer = setTimeout(function () {
+          // debug.log('delayed render of row', self.model.id, new Date());
+          self.update();
+          self._rtimer_buffer = 0;
+        }, timeout);
+      });
 
       
       this.render();

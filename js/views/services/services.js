@@ -108,7 +108,6 @@ define([
     },
     
     showDetail: function (e) {
-      var _this = this;
       var $target = $(e.currentTarget);
       var $detail = $('#service-detail');
       var top = $target.offset().top; // + $target.height()/2;
@@ -121,24 +120,21 @@ define([
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
-          if (view) {
-            view.close();
-          }
+          $detail.removeClass('show');
         } else {
-          this.removeView('#service-detail .content');
           // add info class to selected row
           $target.addClass('info');
-
-          // set current row id
-          $detail.data('id', $target.data('id'));
-
+          
+          // console.log('setting view', $target.data('id'), this.collection.get($target.data('id')), this.context);
           // init detail view
           view = this.setView(new ServiceView({ 
               model: this.collection.get($target.data('id')), 
               context: this.context 
             }), '#service-detail .content', true);
-
-          $('#service-detail').addClass('show');
+          
+          // set current row id
+          $detail.data('id', $target.data('id'));
+          $detail.addClass('show');
         }
       }
       
@@ -164,7 +160,7 @@ define([
     },
     
     openExecuteModal: function (e) {
-      this.removeView('#function-execute');
+      // this.removeView('#function-execute');
       
       var $target = $(e.currentTarget);
 

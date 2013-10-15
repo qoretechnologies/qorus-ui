@@ -200,20 +200,17 @@ define([
     },
     
     comparator: function (c1, c2) {
+      // needs fix
+      var r = (this.sort_order == 'des') ? -1 : 1;
+      var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
+      var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
+      
+      if (k1[0] < k2[0]) return -1 * r;
+      if (k1[0] > k2[0]) return 1 * r;
+      if (k1[1] > k2[1]) return -1 * r;
+      if (k1[1] < k2[1]) return 1 * r;
       return 0;
     },
-    // comparator: function (c1, c2) {
-    //   // needs fix
-    //   var r = (this.sort_order == 'des') ? -1 : 1;
-    //   var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
-    //   var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
-    //   
-    //   if (k1[0] < k2[0]) return -1 * r;
-    //   if (k1[0] > k2[0]) return 1 * r;
-    //   if (k1[1] > k2[1]) return -1 * r;
-    //   if (k1[1] < k2[1]) return 1 * r;
-    //   return 0;
-    // },
     
     sortByKey: function (key, ord, cb) {
       if (key) {

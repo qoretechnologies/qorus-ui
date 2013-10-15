@@ -10,7 +10,8 @@ define([
     url: settings.REST_API_PREFIX + '/services/',
     model: Model,
     
-  	initialize: function(opts){
+  	initialize: function (opts){
+      debug.log('Service collection opts', opts);
       this.sort_key = 'threads';
       this.sort_order = 'des';
       this.sort_history = ['name',];

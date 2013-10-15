@@ -48,12 +48,12 @@ define([
     
     preRender: function () {
       var url = '/workflows/' + this.model.id;
-      // this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
     
     createDiagram: function () {
       var view;
-      this.removeView('#steps');
+      // this.removeView('#steps');
       
       view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
       view.render();
@@ -72,7 +72,7 @@ define([
       }
       
       if ($target.hasClass('log')) {
-        this.getViews('#log').fixHeight();
+        this.getView('#log').fixHeight();
       }
 
       this.active_tab = $target.attr('href');
@@ -94,7 +94,7 @@ define([
     off: function () {
       this.removeViews();
       this.undelegateEvents();
-      this.stopListening;
+      this.stopListening();
     },
     
     editOption: function (e) {

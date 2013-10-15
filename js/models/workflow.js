@@ -133,15 +133,13 @@ define([
         }
         
         $.put(this.url(), params, null, 'application/json')
-          // .done(
-          //   function (e, ee, eee){
-          //     var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
-          //     // $.globalMessenger().post(msg);
-          //     if (_.isFunction(callback)) {
-          //       callback();
-          //     }
-          //   }
-          // );        
+          .done(
+            function (e, ee, eee){
+              if (_.isFunction(callback)) {
+                callback();
+              }
+            }
+          );
       }
     },
     

@@ -62,14 +62,15 @@ define([
       _.extend(this.context, opts);
 
       // call super method
-      // ListView.__super__.initialize.call(this, Collection, opts.date);
+      ListView.__super__.initialize.call(this, Collection, opts.date);
       // add element loader
       this.loader = new Qorus.Loader({ el: $('#wrap') });
       this.loader.render();
 
-      this.collection = new Collection(this.opts);
-      this.listenTo(this.collection, 'sync', this.updateContext, this);
-      this.collection.fetch();
+      // this.collection = new Collection(this.opts);
+      // this.stopListening(this.collection, 'resort');
+      // this.listenTo(this.collection, 'resort', this.updateContext);
+      // this.collection.fetch();
     },
     
     preRender: function () {

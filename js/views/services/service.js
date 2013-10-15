@@ -35,6 +35,7 @@ define([
       }
       
       this.listenTo(this.model, 'change', this.render);
+      
     },
 
     render: function (ctx) {
@@ -54,32 +55,17 @@ define([
     
     preRender: function () {
       var url = '/services/' + this.model.id;
-      
-      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      var log = this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       
       if (this.active_tab) {
         this.$('a[href='+ this.active_tab + ']').tab('show');
       }
     },
     
-    // off: function () {
-    //   this.removeViews();
-    //   this.undelegateEvents();
-    //   this.stopListening();
-    //   this.$el.empty();
-    // },
-    
-    close: function (e) {
-      if (e) {
-        e.preventDefault();  
-      }
-      
-      this.$el.parent()
-        .removeClass('show')
-        .data('id', null);
-      this.$('.info').removeClass('info');
-
-      this.clean();
+    off: function () {
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
     }
     
   });

@@ -21,10 +21,12 @@ define([
     window.debug = window.console;
   } else {
     window.debug = {
-      'log': function () {}
+      'log': function () {},
+      'error': function () {
+        console.log.call(console, arguments);
+      }
     }
   }
-  window.debug.log('shit');
   
   return settings;
 });

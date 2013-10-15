@@ -118,8 +118,6 @@ define([
       var $target = $(e.currentTarget);
       
       if ($target.data) {
-        this.removeView('#modal')
-        
         view = this.setView(new Modal({ workflow: this.collection.get($target.data('id')) }), '#modal', true);
         view.render();
         view.open();
@@ -252,7 +250,6 @@ define([
             view.close();
           }
         } else {
-          this.removeView('#worfklow-detail .content');
           // add info class to selected row
           $target.addClass('info');
 

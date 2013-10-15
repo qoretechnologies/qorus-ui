@@ -31,7 +31,7 @@ define([
       
       ListView.__super__.initialize.call(this, Collection, date);
       
-      this.listenToOnce(this.collection, 'sync', this.render);
+      // this.listenToOnce(this.collection, 'sync', this.render);
 
       this.listenTo(Dispatcher, 'job:instance_stop', this.updateModels);    
     },

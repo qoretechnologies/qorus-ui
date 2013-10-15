@@ -9,8 +9,7 @@ define([
   'bootstrap.multiselect'
 ], function($, _, Backbone, Qorus, Template, date, moment){
   var Toolbar = Qorus.View.extend({
-    context: {
-    },
+    context: {},
     
     events: {
       // "click button.date": "setDate",
@@ -27,7 +26,7 @@ define([
     
     onRender: function () {
       this.datePicker();
-      $('.sticky').sticky();
+      console.log($('.sticky').sticky());
       $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     

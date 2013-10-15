@@ -48,18 +48,7 @@ define([
         var id = this.id;
         var _this = this;
         debug.log(this.url(), action);
-        $.put(this.url(), {'action': action })
-          // .done(
-          //   function (e, ee, eee){
-          //     var msg = sprintf('Service %d %s done', id, action);
-          //     // $.globalMessenger().post(msg);
-          //   }
-          // ).fail(
-          //   function(e, ee, eee){
-          //     var msg = sprintf('Service %d %s failed', id, action);
-          //     // $.globalMessenger().post({ message: msg, type: 'error' });
-          //   }
-          // );        
+        $.put(this.url(), {'action': action });     
       }
     }
   });

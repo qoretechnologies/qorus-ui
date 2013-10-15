@@ -157,9 +157,6 @@ define([
     
     drawCharts: function () {
       // add performance chart subviews
-      this.removeView('#stats-day');
-      this.removeView('#stats-week');
-      this.removeView('#stats-month');
       this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id })), '#stats-day', true);
       this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 })), '#stats-week', true);
       this.setView(new ChartView({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 })), '#stats-month', true);

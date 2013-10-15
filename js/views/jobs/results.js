@@ -28,9 +28,9 @@ define([
 
       this.opts.url = '/jobs/view/' + opts.jobid;
 
-      this.collection = new Collection(opts);
-      this.listenTo(this.collection, 'sync', this.updateContext, this);
-      this.collection.fetch();
+      // this.collection = new Collection(opts);
+      // this.listenTo(this.collection, 'sync', this.updateContext, this);
+      // this.collection.fetch();
       
       this.render();
     },

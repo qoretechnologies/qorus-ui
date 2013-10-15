@@ -3,6 +3,13 @@ define([
   'underscore',
   'qorus/qorus'
 ], function($, _, Qorus){
+  // var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
+  // $.globalMessenger().post(msg);
+  // var msg = sprintf('Service %d %s failed', id, action);
+  // $.globalMessenger().post({ message: msg, type: 'error' });
+  // var msg = sprintf('Job %d %s done', id, action);
+  // $.globalMessenger().post(msg);
+  
   Dispatcher = Backbone.Model.extend({
     add: function (e) {
       this.dispatch(e);

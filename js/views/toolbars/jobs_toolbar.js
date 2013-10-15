@@ -29,8 +29,8 @@ define([
     
     onRender: function () {
       this.datePicker();
-      $('.sticky').sticky();
-      $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+      this.$('.sticky').sticky();
+      this.$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     
     // filter by date init
@@ -46,7 +46,7 @@ define([
     },
     
     onDateChanged: function (date) {
-      $('.datetimepicker').remove();
+      this.$('.datetimepicker').remove();
       this.dp.remove();
       Backbone.history.navigate('/jobs/' + moment(date).utc()
           .format('YYYYMMDDHHmmss'), {trigger: true});
@@ -57,6 +57,12 @@ define([
       if (el.data('url')) {
         Backbone.history.navigate(el.data('url'), {trigger: true});       
       }
+    },
+    
+    clean: function () {
+      this.$('.datetimepicker').remove();
+      this.dp.remove();
+      this.$('.sticky').sticky('remove');
     }
   });
   return Toolbar;

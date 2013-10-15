@@ -15,6 +15,8 @@ define([
     // },
     
     initialize: function (opts) {
+      // reset views
+      this.views = {};
       this.opts = opts;
       _.bindAll(this);
       

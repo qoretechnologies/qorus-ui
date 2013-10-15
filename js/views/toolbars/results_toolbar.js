@@ -46,6 +46,8 @@ define([
     
     clean: function(){
       $('.dp').datetimepicker('remove');
+      this.dp.remove();
+      $('.sticky').sticky('remove');
     },
     
     updateStatuses: function(statuses){
@@ -83,7 +85,7 @@ define([
     // filter by date init
     datePicker: function(){
       var view = this;
-      $('.dp').datetimepicker({
+      this.dp = $('.dp').datetimepicker({
           format: 'yyyy-MM-dd hh:ii:ss',
           autoclose: true
       })

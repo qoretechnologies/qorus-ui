@@ -22,6 +22,11 @@ define([
       this.template = Template;
       this.on('render', function(e, o){ $('.sticky').sticky({ el: $('.sticky').parents('.pane') }); });
     },
+    
+    clean: function(){
+      $('.sticky').sticky('remove');
+    },
+    
     navigateTo: function (e) {
       var el = $(e.currentTarget);
       if (el.data('url')){
