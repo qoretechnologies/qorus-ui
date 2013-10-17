@@ -115,7 +115,7 @@ define([
         _.extend(this.context, Helpers, this.helpers);
 
         var tpl = _.template(this.template, this.context);
-        this.$el.html(tpl);
+        this.$el.append(tpl);
         this.trigger('render', this, {});
       }
       this.renderViews();

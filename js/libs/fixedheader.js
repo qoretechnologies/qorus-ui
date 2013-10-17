@@ -44,6 +44,7 @@ $.fn.fixedHeader = function (options) {
     if (!isFixed) setTimeout(function () {  $win.scrollTop($win.scrollTop() - 47) }, 10);
   })
 
+  // check this
   $head.clone().removeClass('header').addClass('header-copy header-fixed').appendTo(o);
   var header_width = $head.width();
   o.find('thead.header-copy').width(header_width);

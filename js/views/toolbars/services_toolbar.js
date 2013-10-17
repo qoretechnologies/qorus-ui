@@ -26,7 +26,7 @@ define([
     
     onRender: function () {
       this.datePicker();
-      console.log($('.sticky').sticky());
+      $('.sticky').sticky();
       $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     

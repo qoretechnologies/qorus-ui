@@ -6,7 +6,9 @@ $.fn.sticky = function(options){
   };
 
   if (options === 'remove') {
-    $('.sticky-clone').remove();
+    this.each(function () { 
+      $(this).data('_clone').remove();
+    });
     $(opts.el).off('scroll');
     return this;
   }
@@ -15,16 +17,16 @@ $.fn.sticky = function(options){
   return this.each(function (){
     var o = $(this);
     var pos = o.offset().top - opts.top;
-    o._clone = o.clone();
+    var clone = o.data('_clone', o.clone());
     var $el = $(opts.el);
     
     // just added for smooth scrolling
-    o._clone.addClass('sticky-clone');
+    clone.addClass('sticky-clone');
     
     $el.on('scroll', function(){
         if($el.scrollTop() > pos)
         {
-          o.after(o._clone);
+          o.after(clone);
           o.width(o.width())
             .addClass('affix')
             .addClass('sticker')
@@ -32,7 +34,7 @@ $.fn.sticky = function(options){
         }
         else
         {
-          o.next('.sticky-clone').hide();
+          o.next('.sticky-clone').remove();
           o.removeClass('affix')
             .removeClass('sticker');
         }
