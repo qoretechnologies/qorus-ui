@@ -325,7 +325,13 @@
 				this.viewMode = Math.max(this.minViewMode, Math.min(2, this.viewMode + dir));
 			}
 			this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).show();
-		}
+		},
+    
+    remove: function (e) {
+      console.log('removing picker');
+      this.picker.remove();
+      delete this.picker;
+    }
 	};
 	
 	$.fn.datepicker = function ( option, val ) {

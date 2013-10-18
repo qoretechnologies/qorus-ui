@@ -43,14 +43,14 @@ define([
     onRender: function () {
       this.datePicker();
       this.addMultiSelect();
-      $('.sticky').sticky({ el: $('.sticky').parents('.pane') });
+      // $('.sticky').sticky({ el: $('.sticky').parents('.pane') });
     },
     
     clean: function () {
-      debug.error('cleaning toolbar', this.dp);
+      // debug.error('cleaning toolbar', this.dp);
       $('.dp').datetimepicker('remove');
+      $('#statuses').multiselect('destroy');
       this.dp.remove();
-      $('.sticky').sticky('remove');
     },
     
     updateStatuses: function(statuses){

@@ -20,7 +20,7 @@ define([
     },
     
     initialize: function (opts) {
-      this.opts = opts;
+      var model = opts.model;
       this.views = {};
       _.bindAll(this);
       
@@ -30,9 +30,10 @@ define([
         _.extend(this.context, opts.context);
       }
       
-      this.model = new Model({ id: this.opts.model.id });
+      console.log(model);
+      this.model = model;
       this.listenTo(this.model, 'change', this.render);
-      this.model.fetch();
+      // this.model.fetch();
     },
 
     render: function (ctx) {

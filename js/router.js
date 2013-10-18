@@ -33,7 +33,6 @@ define([
     showCloseButton: true
   }
 
-
   var AppRouter = Backbone.Router.extend({
     currentView: null,
     routes: Urls.routes,
@@ -49,10 +48,8 @@ define([
       if (this.currentView) {
         debug.log('cleaning current view');
         this.currentView.off();
-        this.currentView.undelegateEvents();
         this.currentView.remove();
-        // console.log(this.currentView.el.parentNode, this.currentView.el.children, this.currentView._events);
-        debug.log('removed view', this.currentView);
+        delete this.currentView;
       }
     },
     

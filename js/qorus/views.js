@@ -85,24 +85,11 @@ define([
       // this.context = null;
       
       View.__super__.off.call(this);
-      if (remove !== false) this.remove();
+      if (remove !== false) {
+        // this.$el.remove();
+        this.remove();
+      }
     },
-    
-    // // manages subviews
-    // assign : function (selector, view) {
-    //   var selectors;
-    //   if (_.isObject(selector)) {
-    //     selectors = selector;
-    //   }
-    //   else {
-    //     selectors = {};
-    //     selectors[selector] = view;
-    //   }
-    //   if (!selectors) return;
-    //   _.each(selectors, function (view, selector) {
-    //       view.setElement(this.$(selector)).render();
-    //     }, this);
-    // },
     
     render: function (ctx) {
       this.preRender();
@@ -115,7 +102,8 @@ define([
         _.extend(this.context, Helpers, this.helpers);
 
         var tpl = _.template(this.template, this.context);
-        this.$el.append(tpl);
+        // console.log('rendering', tpl.slice(0,100), this.el.id);
+        this.$el.html(tpl);
         this.trigger('render', this, {});
       }
       this.renderViews();
@@ -127,12 +115,15 @@ define([
     removeView: function (id) {
       var view = this.getView(id);
       if (view instanceof Backbone.View) {
+        console.log(id, 'is backbone view removing');
         view.off();
       } else if (_.isArray(view)) {
+        console.log(id, 'is array');
         _.each(view, function (v) {
           v.off();
         });
       }
+      if (view) delete this.views[id];
     },
     
     removeViews: function () {
@@ -148,7 +139,7 @@ define([
           view.off();
         }
       });
-      // this.views = {};
+      this.views = {};
     },
     
     getView: function (id) {
@@ -233,12 +224,12 @@ define([
       this.stopListening();
     },
     
-    updateModels: function (e) {
-      if (e.info) {
-        var m = this.collection.get(e.info.id);
-        debug.log('Updating model', m);
-        m.fetch();
-      }
+    updateModels: function () {
+      // if (e.info) {
+      //   var m = this.collection.get(e.info.id);
+      //   debug.log('Updating model', m);
+      //   m.fetch();
+      // }
     },
     
     doNothing: function (e) {
@@ -256,7 +247,6 @@ define([
       'click .check-all': 'checkall',
       'click .uncheck-all': 'checkall',
       'click .invert': 'invert',
-      'click th': 'sortView',
       'submit .form-search': 'search',
       'keyup .search-query': 'search',
       "click button[data-option]": "setOption",
@@ -295,11 +285,8 @@ define([
       if (collection) {
         this.collection = new collection(this.opts);
         
-        this.listenToOnce(this.collection, 'sync', function () { self.collection.trigger('resort') });
+        this.listenToOnce(this.collection, 'sync', this.render);
         this.listenToOnce(this.collection, 'error', this.render);
-        
-        // re-render after sort - TODO: fix - actually renders twice with first fetch :-/
-        this.listenTo(this.collection, 'resort', this.render);
         
         this.collection.fetch();
         
@@ -344,7 +331,6 @@ define([
       this.renderViews();
       this.setTitle();
       this.onRender();
-      this.sortIcon();
       debug.log('Finished rendering', this);
       return this;
     },
@@ -533,37 +519,6 @@ define([
       e.preventDefault();
     },
     
-    // enable table fixed header
-    fixHeader: function () {
-      $(this.el).find('table').fixedHeaderTable();
-    },
-    
-    // sort view
-    sortView: function (e) {
-      debug.log("Sort by ", e);
-      var el = $(e.currentTarget);
-      if (el.data('sort')) {
-        this.collection.sortByKey(el.data('sort'), el.data('order'));
-      }
-    },
-    
-    sortIcon: function () {
-        var c = this;
-        var key = c.collection.sort_key;
-        var order = c.collection.sort_order;
-        var el = c.$el.find('th[data-sort="' + key + '"]');
-        c.$el.find('th i.sort')
-          .remove();
-
-        if (order == 'des') {
-          el.attr('data-order', 'asc');
-          el.append('<i class="sort icon-chevron-down"></i>');
-        } else {
-          el.attr('data-order', 'des');
-          el.append('<i class="sort icon-chevron-up"></i>');
-        }
-    },
-    
     search: function (e) {
       var $target = $(e.currentTarget);
       var $el = $(this.el);
@@ -594,6 +549,9 @@ define([
   });
 
   var TableView = View.extend({
+    additionalEvents: {
+      'click th': 'sortView',
+    },
     template: TableTpl,
     row_template: undefined,
     dispatcher: undefined,
@@ -605,7 +563,7 @@ define([
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
-      this.listenTo(this.collection, 'resort', this.render);
+      // this.listenTo(this.collection, 'resort', this.render);
       
       if (_.has(opts, 'template')) {
         this.template = opts.template;
@@ -659,6 +617,7 @@ define([
     onRender: function () {
       // this.createRows();
       // this.update();
+      this.sortIcon();
       this.$el.scroll(this.scroll);
     },
     
@@ -678,7 +637,12 @@ define([
       var self = this;
       var ctr = 0;
       if (render === undefined) render = true;
+      // if ($tbody) {
+      //   console.log($tbody.html());
+      // }
+
       this.removeView('tbody');
+      // console.log(this.views);
       debug.log('TableView views ->', this.views);
       
       _.each(this.collection.models, function (m) {
@@ -690,6 +654,37 @@ define([
       if (render) {
         this.render();
       }
+    },
+    
+    // enable table fixed header
+    fixHeader: function () {
+      $(this.el).find('table').fixedHeaderTable();
+    },
+    
+    // sort view
+    sortView: function (e) {
+      debug.log("Sort by ", e);
+      var el = $(e.currentTarget);
+      if (el.data('sort')) {
+        this.collection.sortByKey(el.data('sort'), el.data('order'));
+      }
+    },
+    
+    sortIcon: function () {
+        var c = this;
+        var key = c.collection.sort_key;
+        var order = c.collection.sort_order;
+        var el = c.$el.find('th[data-sort="' + key + '"]');
+        c.$el.find('th i.sort')
+          .remove();
+
+        if (order == 'des') {
+          el.attr('data-order', 'asc');
+          el.append('<i class="sort icon-chevron-down"></i>');
+        } else {
+          el.attr('data-order', 'des');
+          el.append('<i class="sort icon-chevron-up"></i>');
+        }
     }
   });
 

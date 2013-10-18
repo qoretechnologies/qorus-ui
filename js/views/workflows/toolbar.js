@@ -49,12 +49,12 @@ define([
     // filter by date init
     datePicker: function(){
       var view = this;
-      $('.dp').datetimepicker({
-          format: 'yyyy-mm-dd hh:ii:ss',
-      })
-      .on('changeDate', function(e){
-          view.onDateChanged(e.date.toISOString(), {});
-      });
+      // $('.dp').datetimepicker({
+      //     format: 'yyyy-mm-dd hh:ii:ss',
+      // })
+      // .on('changeDate', function(e){
+      //     view.onDateChanged(e.date.toISOString(), {});
+      // });
     },
     statusFilter: function(){
       var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');

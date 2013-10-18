@@ -6,10 +6,11 @@ $.fn.sticky = function(options){
   };
 
   if (options === 'remove') {
+    console.log($(this).length, this.length);
     this.each(function () { 
-      $(this).data('_clone').remove();
+      $(this).removeData();
+      $(opts.el).off('scroll');
     });
-    $(opts.el).off('scroll');
     return this;
   }
   

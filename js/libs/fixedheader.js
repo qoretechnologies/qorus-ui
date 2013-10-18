@@ -7,8 +7,14 @@ $.fn.fixedHeader = function (options) {
    //bgColor: 'white'
  };
  if (options === 'remove') {
-   $(config.el).off('scroll');
-   $('thead.header').off('click');
+   console.log('removing fixed header', $(this).data('_clone'));
+   this.each(function () {
+     var o = $(this);
+     o.removeData();
+     $(config.el).off('scroll');
+   });
+   
+   // $('thead.header').off('click');
    return this;
  }
  if (options){ $.extend(config, options); }
@@ -40,12 +46,19 @@ $.fn.fixedHeader = function (options) {
   $win.on('scroll', processScroll);
 
   // hack sad times - holdover until rewrite for 2.1
-  $head.on('click', function () {
-    if (!isFixed) setTimeout(function () {  $win.scrollTop($win.scrollTop() - 47) }, 10);
-  })
+  // $head.on('click', function () {
+  //   if (!isFixed) setTimeout(function () {  $win.scrollTop($win.scrollTop() - 47) }, 10);
+  // })
 
   // check this
-  $head.clone().removeClass('header').addClass('header-copy header-fixed').appendTo(o);
+  
+  var $clone = $head.clone();
+  o.data('_clone', $clone);
+  $clone
+    .removeClass('header')
+    .addClass('header-copy header-fixed')
+    .appendTo(o);
+    
   var header_width = $head.width();
   o.find('thead.header-copy').width(header_width);
   o.find('thead.header > tr:first > th').each(function (i, h){

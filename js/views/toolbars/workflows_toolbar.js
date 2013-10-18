@@ -23,15 +23,22 @@ define([
     },
     
     onRender: function () {
-      this.datePicker();
-      $('.sticky').sticky();
-      $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+      // this.datePicker();
+      $('.sticky')
+        .affix()
+        .width(function () { return $(this).parent().width(); });
     },
     
     clean: function () {
-      this.$('.sticky').sticky('remove');
-      $('.datetimepicker').remove();
-      this.dp.remove();
+      // this.$('.sticky').sticky('remove');
+      // $('.datetimepicker').remove();
+      // this.dp.remove();
+    },
+    
+    off: function () {
+      // console.log('removing toolbar');
+      Toolbar.__super__.off.call(this);
+      // console.log(this.$el, this.el);
     },
     
     // filter by date init

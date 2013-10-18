@@ -33,19 +33,19 @@ define([
     clean: function () {
       this.$('.sticky').sticky('remove');
       $('.datetimepicker').remove();
-      this.dp.remove();
+      // this.dp.remove();
     },
     
     // filter by date init
     datePicker: function () {
       var view = this;
-      this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-mm-dd hh:ii:ss',
-          autoclose: true
-      });
-      this.dp.on('changeDate', function (e) {
-        view.onDateChanged(e.date.toISOString(), {});
-      });
+      // this.dp = $('.dp').datetimepicker({
+      //     format: 'yyyy-mm-dd hh:ii:ss',
+      //     autoclose: true
+      // });
+      // this.dp.on('changeDate', function (e) {
+      //   view.onDateChanged(e.date.toISOString(), {});
+      // });
     },
     
     onDateChanged: function (date) {

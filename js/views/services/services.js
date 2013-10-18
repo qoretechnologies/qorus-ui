@@ -66,7 +66,7 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       }), '#service-list');
-      this.setView(new Toolbar(), '#service-toolbar');
+      // this.setView(new Toolbar(), '#service-toolbar');
     },
 
     onRender: function () {
@@ -77,7 +77,7 @@ define([
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
         this.$('#service-detail').outerWidth(w);        
       }
-      this.$('.table-fixed').fixedHeader({ topOffset: 80 });
+      // this.$('.table-fixed').fixedHeader({ topOffset: 80 });
     },
 
     setOption: function (e) {
@@ -187,6 +187,7 @@ define([
     },
     
     clean: function () {
+      // console.log(this.$('.table-fixed'));
       this.$('.table-fixed').fixedHeader('remove');
     }
     

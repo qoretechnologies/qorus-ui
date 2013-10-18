@@ -101,7 +101,7 @@ define([
     
     onRender: function () {
       debug.log(this.views);
-      this.$('.table-fixed').fixedHeader({ topOffset: 80 });
+      // this.$('.table-fixed').fixedHeader({ topOffset: 80 });
       
       if ($('[data-sort="version"]')) {
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
@@ -258,7 +258,9 @@ define([
           
           // init detail view
           // debug.log(this.$('#workflow-detail'), this.$('#workflow-detail .content'));
-          view = this.setView(new WorkflowView({ model: this.collection.get($target.data('id')), context: this.context }), '#workflow-detail .content', true);
+          var model = this.collection.get($target.data('id'));
+          console.log(model);
+          view = this.setView(new WorkflowView({ model: model, context: this.context }), '#workflow-detail .content', true);
           this.$('#workflow-detail').addClass('show');
         }
       }

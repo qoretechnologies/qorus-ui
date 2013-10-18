@@ -606,6 +606,8 @@ aside {
 .toolbar {
   margin: 0;
   padding-bottom: 5px;
+  z-index: 1020;
+  background-color: #fff;
 }
 
 .table-condensed td {

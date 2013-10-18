@@ -44,7 +44,7 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       }), '#job-list');
-      this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
+      // this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
     },
 
     reSchedule: function (ev) {
