@@ -88,15 +88,9 @@
   </div>
 
   <div class="tab-pane" id="data">
-      <div class="accordion" id="accordion">
-        <div class="accordion-group">
-          <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-              Order Info
-            </a>
-          </div>
-          <div id="collapse1" class="accordion-body collapse in">
-            <div class="accordion-inner">
+    <div>
+      <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#wfdata-orderinfo">Order Info</button>
+      <div id="wfdata-orderinfo" class="collapse in">
                 <% if (it.keys) { %>
                   <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                   <div class="treeview">
@@ -108,22 +102,16 @@
                 <% } else { %>
                 <p>No data</p>
                 <% } %>
-                </table>
-            </div>
-        </div>
       </div>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-            Static data
-          </a>
-        </div>
-        <div id="collapse2" class="accordion-body collapse">
-          <div class="accordion-inner">
+    </div>
+    
+    <div>
+      <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#wfdata-staticdata">Static Data</button>
+      <div id="wfdata-staticdata" class="collapse in">
               <% if (it.staticdata) { %>
                 <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                 <div class="treeview">
-                    <%= createNestedList(it.staticdata) %>  
+                    <%= createNestedList(it.staticdata) %>
                 </div>
                 <div class="textview">
                     <textarea class="span12"><%= createNestedListAsText(it.staticdata) %></textarea>
@@ -131,21 +119,16 @@
               <% } else { %>
               <p>No data</p>
               <% } %>
-          </div>
-        </div>
       </div>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-            Dynamic data
-          </a>
-        </div>
-        <div id="collapse3" class="accordion-body collapse">
-          <div class="accordion-inner">
+    </div>
+
+    <div> 
+      <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#wfdata-dynamicdata">Dynamic Data</button>
+      <div id="wfdata-dynamicdata" class="collapse in">
               <% if (it.dynamicdata) { %>
                 <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
                 <div class="treeview">
-                    <%= createNestedList(it.dynamicdata) %>  
+                    <%= createNestedList(it.dynamicdata) %>
                 </div>
                 <div class="textview">
                     <textarea class="span12"><%= createNestedListAsText(it.dynamicdata) %></textarea>
@@ -153,10 +136,9 @@
               <% } else { %>
               <p>No data</p>
               <% } %>
-          </div>
-        </div>
       </div>
     </div>
+
   </div>
 
   <div class="tab-pane" id="errors">
