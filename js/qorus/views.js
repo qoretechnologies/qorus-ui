@@ -742,7 +742,7 @@ define([
     },
         
     render: function(ctx) {
-      this.context.item = this.model;
+      this.context.item = this.model.toJSON();
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
       return this;

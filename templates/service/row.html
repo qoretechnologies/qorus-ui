@@ -1,6 +1,4 @@
 <% 
-  var orig_item = item;
-  var item = item.toJSON(); 
   item.id = item.serviceid;
 %>
   <tr class="table-row service-row" data-id="<%= item.id %>">
@@ -13,7 +11,7 @@
           <i class="icon-user" data-toggle="tooltip" title="User"></i>
           <% } %>
       </td>
-      <td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %></td>
+      <td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: item.actions }) %></td>
       <td class="threads"><%= item.threads %></td>                
       <td class="name"><strong><%= item.name %></strong></td>
       <td class="version"><%= item.version %></td>

@@ -5,8 +5,8 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'utils',
-  'later.recur',
-  'later.cron'
+  // 'later.recur',
+  // 'later.cron'
 ], function(settings, _, moment, Qorus, Dispatcher, utils){
 
   var Model = Qorus.Model.extend({

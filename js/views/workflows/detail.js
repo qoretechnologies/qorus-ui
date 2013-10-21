@@ -30,7 +30,7 @@ define([
         _.extend(this.context, opts.context);
       }
       
-      console.log(model);
+      // console.log(model);
       this.model = model;
       this.listenTo(this.model, 'change', this.render);
       // this.model.fetch();

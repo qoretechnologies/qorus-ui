@@ -46,6 +46,9 @@ define([
     initialize: function () {
       var self = this;
       _.bindAll(this);
+      this.views = {};
+      this.opts = {};
+      this.context = {};
       
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
@@ -66,7 +69,7 @@ define([
           helpers: this.helpers,
           dispatcher: Dispatcher
       }), '#service-list');
-      // this.setView(new Toolbar(), '#service-toolbar');
+      this.setView(new Toolbar(), '#service-toolbar');
     },
 
     onRender: function () {
@@ -120,6 +123,7 @@ define([
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
+          $detail.data('id', null);
           $detail.removeClass('show');
         } else {
           // add info class to selected row

@@ -23,7 +23,7 @@ define([
     },
     
     onRender: function () {
-      // this.datePicker();
+      this.datePicker();
       $('.sticky')
         .affix()
         .width(function () { return $(this).parent().width(); });
@@ -31,8 +31,9 @@ define([
     
     clean: function () {
       // this.$('.sticky').sticky('remove');
-      // $('.datetimepicker').remove();
-      // this.dp.remove();
+      $('.datetimepicker').datetimepicker('remove');
+      this.dp.off();
+      this.dp.remove();
     },
     
     off: function () {
@@ -51,10 +52,11 @@ define([
       this.dp.on('changeDate', function (e) {
         view.onDateChanged(e.date.toISOString(), {});
       });
+      // console.log(this.dp, this.dp.data('datetimepicker').remove());
     },
     
     onDateChanged: function (date) {
-      $('.datetimepicker').remove();
+      $('.datetimepicker').datetimepicker('remove');
       this.dp.remove();
       Backbone.history.navigate('/workflows/' + moment(date).utc()
           .format('YYYYMMDDHHmmss'), {trigger: true});

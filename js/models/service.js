@@ -50,6 +50,12 @@ define([
         debug.log(this.url(), action);
         $.put(this.url(), {'action': action });     
       }
+    },
+    
+    toJSON: function () {
+      var json = ServiceModel.__super__.toJSON.call(this, arguments);
+      json.actions = this.actions();
+      return json;
     }
   });
   return ServiceModel;

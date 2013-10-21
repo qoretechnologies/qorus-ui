@@ -41,6 +41,10 @@ define([
       }
       
       return [name.toLowerCase()];
+    },
+    
+    alert: function (alert, text) {
+      
     }
   })
 

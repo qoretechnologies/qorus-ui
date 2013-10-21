@@ -17,6 +17,8 @@ table th {
 
 .table th {
   line-height: 1em;
+  vertical-align: center;
+  padding: 4px 12px;
 }
 
 .table .name, .table .description {
@@ -116,7 +118,7 @@ th {
 
 i.sort {
     position: absolute;
-    bottom: 1em;
+/*    bottom: 1em;*/
     right: 0;
 }
 

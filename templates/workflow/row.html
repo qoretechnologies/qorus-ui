@@ -1,29 +1,26 @@
-<% 
-    var wfl = obj.item.toJSON(); 
-    wfl.id = wfl.workflowid;
-%>
-<tr class="table-row workflow-row" id="workflow-<%= wfl.id %>" data-id="<%= wfl.id %>">
+<% item.id = item.workflowid %>
+<tr class="table-row workflow-row" id="workflow-<%= item.id %>" data-id="<%= item.id %>">
 	<td><i class="icon-check-empty check"></i></td>
-	<td class="id"><%= wfl.workflowid %></td>
-	<td class="err instances"><%= wrapBadge(wfl.exec_count, ['/workflows/view', wfl.id, 'instances'].join('/'), 'badge-success') %></td>
-	<td class="name" data-search="<%= wfl.name.toLowerCase() %>"><a href="<%= getUrl('all', wfl.id) %>"><%= wfl.name %></a></td>
-	<td class="version"><%= wfl.version %></td>
-	<td class="autostart"><%= (wfl.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= wfl.autostart %></td>
-	<td class="err complete"><%= wrapBadge(wfl.COMPLETE, getUrl('complete', wfl.id), 'badge-success') %></td>
-	<td class="err ready"><%= wrapBadge(wfl.READY, getUrl('ready', wfl.id), 'badge-ready') %></td>
-	<td class="err scheduled"><%= wrapBadge(wfl.SCHEDULED, getUrl('scheduled', wfl.id), 'badge-info') %></td>
-	<td class="err incomplete"><%= wrapBadge(wfl.INCOMPLETE, getUrl('incomplete', wfl.id), 'badge-info') %></td>
-	<td class="err event-waiting"><%= wrapBadge(wfl['EVENT-WAITING'], getUrl('event-waiting', wfl.id), 'badge-waiting') %></td>
-	<td class="err async-waiting"><%= wrapBadge(wfl['ASYNC-WAITING'], getUrl('async-waiting', wfl.id), 'badge-waiting') %></td>
-	<td class="err waiting"><%= wrapBadge(wfl.WAITING, getUrl('waiting', wfl.id), 'badge-waiting') %></td>
-	<td class="err retry"><%= wrapBadge(wfl.RETRY, getUrl('retry', wfl.id), 'badge-error') %></td>
-	<td class="err error"><%= wrapBadge(wfl.ERROR, getUrl('error', wfl.id), 'badge-important') %></td>
-	<td class="err in-progress"><%= wrapBadge(wfl['IN-PROGRESS'], getUrl('in-progress', wfl.id), 'badge-warning') %></td>
-	<td class="err canceled"><%= wrapBadge(wfl.CANCELED, getUrl('canceled', wfl.id), 'badge-canceled') %></td>
-	<td class="err blocked"><%= wrapBadge(wfl.BLOCKED, getUrl('blocked', wfl.id), '') %></td>
-	<td><%= wfl.TOTAL %></td>
+	<td class="id"><%= item.id %></td>
+	<td class="err instances"><%= wrapBadge(item.exec_count, ['/workflows/view', item.id, 'instances'].join('/'), 'badge-success') %></td>
+	<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
+	<td class="version"><%= item.version %></td>
+	<td class="autostart"><%= (item.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= item.autostart %></td>
+	<td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id), 'badge-success') %></td>
+	<td class="err ready"><%= wrapBadge(item.READY, getUrl('ready', item.id), 'badge-ready') %></td>
+	<td class="err scheduled"><%= wrapBadge(item.SCHEDULED, getUrl('scheduled', item.id), 'badge-info') %></td>
+	<td class="err incomplete"><%= wrapBadge(item.INCOMPLETE, getUrl('incomplete', item.id), 'badge-info') %></td>
+	<td class="err event-waiting"><%= wrapBadge(item['EVENT-WAITING'], getUrl('event-waiting', item.id), 'badge-waiting') %></td>
+	<td class="err async-waiting"><%= wrapBadge(item['ASYNC-WAITING'], getUrl('async-waiting', item.id), 'badge-waiting') %></td>
+	<td class="err waiting"><%= wrapBadge(item.WAITING, getUrl('waiting', item.id), 'badge-waiting') %></td>
+	<td class="err retry"><%= wrapBadge(item.RETRY, getUrl('retry', item.id), 'badge-error') %></td>
+	<td class="err error"><%= wrapBadge(item.ERROR, getUrl('error', item.id), 'badge-important') %></td>
+	<td class="err in-progress"><%= wrapBadge(item['IN-PROGRESS'], getUrl('in-progress', item.id), 'badge-warning') %></td>
+	<td class="err canceled"><%= wrapBadge(item.CANCELED, getUrl('canceled', item.id), 'badge-canceled') %></td>
+	<td class="err blocked"><%= wrapBadge(item.BLOCKED, getUrl('blocked', item.id), '') %></td>
+	<td><%= item.TOTAL %></td>
   <% if (obj.deprecated) { %>
-  <td><%= wfl.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
+  <td><%= item.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
   <% } %>
 	<td>
         <div class="btn-group">
@@ -32,14 +29,14 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right">
-                <li><a href="#" class="action" data-action="start" data-id="<%= wfl.id %>"><i class="icon-off"></i> Start</a></li>
-                <li><a href="#" class="action-modal" data-action="start" data-id="<%= wfl.id %>"><i class="icon-off"></i> Start Custom</a></li>
-                <li><a href="#" class="action" data-action="reset" data-id="<%= wfl.id %>"><i class="icon-refresh"></i> Reset</a></li>
-                <li><a href="#" class="action" data-action="stop" data-id="<%= wfl.id %>"><i class="icon-remove"></i> Stop</a></li>
-                <% if (wfl.deprecated) { %>
-                <li><a href="#" class="action" data-action="show" data-id="<%= wfl.id %>"><i class="icon-flag"></i> Show</a></li>
+                <li><a href="#" class="action" data-action="start" data-id="<%= item.id %>"><i class="icon-off"></i> Start</a></li>
+                <li><a href="#" class="action-modal" data-action="start" data-id="<%= item.id %>"><i class="icon-off"></i> Start Custom</a></li>
+                <li><a href="#" class="action" data-action="reset" data-id="<%= item.id %>"><i class="icon-refresh"></i> Reset</a></li>
+                <li><a href="#" class="action" data-action="stop" data-id="<%= item.id %>"><i class="icon-remove"></i> Stop</a></li>
+                <% if (item.deprecated) { %>
+                <li><a href="#" class="action" data-action="show" data-id="<%= item.id %>"><i class="icon-flag"></i> Show</a></li>
                 <% } else { %>
-                <li><a href="#" class="action" data-action="hide" data-id="<%= wfl.id %>"><i class="icon-flag-alt"></i> Hide</a></li>
+                <li><a href="#" class="action" data-action="hide" data-id="<%= item.id %>"><i class="icon-flag-alt"></i> Hide</a></li>
                 <% } %>
             </ul>
         </div>

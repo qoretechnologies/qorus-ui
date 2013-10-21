@@ -4,8 +4,8 @@ define([
   'backbone',
   'moment',
   'settings',
-  'later.recur',
-  'later.cron'
+  // 'later.recur',
+  // 'later.cron'
 ], function ($, _, Backbone, moment, settings) {
   var utils = {
     settings: settings,
@@ -54,11 +54,11 @@ define([
         return date.format(settings.DATE_DISPLAY);
     },
     
-    getNextDate: function (cron_time) {
-        var next = later().getNext(cronParser().parse(cron_time));
-            
-        return this.parseDate(next, null);
-    },
+    // getNextDate: function (cron_time) {
+    //     var next = later().getNext(cronParser().parse(cron_time));
+    //         
+    //     return this.parseDate(next, null);
+    // },
     
     getCurrentLocation: function () {
       return window.location.href;

@@ -319,6 +319,7 @@
 		},
 
 		remove: function () {
+      // console.log('removing picker', this._events);
 			this._detachEvents();
 			this.picker.remove();
 			delete this.picker;
