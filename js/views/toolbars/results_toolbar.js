@@ -47,6 +47,7 @@ define([
     clean: function(){
       $('#statuses').multiselect('destroy');
       $('.dp').datetimepicker('remove');
+      this.dp.off();
       this.dp.remove();
       // $('.sticky').sticky('remove');
     },

@@ -15,6 +15,7 @@ require.config({
     "jquery.rest": "libs/jquery.rest",
     "jquery.ui": "libs/jquery.ui.min",
     "jquery.pageslide": "libs/jquery.pageslide.min",
+    // "jquery.floatthead": "libs/jquery.floatThead",
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
     "bootstrap.multiselect": "libs/bootstrap-multiselect",
@@ -62,6 +63,9 @@ require.config({
     "jquery.pageslide": {
       deps: ['jquery']
     },
+    // "jquery.floatthead": {
+    //   deps: ['jquery']
+    // },
     "messenger": {
       deps: ['jquery', 'backbone'],
       exports: 'Messenger',

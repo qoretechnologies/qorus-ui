@@ -64,14 +64,14 @@ define([
       _.defer(this.render);
     },
     
-    render: function (ctx) {
-      var mctx = { item: this.model };
-      if (ctx){
-        _.extend(mctx, ctx);
-      }
-      View.__super__.render.call(this, mctx);
-      return this;
-    },
+    // render: function (ctx) {
+    //   var mctx = { item: this.model };
+    //   if (ctx){
+    //     _.extend(mctx, ctx);
+    //   }
+    //   View.__super__.render.call(this, mctx);
+    //   return this;
+    // },
     
     preRender: function () {      
       this.setView(new Qorus.TableView({ 

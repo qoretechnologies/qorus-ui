@@ -28,7 +28,7 @@ define([
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
-      debug.log('initializing toolbar', this.cid);
+      console.log('initializing toolbar', this.options, this.opts);
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
@@ -48,8 +48,9 @@ define([
     
     clean: function () {
       // debug.error('cleaning toolbar', this.dp);
-      $('.dp').datetimepicker('remove');
+      this.dp = this.$('.dp').datetimepicker('remove');
       $('#statuses').multiselect('destroy');
+      this.dp.off();
       this.dp.remove();
     },
     
@@ -82,7 +83,7 @@ define([
     // filter by date init
     datePicker: function () {
       var view = this;
-      this.dp = $('.dp').datetimepicker({
+      this.dp = this.$('.dp').datetimepicker({
           format: 'yyyy-MM-dd hh:ii:ss',
           autoclose: true
       })

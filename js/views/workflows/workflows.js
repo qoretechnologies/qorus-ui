@@ -58,7 +58,7 @@ define([
       
       this.listenToOnce(this.collection, 'sync', self.render);
       
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function (e, evt) {
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function WFLDISPATCH(e, evt) {
         // debug.log('Event', evt, e);
         var m = self.collection.get(e.info.id);
         
@@ -106,7 +106,7 @@ define([
       
       if ($('[data-sort="version"]')) {
         var w = $(document).width() - $('[data-sort="version"]').offset().left;
-        $('#workflow-detail').outerWidth(w);        
+        $('#workflow-detail').outerWidth(w); 
       }
     },
     
@@ -176,21 +176,21 @@ define([
     
     onRightClick: function (ev) {
       ev.preventDefault();
-      var _this = this;
+      var self = this;
       var $el = $(ev.currentTarget);
       var $menu = $('.context-menu', this.$el);
       var dataId = $el.data('id');
       
       
-      $('a', $menu)
+      this.$('a', $menu)
         .attr('data-id', dataId)
         .unbind('click')
-        .click(function (ev) {
+        .click(function WFLMENUC(ev) {
           debug.log($(this).attr('class'));
           if ($(this).hasClass('action')) {
-            _this.runAction(ev);
+            self.runAction(ev);
           } else if ($(this).hasClass('action-modal')) {
-            _this.openModal(ev);
+            self.openModal(ev);
           }
 
           _.defer(function () {
@@ -203,33 +203,33 @@ define([
     },
     
     highlightRunning: function (e) {
-      var _this = this;
+      var self = this;
       e.preventDefault();
 
       this.uncheckAll();
 
-      $('.workflow-row .instances').each(function () {
+      $('.workflow-row .instances').each(function WFLHILITER() {
         var $this = $(this);
         
         if (parseInt($this.text()) > 0) {
           var id = $this.parent().data('id');
-          _this.checkRow(id);
+          self.checkRow(id);
         }
       });
     },
     
     highlightStopped: function (e) {
-      var _this = this;
+      var self = this;
       e.preventDefault();
       
       this.uncheckAll();
       
-      $('.workflow-row .instances').each(function () {
+      $('.workflow-row .instances').each(function WFLHILITES() {
         var $this = $(this);
         
         if (parseInt($this.text()) == 0) {
           var id = $this.parent().data('id');
-          _this.checkRow(id);
+          self.checkRow(id);
         }
       });
     },

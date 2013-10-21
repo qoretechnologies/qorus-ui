@@ -9,8 +9,7 @@ define([
   'text!../../../templates/workflow/orders.html',
   'text!../../../templates/workflow/orders/table.html',
   'text!../../../templates/workflow/orders/row.html',
-  'jquery.fixedheader',
-  'jquery.sticky'
+  // 'jquery.floatthead'
 ], function($, _, settings, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
   var context = {
     action_css: {
@@ -44,13 +43,12 @@ define([
 
       // set DATE format and init date
       var date = opts.date;
-      this.date_format = settings.DATE_DISPLAY;
       if (date === undefined || date === null || date === '24h') {
-        this.date = moment().add('days', -1).format(this.date_format);
+        this.date = moment().add('days', -1).format(settings.DATE_DISPLAY);
       } else if (date == 'all') {
-        this.date = moment(settings.DATE_FROM).format(this.date_format);
+        this.date = moment(settings.DATE_FROM).format(settings.DATE_DISPLAY);
       } else if (date.match(/^[0-9]+$/)) {
-        this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
+        this.date = moment(date, 'YYYYMMDDHHmmss').format(settings.DATE_DISPLAY);
       } else {
         this.date = date;
       }
@@ -66,16 +64,10 @@ define([
       // add element loader
       this.loader = new Qorus.Loader({ el: $('#wrap') });
       this.loader.render();
-
-      // this.collection = new Collection(this.opts);
-      // this.stopListening(this.collection, 'resort');
-      // this.listenTo(this.collection, 'resort', this.updateContext);
-      // this.collection.fetch();
     },
     
     preRender: function () {
-      debug.log('orders prerender', this, this.url, this.options);
-      var toolbar = this.setView(new OrdersToolbar(this.options), '#toolbar');
+      var toolbar = this.setView(new OrdersToolbar(this.opts), '#toolbar');
       
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 
@@ -93,8 +85,7 @@ define([
       
       if (this.collection.length > 0) {
         this.$el.parent('.pane').scroll(this.scroll);
-        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
-        $('.pane').scroll(this.scroll);
+        // $('.pane').scroll(this.scroll);
       }
       
       // init popover on info text

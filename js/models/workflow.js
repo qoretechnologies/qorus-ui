@@ -107,6 +107,9 @@ define([
 
     initialize: function (opts) {
       _.bindAll(this);
+      // this.on('all', function WorkflowEvent(e, obj) {
+      //   console.log(e, obj);
+      // });
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
         this.id = opts.id;
@@ -208,6 +211,19 @@ define([
       });
       
       return step_list[0].toArray();
+    },
+    
+    getDataset: function () {
+      var vals = {
+        'READY/SCHD': this.get('READY') + this.get('SCHEDULED'),
+        'RUN/WAIT': this.get('WAITING') + this.get('IN-PROGRESS') + this.get('INCOMPLETE') + this.get('ASYNC-WAITING') + this.get('RETRY'),
+        'ERR/BLOCK': this.get('ERROR') + this.get('BLOCKED'),
+        'CANCELED': this.get('CANCELED')
+      }
+      
+      var data = _.map(vals, function (v, idx) { return { name: idx, value: v }});
+      
+      return data;
     }
   });
 

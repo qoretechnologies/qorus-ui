@@ -82,7 +82,11 @@ define([
     },
     
     fetch: function (options) {
-      var data = {}; //this.opts;  
+      var data = {};
+      
+      if (this.opts) {
+        data.date = this.opts.date;
+      }
 
       if (!options) {
         options = {};

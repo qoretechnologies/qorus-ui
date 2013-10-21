@@ -29,7 +29,7 @@ define([
     
     onRender: function () {
       this.datePicker();
-      this.$('.sticky').sticky();
+      this.sticky = this.$('.sticky').sticky();
       this.$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
     },
     
@@ -60,8 +60,10 @@ define([
     },
     
     clean: function () {
-      this.$('.datetimepicker').remove();
+      console.log(this.sticky);
+      this.dp.off();
       this.dp.remove();
+      this.$('.datetimepicker').datetimepicker('remove');
       this.$('.sticky').sticky('remove');
     }
   });

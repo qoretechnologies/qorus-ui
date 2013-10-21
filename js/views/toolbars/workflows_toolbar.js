@@ -24,16 +24,15 @@ define([
     
     onRender: function () {
       this.datePicker();
-      $('.sticky')
-        .affix()
-        .width(function () { return $(this).parent().width(); });
+      // this.sticky = this.$('.sticky').sticky();
+      this.$('.sticky').affix().width(function StickyWidth() { return $(this).parent().width() });
     },
     
     clean: function () {
-      // this.$('.sticky').sticky('remove');
-      $('.datetimepicker').datetimepicker('remove');
-      this.dp.off();
-      this.dp.remove();
+      if (this.dp) {
+        this.$('.datetimepicker').datetimepicker('remove');
+        this.dp.remove();
+      }
     },
     
     off: function () {

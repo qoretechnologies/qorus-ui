@@ -822,10 +822,15 @@ aside {
   position: relative;
   overflow: hidden;
   width: auto;
+  margin-right: 40px;
 }
 
 .chart {
   margin: 0 0 30px 50px;
+}
+
+.chart.pie {
+  margin-left: 0;
 }
 
 .chart-left-axis-label {

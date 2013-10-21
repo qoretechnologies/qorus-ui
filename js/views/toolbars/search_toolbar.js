@@ -20,11 +20,17 @@ define([
       Toolbar.__super__.initialize.call(this, opts);
       
       this.template = Template;
-      this.on('render', function(e, o){ $('.sticky').sticky({ el: $('.sticky').parents('.pane') }); });
+    },
+    
+    onRender: function () {
+       this.sticky = this.$('.sticky').sticky({ el: this.$('.sticky').parents('.pane') });
     },
     
     clean: function(){
-      $('.sticky').sticky('remove');
+      if (this.sticky) {
+        this.$('.sticky').sticky('remove');
+        this.sticky.remove();
+      }
     },
     
     navigateTo: function (e) {

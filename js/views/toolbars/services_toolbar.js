@@ -25,13 +25,9 @@ define([
     },
     
     onRender: function () {
-      $('.sticky')
+      this.$('.sticky')
         .affix()
         .width(function () { return $(this).parent().width(); });
-    },
-    
-    clean: function () {
-      this.$('.sticky').sticky('remove');
     },
     
     navigateTo: function (e) {

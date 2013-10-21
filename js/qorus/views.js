@@ -238,7 +238,6 @@ define([
       e.stopPropagation();
     }
    });
-   
 
 
    var ListView = View.extend({
@@ -563,7 +562,7 @@ define([
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
-      // this.listenTo(this.collection, 'resort', this.render);
+      this.listenTo(this.collection, 'resort', this.render);
       
       if (_.has(opts, 'template')) {
         this.template = opts.template;

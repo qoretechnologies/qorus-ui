@@ -6,7 +6,7 @@ $.fn.sticky = function(options){
   };
 
   if (options === 'remove') {
-    console.log($(this).length, this.length);
+    // console.log($(this).length, this.length);
     this.each(function () { 
       $(this).removeData();
       $(opts.el).off('scroll');
