@@ -89,7 +89,8 @@ define([
           row_template: RowTpl,
           helpers: this.helpers,
           dispatcher: Dispatcher,
-          deprecated: this.opts.deprecated
+          deprecated: this.opts.deprecated,
+          fixed: true
       }), '.workflows');
       this.setView(new Toolbar({ date: this.date }), '.toolbar');
     },

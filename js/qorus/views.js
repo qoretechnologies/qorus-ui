@@ -10,7 +10,8 @@ define([
   'text!../../templates/common/table.html',
   'text!../../templates/common/tablerow.html',
   'text!../../templates/common/nodata.html',
-  'bootstrap'
+  'bootstrap',
+  'jquery.fixedhead'
 ], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -548,6 +549,7 @@ define([
   });
 
   var TableView = View.extend({
+    fixed: false,
     additionalEvents: {
       'click th': 'sortView',
     },
@@ -578,6 +580,10 @@ define([
       
       if (_.has(opts, 'dispatcher')) {
         this.dispatcher = opts.dispatcher;
+      }
+      
+      if (_.has(opts, 'fixed')) {
+        this.fixed = opts.fixed;
       }
       
       this.opts.template = this.template;
@@ -618,6 +624,10 @@ define([
       // this.update();
       this.sortIcon();
       this.$el.scroll(this.scroll);
+      
+      if (this.fixed === true) {
+        this.$('.table-fixed').fixedhead();
+      }
     },
     
     scroll: function (ev) {
@@ -657,7 +667,7 @@ define([
     
     // enable table fixed header
     fixHeader: function () {
-      $(this.el).find('table').fixedHeaderTable();
+      // $(this.el).find('table').fixedHeaderTable();
     },
     
     // sort view
@@ -673,7 +683,12 @@ define([
         var c = this;
         var key = c.collection.sort_key;
         var order = c.collection.sort_order;
-        var el = c.$el.find('th[data-sort="' + key + '"]');
+        if (this.fixed === true) {
+          var el = c.$el.find('th[data-sort="' + key + '"] .inner');
+        } else {
+          var el = c.$el.find('th[data-sort="' + key + '"]');          
+        }
+
         c.$el.find('th i.sort')
           .remove();
 

@@ -15,6 +15,7 @@ require.config({
     "jquery.rest": "libs/jquery.rest",
     "jquery.ui": "libs/jquery.ui.min",
     "jquery.pageslide": "libs/jquery.pageslide.min",
+    "jquery.fixedhead": "libs/jquery.fixedhead",
     // "jquery.floatthead": "libs/jquery.floatThead",
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
@@ -46,6 +47,10 @@ require.config({
     //   deps: ['later', 'later.recur'],
     //   exports: 'cron'
     // },
+    "jquery.fixedhead": {
+      deps: ["jquery"],
+      exports: 'jQuery.fn.fixedhead'
+    },
     "jquery.fixedheader": {
       deps: ['jquery'],
       exports: 'jQuery.fn.fixedHeader'
