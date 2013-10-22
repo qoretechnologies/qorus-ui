@@ -16,6 +16,7 @@
       "jquery.sticky": "libs/jquery.sticky",
       "jquery.rest": "libs/jquery.rest",
       "jquery.ui": "libs/jquery.ui.min",
+      "jquery.fixedhead": "libs/jquery.fixedhead",
       "messenger": "libs/messenger/js/messenger.min",
       sprintf: "libs/sprintf-0.7-beta1",
       "bootstrap.multiselect": "libs/bootstrap-multiselect",
@@ -59,6 +60,10 @@
       },
       "jquery.ui": {
         deps: ['jquery']
+      },
+      "jquery.fixedhead": {
+        deps: ["jquery"],
+        exports: 'jQuery.fn.fixedhead'
       },
       "messenger": {
         deps: ['jquery', 'backbone'],
