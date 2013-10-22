@@ -14,7 +14,7 @@ define([
     idAttribute: "jobid",
     urlRoot: settings.REST_API_PREFIX + '/jobs/',
     dateAttributes: ['last_executed', 'next'],
-    allowed_actions: ['run', 'reset', 'set-expire', 'schedule', 'expiry_date'],
+    allowed_actions: ['run', 'reset', 'set-expire', 'schedule', 'expiry_date', 'setActive'],
 
 
     initialize: function (options) {
@@ -24,10 +24,10 @@ define([
     doAction: function(action, opts){
       debug.log('doing action', action);
       if(_.indexOf(this.allowed_actions, action) != -1){
-        var id = this.id;
-        var _this = this;
+        var params = opts || {};
+        _.extend(opts, {'action': action });
         debug.log(this.url());
-        $.put(this.url(), {'action': action });     
+        $.put(this.url(), params);
       }
     }
   });

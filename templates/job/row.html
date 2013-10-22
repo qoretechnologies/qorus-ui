@@ -3,7 +3,7 @@
 	<td class="id"><%= item.jobid %></td>
 	<td class="name" ><a href="<%= getUrl(item.jobid,obj.date) %>"><%= item.name %></a></td>
 	<td class="version"><%= item.version %></td>
-	<td class="status"><%= powerButton(item.active, { option: 'active', on: 'true', off: 'false', id: item.jobid }) %></td>
+	<td class="status"><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
   <td class="last"><%= item.last_executed %></td>
   <td class="next"><%= item.next %></td>
   <td class="expiry"><%= item.expiry_date %></td>
