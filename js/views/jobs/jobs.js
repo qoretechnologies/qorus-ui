@@ -33,7 +33,7 @@ define([
       
       // this.listenToOnce(this.collection, 'sync', this.render);
 
-      this.listenTo(Dispatcher, 'job:instance_stop', this.updateModels);    
+      this.listenTo(Dispatcher, 'job:start job:stop job:instance_stop', this.updateModels);    
     },
   
     preRender: function () {
@@ -88,9 +88,13 @@ define([
       if (m) {
         if (evt == 'job:instance_stop') {
           m.incr(e.info.status);
+        } else if (evt == 'job:start') {
+          m.set('active', true);
+        } else if (evt == 'job:stop') {
+          m.set('active', false);
         }
         // debug.log(m.attributes);
-        m.trigger('fetch');
+        // m.trigger('fetch');
       }
     },
     
