@@ -53,10 +53,11 @@ define([
     },
     
     createDiagram: function () {
-      var view;
-      // this.removeView('#steps');
+      var view = this.getView('#steps');
       
-      view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
+      if (!view) {
+        view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
+      }
       view.render();
     },
 

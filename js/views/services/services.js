@@ -67,7 +67,8 @@ define([
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
-          dispatcher: Dispatcher
+          dispatcher: Dispatcher,
+          fixed: true
       }), '#service-list');
       this.setView(new Toolbar(), '#service-toolbar');
     },

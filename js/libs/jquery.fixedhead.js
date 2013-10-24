@@ -1,3 +1,25 @@
+/**
+  Simple fixed header based on CSS
+  It wrapps table in 2 containers and each th content is wrapped with positioned div.
+  Copy these styles to the stylesheet.
+  .table-fixed-wrapper {
+      position: relative;
+      height: 100%;
+  }
+
+  .table-fixed-inner {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100%;
+  }
+
+  .table-fixed .inner {
+      position: absolute;
+      top: 0;
+      height: 100%;
+  }
+*/
+
 (function($) {
 $.fn.fixedhead = function (options) {
   options = options || {};
@@ -9,6 +31,7 @@ $.fn.fixedhead = function (options) {
       var $twrapi = $('<div class="table-fixed-inner" />');
       var $thead = $el.find('thead').first();
       var height = $thead.innerHeight();
+      var offset = options.offset || 100;
       
       $thead.find('th').each(function () {
         var $divi = $('<div class="inner" />');
@@ -16,7 +39,7 @@ $.fn.fixedhead = function (options) {
 
         $divi
           .width($this.width())
-          .height($this.height())
+          .height(height)
           .css('text-align', $this.css('text-align'));
           
         $(this).wrapInner($divi);
@@ -30,7 +53,8 @@ $.fn.fixedhead = function (options) {
       $el.addClass('is-fixed');
       
       $twrap = $el.closest('.table-fixed-wrapper');
-      $twrap.height($(window).height() - $twrap.offset().top);
+      
+      $twrap.height($(window).height() - $twrap.offset().top - offset);
     }
   });
 };

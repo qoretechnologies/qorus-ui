@@ -156,8 +156,10 @@ define([
           var frag = document.createDocumentFragment();
           debug.log('creating fragment', idx, frag);
           _.each(view, function (v) {
-            var fc = v.el.firstElementChild;
-            frag.appendChild(v.setElement(fc).el);
+            // var fc = v.el.firstElementChild;
+            // frag.appendChild(v.setElement(fc).el);
+            
+            frag.appendChild(v.el);
           });
           $(frag).appendTo(self.$(idx));
           frag = null;
@@ -473,7 +475,7 @@ define([
         $request = $.get(this.collection.url, params);
       } else if (method == 'put') {
         $request = $.put(this.collection.url, params);
-      } else if (method == 'dekete') {
+      } else if (method == 'delete') {
         $request = $.put(this.collection.url, params);
       }
       
@@ -622,12 +624,12 @@ define([
     onRender: function () {
       // this.createRows();
       // this.update();
-      this.sortIcon();
       this.$el.scroll(this.scroll);
       
       if (this.fixed === true) {
         this.$('.table-fixed').fixedhead();
       }
+      this.sortIcon();
     },
     
     scroll: function (ev) {
@@ -665,11 +667,6 @@ define([
       }
     },
     
-    // enable table fixed header
-    fixHeader: function () {
-      // $(this.el).find('table').fixedHeaderTable();
-    },
-    
     // sort view
     sortView: function (e) {
       debug.log("Sort by ", e);
@@ -680,31 +677,36 @@ define([
     },
     
     sortIcon: function () {
-        var c = this;
-        var key = c.collection.sort_key;
-        var order = c.collection.sort_order;
-        if (this.fixed === true) {
-          var el = c.$el.find('th[data-sort="' + key + '"] .inner');
-        } else {
-          var el = c.$el.find('th[data-sort="' + key + '"]');          
-        }
-
-        c.$el.find('th i.sort')
+        var key = this.collection.sort_key;
+        var order = this.collection.sort_order;
+        var $th = this.$el.find('th[data-sort="' + key + '"]');
+        var $el = ($th.find('.inner')) ? $th.find('.inner') : $th;
+        
+        this.$el
+          .find('th i.sort')
           .remove();
 
         if (order == 'des') {
-          el.attr('data-order', 'asc');
-          el.append('<i class="sort icon-chevron-down"></i>');
+          $th.data('order', 'asc');
+          $el.append('<i class="sort icon-chevron-down"></i>');
         } else {
-          el.attr('data-order', 'des');
-          el.append('<i class="sort icon-chevron-up"></i>');
+          $th.data('order', 'des');
+          $el.append('<i class="sort icon-chevron-up"></i>');
         }
     }
   });
 
   var RowView = View.extend({
+    tagName: 'tr',
+    className: 'table-row',
     context: {},
     template: TableRowTpl,
+    attributes: function() {
+      return {
+        'data-id': this.model.id
+      };
+    },
+    
     initialize: function (opts) {
       // _.bindAll(this);
       this.views =[];
@@ -733,7 +735,7 @@ define([
         , self = this;
 
       // update row on model change
-      this.listenTo(this.model, 'change', function () {
+      this.listenTo(this.model, 'change', function (e) {
         var timeout = 500;
         self._rtimer_buffer = self._rtimer_buffer || 0;
         
@@ -741,9 +743,9 @@ define([
           clearTimeout(self._rtimer);
           self._rtimer_buffer++;
         }
-      
+              
         if (self._rtimer_buffer >= 100) timeout = 0;
-      
+              
         self._rtimer = setTimeout(function () {
           // debug.log('delayed render of row', self.model.id, new Date());
           self.update();
@@ -751,58 +753,37 @@ define([
         }, timeout);
       });
 
-      
       this.render();
     },
         
-    render: function(ctx) {
+    render: function (ctx) {
       this.context.item = this.model.toJSON();
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
       return this;
     },
     
-    update: function(ctx) {
+    update: function (ctx) {
       var self = this;
-      var css_classes = [];
-      var $previous_el = this.parent.$el.find('[data-id=' + this.model.id + ']');
-      
-      if ($previous_el.attr('class')) {
-        css_classes = $previous_el.attr('class').split(/\s+/); 
-      }
+      var css_classes = this.$el.attr('class').split(/\s+/);
+      var check_classes = $('i.check', this.$el).attr('class');
       
       this.render();
       
-      var $el = this.$el.find('tr');
-      
       // restore previous classes
       _.each(css_classes, function (cls) {
-        $el.addClass(cls);
+        self.$el.addClass(cls);
       });
-      
+
       // restore check
-      var check_classes = $('i.check', $previous_el).attr('class');
-      $('i.check', $el).attr('class', check_classes);
+      $('i.check', this.$el).attr('class', check_classes);
+
+      this.$el.addClass('changed');
       
-      $el.addClass('changed');
-      
-      $previous_el.replaceWith($el);
       setTimeout(function() {
-        self.parent.$el.find('[data-id=' + self.model.id + ']').removeClass('changed');
+        self.$el.removeClass('changed');
       }, 5000);
-    },
-    // 
-    // clean: function () {
-    //   debug.log('cleaning model');
-    //   this.stopListening();
-    //   this.model = null;
-    //   this.parent = null;
-    // }
-    // 
-    // clean: function () {
-    //   debug.log("Cleaning row");
-    //   this.undelegateEvents();
-    // }
+    }
   });
   
   var ServiceView = View.extend({

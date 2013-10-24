@@ -9,6 +9,10 @@ define([
   'jquery.ui'
 ], function ($, _, Qorus, Dispatcher, Collection, Template, TemplatePre) {
   var View = Qorus.View.extend({
+    is_scrollable: true,
+    additionalEvents: {
+      'click #log-scroll': 'toggleScroll'
+    },
     messages: "",
     // additionalEvents: {
     //   'click a': function (e) { debug.log('Log tab', e); }
@@ -48,8 +52,14 @@ define([
       this.fixHeight();
     },
 
+    toggleScroll: function (e) {
+      var $el = $(e.currentTarget);
+      this.is_scrollable = $el.prop('checked');
+      console.log(this.is_scrollable);
+    },
+
     isScrollable: function () {
-      return (this.$el.find('#log-scroll').val() == 'on');
+      return this.is_scrollable;
     },
     
     appendText: function (t, text) {
@@ -87,6 +97,7 @@ define([
     },
     
     scroll: function () {
+      console.log(this.isScrollable());
       if (this.isScrollable()) {
         $('.log', this.$el).scrollTop(function (v) {
           // debug.log(this.scrollHeight);

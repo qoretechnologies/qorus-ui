@@ -1,20 +1,18 @@
 <% 
   item.id = item.serviceid;
 %>
-  <tr class="table-row service-row" data-id="<%= item.id %>">
-    	<td><i class="icon-check-empty check"></i></td>
-      <td class="id"><%= item.id %></td>
-      <td class="service_type">
-          <% if (item.type == 'system') { %>
-          <i class="icon-cog" data-toggle="tooltip" title="System"></i>
-          <% } else { %>
-          <i class="icon-user" data-toggle="tooltip" title="User"></i>
-          <% } %>
-      </td>
-      <td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: item.actions }) %></td>
-      <td class="threads"><%= item.threads %></td>                
-      <td class="name"><strong><%= item.name %></strong></td>
-      <td class="version"><%= item.version %></td>
-      <td class="description"><div><%= item.desc %></div></td>
-      <td class="autostart"><%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
-  </tr>
+<td><i class="icon-check-empty check"></i></td>
+<td class="id"><%= item.id %></td>
+<td class="service_type">
+    <% if (item.type == 'system') { %>
+    <i class="icon-cog" data-toggle="tooltip" title="System"></i>
+    <% } else { %>
+    <i class="icon-user" data-toggle="tooltip" title="User"></i>
+    <% } %>
+</td>
+<td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: item.actions }) %></td>
+<td class="threads"><%= item.threads %></td>                
+<td class="name"><strong><%= item.name %></strong></td>
+<td class="version"><%= item.version %></td>
+<td class="description"><div><%= item.desc %></div></td>
+<td class="autostart"><%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>

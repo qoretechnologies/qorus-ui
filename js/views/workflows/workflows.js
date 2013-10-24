@@ -103,10 +103,10 @@ define([
     
     onRender: function () {
       debug.log(this.views);
-      // this.$('.table-fixed').fixedHeader({ topOffset: 80 });
+      var $ver = $('[data-sort="version"]');
       
-      if ($('[data-sort="version"]')) {
-        var w = $(document).width() - $('[data-sort="version"]').offset().left;
+      if ($ver) {
+        var w = $(document).width() - $ver.offset().left;
         $('#workflow-detail').outerWidth(w); 
       }
     },
@@ -193,7 +193,7 @@ define([
           } else if ($(this).hasClass('action-modal')) {
             self.openModal(ev);
           }
-
+          
           _.defer(function () {
             $menu.parent().removeClass('open');
           });

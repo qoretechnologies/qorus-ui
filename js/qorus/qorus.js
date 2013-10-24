@@ -204,15 +204,22 @@ define([
     },
     
     comparator: function (c1, c2) {
-      // needs fix
-      var r = (this.sort_order == 'des') ? -1 : 1;
-      var k1 = [prep(c1.get(this.sort_key)), prep(c1.get(this.sort_history[0]))];
-      var k2 = [prep(c2.get(this.sort_key)), prep(c2.get(this.sort_history[0]))];
+      // needs speed improvements
+      var k10 = prep(c1.get(this.sort_key))
+        , k20 = prep(c2.get(this.sort_key))
+        , r = 1
+        , k11, k21;
       
-      if (k1[0] < k2[0]) return -1 * r;
-      if (k1[0] > k2[0]) return 1 * r;
-      if (k1[1] > k2[1]) return -1 * r;
-      if (k1[1] < k2[1]) return 1 * r;
+      if (this.sort_order === 'des') r = -1;
+      
+      if (k10 < k20) return -1 * r;
+      if (k10 > k20) return 1 * r;
+      
+      k11 = prep(c1.get(this.sort_history[0]));
+      k21 = prep(c2.get(this.sort_history[0]));
+      
+      if (k11 > k21) return -1 * r;
+      if (k11 < k21) return 1 * r;
       return 0;
     },
     
@@ -227,7 +234,7 @@ define([
         this.sort({
           silent: true
         });
-        debug.log('sorting');
+        console.log('sorting', this.sort_order, this.sort_key);
         this.trigger('resort', this, {});
       }
     }

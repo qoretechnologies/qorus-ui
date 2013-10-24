@@ -80,7 +80,8 @@ define([
           row_template: RowTpl,
           helpers: this.helpers,
           context: { url: this.url },
-          dispatcher: Dispatcher
+          dispatcher: Dispatcher,
+          // fixed: true
       }), '#instances');
       this.setView(new BottomBarView({}), '#bottom-bar');
       this.setView(new OrdersToolbar(this.opts), '#toolbar');
