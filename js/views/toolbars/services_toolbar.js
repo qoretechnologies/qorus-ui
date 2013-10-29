@@ -24,12 +24,6 @@ define([
       this.template = Template;
     },
     
-    onRender: function () {
-      this.$('.sticky')
-        .affix()
-        .width(function () { return $(this).parent().width(); });
-    },
-    
     navigateTo: function (e) {
       var el = $(e.currentTarget);
       if (el.data('url')) {

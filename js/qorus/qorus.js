@@ -223,18 +223,29 @@ define([
       return 0;
     },
     
+    // comparator: function (m) {
+    //   return [prep(m.get(this.sort_key)), prep(m.get(this.sort_history[0]))].join(', '); 
+    // },
+    
     sortByKey: function (key, ord, cb) {
+      var old_key = this.sort_key,
+        models = this.models;
+
       if (key) {
-        var old_key = this.sort_key;
         if (old_key != key) {
           this.sort_history.unshift(old_key);
         }
         this.sort_order = ord;
         this.sort_key = key;
-        this.sort({
-          silent: true
-        });
-        console.log('sorting', this.sort_order, this.sort_key);
+        
+        // models = _.sortBy(models, function (m) { 
+        //   return [prep(m.get(key)), prep(m.get(old_key))].join(', '); 
+        // });
+        this.sort({ silent: true });
+        // if (this.sort_order === 'des') this.models.reverse();
+        // this.models = models;
+        
+        // console.log('sorting', this.sort_order, this.sort_key);
         this.trigger('resort', this, {});
       }
     }

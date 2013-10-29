@@ -38,6 +38,7 @@ define([
   
   
   var View = Backbone.View.extend({
+    cls: 'View',
     url: '/',
     additionalEvents: {},
     defaultEvents: {
@@ -93,7 +94,10 @@ define([
     },
     
     render: function (ctx) {
+      var start = new Date().getTime(), tpl;
+
       this.preRender();
+
       if (this.template) {
         if (ctx) {
           _.extend(this.context, ctx); 
@@ -102,24 +106,34 @@ define([
         // adding template helpers
         _.extend(this.context, Helpers, this.helpers);
 
-        var tpl = _.template(this.template, this.context);
+        if (_.isFunction(this.template)) {
+          tpl = this.template(this.context);
+        } else {
+          tpl = _.template(this.template, this.context);
+        }
         // console.log('rendering', tpl.slice(0,100), this.el.id);
         this.$el.html(tpl);
+        debug.log('Template rendered', this.cls, this.cid, new Date().getTime() - start, 'ms');
         this.trigger('render', this, {});
       }
+
+      debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.renderViews();
+      debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
+      debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.onRender();
+      debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       return this;
     },
     
     removeView: function (id) {
       var view = this.getView(id);
       if (view instanceof Backbone.View) {
-        console.log(id, 'is backbone view removing');
+        // console.log(id, 'is backbone view removing');
         view.off();
       } else if (_.isArray(view)) {
-        console.log(id, 'is array');
+        // console.log(id, 'is array');
         _.each(view, function (v) {
           v.off();
         });
@@ -551,6 +565,7 @@ define([
   });
 
   var TableView = View.extend({
+    cls: 'TableView',
     fixed: false,
     additionalEvents: {
       'click th': 'sortView',
@@ -569,7 +584,7 @@ define([
       this.listenTo(this.collection, 'resort', this.render);
       
       if (_.has(opts, 'template')) {
-        this.template = opts.template;
+        this.template = _.template(opts.template);
       }
       
       if (_.has(opts, 'row_template')) {
@@ -602,7 +617,9 @@ define([
         this.opts.template = this.opts.template;
       }
       
+      // console.time('tableView')
       TableView.__super__.render.call(this, ctx);
+      // console.timeEnd('tableView')
       return this;
     },
     
@@ -622,14 +639,15 @@ define([
     },
        
     onRender: function () {
+      var self = this;
       // this.createRows();
       // this.update();
-      this.$el.scroll(this.scroll);
+      self.$el.scroll(self.scroll);
       
-      if (this.fixed === true) {
-        this.$('.table-fixed').fixedhead();
+      if (self.fixed === true) {
+        self.$('.table-fixed').fixedhead();
       }
-      this.sortIcon();
+      self.sortIcon();;
     },
     
     scroll: function (ev) {
@@ -645,8 +663,10 @@ define([
     },
         
     update: function (render) {
-      var self = this;
-      var ctr = 0;
+      var self = this,
+        ctr = 0,
+        row_tpl = _.template(self.row_template);
+
       if (render === undefined) render = true;
       // if ($tbody) {
       //   console.log($tbody.html());
@@ -658,7 +678,7 @@ define([
       
       _.each(this.collection.models, function (m) {
         // if (ctr <= 2) {
-          var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }), 'tbody');
+          var view = self.insertView(new RowView({ model: m, template: row_tpl, helpers: self.helpers, parent: self }), 'tbody');
         // }
         ctr++;
       });

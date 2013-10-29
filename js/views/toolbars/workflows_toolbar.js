@@ -24,8 +24,6 @@ define([
     
     onRender: function () {
       this.datePicker();
-      // this.sticky = this.$('.sticky').sticky();
-      this.$('.sticky').affix().width(function StickyWidth() { return $(this).parent().width() });
     },
     
     clean: function () {
