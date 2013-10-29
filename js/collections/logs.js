@@ -16,17 +16,10 @@ define([
     socket_url: "ws://" + host + "/log",
     messages: "",
 
-    initialize: function (opts) {
+    initialize: function (models, opts) {
       _.bindAll(this);
-      // this.sort_key = 'time';
-      // this.sort_order = 'des';
-      // this.sort_history = [''];
-      
       this.socket_url += opts.socket_url;
-      
-      // debug.log("Logs opts", opts);
-      
-      Collection.__super__.initialize.call(this, opts);
+      Collection.__super__.initialize.call(this, models, opts);
     },
     
     wsAdd: function (e) {

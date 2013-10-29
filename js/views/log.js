@@ -32,6 +32,7 @@ define([
       }
       
       // init model
+      console.log(opts);
       this.collection = new Collection([], { 
         socket_url: opts.socket_url, 
         auto_reconnect: opts.auto_reconnect 
@@ -97,7 +98,6 @@ define([
     },
     
     scroll: function () {
-      console.log(this.isScrollable());
       if (this.isScrollable()) {
         $('.log', this.$el).scrollTop(function (v) {
           // debug.log(this.scrollHeight);
@@ -116,7 +116,7 @@ define([
       // maintain the height of log area
       var $parent = this.$el.parents('.content');
       var $log = this.$('.log-area');
-      $log.height($parent.height() - $log.position().top);
+      // $log.height($parent.height() - $log.position().top);
     }
     
   });

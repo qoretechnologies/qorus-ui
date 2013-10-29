@@ -8,6 +8,7 @@ define([
 ], function($, _, Backbone, Qorus, settings, Template){
 
   var ServiceView = Qorus.View.extend({
+    views: {},
     defaultEvents: {
       'submit': 'doAction',
       'click a[data-action]': 'doAction',
@@ -28,21 +29,22 @@ define([
     },
     
     getData: function () {
-      var _this = this;
+      var self = this;
       var url = this.getUrl();
       
       $.get(url)
         .done(function (data) {
-          _this.data = data;
-          _this.trigger('fetch');
+          self.data = data;
+          self.context.data = data;
+          // self.trigger('fetch');
         });
     },
     
-    render: function (ctx) {
-      _.extend(this.context, { data: this.data });
-      
-      ServiceView.__super__.render.call(this, ctx);
-    },
+    // render: function (ctx) {
+    //   this.context.data = this.data;
+    //   
+    //   ServiceView.__super__.render.call(this, ctx);
+    // },
     
     doAction: function (ev) {
       var params = {};

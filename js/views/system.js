@@ -25,7 +25,7 @@ define([
       this.listenTo(this.info, 'sync', this.render);
       this.template = Template;
       
-      this.info.fetch();
+      if (!this.info.id) this.info.fetch();
     },
     
     preRender: function () {

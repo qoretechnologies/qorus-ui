@@ -7,6 +7,7 @@ define([
   'text!../../../templates/system/datasources.html'
 ], function($, _, Backbone, Qorus, settings, Template){
   var ServiceView = Qorus.ServiceView.extend({
+    views: {},
     name: 'datasource',
     methods: {
       getData: 'showDefaults'

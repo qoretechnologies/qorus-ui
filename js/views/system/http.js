@@ -9,6 +9,7 @@ define([
   var http_services_url = settings.REST_API_PREFIX + '/system/userhttp';
 
   var View = Qorus.View.extend({
+    views: {},
     template: Template,
     
     initialize: function () {
