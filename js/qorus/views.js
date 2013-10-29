@@ -117,12 +117,16 @@ define([
         this.trigger('render', this, {});
       }
 
-      debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
+      debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      // console.time('renderViews ' + this.cls);    
       this.renderViews();
+      // console.timeEnd('renderViews ' + this.cls);
       debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
-      debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');      
+      debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      // console.time('onRender ' + this.cls);
       this.onRender();
+      // console.timeEnd('onRender ' + this.cls);
       debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       return this;
     },
@@ -167,16 +171,14 @@ define([
         if (view instanceof Backbone.View) {
           view.setElement(self.$(idx)).render();
         } else if (_.isArray(view)) {
+
           var frag = document.createDocumentFragment();
           debug.log('creating fragment', idx, frag);
           _.each(view, function (v) {
-            // var fc = v.el.firstElementChild;
-            // frag.appendChild(v.setElement(fc).el);
-            
             frag.appendChild(v.el);
           });
           $(frag).appendTo(self.$(idx));
-          frag = null;
+          console.timeEnd('renderViews ' + self.cls);
         }
       });
     },
@@ -565,6 +567,7 @@ define([
   });
 
   var TableView = View.extend({
+    cached_views: {},
     cls: 'TableView',
     fixed: false,
     additionalEvents: {
@@ -607,9 +610,11 @@ define([
       
       _.extend(this.context, opts);
       _.extend(this.options, opts);
+      this.update();
     },
     
     render: function (ctx) {
+      console.time('tableview');
       debug.log(this, this.colleciton);
       if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
@@ -620,6 +625,7 @@ define([
       // console.time('tableView')
       TableView.__super__.render.call(this, ctx);
       // console.timeEnd('tableView')
+      console.timeEnd('tableview');
       return this;
     },
     
@@ -635,19 +641,19 @@ define([
     // },
     
     preRender: function () {
-      this.update(false);
+      // this.update(false);
     },
        
     onRender: function () {
       var self = this;
-      // this.createRows();
-      // this.update();
-      self.$el.scroll(self.scroll);
-      
+      // self.$el.scroll(self.scroll);
+      // 
+      console.time('fixedHead');
       if (self.fixed === true) {
         self.$('.table-fixed').fixedhead();
       }
-      self.sortIcon();;
+      console.timeEnd('fixedHead');
+      self.sortIcon();
     },
     
     scroll: function (ev) {
@@ -662,29 +668,19 @@ define([
       return this.subviews.rows[id];
     },
         
-    update: function (render) {
+    update: function () {
       var self = this,
         ctr = 0,
         row_tpl = _.template(self.row_template);
 
-      if (render === undefined) render = true;
-      // if ($tbody) {
-      //   console.log($tbody.html());
-      // }
-
       this.removeView('tbody');
-      // console.log(this.views);
-      debug.log('TableView views ->', this.views);
       
       _.each(this.collection.models, function (m) {
-        // if (ctr <= 2) {
-          var view = self.insertView(new RowView({ model: m, template: row_tpl, helpers: self.helpers, parent: self }), 'tbody');
-        // }
+        var view = self.insertView(new RowView({ model: m, template: row_tpl, helpers: self.helpers, parent: self }), 'tbody');
         ctr++;
       });
-      if (render) {
-        this.render();
-      }
+      
+      this.render();
     },
     
     // sort view
@@ -692,7 +688,37 @@ define([
       debug.log("Sort by ", e);
       var el = $(e.currentTarget);
       if (el.data('sort')) {
-        this.collection.sortByKey(el.data('sort'), el.data('order'));
+        // this.collection.sortByKey(el.data('sort'), el.data('order'));
+        var key = el.data('sort'),
+          order = el.data('order'),
+          prev_key = this.collection.sort_key,
+          views = this.getView('tbody');
+        
+        this.collection.sort_order = order;
+        this.collection.sort_key = key;
+        this.collection.sort_history.push(prev_key);
+        
+        this.views['tbody'] = views.sort(function (c1, c2) {
+          // needs speed improvements
+          var k10 = utils.prep(c1.model.get(key))
+            , k20 = utils.prep(c2.model.get(key))
+            , r = 1
+            , k11, k21;
+          
+          if (order === 'des') r = -1;
+          
+          if (k10 < k20) return -1 * r;
+          if (k10 > k20) return 1 * r;
+          
+          k11 = utils.prep(c1.model.get(prev_key));
+          k21 = utils.prep(c2.model.get(prev_key));
+          
+          if (k11 > k21) return -1 * r;
+          if (k11 < k21) return 1 * r;
+          return 0;
+        });
+        
+        this.render();
       }
     },
     
@@ -702,16 +728,19 @@ define([
         var $th = this.$el.find('th[data-sort="' + key + '"]');
         var $el = ($th.find('.inner')) ? $th.find('.inner') : $th;
         
-        this.$el
-          .find('th i.sort')
-          .remove();
-
+        this.$el.find('.sort')
+          .removeClass('sort-asc')
+          .removeClass('sort-des')
+          .removeClass('sort');
+        
+        $th.addClass('sort');
+        
         if (order == 'des') {
           $th.data('order', 'asc');
-          $el.append('<i class="sort icon-chevron-down"></i>');
+          $th.addClass('sort-asc');
         } else {
           $th.data('order', 'des');
-          $el.append('<i class="sort icon-chevron-up"></i>');
+          $th.addClass('sort-des');
         }
     }
   });

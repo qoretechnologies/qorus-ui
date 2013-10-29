@@ -26,13 +26,18 @@ $.fn.fixedhead = function (options) {
   
   return this.each(function () {
     var $el = $(this);
+
     if (!$el.hasClass('is-fixed')) {
+      var $cl = $el.clone();
       var $twrap = $('<div class="table-fixed-wrapper" />'),
         $twrapi = $('<div class="table-fixed-inner" />'),
-        $thead = $el.find('thead tr').first(),
-        $tclone = $thead.clone().empty(),
-        height = $thead.innerHeight(),
         offset = options.offset || 100;
+
+      var $thead = $('thead tr', $el).first();
+      
+      var $tclone = $thead.clone().empty();
+      
+      var height = $thead.height();
       
       $('th', $thead).each(function () {
         var $divi = $('<div class="inner" />'),
@@ -42,24 +47,25 @@ $.fn.fixedhead = function (options) {
         $divi
           .width($this.width())
           .height(height)
-          .css('text-align', $this.css('text-align'));
+          .css('text-align', $this.css('text-align'))
+          .css('margin-left', $this.css('padding-left') * -1);
         
         $copy.wrapInner($divi);
-          
         $tclone.append($copy);
       });
-      $thead.replaceWith($tclone);
-      
       $twrap
         .css('padding-top', height);
-      
-      $el.wrap($twrapi);
-      $el.closest('.table-fixed-inner').wrap($twrap);
-      $el.addClass('is-fixed');
-      
-      $twrap = $el.closest('.table-fixed-wrapper');
-      
-      $twrap.height($(window).height() - $twrap.offset().top - offset);
+
+      $('thead tr', $cl).first().replaceWith($tclone);
+      $cl.appendTo($twrapi);
+
+      $twrapi.appendTo($twrap);
+
+      $cl.addClass('is-fixed');
+
+      $twrap.height($(window).height() - $el.offset().top - offset);
+
+      $el.replaceWith($twrap);
     }
   });
 };

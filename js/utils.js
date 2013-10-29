@@ -84,6 +84,18 @@ define([
     encodeDate: function (date) {
       return moment(date, settings.DATE_DISPLAY)
               .format('YYYYMMDDHHmmss');
+    },
+    
+    prep: function (val, des) {
+      if (_.isNumber(val)) {
+        val = String('00000000000000' + val).slice(-14);
+      } else  if (_.isString(val)) {
+        val = val.toLowerCase();
+      }
+      if (des === true) {
+        return '-' + val;
+      }
+      return val;
     }
   };
     

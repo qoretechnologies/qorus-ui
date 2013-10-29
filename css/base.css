@@ -908,10 +908,30 @@ aside {
 
 .table-fixed .inner {
     position: absolute;
+    padding-right: 1em;
     top: 0;
     height: inherit;
     z-index: 1021;
-	vertical-align: baseline;
+    border-right: 1px solid rgba(0,0,0,.1);
+}
+
+.table-fixed th:last-child .inner {
+  border-right: none;
+}
+
+
+.table-fixed th.sort-asc .inner:after {
+  content: "\f0d7";
+  font-family: FontAwesome;
+  font-size: 120%;
+  margin-left: .2em;
+}
+
+.table-fixed th.sort-des .inner:after {
+  content: "\f0d8";
+  font-family: FontAwesome;
+  font-size: 120%;
+  margin-left: .2em;
 }
 
 .table-fixed {
