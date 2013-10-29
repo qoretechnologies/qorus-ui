@@ -27,23 +27,28 @@ $.fn.fixedhead = function (options) {
   return this.each(function () {
     var $el = $(this);
     if (!$el.hasClass('is-fixed')) {
-      var $twrap = $('<div class="table-fixed-wrapper" />');
-      var $twrapi = $('<div class="table-fixed-inner" />');
-      var $thead = $el.find('thead').first();
-      var height = $thead.innerHeight();
-      var offset = options.offset || 100;
+      var $twrap = $('<div class="table-fixed-wrapper" />'),
+        $twrapi = $('<div class="table-fixed-inner" />'),
+        $thead = $el.find('thead tr').first(),
+        $tclone = $thead.clone().empty(),
+        height = $thead.innerHeight(),
+        offset = options.offset || 100;
       
-      $thead.find('th').each(function () {
-        var $divi = $('<div class="inner" />');
-        var $this = $(this);
+      $('th', $thead).each(function () {
+        var $divi = $('<div class="inner" />'),
+          $this = $(this);
+          $copy = $this.clone();
 
         $divi
           .width($this.width())
           .height(height)
           .css('text-align', $this.css('text-align'));
+        
+        $copy.wrapInner($divi);
           
-        $(this).wrapInner($divi);
+        $tclone.append($copy);
       });
+      $thead.replaceWith($tclone);
       
       $twrap
         .css('padding-top', height);
