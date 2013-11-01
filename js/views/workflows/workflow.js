@@ -159,14 +159,16 @@ define([
     
     drawCharts: function () {
       // add performance chart subviews
+      var m_day = this.model.clone();
+      m_day.date = utils.formatDate(moment());
       var m_week = this.model.clone();
-      m_week.opts.date = utils.formatDate(moment().days(-6));
+      m_week.date = utils.formatDate(moment().days(-6));
       var m_month = this.model.clone();
-      m_month.opts.date = utils.formatDate(moment().days(-29));
+      m_month.date = utils.formatDate(moment().days(-29));
       
       if (!this.getView('#stats-day')) {
         this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id })), '#stats-day', true);
-        this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, this.model), '#stats-day-donut', true);        
+        this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, m_day), '#stats-day-donut', true);        
         this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 })), '#stats-week', true);
         this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, m_week), '#stats-week-donut', true);
         this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 })), '#stats-month', true);

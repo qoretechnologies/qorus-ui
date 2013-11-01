@@ -32,7 +32,7 @@ define([
       }
       
       // init model
-      console.log(opts);
+      // console.log(opts);
       this.collection = new Collection([], { 
         socket_url: opts.socket_url, 
         auto_reconnect: opts.auto_reconnect 

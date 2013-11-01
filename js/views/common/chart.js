@@ -15,7 +15,7 @@ define([
     clr5: "rgba(243,170,121,1)",
     clr6: "rgba(181,181,169,1)",
     clr7: "rgba(230,165,164,1)"
-  }
+  };
   
   var LineStyles = [
     {
@@ -63,6 +63,7 @@ define([
   ];
 
   var ChartView = Qorus.View.extend({
+    LineStyles: LineStyles,
     dataset: null,
     context: {
       legend: null,
@@ -72,6 +73,9 @@ define([
     initialize: function (opts, collection) {
       _.bindAll(this);
       this.opts = opts;
+
+      if(_.has(opts, 'ColorScheme')) this.ColorScheme = opts.ColorScheme;
+      if(_.has(opts, 'LineStyles')) this.LineStyles = opts.LineStyles;
 
       // set collection and collection events
       this.collection = collection;
@@ -99,17 +103,22 @@ define([
     },
     
     styleData: function (dataset) {
-      var c = 0;
+      var c = 0,
+        LS = LineStyles,
+        CS = _.values(this.ColorScheme);
+        
       if (dataset.datasets) {
+
         _.each(dataset.datasets, function (set) {
-          _.extend(set, LineStyles[c]);
+          _.extend(set, LS[c]);
           c++;
         });
       } else {
-        var CS = _.values(ColorScheme);
         _.each(dataset, function (set) {
-          _.extend(set, { color: CS[c] });
-          c++;
+          if (!_.has(set, 'color')) {
+            _.extend(set, { color: CS[c] });
+            c++;
+          }
         });
       }
       return dataset;
@@ -154,6 +163,7 @@ define([
   });
   
   var DoughnutChart = ChartView.extend({
+    ColorScheme: ColorScheme,
     template: DoughnutChartTpl,
     onRender: function () {
       // create chart only if dataset available

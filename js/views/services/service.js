@@ -66,6 +66,10 @@ define([
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
+    },
+    
+    close: function () {
+      this.$el.modal('hide');
     }
     
   });

@@ -214,16 +214,38 @@ define([
     },
     
     getDataset: function () {
-      var vals = {
-        'READY/SCHD': this.get('READY') + this.get('SCHEDULED'),
-        'RUN/WAIT': this.get('WAITING') + this.get('IN-PROGRESS') + this.get('INCOMPLETE') + this.get('ASYNC-WAITING') + this.get('RETRY'),
-        'ERR/BLOCK': this.get('ERROR') + this.get('BLOCKED'),
-        'CANCELED': this.get('CANCELED')
-      }
+      var vals = [
+         {
+          name: 'READY/SCHD',
+          value: this.get('READY') + this.get('SCHEDULED'),
+          color: '#aded9b'
+        },
+        {
+          name: 'RUN/WAIT',
+          value: this.get('WAITING') + this.get('IN-PROGRESS') + this.get('INCOMPLETE') + this.get('ASYNC-WAITING') + this.get('RETRY'),
+          color: '#e5c737'
+        },
+        {
+          name: 'ERR/BLOCK',
+          value: this.get('ERROR') + this.get('BLOCKED'),
+          color: '#b94a48'
+        },
+        {
+          name: 'CANCELED',
+          value: this.get('CANCELED'),
+          color: '#f2dede'
+        },
+        {
+          name: 'COMPLETED',
+          value: this.get('COMPLETE'),
+          color: '#468847'
+        }
+      ];
       
-      var data = _.map(vals, function (v, idx) { return { name: idx, value: v }});
+      console.log('generating graph data', this.get('name'), this.date || this.collection.date);
+      // var data = _.map(vals, function (v, idx) { return { name: idx, value: v.count, color: v.color }});
       
-      return data;
+      return vals;
     }
   });
 
