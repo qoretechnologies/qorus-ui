@@ -29,8 +29,8 @@ define([
     
     onRender: function () {
       this.datePicker();
-      this.sticky = this.$('.sticky').sticky();
-      this.$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+      // this.$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+      this.$el.width(function () { return $(this).width(); }).affix();
     },
     
     // filter by date init
@@ -60,11 +60,10 @@ define([
     },
     
     clean: function () {
-      console.log(this.sticky);
-      this.dp.off();
-      this.dp.remove();
-      this.$('.datetimepicker').datetimepicker('remove');
-      this.$('.sticky').sticky('remove');
+      if (this.dp) {
+        this.$('.datetimepicker').datetimepicker('remove');
+        this.dp.remove();
+      }
     }
   });
   return Toolbar;

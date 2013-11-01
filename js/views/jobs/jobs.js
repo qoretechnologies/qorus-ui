@@ -42,7 +42,8 @@ define([
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
-          dispatcher: Dispatcher
+          dispatcher: Dispatcher,
+          fixed: true
       }), '#job-list');
       this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
     },

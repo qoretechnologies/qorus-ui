@@ -11,7 +11,7 @@ define([
   'text!../../templates/common/tablerow.html',
   'text!../../templates/common/nodata.html',
   'bootstrap',
-  'jquery.fixedhead'
+  'jquery.fixedheader'
 ], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -80,17 +80,14 @@ define([
       if (_.isFunction(this.clean)) {
         this.clean();
       }
-
-      this.undelegateEvents();
-      this.stopListening();
-      this.views = {};
-      // this.context = null;
       
       View.__super__.off.call(this);
+
       if (remove != false) {
         this.$el.remove();
         this.remove();
       }
+      this.views = {};
     },
     
     render: function (ctx) {
@@ -124,9 +121,9 @@ define([
       debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
       debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
-      // console.time('onRender ' + this.cls);
+      console.time('onRender ' + this.cls);
       this.onRender();
-      // console.timeEnd('onRender ' + this.cls);
+      console.timeEnd('onRender ' + this.cls);
       debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       return this;
     },
@@ -231,7 +228,9 @@ define([
     },
     
     setView: function (view, el, set) {
+      console.time('removeView');
       this.removeView(el);
+      console.timeEnd('removeView');
       this.views[el] = view;
 
       // debug.log('setting view', view, el, set);
@@ -656,11 +655,15 @@ define([
       console.time('fixedHead');
       if (self.fixed === true) {
         // _.defer(function () {
-          // self.$('.table-fixed').fixedhead();
+          self.$('.table-fixed').fixedHeader();
         // });
       }
       console.timeEnd('fixedHead');
       self.sortIcon();
+    },
+    
+    clean: function () {
+      self.$('.table-fixed').fixedHeader('remove');
     },
     
     scroll: function (ev) {
@@ -722,8 +725,16 @@ define([
         });
         
         console.time('renderView');
+        console.time('setView');
+        var tbody = this.$('tbody').get(0);
+        while (tbody.firstChild)
+          tbody.removeChild(tbody.firstChild);
+        delete this.views['tbody'];
         this.setView(views, 'tbody');
+        console.timeEnd('setView');
+        console.time('rndrView');
         this.renderView('tbody');
+        console.timeEnd('rndrView');
         this.sortIcon();
         console.timeEnd('renderView');
       }
@@ -731,25 +742,25 @@ define([
     
     sortIcon: function () {
       console.time('sortIcon');
-      var key = this.collection.sort_key;
-      var order = this.collection.sort_order;
-      var $th = this.$el.find('th[data-sort="' + key + '"]');
-      var $el = ($th.find('.inner')) ? $th.find('.inner') : $th;
+      var key = this.collection.sort_key,
+        order = this.collection.sort_order,
+        $el = this.$('[data-sort="'+ key +'"]');
       
-      this.$el.find('.sort')
+      this.$('.sort')
         .removeClass('sort-asc')
         .removeClass('sort-des')
         .removeClass('sort');
       
-      $th.addClass('sort');
+      $el.addClass('sort');
       
       if (order == 'des') {
-        $th.data('order', 'asc');
-        $th.addClass('sort-asc');
+        $el.data('order', 'asc');
+        $el.addClass('sort-asc');
       } else {
-        $th.data('order', 'des');
-        $th.addClass('sort-des');
+        $el.data('order', 'des');
+        $el.addClass('sort-des');
       }
+      
       console.timeEnd('sortIcon');
     }
   });

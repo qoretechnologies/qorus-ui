@@ -124,7 +124,6 @@ define([
         view.render();
         view.open();
       }
-      
     },
     
     // do batch action

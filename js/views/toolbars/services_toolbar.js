@@ -29,6 +29,10 @@ define([
       if (el.data('url')) {
         Backbone.history.navigate(el.data('url'), {trigger: true});       
       }
+    },
+    
+    onRender: function () {
+      this.$el.width(function () { return $(this).width(); }).affix();
     }
   });
   return Toolbar;

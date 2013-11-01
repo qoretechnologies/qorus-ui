@@ -24,6 +24,7 @@ define([
     
     onRender: function () {
       this.datePicker();
+      this.$el.width(function () { return $(this).width(); }).affix();
     },
     
     clean: function () {
@@ -31,12 +32,6 @@ define([
         this.$('.datetimepicker').datetimepicker('remove');
         this.dp.remove();
       }
-    },
-    
-    off: function () {
-      // console.log('removing toolbar');
-      Toolbar.__super__.off.call(this);
-      // console.log(this.$el, this.el);
     },
     
     // filter by date init
@@ -49,7 +44,6 @@ define([
       this.dp.on('changeDate', function (e) {
         view.onDateChanged(e.date.toISOString(), {});
       });
-      // console.log(this.dp, this.dp.data('datetimepicker').remove());
     },
     
     onDateChanged: function (date) {
