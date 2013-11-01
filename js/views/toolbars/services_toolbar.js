@@ -32,7 +32,11 @@ define([
     },
     
     onRender: function () {
-      this.$el.width(function () { return $(this).width(); }).affix();
+      var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
+
+      this.$el.width(function () { return $(this).width(); })
+        .css('position', 'fixed')
+        .after($push);
     }
   });
   return Toolbar;

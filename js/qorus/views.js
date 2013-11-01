@@ -121,9 +121,9 @@ define([
       debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
       debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
-      console.time('onRender ' + this.cls);
+      // console.time('onRender ' + this.cls);
       this.onRender();
-      console.timeEnd('onRender ' + this.cls);
+      // console.timeEnd('onRender ' + this.cls);
       debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       return this;
     },
@@ -170,7 +170,7 @@ define([
       if (view instanceof Backbone.View) {
         view.setElement(self.$(id)).render();
       } else if (_.isArray(view)) {
-        console.time('renderViews' + self.cls);
+        // console.time('renderViews' + self.cls);
         var $el = this.$(id),
           el = $el.get(0);
         
@@ -188,7 +188,7 @@ define([
         });
         
         $(frag).appendTo($el);
-        console.timeEnd('renderViews ' + self.cls);
+        // console.timeEnd('renderViews ' + self.cls);
       }
       
     },
@@ -228,9 +228,7 @@ define([
     },
     
     setView: function (view, el, set) {
-      console.time('removeView');
       this.removeView(el);
-      console.timeEnd('removeView');
       this.views[el] = view;
 
       // debug.log('setting view', view, el, set);
@@ -633,7 +631,6 @@ define([
     },
     
     render: function (ctx) {
-      console.time('tableview');
       debug.log(this, this.colleciton);
       if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
@@ -641,10 +638,7 @@ define([
         this.opts.template = this.opts.template;
       }
       
-      // console.time('tableView')
       TableView.__super__.render.call(this, ctx);
-      // console.timeEnd('tableView')
-      console.timeEnd('tableview');
       return this;
     },
        
@@ -652,13 +646,13 @@ define([
       var self = this;
       // self.$el.scroll(self.scroll);
       // 
-      console.time('fixedHead');
+      // console.time('fixedHead');
       if (self.fixed === true) {
         // _.defer(function () {
           self.$('.table-fixed').fixedHeader();
         // });
       }
-      console.timeEnd('fixedHead');
+      // console.timeEnd('fixedHead');
       self.sortIcon();
     },
     
@@ -724,24 +718,23 @@ define([
           return 0;
         });
         
-        console.time('renderView');
-        console.time('setView');
+
+        // cleaning the view the dirty way
         var tbody = this.$('tbody').get(0);
+
         while (tbody.firstChild)
           tbody.removeChild(tbody.firstChild);
         delete this.views['tbody'];
+        
+        // resetting the element
         this.setView(views, 'tbody');
-        console.timeEnd('setView');
-        console.time('rndrView');
         this.renderView('tbody');
-        console.timeEnd('rndrView');
         this.sortIcon();
-        console.timeEnd('renderView');
       }
     },
     
     sortIcon: function () {
-      console.time('sortIcon');
+      // console.time('sortIcon');
       var key = this.collection.sort_key,
         order = this.collection.sort_order,
         $el = this.$('[data-sort="'+ key +'"]');
@@ -761,7 +754,7 @@ define([
         $el.addClass('sort-des');
       }
       
-      console.timeEnd('sortIcon');
+      // console.timeEnd('sortIcon');
     }
   });
   

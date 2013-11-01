@@ -30,7 +30,11 @@ define([
     onRender: function () {
       this.datePicker();
       // this.$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
-      this.$el.width(function () { return $(this).width(); }).affix();
+      var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
+
+      this.$el.width(function () { return $(this).width(); })
+        .css('position', 'fixed')
+        .after($push);
     },
     
     // filter by date init

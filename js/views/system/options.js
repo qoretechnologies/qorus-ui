@@ -14,6 +14,8 @@ define([
   
   var EDIT_URL = settings.REST_API_PREFIX + '/system/options';
   
+  // need revision
+  
   var ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click td[data-editable]": "editOption",

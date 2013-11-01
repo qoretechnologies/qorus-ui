@@ -65,7 +65,7 @@ define([
     off: function () {
       this.undelegateEvents();
       this.stopListening();
-      // this.$el.empty();
+      this.$el.empty();
     }
     
   });

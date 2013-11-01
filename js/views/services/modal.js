@@ -58,6 +58,12 @@ define([
         response = JSON.stringify(response);
       }
       $('#response', this.$el).text(response);
+    },
+    
+    off: function () {
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
     }
     
   });
