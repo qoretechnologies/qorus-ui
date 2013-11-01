@@ -87,8 +87,8 @@ define([
       // this.context = null;
       
       View.__super__.off.call(this);
-      if (remove !== false) {
-        // this.$el.remove();
+      if (remove != false) {
+        this.$el.remove();
         this.remove();
       }
     },
@@ -165,21 +165,41 @@ define([
       return this.views[id];
     },
     
+    renderView: function (id, view) {
+      if (!view) {
+        view = this.getView(id);
+      }
+      
+      if (view instanceof Backbone.View) {
+        view.setElement(self.$(id)).render();
+      } else if (_.isArray(view)) {
+        console.time('renderViews' + self.cls);
+        var $el = this.$(id),
+          el = $el.get(0);
+        
+        if (el){
+          while(el.firstChild)
+            el.removeChild(el.firstChild);            
+        }
+          
+        var frag = document.createDocumentFragment();
+
+        debug.log('creating fragment', id, frag);
+
+        _.each(view, function (v) {
+          frag.appendChild(v.el);
+        });
+        
+        $(frag).appendTo($el);
+        console.timeEnd('renderViews ' + self.cls);
+      }
+      
+    },
+    
     renderViews: function () {
       var self = this;
-      _.each(self.views, function (view, idx) {
-        if (view instanceof Backbone.View) {
-          view.setElement(self.$(idx)).render();
-        } else if (_.isArray(view)) {
-
-          var frag = document.createDocumentFragment();
-          debug.log('creating fragment', idx, frag);
-          _.each(view, function (v) {
-            frag.appendChild(v.el);
-          });
-          $(frag).appendTo(self.$(idx));
-          console.timeEnd('renderViews ' + self.cls);
-        }
+      _.each(self.views, function (view, id) {
+        self.renderView(id, view);
       });
     },
     
@@ -628,21 +648,6 @@ define([
       console.timeEnd('tableview');
       return this;
     },
-    
-    // appendRows: function (models) {
-    //   console.log('appending rows');
-    //   var self = this;
-    //   var frag = document.createDocumentFragment();
-    //   _.each(models, function (m) {
-    //     var view = self.insertView(new RowView({ model: m, template: self.row_template, helpers: self.helpers, parent: self }));
-    //     frag.appendChild($(view.render().$el.html()));
-    //   });
-    //   this.$('tbody').append(frag);
-    // },
-    
-    preRender: function () {
-      // this.update(false);
-    },
        
     onRender: function () {
       var self = this;
@@ -650,7 +655,9 @@ define([
       // 
       console.time('fixedHead');
       if (self.fixed === true) {
-        self.$('.table-fixed').fixedhead();
+        // _.defer(function () {
+          // self.$('.table-fixed').fixedhead();
+        // });
       }
       console.timeEnd('fixedHead');
       self.sortIcon();
@@ -662,10 +669,6 @@ define([
          this.collection.loadNextPage(); 
          this.$el.children('button[data-pagination]').html("Loading...");
        }
-    },
-    
-    getRow: function (id) {
-      return this.subviews.rows[id];
     },
         
     update: function () {
@@ -680,7 +683,7 @@ define([
         ctr++;
       });
       
-      this.render();
+      this.renderView('tbody');
     },
     
     // sort view
@@ -697,8 +700,8 @@ define([
         this.collection.sort_order = order;
         this.collection.sort_key = key;
         this.collection.sort_history.push(prev_key);
-        
-        this.views['tbody'] = views.sort(function (c1, c2) {
+
+        views = views.sort(function (c1, c2) {
           // needs speed improvements
           var k10 = utils.prep(c1.model.get(key))
             , k20 = utils.prep(c2.model.get(key))
@@ -718,30 +721,44 @@ define([
           return 0;
         });
         
-        this.render();
+        console.time('renderView');
+        this.setView(views, 'tbody');
+        this.renderView('tbody');
+        this.sortIcon();
+        console.timeEnd('renderView');
       }
     },
     
     sortIcon: function () {
-        var key = this.collection.sort_key;
-        var order = this.collection.sort_order;
-        var $th = this.$el.find('th[data-sort="' + key + '"]');
-        var $el = ($th.find('.inner')) ? $th.find('.inner') : $th;
-        
-        this.$el.find('.sort')
-          .removeClass('sort-asc')
-          .removeClass('sort-des')
-          .removeClass('sort');
-        
-        $th.addClass('sort');
-        
-        if (order == 'des') {
-          $th.data('order', 'asc');
-          $th.addClass('sort-asc');
-        } else {
-          $th.data('order', 'des');
-          $th.addClass('sort-des');
-        }
+      console.time('sortIcon');
+      var key = this.collection.sort_key;
+      var order = this.collection.sort_order;
+      var $th = this.$el.find('th[data-sort="' + key + '"]');
+      var $el = ($th.find('.inner')) ? $th.find('.inner') : $th;
+      
+      this.$el.find('.sort')
+        .removeClass('sort-asc')
+        .removeClass('sort-des')
+        .removeClass('sort');
+      
+      $th.addClass('sort');
+      
+      if (order == 'des') {
+        $th.data('order', 'asc');
+        $th.addClass('sort-asc');
+      } else {
+        $th.data('order', 'des');
+        $th.addClass('sort-des');
+      }
+      console.timeEnd('sortIcon');
+    }
+  });
+  
+  var TableBody = View.extend({
+    tagName: 'tbody',
+    context: {},
+    initialize: function (opts) {
+      
     }
   });
 
@@ -806,6 +823,7 @@ define([
     },
         
     render: function (ctx) {
+      // console.log('rendering', this.model.id);
       this.context.item = this.model.toJSON();
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
@@ -825,7 +843,7 @@ define([
       });
 
       // restore check
-      $('i.check', this.$el).attr('class', check_classes);
+      this.$('i.check').attr('class', check_classes);
 
       this.$el.addClass('changed');
       
