@@ -3,6 +3,7 @@ define([
   'underscore',
   'backbone',
   'qorus/qorus',
+  'utils',
   'collections/workflows',
   'text!../../../templates/workflow/list.html',
   'datepicker',
@@ -17,10 +18,11 @@ define([
   'views/workflows/detail',
   'jquery.fixedheader',
   'jquery.sticky'
-], function($, _, Backbone, Qorus, Collection, Template, date, moment, 
+], function($, _, Backbone, Qorus, utils, Collection, Template, date, moment, 
   InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl, WorkflowView){
     
   var ListView = Qorus.ListView.extend({
+    cls: "workflows.ListView",
     timers: [],
     // el: $("#content"),
     additionalEvents: {
@@ -35,7 +37,7 @@ define([
     
     initialize: function (collection, date, router, deprecated) {
       var self = this;
-      _.bindAll(this, 'render');
+      _.bindAll(this);
       this.views = {};
       this.opts = {};
       this.context = {};
@@ -79,15 +81,19 @@ define([
           m.trigger('fetch');
         } 
       });
+      
+      console.log(this.date);
     },
     
     preRender: function () {
       // this.setView(new BottomBarView(), 'bottombar');
+      var helpers = _.extend({ date: this.date }, this.helpers);
+      
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
-          helpers: this.helpers,
+          helpers: helpers,
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated,
           fixed: true
@@ -151,24 +157,26 @@ define([
     },
     
     helpers: {
-      getUrl: function (s, id, date) {
-        var date = date || this.date || null;
-        var params = ['/workflows/view', id, 'orders', s];
+        getUrl: function (s, id, date) {
+              var date = date || this.date || null;
+              var params = ['/workflows/view', id, 'orders', s];
     
-        if (date) {
-          params.push(date);
-        }
+              if (date) {
+                // encode for URL
+                date = utils.encodeDate(date);
+                params.push(date);
+              }
     
-        return params.join('/');
-      },
+              return params.join('/');
+        },
       
-      wrapBadge: function (v, u, e){
-        var res = '<a href="' + u +'">'+ v +'</a>';
-        if (v < 1) {
-          return res;
+        wrapBadge: function (v, u, e){
+          var res = '<a href="' + u +'">'+ v +'</a>';
+          if (v < 1) {
+            return res;
+          }
+          return '<span class="badge ' + e + '">' + res + '</span>';
         }
-        return '<span class="badge ' + e + '">' + res + '</span>';
-      }
     },
     
     loadNextPage: function () {

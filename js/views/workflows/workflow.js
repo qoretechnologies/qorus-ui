@@ -60,7 +60,6 @@ define([
     
     preRender: function () {
       var url = '/workflows/' + this.model.id;
-      console.log(this.opts.date, this.opts)
       
       if (this.opts.inst == 'instances') {
         this.setView(new InstanceListView({ 

@@ -55,6 +55,8 @@ define([
       
       opts.date = this.date;
       
+      console.log('Kalimero', opts.date, this.date);
+      
       this.opts = opts;
       _.extend(this.options, opts);
       _.extend(this.context, opts);
