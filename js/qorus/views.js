@@ -643,18 +643,31 @@ define([
     },
        
     onRender: function () {
-      var self = this;
-
       if (self.fixed === true) {
-        self.$('.table-fixed').fixedHeader();
-        $(window).on('resize.table', this.resize);
+        this.$('.table-fixed').fixedHeader();
       }
-      self.sortIcon();
+      this.sortIcon();
+      this.setWidths();
+      $(window).on('resize.table', this.resize);
+    },
+    
+    setWidths: function () {
+      var clgrp = $('<colgroup />');
+      
+      this.$('colgroup').remove();
+      
+      this.$('tr').first().children().each(function () {
+        clgrp.append($('<col />').width($(this).width()));
+      });
+      this.$('.table-fixed').append(clgrp);
     },
     
     resize: function () {
       // fix static header width and pos
-      this.$('.table-fixed').fixedHeader();
+      if (self.fixed === true) {
+        this.$('.table-fixed').fixedHeader();
+      }
+      this.setWidths();
     },
     
     clean: function () {
