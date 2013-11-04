@@ -98,7 +98,7 @@ define([
           deprecated: this.opts.deprecated,
           fixed: true
       }), '.workflows');
-      this.setView(new Toolbar({ date: this.date }), '.toolbar');
+      this.setView(new Toolbar({ date: this.date, parent: this }), '.toolbar');
     },
     
     clean: function () {

@@ -334,8 +334,8 @@ define([
         };
       }
       
-      // this.on('highlight', this.enableActions);
-      // this.on('highlight', this.updateCheckIcon);
+      this.on('highlight', this.enableActions);
+      this.on('highlight', this.updateCheckIcon);
     },
     
     render: function (ctx) {
@@ -445,8 +445,8 @@ define([
     },
     
     updateCheckIcon: function () {
-      var $checker = $('i.checker', this.$el);
-      var total = $('tbody tr', this.$el).size();
+      var $checker = this.$('i.checker');
+      var total = this.$('tbody tr').size();
       var selected = this.getCheckedIds().length;
 
       if (selected == 0) {
@@ -627,7 +627,7 @@ define([
       
       _.extend(this.context, opts);
       _.extend(this.options, opts);
-      this.update();
+      this.update(); 
     },
     
     render: function (ctx) {
@@ -644,20 +644,22 @@ define([
        
     onRender: function () {
       var self = this;
-      // self.$el.scroll(self.scroll);
-      // 
-      // console.time('fixedHead');
+
       if (self.fixed === true) {
-        // _.defer(function () {
-          self.$('.table-fixed').fixedHeader();
-        // });
+        self.$('.table-fixed').fixedHeader();
+        $(window).on('resize.table', this.resize);
       }
-      // console.timeEnd('fixedHead');
       self.sortIcon();
+    },
+    
+    resize: function () {
+      // fix static header width and pos
+      this.$('.table-fixed').fixedHeader();
     },
     
     clean: function () {
       self.$('.table-fixed').fixedHeader('remove');
+      $(window).off('resize.table');
     },
     
     scroll: function (ev) {

@@ -12,6 +12,8 @@ $.fn.fixedHeader = function (options) {
     $head = $('thead.header', o),
     $clone = $head.clone(),
     header_width = $head.width();
+  
+  $('thead.header-copy', o).remove();
 
   $clone
     .removeClass('header')
@@ -23,9 +25,12 @@ $.fn.fixedHeader = function (options) {
     var w = $(h).width();
     o.find('thead.header-copy> tr > th:eq('+i+')').width(w)
   });
-  $head.css({ margin:'0 auto',
-              width: o.width(),
-             'background-color': config.bgColor });
+  
+  $head.css({ 
+    margin:'0 auto',
+    width: o.width(),
+    'background-color': config.bgColor
+  });
 
    o.find('thead.header-copy')
      .width(header_width);

@@ -1,60 +1,21 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'utils',
-  'qorus/qorus',
+  'views/toolbars/toolbar',
   'text!../../../templates/workflow/toolbars/workflows_toolbar.html',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect'
-], function($, _, Backbone, utils, Qorus, Template, date, moment){
+], function($, _, utils, BaseToolbar, Template){
   
-  var Toolbar = Qorus.View.extend({
+  var Toolbar = BaseToolbar.extend({
+    datepicker: true,
+    template: Template,
     context: {},
+    url: '/workflows',
     
     initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
-      
-      this.context.date = this.options.date;
-      this.template = Template;
       this.getHiddenURL();
-    },
-    
-    onRender: function () {
-      this.datePicker();
-      var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
-
-      this.$el.width(function () { return $(this).width(); })
-        .css('position', 'fixed')
-        .after($push);
-    },
-    
-    clean: function () {
-      if (this.dp) {
-        this.$('.datetimepicker').datetimepicker('remove');
-        this.dp.remove();
-      }
-    },
-    
-    // filter by date init
-    datePicker: function () {
-      var view = this;
-      this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-mm-dd hh:ii:ss',
-          autoclose: true
-      });
-      this.dp.on('changeDate', function (e) {
-        view.onDateChanged(e.date.toISOString(), {});
-      });
-    },
-    
-    onDateChanged: function (date) {
-      $('.datetimepicker').datetimepicker('remove');
-      this.dp.remove();
-      Backbone.history.navigate('/workflows/' + moment(date).utc()
-          .format('YYYYMMDDHHmmss'), {trigger: true});
     },
     
     getHiddenURL: function () {
