@@ -242,7 +242,7 @@ define([
         }
       ];
       
-      console.log('generating graph data', this.get('name'), this.date || this.collection.date);
+      // console.log('generating graph data', this.get('name'), this.date || this.collection.date);
       // var data = _.map(vals, function (v, idx) { return { name: idx, value: v.count, color: v.color }});
       
       return vals;

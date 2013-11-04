@@ -63,6 +63,7 @@ define([
   ];
 
   var ChartView = Qorus.View.extend({
+    cls: 'ChartView',
     LineStyles: LineStyles,
     dataset: null,
     context: {
@@ -80,7 +81,7 @@ define([
       // set collection and collection events
       this.collection = collection;
       this.listenTo(this.collection, 'sync', this.updateDataset);
-      console.log(this.collection.opts.date, this.collection, this.collection.id);
+      console.log(this.collection.opts.date);
       this.collection.fetch();
       
       this.context.chart = {
@@ -91,7 +92,7 @@ define([
     },
         
     updateDataset: function () {
-      console.log('updating', this.cid, this.collection, this.collection.opts.date);
+      console.log('updating', this.cls, this.cid, this.collection, this.collection.date);
       this.dataset = this.styleData(this.collection.getDataset());
       this.context.legend = this.getLegend();
       this.context.chart = {
@@ -149,6 +150,7 @@ define([
   });
   
   var LineChart = ChartView.extend({
+    cls: 'LineChart',
     template: LineChartTpl,
     onRender: function () {
       // create chart only if dataset available
@@ -163,6 +165,7 @@ define([
   });
   
   var DoughnutChart = ChartView.extend({
+    cls: 'DoughnutChart',
     ColorScheme: ColorScheme,
     template: DoughnutChartTpl,
     onRender: function () {
