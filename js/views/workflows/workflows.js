@@ -81,8 +81,6 @@ define([
           m.trigger('fetch');
         } 
       });
-      
-      console.log(this.date);
     },
     
     preRender: function () {

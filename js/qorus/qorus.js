@@ -133,20 +133,21 @@ define([
     },
     
     loadNextPage: function () {
+      console.log('load next page?', this.hasNextPage());
       if (!this.loading) {
         this.loading = true;
         if (this.hasNextPage()) {
 
           this.offset = this.page * this.limit;
           this.page++;
-          debug.log('loading page', this.page, this.limit, this.offset);
+          console.log('loading page', this.page, this.limit, this.offset);
 
           var self = this;
           this.fetch({ 
             remove: false,
             success: function () {
               debug.log("Fetched ->", self.length);
-              self.trigger('sync');
+              // self.trigger('sync');
               self.loading = false;
             }
           });

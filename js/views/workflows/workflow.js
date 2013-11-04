@@ -75,6 +75,11 @@ define([
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
     
+    onRender: function() {
+      var view = this.getView('#instances').getView('#order-list');
+      // this.$('.pane').on('scroll', view.scroll);
+    },
+    
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
       var self = this;

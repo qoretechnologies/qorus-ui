@@ -38,7 +38,7 @@ define([
     onRender: function () {
       if (this.collection.length > 0) {
         this.$el.parent('.pane').scroll(this.scroll);
-        $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
+        // $('.table-fixed').fixedHeader({ topOffset: 80, el: $('.table-fixed').parents('.pane') });
         $('.pane').scroll(this.scroll);
       }
     },

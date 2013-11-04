@@ -55,8 +55,6 @@ define([
       
       opts.date = this.date;
       
-      console.log('Kalimero', opts.date, this.date);
-      
       this.opts = opts;
       _.extend(this.options, opts);
       _.extend(this.context, opts);
@@ -85,11 +83,6 @@ define([
       var toolbar = this.getView('#toolbar');
       toolbar.updateUrl(this.url, this.options.statuses);
       
-      if (this.collection.length > 0) {
-        this.$el.parent('.pane').scroll(this.scroll);
-        // $('.pane').scroll(this.scroll);
-      }
-      
       // init popover on info text
       $('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
@@ -105,10 +98,6 @@ define([
         var inst = this.collection.get(data.id);
         inst.doAction(data.action); 
       }
-    },
-    
-    nextPage: function () {
-      this.collection.loadNextPage();
     },
     
     updateContext: function () {
@@ -132,7 +121,7 @@ define([
     scroll: function () {
       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
       if (pos < 100) {
-        this.nextPage(); 
+        this.nextPage();
         this.$el.children('button[data-pagination]').html("Loading...");
       }
     },

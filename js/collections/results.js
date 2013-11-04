@@ -6,15 +6,17 @@ define([
   'models/result'
 ], function(settings, _, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
+    sort_key: 'job_instanceid',
+    sort_order: 'des',
     model: Model,
     
     url: function () {
-      return settings.REST_API_PREFIX + '/jobs/'+ this.jobid + '/results/?sort=job_instanceid;desc=true';
+      return settings.REST_API_PREFIX + '/jobs/'+ this.jobid + '/results';
     },
     
     initialize: function (opts) {
       Collection.__super__.initialize.call(this, opts);
-      this.opts.sort = 'started';
+      this.opts.sort = 'job_instanceid';
       
       if (_.has(opts, 'jobid')) {
         this.jobid = opts.jobid;

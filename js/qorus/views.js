@@ -577,6 +577,10 @@ define([
     openURL: function (url) {
       Backbone.history.navigate(url, { trigger: true });
     },
+    
+    nextPage: function () {
+      this.collection.loadNextPage();
+    }
     // 
     // clean: function () {
     //   this.collection = null;
@@ -596,11 +600,13 @@ define([
     
     initialize: function (opts) {
       _.bindAll(this);
+      var self = this;
       this.views = {};
       this.opts = opts || {};
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
+      this.listenTo(this.collection, 'sync', this.update);
       this.listenTo(this.collection, 'resort', this.render);
       
       if (_.has(opts, 'template')) {
@@ -632,6 +638,7 @@ define([
     
     render: function (ctx) {
       debug.log(this, this.colleciton);
+      console.log(this.collection.length);
       if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
       } else {
@@ -646,9 +653,17 @@ define([
       if (self.fixed === true) {
         this.$('.table-fixed').fixedHeader();
       }
+
       this.sortIcon();
       this.setWidths();
+      
       $(window).on('resize.table', this.resize);
+      this.$el.closest('.pane').on('scroll', this.scroll);
+      
+      // load next button
+      if (this.collection.hasNextPage()) {
+        this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
+      }
     },
     
     setWidths: function () {
@@ -673,14 +688,16 @@ define([
     clean: function () {
       self.$('.table-fixed').fixedHeader('remove');
       $(window).off('resize.table');
+      this.$el.closest('.pane').off('scroll');
     },
     
     scroll: function (ev) {
-       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
-       if (pos < 100) {
-         this.collection.loadNextPage(); 
-         this.$el.children('button[data-pagination]').html("Loading...");
-       }
+     var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+
+     if (pos < 100) {
+       this.collection.loadNextPage(); 
+       this.$('button[data-pagination]').html("Loading...");
+     }
     },
         
     update: function () {
