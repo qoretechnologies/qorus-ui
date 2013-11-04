@@ -67,7 +67,16 @@ define([
       var msg = "Connected to Qorus instance";
       
       if(this.counter > 1){
+        // change message
         msg = 'We are back!';
+        
+        // refresh current view
+        console.log('refreshing', Backbone.history.fragment);
+        var fragment = Backbone.history.fragment;
+        // null fragment
+        Backbone.history.fragment = null;
+        // refresh the page
+        Backbone.history.navigate(fragment, { trigger: true });
       }
       
       msngr.post({ message: msg, type: "success", hideAfter: 5, id: 'ws-connection' }); 
