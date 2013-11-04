@@ -161,12 +161,58 @@ define([
       // add performance chart subviews
       
       if (!this.getView('#stats-day')) {
-        this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id })), '#stats-day', true);
-        this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, this.model), '#stats-day-donut', true);        
-        this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 7 })), '#stats-week', true);
-        this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-6)) })), '#stats-week-donut', true);
-        this.setView(new ChartView.LineChart({ width: 600, height: 200 }, new StatsCollection({ id: this.id, step: 30 })), '#stats-month', true);
-        this.setView(new ChartView.DoughnutChart({ width: 200, height: 200 }, new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-30)) })), '#stats-month-donut', true);
+        this.setView(
+          new ChartView.LineChart(
+            { width: 600, height: 200 }, 
+            new StatsCollection({ id: this.id })
+          ), 
+          '#stats-day', 
+          true
+        );
+
+        this.setView(
+          new ChartView.DoughnutChart(
+            { width: 200, height: 200 }, 
+            this.model
+          ), 
+          '#stats-day-donut',
+          true
+        );        
+
+        this.setView(
+          new ChartView.LineChart(
+            { width: 600, height: 200 }, 
+            new StatsCollection({ id: this.id, step: 7 })
+          ),
+          '#stats-week', true
+        );
+          
+        this.setView(
+          new ChartView.DoughnutChart(
+            { width: 200, height: 200 }, 
+            new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-6)) })
+          ), 
+          '#stats-week-donut', 
+          true
+        );
+        
+        this.setView(
+          new ChartView.LineChart(
+            { width: 600, height: 200 }, 
+            new StatsCollection({ id: this.id, step: 30 })
+          ),
+          '#stats-month', 
+          true
+        );
+        
+        this.setView(
+          new ChartView.DoughnutChart(
+            { width: 200, height: 200 }, 
+            new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-30)) })
+          ), 
+          '#stats-month-donut', 
+          true
+        );
       }
     },
         

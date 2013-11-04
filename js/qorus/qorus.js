@@ -141,13 +141,13 @@ define([
           this.page++;
           debug.log('loading page', this.page, this.limit, this.offset);
 
-          var _this = this;
+          var self = this;
           this.fetch({ 
             remove: false,
             success: function () {
-              debug.log("Fetched ->", _this.length);
-              _this.trigger('sync');
-              _this.loading = false;
+              debug.log("Fetched ->", self.length);
+              self.trigger('sync');
+              self.loading = false;
             }
           });
         }        
@@ -259,12 +259,12 @@ define([
     },
     
     wsAdd: function (e) {
-      var _this = this;
+      var self = this;
       var models = JSON.parse(e.data);
       _.each(models, function (model) {
-        var mdl = new _this.model(model);
+        var mdl = new self.model(model);
         debug.log("Adding -> ", mdl);
-        _this.add(mdl);
+        self.add(mdl);
       });
     },
     
@@ -275,16 +275,16 @@ define([
     },
     
     connect: function () {
-      var _this = this;
+      var self = this;
       
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
         .done(function (response) {
-          _this.token = response;
-          _this.wsOpen();
+          self.token = response;
+          self.wsOpen();
         })
         .fail(function () {
-          debug.log('Failed to get token. Retrying.', _this);
-          _this.wsRetry();
+          debug.log('Failed to get token. Retrying.', self);
+          self.wsRetry();
         });
     },
     
@@ -351,16 +351,16 @@ define([
     },
 
     connect: function () {
-      var _this = this;
+      var self = this;
       
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
         .done(function (response) {
-          _this.token = response;
-          _this.wsOpen();
+          self.token = response;
+          self.wsOpen();
         })
         .fail(function () {
-          debug.log('Failed to get token. Retrying.', _this);
-          _this.wsRetry();
+          debug.log('Failed to get token. Retrying.', self);
+          self.wsRetry();
         });
     },
     
