@@ -7,13 +7,14 @@ define([
   'messenger'
 ], function(settings, _, Backbone, Qorus, Dispatcher, Messenger){
   var host = window.location.host;
+  var protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
 
   var msngr = $('#msg').messenger();
   
   var Collection = Qorus.WSCollection.extend({
     log_size: 100,
     counter: 0,
-    socket_url: "ws://" + host + "/log",
+    socket_url: protocol + host + "/log",
     messages: "",
 
     initialize: function (models, opts) {
