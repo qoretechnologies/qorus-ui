@@ -6,8 +6,8 @@ define([
   'qorus/dispatcher',
   'messenger'
 ], function(settings, _, Backbone, Qorus, Dispatcher, Messenger){
-  var host = window.location.host;
-  var protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
+  var host = window.location.host,
+    protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
 
   var msngr = $('#msg').messenger();
   

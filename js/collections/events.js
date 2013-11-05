@@ -83,7 +83,7 @@ define([
     },
 
     wsRetry: function () {
-      msngr.post({ message: "<i class=\"icon-warning-sign icon-large\"></i> Qorus instance is down!", type: "error", id: 'ws-connection' }); 
+      msngr.post({ message: "<i class=\"icon-warning-sign icon-large\"></i> Disconnected from Qorus instance!", type: "error", id: 'ws-connection' }); 
       this.trigger('ws-closed', this);
       setTimeout(this.connect, 5000);
     }

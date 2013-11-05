@@ -36,7 +36,7 @@ define([
         .done(function (data) {
           self.data = data;
           self.context.data = data;
-          // self.trigger('fetch');
+          self.trigger('fetch');
         });
     },
     
