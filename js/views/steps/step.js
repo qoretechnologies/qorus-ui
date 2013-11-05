@@ -14,6 +14,8 @@ define([
     },
     
     initialize: function (opts) {
+      console.log('hello stepview');
+      this.views = {};
       this.opts = opts;
       _.bindAll(this, 'render');
       
@@ -33,13 +35,20 @@ define([
 
       var active = $('.tab-pane.active');
       $target.tab('show');
+    },
+    
+    off: function () {
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
     }
   });
   
   var ModalView = Modal.extend({
     initialize: function (opts) {
+      this.views = {};
       ModalView.__super__.initialize.call(this, opts);
-      this.setView(new ModelView(this.opts), '.content');
+      this.setView(new ModelView(this.opts), '.content', true);
     }
   });
   

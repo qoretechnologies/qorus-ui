@@ -135,11 +135,12 @@ define([
     },
     
     stepDetail: function(e) {
-      var $target = $(e.currentTarget);
+      var $target = $(e.currentTarget),
+        id = $target.data('id');
     
-      if ($target.data('id')) {
+      if (id) {
         e.stopPropagation();
-        this.setView(new StepView({ id: $target.data('id') }), '#stepdetail', true);
+        this.setView(new StepView({ id: id }), '#stepdetail', true);
       }
     },
     

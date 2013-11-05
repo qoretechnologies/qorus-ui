@@ -16,7 +16,7 @@ define([
     },
                 
     onRender: function () {
-      var slef = this;
+      var self = this;
       var $modal = this.$('.modal');
       
       this.fixHeight();
@@ -24,9 +24,8 @@ define([
       // show modal
       $modal.modal();
       
-      
       // fix size on resize event
-     $modal.on("resize", function(event, ui) {
+      $modal.on("resize", function(event, ui) {
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
 
@@ -48,7 +47,8 @@ define([
           minWidth: $modal.width(),
           maxWidth: max_width
         });
-      });      
+      });
+      console.log(this.views, this.$el);
     },
     
     fixHeight: function () {
@@ -81,7 +81,14 @@ define([
         if (this.$('.modal').hasClass('ui-resizable')) {
           this.$('.modal').resizable('destroy');
         }
-    }
+    },
+    
+    off: function () {
+      this.clean();
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
+    },
   });
   
   
