@@ -182,6 +182,7 @@ define([
     
     onRightClick: function (ev) {
       ev.preventDefault();
+      
       var self = this;
       var $el = $(ev.currentTarget);
       var $menu = $('.context-menu', this.$el);
@@ -246,7 +247,7 @@ define([
       var $detail = $('#workflow-detail');
       var top = $target.offset().top; // + $target.height()/2;
       
-      if ($target.data('id') && !e.target.localName.match(/(button|a)/)) {
+      if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
         e.stopPropagation();
         
         // remove info class on each row
@@ -272,7 +273,7 @@ define([
         }
       }
       
-    },
+    }
   });
   
   return ListView;

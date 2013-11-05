@@ -38,6 +38,7 @@ define([
   
   
   var View = Backbone.View.extend({
+    render_lock: false,
     cls: 'View',
     url: '/',
     additionalEvents: {},
@@ -92,6 +93,8 @@ define([
     
     render: function (ctx) {
       var start = new Date().getTime(), tpl;
+      
+      if (this.render_lock) return;
 
       this.preRender();
 
@@ -272,6 +275,16 @@ define([
       debug.log('Do nothing', e);
       e.preventDefault();
       e.stopPropagation();
+    },
+    
+    lock: function () {
+      console.log(this.cid, 'locked');
+      this.render_lock = true;
+    },
+    
+    unlock: function () {
+      console.log(this.cid, 'unlocked');
+      this.render_lock = false;
     }
    });
 
@@ -650,7 +663,7 @@ define([
     },
        
     onRender: function () {
-      if (self.fixed === true) {
+      if (this.fixed === true) {
         this.$('.table-fixed').fixedHeader();
       }
 
@@ -809,6 +822,11 @@ define([
       };
     },
     
+    additionalEvents: {
+      'click .dropdown-toggle': 'lock',
+      'click .dropdown-menu a': 'unlock',
+    },
+    
     initialize: function (opts) {
       // _.bindAll(this);
       this.views =[];
@@ -867,6 +885,7 @@ define([
     },
     
     update: function (ctx) {
+      if (this.render_lock === true) return;
       var self = this;
       var css_classes = this.$el.attr('class').split(/\s+/);
       var check_classes = $('i.check', this.$el).attr('class');
