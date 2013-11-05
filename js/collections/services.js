@@ -9,6 +9,7 @@ define([
     limit: 1000,
     url: settings.REST_API_PREFIX + '/services/',
     model: Model,
+    pagination: false,
     
   	initialize: function (opts){
       debug.log('Service collection opts', opts);

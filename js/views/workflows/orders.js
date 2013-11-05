@@ -26,8 +26,7 @@ define([
     additionalEvents: {
       // 'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
-      'click th[data-sort]': 'fetchSorted',
-      'scroll': 'scroll'
+      'click th[data-sort]': 'fetchSorted'
     },
     
     initialize: function (opts) {
@@ -116,14 +115,6 @@ define([
       var sort = $el.data('sort');
       // debug.log("Fetching sorted", sort);
       e.stopPropagation();
-    },
-    
-    scroll: function () {
-      var pos = this.$el.height() + this.$el.offset().top - $(window).height();
-      if (pos < 100) {
-        this.nextPage();
-        this.$el.children('button[data-pagination]').html("Loading...");
-      }
     },
     
     helpers: {

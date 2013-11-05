@@ -8,6 +8,7 @@ define([
   var Collection = Qorus.SortedCollection.extend({
     url: settings.REST_API_PREFIX + '/jobs/',
     model: Model,
+    pagination: false
   });
   // You don't usually return a collection instantiated
   return Collection;

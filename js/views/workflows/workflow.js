@@ -82,10 +82,11 @@ define([
     
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
-      var self = this;
-      var el = $(e.currentTarget);
+      var self = this,
+        el = $(e.currentTarget),
       // var dataview = this.currentDataView();
-      var bar = this.getView('#bottom-bar');
+        bar = this.getView('#bottom-bar'),
+        oview;
       
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
         debug.log('load info stop propagation');
@@ -96,11 +97,11 @@ define([
           bar.hide();
           el.removeClass('info');
         } else {
-          var oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content', true);
+          var oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content');
       
           oview.listenTo(oview.model, 'change', function () {
             bar.render();
-            oview.render();
+            self.renderView('#bottom-content');
             bar.show();
 
             // highlite/unhighlite selected row

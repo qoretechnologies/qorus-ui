@@ -110,6 +110,7 @@ define([
     limit: 100,
     offset: 0,
     page: 1,
+    pagination: true,
     
     initialize: function (date) {
       _.bindAll(this);
@@ -129,7 +130,7 @@ define([
     
     hasNextPage: function () {
       // debug.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
-      return (this.offset + this.limit - 2 < this.models.length); 
+      return this.pagination ? (this.offset + this.limit - 2 < this.models.length) : false; 
     },
     
     loadNextPage: function () {

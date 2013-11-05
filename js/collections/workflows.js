@@ -9,6 +9,7 @@ define([
     url: settings.REST_API_PREFIX + '/workflows/',
     date: null,
     model: Model,
+    pagination: false,
     
   	initialize: function(opts){
       this.sort_key = 'exec_count';

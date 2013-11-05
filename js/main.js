@@ -4,7 +4,7 @@ require.config({
     jquery: 'libs/jquery',
     underscore: 'libs/underscore',
     backbone: 'libs/backbone',
-    bootstrap: 'libs/bootstrap/js/bootstrap.min',
+    bootstrap: 'libs/bootstrap/js/bootstrap',
     moment: "libs/moment",
     // later: "libs/later/later.min",
     // "later.recur": "libs/later/later-recur.min",

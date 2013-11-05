@@ -685,7 +685,10 @@
       clearMenus()
 
       if (!isActive) {
-        $parent.toggleClass('open')
+        $parent
+          .trigger(e = $.Event('show.bs.dropdown'))
+          .toggleClass('open')
+          .trigger('shown.bs.dropdown')
       }
 
       $this.focus()
@@ -737,8 +740,13 @@
   }
 
   function clearMenus() {
-    $(toggle).each(function () {
-      getParent($(this)).removeClass('open')
+    $(toggle).each(function (e) {
+      var $parent = getParent($(this))
+      if (!$parent.hasClass('open')) return
+      $parent.trigger(e = $.Event('hide.bs.dropdown'))
+      if (e.isDefaultPrevented()) return
+      $parent.removeClass('open').trigger('hidden.bs.dropdown')
+      console.log($parent);
     })
   }
 

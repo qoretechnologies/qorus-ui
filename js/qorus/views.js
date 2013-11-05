@@ -642,6 +642,9 @@ define([
         this.fixed = opts.fixed;
       }
       
+      // pre-compile row template
+      this.row_tpl = _.template(this.row_template);
+      
       this.opts.template = this.template;
       
       _.extend(this.context, opts);
@@ -671,7 +674,9 @@ define([
       this.setWidths();
       
       $(window).on('resize.table', this.resize);
-      this.$el.closest('.pane').on('scroll', this.scroll);
+      
+      if (this.collection.pagination)
+        this.$el.closest('.pane').on('scroll', this.scroll);
       
       // load next button
       if (this.collection.hasNextPage()) {
@@ -705,27 +710,43 @@ define([
     },
     
     scroll: function (ev) {
-     var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+      // if not visible do nothing
+      if (!this.$el.is(':visible')) return;
 
-     if (pos < 100) {
-       this.collection.loadNextPage(); 
-       this.$('button[data-pagination]').html("Loading...");
-     }
+      var pos = this.$el.height() + this.$el.offset().top - $(window).height();
+  
+      if (pos < 100) {
+        this.collection.loadNextPage(); 
+        this.$('button[data-pagination]').html("Loading...");
+      }
+    },
+
+    appendRows: function (models) {
+      var self = this,
+        frag = document.createDocumentFragment(),
+        views;
+
+      _.each(models, function (m) {
+        var view = self.appendRow(m, false);
+        frag.appendChild(view.render().el);
+      });
+      
+      this.$('tbody').append(frag);
+    },
+
+    appendRow: function (m, render) {
+      var view = this.insertView(new RowView({ model: m, template: this.row_tpl, helpers: this.helpers, parent: this }), 'tbody');
+      render = (render===undefined) ? true : render;
+      
+      if (render) 
+        this.$('tbody').append(view.render());
+
+      return view;
     },
         
     update: function () {
-      var self = this,
-        ctr = 0,
-        row_tpl = _.template(self.row_template);
-
       this.removeView('tbody');
-      
-      _.each(this.collection.models, function (m) {
-        var view = self.insertView(new RowView({ model: m, template: row_tpl, helpers: self.helpers, parent: self }), 'tbody');
-        ctr++;
-      });
-      
-      this.renderView('tbody');
+      this.appendRows(this.collection.models);
     },
     
     // sort view
@@ -822,11 +843,6 @@ define([
       };
     },
     
-    additionalEvents: {
-      'click .dropdown-toggle': 'lock',
-      'click .dropdown-menu a': 'unlock',
-    },
-    
     initialize: function (opts) {
       // _.bindAll(this);
       this.views =[];
@@ -882,6 +898,11 @@ define([
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
       return this;
+    },
+    
+    onRender: function () {
+      this.$('.btn-group').on('shown.bs.dropdown', this.lock);
+      this.$('.btn-group').on('hidden.bs.dropdown', this.unlock);
     },
     
     update: function (ctx) {
