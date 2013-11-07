@@ -21,11 +21,13 @@ define([
   'views/extensions/extensions',
   'views/extensions/extension',
   'views/functions/functions',
+  'views/groups/groups',
+  // 'views/groups/group',
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, Urls) {
+  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, GroupsView, Urls) {
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -115,6 +117,18 @@ define([
     // order detail
     showOrder: function (wfiid, id){
       var view = new OrderView({ id: wfiid, workflow_id: id });
+      this.setView(view);
+    },
+    
+    // show group list
+    showGroups: function () {
+      var view = new GroupsView();
+      this.setView(view);
+    },
+    
+    // show group detail 
+    showGroup: function (id) {
+      var view = new GroupView({ id: id });
       this.setView(view);
     },
     

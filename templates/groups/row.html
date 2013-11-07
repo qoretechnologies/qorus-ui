@@ -1,0 +1,7 @@
+<td></td>
+<td><%= item.id %></td>
+<td class="enabled"><%= powerButton(item.enabled, { option: 'enabled', action: 'setStatus', on: 'true', off: 'false', id: item.id }) %></td>
+<td class="name"><%= item.name %></td>
+<td class="description"><%= item.description %></td>
+<td><%= statusIcon(item.is_default) %></td>
+<td></td>

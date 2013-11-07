@@ -671,7 +671,7 @@ define([
       }
 
       this.sortIcon();
-      this.setWidths();
+      // this.setWidths();
       
       $(window).on('resize.table', this.resize);
       
@@ -696,11 +696,12 @@ define([
     },
     
     resize: function () {
+      console.log('wtf');
       // fix static header width and pos
-      if (self.fixed === true) {
+      if (this.fixed === true) {
         this.$('.table-fixed').fixedHeader();
       }
-      this.setWidths();
+      // this.setWidths();
     },
     
     clean: function () {
