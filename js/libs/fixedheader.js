@@ -7,7 +7,6 @@ $.fn.fixedHeader = function (options) {
  if (options){ $.extend(config, options); }
 
  return this.each( function() {
-   console.log('fixed header');
   var o = $(this),
     $win = $(config.el),
     $head = $('thead.header', o),

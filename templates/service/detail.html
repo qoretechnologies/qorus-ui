@@ -65,7 +65,7 @@
     <% if (item.groups) { %>
         <div class="tab-pane" id="groups">
             <% _.each(item.groups, function (g) { %>
-                <span class="label"><%= g %></span>
+              <a href="<%= getUrl('showGroup', { name: g }) %>"><span class="label label-info"><%= g %></span></a>
             <% }) %>
         </div>
     <% } %>

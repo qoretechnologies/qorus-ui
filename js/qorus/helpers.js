@@ -4,11 +4,11 @@ define([
   'backbone',
   'settings',
   'utils',
-  'text!../../templates/common/nested_list.html',
-  'text!../../templates/common/nested_list_text.html',
-  'text!../../templates/common/wrap_label.html',
-  'text!../../templates/common/power_button.html',
-  'text!../../templates/common/action_status.html',
+  'tpl!../../templates/common/nested_list.html',
+  'tpl!../../templates/common/nested_list_text.html',
+  'tpl!../../templates/common/wrap_label.html',
+  'tpl!../../templates/common/power_button.html',
+  'tpl!../../templates/common/action_status.html',
   'urls'
 ], function ($, _, Backbone, settings, utils, NestedListTpl, NestedListTextTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
 
@@ -21,18 +21,29 @@ define([
     },
 
     wrapStatus: function (status) {
-      return _.template(WrapLabelTpl, { value: status, label: this.getStatusCSS(status) });
+      return WrapLabelTpl({ value: status, label: this.getStatusCSS(status) });
     },
 
     createNestedList: function (obj, css, tpl, preformatted) {
-      var tpl_html = tpl || NestedListTpl;
-      return _.template(tpl_html, { items: obj, css: css, createNestedList: Helpers.createNestedList, escapeHtml: Helpers.escapeHtml, preformatted: preformatted });
+      var tpl_html = NestedListTpl;
+
+      if (tpl) {
+        tpl_html = _.template(tpl);
+      }
+
+      return tpl_html({ items: obj, css: css, createNestedList: Helpers.createNestedList, escapeHtml: Helpers.escapeHtml, preformatted: preformatted });
     },
     
     createNestedListAsText: function (obj, tpl, level) {
-      var tpl_html = tpl || NestedListTextTpl;
+      var tpl_html = NestedListTextTpl,
+        output;
       level = level || 0;
-      var output = _.template(tpl_html, { items: obj, createNestedListAsText: Helpers.createNestedListAsText, level: level, escapeHtml: Helpers.escapeHtml });
+
+      if (!_.isUndefined(tpl)) {
+        tpl_html = _.template(tpl);
+      }
+
+      output = tpl_html({ items: obj, createNestedListAsText: Helpers.createNestedListAsText, level: level, escapeHtml: Helpers.escapeHtml });
       
       return output.replace(/\n{2,}/gm,"\n");
     },
@@ -46,8 +57,13 @@ define([
     },
 
     powerButton: function (status, data, tpl) {
-      var tpl_html = tpl || PwrBtnTpl;
-      return _.template(tpl_html, { status: status, data: data });
+      var tpl_html = PwrBtnTpl;
+
+      if (!_.isUndefined(tpl)) {
+        tpl_html = _.template(tpl);
+      }
+      
+      return tpl_html({ status: status, data: data });
     },
 
     getUrl: function (route, params) {
@@ -56,14 +72,18 @@ define([
     },
     
     statusActions: function (status, data, tpl) {
-      var tpl_html = tpl || StatusActionTpl;
-      var context = _.extend(this, data, { status: status });
+      var tpl_html = tpl || StatusActionTpl,
+        context = _.extend(this, data, { status: status });
+    
+      if (!_.isUndefined(tpl)) {
+       tpl_html = _.template(tpl);
+      }
     
       // exted this context
       if (data.obj) {
         _.extend(context, data);
       }
-      return _.template(tpl_html, context);
+      return tpl_html(context);
     },
     
     getActionIcon: function (action) {
