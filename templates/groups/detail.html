@@ -76,15 +76,13 @@
       <table class="table table-stripped">
         <thead>
           <tr>
-            <th class="name">Name</th>
-            <th>Version</th>
+            <th class="name">Role</th>
           </tr>
         </thead>
         <tbody>
           <% _.each(item.roles, function (i) {%>
           <tr>
-            <td class="name"><%= i.name %></td>
-            <td><%= i.version %></td>
+            <td class="name"><%= i %></td>
           </tr>
           <% }) %>
         </tbody>
