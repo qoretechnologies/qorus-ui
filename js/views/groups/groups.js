@@ -21,7 +21,6 @@ define([
     },
     
     preRender: function () {
-      console.log('prerender')
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
@@ -34,7 +33,9 @@ define([
     
     updateModels: function(e) {
       var m = this.collection.findWhere({ name: e.info.name });
-      m.set('enabled', e.info.enabled);
+      
+      if (ev == 'group:status_changed')
+        m.set('enabled', e.info.enabled);
     }
   });
 
