@@ -671,7 +671,7 @@ define([
       }
 
       this.sortIcon();
-      // this.setWidths();
+      this.setWidths();
       
       $(window).on('resize.table', this.resize);
       
@@ -690,7 +690,7 @@ define([
       this.$('colgroup').remove();
       
       this.$('tr').first().children().each(function () {
-        clgrp.append($('<col />').width($(this).width()));
+        clgrp.append($('<col />').width($(this).outerWidth()));
       });
       this.$('.table-fixed').append(clgrp);
     },
@@ -701,7 +701,7 @@ define([
       if (this.fixed === true) {
         this.$('.table-fixed').fixedHeader();
       }
-      // this.setWidths();
+      this.setWidths();
     },
     
     clean: function () {

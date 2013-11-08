@@ -5,10 +5,12 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/groups',
+  'views/toolbars/groups_toolbar',
   'text!../../../templates/groups/list.html',
   'text!../../../templates/groups/table.html',
   'text!../../../templates/groups/row.html'
-], function($, _, utils, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
+], function($, _, utils, Qorus, Dispatcher, Collection, ToolbarView, Template, TableTpl, RowTpl
+){
 
   var ListView = Qorus.ListView.extend({
     title: "Groups",
@@ -29,6 +31,7 @@ define([
           dispatcher: Dispatcher,
           fixed: true
       }), '#group-list');
+      this.setView(new ToolbarView(), '#toolbar');
     },
     
     updateModels: function(e) {
