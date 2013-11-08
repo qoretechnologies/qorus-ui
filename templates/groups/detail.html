@@ -1,0 +1,97 @@
+<div id="group">
+  <h3><%= item.name %> <small><%= item.description %></small></h3>
+  <div class="row-fluid">
+    <div class="span3">
+      <h4>Services</h4>
+      <% if (_.size(item.services) > 0) { %>
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <th class="name">Name</th>
+            <th>Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(item.services, function (i) {%>
+          <tr>
+            <td class="name"><%= i.name %></td>
+            <td><%= i.version %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>Any</p>
+    <% } %>
+    </div>
+    <div class="span3">
+      <h4>Workflows</h4>
+      <% if (_.size(item.workflows) > 0) { %>
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <th class="name">Name</th>
+            <th>Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(item.workflows, function (i) {%>
+          <tr>
+            <td class="name"><%= i.name %></td>
+            <td><%= i.version %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p>Any</p>
+      <% } %>
+    </div>
+    <div class="span3">
+      <h4>Jobs</h4>
+      <% if (_.size(item.jobs) > 0) { %>
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <th class="name">Name</th>
+            <th>Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(item.jobs, function (i) {%>
+          <tr>
+            <td class="name"><%= i.name %></td>
+            <td><%= i.version %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p>Any</p>
+      <% } %>
+    </div>
+    <div class="span3">
+      <h4>Roles</h4>
+      <% if (_.size(item.roles) > 0) { %>
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <th class="name">Name</th>
+            <th>Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(item.roles, function (i) {%>
+          <tr>
+            <td class="name"><%= i.name %></td>
+            <td><%= i.version %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p>Any</p>
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -4,29 +4,25 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'models/group',
-  'text!../../../templates/job/detail.html'
-], function ($, _, Qorus, Dispatcher, Model, Log, Template) {
+  'text!../../../templates/groups/detail.html'
+], function ($, _, Qorus, Dispatcher, Model, Template) {
   var ModelView = Qorus.View.extend({
     title: "Group",
     template: Template,
     
     initialize: function (opts) {
-      if (_.has(opts, 'jobid')) {
-        opts.id = opts.jobid;
-        delete opts.jobid;
-      }
-      this.opts = opts || {};
-      this.date = this.opts.date;
-      
+      _.bindAll(this); 
       ModelView.__super__.initialize.call(this, opts);
       
-      this.model = new Model({ id: opts.id });
+      this.model = new Model({ name: opts.name });
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
-      this.listenTo(this.model, 'sync', this.render);
     },
     
-    preRender: function () {
-      
+    render: function (ctx) {
+      this.context.item = this.model.toJSON();
+      ModelView.__super__.render.call(this, ctx);
+      console.log(this.model, this.$el, this.template);
     }
   });
   
