@@ -654,7 +654,7 @@ define([
     
     render: function (ctx) {
       debug.log(this, this.colleciton);
-      console.log(this.collection.length);
+
       if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
       } else {

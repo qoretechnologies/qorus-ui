@@ -23,7 +23,6 @@ $.fn.fixedHeader = function (options) {
     .appendTo(o);
   
   o.find('thead.header > tr:first > th').each(function (i, h){
-    console.log($(h).data(), $(h).width(), $(h).outerWidth(), $(h).outerWidth(true), $(h).innerWidth())
     var w = $(h).width();
     o.find('thead.header-copy> tr > th:eq('+i+')').width(w)
   });
