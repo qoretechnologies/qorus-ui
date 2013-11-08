@@ -552,7 +552,7 @@ define([
       
       if (data.action && data.action != 'open' && data.action !== 'execute') {
         if (data.id == 'selected') {
-          this.runBatchAction(data.action, data.method);
+          this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
         } else if (data.id) {
           if (!$target.hasClass('action-modal')) {
             debug.log("data action", data.id, data.action);

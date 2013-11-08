@@ -34,11 +34,38 @@ define([
       this.setView(new ToolbarView(), '#toolbar');
     },
     
-    updateModels: function(e) {
+    updateModels: function (e, ev) {
       var m = this.collection.findWhere({ name: e.info.name });
       
       if (ev == 'group:status_changed')
         m.set('enabled', e.info.enabled);
+    },
+        
+    // overrides default runBathAction changing ids for names
+    runBatchAction: function (action, method, params) {
+      var method = method || 'get',
+        ids = this.getCheckedIds(),
+        groups;
+      
+      // change ids for names
+      groups = this.collection.filter(function (m) { return _.indexOf(ids, m.id) !== -1; });
+      groups = _.map(groups, function (g) { return g.get('name'); });
+      
+      // extend params to add dataset params
+      params = _.extend(params, { action: action, groups: groups.join(',') });
+      
+      if (method == 'get') {
+        $request = $.get(this.collection.url, params);
+      } else if (method == 'put') {
+        $request = $.put(this.collection.url, params);
+      } else if (method == 'delete') {
+        $request = $.put(this.collection.url, params);
+      }
+      
+      $request
+        .done(function (resp){
+          debug.log(resp);
+        });
     }
   });
 
