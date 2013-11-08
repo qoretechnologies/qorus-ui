@@ -83,6 +83,7 @@ define([
       
           oview.listenTo(oview.model, 'change', function () {
             bar.render();
+            self.renderView('#bottom-content');
             bar.show();
 
             // highlite/unhighlite selected row

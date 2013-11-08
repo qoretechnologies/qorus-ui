@@ -20,7 +20,7 @@ define([
       ModelView.__super__.initialize.call(this, opts);
 
       this.model = new Model({ id: opts.id });
-      this.listenTo(this.model, 'change', this.render, this);
+      // this.listenTo(this.model, 'change', this.render, this);
       this.model.fetch();
     },
 
@@ -40,12 +40,13 @@ define([
     },
     
     render: function (ctx) {
-      this.context.item = this.model;
+      this.context.item = this.model.toJSON();
       ModelView.__super__.render.call(this, ctx);
     },
     
     onRender: function () {
       // init popover on info text
+      console.log(this.$el);
       $('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
         $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});

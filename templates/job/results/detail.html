@@ -1,5 +1,4 @@
-<% if (item.get('id')) { %>
-<% var it = item.toJSON() %>
+<% if (item.id) { %>
 <ul class="nav nav-tabs">
   <li class="active"><a href="?errors" data-target="#errors">Errors</a></li>
   <li><a href="?audit" data-target="#audit">Audit</a></li>
@@ -8,7 +7,7 @@
 
 <div class="tab-content">
   <div class="tab-pane active" id="errors">
-      <% if (it.errors.length > 0) { %>
+      <% if (item.errors) { %>
       <table class="table table-condensed table-numbered">
           <thead>
               <tr>
@@ -22,7 +21,7 @@
               </tr>
           </thead>
           <tbody>
-              <% _.each(it.errors, function (err) { %>
+              <% _.each(item.errors, function (err) { %>
               <tr>
                   <td></td>
                   <td><%= err.job_errorid %></td>
@@ -41,7 +40,7 @@
   </div>
 
   <div class="tab-pane" id="audit">
-      <% if (it.audit.length > 0) { %>
+      <% if (item.audit) { %>
       <table class="table table-condensed table-numbered">
           <thead>
               <tr>
@@ -57,7 +56,7 @@
               </tr>
           </thead>
           <tbody>
-              <% _.each(it.audit, function (audit) { %>
+              <% _.each(item.audit, function (audit) { %>
               <tr>
                   <td></td>
                   <td><%= audit.audit_eventid %></td>
@@ -79,8 +78,8 @@
   </div>
 
   <div class="tab-pane" id="info">
-      <% if (it.info) { %>
-      <%= createNestedList(it.info) %>
+      <% if (item.info) { %>
+      <%= createNestedList(item.info) %>
       <% } else { %>
           <p>No data found</p>
       <% } %>
