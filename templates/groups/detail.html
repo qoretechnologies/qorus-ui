@@ -20,14 +20,14 @@
         <tbody>
           <% _.each(item.services, function (i) {%>
           <tr>
-            <td class="name"><%= i.name %></td>
+            <td class="name"><a href="<%= getUrl('showServices', { id: i.serviceid }) %>"><%= i.name %></a></td>
             <td><%= i.version %></td>
           </tr>
           <% }) %>
         </tbody>
       </table>
     <% } else { %>
-      <p>Any</p>
+      <p>None</p>
     <% } %>
     </div>
     <div class="span3">
@@ -43,14 +43,14 @@
         <tbody>
           <% _.each(item.workflows, function (i) {%>
           <tr>
-            <td class="name"><%= i.name %></td>
+            <td class="name"><a href="<%= getUrl('showWorkflow', { id: i.workflowid }) %>"><%= i.name %></a></td>
             <td><%= i.version %></td>
           </tr>
           <% }) %>
         </tbody>
       </table>
       <% } else { %>
-        <p>Any</p>
+        <p>None</p>
       <% } %>
     </div>
     <div class="span3">
@@ -66,14 +66,14 @@
         <tbody>
           <% _.each(item.jobs, function (i) {%>
           <tr>
-            <td class="name"><%= i.name %></td>
+            <td class="name"><a href="<%= getUrl('showJob', { id: i.jobid }) %>"><%= i.name %></a></a></td>
             <td><%= i.version %></td>
           </tr>
           <% }) %>
         </tbody>
       </table>
       <% } else { %>
-        <p>Any</p>
+        <p>None</p>
       <% } %>
     </div>
     <div class="span3">
@@ -94,7 +94,7 @@
         </tbody>
       </table>
       <% } else { %>
-        <p>Any</p>
+        <p>None</p>
       <% } %>
     </div>
   </div>

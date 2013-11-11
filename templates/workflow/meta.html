@@ -5,6 +5,7 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#details">Details</a></li>
     <li><a href="#library">Library</a></li>
+    <li><a href="#groups" class="groups">Groups</a></li>
     <li><a href="#steps" class="steps">Steps</a></li>
     <li><a href="#log" class="log">Log</a></li>
 </ul>
@@ -46,7 +47,12 @@
     </div>
   </div>
   <div class="tab-pane" id="library">
-      <%= createNestedList(item.lib) %>
+    <%= createNestedList(item.lib) %>
+  </div>
+  <div class="tab-pane" id="groups">
+    <% _.each(item.groups, function (g) { %>
+      <a href="<%= getUrl('showGroup', { name: g }) %>"><span class="label label-info"><%= g %></span></a>
+    <% }) %>
   </div>
   <div class="tab-pane" id="steps">
   </div>
