@@ -29,10 +29,7 @@ define([
     initialize: function (opts) {
       this.opts = opts || {};
       this.step = this.opts.step || this.step;
-      this.params.mindate = this.getMinDate();
-      this.params.wfids = this.opts.id;
-      this.params.global = (this.opts.id) ? false : true;
-      this.params.grouping = (this.step > 1) ? 'daily' : 'hourly';  
+      this.setStep(this.step);
       
       debug.log(this.params.global);
     },
@@ -43,15 +40,27 @@ define([
       return url;
     },
     
+    setStep: function (step) {
+      this.labels = null;
+      this.step = step;
+      this.params.mindate = this.getMinDate();
+      this.params.wfids = this.opts.id;
+      this.params.global = (this.opts.id) ? false : true;
+      this.params.grouping = (this.step > 1) ? 'daily' : 'hourly';
+      console.log(this.url());
+      this.fetch();
+    },
+    
     getMinDate: function () {
       return utils.formatDate(moment().add('d', this.step*-1));
     },
     
     createDataset: function () {
-      var data = [];
-      var _this = this;
+      var data = [],
+         self = this;
+
       _.each(this.getLabels(), function (d) {
-        var m = _this.findWhere({ grouping: d});
+        var m = self.findWhere({ grouping: d});
         
         _.each(datasets, function (d) {
           data[d] = data[d] || { data: [], desc: d };
@@ -72,7 +81,7 @@ define([
         labels: _.map(this.getLabels(), function (l) { return l.slice(-2); }),
         datasets: this.createDataset()
       };
-
+      console.log(this, data);
       return data;
     },
     

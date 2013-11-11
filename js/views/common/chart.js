@@ -81,7 +81,6 @@ define([
       // set collection and collection events
       this.collection = collection;
       this.listenTo(this.collection, 'sync', this.updateDataset);
-      console.log(this.collection.opts.date);
       this.collection.fetch();
       
       this.context.chart = {
@@ -92,7 +91,6 @@ define([
     },
         
     updateDataset: function () {
-      console.log('updating', this.cls, this.cid, this.collection, this.collection.date);
       this.dataset = this.styleData(this.collection.getDataset());
       this.context.legend = this.getLegend();
       this.context.chart = {
@@ -101,6 +99,7 @@ define([
         'id': this.cid + '-chart'
       };
       this.render();
+      console.log('updated', this.cls, this.cid, this.collection, this.dataset);
     },
     
     styleData: function (dataset) {
@@ -159,6 +158,7 @@ define([
         if (cnv) {
           var ctx = cnv.getContext("2d");
           var myChart = new Chart(ctx).Line(this.dataset, { datasetFill: false });
+          console.log(myChart, this.dataset);
         }
       }
     }

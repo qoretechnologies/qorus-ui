@@ -1,5 +1,6 @@
 define([
   'settings',
+  'utils',
   'underscore',
   'jquery',
   'messenger',
@@ -9,7 +10,7 @@ define([
   'models/system',
   'sprintf',
   'jquery.rest'
-], function(settings, _, $, messenger, Backbone, Qorus, Dispatcher, System){
+], function(settings, utils, _, $, messenger, Backbone, Qorus, Dispatcher, System){
   var StepBase = {
       initialize: function (id, depends_on, name, type) {
           this.name = name;
@@ -174,7 +175,7 @@ define([
     setAutostart: function (as) {
       this.doAction('autostart', { autostart: as });
     },
-    
+        
     mapSteps: function () {
       if (!this.get('steps')) {
         return;
@@ -211,6 +212,13 @@ define([
       });
       
       return step_list[0].toArray();
+    },
+    
+    // sets timerange for chart
+    setStep: function (step) {
+      step = step - 1;
+      this.opts.date = utils.formatDate(moment().days(-step));
+      this.fetch();
     },
     
     getDataset: function () {

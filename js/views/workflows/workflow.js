@@ -12,9 +12,11 @@ define([
   'views/workflows/modal',
   'collections/stats',
   'views/common/chart',
-  'views/log'
+  'views/log',
+  'tpl!../../../templates/common/option_edit.html',
+  'sprintf'
 ], function ($, _, utils, Qorus, Workflow, Template, InstanceListView, OrderListView, 
-  BottomBarView, OrderView, Modal, StatsCollection, ChartView, LogView) {
+  BottomBarView, OrderView, Modal, StatsCollection, ChartView, LogView, EditTemplate) {
 
   var ModelView = Qorus.View.extend({
     url: function () {
@@ -31,7 +33,8 @@ define([
       'keyup .search-query': 'search',
       'click .action-modal': 'openModal',
       'click .action': 'runAction',
-      'click .nav a': 'tabToggle'
+      'click .nav a': 'tabToggle',
+      'click .chart-range': 'editRange'
     },
     
     initialize: function (opts) {
@@ -162,25 +165,81 @@ define([
       this.active_tab = $target.attr('href');
     },
     
+    editRange: function (e) {
+      var self = this,
+        $target = $(e.currentTarget),
+        value = $target.data('value'),
+        template = EditTemplate({ 
+          value: value,
+          type: 'text'
+        }),
+        str = "Last %s day(s)";
+        
+        $tpl = template;
+        $target.removeClass('editable');
+        $target.html($tpl);
+        
+        $('input', $target).focus();
+        
+        $('button[data-action=cancel]', $target).click(function () {
+          $target.html(sprintf(str, value));
+          $target.toggleClass('editable');
+        });
+        
+        $('button[data-action=set]').click(function () {
+          var val = $(this).prev('input').val();
+
+          _.each($target.data('targets').split(','), function (t) {
+            self.updateChart(t, val);
+          });
+
+          $target.addClass('editable');
+          $target.data('value', val);
+          $target.html(sprintf(str, val));
+        });
+        
+        $('input').keypress(function (e) {
+          var val = $(this).val();
+          if(e.which == 13) {
+
+            _.each($target.data('targets').split(','), function (t) {
+              self.updateChart(t, val);
+            });
+
+            $target.addClass('editable');
+            $target.data('value', val);
+            $target.html(sprintf(str, val));
+          }
+        });
+    },
+    
+    updateChart: function (view, step) {
+      var v = this.getView(view);
+      
+      if (v) {
+        v.collection.setStep(step); 
+      }
+    },
+    
     drawCharts: function () {
       // add performance chart subviews
-      
-      if (!this.getView('#stats-day')) {
+      // window.view = this;
+      if (!this.getView('#chart-1')) {
         this.setView(
           new ChartView.LineChart(
             { width: 600, height: 200 }, 
             new StatsCollection({ id: this.id })
           ), 
-          '#stats-day', 
+          '#chart-1', 
           true
         );
 
         this.setView(
           new ChartView.DoughnutChart(
             { width: 200, height: 200 }, 
-            this.model
+            new Workflow({ id: this.model.id })
           ), 
-          '#stats-day-donut',
+          '#chart-1-donut',
           true
         );        
 
@@ -189,7 +248,7 @@ define([
             { width: 600, height: 200 }, 
             new StatsCollection({ id: this.id, step: 7 })
           ),
-          '#stats-week', true
+          '#chart-2', true
         );
           
         this.setView(
@@ -197,7 +256,7 @@ define([
             { width: 200, height: 200 }, 
             new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-6)) })
           ), 
-          '#stats-week-donut', 
+          '#chart-2-donut', 
           true
         );
         
@@ -206,7 +265,7 @@ define([
             { width: 600, height: 200 }, 
             new StatsCollection({ id: this.id, step: 30 })
           ),
-          '#stats-month', 
+          '#chart-3', 
           true
         );
         
@@ -215,7 +274,7 @@ define([
             { width: 200, height: 200 }, 
             new Workflow({ id: this.model.id, date: utils.formatDate(moment().days(-30)) })
           ), 
-          '#stats-month-donut', 
+          '#chart-3-donut', 
           true
         );
       }
