@@ -25,7 +25,7 @@ define([
     // },
     
     wsAdd: function (e) {
-      var _this = this;
+      var self = this;
       var models = JSON.parse(e.data);
       
       // drop older messages
@@ -36,8 +36,8 @@ define([
       
       _.each(models, function (model) {
         var m = new Model(model);
-        _this.add(m);
-        _this.events_received++;
+        self.add(m);
+        self.events_received++;
         Dispatcher.dispatch(m);
       });
       // debug.log(this.models.length, this.length, this.models);
@@ -48,16 +48,16 @@ define([
       // waiting for triggering events update for a while
       if (this.timeout_buffer >= this.timeout_buffer_max) {
         this.timeout_buffer = 0;
-        this.trigger('update');
+        this.trigger('sync');
         // debug.log('empting buffer');
       } else {
         this.timeout = setTimeout(function () {
-          _this.trigger('update');
-          _this.timeout_buffer = 0;
+          self.trigger('sync');
+          self.timeout_buffer = 0;
           // debug.log('executing timeout function');
         }, 5*1000);
       }
-      // debug.log('Total events received: ', _this.events_received);
+      // debug.log('Total events received: ', self.events_received);
     },
 
     wsOpened: function () {
@@ -86,6 +86,10 @@ define([
       msngr.post({ message: "<i class=\"icon-warning-sign icon-large\"></i> Disconnected from Qorus instance!", type: "error", id: 'ws-connection' }); 
       this.trigger('ws-closed', this);
       setTimeout(this.connect, 5000);
+    },
+    
+    hasNextPage: function () {
+      return false;
     }
   });
   

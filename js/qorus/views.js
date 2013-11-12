@@ -601,6 +601,9 @@ define([
   });
 
   var TableView = View.extend({
+    messages: {
+      'nodata': "No data found"
+    },
     cached_views: {},
     cls: 'TableView',
     fixed: false,
@@ -622,25 +625,12 @@ define([
       this.listenTo(this.collection, 'sync', this.update);
       this.listenTo(this.collection, 'resort', this.render);
       
-      if (_.has(opts, 'template')) {
-        this.template = _.template(opts.template);
-      }
-      
-      if (_.has(opts, 'row_template')) {
-        this.row_template = opts.row_template;
-      }
-      
-      if (_.has(opts, 'helpers')) {
-        this.helpers = opts.helpers
-      }
-      
-      if (_.has(opts, 'dispatcher')) {
-        this.dispatcher = opts.dispatcher;
-      }
-      
-      if (_.has(opts, 'fixed')) {
-        this.fixed = opts.fixed;
-      }
+      if (_.has(opts, 'template')) this.template = _.template(opts.template);
+      if (_.has(opts, 'row_template')) this.row_template = opts.row_template;
+      if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
+      if (_.has(opts, 'dispatcher')) this.dispatcher = opts.dispatcher;
+      if (_.has(opts, 'fixed')) this.fixed = opts.fixed;
+      if (_.has(opts, 'messages')) _.extend(this.messages, opts.messages);
       
       // pre-compile row template
       this.row_tpl = _.template(this.row_template);
@@ -660,6 +650,8 @@ define([
       } else {
         this.opts.template = this.opts.template;
       }
+      
+      this.context.messages = this.messages;
       
       TableView.__super__.render.call(this, ctx);
       return this;
@@ -746,6 +738,10 @@ define([
     },
         
     update: function () {
+      if (this.template == NoDataTpl) {
+        this.template = this.opts.template;
+        this.render();
+      }
       this.removeView('tbody');
       this.appendRows(this.collection.models);
     },
@@ -825,6 +821,10 @@ define([
     }
   });
   
+  var TableAutoView = TableView.extend({
+    columns: []
+  });
+  
   var TableBody = View.extend({
     tagName: 'tbody',
     context: {},
@@ -845,31 +845,18 @@ define([
     },
     
     initialize: function (opts) {
+      var model = this.model, 
+        self = this;
+
       // _.bindAll(this);
       this.views =[];
       this.model = opts.model;
-      if (_.has(opts, 'cols')) {
-        this.cols = cols; 
-      }
-      
-      if (_.has(opts, 'template')) {
-        this.template = opts.template;
-      }
-      
-      if (_.has(opts, 'helpers')) {
-        this.helpers = opts.helpers;
-      }
-      
-      if (_.has(opts, 'parent')) {
-        this.parent = opts.parent;
-      }
-      
-      if (_.has(opts, 'context')) {
-        _.extends(this.context, opts.context); 
-      }
-      
-      var model = this.model
-        , self = this;
+
+      if (_.has(opts, 'cols')) this.cols = cols;
+      if (_.has(opts, 'template')) this.template = opts.template;
+      if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
+      if (_.has(opts, 'parent')) this.parent = opts.parent;
+      if (_.has(opts, 'context')) _.extends(this.context, opts.context); 
 
       // update row on model change
       this.listenTo(this.model, 'change', function (e) {

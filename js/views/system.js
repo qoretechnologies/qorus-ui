@@ -10,9 +10,10 @@ define([
   'views/system/options',
   'views/system/datasources',
   'views/system/prop',
-  'views/system/http'
+  'views/system/http',
+  'views/system/alerts'
 ], function($, _, Backbone, utils, Qorus, System, Template, LogView, OptionsView, 
-  DatasourceView, PropView, HttpServicesView){
+  DatasourceView, PropView, HttpServicesView, AlertView){
   var SystemInfoView = Qorus.View.extend({
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
@@ -38,6 +39,7 @@ define([
       this.setView(new DatasourceView(), '#datasources');
       this.setView(new PropView(), '#prop');
       this.setView(new HttpServicesView(), '#http');
+      this.setView(new AlertView(), '#alerts');
     },
     
     onRender: function () {

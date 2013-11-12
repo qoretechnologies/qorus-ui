@@ -7,7 +7,7 @@ define([
   'jquery.rest'
 ], function(settings, $, Backbone, Qorus){
   var Model = Qorus.Model.extend({
-    // dateAttributes: ['time',],
+    dateAttributes: ['time',],
     set: function(attributes, options){
       var attr = this.parse(attributes);
       Model.__super__.set.call(this, attr, options);
