@@ -7,8 +7,9 @@ define([
   'collections/alerts',
   'text!../../../templates/system/alerts/list.html',
   'text!../../../templates/system/alerts/table.html',
-  'text!../../../templates/system/alerts/row.html'
-], function($, _, Backbone, Qorus, settings, Collection, Template, TableTpl, RowTpl){
+  'text!../../../templates/system/alerts/row.html',
+  'text!../../../templates/system/alerts/detail.html'
+], function($, _, Backbone, Qorus, settings, Collection, Template, TableTpl, RowTpl, DetailTpl){
   var columns = [
     {
       name: 'alert',
@@ -64,6 +65,56 @@ define([
       label: 'Who'
     }
   ];
+  
+  var DetailView = Qorus.View.extend({
+    template: DetailTpl,
+    
+    initialize: function (opts) {
+      if (opts.model) {
+        this.model = opts.model;
+      }
+      
+      DetailView.__super__.initialize.call(this, opts);
+    },
+    
+    onRender: function (ctx) {
+    },
+    
+    render: function (ctx) {
+      this.context.item = this.model.toJSON();
+      DetailView.__super__.render.call(this, ctx);
+    },
+
+    off: function () {
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
+    }
+  })
+  
+  var TableView = Qorus.TableView.extend({
+    rowClick: function (model, e) {
+      var view;
+      
+      this.$('.info').removeClass('info');
+      
+      if (this.selected_model != model) {
+        view = this.setView(new DetailView({
+          model: model
+        }), '#alert-detail', true);
+        $(e.currentTarget).addClass('info');
+        this.selected_model = model;
+      } else {
+        this.removeView('#alert-detail');
+        this.selected_model = null;
+      }
+      
+    },
+    onRender: function () {
+      TableView.__super__.onRender.call(this);
+      this.$('#alert-detail').affix({ offset: 200 });
+    }
+  });
 
   var View = Qorus.View.extend({
     collections: {},
@@ -81,17 +132,30 @@ define([
     },
     
     preRender: function () {
-      this.setView(new Qorus.TableView({ 
-          collection: this.collections.ongoing, 
-          template: TableTpl,
-          row_template: RowTpl,
-          helpers: this.helpers,
-          context: { url: this.url },
-          dispatcher: Dispatcher,
-          // fixed: true
+      this.setView(new TableView({ 
+        parent: this,
+        collection: this.collections.ongoing, 
+        template: TableTpl,
+        row_template: RowTpl,
+        helpers: this.helpers,
+        context: { url: this.url },
+        dispatcher: Dispatcher,
+        row_attributes: ['type']
+        // fixed: true
       }), '#alerts-ongoing-list');
+
+      this.setView(new TableView({ 
+        parent: this,
+        collection: this.collections.transient, 
+        template: TableTpl,
+        row_template: RowTpl,
+        helpers: this.helpers,
+        context: { url: this.url },
+        dispatcher: Dispatcher,
+        row_attributes: ['type']
+        // fixed: true
+      }), '#alerts-transient-list');
     }
-    
   });
   
   return View;

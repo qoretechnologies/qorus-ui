@@ -7,7 +7,7 @@ html, body {
 	height: 100%;
 }
 
-table th {
+table thead th {
 	font-size: 80%;
 }
 
@@ -15,7 +15,7 @@ table th {
 	text-align: center;
 }
 
-.table th {
+.table thead th {
   line-height: 1em;
   vertical-align: center;
   padding: 4px 12px;
@@ -959,4 +959,12 @@ table .header-copy {
 	margin: 0 .5%;
 	width: 99%;
 	box-shadow: 0 5px 10px rgba(0,0,0,.8);
+}
+
+#alert-detail.affix {
+  top: 40px;
+}
+
+#alert-detail {
+  background-color: #fff;
 }

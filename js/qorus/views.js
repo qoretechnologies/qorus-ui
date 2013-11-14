@@ -625,8 +625,10 @@ define([
       this.listenTo(this.collection, 'sync', this.update);
       this.listenTo(this.collection, 'resort', this.render);
       
+      if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
       if (_.has(opts, 'row_template')) this.row_template = opts.row_template;
+      if (_.has(opts, 'row_attributes')) this.row_attributes = opts.row_attributes;      
       if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
       if (_.has(opts, 'dispatcher')) this.dispatcher = opts.dispatcher;
       if (_.has(opts, 'fixed')) this.fixed = opts.fixed;
@@ -677,6 +679,7 @@ define([
     },
     
     setWidths: function () {
+      if (!this.fixed) return;
       var clgrp = $('<colgroup />');
       
       this.$('colgroup').remove();
@@ -728,7 +731,14 @@ define([
     },
 
     appendRow: function (m, render) {
-      var view = this.insertView(new RowView({ model: m, template: this.row_tpl, helpers: this.helpers, parent: this }), 'tbody');
+      var view = this.insertView(new RowView({ 
+        model: m, 
+        template: this.row_tpl, 
+        helpers: this.helpers, 
+        parent: this, 
+        row_attributes: this.row_attributes 
+      }), 'tbody');
+
       render = (render===undefined) ? true : render;
       
       if (render) 
@@ -839,11 +849,22 @@ define([
     context: {},
     template: TableRowTpl,
     attributes: function() {
-      return {
-        'data-id': this.model.id
-      };
+      var data = { 'data-id': this.model.id },
+        self = this;
+      
+      if (this.row_attributes) {
+        _.each(this.row_attributes, function (atr) {
+          var key = 'data-' + atr;
+          data[key] = self.model.get(atr);
+        });
+      }
+      return data;
     },
-    
+
+    additionalEvents:  {
+      'click': 'rowClick'
+    },
+        
     initialize: function (opts) {
       var model = this.model, 
         self = this;
@@ -914,6 +935,15 @@ define([
       setTimeout(function() {
         self.$el.removeClass('changed');
       }, 5000);
+    },
+    
+    // delagate click event with model to parent view
+    rowClick: function (e) {
+      if (this.parent) {
+        if (this.parent.rowClick) {
+          this.parent.rowClick(this.model, e);
+        }
+      }
     }
   });
   

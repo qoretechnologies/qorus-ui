@@ -10,7 +10,7 @@ define([
     'workflows': 'showWorkflows',
 
     'orders/view/:id': 'showOrder',
-
+    'service/view/:id': 'showServices',
     'services': 'showServices',
     'jobs/view/:id(/:date)': 'showJob',
     'jobs/:date': 'showJobs',
