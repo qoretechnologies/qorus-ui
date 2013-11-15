@@ -961,10 +961,19 @@ table .header-copy {
 	box-shadow: 0 5px 10px rgba(0,0,0,.8);
 }
 
-#alert-detail.affix {
-  top: 40px;
+#alert-detail {
+  position: absolute;
+  position: fixed;
+    background-color: rgba(245,245,245,0.9);
+  box-shadow: 0 0 5px rgba(0,0,0,.5);
+  right: 0;
+  top: 0;
+  height: 100%;
+  max-width: 500px;
+  margin: 0;
+  padding: 40px 0 0 0;
 }
 
-#alert-detail {
-  background-color: #fff;
+.alert-detail {
+	padding: 10px;
 }
