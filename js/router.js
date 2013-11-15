@@ -23,11 +23,12 @@ define([
   'views/functions/functions',
   'views/groups/groups',
   'views/groups/group',
+  'views/dashboard',
   'urls',
   'messenger'
 ], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
   ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, GroupsView, GroupView, Urls) {
+  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, GroupsView, GroupView, DashboardView, Urls) {
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -157,6 +158,11 @@ define([
     
     showFunctions: function () {
       var view = new FunctionListView();
+      this.setView(view);
+    },
+    
+    showDashboard: function () {
+      var view = new DashboardView();
       this.setView(view);
     },
     

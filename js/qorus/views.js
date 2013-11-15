@@ -95,6 +95,7 @@ define([
       var start = new Date().getTime(), tpl;
       
       if (this.render_lock) return;
+      // this.removeViews();
 
       this.preRender();
 
@@ -198,7 +199,7 @@ define([
     
     renderViews: function () {
       var self = this;
-      _.each(self.views, function (view, id) {
+      _.each(self.views, function (view, id) {        
         self.renderView(id, view);
       });
     },
@@ -236,7 +237,7 @@ define([
 
       // debug.log('setting view', view, el, set);
       if (set === true) {
-        // debug.log('setting element on view', el, this.$(el));
+        // console.log('setting element on view', el, this.$(el));
         view.setElement(this.$(el)).render();
       }
       
@@ -278,12 +279,12 @@ define([
     },
     
     lock: function () {
-      console.log(this.cid, 'locked');
+      // console.log(this.cid, 'locked');
       this.render_lock = true;
     },
     
     unlock: function () {
-      console.log(this.cid, 'unlocked');
+      // console.log(this.cid, 'unlocked');
       this.render_lock = false;
     }
    });
@@ -331,7 +332,11 @@ define([
       this.opts.date = this.date;
       
       if (collection) {
-        this.collection = new collection(this.opts);
+        if (collection instanceof Backbone.Collection) {
+          this.collection = collection;
+        } else {
+          this.collection = new collection(this.opts);
+        }
         
         this.listenToOnce(this.collection, 'sync', this.render);
         this.listenToOnce(this.collection, 'error', this.render);
@@ -691,7 +696,6 @@ define([
     },
     
     resize: function () {
-      console.log('wtf');
       // fix static header width and pos
       if (this.fixed === true) {
         this.$('.table-fixed').fixedHeader();
@@ -748,6 +752,7 @@ define([
     },
         
     update: function () {
+      // console.log('updating table', this.collection);
       if (this.template == NoDataTpl) {
         this.template = this.opts.template;
         this.render();

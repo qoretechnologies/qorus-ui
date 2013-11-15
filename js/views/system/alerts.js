@@ -4,67 +4,32 @@ define([
   'backbone',
   'qorus/qorus',
   'settings',
+  'qorus/dispatcher',
   'collections/alerts',
   'text!../../../templates/system/alerts/list.html',
   'text!../../../templates/system/alerts/table.html',
   'text!../../../templates/system/alerts/row.html',
   'text!../../../templates/system/alerts/detail.html'
-], function($, _, Backbone, Qorus, settings, Collection, Template, TableTpl, RowTpl, DetailTpl){
+], function($, _, Backbone, Qorus, settings, Dispatcher, Collection, Template, TableTpl, RowTpl, DetailTpl){
   var columns = [
     {
       name: 'alert',
       label: 'Alert'
     },
     {
-      name: 'auditid',
-      label: 'Audit ID'
-    },
-    {
-      name: 'id',
-      label: 'ID'
-    },
-    {
-      name: 'instance',
-      label: 'Instance'
-    },
-    {
-      name: 'local',
-      label: 'Local',
-      type: 'bool'
-    },
-    {
-      name: 'name',
-      label: 'Name'
-    },
-    {
       name: 'object',
       label: 'Object'
     },
     {
-      name: 'reason',
-      label: 'Reason'
-    },
-    {
-      name: 'source',
-      label: 'Source'
-    },
-    {
-      name: 'type',
-      label: 'Type'
-    },
-    {
-      name: 'version',
-      label: 'Version'
-    },
-    {
       name: 'when',
       label: 'When'
-    },
-    {
-      name: 'who',
-      label: 'Who'
     }
   ];
+  
+  var css_map = {
+    'workflow': 'label-warning',
+    'service': 'label-important'
+  };
   
   var DetailView = Qorus.View.extend({
     template: DetailTpl,
@@ -115,46 +80,40 @@ define([
       this.$('#alert-detail').affix({ offset: 200 });
     }
   });
+  
+  var ListView = Qorus.ListView.extend({
+    template: '<div id="alerts-table" />',
+    
+    preRender: function () {
+      this.setView(new TableView({ 
+        parent: this,
+        collection: this.collection, 
+        template: TableTpl,
+        row_template: RowTpl,
+        helpers: this.helpers,
+        dispatcher: Dispatcher,
+        // fixed: true
+      }), '#alerts-table');
+    }
+  });
 
   var View = Qorus.View.extend({
     collections: {},
     views: {},
     template: Template,
     
-    initialize: function () {
-      View.__super__.initialize.call(this, arguments);
-      this.collections.ongoing = new Collection([], { type: 'ongoing' });
-      this.collections.transient = new Collection([], { type: 'transient '});
-      
-      _.each(this.collections, function (c) {
-        c.fetch();
-      });
+    preRender: function () {
+      this.setView(new ListView(
+        new Collection([], { type: 'ongoing'})
+      ), '#alerts-ongoing-list');
+
+      this.setView(new ListView(
+        new Collection([], { type: 'transient'})
+      ), '#alerts-transient-list');
     },
     
-    preRender: function () {
-      this.setView(new TableView({ 
-        parent: this,
-        collection: this.collections.ongoing, 
-        template: TableTpl,
-        row_template: RowTpl,
-        helpers: this.helpers,
-        context: { url: this.url },
-        dispatcher: Dispatcher,
-        row_attributes: ['type']
-        // fixed: true
-      }), '#alerts-ongoing-list');
-
-      this.setView(new TableView({ 
-        parent: this,
-        collection: this.collections.transient, 
-        template: TableTpl,
-        row_template: RowTpl,
-        helpers: this.helpers,
-        context: { url: this.url },
-        dispatcher: Dispatcher,
-        row_attributes: ['type']
-        // fixed: true
-      }), '#alerts-transient-list');
+    onRender: function () {
+      console.log(this.$el);
     }
   });
   

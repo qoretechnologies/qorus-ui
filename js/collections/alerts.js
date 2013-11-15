@@ -11,6 +11,10 @@ define([
     },
     
     initialize: function (models, opts) {
+      this.sort_key = 'when';
+      this.sort_order = 'des';
+      this.sort_history = ['alert',];
+      
       Collection.__super__.initialize.call(this, models, opts);
       if (opts.type) {
         this.type = opts.type;

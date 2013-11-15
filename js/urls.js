@@ -23,7 +23,7 @@ define([
     'groups': 'showGroups',
     'extensions(/)(:extension)': 'showExtension',
     'functions': 'showFunctions',
-    '': 'redirectToWorkflows',
+    '': 'showDashboard',
 
     // Default
     '*actions': 'defaultAction'
