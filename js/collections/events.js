@@ -25,13 +25,15 @@ define([
     // },
     
     wsAdd: function (e) {
-      var self = this;
-      var models = JSON.parse(e.data);
+      var self = this,
+        models, len, sliced;
+      models = JSON.parse(e.data);
       
       // drop older messages
       if (this.length + models.length > this.log_size - 1) {
-        var len = this.log_size - models.length;
-        this.reset(this.slice(-len));
+        len = this.log_size - models.length;
+        sliced = this.slice(-len);
+        this.models = sliced;
       }
       
       _.each(models, function (model) {
