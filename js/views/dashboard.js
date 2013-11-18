@@ -7,8 +7,9 @@ define([
   'collections/stats',
   'text!../../templates/dashboard.html',
   'views/common/chart',
-  'views/system/alerts'
-], function($, _, Backbone, utils, Qorus, StatsCollection, Template, ChartView, AlertView){
+  'views/system/alerts',
+  'views/system/health'
+], function($, _, Backbone, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
   var DashboardView = Qorus.View.extend({
     template: Template,
     initialize: function (opts) {
@@ -28,6 +29,10 @@ define([
         ), '#chart-1');
 
       this.setView(new AlertView(), '#alerts');
+    },
+    
+    onRender: function () {
+      this.setView(new HealthView(), '#health', true);
     }
 
   });

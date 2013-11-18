@@ -977,3 +977,24 @@ table .header-copy {
 .alert-detail {
 	padding: 10px;
 }
+
+#health .popover {
+  top: 10px !important;
+  height: auto;
+  width: auto;
+}
+
+#health .arrow {
+  top: 22px;
+}
+
+#health .popover-content {
+  height: auto;
+  width: auto;
+}
+
+.label-danger {
+  color: #ffffff;
+  background-color: #da4f49;
+  *background-color: #bd362f;
+}

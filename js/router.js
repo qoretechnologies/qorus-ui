@@ -166,6 +166,11 @@ define([
       this.setView(view);
     },
     
+    // redirects to workflows page
+    redirectToDashboard: function() {
+      Backbone.history.navigate('/dashboard', { trigger: true });
+    },
+    
     // default
     defaultAction: function (actions) {
       this.clean();

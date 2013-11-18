@@ -7,6 +7,7 @@ define([
 
   var Info = Qorus.Model.extend({
     url: settings.REST_API_PREFIX + '/system',
+    dateAttributes: ['alert-summary.cutoff'],
 
     initialize: function (options) {
       this.fetch();

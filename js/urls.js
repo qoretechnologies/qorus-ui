@@ -23,7 +23,8 @@ define([
     'groups': 'showGroups',
     'extensions(/)(:extension)': 'showExtension',
     'functions': 'showFunctions',
-    '': 'showDashboard',
+    'dashboard': 'showDashboard',
+    '': 'redirectToDashboard',
 
     // Default
     '*actions': 'defaultAction'
