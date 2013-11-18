@@ -1,5 +1,8 @@
+<div class="chart-box">
+  <canvas class="chart pie" id="<%= obj.chart.id %>" width="<%= obj.chart.width %>" height="<%= obj.chart.height %>"></canvas>
+</div>
 <% if (obj.legend) { %>
-<div class="span2">
+<div>
   <ul class="chart-legend">
     <% _.each(obj.legend, function (l) { %> 
       <li><div class="chart-legend-box" style="background-color: <%= l.color %>;"></div> <%= l.name %> (<%= l.value %>)</li>
@@ -7,6 +10,3 @@
   </ul>
 </div>
 <% } %>
-<div class="chart-box">
-  <canvas class="chart pie" id="<%= obj.chart.id %>" width="<%= obj.chart.width %>" height="<%= obj.chart.height %>"></canvas>
-</div>

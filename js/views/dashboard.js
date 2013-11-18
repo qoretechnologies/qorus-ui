@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
+  'settings',
   'utils',
   'qorus/qorus',
   'collections/stats',
@@ -9,7 +9,41 @@ define([
   'views/common/chart',
   'views/system/alerts',
   'views/system/health'
-], function($, _, Backbone, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
+], function($, _, settings, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
+  
+  var Summary = Qorus.Model.extend({
+    url: function () {
+      var url = settings.REST_API_PREFIX + '/orders';
+      return url + '?' + $.param(this.opts);
+    },
+
+    initialize: function (atrs, opts) {
+      this.opts = opts || {};
+      this.opts.action = 'orderSummary';
+    },
+    
+    getDataset: function () {
+      var vals = [
+         {
+          name: 'READY',
+          value: this.get('READY'),
+          color: '#aded9b'
+        },
+        {
+          name: 'ERROR',
+          value: this.get('ERROR'),
+          color: '#b94a48'
+        },
+        {
+          name: 'COMPLETED',
+          value: this.get('COMPLETE'),
+          color: '#468847'
+        }
+      ];
+      return vals;
+    }
+  });
+  
   var DashboardView = Qorus.View.extend({
     template: Template,
     initialize: function (opts) {
@@ -24,9 +58,15 @@ define([
     preRender: function () {
       this.setView(
         new ChartView.LineChart(
-          { width: 600, height: 200 }, 
+          { width: 500, height: 200 }, 
           new StatsCollection()
         ), '#chart-1');
+
+      this.setView(
+        new ChartView.DoughnutChart(
+          { width: 200, height: 200 }, 
+          new Summary()
+        ), '#chart-1-doughnut');
 
       this.setView(new AlertView(), '#alerts');
     },
