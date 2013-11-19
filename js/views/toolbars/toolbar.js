@@ -44,8 +44,7 @@ define([
     
     clean: function () {
       if (this.dp) {
-        this.$('.datetimepicker').datetimepicker('remove');
-        this.dp.remove();
+        this.dp.datetimepicker('destroy');
       }
       // unbind window resize event
       $(window).off('resize.toolbar.' + this.cid);
@@ -59,6 +58,7 @@ define([
           autoclose: true
       });
       this.dp.on('changeDate', function (e) {
+        $(this).datetimepicker('destroy');
         view.onDateChanged(e.date.toISOString(), {});
       });
     },

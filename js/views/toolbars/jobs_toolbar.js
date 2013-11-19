@@ -7,7 +7,9 @@ define([
 
   var Toolbar = BaseToolbar.extend({
     context: {},
-    template: Template    
+    template: Template,
+    url: '/jobs/',
+    datepicker: true   
   });
   return Toolbar;
 });

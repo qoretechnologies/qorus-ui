@@ -10,7 +10,7 @@ define([
     datepicker: true,
     template: Template,
     context: {},
-    url: '/workflows',
+    url: '/workflows/',
     
     initialize: function (opts) {
       _.bindAll(this);
