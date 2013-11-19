@@ -14,7 +14,7 @@
     <em><%= item.get('description') %></em>
   </div>
   <div class='row-fluid'>
-    <% _.each(item.get('groups'), function (g) { %><a href="<%= getUrl('showGroup', { name: g }) %>"><span class="label label-info"><%= g %></span></a> <% }) %>
+    <% _.each(item.get('groups'), function (g) { %><a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a> <% }) %>
   </div>
   <div class="push">
       
