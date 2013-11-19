@@ -39,7 +39,7 @@ define([
         output;
       level = level || 0;
 
-      if (!_.isUndefined(tpl)) {
+      if (tpl) {
         tpl_html = _.template(tpl);
       }
 
