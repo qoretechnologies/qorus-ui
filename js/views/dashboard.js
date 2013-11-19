@@ -12,6 +12,12 @@ define([
 ], function($, _, settings, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
   
   var Summary = Qorus.Model.extend({
+    defaults: {
+      'READY': 0,
+      'ERROR': 0,
+      'COMPLETE': 0
+    },
+    
     url: function () {
       var url = settings.REST_API_PREFIX + '/orders';
       return url + '?' + $.param(this.opts);
@@ -40,6 +46,7 @@ define([
           color: '#468847'
         }
       ];
+      console.log('vals')
       return vals;
     }
   });
