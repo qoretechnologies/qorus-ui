@@ -4,7 +4,7 @@ define([
   'backbone',
   'utils',
   'qorus/qorus',
-  'text!../../../templates/workflow/toolbars/orders_toolbar.html',
+  'text!templates/workflow/toolbars/orders_toolbar.html',
   'datepicker',
   'moment',
   'bootstrap.multiselect',

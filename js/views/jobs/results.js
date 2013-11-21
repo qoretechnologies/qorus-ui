@@ -4,9 +4,9 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/results',
-  'text!../../../templates/job/results/list.html',
-  'text!../../../templates/job/results/table.html',
-  'text!../../../templates/job/results/row.html',
+  'text!templates/job/results/list.html',
+  'text!templates/job/results/table.html',
+  'text!templates/job/results/row.html',
   'views/toolbars/results_toolbar'
 ], function ($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar) {
 

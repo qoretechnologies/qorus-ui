@@ -4,7 +4,7 @@ define([
   'backbone',
   'qorus/qorus',
   'settings',
-  'text!../../../templates/system/datasources.html'
+  'text!templates/system/datasources.html'
 ], function($, _, Backbone, Qorus, settings, Template){
   var ServiceView = Qorus.ServiceView.extend({
     views: {},

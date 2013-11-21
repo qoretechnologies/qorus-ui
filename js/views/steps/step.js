@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'models/step',
   'views/common/modal',
-  'text!../../../templates/steps/modal.html',
+  'text!templates/steps/modal.html',
   'jquery.ui',
   'rainbow.qore'
 ], function ($, _, Qorus, Model, Modal, Template) {

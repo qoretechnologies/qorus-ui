@@ -3,7 +3,7 @@ define([
   'underscore',
   'backbone',
   'qorus/qorus',
-  'text!../../../templates/job/toolbars/results_toolbar.html',
+  'text!templates/job/toolbars/results_toolbar.html',
   'datepicker',
   'moment',
   'bootstrap.multiselect',

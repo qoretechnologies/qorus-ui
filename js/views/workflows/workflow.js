@@ -4,7 +4,7 @@ define([
   'utils',
   'qorus/qorus',
   'models/workflow',
-  'text!../../../templates/workflow/detail.html',
+  'text!templates/workflow/detail.html',
   'views/workflows/instances',
   'views/workflows/orders',
   'views/common/bottom_bar',
@@ -13,7 +13,7 @@ define([
   'collections/stats',
   'views/common/chart',
   'views/log',
-  'tpl!../../../templates/common/option_edit.html',
+  'tpl!templates/common/option_edit.html',
   'sprintf'
 ], function ($, _, utils, Qorus, Workflow, Template, InstanceListView, OrderListView, 
   BottomBarView, OrderView, Modal, StatsCollection, ChartView, LogView, EditTemplate) {

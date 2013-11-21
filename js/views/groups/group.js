@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'models/group',
-  'text!../../../templates/groups/detail.html'
+  'text!templates/groups/detail.html'
 ], function ($, _, Qorus, Dispatcher, Model, Template) {
   var ModelView = Qorus.View.extend({
     title: "Group",

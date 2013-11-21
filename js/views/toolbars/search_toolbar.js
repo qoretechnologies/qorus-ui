@@ -3,7 +3,7 @@ define([
   'underscore',
   'backbone',
   'qorus/qorus',
-  'text!../../../templates/workflow/toolbars/search_toolbar.html',
+  'text!templates/workflow/toolbars/search_toolbar.html',
   'datepicker',
   'moment',
   'bootstrap.multiselect',

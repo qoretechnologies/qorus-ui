@@ -4,7 +4,7 @@ define(function (require) {
     Qorus = require('qorus/qorus'),
     HealthView = require('views/system/health'),
     UserView = require('views/system/user'),
-    Template = require('text!/templates/common/header.html'),
+    Template = require('text!templates/common/header.html'),
     View;
   
   View = Qorus.View.extend({

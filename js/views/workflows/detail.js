@@ -7,8 +7,8 @@ define([
   'models/workflow',
   'views/log',
   'views/common/diagram',
-  'text!../../../templates/workflow/meta.html',
-  'text!../../../templates/common/option_edit.html',
+  'text!templates/workflow/meta.html',
+  'text!templates/common/option_edit.html',
   'jquery.ui'
 ], function ($, _, utils, Qorus, Dispatcher, Model, LogView, DiagramView, Template, EditTemplate) {
   

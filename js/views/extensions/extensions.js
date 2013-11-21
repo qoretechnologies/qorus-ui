@@ -5,7 +5,7 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/extensions',
-  'text!../../../templates/extensions/list.html'
+  'text!templates/extensions/list.html'
 ], function($, _, utils, Qorus, Dispatcher, Collection, Template){
 
   var ListView = Qorus.ListView.extend({

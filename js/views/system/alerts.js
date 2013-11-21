@@ -6,10 +6,10 @@ define([
   'settings',
   'qorus/dispatcher',
   'collections/alerts',
-  'text!../../../templates/system/alerts/list.html',
-  'text!../../../templates/system/alerts/table.html',
-  'text!../../../templates/system/alerts/row.html',
-  'text!../../../templates/system/alerts/detail.html'
+  'text!templates/system/alerts/list.html',
+  'text!templates/system/alerts/table.html',
+  'text!templates/system/alerts/row.html',
+  'text!templates/system/alerts/detail.html'
 ], function($, _, Backbone, Qorus, settings, Dispatcher, Collection, Template, TableTpl, RowTpl, DetailTpl){
   var columns = [
     {

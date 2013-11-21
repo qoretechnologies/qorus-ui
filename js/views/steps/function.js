@@ -3,7 +3,7 @@ define([
   'underscore',
   'qorus/qorus',
   'models/function',
-  'text!../../../templates/steps/function_modal.html',
+  'text!templates/steps/function_modal.html',
 ], function ($, _, Qorus, Model, Template) {
   var ModelView = Qorus.View.extend({
     initialize: function (opts) {

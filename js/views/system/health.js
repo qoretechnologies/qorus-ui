@@ -5,8 +5,8 @@ define([
   'qorus/qorus',
   'settings',
   'models/system',
-  'text!../../../templates/system/health/status.html',
-  'tpl!../../../templates/system/health/detail.html'
+  'text!templates/system/health/status.html',
+  'tpl!templates/system/health/detail.html'
 ], function($, _, Backbone, Qorus, settings, Model, StatusTpl, DetailTpl){
   var status_url = settings.REST_API_PREFIX + '/system/health';
 

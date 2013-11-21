@@ -5,7 +5,7 @@ define(function(require){
     utils = require('utils'),
     Qorus = require('qorus/qorus'),
     System = require('models/system'),
-    Template = require('text!../../templates/system/detail.html'),
+    Template = require('text!templates/system/detail.html'),
     LogView = require('views/log'),
     OptionsView = require('views/system/options'),
     DatasourceView = require('views/system/datasources'),

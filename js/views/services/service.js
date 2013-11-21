@@ -5,7 +5,7 @@ define([
   'qorus/dispatcher',
   'models/service',
   'views/log',
-  'text!../../../templates/service/detail.html',
+  'text!templates/service/detail.html',
   'jquery.ui'
 ], function ($, _, Qorus, Dispatcher, Model, LogView, Template) {
   var ModelView = Qorus.View.extend({

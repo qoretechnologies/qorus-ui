@@ -3,7 +3,7 @@ define([
   'underscore',
   'qorus/qorus',
   'models/result',
-  'text!../../../templates/job/results/detail.html',
+  'text!templates/job/results/detail.html',
   'rainbow.qore'
 ], function($, _, Qorus, Model, Template, StepView){
   var context = {};

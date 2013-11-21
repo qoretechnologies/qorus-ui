@@ -7,8 +7,8 @@ define([
   'qorus/qorus',
   'models/system',
   'collections/options',
-  'text!../../../templates/system/options.html',
-  'text!../../../templates/common/option_edit.html',
+  'text!templates/system/options.html',
+  'text!templates/common/option_edit.html',
   'jquery.ui'
 ], function($, _, Backbone, settings, utils, Qorus, System, Collection, Template, EditTemplate){
   

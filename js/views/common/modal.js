@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!../../../templates/common/modal.html',
+  'text!templates/common/modal.html',
   'sprintf',
   'jquery.ui'
 ], function($, _, Qorus, Template){

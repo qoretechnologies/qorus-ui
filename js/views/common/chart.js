@@ -3,8 +3,8 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!../../../templates/common/charts/line.html',
-  'text!../../../templates/common/charts/doughnut.html',
+  'text!templates/common/charts/line.html',
+  'text!templates/common/charts/doughnut.html',
   'chart'
 ], function (self, $, _, Qorus, LineChartTpl, DoughnutChartTpl) {
   var ColorScheme = {

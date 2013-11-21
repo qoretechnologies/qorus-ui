@@ -5,7 +5,7 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
     utils = require('utils'),
     Qorus = require('qorus/qorus'),
     StatsCollection = require('collections/stats'),
-    Template = require('text!/templates/system/dashboard.html'),
+    Template = require('text!templates/system/dashboard.html'),
     ChartView = require('views/common/chart'),
     AlertView = require('views/system/alerts'),
     HealthView = require('views/system/health'),

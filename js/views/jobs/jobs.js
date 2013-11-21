@@ -5,9 +5,9 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/jobs',
-  'text!../../../templates/job/list.html',
-  'text!../../../templates/job/table.html',
-  'text!../../../templates/job/row.html',
+  'text!templates/job/list.html',
+  'text!templates/job/table.html',
+  'text!templates/job/row.html',
   'views/toolbars/jobs_toolbar',
   'views/jobs/modals/reschedule',
   'views/jobs/modals/expire'

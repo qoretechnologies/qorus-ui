@@ -4,7 +4,7 @@ define([
   'qorus/qorus',
   'models/order',
   'models/workflow',
-  'text!../../../templates/workflow/orders/detail.html',
+  'text!templates/workflow/orders/detail.html',
   'views/steps/step',
   'views/common/diagram'
 ], function($, _, Qorus, Model, Workflow, Template, StepView, DiagramView){

@@ -3,7 +3,7 @@ define([
   'underscore',
   'settings',
   'qorus/qorus',
-  'text!../../../templates/service/modal.html',
+  'text!templates/service/modal.html',
 ], function ($, _, settings, Qorus, Template) {
   var View = Qorus.View.extend({
     context: {},

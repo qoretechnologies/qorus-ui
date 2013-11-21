@@ -7,9 +7,9 @@ define([
   'utils',
   'qorus/qorus',
   'qorus/helpers',
-  'text!../../templates/common/table.html',
-  'text!../../templates/common/tablerow.html',
-  'text!../../templates/common/nodata.html',
+  'text!templates/common/table.html',
+  'text!templates/common/tablerow.html',
+  'text!templates/common/nodata.html',
   'bootstrap',
   'jquery.fixedheader'
 ], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {

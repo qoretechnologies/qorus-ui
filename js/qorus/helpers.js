@@ -4,11 +4,11 @@ define([
   'backbone',
   'settings',
   'utils',
-  'tpl!../../templates/common/nested_list.html',
-  'tpl!../../templates/common/nested_list_text.html',
-  'tpl!../../templates/common/wrap_label.html',
-  'tpl!../../templates/common/power_button.html',
-  'tpl!../../templates/common/action_status.html',
+  'tpl!templates/common/nested_list.html',
+  'tpl!templates/common/nested_list_text.html',
+  'tpl!templates/common/wrap_label.html',
+  'tpl!templates/common/power_button.html',
+  'tpl!templates/common/action_status.html',
   'urls'
 ], function ($, _, Backbone, settings, utils, NestedListTpl, NestedListTextTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
 

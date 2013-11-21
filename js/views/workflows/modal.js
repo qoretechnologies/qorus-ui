@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'qorus/qorus',
-  'text!../../../templates/workflow/modal.html',
+  'text!templates/workflow/modal.html',
   'jquery.ui'
 ], function ($, _, Qorus, Template) {
   var View = Qorus.View.extend({

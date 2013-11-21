@@ -5,9 +5,9 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/functions',
-  'text!../../../templates/functions/list.html',
-  'text!../../../templates/functions/table.html',
-  'text!../../../templates/functions/row.html'
+  'text!templates/functions/list.html',
+  'text!templates/functions/table.html',
+  'text!templates/functions/row.html'
 ], function($, _, utils, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
 
   var ListView = Qorus.ListView.extend({

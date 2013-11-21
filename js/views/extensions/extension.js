@@ -5,7 +5,7 @@ define([
   'qorus/qorus',
   'utils',
   'settings',
-  'text!../../../templates/extensions/extension.html'
+  'text!templates/extensions/extension.html'
 ], function($, _, Backbone, Qorus, utils, settings, Template){
     
   var Extension = function (extension, path) {

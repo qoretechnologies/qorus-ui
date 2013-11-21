@@ -6,9 +6,9 @@ define([
   'qorus/dispatcher',
   'collections/groups',
   'views/toolbars/groups_toolbar',
-  'text!../../../templates/groups/list.html',
-  'text!../../../templates/groups/table.html',
-  'text!../../../templates/groups/row.html'
+  'text!templates/groups/list.html',
+  'text!templates/groups/table.html',
+  'text!templates/groups/row.html'
 ], function($, _, utils, Qorus, Dispatcher, Collection, ToolbarView, Template, TableTpl, RowTpl
 ){
 

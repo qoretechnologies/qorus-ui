@@ -4,7 +4,7 @@ define([
   'backbone',
   'qorus/qorus',
   'settings',
-  'text!../../../templates/system/http.html'
+  'text!templates/system/http.html'
 ], function($, _, Backbone, Qorus, settings, Template){
   var http_services_url = settings.REST_API_PREFIX + '/system/userhttp';
 

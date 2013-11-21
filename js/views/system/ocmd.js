@@ -5,7 +5,7 @@ define([
   'qorus/qorus',
   'qorus/helpers',
   'settings',
-  'text!../../../templates/system/ocmd.html'
+  'text!templates/system/ocmd.html'
 ], function($, _, Backbone, Qorus, Helpers, settings, Template){
   var url = settings.REST_API_PREFIX + '/system/api';
 

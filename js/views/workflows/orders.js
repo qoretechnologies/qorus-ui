@@ -6,9 +6,9 @@ define([
   'qorus/dispatcher',
   'collections/orders',
   'views/toolbars/orders_toolbar',
-  'text!../../../templates/workflow/orders.html',
-  'text!../../../templates/workflow/orders/table.html',
-  'text!../../../templates/workflow/orders/row.html',
+  'text!templates/workflow/orders.html',
+  'text!templates/workflow/orders/table.html',
+  'text!templates/workflow/orders/row.html',
   // 'jquery.floatthead'
 ], function($, _, settings, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
   var context = {

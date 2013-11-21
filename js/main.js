@@ -25,7 +25,8 @@ require.config({
     "rainbow.qore": "libs/rainbow/language/qore",
     "rainbow.html": "libs/rainbow/language/html",
     "rainbow.sql": "libs/rainbow/language/sql",
-    "chart": "libs/chart"
+    "chart": "libs/chart",
+    "templates": "../templates"
   },
   shim: { 
     "backbone": {

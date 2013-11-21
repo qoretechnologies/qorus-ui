@@ -5,7 +5,7 @@ define([
   'qorus/dispatcher',
   'models/job',
   'views/log',
-  'text!../../../templates/job/detail.html',
+  'text!templates/job/detail.html',
   'views/jobs/results',
   'views/jobs/result',
   'views/common/bottom_bar',

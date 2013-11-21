@@ -4,8 +4,8 @@ define([
   'qorus/qorus',
   'qorus/dispatcher',
   'collections/logs',
-  'text!../../templates/common/log.html',
-  'text!../../templates/common/log_pre.html',
+  'text!templates/common/log.html',
+  'text!templates/common/log_pre.html',
   'jquery.ui'
 ], function ($, _, Qorus, Dispatcher, Collection, Template, TemplatePre) {
   var View = Qorus.View.extend({

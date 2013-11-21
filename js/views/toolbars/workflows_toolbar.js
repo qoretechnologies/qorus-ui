@@ -3,7 +3,7 @@ define([
   'underscore',
   'utils',
   'views/toolbars/toolbar',
-  'text!../../../templates/workflow/toolbars/workflows_toolbar.html',
+  'text!templates/workflow/toolbars/workflows_toolbar.html',
 ], function($, _, utils, BaseToolbar, Template){
   
   var Toolbar = BaseToolbar.extend({
