@@ -1,12 +1,11 @@
-<h3>System Overview</h3>
-
 <ul class="nav nav-tabs">
-  <li class="active"><a href="?info" data-target="#info">Info</a></li>
+  <li class="active"><a href="?performance" data-target="#performance">Performance</a></li>
+  <li><a href="?http" data-target="#alerts">Alerts</a></li>
   <li><a href="?options" data-target="#options">Options</a></li>
   <li><a href="?datasources" data-target="#datasources">Datasources</a></li>
   <li><a href="?prop" data-target="#prop">Properties</a></li>
   <li><a href="?http" data-target="#http">Http Services</a></li>
-  <li><a href="?http" data-target="#alerts">Alerts</a></li>
+  <li><a href="?info" data-target="#info">Info</a></li>
   <li><a href="?log" data-target="#log">Log</a></li>
   <li><a href="?http-log" data-target="#http-log">HTTP Log</a></li>
   <li><a href="?audit-log" data-target="#audit-log">Audit Log</a></li>
@@ -17,7 +16,9 @@
 <% var item = obj.toJSON(); %>
 
 <div class="tab-content">
-  <div id="info" class="tab-pane active">
+  <div id="performance" class="tab-pane active">
+  </div>
+  <div id="info" class="tab-pane">
     <table class="table table-striped">
       <thead>
         <tr>

@@ -1,17 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'settings',
-  'utils',
-  'qorus/qorus',
-  'collections/stats',
-  'text!../../templates/dashboard.html',
-  'views/common/chart',
-  'views/system/alerts',
-  'views/system/health'
-], function($, _, settings, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
+define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    settings = require('settings'),
+    utils = require('utils'),
+    Qorus = require('qorus/qorus'),
+    StatsCollection = require('collections/stats'),
+    Template = require('text!/templates/system/dashboard.html'),
+    ChartView = require('views/common/chart'),
+    AlertView = require('views/system/alerts'),
+    HealthView = require('views/system/health'),
+    Summary, DashboardView;
   
-  var Summary = Qorus.Model.extend({
+  Summary = Qorus.Model.extend({
     defaults: {
       'READY': 0,
       'ERROR': 0,
@@ -46,12 +46,11 @@ define([
           color: '#468847'
         }
       ];
-      console.log('vals')
       return vals;
     }
   });
   
-  var DashboardView = Qorus.View.extend({
+  DashboardView = Qorus.View.extend({
     template: Template,
     initialize: function (opts) {
       _.bindAll(this);
@@ -59,7 +58,6 @@ define([
       this.opts = opts || {};
       
       this.template = Template;
-      _.defer(this.render);
     },
     
     preRender: function () {
@@ -68,20 +66,13 @@ define([
           { width: 500, height: 200 }, 
           new StatsCollection()
         ), '#chart-1');
-
+      
       this.setView(
         new ChartView.DoughnutChart(
           { width: 200, height: 200 }, 
           new Summary()
         ), '#chart-1-doughnut');
-
-      this.setView(new AlertView(), '#alerts');
-    },
-    
-    onRender: function () {
-      this.setView(new HealthView(), '#health', true);
     }
-
   });
   return DashboardView;
 });

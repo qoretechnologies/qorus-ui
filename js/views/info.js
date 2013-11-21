@@ -1,10 +1,11 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'models/system',
-], function($, _, Backbone, Qorus, System){
+define(function(require){
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    Qorus = require('qorus/qorus'),
+    System = require('models/system'),
+    HeaderView = require('views/common/header'),
+    SystemInfoView;
+  
   var SystemInfoView = Qorus.View.extend({    
     initialize: function (opts) {
       this.opts = opts || {};
@@ -23,9 +24,14 @@ define([
     },
     
     renderInfo: function () {
-			$('header .version').text(this.info.get('omq-version'));
-			$('header .instance-key').text(this.info.get('instance-key'));
-			$('title').text(this.info.get('instance-key') + " | " + this.info.get('omq-version'));
+      console.log(HeaderView);
+      var header = new HeaderView({ info: this.info, user: this.user.get(0) });
+      header.setElement($('#header'));
+      header.render();
+      
+      this.title = this.info.get('instance-key') + " | " + this.info.get('omq-version');
+      this.setTitle();
+      
       $('#build').text(this.info.get('omq-version') + '.' + this.info.get('omq-build'));
       $('#schema').text(this.info.get('omq-schema'));
     }
@@ -33,5 +39,4 @@ define([
   });
 
   return SystemInfoView;
-  
 });

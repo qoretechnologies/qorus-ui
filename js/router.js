@@ -1,34 +1,32 @@
-define([
-  'jquery', 
-  'underscore', 
-  'backbone', 
-  'moment',
-  'messenger',
-  'qorus/qorus', 
-  'views/info',
-  'views/system', 
-  'views/workflows/workflows', 
-  'views/workflows/workflow', 
-  'views/services/services', 
-  'views/jobs/jobs', 
-  'views/jobs/job', 
-  'views/workflows/instances',
-  'views/events/events',
-  'views/workflows/orders',
-  'views/workflows/search',
-  'views/workflows/order',
-  'views/system/ocmd',
-  'views/extensions/extensions',
-  'views/extensions/extension',
-  'views/functions/functions',
-  'views/groups/groups',
-  'views/groups/group',
-  'views/dashboard',
-  'urls',
-  'messenger'
-], function($, _, Backbone, moment, messenger, Qorus, InfoView, SystemInfoView, WorkflowListView, WorkflowView, 
-  ServiceListView, JobListView, JobView, InstanceListView, EventListView, OrderListView, SearchListView,
-  OrderView, OcmdView, ExtensionListView, ExtensionView, FunctionListView, GroupsView, GroupView, DashboardView, Urls) {
+define(function(require) {
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    Backbone = require('backbone'),
+    moment = require('moment'),
+    messenger = require('messenger'),
+    Qorus = require('qorus/qorus'),
+    InfoView = require('views/info'),
+    SystemInfoView = require('views/system'),
+    WorkflowListView = require('views/workflows/workflows'),
+    WorkflowView = require('views/workflows/workflow'),
+    ServiceListView = require('views/services/services'),
+    JobListView = require('views/jobs/job'),
+    JobView = require('views/jobs/job'),
+    InstanceListView = require('views/workflows/instances'),
+    EventListView = require('views/events/events'),
+    OrderListView = require('views/workflows/orders'),
+    SearchListView = require('views/workflows/search'),
+    OrderView = require('views/workflows/order'),
+    OcmdView = require('views/system/ocmd'),
+    ExtensionListView = require('views/extensions/extensions'),
+    ExtensionView = require('views/extensions/extension'),
+    FunctionListView = require('views/functions/functions'),
+    GroupsView = require('views/groups/groups'),
+    GroupView = require('views/groups/group'),
+    Urls = require('urls'),
+    AppRouter, app_router;
+      
+    
 
   Messenger.options = {
   	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -36,7 +34,7 @@ define([
     showCloseButton: true
   }
 
-  var AppRouter = Backbone.Router.extend({
+  AppRouter = Backbone.Router.extend({
     currentView: null,
     routes: Urls.routes,
 
@@ -168,7 +166,7 @@ define([
     
     // redirects to workflows page
     redirectToDashboard: function() {
-      Backbone.history.navigate('/dashboard', { trigger: true });
+      Backbone.history.navigate('/system?dashboard', { trigger: true });
     },
     
     // default
@@ -180,7 +178,7 @@ define([
 
   new InfoView();
 
-  var app_router = new AppRouter();
+  app_router = new AppRouter();
   
   app_router.on('route', function () {
     // update menu and make active item based on fragment

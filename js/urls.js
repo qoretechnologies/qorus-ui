@@ -23,7 +23,6 @@ define([
     'groups': 'showGroups',
     'extensions(/)(:extension)': 'showExtension',
     'functions': 'showFunctions',
-    'dashboard': 'showDashboard',
     '': 'redirectToDashboard',
 
     // Default

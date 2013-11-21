@@ -246,9 +246,11 @@ define([
     
     // sets document title if defined in view
     setTitle: function () {
-      if (!_.isUndefined(this.title)) {
-        var title = _.isFunction(this.title) ? this.title() : this.title;
-        var inst = document.title.match(/(.*)\| /g);
+      var title, inst;
+      
+      if (this.title) {
+        title = _.isFunction(this.title) ? this.title() : this.title;
+        inst = document.title.match(/(.*)\| /g);
         if (inst) {
           document.title = inst[0];
         } else {

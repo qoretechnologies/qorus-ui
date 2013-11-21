@@ -1,25 +1,28 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'utils',
-  'qorus/qorus',
-  'models/system',
-  'text!../../templates/system/detail.html',
-  'views/log',
-  'views/system/options',
-  'views/system/datasources',
-  'views/system/prop',
-  'views/system/http',
-  'views/system/alerts'
-], function($, _, Backbone, utils, Qorus, System, Template, LogView, OptionsView, 
-  DatasourceView, PropView, HttpServicesView, AlertView){
-  var SystemInfoView = Qorus.View.extend({
+define(function(require){
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    Backbone = require('backbone'),
+    utils = require('utils'),
+    Qorus = require('qorus/qorus'),
+    System = require('models/system'),
+    Template = require('text!../../templates/system/detail.html'),
+    LogView = require('views/log'),
+    OptionsView = require('views/system/options'),
+    DatasourceView = require('views/system/datasources'),
+    PropView = require('views/system/prop'),
+    HttpServicesView = require('views/system/http'),
+    AlertView = require('views/system/alerts'),
+    DashboardView = require('views/system/dashboard'),
+    SystemInfoView;  
+
+
+  SystemInfoView = Qorus.View.extend({
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
     },
     
     initialize: function (opts) {
+      _.bindAll(this);
       this.opts = opts || {};
       this.info = System.Info;
       
@@ -30,6 +33,7 @@ define([
     },
     
     preRender: function () {
+      this.setView(new DashboardView(), '#performance');
       this.setView(new LogView({ socket_url: "/system", parent: this }), '#log');
       this.setView(new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false }), '#audit-log');
       this.setView(new LogView({ socket_url: "/http", parent: this, auto_reconnect: false }), '#http-log');

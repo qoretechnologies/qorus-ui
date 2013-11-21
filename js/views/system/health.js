@@ -44,7 +44,7 @@ define([
       
       $status = this.$('#status').popover({ 
         content: DetailTpl(data), 
-        placement: "left", 
+        placement: "right", 
         container: this.$el,
         html: true
       });

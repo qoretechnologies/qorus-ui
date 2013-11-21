@@ -73,6 +73,7 @@ define([
     
     initialize: function (opts, collection) {
       _.bindAll(this);
+      this.views = {};
       this.opts = opts;
 
       if(_.has(opts, 'ColorScheme')) this.ColorScheme = opts.ColorScheme;
