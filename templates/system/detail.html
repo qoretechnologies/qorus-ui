@@ -37,8 +37,8 @@
             <dl>
           <% _.each(item, function (it, key) { %>
               <dt><%= key %> <%= it.version %></dt>
-              <dd><small>Desc: <%= it.desc %><br />
-                Author: <%= it.author %> (<%= it.url %>)</small></dd>
+              <dd><small>Desc: <%- it.desc %><br />
+                Author: <%- it.author %> (<%= it.url %>)</small></dd>
           <% }) %>
         </td>          
         <% } %>
