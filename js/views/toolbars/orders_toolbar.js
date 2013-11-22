@@ -48,10 +48,10 @@ define([
     
     clean: function () {
       // debug.error('cleaning toolbar', this.dp);
-      this.dp = this.$('.dp').datetimepicker('remove');
+      if (this.dp) {
+        this.dp = this.dp.datetimepicker('destroy');
+      }
       $('#statuses').multiselect('destroy');
-      this.dp.off();
-      this.dp.remove();
     },
     
     updateStatuses: function(statuses){

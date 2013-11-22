@@ -13,6 +13,7 @@ define(function (require) {
     
     initialize: function (opts) {
       // View.__super__.initialize.call(this, opts);      
+      _.bindAll(this);
       this.model = opts.info;
       this.user = opts.user;
     },

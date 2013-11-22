@@ -15,7 +15,7 @@ define([
   });
 
   var User = Qorus.Model.extend({
-    url: settings.REST_API_PREFIX + '/users',
+    url: settings.REST_API_PREFIX + '/users/_current_',
 
     initialize: function (options) {
       this.fetch();

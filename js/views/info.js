@@ -12,20 +12,13 @@ define(function(require){
       this.user = System.User;
       this.info = System.Info;
       
-      _.bindAll(this, 'renderUser');
       _.bindAll(this, 'renderInfo');
       
-      this.listenTo(this.user, 'change', this.renderUser);
       this.listenTo(this.info, 'change', this.renderInfo);
     },
     
-    renderUser: function () {
-      $('#user-info .username').text(this.user.get(0).name);
-    },
-    
     renderInfo: function () {
-      console.log(HeaderView);
-      var header = new HeaderView({ info: this.info, user: this.user.get(0) });
+      var header = new HeaderView({ info: this.info, user: this.user });
       header.setElement($('#header'));
       header.render();
       
