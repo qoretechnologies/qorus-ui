@@ -46,7 +46,7 @@ define([
     
     onRender: function () {
       // init popover on info text
-      console.log(this.$el);
+      // console.log(this.$el);
       $('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
         $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});

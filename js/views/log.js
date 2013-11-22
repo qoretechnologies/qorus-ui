@@ -56,7 +56,7 @@ define([
     toggleScroll: function (e) {
       var $el = $(e.currentTarget);
       this.is_scrollable = $el.prop('checked');
-      console.log(this.is_scrollable);
+      // console.log(this.is_scrollable);
     },
 
     isScrollable: function () {

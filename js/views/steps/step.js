@@ -14,7 +14,6 @@ define([
     },
     
     initialize: function (opts) {
-      console.log('hello stepview');
       this.views = {};
       this.opts = opts;
       _.bindAll(this, 'render');

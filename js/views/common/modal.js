@@ -48,7 +48,7 @@ define([
           maxWidth: max_width
         });
       });
-      console.log(this.views, this.$el);
+      // console.log(this.views, this.$el);
     },
     
     fixHeight: function () {

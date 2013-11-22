@@ -1,21 +1,21 @@
 <div id="alert-list">
     <div class="tabbable">
       <ul class="nav nav-pills">
-          <li class="active"><a href="?alerts/ongoing" data-toggle="tab" data-target="#alerts-ongoing">Ongoing</a></li>
-          <li><a href="?alerts/transient" data-toggle="tab" data-target="#alerts-transient">Transient</a></li>
+          <li class="active"><a href="?alerts/ongoing" data-toggle="tab" data-target="#alerts-ongoing-<%= cid %>">Ongoing</a></li>
+          <li><a href="?alerts/transient" data-toggle="tab" data-target="#alerts-transient-<%= cid %>">Transient</a></li>
       </ul>
       <div class="tab-content">
-          <div class="tab-pane active" id="alerts-ongoing">
+          <div class="tab-pane active" id="alerts-ongoing-<%= cid %>">
               <div class="row-fluid">
-                  <div id="alerts-ongoing-list">
+                  <div id="alerts-ongoing-list-<%= cid %>">
                   </div>
               </div>
           </div>
-          <div class="tab-pane " id="alerts-transient">
+          <div class="tab-pane " id="alerts-transient-<%= cid %>">
               <div class="row-fluid">
-                  <div id="alerts-transient-list">                      
+                  <div id="alerts-transient-list-<%= cid %>">
                   </div>
-              </div>              
+              </div>
           </div>
       </div>
     </div>

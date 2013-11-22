@@ -12,11 +12,10 @@ define(function (require) {
     initialize: function (opts) {
       _.bindAll(this);
       this.model = opts.model;
-      console.log(this.model, opts);
+      this.listenTo(this.model, 'change', this.render);
     },
     
     render: function (ctx) {
-      console.log(this.model, this.el, this.$el);
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
     }

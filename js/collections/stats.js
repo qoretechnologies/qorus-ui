@@ -47,7 +47,6 @@ define([
       this.params.wfids = this.opts.id;
       this.params.global = (this.opts.id) ? false : true;
       this.params.grouping = (this.step > 1) ? 'daily' : 'hourly';
-      console.log(this.url());
       this.fetch();
     },
     
@@ -81,7 +80,6 @@ define([
         labels: _.map(this.getLabels(), function (l) { return l.slice(-2); }),
         datasets: this.createDataset()
       };
-      console.log(this, data);
       return data;
     },
     

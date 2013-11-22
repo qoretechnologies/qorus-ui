@@ -1,17 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'settings',
-  'qorus/dispatcher',
-  'collections/alerts',
-  'text!templates/system/alerts/list.html',
-  'text!templates/system/alerts/table.html',
-  'text!templates/system/alerts/row.html',
-  'text!templates/system/alerts/detail.html'
-], function($, _, Backbone, Qorus, settings, Dispatcher, Collection, Template, TableTpl, RowTpl, DetailTpl){
-  var columns = [
+define(function (require) {
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    Qorus = require('qorus/qorus'),
+    settings = require('settings'),
+    Dispatcher = require('qorus/dispatcher'),
+    Collection = require('collections/alerts'),
+    Template = require('text!templates/system/alerts/list.html'),
+    TableTpl = require('text!templates/system/alerts/table.html'),
+    RowTpl = require('text!templates/system/alerts/row.html'),
+    DetailTpl = require('text!templates/system/alerts/detail.html'),
+    columns, css_map, DetailView, TableView, ListView, View;
+  
+  columns = [
     {
       name: 'alert',
       label: 'Alert'
@@ -26,12 +26,12 @@ define([
     }
   ];
   
-  var css_map = {
+  css_map = {
     'workflow': 'label-warning',
     'service': 'label-important'
   };
   
-  var DetailView = Qorus.View.extend({
+  DetailView = Qorus.View.extend({
     template: DetailTpl,
     
     initialize: function (opts) {
@@ -57,7 +57,16 @@ define([
     }
   })
   
-  var TableView = Qorus.TableView.extend({
+  TableView = Qorus.TableView.extend({
+    initialize: function () {
+      _.bindAll(this);
+      var self = this;
+      TableView.__super__.initialize.apply(this, arguments);
+      this.listenTo(Dispatcher, 'alert', function () {
+        self.collection.fetch();
+      });
+    },
+    
     rowClick: function (model, e) {
       var view;
       
@@ -75,14 +84,17 @@ define([
       }
       
     },
+    
     onRender: function () {
       TableView.__super__.onRender.call(this);
       this.$('#alert-detail').affix({ offset: 200 });
     }
   });
   
-  var ListView = Qorus.ListView.extend({
-    template: '<div id="alerts-table" />',
+  ListView = Qorus.ListView.extend({
+    template: function () {
+      return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
+    },
     
     preRender: function () {
       this.setView(new TableView({ 
@@ -93,27 +105,27 @@ define([
         helpers: this.helpers,
         dispatcher: Dispatcher,
         // fixed: true
-      }), '#alerts-table');
+      }), sprintf('#alerts-table-%s', this.cid));
     }
   });
 
-  var View = Qorus.View.extend({
+  View = Qorus.View.extend({
     collections: {},
     views: {},
-    template: Template,
+    template: function (ctx) {
+      ctx = ctx || {};
+      _.extend(ctx, { cid: this.cid });
+      return _.template(Template, ctx);
+    },
     
     preRender: function () {
       this.setView(new ListView(
         new Collection([], { type: 'ongoing'})
-      ), '#alerts-ongoing-list');
+      ), sprintf('#alerts-ongoing-list-%s', this.cid));
 
       this.setView(new ListView(
         new Collection([], { type: 'transient'})
-      ), '#alerts-transient-list');
-    },
-    
-    onRender: function () {
-      console.log(this.$el);
+      ), sprintf('#alerts-transient-list-%s', this.cid));
     }
   });
   

@@ -359,11 +359,13 @@ define([
     },
     
     render: function (ctx) {
+      var ctx, tpl, self = this;
+      
       this.removeViews();
       this.preRender();
       // debug.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
-        var ctx = {
+        ctx = {
           date: this.date,
           items: this.collection.models
         };
@@ -371,8 +373,13 @@ define([
         // adding template helpers
         _.extend(this.context, ctx, Helpers, this.helpers);
         
-        var tpl = _.template(this.template, this.context);
+        if (_.isFunction(this.template)) {
+          tpl = this.template(this.context);
+        } else {
+          tpl = _.template(this.template, this.context);
+        }
         this.$el.html(tpl);
+        
         if (this.loader && this.collection.size() > 0)
           this.loader.destroy();
         this.trigger('render', this, {});
@@ -380,7 +387,7 @@ define([
     
       if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
-        var self = this;
+        self = this;
         _.defer(function () { self.afterRender(); });
       }
       this.renderViews();

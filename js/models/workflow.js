@@ -246,7 +246,7 @@ define([
         {
           name: 'COMPLETED',
           value: this.get('COMPLETE'),
-          color: '#468847'
+          color: '#9ccb3b'
         }
       ];
       

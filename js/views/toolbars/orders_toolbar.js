@@ -28,7 +28,7 @@ define([
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
-      console.log('initializing toolbar', this.options, this.opts);
+      // console.log('initializing toolbar', this.options, this.opts);
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';

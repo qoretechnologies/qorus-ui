@@ -100,7 +100,7 @@ define([
         'id': this.cid + '-chart'
       };
       this.render();
-      console.log('updated', this.cls, this.cid, this.collection, this.dataset);
+      // console.log('updated', this.cls, this.cid, this.collection, this.dataset);
     },
     
     styleData: function (dataset) {
@@ -159,7 +159,7 @@ define([
         if (cnv) {
           var ctx = cnv.getContext("2d");
           var myChart = new Chart(ctx).Line(this.dataset, { datasetFill: false });
-          console.log(myChart, this.dataset);
+          // console.log(myChart, this.dataset);
         }
       }
     }

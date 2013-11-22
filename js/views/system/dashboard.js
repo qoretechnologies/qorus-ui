@@ -33,7 +33,7 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
          {
           name: 'READY',
           value: this.get('READY'),
-          color: '#aded9b'
+          color: '#c5e08c'
         },
         {
           name: 'ERROR',
@@ -43,7 +43,7 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
         {
           name: 'COMPLETED',
           value: this.get('COMPLETE'),
-          color: '#468847'
+          color: '#9ccb3b'
         }
       ];
       return vals;
@@ -72,6 +72,8 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
           { width: 200, height: 200 }, 
           new Summary()
         ), '#chart-1-doughnut');
+      
+      this.setView(new AlertView(), '#dashboard-alerts');  
     }
   });
   return DashboardView;

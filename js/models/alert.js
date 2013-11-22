@@ -12,6 +12,7 @@ define([
   
   var Model = Qorus.Model.extend({
     dateAttributes: ['when'],
+    idAttribute: '_id',
     
     toJSON: function () {
       var obj = Model.__super__.toJSON.call(this);
@@ -19,6 +20,11 @@ define([
       obj.object_url = Helpers.getUrl(obj_map[obj.type.toLowerCase()], { id: obj.id });
       
       return obj;
+    },
+    
+    parse: function (response) {
+      response._id = response.when;
+      return Model.__super__.parse.call(this, response);
     }
   });
   // Return the model for the module
