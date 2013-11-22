@@ -1,19 +1,19 @@
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/jobs',
-  'text!templates/job/list.html',
-  'text!templates/job/table.html',
-  'text!templates/job/row.html',
-  'views/toolbars/jobs_toolbar',
-  'views/jobs/modals/reschedule',
-  'views/jobs/modals/expire'
-], function($, _, utils, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar, RescheduleModal, ExpireModal){
+define(function(require) {
+  var $ = require('jquery'),
+    _ = require('underscore'),
+    utils = require('utils'),
+    Qorus = require('qorus/qorus'),
+    Dispatcher = require('qorus/dispatcher'),
+    Collection = require('collections/jobs'),
+    Template = require('text!templates/job/list.html'),
+    TableTpl = require('text!templates/job/table.html'),
+    RowTpl = require('text!templates/job/row.html'),
+    Toolbar = require('views/toolbars/jobs_toolbar'),
+    RescheduleModal = require('views/jobs/modals/reschedule'),
+    ExpireModal = require('views/jobs/modals/expire'),
+    ListView;
 
-  var ListView = Qorus.ListView.extend({
+  ListView = Qorus.ListView.extend({
     title: "Jobs",
     model_name: 'job',
     

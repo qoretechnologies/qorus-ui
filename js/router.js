@@ -10,7 +10,7 @@ define(function(require) {
     WorkflowListView = require('views/workflows/workflows'),
     WorkflowView = require('views/workflows/workflow'),
     ServiceListView = require('views/services/services'),
-    JobListView = require('views/jobs/job'),
+    JobListView = require('views/jobs/jobs'),
     JobView = require('views/jobs/job'),
     InstanceListView = require('views/workflows/instances'),
     EventListView = require('views/events/events'),
