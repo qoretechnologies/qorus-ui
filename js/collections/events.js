@@ -73,7 +73,7 @@ define([
         msg = 'We are back!';
         
         // refresh current view
-        console.log('refreshing', Backbone.history.fragment);
+        // console.log('refreshing', Backbone.history.fragment);
         var fragment = Backbone.history.fragment;
         // null fragment
         Backbone.history.fragment = null;

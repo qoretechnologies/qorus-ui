@@ -124,8 +124,9 @@ define([
         $('tr', $target.parent()).removeClass('info');
         
         if ($detail.data('id') == $target.data('id')) {
-          $detail.data('id', null);
-          $detail.removeClass('show');
+          $detail
+            .data('id', null)
+            .removeClass('show');
         } else {
           // add info class to selected row
           $target.addClass('info');
@@ -140,6 +141,14 @@ define([
           // set current row id
           $detail.data('id', $target.data('id'));
           $detail.addClass('show');
+          
+          // add on close listener
+          this.listenTo(view, 'close', function () {
+            $detail
+              .data('id', null)
+              .removeClass('show');
+            $target.removeClass('info');
+          })
         }
       }
       

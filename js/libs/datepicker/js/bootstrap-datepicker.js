@@ -328,7 +328,7 @@
 		},
     
     remove: function (e) {
-      console.log('removing picker');
+      // console.log('removing picker');
       this.picker.remove();
       delete this.picker;
     }

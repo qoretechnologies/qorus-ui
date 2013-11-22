@@ -69,7 +69,7 @@ define([
     },
     
     close: function () {
-      this.$el.modal('hide');
+      this.trigger('close');
     }
     
   });
