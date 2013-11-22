@@ -63,6 +63,7 @@ define([
   ];
 
   var ChartView = Qorus.View.extend({
+    scale: 1,
     cls: 'ChartView',
     LineStyles: LineStyles,
     dataset: null,
@@ -93,6 +94,7 @@ define([
         
     updateDataset: function () {
       this.dataset = this.styleData(this.collection.getDataset());
+      this.scaleData();
       this.context.legend = this.getLegend();
       this.context.chart = {
         'width': this.opts.width || 400,
@@ -146,6 +148,52 @@ define([
         }
       }
       return legend;
+    },
+    
+    getMaxValue: function () {
+      var max, dataset;
+
+      if (this.dataset) {
+        if (this.dataset.datasets) {
+          dataset = _.map(this.dataset.datasets, function (set) { return set.data });
+          max = _.max(_.flatten(dataset), function (set) { return set; });
+        } else {
+          max = _.max(this.dataset, function (data) { return data.value }).value;
+        }
+      }
+      return max;
+    },
+    
+    scaleData: function () {
+      var scale = this.getScaleFactor(), datasets;
+      
+      if (this.dataset) {
+        if (this.dataset.datasets) {
+          this.dataset.datasets = _.map(this.dataset.datasets, function (set) { 
+            set.data = _.map(set.data, function (data) { 
+              return data = data / scale;
+            });
+            return set;
+          });
+        }
+      }
+      console.log(scale, this.dataset);
+    },
+    
+    getScaleFactor: function () {
+      var max = this.getMaxValue();
+
+      for (var i = max, ctr = 0; i > 1000; ctr++) {
+          i /= 1000;
+      }
+      
+      this.scale = Math.pow(1000, ctr);
+      return this.scale;
+    },
+    
+    render: function (ctx) {
+      this.context.scale = this.scale;
+      ChartView.__super__.render.call(this, ctx);
     }
   });
   
@@ -154,6 +202,7 @@ define([
     template: LineChartTpl,
     onRender: function () {
       // create chart only if dataset available
+      console.log(this.dataset, this.getMaxValue());
       if (this.dataset) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
