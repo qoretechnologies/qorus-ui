@@ -4,7 +4,7 @@ define([
   'settings',
   'utils',
   'qorus/qorus',
-  'text!../templates/job/modals/expire.html',
+  'text!templates/job/modals/expire.html',
   'datepicker'
 ], function ($, _, settings, utils, Qorus, Template) {
   var View = Qorus.View.extend({

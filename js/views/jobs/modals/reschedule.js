@@ -4,7 +4,7 @@ define([
   'settings',
   'utils',
   'qorus/qorus',
-  'text!../templates/job/modals/reschedule.html',
+  'text!templates/job/modals/reschedule.html',
   'datepicker'
 ], function ($, _, settings, utils, Qorus, Template) {
   var View = Qorus.View.extend({
