@@ -39,7 +39,7 @@ define([
       });
       
       this.listenTo(this.collection, 'message', this.appendTextPre);
-      
+      this.on('show', this.onShow);
     },
     
     onRender: function () {
@@ -50,7 +50,11 @@ define([
           _.defer(lv.scroll);
         });
       }
-      this.fixHeight();
+      // this.fixHeight();
+    },
+    
+    onShow: function () {
+      _.defer(this.fixHeight);
     },
 
     toggleScroll: function (e) {
@@ -114,9 +118,12 @@ define([
     
     fixHeight: function () {
       // maintain the height of log area
-      var $parent = this.$el.parents('.content');
-      var $log = this.$('.log-area');
-      // $log.height($parent.height() - $log.position().top);
+      var $parent = $(window),
+        $log = this.$('.log-area');
+        
+        console.log(this.$('.log-area'), this.$('.log-area').offset());
+      $log.height($parent.height() - $log.offset().top - 40);
+      console.log($log.height(), $log.position().top, $log.offset().top);
     }
     
   });

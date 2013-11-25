@@ -50,13 +50,19 @@ define(function(require){
     },
      
     tabToggle: function(e){
-      var $target = $(e.currentTarget);
+      var $target = $(e.currentTarget),
+        active = $('.tab-pane.active'),
+        view, target_name;
+        
       e.preventDefault();
+      
+      target_name = $target.data('target') || $target.attr('href');
 
-      var active = $('.tab-pane.active');
+      view = this.getView(target_name);
+      if (view) view.trigger('show');
+
       $target.tab('show');
-
-      this.active_tab = $target.attr('href');
+      this.active_tab = $target.data('target');
       
       Backbone.history.navigate(utils.getCurrentLocationPath() + $target.attr('href'));
     }

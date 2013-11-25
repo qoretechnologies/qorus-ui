@@ -48,7 +48,6 @@ define(function (require) {
       var obj = Model.__super__.toJSON.call(this),
         obj_type = obj_map[obj.type.toLowerCase()];
       
-      console.log(obj);
       if (obj_type) {
         obj.object_url = obj_type.url(obj);        
         obj.object_name = obj_type.name(obj);

@@ -104,7 +104,7 @@ define(function (require) {
         row_template: RowTpl,
         helpers: this.helpers,
         dispatcher: Dispatcher,
-        // fixed: true
+        fixed: true
       }), sprintf('#alerts-table-%s', this.cid));
     }
   });

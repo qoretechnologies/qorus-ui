@@ -515,7 +515,7 @@ aside {
 
 .pageslide .content {
     padding: 40px 20px;
-    height: 90%;
+/*    height: 90%;*/
 }
 .modal.wider {
   margin-left: -360px;
@@ -881,9 +881,8 @@ aside {
 .log-area, .log-area.span12 {
 	background-color: #0a0f21;
 	overflow: auto;
-	padding: 1%;
-	height: 400px;
-	min-height: 400px;
+	min-height: 200px;
+  padding: 10px;
 	margin: 0;
 }
 
@@ -1016,4 +1015,12 @@ table .header-copy {
 
 .break {
   word-break: break-word;
+}
+
+.tab-content {
+  height: 100%;
+}
+
+.tab-pane {
+  height: 100%;
 }

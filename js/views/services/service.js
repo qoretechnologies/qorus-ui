@@ -44,13 +44,19 @@ define([
     }, 
 
     tabToggle: function(e){
-      var $target = $(e.currentTarget);
+      var $target = $(e.currentTarget),
+        view, active, target_name;
+
       e.preventDefault();
 
-      var active = $('.tab-pane.active');
+      active = $('.tab-pane.active');
+      target_name = $target.data('target') || $target.attr('href')
       $target.tab('show');
+      
+      view = this.getView(target_name);
+      if (view) view.trigger('show');
 
-      this.active_tab = $target.attr('href');
+      this.active_tab = target_name;
     },
     
     preRender: function () {
