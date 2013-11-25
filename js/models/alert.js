@@ -1,24 +1,61 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus',
-  'qorus/helpers'
-], function(settings, _, Qorus, Helpers){
-  var obj_map = {
-    workflow: 'showWorkflow',
-    service: 'showService',
-    job: 'showJob'
+define(function (require) {
+  var settings = require('settings'),
+    _ = require('underscore'),
+    Qorus = require('qorus/qorus'),
+    Helpers = require('qorus/helpers'),
+    obj_map, Model;
+  
+  obj_map = {
+    workflow: {
+      name: function (obj) {
+        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+      },
+      url: function (obj) {
+        return Helpers.getUrl('showWorkflow', { id: obj.id });
+      }
+    },
+    service: {
+      name: function (obj) {
+        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+      },
+      url: function (obj) {
+        return Helpers.getUrl('showService', { id: obj.id });
+      }
+    },
+    job: {
+      name: function (obj) {
+        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+      },
+      url: function (obj) {
+        return Helpers.getUrl('showJob', { id: obj.id });
+      }
+    },
+    group: {
+      name: function (obj) {
+        return sprintf('%(name)s', obj);
+      },
+      url: function (obj) {
+        return Helpers.getUrl('showGroup', { name: obj.name });
+      }
+    }
   }
   
-  var Model = Qorus.Model.extend({
+  Model = Qorus.Model.extend({
     dateAttributes: ['when'],
     idAttribute: '_id',
     
     toJSON: function () {
-      var obj = Model.__super__.toJSON.call(this);
+      var obj = Model.__super__.toJSON.call(this),
+        obj_type = obj_map[obj.type.toLowerCase()];
       
-      obj.object_url = Helpers.getUrl(obj_map[obj.type.toLowerCase()], { id: obj.id });
-      
+      console.log(obj);
+      if (obj_type) {
+        obj.object_url = obj_type.url(obj);        
+        obj.object_name = obj_type.name(obj);
+      } else {
+        obj.object_name = obj.name;
+      }
+ 
       return obj;
     },
     
