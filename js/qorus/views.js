@@ -635,9 +635,8 @@ define([
             $('body').scrollTop(h);
           }
 
+          e.preventDefault();
         }
-              
-        e.preventDefault();
       }
     }
   });

@@ -13,6 +13,7 @@ define(function(require){
     HttpServicesView = require('views/system/http'),
     AlertView = require('views/system/alerts'),
     DashboardView = require('views/system/dashboard'),
+    LogsView = require('views/system/logs'),
     SystemInfoView;  
 
 
@@ -34,11 +35,7 @@ define(function(require){
     
     preRender: function () {
       this.setView(new DashboardView(), '#performance');
-      this.setView(new LogView({ socket_url: "/system", parent: this }), '#log');
-      this.setView(new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false }), '#audit-log');
-      this.setView(new LogView({ socket_url: "/http", parent: this, auto_reconnect: false }), '#http-log');
-      this.setView(new LogView({ socket_url: "/alert", parent: this, auto_reconnect: false }), '#alert-log');
-      this.setView(new LogView({ socket_url: "/mon", parent: this, auto_reconnect: false }), '#mon-log');
+      this.setView(new LogsView(), '#logs');
       this.setView(new OptionsView(), '#options');
       this.setView(new DatasourceView(), '#datasources');
       this.setView(new PropView(), '#prop');
