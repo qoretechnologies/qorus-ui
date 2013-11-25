@@ -1,29 +1,24 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'settings',
-  'models/system',
-  'text!templates/system/health/status.html',
-  'tpl!templates/system/health/detail.html'
-], function($, _, Backbone, Qorus, settings, Model, StatusTpl, DetailTpl){
-  var status_url = settings.REST_API_PREFIX + '/system/health';
+define(function(require) {
+  var $ = require('jquery'),
+    _ = require('underscore'), 
+    Dispatcher = require('qorus/dispatcher'),
+    Qorus = require('qorus/qorus'),
+    settings = require('settings'),
+    Model = require('models/health'),
+    StatusTpl = require('tpl!templates/system/health/status.html'), 
+    DetailTpl = require('tpl!templates/system/health/detail.html'),
+    View;
 
-  var View = Qorus.View.extend({
+  View = Qorus.View.extend({
     views: {},
-    model: Model.Info,
     template: StatusTpl,
     
     initialize: function () {
-      var self = this;
-      
-      $.get(status_url).done(function (data) {
-        self.data = data;
-        self.trigger('fetch');
-      });
-      
-      this.on('fetch', this.render);
+      _.bindAll(this);
+      this.model = new Model();
+      this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(Dispatcher, 'status:health_changed', this.update);
+      this.model.fetch();
     },
     
     render: function (ctx) {
@@ -48,11 +43,6 @@ define([
         container: this.$el,
         html: true
       });
-      
-      // $status.on('show', function () {
-      //   self.$('.popover').css('top', '100px');
-      //   console.log(self.$('.popover'));
-      // });
     },
     
     getHealthCSS: function () {
@@ -61,6 +51,10 @@ define([
       if (health === 'RED') return 'danger';
       if (health === 'GREEN') return 'success';
       if (health === 'YELLOW') return 'warning';
+    },
+    
+    update: function (e) {
+      this.model.fetch();
     }
   });
   

@@ -1013,3 +1013,7 @@ table .header-copy {
   background-color: #da4f49;
   *background-color: #bd362f;
 }
+
+.break {
+  word-break: break-word;
+}

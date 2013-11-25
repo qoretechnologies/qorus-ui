@@ -23,7 +23,7 @@ define([
     },
     
     parse: function (response) {
-      response._id = response.when;
+      response._id = response.type + response.id;
       return Model.__super__.parse.call(this, response);
     }
   });

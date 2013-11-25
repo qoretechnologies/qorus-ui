@@ -1,27 +1,17 @@
 <h4>System health</h4>
-<% if (obj['alert-summary']) { %>
 <table class="table table-condensed table-align-left">
   <tbody>
     <tr>
       <th>Status:</th>
-      <td><span class="label label-<%= health_css %>"><%= health %></span></td>
+      <td><span class="label label-<%= health_css %>"><%= obj.health %></span></td>
     </tr>
     <tr>
       <th>Transient:</th>
-      <td><%= obj['alert-summary'].transient %></td>
+      <td><%= obj.transient %></td>
     </tr>
     <tr>
       <th>Ongoing:</th>
-      <td><%= obj['alert-summary'].ongoing %></td>
-    </tr>
-    <tr>
-      <th>Shadowed:</th>
-      <td><%= obj['alert-summary'].shadowed %></td>
-    </tr>
-    <tr>
-      <th>Cutoff:</th>
-      <td><%= obj['alert-summary'].cutoff %></td>
+      <td><%= obj.ongoing %></td>
     </tr>
   </tbody>
 </table>
-<% } %>
