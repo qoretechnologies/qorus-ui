@@ -51,7 +51,7 @@
   </div>
   <div class="tab-pane" id="groups">
     <% _.each(item.groups, function (g) { %>
-      <a href="<%= getUrl('showGroup', { name: g }) %>"><span class="label label-info"><%= g %></span></a>
+      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
     <% }) %>
   </div>
   <div class="tab-pane" id="steps">
