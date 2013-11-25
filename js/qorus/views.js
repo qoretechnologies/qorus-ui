@@ -11,7 +11,8 @@ define([
   'text!templates/common/tablerow.html',
   'text!templates/common/nodata.html',
   'bootstrap',
-  'jquery.fixedheader'
+  'jquery.fixedheader',
+  'backbone.keys'
 ], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -293,6 +294,10 @@ define([
 
 
    var ListView = View.extend({
+     keys: {
+       'up down': 'navigate'
+     },
+     
     defaultEvents: {
       'click .check': 'highlight',
       'click .check-all': 'checkall',
@@ -607,11 +612,34 @@ define([
     
     nextPage: function () {
       this.collection.loadNextPage();
+    },    
+    
+    navigate: function (e) { 
+      var $el, $next, h;
+      
+      if (this.$el.is(':visible') && this.$('.info')) {
+        $el = this.$('.info');
+        
+        if (e.keyCode === 38) {
+          $next = $el.prev();
+        } else {
+          $next = $el.next();
+        }
+        
+        if ($next.length > 0) {
+          $el.removeClass('info');
+          $next.addClass('info').click();
+          
+          if ($('body').scrollTop() + $(window).height() < $next.offset().top + $next.height()) {
+            h = $next.offset().top - $(window).height() + $next.height();
+            $('body').scrollTop(h);
+          }
+
+        }
+              
+        e.preventDefault();
+      }
     }
-    // 
-    // clean: function () {
-    //   this.collection = null;
-    // }
   });
 
   var TableView = View.extend({

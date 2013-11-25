@@ -4,6 +4,7 @@ require.config({
     jquery: 'libs/jquery',
     underscore: 'libs/underscore',
     backbone: 'libs/backbone',
+    'backbone.keys': 'libs/backbone.keys',
     bootstrap: 'libs/bootstrap/js/bootstrap',
     moment: "libs/moment",
     // later: "libs/later/later.min",
@@ -32,6 +33,9 @@ require.config({
     "backbone": {
       deps: ["underscore", "jquery"],
       exports: "Backbone"
+    },
+    "backbone.keys": {
+      deps: ['backbone']
     },
     "underscore": {
       exports: "_"
