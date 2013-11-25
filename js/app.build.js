@@ -6,11 +6,9 @@
       jquery: 'libs/jquery',
       underscore: 'libs/underscore',
       backbone: 'libs/backbone',
+      "backbone.keys": 'libs/backbone.keys',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
-      // later: "libs/later/later.min",
-      // "later.recur": "libs/later/later-recur.min",
-      // "later.cron": "libs/later/later-cron.min",
       datepicker: "libs/datetime-picker-2/bootstrap-datetimepicker.min",
       "jquery.fixedheader": "libs/fixedheader",
       "jquery.sticky": "libs/jquery.sticky",
@@ -32,6 +30,9 @@
       "backbone": {
         deps: ["underscore", "jquery"],
         exports: "Backbone"
+      },
+      "backbone.keys": {
+        deps: ['backbone']
       },
       "underscore": {
         exports: "_"
