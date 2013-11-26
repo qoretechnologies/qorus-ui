@@ -1,18 +1,20 @@
 define(function(require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    utils = require('utils'),
-    Qorus = require('qorus/qorus'),
-    Dispatcher = require('qorus/dispatcher'),
-    Collection = require('collections/jobs'),
-    Template = require('text!templates/job/list.html'),
-    TableTpl = require('text!templates/job/table.html'),
-    RowTpl = require('text!templates/job/row.html'),
-    Toolbar = require('views/toolbars/jobs_toolbar'),
-    RescheduleModal = require('views/jobs/modals/reschedule'),
-    ExpireModal = require('views/jobs/modals/expire'),
-    ListView;
-
+  var $               = require('jquery'),
+      _               = require('underscore'),
+      utils           = require('utils'),
+      Qorus           = require('qorus/qorus'),
+      Dispatcher      = require('qorus/dispatcher'),
+      Collection      = require('collections/jobs'),
+      Template        = require('text!templates/job/list.html'),
+      TableTpl        = require('text!templates/job/table.html'),
+      RowTpl          = require('text!templates/job/row.html'),
+      Toolbar         = require('views/toolbars/jobs_toolbar'),
+      RescheduleModal = require('views/jobs/modals/reschedule'),
+      ExpireModal     = require('views/jobs/modals/expire'),
+      PaneView        = require('views/common/pane'),
+      DetailView      = require('views/jobs/detail'),
+      ListView, TableView;
+    
   ListView = Qorus.ListView.extend({
     title: "Jobs",
     model_name: 'job',
@@ -37,7 +39,9 @@ define(function(require) {
     },
   
     preRender: function () {
-      this.setView(new Qorus.TableView({ 
+      var TView;
+      
+      TView = this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
@@ -45,6 +49,9 @@ define(function(require) {
           dispatcher: Dispatcher,
           fixed: true
       }), '#job-list');
+      
+      this.listenTo(TView, 'row:clicked', this.showDetail);
+      
       this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
     },
 
@@ -97,6 +104,29 @@ define(function(require) {
         // debug.log(m.attributes);
         // m.trigger('fetch');
       }
+    },
+    
+    showDetail: function (row) {
+      var model = row.model,
+          view  = this.getView('#job-detail'),
+          width = $(document).width() - $('[data-sort="active"]').offset().left;
+      
+      if (this.selected_model != model) {
+        row.$el.addClass('info');
+        view = this.setView(new PaneView({
+          content_view: new DetailView({ model: model }),
+          width: width
+        }), '#job-detail', true);
+        this.selected_model = model;
+        
+        this.listenToOnce(view, 'closed off', function () {
+          row.$el.removeClass('info');
+        });
+      } else {
+        if (view) view.close();
+        this.selected_model = null;
+      }
+      
     },
     
     helpers: {

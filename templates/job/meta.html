@@ -1,0 +1,28 @@
+<h3><%= item.name %> <small><%= item.version %></small></h3>
+<p class="muted"><em><%= item.description %></em></p>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="?details" data-target="#details">Details</a></li>
+    <li><a href="?library" data-target="#library">Library</a></li>
+    <li><a href="?groups" data-target="#groups" class="groups">Groups</a></li>
+    <li><a href="?connections" data-target="#connections" class="connections">Connections</a></li>
+    <li><a href="?log" data-target="#log" class="log">Log</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="details">
+    <div class="row-fluid">Details</div>
+  </div>
+  <div class="tab-pane" id="library">
+    <%= createNestedList(item.lib) %>
+  </div>
+  <div class="tab-pane" id="groups">
+    <% _.each(item.groups, function (g) { %>
+      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
+    <% }) %>
+  </div>
+  <div class="tab-pane" id="connections">
+    <div class="row-fluid">Connections</div>
+  </div>
+  <div class="tab-pane" id="log">
+  </div>
+</div>

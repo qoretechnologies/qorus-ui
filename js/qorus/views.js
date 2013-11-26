@@ -978,7 +978,9 @@ define(function (require) {
     
     // delagate click event with model to parent view
     rowClick: function (e) {
+      this.trigger('clicked', this);
       if (this.parent) {
+        this.parent.trigger('row:clicked', this);
         if (this.parent.rowClick) {
           this.parent.rowClick(this.model, e);
         }

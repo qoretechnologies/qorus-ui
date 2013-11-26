@@ -25,6 +25,7 @@ define(function (require) {
       if (this.opts.content_view) {
         this.setView(this.opts.content_view, '.content', true);
         this.$el.data('id', this.opts.content_view.model.id);
+        console.log(this.opts.content_view.$el);
       }
       this.$('.pageslide')
         .addClass('show')
@@ -33,7 +34,6 @@ define(function (require) {
     
     close: function (e) {
       if (e) {
-        console.log(e);
         e.preventDefault();  
       }
       
