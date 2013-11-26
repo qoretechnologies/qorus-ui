@@ -1,12 +1,14 @@
 // Qorus core objects definition
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'settings',
-  'utils',
-  'qorus/views'
-], function ($, _, Backbone, settings, utils, Views) {
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Backbone = require('backbone'),
+      settings = require('settings'),
+      utils    = require('utils'),
+      Views    = require('qorus/views'),
+      Qorus    = {},
+      setNested;
+  
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -16,12 +18,10 @@ define([
   });
   
   prep = utils.prep;
-  
-  var Qorus = {};
 
   
   // this function pass function to nested objects
-  var setNested = function (obj, path, fn){
+  setNested = function (obj, path, fn){
     var terms = path.split('.');
     if (terms.length > 1 && _.has(obj, terms[0])){
       var t = terms.shift();

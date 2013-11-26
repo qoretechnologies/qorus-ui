@@ -15,6 +15,8 @@ define(function(require){
       _.bindAll(this, 'renderInfo');
       
       this.listenTo(this.info, 'change', this.renderInfo);
+
+      this.renderInfo();
     },
     
     renderInfo: function () {

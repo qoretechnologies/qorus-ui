@@ -1,11 +1,11 @@
 define(function (require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    Qorus = require('qorus/qorus'),
-    HealthView = require('views/system/health'),
-    UserView = require('views/system/user'),
-    Template = require('text!templates/common/header.html'),
-    View;
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      HealthView = require('views/system/health'),
+      UserView   = require('views/system/user'),
+      Template   = require('text!templates/common/header.html'),
+      View;
   
   View = Qorus.View.extend({
     views: {},

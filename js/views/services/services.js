@@ -1,22 +1,21 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/services',
-  'text!templates/service/list.html',
-  'text!templates/service/table.html',
-  'text!templates/service/row.html',
-  'views/services/service',
-  'views/services/modal',
-  'views/toolbars/services_toolbar',
-  'jquery.fixedheader',
-  'jquery.sticky',
-  'sprintf'
-], function($, _, Qorus, Dispatcher, Collection, Template, TableTpl, 
-  RowTpl, ServiceView, ModalView, Toolbar){
+define(function(require){
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Dispatcher  = require('qorus/dispatcher'),
+      Collection  = require('collections/services'),
+      Template    = require('text!templates/service/list.html'),
+      TableTpl    = require('text!templates/service/table.html'),
+      RowTpl      = require('text!templates/service/row.html'),
+      ServiceView = require('views/services/service'),
+      ModalView   = require('views/services/modal'),
+      Toolbar     = require('views/toolbars/services_toolbar'),
+      PaneView    = require('views/common/pane'),
+      fixedhead   = require('jquery.fixedheader'),
+      sticky      = require('jquery.sticky'),
+      context, ListView;
   
-  var context = {
+  context = {
       action_css: {
         'reset': 'btn-inverse',
         'load': 'btn-success',
@@ -30,7 +29,7 @@ define([
   };
   
   
-  var ListView = Qorus.ListView.extend({
+  ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
@@ -75,13 +74,6 @@ define([
 
     onRender: function () {
       $('[data-toggle="tooltip"]').tooltip();
-      
-      // TODO: this should be set via jQuery plugin $('#service-detail).pageslide() ?
-      if ($('[data-sort="version"]')) {
-        var w = $(document).width() - $('[data-sort="version"]').offset().left;
-        this.$('#service-detail').outerWidth(w);        
-      }
-      // this.$('.table-fixed').fixedHeader({ topOffset: 80 });
     },
 
     setOption: function (e) {
@@ -112,41 +104,32 @@ define([
     },
     
     showDetail: function (e) {
-      var $target = $(e.currentTarget);
-      var $detail = $('#service-detail');
-      var top = $target.offset().top; // + $target.height()/2;
-      var view = this.getView('#service-detail .content');
+      var $target = $(e.currentTarget),
+          $detail = $('#service-detail'),
+          top     = $target.offset().top; // + $target.height()/2;
+          view    = this.getView('#service-detail'),
+          width   = $(document).width() - $('[data-sort="version"]').offset().left;
       
-      if ($target.data('id') && !e.target.localName.match(/(button|a)/)) {
+      if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
         e.stopPropagation();
         
-        // remove info class on each row
-        $('tr', $target.parent()).removeClass('info');
-        
         if ($detail.data('id') == $target.data('id')) {
-          $detail
-            .data('id', null)
-            .removeClass('show');
+          if (view) view.close();
         } else {
           // add info class to selected row
           $target.addClass('info');
           
-          // console.log('setting view', $target.data('id'), this.collection.get($target.data('id')), this.context);
           // init detail view
-          view = this.setView(new ServiceView({ 
+          view = this.setView(new PaneView({
+            content_view: new ServiceView({ 
               model: this.collection.get($target.data('id')), 
               context: this.context 
-            }), '#service-detail .content', true);
-          
-          // set current row id
-          $detail.data('id', $target.data('id'));
-          $detail.addClass('show');
+            }),
+            width: width
+            }),'#service-detail', true);
           
           // add on close listener
-          this.listenTo(view, 'close', function () {
-            $detail
-              .data('id', null)
-              .removeClass('show');
+          this.listenToOnce(view, 'closed off', function () {
             $target.removeClass('info');
           })
         }

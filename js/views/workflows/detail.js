@@ -1,18 +1,18 @@
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'models/workflow',
-  'views/log',
-  'views/common/diagram',
-  'text!templates/workflow/meta.html',
-  'text!templates/common/option_edit.html',
-  'jquery.ui'
-], function ($, _, utils, Qorus, Dispatcher, Model, LogView, DiagramView, Template, EditTemplate) {
+define(function (require) {
+  var $            = require('jquery'), 
+      _            = require('underscore'),
+      jqueryui     = require('jquery.ui'),
+      utils        = require('utils'),
+      Qorus        = require('qorus/qorus'),
+      Dispatcher   = require('qorus/dispatcher'),
+      Model        = require('models/workflow'),
+      LogView      = require('views/log'),
+      DiagramView  = require('views/common/diagram'),
+      Template     = require('tpl!templates/workflow/meta.html'),
+      EditTemplate = require('tpl!templates/common/option_edit.html'),
+      ModelView;
   
-  var ModelView = Qorus.View.extend({
+  ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
       "click a.close-detail": "close",

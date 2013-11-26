@@ -1,19 +1,17 @@
 // Qorus core objects definition
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'settings',
-  'utils',
-  'qorus/qorus',
-  'qorus/helpers',
-  'text!templates/common/table.html',
-  'text!templates/common/tablerow.html',
-  'text!templates/common/nodata.html',
-  'bootstrap',
-  'jquery.fixedheader',
-  'backbone.keys'
-], function ($, _, Backbone, settings, utils, Qorus, Helpers, TableTpl, TableRowTpl, NoDataTpl) {
+define(function (require) {
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Backbone    = require('backbone'),
+      settings    = require('settings'),
+      utils       = require('utils'),
+      TableTpl    = require('tpl!templates/common/table.html'),
+      TableRowTpl = require('tpl!templates/common/tablerow.html'),
+      NoDataTpl   = require('tpl!templates/common/nodata.html'),
+      Helpers     = require('qorus/helpers'),
+      Loader, View, ListView, TableView, RowView, 
+      TableAutoView, TableBodyView, ServiceView, PluginView;
+
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -22,7 +20,7 @@ define([
     }
   });
   
-  var Loader = Backbone.View.extend({
+  Loader = Backbone.View.extend({
     template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
     initialize: function (opts) {
       this.el = opts.el;
@@ -38,7 +36,7 @@ define([
   });
   
   
-  var View = Backbone.View.extend({
+  View = Backbone.View.extend({
     render_lock: false,
     cls: 'View',
     url: '/',
@@ -211,7 +209,7 @@ define([
     onRender: function () {
     },
     
-    insertView: function (view, el) {
+    insertView: function (view, el, append) {
       var views;
       
       if (this.views[el]) {
@@ -221,7 +219,7 @@ define([
       }
       
       el = el || '';
-
+      
       if (views instanceof Backbone.View) {
         var old_view = views;
         views = [old_view];
@@ -293,7 +291,7 @@ define([
    });
 
 
-   var ListView = View.extend({
+   ListView = View.extend({
      keys: {
        'up down': 'navigate'
      },
@@ -641,7 +639,7 @@ define([
     }
   });
 
-  var TableView = View.extend({
+  TableView = View.extend({
     messages: {
       'nodata': "No data found"
     },
@@ -872,11 +870,11 @@ define([
     }
   });
   
-  var TableAutoView = TableView.extend({
+  TableAutoView = TableView.extend({
     columns: []
   });
   
-  var TableBody = View.extend({
+  TableBody = View.extend({
     tagName: 'tbody',
     context: {},
     initialize: function (opts) {
@@ -884,7 +882,7 @@ define([
     }
   });
 
-  var RowView = View.extend({
+  RowView = View.extend({
     tagName: 'tr',
     className: 'table-row',
     context: {},
@@ -988,7 +986,7 @@ define([
     }
   });
   
-  var ServiceView = View.extend({
+  ServiceView = View.extend({
     defaultEvents: {
       'submit': 'doAction',
       'click a[data-action]': 'doAction',
@@ -1065,7 +1063,7 @@ define([
   });
 
 
-  var PluginView = View.extend({
+  PluginView = View.extend({
     defaultEvents: {
       'submit': 'doAction',
       'click a[data-action]': 'doAction',
@@ -1141,7 +1139,7 @@ define([
     }
   });
 
-  var Views = {
+  return {
     View: View,
     ListView: ListView,
     Loader: Loader,
@@ -1149,7 +1147,5 @@ define([
     TableView: TableView,
     RowView: RowView,
     ServiceView: ServiceView
-  }
-
-  return Views;
+  };
 });

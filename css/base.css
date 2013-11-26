@@ -589,6 +589,12 @@ aside {
   right: 20px;
 }
 
+.close-view {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+}
+
 /* fix treeview pre */
 
 /*.treeview pre {

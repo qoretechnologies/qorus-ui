@@ -31,7 +31,7 @@ require.config({
   },
   shim: { 
     "backbone": {
-      deps: ["underscore", "jquery", "sprintf"],
+      deps: ["underscore", "jquery", "sprintf", "bootstrap"],
       exports: "Backbone"
     },
     "backbone.keys": {

@@ -1,27 +1,26 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'utils',
-  'collections/workflows',
-  'text!templates/workflow/list.html',
-  'datepicker',
-  'moment',
-  'views/workflows/instances',
-  'views/toolbars/workflows_toolbar',
-  'views/common/bottom_bar',
-  'qorus/dispatcher',
-  'views/workflows/modal',
-  'text!templates/workflow/table.html',
-  'text!templates/workflow/row.html',
-  'views/workflows/detail',
-  'jquery.fixedheader',
-  'jquery.sticky'
-], function($, _, Backbone, Qorus, utils, Collection, Template, date, moment, 
-  InstanceListView, Toolbar, BottomBarView, Dispatcher, Modal, TableTpl, RowTpl, WorkflowView){
-    
-  var ListView = Qorus.ListView.extend({
+define(function (require) {
+  var $                = require('jquery'),
+      _                = require('underscore'),
+      Backbone         = require('backbone'),
+      Qorus            = require('qorus/qorus'),
+      utils            = require('utils'),
+      Collection       = require('collections/workflows'),
+      Template         = require('text!templates/workflow/list.html'),
+      date             = require('datepicker'),
+      moment           = require('moment'),
+      InstanceListView = require('views/workflows/instances'),
+      Toolbar          = require('views/toolbars/workflows_toolbar'),
+      BottomBarView    = require('views/common/bottom_bar'),
+      Dispatcher       = require('qorus/dispatcher'),
+      Modal            = require('views/workflows/modal'),
+      TableTpl         = require('text!templates/workflow/table.html'),
+      RowTpl           = require('text!templates/workflow/row.html'),
+      WorkflowView     = require('views/workflows/detail'),
+      PaneView         = require('views/common/pane'),
+      ListView;
+
+
+  ListView = Qorus.ListView.extend({
     cls: "workflows.ListView",
     timers: [],
     // el: $("#content"),
@@ -103,16 +102,6 @@ define([
       // removes date picker from DOM
       $('.dp').datetimepicker('remove');
       this.$('.table-fixed').fixedHeader('remove');
-    },
-    
-    onRender: function () {
-      debug.log(this.views);
-      var $ver = $('[data-sort="version"]');
-      
-      if ($ver) {
-        var w = $(document).width() - $ver.offset().left;
-        $('#workflow-detail').outerWidth(w); 
-      }
     },
     
     // edit action with Modal window form
@@ -242,34 +231,33 @@ define([
     },
     
     showDetail: function (e) {
-      var view = this.getView('#workflow-detail .content');;
-      var $target = $(e.currentTarget);
-      var $detail = $('#workflow-detail');
-      var top = $target.offset().top; // + $target.height()/2;
+      var view = this.getView('#workflow-detail'),
+        $target = $(e.currentTarget),
+        $detail = $('#workflow-detail'),
+        top = $target.offset().top; // + $target.height()/2;
+        width = $(document).width() - $('[data-sort="version"]').offset().left;
       
       if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
         e.stopPropagation();
-        
-        // remove info class on each row
-        $('tr', $target.parent()).removeClass('info');
-        
+                
         if ($detail.data('id') == $target.data('id')) {
-          if (view) {
-            view.close();
-          }
+          if (view) view.close();
         } else {
-          // add info class to selected row
           $target.addClass('info');
-
-          // set current row id
-          $detail.data('id', $target.data('id'));
           
           // init detail view
-          // debug.log(this.$('#workflow-detail'), this.$('#workflow-detail .content'));
           var model = this.collection.get($target.data('id'));
-          // console.log(model);
-          view = this.setView(new WorkflowView({ model: model, context: this.context }), '#workflow-detail .content', true);
-          this.$('#workflow-detail').addClass('show');
+          view = this.setView(new PaneView({ 
+              content_view: new WorkflowView({ 
+                model: model, 
+                context: this.context 
+              }),
+              width: width
+            }), '#workflow-detail', true);
+          
+            this.listenToOnce(view, 'closed off', function () {
+              $target.removeClass('info');
+            });
         }
       }
       
