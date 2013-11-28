@@ -1,14 +1,14 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'models/result',
-  'text!templates/job/results/detail.html',
-  'rainbow.qore'
-], function($, _, Qorus, Model, Template, StepView){
-  var context = {};
+define(function(require) {
+  var $         = require('jquery'),
+      _         = require('underscore'),
+      Qorus     = require('qorus/qorus'),
+      Model     = require('models/result'),
+      Template  = require('text!templates/job/results/detail.html'),
+      StepView  = require('rainbow.qore'),
+      context   = {},
+      ModelView;
   
-  var ModelView = Qorus.View.extend({
+  ModelView = Qorus.View.extend({
     template: Template,
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle'

@@ -1,13 +1,13 @@
 define(function(require) {
-  var $ = require('jquery'),
-    _ = require('underscore'), 
-    Dispatcher = require('qorus/dispatcher'),
-    Qorus = require('qorus/qorus'),
-    settings = require('settings'),
-    Model = require('models/health'),
-    StatusTpl = require('tpl!templates/system/health/status.html'), 
-    DetailTpl = require('tpl!templates/system/health/detail.html'),
-    View;
+  var $          = require('jquery'),
+      _          = require('underscore'), 
+      Dispatcher = require('qorus/dispatcher'),
+      Qorus      = require('qorus/qorus'),
+      settings   = require('settings'),
+      Model      = require('models/health'),
+      StatusTpl  = require('tpl!templates/system/health/status.html'), 
+      DetailTpl  = require('tpl!templates/system/health/detail.html'),
+      View;
 
   View = Qorus.View.extend({
     views: {},

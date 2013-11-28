@@ -9,6 +9,7 @@ define(function (require) {
     TableTpl = require('text!templates/system/alerts/table.html'),
     RowTpl = require('text!templates/system/alerts/row.html'),
     DetailTpl = require('text!templates/system/alerts/detail.html'),
+    PaneView = require('views/common/pane'),
     columns, css_map, DetailView, TableView, ListView, View;
   
   columns = [
@@ -66,25 +67,7 @@ define(function (require) {
         self.collection.fetch();
       });
     },
-    
-    rowClick: function (model, e) {
-      var view;
-      
-      this.$('.info').removeClass('info');
-      
-      if (this.selected_model != model) {
-        view = this.setView(new DetailView({
-          model: model
-        }), '#alert-detail', true);
-        $(e.currentTarget).addClass('info');
-        this.selected_model = model;
-      } else {
-        this.removeView('#alert-detail');
-        this.selected_model = null;
-      }
-      
-    },
-    
+        
     onRender: function () {
       TableView.__super__.onRender.call(this);
       this.$('#alert-detail').affix({ offset: 200 });
@@ -97,7 +80,10 @@ define(function (require) {
     },
     
     preRender: function () {
-      this.setView(new TableView({ 
+      var self = this,
+          TView;
+      
+      TView = this.setView(new TableView({ 
         parent: this,
         collection: this.collection, 
         template: TableTpl,
@@ -106,6 +92,10 @@ define(function (require) {
         dispatcher: Dispatcher,
         fixed: true
       }), sprintf('#alerts-table-%s', this.cid));
+      
+      this.listenTo(TView, 'row:clicked', function (row) {
+        self.trigger('row:clicked', row);
+      });
     }
   });
 
@@ -119,13 +109,41 @@ define(function (require) {
     },
     
     preRender: function () {
-      this.setView(new ListView(
+      var ongoing_v, view_transient;
+      
+      ongoing_v = this.setView(new ListView(
         new Collection([], { type: 'ongoing'})
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
 
-      this.setView(new ListView(
+      transient_v = this.setView(new ListView(
         new Collection([], { type: 'transient'})
       ), sprintf('#alerts-transient-list-%s', this.cid));
+      
+      this.listenTo(ongoing_v, 'row:clicked', this.showDetail);
+      this.listenTo(transient_v, 'row:clicked', this.showDetail);
+    },
+    
+    showDetail: function (row) {
+      var content_view = new DetailView({ model: row.model }),
+          view         = this.getView('#alert-detail'),
+          width        = $(document).width() - $('[data-sort="object"]').offset().left
+          model        = row.model;
+      
+      if (this.selected_model != model) {
+        row.$el.addClass('info');
+        view = this.setView(new PaneView({
+          content_view: content_view,
+          width: width
+        }), '#alert-detail', true);
+        this.selected_model = model;
+
+        this.listenToOnce(view, 'closed off', function () {
+          row.$el.removeClass('info');
+        });
+      } else {
+        if (view) view.close();
+        this.selected_model = null;
+      }
     }
   });
   

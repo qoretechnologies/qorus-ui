@@ -1,17 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'settings',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/orders',
-  'views/toolbars/orders_toolbar',
-  'text!templates/workflow/orders.html',
-  'text!templates/workflow/orders/table.html',
-  'text!templates/workflow/orders/row.html',
-  // 'jquery.floatthead'
-], function($, _, settings, Qorus, Dispatcher, Collection, OrdersToolbar, Template, TableTpl, RowTpl){
-  var context = {
+define(function (require) {
+  var $             = require('jquery'),
+      _             = require('underscore'),
+      settings      = require('settings'),
+      Qorus         = require('qorus/qorus'),
+      Dispatcher    = require('qorus/dispatcher'),
+      Collection    = require('collections/orders'),
+      OrdersToolbar = require('views/toolbars/orders_toolbar'),
+      Template      = require('text!templates/workflow/orders.html'),
+      TableTpl      = require('text!templates/workflow/orders/table.html'),
+      RowTpl        = require('text!templates/workflow/orders/row.html'),
+      context, ListView;
+  
+  context = {
     action_css: {
       'block': 'btn-inverse',
       'cancel': 'btn-danger',
@@ -19,7 +19,7 @@ define([
     }
   };
   
-  var ListView = Qorus.ListView.extend({
+  ListView = Qorus.ListView.extend({
     name: 'orders',
     template: Template,
     context: context,

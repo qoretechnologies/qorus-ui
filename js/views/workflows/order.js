@@ -1,14 +1,15 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'models/order',
-  'models/workflow',
-  'text!templates/workflow/orders/detail.html',
-  'views/steps/step',
-  'views/common/diagram'
-], function($, _, Qorus, Model, Workflow, Template, StepView, DiagramView){
-  var context = {
+define(function(require) {
+  var $            = require('jquery'),
+      _            = require('underscore'),
+      Qorus        = require('qorus/qorus'),
+      Model        = require('models/order'),
+      Workflow     = require('models/workflow'),
+      Template     = require('text!templates/workflow/orders/detail.html'),
+      StepView     = require('views/steps/step'),
+      DiagramView  = require('views/common/diagram'),
+      context, ModelView;
+      
+  context = {
     action_css: {
       'block': 'btn-inverse',
       'cancel': 'btn-danger',
@@ -16,7 +17,7 @@ define([
     }
   };
   
-  var ModelView = Qorus.View.extend({
+  ModelView = Qorus.View.extend({
     template: Template,
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle',
