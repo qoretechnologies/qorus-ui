@@ -18,6 +18,12 @@ define(function (require) {
     render: function (ctx) {
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
+    },
+    
+    off: function () {
+      this.stopListening();
+      this.undelegateEvents();
+      this.$el.empty();
     }
   });
   

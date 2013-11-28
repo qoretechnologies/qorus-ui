@@ -10,6 +10,7 @@ define(function (require) {
     RowTpl = require('text!templates/system/alerts/row.html'),
     DetailTpl = require('text!templates/system/alerts/detail.html'),
     PaneView = require('views/common/pane'),
+    Alert = require('models/alert'),
     columns, css_map, DetailView, TableView, ListView, View;
   
   columns = [
@@ -58,21 +59,7 @@ define(function (require) {
     }
   })
   
-  TableView = Qorus.TableView.extend({
-    initialize: function () {
-      _.bindAll(this);
-      var self = this;
-      TableView.__super__.initialize.apply(this, arguments);
-      this.listenTo(Dispatcher, 'alert', function () {
-        self.collection.fetch();
-      });
-    },
-        
-    onRender: function () {
-      TableView.__super__.onRender.call(this);
-      this.$('#alert-detail').affix({ offset: 200 });
-    }
-  });
+  TableView = Qorus.TableView;
   
   ListView = Qorus.ListView.extend({
     template: function () {
@@ -82,7 +69,7 @@ define(function (require) {
     preRender: function () {
       var self = this,
           TView;
-      
+            
       TView = this.setView(new TableView({ 
         parent: this,
         collection: this.collection, 
@@ -109,24 +96,40 @@ define(function (require) {
     },
     
     preRender: function () {
-      var ongoing_v, view_transient;
+      var OView, TView;
       
-      ongoing_v = this.setView(new ListView(
+      OView = this.setView(new ListView(
         new Collection([], { type: 'ongoing'})
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
+      
+      OView.listenTo(Dispatcher, 'alert:ongoing_raised', function (e, evt) {
+        var alert;
+        if (!e.info.when) e.info.when = e.time;
 
-      transient_v = this.setView(new ListView(
+        alert = new Alert(e.info, { parse: true });
+        OView.collection.add(alert);
+      });
+
+      TView = this.setView(new ListView(
         new Collection([], { type: 'transient'})
       ), sprintf('#alerts-transient-list-%s', this.cid));
       
-      this.listenTo(ongoing_v, 'row:clicked', this.showDetail);
-      this.listenTo(transient_v, 'row:clicked', this.showDetail);
+      TView.listenTo(Dispatcher, 'alert:transient_raised', function (e, evt) {
+        var alert;
+        if (!e.info.when) e.info.when = e.time;
+
+        alert = new Alert(e.info, { parse: true });
+        TView.collection.add(alert);
+      });
+      
+      this.listenTo(OView, 'row:clicked', this.showDetail);
+      this.listenTo(TView, 'row:clicked', this.showDetail);
     },
     
     showDetail: function (row) {
       var content_view = new DetailView({ model: row.model }),
-          view         = this.getView('#alert-detail'),
-          width        = $(document).width() - $('[data-sort="object"]').offset().left
+          view         = this.getView('.alert-detail'),
+          width        = $(document).width() - this.$('[data-sort="object"]').offset().left
           model        = row.model;
       
       if (this.selected_model != model) {
@@ -134,7 +137,7 @@ define(function (require) {
         view = this.setView(new PaneView({
           content_view: content_view,
           width: width
-        }), '#alert-detail', true);
+        }), '.alert-detail', true);
         this.selected_model = model;
 
         this.listenToOnce(view, 'closed off', function () {

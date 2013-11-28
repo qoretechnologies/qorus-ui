@@ -15,17 +15,14 @@ define(function(require){
       _.bindAll(this, 'renderInfo');
       
       this.listenTo(this.info, 'change', this.renderInfo);
-
       this.renderInfo();
     },
     
     renderInfo: function () {
       var header = new HeaderView({ info: this.info, user: this.user });
-      header.setElement($('#header'));
-      header.render();
       
       this.title = this.info.get('instance-key') + " | " + this.info.get('omq-version');
-      this.setTitle();
+      document.title = this.title;
       
       $('#build').text(this.info.get('omq-version') + '.' + this.info.get('omq-build'));
       $('#schema').text(this.info.get('omq-schema'));

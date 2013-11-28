@@ -55,6 +55,12 @@ define(function(require) {
     
     update: function (e) {
       this.model.fetch();
+    },
+    
+    off: function () {
+      this.stopListening();
+      this.undelegateEvents();
+      this.$el.empty();
     }
   });
   

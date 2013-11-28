@@ -656,17 +656,19 @@ define(function (require) {
     initialize: function (opts) {
       _.bindAll(this);
       var self = this;
+      this.RowView = RowView;
       this.views = {};
       this.opts = opts || {};
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
       this.listenTo(this.collection, 'sync', this.update);
-      this.listenTo(this.collection, 'resort', this.render);
+      this.listenTo(this.collection, 'resort sort', this.render);
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
       if (_.has(opts, 'row_template')) this.row_template = opts.row_template;
+      if (_.has(opts, 'row_view')) this.RowView = opts.row_view;
       if (_.has(opts, 'row_attributes')) this.row_attributes = opts.row_attributes;      
       if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
       if (_.has(opts, 'dispatcher')) this.dispatcher = opts.dispatcher;
@@ -769,7 +771,7 @@ define(function (require) {
     },
 
     appendRow: function (m, render) {
-      var view = this.insertView(new RowView({ 
+      var view = this.insertView(new this.RowView({ 
         model: m, 
         template: this.row_tpl, 
         helpers: this.helpers, 
@@ -779,9 +781,9 @@ define(function (require) {
 
       render = (render===undefined) ? true : render;
       
-      if (render) 
+      if (render)
         this.$('tbody').append(view.render());
-
+      
       return view;
     },
         

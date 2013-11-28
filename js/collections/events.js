@@ -27,6 +27,7 @@ define([
     wsAdd: function (e) {
       var self = this,
         models, len, sliced;
+
       models = JSON.parse(e.data);
       
       // drop older messages

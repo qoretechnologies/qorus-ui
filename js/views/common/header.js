@@ -16,6 +16,8 @@ define(function (require) {
       _.bindAll(this);
       this.model = opts.info;
       this.user = opts.user;
+      this.setElement($('#header'));
+      this.render();
     },
     
     render: function (ctx) {

@@ -1,8 +1,9 @@
 define(function (require) {
   var settings = require('settings'),
-    _ = require('underscore'),
-    Qorus = require('qorus/qorus'),
-    Helpers = require('qorus/helpers'),
+    _          = require('underscore'),
+    utils      = require('utils'),
+    Qorus      = require('qorus/qorus'),
+    Helpers    = require('qorus/helpers'),
     obj_map, Model;
   
   obj_map = {
@@ -41,6 +42,12 @@ define(function (require) {
   }
   
   Model = Qorus.Model.extend({
+    defaults: {
+      name: 'N/A',
+      version: 'N/A',
+      id: 'N/A'
+    },
+    
     dateAttributes: ['when'],
     idAttribute: '_id',
     
@@ -58,9 +65,10 @@ define(function (require) {
       return obj;
     },
     
-    parse: function (response) {
-      response._id = response.type + response.id;
-      return Model.__super__.parse.call(this, response);
+    parse: function (data, options) {
+      data._id = utils.parseDate(data.when, "YYYYMMDDTHHmmss") + data.type;
+      if (data.id) data._id += data.id;
+      return data;
     }
   });
   // Return the model for the module

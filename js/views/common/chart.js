@@ -177,7 +177,7 @@ define([
           });
         }
       }
-      console.log(scale, this.dataset);
+      // console.log(scale, this.dataset);
     },
     
     getScaleFactor: function () {
@@ -202,7 +202,7 @@ define([
     template: LineChartTpl,
     onRender: function () {
       // create chart only if dataset available
-      console.log(this.dataset, this.getMaxValue());
+      // console.log(this.dataset, this.getMaxValue());
       if (this.dataset) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {

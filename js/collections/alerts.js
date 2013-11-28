@@ -1,21 +1,23 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus',
-  'models/alert'
-], function(settings, _, Qorus, Model){
-  var Collection = Qorus.SortedCollection.extend({
+define(function (require) {
+  var settings = require('settings'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model    = require('models/alert'),
+      Collection;
+       
+  Collection = Qorus.SortedCollection.extend({
+    limit: 100,
     model: Model,
     url: function () {
       return settings.REST_API_PREFIX + '/system/alerts/' + this.type;
     },
     
     initialize: function (models, opts) {
+      Collection.__super__.initialize.apply(this, arguments);
       this.sort_key = 'type';
       this.sort_order = 'des';
-      this.sort_history = ['when',];
+      this.sort_history = ['when'];
       
-      Collection.__super__.initialize.call(this, models, opts);
       if (opts.type) {
         this.type = opts.type;
       }

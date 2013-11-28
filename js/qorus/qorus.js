@@ -44,7 +44,7 @@ define(function (require) {
   
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
-    initialize: function (opts) {
+    initialize: function (opts, options) {
       _.bindAll(this);
       opts = opts || {};
 
@@ -52,8 +52,8 @@ define(function (require) {
         this.id = opts.id;
         delete opts.id;
       }
-      
-      Qorus.Model.__super__.initialize.call(this, opts);
+
+      Qorus.Model.__super__.initialize.call(this, opts, options);
       this.opts = opts;
       // this.parseDates();
     },

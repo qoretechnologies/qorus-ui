@@ -34,7 +34,7 @@ define(function(require){
     },
     
     preRender: function () {
-      this.setView(new DashboardView(), '#performance');
+      this.setView(new DashboardView(), '#dashboard');
       this.setView(new LogsView(), '#logs');
       this.setView(new OptionsView(), '#options');
       this.setView(new DatasourceView(), '#datasources');
