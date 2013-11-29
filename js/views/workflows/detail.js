@@ -9,7 +9,7 @@ define(function (require) {
       LogView      = require('views/log'),
       DiagramView  = require('views/common/diagram'),
       Template     = require('tpl!templates/workflow/meta.html'),
-      EditTemplate = require('tpl!templates/common/option_edit.html'),
+      EditTemplate = require('text!templates/common/option_edit.html'),
       ModelView;
   
   ModelView = Qorus.View.extend({
