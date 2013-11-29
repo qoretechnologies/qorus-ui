@@ -42,7 +42,8 @@ define(function (require) {
     url: '/',
     additionalEvents: {},
     defaultEvents: {
-      "submit": "doNothing"
+      "submit": "doNothing",
+      "show": "onShow"
       // "click a[href^='/']": 'catchAClick'
     },
     context: {},
@@ -57,6 +58,7 @@ define(function (require) {
     },
     
     initialize: function (options) {
+      _.bindAll(this);
       this.views = {};
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
@@ -287,6 +289,12 @@ define(function (require) {
     unlock: function () {
       // console.log(this.cid, 'unlocked');
       this.render_lock = false;
+    },
+    
+    onShow: function (e) {
+      _.each(this.views, function (view) {
+        view.trigger('show');
+      });
     }
    });
 
@@ -307,7 +315,9 @@ define(function (require) {
       "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
-      "click a[data-back]": "historyBack"
+      "click a[data-back]": "historyBack",
+      "show": "onShow",
+      "show": function (e) { console.log('shown', arguments )}
     },
     
     events : function () {
@@ -647,7 +657,7 @@ define(function (require) {
     cls: 'TableView',
     fixed: false,
     additionalEvents: {
-      'click th': 'sortView',
+      'click th': 'sortView'
     },
     template: TableTpl,
     row_template: undefined,
@@ -663,7 +673,13 @@ define(function (require) {
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
       this.listenTo(this.collection, 'sync', this.update);
-      this.listenTo(this.collection, 'resort sort', this.render);
+      this.listenTo(this.collection, 'resort sort', this.update);
+      // this.listenTo(this.collection, 'add', function (model) {
+      //   self.appendRow(model);
+      // });
+      // this.listenTo(this.collection, 'all', function () {
+      //   console.log(arguments, this.collection.length);
+      // });
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
@@ -683,10 +699,11 @@ define(function (require) {
       _.extend(this.context, opts);
       _.extend(this.options, opts);
       this.update();
+      this.on('shown', this.setWidths);
     },
     
     render: function (ctx) {
-      debug.log(this, this.colleciton);
+      debug.log(this, this.collection);
 
       if (!this.collection || this.collection.size() == 0) {
         this.template = NoDataTpl;
@@ -869,6 +886,10 @@ define(function (require) {
       }
       
       // console.timeEnd('sortIcon');
+    },
+    
+    onShown: function () {
+      this.setWidths();
     }
   });
   

@@ -40,7 +40,7 @@ define(function(require){
       this.setView(new DatasourceView(), '#datasources');
       this.setView(new PropView(), '#prop');
       this.setView(new HttpServicesView(), '#http');
-      this.setView(new AlertView(), '#alerts');
+      // this.setView(new AlertView(), '#alerts');
     },
     
     onRender: function () {

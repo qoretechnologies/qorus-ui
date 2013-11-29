@@ -41,6 +41,8 @@ define(function (require) {
     onShow: function () {
       var $target, target_name, view;
       
+      View.__super__.onShow.call(this);
+      
       $target = this.$('.nav .active a');
       target_name = $target.data('target') || $target.attr('href');
       view = this.getView(target_name);

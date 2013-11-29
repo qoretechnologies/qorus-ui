@@ -57,13 +57,24 @@ define(function (require) {
       this.stopListening();
       this.$el.empty();
     }
-  })
+  });
   
   TableView = Qorus.TableView;
   
   ListView = Qorus.ListView.extend({
+    views: {},
+    additionalEvents: {
+      "shown": "onShown"
+    },
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
+    },
+    
+    initialize: function (opts) {
+      _.bindAll(this);
+      this.views = {};
+      ListView.__super__.initialize.call(this, opts);
+      this.on('shown', this.onShown);
     },
     
     preRender: function () {
@@ -83,16 +94,31 @@ define(function (require) {
       this.listenTo(TView, 'row:clicked', function (row) {
         self.trigger('row:clicked', row);
       });
+    },
+    
+    onShown: function () {
+      _.each(this.views, function (view) {
+        view.trigger('shown');
+      })
     }
   });
 
   View = Qorus.View.extend({
+    additionalEvents: {
+      "shown": "onShown"
+    },
     collections: {},
     views: {},
     template: function (ctx) {
       ctx = ctx || {};
       _.extend(ctx, { cid: this.cid });
       return _.template(Template, ctx);
+    },
+    
+    initialize: function () {
+      this.views = {};
+      _.bindAll(this);
+      View.__super__.initialize.apply(this, arguments);
     },
     
     preRender: function () {
@@ -102,12 +128,16 @@ define(function (require) {
         new Collection([], { type: 'ongoing'})
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
-      OView.listenTo(Dispatcher, 'alert:ongoing_raised', function (e, evt) {
+      OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
-
-        alert = new Alert(e.info, { parse: true });
-        OView.collection.add(alert);
+        
+        if (evt === 'alert:ongoing_raised') {
+          alert = new Alert(e.info, { parse: true });
+          OView.collection.add(alert);          
+        } else if (evt === 'alert:ongoing_cleared') {
+          Oview.collection.get(e.info.id).destroy();
+        }
       });
 
       TView = this.setView(new ListView(
@@ -117,7 +147,7 @@ define(function (require) {
       TView.listenTo(Dispatcher, 'alert:transient_raised', function (e, evt) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
-
+      
         alert = new Alert(e.info, { parse: true });
         TView.collection.add(alert);
       });
@@ -147,6 +177,12 @@ define(function (require) {
         if (view) view.close();
         this.selected_model = null;
       }
+    },
+    
+    onShown: function () {
+      _.each(this.views, function (view, idx) {
+        view.trigger('shown');
+      });
     }
   });
   
