@@ -547,7 +547,7 @@ aside {
 }
 
 /* ellipsis */
-.table .info {
+.table td.info {
   text-align: left;
   text-overflow: ellipsis;
   white-space:nowrap; 

@@ -1,18 +1,18 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'settings',
-  'utils',
-  'tpl!templates/common/nested_list.html',
-  'tpl!templates/common/nested_list_text.html',
-  'tpl!templates/common/wrap_label.html',
-  'tpl!templates/common/power_button.html',
-  'tpl!templates/common/action_status.html',
-  'urls'
-], function ($, _, Backbone, settings, utils, NestedListTpl, NestedListTextTpl, WrapLabelTpl, PwrBtnTpl, StatusActionTpl, Urls) { 
+define(function (require) {
+  var $                 = require('jquery'),
+      _                 = require('underscore'),
+      Backbone          = require('backbone'),
+      settings          = require('settings'),
+      utils             = require('utils'),
+      NestedListTpl     = require('tpl!templates/common/nested_list.html'),
+      NestedListTextTpl = require('tpl!templates/common/nested_list_text.html'),
+      WrapLabelTpl      = require('tpl!templates/common/wrap_label.html'),
+      PwrBtnTpl         = require('tpl!templates/common/power_button.html'),
+      StatusActionTpl   = require('tpl!templates/common/action_status.html'),
+      Urls              = require('urls'),
+      Helpers;
 
-  var Helpers = {
+  Helpers = {
     getStatusCSS: function (status) {
       if (status) {
         status = status.toLowerCase();
@@ -96,7 +96,7 @@ define([
     escapeHtml: function (html) {
       if (_.isString(html)) {
         var new_html;
-        new_html = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        new_html = _.escape(html);
         if (html.search(/^<\?xml/) != -1) {
           return '<pre><code data-language="xml">' + new_html + '</code></pre>';
         } 

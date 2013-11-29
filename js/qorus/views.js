@@ -682,7 +682,7 @@ define(function (require) {
       
       _.extend(this.context, opts);
       _.extend(this.options, opts);
-      this.update(); 
+      this.update();
     },
     
     render: function (ctx) {
@@ -728,7 +728,7 @@ define(function (require) {
       this.$('tr').first().children().each(function () {
         clgrp.append($('<col />').width($(this).outerWidth()));
       });
-      this.$('.table-fixed').append(clgrp);
+      this.$('.table-fixed').prepend(clgrp);
     },
     
     resize: function () {

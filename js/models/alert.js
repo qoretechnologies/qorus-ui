@@ -66,6 +66,7 @@ define(function (require) {
     },
     
     parse: function (data, options) {
+      data = Model.__super__.parse.call(this, data, options)
       data._id = utils.parseDate(data.when, "YYYYMMDDTHHmmss") + data.type;
       if (data.id) data._id += data.id;
       return data;
