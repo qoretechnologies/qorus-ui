@@ -672,8 +672,8 @@ define(function (require) {
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
-      this.listenTo(this.collection, 'sync', this.update);
-      this.listenTo(this.collection, 'resort sort', this.update);
+
+      this.listenTo(this.collection, 'syncd resort sort remove', this.update);
       // this.listenTo(this.collection, 'add', function (model) {
       //   self.appendRow(model);
       // });

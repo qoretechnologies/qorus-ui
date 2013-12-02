@@ -37,11 +37,18 @@ define(function (require) {
     template: DetailTpl,
     
     initialize: function (opts) {
+      var self = this;
+      _.bindAll(this);
+      
       if (opts.model) {
         this.model = opts.model;
       }
       
       DetailView.__super__.initialize.call(this, opts);
+      this.listenTo(this.model, 'destroy', function () {
+        console.log('closing detail on destroy');
+        self.trigger('close');
+      });
     },
     
     onRender: function (ctx) {
@@ -129,14 +136,19 @@ define(function (require) {
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
       OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
-        var alert;
+        var alert, id;
         if (!e.info.when) e.info.when = e.time;
         
         if (evt === 'alert:ongoing_raised') {
           alert = new Alert(e.info, { parse: true });
           OView.collection.add(alert);          
         } else if (evt === 'alert:ongoing_cleared') {
-          OView.collection.get(e.info.id).destroy();
+          id = Alert.prototype.createID(e.info);
+          alert = OView.collection.get(id);
+          console.log('destroying', alert, alert.collection, OView.collection.size());
+          alert.trigger('destroy', alert, alert.collection);
+          console.log(alert.collection, OView.collection.size());
+          // OView.collection.get(e.info.id).destroy();
         }
       });
 
@@ -160,7 +172,8 @@ define(function (require) {
       var content_view = new DetailView({ model: row.model }),
           view         = this.getView('.alert-detail'),
           width        = $(document).width() - this.$('[data-sort="object"]').offset().left
-          model        = row.model;
+          model        = row.model
+          self         = this;
       
       if (this.selected_model != model) {
         row.$el.addClass('info');
@@ -173,10 +186,18 @@ define(function (require) {
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
+        
+        this.listenTo(this.selected_model, 'destroy', function () { 
+          this.stopListening(this.selected_model);
+          self.selected_model = null;
+          view.close();
+        });
       } else {
         if (view) view.close();
         this.selected_model = null;
+        this.stopListening(this.selected_model);
       }
+      
     },
     
     onShown: function () {
