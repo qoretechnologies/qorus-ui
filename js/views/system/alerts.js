@@ -145,8 +145,12 @@ define(function (require) {
           OView.collection.add(alert);          
         } else if (evt === 'alert:ongoing_cleared') {
           id = Alert.prototype.createID(e.info);
-          alert = OView.collection.get(id);
-          alert.trigger('destroy', alert, alert.collection);
+          alert = OView.collection.findWhere({ "_id": id });
+          console.log(id, OView.collection, alert);
+          if (alert) {
+            alert.trigger('destroy', alert, OView.collection);
+          }
+
         }
       });
 
