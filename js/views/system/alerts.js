@@ -136,7 +136,7 @@ define(function (require) {
           alert = new Alert(e.info, { parse: true });
           OView.collection.add(alert);          
         } else if (evt === 'alert:ongoing_cleared') {
-          Oview.collection.get(e.info.id).destroy();
+          OView.collection.get(e.info.id).destroy();
         }
       });
 
