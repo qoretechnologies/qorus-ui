@@ -135,6 +135,7 @@ define(function (require) {
         new Collection([], { type: 'ongoing'})
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
+      // adds event listener for ongoing alert events
       OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
         var alert, id;
         if (!e.info.when) e.info.when = e.time;
@@ -145,17 +146,15 @@ define(function (require) {
         } else if (evt === 'alert:ongoing_cleared') {
           id = Alert.prototype.createID(e.info);
           alert = OView.collection.get(id);
-          console.log('destroying', alert, alert.collection, OView.collection.size());
           alert.trigger('destroy', alert, alert.collection);
-          console.log(alert.collection, OView.collection.size());
-          // OView.collection.get(e.info.id).destroy();
         }
       });
 
       TView = this.setView(new ListView(
         new Collection([], { type: 'transient'})
       ), sprintf('#alerts-transient-list-%s', this.cid));
-      
+
+      // adds event listener for ongoing alert events      
       TView.listenTo(Dispatcher, 'alert:transient_raised', function (e, evt) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
