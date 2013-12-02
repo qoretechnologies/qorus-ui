@@ -193,8 +193,8 @@ define(function (require) {
         });
       } else {
         if (view) view.close();
-        this.selected_model = null;
         this.stopListening(this.selected_model);
+        this.selected_model = null;
       }
       
     },
