@@ -664,8 +664,8 @@ define(function (require) {
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
-      this.listenTo(this.collection, 'sync', self.update);
-      this.listenTo(this.collection, 'resort sort', self.render);
+      this.listenTo(this.collection, 'sync remove', self.update);
+      this.listenTo(this.collection, 'resort sort', self.update);
       // this.listenTo(this.collection, 'add', function (model) {
       //   self.appendRow(model);
       // });
@@ -797,6 +797,7 @@ define(function (require) {
     },
         
     update: function () {
+      console.log('updating', arguments, this.collection.size());
       if (this.template == NoDataTpl) {
         this.template = this.opts.template;
         this.render();

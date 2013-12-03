@@ -102,10 +102,10 @@ define(function (require) {
         new Collection([], { type: 'ongoing'})
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
-      OView.listenTo(Dispatcher, 'alert:ongoing_raised', function (e, evt) {
+      OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
-        
+
         if (evt === 'alert:ongoing_raised') {
           alert = new Alert(e.info, { parse: true });
           OView.collection.add(alert);          
@@ -149,11 +149,17 @@ define(function (require) {
         }), '.alert-detail', true);
         this.selected_model = model;
 
+        // close detail on model destroy event
+        this.listenToOnce(this.selected_model, 'destroy', function () {
+          view.close();
+        });
+        
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
       } else {
         if (view) view.close();
+        if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }
     }
