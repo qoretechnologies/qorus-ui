@@ -49,7 +49,7 @@ define(function (require) {
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
-      // this.trigger('off');
+      this.trigger('off');
     }
   });
   

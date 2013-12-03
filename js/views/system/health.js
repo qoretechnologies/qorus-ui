@@ -17,11 +17,8 @@ define(function(require) {
       _.bindAll(this);
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
-      this.listenTo(Dispatcher, 'status:health_changed', this.update);
-      this.listenTo(Dispatcher, 'status:health_changed', function (e) {
-        console.log('status:health_changed', e);
-      });
-      this.model.fetch();
+      this.listenTo(Dispatcher, 'system:health_changed', this.update);
+      this.update();
     },
     
     render: function (ctx) {

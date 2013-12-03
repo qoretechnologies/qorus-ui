@@ -3,6 +3,7 @@ define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
       Backbone    = require('backbone'),
+      Keys        = require('backbone.keys'),
       settings    = require('settings'),
       utils       = require('utils'),
       TableTpl    = require('tpl!templates/common/table.html'),
@@ -797,7 +798,6 @@ define(function (require) {
     },
         
     update: function () {
-      console.log('updating', arguments, this.collection.size());
       if (this.template == NoDataTpl) {
         this.template = this.opts.template;
         this.render();

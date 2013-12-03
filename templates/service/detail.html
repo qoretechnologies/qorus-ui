@@ -16,9 +16,6 @@
     <% if (item.lib) { %>
     <li><a href="#lib">Library</a></li>
     <% } %>
-    <% if (item.groups) { %>
-    <li><a href="#groups">Groups</a></li>
-    <% } %>
     <li><a href="#log" class="log">Log</a></li>
 </ul>
 
@@ -29,6 +26,9 @@
         <p>
             <div>Autostart: <%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></div>
         </p>
+        <% _.each(item.groups, function (g) { %>
+          <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
+        <% }) %>
     </div>
     <div class="tab-pane" id="methods">
         <table class="table table-striped">
@@ -57,13 +57,6 @@
     <% if (item.lib) { %>
         <div class="tab-pane" id="lib">
             <%= createNestedList(item.lib) %>
-        </div>
-    <% } %>
-    <% if (item.groups) { %>
-        <div class="tab-pane" id="groups">
-            <% _.each(item.groups, function (g) { %>
-              <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
-            <% }) %>
         </div>
     <% } %>
     <div class="tab-pane" id="log">
