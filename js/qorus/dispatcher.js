@@ -1,9 +1,8 @@
-define(function($, _, Qorus){
-  var $     = require('jquery'),
-      _     = require('underscore'),
-      Qorus = require('qorus/qorus'),
-      Dispatcher;
-
+define([
+  'jquery',
+  'underscore',
+  'qorus/qorus'
+], function($, _, Qorus){
   // var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
   // $.globalMessenger().post(msg);
   // var msg = sprintf('Service %d %s failed', id, action);

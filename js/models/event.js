@@ -17,7 +17,7 @@ define([
       var cls = response.classstr.toLowerCase() || '';
       
       if(response.info){
-        if (!response.info.id) response.info.id = response.info[cls + 'id'];
+        response.info.id = response.info[cls + 'id'];
         response.info.cls = cls;
         response.info.status = response.info.status || "";
         response.info.instanceid = response.info[cls + '_instanceid'] || response.info['execid'] || "";

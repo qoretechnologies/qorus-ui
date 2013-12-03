@@ -54,7 +54,6 @@ define([
     },
     
     onShow: function () {
-      View.__super__.onShow.call(this);
       _.defer(this.fixHeight);
     },
 
@@ -122,9 +121,9 @@ define([
       var $parent = $(window),
         $log = this.$('.log-area');
         
-      // console.log(this.$('.log-area'), this.$('.log-area').offset());
+        console.log(this.$('.log-area'), this.$('.log-area').offset());
       $log.height($parent.height() - $log.offset().top - 40);
-      // console.log($log.height(), $log.position().top, $log.offset().top);
+      console.log($log.height(), $log.position().top, $log.offset().top);
     }
     
   });

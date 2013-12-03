@@ -12,6 +12,7 @@ define([
     
   	initialize: function(opts){
       this.sort_key = 'name';
+      this.sort_order = 'des';
       this.sort_history = ['default',];
       this.opts = {};
   	}

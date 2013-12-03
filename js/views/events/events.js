@@ -1,15 +1,13 @@
-define(function(require) {
-  var $          = require('jquery'),
-      _          = require('underscore'),
-      Qorus      = require('qorus/qorus'),
-      Template   = require('text!templates/events/list.html'),
-      TableTpl   = require('text!templates/events/table.html'),
-      RowTpl     = require('text!templates/events/row.html'),
-      Events     = require('qorus/events'),
-      Dispatcher = require('qorus/dispatcher'),
-      ListView;
-  
-  ListView = Qorus.ListView.extend({
+define([
+  'jquery',
+  'underscore',
+  'qorus/qorus',
+  'text!templates/events/list.html',
+  'text!templates/events/table.html',
+  'text!templates/events/row.html',
+  'qorus/events'
+], function($, _, Qorus, Template, TableTpl, RowTpl, Events){
+  var ListView = Qorus.ListView.extend({
     template: Template,
     
     title: "Events",
