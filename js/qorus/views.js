@@ -664,14 +664,14 @@ define(function (require) {
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
-      this.listenTo(this.collection, 'sync remove', self.update);
+      this.listenTo(this.collection, 'sync', self.update);
       this.listenTo(this.collection, 'resort sort', self.render);
-      this.listenTo(this.collection, 'add', function (model) {
-        self.appendRow(model);
-      });
-      this.listenTo(this.collection, 'all', function () {
-        console.log(arguments, this.collection.length);
-      });
+      // this.listenTo(this.collection, 'add', function (model) {
+      //   self.appendRow(model);
+      // });
+      // this.listenTo(this.collection, 'all', function () {
+      //   console.log(arguments, this.collection.length);
+      // });
 
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
@@ -691,6 +691,7 @@ define(function (require) {
       
       _.extend(this.context, opts);
       _.extend(this.options, opts);
+      this.update();
     },
     
     render: function (ctx) {
@@ -796,11 +797,11 @@ define(function (require) {
     },
         
     update: function () {
-      console.log('updating table', arguments);
       if (this.template == NoDataTpl) {
         this.template = this.opts.template;
         this.render();
       }
+      
       this.removeView('tbody');
       this.appendRows(this.collection.models);
     },
