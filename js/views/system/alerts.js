@@ -105,9 +105,18 @@ define(function (require) {
       OView.listenTo(Dispatcher, 'alert:ongoing_raised', function (e, evt) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
+        
+        if (evt === 'alert:ongoing_raised') {
+          alert = new Alert(e.info, { parse: true });
+          OView.collection.add(alert);          
+        } else if (evt === 'alert:ongoing_cleared') {
+          id = Alert.prototype.createID(e.info);
+          alert = OView.collection.findWhere({ "_id": id });
 
-        alert = new Alert(e.info, { parse: true });
-        OView.collection.add(alert);
+          if (alert) {
+            alert.trigger('destroy', alert, alert.collection);
+          }
+        }
       });
 
       TView = this.setView(new ListView(

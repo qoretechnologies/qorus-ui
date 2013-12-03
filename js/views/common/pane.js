@@ -6,6 +6,7 @@ define(function (require) {
       View;
 
   View = Qorus.View.extend({
+    cls: 'PaneView',
     template: Template,
     views: {},
     additionalEvents: {
@@ -48,7 +49,7 @@ define(function (require) {
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
-      this.trigger('off');
+      // this.trigger('off');
     }
   });
   

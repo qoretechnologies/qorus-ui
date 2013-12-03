@@ -18,6 +18,9 @@ define(function(require) {
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'status:health_changed', this.update);
+      this.listenTo(Dispatcher, 'status:health_changed', function (e) {
+        console.log('status:health_changed', e);
+      });
       this.model.fetch();
     },
     

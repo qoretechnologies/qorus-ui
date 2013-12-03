@@ -11,6 +11,10 @@
         <td><%= item.type %></td>
       </tr>
       <tr>
+        <th>Object</th>
+        <td><%= (item.object_url ) ? '<a href="'+ item.object_url +'">' + item.object_name + '</a>' : item.object_name %></td>
+      </tr>
+      <tr>
         <th>Source</th>
         <td><%= item.source %></td>
       </tr>
