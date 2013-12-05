@@ -86,19 +86,19 @@ define(function (require) {
     },
     
     doAction: function(action, opts){
-      var self = this, id = this.id;
+      var self = this, id = this.id, action = action.toLowerCase();
       
-      if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
+      if(_.indexOf(this.allowedActions, action) != -1){
         $.put(this.url(), {'action': action })
         .done(
           function (e, ee, eee){
-            var msg = sprintf('Order Instance %d %s done', id, action);
+            var msg = sprintf('Order Instance %s %s done', id, action);
             // $.globalMessenger().post(msg);
             self.fetch();
           }
         ).fail(
           function(e, ee, eee){
-            var msg = sprintf('Order Instance %d %s failed', id, action);
+            var msg = sprintf('Order Instance %s %s failed', id, action);
             // $.globalMessenger().post({ message: msg, type: 'error' });
           }
         );        
