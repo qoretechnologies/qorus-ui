@@ -100,18 +100,18 @@ define(function (require) {
     },
     
     editOption: function (e) {
-      var _this = this;
+      var self = this;
       
       if (e.target.localName == 'td') {
-        var $target = $(e.currentTarget);
-        var value = $target.data('value');
-        var obj_type = $target.data('type');
-        var name = $target.data('name');
-        var template = _.template(EditTemplate, { 
-          value: value,
-          type: utils.input_map[obj_type][1],
-          name: name
-        });
+        var $target  = $(e.currentTarget),
+            value    = $target.data('value'),
+            obj_type = $target.data('type'),
+            name     = $target.data('name');
+            template = EditTemplate({ 
+              value: value,
+              type: utils.input_map[obj_type][1],
+              name: name
+            });
         
         $tpl = template;
         $target.toggleClass('editable');
@@ -124,12 +124,12 @@ define(function (require) {
         
         $('button[data-action=set]').click(function () {
           var val = $(this).prev('input').val();
-          _this.setOption(name, val, $target);
+          self.setOption(name, val, $target);
         });
         
         $('input').keypress(function (e) {
           if(e.which == 13) {
-            _this.setOption(name, $(this).val(), $target);
+            self.setOption(name, $(this).val(), $target);
           }
         });
       }
