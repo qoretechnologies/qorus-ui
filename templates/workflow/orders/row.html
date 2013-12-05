@@ -15,7 +15,7 @@
 <td class="text-right">
   <div class="btn-group">
     <% _.each(item.actions, function(action) { %>
-      <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action.toLowerCase() %>"><%= action.toUpperCase() %></button>
+      <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
     <% }); %>
   </div>
 </td>

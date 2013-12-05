@@ -1,12 +1,12 @@
-define([
-  'settings',
-  'jquery',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'qorus/tree'
-], function(settings, $, Qorus, Dispatcher, Tree){
+define(function (require) {
+  var settings   = require('settings'),
+      $          = require('jquery'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      Tree       = require('qorus/tree'),
+      Model;
   
-  var Model = Qorus.Model.extend({
+  Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
@@ -86,15 +86,15 @@ define([
     },
     
     doAction: function(action, opts){
-      if(_.indexOf(this.allowedActions, action) != -1){
-        var id = this.id;
-        var _this = this;
+      var self = this, id = this.id;
+      
+      if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
         $.put(this.url(), {'action': action })
         .done(
           function (e, ee, eee){
             var msg = sprintf('Order Instance %d %s done', id, action);
             // $.globalMessenger().post(msg);
-            _this.fetch();
+            self.fetch();
           }
         ).fail(
           function(e, ee, eee){
