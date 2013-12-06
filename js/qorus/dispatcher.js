@@ -1,14 +1,8 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus'
-], function($, _, Qorus){
-  // var msg = sprintf('Workflow %s %s done', _this.get('name'), action);
-  // $.globalMessenger().post(msg);
-  // var msg = sprintf('Service %d %s failed', id, action);
-  // $.globalMessenger().post({ message: msg, type: 'error' });
-  // var msg = sprintf('Job %d %s done', id, action);
-  // $.globalMessenger().post(msg);
+define(function (require) { 
+  var $     = require('jquery'),
+      _     = require('underscore'),
+      Qorus = require('qorus/qorus'),
+      Dispatcher;
   
   Dispatcher = Backbone.Model.extend({
     add: function (e) {

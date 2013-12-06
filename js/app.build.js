@@ -7,6 +7,7 @@
       underscore: 'libs/underscore',
       backbone: 'libs/backbone',
       "backbone.keys": 'libs/backbone.keys',
+      localstorage: 'libs/backbone.localstorage',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
       datepicker: "libs/datetime-picker-2/bootstrap-datetimepicker.min",
@@ -32,6 +33,9 @@
         exports: "Backbone"
       },
       "backbone.keys": {
+        deps: ['backbone']
+      },
+      localestorage: {
         deps: ['backbone']
       },
       "underscore": {

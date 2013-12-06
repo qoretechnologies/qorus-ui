@@ -5,6 +5,7 @@ require.config({
     underscore: 'libs/underscore',
     backbone: 'libs/backbone',
     'backbone.keys': 'libs/backbone.keys',
+    localstorage: 'libs/backbone.localstorage',
     bootstrap: 'libs/bootstrap/js/bootstrap',
     moment: "libs/moment",
     // later: "libs/later/later.min",
@@ -35,6 +36,9 @@ require.config({
       exports: "Backbone"
     },
     "backbone.keys": {
+      deps: ['backbone']
+    },
+    localstorage: {
       deps: ['backbone']
     },
     "underscore": {

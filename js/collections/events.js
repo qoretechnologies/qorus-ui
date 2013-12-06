@@ -1,15 +1,16 @@
-define([
-  'settings',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'models/event',
-  'qorus/dispatcher',
-  'messenger'
-], function(settings, _, Backbone, Qorus, Model, Dispatcher, Messenger){
-  var msngr = $('#msg').messenger();
+define(function (require) {
+  var settings     = require('settings'),
+      _            = require('underscore'),
+      Backbone     = require('backbone'),
+      Qorus        = require('qorus/qorus'),
+      Model        = require('models/event'),
+      Dispatcher   = require('qorus/dispatcher'),
+      Messenger    = require('messenger'),
+      msngr, Collection;
   
-  var Collection = Qorus.WSCollection.extend({
+  msngr = $('#msg').messenger();
+  
+  Collection = Qorus.WSCollection.extend({
     model: Model,
     log_size: 500,
     counter: 0,

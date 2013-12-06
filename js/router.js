@@ -24,6 +24,7 @@ define(function(require) {
     GroupsView = require('views/groups/groups'),
     GroupView = require('views/groups/group'),
     Urls = require('urls'),
+    Notifications = require('collections/notifications'),
     AppRouter, app_router;
       
     

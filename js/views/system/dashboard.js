@@ -1,4 +1,4 @@
-define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartView, AlertView, HealthView){
+define(function (require) {
   var $ = require('jquery'),
     _ = require('underscore'),
     settings = require('settings'),
@@ -9,6 +9,7 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
     ChartView = require('views/common/chart'),
     AlertView = require('views/system/alerts'),
     StatusTpl = require('tpl!templates/system/health/summary.html'),
+    Dispatcher = require('qorus/dispatcher'),
     Summary, DashboardView;
   
   Summary = Qorus.Model.extend({
@@ -64,6 +65,8 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
         self.context.remote = remote;
         self.context.statusToCSS = self.statusToCSS;
       });
+      
+      this.listenTo(Dispatcher, 'system', this.render);
     },
     
     statusToCSS: function (health) {
