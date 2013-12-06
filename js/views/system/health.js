@@ -5,7 +5,7 @@ define(function(require) {
       Qorus      = require('qorus/qorus'),
       settings   = require('settings'),
       Model      = require('models/health'),
-      StatusTpl  = require('tpl!templates/system/health/status.html'), 
+      StatusTpl  = require('tpl!templates/system/health/status.html'),
       DetailTpl  = require('tpl!templates/system/health/detail.html'),
       View;
 
@@ -37,7 +37,7 @@ define(function(require) {
         
       data.health_css = this.getHealthCSS();
       
-      $status = this.$('#status').popover({ 
+      $status = this.$('.status').popover({ 
         content: DetailTpl(data), 
         placement: "right", 
         container: this.$el,
@@ -51,6 +51,8 @@ define(function(require) {
       if (health === 'RED') return 'danger';
       if (health === 'GREEN') return 'success';
       if (health === 'YELLOW') return 'warning';
+      if (health === 'UNKNOWN') return 'info';
+      if (health === 'UNREACHABLE') return 'info';
     },
     
     update: function (e) {

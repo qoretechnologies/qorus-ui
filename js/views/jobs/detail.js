@@ -4,6 +4,7 @@ define(function (require) {
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/job/meta.html'),
       LogView  = require('views/log'),
+      Rainbow  = require('rainbow'),
       View;
   
   View = Qorus.View.extend({
@@ -12,13 +13,16 @@ define(function (require) {
       'click .nav-tabs a': 'tabToggle'
     },
     
-    initialize: function ( opts) {
+    initialize: function (opts) {
       this.opts = opts;
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
+      this.model.getProperty('code');
+      this.on('render', function () { Rainbow.color() });
     },
     
     render: function (ctx) {
+      var self = this;
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
     },
@@ -41,8 +45,6 @@ define(function (require) {
           view;
 
       e.preventDefault();
-      
-      console.log('preventing default');
       
       view = this.getView(target_name);
       if (view) view.trigger('show');

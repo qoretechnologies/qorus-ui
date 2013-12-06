@@ -988,7 +988,7 @@ table .header-copy {
 	padding: 10px;
 }
 
-#status {
+#header .status {
   margin-top: -10px;
 }
 
@@ -1020,6 +1020,8 @@ table .header-copy {
 }
 
 .break {
+  white-space: pre;
+  white-space: pre-wrap;
   word-break: break-word;
 }
 

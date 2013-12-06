@@ -4,7 +4,8 @@ define(function(require) {
       Qorus     = require('qorus/qorus'),
       Model     = require('models/result'),
       Template  = require('text!templates/job/results/detail.html'),
-      StepView  = require('rainbow.qore'),
+      StepView  = require('views/steps/step'),
+      rainbow   = require('rainbow.qore'),
       context   = {},
       ModelView;
   

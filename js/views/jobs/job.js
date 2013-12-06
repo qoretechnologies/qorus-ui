@@ -30,8 +30,8 @@ define([
       ModelView.__super__.initialize.call(this, opts);
       
       this.model = new Model({ id: opts.id });
-      this.model.fetch();
       this.listenTo(this.model, 'sync', this.render);
+      this.model.fetch();
     },
     
     preRender: function (args) {

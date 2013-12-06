@@ -1,15 +1,13 @@
-define([
-  'settings',
-  'underscore',
-  'moment',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'utils',
-  // 'later.recur',
-  // 'later.cron'
-], function(settings, _, moment, Qorus, Dispatcher, utils){
+define(function (require) {
+  var settings   = require('settings'),
+      _          = require('underscore'),
+      moment     = require('moment'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      utils      = require('utils'),
+      Model;
 
-  var Model = Qorus.Model.extend({
+  Model = Qorus.Model.extend({
     model_cls: 'job',
     idAttribute: "jobid",
     urlRoot: settings.REST_API_PREFIX + '/jobs/',
@@ -29,8 +27,22 @@ define([
         debug.log(this.url());
         $.put(this.url(), params);
       }
+    },
+    
+    getProperty: function (property) {
+      var self = this,
+          req;
+      
+      if (!this.get(property)) {
+        $.get(_.result(this, 'url') + '/' + property)
+          .done(function (data) {
+            self.set(property, data);
+          });
+      } else {
+        return this.get(property);
+      }
     }
   });
-  // Return the model for the module
+
   return Model;
 });

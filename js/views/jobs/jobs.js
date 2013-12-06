@@ -111,6 +111,8 @@ define(function(require) {
           view  = this.getView('#job-detail'),
           width = $(document).width() - $('[data-sort="active"]').offset().left;
       
+      if (this.selected_model) this.stopListening(this.selected_model);
+      
       if (this.selected_model != model) {
         row.$el.addClass('info');
         view = this.setView(new PaneView({
@@ -118,6 +120,8 @@ define(function(require) {
           width: width
         }), '#job-detail', true);
         this.selected_model = model;
+
+        this.listenTo(this.selected_model, 'change', view.render);
         
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');

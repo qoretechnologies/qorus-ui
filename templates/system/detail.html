@@ -37,7 +37,7 @@
       <tr>
         <td class="name"><%= key %></td>
         <% if (key != 'modules') { %>
-        <td class="description"><%= item %></td>
+        <td class="description"><%= _.isObject(item) ? createNestedList(item) : item %></td>
         <% } else { %>
         <td class="description">
             <dl>
