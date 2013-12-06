@@ -10,11 +10,31 @@
 
 <div class="tab-content">
   <div class="tab-pane active" id="details">
-    <div class="row-fluid">Details</div>
+    <div class="row-fluid">
+    <h4>Properties</h4>
+    <table class="table table-stripped table-condensed">
+      <tbody>
+        <tr>
+          <th class="text-left">Active</th>
+          <td><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
+        </tr>
+        <tr>
+          <th class="text-left">Schedule</th>
+          <td><%= item.sched_txt %></td>
+        </tr>
+        <% if (item.expiry_date) { %>
+        <tr>
+          <th class="text-left">Expires</th>
+          <td><%= item.expiry_date %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
     <h4>Groups</h4>
     <% _.each(item.groups, function (g) { %>
       <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
     <% }) %>
+    </div>
   </div>
   <div class="tab-pane" id="library">
     <%= createNestedList(item.lib) %>
