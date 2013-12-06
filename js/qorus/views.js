@@ -97,6 +97,7 @@ define(function (require) {
       if (this.render_lock) return;
       // this.removeViews();
 
+      this.trigger('prerender', this);
       this.preRender();
 
       if (this.template) {

@@ -1,0 +1,14 @@
+<div class="span6">
+  <div class="system-health">
+    System status: 
+    <span class="label label-<%= statusToCSS(obj.local.health) %>"><%= obj.local.health %></span>
+    Ongoing <span class="badge badge-important"><%= obj.local.ongoing %></span> 
+    Transient <span class="badge badge-warning"><%= obj.local.transient %></span>
+  </div>
+</div>
+<div class="span6">
+  <div class="remote-health">
+    Remote status:
+    <span class="label label-<%= statusToCSS(obj.remote) %>"><%= obj.remote ? obj.remote : 'N/A' %></span>
+  </div>
+</div>

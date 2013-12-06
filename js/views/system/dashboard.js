@@ -5,10 +5,10 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
     utils = require('utils'),
     Qorus = require('qorus/qorus'),
     StatsCollection = require('collections/stats'),
-    Template = require('text!templates/system/dashboard.html'),
+    Template = require('tpl!templates/system/dashboard.html'),
     ChartView = require('views/common/chart'),
     AlertView = require('views/system/alerts'),
-    HealthView = require('views/system/health'),
+    StatusTpl = require('tpl!templates/system/health/summary.html'),
     Summary, DashboardView;
   
   Summary = Qorus.Model.extend({
@@ -50,6 +50,33 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
     }
   });
   
+  StatusView = Qorus.View.extend({
+    template: StatusTpl,
+    initialize: function (opts) {
+      _.bindAll(this);
+      this.views = {};
+      this.opts = opts || {};
+      
+      this.on('prerender', function (self) {
+        var local, remote;
+        local = self.opts.model.get('alert-summary');
+        self.context.local = local;
+        self.context.remote = remote;
+        self.context.statusToCSS = self.statusToCSS;
+      });
+    },
+    
+    statusToCSS: function (health) {
+      console.log(health);
+      if (health === 'RED') return 'important';
+      if (health === 'GREEN') return 'success';
+      if (health === 'YELLOW') return 'warning';
+      if (health === 'UNKNOWN') return 'info';
+      if (health === 'UNREACHABLE') return 'info';
+      return '';
+    }
+  })
+  
   DashboardView = Qorus.View.extend({
     template: Template,
     initialize: function (opts) {
@@ -57,7 +84,15 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
       this.views = {};
       this.opts = opts || {};
       
-      this.template = Template;
+      // this.template = Template;
+      this.on('prerender', function (view) {
+        var local, remote;
+        local = view.opts.model.get('alert-summary');
+        local.health = view.opts.model.get('health');
+        view.context.local = local;
+        
+        console.log(view.context.status);
+      });
     },
     
     preRender: function () {
@@ -73,7 +108,8 @@ define(function($, _, settings, utils, Qorus, StatsCollection, Template, ChartVi
           new Summary()
         ), '#chart-1-doughnut');
       
-      this.setView(new AlertView(), '#dashboard-alerts');  
+      this.setView(new AlertView(), '#dashboard-alerts');
+      this.setView(new StatusView({ model: this.opts.model }), '#health-summary');
     }
   });
   return DashboardView;
