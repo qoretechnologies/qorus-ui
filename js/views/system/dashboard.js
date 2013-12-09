@@ -10,7 +10,7 @@ define(function (require) {
     AlertView = require('views/system/alerts'),
     StatusTpl = require('tpl!templates/system/health/summary.html'),
     Dispatcher = require('qorus/dispatcher'),
-    Summary, DashboardView;
+    Summary, DashboardView, HealthModel;
   
   Summary = Qorus.Model.extend({
     defaults: {
@@ -51,22 +51,36 @@ define(function (require) {
     }
   });
   
+  HealthModel = Qorus.Model.extend({
+    url: settings.REST_API_PREFIX + '/system/health',
+    parse: function (response, options) {
+      var local, remote;
+      local = response;
+      remote = response.remote;
+      
+      response =  { local: local, remote: remote };
+      console.log(response);
+      return response;
+    }
+  });
+  
   StatusView = Qorus.View.extend({
     template: StatusTpl,
     initialize: function (opts) {
       _.bindAll(this);
       this.views = {};
       this.opts = opts || {};
+      this.model = new HealthModel();
+
+      this.model.fetch();
       
-      this.on('prerender', function (self) {
-        var local, remote;
-        local = self.opts.model.get('alert-summary');
-        self.context.local = local;
-        self.context.remote = remote;
+      this.on('prerender', function (self) { 
+        _(self.context).extend(this.model.toJSON());
         self.context.statusToCSS = self.statusToCSS;
       });
       
       this.listenTo(Dispatcher, 'system', this.render);
+      this.listenTo(this.model, 'sync change', this.render);
     },
     
     statusToCSS: function (health) {
