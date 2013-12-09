@@ -386,7 +386,7 @@ define(function (require) {
         }
         this.$el.html(tpl);
         
-        if (this.loader && this.collection.size() > 0)
+        if (this.loader)
           this.loader.destroy();
         this.trigger('render', this, {});
       }
