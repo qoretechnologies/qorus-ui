@@ -1,21 +1,22 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'settings',
-  'models/workflow',
-  'collections/orders',
-  'text!templates/search/detail.html',
-  'text!templates/workflow/orders/table.html',
-  'text!templates/workflow/orders/row.html',
-  'views/workflows/instances',
-  'views/workflows/orders',
-  'views/common/bottom_bar',
-  'views/toolbars/search_toolbar',
-  'views/workflows/order'
-], function ($, _, Qorus, settings, Workflow, Collection, Template, TableTpl, RowTpl, InstanceListView, 
-  OrderListView, BottomBarView, OrdersToolbar, OrderView) {
-  var context = {
+define(function (require) {
+  var $                = require('jquery'),
+      _                = require('underscore'),
+      Qorus            = require('qorus/qorus'),
+      settings         = require('settings'),
+      Workflow         = require('models/workflow'),
+      Dispatcher       = require('qorus/dispatcher'),
+      Collection       = require('collections/orders'),
+      Template         = require('text!templates/search/detail.html'),
+      TableTpl         = require('text!templates/workflow/orders/table.html'),
+      RowTpl           = require('text!templates/workflow/orders/row.html'),
+      InstanceListView = require('views/workflows/instances'),  
+      OrderListView    = require('views/workflows/orders'),
+      BottomBarView    = require('views/common/bottom_bar'),
+      OrdersToolbar    = require('views/toolbars/search_toolbar'),
+      OrderView        = require('views/workflows/order'),
+      context, View;
+      
+  context = {
     action_css: {
       'block': 'btn-inverse',
       'cancel': 'btn-danger',
@@ -23,7 +24,7 @@ define([
     }
   };
     
-  var View = Qorus.ListView.extend({
+  View = Qorus.ListView.extend({
     context: context,
     url: function () {
      return '/search'; 
