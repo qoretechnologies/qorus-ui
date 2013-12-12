@@ -5,7 +5,8 @@
         "jQuery": true, 
         "later": true,
         "cronParser": true,
-        "moment": true
+        "moment": true,
+        "debug": true
     },
     "strict": false,
     "unused": false,

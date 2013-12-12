@@ -6,6 +6,7 @@ require.config({
     backbone: 'libs/backbone',
     'backbone.keys': 'libs/backbone.keys',
     localstorage: 'libs/backbone.localstorage',
+    dualstorage: 'libs/backbone.dualstorage',
     bootstrap: 'libs/bootstrap/js/bootstrap',
     moment: "libs/moment",
     // later: "libs/later/later.min",
@@ -32,13 +33,16 @@ require.config({
   },
   shim: { 
     "backbone": {
-      deps: ["underscore", "jquery", "sprintf", "bootstrap"],
+      deps: ["underscore", "jquery", "sprintf", "bootstrap", "jquery.rest"],
       exports: "Backbone"
     },
     "backbone.keys": {
       deps: ['backbone']
     },
     localstorage: {
+      deps: ['backbone']
+    },
+    dualstorage: {
       deps: ['backbone']
     },
     "underscore": {

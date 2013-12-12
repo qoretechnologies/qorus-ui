@@ -18,6 +18,7 @@ define(function(require){
 
 
   SystemInfoView = Qorus.View.extend({
+    cls: 'SystemInfoView',
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
     },
@@ -49,7 +50,7 @@ define(function(require){
       } 
     },
      
-    tabToggle: function(e){
+    tabToggle: function (e) {
       var $target = $(e.currentTarget),
         active = $('.tab-pane.active'),
         view, target_name;
@@ -66,7 +67,6 @@ define(function(require){
       
       Backbone.history.navigate(utils.getCurrentLocationPath() + $target.attr('href'));
     }
-
   });
   return SystemInfoView;
 });

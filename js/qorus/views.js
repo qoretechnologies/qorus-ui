@@ -3,7 +3,7 @@ define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
       Backbone    = require('backbone'),
-      Keys        = require('backbone.keys'),
+      // Keys        = require('backbone.keys'),
       settings    = require('settings'),
       utils       = require('utils'),
       TableTpl    = require('tpl!templates/common/table.html'),
@@ -164,7 +164,10 @@ define(function (require) {
     },
     
     getView: function (id) {
-      return this.views[id];
+      if (id in this.views)
+        return this.views[id];
+
+      return null;
     },
     
     renderView: function (id, view) {
@@ -666,8 +669,9 @@ define(function (require) {
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
-      this.listenTo(this.collection, 'sync remove', self.update);
-      this.listenTo(this.collection, 'resort sort', self.update);
+      this.listenTo(this.collection, 'add', this.appendRow);
+      this.listenTo(this.collection, 'sync resort sort', this.update);
+      this.listenTo(this.collection, 'queue:empty', this.appendRows);
       // this.listenTo(this.collection, 'add', function (model) {
       //   self.appendRow(model);
       // });
@@ -769,6 +773,11 @@ define(function (require) {
     },
 
     appendRows: function (models) {
+      if (!'tbody' in this.views) {
+        this.update();
+        return;
+      }
+      
       var self = this,
         frag = document.createDocumentFragment(),
         views;
@@ -783,17 +792,21 @@ define(function (require) {
 
     appendRow: function (m, render) {
       var view = this.insertView(new this.RowView({ 
-        model: m, 
-        template: this.row_tpl, 
-        helpers: this.helpers, 
-        parent: this, 
-        row_attributes: this.row_attributes 
-      }), 'tbody');
+            model: m, 
+            template: this.row_tpl, 
+            helpers: this.helpers, 
+            parent: this, 
+            row_attributes: this.row_attributes 
+          }), 'tbody'),
+          prev = m.prev(),
+          idx;
 
       render = (render===undefined) ? true : render;
       
-      if (render)
-        this.$('tbody').append(view.render());
+      if (render && prev) {
+        idx = this.collection.indexOf(m-1);
+        $(this.$('tbody tr').get(idx)).after(view.render().$el);
+      }
       
       return view;
     },
@@ -887,7 +900,7 @@ define(function (require) {
     columns: []
   });
   
-  TableBody = View.extend({
+  TableBodyView = View.extend({
     tagName: 'tbody',
     context: {},
     initialize: function (opts) {
@@ -932,23 +945,25 @@ define(function (require) {
       if (_.has(opts, 'context')) _.extends(this.context, opts.context); 
 
       // update row on model change
-      this.listenTo(this.model, 'change', function (e) {
-        var timeout = 500;
-        self._rtimer_buffer = self._rtimer_buffer || 0;
-        
-        if (self._rtimer) {
-          clearTimeout(self._rtimer);
-          self._rtimer_buffer++;
-        }
-              
-        if (self._rtimer_buffer >= 100) timeout = 0;
-              
-        self._rtimer = setTimeout(function () {
-          // debug.log('delayed render of row', self.model.id, new Date());
-          self.update();
-          self._rtimer_buffer = 0;
-        }, timeout);
-      });
+      // this.listenTo(this.model, 'change', function (e) {
+      //   var timeout = 500;
+      //   self._rtimer_buffer = self._rtimer_buffer || 0;
+      //   
+      //   if (self._rtimer) {
+      //     clearTimeout(self._rtimer);
+      //     self._rtimer_buffer++;
+      //   }
+      //         
+      //   if (self._rtimer_buffer >= 100) timeout = 0;
+      //         
+      //   self._rtimer = setTimeout(function () {
+      //     // debug.log('delayed render of row', self.model.id, new Date());
+      //     self.update();
+      //     self._rtimer_buffer = 0;
+      //   }, timeout);
+      // });
+      this.listenTo(this.model, 'change', this.update);
+      this.listenTo(this.model, 'destroy', this.off);
 
       this.render();
     },

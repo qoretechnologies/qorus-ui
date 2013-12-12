@@ -1,50 +1,54 @@
 define(function (require) {
   var settings     = require('settings'),
       _            = require('underscore'),
-      Backbone     = require('backbone'),
+      localStorage = require('localstorage'),
       Qorus        = require('qorus/qorus'),
       Model        = require('models/event'),
       Dispatcher   = require('qorus/dispatcher'),
       Messenger    = require('messenger'),
+      utils        = require('utils'),
       msngr, Collection;
   
   msngr = $('#msg').messenger();
   
   Collection = Qorus.WSCollection.extend({
-    model: Model,
     log_size: 500,
     counter: 0,
     socket_url: settings.EVENTS_WS_URL,
     timeout_buffer: 0,
     timeout_buffer_max: 50,
     events_received: 0,
-
+    event_queue: [],
+    
+    localStorage: new Backbone.LocalStorage('Qorus.Events'),
+    
     // comparator: function (m1, m2) {
     //   if (m1.get('time') > m2.get('time')) return -1;
     //   if (m2.get('time') > m1.get('time')) return 1;
     //   return 0;
     // },
     
+    initialize: function () {
+      _.bindAll(this);
+      Collection.__super__.initialize.apply(this, arguments); 
+      this.model = Model;
+    },
+    
     wsAdd: function (e) {
-      var self = this,
-        models, len, sliced;
+      var self       = this,
+          models, len, sliced;
 
       models = JSON.parse(e.data);
       
-      // drop older messages
-      if (this.length + models.length > this.log_size - 1) {
-        len = this.log_size - models.length;
-        sliced = this.slice(-len);
-        this.models = sliced;
-      }
-      
       _.each(models, function (model) {
+        model = Model.prototype.parse(model);
         var m = new Model(model);
-        self.add(m);
+        self.event_queue.push(m);
         self.events_received++;
         Dispatcher.dispatch(m);
       });
-      // debug.log(this.models.length, this.length, this.models);
+
+      this.garbage_collection();
       
       this.timeout_buffer++;
       clearTimeout(this.timeout);
@@ -52,16 +56,16 @@ define(function (require) {
       // waiting for triggering events update for a while
       if (this.timeout_buffer >= this.timeout_buffer_max) {
         this.timeout_buffer = 0;
-        this.trigger('sync');
+        this.processQueue();
         // debug.log('empting buffer');
       } else {
         this.timeout = setTimeout(function () {
-          self.trigger('sync');
+          self.processQueue();
           self.timeout_buffer = 0;
           // debug.log('executing timeout function');
         }, 5*1000);
       }
-      // debug.log('Total events received: ', self.events_received);
+      debug.log('Total events received: ', self.events_received);
     },
 
     wsOpened: function () {
@@ -94,8 +98,39 @@ define(function (require) {
     
     hasNextPage: function () {
       return false;
+    },
+    
+    // fetch: function () {},
+    // sync: function () {},
+    empty: function () {
+      _.invoke(this.models, 'destroy');
+    },
+    
+    processQueue: function () {
+      var events = [], new_models;
+      while (this.event_queue.length > 0) {
+        events.push(this.event_queue.shift());
+      }
+      new_models = this.add(events);
+
+      _.each(new_models, function (model) {
+        model.save();
+      });
+
+      this.trigger('queue:empty', new_models);
+      this.trigger('sync');
+    },
+    
+    garbage_collection: function () {
+      var m;
+      // console.log(this.size(), this.log_size);
+      while (this.size() >= this.log_size) {
+        m = this.shift();
+        this.localStorage.destroy(m);
+        m.trigger('destroy');
+      }
     }
   });
   
-  return Collection;
+  return new Collection();
 });

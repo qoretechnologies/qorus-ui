@@ -8,7 +8,8 @@
         "later": true,
         "cronParser": true,
         "WebSocket": true,
-        "moment": true
+        "moment": true,
+        "debug": true
     },
     "strict": false,
     "unparam": false,

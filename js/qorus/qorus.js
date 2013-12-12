@@ -1,12 +1,14 @@
 // Qorus core objects definition
 define(function (require) {
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      Backbone = require('backbone'),
-      settings = require('settings'),
-      utils    = require('utils'),
-      Views    = require('qorus/views'),
-      Qorus    = {},
+  var $              = require('jquery'),
+      _              = require('underscore'),
+      Backbone       = require('backbone'),
+      localstorage   = require('localstorage'),
+      // DualStorage = require('dualstorage'),
+      settings       = require('settings'),
+      utils          = require('utils'),
+      Views          = require('qorus/views'),
+      Qorus          = {},
       setNested;
   
   $.extend($.expr[':'], {
@@ -53,7 +55,7 @@ define(function (require) {
         delete opts.id;
       }
 
-      Qorus.Model.__super__.initialize.call(this, opts, options);
+      Qorus.Model.__super__.initialize.call(this, [], opts, options);
       this.opts = opts;
       // this.parseDates();
     },
@@ -102,10 +104,24 @@ define(function (require) {
       var value = parseInt(this.get(attr)) - val;
       
       this.set(attr, (value > 0) ? value : 0);
+    },
+    
+    next: function () {
+      if (!this.collection) return;
+      
+      return this.collection.next(this);
+    },
+    
+    prev: function () {
+      if (!this.collection) return;
+      
+      return this.collection.prev(this);
     }
+    
   });
 
   Qorus.Collection = Backbone.Collection.extend({
+    local: false,
     date: null,
     limit: 100,
     offset: 0,
@@ -179,8 +195,21 @@ define(function (require) {
       debug.log(this, options);
       
       Qorus.Collection.__super__.fetch.call(this, options);
-    }
+    },
     
+    next: function (model) {
+      var idx = this.indexOf(model) + 1;
+      if (idx >= this.size()) return;
+      
+      return this.at(idx);
+    },
+    
+    prev: function (model) {
+      var idx = this.indexOf(model) - 1;
+      if (idx < 0) return;
+      
+      return this.at(idx);
+    }
   });
   
   Qorus.SortedCollection = Qorus.Collection.extend({
@@ -270,12 +299,6 @@ define(function (require) {
       });
     },
     
-    sync: function () {
-    },
-    
-    fetch: function () {
-    },
-    
     connect: function () {
       var self = this;
       
@@ -329,6 +352,20 @@ define(function (require) {
       if (this.auto_reconnect) {
         setTimeout(this.connect, 5000); 
       }
+    },
+
+    next: function (model) {
+      var idx = this.indexOf(model) + 1;
+      if (idx >= this.size()) return;
+      
+      return this.at(idx);
+    },
+    
+    prev: function (model) {
+      var idx = this.indexOf(model) - 1;
+      if (idx < 0) return;
+      
+      return this.at(idx);
     }
   });
   
@@ -410,12 +447,6 @@ define(function (require) {
       if (this.auto_reconnect) {
         setTimeout(this.connect, 5000); 
       }
-    },
-    
-    sync: function () {
-    },
-    
-    fetch: function () {
     }
   });
   

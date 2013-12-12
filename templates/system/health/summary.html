@@ -1,16 +1,17 @@
+
 <div class="span6">
   <div class="system-health">
-    Local health: 
+<% if (obj.local) { %>
     <span class="label label-<%= statusToCSS(obj.local.health) %>"><%= obj.local.health %></span>
     Ongoing <span class="badge badge-important"><%= obj.local.ongoing %></span> 
     Transient <span class="badge badge-warning"><%= obj.local.transient %></span>
+<% } %>
   </div>
 </div>
 <div class="span6">
-  <% _.each(obj.remote, function (remote) { %>
   <div class="remote-health">
-    <%= remote.name %> health:
-    <span class="label label-<%= statusToCSS(remote.health) %>"><%= remote.health %></span>
-  </div>
+  <% _.each(obj.remote, function (remote) { %>
+    <span class="label label-<%= statusToCSS(remote.health) %>"><%= remote.name %></span>
   <% }) %>
+  </div>
 </div>

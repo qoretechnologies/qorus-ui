@@ -1,17 +1,11 @@
-define([
-  'settings',
-  'jquery',
-  'backbone',
-  'qorus/qorus',
-  'sprintf',
-  'jquery.rest'
-], function(settings, $, Backbone, Qorus){
-  var Model = Qorus.Model.extend({
+define(function (require) {
+  var Qorus = require('qorus/qorus'),
+      utils = require('utils'),
+      Model;
+
+  Model = Qorus.Model.extend({
     dateAttributes: ['time',],
-    set: function(attributes, options){
-      var attr = this.parse(attributes);
-      Model.__super__.set.call(this, attr, options);
-    },
+
     parse: function(response, options){
       // response = Model.__super__.parse.call(this, response, options);
       var cls = response.classstr.toLowerCase() || '';
@@ -27,9 +21,14 @@ define([
         }
       }
       
+      if (response.id) {
+        response.eventid = response.id;
+      }
+      response.id = utils.guid();
+      
       return response
     }
   });
-  // Return the model for the module
+
   return Model;
 });

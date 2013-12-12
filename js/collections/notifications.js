@@ -1,9 +1,5 @@
 define(function (require) {
-  var $ = require('jquery'),
-      _ = require('underscore'),
-      Backbone = require('backbone'),
-      localstorage = require('localstorage'),
-      Qorus = require('qorus/qorus'),
+  var localstorage = require('localstorage'),
       Model = require('models/notification'),
       Collection;
     

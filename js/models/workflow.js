@@ -1,17 +1,13 @@
-define([
-  'settings',
-  'utils',
-  'underscore',
-  'jquery',
-  'messenger',
-  'backbone',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'models/system',
-  'sprintf',
-  'jquery.rest'
-], function(settings, utils, _, $, messenger, Backbone, Qorus, Dispatcher, System){
-  var StepBase = {
+define(function (require) {
+  var settings   = require('settings'),
+      utils      = require('utils'),
+      _          = require('underscore'),
+      $          = require('jquery'),
+      Qorus      = require('qorus/qorus'),
+      System     = require('models/system'),
+      StepBase, Step, Model;
+  
+  StepBase = {
       initialize: function (id, depends_on, name, type) {
           this.name = name;
           this.id = id;
@@ -38,9 +34,9 @@ define([
       },
     
       toArray: function (buffer, level) {
-          var children = [];
-          var children_sorted = _.sortBy(this.children, function (c) { return c.children.length; });
-          var first_child = children_sorted[0];
+          var children = [],
+              children_sorted = _.sortBy(this.children, function (c) { return c.children.length; }),
+              first_child = children_sorted[0];
           
           // debug.log(this.children,children_sorted);
 
@@ -75,14 +71,14 @@ define([
       }
   };
   
-  var Step = function (id) {
+  Step = function () {
       this.initialize.apply(this, arguments);
   };
 
   _.extend(Step.prototype, StepBase);
   
   
-  var Model = Qorus.Model.extend({
+  Model = Qorus.Model.extend({
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
     defaults: {
@@ -97,7 +93,6 @@ define([
       'WAITING': 0,
       'ASYNC-WAITING': 0,
       'EVENT-WAITING': 0,
-      'IN-PROGRESS': 0,
       'BLOCKED': 0,
       'CRASH': 0,
       'TOTAL': 0
@@ -108,9 +103,7 @@ define([
 
     initialize: function (opts) {
       _.bindAll(this);
-      // this.on('all', function WorkflowEvent(e, obj) {
-      //   console.log(e, obj);
-      // });
+      opts = opts || {};
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
         this.id = opts.id;
@@ -118,18 +111,17 @@ define([
     },
     
     doAction: function (action, opts, callback) {
-      debug.log("Doing action", action);
+      var params, wflid;
+
       if (_.indexOf(this.allowedActions, action) != -1) {
-        var params;
-        var wflid = this.id;
-        var _this = this;
+        wflid = this.id;
         
         if (action == 'hide') {
-          params = { action: 'setDeprecated', deprecated: true }
+          params = { action: 'setDeprecated', deprecated: true };
         } else if (action == 'show')  {
-          params = { action: 'setDeprecated', deprecated: false }
+          params = { action: 'setDeprecated', deprecated: false };
         } else {
-          params = { action: action }
+          params = { action: action };
         }
         
         if (opts) {
@@ -138,7 +130,7 @@ define([
         
         $.put(this.url(), params, null, 'application/json')
           .done(
-            function (e, ee, eee){
+            function () {
               if (_.isFunction(callback)) {
                 callback();
               }
@@ -177,22 +169,21 @@ define([
     },
         
     mapSteps: function () {
-      if (!this.get('steps')) {
-        return;
-      }
+      if (!this.get('steps')) return;
 
-      var steps = this.get('steps');
-      var stepmap = this.get('stepmap');
-      var step_list = [];
-      var keys = _.keys(steps, []);
+      var steps     = this.get('steps'),
+          stepmap   = this.get('stepmap'),
+          step_list = [],
+          keys      = _.keys(steps, []),
+          root;
 
       // add root point
-      var root = new Step(0, [], this.get('name'), "start");
+      root = new Step(0, [], this.get('name'), "start");
       step_list.push(root);
 
       // add steps to step_list
       _.each(keys, function (k) {
-          if (steps[k].length == 0) {
+          if (steps[k].length === 0) {
               steps[k] = [0];
           }
           var node = new Step(k, steps[k], stepmap[k]);

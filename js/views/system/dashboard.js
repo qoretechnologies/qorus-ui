@@ -59,7 +59,6 @@ define(function (require) {
       remote = response.remote;
       
       response =  { local: local, remote: remote };
-      console.log(response);
       return response;
     }
   });
@@ -80,11 +79,11 @@ define(function (require) {
       });
       
       this.listenTo(Dispatcher, 'system', this.render);
+      this.listenTo(Dispatcher, 'system', function () { console.log(arguments) });
       this.listenTo(this.model, 'sync change', this.render);
     },
     
     statusToCSS: function (health) {
-      console.log(health);
       if (health === 'RED') return 'important';
       if (health === 'GREEN') return 'success';
       if (health === 'YELLOW') return 'warning';
@@ -100,16 +99,6 @@ define(function (require) {
       _.bindAll(this);
       this.views = {};
       this.opts = opts || {};
-      
-      // this.template = Template;
-      this.on('prerender', function (view) {
-        var local, remote;
-        local = view.opts.model.get('alert-summary');
-        local.health = view.opts.model.get('health');
-        view.context.local = local;
-        
-        console.log(view.context.status);
-      });
     },
     
     preRender: function () {

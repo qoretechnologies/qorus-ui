@@ -1,30 +1,27 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'settings',
-  'utils',
-  'qorus/qorus',
-  'models/system',
-  'collections/options',
-  'text!templates/system/options.html',
-  'text!templates/common/option_edit.html',
-  'jquery.ui'
-], function($, _, Backbone, settings, utils, Qorus, System, Collection, Template, EditTemplate){
+define(function (require) {
+  var $            = require('jquery'),
+      _            = require('underscore'),
+      settings     = require('settings'),
+      utils        = require('utils'),
+      Qorus        = require('qorus/qorus'),
+      Collection   = require('collections/options'),
+      Template     = require('text!templates/system/options.html'),
+      EditTemplate = require('text!templates/common/option_edit.html'),
+      EDIT_URL = settings.REST_API_PREFIX + '/system/options',
+      ListView;
+      require('jquery.ui');
   
-  var EDIT_URL = settings.REST_API_PREFIX + '/system/options';
-  
-  // need revision
-  
-  var ListView = Qorus.ListView.extend({
+  ListView = Qorus.ListView.extend({
+    cls: 'OptionsView',
     additionalEvents: {
-      "click td[data-editable]": "editOption",
+      "click td[data-editable]": "editOption"
     },
     
     initialize: function (opts) {
       _.bindAll(this);
       this.opts = opts || {};
-      ListView.__super__.initialize.call(this, opts);
+      // ListView.__super__.initialize.call(this, opts);
+      this.views = {};
       
       this.collection = new Collection(this.opts);
       this.template = Template;
@@ -35,18 +32,20 @@ define([
     },
     
     editOption: function (e) {
-      var _this = this;
+      var self    = this, 
+          $target = $(e.currentTarget),
+          value, obj_type, name, template, $tpl;
       
-      if (e.target.localName == 'td') {
-        var $target = $(e.currentTarget);
-        var value = $target.data('value');
-        var obj_type = $target.data('type');
-        var name = $target.data('name');
-        var template = _.template(EditTemplate, { 
+      if ($target.s('td')) {
+        value = $target.data('value');
+        obj_type = $target.data('type');
+        name = $target.data('name');
+        template = _.template(EditTemplate, { 
           value: value,
           type: utils.input_map[obj_type][1],
           name: name
         });
+        $tpl;
         
         $tpl = template;
         $target.toggleClass('editable');
@@ -59,12 +58,12 @@ define([
         
         $('button[data-action=set]').click(function () {
           var val = $(this).prev('input').val();
-          _this.setOption(name, val, $target);
+          self.setOption(name, val, $target);
         });
         
         $('input').keypress(function (e) {
           if(e.which == 13) {
-            _this.setOption(name, $(this).val(), $target);
+            self.setOption(name, $(this).val(), $target);
           }
         });
       }
@@ -73,7 +72,7 @@ define([
     setOption: function (option, value, target) {
       var url = EDIT_URL + '/' + option;
       $.put(url, { action: 'set', value: value})
-        .done(function (data) {
+        .done(function () {
           target.html(value);
           target.toggleClass('editable');
           target.data('value', value);
