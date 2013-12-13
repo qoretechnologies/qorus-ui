@@ -7,9 +7,22 @@ define(function (require) {
       Messenger    = require('messenger'),
       utils        = require('utils'),
       Parallel     = require('parallel'),
-      msngr, Collection;
+      msngr, Collection, event_refresh;
   
   msngr = $('#msg').messenger();
+  
+  event_refresh = { 
+    "time" : moment().format("YYYY-MM-DD HH:mm:ss.SSS Z"), 
+    "classstr" : "WEBAPP",
+    "eventstr" : "WEBAPP_RECONNECTED", 
+    "severity" : 0, 
+    "severitystr" : "INFO", 
+    "caller" : "<webapp>",
+    "info": {
+      "cls": "webapp",
+      "name": "Webapp Reconnected"
+    }
+  };
   
   Collection = Qorus.WSCollection.extend({
     log_size: 500,
@@ -19,7 +32,6 @@ define(function (require) {
     timeout_buffer_max: 50,
     events_received: 0,
     event_queue: [],
-    
 
     localStorage: new Backbone.LocalStorage('Events'),
 
@@ -30,10 +42,13 @@ define(function (require) {
     // },
     
     initialize: function () {
+      var self = this;
+      
       _.bindAll(this);
       Collection.__super__.initialize.apply(this, arguments); 
       this.model = Model;
       this.on('queue:empty', this.garbage_collection);
+      this.on('sync', function () { self.event_queue.push(new Model(event_refresh)); self.processQueue(); });
       this.fetch();
     },
     

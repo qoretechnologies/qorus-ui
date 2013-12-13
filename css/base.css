@@ -534,12 +534,12 @@ aside {
     clear: both;
 }*/
 
-.table tr td {    
+/*.table tr td {    
     -webkit-transition: background-color 1000ms linear;
        -moz-transition: background-color 1000ms linear;
          -o-transition: background-color 1000ms linear;
             transition: background-color 1000ms linear;
-}
+}*/
 
 #content .table-striped tr.changed td {
     background-color: #dff0d8;

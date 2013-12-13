@@ -8,7 +8,7 @@ define(function (require) {
     dateAttributes: ['time',],
 
     parse: function(response, options){
-      // response = Model.__super__.parse.call(this, response, options);
+      response = Model.__super__.parse.call(this, response, options);
       var cls = response.classstr.toLowerCase() || '';
       
       if(response.info){

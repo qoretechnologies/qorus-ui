@@ -904,6 +904,12 @@ define(function (require) {
     className: 'table-row',
     context: {},
     template: TableRowTpl,
+    timeout_buffer: 0,
+    timeout_buffer_max: 200,
+    timeout: null,
+    timer: 0,
+    timer_max: 10,
+    
     attributes: function() {
       var data = { 'data-id': this.model.id },
         self = this;
@@ -936,31 +942,33 @@ define(function (require) {
       if (_.has(opts, 'context')) _.extends(this.context, opts.context); 
 
       // update row on model change
-      // this.listenTo(this.model, 'change', function (e) {
-      //   var timeout = 500;
-      //   self._rtimer_buffer = self._rtimer_buffer || 0;
-      //   
-      //   if (self._rtimer) {
-      //     clearTimeout(self._rtimer);
-      //     self._rtimer_buffer++;
-      //   }
-      //         
-      //   if (self._rtimer_buffer >= 100) timeout = 0;
-      //         
-      //   self._rtimer = setTimeout(function () {
-      //     // debug.log('delayed render of row', self.model.id, new Date());
-      //     self.update();
-      //     self._rtimer_buffer = 0;
-      //   }, timeout);
-      // });
-      this.listenTo(this.model, 'change', this.update);
+      this.listenTo(this.model, 'change', function (e) {
+        var timeout = self.timer*1000;
+        self._rtimer_buffer = self._rtimer_buffer || 0;
+        
+        if (self._rtimer) {
+          clearTimeout(self._rtimer);
+          self._rtimer_buffer++;
+          if (self.timer < self.timer_max) self.timer++;
+          console.log(self.timer);
+        }
+              
+        if (self._rtimer_buffer >= self.timeout_buffer_max) timeout = 0;
+              
+        self._rtimer = setTimeout(function () {
+          // debug.log('delayed render of row', self.model.id, new Date());
+          self.update();
+          self._rtimer_buffer = 0;
+          self.timer = 0;
+        }, timeout);
+      });
+      // this.listenTo(this.model, 'change', this.update);
       this.listenTo(this.model, 'destroy', this.off);
 
       this.render();
     },
         
     render: function (ctx) {
-      // console.log('rendering', this.model.id);
       this.context.item = this.model.toJSON();
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
