@@ -5,7 +5,7 @@ define(function (require) {
     
   Collection = Backbone.Collection.extend({
     model: Model,
-    localStorage: new Backbone.LocalStorage('Qorus.Notifications')
+    localStorage: new Backbone.LocalStorage('Notifications')
   });
   
   return new Collection();

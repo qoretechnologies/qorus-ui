@@ -950,7 +950,6 @@ define(function (require) {
           clearTimeout(self._rtimer);
           self._rtimer_buffer++;
           if (self.timer < self.timer_max) self.timer++;
-          console.log(self.timer);
         }
               
         if (self._rtimer_buffer >= self.timeout_buffer_max) timeout = 0;
@@ -962,7 +961,6 @@ define(function (require) {
           self.timer = 0;
         }, timeout);
       });
-      // this.listenTo(this.model, 'change', this.update);
       this.listenTo(this.model, 'destroy', this.off);
 
       this.render();
@@ -978,6 +976,8 @@ define(function (require) {
     onRender: function () {
       this.$('.btn-group').on('shown.bs.dropdown', this.lock);
       this.$('.btn-group').on('hidden.bs.dropdown', this.unlock);
+      if (this.model.get('caller') === "<webapp>")
+        this.$el.addClass('warning');
     },
     
     update: function (ctx) {

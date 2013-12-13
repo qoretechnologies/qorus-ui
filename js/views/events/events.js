@@ -7,6 +7,7 @@ define(function( require) {
       TableTpl   = require('text!templates/events/table.html'),
       RowTpl     = require('text!templates/events/row.html'),
       Events     = require('collections/events'),
+      Toolbar    = require('views/toolbars/events_toolbar'),
       ListView;
   
   
@@ -14,6 +15,10 @@ define(function( require) {
     template: Template,
     
     title: "Events",
+    
+    additionalEvents: {
+      'click button#clear': 'clearStorage'
+    },
     
     initialize: function () {
       this.views = {};
@@ -36,6 +41,8 @@ define(function( require) {
           dispatcher: Dispatcher,
           fixed: true
       }), '#event-list');
+      
+      this.setView(new Toolbar(), '#events-toolbar');
 
       // remove default listeners and assign new ones
       view.stopListening(this.collection, 'add');
@@ -44,6 +51,11 @@ define(function( require) {
       view.listenTo(this.collection, 'queue:empty', function (models) {
         view.appendRows(models);
       });
+    },
+    
+    clearStorage: function () {
+      console.log('emptying');
+      this.collection.empty();
     }
   });
 

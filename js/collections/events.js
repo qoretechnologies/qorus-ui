@@ -119,7 +119,26 @@ define(function (require) {
     // fetch: function () {},
     // sync: function () {},
     empty: function () {
-      _.invoke(this.models, 'destroy');
+      var self  = this,
+          ls    = this.localStorage,
+          store = ls.localStorage(),
+          name  = ls.name,
+          re    = new RegExp('^' + name + '-');
+
+      // clean table rows
+      _.each(this.models, function (model) {
+        model.trigger('destroy', model, self);
+        self.remove(model);
+      });
+      
+      // clean local storage
+      _.each(_.keys(store), function (key) {
+        if (re.test(key) || key === name)
+          store.removeItem(key);
+      });
+      
+      ls.records = [];
+      ls.save();
     },
     
     processQueue: function () {
