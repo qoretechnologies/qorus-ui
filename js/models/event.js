@@ -1,9 +1,10 @@
 define(function (require) {
-  var Qorus = require('qorus/qorus'),
-      utils = require('utils'),
+  var Qorus        = require('qorus/qorus'),
+      localStorage = require('localstorage'),
+      utils        = require('utils'),
       Model;
 
-  Model = Qorus.Model.extend({
+  Model = Qorus.Model.extend({    
     dateAttributes: ['time',],
 
     parse: function(response, options){
@@ -24,9 +25,16 @@ define(function (require) {
       if (response.id) {
         response.eventid = response.id;
       }
-      response.id = utils.guid();
-      
+
+      // generate guid only if not already guid
+      if (_.indexOf(response.id, '-') === -1) 
+        response.id = utils.guid();
+
       return response
+    },
+    
+    isNew: function () {
+      return false;
     }
   });
 

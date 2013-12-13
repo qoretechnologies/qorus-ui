@@ -215,7 +215,7 @@ define(function (require) {
     },
     
     insertView: function (view, el, append) {
-      var views;
+      var views, old_view;
       
       if (this.views[el]) {
         views = this.views[el];
@@ -226,12 +226,12 @@ define(function (require) {
       el = el || '';
       
       if (views instanceof Backbone.View) {
-        var old_view = views;
+        old_view = views;
         views = [old_view];
       }
         
-      views.push(view);
-
+      view.view_idx = views.push(view) - 1;
+      
       return view;
     },
     
@@ -671,14 +671,6 @@ define(function (require) {
 
       this.listenTo(this.collection, 'add', this.appendRow);
       this.listenTo(this.collection, 'sync resort sort', this.update);
-      this.listenTo(this.collection, 'queue:empty', this.appendRows);
-      // this.listenTo(this.collection, 'add', function (model) {
-      //   self.appendRow(model);
-      // });
-      // this.listenTo(this.collection, 'all', function () {
-      //   console.log(arguments, this.collection.length);
-      // });
-
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
@@ -795,15 +787,14 @@ define(function (require) {
             model: m, 
             template: this.row_tpl, 
             helpers: this.helpers, 
-            parent: this, 
+            parent: this,
             row_attributes: this.row_attributes 
           }), 'tbody'),
-          prev = m.prev(),
           idx;
 
       render = (render===undefined) ? true : render;
       
-      if (render && prev) {
+      if (render) {
         idx = this.collection.indexOf(m-1);
         $(this.$('tbody tr').get(idx)).after(view.render().$el);
       }
@@ -1013,6 +1004,12 @@ define(function (require) {
           this.parent.rowClick(this.model, e);
         }
       }
+    },
+    
+    clean: function (e) {
+      var p_view, self= this;
+      p_view = this.parent.getView('tbody');
+      _.reject(p_view, function (view) { return view.cid == self.cid; });
     }
   });
   

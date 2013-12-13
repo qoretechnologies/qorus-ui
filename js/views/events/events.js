@@ -22,7 +22,6 @@ define(function( require) {
 
       this.collection = Events;
       // this.listenTo(this.collection, 'sync', this.render);
-      this.collection.fetch();
       _.defer(this.render);
     },
     
@@ -38,13 +37,12 @@ define(function( require) {
           fixed: true
       }), '#event-list');
 
+      // remove default listeners and assign new ones
       view.stopListening(this.collection, 'add');
+      view.stopListening(this.collection, 'sync');
+      view.listenToOnce(this.collection, 'sync', this.render);
       view.listenTo(this.collection, 'queue:empty', function (models) {
         view.appendRows(models);
-        console.log(view.views);
-      });
-      view.listenTo(this.collection, 'all', function () {
-        console.log(arguments);
       });
     }
   });

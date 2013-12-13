@@ -1,12 +1,12 @@
 define(function (require) {
   var settings     = require('settings'),
       _            = require('underscore'),
-      localStorage = require('localstorage'),
       Qorus        = require('qorus/qorus'),
       Model        = require('models/event'),
       Dispatcher   = require('qorus/dispatcher'),
       Messenger    = require('messenger'),
       utils        = require('utils'),
+      Parallel     = require('parallel'),
       msngr, Collection;
   
   msngr = $('#msg').messenger();
@@ -20,8 +20,9 @@ define(function (require) {
     events_received: 0,
     event_queue: [],
     
-    localStorage: new Backbone.LocalStorage('Qorus.Events'),
-    
+
+    localStorage: new Backbone.LocalStorage('Events'),
+
     // comparator: function (m1, m2) {
     //   if (m1.get('time') > m2.get('time')) return -1;
     //   if (m2.get('time') > m1.get('time')) return 1;
@@ -32,6 +33,8 @@ define(function (require) {
       _.bindAll(this);
       Collection.__super__.initialize.apply(this, arguments); 
       this.model = Model;
+      this.on('queue:empty', this.garbage_collection);
+      this.fetch();
     },
     
     wsAdd: function (e) {
@@ -47,8 +50,6 @@ define(function (require) {
         self.events_received++;
         Dispatcher.dispatch(m);
       });
-
-      this.garbage_collection();
       
       this.timeout_buffer++;
       clearTimeout(this.timeout);
@@ -107,28 +108,38 @@ define(function (require) {
     },
     
     processQueue: function () {
-      var events = [], new_models;
+      var events = [], ev;
       while (this.event_queue.length > 0) {
-        events.push(this.event_queue.shift());
+        ev = this.event_queue.shift();
+        events.push(ev);
+        this.localStorage.create(ev);
       }
-      new_models = this.add(events);
-
-      _.each(new_models, function (model) {
-        model.save();
-      });
-
-      this.trigger('queue:empty', new_models);
-      this.trigger('sync');
+      this.add(events);
+      
+      this.trigger('queue:empty', events);
+      // this.trigger('sync');
     },
     
     garbage_collection: function () {
-      var m;
-      // console.log(this.size(), this.log_size);
-      while (this.size() >= this.log_size) {
-        m = this.shift();
-        this.localStorage.destroy(m);
-        m.trigger('destroy');
+      var m, id;
+
+      while (this.size() > this.log_size) {
+        m = this.at(0);
+        this.destroy(m);
       }
+    },
+    
+    // destroy manually to speed up
+    destroy: function (m) {
+      var store = this.localStorage,
+          ls    = store.localStorage(), 
+          id    = this.localStorage.name + '-' + m.id;
+         
+      store.records = _.reject(store.records, function (id) { return id === m.id.toString(); });
+      ls.removeItem(id);
+      this.remove(m);
+      store.save();
+      m.trigger('destroy', m, this);
     }
   });
   

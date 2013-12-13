@@ -3,7 +3,7 @@ define(function (require) {
   var $              = require('jquery'),
       _              = require('underscore'),
       Backbone       = require('backbone'),
-      localstorage   = require('localstorage'),
+      // localstorage   = require('localstorage'),
       // DualStorage = require('dualstorage'),
       settings       = require('settings'),
       utils          = require('utils'),
@@ -273,6 +273,8 @@ define(function (require) {
   });
   
   Qorus.WSCollection = Backbone.Collection.extend({
+    local: true,
+    remote: false,
     log_size: 1000,
     counter: 0,
     socket_url: null,

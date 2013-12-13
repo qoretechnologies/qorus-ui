@@ -2,6 +2,8 @@ define(function(require) {
   var $ = require('jquery'),
     _ = require('underscore'),
     Backbone = require('backbone'),
+    // dualStorage = require('dualstorage'),
+    localStorage = require('localstorage'),
     moment = require('moment'),
     messenger = require('messenger'),
     Qorus = require('qorus/qorus'),
