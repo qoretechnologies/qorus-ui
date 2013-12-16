@@ -1,10 +1,17 @@
 define(function (require) { 
-  var $     = require('jquery'),
-      _     = require('underscore'),
-      Qorus = require('qorus/qorus'),
+  var Backbone = require('backbone'),
+      Qorus    = require('qorus/qorus'),
       Model;
   
-  Model = Qorus.Model.extend({});
+  require('localstorage');
+  
+  Model = Qorus.Model.extend({
+    localStorage: new Backbone.LocalStorage('Notifications'),
+
+    isNew: function () {
+      return false;
+    }
+  });
 
   return Model;
 });

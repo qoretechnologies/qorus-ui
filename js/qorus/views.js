@@ -176,7 +176,7 @@ define(function (require) {
       }
       
       if (view instanceof Backbone.View) {
-        view.setElement(self.$(id)).render();
+        view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
         // console.time('renderViews' + self.cls);
         var $el = this.$(id),
@@ -747,7 +747,7 @@ define(function (require) {
     },
     
     clean: function () {
-      self.$('.table-fixed').fixedHeader('remove');
+      this.$('.table-fixed').fixedHeader('remove');
       $(window).off('resize.table');
       this.$el.closest('.pane').off('scroll');
     },

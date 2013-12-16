@@ -1,10 +1,15 @@
-§/* @override 
+/* @override 
 	http://localhost:8001/css/base.css
 	http://localhost:8002/css/base.css
 */
 
 html, body {
 	height: 100%;
+}
+
+#header {
+  color: #fff;
+  width: 100%;
 }
 
 table thead th {
@@ -995,6 +1000,73 @@ table .header-copy {
   margin-top: -10px;
 }
 
+#header .pull-right div {
+  float: left;
+}
+
+#notifications-icon a {
+  display: block;
+  color: #fff;
+  padding: 10px;
+  margin-left: 10px;
+  position: relative;
+}
+
+#notifications-icon a:hover {
+  text-decoration: none;
+}
+
+#notifications-icon a .badge {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  padding: 2px 4px;
+  margin-bottom: -50%;
+}
+
+#notifications-list {
+  background-color: #555;
+  color: #fff;
+  position: absolute;
+  top: 41px;
+  right: 0;
+  overflow: auto;
+  width: 300px;
+  height: 100%;
+  z-index: 1030;
+}
+
+#notifications-list h2 {
+	font-size: 110%;
+}
+
+#notifications-list section.group header h2 {
+	line-height: 1.5em;
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+#notifications-list section.group header {
+	background-color: #333;
+	padding: 0 10px;
+	position: relative;
+	overflow: hidden;
+}
+
+#notifications-list section.group button {
+	display: block;
+	float: right;
+	background: rgba(0,0,0,.2);
+	border-color: rgba(0,0,0,.6);
+	color: #fff;
+	display: block;
+	font-size: 80%;
+	padding: 0 5px;
+	position: absolute;
+	right: 10px;
+}
+
 #health {
   display: inline-block;
   position: relative;
@@ -1004,6 +1076,7 @@ table .header-copy {
   top: -10px !important;
   height: auto;
   width: auto;
+	font-variant: small-caps;
 }
 
 #health .arrow {

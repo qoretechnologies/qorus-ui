@@ -1,10 +1,11 @@
 define(function (require) {
-  var $          = require('jquery'),
-      _          = require('underscore'),
-      Qorus      = require('qorus/qorus'),
-      HealthView = require('views/system/health'),
-      UserView   = require('views/system/user'),
-      Template   = require('text!templates/common/header.html'),
+  var $                 = require('jquery'),
+      _                 = require('underscore'),
+      Qorus             = require('qorus/qorus'),
+      HealthView        = require('views/system/health'),
+      UserView          = require('views/system/user'),
+      Template          = require('text!templates/common/header.html'),
+      NotificationsView = require('views/notifications/icon'),
       View;
   
   View = Qorus.View.extend({
@@ -28,6 +29,7 @@ define(function (require) {
     onRender: function () {
       this.setView(new HealthView(), '#health', true);
       this.setView(new UserView({ model: this.user }), '#user-info', true);
+      this.setView(new NotificationsView(), '#notifications-icon', true);
     }
   });
   
