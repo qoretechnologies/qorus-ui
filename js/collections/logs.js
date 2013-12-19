@@ -1,17 +1,14 @@
-define([
-  'settings',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'messenger'
-], function(settings, _, Backbone, Qorus, Dispatcher, Messenger){
-  var host = window.location.host,
-    protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
-
-  var msngr = $('#msg').messenger();
+define(function(require){
+  var settings   = require('settings'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      host, protocol, Collection;
   
-  var Collection = Qorus.WSCollection.extend({
+  host = window.location.host;
+  protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
+  
+  Collection = Qorus.WSCollection.extend({
     log_size: 100,
     counter: 0,
     socket_url: protocol + host + "/log",

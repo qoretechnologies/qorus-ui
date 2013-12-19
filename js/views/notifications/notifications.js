@@ -5,9 +5,12 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       View;
   
-  View = Qorus.View.extend({ 
+  View = Qorus.View.extend({
     template: Template,
     collection: Notifications,
+    additionalEvents: {
+      'click button.clear': 'clearGroup'
+    },
 
     initialize: function () {
       _.bindAll(this);
@@ -23,11 +26,23 @@ define(function (require) {
     updateContext: function () {
       this.context.groups = this.collection.createGroupList();
     },
+    
+    show: function () {
+      this.$el.toggleClass('show');
+    },
 
     off: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();
+    },
+    
+    clearGroup: function (e) {
+      var $target = $(e.currentTarget);
+      
+      if ($target.data('group')) {
+        this.collection.clear($target.data('group'));
+      }
     }
   });
   

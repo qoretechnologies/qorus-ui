@@ -20,6 +20,13 @@ define(function (require) {
         }
       });
       return groups;
+    }, 
+    
+    clear: function (group) {
+      _.each(this.where({ group: group}), function (model) {
+        model.destroy({ silent: true });
+      });
+      this.trigger('sync');
     }
   });
   

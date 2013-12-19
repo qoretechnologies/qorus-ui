@@ -5,6 +5,7 @@ define(function (require) {
       $          = require('jquery'),
       Qorus      = require('qorus/qorus'),
       System     = require('models/system'),
+      Notifications = require('collections/notifications'),
       StepBase, Step, Model;
   
   StepBase = {
@@ -111,7 +112,8 @@ define(function (require) {
     },
     
     doAction: function (action, opts, callback) {
-      var params, wflid;
+      var self = this, 
+          params, wflid;
 
       if (_.indexOf(this.allowedActions, action) != -1) {
         wflid = this.id;
@@ -131,11 +133,21 @@ define(function (require) {
         $.put(this.url(), params, null, 'application/json')
           .done(
             function () {
+              var msg = sprintf('Workflow %s %s done', self.get('name'), action);
+              Notifications.create({ group: 'workflows', type: 'success', title: msg });
               if (_.isFunction(callback)) {
                 callback();
               }
             }
-          );
+          )
+          .fail(
+            function () {
+              var msg = sprintf('Workflow %s %s failed', self.get('name'), action);
+              Notifications.create({ group: 'workflows', type: 'error', title: msg });
+              if (_.isFunction(callback)) {
+                callback();
+              }
+          });
       }
     },
     

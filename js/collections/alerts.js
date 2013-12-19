@@ -1,8 +1,9 @@
 define(function (require) {
-  var settings = require('settings'),
-      _        = require('underscore'),
-      Qorus    = require('qorus/qorus'),
-      Model    = require('models/alert'),
+  var settings      = require('settings'),
+      _             = require('underscore'),
+      Qorus         = require('qorus/qorus'),
+      Model         = require('models/alert'),
+      Notifications = require('collections/notifications'),
       Collection;
        
   Collection = Qorus.SortedCollection.extend({
@@ -21,10 +22,16 @@ define(function (require) {
       if (opts.type) {
         this.type = opts.type;
       }
+      
+      this.on('add', this.notify);
     },
     
     hasNextPage: function () {
       return false;
+    },
+    
+    notify: function (model) {
+      Notifications.create({ id: "alert-" + model.id, group: 'alerts', title: model.get('alert'), type: 'error', description: model.get('name') });
     }
   });
   // You don't usually return a collection instantiated

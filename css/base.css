@@ -1025,26 +1025,42 @@ table .header-copy {
 }
 
 #notifications-list {
-  background-color: #555;
+  background-color: #3d3f45;
+  font-size: 80%;
   color: #fff;
-  position: absolute;
+  position: fixed;
   top: 41px;
-  right: 0;
+  right: -300px;
   overflow: auto;
   width: 300px;
   height: 100%;
   z-index: 1030;
+  -webkit-transition: all .5s ease-in-out;
+     -moz-transition: all .5s ease-in-out;
+       -o-transition: all .5s ease-in-out;
+          transition: all .5s ease-in-out;
+}
+
+#notifications-list.show {
+  right: 0;
 }
 
 #notifications-list h2 {
-	font-size: 110%;
-}
-
-#notifications-list section.group header h2 {
+	font-size: 100%;
 	line-height: 1.5em;
-	float: left;
 	padding: 0;
 	margin: 0;
+}
+
+#notifications-list .group header h2 {
+  font-size: 110%;
+  float: left;
+}
+
+#notifications-list .group article {
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  padding: 5px 10px;
+  overflow: hidden;
 }
 
 #notifications-list section.group header {
@@ -1052,17 +1068,31 @@ table .header-copy {
 	padding: 0 10px;
 	position: relative;
 	overflow: hidden;
+  background-image: -webkit-gradient(
+  	linear,
+  	left top,
+  	left bottom,
+  	color-stop(0, #364854),
+  	color-stop(1, #000000)
+  );
+  background-image: -o-linear-gradient(bottom, rgba(255,255,255,.5) 0%, #000000 100%);
+  background-image: -moz-linear-gradient(bottom, rgba(255,255,255,.5) 0%, #000000 100%);
+  background-image: -webkit-linear-gradient(bottom, rgba(255,255,255,.5) 0%, #000000 100%);
+  background-image: -ms-linear-gradient(bottom, rgba(255,255,255,.5) 0%, #000000 100%);
+  background-image: linear-gradient(to bottom, rgba(255,255,255,.5) 0%, #000000 100%);
 }
 
 #notifications-list section.group button {
 	display: block;
 	float: right;
 	background: rgba(0,0,0,.2);
-	border-color: rgba(0,0,0,.6);
+	border-color: rgba(0,0,0,.2);
+  border-radius: 10px;
 	color: #fff;
 	display: block;
 	font-size: 80%;
-	padding: 0 5px;
+	padding: 2px;
+  line-height: 1em;
 	position: absolute;
 	right: 10px;
 }

@@ -6,11 +6,7 @@ define(function (require) {
   require('localstorage');
   
   Model = Qorus.Model.extend({
-    localStorage: new Backbone.LocalStorage('Notifications'),
-
-    isNew: function () {
-      return false;
-    }
+    localStorage: new Backbone.LocalStorage('Notifications')
   });
 
   return Model;

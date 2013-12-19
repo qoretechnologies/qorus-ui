@@ -3,7 +3,7 @@
   <section class="group">
     <header>
       <h2><%= group.name %></h2>
-      <button class="btn"><i class="icon-remove"></i></button>
+      <button class="btn clear" data-group="<%= group.name %>"><i class="icon-remove"></i></button>
     </header>
     <% _.each(group.notifications, function (ntf) { %> 
     <article>

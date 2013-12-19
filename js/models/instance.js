@@ -1,9 +1,11 @@
-define([
-  'settings',
-  'jquery',
-  'qorus/qorus'
-], function(settings, $, Qorus){
-  var Model = Qorus.Model.extend({
+define(function (require) {
+  var settings      = require('settings'), 
+      $             = require('jquery'), 
+      Qorus         = require('qorus/qorus'),
+      Notifications = require('collections/notifications'),
+      Model;
+  
+  Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/exec/',
     idAttribute: "executionID",
     allowedActions: ['stop'],
@@ -15,7 +17,7 @@ define([
         .done(
           function (e, ee, eee){
             var msg = sprintf('Instance %d %s done', wflid, action);
-            // $.globalMessenger().post(msg);
+            Notifications.create({ group: 'instances', type: 'info', title: msg });
           }
         );        
       }
