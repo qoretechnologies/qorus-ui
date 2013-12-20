@@ -31,7 +31,7 @@ define(function (require) {
     },
     
     notify: function (model) {
-      Notifications.create({ id: "alert-" + model.id, group: 'alerts', title: model.get('alert'), type: 'error', description: model.get('name') });
+      Notifications.create({ id: "alert-" + model.id, group: 'alerts', title: model.get('alert'), type: 'error', description: model.get('name'), url: "/system?alerts" });
     }
   });
   // You don't usually return a collection instantiated

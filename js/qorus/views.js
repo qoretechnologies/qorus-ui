@@ -82,6 +82,7 @@ define(function (require) {
         this.clean();
       }
       
+      this.trigger('destroy');
       View.__super__.off.call(this);
 
       if (remove != false) {

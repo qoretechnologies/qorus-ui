@@ -24,11 +24,15 @@ define(function (require) {
     
     addGroup: function (group) {
       var group_id = '#group-' + group,
-          view = this.getView(group_id);
+          view = this.getView(group_id),
+          self = this;
           
       if (!view) {
         view = this.setView(new GroupView({ group: group }), group_id);
         this.$el.append(view.render().$el);
+        this.listenToOnce(view, 'destroy',  function () {
+          delete this.views[group_id];
+        });
       }
 
       return view;
