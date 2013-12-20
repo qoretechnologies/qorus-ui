@@ -1,5 +1,6 @@
 define(function (require) {
   var settings   = require('settings'),
+      helpers   = require('qorus/helpers'),
       utils      = require('utils'),
       _          = require('underscore'),
       $          = require('jquery'),
@@ -113,6 +114,7 @@ define(function (require) {
     
     doAction: function (action, opts, callback) {
       var self = this, 
+          url = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
 
       if (_.indexOf(this.allowedActions, action) != -1) {
@@ -134,7 +136,7 @@ define(function (require) {
           .done(
             function () {
               var msg = sprintf('Workflow %s %s done', self.get('name'), action);
-              Notifications.create({ group: 'workflows', type: 'success', title: msg });
+              Notifications.create({ group: 'workflows', type: 'success', title: msg, url: url });
               if (_.isFunction(callback)) {
                 callback();
               }
@@ -143,7 +145,7 @@ define(function (require) {
           .fail(
             function () {
               var msg = sprintf('Workflow %s %s failed', self.get('name'), action);
-              Notifications.create({ group: 'workflows', type: 'error', title: msg });
+              Notifications.create({ group: 'workflows', type: 'error', title: msg, url: url });
               if (_.isFunction(callback)) {
                 callback();
               }
