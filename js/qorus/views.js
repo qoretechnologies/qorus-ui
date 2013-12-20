@@ -232,6 +232,10 @@ define(function (require) {
         
       view.view_idx = views.push(view) - 1;
       
+      if (append === true) {
+        this.$(el).append(view.render().$el);
+      }
+      
       return view;
     },
     

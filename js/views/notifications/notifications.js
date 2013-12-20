@@ -1,30 +1,50 @@
 define(function (require) {
-  var _ = require('underscore'),
-      Qorus = require('qorus/qorus'),
-      Template = require('tpl!templates/notifications/list.html'),
+  var _             = require('underscore'),
+      Qorus         = require('qorus/qorus'),
+      Template      = require('tpl!templates/notifications/list.html'),
       Notifications = require('collections/notifications'),
+      GroupView     = require('views/notifications/group'),
       View;
   
   View = Qorus.View.extend({
     template: Template,
     collection: Notifications,
-    additionalEvents: {
-      'click button.clear': 'clearGroup'
-    },
 
     initialize: function () {
       _.bindAll(this);
       View.__super__.initialize.apply(this, arguments);
       
       this.setElement($('#notifications-list'));
-      this.listenTo(this.collection, 'sync add remove', this.render);
-      this.on('prerender', this.updateContext);
+      this.listenTo(this.collection, 'sync', this.addNotifications);
+      this.listenTo(this.collection, 'add', this.addNotification);
+      // this.on('prerender', this.updateContext);
       
       this.render();
     },
     
-    updateContext: function () {
-      this.context.groups = this.collection.createGroupList();
+    addGroup: function (group) {
+      var group_id = '#group-' + group,
+          view = this.getView(group_id);
+          
+      if (!view) {
+        view = this.setView(new GroupView({ group: group }), group_id);
+        this.$el.append(view.render().$el);
+      }
+
+      return view;
+    },
+    
+    addNotification: function (notification) {
+      var view = this.addGroup(notification.get('group'));
+      view.createModelView(notification);
+    },
+    
+    addNotifications: function (notifications) {
+      if (!notifications) return;
+      var self = this;
+      _.each(notifications.models, function (n) {
+        self.addNotification(n);
+      });
     },
     
     show: function () {
@@ -35,14 +55,6 @@ define(function (require) {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();
-    },
-    
-    clearGroup: function (e) {
-      var $target = $(e.currentTarget);
-      
-      if ($target.data('group')) {
-        this.collection.clear($target.data('group'));
-      }
     }
   });
   

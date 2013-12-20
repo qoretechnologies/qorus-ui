@@ -1041,6 +1041,12 @@ table .header-copy {
           transition: all .5s ease-in-out;
 }
 
+#notifications-list:after {
+  content: "";
+  display: block;
+  height: 40px;
+}
+
 #notifications-list.show {
   right: 0;
 }

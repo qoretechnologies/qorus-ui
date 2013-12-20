@@ -18,6 +18,7 @@ define(function(require){
 
 
   SystemInfoView = Qorus.View.extend({
+    views: {},
     cls: 'SystemInfoView',
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle'
