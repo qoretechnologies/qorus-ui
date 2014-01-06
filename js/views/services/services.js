@@ -2,6 +2,7 @@ define(function(require){
   var $           = require('jquery'),
       _           = require('underscore'),
       Qorus       = require('qorus/qorus'),
+      Backbone    = require('backbone'),
       Dispatcher  = require('qorus/dispatcher'),
       Collection  = require('collections/services'),
       Template    = require('text!templates/service/list.html'),
@@ -11,9 +12,10 @@ define(function(require){
       ModalView   = require('views/services/modal'),
       Toolbar     = require('views/toolbars/services_toolbar'),
       PaneView    = require('views/common/pane'),
-      fixedhead   = require('jquery.fixedheader'),
-      sticky      = require('jquery.sticky'),
-      context, ListView;
+      context, ListView, TableView;
+      
+  require('jquery.fixedheader');
+  require('jquery.fixedheader');
   
   context = {
       action_css: {
@@ -29,13 +31,25 @@ define(function(require){
   };
   
   
+  TableView = Qorus.TableView.extend({
+    initialize: function () {
+      _.bindAll(this);
+      TableView.__super__.initialize.apply(this, arguments);
+
+      // reset listening events
+      this.stopListening(this.collection);
+      
+      this.listenTo(this.collection, 'add', this.appendRow);
+      this.listenTo(this.collection, 'resort sort', this.update);
+    }
+  })
+  
   ListView = Qorus.ListView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
-      "click a[data-action]": "runAction",
-      "click tr": "showDetail"
+      "click a[data-action]": "runAction"
     },
     
     context: context,
@@ -55,13 +69,14 @@ define(function(require){
       this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
         var m = self.collection.get(e.info.id);
         if (m) {
-          m.fetch();
+         m.fetch();
         }
       });
     },
     
     preRender: function () {
-      this.setView(new Qorus.TableView({ 
+      // init TableView
+      var tview = this.setView(new TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
@@ -69,6 +84,11 @@ define(function(require){
           dispatcher: Dispatcher,
           fixed: true
       }), '#service-list');
+      
+      // assign show detail on row click
+      this.listenTo(tview, 'row:clicked', this.showDetail);
+      
+      // init Toolbar
       this.setView(new Toolbar(), '#service-toolbar');
     },
 
@@ -87,7 +107,6 @@ define(function(require){
 	
     runAction: function (e) {
       debug.log('running action', e);
-      var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
       if (data.action) {
@@ -100,41 +119,33 @@ define(function(require){
           inst.doAction(data.action);           
         }
       }
-      
     },
     
-    showDetail: function (e) {
-      var $target = $(e.currentTarget),
-          $detail = $('#service-detail'),
-          top     = $target.offset().top; // + $target.height()/2;
-          view    = this.getView('#service-detail'),
-          width   = $(document).width() - $('[data-sort="version"]').offset().left;
+    showDetail: function (row) {
+      var view  = this.getView('#service-detail'),
+          width = $(document).width() - $('[data-sort="version"]').offset().left,
+          id    = (view instanceof Backbone.View) ? view.$el.data('id') : null;
       
-      if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
-        e.stopPropagation();
+      if (id === row.model.id) {
+        if (view) view.close();
+      } else {
+        // add info class to selected row
+        row.$el.addClass('info');
         
-        if ($detail.data('id') == $target.data('id')) {
-          if (view) view.close();
-        } else {
-          // add info class to selected row
-          $target.addClass('info');
-          
-          // init detail view
-          view = this.setView(new PaneView({
-            content_view: new ServiceView({ 
-              model: this.collection.get($target.data('id')), 
-              context: this.context 
-            }),
-            width: width
-            }),'#service-detail', true);
-          
-          // add on close listener
-          this.listenToOnce(view, 'closed off', function () {
-            $target.removeClass('info');
-          })
-        }
+        // init detail view
+        view = this.setView(new PaneView({
+          content_view: new ServiceView({ 
+            model: row.model, 
+            context: this.context 
+          }),
+          width: width
+          }),'#service-detail', true);
+        
+        // add on close listener
+        this.listenToOnce(view, 'closed off', function () {
+          row.$el.removeClass('info');
+        });
       }
-      
     },
     
     helpers:  {
@@ -157,23 +168,19 @@ define(function(require){
     },
     
     openExecuteModal: function (e) {
-      // this.removeView('#function-execute');
-      
-      var $target = $(e.currentTarget);
+      var $target = $(e.currentTarget),
+          svc = this.collection.get($target.data('serviceid'));
 
-      var svc = this.collection.get($target.data('serviceid'));
-      var method = svc.get('methods')[$target.data('id')];
-
-      var modal = this.setView(new ModalView({ 
-          name: $target.data('methodname'), 
-          methods: svc.get('methods'), 
-          service_name: svc.get('name') 
-        }), '#function-execute', true);
+      this.setView(new ModalView({ 
+        name: $target.data('methodname'), 
+        methods: svc.get('methods'), 
+        service_name: svc.get('name') 
+      }), '#function-execute', true);
       
       e.stopPropagation();
     },
     
-    enableActions: function (e) {
+    enableActions: function () {
       var ids = this.getCheckedIds();
       
       if (ids.length > 0) {

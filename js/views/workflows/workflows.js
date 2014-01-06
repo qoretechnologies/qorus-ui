@@ -1,7 +1,6 @@
 define(function (require) {
   var $                = require('jquery'),
       _                = require('underscore'),
-      Backbone         = require('backbone'),
       Qorus            = require('qorus/qorus'),
       utils            = require('utils'),
       Collection       = require('collections/workflows'),
@@ -231,11 +230,11 @@ define(function (require) {
     },
     
     showDetail: function (e) {
-      var view = this.getView('#workflow-detail'),
-        $target = $(e.currentTarget),
-        $detail = $('#workflow-detail'),
-        top = $target.offset().top; // + $target.height()/2;
-        width = $(document).width() - $('[data-sort="version"]').offset().left;
+      var view    = this.getView('#workflow-detail'),
+          $target = $(e.currentTarget),
+          $detail = $('#workflow-detail'),
+          top     = $target.offset().top; // + $target.height()/2;
+          width   = $(document).width() - $('[data-sort="version"]').offset().left;
       
       if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
         e.stopPropagation();

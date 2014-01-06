@@ -658,7 +658,7 @@ define(function (require) {
     cls: 'TableView',
     fixed: false,
     additionalEvents: {
-      'click th': 'sortView',
+      'click th': 'sortView'
     },
     template: TableTpl,
     row_template: undefined,
@@ -927,8 +927,8 @@ define(function (require) {
       }
       return data;
     },
-
-    additionalEvents:  {
+    
+    additionalEvents: {
       'click': 'rowClick'
     },
         
@@ -936,7 +936,7 @@ define(function (require) {
       var model = this.model, 
         self = this;
 
-      // _.bindAll(this);
+      _.bindAll(this);
       this.views =[];
       this.model = opts.model;
 
@@ -1008,13 +1008,22 @@ define(function (require) {
       }, 5000);
     },
     
-    // delagate click event with model to parent view
+    // delegate click event with model to parent view
     rowClick: function (e) {
-      this.trigger('clicked', this);
-      if (this.parent) {
-        this.parent.trigger('row:clicked', this);
-        if (this.parent.rowClick) {
-          this.parent.rowClick(this.model, e);
+      var $target = $(e.currentTarget),
+          $et     = $(e.target),
+          silent = ($et.parents('button').size() > 0) || 
+            ($et.parents('.dropdown-menu').size() > 0) || 
+            ($et.parents('a').size() > 0) || 
+            ($et.is('a')) || ($et.is('button'));
+      
+      if ($target.is(this.tagName) && !silent) {
+        this.trigger('clicked', this);
+        if (this.parent) {
+          this.parent.trigger('row:clicked', this);
+          if (this.parent.rowClick) {
+            this.parent.rowClick(this.model, e);
+          }
         }
       }
     },
