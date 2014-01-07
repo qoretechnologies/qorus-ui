@@ -13,6 +13,7 @@ define([
     
     initialize: function (opts) {
       this.opts = opts;
+      this.views = {};
     },
                 
     onRender: function () {

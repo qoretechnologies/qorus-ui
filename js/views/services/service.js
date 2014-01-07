@@ -1,21 +1,26 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'models/service',
-  'views/log',
-  'text!templates/service/detail.html',
-  'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Model, LogView, Template) {
-  var ModelView = Qorus.View.extend({
+define(function (require) {
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      Model      = require('models/service'),
+      LogView    = require('views/log'),
+      ModalView   = require('views/services/modal'),
+      Template   = require('text!templates/service/detail.html'),
+      ModelView; 
+
+  require('jquery.ui');
+
+  ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
-      "click a.close-detail": "close"
+      "click button[data-action!='execute']": "runAction",
+      "click button[data-action='execute']": "openExecuteModal",
     },
     
     initialize: function (opts) {
       this.opts = opts;
+      this.views = {};
       _.bindAll(this);
       
       this.template = Template;
@@ -34,18 +39,27 @@ define([
         this.model = new Model();
       }
       
+      // TODO: check why this doesn't work
       this.listenTo(this.model, 'change', this.render);
-      
     },
 
     render: function (ctx) {
-      this.context.item = this.model;
+      this.context.item = this.model.toJSON();
       ModelView.__super__.render.call(this, ctx);
-    }, 
+    },
+    
+    preRender: function () {
+      var url = '/services/' + this.model.id,
+          log = this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      
+      if (this.active_tab) {
+        this.$('a[href='+ this.active_tab + ']').tab('show');
+      }
+    },
 
     tabToggle: function(e){
       var $target = $(e.currentTarget),
-        view, active, target_name;
+          view, active, target_name;
 
       e.preventDefault();
 
@@ -59,13 +73,14 @@ define([
       this.active_tab = target_name;
     },
     
-    preRender: function () {
-      var url = '/services/' + this.model.id;
-      var log = this.setView(new LogView({ socket_url: url, parent: this }), '#log');
-      
-      if (this.active_tab) {
-        this.$('a[href='+ this.active_tab + ']').tab('show');
-      }
+    runAction: function (evt) {
+      var data = $(evt.currentTarget).data();
+      this.model.doAction(data.action, data);
+    },
+    
+    openExecuteModal: function (evt) {
+      evt.stopPropagation();
+      this.trigger('modal:open', this.model, $(evt.currentTarget).data('methodname'));
     },
     
     off: function () {

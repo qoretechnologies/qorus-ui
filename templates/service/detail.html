@@ -1,12 +1,6 @@
-<% var orig_item = obj.item; %>
-<% 
-  var item = obj.item.toJSON(); 
-  item.id = item.serviceid;
-%>
 <div class="btn-toolbar">
     <h3><%= item.name %> <small><%= item.version %></small></h3>
     <div class="pull-right">
-    <!-- <%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: orig_item.actions() }) %> -->
     </div>
 </div>
 <p class="muted"><em><%= item.desc %></em></p>
@@ -21,11 +15,8 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="info">
-        <p><%= item.description %></p>
         <p>Type: <%= item.type %></p>
-        <p>
-            <div>Autostart: <%= powerButton(item.autostart, { option: 'autostart', on: 'true', off: 'false', id: item.id }) %></div>
-        </p>
+        <p>Autostart: <%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></p>
         <% _.each(item.groups, function (g) { %>
           <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
         <% }) %>

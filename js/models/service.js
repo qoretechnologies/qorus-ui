@@ -1,16 +1,15 @@
-define(function (require){
+define(function (require) {
   var _             = require('underscore'),
       $             = require('jquery'),
       settings      = require('settings'),
       Qorus         = require('qorus/qorus'),
-      Dispatcher    = require('qorus/dispatcher'),
       Notifications = require('collections/notifications'),
       Model;
   
   
   Model = Qorus.Model.extend({
     defaults: {
-      threads: '-',
+      threads: '-'
     },
     urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
@@ -31,25 +30,15 @@ define(function (require){
       return actions;
     },
 
-    doAction: function(action, opts){
-      var self    = this,
-          options = { action: action },
-          url = null,
-          resp, msg;
+    doAction: function(action, opts, callback){
+      var options = { action: action },
+          url     = null,
+          resp;
       
       _(options).extend(opts);
 
       if(_.indexOf(this.allowedActions, action) != -1){
         $.put(this.url(), options)
-          // .done(
-          //   function () {
-          //     msg = sprintf('Workflow %s %s failed', self.get('name'), action);
-          //     Notifications.create({ group: 'services', type: 'success', title: msg, url: url });
-          //     if (_.isFunction(callback)) {
-          //       callback();
-          //     }
-          //   }
-          // )
           .fail(
             function (data) {
               resp = data.responseJSON;
@@ -61,7 +50,7 @@ define(function (require){
       }
     },
     
-    setOption: function (options) {
+    setOption: function (opts) {
       $.put(this.url(), opts, null, 'application/json');
     },
     

@@ -49,10 +49,10 @@ define(function(require){
     additionalEvents: {
       "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
-      "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction"
     },
     
+    // sets model option
     setOption: function (evt) {
      var data = $(e.currentTarget).data(),
          opts = data.action ? { 'action': data.action } : {};
@@ -62,16 +62,13 @@ define(function(require){
       this.model.setOption(opts);
     },
     
+    // run model specific actions
     runAction: function (evt) {
       var $target = $(evt.currentTarget);
       
-      this.model.doAction($target.data('action'), $target.data('options'));
+      this.model.doAction($target.data('action'), $target.data());
+      e.stopPropagation();
     },
-    
-    openExecuteModal: function (evt) {
-      var $target = $(evt.currentTarget);      
-      this.parent.trigger('modal:open', $target.data('methodname'), this.model)
-    }
   });
   
   ListView = Qorus.ListView.extend({
@@ -119,11 +116,12 @@ define(function(require){
       $('[data-toggle="tooltip"]').tooltip();
     },
 
-    
     showDetail: function (row) {
       var view  = this.getView('#service-detail'),
           width = $(document).width() - $('[data-sort="version"]').offset().left,
-          id    = (view instanceof Backbone.View) ? view.$el.data('id') : null;
+          id    = (view instanceof Backbone.View) ? view.$el.data('id') : null,
+          model = row.model,
+          content_view;
       
       if (id === row.model.id) {
         if (view) view.close();
@@ -131,20 +129,41 @@ define(function(require){
         // add info class to selected row
         row.$el.addClass('info');
         
+        // init content view
+        content_view = new ServiceView({ 
+          model: model, 
+          context: this.context 
+        });
+        
+        // add listener - for some reason it doesn't work inside ServiceView
+        this.listenTo(model, 'change', content_view.render);
+        this.listenTo(content_view, 'modal:open', this.openExecuteModal);
+        
         // init detail view
         view = this.setView(new PaneView({
-          content_view: new ServiceView({ 
-            model: row.model, 
-            context: this.context 
-          }),
+          content_view: content_view,
           width: width
           }),'#service-detail', true);
+        
         
         // add on close listener
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
+          self.stopListening(content_view);
+          self.stopListening(model);
         });
       }
+    },
+    
+    // open service method execution modal
+    // TODO: it would be better to run inside Service Detail view,
+    // but it has CSS position issues. try to fix later
+    openExecuteModal: function (model, method) {
+      this.setView(new ModalView({ 
+        name: method, 
+        methods: model.get('methods'), 
+        service_name: model.get('name') 
+      }), '#function-execute', true);
     },
     
     helpers:  {
@@ -174,14 +193,6 @@ define(function(require){
       } else {
         $('.toolbar-actions', this.$el).addClass('hide');
       }
-    },
-    
-    openExecuteModal: function (method, model) {
-      this.setView(new ModalView({ 
-        name: method, 
-        methods: model.get('methods'), 
-        service_name: model.get('name') 
-      }), '#function-execute', true);
     },
     
     clean: function () {

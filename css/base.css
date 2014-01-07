@@ -469,7 +469,7 @@ aside {
     /*min-width: 60%;*/
 
     padding: 0;
-	overflow-y: auto;
+    overflow-y: auto;
     
     /* These styles are optional, and describe how the pageslide will look */
     background-color: rgba(245,245,245,0.9);

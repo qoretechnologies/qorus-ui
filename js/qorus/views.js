@@ -41,7 +41,6 @@ define(function (require) {
     render_lock: false,
     cls: 'View',
     url: '/',
-    additionalEvents: {},
     defaultEvents: {
       "submit": "doNothing"
       // "click a[href^='/']": 'catchAClick'
@@ -54,7 +53,8 @@ define(function (require) {
     opts: {},
     
     events : function () {
-      return _.extend({}, this.defaultEvents, this.additionalEvents);
+      var aEvents = this.additionalEvents || {};
+      return _.extend({}, this.defaultEvents, aEvents);
     },
     
     initialize: function (options) {
@@ -574,7 +574,6 @@ define(function (require) {
     // end batch section definition
     
     runAction: function (e) {
-      debug.log('run action', e);
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
       
@@ -937,7 +936,7 @@ define(function (require) {
         self = this;
 
       _.bindAll(this);
-      this.views =[];
+      this.views = [];
       this.model = opts.model;
 
       if (_.has(opts, 'cols')) this.cols = cols;
