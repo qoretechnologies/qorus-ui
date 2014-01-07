@@ -35,6 +35,7 @@ define(function(require){
     initialize: function () {
       _.bindAll(this);
       TableView.__super__.initialize.apply(this, arguments);
+      this.RowView = RowView;
 
       // reset listening events
       this.stopListening(this.collection);
@@ -42,9 +43,9 @@ define(function(require){
       this.listenTo(this.collection, 'add', this.appendRow);
       this.listenTo(this.collection, 'resort sort', this.update);
     }
-  })
+  });
   
-  ListView = Qorus.ListView.extend({
+  RowView = Qorus.RowView.extend({
     additionalEvents: {
       "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
@@ -52,6 +53,28 @@ define(function(require){
       "click a[data-action]": "runAction"
     },
     
+    setOption: function (evt) {
+     var data = $(e.currentTarget).data(),
+         opts = data.action ? { 'action': data.action } : {};
+
+      opts[data.option] = data.value; 
+      
+      this.model.setOption(opts);
+    },
+    
+    runAction: function (evt) {
+      var $target = $(evt.currentTarget);
+      
+      this.model.doAction($target.data('action'), $target.data('options'));
+    },
+    
+    openExecuteModal: function (evt) {
+      var $target = $(evt.currentTarget);      
+      this.parent.trigger('modal:open', $target.data('methodname'), this.model)
+    }
+  });
+  
+  ListView = Qorus.ListView.extend({
     context: context,
     
     title: "Services",
@@ -96,30 +119,6 @@ define(function(require){
       $('[data-toggle="tooltip"]').tooltip();
     },
 
-    setOption: function (e) {
-      var data = $(e.currentTarget).data();
-      var svc = this.collection.get(data.id);
-
-      var opts = data.action ? { 'action': data.action } : {};
-      opts[data.option] = data.value;
-      $.put(svc.url(), opts, null, 'application/json');
-    },
-	
-    runAction: function (e) {
-      debug.log('running action', e);
-      var data = e.currentTarget.dataset;
-      
-      if (data.action) {
-        if (data.id == 'selected') {
-          this.runBatchAction(data.action, data.method);
-        } else if (data.id) {
-          debug.log("data action", data.id, data.action);
-          // $target.text(data.msg.toUpperCase());
-          var inst = this.collection.get(data.id);
-          inst.doAction(data.action);           
-        }
-      }
-    },
     
     showDetail: function (row) {
       var view  = this.getView('#service-detail'),
@@ -167,19 +166,6 @@ define(function(require){
       }
     },
     
-    openExecuteModal: function (e) {
-      var $target = $(e.currentTarget),
-          svc = this.collection.get($target.data('serviceid'));
-
-      this.setView(new ModalView({ 
-        name: $target.data('methodname'), 
-        methods: svc.get('methods'), 
-        service_name: svc.get('name') 
-      }), '#function-execute', true);
-      
-      e.stopPropagation();
-    },
-    
     enableActions: function () {
       var ids = this.getCheckedIds();
       
@@ -188,6 +174,14 @@ define(function(require){
       } else {
         $('.toolbar-actions', this.$el).addClass('hide');
       }
+    },
+    
+    openExecuteModal: function (method, model) {
+      this.setView(new ModalView({ 
+        name: method, 
+        methods: model.get('methods'), 
+        service_name: model.get('name') 
+      }), '#function-execute', true);
     },
     
     clean: function () {

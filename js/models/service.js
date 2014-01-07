@@ -1,62 +1,75 @@
-define([
-  'settings',
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'sprintf'
-], function(settings, $, _, Qorus, Dispatcher){
-  var ServiceModel = Qorus.Model.extend({
+define(function (require){
+  var _             = require('underscore'),
+      $             = require('jquery'),
+      settings      = require('settings'),
+      Qorus         = require('qorus/qorus'),
+      Dispatcher    = require('qorus/dispatcher'),
+      Notifications = require('collections/notifications'),
+      Model;
+  
+  
+  Model = Qorus.Model.extend({
     defaults: {
       threads: '-',
     },
     urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
-    allowedActions: ['load','unload','reset'],
-    
-    initialize: function (opts) {
-      ServiceModel.__super__.initialize.call(this, opts);
+    allowedActions: ['load','unload','reset','setAutostart'],
 
-      // changed add to views to simpler management
-      // listen to dispatcher
-      // var _this = this;
-      // this.listenTo(Dispatcher, "service:start service:stop service:error", function (e) {
-      //   // fetch only if event.info.id equals this model
-      //   if (e.info.id == _this.id) {
-      //     debug.log('Updating/fetching', _this.id, _this);
-      //     _this.fetch();
-      //   }
-      // });
+    // get available actions
+    actions: function () {
+      var status = this.get('status'),
+          actions = [];
+          
+      if (status == 'unloaded') {
+        actions.push('load');
+      } else {
+        actions.push('unload');
+        actions.push('reset');
+      }
+        
+      return actions;
     },
 
-  	// get available actions
-  	actions: function () {
-  		var status = this.get('status');
-  		var actions = []
-  		if (status == 'unloaded') {
-  			actions.push('load');
-  		} else {
-  			actions.push('unload');
-  			actions.push('reset');
-  		}
-
-  		return actions;
-  	},
-
     doAction: function(action, opts){
+      var self    = this,
+          options = { action: action },
+          url = null,
+          resp, msg;
+      
+      _(options).extend(opts);
+
       if(_.indexOf(this.allowedActions, action) != -1){
-        var id = this.id;
-        var _this = this;
-        debug.log(this.url(), action);
-        $.put(this.url(), {'action': action });     
+        $.put(this.url(), options)
+          // .done(
+          //   function () {
+          //     msg = sprintf('Workflow %s %s failed', self.get('name'), action);
+          //     Notifications.create({ group: 'services', type: 'success', title: msg, url: url });
+          //     if (_.isFunction(callback)) {
+          //       callback();
+          //     }
+          //   }
+          // )
+          .fail(
+            function (data) {
+              resp = data.responseJSON;
+              Notifications.create({ group: 'services', type: 'error', title: resp.err, description: resp.desc, url: url });
+              if (_.isFunction(callback)) {
+                callback();
+              }
+          });
       }
     },
     
+    setOption: function (options) {
+      $.put(this.url(), opts, null, 'application/json');
+    },
+    
     toJSON: function () {
-      var json = ServiceModel.__super__.toJSON.call(this, arguments);
+      var json = Model.__super__.toJSON.call(this, arguments);
       json.actions = this.actions();
       return json;
     }
   });
-  return ServiceModel;
+  return Model;
 });
