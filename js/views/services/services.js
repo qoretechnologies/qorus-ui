@@ -117,7 +117,8 @@ define(function(require){
     },
 
     showDetail: function (row) {
-      var view  = this.getView('#service-detail'),
+      var self  = this,
+          view  = this.getView('#service-detail'),
           width = $(document).width() - $('[data-sort="version"]').offset().left,
           id    = (view instanceof Backbone.View) ? view.$el.data('id') : null,
           model = row.model,
