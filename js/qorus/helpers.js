@@ -1,15 +1,16 @@
 define(function (require) {
-  var $                 = require('jquery'),
-      _                 = require('underscore'),
-      Backbone          = require('backbone'),
-      settings          = require('settings'),
-      utils             = require('utils'),
-      NestedListTpl     = require('tpl!templates/common/nested_list.html'),
-      NestedListTextTpl = require('tpl!templates/common/nested_list_text.html'),
-      WrapLabelTpl      = require('tpl!templates/common/wrap_label.html'),
-      PwrBtnTpl         = require('tpl!templates/common/power_button.html'),
-      StatusActionTpl   = require('tpl!templates/common/action_status.html'),
-      Urls              = require('urls'),
+  var $                    = require('jquery'),
+      _                    = require('underscore'),
+      Backbone             = require('backbone'),
+      settings             = require('settings'),
+      utils                = require('utils'),
+      NestedListTpl        = require('tpl!templates/common/nested_list.html'),
+      NestedListTextTpl    = require('tpl!templates/common/nested_list_text.html'),
+      WrapLabelTpl         = require('tpl!templates/common/wrap_label.html'),
+      PwrBtnTpl            = require('tpl!templates/common/power_button.html'),
+      StatusActionTpl      = require('tpl!templates/common/action_status.html'),
+      ConnectionsStatusTpl = require('tpl!templates/common/connections_status.html'),
+      Urls                 = require('urls'),
       Helpers;
 
   Helpers = {
@@ -125,6 +126,10 @@ define(function (require) {
         return text.replace(/\n/gi,'<br />');
       }
       return text;
+    },
+    
+    connectionsStatus: function (status, connections) {
+      return ConnectionsStatusTpl({ status: status, connections: connections });
     }
     
   }

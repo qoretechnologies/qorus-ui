@@ -116,6 +116,27 @@ define(function (require) {
       if (!this.collection) return;
       
       return this.collection.prev(this);
+    },
+    
+    getConnections: function () {
+      return this.get('connections');
+    },
+    
+    hasConnections: function () {
+      var cons = this.getConnections();
+
+      if (_(cons).isArray()) return (cons.length > 0);
+      
+      return false;
+    },
+    
+    getConnectionsStatus: function () {
+      var cons;
+      
+      if (!this.hasConnections()) return undefined;
+      
+      cons = this.getConnections();
+      return _(cons).findWhere({ up: false }) ? false : true;
     }
     
   });

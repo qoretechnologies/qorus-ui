@@ -1109,10 +1109,10 @@ table .header-copy {
 }
 
 #health .popover {
+  color: #000;
   top: -10px !important;
   height: auto;
   width: auto;
-	font-variant: small-caps;
 }
 
 #health .arrow {

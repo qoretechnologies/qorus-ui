@@ -947,6 +947,7 @@ define(function (require) {
 
       // update row on model change
       this.listenTo(this.model, 'change', function (e) {
+        // enable throttling - possible replacement _.throttle(func, wait, options)
         var timeout = self.timer*1000;
         self._rtimer_buffer = self._rtimer_buffer || 0;
         
@@ -972,6 +973,7 @@ define(function (require) {
         
     render: function (ctx) {
       this.context.item = this.model.toJSON();
+      this.context._item = this.model;
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
       return this;

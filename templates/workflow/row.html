@@ -21,6 +21,7 @@
 <% if (obj.deprecated) { %>
 <td><%= item.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
 <% } %>
+<td class="connections"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %></td>
 <td>
       <div class="btn-group">
           <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
