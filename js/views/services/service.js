@@ -92,7 +92,6 @@ define(function (require) {
     close: function () {
       this.trigger('close');
     }
-    
   });
   
   return ModelView;

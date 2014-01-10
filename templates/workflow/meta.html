@@ -5,7 +5,6 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#details">Details</a></li>
     <li><a href="#library">Library</a></li>
-    <li><a href="#groups" class="groups">Groups</a></li>
     <li><a href="#steps" class="steps">Steps</a></li>
     <li><a href="#log" class="log">Log</a></li>
 </ul>
@@ -22,6 +21,10 @@
         </tbody>
       </table>
     </div>
+    <h4>Groups</h4>
+    <% _.each(item.groups, function (g) { %>
+      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
+    <% }) %>
     <div class="row-fuild">
       <h4>Options</h4>
       <% if (item.options) { %>
@@ -48,11 +51,6 @@
   </div>
   <div class="tab-pane" id="library">
     <%= createNestedList(item.lib) %>
-  </div>
-  <div class="tab-pane" id="groups">
-    <% _.each(item.groups, function (g) { %>
-      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
-    <% }) %>
   </div>
   <div class="tab-pane" id="steps">
   </div>

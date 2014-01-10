@@ -17,6 +17,7 @@
     <div class="tab-pane active" id="info">
         <p>Type: <%= item.type %></p>
         <p>Autostart: <%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></p>
+        <h4>Groups</h4>
         <% _.each(item.groups, function (g) { %>
           <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
         <% }) %>

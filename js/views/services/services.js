@@ -123,6 +123,7 @@ define(function(require){
           id    = (view instanceof Backbone.View) ? view.$el.data('id') : null,
           model = row.model,
           content_view;
+          
       
       if (id === row.model.id) {
         if (view) view.close();
@@ -199,8 +200,15 @@ define(function(require){
     clean: function () {
       // console.log(this.$('.table-fixed'));
       this.$('.table-fixed').fixedHeader('remove');
-    }
+    },
     
+    _showDetail: function (row) {
+      console.log('showin detail', row)
+    },
+    
+    _hideDetail: function (row) {
+      console.log('hiding detail', row)
+    }
   });
 
   return ListView;
