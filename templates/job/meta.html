@@ -31,10 +31,8 @@
       </tbody>
     </table>
     <h4>Groups</h4>
-    <% _.each(item.groups, function (g) { %>
-      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
-    <% }) %>
-    </div>
+    <%= groupList(item.groups) %>
+  </div>
   </div>
   <div class="tab-pane" id="library">
     <%= createNestedList(item.lib) %>

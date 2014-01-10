@@ -1,0 +1,3 @@
+<% _.each(groups, function (g) { %>
+  <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %> <small>(<%= g.size %>)</small></span></a>
+<% }) %>

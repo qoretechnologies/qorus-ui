@@ -10,6 +10,7 @@ define(function (require) {
       PwrBtnTpl            = require('tpl!templates/common/power_button.html'),
       StatusActionTpl      = require('tpl!templates/common/action_status.html'),
       ConnectionsStatusTpl = require('tpl!templates/common/connections_status.html'),
+      GroupListTpl         = require('tpl!templates/common/groups_list.html'),
       Urls                 = require('urls'),
       Helpers;
 
@@ -130,6 +131,10 @@ define(function (require) {
     
     connectionsStatus: function (status, connections) {
       return ConnectionsStatusTpl({ status: status, connections: connections });
+    },
+    
+    groupList: function (groups) {
+      return GroupListTpl({ groups: groups, getUrl: this.getUrl });
     }
     
   }

@@ -22,9 +22,7 @@
       </table>
     </div>
     <h4>Groups</h4>
-    <% _.each(item.groups, function (g) { %>
-      <a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a>
-    <% }) %>
+    <%= groupList(item.groups) %>
     <div class="row-fuild">
       <h4>Options</h4>
       <% if (item.options) { %>
