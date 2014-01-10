@@ -92,6 +92,8 @@ define(function(require){
          m.fetch();
         }
       });
+      
+      this.on('showDetail', function (args, obj) { obj.collection.get(args[0]).trigger('rowClick'); });
     },
     
     preRender: function () {

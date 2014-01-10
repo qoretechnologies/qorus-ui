@@ -17,7 +17,8 @@ define(function(require){
     SystemInfoView;  
 
 
-  SystemInfoView = Qorus.View.extend({
+  SystemInfoView = Qorus.TabView.extend({
+    url: '/system',
     views: {},
     cls: 'SystemInfoView',
     additionalEvents: {
@@ -26,6 +27,8 @@ define(function(require){
     
     initialize: function (opts) {
       _.bindAll(this);
+      this.path = opts.path;
+      SystemInfoView.__super__.initialize.call(this, arguments);
       this.opts = opts || {};
       this.info = System.Info;
       
@@ -33,6 +36,8 @@ define(function(require){
       this.template = Template;
       
       if (!this.info.id) this.info.fetch();
+
+      this.processPath();
     },
     
     preRender: function () {
@@ -43,30 +48,6 @@ define(function(require){
       this.setView(new PropView(), '#prop');
       this.setView(new HttpServicesView(), '#http');
       this.setView(new AlertView(), '#alerts');
-    },
-    
-    onRender: function () {
-      if (_.has(this.opts, 'query')) {
-        $('a[data-target=#'+ this.opts.query +']').tab('show');
-      } 
-    },
-     
-    tabToggle: function (e) {
-      var $target = $(e.currentTarget),
-        active = $('.tab-pane.active'),
-        view, target_name;
-        
-      e.preventDefault();
-      
-      target_name = $target.data('target') || $target.attr('href');
-
-      view = this.getView(target_name);
-      if (view) view.trigger('show');
-
-      $target.tab('show');
-      this.active_tab = $target.data('target');
-      
-      Backbone.history.navigate(utils.getCurrentLocationPath() + $target.attr('href'));
     }
   });
   return SystemInfoView;

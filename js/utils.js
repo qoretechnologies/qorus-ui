@@ -68,6 +68,17 @@ define([
       return window.location.pathname;
     },
     
+    parseURLparams: function () {
+      var loc    = window.location.hash.slice(1), 
+          params = [];
+
+      _(loc.split(';')).each(function (param) {
+        params.push(param.split(':'));
+      });
+      
+      return params;
+    },
+    
     flattenSerializedArray: function (object, except) {
       var exclude = _.isArray(except) ? except : [except];
       

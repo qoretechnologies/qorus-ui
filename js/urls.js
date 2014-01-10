@@ -17,7 +17,7 @@ define([
     'jobs': 'showJobs',
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
-    'system': 'showSystem',
+    'system(/)*path': 'showSystem',
     'ocmd': 'showOcmd',
     'groups/:name': 'showGroup',
     'groups': 'showGroups',

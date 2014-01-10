@@ -11,7 +11,7 @@ define(function (require) {
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
       Helpers     = require('qorus/helpers'),
       Loader, View, ListView, TableView, RowView, 
-      TableAutoView, TableBodyView, ServiceView, PluginView;
+      TableAutoView, TableBodyView, ServiceView, PluginView, TabView;
 
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -40,7 +40,8 @@ define(function (require) {
   View = Backbone.View.extend({
     render_lock: false,
     cls: 'View',
-    url: '/',
+    upstreamUrl: "/",
+    url: '',
     defaultEvents: {
       "submit": "doNothing"
       // "click a[href^='/']": 'catchAClick'
@@ -51,6 +52,7 @@ define(function (require) {
     options: {},
     model_name: null,
     opts: {},
+    path: "",
     
     events : function () {
       var aEvents = this.additionalEvents || {};
@@ -73,6 +75,7 @@ define(function (require) {
       
       _.extend(this.context, options);
       _.extend(this.options, options);
+      this.processPath();
     },
         
     off: function (remove) {
@@ -131,6 +134,11 @@ define(function (require) {
       this.onRender();
       // console.timeEnd('onRender ' + this.cls);
       debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      this.trigger('postrender', this);
+      
+      if (_.isFunction(this.processUrlParams))
+        this.processUrlParams();
+      
       return this;
     },
     
@@ -199,7 +207,6 @@ define(function (require) {
         $(frag).appendTo($el);
         // console.timeEnd('renderViews ' + self.cls);
       }
-      
     },
     
     renderViews: function () {
@@ -243,6 +250,9 @@ define(function (require) {
     setView: function (view, el, set) {
       this.removeView(el);
       this.views[el] = view;
+
+      view.processPath(this.processPath(null, true));
+      view.upstreamUrl = this.getUrl();
 
       // debug.log('setting view', view, el, set);
       if (set === true) {
@@ -297,6 +307,40 @@ define(function (require) {
     unlock: function () {
       // console.log(this.cid, 'unlocked');
       this.render_lock = false;
+    },
+    
+    getUrlParams: function () {
+      return utils.parseURLparams();
+    },
+    
+    processUrlParams: function () {
+    },
+    
+    // process url and executes associated event/method
+    // returns path tail
+    processPath: function (path, silent) {
+      var action, tail;
+
+      path = path || this.path;
+      
+      path = path.split('/');
+      
+      if (path.length == 0) return;
+
+      action = path.shift();
+      tail = path.join('/');
+      
+      // dont execute associated events/methods if in silent mode
+      if (silent !== true) {
+        this.trigger('processpath', action, tail, this);
+        if (this.onProcessPath) this.onProcessPath(action, tail, this);
+      }
+      
+      return tail;
+    },
+    
+    getUrl: function () {
+      return this.upstreamUrl + this.url;
     }
    });
 
@@ -376,6 +420,7 @@ define(function (require) {
       var ctx, tpl, self = this;
       
       this.removeViews();
+      this.trigger('prerender');
       this.preRender();
       // debug.log('Starts rendering with context ->', this.context.page.has_next);
       if (this.template) {
@@ -408,6 +453,11 @@ define(function (require) {
       this.setTitle();
       this.onRender();
       debug.log('Finished rendering', this);
+      
+      if (_.isFunction(this.processUrlParams))
+        this.processUrlParams();
+      
+      this.trigger('postrender');
       return this;
     },
     
@@ -646,6 +696,16 @@ define(function (require) {
           e.preventDefault();
         }
       }
+    },
+    
+    processUrlParams: function () {
+      var params = this.getUrlParams(),
+          self   = this;
+
+      _(params).each(function (param) {
+        var event = param.shift();
+        self.trigger(event, param, self);
+      });
     }
   });
 
@@ -928,7 +988,7 @@ define(function (require) {
     },
     
     additionalEvents: {
-      'click': 'rowClick'
+      'click': 'rowClick',
     },
         
     initialize: function (opts) {
@@ -938,6 +998,7 @@ define(function (require) {
       _.bindAll(this);
       this.views = [];
       this.model = opts.model;
+      this.listenTo(this.model, 'rowClick', this.rowClick);
 
       if (_.has(opts, 'cols')) this.cols = cols;
       if (_.has(opts, 'template')) this.template = opts.template;
@@ -1011,14 +1072,19 @@ define(function (require) {
     
     // delegate click event with model to parent view
     rowClick: function (e) {
-      var $target = $(e.currentTarget),
-          $et     = $(e.target),
-          silent = ($et.parents('button').size() > 0) || 
-            ($et.parents('.dropdown-menu').size() > 0) || 
-            ($et.parents('a').size() > 0) || 
-            ($et.is('a')) || ($et.is('button'));
+      var trigger = true;
       
-      if ($target.is(this.tagName) && !silent) {
+      if (e) {
+        var $target = $(e.currentTarget),
+            $et     = $(e.target),
+            silent = ($et.parents('button').size() > 0) || 
+              ($et.parents('.dropdown-menu').size() > 0) || 
+              ($et.parents('a').size() > 0) || 
+              ($et.is('a')) || ($et.is('button'));
+        trigger = ($target.is(this.tagName) && !silent);
+      }
+      
+      if (trigger) {
         this.trigger('clicked', this);
         if (this.parent) {
           this.parent.trigger('row:clicked', this);
@@ -1027,6 +1093,8 @@ define(function (require) {
           }
         }
       }
+      
+      console.log(trigger, this);
     },
     
     clean: function (e) {
@@ -1188,6 +1256,47 @@ define(function (require) {
         });
     }
   });
+  
+  TabView = View.extend({
+    initialize: function () {
+      TabView.__super__.initialize.call(this, arguments);
+      this.on('postrender', this.activateTab);
+      this.on('all', function () { console.log(this.cls, arguments) });
+    },
+    
+    activateTab: function () {
+      this.showTab('#'+this.active_tab);
+    },
+     
+    tabToggle: function (e) {
+      var $target = $(e.currentTarget),
+        active = $('.tab-pane.active'),
+        view, target_name;
+        
+      e.preventDefault();
+      this.showTab($target.data('target'))
+    },
+    
+    showTab: function (tab) {
+      var view = this.getView(tab),
+        $target = this.$('[data-target='+tab+']'),
+        name = (tab.charAt(0) === '#') ? tab.slice(1) : tab
+        url = (this.getUrl().charAt(0) === '/') ? this.getUrl().slice(1) : this.getUrl();
+
+      if (view) view.trigger('show');
+
+      $target.tab('show');
+   
+      if (name !== this.active_tab) {
+        Backbone.history.navigate(url + '/' + tab.slice(1));
+        this.active_tab = name;        
+      }
+    },
+    
+    onProcessPath: function (tab) {
+      this.active_tab = tab;
+    }
+  })
 
   return {
     View: View,
@@ -1196,6 +1305,7 @@ define(function (require) {
     ViewHelpers: Helpers,
     TableView: TableView,
     RowView: RowView,
-    ServiceView: ServiceView
+    ServiceView: ServiceView,
+    TabView: TabView
   };
 });

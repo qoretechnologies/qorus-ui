@@ -86,7 +86,9 @@ define(function (require) {
     }
   });
 
-  View = Qorus.View.extend({
+  View = Qorus.TabView.extend({
+    url: "/alerts",
+    cls: 'AlertsTabView',
     collections: {},
     views: {},
     template: function (ctx) {

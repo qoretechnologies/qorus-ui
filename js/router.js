@@ -135,9 +135,9 @@ define(function(require) {
     },
     
     // system detail
-    showSystem: function() {
+    showSystem: function(path) {
       var query = window.location.search.slice(1);
-      var view = new SystemInfoView({ query: query });
+      var view = new SystemInfoView({ query: query, path: path});
       this.setView(view);
     },
     
@@ -169,7 +169,7 @@ define(function(require) {
     
     // redirects to workflows page
     redirectToDashboard: function() {
-      Backbone.history.navigate('/system?dashboard', { trigger: true });
+      Backbone.history.navigate('/system/dashboard', { trigger: true });
     },
     
     // default
