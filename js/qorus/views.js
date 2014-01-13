@@ -320,6 +320,7 @@ define(function (require) {
     // returns path tail
     processPath: function (path, silent) {
       var action, tail;
+      console.log('processing path in View', this.cls, arguments);
 
       path = path || this.path;
       
