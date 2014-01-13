@@ -1,21 +1,16 @@
 define(function (require) {
-  var $                = require('jquery'),
-      _                = require('underscore'),
-      Qorus            = require('qorus/qorus'),
-      utils            = require('utils'),
-      Collection       = require('collections/workflows'),
-      Template         = require('text!templates/workflow/list.html'),
-      date             = require('datepicker'),
-      moment           = require('moment'),
-      InstanceListView = require('views/workflows/instances'),
-      Toolbar          = require('views/toolbars/workflows_toolbar'),
-      BottomBarView    = require('views/common/bottom_bar'),
-      Dispatcher       = require('qorus/dispatcher'),
-      Modal            = require('views/workflows/modal'),
-      TableTpl         = require('text!templates/workflow/table.html'),
-      RowTpl           = require('text!templates/workflow/row.html'),
-      WorkflowView     = require('views/workflows/detail'),
-      PaneView         = require('views/common/pane'),
+  var _            = require('underscore'),
+      Qorus        = require('qorus/qorus'),
+      Collection   = require('collections/workflows'),
+      Template     = require('text!templates/workflow/list.html'),
+      Toolbar      = require('views/toolbars/workflows_toolbar'),
+      Dispatcher   = require('qorus/dispatcher'),
+      Modal        = require('views/workflows/modal'),
+      TableTpl     = require('text!templates/workflow/table.html'),
+      RowTpl       = require('text!templates/workflow/row.html'),
+      WorkflowView = require('views/workflows/detail'),
+      PaneView     = require('views/common/pane'),
+      utils        = require('utils'),
       ListView;
 
 
@@ -72,7 +67,6 @@ define(function (require) {
             m.incr(e.info.status);
             m.incr('TOTAL');
           } else if (evt == 'workflow:status_changed') {
-            m.incr(e.info.info.new);
             m.decr(e.info.info.old);
           }
           // debug.log(m.attributes);
@@ -120,12 +114,14 @@ define(function (require) {
     
     // do batch action
     runBatchAction: function (action, method, params) {
-      var method = method || 'get';
-      var ids = this.getCheckedIds();
-      var params = { action: action, ids: ids.join(',') };
+      var ids = this.getCheckedIds(),
+        $request;
+
+      method = method || 'get';
+      params = { action: action, ids: ids.join(',') };
       
       if (action == 'show' || action == 'hide') {
-        params = { action: 'setDeprecated', ids: ids.join(','), deprecated: (action=='hide') }
+        params = { action: 'setDeprecated', ids: ids.join(','), deprecated: (action=='hide') };
       }
       
       if (method == 'get') {
@@ -144,8 +140,8 @@ define(function (require) {
     
     helpers: {
         getUrl: function (s, id, date) {
-              var date = date || this.date || null;
               var params = ['/workflows/view', id, 'orders', s];
+              date = date || this.date || null;
     
               if (date) {
                 // encode for URL
@@ -222,7 +218,7 @@ define(function (require) {
       $('.workflow-row .instances').each(function WFLHILITES() {
         var $this = $(this);
         
-        if (parseInt($this.text()) == 0) {
+        if (parseInt($this.text()) === 0) {
           var id = $this.parent().data('id');
           self.checkRow(id);
         }
@@ -233,7 +229,6 @@ define(function (require) {
       var view    = this.getView('#workflow-detail'),
           $target = $(e.currentTarget),
           $detail = $('#workflow-detail'),
-          top     = $target.offset().top; // + $target.height()/2;
           width   = $(document).width() - $('[data-sort="version"]').offset().left;
       
       if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {

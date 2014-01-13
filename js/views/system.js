@@ -21,9 +21,6 @@ define(function(require){
     url: '/system',
     views: {},
     cls: 'SystemInfoView',
-    additionalEvents: {
-      'click .nav-tabs a': 'tabToggle'
-    },
     
     initialize: function (opts) {
       _.bindAll(this);

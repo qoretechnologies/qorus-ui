@@ -9,7 +9,7 @@ define(function (require) {
   obj_map = {
     workflow: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(id)s', obj);
       },
       url: function (obj) {
         return Helpers.getUrl('showWorkflow', { id: obj.id });
@@ -17,7 +17,7 @@ define(function (require) {
     },
     service: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(id)s', obj);
       },
       url: function (obj) {
         return Helpers.getUrl('showService', { id: obj.id });
@@ -25,7 +25,7 @@ define(function (require) {
     },
     job: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s, ID#%(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(id)s', obj);
       },
       url: function (obj) {
         return Helpers.getUrl('showJob', { id: obj.id });

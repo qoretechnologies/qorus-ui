@@ -62,8 +62,20 @@ define(function (require) {
   TableView = Qorus.TableView;
   
   ListView = Qorus.ListView.extend({
+    // tagName: 'div',
+    // id: function () {
+    //   return "alerts-table-" + this.cid;
+    // },
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
+    },
+    
+    onProcessPath: function (arguments) {
+      console.log('processing path', arguments);
+    },
+    
+    clickDetail: function (path) {
+      console.log('process path', path);
     },
     
     preRender: function () {
@@ -96,7 +108,7 @@ define(function (require) {
       _.extend(ctx, { cid: this.cid });
       return _.template(Template, ctx);
     },
-    
+        
     preRender: function () {
       var OView, TView;
       

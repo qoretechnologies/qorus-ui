@@ -2,7 +2,10 @@
 <html>
 <head>
   <title>Qorus Integration Engine</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/js/libs/modernizr.js"></script>
+  <script data-main="/js/main" src="/js/libs/require.js"></script>
   <link href="/js/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" media="screen"
        href="/js/libs/datetime-picker/bootstrap-datetimepicker.min.css">
@@ -13,9 +16,22 @@
   <link href="/css/base.css" rel="stylesheet" type="text/css">
   <link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="/js/libs/rainbow/themes/blackboard.css" rel="stylesheet" type="text/css">
-  <script data-main="/js/main" src="/js/libs/require.js"></script>
 </head>
 <body>
+  <div id="not-supported">
+    <div class="wrap">
+      <h1>Your browser is not supported</h1>
+      <p>We are sorry, but your browser is not supported</p>
+      <p>Try to open the page with one of these browsers:</p>
+      <ul>
+        <li>Google Chrome 14+</li>
+        <li>Firefox 11+</li>
+        <li>Opera 12.1+</li>
+        <li>Safari 6+</li>
+        <li>Internet Explorer 10+</li>
+      </ul>
+    </div>
+  </div>
   <div id="wrap">
   <header id="header" class="navbar navbar-fixed-top navbar-inverse"></header>
   <section class="section">
@@ -54,5 +70,12 @@
     </div>
   </footer>
   <div id="notifications-list"></div>
+  <script type="text/javascript">
+  // remove unsupported banner if browser supports following features
+  if (Modernizr.websockets && Modernizr.localstorage) {
+    var el = document.getElementById('not-supported');
+    el.parentNode.removeChild(el);
+  }
+  </script>
 </body>
 </html>

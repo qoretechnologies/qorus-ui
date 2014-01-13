@@ -1144,3 +1144,23 @@ table .header-copy {
 .tab-pane {
   height: 100%;
 }
+
+/* not supported */
+#not-supported {
+  position: fixed;
+  color: #fff;
+  background-color: #000;
+  background-color: rgba(0,0,0,.8);
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 20000;
+  text-align: center;
+}
+
+#not-supported .wrap {
+  margin: 100px auto;
+  text-align: left;
+  width: 600px;
+}

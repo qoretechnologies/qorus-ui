@@ -14,5 +14,6 @@
     "strict": false,
     "unparam": false,
     "ident": 2,
-    "white": false
+    "white": false,
+    "-W065": true
 }

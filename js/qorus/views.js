@@ -323,6 +323,8 @@ define(function (require) {
 
       path = path || this.path;
       
+      if (!path) return;
+      
       path = path.split('/');
       
       if (path.length == 0) return;
@@ -1258,14 +1260,18 @@ define(function (require) {
   });
   
   TabView = View.extend({
+    additionalEvents: {
+      'click .nav-tabs a': 'tabToggle',
+      'click .nav-pills a': 'tabToggle'
+    },
+    
     initialize: function () {
       TabView.__super__.initialize.call(this, arguments);
       this.on('postrender', this.activateTab);
-      this.on('all', function () { console.log(this.cls, arguments) });
     },
     
     activateTab: function () {
-      this.showTab('#'+this.active_tab);
+      if (this.active_tab) this.showTab(this.active_tab);
     },
      
     tabToggle: function (e) {
@@ -1274,13 +1280,14 @@ define(function (require) {
         view, target_name;
         
       e.preventDefault();
-      this.showTab($target.data('target'))
+      e.stopPropagation();
+      this.showTab($target.attr('href'))
     },
     
     showTab: function (tab) {
       var view = this.getView(tab),
-        $target = this.$('[data-target='+tab+']'),
-        name = (tab.charAt(0) === '#') ? tab.slice(1) : tab
+        $target = this.$('[href='+tab+']'),
+        name = (tab.charAt(0) === '/') ? tab.slice(1) : tab
         url = (this.getUrl().charAt(0) === '/') ? this.getUrl().slice(1) : this.getUrl();
 
       if (view) view.trigger('show');
@@ -1288,7 +1295,7 @@ define(function (require) {
       $target.tab('show');
    
       if (name !== this.active_tab) {
-        Backbone.history.navigate(url + '/' + tab.slice(1));
+        Backbone.history.navigate(url + '/' + name);
         this.active_tab = name;        
       }
     },
