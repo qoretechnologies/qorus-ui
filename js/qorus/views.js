@@ -40,7 +40,7 @@ define(function (require) {
   View = Backbone.View.extend({
     render_lock: false,
     cls: 'View',
-    upstreamUrl: "/",
+    upstreamUrl: "",
     url: '',
     defaultEvents: {
       "submit": "doNothing"
@@ -252,7 +252,7 @@ define(function (require) {
       this.views[el] = view;
 
       view.processPath(this.processPath(null, true));
-      view.upstreamUrl = this.getUrl();
+      view.upstreamUrl = this.getViewUrl();
 
       // debug.log('setting view', view, el, set);
       if (set === true) {
@@ -320,11 +320,12 @@ define(function (require) {
     // returns path tail
     processPath: function (path, silent) {
       var action, tail;
-      console.log('processing path in View', this.cls, arguments);
 
       path = path || this.path;
       
       if (!path) return;
+      
+      this.path = path;
       
       path = path.split('/');
       
@@ -342,7 +343,7 @@ define(function (require) {
       return tail;
     },
     
-    getUrl: function () {
+    getViewUrl: function () {
       return this.upstreamUrl + this.url;
     }
    });
@@ -372,10 +373,10 @@ define(function (require) {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
     
-    initialize: function (collection, date) {
+    initialize: function (collection, date, options) {
       var self = this;
       _.bindAll(this);
-      ListView.__super__.initialize.call(this);
+      ListView.__super__.initialize.call(this, options);
       // add element loader
       this.loader = new Loader({ el: $('#wrap') });
       this.loader.render();
@@ -460,7 +461,7 @@ define(function (require) {
       if (_.isFunction(this.processUrlParams))
         this.processUrlParams();
       
-      this.trigger('postrender');
+      this.trigger('postrender', this);
       return this;
     },
     
@@ -1002,6 +1003,7 @@ define(function (require) {
       this.views = [];
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
+      this.listenTo(this.model, 'destroy', this.off);
 
       if (_.has(opts, 'cols')) this.cols = cols;
       if (_.has(opts, 'template')) this.template = opts.template;
@@ -1030,7 +1032,6 @@ define(function (require) {
           self.timer = 0;
         }, timeout);
       });
-      this.listenTo(this.model, 'destroy', this.off);
 
       this.render();
     },
@@ -1280,6 +1281,8 @@ define(function (require) {
         active = $('.tab-pane.active'),
         view, target_name;
         
+        console.log('hello');
+        
       e.preventDefault();
       e.stopPropagation();
       this.showTab($target.attr('href'))
@@ -1289,7 +1292,7 @@ define(function (require) {
       var view = this.getView(tab),
         $target = this.$('[href='+tab+']'),
         name = (tab.charAt(0) === '/') ? tab.slice(1) : tab
-        url = (this.getUrl().charAt(0) === '/') ? this.getUrl().slice(1) : this.getUrl();
+        url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getUrl();
 
       if (view) view.trigger('show');
 

@@ -87,8 +87,8 @@ define(function(require) {
     },
 
     // servicee list
-    showServices: function () {
-      var view = new ServiceListView();
+    showServices: function (path) {
+      var view = new ServiceListView({ path: path });
       this.setView(view);
     },
     

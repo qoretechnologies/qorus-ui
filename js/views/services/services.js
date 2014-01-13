@@ -72,16 +72,19 @@ define(function(require){
   });
   
   ListView = Qorus.ListView.extend({
+    url: '/services',
     context: context,
     
     title: "Services",
 
-    initialize: function () {
+    initialize: function (options) {
       var self = this;
       _.bindAll(this);
       this.views = {};
-      this.opts = {};
+      this.opts = options || {};
       this.context = {};
+      
+      if (this.opts.path) this.path = this.opts.path;
       
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
@@ -92,8 +95,12 @@ define(function(require){
          m.fetch();
         }
       });
+    },
+    
+    onProcessPath: function (path) {
+      var id = path.split('/')[0];
       
-      this.on('showDetail', function (args, obj) { obj.collection.get(args[0]).trigger('rowClick'); });
+      if (id) this.detail_id = id;
     },
     
     preRender: function () {
@@ -116,6 +123,10 @@ define(function(require){
 
     onRender: function () {
       $('[data-toggle="tooltip"]').tooltip();
+      
+      if (this.detail_id) {
+        this.collection.get(this.detail_id).trigger('rowClick');
+      }
     },
 
     showDetail: function (row) {
@@ -124,18 +135,19 @@ define(function(require){
           width = $(document).width() - $('[data-sort="version"]').offset().left,
           id    = (view instanceof Backbone.View) ? view.$el.data('id') : null,
           model = row.model,
-          content_view;
+          content_view, url;
           
       
       if (id === row.model.id) {
         if (view) view.close();
+        url = this.getViewUrl();
       } else {
         // add info class to selected row
         row.$el.addClass('info');
         
         // init content view
         content_view = new ServiceView({ 
-          model: model, 
+          model: row.model, 
           context: this.context 
         });
         
@@ -156,7 +168,12 @@ define(function(require){
           self.stopListening(content_view);
           self.stopListening(model);
         });
+        
+        url = [this.getViewUrl(), model.id].join('/');
       }
+      
+      Backbone.history.navigate(url)
+      
     },
     
     // open service method execution modal
@@ -202,14 +219,6 @@ define(function(require){
     clean: function () {
       // console.log(this.$('.table-fixed'));
       this.$('.table-fixed').fixedHeader('remove');
-    },
-    
-    _showDetail: function (row) {
-      console.log('showin detail', row)
-    },
-    
-    _hideDetail: function (row) {
-      console.log('hiding detail', row)
     }
   });
 

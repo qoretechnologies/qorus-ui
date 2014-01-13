@@ -11,7 +11,7 @@ define(function (require) {
 
   require('jquery.ui');
 
-  ModelView = Qorus.View.extend({
+  ModelView = Qorus.TabView.extend({
     additionalEvents: {
       "click .nav-tabs a": "tabToggle",
       "click button[data-action!='execute']": "runAction",
@@ -41,6 +41,7 @@ define(function (require) {
       
       // TODO: check why this doesn't work
       this.listenTo(this.model, 'change', this.render);
+      this.url = "/" + this.model.id;
     },
 
     render: function (ctx) {
@@ -55,22 +56,6 @@ define(function (require) {
       if (this.active_tab) {
         this.$('a[href='+ this.active_tab + ']').tab('show');
       }
-    },
-
-    tabToggle: function(e){
-      var $target = $(e.currentTarget),
-          view, active, target_name;
-
-      e.preventDefault();
-
-      active = $('.tab-pane.active');
-      target_name = $target.data('target') || $target.attr('href')
-      $target.tab('show');
-      
-      view = this.getView(target_name);
-      if (view) view.trigger('show');
-
-      this.active_tab = target_name;
     },
     
     runAction: function (evt) {

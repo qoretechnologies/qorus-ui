@@ -70,15 +70,12 @@ define(function (require) {
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
     },
-    
-    onProcessPath: function () {
-      console.log('XXX processing path', arguments);
+
+    onRender: function () {
+      ListView.__super__.onRender.apply(this, arguments);
+      console.log(this.cls, 'kalimero', this.path, this.url, this.upstreamUrl);
     },
-    
-    clickDetail: function (path) {
-      console.log('process path', path);
-    },
-    
+
     preRender: function () {
       var self = this,
           TView;
@@ -148,6 +145,9 @@ define(function (require) {
       
       this.listenTo(OView, 'row:clicked', this.showDetail);
       this.listenTo(TView, 'row:clicked', this.showDetail);
+      
+      OView.url = '/ongoing';
+      TView.url = '/transient';
     },
     
     showDetail: function (row) {

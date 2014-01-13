@@ -11,7 +11,7 @@ define([
 
     'orders/view/:id': 'showOrder',
     'service/view/:id': 'showServices',
-    'services': 'showServices',
+    'services(/)*path': 'showServices',
     'jobs/view/:id(/:date)': 'showJob',
     'jobs/:date': 'showJobs',
     'jobs': 'showJobs',

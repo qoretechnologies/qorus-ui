@@ -33,8 +33,6 @@ define(function(require){
       this.template = Template;
       
       if (!this.info.id) this.info.fetch();
-      // 
-      // this.processPath();
     },
     
     preRender: function () {

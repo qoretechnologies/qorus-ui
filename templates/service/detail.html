@@ -5,12 +5,12 @@
 </div>
 <p class="muted"><em><%= item.desc %></em></p>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#info">Info</a></li>
-    <li><a href="#methods">Methods</a></li>
+    <li class="active"><a href="info" data-target="#info">Info</a></li>
+    <li><a href="methods" data-target="#methods">Methods</a></li>
     <% if (item.lib) { %>
-    <li><a href="#lib">Library</a></li>
+    <li><a href="lib" data-target="#lib">Library</a></li>
     <% } %>
-    <li><a href="#log" class="log">Log</a></li>
+    <li><a href="log" data-target="#log" class="log">Log</a></li>
 </ul>
 
 <div class="tab-content">
