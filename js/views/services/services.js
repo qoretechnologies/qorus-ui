@@ -136,7 +136,6 @@ define(function(require){
           id    = (view instanceof Backbone.View) ? view.$el.data('id') : null,
           model = row.model,
           content_view, url;
-          
       
       if (id === row.model.id) {
         if (view) view.close();
@@ -172,7 +171,7 @@ define(function(require){
         url = [this.getViewUrl(), model.id].join('/');
       }
       
-      Backbone.history.navigate(url)
+      // Backbone.history.navigate(url);
       
     },
     

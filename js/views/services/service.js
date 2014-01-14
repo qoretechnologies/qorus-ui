@@ -42,6 +42,7 @@ define(function (require) {
       // TODO: check why this doesn't work
       this.listenTo(this.model, 'change', this.render);
       this.url = "/" + this.model.id;
+      this.on('postrender', this.activateTab);
     },
 
     render: function (ctx) {
@@ -52,10 +53,6 @@ define(function (require) {
     preRender: function () {
       var url = '/services/' + this.model.id,
           log = this.setView(new LogView({ socket_url: url, parent: this }), '#log');
-      
-      if (this.active_tab) {
-        this.$('a[href='+ this.active_tab + ']').tab('show');
-      }
     },
     
     runAction: function (evt) {

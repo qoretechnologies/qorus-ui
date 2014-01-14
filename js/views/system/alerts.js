@@ -42,9 +42,13 @@ define(function (require) {
       }
       
       DetailView.__super__.initialize.call(this, opts);
+      console.log('path', this.path, this.processPath(null, true));
     },
     
-    onRender: function (ctx) {
+    onProcessPath: function (path) {
+      var id = path.split('/')[0];
+      
+      if (id) this.detail_id = id;
     },
     
     render: function (ctx) {
@@ -70,10 +74,9 @@ define(function (require) {
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
     },
-
-    onRender: function () {
-      ListView.__super__.onRender.apply(this, arguments);
-      console.log(this.cls, 'kalimero', this.path, this.url, this.upstreamUrl);
+  
+    onProcessPath: function () {
+      if (this.path) this.detail_id = this.path;
     },
 
     preRender: function () {
@@ -93,6 +96,14 @@ define(function (require) {
       this.listenTo(TView, 'row:clicked', function (row) {
         self.trigger('row:clicked', row);
       });
+    },
+    
+    onRender: function () {
+      ListView.__super__.onRender.apply(this, arguments);
+      if (this.detail_id) {
+        var m = this.collection.get(this.detail_id);
+        if (m) m.trigger('rowClick');
+      }
     }
   });
 
@@ -105,6 +116,11 @@ define(function (require) {
       ctx = ctx || {};
       _.extend(ctx, { cid: this.cid });
       return _.template(Template, ctx);
+    },
+    
+    
+    onProcessPath: function () {
+      View.__super__.onProcessPath.apply(this, arguments);
     },
         
     preRender: function () {
@@ -153,8 +169,9 @@ define(function (require) {
     showDetail: function (row) {
       var content_view = new DetailView({ model: row.model }),
           view         = this.getView('.alert-detail'),
-          width        = $(document).width() - this.$('[data-sort="object"]').offset().left
-          model        = row.model;
+          width        = $(document).width() - this.$('[data-sort="object"]').offset().left,
+          model        = row.model
+          url          = [this.getViewUrl(), this.active_tab].join('/');  ;
       
       if (this.selected_model != model) {
         row.$el.addClass('info');
@@ -172,11 +189,15 @@ define(function (require) {
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
+        
+        url = [this.getViewUrl(), this.active_tab, row.model.id].join('/');  
       } else {
         if (view) view.close();
         if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }
+      
+      Backbone.history.navigate(url)
     }
   });
   

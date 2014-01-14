@@ -22,6 +22,12 @@ define(function (require) {
       this.render();
     },
     
+    // override default procesPath to delegate full-path to the content_view
+    processPath: function () {
+      var tail = View.__super__.processPath.apply(this, arguments);
+      return this.path;
+    },
+    
     onRender: function () {
       if (this.opts.content_view) {
         this.setView(this.opts.content_view, '.content', true);

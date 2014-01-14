@@ -54,10 +54,12 @@ define(function (require) {
     opts: {},
     path: "",
     
+    // merging defaultEvents with additionalEvents
     events : function () {
       var aEvents = this.additionalEvents || {};
       return _.extend({}, this.defaultEvents, aEvents);
     },
+    
     
     initialize: function (options) {
       this.views = {};
@@ -88,7 +90,7 @@ define(function (require) {
       this.trigger('destroy');
       View.__super__.off.call(this);
 
-      if (remove != false) {
+      if (remove !== false) {
         this.$el.remove();
         this.remove();
       }
@@ -142,6 +144,7 @@ define(function (require) {
       return this;
     },
     
+    // removes view by ID
     removeView: function (id) {
       var view = this.getView(id);
       if (view instanceof Backbone.View) {
@@ -156,6 +159,7 @@ define(function (require) {
       if (view) delete this.views[id];
     },
     
+    // removes all subviews
     removeViews: function () {
       _.each(this.views, function (view) {
         debug.log('removing subviews');
@@ -172,6 +176,7 @@ define(function (require) {
       this.views = {};
     },
     
+    // returns view by specified id, el id attr in the most cases
     getView: function (id) {
       if (id in this.views)
         return this.views[id];
@@ -179,6 +184,7 @@ define(function (require) {
       return null;
     },
     
+    // renders specific subview
     renderView: function (id, view) {
       if (!view) {
         view = this.getView(id);
@@ -187,7 +193,6 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
-        // console.time('renderViews' + self.cls);
         var $el = this.$(id),
           el = $el.get(0);
         
@@ -198,17 +203,15 @@ define(function (require) {
           
         var frag = document.createDocumentFragment();
 
-        debug.log('creating fragment', id, frag);
-
         _.each(view, function (v) {
           frag.appendChild(v.el);
         });
         
         $(frag).appendTo($el);
-        // console.timeEnd('renderViews ' + self.cls);
       }
     },
     
+    // renders subviews
     renderViews: function () {
       var self = this;
       _.each(self.views, function (view, id) {        
@@ -216,12 +219,16 @@ define(function (require) {
       });
     },
     
+    // executes before rendering
     preRender: function () {
     },
     
+    // executes after rendering
     onRender: function () {
     },
     
+    // adds view into el views array
+    // useful for table rows
     insertView: function (view, el, append) {
       var views, old_view;
       
@@ -247,12 +254,15 @@ define(function (require) {
       return view;
     },
     
+    // adds subview to el
     setView: function (view, el, set) {
       this.removeView(el);
       this.views[el] = view;
-
-      view.processPath(this.processPath(null, true));
-      view.upstreamUrl = this.getViewUrl();
+      
+      if (view instanceof Backbone.View) {
+        view.processPath(this.processPath(null, true));
+        view.upstreamUrl = this.getViewUrl();
+      }
 
       // debug.log('setting view', view, el, set);
       if (set === true) {
@@ -329,7 +339,7 @@ define(function (require) {
       
       path = path.split('/');
       
-      if (path.length == 0) return;
+      if (path.length === 0) return;
 
       action = path.shift();
       tail = path.join('/');
@@ -365,7 +375,7 @@ define(function (require) {
       "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
-      "click a[data-back]": "historyBack",
+      "click a[data-back]": "historyBack"
       // "show": function (e) { console.log('shown', arguments )}
     },
     
@@ -374,7 +384,6 @@ define(function (require) {
     },
     
     initialize: function (collection, date, options) {
-      var self = this;
       _.bindAll(this);
       ListView.__super__.initialize.call(this, options);
       // add element loader
@@ -421,7 +430,7 @@ define(function (require) {
     },
     
     render: function (ctx) {
-      var ctx, tpl, self = this;
+      var tpl, self = this;
       
       this.removeViews();
       this.trigger('prerender');
@@ -544,32 +553,32 @@ define(function (require) {
       var total = this.$('tbody tr').size();
       var selected = this.getCheckedIds().length;
 
-      if (selected == 0) {
+      if (selected === 0) {
         $checker
           .removeClass('icon-check')
           .removeClass('icon-check-minus')
           .removeClass('uncheck-all')
           .addClass('icon-check-empty')
-          .addClass('check-all')
+          .addClass('check-all');
       } else if (selected == total) {
         $checker
           .removeClass('icon-check-minus')
           .removeClass('icon-check-empty')
           .removeClass('check-all')
           .addClass('icon-check')
-          .addClass('uncheck-all')
+          .addClass('uncheck-all');
       } else {
         $checker
           .removeClass('icon-check')
           .removeClass('icon-check-empty')
           .removeClass('uncheck-all')
           .addClass('icon-check-minus')
-          .addClass('check-all')        
+          .addClass('check-all');
       }
       
     },
     
-    invert: function (e) {      
+    invert: function () {
       $('.table-row .check', this.$el)
         .toggleClass('icon-check')
         .toggleClass('icon-check-empty');
@@ -588,16 +597,17 @@ define(function (require) {
       
       _.each($checked_rows, function (row) {
         ids.push($(row).data('id'));
-      })
+      });
 
       return ids;
     },
     
     // do batch action
     runBatchAction: function (action, method, params) {
-      var method = method || 'get';
-      var ids = this.getCheckedIds();
-      var params = { action: action, ids: ids.join(',') };
+      var ids = this.getCheckedIds(),
+        $request;
+      method = method || 'get';
+      params = { action: action, ids: ids.join(',') };
       
       if (method == 'get') {
         $request = $.get(this.collection.url, params);
@@ -613,7 +623,7 @@ define(function (require) {
         });
     },
     
-    enableActions: function (e) {
+    enableActions: function () {
       var ids = this.getCheckedIds();
       
       debug.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
@@ -729,7 +739,6 @@ define(function (require) {
     
     initialize: function (opts) {
       _.bindAll(this);
-      var self = this;
       this.RowView = RowView;
       this.views = {};
       this.opts = opts || {};
@@ -763,7 +772,7 @@ define(function (require) {
     render: function (ctx) {
       debug.log(this, this.colleciton);
 
-      if (!this.collection || this.collection.size() == 0) {
+      if (!this.collection || this.collection.size() === 0) {
         this.template = NoDataTpl;
       } else {
         this.opts.template = this.opts.template;
@@ -820,7 +829,7 @@ define(function (require) {
       this.$el.closest('.pane').off('scroll');
     },
     
-    scroll: function (ev) {
+    scroll: function () {
       // if not visible do nothing
       if (!this.$el.is(':visible')) return;
 
@@ -833,14 +842,13 @@ define(function (require) {
     },
 
     appendRows: function (models) {
-      if (!'tbody' in this.views) {
+      if ('tbody' in this.views) {
         this.update();
         return;
       }
       
       var self = this,
-        frag = document.createDocumentFragment(),
-        views;
+          frag = document.createDocumentFragment();
 
       _.each(models, function (m) {
         var view = self.appendRow(m, false);
@@ -897,10 +905,10 @@ define(function (require) {
 
         views = views.sort(function (c1, c2) {
           // needs speed improvements
-          var k10 = utils.prep(c1.model.get(key))
-            , k20 = utils.prep(c2.model.get(key))
-            , r = 1
-            , k11, k21;
+          var k10 = utils.prep(c1.model.get(key)),
+              k20 = utils.prep(c2.model.get(key)),
+              r   = 1,
+              k11, k21;
           
           if (order === 'des') r = -1;
           
@@ -921,7 +929,7 @@ define(function (require) {
 
         while (tbody.firstChild)
           tbody.removeChild(tbody.firstChild);
-        delete this.views['tbody'];
+        delete this.views.tbody;
         
         // resetting the element
         this.setView(views, 'tbody');
@@ -962,9 +970,7 @@ define(function (require) {
   TableBodyView = View.extend({
     tagName: 'tbody',
     context: {},
-    initialize: function (opts) {
-      
-    }
+    initialize: function () {}
   });
 
   RowView = View.extend({
@@ -992,12 +998,11 @@ define(function (require) {
     },
     
     additionalEvents: {
-      'click': 'rowClick',
+      'click': 'rowClick'
     },
         
     initialize: function (opts) {
-      var model = this.model, 
-        self = this;
+      var self = this;
 
       _.bindAll(this);
       this.views = [];
@@ -1005,14 +1010,14 @@ define(function (require) {
       this.listenTo(this.model, 'rowClick', this.rowClick);
       this.listenTo(this.model, 'destroy', this.off);
 
-      if (_.has(opts, 'cols')) this.cols = cols;
+      if (_.has(opts, 'cols')) this.cols = opts.cols;
       if (_.has(opts, 'template')) this.template = opts.template;
       if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
       if (_.has(opts, 'parent')) this.parent = opts.parent;
-      if (_.has(opts, 'context')) _.extends(this.context, opts.context); 
+      if (_.has(opts, 'context')) _.extend(this.context, opts.context); 
 
       // update row on model change
-      this.listenTo(this.model, 'change', function (e) {
+      this.listenTo(this.model, 'change', function () {
         // enable throttling - possible replacement _.throttle(func, wait, options)
         var timeout = self.timer*1000;
         self._rtimer_buffer = self._rtimer_buffer || 0;
@@ -1051,7 +1056,7 @@ define(function (require) {
         this.$el.addClass('warning');
     },
     
-    update: function (ctx) {
+    update: function () {
       if (this.render_lock === true) return;
       var self = this;
       var css_classes = this.$el.attr('class').split(/\s+/);
@@ -1101,7 +1106,7 @@ define(function (require) {
       console.log(trigger, this);
     },
     
-    clean: function (e) {
+    clean: function () {
       var p_view, self= this;
       p_view = this.parent.getView('tbody');
       _.reject(p_view, function (view) { return view.cid == self.cid; });
@@ -1155,7 +1160,6 @@ define(function (require) {
         var $f = $target.parents('form');
 
         var vals = $f.serializeArray();
-        var params = {};
       
         _.each(vals, function (v) {
           params[v.name] = v.value;
@@ -1232,7 +1236,6 @@ define(function (require) {
         var $f = $target.parents('form');
 
         var vals = $f.serializeArray();
-        var params = {};
       
         _.each(vals, function (v) {
           params[v.name] = v.value;
@@ -1262,6 +1265,7 @@ define(function (require) {
   });
   
   TabView = View.extend({
+    views: {},
     additionalEvents: {
       'click .nav-tabs a': 'tabToggle',
       'click .nav-pills a': 'tabToggle'
@@ -1277,22 +1281,18 @@ define(function (require) {
     },
      
     tabToggle: function (e) {
-      var $target = $(e.currentTarget),
-        active = $('.tab-pane.active'),
-        view, target_name;
-        
-        console.log('hello');
+      var $target = $(e.currentTarget);
         
       e.preventDefault();
       e.stopPropagation();
-      this.showTab($target.attr('href'))
+      this.showTab($target.attr('href'));
     },
     
     showTab: function (tab) {
       var view = this.getView(tab),
         $target = this.$('[href='+tab+']'),
-        name = (tab.charAt(0) === '/') ? tab.slice(1) : tab
-        url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getUrl();
+        name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
+        url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getViewUrl();
 
       if (view) view.trigger('show');
 
@@ -1307,7 +1307,7 @@ define(function (require) {
     onProcessPath: function (tab) {
       this.active_tab = tab;
     }
-  })
+  });
 
   return {
     View: View,
