@@ -2,9 +2,6 @@ define(function(require) {
   var $ = require('jquery'),
     _ = require('underscore'),
     Backbone = require('backbone'),
-    // dualStorage = require('dualstorage'),
-    localStorage = require('localstorage'),
-    moment = require('moment'),
     messenger = require('messenger'),
     Qorus = require('qorus/qorus'),
     InfoView = require('views/info'),
@@ -147,12 +144,14 @@ define(function(require) {
     },
     
     showExtension: function (extension) {
+      var view, query; 
+      
       if (!extension) {
-        var view = new ExtensionListView();
+        view = new ExtensionListView();
       } else {
-        var query = window.location.search.slice(1);
+        query = window.location.search.slice(1);
         debug.log(query);
-        var view = new ExtensionView({}, extension, query);        
+        view = new ExtensionView({}, extension, query);        
       }
       this.setView(view);
     },

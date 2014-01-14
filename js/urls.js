@@ -1,9 +1,8 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-], function ($, _, Backbone) {
-  var routes = {
+define(function (require) {
+  var routes, urls,
+      _ = require('underscore');
+  
+  routes = {
     // Define some URL routes
     'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
     'workflows/:date(/)(:deprecated)': 'showWorkflows',
@@ -27,9 +26,9 @@ define([
 
     // Default
     '*actions': 'defaultAction'
-  }
+  };
 
-  var _urls = function () {
+  urls = function () {
     var rts = _.invert(routes);
     _.each(rts, function(route, k){
       // remove optional paramaters
@@ -38,12 +37,10 @@ define([
       rts[k] = "/" + route;
     });
     return rts;
-  }
-  
-  var urls = new _urls;
+  };
   
   return {
     routes: routes,
-    urls: urls
+    urls: new urls()
   };
 });

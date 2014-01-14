@@ -1,6 +1,5 @@
 define(function (require) {
   var settings      = require('settings'),
-      _             = require('underscore'),
       Qorus         = require('qorus/qorus'),
       Model         = require('models/alert'),
       Notifications = require('collections/notifications'),

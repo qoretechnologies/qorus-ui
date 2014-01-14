@@ -1,8 +1,4 @@
-define([
-  'jquery',     // lib/jquery/jquery
-  'underscore', // lib/underscore/underscore
-  'backbone'    // lib/backbone/backbone
-], function($, _, Backbone){
+define(function () {
   var host = window.location.host;
   
   var settings = {
@@ -25,7 +21,7 @@ define([
       'error': function () {
         console.log.call(console, arguments);
       }
-    }
+    };
   }
   
   return settings;

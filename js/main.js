@@ -88,10 +88,10 @@ require.config({
     "messenger": {
       deps: ['jquery', 'backbone'],
       exports: 'Messenger',
-      init: function(m){
+      init: function () {
         $._messengerDefaults = {
-        	extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
-        }
+          extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
+        };
       }
     },
     "rainbow": {
@@ -118,7 +118,7 @@ require.config({
 
 require([
 // Load our app module and pass it to our definition function
-'app', ], function(App) {
+'app'], function(App) {
   // The "app" dependency is passed in as "App"
   App.initialize();
   return App;

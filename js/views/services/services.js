@@ -12,7 +12,7 @@ define(function(require){
       ModalView   = require('views/services/modal'),
       Toolbar     = require('views/toolbars/services_toolbar'),
       PaneView    = require('views/common/pane'),
-      context, ListView, TableView;
+      context, ListView, TableView, RowView;
       
   require('jquery.fixedheader');
   require('jquery.fixedheader');
@@ -30,6 +30,31 @@ define(function(require){
       }
   };
   
+  RowView = Qorus.RowView.extend({
+    additionalEvents: {
+      "click button[data-option]": "setOption",
+      "click button[data-action!='execute']": "runAction",
+      "click a[data-action]": "runAction"
+    },
+    
+    // sets model option
+    setOption: function (evt) {
+     var data = $(evt.currentTarget).data(),
+         opts = data.action ? { 'action': data.action } : {};
+
+      opts[data.option] = data.value; 
+      
+      this.model.setOption(opts);
+    },
+    
+    // run model specific actions
+    runAction: function (evt) {
+      var $target = $(evt.currentTarget);
+      
+      this.model.doAction($target.data('action'), $target.data());
+      evt.stopPropagation();
+    }
+  });
   
   TableView = Qorus.TableView.extend({
     initialize: function () {
@@ -43,32 +68,6 @@ define(function(require){
       this.listenTo(this.collection, 'add', this.appendRow);
       this.listenTo(this.collection, 'resort sort', this.update);
     }
-  });
-  
-  RowView = Qorus.RowView.extend({
-    additionalEvents: {
-      "click button[data-option]": "setOption",
-      "click button[data-action!='execute']": "runAction",
-      "click a[data-action]": "runAction"
-    },
-    
-    // sets model option
-    setOption: function (evt) {
-     var data = $(e.currentTarget).data(),
-         opts = data.action ? { 'action': data.action } : {};
-
-      opts[data.option] = data.value; 
-      
-      this.model.setOption(opts);
-    },
-    
-    // run model specific actions
-    runAction: function (evt) {
-      var $target = $(evt.currentTarget);
-      
-      this.model.doAction($target.data('action'), $target.data());
-      e.stopPropagation();
-    },
   });
   
   ListView = Qorus.ListView.extend({

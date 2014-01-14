@@ -6,7 +6,9 @@
         "later": true,
         "cronParser": true,
         "moment": true,
-        "debug": true
+        "debug": true,
+        "sprintf": true,
+        "Backbone": true
     },
     "strict": false,
     "unused": false,

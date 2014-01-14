@@ -9,7 +9,8 @@
         "cronParser": true,
         "WebSocket": true,
         "moment": true,
-        "debug": true
+        "debug": true,
+        "sprintf": true
     },
     "strict": false,
     "unparam": false,

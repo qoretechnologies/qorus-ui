@@ -2,7 +2,6 @@ define(function (require) {
   var $ = require('jquery'),
     _ = require('underscore'),
     Qorus = require('qorus/qorus'),
-    settings = require('settings'),
     Dispatcher = require('qorus/dispatcher'),
     Collection = require('collections/alerts'),
     Template = require('text!templates/system/alerts/list.html'),
@@ -61,7 +60,7 @@ define(function (require) {
       this.stopListening();
       this.$el.empty();
     }
-  })
+  });
   
   TableView = Qorus.TableView;
   
@@ -131,7 +130,8 @@ define(function (require) {
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
       OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
-        var alert;
+        var alert, id;
+        
         if (!e.info.when) e.info.when = e.time;
 
         if (evt === 'alert:ongoing_raised') {
@@ -151,7 +151,7 @@ define(function (require) {
         new Collection([], { type: 'transient'})
       ), sprintf('#alerts-transient-list-%s', this.cid));
       
-      TView.listenTo(Dispatcher, 'alert:transient_raised', function (e, evt) {
+      TView.listenTo(Dispatcher, 'alert:transient_raised', function (e) {
         var alert;
         if (!e.info.when) e.info.when = e.time;
 
@@ -170,8 +170,8 @@ define(function (require) {
       var content_view = new DetailView({ model: row.model }),
           view         = this.getView('.alert-detail'),
           width        = $(document).width() - this.$('[data-sort="object"]').offset().left,
-          model        = row.model
-          url          = [this.getViewUrl(), this.active_tab].join('/');  ;
+          model        = row.model,
+          url          = [this.getViewUrl(), this.active_tab].join('/');
       
       if (this.selected_model != model) {
         row.$el.addClass('info');
@@ -197,7 +197,7 @@ define(function (require) {
         this.selected_model = null;
       }
       
-      Backbone.history.navigate(url)
+      Backbone.history.navigate(url);
     }
   });
   
