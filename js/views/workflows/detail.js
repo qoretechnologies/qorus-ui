@@ -106,11 +106,13 @@ define(function (require) {
         var $target  = $(e.currentTarget),
             value    = $target.data('value'),
             obj_type = $target.data('type'),
-            name     = $target.data('name');
+            name     = $target.data('name'),
+            min      = $target.data('min'),
             template = EditTemplate({ 
               value: value,
               type: utils.input_map[obj_type][1],
-              name: name
+              name: name,
+              min: min
             });
         
         $tpl = template;
