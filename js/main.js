@@ -30,7 +30,8 @@ require.config({
     "rainbow.sql": "libs/rainbow/language/sql",
     "chart": "libs/chart",
     "templates": "../templates",
-    "parallel": "libs/parallel"
+    "parallel": "libs/parallel",
+    "settings": "settings.dev"
   },
   shim: { 
     "backbone": {
@@ -110,10 +111,7 @@ require.config({
       deps: ['rainbow']
     }
   },
-  templates: '../templates',
-  config: {
-    'REST_API_PREFIX': '/test'
-  }
+  templates: '../templates'
 });
 
 require([

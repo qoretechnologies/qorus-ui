@@ -354,7 +354,7 @@ define(function (require) {
     },
     
     getViewUrl: function () {
-      return this.upstreamUrl + this.url;
+      return this.upstreamUrl + _.result(this, 'url');
     }
    });
 
@@ -997,7 +997,7 @@ define(function (require) {
       return data;
     },
     
-    additionalEvents: {
+    defaultEvents: {
       'click': 'rowClick'
     },
         
@@ -1266,7 +1266,7 @@ define(function (require) {
   
   TabView = View.extend({
     views: {},
-    additionalEvents: {
+    defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
       'click .nav-pills a': 'tabToggle'
     },
@@ -1289,6 +1289,7 @@ define(function (require) {
     },
     
     showTab: function (tab) {
+      console.log(tab);
       var view = this.getView(tab),
         $target = this.$('[href='+tab+']'),
         name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
@@ -1299,9 +1300,13 @@ define(function (require) {
       $target.tab('show');
    
       if (name !== this.active_tab) {
-        Backbone.history.navigate(url + '/' + name);
-        this.active_tab = name;        
+        this.updateUrl([url,name].join('/'));
+        this.active_tab = name;
       }
+    },
+    
+    updateUrl: function (url) {
+      Backbone.history.navigate(url);        
     },
     
     onProcessPath: function (tab) {

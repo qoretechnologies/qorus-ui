@@ -9,6 +9,7 @@ define([
   'jquery.ui'
 ], function ($, _, Qorus, Dispatcher, Collection, Template, TemplatePre) {
   var View = Qorus.View.extend({
+    msg_queue: [],
     is_scrollable: true,
     additionalEvents: {
       'click #log-scroll': 'toggleScroll'
@@ -40,13 +41,14 @@ define([
       
       this.listenTo(this.collection, 'message', this.appendTextPre);
       this.on('show', this.onShow);
+      this.on('update', _.throttle(this.update, 5000));
     },
     
     onRender: function () {
       // hack
       var lv = this;
       if (this.parent) {
-        $('a[href=#log]', this.parent.$el).click(function (e) {
+        $('a[href=#log]', this.parent.$el).click(function () {
           _.defer(lv.scroll);
         });
       }
@@ -67,29 +69,30 @@ define([
       return this.is_scrollable;
     },
     
-    appendText: function (t, text) {
-      var lines_text = text.split('\n').length;
-      var lines = this.messages.split('\n').length;
+    appendTextPre: function (t, text) {
+      var self = this;
       
-      if (lines + lines_text > this.collection.log_size) {
-        this.messages = this.messages.slice(-lines_text);
-      }
+      _(text.split('\n')).each(function (msg) {
+        self.msg_queue.push(msg);
+      });
       
-      this.messages += text;
-      
-      $('textarea.log', this.$el).val(this.messages);
-      this.scroll();
+      this.trigger('update');
     },
     
-    appendTextPre: function (t, text) {
-      var html = $('<pre />').text(text);
-      var $el = this.$el;
+    update: function () {
+      var html, log, msgs = this.msg_queue;
       
-      setTimeout(function () {
-        $('.log-area', $el).append(html);
-      }, 100);
-      
-      var log = $('.log-area', this.$el).get(0);
+      html = document.createDocumentFragment();
+
+      while (this.msg_queue.length > 0) {
+        msg = this.msg_queue.shift();
+        el = $('<pre>'+msg+'</pre>');
+        html.appendChild(el.get(0));
+      }
+
+      log = $('.log-area', this.$el).get(0);
+
+      $(html).appendTo($(log));
 
       if (log) {
         while (log.childNodes.length > this.collection.log_size) {
@@ -103,7 +106,7 @@ define([
     
     scroll: function () {
       if (this.isScrollable()) {
-        $('.log', this.$el).scrollTop(function (v) {
+        $('.log', this.$el).scrollTop(function () {
           // debug.log(this.scrollHeight);
           return this.scrollHeight;
         });        

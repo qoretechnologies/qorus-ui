@@ -11,8 +11,28 @@ define(function (require) {
       WorkflowView = require('views/workflows/detail'),
       PaneView     = require('views/common/pane'),
       utils        = require('utils'),
-      ListView;
+      helpers      = require('qorus/helpers'),
+      ListView, RowView;
 
+
+  // extending base RowView to add workflow related events
+  RowView = Qorus.RowView.extend({
+    additionalEvents: {
+      'click .connalert': 'showAlert'
+    },
+    
+    showAlert: function () {
+      var url, alert;
+      var alerts = this.model.get('alerts');
+      
+      if (alerts.length < 1) return;
+
+      alert = alerts[0];
+      url = [helpers.getUrl('showSystem'), 'alerts', alert.alerttype.toLowerCase(), alert.id].join('/');
+      
+      Backbone.history.navigate(url, { trigger: true });
+    }
+  });
 
   ListView = Qorus.ListView.extend({
     cls: "workflows.ListView",
@@ -83,6 +103,7 @@ define(function (require) {
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
+          row_view: RowView,
           helpers: helpers,
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated,

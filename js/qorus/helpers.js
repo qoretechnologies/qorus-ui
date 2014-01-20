@@ -1,8 +1,6 @@
 define(function (require) {
   var $                    = require('jquery'),
       _                    = require('underscore'),
-      Backbone             = require('backbone'),
-      settings             = require('settings'),
       utils                = require('utils'),
       NestedListTpl        = require('tpl!templates/common/nested_list.html'),
       NestedListTextTpl    = require('tpl!templates/common/nested_list_text.html'),
@@ -137,7 +135,7 @@ define(function (require) {
       return GroupListTpl({ groups: groups, getUrl: this.getUrl });
     }
     
-  }
+  };
   
-  return Helpers
+  return Helpers;
 });

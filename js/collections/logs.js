@@ -5,7 +5,7 @@ define(function(require){
       Dispatcher = require('qorus/dispatcher'),
       host, protocol, Collection;
   
-  host = window.location.host;
+  host = settings.host;
   protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
   
   Collection = Qorus.WSCollection.extend({

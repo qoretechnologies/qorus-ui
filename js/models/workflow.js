@@ -101,7 +101,16 @@ define(function (require) {
     },
     idAttribute: "workflowid",
     date: null,
-    allowedActions: ['start','stop','reset','show','hide','setAutostart'],
+    allowedActions: [
+      'start',
+      'stop',
+      'reset',
+      'setAutostart',
+      'incAutostart',
+      'decAutostart',
+      'enable',
+      'disable'
+    ],
 
     initialize: function (opts) {
       _.bindAll(this);

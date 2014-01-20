@@ -1,12 +1,8 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'moment',
-  'settings',
-  // 'later.recur',
-  // 'later.cron'
-], function ($, _, Backbone, moment, settings) {
+define(function (require) {
+  var _        = require('underscore'),
+      moment   = require('moment'),
+      settings = require('settings');
+  
   var utils = {
     settings: settings,
     status_map: {
@@ -20,7 +16,6 @@ define([
       "canceled": "canceled",
       "retry": "error",
       "ready": "ready",
-      "incomplete": "info",
       "scheduled": "info",
       "success": "success"
     },
@@ -33,8 +28,7 @@ define([
     input_map: {
       'integer': ['input', 'number'],
       'bool': ['input', 'text'],
-      'string': ['input', 'text'],
-      'string': ['input', 'text'],
+      'string': ['input', 'text']
     },
     
     parseDate: function (date, format) {

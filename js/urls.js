@@ -33,7 +33,7 @@ define(function (require) {
     _.each(rts, function(route, k){
       // remove optional paramaters
       route = route.replace(/\(.*$/, '');
-      route = route.replace(/(\:)(.*)/, '%(\$2)s');
+      route = route.replace(/(\:)(.*)/, '%($2)s');
       rts[k] = "/" + route;
     });
     return rts;

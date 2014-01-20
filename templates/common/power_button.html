@@ -1,9 +1,9 @@
 <span class="btn-group btn-mini">
-<% if (status){ %>
-    <button class="btn active btn-mini btn-success" data-action="<%= data.action %>" data-id="<%= data.id %>" data-<%= data.option %>="<%= data.on %>">On</button>
-    <button class="btn btn-mini" data-id="<%= data.id %>" data-action="<%= data.action %>" data-<%= data.option %>="<%= data.off %>">Off</button>
+<% if (status) { %>
+    <button class="btn active btn-mini btn-success" data-action="<%= data.action %>" data-id="<%= data.id %>" data-<%= data.option %>="<%= data.on %>"><%= data.on_label ? data.on_label : 'On' %></button>
+    <button class="btn btn-mini" data-id="<%= data.id %>" data-action="<%= data.action_off ? data.action_off : data.action %>" data-<%= data.option %>="<%= data.off %>"><%= data.off_label ? data.off_label : 'Off' %></button>
 <% } else { %>
-    <button class="btn btn-mini" data-id="<%= data.id %>" data-action="<%= data.action %>" data-<%= data.option %>="<%= data.on %>">On</button>
-    <button class="btn btn-mini active btn-danger" data-id="<%= data.id %>" data-action="<%= data.action %>" data-<%= data.option %>="<%= data.off %>">Off</button>
+    <button class="btn btn-mini" data-id="<%= data.id %>" data-action="<%= data.action %>" data-<%= data.option %>="<%= data.on %>"><%= data.on_label ? data.on_label : 'On' %></button>
+    <button class="btn btn-mini active btn-danger" data-id="<%= data.id %>" data-action="<%= data.action_off ? data.action_off : data.action %>" data-<%= data.option %>="<%= data.off %>"><%= data.off_label ? data.off_label : 'Off' %></button>
 <% } %>
 </span>

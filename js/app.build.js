@@ -26,7 +26,8 @@
       "rainbow.sql": "libs/rainbow/language/sql",
       "chart": "libs/chart",
       "templates": "../templates",
-      "parallel": "libs/parallel"
+      "parallel": "libs/parallel",
+      "settings": "settings.build"
     },
     shim: { 
       "backbone": {

@@ -1,6 +1,6 @@
 <% item.id = item.workflowid %>
 <td><i class="icon-check-empty check"></i></td>
-<td class="id"><%= item.id %></td>
+<td class="connections"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %></td>
 <td class="err instances"><%= wrapBadge(item.exec_count, ['/workflows/view', item.id, 'instances'].join('/'), 'badge-success') %></td>
 <td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
@@ -21,7 +21,6 @@
 <% if (obj.deprecated) { %>
 <td><%= item.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
 <% } %>
-<td class="connections"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %></td>
 <td>
       <div class="btn-group">
           <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">

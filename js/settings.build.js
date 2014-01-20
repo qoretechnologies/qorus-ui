@@ -7,10 +7,11 @@ define(function () {
       DATE_TSEPARATOR: 'YYYY-MM-DDTHH:mm:ss',      
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
-      REST_API_PREFIX: '/api',
+      REST_API_PREFIX: 'http://localhost:8001/api',
       WS_PREFIX: '',
       EVENTS_WS_URL: 'ws://' + host + '/apievents',
-      DEBUG: false
+      DEBUG: false,
+      HOST: host
   };
   
   if (settings.DEBUG && window.console && console.log) {
