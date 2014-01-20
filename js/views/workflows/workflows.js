@@ -35,11 +35,11 @@ define(function (require) {
   });
 
   ListView = Qorus.ListView.extend({
+    url: '/workflows',
     cls: "workflows.ListView",
     timers: [],
     // el: $("#content"),
     additionalEvents: {
-      'click tbody tr': 'showDetail',
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
@@ -48,23 +48,20 @@ define(function (require) {
     
     title: "Workflows",
     
-    initialize: function (collection, date, router, deprecated) {
+    initialize: function (collection, options) {
       var self = this;
       _.bindAll(this);
       this.views = {};
-      this.opts = {};
+      this.opts = options || {};
       this.context = {};
-
-      this.router = router;
+      
       this.template = Template;
-
-      this.opts.deprecated = deprecated;
       
       // pass date to options object
-      this.date = date;
+      this.date = this.opts.date;
       
       // call super method
-      ListView.__super__.initialize.call(this, Collection, date);
+      ListView.__super__.initialize.call(this, Collection, this.date);
       
       // reassign listening events to collection
       this.stopListening(this.collection);
@@ -97,9 +94,11 @@ define(function (require) {
     
     preRender: function () {
       // this.setView(new BottomBarView(), 'bottombar');
-      var helpers = _.extend({ date: this.date }, this.helpers);
+      var helpers = _.extend({ date: this.date }, this.helpers),
+          tview;
       
-      this.setView(new Qorus.TableView({ 
+      // create workflows table
+      tview = this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
@@ -109,6 +108,10 @@ define(function (require) {
           deprecated: this.opts.deprecated,
           fixed: true
       }), '.workflows');
+
+      // add listener to rowclick
+      this.listenTo(tview, 'row:clicked', this.showDetail);
+      
       this.setView(new Toolbar({ date: this.date, parent: this }), '.toolbar');
     },
     
@@ -223,7 +226,7 @@ define(function (require) {
       $('.workflow-row .instances').each(function WFLHILITER() {
         var $this = $(this);
         
-        if (parseInt($this.text()) > 0) {
+        if (parseInt($this.text(), 10) > 0) {
           var id = $this.parent().data('id');
           self.checkRow(id);
         }
@@ -239,43 +242,52 @@ define(function (require) {
       $('.workflow-row .instances').each(function WFLHILITES() {
         var $this = $(this);
         
-        if (parseInt($this.text()) === 0) {
+        if (parseInt($this.text(), 10) === 0) {
           var id = $this.parent().data('id');
           self.checkRow(id);
         }
       });
     },
     
-    showDetail: function (e) {
-      var view    = this.getView('#workflow-detail'),
-          $target = $(e.currentTarget),
+    showDetail: function (row) {
+      var self    = this,
+          view    = this.getView('#workflow-detail'),
           $detail = $('#workflow-detail'),
-          width   = $(document).width() - $('[data-sort="version"]').offset().left;
+          id      = (view instanceof Backbone.View) ? view.$el.data('id') : null,
+          width   = $(document).width() - $('[data-sort="version"]').offset().left,
+          model   = row.model,
+          content_view, url;
       
-      if ($target.data('id') && !e.target.localName.match(/(button|a|i)/)) {
-        e.stopPropagation();
-                
-        if ($detail.data('id') == $target.data('id')) {
-          if (view) view.close();
-        } else {
-          $target.addClass('info');
+      if (id === model.id) {
+        if (view) view.close();
+        url = this.url;
+      } else {
+        row.$el.addClass('info');
+        
+        content_view = new WorkflowView({
+          model: model,
+          context: this.context
+        });
+        
+        // add listener - for some reason it doesn't work inside ServiceView
+        this.listenTo(model, 'change', content_view.render);
+
+        // init detail view
+        view = this.setView(new PaneView({ 
+            content_view: content_view,
+            width: width
+          }), '#workflow-detail', true);
+        
+          this.listenToOnce(view, 'closed off', function () {
+            row.$el.removeClass('info');
+            self.stopListening(content_view);
+            self.stopListening(model);
+          });
           
-          // init detail view
-          var model = this.collection.get($target.data('id'));
-          view = this.setView(new PaneView({ 
-              content_view: new WorkflowView({ 
-                model: model, 
-                context: this.context 
-              }),
-              width: width
-            }), '#workflow-detail', true);
-          
-            this.listenToOnce(view, 'closed off', function () {
-              $target.removeClass('info');
-            });
-        }
+        url = helpers.getUrl('showWorkflows', { 'id': row.model.id });
       }
       
+      Backbone.history.navigate(url);
     }
   });
   

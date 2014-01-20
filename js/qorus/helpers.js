@@ -67,8 +67,18 @@ define(function (require) {
     },
 
     getUrl: function (route, params) {
-      var urls = Urls.urls;
-      return sprintf(urls[route], params);
+      var url        = Urls.urls[route],
+          matches    = url.match(/(%\(.[^\)]*)\)s/g),
+          url_params = {};
+      
+      params = params || {};
+      
+      _.each(matches, function (match) {
+        var m = match.replace(/(%\()|(\)s)/g, '');
+        url_params[m] = _.has(params, m) ? (params[m] || '') : '';
+      });
+      
+      return sprintf(url, url_params).replace(/\/+/, '');
     },
     
     statusActions: function (status, data, tpl) {

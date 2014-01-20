@@ -35,7 +35,6 @@ define(function (require) {
       this.path = window.location.pathname.replace("/workflows/view/"+opts.id+"/", "");
       ModelView.__super__.initialize.call(this, opts);
       _.bindAll(this);
-      console.log(this.path, this.url());
       this.opts = opts;
       
       this.template = Template;

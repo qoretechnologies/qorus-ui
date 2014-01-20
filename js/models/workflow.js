@@ -1,11 +1,11 @@
 define(function (require) {
-  var settings   = require('settings'),
-      helpers   = require('qorus/helpers'),
-      utils      = require('utils'),
-      _          = require('underscore'),
-      $          = require('jquery'),
-      Qorus      = require('qorus/qorus'),
-      System     = require('models/system'),
+  var settings      = require('settings'),
+      helpers       = require('qorus/helpers'),
+      utils         = require('utils'),
+      _             = require('underscore'),
+      $             = require('jquery'),
+      Qorus         = require('qorus/qorus'),
+      System        = require('models/system'),
       Notifications = require('collections/notifications'),
       StepBase, Step, Model;
   

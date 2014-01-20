@@ -2,6 +2,7 @@
     "predef": {
         "$": true,  
         "define": true, 
+        "require": true,
         "jQuery": true, 
         "later": true,
         "cronParser": true,

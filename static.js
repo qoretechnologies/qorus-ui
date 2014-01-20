@@ -1,7 +1,7 @@
-var static = require('node-static');
-var sys = require('sys');
+var nstatic = require('node-static');
+// var sys = require('sys');
 
-var fileServer = new static.Server('.', { cache: false });
+var fileServer = new nstatic.Server('.', { cache: false });
 
 require('http').createServer(function (request, response) {
   request.addListener('end', function () {

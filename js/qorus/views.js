@@ -1289,7 +1289,6 @@ define(function (require) {
     },
     
     showTab: function (tab) {
-      console.log(tab);
       var view = this.getView(tab),
         $target = this.$('[href='+tab+']'),
         name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,

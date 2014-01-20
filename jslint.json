@@ -3,6 +3,7 @@
         "$": true, 
         "console": true, 
         "define": true, 
+        "require": true, 
         "jQuery": true, 
         "window": true,
         "later": true,

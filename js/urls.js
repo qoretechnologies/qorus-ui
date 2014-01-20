@@ -5,8 +5,7 @@ define(function (require) {
   routes = {
     // Define some URL routes
     'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
-    'workflows/:date(/)(:deprecated)': 'showWorkflows',
-    'workflows': 'showWorkflows',
+    'workflows(/)(:date)(/)(:deprecated)(/)(:id)': 'showWorkflows',
 
     'orders/view/:id': 'showOrder',
     'service/view/:id': 'showServices',
@@ -32,12 +31,11 @@ define(function (require) {
     var rts = _.invert(routes);
     _.each(rts, function(route, k){
       // remove optional paramaters
-      route = route.replace(/\(.*$/, '');
-      route = route.replace(/(\:)(.*)/, '%($2)s');
+      route = route.replace(/\(|\)/g, '').replace(/(\:)(\w+)/g, '%($2)s');
       rts[k] = "/" + route;
     });
     return rts;
-  };
+  };  
   
   return {
     routes: routes,

@@ -1,38 +1,32 @@
-define(function(require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    Backbone = require('backbone'),
-    messenger = require('messenger'),
-    Qorus = require('qorus/qorus'),
-    InfoView = require('views/info'),
-    SystemInfoView = require('views/system'),
-    WorkflowListView = require('views/workflows/workflows'),
-    WorkflowView = require('views/workflows/workflow'),
-    ServiceListView = require('views/services/services'),
-    JobListView = require('views/jobs/jobs'),
-    JobView = require('views/jobs/job'),
-    InstanceListView = require('views/workflows/instances'),
-    EventListView = require('views/events/events'),
-    OrderListView = require('views/workflows/orders'),
-    SearchListView = require('views/workflows/search'),
-    OrderView = require('views/workflows/order'),
-    OcmdView = require('views/system/ocmd'),
-    ExtensionListView = require('views/extensions/extensions'),
-    ExtensionView = require('views/extensions/extension'),
-    FunctionListView = require('views/functions/functions'),
-    GroupsView = require('views/groups/groups'),
-    GroupView = require('views/groups/group'),
-    Urls = require('urls'),
-    Notifications = require('collections/notifications'),
-    AppRouter, app_router;
-      
-    
+define(function (require) {
+  var $                 = require('jquery'),
+      _                 = require('underscore'),
+      Backbone          = require('backbone'),
+      Messenger         = require('messenger'),
+      InfoView          = require('views/info'),
+      SystemInfoView    = require('views/system'),
+      WorkflowListView  = require('views/workflows/workflows'),
+      WorkflowView      = require('views/workflows/workflow'),
+      ServiceListView   = require('views/services/services'),
+      JobListView       = require('views/jobs/jobs'),
+      JobView           = require('views/jobs/job'),
+      EventListView     = require('views/events/events'),
+      SearchListView    = require('views/workflows/search'),
+      OrderView         = require('views/workflows/order'),
+      OcmdView          = require('views/system/ocmd'),
+      ExtensionListView = require('views/extensions/extensions'),
+      ExtensionView     = require('views/extensions/extension'),
+      FunctionListView  = require('views/functions/functions'),
+      GroupsView        = require('views/groups/groups'),
+      GroupView         = require('views/groups/group'),
+      Urls              = require('urls'),
+      AppRouter, app_router;
 
   Messenger.options = {
-  	extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-  	theme: 'qore',
+    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+    theme: 'qore',
     showCloseButton: true
-  }
+  };
 
   AppRouter = Backbone.Router.extend({
     currentView: null,
@@ -158,11 +152,6 @@ define(function(require) {
     
     showFunctions: function () {
       var view = new FunctionListView();
-      this.setView(view);
-    },
-    
-    showDashboard: function () {
-      var view = new DashboardView();
       this.setView(view);
     },
     
