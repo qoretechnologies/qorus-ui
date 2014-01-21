@@ -8,14 +8,11 @@ define(function (require) {
   
   View = Qorus.TabView.extend({
     url: '/logs',
-    additionalEvents:  {
-      'click .nav a': 'tabToggle'
-    },
     template: Template,
     
     initialize: function () {
       View.__super__.initialize.apply(this, arguments);
-      // this.on('show', this.onShow);
+      this.on('show', this.onShow);
     },
     
     preRender: function () {
@@ -25,28 +22,16 @@ define(function (require) {
       this.setView(new LogView({ socket_url: "/alert", parent: this, auto_reconnect: false }), '#log-alert');
       this.setView(new LogView({ socket_url: "/mon", parent: this, auto_reconnect: false }), '#log-monitor');
     },
-    
-    // tabToggle: function (e) {
-    //   var $target = $(e.currentTarget),
-    //     view;
-    //   
-    //   e.preventDefault();
-    //   
-    //   target_name = $target.data('target') || $target.attr('href');
-    //   $target.tab('show');
-    //   
-    //   view = this.getView(target_name);
-    //   if (view) view.trigger('show');
-    // },
-    // 
-    // onShow: function () {
-    //   var $target, target_name, view;
-    //   
-    //   $target = this.$('.nav .active a');
-    //   target_name = $target.data('target') || $target.attr('href');
-    //   view = this.getView(target_name);
-    //   if (view) view.trigger('show');
-    // }
+
+    onShow: function () {
+      var $target, target_name, view;
+      console.log('logs onshow');
+      
+      $target = this.$('.nav .active a');
+      target_name = $target.data('target') || $target.attr('href');
+      view = this.getView(target_name);
+      if (view) view.trigger('show');
+    }
   });
   
   return View;

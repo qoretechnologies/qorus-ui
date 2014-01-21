@@ -7,6 +7,7 @@ define(function (require) {
       Qorus         = require('qorus/qorus'),
       System        = require('models/system'),
       Notifications = require('collections/notifications'),
+      Dispatcher    = require('qorus/dispatcher'),
       StepBase, Step, Model;
   
   StepBase = {
@@ -119,6 +120,25 @@ define(function (require) {
       if (opts.id){
         this.id = opts.id;
       }
+
+      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', this.dispatch);
+    },
+    
+    dispatch: function (e, evt) {
+      if (e.info.id !== this.id) return;
+      
+      if (evt == 'workflow:start') {
+        this.incr('exec_count');
+      } else if (evt == 'workflow:stop') {
+        this.set('exec_count', 0);
+      } else if (evt == 'workflow:data_submitted') {
+        this.incr(e.info.status);
+        this.incr('TOTAL');
+      } else if (evt == 'workflow:status_changed') {
+        this.decr(e.info.info.old);
+      }
+      // debug.log(m.attributes);
+      this.trigger('fetch');
     },
     
     doAction: function (action, opts, callback) {

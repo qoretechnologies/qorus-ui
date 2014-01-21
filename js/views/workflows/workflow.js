@@ -127,7 +127,6 @@ define(function (require) {
     // starts workflow
     runAction: function (e) {
       var data = e.currentTarget.dataset;
-      console.log(data, this.model);
       if (data.action) {
         var wfl = this.model;
         wfl.doAction(data.action);

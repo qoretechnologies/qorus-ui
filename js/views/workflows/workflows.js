@@ -70,26 +70,26 @@ define(function (require) {
       
       this.listenToOnce(this.collection, 'sync', self.render);
       
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function WFLDISPATCH(e, evt) {
-        // debug.log('Event', evt, e);
-        var m = self.collection.get(e.info.id);
-        
-        if (m) {
-          // debug.log(m.attributes);
-          if (evt == 'workflow:start') {
-            m.incr('exec_count');
-          } else if (evt == 'workflow:stop') {
-            m.set('exec_count', 0);
-          } else if (evt == 'workflow:data_submitted') {
-            m.incr(e.info.status);
-            m.incr('TOTAL');
-          } else if (evt == 'workflow:status_changed') {
-            m.decr(e.info.info.old);
-          }
-          // debug.log(m.attributes);
-          m.trigger('fetch');
-        } 
-      });
+      // this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function WFLDISPATCH(e, evt) {
+      //   // debug.log('Event', evt, e);
+      //   var m = self.collection.get(e.info.id);
+      //   
+      //   if (m) {
+      //     // debug.log(m.attributes);
+      //     if (evt == 'workflow:start') {
+      //       m.incr('exec_count');
+      //     } else if (evt == 'workflow:stop') {
+      //       m.set('exec_count', 0);
+      //     } else if (evt == 'workflow:data_submitted') {
+      //       m.incr(e.info.status);
+      //       m.incr('TOTAL');
+      //     } else if (evt == 'workflow:status_changed') {
+      //       m.decr(e.info.info.old);
+      //     }
+      //     // debug.log(m.attributes);
+      //     m.trigger('fetch');
+      //   } 
+      // });
     },
     
     preRender: function () {

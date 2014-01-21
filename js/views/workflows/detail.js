@@ -1,11 +1,8 @@
 define(function (require) {
   var $            = require('jquery'), 
       _            = require('underscore'),
-      jqueryui     = require('jquery.ui'),
       utils        = require('utils'),
       Qorus        = require('qorus/qorus'),
-      Dispatcher   = require('qorus/dispatcher'),
-      Model        = require('models/workflow'),
       LogView      = require('views/log'),
       DiagramView  = require('views/common/diagram'),
       Template     = require('tpl!templates/workflow/meta.html'),
@@ -14,13 +11,11 @@ define(function (require) {
   
   ModelView = Qorus.View.extend({
     additionalEvents: {
-      "click .nav-tabs a": "tabToggle",
       "click a.close-detail": "close",
       "click td[data-editable]": "editOption"
     },
     
     initialize: function (opts) {
-      var model = opts.model;
       this.views = {};
       _.bindAll(this);
       
@@ -31,9 +26,8 @@ define(function (require) {
       }
       
       // console.log(model);
-      this.model = model;
+      this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
-      // this.model.fetch();
     },
 
     render: function (ctx) {
@@ -60,25 +54,6 @@ define(function (require) {
       }
       view.render();
     },
-
-    tabToggle: function(e){
-      debug.log(e, $(e.currentTarget));
-      var $target = $(e.currentTarget);
-      e.preventDefault();
-
-      var active = $('.tab-pane.active');
-      $target.tab('show');
-      
-      if ($target.hasClass('steps')) {
-        this.createDiagram();
-      }
-      
-      if ($target.hasClass('log')) {
-        this.getView('#log').fixHeight();
-      }
-
-      this.active_tab = $target.attr('href');
-    },
         
     close: function (e) {
       if (e) {
@@ -100,7 +75,7 @@ define(function (require) {
     },
     
     editOption: function (e) {
-      var self = this;
+      var self = this, $tpl;
       
       if (e.target.localName == 'td') {
         var $target  = $(e.currentTarget),

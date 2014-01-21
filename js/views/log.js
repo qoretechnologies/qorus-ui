@@ -42,18 +42,8 @@ define(function (require) {
       this.on('update', _.throttle(this.update, 5000));
     },
     
-    onRender: function () {
-      // hack
-      var lv = this;
-      if (this.parent) {
-        $('a[href=#log]', this.parent.$el).click(function () {
-          _.defer(lv.scroll);
-        });
-      }
-      // this.fixHeight();
-    },
-    
     onShow: function () {
+      console.log('onshow', this);
       _.defer(this.fixHeight);
     },
 
@@ -121,7 +111,7 @@ define(function (require) {
       var $parent = $(window),
         $log = this.$('.log-area');
         
-        console.log(this.$('.log-area'), this.$('.log-area').offset());
+      console.log(this.$('.log-area'), this.$('.log-area').offset());
       $log.height($parent.height() - $log.offset().top - 40);
       console.log($log.height(), $log.position().top, $log.offset().top);
     }

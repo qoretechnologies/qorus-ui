@@ -1272,6 +1272,8 @@ define(function (require) {
     },
     
     initialize: function () {
+      _.bindAll(this);
+      console.log('init of', this);
       TabView.__super__.initialize.call(this, arguments);
       this.on('postrender', this.activateTab);
     },
@@ -1285,14 +1287,15 @@ define(function (require) {
         
       e.preventDefault();
       e.stopPropagation();
+      console.log('toggling', this);
       this.showTab($target.attr('href'));
     },
     
     showTab: function (tab) {
-      var view = this.getView(tab),
-        $target = this.$('[href='+tab+']'),
-        name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
-        url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getViewUrl();
+      var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
+          view = this.getView('#'+name),
+          $target = this.$('[href='+tab+']'),
+          url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getViewUrl();
 
       if (view) view.trigger('show');
 
