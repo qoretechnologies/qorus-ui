@@ -10,6 +10,7 @@ define(function () {
       REST_API_PREFIX: 'http://localhost:8001/api',
       WS_PREFIX: '',
       EVENTS_WS_URL: 'ws://' + host + '/apievents',
+      HOST: host,
       DEBUG: false
   };
   

@@ -1,14 +1,12 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/logs',
-  'text!templates/common/log.html',
-  'text!templates/common/log_pre.html',
-  'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Collection, Template, TemplatePre) {
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Collection  = require('collections/logs'),
+      TemplatePre = require('text!templates/common/log_pre.html'),
+      View;
+  
+  View = Qorus.View.extend({
     msg_queue: [],
     is_scrollable: true,
     additionalEvents: {
@@ -80,7 +78,7 @@ define([
     },
     
     update: function () {
-      var html, log, msgs = this.msg_queue;
+      var html, log, msg, el;
       
       html = document.createDocumentFragment();
 
@@ -89,7 +87,6 @@ define([
         el = $('<pre>'+msg+'</pre>');
         html.appendChild(el.get(0));
       }
-
       log = $('.log-area', this.$el).get(0);
 
       $(html).appendTo($(log));
