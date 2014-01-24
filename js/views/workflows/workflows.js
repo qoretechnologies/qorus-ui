@@ -12,7 +12,6 @@ define(function (require) {
       PaneView     = require('views/common/pane'),
       utils        = require('utils'),
       helpers      = require('views/workflows/helpers'),
-      ControlTpl   = require('tpl!templates/workflow/controls.html'),
       ListView, RowView;
 
 
