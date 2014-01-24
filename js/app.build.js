@@ -7,6 +7,7 @@
       underscore: 'libs/underscore',
       backbone: 'libs/backbone',
       "backbone.keys": 'libs/backbone.keys',
+      "backbone.identity": 'libs/backbone.identity',
       localstorage: 'libs/backbone.localstorage',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
@@ -27,7 +28,8 @@
       "chart": "libs/chart",
       "templates": "../templates",
       "parallel": "libs/parallel",
-      "settings": "settings.build"
+      "settings": "settings.build",
+      
     },
     shim: { 
       "backbone": {
@@ -35,6 +37,9 @@
         exports: "Backbone"
       },
       "backbone.keys": {
+        deps: ['backbone']
+      },
+      "backbone.identity": {
         deps: ['backbone']
       },
       localestorage: {
