@@ -63,6 +63,7 @@ define([
   ];
 
   var ChartView = Qorus.View.extend({
+    __name__: 'ChartView',
     scale: 1,
     cls: 'ChartView',
     LineStyles: LineStyles,
@@ -194,12 +195,6 @@ define([
     render: function (ctx) {
       this.context.scale = this.scale;
       ChartView.__super__.render.call(this, ctx);
-    },
-    
-    clean: function () {
-      this.stopListening();
-      this.undelegateEvents();
-      this.collection = null;
     }
   });
   

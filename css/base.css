@@ -1164,3 +1164,7 @@ table .header-copy {
   text-align: left;
   width: 600px;
 }
+
+.clickable {
+  cursor: context-menu;
+}

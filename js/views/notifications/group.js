@@ -20,11 +20,11 @@ define(function (require) {
       this.views = {};
       this.group = opts.group;
       this.on('prerender', this.updateContext);
+      this.listenTo(Notifications, sprintf('cleared:%s reset', this.group), this.off);
     },
 
     clear: function () {
       Notifications.clear(this.group);
-      this.off();
     },
 
     createModelView: function (model) {

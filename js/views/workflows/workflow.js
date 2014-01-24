@@ -3,6 +3,7 @@ define(function (require) {
       _                = require('underscore'),
       Qorus            = require('qorus/qorus'),
       Workflow         = require('models/workflow'),
+      Dispatcher       = require('qorus/dispatcher'),
       Template         = require('text!templates/workflow/detail.html'),
       InstanceListView = require('views/workflows/instances'),
       OrderListView    = require('views/workflows/orders'),
@@ -10,10 +11,24 @@ define(function (require) {
       OrderView        = require('views/workflows/order'),
       Modal            = require('views/workflows/modal'),
       ChartsView       = require('views/workflows/charts'),
-      LogView          = require('views/log');
+      helpers          = require('views/workflows/helpers'),
+      LogView          = require('views/log'),
+      HeaderTpl = require("tpl!templates/workflow/detail_header.html"),
+      HeaderView, ModelView;
+      
+      
+  HeaderView = Qorus.View.extend({
+    template: HeaderTpl,
+    initialize: function (options) {
+      this.model = options.model;
+    },
+    preRender: function () {
+      this.context.item = this.model.toJSON();
+    }
+  });
 
-
-  var ModelView = Qorus.TabView.extend({
+  ModelView = Qorus.TabView.extend({
+    helpers: helpers, 
     url: function () {
      return '/workflows/view/' + this.opts.id; 
     },
@@ -34,15 +49,20 @@ define(function (require) {
       // debug.log("workflow opts", this.opts);
       this.path = window.location.pathname.replace("/workflows/view/"+opts.id+"/", "");
       ModelView.__super__.initialize.call(this, opts);
-      _.bindAll(this);
       this.opts = opts;
       
       this.template = Template;
       
       // init model
-      this.model = new Workflow({ id: opts.id });
-      this.listenTo(this.model, 'change', this.render);
+      this.model = new Workflow({ id: opts.id });;
+      this.listenToOnce(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'fetch', this.updateViews);
+      this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
       this.model.fetch();
+    },
+    
+    dispatch: function () {
+      this.model.dispatch.apply(this.model, arguments);
     },
     
     render: function (ctx) {
@@ -52,6 +72,12 @@ define(function (require) {
       }
       ModelView.__super__.render.call(this, mctx);
       return this;
+    },
+    
+    updateViews: function () {
+      console.log('hello', this);
+      var detail_view = this.getView('#detail');
+      if (detail_view) detail_view.render();
     },
     
     preRender: function () {
@@ -66,7 +92,8 @@ define(function (require) {
             date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
           }), '#instances');
       }
-        
+      
+      this.setView(new HeaderView({ model: this.model }), '#detail')  
       this.setView(new BottomBarView({}), '#bottom-bar');
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
@@ -128,8 +155,7 @@ define(function (require) {
     runAction: function (e) {
       var data = e.currentTarget.dataset;
       if (data.action) {
-        var wfl = this.model;
-        wfl.doAction(data.action);
+        this.model.doAction(data.action);
         e.preventDefault();
       }
     },
@@ -154,7 +180,6 @@ define(function (require) {
     clean: function () {
       this.undelegateEvents();
       this.stopListening();
-      this.model.stopListening();
     }
   });
   return ModelView;

@@ -21,6 +21,9 @@ define(function (require) {
       GroupsView        = require('views/groups/groups'),
       GroupView         = require('views/groups/group'),
       Urls              = require('urls'),
+      Notifications     = require('collections/notifications'),
+      Alerts            = require('collections/alerts'),
+      // LocalSettings  = require('models/setting'),
       AppRouter, app_router;
 
   Messenger.options = {
@@ -28,6 +31,14 @@ define(function (require) {
     theme: 'qore',
     showCloseButton: true
   };
+
+  
+  // fetch local notifications
+  Notifications.fetch();
+  
+  // fetch alerts
+  alerts = new Alerts();
+  alerts.fetch();
 
   AppRouter = Backbone.Router.extend({
     currentView: null,

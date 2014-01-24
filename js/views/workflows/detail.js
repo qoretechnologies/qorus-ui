@@ -28,6 +28,11 @@ define(function (require) {
       // console.log(model);
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, this.model.api_events, this.dispatch);
+    },
+    
+    dispatch: function () {
+      this.model.dispatch.apply(this.model, arguments);
     },
 
     render: function (ctx) {

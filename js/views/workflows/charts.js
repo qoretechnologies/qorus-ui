@@ -139,6 +139,12 @@ define(function (require) {
           true
         );
       }
+    },
+    
+    clean: function () {
+      this.undelegateEvents();
+      this.stopListening();
+      this.remove();
     }
   });
   

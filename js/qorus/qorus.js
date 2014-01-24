@@ -101,7 +101,7 @@ define(function (require) {
     
     decr: function (attr, val) {
       val = val || 1;
-      var value = parseInt(this.get(attr)) - val;
+      var value = parseInt(this.get(attr), 10) - val;
       
       this.set(attr, (value > 0) ? value : 0);
     },
@@ -194,8 +194,10 @@ define(function (require) {
     },
     
     fetch: function (options) {
-      this.opts.limit = this.limit;
-      this.opts.offset = this.offset;
+      if (this.opts) {
+        this.opts.limit = this.limit;
+        this.opts.offset = this.offset;
+      }
 
       var data = this.opts;
       

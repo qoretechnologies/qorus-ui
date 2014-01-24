@@ -1,8 +1,8 @@
 <% item.id = item.workflowid %>
 <td><i class="icon-check-empty check"></i></td>
-<td class="connections"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %></td>
+<td class="connections"><%= createControls(item) %></td>
 <td class="err instances"><%= wrapBadge(item.exec_count, ['/workflows/view', item.id, 'instances'].join('/'), 'badge-success') %></td>
-<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
+<td class="name" data-search="<%= item.name.toLowerCase() %>"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %> <a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
 <td class="autostart"><%= (item.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= item.autostart %></td>
 <td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id), 'badge-success') %></td>
@@ -21,22 +21,3 @@
 <% if (obj.deprecated) { %>
 <td><%= item.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
 <% } %>
-<td>
-      <div class="btn-group">
-          <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-cog"></i>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu pull-right">
-              <li><a href="#" class="action" data-action="start" data-id="<%= item.id %>"><i class="icon-off"></i> Start</a></li>
-              <li><a href="#" class="action-modal" data-action="start" data-id="<%= item.id %>"><i class="icon-off"></i> Start Custom</a></li>
-              <li><a href="#" class="action" data-action="reset" data-id="<%= item.id %>"><i class="icon-refresh"></i> Reset</a></li>
-              <li><a href="#" class="action" data-action="stop" data-id="<%= item.id %>"><i class="icon-remove"></i> Stop</a></li>
-              <% if (item.deprecated) { %>
-              <li><a href="#" class="action" data-action="show" data-id="<%= item.id %>"><i class="icon-flag"></i> Show</a></li>
-              <% } else { %>
-              <li><a href="#" class="action" data-action="hide" data-id="<%= item.id %>"><i class="icon-flag-alt"></i> Hide</a></li>
-              <% } %>
-          </ul>
-      </div>
-</td>

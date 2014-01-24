@@ -1,5 +1,6 @@
 define(function (require) {
-  var settings      = require('settings'),
+  var _             = require('underscore'), 
+      settings      = require('settings'),
       Qorus         = require('qorus/qorus'),
       Model         = require('models/alert'),
       Notifications = require('collections/notifications'),
@@ -9,7 +10,9 @@ define(function (require) {
     limit: 100,
     model: Model,
     url: function () {
-      return settings.REST_API_PREFIX + '/system/alerts/' + this.type;
+      var url = settings.REST_API_PREFIX + '/system/alerts/';
+      if (!this.type) return url;
+      return url + this.type;
     },
     
     initialize: function (models, opts) {
@@ -18,7 +21,7 @@ define(function (require) {
       this.sort_order = 'des';
       this.sort_history = ['when'];
       
-      if (opts.type) {
+      if (opts) {
         this.type = opts.type;
       }
       
@@ -30,7 +33,14 @@ define(function (require) {
     },
     
     notify: function (model) {
-      Notifications.create({ id: "alert-" + model.id, group: 'alerts', title: model.get('alert'), type: 'error', description: model.get('name'), url: "/system?alerts" });
+      Notifications.create({
+        id: "alert-" + model.id,
+        group: 'alerts-' + model.get('alerttype'),
+        title: model.get('alert'),
+        type: 'error',
+        description: model.get('name'),
+        url: sprintf("/system/alerts/%s/%s", model.get('alerttype'), model.id)
+      });
     }
   });
   // You don't usually return a collection instantiated

@@ -6,6 +6,7 @@ define(function (require) {
       // Keys        = require('backbone.keys'),
       settings    = require('settings'),
       utils       = require('utils'),
+      Dispatcher  = require('qorus/dispatcher'),
       TableTpl    = require('tpl!templates/common/table.html'),
       TableRowTpl = require('tpl!templates/common/tablerow.html'),
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
@@ -96,9 +97,17 @@ define(function (require) {
       }
       this.views = {};
       
-      // stopListening for collection/models
-      if (this.collection instanceof Backbone.Collection) this.collection.stopListening();
-      if (this.model instanceof Backbone.Model) this.model.stopListening();
+      // // stopListening for collection/models
+      // if (this.collection instanceof Backbone.Collection) {
+      //   console.log("cleaning", this.__name__, this.collection.__name__);
+      //   this.collection.stopListening();
+      //   this.collection = null;
+      // }
+      // if (this.model instanceof Backbone.Model) {
+      //   console.log("cleaning", this.__name__, this.model.__name__);
+      //   this.model.stopListening();
+      //   this.model = null;
+      // }
     },
     
     render: function (ctx) {
@@ -981,7 +990,7 @@ define(function (require) {
   RowView = View.extend({
     __name__: 'RowView',
     tagName: 'tr',
-    className: 'table-row',
+    className: 'table-row clickable',
     context: {},
     template: TableRowTpl,
     timeout_buffer: 0,
@@ -1004,7 +1013,9 @@ define(function (require) {
     },
     
     defaultEvents: {
-      'click': 'rowClick'
+      'click': 'rowClick',
+      'shown.bs.dropdown .btn-group': 'lock',
+      'hidden.bs.dropdown .btn-group': 'unlock'
     },
         
     initialize: function (opts) {
@@ -1043,8 +1054,15 @@ define(function (require) {
           self.timer = 0;
         }, timeout);
       });
+      
+      this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
 
       this.render();
+    },
+    
+    dispatch: function () {
+      console.log('args', arguments);
+      this.model.dispatch.apply(this.model, arguments);
     },
         
     render: function (ctx) {
@@ -1056,8 +1074,6 @@ define(function (require) {
     },
     
     onRender: function () {
-      this.$('.btn-group').on('shown.bs.dropdown', this.lock);
-      this.$('.btn-group').on('hidden.bs.dropdown', this.unlock);
       if (this.model.get('caller') === "<webapp>")
         this.$el.addClass('warning');
     },
@@ -1107,15 +1123,14 @@ define(function (require) {
             this.parent.rowClick(this.model, e);
           }
         }
-      }
-      
-      console.log(trigger, this);
+      } 
     },
     
     clean: function () {
       var p_view, self= this;
       p_view = this.parent.getView('tbody');
       // this.model.stopListening();
+      this.$('.btn-group').off();
       _.reject(p_view, function (view) { return view.cid == self.cid; });
     }
   });
@@ -1299,6 +1314,7 @@ define(function (require) {
     },
     
     showTab: function (tab) {
+      console.log(tab);
       var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
           view = this.getView('#'+name),
           $target = this.$('[href='+tab+']'),

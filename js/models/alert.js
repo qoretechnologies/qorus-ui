@@ -66,6 +66,7 @@ define(function (require) {
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
       data._id = this.createID(data);
+      data.alerttype = data.alerttype.toLowerCase();
       return data;
     },
     

@@ -11,15 +11,18 @@ define(function (require) {
       WorkflowView = require('views/workflows/detail'),
       PaneView     = require('views/common/pane'),
       utils        = require('utils'),
-      helpers      = require('qorus/helpers'),
+      helpers      = require('views/workflows/helpers'),
+      ControlTpl   = require('tpl!templates/workflow/controls.html'),
       ListView, RowView;
 
 
   // extending base RowView to add workflow related events
   RowView = Qorus.RowView.extend({
     __name__: 'WorkflowRowView',
+    
     additionalEvents: {
-      'click .connalert': 'showAlert'
+      'click .connalert': 'showAlert',
+      'click [data-action]': 'doAction'
     },
     
     showAlert: function () {
@@ -30,8 +33,19 @@ define(function (require) {
 
       alert = alerts[0];
       url = [helpers.getUrl('showSystem'), 'alerts', alert.alerttype.toLowerCase(), alert.id].join('/');
+      console.log(url, helpers.getUrl('showSystem'));
       
       Backbone.history.navigate(url, { trigger: true });
+    },
+    
+    doAction: function (e) {
+      var $target = $(e.currentTarget),
+          action = $target.data('action');
+      
+      e.stopPropagation();
+      e.preventDefault();
+      console.log('running action %s on %s', action, this.model.id);
+      this.model.doAction(action);
     }
   });
 
@@ -163,7 +177,7 @@ define(function (require) {
         });
     },
     
-    helpers: {
+    helpers: _.extend(helpers, {
         getUrl: function (s, id, date) {
               var params = ['/workflows/view', id, 'orders', s];
               date = date || this.date || null;
@@ -184,7 +198,7 @@ define(function (require) {
           }
           return '<span class="badge ' + e + '">' + res + '</span>';
         }
-    },
+    }),
     
     loadNextPage: function () {
     },

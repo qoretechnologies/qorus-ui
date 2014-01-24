@@ -31,7 +31,7 @@ define(function (require) {
     var rts = _.invert(routes);
     _.each(rts, function(route, k){
       // remove optional paramaters
-      route = route.replace(/\(|\)/g, '').replace(/(\:)(\w+)/g, '%($2)s');
+      route = route.replace(/\(|\)/g, '').replace(/(\:)(\w+)/g, '%($2)s').replace(/(\/\*\w+)/, '');
       rts[k] = "/" + route;
     });
     return rts;

@@ -43,8 +43,7 @@ define(function (require) {
     
     initialize: function () {
       var self = this;
-      
-      _.bindAll(this);
+
       Collection.__super__.initialize.apply(this, arguments); 
       this.model = Model;
       this.on('queue:empty', this.garbage_collection);

@@ -113,6 +113,14 @@ define(function (require) {
       'enable',
       'disable'
     ],
+    
+    api_events_list: [
+      "workflow:%(id)s:start ",
+      "workflow:%(id)s:stop",
+      "workflow:%(id)s:data_submitted",
+      "workflow:%(id)s:status_changed",
+      "group:%(id)s:status_changed",
+    ],
 
     initialize: function (opts) {
       var events;
@@ -122,23 +130,33 @@ define(function (require) {
         this.id = opts.id;
       }
 
-      events = sprintf('workflow:%(id)s:start workflow:%(id)s:stop workflow:%(id)s:data_submitted workflow:%(id)s:status_changed', { id: this.id });
-      this.listenTo(Dispatcher, events, this.dispatch);
+      this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
     },
     
     dispatch: function (e, evt) {
       if (e.info.id !== this.id) return;
-      console.log('dispatching', evt, e);
       
-      if (evt == 'workflow:start') {
-        this.incr('exec_count');
-      } else if (evt == 'workflow:stop') {
-        this.set('exec_count', 0);
-      } else if (evt == 'workflow:data_submitted') {
-        this.incr(e.info.status);
-        this.incr('TOTAL');
-      } else if (evt == 'workflow:status_changed') {
-        this.decr(e.info.info.old);
+      var evt_types = evt.split(':'),
+          obj = evt_types[0],
+          id = evt_types[1],
+          action = evt_types[2] || id;
+      
+      if (obj === 'workflow') {
+        if (action === 'start') {
+          this.incr('exec_count');
+        } else if (action === 'stop') {
+          console.log('decr');
+          this.decr('exec_count');
+        } else if (action === 'workflow:data_submitted') {
+          this.incr(e.info.status);
+          this.incr('TOTAL');
+        } else if (action === 'status_changed') {
+          this.decr(e.info.info.old);
+        }
+      } else if (obj === 'group') {
+        if (e.info.id === 14 && e.info.type === 'workflow') {
+          this.set('enabled', e.info.enabled);
+        }
       }
       // debug.log(m.attributes);
       this.trigger('fetch');

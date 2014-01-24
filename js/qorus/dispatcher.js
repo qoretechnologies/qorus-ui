@@ -1,30 +1,38 @@
 define(function (require) { 
-  var $     = require('jquery'),
-      _     = require('underscore'),
-      Qorus = require('qorus/qorus'),
+  var _     = require('underscore'),
+      Backbone = require('backbone'),
       Dispatcher;
   
   Dispatcher = Backbone.Model.extend({
     add: function (e) {
       this.dispatch(e);
     },
+    
     dispatch: function (e) {
+      var self = this,
+          events = [],
+          ev, ev_id;
+
       e = e.toJSON();
-      var ev = this.eventParse(e.eventstr);
       
-      var events = [ 
-        ev[0],
-        ev.join(':'),
-        e.info.cls + ':' + e.info.id,
-        e.info.cls + ':' + e.info.id + ':' + ev[1]
-      ];
+      ev = this.eventParse(e.eventstr);
+
+      events.push(ev[0]);
+      events.push(ev.join(':'));
       
-      var _this = this;
+      if (e.info) {
+        if ('cls' in e.info) {
+          ev_id = [e.info.cls, e.info.id].join(':');
+          events.push(ev_id);
+          events.push([ev_id, ev[1]].join(':'));
+        }
+      }
+          
       _.each(events, function(evt){
-        _this.trigger(evt, e, evt);
-        // debug.log("Dispatching", evt);
-      })
+        self.trigger(evt, e, evt);
+      });
     },
+    
     eventParse: function(name) {
       var pos = name.indexOf('_');
       
@@ -35,12 +43,12 @@ define(function (require) {
       }
       
       return [name.toLowerCase()];
-    },
-    
-    alert: function (alert, text) {
-      
     }
-  })
+    
+    // alert: function (alert, text) {
+    //   
+    // }
+  });
 
   return new Dispatcher();
 });

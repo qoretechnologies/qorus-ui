@@ -1,0 +1,17 @@
+<% console.log(item) %>
+<div class="row-fluid relative">
+  <div class="span8">
+    <h3><%= item.name %> <small><%= item.version %></small></h3>
+  </div>
+  <div class="pull-right align-middle">
+    <%= createControls(item) %>
+    <div class="btn-group">
+      <button class="btn btn-mini" data-action="incAutostart"><i class="icon-plus"></i></button>
+      <button class="btn btn-mini"><%= item.exec_count %></button>
+      <button class="btn btn-mini" data-action="decAutostart"><i class="icon-minus"></i></button>
+    </div>
+  </div>
+</div>
+<div class='row-fluid'>
+  <% _.each(item.groups, function (g) { %><a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a> <% }) %>
+</div>
