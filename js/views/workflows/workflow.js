@@ -154,6 +154,7 @@ define(function (require) {
     clean: function () {
       this.undelegateEvents();
       this.stopListening();
+      this.model.stopListening();
     }
   });
   return ModelView;

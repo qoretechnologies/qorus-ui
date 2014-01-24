@@ -6,6 +6,7 @@ define([
   'models/workflow'
 ], function(settings, _, Backbone, Qorus, Model){
   var Collection = Qorus.SortedCollection.extend({
+    __name__: 'WorkflowCollection',
     url: settings.REST_API_PREFIX + '/workflows/',
     date: null,
     model: Model,

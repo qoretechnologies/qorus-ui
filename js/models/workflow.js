@@ -82,6 +82,7 @@ define(function (require) {
   
   
   Model = Qorus.Model.extend({
+    __name__: 'Workflow',
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
     defaults: {
@@ -114,18 +115,20 @@ define(function (require) {
     ],
 
     initialize: function (opts) {
-      _.bindAll(this);
+      var events;
       opts = opts || {};
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
         this.id = opts.id;
       }
 
-      this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', this.dispatch);
+      events = sprintf('workflow:%(id)s:start workflow:%(id)s:stop workflow:%(id)s:data_submitted workflow:%(id)s:status_changed', { id: this.id });
+      this.listenTo(Dispatcher, events, this.dispatch);
     },
     
     dispatch: function (e, evt) {
       if (e.info.id !== this.id) return;
+      console.log('dispatching', evt, e);
       
       if (evt == 'workflow:start') {
         this.incr('exec_count');

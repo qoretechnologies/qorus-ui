@@ -10,9 +10,10 @@ define(function (require) {
     AlertView = require('views/system/alerts'),
     StatusTpl = require('tpl!templates/system/health/summary.html'),
     Dispatcher = require('qorus/dispatcher'),
-    Summary, DashboardView, HealthModel;
+    Summary, DashboardView, HealthModel, StatusView;
   
   Summary = Qorus.Model.extend({
+    __name__: 'Summary',
     defaults: {
       'READY': 0,
       'ERROR': 0,
@@ -52,6 +53,7 @@ define(function (require) {
   });
   
   HealthModel = Qorus.Model.extend({
+    __name__: 'HealthModel',
     url: settings.REST_API_PREFIX + '/system/health',
     parse: function (response, options) {
       var local, remote;
@@ -64,6 +66,7 @@ define(function (require) {
   });
   
   StatusView = Qorus.View.extend({
+    __name__: 'StatusView',
     template: StatusTpl,
     initialize: function (opts) {
       _.bindAll(this);
@@ -94,6 +97,7 @@ define(function (require) {
   })
   
   DashboardView = Qorus.View.extend({
+    __name__: 'DashboardView',
     template: Template,
     initialize: function (opts) {
       _.bindAll(this);

@@ -17,6 +17,7 @@ define(function (require) {
 
   // extending base RowView to add workflow related events
   RowView = Qorus.RowView.extend({
+    __name__: 'WorkflowRowView',
     additionalEvents: {
       'click .connalert': 'showAlert'
     },
@@ -35,6 +36,7 @@ define(function (require) {
   });
 
   ListView = Qorus.ListView.extend({
+    __name__: "WorkflowListView",
     url: '/workflows',
     cls: "workflows.ListView",
     timers: [],
@@ -50,7 +52,6 @@ define(function (require) {
     
     initialize: function (collection, options) {
       var self = this;
-      _.bindAll(this);
       this.views = {};
       this.opts = options || {};
       this.context = {};

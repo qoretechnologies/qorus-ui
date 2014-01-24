@@ -194,6 +194,12 @@ define([
     render: function (ctx) {
       this.context.scale = this.scale;
       ChartView.__super__.render.call(this, ctx);
+    },
+    
+    clean: function () {
+      this.stopListening();
+      this.undelegateEvents();
+      this.collection = null;
     }
   });
   

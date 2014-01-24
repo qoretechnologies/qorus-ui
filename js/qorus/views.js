@@ -95,6 +95,10 @@ define(function (require) {
         this.remove();
       }
       this.views = {};
+      
+      // stopListening for collection/models
+      if (this.collection instanceof Backbone.Collection) this.collection.stopListening();
+      if (this.model instanceof Backbone.Model) this.model.stopListening();
     },
     
     render: function (ctx) {
@@ -724,6 +728,7 @@ define(function (require) {
   });
 
   TableView = View.extend({
+    __name__: 'TableView',
     messages: {
       'nodata': "No data found"
     },
@@ -974,6 +979,7 @@ define(function (require) {
   });
 
   RowView = View.extend({
+    __name__: 'RowView',
     tagName: 'tr',
     className: 'table-row',
     context: {},
@@ -1004,7 +1010,7 @@ define(function (require) {
     initialize: function (opts) {
       var self = this;
 
-      _.bindAll(this);
+      // _.bindAll(this);
       this.views = [];
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
@@ -1109,6 +1115,7 @@ define(function (require) {
     clean: function () {
       var p_view, self= this;
       p_view = this.parent.getView('tbody');
+      // this.model.stopListening();
       _.reject(p_view, function (view) { return view.cid == self.cid; });
     }
   });

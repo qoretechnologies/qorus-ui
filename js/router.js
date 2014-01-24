@@ -2,6 +2,7 @@ define(function (require) {
   var $                 = require('jquery'),
       _                 = require('underscore'),
       Backbone          = require('backbone'),
+      BackboneI         = require('backbone.identity'),
       Messenger         = require('messenger'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),

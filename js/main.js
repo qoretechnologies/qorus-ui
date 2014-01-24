@@ -8,6 +8,7 @@ require.config({
     localstorage: 'libs/backbone.localstorage',
     dualstorage: 'libs/backbone.dualstorage',
     bootstrap: 'libs/bootstrap/js/bootstrap',
+    "backbone.identity": "libs/backbone.identity",
     moment: "libs/moment",
     // later: "libs/later/later.min",
     // "later.recur": "libs/later/later-recur.min",
@@ -39,6 +40,9 @@ require.config({
       exports: "Backbone"
     },
     "backbone.keys": {
+      deps: ['backbone']
+    },
+    "backbone.identity": {
       deps: ['backbone']
     },
     localstorage: {
