@@ -9,15 +9,19 @@ define(function (require) {
       EditTemplate = require('tpl!templates/common/option_edit.html'),
       ModelView;
   
-  ModelView = Qorus.View.extend({
+  ModelView = Qorus.TabView.extend({
+    url: function () {
+      return "/" + this.model.id;
+    },
+    
     additionalEvents: {
       "click a.close-detail": "close",
       "click td[data-editable]": "editOption"
     },
     
     initialize: function (opts) {
+      ModelView.__super__.initialize.apply(this, arguments);
       this.views = {};
-      _.bindAll(this);
       
       this.template = Template;
       
@@ -29,6 +33,7 @@ define(function (require) {
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, this.model.api_events, this.dispatch);
+      
     },
     
     dispatch: function () {
@@ -50,16 +55,7 @@ define(function (require) {
       var url = '/workflows/' + this.model.id;
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
-    
-    createDiagram: function () {
-      var view = this.getView('#steps');
-      
-      if (!view) {
-        view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
-      }
-      view.render();
-    },
-        
+            
     close: function (e) {
       if (e) {
         e.preventDefault();  
@@ -69,7 +65,7 @@ define(function (require) {
         .removeClass('show')
         .data('id', null);
       $('.info').removeClass('info');
-
+      this.active_tab = null;
       this.clean();
     },
     
@@ -77,6 +73,20 @@ define(function (require) {
       this.removeViews();
       this.undelegateEvents();
       this.stopListening();
+    },
+    
+    createDiagram: function () {
+      var view = this.getView('#steps');
+      
+      if (!view) {
+        view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
+      }
+      view.render();
+    },
+    
+    onTabChange: function (name) {
+      console.log('tabchange', name);
+      if (name === 'steps') this.createDiagram();
     },
     
     editOption: function (e) {

@@ -13,7 +13,6 @@ define(function (require) {
 
   ModelView = Qorus.TabView.extend({
     additionalEvents: {
-      "click .nav-tabs a": "tabToggle",
       "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
     },

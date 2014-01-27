@@ -14,7 +14,6 @@ define(function (require) {
       helpers      = require('views/workflows/helpers'),
       ListView, RowView;
 
-
   // extending base RowView to add workflow related events
   RowView = Qorus.RowView.extend({
     __name__: 'WorkflowRowView',
@@ -43,14 +42,16 @@ define(function (require) {
       
       e.stopPropagation();
       e.preventDefault();
-      console.log('running action %s on %s', action, this.model.id);
       this.model.doAction(action);
     }
   });
 
   ListView = Qorus.ListView.extend({
     __name__: "WorkflowListView",
-    url: '/workflows',
+    url: function () {
+      return helpers.getUrl('showWorkflows').replace(/\/$/, "");
+    },
+    
     cls: "workflows.ListView",
     timers: [],
     // el: $("#content"),
@@ -63,7 +64,7 @@ define(function (require) {
     
     title: "Workflows",
     
-    initialize: function (collection, options) {
+    initialize: function (collection, options, router, deprecated) {
       var self = this;
       this.views = {};
       this.opts = options || {};
@@ -74,6 +75,8 @@ define(function (require) {
       // pass date to options object
       this.date = this.opts.date;
       
+      this.opts.deprecated = deprecated ? true : false;
+      
       // call super method
       ListView.__super__.initialize.call(this, Collection, this.date);
       
@@ -83,27 +86,13 @@ define(function (require) {
       debug.log(this.views);
       
       this.listenToOnce(this.collection, 'sync', self.render);
+      this.processPath(this.opts.path);
+    },
+    
+    onProcessPath: function (path) {
+      var id = path.split('/')[0];
       
-      // this.listenTo(Dispatcher, 'workflow:start workflow:stop workflow:data_submitted workflow:status_changed', function WFLDISPATCH(e, evt) {
-      //   // debug.log('Event', evt, e);
-      //   var m = self.collection.get(e.info.id);
-      //   
-      //   if (m) {
-      //     // debug.log(m.attributes);
-      //     if (evt == 'workflow:start') {
-      //       m.incr('exec_count');
-      //     } else if (evt == 'workflow:stop') {
-      //       m.set('exec_count', 0);
-      //     } else if (evt == 'workflow:data_submitted') {
-      //       m.incr(e.info.status);
-      //       m.incr('TOTAL');
-      //     } else if (evt == 'workflow:status_changed') {
-      //       m.decr(e.info.info.old);
-      //     }
-      //     // debug.log(m.attributes);
-      //     m.trigger('fetch');
-      //   } 
-      // });
+      if (id) this.detail_id = id;
     },
     
     preRender: function () {
@@ -127,6 +116,12 @@ define(function (require) {
       this.listenTo(tview, 'row:clicked', this.showDetail);
       
       this.setView(new Toolbar({ date: this.date, parent: this }), '.toolbar');
+    },
+    
+    onRender: function () {
+      if (parseInt(this.detail_id, 10)) {
+        this.collection.get(this.detail_id).trigger('rowClick');
+      }
     },
     
     clean: function () {
@@ -176,7 +171,7 @@ define(function (require) {
         });
     },
     
-    helpers: _.extend(helpers, {
+    helpers: _.extend(_.clone(helpers), {
         getUrl: function (s, id, date) {
               var params = ['/workflows/view', id, 'orders', s];
               date = date || this.date || null;
@@ -272,9 +267,14 @@ define(function (require) {
           model   = row.model,
           content_view, url;
       
+      // set pane width
+      $detail.width(width);
+      console.log(width);
+      
       if (id === model.id) {
         if (view) view.close();
-        url = this.url;
+        url = _.result(this.url);
+        this.detail_id = null;
       } else {
         row.$el.addClass('info');
         
@@ -297,8 +297,9 @@ define(function (require) {
             self.stopListening(content_view);
             self.stopListening(model);
           });
-          
-        url = helpers.getUrl('showWorkflows', { 'id': row.model.id });
+
+        url = helpers.getUrl('showWorkflows') + row.model.id;
+        this.detail_id = row.model.id;
       }
       
       Backbone.history.navigate(url);

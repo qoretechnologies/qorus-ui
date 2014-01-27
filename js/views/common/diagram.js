@@ -10,23 +10,22 @@ define([
     additionalEvents: {},
         
     initialize: function (opts) {
-      _.bindAll(this);
+      _.bindAll(this, 'initCanvas');
       this.template = Template;
       View.__super__.initialize.call(this, opts);
-      this.render();
+      this.on('show', this.render);
     },
     
     onRender: function () {
-      this.initCanvas();
+      _.defer(this.initCanvas);
     },
     
     initCanvas: function () {
+      console.log('initializing canvas', this.$el.width());
       var joins;
-      var _this = this;
       var $cnt = this.$('#canvas-container');
       var $cnvs = this.$('#canvas');
       var ctx = this.$('#canvas')[0].getContext("2d");
-      
 
       // reset canvas dimensions      
       $cnvs
@@ -43,8 +42,8 @@ define([
       
       // draw lines
       _.each(joins, function (join) {
-        _this.drawJoin(ctx, join);
-      });
+        this.drawJoin(ctx, join);
+      }, this);
     },
     
     drawJoin: function (ctx, el_ids) {

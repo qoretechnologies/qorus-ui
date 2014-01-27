@@ -74,8 +74,8 @@ define(function (require) {
     },
     
     // workflow list 
-    showWorkflows: function (date, deprecated) {
-      var view = new WorkflowListView({}, date, this, deprecated);
+    showWorkflows: function (date, deprecated, path) {
+      var view = new WorkflowListView({}, { date: date, path: path, deprecated: deprecated });
       this.setView(view);
     },
     

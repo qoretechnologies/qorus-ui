@@ -13,5 +13,5 @@
   </div>
 </div>
 <div class='row-fluid'>
-  <% _.each(item.groups, function (g) { %><a href="<%= getUrl('showGroup', { name: g.name }) %>"><span class="label <%= g.enabled ? 'label-info' : '' %>"><%= g.name %></span></a> <% }) %>
+    <%= groupList(item.groups) %>
 </div>

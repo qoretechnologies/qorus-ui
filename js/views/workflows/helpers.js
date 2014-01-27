@@ -16,6 +16,9 @@ define(function (require) {
       controls.push({ action: 'reset', icon: 'refresh', title: 'Reset', css: 'warning' });
       controls.push({ action: 'options', icon: 'cog', title: 'Set options' });
       
+      if (item.deprecated === false) controls.push({ action: 'hide', icon: 'flag-alt', title: 'Hide'});
+      if (item.deprecated === true) controls.push({ action: 'show', icon: 'flag', title: 'Show'});
+      
       return ControlsTpl({ controls: controls });
     }
   });

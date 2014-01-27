@@ -12,6 +12,7 @@ define([
   var BaseToolbar = Qorus.View.extend({
     datepicker: false,
     context: {},
+    fixed: true,
     
     initialize: function (opts) {
       _.bindAll(this);
@@ -26,15 +27,17 @@ define([
       }
       
       // fix header
-      var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
+      if (this.fixed) {
+        var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
 
-      this.$el
-        .width(function () { return $(this).parent().width(); })
-        .css('position', 'fixed')
-        .after($push);
+        this.$el
+          .width(function () { return $(this).parent().width(); })
+          .css('position', 'fixed')
+          .after($push);
       
-      // bind resize on window size change
-      $(window).on('resize.toolbar.' + this.cid, this.resize);
+        // bind resize on window size change
+        $(window).on('resize.toolbar.' + this.cid, this.resize);
+      }
     },
     
     resize: function () {

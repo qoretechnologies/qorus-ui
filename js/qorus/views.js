@@ -275,6 +275,7 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.processPath(this.processPath(null, true));
         view.upstreamUrl = this.getViewUrl();
+        console.log(view.upstreamUrl, 'view upstream url');
       }
 
       // debug.log('setting view', view, el, set);
@@ -1294,8 +1295,6 @@ define(function (require) {
     },
     
     initialize: function () {
-      _.bindAll(this);
-      console.log('init of', this);
       TabView.__super__.initialize.call(this, arguments);
       this.on('postrender', this.activateTab);
     },
@@ -1309,12 +1308,10 @@ define(function (require) {
         
       e.preventDefault();
       e.stopPropagation();
-      console.log('toggling', this);
       this.showTab($target.attr('href'));
     },
     
     showTab: function (tab) {
-      console.log(tab);
       var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
           view = this.getView('#'+name),
           $target = this.$('[href='+tab+']'),
@@ -1325,9 +1322,10 @@ define(function (require) {
       $target.tab('show');
    
       if (name !== this.active_tab) {
-        this.updateUrl([url,name].join('/'));
+        this.updateUrl([url, name].join('/'));
         this.active_tab = name;
       }
+      this.onTabChange(tab);
     },
     
     updateUrl: function (url) {
