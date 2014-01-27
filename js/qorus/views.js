@@ -1112,7 +1112,8 @@ define(function (require) {
             silent = ($et.parents('button').size() > 0) || 
               ($et.parents('.dropdown-menu').size() > 0) || 
               ($et.parents('a').size() > 0) || 
-              ($et.is('a')) || ($et.is('button'));
+              ($et.is('a')) || ($et.is('button')) ||
+              $et.hasClass('check');
         trigger = ($target.is(this.tagName) && !silent);
       }
       
