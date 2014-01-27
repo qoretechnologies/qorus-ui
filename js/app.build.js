@@ -81,10 +81,10 @@
       "messenger": {
         deps: ['jquery', 'backbone'],
         exports: 'jQuery.fn.messenger',
-        init: function(m){
+        init: function () {
           $._messengerDefaults = {
-          	extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
-          }
+            extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
+          };
         }
       },
       "rainbow": {
