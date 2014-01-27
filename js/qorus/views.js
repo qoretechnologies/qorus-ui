@@ -1328,6 +1328,8 @@ define(function (require) {
       this.onTabChange(tab);
     },
     
+    onTabChange: function () {},
+    
     updateUrl: function (url) {
       Backbone.history.navigate(url);        
     },
