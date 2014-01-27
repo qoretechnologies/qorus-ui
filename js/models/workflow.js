@@ -163,6 +163,7 @@ define(function (require) {
     },
     
     doAction: function (action, opts, callback) {
+      console.log('doing action', arguments);
       var self = this, 
           url = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
@@ -229,7 +230,7 @@ define(function (require) {
     },
     
     setAutostart: function (as) {
-      this.doAction('autostart', { autostart: as });
+      this.doAction('setAutostart', { autostart: as });
     },
         
     mapSteps: function () {

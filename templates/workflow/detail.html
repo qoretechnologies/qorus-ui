@@ -1,28 +1,21 @@
-<div id="split-panes">
-<div class="pane">
-  <div id="detail"></div>
-  <div class="push"></div>
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="instances" data-target="#instances" data-toggle="tab">List</a></li>
-    <li><a href="stats" data-target="#stats" data-toggle="tab">Performance</a></li>
-    <li><a href="log" data-target="#log" data-toggle="tab">Log</a></li>
-    <li><a href="info" data-target="#info" data-toggle="tab">Info</a></li>
-  </ul>
-  <div class="tab-content">
-      <div id='instances' class="tab-pane active">
-      	<p>Loading instances</p>
-      </div>
-      <div id='log' class="tab-pane">
-          <p>Log</p>
-      </div>
-      <div class="tab-pane" id="stats"></div>
-      <div class="tab-pane" id="info">
-        <p><%= item.get('description') %></p>
-      </div>
-  </div>
-</div>
-<div class="handler"><i class="icon-reorder"></i></div>
-<div id='bottom-bar' class="pane">
-</div>
+<div id="detail"></div>
+<div class="push"></div>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="instances" data-target="#instances" data-toggle="tab">List</a></li>
+  <li><a href="stats" data-target="#stats" data-toggle="tab">Performance</a></li>
+  <li><a href="log" data-target="#log" data-toggle="tab">Log</a></li>
+  <li><a href="info" data-target="#info" data-toggle="tab">Info</a></li>
+</ul>
+<div class="tab-content">
+    <div id='instances' class="tab-pane active">
+    	<p>Loading instances</p>
+    </div>
+    <div id='log' class="tab-pane">
+        <p>Log</p>
+    </div>
+    <div class="tab-pane" id="stats"></div>
+    <div class="tab-pane" id="info">
+      <p><%= item.get('description') %></p>
+    </div>
 </div>
 <div id="modal" class="modal hide fade wider" tabindex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true"></div>

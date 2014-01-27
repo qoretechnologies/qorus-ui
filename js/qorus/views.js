@@ -12,7 +12,8 @@ define(function (require) {
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
       Helpers     = require('qorus/helpers'),
       Loader, View, ListView, TableView, RowView, 
-      TableAutoView, TableBodyView, ServiceView, PluginView, TabView;
+      TableAutoView, TableBodyView, ServiceView, PluginView, 
+      TabView, ModelView;
 
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -1339,6 +1340,20 @@ define(function (require) {
       this.active_tab = tab;
     }
   });
+  
+  ModelView = View.extend({
+    __name__: 'ModelView',
+    initialize: function () {
+      ModelView.__super__.initialize.apply(this, arguments);
+      
+      this.model = this.options.model;
+    },
+    
+    preRender: function () {
+      this.context.item = this.model.toJSON();
+      ModelView.__super__.preRender.apply(this, arguments);
+    }
+  });
 
   return {
     View: View,
@@ -1348,6 +1363,7 @@ define(function (require) {
     TableView: TableView,
     RowView: RowView,
     ServiceView: ServiceView,
-    TabView: TabView
+    TabView: TabView,
+    ModelView: ModelView
   };
 });

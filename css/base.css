@@ -1168,3 +1168,15 @@ table .header-copy {
 .clickable {
   cursor: context-menu;
 }
+
+.btn-controls a.label {
+  margin-right: 2px;
+}
+
+.btn-controls a.label:last-child {
+  margin-right: 0;
+}
+
+#controls .autostart {
+  display: inline-block;
+}

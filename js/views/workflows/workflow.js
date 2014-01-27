@@ -7,13 +7,13 @@ define(function (require) {
       Template         = require('text!templates/workflow/detail.html'),
       InstanceListView = require('views/workflows/instances'),
       OrderListView    = require('views/workflows/orders'),
-      BottomBarView    = require('views/common/bottom_bar'),
       OrderView        = require('views/workflows/order'),
       Modal            = require('views/workflows/modal'),
       ChartsView       = require('views/workflows/charts'),
       helpers          = require('views/workflows/helpers'),
       LogView          = require('views/log'),
-      HeaderTpl = require("tpl!templates/workflow/detail_header.html"),
+      HeaderTpl        = require("tpl!templates/workflow/detail_header.html"),
+      AutostartView    = require('views/workflows/autostart'),
       HeaderView, ModelView;
       
       
@@ -24,6 +24,7 @@ define(function (require) {
     },
     preRender: function () {
       this.context.item = this.model.toJSON();
+      this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });
 
@@ -75,7 +76,6 @@ define(function (require) {
     },
     
     updateViews: function () {
-      console.log('hello', this);
       var detail_view = this.getView('#detail');
       if (detail_view) detail_view.render();
     },
@@ -94,19 +94,10 @@ define(function (require) {
       }
       
       this.setView(new HeaderView({ model: this.model }), '#detail')  
-      this.setView(new BottomBarView({}), '#bottom-bar');
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
     },
     
-    // onRender: function () {
-    //   this.$el.tooltip();
-    // },
-    
-    // onRender: function() {
-    //   var view = this.getView('#instances').getView('#order-list');
-    //   // this.$('.pane').on('scroll', view.scroll);
-    // },
     
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
@@ -140,11 +131,6 @@ define(function (require) {
       }
     },
     
-    // orderDetail: function (m) {
-    //   var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
-    //   return tpl;
-    // },
-    
     // delegate search to current dataview
     search: function (e) {
       var dataview = this.currentDataView();
@@ -174,8 +160,6 @@ define(function (require) {
       }
 
     },
-    
-    // updateUrl: function () {},
         
     clean: function () {
       this.undelegateEvents();

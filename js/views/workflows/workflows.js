@@ -269,11 +269,10 @@ define(function (require) {
       
       // set pane width
       $detail.width(width);
-      console.log(width);
       
       if (id === model.id) {
         if (view) view.close();
-        url = _.result(this.url);
+        url = this.url();
         this.detail_id = null;
       } else {
         row.$el.addClass('info');
