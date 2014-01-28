@@ -1,13 +1,14 @@
-<% console.log(item) %>
 <div class="row-fluid relative">
   <div class="span8">
     <h3><%= item.name %> <small><%= item.version %></small></h3>
   </div>
-  <div class="pull-right align-middle" id="controls">
+  <div class="<%= (obj.pull_right) ? 'pull-right align-middle' : '' %>" id="controls">
     <%= createControls(item) %>
     <div class="autostart"></div>
   </div>
 </div>
+<% if (obj.show_groups) { %>
 <div class='row-fluid'>
     <%= groupList(item.groups) %>
 </div>
+<% } %>

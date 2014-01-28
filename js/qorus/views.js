@@ -863,13 +863,19 @@ define(function (require) {
         return;
       }
       
-      var self = this,
-          frag = document.createDocumentFragment();
+      // console.time('appending');
+      var frag = document.createDocumentFragment();
 
       _.each(models, function (m) {
-        var view = self.appendRow(m, false);
+        var view = this.appendRow(m, false);
         frag.appendChild(view.render().el);
-      });
+      }, this);
+      
+      // for (var i=0; i<100; i++) {
+      //   var view = this.appendRow(models[i], false);
+      //   frag.appendChild(view.render().el);
+      // }
+      // console.timeEnd('appending');
       
       this.$('tbody').append(frag);
     },

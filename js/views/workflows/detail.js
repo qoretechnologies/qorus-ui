@@ -1,13 +1,28 @@
 define(function (require) {
-  var $            = require('jquery'), 
-      _            = require('underscore'),
-      utils        = require('utils'),
-      Qorus        = require('qorus/qorus'),
-      LogView      = require('views/log'),
-      DiagramView  = require('views/common/diagram'),
-      Template     = require('tpl!templates/workflow/meta.html'),
-      EditTemplate = require('tpl!templates/common/option_edit.html'),
-      ModelView;
+  var $             = require('jquery'), 
+      _             = require('underscore'),
+      utils         = require('utils'),
+      Qorus         = require('qorus/qorus'),
+      LogView       = require('views/log'),
+      DiagramView   = require('views/common/diagram'),
+      Template      = require('tpl!templates/workflow/meta.html'),
+      EditTemplate  = require('tpl!templates/common/option_edit.html'),
+      AutostartView = require('views/workflows/autostart'),
+      HeaderTpl        = require("tpl!templates/workflow/detail_header.html"),
+      ModelView, HeaderView;      
+
+      
+  HeaderView = Qorus.View.extend({
+    template: HeaderTpl,
+    initialize: function (options) {
+      this.model = options.model;
+    },
+    preRender: function () {
+      this.context.item = this.model.toJSON();
+      this.context.pull_right = false;
+      this.setView(new AutostartView({ model: this.model }), '.autostart');
+    }
+  });
   
   ModelView = Qorus.TabView.extend({
     url: function () {
@@ -54,6 +69,7 @@ define(function (require) {
     preRender: function () {
       var url = '/workflows/' + this.model.id;
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      this.setView(new HeaderView({ model: this.model }), '#heading');
     },
             
     close: function (e) {

@@ -1,51 +1,39 @@
 <% var orig_item = item; %>
 <% item = item.toJSON() %>
-<h3><%= item.name %> <small><%= item.version %></small></h3>
-<p class="muted"><em><%= item.description %></em></p>
+<div id="heading"></div>
 <ul class="nav nav-tabs">
     <li class="active"><a href="details" data-target="#details">Details</a></li>
     <li><a href="library" data-target="#library">Library</a></li>
     <li><a href="steps" data-target="#steps" class="steps">Steps</a></li>
     <li><a href="log" data-target="#log" class="log">Log</a></li>
+    <% if (item.has_alerts) { %><li><a href="alerts" data-target="#alerts" class="alerts">Alerts</a></li><% }%>
 </ul>
 
 <div class="tab-content">
   <div class="tab-pane active" id="details">
-    <div class="row-fluid">
-      <table class='table table-align-left'>
-        <tbody>
-          <tr>
-            <td><strong>Autostart</strong></td>
-            <td class="text-left editable" style="width: 50%" data-editable="edit" data-value="<%= item.autostart %>" data-type="integer" data-min="0" data-name="autostart"><%= (item.manual_autostart) ? '<i class="icon-asterisk"></i>' : '' %><%= item.autostart %></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <h4>Groups</h4>
     <%= groupList(item.groups) %>
+    <% if (item.options.length > 0) { %>
     <div class="row-fuild">
       <h4>Options</h4>
-      <% if (item.options) { %>
       <table class="table table-condensed table-stripped table-align-left">
         <thead>
           <tr>
             <th>Option</th>
-            <th>Description</th>
+            <th>Value</th>
           </tr>
         </thead>
         <tbody>
-      <% _.each(item.options, function (option, idx) { %>
+      <% _.each(item.options, function (option) { %>
           <tr>
-            <td class="name"><%= idx %></td>
-            <td><%= option %></td>
+            <td class="name"><%= option.name %><br /><p class="muted"><%= option.desc %></p></td>
+            <td><%= option.value %></td>
           </tr>
       <% }) %>
         </tbody>
       </table>
-      <% } else { %>
-      <p>No options</p>
-      <% } %>
     </div>
+    <% } %>
   </div>
   <div class="tab-pane" id="library">
     <%= createNestedList(item.lib) %>
@@ -55,4 +43,17 @@
   <div class="tab-pane" id="log">
       <p>TODO log</p>
   </div>
+  <% if (item.has_alerts) { %>
+  <div class="tab-pane" id="alerts">
+    <table class="table table-condensed table-striped table-align-left">
+      <tbody>
+        <% _.each(item.alerts, function (alert) { %> 
+          <tr>
+            <td><a href="/<%= getUrl('showSystem') + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.object %></a> <p class="muted"><%= alert.reason %></p></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
 </div>

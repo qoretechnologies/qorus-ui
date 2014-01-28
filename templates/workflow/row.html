@@ -2,7 +2,8 @@
 <td><i class="icon-check-empty check"></i></td>
 <td class="connections"><%= createControls(item) %></td>
 <td class="err instances"><%= wrapBadge(item.exec_count, ['/workflows/view', item.id, 'instances'].join('/'), 'badge-success') %></td>
-<td class="name" data-search="<%= item.name.toLowerCase() %>"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %> <a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
+<td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error"></i>' : '' %></td>
+<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
 <td class="autostart"><%= (item.manual_autostart) ? '<i class="icon-asterisk"></i> ' : '' %><%= item.autostart %></td>
 <td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id), 'badge-success') %></td>

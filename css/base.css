@@ -1180,3 +1180,9 @@ table .header-copy {
 #controls .autostart {
   display: inline-block;
 }
+
+#heading #controls {
+  display: block;
+  clear: both;
+  margin-bottom: 10px;
+}

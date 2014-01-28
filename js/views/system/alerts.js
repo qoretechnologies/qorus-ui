@@ -1,16 +1,16 @@
 define(function (require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    Qorus = require('qorus/qorus'),
-    Dispatcher = require('qorus/dispatcher'),
-    Collection = require('collections/alerts'),
-    Template = require('text!templates/system/alerts/list.html'),
-    TableTpl = require('text!templates/system/alerts/table.html'),
-    RowTpl = require('text!templates/system/alerts/row.html'),
-    DetailTpl = require('text!templates/system/alerts/detail.html'),
-    PaneView = require('views/common/pane'),
-    Alert = require('models/alert'),
-    columns, css_map, DetailView, TableView, ListView, View;
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      Collection = require('collections/alerts'),
+      Template   = require('text!templates/system/alerts/list.html'),
+      TableTpl   = require('text!templates/system/alerts/table.html'),
+      RowTpl     = require('text!templates/system/alerts/row.html'),
+      DetailTpl  = require('text!templates/system/alerts/detail.html'),
+      PaneView   = require('views/common/pane'),
+      Alert      = require('models/alert'),
+      columns, css_map, DetailView, TableView, ListView, View;
   
   columns = [
     {
@@ -41,7 +41,6 @@ define(function (require) {
       }
       
       DetailView.__super__.initialize.call(this, opts);
-      console.log('path', this.path, this.processPath(null, true));
     },
     
     onProcessPath: function (path) {

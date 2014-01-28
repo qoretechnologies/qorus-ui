@@ -24,6 +24,8 @@ define(function (require) {
     },
     preRender: function () {
       this.context.item = this.model.toJSON();
+      this.context.pull_right = true;
+      this.context.show_groups = true;
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });

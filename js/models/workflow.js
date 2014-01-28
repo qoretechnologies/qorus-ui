@@ -7,7 +7,6 @@ define(function (require) {
       Qorus         = require('qorus/qorus'),
       System        = require('models/system'),
       Notifications = require('collections/notifications'),
-      Dispatcher    = require('qorus/dispatcher'),
       StepBase, Step, Model;
   
   StepBase = {
@@ -119,11 +118,10 @@ define(function (require) {
       "workflow:%(id)s:stop",
       "workflow:%(id)s:data_submitted",
       "workflow:%(id)s:status_changed",
-      "group:%(id)s:status_changed",
+      "group:%(id)s:status_changed"
     ],
 
     initialize: function (opts) {
-      var events;
       opts = opts || {};
       Model.__super__.initialize.call(this, opts);
       if (opts.id){
@@ -218,6 +216,7 @@ define(function (require) {
       // rewrite stepmap
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
+      response.has_alerts = (response.alerts.length > 0) ? true : false;
       return response;
     },
     
