@@ -11,9 +11,9 @@ define([
     pagination: false,
     
   	initialize: function(opts){
-      this.sort_key = 'name';
-      this.sort_order = 'des';
-      this.sort_history = ['default',];
+      this.sort_key = 'enabled';
+      this.sort_order = 'asc';
+      this.sort_history = ['name',];
       this.opts = {};
   	}
   });

@@ -59,7 +59,7 @@ define(function (require) {
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
       'click .stopped': 'highlightStopped',
-      'contextmenu tbody tr': 'onRightClick'
+      'contextmenu .workflows tbody tr': 'onRightClick'
     },
     
     title: "Workflows",
@@ -227,35 +227,35 @@ define(function (require) {
     },
     
     highlightRunning: function (e) {
-      var self = this;
       e.preventDefault();
-
       this.uncheckAll();
 
-      $('.workflow-row .instances').each(function WFLHILITER() {
-        var $this = $(this);
-        
-        if (parseInt($this.text(), 10) > 0) {
-          var id = $this.parent().data('id');
-          self.checkRow(id);
-        }
+      var items = this.collection.filter(function (item) {
+        return parseInt(item.get('exec_count'), 10) > 0;
       });
+
+      if (items.length > 0) {
+        _(items).each(function (item) {
+          item.trigger('check')
+        });
+      }
+
     },
     
     highlightStopped: function (e) {
-      var self = this;
       e.preventDefault();
       
       this.uncheckAll();
       
-      $('.workflow-row .instances').each(function WFLHILITES() {
-        var $this = $(this);
-        
-        if (parseInt($this.text(), 10) === 0) {
-          var id = $this.parent().data('id');
-          self.checkRow(id);
-        }
+      var items = this.collection.filter(function (item) {
+        return parseInt(item.get('exec_count'), 10) === 0;
       });
+
+      if (items.length > 0) {
+        _(items).each(function (item) {
+          item.trigger('check');
+        });
+      }
     },
     
     showDetail: function (row) {

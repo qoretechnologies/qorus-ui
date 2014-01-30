@@ -1,9 +1,11 @@
 define(function (require) {
+  require('backbone.identity');
+  require('messenger');
+  
   var $                 = require('jquery'),
       _                 = require('underscore'),
       Backbone          = require('backbone'),
-      BackboneI         = require('backbone.identity'),
-      Messenger         = require('messenger'),
+      // Messenger         = require('messenger'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),
       WorkflowListView  = require('views/workflows/workflows'),
@@ -24,13 +26,13 @@ define(function (require) {
       Notifications     = require('collections/notifications'),
       Alerts            = require('collections/alerts'),
       // LocalSettings  = require('models/setting'),
-      AppRouter, app_router;
+      AppRouter, app_router, alerts;
 
-  Messenger.options = {
-    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-    theme: 'qore',
-    showCloseButton: true
-  };
+  // Messenger.options = {
+  //   extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+  //   theme: 'qore',
+  //   showCloseButton: true
+  // };
 
   
   // fetch local notifications
@@ -190,7 +192,7 @@ define(function (require) {
     $('.nav a[href*="'+ fragment +'"]').addClass('active');
   });
   
-  $(document).on("click", "a[href^='/']", function(event) {
+  $(document).on("click", 'a:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
       event.stopPropagation();

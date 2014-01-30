@@ -78,6 +78,8 @@ define(function (require) {
         url_params[m] = _.has(params, m) ? (params[m] || '') : '';
       });
       
+      if (url.charAt(0) !== "/") url = "/" + url;
+      
       return sprintf(url, url_params).replace(/\/+/, '');
     },
     

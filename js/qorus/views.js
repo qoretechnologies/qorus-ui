@@ -276,7 +276,6 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.processPath(this.processPath(null, true));
         view.upstreamUrl = this.getViewUrl();
-        console.log(view.upstreamUrl, 'view upstream url');
       }
 
       // debug.log('setting view', view, el, set);
@@ -542,25 +541,21 @@ define(function (require) {
     },
     
     uncheckAll: function () {
-      $('.table-row')
+      this.$('.table-row')
         .removeClass('warning')
         .removeClass('checked');
 
-      $('.table-row .check')
+      this.$('.table-row .check')
         .removeClass('icon-check')
         .addClass('icon-check-empty');
     },
     
     checkRow: function (id) {
-      var $row = $('.table-row[data-id='+ id +']');
+      var model = this.collection.get(id);
       
-      $row
-        .addClass('warning')
-        .addClass('checked');
-
-      $('.check', $row)
-        .removeClass('icon-check-empty')
-        .addClass('icon-check');
+      if (model) {
+        model.trigger('check');
+      }
     },
     
     updateCheckIcon: function () {
@@ -980,9 +975,8 @@ define(function (require) {
         $el.data('order', 'des');
         $el.addClass('sort-des');
       }
-      
       // console.timeEnd('sortIcon');
-    }
+    } 
   });
   
   TableAutoView = TableView.extend({
@@ -1063,6 +1057,9 @@ define(function (require) {
         }, timeout);
       });
       
+      this.listenTo(this.model, 'check', this.check);
+      this.listenTo(this.model, 'uncheck', this.uncheck);
+      
       this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
 
       this.render();
@@ -1141,7 +1138,30 @@ define(function (require) {
       // this.model.stopListening();
       this.$('.btn-group').off();
       _.reject(p_view, function (view) { return view.cid == self.cid; });
-    }
+    },
+    
+    check: function () {
+      console.log('highlighting', this.model.id);
+      this.$el
+        .addClass('warning')
+        .addClass('checked');
+
+      this.$('.check')
+        .removeClass('icon-check-empty')
+        .addClass('icon-check');
+    },
+    
+    uncheck: function () {
+      console.log('unchecking', this.model.id);
+
+      this.$el
+        .removeClass('warning')
+        .removeClass('checked');
+
+      this.$('.check')
+        .addClass('icon-check-empty')
+        .removeClass('icon-check');
+    } 
   });
   
   ServiceView = View.extend({

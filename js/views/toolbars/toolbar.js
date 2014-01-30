@@ -1,15 +1,13 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'utils',
-  'qorus/qorus',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect'
-], function($, _, Backbone, utils, Qorus, date, moment){
+define(function (require) {
+  require('bootstrap.multiselect');
   
-  var BaseToolbar = Qorus.View.extend({
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      DatePicker  = require('views/common/datetimepicker'),
+      BaseToolbar;
+    
+  BaseToolbar = Qorus.View.extend({
     datepicker: false,
     context: {},
     fixed: true,
@@ -55,26 +53,13 @@ define([
     
     // filter by date init
     datePicker: function () {
-      var view = this;
-      this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-MM-dd HH:mm:ss',
-          autoclose: true
-      });
-      this.dp.on('changeDate', function (e) {
-        $(this).datetimepicker('destroy');
-        view.onDateChanged(e.date.toISOString(), {});
-      });
+      var el = this.$el.selector + ' .dp';
+      var view = this.setView(new DatePicker({ date: this.options.date, element: el }), '.datepicker-container', true);
+
+      this.listenTo(view, 'onSubmit', function () { console.log(arguments); });
     },
     
-    onDateChanged: function (date) {
-      // remove datepicker
-      this.clean();
-
-      // trigger new route
-      if (this.url) {
-        Backbone.history.navigate(this.url + moment(date).utc()
-            .format('YYYYMMDDHHmmss'), {trigger: true});        
-      }
+    showDatePicker: function (e) {
     },
     
     navigateTo: function (e) {
