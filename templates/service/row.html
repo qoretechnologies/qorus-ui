@@ -16,4 +16,3 @@
 <td class="version"><%= item.version %></td>
 <td class="description"><div><%= item.desc %></div></td>
 <td class="autostart"><%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></td>
-<td class="connections"><%= connectionsStatus(_item.getConnectionsStatus(), _item.getConnections()) %></td>
