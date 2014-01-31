@@ -1141,7 +1141,7 @@ define(function (require) {
     },
     
     check: function () {
-      console.log('highlighting', this.model.id);
+      // console.log('highlighting', this.model.id);
       this.$el
         .addClass('warning')
         .addClass('checked');
@@ -1152,7 +1152,7 @@ define(function (require) {
     },
     
     uncheck: function () {
-      console.log('unchecking', this.model.id);
+      // console.log('unchecking', this.model.id);
 
       this.$el
         .removeClass('warning')

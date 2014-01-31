@@ -171,14 +171,14 @@ define(function (require) {
     },
     
     loadNextPage: function () {
-      console.log('load next page?', this.hasNextPage());
+      // console.log('load next page?', this.hasNextPage());
       if (!this.loading) {
         this.loading = true;
         if (this.hasNextPage()) {
 
           this.offset = this.page * this.limit;
           this.page++;
-          console.log('loading page', this.page, this.limit, this.offset);
+          // console.log('loading page', this.page, this.limit, this.offset);
 
           var self = this;
           this.fetch({ 

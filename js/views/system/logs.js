@@ -25,7 +25,7 @@ define(function (require) {
 
     onShow: function () {
       var $target, target_name, view;
-      console.log('logs onshow');
+      // console.log('logs onshow');
       
       $target = this.$('.nav .active a');
       target_name = $target.data('target') || $target.attr('href');

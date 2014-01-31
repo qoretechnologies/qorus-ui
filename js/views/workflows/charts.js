@@ -83,7 +83,6 @@ define(function (require) {
     drawCharts: function () {
       // add performance chart subviews
       // window.view = this;
-      console.log('drawing charts');
       
       if (!this.getView('#chart-1')) {
         this.setView(

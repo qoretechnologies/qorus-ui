@@ -31,7 +31,7 @@ define(function (require) {
     },
 
     doAction: function(action, opts, callback){
-      console.log(arguments);
+      // console.log(arguments);
       var options = { action: action },
           url     = null,
           resp;

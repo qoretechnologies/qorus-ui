@@ -51,7 +51,7 @@ define(function(require){
     // run model specific actions
     runAction: function (evt) {
       var $target = $(evt.currentTarget);
-      console.log('halo', arguments);
+      // console.log('halo', arguments);
       this.model.doAction($target.data('action'), $target.data());
       evt.stopPropagation();
     },
@@ -64,13 +64,13 @@ define(function(require){
 
       alert = alerts[0];
       url = [helpers.getUrl('showSystem'), 'alerts', alert.alerttype.toLowerCase(), alert.id].join('/');
-      console.log(url, helpers.getUrl('showSystem'));
+      // console.log(url, helpers.getUrl('showSystem'));
       
       Backbone.history.navigate(url, { trigger: true });
     },
     
     doAction: function (e) {
-      console.log(arguments);
+      // console.log(arguments);
       var $target = $(e.currentTarget),
           action = $target.data('action');
       

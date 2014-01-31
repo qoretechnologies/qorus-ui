@@ -286,7 +286,6 @@ define(function (require) {
         url = this.getViewUrl() + "/" + row.model.id;
         
         view.upstreamUrl = this.getViewUrl();
-        console.log(url, this.getViewUrl());
         this.detail_id = row.model.id;
       }
       
