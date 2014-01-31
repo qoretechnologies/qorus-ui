@@ -53,7 +53,7 @@
               <a href="/<%= getUrl('showSystem') + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.alert %></a>
               <p>
                 <%= alert.object %><br />
-                <small class="muted"><%= alert.reason %></small>
+                <small class="muted break"><%= escapeHtml(alert.reason) %></small>
               </p>
             </td>
           </tr>
