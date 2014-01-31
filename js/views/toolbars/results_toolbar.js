@@ -1,15 +1,23 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'text!templates/job/toolbars/results_toolbar.html',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect',
-  'jquery.sticky'
-], function($, _, Backbone, Qorus, Template, date, moment){
-  var Toolbar = Qorus.View.extend({
+define(function (require) {
+  require('bootstrap.multiselect');
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Template    = require('text!templates/job/toolbars/results_toolbar.html'),
+      moment      = require('moment'),
+      BaseToolbar = require('views/toolbars/toolbar'),
+      Toolbar;
+  
+  var Toolbar = BaseToolbar.extend({
+    fixed: false,
+    datepicker: true,
+    route: 'showJob',
+    url_options: function () {
+      return {
+        id: this.options.id
+      }
+    },
+    
     context: {
       predefined_statuses: [
         'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
@@ -18,15 +26,12 @@ define([
       ]
     },
     
-    events: {
+    additionalEvents: {
       "click button#status-filter": "statusFilter",
       "click button[data-action='open']": "navigateTo",
-      // 'submit .form-search': 'search',
-      // 'keyup .search-query': 'search'
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
       if (!_.has(opts, 'statuses')) {
@@ -46,8 +51,6 @@ define([
     
     clean: function(){
       $('#statuses').multiselect('destroy');
-      if (this.dp) this.dp.datetimepicker('destroy');
-      // $('.sticky').sticky('remove');
     },
     
     updateStatuses: function(statuses){
@@ -56,23 +59,9 @@ define([
     
     updateUrl: function(url, statuses){
       var baseUrl = url || this.options.url;
-      // this.baseUrl = baseUrl;
-      // var statuses = statuses || this.options.statuses;
-      // this.updateStatuses(statuses);
-      // this.url = baseUrl;
-      // 
-      // if (statuses){
-      //   this.url = [baseUrl, statuses].join('/');
-      // }
-      // 
-      // this.context.url = this.url;
       this.context.url = baseUrl;
     },
     
-    render: function(ctx) {
-      debug.log('context', this.context);
-      Toolbar.__super__.render.call(this, ctx);
-    },
     
     // check the statuses for given status
     hasStatus: function (status){
@@ -80,18 +69,6 @@ define([
         return _.indexOf(this.options.statuses.split(','), status) > -1;        
       }
       return false;
-    },
-    
-    // filter by date init
-    datePicker: function(){
-      var view = this;
-      this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-MM-dd hh:ii:ss',
-          autoclose: true
-      })
-      .on('changeDate', function(e){
-          view.onDateChanged(e.date.toISOString(), {});
-      });
     },
     
     statusFilter: function(){
