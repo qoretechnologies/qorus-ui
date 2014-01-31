@@ -1,6 +1,6 @@
 <% item.id = item.workflowid %>
 <td><i class="icon-check-empty check"></i></td>
-<td class="connections"><%= createControls(item) %></td>
+<td class="connections"><%= createControls(_item) %></td>
 <td class="err instances"><%= wrapBadge(item.exec_count, ['/workflows/view', item.id, 'instances'].join('/'), 'badge-success') %></td>
 <td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show"></i>' : '' %></td>
 <td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>

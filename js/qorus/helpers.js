@@ -10,6 +10,7 @@ define(function (require) {
       ConnectionsStatusTpl = require('tpl!templates/common/connections_status.html'),
       GroupListTpl         = require('tpl!templates/common/groups_list.html'),
       Urls                 = require('urls'),
+      ControlsTpl     = require('tpl!templates/common/controls.html'),
       Helpers;
 
   Helpers = {
@@ -145,8 +146,12 @@ define(function (require) {
     
     groupList: function (groups) {
       return GroupListTpl({ groups: groups, getUrl: this.getUrl });
-    }
+    },
     
+    createControls: function (item) {
+      var controls = _.result(item, 'getControls');
+      return ControlsTpl({ controls: controls });
+    }
   };
   
   return Helpers;

@@ -102,7 +102,6 @@ define(function (require) {
     },
     
     onTabChange: function (name) {
-      console.log('tabchange', name);
       if (name === 'steps') this.createDiagram();
     },
     

@@ -39,7 +39,6 @@ define(function (require) {
         // delete opts.url;
       }
 
-
       // set DATE format and init date
       var date = opts.date;
       if (date === undefined || date === null || date === '24h') {
@@ -60,10 +59,9 @@ define(function (require) {
 
       // call super method
       ListView.__super__.initialize.call(this, Collection, opts.date);
-      // add element loader
-      this.loader = new Qorus.Loader({ el: $('#wrap') });
-      this.loader.render();
-      console.log(this.loader, this.loader.$el);
+      // // add element loader
+      // this.loader = new Qorus.Loader({ el: $('#wrap') });
+      // this.loader.render();
     },
     
     preRender: function () {
@@ -100,14 +98,14 @@ define(function (require) {
       }
     },
     
-    updateContext: function () {
-      // update actual pages
-      this.context.page = {
-        current_page: this.collection.page,
-        has_next: this.collection.hasNextPage()
-      };
-      this.getView('#order-list').render();
-    },
+    // updateContext: function () {
+    //   // update actual pages
+    //   this.context.page = {
+    //     current_page: this.collection.page,
+    //     has_next: this.collection.hasNextPage()
+    //   };
+    //   this.getView('#order-list').update();
+    // },
     
     // fetches the collection from server presorted by key
     fetchSorted: function (e) {

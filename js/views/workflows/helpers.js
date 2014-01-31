@@ -5,23 +5,6 @@ define(function (require) {
       helpers;
   
   helpers = _.clone(qorus_helpers);
-  
-  _(helpers).extend({
-    createControls: function (item) {
-      var controls = [];
-      
-      if (item.enabled === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
-      if (item.enabled === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
-      
-      controls.push({ action: 'reset', icon: 'refresh', title: 'Reset', css: 'warning' });
-      controls.push({ action: 'options', icon: 'cog', title: 'Set options' });
-      
-      // if (item.deprecated === false) controls.push({ action: 'hide', icon: 'flag-alt', title: 'Hide'});
-      // if (item.deprecated === true) controls.push({ action: 'show', icon: 'flag', title: 'Show'});
-      
-      return ControlsTpl({ controls: controls });
-    }
-  });
-  
+    
   return helpers;
 });

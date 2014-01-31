@@ -11,7 +11,7 @@ define(function (require) {
     'service/view/:id': 'showServices',
     'services(/)*path': 'showServices',
     'jobs/view/:id(/:date)': 'showJob',
-    'jobs(/)(:date)': 'showJobs',
+    'jobs(/)(:date)(/)*path': 'showJobs',
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
     'system(/)*path': 'showSystem',

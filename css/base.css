@@ -1217,6 +1217,11 @@ table .header-copy {
   width: 30px;
 }
 
+.datepicker thead th[data-toggle]:hover {
+  background-color: #ccc;
+  cursor: pointer; 
+}
+
 .datepicker tbody td:hover {
   background-color: #ccc;
   cursor: pointer;  
@@ -1266,4 +1271,9 @@ table .header-copy {
 
 .datepicker .hours {
   line-height: 2;
+}
+
+/* tab fix */
+.tab-content {
+  overflow: visible;
 }

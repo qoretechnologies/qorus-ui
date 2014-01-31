@@ -19,23 +19,9 @@ define(function (require) {
     __name__: 'WorkflowRowView',
     
     additionalEvents: {
-      'click .connalert': 'showAlert',
       'click [data-action]': 'doAction'
     },
-    
-    showAlert: function () {
-      var url, alert;
-      var alerts = this.model.get('alerts');
-      
-      if (alerts.length < 1) return;
-
-      alert = alerts[0];
-      url = [helpers.getUrl('showSystem'), 'alerts', alert.alerttype.toLowerCase(), alert.id].join('/');
-      console.log(url, helpers.getUrl('showSystem'));
-      
-      Backbone.history.navigate(url, { trigger: true });
-    },
-    
+        
     doAction: function (e) {
       var $target = $(e.currentTarget),
           action = $target.data('action');
@@ -49,7 +35,9 @@ define(function (require) {
   ListView = Qorus.ListView.extend({
     __name__: "WorkflowListView",
     url: function () {
-      return helpers.getUrl('showWorkflows').replace(/\/$/, "");
+      var url = helpers.getUrl('showWorkflows', { date: utils.encodeDate(this.opts.date), deprecated: (this.opts.deprecated) ? 'hidden' : '' });
+      if (!this.opts.deprecated) url += "/";
+      return url;
     },
     
     cls: "workflows.ListView",
@@ -295,7 +283,10 @@ define(function (require) {
             self.stopListening(model);
           });
 
-        url = helpers.getUrl('showWorkflows') + row.model.id;
+        url = this.getViewUrl() + "/" + row.model.id;
+        
+        view.upstreamUrl = this.getViewUrl();
+        console.log(url, this.getViewUrl());
         this.detail_id = row.model.id;
       }
       

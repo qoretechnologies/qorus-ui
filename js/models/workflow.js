@@ -143,7 +143,6 @@ define(function (require) {
         if (action === 'start') {
           this.incr('exec_count');
         } else if (action === 'stop') {
-          console.log('decr');
           this.decr('exec_count');
         } else if (action === 'workflow:data_submitted') {
           this.incr(e.info.status);
@@ -161,7 +160,6 @@ define(function (require) {
     },
     
     doAction: function (action, opts, callback) {
-      console.log('doing action', arguments);
       var self = this, 
           url = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
@@ -309,6 +307,21 @@ define(function (require) {
       // var data = _.map(vals, function (v, idx) { return { name: idx, value: v.count, color: v.color }});
       
       return vals;
+    },
+    
+    getControls: function () {
+      var item     = this.toJSON(),
+          controls = [];
+      
+      if (item.enabled === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
+      if (item.enabled === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
+      
+      controls.push({ action: 'reset', icon: 'refresh', title: 'Reset', css: 'warning' });
+      controls.push({ action: 'options', icon: 'cog', title: 'Set options' });
+      
+      // if (item.deprecated === false) controls.push({ action: 'hide', icon: 'flag-alt', title: 'Hide'});
+      // if (item.deprecated === true) controls.push({ action: 'show', icon: 'flag', title: 'Show'});
+      return controls;
     }
   });
 

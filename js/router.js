@@ -192,7 +192,7 @@ define(function (require) {
     $('.nav a[href*="'+ fragment +'"]').addClass('active');
   });
   
-  $(document).on("click", 'a:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
+  $(document).on("click", 'a[href]:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
       event.stopPropagation();

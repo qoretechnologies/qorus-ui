@@ -758,7 +758,7 @@ define(function (require) {
       this.collection = opts.collection;
 
       this.listenTo(this.collection, 'add', this.appendRow);
-      this.listenTo(this.collection, 'sync resort sort', this.update);
+      this.listenTo(this.collection, 'resort', this.update);
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
@@ -805,8 +805,9 @@ define(function (require) {
       
       $(window).on('resize.table', this.resize);
       
-      if (this.collection.pagination)
+      if (this.collection.pagination) 
         this.$el.closest('.pane').on('scroll', this.scroll);
+      
       
       // load next button
       if (this.collection.hasNextPage()) {
@@ -1066,7 +1067,6 @@ define(function (require) {
     },
     
     dispatch: function () {
-      console.log('args', arguments);
       this.model.dispatch.apply(this.model, arguments);
     },
         

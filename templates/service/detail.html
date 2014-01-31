@@ -11,6 +11,7 @@
     <li><a href="lib" data-target="#lib">Library</a></li>
     <% } %>
     <li><a href="log" data-target="#log" class="log">Log</a></li>
+    <% if (item.has_alerts) { %><li><a href="alerts" data-target="#alerts" class="alerts"><i class="icon-warning-sign text-error"></i> Alerts</a></li><% }%>
 </ul>
 
 <div class="tab-content">
@@ -52,4 +53,23 @@
     <div class="tab-pane" id="log">
       <textarea disabled class="log span12"></textarea>
     </div>
+    <% if (item.has_alerts) { %>
+    <div class="tab-pane" id="alerts">
+      <table class="table table-condensed table-striped table-align-left">
+        <tbody>
+          <% _.each(item.alerts, function (alert) { %> 
+            <tr>
+              <td>
+                <a href="/<%= getUrl('showSystem') + "/" + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.alert %></a>
+                <p>
+                  <%= alert.object %><br />
+                  <small class="muted"><%= alert.reason %></small>
+                </p>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
 </div>

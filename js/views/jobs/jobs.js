@@ -2,6 +2,7 @@ define(function(require) {
   var $               = require('jquery'),
       _               = require('underscore'),
       utils           = require('utils'),
+      helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
       Dispatcher      = require('qorus/dispatcher'),
       Collection      = require('collections/jobs'),
@@ -18,6 +19,10 @@ define(function(require) {
   ListView = Qorus.ListView.extend({
     title: "Jobs",
     model_name: 'job',
+
+    url: function () {
+      return helpers.getUrl('showJobs', { date: utils.encodeDate(this.date) });
+    },
     
     additionalEvents: {
       'click a[data-action="set-expiry"]': 'setExpiration',
@@ -36,8 +41,21 @@ define(function(require) {
       // this.listenToOnce(this.collection, 'sync', this.render);
 
       this.listenTo(Dispatcher, 'job:start job:stop job:instance_stop', this.updateModels);    
+      this.processPath(this.opts.path);
     },
-  
+    
+    onProcessPath: function (path) {
+      var id = path.split('/')[0];
+      
+      if (id) this.detail_id = id;
+    },
+    
+    onRender: function () {
+      if (parseInt(this.detail_id, 10)) {
+        this.collection.get(this.detail_id).trigger('rowClick');
+      }
+    },
+    
     preRender: function () {
       var TView;
       
@@ -109,7 +127,8 @@ define(function(require) {
     showDetail: function (row) {
       var model = row.model,
           view  = this.getView('#job-detail'),
-          width = $(document).width() - $('[data-sort="active"]').offset().left;
+          width = $(document).width() - $('[data-sort="active"]').offset().left,
+          url = this.getViewUrl();
       
       if (this.selected_model) this.stopListening(this.selected_model);
       
@@ -126,11 +145,13 @@ define(function(require) {
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
+        url = this.getViewUrl() + '/' + row.model.id;
       } else {
         if (view) view.close();
         this.selected_model = null;
       }
       
+      Backbone.history.navigate(url)
     },
     
     helpers: {

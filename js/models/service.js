@@ -18,7 +18,7 @@ define(function (require) {
     // get available actions
     actions: function () {
       var status = this.get('status'),
-          actions = [];
+          actions = ['enable', 'disable'];
           
       if (status == 'unloaded') {
         actions.push('load');
@@ -31,6 +31,7 @@ define(function (require) {
     },
 
     doAction: function(action, opts, callback){
+      console.log(arguments);
       var options = { action: action },
           url     = null,
           resp;
@@ -55,9 +56,25 @@ define(function (require) {
     },
     
     toJSON: function () {
-      var json = Model.__super__.toJSON.call(this, arguments);
+      var json = Model.__super__.toJSON.apply(this, arguments);
       json.actions = this.actions();
       return json;
+    },
+    
+    parse: function () {
+      response = Model.__super__.parse.apply(this, arguments);
+      response.has_alerts = (response.alerts.length > 0) ? true : false;
+      return response;
+    },
+    
+    getControls: function () {
+      var item     = this.toJSON(),
+          controls = [];
+          
+      if (item.enabled === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
+      if (item.enabled === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
+  
+      return controls;
     }
   });
   return Model;

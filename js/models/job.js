@@ -41,6 +41,12 @@ define(function (require) {
       } else {
         return this.get(property);
       }
+    },
+    
+    parse: function () {
+      response = Model.__super__.parse.apply(this, arguments);
+      response.has_alerts = (response.alerts.length > 0);
+      return response;
     }
   });
 

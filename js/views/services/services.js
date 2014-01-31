@@ -31,10 +31,11 @@ define(function(require){
   };
   
   RowView = Qorus.RowView.extend({
+    __name__: 'ServiceRowView',
     additionalEvents: {
       "click button[data-option]": "setOption",
       "click button[data-action!='execute']": "runAction",
-      "click a[data-action]": "runAction"
+      'click [data-action]': 'doAction'
     },
     
     // sets model option
@@ -50,11 +51,35 @@ define(function(require){
     // run model specific actions
     runAction: function (evt) {
       var $target = $(evt.currentTarget);
-      
+      console.log('halo', arguments);
       this.model.doAction($target.data('action'), $target.data());
       evt.stopPropagation();
+    },
+    
+    showAlert: function () {
+      var url, alert;
+      var alerts = this.model.get('alerts');
+      
+      if (alerts.length < 1) return;
+
+      alert = alerts[0];
+      url = [helpers.getUrl('showSystem'), 'alerts', alert.alerttype.toLowerCase(), alert.id].join('/');
+      console.log(url, helpers.getUrl('showSystem'));
+      
+      Backbone.history.navigate(url, { trigger: true });
+    },
+    
+    doAction: function (e) {
+      console.log(arguments);
+      var $target = $(e.currentTarget),
+          action = $target.data('action');
+      
+      e.stopPropagation();
+      e.preventDefault();
+      this.model.doAction(action);
     }
   });
+
   
   TableView = Qorus.TableView.extend({
     initialize: function () {
@@ -170,7 +195,7 @@ define(function(require){
         url = [this.getViewUrl(), model.id].join('/');
       }
       
-      // Backbone.history.navigate(url);
+      Backbone.history.navigate(url);
       
     },
     

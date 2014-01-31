@@ -7,13 +7,15 @@ define(function (require) {
       Rainbow  = require('rainbow'),
       View;
   
-  View = Qorus.View.extend({
-    template: Template,
-    additionalEvents: {
-      'click .nav-tabs a': 'tabToggle'
+  View = Qorus.TabView.extend({
+    url: function () {
+      return "/" + this.model.id;
     },
     
+    template: Template,
+    
     initialize: function (opts) {
+      View.__super__.initialize.apply(this, arguments);
       this.opts = opts;
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
@@ -36,22 +38,6 @@ define(function (require) {
       this.removeViews();
       this.undelegateEvents();
       this.stopListening();
-    },
-    
-    tabToggle: function (e) {
-      var $target = $(e.currentTarget),
-          active  = $('.tab-pane.active'),
-          target_name = $target.data('target') || $target.attr('href'),
-          view;
-
-      e.preventDefault();
-      
-      view = this.getView(target_name);
-      if (view) view.trigger('show');
-
-      $target.tab('show');
-
-      this.active_tab = $target.attr('href');
     }
   });    
   return View;

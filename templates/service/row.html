@@ -2,7 +2,6 @@
   item.id = item.serviceid;
 %>
 <td><i class="icon-check-empty check"></i></td>
-<td class="id"><%= item.id %></td>
 <td class="service_type">
     <% if (item.type == 'system') { %>
     <i class="icon-cog" data-toggle="tooltip" title="System"></i>
@@ -12,6 +11,7 @@
 </td>
 <td class="status"><%= statusActions(item.status, { status_label: getLabel(item.status), id: item.id, actions: item.actions }) %></td>
 <td class="threads"><%= item.threads %></td>                
+<td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show"></i>' : '' %></td>
 <td class="name"><strong><%= item.name %></strong></td>
 <td class="version"><%= item.version %></td>
 <td class="description"><div><%= item.desc %></div></td>
