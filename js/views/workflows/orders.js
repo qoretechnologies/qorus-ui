@@ -63,6 +63,7 @@ define(function (require) {
       // add element loader
       this.loader = new Qorus.Loader({ el: $('#wrap') });
       this.loader.render();
+      console.log(this.loader, this.loader.$el);
     },
     
     preRender: function () {

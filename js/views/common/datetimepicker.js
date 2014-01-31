@@ -9,11 +9,19 @@ define(function (require) {
       
   Datepicker = Qorus.View.extend({
     additionalEvents: {
-      'click [data-toggle]': 'processClick'
+      'click [data-toggle]': 'processClick',
+      'change input[name=hours],input[name=minutes]': 'processHours',
+      'click [data-value=submit]': 'applyDate',
+      'click [data-value=24h]': 'setToday',
+      'click [data-value=all]': 'setAll'
     },
     
     tagName: 'div',
-    className: "datepicker hide",
+    className: 'datepicker hide',
+    id: function () {
+      return "datepicker-" + this.cid;
+    },
+    
     template: Template,
     initialize: function (options) {
       this.options = options || {};
@@ -29,6 +37,7 @@ define(function (require) {
       this.options.year = this.options.date.year();
       
       this.$input_el = $(this.options.element + ' input');
+      this.$el.appendTo('body');
     },
         
     getDaysInMonth: function () {
@@ -58,6 +67,10 @@ define(function (require) {
       return days;
     },
     
+    getYear: function () {
+      return moment([this.options.year, this.options.month]).format('YYYY');
+    },
+    
     getMonth: function () {
       return moment([this.options.year, this.options.month]).format('MMMM');
     },
@@ -70,19 +83,14 @@ define(function (require) {
     },
     
     getCalendar: function () {
-      return CalendarTpl({ month: this.getMonth(), days: this.getDaysInMonth() });
+      return CalendarTpl({ month: this.getMonth(), year: this.getYear(), days: this.getDaysInMonth(), date: this.options.date });
     },
     
     preRender: function () {
       this.context.calendar = this.getCalendar();
       this.context.month = this.getMonth();
-    },
-    
-    onRender: function () {
-      var $el = $(this.options.element);
-      this.$el
-        .css('top', $el.offset().top)
-        .css('left', $el.offset().left)
+      this.context.year = this.getYear();
+      this.context.date = this.options.date;
     },
     
     processClick: function (ev) {
@@ -94,8 +102,6 @@ define(function (require) {
         this.changeMonth(1);
       } else if ($target.data('toggle') === 'set-day') {
         var date = this.options.date;
-        
-        console.log(date);
 
         date
           .year($target.data('year'))
@@ -108,9 +114,58 @@ define(function (require) {
       }
     },
     
+    processHours: function (ev) {
+      var $target = $(ev.currentTarget);
+      
+      if ($target.attr('name') === 'hours') this.options.date.hours($target.val());
+      if ($target.attr('name') === 'minutes') this.options.date.minutes($target.val());
+      
+      this.onDateChange(this.options.date);
+    },
+    
     onDateChange: function (date) {
       this.$input_el.val(date.format(settings.DATE_DISPLAY));
       this.trigger('onDateChange', date);
+    },
+    
+    show: function (e) {
+      var $target = $(e.currentTarget),
+          top     = $target.offset().top + $target.height() + 10,
+          left    = $target.offset().left;
+          
+      this.$input_el = $target.children('input');
+      
+      this.render();
+      
+      this.$el
+        .css('top', top)
+        .css('left', left)
+        .removeClass('hide');
+    },
+    
+    hide: function () {
+      this.$el.addClass('hide');
+    },
+    
+    applyDate: function () {
+      this.trigger('applyDate', this.options.date);
+      this.hide();
+    },
+    
+    setToday: function () {
+      this.options.date = moment().add('days', -1);
+      this.onDateChange(this.options.date);
+      this.trigger('setToday', this.options.date);
+      this.applyDate();
+      this.hide();
+    },
+    
+    setAll: function () {
+      this.options.date = moment([1970,0,1]);
+      this.onDateChange(this.options.date);
+      this.trigger('setAll', this.options.date);
+      this.applyDate();
+      this.hide();
     }
   });
   

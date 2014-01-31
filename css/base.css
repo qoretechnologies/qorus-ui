@@ -1200,6 +1200,11 @@ table .header-copy {
   padding: 10px;
   top: 0;
   left: 0;
+  max-width: 200px;
+}
+
+.datepicker .table {
+  margin-bottom: 10px;
 }
 
 .datepicker td, .datepicker thead th {
@@ -1231,7 +1236,7 @@ table .header-copy {
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid #fff;
   top: -10px;
-  left: 10px;
+  left: 5px;
 }
 
 .datepicker:before {
@@ -1243,7 +1248,7 @@ table .header-copy {
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid #eee;
   top: -12px;
-  left: 10px;
+  left: 4px;
 }
 
 .datepicker .active {
@@ -1257,4 +1262,8 @@ table .header-copy {
 
 .datepicker .new, .datepicker .old {
   color: #aaa;
+}
+
+.datepicker .hours {
+  line-height: 2;
 }

@@ -1,13 +1,14 @@
-<div class="datepicker hide">
-  <div class="calendar"><%= calendar %></div>
-  <div class="hours">
-    <input type="time" name="hours">
+<div class="calendar"><%= calendar %></div>
+<div class="hours row-fluid">
+  <span class="text-center span2"><i class="icon-time"></i></span>
+  <span class="span3"><input type="number" name="hours" max="23" min="0" value="<%= date.hours() %>" class="span12 text-center"></span>
+  <span class="span2 text-center">:</span>
+  <span class="span3"><input type="number" name="minutes" max="59" min="0" value="<%= date.minutes() %>" class="span12 text-center"></span>
+</div>
+<div class="buttons">
+  <div class="btn-group">
+    <button class="btn" data-value="24h">24 h</button>
+    <button class="btn" data-value="all">All</button>
   </div>
-  <div class="buttons">
-    <div class="btn-group">
-      <button class="btn" data-value="24h">24 h</button>
-      <button class="btn" data-value="all">All</button>
-    </div>
-    <button class="btn btn-primary" data-value="submit">Apply</button>
-  </div>
+  <button class="btn btn-primary pull-right" data-value="submit">Apply</button>
 </div>

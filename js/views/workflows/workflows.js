@@ -64,7 +64,7 @@ define(function (require) {
     
     title: "Workflows",
     
-    initialize: function (collection, options, router, deprecated) {
+    initialize: function (collection, options) {
       var self = this;
       this.views = {};
       this.opts = options || {};
@@ -74,8 +74,6 @@ define(function (require) {
       
       // pass date to options object
       this.date = this.opts.date;
-      
-      this.opts.deprecated = deprecated ? true : false;
       
       // call super method
       ListView.__super__.initialize.call(this, Collection, this.date);
@@ -115,7 +113,7 @@ define(function (require) {
       // add listener to rowclick
       this.listenTo(tview, 'row:clicked', this.showDetail);
       
-      this.setView(new Toolbar({ date: this.date, parent: this }), '.toolbar');
+      this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
     },
     
     onRender: function () {

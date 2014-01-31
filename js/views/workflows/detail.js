@@ -20,6 +20,7 @@ define(function (require) {
     preRender: function () {
       this.context.item = this.model.toJSON();
       this.context.pull_right = false;
+      this.context.show_groups = false;
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });

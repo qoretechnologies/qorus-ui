@@ -9,7 +9,8 @@ define([
     context: {},
     template: Template,
     url: '/jobs/',
-    datepicker: true   
+    datepicker: true,
+    route: 'showJobs'
   });
   return Toolbar;
 });

@@ -1,16 +1,18 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'utils',
-  'qorus/qorus',
-  'text!templates/workflow/toolbars/orders_toolbar.html',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect',
-  'jquery.sticky'
-], function($, _, Backbone, utils, Qorus, Template, date, moment){
-  var Toolbar = Qorus.View.extend({
+define(function (require) {
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      utils       = require('utils'),
+      Qorus       = require('qorus/qorus'),
+      Template    = require('text!templates/workflow/toolbars/orders_toolbar.html'),
+      BaseToolbar = require('views/toolbars/toolbar'),
+      moment      = require('moment'),
+      Toolbar;
+
+  var Toolbar = BaseToolbar.extend({
+    template: Template,
+    datepicker: true,
+    fixed: false,
+    
     context: {
       predefined_statuses: [
         'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
@@ -19,38 +21,28 @@ define([
       ]
     },
     
-    events: {
+    additionalEvents: {
       "click button#status-filter": "statusFilter",
       "click button[data-action='open']": "navigateTo"
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
-      
-      // console.log('initializing toolbar', this.options, this.opts);
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
       }
       
-      this.template = Template;
       this.context.hasStatus = this.hasStatus;
       this.updateUrl();
-      this.date = this.options.date;
     },
         
     onRender: function () {
-      this.datePicker();
+      Toolbar.__super__.onRender.apply(this, arguments);
       this.addMultiSelect();
-      // $('.sticky').sticky({ el: $('.sticky').parents('.pane') });
     },
     
     clean: function () {
-      // debug.error('cleaning toolbar', this.dp);
-      if (this.dp) {
-        this.dp = this.dp.datetimepicker('destroy');
-      }
       $('#statuses').multiselect('destroy');
     },
     
@@ -70,6 +62,7 @@ define([
       }
       
       this.context.url = this.url;
+      return this.url;
     },
     
     // check the statuses for given status
@@ -80,20 +73,8 @@ define([
       return false;
     },
     
-    // filter by date init
-    datePicker: function () {
-      var view = this;
-      this.dp = this.$('.dp').datetimepicker({
-          format: 'yyyy-MM-dd hh:ii:ss',
-          autoclose: true
-      })
-      .on('changeDate', function(e){
-          view.onDateChanged(e.date.toISOString(), {});
-      });
-    },
-    
     statusFilter: function () {
-      var url = [this.baseUrl, this.options.statuses, utils.encodeDate(this.date)].join('/');
+      var url = [this.baseUrl, this.options.statuses, utils.encodeDate(this.options.date)].join('/');
       Backbone.history.navigate(url, { trigger: true });
     },
     
@@ -105,13 +86,7 @@ define([
         debug.log([this.url, 'true'].join('/'));
       }
     },
-    
-    onDateChanged: function (date) {
-      var url = this.url + '/' + moment(date).utc().format('YYYYMMDDHHmmss');
-      Backbone.history.navigate(url, { trigger: true });
-      this.off();
-    },
-    
+
     addMultiSelect: function () {
       var _this = this;
       // apply bootstrap multiselect to #statuses element      
@@ -149,18 +124,22 @@ define([
       });
     },
     
-    navigateTo: function (e) {
-      var el = $(e.currentTarget);
-      if (el.data('url')){
-        Backbone.history.navigate(el.data('url'), {trigger: true});       
-      }
-    },
-    
     search: function (e) {
       if (this.collection){
         this.collection.search(e); 
       }
-    }
+    },
+    
+    applyDate: function (date) {
+      var url;
+      
+      if (!moment(date).isValid()) return false;
+
+      date = utils.encodeDate(date);
+      
+      url = this.updateUrl() + "/" + date;
+      Backbone.history.navigate(url, {trigger: true});
+    },
   });
   return Toolbar;
 });

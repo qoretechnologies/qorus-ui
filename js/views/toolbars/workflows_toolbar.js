@@ -1,16 +1,24 @@
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'views/toolbars/toolbar',
-  'text!templates/workflow/toolbars/workflows_toolbar.html',
-], function($, _, utils, BaseToolbar, Template){
+define(function (require) {
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      utils       = require('utils'),
+      helpers     = require('qorus/helpers'),
+      BaseToolbar = require('views/toolbars/toolbar'),
+      Template    = require('text!templates/workflow/toolbars/workflows_toolbar.html'),
+      Toolbar;
   
-  var Toolbar = BaseToolbar.extend({
+  Toolbar = BaseToolbar.extend({
     datepicker: true,
     template: Template,
     context: {},
     url: '/workflows/',
+    url_options: function () {
+      return {
+        deprecated: this.options.deprecated
+      }
+    },
+    
+    route: 'showWorkflows',
     
     initialize: function (opts) {
       _.bindAll(this);
@@ -22,8 +30,6 @@ define([
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
       
-      debug.log(parts.length);
-      
       if (parts.length > 2) {
         this.context.url = [parts[0], parts[1]].join('/');
         this.context.deprecated = true;
@@ -34,8 +40,7 @@ define([
         this.context.url = [parts[0], '24h', 'hidden'].join('/');
         this.context.deprecated = false;
       }
-
-    }
+    }    
   });
   
   return Toolbar;
