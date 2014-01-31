@@ -80,7 +80,7 @@ define(function (require) {
       
       if (url.charAt(0) !== "/") url = "/" + url;
       
-      return sprintf(url, url_params).replace(/\/+/, '');
+      return sprintf(url, url_params).replace(/\/+$/, '');
     },
     
     statusActions: function (status, data, tpl) {
