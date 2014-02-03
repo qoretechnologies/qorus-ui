@@ -1191,7 +1191,7 @@ table .header-copy {
 /* datepicker */
 .datepicker {
   color: #000;
-  position: absolute;
+  position: fixed;
   background-color: #fff;
   border-radius: 5px;
   border: 1px solid #eee;

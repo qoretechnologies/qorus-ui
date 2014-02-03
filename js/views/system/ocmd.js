@@ -115,7 +115,6 @@ define([
     },
     
     autocomplete: function (e) {
-
       e.preventDefault();
     },
     
@@ -130,9 +129,11 @@ define([
     },
     
     initTypeahead: function (data) {
-      this.$('#command').typeahead({ source: _.keys(data)  });
+      this.$('#command').typeahead({ 
+        source: _.keys(data),
+        dropup: true
+      });
     }
-    
     
   });
   

@@ -1886,11 +1886,14 @@
 
       this.$menu
         .insertAfter(this.$element)
-        .css({
+        .show()
+        
+      if (!this.options.dropup) {
+        this.$menu.css({
           top: pos.top + pos.height
         , left: pos.left
         })
-        .show()
+      }      
 
       this.shown = true
       return this

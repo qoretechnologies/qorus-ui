@@ -1,5 +1,5 @@
 <td><i class="icon-check-empty check"></i></td>>
-<td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show"></i>' : '' %></td>
+<td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show" title="Alerts" data-toggle="tooltip"></i>' : '' %></td>
 <td class="name" ><a href="<%= getUrl(item.jobid,obj.date) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
 <td class="status"><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
