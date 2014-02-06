@@ -151,8 +151,10 @@ define(function (require) {
           this.decr(e.info.info.old);
         }
       } else if (obj === 'group') {
-        if (e.info.id === 14 && e.info.type === 'workflow') {
+        console.log(e, e.info);
+        if (e.info.id === this.id && e.info.type === 'workflow') {
           this.set('enabled', e.info.enabled);
+          console.log(this.get('enabled'));
         }
       }
       // debug.log(m.attributes);
