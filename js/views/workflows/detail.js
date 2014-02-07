@@ -8,7 +8,7 @@ define(function (require) {
       Template      = require('tpl!templates/workflow/meta.html'),
       EditTemplate  = require('tpl!templates/common/option_edit.html'),
       AutostartView = require('views/workflows/autostart'),
-      HeaderTpl        = require("tpl!templates/workflow/detail_header.html"),
+      HeaderTpl     = require("tpl!templates/workflow/detail_header.html"),
       ModelView, HeaderView;      
 
       
@@ -18,10 +18,12 @@ define(function (require) {
       this.model = options.model;
     },
     preRender: function () {
+      var as_view = new AutostartView({ model: this.model });
       this.context.item = this.model.toJSON();
+      this.context._item = this.model;
       this.context.pull_right = false;
       this.context.show_groups = false;
-      this.setView(new AutostartView({ model: this.model }), '.autostart');
+      this.setView(as_view, '.autostart');
     }
   });
   

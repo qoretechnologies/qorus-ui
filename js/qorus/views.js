@@ -3,7 +3,7 @@ define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
       Backbone    = require('backbone'),
-      // Keys        = require('backbone.keys'),
+      // Keys     = require('backbone.keys'),
       settings    = require('settings'),
       utils       = require('utils'),
       Dispatcher  = require('qorus/dispatcher'),
@@ -11,6 +11,7 @@ define(function (require) {
       TableRowTpl = require('tpl!templates/common/tablerow.html'),
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
       Helpers     = require('qorus/helpers'),
+      moment      = require('moment'),
       Loader, View, ListView, TableView, RowView, 
       TableAutoView, TableBodyView, ServiceView, PluginView, 
       TabView, ModelView;
@@ -24,20 +25,26 @@ define(function (require) {
   });
   
   Loader = Backbone.View.extend({
-    template: '<div class="loader"><p><img src="/imgs/loader.gif" /> Loading...</p></div>',
+    tagName: 'div',
+    className: 'loader',
+    template: '<p><img src="/imgs/loader.gif" /> Loading...</p>',
     initialize: function (opts) {
-      this.el = opts.el;
-      _.bindAll(this);
+      _.bindAll(this, 'render', 'destroy');
+      this.opts = opts || {};
       this.render();
     },
     render: function () {
-      $(this.el).before(this.template);
+      var el = this.opts.el || 'body';
+      
+      this.$el.html(this.template);  
+      this.$el.appendTo(el);
+      
+      return this;
     },
     destroy: function () {
-      $(this.el).parent().find('.loader').remove();
+      this.$el.remove();
     }
   });
-  
   
   View = Backbone.View.extend({
     render_lock: false,
@@ -64,7 +71,13 @@ define(function (require) {
     
     
     initialize: function (options) {
+      _.bindAll(this, 'render');
       this.views = {};
+      this.context = {};
+      this.views = {};
+      this.helpers = {};
+      this.options = {};
+      
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -97,18 +110,6 @@ define(function (require) {
         this.remove();
       }
       this.views = {};
-      
-      // // stopListening for collection/models
-      // if (this.collection instanceof Backbone.Collection) {
-      //   console.log("cleaning", this.__name__, this.collection.__name__);
-      //   this.collection.stopListening();
-      //   this.collection = null;
-      // }
-      // if (this.model instanceof Backbone.Model) {
-      //   console.log("cleaning", this.__name__, this.model.__name__);
-      //   this.model.stopListening();
-      //   this.model = null;
-      // }
     },
     
     render: function (ctx) {
@@ -374,6 +375,7 @@ define(function (require) {
 
 
    ListView = View.extend({
+     context: {},
      keys: {
        'up down': 'navigate'
      },
@@ -401,8 +403,8 @@ define(function (require) {
       _.bindAll(this);
       ListView.__super__.initialize.call(this, options);
       // add element loader
-      this.loader = new Loader({ el: $('#wrap') });
-      this.loader.render();
+      // this.loader = new Loader({ el: $('#wrap') });
+      // this.loader.render();
 
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -430,13 +432,17 @@ define(function (require) {
         
         this.collection.fetch();
         
-        var _c = this.collection;
       
         this.context.page = {
-          current_page: _c.page,
-          has_next: _c.hasNextPage,
+          current_page: this.collection.page,
+          has_next: this.collection.hasNextPage,
           has_prev: null
         };
+        
+        _.extend(this.context, this.opts);
+        
+        // this.loader = new Loader();
+        // this.listenToOnce(this.collection, 'sync error', this.loader.remove);
       }
       
       this.on('highlight', this.enableActions);
@@ -445,7 +451,7 @@ define(function (require) {
     
     render: function (ctx) {
       var tpl, self = this;
-      
+            
       this.removeViews();
       this.trigger('prerender');
       this.preRender();
@@ -736,6 +742,7 @@ define(function (require) {
   TableView = View.extend({
     __name__: 'TableView',
     messages: {
+      'loading': 'Loading...',
       'nodata': "No data found"
     },
     cached_views: {},
@@ -777,12 +784,11 @@ define(function (require) {
       
       _.extend(this.context, opts);
       _.extend(this.options, opts);
+      
       this.update();
     },
     
     render: function (ctx) {
-      debug.log(this, this.colleciton);
-
       if (!this.collection || this.collection.size() === 0) {
         this.template = NoDataTpl;
       } else {
@@ -790,7 +796,7 @@ define(function (require) {
       }
       
       this.context.messages = this.messages;
-      
+
       TableView.__super__.render.call(this, ctx);
       return this;
     },
@@ -904,6 +910,7 @@ define(function (require) {
       
       this.removeView('tbody');
       this.appendRows(this.collection.models);
+      // if (this.loader) this.loader.destroy();
     },
     
     // sort view
@@ -1377,6 +1384,7 @@ define(function (require) {
     
     preRender: function () {
       this.context.item = this.model.toJSON();
+      this.context._item =this.model;
       ModelView.__super__.preRender.apply(this, arguments);
     }
   });

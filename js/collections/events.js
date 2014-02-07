@@ -1,12 +1,13 @@
 define(function (require) {
-  var settings     = require('settings'),
-      _            = require('underscore'),
-      Qorus        = require('qorus/qorus'),
-      Model        = require('models/event'),
-      Dispatcher   = require('qorus/dispatcher'),
-      Messenger    = require('messenger'),
-      utils        = require('utils'),
-      Parallel     = require('parallel'),
+  var settings   = require('settings'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Model      = require('models/event'),
+      Dispatcher = require('qorus/dispatcher'),
+      Messenger  = require('messenger'),
+      utils      = require('utils'),
+      Parallel   = require('parallel'),
+      moment     = require('moment'),
       msngr, Collection, event_refresh;
   
   msngr = $('#msg').messenger();

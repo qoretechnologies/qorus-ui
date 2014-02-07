@@ -1,17 +1,16 @@
-define([
-  'jquery',
-  'underscore',
-  'settings',
-  'utils',
-  'qorus/qorus',
-  'text!templates/job/modals/expire.html',
-  'datepicker'
-], function ($, _, settings, utils, Qorus, Template) {
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      settings = require('settings'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('tpl!templates/job/modals/expire.html'),
+      View;
+      
+  View = Qorus.View.extend({
     url: settings.REST_API_PREFIX + '/jobs/',
     context: {},
     additionalEvents: {
-      'submit': 'runAction',
+      'submit': 'runAction'
     },
     
     initialize: function (opts) {
@@ -46,7 +45,6 @@ define([
     },
 
     datePicker: function () {
-      var view = this;
       this.dp = $('.dp').datetimepicker({
           format: 'yyyy-mm-dd hh:ii:ss',
           autoclose: true
@@ -66,7 +64,7 @@ define([
       };
       
       $.put(url, params)
-        .done(function (resp) {
+        .done(function () {
            // $.globalMessenger().post("Job " + id + " set expiry");
         });
           

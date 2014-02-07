@@ -7,6 +7,7 @@ define(function (require) {
       Qorus         = require('qorus/qorus'),
       System        = require('models/system'),
       Notifications = require('collections/notifications'),
+      moment        = require('moment'),
       StepBase, Step, Model;
   
   StepBase = {

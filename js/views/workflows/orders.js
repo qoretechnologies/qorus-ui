@@ -9,9 +9,10 @@ define(function (require) {
       Template      = require('text!templates/workflow/orders.html'),
       TableTpl      = require('text!templates/workflow/orders/table.html'),
       RowTpl        = require('text!templates/workflow/orders/row.html'),
-      context, ListView;
+      moment        = require('moment'),
+      helpers, ListView;
   
-  context = {
+  helpers = {
     action_css: {
       'block': 'btn-inverse',
       'cancel': 'btn-danger',
@@ -20,9 +21,10 @@ define(function (require) {
   };
   
   ListView = Qorus.ListView.extend({
+    __name__: 'OrdersListView',
     name: 'orders',
     template: Template,
-    context: context,
+
     additionalEvents: {
       // 'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
@@ -31,7 +33,6 @@ define(function (require) {
     
     initialize: function (opts) {
       opts = opts || {};
-      _.bindAll(this);
       
       if (opts.url) {
         this.url = [opts.url, this.name].join('/');
@@ -55,23 +56,18 @@ define(function (require) {
       
       this.opts = opts;
       _.extend(this.options, opts);
-      _.extend(this.context, opts);
 
-      // call super method
       ListView.__super__.initialize.call(this, Collection, opts.date);
-      // // add element loader
-      // this.loader = new Qorus.Loader({ el: $('#wrap') });
-      // this.loader.render();
     },
     
     preRender: function () {
-      var toolbar = this.setView(new OrdersToolbar(this.opts), '#toolbar');
+      this.setView(new OrdersToolbar(this.opts), '#toolbar');
       
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
-          helpers: this.helpers,
+          helpers: helpers,
           context: { url: this.url },
           dispatcher: Dispatcher
       }), '#order-list');
@@ -98,33 +94,11 @@ define(function (require) {
       }
     },
     
-    // updateContext: function () {
-    //   // update actual pages
-    //   this.context.page = {
-    //     current_page: this.collection.page,
-    //     has_next: this.collection.hasNextPage()
-    //   };
-    //   this.getView('#order-list').update();
-    // },
-    
     // fetches the collection from server presorted by key
     fetchSorted: function (e) {
       // TODO
-      var $el = $(e.currentTarget);
-      var sort = $el.data('sort');
-      // debug.log("Fetching sorted", sort);
       e.stopPropagation();
-    },
-    
-    helpers: {
-      action_css: context.action_css
     }
-    
-    // render: function (ctx) {
-    //   ListView.__super__.render.call(this, ctx);
-    //   // debug.log("Rendering context", this.context, this.helpers);
-    // }
-    
   });
   
   return ListView;

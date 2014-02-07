@@ -1,17 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'settings',
-  'utils',
-  'qorus/qorus',
-  'text!templates/job/modals/reschedule.html',
-  'datepicker'
-], function ($, _, settings, utils, Qorus, Template) {
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $ = require('jquery'),
+      _ = require('underscore'),
+      settings = require('settings'),
+      utils = require('utils'),
+      Qorus = require('qorus/qorus'),
+      Template = require('tpl!templates/job/modals/reschedule.html'),
+      View;
+  
+  View = Qorus.View.extend({
     url: settings.REST_API_PREFIX + '/jobs/',
     context: {},
     additionalEvents: {
-      'submit': 'runAction',
+      'submit': 'runAction'
     },
     
     initialize: function (opts) {
@@ -56,11 +56,8 @@ define([
         schedule: _.values(data).join(' ')
       };
       
-      $.put(url, params)
-        .done(function (resp) {
-           // $.globalMessenger().post("Job " + id + " rescheduled");
-        });
-          
+      $.put(url, params);
+                
       this.close();
     },
     

@@ -89,7 +89,7 @@ define([
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
-    },
+    }
   });
   
   

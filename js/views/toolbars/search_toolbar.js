@@ -1,17 +1,16 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'text!templates/workflow/toolbars/search_toolbar.html',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect',
-  'jquery.sticky'
-], function($, _, Backbone, Qorus, Template, date, moment){
-  var Toolbar = Qorus.View.extend({
+define(function (require) {
+  require('bootstrap.multiselect');
+  require('jquery.sticky');
+  
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('tpl!templates/workflow/toolbars/search_toolbar.hrml'),
+      Toolbar;
+  
+  Toolbar = Qorus.View.extend({
     events: {
-      "click button[data-action='open']": "navigateTo",
+      "click button[data-action='open']": "navigateTo"
       // 'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },

@@ -1,32 +1,31 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'text!templates/toolbars/orders.html',
-  'datepicker',
-  'moment',
-  'bootstrap.multiselect'
-], function($, _, Backbone, Qorus, Template, date, moment){
-  var Toolbar = Qorus.View.extend({
+define(function (require) {
+  require('bootstrap.multiselect');
+  
+  var _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('tpl!templates/toolbars/orders.html'),
+      moment   = require('moment'),
+      Toolbar;
+  
+  Toolbar = Qorus.View.extend({
     context: {
       predefined_statuses: [
         'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
         'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
         'Blocked', 'Crash'
-      ],
+      ]
     },
+    
     events: {
-      "click button#status-filter": "statusFilter",
+      "click button#status-filter": "statusFilter"
     },
+    
     initialize: function(opts){
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       
       this.template = Template;
       this.on('render', this.datePicker, this);
-      
-      var _this = this;
       
       // add multiselect to statuses
       this.on('render', function(){});
@@ -39,6 +38,7 @@ define([
       this.context.hasStatus = this.hasStatus;
       this.on('render', this.addMultiSelect);
     },
+    
     // check the statuses for given status
     hasStatus: function (status){
       if (this.options.statuses){
@@ -48,22 +48,18 @@ define([
     },
     // filter by date init
     datePicker: function(){
-      var view = this;
-      // $('.dp').datetimepicker({
-      //     format: 'yyyy-mm-dd hh:ii:ss',
-      // })
-      // .on('changeDate', function(e){
-      //     view.onDateChanged(e.date.toISOString(), {});
-      // });
     },
+    
     statusFilter: function(){
       var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
       Backbone.history.navigate(url);
     },
+    
     onDateChanged: function(date) {
       var url = this.url + '/' + moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
       Backbone.history.navigate(url);
     },
+    
     addMultiSelect: function(){
       // var _this = this;
       // // apply bootstrap multiselect to #statuses element

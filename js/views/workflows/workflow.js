@@ -20,10 +20,12 @@ define(function (require) {
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
     initialize: function (options) {
+      _.bindAll(this, 'render');
       this.model = options.model;
     },
     preRender: function () {
       this.context.item = this.model.toJSON();
+      this.context._item= this.model;
       this.context.pull_right = true;
       this.context.show_groups = true;
       this.setView(new AutostartView({ model: this.model }), '.autostart');
@@ -50,6 +52,7 @@ define(function (require) {
     
     initialize: function (opts) {
       // debug.log("workflow opts", this.opts);
+      _.bindAll(this, 'render');
       this.path = window.location.pathname.replace("/workflows/view/"+opts.id+"/", "");
       ModelView.__super__.initialize.call(this, opts);
       this.opts = opts;
@@ -57,11 +60,12 @@ define(function (require) {
       this.template = Template;
       
       // init model
-      this.model = new Workflow({ id: opts.id });;
+      this.model = new Workflow({ id: opts.id });
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
       this.model.fetch();
+      // this.listenTo(this.model, 'all', function () { console.log(arguments); } );
     },
     
     dispatch: function () {
@@ -95,7 +99,7 @@ define(function (require) {
           }), '#instances');
       }
       
-      this.setView(new HeaderView({ model: this.model }), '#detail')  
+      this.setView(new HeaderView({ model: this.model }), '#detail');  
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
     },

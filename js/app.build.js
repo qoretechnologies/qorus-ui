@@ -11,7 +11,6 @@
       localstorage: 'libs/backbone.localstorage',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
-      datepicker: "libs/datetime-picker-2/bootstrap-datetimepicker.min",
       "jquery.fixedheader": "libs/fixedheader",
       "jquery.sticky": "libs/jquery.sticky",
       "jquery.rest": "libs/jquery.rest",

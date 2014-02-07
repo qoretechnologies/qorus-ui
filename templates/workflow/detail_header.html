@@ -3,7 +3,7 @@
     <h3><%= item.name %> <small><%= item.version %></small></h3>
   </div>
   <div class="<%= (obj.pull_right) ? 'pull-right align-middle' : '' %>" id="controls">
-    <%= createControls(item) %>
+    <%= createControls(_item) %>
     <div class="autostart"></div>
   </div>
 </div>

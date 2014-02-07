@@ -6,6 +6,8 @@ define(function (require) {
       StatsCollection = require('collections/stats'),
       ChartView       = require('views/common/chart'),
       Template        = require('tpl!templates/workflow/stats.html'),
+      EditTemplate    = require('tpl!templates/common/option_edit.html'),
+      moment          = require('moment'),
       ChartsView;
 
   ChartsView = Qorus.View.extend({

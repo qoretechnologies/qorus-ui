@@ -2,6 +2,7 @@ define(function (require) {
   var Backbone = require('backbone'),
       Qorus    = require('qorus/qorus'),
       settings = require('settings'),
+      moment   = require('moment'),
       Model;
   
   require('localstorage');

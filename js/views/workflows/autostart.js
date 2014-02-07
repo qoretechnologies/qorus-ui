@@ -4,6 +4,7 @@ define(function (require) {
       View;
   
   View = Qorus.ModelView.extend({
+    __name__: "AutostartView",
     template: Template,
     
     additionalEvents: {
@@ -38,6 +39,14 @@ define(function (require) {
         e.preventDefault();
         e.stopPropagation();
       }
+    },
+    
+    off: function () {
+      console.log('cleaning autostart');
+      this.clean();
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
     }
   });
   

@@ -8,6 +8,7 @@ define(function (require) {
       Datepicker;
       
   Datepicker = Qorus.View.extend({
+    views: {},
     additionalEvents: {
       'click [data-toggle]': 'processClick',
       'change input[name=hours],input[name=minutes]': 'processHours',

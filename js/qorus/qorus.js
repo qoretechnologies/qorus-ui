@@ -1,14 +1,15 @@
 // Qorus core objects definition
 define(function (require) {
-  var $              = require('jquery'),
-      _              = require('underscore'),
-      Backbone       = require('backbone'),
-      // localstorage   = require('localstorage'),
-      // DualStorage = require('dualstorage'),
-      settings       = require('settings'),
-      utils          = require('utils'),
-      Views          = require('qorus/views'),
-      Qorus          = {},
+  var $               = require('jquery'),
+      _               = require('underscore'),
+      Backbone        = require('backbone'),
+      // localstorage = require('localstorage'),
+      // DualStorage  = require('dualstorage'),
+      settings        = require('settings'),
+      utils           = require('utils'),
+      Views           = require('qorus/views'),
+      moment          = require('moment'),
+      Qorus           = {},
       setNested;
   
   $.extend($.expr[':'], {
@@ -194,6 +195,8 @@ define(function (require) {
     },
     
     fetch: function (options) {
+      this.trigger('pre:fetch', this);
+      
       if (this.opts) {
         this.opts.limit = this.limit;
         this.opts.offset = this.offset;

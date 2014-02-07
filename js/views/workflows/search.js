@@ -48,7 +48,6 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
       this.views = {};
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
@@ -65,15 +64,7 @@ define(function (require) {
       _.defer(this.render);
     },
     
-    // render: function (ctx) {
-    //   var mctx = { item: this.model };
-    //   if (ctx){
-    //     _.extend(mctx, ctx);
-    //   }
-    //   View.__super__.render.call(this, mctx);
-    //   return this;
-    // },
-    
+
     preRender: function () {      
       this.setView(new Qorus.TableView({ 
           collection: this.collection, 

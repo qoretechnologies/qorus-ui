@@ -1,12 +1,12 @@
-define([
-  'settings',
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'utils'
-], function(settings, $, _, Qorus, utils){
+define(function (require) {
+  var settings = require('settings'),
+      $ = require('jquery'),
+      _ = require('underscore'),
+      Qorus = require('qorus/qorus'),
+      utils = require('utils'),
+      datasets, Collection;
   
-  var datasets = [
+  datasets = [
     'avgduration',
     'avgprocessing',
     'maxduration',
@@ -16,7 +16,7 @@ define([
     // 'count',
   ];
   
-  var Collection = Qorus.Collection.extend({
+  Collection = Qorus.Collection.extend({
     step: 1,
     params: { 
       action: 'processingSummary',
@@ -69,7 +69,7 @@ define([
           } else {
             data[d].data.push(0);
           }
-        })
+        });
         
       });
       return _.values(data);
