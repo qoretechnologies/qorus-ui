@@ -36,7 +36,7 @@ define(function (require) {
           $target = $(e.currentTarget),
           value, obj_type, name, template, $tpl;
       
-      if ($target.s('td')) {
+      if ($target.is('td')) {
         value = $target.data('value');
         obj_type = $target.data('type');
         name = $target.data('name');
