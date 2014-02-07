@@ -5,7 +5,7 @@ define(function (require) {
   var $        = require('jquery'),
       _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
-      Template = require('tpl!templates/workflow/toolbars/search_toolbar.hrml'),
+      Template = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
       Toolbar;
   
   Toolbar = Qorus.View.extend({
