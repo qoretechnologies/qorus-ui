@@ -1,5 +1,6 @@
 define(function (require) {
-  var _          = require('underscore'),
+  var $          = require('jquery'),
+      _          = require('underscore'),
       Qorus      = require('qorus/qorus'),
       Template   = require('tpl!templates/system/connections.html'),
       PaneTpl    = require('tpl!templates/system/connections/pane.html'),
@@ -7,16 +8,28 @@ define(function (require) {
       View, PaneView;
   
   PaneView = Qorus.View.extend({
+    additionalEvents: {
+      'click .nav-list a': 'tabToggle'
+    },
     views: {},
     template:  PaneTpl,
+    
     initialize: function (options) {
       this.name = options.resource_type;
       this.collection = new Collection({ resource_type: options.resource_type });
       this.listenTo(this.collection, 'sync', this.render);
       this.collection.fetch();
     },
+    
     preRender: function () {
       this.context.items = this.collection.toJSON();
+    },
+    
+    tabToggle: function (e) {
+      var $target = $(e.currentTarget);
+      $target.tab('show');
+      e.preventDefault();
+      e.stopPropagation();
     }
   });
   

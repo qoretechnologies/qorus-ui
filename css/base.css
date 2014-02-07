@@ -26,6 +26,10 @@ table thead th {
   padding: 4px 12px;
 }
 
+.table.table-condensed thead th {
+  padding: 4px 5px;
+}
+
 .table .name, .table .description {
 	text-align: left;
   white-space: nowrap;
