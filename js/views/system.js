@@ -1,20 +1,20 @@
 define(function(require){
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    Backbone = require('backbone'),
-    utils = require('utils'),
-    Qorus = require('qorus/qorus'),
-    System = require('models/system'),
-    Template = require('text!templates/system/detail.html'),
-    LogView = require('views/log'),
-    OptionsView = require('views/system/options'),
-    DatasourceView = require('views/system/datasources'),
-    PropView = require('views/system/prop'),
-    HttpServicesView = require('views/system/http'),
-    AlertView = require('views/system/alerts'),
-    DashboardView = require('views/system/dashboard'),
-    LogsView = require('views/system/logs'),
-    SystemInfoView;  
+  var $                = require('jquery'),
+      _                = require('underscore'),
+      Backbone         = require('backbone'),
+      utils            = require('utils'),
+      Qorus            = require('qorus/qorus'),
+      System           = require('models/system'),
+      Template         = require('tpl!templates/system/detail.html'),
+      LogView          = require('views/log'),
+      OptionsView      = require('views/system/options'),
+      ConnectionsView  = require('views/system/connections'),
+      PropView         = require('views/system/prop'),
+      HttpServicesView = require('views/system/http'),
+      AlertView        = require('views/system/alerts'),
+      DashboardView    = require('views/system/dashboard'),
+      LogsView         = require('views/system/logs'),
+      SystemInfoView;  
 
 
   SystemInfoView = Qorus.TabView.extend({
@@ -39,7 +39,7 @@ define(function(require){
       this.setView(new DashboardView({ model: this.info }), '#dashboard');
       this.setView(new LogsView(), '#logs');
       this.setView(new OptionsView(), '#options');
-      this.setView(new DatasourceView(), '#datasources');
+      this.setView(new ConnectionsView(), '#remote');
       this.setView(new PropView(), '#prop');
       this.setView(new HttpServicesView(), '#http');
       this.setView(new AlertView(), '#alerts');

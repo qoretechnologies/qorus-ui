@@ -33,6 +33,7 @@ define(function (require) {
   });
 
   ListView = Qorus.ListView.extend({
+    helpers: helpers,
     __name__: "WorkflowListView",
     url: function () {
       var url = helpers.getUrl('showWorkflows', { date: utils.encodeDate(this.opts.date), deprecated: (this.opts.deprecated) ? 'hidden' : '' });
@@ -40,7 +41,6 @@ define(function (require) {
       return url;
     },
     
-    cls: "workflows.ListView",
     timers: [],
     // el: $("#content"),
     additionalEvents: {
@@ -85,7 +85,7 @@ define(function (require) {
       // this.setView(new BottomBarView(), 'bottombar');
       var helpers = _.extend({ date: this.date }, this.helpers),
           tview;
-      
+
       // create workflows table
       tview = this.setView(new Qorus.TableView({ 
           collection: this.collection, 
@@ -112,7 +112,6 @@ define(function (require) {
     
     clean: function () {
       // removes date picker from DOM
-      $('.dp').datetimepicker('remove');
       this.$('.table-fixed').fixedHeader('remove');
     },
     
@@ -156,29 +155,6 @@ define(function (require) {
           debug.log(resp);
         });
     },
-    
-    helpers: _.extend(_.clone(helpers), {
-        getUrl: function (s, id, date) {
-              var params = ['/workflows/view', id, 'orders', s];
-              date = date || this.date || null;
-    
-              if (date) {
-                // encode for URL
-                date = utils.encodeDate(date);
-                params.push(date);
-              }
-    
-              return params.join('/');
-        },
-      
-        wrapBadge: function (v, u, e){
-          var res = '<a href="' + u +'">'+ v +'</a>';
-          if (v < 1) {
-            return res;
-          }
-          return '<span class="badge ' + e + '">' + res + '</span>';
-        }
-    }),
     
     loadNextPage: function () {
     },

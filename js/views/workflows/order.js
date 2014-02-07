@@ -45,7 +45,7 @@ define(function(require) {
     
     render: function (ctx) {
       this.context.item = this.model;
-      _.extend(this.context, { getStepName: this.getStepName }); 
+      _.extend(this.context, { getStepName: this.getStepName, action_css: context.action_css }); 
 
       ModelView.__super__.render.call(this, ctx);
     },

@@ -26,14 +26,12 @@ define(function (require) {
     template: Template,
     initialize: function (options) {
       this.options = options || {};
+      this.options.date = this.options.date || moment();
       
-      if (!('date' in this.options)) {
-        this.options.date = moment();
-      } else {
-        if (!this.options.date._isMomentObject) {
-          this.options.date = moment(this.options.date);
-        }
+      if (!moment.isMoment(this.options.date)) {
+        this.options.date = moment(this.options.date);
       }
+
       this.options.month = this.options.date.month();
       this.options.year = this.options.date.year();
       

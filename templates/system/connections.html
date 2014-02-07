@@ -1,0 +1,11 @@
+<ul class="nav nav-pills">
+  <% _.each(obj.tabs(), function (tab, idx) { %>
+  <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+  <% }) %>
+</ul>
+
+<div class="tab-content">
+  <% _.each(obj.tabs(), function (tab, idx) { %>  
+  <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+  <% }) %>
+</div>

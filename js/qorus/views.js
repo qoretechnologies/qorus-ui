@@ -62,6 +62,7 @@ define(function (require) {
     model_name: null,
     opts: {},
     path: "",
+    _is_rendered: false,
     
     // merging defaultEvents with additionalEvents
     events : function () {
@@ -75,7 +76,6 @@ define(function (require) {
       this.views = {};
       this.context = {};
       this.views = {};
-      this.helpers = {};
       this.options = {};
       
       View.__super__.initialize.call(this, [options]);
@@ -155,6 +155,8 @@ define(function (require) {
       
       if (_.isFunction(this.processUrlParams))
         this.processUrlParams();
+      
+      this._is_rendered = true;
       
       return this;
     },
@@ -400,7 +402,7 @@ define(function (require) {
     },
     
     initialize: function (collection, date, options) {
-      _.bindAll(this);
+      _.bindAll(this, 'render');
       ListView.__super__.initialize.call(this, options);
       // add element loader
       // this.loader = new Loader({ el: $('#wrap') });
@@ -456,6 +458,7 @@ define(function (require) {
       this.trigger('prerender');
       this.preRender();
       // debug.log('Starts rendering with context ->', this.context.page.has_next);
+      
       if (this.template) {
         ctx = {
           date: this.date,
@@ -479,8 +482,7 @@ define(function (require) {
     
       if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
-        self = this;
-        _.defer(function () { self.afterRender(); });
+        _.defer(this.afterRender);
       }
       this.renderViews();
       this.setTitle();
@@ -1323,15 +1325,21 @@ define(function (require) {
   });
   
   TabView = View.extend({
+    __name__: 'TabView',
     views: {},
+    tabs: [],
+    
     defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
       'click .nav-pills a': 'tabToggle'
     },
     
     initialize: function () {
+      _.bindAll(this, 'getTabs');
       TabView.__super__.initialize.call(this, arguments);
       this.on('postrender', this.activateTab);
+      this.on('postrender', this.renderTabs);
+      this.context.tabs = this.getTabs;
     },
     
     activateTab: function () {
@@ -1344,6 +1352,21 @@ define(function (require) {
       e.preventDefault();
       e.stopPropagation();
       this.showTab($target.attr('href'));
+    },
+    
+    addTabView: function (view) {
+      this.insertView(view, 'tabs');
+    },
+    
+    renderTabs: function () {
+      _.each(this.getTabs(), function (tab) {
+        var id = '#' + tab.name;
+        tab.setElement(this.$(id));
+      });
+    },
+    
+    getTabs: function () {
+      return this.getView('tabs');
     },
     
     showTab: function (tab) {

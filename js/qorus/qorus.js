@@ -150,10 +150,12 @@ define(function (require) {
     page: 1,
     pagination: true,
     
-    initialize: function (date) {
+    initialize: function (models, options) {
       _.bindAll(this);
-      if (date) {
-        this.date = date;
+      this.options = options || {};
+      
+      if (options.date) {
+        this.date = this.options.date;
       }
     },
     
