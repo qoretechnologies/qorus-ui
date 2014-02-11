@@ -7,6 +7,8 @@ define(function (require) {
       View;
   
   View = Qorus.View.extend({
+    __name__: "LogView",
+    name: 'Log',
     msg_queue: [],
     is_scrollable: true,
     additionalEvents: {

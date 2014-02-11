@@ -1,16 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'models/step',
-  'views/common/modal',
-  'text!templates/steps/modal.html',
-  'jquery.ui',
-  'rainbow.qore'
-], function ($, _, Qorus, Model, Modal, Template) {
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model    = require('models/step'),
+      Modal    = require('views/common/modal'),
+      Template = require('tpl!templates/steps/modal.html'),
+      Rainbow  = require('rainbow');
+  
+  require('rainbow.qore');
+  
   var ModelView = Qorus.View.extend({
     additionalEvents: {
-      "click .nav-tabs a": 'tabToggle',
+      "click .nav-tabs a": 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -22,17 +23,15 @@ define([
       
       // init model
       this.model = new Model({ id: opts.id });
-      this.listenTo(this.model, 'change', this.render);      
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
       
-      this.on('render', function () { Rainbow.color() });
+      this.on('render', Rainbow.color);
     },
     
     tabToggle: function(e){
       var $target = $(e.currentTarget);
       e.preventDefault();
-
-      var active = $('.tab-pane.active');
       $target.tab('show');
     },
     

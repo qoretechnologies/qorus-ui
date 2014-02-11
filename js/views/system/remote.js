@@ -51,6 +51,10 @@ define(function (require) {
       if (health === 'YELLOW') return 'warning';
       if (health === 'UNKNOWN') return 'info';
       if (health === 'UNREACHABLE') return 'info';
+    },
+    
+    clean: function () {
+      this.$('pdata-toggle=tooltip').tooltip('destroy');
     }
   });
   

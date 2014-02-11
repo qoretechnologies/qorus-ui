@@ -1,12 +1,12 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'text!templates/common/diagram.html',
-  'sprintf',
-  'jquery.ui'
-], function($, _, Qorus, Template){
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $ = require('jquery'),
+      _ = require('underscore'),
+      Qorus = require('qorus/qorus'),
+      Template = require('tpl!templates/common/diagram.html'),
+      View;
+  
+  
+  View = Qorus.View.extend({
     additionalEvents: {},
         
     initialize: function (opts) {
@@ -17,7 +17,8 @@ define([
     },
     
     onRender: function () {
-      _.defer(this.initCanvas);
+      this.initCanvas();
+      // _.defer(this.initCanvas);
     },
     
     initCanvas: function () {
@@ -50,7 +51,7 @@ define([
       var coords = el_ids.split(',');
       var $el1 = this.$('#ds-'+coords[0]);
       var $el2 = this.$('#ds-'+coords[1]);
-      var pad = parseInt($el1.css('margin-top'));
+      var pad = parseInt($el1.css('margin-top'), 10);
       var cdrs1 = $el1.position();
       var cdrs2 = $el2.position();
       

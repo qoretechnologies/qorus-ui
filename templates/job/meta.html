@@ -1,68 +1,14 @@
 <h3><%= item.name %> <small><%= item.version %></small></h3>
 <p class="muted"><em><%= item.description %></em></p>
+
 <ul class="nav nav-tabs">
-    <li class="active"><a href="details" data-target="#details">Details</a></li>
-    <li><a href="library" data-target="#library">Library</a></li>
-    <li><a href="code" data-target="#code">Code</a></li>
-    <li><a href="connections" data-target="#connections" class="connections">Connections</a></li>
-    <li><a href="log" data-target="#log" class="log">Log</a></li>
-    <% if (item.has_alerts) { %><li><a href="alerts" data-target="#alerts" class="alerts"><i class="icon-warning-sign text-error"></i> Alerts</a></li><% }%>
+  <% _.each(obj.tabs(), function (tab, idx) { %>
+  <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+  <% }) %>
 </ul>
 
 <div class="tab-content">
-  <div class="tab-pane active" id="details">
-    <div class="row-fluid">
-    <h4>Properties</h4>
-    <table class="table table-stripped table-condensed">
-      <tbody>
-        <tr>
-          <th class="text-left">Active</th>
-          <td><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
-        </tr>
-        <tr>
-          <th class="text-left">Schedule</th>
-          <td><%= item.sched_txt %></td>
-        </tr>
-        <% if (item.expiry_date) { %>
-        <tr>
-          <th class="text-left">Expires</th>
-          <td><%= item.expiry_date %></td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-    <h4>Groups</h4>
-    <%= groupList(item.groups) %>
-  </div>
-  </div>
-  <div class="tab-pane" id="library">
-    <%= createNestedList(item.lib) %>
-  </div>
-  <div class="tab-pane" id="code">
-    <pre><code data-language="qore"><%= item.code %></code></pre>
-  </div>
-  <div class="tab-pane" id="connections">
-    <div class="row-fluid">Connections</div>
-  </div>
-  <div class="tab-pane" id="log">
-  </div>
-  <% if (item.has_alerts) { %>
-  <div class="tab-pane" id="alerts">
-    <table class="table table-condensed table-striped table-align-left">
-      <tbody>
-        <% _.each(item.alerts, function (alert) { %> 
-          <tr>
-            <td>
-              <a href="/<%= getUrl('showSystem') + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.alert %></a>
-              <p>
-                <%= alert.object %><br />
-                <small class="muted break"><%= escapeHtml(alert.reason) %></small>
-              </p>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-  <% } %>
+  <% _.each(obj.tabs(), function (tab, idx) { %>  
+  <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+  <% }) %>
 </div>

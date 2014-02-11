@@ -12,6 +12,7 @@ define(function (require) {
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
       Helpers     = require('qorus/helpers'),
       moment      = require('moment'),
+      Filtered    = require('backbone.filtered.collection'),
       Loader, View, ListView, TableView, RowView, 
       TableAutoView, TableBodyView, ServiceView, PluginView, 
       TabView, ModelView;
@@ -221,7 +222,7 @@ define(function (require) {
         var frag = document.createDocumentFragment();
 
         _.each(view, function (v) {
-          frag.appendChild(v.el);
+          if (v.el) frag.appendChild(v.el);
         });
         
         $(frag).appendTo($el);
@@ -231,8 +232,8 @@ define(function (require) {
     // renders subviews
     renderViews: function () {
       var self = this;
-      _.each(self.views, function (view, id) {        
-        self.renderView(id, view);
+      _.each(self.views, function (view, id) {
+        if (id!=='tabs')  self.renderView(id, view);
       });
     },
     
@@ -818,8 +819,10 @@ define(function (require) {
       
       
       // load next button
-      if (this.collection.hasNextPage()) {
-        this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
+      if (this.collection.hasNextPage) {
+        if (this.collection.hasNextPage()) {
+          this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
+        }        
       }
     },
     
@@ -928,7 +931,7 @@ define(function (require) {
         
         this.collection.sort_order = order;
         this.collection.sort_key = key;
-        this.collection.sort_history.push(prev_key);
+        if (this.collection.sort_history) this.collection.sort_history.push(prev_key);
 
         views = views.sort(function (c1, c2) {
           // needs speed improvements
@@ -1355,13 +1358,14 @@ define(function (require) {
     },
     
     addTabView: function (view) {
-      this.insertView(view, 'tabs');
+      view = this.insertView(view, 'tabs');
     },
     
     renderTabs: function () {
       _.each(this.getTabs(), function (tab) {
         var id = '#' + tab.name;
         tab.setElement(this.$(id));
+        tab.render();
       });
     },
     

@@ -3,6 +3,7 @@ define(function () {
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
+      DATE_DISPLAY_CONDENSED: 'YYYYMMDDHHmmss',
       DATE_DISPLAY: 'YYYY-MM-DD HH:mm:ss',
       DATE_TSEPARATOR: 'YYYY-MM-DDTHH:mm:ss',      
       DATE_FROM: '1970-01-01',

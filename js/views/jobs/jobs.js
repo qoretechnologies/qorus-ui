@@ -128,9 +128,7 @@ define(function(require) {
       var model = row.model,
           view  = this.getView('#job-detail'),
           width = $(document).width() - $('[data-sort="active"]').offset().left,
-          url = this.getViewUrl();
-      
-      if (this.selected_model) this.stopListening(this.selected_model);
+          url   = this.getViewUrl();
       
       if (this.selected_model != model) {
         row.$el.addClass('info');
@@ -148,6 +146,8 @@ define(function(require) {
         url = this.getViewUrl() + '/' + row.model.id;
       } else {
         if (view) view.close();
+        if (this.selected_model) this.stopListening(this.selected_model);
+        
         this.selected_model = null;
       }
       

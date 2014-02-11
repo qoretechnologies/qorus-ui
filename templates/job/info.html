@@ -1,0 +1,23 @@
+  <div class="row-fluid">
+  <h4>Properties</h4>
+  <table class="table table-stripped table-condensed">
+    <tbody>
+      <tr>
+        <th class="text-left">Active</th>
+        <td><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
+      </tr>
+      <tr>
+        <th class="text-left">Schedule</th>
+        <td><%= item.sched_txt %></td>
+      </tr>
+      <% if (item.expiry_date) { %>
+      <tr>
+        <th class="text-left">Expires</th>
+        <td><%= item.expiry_date %></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h4>Groups</h4>
+  <%= groupList(item.groups) %>
+</div>

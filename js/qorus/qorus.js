@@ -138,8 +138,25 @@ define(function (require) {
       
       cons = this.getConnections();
       return _(cons).findWhere({ up: false }) ? false : true;
-    }
+    },
     
+    // gets property from server
+    getProperty: function (property, data, force) {
+      var self = this,
+          req;
+      
+      data = data || {};
+      
+      if (!this.get(property) || force === true) {
+        $.get(_.result(this, 'url') + '/' + property, data)
+          .done(function (data) {
+            self.set(property, data);
+            self.trigger('update:'+property, self);
+          });
+      } else {
+        return this.get(property);
+      }
+    }
   });
 
   Qorus.Collection = Backbone.Collection.extend({

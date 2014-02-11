@@ -5,6 +5,7 @@ require.config({
     underscore: 'libs/underscore',
     backbone: 'libs/backbone',
     'backbone.keys': 'libs/backbone.keys',
+    'backbone.filtered.collection': 'libs/backbone.filtered.collection',
     localstorage: 'libs/backbone.localstorage',
     dualstorage: 'libs/backbone.dualstorage',
     bootstrap: 'libs/bootstrap/js/bootstrap',
@@ -20,7 +21,7 @@ require.config({
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
     "bootstrap.multiselect": "libs/bootstrap-multiselect",
-    "rainbow": "libs/rainbow/rainbow.min",
+    "rainbow": "libs/rainbow/rainbow",
     "rainbow.generic": "libs/rainbow/language/generic",
     "rainbow.qore": "libs/rainbow/language/qore",
     "rainbow.html": "libs/rainbow/language/html",
@@ -32,13 +33,16 @@ require.config({
   },
   shim: { 
     "backbone": {
-      deps: ["underscore", "jquery", "sprintf", "bootstrap", "jquery.rest"],
+      deps: ["underscore", "sprintf", "jquery", "jquery.rest", "jquery.ui", "bootstrap"],
       exports: "Backbone"
     },
     "backbone.keys": {
       deps: ['backbone']
     },
     "backbone.identity": {
+      deps: ['backbone']
+    },
+    "backbone.filtered.collection": {
       deps: ['backbone']
     },
     localstorage: {

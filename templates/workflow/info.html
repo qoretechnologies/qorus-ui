@@ -1,0 +1,23 @@
+<h4>Groups</h4>
+<%= groupList(item.groups) %>
+<% if (item.options.length > 0) { %>
+<div class="row-fuild">
+  <h4>Options</h4>
+  <table class="table table-condensed table-stripped table-align-left">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+  <% _.each(item.options, function (option) { %>
+      <tr>
+        <td class="name"><%= option.name %><br /><p class="muted"><%= option.desc %></p></td>
+        <td><%= option.value %></td>
+      </tr>
+  <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>

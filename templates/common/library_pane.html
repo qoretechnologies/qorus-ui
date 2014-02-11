@@ -1,0 +1,18 @@
+<% if (obj.data.length > 0) { %>
+<div class="well span3" style="padding: 8px 0;">
+<ul class="nav nav-list">  
+  <% _.each(obj.data, function (data, idx) { %>
+  <li class="<%= (idx===0) ? 'active' : '' %>"><a href="#" data-target="#<%= data.name %>"><%= data.name %> <%= data.version %></a></li>
+  <% }) %>
+</ul>
+</div>
+<div class="span9 tab-content">
+  <% _.each(obj.data, function (data, idx) { %>
+    <div class="tab-pane<%= (idx===0) ? ' active' : '' %>" id="<%= data.name %>">
+      <pre><code data-language="qore"><%= data.body %></code></pre>
+    </div>
+  <% }) %>  
+</div>
+<% } else { %>
+  <p>Empty</p>
+<% } %>

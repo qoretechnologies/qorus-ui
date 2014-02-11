@@ -8,6 +8,7 @@
       backbone: 'libs/backbone',
       "backbone.keys": 'libs/backbone.keys',
       "backbone.identity": 'libs/backbone.identity',
+      'backbone.filtered.collection': 'libs/backbone.filtered.collection',
       localstorage: 'libs/backbone.localstorage',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
@@ -39,6 +40,9 @@
         deps: ['backbone']
       },
       "backbone.identity": {
+        deps: ['backbone']
+      },
+      "backbone.filtered.collection": {
         deps: ['backbone']
       },
       localestorage: {

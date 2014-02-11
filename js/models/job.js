@@ -13,11 +13,6 @@ define(function (require) {
     urlRoot: settings.REST_API_PREFIX + '/jobs/',
     dateAttributes: ['last_executed', 'next'],
     allowed_actions: ['run', 'reset', 'set-expire', 'schedule', 'expiry_date', 'setActive'],
-
-
-    initialize: function (options) {
-      Model.__super__.initialize.call(this, options);
-    },
     
     doAction: function(action, opts){
       debug.log('doing action', action);
@@ -29,24 +24,19 @@ define(function (require) {
       }
     },
     
-    getProperty: function (property) {
-      var self = this,
-          req;
-      
-      if (!this.get(property)) {
-        $.get(_.result(this, 'url') + '/' + property)
-          .done(function (data) {
-            self.set(property, data);
-          });
-      } else {
-        return this.get(property);
-      }
-    },
-    
     parse: function () {
       response = Model.__super__.parse.apply(this, arguments);
       response.has_alerts = (response.alerts.length > 0);
       return response;
+    },
+    
+    fetch: function (options) {
+      options = options || {};
+      
+      if (!options.data) options.data = {};
+      _.extend(options.data, { lib_source: true });
+      
+      Model.__super__.fetch.call(this, options);
     }
   });
 

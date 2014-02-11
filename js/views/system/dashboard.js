@@ -82,7 +82,6 @@ define(function (require) {
       });
       
       this.listenTo(Dispatcher, 'system', this.render);
-      this.listenTo(Dispatcher, 'system', function () { console.log(arguments) });
       this.listenTo(this.model, 'sync change', this.render);
     },
     
@@ -91,8 +90,12 @@ define(function (require) {
       if (health === 'GREEN') return 'success';
       if (health === 'YELLOW') return 'warning';
       if (health === 'UNKNOWN') return 'info';
-      if (health === 'UNREACHABLE') return 'info';
+      if (health === 'UNREACHABLE') return 'warning';
       return '';
+    },
+    
+    onRender: function () {
+      this.$('[data-toggle=tooltip]').tooltip();
     }
   })
   

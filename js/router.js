@@ -25,6 +25,8 @@ define(function (require) {
       Urls              = require('urls'),
       Notifications     = require('collections/notifications'),
       Alerts            = require('collections/alerts'),
+      Constants         = require('collections/constants'),
+      Functions         = require('collections/functions'),
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router, alerts;
 
@@ -37,10 +39,12 @@ define(function (require) {
   
   // fetch local notifications
   Notifications.fetch();
-  
   // fetch alerts
-  alerts = new Alerts();
-  alerts.fetch();
+  Alerts.fetch();
+  // fetch functions
+  Functions.fetch();
+  // fetch constants
+  Constants.fetch();
 
   AppRouter = Backbone.Router.extend({
     currentView: null,

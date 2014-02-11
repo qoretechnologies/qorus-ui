@@ -11,7 +11,7 @@
 <div class="span6">
   <div class="remote-health">
   <% _.each(obj.remote, function (remote) { %>
-    <a href="<%= remote.url %>" class="label label-<%= statusToCSS(remote.health) %>" target="_blank"><%= remote.name %></a>
+    <a href="<%= remote.url %>" class="label label-<%= statusToCSS(remote.health) %>" target="_blank" data-toggle="tooltip" data-placement="bottom" title="<%= escapeHtml(remote.error) %>"><%= remote.name %></a>
   <% }) %>
   </div>
 </div>

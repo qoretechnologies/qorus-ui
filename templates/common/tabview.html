@@ -1,5 +1,4 @@
-<div id="heading"></div>
-<ul class="nav nav-tabs">
+<ul class="nav <%= obj.tab_css %>">
   <% _.each(obj.tabs(), function (tab, idx) { %>
   <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
   <% }) %>

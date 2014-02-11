@@ -44,5 +44,5 @@ define(function (require) {
     }
   });
   // You don't usually return a collection instantiated
-  return Collection;
+  return new Collection();
 });

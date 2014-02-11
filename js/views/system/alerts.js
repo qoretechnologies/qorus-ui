@@ -1,4 +1,4 @@
-define(function (require) {
+define(function (require) {  
   var $          = require('jquery'),
       _          = require('underscore'),
       Qorus      = require('qorus/qorus'),
@@ -69,6 +69,10 @@ define(function (require) {
     // id: function () {
     //   return "alerts-table-" + this.cid;
     // },
+    initialize: function (collection) {
+      this.collection = collection;
+    },
+    
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
     },
@@ -116,6 +120,10 @@ define(function (require) {
       return _.template(Template, ctx);
     },
     
+    initialize: function () {
+      View.__super__.initialize.apply(this, arguments);
+      this.listenTo(Collection, 'sync', this.render);
+    },
     
     onProcessPath: function () {
       View.__super__.onProcessPath.apply(this, arguments);
@@ -123,9 +131,9 @@ define(function (require) {
         
     preRender: function () {
       var OView, TView;
-      
+        
       OView = this.setView(new ListView(
-        new Collection([], { type: 'ongoing'})
+        new Collection.constructor(Collection.where({ alerttype: 'ONGOING' }))
       ), sprintf('#alerts-ongoing-list-%s', this.cid));
       
       OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
@@ -147,7 +155,7 @@ define(function (require) {
       });
 
       TView = this.setView(new ListView(
-        new Collection([], { type: 'transient'})
+        new Collection.constructor(Collection.where({ alerttype: 'TRANSIENT'}))
       ), sprintf('#alerts-transient-list-%s', this.cid));
       
       TView.listenTo(Dispatcher, 'alert:transient_raised', function (e) {

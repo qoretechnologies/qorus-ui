@@ -1,6 +1,8 @@
 define(function (require) {
   var Qorus   = require('qorus/qorus'),
       Helpers = require('qorus/helpers'),
+      utils   = require('utils'),
+      moment  = require('moment'),
       obj_map, Model;
   
   obj_map = {
@@ -42,12 +44,11 @@ define(function (require) {
   Model = Qorus.Model.extend({
     defaults: {
       name: 'N/A',
-      version: 'N/A',
-      id: 'N/A'
+      version: 'N/A'
     },
     
     dateAttributes: ['when'],
-    idAttribute: '_id',
+    // idAttribute: '_id',
     
     toJSON: function () {
       var obj = Model.__super__.toJSON.call(this),
@@ -65,8 +66,8 @@ define(function (require) {
     
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
-      data._id = this.createID(data);
-      data.alerttype = data.alerttype.toLowerCase();
+      data.id = this.createID(data);
+      
       return data;
     },
     

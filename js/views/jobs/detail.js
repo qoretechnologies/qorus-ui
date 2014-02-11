@@ -1,13 +1,44 @@
 define(function (require) {
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      Qorus    = require('qorus/qorus'),
-      Template = require('tpl!templates/job/meta.html'),
-      LogView  = require('views/log'),
-      Rainbow  = require('rainbow'),
-      View;
+  var Qorus       = require('qorus/qorus'),
+      Template    = require('tpl!templates/job/meta.html'),
+      InfoTpl     = require('tpl!templates/job/info.html'),
+      AlertsTpl   = require('tpl!templates/common/alerts.html'),
+      LogView     = require('views/log'),
+      LibraryView = require('views/common/library'),
+      rainbow     = require('rainbow.qore'),
+      View, InfoPaneView, CodePaneView, AlertsView;
+  
+  InfoPaneView = Qorus.ModelView.extend({
+    __name__: 'JobInfoPaneView',
+    name: 'Details',
+    template: InfoTpl
+  });
+  
+  CodePaneView = Qorus.ModelView.extend({
+    __name__: 'JobCodePaneView',
+    template: "<pre><code data-language='qore'><%= item.code %></code></pre>",
+    name: 'Code',
+    initialize: function () {
+      CodePaneView.__super__.initialize.apply(this, arguments);
+      this.model.getProperty('code');
+      this.listenTo(this.model, 'change:code', this.update);
+      this.on('postrender', this.color);
+    },
+    color: function () {
+      var self = this;
+      Rainbow.color(this.el, function (code) { self.$el.html(code); });
+    }
+  });
+  
+  AlertsView = Qorus.ModelView.extend({
+    __name__: 'JobAlertsPaneView',
+    name: 'Alerts',
+    template: AlertsTpl
+  });
   
   View = Qorus.TabView.extend({
+    views: {},
+    
     url: function () {
       return "/" + this.model.id;
     },
@@ -19,19 +50,21 @@ define(function (require) {
       this.opts = opts;
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
-      this.model.getProperty('code');
-      this.on('render', function () { Rainbow.color() });
+    },
+
+    preRender: function () {
+      var url = '/jobs/' + this.model.id;
+      this.addTabView(new InfoPaneView({ model: this.model }));
+      this.addTabView(new LibraryView({ model: this.model }));
+      this.addTabView(new CodePaneView({ model: this.model }));
+      this.addTabView(new LogView({ socket_url: url, parent: this }));
+      
+      if (this.model.has_alerts) this.addTabView(new AlertsView({ model: this.model }));
     },
     
     render: function (ctx) {
-      var self = this;
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
-    },
-    
-    preRender: function () {
-      var url = '/jobs/' + this.model.id;
-      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
     },
     
     off: function () {

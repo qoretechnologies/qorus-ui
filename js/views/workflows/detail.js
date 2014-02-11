@@ -6,9 +6,11 @@ define(function (require) {
       LogView       = require('views/log'),
       DiagramView   = require('views/common/diagram'),
       Template      = require('tpl!templates/workflow/meta.html'),
+      DetailTpl     = require('tpl!templates/workflow/info.html'),
       EditTemplate  = require('tpl!templates/common/option_edit.html'),
       AutostartView = require('views/workflows/autostart'),
       HeaderTpl     = require("tpl!templates/workflow/detail_header.html"),
+      LibraryView   = require('views/common/library'),
       ModelView, HeaderView;      
 
       
@@ -27,7 +29,13 @@ define(function (require) {
     }
   });
   
+  PaneView = Qorus.ModelView.extend({
+    template: DetailTpl,
+    name: 'Detail'
+  });
+  
   ModelView = Qorus.TabView.extend({
+    views: {},
     url: function () {
       return "/" + this.model.id;
     },
@@ -71,7 +79,14 @@ define(function (require) {
     
     preRender: function () {
       var url = '/workflows/' + this.model.id;
-      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      
+      this.removeView('tabs');
+
+      this.addTabView(new PaneView({ model: this.model }));
+      this.addTabView(new LibraryView({ model: this.model }));
+      // this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
+      this.addTabView(new LogView({ socket_url: url, parent: this }));
+      
       this.setView(new HeaderView({ model: this.model }), '#heading');
     },
             
