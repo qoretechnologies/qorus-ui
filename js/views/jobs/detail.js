@@ -21,7 +21,7 @@ define(function (require) {
     initialize: function () {
       CodePaneView.__super__.initialize.apply(this, arguments);
       this.model.getProperty('code');
-      this.listenTo(this.model, 'change:code', this.update);
+      this.listenTo(this.model, 'update:code', this.render);
       this.on('postrender', this.color);
     },
     color: function () {
@@ -37,6 +37,7 @@ define(function (require) {
   });
   
   View = Qorus.TabView.extend({
+    __name__: 'JobDetail',
     views: {},
     
     url: function () {

@@ -6,7 +6,7 @@ define(function (require) {
       View;
 
   View = Qorus.View.extend({
-    cls: 'PaneView',
+    __name__: 'PaneView',
     template: Template,
     views: {},
     additionalEvents: {
@@ -19,7 +19,6 @@ define(function (require) {
       this.opts = opts;
 
       View.__super__.initialize.call(this);
-      this.render();
     },
     
     // override default procesPath to delegate full-path to the content_view
@@ -28,11 +27,17 @@ define(function (require) {
       return this.path;
     },
     
+    render: function () {
+      View.__super__.render.apply(this, arguments);
+    },
+    
+    preRender: function () {
+      this.setView(this.opts.content_view, '.content');
+    },
+    
     onRender: function () {
       if (this.opts.content_view) {
-        this.setView(this.opts.content_view, '.content', true);
         this.$el.data('id', this.opts.content_view.model.id);
-        // console.log(this.opts.content_view.$el);
       }
       this.$('.pageslide')
         .addClass('show')

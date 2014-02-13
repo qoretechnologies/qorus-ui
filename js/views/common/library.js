@@ -15,7 +15,7 @@ define(function (require) {
     template: PaneTemplate,
     
     additionalEvents: {
-      'click .nav-list a': 'tabToggle'
+      'click .nav-pills a': 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -23,20 +23,16 @@ define(function (require) {
       this.opts = opts || {};
       this.name = this.opts.name;
       this.model = opts.model;
-      this.listenTo(this.model, 'update:lib', this.render);
-      // this.on('postrender', function () { Rainbow.color() });
     },
     
     preRender: function () {
       this.context.data = this.model.get('lib')[this.name];
     },
-    
+        
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
-      
       e.preventDefault();
       e.stopPropagation();
-      
       $target.tab('show');
     }
   });
@@ -44,6 +40,7 @@ define(function (require) {
   
   View = Qorus.TabView.extend({
     __name__: "LibraryView",
+    url: "/Library",
     name: 'Library',
     template: Template,
     initialize: function (opts) {
@@ -54,6 +51,8 @@ define(function (require) {
       View.__super__.initialize.apply(this);
       
       this.model.getProperty('lib', { lib_source: true }, true);
+      this.listenTo(this.model, 'update:lib', this.update);
+      this.on('postrender', this.color);
     },
     
     preRender: function () {
@@ -66,7 +65,14 @@ define(function (require) {
           this.addTabView(new Pane({ model: this.model, name: key }));
         }, this);        
       }
+      console.log(this.getViewUrl());
+    },
+    
+    update: function () {
+      this.renderTabs();
+      Rainbow.color();
     }
+    
   });      
   return View;
 });

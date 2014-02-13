@@ -150,7 +150,9 @@ define(function (require) {
       if (!this.get(property) || force === true) {
         $.get(_.result(this, 'url') + '/' + property, data)
           .done(function (data) {
-            self.set(property, data);
+            var atrs = {};
+            atrs[property] = data;
+            self.set(atrs, { silent: true });
             self.trigger('update:'+property, self);
           });
       } else {

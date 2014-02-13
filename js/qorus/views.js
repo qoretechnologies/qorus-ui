@@ -250,6 +250,8 @@ define(function (require) {
     insertView: function (view, el, append) {
       var views, old_view;
       
+      this._updateViewUrl(view);
+      
       if (this.views[el]) {
         views = this.views[el];
       } else {
@@ -276,11 +278,8 @@ define(function (require) {
     setView: function (view, el, set) {
       this.removeView(el);
       this.views[el] = view;
-      
-      if (view instanceof Backbone.View) {
-        view.processPath(this.processPath(null, true));
-        view.upstreamUrl = this.getViewUrl();
-      }
+
+      this._updateViewUrl(view);
 
       // debug.log('setting view', view, el, set);
       if (set === true) {
@@ -289,6 +288,14 @@ define(function (require) {
       }
       
       return view;
+    },
+    
+    _updateViewUrl: function (view) {
+      if (view instanceof Backbone.View) {
+        view.processPath(this.processPath(null, true));
+        view.upstreamUrl = this.getViewUrl();
+        console.log(view.__name__, view.upstreamUrl, 'ttt');
+      }
     },
     
     // sets document title if defined in view
