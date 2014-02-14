@@ -65,7 +65,6 @@ define(function (require) {
           this.addTabView(new Pane({ model: this.model, name: key }));
         }, this);        
       }
-      console.log(this.getViewUrl());
     },
     
     update: function () {

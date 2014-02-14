@@ -1,4 +1,4 @@
-// Qorus core objects definition
+// Qorus core objects definitions
 define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
@@ -93,6 +93,8 @@ define(function (require) {
       
       _.extend(this.context, options);
       _.extend(this.options, options);
+      
+      if (_.has(this.options, 'template')) this.template = this.options.template;
       this.processPath();
     },
         
@@ -750,12 +752,12 @@ define(function (require) {
 
   TableView = View.extend({
     __name__: 'TableView',
+    tagName: 'table',
     messages: {
       'loading': 'Loading...',
       'nodata': "No data found"
     },
     cached_views: {},
-    cls: 'TableView',
     fixed: false,
     additionalEvents: {
       'click th': 'sortView'
@@ -975,10 +977,9 @@ define(function (require) {
     },
     
     sortIcon: function () {
-      // console.time('sortIcon');
-      var key = this.collection.sort_key,
-        order = this.collection.sort_order,
-        $el = this.$('[data-sort="'+ key +'"]');
+      var key   = this.collection.sort_key,
+          order = this.collection.sort_order,
+          $el   = this.$('[data-sort="'+ key +'"]');
       
       this.$('.sort')
         .removeClass('sort-asc')
@@ -994,7 +995,6 @@ define(function (require) {
         $el.data('order', 'des');
         $el.addClass('sort-des');
       }
-      // console.timeEnd('sortIcon');
     } 
   });
   
@@ -1344,7 +1344,7 @@ define(function (require) {
     },
     
     initialize: function () {
-      _.bindAll(this, 'getTabs');
+      _.bindAll(this, 'render', 'getTabs');
       TabView.__super__.initialize.call(this, arguments);
       this.on('postrender', this.activateTab);
       this.on('postrender', this.renderTabs);
@@ -1363,8 +1363,11 @@ define(function (require) {
       this.showTab($target.attr('href'));
     },
     
-    addTabView: function (view) {
+    addTabView: function (view, opts) {
+      opts = opts || {};
       view = this.insertView(view, 'tabs');
+      
+      if (opts.name) view.name = opts.name;
     },
     
     renderTabs: function () {
@@ -1417,7 +1420,7 @@ define(function (require) {
     
     preRender: function () {
       this.context.item = this.model.toJSON();
-      this.context._item =this.model;
+      this.context._item = this.model;
       ModelView.__super__.preRender.apply(this, arguments);
     }
   });

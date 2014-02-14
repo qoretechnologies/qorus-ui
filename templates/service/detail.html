@@ -4,72 +4,14 @@
     </div>
 </div>
 <p class="muted"><em><%= item.desc %></em></p>
-<ul class="nav nav-tabs">
-    <li class="active"><a href="info" data-target="#info">Info</a></li>
-    <li><a href="methods" data-target="#methods">Methods</a></li>
-    <% if (item.lib) { %>
-    <li><a href="lib" data-target="#lib">Library</a></li>
-    <% } %>
-    <li><a href="log" data-target="#log" class="log">Log</a></li>
-    <% if (item.has_alerts) { %><li><a href="alerts" data-target="#alerts" class="alerts"><i class="icon-warning-sign text-error"></i> Alerts</a></li><% }%>
+<ul class="nav <%= obj.tab_css ? obj.tab_css : 'nav-tabs' %>">
+  <% _.each(obj.tabs(), function (tab, idx) { %>
+  <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+  <% }) %>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="info">
-        <p>Type: <%= item.type %></p>
-        <p>Autostart: <%= powerButton(item.autostart, { action: 'setAutostart', option: 'autostart', on: 'true', off: 'false', id: item.id }) %></p>
-        <h4>Groups</h4>
-        <%= groupList(item.groups) %>
-    </div>
-    <div class="tab-pane" id="methods">
-        <table class="table table-striped">
-            <thead>
-                <th class="name">Name</th>
-                <th class="name">Description</th>
-                <th>Lock</th>
-                <th>Internal</th>
-                <th>Write</th>
-                <th></th>
-            </thead>
-            <tbody>
-            <% _.each(item.methods, function (method) { %>
-                <tr>
-                    <td class="name"><%= method.name %></td>
-                    <td class="name"><%= method.description %></td>
-                    <td><%= statusIcon(method.locked) %></td>
-                    <td><%= statusIcon(method.internal) %></td>
-                    <td><%= statusIcon(method.write) %></td>
-                    <td><button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= method.service_methodid %>" data-action="execute">Execute</button></td>
-                </tr>
-            <% }) %>
-            </tbody>
-        </table>
-    </div>
-    <% if (item.lib) { %>
-        <div class="tab-pane" id="lib">
-            <%= createNestedList(item.lib) %>
-        </div>
-    <% } %>
-    <div class="tab-pane" id="log">
-      <textarea disabled class="log span12"></textarea>
-    </div>
-    <% if (item.has_alerts) { %>
-    <div class="tab-pane" id="alerts">
-      <table class="table table-condensed table-striped table-align-left">
-        <tbody>
-          <% _.each(item.alerts, function (alert) { %> 
-            <tr>
-              <td>
-                <a href="/<%= getUrl('showSystem') + "/" + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.alert %></a>
-                <p>
-                  <%= alert.object %><br />
-                  <small class="muted break"><%= escapeHtml(alert.reason) %></small>
-                </p>
-              </td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-    <% } %>
+  <% _.each(obj.tabs(), function (tab, idx) { %>  
+  <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+  <% }) %>
 </div>

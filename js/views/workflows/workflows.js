@@ -264,7 +264,6 @@ define(function (require) {
         
         view.upstreamUrl = this.getViewUrl();
         this.detail_id = row.model.id;
-        console.log(this.getViewUrl());
       }
       
       Backbone.history.navigate(url);

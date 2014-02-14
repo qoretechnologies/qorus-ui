@@ -7,7 +7,7 @@ define(function (require) {
       Collection = require('collections/remote'),
       View, PaneView;
   
-  PaneView = Qorus.View.extend({
+  PaneView = Qorus.ListView.extend({
     additionalEvents: {
       'click .nav-list a': 'tabToggle'
     },

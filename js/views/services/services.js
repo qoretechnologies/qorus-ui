@@ -184,7 +184,6 @@ define(function(require){
           width: width
           }),'#service-detail', true);
         
-        
         // add on close listener
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');

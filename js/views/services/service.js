@@ -1,57 +1,48 @@
 define(function (require) {
-  var $          = require('jquery'),
-      _          = require('underscore'),
-      Qorus      = require('qorus/qorus'),
-      Dispatcher = require('qorus/dispatcher'),
-      Model      = require('models/service'),
-      LogView    = require('views/log'),
-      ModalView   = require('views/services/modal'),
-      Template   = require('text!templates/service/detail.html'),
-      ModelView; 
-
   require('jquery.ui');
+  
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Dispatcher  = require('qorus/dispatcher'),
+      Model       = require('models/service'),
+      LogView     = require('views/log'),
+      ModalView   = require('views/services/modal'),
+      Template    = require('tpl!templates/service/detail.html'),
+      MethodsTpl  = require('tpl!templates/service/methods.html'),
+      InfoTpl     = require('tpl!templates/service/info.html'),
+      ModelView;
 
   ModelView = Qorus.TabView.extend({
+    template: Template,
+    views: {},
+    url: function () {
+      return "/" + this.model.id;
+    },
+    
     additionalEvents: {
       "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
     },
     
-    initialize: function (opts) {
-      this.opts = opts;
-      this.views = {};
-      _.bindAll(this);
-      
-      this.template = Template;
-      
-      if (_.has(opts, 'context')) {
-        _.extend(this.context, opts.context);
-      }
-      
-      // init model
-      if (_.has(opts, "model")) {
-        this.model = opts.model;
-      } else if (_.has(opts, "id")) {
-        this.model = new Model({ id: opts.id });
-        this.model.fetch();        
-      } else {
-        this.model = new Model();
-      }
+    initialize: function () {
+      ModelView.__super__.initialize.apply(this, arguments);
       
       // TODO: check why this doesn't work
       this.listenTo(this.model, 'change', this.render);
-      this.url = "/" + this.model.id;
-      this.on('postrender', this.activateTab);
     },
 
     render: function (ctx) {
       this.context.item = this.model.toJSON();
-      ModelView.__super__.render.call(this, ctx);
+      return ModelView.__super__.render.call(this, ctx);
     },
     
     preRender: function () {
-      var url = '/services/' + this.model.id,
-          log = this.setView(new LogView({ socket_url: url, parent: this }), '#log');
+      var url = '/services/' + this.model.id;
+      
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: MethodsTpl }), { name: 'Methods'});
+      this.addTabView(new LogView({ socket_url: url, parent: this }));
     },
     
     runAction: function (evt) {
@@ -65,6 +56,7 @@ define(function (require) {
     },
     
     off: function () {
+      this.removeViews();
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
