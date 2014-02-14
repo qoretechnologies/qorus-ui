@@ -11,9 +11,16 @@ define(function (require) {
       AutostartView = require('views/workflows/autostart'),
       HeaderTpl     = require("tpl!templates/workflow/detail_header.html"),
       LibraryView   = require('views/common/library'),
+      AlertsTpl   = require('tpl!templates/common/alerts.html'),
       ModelView, HeaderView;      
 
-      
+
+  AlertsView = Qorus.ModelView.extend({
+    __name__: 'JobAlertsPaneView',
+    name: 'Alerts',
+    template: AlertsTpl
+  });
+
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
     initialize: function (options) {
@@ -86,6 +93,7 @@ define(function (require) {
       this.addTabView(new LibraryView({ model: this.model }));
       // this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
+      if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
       
       this.setView(new HeaderView({ model: this.model }), '#heading');
     },

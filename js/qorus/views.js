@@ -294,7 +294,6 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.processPath(this.processPath(null, true));
         view.upstreamUrl = this.getViewUrl();
-        console.log(view.__name__, view.upstreamUrl, 'ttt');
       }
     },
     

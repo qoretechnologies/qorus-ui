@@ -1,17 +1,18 @@
 define(function (require) {
-  var _            = require('underscore'),
-      Qorus        = require('qorus/qorus'),
-      Collection   = require('collections/workflows'),
-      Template     = require('text!templates/workflow/list.html'),
-      Toolbar      = require('views/toolbars/workflows_toolbar'),
-      Dispatcher   = require('qorus/dispatcher'),
-      Modal        = require('views/workflows/modal'),
-      TableTpl     = require('text!templates/workflow/table.html'),
-      RowTpl       = require('text!templates/workflow/row.html'),
-      WorkflowView = require('views/workflows/detail'),
-      PaneView     = require('views/common/pane'),
-      utils        = require('utils'),
-      helpers      = require('views/workflows/helpers'),
+  var _             = require('underscore'),
+      Qorus         = require('qorus/qorus'),
+      Collection    = require('collections/workflows'),
+      Template      = require('text!templates/workflow/list.html'),
+      Toolbar       = require('views/toolbars/workflows_toolbar'),
+      Dispatcher    = require('qorus/dispatcher'),
+      Modal         = require('views/workflows/modal'),
+      TableTpl      = require('text!templates/workflow/table.html'),
+      RowTpl        = require('text!templates/workflow/row.html'),
+      WorkflowView  = require('views/workflows/detail'),
+      PaneView      = require('views/common/pane'),
+      utils         = require('utils'),
+      qorus_helpers = require('qorus/helpers'),
+      helpers       = require('views/workflows/helpers'),
       ListView, RowView;
 
   // extending base RowView to add workflow related events
@@ -36,7 +37,7 @@ define(function (require) {
     helpers: helpers,
     __name__: "WorkflowListView",
     url: function () {
-      var url = helpers.getUrl('showWorkflows', { date: utils.encodeDate(this.opts.date), deprecated: (this.opts.deprecated) ? 'hidden' : '' });
+      var url = qorus_helpers.getUrl('showWorkflows', { date: utils.encodeDate(this.opts.date), deprecated: (this.opts.deprecated) ? 'hidden' : '' });
       if (!this.opts.deprecated) url += "/";
       return url;
     },
@@ -263,6 +264,7 @@ define(function (require) {
         
         view.upstreamUrl = this.getViewUrl();
         this.detail_id = row.model.id;
+        console.log(this.getViewUrl());
       }
       
       Backbone.history.navigate(url);
