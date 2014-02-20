@@ -21,12 +21,9 @@ define(function (require) {
     
     initialize: function () {
       Modal.__super__.initialize.apply(this, arguments);
-      console.log('modal', this.opts, this.options);
       this.setView(this.options.content_view, '.content');
-    },
-
-    preRender: function () {
       this.$el.appendTo('body');
+      this.render();
     },
     
     onRender: function () {
@@ -43,29 +40,25 @@ define(function (require) {
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
 
-          this.fixHeight();
-      }, this);
+          self.fixHeight();
+      });
 
       // assign attributes on modal shown event
       $modal.on('shown', function () {
-        var max_height = $(window).innerHeight() - this.$el.position().top * 2;
-        var max_width = $(window).innerWidth() - this.$el.position().top * 2;
+        var max_height = $(window).innerHeight() - self.$el.position().top * 2;
+        var max_width = $(window).innerWidth() - self.$el.position().top * 2;
         
-        this.fixHeight();
+        self.fixHeight();
         
         // enable resizable
         $(this).resizable({
           handles: "se",
-          minHeight: this.$el.height(),
+          minHeight: self.$el.height(),
           maxHeight: max_height,
-          minWidth: this.$el.width(),
+          minWidth: self.$el.width(),
           maxWidth: max_width
         });
-      }, this);
-      
-      // move to body el to fix z-index issues
-      console.log('mrdal',$modal);
-      console.log(this.views, this.$el);
+      });
     },
     
     fixHeight: function () {

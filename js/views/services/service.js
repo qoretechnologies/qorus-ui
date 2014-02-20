@@ -42,7 +42,7 @@ define(function (require) {
       
       this.insertView(new ModalView({ 
         content_view: content_view
-      }), '#source-modal', true);
+      }), '#source-modal');
     }
   });
 
@@ -92,7 +92,7 @@ define(function (require) {
       this.removeViews();
       this.undelegateEvents();
       this.stopListening();
-      this.$el.remov();
+      this.$el.remove();
     },
     
     close: function () {
