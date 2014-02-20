@@ -140,9 +140,9 @@ define(function(require) {
     
       if (id) {
         e.stopPropagation();
-        this.setView(new ModalView({
+        this.insertView(new ModalView({
           content_view: new StepView({ id: id }) 
-        }), '#stepdetail', true);
+        }), '#stepdetail');
       }
     },
     

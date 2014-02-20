@@ -25,7 +25,7 @@ define(function (require) {
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
       
-      this.on('render', Rainbow.color);
+      this.on('postrender', Rainbow.color);
     },
     
     tabToggle: function(e){
