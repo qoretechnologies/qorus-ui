@@ -10,6 +10,8 @@ define(function (require) {
       TableTpl      = require('text!templates/workflow/orders/table.html'),
       RowTpl        = require('text!templates/workflow/orders/row.html'),
       moment        = require('moment'),
+      qorus_helpers = require('qorus/helpers'),
+      utils         = require('utils'),
       helpers, ListView;
   
   helpers = {
@@ -22,7 +24,9 @@ define(function (require) {
   
   ListView = Qorus.ListView.extend({
     __name__: 'OrdersListView',
-    name: 'orders',
+    url: function () {
+      return "/" + ['orders', this.opts.statuses, utils.encodeDate(this.opts.date)].join('/');
+    },
     template: Template,
 
     additionalEvents: {
@@ -34,11 +38,11 @@ define(function (require) {
     initialize: function (opts) {
       opts = opts || {};
       
-      if (opts.url) {
-        this.url = [opts.url, this.name].join('/');
-        opts.url = this.url;
-        // delete opts.url;
-      }
+      // if (opts.url) {
+      //   this.url = [opts.url, this.name].join('/');
+      //   opts.url = this.url;
+      //   // delete opts.url;
+      // }
 
       // set DATE format and init date
       var date = opts.date;
@@ -61,6 +65,9 @@ define(function (require) {
     },
     
     preRender: function () {
+      var opts = this.opts;
+      console.log(this.opts, this.getViewUrl(), this.upstreamUrl, this.url());
+      
       this.setView(new OrdersToolbar(this.opts), '#toolbar');
       
       this.setView(new Qorus.TableView({ 

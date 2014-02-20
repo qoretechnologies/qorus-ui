@@ -42,7 +42,6 @@ define(function (require) {
     },
     
     off: function () {
-      console.log('cleaning autostart');
       this.clean();
       this.undelegateEvents();
       this.stopListening();

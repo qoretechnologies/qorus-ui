@@ -2,41 +2,68 @@ define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
       utils       = require('utils'),
-      Qorus       = require('qorus/qorus'),
+      settings    = require('settings'),
       Template    = require('text!templates/workflow/toolbars/orders_toolbar.html'),
       BaseToolbar = require('views/toolbars/toolbar'),
       moment      = require('moment'),
-      Toolbar;
+      Toolbar, status;
+      
+  status = [
+    'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
+    'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
+    'Blocked', 'Crash'
+  ];
 
-  var Toolbar = BaseToolbar.extend({
+  Toolbar = BaseToolbar.extend({
+    context: {},
     template: Template,
     datepicker: true,
     fixed: false,
-    
-    context: {
-      predefined_statuses: [
-        'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
-        'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
-        'Blocked', 'Crash'
-      ]
-    },
-    
+        
     additionalEvents: {
       "click button#status-filter": "statusFilter",
       "click button[data-action='open']": "navigateTo"
     },
     
+    url: function (opts) {
+      var opts     = opts || {},
+          date     = opts.date || this.options.date,
+          statuses = opts.statuses || this.options.statuses;
+          
+      if (date !== 'all') date = utils.encodeDate(date);
+
+      this.fixUpstreamUrl();
+      return "/" + ['orders', statuses, date].join('/');
+    },
+    
     initialize: function (opts) {
+      _.bindAll(this);
+
       Toolbar.__super__.initialize.call(this, opts);
+
+      _.extend(this.context, {
+        predefined_statuses: status,
+        hasStatus: this.hasStatus,
+        url: this.getViewUrl,
+        getAllUrl: this.getAllUrl,
+        get24hUrl: this.get24hUrl
+      });
+
+      console.log(this.context);
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
       }
-      
-      this.context.hasStatus = this.hasStatus;
+
       this.updateUrl();
     },
-        
+    
+    fixUpstreamUrl: function () {
+      var url = this.upstreamUrl.split('/').splice(0,4).join('/');
+      this.upstreamUrl = url;
+      return url;
+    },
+    
     onRender: function () {
       Toolbar.__super__.onRender.apply(this, arguments);
       this.addMultiSelect();
@@ -55,14 +82,8 @@ define(function (require) {
       this.baseUrl = baseUrl;
       statuses = statuses || this.options.statuses;
       this.updateStatuses(statuses);
-      this.url = baseUrl;
-
-      if (statuses){
-        this.url = [baseUrl, statuses].join('/');
-      }
       
-      this.context.url = this.url;
-      return this.url;
+      return this.getViewUrl();
     },
     
     // check the statuses for given status
@@ -73,9 +94,18 @@ define(function (require) {
       return false;
     },
     
+    getAllUrl: function () {
+      var url = this.url({ date: 'all' });
+      return this.fixUpstreamUrl() + url;
+    },
+
+    get24hUrl: function () {
+      var url = this.url({ date: moment().add('days',-1).format(settings.DATE_FORMAT) });
+      return this.fixUpstreamUrl() + url;
+    },
+
     statusFilter: function () {
-      var url = [this.baseUrl, this.options.statuses, utils.encodeDate(this.options.date)].join('/');
-      Backbone.history.navigate(url, { trigger: true });
+      Backbone.history.navigate(this.getViewUrl(), { trigger: true });
     },
     
     filterBE: function (e) {
@@ -139,7 +169,7 @@ define(function (require) {
       
       url = this.updateUrl() + "/" + date;
       Backbone.history.navigate(url, {trigger: true});
-    },
+    }
   });
   return Toolbar;
 });

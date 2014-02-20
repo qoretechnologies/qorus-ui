@@ -19,6 +19,7 @@ define(function(require) {
   };
   
   ModelView = Qorus.View.extend({
+    __name__: "OrderView",
     template: Template,
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle',
@@ -32,6 +33,7 @@ define(function(require) {
     },
     
     initialize: function (opts) {
+      _.bindAll(this);
       if (!_.has(opts, 'show_header'))
         opts.show_header = true;
       

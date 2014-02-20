@@ -20,12 +20,12 @@ define(function (require) {
     url_options: {},
     
     datepicker: false,
-    context: {},
     fixed: true,
     
     initialize: function (opts) {
       _.bindAll(this);
       BaseToolbar.__super__.initialize.call(this, opts);
+      this.context = {};
       
       this.context.date = this.options.date;
     },
