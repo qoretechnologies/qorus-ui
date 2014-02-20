@@ -3,7 +3,6 @@ define(function (require) {
       _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
       Model    = require('models/step'),
-      Modal    = require('views/common/modal'),
       Template = require('tpl!templates/steps/modal.html'),
       Rainbow  = require('rainbow');
   
@@ -42,13 +41,5 @@ define(function (require) {
     }
   });
   
-  var ModalView = Modal.extend({
-    initialize: function (opts) {
-      this.views = {};
-      ModalView.__super__.initialize.call(this, opts);
-      this.setView(new ModelView(this.opts), '.content', true);
-    }
-  });
-  
-  return ModalView;
+  return ModelView;
 });

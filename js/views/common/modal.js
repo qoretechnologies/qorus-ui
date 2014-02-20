@@ -1,24 +1,37 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'text!templates/common/modal.html',
-  'sprintf',
-  'jquery.ui'
-], function($, _, Qorus, Template){
+define(function (require) {
+  require('jquery.ui');
+  
+  var $        = require('jquery'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('text!templates/common/modal.html'),
+      Modal;
   
   // var modal wrapper
-  var Modal = Qorus.View.extend({
+  Modal = Qorus.View.extend({
+    tagName: 'div',
+    className: 'modal hide fade wider',
+    attributes: {
+      tabindex: -1,
+      role: 'dialog',
+      'aria-labelledby': 'modalHeader',
+      'aria-hidden': true
+    },
+    views: {},
     template: Template,
     
-    initialize: function (opts) {
-      this.opts = opts;
-      this.views = {};
+    initialize: function () {
+      Modal.__super__.initialize.apply(this, arguments);
+      console.log('modal', this.opts, this.options);
+      this.setView(this.options.content_view, '.content');
     },
-                
+
+    preRender: function () {
+      this.$el.appendTo('body');
+    },
+    
     onRender: function () {
       var self = this;
-      var $modal = this.$('.modal');
+      var $modal = this.$el;
       
       this.fixHeight();
       
@@ -30,31 +43,34 @@ define([
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
 
-          self.fixHeight();
-      });
+          this.fixHeight();
+      }, this);
 
       // assign attributes on modal shown event
       $modal.on('shown', function () {
-        var max_height = $(window).innerHeight() - $('.modal').position().top * 2;
-        var max_width = $(window).innerWidth() - $('.modal').position().top * 2;
+        var max_height = $(window).innerHeight() - this.$el.position().top * 2;
+        var max_width = $(window).innerWidth() - this.$el.position().top * 2;
         
-        self.fixHeight();
+        this.fixHeight();
         
         // enable resizable
         $(this).resizable({
           handles: "se",
-          minHeight: $modal.height(),
+          minHeight: this.$el.height(),
           maxHeight: max_height,
-          minWidth: $modal.width(),
+          minWidth: this.$el.width(),
           maxWidth: max_width
         });
-      });
-      // console.log(this.views, this.$el);
+      }, this);
+      
+      // move to body el to fix z-index issues
+      console.log('mrdal',$modal);
+      console.log(this.views, this.$el);
     },
     
     fixHeight: function () {
       var padding = 15;
-      var $modal = this.$('.modal');
+      var $modal = this.$el;
       var max_height = $(window).innerHeight() - $modal.position().top * 2;
       
       if ($modal.height() > max_height) {
@@ -88,10 +104,10 @@ define([
       this.clean();
       this.undelegateEvents();
       this.stopListening();
-      this.$el.empty();
+      this.$el.remove();
     }
   });
   
   
-  return Modal
+  return Modal;
 });

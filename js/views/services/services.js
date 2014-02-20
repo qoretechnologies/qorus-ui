@@ -12,9 +12,9 @@ define(function(require){
       ModalView   = require('views/services/modal'),
       Toolbar     = require('views/toolbars/services_toolbar'),
       PaneView    = require('views/common/pane'),
+      helpers     = require('qorus/helpers'),
       context, ListView, TableView, RowView;
       
-  require('jquery.fixedheader');
   require('jquery.fixedheader');
   
   context = {
@@ -175,7 +175,7 @@ define(function(require){
         });
         
         // add listener - for some reason it doesn't work inside ServiceView
-        this.listenTo(model, 'change', content_view.render);
+        // this.listenTo(model, 'change', content_view.render);
         this.listenTo(content_view, 'modal:open', this.openExecuteModal);
         
         // init detail view

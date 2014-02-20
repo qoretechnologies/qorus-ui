@@ -1,17 +1,50 @@
 define(function (require) {
   require('jquery.ui');
   
-  var $           = require('jquery'),
-      _           = require('underscore'),
-      Qorus       = require('qorus/qorus'),
-      Dispatcher  = require('qorus/dispatcher'),
-      Model       = require('models/service'),
-      LogView     = require('views/log'),
-      ModalView   = require('views/services/modal'),
-      Template    = require('tpl!templates/service/detail.html'),
-      MethodsTpl  = require('tpl!templates/service/methods.html'),
-      InfoTpl     = require('tpl!templates/service/info.html'),
-      ModelView;
+  var $          = require('jquery'),
+      Qorus      = require('qorus/qorus'),
+      LogView    = require('views/log'),
+      ModalView  = require('views/common/modal'),
+      Template   = require('tpl!templates/service/detail.html'),
+      MethodsTpl = require('tpl!templates/service/methods.html'),
+      InfoTpl    = require('tpl!templates/service/info.html'),
+      SourceTpl  = require('tpl!templates/service/source.html'),
+      Rainbow    = require('rainbow'),
+      ModelView, MethodsView;
+
+  MethodsView = Qorus.ModelView.extend({
+    template: MethodsTpl,
+    name: 'Methods',
+    additionalEvents: {
+      'click button[data-action=showSource]': 'showSource'
+    },
+    
+    initialize: function () {
+      MethodsView.__super__.initialize.apply(this, arguments);
+
+      // this.model.getProperty('methods', { method_source: true }, true);
+      this.model.getProperty('methods', { method_source: true }, true);
+      this.listenTo(this.model, 'update:methods', this.render);
+    },
+    
+    showSource: function (e) {
+      var $target = $(e.currentTarget);
+      var method = _.where(this.model.get('methods'), { name: $target.data('methodname') })[0];
+      
+      content_view = new Qorus.View({
+        template: SourceTpl,
+        method: method
+      });
+      
+      content_view.on('postrender', function () { Rainbow.color() } );
+      
+      this.removeView('#source-modal');
+      
+      this.insertView(new ModalView({ 
+        content_view: content_view
+      }), '#source-modal', true);
+    }
+  });
 
   ModelView = Qorus.TabView.extend({
     template: Template,
@@ -22,14 +55,14 @@ define(function (require) {
     
     additionalEvents: {
       "click button[data-action!='execute']": "runAction",
-      "click button[data-action='execute']": "openExecuteModal",
+      "click button[data-action='execute']": "openExecuteModal"
     },
     
     initialize: function () {
       ModelView.__super__.initialize.apply(this, arguments);
       
       // TODO: check why this doesn't work
-      this.listenTo(this.model, 'change', this.render);
+      // this.listenTo(this.model, 'change', this.render);
     },
 
     render: function (ctx) {
@@ -41,7 +74,7 @@ define(function (require) {
       var url = '/services/' + this.model.id;
       
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: MethodsTpl }), { name: 'Methods'});
+      this.addTabView(new MethodsView({ model: this.model }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
     },
     
@@ -59,7 +92,7 @@ define(function (require) {
       this.removeViews();
       this.undelegateEvents();
       this.stopListening();
-      this.$el.empty();
+      this.$el.remov();
     },
     
     close: function () {

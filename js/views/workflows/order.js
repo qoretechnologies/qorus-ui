@@ -1,12 +1,13 @@
 define(function(require) {
-  var $            = require('jquery'),
-      _            = require('underscore'),
-      Qorus        = require('qorus/qorus'),
-      Model        = require('models/order'),
-      Workflow     = require('models/workflow'),
-      Template     = require('text!templates/workflow/orders/detail.html'),
-      StepView     = require('views/steps/step'),
-      DiagramView  = require('views/common/diagram'),
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Model       = require('models/order'),
+      Workflow    = require('models/workflow'),
+      Template    = require('text!templates/workflow/orders/detail.html'),
+      ModalView   = require('views/common/modal'),
+      StepView    = require('views/steps/step'),
+      DiagramView = require('views/common/diagram'),
       context, ModelView;
       
   context = {
@@ -31,8 +32,6 @@ define(function(require) {
     },
     
     initialize: function (opts) {
-  	  _.bindAll(this);
-      
       if (!_.has(opts, 'show_header'))
         opts.show_header = true;
       
@@ -73,8 +72,7 @@ define(function(require) {
     
     createDiagram: function () {
       var self = this,
-        dia,
-        wfl = new Workflow({ id: this.model.get('workflowid') });
+          wfl  = new Workflow({ id: this.model.get('workflowid') });
       
       self.listenTo(wfl, 'sync', function () {
         self.setview(new DiagramView({ steps: wfl.mapSteps() }), '#steps-diagram', true);
@@ -100,7 +98,6 @@ define(function(require) {
       var $target = $(e.currentTarget);
       e.preventDefault();
 
-      var active = $('.tab-pane.active');
       $target.tab('show');
     },
     
@@ -141,7 +138,9 @@ define(function(require) {
     
       if (id) {
         e.stopPropagation();
-        this.setView(new StepView({ id: id }), '#stepdetail', true);
+        this.setView(new ModalView({
+          content_view: new StepView({ id: id }) 
+        }), '#stepdetail', true);
       }
     },
     

@@ -1,14 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'settings',
-  'qorus/qorus',
-  'text!templates/service/modal.html',
-], function ($, _, settings, Qorus, Template) {
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      settings = require('settings'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('tpl!templates/service/modal.html'),
+      View;
+
+
+  View = Qorus.View.extend({
+    views: {},
     context: {},
     additionalEvents: {
-      'submit': 'executeMethod',
+      'submit': 'executeMethod'
     },
     
     initialize: function (opts) {
@@ -33,8 +36,8 @@ define([
     
     // starts workflow with params from form
     executeMethod: function (e) {
+      var $target = $(e.currentTarget);
       e.preventDefault();
-      $target = $(e.currentTarget);
       
       this.methodCall($('#service_name', $target).val(), $('#method', $target).val(), $('#args', $target).val());
       return this;
@@ -46,11 +49,11 @@ define([
       var _this = this;
       
       $.put(url, { action: 'call', parse_args: args })
-      .always( 
-        function (e) {
-          _this.updateResponse(e);
-        }
-      )
+        .always( 
+          function (e) {
+            _this.updateResponse(e);
+          }
+        );
     },
     
     updateResponse: function (response) {
@@ -67,5 +70,6 @@ define([
     }
     
   });
+  
   return View;
 });

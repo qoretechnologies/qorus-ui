@@ -9,7 +9,6 @@ define(function (require) {
     },
     
     initialize: function (options) {
-      console.log(options);
       this.options = options || {};
       this.resource_type = this.options.resource_type;
     }
