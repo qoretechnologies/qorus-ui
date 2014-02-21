@@ -11,8 +11,8 @@ define([
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
     
-    initialize: function (opts) {
-      Collection.__super__.initialize.call(this, opts);
+    initialize: function (models, opts) {
+      Collection.__super__.initialize.call(this, arguments);
       
       if (!opts.date) {
         opts.date = this.date;

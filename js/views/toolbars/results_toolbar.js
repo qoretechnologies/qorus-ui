@@ -2,47 +2,75 @@ define(function (require) {
   require('bootstrap.multiselect');
   var $           = require('jquery'),
       _           = require('underscore'),
-      Qorus       = require('qorus/qorus'),
       Template    = require('text!templates/job/toolbars/results_toolbar.html'),
       moment      = require('moment'),
       BaseToolbar = require('views/toolbars/toolbar'),
-      Toolbar;
+      settings    = require('settings'),
+      utils       = require('utils'),
+      Toolbar, status;
   
-  var Toolbar = BaseToolbar.extend({
+  status =  [
+    'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
+    'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
+    'Blocked', 'Crash'
+  ];
+  
+  Toolbar = BaseToolbar.extend({
+    template: Template,
     fixed: false,
     datepicker: true,
     route: 'showJob',
     url_options: function () {
       return {
         id: this.options.id
-      }
+      };
     },
     
-    context: {
-      predefined_statuses: [
-        'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
-        'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
-        'Blocked', 'Crash'
-      ]
+    url: function (opts) {
+      var date, statuses;
+      
+      opts     = opts || {};
+      date     = opts.date || this.options.date;
+      statuses = opts.statuses || this.options.statuses;
+          
+      if (date !== 'all') date = utils.encodeDate(date);
+
+      this.fixUpstreamUrl();
+      return "/" + [statuses, date].join('/');
     },
     
     additionalEvents: {
       "click button#status-filter": "statusFilter",
-      "click button[data-action='open']": "navigateTo",
+      "click button[data-action='open']": "navigateTo"
     },
     
     initialize: function (opts) {
       Toolbar.__super__.initialize.call(this, opts);
+
+      _.extend(this.context, {
+        predefined_statuses: status,
+        hasStatus: this.hasStatus,
+        url: this.getViewUrl,
+        getAllUrl: this.getAllUrl,
+        get24hUrl: this.get24hUrl
+      });
+
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
       }
       
-      this.template = Template;
-      this.context.hasStatus = this.hasStatus;
       this.updateUrl();
     },
-        
+
+    // check the statuses for given status
+    hasStatus: function (status) {
+      if (this.options.statuses){
+        return _.indexOf(this.options.statuses.split(','), status) > -1;        
+      }
+      return false;
+    },
+
     onRender: function () {
       this.datePicker();
       this.addMultiSelect();
@@ -53,27 +81,33 @@ define(function (require) {
       $('#statuses').multiselect('destroy');
     },
     
+    fixUpstreamUrl: function () {
+      var url = this.upstreamUrl.split('/').splice(0,4).join('/');
+      this.upstreamUrl = url;
+      return url;
+    },
+    
+    getAllUrl: function () {
+      var url = this.url({ date: 'all' });
+      return this.fixUpstreamUrl() + url;
+    },
+
+    get24hUrl: function () {
+      var url = this.url({ date: moment().add('days',-1).format(settings.DATE_FORMAT) });
+      return this.fixUpstreamUrl() + url;
+    },
+    
     updateStatuses: function(statuses){
       this.options.statuses = statuses;
     },
     
-    updateUrl: function(url, statuses){
+    updateUrl: function(url){
       var baseUrl = url || this.options.url;
       this.context.url = baseUrl;
     },
     
-    
-    // check the statuses for given status
-    hasStatus: function (status){
-      if (this.options.statuses){
-        return _.indexOf(this.options.statuses.split(','), status) > -1;        
-      }
-      return false;
-    },
-    
-    statusFilter: function(){
-      var url = [this.baseUrl, this.options.statuses, this.options.date].join('/');
-      Backbone.history.navigate(url, { trigger: true });
+    statusFilter: function () {
+      Backbone.history.navigate(this.getViewUrl(), { trigger: true });
     },
     
     filterBE: function(e){
@@ -92,13 +126,13 @@ define(function (require) {
     },
     
     addMultiSelect: function(){
-      var _this = this;
+      var self = this;
       // apply bootstrap multiselect to #statuses element
       $('#statuses').multiselect({
         onChange: function(el, checked){
           var sl = [], val = $(el).val();
-          if(_this.options.statuses){
-            sl = _this.options.statuses.split(',');
+          if(self.options.statuses){
+            sl = self.options.statuses.split(',');
           }
           
           if(checked){
@@ -121,9 +155,9 @@ define(function (require) {
           }
           // refresh valudes
           $('#statuses').multiselect('refresh');
-          _this.options.statuses = sl.join(',');
-          _this.trigger('filter', _this.options.statuses);
-          debug.log(_this.options);
+          self.options.statuses = sl.join(',');
+          self.trigger('filter', self.options.statuses);
+          debug.log(self.options);
         }
       });
     },

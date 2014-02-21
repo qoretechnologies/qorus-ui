@@ -1,22 +1,30 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'models/job',
-  'views/log',
-  'text!templates/job/detail.html',
-  'views/jobs/results',
-  'views/jobs/result',
-  'views/common/bottom_bar',
-  'jquery.ui'
-], function ($, _, Qorus, Dispatcher, Model, Log, Template, ResultsView, ResultView, BottomBarView) {
-  var ModelView = Qorus.View.extend({
+define(function (require) {
+  require('jquery.ui');
+  
+  var $             = require('jquery'),
+      _             = require('underscore'),
+      Qorus         = require('qorus/qorus'),
+      Model         = require('models/job'),
+      Log           = require('views/log'),
+      Template      = require('text!templates/job/detail.html'),
+      ResultsView   = require('views/jobs/results'),
+      ResultView    = require('views/jobs/result'),
+      BottomBarView = require('views/common/bottom_bar'),
+      helpers       = require('qorus/helpers'),
+      ModelView;
+  
+  
+  ModelView = Qorus.TabView.extend({
+    __name__: 'JobView',
     title: "Job",
     template: Template,
     additionalEvents: {
-      'click .nav-tabs a': 'tabToggle',
-      'click #results tbody tr': 'loadInfo',
+      'click #results tbody tr': 'loadInfo'
+    },
+    
+    url: function () {
+      var url = helpers.getUrl('showJob', { id: this.model.id });
+      return url;
     },
     
     initialize: function (opts) {
@@ -37,11 +45,12 @@ define([
     preRender: function (args) {
       var socket_url = '/jobs/' + this.opts.id;
       
-      this.setView(new ResultsView({
+      this.addTabView(new ResultsView({
         jobid: this.opts.id, 
-        date: this.opts.date
-      }), '#results');
-      this.setView(new Log({ socket_url: socket_url, parent: this }), '#log');
+        date: this.opts.date,
+        statuses: this.opts.filter
+      }), { name: 'Results'});
+      this.addTabView(new Log({ socket_url: socket_url, parent: this }));
       this.setView(new BottomBarView({}), '#bottom-bar');
     },
     
@@ -52,16 +61,6 @@ define([
       }
       ModelView.__super__.render.call(this, mctx);
       return this;
-    },
-
-    tabToggle: function(e){
-      var $target = $(e.currentTarget);
-      e.preventDefault();
-
-      var active = $('.tab-pane.active');
-      $target.tab('show');
-
-      this.active_tab = $target.attr('href');
     },
     
     // opens the bottom bar with detail info about the Instance/Order

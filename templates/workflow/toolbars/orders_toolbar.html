@@ -16,8 +16,8 @@
       <input type="text" class="span10" value="<%= date %>">
     </div>
     <div class="btn-group">
-      <button class="btn" data-action="open" data-url="<%= obj.url %>/all">All</button>
-      <button class="btn" data-action="open" data-url="<%= obj.url %>">24 h</button>
+      <button class="btn" data-action="open" data-url="<%= obj.getAllUrl() %>">All</button>
+      <button class="btn" data-action="open" data-url="<%= obj.get24hUrl() %>">24 h</button>
     </div>
   </div>
   <div class="btn-group">

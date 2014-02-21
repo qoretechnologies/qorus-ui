@@ -1,11 +1,11 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus',
-  // Pull in the Model module from above
-  'models/result'
-], function(settings, _, Qorus, Model){
-  var Collection = Qorus.SortedCollection.extend({
+define(function (require) {
+  var settings = require('settings'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model    = require('models/result'),
+      Collection;
+  
+  Collection = Qorus.SortedCollection.extend({
     sort_key: 'job_instanceid',
     sort_order: 'des',
     model: Model,
@@ -14,8 +14,8 @@ define([
       return settings.REST_API_PREFIX + '/jobs/'+ this.jobid + '/results';
     },
     
-    initialize: function (opts) {
-      Collection.__super__.initialize.call(this, opts);
+    initialize: function (models, opts) {
+      Collection.__super__.initialize.apply(this, arguments);
       this.opts.sort = 'job_instanceid';
       
       if (_.has(opts, 'jobid')) {
@@ -23,6 +23,10 @@ define([
         delete opts.jobid;
       } else {
         this.url = settings.REST_API_PREFIX + '/jobs';
+      }
+
+      if (this.opts.statuses == 'all' || !this.opts.statuses) {
+        delete this.opts.statuses;
       }
     }    
   });

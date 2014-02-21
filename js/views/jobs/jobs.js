@@ -152,19 +152,6 @@ define(function(require) {
       }
       
       Backbone.history.navigate(url)
-    },
-    
-    helpers: {
-      getUrl: function (id, date) {
-        var date = date || this.date || null;
-        var params = ['/jobs/view', id];
-    
-        if (date) {
-          params.push(utils.encodeDate(date));
-        }
-        
-        return params.join('/');
-      }
     }
   });
 

@@ -108,8 +108,8 @@ define(function (require) {
     },
     
     // result list
-    showJob: function (id, date) {
-      var view = new JobView({ jobid: id, date: date });
+    showJob: function (id, filter, date) {
+      var view = new JobView({ jobid: id, filter: filter, date: date });
       this.setView(view);
     },
     

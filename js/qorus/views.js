@@ -435,7 +435,7 @@ define(function (require) {
         if (collection instanceof Backbone.Collection) {
           this.collection = collection;
         } else {
-          this.collection = new collection(this.opts);
+          this.collection = new collection([], this.opts);
         }
         
         this.listenToOnce(this.collection, 'sync', this.render);
@@ -803,7 +803,7 @@ define(function (require) {
       if (!this.collection || this.collection.size() === 0) {
         this.template = NoDataTpl;
       } else {
-        this.opts.template = this.opts.template;
+        this.template = this.opts.template;
       }
       
       this.context.messages = this.messages;
@@ -896,6 +896,7 @@ define(function (require) {
     },
 
     appendRow: function (m, render) {
+      if (this.template === NoDataTpl) this.render();
       var view = this.insertView(new this.RowView({ 
             model: m, 
             template: this.row_tpl, 
@@ -909,7 +910,11 @@ define(function (require) {
       
       if (render) {
         idx = this.collection.indexOf(m-1);
-        $(this.$('tbody tr').get(idx)).after(view.render().$el);
+        if (this.$('tbody tr').get(idx)) {
+          $(this.$('tbody tr').get(idx)).after(view.render().$el);
+        } else {
+          this.$('tbody').append(view.render().$el);
+        }
       }
       
       return view;
@@ -1002,10 +1007,23 @@ define(function (require) {
     columns: []
   });
   
-  TableBodyView = View.extend({
+  TBodyView = View.extend({
     tagName: 'tbody',
     context: {},
-    initialize: function () {}
+  });
+  
+  THeadView = View.extend({
+    tagName: 'thead',
+    context: {},
+  });
+  
+  TFootView = View.extend({
+    tagName: 'tfoot',
+    context: {}
+  });
+  
+  TRowView = View.extend({
+    tagName: 'tr'
   });
 
   RowView = View.extend({

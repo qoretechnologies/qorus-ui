@@ -6,8 +6,7 @@
     <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
   <% } %>
 </td>
-<% var order_url = (obj.url) ? [obj.url,obj.statuses,obj.date,item.workflow_instanceid].join('/') : '/orders/view/' + item.workflow_instanceid %>
-<td class="name"><a href="<%= order_url %>"><%= item.name %> <small>v<%= item.version %>, ID#<%= item.workflow_instanceid %></small></a></td>
+<td class="name"><a href="<%= getUrl('showOrder', { id: item.workflow_instanceid }) %>"><%= item.name %> <small>v<%= item.version %>, ID#<%= item.workflow_instanceid %></small></a></td>
 <td><%= item.started %></td>
 <td><%= item.completed %></td>
 <td><%= (item.error_count) ? item.error_count : 0 %></td>

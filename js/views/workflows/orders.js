@@ -66,8 +66,7 @@ define(function (require) {
     
     preRender: function () {
       var opts = this.opts;
-      console.log(this.opts, this.getViewUrl(), this.upstreamUrl, this.url());
-      
+            
       this.setView(new OrdersToolbar(this.opts), '#toolbar');
       
       this.setView(new Qorus.TableView({ 

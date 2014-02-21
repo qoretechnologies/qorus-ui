@@ -8,9 +8,9 @@ define(function (require) {
       return [settings.REST_API_PREFIX, 'remote', this.resource_type].join('/');
     },
     
-    initialize: function (options) {
-      this.options = options || {};
-      this.resource_type = this.options.resource_type;
+    initialize: function (models, options) {
+      this.opts = options || {};
+      this.resource_type = this.opts.resource_type;
     }
   });
   

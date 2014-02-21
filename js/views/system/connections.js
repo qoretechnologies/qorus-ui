@@ -4,32 +4,40 @@ define(function (require) {
       Qorus      = require('qorus/qorus'),
       Template   = require('tpl!templates/system/connections.html'),
       PaneTpl    = require('tpl!templates/system/connections/pane.html'),
+      TableTpl   = require('text!templates/system/connections/table.html'),
+      RowTpl     = require('text!templates/system/connections/row.html'),
       Collection = require('collections/remote'),
-      View, PaneView;
+      View, PaneView, TableView;
+
+  
+  TableView = Qorus.TableView.extend({
+    template: TableTpl,
+    row_template: RowTpl,
+    fixed: true,
+    appendRow: function () {
+      var view = TableView.__super__.appendRow.apply(this, arguments);
+      view.render();
+      console.log(view.$el);
+      return view;
+    }
+  });
   
   PaneView = Qorus.ListView.extend({
-    additionalEvents: {
-      'click .nav-list a': 'tabToggle'
-    },
     views: {},
     template:  PaneTpl,
     
     initialize: function (options) {
       this.name = options.resource_type;
-      this.collection = new Collection({ resource_type: options.resource_type });
-      this.listenTo(this.collection, 'sync', this.render);
+      this.collection = new Collection([], { resource_type: options.resource_type });
       this.collection.fetch();
+      this.render();
     },
     
     preRender: function () {
       this.context.items = this.collection.toJSON();
-    },
-    
-    tabToggle: function (e) {
-      var $target = $(e.currentTarget);
-      $target.tab('show');
-      e.preventDefault();
-      e.stopPropagation();
+      this.setView(new TableView({
+        collection: this.collection,
+      }), '.connections');
     }
   });
   

@@ -54,7 +54,7 @@ define(function (require) {
       
       _.bindAll(this, 'render');
       
-      this.collection = new Collection({ date: this.opts.date, search: this.opts.search });
+      this.collection = new Collection([], { date: this.opts.date, search: this.opts.search });
       this.template = Template;
       this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.collection.fetch();

@@ -172,6 +172,8 @@ define(function (require) {
     initialize: function (models, options) {
       _.bindAll(this);
       this.options = options || {};
+      this.opts = this.options;
+      console.log(this.options, this.opts, options);
       
       if (options.date) {
         this.date = this.options.date;
@@ -260,12 +262,12 @@ define(function (require) {
   });
   
   Qorus.SortedCollection = Qorus.Collection.extend({
-    initialize: function (opts) {
+    initialize: function (models, opts) {
       debug.log(this);
       this.sort_key = 'name';
       this.sort_order = 'asc';
       this.sort_history = [''];
-      this.opts = opts;
+      this.opts = opts || {};
       if (opts) {
         this.date = opts.date;
       }

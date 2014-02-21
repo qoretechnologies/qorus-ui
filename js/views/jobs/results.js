@@ -1,38 +1,54 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/results',
-  'text!templates/job/results/list.html',
-  'text!templates/job/results/table.html',
-  'text!templates/job/results/row.html',
-  'views/toolbars/results_toolbar'
-], function ($, _, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl, Toolbar) {
+define(function (require) {
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      Collection = require('collections/results'),
+      Template   = require('tpl!templates/job/results/list.html'),
+      TableTpl   = require('text!templates/job/results/table.html'),
+      RowTpl     = require('text!templates/job/results/row.html'),
+      Toolbar    = require('views/toolbars/results_toolbar'), 
+      moment     = require('moment'),
+      settings   = require('settings'),
+      ListView;
 
-  var ListView = Qorus.ListView.extend({
+
+  ListView = Qorus.ListView.extend({
     template: Template,
     model_name: 'result',
     additionalEvents: {
-      'click th[data-sort]': 'fetchSorted',
+      'click th[data-sort]': 'fetchSorted'
     },
     
     initialize: function (opts) {
       _.bindAll(this);
       
-      this.opts = opts || {};
+      opts = opts || {};
+      
+      // if (opts.url) {
+      //   this.url = [opts.url, this.name].join('/');
+      //   opts.url = this.url;
+      //   // delete opts.url;
+      // }
+
+      // set DATE format and init date
+      var date = opts.date;
+      if (date === undefined || date === null || date === '24h') {
+        this.date = moment().add('days', -1).format(settings.DATE_DISPLAY);
+      } else if (date == 'all') {
+        this.date = moment(settings.DATE_FROM).format(settings.DATE_DISPLAY);
+      } else if (date.match(/^[0-9]+$/)) {
+        this.date = moment(date, 'YYYYMMDDHHmmss').format(settings.DATE_DISPLAY);
+      } else {
+        this.date = date;
+      }
+      
+      opts.date = this.date;
+      
+      this.opts = opts;
+      _.extend(this.options, opts);
 
       ListView.__super__.initialize.call(this, Collection, this.opts.date);
-      // _.extend(this.options, opts);
-      // _.extend(this.context, opts);
-
-      this.opts.url = '/jobs/view/' + opts.jobid;
-
-      // this.collection = new Collection(opts);
-      // this.listenTo(this.collection, 'sync', this.updateContext, this);
-      // this.collection.fetch();
-      
-      this.render();
     },
 
     onRender: function () {
@@ -52,8 +68,8 @@ define([
         context: { url: this.url },
         dispatcher: Dispatcher
       }), '#result-list');
-      
-      this.setView(new Toolbar({ date: this.date, url: this.opts.url }), '#toolbar');
+
+      this.setView(new Toolbar({ date: this.date, url: this.opts.url, statuses: this.opts.statuses }), '#toolbar');
     },
     
     updateContext: function () {
@@ -74,10 +90,7 @@ define([
       }
     },
     
-    fetchSorted: function (e) {
-      var $target = $(e.currentTarget);
-      var sort = $target.data('sort');
-    }
+    fetchSorted: function () {  }
   }); 
 
   return ListView;

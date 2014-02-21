@@ -8,13 +8,13 @@ define([
     url: function() {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/instances/'
     },
-    initialize: function(opts){
+    initialize: function (models, opts){
       this.opts = opts;
       this.workflowid = opts.workflowid;
       
       delete this.opts.url;
       
-      Collection.__super__.initialize.call(this, opts);
+      Collection.__super__.initialize.apply(this, arguments);
     },
     model: Model,
   });

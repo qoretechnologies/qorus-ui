@@ -5,18 +5,16 @@
           <h3><%= job.name %></h3>
           <p><%= job.description %></p>
   
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="results" data-target="#results">Results</a></li>
-            <li><a href="log" data-target="#log">Log</a></li>
+          <ul class="nav <%= obj.tab_css ? obj.tab_css : 'nav-tabs' %>">
+            <% _.each(obj.tabs(), function (tab, idx) { %>
+            <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+            <% }) %>
           </ul>
-  
+
           <div class="tab-content">
-              <div id='results' class="tab-pane active">
-              	<p>Loading results...</p>
-              </div>
-              <div id='log' class="tab-pane">
-                  <p>Log</p>
-              </div>
+            <% _.each(obj.tabs(), function (tab, idx) { %>  
+            <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+            <% }) %>
           </div>
         </div>
     </div>

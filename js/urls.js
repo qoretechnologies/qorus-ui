@@ -10,7 +10,7 @@ define(function (require) {
     'orders/view/:id': 'showOrder',
     'service/view/:id': 'showServices',
     'services(/)*path': 'showServices',
-    'jobs/view/:id(/:date)': 'showJob',
+    'jobs/view/:id(/)(:filter)(/)(:date)': 'showJob',
     'jobs(/)(:date)(/)*path': 'showJobs',
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',

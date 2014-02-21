@@ -48,8 +48,6 @@ define(function (require) {
         getAllUrl: this.getAllUrl,
         get24hUrl: this.get24hUrl
       });
-
-      console.log(this.context);
       
       if (!_.has(opts, 'statuses')) {
         this.options.statuses = 'all';
