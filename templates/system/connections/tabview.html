@@ -1,0 +1,14 @@
+<h3><span class="selectable"><%= item.name %></span> <small><%= item.version %></small></h3>
+<p class="muted"><em><%= item.description %></em></p>
+
+<ul class="nav nav-tabs">
+  <% _.each(obj.tabs(), function (tab, idx) { %>
+  <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+  <% }) %>
+</ul>
+
+<div class="tab-content">
+  <% _.each(obj.tabs(), function (tab, idx) { %>  
+  <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+  <% }) %>
+</div>
