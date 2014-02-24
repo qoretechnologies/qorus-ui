@@ -4,6 +4,7 @@ define(function (require) {
       Collection;
       
   Collection = Qorus.Collection.extend({
+    model: Qorus.ModelWithAlerts,
     url: function () {
       return [settings.REST_API_PREFIX, 'remote', this.resource_type].join('/');
     },

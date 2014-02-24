@@ -64,7 +64,7 @@ define(function (require) {
   TableView = Qorus.TableView;
   
   ListView = Qorus.ListView.extend({
-    cls: "AlertsListView",
+    __name__: "AlertsListView",
     // tagName: 'div',
     // id: function () {
     //   return "alerts-table-" + this.cid;

@@ -160,6 +160,14 @@ define(function (require) {
       }
     }
   });
+  
+  Qorus.ModelWithAlerts = Qorus.Model.extend({
+    parse: function (response, options) {
+      response = Qorus.ModelWithAlerts.__super__.parse.apply(this, arguments);
+      response.has_alerts = (response.alerts.length > 0);
+      return response;
+    }
+  });
 
   Qorus.Collection = Backbone.Collection.extend({
     local: false,

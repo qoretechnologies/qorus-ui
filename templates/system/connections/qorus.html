@@ -1,0 +1,17 @@
+<h2><%= item.name %></h2>
+<table class="table table-stripped table-condensed table-align-left">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% _.each(item, function (v, k) { %>
+      <tr>
+        <td><%= k %></td>
+        <td><%= (_.isObject(v)) ? createNestedList(v) : v %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

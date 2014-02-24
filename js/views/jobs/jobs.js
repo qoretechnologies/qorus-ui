@@ -127,7 +127,7 @@ define(function(require) {
     showDetail: function (row) {
       var model = row.model,
           view  = this.getView('#job-detail'),
-          width = $(document).width() - $('[data-sort="active"]').offset().left,
+          width = $(document).width() - this.$('[data-sort="active"]').offset().left,
           url   = this.getViewUrl();
       
       if (this.selected_model != model) {

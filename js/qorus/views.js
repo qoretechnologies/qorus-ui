@@ -1386,6 +1386,7 @@ define(function (require) {
       view = this.insertView(view, 'tabs');
       
       if (opts.name) view.name = opts.name;
+      return view;
     },
     
     renderTabs: function () {
