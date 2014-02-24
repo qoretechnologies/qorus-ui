@@ -1281,3 +1281,10 @@ table .header-copy {
 .tab-content {
   overflow: visible;
 }
+
+a[data-target='#Alerts']:before {
+  content: "\f071";
+  font-family: FontAwesome;
+  color: #B94A48;
+  margin-right: .5em;
+}

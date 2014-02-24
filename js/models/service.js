@@ -64,7 +64,6 @@ define(function (require) {
     parse: function () {
       response = Model.__super__.parse.apply(this, arguments);
       response.has_alerts = (response.alerts.length > 0);
-      console.log(response.has_alerts, response.alerts.length, response.name);
       return response;
     },
     
