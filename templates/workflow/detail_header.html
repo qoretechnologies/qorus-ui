@@ -1,6 +1,6 @@
 <div class="row-fluid relative">
   <div class="span8">
-    <h3><%= item.name %> <small><%= item.version %></small></h3>
+    <h3><span class="selectable"><%= item.name %></span> <small><%= item.version %></small></h3>
   </div>
   <div class="<%= (obj.pull_right) ? 'pull-right align-middle' : '' %>" id="controls">
     <%= createControls(_item) %>

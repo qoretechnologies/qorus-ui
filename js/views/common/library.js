@@ -30,7 +30,6 @@ define(function (require) {
     },
         
     tabToggle: function (e) {
-      console.log('am i there');
       var $target = $(e.currentTarget);
       e.preventDefault();
       e.stopPropagation();

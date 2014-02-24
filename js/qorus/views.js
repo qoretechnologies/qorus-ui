@@ -53,7 +53,8 @@ define(function (require) {
     upstreamUrl: "",
     url: '',
     defaultEvents: {
-      "submit": "doNothing"
+      "submit": "doNothing",
+      "dblclick .selectable": "selectName"
       // "click a[href^='/']": 'catchAClick'
     },
     context: {},
@@ -381,6 +382,23 @@ define(function (require) {
     
     getViewUrl: function () {
       return this.upstreamUrl + _.result(this, 'url');
+    },
+    
+    selectName: function (e) {
+      var $target = $(e.currentTarget);
+      var range, selection;
+    
+      if (window.getSelection && document.createRange) {
+          selection = window.getSelection();
+          range = document.createRange();
+          range.selectNodeContents($target[0]);
+          selection.removeAllRanges();
+          selection.addRange(range);
+      } else if (document.selection && document.body.createTextRange) {
+          range = document.body.createTextRange();
+          range.moveToElementText($target[0]);
+          range.select();
+      }
     }
    });
 
@@ -402,7 +420,8 @@ define(function (require) {
       "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
       "click a[data-action]": "runAction",
-      "click a[data-back]": "historyBack"
+      "click a[data-back]": "historyBack",
+      "dblclick .selectable": "selectName"
       // "show": function (e) { console.log('shown', arguments )}
     },
     
@@ -1054,7 +1073,8 @@ define(function (require) {
     defaultEvents: {
       'click': 'rowClick',
       'shown.bs.dropdown .btn-group': 'lock',
-      'hidden.bs.dropdown .btn-group': 'unlock'
+      'hidden.bs.dropdown .btn-group': 'unlock',
+      "dblclick .selectable": "selectName"
     },
         
     initialize: function (opts) {
@@ -1204,7 +1224,8 @@ define(function (require) {
     defaultEvents: {
       'submit': 'doAction',
       'click a[data-action]': 'doAction',
-      'click button[data-action]': 'doAction'
+      'click button[data-action]': 'doAction',
+      "dblclick .selectable": "selectName"
     },
     
     initialize: function (opts) {
@@ -1280,7 +1301,8 @@ define(function (require) {
     defaultEvents: {
       'submit': 'doAction',
       'click a[data-action]': 'doAction',
-      'click button[data-action]': 'doAction'
+      'click button[data-action]': 'doAction',
+      "dblclick .selectable": "selectName"
     },
     
     initialize: function (opts) {
@@ -1358,7 +1380,8 @@ define(function (require) {
     
     defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
-      'click .nav-pills a': 'tabToggle'
+      'click .nav-pills a': 'tabToggle',
+      "dblclick .selectable": "selectName"
     },
     
     initialize: function () {
