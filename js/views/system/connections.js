@@ -13,7 +13,8 @@ define(function (require) {
       DatasourceTpl = require('tpl!templates/system/connections/qorus.html'),
       AlertsTpl     = require('tpl!templates/common/alerts.html'),
       TabTpl        = require('tpl!templates/system/connections/tabview.html'),
-      View, PaneView, TableView, ResourceViews, QorusDetailView, UserDetailView, DatasourcesDetailView;
+      View, PaneView, TableView, ResourceViews, QorusDetailView, 
+      UserDetailView, DatasourcesDetailView;
   
      
       
@@ -35,11 +36,14 @@ define(function (require) {
         template: QorusTpl
       }), { name: 'Detail' });
       
-      if (this.model.get('has_alerts')) 
+      if (this.model.get('has_alerts')) {
         this.addTabView(new Qorus.ModelView({
           model: this.model,
           template: AlertsTpl
-        }, { name: 'Alerts' }));
+        }), { name: 'Alerts' });
+      }
+      
+      console.log(this.model.get('has_alerts'), this.views);
     }
   });
 
