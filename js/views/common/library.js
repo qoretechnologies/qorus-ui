@@ -15,7 +15,7 @@ define(function (require) {
     template: PaneTemplate,
     
     additionalEvents: {
-      'click .nav-pills a': 'tabToggle'
+      'click .nav-list a': 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -30,6 +30,7 @@ define(function (require) {
     },
         
     tabToggle: function (e) {
+      console.log('am i there');
       var $target = $(e.currentTarget);
       e.preventDefault();
       e.stopPropagation();

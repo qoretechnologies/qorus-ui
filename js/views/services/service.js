@@ -81,7 +81,7 @@ define(function (require) {
     preRender: function () {
       var url = '/services/' + this.model.id;
       
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Detail'});
       this.addTabView(new MethodsView({ model: this.model }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
       
