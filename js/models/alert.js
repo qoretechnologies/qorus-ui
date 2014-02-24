@@ -8,15 +8,15 @@ define(function (require) {
   obj_map = {
     workflow: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s %(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(_id)s', obj);
       },
       url: function (obj) {
-        return Helpers.getUrl('showWorkflow', { id: obj.id });
+        return Helpers.getUrl('showWorkflow', { id: obj._id });
       }
     },
     service: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s %(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(_id)s', obj);
       },
       url: function (obj) {
         var url = [Helpers.getUrl('showServices'), obj.id].join('/');
@@ -25,10 +25,10 @@ define(function (require) {
     },
     job: {
       name: function (obj) {
-        return sprintf('%(name)s v%(version)s %(id)s', obj);
+        return sprintf('%(name)s v%(version)s %(_id)s', obj);
       },
       url: function (obj) {
-        return Helpers.getUrl('showJob', { id: obj.id });
+        return Helpers.getUrl('showJob', { id: obj._id });
       }
     },
     group: {
@@ -37,6 +37,30 @@ define(function (require) {
       },
       url: function (obj) {
         return Helpers.getUrl('showGroup', { name: obj.name });
+      }
+    },
+    "user-connection": {
+      name: function (obj) {
+        return sprintf('%(name)s', obj);
+      },
+      url: function (obj) {
+        return [Helpers.getUrl('showSystem'), 'remote', 'user', obj.name].join('/');
+      }
+    },
+    datasource: {
+      name: function (obj) {
+        return sprintf('%(name)s', obj);
+      },
+      url: function (obj) {
+        return [Helpers.getUrl('showSystem'), 'remote', 'datasource', obj.name].join('/');
+      }
+    },
+    remote: {
+      name: function (obj) {
+        return sprintf('%(name)s', obj);
+      },
+      url: function (obj) {
+        return [Helpers.getUrl('showSystem'), 'remote', 'remote', obj.name].join('/');
       }
     }
   };
@@ -66,6 +90,7 @@ define(function (require) {
     
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
+      data._id = data.id;
       data.id = this.createID(data);
       
       return data;

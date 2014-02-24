@@ -1454,6 +1454,7 @@ define(function (require) {
   
   ModelView = View.extend({
     __name__: 'ModelView',
+    views: {},
     initialize: function () {
       ModelView.__super__.initialize.apply(this, arguments);
       

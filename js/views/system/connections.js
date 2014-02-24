@@ -11,14 +11,58 @@ define(function (require) {
       QorusTpl      = require('tpl!templates/system/connections/qorus.html'),
       UserTpl       = require('tpl!templates/system/connections/qorus.html'),
       DatasourceTpl = require('tpl!templates/system/connections/qorus.html'),
-      View, PaneView, TableView, ResourceTpl;
+      AlertsTpl     = require('tpl!templates/common/alerts.html'),
+      TabTpl        = require('tpl!templates/system/connections/tabview.html'),
+      View, PaneView, TableView, ResourceViews, QorusDetailView, UserDetailView, DatasourcesDetailView;
+  
+     
       
+  QorusDetailView = Qorus.TabView.extend({
+    views: {},
+    template: TabTpl,
+    
+    initialize: function (options) {
+      QorusDetailView.__super__.initialize.apply(this, arguments);
+      this.model = options.model;
+    },
+    
+    preRender: function () {
+      this.context.item = this.model.toJSON();
+      this.context.item.description = this.context.item.desc;
       
-  ResourceTpl = {
-    'qorus': QorusTpl,
-    'user': UserTpl,
-    'datasources': DatasourceTpl
+      this.addTabView(new Qorus.ModelView({
+        model: this.model,
+        template: QorusTpl
+      }), { name: 'Detail' });
+      
+      if (this.model.get('has_alerts')) 
+        this.addTabView(new Qorus.ModelView({
+          model: this.model,
+          template: AlertsTpl
+        }, { name: 'Alerts' }));
+    }
+  });
+
+  UserDetailView = DatasourcesDetailView = QorusDetailView;
+
+  ResourceViews = {
+    'qorus': QorusDetailView,
+    'user': UserDetailView,
+    'datasources': DatasourcesDetailView
   };
+  
+  
+  // Resource Table and Rows defintions
+  
+  RowView = Qorus.RowView.extend({
+    additionalEvents: {
+      'click [data-action=ping]': 'doPing'
+    },
+    
+    doPing: function () {
+
+    }
+  });
   
   TableView = Qorus.TableView.extend({
     template: TableTpl,
@@ -31,7 +75,9 @@ define(function (require) {
     }
   });
   
-  PaneView = Qorus.ListView.extend({
+  // Resource pane definition
+  
+  PaneView = Qorus.View.extend({
     views: {},
     template:  PaneTpl,
     url: function () {
@@ -39,6 +85,7 @@ define(function (require) {
     },
     
     initialize: function (options) {
+      this.views = {};
       this.options = options || {};
       this.name = options.resource_type;
       this.collection = new Collection([], { resource_type: options.resource_type });
@@ -79,6 +126,8 @@ define(function (require) {
     }
   });
   
+  
+  // Main connections View
   View = Qorus.TabView.extend({
     views: {},
     url: '/remote',
@@ -94,20 +143,21 @@ define(function (require) {
     },
     
     onProcessPath: function () {
+      View.__super__.onProcessPath.apply(this, arguments);
       if (this.path) this.detail_id = this.path;
     },
     
     showDetail: function (row, source_view) {
       var model = row.model,
           view  = this.getView('.detail'),
-          width = $(document).width() - source_view.$('[data-sort="status"]').offset().left,
+          width = $(document).width() - source_view.$('[data-sort="description"]').offset().left,
           url   = this.getViewUrl();
                 
       if (this.selected_model != model) {
         row.$el.addClass('info');
         
         view = this.setView(new RPView({
-          content_view: new Qorus.ModelView({ model: model, template: ResourceTpl[source_view.options.resource_type] }),
+          content_view: new ResourceViews[source_view.options.resource_type]({ model: model }),
           width: width
         }), '.detail', true);
         this.selected_model = model;
@@ -126,6 +176,12 @@ define(function (require) {
       }
       
       Backbone.history.navigate(url);
+    },
+    
+    tabToggle: function () {
+      View.__super__.tabToggle.apply(this, arguments);
+      var view = this.getView('.detail');
+      if (view) view.close();
     }
   });
   
