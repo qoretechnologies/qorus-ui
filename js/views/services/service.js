@@ -9,8 +9,16 @@ define(function (require) {
       MethodsTpl = require('tpl!templates/service/methods.html'),
       InfoTpl    = require('tpl!templates/service/info.html'),
       SourceTpl  = require('tpl!templates/service/source.html'),
+      AlertsTpl  = require('tpl!templates/common/alerts.html'),
       Rainbow    = require('rainbow'),
       ModelView, MethodsView;
+      
+
+  AlertsView = Qorus.ModelView.extend({
+    __name__: 'ServiceAlertsPaneView',
+    name: 'Alerts',
+    template: AlertsTpl
+  });
 
   MethodsView = Qorus.ModelView.extend({
     template: MethodsTpl,
@@ -76,6 +84,8 @@ define(function (require) {
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
       this.addTabView(new MethodsView({ model: this.model }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
+      
+      if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
     },
     
     runAction: function (evt) {

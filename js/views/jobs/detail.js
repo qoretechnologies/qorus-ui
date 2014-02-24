@@ -60,7 +60,7 @@ define(function (require) {
       this.addTabView(new CodePaneView({ model: this.model }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
       
-      if (this.model.has_alerts) this.addTabView(new AlertsView({ model: this.model }));
+      if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
     },
     
     render: function (ctx) {
