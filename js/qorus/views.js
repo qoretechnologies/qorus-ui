@@ -1424,9 +1424,14 @@ define(function (require) {
       return this.getView('tabs');
     },
     
+    getTab: function (name) {
+      var tabs = this.getTabs();
+      return _(tabs).findWhere({'name': name});
+    },
+    
     showTab: function (tab) {
       var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
-          view = this.getView('#'+name),
+          view = this.getTab(tab),
           $target = this.$('[href='+tab+']'),
           url = (this.getViewUrl().charAt(0) === '/') ? this.getViewUrl().slice(1) : this.getViewUrl();
 
@@ -1444,7 +1449,7 @@ define(function (require) {
     onTabChange: function () {},
     
     updateUrl: function (url) {
-      Backbone.history.navigate(url);        
+      Backbone.history.navigate(url);
     },
     
     onProcessPath: function (tab) {

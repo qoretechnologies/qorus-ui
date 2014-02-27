@@ -7,44 +7,52 @@ define(function (require) {
   
   
   View = Qorus.View.extend({
+    name: "Steps",
     additionalEvents: {},
         
     initialize: function (opts) {
       _.bindAll(this, 'initCanvas');
       this.template = Template;
       View.__super__.initialize.call(this, opts);
-      this.on('show', this.render);
+      this.on('show', this.fixCanvas);
+      // this.on('postrender', this.initCanvas);
     },
     
     onRender: function () {
-      this.initCanvas();
+      // this.initCanvas();
       // _.defer(this.initCanvas);
     },
     
+    fixCanvas: function () {
+      _.defer(this.initCanvas);
+    },
+    
     initCanvas: function () {
-      console.log('initializing canvas', this.$el.width());
-      var joins;
-      var $cnt = this.$('#canvas-container');
-      var $cnvs = this.$('#canvas');
-      var ctx = this.$('#canvas')[0].getContext("2d");
+      var joins, ctx,
+          $cnt = this.$('#canvas-container'),
+          $cnvs = this.$('#canvas');
 
-      // reset canvas dimensions      
-      $cnvs
-        .width($cnt.width())
-        .height($cnt.height())
-        .css('top', $cnt.position().top)
-        .css('left', $cnt.position().left);
-
-      ctx.canvas.width = $cnt.width();
-      ctx.canvas.height = $cnt.height();
+      if ($cnvs.get(0)) {
+        ctx = $cnvs.get(0).getContext("2d");
+        // reset canvas dimensions      
+        $cnvs
+          // .width($cnt.width())
+          // .height($cnt.height())
+          .css('top', $cnt.position().top)
+          .css('left', $cnt.position().left);
       
-      // get connections
-      joins = this.getConnections();
+        ctx.canvas.width = $cnt.width();
+        ctx.canvas.height = $cnt.height();
       
-      // draw lines
-      _.each(joins, function (join) {
-        this.drawJoin(ctx, join);
-      }, this);
+        // get connections
+        joins = this.getConnections();
+      
+        // draw lines
+        _.each(joins, function (join) {
+          this.drawJoin(ctx, join);
+        }, this);        
+      }
+      
     },
     
     drawJoin: function (ctx, el_ids) {

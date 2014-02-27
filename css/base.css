@@ -32,7 +32,7 @@ table thead th {
 
 .table .name, .table .description {
 	text-align: left;
-  white-space: nowrap;
+/*  white-space: nowrap;*/
   overflow: hidden;
 }
 
@@ -808,7 +808,7 @@ aside {
 
 .box {
   display: inline-block;
-  background-color: green;
+  background-color: #fff;
   border: 1px solid rgba(0,0,0,.2);
   font-weight: bold;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
@@ -833,10 +833,18 @@ aside {
   border-radius: 5px;
 }
 
+.box.async {
+  background-color: #CBCBFA;
+}
+
+.box.subworkflow {
+  background-color: #FED5AC;
+}
+
 .box.start {
   padding: 0;
   border-radius: 50%;
-  background-color: red;
+  background-color: #fff;
 }
 
 .indent {

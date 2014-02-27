@@ -91,7 +91,7 @@ define(function (require) {
 
       this.addTabView(new PaneView({ model: this.model }));
       this.addTabView(new LibraryView({ model: this.model }));
-      // this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
+      this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
       if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
       

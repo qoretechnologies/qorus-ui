@@ -2,7 +2,7 @@
 <div class="well span3" style="padding: 8px 0;">
 <ul class="nav nav-list">  
   <% _.each(obj.data, function (data, idx) { %>
-  <li class="<%= (idx===0) ? 'active' : '' %>"><a href="#" data-target="#<%= data.name %>"><%= data.name %> <%= data.version %></a></li>
+  <li class="<%= (idx===0) ? 'active' : '' %>"><a href="<%= data.name %>" data-target="#<%= data.name %>"><%= data.name %> <%= data.version %></a></li>
   <% }) %>
 </ul>
 </div>
