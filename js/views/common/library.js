@@ -38,7 +38,7 @@ define(function (require) {
   });
 
   
-  View = Qorus.TabView.extend({
+  View = Qorus.View.extend({
     __name__: "LibraryView",
     url: "/Library",
     name: 'Library',
@@ -56,19 +56,11 @@ define(function (require) {
     },
     
     preRender: function () {
-      this.removeView('tabs');
-      
-      if (this.model.get('lib')) {
-        keys = _.keys(this.model.get('lib'));
-      
-        _.each(keys, function (key) {
-          this.addTabView(new Pane({ model: this.model, name: key }));
-        }, this);        
-      }
+      this.context.lib = this.model.get('lib');
     },
     
     update: function () {
-      this.renderTabs();
+      this.render();
       Rainbow.color();
     }
     

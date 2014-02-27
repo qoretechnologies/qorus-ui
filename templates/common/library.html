@@ -1,11 +1,23 @@
-<ul class="nav nav-pills">
-  <% _.each(obj.tabs(), function (tab, idx) { %>
-  <li<%= (idx == 0) ? ' class="active"' : '' %>><a href="<%= tab.name %>" data-target="#<%= tab.name %>"><%= tab.name %></a></li>
+<div class="well span3" style="padding: 8px 0;">
+<ul class="nav nav-list">  
+  <% var idx = 0 %>
+  <% _.each(obj.lib, function (lib, name) { %>
+  <li class="nav-header"><%= name %></li>
+  <% _.each(lib, function (fn, idxx) { %>
+  <li class="<%= (idx===0 && idxx===0) ? ' active' : '' %>"><a href="#" data-toggle="tab" data-target="#<%= fn.name %>"><%= fn.name %></a></li>
+  <% }) %>
+  <% idx++ %>
   <% }) %>
 </ul>
-
-<div class="tab-content">
-  <% _.each(obj.tabs(), function (tab, idx) { %>  
-  <div id="<%= tab.name %>" class="tab-pane<%= (idx == 0) ? ' active' : '' %>"><i class="icon-spin icon-refresh"></i> Loading</div>
+</div>
+<div class="span9 tab-content">
+  <% var idx = 0 %>
+  <% _.each(obj.lib, function (lib, name) { %>
+    <% _.each(lib, function (fn, idxx) { %>
+    <div class="tab-pane<%= (idx===0 && idxx===0) ? ' active' : '' %>" id="<%= fn.name %>">
+      <pre><code data-language="qore"><%= fn.body %></code></pre>
+    </div>
   <% }) %>
+  <% idx++ %>
+  <% }) %>  
 </div>
