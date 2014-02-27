@@ -1,16 +1,17 @@
 define(function (require) {
   require('jquery.ui');
   
-  var $          = require('jquery'),
-      Qorus      = require('qorus/qorus'),
-      LogView    = require('views/log'),
-      ModalView  = require('views/common/modal'),
-      Template   = require('tpl!templates/service/detail.html'),
-      MethodsTpl = require('tpl!templates/service/methods.html'),
-      InfoTpl    = require('tpl!templates/service/info.html'),
-      SourceTpl  = require('tpl!templates/service/source.html'),
-      AlertsTpl  = require('tpl!templates/common/alerts.html'),
-      Rainbow    = require('rainbow'),
+  var $           = require('jquery'),
+      Qorus       = require('qorus/qorus'),
+      LogView     = require('views/log'),
+      ModalView   = require('views/common/modal'),
+      LibraryView = require('views/common/library'),
+      Template    = require('tpl!templates/service/detail.html'),
+      MethodsTpl  = require('tpl!templates/service/methods.html'),
+      InfoTpl     = require('tpl!templates/service/info.html'),
+      SourceTpl   = require('tpl!templates/service/source.html'),
+      AlertsTpl   = require('tpl!templates/common/alerts.html'),
+      Rainbow     = require('rainbow'),
       ModelView, MethodsView;
       
 
@@ -82,6 +83,7 @@ define(function (require) {
       var url = '/services/' + this.model.id;
       
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Detail'});
+      this.addTabView(new LibraryView({ model: this.model }));
       this.addTabView(new MethodsView({ model: this.model }));
       this.addTabView(new LogView({ socket_url: url, parent: this }));
       
