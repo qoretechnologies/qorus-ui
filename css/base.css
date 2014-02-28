@@ -847,6 +847,10 @@ aside {
   background-color: #fff;
 }
 
+.box.start a {
+  padding: 12px 10%;
+}
+
 .indent {
   display: inline-block;
   width: 1em;

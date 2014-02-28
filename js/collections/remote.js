@@ -4,11 +4,20 @@ define(function (require) {
       Collection;
 
   Model = Qorus.ModelWithAlerts.extend({
-    doPing: function () {}
-  })
+    __name__: 'RemoteModel',
+    idAttribute: 'name',
+
+    doPing: function () {
+      var self = this;
+      $.put(this.url(), { 'action': 'ping' })
+        .done(function (response) {
+          self.trigger('ping', response);
+        });
+    }
+  });
 
   Collection = Qorus.Collection.extend({
-    model: Qorus.ModelWithAlerts,
+    model: Model,
     url: function () {
       return [settings.REST_API_PREFIX, 'remote', this.resource_type].join('/');
     },

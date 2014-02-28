@@ -787,7 +787,7 @@ define(function (require) {
     
     initialize: function (opts) {
       _.bindAll(this);
-      this.RowView = RowView;
+      this.RowView = this.row_view || RowView;
       this.views = {};
       this.opts = opts || {};
       

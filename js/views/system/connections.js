@@ -13,6 +13,8 @@ define(function (require) {
       DatasourceTpl = require('tpl!templates/system/connections/qorus.html'),
       AlertsTpl     = require('tpl!templates/common/alerts.html'),
       TabTpl        = require('tpl!templates/system/connections/tabview.html'),
+      ModalView     = require('views/common/modal'),
+      PingTpl       = require('tpl!templates/system/connections/ping.html'),
       View, PaneView, TableView, ResourceViews, QorusDetailView, 
       UserDetailView, DatasourcesDetailView;
   
@@ -42,8 +44,6 @@ define(function (require) {
           template: AlertsTpl
         }), { name: 'Alerts' });
       }
-      
-      console.log(this.model.get('has_alerts'), this.views);
     }
   });
 
@@ -64,7 +64,12 @@ define(function (require) {
     },
     
     doPing: function () {
-
+      this.listenToOnce(this.model, 'ping', this.showModal);
+      this.model.doPing();
+    },
+    
+    showModal: function (response) {
+      this.parent.trigger('showModal', response);
     }
   });
   
@@ -72,6 +77,7 @@ define(function (require) {
     template: TableTpl,
     row_template: RowTpl,
     fixed: true,
+    row_view: RowView,
     appendRow: function () {
       var view = TableView.__super__.appendRow.apply(this, arguments);
       view.render();
@@ -103,6 +109,7 @@ define(function (require) {
     },
     
     preRender: function () {
+      var self = this;
       this.context.items = this.collection.toJSON();
 
       var TView = this.setView(new TableView({
@@ -110,6 +117,9 @@ define(function (require) {
       }), '.connections');
       
       this.listenTo(TView, 'row:clicked', this.showDetail);
+      this.listenTo(TView, 'showModal', function (response) {
+        self.trigger('showModal', response);
+      });
     },
     
     onProcessPath: function () {
@@ -143,12 +153,20 @@ define(function (require) {
       _.each(types, function (type) {
         var view = this.addTabView(new PaneView({ resource_type: type }));
         this.listenTo(view, 'rowClicked', this.showDetail);
+        this.listenTo(view, 'showModal', this.showModal);
       }, this);
     },
     
     onProcessPath: function () {
       View.__super__.onProcessPath.apply(this, arguments);
       if (this.path) this.detail_id = this.path;
+    },
+    
+    showModal: function (response, model) {
+      var content_view = new Qorus.View({ template: PingTpl, response: response });
+      this.setView(new ModalView({
+        content_view: content_view
+      }), '#modal');
     },
     
     showDetail: function (row, source_view) {
