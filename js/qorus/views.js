@@ -14,8 +14,8 @@ define(function (require) {
       moment      = require('moment'),
       Filtered    = require('backbone.filtered.collection'),
       Loader, View, ListView, TableView, RowView, 
-      TableAutoView, TableBodyView, ServiceView, PluginView, 
-      TabView, ModelView;
+      TableAutoView, ServiceView, PluginView, 
+      TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
 
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -475,12 +475,13 @@ define(function (require) {
         // this.listenToOnce(this.collection, 'sync error', this.loader.remove);
       }
       
+      
       this.on('highlight', this.enableActions);
       this.on('highlight', this.updateCheckIcon);
     },
     
     render: function (ctx) {
-      var tpl, self = this;
+      var tpl;
             
       this.removeViews();
       this.trigger('prerender');
@@ -1028,12 +1029,12 @@ define(function (require) {
   
   TBodyView = View.extend({
     tagName: 'tbody',
-    context: {},
+    context: {}
   });
   
   THeadView = View.extend({
     tagName: 'thead',
-    context: {},
+    context: {}
   });
   
   TFootView = View.extend({
