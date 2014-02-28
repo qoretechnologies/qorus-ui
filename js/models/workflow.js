@@ -8,6 +8,7 @@ define(function (require) {
       System        = require('models/system'),
       Notifications = require('collections/notifications'),
       moment        = require('moment'),
+      Dispatcher    = require('qorus/dispatcher'),      
       StepBase, Step, Model;
   
   StepBase = {
@@ -130,6 +131,7 @@ define(function (require) {
       }
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
+      this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
     dispatch: function (e, evt) {
@@ -139,6 +141,8 @@ define(function (require) {
           obj = evt_types[0],
           id = evt_types[1],
           action = evt_types[2] || id;
+      
+          console.log(obj, id, action, e.info.info);
       
       if (obj === 'workflow') {
         if (action === 'start') {
@@ -150,6 +154,7 @@ define(function (require) {
           this.incr('TOTAL');
         } else if (action === 'status_changed') {
           this.decr(e.info.info.old);
+          this.incr(e.info.info.new);
         }
       } else if (obj === 'group') {
         console.log(e, e.info);

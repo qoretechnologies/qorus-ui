@@ -63,13 +63,8 @@ define(function (require) {
       this.model = new Workflow({ id: opts.id });
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
-      this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
       this.model.fetch();
       // this.listenTo(this.model, 'all', function () { console.log(arguments); } );
-    },
-    
-    dispatch: function () {
-      this.model.dispatch.apply(this.model, arguments);
     },
     
     render: function (ctx) {
