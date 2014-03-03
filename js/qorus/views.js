@@ -1430,6 +1430,17 @@ define(function (require) {
       return _(tabs).findWhere({'name': name});
     },
     
+    removeTab: function (name) {
+      var tab = this.getTab(name);
+      var tabs = this.getTabs();
+      var idx = _.indexOf(tabs, tab);
+      
+      if (idx > -1) {
+        tab.off();
+        tabs.splice(idx, 1);
+      }
+    },
+    
     showTab: function (tab) {
       var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
           view = this.getTab(tab),

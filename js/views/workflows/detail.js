@@ -71,7 +71,7 @@ define(function (require) {
       this.model = opts.model;
       // this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, this.model.api_events, this.dispatch);
-      console.log('events', this._events);
+      this.listenTo(this.model, 'change:has_alerts', this.render);
     },
     
     dispatch: function () {
@@ -90,17 +90,26 @@ define(function (require) {
     },
     
     preRender: function () {
-      var url = '/workflows/' + this.model.id;
+      var url = '/workflows/' + this.model.id,
+          pview, lview, dview, tview, aview, logview, hview;
       
       this.removeView('tabs');
 
-      this.addTabView(new PaneView({ model: this.model }));
-      this.addTabView(new LibraryView({ model: this.model }));
-      this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
-      this.addTabView(new LogView({ socket_url: url, parent: this }));
-      if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
+      pview = this.addTabView(new PaneView({ model: this.model }));
       
-      this.setView(new HeaderView({ model: this.model }), '#heading');
+      pview.listenTo(this.model, 'change', pview.render);
+      
+      lview = this.addTabView(new LibraryView({ model: this.model }));
+      
+      lview.listenTo(this.model, 'change:lib change:wffunc', lview.render);
+      
+      dview = this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
+      
+      logview = this.addTabView(new LogView({ socket_url: url, parent: this }));
+
+      if (this.model.get('has_alerts')) aview = this.addTabView(new AlertsView({ model: this.model }));
+      
+      hview =  this.setView(new HeaderView({ model: this.model }), '#heading');
     },
             
     close: function (e) {

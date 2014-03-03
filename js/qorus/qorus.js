@@ -58,6 +58,7 @@ define(function (require) {
 
       Qorus.Model.__super__.initialize.call(this, [], opts, options);
       this.opts = opts;
+      
       // this.parseDates();
     },
     
@@ -142,7 +143,8 @@ define(function (require) {
     
     // gets property from server
     getProperty: function (property, data, force) {
-      var self = this,
+      var self   = this,
+          silent = true,
           req;
       
       data = data || {};
@@ -152,8 +154,13 @@ define(function (require) {
           .done(function (data) {
             var atrs = {};
             atrs[property] = data;
-            self.set(atrs, { silent: true });
+            if (force === true) silent = false;
+            self.set(atrs, { silent: silent });
             self.trigger('update:'+property, self);
+            
+            if (property === 'alerts') {
+              self.set('has_alerts', self.get('alerts').length > 0);
+            }
           });
       } else {
         return this.get(property);

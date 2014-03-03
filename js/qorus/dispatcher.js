@@ -25,6 +25,12 @@ define(function (require) {
           ev_id = [e.info.cls, e.info.id].join(':');
           events.push(ev_id);
           events.push([ev_id, ev[1]].join(':'));
+          
+          if (ev[0] === 'alert') {
+            var id = [e.info.type, e.info.id].join(":");
+            events.push(id.toLowerCase());
+            events.push([id, e.eventstr.toLowerCase()].join(":").toLowerCase());
+          }
         }
       }
           

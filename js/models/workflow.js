@@ -120,7 +120,10 @@ define(function (require) {
       "workflow:%(id)s:stop",
       "workflow:%(id)s:data_submitted",
       "workflow:%(id)s:status_changed",
-      "group:%(id)s:status_changed"
+      "group:%(id)s:status_changed",
+      "workflow:%(id)s:alert_ongoing_raised",
+      "workflow:%(id)s:alert_ongoing_cleared",
+      "workflow:%(id)s:alert_transient_raised"
     ],
 
     initialize: function (opts) {
@@ -131,18 +134,16 @@ define(function (require) {
       }
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
-      // this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
     dispatch: function (e, evt) {
-      if (e.info.id !== this.id) return;
+      if (parseInt(e.info.id, 10) !== this.id) return;
       
       var evt_types = evt.split(':'),
           obj = evt_types[0],
           id = evt_types[1],
-          action = evt_types[2] || id;
-      
-      // console.log(obj, id, action, e.info.info);
+          action = evt_types[2] || id,
+          alert = /^(alert_).*/;
       
       if (obj === 'workflow') {
         if (action === 'start') {
@@ -155,18 +156,19 @@ define(function (require) {
         } else if (action === 'status_changed') {
           this.decr(e.info.info.old);
           this.incr(e.info.info.new);
+        } else if (alert.test(action)) {
+          this.getProperty('alerts', {}, true);
         }
       } else if (obj === 'group') {
         if (e.info.id === this.id && e.info.type === 'workflow') {
           this.set('enabled', e.info.enabled);
         }
-      }
+      } 
       // debug.log(m.attributes);
       this.trigger('fetch');
     },
     
     doAction: function (action, opts, callback) {
-      console.log(arguments);
       var self = this, 
           url = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
@@ -242,8 +244,10 @@ define(function (require) {
 
       var steps     = this.get('steps'),
           stepmap   = this.get('stepmap'),
+          stepinfo  = this.get('stepinfo'),
           step_list = [],
           keys      = _.keys(steps, []),
+          stype     = undefined,
           root;
 
       // add root point
@@ -255,9 +259,12 @@ define(function (require) {
           if (steps[k].length === 0) {
               steps[k] = [0];
           }
-          var node = new Step(k, steps[k], stepmap[k]);
+          
+          var info = _.findWhere(stepinfo, { name: stepmap[k]});
+          if (info) stype = info.steptype;
+          var node = new Step(k, steps[k], stepmap[k], stype);
           step_list.push(node);
-      });
+      }, this);
 
       _.each(step_list, function (step) {
           var parent;
