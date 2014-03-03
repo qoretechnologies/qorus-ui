@@ -13,6 +13,11 @@ define(function (require) {
       'keyup .autostart-change': 'setAutostart'
     },
     
+    initialize: function () {
+      View.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'change:exec_count', this.render);
+    },
+        
     setAutostart: function (e) {
       var $target = $(e.currentTarget),
           code    = e.keyCode || e.which,
@@ -42,6 +47,7 @@ define(function (require) {
     },
     
     off: function () {
+      console.log('cleaning');
       this.clean();
       this.undelegateEvents();
       this.stopListening();

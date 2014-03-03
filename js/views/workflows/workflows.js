@@ -245,8 +245,8 @@ define(function (require) {
           context: this.context
         });
         
-        // add listener - for some reason it doesn't work inside ServiceView
-        this.listenTo(model, 'change', content_view.render);
+        // // add listener - for some reason it doesn't work inside ServiceView
+        // this.listenTo(model, 'change', content_view.render);
 
         // init detail view
         view = this.setView(new PaneView({ 

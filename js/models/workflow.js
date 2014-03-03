@@ -131,7 +131,7 @@ define(function (require) {
       }
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
-      this.listenTo(Dispatcher, this.api_events, this.dispatch);
+      // this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
     dispatch: function (e, evt) {
@@ -142,7 +142,7 @@ define(function (require) {
           id = evt_types[1],
           action = evt_types[2] || id;
       
-          console.log(obj, id, action, e.info.info);
+      // console.log(obj, id, action, e.info.info);
       
       if (obj === 'workflow') {
         if (action === 'start') {
@@ -157,10 +157,8 @@ define(function (require) {
           this.incr(e.info.info.new);
         }
       } else if (obj === 'group') {
-        console.log(e, e.info);
         if (e.info.id === this.id && e.info.type === 'workflow') {
           this.set('enabled', e.info.enabled);
-          console.log(this.get('enabled'));
         }
       }
       // debug.log(m.attributes);
@@ -168,6 +166,7 @@ define(function (require) {
     },
     
     doAction: function (action, opts, callback) {
+      console.log(arguments);
       var self = this, 
           url = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;

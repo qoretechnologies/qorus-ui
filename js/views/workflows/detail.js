@@ -11,8 +11,8 @@ define(function (require) {
       AutostartView = require('views/workflows/autostart'),
       HeaderTpl     = require("tpl!templates/workflow/detail_header.html"),
       LibraryView   = require('views/common/library'),
-      AlertsTpl   = require('tpl!templates/common/alerts.html'),
-      ModelView, HeaderView;      
+      AlertsTpl     = require('tpl!templates/common/alerts.html'),
+      ModelView, HeaderView, AlertsView, PaneView;      
 
 
   AlertsView = Qorus.ModelView.extend({
@@ -22,10 +22,14 @@ define(function (require) {
   });
 
   HeaderView = Qorus.View.extend({
+    __name__: 'WorkflowHeaderView',
     template: HeaderTpl,
+
     initialize: function (options) {
+      this.views = {},
       this.model = options.model;
     },
+    
     preRender: function () {
       var as_view = new AutostartView({ model: this.model });
       this.context.item = this.model.toJSON();
@@ -42,6 +46,7 @@ define(function (require) {
   });
   
   ModelView = Qorus.TabView.extend({
+    __name__: "WorkflowDetailView",
     views: {},
     url: function () {
       return "/" + this.model.id;
@@ -64,9 +69,9 @@ define(function (require) {
       
       // console.log(model);
       this.model = opts.model;
-      this.listenTo(this.model, 'change', this.render);
+      // this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, this.model.api_events, this.dispatch);
-      
+      console.log('events', this._events);
     },
     
     dispatch: function () {

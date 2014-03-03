@@ -9,6 +9,12 @@
         <th>URL</th>
         <td><%= obj.response.url %></td>
       </tr>
+      <% if (obj.response.time) { %>
+      <tr>
+        <th>Response Time</th>
+        <td><%= obj.response.time %></td>
+      </tr>
+      <% } %>
       <tr>
         <th>Status</th>
         <td><%= statusIcon(obj.response.ok) %></td>

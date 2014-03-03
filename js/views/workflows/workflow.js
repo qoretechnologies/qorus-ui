@@ -3,7 +3,6 @@ define(function (require) {
       _                = require('underscore'),
       Qorus            = require('qorus/qorus'),
       Workflow         = require('models/workflow'),
-      Dispatcher       = require('qorus/dispatcher'),
       Template         = require('text!templates/workflow/detail.html'),
       InstanceListView = require('views/workflows/instances'),
       OrderListView    = require('views/workflows/orders'),
@@ -20,6 +19,7 @@ define(function (require) {
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
     initialize: function (options) {
+      this.views = {};
       _.bindAll(this, 'render');
       this.model = options.model;
     },
@@ -31,6 +31,9 @@ define(function (require) {
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });
+
+
+  // TODO; rewrite to Qorus.TabView
 
   ModelView = Qorus.TabView.extend({
     helpers: helpers, 

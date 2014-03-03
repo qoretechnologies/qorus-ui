@@ -140,21 +140,21 @@ define(function (require) {
         }
         // console.log('rendering', tpl.slice(0,100), this.el.id);
         this.$el.html(tpl);
-        debug.log('Template rendered', this.cls, this.cid, new Date().getTime() - start, 'ms');
+        // debug.log('Template rendered', this.cls, this.cid, new Date().getTime() - start, 'ms');
         this.trigger('render', this, {});
       }
 
-      debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      // debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');
       // console.time('renderViews ' + this.cls);    
       this.renderViews();
       // console.timeEnd('renderViews ' + this.cls);
-      debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
+      // debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
-      debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      // debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
       // console.time('onRender ' + this.cls);
       this.onRender();
       // console.timeEnd('onRender ' + this.cls);
-      debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
+      // debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       this.trigger('postrender', this);
       
       if (_.isFunction(this.processUrlParams))
