@@ -47,7 +47,6 @@ define(function (require) {
     },
     
     off: function () {
-      console.log('cleaning');
       this.clean();
       this.undelegateEvents();
       this.stopListening();

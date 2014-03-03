@@ -1,8 +1,21 @@
 <td><i class="icon-check-empty check"></i></td>>
 <td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show" title="Alerts" data-toggle="tooltip"></i>' : '' %></td>
+<td class="controls">
+  <%= createControls(_item) %>
+  <div class="btn-group">
+    <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-cog"></i>
+    </button>
+      <ul class="dropdown-menu">
+        <li><a href="#" data-id="<%= item.jobid %>" data-action="run" data-msg="Running"><i class="icon-play"></i> Run</a></li>
+        <li><a href="#" data-id="<%= item.jobid %>" data-action="schedule" data-msg="Rescheduling"><i class="icon-time"></i> Reschedule</a></li>
+        <li><a href="#" data-id="<%= item.jobid %>" data-action="reset" data-msg="Reseting"><i class="icon-refresh"></i> Reset</a></li>
+        <li><a href="#" data-id="<%= item.jobid %>" data-action="set-expiry" data-msg="Setting expiration"><i class="icon-tag"></i> Set expiration</a></li>
+      </ul>
+  </div>
+</td>
 <td class="name" ><a href="<%= getUrl('showJob', { id: item.jobid, date: obj.date, filter: 'all' }) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
-<td class="status"><%= powerButton(item.active, { option: 'active', action: 'setActive', on: 'true', off: 'false', id: item.jobid }) %></td>
 <td class="last"><%= item.last_executed %></td>
 <td class="next"><%= item.next %></td>
 <td class="expiry"><%= item.expiry_date %></td>
@@ -10,17 +23,4 @@
 <td class="error"><%= item.ERROR ? '<span class="badge badge-important">'+item.ERROR +'</span>' : 0 %></td>
 <td class="in-progress"><%= item['IN-PROGRESS'] ? item['IN-PROGRESS'] : 0 %></td>
 <td class="crash"><%= item['CRASH'] ? item['CRASH'] : 0 %></td>
-<td>
-	<div class="btn-group">
-		<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-cog"></i>
-            <span class="caret"></span>
-		</button>
-	    <ul class="dropdown-menu pull-right">
-        <li><a href="#" data-id="<%= item.jobid %>" data-action="run" data-msg="Running"><i class="icon-play"></i> Run</a></li>
-        <li><a href="#" data-id="<%= item.jobid %>" data-action="schedule" data-msg="Rescheduling"><i class="icon-time"></i> Reschedule</a></li>
-        <li><a href="#" data-id="<%= item.jobid %>" data-action="reset" data-msg="Reseting"><i class="icon-refresh"></i> Reset</a></li>
-        <li><a href="#" data-id="<%= item.jobid %>" data-action="set-expiry" data-msg="Setting expiration"><i class="icon-tag"></i> Set expiration</a></li>
-	    </ul>
-	</div>
-</td>
+<td></td>

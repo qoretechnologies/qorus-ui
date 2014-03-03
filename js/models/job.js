@@ -37,6 +37,18 @@ define(function (require) {
       _.extend(options.data, { lib_source: true });
       
       Model.__super__.fetch.call(this, options);
+    },
+    
+    getControls: function () {
+      var item     = this.toJSON(),
+          controls = [];
+          
+      if (item.enabled === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
+      if (item.enabled === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
+      if (item.active) controls.push({ action: 'setActive', icon: 'ok', title: 'Deactivate', css: 'success', data: { active: false } });
+      if (!item.active) controls.push({ action: 'setActive', icon: 'ban-circle', title: 'Activate', css: 'danger', data: { active: true } });
+        
+      return controls;
     }
   });
 

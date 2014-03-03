@@ -31,7 +31,6 @@ define(function (require) {
     },
 
     doAction: function(action, opts, callback){
-      // console.log(arguments);
       var options = { action: action },
           url     = null,
           resp;
@@ -73,6 +72,16 @@ define(function (require) {
           
       if (item.enabled === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
       if (item.enabled === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
+      
+      if (item.autostart) controls.push({ action: 'setAutostart', icon: 'rocket', title: "Disable autostart", css: 'success', data: { autostart: false} });
+      if (!item.autostart) controls.push({ action: 'setAutostart', icon: 'rocket', title: "Enable autostart", css: '', data: { autostart: true } });
+      
+      if (item.status === 'unloaded') {
+        controls.push({ action: 'load', icon: 'ban-circle', title: 'Load', css: '' });
+      } else {
+        controls.push({ action: 'unload', icon: 'ok', title: 'Unload', css: 'success'});
+        controls.push({ action: 'reset', icon: 'refresh', title: 'Reset', css: 'warning' });
+      }
   
       return controls;
     }

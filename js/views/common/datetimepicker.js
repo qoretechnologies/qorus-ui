@@ -127,6 +127,14 @@ define(function (require) {
       this.trigger('onDateChange', date);
     },
     
+    toggle: function (e) {
+      if (this.$el.hasClass('hide')) {
+        this.show(e);
+      } else {
+        this.hide();
+      }
+    },
+    
     show: function (e) {
       var $target = $(e.currentTarget),
           top     = $target.offset().top + $target.height() + 10,

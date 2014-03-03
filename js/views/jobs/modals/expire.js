@@ -4,12 +4,15 @@ define(function (require) {
       settings = require('settings'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/job/modals/expire.html'),
+      DatePicker = require('views/common/datetimepicker'),
       View;
       
   View = Qorus.View.extend({
     url: settings.REST_API_PREFIX + '/jobs/',
     context: {},
     additionalEvents: {
+      'click .dp': 'showDatePicker',
+      'click [data-dismiss]': 'close',
       'submit': 'runAction'
     },
     
@@ -41,14 +44,17 @@ define(function (require) {
     },
     
     close: function () {
+      this.views.datepicker.hide();
       this.$el.modal('hide');
     },
 
     datePicker: function () {
-      this.dp = $('.dp').datetimepicker({
-          format: 'yyyy-mm-dd hh:ii:ss',
-          autoclose: true
-      });
+      this.views.datepicker = new DatePicker({ date: this.options.date });
+    },
+    
+    showDatePicker: function (e) {
+      if (this.views.datepicker) this.views.datepicker.toggle(e);
+      e.stopPropagation();
     },
     
     runAction: function (ev) {

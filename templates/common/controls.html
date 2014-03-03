@@ -1,5 +1,5 @@
 <div class="btn-group btn-controls">
 <% _(controls).each(function (control) { %> 
-<a class="label label-<%= control.css %>" title="<%= control.title %>" data-action="<%= control.action %>"><i class="icon-<%= control.icon %>"></i></a>
+<a class="label label-<%= control.css %>" title="<%= control.title %>" data-action="<%= control.action %>" <% if (control.data) _(control.data).each(function (v, k) { %><%= "data-"+k+"='"+v+"'" %><% }) %>><i class="icon-<%= control.icon %>"></i></a>
 <% }) %>
 </div>

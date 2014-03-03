@@ -70,22 +70,23 @@ define(function(require){
     },
     
     doAction: function (e) {
-      // console.log(arguments);
       var $target = $(e.currentTarget),
           action = $target.data('action');
       
       e.stopPropagation();
       e.preventDefault();
-      this.model.doAction(action);
+      this.model.doAction(action, $target.data());
     }
   });
 
   
   TableView = Qorus.TableView.extend({
+    row_view: RowView,
+    
     initialize: function () {
       _.bindAll(this);
       TableView.__super__.initialize.apply(this, arguments);
-      this.RowView = RowView;
+      // this.RowView = RowView;
 
       // reset listening events
       this.stopListening(this.collection);
@@ -113,6 +114,8 @@ define(function(require){
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
       
+      
+      // TODO: rewrite to api_events attribute of model
       this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
         var m = self.collection.get(e.info.id);
         if (m) {

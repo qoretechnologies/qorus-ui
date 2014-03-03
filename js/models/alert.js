@@ -75,8 +75,9 @@ define(function (require) {
     // idAttribute: '_id',
     
     toJSON: function () {
-      var obj = Model.__super__.toJSON.call(this),
-        obj_type = obj_map[obj.type.toLowerCase()];
+      var obj = Model.__super__.toJSON.call(this);
+        
+      if (_.isString(obj.type)) obj_type = obj_map[obj.type.toLowerCase()];
     
       if (obj_type) {
         obj.object_url = obj_type.url(obj);
