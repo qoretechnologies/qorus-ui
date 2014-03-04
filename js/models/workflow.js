@@ -261,7 +261,7 @@ define(function (require) {
           }
           
           var info = _.findWhere(stepinfo, { name: stepmap[k]});
-          if (info) stype = info.steptype;
+          if (info) stype = info.steptype.toLowerCase();
           var node = new Step(k, steps[k], stepmap[k], stype);
           step_list.push(node);
       }, this);
