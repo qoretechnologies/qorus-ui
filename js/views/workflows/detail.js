@@ -54,7 +54,8 @@ define(function (require) {
     
     additionalEvents: {
       "click a.close-detail": "close",
-      "click td[data-editable]": "editOption"
+      "click td[data-editable]": "editOption",
+      "click [data-action]": 'runAction'
     },
     
     initialize: function (opts) {
@@ -69,8 +70,6 @@ define(function (require) {
       
       // console.log(model);
       this.model = opts.model;
-      // this.listenTo(this.model, 'change', this.render);
-      this.listenTo(this.model, this.model.api_events, this.dispatch);
       this.listenTo(this.model, 'change:has_alerts', this.render);
     },
     
@@ -91,7 +90,7 @@ define(function (require) {
     
     preRender: function () {
       var url = '/workflows/' + this.model.id,
-          pview, lview, dview, tview, aview, logview, hview;
+          pview, lview, dview, aview, logview, hview;
       
       this.removeView('tabs');
 
@@ -193,6 +192,14 @@ define(function (require) {
         target.addClass('editable');
         target.data('value', value);
       });
+    },
+    
+    runAction: function (e) {
+      var data = e.currentTarget.dataset;
+      if (data.action) {
+        this.model.doAction(data.action);
+        e.preventDefault();
+      }
     }
     
   });

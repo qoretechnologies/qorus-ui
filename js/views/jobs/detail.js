@@ -55,6 +55,9 @@ define(function (require) {
 
     preRender: function () {
       var url = '/jobs/' + this.model.id;
+      
+      this.removeView('tabs');
+      
       this.addTabView(new InfoPaneView({ model: this.model }));
       this.addTabView(new LibraryView({ model: this.model }));
       this.addTabView(new CodePaneView({ model: this.model }));

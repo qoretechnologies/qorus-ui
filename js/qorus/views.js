@@ -1118,7 +1118,7 @@ define(function (require) {
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
       
-      this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
+      // this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
 
       this.render();
     },

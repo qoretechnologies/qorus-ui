@@ -113,15 +113,6 @@ define(function(require){
       
       this.template = Template;
       ListView.__super__.initialize.call(this, Collection);
-      
-      
-      // TODO: rewrite to api_events attribute of model
-      this.listenTo(Dispatcher, 'service:start service:stop service:error service:autostart_change', function (e) {
-        var m = self.collection.get(e.info.id);
-        if (m) {
-         m.fetch();
-        }
-      });
     },
     
     onProcessPath: function (path) {
@@ -137,7 +128,6 @@ define(function(require){
           template: TableTpl,
           row_template: RowTpl,
           helpers: this.helpers,
-          dispatcher: Dispatcher,
           fixed: true
       }), '#service-list');
       

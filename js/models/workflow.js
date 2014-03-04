@@ -134,6 +134,7 @@ define(function (require) {
       }
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
+      this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
     dispatch: function (e, evt) {

@@ -67,7 +67,6 @@ define(function (require) {
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.model.fetch();
-      // this.listenTo(this.model, 'all', function () { console.log(arguments); } );
     },
     
     render: function (ctx) {

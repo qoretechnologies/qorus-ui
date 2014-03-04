@@ -4,6 +4,7 @@ define(function (require) {
       settings      = require('settings'),
       Qorus         = require('qorus/qorus'),
       Notifications = require('collections/notifications'),
+      Dispatcher    = require('qorus/dispatcher'),
       Model;
   
   
@@ -13,7 +14,7 @@ define(function (require) {
     },
     urlRoot: settings.REST_API_PREFIX + '/services/',
     idAttribute: "serviceid",
-    allowedActions: ['load','unload','reset','setAutostart'],
+    allowedActions: ['load','unload','reset','setAutostart', 'enable', 'disable'],
 
     // get available actions
     actions: function () {
@@ -37,10 +38,40 @@ define(function (require) {
       "service:%(id)s:alert_ongoing_raised",
       "service:%(id)s:alert_ongoing_cleared",
       "service:%(id)s:alert_transient_raised",
+      "group:%(id)s:status_changed",
     ],
     
+    initialize: function () {
+      Model.__super__.initialize.apply(this, arguments);
+      this.listenTo(Dispatcher, this.api_events, this.dispatch);
+    },
+    
     dispatch: function (e, evt) {
+      if (parseInt(e.info.id, 10) !== this.id) return;
       
+      var evt_types = evt.split(':'),
+          obj = evt_types[0],
+          id = evt_types[1],
+          action = evt_types[2] || id,
+          alert = /^(alert_).*/;
+      
+      if (obj === 'service') {
+        if (action === 'start') {
+          this.set('status', 'loaded');
+        } else if (action === 'stop') {
+          this.set('status', 'unloaded');
+        } else if (action === 'autostart_change') {
+          this.set('autostart', e.info.autostart);
+        } else if (alert.test(action)) {
+          this.getProperty('alerts', {}, true);
+        }
+      } else if (obj === 'group') {
+        if (e.info.id === this.id && e.info.type === 'service') {
+          this.set('enabled', e.info.enabled);
+        }
+      } 
+      // debug.log(m.attributes);
+      this.trigger('fetch');
     },
 
     doAction: function(action, opts, callback){

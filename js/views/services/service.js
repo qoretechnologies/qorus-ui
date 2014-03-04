@@ -2,6 +2,7 @@ define(function (require) {
   require('jquery.ui');
   
   var $           = require('jquery'),
+      _           = require('underscore'),
       Qorus       = require('qorus/qorus'),
       LogView     = require('views/log'),
       ModalView   = require('views/common/modal'),
@@ -12,7 +13,7 @@ define(function (require) {
       SourceTpl   = require('tpl!templates/service/source.html'),
       AlertsTpl   = require('tpl!templates/common/alerts.html'),
       Rainbow     = require('rainbow'),
-      ModelView, MethodsView;
+      ModelView, MethodsView, AlertsView;
       
 
   AlertsView = Qorus.ModelView.extend({
@@ -37,15 +38,16 @@ define(function (require) {
     },
     
     showSource: function (e) {
-      var $target = $(e.currentTarget);
-      var method = _.where(this.model.get('methods'), { name: $target.data('methodname') })[0];
+      var $target = $(e.currentTarget),
+          method  = _.where(this.model.get('methods'), { name: $target.data('methodname') })[0],
+          content_view;
       
       content_view = new Qorus.View({
         template: SourceTpl,
         method: method
       });
       
-      content_view.on('postrender', function () { Rainbow.color() } );
+      content_view.on('postrender', function () { Rainbow.color(); } );
       
       this.removeView('#source-modal');
       
@@ -66,13 +68,6 @@ define(function (require) {
       "click button[data-action!='execute']": "runAction",
       "click button[data-action='execute']": "openExecuteModal"
     },
-    
-    initialize: function () {
-      ModelView.__super__.initialize.apply(this, arguments);
-      
-      // TODO: check why this doesn't work
-      // this.listenTo(this.model, 'change', this.render);
-    },
 
     render: function (ctx) {
       this.context.item = this.model.toJSON();
@@ -80,14 +75,22 @@ define(function (require) {
     },
     
     preRender: function () {
-      var url = '/services/' + this.model.id;
+      var url = '/services/' + this.model.id,
+          dview, lview, mview, logview;
+          
+      this.removeView('tabs');
       
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Detail'});
-      this.addTabView(new LibraryView({ model: this.model }));
-      this.addTabView(new MethodsView({ model: this.model }));
-      this.addTabView(new LogView({ socket_url: url, parent: this }));
+      dview   = this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Detail'});
+      
+      dview.listenTo(this.model, 'change', dview.render);
+      
+      lview   = this.addTabView(new LibraryView({ model: this.model }));
+      mview   = this.addTabView(new MethodsView({ model: this.model }));
+      logview = this.addTabView(new LogView({ socket_url: url, parent: this }));
       
       if (this.model.get('has_alerts')) this.addTabView(new AlertsView({ model: this.model }));
+      
+      this.listenTo(this.model, 'change:has_alerts', this.render);
     },
     
     runAction: function (evt) {

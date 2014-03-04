@@ -4,7 +4,6 @@ define(function(require) {
       utils           = require('utils'),
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
-      Dispatcher      = require('qorus/dispatcher'),
       Collection      = require('collections/jobs'),
       Template        = require('text!templates/job/list.html'),
       TableTpl        = require('text!templates/job/table.html'),
@@ -14,7 +13,21 @@ define(function(require) {
       ExpireModal     = require('views/jobs/modals/expire'),
       PaneView        = require('views/common/pane'),
       DetailView      = require('views/jobs/detail'),
-      ListView, TableView;
+      ListView, RowView;
+      
+
+  RowView = Qorus.RowView.extend({
+    template: RowTpl,
+    additionalEvents: {
+      'click [data-action]': 'runAction'
+    },
+    runAction: function (evt) {
+      var $target = $(evt.currentTarget);
+      // console.log('halo', arguments);
+      this.model.doAction($target.data('action'), $target.data());
+      evt.stopPropagation();
+    }
+  });
     
   ListView = Qorus.ListView.extend({
     title: "Jobs",
@@ -39,8 +52,6 @@ define(function(require) {
       ListView.__super__.initialize.call(this, Collection, date);
       
       // this.listenToOnce(this.collection, 'sync', this.render);
-
-      this.listenTo(Dispatcher, 'job:start job:stop job:instance_stop', this.updateModels);    
       this.processPath(this.opts.path);
     },
     
@@ -63,8 +74,8 @@ define(function(require) {
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
+          row_view: RowView,
           helpers: this.helpers,
-          dispatcher: Dispatcher,
           fixed: true
       }), '#job-list');
       
@@ -108,26 +119,10 @@ define(function(require) {
       }
     },
     
-    updateModels: function (e, evt) {
-      var m = this.collection.get(e.info.id);
-      
-      if (m) {
-        if (evt == 'job:instance_stop') {
-          m.incr(e.info.status);
-        } else if (evt == 'job:start') {
-          m.set('active', true);
-        } else if (evt == 'job:stop') {
-          m.set('active', false);
-        }
-        // debug.log(m.attributes);
-        // m.trigger('fetch');
-      }
-    },
-    
     showDetail: function (row) {
       var model = row.model,
           view  = this.getView('#job-detail'),
-          width = $(document).width() - this.$('[data-sort="active"]').offset().left,
+          width = $(document).width() - this.$('[data-sort="version"]').offset().left,
           url   = this.getViewUrl();
       
       if (this.selected_model != model) {
