@@ -192,7 +192,6 @@ define(function (require) {
       _.bindAll(this);
       this.options = options || {};
       this.opts = this.options;
-      console.log(this.options, this.opts, options);
       
       if (options.date) {
         this.date = this.options.date;

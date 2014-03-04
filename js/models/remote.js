@@ -28,8 +28,6 @@ define(function (require) {
           action = evt_types[2] || id,
           alert = /^(alert_).*/;
       
-      console.log(obj, action, alert.test(action), this);
-      
       if (obj === 'remote') {
         if (alert.test(action)) {
           this.fetch();

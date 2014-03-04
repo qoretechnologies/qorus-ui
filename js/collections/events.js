@@ -50,6 +50,8 @@ define(function (require) {
       this.on('queue:empty', this.garbage_collection);
       this.on('sync', function () { self.event_queue.push(new Model(event_refresh)); self.processQueue(); });
       this.fetch();
+      
+      this.localStorage._clear();
     },
     
     wsAdd: function (e) {
@@ -168,8 +170,8 @@ define(function (require) {
       var store = this.localStorage,
           ls    = store.localStorage(), 
           id    = this.localStorage.name + '-' + m.id;
-         
-      store.records = _.reject(store.records, function (id) { return id === m.id.toString(); });
+
+      if (m.id) store.records = _.reject(store.records, function (id) { return id === m.id.toString(); });
       ls.removeItem(id);
       this.remove(m);
       store.save();

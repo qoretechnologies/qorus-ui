@@ -39,10 +39,6 @@ define(function (require) {
         template: QorusTpl
       }), { name: 'Detail' });
       
-      this.listenTo(dview, 'destroy', function () { 
-        console.log('dview', arguments); 
-      });
-      
       if (this.model.get('has_alerts')) {
         this.addTabView(new Qorus.ModelView({
           model: this.model,
