@@ -6,6 +6,9 @@ define(function (require) {
   Model = Qorus.ModelWithAlerts.extend({
     __name__: 'RemoteModel',
     idAttribute: 'name',
+    
+    // TODO: add api events for alerts updates
+    api_events_list: [],
 
     doPing: function () {
       var self = this;

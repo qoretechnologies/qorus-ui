@@ -47,6 +47,7 @@ define(function (require) {
   
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
+    api_events_list: [],
     initialize: function (opts, options) {
       _.bindAll(this);
       opts = opts || {};
@@ -59,8 +60,11 @@ define(function (require) {
       Qorus.Model.__super__.initialize.call(this, [], opts, options);
       this.opts = opts;
       
+      this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
       // this.parseDates();
     },
+    
+    dispatch: function () {},
     
     parse: function (response, options) {
       _.each(this.dateAttributes, function (date) {

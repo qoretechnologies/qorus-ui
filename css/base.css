@@ -1300,3 +1300,12 @@ a[data-target='#Alerts']:before {
   color: #B94A48;
   margin-right: .5em;
 }
+
+td.spacer, .table-striped tbody>tr:nth-child(odd)>td.spacer {
+  background-color: transparent;
+  border: none;
+}
+
+tbody+thead>tr:first-child>td {
+  border: none;
+}

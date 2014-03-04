@@ -29,6 +29,19 @@ define(function (require) {
         
       return actions;
     },
+    
+    api_events_list: [
+      "service:%(id)s:start",
+      "service:%(id)s:stop",
+      "service:%(id)s:autostart_change",
+      "service:%(id)s:alert_ongoing_raised",
+      "service:%(id)s:alert_ongoing_cleared",
+      "service:%(id)s:alert_transient_raised",
+    ],
+    
+    dispatch: function (e, evt) {
+      
+    },
 
     doAction: function(action, opts, callback){
       var options = { action: action },

@@ -3,27 +3,28 @@
 <div class="create">
   <a class="btn btn-small btn-success" data-toggle="modal" data-target="#prop-editor"><i class="icon-plus"></i> Add property</a>
 </div>
-  <table class="table table-condensed">
+  <table class="table table-condensed table-striped">
 <% _.each(domains, function (domain, key) { %>
     <thead class="extra-padding">
         <tr>
-            <td colspan="2" class="name"><%= key.toUpperCase() %></td>
-            <td><a class="btn btn-mini btn-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a></td>
+            <td colspan="3" class="name"><%= key.toUpperCase() %></td>
+            <td><% if (key !== 'omq') { %><a class="btn btn-mini btn-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
     </thead>
-  <% _.each(domain, function(prop, pkey) { %>
     <tbody>
+  <% _.each(domain, function(prop, pkey) { %>
         <tr>
+          <td class="spacer"></td>
           <td class="property-key"><%= pkey %></td>
           <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>
-          <td class="property-actions"><a class="btn btn-mini btn-warning edit-modal" data-toggle="modal" data-target="#prop-editor" 
+          <td class="property-actions"><% if (key !== 'omq') { %><a class="btn btn-mini btn-warning edit-modal" data-toggle="modal" data-target="#prop-editor" 
               data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i></a>
-              <a class="btn btn-mini btn-danger" data-action="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a></td>
+              <a class="btn btn-mini btn-danger" data-action="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
-    </tbody>
   <% }) %>
+    </tbody>
 <% }) %>  
-  </table>
+</table>
 
 <div id="prop-editor" class="modal hide fade wider" tabindex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true">
   <div class="modal-header">

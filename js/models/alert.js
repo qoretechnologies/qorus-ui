@@ -19,7 +19,7 @@ define(function (require) {
         return sprintf('%(name)s v%(version)s %(_id)s', obj);
       },
       url: function (obj) {
-        var url = [Helpers.getUrl('showServices'), obj.id].join('/');
+        var url = [Helpers.getUrl('showServices'), obj._id].join('/');
         return url;
       }
     },
@@ -72,7 +72,7 @@ define(function (require) {
     },
     
     dateAttributes: ['when'],
-    // idAttribute: '_id',
+    idAttribute: 'alertid',
     
     toJSON: function () {
       var obj = Model.__super__.toJSON.call(this);
@@ -92,7 +92,8 @@ define(function (require) {
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
       data._id = data.id;
-      data.id = this.createID(data);
+      if (data.id) delete data.id
+      // data.id = this.createID(data);
       
       return data;
     },
