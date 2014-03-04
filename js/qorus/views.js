@@ -1080,6 +1080,7 @@ define(function (require) {
         
     initialize: function (opts) {
       var self = this;
+      _.bindAll(this, 'update');
 
       // _.bindAll(this);
       this.views = [];
@@ -1093,7 +1094,7 @@ define(function (require) {
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'context')) _.extend(this.context, opts.context); 
 
-      // update row on model change
+      // // update row on model change
       this.listenTo(this.model, 'change', function () {
         // enable throttling - possible replacement _.throttle(func, wait, options)
         var timeout = self.timer*1000;

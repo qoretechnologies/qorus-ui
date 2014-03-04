@@ -29,7 +29,8 @@ define(function (require) {
           if (ev[0] === 'alert') {
             var id = [e.info.type, e.info.id].join(":");
             events.push(id.toLowerCase());
-            events.push([id, e.eventstr.toLowerCase()].join(":").toLowerCase());
+            events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
+            console.log(events);
           }
         }
       }

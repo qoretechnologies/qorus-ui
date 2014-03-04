@@ -44,7 +44,7 @@ define(function (require) {
         } else if (action === 'instance_stop') {
           this.incr(e.info.status);
         } else if (alert.test(action)) {
-          console.log('getting alerts')
+          // console.log('getting alerts')
           this.getProperty('alerts', {}, true);
         }
       } else if (obj === 'group') {

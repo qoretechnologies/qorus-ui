@@ -111,6 +111,7 @@ define(function (require) {
       'setAutostart',
       'incAutostart',
       'decAutostart',
+      'setOptions',
       'enable',
       'disable'
     ],

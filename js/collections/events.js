@@ -146,7 +146,7 @@ define(function (require) {
       while (this.event_queue.length > 0) {
         ev = this.event_queue.shift();
         events.push(ev);
-        this.localStorage.create(ev);
+        // this.localStorage.create(ev);
       }
       this.add(events);
       

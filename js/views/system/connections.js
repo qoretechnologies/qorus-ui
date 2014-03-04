@@ -9,14 +9,12 @@ define(function (require) {
       RPView        = require('views/common/pane'),
       Collection    = require('collections/remote'),
       QorusTpl      = require('tpl!templates/system/connections/qorus.html'),
-      UserTpl       = require('tpl!templates/system/connections/qorus.html'),
-      DatasourceTpl = require('tpl!templates/system/connections/qorus.html'),
       AlertsTpl     = require('tpl!templates/common/alerts.html'),
       TabTpl        = require('tpl!templates/system/connections/tabview.html'),
       ModalView     = require('views/common/modal'),
       PingTpl       = require('tpl!templates/system/connections/ping.html'),
       View, PaneView, TableView, ResourceViews, QorusDetailView, 
-      UserDetailView, DatasourcesDetailView;
+      UserDetailView, DatasourcesDetailView, RowView;
   
      
       
@@ -27,16 +25,23 @@ define(function (require) {
     initialize: function (options) {
       QorusDetailView.__super__.initialize.apply(this, arguments);
       this.model = options.model;
+      this.listenTo(this.model, 'change', this.render);
     },
     
     preRender: function () {
+      this.removeView('tabs');
+      
       this.context.item = this.model.toJSON();
       this.context.item.description = this.context.item.desc;
       
-      this.addTabView(new Qorus.ModelView({
+      var dview = this.addTabView(new Qorus.ModelView({
         model: this.model,
         template: QorusTpl
       }), { name: 'Detail' });
+      
+      this.listenTo(dview, 'destroy', function () { 
+        console.log('dview', arguments); 
+      });
       
       if (this.model.get('has_alerts')) {
         this.addTabView(new Qorus.ModelView({
@@ -162,7 +167,7 @@ define(function (require) {
       if (this.path) this.detail_id = this.path;
     },
     
-    showModal: function (response, model) {
+    showModal: function (response) {
       var content_view = new Qorus.View({ template: PingTpl, response: response });
       this.setView(new ModalView({
         content_view: content_view
@@ -183,8 +188,6 @@ define(function (require) {
           width: width
         }), '.detail', true);
         this.selected_model = model;
-
-        this.listenTo(this.selected_model, 'change', view.render);
         
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');

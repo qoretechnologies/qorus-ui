@@ -54,7 +54,7 @@ define(function( require) {
     },
     
     clearStorage: function () {
-      console.log('emptying');
+      // console.log('emptying');
       this.collection.empty();
     }
   });

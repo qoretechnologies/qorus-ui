@@ -14,7 +14,7 @@
   <% _.each(item.options, function (option) { %>
       <tr>
         <td class="name"><%= option.name %><br /><p class="muted"><%= option.desc %></p></td>
-        <td><%= option.value %></td>
+        <td class="editable" data-editable="true" data-method="setOptions" data-name="<%= option.name %>" data-value="<%= option.value %>"><%= option.value || "not set" %></td>
       </tr>
   <% }) %>
     </tbody>

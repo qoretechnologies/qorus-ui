@@ -154,7 +154,7 @@ define(function (require) {
             min      = $target.data('min'),
             template = EditTemplate({ 
               value: value,
-              type: utils.input_map[obj_type][1],
+              type: obj_type ? utils.input_map[obj_type][1] : 'string',
               name: name,
               min: min
             });
@@ -162,6 +162,8 @@ define(function (require) {
         $tpl = template;
         $target.toggleClass('editable');
         $target.html($tpl);
+        
+        this.lock();
         
         $('button[data-action=cancel]', $target).click(function () {
           $target.html(value);
@@ -182,12 +184,18 @@ define(function (require) {
     },
  
     setOption: function (option, value, target) {
-      var opts = {}, action = 'set';
+      var opts = {}, action = 'set', self = this;
 
       opts[option] = value;
       action += option.charAt(0).toUpperCase() + option.slice(1);
       
+      if (target.data('method')) {
+        opts = { options: option +'='+ value };
+        action = target.data('method');
+      }
+      
       this.model.doAction(action, opts, function () {
+        self.unlock();
         target.html(value);
         target.addClass('editable');
         target.data('value', value);

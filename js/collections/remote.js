@@ -1,23 +1,8 @@
 define(function (require) {
   var settings = require('settings'),
       Qorus    = require('qorus/qorus'),
+      Model    = require('models/remote'),
       Collection;
-
-  Model = Qorus.ModelWithAlerts.extend({
-    __name__: 'RemoteModel',
-    idAttribute: 'name',
-    
-    // TODO: add api events for alerts updates
-    api_events_list: [],
-
-    doPing: function () {
-      var self = this;
-      $.put(this.url(), { 'action': 'ping' })
-        .done(function (response) {
-          self.trigger('ping', response);
-        });
-    }
-  });
 
   Collection = Qorus.Collection.extend({
     model: Model,
