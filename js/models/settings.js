@@ -17,13 +17,18 @@ define(function (require) {
 
     initialize: function () {
       this.id = 'local-settings';
+      this.fetch();
     },
     
     dispatch: function (obj, ev) {
       if (ev === 'session:changed') {
-        var model = this.get('session-id');
-        model.set()
+        model.set('session-id', obj.session_id);
       }
+    },
+    
+    setSessionID: function (id) {
+      this.set('session-id', id);
+      
     }
     
   });

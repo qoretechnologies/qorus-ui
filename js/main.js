@@ -94,8 +94,8 @@ require.config({
       deps: ['jquery', 'backbone'],
       exports: 'Messenger',
       init: function () {
-        $._messengerDefaults = {
-          extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
+        this.Messenger.options = {
+          extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top messenger-on-right'
         };
       }
     },

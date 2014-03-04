@@ -1,8 +1,9 @@
 define(function (require) {
-  var _          = require('underscore'),
-      Backbone   = require('backbone'),
-      Model      = require('models/notification'),
-      Dispatcher = require('qorus/dispatcher'),
+  var _           = require('underscore'),
+      Backbone    = require('backbone'),
+      Model       = require('models/notification'),
+      Dispatcher  = require('qorus/dispatcher'),
+      SettingsCol = require('models/settings'),
       Collection, notifications;
   
   // init localstorage
@@ -67,19 +68,25 @@ define(function (require) {
         });
         this.trigger(sprintf('cleared:%s', group));
       } else {
-        var groups = this.pluck('group');
         _(this.models).each(function (model) {
           model.destroy({ silent: true });
         });
         this.reset();
       }
       this.trigger('sync');
+    }, 
+    
+    empty: function () {
+      console.log('emptying', this.size());
+      this.clear();
+      console.log('after emptying', this.size());
     }
   });
   
   notifications = new Collection();
   
-  notifications.listenTo(Dispatcher, 'system session:changed alert', this.dispatch);
+  notifications.listenTo(Dispatcher, 'system session:changed alert', notifications.dispatch);
+  notifications.listenTo(SettingsCol, 'change:session-id', notifications.empty);
   
   return new Collection();
 });

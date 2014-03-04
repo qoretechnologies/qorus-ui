@@ -1,31 +1,44 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus'
-], function(settings, _, Qorus){
-  var System = {};
+define(function (require) {
+  var settings = require('settings'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      System   = {},
+      SystemSettings = require('models/settings'),
+      Info, User, Options;
 
-  var Info = Qorus.Model.extend({
+  System = {};
+
+  Info = Qorus.Model.extend({
     url: settings.REST_API_PREFIX + '/system',
     dateAttributes: ['alert-summary.cutoff'],
 
-    initialize: function (options) {
+    initialize: function () {
+      this.on('sync', this.updateSettings);
       this.fetch();
+    },
+    
+    updateSettings: function () {
+      var session_id = this.get('session-id');
+      var old_id = SystemSettings.get('session-id');
+
+      if (session_id !== old_id) {
+        SystemSettings.setSessionID(session_id);
+      }
     }
   });
 
-  var User = Qorus.Model.extend({
+  User = Qorus.Model.extend({
     url: settings.REST_API_PREFIX + '/users/_current_',
 
-    initialize: function (options) {
+    initialize: function () {
       this.fetch();
     }
   });
 
-  var Options = Qorus.Model.extend({
+  Options = Qorus.Model.extend({
     url: settings.REST_API_PREFIX + '/system/options',
     
-    initialize: function (options) {  
+    initialize: function () {  
       this.fetch();
     },
     

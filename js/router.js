@@ -41,8 +41,8 @@ define(function (require) {
   Notifications.fetch();
   // fetch alerts
   Alerts.fetch();
-  // fetch functions
-  Functions.fetch();
+  // // fetch functions
+  // Functions.fetch();
   // fetch constants
   Constants.fetch();
 

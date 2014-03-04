@@ -19,7 +19,6 @@ define(function (require) {
       
       this.model.getProperty('lib', { lib_source: true }, true);
       this.listenTo(this.model, 'update:lib', this.update);
-      this.on('postrender', this.color);
     },
     
     preRender: function () {
