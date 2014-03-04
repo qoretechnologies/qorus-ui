@@ -151,7 +151,7 @@ define(function (require) {
           this.incr('exec_count');
         } else if (action === 'stop') {
           this.decr('exec_count');
-        } else if (action === 'workflow:data_submitted') {
+        } else if (action === 'data_submitted') {
           this.incr(e.info.status);
           this.incr('TOTAL');
         } else if (action === 'status_changed') {
