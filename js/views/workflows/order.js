@@ -1,14 +1,22 @@
 define(function(require) {
-  var $           = require('jquery'),
-      _           = require('underscore'),
-      Qorus       = require('qorus/qorus'),
-      Model       = require('models/order'),
-      Workflow    = require('models/workflow'),
-      Template    = require('text!templates/workflow/orders/detail.html'),
-      ModalView   = require('views/common/modal'),
-      StepView    = require('views/steps/step'),
-      DiagramView = require('views/common/diagram'),
-      context, ModelView;
+  var $            = require('jquery'),
+      _            = require('underscore'),
+      helpers      = require('qorus/helpers'),
+      Qorus        = require('qorus/qorus'),
+      Model        = require('models/order'),
+      Workflow     = require('models/workflow'),
+      Template     = require('text!templates/workflow/orders/detail.html'),
+      ModalView    = require('views/common/modal'),
+      StepView     = require('views/steps/step'),
+      DiagramView  = require('views/common/diagram'),
+      StepsTpl     = require('tpl!templates/workflow/orders/steps.html'),
+      DataTpl      = require('tpl!templates/workflow/orders/data.html'),
+      ErrorsTpl    = require('tpl!templates/workflow/orders/errors.html'),
+      HierarchyTpl = require('tpl!templates/workflow/orders/hierarchy.html'),
+      AuditTpl     = require('tpl!templates/workflow/orders/audit.html'),
+      InfoTpl      = require('tpl!templates/workflow/orders/info.html'),
+      AlertsTpl    = require('tpl!templates/common/alerts.html'),
+      context, ModelView, StepsView;
       
   context = {
     action_css: {
@@ -18,11 +26,44 @@ define(function(require) {
     }
   };
   
-  ModelView = Qorus.View.extend({
+  StepsView = Qorus.ModelView.extend({
+    name: 'Steps',
+    template: StepsTpl,
+    preRender: function () {
+      StepsView.__super__.preRender.apply(this, arguments);
+      _.extend(this.context, { getStepName: this.getStepName });
+    },
+    onRender: function () {
+      this.$('li:has(li)').addClass('parent');
+      
+      // hide substeps and add plus sign icon
+      this.$('.substep').each(function () { 
+        var $this = $(this);
+        $this.hide();
+        if ($this.prev('.parent')) {
+          $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
+        }
+      });
+    },
+    getStepName: function (id) {
+      var steps = _.filter(this.model.get('StepInstances'), function (s) {
+        if (s.stepid == id)
+          return s;
+      });
+      
+      if (steps.length > 0) {
+        return steps[0].stepname; 
+      } else {
+        return id;
+      } 
+    },
+  });
+  
+  
+  ModelView = Qorus.TabView.extend({
     __name__: "OrderView",
     template: Template,
     additionalEvents: {
-      "click .nav-tabs a": 'tabToggle',
       "click .treeview li": "toggleRow",
       "click .showstep": "stepDetail",
       "click tr.parent": "showSubSteps",
@@ -32,37 +73,44 @@ define(function(require) {
       "click .tree-caret": 'toggleTree'
     },
     
+    url: function () {
+      return helpers.getUrl('showOrder', { id: this.model.id });
+    },
+    
     initialize: function (opts) {
-      _.bindAll(this);
-      if (!_.has(opts, 'show_header'))
-        opts.show_header = true;
+      ModelView.__super__.initialize.apply(this, arguments);
       
-      ModelView.__super__.initialize.call(this, opts);
+      if (!_.has(opts, 'show_header'))
+        this.options.show_header = true;
 
       this.model = new Model({ id: opts.id });
       this.listenTo(this.model, 'change', this.render, this);
       this.model.fetch();
     },
     
-    render: function (ctx) {
-      this.context.item = this.model;
-      _.extend(this.context, { getStepName: this.getStepName, action_css: context.action_css }); 
-
-      ModelView.__super__.render.call(this, ctx);
+    preRender: function () {
+      this.removeView('tabs');
+      
+      this.addTabView(new StepsView({ model: this.model }));
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: DataTpl }), { name: 'Data'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
+      
+      if (this.model.get('has_alerts'))
+        this.addTabView(new AlertsView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});
+        
+      _.extend(this.context, { 
+        item: this.model.toJSON(),
+        show_header: this.options.show_header,
+        getStepName: this.getStepName, 
+        action_css: context.action_css 
+      }); 
     },
     
     onRender: function(){
-      $('li:has(li)').addClass('parent');
-      
-      // hide substeps and add plus sign icon
-      $('.substep', this.$el).each(function () { 
-        var $this = $(this);
-        $this.hide();
-        if ($this.prev('.parent')) {
-          $('td:first-child', $this.prev('.parent')).html('<i class="icon-plus-sign"></i>');
-        }
-      });
-      
+    
       // init popover on info text
       $('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
@@ -94,13 +142,6 @@ define(function(require) {
       } else {
         return id;
       } 
-    },
-
-    tabToggle: function(e){
-      var $target = $(e.currentTarget);
-      e.preventDefault();
-
-      $target.tab('show');
     },
     
     toggleRow: function(e){

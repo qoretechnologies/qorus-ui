@@ -1,0 +1,52 @@
+<table class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Status</th> 
+      <th class="name">Name</th>
+      <th>Error Type</th>
+      <th>Custom Status</th>
+      <th>Ind</th>
+      <th>Retries</th>
+      <th>Skip</th>
+      <th>Started</th>
+      <th>Completed</th>
+      <th>SubWFL IID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% _.each(item.step_groups, function(group) { 
+      if (group.steps.length > 1) {
+    %>
+    <tr class="<%= group.name %> parent" data-parent="<%= group.name %>">
+      <td></td>
+      <td><%= wrapStatus(group.status) %></td> 
+      <td class="name"><%= group.name %></td>
+      <td colspan=8></td>
+    </tr>
+    <% } %>
+    <%
+      _.each(group.steps, function (step) {
+    %>
+    <tr class="<%= step.stepname %> <%= (group.steps.length > 1) ? 'substep' : 'parent' %>">
+      <td><%= (group.steps.length == 1) ? '' : '|' %></td>
+      <td><%= wrapStatus(step.stepstatus) %></td> 
+      <td class="name showstep" data-id="<%= step.stepid %>"><%= step.stepname %></td>
+      <td><%= (step.business_error) ? 'Business' : 'Other' %></td>
+      <td><%= step.custom_status %></td>
+      <td><%= step.ind %></td>
+      <td><%= step.retries %></td>
+      <td><%= statusIcon(step.skip) %></td>
+      <td><%= step.started %></td>
+      <td><%= step.completed %></td>
+      <td><% if (step.subworkflow_instanceid) { %>
+       <a href="/orders/view/<%= step.subworkflow_instanceid %>"><%= step.subworkflow_instanceid %></a>
+       <% } %>
+      </td>
+    </tr>
+    <% }) %>
+    <% }) %>
+  </tbody>
+</table>
+
+<div id="steps-diagram"></div>

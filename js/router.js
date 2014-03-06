@@ -91,7 +91,7 @@ define(function (require) {
         this.showOrder(wfiid, id);
       } else {
         var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
-        this.setView(view);        
+        this.setView(view);
       }
     },
 
@@ -126,8 +126,8 @@ define(function (require) {
     },
     
     // order detail
-    showOrder: function (wfiid, id){
-      var view = new OrderView({ id: wfiid, workflow_id: id });
+    showOrder: function (wfiid, id, path){
+      var view = new OrderView({ id: wfiid, workflow_id: id, path: path });
       this.setView(view);
     },
     

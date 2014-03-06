@@ -103,6 +103,19 @@ define(function (require) {
           }
         );        
       }
+    },
+    
+    getStepName: function (id) {
+      var steps = _.filter(this.get('StepInstances'), function (s) {
+        if (s.stepid == id)
+          return s;
+      });
+      
+      if (steps.length > 0) {
+        return steps[0].stepname; 
+      } else {
+        return id;
+      } 
     }
   });
   return Model;

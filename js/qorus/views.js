@@ -49,7 +49,7 @@ define(function (require) {
   
   View = Backbone.View.extend({
     render_lock: false,
-    cls: 'View',
+    __name__: 'View',
     upstreamUrl: "",
     url: '',
     defaultEvents: {
@@ -399,6 +399,11 @@ define(function (require) {
           range.moveToElementText($target[0]);
           range.select();
       }
+    },
+    
+    slug: function () {
+      if (this.name) return Helpers.slugify(this.name);
+      return Helpers.slugify(this.__name__);
     }
    });
 
@@ -1416,7 +1421,7 @@ define(function (require) {
     
     renderTabs: function () {
       _.each(this.getTabs(), function (tab) {
-        var id = '#' + tab.name;
+        var id = '#' + tab.slug();
         tab.setElement(this.$(id));
         tab.render();
       });

@@ -151,6 +151,10 @@ define(function (require) {
     createControls: function (item) {
       var controls = _.result(item, 'getControls');
       return ControlsTpl({ controls: controls });
+    },
+    
+    slugify: function (value) {
+      return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     }
   };
   
