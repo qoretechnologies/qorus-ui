@@ -60,7 +60,7 @@ define(function (require) {
       Qorus.Model.__super__.initialize.call(this, [], opts, options);
       this.opts = opts;
       
-      this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
+      this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
     },
     

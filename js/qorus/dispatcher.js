@@ -26,6 +26,7 @@ define(function (require) {
           events.push(ev_id);
           events.push([ev_id, ev[1]].join(':'));
           
+          //  || e.info.type !== 'alert'
           if (ev[0] === 'alert') {
             var id = [e.info.type, e.info.id].join(":");
             events.push(id.toLowerCase());

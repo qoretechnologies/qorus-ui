@@ -1,8 +1,9 @@
 define(function (require) {
-  var Qorus   = require('qorus/qorus'),
-      Helpers = require('qorus/helpers'),
-      utils   = require('utils'),
-      moment  = require('moment'),
+  var Qorus      = require('qorus/qorus'),
+      Helpers    = require('qorus/helpers'),
+      utils      = require('utils'),
+      moment     = require('moment'),
+      Dispatcher = require('qorus/dispatcher'),
       obj_map, Model;
   
   obj_map = {
@@ -74,6 +75,22 @@ define(function (require) {
     dateAttributes: ['when'],
     idAttribute: 'alertid',
     
+    api_events_list: function () {
+      var events;
+      
+      if (this.get('alerttype') === 'ONGOING') {
+        events = [
+          "alert:%(id)s:ongoing_cleared"
+        ];
+      } else {
+        events = [
+          "alert:%(id)s:transient_cleared"
+        ];
+      }
+      
+      return events;
+    },
+    
     toJSON: function () {
       var obj = Model.__super__.toJSON.call(this);
         
@@ -89,12 +106,13 @@ define(function (require) {
       return obj;
     },
     
+    dispatch: function (obj, evt) {},
+    
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
       data._id = data.id;
       if (data.id) delete data.id
       // data.id = this.createID(data);
-      
       return data;
     },
     

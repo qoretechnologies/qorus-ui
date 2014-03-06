@@ -10,6 +10,7 @@ define(function (require) {
       DetailTpl  = require('text!templates/system/alerts/detail.html'),
       PaneView   = require('views/common/pane'),
       Alert      = require('models/alert'),
+      Filtered   = require('backbone.filtered.collection'),
       columns, css_map, DetailView, TableView, ListView, View;
   
   columns = [
@@ -121,7 +122,7 @@ define(function (require) {
     },
     
     initialize: function () {
-      View.__super__.initialize.apply(this, arguments);
+      View.__super__.initialize.apply(this, arguments); 
       this.listenTo(Collection, 'sync', this.render);
     },
     
@@ -130,40 +131,35 @@ define(function (require) {
     },
         
     preRender: function () {
-      var OView, TView;
+      var OView, TView, ongoing, transient;
         
-      OView = this.setView(new ListView(
-        new Collection.constructor(Collection.where({ alerttype: 'ONGOING' }))
-      ), sprintf('#alerts-ongoing-list-%s', this.cid));
+      ongoing = new Filtered(Collection);
+      ongoing.filterBy({ alerttype: 'ONGOING' });
+      transient = new Filtered(Collection);
+      transient.filterBy({ alerttype: 'TRANSIENT' });
       
-      OView.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared', function (e, evt) {
+      OView = this.setView(new ListView(ongoing), sprintf('#alerts-ongoing-list-%s', this.cid));
+
+      TView = this.setView(new ListView(transient), sprintf('#alerts-transient-list-%s', this.cid));
+      
+      
+      this.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared alert:transient_raised', function (e, evt) {
         var alert, id;
         
         if (!e.info.when) e.info.when = e.time;
-
-        if (evt === 'alert:ongoing_raised') {
+        
+        if (evt === 'alert:ongoing_raised' || evt === 'alert:transient_raised') {
+          var type = (evt === 'alert:ongoing_raised') ? 'ONGOING' : 'TRANSIENT';
+          
+          _.extend(e.info, { alerttype: type });
           alert = new Alert(e.info, { parse: true });
-          OView.collection.add(alert);          
+          Collection.add(alert);
         } else if (evt === 'alert:ongoing_cleared') {
-          id = Alert.prototype.createID(e.info);
-          alert = OView.collection.findWhere({ "_id": id });
-
+          alert = Collection.findWhere({ _id: e.info.id, type: e.info.type, alerttype: 'ONGOING' });
           if (alert) {
             alert.trigger('destroy', alert, alert.collection);
           }
         }
-      });
-
-      TView = this.setView(new ListView(
-        new Collection.constructor(Collection.where({ alerttype: 'TRANSIENT'}))
-      ), sprintf('#alerts-transient-list-%s', this.cid));
-      
-      TView.listenTo(Dispatcher, 'alert:transient_raised', function (e) {
-        var alert;
-        if (!e.info.when) e.info.when = e.time;
-
-        alert = new Alert(e.info, { parse: true });
-        TView.collection.add(alert);
       });
       
       this.listenTo(OView, 'row:clicked', this.showDetail);

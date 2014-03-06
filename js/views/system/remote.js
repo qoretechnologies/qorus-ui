@@ -15,8 +15,10 @@ define(function (require) {
       _.bindAll(this, 'render');
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
-      this.listenTo(Dispatcher, 'system:remote_health_changed', this.update);
-      this.update();
+      this.listenTo(Dispatcher, 'system:remote_health_changed', this.render);
+      console.log('hovno');
+      this.listenTo(Dispatcher, 'system', function () { console.log('remote', arguments)});
+      this.render();
     },
     
     render: function (ctx) {
@@ -37,7 +39,7 @@ define(function (require) {
       $status = this.$('.status').popover({ 
         content: DetailTpl(data), 
         placement: "right", 
-        container: this.$el,
+        container: 'body',
         html: true
       });
     },

@@ -1,16 +1,16 @@
 define(function (require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    settings = require('settings'),
-    utils = require('utils'),
-    Qorus = require('qorus/qorus'),
-    StatsCollection = require('collections/stats'),
-    Template = require('tpl!templates/system/dashboard.html'),
-    ChartView = require('views/common/chart'),
-    AlertView = require('views/system/alerts'),
-    StatusTpl = require('tpl!templates/system/health/summary.html'),
-    Dispatcher = require('qorus/dispatcher'),
-    Summary, DashboardView, HealthModel, StatusView;
+  var $               = require('jquery'),
+      _               = require('underscore'),
+      settings        = require('settings'),
+      utils           = require('utils'),
+      Qorus           = require('qorus/qorus'),
+      StatsCollection = require('collections/stats'),
+      Template        = require('tpl!templates/system/dashboard.html'),
+      ChartView       = require('views/common/chart'),
+      AlertView       = require('views/system/alerts'),
+      StatusTpl       = require('tpl!templates/system/health/summary.html'),
+      Dispatcher      = require('qorus/dispatcher'),
+      Summary, DashboardView, HealthModel, StatusView;
   
   Summary = Qorus.Model.extend({
     __name__: 'Summary',
@@ -81,7 +81,7 @@ define(function (require) {
         self.context.statusToCSS = self.statusToCSS;
       });
       
-      this.listenTo(Dispatcher, 'system', this.render);
+      this.listenTo(Dispatcher, 'system', this.update);
       this.listenTo(this.model, 'sync change', this.render);
     },
     
@@ -94,8 +94,12 @@ define(function (require) {
       return '';
     },
     
+    update: function () {
+      this.model.fetch();
+    },
+    
     onRender: function () {
-      this.$('[data-toggle=tooltip]').tooltip();
+      this.$('[data-toggle=tooltip]').tooltip({ container: 'body' });
     }
   })
   

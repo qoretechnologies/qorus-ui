@@ -77,9 +77,7 @@ define(function (require) {
     }, 
     
     empty: function () {
-      console.log('emptying', this.size());
       this.clear();
-      console.log('after emptying', this.size());
     }
   });
   

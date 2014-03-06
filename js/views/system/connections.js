@@ -184,11 +184,14 @@ define(function (require) {
           width: width
         }), '.detail', true);
         this.selected_model = model;
+
+        view.upstreamUrl = this.getViewUrl();
         
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
         url = [this.getViewUrl(), source_view.url(), row.model.get('name')].join('/').replace(/\/+/g, "/");
+
       } else {
         if (view) view.close();
         if (this.selected_model) this.stopListening(this.selected_model);
