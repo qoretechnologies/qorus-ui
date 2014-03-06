@@ -1,9 +1,9 @@
-<table class="table table-condensed table-striped table-align-left">
+%><table class="table table-condensed table-striped table-align-left">
   <tbody>
     <% _.each(item.alerts, function (alert) { %> 
       <tr>
         <td>
-          <a href="/<%= getUrl('showSystem') + "/" + ["alerts",alert.alerttype.toLowerCase(),alert.id].join('/') %>"><%= alert.alert %></a>
+          <a href="/<%= getUrl('showSystem') + "/" + ["alerts",alert.alerttype.toLowerCase(),alert.alertid].join('/') %>"><%= alert.alert %></a>
           <p>
             <%= alert.object %><br />
             <small class="muted break"><%= escapeHtml(alert.reason) %></small>

@@ -99,7 +99,16 @@ define(function (require) {
     },
     
     onRender: function () {
-      this.$('[data-toggle=tooltip]').tooltip({ container: 'body' });
+      console.log(this.$('[data-toggle=tooltip]'));
+      this.$('[data-toggle=tooltip]').tooltip();
+    },
+    
+    preRender: function () {
+      this.clean();
+    },
+    
+    clean: function () {
+      this.$('[data-toggle=tooltip]').tooltip('destroy');
     }
   })
   
