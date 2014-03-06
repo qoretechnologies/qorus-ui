@@ -33,7 +33,7 @@
     },
     shim: { 
       "backbone": {
-        deps: ["underscore", "jquery", "sprintf", "bootstrap", "jquery.rest"],
+        deps: ["underscore", "jquery", "sprintf", "jquery.rest", "jquery.ui", "bootstrap"],
         exports: "Backbone"
       },
       "backbone.keys": {

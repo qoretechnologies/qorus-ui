@@ -99,7 +99,6 @@ define(function (require) {
     },
     
     onRender: function () {
-      console.log(this.$('[data-toggle=tooltip]'));
       this.$('[data-toggle=tooltip]').tooltip();
     },
     
