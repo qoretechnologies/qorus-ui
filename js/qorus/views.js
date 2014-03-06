@@ -1433,7 +1433,7 @@ define(function (require) {
     
     getTab: function (name) {
       var tabs = this.getTabs();
-      return _(tabs).findWhere({'name': name});
+      return _(tabs).find(function (tab) { return tab.slug() === name});
     },
     
     removeTab: function (name) {
