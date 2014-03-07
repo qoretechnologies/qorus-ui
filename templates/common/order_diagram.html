@@ -4,9 +4,11 @@
   <% _.each(obj.steps, function (steps, idx1) { %>
     <div class="level">
       <% _.each(steps, function (step, idx2) { %>
-        <% var status = 'ok';
+        <% var status;
            if (step.type === 'start' && order.workflowstatus === 'ERROR') status = 'error';
+           if (step.type === 'start' && order.workflowstatus !== 'ERROR') status = 'ok';
            if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'ERROR'})) status = 'error';
+           if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'COMPLETE'})) status = 'ok';
         %>
         <div class="box <%= step.type %> <%= status %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>"><a href="#"><%= step.name || step.id %></a></div>
       <% }) %>
