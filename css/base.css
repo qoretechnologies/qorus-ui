@@ -718,6 +718,15 @@ aside {
 }
 
 /* resizable modal */
+.modal .content {
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal .modal-body {
+  max-height: none;
+}
+
 .ui-resizable-handle { z-index: auto !important; }
 
 .ui-resizable-s {

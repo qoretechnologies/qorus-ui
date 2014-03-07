@@ -19,6 +19,7 @@ define(function (require) {
       
       this.model.getProperty('lib', { lib_source: true }, true);
       this.listenTo(this.model, 'update:lib', this.update);
+      this.on('show', this.color);
     },
     
     preRender: function () {
@@ -27,7 +28,15 @@ define(function (require) {
     
     update: function () {
       this.render();
+    },
+    
+    color: function () {
+      console.log('should color?', this._is_colored);
+      if (this._is_colored) return;
+      console.log('coloring');
+      
       Rainbow.color(this.$el);
+      this._is_colored = true;
     }
     
   });      

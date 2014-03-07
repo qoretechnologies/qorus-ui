@@ -39,7 +39,6 @@ define(function (require) {
       $modal.on("resize", function(event, ui) {
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
-
           self.fixHeight();
       });
 
@@ -66,6 +65,7 @@ define(function (require) {
       var $modal = this.$el;
       var max_height = $(window).innerHeight() - $modal.position().top * 2;
       
+      
       if ($modal.height() > max_height) {
         $modal.height(max_height);
 
@@ -73,7 +73,7 @@ define(function (require) {
         var cor = $body.innerHeight() - $body.height();
         var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
 
-        $body.height(h);
+        $body.height(h).css('max-height', h);
         debug.log(cor, h, $body.height(), $modal.height());
       }
     },
