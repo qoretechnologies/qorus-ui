@@ -860,6 +860,14 @@ aside {
   padding: 12px 10%;
 }
 
+.box.ok {
+  background-color: green;
+}
+
+.box.error {
+  background-color: red;
+}
+
 .indent {
   display: inline-block;
   width: 1em;

@@ -9,20 +9,16 @@ define(function (require) {
   
   View = Qorus.View.extend({
     name: "Steps",
+    template: Template,
         
     initialize: function (opts) {
-      _.bindAll(this, 'initCanvas');
-      this.template = Template;
+      _.bindAll(this, 'initCanvas', 'fixCanvas');
       View.__super__.initialize.call(this, opts);
       this.on('show', this.fixCanvas);
     },
     
     fixCanvas: function () {
       _.defer(this.initCanvas);
-    },
-    
-    onRender: function () {
-      console.log(this.el);
     },
     
     initCanvas: function () {

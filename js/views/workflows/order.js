@@ -1,21 +1,22 @@
 define(function(require) {
-  var $            = require('jquery'),
-      _            = require('underscore'),
-      helpers      = require('qorus/helpers'),
-      Qorus        = require('qorus/qorus'),
-      Model        = require('models/order'),
-      Workflow     = require('models/workflow'),
-      Template     = require('text!templates/workflow/orders/detail.html'),
-      ModalView    = require('views/common/modal'),
-      StepView     = require('views/steps/step'),
-      DiagramView  = require('views/common/diagram'),
-      StepsTpl     = require('tpl!templates/workflow/orders/steps.html'),
-      DataTpl      = require('tpl!templates/workflow/orders/data.html'),
-      ErrorsTpl    = require('tpl!templates/workflow/orders/errors.html'),
-      HierarchyTpl = require('tpl!templates/workflow/orders/hierarchy.html'),
-      AuditTpl     = require('tpl!templates/workflow/orders/audit.html'),
-      InfoTpl      = require('tpl!templates/workflow/orders/info.html'),
-      AlertsTpl    = require('tpl!templates/common/alerts.html'),
+  var $               = require('jquery'),
+      _               = require('underscore'),
+      helpers         = require('qorus/helpers'),
+      Qorus           = require('qorus/qorus'),
+      Model           = require('models/order'),
+      Workflow        = require('models/workflow'),
+      Template        = require('text!templates/workflow/orders/detail.html'),
+      ModalView       = require('views/common/modal'),
+      StepView        = require('views/steps/step'),
+      DiagramBaseView = require('views/common/diagram'),
+      DiagramTpl      = require('tpl!templates/common/order_diagram.html'),
+      StepsTpl        = require('tpl!templates/workflow/orders/steps.html'),
+      DataTpl         = require('tpl!templates/workflow/orders/data.html'),
+      ErrorsTpl       = require('tpl!templates/workflow/orders/errors.html'),
+      HierarchyTpl    = require('tpl!templates/workflow/orders/hierarchy.html'),
+      AuditTpl        = require('tpl!templates/workflow/orders/audit.html'),
+      InfoTpl         = require('tpl!templates/workflow/orders/info.html'),
+      AlertsTpl       = require('tpl!templates/common/alerts.html'),
       context, ModelView, StepsView;
       
   context = {
@@ -26,11 +27,61 @@ define(function(require) {
     }
   };
   
+  DiagramView = DiagramBaseView.extend({
+    template: DiagramTpl,
+    additionalEvents: {
+      "click .box": 'stepDetail'
+    },
+    
+    initialize: function (options) {
+      DiagramView.__super__.initialize.apply(this, arguments);
+      this.order_model = options.model;
+      
+      this.model = new Workflow({ workflowid: options.id });
+      this.model.fetch();
+      this.listenTo(this.model, 'sync', this.render);
+    },
+    
+    preRender: function () {
+      this.context.steps = this.model.mapSteps();
+      this.context.order = this.order_model.toJSON();
+    },
+    
+    onRender: function () {
+      this.fixCanvas();
+      $(window).on('resize.canvas', this.fixCanvas);
+    },
+    
+    render: function () {
+      if (this.model.isNew()) return;
+      DiagramView.__super__.render.apply(this, arguments);
+    },
+    
+    stepDetail: function (e) {
+      var $target = $(e.currentTarget),
+        id = $target.data('id');
+    
+      if (id) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.insertView(new ModalView({
+          content_view: new StepView({ id: id }) 
+        }), '#stepdetail');
+      }
+    },
+    
+    clean: function () {
+      $(window).off('resize.canvas', this.fixCanvas);
+    }
+  });
+  
   StepsView = Qorus.ModelView.extend({
     name: 'Steps',
     template: StepsTpl,
     preRender: function () {
       StepsView.__super__.preRender.apply(this, arguments);
+      
+      this.setView(new DiagramView({ id: this.model.get('workflowid'), model: this.model }), '#steps-diagram');
       _.extend(this.context, { getStepName: this.getStepName });
     },
     onRender: function () {
@@ -118,17 +169,6 @@ define(function(require) {
       });
       
       // this.createDiagram();
-    },
-    
-    createDiagram: function () {
-      var self = this,
-          wfl  = new Workflow({ id: this.model.get('workflowid') });
-      
-      self.listenTo(wfl, 'sync', function () {
-        self.setview(new DiagramView({ steps: wfl.mapSteps() }), '#steps-diagram', true);
-      });
-      
-      wfl.fetch();
     },
 
     getStepName: function (id) {
