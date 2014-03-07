@@ -12,7 +12,7 @@ define(function (require) {
       StepBase, Step, Model;
   
   StepBase = {
-      initialize: function (id, depends_on, name, type) {
+      initialize: function (id, depends_on, name, type, info) {
           this.name = name;
           this.id = id;
           this.depends_on = depends_on || [];
@@ -21,6 +21,7 @@ define(function (require) {
           this.root = false;
           this.parent_id = null;
           this.type = type || "process";
+          this.info = info;
       },
     
       size: function () {
@@ -263,8 +264,11 @@ define(function (require) {
           }
           
           var info = _.findWhere(stepinfo, { name: stepmap[k]});
-          if (info) stype = info.steptype.toLowerCase();
-          var node = new Step(k, steps[k], stepmap[k], stype);
+          if (info) {
+            stype = info.steptype.toLowerCase();
+            sinfo = info;
+          }
+          var node = new Step(k, steps[k], stepmap[k], stype, sinfo);
           step_list.push(node);
       }, this);
 

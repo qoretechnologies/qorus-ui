@@ -1,30 +1,28 @@
 define(function (require) {
-  var $ = require('jquery'),
-      _ = require('underscore'),
-      Qorus = require('qorus/qorus'),
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/common/diagram.html'),
       View;
   
   
+  
   View = Qorus.View.extend({
     name: "Steps",
-    additionalEvents: {},
         
     initialize: function (opts) {
       _.bindAll(this, 'initCanvas');
       this.template = Template;
       View.__super__.initialize.call(this, opts);
       this.on('show', this.fixCanvas);
-      // this.on('postrender', this.initCanvas);
-    },
-    
-    onRender: function () {
-      // this.initCanvas();
-      // _.defer(this.initCanvas);
     },
     
     fixCanvas: function () {
       _.defer(this.initCanvas);
+    },
+    
+    onRender: function () {
+      console.log(this.el);
     },
     
     initCanvas: function () {

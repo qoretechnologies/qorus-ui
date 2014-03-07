@@ -1,18 +1,20 @@
 define(function (require) {
-  var $             = require('jquery'), 
-      _             = require('underscore'),
-      utils         = require('utils'),
-      Qorus         = require('qorus/qorus'),
-      LogView       = require('views/log'),
-      DiagramView   = require('views/common/diagram'),
-      Template      = require('tpl!templates/workflow/meta.html'),
-      DetailTpl     = require('tpl!templates/workflow/info.html'),
-      EditTemplate  = require('tpl!templates/common/option_edit.html'),
-      AutostartView = require('views/workflows/autostart'),
-      HeaderTpl     = require("tpl!templates/workflow/detail_header.html"),
-      LibraryView   = require('views/common/library'),
-      AlertsTpl     = require('tpl!templates/common/alerts.html'),
-      ModelView, HeaderView, AlertsView, PaneView;      
+  var $               = require('jquery'), 
+      _               = require('underscore'),
+      utils           = require('utils'),
+      Qorus           = require('qorus/qorus'),
+      LogView         = require('views/log'),
+      DiagramBaseView = require('views/common/diagram'),
+      Template        = require('tpl!templates/workflow/meta.html'),
+      DetailTpl       = require('tpl!templates/workflow/info.html'),
+      EditTemplate    = require('tpl!templates/common/option_edit.html'),
+      AutostartView   = require('views/workflows/autostart'),
+      HeaderTpl       = require("tpl!templates/workflow/detail_header.html"),
+      LibraryView     = require('views/common/library'),
+      AlertsTpl       = require('tpl!templates/common/alerts.html'),
+      ModalView       = require('views/common/modal'),
+      StepView        = require('views/steps/step'),
+      ModelView, HeaderView, AlertsView, PaneView, DiagramView;
 
 
   AlertsView = Qorus.ModelView.extend({
@@ -43,6 +45,25 @@ define(function (require) {
   PaneView = Qorus.ModelView.extend({
     template: DetailTpl,
     name: 'Detail'
+  });
+  
+  DiagramView = DiagramBaseView.extend({
+    additionalEvents: {
+      "click .box": 'stepDetail'
+    },
+    
+    stepDetail: function (e) {
+      var $target = $(e.currentTarget),
+        id = $target.data('id');
+    
+      if (id) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.insertView(new ModalView({
+          content_view: new StepView({ id: id }) 
+        }), '#stepdetail');
+      }
+    }
   });
   
   ModelView = Qorus.TabView.extend({
@@ -139,9 +160,9 @@ define(function (require) {
       view.render();
     },
     
-    onTabChange: function (name) {
-      if (name === 'steps') this.createDiagram();
-    },
+    // onTabChange: function (name) {
+    //   if (name === 'steps') this.createDiagram();
+    // },
     
     editOption: function (e) {
       var self = this, $tpl;
