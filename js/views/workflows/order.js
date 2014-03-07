@@ -17,7 +17,7 @@ define(function(require) {
       AuditTpl        = require('tpl!templates/workflow/orders/audit.html'),
       InfoTpl         = require('tpl!templates/workflow/orders/info.html'),
       AlertsTpl       = require('tpl!templates/common/alerts.html'),
-      context, ModelView, StepsView;
+      context, ModelView, StepsView, ErrorsView;
       
   context = {
     action_css: {
@@ -110,6 +110,16 @@ define(function(require) {
     },
   });
   
+  ErrorsView = Qorus.ModelView.extend({
+    onRender: function () {
+      // init popover on info text
+      this.$('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+      });
+    }
+  });
+  
   
   ModelView = Qorus.TabView.extend({
     __name__: "OrderView",
@@ -118,7 +128,6 @@ define(function(require) {
       "click .treeview li": "toggleRow",
       "click .showstep": "stepDetail",
       "click tr.parent": "showSubSteps",
-      "click td.info": "showInfo",
       'click button[data-action]': 'runAction',
       "click .copy-paste": 'enableCopyMode',
       "click .tree-caret": 'toggleTree'
@@ -144,7 +153,7 @@ define(function(require) {
       
       this.addTabView(new StepsView({ model: this.model }));
       this.addTabView(new Qorus.ModelView({ model: this.model, template: DataTpl }), { name: 'Data'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
+      this.addTabView(new ErrorsView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
@@ -160,17 +169,6 @@ define(function(require) {
       }); 
     },
     
-    onRender: function(){
-    
-      // init popover on info text
-      $('td.info').each(function () {
-        var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
-      });
-      
-      // this.createDiagram();
-    },
-
     getStepName: function (id) {
       var steps = _.filter(this.model.get('StepInstances'), function (s) {
         if (s.stepid == id)
