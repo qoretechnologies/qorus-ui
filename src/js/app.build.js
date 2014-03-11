@@ -1,7 +1,7 @@
 ({
     appDir: "../",
     baseUrl: "js",
-    dir: "../../webapp-build",
+    dir: "../../dist",
     paths: {
       jquery: 'libs/jquery',
       underscore: 'libs/underscore',
