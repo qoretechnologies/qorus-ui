@@ -31,9 +31,7 @@ define(function (require) {
     },
     
     color: function () {
-      console.log('should color?', this._is_colored);
       if (this._is_colored) return;
-      console.log('coloring');
       
       Rainbow.color(this.$el);
       this._is_colored = true;
