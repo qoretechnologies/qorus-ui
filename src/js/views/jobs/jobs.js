@@ -22,8 +22,12 @@ define(function(require) {
       'click [data-action]': 'runAction'
     },
     runAction: function (evt) {
+      var data = evt.currentTarget.dataset;
+      console.log(data)
+      // if setExpiration or reSchedule propagate the event to parent view
+      if (data.action === 'set-expiry' || data.action === 'schedule') return;
       var $target = $(evt.currentTarget);
-      // console.log('halo', arguments);
+      
       this.model.doAction($target.data('action'), $target.data());
       evt.stopPropagation();
     }
