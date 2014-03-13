@@ -16,7 +16,14 @@ define(function (require) {
       View, PaneView, TableView, ResourceViews, QorusDetailView, 
       UserDetailView, DatasourcesDetailView, RowView;
   
-     
+  
+  
+  AlertsView = Qorus.ModelView.extend({
+    slug: function () {
+      slug = AlertsView.__super__.slug.apply(this);
+      return 'connections-' + slug;
+    }
+  });
       
   QorusDetailView = Qorus.TabView.extend({
     views: {},
@@ -40,7 +47,7 @@ define(function (require) {
       }), { name: 'Detail' });
       
       if (this.model.get('has_alerts')) {
-        this.addTabView(new Qorus.ModelView({
+        this.addTabView(new AlertsView({
           model: this.model,
           template: AlertsTpl
         }), { name: 'Alerts' });
