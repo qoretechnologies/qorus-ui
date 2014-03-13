@@ -29,6 +29,7 @@ define(function(require) {
       var $target = $(evt.currentTarget);
       
       this.model.doAction($target.data('action'), $target.data());
+      this.$('.btn-group.open').dropdown('toggle');
       evt.stopPropagation();
     }
   });
