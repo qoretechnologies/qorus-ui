@@ -16,8 +16,6 @@ define(function (require) {
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'system:remote_health_changed', this.render);
-      console.log('hovno');
-      this.listenTo(Dispatcher, 'system', function () { console.log('remote', arguments)});
       this.render();
     },
     

@@ -1,15 +1,11 @@
 <table class="table table-stripped table-condensed table-align-left">
-  <thead>
-    <tr>
-      <th>Key</th>
-      <th>Value</th>
-    </tr>
-  </thead>
+  <thead></thead>
   <tbody>
-    <% _.each(item, function (v, k) { %>
+    <% _.each(_item.getDetails(), function (type, detail) { %>
+      <% var it = item[detail] %>
       <tr>
-        <td><%= k %></td>
-        <td><%= (_.isObject(v)) ? createNestedList(v) : v %></td>
+        <th><%= detail %></th>
+        <td><%= autoFormat(it, type) %></td>
       </tr>
     <% }) %>
   </tbody>

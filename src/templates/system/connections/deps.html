@@ -1,0 +1,13 @@
+<table class="table table-stripped table-condensed table-align-left">
+  <thead>
+    <tr></tr>
+  </thead>
+  <tbody>
+    <% _.each(item.deps, function (dep) { %>
+      <% var type = dep.type.charAt(0) + dep.type.slice(1).toLowerCase() %>
+      <tr>
+        <td><a href="<%= getUrl('show'+ type, { id: dep[dep.type.toLowerCase()+'id'] }) %>"><%= dep.desc %></a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

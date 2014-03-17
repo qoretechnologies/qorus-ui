@@ -1,7 +1,44 @@
 define(function (require) {
   var Qorus      = require('qorus/qorus'),
       Dispatcher = require('qorus/dispatcher'),
-      Model;
+      _          = require('underscore'),
+      Model, BaseParams, ObjectDetailAttributes;
+
+  function extend(d, s) {
+    var copy = _.clone(d);
+    return _.extend(copy, s);
+  };
+
+  BaseParams = {
+    "conntype": "string",
+    "locked":	"boolean",
+    "up": "boolean",
+    "monitor": "boolean",
+    "status": "string",
+    "last_check": "date"
+  };
+
+  ObjectDetailAttributes = {
+    'DATASOURCE':  extend(BaseParams, {
+        "type": "string",
+        "user": "string",
+        "db": "string"
+    }),
+    'REMOTE': extend(BaseParams, {
+        "loopback": "boolean",
+        "updated": "date",
+        "opts": "list",
+        "url": "string"
+      }),
+    'USER-CONNECTION': extend(BaseParams, {
+        "loopback": "boolean",
+        "updated": "date",
+        "opts": "list",
+        "url": "string",
+        "type": "string"
+      })
+  };
+
     
   Model = Qorus.ModelWithAlerts.extend({
     __name__: 'RemoteModel',
@@ -43,6 +80,10 @@ define(function (require) {
         .done(function (response) {
           self.trigger('ping', response);
         });
+    },
+    
+    getDetails: function () {
+      return ObjectDetailAttributes[this.get('conntype')];
     }
   });
   

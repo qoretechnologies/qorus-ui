@@ -1,22 +1,21 @@
 define(function (require) {
-  var $             = require('jquery'),
-      _             = require('underscore'),
-      Qorus         = require('qorus/qorus'),
-      Template      = require('tpl!templates/system/connections.html'),
-      PaneTpl       = require('tpl!templates/system/connections/pane.html'),
-      TableTpl      = require('text!templates/system/connections/table.html'),
-      RowTpl        = require('text!templates/system/connections/row.html'),
-      RPView        = require('views/common/pane'),
-      Collection    = require('collections/remote'),
-      QorusTpl      = require('tpl!templates/system/connections/qorus.html'),
-      AlertsTpl     = require('tpl!templates/common/alerts.html'),
-      TabTpl        = require('tpl!templates/system/connections/tabview.html'),
-      ModalView     = require('views/common/modal'),
-      PingTpl       = require('tpl!templates/system/connections/ping.html'),
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      Template   = require('tpl!templates/system/connections.html'),
+      PaneTpl    = require('tpl!templates/system/connections/pane.html'),
+      TableTpl   = require('text!templates/system/connections/table.html'),
+      RowTpl     = require('text!templates/system/connections/row.html'),
+      RPView     = require('views/common/pane'),
+      Collection = require('collections/remote'),
+      QorusTpl   = require('tpl!templates/system/connections/qorus.html'),
+      AlertsTpl  = require('tpl!templates/common/alerts.html'),
+      TabTpl     = require('tpl!templates/system/connections/tabview.html'),
+      ModalView  = require('views/common/modal'),
+      PingTpl    = require('tpl!templates/system/connections/ping.html'),
+      DepsTpl    = require('tpl!templates/system/connections/deps.html'),
       View, PaneView, TableView, ResourceViews, QorusDetailView, 
       UserDetailView, DatasourcesDetailView, RowView;
-  
-  
   
   AlertsView = Qorus.ModelView.extend({
     slug: function () {
@@ -28,10 +27,14 @@ define(function (require) {
   QorusDetailView = Qorus.TabView.extend({
     views: {},
     template: TabTpl,
+    url: function () {
+      return "/" + [this.options.resource_type, this.model.get('name')].join('/');
+    },
     
     initialize: function (options) {
       QorusDetailView.__super__.initialize.apply(this, arguments);
       this.model = options.model;
+      this.options.resource_type = options.resource_type;
       this.listenTo(this.model, 'change', this.render);
     },
     
@@ -45,6 +48,11 @@ define(function (require) {
         model: this.model,
         template: QorusTpl
       }), { name: 'Detail' });
+      
+      var depview = this.addTabView(new Qorus.ModelView({
+        model: this.model,
+        template: DepsTpl
+      }), { name: 'Dependencies'});
       
       if (this.model.get('has_alerts')) {
         this.addTabView(new AlertsView({
@@ -185,9 +193,12 @@ define(function (require) {
                 
       if (this.selected_model != model) {
         row.$el.addClass('info');
+
+        var content_view = new ResourceViews[source_view.options.resource_type]({ model: model, resource_type: source_view.options.resource_type });
+        content_view.upstreamUrl = [url, source_view.options.resource_type, model.get('name')].join("/");
         
         view = this.setView(new RPView({
-          content_view: new ResourceViews[source_view.options.resource_type]({ model: model }),
+          content_view: content_view,
           width: width
         }), '.detail', true);
         this.selected_model = model;
