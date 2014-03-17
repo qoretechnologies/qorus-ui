@@ -175,7 +175,12 @@ define(function (require) {
   Qorus.ModelWithAlerts = Qorus.Model.extend({
     parse: function (response, options) {
       response = Qorus.ModelWithAlerts.__super__.parse.apply(this, arguments);
-      response.has_alerts = (response.alerts.length > 0);
+      if (_(response).has('alerts') {
+        response.has_alerts = (response.alerts.length > 0);
+      } else {
+        response.has_alerts = false;
+      }
+      
       return response;
     }
   });

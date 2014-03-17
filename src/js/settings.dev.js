@@ -1,5 +1,6 @@
 define(function () {
-  var host = "localhost:8001";
+  var host = "admin:admin@192.168.20.171:8001";
+  var protocol = window.location.protocol;
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
@@ -8,7 +9,7 @@ define(function () {
       DATE_TSEPARATOR: 'YYYY-MM-DDTHH:mm:ss',      
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
-      REST_API_PREFIX: 'http://localhost:8001/api',
+      REST_API_PREFIX:  protocol + '//'+ host + '/api',
       WS_PREFIX: '',
       EVENTS_WS_URL: 'ws://' + host + '/apievents',
       HOST: host,
