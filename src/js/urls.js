@@ -8,7 +8,7 @@ define(function (require) {
     'workflows(/)(:date)(/)(:deprecated)(/)*path': 'showWorkflows',
 
     'orders/view/:id(/)*path': 'showOrder',
-    'service/view/:id': 'showServices',
+    'service/view/:id': 'showService',
     'services(/)*path': 'showServices',
     'jobs/view/:id(/)(:filter)(/)(:date)': 'showJob',
     'jobs(/)(:date)(/)*path': 'showJobs',

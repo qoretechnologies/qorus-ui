@@ -2,6 +2,7 @@ define(function (require) {
   var Qorus      = require('qorus/qorus'),
       Dispatcher = require('qorus/dispatcher'),
       _          = require('underscore'),
+      helpers    = require('qorus/helpers'),
       Model, BaseParams, ObjectDetailAttributes;
 
   function extend(d, s) {
@@ -39,7 +40,7 @@ define(function (require) {
       })
   };
 
-    
+
   Model = Qorus.ModelWithAlerts.extend({
     __name__: 'RemoteModel',
     idAttribute: 'name',
@@ -54,6 +55,31 @@ define(function (require) {
     initialize: function () {
       Model.__super__.initialize.apply(this, arguments);
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
+    },
+    
+    parse: function (response, options) {
+      Model.__super__.parse.apply(this, arguments);
+      
+      this.parseDeps(response.deps);
+      return response;
+    },
+    
+    parseDeps: function (deps) {
+      _.each(deps, function (dep) {
+        var type,
+            desc = dep.desc.split(' ');
+        
+        if (desc.indexOf(dep.name) > 1) {
+          type = desc[1];
+        } else {
+          type = desc[0];
+        }
+        
+        type = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+        
+        dep.url = helpers.getUrl('show'+type, { id: dep[type.toLowerCase()+'id']});
+      }, this);
+      return deps;
     },
     
     dispatch: function (e, evt) {

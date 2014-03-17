@@ -101,6 +101,10 @@ define(function (require) {
       this.setView(view);
     },
     
+    showService: function (id) {
+      this.showServices(id);
+    },
+    
     // job list
     showJobs: function (date) {
       var view = new JobListView({}, date, this);

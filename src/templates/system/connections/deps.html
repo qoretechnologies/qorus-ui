@@ -4,9 +4,8 @@
   </thead>
   <tbody>
     <% _.each(item.deps, function (dep) { %>
-      <% var type = dep.type.charAt(0) + dep.type.slice(1).toLowerCase() %>
       <tr>
-        <td><a href="<%= getUrl('show'+ type, { id: dep[dep.type.toLowerCase()+'id'] }) %>"><%= dep.desc %></a></td>
+        <td><a href="<%= dep.url %>"><%= dep.desc %></a></td>
       </tr>
     <% }) %>
   </tbody>
