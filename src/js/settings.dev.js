@@ -1,5 +1,5 @@
 define(function () {
-  var host = "admin:admin@192.168.20.171:8001";
+  var host = "localhost:8001";
   var protocol = window.location.protocol;
   
   var settings = {

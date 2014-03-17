@@ -2,6 +2,7 @@ define(function (require) {
   var $                    = require('jquery'),
       _                    = require('underscore'),
       utils                = require('utils'),
+      settings             = require('settings'),
       NestedListTpl        = require('tpl!templates/common/nested_list.html'),
       NestedListTextTpl    = require('tpl!templates/common/nested_list_text.html'),
       WrapLabelTpl         = require('tpl!templates/common/wrap_label.html'),
@@ -10,7 +11,8 @@ define(function (require) {
       ConnectionsStatusTpl = require('tpl!templates/common/connections_status.html'),
       GroupListTpl         = require('tpl!templates/common/groups_list.html'),
       Urls                 = require('urls'),
-      ControlsTpl     = require('tpl!templates/common/controls.html'),
+      ControlsTpl          = require('tpl!templates/common/controls.html'),
+      moment               = require('moment'),
       Helpers;
 
   Helpers = {
@@ -155,6 +157,13 @@ define(function (require) {
     
     slugify: function (value) {
       return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    },
+    
+    autoFormat: function (value, type) {
+      if (type === 'boolean') return this.statusIcon(value);
+      if (type === 'list') return this.createNestedList(value);
+      if (type === 'date' && value) return moment(value, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+      return value;
     }
   };
   

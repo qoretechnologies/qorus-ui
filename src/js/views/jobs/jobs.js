@@ -23,7 +23,6 @@ define(function(require) {
     },
     runAction: function (evt) {
       var data = evt.currentTarget.dataset;
-      console.log(data)
       // if setExpiration or reSchedule propagate the event to parent view
       if (data.action === 'set-expiry' || data.action === 'schedule') return;
       var $target = $(evt.currentTarget);
