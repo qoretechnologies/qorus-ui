@@ -201,14 +201,20 @@ define(function(require) {
   // Diagram tab view
   DiagramPaneView = Qorus.ModelView.extend({
     additionalEvents: {
+      "click #step-diagram .box.start": 'showAllErrors',
       "click #step-diagram .box[data-action='show-detail']": 'showDetail',
       "click #step-diagram a[data-action='show-detail']": 'showDetail'
     },
     
     name: 'Diagram',
     template: DiagramPaneTpl,
-    preRender: function () {
+    preRender: function () {      
       this.setView(new DiagramView({ model: this.model }), '#step-diagram');
+      this.showAllErrors();
+    },
+    
+    showAllErrors: function () {
+      this.setView(new StepErrorsView({ errors: this.model.get('ErrorInstances'), template: StepErrorsTpl}), '#step-errors', true).render();
     },
     
     showDetail: function (e) {
