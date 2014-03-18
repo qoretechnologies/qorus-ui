@@ -155,7 +155,7 @@ define(function(require) {
       // init popover on info text
       this.$('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+        $(this).popover({ content: text, title: "Info", placement: "left", container: '#errors', html: true});
       });
     }
   });
@@ -187,7 +187,7 @@ define(function(require) {
       // init popover on info text
       this.$('td.info').each(function () {
         var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#diagram", html: true});
       });
     },
     off: function () {
