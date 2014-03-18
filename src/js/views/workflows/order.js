@@ -35,7 +35,7 @@ define(function(require) {
   DiagramView = DiagramBaseView.extend({
     template: DiagramTpl,
     additionalEvents: {
-      "click [data-action='show-source']": 'stepDetail',
+      "click .box[data-action='show-dd']": 'showDropdown',
       "contextmenu .box": 'stepDetail'
     },
     
@@ -49,7 +49,19 @@ define(function(require) {
     },
     
     preRender: function () {
-      this.context.steps = this.model.mapSteps();
+      // alter instances to have name hash with stepname
+      var instances = _(this.order_model.get('StepInstances')).map(function (inst) {
+        inst.name = inst.stepname;
+        return inst;
+      });
+      
+      this.context.steps = this.model.prepareSteps(
+        this.model.get('name'),
+        this.model.get('steps'), 
+        this.model.get('stepmap'),
+        instances
+      );
+
       this.context.order = this.order_model.toJSON();
     },
     
@@ -74,6 +86,30 @@ define(function(require) {
           content_view: new StepView({ id: id }) 
         }), '#stepdetail');
       }
+    },
+    
+    showDropdown: function (e) {
+      var tpl = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" 
+        + " data-action='show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>";
+      var $target = $(e.currentTarget);
+      var stepname = this.order_model.getStepName($target.data('id'));
+      var step = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
+      
+      this.hideDropdown();
+      
+      e.preventDefault();
+      if (step.length <= 1) return;
+
+      var $dd = $(_.template(tpl, { steps: step }));      
+      $dd
+        .css('top', $target.offset().top)
+        .css('left', $target.position().left)
+        .css('position', 'absolute');
+      this.$el.append($dd);
+    },
+    
+    hideDropdown: function () {
+      this.$('.dropdown').remove();
     },
     
     clean: function () {
@@ -124,6 +160,7 @@ define(function(require) {
     }
   });
   
+  // View showing step info which is used within DiagramView
   StepInfoView = Qorus.View.extend({
     initialize: function (options) {
       StepInfoView.__super__.initialize.apply(this, arguments);
@@ -144,7 +181,15 @@ define(function(require) {
     }
   });
   
+  // View showing step associated errors
   StepErrorsView = Qorus.View.extend({
+    onRender: function () {
+      // init popover on info text
+      this.$('td.info').each(function () {
+        var text = '<textarea>' + $(this).text() + '</textarea>';
+        $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
+      });
+    },
     off: function () {
       if (this.clean) this.clean();
       this.undelegateEvents();
@@ -153,10 +198,13 @@ define(function(require) {
     }
   });
   
+  // Diagram tab view
   DiagramPaneView = Qorus.ModelView.extend({
     additionalEvents: {
-      "click #step-diagram .box": 'showDetail'
+      "click #step-diagram .box[data-action='show-detail']": 'showDetail',
+      "click #step-diagram a[data-action='show-detail']": 'showDetail'
     },
+    
     name: 'Diagram',
     template: DiagramPaneTpl,
     preRender: function () {
@@ -164,23 +212,26 @@ define(function(require) {
     },
     
     showDetail: function (e) {
-      var $target = $(e.currentTarget);
-      var stepid = $target.data('id');
+      var $target = $(e.currentTarget),
+          stepid  = $target.data('id'),
+          instances = this.model.get('StepInstances'),
+          step, errors;
       
       e.preventDefault();
       
       // exit when click is made on diagram start - no step detail available
       if ($target.hasClass('start')) return;
       
-      var step = _.findWhere(this.model.get('StepInstances'), { stepid: stepid});
-      var errors = _.where(this.model.get('ErrorInstances'), { stepid: stepid });
+      step   = _.findWhere(instances, { stepid: stepid });
+      errors = _.where(this.model.get('ErrorInstances'), { stepid: stepid });
       
-      this.setView(new StepInfoView({ item: step, stepid: $target.data('id'), template: StepInfoTpl }), '#step-detail', true);
+      this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
       this.setView(new StepErrorsView({ errors: errors, template: StepErrorsTpl}), '#step-errors', true).render();
       
       // box selected styling
       this.$('.box').removeClass('selected');
       $target.addClass('selected');
+      this.getView('#step-diagram').hideDropdown();
     }
   });
   

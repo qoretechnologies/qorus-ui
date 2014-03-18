@@ -9,7 +9,7 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       moment        = require('moment'),
       Dispatcher    = require('qorus/dispatcher'),      
-      StepBase, Step, Model;
+      StepBase, Step, Model, prepareSteps;
   
   StepBase = {
       initialize: function (id, depends_on, name, type, info) {
@@ -57,7 +57,8 @@ define(function (require) {
                 id: c.id, 
                 links_to: c.depends_on,
                 name: c.name,
-                type: c.type
+                type: c.type,
+                info: c.info
               });
           });
 
@@ -66,7 +67,8 @@ define(function (require) {
                 id: this.id, 
                 links_to: this.depends_on,
                 name: this.name,
-                type: this.type
+                type: this.type,
+                info: this.info
               }];
           }
 
@@ -82,6 +84,51 @@ define(function (require) {
 
   _.extend(Step.prototype, StepBase);
   
+  
+  prepareSteps = function (name, steps, stepmap, stepinfo) {
+    if (!steps) return;
+
+    var step_list = [],
+        keys      = _.keys(steps, []),
+        stype     = undefined,
+        root;
+
+    // add root point
+    root = new Step(0, [], name, "start");
+    step_list.push(root);
+
+    // add steps to step_list
+    _.each(keys, function (k) {
+        if (steps[k].length === 0) {
+            steps[k] = [0];
+        }
+        
+        var info = _.findWhere(stepinfo, { name: stepmap[k] });
+        var sinfo;
+        if (info) {
+          stype = info.steptype.toLowerCase();
+          sinfo = _.clone(info);
+          if (info.ind === 0) sinfo.subwfls = _.where(stepinfo, { name: stepmap[k] });
+        }
+        
+        var node = new Step(k, steps[k], stepmap[k], stype, sinfo);
+        step_list.push(node);
+    });
+
+    _.each(step_list, function (step) {
+        var parent;
+  
+        _.each(step.depends_on, function (dep) {
+            parent = _.find(step_list, function (n) { return n.id == dep; });
+      
+            if (parent) {
+                parent.addChild(step);
+            }
+        });
+    });
+    
+    return step_list[0].toArray();
+  };
   
   Model = Qorus.Model.extend({
     __name__: 'Workflow',
@@ -241,50 +288,11 @@ define(function (require) {
     setAutostart: function (as) {
       this.doAction('setAutostart', { autostart: as });
     },
+    
+    prepareSteps: prepareSteps,
         
     mapSteps: function () {
-      if (!this.get('steps')) return;
-
-      var steps     = this.get('steps'),
-          stepmap   = this.get('stepmap'),
-          stepinfo  = this.get('stepinfo'),
-          step_list = [],
-          keys      = _.keys(steps, []),
-          stype     = undefined,
-          root;
-
-      // add root point
-      root = new Step(0, [], this.get('name'), "start");
-      step_list.push(root);
-
-      // add steps to step_list
-      _.each(keys, function (k) {
-          if (steps[k].length === 0) {
-              steps[k] = [0];
-          }
-          
-          var info = _.findWhere(stepinfo, { name: stepmap[k]});
-          if (info) {
-            stype = info.steptype.toLowerCase();
-            sinfo = info;
-          }
-          var node = new Step(k, steps[k], stepmap[k], stype, sinfo);
-          step_list.push(node);
-      }, this);
-
-      _.each(step_list, function (step) {
-          var parent;
-    
-          _.each(step.depends_on, function (dep) {
-              parent = _.find(step_list, function (n) { return n.id == dep; });
-        
-              if (parent) {
-                  parent.addChild(step);
-              }
-          });
-      });
-      
-      return step_list[0].toArray();
+      return this.prepareSteps(this.get('name'), this.get('steps'), this.get('stepmap'), this.get('stepinfo'));
     },
     
     // sets timerange for chart

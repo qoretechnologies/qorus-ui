@@ -5,12 +5,19 @@
     <div class="level">
       <% _.each(steps, function (step, idx2) { %>
         <% var status;
+           var action = (step.type === 'start') ? '' : 'show-detail';
            if (step.type === 'start' && order.workflowstatus === 'ERROR') status = 'error';
            if (step.type === 'start' && order.workflowstatus !== 'ERROR') status = 'ok';
            if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'ERROR'})) status = 'error';
            if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'COMPLETE'})) status = 'ok';
+           if (step.info) {
+             if (step.info.subwfls.length > 1) {
+               action = 'show-dd';
+               console.log(step.name, step.info.subwfls);
+             }
+           }
         %>
-        <div class="box <%= step.type %> <%= status %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>"><a href="#"><%= step.name || step.id %></a></div>
+        <div class="box <%= step.type %> <%= status %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>" data-action="<%= action %>"><a href="#"><%= step.name || step.id %></a></div>
       <% }) %>
     </div>
   <% }) %>
