@@ -1,12 +1,14 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'text!templates/common/bottom_bar.html',
-  'sprintf',
-  'jquery.ui'
-], function($, _, Qorus, Template){
-  var View = Qorus.View.extend({
+define(function (require) {
+  require('jquery.ui');
+  
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Template = require('tpl!templates/common/bottom_bar.html'),
+      View;
+  
+  
+  View = Qorus.View.extend({
     additionalEvents: {
       "click button[data-hide]": 'hide',
       "click .nav-tabs a": 'tabToggle'
@@ -36,7 +38,6 @@ define([
     },
     
     resize: function (event, ui) {
-      var parent = $('#bottom-bar');
       var bpos = ui.position.top + $('.handler').height();
       var height = $('#split-panes').height();
       
@@ -100,7 +101,6 @@ define([
       var $target = $(e.currentTarget);
       e.preventDefault();
 
-      var active = $('.tab-pane.active');
       $target.tab('show');
       this.activeTab = $target.attr('href');
     }

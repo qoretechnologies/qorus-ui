@@ -1,8 +1,3 @@
-<div class="span6">
-<div id="steps-diagram"></div>
-</div>
-
-<div class="span6">
 <table class="table table-hover table-condensed">
   <thead>
     <tr>
@@ -42,8 +37,8 @@
       <td><%= step.ind %></td>
       <td><%= step.retries %></td>
       <td><%= statusIcon(step.skip) %></td>
-      <td><%= step.started %></td>
-      <td><%= step.completed %></td>
+      <td class="date"><%= step.started %></td>
+      <td class="date"><%= step.completed %></td>
       <td><% if (step.subworkflow_instanceid) { %>
        <a href="/orders/view/<%= step.subworkflow_instanceid %>"><%= step.subworkflow_instanceid %></a>
        <% } %>

@@ -202,6 +202,8 @@ define(function (require) {
           width: width
         }), '.detail', true);
         this.selected_model = model;
+        
+        view.render();
 
         view.upstreamUrl = this.getViewUrl();
         

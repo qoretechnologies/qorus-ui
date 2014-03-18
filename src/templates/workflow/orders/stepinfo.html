@@ -1,0 +1,24 @@
+<table class="table table-condensed table-striped table-bordered table-align-left">
+  <tbody>
+    <tr>
+      <th class="narrow">Name</th>
+      <td><%= model.name %> <small><%= model.version %></small></td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td><%= model.steptype %></td>
+    </tr>
+    <tr>
+      <th>Started</th>
+      <td class="date"><%= (item) ? item.started : '' %></td>
+    </tr>
+    <tr>
+      <th>Completed</th>
+      <td class="date"><%= (item) ? item.completed : '' %></td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td><%= wrapStatus((item) ? item.stepstatus : 'Not started') %></td>
+    </tr>
+  </tbody>
+</table>

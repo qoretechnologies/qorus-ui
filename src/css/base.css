@@ -807,11 +807,15 @@ aside {
   position: absolute; 
 }
 
+#diagram {
+  font-size: 90%;
+}
+
 .level {
   text-align: center;
   overflow: hidden;
   padding: 10px 0;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -866,6 +870,10 @@ aside {
 
 .box.error {
   background-color: red;
+}
+
+.box.selected {
+  box-shadow: 0 0 20px rgba(0, 86, 134, 1);
 }
 
 .indent {
@@ -1011,6 +1019,14 @@ table .header-copy {
 	margin: 0 .5%;
 	width: 99%;
 	box-shadow: 0 5px 10px rgba(0,0,0,.8);
+}
+
+td.date {
+  white-space: nowrap;
+}
+
+td.nowrap {
+  white-space: nowrap;
 }
 
 #alert-detail {

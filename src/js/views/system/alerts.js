@@ -183,6 +183,8 @@ define(function (require) {
           width: width
         }), '.alert-detail', true);
         this.selected_model = model;
+        
+        view.render();
 
         // close detail on model destroy event
         this.listenToOnce(this.selected_model, 'destroy', function () {

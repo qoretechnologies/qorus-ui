@@ -287,7 +287,8 @@ define(function (require) {
       // debug.log('setting view', view, el, set);
       if (set === true) {
         // console.log('setting element on view', el, this.$(el));
-        view.setElement(this.$(el)).render();
+        view.setElement(this.$(el));  
+        // view.setElement(this.$(el)).render();
       }
       
       return view;

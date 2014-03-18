@@ -1,0 +1,98 @@
+<div class="span6" id="step-diagram"></div>
+
+<div class="span6">
+  <div id="order-keys">
+    <h4>Keys</h4>
+    <table class="table table-stripped table-condensed table-bordered table-align-left">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (model.get('keys')) { %>
+        <% _.each(model.get('keys'), function (v, k) {%>
+          <tr>
+            <td><%= k %></td>
+            <td><%= v %></td>
+          </tr>
+        <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="2">No data to display</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h4>Step Details</h4>
+    <div id="step-detail">
+      <table class="table table-condensed table-striped table-bordered table-align-left">
+        <tbody>
+          <tr>
+            <th class="narrow">Name</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>Started</th>
+            <td class="date"></td>
+          </tr>
+          <tr>
+            <th>Completed</th>
+            <td class="date"></td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <h4>Hierarchy</h4>
+    <div id="order-hierarchy">
+      <% if (model.get('hierarchy_tree')) { %>
+      <table class="table table-striped table-hover table-condensed table-align-left">
+        <thead>
+          <tr>
+            <th>Instance ID</th>
+            <th>Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(model.get('hierarchy_tree').flatten(), function(child) { %>
+          <% var ha = child.el.opts; %>
+          <% var level = (child.el.hasChildren()) ? child.level-1 : child.level %>
+          <tr class="<%= (child.el.hasChildren()) ? 'branch' : 'leaf' %>" data-tree-id="<%= child.path %>">
+            <td class="nowrap">
+              <% _.each(_.range(level), function () { %>
+                <span class="indent"></span>
+              <% }) %>
+              <% if (child.el.hasChildren()) { %>
+                <span class="tree-caret" data-branch-id="<%= child.path %>" data-level="<%= level %>"><i class="icon-caret-down icon-large"></i></span>
+              <% } %>
+              <a href="<%= getUrl('showOrder', { id : ha.workflow_instanceid }) %>"><%= ha.workflow_instanceid %></a>
+            </td>
+            <td class="nowrap"><a href="<%= getUrl('showWorkflow', { id : ha.workflowid }) %>"><%= ha.name %></a></td>
+            <td><%= wrapStatus(ha.workflowstatus) %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<div class="span6">
+  <h4>Errors</h4>
+  <div id="step-errors"></div>
+</div>

@@ -136,6 +136,8 @@ define(function(require) {
           width: width
         }), '#job-detail', true);
         this.selected_model = model;
+        
+        view.render();
 
         this.listenTo(this.selected_model, 'change', view.render);
         

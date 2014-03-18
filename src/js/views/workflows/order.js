@@ -4,6 +4,7 @@ define(function(require) {
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
       Model           = require('models/order'),
+      StepModel       = require('models/step'),
       Workflow        = require('models/workflow'),
       Template        = require('text!templates/workflow/orders/detail.html'),
       ModalView       = require('views/common/modal'),
@@ -17,7 +18,11 @@ define(function(require) {
       AuditTpl        = require('tpl!templates/workflow/orders/audit.html'),
       InfoTpl         = require('tpl!templates/workflow/orders/info.html'),
       AlertsTpl       = require('tpl!templates/common/alerts.html'),
-      context, ModelView, StepsView, ErrorsView;
+      DiagramPaneTpl  = require('tpl!templates/workflow/orders/diagram.html'),
+      StepInfoTpl     = require('tpl!templates/workflow/orders/stepinfo.html'),
+      StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
+      context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
+      DiagramView, StepInfoView, StepErrorsView;
       
   context = {
     action_css: {
@@ -30,16 +35,17 @@ define(function(require) {
   DiagramView = DiagramBaseView.extend({
     template: DiagramTpl,
     additionalEvents: {
-      "click .box": 'stepDetail'
+      "click [data-action='show-source']": 'stepDetail',
+      "contextmenu .box": 'stepDetail'
     },
     
     initialize: function (options) {
       DiagramView.__super__.initialize.apply(this, arguments);
       this.order_model = options.model;
       
-      this.model = new Workflow({ workflowid: options.id });
-      this.model.fetch();
+      this.model = new Workflow({ workflowid: options.model.get('workflowid') });
       this.listenTo(this.model, 'sync', this.render);
+      this.model.fetch();
     },
     
     preRender: function () {
@@ -80,8 +86,6 @@ define(function(require) {
     template: StepsTpl,
     preRender: function () {
       StepsView.__super__.preRender.apply(this, arguments);
-      
-      this.setView(new DiagramView({ id: this.model.get('workflowid'), model: this.model }), '#steps-diagram');
       _.extend(this.context, { getStepName: this.getStepName });
     },
     onRender: function () {
@@ -107,7 +111,7 @@ define(function(require) {
       } else {
         return id;
       } 
-    },
+    }
   });
   
   ErrorsView = Qorus.ModelView.extend({
@@ -117,6 +121,66 @@ define(function(require) {
         var text = '<textarea>' + $(this).text() + '</textarea>';
         $(this).popover({ content: text, title: "Info", placement: "left", container: "#errors", html: true});
       });
+    }
+  });
+  
+  StepInfoView = Qorus.View.extend({
+    initialize: function (options) {
+      StepInfoView.__super__.initialize.apply(this, arguments);
+      this.model = new StepModel({ stepid: options.stepid });
+      this.listenTo(this.model, 'sync', this.render);
+      this.model.fetch();
+    },
+    
+    preRender: function () {
+      this.context.model = this.model.toJSON();
+    },
+    
+    off: function () {
+      if (this.clean) this.clean();
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
+    }
+  });
+  
+  StepErrorsView = Qorus.View.extend({
+    off: function () {
+      if (this.clean) this.clean();
+      this.undelegateEvents();
+      this.stopListening();
+      this.$el.empty();
+    }
+  });
+  
+  DiagramPaneView = Qorus.ModelView.extend({
+    additionalEvents: {
+      "click #step-diagram .box": 'showDetail'
+    },
+    name: 'Diagram',
+    template: DiagramPaneTpl,
+    preRender: function () {
+      this.setView(new DiagramView({ model: this.model }), '#step-diagram');
+    },
+    
+    showDetail: function (e) {
+      var $target = $(e.currentTarget);
+      var stepid = $target.data('id');
+      
+      e.preventDefault();
+      
+      // exit when click is made on diagram start - no step detail available
+      if ($target.hasClass('start')) return;
+      
+      var step = _.findWhere(this.model.get('StepInstances'), { stepid: stepid});
+      var errors = _.where(this.model.get('ErrorInstances'), { stepid: stepid });
+      
+      this.setView(new StepInfoView({ item: step, stepid: $target.data('id'), template: StepInfoTpl }), '#step-detail', true);
+      this.setView(new StepErrorsView({ errors: errors, template: StepErrorsTpl}), '#step-errors', true).render();
+      
+      // box selected styling
+      this.$('.box').removeClass('selected');
+      $target.addClass('selected');
     }
   });
   
@@ -151,6 +215,7 @@ define(function(require) {
     preRender: function () {
       this.removeView('tabs');
       
+      this.addTabView(new DiagramPaneView({ model: this.model }));
       this.addTabView(new StepsView({ model: this.model }));
       this.addTabView(new Qorus.ModelView({ model: this.model, template: DataTpl }), { name: 'Data'});
       this.addTabView(new ErrorsView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
@@ -159,7 +224,7 @@ define(function(require) {
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
       
       if (this.model.get('has_alerts'))
-        this.addTabView(new AlertsView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});
+        this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});
         
       _.extend(this.context, { 
         item: this.model.toJSON(),

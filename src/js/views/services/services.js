@@ -176,6 +176,8 @@ define(function(require){
           content_view: content_view,
           width: width
           }),'#service-detail', true);
+      
+        view.render();
         
         // add on close listener
         this.listenToOnce(view, 'closed off', function () {

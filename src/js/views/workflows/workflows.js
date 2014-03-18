@@ -253,12 +253,14 @@ define(function (require) {
             content_view: content_view,
             width: width
           }), '#workflow-detail', true);
+
+        view.render();
         
-          this.listenToOnce(view, 'closed off', function () {
-            row.$el.removeClass('info');
-            self.stopListening(content_view);
-            self.stopListening(model);
-          });
+        this.listenToOnce(view, 'closed off', function () {
+          row.$el.removeClass('info');
+          self.stopListening(content_view);
+          self.stopListening(model);
+        });
 
         url = this.getViewUrl() + "/" + row.model.id;
         

@@ -226,7 +226,7 @@ define(function (require) {
       // rewrite stepmap
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
-      response.has_alerts = (response.alerts.length > 0);
+      if (response.alerts) response.has_alerts = (response.alerts.length > 0);
       return response;
     },
     
