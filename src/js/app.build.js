@@ -104,6 +104,9 @@
       },
       "rainbow.sql": {
         deps: ['rainbow']
+      },
+      "prism": {
+        exports: "Prism"
       }
     },
     removeCombined: true,
