@@ -5,7 +5,7 @@ define(function (require) {
       AlertsTpl   = require('tpl!templates/common/alerts.html'),
       LogView     = require('views/log'),
       LibraryView = require('views/common/library'),
-      rainbow     = require('rainbow.qore'),
+      Prism       = require('prism'),
       View, InfoPaneView, CodePaneView, AlertsView;
   
   InfoPaneView = Qorus.ModelView.extend({
@@ -16,7 +16,7 @@ define(function (require) {
   
   CodePaneView = Qorus.ModelView.extend({
     __name__: 'JobCodePaneView',
-    template: "<pre><code data-language='qore'><%= item.code %></code></pre>",
+    template: "<pre class='language-qore'><code class='language-qore'><%= item.code %></code></pre>",
     name: 'Code',
     initialize: function () {
       CodePaneView.__super__.initialize.apply(this, arguments);
@@ -26,7 +26,7 @@ define(function (require) {
     },
     color: function () {
       var self = this;
-      Rainbow.color(this.el, function (code) { self.$el.html(code); });
+      Prism.highlightAll();
     }
   });
   

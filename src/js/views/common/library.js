@@ -1,8 +1,8 @@
 define(function (require) {
-  var $              = require('jquery'),
-      Rainbow        = require('rainbow'),
-      Qorus          = require('qorus/qorus'),
-      Template       = require('tpl!templates/common/library.html'),
+  var $          = require('jquery'),
+      Prism      = require('prism'),
+      Qorus      = require('qorus/qorus'),
+      Template   = require('tpl!templates/common/library.html'),
       View;
 
   require('rainbow.qore');
@@ -19,7 +19,7 @@ define(function (require) {
       
       this.model.getProperty('lib', { lib_source: true }, true);
       this.listenTo(this.model, 'update:lib', this.update);
-      this.on('show', this.color);
+      // this.on('show', this.color);
     },
     
     preRender: function () {
@@ -28,13 +28,16 @@ define(function (require) {
     
     update: function () {
       this.render();
+      this.color();
     },
     
     color: function () {
       if (this._is_colored) return;
       
-      Rainbow.color(this.$el);
-      this._is_colored = true;
+      // Rainbow.color(this.$el);
+      console.log('colorizing');
+      // this._is_colored = true;
+      Prism.highlightAll();
     }
     
   });      

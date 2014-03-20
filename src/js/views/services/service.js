@@ -12,7 +12,7 @@ define(function (require) {
       InfoTpl     = require('tpl!templates/service/info.html'),
       SourceTpl   = require('tpl!templates/service/source.html'),
       AlertsTpl   = require('tpl!templates/common/alerts.html'),
-      Rainbow     = require('rainbow'),
+      Prism       = require('prism'),
       ModelView, MethodsView, AlertsView;
       
 
@@ -47,7 +47,7 @@ define(function (require) {
         method: method
       });
       
-      content_view.on('postrender', function () { Rainbow.color(); } );
+      content_view.on('postrender', Prism.highlightAll);
       
       this.removeView('#source-modal');
       

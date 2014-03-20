@@ -4,7 +4,7 @@ define(function (require) {
       Qorus    = require('qorus/qorus'),
       Model    = require('models/step'),
       Template = require('tpl!templates/steps/modal.html'),
-      Rainbow  = require('rainbow');
+      Prism    = require('prism');
   
   require('rainbow.qore');
   
@@ -25,7 +25,7 @@ define(function (require) {
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
       
-      this.on('postrender', Rainbow.color);
+      this.on('postrender', Prism.highlightAll);
     },
     
     tabToggle: function(e){

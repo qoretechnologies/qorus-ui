@@ -15,7 +15,7 @@
   <% _.each(obj.lib, function (lib, name) { %>
     <% _.each(lib, function (fn, idxx) { %>
     <div class="tab-pane<%= (idx===0 && idxx===0) ? ' active' : '' %>" id="<%= fn.name %>">
-      <pre><code data-language="qore"><%= fn.body %></code></pre>
+      <pre class="language-qore"><code class="language-qore"><%= fn.body %></code></pre>
     </div>
   <% }) %>
   <% idx++ %>

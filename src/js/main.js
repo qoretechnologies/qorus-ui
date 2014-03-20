@@ -29,7 +29,8 @@ require.config({
     "chart": "libs/chart",
     "templates": "../templates",
     "parallel": "libs/parallel",
-    "settings": "settings.dev"
+    "settings": "settings.dev",
+    "prism": "libs/prism/prism"
   },
   shim: { 
     "backbone": {
@@ -113,6 +114,9 @@ require.config({
     },
     "rainbow.sql": {
       deps: ['rainbow']
+    },
+    "prism": {
+      exports: "Prism"
     }
   },
   templates: '../templates'
