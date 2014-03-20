@@ -36,6 +36,7 @@ define(function(require) {
   ListView = Qorus.ListView.extend({
     title: "Jobs",
     model_name: 'job',
+    template: Template,
 
     url: function () {
       return helpers.getUrl('showJobs', { date: utils.encodeDate(this.date) });
@@ -46,14 +47,17 @@ define(function(require) {
       'click a[data-action="schedule"]': 'reSchedule'
     },
     
-    initialize: function (collection, date) {
-      _.bindAll(this);
+    initialize: function (collection, options) {
+      this.views = {};
+      this.opts = options || {};
+      this.context = {};
+      
       this.template = Template;
       
       // pass date to options object
-      this.date = date;
+      this.date = this.opts.date;
       
-      ListView.__super__.initialize.call(this, Collection, date);
+      ListView.__super__.initialize.call(this, Collection, options.date);
       
       // this.listenToOnce(this.collection, 'sync', this.render);
       this.processPath(this.opts.path);

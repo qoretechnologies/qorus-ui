@@ -106,8 +106,9 @@ define(function (require) {
     },
     
     // job list
-    showJobs: function (date) {
-      var view = new JobListView({}, date, this);
+    showJobs: function (date, path) {
+      console.log(path);
+      var view = new JobListView({}, { date: date, path: path }, this);
       this.setView(view);
     },
     
