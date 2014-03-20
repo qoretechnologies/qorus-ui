@@ -32,11 +32,6 @@ define(function (require) {
     },
     
     color: function () {
-      if (this._is_colored) return;
-      
-      // Rainbow.color(this.$el);
-      console.log('colorizing');
-      // this._is_colored = true;
       Prism.highlightAll();
     }
     
