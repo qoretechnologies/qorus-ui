@@ -29,7 +29,7 @@
       "templates": "../templates",
       "parallel": "libs/parallel",
       "settings": "settings.build",
-      
+      "prism": "libs/prism/prism"
     },
     shim: { 
       "backbone": {
