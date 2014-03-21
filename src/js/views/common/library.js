@@ -18,7 +18,7 @@ define(function (require) {
       View.__super__.initialize.apply(this);
       
       this.model.getProperty('lib', { lib_source: true }, true);
-      this.listenTo(this.model, 'update:lib', this.update);
+      this.listenTo(this.model, 'change:lib', this.update);
       // this.on('show', this.color);
     },
     

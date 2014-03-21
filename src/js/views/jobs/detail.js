@@ -11,7 +11,11 @@ define(function (require) {
   InfoPaneView = Qorus.ModelView.extend({
     __name__: 'JobInfoPaneView',
     name: 'Details',
-    template: InfoTpl
+    template: InfoTpl,
+    initialize: function () {
+      InfoPaneView.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'change', this.render);
+    },
   });
   
   CodePaneView = Qorus.ModelView.extend({
@@ -21,7 +25,7 @@ define(function (require) {
     initialize: function () {
       CodePaneView.__super__.initialize.apply(this, arguments);
       this.model.getProperty('code');
-      this.listenTo(this.model, 'update:code', this.render);
+      this.listenTo(this.model, 'change:code', this.render);
       this.on('postrender', this.color);
     },
     color: function () {
@@ -33,7 +37,11 @@ define(function (require) {
   AlertsView = Qorus.ModelView.extend({
     __name__: 'JobAlertsPaneView',
     name: 'Alerts',
-    template: AlertsTpl
+    template: AlertsTpl,
+    initialize: function () {
+      AlertsView.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'change', this.render);
+    },
   });
   
   View = Qorus.TabView.extend({
@@ -50,7 +58,7 @@ define(function (require) {
       View.__super__.initialize.apply(this, arguments);
       this.opts = opts;
       this.model = opts.model;
-      this.listenTo(this.model, 'change', this.render);
+      // this.listenTo(this.model, 'change', this.render);
     },
 
     preRender: function () {

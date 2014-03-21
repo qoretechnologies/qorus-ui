@@ -189,12 +189,57 @@ define(function(require) {
         var text = '<textarea>' + $(this).text() + '</textarea>';
         $(this).popover({ content: text, title: "Info", placement: "left", container: "#diagram", html: true});
       });
+      this.wrap();
     },
+    
     off: function () {
       if (this.clean) this.clean();
+      if (this.$fixed_pane) {
+        this.$fixed_pane.resizable('destroy');
+        this.$fixed_pane = null;
+      }
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
+    },
+    
+    /* wraps view element to make it fixed position and resizable */
+    wrap: function () {
+      var $divw      = $('<div class="fixed-pane-wrapper" />'),
+          $div       = $('<div class="fixed-pane" />'),
+          $div_inner = $('<div class="fixed-pane-inner" />'),
+          $push      = $('<div class="fixed-pane-push push"/>'),
+          $fixed_pane;
+      
+      $div
+        .addClass('fixed-pane-bottom');
+        
+      // add parent pusher      
+      this.$el.parent().append($push);
+      
+      // wrap the view element
+      this.$el.wrap($divw).wrap($div).wrap($div_inner);
+      
+      $fixed_pane = this.$el.parents('.fixed-pane');
+      
+      // change push height according to pane height
+      $push.height($fixed_pane.outerHeight(true));
+
+      // resizable
+      $fixed_pane.resizable({
+        handles: 'n',
+        maxHeight: $(window).height() - 200,
+        minHeight: 150
+      });
+      this.$fixed_pane = $fixed_pane;
+      $fixed_pane.on('resize', function (e, ui) {
+        var $el = ui.element;
+        $el.parent().next().height(ui.size.height);
+      });
+    },
+    
+    resize: function (e) {
+      
     }
   });
   
@@ -213,8 +258,11 @@ define(function(require) {
       this.showAllErrors();
     },
     
-    showAllErrors: function () {
+    showAllErrors: function (e) {
       this.setView(new StepErrorsView({ errors: this.model.get('ErrorInstances'), template: StepErrorsTpl}), '#step-errors', true).render();
+      if (e) {
+       e.preventDefault(); 
+      }
     },
     
     showDetail: function (e) {

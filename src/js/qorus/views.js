@@ -1395,8 +1395,8 @@ define(function (require) {
     initialize: function () {
       _.bindAll(this, 'render', 'getTabs');
       TabView.__super__.initialize.call(this, arguments);
-      this.on('postrender', this.activateTab);
       this.on('postrender', this.renderTabs);
+      this.on('postrender', this.activateTab);
       this.context.tabs = this.getTabs;
     },
     
@@ -1458,10 +1458,8 @@ define(function (require) {
 
       $target.tab('show');
    
-      if (name !== this.active_tab) {
-        this.updateUrl([url, name].join('/'));
-        this.active_tab = name;
-      }
+      this.updateUrl([url, name].join('/'));
+      this.active_tab = name;
       this.onTabChange(tab);
     },
     

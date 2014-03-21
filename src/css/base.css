@@ -1,6 +1,5 @@
 /* @override 
-	http://localhost:8001/css/base.css
-	http://localhost:8002/css/base.css
+	http://localhost:8080/css/base.css
 */
 
 html, body {
@@ -809,6 +808,19 @@ aside {
 
 #diagram {
   font-size: 90%;
+  min-height: 500px;
+}
+
+#step-diagram {
+  float:left;
+  min-width: 200px;
+  max-width: 50%;
+  overflow: auto;
+}
+
+#step-diagram-details {
+  padding-left: 40px;
+  overflow:hidden;
 }
 
 .level {
@@ -847,11 +859,11 @@ aside {
 }
 
 .box.async {
-  background-color: #CBCBFA;
+  background-color: #d9edf7;
 }
 
 .box.subworkflow {
-  background-color: #FED5AC;
+  background-color: #e5c737;
 }
 
 .box.start {
@@ -865,11 +877,16 @@ aside {
 }
 
 .box.ok {
-  background-color: green;
+  background-color: #c5e08c;
 }
 
 .box.error {
-  background-color: red;
+  background-color: #da4f49;
+  *background-color: #bd362f;
+}
+
+.box.error a {
+	color: #fff;
 }
 
 .box.selected {
@@ -879,7 +896,8 @@ aside {
 .indent {
   display: inline-block;
   width: 1em;
-}
+} 
+
 
 /* chart styling */
 
@@ -1343,4 +1361,48 @@ td.spacer, .table-striped tbody>tr:nth-child(odd)>td.spacer {
 
 tbody+thead>tr:first-child>td {
   border: none;
+}
+
+/* fixed-pane-bottom */
+.fixed-pane-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.fixed-pane {
+	box-shadow: 0 0 10px rgba(100,100,100,.5);
+}
+
+.fixed-pane-bottom {
+  left: 0;
+  overflow: auto;
+  height: 200px;
+  background-color: #fff;
+  width: 100%;
+}
+
+.fixed-pane-bottom .fixed-pane-inner {
+  position: relative;
+  padding: 10px 10px 30px 120px;
+}
+
+.ui-resizable-handle.ui-resizable-n {
+	background-color: #F6F6F6;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 10px;
+	width: 100%;
+}
+
+.ui-resizable-handle.ui-resizable-n:after {
+	content: "\f0c9";
+	color: #666;
+	font-family: FontAwesome;
+	font-size: 60%;
+	position: absolute;
+	top: -5px;
+	left: 50%;
 }
