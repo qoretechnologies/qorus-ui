@@ -1,8 +1,9 @@
-define(function (require) {
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      Qorus    = require('qorus/qorus'),
-      Template = require('tpl!templates/common/pane.html'),
+define(function (require, exports, module) {
+  var $              = require('jquery'),
+      _              = require('underscore'),
+      Qorus          = require('qorus/qorus'),
+      Template       = require('tpl!templates/common/pane.html'),
+      SystemSettings = require('models/settings'),
       View;
 
   View = Qorus.View.extend({
@@ -36,12 +37,19 @@ define(function (require) {
     },
     
     onRender: function () {
+      var $ps = this.$('.pageslide'),
+          width_n = this.getStorageKey() + '.width',
+          width = SystemSettings.get(width_n);
+          
       if (this.opts.content_view) {
         this.$el.data('id', this.opts.content_view.model.id);
       }
-      this.$('.pageslide')
+
+      $ps
         .addClass('show')
-        .outerWidth(this.opts.width);
+        .width(width || this.opts.width);
+
+      this.wrap();
     },
     
     close: function (e) {
@@ -51,7 +59,7 @@ define(function (require) {
       
       this.$('.pageslide').removeClass('show');
       this.$el.data('id', null);
-
+      
       this.off();
       this.trigger('closed');
     },
@@ -61,6 +69,30 @@ define(function (require) {
       this.stopListening();
       this.$el.empty();
       this.trigger('off');
+    },
+    
+    wrap: function () {
+      var $ps = this.$('.pageslide'),
+          width_n = this.getStorageKey() + '.width',
+          width = SystemSettings.get(width_n);
+          
+      if (width) $ps.width(width);
+
+      $ps.resizable({
+        handles: 'w',
+        resize: function (event, ui) {
+          // fix the element left position
+          ui.element
+            .css('left', '')
+        },
+        stop: function (event, ui) {
+          SystemSettings.set(width_n, ui.size.width);
+          SystemSettings.save();
+        }
+      });
+    },
+    getStorageKey: function () {
+      return [module.id.replace(/\//g, '.'), this.opts.content_view.__name__].join('.');
     }
   });
   

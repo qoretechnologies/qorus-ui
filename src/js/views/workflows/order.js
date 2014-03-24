@@ -207,10 +207,12 @@ define(function(require, exports, module) {
     
     /* wraps view element to make it fixed position and resizable */
     wrap: function () {
-      var $divw      = $('<div class="fixed-pane-wrapper" />'),
-          $div       = $('<div class="fixed-pane" />'),
-          $div_inner = $('<div class="fixed-pane-inner" />'),
-          $push      = $('<div class="fixed-pane-push push"/>'),
+      var $divw           = $('<div class="fixed-pane-wrapper" />'),
+          $div            = $('<div class="fixed-pane" />'),
+          $div_inner      = $('<div class="fixed-pane-inner" />'),
+          $push           = $('<div class="fixed-pane-push push"/>'),
+          height_settings = [module.id.replace(/\//g, '.'), this.__name__, 'height'].join('.'),
+          height,
           $fixed_pane;
       
       $div
@@ -225,7 +227,7 @@ define(function(require, exports, module) {
       $fixed_pane = this.$el.parents('.fixed-pane');
       
       // get stored height
-      var height = SystemSettings.get('views.order.steperrors.height');
+      var height = SystemSettings.get(height_settings);
       if (height) $fixed_pane.height(height);
       
       // change push height according to pane height
@@ -244,14 +246,9 @@ define(function(require, exports, module) {
         $el.parent().next().height(ui.size.height);
       });
       $fixed_pane.on('resizestop', $.proxy(function (event, ui) {
-        SystemSettings.set('views.order.steperrors.height', ui.size.height);
+        SystemSettings.set(height_settings, ui.size.height);
         SystemSettings.save();
-        console.log(this.__name__);
       }, this));
-    },
-    
-    resize: function (e) {
-      
     }
   });
   
