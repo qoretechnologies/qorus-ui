@@ -1,4 +1,4 @@
-define(function(require) {
+define(function(require, exports, module) {
   var $               = require('jquery'),
       _               = require('underscore'),
       helpers         = require('qorus/helpers'),
@@ -243,10 +243,11 @@ define(function(require) {
         var $el = ui.element;
         $el.parent().next().height(ui.size.height);
       });
-      $fixed_pane.on('resizestop', function (event, ui) {
+      $fixed_pane.on('resizestop', $.proxy(function (event, ui) {
         SystemSettings.set('views.order.steperrors.height', ui.size.height);
         SystemSettings.save();
-      });
+        console.log(this.__name__);
+      }, this));
     },
     
     resize: function (e) {

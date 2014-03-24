@@ -18,7 +18,7 @@ define(function (require) {
       View.__super__.initialize.apply(this);
       
       this.model.getProperty('lib', { lib_source: true }, true);
-      this.listenTo(this.model, 'change:lib', this.update);
+      this.listenTo(this.model, 'change:lib', this.render);
       // this.on('show', this.color);
     },
     
@@ -26,8 +26,7 @@ define(function (require) {
       this.context.lib = this.model.get('lib');
     },
     
-    update: function () {
-      this.render();
+    onRender: function () {
       this.color();
     },
     
