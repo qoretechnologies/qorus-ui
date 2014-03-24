@@ -80,6 +80,7 @@ define(function (require, exports, module) {
 
       $ps.resizable({
         handles: 'w',
+        minWidth: 400,
         resize: function (event, ui) {
           // fix the element left position
           ui.element
