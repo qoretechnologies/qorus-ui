@@ -28,7 +28,6 @@ define(function (require) {
     
     setSessionID: function (id) {
       this.set('session-id', id);
-      
     }
     
   });

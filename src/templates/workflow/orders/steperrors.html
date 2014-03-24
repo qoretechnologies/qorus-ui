@@ -11,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <% if (obj.errors.length > 0) { %>
+    <% if (obj.errors) { %>
     <% _.each(obj.errors, function (err) {%>
     <tr>
       <td><%= err.severity %></td>

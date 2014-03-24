@@ -1395,6 +1395,7 @@ tbody+thead>tr:first-child>td {
 	left: 0;
 	height: 10px;
 	width: 100%;
+	cursor: ns-resize;
 }
 
 .ui-resizable-handle.ui-resizable-n:after {

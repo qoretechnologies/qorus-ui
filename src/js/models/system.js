@@ -23,6 +23,7 @@ define(function (require) {
 
       if (session_id !== old_id) {
         SystemSettings.setSessionID(session_id);
+        SystemSettings.save();
       }
     }
   });

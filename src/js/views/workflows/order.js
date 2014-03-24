@@ -21,6 +21,7 @@ define(function(require) {
       DiagramPaneTpl  = require('tpl!templates/workflow/orders/diagram.html'),
       StepInfoTpl     = require('tpl!templates/workflow/orders/stepinfo.html'),
       StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
+      SystemSettings  = require('models/settings'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, StepInfoView, StepErrorsView;
       
@@ -183,6 +184,7 @@ define(function(require) {
   
   // View showing step associated errors
   StepErrorsView = Qorus.View.extend({
+    __name__: 'StepErrorsView',
     onRender: function () {
       // init popover on info text
       this.$('td.info').each(function () {
@@ -222,6 +224,10 @@ define(function(require) {
       
       $fixed_pane = this.$el.parents('.fixed-pane');
       
+      // get stored height
+      var height = SystemSettings.get('views.order.steperrors.height');
+      if (height) $fixed_pane.height(height);
+      
       // change push height according to pane height
       $push.height($fixed_pane.outerHeight(true));
 
@@ -231,10 +237,15 @@ define(function(require) {
         maxHeight: $(window).height() - 200,
         minHeight: 150
       });
+      
       this.$fixed_pane = $fixed_pane;
       $fixed_pane.on('resize', function (e, ui) {
         var $el = ui.element;
         $el.parent().next().height(ui.size.height);
+      });
+      $fixed_pane.on('resizestop', function (event, ui) {
+        SystemSettings.set('views.order.steperrors.height', ui.size.height);
+        SystemSettings.save();
       });
     },
     
