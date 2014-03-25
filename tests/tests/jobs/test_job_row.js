@@ -13,7 +13,6 @@ casper.test.begin('Testing Job row', function suite(test) {
   
   // test open model with job reschedule
   casper.waitForSelector(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div[contains(@class,"open")]'), function () {
-    this.echo('Dropdown opened');
     test.assertExists(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div/ul/li[a[@data-action="schedule"]]'));
     this.click(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div/ul/li/a[@data-action="schedule"]'));
   });
@@ -21,6 +20,24 @@ casper.test.begin('Testing Job row', function suite(test) {
   // wait until modal opened
   casper.waitUntilVisible('#modalHeader', function () {
     test.assertExists(xpath('//*[contains(text(), "Reschedule qorus-snapshot-refresh")]'));
+    
+    // close modal
+    this.click('#jobs-modal *[data-dismiss]');
+  });
+  
+  casper.waitWhileVisible('#modalHeader', function () {
+    this.click(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div/button[@data-toggle="dropdown"]'));
+  });
+  
+  // test open modal with job setting job expiration
+  casper.waitForSelector(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div[contains(@class,"open")]'), function () {
+    test.assertExists(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div/ul/li[a[@data-action="set-expiry"]]'));
+    this.click(xpath('//tr[td/a[text()="qorus-snapshot-refresh"]]/td[@class="controls"]/div/ul/li/a[@data-action="set-expiry"]'));
+  });
+
+  // wait until modal opened
+  casper.waitUntilVisible('#modalHeader', function () {
+    test.assertExists(xpath('//*[contains(text(), "Set expiration qorus-snapshot-refresh")]'));
     
     // close modal
     this.click('#jobs-modal *[data-dismiss]');

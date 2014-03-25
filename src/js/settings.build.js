@@ -1,6 +1,7 @@
 define(function () {
   var host = window.location.host;
-  var protocol = window.location.protocol
+  var protocol = window.location.protocol;
+  var ws_protocol = (host == 'https:') ? "wss://" : "ws://";
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
@@ -11,7 +12,7 @@ define(function () {
       SEARCH_SEPARATOR: /[ ,]+/,
       REST_API_PREFIX:  protocol + '//'+ host +'/api',
       WS_PREFIX: '',
-      EVENTS_WS_URL: 'ws://' + host + '/apievents',
+      EVENTS_WS_URL: ws_protocol + host + '/apievents',
       DEBUG: false,
       HOST: host
   };
