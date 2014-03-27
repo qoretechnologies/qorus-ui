@@ -1,7 +1,7 @@
 define(function () {
   var host = "localhost:8001";
-  var protocol = window.location.protocol;
-  var ws_protocol = (host == 'https:') ? "wss://" : "ws://";
+  var protocol = "https:"; // window.location.protocol;
+  var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
