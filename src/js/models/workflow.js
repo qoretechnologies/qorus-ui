@@ -1,6 +1,7 @@
 define(function (require) {
   var settings      = require('settings'),
       helpers       = require('qorus/helpers'),
+      backbone      = require('backbone'),
       utils         = require('utils'),
       _             = require('underscore'),
       $             = require('jquery'),
@@ -10,6 +11,7 @@ define(function (require) {
       moment        = require('moment'),
       Dispatcher    = require('qorus/dispatcher'),      
       StepBase, Step, Model, prepareSteps;
+
   
   StepBase = {
       initialize: function (id, depends_on, name, type, info) {
@@ -134,6 +136,9 @@ define(function (require) {
     __name__: 'Workflow',
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
+    url: function () {
+      return this.urlRoot + this.id;
+    },
     defaults: {
       'IN-PROGRESS': 0,
       'READY': 0,
@@ -260,7 +265,7 @@ define(function (require) {
     },
     
     fetch: function (options) {
-      debug.log('fetching workflow', this.get('name'));
+      console.log('fetching workflow', this.id, this.url());
       if (!options) options = {};
       if (!this.date && this.collection){
         this.date = this.collection.date;

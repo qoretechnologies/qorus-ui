@@ -20,7 +20,6 @@ define(function (require) {
     template: HeaderTpl,
     initialize: function (options) {
       this.views = {};
-      _.bindAll(this, 'render');
       this.model = options.model;
     },
     preRender: function () {
@@ -96,7 +95,7 @@ define(function (require) {
           }), '#instances');
       }
       
-      this.setView(new HeaderView({ model: this.model }), '#detail');  
+      this.setView(new HeaderView({ model: this.model }), '#detail').render();  
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
     },

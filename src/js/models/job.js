@@ -5,6 +5,8 @@ define(function (require) {
       Dispatcher = require('qorus/dispatcher'),
       Model;
 
+  require('jquery.rest');
+
   Model = Qorus.Model.extend({
     model_cls: 'job',
     idAttribute: "jobid",
@@ -68,7 +70,12 @@ define(function (require) {
     
     parse: function (response) {
       response = Model.__super__.parse.apply(this, arguments);
-      response.has_alerts = (response.alerts.length > 0);
+      if (response.alerts) {
+        response.has_alerts = (response.alerts.length > 0);
+      } else {
+        response.has_alerts = false;
+      }
+        
       return response;
     },
     

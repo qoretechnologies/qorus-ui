@@ -156,7 +156,7 @@ define(function (require) {
     },
     
     slugify: function (value) {
-      return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
     },
     
     autoFormat: function (value, type) {
@@ -164,7 +164,9 @@ define(function (require) {
       if (type === 'list') return this.createNestedList(value);
       if (type === 'date' && value) return moment(value, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
       return value;
-    }
+    },
+    
+    encodeDate: utils.encodeDate
   };
   
   return Helpers;

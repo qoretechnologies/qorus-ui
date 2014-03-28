@@ -12,12 +12,9 @@ define(function(require) {
     template: Template,
     
     initialize: function (opts) {
-  	  _.bindAll(this);
-            
       ModelView.__super__.initialize.call(this, opts);
-
       this.model = new Model({ id: opts.id });
-      // this.listenTo(this.model, 'change', this.render, this);
+      this.listenTo(this.model, 'change', this.render, this);
       this.model.fetch();
     },
     

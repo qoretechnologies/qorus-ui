@@ -1,11 +1,7 @@
-define(function (require) {
-  require('backbone.identity');
-  require('messenger');
-  
+define(function (require) {  
   var $                 = require('jquery'),
       _                 = require('underscore'),
       Backbone          = require('backbone'),
-      // Messenger         = require('messenger'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),
       WorkflowListView  = require('views/workflows/workflows'),
@@ -30,21 +26,16 @@ define(function (require) {
       Qorus             = require('qorus/views'),
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router, alerts;
-
-  // Messenger.options = {
-  //   extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-  //   theme: 'qore',
-  //   showCloseButton: true
-  // };
+      
+  require('backbone.identity');
+  require('messenger');
 
   
   // fetch local notifications
   Notifications.fetch();
+
   // fetch alerts
   Alerts.fetch();
-  // // fetch functions
-  // Functions.fetch();
-  // fetch constants
   Constants.fetch();
 
   AppRouter = Backbone.Router.extend({
@@ -77,7 +68,6 @@ define(function (require) {
     
     // workflow list 
     showWorkflows: function (date, deprecated, path, query) {
-      console.log(arguments);
       var view = new WorkflowListView({}, { date: date, path: path, deprecated: deprecated, query: query });
       this.setView(view);
     },

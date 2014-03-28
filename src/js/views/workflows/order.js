@@ -24,6 +24,8 @@ define(function(require, exports, module) {
       SystemSettings  = require('models/settings'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, StepInfoView, StepErrorsView;
+  
+  require('bootstrap');
       
   context = {
     action_css: {

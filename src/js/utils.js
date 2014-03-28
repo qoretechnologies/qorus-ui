@@ -87,8 +87,13 @@ define(function (require) {
     },
     
     encodeDate: function (date) {
-      return moment(date, settings.DATE_DISPLAY)
-              .format('YYYYMMDDHHmmss');
+      var m  = moment(date, settings.DATE_DISPLAY);
+      
+      if (!m.isValid()) {
+        m = moment();
+      }
+      return m.format('YYYYMMDDHHmmss');
+
     },
     
     prep: function (val, des) {

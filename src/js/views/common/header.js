@@ -1,4 +1,6 @@
 define(function (require) {
+  require('backbone');
+  
   var $                 = require('jquery'),
       _                 = require('underscore'),
       Qorus             = require('qorus/qorus'),
@@ -13,8 +15,6 @@ define(function (require) {
     template: Template,
     
     initialize: function (opts) {
-      // View.__super__.initialize.call(this, opts);      
-      _.bindAll(this);
       this.model = opts.info;
       this.user = opts.user;
       this.setElement($('#header'));

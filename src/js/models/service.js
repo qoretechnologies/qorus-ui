@@ -6,7 +6,8 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       Dispatcher    = require('qorus/dispatcher'),
       Model;
-  
+
+  require('jquery.rest');  
   
   Model = Qorus.Model.extend({
     defaults: {

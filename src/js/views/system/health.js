@@ -1,6 +1,6 @@
 define(function(require) {
   var $          = require('jquery'),
-      _          = require('underscore'), 
+      _          = require('underscore'),
       Dispatcher = require('qorus/dispatcher'),
       Qorus      = require('qorus/qorus'),
       settings   = require('settings'),
@@ -8,6 +8,8 @@ define(function(require) {
       StatusTpl  = require('tpl!templates/system/health/status.html'),
       DetailTpl  = require('tpl!templates/system/health/detail.html'),
       View;
+
+  require("bootstrap");
 
   View = Qorus.View.extend({
     views: {},

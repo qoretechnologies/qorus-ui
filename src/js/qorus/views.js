@@ -17,6 +17,8 @@ define(function (require) {
       TableAutoView, ServiceView, PluginView, 
       TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
 
+  require('bootstrap');
+
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {

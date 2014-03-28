@@ -14,7 +14,7 @@
       </ul>
   </div>
 </td>
-<td class="name" ><a href="<%= getUrl('showJob', { id: item.jobid, date: obj.date, filter: 'all' }) %>"><%= item.name %></a></td>
+<td class="name" ><a href="<%= getUrl('showJob', { id: item.jobid, date: encodeDate(obj.date), filter: 'all' }) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
 <td class="last"><%= item.last_executed %></td>
 <td class="next"><%= item.next %></td>

@@ -11,6 +11,8 @@ define(function (require) {
       moment          = require('moment'),
       Qorus           = {},
       setNested, prep;
+
+  require('sprintf');
   
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)

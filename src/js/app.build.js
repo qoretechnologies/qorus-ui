@@ -29,7 +29,7 @@
     wrapShim: true,
     shim: { 
       "backbone": {
-        deps: ["underscore", "jquery", "sprintf", "jquery.rest", "jquery.ui", "bootstrap"],
+        deps: ["underscore", "jquery", "jquery.rest", "jquery.ui", "sprintf"],
         exports: "Backbone"
       },
       "backbone.keys": {
@@ -48,7 +48,8 @@
         exports: "_"
       },
       "bootstrap": {
-        deps: ['jquery']
+        deps: ['jquery'],
+        exports: "jQuery.fn.popover"
       },
       "bootstrap.mulitselect": {
         deps: ['bootstrap'],
@@ -100,4 +101,8 @@
     //     return contents.replace(/debug.log(.*);/g, '');
     // }
     // optimize: "none"
+    optimize: "uglify2",
+    generateSourceMaps: true,
+    preserveLicenseComments: false,
+    useSourceUrl: true
 })
