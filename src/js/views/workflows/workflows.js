@@ -37,7 +37,10 @@ define(function (require) {
     helpers: helpers,
     __name__: "WorkflowListView",
     url: function () {
-      var url = qorus_helpers.getUrl('showWorkflows', { date: utils.encodeDate(this.opts.date), deprecated: (this.opts.deprecated) ? 'hidden' : '' });
+      var url = qorus_helpers.getUrl('showWorkflows', { 
+        date: utils.encodeDate(this.opts.date),
+        deprecated: (this.opts.deprecated) ? 'hidden' : '' 
+      });
       if (!this.opts.deprecated) url += "/";
       return url;
     },

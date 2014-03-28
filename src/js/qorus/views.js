@@ -44,6 +44,12 @@ define(function (require) {
     },
     destroy: function () {
       this.$el.remove();
+    },
+    show: function () {
+      this.$el.removeClass('hide');
+    },
+    hide: function () {
+      this.$el.addClass('hide');
     }
   });
   
@@ -712,9 +718,10 @@ define(function (require) {
     },
     
     search: function (e) {
-      var $target = $(e.currentTarget);
-      var $el = $(this.el);
-      var query = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val();
+      var $target = $(e.currentTarget),
+          $el = $(this.el),
+          query = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val(),
+          url, url_query;
       
       if (query.length < 1) {
         $el.find('tbody tr').show();
@@ -724,6 +731,12 @@ define(function (require) {
           $el.find("tbody td:icontains('" + keyword + "')").parent().show();
         });
       }
+      
+      url_query = utils.parseQuery(Backbone.history.fragment);
+      url_query.q = query;
+      url = [Backbone.history.location.pathname, utils.encodeQuery(url_query)].join('?');
+      
+      Backbone.history.navigate(url);
       
       // prevent reload if submited by form
       if (e.type == "submit") {

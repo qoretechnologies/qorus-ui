@@ -111,7 +111,33 @@ define(function (require) {
     // Generate a pseudo-GUID by concatenating random hexadecimal.
     guid: function () {
        return (this.S4()+this.S4()+"-"+this.S4()+"-"+this.S4()+"-"+this.S4()+"-"+this.S4()+this.S4()+this.S4());
-    }
+    },
+    
+    parseQuery: function (fragment) {
+      if (fragment.indexOf('?') === -1) return {};
+      var query = fragment.split('?')[1];
+      var params = {};
+      
+      if (query.search(/^\s+/) !== -1) return {};
+      
+      _.each(query.split(/;|&/), function (pair) {
+        pair = pair.split('=');
+        params[pair[0]] = pair[1];
+      });
+      
+      return params;
+    },
+    
+    encodeQuery: function (query) {
+      var equery = [];
+
+      _.each(query, function (v, k) {
+        if (k!=='')
+          equery.push([k,v].join('='));
+      });
+      
+      return equery.join('&');
+    },
   };
     
   return utils;

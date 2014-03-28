@@ -6,7 +6,7 @@ define(function(require){
       host, protocol, Collection;
   
   host = settings.HOST;
-  protocol = (window.location.protocol == 'https:') ? "wss://" : "ws://";
+  protocol = (settings.PROTOCOL == 'https:') ? "wss://" : "ws://";
   
   Collection = Qorus.WSCollection.extend({
     log_size: 100,

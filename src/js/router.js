@@ -27,6 +27,7 @@ define(function (require) {
       Alerts            = require('collections/alerts'),
       Constants         = require('collections/constants'),
       Functions         = require('collections/functions'),
+      Qorus             = require('qorus/views'),
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router, alerts;
 
@@ -49,11 +50,7 @@ define(function (require) {
   AppRouter = Backbone.Router.extend({
     currentView: null,
     routes: Urls.routes,
-
-    initialize: function () {
-      _.bindAll(this);
-      debug.log('init');
-    },
+    views: {},
         
     // cleans viewport from zombies
     clean: function () {
@@ -70,7 +67,6 @@ define(function (require) {
     setView: function (view) {
       this.clean();
       this.currentView = view;
-      // $('#content').html(view.el);
       view.$el.appendTo('#content');
     },
     
@@ -80,8 +76,9 @@ define(function (require) {
     },
     
     // workflow list 
-    showWorkflows: function (date, deprecated, path) {
-      var view = new WorkflowListView({}, { date: date, path: path, deprecated: deprecated });
+    showWorkflows: function (date, deprecated, path, query) {
+      console.log(arguments);
+      var view = new WorkflowListView({}, { date: date, path: path, deprecated: deprecated, query: query });
       this.setView(view);
     },
     

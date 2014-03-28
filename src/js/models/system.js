@@ -29,7 +29,7 @@ define(function (require) {
   });
 
   User = Qorus.Model.extend({
-    url: settings.REST_API_PREFIX + '/users/_current_',
+    url: settings.REST_API_PREFIX + '/users/?action=current',
 
     initialize: function () {
       this.fetch();
