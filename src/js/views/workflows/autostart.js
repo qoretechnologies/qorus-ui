@@ -17,10 +17,6 @@ define(function (require) {
       View.__super__.initialize.apply(this, arguments);
       this.listenTo(this.model, 'change:exec_count', this.render);
     },
-    
-    onRender: function () {
-      console.log('rendering autostart', this.options);
-    },
         
     setAutostart: function (e) {
       var $target = $(e.currentTarget),

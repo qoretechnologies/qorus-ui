@@ -265,7 +265,6 @@ define(function (require) {
     },
     
     fetch: function (options) {
-      console.log('fetching workflow', this.id, this.url());
       if (!options) options = {};
       if (!this.date && this.collection){
         this.date = this.collection.date;

@@ -1,7 +1,7 @@
 define(function (require) {
-  var $ = require('jquery'),
-    _ = require('underscore'),
-    Qorus = require('qorus/qorus'),
+  var $      = require('jquery'),
+    _        = require('underscore'),
+    Qorus    = require('qorus/qorus'),
     Template = require('text!templates/users/user.html'),
     View;
     
@@ -10,7 +10,6 @@ define(function (require) {
     template: Template,
     
     initialize: function (opts) {
-      _.bindAll(this);
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
     },

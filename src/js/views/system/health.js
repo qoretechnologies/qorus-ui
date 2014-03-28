@@ -14,9 +14,9 @@ define(function(require) {
   View = Qorus.View.extend({
     views: {},
     template: StatusTpl,
+    context: {},
     
     initialize: function () {
-      _.bindAll(this);
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'system:health_changed', this.update);

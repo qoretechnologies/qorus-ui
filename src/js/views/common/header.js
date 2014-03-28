@@ -15,6 +15,7 @@ define(function (require) {
     template: Template,
     
     initialize: function (opts) {
+      View.__super__.initialize.apply(this, arguments);
       this.model = opts.info;
       this.user = opts.user;
       this.setElement($('#header'));
@@ -26,10 +27,10 @@ define(function (require) {
       View.__super__.render.call(this, ctx);
     },
     
-    onRender: function () {
-      this.setView(new HealthView(), '#health', true);
-      this.setView(new UserView({ model: this.user }), '#user-info', true);
-      this.setView(new NotificationsView(), '#notifications-icon', true);
+    preRender: function () {
+      this.setView(new HealthView(), '#health');
+      this.setView(new UserView({ model: this.user }), '#user-info');
+      this.setView(new NotificationsView(), '#notifications-icon');
     }
   });
   
