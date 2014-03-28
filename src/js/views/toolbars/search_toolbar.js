@@ -4,6 +4,7 @@ define(function (require) {
   
   var $        = require('jquery'),
       _        = require('underscore'),
+      Backbone = require('backbone'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
       Toolbar;

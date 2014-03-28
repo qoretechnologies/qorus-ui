@@ -1,6 +1,7 @@
 define(function(require) {
   var $               = require('jquery'),
       _               = require('underscore'),
+      Backbone        = require('backbone'),
       utils           = require('utils'),
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),

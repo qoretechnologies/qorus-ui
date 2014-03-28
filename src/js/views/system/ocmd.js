@@ -1,15 +1,16 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'qorus/helpers',
-  'settings',
-  'text!templates/system/ocmd.html'
-], function($, _, Backbone, Qorus, Helpers, settings, Template){
-  var url = settings.REST_API_PREFIX + '/system/api';
-
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Backbone = require('backbone'),
+      Qorus    = require('qorus/qorus'),
+      Helpers  = require('qorus/helpers'),
+      settings = require('settings'),
+      Template = require('text!templates/system/ocmd.html'), 
+      url, View;
+  
+  url = settings.REST_API_PREFIX + '/system/api';
+  
+  View = Qorus.View.extend({
     history: [],
     
     template: Template,

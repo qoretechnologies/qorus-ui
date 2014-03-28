@@ -1,6 +1,7 @@
 define(function (require) {
   var $                = require('jquery'),
       _                = require('underscore'),
+      Backbone         = require('backbone'),
       Qorus            = require('qorus/qorus'),
       settings         = require('settings'),
       Workflow         = require('models/workflow'),

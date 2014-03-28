@@ -1,6 +1,7 @@
 define(function (require) {
   var $           = require('jquery'),
       _           = require('underscore'),
+      Backbone    = require('backbone'),
       utils       = require('utils'),
       settings    = require('settings'),
       Template    = require('text!templates/workflow/toolbars/orders_toolbar.html'),

@@ -1,14 +1,13 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'utils',
-  'settings',
-  'text!templates/extensions/extension.html'
-], function($, _, Backbone, Qorus, utils, settings, Template){
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Backbone = require('backbone'),
+      Qorus    = require('qorus/qorus'),
+      utils    = require('utils'),
+      Template = require('text!templates/extensions/extension.html'),
+      Extension, View;
     
-  var Extension = function (extension, path) {
+  Extension = function () {
     this.initialize.apply(this, arguments);
   };
     
@@ -23,7 +22,7 @@ define([
     },
     
     fetch: function (query) {
-      var query = query || this.query;
+      query = query || this.query;
       query = query.replace(/^\?/, "");
       
       var url = this.baseUrl + '?' + query;
@@ -46,7 +45,7 @@ define([
     }
   });
 
-  var View = Qorus.View.extend({
+  View = Qorus.View.extend({
     title: "Extension",
     context: {},
     additionalEvents: {
@@ -74,7 +73,7 @@ define([
     },
     
     catchClick: function (e) {
-      $target = $(e.currentTarget);
+      var $target = $(e.currentTarget);
       
       if ($target.attr('target')) {
         window.open($target.attr('href'), $target.attr('target'));
@@ -89,10 +88,10 @@ define([
       }
 
       if (($target.data('toggle') != 'dropdown' && !$target.data('action'))) {
-	      this.extension.fetch($target.attr('href'));
+        this.extension.fetch($target.attr('href'));
 
-	      var url = utils.getCurrentLocationPath() + $target.attr('href');
-	      Backbone.history.navigate(url, { trigger: false });      	
+        var url = utils.getCurrentLocationPath() + $target.attr('href');
+        Backbone.history.navigate(url, { trigger: false });
       }
     }
   });

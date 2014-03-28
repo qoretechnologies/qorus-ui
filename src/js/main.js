@@ -21,11 +21,6 @@ require.config({
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
     "bootstrap.multiselect": "libs/bootstrap-multiselect",
-    "rainbow": "libs/rainbow/rainbow",
-    "rainbow.generic": "libs/rainbow/language/generic",
-    "rainbow.qore": "libs/rainbow/language/qore",
-    "rainbow.html": "libs/rainbow/language/html",
-    "rainbow.sql": "libs/rainbow/language/sql",
     "chart": "libs/chart",
     "templates": "../templates",
     "parallel": "libs/parallel",
@@ -99,21 +94,6 @@ require.config({
           extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top messenger-on-right'
         };
       }
-    },
-    "rainbow": {
-      exports: "Rainbow"
-    },
-    "rainbow.generic": {
-      deps: ['rainbow']
-    },
-    "rainbow.qore": {
-      deps: ['rainbow']
-    },
-    "rainbow.html": {
-      deps: ['rainbow']
-    },
-    "rainbow.sql": {
-      deps: ['rainbow']
     },
     "prism": {
       exports: "Prism"

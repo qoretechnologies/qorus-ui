@@ -5,7 +5,6 @@ define(function(require) {
       Model     = require('models/result'),
       Template  = require('text!templates/job/results/detail.html'),
       StepView  = require('views/steps/step'),
-      rainbow   = require('rainbow.qore'),
       context   = {},
       ModelView;
   

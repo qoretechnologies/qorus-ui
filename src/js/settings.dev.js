@@ -1,6 +1,6 @@
 define(function () {
   var host = "localhost:8001";
-  var protocol = "https:"; // window.location.protocol;
+  var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   
   var settings = {

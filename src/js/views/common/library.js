@@ -1,11 +1,8 @@
 define(function (require) {
-  var $          = require('jquery'),
-      Prism      = require('prism'),
+  var Prism      = require('prism'),
       Qorus      = require('qorus/qorus'),
       Template   = require('tpl!templates/common/library.html'),
       View;
-
-  require('rainbow.qore');
   
   View = Qorus.View.extend({
     __name__: "LibraryView",

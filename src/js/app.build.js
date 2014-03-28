@@ -5,32 +5,28 @@
     paths: {
       jquery: 'libs/jquery',
       underscore: 'libs/underscore',
+      bootstrap: 'libs/bootstrap/js/bootstrap',
+      "jquery.rest": "libs/jquery.rest",
+      "jquery.ui": "libs/jquery.ui.min",
+      sprintf: "libs/sprintf-0.7-beta1",
       backbone: 'libs/backbone',
       "backbone.keys": 'libs/backbone.keys',
       "backbone.identity": 'libs/backbone.identity',
       'backbone.filtered.collection': 'libs/backbone.filtered.collection',
       localstorage: 'libs/backbone.localstorage',
-      bootstrap: 'libs/bootstrap/js/bootstrap',
       moment: "libs/moment",
       "jquery.fixedheader": "libs/fixedheader",
       "jquery.sticky": "libs/jquery.sticky",
-      "jquery.rest": "libs/jquery.rest",
-      "jquery.ui": "libs/jquery.ui.min",
       "jquery.fixedhead": "libs/jquery.fixedhead",
       "messenger": "libs/messenger/js/messenger.min",
-      sprintf: "libs/sprintf-0.7-beta1",
       "bootstrap.multiselect": "libs/bootstrap-multiselect",
-      "rainbow": "libs/rainbow/rainbow.min",
-      "rainbow.generic": "libs/rainbow/language/generic",
-      "rainbow.qore": "libs/rainbow/language/qore",
-      "rainbow.html": "libs/rainbow/language/html",
-      "rainbow.sql": "libs/rainbow/language/sql",
       "chart": "libs/chart",
       "templates": "../templates",
       "parallel": "libs/parallel",
       "settings": "settings.build",
       "prism": "libs/prism/prism"
     },
+    wrapShim: true,
     shim: { 
       "backbone": {
         deps: ["underscore", "jquery", "sprintf", "jquery.rest", "jquery.ui", "bootstrap"],
@@ -89,21 +85,6 @@
             extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top messenger-on-right'
           };
         }
-      },
-      "rainbow": {
-        exports: "Rainbow"
-      },
-      "rainbow.generic": {
-        deps: ['rainbow']
-      },
-      "rainbow.qore": {
-        deps: ['rainbow']
-      },
-      "rainbow.html": {
-        deps: ['rainbow']
-      },
-      "rainbow.sql": {
-        deps: ['rainbow']
       },
       "prism": {
         exports: "Prism"

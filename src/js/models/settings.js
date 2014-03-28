@@ -1,9 +1,6 @@
 define(function (require) {
-  var _          = require('underscore'),
-      Backbone   = require('backbone'),
-      Model      = require('models/notification'),
-      Dispatcher = require('qorus/dispatcher'),
-      Collection;
+  var Backbone   = require('backbone'),
+      Model      = require('models/notification');
   
   // init localstorage
   require('localstorage');
@@ -22,7 +19,7 @@ define(function (require) {
     
     dispatch: function (obj, ev) {
       if (ev === 'session:changed') {
-        model.set('session-id', obj.session_id);
+        this.set('session-id', obj.session_id);
       }
     },
     

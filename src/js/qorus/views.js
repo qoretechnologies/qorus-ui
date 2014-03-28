@@ -6,13 +6,13 @@ define(function (require) {
       // Keys     = require('backbone.keys'),
       settings    = require('settings'),
       utils       = require('utils'),
-      Dispatcher  = require('qorus/dispatcher'),
+      // Dispatcher  = require('qorus/dispatcher'),
       TableTpl    = require('tpl!templates/common/table.html'),
       TableRowTpl = require('tpl!templates/common/tablerow.html'),
       NoDataTpl   = require('tpl!templates/common/nodata.html'),
       Helpers     = require('qorus/helpers'),
       moment      = require('moment'),
-      Filtered    = require('backbone.filtered.collection'),
+      // Filtered    = require('backbone.filtered.collection'),
       Loader, View, ListView, TableView, RowView, 
       TableAutoView, ServiceView, PluginView, 
       TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
@@ -123,7 +123,8 @@ define(function (require) {
     },
     
     render: function (ctx) {
-      var start = new Date().getTime(), tpl;
+      // var start = new Date().getTime(), tpl;
+      var tpl;
       
       if (this.render_lock) return;
       // this.removeViews();
@@ -1447,7 +1448,7 @@ define(function (require) {
     
     getTab: function (name) {
       var tabs = this.getTabs();
-      return _(tabs).find(function (tab) { return tab.slug() === name});
+      return _(tabs).find(function (tab) { return tab.slug() === name; });
     },
     
     removeTab: function (name) {

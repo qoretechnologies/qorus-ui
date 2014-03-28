@@ -2,6 +2,7 @@ define(function (require) {
   require('bootstrap.multiselect');
   var $           = require('jquery'),
       _           = require('underscore'),
+      Backbone    = require('backbone'),
       Template    = require('text!templates/job/toolbars/results_toolbar.html'),
       moment      = require('moment'),
       BaseToolbar = require('views/toolbars/toolbar'),

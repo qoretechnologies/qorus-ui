@@ -1,6 +1,7 @@
 define(function (require) {
   var settings   = require('settings'),
       _          = require('underscore'),
+      Backbone   = require('backbone'),
       Qorus      = require('qorus/qorus'),
       Model      = require('models/event'),
       Dispatcher = require('qorus/dispatcher'),

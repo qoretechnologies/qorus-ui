@@ -1,5 +1,6 @@
 define(function (require) {
   var _             = require('underscore'),
+      Backbone      = require('backbone'),
       Qorus         = require('qorus/qorus'),
       Collection    = require('collections/workflows'),
       Template      = require('text!templates/workflow/list.html'),

@@ -2,6 +2,7 @@ define(function (require) {
   require('bootstrap.multiselect');
   
   var _        = require('underscore'),
+      Backbone = require('backbone'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/toolbars/orders.html'),
       moment   = require('moment'),

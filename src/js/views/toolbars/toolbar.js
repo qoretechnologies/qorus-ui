@@ -3,6 +3,7 @@ define(function (require) {
   
   var $          = require('jquery'),
       _          = require('underscore'),
+      Backbone   = require('backbone'),
       Qorus      = require('qorus/qorus'),
       DatePicker = require('views/common/datetimepicker'),
       utils      = require('utils'),

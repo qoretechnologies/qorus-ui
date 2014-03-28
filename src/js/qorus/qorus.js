@@ -10,7 +10,7 @@ define(function (require) {
       Views           = require('qorus/views'),
       moment          = require('moment'),
       Qorus           = {},
-      setNested;
+      setNested, prep;
   
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -34,7 +34,7 @@ define(function (require) {
       if (_.has(obj, term)) {
         obj[term] = fn(obj[term]); 
       } else {
-        _.each(_.values(obj), function(v, k, l) {
+        _.each(_.values(obj), function(v) {
           if (_.isObject(v)) {
             if (_.has(v, term)) {
               v[term] = fn(v[term]); 
@@ -66,10 +66,10 @@ define(function (require) {
     
     dispatch: function () {},
     
-    parse: function (response, options) {
+    parse: function (response) {
       _.each(this.dateAttributes, function (date) {
         if (date.search(/\./) > -1) {
-            setNested(response, date, function(val) { if (val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); }})
+            setNested(response, date, function(val) { if (val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); }});
         } else {
           if (response[date]) {
             response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
@@ -101,7 +101,7 @@ define(function (require) {
     
     incr: function (attr, val) {
       val = val || 1;
-      var value = parseInt(this.get(attr));
+      var value = parseInt(this.get(attr), 10);
       this.set(attr, value+val);
     },
     
@@ -148,8 +148,7 @@ define(function (require) {
     // gets property from server
     getProperty: function (property, data, force) {
       var self   = this,
-          silent = true,
-          req;
+          silent = true;
       
       data = data || {};
       
@@ -173,7 +172,7 @@ define(function (require) {
   });
   
   Qorus.ModelWithAlerts = Qorus.Model.extend({
-    parse: function (response, options) {
+    parse: function (response) {
       response = Qorus.ModelWithAlerts.__super__.parse.apply(this, arguments);
       if (_(response).has('alerts')) {
         response.has_alerts = (response.alerts.length > 0);
@@ -298,10 +297,10 @@ define(function (require) {
     
     comparator: function (c1, c2) {
       // needs speed improvements
-      var k10 = prep(c1.get(this.sort_key))
-        , k20 = prep(c2.get(this.sort_key))
-        , r = 1
-        , k11, k21;
+      var k10 = prep(c1.get(this.sort_key)),
+          k20 = prep(c2.get(this.sort_key)),
+          r   = 1,
+          k11, k21;
       
       if (this.sort_order === 'des') r = -1;
       
@@ -320,9 +319,8 @@ define(function (require) {
     //   return [prep(m.get(this.sort_key)), prep(m.get(this.sort_history[0]))].join(', '); 
     // },
     
-    sortByKey: function (key, ord, cb) {
-      var old_key = this.sort_key,
-        models = this.models;
+    sortByKey: function (key, ord) {
+      var old_key = this.sort_key;
 
       if (key) {
         if (old_key != key) {
@@ -503,7 +501,7 @@ define(function (require) {
       }
     },
 
-    wsAdd: function (e) {
+    wsAdd: function () {
       this.trigger('update', this);
     },
 

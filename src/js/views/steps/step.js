@@ -6,8 +6,6 @@ define(function (require) {
       Template = require('tpl!templates/steps/modal.html'),
       Prism    = require('prism');
   
-  require('rainbow.qore');
-  
   var ModelView = Qorus.View.extend({
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle'
