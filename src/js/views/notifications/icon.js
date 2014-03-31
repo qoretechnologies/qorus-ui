@@ -17,7 +17,7 @@ define(function (require) {
       View.__super__.initialize.call(this, arguments);
       this.collection = Notifications;
 
-      this.listenTo(this.collection, 'all', function () { console.log(arguments); } );
+      // this.listenTo(this.collection, 'all', function () { console.log(arguments); } );
       // this.listenTo(this.collection, 'sync', this.addTest);
       this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.collection, 'add', this.render);

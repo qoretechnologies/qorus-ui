@@ -1,4 +1,5 @@
 define(function (require) {
+  require('jquery.ui');
   require('bootstrap.multiselect');
   
   var $          = require('jquery'),
@@ -35,13 +36,16 @@ define(function (require) {
       if (this.datepicker) {
         this.datePicker();
       }
-      
-      // fix header
+      _.defer(this.setFixed);
+    },
+    
+    setFixed: function () {
       if (this.fixed) {
+
         var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
 
         this.$el
-          .width(function () { return $(this).parent().width(); })
+          .width(function () { return $(this).width(); })
           .css('position', 'fixed')
           .after($push);
       
@@ -49,7 +53,7 @@ define(function (require) {
         $(window).on('resize.toolbar.' + this.cid, this.resize);
       }
     },
-    
+        
     resize: function () {
       // reset width of fixed el
       this.$el.width(function () { return $(this).parent().width(); });

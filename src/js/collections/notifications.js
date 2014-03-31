@@ -16,13 +16,7 @@ define(function (require) {
     dispatch: function (obj, ev) {
       var alert, alert_type, alert_event;
 
-      if (ev === 'system') {
-        if (obj.eventstr === 'SYSTEM_SHUTDOWN') {
-          this.clear();
-        }        
-      } else if (ev === 'session:changed') {
-        this.clear();
-      } else if (ev === 'alert') {
+      if (ev === 'alert') {
         alert_event = obj.eventstr.split('_');
         alert = obj.info;
         alert_type = alert_event[1];
@@ -86,5 +80,5 @@ define(function (require) {
   notifications.listenTo(Dispatcher, 'system session:changed alert', notifications.dispatch);
   notifications.listenTo(SettingsCol, 'change:session-id', notifications.empty);
   
-  return new Collection();
+  return notifications;
 });

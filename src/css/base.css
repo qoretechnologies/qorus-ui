@@ -87,6 +87,7 @@ table thead th {
 
 #content {
   position: relative;
+  width: 100%;
 }
 
 .push {
@@ -634,6 +635,7 @@ aside {
   padding: 5px 0;
   z-index: 1021;
   background-color: #fff;
+  overflow: hidden;
 }
 
 .table-condensed td {
@@ -1449,4 +1451,10 @@ tbody+thead>tr:first-child>td {
 	-moz-transform: rotate(270deg) ;
 	-o-transform: rotate(270deg) ;
 	-ms-transform: rotate(270deg) ;
+}
+
+.listview {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }

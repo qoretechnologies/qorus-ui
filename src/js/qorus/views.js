@@ -1,17 +1,18 @@
 // Qorus core objects definitions
 define(function (require) {
-  var $           = require('jquery'),
-      _           = require('underscore'),
-      Backbone    = require('backbone'),
-      // Keys     = require('backbone.keys'),
-      settings    = require('settings'),
-      utils       = require('utils'),
+  var $              = require('jquery'),
+      _              = require('underscore'),
+      Backbone       = require('backbone'),
+      // Keys        = require('backbone.keys'),
+      settings       = require('settings'),
+      utils          = require('utils'),
       // Dispatcher  = require('qorus/dispatcher'),
-      TableTpl    = require('tpl!templates/common/table.html'),
-      TableRowTpl = require('tpl!templates/common/tablerow.html'),
-      NoDataTpl   = require('tpl!templates/common/nodata.html'),
-      Helpers     = require('qorus/helpers'),
-      moment      = require('moment'),
+      TableTpl       = require('tpl!templates/common/table.html'),
+      TableRowTpl    = require('tpl!templates/common/tablerow.html'),
+      NoDataTpl      = require('tpl!templates/common/nodata.html'),
+      LoadingDataTpl = require('tpl!templates/common/loadingdata.html'),
+      Helpers        = require('qorus/helpers'),
+      moment         = require('moment'),
       // Filtered    = require('backbone.filtered.collection'),
       Loader, View, ListView, TableView, RowView, 
       TableAutoView, ServiceView, PluginView, 
@@ -32,7 +33,6 @@ define(function (require) {
     className: 'loader',
     template: '<p><img src="/imgs/loader.gif" /> Loading...</p>',
     initialize: function (opts) {
-      _.bindAll(this, 'render', 'destroy');
       this.opts = opts || {};
       this.render();
     },
@@ -82,7 +82,7 @@ define(function (require) {
     
     
     initialize: function (options) {
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'insertView', 'setView');
       this.views = {};
       this.context = {};
       this.views = {};
@@ -261,7 +261,7 @@ define(function (require) {
     // useful for table rows
     insertView: function (view, el, append) {
       var views, old_view;
-      
+
       this._updateViewUrl(view);
       
       if (this.views[el]) {
@@ -304,7 +304,7 @@ define(function (require) {
     },
     
     _updateViewUrl: function (view) {
-      if (view instanceof Backbone.View) {
+      if (view instanceof Backbone.View && view.processPath) {
         view.processPath(this.processPath(null, true));
         view.upstreamUrl = this.getViewUrl();
       }
@@ -414,11 +414,26 @@ define(function (require) {
     slug: function () {
       if (this.name) return Helpers.slugify(this.name);
       return Helpers.slugify(this.__name__);
+    },
+    
+    showLoader: function () {
+      var view = this.insertView(new Loader(), '#loader', true);
+      view.$el.addClass(this.__name__)
+      console.log('showing loader for', this.__name__);
+    },
+    
+    hideLoader: function () {
+      if (views) _.each(views, function (view) { 
+        console.log('hiding loader for', this.__name__, view.$el);
+        view.remove();
+      });
     }
    });
 
 
    ListView = View.extend({
+     __name__: 'ListView',
+     className: 'listview',
      context: {},
      keys: {
        'up down': 'navigate'
@@ -472,11 +487,7 @@ define(function (require) {
           this.collection = new collection([], this.opts);
         }
         
-        this.listenToOnce(this.collection, 'sync', this.render);
-        this.listenToOnce(this.collection, 'error', this.render);
-        
         this.collection.fetch();
-        
       
         this.context.page = {
           current_page: this.collection.page,
@@ -493,6 +504,7 @@ define(function (require) {
       
       this.on('highlight', this.enableActions);
       this.on('highlight', this.updateCheckIcon);
+      this.render();
     },
     
     render: function (ctx) {
@@ -819,6 +831,7 @@ define(function (require) {
 
       this.listenTo(this.collection, 'add', this.appendRow);
       this.listenTo(this.collection, 'resort', this.update);
+      this.listenTo(this.collection, 'sync', this.update);
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
@@ -838,16 +851,10 @@ define(function (require) {
       _.extend(this.context, opts);
       _.extend(this.options, opts);
       
-      this.update();
+      this.update(true);
     },
     
     render: function (ctx) {
-      if (!this.collection || this.collection.size() === 0) {
-        this.template = NoDataTpl;
-      } else {
-        this.template = this.opts.template;
-      }
-      
       this.context.messages = this.messages;
 
       TableView.__super__.render.call(this, ctx);
@@ -962,11 +969,15 @@ define(function (require) {
       return view;
     },
         
-    update: function () {
-      if (this.template == NoDataTpl) {
+    update: function (initial) {
+      if (this.collection.size() === 0 && initial !== true) {
+        this.template = NoDataTpl;
+      } else if (this.collection.size() > 0) {
         this.template = this.opts.template;
-        this.render();
+      } else {
+        this.template = LoadingDataTpl;
       }
+      this.render();
       
       this.removeView('tbody');
       this.appendRows(this.collection.models);

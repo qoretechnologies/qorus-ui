@@ -35,6 +35,7 @@ define(function (require) {
   });
 
   ListView = Qorus.ListView.extend({
+    id: 'workflows',
     helpers: helpers,
     __name__: "WorkflowListView",
     url: function () {
@@ -74,8 +75,6 @@ define(function (require) {
       // reassign listening events to collection
       this.stopListening(this.collection);
       
-      debug.log(this.views);
-      
       this.listenToOnce(this.collection, 'sync', self.render);
       this.processPath(this.opts.path);
     },
@@ -89,7 +88,7 @@ define(function (require) {
     preRender: function () {
       // this.setView(new BottomBarView(), 'bottombar');
       var helpers = _.extend({ date: this.date }, this.helpers),
-          tview;
+          tview, toolbar;
 
       // create workflows table
       tview = this.setView(new Qorus.TableView({ 
@@ -106,7 +105,7 @@ define(function (require) {
       // add listener to rowclick
       this.listenTo(tview, 'row:clicked', this.showDetail);
       
-      this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
+      toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
     },
     
     onRender: function () {
