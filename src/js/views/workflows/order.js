@@ -25,6 +25,7 @@ define(function(require, exports, module) {
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, StepInfoView, StepErrorsView;
   
+  require('jquery.ui');
   require('bootstrap');
       
   context = {
