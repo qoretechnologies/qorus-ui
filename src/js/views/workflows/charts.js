@@ -99,7 +99,7 @@ define(function (require) {
         this.setView(
           new ChartView.DoughnutChart(
             { width: 200, height: 200 }, 
-            new Workflow({ id: this.model_id })
+            new Workflow({ workflowid: this.model_id })
           ), 
           '#chart-1-donut',
           true
@@ -116,7 +116,7 @@ define(function (require) {
         this.setView(
           new ChartView.DoughnutChart(
             { width: 200, height: 200 }, 
-            new Workflow({ id: this.model_id, date: utils.formatDate(moment().days(-6)) })
+            new Workflow({ workflowid: this.model_id, date: utils.formatDate(moment().days(-6)) })
           ), 
           '#chart-2-donut', 
           true
@@ -134,7 +134,7 @@ define(function (require) {
         this.setView(
           new ChartView.DoughnutChart(
             { width: 200, height: 200 }, 
-            new Workflow({ id: this.model_id, date: utils.formatDate(moment().days(-30)) })
+            new Workflow({ workflowid: this.model_id, date: utils.formatDate(moment().days(-30)) })
           ), 
           '#chart-3-donut', 
           true

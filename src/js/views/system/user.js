@@ -6,10 +6,12 @@ define(function (require) {
     View;
     
   var View = Qorus.View.extend({
-    views: {},
     template: Template,
     
     initialize: function (opts) {
+      this.context = {};
+      this.views = {};
+      this.options = {};
       this.model = opts.model;
       this.listenTo(this.model, 'change', this.render);
     },

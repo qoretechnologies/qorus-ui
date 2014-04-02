@@ -1,9 +1,7 @@
-define(function(require) {
-  var $          = require('jquery'),
-      _          = require('underscore'),
+define(function (require) {
+  var _          = require('underscore'),
       Dispatcher = require('qorus/dispatcher'),
       Qorus      = require('qorus/qorus'),
-      settings   = require('settings'),
       Model      = require('models/health'),
       StatusTpl  = require('tpl!templates/system/health/status.html'),
       DetailTpl  = require('tpl!templates/system/health/detail.html'),
@@ -12,11 +10,12 @@ define(function(require) {
   require("bootstrap");
 
   View = Qorus.View.extend({
-    views: {},
     template: StatusTpl,
-    context: {},
     
     initialize: function () {
+      this.context = {};
+      this.views = {};
+      this.options = {};
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'system:health_changed', this.update);
@@ -33,9 +32,8 @@ define(function(require) {
     },
     
     onRender: function () {
-      var self = this, 
-        data = this.model.toJSON(),
-        $status;
+      var data = this.model.toJSON(),
+          $status;
         
       data.health_css = this.getHealthCSS();
       
@@ -57,7 +55,7 @@ define(function(require) {
       if (health === 'UNREACHABLE') return 'info';
     },
     
-    update: function (e) {
+    update: function () {
       this.model.fetch();
     },
     

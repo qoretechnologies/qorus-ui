@@ -62,7 +62,7 @@ define(function (require) {
       this.template = Template;
       
       // init model
-      this.model = new Workflow({ id: opts.id });
+      this.model = new Workflow({ workflowid: opts.id });
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.model.fetch();
@@ -87,11 +87,11 @@ define(function (require) {
       
       if (this.opts.inst == 'instances') {
         this.setView(new InstanceListView({ 
-            date: this.opts.date, workflowid: this.model.id, url: this.url() 
+            date: this.opts.date, workflowid: this.opts.id, url: this.url() 
           }), '#instances');
       } else {
         this.setView(new OrderListView({ 
-            date: this.opts.date, workflowid: this.model.id, statuses: this.opts.filter, url: this.url() 
+            date: this.opts.date, workflowid: this.opts.id, statuses: this.opts.filter, url: this.url() 
           }), '#instances');
       }
       

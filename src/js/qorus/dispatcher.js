@@ -1,9 +1,9 @@
 define(function (require) { 
-  var _     = require('underscore'),
+  var _        = require('underscore'),
       Backbone = require('backbone'),
       Dispatcher;
   
-  Dispatcher = Backbone.Model.extend({
+  Dispatcher = {
     add: function (e) {
       this.dispatch(e);
     },
@@ -55,7 +55,9 @@ define(function (require) {
     // alert: function (alert, text) {
     //   
     // }
-  });
+  };
+  
+  _.extend(Dispatcher, Backbone.Events)
 
-  return new Dispatcher();
+  return Dispatcher;
 });

@@ -4,11 +4,14 @@ define(function (require) {
     Qorus             = require('qorus/qorus'),
     System            = require('models/system'),
     HeaderView        = require('views/common/header'),
-    NotificationsView = require('views/notifications/notifications'),
     SystemInfoView;
   
-  var SystemInfoView = Qorus.View.extend({    
+  SystemInfoView = Qorus.View.extend({    
     initialize: function (opts) {
+      this.context = {};
+      this.views = {};
+      this.options = {};
+      
       this.opts = opts || {};
       this.user = System.User;
       this.info = System.Info;
@@ -20,7 +23,9 @@ define(function (require) {
     },
     
     renderInfo: function () {
-      var header        = new HeaderView({ info: this.info, user: this.user });
+      if (this.header) this.header.off(false);
+      
+      this.header = new HeaderView({ info: this.info, user: this.user });
       
       this.title = this.info.get('instance-key') + " | " + this.info.get('omq-version');
       document.title = this.title;

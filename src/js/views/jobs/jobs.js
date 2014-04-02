@@ -136,8 +136,9 @@ define(function(require) {
       
       if (this.selected_model != model) {
         row.$el.addClass('info');
+        var cv = new DetailView({ model: model });
         view = this.setView(new PaneView({
-          content_view: new DetailView({ model: model }),
+          content_view: cv,
           width: width
         }), '#job-detail', true);
         this.selected_model = model;

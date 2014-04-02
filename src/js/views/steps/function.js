@@ -1,11 +1,12 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'models/function',
-  'text!templates/steps/function_modal.html',
-], function ($, _, Qorus, Model, Template) {
-  var ModelView = Qorus.View.extend({
+define(function (require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model    = require('models/function'),
+      Template = require('text!templates/steps/function_modal.html'),
+      ModelView;
+  
+  ModelView = Qorus.View.extend({
     initialize: function (opts) {
       this.opts = opts;
       _.bindAll(this, 'render');
@@ -13,7 +14,7 @@ define([
       this.template = Template;
       
       // init model
-      this.model = new Model({ id: opts.id });
+      this.model = new Model({ function_instanceid: opts.id });
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
     },

@@ -2,7 +2,6 @@ define(function (require) {
   require('backbone');
   
   var $                 = require('jquery'),
-      _                 = require('underscore'),
       Qorus             = require('qorus/qorus'),
       HealthView        = require('views/system/health'),
       UserView          = require('views/system/user'),
@@ -11,7 +10,6 @@ define(function (require) {
       View;
   
   View = Qorus.View.extend({
-    views: {},
     template: Template,
     
     initialize: function (opts) {

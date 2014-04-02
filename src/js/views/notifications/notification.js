@@ -12,7 +12,7 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
+      this.context = {};
       this.model = opts.model;
       this.opts = opts;
       this.on('prerender', this.updateContext);

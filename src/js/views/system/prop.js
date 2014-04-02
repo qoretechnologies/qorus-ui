@@ -17,7 +17,9 @@ define([
     template: Template,
 
     initialize: function (opts) {
-      _.bindAll(this);
+      this.context = {};
+      this.views = {};
+      this.options = {};
       this.opts = opts || {};
       
       this.on('fetch', this.render);

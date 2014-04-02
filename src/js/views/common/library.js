@@ -11,6 +11,9 @@ define(function (require) {
     template: Template,
     initialize: function (opts) {
       this.views = {};
+      this.context = {};
+      this.helpers = {};
+      this.opts = {};
       this.model = opts.model;
       View.__super__.initialize.apply(this);
       

@@ -113,6 +113,7 @@ define(function (require) {
     
     initialize: function (options) {
       this.views = {};
+      this.context = {};
       this.options = options || {};
       this.name = options.resource_type;
       this.collection = new Collection([], { resource_type: options.resource_type });

@@ -21,7 +21,10 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
+      this.context = {};
+      this.views = {};
+      this.options = {};
+      
       this.template = Template;
       this.render();
       $(window).bind("resize.app", _.bind(this.setHeight, this));

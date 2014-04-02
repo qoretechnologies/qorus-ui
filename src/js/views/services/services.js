@@ -3,7 +3,6 @@ define(function(require){
       _           = require('underscore'),
       Qorus       = require('qorus/qorus'),
       Backbone    = require('backbone'),
-      Dispatcher  = require('qorus/dispatcher'),
       Collection  = require('collections/services'),
       Template    = require('text!templates/service/list.html'),
       TableTpl    = require('text!templates/service/table.html'),
@@ -84,7 +83,6 @@ define(function(require){
     row_view: RowView,
     
     initialize: function () {
-      _.bindAll(this);
       TableView.__super__.initialize.apply(this, arguments);
       // this.RowView = RowView;
 
@@ -97,17 +95,16 @@ define(function(require){
   });
   
   ListView = Qorus.ListView.extend({
+    __name__: "ServicesListView",
     url: '/services',
     context: context,
     
     title: "Services",
 
     initialize: function (options) {
-      var self = this;
-      _.bindAll(this);
+      this.options = {};
       this.views = {};
       this.opts = options || {};
-      this.context = {};
       
       if (this.opts.path) this.path = this.opts.path;
       
@@ -139,10 +136,13 @@ define(function(require){
     },
 
     onRender: function () {
+      var model;
       $('[data-toggle="tooltip"]').tooltip();
       
       if (this.detail_id) {
-        this.collection.get(this.detail_id).trigger('rowClick');
+        // TODO: needs fix - not working with prerendering
+        model = this.collection.get(this.detail_id);
+        if (model) model.trigger('rowClick');
       }
     },
 
@@ -197,11 +197,12 @@ define(function(require){
     // TODO: it would be better to run inside Service Detail view,
     // but it has CSS position issues. try to fix later
     openExecuteModal: function (model, method) {
-      this.setView(new ModalView({ 
+      var view = this.setView(new ModalView({ 
         name: method, 
         methods: model.get('methods'), 
         service_name: model.get('name') 
       }), '#function-execute', true);
+      view.render();
     },
     
     helpers:  {

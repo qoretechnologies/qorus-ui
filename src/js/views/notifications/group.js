@@ -16,7 +16,9 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
+      this.context = {};
+      this.helpers = {};
+      this.options = {};
       this.views = {};
       this.group = opts.group;
       this.on('prerender', this.updateContext);

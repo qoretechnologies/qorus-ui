@@ -72,6 +72,9 @@ define(function (require) {
     //   return "alerts-table-" + this.cid;
     // },
     initialize: function (collection) {
+      this.views = {};
+      this.context = {};
+      this.options = {};
       this.collection = collection;
     },
     

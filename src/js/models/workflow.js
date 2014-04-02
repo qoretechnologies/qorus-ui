@@ -136,9 +136,9 @@ define(function (require) {
     __name__: 'Workflow',
     _name: 'workflow',
     urlRoot: settings.REST_API_PREFIX + '/workflows/',
-    url: function () {
-      return this.urlRoot + this.id;
-    },
+    // url: function () {
+    //   return this.urlRoot + this.id;
+    // },
     defaults: {
       'IN-PROGRESS': 0,
       'READY': 0,

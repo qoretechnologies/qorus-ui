@@ -7,7 +7,7 @@ define(function (require) {
       Collection   = require('collections/options'),
       Template     = require('text!templates/system/options.html'),
       EditTemplate = require('text!templates/common/option_edit.html'),
-      EDIT_URL = settings.REST_API_PREFIX + '/system/options',
+      EDIT_URL     = settings.REST_API_PREFIX + '/system/options',
       ListView;
       require('jquery.ui');
   
@@ -18,10 +18,11 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
       this.opts = opts || {};
       // ListView.__super__.initialize.call(this, opts);
       this.views = {};
+      this.context = {};
+      this.options = {};
       
       this.collection = new Collection(this.opts);
       this.template = Template;
@@ -45,7 +46,6 @@ define(function (require) {
           type: utils.input_map[obj_type][1],
           name: name
         });
-        $tpl;
         
         $tpl = template;
         $target.toggleClass('editable');

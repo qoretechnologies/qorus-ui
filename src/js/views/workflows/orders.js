@@ -36,6 +36,7 @@ define(function (require) {
     },
     
     initialize: function (opts) {
+      this.options = {};
       opts = opts || {};
       
       // if (opts.url) {
@@ -61,7 +62,7 @@ define(function (require) {
       this.opts = opts;
       _.extend(this.options, opts);
 
-      ListView.__super__.initialize.call(this, Collection, opts.date);
+      ListView.__super__.initialize.call(this, Collection, opts.date, opts);
     },
     
     preRender: function () {

@@ -40,26 +40,30 @@ define(function (require) {
     showSource: function (e) {
       var $target = $(e.currentTarget),
           method  = _.where(this.model.get('methods'), { name: $target.data('methodname') })[0],
-          content_view;
+          content_view, modal;
       
       content_view = new Qorus.View({
         template: SourceTpl,
         method: method
       });
       
-      content_view.on('postrender', Prism.highlightAll);
+      content_view.onRender = function () {
+        var el = this.$('pre').get(0);
+        _.defer(Prism.highlightElement, el);
+      };
       
       this.removeView('#source-modal');
       
-      this.insertView(new ModalView({ 
+      modal = new ModalView({ 
         content_view: content_view
-      }), '#source-modal');
+      });
+      
+      this.insertView(modal, '#source-modal');
     }
   });
 
   ModelView = Qorus.TabView.extend({
     template: Template,
-    views: {},
     url: function () {
       return "/" + this.model.id;
     },
@@ -99,15 +103,9 @@ define(function (require) {
     },
     
     openExecuteModal: function (evt) {
+      console.log('tada');
       evt.stopPropagation();
       this.trigger('modal:open', this.model, $(evt.currentTarget).data('methodname'));
-    },
-    
-    off: function () {
-      this.removeViews();
-      this.undelegateEvents();
-      this.stopListening();
-      this.$el.remove();
     },
     
     close: function () {

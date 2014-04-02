@@ -18,9 +18,10 @@ define([
         opts.date = this.date;
       }
       
-      
       this.opts = opts;
       this.opts.sort = 'started';
+      
+      console.log(this.opts);
       
       if (opts.workflowid) {
         this.workflowid = opts.workflowid; 

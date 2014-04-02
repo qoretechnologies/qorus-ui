@@ -16,10 +16,8 @@ define(function (require, exports, module) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
-      this.opts = opts;
-
       View.__super__.initialize.call(this);
+      this.opts = opts;
     },
     
     // override default procesPath to delegate full-path to the content_view
@@ -93,7 +91,8 @@ define(function (require, exports, module) {
       });
     },
     getStorageKey: function () {
-      return [module.id.replace(/\//g, '.'), this.opts.content_view.__name__].join('.');
+      var cvkey = (this.opts.content_view) ? this.opts.content_view.__name__ : this.__name__;
+      return [module.id.replace(/\//g, '.'), cvkey].join('.');
     }
   });
   

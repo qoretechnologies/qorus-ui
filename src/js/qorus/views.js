@@ -65,12 +65,8 @@ define(function (require) {
       "dblclick .selectable": "selectName"
       // "click a[href^='/']": 'catchAClick'
     },
-    context: {},
-    views: {},
-    helpers: {},
-    options: {},
     model_name: null,
-    opts: {},
+    // opts: {},
     path: "",
     _is_rendered: false,
     
@@ -79,14 +75,16 @@ define(function (require) {
       var aEvents = this.additionalEvents || {};
       return _.extend({}, this.defaultEvents, aEvents);
     },
+    context: {},
     
     
     initialize: function (options) {
       _.bindAll(this, 'render', 'insertView', 'setView');
-      this.views = {};
       this.context = {};
       this.views = {};
       this.options = {};
+      this.opts = {};
+      this.belpers = {};
       
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
@@ -108,6 +106,7 @@ define(function (require) {
     },
         
     off: function (remove) {
+      // console.log('cleaning', this.__name__);
       this.removeViews();
       
       if (_.isFunction(this.clean)) {
@@ -135,7 +134,7 @@ define(function (require) {
       this.preRender();
 
       if (this.template) {
-        if (ctx) {
+        if (ctx && !(ctx instanceof Backbone.Model)) {
           _.extend(this.context, ctx); 
         }
         
@@ -435,6 +434,7 @@ define(function (require) {
      __name__: 'ListView',
      className: 'listview',
      context: {},
+     opts: {},
      keys: {
        'up down': 'navigate'
      },
@@ -465,6 +465,7 @@ define(function (require) {
       // add element loader
       // this.loader = new Loader({ el: $('#wrap') });
       // this.loader.render();
+      this.opts = options || {};
 
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
@@ -822,15 +823,18 @@ define(function (require) {
     
     initialize: function (opts) {
       _.bindAll(this);
-      this.RowView = this.row_view || RowView;
+      this.context = {};
       this.views = {};
+      this.options = {};
+      
+      this.RowView = this.row_view || RowView;
       this.opts = opts || {};
       
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
       this.listenTo(this.collection, 'add', this.appendRow);
-      this.listenTo(this.collection, 'resort', this.update);
+      // this.listenTo(this.collection, 'resort', this.update);
       this.listenTo(this.collection, 'sync', this.update);
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
@@ -862,12 +866,12 @@ define(function (require) {
     },
        
     onRender: function () {
-      if (this.fixed === true) {
-        this.$('.table-fixed').fixedHeader();
-      }
-
-      this.sortIcon();
-      this.setWidths();
+      // if (this.fixed === true) {
+      //   this.$('.table-fixed').fixedHeader();
+      // }
+      // 
+      // this.sortIcon();
+      // this.setWidths();
       
       $(window).on('resize.table', this.resize);
       
@@ -923,11 +927,16 @@ define(function (require) {
 
     appendRows: function (models) {
       if ('tbody' in this.views) {
-        this.update();
-        return;
+        // // cleaning the view the dirty way
+        // var tbody = this.$('tbody').get(0);
+        // 
+        // while (tbody.firstChild)
+        //   tbody.removeChild(tbody.firstChild);
+        // delete this.views.tbody;
+        this.removeView('tbody');
       }
       
-      // console.time('appending');
+      console.time('appending');
       var frag = document.createDocumentFragment();
 
       _.each(models, function (m) {
@@ -935,13 +944,9 @@ define(function (require) {
         frag.appendChild(view.render().el);
       }, this);
       
-      // for (var i=0; i<100; i++) {
-      //   var view = this.appendRow(models[i], false);
-      //   frag.appendChild(view.render().el);
-      // }
-      // console.timeEnd('appending');
-      
+      console.timeEnd('appending');
       this.$('tbody').append(frag);
+      this.resize();
     },
 
     appendRow: function (m, render) {
@@ -957,7 +962,7 @@ define(function (require) {
 
       render = (render===undefined) ? true : render;
       
-      if (render) {
+      if (render === true) {
         idx = this.collection.indexOf(m-1);
         if (this.$('tbody tr').get(idx)) {
           $(this.$('tbody tr').get(idx)).after(view.render().$el);
@@ -965,11 +970,13 @@ define(function (require) {
           this.$('tbody').append(view.render().$el);
         }
       }
-      
+
       return view;
     },
         
     update: function (initial) {
+      var tpl = this.template
+      console.time('update')
       if (this.collection.size() === 0 && initial !== true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
@@ -977,11 +984,14 @@ define(function (require) {
       } else {
         this.template = LoadingDataTpl;
       }
-      this.render();
-      
-      this.removeView('tbody');
+
+      if (this.template !== tpl) {
+        this.render();
+      }
+
       this.appendRows(this.collection.models);
-      // if (this.loader) this.loader.destroy();
+      // this.resize();
+      console.timeEnd('update');
     },
     
     // sort view
@@ -1503,17 +1513,14 @@ define(function (require) {
   
   ModelView = View.extend({
     __name__: 'ModelView',
-    views: {},
     initialize: function () {
       ModelView.__super__.initialize.apply(this, arguments);
-      
       this.model = this.options.model;
     },
     
     preRender: function () {
       this.context.item = this.model.toJSON();
       this.context._item = this.model;
-      ModelView.__super__.preRender.apply(this, arguments);
     }
   });
 

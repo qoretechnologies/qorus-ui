@@ -13,17 +13,23 @@ define(function (require) {
     
     initialize: function (opts) {
       this.views = {};
+      this.options = {};
+      this.context = {};
       this.opts = opts;
-      _.bindAll(this, 'render');
       
       this.template = Template;
       
       // init model
-      this.model = new Model({ id: opts.id });
+      this.model = new Model({ stepid: opts.id });
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
-      
+
       this.on('postrender', Prism.highlightAll);
+    },
+    
+    preRender: function () {
+      this.context.item = this.model.toJSON();
+      this.context._item = this.model;
     },
     
     tabToggle: function(e){

@@ -6,13 +6,16 @@ define(function (require) {
       StatusTpl  = require('tpl!templates/system/health/status.html'),
       DetailTpl  = require('tpl!templates/system/remote/detail.html'),
       View;
+      
+  require('bootstrap');
 
   View = Qorus.View.extend({
-    views: {},
     template: StatusTpl,
     
     initialize: function () {
-      _.bindAll(this, 'render');
+      this.context = {};
+      this.views = {};
+      this.options = {};
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'system:remote_health_changed', this.render);

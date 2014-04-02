@@ -11,7 +11,6 @@ define(function (require) {
     collection: Notifications,
 
     initialize: function () {
-      _.bindAll(this);
       View.__super__.initialize.apply(this, arguments);
       
       this.setElement($('#notifications-list'));
@@ -24,8 +23,7 @@ define(function (require) {
     
     addGroup: function (group) {
       var group_id = '#group-' + group,
-          view = this.getView(group_id),
-          self = this;
+          view = this.getView(group_id);
           
       if (!view) {
         view = this.setView(new GroupView({ group: group }), group_id);

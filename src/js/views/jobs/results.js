@@ -21,7 +21,9 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this);
+      this.options = {};
+      this.context = {};
+      this.helpers = {};
       
       opts = opts || {};
       
@@ -48,7 +50,7 @@ define(function (require) {
       this.opts = opts;
       _.extend(this.options, opts);
 
-      ListView.__super__.initialize.call(this, Collection, this.opts.date);
+      ListView.__super__.initialize.call(this, Collection, this.date, this.options);
     },
 
     onRender: function () {

@@ -1,9 +1,9 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus'
-], function(settings, _, Qorus){
-  var Model = Qorus.Model.extend({
+define(function (require) {
+  var settings = require('settings'),
+      Qorus    = require('qorus/qorus'),
+      Model;
+  
+  Model = Qorus.Model.extend({
     idAttribute: "function_instanceid",
     urlRoot: settings.REST_API_PREFIX + '/functions/',
     dateAttributes: ['created', 'modified'],
@@ -28,6 +28,6 @@ define([
       return response;
     }
   });
-  // Return the model for the module
+
   return Model;
 });

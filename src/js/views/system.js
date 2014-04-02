@@ -23,7 +23,6 @@ define(function(require){
     cls: 'SystemInfoView',
     
     initialize: function (opts) {
-      _.bindAll(this);
       this.path = opts.path;
       SystemInfoView.__super__.initialize.call(this, arguments);
       this.opts = opts || {};
@@ -36,6 +35,7 @@ define(function(require){
     },
     
     preRender: function () {
+      this.context.item = this.info.toJSON();
       this.setView(new DashboardView({ model: this.info }), '#dashboard');
       this.setView(new LogsView(), '#logs');
       this.setView(new OptionsView(), '#options');

@@ -22,6 +22,9 @@ define(function (require) {
     initialize: function (opts) {
       // reset views
       this.views = {};
+      this.options = {};
+      this.context = {};
+      this.helpers = {};
       this.opts = opts;
       _.bindAll(this);
       

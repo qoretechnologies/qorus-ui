@@ -28,6 +28,8 @@ define(function (require) {
     template: HeaderTpl,
 
     initialize: function (options) {
+      this.context = {};
+      this.options = {};
       this.views = {},
       this.model = options.model;
     },

@@ -1,23 +1,25 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'settings',
-  'text!templates/system/http.html'
-], function($, _, Backbone, Qorus, settings, Template){
-  var http_services_url = settings.REST_API_PREFIX + '/system/userhttp';
+define(function (require) {
+  var $                 = require('jquery'),
+      _                 = require('underscore'),
+      Qorus             = require('qorus/qorus'),
+      settings          = require('settings'),
+      Template          = require('text!templates/system/http.html'),
+      http_services_url = settings.REST_API_PREFIX + '/system/userhttp',
+      View;
 
-  var View = Qorus.View.extend({
+  View = Qorus.View.extend({
     views: {},
     template: Template,
     
     initialize: function () {
-      var _this = this;
+      var self = this;
+      this.views = {};
+      this.context = {};
+      this.options = {};
       
       $.get(http_services_url).done(function (data) {
-        _this.data = data;
-        _this.trigger('fetch');
+        self.data = data;
+        self.trigger('fetch');
       });
       
       this.on('fetch', this.render);

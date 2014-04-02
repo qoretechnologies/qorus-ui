@@ -16,7 +16,6 @@ define(function (require) {
       'aria-labelledby': 'modalHeader',
       'aria-hidden': true
     },
-    views: {},
     template: Template,
     
     initialize: function () {

@@ -323,8 +323,8 @@ define(function(require, exports, module) {
       if (!_.has(opts, 'show_header'))
         this.options.show_header = true;
 
-      this.model = new Model({ id: opts.id });
-      this.listenTo(this.model, 'change', this.render, this);
+      this.model = new Model({ workflow_instanceid: opts.id });
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
     },
     
@@ -347,7 +347,8 @@ define(function(require, exports, module) {
         show_header: this.options.show_header,
         getStepName: this.getStepName, 
         action_css: context.action_css 
-      }); 
+      });
+      console.log(this.$el, this.context);
     },
     
     getStepName: function (id) {

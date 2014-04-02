@@ -28,6 +28,7 @@ define(function (require) {
     },
     
     initialize: function (opts) {
+      ModelView.__super__.initialize.call(this, opts);
       if (_.has(opts, 'jobid')) {
         opts.id = opts.jobid;
         delete opts.jobid;
@@ -35,9 +36,7 @@ define(function (require) {
       this.opts = opts || {};
       this.date = this.opts.date;
       
-      ModelView.__super__.initialize.call(this, opts);
-      
-      this.model = new Model({ id: opts.id });
+      this.model = new Model({ jobid: opts.id });
       this.listenTo(this.model, 'sync', this.render);
       this.model.fetch();
     },
@@ -50,6 +49,7 @@ define(function (require) {
         date: this.opts.date,
         statuses: this.opts.filter
       }), { name: 'Results'});
+      
       this.addTabView(new Log({ socket_url: socket_url, parent: this }));
       this.setView(new BottomBarView({}), '#bottom-bar');
     },

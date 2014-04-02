@@ -75,6 +75,7 @@ define(function (require) {
     },
     
     render: function (ctx) {
+      console.log('render man');
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
     },

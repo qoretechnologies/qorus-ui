@@ -69,8 +69,9 @@ define(function (require) {
     __name__: 'StatusView',
     template: StatusTpl,
     initialize: function (opts) {
-      _.bindAll(this);
       this.views = {};
+      this.context = {};
+      this.options = {};
       this.opts = opts || {};
       this.model = new HealthModel();
 
@@ -115,8 +116,9 @@ define(function (require) {
     __name__: 'DashboardView',
     template: Template,
     initialize: function (opts) {
-      _.bindAll(this);
       this.views = {};
+      this.context = {};
+      this.options = {};
       this.opts = opts || {};
     },
     

@@ -14,6 +14,9 @@ define([
     },
     
     initialize: function (opts) {
+      this.opts = {};
+      this.options = {};
+      this.context = {};
       this.views = {};
       _.bindAll(this); 
       ModelView.__super__.initialize.call(this, opts);

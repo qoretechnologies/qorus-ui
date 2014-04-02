@@ -14,7 +14,7 @@ define(function (require) {
       utils         = require('utils'),
       qorus_helpers = require('qorus/helpers'),
       helpers       = require('views/workflows/helpers'),
-      ListView, RowView;
+      ListView, RowView, TableView;
 
   // extending base RowView to add workflow related events
   RowView = Qorus.RowView.extend({
@@ -31,6 +31,13 @@ define(function (require) {
       e.stopPropagation();
       e.preventDefault();
       this.model.doAction(action);
+    }
+  });
+  
+  TableView = Qorus.TableView.extend({
+    initialize: function () {
+      TableView.__super__.initialize.apply(this, arguments);
+      this.stopListening(this.collection, 'add');
     }
   });
 
@@ -59,10 +66,10 @@ define(function (require) {
     title: "Workflows",
     
     initialize: function (collection, options) {
-      var self = this;
+      this.options = {};
       this.views = {};
-      this.opts = options || {};
       this.context = {};
+      this.opts = options || {};
       
       this.template = Template;
       
@@ -75,7 +82,7 @@ define(function (require) {
       // reassign listening events to collection
       this.stopListening(this.collection);
       
-      this.listenToOnce(this.collection, 'sync', self.render);
+      // this.listenToOnce(this.collection, 'sync', self.render);
       this.processPath(this.opts.path);
     },
     
@@ -91,7 +98,7 @@ define(function (require) {
           tview, toolbar;
 
       // create workflows table
-      tview = this.setView(new Qorus.TableView({ 
+      tview = this.setView(new TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
@@ -202,7 +209,7 @@ define(function (require) {
 
       if (items.length > 0) {
         _(items).each(function (item) {
-          item.trigger('check')
+          item.trigger('check');
         });
       }
 

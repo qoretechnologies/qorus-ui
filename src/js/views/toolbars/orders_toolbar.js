@@ -27,8 +27,8 @@ define(function (require) {
     },
     
     url: function (opts) {
-      var opts     = opts || {},
-          date     = opts.date || this.options.date,
+      opts = opts || {};
+      var date     = opts.date || this.options.date,
           statuses = opts.statuses || this.options.statuses;
           
       if (date !== 'all') date = utils.encodeDate(date);
