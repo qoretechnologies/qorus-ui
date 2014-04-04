@@ -61,7 +61,7 @@ define(function (require) {
       if (id) {
         e.preventDefault();
         e.stopPropagation();
-        this.insertView(new ModalView({
+        var view = this.insertView(new ModalView({
           content_view: new StepView({ id: id }) 
         }), '#stepdetail');
       }
@@ -123,7 +123,7 @@ define(function (require) {
       
       lview = this.addTabView(new LibraryView({ model: this.model }));
       
-      lview.listenTo(this.model, 'change:lib change:wffunc', lview.render);
+      lview.listenTo(this.model, 'change:wffunc', lview.render);
       
       dview = this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
       
@@ -147,11 +147,11 @@ define(function (require) {
       this.clean();
     },
     
-    off: function () {
-      this.removeViews();
-      this.undelegateEvents();
-      this.stopListening();
-    },
+    // off: function () {
+    //   this.removeViews();
+    //   this.undelegateEvents();
+    //   this.stopListening();
+    // },
     
     createDiagram: function () {
       var view = this.getView('#steps');

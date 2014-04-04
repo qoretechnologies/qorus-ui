@@ -106,7 +106,6 @@ define(function (require) {
     },
         
     off: function (remove) {
-      // console.log('cleaning', this.__name__);
       this.removeViews();
       
       if (_.isFunction(this.clean)) {
@@ -117,10 +116,10 @@ define(function (require) {
       View.__super__.off.call(this);
 
       if (remove !== false) {
-        this.$el.remove();
         this.remove();
       }
-      this.views = {};
+      // this.views = {};
+      return this;
     },
     
     render: function (ctx) {
@@ -186,6 +185,8 @@ define(function (require) {
         });
       }
       if (view) delete this.views[id];
+      
+      return this;
     },
     
     // removes all subviews
@@ -203,6 +204,7 @@ define(function (require) {
         }
       });
       this.views = {};
+      return this;
     },
     
     // returns view by specified id, el id attr in the most cases
@@ -246,6 +248,7 @@ define(function (require) {
       _.each(self.views, function (view, id) {
         if (id!=='tabs')  self.renderView(id, view);
       });
+      return this;
     },
     
     // executes before rendering
@@ -324,11 +327,13 @@ define(function (require) {
 
         document.title += " " + title; 
       }
+      return this;
     },
     
     clean: function () {
       // debug.log('called stop listening on', this.cid);
-      this.stopListening();
+      // this.stopListening();
+      return this;
     },
     
     updateModels: function () {
@@ -343,16 +348,19 @@ define(function (require) {
       debug.log('Do nothing', e);
       e.preventDefault();
       e.stopPropagation();
+      return this;
     },
     
     lock: function () {
       // console.log(this.cid, 'locked');
       this.render_lock = true;
+      return this;
     },
     
     unlock: function () {
       // console.log(this.cid, 'unlocked');
       this.render_lock = false;
+      return this;
     },
     
     getUrlParams: function () {
@@ -419,6 +427,7 @@ define(function (require) {
       var view = this.insertView(new Loader(), '#loader', true);
       view.$el.addClass(this.__name__)
       console.log('showing loader for', this.__name__);
+      return this;
     },
     
     hideLoader: function () {
@@ -426,6 +435,7 @@ define(function (require) {
         console.log('hiding loader for', this.__name__, view.$el);
         view.remove();
       });
+      return this;
     }
    });
 
@@ -936,7 +946,7 @@ define(function (require) {
         this.removeView('tbody');
       }
       
-      console.time('appending');
+      // console.time('appending');
       var frag = document.createDocumentFragment();
 
       _.each(models, function (m) {
@@ -944,7 +954,7 @@ define(function (require) {
         frag.appendChild(view.render().el);
       }, this);
       
-      console.timeEnd('appending');
+      // console.timeEnd('appending');
       this.$('tbody').append(frag);
       this.resize();
     },
@@ -975,8 +985,9 @@ define(function (require) {
     },
         
     update: function (initial) {
-      var tpl = this.template
-      console.time('update')
+      var tpl = this.template;
+
+      // console.time('update')
       if (this.collection.size() === 0 && initial !== true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
@@ -991,7 +1002,7 @@ define(function (require) {
 
       this.appendRows(this.collection.models);
       // this.resize();
-      console.timeEnd('update');
+      // console.timeEnd('update');
     },
     
     // sort view
@@ -1508,6 +1519,11 @@ define(function (require) {
     
     onProcessPath: function (tab) {
       this.active_tab = tab;
+    },
+    
+    off: function () {
+      TabView.__super__.off.apply(this, arguments);
+      // console.log(this.views, this.getTabs());
     }
   });
   

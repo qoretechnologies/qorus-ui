@@ -50,6 +50,8 @@ define(function (require) {
     
     initialize: function (opts) {
       this.views = {};
+      this.options = {};
+      this.context =  {};
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
       

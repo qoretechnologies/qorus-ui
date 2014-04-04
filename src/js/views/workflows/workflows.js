@@ -252,7 +252,7 @@ define(function (require) {
         
         content_view = new WorkflowView({
           model: model,
-          context: this.context
+          context: _.clone(this.context)
         });
         
         // // add listener - for some reason it doesn't work inside ServiceView

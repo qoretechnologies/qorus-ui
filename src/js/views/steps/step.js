@@ -7,6 +7,7 @@ define(function (require) {
       Prism    = require('prism');
   
   var ModelView = Qorus.View.extend({
+    __name__: "StepView",
     additionalEvents: {
       "click .nav-tabs a": 'tabToggle'
     },
@@ -39,9 +40,8 @@ define(function (require) {
     },
     
     off: function () {
-      this.undelegateEvents();
-      this.stopListening();
-      this.$el.empty();
+      ModelView.__super__.off.apply(this, arguments);
+      console.log('destroying step');
     }
   });
   

@@ -1,11 +1,10 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus',
-  'models/order'
-], function(settings, _, Qorus, Model){
+define(function (require) {
+  var settings = require('settings'),
+      Qorus = require('qorus/qorus'),  
+      Model = require('models/order'),
+      Collection;
   
-  var Collection = Qorus.SortedCollection.extend({
+   Collection = Qorus.SortedCollection.extend({
     model: Model,
     url: function () {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
@@ -20,8 +19,6 @@ define([
       
       this.opts = opts;
       this.opts.sort = 'started';
-      
-      console.log(this.opts);
       
       if (opts.workflowid) {
         this.workflowid = opts.workflowid; 

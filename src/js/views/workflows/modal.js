@@ -1,11 +1,13 @@
-define([
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'text!templates/workflow/modal.html',
-  'jquery.ui'
-], function ($, _, Qorus, Template) {
-  var View = Qorus.View.extend({
+define(function (require) {
+  var $ = require('jquery'),
+      _ = require('underscore'),
+      Qorus = require('qorus/qorus'),
+      Template = require('text!templates/workflow/modal.html'),
+      View;
+  
+  require('jquery.ui');
+  
+  View = Qorus.View.extend({
     additionalEvents: {
       'submit': 'startWorkflow',
     },

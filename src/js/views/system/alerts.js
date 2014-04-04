@@ -63,7 +63,11 @@ define(function (require) {
     }
   });
   
-  TableView = Qorus.TableView;
+  TableView = Qorus.TableView.extend({
+    update: function () {
+      TableView.__super__.update.call(this, false);
+    }
+  });
   
   ListView = Qorus.ListView.extend({
     __name__: "AlertsListView",
@@ -76,6 +80,8 @@ define(function (require) {
       this.context = {};
       this.options = {};
       this.collection = collection;
+      
+      this.listenTo(this.collection, 'all', function () { console.log(arguments)} );
     },
     
     template: function () {

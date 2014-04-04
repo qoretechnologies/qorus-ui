@@ -32,6 +32,10 @@ define(function (require) {
     
     color: function () {
       Prism.highlightAll();
+    },
+    
+    clean: function () {
+      this.model = null;
     }
     
   });      

@@ -89,7 +89,7 @@ define(function(require){
       // reset listening events
       this.stopListening(this.collection);
       
-      this.listenTo(this.collection, 'add', this.appendRow);
+      // this.listenTo(this.collection, 'add', this.appendRow);
       this.listenTo(this.collection, 'resort sort', this.update);
     }
   });

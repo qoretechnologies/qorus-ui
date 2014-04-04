@@ -203,6 +203,8 @@ define(function (require) {
       if (options.date) {
         this.date = this.options.date;
       }
+      
+      this.on('fetch', function () { this._fetched = true; }, this);
     },
     
     search: function (query) {

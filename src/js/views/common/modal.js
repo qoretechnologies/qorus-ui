@@ -32,21 +32,19 @@ define(function (require) {
       this.fixHeight();
       
       // show modal
-      $modal.modal();
+      this.$el.modal();
       
       // fix size on resize event
-      $modal.on("resize", function(event, ui) {
+      this.$el.on("resize.modal", function(event, ui) {
           ui.element.css("margin-left", -ui.size.width/2);
           ui.element.css("left", "50%");
           self.fixHeight();
       });
 
       // assign attributes on modal shown event
-      $modal.on('shown', function () {
-        var max_height = $(window).innerHeight() - self.$el.position().top * 2;
-        var max_width = $(window).innerWidth() - self.$el.position().top * 2;
-        
-        self.fixHeight();
+      this.$el.on('shown.modal', function () {
+        var max_height = $(window).innerHeight() - $(this).position().top * 2;
+        var max_width = $(window).innerWidth() - $(this).position().top * 2;
         
         // enable resizable
         $(this).resizable({
@@ -57,6 +55,10 @@ define(function (require) {
           maxWidth: max_width
         });
       });
+      
+      this.$el.on('shown.modal', this.fixeHeight);
+      
+      this.$el.on('hide.modal', $.proxy(this.off, this));
     },
     
     fixHeight: function () {
@@ -77,27 +79,19 @@ define(function (require) {
       }
     },
         
-    clean: function () {
-      this.$('.modal')
-        .css('width', '')
-        .css('height', '')
-        .css('left', '')
-        .css('top', '')
-        .css('margin-top', '')
-        .css('margin-left', '')
-        .unbind();
-      
-        if (this.$('.modal').hasClass('ui-resizable')) {
-          this.$('.modal').resizable('destroy');
-        }
+    clean: function () {      
+      if (this.$('.modal').hasClass('ui-resizable')) {
+        this.$('.modal').resizable('destroy');
+      }
+      this.$el.off();
     },
-    
-    off: function () {
-      this.clean();
-      this.undelegateEvents();
-      this.stopListening();
-      this.$el.remove();
-    }
+    // 
+    // off: function () {
+    //   this.clean();
+    //   this.undelegateEvents();
+    //   this.stopListening();
+    //   this.$el.remove();
+    // }
   });
   
   

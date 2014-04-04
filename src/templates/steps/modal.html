@@ -7,7 +7,7 @@
     <ul class="nav nav-tabs">
         <% var counter = 0; %>
         <% _.each(item.functions, function (func) { %>
-        <li<% if (counter == 0) { %> class="active"<% } %>><a href="#<%= func.type %>"><%= func.type %></a></li>
+        <li<% if (counter == 0) { %> class="active"<% } %>><a data-target="#step-modal-<%= func.type %>"><%= func.type %></a></li>
         <% counter++; %>
         <% }) %>
     </ul>
@@ -15,7 +15,7 @@
     <div class="tab-content">
     <% counter = 0; %>
     <% _.each(item.functions, function (func) { %>
-        <div class="tab-pane<% if (counter == 0) { %> active<% } %>" id="<%= func.type %>">
+        <div class="tab-pane<% if (counter == 0) { %> active<% } %>" id="step-modal-<%= func.type %>">
             <table class="table table-vertical">
                 <tr>
                     <th>Version</th>

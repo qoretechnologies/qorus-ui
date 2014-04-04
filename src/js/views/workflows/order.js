@@ -93,11 +93,11 @@ define(function(require, exports, module) {
     },
     
     showDropdown: function (e) {
-      var tpl = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" 
-        + " data-action='show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>";
-      var $target = $(e.currentTarget);
-      var stepname = this.order_model.getStepName($target.data('id'));
-      var step = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
+      var tpl      = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" + 
+                     " data-action = 'show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
+          $target  = $(e.currentTarget),
+          stepname = this.order_model.getStepName($target.data('id')),
+          step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
       
       this.hideDropdown();
       
@@ -200,6 +200,8 @@ define(function(require, exports, module) {
     off: function () {
       if (this.clean) this.clean();
       if (this.$fixed_pane) {
+        console.log('destroying resizable');
+        this.$fixed_pane.off();
         this.$fixed_pane.resizable('destroy');
         this.$fixed_pane = null;
       }
@@ -215,8 +217,7 @@ define(function(require, exports, module) {
           $div_inner      = $('<div class="fixed-pane-inner" />'),
           $push           = $('<div class="fixed-pane-push push"/>'),
           height_settings = [module.id.replace(/\//g, '.'), this.__name__, 'height'].join('.'),
-          height,
-          $fixed_pane;
+          height, $fixed_pane;
       
       $div
         .addClass('fixed-pane-bottom');
@@ -230,7 +231,7 @@ define(function(require, exports, module) {
       $fixed_pane = this.$el.parents('.fixed-pane');
       
       // get stored height
-      var height = SystemSettings.get(height_settings);
+      height = SystemSettings.get(height_settings);
       if (height) $fixed_pane.height(height);
       
       // change push height according to pane height
@@ -244,11 +245,11 @@ define(function(require, exports, module) {
       });
       
       this.$fixed_pane = $fixed_pane;
-      $fixed_pane.on('resize', function (e, ui) {
+      this.$fixed_pane.on('resize', function (e, ui) {
         var $el = ui.element;
         $el.parent().next().height(ui.size.height);
       });
-      $fixed_pane.on('resizestop', $.proxy(function (event, ui) {
+      this.$fixed_pane.on('resizestop', $.proxy(function (event, ui) {
         SystemSettings.set(height_settings, ui.size.height);
         SystemSettings.save();
       }, this));
@@ -349,7 +350,6 @@ define(function(require, exports, module) {
         getStepName: this.getStepName, 
         action_css: context.action_css 
       });
-      console.log(this.$el, this.context);
     },
     
     getStepName: function (id) {
