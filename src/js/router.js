@@ -83,8 +83,8 @@ define(function (require) {
     },
 
     // servicee list
-    showServices: function (path) {
-      var view = new ServiceListView({ path: path });
+    showServices: function (path, query) {
+      var view = new ServiceListView({ path: path, query: query });
       this.setView(view);
     },
     
@@ -93,8 +93,8 @@ define(function (require) {
     },
     
     // job list
-    showJobs: function (date, path) {
-      var view = new JobListView({}, { date: date, path: path }, this);
+    showJobs: function (date, path, query) {
+      var view = new JobListView({}, { date: date, path: path, query: query }, this);
       this.setView(view);
     },
     

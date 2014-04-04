@@ -278,7 +278,7 @@ define(function (require) {
         this.detail_id = row.model.id;
       }
       
-      Backbone.history.navigate(url);
+      Backbone.history.navigate(url + Backbone.history.location.search);
     }
   });
   

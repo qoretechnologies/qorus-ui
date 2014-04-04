@@ -635,7 +635,6 @@ aside {
   padding: 5px 0;
   z-index: 1021;
   background-color: #fff;
-  overflow: hidden;
 }
 
 .table-condensed td {

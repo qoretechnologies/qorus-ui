@@ -528,6 +528,22 @@ define(function (require) {
     }
   });
   
+  // var _navigate = Backbone.history.navigate;
+  // 
+  // Backbone.history.navigate = function (route, options) {
+  //   if (_.result(options.keep_query)) {
+  //     var query = utils.parseQuery(Backbone.history.fragment);
+  //     var pos = Backbone.history.fragment.search(/\?/);
+  //     
+  //     console.log(query);
+  //     
+  //     route = route.slice(0, pos);
+  //     route += "?" + utils.encodeQuery(query);
+  //   }
+  // 
+  //   return _navigate.apply(this, arguments);
+  // }
+  
   _.extend(Qorus, Views);
 
   return Qorus;

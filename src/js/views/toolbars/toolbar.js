@@ -30,6 +30,7 @@ define(function (require) {
       this.context = {};
       
       this.context.date = this.options.date;
+      this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
     },
     
     onRender: function () {
