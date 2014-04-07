@@ -50,7 +50,7 @@ define(function (require) {
         debug.log('cleaning current view');
         this.currentView.off();
         this.currentView.remove();
-        delete this.currentView;
+        this.currentView = null;
       }
     },
     

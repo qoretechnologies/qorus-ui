@@ -528,21 +528,21 @@ define(function (require) {
     }
   });
   
-  // var _navigate = Backbone.history.navigate;
-  // 
-  // Backbone.history.navigate = function (route, options) {
-  //   if (_.result(options.keep_query)) {
-  //     var query = utils.parseQuery(Backbone.history.fragment);
-  //     var pos = Backbone.history.fragment.search(/\?/);
-  //     
-  //     console.log(query);
-  //     
-  //     route = route.slice(0, pos);
-  //     route += "?" + utils.encodeQuery(query);
-  //   }
-  // 
-  //   return _navigate.apply(this, arguments);
-  // }
+  var _navigate = Backbone.history.navigate;
+  
+  Backbone.history.navigate = function (route, options) {
+    options = options || {};
+    if (!options.trigger) {
+      var query = utils.parseQuery(Backbone.history.fragment);
+      _.extend(query, utils.parseQuery(route));
+
+      // if (pos > 0) route = route.slice(0, pos);
+      route.replace(/\?*/, "?" + utils.encodeQuery(query));
+      // console.log(Backbone.history.fragment, route);      
+    }
+  
+    return _navigate.apply(this, arguments);
+  }
   
   _.extend(Qorus, Views);
 

@@ -63,6 +63,8 @@ define(function (require, exports, module) {
     },
     
     off: function () {
+      this.removeViews();
+      this.$('.pageslide').resizable('destroy');
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();

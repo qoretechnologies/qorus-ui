@@ -38,7 +38,13 @@ define(function (require) {
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
       this.stopListening(this.collection, 'add');
-    }
+      this.processPath();
+    },
+    onProcessPath: function (path) {
+      var id = path.split('/')[0];
+      
+      if (id) this.detail_id = id;
+    },
   });
 
   ListView = Qorus.ListView.extend({
@@ -66,6 +72,9 @@ define(function (require) {
     title: "Workflows",
     
     initialize: function (collection, options) {
+      // call super method
+      ListView.__super__.initialize.call(this, Collection, options.date);
+      
       this.options = {};
       this.views = {};
       this.context = {};
@@ -73,17 +82,12 @@ define(function (require) {
       
       this.template = Template;
       
-      // pass date to options object
-      this.date = this.opts.date;
-      
-      // call super method
-      ListView.__super__.initialize.call(this, Collection, this.date);
-      
       // reassign listening events to collection
       this.stopListening(this.collection);
       
-      // this.listenToOnce(this.collection, 'sync', self.render);
+      this.listenToOnce(this.collection, 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
+      this.render();
     },
     
     onProcessPath: function (path) {
@@ -113,12 +117,6 @@ define(function (require) {
       this.listenTo(tview, 'row:clicked', this.showDetail);
       
       toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
-    },
-    
-    onRender: function () {
-      if (parseInt(this.detail_id, 10)) {
-        this.collection.get(this.detail_id).trigger('rowClick');
-      }
     },
     
     clean: function () {
@@ -236,7 +234,8 @@ define(function (require) {
           view    = this.getView('#workflow-detail'),
           $detail = $('#workflow-detail'),
           id      = (view instanceof Backbone.View) ? view.$el.data('id') : null,
-          width   = $(document).width() - $('[data-sort="version"]').offset().left,
+          left    = $('[data-sort="version"]').offset() && $('[data-sort="version"]').offset().left,
+          width   = left ? $(document).width() - left : 400,
           model   = row.model,
           content_view, url;
       
@@ -266,10 +265,8 @@ define(function (require) {
 
         view.render();
         
-        this.listenToOnce(view, 'closed off', function () {
-          row.$el.removeClass('info');
-          self.stopListening(content_view);
-          self.stopListening(model);
+        row.listenToOnce(view, 'off', function () {
+          this.$el.removeClass('info');
         });
 
         url = this.getViewUrl() + "/" + row.model.id;

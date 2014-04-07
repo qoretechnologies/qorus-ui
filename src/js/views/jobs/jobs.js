@@ -49,18 +49,14 @@ define(function(require) {
     },
     
     initialize: function (collection, options) {
+      ListView.__super__.initialize.call(this, Collection, options.date);
+
       this.views = {};
       this.opts = options || {};
       this.context = {};
       
       this.template = Template;
       
-      // pass date to options object
-      this.date = this.opts.date;
-      
-      ListView.__super__.initialize.call(this, Collection, options.date);
-      
-      // this.listenToOnce(this.collection, 'sync', this.render);
       this.processPath(this.opts.path);
     },
     
@@ -131,7 +127,8 @@ define(function(require) {
     showDetail: function (row) {
       var model = row.model,
           view  = this.getView('#job-detail'),
-          width = $(document).width() - this.$('[data-sort="version"]').offset().left,
+          left  = this.$('[data-sort="version"]').offset() && this.$('[data-sort="version"]').offset().left,
+          width = left ? $(document).width() - left : 400,
           url   = this.getViewUrl();
       
       if (this.selected_model != model) {

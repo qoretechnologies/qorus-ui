@@ -12,7 +12,7 @@ define([
       this.opts = opts;
       this.workflowid = opts.workflowid;
       
-      delete this.opts.url;
+      this.opts.url = null;
       
       Collection.__super__.initialize.apply(this, arguments);
     },

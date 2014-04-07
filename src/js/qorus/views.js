@@ -515,6 +515,7 @@ define(function (require) {
       
       this.on('highlight', this.enableActions);
       this.on('highlight', this.updateCheckIcon);
+      this.listenTo(this.collection, 'sync', this.triggerRowClick);
       this.render();
     },
     
@@ -812,7 +813,12 @@ define(function (require) {
         var event = param.shift();
         self.trigger(event, param, self);
       });
-    }
+    },
+    
+    triggerRowClick: function () {
+      if (this.detail_id)
+        this.collection.get(this.detail_id).trigger('rowClick');
+    },
   });
 
   TableView = View.extend({
@@ -876,18 +882,10 @@ define(function (require) {
     },
        
     onRender: function () {
-      // if (this.fixed === true) {
-      //   this.$('.table-fixed').fixedHeader();
-      // }
-      // 
-      // this.sortIcon();
-      // this.setWidths();
-      
       $(window).on('resize.table', this.resize);
       
-      if (this.collection.pagination) 
-        this.$el.closest('.pane').on('scroll', this.scroll);
-      
+      // if (this.collection.pagination) 
+      //   this.$el.closest('.pane').on('scroll', this.scroll);
       
       // load next button
       if (this.collection.hasNextPage) {
@@ -920,7 +918,7 @@ define(function (require) {
     clean: function () {
       this.$('.table-fixed').fixedHeader('remove');
       $(window).off('resize.table');
-      this.$el.closest('.pane').off('scroll');
+      // this.$el.closest('.pane').off('scroll');
     },
     
     scroll: function () {
@@ -957,6 +955,7 @@ define(function (require) {
       // console.timeEnd('appending');
       this.$('tbody').append(frag);
       this.resize();
+      this.trigger('rows:appended', this);
     },
 
     appendRow: function (m, render) {
