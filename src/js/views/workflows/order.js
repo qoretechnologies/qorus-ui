@@ -256,6 +256,19 @@ define(function(require, exports, module) {
     }
   });
   
+  DataView = Qorus.ModelView.extend({
+    additionalEvents: {
+      'click .nav-pills a': 'tabToggle'
+    },
+    tabToggle: function (e) {
+      var $target = $(e.currentTarget);
+      
+      $target.tab('show');
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+  
   // Diagram tab view
   DiagramPaneView = Qorus.ModelView.extend({
     additionalEvents: {
@@ -335,7 +348,7 @@ define(function(require, exports, module) {
       
       this.addTabView(new DiagramPaneView({ model: this.model }));
       this.addTabView(new StepsView({ model: this.model }));
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: DataTpl }), { name: 'Data'});
+      this.addTabView(new DataView({ model: this.model, template: DataTpl }), { name: 'Data'});
       this.addTabView(new ErrorsView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});

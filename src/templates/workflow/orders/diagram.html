@@ -1,6 +1,42 @@
 <div id="step-diagram"></div>
 
 <div id="step-diagram-details">
+  <div id="order-info">
+    <table class="table table-stripped table-condensed table-bordered table-align-left">
+      <tbody>
+        <tr>
+          <th>Instance ID</th>
+          <td><%= model.get('workflow_instanceid') %></td>
+          <th>Status</th>
+          <td><%= wrapStatus(model.get('workflowstatus')) %></td>
+        </tr>
+        <tr>
+          <th>Started</th>
+          <td><%= model.get('started') %></td>
+          <th>Custom</th>
+          <td><%= model.get('custom_status') %></td>
+        </tr>
+        <tr>
+          <th>Modified</th>
+          <td><%= model.get('modified') %></td>
+          <th>Priority</th>
+          <td><%= model.get('priority') %></td>
+        </tr>
+        <tr>
+          <th>Completed</th>
+          <td><%= model.get('completed') %></td>
+          <th>Parent ID</th>
+          <td><%= model.get('parent_workflow_instanceid') %></td>
+        </tr>
+        <tr>
+          <th>Scheduled</th>
+          <td><%= model.get('scheduled') %></td>
+          <th>Synchronous</th>
+          <td><%= statusIcon(model.get('synchronous')) %></td>
+        </tr>        
+      </tbody>
+    </table>
+  </div>
   <div id="order-keys">
     <h4>Keys</h4>
     <table class="table table-stripped table-condensed table-bordered table-align-left">

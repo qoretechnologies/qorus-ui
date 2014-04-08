@@ -424,6 +424,10 @@ aside {
     height: auto;
 }
 
+.relative {
+  position: relative;
+}
+
 .copy-paste {
     position: absolute;
     right: 15px;

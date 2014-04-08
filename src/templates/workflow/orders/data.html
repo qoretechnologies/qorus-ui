@@ -1,58 +1,47 @@
-<div class="accordion">
-<div class='accordion-group'>
-  <div class="accordion-heading">
-    <a class="accordion-toggle" type="button" data-toggle="collapse" data-target="#wfdata-orderinfo">Order Info</a>
-  </div>
-  <div id="wfdata-orderinfo" class="accordion-body collapse in">
-            <% if (item.keys) { %>
-              <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
-              <div class="treeview">
-                  <%= createNestedList(item.keys) %>  
-              </div>
-              <div class="textview">
-                  <textarea class="span12"><%= createNestedListAsText(item.keys) %></textarea>
-              </div>
-            <% } else { %>
-            <p>No data</p>
-            <% } %>
-  </div>
-</div>
+<ul class="nav nav-pills">
+  <li class="active"><a data-target="#static-data">Static</a></li>
+  <li><a data-target="#dynamic-data">Dynamic</a></li>
+  <li><a data-target="#keys">Keys</a></li>
+</ul>
 
-<div class='accordion-group'>
-  <div class="accordion-heading">
-  <a class="accordion-toggle" type="button" data-toggle="collapse" data-target="#wfdata-staticdata">Static Data</a>
+<div class="tab-content">
+  <div id="static-data" class="tab-pane active relative">
+  <% if (item.staticdata) { %>
+    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="treeview">
+        <%= createNestedList(item.staticdata) %>
+    </div>
+    <div class="textview">
+        <textarea class="span12"><%= createNestedListAsText(item.staticdata) %></textarea>
+    </div>
+  <% } else { %>
+  <p>No data</p>
+  <% } %>
   </div>
-  <div id="wfdata-staticdata" class="collapse">
-          <% if (item.staticdata) { %>
-            <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
-            <div class="treeview">
-                <%= createNestedList(item.staticdata) %>
-            </div>
-            <div class="textview">
-                <textarea class="span12"><%= createNestedListAsText(item.staticdata) %></textarea>
-            </div>
-          <% } else { %>
-          <p>No data</p>
-          <% } %>
+  <div id="dynamic-data" class="tab-pane relative">
+  <% if (item.dynamicdata) { %>
+    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="treeview">
+        <%= createNestedList(item.dynamicdata) %>
+    </div>
+    <div class="textview">
+        <textarea class="span12"><%= createNestedListAsText(item.dynamicdata) %></textarea>
+    </div>
+  <% } else { %>
+  <p>No data</p>
+  <% } %>
   </div>
-</div>
-
-<div class='accordion-group'>
-  <div class="accordion-heading">
-  <a class="accordion-toggle" type="button" data-toggle="collapse" data-target="#wfdata-dynamicdata">Dynamic Data</a>
+  <div id="keys" class="tab-pane relative">
+  <% if (item.keys) { %>
+    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="treeview">
+        <%= createNestedList(item.keys) %>  
+    </div>
+    <div class="textview">
+        <textarea class="span12"><%= createNestedListAsText(item.keys) %></textarea>
+    </div>
+  <% } else { %>
+  <p>No data</p>
+  <% } %>
   </div>
-  <div id="wfdata-dynamicdata" class="collapse">
-          <% if (item.dynamicdata) { %>
-            <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
-            <div class="treeview">
-                <%= createNestedList(item.dynamicdata) %>
-            </div>
-            <div class="textview">
-                <textarea class="span12"><%= createNestedListAsText(item.dynamicdata) %></textarea>
-            </div>
-          <% } else { %>
-          <p>No data</p>
-          <% } %>
-  </div>
-</div>
 </div>

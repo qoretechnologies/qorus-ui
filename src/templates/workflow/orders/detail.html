@@ -2,7 +2,6 @@
 <div class="row-fluid relative">
     <div class="span6">
         <h3><%= item.name %> <small><%= item.version%></small></h3>
-        <p><%= wrapStatus(item.workflowstatus) %> Workflow Instance ID: <%= item.workflow_instanceid %></p>
     </div>
     <div class="btn-group pull-right align-middle">
         <% _.each(item.actions, function(action) { %>

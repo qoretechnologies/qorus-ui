@@ -1184,7 +1184,6 @@ define(function (require) {
     
     update: _.debounce(function () {
       if (this.render_lock === true) return;
-      console.log(this.model.id, this.timer);
       var self = this,
           css_classes = this.$el.attr('class').split(/\s+/),
           check_classes = $('i.check', this.$el).attr('class');
