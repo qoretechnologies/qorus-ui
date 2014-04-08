@@ -425,12 +425,13 @@ define(function (require) {
     
     showLoader: function () {
       var view = this.insertView(new Loader(), '#loader', true);
-      view.$el.addClass(this.__name__)
+      view.$el.addClass(this.__name__);
       console.log('showing loader for', this.__name__);
       return this;
     },
     
     hideLoader: function () {
+      var views = this.views;
       if (views) _.each(views, function (view) { 
         console.log('hiding loader for', this.__name__, view.$el);
         view.remove();
@@ -746,8 +747,7 @@ define(function (require) {
     
     search: function (e) {
       var $target = $(e.currentTarget),
-          query   = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val(),
-          url, url_query;
+          query   = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val();
       
       this.applySearch(query);
       
@@ -758,7 +758,7 @@ define(function (require) {
     },
     
     applySearch: function (query) {
-      var $el = this.$el;
+      var $el = this.$el, url, url_query;
       
       if (!_.isString(query)) query = null;
       query = query || this.$('.search-query').val();
@@ -828,7 +828,7 @@ define(function (require) {
     triggerRowClick: function () {
       if (this.detail_id)
         this.collection.get(this.detail_id).trigger('rowClick');
-    },
+    }
   });
 
   TableView = View.extend({
@@ -1116,11 +1116,11 @@ define(function (require) {
     className: 'table-row clickable',
     context: {},
     template: TableRowTpl,
-    timeout_buffer: 0,
-    timeout_buffer_max: 200,
-    timeout: null,
-    timer: 0,
-    timer_max: 10,
+    // timeout_buffer: 0,
+    // timeout_buffer_max: 200,
+    // timeout: null,
+    // timer: 0,
+    // timer_max: 10,
     
     attributes: function() {
       var data = { 'data-id': this.model.id },
@@ -1143,10 +1143,6 @@ define(function (require) {
     },
         
     initialize: function (opts) {
-      var self = this;
-      _.bindAll(this, 'update');
-
-      // _.bindAll(this);
       this.views = [];
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
@@ -1158,27 +1154,8 @@ define(function (require) {
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'context')) _.extend(this.context, opts.context); 
 
-      // // update row on model change
-      this.listenTo(this.model, 'change', function () {
-        // enable throttling - possible replacement _.throttle(func, wait, options)
-        var timeout = self.timer*1000;
-        self._rtimer_buffer = self._rtimer_buffer || 0;
-        
-        if (self._rtimer) {
-          clearTimeout(self._rtimer);
-          self._rtimer_buffer++;
-          if (self.timer < self.timer_max) self.timer++;
-        }
-              
-        if (self._rtimer_buffer >= self.timeout_buffer_max) timeout = 0;
-              
-        self._rtimer = setTimeout(function () {
-          // debug.log('delayed render of row', self.model.id, new Date());
-          self.update();
-          self._rtimer_buffer = 0;
-          self.timer = 0;
-        }, timeout);
-      });
+      
+      this.listenTo(this.model, 'change', this.update);
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
@@ -1205,18 +1182,19 @@ define(function (require) {
         this.$el.addClass('warning');
     },
     
-    update: function () {
+    update: _.debounce(function () {
       if (this.render_lock === true) return;
-      var self = this;
-      var css_classes = this.$el.attr('class').split(/\s+/);
-      var check_classes = $('i.check', this.$el).attr('class');
+      console.log(this.model.id, this.timer);
+      var self = this,
+          css_classes = this.$el.attr('class').split(/\s+/),
+          check_classes = $('i.check', this.$el).attr('class');
       
       this.render();
       
       // restore previous classes
       _.each(css_classes, function (cls) {
-        self.$el.addClass(cls);
-      });
+        this.$el.addClass(cls);
+      }, this);
 
       // restore check
       this.$('i.check').attr('class', check_classes);
@@ -1226,7 +1204,7 @@ define(function (require) {
       setTimeout(function() {
         self.$el.removeClass('changed');
       }, 5000);
-    },
+    }, 5*1000, { trailing: true, leading: true, maxWait: 5*5*1000 }),
     
     // delegate click event with model to parent view
     rowClick: function (e) {

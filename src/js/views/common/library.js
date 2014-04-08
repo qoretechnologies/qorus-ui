@@ -31,7 +31,7 @@ define(function (require) {
     },
     
     color: function () {
-      // Prism.highlightAll();
+      Prism.highlightAll();
     },
     
     clean: function () {

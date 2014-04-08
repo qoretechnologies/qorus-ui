@@ -4,7 +4,7 @@
     dir: "../../dist",
     paths: {
       jquery: 'libs/jquery',
-      underscore: 'libs/underscore',
+      underscore: 'libs/lodash.underscore',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       "jquery.rest": "libs/jquery.rest",
       "jquery.ui": "libs/jquery.ui.min",
