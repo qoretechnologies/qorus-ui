@@ -115,6 +115,7 @@ define(function (require) {
 
       // add listener to rowclick
       this.listenTo(tview, 'row:clicked', this.showDetail);
+      this.listenTo(tview, 'update', this.applySearch);
       
       toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
     },

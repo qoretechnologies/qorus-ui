@@ -130,6 +130,7 @@ define(function(require){
       
       // assign show detail on row click
       this.listenTo(tview, 'row:clicked', this.showDetail);
+      this.listenTo(tview, 'update', this.applySearch);
       
       // init Toolbar
       this.setView(new Toolbar(), '#service-toolbar');
@@ -138,12 +139,6 @@ define(function(require){
     onRender: function () {
       var model;
       $('[data-toggle="tooltip"]').tooltip();
-      
-      if (this.detail_id) {
-        // TODO: needs fix - not working with prerendering
-        model = this.collection.get(this.detail_id);
-        if (model) model.trigger('rowClick');
-      }
     },
 
     showDetail: function (row) {

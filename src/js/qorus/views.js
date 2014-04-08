@@ -746,29 +746,39 @@ define(function (require) {
     
     search: function (e) {
       var $target = $(e.currentTarget),
-          $el = $(this.el),
-          query = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val(),
+          query   = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val(),
           url, url_query;
       
-      if (query.length < 1) {
+      this.applySearch(query);
+      
+      // prevent reload if submited by form
+      if (e.type == "submit") {
+        e.preventDefault();
+      }
+    },
+    
+    applySearch: function (query) {
+      var $el = this.$el;
+      
+      if (!_.isString(query)) query = null;
+      query = query || this.$('.search-query').val();
+      
+      if (!query || query.length < 1) {
         $el.find('tbody tr').show();
       } else {
+        console.log('searching for', query);
         $el.find('tbody tr').hide();
-        _.each(query.split(settings.SEARCH_SEPARATOR), function(keyword){
-          $el.find("tbody td:icontains('" + keyword + "')").parent().show();
-        });
+        _.each(query.split(settings.SEARCH_SEPARATOR), function (keyword) {
+          this.$el.find("tbody td:icontains('" + keyword + "')").parent().show();
+        }, this);
       }
       
       url_query = utils.parseQuery(Backbone.history.fragment);
       url_query.q = query;
       url = [Backbone.history.location.pathname, utils.encodeQuery(url_query)].join('?');
       
-      Backbone.history.navigate(url);
-      
-      // prevent reload if submited by form
-      if (e.type == "submit") {
-        e.preventDefault();
-      }
+      if (query)
+        Backbone.history.navigate(url);
     },
     
     openURL: function (url) {
@@ -1002,6 +1012,7 @@ define(function (require) {
       this.appendRows(this.collection.models);
       // this.resize();
       // console.timeEnd('update');
+      this.trigger('update');
     },
     
     // sort view

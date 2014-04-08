@@ -66,12 +66,6 @@ define(function(require) {
       if (id) this.detail_id = id;
     },
     
-    onRender: function () {
-      if (parseInt(this.detail_id, 10)) {
-        this.collection.get(this.detail_id).trigger('rowClick');
-      }
-    },
-    
     preRender: function () {
       var TView;
       
@@ -85,6 +79,7 @@ define(function(require) {
       }), '#job-list');
       
       this.listenTo(TView, 'row:clicked', this.showDetail);
+      this.listenTo(TView, 'update', this.applySearch);
       
       this.setView(new Toolbar({ date: this.date }), '#job-toolbar');
     },

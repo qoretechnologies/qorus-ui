@@ -1,18 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/groups',
-  'views/toolbars/groups_toolbar',
-  'text!templates/groups/list.html',
-  'text!templates/groups/table.html',
-  'text!templates/groups/row.html'
-], function($, _, utils, Qorus, Dispatcher, Collection, ToolbarView, Template, TableTpl, RowTpl
-){
-
-  var ListView = Qorus.ListView.extend({
+define(function (require) {
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Dispatcher  = require('qorus/dispatcher'),
+      Collection  = require('collections/groups'),
+      ToolbarView = require('views/toolbars/groups_toolbar'),
+      Template    = require('text!templates/groups/list.html'),
+      TableTpl    = require('text!templates/groups/table.html'),
+      RowTpl      = require('text!templates/groups/row.html'),
+      ListView;
+  
+  ListView = Qorus.ListView.extend({
+    __name__: "GroupsListView",
     title: "Groups",
     model_name: 'group',
     template: Template,
@@ -23,14 +22,18 @@ define([
     },
     
     preRender: function () {
-      this.setView(new Qorus.TableView({ 
+      var TView;
+      
+      TView = this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
-          // helpers: this.helpers,
           dispatcher: Dispatcher,
           fixed: true
       }), '#group-list');
+      
+      this.listenTo(TView, 'update', this.applySearch);
+      
       this.setView(new ToolbarView(), '#toolbar');
     },
     
@@ -43,9 +46,9 @@ define([
         
     // overrides default runBathAction changing ids for names
     runBatchAction: function (action, method, params) {
-      var method = method || 'get',
-        ids = this.getCheckedIds(),
-        groups;
+      method = method || 'get';
+      var ids = this.getCheckedIds(),
+        $request, groups;
       
       // change ids for names
       groups = this.collection.filter(function (m) { return _.indexOf(ids, m.id) !== -1; });
