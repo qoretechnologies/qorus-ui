@@ -151,29 +151,33 @@ define(function (require) {
       var ctr = 1;
   
       _.each(obj, function (val, key) {
+        var wal;
         if (_.isObject(val)) {
-          result.push({
+          wal = {
             key: key,
             value: "",
             path: path,
             level: level,
             node: true,
             leaf: false
-          });
+          };
+          result.push(wal);
           this.flattenObj(val, path + key + "/", level+1, result);
         } else {
-          result.push({
+          wal = {
             key: key,
             value: val,
             path: path,
             level: level,
             node: false,
             leaf: (_.keys(obj).length == ctr)
-          });
+          };
+          result.push(wal);
         }
         ctr++;
       }, this);
   
+      console.log(result);
       return result;
     }
   };

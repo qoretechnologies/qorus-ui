@@ -1,6 +1,4 @@
-/* @override 
-	http://localhost:8080/css/base.css
-*/
+/* @override http://localhost:8080/css/base.css */
 
 html, body {
 	height: 100%;
@@ -1462,41 +1460,107 @@ tbody+thead>tr:first-child>td {
   position: relative;
 }
 
-.tree .indent {
+/*.tree .indent {
 	display: inline-block;
 	border-right: 1px dotted red;
     vertical-align: middle;	
 	height: 100%;
     width: 20px;
+}*/
+
+.tree {
+	margin-left: 10px;
+	width: 100%;
 }
 
-.tree .indent:first-child {
-	border: none;
-}
-
-.tree .leaf .indent:last-child {
-	color:  pink;
+.tree .indent {
 	display: inline-block;
-	vertical-align: top;
-	height: 50%;
-}
-
-
-.tree .child {
-	display: inline-block;
-	border-right: 1px dotted red;	
-	margin-left: 5px;
+	border-right: 1px dotted red;
+	margin-left: 10px;
 	height: 100%;
+	vertical-align: top;
+}
+
+.tree .leaf span:nth-last-child(3) {
+	display: inline-block;
+	border-right: 1px dotted red;
+	margin-left: 10px;
+	height: 50%;
 	vertical-align: top;
 }
 
 .tree .value {
 	display: inline-block;
-	margin: 5px 0;
 }
 
-.tree .value:before {
-	content: "-";
+.tree .td {
+	padding: auto;
+}
+
+.tree th {
+	position: relative;
+}
+
+.tree th.node .value {
+	padding-top: 5px;
+}
+
+.tree th.node span:last-child:before {
+	content:  "\f117";
+	display: inline-block;
+	font-family: "FontAwesome";
+	font-weight: normal;
+	background-color: #fff;
+	margin-left: -9px;
+	margin-right: 10px;
 	color: red;
-	margin: 0 10px 0 0;
+	border: none;
+}
+
+/*.tree span:last-child:after {
+	content: " ";
+	font-size: 0;
+	line-height: 0;
+	border-bottom: 1px dotted red;
+	display: block;
+	white-space: pre;
+	margin-left: -2px;
+	margin-bottom: -2px;
+	height: 2px;
+	bottom: 0;
+}*/
+
+.tree .branch span:last-child:before, .tree .leaf span:last-child:before {
+	content: " ";
+	border-bottom: 1px dotted red;
+	display: inline-block;
+	width: 10px;
+	margin-left: -2px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+.tree .leaf span:last-child:after {
+	
+}
+
+.tree th.node span:last-child:after {
+	content:  "";
+	color: green;
+}
+
+.tree th.leaf span:last-child:after {
+	height: 1px;
+	
+}
+
+.tree th.node span:nth-last-child(1):after {
+	display: inline-block;
+	height: 50%;;
+}
+
+.tree .node .value:before {
+	content: "";
+	display: inline-block;
+	margin: 5px 0;
 }
