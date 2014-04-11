@@ -143,6 +143,39 @@ define(function (require) {
       
       return equery.join('&');
     },
+    
+    flattenObj: function (obj, path, level, result) {
+      level = level || 0;
+      path = path || "/";
+      result = result || [];
+      var ctr = 1;
+  
+      _.each(obj, function (val, key) {
+        if (_.isObject(val)) {
+          result.push({
+            key: key,
+            value: "",
+            path: path,
+            level: level,
+            node: true,
+            leaf: false
+          });
+          this.flattenObj(val, path + key + "/", level+1, result);
+        } else {
+          result.push({
+            key: key,
+            value: val,
+            path: path,
+            level: level,
+            node: false,
+            leaf: (_.keys(obj).length == ctr)
+          });
+        }
+        ctr++;
+      }, this);
+  
+      return result;
+    }
   };
     
   return utils;

@@ -1461,3 +1461,42 @@ tbody+thead>tr:first-child>td {
   overflow: hidden;
   position: relative;
 }
+
+.tree .indent {
+	display: inline-block;
+	border-right: 1px dotted red;
+    vertical-align: middle;	
+	height: 100%;
+    width: 20px;
+}
+
+.tree .indent:first-child {
+	border: none;
+}
+
+.tree .leaf .indent:last-child {
+	color:  pink;
+	display: inline-block;
+	vertical-align: top;
+	height: 50%;
+}
+
+
+.tree .child {
+	display: inline-block;
+	border-right: 1px dotted red;	
+	margin-left: 5px;
+	height: 100%;
+	vertical-align: top;
+}
+
+.tree .value {
+	display: inline-block;
+	margin: 5px 0;
+}
+
+.tree .value:before {
+	content: "-";
+	color: red;
+	margin: 0 10px 0 0;
+}

@@ -5,6 +5,7 @@ define(function (require) {
       settings             = require('settings'),
       NestedListTpl        = require('tpl!templates/common/nested_list.html'),
       NestedListTextTpl    = require('tpl!templates/common/nested_list_text.html'),
+      NestedListTableTpl   = require('tpl!templates/common/nested_table.html'),
       WrapLabelTpl         = require('tpl!templates/common/wrap_label.html'),
       PwrBtnTpl            = require('tpl!templates/common/power_button.html'),
       StatusActionTpl      = require('tpl!templates/common/action_status.html'),
@@ -47,6 +48,20 @@ define(function (require) {
       }
 
       output = tpl_html({ items: obj, createNestedListAsText: Helpers.createNestedListAsText, level: level, escapeHtml: Helpers.escapeHtml });
+      
+      return output.replace(/\n{2,}/gm,"\n");
+    },
+
+    createNestedListAsTable: function (obj, tpl, level) {
+      var tpl_html = NestedListTableTpl,
+        output;
+      level = level || 0;
+
+      if (tpl) {
+        tpl_html = _.template(tpl);
+      }
+
+      output = tpl_html({ items: obj, flattenObj: utils.flattenObj, level: level, escapeHtml: Helpers.escapeHtml });
       
       return output.replace(/\n{2,}/gm,"\n");
     },

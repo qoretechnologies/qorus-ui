@@ -1,0 +1,17 @@
+<table class="tree">
+  <tbody>
+<% var flat_items = flattenObj(obj.items) %>
+<% _.each(flat_items, function(v, i) { %>
+    <tr>
+      <th class="text-left nowrap <%= (v.leaf) ? 'leaf': 'branch' %>">
+        <% if (v.level==0) { %><span class='node'></span><% } else { %><span class="child"></span><% } %>
+        <% _.each(_.range(v.level), function () { %><span class="indent"></span><% }) %>
+        <span class="value"><%= v.key %></span>
+      </th>
+      <td class="text-left">
+        <%= v.value %>
+      </td>
+    </tr>
+<% }) %>
+  </tbody>
+</table>
