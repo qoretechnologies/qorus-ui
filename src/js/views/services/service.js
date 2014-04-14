@@ -103,7 +103,6 @@ define(function (require) {
     },
     
     openExecuteModal: function (evt) {
-      console.log('tada');
       evt.stopPropagation();
       this.trigger('modal:open', this.model, $(evt.currentTarget).data('methodname'));
     },

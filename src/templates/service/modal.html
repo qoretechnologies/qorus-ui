@@ -13,8 +13,21 @@
     </select>
     <label for="args">Arguments</label>
     <textarea id="args" name="args" class="span12" rows=5></textarea>
-    <label for="response">Response</label>
-    <textarea id="response" name="response" class="span12" disabled rows=5></textarea>
+    
+    <div id="service-method-response">
+      <ul class="nav nav-pills">
+        <li class="active"><a data-target="#service-method-response-yaml">YAML</a></li>
+        <li><a data-target="#service-method-response-json">JSON</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="service-method-response-yaml" class="tab-pane active">
+          <textarea id="response-yaml" name="response-yaml" class="span12" disabled rows=5>Response</textarea>
+        </div>
+        <div id="service-method-response-json" class="tab-pane">
+          <textarea id="response-json" name="response-json" class="span12" disabled rows=5>Response</textarea>
+        </div>
+      </div>
+    </div>
 </div>
 <div class="modal-footer">
       <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

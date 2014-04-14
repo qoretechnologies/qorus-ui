@@ -4,6 +4,7 @@ define(function (require) {
       settings = require('settings'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/service/modal.html'),
+      yaml     = require('libs/js-yaml'),
       View;
 
 
@@ -11,7 +12,8 @@ define(function (require) {
     views: {},
     context: {},
     additionalEvents: {
-      'submit': 'executeMethod'
+      'submit': 'executeMethod',
+      'click .nav-pills a': 'tabToggle'
     },
     
     initialize: function (opts) {
@@ -25,7 +27,7 @@ define(function (require) {
     onRender: function () {
       $(this.$el).modal();
     },
-        
+
     open: function () {
       $(this.$el).modal();
     },
@@ -46,27 +48,30 @@ define(function (require) {
     methodCall: function(service_name, method, args) {
       var url = [settings.REST_API_PREFIX, 'services', service_name, method].join('/');
       
-      var _this = this;
-      
       $.put(url, { action: 'call', parse_args: args })
-        .always( 
-          function (e) {
-            _this.updateResponse(e);
-          }
-        );
+        .always(this.updateResponse);
     },
     
     updateResponse: function (response) {
       if (_.isObject(response)) {
-        response = JSON.stringify(response);
+        response = JSON.stringify(response, null, 4);
       }
-      $('#response', this.$el).text(response);
+      this.$('#response-json', this.$el).text(response);
+      this.$('#response-yaml', this.$el).text(yaml.dump(arguments[2].responseJSON));
+      console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
     },
     
     off: function () {
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();
+    },
+    
+    tabToggle: function (e) {
+      var $target = $(e.currentTarget);
+      
+      $target.tab('show');
+      e.preventDefault();
     }
     
   });

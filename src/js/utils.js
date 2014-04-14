@@ -177,7 +177,6 @@ define(function (require) {
         ctr++;
       }, this);
   
-      console.log(result);
       return result;
     }
   };
