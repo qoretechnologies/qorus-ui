@@ -63,7 +63,8 @@ define(function (require) {
         this.trigger(sprintf('cleared:%s', group));
       } else {
         _(this.models).each(function (model) {
-          model.destroy({ silent: true });
+          if (model instanceof Backbone.Model)
+            model.destroy({ silent: true });
         });
         this.reset();
       }

@@ -81,7 +81,7 @@ define(function (require) {
       this.options = {};
       this.collection = collection;
       
-      this.listenTo(this.collection, 'all', function () { console.log(arguments)} );
+      // this.listenTo(this.collection, 'all', function () { console.log(arguments)} );
     },
     
     template: function () {
