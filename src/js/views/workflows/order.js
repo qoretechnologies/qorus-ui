@@ -21,6 +21,7 @@ define(function(require, exports, module) {
       DiagramPaneTpl  = require('tpl!templates/workflow/orders/diagram.html'),
       StepInfoTpl     = require('tpl!templates/workflow/orders/stepinfo.html'),
       StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
+      NotesTpl        = require('tpl!templates/workflow/orders/notes.html'),
       SystemSettings  = require('models/settings'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, StepInfoView, StepErrorsView;
@@ -353,6 +354,7 @@ define(function(require, exports, module) {
       this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
+      this.addTabView(new Qorus.ModelView({ model: this.model, template: NotesTpl }), { name: "Notes" });
       
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});

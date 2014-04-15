@@ -23,7 +23,9 @@ define(function (require) {
       'InstanceInfo.modified',
       'InstanceInfo.started',
       'InstanceInfo.completed',
-      'AuditEvents.created'
+      'AuditEvents.created',
+      'notes.created',
+      'notes.modified'
     ],
 
     initialize: function(opts){      
