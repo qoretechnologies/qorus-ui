@@ -280,7 +280,7 @@ define(function(require, exports, module) {
     initialize: function () {
       NotesView.__super__.initialize.apply(this, arguments);
       this.listenTo(this.model, 'change:notes', this.render);
-      this.listenTo(this.model, 'all', function () { console.log(arguments); });
+      // this.listenTo(this.model, 'all', function () { console.log(arguments); });
     },
     
     addNote: function (e) {
@@ -289,7 +289,7 @@ define(function(require, exports, module) {
       if (code === 13 && e.altKey === false) {
         var $target = $(e.currentTarget);
         this.model.addNote($target.val());
-        $target.val('');
+        $target.closest('form').get(0).reset();
       }
     }
   });

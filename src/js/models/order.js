@@ -1,5 +1,6 @@
 define(function (require) {
   var settings   = require('settings'),
+      moment     = require('moment'),
       $          = require('jquery'),
       Qorus      = require('qorus/qorus'),
       Dispatcher = require('qorus/dispatcher'),
@@ -60,10 +61,13 @@ define(function (require) {
     dispatch: function (obj, ev) {
       if (ev === 'workflow:info_changed') {
         if (obj.info.instanceid === this.id) {
-          // var notes = this.get('notes');
-          // notes.push({
-          //   
-          // })
+          var notes = this.get('notes');
+          var info = obj.info.info;
+          info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+          info.modified = info.created;
+          notes.unshift(info);
+          this.set('notes', notes);
+          this.trigger('change:notes', this);
         }
       }
     },
