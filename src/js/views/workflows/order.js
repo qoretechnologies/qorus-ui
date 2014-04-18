@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
   var $               = require('jquery'),
+      expand          = require('libs/jquery.expanding'),
       _               = require('underscore'),
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
@@ -275,12 +276,30 @@ define(function(require, exports, module) {
     template: NotesTpl,
     additionalEvents: {
       // "submit": "addNote",
-      "keypress textarea.note": "addNote"
+      "keypress textarea.note": "addNote",
+      "focus textarea.note": "expand"
     },
     initialize: function () {
       NotesView.__super__.initialize.apply(this, arguments);
-      this.listenTo(this.model, 'change:notes', this.render);
-      // this.listenTo(this.model, 'all', function () { console.log(arguments); });
+      this.listenTo(this.model, 'change:notes', this.update);
+    },
+    
+    update: function () {
+      this
+        .clean()
+        .render();
+    },
+    
+    clean: function () {
+      this.$('textarea').expanding('destroy');
+      return this;
+    },
+    
+    expand: function () {
+      if (this.$('textarea').expanding('active')) return this;
+
+      this.$('textarea').expanding();
+      this.$('textarea').focus();
     },
     
     addNote: function (e) {

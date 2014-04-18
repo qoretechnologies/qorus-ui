@@ -127,6 +127,7 @@ define(function (require) {
       var tpl;
       
       if (this.render_lock) return;
+      // this.clean();
       // this.removeViews();
 
       this.trigger('prerender', this);

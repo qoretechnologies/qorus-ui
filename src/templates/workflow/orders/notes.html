@@ -1,3 +1,4 @@
+<div class="row-fluid">
 <div class="span12">
   <form action="" method="get" accept-charset="utf-8">
     <textarea id="add-note" class="note" placeholder="Add note..."></textarea>
@@ -8,4 +9,4 @@
 <% _.forEach(obj.model.get('notes'), function (note) { %>
 <p><time datetime="<%= note.modified %>"><%= note.modified %></time> <span class="label"><%= note.username %></span> <span class='note'><%= note.note %></span></p>
 <% }) %>
-  
+</div>

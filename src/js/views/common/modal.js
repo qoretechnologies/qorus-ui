@@ -83,7 +83,7 @@ define(function (require) {
       if (this.$('.modal').hasClass('ui-resizable')) {
         this.$('.modal').resizable('destroy');
       }
-      this.$el.off();
+      // this.$el.off();
     },
     // 
     // off: function () {

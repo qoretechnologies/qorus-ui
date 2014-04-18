@@ -107,8 +107,6 @@ define(function (require) {
     
     clean: function () {
       this.collection.wsClose();
-      this.stopListening();
-      this.undelegateEvents();
     },
     
     fixHeight: function () {

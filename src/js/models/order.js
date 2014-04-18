@@ -8,6 +8,7 @@ define(function (require) {
       Model;
   
   Model = Qorus.Model.extend({
+    __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
