@@ -1,6 +1,9 @@
-<div class="span12"><a class='btn btn-small btn-success'><i class="icon-plus"></i> Add note</a></span>
+<div class="span12">
+  <form action="" method="get" accept-charset="utf-8">
+    <textarea id="add-note" class="note" placeholder="Add note..."></textarea>
+  </form>
+</div>
 <% if (obj.model.get('notes').length === 0) { %>
-  <p>Notes are empty you can <a>add one</a></p>
 <% } %>
 <% _.forEach(obj.model.get('notes'), function (note) { %>
 <p><time datetime="<%= note.modified %>"><%= note.modified %></time> <span class="label"><%= note.username %></span> <span class='note'><%= note.note %></span></p>

@@ -53,6 +53,19 @@ define(function (require) {
           _this.fetch();
         }
       });
+      
+      this.listenTo(Dispatcher, 'workflow:info_changed', this.dispatch);
+    },
+    
+    dispatch: function (obj, ev) {
+      if (ev === 'workflow:info_changed') {
+        if (obj.info.instanceid === this.id) {
+          // var notes = this.get('notes');
+          // notes.push({
+          //   
+          // })
+        }
+      }
     },
     
     parse: function (response, options) {
@@ -118,6 +131,13 @@ define(function (require) {
       } else {
         return id;
       } 
+    },
+    
+    addNote: function (note) {
+      $.put(this.url(), {
+        action: 'Notes',
+        note: note
+      }).done(this.fetch);
     }
   });
   return Model;

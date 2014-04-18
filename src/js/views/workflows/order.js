@@ -24,7 +24,7 @@ define(function(require, exports, module) {
       NotesTpl        = require('tpl!templates/workflow/orders/notes.html'),
       SystemSettings  = require('models/settings'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
-      DiagramView, StepInfoView, StepErrorsView;
+      DiagramView, StepInfoView, StepErrorsView, NotesView;
   
   require('jquery.ui');
   require('bootstrap');
@@ -270,6 +270,30 @@ define(function(require, exports, module) {
     }
   });
   
+  
+  NotesView = Qorus.ModelView.extend({
+    template: NotesTpl,
+    additionalEvents: {
+      // "submit": "addNote",
+      "keypress textarea.note": "addNote"
+    },
+    initialize: function () {
+      NotesView.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'change:notes', this.render);
+      this.listenTo(this.model, 'all', function () { console.log(arguments); });
+    },
+    
+    addNote: function (e) {
+      var code = e.keyCode || e.which;
+      
+      if (code === 13 && e.altKey === false) {
+        var $target = $(e.currentTarget);
+        this.model.addNote($target.val());
+        $target.val('');
+      }
+    }
+  });
+  
   // Diagram tab view
   DiagramPaneView = Qorus.ModelView.extend({
     additionalEvents: {
@@ -354,7 +378,7 @@ define(function(require, exports, module) {
       this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: NotesTpl }), { name: "Notes" });
+      this.addTabView(new NotesView({ model: this.model }), { name: "Notes" });
       
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});

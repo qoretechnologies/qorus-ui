@@ -440,7 +440,6 @@ define(function (require) {
     }
    });
 
-
    ListView = View.extend({
      __name__: 'ListView',
      className: 'listview',
