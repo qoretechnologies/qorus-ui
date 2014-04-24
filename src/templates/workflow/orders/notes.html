@@ -1,12 +1,10 @@
 <div class="row-fluid">
 <div class="span12">
+  <p class="alert alert-error hide form-error"></p>
   <form action="" method="get" accept-charset="utf-8">
-    <textarea id="add-note" class="note" placeholder="Add note..."></textarea>
+    <textarea id="add-note" class="note" placeholder="Type note... (Ctrl+Enter for submit)"></textarea>
+    <button type="submit" class="btn btn-small btn-success"><i class="icon-plus-sign"></i> Add note</button>
   </form>
 </div>
-<% if (obj.model.get('notes').length === 0) { %>
-<% } %>
-<% _.forEach(obj.model.get('notes'), function (note) { %>
-<p><time datetime="<%= note.modified %>"><%= note.modified %></time> <span class="label"><%= note.username %></span> <span class='note'><%= note.note %></span></p>
-<% }) %>
+<div id='notes-list'></div>
 </div>

@@ -62,7 +62,7 @@ define(function (require) {
     dispatch: function (obj, ev) {
       if (ev === 'workflow:info_changed') {
         if (obj.info.instanceid === this.id) {
-          var notes = this.get('notes');
+          var notes = this.get('notes') || [];
           var info = obj.info.info;
           info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
           info.modified = info.created;

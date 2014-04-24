@@ -23,6 +23,7 @@ define(function(require, exports, module) {
       StepInfoTpl     = require('tpl!templates/workflow/orders/stepinfo.html'),
       StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
       NotesTpl        = require('tpl!templates/workflow/orders/notes.html'),
+      NotesListTpl    = require('tpl!templates/workflow/orders/noteslist.html'),
       SystemSettings  = require('models/settings'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, StepInfoView, StepErrorsView, NotesView;
@@ -277,17 +278,14 @@ define(function(require, exports, module) {
     additionalEvents: {
       // "submit": "addNote",
       "keypress textarea.note": "addNote",
-      "focus textarea.note": "expand"
+      "focus textarea.note": "expand",
+      "submit form": "addNote"
     },
     initialize: function () {
       NotesView.__super__.initialize.apply(this, arguments);
-      this.listenTo(this.model, 'change:notes', this.update);
-    },
-    
-    update: function () {
-      this
-        .clean()
-        .render();
+
+      var notes = this.setView(new Qorus.View({ model: this.model, template: NotesListTpl }), '#notes-list');
+      notes.listenTo(this.model, 'change:notes', notes.render);
     },
     
     clean: function () {
@@ -305,11 +303,24 @@ define(function(require, exports, module) {
     addNote: function (e) {
       var code = e.keyCode || e.which;
       
-      if (code === 13 && e.altKey === false) {
+      if ((code === 13 && e.ctrlKey === true) || e.type === 'submit') {
         var $target = $(e.currentTarget);
-        this.model.addNote($target.val());
-        $target.closest('form').get(0).reset();
+        if (e.type === 'submit') {
+          e.preventDefault();
+          $target = $('#add-note', $target);
+        }
+        
+        if ($target.val().trim().length > 2) {
+          this.model.addNote($target.val());
+          $target.closest('form').get(0).reset();
+          this.$('.form-error').hide();
+        } else {
+          this.showError('Note is too short (please type at least 3 chars)');
+        }
       }
+    },
+    showError: function (e) {
+      this.$('.form-error').text(e).show();
     }
   });
   
@@ -385,6 +396,7 @@ define(function(require, exports, module) {
       this.model = new Model({ workflow_instanceid: opts.id });
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
+      this.processPath(opts.path);
     },
     
     preRender: function () {

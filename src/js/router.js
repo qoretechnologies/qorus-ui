@@ -117,8 +117,8 @@ define(function (require) {
     },
     
     // order detail
-    showOrder: function (wfiid, id, path){
-      var view = new OrderView({ id: wfiid, workflow_id: id, path: path });
+    showOrder: function (id, path){
+      var view = new OrderView({ id: id, path: path });
       this.setView(view);
     },
     
