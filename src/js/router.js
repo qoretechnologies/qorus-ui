@@ -73,13 +73,9 @@ define(function (require) {
     },
     
     // workflow detail
-    showWorkflow: function (id, inst, filter, date, wfiid) {
-      if (wfiid) {
-        this.showOrder(wfiid, id);
-      } else {
-        var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
-        this.setView(view);
-      }
+    showWorkflow: function (id, inst, filter, date) {
+      var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
+      this.setView(view);
     },
 
     // servicee list

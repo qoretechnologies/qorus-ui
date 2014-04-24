@@ -11,6 +11,8 @@
 <td><%= item.completed %></td>
 <td><%= (item.error_count) ? item.error_count : 0 %></td>
 <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
+<td><%= iconLock(item.operator_lock) %> <%= item.operator_lock %></td>
+<td><%= item.notes_count %></td>
 <td class="text-right">
   <div class="btn-group">
     <% _.each(item.actions, function(action) { %>

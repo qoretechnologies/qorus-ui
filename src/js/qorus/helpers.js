@@ -181,7 +181,19 @@ define(function (require) {
       return value;
     },
     
-    encodeDate: utils.encodeDate
+    encodeDate: utils.encodeDate,
+    
+    iconLock: function (lock) {
+      var icon;
+
+      if (lock) {
+        icon = "<i class='icon-lock'></i>";
+      } else {
+        icon = "<i class='icon-unlock'></i>";
+      }
+      
+      return icon;
+    }
   };
   
   return Helpers;
