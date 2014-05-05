@@ -905,29 +905,28 @@ define(function (require) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
         }        
       }
-      
-      this.resize();
     },
     
     setWidths: function () {
       if (!this.fixed) return;
-      var clgrp = $('<colgroup />');
-      
-      this.$('colgroup').remove();
-      
-      this.$('tr').first().children().each(function () {
-        clgrp.append($('<col />').width($(this).outerWidth()));
-      });
-      this.$('.table-fixed').prepend(clgrp);
+      // var clgrp = $('<colgroup />');
+      // 
+      // this.$('colgroup').remove();
+      // 
+      // this.$('tr').first().children().each(function () {
+      //   clgrp.append($('<col />').width($(this).outerWidth()));
+      // });
+      // this.$('.table-fixed').prepend(clgrp);
     },
     
-    resize: function () {
-      // fix static header width and pos
-      if (this.fixed === true) {
-        this.$('.table-fixed').fixedHeader();
-      }
-      this.setWidths();
-    },
+    resize: _.debounce(function () {
+        // fix static header width and pos
+        if (this.fixed === true) {
+          this.$('.table-fixed').fixedHeader();
+        }
+        this.setWidths();
+      }, 200, { trailing: true, leading: true, maxWait: 5*200 }
+    ),
     
     clean: function () {
       this.$('.table-fixed').fixedHeader('remove');
