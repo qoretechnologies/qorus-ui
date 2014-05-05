@@ -85,8 +85,7 @@ define(function (require) {
         _.extend(this.collections.workflows.opts, opts);
       }
       
-      this.collections.workflows.fetch({ silent: true });
-      console.log('suck');
+      this.collections.workflows.fetch();
       
       var view = new WorkflowListView(this.collections.workflows, opts);
       

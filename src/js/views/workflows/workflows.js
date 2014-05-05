@@ -26,7 +26,7 @@ define(function (require) {
     initialize: function () {
       RowView.__super__.initialize.apply(this, arguments);
       this.listenTo(this.model, 'change', function () { console.log(arguments); });
-      this.listenTo(this.model.collection, 'all', function () { console.log(arguments); });
+      // this.listenTo(this.model.collection, 'all', function () { console.log(arguments); });
     },
     doAction: function (e) {
       var $target = $(e.currentTarget),

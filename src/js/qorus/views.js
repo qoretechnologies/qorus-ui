@@ -905,6 +905,8 @@ define(function (require) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
         }        
       }
+      
+      this.resize();
     },
     
     setWidths: function () {
