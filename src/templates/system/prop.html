@@ -1,7 +1,17 @@
 <% var domains = obj.data %>
 
-<div class="create">
-  <a class="btn btn-small btn-success" data-toggle="modal" data-target="#prop-editor"><i class="icon-plus"></i> Add property</a>
+<div class="row-fluid">
+  <div class="create span2">
+    <a class="btn btn-small btn-success" data-toggle="modal" data-target="#prop-editor"><i class="icon-plus"></i> Add property</a>
+  </div>
+  <div class="pull-right">
+    <form id="property-search" class="form-search">
+      <div class="input-append search-box">
+        <input type="text" class="search appendInputButton search-query" id="property-filter" placeholder="Filter..." />
+        <button type="submit" class="btn"><i class="icon-search"></i></button>
+      </div>
+    </form>
+  </div>
 </div>
   <table class="table table-condensed table-striped">
 <% _.each(domains, function (domain, key) { %>
@@ -13,7 +23,7 @@
     </thead>
     <tbody>
   <% _.each(domain, function(prop, pkey) { %>
-        <tr>
+        <tr data-search="<%= key %>,<%= prop %>,<%= pkey %>">
           <td class="spacer"></td>
           <td class="property-key"><%= pkey %></td>
           <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>

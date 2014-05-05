@@ -1,16 +1,17 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'qorus/qorus',
-  'settings',
-  'text!templates/system/prop.html'
-], function($, _, Backbone, Qorus, settings, Template){
+define(function(require) {
+  var $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      settings = require('settings'),
+      Template = require('tpl!templates/system/prop.html'),
+      ServiceView;
 
-  var ServiceView = Qorus.View.extend({
+  ServiceView = Qorus.View.extend({
     views: {},
     defaultEvents: {
       'submit': 'doAction',
+      'submit #property-search': 'search',
+      'keyup #property-filter': 'search',
       'click a[data-action]': 'doAction',
       'click button[data-action]': 'doAction'
     },
@@ -57,7 +58,6 @@ define([
         var $f = $target.parents('form');
 
         var vals = $f.serializeArray();
-        var params = {};
       
         _.each(vals, function (v) {
           params[v.name] = v.value;
@@ -66,34 +66,53 @@ define([
         // close modal
         $f.parents('.modal').modal('hide');
       } else {
-        var params = ev.currentTarget.dataset;
+        params = ev.currentTarget.dataset;
       }
       
       this.runAction($target.data('action'), params);
     },
     
     runAction: function (action, data) {
-      var _this = this;
+      var self = this;
       var url = [this.getUrl(), data.domain, data.key].join('/');
-      var args = _.values(data);
       
       if (action == 'update') {
         $.put(url, { action: 'set', parse_args: data.value })
-          .done(function (resp) {
-            _this.getData();
+          .done(function () {
+            self.getData();
           })
           .fail(function (resp) {
             debug.log(resp);
           });        
       } else if (action == 'delete') {
         $.delete(url)
-          .done(function (resp) {
-            _this.getData();
+          .done(function () {
+            self.getData();
           })
           .fail(function (resp) {
             debug.log(resp);
           });
       }
+    },
+    
+    search: function (e) {
+      var query = this.$('#property-filter').val();
+      this.applySearch(query);
+    },
+    
+    applySearch: function (query) {
+      if (query.length < 1) {
+        this.$('tr').show();
+        return this;
+      }
+      
+      this.$('tr').hide();
+      this.$('tr[data-search*='+ query.toLowerCase() +']')
+        .show()
+        .parent()
+        .prev('thead')
+        .find('tr')
+        .show();
     }
   });
   
