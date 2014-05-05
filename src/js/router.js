@@ -1,9 +1,11 @@
 define(function (require) {  
   var $                 = require('jquery'),
       _                 = require('underscore'),
+      utils             = require('utils'),
       Backbone          = require('backbone'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),
+      Workflows         = require('collections/workflows'),
       WorkflowListView  = require('views/workflows/workflows'),
       WorkflowView      = require('views/workflows/workflow'),
       ServiceListView   = require('views/services/services'),
@@ -42,6 +44,7 @@ define(function (require) {
     currentView: null,
     routes: Urls.routes,
     views: {},
+    collections: {},
         
     // cleans viewport from zombies
     clean: function () {
@@ -68,7 +71,25 @@ define(function (require) {
     
     // workflow list 
     showWorkflows: function (date, deprecated, path, query) {
-      var view = new WorkflowListView({}, { date: date, path: path, deprecated: deprecated, query: query });
+      var opts = { 
+        date: utils.prepareDate(date), 
+        path: path, 
+        deprecated: deprecated, 
+        query: query, 
+        fetch: false 
+      };
+      
+      if (!this.collections.workflows) {
+        this.collections.workflows = new Workflows([], opts);
+      } else {
+        _.extend(this.collections.workflows.opts, opts);
+      }
+      
+      this.collections.workflows.fetch({ silent: true });
+      console.log('suck');
+      
+      var view = new WorkflowListView(this.collections.workflows, opts);
+      
       this.setView(view);
     },
     

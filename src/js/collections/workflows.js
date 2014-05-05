@@ -2,7 +2,24 @@ define(function (require) {
   var settings = require('settings'),
       Qorus    = require('qorus/qorus'),
       Model    = require('models/workflow'),
-      Collection;
+      Collection, defaults;
+  
+  defaults = {
+    'IN-PROGRESS': 0,
+    'READY': 0,
+    'SCHEDULED': 0,
+    'COMPLETE': 0,
+    'INCOMPLETE': 0,
+    'ERROR': 0,
+    'CANCELED': 0,
+    'RETRY': 0,
+    'WAITING': 0,
+    'ASYNC-WAITING': 0,
+    'EVENT-WAITING': 0,
+    'BLOCKED': 0,
+    'CRASH': 0,
+    'TOTAL': 0
+  };
   
   Collection = Qorus.SortedCollection.extend({
     __name__: 'WorkflowCollection',
@@ -20,11 +37,16 @@ define(function (require) {
       
 
       if (opts) {
-          this.date = opts.date;
+          this.opts = opts;
           this.opts.deprecated = (opts.deprecated === 'hidden'); 
       }
-
-      debug.log("deprecated",this.opts.deprecated, this.opts);
+    },
+    
+    parse: function (response, options) {
+      _.map(response, function (model) { 
+        _.defaults(model, defaults);
+      });
+      return response;
     }
   });
 

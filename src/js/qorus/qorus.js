@@ -254,9 +254,9 @@ define(function (require) {
 
       var data = this.opts;
       
-      if (this.date) {
-        this.opts.date = this.date;
-      }
+      // if (this.date) {
+      //   this.opts.date = this.date;
+      // }
 
       if (!options) {
         options = {};
@@ -268,8 +268,9 @@ define(function (require) {
       
       _.extend(options, { data: data });
       
-      debug.log(this, options);
-      
+      options.reset = false;
+      options.merge = true;
+            
       Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
     },

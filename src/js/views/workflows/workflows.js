@@ -2,7 +2,6 @@ define(function (require) {
   var _             = require('underscore'),
       Backbone      = require('backbone'),
       Qorus         = require('qorus/qorus'),
-      Collection    = require('collections/workflows'),
       Template      = require('text!templates/workflow/list.html'),
       Toolbar       = require('views/toolbars/workflows_toolbar'),
       Dispatcher    = require('qorus/dispatcher'),
@@ -24,6 +23,11 @@ define(function (require) {
       'click [data-action]': 'doAction'
     },
         
+    initialize: function () {
+      RowView.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'change', function () { console.log(arguments); });
+      this.listenTo(this.model.collection, 'all', function () { console.log(arguments); });
+    },
     doAction: function (e) {
       var $target = $(e.currentTarget),
           action = $target.data('action');
@@ -73,7 +77,7 @@ define(function (require) {
     
     initialize: function (collection, options) {
       // call super method
-      ListView.__super__.initialize.call(this, Collection, options.date);
+      ListView.__super__.initialize.call(this, collection, options.date, options);
       
       this.options = {};
       this.views = {};

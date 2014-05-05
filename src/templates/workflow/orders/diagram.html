@@ -20,7 +20,7 @@
           <th>Modified</th>
           <td><%= model.get('modified') %></td>
           <th>Priority</th>
-          <td><span contenteditable="true"><%= model.get('priority') %></span></td>
+          <td><span contenteditable="true" class="editable" data-type="integer" data-max-length="6"><%= model.get('priority') %></span></td>
         </tr>
         <tr>
           <th>Completed</th>
@@ -82,6 +82,10 @@
           <tr>
             <th>Completed</th>
             <td class="date"></td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td></td>
           </tr>
           <tr>
             <th>Status</th>

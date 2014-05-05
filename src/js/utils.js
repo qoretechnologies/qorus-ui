@@ -48,6 +48,22 @@ define(function (require) {
         return date.format(settings.DATE_DISPLAY);
     },
     
+    prepareDate: function (date) {
+      var mdate;
+      
+      if (date === undefined || date === null || date === '24h') {
+        mdate = moment().add('days', -1).format(settings.DATE_DISPLAY);
+      } else if (date == 'all') {
+        mdate = moment(settings.DATE_FROM).format(settings.DATE_DISPLAY);
+      } else if (date.match(/^[0-9]+$/)) {
+        mdate = moment(date, 'YYYYMMDDHHmmss').format(settings.DATE_DISPLAY);
+      } else {
+        mdate = date;
+      }
+      
+      return mdate;
+    },
+    
     // getNextDate: function (cron_time) {
     //     var next = later().getNext(cronParser().parse(cron_time));
     //         

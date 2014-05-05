@@ -1578,3 +1578,8 @@ textarea.note {
 	/*max-height: 15em;*/
 	overflow: auto;
 }
+
+*[contenteditable="true"]:after {
+  content: "\f14B";
+  font-family: "FontAwesome";
+}
