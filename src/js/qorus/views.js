@@ -479,16 +479,16 @@ define(function (require) {
       this.opts = options || {};
 
       // set DATE format and init date
-      // this.date_format = settings.DATE_DISPLAY;
-      // if (date === undefined || date === null || date === '24h') {
-      //   this.date = moment().add('days', -1).format(this.date_format);
-      // } else if (date == 'all') {
-      //   this.date = moment(settings.DATE_FROM).format(this.date_format);
-      // } else if (date.match(/^[0-9]+$/)) {
-      //   this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
-      // } else {
-      //   this.date = date;
-      // }
+      this.date_format = settings.DATE_DISPLAY;
+      if (date === undefined || date === null || date === '24h') {
+        this.date = moment().add('days', -1).format(this.date_format);
+      } else if (date == 'all') {
+        this.date = moment(settings.DATE_FROM).format(this.date_format);
+      } else if (date.match(/^[0-9]+$/)) {
+        this.date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
+      } else {
+        this.date = date;
+      }
       
       this.opts.date = this.date;
       
@@ -860,7 +860,7 @@ define(function (require) {
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
-      this.listenTo(this.collection, 'add', this.appendRow);
+      this.listenTo(this.collection, 'add', this.append);
       // this.listenTo(this.collection, 'resort', this.update);
       if (this.collection.size() === 0)
         this.listenToOnce(this.collection, 'sync', this.update);
@@ -944,6 +944,10 @@ define(function (require) {
         this.collection.loadNextPage(); 
         this.$('button[data-pagination]').html("Loading...");
       }
+    },
+
+    append: function (model) {
+      this.appendRow(model);
     },
 
     appendRows: function (models) {

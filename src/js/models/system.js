@@ -1,9 +1,9 @@
 define(function (require) {
-  var settings = require('settings'),
-      _        = require('underscore'),
-      Qorus    = require('qorus/qorus'),
-      System   = {},
+  var _              = require('underscore'),
+      Qorus          = require('qorus/qorus'),
+      settings       = require('settings'),
       SystemSettings = require('models/settings'),
+      System         = {},
       Info, User, Options;
 
   System = {};
@@ -33,6 +33,12 @@ define(function (require) {
 
     initialize: function () {
       this.fetch();
+    },
+    
+    canBreakLock: function () {
+      var perms = this.get('permissions');
+      var allowed = ['WORKFLOW-CONTROL', 'WORKFLOW-ORDER-CONTROL', 'BREAK-WORKFLOW-ORDER-LOCK'];
+      return _.intersection(perms, allowed).length > 0;
     }
   });
 

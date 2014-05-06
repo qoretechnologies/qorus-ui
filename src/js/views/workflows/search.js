@@ -45,6 +45,7 @@ define(function (require) {
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
+      'click button[data-pagination]': 'nextPage',
       // 'keyup .search-query': 'search'
     },
     

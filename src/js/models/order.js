@@ -11,7 +11,7 @@ define(function (require) {
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
-    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry'],
+    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
       'HierarchyInfo.modified',
@@ -107,21 +107,21 @@ define(function (require) {
     
     doAction: function(action, opts){
       var self = this, id = this.id, action = action.toLowerCase();
-      
+      opts = opts || {};
+      opts.action = action;
+
       if(_.indexOf(this.allowedActions, action) != -1){
-        $.put(this.url(), {'action': action })
-        .done(
-          function (e, ee, eee){
-            var msg = sprintf('Order Instance %s %s done', id, action);
-            // $.globalMessenger().post(msg);
-            self.fetch();
-          }
-        ).fail(
-          function(e, ee, eee){
-            var msg = sprintf('Order Instance %s %s failed', id, action);
-            // $.globalMessenger().post({ message: msg, type: 'error' });
-          }
-        );        
+        $.put(this.url(), opts)
+        // .done(
+        //   function (e, ee, eee){
+        //     var msg = sprintf('Order Instance %s %s done', id, action);
+        //     self.fetch();
+        //   }
+        // ).fail(
+        //   function(e, ee, eee){
+        //     var msg = sprintf('Order Instance %s %s failed', id, action);
+        //   }
+        // );        
       }
     },
     

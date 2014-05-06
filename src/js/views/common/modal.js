@@ -20,9 +20,16 @@ define(function (require) {
     
     initialize: function () {
       Modal.__super__.initialize.apply(this, arguments);
-      this.setView(this.options.content_view, '.content');
+      var cview = this.setView(this.options.content_view, '.content');
+      
+      this.listenTo(cview, 'close', this.hide);
       this.$el.appendTo('body');
       this.render();
+    },
+    
+    hide: function () {
+      this.$el.modal('toggle');
+      this.off();
     },
     
     onRender: function () {
@@ -79,7 +86,7 @@ define(function (require) {
       }
     },
         
-    clean: function () {      
+    clean: function () {
       if (this.$('.modal').hasClass('ui-resizable')) {
         this.$('.modal').resizable('destroy');
       }

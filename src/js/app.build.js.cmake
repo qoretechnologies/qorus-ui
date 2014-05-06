@@ -4,7 +4,7 @@
     dir: "@CMAKE_BINARY_DIR@/webapp/",
     paths: {
       jquery: 'libs/jquery',
-      underscore: 'libs/lodash.underscore',
+      underscore: 'libs/lodash',
       bootstrap: 'libs/bootstrap/js/bootstrap',
       "jquery.rest": "libs/jquery.rest",
       "jquery.ui": "libs/jquery.ui.min",

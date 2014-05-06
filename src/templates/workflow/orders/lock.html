@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="modalHeader"><%= _.capitalize(obj.action) %> <%= obj.item.name %> v<%= obj.item.version%>, ID#<%= obj.item.workflow_instanceid %></h3>
+</div>
+<form>
+<div class="modal-body">
+  <form id="order-lock-note-form">
+    <textarea name="note" placeholder="Reason..."></textarea>
+  </form>
+</div>
+<div class="modal-footer">
+      <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button type="submit" class="btn btn-success"><%= _.capitalize(obj.action) %></button>
+</div>
+</form>

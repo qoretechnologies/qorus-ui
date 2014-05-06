@@ -17,7 +17,8 @@ define(function (require) {
     template: Template,
     model_name: 'result',
     additionalEvents: {
-      'click th[data-sort]': 'fetchSorted'
+      'click th[data-sort]': 'fetchSorted',
+      'click button[data-pagination]': 'nextPage'
     },
     
     initialize: function (opts) {

@@ -2,7 +2,9 @@ require.config({
   baseUrl: '/js',
   paths: {
     jquery: 'libs/jquery',
-    underscore: 'libs/lodash.underscore',
+    lodash: 'libs/lodash.underscore',
+    // 'underscore.string': 'libs/underscore.string',
+    underscore: 'libs/lodash',
     backbone: 'libs/backbone',
     'backbone.keys': 'libs/backbone.keys',
     'backbone.filtered.collection': 'libs/backbone.filtered.collection',

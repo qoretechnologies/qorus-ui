@@ -1,10 +1,10 @@
 define(function (require) {
-  var $               = require('jquery'),
-    _                 = require('underscore'),
-    Qorus             = require('qorus/qorus'),
-    System            = require('models/system'),
-    HeaderView        = require('views/common/header'),
-    SystemInfoView;
+  var $          = require('jquery'),
+      _          = require('underscore'),
+      Qorus      = require('qorus/qorus'),
+      System     = require('models/system'),
+      HeaderView = require('views/common/header'),
+      SystemInfoView;
   
   SystemInfoView = Qorus.View.extend({    
     initialize: function (opts) {

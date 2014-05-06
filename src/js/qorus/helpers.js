@@ -193,7 +193,9 @@ define(function (require) {
       }
       
       return icon;
-    }
+    },
+    
+    // user: System.User
   };
   
   return Helpers;

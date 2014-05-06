@@ -12,7 +12,10 @@ define(function (require) {
       moment        = require('moment'),
       qorus_helpers = require('qorus/helpers'),
       utils         = require('utils'),
-      helpers, ListView;
+      ModalView     = require('views/common/modal'),
+      LockTemplate  = require('tpl!templates/workflow/orders/lock.html'),
+      User          = require('models/system').User,
+      helpers, ListView, RowView, OrderUnlockView, OrderLockView;
   
   helpers = {
     action_css: {
@@ -21,6 +24,52 @@ define(function (require) {
       'retry': 'btn-success'
     }
   };
+  
+  OrderLockView = Qorus.ModelView.extend({
+    template: LockTemplate,
+    additionalEvents: {
+      "submit": "lockOrder",
+      "click button[type=submit]": "lockOrder"
+    },
+        
+    lockOrder: function (e) {
+      var note = this.$('textarea[name=note]').val();
+      this.model.doAction(this.options.action, { note: note });
+      this.trigger('close');
+    }
+  });
+  
+  
+  RowView = Qorus.RowView.extend({
+    context: {
+      user: User
+    },
+    template: RowTpl,
+    additionalEvents: {
+      "click .order-lock": 'lockOrder',
+      "click .order-unlock": 'unlockOrder',
+      "click .order-breaklock": 'breakLockOrder'
+    },
+        
+    lockOrder: function (e) {
+      this.applyLock('lock', e);
+    },
+    
+    unlockOrder: function (e) {
+      this.applyLock('unlock', e);
+    },
+    
+    breakLockOrder: function (e) {
+      this.applyLock('breakLock', e);
+    },
+    
+    applyLock: function (action) {
+      var view = this.setView(new ModalView({
+        content_view: new OrderLockView({ action: action, model: this.model})
+      }), '.order-lock-modal');
+    }
+    
+  });
   
   ListView = Qorus.ListView.extend({
     __name__: 'OrdersListView',
@@ -36,16 +85,9 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      ListView.__super__.initialize.call(this, Collection, opts.date, opts);
       this.options = {};
       opts = opts || {};
       
-      // if (opts.url) {
-      //   this.url = [opts.url, this.name].join('/');
-      //   opts.url = this.url;
-      //   // delete opts.url;
-      // }
-
       // set DATE format and init date
       var date = opts.date;
       if (date === undefined || date === null || date === '24h') {
@@ -57,8 +99,15 @@ define(function (require) {
       } else {
         this.date = date;
       }
-      
       opts.date = this.date;
+      
+      ListView.__super__.initialize.call(this, Collection, opts.date, opts);
+      
+      // if (opts.url) {
+      //   this.url = [opts.url, this.name].join('/');
+      //   opts.url = this.url;
+      //   // delete opts.url;
+      // }
       
       this.opts = opts;
       _.extend(this.options, opts);
@@ -75,7 +124,7 @@ define(function (require) {
           row_template: RowTpl,
           helpers: helpers,
           context: { url: this.url },
-          dispatcher: Dispatcher
+          row_view: RowView,
       }), '#order-list');
     },
     
