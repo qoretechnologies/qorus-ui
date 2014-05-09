@@ -543,7 +543,7 @@ define(function (require) {
     }
   
     return _navigate.apply(this, arguments);
-  }
+  };
   
   _.extend(Qorus, Views);
 

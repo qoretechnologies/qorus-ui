@@ -1,5 +1,6 @@
 define(function (require) {
   var settings   = require('settings'),
+      _          = require('underscore'),
       moment     = require('moment'),
       $          = require('jquery'),
       Qorus      = require('qorus/qorus'),
@@ -29,6 +30,12 @@ define(function (require) {
       'notes.created',
       'notes.modified'
     ],
+    
+    api_events_list: [
+      "order:%(id)d:data_locked",
+      "order:%(id)d:data_unlocked",
+      "workflow:info_changed"
+    ],
 
     initialize: function(opts){      
       // set id if in opts
@@ -56,12 +63,19 @@ define(function (require) {
         }
       });
       
-      this.listenTo(Dispatcher, 'workflow:info_changed', this.dispatch);
+      this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
+      this.listenTo(Dispatcher, this.api_events, this.dispatch);
+      this.on('change', function () { console.log(arguments) });
     },
     
-    dispatch: function (obj, ev) {
-      if (ev === 'workflow:info_changed') {
-        if (obj.info.instanceid === this.id) {
+    dispatch: function (e, evt) {
+      var evt_types = evt.split(':'),
+          obj = evt_types[0],
+          id = evt_types[1],
+          action = evt_types[2] || id;
+
+      if (obj === 'workflow') {
+        if (e.info.instanceid === this.id && action === 'status_changed') {
           var notes = this.get('notes') || [];
           var info = obj.info.info;
           info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
@@ -70,6 +84,20 @@ define(function (require) {
           this.set('notes', notes);
           this.trigger('change:notes', this);
         }
+      } else if (obj === 'order') {
+        console.log(action, this.id, evt_types, id);
+        if (action === 'data_locked') {
+          if (_.isObject(e.caller)) {
+            this.set('operator_lock', e.caller.user);
+          } else {
+            this.set('operator_lock', 'N/A');
+          }
+          console.log(this.get('operator_lock'));
+        } else if (action === 'data_unlocked') {
+          this.unset('operator_lock');
+          console.log(this.get('operator_lock'));
+        }
+
       }
     },
     
@@ -102,16 +130,16 @@ define(function (require) {
       
       response = Model.__super__.parse.call(this, response, options);
       
-      return response
+      return response;
     },
     
     doAction: function(action, opts){
-      var self = this, id = this.id, action = action.toLowerCase();
-      opts = opts || {};
+      action      = action.toLowerCase();
+      opts        = opts || {};
       opts.action = action;
 
       if(_.indexOf(this.allowedActions, action) != -1){
-        $.put(this.url(), opts)
+        $.put(this.url(), opts);
         // .done(
         //   function (e, ee, eee){
         //     var msg = sprintf('Order Instance %s %s done', id, action);

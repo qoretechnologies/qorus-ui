@@ -33,6 +33,11 @@ define(function (require) {
             events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
           }
         }
+        if (instanceid = e.info.instanceid) {
+          ev_id = ['order', instanceid].join(":");
+          events.push(ev_id);
+          events.push([ev_id, ev[1]].join(':'));
+        }
       }
           
       _.each(events, function(evt){

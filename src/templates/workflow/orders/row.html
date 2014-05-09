@@ -12,6 +12,7 @@
 <td><%= (item.error_count) ? item.error_count : 0 %></td>
 <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
 <td>
+<% if (item.workflowstatus != 'COMPLETE') {%>
   <div class="btn-group">
     <a class="btn btn-mini dropdown-toggle<%= item.operator_lock ? ' btn-danger' : ' btn-success' %>" data-toggle="dropdown" href="#">
       <%= iconLock(item.operator_lock) %> <%= item.operator_lock %>
@@ -27,6 +28,8 @@
       <% } %>
     </ul>
   </div>
+<% } %>
+</td>
 <td><%= item.notes_count %></td>
 <td class="text-right">
   <div class="btn-group">
