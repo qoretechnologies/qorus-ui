@@ -85,19 +85,16 @@ define(function (require) {
           this.trigger('change:notes', this);
         }
       } else if (obj === 'order') {
-        console.log(action, this.id, evt_types, id);
         if (action === 'data_locked') {
           if (_.isObject(e.caller)) {
             this.set('operator_lock', e.caller.user);
           } else {
             this.set('operator_lock', 'N/A');
           }
-          console.log(this.get('operator_lock'));
         } else if (action === 'data_unlocked') {
           this.unset('operator_lock');
-          console.log(this.get('operator_lock'));
         }
-
+        this.trigger('change', this);
       }
     },
     
