@@ -32,9 +32,9 @@ define(function (require) {
     ],
     
     api_events_list: [
-      "order:%(id)d:data_locked",
-      "order:%(id)d:data_unlocked",
-      "workflow:info_changed"
+      "order:%(id)s:data_locked",
+      "order:%(id)s:data_unlocked",
+      "order:%(id)s:info_changed"
     ],
 
     initialize: function(opts){      
@@ -57,15 +57,14 @@ define(function (require) {
     
       // update on dispatcher event
       var _this = this;
-      this.listenTo(Dispatcher, 'workflow:status_changed', function (e) {
-        if (e.info.instanceid == _this.id) {
-          _this.fetch();
-        }
-      });
+      // this.listenTo(Dispatcher, 'workflow:status_changed', function (e) {
+      //   if (e.info.instanceid == _this.id) {
+      //     _this.fetch();
+      //   }
+      // });
       
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
-      this.on('change', function () { console.log(arguments) });
     },
     
     dispatch: function (e, evt) {
@@ -74,18 +73,17 @@ define(function (require) {
           id = evt_types[1],
           action = evt_types[2] || id;
 
-      if (obj === 'workflow') {
-        if (e.info.instanceid === this.id && action === 'status_changed') {
+      if (obj === 'order') {
+        if (action === 'info_changed') {
           var notes = this.get('notes') || [];
-          var info = obj.info.info;
+          var note_count = this.get('note_count');
+          var info = e.info.info;
           info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
           info.modified = info.created;
           notes.unshift(info);
-          this.set('notes', notes);
-          this.trigger('change:notes', this);
-        }
-      } else if (obj === 'order') {
-        if (action === 'data_locked') {
+          this.set({ notes: notes, note_count: note_count+1 });
+          this.trigger('update:notes', this);
+        } else if (action === 'data_locked') {
           if (_.isObject(e.caller)) {
             this.set('operator_lock', e.caller.user);
           } else {
@@ -167,7 +165,7 @@ define(function (require) {
       $.put(this.url(), {
         action: 'Notes',
         note: note
-      }).done(this.fetch);
+      });
     }
   });
   return Model;

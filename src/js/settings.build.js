@@ -11,7 +11,7 @@ define(function () {
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
       PROTOCOL: protocol,
-      REST_API_PREFIX:  protocol + '//'+ host +'/api',
+      REST_API_PREFIX:  protocol + '//'+ host + '/api',
       WS_PREFIX: '',
       EVENTS_WS_URL: ws_protocol + host + '/apievents',
       DEBUG: false,

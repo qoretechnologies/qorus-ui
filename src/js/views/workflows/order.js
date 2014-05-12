@@ -285,7 +285,7 @@ define(function(require, exports, module) {
       NotesView.__super__.initialize.apply(this, arguments);
 
       var notes = this.setView(new Qorus.View({ model: this.model, template: NotesListTpl }), '#notes-list');
-      notes.listenTo(this.model, 'change:notes', notes.render);
+      notes.listenTo(this.model, 'update:notes', notes.render);
     },
     
     clean: function () {
