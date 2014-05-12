@@ -22,7 +22,7 @@
     <% _.each(item.hierarchy_tree.flatten(), function(child) { %>
     <% var ha = child.el.opts; %>
     <% var level = (child.el.hasChildren()) ? child.level-1 : child.level %>
-    <tr class="<%= (child.el.hasChildren()) ? 'branch' : 'leaf' %>" data-tree-id="<%= child.path %>">
+    <tr class="<%= (child.el.hasChildren()) ? 'branch' : 'leaf' %><%= (ha.workflow_instanceid == item.workflow_instanceid) ? ' warning':''%>" data-tree-id="<%= child.path %>">
       <td class="text-left nowrap">
         <% _.each(_.range(level), function () { %>
           <span class="indent"></span>

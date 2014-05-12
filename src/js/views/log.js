@@ -78,7 +78,7 @@ define(function (require) {
       html = document.createDocumentFragment();
 
       while (this.msg_queue.length > 0) {
-        msg = this.msg_queue.shift();
+        msg = _.escape(this.msg_queue.shift());
         el = $('<pre>'+msg+'</pre>');
         html.appendChild(el.get(0));
       }

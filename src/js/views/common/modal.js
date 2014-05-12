@@ -36,8 +36,6 @@ define(function (require) {
       var self = this;
       var $modal = this.$el;
       
-      this.fixHeight();
-      
       // show modal
       this.$el.modal();
       
@@ -53,6 +51,8 @@ define(function (require) {
         var max_height = $(window).innerHeight() - $(this).position().top * 2;
         var max_width = $(window).innerWidth() - $(this).position().top * 2;
         
+        self.fixHeight();
+        
         // enable resizable
         $(this).resizable({
           handles: "se",
@@ -66,13 +66,13 @@ define(function (require) {
       this.$el.on('shown.modal', this.fixeHeight);
       
       this.$el.on('hide.modal', $.proxy(this.off, this));
+      console.log('panda');
     },
     
     fixHeight: function () {
       var padding = 15;
       var $modal = this.$el;
       var max_height = $(window).innerHeight() - $modal.position().top * 2;
-      
       
       if ($modal.height() > max_height) {
         $modal.height(max_height);
@@ -82,7 +82,6 @@ define(function (require) {
         var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
 
         $body.height(h).css('max-height', h);
-        debug.log(cor, h, $body.height(), $modal.height());
       }
     },
         

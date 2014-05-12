@@ -318,7 +318,7 @@ define(function (require) {
       var title, inst;
       
       if (this.title) {
-        title = _.isFunction(this.title) ? this.title() : this.title;
+        title = _.result(this, 'title');
         inst = document.title.match(/(.*)\| /g);
         if (inst) {
           document.title = inst[0];

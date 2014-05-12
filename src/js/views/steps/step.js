@@ -25,7 +25,7 @@ define(function (require) {
       this.listenTo(this.model, 'change', this.render);
       this.model.fetch();
 
-      this.on('postrender', Prism.highlightAll);
+      this.on('postrender', this.highlight);
     },
     
     preRender: function () {
@@ -42,6 +42,14 @@ define(function (require) {
     off: function () {
       ModelView.__super__.off.apply(this, arguments);
       console.log('destroying step');
+    },
+    
+    highlight: function () {
+      var el = this.$el.find('code[class*="language-"]')[0];
+      
+      if (el) {
+        Prism.highlightElement(el)
+      }
     }
   });
   

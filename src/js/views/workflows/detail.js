@@ -61,7 +61,7 @@ define(function (require) {
       if (id) {
         e.preventDefault();
         e.stopPropagation();
-        var view = this.insertView(new ModalView({
+        var view = this.setView(new ModalView({
           content_view: new StepView({ id: id }) 
         }), '#stepdetail');
       }
