@@ -1,9 +1,10 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus'
-], function(settings, _, Qorus){
-  var Model = Qorus.Model.extend({
+define(function(require) {
+  var settings = require('settings'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model;
+
+  Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/system/options',
     parse: function  (response, options) {
       var interval = [];

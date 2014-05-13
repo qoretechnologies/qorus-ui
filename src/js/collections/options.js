@@ -1,11 +1,10 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus',
-  // Pull in the Model module from above
-  'models/option'
-], function(settings, _, Qorus, Model){
-  var Collection = Qorus.SortedCollection.extend({
+define(function (require) {
+  var settings = require('settings'),
+      Qorus    = require('qorus/qorus'),
+      Model    = require('models/option'),
+      Collection;
+  
+  Collection = Qorus.SortedCollection.extend({
     url: settings.REST_API_PREFIX + '/system/options',
     model: Model,
     sort_key: 'status',

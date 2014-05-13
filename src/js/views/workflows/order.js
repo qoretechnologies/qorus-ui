@@ -380,7 +380,8 @@ define(function(require, exports, module) {
       "click tr.parent": "showSubSteps",
       'click button[data-action]': 'runAction',
       "click .copy-paste": 'enableCopyMode',
-      "click .tree-caret": 'toggleTree'
+      "click .tree-caret": 'toggleTree',
+      "click td.editable": 'editTableCell'
     },
     
     url: function () {
@@ -507,7 +508,45 @@ define(function(require, exports, module) {
     
     helpers: {
       action_css: context.action_css
-    }
+    },
+    
+    editTableCell: function (e) {
+      var $row   = $(e.currentTarget),
+          value  = $row.text(),
+          $input = $('<input type="text" />')
+          self   = this;
+      
+      if (!$row.hasClass('editor')) {
+        $row.addClass('editor');
+        $input.val(value);
+        $row.empty();
+        $row.append($input);
+        $input.focus();
+
+        function clean() {
+          $input.off().remove();
+          $row.text(value);
+          $row.toggleClass('editor');
+        }
+        
+        $input.on('keypress', function (e) {
+          var $target = $(e.currentTarget);
+          var val = $target.val();
+          
+          if ($target.key === 13 || e.which === 13) {
+            self.model.doAction('setPriority', { priority: val });
+            value = val;
+            clean();
+          }
+          
+          if ($target.key === 27 || e.which === 27) {
+            clean();
+          }
+        });
+        
+        $input.blur(clean);
+      }
+    },
     
   });
   return ModelView;

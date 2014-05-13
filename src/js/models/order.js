@@ -12,7 +12,7 @@ define(function (require) {
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
-    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock'],
+    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
       'HierarchyInfo.modified',
@@ -129,11 +129,11 @@ define(function (require) {
     },
     
     doAction: function(action, opts){
-      action      = action.toLowerCase();
+      action      = action;
       opts        = opts || {};
       opts.action = action;
 
-      if(_.indexOf(this.allowedActions, action) != -1){
+      if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
         $.put(this.url(), opts);
         // .done(
         //   function (e, ee, eee){

@@ -76,7 +76,7 @@ define(function (require) {
     },
     
     additionalEvents: {
-      "click a.close-detail": "close",
+      "click a.close-view": "close",
       "click td[data-editable]": "editOption",
       "click [data-action]": 'runAction'
     },
@@ -139,6 +139,8 @@ define(function (require) {
         e.preventDefault();  
       }
       
+      console.log('hovno', this.$el.parent());
+      
       this.$el.parent()
         .removeClass('show')
         .data('id', null);
@@ -146,13 +148,7 @@ define(function (require) {
       this.active_tab = null;
       this.clean();
     },
-    
-    // off: function () {
-    //   this.removeViews();
-    //   this.undelegateEvents();
-    //   this.stopListening();
-    // },
-    
+
     createDiagram: function () {
       var view = this.getView('#steps');
       

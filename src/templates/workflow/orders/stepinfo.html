@@ -11,14 +11,20 @@
     <tr>
       <th>Started</th>
       <td class="date"><%= (item) ? item.started : '' %></td>
+      <th>Skipped</th>
+      <td><%= (item) ? statusIcon(item.skip) : '' %></td>
     </tr>
     <tr>
       <th>Completed</th>
       <td class="date"><%= (item) ? item.completed : '' %></td>
+      <th>Subwfl</th>
+      <td><%= (item) ? item.subworfklow_instanceid : '' %></td>
     </tr>
     <tr>
       <th>Status</th>
       <td><%= wrapStatus((item) ? item.stepstatus : 'Not started') %></td>
+      <th>Ind</th>
+      <td><%= (item) ? item.ind : '' %></td>
     </tr>
   </tbody>
 </table>
