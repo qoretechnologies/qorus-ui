@@ -2,6 +2,7 @@ define(function(require, exports, module) {
   var $               = require('jquery'),
       expand          = require('libs/jquery.expanding'),
       _               = require('underscore'),
+      utils           = require('utils'),
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
       Model           = require('models/order'),
@@ -523,29 +524,41 @@ define(function(require, exports, module) {
         $row.append($input);
         $input.focus();
 
-        function clean() {
-          $input.off().remove();
-          $row.text(value);
-          $row.toggleClass('editor');
+        function saveOrClean(e) {
+          var $target  = $(e.currentTarget),
+              val      = $target.val(),
+              property = $target.data('name'),
+              clean    = true;
+          
+          if ($target.key === 13 || e.which === 13) {
+            if (utils.validate(val, $row.data('type'))) {
+              var data = {};
+              data[$row.data('name')] = val;
+              self.model.doAction($row.data('action'), data);
+              value = val;              
+            } else {
+              $row.addClass('invalid');
+              clean = false;
+              $target.focus();
+            }
+          }
+
+          if (clean) {
+            $input.off().remove();
+            $row
+              .text(value)
+              .toggleClass('editor')
+              .removeClass('invalid');
+          }
+          
+          e.preventDefault();
         }
         
         $input.on('keypress', function (e) {
-          var $target = $(e.currentTarget);
-          var val = $target.val();
-          
-          if ($target.key === 13 || e.which === 13) {
-            var property =$target.data('name');
-            self.model.doAction($target.data('action'), { property: val });
-            value = val;
-            clean();
-          }
-          
-          if ($target.key === 27 || e.which === 27) {
-            clean();
-          }
+           if (e.keyCode === 13 || e.which === 13) saveOrClean(e);
         });
         
-        $input.blur(clean);
+        $input.blur(saveOrClean);
       }
     },
     

@@ -726,6 +726,13 @@ input:focus {
   outline: 1px solid redt;
 }
 
+.editor.invalid {
+  background-color: pink;
+  color: #3a87ad;
+  outline: 1px solid #bce8f1;
+  outline-offset: -1px;
+}
+
 /* ocmd */
 
 #output {
@@ -1611,6 +1618,10 @@ textarea.note {
   font-family: "FontAwesome";
 }
 
-th.info {
-  min-width: 30%;
+#step-errors th.info {
+  min-width: 300px;
+}
+
+#step-errors td.info {
+  width: 40%;
 }

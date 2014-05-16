@@ -209,9 +209,7 @@ define(function (require) {
         
       if (type === 'regex') test = regex;
       
-      m = obj.match(test);
-      
-      return m.length > 0;
+      return obj.match(test);
     }
   };
     
