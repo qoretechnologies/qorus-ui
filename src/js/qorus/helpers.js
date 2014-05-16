@@ -195,6 +195,7 @@ define(function (require) {
       return icon;
     },
     
+    settings: settings
     // user: System.User
   };
   

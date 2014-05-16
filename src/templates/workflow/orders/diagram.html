@@ -20,7 +20,7 @@
           <th>Modified</th>
           <td><%= model.get('modified') %></td>
           <th>Priority</th>
-          <td class="editable" data-type="integer" data-name="priority" data-max-length="6"><%= model.get('priority') %></td>
+          <td class="editable" data-action="setPriority" data-type="integer" data-name="priority" data-max-length="6"><%= model.get('priority') %></td>
         </tr>
         <tr>
           <th>Completed</th>
@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <th>Scheduled</th>
-          <td><i class="icon-calendar"></i> <%= model.get('scheduled') %></td>
+          <td class="editable date" data-action="schedule" data-name="scheduled" data-type="date"><%= model.get('scheduled') %></td>
           <th>Synchronous</th>
           <td><%= statusIcon(model.get('synchronous')) %></td>
         </tr>

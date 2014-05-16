@@ -45,24 +45,7 @@ define(function (require) {
       }
       
       Model.__super__.initialize.call(this, opts);
-
-      // // TODO: find proper place/way within the view
-      // this.on('sync', function(m, r){ 
-      //   // debug.log('Orders->Syncing', m.id, m.collection);
-      //   if (m.collection){
-      //     m.collection.trigger('reset');
-      //   }
-      // }, this);
-      // 
     
-      // update on dispatcher event
-      var _this = this;
-      // this.listenTo(Dispatcher, 'workflow:status_changed', function (e) {
-      //   if (e.info.instanceid == _this.id) {
-      //     _this.fetch();
-      //   }
-      // });
-      
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },

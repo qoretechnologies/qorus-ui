@@ -534,7 +534,7 @@ define(function(require, exports, module) {
           var val = $target.val();
           
           if ($target.key === 13 || e.which === 13) {
-            self.model.doAction('setPriority', { priority: val });
+            self.model.doAction($target.data('action'), { $target.data('name'): val });
             value = val;
             clean();
           }
