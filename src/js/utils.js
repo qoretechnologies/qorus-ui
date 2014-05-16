@@ -34,7 +34,7 @@ define(function (require) {
       'integer': /\d+/,
       'string': /.*/,
       'date': /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
-    }
+    },
     
     parseDate: function (date, format) {
       var d;
@@ -199,7 +199,7 @@ define(function (require) {
       }, this);
   
       return result;
-    }
+    },
     
     validate: function (obj, type, regex) {
       var m, test;

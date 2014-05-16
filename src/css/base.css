@@ -1610,3 +1610,7 @@ textarea.note {
   content: "\f14B";
   font-family: "FontAwesome";
 }
+
+th.info {
+  min-width: 30%;
+}
