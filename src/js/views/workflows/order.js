@@ -518,12 +518,13 @@ define(function(require, exports, module) {
           self   = this;
       
       if (!$row.hasClass('editor')) {
+        $row.width($row.width());
         $row.addClass('editor');
         $input.val(value);
         $row.empty();
         $row.append($input);
         $input.focus();
-
+        
         function saveOrClean(e) {
           var $target  = $(e.currentTarget),
               val      = $target.val(),
@@ -542,13 +543,14 @@ define(function(require, exports, module) {
               $target.focus();
             }
           }
-
+        
           if (clean) {
             $input.off().remove();
             $row
               .text(value)
               .toggleClass('editor')
-              .removeClass('invalid');
+              .removeClass('invalid')
+              .width('');
           }
           
           e.preventDefault();
