@@ -4,9 +4,8 @@
     <tr>
       <th>Severity</th>
       <th>Error</th>
-      <th class="narrow">Ind</th>
       <th class="date">Created</th>
-      <th class="info">Info</th>
+      <th>Description</th>
       <th class="narrow date">Business</th>
     </tr>
   </thead>
@@ -16,11 +15,15 @@
     <tr>
       <td><%= err.severity %></td>
       <td><%= err.error %></td>
-      <td><%= err.ind %></td>
       <td><%= err.created %></td>
-      <td class="info"><%= err.info %></td>
+      <td><%= err.description %></td>
       <td><%= statusIcon(err.business_error) %></td>
     </tr>
+    <% if (err.info) { %>
+    <tr>
+      <td colspan="5"><%= err.info %></td>
+    </tr>
+    <% } %>
     <% }) %>
     <% } else { %>
     <tr>
