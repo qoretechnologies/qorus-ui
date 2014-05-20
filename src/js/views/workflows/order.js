@@ -1,7 +1,9 @@
 define(function(require, exports, module) {
   var $               = require('jquery'),
       expand          = require('libs/jquery.expanding'),
+      settings        = require('settings'),
       _               = require('underscore'),
+      moment          = require('moment'),
       utils           = require('utils'),
       helpers         = require('qorus/helpers'),
       Qorus           = require('qorus/qorus'),
@@ -26,8 +28,9 @@ define(function(require, exports, module) {
       NotesTpl        = require('tpl!templates/workflow/orders/notes.html'),
       NotesListTpl    = require('tpl!templates/workflow/orders/noteslist.html'),
       SystemSettings  = require('models/settings'),
+      datepicker      = require('views/common/datetimepicker'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
-      DiagramView, StepInfoView, StepErrorsView, NotesView;
+      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView;
   
   require('jquery.ui');
   require('bootstrap');
@@ -514,7 +517,7 @@ define(function(require, exports, module) {
     editTableCell: function (e) {
       var $row   = $(e.currentTarget),
           value  = $row.text(),
-          $input = $('<input type="text" />')
+          $input = $('<input type="text" />'),
           self   = this;
       
       if (!$row.hasClass('editor')) {
@@ -524,46 +527,72 @@ define(function(require, exports, module) {
         $row.empty();
         $row.append($input);
         $input.focus();
+
+        if ($row.data('type') === 'date') {
+          this.views.datepicker = new datepicker();
+          this.views.datepicker.show(e);
+          this.listenTo(this.views.datepicker, 'applyDate', save);
+          $(document).on('click.datepickerout', clean);
+        } else {
+          $input.blur(saveOrClean);
+        }
+        
+        function save(val) {
+          var data     = {},
+              property = $row.data('name');
+          
+          if (moment.isMoment(val))
+            val = val.format(settings.DATE_DISPLAY);
+
+          data[property] = val;
+          self.model.doAction($row.data('action'), data);
+          value = val;
+          clean();
+        }
+        
+        function clean() {
+          $input.off().remove();
+          $row
+            .text(value)
+            .toggleClass('editor')
+            .removeClass('invalid')
+            .width('');
+          
+          if ($row.data('type') === 'date') {
+            self.stopListening(self.views.datepicker);
+            self.views.datepicker.off();
+            $(document).off('click.datepickerout');
+          }
+        }
         
         function saveOrClean(e) {
           var $target  = $(e.currentTarget),
-              val      = $target.val(),
-              property = $target.data('name'),
-              clean    = true;
+              val      = $target.val();
           
           if ($target.key === 13 || e.which === 13) {
             if (utils.validate(val, $row.data('type'))) {
-              var data = {};
-              data[$row.data('name')] = val;
-              self.model.doAction($row.data('action'), data);
-              value = val;              
+              save(val);
+              value = val;
             } else {
               $row.addClass('invalid');
-              clean = false;
               $target.focus();
             }
-          }
-        
-          if (clean) {
-            $input.off().remove();
-            $row
-              .text(value)
-              .toggleClass('editor')
-              .removeClass('invalid')
-              .width('');
           }
           
           e.preventDefault();
         }
         
         $input.on('keypress', function (e) {
-           if (e.keyCode === 13 || e.which === 13) saveOrClean(e);
+           if (e.keyCode === 13 || e.which === 13) {
+             saveOrClean(e);
+           } else if (e.keyCode === 27 || e.which === 27) {
+             clean();
+           }
         });
         
-        $input.blur(saveOrClean);
+        e.stopPropagation();
       }
-    },
-    
+    }
   });
   return ModelView;
 });

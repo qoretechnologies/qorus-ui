@@ -4,10 +4,6 @@ html, body {
 	height: 100%;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 #header {
   color: #fff;
   width: 100%;
@@ -1319,7 +1315,7 @@ td.nowrap {
 /* datepicker */
 .datepicker {
   color: #000;
-  position: fixed;
+  position: absolute;
   background-color: #fff;
   border-radius: 5px;
   border: 1px solid #eee;

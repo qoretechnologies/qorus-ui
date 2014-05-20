@@ -112,6 +112,7 @@ define(function (require) {
         $target.addClass('active');
         this.onDateChange(date);
       }
+      ev.stopPropagation();
     },
     
     processHours: function (ev) {
@@ -155,25 +156,28 @@ define(function (require) {
       this.$el.addClass('hide');
     },
     
-    applyDate: function () {
+    applyDate: function (ev) {
       this.trigger('applyDate', this.options.date);
       this.hide();
+      ev.stopPropagation();
     },
     
-    setToday: function () {
+    setToday: function (ev) {
       this.options.date = moment().add('days', -1);
       this.onDateChange(this.options.date);
       this.trigger('setToday', this.options.date);
       this.applyDate();
       this.hide();
+      ev.stopPropagation();
     },
     
-    setAll: function () {
+    setAll: function (ev) {
       this.options.date = moment([1970,0,1]);
       this.onDateChange(this.options.date);
       this.trigger('setAll', this.options.date);
       this.applyDate();
       this.hide();
+      ev.stopPropagation();
     }
   });
   
