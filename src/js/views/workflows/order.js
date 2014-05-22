@@ -29,8 +29,10 @@ define(function(require, exports, module) {
       NotesListTpl    = require('tpl!templates/workflow/orders/noteslist.html'),
       SystemSettings  = require('models/settings'),
       datepicker      = require('views/common/datetimepicker'),
+      LockTemplate    = require('tpl!templates/workflow/orders/lock.html'),
+      User            = require('models/system').User,
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
-      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView;
+      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView, OrderLockView;
   
   require('jquery.ui');
   require('bootstrap');
@@ -42,6 +44,21 @@ define(function(require, exports, module) {
       'retry': 'btn-success'
     }
   };
+  
+  OrderLockView = Qorus.ModelView.extend({
+    template: LockTemplate,
+    additionalEvents: {
+      "submit": "lockOrder",
+      "click button[type=submit]": "lockOrder"
+    },
+        
+    lockOrder: function (e) {
+      var note = this.$('textarea[name=note]').val();
+      this.model.doAction(this.options.action, { note: note });
+      this.trigger('close');
+    }
+  });
+
   
   DiagramView = DiagramBaseView.extend({
     template: DiagramTpl,
@@ -374,7 +391,6 @@ define(function(require, exports, module) {
     }
   });
   
-  
   ModelView = Qorus.TabView.extend({
     __name__: "OrderView",
     template: Template,
@@ -385,7 +401,10 @@ define(function(require, exports, module) {
       'click button[data-action]': 'runAction',
       "click .copy-paste": 'enableCopyMode',
       "click .tree-caret": 'toggleTree',
-      "click td.editable": 'editTableCell'
+      "click td.editable": 'editTableCell',
+      "click .order-lock": 'lockOrder',
+      "click .order-unlock": 'unlockOrder',
+      "click .order-breaklock": 'breakLockOrder'
     },
     
     url: function () {
@@ -423,7 +442,8 @@ define(function(require, exports, module) {
         item: this.model.toJSON(),
         show_header: this.options.show_header,
         getStepName: this.getStepName, 
-        action_css: context.action_css 
+        action_css: context.action_css,
+        user: User
       });
     },
     
@@ -550,19 +570,23 @@ define(function(require, exports, module) {
           clean();
         }
         
-        function clean() {
-          $input.off().remove();
-          $row
-            .text(value)
-            .toggleClass('editor')
-            .removeClass('invalid')
-            .width('');
+        function clean(e) {
+          if (e && $(e.target).closest('.datepicker').length) {
+            
+          } else {
+            $input.off().remove();
+            $row
+              .text(value)
+              .toggleClass('editor')
+              .removeClass('invalid')
+              .width('');
           
-          if ($row.data('type') === 'date') {
-            self.stopListening(self.views.datepicker);
-            self.views.datepicker.off();
-            $(document).off('click.datepickerout');
-          }
+            if ($row.data('type') === 'date') {
+              self.stopListening(self.views.datepicker);
+              self.views.datepicker.off();
+              $(document).off('click.datepickerout');
+            }
+          };
         }
         
         function saveOrClean(e) {
@@ -592,6 +616,24 @@ define(function(require, exports, module) {
         
         e.stopPropagation();
       }
+    },
+    
+    lockOrder: function (e) {
+      this.applyLock('lock', e);
+    },
+    
+    unlockOrder: function (e) {
+      this.applyLock('unlock', e);
+    },
+    
+    breakLockOrder: function (e) {
+      this.applyLock('breakLock', e);
+    },
+    
+    applyLock: function (action) {
+      var view = this.setView(new ModalView({
+        content_view: new OrderLockView({ action: action, model: this.model})
+      }), '.order-lock-modal');
     }
   });
   return ModelView;

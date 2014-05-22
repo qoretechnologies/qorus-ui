@@ -966,7 +966,7 @@ define(function (require) {
 
       _.each(models, function (m) {
         var view = this.appendRow(m, false);
-        frag.appendChild(view.render().el);
+        frag.appendChild(view.el);
       }, this);
       
       // console.timeEnd('appending');
@@ -1166,6 +1166,7 @@ define(function (require) {
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
+      this.listenTo(this.model, 'all', function () { console.log(arguments)});
       
       // this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
 

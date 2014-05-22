@@ -7,6 +7,21 @@
         <% _.each(item.actions, function(action) { %>
           <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
         <% }); %>
+      <% if (item.workflowstatus != 'COMPLETE') { %>
+          <a class="btn btn-mini dropdown-toggle<%= item.operator_lock ? ' btn-danger' : ' btn-success' %>" data-toggle="dropdown" href="#">
+            <%= iconLock(item.operator_lock) %> <%= item.operator_lock %>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <% if (!item.operator_lock) { %>
+              <li><a class="order-lock"><i class="icon-fixed-width icon-lock"></i> Lock</a></li>
+            <% } else if (item.operator_lock && item.operator_lock === obj.user.get('username') ) {%>
+            <li><a class="order-unlock"><i class="icon-fixed-width icon-unlock"></i> Unlock</a></li>
+            <% } else if (obj.user.canBreakLock()) { %>
+            <li><a class="order-breaklock"><i class="icon-fixed-width icon-ban-circle"></i> Break lock</a></li>
+            <% } %>
+          </ul>
+      <% } %>
     </div>
 </div>
 <% } %>

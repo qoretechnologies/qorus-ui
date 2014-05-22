@@ -13,6 +13,7 @@ define(function (require) {
       utils         = require('utils'),
       qorus_helpers = require('qorus/helpers'),
       helpers       = require('views/workflows/helpers'),
+      AutostartView = require('views/workflows/autostart'),
       ListView, RowView, TableView;
 
   // extending base RowView to add workflow related events
@@ -22,12 +23,7 @@ define(function (require) {
     additionalEvents: {
       'click [data-action]': 'doAction'
     },
-        
-    initialize: function () {
-      RowView.__super__.initialize.apply(this, arguments);
-      this.listenTo(this.model, 'change', this.render);
-      // this.listenTo(this.model.collection, 'all', function () { console.log(arguments); });
-    },
+    
     doAction: function (e) {
       var $target = $(e.currentTarget),
           action = $target.data('action');

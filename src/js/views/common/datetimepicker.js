@@ -112,7 +112,6 @@ define(function (require) {
         $target.addClass('active');
         this.onDateChange(date);
       }
-      ev.stopPropagation();
     },
     
     processHours: function (ev) {
@@ -159,7 +158,6 @@ define(function (require) {
     applyDate: function (ev) {
       this.trigger('applyDate', this.options.date);
       this.hide();
-      ev.stopPropagation();
     },
     
     setToday: function (ev) {
@@ -168,7 +166,6 @@ define(function (require) {
       this.trigger('setToday', this.options.date);
       this.applyDate();
       this.hide();
-      ev.stopPropagation();
     },
     
     setAll: function (ev) {
@@ -177,7 +174,6 @@ define(function (require) {
       this.trigger('setAll', this.options.date);
       this.applyDate();
       this.hide();
-      ev.stopPropagation();
     }
   });
   
