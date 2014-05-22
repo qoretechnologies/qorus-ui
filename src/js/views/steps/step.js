@@ -41,7 +41,7 @@ define(function (require) {
     
     off: function () {
       ModelView.__super__.off.apply(this, arguments);
-      console.log('destroying step');
+      // console.log('destroying step');
     },
     
     highlight: function () {

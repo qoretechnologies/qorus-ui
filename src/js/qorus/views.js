@@ -427,14 +427,14 @@ define(function (require) {
     showLoader: function () {
       var view = this.insertView(new Loader(), '#loader', true);
       view.$el.addClass(this.__name__);
-      console.log('showing loader for', this.__name__);
+      // console.log('showing loader for', this.__name__);
       return this;
     },
     
     hideLoader: function () {
       var views = this.views;
       if (views) _.each(views, function (view) { 
-        console.log('hiding loader for', this.__name__, view.$el);
+        // console.log('hiding loader for', this.__name__, view.$el);
         view.remove();
       });
       return this;
@@ -767,7 +767,7 @@ define(function (require) {
       if (!query || query.length < 1) {
         $el.find('tbody tr').show();
       } else {
-        console.log('searching for', query);
+        // console.log('searching for', query);
         $el.find('tbody tr').hide();
         _.each(query.split(settings.SEARCH_SEPARATOR), function (keyword) {
           this.$el.find("tbody td:icontains('" + keyword + "')").parent().show();
