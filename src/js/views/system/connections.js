@@ -190,7 +190,8 @@ define(function (require) {
     showDetail: function (row, source_view) {
       var model = row.model,
           view  = this.getView('.detail'),
-          width = $(document).width() - source_view.$('[data-sort="description"]').offset().left,
+          left  = source_view.$('[data-sort="description"]').offset() ? source_view.$('[data-sort="description"]').offset().left : 0,
+          width = $(document).width() - left,
           url   = this.getViewUrl();
                 
       if (this.selected_model != model) {

@@ -697,16 +697,22 @@ td.editable {
 .editable:after {
   content: "\f040";
   color: #cacaca;
-  position: absolute;
+/*  position: absolute;*/
   right: 5px;
   top: 50%;
   font-family: FontAwesome;
   font-weight: normal;
   font-style: normal;
+  font-size: 90%;
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
-  margin-left: .3em;
-  margin-top: -.75em;
+  margin-left: 10px;
+}
+
+td.editable:after {
+    position: absolute;
+    margin-left: .3em;
+    margin-top: -.75em;
 }
 
 .editable:hover:after {

@@ -12,7 +12,7 @@ define(function (require) {
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
-    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'setskip'],
+    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
       'HierarchyInfo.modified',

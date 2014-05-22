@@ -1166,7 +1166,7 @@ define(function (require) {
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
-      this.listenTo(this.model, 'all', function () { console.log(arguments)});
+      // this.listenTo(this.model, 'all', function () { console.log(arguments)});
       
       // this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
 
@@ -1501,9 +1501,11 @@ define(function (require) {
 
       $target.tab('show');
    
-      this.updateUrl([url, name].join('/'));
-      this.active_tab = name;
-      this.onTabChange(tab);
+      if (this.active_tab !== name) {
+        this.updateUrl([url, name].join('/'));
+        this.active_tab = name;
+        this.onTabChange(tab);        
+      }
     },
     
     onTabChange: function () {},

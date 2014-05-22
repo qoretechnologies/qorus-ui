@@ -10,11 +10,7 @@ define(function (require) {
       utils       = require('utils'),
       Toolbar, status;
   
-  status =  [
-    'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
-    'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
-    'Blocked', 'Crash'
-  ];
+  status =  ['Complete', 'Error'];
   
   Toolbar = BaseToolbar.extend({
     template: Template,

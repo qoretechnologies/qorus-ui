@@ -1,16 +1,15 @@
-define([
-  'jquery',
-  'underscore',
-  'views/toolbars/toolbar',
-  'text!templates/job/toolbars/jobs_toolbar.html',
-], function($, _, BaseToolbar, Template){
+define(function(require) {
+  var BaseToolbar = require('views/toolbars/toolbar'),
+      Template    = require('tpl!templates/job/toolbars/jobs_toolbar.html'),
+      Toolbar;
 
-  var Toolbar = BaseToolbar.extend({
+  Toolbar = BaseToolbar.extend({
     context: {},
     template: Template,
     url: '/jobs/',
     datepicker: true,
     route: 'showJobs'
   });
+  
   return Toolbar;
 });
