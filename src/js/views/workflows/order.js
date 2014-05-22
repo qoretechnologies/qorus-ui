@@ -224,7 +224,7 @@ define(function(require, exports, module) {
     off: function () {
       if (this.clean) this.clean();
       if (this.$fixed_pane) {
-        console.log('destroying resizable');
+        // console.log('destroying resizable');
         this.$fixed_pane.off();
         this.$fixed_pane.resizable('destroy');
         this.$fixed_pane = null;

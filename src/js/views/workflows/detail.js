@@ -139,8 +139,6 @@ define(function (require) {
         e.preventDefault();  
       }
       
-      console.log('hovno', this.$el.parent());
-      
       this.$el.parent()
         .removeClass('show')
         .data('id', null);

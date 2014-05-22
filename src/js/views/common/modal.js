@@ -66,7 +66,6 @@ define(function (require) {
       this.$el.on('shown.modal', this.fixeHeight);
       
       this.$el.on('hide.modal', $.proxy(this.off, this));
-      console.log('panda');
     },
     
     fixHeight: function () {

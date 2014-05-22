@@ -58,7 +58,7 @@ define(function (require) {
       }
       this.$('#response-json', this.$el).text(response);
       this.$('#response-yaml', this.$el).text(yaml.dump(arguments[2].responseJSON));
-      console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
+      // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
     },
     
     off: function () {
