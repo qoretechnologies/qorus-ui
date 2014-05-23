@@ -14,7 +14,7 @@ define(function (require) {
     
   BaseToolbar = Qorus.View.extend({
     defaultEvents: {
-      'click .dp': 'showDatePicker',
+      'click .dp': 'datePicker',
       'keypress .dp input': 'submitDate'
     },
     
@@ -37,9 +37,6 @@ define(function (require) {
     },
     
     onRender: function () {
-      if (this.datepicker) {
-        this.datePicker();
-      }
       _.defer(this.setFixed);
     },
     
@@ -75,13 +72,17 @@ define(function (require) {
     },
     
     // filter by date init
-    datePicker: function () {
-      this.views.datepicker = new DatePicker({ date: this.options.date });
-      this.listenTo(this.views.datepicker, 'applyDate', this.applyDate);
+    datePicker: function (e) {
+      if (this.views.datepicker)
+        this.views.datepicker.off();
+        
+      var view = this.views.datepicker = new DatePicker({ date: this.options.date });
+      this.listenTo(view, 'applyDate', this.applyDate);
+      view.show(e);
     },
     
     showDatePicker: function (e) {
-      if (this.views.datepicker) this.views.datepicker.show(e);
+
     },
     
     applyDate: function (date) {
