@@ -1111,7 +1111,7 @@ td.date {
   white-space: nowrap;
 }
 
-td.nowrap {
+th.nowrap, td.nowrap {
   white-space: nowrap;
 }
 
