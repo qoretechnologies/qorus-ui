@@ -31,6 +31,11 @@ define(function (require) {
       e.stopPropagation();
       e.preventDefault();
       this.model.doAction(action);
+    },
+    
+    render: function () {
+      this.context.deprecated = this.model.collection.opts.deprecated;
+      RowView.__super__.render.apply(this, arguments);
     }
   });
   

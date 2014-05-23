@@ -189,6 +189,8 @@ define(function (require) {
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
+      
+      this.on('change', this.updateTotal);
     },
     
     dispatch: function (e, evt) {
@@ -207,7 +209,6 @@ define(function (require) {
           this.decr('exec_count');
         } else if (action === 'data_submitted') {
           this.incr(e.info.status);
-          this.incr('TOTAL');
         } else if (action === 'status_changed') {
           this.decr(e.info.info.old);
           this.incr(e.info.info.new);
@@ -354,6 +355,17 @@ define(function (require) {
       // if (item.deprecated === false) controls.push({ action: 'hide', icon: 'flag-alt', title: 'Hide'});
       // if (item.deprecated === true) controls.push({ action: 'show', icon: 'flag', title: 'Show'});
       return controls;
+    },
+    
+    updateTotal: function () {
+      var states = ['IN-PROGRESS','READY','SCHEDULED','COMPLETE','INCOMPLETE','ERROR','CANCELED','RETRY','WAITING','ASYNC-WAITING','EVENT-WAITING','BLOCKED','CRASH'],
+          total  = 0;
+          
+      _.each(states, function (state) {
+        total += this.attributes[state];
+      }, this);
+    
+      this.attributes.TOTAL = total;      
     }
   });
 

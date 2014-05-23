@@ -15,7 +15,6 @@ define(function (require) {
   BaseToolbar = Qorus.View.extend({
     defaultEvents: {
       'click .dp': 'showDatePicker',
-      'click': 'hideDatePicker',
       'keypress .dp input': 'submitDate'
     },
     
@@ -73,7 +72,6 @@ define(function (require) {
     
     showDatePicker: function (e) {
       if (this.views.datepicker) this.views.datepicker.show(e);
-      e.stopPropagation();
     },
     
     applyDate: function (date) {

@@ -71,27 +71,35 @@ define(function (require) {
     
     // workflow list 
     showWorkflows: function (date, deprecated, path, query) {
-      var opts = { 
-        date: utils.prepareDate(date), 
-        path: path, 
-        deprecated: deprecated, 
-        query: query, 
-        fetch: false 
-      };
+      var opts = {
+            date: utils.prepareDate(date),
+            path: path,
+            deprecated: deprecated || false,
+            query: query,
+            fetch: false
+          },
+          view, d = (deprecated === 'hidden');
       
       if (!this.collections.workflows) {
         this.collections.workflows = new Workflows([], opts);
       } else {
+        d = this.collections.workflows.opts.deprecated;
         _.extend(this.collections.workflows.opts, opts);
       }
       
       this.collections.workflows.fetch();
       
-      console.log(this.currentView, this.currentView instanceof WorkflowListView);
-      
       if (!(this.currentView instanceof WorkflowListView)) {
-        var view = new WorkflowListView(this.collections.workflows, opts);
+        view = new WorkflowListView(this.collections.workflows, opts);
         this.setView(view);
+      }
+      
+      var dd = (deprecated === null) ? false : deprecated;
+      
+      if (d !== dd) {
+        var tview = this.currentView.getView('.workflows');
+        this.currentView.opts.deprecated = dd;
+        this.currentView.render();
       }
     },
     

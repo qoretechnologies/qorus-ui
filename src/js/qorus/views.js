@@ -226,7 +226,6 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
-        console.log('frag', this.id);
         var $el = this.$(id),
           el = $el.get(0);
         
