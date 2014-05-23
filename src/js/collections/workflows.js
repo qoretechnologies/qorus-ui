@@ -35,7 +35,6 @@ define(function (require) {
       this.opts = {};
       this.opts.deprecated = false;
       
-
       if (opts) {
           this.opts = opts;
           this.opts.deprecated = (opts.deprecated === 'hidden'); 

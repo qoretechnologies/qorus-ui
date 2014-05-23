@@ -122,7 +122,7 @@ define(function (require) {
       this.listenTo(tview, 'row:clicked', this.showDetail);
       this.listenTo(tview, 'update', this.applySearch);
       
-      toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated }), '.toolbar');
+      toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated, collection: this.collection }), '.toolbar');
     },
     
     clean: function () {

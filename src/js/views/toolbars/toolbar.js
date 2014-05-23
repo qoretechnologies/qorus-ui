@@ -24,12 +24,16 @@ define(function (require) {
     fixed: true,
     
     initialize: function (opts) {
-      _.bindAll(this);
+      // _.bindAll(this);
       BaseToolbar.__super__.initialize.call(this, opts);
+      console.log(opts);
       this.context = {};
       
       this.context.date = this.options.date;
       this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
+      
+      if (this.collection)
+        this.listenTo(this.collection, 'sync', this.update);
     },
     
     onRender: function () {
@@ -39,9 +43,15 @@ define(function (require) {
       _.defer(this.setFixed);
     },
     
+    update: function () {
+      console.log('panda', this.collection.date, this.collection.opts.date);
+      this.options.date = this.context.date = this.collection.opts.date;
+      this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
+      this.render();
+    },
+    
     setFixed: function () {
-      if (this.fixed) {
-
+      if (this.fixed && this.$el.next('.push').length == 0) {
         var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
 
         this.$el

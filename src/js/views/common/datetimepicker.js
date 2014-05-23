@@ -149,6 +149,15 @@ define(function (require) {
         .css('top', top)
         .css('left', left)
         .removeClass('hide');
+
+      e.preventDefault();
+
+      $('html').on('click.datepickeroutside', $.proxy(function (e) { 
+        if (e.isDefaultPrevented()) return;
+        $('html').off('click.dpoutside');
+        this.hide(); 
+      }, this));
+
     },
     
     hide: function () {
