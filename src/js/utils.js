@@ -33,7 +33,8 @@ define(function (require) {
     data_types: {
       'integer': /\d+/,
       'string': /.*/,
-      'date': /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
+      'date': /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
+      'boolean': /(1|2|True|False)/i
     },
     
     parseDate: function (date, format) {
@@ -202,7 +203,7 @@ define(function (require) {
     },
     
     validate: function (obj, type, regex) {
-      var m, test;
+      var test;
       
       if (type in this.data_types)
         test = this.data_types[type];

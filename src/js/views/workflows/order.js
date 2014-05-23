@@ -31,6 +31,7 @@ define(function(require, exports, module) {
       datepicker      = require('views/common/datetimepicker'),
       LockTemplate    = require('tpl!templates/workflow/orders/lock.html'),
       User            = require('models/system').User,
+      ConfirmView     = require('views/common/confirm'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, DataView, StepInfoView, StepErrorsView, NotesView, OrderLockView;
   
@@ -547,17 +548,21 @@ define(function(require, exports, module) {
         $row.empty();
         $row.append($input);
         $input.focus();
-
+        
         if ($row.data('type') === 'date') {
           this.views.datepicker = new datepicker();
           this.views.datepicker.show(e);
           this.listenTo(this.views.datepicker, 'applyDate', save);
           $(document).on('click.datepickerout', clean);
+        } else if ($row.data('type') === 'boolean') {
+          this.views.confirm = new ConfirmView({ title: 'Are you sure', element: $row });
+          this.listenTo(this.views.confirm, 'confirm', save);
+          this.listenTo(this.views.confirm, 'dismiss', clean);
         } else {
           $input.blur(saveOrClean);
         }
         
-        function save(val) {
+        function save (val) {
           var data     = {},
               property = $row.data('name');
           
@@ -565,12 +570,16 @@ define(function(require, exports, module) {
             val = val.format(settings.DATE_DISPLAY);
 
           data[property] = val;
+          
+          if ($row.data('stepid')) data.stepid = $row.data('stepid');
+          if ($row.data('ind')) data.stepid = $row.data('ind');
+
           self.model.doAction($row.data('action'), data);
           value = val;
           clean();
         }
         
-        function clean(e) {
+        function clean (e) {
           if (e && $(e.target).closest('.datepicker').length) {
             
           } else {

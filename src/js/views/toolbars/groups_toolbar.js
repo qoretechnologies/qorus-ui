@@ -7,7 +7,8 @@ define([
 
   var Toolbar = BaseToolbar.extend({
     context: {},
-    template: Template    
+    template: Template,
+    fixed: true  
   });
   return Toolbar;
 });

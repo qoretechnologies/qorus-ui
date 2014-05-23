@@ -26,7 +26,6 @@ define(function (require) {
     initialize: function (opts) {
       // _.bindAll(this);
       BaseToolbar.__super__.initialize.call(this, opts);
-      console.log(opts);
       this.context = {};
       
       this.context.date = this.options.date;
@@ -41,7 +40,6 @@ define(function (require) {
     },
     
     update: function () {
-      console.log('panda', this.collection.date, this.collection.opts.date);
       this.options.date = this.context.date = this.collection.opts.date;
       this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
       this.render();

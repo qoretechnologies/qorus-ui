@@ -585,6 +585,11 @@ aside {
   width: 760px;
 }
 
+.popover.confirm .popover-content {
+  height: auto;
+  width: auto;
+}
+
 #service-detail .tab-content {
     height: 80%;
 }

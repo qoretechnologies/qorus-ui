@@ -8,6 +8,8 @@ define(function (require) {
       Template = require('text!templates/system/ocmd.html'), 
       url, View;
   
+  require('bootstrap');
+  
   url = settings.REST_API_PREFIX + '/system/api';
   
   View = Qorus.View.extend({
@@ -133,7 +135,7 @@ define(function (require) {
     },
     
     initTypeahead: function (data) {
-      this.$('#command').typeahead({ 
+      $('#command').typeahead({ 
         source: _.keys(data),
         dropup: true
       });
