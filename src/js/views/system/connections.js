@@ -16,11 +16,11 @@ define(function (require) {
       PingTpl    = require('tpl!templates/system/connections/ping.html'),
       DepsTpl    = require('tpl!templates/system/connections/deps.html'),
       View, PaneView, TableView, ResourceViews, QorusDetailView, 
-      UserDetailView, DatasourcesDetailView, RowView;
+      UserDetailView, DatasourcesDetailView, RowView, AlertsView;
   
   AlertsView = Qorus.ModelView.extend({
     slug: function () {
-      slug = AlertsView.__super__.slug.apply(this);
+      var slug = AlertsView.__super__.slug.apply(this);
       return 'connections-' + slug;
     }
   });
@@ -100,6 +100,10 @@ define(function (require) {
       view.render();
       return view;
     }
+    // initialize: function () {
+    //   TableView.__super__.initialize.apply(this, arguments);
+    //   console.log('tview init', this.collection);
+    // }
   });
   
   // Resource pane definition

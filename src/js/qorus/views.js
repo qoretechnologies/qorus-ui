@@ -148,6 +148,7 @@ define(function (require) {
         }
         // console.log('rendering', tpl.slice(0,100), this.el.id);
         this.$el.html(tpl);
+        
         // debug.log('Template rendered', this.cls, this.cid, new Date().getTime() - start, 'ms');
         this.trigger('render', this, {});
       }
@@ -225,6 +226,7 @@ define(function (require) {
       if (view instanceof Backbone.View) {
         view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
+        console.log('frag', this.id);
         var $el = this.$(id),
           el = $el.get(0);
         
@@ -245,10 +247,9 @@ define(function (require) {
     
     // renders subviews
     renderViews: function () {
-      var self = this;
-      _.each(self.views, function (view, id) {
-        if (id!=='tabs')  self.renderView(id, view);
-      });
+      _.each(this.views, function (view, id) {
+        if (id!=='tabs')  this.renderView(id, view);
+      }, this);
       return this;
     },
     
@@ -1162,7 +1163,7 @@ define(function (require) {
       if (_.has(opts, 'context')) _.extend(this.context, opts.context); 
 
       
-      this.listenTo(this.model, 'change', this.update);
+      this.listenTo(this.model, 'change', _.throttle(this.update, 5*1000));
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
@@ -1190,7 +1191,7 @@ define(function (require) {
         this.$el.addClass('warning');
     },
     
-    update: _.debounce(function () {
+    update: function () {
       if (this.render_lock === true) return;
       var self = this,
           css_classes = this.$el.attr('class').split(/\s+/),
@@ -1211,7 +1212,7 @@ define(function (require) {
       setTimeout(function() {
         self.$el.removeClass('changed');
       }, 5000);
-    }, 5*1000, { trailing: true, leading: true, maxWait: 5*5*1000 }),
+    }, // , { trailing: true, leading: true, maxWait: 5*5*1000 }
     
     // delegate click event with model to parent view
     rowClick: function (e) {
@@ -1229,6 +1230,7 @@ define(function (require) {
       }
       
       if (trigger) {
+        this.className += " info";
         this.trigger('clicked', this);
         if (this.parent) {
           this.parent.trigger('row:clicked', this);

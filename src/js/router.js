@@ -87,9 +87,12 @@ define(function (require) {
       
       this.collections.workflows.fetch();
       
-      var view = new WorkflowListView(this.collections.workflows, opts);
+      console.log(this.currentView, this.currentView instanceof WorkflowListView);
       
-      this.setView(view);
+      if (!(this.currentView instanceof WorkflowListView)) {
+        var view = new WorkflowListView(this.collections.workflows, opts);
+        this.setView(view);
+      }
     },
     
     // workflow detail

@@ -11,6 +11,8 @@ define(function (require) {
       StatusTpl       = require('tpl!templates/system/health/summary.html'),
       Dispatcher      = require('qorus/dispatcher'),
       Summary, DashboardView, HealthModel, StatusView;
+      
+  require('bootstrap');
   
   Summary = Qorus.Model.extend({
     __name__: 'Summary',
