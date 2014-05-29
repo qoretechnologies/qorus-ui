@@ -1,14 +1,12 @@
-define([
-  'jquery',
-  'underscore',
-  'views/toolbars/toolbar',
-  'text!templates/groups/toolbars/groups_toolbar.html',
-], function($, _, BaseToolbar, Template){
+define(function(require) {
+  var BaseToolbar = require('views/toolbars/toolbar'), 
+      Template = require('tpl!templates/groups/toolbars/groups_toolbar.html'),
+      Toolbar;
 
-  var Toolbar = BaseToolbar.extend({
+  Toolbar = BaseToolbar.extend({
     context: {},
-    template: Template,
-    fixed: true  
+    template: Template
   });
+  
   return Toolbar;
 });

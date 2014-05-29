@@ -2,8 +2,7 @@
   <div class="row-fluid">
     <div class="row-fluid relative">
       <span class="span10"><h3>Group: <%= item.name %></h3></span>
-      <div class="btn-group pull-right align-middle">
-        <%= powerButton(item.enabled, { option: 'enabled', action: 'setStatus', on: 'true', off: 'false', id: item.id }) %></div>        
+      <div class="btn-group pull-right align-middle"><%= createControls(_item) %></div>
       </div>
       <p class="muted"><%= item.description %></p>
     </div>

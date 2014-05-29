@@ -47,6 +47,7 @@ define(function (require) {
     
     setFixed: function () {
       if (this.fixed && this.$el.next('.push').length == 0) {
+        console.log('fixed');
         var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
 
         this.$el

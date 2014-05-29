@@ -1,5 +1,5 @@
 <td><i class="icon-check-empty check"></i></td>
-<td class="enabled"><%= powerButton(item.enabled, { option: 'enabled', action: 'setStatus', on: 'true', off: 'false', id: item.id }) %></td>
+<td class="enabled"><%= createControls(_item) %></td>
 <td class="name"><a href="/groups/<%= item.name %>"><%= item.name %></a></td>
 <td class="description"><%= item.description %></td>
 <td></td>

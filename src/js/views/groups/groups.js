@@ -8,7 +8,27 @@ define(function (require) {
       Template    = require('text!templates/groups/list.html'),
       TableTpl    = require('text!templates/groups/table.html'),
       RowTpl      = require('text!templates/groups/row.html'),
-      ListView;
+      ListView, RowView;
+  
+
+  RowView = Qorus.RowView.extend({
+    __name__: 'GroupRowView',
+    template: RowTpl,
+
+    additionalEvents: {
+      'click [data-action]': 'doAction'
+    },
+
+    doAction: function (e) {
+      var $target = $(e.currentTarget),
+          action  = $target.data('action'),
+          data    = $target.data();
+  
+      e.preventDefault();
+      this.model.doAction(action, data);
+    }
+  });
+  
   
   ListView = Qorus.ListView.extend({
     __name__: "GroupsListView",
@@ -27,6 +47,7 @@ define(function (require) {
       TView = this.setView(new Qorus.TableView({ 
           collection: this.collection, 
           template: TableTpl,
+          row_view: RowView,
           row_template: RowTpl,
           dispatcher: Dispatcher,
           fixed: true
