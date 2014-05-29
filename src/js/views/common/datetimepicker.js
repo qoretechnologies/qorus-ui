@@ -13,7 +13,9 @@ define(function (require) {
       'change input[name=hours],input[name=minutes]': 'processHours',
       'click [data-value=submit]': 'applyDate',
       'click [data-value=24h]': 'setToday',
-      'click [data-value=all]': 'setAll'
+      'click [data-value=all]': 'setAll',
+      'click .reset-time': 'resetTime',
+      'click': 'preventDefault'
     },
     
     tagName: 'div',
@@ -120,7 +122,12 @@ define(function (require) {
       if ($target.attr('name') === 'hours') this.options.date.hours($target.val());
       if ($target.attr('name') === 'minutes') this.options.date.minutes($target.val());
       
-      this.onDateChange(this.options.date);
+      this.onTimeChange(this.options.date);
+    },
+    
+    onTimeChange: function (date) {
+      this.$input_el.val(date.format(settings.DATE_DISPLAY));
+      this.trigger('onTimeChange', date);
     },
     
     onDateChange: function (date) {
@@ -183,6 +190,17 @@ define(function (require) {
       this.trigger('setAll', this.options.date);
       this.applyDate();
       this.hide();
+    },
+    
+    resetTime: function (ev) {
+      this.options.date = moment(this.options.date).hour(0).minute(0).second(0);
+      this.$el.find('[name=hours]').val('00');
+      this.$el.find('[name=minutes]').val('00');
+      this.onTimeChange(this.options.date);
+    },
+    
+    preventDefault: function (ev) {
+      ev.preventDefault();
     }
   });
   
