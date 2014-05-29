@@ -36,7 +36,7 @@ define(function (require) {
     },
     
     onRender: function () {
-      _.defer(this.setFixed);
+      _.defer($.proxy(this.setFixed, this));
     },
     
     update: function () {
