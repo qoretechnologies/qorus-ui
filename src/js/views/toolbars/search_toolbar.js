@@ -1,44 +1,36 @@
 define(function (require) {
   require('bootstrap.multiselect');
-  require('jquery.sticky');
   
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      Backbone = require('backbone'),
-      Qorus    = require('qorus/qorus'),
-      Template = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Backbone    = require('backbone'),
+      Qorus       = require('qorus/qorus'),
+      Template    = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
+      BaseToolbar = require('views/toolbars/toolbar'),
       Toolbar;
   
-  Toolbar = Qorus.View.extend({
-    events: {
+  Toolbar = BaseToolbar.extend({
+    fixed: true,
+    additionalEvents: {
       "click button[data-action='open']": "navigateTo"
       // 'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },
-    initialize: function(opts){
-      _.bindAll(this);
+
+    initialize: function (opts) {
       Toolbar.__super__.initialize.call(this, opts);
       
       this.template = Template;
-    },
-    
-    onRender: function () {
-       this.sticky = this.$('.sticky').sticky({ el: this.$('.sticky').parents('.pane') });
-    },
-    
-    clean: function(){
-      if (this.sticky) {
-        this.$('.sticky').sticky('remove');
-        this.sticky.remove();
-      }
+      _.extend(this.context, opts);
     },
     
     navigateTo: function (e) {
       var el = $(e.currentTarget);
       if (el.data('url')){
-        Backbone.history.navigate(el.data('url'), {trigger: true});       
+        Backbone.history.navigate(el.data('url'), { trigger: true });
       }
     },
+    
     search: function (e) {
       if (this.collection){
         this.collection.search(e); 

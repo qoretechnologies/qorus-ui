@@ -80,7 +80,7 @@ define(function (require) {
           // fixed: true
       }), '#instances');
       this.setView(new BottomBarView({}), '#bottom-bar');
-      this.setView(new OrdersToolbar(this.opts), '#toolbar');
+      this.setView(new OrdersToolbar(this.opts), '.toolbar');
     },
     
     runAction: function (e) {

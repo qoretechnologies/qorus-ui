@@ -128,6 +128,7 @@ define(function (require) {
     onTimeChange: function (date) {
       this.$input_el.val(date.format(settings.DATE_DISPLAY));
       this.trigger('onTimeChange', date);
+      this.onDateChange(this.options.date);
     },
     
     onDateChange: function (date) {

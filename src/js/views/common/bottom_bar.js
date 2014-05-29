@@ -23,18 +23,21 @@ define(function (require) {
     
     addSizeHandler: function () {
       var offset = $('#split-panes').offset();
-      $('.handler').draggable({
-        axis : 'y',
-        containment: [
-          offset.left,
-          offset.top + 200,
-          offset.top + $('#split-panes').width(),
-          offset.top + $('#split-panes').height() - 200
-        ],
-        drag : this.resize,
-        refreshPositions: true,
-        scroll: true
-      });
+      
+      if (offset) {
+        $('.handler').draggable({
+          axis : 'y',
+          containment: [
+            offset.left,
+            offset.top + 200,
+            offset.top + $('#split-panes').width(),
+            offset.top + $('#split-panes').height() - 200
+          ],
+          drag : this.resize,
+          refreshPositions: true,
+          scroll: true
+        });        
+      }
     },
     
     resize: function (event, ui) {

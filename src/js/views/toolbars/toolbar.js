@@ -47,7 +47,7 @@ define(function (require) {
     
     setFixed: function () {
       if (this.fixed && this.$el.next('.push').length == 0) {
-        console.log('fixed');
+        console.log(this.$el.css('display'), this.$el.outerHeight(true));
         var $push = $('<div class="push" />').height(this.$el.outerHeight(true));
 
         this.$el
@@ -80,9 +80,7 @@ define(function (require) {
       view.show(e);
     },
     
-    showDatePicker: function (e) {
-
-    },
+    showDatePicker: function (e) {},
     
     applyDate: function (date) {
       var options = _.result(this, 'url_options'), 
