@@ -129,7 +129,7 @@ define(function (require) {
               // highlite/unhighlite selected row
               $('tr', el.parent()).removeClass('info');
               $('tr[data-id='+ el.data('id') +']').addClass('info');
-            });                    
+            });
           }
         }
       }

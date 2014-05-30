@@ -7,6 +7,10 @@ define(function (require) {
     idAttribute: "function_instanceid",
     urlRoot: settings.REST_API_PREFIX + '/functions/',
     dateAttributes: ['created', 'modified'],
+
+    defaults: {
+      type: 'function'
+    },
     
     initialize: function (opts) {
       if (opts.id) {
@@ -16,6 +20,7 @@ define(function (require) {
       
       Model.__super__.initialize.call(this, opts);
     },
+    
     parse: function (response, options) {
       response = Model.__super__.parse.call(this, response, options);
 

@@ -17,11 +17,11 @@ define(function (require) {
     },
     
     preRender: function () {
-      var view = this.setView(new Qorus.TableView({ 
-        collection: this.collection, 
+      var view = this.setView(new Qorus.TableView({
+        collection: this.collection,
         template: TableTpl,
         row_template: RowTpl,
-        context: { url: this.url },
+        context: { url: this.url }
       }), '#order-list');
     },
 

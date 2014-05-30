@@ -200,7 +200,7 @@ define(function (require) {
       this.options = options || {};
       this.opts = this.options;
       
-      if (options.date) {
+      if (this.options.date) {
         this.date = this.options.date;
       }
       

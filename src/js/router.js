@@ -26,6 +26,8 @@ define(function (require) {
       Constants         = require('collections/constants'),
       Functions         = require('collections/functions'),
       Qorus             = require('qorus/views'),
+      Library           = require('collections/library'),
+      LibraryView       = require('views/library/library'),
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router, alerts;
       
@@ -188,6 +190,12 @@ define(function (require) {
     
     showFunctions: function () {
       var view = new FunctionListView();
+      this.setView(view);
+    },
+    
+    showClasses: function () {
+      var collection = new Library();
+      var view = new LibraryView({ collection: collection });
       this.setView(view);
     },
     

@@ -1,12 +1,16 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus'
-], function(settings, _, Qorus){
-  var Model = Qorus.Model.extend({
+define(function (require) {
+  var settings = require('settings'), 
+      Qorus = require('qorus/qorus'),
+      Model;
+  
+  Model = Qorus.Model.extend({
     idAttribute: "constantid",
     urlRoot: settings.REST_API_PREFIX + '/constant/',
     dateAttributes: ['created', 'modified'],
+    
+    defaults: {
+      type: 'constant'
+    },
     
     initialize: function (opts) {
       if (opts.id) {

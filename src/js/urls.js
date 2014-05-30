@@ -20,6 +20,7 @@ define(function (require) {
     'groups': 'showGroups',
     'extensions(/)(:extension)': 'showExtension',
     'functions': 'showFunctions',
+    'library': 'showClasses',
     '': 'redirectToDashboard',
 
     // Default
