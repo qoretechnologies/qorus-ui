@@ -496,6 +496,7 @@ define(function (require) {
         if (collection instanceof Backbone.Collection) {
           this.collection = collection;
         } else {
+          console.log(collection);
           this.collection = new collection([], this.opts);
         }
         

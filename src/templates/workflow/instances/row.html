@@ -1,0 +1,11 @@
+<td><span class="label"><%= item.status %></span></td>
+<td><%= item.executionID %></td>
+<td><%= item.mode %></td>
+<td><%= item.starttime %></td>
+<td><%= item.errors %></td>
+<td><%= item.warnings %></td>
+<td>
+  <div class="btn_group">
+    <button class="btn-mini btn-danger" data-id="<%= item.executionID %>" data-action="stop">Stop</button>
+  </div>
+</td>

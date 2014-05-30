@@ -3,19 +3,17 @@ define(function (require) {
       _             = require('underscore'),
       settings      = require('settings'),
       Qorus         = require('qorus/qorus'),
-      Dispatcher    = require('qorus/dispatcher'),
       Collection    = require('collections/orders'),
       OrdersToolbar = require('views/toolbars/orders_toolbar'),
       Template      = require('text!templates/workflow/orders.html'),
       TableTpl      = require('text!templates/workflow/orders/table.html'),
       RowTpl        = require('text!templates/workflow/orders/row.html'),
       moment        = require('moment'),
-      qorus_helpers = require('qorus/helpers'),
       utils         = require('utils'),
       ModalView     = require('views/common/modal'),
       LockTemplate  = require('tpl!templates/workflow/orders/lock.html'),
       User          = require('models/system').User,
-      helpers, ListView, RowView, OrderUnlockView, OrderLockView;
+      helpers, ListView, RowView, OrderLockView;
   
   helpers = {
     action_css: {
@@ -32,7 +30,7 @@ define(function (require) {
       "click button[type=submit]": "lockOrder"
     },
         
-    lockOrder: function (e) {
+    lockOrder: function () {
       var note = this.$('textarea[name=note]').val();
       this.model.doAction(this.options.action, { note: note });
       this.trigger('close');
@@ -64,7 +62,7 @@ define(function (require) {
     },
     
     applyLock: function (action) {
-      var view = this.setView(new ModalView({
+      this.setView(new ModalView({
         content_view: new OrderLockView({ action: action, model: this.model})
       }), '.order-lock-modal');
     }
@@ -114,8 +112,6 @@ define(function (require) {
     },
     
     preRender: function () {
-      var opts = this.opts;
-            
       this.setView(new OrdersToolbar(this.opts), '#toolbar');
       
       this.setView(new Qorus.TableView({ 
@@ -124,7 +120,7 @@ define(function (require) {
           row_template: RowTpl,
           helpers: helpers,
           context: { url: this.url },
-          row_view: RowView,
+          row_view: RowView
       }), '#order-list');
     },
     

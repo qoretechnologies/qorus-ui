@@ -85,7 +85,7 @@ define(function (require) {
     preRender: function () {
       var url = '/workflows/' + this.model.id;
       
-      if (this.opts.inst == 'instances') {
+      if (this.opts.inst === 'instances') {
         this.setView(new InstanceListView({ 
             date: this.opts.date, workflowid: this.opts.id, url: this.url() 
           }), '#instances');
@@ -118,17 +118,19 @@ define(function (require) {
           bar.hide();
           el.removeClass('info');
         } else {
-          oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content');
+          if (bar) {
+            oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content');
       
-          oview.listenTo(oview.model, 'change', function () {
-            bar.render();
-            self.renderView('#bottom-content');
-            bar.show();
+            oview.listenTo(oview.model, 'change', function () {
+              bar.render();
+              self.renderView('#bottom-content');
+              bar.show();
 
-            // highlite/unhighlite selected row
-            $('tr', el.parent()).removeClass('info');
-            $('tr[data-id='+ el.data('id') +']').addClass('info');
-          });        
+              // highlite/unhighlite selected row
+              $('tr', el.parent()).removeClass('info');
+              $('tr[data-id='+ el.data('id') +']').addClass('info');
+            });                    
+          }
         }
       }
     },
