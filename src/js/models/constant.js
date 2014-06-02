@@ -5,7 +5,7 @@ define(function (require) {
   
   Model = Qorus.Model.extend({
     idAttribute: "constantid",
-    urlRoot: settings.REST_API_PREFIX + '/constant/',
+    urlRoot: settings.REST_API_PREFIX + '/constants/',
     dateAttributes: ['created', 'modified'],
     
     defaults: {
@@ -20,6 +20,7 @@ define(function (require) {
       
       Model.__super__.initialize.call(this, opts);
     },
+    
     parse: function (response, options) {
       response = Model.__super__.parse.call(this, response, options);
 

@@ -26,6 +26,7 @@ define(function (require) {
   });
       
   QorusDetailView = Qorus.TabView.extend({
+    __name__: 'QorusDetailView',
     views: {},
     template: TabTpl,
     url: function () {
@@ -33,10 +34,11 @@ define(function (require) {
     },
     
     initialize: function (options) {
-      QorusDetailView.__super__.initialize.apply(this, arguments);
       this.model = options.model;
       this.options.resource_type = options.resource_type;
       this.listenTo(this.model, 'change', this.render);
+      QorusDetailView.__super__.initialize.apply(this, arguments);
+      console.log('harfa');
     },
     
     preRender: function () {
@@ -100,10 +102,6 @@ define(function (require) {
       view.render();
       return view;
     }
-    // initialize: function () {
-    //   TableView.__super__.initialize.apply(this, arguments);
-    //   console.log('tview init', this.collection);
-    // }
   });
   
   // Resource pane definition

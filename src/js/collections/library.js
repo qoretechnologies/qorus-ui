@@ -30,6 +30,10 @@ define(function (require) {
       }, this);
       
       this.trigger('sync', this.models);
+    },
+    
+    groupByType: function () {
+      return this.groupBy(function (item) { return item.get('type'); });
     }
   });
   
