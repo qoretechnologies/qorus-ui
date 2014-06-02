@@ -103,6 +103,14 @@ define(function (require) {
       
       if (_.has(this.options, 'template')) this.template = this.options.template;
       this.processPath();
+      
+      if (this.collection || this.model) {
+        if (this.collection instanceof Backbone.Collection) {
+          this.listenTo(this.collection, 'sync:error', this.onSyncError);
+        } else if (this.model instanceof Backbone.Model) {
+          this.listenTo(this.model, 'sync:error', this.onSyncError);
+        }
+      }
     },
         
     off: function (remove) {
@@ -438,7 +446,9 @@ define(function (require) {
         view.remove();
       });
       return this;
-    }
+    },
+    
+    onSyncError: function () {}
    });
 
    ListView = View.extend({
@@ -496,7 +506,6 @@ define(function (require) {
         if (collection instanceof Backbone.Collection) {
           this.collection = collection;
         } else {
-          console.log(collection);
           this.collection = new collection([], this.opts);
         }
         
@@ -865,12 +874,14 @@ define(function (require) {
       // this.listenTo(this.collection, 'resort', this.update);
       if (this.collection.size() === 0)
         this.listenToOnce(this.collection, 'sync', this.update);
+
+      this.listenTo(this.collection, 'sync:error', this.onSyncError);
       
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
       if (_.has(opts, 'row_template')) this.row_template = opts.row_template;
       if (_.has(opts, 'row_view')) this.RowView = opts.row_view;
-      if (_.has(opts, 'row_attributes')) this.row_attributes = opts.row_attributes;      
+      if (_.has(opts, 'row_attributes')) this.row_attributes = opts.row_attributes;
       if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
       if (_.has(opts, 'dispatcher')) this.dispatcher = opts.dispatcher;
       if (_.has(opts, 'fixed')) this.fixed = opts.fixed;
@@ -1092,7 +1103,13 @@ define(function (require) {
         $el.data('order', 'des');
         $el.addClass('sort-des');
       }
-    } 
+    },
+    
+    onSyncError: function (collection, response, options) {
+      this.template = _.template('<div class="alert alert-warning"><h4><%= response.err %></h4><p><%= response.desc %></p></div>', 
+                        { response: response.responseJSON, options: options });
+      this.render();
+    }
   });
   
   TableAutoView = TableView.extend({

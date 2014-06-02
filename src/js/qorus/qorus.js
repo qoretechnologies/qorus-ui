@@ -82,7 +82,6 @@ define(function (require) {
     },
     
     fetch: function (options) {
-      this.trigger('pre:fetch', this);
       var data = {};
       
       if (this.opts) {
@@ -97,7 +96,13 @@ define(function (require) {
         _.extend(data, options.data);
       }
       
-      _.extend(options, { data: data });
+      _.extend(options, { 
+        data: data,
+        error: function syncError(model, response, options) {
+                 model.trigger('sync:error', model, response, options);
+               }
+      });
+      
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
     },
@@ -266,7 +271,12 @@ define(function (require) {
         _.extend(data, options.data);
       }
       
-      _.extend(options, { data: data });
+      _.extend(options, { 
+        data: data,
+        error: function syncError(model, response, options) {
+                 model.trigger('sync:error', model, response, options);
+               }
+      });
       
       options.reset = false;
       options.merge = true;
