@@ -1653,3 +1653,11 @@ textarea.note {
 #step-errors td.info {
   width: 50%;
 }
+
+td.break {
+  word-break: break-word;
+}
+
+.overflow .row-fluid > div {
+  overflow: auto;
+}

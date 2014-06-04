@@ -6,7 +6,8 @@ define(function (require) {
   
   Collection = Qorus.SortedCollection.extend({
     url: settings.REST_API_PREFIX + '/functions',
-    model: Model
+    model: Model,
+    pagination: false
   });
   
   return new Collection();
