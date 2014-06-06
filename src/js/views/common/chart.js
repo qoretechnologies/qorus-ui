@@ -1,9 +1,9 @@
 define(function (require) {
+  require('chart');
   var _                = require('underscore'),
       Qorus            = require('qorus/qorus'),
       LineChartTpl     = require('tpl!templates/common/charts/line.html'),
       DoughnutChartTpl = require('tpl!templates/common/charts/doughnut.html'),
-      Chart            = require('chart'),
       ColorScheme, LineStyles, ChartView, LineChart, DoughnutChart;
   
   
@@ -209,7 +209,7 @@ define(function (require) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          new Chart(ctx).Line(this.dataset, { datasetFill: false });
+          var myChart = new Chart(ctx).Line(this.dataset, { datasetFill: false });
           // console.log(myChart, this.dataset);
         }
       }
@@ -226,7 +226,7 @@ define(function (require) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          new Chart(ctx).Doughnut(this.dataset);
+          var myChart = new Chart(ctx).Doughnut(this.dataset);
         }
       }
     }    
