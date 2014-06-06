@@ -20,7 +20,14 @@ define(function (require) {
     
     onRender: function () {
       var div = document.createElement('div'),
-          code = Prism.highlight(this.model.get('body'), Prism.languages.qore);
+          code, highlighted;
+          
+      if (highlighted = this.model.get('body_highlighted')) {
+        code = highlighted;
+      } else {
+        code = highlighted = Prism.highlight(this.model.get('body'), Prism.languages.qore);
+        this.model.set({ 'body_highlighted': highlighted }, { silent: true });
+      }
       
       div.innerHTML = code;
       
