@@ -1,4 +1,6 @@
 define(function (require) {
+  require('localstorage');
+  
   var settings   = require('settings'),
       _          = require('underscore'),
       Backbone   = require('backbone'),
