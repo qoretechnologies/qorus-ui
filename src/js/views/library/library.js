@@ -19,7 +19,12 @@ define(function (require) {
     template: LibraryDetailTpl,
     
     onRender: function () {
-      this.highlight();
+      var div = document.createElement('div'),
+          code = Prism.highlight(this.model.get('body'), Prism.languages.qore);
+      
+      div.innerHTML = code;
+      
+      this.$('code').append(div);
     },
     
     highlight: function () {

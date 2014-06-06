@@ -1,6 +1,6 @@
 define(function (require) {
   var settings = require('settings'), 
-      Qorus = require('qorus/qorus'),
+      Qorus    = require('qorus/qorus'),
       Model;
   
   Model = Qorus.Model.extend({
@@ -29,6 +29,7 @@ define(function (require) {
         response.body = response.body.replace(/\\n/g, '\n');
         response.body = response.body.replace(/\\t/g, '    ');
       }
+      
       return response;
     }
   });
