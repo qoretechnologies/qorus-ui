@@ -11,8 +11,8 @@ define(function (require) {
       _.bindAll(this, 'synced');
       this.collections = {
         'classes': Classes,
-        'functions': Funcs,
-        'constants': Constants
+        'constants': Constants,
+        'functions': Funcs
       };
       
       var done = _.after(_.size(this.collections), this.synced);

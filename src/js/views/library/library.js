@@ -7,7 +7,13 @@ define(function (require) {
       Library          = require('collections/library'),
       LibraryDetailTpl = require('tpl!templates/library/detail.html'),
       Prism            = require('prism'),
-      View, DetailView;
+      ToolbarTpl       = require('tpl!templates/library/toolbar.html'),
+      Toolbar          = require('views/toolbars/toolbar'),
+      ToolbarView, View, DetailView, RowView;
+      
+  ToolbarView = Toolbar.extend({
+    template: ToolbarTpl
+  });
     
   DetailView = Qorus.ModelView.extend({
     template: LibraryDetailTpl,
@@ -30,10 +36,21 @@ define(function (require) {
       this.$el.empty();
     }
   });
+  
+  RowView = Qorus.RowView.extend({
+    template: RowTpl,
+    attributes: function () {
+      return {
+        "data-search": this.model.get('name')
+      }
+    }
+  });
             
   View = Qorus.ListView.extend({
     additionalEvents: {
-      "click [data-idattr]": "fetch"
+      "click [data-idattr]": "fetch",
+      "keyup input.filter": "search",
+      "submit": "search"
     },
       
     template: Template,
@@ -46,9 +63,10 @@ define(function (require) {
     
     preRender: function () {  
       _.each(this.collection.collections, function (col, name) {
-        var view = this.setView(new Qorus.TableView({ collection: col, row_template: RowTpl, template: TableTpl, name: name }), '#'+name).render();
+        var view = this.setView(new Qorus.TableView({ collection: col, row_view: RowView, row_template: RowTpl, template: TableTpl, name: name }), '#'+name).render();
         this.listenTo(view, 'row:clicked', this.fetch);
       }, this);
+      this.setView(new ToolbarView(), '#toolbar');
     },
     
     onRender: function () {
@@ -57,8 +75,7 @@ define(function (require) {
     },
     
     fixHeights: function () {
-      console.log('r');
-      var h = $(document).height() - $('header').height() - $('footer').height() - 6;
+      var h = $(window).height() - this.$el.offset().top - $('footer').height() - 6;
       this.$el.height(h).addClass('overflow');
       this.$el.find('.row-fluid > div').height(h);
     },
@@ -84,6 +101,30 @@ define(function (require) {
     
     clean: function () {
       $(window).off('resize.panes');
+    },
+    
+    search: function (e) {
+      var query = this.$('input.filter').val();
+      this.applySearch(query);
+      $(window).trigger('resize.panes');
+      e.preventDefault();
+    },
+    
+    applySearch: function (query) {
+      if (query.length < 1) {
+        this.$('tr').show();
+        return this;
+      }
+      
+      this.$('tr').hide();
+      this.$('tr[data-search*='+ query.toLowerCase() +']')
+        .show()
+        .parent()
+        .prev('thead')
+        .find('tr')
+        .show();
+      
+      this.$('#library-info').height('');
     }
   });
   

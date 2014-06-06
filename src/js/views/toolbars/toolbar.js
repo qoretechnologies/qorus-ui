@@ -55,7 +55,7 @@ define(function (require) {
           .after($push);
       
         // bind resize on window size change
-        $(window).on('resize.toolbar.' + this.cid, this.resize);
+        $(window).on('resize.toolbar.' + this.cid, $.proxy(this.resize, this));
       }
     },
         
