@@ -1,13 +1,13 @@
-define([
-  'module',
-  'jquery',
-  'underscore',
-  'qorus/qorus',
-  'text!templates/common/charts/line.html',
-  'text!templates/common/charts/doughnut.html',
-  'chart'
-], function (self, $, _, Qorus, LineChartTpl, DoughnutChartTpl) {
-  var ColorScheme = {
+define(function (require) {
+  var _                = require('underscore'),
+      Qorus            = require('qorus/qorus'),
+      LineChartTpl     = require('tpl!templates/common/charts/line.html'),
+      DoughnutChartTpl = require('tpl!templates/common/charts/doughnut.html'),
+      Chart            = require('chart'),
+      ColorScheme, LineStyles, ChartView, LineChart, DoughnutChart;
+  
+  
+  ColorScheme = {
     clr1: "rgba(250,225,107,1)",
     clr2: "rgba(169,204,143,1)",
     clr3: "rgba(178,200,217,1)",
@@ -17,7 +17,7 @@ define([
     clr7: "rgba(230,165,164,1)"
   };
   
-  var LineStyles = [
+  LineStyles = [
     {
       fillColor : "rgba(250,225,107,0.5)",
       strokeColor : ColorScheme.clr1,
@@ -62,7 +62,7 @@ define([
     }
   ];
 
-  var ChartView = Qorus.View.extend({
+  ChartView = Qorus.View.extend({
     __name__: 'ChartView',
     scale: 1,
     cls: 'ChartView',
@@ -157,23 +157,23 @@ define([
 
       if (this.dataset) {
         if (this.dataset.datasets) {
-          dataset = _.map(this.dataset.datasets, function (set) { return set.data });
+          dataset = _.map(this.dataset.datasets, function (set) { return set.data; });
           max = _.max(_.flatten(dataset), function (set) { return set; });
         } else {
-          max = _.max(this.dataset, function (data) { return data.value }).value;
+          max = _.max(this.dataset, function (data) { return data.value; }).value;
         }
       }
       return max;
     },
     
     scaleData: function () {
-      var scale = this.getScaleFactor(), datasets;
+      var scale = this.getScaleFactor();
       
       if (this.dataset) {
         if (this.dataset.datasets) {
           this.dataset.datasets = _.map(this.dataset.datasets, function (set) { 
             set.data = _.map(set.data, function (data) { 
-              return data = data / scale;
+              return data /= scale;
             });
             return set;
           });
@@ -199,7 +199,7 @@ define([
     }
   });
   
-  var LineChart = ChartView.extend({
+  LineChart = ChartView.extend({
     cls: 'LineChart',
     template: LineChartTpl,
     onRender: function () {
@@ -209,14 +209,14 @@ define([
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Line(this.dataset, { datasetFill: false });
+          new Chart(ctx).Line(this.dataset, { datasetFill: false });
           // console.log(myChart, this.dataset);
         }
       }
     }
   });
   
-  var DoughnutChart = ChartView.extend({
+  DoughnutChart = ChartView.extend({
     cls: 'DoughnutChart',
     ColorScheme: ColorScheme,
     template: DoughnutChartTpl,
@@ -226,7 +226,7 @@ define([
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Doughnut(this.dataset);
+          new Chart(ctx).Doughnut(this.dataset);
         }
       }
     }    

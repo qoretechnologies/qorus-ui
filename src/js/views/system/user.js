@@ -1,11 +1,9 @@
 define(function (require) {
-  var $      = require('jquery'),
-    _        = require('underscore'),
-    Qorus    = require('qorus/qorus'),
-    Template = require('text!templates/users/user.html'),
-    View;
+  var Qorus    = require('qorus/qorus'),
+      Template = require('text!templates/users/user.html'),
+      View;
     
-  var View = Qorus.View.extend({
+  View = Qorus.View.extend({
     template: Template,
     
     initialize: function (opts) {

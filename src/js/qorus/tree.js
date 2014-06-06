@@ -1,8 +1,8 @@
-define([
-  'module',
-  'underscore'
-], function (self, _) {
-  var TreeNodeBase = {
+define(function (require) {
+  var _ = require('underscore'),
+      TreeNodeBase, TreeNode;
+  
+  TreeNodeBase = {
       initialize: function (id, opts) {
           this.id = id;
           this.opts = opts || {};
@@ -55,8 +55,9 @@ define([
           
         return el_list;
       }
-    },  
-    TreeNode = function (id) {
+    };
+
+    TreeNode = function () {
         this.initialize.apply(this, arguments);
     };
 
@@ -89,5 +90,5 @@ define([
   return {
     Node: TreeNode,
     createTree: createTree
-  }
+  };
 });

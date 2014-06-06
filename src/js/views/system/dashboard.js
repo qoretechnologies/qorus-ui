@@ -2,7 +2,6 @@ define(function (require) {
   var $               = require('jquery'),
       _               = require('underscore'),
       settings        = require('settings'),
-      utils           = require('utils'),
       Qorus           = require('qorus/qorus'),
       StatsCollection = require('collections/stats'),
       Template        = require('tpl!templates/system/dashboard.html'),
@@ -57,7 +56,7 @@ define(function (require) {
   HealthModel = Qorus.Model.extend({
     __name__: 'HealthModel',
     url: settings.REST_API_PREFIX + '/system/health',
-    parse: function (response, options) {
+    parse: function (response) {
       var local, remote;
       local = response;
       remote = response.remote;
@@ -112,7 +111,7 @@ define(function (require) {
     clean: function () {
       this.$('[data-toggle=tooltip]').tooltip('destroy');
     }
-  })
+  });
   
   DashboardView = Qorus.View.extend({
     __name__: 'DashboardView',

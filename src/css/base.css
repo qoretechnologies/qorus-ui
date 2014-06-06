@@ -533,8 +533,8 @@ aside {
 /*    height: 90%;*/
 }
 .modal.wider {
-  margin-left: -360px;
-  width: 720px;
+  margin-left: -480px;
+  width: 960px;
 }
 
 .modal form, .modal .form-actions {

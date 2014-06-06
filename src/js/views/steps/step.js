@@ -39,17 +39,18 @@ define(function (require) {
       $target.tab('show');
     },
     
-    off: function () {
-      ModelView.__super__.off.apply(this, arguments);
-      // console.log('destroying step');
-    },
-    
     highlight: function () {
-      var el = this.$el.find('code[class*="language-"]')[0];
+      if (!this.model.get('functions')) return;
       
-      if (el) {
-        Prism.highlightElement(el)
-      }
+      _.each(this.model.get('functions'), function (func) {
+        var key  = '#step-modal-'+ func.type +' code',
+            el   = this.$(key),
+            code = Prism.highlight(func.body, Prism.languages.qore),
+            div  = document.createElement('div');
+
+        div.innerHTML = code;
+        el.append(div);
+      }, this);
     }
   });
   

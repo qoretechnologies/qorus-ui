@@ -1,9 +1,7 @@
 define(function (require) {
-  var Qorus      = require('qorus/qorus'),
-      Helpers    = require('qorus/helpers'),
-      utils      = require('utils'),
-      moment     = require('moment'),
-      Dispatcher = require('qorus/dispatcher'),
+  var _       = require('underscore'),
+      Qorus   = require('qorus/qorus'),
+      Helpers = require('qorus/helpers'),
       obj_map, Model;
   
   obj_map = {
@@ -92,7 +90,8 @@ define(function (require) {
     },
     
     toJSON: function () {
-      var obj = Model.__super__.toJSON.call(this);
+      var obj = Model.__super__.toJSON.call(this),
+          obj_type;
         
       if (_.isString(obj.type)) obj_type = obj_map[obj.type.toLowerCase()];
     
@@ -106,12 +105,12 @@ define(function (require) {
       return obj;
     },
     
-    dispatch: function (obj, evt) {},
+    dispatch: function () {},
     
     parse: function (data, options) {
       data = Model.__super__.parse.call(this, data, options);
       data._id = data.id;
-      if (data.id) delete data.id
+      if (data.id) delete data.id;
       // data.id = this.createID(data);
       return data;
     },

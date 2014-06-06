@@ -1,13 +1,11 @@
-// Filename: app.js
-define([
-  'settings',
-  'router'
-], function(settings, Router){  
+define(function (require) {  
+  var Router   = require('router'),
+      initialize;
   
-  var initialize = function(){
+  initialize = function () {
     debug.log('initializing router');
     Router.initialize();
-  }
+  };
 
   return {
     initialize: initialize

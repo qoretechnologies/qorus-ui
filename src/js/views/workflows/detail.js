@@ -30,7 +30,7 @@ define(function (require) {
     initialize: function (options) {
       this.context = {};
       this.options = {};
-      this.views = {},
+      this.views = {};
       this.model = options.model;
     },
     
@@ -61,7 +61,7 @@ define(function (require) {
       if (id) {
         e.preventDefault();
         e.stopPropagation();
-        var view = this.setView(new ModalView({
+        this.setView(new ModalView({
           content_view: new StepView({ id: id }) 
         }), '#stepdetail');
       }

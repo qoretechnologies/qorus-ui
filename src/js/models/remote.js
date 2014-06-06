@@ -8,7 +8,7 @@ define(function (require) {
   function extend(d, s) {
     var copy = _.clone(d);
     return _.extend(copy, s);
-  };
+  }
 
   BaseParams = {
     "conntype": "string",
@@ -57,7 +57,7 @@ define(function (require) {
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
-    parse: function (response, options) {
+    parse: function (response) {
       Model.__super__.parse.apply(this, arguments);
       
       this.parseDeps(response.deps);

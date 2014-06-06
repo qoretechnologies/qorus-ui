@@ -1,9 +1,10 @@
-define([
-  'settings',
-  'underscore',
-  'qorus/qorus'
-], function(settings, _, Qorus){
-  var Model = Qorus.Model.extend({
+define(function(require) {
+  var settings = require('settings'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      Model;
+  
+  Model = Qorus.Model.extend({
     idAttribute: "stepid",
     urlRoot: settings.REST_API_PREFIX + '/steps/',
     dateAttributes: ['last_executed'],
@@ -26,11 +27,11 @@ define([
           // response.body = response.body.replace(/\\n/g, '<br>');
           func.body = func.body.replace(/\\n/g, '\n');
           func.body = func.body.replace(/\\t/g, '    ');
-        })
+        });
       }
       return response;
     }
   });
-  // Return the model for the module
+
   return Model;
 });

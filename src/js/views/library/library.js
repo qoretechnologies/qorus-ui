@@ -1,10 +1,10 @@
 define(function (require) {
   var $                = require('jquery'),
+      _                = require('underscore'),
       Qorus            = require('qorus/qorus'),
       Template         = require('text!templates/library/list.html'),
       TableTpl         = require('text!templates/library/table.html'),
       RowTpl           = require('text!templates/library/row.html'),
-      Library          = require('collections/library'),
       LibraryDetailTpl = require('tpl!templates/library/detail.html'),
       Prism            = require('prism'),
       ToolbarTpl       = require('tpl!templates/library/toolbar.html'),
@@ -20,26 +20,18 @@ define(function (require) {
     
     onRender: function () {
       var div = document.createElement('div'),
-          code, highlighted;
+          code;
           
-      if (highlighted = this.model.get('body_highlighted')) {
-        code = highlighted;
+      if (this.model.get('body_highlighted')) {
+        code = this.model.get('body_highlighted');
       } else {
-        code = highlighted = Prism.highlight(this.model.get('body'), Prism.languages.qore);
-        this.model.set({ 'body_highlighted': highlighted }, { silent: true });
+        code = Prism.highlight(this.model.get('body'), Prism.languages.qore);
+        this.model.set({ 'body_highlighted': code }, { silent: true });
       }
       
       div.innerHTML = code;
       
       this.$('code').append(div);
-    },
-    
-    highlight: function () {
-      var el = this.$el.find('code[class*="language-"]')[0];
-      
-      if (el) {
-        Prism.highlightElement(el);
-      }
     },
     
     off: function () {
@@ -54,7 +46,7 @@ define(function (require) {
     attributes: function () {
       return {
         "data-search": this.model.get('name')
-      }
+      };
     }
   });
             

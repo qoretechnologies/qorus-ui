@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
   var $               = require('jquery'),
-      expand          = require('libs/jquery.expanding'),
       settings        = require('settings'),
       _               = require('underscore'),
       moment          = require('moment'),
@@ -53,7 +52,7 @@ define(function(require, exports, module) {
       "click button[type=submit]": "lockOrder"
     },
         
-    lockOrder: function (e) {
+    lockOrder: function () {
       var note = this.$('textarea[name=note]').val();
       this.model.doAction(this.options.action, { note: note });
       this.trigger('close');
@@ -540,6 +539,59 @@ define(function(require, exports, module) {
           value  = $row.text(),
           $input = $('<input type="text" />'),
           self   = this;
+          
+      function save (val) {
+        var data     = {},
+            property = $row.data('name');
+      
+        if (moment.isMoment(val))
+          val = val.format(settings.DATE_DISPLAY);
+
+        data[property] = val;
+      
+        if ($row.data('stepid')) data.stepid = $row.data('stepid');
+        if ($row.data('ind')) data.stepid = $row.data('ind');
+
+        self.model.doAction($row.data('action'), data);
+        value = val;
+        clean();
+      }
+    
+      function clean (e) {
+        if (e && $(e.target).closest('.datepicker').length) {
+        
+        } else {
+          $input.off().remove();
+          $row
+            .text(value)
+            .toggleClass('editor')
+            .removeClass('invalid')
+            .width('');
+      
+          if ($row.data('type') === 'date') {
+            self.stopListening(self.views.datepicker);
+            self.views.datepicker.off();
+            $(document).off('click.datepickerout');
+          }
+        }
+      }
+    
+      function saveOrClean(e) {
+        var $target  = $(e.currentTarget),
+            val      = $target.val();
+      
+        if ($target.key === 13 || e.which === 13) {
+          if (utils.validate(val, $row.data('type'))) {
+            save(val);
+            value = val;
+          } else {
+            $row.addClass('invalid');
+            $target.focus();
+          }
+        }
+      
+        e.preventDefault();
+      }
       
       if (!$row.hasClass('editor')) {
         $row.width($row.width());
@@ -560,59 +612,6 @@ define(function(require, exports, module) {
           this.listenTo(this.views.confirm, 'dismiss', clean);
         } else {
           $input.blur(saveOrClean);
-        }
-        
-        function save (val) {
-          var data     = {},
-              property = $row.data('name');
-          
-          if (moment.isMoment(val))
-            val = val.format(settings.DATE_DISPLAY);
-
-          data[property] = val;
-          
-          if ($row.data('stepid')) data.stepid = $row.data('stepid');
-          if ($row.data('ind')) data.stepid = $row.data('ind');
-
-          self.model.doAction($row.data('action'), data);
-          value = val;
-          clean();
-        }
-        
-        function clean (e) {
-          if (e && $(e.target).closest('.datepicker').length) {
-            
-          } else {
-            $input.off().remove();
-            $row
-              .text(value)
-              .toggleClass('editor')
-              .removeClass('invalid')
-              .width('');
-          
-            if ($row.data('type') === 'date') {
-              self.stopListening(self.views.datepicker);
-              self.views.datepicker.off();
-              $(document).off('click.datepickerout');
-            }
-          };
-        }
-        
-        function saveOrClean(e) {
-          var $target  = $(e.currentTarget),
-              val      = $target.val();
-          
-          if ($target.key === 13 || e.which === 13) {
-            if (utils.validate(val, $row.data('type'))) {
-              save(val);
-              value = val;
-            } else {
-              $row.addClass('invalid');
-              $target.focus();
-            }
-          }
-          
-          e.preventDefault();
         }
         
         $input.on('keypress', function (e) {
@@ -640,7 +639,7 @@ define(function(require, exports, module) {
     },
     
     applyLock: function (action) {
-      var view = this.setView(new ModalView({
+      this.setView(new ModalView({
         content_view: new OrderLockView({ action: action, model: this.model})
       }), '.order-lock-modal');
     }

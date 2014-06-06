@@ -1,8 +1,6 @@
 define(function (require) {
-  var $           = require('jquery'),
-      _           = require('underscore'),
+  var _           = require('underscore'),
       utils       = require('utils'),
-      helpers     = require('qorus/helpers'),
       BaseToolbar = require('views/toolbars/toolbar'),
       Template    = require('text!templates/workflow/toolbars/workflows_toolbar.html'),
       Toolbar;
@@ -15,7 +13,7 @@ define(function (require) {
     url_options: function () {
       return {
         deprecated: this.options.deprecated
-      }
+      };
     },
     
     route: 'showWorkflows',

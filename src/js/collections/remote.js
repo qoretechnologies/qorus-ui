@@ -1,5 +1,6 @@
 define(function (require) {
-  var settings = require('settings'),
+  var _        = require('underscore'),
+      settings = require('settings'),
       Qorus    = require('qorus/qorus'),
       Model    = require('models/remote'),
       Collection;
@@ -15,13 +16,13 @@ define(function (require) {
       this.resource_type = this.opts.resource_type;
     },
     
-    parse: function (response, options) {
+    parse: function (response) {
       // add resource_type to each model
       _(response.results).each(function (result) {
         result.resource_type = this.options.resource_type;
       }, this);
       
-      return response
+      return response;
     }
   });
   

@@ -1,7 +1,6 @@
 define(function (require) {
   var settings      = require('settings'),
       helpers       = require('qorus/helpers'),
-      backbone      = require('backbone'),
       utils         = require('utils'),
       _             = require('underscore'),
       $             = require('jquery'),
@@ -92,7 +91,7 @@ define(function (require) {
 
     var step_list = [],
         keys      = _.keys(steps, []),
-        stype     = undefined,
+        stype     = '',
         root;
 
     // add root point
@@ -211,7 +210,7 @@ define(function (require) {
           this.incr(e.info.status);
         } else if (action === 'status_changed') {
           this.decr(e.info.info.old);
-          this.incr(e.info.info.new);
+          this.incr(e.info.info['new']);
         } else if (alert.test(action)) {
           this.getProperty('alerts', {}, true);
         }

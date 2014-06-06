@@ -1,7 +1,5 @@
 define(function (require, exports, module) {
-  var $              = require('jquery'),
-      _              = require('underscore'),
-      Qorus          = require('qorus/qorus'),
+  var Qorus          = require('qorus/qorus'),
       Template       = require('tpl!templates/common/pane.html'),
       SystemSettings = require('models/settings'),
       View;
@@ -22,7 +20,7 @@ define(function (require, exports, module) {
     
     // override default procesPath to delegate full-path to the content_view
     processPath: function () {
-      var tail = View.__super__.processPath.apply(this, arguments);
+      View.__super__.processPath.apply(this, arguments);
       return this.path;
     },
     
@@ -84,7 +82,7 @@ define(function (require, exports, module) {
         resize: function (event, ui) {
           // fix the element left position
           ui.element
-            .css('left', '')
+            .css('left', '');
         },
         stop: function (event, ui) {
           SystemSettings.set(width_n, ui.size.width);

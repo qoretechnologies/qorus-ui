@@ -11,7 +11,7 @@ define(function (require) {
     dispatch: function (e) {
       var self = this,
           events = [],
-          ev, ev_id;
+          ev, ev_id, instanceid;
 
       e = e.toJSON();
       
@@ -33,7 +33,9 @@ define(function (require) {
             events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
           }
         }
-        if (instanceid = e.info.instanceid) {
+        
+        if (e.info.instanceid) {
+          instanceid = e.info.instanceid;
           ev_id = ['order', instanceid].join(":");
           events.push(ev_id);
           events.push([ev_id, ev[1]].join(':'));
@@ -62,7 +64,7 @@ define(function (require) {
     // }
   };
   
-  _.extend(Dispatcher, Backbone.Events)
+  _.extend(Dispatcher, Backbone.Events);
 
   return Dispatcher;
 });

@@ -22,7 +22,7 @@ define(function (require) {
       'keydown #command': 'keyDown'
     },
     
-    initialize: function (opts) {
+    initialize: function () {
       this.context = {};
       this.views = {};
       this.options = {};
@@ -129,7 +129,7 @@ define(function (require) {
       var params = {
         action: 'call',
         method: 'help'
-      }
+      };
       $.put(url, params)
         .done(view.initTypeahead);
     },
