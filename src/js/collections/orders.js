@@ -1,7 +1,8 @@
 define(function (require) {
-  var settings = require('settings'),
-      Qorus = require('qorus/qorus'),  
-      Model = require('models/order'),
+  var settings   = require('settings'),
+      Qorus      = require('qorus/qorus'),  
+      Model      = require('models/order'),
+      Dispatcher = require('qorus/dispatcher'),
       Collection;
   
    Collection = Qorus.SortedCollection.extend({
@@ -9,6 +10,17 @@ define(function (require) {
     url: function () {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
+    
+    api_events_list: [
+      "workflow:data_submitted",
+      "workflow:status_changed"
+    ],
+    
+    api_events_list_id: [
+      "workflow:%(workflowid)s:data_submitted",
+      "workflow:%(workflowid)s:status_changed",
+      "workflow:%(workflowid)s:data_error"
+    ],
     
     initialize: function (models, opts) {
       Collection.__super__.initialize.call(this, arguments);
@@ -46,6 +58,20 @@ define(function (require) {
       }
 
       delete this.opts.url;
+      
+      if (this.workflowid) {
+        this.api_events = sprintf(this.api_events_list_id.join(' '), { id: this.id, workflowid: this.workflowid });
+      } else {
+        this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id, workflowid: this.get('workflowid') });
+      }
+
+      this.listenTo(Dispatcher, this.api_events, this.dispatch);
+    },
+    
+    dispatch: function (e, evt) {
+      if (e === 'data_submitted') {
+        this.add(e.info);
+      }
     }
   });
   return Collection;
