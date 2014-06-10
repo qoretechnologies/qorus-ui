@@ -3,6 +3,7 @@ define(function (require) {
       Qorus      = require('qorus/qorus'),  
       Model      = require('models/order'),
       Dispatcher = require('qorus/dispatcher'),
+      moment     = require('moment'),
       Collection;
   
    Collection = Qorus.SortedCollection.extend({
@@ -69,8 +70,21 @@ define(function (require) {
     },
     
     dispatch: function (e, evt) {
-      if (e === 'data_submitted') {
-        this.add(e.info);
+      var evt_types = evt.split(':'),
+          obj = evt_types[0],
+          id = evt_types[1],
+          action = evt_types[2] || id,
+          alert = /^(alert_).*/,
+          model;
+      
+          // console.log(e);
+      
+      if (action === 'data_submitted') {
+        var info = e.info;
+        info.workflowstatus = info.workflowstatus || info.status;
+        delete info.id;
+
+        model = this.add(e.info);
       }
     }
   });

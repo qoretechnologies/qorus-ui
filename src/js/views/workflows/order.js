@@ -310,7 +310,9 @@ define(function(require, exports, module) {
     },
     
     clean: function () {
-      this.$('textarea').expanding('destroy');
+      if (this.$('textarea')) {
+        this.$('textarea').expanding('destroy');
+      }
       return this;
     },
     

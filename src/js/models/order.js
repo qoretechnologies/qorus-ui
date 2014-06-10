@@ -12,6 +12,12 @@ define(function (require) {
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
+    
+    defaults: {
+      'note_count': 0,
+      'started': moment().format(settings.DATE_DISPLAY)
+    },
+    
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
@@ -34,10 +40,11 @@ define(function (require) {
     api_events_list: [
       "order:%(id)s:data_locked",
       "order:%(id)s:data_unlocked",
-      "order:%(id)s:info_changed"
+      "order:%(id)s:info_changed",
+      "order:%(id)s:status_changed"
     ],
 
-    initialize: function(opts){      
+    initialize: function (opts){      
       // set id if in opts
       if (opts.id){
         this.id = opts.id;
@@ -45,8 +52,7 @@ define(function (require) {
       }
       
       Model.__super__.initialize.call(this, opts);
-    
-      this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
+      
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
@@ -74,6 +80,9 @@ define(function (require) {
           }
         } else if (action === 'data_unlocked') {
           this.unset('operator_lock');
+        } else if (action === 'status_changed') {
+          this.set({ workflowstatus: e.info.info.new });
+          this.getProperty('actions', null, true);
         }
         this.trigger('change', this);
       }
@@ -149,7 +158,10 @@ define(function (require) {
         action: 'Notes',
         note: note
       });
-    }
+    },
+    
+    update: function (note) {}
+    
   });
   return Model;
 });
