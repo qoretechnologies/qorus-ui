@@ -18,6 +18,7 @@
       "jquery.fixedheader": "libs/fixedheader",
       "jquery.sticky": "libs/jquery.sticky",
       "jquery.fixedhead": "libs/jquery.fixedhead",
+      "jquery.expanding": "libs/jquery.expanding",
       "messenger": "libs/messenger/js/messenger.min",
       "bootstrap.multiselect": "libs/bootstrap-multiselect",
       "chart": "libs/chart",

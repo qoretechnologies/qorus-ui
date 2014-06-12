@@ -36,6 +36,7 @@ define(function(require, exports, module) {
   
   require('jquery.ui');
   require('bootstrap');
+  require('jquery.expanding');
       
   context = {
     action_css: {
@@ -310,9 +311,7 @@ define(function(require, exports, module) {
     },
     
     clean: function () {
-      if (this.$('textarea')) {
-        this.$('textarea').expanding('destroy');
-      }
+      this.$('textarea').expanding('destroy');
       return this;
     },
     

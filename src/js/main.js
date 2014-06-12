@@ -19,6 +19,7 @@ require.config({
     "jquery.ui": "libs/jquery.ui.min",
     "jquery.pageslide": "libs/jquery.pageslide.min",
     "jquery.fixedhead": "libs/jquery.fixedhead",
+    "jquery.expanding": "libs/jquery.expanding",
     // "jquery.floatthead": "libs/jquery.floatThead",
     "messenger": "libs/messenger/js/messenger",
     sprintf: "libs/sprintf-0.7-beta1",
