@@ -1,9 +1,10 @@
 define(function (require) {
   var settings = require('settings'),
-      $ = require('jquery'),
-      _ = require('underscore'),
-      Qorus = require('qorus/qorus'),
-      utils = require('utils'),
+      $        = require('jquery'),
+      _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
+      utils    = require('utils'),
+      moment   = require('moment'),
       datasets, Collection;
   
   datasets = [
