@@ -633,7 +633,7 @@ aside {
     counter-reset: line-number; 
 }
 
-.table-numbered td:first-child:before {
+.table-numbered td:nth-child(2):before {
     content: counter(line-number) ".";
     counter-increment: line-number;
 }
@@ -644,6 +644,10 @@ aside {
   padding: 5px 0;
   z-index: 1021;
   background-color: #fff;
+}
+
+.toolbar-small {
+  margin: 0;
 }
 
 .table-condensed td {
@@ -1660,4 +1664,15 @@ td.break {
 
 .overflow .row-fluid > div {
   overflow: auto;
+}
+
+.input-append-small input, .input-prepend-small input, .input-prepend-small .add-on, .input-append-small .add-on {
+  padding: 0 6px;
+  font-size: 10.5px;
+  height: 24px;
+  min-height: 24px;
+}
+
+.nav.no-margin {
+  margin-bottom: 5px;
 }

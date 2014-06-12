@@ -117,13 +117,14 @@ define(function (require) {
     },
 
     addMultiSelect: function () {
-      var _this = this;
+      var self = this;
       // apply bootstrap multiselect to #statuses element      
       $('#statuses').multiselect({
+        buttonClass: "btn btn-small",
         onChange: function(el, checked){
           var sl = [], val = $(el).val();
-          if(_this.options.statuses){
-            sl = _this.options.statuses.split(',');
+          if(self.options.statuses){
+            sl = self.options.statuses.split(',');
           }
           
           if(checked){
@@ -146,9 +147,9 @@ define(function (require) {
           }
           // refresh valudes
           $('#statuses').multiselect('refresh');
-          _this.options.statuses = sl.join(',');
-          _this.trigger('filter', _this.options.statuses);
-          debug.log("multiselect", _this.options);
+          self.options.statuses = sl.join(',');
+          self.trigger('filter', self.options.statuses);
+          debug.log("multiselect", self.options);
         }
       });
     },

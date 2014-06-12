@@ -121,22 +121,11 @@ define(function (require) {
     },
     
     doAction: function(action, opts){
-      action      = action;
       opts        = opts || {};
       opts.action = action;
 
       if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
-        $.put(this.url(), opts);
-        // .done(
-        //   function (e, ee, eee){
-        //     var msg = sprintf('Order Instance %s %s done', id, action);
-        //     self.fetch();
-        //   }
-        // ).fail(
-        //   function(e, ee, eee){
-        //     var msg = sprintf('Order Instance %s %s failed', id, action);
-        //   }
-        // );        
+        $.put(this.url(), opts);     
       }
     },
     

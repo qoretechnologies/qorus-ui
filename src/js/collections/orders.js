@@ -12,6 +12,8 @@ define(function (require) {
       return settings.REST_API_PREFIX + '/workflows/'+ this.workflowid + '/orders/';
     },
     
+    allowedActions: Model.prototype.allowedActions,
+    
     api_events_list: [
       "workflow:data_submitted",
       "workflow:status_changed"
@@ -85,6 +87,12 @@ define(function (require) {
         delete info.id;
 
         model = this.add(e.info);
+      }
+    },
+    
+    doAction: function (opts) {
+      if(_.indexOf(this.allowedActions, opts.action.toLowerCase()) != -1){
+        $.put(settings.REST_API_PREFIX + '/orders/', opts);
       }
     }
   });

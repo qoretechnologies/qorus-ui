@@ -46,7 +46,8 @@ define(function (require) {
     additionalEvents: {
       "click .order-lock": 'lockOrder',
       "click .order-unlock": 'unlockOrder',
-      "click .order-breaklock": 'breakLockOrder'
+      "click .order-breaklock": 'breakLockOrder',
+      "click [data-action]": "runAction"
     },
         
     lockOrder: function (e) {
@@ -65,7 +66,15 @@ define(function (require) {
       this.setView(new ModalView({
         content_view: new OrderLockView({ action: action, model: this.model})
       }), '.order-lock-modal');
-    }
+    },
+    
+    runAction: function (e) {      
+      var data = e.currentTarget.dataset;
+      if (data.id && data.action) {
+        this.model.doAction(data.action);
+        e.preventDefault(); 
+      }
+    },
     
   });
   
@@ -100,7 +109,6 @@ define(function (require) {
       opts.date = this.date;
       
       ListView.__super__.initialize.call(this, Collection, opts.date, opts);
-      
       // if (opts.url) {
       //   this.url = [opts.url, this.name].join('/');
       //   opts.url = this.url;
@@ -136,12 +144,17 @@ define(function (require) {
       
     },
     
-    runAction: function (e) {      
-      var data = e.currentTarget.dataset;
-      if (data.id && data.action) {
-        e.stopPropagation();
-        var inst = this.collection.get(data.id);
-        inst.doAction(data.action); 
+    runAction: function (e) {
+      if (e.isDefaultPrevented()) return;
+
+      var data = e.currentTarget.dataset,
+          selected_ids = this.getCheckedIds();
+          
+      if (data.id !== 'selected') return;
+          
+      if (selected_ids && data.action) {
+        this.collection.doAction({ action: data.action, ids: selected_ids });
+        e.preventDefault();
       }
     },
     
