@@ -1,5 +1,12 @@
 <td><i class="icon-check-empty check"></i></td>
 <td></td>
+<td class="text-left narrow">
+  <div class="btn-controls">
+    <% _.each(item.actions, function(action) { %>
+      <a class="label <%= (action_css[action]) ? action_css[action].style : '' %>" data-action="<%= action %>" title="<%= action.toUpperCase() %>"><% if (action_css[action]) { %><i class="<%= action_css[action].icon %>"></i><% } else { %><%= action %><% } %></a>
+    <% }); %>
+  </div>
+</td>
 <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
 <td>
   <% if (item.business_error) { %>
@@ -31,10 +38,3 @@
 <% } %>
 </td>
 <td><%= item.note_count %></td>
-<td class="text-right">
-  <div class="btn-group">
-    <% _.each(item.actions, function(action) { %>
-      <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
-    <% }); %>
-  </div>
-</td>

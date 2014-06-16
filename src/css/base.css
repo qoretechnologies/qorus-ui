@@ -1645,10 +1645,10 @@ textarea.note {
 	overflow: auto;
 }
 
-*[contenteditable="true"]:after {
+/**[contenteditable="true"]:after {
   content: "\f14B";
   font-family: "FontAwesome";
-}
+}*/
 
 #step-errors th.info {
   min-width: 300px;
@@ -1666,7 +1666,10 @@ td.break {
   overflow: auto;
 }
 
-.input-append-small input, .input-prepend-small input, .input-prepend-small .add-on, .input-append-small .add-on {
+.input-append-small input,
+.input-prepend-small input,
+.input-prepend-small .add-on,
+.input-append-small .add-on {
   padding: 0 6px;
   font-size: 10.5px;
   height: 24px;
@@ -1675,4 +1678,19 @@ td.break {
 
 .nav.no-margin {
   margin-bottom: 5px;
+}
+
+.btn-controls {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.btn-controls a.label {
+  margin: 0;
+  margin-right: -2px;
+}
+
+td .input-append {
+  margin: 0;
 }

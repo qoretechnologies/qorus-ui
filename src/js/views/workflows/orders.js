@@ -17,9 +17,30 @@ define(function (require) {
   
   helpers = {
     action_css: {
-      'block': 'btn-inverse',
-      'cancel': 'btn-danger',
-      'retry': 'btn-success'
+      'block': {
+        'style': 'label-inverse',
+        'icon': 'icon-minus-sign'
+      },
+      'unblock': {
+        'style': '',
+        'icon': 'icon-ok-sign'
+      },
+      'cancel': {
+        'style': 'label-danger',
+        'icon': 'icon-remove-sign'
+      },
+      'uncancel': {
+        'style': 'label-warning',
+        'icon': 'icon-remove-sign'
+      },
+      'retry': {
+        'style': 'label-success',
+        'icon': 'icon-refresh'
+      },
+      'reschedule': {
+        'style': 'label-warning',
+        'icon': 'icon-calendar'
+      }
     }
   };
   
@@ -68,9 +89,9 @@ define(function (require) {
       }), '.order-lock-modal');
     },
     
-    runAction: function (e) {      
+    runAction: function (e) { 
       var data = e.currentTarget.dataset;
-      if (data.id && data.action) {
+      if (data.action) {
         this.model.doAction(data.action);
         e.preventDefault(); 
       }

@@ -111,6 +111,7 @@ define(function (require) {
         
       });
       response.step_groups = step_groups;
+      response.actions = _.map(response.actions, function (action) { return action.toLowerCase(); });
       
       // create Hierarchy Tree from Hierarchy Info
       response.hierarchy_tree = Tree.createTree(response.HierarchyInfo, 'parent_workflow_instanceid');

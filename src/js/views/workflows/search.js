@@ -15,15 +15,76 @@ define(function (require) {
       BottomBarView    = require('views/common/bottom_bar'),
       OrdersToolbar    = require('views/toolbars/search_toolbar'),
       OrderView        = require('views/workflows/order'),
-      context, View;
+      User             = require('models/system').User,
+      context, View, RowView;
       
   context = {
     action_css: {
-      'block': 'btn-inverse',
-      'cancel': 'btn-danger',
-      'retry': 'btn-success'
+      'block': {
+        'style': 'label-inverse',
+        'icon': 'icon-minus-sign'
+      },
+      'unblock': {
+        'style': '',
+        'icon': 'icon-ok-sign'
+      },
+      'cancel': {
+        'style': 'label-danger',
+        'icon': 'icon-remove-sign'
+      },
+      'uncancel': {
+        'style': 'label-warning',
+        'icon': 'icon-remove-sign'
+      },
+      'retry': {
+        'style': 'label-success',
+        'icon': 'icon-refresh'
+      },
+      'reschedule': {
+        'style': 'label-warning',
+        'icon': 'icon-calendar'
+      }
     }
   };
+  
+  RowView = Qorus.RowView.extend({
+    context: {
+      user: User
+    },
+    template: RowTpl,
+    additionalEvents: {
+      "click .order-lock": 'lockOrder',
+      "click .order-unlock": 'unlockOrder',
+      "click .order-breaklock": 'breakLockOrder',
+      "click [data-action]": "runAction"
+    },
+        
+    lockOrder: function (e) {
+      this.applyLock('lock', e);
+    },
+    
+    unlockOrder: function (e) {
+      this.applyLock('unlock', e);
+    },
+    
+    breakLockOrder: function (e) {
+      this.applyLock('breakLock', e);
+    },
+    
+    applyLock: function (action) {
+      this.setView(new ModalView({
+        content_view: new OrderLockView({ action: action, model: this.model})
+      }), '.order-lock-modal');
+    },
+    
+    runAction: function (e) { 
+      var data = e.currentTarget.dataset;
+      if (data.action) {
+        this.model.doAction(data.action);
+        e.preventDefault(); 
+      }
+    },
+  });
     
   View = Qorus.ListView.extend({
     context: context,
@@ -43,7 +104,7 @@ define(function (require) {
     },
     
     additionalEvents: {
-      'click #instances tbody tr': 'loadInfo',
+      // 'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
       'click button[data-pagination]': 'nextPage',
       // 'keyup .search-query': 'search'
@@ -74,6 +135,7 @@ define(function (require) {
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
+          row_view: RowView,
           helpers: this.helpers,
           context: { url: this.url },
           dispatcher: Dispatcher,
