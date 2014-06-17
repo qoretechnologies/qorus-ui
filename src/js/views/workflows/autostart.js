@@ -21,14 +21,17 @@ define(function (require) {
     setAutostart: function (e) {
       var $target = $(e.currentTarget),
           code    = e.keyCode || e.which,
-          value   = parseInt($target.text(), 10);
+          value   = parseInt($target.text(), 10),
+          promise;
 
       if (code === 13) {
         if (value) {
-          this.model.setAutostart(value);
+          promise = this.model.setAutostart(value);
+          promise.fail(this.render);
           $target.blur();
         }
       }
+      
     },
 
     runAction: function (e) {

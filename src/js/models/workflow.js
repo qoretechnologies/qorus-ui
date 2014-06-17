@@ -243,7 +243,7 @@ define(function (require) {
           _.extend(params, opts);
         }
         
-        $.put(this.url(), params, null, 'application/json')
+        var req = $.put(this.url(), params, null, 'application/json')
           .done(
             function () {
               var msg = sprintf('Workflow %s %s done', self.get('name'), action);
@@ -261,7 +261,9 @@ define(function (require) {
                 callback(false);
               }
           });
+        return req;
       }
+      return false;
     },
     
     fetch: function (options) {
@@ -290,8 +292,7 @@ define(function (require) {
     },
     
     setAutostart: function (as) {
-      var self = this;
-      this.doAction('setAutostart', { autostart: as }, function (done) { if (!done) { self.trigger('change:exec_count', self ); }});
+      return this.doAction('setAutostart', { autostart: as });
     },
     
     prepareSteps: prepareSteps,
