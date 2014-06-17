@@ -1,6 +1,6 @@
 <% var cls = (item.exec_count > 0) ? 'btn-success' : '' %>
 <div class="btn-group">
   <button class="btn btn-mini" data-action="decAutostart"><i class="icon-minus"></i></button>
-  <input type="text" class="btn btn-mini autostart-change <%= cls %>" title="Click to edit" contenteditable="true" data-toggle="tooltip" value="<%= item.exec_count %>" />
+  <button class="btn btn-mini autostart-change <%= cls %>" title="Click to edit" data-toggle="tooltip"><p contenteditable="true"><%= item.exec_count %></p></button>
   <button class="btn btn-mini" data-action="incAutostart"><i class="icon-plus"></i></button>
 </div>

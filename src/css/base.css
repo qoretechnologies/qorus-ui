@@ -1326,11 +1326,6 @@ th.nowrap, td.nowrap {
   min-width: 1em;
 }
 
-[contenteditable]:focus :empty {
-  display: block;
-  height: 1em;
-}
-
 #heading #controls {
   display: block;
   clear: both;

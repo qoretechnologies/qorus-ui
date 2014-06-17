@@ -249,7 +249,7 @@ define(function (require) {
               var msg = sprintf('Workflow %s %s done', self.get('name'), action);
               Notifications.create({ group: 'workflows', type: 'success', title: msg, url: url });
               if (_.isFunction(callback)) {
-                callback();
+                callback(true);
               }
             }
           )
@@ -258,7 +258,7 @@ define(function (require) {
               var msg = sprintf('Workflow %s %s failed', self.get('name'), action);
               Notifications.create({ group: 'workflows', type: 'error', title: msg, url: url });
               if (_.isFunction(callback)) {
-                callback();
+                callback(false);
               }
           });
       }
@@ -290,7 +290,8 @@ define(function (require) {
     },
     
     setAutostart: function (as) {
-      this.doAction('setAutostart', { autostart: as });
+      var self = this;
+      this.doAction('setAutostart', { autostart: as }, function (done) { if (!done) { self.trigger('change:exec_count', self ); }});
     },
     
     prepareSteps: prepareSteps,

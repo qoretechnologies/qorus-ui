@@ -21,7 +21,7 @@ define(function (require) {
     setAutostart: function (e) {
       var $target = $(e.currentTarget),
           code    = e.keyCode || e.which,
-          value   = parseInt($target.val(), 10);
+          value   = parseInt($target.text(), 10);
 
       if (code === 13) {
         if (value) {
