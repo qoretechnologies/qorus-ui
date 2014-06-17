@@ -34,6 +34,7 @@ define(function (require) {
     },
     
     initialize: function (options) {
+      this.options = {};
       this.model = options.model;
       this.options.resource_type = options.resource_type;
       this.listenTo(this.model, 'change', this.render);

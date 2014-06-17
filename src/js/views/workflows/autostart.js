@@ -21,17 +21,11 @@ define(function (require) {
     setAutostart: function (e) {
       var $target = $(e.currentTarget),
           code    = e.keyCode || e.which,
-          value   = parseInt($target.text(), 10);
-      
+          value   = parseInt($target.val(), 10);
+
       if (code === 13) {
         if (value) {
           this.model.setAutostart(value);
-          $target.blur();
-        }
-      } else {        
-        if (!value) {
-          $target.text(0);
-          this.model.setAutostart(0);
           $target.blur();
         }
       }
