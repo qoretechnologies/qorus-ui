@@ -24,7 +24,7 @@ define(function (require) {
     fixed: true,
     
     initialize: function (opts) {
-      // _.bindAll(this);
+      _.bindAll(this);
       BaseToolbar.__super__.initialize.call(this, opts);
       this.context = {};
       

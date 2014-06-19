@@ -46,10 +46,10 @@ define(function (require) {
 
       _.extend(this.context, {
         predefined_statuses: status,
-        hasStatus: $.proxy(this.hasStatus, this),
-        url: $.proxy(this.getViewUrl, this),
-        getAllUrl: $.proxy(this.getAllUrl, this),
-        get24hUrl: $.proxy(this.get24hUrl, this)
+        hasStatus: this.hasStatus,
+        url: this.getViewUrl,
+        getAllUrl: this.getAllUrl,
+        get24hUrl: this.get24hUrl
       });
 
       
