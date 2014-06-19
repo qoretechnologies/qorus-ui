@@ -23,6 +23,12 @@ define(function (require) {
     additionalEvents: {
       'click [data-action]': 'doAction'
     },
+        
+    onRender: function () {
+      this
+        .setView(new AutostartView({ model: this.model }), '.autostart', true)
+        .render();
+    },
     
     doAction: function (e) {
       var $target = $(e.currentTarget),
