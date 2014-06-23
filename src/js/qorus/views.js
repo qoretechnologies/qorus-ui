@@ -962,6 +962,12 @@ define(function (require) {
       this.appendRow(model);
     },
 
+    emptyRows: function () {
+      // this.getView('tbody').off();
+      console.log('panda');
+      this.update();
+    },
+
     appendRows: function (models) {
       if ('tbody' in this.views) {
         // // cleaning the view the dirty way
@@ -1014,9 +1020,8 @@ define(function (require) {
         
     update: function (initial) {
       var tpl = this.template;
-
       // console.time('update')
-      if (this.collection.size() === 0 && initial !== true) {
+      if (this.collection.size() === 0 && initial != true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
         this.template = this.opts.template;
@@ -1184,9 +1189,7 @@ define(function (require) {
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
-      // this.listenTo(this.model, 'all', function () { console.log(arguments)});
-      
-      // this.listenTo(Dispatcher, this.model.api_events, this.dispatch);
+      this.listenTo(this.model, 'remove', this.off);
 
       this.render();
     },

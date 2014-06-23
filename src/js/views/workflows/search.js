@@ -16,6 +16,7 @@ define(function (require) {
       OrdersToolbar    = require('views/toolbars/search_toolbar'),
       OrderView        = require('views/workflows/order'),
       User             = require('models/system').User,
+      Filters          = require('views/search/filters'),
       context, View, RowView;
       
   context = {
@@ -106,6 +107,7 @@ define(function (require) {
     additionalEvents: {
       // 'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
+      'submit .form-search-advanced': 'searchAdvanced',
       'click button[data-pagination]': 'nextPage',
       // 'keyup .search-query': 'search'
     },
@@ -232,6 +234,15 @@ define(function (require) {
     
     helpers: {
       action_css: context.action_css
+    },
+    
+    searchAdvanced: function (e) {
+      var $target = $(e.currentTarget).find('input'),
+          data = Filters.process($target.val());
+
+      e.preventDefault();
+      _.extend(this.collection.opts, data);
+      this.collection.fetch({ reset: true });
     }
     
   });

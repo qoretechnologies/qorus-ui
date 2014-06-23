@@ -33,7 +33,8 @@ define(function (require) {
       }
       
       this.opts = opts;
-      this.opts.sort = 'started';
+      this.opts.sort = this.opts.orderby = 'started';
+      this.opts.desc = true;
       
       if (opts.workflowid) {
         this.workflowid = opts.workflowid; 
