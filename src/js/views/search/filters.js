@@ -4,46 +4,6 @@ define(function (require) {
   
   FilterBase = {
     FILTERS: {
-      ERROR: {
-        name: 'error',
-        help: "the error text to search (can also include '%' characters for use with the LIKE operator; in this case only 1 value can be given)"
-      },
-      ERRORID: {
-        name: 'error_instanceid',
-        help: "limit the search to one or more error_instanceids"
-      },
-      DESCRIPTION: {
-        name: 'description',
-        help: "the description text to search (can also include '%' characters for use with the LIKE operator; in this case only 1 value can be given)"
-      },
-      INFO: {
-        name: 'info',
-        help: "the info text to search (can also include '%' characters for use with the LIKE operator; in this case only 1 value can be given"
-      },
-      STEPID: {
-        name: 'stepid',
-        help: 'limit the search to one or more stepids'
-      },
-      STEPNAME: {
-        name: 'stepname',
-        help: 'limit the search to one or more step names'
-      },
-      SEVERITY: {
-        name: 'severity',
-        help: 'limit the search to one or more severity values'
-      },
-      VERSION: {
-        name: 'version',
-        help: 'limit the search to one or more step versions'
-      },
-      RETRY: {
-        name: 'retry',
-        help: 'limit the search to errors with or without the retry flag'
-      },
-      BUSINESSERROR: {
-        name: 'business_error',
-        help: 'limit the search to errors with or without the business_error flag'
-      },
       ID: {
         name: 'workflow_instanceid',
         help: 'limit the search to one or more workflow_instanceids'      
@@ -52,21 +12,43 @@ define(function (require) {
         name: 'workflowid',
         help: 'limit the search to one or more workflowids'
       },
-      WORKFLOWSTATUS: {
-        name: 'workflowstatus',
+      STATUS: {
+        name: 'status',
         help: 'limit the search to workflow instances with the given status value(s)'
       },
-      MAXDATE: {
-        name: 'maxdate',
-        help: 'give the upper date range for the error search'
+      MAXMODIFIED: {
+        name: 'maxmodified',
+        help: 'give the upper modified date range for the error search'
       },
-      MINDATE: {
-        name: 'mindate',
-        help: 'give the lower date range for the error search'
+      MINMODIFIED: {
+        name: 'minmodified',
+        help: 'give the lower modified date range for the search'
+      },
+      MAXSTARTED: {
+        name: 'maxstarted',
+        help: 'give the upper start date range for the search'        
+      },
+      MINSTARTED: {
+        name: 'minstarted',
+        help: 'give the lower start date range for the search'        
+      },
+      DATEMOD: {
+        name: ['minmodfied', 'maxmodified'],
+        help: 'limt the search to defined time range',
+        parse: function (value) {
+          return value.split(/\s|;|,/);
+        }
       },
       DATE: {
-        name: ['mindate', 'maxdate'],
+        name: ['minstarted', 'maxstarted'],
         help: 'limt the search to defined time range',
+        parse: function (value) {
+          return value.split(/\s|;|,/);
+        }
+      },
+      KEYS: {
+        name: ['keyname', 'keyvalue'],
+        help: "the name of a search key to be used with the \\a keyvalue value(s)",
         parse: function (value) {
           return value.split(/\s|;|,/);
         }
@@ -74,19 +56,12 @@ define(function (require) {
     },
     
     ALIASES: {
-      MD: 'MINDATE',
-      XD: 'MAXDATE',
-      BE: 'BUSINESSERROR',
-      V: 'VERSION',
-      E: 'ERROR',
-      EID: 'ERRORID',
+      STARTED: 'MINSTARTED',
+      STARTEDMAX: 'MAXSTARTED',
+      MODIFIED: 'MINMODIFIED',
+      MODIFIEDMAX: 'MAXMODIFIED',
       W: 'WORKFLOWID',
-      WS: 'WORKFLOWSTATUS',
-      S: 'STEPID',
-      SN: 'STEPNAME',
-      I: 'INFO',
-      SV: 'SEVERITY',
-      D: 'DESCRIPTION',
+      S: 'STATUS'
     },
     
     parse: function (text) {

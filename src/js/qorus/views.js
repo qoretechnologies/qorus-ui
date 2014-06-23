@@ -1020,7 +1020,7 @@ define(function (require) {
         
     update: function (initial) {
       var tpl = this.template;
-      // console.time('update')
+      console.log(this.collection.size(), initial);
       if (this.collection.size() === 0 && initial != true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {

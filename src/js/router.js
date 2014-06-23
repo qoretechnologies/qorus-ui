@@ -28,6 +28,7 @@ define(function (require) {
       Qorus             = require('qorus/views'),
       Library           = require('collections/library'),
       LibraryView       = require('views/library/library'),
+      OrdersCollection  = require('collections/orders'),
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router, alerts;
       
@@ -141,7 +142,11 @@ define(function (require) {
     
     // search
     showSearch: function (ids, keyvalues) {
-      var view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues } });
+      var collection = new OrdersCollection([], { ids: ids, keyvalues: keyvalues }),
+          view;
+    
+      collection.fetch();
+      view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues }, collection: collection });
       this.setView(view);
     },
     

@@ -17,7 +17,7 @@ define(function (require) {
       OrderView        = require('views/workflows/order'),
       User             = require('models/system').User,
       Filters          = require('views/search/filters'),
-      context, View, RowView;
+      context, View, RowView, TableView;
       
   context = {
     action_css: {
@@ -86,6 +86,13 @@ define(function (require) {
       }
     },
   });
+  
+  TableView = Qorus.TableView.extend({
+    off: function () {
+      TableView.__super__.off.call(this, false);
+      return this;
+    }
+  });
     
   View = Qorus.ListView.extend({
     context: context,
@@ -113,27 +120,36 @@ define(function (require) {
     },
     
     initialize: function (opts) {
+      Qorus.ListView.__super__.initialize.apply(this, arguments);
       this.views = {};
       this.options = {};
       this.context =  {};
       this.opts = opts || {};
       this.opts.date = this.opts.date || settings.DATE_FROM;
-      
+            
       _.bindAll(this, 'render');
       
-      this.collection = new Collection([], { date: this.opts.date, search: this.opts.search });
       this.template = Template;
-      this.listenTo(this.collection, 'sync', this.updateContext, this);
-      this.collection.fetch();
-      
+      // this.listenTo(this.collection, 'sync', this.updateContext, this);
+      this.stopListening(this.collection);
+      this.listenTo(this.collection, 'reset', this.createOrdersTable);
+            
       _.extend(this.options, this.opts);
       _.extend(this.context, this.opts);
       _.defer(this.render);
     },
     
 
-    preRender: function () {      
-      this.setView(new Qorus.TableView({ 
+    preRender: function () {
+      var toolbar = this.setView(new OrdersToolbar(this.opts), '.toolbar');
+      
+      toolbar.stopListening(this.collection);
+      
+      this.createOrdersTable();
+    },
+    
+    createOrdersTable: function () {
+      this.setView(new TableView({ 
           collection: this.collection, 
           template: TableTpl,
           row_template: RowTpl,
@@ -143,8 +159,6 @@ define(function (require) {
           dispatcher: Dispatcher,
           // fixed: true
       }), '#instances');
-      this.setView(new BottomBarView({}), '#bottom-bar');
-      this.setView(new OrdersToolbar(this.opts), '.toolbar');
     },
     
     runAction: function (e) {
@@ -242,7 +256,13 @@ define(function (require) {
 
       e.preventDefault();
       _.extend(this.collection.opts, data);
-      this.collection.fetch({ reset: true });
+      this.collection.reset();
+      this.collection.fetch();
+    },
+    
+    render: function () {
+      console.log('lochness');
+      View.__super__.render.apply(this, arguments);
     }
     
   });

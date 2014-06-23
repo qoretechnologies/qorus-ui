@@ -150,7 +150,10 @@ define(function (require) {
       });
     },
     
-    update: function (note) {}
+    update: function (note) {},
+    destroy: function () {
+      this.trigger('remove');
+    }
     
   });
   return Model;
