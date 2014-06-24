@@ -5,7 +5,6 @@ define(function (require) {
       Qorus            = require('qorus/qorus'),
       settings         = require('settings'),
       Workflow         = require('models/workflow'),
-      Dispatcher       = require('qorus/dispatcher'),
       Collection       = require('collections/orders'),
       Template         = require('text!templates/search/detail.html'),
       TableTpl         = require('text!templates/workflow/orders/table.html'),
@@ -156,7 +155,6 @@ define(function (require) {
           row_view: RowView,
           helpers: this.helpers,
           context: { url: this.url },
-          dispatcher: Dispatcher,
           // fixed: true
       }), '#instances');
     },
@@ -258,11 +256,6 @@ define(function (require) {
       _.extend(this.collection.opts, data);
       this.collection.reset();
       this.collection.fetch();
-    },
-    
-    render: function () {
-      console.log('lochness');
-      View.__super__.render.apply(this, arguments);
     }
     
   });
