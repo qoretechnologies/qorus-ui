@@ -1,6 +1,6 @@
 define(function (require) {
   require('bootstrap');
-  require('libs/typeahead/typeahead');
+  // require('libs/typeahead/typeahead');
   
   var $           = require('jquery'),
       _           = require('underscore'),
