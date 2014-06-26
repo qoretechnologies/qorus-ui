@@ -1699,3 +1699,19 @@ td.break {
 td .input-append {
   margin: 0;
 }
+
+.autocomplete-box {
+  position: relative;
+}
+
+input.autocomplete {
+  background: transparent;
+}
+
+.autocomplete-hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #666;
+  z-index: -1;
+}

@@ -1,12 +1,12 @@
 define(function (require) {
   require('bootstrap');
-  // require('libs/typeahead/typeahead');
   
-  var $           = require('jquery'),
-      _           = require('underscore'),
-      Template    = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
-      BaseToolbar = require('views/toolbars/toolbar'),
-      Filters     = require('views/search/filters'),
+  var $            = require('jquery'),
+      _            = require('underscore'),
+      Template     = require('tpl!templates/workflow/toolbars/search_toolbar.html'),
+      BaseToolbar  = require('views/toolbars/toolbar'),
+      Filters      = require('views/search/filters'),
+      Autocomplete = require('views/common/autocomplete'),
       Toolbar;
   
   Toolbar = BaseToolbar.extend({
@@ -24,50 +24,10 @@ define(function (require) {
       _.extend(this.context, opts);
     },
     
-    // onRender: function () {
-    //   // $('input.search-qql').typeahead({
-    //   //   source: _.map(Filters.mapAliases().FILTERS, function (v, k) { return k + '()' }),
-    //   //   matcher: function (item) {
-    //   //     var query = this.query.match(/(?=[^\s]*$)(.*)/)[1];
-    //   //     return ~item.toLowerCase().indexOf(query);
-    //   //   },
-    //   //   updater: function (item) {
-    //   //
-    //   //   }
-    //   // });
-    //   var data = _.map(Filters.mapAliases().FILTERS, function (v, k) { v.val = k; return v; });
-    //
-    //   var engine = new Bloodhound({
-    //     name: 'functions',
-    //     local: data,
-    //     datumTokenizer: function(d) {
-    //       return Bloodhound.tokenizers.obj.whitespace('val');
-    //     },
-    //     queryTokenizer: Bloodhound.tokenizers.whitespace
-    //   });
-    //
-    //   engine.initialize();
-    //   console.log($('input.search-qql'));
-    //   $('input.search-qql').typeahead({
-    //     displayKey: 'val',
-    //     // source: engine.ttAdapter()
-    //     source: function (q, cb) {
-    //       var matches = [],
-    //           ptr     = new RexExp(q, 'i');
-    //
-    //       _.each(data, function (v, k) {
-    //         if (ptr.test(k)) {
-    //           v.val = k;
-    //           matches.push(v);
-    //         }
-    //       });
-    //       console.log(q, 'hovno');
-    //
-    //       cb(matches);
-    //     }
-    //   });
-    //   console.log($('input.search-qql'));
-    // },
+    onRender: function () {
+      var dataset = _.map(Filters.FILTERS, function (v, k) { v.value = k; return v; });
+      this.setView(new Autocomplete({ input: this.$('input.search-qql'), dataset: dataset }), 'autocomplete').render();
+    },
     
     navigateTo: function (e) {
       var el = $(e.currentTarget);
