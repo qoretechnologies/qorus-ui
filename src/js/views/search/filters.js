@@ -6,42 +6,51 @@ define(function (require) {
     FILTERS: {
       ID: {
         name: 'workflow_instanceid',
-        help: 'limit the search to one or more workflow_instanceids'      
+        help: 'limit the search to one or more workflow_instanceids',
+        hint:  'ID(id)'
       },
       WORKFLOWID: {
         name: 'workflowid',
-        help: 'limit the search to one or more workflowids'
+        help: 'limit the search to one or more workflowids',
+        hint:  'WORKFLOWID(id)'
       },
       STATUS: {
         name: 'status',
-        help: 'limit the search to workflow instances with the given status value(s)'
+        help: 'limit the search to workflow instances with the given status value(s)',
+        hint:  'STATUS(status)'
       },
       MAXMODIFIED: {
         name: 'maxmodified',
-        help: 'give the upper modified date range for the error search'
+        help: 'give the upper modified date range for the error search',
+        hint:  'MAXMODIFIED(date)'
       },
       MINMODIFIED: {
         name: 'minmodified',
-        help: 'give the lower modified date range for the search'
+        help: 'give the lower modified date range for the search',
+        hint:  'MINODIFIED(date)'
       },
       MAXSTARTED: {
         name: 'maxstarted',
-        help: 'give the upper start date range for the search'        
+        help: 'give the upper start date range for the search',
+        hint:  'MAXSTARTED(date)'
       },
       MINSTARTED: {
         name: 'minstarted',
-        help: 'give the lower start date range for the search'        
+        help: 'give the lower start date range for the search',
+        hint:  'MINSTARTED(date)'
       },
       DATEMOD: {
         name: ['minmodfied', 'maxmodified'],
-        help: 'limt the search to defined time range',
+        help: 'limit the search to defined modified time range',
+        hint:  'DATEMOD(mindate,maxdate)',
         parse: function (value) {
           return value.split(/\s|;|,/);
         }
       },
       DATE: {
         name: ['minstarted', 'maxstarted'],
-        help: 'limt the search to defined time range',
+        help: 'limit the search to defined start time range ',
+        hint:  'DATE(mindate,maxdate)',
         parse: function (value) {
           return value.split(/\s|;|,/);
         }
@@ -49,6 +58,7 @@ define(function (require) {
       KEYS: {
         name: ['keyname', 'keyvalue'],
         help: "the name of a search key to be used with the \\a keyvalue value(s)",
+        hint:  'KEYS(keyname,keyvalue)',
         parse: function (value) {
           return value.split(/\s|;|,/);
         }
