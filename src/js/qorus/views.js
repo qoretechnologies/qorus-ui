@@ -15,7 +15,7 @@ define(function (require) {
       moment         = require('moment'),
       // Filtered    = require('backbone.filtered.collection'),
       Loader, View, ListView, TableView, RowView, 
-      TableAutoView, ServiceView, PluginView, 
+      TableAutoView, ServiceView, PluginView, CollectionView,
       TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
 
   require('bootstrap');
@@ -501,6 +501,8 @@ define(function (require) {
       }
       
       this.opts.date = this.date;
+      
+      if (!collection) collection = this.collection;
       
       if (collection) {
         if (collection instanceof Backbone.Collection) {
@@ -1020,7 +1022,6 @@ define(function (require) {
         
     update: function (initial) {
       var tpl = this.template;
-      console.log(this.collection.size(), initial);
       if (this.collection.size() === 0 && initial != true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
@@ -1463,6 +1464,7 @@ define(function (require) {
       this.on('postrender', this.renderTabs);
       this.on('postrender', this.activateTab);
       this.context.tabs = this.getTabs;
+      this.initTabs();
     },
     
     activateTab: function () {
@@ -1543,6 +1545,14 @@ define(function (require) {
     off: function () {
       TabView.__super__.off.apply(this, arguments);
       // console.log(this.views, this.getTabs());
+    },
+    
+    initTabs: function () {
+      if (_.size(this.tabs) > 0) {
+        _.each(this.tabs, function (view, tab) {
+          this.addTabView(new view(), { name: tab });
+        }, this);
+      }
     }
   });
   
@@ -1559,6 +1569,21 @@ define(function (require) {
     }
   });
 
+  CollectionView = View.extend({
+    __name__: 'CollectionView',
+    initialize: function () {
+      CollectionView.__super__.initialize.apply(this, arguments);
+      if (this.options.collection) this.collection = this.options.collection;
+    },
+    
+    preRender: function () {
+      if (this.collection) {
+        this.context.collection = this.collection.toJSON();
+        this.context._collection = this.collection;        
+      }
+    }
+  });
+
   return {
     View: View,
     ListView: ListView,
@@ -1568,6 +1593,7 @@ define(function (require) {
     RowView: RowView,
     ServiceView: ServiceView,
     TabView: TabView,
-    ModelView: ModelView
+    ModelView: ModelView,
+    CollectionView: CollectionView
   };
 });

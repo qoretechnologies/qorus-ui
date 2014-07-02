@@ -14,6 +14,7 @@ define(function(require){
       AlertView        = require('views/system/alerts'),
       DashboardView    = require('views/system/dashboard'),
       LogsView         = require('views/system/logs'),
+      RbacView         = require('views/system/rbac'),
       SystemInfoView;  
 
 
@@ -43,6 +44,8 @@ define(function(require){
       this.setView(new PropView(), '#prop');
       this.setView(new HttpServicesView(), '#http');
       this.setView(new AlertView(), '#alerts');
+      this.setView(new RbacView(), '#rbac');
+
     }
   });
   return SystemInfoView;

@@ -1,0 +1,7 @@
+<td><%= item.name %></td>
+<td><%= item.username %></td>
+<td>
+  <% _.each(item.roles, function (role) { %>
+    <a href="#" class="label"><%= item.username %></a>
+  <% }) %>
+</td>

@@ -8,9 +8,7 @@ define(function (require) {
   
   Match = Qorus.View.extend({
     additionalEvents: {
-      "click a": "applyMatch",
-      "activate": "active",
-      "deactivate": "active"
+      "click a": "applyMatch"
     },
     tagName: 'li',
     template: _.template('<a href=\"#\"><strong><%= model.hint %></strong><br /><small><%= model.help %></small></a>'),
@@ -36,7 +34,13 @@ define(function (require) {
       this.active_match = -1;
       
       _.each(matches, function (match) {
-        var v = this.insertView(new Match({ model: match }), '.matches').render();
+        var v    = this.insertView(new Match({ model: match }), '.matches').render(),
+            self = this;
+              
+        this.listenTo(v, 'apply', function (model) {
+          self.trigger('activate', model);
+        });
+
         frag.appendChild(v.el);
       }, this);
       
@@ -44,7 +48,7 @@ define(function (require) {
       return this;
     },
     show: function () {
-      this.$el.show();
+      if (this.matches.length > 0) this.$el.show();
     },
     setActive: function (next) {
       var matches = this.getView('.matches'),
@@ -150,11 +154,10 @@ define(function (require) {
       var query = this.query.match(/(?=[^\s]*$)(.*)/)[1];
       return ~item.toLowerCase().indexOf(query);
     },
-    highlight: function (item) {
-      
-    },
-    hideDropdown: function () {
-      this.$('.dropdown-menu').hide();
+    highlight: function (item) {},
+    hideDropdown: function (now) {
+      // delay the hide of dropdown to allow click event execution
+      _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },
     getCaretPosition: function () {
       return this.$clone.caret();
@@ -168,7 +171,6 @@ define(function (require) {
         e.preventDefault();
       }
     }
-    
   });
   
   return View;
