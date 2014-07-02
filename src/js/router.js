@@ -142,7 +142,7 @@ define(function (require) {
     
     // search
     showSearch: function (ids, keyvalues) {
-      var collection = new OrdersCollection([], { ids: ids, keyvalues: keyvalues }),
+      var collection = new OrdersCollection([], { ids: ids, keyvalue: keyvalues }),
           view;
     
       collection.fetch();
