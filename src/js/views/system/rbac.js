@@ -9,7 +9,7 @@ define(function (require) {
     url: '/rbac',
     tabs: {
       'users': UsersView,
-      'permissions': RolesView
+      'roles': RolesView
     },
     template: Template
   });

@@ -1696,6 +1696,11 @@ td.break {
   margin-right: -2px;
 }
 
+.table-condensed .btn-controls {
+  margin-top: -4px;
+}
+
+
 td .input-append {
   margin: 0;
 }
