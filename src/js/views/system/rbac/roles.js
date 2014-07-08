@@ -4,7 +4,13 @@ define(function (require) {
       Template = require('tpl!templates/system/rbac/roles.html'),
       TableTpl = require('text!templates/system/rbac/roles/table.html'),
       RowTpl   = require('text!templates/system/rbac/roles/row.html'),
-      View;
+      RoleTpl  = require('tpl!templates/system/rbac/roles/detail.html'),
+      PaneView = require('views/common/pane'),
+      View, RoleView, DetailView;
+  
+  DetailView = PaneView.extend({
+    content_view: new Qorus.ModelView({ template: RoleTpl, model: this.model })
+  });
       
   View = Qorus.ListView.extend({
     collection: new Roles(),
