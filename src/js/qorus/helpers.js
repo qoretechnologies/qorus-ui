@@ -46,7 +46,7 @@ define(function (require) {
     
     createNestedListAsText: function (obj, tpl, level) {
       var tpl_html = NestedListTextTpl,
-        output;
+          output;
       level = level || 0;
 
       if (tpl) {
@@ -58,7 +58,7 @@ define(function (require) {
         createNestedListAsText: Helpers.createNestedListAsText, 
         level: level, 
         escapeHtml: Helpers.escapeHtml 
-      );
+      });
       
       return output.replace(/\n{2,}/gm,"\n");
     },
