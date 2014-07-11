@@ -1733,3 +1733,15 @@ input.autocomplete {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
+
+.items-listing {
+  margin: 14px 0;
+}
+
+.label-info a {
+  color: #fff;
+}
+
+.label-info a:hover {
+  text-decoration: none;
+}

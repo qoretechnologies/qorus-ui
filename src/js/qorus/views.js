@@ -84,7 +84,7 @@ define(function (require) {
       this.views = {};
       this.options = {};
       this.opts = {};
-      this.belpers = {};
+      this.helpers = {};
       
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
@@ -120,7 +120,7 @@ define(function (require) {
         this.clean();
       }
       
-      this.trigger('destroy');
+      this.trigger('destroy', this);
       View.__super__.off.call(this);
 
       if (remove !== false) {
@@ -448,7 +448,13 @@ define(function (require) {
       return this;
     },
     
-    onSyncError: function () {}
+    onSyncError: function () {},
+    
+    id: function () {
+      var name = this.name || this.__name__;
+      name = this.cid + '_' + name;
+      return Helpers.slugify(name);
+    }
    });
 
    ListView = View.extend({
@@ -480,6 +486,7 @@ define(function (require) {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
     
+    // TODO: change positional arguments to single hash argument { collection: collection, date: date, more: options }
     initialize: function (collection, date, options) {
       _.bindAll(this, 'render');
       ListView.__super__.initialize.call(this, options);
@@ -502,7 +509,8 @@ define(function (require) {
       
       this.opts.date = this.date;
       
-      if (!collection) collection = this.collection;
+      // TODO: improve code for collection checking
+      if (!collection || !_.isFunction(collection)) collection = this.collection;
       
       if (collection) {
         if (collection instanceof Backbone.Collection) {
@@ -1459,8 +1467,8 @@ define(function (require) {
     },
     
     initialize: function () {
-      _.bindAll(this, 'render', 'getTabs');
-      TabView.__super__.initialize.call(this, arguments);
+      _.bindAll(this);
+      TabView.__super__.initialize.apply(this, arguments);
       this.on('postrender', this.renderTabs);
       this.on('postrender', this.activateTab);
       this.context.tabs = this.getTabs;
@@ -1484,6 +1492,8 @@ define(function (require) {
       view = this.insertView(view, 'tabs');
       
       if (opts.name) view.name = opts.name;
+      
+      this.listenTo(view, 'all', this.tabEvent);
       return view;
     },
     
@@ -1550,9 +1560,28 @@ define(function (require) {
     initTabs: function () {
       if (_.size(this.tabs) > 0) {
         _.each(this.tabs, function (view, tab) {
-          this.addTabView(new view(), { name: tab });
+          var view_obj,
+              opts = {};
+          
+          if (!_.isFunction(view)) {
+            view_obj = view;
+            view = view_obj.view;
+            opts = view_obj.options;
+          }
+          
+          opts = _.chain(opts)
+            .extend(this.options)
+            .extend(this.opts)
+            .omit('template')
+            .value();
+        
+          this.addTabView(new view(opts), { name: tab });
         }, this);
       }
+    },
+    
+    tabEvent: function () {
+      console.log(arguments);
     }
   });
   

@@ -35,7 +35,13 @@ define(function (require) {
         tpl_html = _.template(tpl);
       }
 
-      return tpl_html({ items: obj, css: css, createNestedList: Helpers.createNestedList, escapeHtml: Helpers.escapeHtml, preformatted: preformatted });
+      return tpl_html({ 
+        items: obj, 
+        css: css, 
+        createNestedList: Helpers.createNestedList, 
+        escapeHtml: Helpers.escapeHtml, 
+        preformatted: preformatted 
+      });
     },
     
     createNestedListAsText: function (obj, tpl, level) {
@@ -47,7 +53,12 @@ define(function (require) {
         tpl_html = _.template(tpl);
       }
 
-      output = tpl_html({ items: obj, createNestedListAsText: Helpers.createNestedListAsText, level: level, escapeHtml: Helpers.escapeHtml });
+      output = tpl_html({ 
+        items: obj, 
+        createNestedListAsText: Helpers.createNestedListAsText, 
+        level: level, 
+        escapeHtml: Helpers.escapeHtml 
+      );
       
       return output.replace(/\n{2,}/gm,"\n");
     },
@@ -171,7 +182,7 @@ define(function (require) {
     },
     
     slugify: function (value) {
-      return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+      return value.toLowerCase().replace(/\-+/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
     },
     
     autoFormat: function (value, type) {

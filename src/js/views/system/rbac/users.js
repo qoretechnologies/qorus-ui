@@ -1,5 +1,6 @@
 define(function (require) {
   var Qorus    = require('qorus/qorus'),
+      _        = require('underscore'),
       Users    = require('collections/users'),
       Template = require('tpl!templates/system/rbac/users.html'),
       TableTpl = require('text!templates/system/rbac/users/table.html'),
@@ -11,7 +12,11 @@ define(function (require) {
     collection: new Users(),
     template: Template,
     preRender: function () {
-      this.setView(new Qorus.TableView({ collection: this.collection, template: TableTpl, row_template: RowTpl }), '#user-list');
+      this.setView(new Qorus.TableView({ 
+        collection: this.collection, 
+        template: TableTpl, 
+        row_template: RowTpl 
+    }), '#user-list');
     }
   });
   

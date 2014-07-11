@@ -6,12 +6,16 @@ define(function (require) {
       View;
   
   View = Qorus.TabView.extend({
+    upstreamUrl: '/system',
     url: '/rbac',
     tabs: {
       'users': UsersView,
       'roles': RolesView
     },
-    template: Template
+    template: Template,
+    initialize: function () {
+      View.__super__.initialize.apply(this, arguments);
+    }
   });
   
   return View;
