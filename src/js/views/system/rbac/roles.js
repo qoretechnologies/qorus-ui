@@ -21,9 +21,13 @@ define(function (require) {
   
   ItemView = Qorus.View.extend({
     additionalEvents: {
-      'click .remove': 'off'
+      'click .remove': 'removeItem'
     },
-    template: ItemTpl
+    template: ItemTpl,
+    removeItem: function () {
+      this.trigger('item:remove', this.options.item);
+      this.off();
+    }
   });
   
   // Role detail attribute listing
@@ -41,14 +45,17 @@ define(function (require) {
     },
     addItem: function (item) {
       var view = this.insertView(new ItemView({ item: item }), '.items-listing', true);
-      this.listenTo(view, 'destroy', this.delItem);
+      this.listenTo(view, 'item:remove', this.delItem);
     },
     addItems: function (items) {
       _.each(items, this.addItem, this);
     },
-    delItem: function (view) {
-      console.log(this.arguments)
-      // this.trigger('item:remove', view.item);
+    delItem: function (item) {
+      var items = this.model.get(this.name);
+      
+      this.model.set(this.name, _.without(items, item));
+      this.model.save(this.name);
+      console.log('saving');
     }
   });
   

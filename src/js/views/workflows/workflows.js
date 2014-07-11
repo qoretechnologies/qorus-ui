@@ -83,8 +83,9 @@ define(function (require) {
     title: "Workflows",
     
     initialize: function (collection, options) {
+      this.collection = collection;
       // call super method
-      ListView.__super__.initialize.call(this, collection, options.date, options);
+      ListView.__super__.initialize.call(this, this.collection, options.date, options);
       
       this.options = {};
       this.views = {};

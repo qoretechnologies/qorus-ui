@@ -84,7 +84,7 @@ define(function (require) {
       this.views = {};
       this.options = {};
       this.opts = {};
-      this.helpers = {};
+      this.helpers = this.helpers || {};
       
       View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
@@ -488,6 +488,7 @@ define(function (require) {
     
     // TODO: change positional arguments to single hash argument { collection: collection, date: date, more: options }
     initialize: function (collection, date, options) {
+      console.log(this.__name__, arguments);
       _.bindAll(this, 'render');
       ListView.__super__.initialize.call(this, options);
       // add element loader
@@ -1580,9 +1581,7 @@ define(function (require) {
       }
     },
     
-    tabEvent: function () {
-      console.log(arguments);
-    }
+    tabEvent: function () {}
   });
   
   ModelView = View.extend({
