@@ -9,6 +9,7 @@ define(function (require) {
       EditTemplate = require('text!templates/common/option_edit.html'),
       EDIT_URL     = settings.REST_API_PREFIX + '/system/options',
       ListView;
+
       require('jquery.ui');
   
   ListView = Qorus.ListView.extend({
@@ -37,7 +38,7 @@ define(function (require) {
           $target = $(e.currentTarget),
           value, obj_type, name, template, $tpl;
       
-      if ($target.is('td')) {
+      if ($(e.target).is('td')) {
         value = $target.data('value');
         obj_type = $target.data('type');
         name = $target.data('name');
@@ -62,7 +63,7 @@ define(function (require) {
         });
         
         $('input').keypress(function (e) {
-          if(e.which == 13) {
+          if (e.which == 13) {
             self.setOption(name, $(this).val(), $target);
           }
         });
