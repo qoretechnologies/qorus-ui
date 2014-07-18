@@ -51,11 +51,14 @@ define(function (require) {
       _.each(items, this.addItem, this);
     },
     delItem: function (item) {
-      var items = this.model.get(this.name);
+      var items = this.model.get(this.name),
+          data  = {};
       
-      this.model.set(this.name, _.without(items, item));
-      this.model.save(this.name);
-      console.log('saving');
+      data[this.name] = _.without(items, item);
+      
+      console.log('saving', data);
+      this.model.set(data);
+      this.model.save();
     }
   });
   

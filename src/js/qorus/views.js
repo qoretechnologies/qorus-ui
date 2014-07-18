@@ -86,7 +86,6 @@ define(function (require) {
       this.opts = {};
       this.helpers = this.helpers || {};
       
-      View.__super__.initialize.call(this, [options]);
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
 
@@ -97,6 +96,8 @@ define(function (require) {
           options.date = moment(settings.DATE_FROM).format(this.date_format);
         }        
       }
+      
+      View.__super__.initialize.call(this, [options]);
       
       _.extend(this.context, options);
       _.extend(this.options, options);
@@ -235,9 +236,9 @@ define(function (require) {
         view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
         var $el = this.$(id),
-          el = $el.get(0);
+            el  = $el.get(0);
         
-        if (el){
+        if (el) {
           while(el.firstChild)
             el.removeChild(el.firstChild);            
         }
@@ -248,6 +249,8 @@ define(function (require) {
           if (v.el) frag.appendChild(v.el);
         });
         
+        if ($el.size() === 0) $el = this.$el;
+        console.log($el, frag);
         $(frag).appendTo($el);
       }
     },
@@ -270,7 +273,7 @@ define(function (require) {
     
     // adds view into el views array
     // useful for table rows
-    insertView: function (view, el, append) {
+      insertView: function (view, el, append) {
       var views, old_view;
 
       this._updateViewUrl(view);
@@ -488,7 +491,6 @@ define(function (require) {
     
     // TODO: change positional arguments to single hash argument { collection: collection, date: date, more: options }
     initialize: function (collection, date, options) {
-      console.log(this.__name__, arguments);
       _.bindAll(this, 'render');
       ListView.__super__.initialize.call(this, options);
       // add element loader

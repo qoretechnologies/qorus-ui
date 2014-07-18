@@ -122,6 +122,7 @@ define(function (require) {
     updateQuery: function (e) {
       var $target = $(e.currentTarget);
       this.query = $target.val();
+      console.log(this.query);
       return this;
     },
     showSuggestions: function (e) {
@@ -163,6 +164,8 @@ define(function (require) {
       return this.$clone.caret();
     },
     applyActiveHint: function (model) {
+      console.log('panda', model, this.$('.autocomplete').val());
+      this.getCaretPosition();
       this.$('.autocomplete').val(model.hint).caret(-1);
       this.hideDropdown();
     },

@@ -5,7 +5,7 @@ define(function (require) {
   
   Model = Qorus.Model.extend({
     idAttribute: 'role',
-    urlRoot: settings.REST_API_URL + '/roles/',
+    urlRoot: settings.REST_API_PREFIX + '/roles/',
     getControls: function () {
       var controls = [];
       
@@ -17,6 +17,10 @@ define(function (require) {
     doAction: function (opts) {
       if (opts.action === "delete") this.destroy();
       return this;
+    },
+    save: function () {
+      console.log(arguments, this);
+      Model.__super__.save.apply(this, arguments);
     }
   });
 
