@@ -1,15 +1,16 @@
 define(function (require) {
-  var Qorus  = require('qorus/qorus'),
-      _      = require('underscore'),
-      Fields = {},
+  var Backbone = require('backbone'),
+      Qorus    = require('qorus/qorus'),
+      _        = require('underscore'),
+      Fields   = {},
       BaseView, OptionView;
   
   BaseView = Qorus.ModelView.extend({
-    attrName: false,
-    intitialze: function () {
+    attrName: '',
+    initialize: function () {
       BaseView.__super__.initialize.apply(this, arguments);
       this.attrName = this.options.attrName || this.attrName;
-      this.listenTo(this.model);
+      if (this.model instanceof Backbone.Model) this.listenTo(this.model);
     },
     getValue: function () {
       if (this.model) 
@@ -29,13 +30,19 @@ define(function (require) {
       return {
         'type': 'text',
         'name': this.attrName,
-        'value': this.getValue()
+        'value': this.getValue(),
+        'placeholder': this.name
       };
     }
   });
 
   Fields.TextareaView = BaseView.extend({
     tagName: 'textarea',
+    attributes: function () {
+      return {
+        placeholder: this.name 
+      }
+    },
     onRender: function () {
       this.$el.val(this.getValue());
     }
@@ -43,15 +50,15 @@ define(function (require) {
 
   OptionView = Qorus.View.extend({
     tagName: 'option',
-    attributes: function () {
-      return {
-        'value': this.options.name 
-      };
+    render: function () {
+      OptionView.__super__.render.apply(this, arguments);
+      this.$el.html(this.options.value);
+      return this;
     }
   });
 
   Fields.SelectView = BaseView.extend({
-    collection: [],
+    // collection: [],
     tagName: 'select',
     attributes: function () {
       return {
@@ -60,9 +67,37 @@ define(function (require) {
     },
     initialize: function () {
       Fields.SelectView.__super__.initialize.apply(this, arguments);
-      _.each(this.collection, function (item) {
-        this.insertView(new OptionView({ name: item }));
+      _.each(this.collection.models, function (item) {
+        this.insertView(new OptionView({ 
+          value: item.get('name'), 
+          attributes: { 
+            value: item.get('name') 
+          } 
+        }), 'self');
       });
+    }
+  });
+  
+  Fields.MultiSelectView = BaseView.extend({
+    // collection: [],
+    optionView: OptionView,
+    tagName: 'select',
+    attributes: function () {
+      return {
+        'name': this.attrName,
+        'multiple': true
+      };
+    },
+    initialize: function () {
+      Fields.SelectView.__super__.initialize.apply(this, arguments);
+      _.each(this.collection.models, function (item) {
+        this.insertView(new this.optionView({ 
+          value: item.get('name'), 
+          attributes: { 
+            value: item.get('name') 
+          } 
+        }), 'self');
+      }, this);
     }
   });
 

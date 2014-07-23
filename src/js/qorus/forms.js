@@ -2,22 +2,43 @@ define(function (require) {
   var Qorus  = require('qorus/qorus'),
       _      = require('underscore'),
       Fields = require('qorus/fields'),
-      LabelView, FormView;
-  
+      FormView, ControlsView, LabelView;
   
   LabelView = Qorus.View.extend({
     tagName: 'label',
-    initialize: function (options) {
-      this.options = options;
+    onRender: function () {
+      this.$el.html(this.options.name);
+    }
+  });
+  
+  ControlsView = Qorus.View.extend({
+    className: 'controls',
+    preRender: function () {
+      this.insertView(this.options.content_view, 'self');
+    }
+  });
 
-      LabelView.__super__.initialize.apply(this, arguments);
+  FieldView = Qorus.View.extend({
+    className: 'control-group',
+    preRender: function () {
+      var field = new this.options.field(this.options);
+      this.insertView(new LabelView({ 
+        name: field.name, 
+        attributes: { 
+          name: field.name, 
+          for: field.id(), 
+          'class': 'control-label' 
+        }
+      }), 'self');
+      this.insertView(new ControlsView({ content_view: field }), 'self');
     }
   });
   
   FormView = Qorus.View.extend({
+    name: 'qorus-form-view',
     tagName: 'form',
     attributes: {
-      name: 'qorus-form-view',
+      name: this.name,
       method: 'get'
     },
     fields: false,
@@ -25,10 +46,10 @@ define(function (require) {
       FormView.__super__.initialize.apply(this, arguments);
       this.fields = this.options.fields || this.fields;
       _.each(this.fields, function (item) {
-        var View = Fields[item.type];
-        var field = new View({ model: this.model });
-        this.insertView(new LabelView({ attributes: { name: item.name, for: field.id } }), '');
-        this.insertView(field, '');
+        this.insertView(new FieldView({ 
+          model: this.model,
+          field: item
+        }), 'self');
       }, this);
     }
   });

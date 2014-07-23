@@ -28,6 +28,7 @@ define(function (require) {
     render: function () {
       var ctx = { item: this.model };
       View.__super__.render.call(this, ctx);
+      return this;
     },
     
     onRender: function () {

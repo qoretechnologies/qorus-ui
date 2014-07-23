@@ -102,6 +102,7 @@ define(function(require, exports, module) {
     render: function () {
       if (this.model.isNew()) return;
       DiagramView.__super__.render.apply(this, arguments);
+      return this;
     },
     
     stepDetail: function (e) {

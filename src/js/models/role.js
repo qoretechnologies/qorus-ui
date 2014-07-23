@@ -17,10 +17,6 @@ define(function (require) {
     doAction: function (opts) {
       if (opts.action === "delete") this.destroy();
       return this;
-    },
-    save: function () {
-      console.log(arguments, this);
-      Model.__super__.save.apply(this, arguments);
     }
   });
 

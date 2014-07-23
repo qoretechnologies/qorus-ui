@@ -202,7 +202,7 @@ define(function (require) {
     
     // removes all subviews
     removeViews: function () {
-      _.each(this.views, function (view) {
+      _.each(_.result(this, 'views'), function (view) {
         debug.log('removing subviews');
         if (_.isArray(view)) {
           _.each(view, function (v) {
@@ -220,8 +220,9 @@ define(function (require) {
     
     // returns view by specified id, el id attr in the most cases
     getView: function (id) {
-      if (id in this.views)
-        return this.views[id];
+      var views = _.result(this, 'views');
+      if (id in views)
+        return views[id];
 
       return null;
     },
@@ -246,18 +247,17 @@ define(function (require) {
         var frag = document.createDocumentFragment();
 
         _.each(view, function (v) {
-          if (v.el) frag.appendChild(v.el);
+          if (v.el) frag.appendChild(v.render().el);
         });
         
-        if ($el.size() === 0) $el = this.$el;
-        console.log($el, frag);
+        if (id === 'self') $el = this.$el;
         $(frag).appendTo($el);
       }
     },
     
     // renders subviews
     renderViews: function () {
-      _.each(this.views, function (view, id) {
+      _.each(_.result(this,'views'), function (view, id) {
         if (id!=='tabs')  this.renderView(id, view);
       }, this);
       return this;
@@ -273,15 +273,16 @@ define(function (require) {
     
     // adds view into el views array
     // useful for table rows
-      insertView: function (view, el, append) {
-      var views, old_view;
+    insertView: function (view, el, append) {
+      var views, old_view,
+          views_list = _.result(this, 'views');
 
       this._updateViewUrl(view);
       
-      if (this.views[el]) {
-        views = this.views[el];
+      if (views_list[el]) {
+        views = views_list[el];
       } else {
-        views = this.views[el] = [];
+        views = views_list[el] = [];
       }
       
       el = el || '';
@@ -1342,6 +1343,7 @@ define(function (require) {
       _.extend(this.context, { data: this.data });
       
       ServiceView.__super__.render.call(this, ctx);
+      return this;
     },
     
     doAction: function (ev) {
@@ -1419,6 +1421,8 @@ define(function (require) {
       _.extend(this.context, { data: this.data });
       
       ServiceView.__super__.render.call(this, ctx);
+      
+      return this;
     },
     
     doAction: function (ev) {
@@ -1594,8 +1598,10 @@ define(function (require) {
     },
     
     preRender: function () {
-      this.context.item = this.model.toJSON();
-      this.context._item = this.model;
+      if (this.model) {
+        this.context.item = this.model.toJSON();
+        this.context._item = this.model;        
+      }
     }
   });
 

@@ -23,6 +23,7 @@ define(function (require) {
     render: function (ctx) {
       this.context.item = this.model.toJSON();
       View.__super__.render.call(this, ctx);
+      return this;
     },
     
     preRender: function () {

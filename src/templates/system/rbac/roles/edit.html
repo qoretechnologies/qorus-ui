@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <% if (obj.model) { %>
+  <h3>Edit role <%= obj.model.name %></h3>
+  <% } else { %>
+  <h3>Add role</h3>
+  <% } %>
+</div>
+<div class="modal-body">
+  <div id="role-edit-form"></div>
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Close</a>
+  <a href="#" class="btn btn-primary"><% if (obj.model) { %>Save changes<% } else { %>Create<% } %></a>
+</div>

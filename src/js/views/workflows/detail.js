@@ -103,6 +103,7 @@ define(function (require) {
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
+      return this;
     },
     
     onRender: function () {

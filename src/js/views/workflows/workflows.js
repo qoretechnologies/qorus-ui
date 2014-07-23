@@ -42,6 +42,7 @@ define(function (require) {
     render: function () {
       this.context.deprecated = this.model.collection.opts.deprecated;
       RowView.__super__.render.apply(this, arguments);
+      return this;
     }
   });
   

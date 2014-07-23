@@ -24,10 +24,6 @@ define(function (require, exports, module) {
       return this.path;
     },
     
-    render: function () {
-      View.__super__.render.apply(this, arguments);
-    },
-    
     preRender: function () {
       this.setView(this.opts.content_view, '.content');
     },

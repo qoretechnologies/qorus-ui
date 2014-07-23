@@ -196,6 +196,7 @@ define(function (require) {
     render: function (ctx) {
       this.context.scale = this.scale;
       ChartView.__super__.render.call(this, ctx);
+      return this;
     }
   });
   

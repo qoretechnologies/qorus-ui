@@ -66,6 +66,7 @@ define(function (require) {
       var context = _.extend(this.context, { item: this.extension }, ctx);
       
       View.__super__.render.call(this, context);
+      return this;
     },
     
     onRender: function () {

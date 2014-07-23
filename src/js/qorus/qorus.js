@@ -105,6 +105,7 @@ define(function (require) {
       
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
+      return this;
     },
     
     incr: function (attr, val) {
@@ -283,6 +284,7 @@ define(function (require) {
             
       Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
+      return this;
     },
     
     next: function (model) {

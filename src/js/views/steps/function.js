@@ -35,6 +35,8 @@ define(function (require) {
       
       // $(".modal").resizable();
       debug.log($(".modal"));
+      
+      return this;
     }
   });
   return ModelView;
