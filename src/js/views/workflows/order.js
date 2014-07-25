@@ -590,6 +590,8 @@ define(function(require, exports, module) {
             $row.addClass('invalid');
             $target.focus();
           }
+        } else {
+          clean(e);
         }
       
         e.preventDefault();
