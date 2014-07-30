@@ -14,6 +14,7 @@ define(function (require) {
       ItemTpl        = require('tpl!templates/common/item.html'),
       Forms          = require('views/system/rbac/forms'),
       EditTpl        = require('tpl!templates/system/rbac/roles/edit.html'),
+      WSJTpl         = require('tpl!templates/system/rbac/roles/wsj.html'),
       View, DetailView, ListingView, ItemView, EditView;
   
   ItemView = Qorus.View.extend({
@@ -60,10 +61,13 @@ define(function (require) {
       
       data[this.name] = _.without(items, item);
       
-      console.log('saving', data);
       this.model.set(data);
       this.model.save();
     }
+  });
+  
+  var TestView = Qorus.View.extend({
+    // initialize: function () {}
   });
   
   // Right pane detail view
@@ -82,9 +86,13 @@ define(function (require) {
       },
       'users': ListingView,
       'groups': ListingView,
-      'worfklows': ListingView,
-      'services': ListingView,
-      'jobs': ListingView
+      'wsj': {
+        view: Qorus.View,
+        options: {
+          template: WSJTpl,
+          name: 'Linked objects'
+        }
+      }
     },
     preRender: function () {
       this.context.item = this.model.toJSON();

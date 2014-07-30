@@ -21,6 +21,8 @@ define(function (require) {
     setValue: function (value) {
       if (this.model)
         this.model.set(this.attrName, value);
+    },
+    validate: function () {
     }
   });
   

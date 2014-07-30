@@ -1,8 +1,7 @@
 define(function (require) {
   var Qorus  = require('qorus/qorus'),
       _      = require('underscore'),
-      Fields = require('qorus/fields'),
-      FormView, ControlsView, LabelView;
+      FormView, ControlsView, LabelView, FieldView;
   
   LabelView = Qorus.View.extend({
     tagName: 'label',
@@ -26,7 +25,7 @@ define(function (require) {
         name: field.name, 
         attributes: { 
           name: field.name, 
-          for: field.id(), 
+          'for': field.id(), 
           'class': 'control-label' 
         }
       }), 'self');
@@ -51,6 +50,15 @@ define(function (require) {
           field: item
         }), 'self');
       }, this);
+    },
+    save: function () {
+      
+    },
+    is_valid: function () {
+      
+    },
+    clean: function () {
+      
     }
   });
   

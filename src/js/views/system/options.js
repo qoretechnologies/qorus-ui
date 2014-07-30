@@ -112,9 +112,6 @@ define(function (require) {
   
   ListView = Qorus.ListView.extend({
     __name__: 'OptionsView',
-    additionalEvents: {
-      "click td[data-editable]": "editTableCell"
-    },
     
     initialize: function (opts) {
       this.opts = opts || {};
