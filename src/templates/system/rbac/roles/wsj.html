@@ -1,0 +1,12 @@
+<div class="span12">
+  <h3>Workflows</h3>
+  <% if (this.item.workflows) { %>
+    <ul>
+      <% _.each(this.item.workflows, function (workflow) { %>
+        <li><%= wfl.name %></li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>None</p>
+  <% } %>
+</div>
