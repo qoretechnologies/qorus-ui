@@ -14,7 +14,7 @@ define(function (require) {
       AlertsTpl       = require('tpl!templates/common/alerts.html'),
       ModalView       = require('views/common/modal'),
       StepView        = require('views/steps/step'),
-      ModelView, HeaderView, AlertsView, PaneView, DiagramView;
+      ModelView, HeaderView, AlertsView, PaneView, DiagramView, LibView;
 
 
   AlertsView = Qorus.ModelView.extend({
@@ -22,6 +22,35 @@ define(function (require) {
     name: 'Alerts',
     template: AlertsTpl
   });
+  
+  LibView = LibraryView.extend({
+    initialize: function () {
+      LibView.__super__.initialize.apply(this, arguments);
+      this.model.fetch({ data: { lib_source: true }});
+      this.listenTo(this.model, 'all', function () {
+        console.log(arguments);
+      });
+    },
+    preRender: function () {
+      var lib = this.model.get('lib');
+      _.extend(lib, { wffuncs: _.sortBy(this.model.get('wffuncs'), 'name'), stepfuncs: this.mapStepInfo() });
+      this.model.set('lib', lib);
+      this.context.lib = this.model.get('lib');
+    },
+    mapStepInfo: function () {
+      var stepinfo = this.model.get('stepinfo');
+      var steps = [];
+      _.each(stepinfo, function (step) {
+        _.each(step.functions, function (func) {
+          steps.push({
+            name: func.name,
+            body: func.body
+          });
+        });
+      });
+      return _.chain(steps).unique('name').sortBy('name').value();
+    }
+  })
 
   HeaderView = Qorus.View.extend({
     __name__: 'WorkflowHeaderView',
@@ -122,7 +151,7 @@ define(function (require) {
       
       pview.listenTo(this.model, 'change', pview.render);
       
-      lview = this.addTabView(new LibraryView({ model: this.model }));
+      lview = this.addTabView(new LibView({ model: this.model }));
       
       lview.listenTo(this.model, 'change:wffunc', lview.render);
       
