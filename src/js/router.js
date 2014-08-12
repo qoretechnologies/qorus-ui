@@ -88,6 +88,7 @@ define(function (require) {
       } else {
         d = this.collections.workflows.opts.deprecated;
         _.extend(this.collections.workflows.opts, opts);
+        // console.log(this.collections.workflows.opts, opts);
       }
       
       this.collections.workflows.fetch();

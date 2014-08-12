@@ -12,10 +12,12 @@ define(function (require) {
       ListingViewTpl = require('tpl!templates/common/listing.html'),
       Permissions    = require('collections/permissions'),
       ItemTpl        = require('tpl!templates/common/item.html'),
-      Forms          = require('views/system/rbac/forms'),
-      EditTpl        = require('tpl!templates/system/rbac/roles/edit.html'),
-      WSJTpl         = require('tpl!templates/system/rbac/roles/wsj.html'),
-      View, DetailView, ListingView, ItemView, EditView;
+      View, DetailView, Modal, ListingView;
+  
+  // Add/edit modal view 
+  Modal = ModalView.extend({
+    
+  });
   
   ItemView = Qorus.View.extend({
     additionalEvents: {
@@ -25,13 +27,6 @@ define(function (require) {
     removeItem: function () {
       this.trigger('item:remove', this.options.item);
       this.off();
-    }
-  });
-  
-  EditView = Qorus.View.extend({
-    template: EditTpl,
-    preRender: function () {
-      this.insertView(new Forms.Role({ model: this.model }), '#role-edit-form');
     }
   });
   
@@ -49,6 +44,7 @@ define(function (require) {
       }
     },
     addItem: function (item) {
+      console.log(typeof item);
       var view = this.insertView(new ItemView({ item: item }), '.items-listing', true);
       this.listenTo(view, 'item:remove', this.delItem);
     },
@@ -56,18 +52,11 @@ define(function (require) {
       _.each(items, this.addItem, this);
     },
     delItem: function (item) {
-      var items = this.model.get(this.name),
-          data  = {};
+      var items = this.model.get(this.name);
       
-      data[this.name] = _.without(items, item);
-      
-      this.model.set(data);
-      this.model.save();
+      this.model.set(this.name, _.without(items, item));
+      this.model.save(this.name);
     }
-  });
-  
-  var TestView = Qorus.View.extend({
-    // initialize: function () {}
   });
   
   // Right pane detail view
@@ -85,14 +74,7 @@ define(function (require) {
         }
       },
       'users': ListingView,
-      'groups': ListingView,
-      'wsj': {
-        view: Qorus.View,
-        options: {
-          template: WSJTpl,
-          name: 'Linked objects'
-        }
-      }
+      'groups': ListingView
     },
     preRender: function () {
       this.context.item = this.model.toJSON();
@@ -112,7 +94,7 @@ define(function (require) {
         tab.setElement(this.$(id));
         tab.render();
       });
-    }
+    },
   });
   
   // Roles listing view
@@ -120,10 +102,6 @@ define(function (require) {
     url: "/roles",
     collection: new Roles(),
     template: Template,
-    additionalEvents: {
-      'click .add-role': 'showAddView'
-    },
-    
     preRender: function () {
       var TView = this.setView(new Qorus.TableView({
         url: "/roles",
@@ -154,7 +132,7 @@ define(function (require) {
         view.render();
         
         this.listenToOnce(view, 'off closed', function () {
-          row.$el.removeClass('info');
+          row.$el.removeClass('info')
         });
         row.$el.addClass('info');
 
@@ -164,12 +142,10 @@ define(function (require) {
         if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }
-      Backbone.history.navigate(url);
+      Backbone.history.navigate(url)
     },
     showAddView: function () {
-      this.setView(new ModalView({
-        content_view: new EditView({ model: this.model })
-      }));
+      this.setView(new Modal({ }));
     }
   });
   

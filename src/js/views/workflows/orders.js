@@ -136,6 +136,8 @@ define(function (require) {
       //   // delete opts.url;
       // }
       
+      
+      console.log(Collection, opts.date, opts);
       this.opts = opts;
       _.extend(this.options, opts);
     },

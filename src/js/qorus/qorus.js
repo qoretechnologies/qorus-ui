@@ -102,7 +102,6 @@ define(function (require) {
                  model.trigger('sync:error', model, response, options);
                }
       });
-      
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
       return this;

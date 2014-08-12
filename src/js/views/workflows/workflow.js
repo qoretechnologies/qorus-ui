@@ -54,7 +54,7 @@ define(function (require) {
     
     initialize: function (opts) {
       // debug.log("workflow opts", this.opts);
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'search');
       // this.path = window.location.pathname.replace("/workflows/view/"+opts.id+"/", "");
       ModelView.__super__.initialize.call(this, opts);
       this.opts = opts;

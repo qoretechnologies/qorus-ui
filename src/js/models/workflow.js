@@ -204,8 +204,10 @@ define(function (require) {
       if (obj === 'workflow') {
         if (action === 'start') {
           this.incr('exec_count');
+          this.incr('autostart');
         } else if (action === 'stop') {
           this.decr('exec_count');
+          this.decr('autostart');
         } else if (action === 'data_submitted') {
           this.incr(e.info.status);
         } else if (action === 'status_changed') {

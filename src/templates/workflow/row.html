@@ -1,9 +1,10 @@
 <% item.id = item.workflowid %>
 <td><i class="icon-check-empty check"></i></td>
 <td class="connections"><%= createControls(_item) %></td>
+<td class="err instances"><%= item.exec_count %></td>
 <td class="err instances autostart"></td>
 <td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show" title="Alerts" data-toggle="tooltip"></i>' : '' %></td>
-<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id) %>"><%= item.name %></a></td>
+<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id, date) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
 <td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id), 'badge-success') %></td>
 <td class="err ready"><%= wrapBadge(item.READY, getUrl('ready', item.id), 'badge-ready') %></td>

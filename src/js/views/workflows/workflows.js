@@ -41,6 +41,7 @@ define(function (require) {
     
     render: function () {
       this.context.deprecated = this.model.collection.opts.deprecated;
+      this.context.date = this.model.collection.opts.date;
       RowView.__super__.render.apply(this, arguments);
       return this;
     }

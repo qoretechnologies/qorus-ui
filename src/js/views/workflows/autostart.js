@@ -14,8 +14,9 @@ define(function (require) {
     },
     
     initialize: function () {
+      _.bindAll(this, 'render');
       View.__super__.initialize.apply(this, arguments);
-      this.listenTo(this.model, 'change:exec_count', this.render);
+      this.listenTo(this.model, 'change:autostart', this.render);
     },
         
     setAutostart: function (e) {
