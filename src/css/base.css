@@ -785,7 +785,7 @@ input:focus {
 /* resizable modal */
 .modal .content {
   height: 100%;
-  overflow: hidden;
+/*  overflow: hidden;*/
 }
 
 .modal .modal-body {

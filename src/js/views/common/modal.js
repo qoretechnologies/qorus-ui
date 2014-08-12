@@ -63,9 +63,11 @@ define(function (require) {
         });
       });
       
-      this.$el.on('shown.modal', this.fixeHeight);
+      this.$el.on('shown.modal', this.fixHeight);
       
       this.$el.on('hide.modal', $.proxy(this.off, this));
+      
+      $(window).on('resize.'+this.cid, $.proxy(this.fixHeight, this));
     },
     
     fixHeight: function () {
@@ -85,6 +87,8 @@ define(function (require) {
     },
         
     clean: function () {
+      $(window).off('resize.'+this.cid);
+      
       if (this.$('.modal').hasClass('ui-resizable')) {
         this.$('.modal').resizable('destroy');
       }
