@@ -18,10 +18,16 @@ define(function (require) {
 
   // extending base RowView to add workflow related events
   RowView = Qorus.RowView.extend({
+    helpers: helpers,
     __name__: 'WorkflowRowView',
     
     additionalEvents: {
       'click [data-action]': 'doAction'
+    },
+    
+    initialize: function () {
+      RowView.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model.collection, 'change:date', this.render);
     },
         
     onRender: function () {
@@ -44,6 +50,10 @@ define(function (require) {
       this.context.date = this.model.collection.opts.date;
       RowView.__super__.render.apply(this, arguments);
       return this;
+    },
+    
+    hiJack: function (e) {
+      e.preventDefault();
     }
   });
   

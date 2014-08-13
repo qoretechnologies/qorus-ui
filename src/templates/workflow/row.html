@@ -4,20 +4,20 @@
 <td class="err instances"><%= item.exec_count %></td>
 <td class="err instances autostart"></td>
 <td class="connections"><%= (item.has_alerts) ? '<i class="icon-warning-sign text-error alert-show" title="Alerts" data-toggle="tooltip"></i>' : '' %></td>
-<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id, date) %>"><%= item.name %></a></td>
+<td class="name" data-search="<%= item.name.toLowerCase() %>"><a href="<%= getUrl('all', item.id, _item.collection.opts.date) %>"><%= item.name %></a></td>
 <td class="version"><%= item.version %></td>
-<td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id), 'badge-success') %></td>
-<td class="err ready"><%= wrapBadge(item.READY, getUrl('ready', item.id), 'badge-ready') %></td>
-<td class="err scheduled"><%= wrapBadge(item.SCHEDULED, getUrl('scheduled', item.id), 'badge-info') %></td>
-<td class="err incomplete"><%= wrapBadge(item.INCOMPLETE, getUrl('incomplete', item.id), 'badge-info') %></td>
-<td class="err event-waiting"><%= wrapBadge(item['EVENT-WAITING'], getUrl('event-waiting', item.id), 'badge-waiting') %></td>
-<td class="err async-waiting"><%= wrapBadge(item['ASYNC-WAITING'], getUrl('async-waiting', item.id), 'badge-waiting') %></td>
-<td class="err waiting"><%= wrapBadge(item.WAITING, getUrl('waiting', item.id), 'badge-waiting') %></td>
-<td class="err retry"><%= wrapBadge(item.RETRY, getUrl('retry', item.id), 'badge-error') %></td>
-<td class="err error"><%= wrapBadge(item.ERROR, getUrl('error', item.id), 'badge-important') %></td>
-<td class="err in-progress"><%= wrapBadge(item['IN-PROGRESS'], getUrl('in-progress', item.id), 'badge-warning') %></td>
-<td class="err canceled"><%= wrapBadge(item.CANCELED, getUrl('canceled', item.id), 'badge-canceled') %></td>
-<td class="err blocked"><%= wrapBadge(item.BLOCKED, getUrl('blocked', item.id), '') %></td>
+<td class="err complete"><%= wrapBadge(item.COMPLETE, getUrl('complete', item.id, _item.collection.opts.date), 'badge-success') %></td>
+<td class="err ready"><%= wrapBadge(item.READY, getUrl('ready', item.id,  _item.collection.opts.date), 'badge-ready') %></td>
+<td class="err scheduled"><%= wrapBadge(item.SCHEDULED, getUrl('scheduled', item.id, _item.collection.opts.date), 'badge-info') %></td>
+<td class="err incomplete"><%= wrapBadge(item.INCOMPLETE, getUrl('incomplete', item.id, _item.collection.opts.date), 'badge-info') %></td>
+<td class="err event-waiting"><%= wrapBadge(item['EVENT-WAITING'], getUrl('event-waiting', item.id, _item.collection.opts.date), 'badge-waiting') %></td>
+<td class="err async-waiting"><%= wrapBadge(item['ASYNC-WAITING'], getUrl('async-waiting', item.id, _item.collection.opts.date), 'badge-waiting') %></td>
+<td class="err waiting"><%= wrapBadge(item.WAITING, getUrl('waiting', item.id, _item.collection.opts.date), 'badge-waiting') %></td>
+<td class="err retry"><%= wrapBadge(item.RETRY, getUrl('retry', item.id, _item.collection.opts.date), 'badge-error') %></td>
+<td class="err error"><%= wrapBadge(item.ERROR, getUrl('error', item.id, _item.collection.opts.date), 'badge-important') %></td>
+<td class="err in-progress"><%= wrapBadge(item['IN-PROGRESS'], getUrl('in-progress', item.id, _item.collection.opts.date), 'badge-warning') %></td>
+<td class="err canceled"><%= wrapBadge(item.CANCELED, getUrl('canceled', item.id, _item.collection.opts.date), 'badge-canceled') %></td>
+<td class="err blocked"><%= wrapBadge(item.BLOCKED, getUrl('blocked', item.id, _item.collection.opts.date), '') %></td>
 <td><%= item.TOTAL %></td>
 <% if (obj.deprecated) { %>
 <td><%= item.deprecated ? "<i class=\"icon-flag-alt\"></i>" : "<i class=\"icon-flag\"></i>" %></td>
