@@ -31,8 +31,10 @@ define(function(require, exports, module) {
       LockTemplate    = require('tpl!templates/workflow/orders/lock.html'),
       User            = require('models/system').User,
       ConfirmView     = require('views/common/confirm'),
+      StatusTpl       = require('tpl!templates/workflow/orders/status.html'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
-      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView, OrderLockView;
+      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView, OrderLockView,
+      WorkflowStatus;
   
   require('jquery.ui');
   require('bootstrap');
@@ -45,6 +47,14 @@ define(function(require, exports, module) {
       'retry': 'btn-success'
     }
   };
+  
+  WorkflowStatus = Qorus.ModelView.extend({
+    template: StatusTpl,
+    initialize: function () {
+      WorkflowStatus.__super__.initialize.apply(this, arguments);
+      this.listenTo(this.model, 'sync', this.render);
+    }
+  });
   
   OrderLockView = Qorus.ModelView.extend({
     template: LockTemplate,
@@ -426,6 +436,9 @@ define(function(require, exports, module) {
     },
     
     preRender: function () {
+      var workflow = new Workflow({ workflowid: this.model.get('workflowid') });
+      console.log(workflow, workflow.url(), this.model.get('workflowid') );
+
       this.removeView('tabs');
       
       this.addTabView(new DiagramPaneView({ model: this.model }));
@@ -436,6 +449,9 @@ define(function(require, exports, module) {
       this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
       this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
       this.addTabView(new NotesView({ model: this.model }), { name: "Notes" });
+      this.setView(new WorkflowStatus({ model: workflow }), '.workflow-status');
+      
+      workflow.fetch();
       
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});

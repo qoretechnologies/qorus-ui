@@ -137,7 +137,6 @@ define(function (require) {
       // }
       
       
-      console.log(Collection, opts.date, opts);
       this.opts = opts;
       _.extend(this.options, opts);
     },
