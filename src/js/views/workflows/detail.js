@@ -33,7 +33,9 @@ define(function (require) {
     },
     preRender: function () {
       var lib = this.model.get('lib');
-      _.extend(lib, { wffuncs: _.sortBy(this.model.get('wffuncs'), 'name'), stepfuncs: this.mapStepInfo() });
+      var wffuncs = _.sortBy(this.model.get('wffuncs'), 'name');
+      wffuncs = this.transformName(wffuncs, "<small class='label'>%(type)s</small><br />%(name)s", ['name', 'type']);
+      _.extend(lib, { wffuncs: wffuncs, stepfuncs: this.mapStepInfo() });
       this.model.set('lib', lib);
       this.context.lib = this.model.get('lib');
     },
@@ -42,13 +44,18 @@ define(function (require) {
       var steps = [];
       _.each(stepinfo, function (step) {
         _.each(step.functions, function (func) {
-          steps.push({
-            name: func.name,
-            body: func.body
-          });
+          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> <small class='label label-small'>%s</small><br /> %s", 
+            func.type, func.type.slice(0,1).toUpperCase(), step.name, func.name);
+          steps.push(func);
         });
       });
       return _.chain(steps).unique('name').sortBy('name').value();
+    },
+    transformName: function (objects, format, attrs) {
+      _.each(objects, function (obj) {
+        obj.formatted_name = sprintf(format, _.pick(obj, attrs));
+      });
+      return objects;
     }
   })
 
