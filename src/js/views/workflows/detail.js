@@ -27,9 +27,6 @@ define(function (require) {
     initialize: function () {
       LibView.__super__.initialize.apply(this, arguments);
       this.model.fetch({ data: { lib_source: true }});
-      this.listenTo(this.model, 'all', function () {
-        console.log(arguments);
-      });
     },
     preRender: function () {
       var lib = this.model.get('lib');
