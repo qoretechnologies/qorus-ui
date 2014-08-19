@@ -4,7 +4,7 @@
   <% _.each(obj.lib, function (lib, name) { %>
   <li class="nav-header"><%= name %></li>
   <% _.each(lib, function (fn, idxx) { %>
-  <li class="<%= (idx===0 && idxx===0) ? ' active' : '' %>"><a href="#" data-toggle="tab" data-target="#<%= fn.name %>"><%= fn.name %></a></li>
+  <li class="<%= (idx===0 && idxx===0) ? ' active' : '' %>"><a href="#" data-toggle="tab" data-target="#<%= fn.name %>"><%= fn.formatted_name || fn.name %></a></li>
   <% }) %>
   <% idx++ %>
   <% }) %>
