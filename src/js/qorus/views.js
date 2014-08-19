@@ -79,6 +79,7 @@ define(function (require) {
     
     
     initialize: function (options) {
+      this.preInit();
       _.bindAll(this, 'render', 'insertView', 'setView');
       this.context = {};
       this.views = {};
@@ -112,6 +113,7 @@ define(function (require) {
           this.listenTo(this.model, 'sync:error', this.onSyncError);
         }
       }
+      this.postInit();
     },
         
     off: function (remove) {
@@ -458,7 +460,10 @@ define(function (require) {
       var name = this.name || this.__name__;
       name = this.cid + '_' + name;
       return Helpers.slugify(name);
-    }
+    },
+    
+    preInit: function () {},
+    postInit: function () {}
    });
 
    ListView = View.extend({
@@ -1466,6 +1471,7 @@ define(function (require) {
     __name__: 'TabView',
     views: {},
     tabs: [],
+    context: {},
     
     defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
@@ -1509,7 +1515,7 @@ define(function (require) {
         var id = '#' + tab.slug();
         tab.setElement(this.$(id));
         tab.render();
-      });
+      }, this);
     },
     
     getTabs: function () {
@@ -1573,13 +1579,12 @@ define(function (require) {
           if (!_.isFunction(view)) {
             view_obj = view;
             view = view_obj.view;
-            opts = view_obj.options;
+            opts = view_obj.options || {};
           }
           
           opts = _.chain(opts)
             .extend(this.options)
-            .extend(this.opts)
-            .omit('template')
+            .extend(_.omit(this.opts, 'template'))
             .value();
         
           this.addTabView(new view(opts), { name: tab });
@@ -1595,6 +1600,7 @@ define(function (require) {
     initialize: function () {
       ModelView.__super__.initialize.apply(this, arguments);
       this.model = this.options.model;
+      
     },
     
     preRender: function () {
