@@ -203,11 +203,13 @@ define(function (require) {
       
       if (obj === 'workflow') {
         if (action === 'start') {
+          console.log('start', e.info, e.info.autostart, this.get('exec_count'));
+          this.set('autostart', e.info.autostart);
           this.incr('exec_count');
-          this.incr('autostart');
         } else if (action === 'stop') {
+          console.log('stop', e.info, e.info.autostart, this.get('exec_count'));
+          this.set('autostart', e.info.autostart);
           this.decr('exec_count');
-          this.decr('autostart');
         } else if (action === 'data_submitted') {
           this.incr(e.info.status);
         } else if (action === 'status_changed') {
