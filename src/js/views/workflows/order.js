@@ -160,6 +160,9 @@ define(function(require, exports, module) {
   StepsView = Qorus.ModelView.extend({
     name: 'Steps',
     template: StepsTpl,
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
+    },
     preRender: function () {
       StepsView.__super__.preRender.apply(this, arguments);
       _.extend(this.context, { getStepName: this.getStepName });
@@ -191,6 +194,9 @@ define(function(require, exports, module) {
   });
   
   ErrorsView = Qorus.ModelView.extend({
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
+    },
     onRender: function () {
       // init popover on info text
       this.$('td.info').each(function () {
@@ -224,6 +230,9 @@ define(function(require, exports, module) {
   // View showing step associated errors
   StepErrorsView = Qorus.View.extend({
     __name__: 'StepErrorsView',
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
+    },
     onRender: function () {
       // init popover on info text
       this.$('td.info').each(function () {
@@ -293,6 +302,7 @@ define(function(require, exports, module) {
   });
   
   DataView = Qorus.ModelView.extend({
+    template: DataTpl,
     additionalEvents: {
       'click .nav-pills a': 'tabToggle'
     },
@@ -302,6 +312,9 @@ define(function(require, exports, module) {
       $target.tab('show');
       e.preventDefault();
       e.stopPropagation();
+    },
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
     }
   });
   
@@ -316,7 +329,6 @@ define(function(require, exports, module) {
     },
     initialize: function () {
       NotesView.__super__.initialize.apply(this, arguments);
-
       var notes = this.setView(new Qorus.View({ model: this.model, template: NotesListTpl }), '#notes-list');
       notes.listenTo(this.model, 'update:notes', notes.render);
     },
@@ -367,13 +379,16 @@ define(function(require, exports, module) {
     
     name: 'Diagram',
     template: DiagramPaneTpl,
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
+    },
     preRender: function () {      
       this.setView(new DiagramView({ model: this.model }), '#step-diagram');
       this.showAllErrors();
     },
     
     showAllErrors: function (e) {
-      this.setView(new StepErrorsView({ errors: this.model.get('ErrorInstances'), template: StepErrorsTpl}), '#step-errors', true).render();
+      this.setView(new StepErrorsView({ model: this.model, errors: this.model.get('ErrorInstances'), template: StepErrorsTpl}), '#step-errors', true).render();
       if (e) {
        e.preventDefault(); 
       }
@@ -394,12 +409,18 @@ define(function(require, exports, module) {
       errors = _.where(this.model.get('ErrorInstances'), { stepid: stepid });
       
       this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
-      this.setView(new StepErrorsView({ errors: errors, template: StepErrorsTpl}), '#step-errors', true).render();
+      this.setView(new StepErrorsView({ model: this.model, errors: errors, template: StepErrorsTpl}), '#step-errors', true).render();
       
       // box selected styling
       this.$('.box').removeClass('selected');
       $target.addClass('selected');
       this.getView('#step-diagram').hideDropdown();
+    }
+  });
+  
+  var MView = Qorus.ModelView.extend({
+    postInit: function () {
+      this.listenTo(this.model, 'sync', this.render);
     }
   });
   
@@ -420,49 +441,104 @@ define(function(require, exports, module) {
     },
     
     url: function () {
-      return helpers.getUrl('showOrder', { id: this.model.id });
+      var model = this.model || this.options.model;
+      return helpers.getUrl('showOrder', { id: model.id });
     },
     
     initialize: function (opts) {
+      _.bindAll(this);
+      var model = new Model({ workflow_instanceid: opts.id });
+      arguments[0].model = model;
+      
       ModelView.__super__.initialize.apply(this, arguments);
       
       if (!_.has(opts, 'show_header'))
         this.options.show_header = true;
 
-      this.model = new Model({ workflow_instanceid: opts.id });
-      this.listenTo(this.model, 'change', this.render);
+      this.model = this.options.model;
+      this.listenToOnce(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'workflowstatus:change', this.update);
       this.model.fetch();
       this.processPath(opts.path);
+    },
+
+    renderNoArgs: function (model) {
+      this.render();
+    },
+
+    tabs: {
+      'diagram': {
+        view: DiagramPaneView
+      },
+      'steps': {
+        view: StepsView
+      },
+      'data': {
+        view: DataView,
+        options: {
+          name: 'Data',
+          template: DataTpl
+        }
+      },
+      'errors': {
+        view: ErrorsView,
+        options: {
+          template: ErrorsTpl,
+          name: 'Errors'
+        }
+      },
+      'hierarchy': {
+        view: MView,
+        options: {
+          template: HierarchyTpl,
+          name: 'Hierarchy'
+        }
+      },
+      'audit': {
+        view: MView,
+        options: {
+          template: AuditTpl,
+          name: 'Audit Events'
+        }
+      },
+      'info': {
+        view: MView,
+        options: {
+          template: InfoTpl,
+          name: 'info'
+        }
+      },
+      'notes': {
+        view: NotesView,
+        options: {
+          name: 'Notes'
+        }
+      }, 
+    },
+    
+    update: function () {
+      this.model.fetch();
     },
     
     preRender: function () {
       var workflow = new Workflow({ workflowid: this.model.get('workflowid') });
-      console.log(workflow, workflow.url(), this.model.get('workflowid') );
-
-      this.removeView('tabs');
-      
-      this.addTabView(new DiagramPaneView({ model: this.model }));
-      this.addTabView(new StepsView({ model: this.model }));
-      this.addTabView(new DataView({ model: this.model, template: DataTpl }), { name: 'Data'});
-      this.addTabView(new ErrorsView({ model: this.model, template: ErrorsTpl }), { name: 'Errors'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: HierarchyTpl }), { name: 'Hierarchy'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: AuditTpl }), { name: 'Audit Events'});
-      this.addTabView(new Qorus.ModelView({ model: this.model, template: InfoTpl }), { name: 'Info'});
-      this.addTabView(new NotesView({ model: this.model }), { name: "Notes" });
       this.setView(new WorkflowStatus({ model: workflow }), '.workflow-status');
-      
       workflow.fetch();
+      
       
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});
         
       _.extend(this.context, { 
-        item: this.model.toJSON(),
         show_header: this.options.show_header,
         getStepName: this.getStepName, 
         action_css: context.action_css,
         user: User
       });
+      
+      this.context.item = this.model.toJSON();
+      
+      console.log(this.model, this.context.item);
     },
     
     getStepName: function (id) {
@@ -533,10 +609,11 @@ define(function(require, exports, module) {
     },
     
     toggleTree: function (e) {
-      var $el = $(e.currentTarget),
-        branch = $el.data('branch-id');
+      var $el    = $(e.currentTarget),
+          branch = $el.data('branch-id');
         
-        debug.log($el.data);
+      debug.log($el.data);
+      
       $el.children('i')
         .toggleClass('icon-caret-down')
         .toggleClass('icon-caret-right');

@@ -83,6 +83,7 @@ define(function (require) {
         } else if (action === 'status_changed') {
           this.set({ workflowstatus: e.info.info.new });
           this.getProperty('actions', null, true);
+          this.trigger('workflowstatus:change');
         }
         this.trigger('change', this);
       }
