@@ -1744,3 +1744,36 @@ input.autocomplete {
 .label-info a:hover {
   text-decoration: none;
 }
+
+.nav li+.nav-subheader {
+	margin: 0 0 0 -15px;
+	font-size: 10px;
+}
+
+.break-word {
+	word-wrap: break-word;
+}
+
+.legend {
+	float: left;
+}
+
+.legend ul, .legend li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-indent: 0;
+}
+
+.legend li {
+	display: block;
+}
+
+.legend .legend-color-box {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border-radius: 2px;
+	margin-right: 10px;
+	vertical-align: text-bottom;
+}
