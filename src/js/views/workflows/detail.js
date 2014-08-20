@@ -39,14 +39,16 @@ define(function (require) {
     mapStepInfo: function () {
       var stepinfo = this.model.get('stepinfo');
       var steps = [];
+			
       _.each(stepinfo, function (step) {
         _.each(step.functions, function (func) {
-          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> <small class='label label-small'>%s</small><br /> %s", 
-            func.type, func.type.slice(0,1).toUpperCase(), step.name, func.name);
+					func.header = step.name;
+          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> %s", 
+            func.type, func.type.slice(0,1).toUpperCase(), func.name);
           steps.push(func);
         });
       });
-      return _.chain(steps).unique('name').sortBy('name').value();
+      return _.chain(steps).unique('name').sortBy('header').value();
     },
     transformName: function (objects, format, attrs) {
       _.each(objects, function (obj) {

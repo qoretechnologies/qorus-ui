@@ -1,10 +1,13 @@
 <div class="well span3" style="padding: 8px 0;">
-<ul class="nav nav-list">  
+<ul class="nav nav-list break-word">  
   <% var idx = 0 %>
+  <% var header %>
   <% _.each(obj.lib, function (lib, name) { %>
   <li class="nav-header"><%= name %></li>
   <% _.each(lib, function (fn, idxx) { %>
+	<% if (fn.header !== header) { %><li class="nav-header nav-subheader"><%= fn.header %></li><% } %>
   <li class="<%= (idx===0 && idxx===0) ? ' active' : '' %>"><a href="#" data-toggle="tab" data-target="#<%= fn.name %>"><%= fn.formatted_name || fn.name %></a></li>
+	<% header = fn.header %>
   <% }) %>
   <% idx++ %>
   <% }) %>
