@@ -57,13 +57,14 @@ define(function (require) {
     
     createDataset: function () {
       var data = [],
-         self = this;
+         	self = this;
 
       _.each(this.getLabels(), function (d) {
         var m = self.findWhere({ grouping: d});
         
         _.each(datasets, function (d) {
           data[d] = data[d] || { data: [], desc: d };
+					data[d].label = d;
 
           if (m) {
             data[d].data.push(m.get(d));

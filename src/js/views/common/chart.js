@@ -4,8 +4,18 @@ define(function (require) {
       Qorus            = require('qorus/qorus'),
       LineChartTpl     = require('tpl!templates/common/charts/line.html'),
       DoughnutChartTpl = require('tpl!templates/common/charts/doughnut.html'),
-      ColorScheme, LineStyles, ChartView, LineChart, DoughnutChart;
-  
+      ColorScheme, LineStyles, ChartView, LineChart, DoughnutChart, Config, DoughnutConfig;
+
+
+	Config = {
+		datasetFill: false,
+		legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span class=\"legend-color-box\" style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+	};
+
+	DoughnutConfig = _.extend({}, Config, {
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li data-idx=\"<%= i %>\"><span class=\"legend-color-box\" style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%> (<%= segments[i].value %>)<%}%></li><%}%></ul>"
+	});
+			
   
   ColorScheme = {
     clr1: "rgba(250,225,107,1)",
@@ -210,9 +220,11 @@ define(function (require) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Line(this.dataset, { datasetFill: false });
+          var myChart = new Chart(ctx).Line(this.dataset, Config);
           // console.log(myChart, this.dataset);
         }
+				
+				if (myChart) this.$('.legend').html(myChart.generateLegend());
       }
     }
   });
@@ -227,9 +239,24 @@ define(function (require) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Doughnut(this.dataset);
+          var myChart = new Chart(ctx).Doughnut(this.dataset, DoughnutConfig);
         }
       }
+			if (myChart) {
+				var $legend = this.$('.legend').html(myChart.generateLegend());
+				// TODO: mouseover events disabled for now - (have to check if it doesn't introduce DOM zombies)
+				// $legend.find('li').on('mouseover', function (e) {
+				// 	var idx = $(e.currentTarget).data('idx');
+				// 	var seg = myChart.segments[idx];
+				// 	seg.save();
+				// 	myChart.showTooltip([seg]);
+				// 	seg.restore();
+				// });
+				// $legend.on('mouseout', function () {
+				// 	myChart.draw()
+				// });
+			}
+				
     }    
   });
   

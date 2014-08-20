@@ -34,17 +34,17 @@ define(function (require) {
     getDataset: function () {
       var vals = [
          {
-          name: 'READY',
+          label: 'READY',
           value: this.get('READY'),
           color: '#c5e08c'
         },
         {
-          name: 'ERROR',
+          label: 'ERROR',
           value: this.get('ERROR'),
           color: '#b94a48'
         },
         {
-          name: 'COMPLETED',
+          label: 'COMPLETED',
           value: this.get('COMPLETE'),
           color: '#9ccb3b'
         }

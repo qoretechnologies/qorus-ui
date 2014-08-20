@@ -203,11 +203,9 @@ define(function (require) {
       
       if (obj === 'workflow') {
         if (action === 'start') {
-          console.log('start', e.info, e.info.autostart, this.get('exec_count'));
           this.set('autostart', e.info.autostart);
           this.incr('exec_count');
         } else if (action === 'stop') {
-          console.log('stop', e.info, e.info.autostart, this.get('exec_count'));
           this.set('autostart', e.info.autostart);
           this.decr('exec_count');
         } else if (action === 'data_submitted') {
@@ -315,27 +313,27 @@ define(function (require) {
     getDataset: function () {
       var vals = [
          {
-          name: 'READY/SCHD',
+          label: 'READY/SCHD',
           value: this.get('READY') + this.get('SCHEDULED'),
           color: '#aded9b'
         },
         {
-          name: 'RUN/WAIT',
+          label: 'RUN/WAIT',
           value: this.get('WAITING') + this.get('IN-PROGRESS') + this.get('INCOMPLETE') + this.get('ASYNC-WAITING') + this.get('RETRY'),
           color: '#e5c737'
         },
         {
-          name: 'ERR/BLOCK',
+          label: 'ERR/BLOCK',
           value: this.get('ERROR') + this.get('BLOCKED'),
           color: '#b94a48'
         },
         {
-          name: 'CANCELED',
+          label: 'CANCELED',
           value: this.get('CANCELED'),
           color: '#f2dede'
         },
         {
-          name: 'COMPLETED',
+          label: 'COMPLETED',
           value: this.get('COMPLETE'),
           color: '#9ccb3b'
         }
