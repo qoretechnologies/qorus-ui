@@ -87,8 +87,8 @@ define(function(require) {
       var $target = $(ev.currentTarget);
       var job = this.collection.get($target.data('id'));
 
-      this.setView(new RescheduleModal({ job: job }), '#jobs-modal', true);
-      
+      this.setView(new RescheduleModal({ job: job }), '#jobs-modal', true).render();
+			
       ev.preventDefault();
     },
     
@@ -96,7 +96,7 @@ define(function(require) {
       var $target = $(ev.currentTarget);
       var job = this.collection.get($target.data('id'));
 
-      this.setView(new ExpireModal({ job: job }), '#jobs-modal', true);
+      this.setView(new ExpireModal({ job: job }), '#jobs-modal', true).render();
       
       ev.preventDefault();
     },    // 

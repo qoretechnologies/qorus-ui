@@ -10,6 +10,7 @@ define(function (require) {
   View = Qorus.View.extend({
     url: settings.REST_API_PREFIX + '/jobs/',
     context: {},
+    views: {},
     additionalEvents: {
       'click .dp': 'showDatePicker',
       'click [data-dismiss]': 'close',
@@ -17,7 +18,7 @@ define(function (require) {
     },
     
     initialize: function (opts) {
-      _.bindAll(this, 'render');
+      _.bindAll(this);
       this.template = Template;
 
       this.opts = opts;
@@ -49,7 +50,7 @@ define(function (require) {
     },
 
     datePicker: function () {
-      this.views.datepicker = new DatePicker({ date: this.options.date });
+      this.views.datepicker = new DatePicker({ date: this.opts.date });
     },
     
     showDatePicker: function (e) {
