@@ -56,6 +56,7 @@ define(function (require) {
   });
   
   View = Backbone.View.extend({
+    is_rendered: false,
     render_lock: false,
     __name__: 'View',
     upstreamUrl: "",
@@ -157,24 +158,16 @@ define(function (require) {
         } else {
           tpl = _.template(this.template, this.context);
         }
-        // console.log('rendering', tpl.slice(0,100), this.el.id);
+        
         this.$el.html(tpl);
         
-        // debug.log('Template rendered', this.cls, this.cid, new Date().getTime() - start, 'ms');
         this.trigger('render', this, {});
       }
 
-      // debug.log('pre renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');
-      // console.time('renderViews ' + this.cls);    
+
       this.renderViews();
-      // console.timeEnd('renderViews ' + this.cls);
-      // debug.log('after renderViews', this.cls, this.cid, new Date().getTime() - start, 'ms');      
       this.setTitle();
-      // debug.log('after setTitle', this.cls, this.cid, new Date().getTime() - start, 'ms');
-      // console.time('onRender ' + this.cls);
       this.onRender();
-      // console.timeEnd('onRender ' + this.cls);
-      // debug.log('Rendering view', this.cls, this.cid, new Date().getTime() - start, 'ms');
       this.trigger('postrender', this);
       
       if (_.isFunction(this.processUrlParams))
@@ -188,6 +181,7 @@ define(function (require) {
     // removes view by ID
     removeView: function (id) {
       var view = this.getView(id);
+      
       if (view instanceof Backbone.View) {
         // console.log(id, 'is backbone view removing');
         view.off();
@@ -925,6 +919,7 @@ define(function (require) {
     },
        
     onRender: function () {
+      this.clean();
       $(window).on('resize.table', this.resize);
       
       // if (this.collection.pagination) 
@@ -936,6 +931,7 @@ define(function (require) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
         }        
       }
+      this.resize();
     },
     
     setWidths: function () {
@@ -983,7 +979,6 @@ define(function (require) {
 
     emptyRows: function () {
       // this.getView('tbody').off();
-      console.log('panda');
       this.update();
     },
 
@@ -1039,6 +1034,7 @@ define(function (require) {
         
     update: function (initial) {
       var tpl = this.template;
+      
       if (this.collection.size() === 0 && initial != true) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
@@ -1050,10 +1046,9 @@ define(function (require) {
       if (this.template !== tpl) {
         this.render();
       }
-
+      
       this.appendRows(this.collection.models);
-      // this.resize();
-      // console.timeEnd('update');
+    
       this.trigger('update');
     },
     
@@ -1163,6 +1158,7 @@ define(function (require) {
     tagName: 'tr',
     className: 'table-row clickable',
     context: {},
+    render_count: 0,
     template: TableRowTpl,
     // timeout_buffer: 0,
     // timeout_buffer_max: 200,
@@ -1191,7 +1187,7 @@ define(function (require) {
     },
         
     initialize: function (opts) {
-      this.views = [];
+      this.views = {};
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
       this.listenTo(this.model, 'destroy', this.off);
@@ -1221,6 +1217,7 @@ define(function (require) {
       this.context._item = this.model;
       _.extend(this.context, this.options);
       RowView.__super__.render.call(this, ctx);
+      this.render_count++;
       return this;
     },
     
@@ -1231,6 +1228,7 @@ define(function (require) {
     
     update: function () {
       if (this.render_lock === true) return;
+      this.is_rendered = false;
       var self = this,
           css_classes = this.$el.attr('class').split(/\s+/),
           check_classes = $('i.check', this.$el).attr('class');
@@ -1286,7 +1284,7 @@ define(function (require) {
       this.$('.btn-group').off();
       _.reject(p_view, function (view) { return view.cid == self.cid; });
     },
-    
+        
     check: function () {
       // console.log('highlighting', this.model.id);
       this.$el

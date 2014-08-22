@@ -26,6 +26,7 @@ define(function (require) {
     },
     
     initialize: function () {
+      _.bindAll(this, 'render');
       RowView.__super__.initialize.apply(this, arguments);
       this.listenTo(this.model.collection, 'change:date', this.render);
     },
@@ -46,9 +47,11 @@ define(function (require) {
     },
     
     render: function () {
+      if (this.is_rendered) return this;
       this.context.deprecated = this.model.collection.opts.deprecated;
       this.context.date = this.model.collection.opts.date;
       RowView.__super__.render.apply(this, arguments);
+      this.is_rendered = true;
       return this;
     },
     
@@ -58,16 +61,18 @@ define(function (require) {
   });
   
   TableView = Qorus.TableView.extend({
+    __name__: 'WorkflowsTableView',
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
-      this.stopListening(this.collection, 'add');
+      this.stopListening(this.collection);
+      this.listenToOnce(this.collection, 'firstsync', this.update);
       this.processPath();
     },
     onProcessPath: function (path) {
       var id = path.split('/')[0];
-      
+ 
       if (id) this.detail_id = id;
-    },
+    }
   });
 
   ListView = Qorus.ListView.extend({
@@ -93,25 +98,23 @@ define(function (require) {
     },
     
     title: "Workflows",
+    template: Template,
     
     initialize: function (collection, options) {
+      _.bindAll(this, 'render');
       this.collection = collection;
-      // call super method
-      ListView.__super__.initialize.call(this, this.collection, options.date, options);
-      
       this.options = {};
-      this.views = {};
       this.context = {};
       this.opts = options || {};
-      
-      this.template = Template;
+            
+      // call super method
+      ListView.__super__.initialize.call(this, this.collection, options.date, options);
       
       // reassign listening events to collection
       this.stopListening(this.collection);
       
       this.listenToOnce(this.collection, 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
-      this.render();
     },
     
     onProcessPath: function (path) {
@@ -141,7 +144,12 @@ define(function (require) {
       this.listenTo(tview, 'row:clicked', this.showDetail);
       this.listenTo(tview, 'update', this.applySearch);
       
-      toolbar = this.setView(new Toolbar({ date: this.date, parent: this, deprecated: this.opts.deprecated, collection: this.collection }), '.toolbar');
+      toolbar = this.setView(new Toolbar({ 
+        date: this.date, 
+        parent: this, 
+        deprecated: this.opts.deprecated, 
+        collection: this.collection 
+      }), '.toolbar');
     },
     
     clean: function () {
@@ -255,8 +263,7 @@ define(function (require) {
     },
     
     showDetail: function (row) {
-      var self    = this,
-          view    = this.getView('#workflow-detail'),
+      var view    = this.getView('#workflow-detail'),
           $detail = $('#workflow-detail'),
           id      = (view instanceof Backbone.View) ? view.$el.data('id') : null,
           left    = $('[data-sort="version"]').offset() && $('[data-sort="version"]').offset().left,

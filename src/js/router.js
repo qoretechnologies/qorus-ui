@@ -85,6 +85,12 @@ define(function (require) {
       
       if (!this.collections.workflows) {
         this.collections.workflows = new Workflows([], opts);
+        this.listenToOnce(this.collections.workflows, 'sync', function (col) {
+          var array = [];
+          var args = array.slice.call(arguments, 0);
+          args.unshift('firstsync');
+          col.trigger.apply(col, args)
+        });
       } else {
         d = this.collections.workflows.opts.deprecated;
         _.extend(this.collections.workflows.opts, opts);

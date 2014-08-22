@@ -1,9 +1,9 @@
 define(function (require) {
-  var $ = require('jquery'),
-      _ = require('underscore'),
+  var $        = require('jquery'),
+      _        = require('underscore'),
       settings = require('settings'),
-      utils = require('utils'),
-      Qorus = require('qorus/qorus'),
+      utils    = require('utils'),
+      Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/job/modals/reschedule.html'),
       View;
   

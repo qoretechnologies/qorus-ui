@@ -1528,7 +1528,7 @@ tbody+thead>tr:first-child>td {
 
 .listview {
   width: 100%;
-  overflow: hidden;
+/*  overflow: hidden;*/
   position: relative;
 }
 

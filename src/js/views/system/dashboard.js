@@ -109,7 +109,8 @@ define(function (require) {
     },
     
     clean: function () {
-      this.$('[data-toggle=tooltip]').tooltip('destroy');
+			if (this.is_rendered)
+				this.$('[data-toggle=tooltip]').tooltip('destroy');
     }
   });
   

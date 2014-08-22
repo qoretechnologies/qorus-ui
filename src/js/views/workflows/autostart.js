@@ -1,6 +1,7 @@
 define(function (require) {
   var Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/workflow/autostart.html'),
+      $        = require('jquery'),
       View;
   
   View = Qorus.ModelView.extend({
@@ -14,7 +15,7 @@ define(function (require) {
     },
     
     initialize: function () {
-      _.bindAll(this, 'render');
+      // _.bindAll(this, 'render');
       View.__super__.initialize.apply(this, arguments);
       this.listenTo(this.model, 'change:autostart', this.render);
     },
@@ -43,7 +44,13 @@ define(function (require) {
         e.stopPropagation();
       }
     },
-    
+
+    clean: function () {
+      this.context = null;
+      this.model = null;
+      this.options = null;
+    },
+
     off: function () {
       this.clean();
       this.undelegateEvents();
