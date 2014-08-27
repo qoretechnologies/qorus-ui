@@ -7,10 +7,9 @@
 <div class="tab-content">
   <div class="tab-pane active" id="errors">
       <% if (item.errors) { %>
-      <table class="table table-condensed table-numbered">
+      <table class="table table-condensed table-align-left table-bordered">
           <thead>
               <tr>
-                  <th class="narrow"></th>
                   <th class="narrow">ID</th>
                   <th>Severity</th>
                   <th class="name">Error</th>
@@ -22,7 +21,6 @@
           <tbody>
               <% _.each(item.errors, function (err) { %>
               <tr>
-                  <td></td>
                   <td><%= err.job_errorid %></td>
                   <td><%= err.severity %></td>
                   <td class="name"><%= err.error %></td>
@@ -30,6 +28,11 @@
                   <td><%= err.created %></td>
                   <td class="info"><%= err.description %></td>
               </tr>
+              <% if (err.info) { %>
+              <tr>
+                <td colspan="6"><em class="muted"><%= err.info %></em></td>
+              </tr>
+              <% } %>
               <% }) %>
           </tbody>
       </table>
