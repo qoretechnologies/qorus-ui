@@ -65,7 +65,7 @@ define(function (require) {
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
       this.stopListening(this.collection);
-      this.listenToOnce(this.collection, 'firstsync', this.update);
+      this.listenToOnce(this.collection, 'sync', this.update);
       this.processPath();
     },
     onProcessPath: function (path) {
@@ -152,11 +152,7 @@ define(function (require) {
       }), '.toolbar');
     },
     
-    clean: function () {
-      // removes date picker from DOM
-      this.$('.table-fixed').fixedHeader('remove');
-    },
-    
+
     // edit action with Modal window form
     openModal: function (e) {
       var view;

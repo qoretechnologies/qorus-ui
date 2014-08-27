@@ -543,7 +543,7 @@ define(function (require) {
       this.listenTo(this.collection, 'sync', this.triggerRowClick);
       this.render();
     },
-    
+
     render: function (ctx) {
       var tpl;
             
@@ -908,7 +908,7 @@ define(function (require) {
       _.extend(this.context, opts);
       _.extend(this.options, opts);
       
-      this.update(true);
+      // this.update(true);
     },
     
     render: function (ctx) {
@@ -919,8 +919,7 @@ define(function (require) {
     },
        
     onRender: function () {
-      this.clean();
-      $(window).on('resize.table', this.resize);
+      $(window).on('resize.table.'+this.cid, this.resize);
       
       // if (this.collection.pagination) 
       //   this.$el.closest('.pane').on('scroll', this.scroll);
@@ -937,9 +936,9 @@ define(function (require) {
     setWidths: function () {
       if (!this.fixed) return;
       // var clgrp = $('<colgroup />');
-      // 
+      //
       // this.$('colgroup').remove();
-      // 
+      //
       // this.$('tr').first().children().each(function () {
       //   clgrp.append($('<col />').width($(this).outerWidth()));
       // });
@@ -957,7 +956,7 @@ define(function (require) {
     
     clean: function () {
       this.$('.table-fixed').fixedHeader('remove');
-      $(window).off('resize.table');
+      $(window).off('resize.table.'+this.cid);
       // this.$el.closest('.pane').off('scroll');
     },
     
