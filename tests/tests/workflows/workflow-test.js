@@ -9,10 +9,7 @@ casper.test.begin('Testing workflow list page', function suite(test) {
     casper.waitForSelector('.workflows .table-row', function success() {
       test.assertExists('td[data-search="arraytest"]', 'ARRAYTEST exists');
       this.click('td[data-search="arraytest"]');
-    }, function fail() {
-      test.assertExists('td[data-search="arraytest"]', 'ARRAYTEST exists');
-      this.exit();
-    });
+			}, null, 10000);
 
 
     // Test Workflow detail pane
