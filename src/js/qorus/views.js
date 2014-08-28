@@ -908,7 +908,7 @@ define(function (require) {
       _.extend(this.context, opts);
       _.extend(this.options, opts);
       
-      // this.update(true);
+      this.update(true);
     },
     
     render: function (ctx) {
@@ -982,18 +982,11 @@ define(function (require) {
 
     appendRows: function (models) {
       if ('tbody' in this.views) {
-        // // cleaning the view the dirty way
-        // var tbody = this.$('tbody').get(0);
-        // 
-        // while (tbody.firstChild)
-        //   tbody.removeChild(tbody.firstChild);
-        // delete this.views.tbody;
         this.removeView('tbody');
       }
-      
+
       this.$('tbody').html('<tr><td colspan=100><i class="icon-spin icon-refresh"></i>Loading</td></tr>');
-      console.log(this.$('tbody').html());
-      
+
       // console.time('appending');
       var frag = document.createDocumentFragment();
 
@@ -1001,16 +994,17 @@ define(function (require) {
         var view = this.appendRow(m, false);
         frag.appendChild(view.el);
       }, this);
-      
+
       // console.timeEnd('appending');
       this.$('tbody').empty().append(frag);
-      this.resize();
+      _.defer(this.resize);
       this.trigger('rows:appended', this);
     },
 
     appendRow: function (m, render) {
       if (this.template === NoDataTpl) this.render();
-      var view = this.insertView(new this.RowView({ 
+
+      var view = this.insertView(new this.RowView({
             model: m, 
             template: this.row_tpl, 
             helpers: this.helpers, 
@@ -1048,7 +1042,8 @@ define(function (require) {
         this.render();
       }
       
-      this.appendRows(this.collection.models);
+      if (this.collection.size() > 0)
+        this.appendRows(this.collection.models);
     
       this.trigger('update');
     },

@@ -64,8 +64,8 @@ define(function (require) {
     __name__: 'WorkflowsTableView',
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
-      this.stopListening(this.collection);
-      this.listenToOnce(this.collection, 'sync', this.update);
+      // this.stopListening(this.collection);
+      // this.listenToOnce(this.collection, 'sync', this.update);
       this.processPath();
     },
     onProcessPath: function (path) {
