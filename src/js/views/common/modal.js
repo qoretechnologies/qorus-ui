@@ -63,7 +63,7 @@ define(function (require) {
         });
       });
       
-      this.$el.on('shown.modal', this.fixHeight);
+      this.$el.on('shown.modal', $.proxy(this.fixHeight, this));
       
       this.$el.on('hide.modal', $.proxy(this.off, this));
       
@@ -80,7 +80,7 @@ define(function (require) {
 
         var $body = $modal.find('.modal-body');
         var cor = $body.innerHeight() - $body.height();
-        var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
+        var h = $modal.height() - $modal.find('.modal-header').outerHeight() - $modal.find('.modal-footer').outerHeight() - cor - padding;
 
         $body.height(h).css('max-height', h);
       }
