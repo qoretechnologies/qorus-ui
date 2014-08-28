@@ -19,7 +19,8 @@ define(function (require) {
 
   FieldView = Qorus.View.extend({
     className: 'control-group',
-    onInit: function () {
+    postInit: function () {
+      console.log('on init');
       var field = new this.options.field(_.omit(this.options, 'field'));
       this.insertView(new LabelView({ 
         name: field.name, 
@@ -54,7 +55,7 @@ define(function (require) {
           field: item
         }), 'self');
         
-        console.log(field, item);
+        console.log(field, item, field.el);
       }, this);
     },
     save: function () {},

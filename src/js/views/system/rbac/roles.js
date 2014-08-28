@@ -22,10 +22,11 @@ define(function (require) {
   Modal = ModalView.extend({ 
     template: ModalTpl,
     additionalEvents: {
-      "submit": "createRole" 
+      "click button[type=submit]": 'createRole',
+      "submit": "createRole"
     },
     createRole: function (e) {
-      e.preventDefault();
+      console.log(this.$('form').serialize());
     }
   });
   
@@ -157,10 +158,15 @@ define(function (require) {
       Backbone.history.navigate(url)
     },
     showAddView: function () {
-      this.setView(new Modal({
-        content_view: new Forms.Role({
+      var form = new Forms.Role({
           model: new Role()
-        })
+      });
+      
+      var wrap = new Qorus.View();
+      wrap.insertView(form, 'self');
+      
+      this.setView(new Modal({
+        content_view: wrap
       }));
     }
   });
