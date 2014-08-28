@@ -54,6 +54,7 @@ define(function (require) {
     tagName: 'textarea',
     attributes: function () {
       return {
+        name: this.attrName,
         placeholder: this.name 
       };
     },
@@ -117,6 +118,10 @@ define(function (require) {
         }), 'self');
       }, this);
     }
+  });
+  
+  Fields.PillboxView = Fields.MultiSelectView.extend({
+    
   });
 
   return Fields;
