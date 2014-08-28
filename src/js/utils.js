@@ -101,7 +101,15 @@ define(function (require) {
       var data = {};
       _.each(object, function(obj) {
         if (_.indexOf(exclude, obj.name) === -1) {
-          data[obj.name] = obj.value; 
+          if (_.has(data, obj.name)) {
+            if (!_.isArray(data[obj.name])) {
+              var old = data[obj.name];
+              data[obj.name] = [old];
+            }
+            data[obj.name].push(obj.value);
+          } else {
+            data[obj.name] = obj.value; 
+          }
         }
       });
       
