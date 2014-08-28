@@ -3,6 +3,7 @@ define(function (require) {
       Qorus          = require('qorus/qorus'),
       settings       = require('settings'),
       SystemSettings = require('models/settings'),
+      OptionModel    = require('models/option'),
       System         = {},
       Info, User, Options;
 
@@ -42,8 +43,10 @@ define(function (require) {
     }
   });
 
-  Options = Qorus.Model.extend({
+  Options = Qorus.Collection.extend({
     url: settings.REST_API_PREFIX + '/system/options',
+    idAttribute: 'name',
+    model: OptionModel,
     
     initialize: function () {  
       this.fetch();
