@@ -1,6 +1,5 @@
 define(function (require) {
   var FormView    = require('qorus/forms'),
-      _           = require('underscore'),
       Users       = require('collections/users'),
       Permissions = require('collections/permissions'),
       Role        = require('models/role'),
@@ -24,7 +23,7 @@ define(function (require) {
       Fields.MultiSelectView.extend({
         name: 'Permissions',
         attrName: 'permissions',
-        collection: new Permissions().fetch()        
+        collection: new Permissions().fetch()
       }),
       Fields.MultiSelectView.extend({
         name: 'Users',
@@ -36,4 +35,4 @@ define(function (require) {
   
 
   return Forms;
-})
+});

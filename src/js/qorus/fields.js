@@ -6,6 +6,8 @@ define(function (require) {
       BaseView, OptionView;
   
   BaseView = Qorus.ModelView.extend({
+    validator: null,
+    error: null,
     attrName: '',
     initialize: function () {
       BaseView.__super__.initialize.apply(this, arguments);
@@ -22,7 +24,17 @@ define(function (require) {
       if (this.model)
         this.model.set(this.attrName, value);
     },
-    validate: function () {
+    validate: function (value) {
+      if (this.validator) {
+        var v = new RegExp(this.validator);
+        if (v.test(value)) {
+          return true;
+        } else {
+          this.error = 'Invalid input';
+          return false;
+        }
+      }
+      return true;
     }
   });
   
@@ -43,7 +55,7 @@ define(function (require) {
     attributes: function () {
       return {
         placeholder: this.name 
-      }
+      };
     },
     onRender: function () {
       this.$el.val(this.getValue());
@@ -77,6 +89,10 @@ define(function (require) {
           } 
         }), 'self');
       });
+    },
+    validate: function (value) {
+      var values = _(this.collection.models).pluck('name');
+      return (_(values).indexOf(value) > 0);
     }
   });
   

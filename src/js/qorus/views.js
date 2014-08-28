@@ -930,7 +930,6 @@ define(function (require) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
         }        
       }
-      this.resize();
     },
     
     setWidths: function () {
@@ -992,6 +991,9 @@ define(function (require) {
         this.removeView('tbody');
       }
       
+      this.$('tbody').html('<tr><td colspan=100><i class="icon-spin icon-refresh"></i>Loading</td></tr>');
+      console.log(this.$('tbody').html());
+      
       // console.time('appending');
       var frag = document.createDocumentFragment();
 
@@ -1001,7 +1003,7 @@ define(function (require) {
       }, this);
       
       // console.timeEnd('appending');
-      this.$('tbody').append(frag);
+      this.$('tbody').empty().append(frag);
       this.resize();
       this.trigger('rows:appended', this);
     },

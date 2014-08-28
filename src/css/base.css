@@ -633,9 +633,14 @@ aside {
     counter-reset: line-number; 
 }
 
-.table-numbered td:nth-child(2):before {
+.table-numbered-col-1 td:nth-child(1):before {
     content: counter(line-number) ".";
     counter-increment: line-number;
+}
+
+.table-numbered-col-2 td:nth-child(2):before {
+  content: counter(line-number) ".";
+  counter-increment: line-number;
 }
 
 .toolbar {
@@ -1471,7 +1476,7 @@ tbody+thead>tr:first-child>td {
 }
 
 .fixed-pane-bottom .fixed-pane-inner {
-  padding: 10px 10px 30px 120px;
+  padding: 10px 10px 30px 8.333333333%;
 }
 
 .workflow-detail {

@@ -122,7 +122,7 @@ define(function (require) {
     updateQuery: function (e) {
       var $target = $(e.currentTarget);
       this.query = $target.val();
-      console.log(this.query);
+      // console.log(this.query);
       return this;
     },
     showSuggestions: function (e) {

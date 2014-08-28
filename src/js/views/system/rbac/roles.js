@@ -2,6 +2,7 @@ define(function (require) {
   var Backbone       = require('backbone'),
       _              = require('underscore'),
       Qorus          = require('qorus/qorus'),
+      Role           = require('models/role'),
       Roles          = require('collections/roles'),
       Template       = require('tpl!templates/system/rbac/roles.html'),
       TableTpl       = require('text!templates/system/rbac/roles/table.html'),
@@ -9,14 +10,23 @@ define(function (require) {
       RoleTpl        = require('tpl!templates/system/rbac/roles/detail.html'),
       PaneView       = require('views/common/pane'),
       ModalView      = require('views/common/modal'),
+      ModalTpl       = require('tpl!templates/system/rbac/roles/modal.html'),
       ListingViewTpl = require('tpl!templates/common/listing.html'),
       Permissions    = require('collections/permissions'),
       ItemTpl        = require('tpl!templates/common/item.html'),
-      View, DetailView, Modal, ListingView;
+      EditTpl        = require('tpl!templates/system/rbac/roles/edit.html'),
+      Forms          = require('views/system/rbac/forms'),
+      View, DetailView, Modal, ListingView, EditView;
+
   
-  // Add/edit modal view 
-  Modal = ModalView.extend({
-    
+  Modal = ModalView.extend({ 
+    template: ModalTpl,
+    additionalEvents: {
+      "submit": "createRole" 
+    },
+    createRole: function (e) {
+      e.preventDefault();
+    }
   });
   
   ItemView = Qorus.View.extend({
@@ -44,7 +54,6 @@ define(function (require) {
       }
     },
     addItem: function (item) {
-      console.log(typeof item);
       var view = this.insertView(new ItemView({ item: item }), '.items-listing', true);
       this.listenTo(view, 'item:remove', this.delItem);
     },
@@ -99,6 +108,9 @@ define(function (require) {
   
   // Roles listing view
   View = Qorus.ListView.extend({
+    additionalEvents: {
+      "click .add-role": 'showAddView'
+    },
     url: "/roles",
     collection: new Roles(),
     template: Template,
@@ -145,7 +157,11 @@ define(function (require) {
       Backbone.history.navigate(url)
     },
     showAddView: function () {
-      this.setView(new Modal({ }));
+      this.setView(new Modal({
+        content_view: new Forms.Role({
+          model: new Role()
+        })
+      }));
     }
   });
   

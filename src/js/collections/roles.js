@@ -1,7 +1,6 @@
 define(function (require) {
   var settings = require('settings'),
       Qorus    = require('qorus/qorus'),
-      FormView = require('qorus/forms'),
       Model    = require('models/role'),
       Collection;
   
