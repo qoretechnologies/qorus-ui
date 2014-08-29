@@ -9,12 +9,20 @@ define(function (require) {
     validator: null,
     error: null,
     attrName: '',
+    value: null,
+    error_msg: '\'%s\' is not valid input',
+    empty_msg: 'This field is required!',
     initialize: function () {
       BaseView.__super__.initialize.apply(this, arguments);
       this.attrName = this.options.attrName || this.attrName;
+      this.error_msg = this.options.error_msg || this.error_msg;
+      this.required = this.options.required || this.required || false;
       if (this.model instanceof Backbone.Model) this.listenTo(this.model);
     },
     getValue: function () {
+      if (this.value) 
+        return this.value;
+
       if (this.model) 
         return this.model.get(this.attrName);
       
@@ -25,16 +33,28 @@ define(function (require) {
         this.model.set(this.attrName, value);
     },
     validate: function (value) {
+      if (this.required && _.size(value) == 0) {
+        this.error = this.empty_msg || 'Field is required!';
+        this.onError();
+        return false;
+      }
+      
       if (this.validator) {
         var v = new RegExp(this.validator);
-        if (v.test(value)) {
-          return true;
-        } else {
-          this.error = 'Invalid input';
+        if (!v.test(value)) {
+          this.error = sprintf(this.error_msg, value);
+          this.onError();
           return false;
         }
       }
+      this.onValid();
       return true;
+    },
+    onError: function () {
+      this.trigger('error', this.error);
+    },
+    onValid: function () {
+      this.trigger('valid');
     }
   });
   

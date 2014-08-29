@@ -22,11 +22,11 @@ define(function (require) {
   Modal = ModalView.extend({ 
     template: ModalTpl,
     additionalEvents: {
-      "click button[type=submit]": 'createRole',
-      "submit": "createRole"
+      "submit": 'delegateSubmit',
+      "click button[type=submit]": 'delegateSubmit',
     },
-    createRole: function (e) {
-      console.log(this.$('form').serialize());
+    delegateSubmit: function (e) {
+      this.$('form').trigger('submit', e);
     }
   });
   

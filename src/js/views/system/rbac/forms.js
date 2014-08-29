@@ -2,6 +2,7 @@ define(function (require) {
   var FormView    = require('qorus/forms'),
       Users       = require('collections/users'),
       Permissions = require('collections/permissions'),
+      Groups      = require('collections/groups'),
       Role        = require('models/role'),
       Fields      = require('qorus/fields'),
       Forms       = {};
@@ -14,11 +15,14 @@ define(function (require) {
     fields: [
       Fields.InputView.extend({
         name: 'Role name',
-        attrName: 'role'
+        attrName: 'role',
+        required: true,
+        validator: /[^\s]/
       }),
       Fields.TextareaView.extend({
         name: 'Description',
-        attrName: 'desc'
+        attrName: 'desc',
+        required: true
       }),
       Fields.MultiSelectView.extend({
         name: 'Permissions',
@@ -26,13 +30,12 @@ define(function (require) {
         collection: new Permissions().fetch()
       }),
       Fields.MultiSelectView.extend({
-        name: 'Users',
-        attrName: 'users',
-        collection: new Users().fetch()
+        name: 'Groups',
+        attrName: 'groups',
+        collection: new Groups().fetch()
       })
     ]
   });
-  
 
   return Forms;
 });

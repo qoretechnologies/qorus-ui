@@ -80,7 +80,9 @@ define(function (require) {
 
         var $body = $modal.find('.modal-body');
         var cor = $body.innerHeight() - $body.height();
-        var h = $modal.height() - $modal.find('.modal-header').outerHeight() - $modal.find('.modal-footer').outerHeight() - cor - padding;
+        var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
+        
+        if ($modal.find('.modal-footer')) h -= $modal.find('.modal-footer').outerHeight() - padding;
 
         $body.height(h).css('max-height', h);
       }
