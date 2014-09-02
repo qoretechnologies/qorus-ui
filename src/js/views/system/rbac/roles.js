@@ -16,7 +16,7 @@ define(function (require) {
       ItemTpl        = require('tpl!templates/common/item.html'),
       EditTpl        = require('tpl!templates/system/rbac/roles/edit.html'),
       Forms          = require('views/system/rbac/forms'),
-      View, DetailView, Modal, ListingView, EditView;
+      View, DetailView, Modal, ListingView, EditView, RowView;
 
   
   Modal = ModalView.extend({ 
@@ -107,6 +107,18 @@ define(function (require) {
     },
   });
   
+  RowView = Qorus.RowView.extend({
+    additionalEvents: {
+      "click [data-action]": 'doAction'
+    },
+    doAction: function (e) {
+      var $target = $(e.currentTarget),
+          opts    = $target.data();
+          
+      this.model.doAction(opts);
+    }
+  })
+  
   // Roles listing view
   View = Qorus.ListView.extend({
     additionalEvents: {
@@ -120,7 +132,8 @@ define(function (require) {
         url: "/roles",
         collection: this.collection, 
         template: TableTpl, 
-        row_template: RowTpl 
+        row_template: RowTpl,
+        row_view: RowView
       }), '#role-list');
       
       this.listenTo(TView, 'row:clicked', this.showDetail);
@@ -159,15 +172,18 @@ define(function (require) {
     },
     showAddView: function () {
       var form = new Forms.Role({
-          model: new Role()
+          model: new Role(),
+          collection: this.collection
       });
       
       var wrap = new Qorus.View();
       wrap.insertView(form, 'self');
       
-      this.setView(new Modal({
+      var modal = this.setView(new Modal({
         content_view: wrap
       }));
+      
+      modal.listenTo(form, 'close', modal.hide);
     }
   });
   

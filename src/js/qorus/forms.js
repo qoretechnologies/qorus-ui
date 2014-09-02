@@ -96,12 +96,14 @@ define(function (require) {
     },
     save: function () {
       if (this.model) {
-        _.each(this.cleaned_data, function (value, key) {
-          this.model.set(key, value);
-        }, this);
-        console.log(this.model.toJSON());
-        this.model.save();
+        this.model.set(this.cleaned_data);
+        this.model.save({ save: this.onSave, error: this.onError });
       }
+    },
+    onError: function () {
+    },
+    onSave: function () {
+      this.collection.add(this.model);
     },
     is_valid: function () {
       this.clean_data();

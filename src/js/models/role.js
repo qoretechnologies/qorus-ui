@@ -17,6 +17,12 @@ define(function (require) {
     doAction: function (opts) {
       if (opts.action === "delete") this.destroy();
       return this;
+    },
+    isNew: function () {
+      if (this.is_new) 
+        return true;
+
+      return Model.__super__.isNew.apply(this, arguments);
     }
   });
 
