@@ -207,7 +207,6 @@ define(function (require) {
     },
     
     settings: settings
-    // user: System.User
   };
   
   return Helpers;

@@ -7,7 +7,7 @@
 <td><%= statusIcon(item.job) %></td>
 <td><%= statusIcon(item.service) %></td>
 <td><%= statusIcon(item.workflow) %></td>
-<% if (item.status != 'locked') { %>
+<% if (item.status != 'locked' && user.hasPermissions('OPTION-CONTROL')) { %>
 <td class="text-left editable" data-editable="edit" data-value="<%= item.value %>" data-type="<%= item.expects %>" data-name="<%= item.name %>"><%= item.value %></td>
 <% } else { %>
 <td class="text-left"><%= item.value %></td>

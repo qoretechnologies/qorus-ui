@@ -4,6 +4,8 @@ define(function (require) {
       settings       = require('settings'),
       SystemSettings = require('models/settings'),
       OptionModel    = require('models/option'),
+      Helpers        = require('qorus/helpers'),
+      UserModel      = require('models/user'),
       System         = {},
       Info, User, Options;
 
@@ -29,7 +31,7 @@ define(function (require) {
     }
   });
 
-  User = Qorus.Model.extend({
+  User = UserModel.extend({
     url: settings.REST_API_PREFIX + '/users/?action=current',
 
     initialize: function () {
@@ -66,10 +68,13 @@ define(function (require) {
       return options;
     }
   });
+  
+  // monkey patch helpers add logged user
+  Helpers.user = new User();
 
   return {
     Info: new Info(),
-    User: new User(),
+    User: Helpers.user,
     Options: new Options()
   };
 });
