@@ -55,6 +55,9 @@ define(function (require) {
     },
     onValid: function () {
       this.trigger('valid');
+    },
+    getElValue: function () {
+      return this.$el.val();
     }
   });
   
@@ -101,15 +104,29 @@ define(function (require) {
       };
     },
     initialize: function () {
+      var selected = [], models;
       Fields.SelectView.__super__.initialize.apply(this, arguments);
-      _.each(this.collection.models, function (item) {
+      if (this.model) {
+        selected = this.model.get(this.attrName);
+      }
+      if (!selected) selected = [];
+      
+      
+      if (this.collection instanceof Backbone.Collection) {
+        models = this.collection.models;
+      } else {
+        models = this.collection;
+      }
+      
+      _.each(models, function (item) {
         this.insertView(new OptionView({ 
-          value: item.get('name'), 
+          value: item.get('name') || item, 
           attributes: { 
-            value: item.get('name') 
+            value: item.get('name') || item,
+            selected: selected.indexOf(item.get('name') || item) > -1
           } 
         }), 'self');
-      });
+        }, this);
     },
     validate: function (value) {
       var values = _(this.collection.models).pluck('name');
@@ -128,12 +145,18 @@ define(function (require) {
       };
     },
     initialize: function () {
+      var selected;
       Fields.SelectView.__super__.initialize.apply(this, arguments);
+      if (this.model) {
+        selected = this.model.get(this.attrName);
+      }
+      if (!selected) selected = [];
       _.each(this.collection.models, function (item) {
         this.insertView(new this.optionView({ 
           value: item.get('name'), 
           attributes: { 
-            value: item.get('name') 
+            value: item.get('name'),
+            selected: selected.indexOf(item.get('name')) > -1
           } 
         }), 'self');
       }, this);

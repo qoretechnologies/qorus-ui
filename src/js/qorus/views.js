@@ -1545,7 +1545,7 @@ define(function (require) {
       if (this.active_tab !== name) {
         this.updateUrl([url, name].join('/'));
         this.active_tab = name;
-        this.onTabChange(tab);        
+        this.onTabChange(tab);
       }
     },
     
@@ -1577,10 +1577,10 @@ define(function (require) {
           }
           
           opts = _.chain(opts)
-            .extend(this.options)
+            .extend(_.omit(this.options, 'template'))
             .extend(_.omit(this.opts, 'template'))
             .value();
-        
+          
           this.addTabView(new view(opts), { name: tab });
         }, this);
       }

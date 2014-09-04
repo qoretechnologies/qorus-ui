@@ -47,6 +47,7 @@ define(function (require) {
     ],
     save: function () {
       if (this.model) {
+        console.log(this.cleaned_data);
         this.model.set(this.cleaned_data);
         
         if (!this.model.collection)
@@ -61,11 +62,13 @@ define(function (require) {
       this.stopListening(this.model, 'sync');
     },
     onSave: function (model) {
-      console.log(model);
+      var opts = { merge: true };
       if (this.model.is_new) {
         delete this.model.is_new;
-        this.collection.add(model);
+        opts = {};
       }
+      
+      this.collection.add(model, opts);
       
       this.trigger('close');
       this.stopListening(this.model, 'error');

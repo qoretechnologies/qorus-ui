@@ -96,8 +96,8 @@ define(function (require) {
     },
     
     flattenSerializedArray: function (object, except) {
+      // buggy when the object should be an array but has only one item selected it becomes a string
       var exclude = _.isArray(except) ? except : [except];
-      
       var data = {};
       _.each(object, function(obj) {
         if (_.indexOf(exclude, obj.name) === -1) {

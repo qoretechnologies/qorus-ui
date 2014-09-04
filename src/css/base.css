@@ -1742,6 +1742,10 @@ input.autocomplete {
   margin: 14px 0;
 }
 
+.items-listing .label {
+  margin-right: .5em;
+}
+
 .label-info a {
   color: #fff;
 }

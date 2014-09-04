@@ -2,7 +2,6 @@ define(function (require) {
   var Qorus    = require('qorus/qorus'),
       _        = require('underscore'),
       $        = require('jquery'),
-      utils    = require('utils'),
       ErrorTpl = require('tpl!templates/forms/error.html'),
       FormView, ControlsView, LabelView, FieldView;
   
@@ -115,15 +114,15 @@ define(function (require) {
       _.each(this._fields, function (field) {
         var value = '';
         var name = field.attrName;
-        
-        if (field.validate(this.data[name])) {
-          value = this.data[name];
+
+        if (field.validate(field.getElValue())) {
+          value = field.getElValue();
         } else {
           this.errors[name] = field.error;
         }
-        
+
         field.value = value;
-        
+
         if (value) this.cleaned_data[name] = value;
       }, this);
     },
@@ -131,9 +130,6 @@ define(function (require) {
       this.data = data;
     },
     processData: function (e) {
-      var parsed = utils.flattenSerializedArray(this.$el.serializeArray());
-      this.setData(parsed);
-
       if (this.is_valid()) {
         this.trigger('valid', this.cleaned_data);
         if (this.model) this.save();

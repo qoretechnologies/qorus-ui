@@ -14,16 +14,19 @@ define(function (require) {
       ListingViewTpl = require('tpl!templates/common/listing.html'),
       Permissions    = require('collections/permissions'),
       ItemTpl        = require('tpl!templates/common/item.html'),
-      EditTpl        = require('tpl!templates/system/rbac/roles/edit.html'),
+      AddItemTpl     = require('tpl!templates/common/item_add.html'),
       Forms          = require('views/system/rbac/forms'),
-      View, DetailView, Modal, ListingView, EditView, RowView;
+      Fields         = require('qorus/fields'),
+      Users          = require('collections/users'),
+      Groups         = require('collections/groups'),
+      View, DetailView, Modal, ListingView, RowView, ItemView, AddItemView;
 
   
   Modal = ModalView.extend({ 
     template: ModalTpl,
     additionalEvents: {
       "submit": 'delegateSubmit',
-      "click button[type=submit]": 'delegateSubmit',
+      "click button[type=submit]": 'delegateSubmit'
     },
     delegateSubmit: function (e) {
       this.$('form').trigger('submit', e);
@@ -31,6 +34,8 @@ define(function (require) {
   });
   
   ItemView = Qorus.View.extend({
+    tagName: 'li',
+    className: 'label label-info',
     additionalEvents: {
       'click .remove': 'removeItem'
     },
@@ -41,13 +46,42 @@ define(function (require) {
     }
   });
   
+  AddItemView = Qorus.View.extend({
+    additionalEvents: {
+      'click .add': 'addItem'
+    },
+    template: AddItemTpl,
+    preRender: function () {
+      var view = new Fields.SelectView({
+        name: 'Add item',
+        attrName: this.options.name,
+        collection: this.collection
+      });
+      this.insertView(view, '.listing');
+    },
+    addItem: function (e) {
+      e.preventDefault();
+      var view = this.getView('.listing')[0];
+      
+      var items = this.model.get(this.options.name);
+      items.push(view.getElValue());
+      this.model.set(this.options.name, items);
+      this.model.save();
+      this.model.trigger('item:'+this.options.name+':add', view.getElValue());
+      this.off();
+    }
+  });
+  
   // Role detail attribute listing
   ListingView = Qorus.View.extend({
     additionalEvents: {
-      'click .add-item': 'addItem',
-      'click .remove-item': 'removeItem'
+      'click .add-item': 'addItemView',
     },
     template: ListingViewTpl,
+    postInit: function () {
+      var name = this.options.name.toLowerCase();
+      this.listenTo(this.model, 'item:'+name+':add', this.addItem);
+    },
     onRender: function () {
       var items = this.model.get(this.name);
       if (_.size(items) > 0) {
@@ -59,6 +93,7 @@ define(function (require) {
       this.listenTo(view, 'item:remove', this.delItem);
     },
     addItems: function (items) {
+      this.$('.items-listing').empty();
       _.each(items, this.addItem, this);
     },
     delItem: function (item) {
@@ -66,6 +101,22 @@ define(function (require) {
       
       this.model.set(this.name, _.without(items, item));
       this.model.save(this.name);
+    },
+    addItemView: function () {
+      var listed     = this.model.get(this.name),
+          collection = this.collection.reject(function (item) { 
+            return listed.indexOf(item.get('name')) > -1; 
+            }),
+          $btn       = this.$('.add-item');
+
+      $btn.hide();
+      var view = this.insertView(new AddItemView({ 
+        name: this.name,
+        model: this.model,
+        collection: collection
+      }), '.add-item-form', true);
+
+      this.listenToOnce(view, 'destroy', $.proxy(function () { this.show(); }, $btn));
     }
   });
   
@@ -79,12 +130,25 @@ define(function (require) {
       'permissions': {
         view: ListingView,
         options: {
-          collection: Permissions,
-          name: 'Permission'
+          collection: new Permissions().fetch(),
+          name: 'Permissions'
         }
       },
-      'users': ListingView,
-      'groups': ListingView
+      'users': {
+        view: ListingView,
+        options: {
+          collection: new Users().fetch(),
+          name: 'Users',
+          readonly: true
+        },
+      },
+      'groups': {
+        view: ListingView,
+        options: {
+          collection: new Groups().fetch(),
+          name: 'Groups'
+        }
+      }
     },
     preRender: function () {
       this.context.item = this.model.toJSON();
@@ -104,7 +168,7 @@ define(function (require) {
         tab.setElement(this.$(id));
         tab.render();
       });
-    },
+    }
   });
   
   RowView = Qorus.RowView.extend({
@@ -114,10 +178,15 @@ define(function (require) {
     doAction: function (e) {
       var $target = $(e.currentTarget),
           opts    = $target.data();
-          
-      this.model.doAction(opts);
+      
+      if (opts.action == 'edit') {
+        this.trigger('edit', this.model);
+        this.parent.trigger('row:edit', this.model);
+      } else {
+        this.model.doAction(opts);
+      }
     }
-  })
+  });
   
   // Roles listing view
   View = Qorus.ListView.extend({
@@ -137,6 +206,7 @@ define(function (require) {
       }), '#role-list');
       
       this.listenTo(TView, 'row:clicked', this.showDetail);
+      this.listenTo(TView, 'row:edit', this.showEditView);
     },
     showDetail: function (row) {
       var view  = this.getView('#role-detail-view'),
@@ -158,7 +228,7 @@ define(function (require) {
         view.render();
         
         this.listenToOnce(view, 'off closed', function () {
-          row.$el.removeClass('info')
+          row.$el.removeClass('info');
         });
         row.$el.addClass('info');
 
@@ -168,7 +238,7 @@ define(function (require) {
         if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }
-      Backbone.history.navigate(url)
+      Backbone.history.navigate(url);
     },
     showAddView: function () {
       var form = new Forms.Role({
@@ -182,6 +252,23 @@ define(function (require) {
       var modal = this.setView(new Modal({
         content_view: wrap
       }));
+      
+      modal.listenTo(form, 'close', modal.hide);
+    },
+    showEditView: function (model) {
+      var form = new Forms.Role({
+          model: model,
+          collection: this.collection
+      });
+      
+      var wrap = new Qorus.View();
+      wrap.insertView(form, 'self');
+      
+      var modal = this.setView(new Modal({
+        content_view: wrap,
+        edit: true
+      }));
+      modal.context.edit = true;
       
       modal.listenTo(form, 'close', modal.hide);
     }

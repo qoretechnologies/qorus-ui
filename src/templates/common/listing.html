@@ -1,6 +1,11 @@
 <div class="span12">
+<% if (!obj.readonly) { %>
   <div class="">
-    <a class="btn btn-success btn-mini"><i class="icon-plus"></i> Add</a>
+    <a class="btn btn-success btn-mini add-item"><i class="icon-plus"></i> Add</a>
+    <div class="add-item-form"></div>
   </div>
-  <ul class="items-listing"></ul>
+<% } %>
+  <ul class="items-listing">
+    <p>No data</p>
+  </ul>
 </div>
