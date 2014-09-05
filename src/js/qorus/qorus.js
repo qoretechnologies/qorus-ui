@@ -13,7 +13,7 @@ define(function (require) {
       setNested, prep;
 
   require('sprintf');
-  
+
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
     {
@@ -21,10 +21,9 @@ define(function (require) {
       .indexOf((match[3] || "").toLowerCase()) >= 0;
     }
   });
-  
+
   prep = utils.prep;
 
-  
   // this function pass function to nested objects
   setNested = function (obj, path, fn){
     var terms = path.split('.');
@@ -42,11 +41,11 @@ define(function (require) {
               v[term] = fn(v[term]); 
             }
           }
-        });        
+        });
       }
     }
   };
-  
+
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
     api_events_list: [],
@@ -61,13 +60,13 @@ define(function (require) {
 
       Qorus.Model.__super__.initialize.call(this, [], opts, options);
       this.opts = opts;
-      
+
       this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
     },
-    
+
     dispatch: function () {},
-    
+
     parse: function (response) {
       _.each(this.dateAttributes, function (date) {
         if (date.search(/\./) > -1) {
@@ -75,12 +74,12 @@ define(function (require) {
         } else {
           if (response[date]) {
             response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
-          }          
+          }
         }
       });
       return response;
     },
-    
+
     fetch: function (options) {
       var data = {};
       
@@ -95,47 +94,48 @@ define(function (require) {
       if (options.data) {
         _.extend(data, options.data);
       }
-      
+
       _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
                  model.trigger('sync:error', model, response, options);
                }
       });
+
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
       return this;
     },
-    
+
     incr: function (attr, val) {
       val = val || 1;
       var value = parseInt(this.get(attr), 10);
       this.set(attr, value+val);
     },
-    
+
     decr: function (attr, val) {
       val = val || 1;
       var value = parseInt(this.get(attr), 10) - val;
       
       this.set(attr, (value > 0) ? value : 0);
     },
-    
+
     next: function () {
       if (!this.collection) return;
       
       return this.collection.next(this);
     },
-    
+
     prev: function () {
       if (!this.collection) return;
       
       return this.collection.prev(this);
     },
-    
+
     getConnections: function () {
       return this.get('connections');
     },
-    
+
     hasConnections: function () {
       var cons = this.getConnections();
 
@@ -143,7 +143,7 @@ define(function (require) {
       
       return false;
     },
-    
+
     getConnectionsStatus: function () {
       var cons;
       
@@ -152,14 +152,14 @@ define(function (require) {
       cons = this.getConnections();
       return _(cons).findWhere({ up: false }) ? false : true;
     },
-    
+
     // gets property from server
     getProperty: function (property, data, force) {
       var self   = this,
           silent = true;
-      
+
       data = data || {};
-      
+
       if (!this.get(property) || force === true) {
         $.get(_.result(this, 'url') + '/' + property, data)
           .done(function (data) {
@@ -178,7 +178,7 @@ define(function (require) {
       }
     }
   });
-  
+
   Qorus.ModelWithAlerts = Qorus.Model.extend({
     parse: function (response) {
       response = Qorus.ModelWithAlerts.__super__.parse.apply(this, arguments);
@@ -199,19 +199,19 @@ define(function (require) {
     offset: 0,
     page: 1,
     pagination: true,
-    
+
     initialize: function (models, options) {
       _.bindAll(this);
       this.options = options || {};
       this.opts = this.options;
-      
+
       if (this.options.date) {
         this.date = this.options.date;
       }
-      
+
       this.on('fetch', function () { this._fetched = true; }, this);
     },
-    
+
     search: function (query) {
       if (query === "") return this;
 
@@ -220,12 +220,12 @@ define(function (require) {
         return pattern.test(data.get("name"));
       }));
     },
-    
+
     hasNextPage: function () {
       // debug.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
       return this.pagination ? (this.offset + this.limit - 2 < this.models.length) : false; 
     },
-    
+
     loadNextPage: function () {
       // console.log('load next page?', this.hasNextPage());
       if (!this.loading) {
@@ -245,10 +245,10 @@ define(function (require) {
               self.loading = false;
             }
           });
-        }        
+        }
       }
     },
-    
+
     fetch: function (options) {
       this.trigger('pre:fetch', this);
       
@@ -258,10 +258,6 @@ define(function (require) {
       }
 
       var data = this.opts;
-      
-      // if (this.date) {
-      //   this.opts.date = this.date;
-      // }
 
       if (!options) {
         options = {};
@@ -270,17 +266,22 @@ define(function (require) {
       if (options.data) {
         _.extend(data, options.data);
       }
-      
+
+      data = _.clone(data);
+      if (_.has(data, 'date')) {
+        data.date = moment(data.date, settings.DATE_DISPLAY).format(settings.DATE_TSEPARATOR);
+      }
+
       _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
                  model.trigger('sync:error', model, response, options);
                }
       });
-      
+
       options.reset = false;
       options.merge = true;
-            
+
       Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
       return this;
@@ -300,7 +301,7 @@ define(function (require) {
       return this.at(idx);
     }
   });
-  
+
   Qorus.SortedCollection = Qorus.Collection.extend({
     initialize: function (models, opts) {
       debug.log(this);
@@ -312,7 +313,7 @@ define(function (require) {
         this.date = opts.date;
       }
     },
-    
+
     comparator: function (c1, c2) {
       // needs speed improvements
       var k10 = prep(c1.get(this.sort_key)),
@@ -332,11 +333,11 @@ define(function (require) {
       if (k11 < k21) return 1 * r;
       return 0;
     },
-    
+
     // comparator: function (m) {
     //   return [prep(m.get(this.sort_key)), prep(m.get(this.sort_history[0]))].join(', '); 
     // },
-    
+
     sortByKey: function (key, ord) {
       var old_key = this.sort_key;
     
@@ -359,7 +360,7 @@ define(function (require) {
       }
     }
   });
-  
+
   Qorus.WSCollection = Backbone.Collection.extend({
     local: true,
     remote: false,
@@ -367,7 +368,7 @@ define(function (require) {
     counter: 0,
     socket_url: null,
     auto_reconnect: true,
-    
+
     initialize: function (opts) {
       opts = opts || {};
       _.bindAll(this);
@@ -375,10 +376,10 @@ define(function (require) {
       if (opts.auto_reconnect === false) {
         this.auto_reconnect = opts.auto_reconnect;
       }
-      
+
       this.connect();
     },
-    
+
     wsAdd: function (e) {
       var self = this;
       var models = JSON.parse(e.data);
@@ -388,10 +389,10 @@ define(function (require) {
         self.add(mdl);
       });
     },
-    
+
     connect: function () {
       var self = this;
-      
+
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
         .done(function (response) {
           self.token = response;
@@ -402,7 +403,7 @@ define(function (require) {
           self.wsRetry();
         });
     },
-    
+
     wsClose: function () {
       if (this.socket) {
         debug.log("Closing WS", this.socket_url, this.socket);
@@ -447,18 +448,18 @@ define(function (require) {
     next: function (model) {
       var idx = this.indexOf(model) + 1;
       if (idx >= this.size()) return;
-      
+
       return this.at(idx);
     },
-    
+
     prev: function (model) {
       var idx = this.indexOf(model) - 1;
       if (idx < 0) return;
-      
+
       return this.at(idx);
     }
   });
-  
+
   Qorus.SortedWSCollection = Qorus.SortedCollection.extend({
     log_size: 1000,
     counter: 0,
@@ -533,15 +534,15 @@ define(function (require) {
 
     wsRetry: function () {
       this.trigger('ws-closed', this);
-      
+
       if (this.auto_reconnect) {
         setTimeout(this.connect, 5000); 
       }
     }
   });
-  
+
   var _navigate = Backbone.history.navigate;
-  
+
   Backbone.history.navigate = function (route, options) {
     options = options || {};
     if (!options.trigger) {
@@ -552,10 +553,10 @@ define(function (require) {
       route.replace(/\?*/, "?" + utils.encodeQuery(query));
       // console.log(Backbone.history.fragment, route);      
     }
-  
+
     return _navigate.apply(this, arguments);
   };
-  
+
   _.extend(Qorus, Views);
 
   return Qorus;
