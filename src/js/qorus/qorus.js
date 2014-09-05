@@ -49,6 +49,7 @@ define(function (require) {
   Qorus.Model = Backbone.Model.extend({
     dateAttributes: {},
     api_events_list: [],
+    nameAttribute: 'name',
     initialize: function (opts, options) {
       _.bindAll(this);
       opts = opts || {};
@@ -176,6 +177,9 @@ define(function (require) {
       } else {
         return this.get(property);
       }
+    },
+    getName: function () {
+      return this.get(this.nameAttribute);
     }
   });
 

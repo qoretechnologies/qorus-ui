@@ -4,6 +4,7 @@ define(function (require) {
       Collection;
   
   Collection = Qorus.SortedCollection.extend({
+    model: Qorus.Model,
     url: settings.REST_API_PREFIX + '/system/rbac/permissions'
   });
 

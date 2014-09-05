@@ -1,9 +1,10 @@
 define(function (require) {
   var FormView    = require('qorus/forms'),
-      Users       = require('collections/users'),
       Permissions = require('collections/permissions'),
       Groups      = require('collections/groups'),
       Role        = require('models/role'),
+      User        = require('models/user'),
+      Roles       = require('collections/roles'),
       Fields      = require('qorus/fields'),
       Forms       = {},
       GroupsMod;
@@ -47,14 +48,13 @@ define(function (require) {
     ],
     save: function () {
       if (this.model) {
-        console.log(this.cleaned_data);
         this.model.set(this.cleaned_data);
         
         if (!this.model.collection)
           this.model.is_new = true;
 
         this.listenToOnce(this.model, 'sync', this.onSave);
-        this.listenToOnce(this.model, 'error', this.onError)
+        this.listenToOnce(this.model, 'error', this.onError);
         this.model.save(null);
       }
     },
@@ -73,7 +73,68 @@ define(function (require) {
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
+    }
+  });
+  
+  Forms.User = FormView.extend({
+    model: User,
+    className: 'form-horizontal',
+    name: 'user-edit-form',
+    fields: [
+      Fields.InputView.extend({
+        name: 'Username',
+        attrName: 'user',
+        require: true
+      }),
+      Fields.InputView.extend({
+        name: 'Full name',
+        attrName: 'desc',
+        required: true
+      }),
+      Fields.PasswordView.extend({
+        name: 'Password',
+        attrName: 'pass',
+        required: true
+      }),
+      Fields.PasswordView.extend({
+        name: 'Confirm Password',
+        attrName: 'confirm-pass',
+        required: true
+      }),
+      Fields.MultiSelectView.extend({
+        name: 'Roles',
+        attrName: 'role',
+        collection: new Roles().fetch()
+      })
+    ],
+    save: function () {
+      if (this.model) {
+        this.model.set(this.cleaned_data);
+        
+        if (!this.model.collection)
+          this.model.is_new = true;
+
+        this.listenToOnce(this.model, 'sync', this.onSave);
+        this.listenToOnce(this.model, 'error', this.onError);
+        this.model.save(null);
+      }
     },
+    onError: function () {
+      this.stopListening(this.model, 'sync');
+    },
+    onSave: function (model) {
+      var opts = { merge: true };
+      if (this.model.is_new) {
+        delete this.model.is_new;
+        opts = {};
+      }
+      
+      this.collection.add(model, opts);
+      
+      this.trigger('close');
+      this.stopListening(this.model, 'error');
+      this.model = model;
+    }
   });
 
   return Forms;

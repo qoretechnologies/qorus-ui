@@ -11,6 +11,24 @@ define(function (require) {
         return this.get('permissions').indexOf(perm) > -1;
       
       return false;
+    },
+    getControls: function () {
+      var controls = [];
+      
+      controls.push({ action: 'edit', icon: 'edit', title: 'Edit', css: 'warning' });
+      controls.push({ action: 'delete', icon: 'remove', title: 'Remove', css: 'danger' });
+      
+      return controls;
+    },
+    doAction: function (opts) {
+      if (opts.action === "delete") this.destroy();
+      return this;
+    },
+    isNew: function () {
+      if (this.is_new)
+        return true;
+
+      return Model.__super__.isNew.apply(this, arguments);
     }
   });
 

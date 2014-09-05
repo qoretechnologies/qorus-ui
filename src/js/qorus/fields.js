@@ -72,6 +72,17 @@ define(function (require) {
       };
     }
   });
+  
+  Fields.PasswordView = BaseView.extend({
+    tagName: 'input',
+    attributes: function () {
+      return {
+        type: 'password',
+        name: this.attrName,
+        value: this.getValue()
+      }
+    }
+  });
 
   Fields.TextareaView = BaseView.extend({
     tagName: 'textarea',
@@ -120,10 +131,10 @@ define(function (require) {
       
       _.each(models, function (item) {
         this.insertView(new OptionView({ 
-          value: item.get('name') || item, 
+          value: item.getName() || item, 
           attributes: { 
-            value: item.get('name') || item,
-            selected: selected.indexOf(item.get('name') || item) > -1
+            value: item.getName() || item,
+            selected: selected.indexOf(item.getName() || item) > -1
           } 
         }), 'self');
         }, this);
@@ -153,10 +164,10 @@ define(function (require) {
       if (!selected) selected = [];
       _.each(this.collection.models, function (item) {
         this.insertView(new this.optionView({ 
-          value: item.get('name'), 
+          value: item.getName(), 
           attributes: { 
-            value: item.get('name'),
-            selected: selected.indexOf(item.get('name')) > -1
+            value: item.getName(),
+            selected: selected.indexOf(item.getName()) > -1
           } 
         }), 'self');
       }, this);

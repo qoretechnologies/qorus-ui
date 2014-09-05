@@ -1,25 +1,22 @@
 define(function (require) {
-  var Backbone       = require('backbone'),
-      _              = require('underscore'),
-      Qorus          = require('qorus/qorus'),
-      Role           = require('models/role'),
-      Roles          = require('collections/roles'),
-      Template       = require('tpl!templates/system/rbac/roles.html'),
-      TableTpl       = require('text!templates/system/rbac/roles/table.html'),
-      RowTpl         = require('text!templates/system/rbac/roles/row.html'),
-      RoleTpl        = require('tpl!templates/system/rbac/roles/detail.html'),
-      PaneView       = require('views/common/pane'),
-      ModalView      = require('views/common/modal'),
-      ModalTpl       = require('tpl!templates/system/rbac/roles/modal.html'),
-      ListingViewTpl = require('tpl!templates/common/listing.html'),
-      Permissions    = require('collections/permissions'),
-      ItemTpl        = require('tpl!templates/common/item.html'),
-      AddItemTpl     = require('tpl!templates/common/item_add.html'),
-      Forms          = require('views/system/rbac/forms'),
-      Fields         = require('qorus/fields'),
-      Users          = require('collections/users'),
-      Groups         = require('collections/groups'),
-      View, DetailView, Modal, ListingView, RowView, ItemView, AddItemView;
+  var Backbone    = require('backbone'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      Role        = require('models/role'),
+      Roles       = require('collections/roles'),
+      Template    = require('tpl!templates/system/rbac/roles.html'),
+      TableTpl    = require('text!templates/system/rbac/roles/table.html'),
+      RowTpl      = require('text!templates/system/rbac/roles/row.html'),
+      RoleTpl     = require('tpl!templates/system/rbac/roles/detail.html'),
+      PaneView    = require('views/common/pane'),
+      ModalView   = require('views/common/modal'),
+      ModalTpl    = require('tpl!templates/system/rbac/roles/modal.html'),
+      Permissions = require('collections/permissions'),
+      Forms       = require('views/system/rbac/forms'),
+      Users       = require('collections/users'),
+      Groups      = require('collections/groups'),
+      ItemsViews  = require('qorus/views/items'),
+      View, DetailView, Modal, RowView;
 
   
   Modal = ModalView.extend({ 
@@ -33,93 +30,6 @@ define(function (require) {
     }
   });
   
-  ItemView = Qorus.View.extend({
-    tagName: 'li',
-    className: 'label label-info',
-    additionalEvents: {
-      'click .remove': 'removeItem'
-    },
-    template: ItemTpl,
-    removeItem: function () {
-      this.trigger('item:remove', this.options.item);
-      this.off();
-    }
-  });
-  
-  AddItemView = Qorus.View.extend({
-    additionalEvents: {
-      'click .add': 'addItem'
-    },
-    template: AddItemTpl,
-    preRender: function () {
-      var view = new Fields.SelectView({
-        name: 'Add item',
-        attrName: this.options.name,
-        collection: this.collection
-      });
-      this.insertView(view, '.listing');
-    },
-    addItem: function (e) {
-      e.preventDefault();
-      var view = this.getView('.listing')[0];
-      
-      var items = this.model.get(this.options.name);
-      items.push(view.getElValue());
-      this.model.set(this.options.name, items);
-      this.model.save();
-      this.model.trigger('item:'+this.options.name+':add', view.getElValue());
-      this.off();
-    }
-  });
-  
-  // Role detail attribute listing
-  ListingView = Qorus.View.extend({
-    additionalEvents: {
-      'click .add-item': 'addItemView',
-    },
-    template: ListingViewTpl,
-    postInit: function () {
-      var name = this.options.name.toLowerCase();
-      this.listenTo(this.model, 'item:'+name+':add', this.addItem);
-    },
-    onRender: function () {
-      var items = this.model.get(this.name);
-      if (_.size(items) > 0) {
-        this.addItems(items.sort());
-      }
-    },
-    addItem: function (item) {
-      var view = this.insertView(new ItemView({ item: item }), '.items-listing', true);
-      this.listenTo(view, 'item:remove', this.delItem);
-    },
-    addItems: function (items) {
-      this.$('.items-listing').empty();
-      _.each(items, this.addItem, this);
-    },
-    delItem: function (item) {
-      var items = this.model.get(this.name);
-      
-      this.model.set(this.name, _.without(items, item));
-      this.model.save(this.name);
-    },
-    addItemView: function () {
-      var listed     = this.model.get(this.name),
-          collection = this.collection.reject(function (item) { 
-            return listed.indexOf(item.get('name')) > -1; 
-            }),
-          $btn       = this.$('.add-item');
-
-      $btn.hide();
-      var view = this.insertView(new AddItemView({ 
-        name: this.name,
-        model: this.model,
-        collection: collection
-      }), '.add-item-form', true);
-
-      this.listenToOnce(view, 'destroy', $.proxy(function () { this.show(); }, $btn));
-    }
-  });
-  
   // Right pane detail view
   DetailView = Qorus.TabView.extend({
     url: function () {
@@ -128,14 +38,14 @@ define(function (require) {
     template: RoleTpl, 
     tabs: {
       'permissions': {
-        view: ListingView,
+        view: ItemsViews.ListingView,
         options: {
           collection: new Permissions().fetch(),
           name: 'Permissions'
         }
       },
       'users': {
-        view: ListingView,
+        view: ItemsViews.ListingView,
         options: {
           collection: new Users().fetch(),
           name: 'Users',
@@ -143,7 +53,7 @@ define(function (require) {
         },
       },
       'groups': {
-        view: ListingView,
+        view: ItemsViews.ListingView,
         options: {
           collection: new Groups().fetch(),
           name: 'Groups'
@@ -182,6 +92,9 @@ define(function (require) {
       if (opts.action == 'edit') {
         this.trigger('edit', this.model);
         this.parent.trigger('row:edit', this.model);
+      } else if (opts.action == 'clone') {
+        this.trigger('clone', this.model);
+        this.parent.trigger('row:clone', this.model);
       } else {
         this.model.doAction(opts);
       }
@@ -207,6 +120,7 @@ define(function (require) {
       
       this.listenTo(TView, 'row:clicked', this.showDetail);
       this.listenTo(TView, 'row:edit', this.showEditView);
+      this.listenTo(TView, 'row:clone', this.showCloneView);
     },
     showDetail: function (row) {
       var view  = this.getView('#role-detail-view'),
@@ -267,6 +181,29 @@ define(function (require) {
       var modal = this.setView(new Modal({
         content_view: wrap,
         edit: true
+      }));
+      modal.context.edit = true;
+      
+      modal.listenTo(form, 'close', modal.hide);
+    },
+    showCloneView: function (model) {
+      var clone, form, wrap, modal, name;
+      
+      clone = model.clone();
+      name = clone.get('role');
+      delete clone.collection;
+      clone.set('role', name + '_copy');
+      
+      form = new Forms.Role({
+          model: clone,
+          collection: this.collection
+      });
+      
+      wrap = new Qorus.View();
+      wrap.insertView(form, 'self');
+      
+      modal = this.setView(new Modal({
+        content_view: wrap
       }));
       modal.context.edit = true;
       
