@@ -13,6 +13,8 @@ define(function (require) {
       Roles      = require('collections/roles'),
       PaneView   = require('views/common/pane'),
       User       = require('models/user'),
+      Toolbar    = require('views/toolbars/toolbar'),
+      ToolbarTpl = require('tpl!templates/system/rbac/users/toolbar.html'),
       View, Modal, DetailView, RowView;
 
 
@@ -104,6 +106,8 @@ define(function (require) {
       this.listenTo(TView, 'row:clicked', this.showDetail);
       this.listenTo(TView, 'row:edit', this.showEditView);
       this.listenTo(TView, 'row:clone', this.showCloneView);
+      
+      this.setView(new Toolbar({ template: ToolbarTpl }), '.toolbar');
     },
     showDetail: function (row) {
       var view  = this.getView('#user-detail-view'),
@@ -152,6 +156,7 @@ define(function (require) {
       modal.listenTo(form, 'close', modal.hide);
     },
     showEditView: function (model) {
+      console.log(model);
       var form = new Forms.User({
           model: model,
           collection: this.collection

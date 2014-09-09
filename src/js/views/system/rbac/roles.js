@@ -16,6 +16,8 @@ define(function (require) {
       Users       = require('collections/users'),
       Groups      = require('collections/groups'),
       ItemsViews  = require('qorus/views/items'),
+      Toolbar    = require('views/toolbars/toolbar'),
+      ToolbarTpl = require('tpl!templates/system/rbac/roles/toolbar.html'),
       View, DetailView, Modal, RowView;
 
   
@@ -121,6 +123,8 @@ define(function (require) {
       this.listenTo(TView, 'row:clicked', this.showDetail);
       this.listenTo(TView, 'row:edit', this.showEditView);
       this.listenTo(TView, 'row:clone', this.showCloneView);
+      
+      this.setView(new Toolbar({ template: ToolbarTpl }), '.toolbar');
     },
     showDetail: function (row) {
       var view  = this.getView('#role-detail-view'),
