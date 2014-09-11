@@ -198,13 +198,15 @@ define(function (require) {
       for (var i = max, ctr = 0; i > 1000; ctr++) {
           i /= 1000;
       }
-      
+
       this.scale = Math.pow(1000, ctr);
       return this.scale;
     },
     
     render: function (ctx) {
       this.context.scale = this.scale;
+      
+      this.context.units = (this.collection && this.collection.params && this.collection.params.seconds) ? 'sec' : 'ms';
       ChartView.__super__.render.call(this, ctx);
       return this;
     }
