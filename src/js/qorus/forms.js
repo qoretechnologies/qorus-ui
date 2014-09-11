@@ -99,7 +99,9 @@ define(function (require) {
         this.model.save({ save: this.onSave, error: this.onError });
       }
     },
-    onError: function () {
+    onError: function (m, res) {
+      if (res && res.responseJSON)
+        this.showError(res.responseJSON.err + ': ' + res.responseJSON.desc);
     },
     onSave: function () {
       this.collection.add(this.model);
@@ -130,6 +132,7 @@ define(function (require) {
       this.data = data;
     },
     processData: function (e) {
+      console.log('process data', this.is_valid());
       if (this.is_valid()) {
         this.trigger('valid', this.cleaned_data);
         if (this.model) this.save();
@@ -138,6 +141,11 @@ define(function (require) {
         this.render();
       }
       e.preventDefault();
+    },
+    showError: function (err) {
+      var $el = $('<div class="form-alerts alert alert-error" />').text(err);
+      this.$('.form-alerts').remove();
+      this.$el.prepend($el);
     }
   });
   

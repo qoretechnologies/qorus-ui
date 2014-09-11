@@ -18,7 +18,7 @@ define(function (require) {
       ItemsViews  = require('qorus/views/items'),
       BaseToolbar = require('views/toolbars/toolbar'),
       ToolbarTpl  = require('tpl!templates/system/rbac/roles/toolbar.html'),
-      View, DetailView, Modal, RowViewToolbar;
+      View, DetailView, Modal, RowView, Toolbar;
 
   Toolbar = BaseToolbar.extend({
     fixed: false
@@ -55,7 +55,7 @@ define(function (require) {
           collection: new Users().fetch(),
           name: 'Users',
           readonly: true
-        },
+        }
       },
       'groups': {
         view: ItemsViews.ListingView,

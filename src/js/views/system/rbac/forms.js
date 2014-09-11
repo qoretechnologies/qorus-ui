@@ -22,7 +22,6 @@ define(function (require) {
     model: Role,
     className: 'form-horizontal',
     name: 'role-edit-form',
-    required: ['role', 'desc'],
     fields: [
       Fields.InputView.extend({
         name: 'Role name',
@@ -58,7 +57,9 @@ define(function (require) {
         this.model.save(null);
       }
     },
-    onError: function () {
+    onError: function (m, res) {
+      if (res && res.responseJSON)
+        this.showError(res.responseJSON.err + ': ' + res.responseJSON.desc);
       this.stopListening(this.model, 'sync');
     },
     onSave: function (model) {
@@ -84,7 +85,7 @@ define(function (require) {
       Fields.InputView.extend({
         name: 'Username',
         attrName: 'username',
-        require: true
+        required: true
       }),
       Fields.InputView.extend({
         name: 'Full name',
@@ -119,7 +120,9 @@ define(function (require) {
         this.model.save(null);
       }
     },
-    onError: function () {
+    onError: function (m, res) {
+      if (res && res.responseJSON)
+        this.showError(res.responseJSON.err + ': ' + res.responseJSON.desc);
       this.stopListening(this.model, 'sync');
     },
     onSave: function (model) {
@@ -135,6 +138,26 @@ define(function (require) {
       this.stopListening(this.model, 'error');
       this.model = model;
     }
+  });
+  
+  Forms.UserEdit = Forms.User.extend({
+    fields: [
+      Fields.InputView.extend({
+        name: 'Username',
+        attrName: 'username',
+        readonly: true
+      }),
+      Fields.InputView.extend({
+        name: 'Full name',
+        attrName: 'name',
+        required: true
+      }),
+      Fields.MultiSelectView.extend({
+        name: 'Roles',
+        attrName: 'roles',
+        collection: new Roles().fetch()
+      })
+    ]
   });
 
   return Forms;

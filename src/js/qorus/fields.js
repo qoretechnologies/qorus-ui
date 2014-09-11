@@ -33,7 +33,7 @@ define(function (require) {
         this.model.set(this.attrName, value);
     },
     validate: function (value) {
-      if (this.required && _.size(value) == 0) {
+      if (this.required && _.size(value) === 0) {
         this.error = this.empty_msg || 'Field is required!';
         this.onError();
         return false;
@@ -68,7 +68,8 @@ define(function (require) {
         'type': 'text',
         'name': this.attrName,
         'value': this.getValue(),
-        'placeholder': this.name
+        'placeholder': this.name,
+        'readonly': this.readonly || false
       };
     }
   });
@@ -79,8 +80,9 @@ define(function (require) {
       return {
         type: 'password',
         name: this.attrName,
-        value: this.getValue()
-      }
+        value: this.getValue(),
+        readonly: this.readonly || false
+      };
     }
   });
 
@@ -89,7 +91,8 @@ define(function (require) {
     attributes: function () {
       return {
         name: this.attrName,
-        placeholder: this.name 
+        placeholder: this.name,
+        readonly: this.readonly || false
       };
     },
     onRender: function () {
@@ -111,7 +114,8 @@ define(function (require) {
     tagName: 'select',
     attributes: function () {
       return {
-        'name': this.attrName
+        'name': this.attrName,
+        'readonly': this.readonly || false
       };
     },
     initialize: function () {
@@ -152,7 +156,8 @@ define(function (require) {
     attributes: function () {
       return {
         'name': this.attrName,
-        'multiple': true
+        'multiple': true,
+        'readonly': this.readonly || false
       };
     },
     initialize: function () {

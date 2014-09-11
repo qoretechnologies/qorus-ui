@@ -49,7 +49,7 @@ define(function (require) {
   // Role detail attribute listing
   ListingView = Qorus.View.extend({
     additionalEvents: {
-      'click .add-item': 'addItemView',
+      'click .add-item': 'addItemView'
     },
     template: ListingViewTpl,
     postInit: function () {
@@ -65,7 +65,7 @@ define(function (require) {
     addItem: function (item) {
       if (!this.getView('.items-listing')) {
             this.$('.items-listing').empty();
-      };
+      }
       
       var view = this.insertView(new ItemView({ item: item }), '.items-listing', true);
       this.listenTo(view, 'item:remove', this.delItem);
@@ -105,5 +105,5 @@ define(function (require) {
     AddItemView: AddItemView,
     ListingView: ListingView,
     ItemView: ItemView
-  }
+  };
 });

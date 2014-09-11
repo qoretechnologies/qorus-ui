@@ -158,8 +158,7 @@ define(function (require) {
       modal.listenTo(form, 'close', modal.hide);
     },
     showEditView: function (model) {
-      console.log(model);
-      var form = new Forms.User({
+      var form = new Forms.UserEdit({
           model: model,
           collection: this.collection
       });
