@@ -1,22 +1,25 @@
 define(function (require) {
-  var Qorus      = require('qorus/qorus'),
-      _          = require('underscore'),
-      Users      = require('collections/users'),
-      Template   = require('tpl!templates/system/rbac/users.html'),
-      TableTpl   = require('text!templates/system/rbac/users/table.html'),
-      RowTpl     = require('text!templates/system/rbac/users/row.html'),
-      Forms      = require('views/system/rbac/forms'),
-      ItemsViews = require('qorus/views/items'),
-      ModalView  = require('views/common/modal'),
-      ModalTpl   = require('tpl!templates/system/rbac/users/modal.html'),
-      UserTpl    = require('tpl!templates/system/rbac/users/detail.html'),
-      Roles      = require('collections/roles'),
-      PaneView   = require('views/common/pane'),
-      User       = require('models/user'),
-      Toolbar    = require('views/toolbars/toolbar'),
-      ToolbarTpl = require('tpl!templates/system/rbac/users/toolbar.html'),
-      View, Modal, DetailView, RowView;
+  var Qorus       = require('qorus/qorus'),
+      _           = require('underscore'),
+      Users       = require('collections/users'),
+      Template    = require('tpl!templates/system/rbac/users.html'),
+      TableTpl    = require('text!templates/system/rbac/users/table.html'),
+      RowTpl      = require('text!templates/system/rbac/users/row.html'),
+      Forms       = require('views/system/rbac/forms'),
+      ItemsViews  = require('qorus/views/items'),
+      ModalView   = require('views/common/modal'),
+      ModalTpl    = require('tpl!templates/system/rbac/users/modal.html'),
+      UserTpl     = require('tpl!templates/system/rbac/users/detail.html'),
+      Roles       = require('collections/roles'),
+      PaneView    = require('views/common/pane'),
+      User        = require('models/user'),
+      BaseToolbar = require('views/toolbars/toolbar'),
+      ToolbarTpl  = require('tpl!templates/system/rbac/users/toolbar.html'),
+      View, Modal, DetailView, RowView, Toolbar;
 
+  Toolbar = BaseToolbar.extend({
+    fixed: false
+  });
 
   Modal = ModalView.extend({ 
     template: ModalTpl,
@@ -71,7 +74,6 @@ define(function (require) {
     },
     postInit: function () {
       this.listenTo(this.model, 'change', this.render);
-      this.listenTo(this.model, 'all', console.log);
     },
     doAction: function (e) {
       var $target = $(e.currentTarget),

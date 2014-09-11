@@ -16,10 +16,13 @@ define(function (require) {
       Users       = require('collections/users'),
       Groups      = require('collections/groups'),
       ItemsViews  = require('qorus/views/items'),
-      Toolbar    = require('views/toolbars/toolbar'),
-      ToolbarTpl = require('tpl!templates/system/rbac/roles/toolbar.html'),
-      View, DetailView, Modal, RowView;
+      BaseToolbar = require('views/toolbars/toolbar'),
+      ToolbarTpl  = require('tpl!templates/system/rbac/roles/toolbar.html'),
+      View, DetailView, Modal, RowViewToolbar;
 
+  Toolbar = BaseToolbar.extend({
+    fixed: false
+  });
   
   Modal = ModalView.extend({ 
     template: ModalTpl,

@@ -83,12 +83,12 @@ define(function (require) {
     fields: [
       Fields.InputView.extend({
         name: 'Username',
-        attrName: 'user',
+        attrName: 'username',
         require: true
       }),
       Fields.InputView.extend({
         name: 'Full name',
-        attrName: 'desc',
+        attrName: 'name',
         required: true
       }),
       Fields.PasswordView.extend({
@@ -103,7 +103,7 @@ define(function (require) {
       }),
       Fields.MultiSelectView.extend({
         name: 'Roles',
-        attrName: 'role',
+        attrName: 'roles',
         collection: new Roles().fetch()
       })
     ],
