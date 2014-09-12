@@ -1,58 +1,54 @@
 define(function (require) {
-  var _          = require('underscore'),
-      Dispatcher = require('qorus/dispatcher'),
-      Qorus      = require('qorus/qorus'),
-      Model      = require('models/health'),
-      StatusTpl  = require('tpl!templates/system/health/status.html'),
-      DetailTpl  = require('tpl!templates/system/health/detail.html'),
-      View;
+  var _           = require('underscore'),
+      Dispatcher  = require('qorus/dispatcher'),
+      Qorus       = require('qorus/qorus'),
+      Model       = require('models/health'),
+      DetailTpl   = require('tpl!templates/system/health/detail.html'),
+      TaskBarIcon = require('views/common/taskbaricon'),
+      View, DetailView;
+      
+  function getHealthCSS(health) {
+    if (health === 'RED') return 'text-error';
+    if (health === 'GREEN') return 'text-success';
+    if (health === 'YELLOW') return 'text-warning';
+    if (health === 'UNKNOWN') return 'text-info';
+    if (health === 'UNREACHABLE') return 'text-info';
+  }
+  
+  DetailView = Qorus.View.extend({
+    __name__: 'DetailView',
+    template: DetailTpl,
+    preRender: function () {
+      console.log(this);
+      this.context.health_css = this.getHealthCSS();
+    },
+    getHealthCSS: function () {
+      var health = this.model.get('health');
+      
+      return getHealthCSS(health);
+    }
+  });
 
-  require("bootstrap");
-
-  View = Qorus.View.extend({
-    template: StatusTpl,
+  View = TaskBarIcon.extend({
+    icon: 'icon-stethoscope', 
+    icon_class: function () {
+      return this.getHealthCSS();
+    },
+    icon_type: 'fa-icon-sign',
     
-    initialize: function () {
-      this.context = {};
-      this.views = {};
-      this.options = {};
+    postInit: function () {
+      _.bindAll(this, 'icon_class');
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
       this.listenTo(Dispatcher, 'system:health_changed', this.update);
       this.update();
-    },
-    
-    render: function (ctx) {
-      var data = this.model.toJSON();
-      data.health_css = this.getHealthCSS();
-      
-      _.extend(this.context, { data: data });
-      View.__super__.render.call(this, ctx);
-      return this;
-    },
-    
-    onRender: function () {
-      var data = this.model.toJSON(),
-          $status;
-        
-      data.health_css = this.getHealthCSS();
-      
-      $status = this.$('.status').popover({ 
-        content: DetailTpl(data), 
-        placement: "right", 
-        container: this.$el,
-        html: true
-      });
+      this.initDetailView(new DetailView({ model: this.model }));
     },
     
     getHealthCSS: function () {
       var health = this.model.get('health');
       
-      if (health === 'RED') return 'danger';
-      if (health === 'GREEN') return 'success';
-      if (health === 'YELLOW') return 'warning';
-      if (health === 'UNKNOWN') return 'info';
-      if (health === 'UNREACHABLE') return 'info';
+      return getHealthCSS(health);
     },
     
     update: function () {

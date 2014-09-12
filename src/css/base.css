@@ -73,7 +73,7 @@ table thead th {
 }
 
 #wrap > .container, #wrap > .section {
-  padding: 0;
+/*  padding: 0;*/
   padding-top: 40px;
 }
 
@@ -82,6 +82,7 @@ table thead th {
 	height: auto !important;
 	margin: 0 auto -4em;
   height: 100%;
+  background-color: #fff;
 }
 
 #content {
@@ -145,6 +146,7 @@ i.sort {
 
 .navbar-text {
     margin: 0;
+    margin-left: 20px;
     display: inline-block;
 }
 
@@ -205,14 +207,10 @@ table .header-fixed {
 }
 
 .row-fluid .page {
-  padding-left: 8.333333333%;
+/*  padding-left: 8.333333333%;
   margin-left: 0;
-  width: 98.5%;
+  width: 98.5%; */
   height: 100%;
-}
-
-aside {
-  z-index: 1020;
 }
 
 #nav-main {
@@ -1785,4 +1783,77 @@ input.autocomplete {
 	border-radius: 2px;
 	margin-right: 10px;
 	vertical-align: text-bottom;
+}
+
+#wrap {
+  transition: transform 200 ease-in-out;
+}
+
+#wrap.offset {
+  transform: translate3D(80px,0,0);
+}
+
+aside.navigation {
+  width: 80px;
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: opacity 0s 0.1s;
+          transition: opacity 0s 0.1s;
+}
+
+
+aside.navigation.opacity {
+  opacity: 1;
+  -webkit-transition: opacity 0s 0s;
+          transition: opacity 0s 0s;
+}
+
+#wrap {
+  -webkit-transition: -webkit-transform .1s ease-in-out;
+          transition: transform .1s ease-in-out;
+}
+
+#wrap.offset {
+  -webkit-transform: translate3D(80px,0,0);
+          transform: translate3D(80px,0,0);
+}
+
+.menu-icon {
+  display: block;
+  color: #fff;
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 150%;
+  -webkit-transition: opacity 0s 0.1s;
+          transition: opacity 0s 0.1s;
+}
+
+.menu-icon:hover {
+  color: #666;
+  text-decoration: none;
+}
+
+.taskbar, .taskbar li {
+  float: left;
+  height: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-indent: 0;
+}
+
+.taskbar {
+  margin-right: 10px;
+}
+
+.taskbar-icon-image {
+  display: block;
+  padding: 10px 5px 0 0;
+  cursor: pointer;
+}
+
+.taskbar-icon-image .icon-stack {
+  margin-top: -2px;
 }

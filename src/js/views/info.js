@@ -23,7 +23,10 @@ define(function (require) {
     },
     
     renderInfo: function () {
-      if (this.header) this.header.off(false);
+      if (this.header) {
+        console.log('header off');
+        this.header.off(false);
+      }
       
       this.header = new HeaderView({ info: this.info, user: this.user });
       

@@ -7,10 +7,15 @@ define(function (require) {
       UserView          = require('views/system/user'),
       Template          = require('text!templates/common/header.html'),
       NotificationsView = require('views/notifications/icon'),
-      View;
+      TaskBar           = require('views/common/taskbar'),
+      TaskBarIcon       = require('views/common/taskbaricon'),
+      View, HealthIcon;
   
   View = Qorus.View.extend({
     template: Template,
+    additionalEvents: {
+      "click a.menu-icon": 'menuToggle'
+    },
     
     initialize: function (opts) {
       View.__super__.initialize.apply(this, arguments);
@@ -27,9 +32,22 @@ define(function (require) {
     },
     
     preRender: function () {
-      this.setView(new HealthView(), '#health');
       this.setView(new UserView({ model: this.user }), '#user-info');
       this.setView(new NotificationsView(), '#notifications-icon');
+      
+      TaskBar.addIcon(new HealthView());
+      this.setView(TaskBar, '#taskbar');
+    },
+    
+    menuToggle: function (e) {
+      e.preventDefault();
+      $('#wrap').toggleClass('offset');
+      $('aside.navigation').toggleClass('opacity');
+    },
+    
+    clean: function () {
+      this.undelegateEvents();
+      this.$el.empty();
     }
   });
   

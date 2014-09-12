@@ -2,10 +2,11 @@
   <div class="container-fluid">
     <div class="row-fluid">
         <div class="span8">
-          <div id="health"></div>
-          <h2 class="navbar-text"><span class="instance-key"><%= item['instance-key'] %></span> <small>Qorus Integration Engine</small> <small class="version"><%= item.version %></small></h2>
+           <a class="menu-icon"><i class="icon-reorder"></i></a>
+           <h2 class="navbar-text"><span class="instance-key"><%= item['instance-key'] %></span> <small>Qorus Integration Engine</small> <small class="version"><%= item.version %></small></h2>
         </div>
         <div class="pull-right">
+          <ul id="taskbar" class="taskbar"></ul>
           <div id="user-info"></div>
           <div id="notifications-icon"></div>
         </div>
