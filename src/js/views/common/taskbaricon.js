@@ -1,5 +1,6 @@
 define(function (require) {
-  var _        = require('underscore'),
+  var $        = require('jquery'),
+      _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/common/taskbaricon.html'),
       IconView, Icon;
@@ -63,8 +64,21 @@ define(function (require) {
     initDetailView: function (view) {
       this.setView(view, '.taskbar-icon-detail');
     },
-    showDetailView: function () {
+    showDetailView: function (e) {
+      // hide other detail views
+      $('.taskbar-icon-detail:visible').addClass('hide');
+      $('html').off('click.taskbariconoutside');
       
+      var view = this.getView('.taskbar-icon-detail');
+      view.$el.toggleClass('hide');
+      
+      e.preventDefault();
+      
+      $('html').on('click.taskbariconoutside', $.proxy(function (e) {
+        if (e.isDefaultPrevented()) return;
+        $('html').off('click.taskbariconoutside');
+        this.$el.addClass('hide');
+      }, view));
     }
   });
   

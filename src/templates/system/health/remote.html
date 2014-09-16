@@ -1,0 +1,8 @@
+<h4>Remote health</h4>
+<% _.each(model.get('remote'), function (remote) { %>
+  <p>
+    <span class="label label-<%= getHealthCSS(remote.health) %>"><%= remote.health %></span> <a href="<%= remote.url %>" target="_blank"><%= remote.name %></a>
+    <br />
+    <span><%= escapeHtml(remote.error) %></span>
+  </p>
+<% }) %>

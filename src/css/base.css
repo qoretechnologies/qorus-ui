@@ -1848,6 +1848,7 @@ aside.navigation.opacity {
   margin-right: 10px;
 }
 
+
 .taskbar-icon-image {
   display: block;
   padding: 10px 5px 0 0;
@@ -1856,4 +1857,33 @@ aside.navigation.opacity {
 
 .taskbar-icon-image .icon-stack {
   margin-top: -2px;
+}
+
+.taskbar-icon {
+  position: relative;
+}
+
+.taskbar-icon-detail {
+  background: #fff;
+  border: 1px rgba(0,0,0,0.2) solid;
+  border-radius: 10px;
+  box-shadow: rgba(0,0,0,0.5) 0px 0px 10px 0px;
+  color: #000;
+  font-size: 90%;
+  padding: 10px;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  margin-left: -100px;
+  width: 200px;
+}
+
+.taskbar-icon-detail:before {
+  content: "";
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+  position: absolute;
+  left: calc(50% - 7px);
+  top: -10px;
 }

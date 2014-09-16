@@ -162,7 +162,7 @@ define(function (require) {
 
       $('html').on('click.datepickeroutside', $.proxy(function (e) { 
         if (e.isDefaultPrevented()) return;
-        $('html').off('click.dpoutside');
+        $('html').off('click.datepickeroutside');
         this.hide(); 
       }, this));
 

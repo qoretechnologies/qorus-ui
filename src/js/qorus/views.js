@@ -1594,10 +1594,10 @@ define(function (require) {
     initialize: function () {
       ModelView.__super__.initialize.apply(this, arguments);
       this.model = this.options.model;
-      
+      this.on('prerender', this.addContext);
     },
     
-    preRender: function () {
+    addContext: function () {
       if (this.model) {
         this.context.item = this.model.toJSON();
         this.context._item = this.model;        

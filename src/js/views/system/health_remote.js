@@ -1,40 +1,45 @@
 define(function (require) {
   var _           = require('underscore'),
-      Dispatcher  = require('qorus/dispatcher'),
       Qorus       = require('qorus/qorus'),
       Model       = require('models/health'),
-      DetailTpl   = require('tpl!templates/system/health/detail.html'),
+      Dispatcher  = require('qorus/dispatcher'),
       TaskBarIcon = require('views/common/taskbaricon'),
-      View, DetailView;
-      
+      DetailTpl   = require('tpl!templates/system/health/remote.html'),
+      View, DetailView, LEVELS;
+
+  LEVELS = {
+    'GREEN': 0,
+    'YELLOW': 1,
+    'UNKWNOWN': 2,
+    'UNREACHABLE': 2,
+    'RED': 3
+  };
+
   function getHealthCSS (health, noprefix) {
     var prefix = (noprefix===true) ? '' : 'text-';
-    
+
     if (health === 'RED' && !noprefix) return prefix + 'error';
     if (health === 'RED' && noprefix === true) return prefix + 'danger';
     if (health === 'GREEN') return prefix + 'success';
     if (health === 'YELLOW') return prefix + 'warning';
-    if (health === 'UNKNOWN') return prefix + 'info';
-    if (health === 'UNREACHABLE') return prefix + 'info';
+    if (health === 'UNKNOWN') return prefix + 'warning';
+    if (health === 'UNREACHABLE') return prefix + 'warning';
   }
-  
+
   DetailView = Qorus.ModelView.extend({
     __name__: 'DetailView',
     template: DetailTpl,
     preRender: function () {
-      this.context.health_css = this.getHealthCSS();
-    },
-    getHealthCSS: function () {
-      var health = this.model.get('health');
-      
-      return getHealthCSS(health, true);
+      this.context.getHealthCSS = getHealthCSS;
     }
   });
 
   View = TaskBarIcon.extend({
-    icon: 'icon-stethoscope', 
+    icon: 'icon-sitemap', 
     icon_class: function () {
-      return this.getHealthCSS();
+      var health = this.getHealthCSS();
+      console.log(health, this);
+      return health;
     },
     icon_type: 'fa-icon-sign',
     
@@ -42,13 +47,22 @@ define(function (require) {
       _.bindAll(this, 'icon_class');
       this.model = new Model();
       this.listenTo(this.model, 'sync', this.render);
-      this.listenTo(Dispatcher, 'system:health_changed', this.update);
+      this.listenTo(Dispatcher, 'system:remote_health_changed', this.update);
       this.update();
       this.initDetailView(new DetailView({ model: this.model }));
     },
     
     getHealthCSS: function () {
-      var health = this.model.get('health');
+      var remote = this.model.get('remote'),
+          level  = 1,
+          health = 'GREEN';
+      
+      _.each(remote, function (rem) {
+        if (LEVELS[rem.health] > level) {
+          level = LEVELS[rem.health];
+          health = rem.health;
+        }
+      });
       
       return getHealthCSS(health);
     },
@@ -63,6 +77,6 @@ define(function (require) {
       this.$el.empty();
     }
   });
-  
+
   return View;
 });
