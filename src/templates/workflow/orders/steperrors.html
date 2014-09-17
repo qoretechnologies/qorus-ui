@@ -1,34 +1,3 @@
 <h4>Errors</h4>
-<table class="table table-stripped table-condensed table-bordered table-align-left">
-  <thead>
-    <tr>
-      <th>Severity</th>
-      <th>Error</th>
-      <th class="date">Created</th>
-      <th>Description</th>
-      <th class="narrow date">Business</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if (obj.errors) { %>
-    <% _.each(obj.errors, function (err) {%>
-    <tr>
-      <td><%= err.severity %></td>
-      <td><%= err.error %></td>
-      <td><%= err.created %></td>
-      <td><%= err.description %></td>
-      <td><%= statusIcon(err.business_error) %></td>
-    </tr>
-    <% if (err.info) { %>
-    <tr>
-      <td colspan="5"><%= err.info %></td>
-    </tr>
-    <% } %>
-    <% }) %>
-    <% } else { %>
-    <tr>
-      <td colspan="6">No data to display</td>
-    </tr>
-    <% }%>
-  </tbody>
-</table>
+<div class="errors-toolbar toolbar"></div>
+<div class="errors-table"></div>

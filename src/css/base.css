@@ -1470,11 +1470,7 @@ tbody+thead>tr:first-child>td {
 
 .fixed-pane .fixed-pane-inner {
   position: relative;
-  padding: 10px;
-}
-
-.fixed-pane-bottom .fixed-pane-inner {
-  padding: 10px 10px 30px 8.333333333%;
+  padding: 10px 20px;
 }
 
 .workflow-detail {

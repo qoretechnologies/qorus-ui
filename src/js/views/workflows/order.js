@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(function(require) {
   var $               = require('jquery'),
       settings        = require('settings'),
       _               = require('underscore'),
@@ -23,17 +23,16 @@ define(function(require, exports, module) {
       AlertsTpl       = require('tpl!templates/common/alerts.html'),
       DiagramPaneTpl  = require('tpl!templates/workflow/orders/diagram.html'),
       StepInfoTpl     = require('tpl!templates/workflow/orders/stepinfo.html'),
-      StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
       NotesTpl        = require('tpl!templates/workflow/orders/notes.html'),
       NotesListTpl    = require('tpl!templates/workflow/orders/noteslist.html'),
-      SystemSettings  = require('models/settings'),
       datepicker      = require('views/common/datetimepicker'),
       LockTemplate    = require('tpl!templates/workflow/orders/lock.html'),
       User            = require('models/system').User,
       ConfirmView     = require('views/common/confirm'),
       StatusTpl       = require('tpl!templates/workflow/orders/status.html'),
+      StepErrorsView = require('views/workflows/orders/steperrors'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
-      DiagramView, DataView, StepInfoView, StepErrorsView, NotesView, OrderLockView,
+      DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus;
   
   require('jquery.ui');
@@ -227,80 +226,6 @@ define(function(require, exports, module) {
     }
   });
   
-  // View showing step associated errors
-  StepErrorsView = Qorus.View.extend({
-    __name__: 'StepErrorsView',
-    postInit: function () {
-      this.listenTo(this.model, 'sync', this.render);
-    },
-    onRender: function () {
-      // init popover on info text
-      this.$('td.info').each(function () {
-        var text = '<textarea>' + $(this).text() + '</textarea>';
-        $(this).popover({ content: text, title: "Info", placement: "left", container: "#diagram", html: true});
-      });
-      this.wrap();
-    },
-    
-    off: function () {
-      if (this.clean) this.clean();
-      if (this.$fixed_pane) {
-        // console.log('destroying resizable');
-        this.$fixed_pane.off();
-        this.$fixed_pane.resizable('destroy');
-        this.$fixed_pane = null;
-      }
-      this.undelegateEvents();
-      this.stopListening();
-      this.$el.empty();
-    },
-    
-    /* wraps view element to make it fixed position and resizable */
-    wrap: function () {
-      var $divw           = $('<div class="fixed-pane-wrapper" />'),
-          $div            = $('<div class="fixed-pane" />'),
-          $div_inner      = $('<div class="fixed-pane-inner" />'),
-          $push           = $('<div class="fixed-pane-push push"/>'),
-          height_settings = [module.id.replace(/\//g, '.'), this.__name__, 'height'].join('.'),
-          height, $fixed_pane;
-      
-      $div
-        .addClass('fixed-pane-bottom');
-        
-      // add parent pusher      
-      this.$el.parent().append($push);
-      
-      // wrap the view element
-      this.$el.wrap($divw).wrap($div).wrap($div_inner);
-      
-      $fixed_pane = this.$el.parents('.fixed-pane');
-      
-      // get stored height
-      height = SystemSettings.get(height_settings);
-      if (height) $fixed_pane.height(height);
-      
-      // change push height according to pane height
-      $push.height($fixed_pane.outerHeight(true));
-
-      // resizable
-      $fixed_pane.resizable({
-        handles: 'n',
-        maxHeight: $(window).height() - 200,
-        minHeight: 150
-      });
-      
-      this.$fixed_pane = $fixed_pane;
-      this.$fixed_pane.on('resize', function (e, ui) {
-        var $el = ui.element;
-        $el.parent().next().height(ui.size.height);
-      });
-      this.$fixed_pane.on('resizestop', $.proxy(function (event, ui) {
-        SystemSettings.set(height_settings, ui.size.height);
-        SystemSettings.save();
-      }, this));
-    }
-  });
-  
   DataView = Qorus.ModelView.extend({
     template: DataTpl,
     additionalEvents: {
@@ -388,9 +313,11 @@ define(function(require, exports, module) {
     },
     
     showAllErrors: function (e) {
-      this.setView(new StepErrorsView({ model: this.model, errors: this.model.get('ErrorInstances'), template: StepErrorsTpl}), '#step-errors', true).render();
+      var view = this.setView(new StepErrorsView({ model: this.model }), '#step-errors', true);
+
       if (e) {
        e.preventDefault(); 
+       view.render();
       }
     },
     
@@ -398,7 +325,7 @@ define(function(require, exports, module) {
       var $target = $(e.currentTarget),
           stepid  = $target.data('id'),
           instances = this.model.get('StepInstances'),
-          step, errors;
+          step;
       
       e.preventDefault();
       
@@ -406,10 +333,9 @@ define(function(require, exports, module) {
       if ($target.hasClass('start')) return;
       
       step   = _.findWhere(instances, { stepid: stepid });
-      errors = _.where(this.model.get('ErrorInstances'), { stepid: stepid });
       
       this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
-      this.setView(new StepErrorsView({ model: this.model, errors: errors, template: StepErrorsTpl}), '#step-errors', true).render();
+      this.setView(new StepErrorsView({ model: this.model, stepid: stepid }), '#step-errors', true).render();
       
       // box selected styling
       this.$('.box').removeClass('selected');
@@ -462,7 +388,7 @@ define(function(require, exports, module) {
       this.processPath(opts.path);
     },
 
-    renderNoArgs: function (model) {
+    renderNoArgs: function () {
       this.render();
     },
 
@@ -513,7 +439,7 @@ define(function(require, exports, module) {
         options: {
           name: 'Notes'
         }
-      }, 
+      } 
     },
     
     update: function () {
