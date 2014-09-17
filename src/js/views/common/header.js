@@ -3,13 +3,13 @@ define(function (require) {
   
   var $                 = require('jquery'),
       Qorus             = require('qorus/qorus'),
-      HealthView        = require('views/system/health'),
-      RemoteHealthView  = require('views/system/health_remote'),
       UserView          = require('views/system/user'),
       Template          = require('text!templates/common/header.html'),
       NotificationsView = require('views/notifications/icon'),
       TaskBar           = require('views/common/taskbar'),
       View;
+      
+  require('views/common/icons');
   
   View = Qorus.View.extend({
     template: Template,
@@ -35,8 +35,6 @@ define(function (require) {
       this.setView(new UserView({ model: this.user }), '#user-info');
       this.setView(new NotificationsView(), '#notifications-icon');
       
-      TaskBar.addIcon(new HealthView());
-      TaskBar.addIcon(new RemoteHealthView());
       this.setView(TaskBar, '#taskbar');
     },
     
