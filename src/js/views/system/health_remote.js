@@ -38,7 +38,6 @@ define(function (require) {
     icon: 'icon-sitemap', 
     icon_class: function () {
       var health = this.getHealthCSS();
-      console.log(health, this);
       return health;
     },
     icon_type: 'fa-icon-sign',

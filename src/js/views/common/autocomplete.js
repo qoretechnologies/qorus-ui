@@ -164,7 +164,6 @@ define(function (require) {
       return this.$clone.caret();
     },
     applyActiveHint: function (model) {
-      console.log('panda', model, this.$('.autocomplete').val());
       this.getCaretPosition();
       this.$('.autocomplete').val(model.hint).caret(-1);
       this.hideDropdown();

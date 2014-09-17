@@ -24,7 +24,6 @@ define(function (require) {
     
     renderInfo: function () {
       if (this.header) {
-        console.log('header off');
         this.header.off(false);
       }
       

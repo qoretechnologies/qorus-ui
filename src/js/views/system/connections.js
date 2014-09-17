@@ -39,7 +39,6 @@ define(function (require) {
       this.options.resource_type = options.resource_type;
       this.listenTo(this.model, 'change', this.render);
       QorusDetailView.__super__.initialize.apply(this, arguments);
-      console.log('harfa');
     },
     
     preRender: function () {

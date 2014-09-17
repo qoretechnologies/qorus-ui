@@ -537,8 +537,6 @@ define(function(require, exports, module) {
       });
       
       this.context.item = this.model.toJSON();
-      
-      console.log(this.model, this.context.item);
     },
     
     getStepName: function (id) {
