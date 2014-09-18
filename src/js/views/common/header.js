@@ -9,6 +9,7 @@ define(function (require) {
       TaskBar           = require('views/common/taskbar'),
       View;
       
+  require('views/system/menu/menu');
   require('views/common/icons');
   
   View = Qorus.View.extend({
