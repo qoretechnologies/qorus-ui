@@ -1,0 +1,14 @@
+<div class="errors-toolbar btn-toolbar sticky toolbar toolbar-small"> 
+  <div class="btn-group"><h4>Errors</h4></div>
+  <div class="btn-group btn-small">
+    <select id='severities' class="multiselect btn-small" multiple="multiple">
+      <option value="all" selected>All</option>
+       <% _.each(obj.predefined_statuses, function(error){ %>
+         <option value="<%= error.toLowerCase() %>"><%= error %></option>
+       <% }) %>
+    </select>
+  </div>
+  <div class="btn-group btn-small">
+      <button class="btn btn-small warnings show-warnings"><i class="icon-check-empty"></i> <span>Show</span> Warnings</button>
+  </div>
+</div>

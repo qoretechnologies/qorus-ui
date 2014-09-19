@@ -5,25 +5,128 @@ define(function (require, exports, module) {
       TableTpl       = require('text!templates/workflow/orders/errors/table.html'),
       RowTpl         = require('text!templates/workflow/orders/errors/row.html'),
       SystemSettings = require('models/settings'),
-      Toolbar        = require('views/toolbars/toolbar'),
-      View, TableView;
+      BaseToolbar    = require('views/toolbars/toolbar'),
+      ToolbarTpl     = require('tpl!templates/workflow/orders/errors/toolbar.html'),
+      View, TableView, SEVERITIES, Toolbar;
       
+  require('bootstrap');
+      
+  SEVERITIES = [
+    'FATAL',
+    'MAJOR',
+    'WARNING',
+    'INFO',
+    'NONE'
+  ];
+  
+  Toolbar = BaseToolbar.extend({
+    fixed: true,
+    template: ToolbarTpl,
+    
+    additionalEvents: {
+      'click button.warnings': 'toggleWarnings',
+    },
+    
+    preRender: function () {
+      _.extend(this.context, {
+        predefined_statuses: SEVERITIES
+      });
+    },
+    onRender: function () {
+      Toolbar.__super__.onRender.apply(this, arguments);
+      this.addMultiSelect();
+    },
+    addMultiSelect: function () {
+      var self = this;
+      // apply bootstrap multiselect to #statuses element      
+      $('#severities').multiselect({
+        buttonClass: "btn btn-small",
+        onChange: function(el, checked){
+          var sl = [], val = $(el).val();
+          if (self.options.statuses) {
+            sl = self.options.statuses.split(',');
+          }
+          
+          if (checked) {
+            sl.push(val);
+
+            // check if alias for all and than check/uncheck all statuses
+            if(val=='all'){
+              $('option[value!="all"]', $(el).parent()).removeAttr('selected');
+              sl = ['all'];
+            } else {
+              $('option[value="all"]', $(el).parent()).removeAttr('selected');
+              sl = _.without(sl, 'all');
+            }
+          } else {
+            if(val=='all'){
+              $('option', $(el).parent()).removeAttr('selected');
+            }else{
+             sl = _.without(sl, val); 
+            }
+          }
+          // refresh valudes
+          $('#severities').multiselect('refresh');
+          self.options.statuses = sl.join(',');
+          self.trigger('filter', self.options.statuses);
+        }
+      });
+    },
+    
+    toggleWarnings: function (e) {
+      var $el = $(e.currentTarget), text;
+      
+      if ($el.hasClass('show-warnings')) {
+        this.trigger('errors', 'show');
+        this.$('button.warnings i').removeClass('icon-check-empty').addClass('icon-check');
+        text = 'Hide';
+      } else {
+        this.trigger('errors', 'hide');
+        this.$('button.warnings i').removeClass('icon-check').addClass('icon-check-empty');
+        text = 'Show';
+      }
+      this.$('button.warnings').toggleClass('show-warnings');
+      this.$('button.warnings span').text(text);
+    }
+  });
+  
+  RowView = Qorus.RowView.extend({
+    postInit: function () {
+      this.listenTo(this.parent, 'errors:show', this.showWarning);
+      this.listenTo(this.parent, 'errors:hide', this.hideWarning);
+    },
+    showWarning: function () {
+      var $el = $("<tr class='error-warning'><td colspan='5'/></tr>");
+      this.$el.after($el.find('td').text(this.model.get('info')));
+    },
+    hideWarning: function () {
+      this.$el.next().remove();
+    }
+  });
+  
   TableView = Qorus.TableView.extend({
     template: TableTpl, 
     row_template: RowTpl,
-    onRender: function () {
-      console.log(this.views);
-    }
+    row_view: RowView
   });
+  
   
   // View showing step associated errors
   View = Qorus.View.extend({
     __name__: 'StepErrorsView',
     template: StepErrorsTpl,
+    
     postInit: function () {
+      var toolbar;
+
+      toolbar = this.setView(new Toolbar(), '.toolbar');
+  
+      this.listenTo(toolbar, 'filter', this.filterErrors);
       this.listenTo(this.model, 'sync', this.update);
+
       this.update();
     },
+    
     onRender: function () {
       // init popover on info text
       // this.$('td.info').each(function () {
@@ -34,16 +137,41 @@ define(function (require, exports, module) {
     },
 
     update: function () {
-      var errors = this.model.get('ErrorInstances');
+      var errors  = this.model.get('ErrorInstances'),
+          toolbar = this.getView('.toolbar'),
+          table;
   
       if (this.options.stepid)
         errors = _.where(errors, { stepid: this.options.stepid });
     
       this.collection = new Qorus.SortedCollection(errors);
-      this.setView(new TableView({ collection: this.collection }), '.errors-table');
+      table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
+      
+      table.listenTo(toolbar, 'errors', function (state) {
+        table.trigger('errors:'+state);
+      });
+      
       this.render();
     },
-
+    
+    filterErrors: function (statuses) {
+      statuses = statuses.toLowerCase();
+      
+      if (statuses === 'all') {
+        this.$('.errors-table tbody tr').show();
+        return this;
+      }
+      
+      var states = statuses.split(',');
+      
+      this.$('.errors-table tbody tr').hide();
+      this.$('.errors-table td').filter(function () {
+        return states.indexOf($(this).text().toLowerCase()) > -1;
+      }).parent().show();
+      
+      return this;
+    },
+    
     off: function () {
       if (this.clean) this.clean();
       if (this.$fixed_pane) {

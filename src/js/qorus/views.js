@@ -1183,6 +1183,7 @@ define(function (require) {
     },
         
     initialize: function (opts) {
+      this.preInit();
       this.views = {};
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
@@ -1202,6 +1203,7 @@ define(function (require) {
       this.listenTo(this.model, 'remove', this.off);
 
       this.render();
+      this.postInit();
     },
     
     dispatch: function () {

@@ -8,7 +8,9 @@ define(function (require) {
       BaseToolbar = require('views/toolbars/toolbar'),
       moment      = require('moment'),
       Toolbar, status;
-      
+  
+  require('bootstrap');
+  
   status = [
     'Ready', 'Scheduled', 'Complete', 'Incomplete', 'Error', 'Canceled', 
     'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
