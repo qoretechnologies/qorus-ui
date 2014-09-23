@@ -5,4 +5,5 @@ define(function (require) {
   
   TaskBar.addIcon(new HealthView());
   TaskBar.addIcon(new RemoteHealthView());
+
 });

@@ -5,7 +5,7 @@ define(function(require) {
   
   TaskBar = Qorus.View.extend({
     addIcon: function (view) {
-      this.insertView(view, 'self');
+      return this.insertView(view, 'self');
     }
   });
   

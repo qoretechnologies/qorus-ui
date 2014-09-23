@@ -23,6 +23,9 @@ define(function (require) {
       this.model = opts.info;
       this.user = opts.user;
       this.setElement($('#header'));
+
+      this.setView(TaskBar, '#taskbar');
+
       this.render();
     },
     
@@ -35,8 +38,6 @@ define(function (require) {
     preRender: function () {
       this.setView(new UserView({ model: this.user }), '#user-info');
       this.setView(new NotificationsView(), '#notifications-icon');
-      
-      this.setView(TaskBar, '#taskbar');
     },
     
     menuToggle: function (e) {

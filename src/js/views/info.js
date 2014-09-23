@@ -19,16 +19,11 @@ define(function (require) {
       _.bindAll(this, 'renderInfo');
       
       this.listenTo(this.info, 'change', this.renderInfo);
-      this.renderInfo();
+      this.header = new HeaderView({ info: this.info, user: this.user });
+      // this.renderInfo();
     },
     
     renderInfo: function () {
-      if (this.header) {
-        this.header.off(false);
-      }
-      
-      this.header = new HeaderView({ info: this.info, user: this.user });
-      
       this.title = this.info.get('instance-key') + " | " + this.info.get('omq-version');
       document.title = this.title;
       
