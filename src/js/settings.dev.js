@@ -15,6 +15,7 @@ define(function () {
       WS_PREFIX: '',
       EVENTS_WS_URL: ws_protocol + host + '/apievents',
       HOST: host,
+      PROTOCOL: protocol,
       DEBUG: false
   };
   

@@ -71,9 +71,10 @@ define(function (require) {
   
   // monkey patch helpers add logged user
   Helpers.user = new User();
+  Helpers.system_info = new Info();
 
   return {
-    Info: new Info(),
+    Info: Helpers.system_info,
     User: Helpers.user,
     Options: new Options()
   };

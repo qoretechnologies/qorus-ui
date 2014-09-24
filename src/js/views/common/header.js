@@ -44,11 +44,18 @@ define(function (require) {
       e.preventDefault();
       $('#wrap').toggleClass('offset');
       $('aside.navigation').toggleClass('opacity');
-    },
-    
-    clean: function () {
-      this.undelegateEvents();
-      this.$el.empty();
+      $('html').on('click.navigation', $.proxy(function (e) { 
+        if (e.isDefaultPrevented()) return;
+        $('html').off('click.navigation');
+        $('#wrap').toggleClass('offset');
+        $('aside.navigation').toggleClass('opacity');
+      }, this));
+
+    // },
+    //
+    // clean: function () {
+    //   this.undelegateEvents();
+    //   this.$el.empty();
     }
   });
   

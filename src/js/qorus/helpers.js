@@ -206,7 +206,8 @@ define(function (require) {
       return icon;
     },
     
-    settings: settings
+    settings: settings,
+    isMac: navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)?true:false
   };
   
   return Helpers;

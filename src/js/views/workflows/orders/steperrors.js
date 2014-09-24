@@ -7,7 +7,9 @@ define(function (require, exports, module) {
       SystemSettings = require('models/settings'),
       BaseToolbar    = require('views/toolbars/toolbar'),
       ToolbarTpl     = require('tpl!templates/workflow/orders/errors/toolbar.html'),
-      View, TableView, SEVERITIES, Toolbar;
+      Modal          = require('views/common/modal'),
+      ErrorModalTpl  = require('tpl!templates/workflow/orders/errors/modal.html'),
+      View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent;
       
   require('bootstrap');
       
@@ -90,6 +92,24 @@ define(function (require, exports, module) {
     }
   });
   
+  ErrorModalContent = Qorus.ModelView.extend({
+    template: ErrorModalTpl
+  });
+  
+  ErrorModal = Modal.extend({
+    postInit: function () {
+      var self = this;
+      _.bindAll(this, 'selectAll');
+      $(document).on('focusin.modal', function (e) {
+        if (e.target !== self.el) return;
+        self.selectAll();
+      });
+    },
+    selectAll: function () {
+      this.$('.copy-error').focus().select();
+    }
+  });
+  
   RowView = Qorus.RowView.extend({
     postInit: function () {
       this.listenTo(this.parent, 'errors:show', this.showWarning);
@@ -115,6 +135,9 @@ define(function (require, exports, module) {
   View = Qorus.View.extend({
     __name__: 'StepErrorsView',
     template: StepErrorsTpl,
+    additionalEvents: {
+      'click .copy-last-error': 'copyLastError'
+    },
     
     postInit: function () {
       var toolbar;
@@ -122,6 +145,7 @@ define(function (require, exports, module) {
       toolbar = this.setView(new Toolbar(), '.toolbar');
   
       this.listenTo(toolbar, 'filter', this.filterErrors);
+      this.listenTo(toolbar, 'error:show', this.showErrorModal);
       this.listenTo(this.model, 'sync', this.update);
 
       this.update();
@@ -146,6 +170,8 @@ define(function (require, exports, module) {
     
       this.collection = new Qorus.SortedCollection(errors);
       table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
+      
+      if (this.collection.size() === 0) table.update();
       
       table.listenTo(toolbar, 'errors', function (state) {
         table.trigger('errors:'+state);
@@ -228,6 +254,22 @@ define(function (require, exports, module) {
         SystemSettings.set(height_settings, ui.size.height);
         SystemSettings.save();
       }, this));
+    },
+    showErrorModal: function () {
+      
+    },
+    copyLastError: function () {
+      var errors    = this.model.get('ErrorInstances'),
+          err       = _.sortBy(errors, 'created')[0],
+          stepname  = _.find(this.model.get('StepInstances'), { stepid: err.stepid }).name,
+          ErrorView = new ErrorModalContent({ 
+            model: this.model, 
+            error: err,
+            url: this.getViewUrl(),
+            stepname: stepname
+          });
+          
+      this.setView(new ErrorModal({ content_view: ErrorView }), '#modal');
     }
   });
   

@@ -20,7 +20,7 @@ define(function (require) {
       
       this.listenTo(this.info, 'change', this.renderInfo);
       this.header = new HeaderView({ info: this.info, user: this.user });
-      // this.renderInfo();
+      this.renderInfo();
     },
     
     renderInfo: function () {

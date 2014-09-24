@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="modalHeader">Copy error <small>(Press <%= obj.isMac ? '&#8984;' : 'Ctrl' %> + C)</small></h3>
+</div>
+<div class="modal-body">
+  <textarea class="copy-error" rows="12">
+    QORUS-INSTANCE: <%= obj.system_info.get('instance-key') %>
+    URL: <%= obj.settings.PROTOCOL %>//<%= obj.settings.HOST %><%= obj.url %>
+    WF: <%= obj.item.name %>
+    WFIID: <%= obj.error.workflow_instanceid %>
+    STEP: <%= obj.stepname %> (<%= obj.error.stepid %>/<%= obj.error.ind %>)
+    LOG: <%= obj.error.created %>
+    DATE: <%= obj.error.created %>
+    BUSINESS: <%= obj.error.business_error %>
+    ERROR-CODE: <%= obj.error.error %>
+    ERROR-TYPE: <%= obj.error.severity %>
+    DESCRIPTION: <%= obj.error.description %>
+    INFO: <%= obj.error.info %>
+  </textarea>
+</div>

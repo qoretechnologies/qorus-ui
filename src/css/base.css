@@ -1791,7 +1791,9 @@ input.autocomplete {
 
 aside.navigation {
   width: 80px;
-  position: absolute;
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
   opacity: 0;
   -webkit-transition: opacity 0s 0.1s;
           transition: opacity 0s 0.1s;
@@ -1882,4 +1884,11 @@ aside.navigation.opacity {
   position: absolute;
   left: calc(50% - 7px);
   top: -10px;
+}
+
+.copy-error {
+  width: 100%;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
 }
