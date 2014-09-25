@@ -25,7 +25,7 @@ define(function (require) {
       this.setElement($('#header'));
 
       this.setView(TaskBar, '#taskbar');
-
+      this.listenTo(this.model, 'change', this.update);
       this.render();
     },
     
@@ -38,6 +38,11 @@ define(function (require) {
     preRender: function () {
       this.setView(new UserView({ model: this.user }), '#user-info');
       this.setView(new NotificationsView(), '#notifications-icon');
+    },
+    
+    update: function () {
+      this.$('.instance-key').text(this.model.get('instance-key'));
+      this.$('.version').text(this.model.get('version'));
     },
     
     menuToggle: function (e) {
