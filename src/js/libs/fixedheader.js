@@ -8,7 +8,6 @@ $.fn.fixedHeader = function (options) {
 
  return this.each( function() {
   var o = $(this),
-    $win = $(config.el),
     $head = $('thead.header', o),
     $clone = $head.clone(),
     header_width = $head.width();
@@ -23,10 +22,10 @@ $.fn.fixedHeader = function (options) {
   
   o.find('thead.header > tr:first > th').each(function (i, h){
     var w = $(h).width();
-    o.find('thead.header-copy> tr > th:eq('+i+')').width(w)
+    o.find('thead.header-copy> tr > th:eq('+i+')').width(w);
   });
-  
-  $head.css({ 
+
+  $head.css({
     margin:'0 auto',
     width: o.width(),
     'background-color': config.bgColor

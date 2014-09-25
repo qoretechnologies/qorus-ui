@@ -126,11 +126,12 @@ define(function (require) {
       
       this.trigger('destroy', this);
       View.__super__.off.call(this);
+      this.undelegateEvents();
 
       if (remove !== false) {
         this.remove();
       }
-      // this.views = {};
+      this.views = {};
       return this;
     },
     
@@ -872,6 +873,7 @@ define(function (require) {
     dispatcher: undefined,
     
     initialize: function (opts) {
+      this.preInit();
       _.bindAll(this);
       this.context = {};
       this.views = {};
@@ -909,6 +911,7 @@ define(function (require) {
       _.extend(this.options, opts);
       
       this.update(true);
+      this.postInit();
     },
     
     render: function (ctx) {

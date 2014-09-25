@@ -9,7 +9,8 @@ define(function (require, exports, module) {
       ToolbarTpl     = require('tpl!templates/workflow/orders/errors/toolbar.html'),
       Modal          = require('views/common/modal'),
       ErrorModalTpl  = require('tpl!templates/workflow/orders/errors/modal.html'),
-      View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent;
+      RowInfoTpl     = require('tpl!templates/workflow/orders/errors/rowinfo.html'),
+      View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
       
   require('bootstrap');
       
@@ -26,7 +27,7 @@ define(function (require, exports, module) {
     template: ToolbarTpl,
     
     additionalEvents: {
-      'click button.warnings': 'toggleWarnings',
+      'click button.warnings': 'toggleWarnings'
     },
     
     preRender: function () {
@@ -110,26 +111,60 @@ define(function (require, exports, module) {
     }
   });
   
+  RowInfoView = Qorus.ModelView.extend({
+    tagName: 'tr',
+    additionalEvents: {
+      "click .copy-error": 'copyError'
+    },
+    template: RowInfoTpl,
+    postInit: function () {
+      this.parent = this.options.parent;
+    },
+    copyError: function () {
+      if (this.parent)
+        this.parent.parent.trigger('copy', this.parent.model);
+    },
+    clean: function () {
+      this.parent = this.options.parent = null;
+    }
+  });
+  
   RowView = Qorus.RowView.extend({
+    additionalEvents: {
+      "click": 'toggleWarning'
+    },
     postInit: function () {
       this.listenTo(this.parent, 'errors:show', this.showWarning);
       this.listenTo(this.parent, 'errors:hide', this.hideWarning);
     },
     showWarning: function () {
-      var $el = $("<tr class='error-warning'><td colspan='5'/></tr>");
-      this.$el.after($el.find('td').text(this.model.get('info')));
+      if (this.shown) return this;
+      this.info_view = new RowInfoView({ model: this.model, parent: this });
+      
+      this.$el.after(this.info_view.render().$el);
+      this.shown = true;
+      return this;
     },
     hideWarning: function () {
-      this.$el.next().remove();
+      this.info_view.off();
+      this.shown = false;
+      return this;
+    },
+    toggleWarning: function () {
+      return this.shown ? this.hideWarning() : this.showWarning();
+    },
+    clean: function () {
+      this.parent = null;
+      this.info_view = null;
     }
   });
   
   TableView = Qorus.TableView.extend({
+    fixed: true,
     template: TableTpl, 
     row_template: RowTpl,
     row_view: RowView
   });
-  
   
   // View showing step associated errors
   View = Qorus.View.extend({
@@ -140,15 +175,30 @@ define(function (require, exports, module) {
     },
     
     postInit: function () {
-      var toolbar;
+      var errors  = this.model.get('ErrorInstances'),
+          toolbar = this.getView('.toolbar'),
+          table;
 
+      _.bindAll(this, 'showErrorModal');
+      
       toolbar = this.setView(new Toolbar(), '.toolbar');
   
       this.listenTo(toolbar, 'filter', this.filterErrors);
-      this.listenTo(toolbar, 'error:show', this.showErrorModal);
       this.listenTo(this.model, 'sync', this.update);
+        
+      if (this.options.stepid)
+        errors = _.where(errors, { stepid: this.options.stepid });
+    
+      this.collection = new Qorus.SortedCollection(errors);
+      table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
+      
+      table.listenTo(toolbar, 'errors', function (state) {
+        table.trigger('errors:'+state);
+      });
+      
+      table.on('copy', this.showErrorModal);
 
-      this.update();
+      this.render();
     },
     
     onRender: function () {
@@ -158,26 +208,6 @@ define(function (require, exports, module) {
       //   $(this).popover({ content: text, title: "Info", placement: "left", container: "#diagram", html: true});
       // });
       this.wrap();
-    },
-
-    update: function () {
-      var errors  = this.model.get('ErrorInstances'),
-          toolbar = this.getView('.toolbar'),
-          table;
-  
-      if (this.options.stepid)
-        errors = _.where(errors, { stepid: this.options.stepid });
-    
-      this.collection = new Qorus.SortedCollection(errors);
-      table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
-      
-      if (this.collection.size() === 0) table.update();
-      
-      table.listenTo(toolbar, 'errors', function (state) {
-        table.trigger('errors:'+state);
-      });
-      
-      this.render();
     },
     
     filterErrors: function (statuses) {
@@ -255,13 +285,10 @@ define(function (require, exports, module) {
         SystemSettings.save();
       }, this));
     },
-    showErrorModal: function () {
-      
-    },
-    copyLastError: function () {
-      var errors    = this.model.get('ErrorInstances'),
-          err       = _.sortBy(errors, 'created')[0],
-          stepname  = _.find(this.model.get('StepInstances'), { stepid: err.stepid }).name,
+    
+    showErrorModal: function (err) {
+      var stepid = err.stepid || err.get('stepid'),
+          stepname  = _.find(this.model.get('StepInstances'), { stepid: stepid }).name,
           ErrorView = new ErrorModalContent({ 
             model: this.model, 
             error: err,
@@ -270,6 +297,13 @@ define(function (require, exports, module) {
           });
           
       this.setView(new ErrorModal({ content_view: ErrorView }), '#modal');
+    },
+    
+    copyLastError: function () {
+      var errors    = this.model.get('ErrorInstances'),
+          err       = _.sortBy(errors, 'created')[0];
+
+      this.showErrorModal(err);
     }
   });
   
