@@ -1070,14 +1070,14 @@ input:focus {
 }
 
 
-.table-fixed .sort-asc:after {
+.sort-asc:after {
   content: "\f0d7";
   font-family: FontAwesome;
   font-size: 120%;
   margin-left: .2em;
 }
 
-.table-fixed .sort-des:after {
+.sort-des:after {
   content: "\f0d8";
   font-family: FontAwesome;
   font-size: 120%;

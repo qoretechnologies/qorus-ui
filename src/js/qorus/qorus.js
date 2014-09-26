@@ -307,15 +307,22 @@ define(function (require) {
   });
 
   Qorus.SortedCollection = Qorus.Collection.extend({
+    sort_key: 'name',
+    sort_order: 'asc',
+    sort_history: [''],
     initialize: function (models, opts) {
       debug.log(this);
-      this.sort_key = 'name';
-      this.sort_order = 'asc';
-      this.sort_history = [''];
+      // this.sort_key = 'name';
+      // this.sort_order = 'asc';
+      // this.sort_history = [''];
       this.opts = opts || {};
       if (opts) {
         this.date = opts.date;
       }
+      
+      this.sort_key = this.opts.sort_key || this.sort_key;
+      this.sort_order = this.opts.sort_order || this.sort_order;
+      this.sort_history = this.opts.sort_history || this.sort_history;
     },
 
     comparator: function (c1, c2) {

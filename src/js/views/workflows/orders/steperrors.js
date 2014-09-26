@@ -117,9 +117,9 @@ define(function (require, exports, module) {
       "click .copy-error": 'copyError'
     },
     template: RowInfoTpl,
-    postInit: function () {
-      this.parent = this.options.parent;
-    },
+    // postInit: function () {
+    //   this.parent = this.options.parent;
+    // },
     copyError: function () {
       if (this.parent)
         this.parent.parent.trigger('copy', this.parent.model);
@@ -134,41 +134,48 @@ define(function (require, exports, module) {
       "click": 'toggleWarning'
     },
     postInit: function () {
+      _.bindAll(this);
       this.listenTo(this.parent, 'errors:show', this.showWarning);
       this.listenTo(this.parent, 'errors:hide', this.hideWarning);
     },
-    showWarning: function () {
-      if (this.shown) return this;
-      this.info_view = new RowInfoView({ model: this.model, parent: this });
+    showWarning: function (force) {
+      if (this.shown && force !== true) return this;
+      var view = this.setView(new RowInfoView({ model: this.model, parent: this }), '_info');
       
-      this.$el.after(this.info_view.render().$el);
+      this.$el.after(view.render().$el);
       this.shown = true;
       return this;
     },
     hideWarning: function () {
-      this.info_view.off();
+      this.getView('_info').off();
       this.shown = false;
       return this;
     },
     toggleWarning: function () {
       return this.shown ? this.hideWarning() : this.showWarning();
     },
-    clean: function () {
-      this.parent = null;
-      this.info_view = null;
+    onRender: function () {
+      if (this.shown) _.defer(this.showWarning, true);
     }
   });
   
   TableView = Qorus.TableView.extend({
+    __name__: 'StepErrorTableView',
     fixed: true,
     template: TableTpl, 
     row_template: RowTpl,
-    row_view: RowView
+    row_view: RowView,
+    postInit: function () {
+      this.update();
+    },
+    removeViews: function () {
+      console.log(this);
+    }
   });
   
   // View showing step associated errors
   View = Qorus.View.extend({
-    __name__: 'StepErrorsView',
+    __name__: 'StepErrorsListView',
     template: StepErrorsTpl,
     additionalEvents: {
       'click .copy-last-error': 'copyLastError'
@@ -189,13 +196,13 @@ define(function (require, exports, module) {
       if (this.options.stepid)
         errors = _.where(errors, { stepid: this.options.stepid });
     
-      this.collection = new Qorus.SortedCollection(errors);
+      this.collection = new Qorus.SortedCollection(errors, { sort_key: 'created', sort_order: 'des' });
       table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
-      
+
       table.listenTo(toolbar, 'errors', function (state) {
         table.trigger('errors:'+state);
       });
-      
+
       table.on('copy', this.showErrorModal);
 
       this.render();

@@ -933,6 +933,7 @@ define(function (require) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
         }        
       }
+      this.sortIcon();
     },
     
     setWidths: function () {
@@ -1099,6 +1100,7 @@ define(function (require) {
         this.renderView('tbody');
         this.sortIcon();
       }
+      this.trigger('sort');
     },
     
     sortIcon: function () {
