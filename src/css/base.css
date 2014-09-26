@@ -1893,3 +1893,42 @@ aside.navigation.opacity {
   -webkit-box-sizing: border-box; 
   box-sizing: border-box; 
 }
+
+.table .check {
+  width: 40px;
+}
+
+.table .actions {
+  width: 80px;
+}
+
+.workflow-backlink a {
+  color: #000;
+  text-decoration: none;
+}
+
+.workflow-backlink a:hover:focus {
+  text-decoration: none;
+}
+
+.workflow-backlink i.icon-chevron-left {
+  font-size: 60%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.workflow-backlink a:hover i.icon-chevron-left {
+  color: #666;
+}
+
+.subtle {
+  color: #666;
+  font-size: 60%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+a.subtle:hover, a.subtle:focus {
+  color: #666;
+  text-decoration: none;
+}

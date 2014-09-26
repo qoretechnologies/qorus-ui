@@ -21,8 +21,10 @@ define(function (require) {
     initialize: function (options) {
       this.views = {};
       this.model = options.model;
+      this.options = options;
     },
     preRender: function () {
+      _.extend(this.context, this.options);
       this.context.item = this.model.toJSON();
       this.context._item= this.model;
       this.context.pull_right = true;
@@ -95,7 +97,8 @@ define(function (require) {
           }), '#instances');
       }
       
-      this.setView(new HeaderView({ model: this.model }), '#detail');  
+      console.log('date', this.opts.date);
+      this.setView(new HeaderView({ model: this.model, date: this.opts.date }), '#detail');  
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
     },

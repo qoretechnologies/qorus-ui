@@ -34,7 +34,6 @@ define(function (require) {
     
     onRender: function () {
       var self = this;
-      var $modal = this.$el;
       
       // show modal
       this.$el.modal();

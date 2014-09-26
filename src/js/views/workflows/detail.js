@@ -138,6 +138,7 @@ define(function (require) {
     render: function (ctx) {
       this.context.item = this.model;
       ModelView.__super__.render.call(this, ctx);
+      console.log(this.model, ctx);
       return this;
     },
     
@@ -167,7 +168,7 @@ define(function (require) {
 
       if (this.model.get('has_alerts')) aview = this.addTabView(new AlertsView({ model: this.model }));
       
-      hview =  this.setView(new HeaderView({ model: this.model }), '#heading');
+      hview =  this.setView(new HeaderView({ model: this.model, date: this.date }), '#heading');
     },
             
     close: function (e) {
