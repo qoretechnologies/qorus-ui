@@ -937,14 +937,14 @@ define(function (require) {
     
     setWidths: function () {
       if (!this.fixed) return;
-      // var clgrp = $('<colgroup />');
-      //
-      // this.$('colgroup').remove();
-      //
-      // this.$('tr').first().children().each(function () {
-      //   clgrp.append($('<col />').width($(this).outerWidth()));
-      // });
-      // this.$('.table-fixed').prepend(clgrp);
+      var clgrp = $('<colgroup />');
+
+      this.$('colgroup').remove();
+
+      this.$('tr').first().children().each(function () {
+        clgrp.append($('<col />').width($(this).outerWidth()));
+      });
+      this.$('.table-fixed').prepend(clgrp);
     },
     
     resize: _.debounce(function () {

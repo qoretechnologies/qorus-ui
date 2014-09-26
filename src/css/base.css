@@ -1086,6 +1086,7 @@ input:focus {
 
 .table-fixed {
 	margin-bottom: 0;
+/*  table-layout: fixed;*/
 }
 
 table .header-copy {
