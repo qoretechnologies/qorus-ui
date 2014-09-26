@@ -2,6 +2,7 @@ define(function (require) {
   var $                = require('jquery'),
       _                = require('underscore'),
       Qorus            = require('qorus/qorus'),
+      utils            = require('utils'),
       Workflow         = require('models/workflow'),
       Template         = require('text!templates/workflow/detail.html'),
       InstanceListView = require('views/workflows/instances'),
@@ -29,6 +30,7 @@ define(function (require) {
       this.context._item= this.model;
       this.context.pull_right = true;
       this.context.show_groups = true;
+      this.context.date = utils.encodeDate(this.context.date);
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });
@@ -97,7 +99,6 @@ define(function (require) {
           }), '#instances');
       }
       
-      console.log('date', this.opts.date);
       this.setView(new HeaderView({ model: this.model, date: this.opts.date }), '#detail');  
       this.setView(new LogView({ socket_url: url, parent: this }), '#log');
       this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
