@@ -117,9 +117,9 @@ define(function (require, exports, module) {
       "click .copy-error": 'copyError'
     },
     template: RowInfoTpl,
-    // postInit: function () {
-    //   this.parent = this.options.parent;
-    // },
+    postInit: function () {
+      this.parent = this.options.parent;
+    },
     copyError: function () {
       if (this.parent)
         this.parent.parent.trigger('copy', this.parent.model);
@@ -134,7 +134,7 @@ define(function (require, exports, module) {
       "click": 'toggleWarning'
     },
     postInit: function () {
-      // _.bindAll(this);
+      _.bindAll(this);
       this.listenTo(this.parent, 'errors:show', this.showWarning);
       this.listenTo(this.parent, 'errors:hide', this.hideWarning);
     },
@@ -200,7 +200,9 @@ define(function (require, exports, module) {
         table.trigger('errors:'+state);
       });
 
-      table.on('copy', this.showErrorModal);
+      // table.on('copy', this.showErrorModal);
+      this.listenTo(table, 'copy', this.showErrorModal);
+      this.listenTo(table, 'all', function () { console.log(arguments); });
 
       this.render();
     },

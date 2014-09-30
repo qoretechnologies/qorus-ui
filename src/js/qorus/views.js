@@ -1188,7 +1188,7 @@ define(function (require) {
     },
         
     initialize: function (opts) {
-      _.bindAll(this, 'render', 'off', 'insertView', 'setView');
+      // _.bindAll(this, 'render', 'off', 'insertView', 'setView');
       this.preInit();
       this.views = {};
       this.model = opts.model;
