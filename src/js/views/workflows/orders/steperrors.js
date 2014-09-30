@@ -200,9 +200,7 @@ define(function (require, exports, module) {
         table.trigger('errors:'+state);
       });
 
-      // table.on('copy', this.showErrorModal);
       this.listenTo(table, 'copy', this.showErrorModal);
-      this.listenTo(table, 'all', function () { console.log(arguments); });
 
       this.render();
     },
