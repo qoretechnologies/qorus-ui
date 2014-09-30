@@ -50,7 +50,7 @@ define(function (require) {
       
           if ($row.data('type') === 'date') {
             self.stopListening(self.views.datepicker);
-            self.views.datepicker.off();
+            self.views.datepicker.close();
             $(document).off('click.datepickerout');
           }
         }

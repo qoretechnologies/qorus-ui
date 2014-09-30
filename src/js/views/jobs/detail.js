@@ -80,7 +80,7 @@ define(function (require) {
       return this;
     },
     
-    off: function () {
+    close: function () {
       this.removeViews();
       this.undelegateEvents();
       this.stopListening();

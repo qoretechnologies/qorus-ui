@@ -23,7 +23,7 @@ define(function (require) {
       view.show();
     },
     
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

@@ -61,7 +61,7 @@ define(function (require) {
       this.close();
     },
     
-    off: function () {
+    close: function () {
       this.undelegateEvents();
     }
     

@@ -134,7 +134,7 @@ define(function (require, exports, module) {
       "click": 'toggleWarning'
     },
     postInit: function () {
-      _.bindAll(this);
+      // _.bindAll(this);
       this.listenTo(this.parent, 'errors:show', this.showWarning);
       this.listenTo(this.parent, 'errors:hide', this.hideWarning);
     },
@@ -147,7 +147,7 @@ define(function (require, exports, module) {
       return this;
     },
     hideWarning: function () {
-      this.getView('_info').off();
+      this.getView('_info').close();
       this.shown = false;
       return this;
     },
@@ -167,9 +167,6 @@ define(function (require, exports, module) {
     row_view: RowView,
     postInit: function () {
       this.update();
-    },
-    removeViews: function () {
-      console.log(this);
     }
   });
   
@@ -235,7 +232,7 @@ define(function (require, exports, module) {
       return this;
     },
     
-    off: function () {
+    close: function () {
       if (this.clean) this.clean();
       if (this.$fixed_pane) {
         // console.log('destroying resizable');

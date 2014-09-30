@@ -29,7 +29,7 @@ define(function (require) {
     
     hide: function () {
       this.$el.modal('toggle');
-      this.off();
+      this.close();
     },
     
     onRender: function () {
@@ -96,7 +96,7 @@ define(function (require) {
       // this.$el.off();
     },
     // 
-    // off: function () {
+    // close: function () {
     //   this.clean();
     //   this.undelegateEvents();
     //   this.stopListening();

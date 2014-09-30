@@ -72,7 +72,7 @@ define(function (require) {
       DetailView.__super__.render.apply(this, arguments);
       return this;
     },
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

@@ -218,7 +218,7 @@ define(function(require) {
       this.context.model = this.model.toJSON();
     },
     
-    off: function () {
+    close: function () {
       if (this.clean) this.clean();
       this.undelegateEvents();
       this.stopListening();
@@ -589,7 +589,7 @@ define(function(require) {
       
           if ($row.data('type') === 'date') {
             self.stopListening(self.views.datepicker);
-            self.views.datepicker.off();
+            self.views.datepicker.close();
             $(document).off('click.datepickerout');
           }
         }

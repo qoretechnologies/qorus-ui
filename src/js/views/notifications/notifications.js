@@ -53,7 +53,7 @@ define(function (require) {
       this.$el.toggleClass('show');
     },
 
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

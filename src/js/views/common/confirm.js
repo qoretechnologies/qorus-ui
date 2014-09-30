@@ -44,7 +44,7 @@ define(function (require) {
         this.trigger('dismiss', $target.data('confirm'));
       }
       
-      this.off();
+      this.close();
     }
   });
   

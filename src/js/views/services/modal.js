@@ -61,7 +61,7 @@ define(function (require) {
       // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
     },
     
-    off: function () {
+    close: function () {
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();

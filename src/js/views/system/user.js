@@ -20,7 +20,7 @@ define(function (require) {
       return this;
     },
     
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

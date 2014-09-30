@@ -16,7 +16,7 @@ define(function (require) {
     template: ItemTpl,
     removeItem: function () {
       this.trigger('item:remove', this.options.item, this.cid);
-      this.off();
+      this.close();
     }
   });
   
@@ -42,7 +42,7 @@ define(function (require) {
       this.model.set(this.options.name, items);
       this.model.save();
       this.model.trigger('item:'+this.options.name+':add', view.getElValue());
-      this.off();
+      this.close();
     }
   });
   

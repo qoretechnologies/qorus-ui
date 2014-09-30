@@ -57,7 +57,7 @@ define(function (require) {
       this.model.fetch();
     },
     
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

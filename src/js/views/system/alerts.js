@@ -57,7 +57,7 @@ define(function (require) {
       return this;
     },
 
-    off: function () {
+    close: function () {
       this.undelegateEvents();
       this.stopListening();
       this.$el.empty();

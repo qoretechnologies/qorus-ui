@@ -52,11 +52,11 @@ define(function (require, exports, module) {
       this.$('.pageslide').removeClass('show');
       this.$el.data('id', null);
       
-      this.off();
+      this.close();
       this.trigger('closed');
     },
     
-    off: function () {
+    close: function () {
       this.removeViews();
       this.$('.pageslide').resizable('destroy');
       this.undelegateEvents();

@@ -72,7 +72,7 @@ define(function (require) {
     // filter by date init
     datePicker: function (e) {
       if (this.views.datepicker)
-        this.views.datepicker.off();
+        this.views.datepicker.close();
         
       var view = this.views.datepicker = new DatePicker({ date: this.options.date });
       this.listenTo(view, 'applyDate', this.applyDate);

@@ -87,7 +87,7 @@ define(function (require) {
   });
   
   TableView = Qorus.TableView.extend({
-    off: function () {
+    close: function () {
       TableView.__super__.off.call(this, false);
       return this;
     }

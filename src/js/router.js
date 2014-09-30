@@ -54,7 +54,7 @@ define(function (require) {
       debug.log('cleaning', this.currentView);
       if (this.currentView) {
         debug.log('cleaning current view');
-        this.currentView.off();
+        this.currentView.close();
         this.currentView.remove();
         this.currentView = null;
       }

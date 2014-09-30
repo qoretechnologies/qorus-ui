@@ -81,7 +81,7 @@ define(function (require) {
     
     initialize: function (options) {
       this.preInit();
-      _.bindAll(this, 'render', 'insertView', 'setView');
+      _.bindAll(this, 'render', 'insertView', 'setView', 'off');
       this.context = {};
       this.views = {};
       this.options = {};
@@ -117,7 +117,7 @@ define(function (require) {
       this.postInit();
     },
         
-    off: function (remove) {
+    close: function (remove) {
       this.removeViews();
       
       if (_.isFunction(this.clean)) {
@@ -185,11 +185,11 @@ define(function (require) {
       
       if (view instanceof Backbone.View) {
         // console.log(id, 'is backbone view removing');
-        view.off();
+        view.close();
       } else if (_.isArray(view)) {
         // console.log(id, 'is array');
         _.each(view, function (v) {
-          v.off();
+          v.close();
         });
       }
       if (view) delete this.views[id];
@@ -204,11 +204,11 @@ define(function (require) {
         if (_.isArray(view)) {
           _.each(view, function (v) {
             // debug.log('removing view from array', v.cid);
-            v.off();
+            v.close();
           });
         } else if (view instanceof Backbone.View) {
           // debug.log('removing view', view.cid);
-          view.off();
+          view.close();
         }
       });
       this.views = {};
@@ -960,7 +960,7 @@ define(function (require) {
     clean: function () {
       this.$('.table-fixed').fixedHeader('remove');
       $(window).off('resize.table.'+this.cid);
-      // this.$el.closest('.pane').off('scroll');
+      // this.$el.closest('.pane').close('scroll');
     },
     
     scroll: function () {
@@ -980,7 +980,7 @@ define(function (require) {
     },
 
     emptyRows: function () {
-      // this.getView('tbody').off();
+      // this.getView('tbody').close();
       this.update();
     },
 
@@ -1188,6 +1188,7 @@ define(function (require) {
     },
         
     initialize: function (opts) {
+      _.bindAll(this, 'render', 'off', 'insertView', 'setView');
       this.preInit();
       this.views = {};
       this.model = opts.model;
@@ -1281,7 +1282,7 @@ define(function (require) {
     },
     
     clean: function () {
-      var p_view, self= this;
+      var p_view, self = this;
       p_view = this.parent.getView('tbody');
       // this.model.stopListening();
       this.$('.btn-group').off();
@@ -1534,7 +1535,7 @@ define(function (require) {
       var idx = _.indexOf(tabs, tab);
       
       if (idx > -1) {
-        tab.off();
+        tab.close();
         tabs.splice(idx, 1);
       }
     },
@@ -1566,8 +1567,8 @@ define(function (require) {
       this.active_tab = tab;
     },
     
-    off: function () {
-      TabView.__super__.off.apply(this, arguments);
+    close: function () {
+      TabView.__super__.close.apply(this, arguments);
       // console.log(this.views, this.getTabs());
     },
     

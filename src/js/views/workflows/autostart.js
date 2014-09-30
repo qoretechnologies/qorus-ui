@@ -51,7 +51,7 @@ define(function (require) {
       this.options = null;
     },
 
-    off: function () {
+    close: function () {
       this.clean();
       this.undelegateEvents();
       this.stopListening();

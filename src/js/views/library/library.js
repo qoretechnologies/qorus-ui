@@ -34,7 +34,7 @@ define(function (require) {
       this.$('code').append(div);
     },
     
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();

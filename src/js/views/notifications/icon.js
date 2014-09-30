@@ -49,7 +49,7 @@ define(function (require) {
       // if (level )
     },
     
-    off: function () {
+    close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();
