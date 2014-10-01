@@ -27,7 +27,8 @@ define(function (require, exports, module) {
     template: ToolbarTpl,
     
     additionalEvents: {
-      'click button.warnings': 'toggleWarnings'
+      'click button.warnings': 'toggleWarnings',
+      'click .disabled': 'disable'
     },
     
     preRender: function () {
@@ -38,12 +39,19 @@ define(function (require, exports, module) {
     onRender: function () {
       Toolbar.__super__.onRender.apply(this, arguments);
       this.addMultiSelect();
+      this.enableButtons();
     },
+    
+    enableButtons: function () {
+      if (this.options.errors) 
+        this.$('.disabled').removeClass('disabled');
+    },
+    
     addMultiSelect: function () {
       var self = this;
       // apply bootstrap multiselect to #statuses element      
       $('#severities').multiselect({
-        buttonClass: "btn btn-small",
+        buttonClass: "btn btn-small disabled",
         onChange: function(el, checked){
           var sl = [], val = $(el).val();
           if (self.options.statuses) {
@@ -79,6 +87,8 @@ define(function (require, exports, module) {
     toggleWarnings: function (e) {
       var $el = $(e.currentTarget), text;
       
+      if ($el.hasClass('disabled')) return this;
+      
       if ($el.hasClass('show-warnings')) {
         this.trigger('errors', 'show');
         this.$('button.warnings i').removeClass('icon-check-empty').addClass('icon-check');
@@ -90,6 +100,11 @@ define(function (require, exports, module) {
       }
       this.$('button.warnings').toggleClass('show-warnings');
       this.$('button.warnings span').text(text);
+    },
+    
+    disable: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
   });
   
@@ -182,22 +197,20 @@ define(function (require, exports, module) {
       var errors  = this.model.get('ErrorInstances'),
           toolbar = this.getView('.toolbar'),
           table;
-
-      _.bindAll(this, 'showErrorModal');
-      
-      toolbar = this.setView(new Toolbar(), '.toolbar');
-  
-      this.listenTo(toolbar, 'filter', this.filterErrors);
-      this.listenTo(this.model, 'sync', this.update);
         
       if (this.options.stepid)
         errors = _.where(errors, { stepid: this.options.stepid });
     
       this.collection = new Qorus.SortedCollection(errors, { sort_key: 'created', sort_order: 'des' });
       table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
+      
+      toolbar = this.setView(new Toolbar({ errors: this.collection.size() > 0 }), '.toolbar');
+  
+      this.listenTo(toolbar, 'filter', this.filterErrors);
+      this.listenTo(this.model, 'sync', this.update);
 
       table.listenTo(toolbar, 'errors', function (state) {
-        table.trigger('errors:'+state);
+        table.trigger('errors:' + state);
       });
 
       this.listenTo(table, 'copy', this.showErrorModal);
@@ -242,7 +255,13 @@ define(function (require, exports, module) {
       }
       this.undelegateEvents();
       this.stopListening();
-      this.$el.empty();
+      
+      // remove fixed pane wrappers and empty el
+      this.$el
+        .unwrap()
+        .unwrap()
+        .unwrap()
+        .empty();
     },
 
     /* wraps view element to make it fixed position and resizable */

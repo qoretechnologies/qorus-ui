@@ -30,7 +30,7 @@ define(function(require) {
       User            = require('models/system').User,
       ConfirmView     = require('views/common/confirm'),
       StatusTpl       = require('tpl!templates/workflow/orders/status.html'),
-      StepErrorsView = require('views/workflows/orders/steperrors'),
+      StepErrorsView  = require('views/workflows/orders/steperrors'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus;
