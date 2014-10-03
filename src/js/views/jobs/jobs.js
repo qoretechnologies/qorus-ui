@@ -143,7 +143,7 @@ define(function(require) {
         });
         url = this.getViewUrl() + '/' + row.model.id;
       } else {
-        if (view) view.close();
+        if (view) view.closeView();
         if (this.selected_model) this.stopListening(this.selected_model);
         
         this.selected_model = null;

@@ -1627,7 +1627,7 @@ tbody+thead>tr:first-child>td {
 
 .tree th.node span:nth-last-child(1):after {
 	display: inline-block;
-	height: 50%;;
+	height: 50%;
 }
 
 .tree .node .value:before {

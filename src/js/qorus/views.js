@@ -1157,7 +1157,8 @@ define(function (require) {
   RowView = View.extend({
     __name__: 'RowView',
     tagName: 'tr',
-    className: 'table-row clickable',
+    className: 'table-row',
+    clickable: true,
     context: {},
     render_count: 0,
     template: TableRowTpl,
@@ -1177,6 +1178,10 @@ define(function (require) {
           data[key] = self.model.get(atr);
         });
       }
+      
+      if (this.clickable) 
+        data.class = this.className + ' clickable';
+        
       return data;
     },
     

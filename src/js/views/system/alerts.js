@@ -208,7 +208,7 @@ define(function (require) {
         
         url = [this.getViewUrl(), this.active_tab, row.model.id].join('/');  
       } else {
-        if (view) view.close();
+        if (view) view.closeView();
         if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }

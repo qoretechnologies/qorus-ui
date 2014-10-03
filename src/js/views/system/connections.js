@@ -218,7 +218,7 @@ define(function (require) {
         url = [this.getViewUrl(), source_view.url(), row.model.get('name')].join('/').replace(/\/+/g, "/");
 
       } else {
-        if (view) view.close();
+        if (view) view.closeView();
         if (this.selected_model) this.stopListening(this.selected_model);
         
         this.selected_model = null;
@@ -230,7 +230,7 @@ define(function (require) {
     tabToggle: function () {
       View.__super__.tabToggle.apply(this, arguments);
       var view = this.getView('.detail');
-      if (view) view.close();
+      if (view) view.closeView();
     }
   });
   

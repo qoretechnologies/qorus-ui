@@ -271,7 +271,7 @@ define(function (require) {
       $detail.width(width);
       
       if (id === model.id) {
-        if (view) view.close();
+        if (view) view.closeView();
         url = this.url();
         this.detail_id = null;
       } else {

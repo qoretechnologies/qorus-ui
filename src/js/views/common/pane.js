@@ -9,8 +9,8 @@ define(function (require, exports, module) {
     template: Template,
     views: {},
     additionalEvents: {
-      'close': 'close',
-      'click .close-view': 'close'
+      'close': 'closeView',
+      'click .close-view': 'closeView'
     },
     
     initialize: function (opts) {
@@ -44,7 +44,7 @@ define(function (require, exports, module) {
       this.wrap();
     },
     
-    close: function (e) {
+    closeView: function (e) {
       if (e) {
         e.preventDefault();  
       }

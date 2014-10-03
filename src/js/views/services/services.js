@@ -150,7 +150,7 @@ define(function(require){
           content_view, url;
       
       if (id === row.model.id) {
-        if (view) view.close();
+        if (view) view.closeView();
         url = this.getViewUrl();
       } else {
         // add info class to selected row
