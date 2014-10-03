@@ -65,20 +65,26 @@ define(function (require) {
       this.setView(view, '.taskbar-icon-detail');
     },
     showDetailView: function (e) {
+      var view = this.getView('.taskbar-icon-detail'),
+          show = true;
+
+      if (view.$el.is(':visible')) show = false; 
+      
       // hide other detail views
       $('.taskbar-icon-detail:visible').addClass('hide');
       $('html').off('click.taskbariconoutside');
       
-      var view = this.getView('.taskbar-icon-detail');
-      view.$el.toggleClass('hide');
+      if (show) {
+        view.$el.toggleClass('hide');
       
-      e.preventDefault();
+        e.preventDefault();
       
-      $('html').on('click.taskbariconoutside', $.proxy(function (e) {
-        if (e.isDefaultPrevented()) return;
-        $('html').off('click.taskbariconoutside');
-        this.$el.addClass('hide');
-      }, view));
+        $('html').on('click.taskbariconoutside', $.proxy(function (e) {
+          if (e.isDefaultPrevented()) return;
+          $('html').off('click.taskbariconoutside');
+          this.$el.addClass('hide');
+        }, view));
+      }
     }
   });
   
