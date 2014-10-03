@@ -5,7 +5,16 @@ define(function (require) {
       Qorus    = require('qorus/qorus'),
       Settings = require('models/settings'),
       Item     = require('views/system/menu/item'),
-      Menu, DefaultMenuItems;
+      Menu, DefaultMenuItems, CollapseItem, CollapseOffItem;
+      
+      
+  CollapseItem = Item.extend({
+    className: 'extra menu-collapse'
+  });
+  
+  CollapseOffItem = Item.extend({
+    className: 'extra menu-collapse-off'
+  });
 
   DefaultMenuItems = new Qorus.Collection([
     { 
@@ -59,6 +68,16 @@ define(function (require) {
   Menu = Qorus.View.extend({
     tagName: 'ul',
     className: 'nav nav-list',
+    
+    offset: function () {
+      return Settings.get('menu-offset') || false;
+    },
+    
+    additionalEvents: {
+      'click .menu-collapse': 'setOffsetOn',
+      'click .menu-collapse-off': 'setOffsetOff'
+    },
+    
     postInit: function () {
       _.each(DefaultMenuItems.models, function (item) {
         this.addMenuItem(item);
@@ -66,17 +85,67 @@ define(function (require) {
       this.setElement($('#nav-main .nav'));
       this.render();
     },
-    addMenuItem: function (item) {
+    
+    onRender: function () {
+      console.log('setting offset');
+      this.addOffsetIcon();
+    },
+    
+    addMenuItem: function (item, append) {
       var view;
       
       if (item instanceof Backbone.View) {
-        console.log('view');
         view = this.insertView(item, 'self');
       } else {
-        view = this.insertView(new Item({ model: item }), 'self');
+        if (item.has('view')) {
+          itemView = item.get('view');
+          item.set('view', null);
+        } else {
+          itemView = Item;
+        }
+        console.log(append, arguments);
+        view = this.insertView(new itemView({ model: item }), 'self', append);
       }
       
       return view;
+    },
+    
+    setOffset: function () {
+      if (_.result(this, 'offset') === false) {
+        $('body').addClass('navigation-pinned');
+        Settings.set('menu-offset', true);
+      } else {
+        $('body').removeClass('navigation-pinned');
+        Settings.set('menu-offset', false);
+      }
+      this.addOffsetIcon();
+    },
+    
+    addOffsetIcon: function () {
+      var view = _.find(this.views['self'], function (item) { return item instanceof CollapseItem || item instanceof CollapseOffItem });
+      
+      if (view) {
+        view.close();
+        this.views['self'].pop();
+      }
+      
+      if (_.result(this, 'offset')) {
+        this.addMenuItem(new CollapseOffItem({
+          model: new Backbone.Model({
+            name: 'Keep memu',
+            url: "#",
+            icon: 'chevron-sign-right'
+          })
+        }), true);
+      } else {
+        this.addMenuItem(new CollapseItem({
+          model: new Backbone.Model({
+            name: 'Don\'t keep menu',
+            url: "#",
+            icon: 'chevron-sign-left'
+          })
+        }), true);
+      }
     }
   });
   

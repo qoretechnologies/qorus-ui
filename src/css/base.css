@@ -240,6 +240,20 @@ table .header-fixed {
   padding: 10px 0;
 }
 
+#nav-main li.extra {
+  padding: 0;
+  border: none;
+}
+
+#nav-main .extra a {
+  padding: 0;
+  width: 100%;
+  margin: 0;
+  color: #aaa;
+  line-height: 1.2em;
+  font-weight: normal;
+}
+
 #nav-main a:hover {
   color: #333;
   text-shadow: none;
@@ -1806,6 +1820,23 @@ aside.navigation.opacity {
           transition: opacity 0s 0s;
 }
 
+.navigation-pinned aside.navigation {
+  top: 40px;
+  opacity: 1;
+}
+
+.navigation-pinned #wrap {
+  padding-left: 80px;
+}
+
+.navigation-pinned .menu-icon {
+  display: none;
+}
+
+.navigation-pinned .navbar-text {
+  margin-left: 0;
+}
+
 #wrap {
   -webkit-transition: -webkit-transform .1s ease-in-out;
           transition: transform .1s ease-in-out;
@@ -1930,4 +1961,14 @@ aside.navigation.opacity {
 a.subtle:hover, a.subtle:focus {
   color: #666;
   text-decoration: none;
+}
+
+#heading h3 {
+  margin-top: 24.5px;
+  margin-right: 60px;
+  line-height: 1em;
+}
+
+.show-menu {
+  
 }
