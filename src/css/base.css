@@ -1608,7 +1608,7 @@ tbody+thead>tr:first-child>td {
 	width: 10px;
 	margin-left: -2px;
 	margin-right: 10px;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 .tree .leaf span:last-child:after {
@@ -1622,7 +1622,6 @@ tbody+thead>tr:first-child>td {
 
 .tree th.leaf span:last-child:after {
 	height: 1px;
-	
 }
 
 .tree th.node span:nth-last-child(1):after {

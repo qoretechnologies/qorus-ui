@@ -9,7 +9,7 @@
     WF: <%= obj.item.name %>
     WFIID: <%= obj.error.workflow_instanceid %>
     STEP: <%= obj.stepname %> (<%= obj.error.stepid %>/<%= obj.error.ind %>)
-    LOG: <%= obj.error.created %>
+    LOG: <%= obj.item.log.get('log') %>
     DATE: <%= obj.error.created %>
     BUSINESS: <%= obj.error.business_error %>
     ERROR-CODE: <%= obj.error.error %>

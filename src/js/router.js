@@ -25,6 +25,7 @@ define(function (require) {
       Alerts            = require('collections/alerts'),
       Constants         = require('collections/constants'),
       Functions         = require('collections/functions'),
+      Loggers           = require('collections/loggers'),
       Qorus             = require('qorus/views'),
       Library           = require('collections/library'),
       LibraryView       = require('views/library/library'),
@@ -42,6 +43,7 @@ define(function (require) {
   // fetch alerts
   Alerts.fetch();
   Constants.fetch();
+  Loggers.fetch();
 
   AppRouter = Backbone.Router.extend({
     currentView: null,

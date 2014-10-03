@@ -1,5 +1,6 @@
 define(function (require, exports, module) {
   var _              = require('underscore'),
+      Backbone       = require('backbone'),
       Qorus          = require('qorus/qorus'),
       StepErrorsTpl  = require('tpl!templates/workflow/orders/steperrors.html'),
       TableTpl       = require('text!templates/workflow/orders/errors/table.html'),
@@ -10,6 +11,7 @@ define(function (require, exports, module) {
       Modal          = require('views/common/modal'),
       ErrorModalTpl  = require('tpl!templates/workflow/orders/errors/modal.html'),
       RowInfoTpl     = require('tpl!templates/workflow/orders/errors/rowinfo.html'),
+      Loggers        = require('collections/loggers'),
       View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
       
   require('bootstrap');
@@ -196,7 +198,12 @@ define(function (require, exports, module) {
     postInit: function () {
       var errors  = this.model.get('ErrorInstances'),
           toolbar = this.getView('.toolbar'),
+          name    = this.model.get('name'),
+          log     = Loggers.find(function (item) { return item.get('type') === 'workflow' && item.get('name') === name; }),
           table;
+      
+      // add logger info to model
+      this.model.set({ log: log }, { silent: true });
         
       if (this.options.stepid)
         errors = _.where(errors, { stepid: this.options.stepid });
@@ -262,6 +269,9 @@ define(function (require, exports, module) {
         .unwrap()
         .unwrap()
         .empty();
+      this.$el.parent()
+        .find('.fixed-pane-push.push')
+        .remove();
     },
 
     /* wraps view element to make it fixed position and resizable */
@@ -314,7 +324,7 @@ define(function (require, exports, module) {
           stepname  = _.find(this.model.get('StepInstances'), { stepid: stepid }).name,
           ErrorView = new ErrorModalContent({ 
             model: this.model, 
-            error: err,
+            error: (err instanceof Backbone.Model) ? err.toJSON() : err,
             url: this.getViewUrl(),
             stepname: stepname
           });
