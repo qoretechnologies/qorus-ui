@@ -31,9 +31,10 @@ define(function(require) {
       ConfirmView     = require('views/common/confirm'),
       StatusTpl       = require('tpl!templates/workflow/orders/status.html'),
       StepErrorsView  = require('views/workflows/orders/steperrors'),
+      ToolbarTpl      = require('tpl!templates/workflow/orders/toolbar.html'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
-      WorkflowStatus;
+      WorkflowStatus, Toolbar;
   
   require('jquery.ui');
   require('bootstrap');
@@ -46,6 +47,14 @@ define(function(require) {
       'retry': 'btn-success'
     }
   };
+  
+  Toolbar = Qorus.ModelView.extend({
+    template: ToolbarTpl,
+    postInit: function () {
+      this.listenTo(this.model, 'change', this.render);
+      this.context.action_css = context.action_css;
+    }
+  });
   
   WorkflowStatus = Qorus.ModelView.extend({
     template: StatusTpl,
@@ -451,6 +460,7 @@ define(function(require) {
       this.setView(new WorkflowStatus({ model: workflow }), '.workflow-status');
       workflow.fetch();
       
+      this.setView(new Toolbar({ model: this.model }), '.toolbar');
       
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});

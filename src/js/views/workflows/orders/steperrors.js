@@ -14,6 +14,7 @@ define(function (require, exports, module) {
       Loggers        = require('collections/loggers'),
       View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
       
+  require('jquery.ui');
   require('bootstrap');
       
   SEVERITIES = [
@@ -254,10 +255,9 @@ define(function (require, exports, module) {
     
     close: function () {
       if (this.clean) this.clean();
-      if (this.$fixed_pane) {
-        // console.log('destroying resizable');
-        this.$fixed_pane.off();
+      if (this.$fixed_pane.hasClass('ui-resizable')) {
         this.$fixed_pane.resizable('destroy');
+        this.$fixed_pane.off();
         this.$fixed_pane = null;
       }
       this.undelegateEvents();
@@ -292,23 +292,22 @@ define(function (require, exports, module) {
       // wrap the view element
       this.$el.wrap($divw).wrap($div).wrap($div_inner);
   
-      $fixed_pane = this.$el.parents('.fixed-pane');
+      this.$fixed_pane = this.$el.parents('.fixed-pane');
   
       // get stored height
       height = SystemSettings.get(height_settings);
-      if (height) $fixed_pane.height(height);
+      if (height) this.$fixed_pane.height(height);
   
       // change push height according to pane height
-      $push.height($fixed_pane.outerHeight(true));
+      $push.height(this.$fixed_pane.outerHeight(true));
 
       // resizable
-      $fixed_pane.resizable({
+      this.$fixed_pane.resizable({
         handles: 'n',
         maxHeight: $(window).height() - 200,
         minHeight: 150
       });
   
-      this.$fixed_pane = $fixed_pane;
       this.$fixed_pane.on('resize', function (e, ui) {
         var $el = ui.element;
         $el.parent().next().height(ui.size.height);

@@ -103,7 +103,7 @@ define(function (require) {
         } else {
           itemView = Item;
         }
-        console.log(append, arguments);
+
         view = this.insertView(new itemView({ model: item }), 'self', append);
       }
       
