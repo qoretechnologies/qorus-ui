@@ -47,9 +47,8 @@ define(function (require) {
   
     // TODO: add api events for alerts updates
     api_events_list: [
-      "remote:%(id)s:alert_ongoing_raised",
-      "remote:%(id)s:alert_ongoing_cleared",
-      "remote:%(id)s:alert_transient_raised"
+      "connection:%(id)s:connection_up",
+      "connection:%(id)s:connection_down",
     ],
     
     initialize: function () {
@@ -89,9 +88,9 @@ define(function (require) {
           obj = evt_types[0],
           id = evt_types[1],
           action = evt_types[2] || id,
-          alert = /^(alert_).*/;
+          alert = /^(connection_).*/;
       
-      if (obj === 'remote') {
+      if (obj === 'connection') {
         if (alert.test(action)) {
           this.fetch();
         }

@@ -31,6 +31,9 @@ define(function (require) {
             var id = [e.info.type, e.info.id].join(":");
             events.push(id.toLowerCase());
             events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
+          } else if (ev[0] == 'connection') {
+            var id = ['connection', e.info.name].join(":");
+            events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
           }
         }
         
