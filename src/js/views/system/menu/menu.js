@@ -87,7 +87,6 @@ define(function (require) {
     },
     
     onRender: function () {
-      console.log('setting offset');
       this.addOffsetIcon();
     },
     

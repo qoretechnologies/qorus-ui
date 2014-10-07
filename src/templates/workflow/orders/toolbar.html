@@ -1,4 +1,4 @@
-<div class="btn-group pull-right align-middle">
+<div class="btn-group align-middle">
     <% _.each(item.actions, function(action) { %>
       <button class="btn btn-mini <%= (action_css[action]) ? action_css[action] : '' %>" data-id="<%= item.workflow_instanceid %>" data-action="<%= action %>"><%= action.toUpperCase() %></button>
     <% }); %>
