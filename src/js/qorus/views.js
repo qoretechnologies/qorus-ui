@@ -292,7 +292,8 @@ define(function (require) {
       view.view_idx = views.push(view) - 1;
       
       if (append === true) {
-        this.$(el).append(view.render().$el);
+        var $el = (el === 'self') ? this.$el : this.$(el);
+        $el.append(view.render().$el);
       }
       
       return view;

@@ -107,7 +107,6 @@ define(function (require, exports, module) {
     
     disable: function (e) {
       e.preventDefault();
-      e.stopPropagation();
     }
   });
   
@@ -331,7 +330,9 @@ define(function (require, exports, module) {
       this.setView(new ErrorModal({ content_view: ErrorView }), '#modal');
     },
     
-    copyLastError: function () {
+    copyLastError: function (e) {
+      if (e.isDefaultPrevented()) return this;
+      
       var errors    = this.model.get('ErrorInstances'),
           err       = _.sortBy(errors, 'created')[0];
 
