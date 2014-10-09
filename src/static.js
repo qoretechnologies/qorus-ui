@@ -1,4 +1,5 @@
 var static = require('node-static');
+var proxyServer = require('http-route-proxy');
 
 //
 // Create a node-static server to serve the current directory
@@ -17,3 +18,19 @@ require('http').createServer(function (request, response) {
 }).listen(8080);
 
 console.log("> node-static is listening on http://127.0.0.1:8080");
+
+/**
+ *   proxy configs
+ */
+proxyServer.proxy([
+    // common config
+    {
+        from: 'localhost:8002',
+        to: 'localhost:8001',
+        req: {origin: 'localhost:8001', referer: 'localhost:8001'},
+        headers: {
+            res: {'access-control-allow-origin': '*', 'access-control-allow-credentials': true}
+        }
+
+    }
+]);

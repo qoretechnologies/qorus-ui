@@ -1,5 +1,6 @@
 define(function () {
-  var host = "localhost:8001";
+  var host = "localhost:8002";
+  var wshost = "localhost:8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   
@@ -13,11 +14,10 @@ define(function () {
       PROTOCOL: protocol,
       REST_API_PREFIX:  protocol + '//'+ host + '/api',
       WS_PREFIX: '',
-      EVENTS_WS_URL: ws_protocol + host + '/apievents',
+      EVENTS_WS_URL: ws_protocol + wshost + '/apievents',
       HOST: host,
-      PROTOCOL: protocol,
-      DEBUG: false
-  };
+      DEBUG: true
+    };
   
   if (settings.DEBUG && window.console && console.log) {
     window.debug = window.console;
