@@ -280,7 +280,7 @@ define(function (require, exports, module) {
           $div_inner      = $('<div class="fixed-pane-inner" />'),
           $push           = $('<div class="fixed-pane-push push"/>'),
           height_settings = [module.id.replace(/\//g, '.'), this.__name__, 'height'].join('.'),
-          height, $fixed_pane;
+          height;
   
       $div
         .addClass('fixed-pane-bottom');

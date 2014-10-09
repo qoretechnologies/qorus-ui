@@ -1,4 +1,3 @@
-
 define(function (require) {
   var Backbone = require('backbone'),
       $        = require('jquery'),
@@ -74,7 +73,6 @@ define(function (require) {
       icon: 'beer'
     }
   ]);
-  
   
   MainMenu = Qorus.View.extend({
     tagName: 'ul',
@@ -171,7 +169,7 @@ define(function (require) {
     },
     
     setOffset: function (e) {
-      if (e) e.preventDefault();
+      if (e) { e.preventDefault(); }
       
       if (_.result(this, 'offset') === false) {
         Settings.save({ 'menu-offset': true });
