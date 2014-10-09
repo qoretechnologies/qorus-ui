@@ -7,7 +7,7 @@ define(function (require) {
     idAttribute: "username",
     urlRoot: settings.REST_API_PREFIX + '/users/',
     hasPermissions: function (perm) {
-      if (typeof perm === 'string')
+      if (typeof perm === 'string' && this.get('permissions'))
         return this.get('permissions').indexOf(perm) > -1;
       
       return false;

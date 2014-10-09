@@ -1,18 +1,19 @@
 define(function (require) {
-  var $          = require('jquery'),
-      _          = require('underscore'),
-      settings   = require('settings'),
-      utils      = require('utils'),
-      Qorus      = require('qorus/qorus'),
-      Collection = require('collections/options'),
-      Template   = require('text!templates/system/options/list.html'),
-      RowTpl     = require('text!templates/system/options/row.html'),
-      TableTpl   = require('text!templates/system/options/table.html'),
+  var $               = require('jquery'),
+      _               = require('underscore'),
+      System          = require('models/system'),
+      settings        = require('settings'),
+      utils           = require('utils'),
+      Qorus           = require('qorus/qorus'),
+      Collection      = require('collections/options'),
+      Template        = require('text!templates/system/options/list.html'),
+      RowTpl          = require('text!templates/system/options/row.html'),
+      TableTpl        = require('text!templates/system/options/table.html'),
       datepicker      = require('views/common/datetimepicker'),
       ConfirmView     = require('views/common/confirm'),
       ListView, RowView;
 
-      require('jquery.ui');
+  require('jquery.ui');
   
   
   RowView = Qorus.RowView.extend({
