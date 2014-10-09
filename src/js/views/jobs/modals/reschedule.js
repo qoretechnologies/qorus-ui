@@ -40,7 +40,7 @@ define(function (require) {
       $(this.$el).modal();
     },
     
-    close: function () {
+    closeView: function () {
       this.$el.modal('hide');
     },
     
@@ -58,7 +58,7 @@ define(function (require) {
       
       $.put(url, params);
                 
-      this.close();
+      this.closeView();
     },
     
     close: function () {

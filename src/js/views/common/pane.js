@@ -52,8 +52,8 @@ define(function (require, exports, module) {
       this.$('.pageslide').removeClass('show');
       this.$el.data('id', null);
       
-      this.close();
       this.trigger('closed');
+      this.close();
     },
     
     close: function () {

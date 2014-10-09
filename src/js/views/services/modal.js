@@ -32,7 +32,7 @@ define(function (require) {
       $(this.$el).modal();
     },
     
-    close: function () {
+    closeView: function () {
       this.$el.modal('hide');
     },
     

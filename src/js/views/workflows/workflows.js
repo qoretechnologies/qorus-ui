@@ -138,7 +138,7 @@ define(function (require) {
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated,
           fixed: true
-      }), '.workflows');
+        }), '.workflows');
 
       // add listener to rowclick
       this.listenTo(tview, 'row:clicked', this.showDetail);

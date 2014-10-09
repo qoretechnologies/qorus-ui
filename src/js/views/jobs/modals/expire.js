@@ -44,7 +44,7 @@ define(function (require) {
       $(this.$el).modal();
     },
     
-    close: function () {
+    closeView: function () {
       this.views.datepicker.hide();
       this.$el.modal('hide');
     },
@@ -75,7 +75,7 @@ define(function (require) {
            // $.globalMessenger().post("Job " + id + " set expiry");
         });
           
-      this.close();
+      this.closeView();
     },
     
     close: function () {

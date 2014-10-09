@@ -1575,7 +1575,7 @@ define(function (require) {
     
     close: function () {
       TabView.__super__.close.apply(this, arguments);
-      // console.log(this.views, this.getTabs());
+//      console.log(this.views, this.getTabs());
     },
     
     initTabs: function () {

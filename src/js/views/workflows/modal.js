@@ -40,7 +40,7 @@ define(function (require) {
       $(this.$el).modal();
     },
     
-    close: function () {
+    closeView: function () {
       this.$el.modal('hide');
     },
     
@@ -57,7 +57,7 @@ define(function (require) {
       });
       
       this.model.doAction('start', params);
-      this.close();
+      this.closeView();
       return this;
     }
     

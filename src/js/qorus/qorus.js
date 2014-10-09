@@ -506,6 +506,7 @@ define(function (require) {
     },
     
     wsClose: function () {
+      this.token = null;
       if (this.socket) {
         debug.log("Closing WS", this.socket_url, this.socket);
         this.socket.onclose = function (e) { debug.log('Closed', e); };
@@ -536,6 +537,7 @@ define(function (require) {
     },
 
     wsError: function (e) {
+      this.token = null;
       debug.log(e);
     },
 

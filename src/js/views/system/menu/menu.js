@@ -5,6 +5,7 @@ define(function (require) {
       Qorus    = require('qorus/qorus'),
       Settings = require('models/settings'),
       Item     = require('views/system/menu/item'),
+      
       Menu, MainMenu, ControlsMenu, DefaultMenuItems, CollapseItem, CollapseOffItem;
       
       

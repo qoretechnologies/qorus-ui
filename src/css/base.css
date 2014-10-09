@@ -78,11 +78,12 @@ table thead th {
 }
 
 #wrap {
-	min-height: 100%;
-	height: auto !important;
-	margin: 0 auto -4em;
+  min-height: 100%;
+  height: auto !important;
+  margin: 0 auto -4em;
   height: 100%;
   background-color: #fff;
+/*  position: relative;*/
 }
 
 #content {
@@ -1462,6 +1463,11 @@ tbody+thead>tr:first-child>td {
   bottom: 0;
   left: 0;
   width: 100%;
+}
+
+.navigation-pinned .fixed-pane-wrapper {
+  left: 80px;
+  width: calc(100% - 80px);
 }
 
 .fixed-pane {

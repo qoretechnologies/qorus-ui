@@ -108,7 +108,7 @@ define(function (require) {
       this.trigger('modal:open', this.model, $(evt.currentTarget).data('methodname'));
     },
     
-    close: function () {
+    closeView: function () {
       this.trigger('close');
     }
   });

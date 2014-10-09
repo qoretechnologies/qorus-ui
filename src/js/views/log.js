@@ -106,6 +106,7 @@ define(function (require) {
     },
     
     clean: function () {
+//      console.log('cleaning log');
       this.collection.wsClose();
     },
     

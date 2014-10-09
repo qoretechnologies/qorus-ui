@@ -41,8 +41,7 @@ define(function (require) {
     },
     
     setSessionID: function (id) {
-      this.set('session-id', id);
-      this.save();
+      this.save({ 'session-id': id });
     }
     
   });

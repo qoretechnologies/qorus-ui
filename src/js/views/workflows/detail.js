@@ -111,7 +111,7 @@ define(function (require) {
     },
     
     additionalEvents: {
-      "click a.close-view": "close",
+      "click a.close-view": "closeView",
       "click td[data-editable]": "editOption",
       "click [data-action]": 'runAction'
     },
@@ -170,7 +170,7 @@ define(function (require) {
       hview =  this.setView(new HeaderView({ model: this.model, date: this.date }), '#heading');
     },
             
-    close: function (e) {
+    closeView: function (e) {
       if (e) {
         e.preventDefault();  
       }
