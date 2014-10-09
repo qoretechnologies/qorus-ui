@@ -40,7 +40,7 @@ define(function (require) {
     
     canBreakLock: function () {
       var perms = this.get('permissions');
-      var allowed = ['WORKFLOW- CONTROL', 'WORKFLOW-ORDER-CONTROL', 'BREAK-WORKFLOW-ORDER-LOCK'];
+      var allowed = ['WORKFLOW-CONTROL', 'WORKFLOW-ORDER-CONTROL', 'BREAK-WORKFLOW-ORDER-LOCK'];
       return _.intersection(perms, allowed).length > 0;
     }
   });
