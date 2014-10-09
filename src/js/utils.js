@@ -1,7 +1,8 @@
 define(function (require) {
-  var _        = require('underscore'),
-      moment   = require('moment'),
-      settings = require('settings');
+  var _         = require('underscore'),
+      moment    = require('moment'),
+      settings  = require('settings'),
+      $         = require('jquery');
   
   var utils = {
     settings: settings,
@@ -219,6 +220,28 @@ define(function (require) {
       if (type === 'regex') test = regex;
       
       return obj.match(test);
+    },
+    
+    tableToCSV: function (el) {
+      var $el = $(el),
+          csv = '';
+      
+      // create header
+      $el.find('thead').first().find('th').each(function () {
+        csv += $(this).text()  + ';';
+      });
+      
+      csv += "\n";
+      
+      // process rows
+      $el.find('tbody tr:visible').each(function () {
+        $(this).find('td').each(function () {
+          csv += $(this).text().replace(/\n/g, '\\n') + ';';
+        });
+        csv += "\n";
+      });
+      
+      return csv;
     }
   };
     
