@@ -8,9 +8,15 @@ define(function (require) {
       BaseToolbar = require('views/toolbars/toolbar'),
       settings    = require('settings'),
       utils       = require('utils'),
+      CopyView    = require('views/common/table.copy'),
       Toolbar, status;
   
   status =  ['Complete', 'Error'];
+  
+  var csv_options = {
+    el: "#result-list table",
+    ignore: [0]
+  };
   
   Toolbar = BaseToolbar.extend({
     template: Template,
@@ -58,6 +64,10 @@ define(function (require) {
       }
       
       this.updateUrl();
+    },
+    
+    postInit: function () {
+      this.setView(new CopyView({ csv_options: csv_options }), '#table-copy');
     },
 
     // check the statuses for given status

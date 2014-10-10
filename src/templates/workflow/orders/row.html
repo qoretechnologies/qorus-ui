@@ -8,7 +8,7 @@
   </div>
 </td>
 <td><span class="label label-<%= getStatusCSS(item.workflowstatus) %>"><%= item.workflowstatus %></span></td>
-<td>
+<td data-value="<%= item.business_error ? 1 : 0 %>">
   <% if (item.business_error) { %>
     <span class="label label-important"><i class="icon-exclamation-sign icon-white"></i></span>
   <% } %>
@@ -18,7 +18,7 @@
 <td><%= item.completed %></td>
 <td><%= (item.error_count) ? item.error_count : 0 %></td>
 <td><%= (item.warning_count) ? item.warning_count : 0 %></td>
-<td>
+<td data-value="<%= item.operator_lock ? 1 : 0 %>">
 <% if (item.workflowstatus != 'COMPLETE') {%>
   <div class="btn-group">
     <a class="btn btn-mini dropdown-toggle<%= item.operator_lock ? ' btn-danger' : ' btn-success' %>" data-toggle="dropdown" href="#">

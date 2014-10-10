@@ -13,8 +13,8 @@ define(function (require) {
     attributes: {
       tabindex: -1,
       role: 'dialog',
-      'aria-labelledby': 'modalHeader',
-      'aria-hidden': true
+//      'aria-labelledby': 'modalHeader',
+//      'aria-hidden': true
     },
     template: Template,
     

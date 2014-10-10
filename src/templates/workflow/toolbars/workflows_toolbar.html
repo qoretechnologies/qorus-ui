@@ -33,12 +33,13 @@
         <button class="btn" data-action="open" data-url="<%= url %>"><i class="icon-<%= (deprecated) ? 'flag' : 'flag-alt' %>"></i> <%= (deprecated) ? 'Only visible' : 'Show hidden' %></button>
     </div>
     <div class="pull-right">
-    <form class="form-search">
-      <div class="input-append search-box">
-        <input type="text" class="search-query appendInputButton" placeholder="Search..." value="<%= obj.query %>">
-        <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
-      </div>
-    </form>
+      <form class="form-search">
+        <div class="input-append search-box">
+          <input type="text" class="search-query appendInputButton" placeholder="Search..." value="<%= obj.query %>">
+          <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+        </div>
+      </form>
     </div>
+    <div id="table-copy" class="btn-group"></div>
 </div>
 <div class="datepicker-container"></div>

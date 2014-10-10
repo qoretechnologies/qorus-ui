@@ -3,7 +3,13 @@ define(function (require) {
       utils       = require('utils'),
       BaseToolbar = require('views/toolbars/toolbar'),
       Template    = require('text!templates/workflow/toolbars/workflows_toolbar.html'),
+      CopyView    = require('views/common/table.copy'),
       Toolbar;
+  
+  var csv_options = {
+    el: '#workflows table',
+    ignore: [0,1,4]
+  };
   
   Toolbar = BaseToolbar.extend({
     datepicker: true,
@@ -22,6 +28,7 @@ define(function (require) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
       this.getHiddenURL();
+      this.setView(new CopyView({ csv_options: csv_options }), '#table-copy');
     },
     
     getHiddenURL: function () {

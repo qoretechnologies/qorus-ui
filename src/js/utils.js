@@ -222,26 +222,39 @@ define(function (require) {
       return obj.match(test);
     },
     
-    tableToCSV: function (el) {
-      var $el = $(el),
-          csv = '';
+    tableToCSV: function (opts) {
+      if (!opts && !opts.el) return 'Options or element not specified';
+      var $el       = $(opts.el),
+          ignore    = (opts.ignore) ? _(opts.ignore).clone().map(function (ig) { return ":eq("+ig+")"; }).join() : '',
+          separator = opts.separator || ';',
+          csv       = '';
       
       // create header
-      $el.find('thead').first().find('th').each(function () {
-        csv += $(this).text()  + ';';
-      });
-      
+      if (opts.header) {
+        csv += opts.header.join(separator);
+      } else {
+        csv += $el.find('thead').first().find('th').not(ignore).map(function (i, el) {
+          return $(el).text().trim();
+        }).get().join(separator);        
+      }
       csv += "\n";
       
       // process rows
       $el.find('tbody tr:visible').each(function () {
-        $(this).find('td').each(function () {
-          csv += $(this).text().replace(/\n/g, '\\n') + ';';
-        });
+        csv += $(this).find('td').not(ignore).map(function (i, el) {
+          var val;
+          
+          if (_.has($(el).data(), 'value')) {
+            val = $(el).data('value').toString();
+          } else {
+            val = $(el).text();
+          }
+          return val.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+        }).get().join(separator);
         csv += "\n";
       });
       
-      return csv;
+      return csv.trim();
     }
   };
     

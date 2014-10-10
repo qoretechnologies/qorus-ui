@@ -15,9 +15,9 @@ require('http').createServer(function (request, response) {
             console.log("> " + request.url + " - " + res.message);
         }
     });
-}).listen(8080);
+}).listen(3000);
 
-console.log("> node-static is listening on http://127.0.0.1:8080");
+console.log("> node-static is listening on http://127.0.0.1:3000");
 
 /**
  *   proxy configs

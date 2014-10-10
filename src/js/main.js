@@ -102,7 +102,8 @@ require.config({
       exports: "Prism"
     }
   },
-  templates: '../templates'
+  templates: '../templates',
+//  waitSeconds: 300
 });
 
 require([

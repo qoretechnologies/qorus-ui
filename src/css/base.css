@@ -1923,7 +1923,7 @@ aside.navigation.opacity {
   top: -10px;
 }
 
-.copy-error {
+.copy-error, .copy-table {
   width: 100%;
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 

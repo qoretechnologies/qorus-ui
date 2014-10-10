@@ -1,22 +1,24 @@
 define(function (require) {
-  var $                = require('jquery'),
-      _                = require('underscore'),
-      Backbone         = require('backbone'),
-      Qorus            = require('qorus/qorus'),
-      settings         = require('settings'),
-      Workflow         = require('models/workflow'),
-      Collection       = require('collections/orders'),
-      Template         = require('text!templates/search/detail.html'),
-      TableTpl         = require('text!templates/workflow/orders/table.html'),
-      RowTpl           = require('text!templates/workflow/orders/row.html'),
-      InstanceListView = require('views/workflows/instances'),  
-      OrderListView    = require('views/workflows/orders'),
-      BottomBarView    = require('views/common/bottom_bar'),
-      OrdersToolbar    = require('views/toolbars/search_toolbar'),
-      OrderView        = require('views/workflows/order'),
-      User             = require('models/system').User,
-      Filters          = require('views/search/filters'),
-      context, View, RowView, TableView;
+  var $                 = require('jquery'),
+      _                 = require('underscore'),
+      Backbone          = require('backbone'),
+      Qorus             = require('qorus/qorus'),
+      settings          = require('settings'),
+      Workflow          = require('models/workflow'),
+      Collection        = require('collections/orders'),
+      Template          = require('text!templates/search/detail.html'),
+      TableTpl          = require('text!templates/workflow/orders/table.html'),
+      RowTpl            = require('text!templates/workflow/orders/row.html'),
+      InstanceListView  = require('views/workflows/instances'),  
+      OrderListView     = require('views/workflows/orders'),
+      BottomBarView     = require('views/common/bottom_bar'),
+      OrdersToolbar     = require('views/toolbars/search_toolbar'),
+      OrderView         = require('views/workflows/order'),
+      User              = require('models/system').User,
+      Filters           = require('views/search/filters'),
+      ModalView         = require('views/common/modal'),
+      LockTemplate      = require('tpl!templates/workflow/orders/lock.html'),
+      context, View, RowView, TableView, OrderLockView;
       
   context = {
     action_css: {
@@ -46,6 +48,20 @@ define(function (require) {
       }
     }
   };
+  
+  OrderLockView = Qorus.ModelView.extend({
+    template: LockTemplate,
+    additionalEvents: {
+      "submit": "lockOrder",
+      "click button[type=submit]": "lockOrder"
+    },
+        
+    lockOrder: function () {
+      var note = this.$('textarea[name=note]').val();
+      this.model.doAction(this.options.action, { note: note });
+      this.trigger('close');
+    }
+  });
   
   RowView = Qorus.RowView.extend({
     context: {
@@ -87,6 +103,7 @@ define(function (require) {
   });
   
   TableView = Qorus.TableView.extend({
+    fixed: true,
     close: function () {
       TableView.__super__.off.call(this, false);
       return this;

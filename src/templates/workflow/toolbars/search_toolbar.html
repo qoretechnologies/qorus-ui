@@ -2,13 +2,14 @@
   <div class="btn-group">
     <form class="form-search">
       <div class="input-append search-box">
-        <input type="text" class="span10 search-query-ids" placeholder="Instance ID"<%= (obj.search.ids) ? ' value="' + obj.search.ids +'"' : '' %> />
-        <input type="text" class="span10 search-query-keyvalues appendInputButton" placeholder="Keyvalue"<%= (obj.search.keyvalues) ? ' value="' + obj.search.keyvalues +'"' : '' %> />
+        <input type="text" class="search-query-ids" placeholder="Instance ID"<%= (obj.search.ids) ? ' value="' + obj.search.ids +'"' : '' %> />
+        <input type="text" class="search-query-keyvalues appendInputButton" placeholder="Keyvalue"<%= (obj.search.keyvalues) ? ' value="' + obj.search.keyvalues +'"' : '' %> />
         <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
       </div>
     </form>
   </div>
-  <div class="row-fluid relative">
-        <input type="text" class="span10 search-qql input-xxlarge" placeholder="QQL syntax" value="<%= obj.search.qql %>" />
+  <div class="row-fluid relative hide">
+      <input type="text" class="span12 search-qql input-xxlarge" placeholder="QQL syntax" value="<%= obj.search.qql %>" />
   </div>
+  <div class="btn-group pull-right" id="table-copy"></div>
 </div>

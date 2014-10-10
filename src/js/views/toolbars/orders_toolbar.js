@@ -7,6 +7,7 @@ define(function (require) {
       Template    = require('text!templates/workflow/toolbars/orders_toolbar.html'),
       BaseToolbar = require('views/toolbars/toolbar'),
       moment      = require('moment'),
+      CopyView    = require('views/common/table.copy'),
       Toolbar, status;
   
   require('bootstrap');
@@ -16,6 +17,11 @@ define(function (require) {
     'Retry', 'Waiting', 'Async-Waiting', 'Event-Waiting', 'In-Progress', 
     'Blocked', 'Crash'
   ];
+  
+  var csv_options = {
+    el: "#order-list table",
+    ignore: [0,1,2]
+  };
 
   Toolbar = BaseToolbar.extend({
     context: {},
@@ -57,6 +63,10 @@ define(function (require) {
       }
 
       this.updateUrl();
+    },
+    
+    postInit: function () {
+      this.setView(new CopyView({ csv_options: csv_options, css_class: 'btn-small' }), '#table-copy');
     },
     
     fixUpstreamUrl: function () {

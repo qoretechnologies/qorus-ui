@@ -9,12 +9,14 @@
         "moment": true,
         "debug": true,
         "sprintf": true,
-        "Backbone": true
+        "Backbone": true,
+        "window": true
     },
     "strict": false,
     "unused": false,
     "browser": true,
     "devel": true,
     "indent": 2,
-    "white": false
+    "white": false,
+    "curly": false
 }
