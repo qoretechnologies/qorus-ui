@@ -41,11 +41,16 @@ define(function (require) {
       this.context.css_class = this.options.css_class || '';
     },
     showModal: function (e) {
+      var self = this;
       var ModalView = new ModalContent({ 
             csv_options: this.csv_options
           });
           
-      this.setView(new TModal({ content_view: ModalView }), '#table-copy-modal');
+      var modal = this.setView(new TModal({ content_view: ModalView }), '#table-copy-modal');
+      this.listenTo(modal, 'destroy', this.removeModal);
+    },
+    removeModal: function () {
+      delete this.views['#table-copy-modal'];
     }
   });
   

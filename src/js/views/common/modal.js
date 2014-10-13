@@ -28,7 +28,7 @@ define(function (require) {
     },
     
     hide: function () {
-      this.$el.modal('toggle');
+      this.$el.modal('destroy');
       this.close();
     },
     
@@ -64,7 +64,7 @@ define(function (require) {
       
       this.$el.on('shown.modal', $.proxy(this.fixHeight, this));
       
-      this.$el.on('hide.modal', $.proxy(this.off, this));
+      this.$el.on('hide.modal', $.proxy(this.close, this));
       
       $(window).on('resize.'+this.cid, $.proxy(this.fixHeight, this));
     },
@@ -93,7 +93,7 @@ define(function (require) {
       if (this.$('.modal').hasClass('ui-resizable')) {
         this.$('.modal').resizable('destroy');
       }
-      // this.$el.off();
+      this.$el.off();
     },
     // 
     // close: function () {
