@@ -8,8 +8,10 @@ define(function (require) {
       System        = require('models/system'),
       Notifications = require('collections/notifications'),
       moment        = require('moment'),
-      Dispatcher    = require('qorus/dispatcher'),      
+      Dispatcher    = require('qorus/dispatcher'),
       StepBase, Step, Model, prepareSteps;
+  
+  require('sprintf');
 
   
   StepBase = {
@@ -226,8 +228,8 @@ define(function (require) {
     },
     
     doAction: function (action, opts, callback) {
-      var self = this, 
-          url = helpers.getUrl('showWorkflow', { id: this.id }),
+      var self  = this, 
+          url   = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
 
       if (_.indexOf(this.allowedActions, action) != -1) {

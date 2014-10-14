@@ -1,12 +1,16 @@
 define(function (require) {
-  var settings   = require('settings'),
-      _          = require('underscore'),
-      moment     = require('moment'),
-      $          = require('jquery'),
-      Qorus      = require('qorus/qorus'),
-      Dispatcher = require('qorus/dispatcher'),
-      Tree       = require('qorus/tree'),
+  var settings      = require('settings'),
+      helpers       = require('qorus/helpers'),
+      _             = require('underscore'),
+      moment        = require('moment'),
+      $             = require('jquery'),
+      Qorus         = require('qorus/qorus'),
+      Dispatcher    = require('qorus/dispatcher'),
+      Tree          = require('qorus/tree'),
+      Notifications = require('collections/notifications'),
       Model;
+  
+  require('sprintf');
   
   Model = Qorus.Model.extend({
     __name__: "OrderModel",
@@ -122,12 +126,30 @@ define(function (require) {
       return response;
     },
     
-    doAction: function(action, opts){
+    doAction: function(action, opts, callback){
       opts        = opts || {};
       opts.action = action;
+      
+      var url = helpers.getUrl('showWorkflow', { id: this.id }),
+          self = this;
+      
 
       if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
-        $.put(this.url(), opts);     
+        $.put(this.url(), opts)
+          .done(function (resp) {
+            var msg = sprintf('Order %s %s done', self.get('name'), action);
+            Notifications.create({ group: 'orders', type: 'success', title: msg, url: url });
+            if (_.isFunction(callback)) {
+              callback(false);
+            }
+          })
+          .fail(function (resp) {
+            var msg = sprintf('Order %s %s failed', self.get('name'), action);
+            Notifications.create({ group: 'orders', type: 'error', title: msg, url: url });
+            if (_.isFunction(callback)) {
+              callback(false);
+            }
+          });     
       }
     },
     

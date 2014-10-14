@@ -64,14 +64,19 @@ define(function (require) {
     __name__: 'WorkflowsTableView',
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
-      // this.stopListening(this.collection);
+//       this.stopListening(this.collection);
       // this.listenToOnce(this.collection, 'sync', this.update);
+      this.stopListening(this.collection, 'add');
       this.processPath();
     },
     onProcessPath: function (path) {
       var id = path.split('/')[0];
  
       if (id) this.detail_id = id;
+    },
+    update: function () {
+      console.log('update', arguments);
+      TableView.__super__.update.apply(this, arguments);
     }
   });
 

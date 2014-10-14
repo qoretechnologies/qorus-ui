@@ -992,15 +992,15 @@ define(function (require) {
 
       this.$('tbody').html('<tr><td colspan=100><i class="icon-spin icon-refresh"></i>Loading</td></tr>');
 
-      // console.time('appending');
+//      console.time('appending');
       var frag = document.createDocumentFragment();
 
-      _.each(models, function (m) {
+      _.each(models, function (m, i) {
         var view = this.appendRow(m, false);
         frag.appendChild(view.el);
       }, this);
 
-      // console.timeEnd('appending');
+//      console.timeEnd('appending');
       this.$('tbody').empty().append(frag);
       _.defer(this.resize);
       this.trigger('rows:appended', this);
@@ -1017,7 +1017,7 @@ define(function (require) {
             row_attributes: this.row_attributes 
           }), 'tbody'),
           idx;
-
+      
       render = (render===undefined) ? true : render;
       
       if (render === true) {
@@ -1033,7 +1033,7 @@ define(function (require) {
     },
         
     update: function (initial) {
-      var tpl = this.template;
+      var tpl = this.template, tt;
       
       if (this.collection.size() === 0 && initial != true) {
         this.template = NoDataTpl;
@@ -1042,6 +1042,7 @@ define(function (require) {
       } else {
         this.template = LoadingDataTpl;
       }
+      
 
       if (this.template !== tpl) {
         this.render();
