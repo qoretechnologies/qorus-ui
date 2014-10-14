@@ -1,0 +1,10 @@
+@import url(http://bootswatch.com/2/slate/bootstrap.min.css);
+
+
+#wrap, body, .table-fixed thead tr, .toolbar {
+  background-color: #272b30;
+}
+
+.input-append, .input-prepend {
+  margin-bottom: 0;
+}
