@@ -29,7 +29,7 @@
           <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>
           <td class="property-actions"><% if (key !== 'omq') { %><a class="btn btn-mini btn-warning edit-modal" data-toggle="modal" data-target="#prop-editor" 
               data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i></a>
-              <a class="btn btn-mini btn-danger" data-action="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
+              <a class="btn btn-mini btn-danger" data-action-confirm="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
   <% }) %>
     </tbody>

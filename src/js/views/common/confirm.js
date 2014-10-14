@@ -21,7 +21,7 @@ define(function (require) {
     show: function () {
       var left = this.$input_el.offset().left;
       var top = this.$input_el.offset().top;
-      var title;
+      var title = this.options.title;
       
       if (this.$input_el.data('title')) {
         title = this.$input_el.data('title');

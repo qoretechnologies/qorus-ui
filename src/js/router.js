@@ -91,7 +91,7 @@ define(function (require) {
           var array = [];
           var args = array.slice.call(arguments, 0);
           args.unshift('firstsync');
-          col.trigger.apply(col, args)
+          col.trigger.apply(col, args);
         });
       } else {
         d = this.collections.workflows.opts.deprecated;
@@ -239,9 +239,10 @@ define(function (require) {
   $(document).on("click", 'a[href]:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
-      event.stopPropagation();
+//      event.stopPropagation();
       var url = $(event.currentTarget).attr("href").replace(/^\//, "");
       app_router.navigate(url, { trigger: true });
+      return ;
     }
   });
   

@@ -1,9 +1,10 @@
 define(function(require) {
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      Qorus    = require('qorus/qorus'),
-      settings = require('settings'),
-      Template = require('tpl!templates/system/prop.html'),
+  var $           = require('jquery'),
+      _           = require('underscore'),
+      Qorus       = require('qorus/qorus'),
+      settings    = require('settings'),
+      Template    = require('tpl!templates/system/prop.html'),
+      ConfirmView = require('views/common/confirm'),
       ServiceView;
 
   ServiceView = Qorus.View.extend({
@@ -13,7 +14,8 @@ define(function(require) {
       'submit #property-search': 'search',
       'keyup #property-filter': 'search',
       'click a[data-action]': 'doAction',
-      'click button[data-action]': 'doAction'
+      'click button[data-action]': 'doAction',
+      'click a[data-action-confirm]': 'confirmAction'
     },
     template: Template,
 
@@ -70,6 +72,17 @@ define(function(require) {
       }
       
       this.runAction($target.data('action'), params);
+    },
+    
+    confirmAction: function (ev) {
+      var $el   = $(ev.currentTarget),
+          view  = this.setView(new ConfirmView({ element: $el, title: 'Delete property?' }), 'confirm'),
+          self  = this;
+      
+      this.listenTo(view, 'confirm', function () {
+        console.log($el.data('action-confirm'), $el.data());
+        self.runAction($el.data('action-confirm'), $el.data());
+      });
     },
     
     runAction: function (action, data) {

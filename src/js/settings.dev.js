@@ -1,6 +1,6 @@
 define(function () {
   var host = "localhost:8002";
-  var wshost = "localhost:8001";
+  var wshost = "admin:admin@localhost:8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   
@@ -14,9 +14,10 @@ define(function () {
       PROTOCOL: protocol,
       REST_API_PREFIX:  protocol + '//'+ host + '/api',
       WS_PREFIX: '',
+      WS_HOST: ws_protocol + '//' + wshost,
       EVENTS_WS_URL: ws_protocol + wshost + '/apievents',
       HOST: host,
-      DEBUG: true
+      DEBUG: false
     };
   
   if (settings.DEBUG && window.console && console.log) {

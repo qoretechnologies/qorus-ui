@@ -2,16 +2,12 @@ define(function(require){
   var settings   = require('settings'),
       _          = require('underscore'),
       Qorus      = require('qorus/qorus'),
-      Dispatcher = require('qorus/dispatcher'),
-      host, protocol, Collection;
-  
-  host = settings.HOST;
-  protocol = (settings.PROTOCOL == 'https:') ? "wss://" : "ws://";
+      Collection;
   
   Collection = Qorus.WSCollection.extend({
     log_size: 100,
     counter: 0,
-    socket_url: protocol + host + "/log",
+    socket_url: settings.WS_HOST + "/log",
     messages: "",
 
     initialize: function (models, opts) {

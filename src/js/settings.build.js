@@ -1,5 +1,6 @@
 define(function () {
   var host = window.location.host;
+  var wshost = host;
   var protocol = window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   
@@ -13,6 +14,7 @@ define(function () {
       PROTOCOL: protocol,
       REST_API_PREFIX:  protocol + '//'+ host + '/api',
       WS_PREFIX: '',
+      WS_HOST: ws_protocol + '//' + wshost,
       EVENTS_WS_URL: ws_protocol + host + '/apievents',
       DEBUG: false,
       HOST: host
