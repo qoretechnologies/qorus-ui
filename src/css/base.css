@@ -160,18 +160,10 @@ i.sort {
 }
 
 .loader {
-    background-color: rgba(100,100,100,.8);
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(100,100,100,.5);
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    width: 150px;
-    height: 50px;
-    margin: -50px 0 0 -75px;
-    text-align: center;
-    vertical-align: center;
+    color: #000;
+    margin: 20px 0;
+    font-size: 120%;
+    width: 100%;
     z-index: 9999;
 }
 
@@ -1628,6 +1620,7 @@ tbody+thead>tr:first-child>td {
 	width: 10px;
 	margin-left: -2px;
 	margin-right: 10px;
+    margin-top: .7em;
 	vertical-align: top;
 }
 
@@ -1973,8 +1966,4 @@ a.subtle:hover, a.subtle:focus {
   margin-top: 24.5px;
   margin-right: 60px;
   line-height: 1em;
-}
-
-.show-menu {
-  
 }
