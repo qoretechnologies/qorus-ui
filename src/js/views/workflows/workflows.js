@@ -75,7 +75,6 @@ define(function (require) {
       if (id) this.detail_id = id;
     },
     update: function () {
-      console.log('update', arguments);
       TableView.__super__.update.apply(this, arguments);
     }
   });

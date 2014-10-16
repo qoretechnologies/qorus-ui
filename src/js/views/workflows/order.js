@@ -362,6 +362,7 @@ define(function(require) {
   ModelView = Qorus.TabView.extend({
     __name__: "OrderView",
     template: Template,
+    loader: Qorus.LoaderView,
     additionalEvents: {
       "click .treeview li": "toggleRow",
       "click .showstep": "stepDetail",

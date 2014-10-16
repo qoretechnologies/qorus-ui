@@ -14,7 +14,7 @@ define(function (require) {
       Helpers        = require('qorus/helpers'),
       moment         = require('moment'),
       // Filtered    = require('backbone.filtered.collection'),
-      Loader, View, ListView, TableView, RowView, 
+      LoaderView, View, ListView, TableView, RowView, 
       TableAutoView, ServiceView, PluginView, CollectionView,
       TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
 
@@ -25,33 +25,6 @@ define(function (require) {
     {
       return (elem.textContent || elem.innerText || '').toLowerCase()
       .indexOf((match[3] || "").toLowerCase()) >= 0;
-    }
-  });
-  
-  Loader = Backbone.View.extend({
-    tagName: 'div',
-    className: 'loader',
-    template: '<p><img src="/imgs/loader.gif" /> Loading...</p>',
-    initialize: function (opts) {
-      this.opts = opts || {};
-      this.render();
-    },
-    render: function () {
-      var el = this.opts.el || 'body';
-      
-      this.$el.html(this.template);  
-      this.$el.appendTo(el);
-      
-      return this;
-    },
-    destroy: function () {
-      this.$el.remove();
-    },
-    show: function () {
-      this.$el.removeClass('hide');
-    },
-    hide: function () {
-      this.$el.addClass('hide');
     }
   });
   
@@ -114,6 +87,7 @@ define(function (require) {
           this.listenTo(this.model, 'sync:error', this.onSyncError);
         }
       }
+      this.initLoader();
       this.postInit();
     },
         
@@ -434,22 +408,6 @@ define(function (require) {
       return Helpers.slugify(this.__name__);
     },
     
-    showLoader: function () {
-      var view = this.insertView(new Loader(), '#loader', true);
-      view.$el.addClass(this.__name__);
-      // console.log('showing loader for', this.__name__);
-      return this;
-    },
-    
-    hideLoader: function () {
-      var views = this.views;
-      if (views) _.each(views, function (view) { 
-        // console.log('hiding loader for', this.__name__, view.$el);
-        view.remove();
-      });
-      return this;
-    },
-    
     onSyncError: function () {},
     
     id: function () {
@@ -459,7 +417,17 @@ define(function (require) {
     },
     
     preInit: function () {},
-    postInit: function () {}
+    postInit: function () {},
+    initLoader: function () {
+      if (this.loader) {
+        var loader = this.setView(new this.loader(), '_loader');
+        this.$el.html(loader.render().$el.html());
+        this.once('prerender', this.removeLoader);
+      }
+    },
+    removeLoader: function () {
+      this.removeView('_loader');
+    }
    });
 
    ListView = View.extend({
@@ -1634,11 +1602,15 @@ define(function (require) {
       }
     }
   });
+  
+  LoaderView = View.extend({
+    template: '<p class="loader"><i class="icon-spin icon-spinner"></i> Loading...</p>'
+  });
 
   return {
     View: View,
     ListView: ListView,
-    Loader: Loader,
+    LoaderView: LoaderView,
     ViewHelpers: Helpers,
     TableView: TableView,
     RowView: RowView,
