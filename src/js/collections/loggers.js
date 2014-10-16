@@ -14,5 +14,5 @@ define(function(require) {
     }
   });
   
-  return new Collection();
+  return new Collection().fetch();
 });

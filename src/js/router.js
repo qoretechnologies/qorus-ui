@@ -43,7 +43,7 @@ define(function (require) {
   // fetch alerts
   Alerts.fetch();
   Constants.fetch();
-  Loggers.fetch();
+//  Loggers.fetch();
 
   AppRouter = Backbone.Router.extend({
     currentView: null,

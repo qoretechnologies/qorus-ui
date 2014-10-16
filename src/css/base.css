@@ -1594,7 +1594,8 @@ tbody+thead>tr:first-child>td {
 	font-family: "FontAwesome";
 	font-weight: normal;
 	background-color: #fff;
-	margin-left: -9px;
+    margin: 0;
+/*	margin-left: -9px;*/
 	margin-right: 10px;
 	color: red;
 	border: none;
