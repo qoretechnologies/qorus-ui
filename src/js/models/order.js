@@ -22,6 +22,7 @@ define(function (require) {
       'started': moment().format(settings.DATE_DISPLAY)
     },
     
+    /** list of allowed actions */
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
@@ -48,6 +49,11 @@ define(function (require) {
       "order:%(id)s:status_changed"
     ],
 
+    /**
+      Initialize Model
+      @constructs
+      @param {Object} [opts]
+    */
     initialize: function (opts){      
       // set id if in opts
       if (opts.id){
@@ -60,11 +66,16 @@ define(function (require) {
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
+    /**
+      Dispatching events for model
+      @param {Object} e
+      @param {String} evt
+    */
     dispatch: function (e, evt) {
       var evt_types = evt.split(':'),
-          obj = evt_types[0],
-          id = evt_types[1],
-          action = evt_types[2] || id;
+          obj       = evt_types[0],
+          id        = evt_types[1],
+          action    = evt_types[2] || id;
 
       if (obj === 'order') {
         if (action === 'info_changed') {
@@ -93,6 +104,11 @@ define(function (require) {
       }
     },
     
+    /**
+      Parses the API response
+      @param {Object} response
+      #param {Object} [options]
+    */
     parse: function (response, options) {
       var step_groups = {};
       // unescape info string
@@ -126,6 +142,12 @@ define(function (require) {
       return response;
     },
     
+    /**
+      Executes the action on model and calls REST api
+      @param {String} action
+      @param {Object} [options]
+      @param {function} [callback]
+    */
     doAction: function(action, opts, callback){
       opts        = opts || {};
       opts.action = action;
@@ -153,6 +175,11 @@ define(function (require) {
       }
     },
     
+    /**
+      Gets Step name form StepInstances
+      @param {Number|String} id Step ID
+      @returns {String|Number} Stepname or step id
+    */
     getStepName: function (id) {
       var steps = _.filter(this.get('StepInstances'), function (s) {
         if (s.stepid == id)
@@ -166,6 +193,10 @@ define(function (require) {
       } 
     },
     
+    /**
+      Add note to the order and calls REST API
+      @param {String} note
+    */
     addNote: function (note) {
       $.put(this.url(), {
         action: 'Notes',
@@ -174,6 +205,10 @@ define(function (require) {
     },
     
     update: function (note) {},
+    
+    /**
+      Triggers remove event
+    */
     destroy: function () {
       this.trigger('remove');
     }
