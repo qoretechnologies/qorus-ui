@@ -19,11 +19,12 @@ define(function (require) {
       
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
-    helpers: helpers,
     initialize: function (options) {
       this.views = {};
       this.model = options.model;
       this.options = options;
+      // add method to helpers
+      this.context.statusList = helpers.statusList;
     },
     preRender: function () {
       _.extend(this.context, this.options);
