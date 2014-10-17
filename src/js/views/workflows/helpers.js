@@ -1,8 +1,9 @@
 define(function (require) {
   var _             = require('underscore'),
       qorus_helpers = require('qorus/helpers'),
-      ControlsTpl   = require('tpl!templates/common/controls.html'),
       utils         = require('utils'),
+      ORDER_STATES  = require('constants/workflow').ORDER_STATES,
+      StatusListTpl = require('tpl!templates/common/status_list.html'),
       helpers;
   
   helpers = _.extend(_.clone(qorus_helpers), {
@@ -25,6 +26,20 @@ define(function (require) {
         return res;
       }
       return '<span class="badge ' + e + '">' + res + '</span>';
+    },
+    
+    statusList: function (workflow) {
+      var ctx = {};
+      ctx.states = _.filter(ORDER_STATES, function (st) {
+        var count = workflow[st.name];
+        if (count > 0) {
+          st.count = count; 
+          return true;
+        }
+        return false;
+      });
+      ctx.getStatusCSS = qorus_helpers.getStatusCSS;
+      return StatusListTpl(ctx);
     }
   });
     

@@ -19,6 +19,7 @@ define(function (require) {
       
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
+    helpers: helpers,
     initialize: function (options) {
       this.views = {};
       this.model = options.model;
@@ -34,7 +35,6 @@ define(function (require) {
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });
-
 
   // TODO; rewrite to Qorus.TabView
 
@@ -66,7 +66,7 @@ define(function (require) {
       this.template = Template;
       
       // init model
-      this.model = new Workflow({ workflowid: opts.id });
+      this.model = new Workflow({ workflowid: opts.id, date: opts.date });
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.model.fetch();

@@ -1968,3 +1968,42 @@ a.subtle:hover, a.subtle:focus {
   margin-right: 60px;
   line-height: 1em;
 }
+
+.status-list {
+  margin: 0 0 10px 0;
+}
+
+.status-list li {
+  position: relative;
+  text-align: center;
+}
+
+.status-list .qtooltip:hover:after {
+  display: block;
+  content: attr(data-title);
+  background-color: rgba(0,0,0,.8);
+  border-radius: 5px;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 20%;
+  padding: 5px;
+  text-align: center;
+}
+
+.status-list .qtooltip:hover:before {
+  display: block;
+  content: "";
+
+  position: absolute;
+  top:  100%;
+  left: calc(20% + 10px);
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0,0,0,.8);
+}
+
+.status-list .badge:hover .short {
+  display: none;
+}

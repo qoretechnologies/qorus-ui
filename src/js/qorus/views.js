@@ -582,6 +582,7 @@ define(function (require) {
         
       e.stopPropagation();
       this.trigger('highlight');
+      this.trigger('highlight:toggle');
     },
 
     // start batch actions definition
@@ -599,9 +600,10 @@ define(function (require) {
         $('.table-row .check')
           .removeClass('icon-check-empty')
           .addClass('icon-check');
-
+        this.trigger('highlight:all');
       } else {
         this.uncheckAll();
+        this.trigger('highlight:none');
       }
 
       if (e.target.localName == "i") {
@@ -627,6 +629,7 @@ define(function (require) {
       if (model) {
         model.trigger('check');
       }
+      this.trigger('highlight:row');
     },
     
     updateCheckIcon: function () {
@@ -669,6 +672,7 @@ define(function (require) {
         .toggleClass('checked');
 
       this.trigger('highlight');
+      this.trigger('highlight:invert');
     },
     
     // get all visible checked rows and its data-id attribute

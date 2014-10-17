@@ -9,11 +9,11 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       moment        = require('moment'),
       Dispatcher    = require('qorus/dispatcher'),
+      ORDER_STATES  = require('constants/workflow').ORDER_STATES,
       StepBase, Step, Model, prepareSteps;
   
   require('sprintf');
 
-  
   StepBase = {
       initialize: function (id, depends_on, name, type, info) {
           this.name = name;
@@ -140,22 +140,16 @@ define(function (require) {
     // url: function () {
     //   return this.urlRoot + this.id;
     // },
-    defaults: {
-      'IN-PROGRESS': 0,
-      'READY': 0,
-      'SCHEDULED': 0,
-      'COMPLETE': 0,
-      'INCOMPLETE': 0,
-      'ERROR': 0,
-      'CANCELED': 0,
-      'RETRY': 0,
-      'WAITING': 0,
-      'ASYNC-WAITING': 0,
-      'EVENT-WAITING': 0,
-      'BLOCKED': 0,
-      'CRASH': 0,
-      'TOTAL': 0
+    defaults: function () {
+      var defaults = {};
+      
+      _.each(_.pluck(ORDER_STATES, 'name'), function (item ) {
+        defaults[item] = 0;
+      });
+      
+      return defaults; 
     },
+    
     idAttribute: "workflowid",
     date: null,
     allowedActions: [

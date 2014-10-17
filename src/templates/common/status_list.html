@@ -1,0 +1,5 @@
+<ul class="status-list">
+<% _.each(states, function (st) { %>
+  <li class="badge badge-<%= getStatusCSS(st.name) %> qtooltip" data-title="<%= st.name %>"><%= st.short %>: <%= st.count %></li>
+<% }) %>
+</ul>

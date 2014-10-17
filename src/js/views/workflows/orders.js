@@ -139,6 +139,7 @@ define(function (require) {
       
       this.opts = opts;
       _.extend(this.options, opts);
+      this.on('highlight:all', this.showAllSummary);
     },
     
     preRender: function () {
@@ -184,6 +185,15 @@ define(function (require) {
     fetchSorted: function (e) {
       // TODO
       e.stopPropagation();
+    },
+    
+    showAllSummary: function () {
+      this.$el.prepend('<p class="selection">'+this.opts.statuses+'</p>');
+      this.on('highlight:none highlight:row', this.hideAllSummary);
+    },
+    
+    hideAllSummary: function () {
+      this.$el.find('.selection').remove();
     }
   });
   

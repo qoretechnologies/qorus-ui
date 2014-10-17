@@ -93,7 +93,7 @@ define(function (require) {
 
       if (this.route) {
         url = helpers.getUrl(this.route, options);
-        Backbone.history.navigate(url, {trigger: true});
+        Backbone.history.navigate(url, { trigger: true });
       }
     },
     
