@@ -57,13 +57,13 @@ define(function (require) {
     // returns object of system options as name as key and desc as value
     getFor: function (option) {
       var props = {};
-      var options = {};
+      var options = [];
       props[option] = true;
       
       var opts = _.where(this.toJSON(), props);
       
       _.each(opts, function(opt) {
-        options[opt.name] = opt.desc;
+        options.push(_.pick(opt, 'name', 'desc', 'default'));
       });
       return options;
     }

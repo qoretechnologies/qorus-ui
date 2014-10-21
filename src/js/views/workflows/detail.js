@@ -14,8 +14,15 @@ define(function (require) {
       AlertsTpl       = require('tpl!templates/common/alerts.html'),
       ModalView       = require('views/common/modal'),
       StepView        = require('views/steps/step'),
-      ModelView, HeaderView, AlertsView, PaneView, DiagramView, LibView;
+      TableEditView   = require('views/common/table.edit'),
+      OptionsTpl      = require('tpl!templates/workflow/options.html'),
+      ModelView, HeaderView, AlertsView, PaneView, DiagramView, LibView, TEView;
 
+  TEView = TableEditView.extend({
+    prepareData: function (data) {
+      return { options: _.pick(data, data.name) };
+    }
+  });
 
   AlertsView = Qorus.ModelView.extend({
     __name__: 'JobAlertsPaneView',
@@ -56,7 +63,7 @@ define(function (require) {
       });
       return objects;
     }
-  })
+  });
 
   HeaderView = Qorus.View.extend({
     __name__: 'WorkflowHeaderView',
@@ -81,7 +88,14 @@ define(function (require) {
   
   PaneView = Qorus.ModelView.extend({
     template: DetailTpl,
-    name: 'Detail'
+    name: 'Detail',
+    postInit: function () {
+      var opts = this.model.getOptions();
+      
+      if (opts.length > 0) {
+        this.setView(new TEView({ model: this.model, template: OptionsTpl }), '.options');
+      }
+    }
   });
   
   DiagramView = DiagramBaseView.extend({

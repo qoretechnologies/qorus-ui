@@ -1,0 +1,18 @@
+<% var opts = _item.getOptions() %>
+  <h4>Options</h4>
+  <table class="table table-condensed table-stripped table-align-left">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+  <% _.each(opts, function (option) { %>
+      <tr>
+        <td class="name"><%= option.name %><br /><p class="muted"><%= option.desc %></p></td>
+        <td class="editable" data-editable="true" data-action="setOptions" data-name="<%= option.name %>" data-value="<%= option.value %>"><%= option.value || "not set" %></td>
+      </tr>
+  <% }) %>
+    </tbody>
+  </table>

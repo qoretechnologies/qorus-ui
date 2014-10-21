@@ -283,10 +283,10 @@ define(function (require) {
     
     // return all options for starting workflow
     getOptions: function () {
-      var opts = this.get('options') || {};
+      var opts = this.get('options') || [];
       var sysopts = System.Options.getFor('workflow');
-
-      return _.extend(opts, sysopts);
+      
+      return opts.concat(sysopts);
     },
     
     setAutostart: function (as) {
