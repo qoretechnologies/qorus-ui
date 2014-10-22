@@ -18,6 +18,8 @@ define(function (require) {
       OptionsTpl      = require('tpl!templates/workflow/options.html'),
       ModelView, HeaderView, AlertsView, PaneView, DiagramView, LibView, TEView;
 
+  require('sprintf');
+
   TEView = TableEditView.extend({
     prepareData: function (data) {
       return { options: _.pick(data, data.name) };

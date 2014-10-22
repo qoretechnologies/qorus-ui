@@ -71,7 +71,6 @@ define(function (require) {
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.model.fetch();
-      console.log(this.options);
     },
     
     render: function (ctx) {
@@ -93,12 +92,18 @@ define(function (require) {
       
       if (this.opts.inst === 'instances') {
         this.setView(new InstanceListView({ 
-            date: this.opts.date, workflowid: this.opts.id, url: this.url() 
-          }), '#instances');
+          date: this.opts.date, 
+          workflowid: this.opts.id, 
+//          workflow: this.model,
+          url: this.url() 
+        }), '#instances');
       } else {
         this.setView(new OrderListView({ 
-            date: this.opts.date, workflowid: this.opts.id, statuses: this.opts.filter, url: this.url() 
-          }), '#instances');
+          date: this.opts.date, 
+          workflowid: this.opts.id, 
+          statuses: this.opts.filter, 
+          url: this.url() 
+        }, this.model), '#instances');
       }
       
       this.setView(new HeaderView({ model: this.model, date: this.opts.date }), '#detail');  
@@ -125,7 +130,7 @@ define(function (require) {
           el.removeClass('info');
         } else {
           if (bar) {
-            oview = self.setView(new OrderView({ id: el.data('id'), workflow: this.model, show_header: false }), '#bottom-content');
+            oview = self.setView(new OrderView({ id: el.data('id'), show_header: false }), '#bottom-content');
       
             oview.listenTo(oview.model, 'change', function () {
               bar.render();

@@ -508,8 +508,9 @@ define(function (require) {
       }
       
       
-      this.on('highlight', this.enableActions);
-      this.on('highlight', this.updateCheckIcon);
+      this.on('highlight highlight:none', this.enableActions);
+      this.on('highlight highlight:none', this.updateCheckIcon);
+      this.on('highlight:none', this.uncheckAll);
       this.listenTo(this.collection, 'sync', this.triggerRowClick);
       this.render();
     },
@@ -621,6 +622,9 @@ define(function (require) {
       this.$('.table-row .check')
         .removeClass('icon-check')
         .addClass('icon-check-empty');
+      
+      this.enableActions();
+      this.updateCheckIcon();
     },
     
     checkRow: function (id) {

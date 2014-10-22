@@ -109,10 +109,12 @@ define(function (require) {
     additionalEvents: {
       // 'click button[data-action]': 'runAction',
       'click button[data-pagination]': 'nextPage',
-      'click th[data-sort]': 'fetchSorted'
+      'click th[data-sort]': 'fetchSorted',
+      'click .select-hidden': 'selectHidden',
+      'click .unselect-hidden': 'showAllSummary',
     },
     
-    initialize: function (opts) {
+    initialize: function (opts, workflow) {
       this.options = {};
       opts = opts || {};
       
@@ -139,6 +141,7 @@ define(function (require) {
       
       this.opts = opts;
       _.extend(this.options, opts);
+      this.opts.workflow = workflow;
       this.on('highlight:all', this.showAllSummary);
     },
     
@@ -178,6 +181,7 @@ define(function (require) {
       if (selected_ids && data.action) {
         this.collection.doAction({ action: data.action, ids: selected_ids });
         e.preventDefault();
+        this.trigger('highlight:none');
       }
     },
     
@@ -188,12 +192,30 @@ define(function (require) {
     },
     
     showAllSummary: function () {
-      this.$el.prepend('<p class="selection">'+this.opts.statuses+'</p>');
+      var states  = this.opts.statuses ? this.opts.statuses.toUpperCase().replace(',', ', ') : 'All',
+          count   = this.opts.statuses ? _.reduce(this.opts.workflow.pick(this.opts.statuses.toUpperCase().split(',')), function (sum, num) { return sum + num; }) : this.opts.workflow.get('TOTAL'),
+          msg     = sprintf('Select all orders (total: %d) with the following states %s', count, states);
+      
+      // reset the info 
+      this.collection.select_limit = 0;
+      this.$el.find('.selection').remove();
+      
+      this.$el.prepend('<p class="selection text-center"><a class="select-hidden">'+msg+'</a></p>');
       this.on('highlight:none highlight:row', this.hideAllSummary);
     },
     
     hideAllSummary: function () {
+      this.collection.select_limit = 0;
       this.$el.find('.selection').remove();
+    },
+    
+    selectHidden: function () {
+      var states  = this.opts.statuses ? this.opts.statuses.toUpperCase().replace(',', ', ') : 'All',
+          count   = this.opts.statuses ? _.reduce(this.opts.workflow.pick(this.opts.statuses.toUpperCase().split(',')), function (sum, num) { return sum + num; }) : this.opts.workflow.get('TOTAL'),
+          msg     = sprintf('Selected all orders (total: %d) with the following states %s', count, states);
+      this.collection.select_limit = count;
+      this.$('.selection').html(msg + " <a class='unselect-hidden'>Cancel selection</a>");
+      this.on('highlight', this.showAllSummary);
     }
   });
   

@@ -1,9 +1,10 @@
 define(function (require) {
-  var settings   = require('settings'),
-      Qorus      = require('qorus/qorus'),  
-      Model      = require('models/order'),
-      Dispatcher = require('qorus/dispatcher'),
-      moment     = require('moment'),
+  var settings    = require('settings'),
+      Qorus       = require('qorus/qorus'),  
+      Model       = require('models/order'),
+      Dispatcher  = require('qorus/dispatcher'),
+      moment      = require('moment'),
+      _           = require('underscore'),
       Collection;
   
    Collection = Qorus.SortedCollection.extend({
@@ -26,6 +27,7 @@ define(function (require) {
     ],
     
     initialize: function (models, opts) {
+      opts = opts || {};
       Collection.__super__.initialize.call(this, arguments);
       
       if (!opts.date) {
@@ -80,8 +82,6 @@ define(function (require) {
           alert = /^(alert_).*/,
           model;
       
-          // console.log(e);
-      
       if (action === 'data_submitted') {
         var info = e.info;
         info.workflowstatus = info.workflowstatus || info.status;
@@ -92,6 +92,26 @@ define(function (require) {
     },
     
     doAction: function (opts) {
+      if (this.select_limit) {
+        var clone = new Collection([]);
+        clone.opts = _.clone(this.opts);
+        delete clone.opts.workflow;
+        clone.limit = clone.opts.limit = this.select_limit;
+        clone.fetch({ success: function () { 
+            var ids = clone.pluck('workflow_instanceid');
+            opts.ids = ids.join(',');
+            clone.processAction(opts);
+            _.each(clone.models, function (m) { m.stopListening(); });
+            clone.reset();
+            clone = null;
+          } 
+        });
+      } else {
+        this.processAction(opts);
+      }
+    },
+     
+    processAction: function (opts) {
       if(_.indexOf(this.allowedActions, opts.action.toLowerCase()) != -1){
         $.put(settings.REST_API_PREFIX + '/orders/', opts);
       }
