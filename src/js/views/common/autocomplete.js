@@ -2,6 +2,7 @@ define(function (require) {
   var Tpl   = require('tpl!templates/common/autocomplete.html'),
       $     = require('jquery'),
       Qorus = require('qorus/qorus'),
+      _     = require('underscore'),
       View, Match, Matches;
     
   require('libs/jquery.caret');
@@ -38,7 +39,7 @@ define(function (require) {
             self = this;
               
         this.listenTo(v, 'apply', function (model) {
-          self.trigger('activate', model);
+          self.trigger('activate', model, true);
         });
 
         frag.appendChild(v.el);
@@ -49,6 +50,9 @@ define(function (require) {
     },
     show: function () {
       if (this.matches.length > 0) this.$el.show();
+    },
+    hide: function () {
+      this.$el.hide();
     },
     setActive: function (next) {
       var matches = this.getView('.matches'),
@@ -83,7 +87,7 @@ define(function (require) {
     additionalEvents: {
       'keyup input.autocomplete': 'showSuggestions',
       'keydown input.autocomplete': 'preventDefault',
-      'blur input.autocomplete': 'hideDropdown'
+//      'blur input.autocomplete': 'hideDropdown'
     },
     className: "autocomplete-box",
     template: Tpl,
@@ -109,6 +113,9 @@ define(function (require) {
         .css('left', pos.left)
         .width($el.width());
     },
+    split: function () {
+      return /\s/;
+    },
     getMatches: function () {
       var ds      = this.dataset,
           matches = [];
@@ -121,24 +128,31 @@ define(function (require) {
     },
     updateQuery: function (e) {
       var $target = $(e.currentTarget);
-      this.query = $target.val();
-      // console.log(this.query);
+      var pos = this.getCaretPosition();
+      var q = $target.val();
+      var rpos = q.slice(0, pos).split('').reverse().join('').search(this.split());
+      
+      
+      this.query = $target.val().slice(0, pos);
+      
+      if (rpos > 0) this.query = this.query.slice(rpos*-1);
+      console.log('q:', this.query);
       return this;
     },
     showSuggestions: function (e) {
       var dd = this.getDropdown();
       // up and down arrow codes 38, 40
       // tab 9
-      if (/(37)|(39)|(38)|(40)|(9)/.test(e.keyCode)) {
-        e.preventDefault();
+      if (/(37)|(39)|(38)|(40)|(13)/.test(e.keyCode)) {
+//        e.preventDefault();
 
         if (e.keyCode == 40) {
           dd.next();
         } else if (e.keyCode == 38) {
           dd.prev();
           this.$('.autocomplete').caret(-1);
-        } else if (e.keyCode == 9){
-          dd.applyHint();
+        } else if (e.keyCode == 13){
+          this.hideDropdown();
         }
       } else {
         var matches;
@@ -152,21 +166,27 @@ define(function (require) {
       return this.getView('.dropdown')[0];
     },
     match: function (item) {
-      var query = this.query.match(/(?=[^\s]*$)(.*)/)[1];
+      // var query = this.query.match(/(?=[^\s]*$)(.*)/)[1];
+      var query = this.query;
       return ~item.toLowerCase().indexOf(query);
     },
-    highlight: function (item) {},
+    highlight: function () {
+      console.log('pos:', this.getCaretPosition());
+    },
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
+      this.highlight();
       _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },
     getCaretPosition: function () {
       return this.$clone.caret();
     },
-    applyActiveHint: function (model) {
-      this.getCaretPosition();
-      this.$('.autocomplete').val(model.hint).caret(-1);
-      this.hideDropdown();
+    applyActiveHint: function (model, hide) {
+      var $el = this.$('.autocomplete');
+      var pos = this.getCaretPosition();
+
+      $el.val(model.hint);
+      if (hide === true) this.hideDropdown();
     },
     preventDefault: function (e) {
       if (/(38)|(40)/.test(e.keyCode)) {

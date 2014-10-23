@@ -247,10 +247,10 @@ define(function (require) {
       }
     },
     
-    orderDetail: function (m) {
-      var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
-      return tpl;
-    },
+//    orderDetail: function (m) {
+//      var tpl = _.template(OrderDetailTemplate, { item: m, workflow: this.model });
+//      return tpl;
+//    },
     
     // delegate search to current dataview
     search: function (e) {

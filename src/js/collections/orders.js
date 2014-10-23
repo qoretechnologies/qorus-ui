@@ -30,12 +30,14 @@ define(function (require) {
       opts = opts || {};
       Collection.__super__.initialize.call(this, arguments);
       
+      console.log(opts.date, this.date);
+      
       if (!opts.date) {
         opts.date = this.date;
       }
       
       this.opts = opts;
-      this.opts.sort = this.opts.orderby = 'started';
+      this.opts.sort = 'started';
       this.opts.desc = true;
       
       if (opts.workflowid) {
