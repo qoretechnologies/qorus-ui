@@ -78,10 +78,12 @@ define(function (require) {
       $(window).on('resize.panes', $.proxy(this.fixHeights, this));
     },
     
-    fixHeights: function () {
-      var h = $(window).height() - this.$el.offset().top - $('footer').height() - 6;
-      this.$el.height(h).addClass('overflow');
-      this.$el.find('.row-fluid > div').height(h);
+    fixHeights: function (e) {
+      if (e && !e.target.tagName) {
+        var h = $(window).height() - this.$el.offset().top - $('footer').height() - 6;
+        this.$el.height(h).addClass('overflow');
+        this.$el.find('.row-fluid > div').height(h);        
+      }
     },
     
     fetch: function (view) {

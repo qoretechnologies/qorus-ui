@@ -925,12 +925,14 @@ define(function (require) {
       this.$('.table-fixed').prepend(clgrp);
     },
     
-    resize: _.debounce(function () {
-        // fix static header width and pos
-        if (this.fixed === true) {
-          this.$('.table-fixed').fixedHeader();
+    resize: _.debounce(function (e) {
+        if (e && !e.target.tagName) {
+          // fix static header width and pos
+          if (this.fixed === true) {
+            this.$('.table-fixed').fixedHeader();
+          }
+          this.setWidths();
         }
-        this.setWidths();
       }, 200, { trailing: true, leading: true, maxWait: 5*200 }
     ),
     

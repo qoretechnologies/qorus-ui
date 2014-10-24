@@ -1321,11 +1321,28 @@ th.nowrap, td.nowrap {
 }
 
 .btn-controls a.label {
+  position: relative;
   margin-right: 2px;
+}
+
+.btn-controls a.label:active {
+  position: relative;
+  top: 1px;
 }
 
 .btn-controls a.label:last-child {
   margin-right: 0;
+}
+
+.btn-controls a.label:active:after {
+  content: "";
+  display: block;
+  background-color: rgba(255,255,255,.3);
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  top:0;
+  left:0;
 }
 
 #controls .autostart {

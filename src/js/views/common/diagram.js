@@ -5,8 +5,6 @@ define(function (require) {
       Template = require('tpl!templates/common/diagram.html'),
       View;
   
-  
-  
   View = Qorus.View.extend({
     name: "Steps",
     template: Template,
@@ -15,6 +13,7 @@ define(function (require) {
       _.bindAll(this, 'initCanvas', 'fixCanvas');
       View.__super__.initialize.call(this, opts);
       this.on('show', this.fixCanvas);
+      $(window).on('resize.diagram.'+this.cid, this.fixCanvas);
     },
     
     fixCanvas: function () {
@@ -83,6 +82,10 @@ define(function (require) {
         
         return conn;
       });
+    },
+    
+    clean: function () {
+      $(window).off('resize.diagram.'+this.cid);
     }
   });
   return View;

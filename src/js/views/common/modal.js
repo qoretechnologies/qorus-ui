@@ -69,21 +69,23 @@ define(function (require) {
       $(window).on('resize.'+this.cid, $.proxy(this.fixHeight, this));
     },
     
-    fixHeight: function () {
-      var padding = 15;
-      var $modal = this.$el;
-      var max_height = $(window).innerHeight() - $modal.position().top * 2;
-      
-      if ($modal.height() > max_height) {
-        $modal.height(max_height);
+    fixHeight: function (e) {
+      if (e && !e.target.tagName) {
+        var padding = 15;
+        var $modal = this.$el;
+        var max_height = $(window).innerHeight() - $modal.position().top * 2;
 
-        var $body = $modal.find('.modal-body');
-        var cor = $body.innerHeight() - $body.height();
-        var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
-        
-        if ($modal.find('.modal-footer')) h -= $modal.find('.modal-footer').outerHeight() - padding;
+        if ($modal.height() > max_height) {
+          $modal.height(max_height);
 
-        $body.height(h).css('max-height', h);
+          var $body = $modal.find('.modal-body');
+          var cor = $body.innerHeight() - $body.height();
+          var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
+
+          if ($modal.find('.modal-footer')) h -= $modal.find('.modal-footer').outerHeight() - padding;
+
+          $body.height(h).css('max-height', h);
+        }
       }
     },
         

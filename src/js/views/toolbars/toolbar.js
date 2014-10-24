@@ -59,9 +59,11 @@ define(function (require) {
       }
     },
         
-    resize: function () {
-      // reset width of fixed el
-      this.$el.width(function () { return $(this).parent().width(); });
+    resize: function (e) {
+      if (e && !e.target.tagName) {
+        // reset width of fixed el
+        this.$el.width(function () { return $(this).parent().width(); });
+      }
     },
     
     clean: function () {
