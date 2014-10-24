@@ -60,7 +60,7 @@ define(function (require) {
     },
         
     resize: function (e) {
-      if (e && !e.target.tagName) {
+      if (!e || !e.target.tagName) {
         // reset width of fixed el
         this.$el.width(function () { return $(this).parent().width(); });
       }

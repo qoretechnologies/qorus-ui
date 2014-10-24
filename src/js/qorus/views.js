@@ -926,7 +926,7 @@ define(function (require) {
     },
     
     resize: _.debounce(function (e) {
-        if (e && !e.target.tagName) {
+        if (!e || !e.target.tagName) {
           // fix static header width and pos
           if (this.fixed === true) {
             this.$('.table-fixed').fixedHeader();

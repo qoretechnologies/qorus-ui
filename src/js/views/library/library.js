@@ -79,7 +79,7 @@ define(function (require) {
     },
     
     fixHeights: function (e) {
-      if (e && !e.target.tagName) {
+      if (!e || !e.target.tagName) {
         var h = $(window).height() - this.$el.offset().top - $('footer').height() - 6;
         this.$el.height(h).addClass('overflow');
         this.$el.find('.row-fluid > div').height(h);        

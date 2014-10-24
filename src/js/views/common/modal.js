@@ -70,7 +70,7 @@ define(function (require) {
     },
     
     fixHeight: function (e) {
-      if (e && !e.target.tagName) {
+      if (!e || !e.target.tagName) {
         var padding = 15;
         var $modal = this.$el;
         var max_height = $(window).innerHeight() - $modal.position().top * 2;
