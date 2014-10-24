@@ -78,11 +78,11 @@ define(function (require) {
       
       if (this.get('alerttype') === 'ONGOING') {
         events = [
-          "alert:%(id)s:ongoing_cleared"
+          "alert:%(id)s:alert_ongoing_cleared"
         ];
       } else {
         events = [
-          "alert:%(id)s:transient_cleared"
+          "alert:%(id)s:alert_transient_cleared"
         ];
       }
       

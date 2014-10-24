@@ -166,7 +166,8 @@ define(function (require) {
           alert = new Alert(e.info, { parse: true });
           Collection.add(alert);
         } else if (evt === 'alert:ongoing_cleared') {
-          alert = Collection.findWhere({ _id: e.info.id, type: e.info.type, alerttype: 'ONGOING' });
+          alert = Collection.findWhere({ name: e.info.name, type: e.info.type, alerttype: 'ONGOING' });
+          
           if (alert) {
             alert.trigger('destroy', alert, alert.collection);
           }

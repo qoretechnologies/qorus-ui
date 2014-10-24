@@ -1176,7 +1176,7 @@ define(function (require) {
       this.views = {};
       this.model = opts.model;
       this.listenTo(this.model, 'rowClick', this.rowClick);
-      this.listenTo(this.model, 'destroy', this.off);
+      this.listenTo(this.model, 'destroy', this.close);
 
       if (_.has(opts, 'cols')) this.cols = opts.cols;
       if (_.has(opts, 'template')) this.template = opts.template;
@@ -1189,7 +1189,7 @@ define(function (require) {
       
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
-      this.listenTo(this.model, 'remove', this.off);
+      this.listenTo(this.model, 'remove', this.close);
 
       this.render();
       this.postInit();

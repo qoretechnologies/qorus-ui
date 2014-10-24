@@ -11,7 +11,7 @@ define(function (require) {
     dispatch: function (e) {
       var self = this,
           events = [],
-          ev, ev_id, instanceid;
+          ev, ev_id, instanceid, id;
 
       e = e.toJSON();
       
@@ -28,11 +28,11 @@ define(function (require) {
           
           //  || e.info.type !== 'alert'
           if (ev[0] === 'alert') {
-            var id = [e.info.type, e.info.id].join(":");
+            id = [e.info.type, e.info.id].join(":");
             events.push(id.toLowerCase());
             events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
           } else if (ev[0] == 'connection') {
-            var id = ['connection', e.info.name].join(":");
+            id = ['connection', e.info.name].join(":");
             events.push([id.toLowerCase(), e.eventstr.toLowerCase()].join(":").toLowerCase());
           }
         }
