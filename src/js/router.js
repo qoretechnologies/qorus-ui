@@ -24,17 +24,21 @@ define(function (require) {
       Notifications     = require('collections/notifications'),
       Alerts            = require('collections/alerts'),
       Constants         = require('collections/constants'),
-      Functions         = require('collections/functions'),
-      Loggers           = require('collections/loggers'),
-      Qorus             = require('qorus/views'),
+//      Functions         = require('collections/functions'),
+//      Loggers           = require('collections/loggers'),
+//      Qorus             = require('qorus/views'),
       Library           = require('collections/library'),
       LibraryView       = require('views/library/library'),
       OrdersCollection  = require('collections/orders'),
-      // LocalSettings  = require('models/setting'),
-      AppRouter, app_router, alerts;
       
+      // LocalSettings  = require('models/setting'),
+      AppRouter, app_router;
+  
+//  require('libs/newrelic');
   require('backbone.identity');
   require('messenger');
+  require('collections/functions');
+  require('collections/loggers');
 
   
   // fetch local notifications
@@ -109,7 +113,7 @@ define(function (require) {
       var dd = (deprecated === null) ? false : deprecated;
       
       if (d !== dd) {
-        var tview = this.currentView.getView('.workflows');
+        this.currentView.getView('.workflows');
         this.currentView.opts.deprecated = dd;
         this.currentView.render();
       }

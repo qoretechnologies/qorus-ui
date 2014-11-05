@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
   var host = "localhost:8002";
   var wshost = "admin:admin@localhost:8001";
   var protocol = "http:"; // window.location.protocol;

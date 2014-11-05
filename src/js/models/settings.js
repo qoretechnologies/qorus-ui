@@ -1,13 +1,11 @@
 define(function (require) {
   var Backbone   = require('backbone'),
       Model      = require('models/notification'),
-      Dispatcher = require('qorus/dispatcher'),
       moment     = require('moment'),
       event_session_changed;
   
   // init localstorage
   require('localstorage');
-  
   
   event_session_changed = { 
     "time" : moment().format("YYYY-MM-DD HH:mm:ss.SSS Z"), 

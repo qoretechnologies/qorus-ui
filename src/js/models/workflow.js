@@ -23,6 +23,8 @@ define(function (require) {
           this.subworkflow = true;
           this.root = false;
           this.parent_id = null;
+          this.parent = null;
+          this.level = 0;
           this.type = type || "process";
           this.info = info;
       },
@@ -37,47 +39,67 @@ define(function (require) {
     
       addChild: function(child) {
           child.parent_id = this.id;
+          child.level = Math.max(child.level, this.level + 1);
+          child.addParent(this);
           this.children.push(child);
           this.children = _.sortBy(this.children, 'id');
       },
     
-      toArray: function (buffer, level) {
-          var children = [],
-              children_sorted = _.sortBy(this.children, function (c) { return c.children.length; }),
-              first_child = children_sorted[0];
+      addParent: function (parent) {
+        if (!this.parent) {
+          this.parent = [parent];
+        } else {
+          this.parent.push(parent);
+        }
+      },
+    
+      getDepth: function () {
+        if (!this.parent) return 0;
+        var level = 1,
+            max = 0;
+        
+        _.each(this.parent, function (p) {
+          max = Math.max(max, p.getDepth());
+        });
+        
+        return level + max;
+      },
+    
+      getAllChildren: function (children) {
+        children = children || [];
+    
+        _.each(this.children, function (child) {
+          children.push(child);
+          child.getAllChildren(children);
+        }, this);
+        
+        return _.uniq(children);
+      },
+    
+      toArray: function () {
+        var children = this.getAllChildren(),
+            root     = _.pick(this, ['id', 'name', 'type', 'info']),
+            steps    = {};
+
+        root.links_to = this.depends_on;
+        
+        steps[0] = [root];
+        
+        _.each(children, 
+          function (step) { 
+            var l = step.getDepth(),
+                s = _.pick(step, ['id', 'name', 'type', 'info']);
           
-          // debug.log(this.children,children_sorted);
-
-          buffer = buffer || [];
-          level = level || 1;
+            s.links_to = step.depends_on;
+          
+            if (!steps[l]) { 
+              steps[l] = [s]; 
+            } else { 
+              steps[l].push(s);
+            } 
+        });
         
-          if (first_child) {
-            first_child.toArray(buffer, level+1);
-          }
-        
-          _.each(this.children, function (c) {
-              children.push({
-                id: c.id, 
-                links_to: c.depends_on,
-                name: c.name,
-                type: c.type,
-                info: c.info
-              });
-          });
-
-          if (!this.parent_id) {
-              buffer[0] = [{ 
-                id: this.id, 
-                links_to: this.depends_on,
-                name: this.name,
-                type: this.type,
-                info: this.info
-              }];
-          }
-
-          buffer[level] = children;
-        
-          return buffer;
+        return _.toArray(steps);
       }
   };
   
@@ -129,7 +151,7 @@ define(function (require) {
             }
         });
     });
-    
+
     return step_list[0].toArray();
   };
   
