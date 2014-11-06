@@ -219,11 +219,13 @@ define(function (require) {
     onRender: function () {
       // create chart only if dataset available
       // console.log(this.dataset, this.getMaxValue());
+      var myChart;
+      
       if (this.dataset) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Line(this.dataset, Config);
+          myChart = new Chart(ctx).Line(this.dataset, Config);
           // console.log(myChart, this.dataset);
         }
         
@@ -238,11 +240,13 @@ define(function (require) {
     template: DoughnutChartTpl,
     onRender: function () {
       // create chart only if dataset available
+      var myChart;
+      
       if (this.dataset) {
         var cnv = this.$("canvas").get(0);
         if (cnv) {
           var ctx = cnv.getContext("2d");
-          var myChart = new Chart(ctx).Doughnut(this.dataset, DoughnutConfig);
+          myChart = new Chart(ctx).Doughnut(this.dataset, DoughnutConfig);
         }
       }
       if (myChart) {

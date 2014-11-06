@@ -9,5 +9,5 @@ define(function(require) {
     }
   });
   
-  return new TaskBar;
+  return new TaskBar();
 });

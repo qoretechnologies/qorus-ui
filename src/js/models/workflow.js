@@ -82,6 +82,7 @@ define(function (require) {
             steps    = {};
 
         root.links_to = this.depends_on;
+        root.children = _.map(this.children, function (c) { return _.parseInt(c.id); });
         
         steps[0] = [root];
         
@@ -91,6 +92,7 @@ define(function (require) {
                 s = _.pick(step, ['id', 'name', 'type', 'info']);
           
             s.links_to = step.depends_on;
+            s.children = _.map(step.children, function (c) { return _.parseInt(c.id); });
           
             if (!steps[l]) { 
               steps[l] = [s]; 

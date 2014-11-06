@@ -233,14 +233,20 @@ table .header-fixed {
   padding: 10px 0;
 }
 
+#nav-main ul.extra {
+  position: fixed;
+  bottom: 30px;
+  width: 80px;
+}
+
 #nav-main li.extra {
   padding: 0;
   border: none;
 }
 
 #nav-main .extra a {
-  padding: 0;
-  width: 100%;
+  padding: 5px;
+  width: calc(100% - 10px);
   margin: 0;
   color: #aaa;
   line-height: 1.2em;

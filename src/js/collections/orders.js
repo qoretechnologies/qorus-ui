@@ -29,9 +29,7 @@ define(function (require) {
     initialize: function (models, opts) {
       opts = opts || {};
       Collection.__super__.initialize.call(this, arguments);
-      
-      console.log(opts.date, this.date);
-      
+            
       if (!opts.date) {
         opts.date = this.date;
       }

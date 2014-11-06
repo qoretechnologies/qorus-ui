@@ -22,7 +22,7 @@
       <td><%= error.ind %></td>  
       <td><%= error.created %></td>
       <td><%= (error.business_error) ? 'Business' : 'Other' %></td>
-      <td class="info"><%= error.info %></td>
+      <td class="info"><%= _.escape(error.info) %></td>
       <td><%= error.retry %></td>
     </tr>
     <% }) %>
