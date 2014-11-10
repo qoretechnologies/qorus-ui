@@ -986,7 +986,7 @@ define(function (require) {
 
     appendRow: function (m, render) {
       if (this.template === NoDataTpl) this.render();
-
+      
       var view = this.insertView(new this.RowView({
             model: m, 
             template: this.row_tpl, 

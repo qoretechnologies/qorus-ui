@@ -29,7 +29,7 @@ define(['underscore', 'text'], function (_, text) {
         if (config.isBuild) {
           content = buildMap[name] = content.source;
         } else {
-          content = new Function('obj', 'return ' + content.source)();
+//          content = new Function('obj', 'return ' + content.source)();
         }
 
         onLoadNative(content);
