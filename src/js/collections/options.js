@@ -11,7 +11,7 @@ define(function (require) {
     sort_order: 'des',
     sort_history: ['name'],
     
-    initialize: function (opts) {
+    initialize: function (models, opts) {
       this.opts = opts || {};
     }
   });

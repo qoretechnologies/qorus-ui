@@ -11,6 +11,7 @@ define(function (require) {
       TableTpl        = require('text!templates/system/options/table.html'),
       datepicker      = require('views/common/datetimepicker'),
       ConfirmView     = require('views/common/confirm'),
+//      Toolbar         = require('views/common/toolbar'),
       ListView, RowView;
 
   require('jquery.ui');
@@ -108,8 +109,7 @@ define(function (require) {
         e.stopPropagation();
       }
     },
-  });
-  
+  });  
   
   ListView = Qorus.ListView.extend({
     __name__: 'OptionsView',
@@ -121,7 +121,7 @@ define(function (require) {
       this.context = {};
       this.options = {};
       
-      this.collection = new Collection(this.opts);
+      this.collection = new Collection([], this.opts);
       this.template = Template;
  
       this.collection.fetch();
@@ -129,11 +129,12 @@ define(function (require) {
       // this.listenTo(this.collection, 'sync resort', this.render);
     },
     preRender: function () {
-      this.setView(new Qorus.TableView({
+      var view = this.setView(new TableView({ 
+        fixed: true,
         template: TableTpl,
         row_view: RowView,
         row_template: RowTpl,
-        collection: this.collection
+        collection: this.collection 
       }), '#system-options-list');
     }
   });
