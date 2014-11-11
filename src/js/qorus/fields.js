@@ -144,8 +144,8 @@ define(function (require) {
         }, this);
     },
     validate: function (value) {
-      var values = _(this.collection.models).pluck('name');
-      return (_(values).indexOf(value) > 0);
+      var values = _.map(this.collection.models, function (m) { return m.getName(); });
+      return (_.indexOf(values, value) > 0);
     }
   });
   

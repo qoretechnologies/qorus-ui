@@ -132,7 +132,7 @@ define(function (require) {
       this.data = data;
     },
     processData: function (e) {
-      console.log('process data', this.is_valid());
+//      console.log('process data', this.is_valid());
       if (this.is_valid()) {
         this.trigger('valid', this.cleaned_data);
         if (this.model) this.save();
