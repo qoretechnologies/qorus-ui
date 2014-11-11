@@ -129,7 +129,7 @@ define(function (require) {
       // this.listenTo(this.collection, 'sync resort', this.render);
     },
     preRender: function () {
-      var view = this.setView(new TableView({ 
+      var view = this.setView(new Qorus.TableView({ 
         fixed: true,
         template: TableTpl,
         row_view: RowView,
