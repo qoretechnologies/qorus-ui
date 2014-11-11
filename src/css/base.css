@@ -933,7 +933,8 @@ input:focus {
   display: block;
   color: #000;
   height: 100%;
-  padding: 10px 2%;
+  padding: 10px 0;
+  text-align: center;
 }
 
 .box a:hover {
@@ -955,7 +956,7 @@ input:focus {
 .box.start {
   padding: 0;
   border-radius: 50%;
-  background-color: #fff;
+/*  background-color: #fff;*/
 }
 
 .box.start a {
@@ -972,11 +973,39 @@ input:focus {
 }
 
 .box.error a {
-	color: #fff;
+  color: #fff;
 }
 
 .box.selected {
   box-shadow: 0 0 20px rgba(0, 86, 134, 1);
+}
+
+.box.waiting {
+  background-color: #edd973;
+}
+
+.box.important {
+  background-color: #ce807f;
+}
+
+.box.warning {
+  background-color: #fab451;
+}
+
+.box.success {
+  background-color: #9ec251;
+}
+
+.box.info {
+  background-color: #75abc6;
+}
+
+.box.error {
+  background-color: #adadad;
+}
+
+.box.canceled {
+  background-color: #e2b6b6;
 }
 
 .indent {

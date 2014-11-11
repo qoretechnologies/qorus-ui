@@ -60,9 +60,10 @@ define(function (require) {
       cdrs2.center = cdrs2.left + $el2.outerWidth(true) / 2;
       cdrs2.bottom = cdrs2.bottom || cdrs2.top + $el2.outerHeight();
     
+      var half = parseInt(cdrs1.top - cdrs2.bottom, 10)/2 - 4;
       ctx.moveTo(cdrs1.center, cdrs1.top + pad);
-      ctx.lineTo(cdrs1.center, cdrs1.top - 20);
-      ctx.lineTo(cdrs2.center, cdrs1.top - 20);
+      ctx.lineTo(cdrs1.center, cdrs1.top - half);
+      ctx.lineTo(cdrs2.center, cdrs1.top - half);
       ctx.lineTo(cdrs2.center, cdrs2.bottom);
       ctx.lineWidth = 2;
       ctx.stroke();

@@ -4,12 +4,12 @@
   <% _.each(obj.steps, function (steps, idx1) { %>
     <div class="level">
       <% _.each(steps, function (step, idx2) { %>
-        <% var status;
+        <% var status = "blank";
+           var group = order.step_groups[step.name || step.id];
            var action = (step.type === 'start') ? '' : 'show-detail';
-           if (step.type === 'start' && order.workflowstatus === 'ERROR') status = 'error';
-           if (step.type === 'start' && order.workflowstatus !== 'ERROR') status = 'ok';
-           if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'ERROR'})) status = 'error';
-           if (step.type !== 'start' && _(order.StepInstances).findWhere({ stepname: step.name, stepstatus: 'COMPLETE'})) status = 'ok';
+           if (step.type === 'start' && order.workflowstatus === 'ERROR') status = 'important';
+           if (step.type === 'start' && order.workflowstatus !== 'ERROR') status = 'success';
+           if (step.type !== 'start' && group) status = getStatusCSS(group.status);
            if (step.info && step.info.subwfls && step.info.subwfls.length > 1) {
                action = 'show-dd';
            }

@@ -12,7 +12,7 @@
       <th>Started</th>
       <td class="date"><%= (item) ? item.started : '' %></td>
       <th>Skipped</th>
-      <td class="editable" data-action="skipStep" data-name="noretry" data-ind="<%= item.ind %>" data-stepid="<%= item.stepid %>" data-type="boolean" data-title="Skip step?"><%= (item) ? statusIcon(item.skip) : '' %></td>
+      <td class="editable" data-action="skipStep" data-name="noretry" data-ind="<%= (item) ? item.ind : '' %>" data-stepid="<%= (item) ? item.stepid : '' %>" data-type="boolean" data-title="Skip step?"><%= (item) ? statusIcon(item.skip) : '' %></td>
     </tr>
     <tr>
       <th>Completed</th>

@@ -12,6 +12,16 @@ define(function (require) {
   
   require('sprintf');
   
+  var STATUS_PRIORITY = [
+    'EVENT-WAITING',
+    'WAITING',
+    'ASYNC-WAITING',
+    'RETRY',
+    'ERROR',
+    'COMPLETE',
+    'IN-PROGRESS' 
+  ];
+  
   Model = Qorus.Model.extend({
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
@@ -122,15 +132,16 @@ define(function (require) {
       // group StepInstances
       _.each(response.StepInstances, function (step) {
         var name = step.stepname;
-        var group = step_groups[name] = step_groups[name] || { steps: [], name: name, status: 'COMPLETE' };
+        var group = step_groups[name] = step_groups[name] || { steps: [], name: name, status: null };
         
         group.steps.push(step);
         
-        if (step.stepstatus !== 'COMPLETE') {
-          group.status = step.stepstatus;
-        } 
+        var max = Math.max(_.indexOf(STATUS_PRIORITY, group.status), _.indexOf(STATUS_PRIORITY, step.stepstatus));
+        
+        group.status = STATUS_PRIORITY[max];
         
       });
+      response.StepInstances = _.sortBy(response.StepInstances, 'started');
       response.step_groups = step_groups;
       response.actions = _.map(response.actions, function (action) { return action.toLowerCase(); });
       
