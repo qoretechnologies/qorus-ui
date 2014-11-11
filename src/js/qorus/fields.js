@@ -145,7 +145,7 @@ define(function (require) {
     },
     validate: function (value) {
       var values = _.map(this.collection.models, function (m) { return m.getName(); });
-      return (_.indexOf(values, value) > 0);
+      return (_.indexOf(values, value) > -1);
     }
   });
   
