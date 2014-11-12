@@ -6,6 +6,8 @@ define(function (require) {
       NView         = require('views/notifications/notification'),
       View;
 
+  require('sprintf');
+  
   View = Qorus.View.extend({
     tagName: 'section',
     className: 'group',
@@ -22,7 +24,7 @@ define(function (require) {
       this.views = {};
       this.group = opts.group;
       this.on('prerender', this.updateContext);
-      this.listenTo(Notifications, sprintf('cleared:%s reset', this.group), this.off);
+      this.listenTo(Notifications, sprintf('cleared:%s reset', this.group), this.close);
     },
 
     clear: function () {
