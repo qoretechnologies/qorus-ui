@@ -1,17 +1,18 @@
 define(function (require, exports, module) {
-  var _              = require('underscore'),
-      Backbone       = require('backbone'),
-      Qorus          = require('qorus/qorus'),
-      StepErrorsTpl  = require('tpl!templates/workflow/orders/steperrors.html'),
-      TableTpl       = require('text!templates/workflow/orders/errors/table.html'),
-      RowTpl         = require('text!templates/workflow/orders/errors/row.html'),
-      SystemSettings = require('models/settings'),
-      BaseToolbar    = require('views/toolbars/toolbar'),
-      ToolbarTpl     = require('tpl!templates/workflow/orders/errors/toolbar.html'),
-      Modal          = require('views/common/modal'),
-      ErrorModalTpl  = require('tpl!templates/workflow/orders/errors/modal.html'),
-      RowInfoTpl     = require('tpl!templates/workflow/orders/errors/rowinfo.html'),
-      Loggers        = require('collections/loggers'),
+  var _               = require('underscore'),
+      Backbone        = require('backbone'),
+      Qorus           = require('qorus/qorus'),
+      StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
+      TableTpl        = require('text!templates/workflow/orders/errors/table.html'),
+      RowTpl          = require('text!templates/workflow/orders/errors/row.html'),
+      SystemSettings  = require('models/settings'),
+      BaseToolbar     = require('views/toolbars/toolbar'),
+      ToolbarTpl      = require('tpl!templates/workflow/orders/errors/toolbar.html'),
+      Modal           = require('views/common/modal'),
+      ErrorModalTpl   = require('tpl!templates/workflow/orders/errors/modal.html'),
+      RowInfoTpl      = require('tpl!templates/workflow/orders/errors/rowinfo.html'),
+      Loggers         = require('collections/loggers'),
+      CopyView        = require('views/common/table.copy'),
       View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
       
   require('jquery.ui');
@@ -39,6 +40,7 @@ define(function (require, exports, module) {
         predefined_statuses: SEVERITIES,
         count: this.options.count
       });
+      this.setView(new CopyView({ csv_options: { el: '.errors-table table' }, css_class: 'btn-small' }), '#table-copy');
     },
     onRender: function () {
       Toolbar.__super__.onRender.apply(this, arguments);

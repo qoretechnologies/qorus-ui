@@ -32,6 +32,7 @@ define(function(require) {
       StatusTpl       = require('tpl!templates/workflow/orders/status.html'),
       StepErrorsView  = require('views/workflows/orders/steperrors'),
       ToolbarTpl      = require('tpl!templates/workflow/orders/toolbar.html'),
+      CopyView        = require('views/common/table.copy'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus, Toolbar;
@@ -204,6 +205,7 @@ define(function(require) {
   ErrorsView = Qorus.ModelView.extend({
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
+      this.setView(new CopyView({ csv_options:  { el: '#errors table' }, css_class: 'btn-mini' }), '.table-copy');
     },
     onRender: function () {
       // init popover on info text
