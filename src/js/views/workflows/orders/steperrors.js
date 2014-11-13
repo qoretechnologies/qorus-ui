@@ -36,7 +36,8 @@ define(function (require, exports, module) {
     
     preRender: function () {
       _.extend(this.context, {
-        predefined_statuses: SEVERITIES
+        predefined_statuses: SEVERITIES,
+        count: this.options.count
       });
     },
     onRender: function () {
@@ -211,7 +212,7 @@ define(function (require, exports, module) {
       this.collection = new Qorus.SortedCollection(errors, { sort_key: 'created', sort_order: 'des' });
       table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
       
-      toolbar = this.setView(new Toolbar({ errors: this.collection.size() > 0 }), '.toolbar');
+      toolbar = this.setView(new Toolbar({ errors: this.collection.size() > 0, count: this.collection.size() }), '.toolbar');
   
       this.listenTo(toolbar, 'filter', this.filterErrors);
       this.listenTo(this.model, 'sync', this.update);
