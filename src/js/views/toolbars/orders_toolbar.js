@@ -177,9 +177,9 @@ define(function (require) {
       
       if (!moment(date).isValid()) return false;
 
-      date = utils.encodeDate(date);
+      this.options.date = utils.encodeDate(date);
       
-      url = this.updateUrl() + "/" + date;
+      url = this.updateUrl();
       Backbone.history.navigate(url, {trigger: true});
     }
   });
