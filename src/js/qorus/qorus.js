@@ -237,7 +237,6 @@ define(function (require) {
         if (this.hasNextPage()) {
 
           this.offset = this.page * this.limit;
-          this.page++;
           // console.log('loading page', this.page, this.limit, this.offset);
 
           var self = this;
@@ -247,6 +246,7 @@ define(function (require) {
               debug.log("Fetched ->", self.length);
               // self.trigger('sync');
               self.loading = false;
+              self.page++;
             }
           });
         }
@@ -274,6 +274,15 @@ define(function (require) {
       data = _.clone(data);
       if (_.has(data, 'date')) {
         data.date = moment(data.date, settings.DATE_DISPLAY).format(settings.DATE_TSEPARATOR);
+      }
+      
+      // remove any Backbone.Model from data
+      if (data) {
+        _.each(data, function (d, k) {
+          if (d instanceof Backbone.Model) {
+            delete data[k];
+          }
+        });
       }
 
       _.extend(options, { 
