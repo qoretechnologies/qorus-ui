@@ -3,7 +3,6 @@ define(function (require) {
       Qorus       = require('qorus/qorus'),  
       Model       = require('models/order'),
       Dispatcher  = require('qorus/dispatcher'),
-      moment      = require('moment'),
       _           = require('underscore'),
       Collection;
   
@@ -71,7 +70,7 @@ define(function (require) {
         this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id, workflowid: this.get('workflowid') });
       }
 
-      this.listenTo(Dispatcher, this.api_events, this.dispatch);
+      // this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
     
     dispatch: function (e, evt) {

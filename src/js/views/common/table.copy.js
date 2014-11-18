@@ -41,7 +41,7 @@ define(function (require) {
       this.context.css_class = this.options.css_class || '';
     },
     showModal: function (e) {
-      var self = this;
+      if (this.$el.find('.disabled')) return;
       var ModalView = new ModalContent({ 
             csv_options: this.csv_options
           });

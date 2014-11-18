@@ -1,5 +1,6 @@
 define(function (require, exports, module) {
   var _               = require('underscore'),
+      $               = require('jquery'),
       Backbone        = require('backbone'),
       Qorus           = require('qorus/qorus'),
       StepErrorsTpl   = require('tpl!templates/workflow/orders/steperrors.html'),
@@ -40,7 +41,7 @@ define(function (require, exports, module) {
         predefined_statuses: SEVERITIES,
         count: this.options.count
       });
-      this.setView(new CopyView({ csv_options: { el: '.errors-table table' }, css_class: 'btn-small' }), '#table-copy');
+      this.setView(new CopyView({ csv_options: { el: '.errors-table table' }, css_class: 'btn-small disabled' }), '#table-copy');
     },
     onRender: function () {
       Toolbar.__super__.onRender.apply(this, arguments);
@@ -110,6 +111,7 @@ define(function (require, exports, module) {
     
     disable: function (e) {
       e.preventDefault();
+      e.stopPropagation();
     }
   });
   

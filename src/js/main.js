@@ -103,7 +103,8 @@ require.config({
     }
   },
   templates: '../templates',
-//  waitSeconds: 300
+//  urlArgs: 'theseus=no',
+  waitSeconds: 300
 });
 
 require([
