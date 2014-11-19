@@ -828,8 +828,10 @@ define(function (require) {
     },
     
     triggerRowClick: function () {
-      if (this.detail_id)
-        this.collection.get(this.detail_id).trigger('rowClick');
+      if (this.detail_id) {
+        var m = this.collection.get(this.detail_id);
+        if (m) m.trigger('rowClick');
+      }
     }
   });
 

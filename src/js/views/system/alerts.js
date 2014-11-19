@@ -49,6 +49,7 @@ define(function (require) {
       var id = path.split('/')[0];
       
       if (id) this.detail_id = id;
+      console.log(this, path);
     },
     
     render: function (ctx) {
@@ -83,6 +84,8 @@ define(function (require) {
       this.collection = collection;
       
       // this.listenTo(this.collection, 'all', function () { console.log(arguments)} );
+//      this.processPath();
+      this.listenTo(this.collection, 'sync', this.triggerRowClick);
     },
     
     template: function () {
@@ -91,6 +94,7 @@ define(function (require) {
   
     onProcessPath: function () {
       if (this.path) this.detail_id = this.path;
+      console.log('p', this.detail_id);
     },
 
     preRender: function () {
@@ -115,10 +119,11 @@ define(function (require) {
     onRender: function () {
       ListView.__super__.onRender.apply(this, arguments);
       if (this.detail_id) {
-        var m = this.collection.get(this.detail_id);
+        var detail_id = this.detail_id;
+        var m = _.find(this.collection.models, function (a) { return a.get('alertid') == detail_id; });
         if (m) m.trigger('rowClick');
       }
-    }
+    },
   });
 
   View = Qorus.TabView.extend({
