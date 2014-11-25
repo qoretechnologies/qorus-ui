@@ -6,6 +6,7 @@ define(function (require) {
       User        = require('models/user'),
       Roles       = require('collections/roles'),
       Fields      = require('qorus/fields'),
+      Permission  = require('models/permission'),
       Forms       = {},
       GroupsMod;
       
@@ -158,6 +159,55 @@ define(function (require) {
         collection: new Roles().fetch()
       })
     ]
+  });
+  
+  Forms.Permission = FormView.extend({
+    model: Role,
+    className: 'form-horizontal',
+    name: 'perm-edit-form',
+    fields: [
+      Fields.InputView.extend({
+        name: 'Permission name',
+        attrName: 'name',
+        required: true,
+        validator: /[^\s]/
+      }),
+      Fields.TextareaView.extend({
+        name: 'Description',
+        attrName: 'desc',
+        required: true
+      })
+    ],
+    save: function () {
+      if (this.model) {
+        this.model.set(this.cleaned_data);
+        
+        if (!this.model.collection)
+          this.model.is_new = true;
+
+        this.listenToOnce(this.model, 'sync', this.onSave);
+        this.listenToOnce(this.model, 'error', this.onError);
+        this.model.save(null);
+      }
+    },
+    onError: function (m, res) {
+      if (res && res.responseJSON)
+        this.showError(res.responseJSON.err + ': ' + res.responseJSON.desc);
+      this.stopListening(this.model, 'sync');
+    },
+    onSave: function (model) {
+      var opts = { merge: true };
+      if (this.model.is_new) {
+        delete this.model.is_new;
+        opts = {};
+      }
+      
+      this.collection.add(model, opts);
+      
+      this.trigger('close');
+      this.stopListening(this.model, 'error');
+      this.model = model;
+    }    
   });
 
   return Forms;

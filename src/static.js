@@ -12,6 +12,7 @@ var file = new static.Server('.', { cache: false, headers: {"Cache-Control": "no
 
 http.createServer(function (request, response) {
     file.serve(request, response, function (err, res) {
+//        console.log(response, request, res);
         if (err && (err.status === 404)) { // An error as occured
           console.error("> Error serving " + request.url + " - " + err.message);
           file.serveFile('/index.html', 200, {}, request, response);

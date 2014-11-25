@@ -28,7 +28,9 @@ require.config({
     "templates": "../templates",
     "parallel": "libs/parallel",
     "settings": "settings.dev",
-    "prism": "libs/prism/prism"
+    "prism": "libs/prism/prism",
+    "piwik.tracker": "libs/piwik/tracker",
+    "piwik": "libs/piwik/piwik"
   },
   shim: { 
     "backbone": {

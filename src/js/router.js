@@ -39,6 +39,7 @@ define(function (require) {
   require('messenger');
   require('collections/functions');
   require('collections/loggers');
+//  require('piwik');
 
   
   // fetch local notifications

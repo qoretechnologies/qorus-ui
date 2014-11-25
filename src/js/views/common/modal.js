@@ -28,7 +28,7 @@ define(function (require) {
     },
     
     hide: function () {
-      this.$el.modal('destroy');
+      this.$el.modal('hide');
       this.close();
     },
     

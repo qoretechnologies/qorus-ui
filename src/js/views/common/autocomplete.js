@@ -136,7 +136,7 @@ define(function (require) {
       this.query = $target.val().slice(0, pos);
       
       if (rpos > 0) this.query = this.query.slice(rpos*-1);
-      console.log('q:', this.query, $target.val());
+      console.log('q:', this.query, $target.val(), rpos, pos);
       return this;
     },
     showSuggestions: function (e) {

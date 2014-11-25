@@ -1,10 +1,11 @@
 define(function (require) {
-  var settings = require('settings'),
-      Qorus    = require('qorus/qorus'),
+  var settings  = require('settings'),
+      Qorus     = require('qorus/qorus'),
+      Model     = require('models/permission'),
       Collection;
   
   Collection = Qorus.SortedCollection.extend({
-    model: Qorus.Model,
+    model: Model,
     url: settings.REST_API_PREFIX + '/system/rbac/permissions'
   });
 
