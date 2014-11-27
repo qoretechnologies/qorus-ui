@@ -1149,6 +1149,7 @@ define(function (require) {
     // timeout: null,
     // timer: 0,
     // timer_max: 10,
+    click: 0,
     
     attributes: function() {
       var data = { 'data-id': this.model.id },
@@ -1245,6 +1246,13 @@ define(function (require) {
     rowClick: function (e) {
       var trigger = true;
       
+      this.click++;
+      
+      if (this.click > 1) {
+        clearTimeout(this.click_timer);
+        this.click = 0;
+      }
+      
       if (e) {
         var $target = $(e.currentTarget),
             $et     = $(e.target),
@@ -1256,15 +1264,20 @@ define(function (require) {
         trigger = ($target.is(this.tagName) && !silent);
       }
       
-      if (trigger) {
-        this.className += " info";
-        this.trigger('clicked', this);
-        if (this.parent) {
-          this.parent.trigger('row:clicked', this);
-          if (this.parent.rowClick) {
-            this.parent.rowClick(this.model, e);
+      if (trigger && this.click === 1) {
+        var self = this;
+
+        this.click_timer = setTimeout(function () {
+          self.className += " info";
+          self.trigger('clicked', self);
+          if (self.parent) {
+            self.parent.trigger('row:clicked', self);
+            if (self.parent.rowClick) {
+              self.parent.rowClick(self.model, e);
+            }
           }
-        }
+          self.click = 0;
+        }, 200);
       } 
     },
     
