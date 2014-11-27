@@ -14,6 +14,7 @@ define(function (require) {
     tagName: 'li',
     template: _.template('<a href=\"#\"><strong><%= model.hint %></strong><br /><small><%= model.help %></small></a>'),
     applyMatch: function (e) {
+//      $('.autocomplete').get(0).focus();
       this.trigger('apply', this.model);
     },
     initialize: function () {
@@ -171,7 +172,11 @@ define(function (require) {
       return ~item.toLowerCase().indexOf(query);
     },
     highlight: function () {
+      console.log($(':focus'));
       console.log('pos:', this.getCaretPosition());
+      this.$clone.focus();
+      this.setSelection(this.getCaretPosition()-4, this.getCaretPosition()-1);
+      console.log($(':focus'));
     },
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
@@ -192,6 +197,22 @@ define(function (require) {
       if (/(38)|(40)/.test(e.keyCode)) {
         e.preventDefault();
       }
+    },
+    setSelection: function(startPos, endPos) {
+        var input = this.$clone.get(0);
+        input.focus();
+        if (typeof input.selectionStart != "undefined") {
+            input.selectionStart = startPos;
+            input.selectionEnd = endPos;
+        } else if (document.selection && document.selection.createRange) {
+            // IE branch
+            input.select();
+            var range = document.selection.createRange();
+            range.collapse(true);
+            range.moveEnd("character", endPos);
+            range.moveStart("character", startPos);
+            range.select();
+        }
     }
   });
   
