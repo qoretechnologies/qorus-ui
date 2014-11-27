@@ -172,11 +172,9 @@ define(function (require) {
       return ~item.toLowerCase().indexOf(query);
     },
     highlight: function () {
-      console.log($(':focus'));
-      console.log('pos:', this.getCaretPosition());
+//      console.log('pos:', this.getCaretPosition(), arguments);
       this.$clone.focus();
       this.setSelection(this.getCaretPosition()-4, this.getCaretPosition()-1);
-      console.log($(':focus'));
     },
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
