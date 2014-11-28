@@ -81,7 +81,7 @@ define(function (require) {
       return response;
     },
 
-    fetch: _.debounce(function (options) {
+    fetch: function (options) {
       var data = {};
       
       if (this.opts) {
@@ -106,7 +106,7 @@ define(function (require) {
       Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
       return this;
-    }, 300, { leading: true }),
+    },
 
     incr: function (attr, val) {
       val = val || 1;
@@ -253,7 +253,7 @@ define(function (require) {
       }
     },
 
-    fetch: _.debounce(function (options) {
+    fetch: function (options) {
       this.trigger('pre:fetch', this);
       
       if (this.opts) {
@@ -298,7 +298,7 @@ define(function (require) {
       Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
       return this;
-    }, 300, { leading: true }),
+    },
     
     next: function (model) {
       var idx = this.indexOf(model) + 1;

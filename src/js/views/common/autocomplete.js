@@ -1,4 +1,6 @@
-define(function (require) {  
+//TODO: replace the hint on apply not on activate
+
+define(function (require) { 
   var Tpl   = require('tpl!templates/common/autocomplete.html'),
       $     = require('jquery'),
       Qorus = require('qorus/qorus'),
@@ -7,14 +9,19 @@ define(function (require) {
     
   require('libs/jquery.caret');
   
+  var indexOfRight = function (col, ind) {
+    var length = col.length;
+    var pos = col.reverse().indexOf(ind);
+    return (pos === -1) ? pos : length - pos;
+  };
+  
   Match = Qorus.View.extend({
     additionalEvents: {
       "click a": "applyMatch"
     },
     tagName: 'li',
     template: _.template('<a href=\"#\"><strong><%= model.hint %></strong><br /><small><%= model.help %></small></a>'),
-    applyMatch: function (e) {
-//      $('.autocomplete').get(0).focus();
+    applyMatch: function () {
       this.trigger('apply', this.model);
     },
     initialize: function () {
@@ -42,7 +49,7 @@ define(function (require) {
         this.listenTo(v, 'apply', function (model) {
           self.trigger('activate', model, true);
         });
-
+        
         frag.appendChild(v.el);
       }, this);
       
@@ -99,6 +106,7 @@ define(function (require) {
       this.dataset = opts.dataset;
     },
     preRender: function () {
+      this.activehint = null;
       var dd = this.insertView(new Matches(), '.dropdown');
       this.listenTo(dd, 'activate', this.applyActiveHint);
     },
@@ -137,7 +145,7 @@ define(function (require) {
       this.query = $target.val().slice(0, pos);
       
       if (rpos > 0) this.query = this.query.slice(rpos*-1);
-      console.log('q:', this.query, $target.val(), rpos, pos);
+//      console.log('q:', this.query, $target.val(), rpos, pos);
       return this;
     },
     showSuggestions: function (e) {
@@ -151,7 +159,7 @@ define(function (require) {
           dd.next();
         } else if (e.keyCode == 38) {
           dd.prev();
-          this.$('.autocomplete').caret(-1);
+          this.$clone.caret(-1);
         } else if (e.keyCode == 13){
           this.hideDropdown();
         }
@@ -172,13 +180,11 @@ define(function (require) {
       return ~item.toLowerCase().indexOf(query);
     },
     highlight: function () {
-//      console.log('pos:', this.getCaretPosition(), arguments);
       this.$clone.focus();
-      this.setSelection(this.getCaretPosition()-4, this.getCaretPosition()-1);
+//      this.setSelection(this.getCaretPosition()-4, this.getCaretPosition()-1);
     },
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
-      this.highlight();
       _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },
     getCaretPosition: function () {
@@ -186,9 +192,15 @@ define(function (require) {
     },
     applyActiveHint: function (model, hide) {
       var $el = this.$('.autocomplete');
-      var pos = this.getCaretPosition();
+      var rpos = this.getCaretPosition();
+      var pos = $el.val().split('').in
+      var q = this.query;
 
-      $el.val(model.hint);
+      $el.val(function (i, val) {
+        return val.replace(val.substr(pos, rpos), model.hint);
+      });
+      this.query = model.hint;
+
       if (hide === true) this.hideDropdown();
     },
     preventDefault: function (e) {
