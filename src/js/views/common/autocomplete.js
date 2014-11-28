@@ -11,10 +11,10 @@ define(function (require) {
   
   var indexOfRight = function (col, ind) {
     var length = col.length;
-    var pos = col.reverse().indexOf(ind);
+    var pos = col.reverse().join('').search(ind);
     return (pos === -1) ? pos : length - pos;
   };
-  
+
   Match = Qorus.View.extend({
     additionalEvents: {
       "click a": "applyMatch"
@@ -47,7 +47,7 @@ define(function (require) {
             self = this;
               
         this.listenTo(v, 'apply', function (model) {
-          self.trigger('activate', model, true);
+          self.setActiveMatch(model);
         });
         
         frag.appendChild(v.el);
@@ -64,8 +64,7 @@ define(function (require) {
     },
     setActive: function (next) {
       var matches = this.getView('.matches'),
-          current = _.at(matches, this.active_match)[0],
-          active;
+          current = _.at(matches, this.active_match)[0];
       
       if (current) current.trigger('deactivate');
       if (next) {
@@ -74,19 +73,36 @@ define(function (require) {
         this.active_match--;
       }
       
-      if (this.active_match < 0) this.active_match = matches.length - 1;
-      if (this.active_match >= matches.length) this.active_match = 0;
-      
-      active = _.at(matches, this.active_match)[0];
-      active.trigger('activate');
-      this.trigger('activate', active.model);
-      return active;
+      return this.applyMatch();
+    },
+    setActiveMatch: function (model) {
+      this.active_match = this.matches.indexOf(model);
     },
     next: function () {
       return this.setActive(true);
     },
     prev: function () {
       return this.setActive();
+    },
+    applyMatch: function () {
+      var active; 
+      
+      active = this.getActiveMatch();
+      active.trigger('activate');
+      this.trigger('activate', active.model);
+      
+      return active;
+    },
+    getActiveMatch: function () {
+      var matches = this.getView('.matches'),
+          active;
+      
+      if (!matches) return null;
+      
+      if (this.active_match < 0) this.active_match = matches.length - 1;
+      if (this.active_match >= matches.length) this.active_match = 0;
+      
+      return _.at(matches, this.active_match)[0];
     }
   });
   
@@ -95,6 +111,7 @@ define(function (require) {
     additionalEvents: {
       'keyup input.autocomplete': 'showSuggestions',
       'keydown input.autocomplete': 'preventDefault',
+      'click .dropdown a': 'applyActiveHint'
 //      'blur input.autocomplete': 'hideDropdown'
     },
     className: "autocomplete-box",
@@ -108,7 +125,6 @@ define(function (require) {
     preRender: function () {
       this.activehint = null;
       var dd = this.insertView(new Matches(), '.dropdown');
-      this.listenTo(dd, 'activate', this.applyActiveHint);
     },
     onRender: function () {
       this.$el.prepend(this.$clone);
@@ -141,7 +157,6 @@ define(function (require) {
       var q = $target.val();
       var rpos = q.slice(0, pos).split('').reverse().join('').search(this.split());
       
-      
       this.query = $target.val().slice(0, pos);
       
       if (rpos > 0) this.query = this.query.slice(rpos*-1);
@@ -152,16 +167,18 @@ define(function (require) {
       var dd = this.getDropdown();
       // up and down arrow codes 38, 40
       // tab 9
+      this.caret_pos = this.$clone.caret();
+      
       if (/(37)|(39)|(38)|(40)|(13)/.test(e.keyCode)) {
-//        e.preventDefault();
-
         if (e.keyCode == 40) {
           dd.next();
         } else if (e.keyCode == 38) {
           dd.prev();
           this.$clone.caret(-1);
         } else if (e.keyCode == 13){
-          this.hideDropdown();
+          if (this.getDropdown().getActiveMatch()) {
+            this.applyActiveHint();
+          }
         }
       } else {
         var matches;
@@ -188,20 +205,24 @@ define(function (require) {
       _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },
     getCaretPosition: function () {
-      return this.$clone.caret();
+      return this.caret_pos;
     },
-    applyActiveHint: function (model, hide) {
-      var $el = this.$('.autocomplete');
-      var rpos = this.getCaretPosition();
-      var pos = $el.val().split('').in
-      var q = this.query;
-
+    applyActiveHint: function () {
+      var $el   = this.$('.autocomplete'),
+          q     = this.query,
+          rpos  = this.getCaretPosition(),
+          lpos  = indexOfRight($el.val().slice(0, rpos).split(''), this.split()),
+          model = this.getDropdown().getActiveMatch().model;
+      
+      lpos = (lpos > 0) ? lpos : 0;      
+      
       $el.val(function (i, val) {
-        return val.replace(val.substr(pos, rpos), model.hint);
+        var p1 = val.substr(0, lpos);
+        var p2 = val.substr(rpos, val.length);
+        return p1 + model.hint + p2;
       });
-      this.query = model.hint;
 
-      if (hide === true) this.hideDropdown();
+      this.hideDropdown();
     },
     preventDefault: function (e) {
       if (/(38)|(40)/.test(e.keyCode)) {
