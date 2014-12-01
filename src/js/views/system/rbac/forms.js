@@ -80,7 +80,18 @@ define(function (require) {
     onRender: function () {
       this.$('select').multiselect({
         enableCaseInsensitiveFiltering : true,
-        maxHeight: 200
+        maxHeight: 200,
+        onChange: function (option, checked, select) {
+          if (option.val() == 'DEFAULT') {
+            if (checked) {
+              $(option).parent().find('option').not('[value=DEFAULT]').prop('disabled', true);
+              this.refresh();
+            } else {
+              $(option).parent().find('option').not('[value=DEFAULT]').prop('disabled', false);
+              this.refresh();
+            }
+          }
+        }
       });
     }
   });
@@ -145,6 +156,12 @@ define(function (require) {
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
+    },
+    onRender: function () {
+      this.$('select').multiselect({
+        enableCaseInsensitiveFiltering : true,
+        maxHeight: 200
+      });
     }
   });
   

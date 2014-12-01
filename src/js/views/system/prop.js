@@ -80,7 +80,6 @@ define(function(require) {
           self  = this;
       
       this.listenTo(view, 'confirm', function () {
-        console.log($el.data('action-confirm'), $el.data());
         self.runAction($el.data('action-confirm'), $el.data());
       });
     },

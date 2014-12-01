@@ -70,6 +70,7 @@ define(function (require) {
     },
     
     fixHeight: function (e) {
+      this.$el.css('padding-bottom', this.$el.find('.modal-footer').outerHeight() + 10);
       if (!e || !e.target.tagName) {
         var padding = 15;
         var $modal = this.$el;
@@ -89,7 +90,6 @@ define(function (require) {
           $body.height(h).css('max-height', h);
         }
       }
-      this.$el.css('padding-bottom', this.$el.find('.modal-footer').outerHeight());
     },
         
     clean: function () {
