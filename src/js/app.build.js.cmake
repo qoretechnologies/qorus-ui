@@ -20,7 +20,7 @@
       "jquery.fixedhead": "libs/jquery.fixedhead",
       "jquery.expanding": "libs/jquery.expanding",
       "messenger": "libs/messenger/js/messenger.min",
-      "bootstrap.multiselect": "libs/bootstrap-multiselect",
+      "bootstrap.multiselect": "libs/bootstrap-multiselect/js/bootstrap-multiselect",
       "chart": "libs/chart",
       "templates": "../templates",
       "parallel": "libs/parallel",
