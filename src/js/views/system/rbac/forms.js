@@ -9,7 +9,8 @@ define(function (require) {
       Permission  = require('models/permission'),
       Forms       = {},
       GroupsMod;
-      
+  
+  require('bootstrap.multiselect');
       
   GroupsMod = Groups.extend({
     initialize: function () {
@@ -75,6 +76,12 @@ define(function (require) {
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
+    },
+    onRender: function () {
+      this.$('select').multiselect({
+        enableCaseInsensitiveFiltering : true,
+        maxHeight: 200
+      });
     }
   });
   

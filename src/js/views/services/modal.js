@@ -1,16 +1,17 @@
 define(function (require) {
-  var $        = require('jquery'),
-      _        = require('underscore'),
-      settings = require('settings'),
-      Qorus    = require('qorus/qorus'),
-      Template = require('tpl!templates/service/modal.html'),
-      yaml     = require('libs/js-yaml'),
+  var $         = require('jquery'),
+      _         = require('underscore'),
+      settings  = require('settings'),
+      Qorus     = require('qorus/qorus'),
+      Template  = require('tpl!templates/service/method.html'),
+      yaml      = require('libs/js-yaml'),
       View;
 
 
   View = Qorus.View.extend({
     views: {},
     context: {},
+    template: Template,
     additionalEvents: {
       'submit': 'executeMethod',
       'click .nav-pills a': 'tabToggle'
@@ -18,22 +19,9 @@ define(function (require) {
     
     initialize: function (opts) {
       _.bindAll(this);
-      this.template = Template;
 
       this.opts = opts;      
       _.extend(this.context, opts);
-    },
-        
-    onRender: function () {
-      $(this.$el).modal();
-    },
-
-    open: function () {
-      $(this.$el).modal();
-    },
-    
-    closeView: function () {
-      this.$el.modal('hide');
     },
     
     // starts workflow with params from form
@@ -59,12 +47,6 @@ define(function (require) {
       this.$('#response-json', this.$el).text(response);
       this.$('#response-yaml', this.$el).text(yaml.dump(arguments[2].responseJSON));
       // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
-    },
-    
-    close: function () {
-      this.undelegateEvents();
-      this.stopListening();
-      this.$el.empty();
     },
     
     tabToggle: function (e) {

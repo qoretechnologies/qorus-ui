@@ -162,10 +162,6 @@ define(function(require){
           context: this.context 
         });
         
-        // add listener - for some reason it doesn't work inside ServiceView
-        // this.listenTo(model, 'change', content_view.render);
-        this.listenTo(content_view, 'modal:open', this.openExecuteModal);
-        
         // init detail view
         view = this.setView(new PaneView({
           content_view: content_view,
@@ -186,18 +182,6 @@ define(function(require){
       
       Backbone.history.navigate(url);
       
-    },
-    
-    // open service method execution modal
-    // TODO: it would be better to run inside Service Detail view,
-    // but it has CSS position issues. try to fix later
-    openExecuteModal: function (model, method) {
-      var view = this.setView(new ModalView({ 
-        name: method, 
-        methods: model.get('methods'), 
-        service_name: model.get('name') 
-      }), '#function-execute', true);
-      view.render();
     },
     
     helpers:  {

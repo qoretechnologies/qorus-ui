@@ -806,6 +806,14 @@ input:focus {
 
 .modal .modal-body {
   max-height: none;
+  height: 100%;
+}
+
+.modal-footer {
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 0;
+  width: 100%;
 }
 
 .ui-resizable-handle { z-index: auto !important; }
@@ -2058,4 +2066,8 @@ a.subtle:hover, a.subtle:focus {
 
 .status-list .badge:hover .short {
   display: none;
+}
+
+.filter .btn {
+  padding: 4px;
 }

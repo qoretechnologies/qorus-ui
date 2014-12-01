@@ -82,11 +82,14 @@ define(function (require) {
           var cor = $body.innerHeight() - $body.height();
           var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
 
-          if ($modal.find('.modal-footer')) h -= $modal.find('.modal-footer').outerHeight() - padding;
+          if ($modal.find('.modal-footer')) {
+            h -= $modal.find('.modal-footer').outerHeight() - padding;
+          }
 
           $body.height(h).css('max-height', h);
         }
       }
+      this.$el.css('padding-bottom', this.$el.find('.modal-footer').outerHeight());
     },
         
     clean: function () {

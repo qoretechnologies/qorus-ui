@@ -1,21 +1,33 @@
 define(function (require) {
   require('jquery.ui');
   
-  var $           = require('jquery'),
-      _           = require('underscore'),
-      Qorus       = require('qorus/qorus'),
-      LogView     = require('views/log'),
-      ModalView   = require('views/common/modal'),
-      LibraryView = require('views/common/library'),
-      Template    = require('tpl!templates/service/detail.html'),
-      MethodsTpl  = require('tpl!templates/service/methods.html'),
-      InfoTpl     = require('tpl!templates/service/info.html'),
-      SourceTpl   = require('tpl!templates/service/source.html'),
-      AlertsTpl   = require('tpl!templates/common/alerts.html'),
-      Prism       = require('prism'),
-      ModelView, MethodsView, AlertsView;
+  var $             = require('jquery'),
+      _             = require('underscore'),
+      Qorus         = require('qorus/qorus'),
+      LogView       = require('views/log'),
+      Modal    = require('views/common/modal'),
+      ModalTpl      = require('tpl!/templates/service/modal.html'),
+      LibraryView   = require('views/common/library'),
+      MethodView    = require('views/services/modal'),
+      Template      = require('tpl!templates/service/detail.html'),
+      MethodsTpl    = require('tpl!templates/service/methods.html'),
+      InfoTpl       = require('tpl!templates/service/info.html'),
+      SourceTpl     = require('tpl!templates/service/source.html'),
+      AlertsTpl     = require('tpl!templates/common/alerts.html'),
+      Prism         = require('prism'),
+      ModelView, MethodsView, AlertsView, ModalView;
       
 
+  ModalView = Modal.extend({
+    additionalEvents: {
+      'submit': 'executeMethod'
+    },
+    executeMethod: function (e) {
+      e.preventDefault();
+      this.getView('.content').executeMethod(e);
+    }
+  });
+  
   AlertsView = Qorus.ModelView.extend({
     __name__: 'ServiceAlertsPaneView',
     name: 'Alerts',
@@ -104,8 +116,17 @@ define(function (require) {
     },
     
     openExecuteModal: function (evt) {
-      evt.stopPropagation();
-      this.trigger('modal:open', this.model, $(evt.currentTarget).data('methodname'));
+      evt.preventDefault();
+      var method = $(evt.currentTarget).data('methodname');
+      this.setView(new ModalView({
+        template: ModalTpl,
+        service_name: this.model.get('name'),
+        content_view: new MethodView({
+          name: method,
+          methods: this.model.get('methods'), 
+          service_name: this.model.get('name') 
+        })
+      }), '.modal');
     },
     
     closeView: function () {

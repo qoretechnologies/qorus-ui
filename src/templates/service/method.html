@@ -1,0 +1,24 @@
+<label for="method">Method</label>
+<input type="hidden" value="<%= service_name %>" name="service_name" id="service_name" />
+<select name="method" id="method">
+    <% _.each(obj.methods, function(method) { %>
+        <option value="<%= method.name %>" <% if (method.name == obj.name) { %>selected<% } %>><%= method.name %></option>
+    <% }) %>
+</select>
+<label for="args">Arguments</label>
+<textarea id="args" name="args" class="span12" rows=5></textarea>
+
+<div id="service-method-response">
+  <div class="tab-content">
+    <div id="service-method-response-yaml" class="tab-pane active">
+      <textarea id="response-yaml" name="response-yaml" class="span12" disabled rows=5>Response</textarea>
+    </div>
+    <div id="service-method-response-json" class="tab-pane">
+      <textarea id="response-json" name="response-json" class="span12" disabled rows=5>Response</textarea>
+    </div>
+  </div>
+  <ul class="nav nav-pills">
+    <li class="active"><a data-target="#service-method-response-yaml">YAML</a></li>
+    <li><a data-target="#service-method-response-json">JSON</a></li>
+  </ul>
+</div>
