@@ -2072,3 +2072,8 @@ a.subtle:hover, a.subtle:focus {
 .filter .btn {
   padding: 4px;
 }
+
+.order-header {
+  float: left;
+  padding-right: 200px;
+}
