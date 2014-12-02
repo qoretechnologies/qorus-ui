@@ -261,7 +261,7 @@ define(function (require) {
         this.opts.offset = this.offset;
       }
 
-      var data = this.opts;
+      var data = this.opts || {};
 
       if (!options) {
         options = {};
@@ -272,7 +272,7 @@ define(function (require) {
       }
 
       data = _.clone(data);
-      if (_.has(data, 'date')) {
+      if (data.date) {
         data.date = moment(data.date, settings.DATE_DISPLAY).format(settings.DATE_TSEPARATOR);
       }
       
@@ -320,7 +320,6 @@ define(function (require) {
     sort_order: 'asc',
     sort_history: [''],
     initialize: function (models, opts) {
-      debug.log(this);
       // this.sort_key = 'name';
       // this.sort_order = 'asc';
       // this.sort_history = [''];

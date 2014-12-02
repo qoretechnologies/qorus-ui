@@ -174,10 +174,11 @@ define(function (require) {
           dd.next();
         } else if (e.keyCode == 38) {
           dd.prev();
-          this.$clone.caret(-1);
         } else if (e.keyCode == 13){
           if (this.getDropdown().getActiveMatch()) {
             this.applyActiveHint();
+          } else {
+            this.$el.parents('form').submit();
           }
         }
       } else {
@@ -197,8 +198,14 @@ define(function (require) {
       return ~item.toLowerCase().indexOf(query);
     },
     highlight: function () {
-      this.$clone.focus();
-//      this.setSelection(this.getCaretPosition()-4, this.getCaretPosition()-1);
+//      this.$clone.focus();
+      var model = this.getDropdown().getActiveMatch().model,
+          caret = this.getCaretPosition(),
+          query = this.$clone.val(),
+          left  = query.slice(caret).search(/\(/) + caret + 1,
+          right = query.slice(caret).search(/\)/) + caret;
+    
+      this.setSelection(left, right);
     },
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
@@ -209,7 +216,6 @@ define(function (require) {
     },
     applyActiveHint: function () {
       var $el   = this.$('.autocomplete'),
-          q     = this.query,
           rpos  = this.getCaretPosition(),
           lpos  = indexOfRight($el.val().slice(0, rpos).split(''), this.split()),
           model = this.getDropdown().getActiveMatch().model;
@@ -219,10 +225,11 @@ define(function (require) {
       $el.val(function (i, val) {
         var p1 = val.substr(0, lpos);
         var p2 = val.substr(rpos, val.length);
-        return p1 + model.hint + p2;
+        return p1 + model.hint + ' ' + p2;
       });
 
       this.hideDropdown();
+      this.highlight();
     },
     preventDefault: function (e) {
       if (/(38)|(40)/.test(e.keyCode)) {

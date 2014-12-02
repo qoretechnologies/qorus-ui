@@ -5,7 +5,7 @@ define(function (require) {
   FilterBase = {
     FILTERS: {
       ID: {
-        name: 'workflow_instanceid',
+        name: 'ids',
         help: 'limit the search to one or more workflow_instanceids',
         hint:  'ID(id)'
       },
@@ -25,9 +25,9 @@ define(function (require) {
         hint:  'MAXMODIFIED(date)'
       },
       MINMODIFIED: {
-        name: 'minmodified',
+        name: 'modified',
         help: 'give the lower modified date range for the search',
-        hint:  'MINODIFIED(date)'
+        hint:  'MINMODIFIED(date)'
       },
       MAXSTARTED: {
         name: 'maxstarted',
@@ -40,7 +40,7 @@ define(function (require) {
         hint:  'MINSTARTED(date)'
       },
       DATEMOD: {
-        name: ['minmodfied', 'maxmodified'],
+        name: ['modified', 'maxmodified'],
         help: 'limit the search to defined modified time range',
         hint:  'DATEMOD(mindate,maxdate)',
         parse: function (value) {
@@ -56,9 +56,9 @@ define(function (require) {
         }
       },
       KEYS: {
-        name: ['keyname', 'keyvalue'],
+        name: ['keyvalue', 'keyname'],
         help: "the name of a search key to be used with the \\a keyvalue value(s)",
-        hint:  'KEYS(keyname,keyvalue)',
+        hint:  'KEYS(keyvalue,keyname)',
         parse: function (value) {
           return value.split(/\s|;|,/);
         }

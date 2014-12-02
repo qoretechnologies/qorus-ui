@@ -104,10 +104,11 @@ define(function (require) {
   
   TableView = Qorus.TableView.extend({
     fixed: true,
-    close: function () {
-      TableView.__super__.off.call(this, false);
-      return this;
-    }
+//    close: function () {
+//      this.stopListening();
+//      this.undelegateEvents();
+//      this.$el.empty();
+//    }
   });
     
   View = Qorus.ListView.extend({
@@ -149,6 +150,7 @@ define(function (require) {
       // this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.stopListening(this.collection);
       this.listenTo(this.collection, 'reset', this.createOrdersTable);
+//      this.listenTo(this.collection, 'reset', function () { console.log(arguments); });
             
       _.extend(this.options, this.opts);
       _.extend(this.context, this.opts);
@@ -271,6 +273,7 @@ define(function (require) {
 
       e.preventDefault();
       _.extend(this.collection.opts, data);
+
       this.collection.reset();
       this.collection.fetch();
     }
