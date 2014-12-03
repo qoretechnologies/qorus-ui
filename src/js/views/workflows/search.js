@@ -104,11 +104,9 @@ define(function (require) {
   
   TableView = Qorus.TableView.extend({
     fixed: true,
-//    close: function () {
-//      this.stopListening();
-//      this.undelegateEvents();
-//      this.$el.empty();
-//    }
+    postInit: function () {
+      this.listenTo(this.collection, 'sync', this.update);
+    }
   });
     
   View = Qorus.ListView.extend({
@@ -147,10 +145,7 @@ define(function (require) {
       _.bindAll(this, 'render');
       
       this.template = Template;
-      // this.listenTo(this.collection, 'sync', this.updateContext, this);
       this.stopListening(this.collection);
-      this.listenTo(this.collection, 'reset', this.createOrdersTable);
-//      this.listenTo(this.collection, 'reset', function () { console.log(arguments); });
             
       _.extend(this.options, this.opts);
       _.extend(this.context, this.opts);
@@ -269,13 +264,16 @@ define(function (require) {
     
     searchAdvanced: function (e) {
       var $target = $(e.currentTarget).find('input'),
-          data = Filters.process($target.val());
-
+          data    = Filters.process($target.val()),
+          table   = this.getView('#instances');
+      
       e.preventDefault();
-      _.extend(this.collection.opts, data);
 
       this.collection.reset();
-      this.collection.fetch();
+      table.update(true);
+      this.collection.fetch({ data: data });
+      
+      Backbone.history.navigate([this.url(), $.param(data)].join("?"));
     }
     
   });

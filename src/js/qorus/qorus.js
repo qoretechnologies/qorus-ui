@@ -261,7 +261,7 @@ define(function (require) {
         this.opts.offset = this.offset;
       }
 
-      var data = this.opts || {};
+      var data = _.clone(this.opts) || {};
 
       if (!options) {
         options = {};

@@ -65,14 +65,14 @@ define(function (require) {
       }
     },
     
-    ALIASES: {
-      STARTED: 'MINSTARTED',
-      STARTEDMAX: 'MAXSTARTED',
-      MODIFIED: 'MINMODIFIED',
-      MODIFIEDMAX: 'MAXMODIFIED',
-      W: 'WORKFLOWID',
-      S: 'STATUS'
-    },
+//    ALIASES: {
+//      STARTED: 'MINSTARTED',
+//      STARTEDMAX: 'MAXSTARTED',
+//      MODIFIED: 'MINMODIFIED',
+//      MODIFIEDMAX: 'MAXMODIFIED',
+//      W: 'WORKFLOWID',
+//      S: 'STATUS'
+//    },
     
     parse: function (text) {
       var filter_list = text.split(/\s/), 
@@ -115,10 +115,23 @@ define(function (require) {
     },
     
     mapAliases: function () {
-      _.each(this.ALIASES, function (filter, alias) {
-        this.FILTERS[alias] = this.FILTERS[filter];
-      }, this);
+      if (this.ALIASES) {
+        _.each(this.ALIASES, function (filter, alias) {
+          this.FILTERS[alias] = this.FILTERS[filter];
+        }, this);        
+      }
       return this;
+    },
+    
+    getFilters: function() {
+      if (this.ALIASES) {
+        var key = _.keys(this.ALIASES)[0];
+        if (!_.has(this.FILTERS, key)) {
+            this.mapAliases();
+        }        
+      }
+
+      return this.FILTERS;
     }
   };
   

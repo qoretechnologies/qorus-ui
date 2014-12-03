@@ -57,7 +57,11 @@ define(function (require) {
       return this;
     },
     show: function () {
-      if (this.matches.length > 0) this.$el.show();
+      if (this.matches.length > 0) {
+        this.$el.show();
+      } else {
+        this.hide();
+      }
     },
     hide: function () {
       this.$el.hide();
@@ -130,6 +134,9 @@ define(function (require) {
       this.$el.prepend(this.$clone);
       this.$input.replaceWith(this.$el);
       
+      this.onShow();
+    },
+    onShow: function () {
       var $el = this.$('.autocomplete'),
           pos = $el.position();
 
@@ -137,6 +144,13 @@ define(function (require) {
         .css('top', pos.top)
         .css('left', pos.left)
         .width($el.width());
+    },
+    show: function () {
+      this.$el.show();
+      this.onShow();
+    },
+    hide: function () {
+      this.$el.hide();
     },
     split: function () {
       return /\s/;
@@ -151,6 +165,7 @@ define(function (require) {
       
       return matches;
     },
+    
     updateQuery: function (e) {
       var $target = $(e.currentTarget);
       var pos = this.getCaretPosition();
@@ -160,26 +175,30 @@ define(function (require) {
       this.query = $target.val().slice(0, pos);
       
       if (rpos > 0) this.query = this.query.slice(rpos*-1);
-//      console.log('q:', this.query, $target.val(), rpos, pos);
+
       return this;
     },
+    
     showSuggestions: function (e) {
       var dd = this.getDropdown();
       // up and down arrow codes 38, 40
       // tab 9
       this.caret_pos = this.$clone.caret();
       
-      if (/(37)|(39)|(38)|(40)|(13)/.test(e.keyCode)) {
+      if (/^(37|39|38|40|13|9)$/.test(e.keyCode)) {
         if (e.keyCode == 40) {
           dd.next();
         } else if (e.keyCode == 38) {
           dd.prev();
         } else if (e.keyCode == 13){
-          if (this.getDropdown().getActiveMatch()) {
+          if (this.getDropdown().getActiveMatch() && this.$clone.val().length > 0) {
             this.applyActiveHint();
           } else {
+            this.hideDropdown();
             this.$el.parents('form').submit();
           }
+        } else if (e.keyCode == 9) {
+          this.$clone.caret(-1);
         }
       } else {
         var matches;
@@ -189,14 +208,16 @@ define(function (require) {
         dd.addMatches(matches).show();
       }
     },
+    
     getDropdown: function () {
       return this.getView('.dropdown')[0];
     },
     match: function (item) {
       // var query = this.query.match(/(?=[^\s]*$)(.*)/)[1];
-      var query = this.query;
+      var query = this.query.toLowerCase();
       return ~item.toLowerCase().indexOf(query);
     },
+    
     highlight: function () {
 //      this.$clone.focus();
       var model = this.getDropdown().getActiveMatch().model,
@@ -207,13 +228,16 @@ define(function (require) {
     
       this.setSelection(left, right);
     },
+    
     hideDropdown: function (now) {
       // delay the hide of dropdown to allow click event execution
       _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },
+    
     getCaretPosition: function () {
       return this.caret_pos;
     },
+    
     applyActiveHint: function () {
       var $el   = this.$('.autocomplete'),
           rpos  = this.getCaretPosition(),
@@ -231,14 +255,17 @@ define(function (require) {
       this.hideDropdown();
       this.highlight();
     },
+    
     preventDefault: function (e) {
-      if (/(38)|(40)/.test(e.keyCode)) {
+      if (/^(38|40|9)$/.test(e.keyCode)) {
         e.preventDefault();
       }
     },
+    
     setSelection: function(startPos, endPos) {
         var input = this.$clone.get(0);
         input.focus();
+      
         if (typeof input.selectionStart != "undefined") {
             input.selectionStart = startPos;
             input.selectionEnd = endPos;

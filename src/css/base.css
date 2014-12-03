@@ -2077,3 +2077,13 @@ a.subtle:hover, a.subtle:focus {
   float: left;
   padding-right: 200px;
 }
+
+.modal textarea {
+  width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+.modal textarea[name='note'] {
+  min-height: 200px;
+}

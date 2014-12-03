@@ -19,7 +19,8 @@ define(function (require) {
   Toolbar = BaseToolbar.extend({
     fixed: true,
     additionalEvents: {
-      "click button[data-action='open']": "navigateTo"
+      "click button[data-action='open']": "navigateTo",
+      "click .search-toggle": "searchToggle"
       // 'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },
@@ -37,7 +38,7 @@ define(function (require) {
     
     onRender: function () {
       Toolbar.__super__.onRender.apply(this, arguments);
-      var dataset = _.map(Filters.FILTERS, function (v, k) { v.value = k; return v; });
+      var dataset = _.map(Filters.getFilters(), function (v, k) { v.value = k; return v; });
       this.setView(new Autocomplete({ input: this.$('input.search-qql'), dataset: dataset }), 'autocomplete').render();
     },
     
@@ -53,6 +54,10 @@ define(function (require) {
         this.collection.search(e); 
       }
       debug.log(this.options);
+    },
+    
+    searchToggle: function (e) {
+      this.$('.simple-search').toggleClass('hide');
     }
   });
   return Toolbar;
