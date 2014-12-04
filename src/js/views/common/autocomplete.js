@@ -1,5 +1,3 @@
-//TODO: replace the hint on apply not on activate
-
 define(function (require) { 
   var Tpl   = require('tpl!templates/common/autocomplete.html'),
       $     = require('jquery'),
@@ -59,6 +57,7 @@ define(function (require) {
     show: function () {
       if (this.matches.length > 0) {
         this.$el.show();
+        this.next();
       } else {
         this.hide();
       }
@@ -98,8 +97,7 @@ define(function (require) {
       return active;
     },
     getActiveMatch: function () {
-      var matches = this.getView('.matches'),
-          active;
+      var matches = this.getView('.matches');
       
       if (!matches) return null;
       
@@ -128,26 +126,15 @@ define(function (require) {
     },
     preRender: function () {
       this.activehint = null;
-      var dd = this.insertView(new Matches(), '.dropdown');
+      this.insertView(new Matches(), '.dropdown');
     },
     onRender: function () {
       this.$el.prepend(this.$clone);
       this.$input.replaceWith(this.$el);
-      
-      this.onShow();
-    },
-    onShow: function () {
-      var $el = this.$('.autocomplete'),
-          pos = $el.position();
-
-      this.$('.autocomplete-hint')
-        .css('top', pos.top)
-        .css('left', pos.left)
-        .width($el.width());
     },
     show: function () {
       this.$el.show();
-      this.onShow();
+//      this.onShow();
     },
     hide: function () {
       this.$el.hide();
@@ -220,8 +207,7 @@ define(function (require) {
     
     highlight: function () {
 //      this.$clone.focus();
-      var model = this.getDropdown().getActiveMatch().model,
-          caret = this.getCaretPosition(),
+      var caret = this.getCaretPosition(),
           query = this.$clone.val(),
           left  = query.slice(caret).search(/\(/) + caret + 1,
           right = query.slice(caret).search(/\)/) + caret;
@@ -229,7 +215,7 @@ define(function (require) {
       this.setSelection(left, right);
     },
     
-    hideDropdown: function (now) {
+    hideDropdown: function () {
       // delay the hide of dropdown to allow click event execution
       _.delay(function($dd) { $dd.hide(); }, 50, this.$('.dropdown-menu'));
     },

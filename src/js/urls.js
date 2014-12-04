@@ -14,6 +14,7 @@ define(function (require) {
     'jobs(/)(:date)(/)*path': 'showJobs',
     'events': 'showEvents',
     'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
+//    'search?*queryString': 'showSearch',
     'system(/)*path': 'showSystem',
     'ocmd': 'showOcmd',
     'groups/:name': 'showGroup',

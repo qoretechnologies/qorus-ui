@@ -1,23 +1,22 @@
 define(function (require) {
-  var $                 = require('jquery'),
-      _                 = require('underscore'),
-      Backbone          = require('backbone'),
-      Qorus             = require('qorus/qorus'),
-      settings          = require('settings'),
-      Workflow          = require('models/workflow'),
-      Collection        = require('collections/orders'),
-      Template          = require('text!templates/search/detail.html'),
-      TableTpl          = require('text!templates/workflow/orders/table.html'),
-      RowTpl            = require('text!templates/workflow/orders/row.html'),
-      InstanceListView  = require('views/workflows/instances'),  
-      OrderListView     = require('views/workflows/orders'),
-      BottomBarView     = require('views/common/bottom_bar'),
-      OrdersToolbar     = require('views/toolbars/search_toolbar'),
-      OrderView         = require('views/workflows/order'),
-      User              = require('models/system').User,
-      Filters           = require('views/search/filters'),
-      ModalView         = require('views/common/modal'),
-      LockTemplate      = require('tpl!templates/workflow/orders/lock.html'),
+  var $                   = require('jquery'),
+      _                   = require('underscore'),
+      Backbone            = require('backbone'),
+      utils               = require('utils'),
+      Qorus               = require('qorus/qorus'),
+      settings            = require('settings'),
+      Template            = require('text!templates/search/detail.html'),
+      TableTpl            = require('text!templates/workflow/orders/table.html'),
+      RowTpl              = require('text!templates/workflow/orders/row.html'),
+//      InstanceListView  = require('views/workflows/instances'),  
+//      OrderListView     = require('views/workflows/orders'),
+//      BottomBarView     = require('views/common/bottom_bar'),
+      OrdersToolbar       = require('views/toolbars/search_toolbar'),
+      OrderView           = require('views/workflows/order'),
+      User                = require('models/system').User,
+      Filters             = require('views/search/filters'),
+      ModalView           = require('views/common/modal'),
+      LockTemplate        = require('tpl!templates/workflow/orders/lock.html'),
       context, View, RowView, TableView, OrderLockView;
       
   context = {
@@ -154,7 +153,7 @@ define(function (require) {
     
 
     preRender: function () {
-      var toolbar = this.setView(new OrdersToolbar(this.opts), '.toolbar');
+      var toolbar = this.setView(new OrdersToolbar({ search: this.opts.search }), '.toolbar');
       
       toolbar.stopListening(this.collection);
       
@@ -219,7 +218,6 @@ define(function (require) {
     loadInfo: function (e) {
       var self = this;
       var el = $(e.currentTarget);
-      var dataview = this.getView('#instances');
       var bar = this.getView('#bottom-bar');
       
       if (el.hasClass('info')) {
@@ -252,10 +250,13 @@ define(function (require) {
     // delegate search to current dataview
     search: function (e) {
       e.preventDefault();
-      var $target = $(e.currentTarget);
-      var ids = $target.hasClass('.search-query-ids') ? $target.val() : $target.find('.search-query-ids').val();
-      var keyvalues = $target.hasClass('.search-query-keyvalues') ? $target.val() : $target.find('.search-query-keyvalues').val();
-      Backbone.history.navigate([this.url(), ids, keyvalues].join("/"), { trigger: true });
+      
+      var data = {
+        ids:      this.$('.search-query-ids').val(),
+        keyvalue: this.$('.search-query-keyvalues').val() 
+      };
+      
+      this.applySearch(data);
     },
     
     helpers: {
@@ -263,19 +264,24 @@ define(function (require) {
     },
     
     searchAdvanced: function (e) {
-      var $target = $(e.currentTarget).find('input'),
-          data    = Filters.process($target.val()),
-          table   = this.getView('#instances');
-      
       e.preventDefault();
-
+      var $target = $(e.currentTarget).find('input'),
+          data    = Filters.process($target.val());
+      
+      this.applySearch(data);
+    },
+    
+    applySearch: function (data) {
+      var table = this.getView('#instances');
+      
+      data = _.transform(data, function (res, v, k) { if (v || v === false) { res[k] = v; }}); 
+      
       this.collection.reset();
       table.update(true);
       this.collection.fetch({ data: data });
       
-      Backbone.history.navigate([this.url(), $.param(data)].join("?"));
+      Backbone.history.navigate([this.url(), utils.encodeQuery(data)].join("?"));
     }
-    
   });
   return View;
 });

@@ -2087,3 +2087,27 @@ a.subtle:hover, a.subtle:focus {
 .modal textarea[name='note'] {
   min-height: 200px;
 }
+
+.search-group {
+  float: left;
+  width: calc(100% - 300px);
+}
+
+.simple-search {
+/*    display: none;*/
+  overflow: hidden;
+}
+
+.advanced-search {
+  float: left;
+  height: 30px;
+  width: 100%;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.search-toolbar {
+  min-height: 30px;
+}

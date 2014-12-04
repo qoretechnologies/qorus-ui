@@ -150,8 +150,9 @@ define(function (require) {
     },
     
     parseQuery: function (fragment) {
-      if (fragment.indexOf('?') === -1) return {};
-      var query = fragment.split('?')[1];
+      if (!fragment) return {};
+      fragment = decodeURIComponent(fragment);
+      var query = (fragment.indexOf('?') === -1) ? fragment : fragment.split('?')[1];
       var params = {};
       
       if (query.search(/^\s+/) !== -1) return {};
@@ -160,7 +161,7 @@ define(function (require) {
         pair = pair.split('=');
         params[pair[0]] = pair[1];
       });
-      
+
       return params;
     },
     

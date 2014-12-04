@@ -4,7 +4,69 @@ define(function (require) {
       Model       = require('models/order'),
       Dispatcher  = require('qorus/dispatcher'),
       _           = require('underscore'),
-      Collection;
+      Collection, FILTERS;
+  
+  FILTERS = {
+      ID: {
+        name: 'ids',
+        help: 'limit the search to one or more workflow_instanceids',
+        hint:  'ID(id)'
+      },
+      WORKFLOWID: {
+        name: 'workflowid',
+        help: 'limit the search to one or more workflowids',
+        hint:  'WORKFLOWID(id)'
+      },
+      STATUS: {
+        name: 'status',
+        help: 'limit the search to workflow instances with the given status value(s)',
+        hint:  'STATUS(status)'
+      },
+      MAXMODIFIED: {
+        name: 'maxmodified',
+        help: 'give the upper modified date range for the error search',
+        hint:  'MAXMODIFIED(date)'
+      },
+      MINMODIFIED: {
+        name: 'modified',
+        help: 'give the lower modified date range for the search',
+        hint:  'MINMODIFIED(date)'
+      },
+      MAXSTARTED: {
+        name: 'maxstarted',
+        help: 'give the upper start date range for the search',
+        hint:  'MAXSTARTED(date)'
+      },
+      MINSTARTED: {
+        name: 'minstarted',
+        help: 'give the lower start date range for the search',
+        hint:  'MINSTARTED(date)'
+      },
+      DATEMOD: {
+        name: ['modified', 'maxmodified'],
+        help: 'limit the search to defined modified time range',
+        hint:  'DATEMOD(mindate,maxdate)',
+        parse: function (value) {
+          return value.split(/\s|;|,/);
+        }
+      },
+      DATE: {
+        name: ['minstarted', 'maxstarted'],
+        help: 'limit the search to defined start time range ',
+        hint:  'DATE(mindate,maxdate)',
+        parse: function (value) {
+          return value.split(/\s|;|,/);
+        }
+      },
+      KEYS: {
+        name: ['keyvalue', 'keyname'],
+        help: "the name of a search key to be used with the \\a keyvalue value(s)",
+        hint:  'KEYS(keyvalue,keyname)',
+        parse: function (value) {
+          return value.split(/\s|;|,/);
+        }
+      }
+   };
   
    Collection = Qorus.SortedCollection.extend({
     model: Model,
@@ -24,6 +86,8 @@ define(function (require) {
       "workflow:%(workflowid)s:status_changed",
       "workflow:%(workflowid)s:data_error"
     ],
+     
+    search_params: FILTERS,
     
     initialize: function (models, opts) {
       opts = opts || {};

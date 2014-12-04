@@ -1,19 +1,24 @@
-<div class="search-toolbar sticky toolbar"> 
-  <div class="btn-group">
+<div class="search-toolbar sticky toolbar">
+  <div class="search-group">
     <div class="simple-search">
-      <form class="form-search">
-        <div class="input-append search-box">
-          <input type="text" class="search-query-ids" placeholder="Instance ID"<%= (obj.search.ids) ? ' value="' + obj.search.ids +'"' : '' %> />
-          <input type="text" class="search-query-keyvalues appendInputButton" placeholder="Keyvalue"<%= (obj.search.keyvalues) ? ' value="' + obj.search.keyvalues +'"' : '' %> />
-          <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
-        </div>
-      </form>
+      <div class="btn-group">
+        <form class="form-search">
+          <div class="input-append search-box">
+            <input type="text" class="search-query-ids" placeholder="Instance ID"<%= (obj.search.ids) ? ' value="' + obj.search.ids +'"' : '' %> />
+            <input type="text" class="search-query-keyvalues appendInputButton" placeholder="Keyvalue"<%= (obj.search.keyvalue) ? ' value="' + obj.search.keyvalue +'"' : '' %> />
+            <button type="submit" class="btn">&nbsp;<i class="icon-search"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="advanced-search hide">
+        <form class="form-search-advanced">
+          <input type="text" class="span12 search-qql input-xxlarge" placeholder="QQL syntax" value="<%= obj.search.qql %>" />
+        </form>
     </div>
   </div>
-  <div class="btn-group pull-right" id="table-copy"></div>
-  <div class="advanced-search relative row-fluid">
-    <form class="form-search-advanced">
-      <input type="text" class="span12 search-qql input-xxlarge" placeholder="QQL syntax" value="<%= obj.search.qql %>" />
-    </form>
-  </div>
+  <div class="pull-right">
+    <a class="btn toggle-search">Advanced search</a>
+    <div id="table-copy" class="inline-block"></div>
+  </div>  
 </div>

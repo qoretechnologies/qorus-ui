@@ -1,78 +1,10 @@
 define(function (require) {
-  var _ = require('underscore'),
+  var _       = require('underscore'),
+      filters = require('collections/orders').prototype.search_params,
       FilterBase;
   
   FilterBase = {
-    FILTERS: {
-      ID: {
-        name: 'ids',
-        help: 'limit the search to one or more workflow_instanceids',
-        hint:  'ID(id)'
-      },
-      WORKFLOWID: {
-        name: 'workflowid',
-        help: 'limit the search to one or more workflowids',
-        hint:  'WORKFLOWID(id)'
-      },
-      STATUS: {
-        name: 'status',
-        help: 'limit the search to workflow instances with the given status value(s)',
-        hint:  'STATUS(status)'
-      },
-      MAXMODIFIED: {
-        name: 'maxmodified',
-        help: 'give the upper modified date range for the error search',
-        hint:  'MAXMODIFIED(date)'
-      },
-      MINMODIFIED: {
-        name: 'modified',
-        help: 'give the lower modified date range for the search',
-        hint:  'MINMODIFIED(date)'
-      },
-      MAXSTARTED: {
-        name: 'maxstarted',
-        help: 'give the upper start date range for the search',
-        hint:  'MAXSTARTED(date)'
-      },
-      MINSTARTED: {
-        name: 'minstarted',
-        help: 'give the lower start date range for the search',
-        hint:  'MINSTARTED(date)'
-      },
-      DATEMOD: {
-        name: ['modified', 'maxmodified'],
-        help: 'limit the search to defined modified time range',
-        hint:  'DATEMOD(mindate,maxdate)',
-        parse: function (value) {
-          return value.split(/\s|;|,/);
-        }
-      },
-      DATE: {
-        name: ['minstarted', 'maxstarted'],
-        help: 'limit the search to defined start time range ',
-        hint:  'DATE(mindate,maxdate)',
-        parse: function (value) {
-          return value.split(/\s|;|,/);
-        }
-      },
-      KEYS: {
-        name: ['keyvalue', 'keyname'],
-        help: "the name of a search key to be used with the \\a keyvalue value(s)",
-        hint:  'KEYS(keyvalue,keyname)',
-        parse: function (value) {
-          return value.split(/\s|;|,/);
-        }
-      }
-    },
-    
-//    ALIASES: {
-//      STARTED: 'MINSTARTED',
-//      STARTEDMAX: 'MAXSTARTED',
-//      MODIFIED: 'MINMODIFIED',
-//      MODIFIEDMAX: 'MAXMODIFIED',
-//      W: 'WORKFLOWID',
-//      S: 'STATUS'
-//    },
+    FILTERS: filters,
     
     parse: function (text) {
       var filter_list = text.split(/\s/), 
@@ -112,6 +44,21 @@ define(function (require) {
       }, this);
       
       return filters_processed;
+    },
+    
+    rebuild: function (params) {
+      var query = [];
+      _.each(params, function (v, k) {
+        var filter = _.find(this.FILTERS, { name : k });
+        var lpos, rpos;
+        if (filter) {
+          lpos = filter.hint.indexOf('(') + 1;
+          rpos = filter.hint.indexOf(')');
+          query.push(filter.hint.slice(0,lpos) + v + filter.hint.slice(rpos));
+        }
+      }, this);
+      
+      return query.join(" ");
     },
     
     mapAliases: function () {

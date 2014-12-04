@@ -18,17 +18,17 @@ define(function (require) {
   
   Toolbar = BaseToolbar.extend({
     fixed: true,
+    template: Template,
     additionalEvents: {
       "click button[data-action='open']": "navigateTo",
-      "click .search-toggle": "searchToggle"
+      "click .toggle-search": "searchToggle"
       // 'submit .form-search': 'search',
       // 'keyup .search-query': 'search'
     },
 
     initialize: function (opts) {
+      opts.search.qql = Filters.rebuild(opts.search);
       Toolbar.__super__.initialize.call(this, opts);
-      
-      this.template = Template;
       _.extend(this.context, opts);
     },
     
@@ -53,11 +53,14 @@ define(function (require) {
       if (this.collection){
         this.collection.search(e); 
       }
-      debug.log(this.options);
     },
     
-    searchToggle: function (e) {
+    searchToggle: function () {
       this.$('.simple-search').toggleClass('hide');
+      this.$('.advanced-search').toggleClass('hide');
+      this.$('.toggle-search').text(function () { 
+        return ($(this).text()=="Advanced search") ? "Simple search" : "Advanced search"; 
+      });
     }
   });
   return Toolbar;

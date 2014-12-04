@@ -155,12 +155,15 @@ define(function (require) {
     },
     
     // search
-    showSearch: function (ids, keyvalues) {
-      var collection = new OrdersCollection([], { ids: ids, keyvalue: keyvalues }),
+    showSearch: function (ids, keyvalues, query) {
+      var order_params  = _.chain(OrdersCollection.prototype.search_params).pluck('name').flatten().uniq().value(),
+          search_params = _.pick(utils.parseQuery(query), order_params);
+      
+      var collection = new OrdersCollection([], _.clone(search_params)),
           view;
     
       collection.fetch();
-      view = new SearchListView({ search: { ids: ids, keyvalues: keyvalues }, collection: collection });
+      view = new SearchListView({ search: search_params, collection: collection });
       this.setView(view);
     },
     
