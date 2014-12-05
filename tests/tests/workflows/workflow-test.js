@@ -15,7 +15,7 @@ casper.test.begin('Testing workflow list page', function suite(test) {
     // Test Workflow detail pane
     // wait for ARRAYTEST detail pane
     casper.echo('Testing workflow detail right pane');
-    casper.waitForSelector('#workflow-detail', function () {
+    casper.waitForSelector('#heading .selectable', function () {
       test.assertSelectorHasText('#heading .selectable', 'ARRAYTEST');
     });
 
