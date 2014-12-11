@@ -44,6 +44,7 @@ module.exports = function (grunt) {
         },
         test : {
           src: ['tests/tests'],
+          dest : 'casperjs-report.xml'
         }
       },
       express: {
@@ -72,5 +73,5 @@ module.exports = function (grunt) {
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
   grunt.registerTask('serve', ['express', 'express-keepalive']);
-  grunt.registerTask('test', ['express', 'casper']);
+  grunt.registerTask('test', ['express', 'casper:test']);
 };
