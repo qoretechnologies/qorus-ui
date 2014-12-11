@@ -58,7 +58,7 @@ module.exports = function (grunt) {
           options: {
             hostname: '*',
             port: 3000,
-            server: "src/server-test.js"
+            server: "server-test.js"
           }
         }
       }

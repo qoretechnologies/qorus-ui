@@ -6,7 +6,7 @@ var express = require('express'),
 
 app.use(function(req, res, next) {
   var url = req.path.replace(/^\/|\/$/g, '');
-  var fpath = path.resolve(__dirname, url);
+  var fpath = path.resolve(__dirname, 'src', url);
 
   fs.stat(fpath, function (err, stats) {
     if (err) {
@@ -22,7 +22,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  res.status(200).sendFile(path.resolve(__dirname, 'index.html'));
+  res.status(200).sendFile(path.resolve(__dirname, 'src', 'index.html'));
 });
 
 module.exports = app;
