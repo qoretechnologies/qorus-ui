@@ -3,28 +3,31 @@ var express = require('express');
 var cors = require('cors')
 var app = express();
 var _ = require('lodash')._;
-var colors = require('colors')
+var colors = require('colors');
+var path = require('path');
 
 app.use(cors());
 
+app.qorus = app.qorus || {};
 
-function resource_list(dir) {
+app.qorus.resource_list = function resource_list(dir) {
   var resources = [];
 
-  fs.readdir('./res/'+dir, function (err, files) {
+  fs.readdir(path.resolve(__dirname, './res/', dir), function (err, files) {
     files.forEach(function (f) {
       if ((/^[^.](.*)\.json$/).test(f)) {
-        resources.push(require('./res/'+dir+'/'+f));
+        var fpath = path.resolve(__dirname, './res/', dir, f);
+        resources.push(require(fpath));
       }
     });
   });
   
   return resources;
-}
+};
 
-var resources = {};
+app.qorus.resources = {};
 
-var resource_defs = [
+app.qorus.resource_defs = [
   {
     name: 'workflows',
     idAttribute: 'workflowid'
@@ -38,11 +41,15 @@ var resource_defs = [
   },
   {
     name: 'remote'
+  },
+  {
+    name: 'jobs',
+    idAttribute: 'jobid'
   }
 ];
 
-resource_defs.forEach(function (r) {
-  resources[r.name] = resource_list(r.name);
+app.qorus.resource_defs.forEach(function (r) {
+  app.qorus.resources[r.name] = app.qorus.resource_list(r.name);
 });
 
 
@@ -52,8 +59,8 @@ app.get('/api/system$', function (req, res) {
 });
 
 app.get('/api/:resource', function (req, res, next) {
-  if (resources[req.params.resource]) {
-    res.json(resources[req.params.resource]);
+  if (app.qorus.resources[req.params.resource]) {
+    res.json(app.qorus.resources[req.params.resource]);
   } else {
     next();
   }
@@ -62,10 +69,10 @@ app.get('/api/:resource', function (req, res, next) {
 
 app.get('/api/:resource/:id', function (req, res, next) {
   var resource = req.params.resource;
-  if (resources[resource]) {
+  if (app.qorus.resources[resource]) {
     var id = req.params.id;
-    var idAttribute = _.find(resource_defs, { name: resource }).idAttribute || 'id';
-    var obj = _.find(resources[resource], function (r) { return r[idAttribute] == id; });
+    var idAttribute = _.find(app.qorus.resource_defs, { name: resource }).idAttribute || 'id';
+    var obj = _.find(app.qorus.resources[resource], function (r) { return r[idAttribute] == id; });
     if (!obj) {
       obj = require(['.', 'res', req.params.resource, req.params.id].join('/') + '.json');
     }
@@ -82,10 +89,12 @@ app.get('/api/*', function (req, res) {
   try {
     res.json(require(resource));
   } catch (err) {
-    console.log(path + " not found".red);
+//    console.log(path + " not found".red);
     res.status(404).send('Resource ' + path + ' not found');
   }
 });
 
 
-app.listen(3030);
+// app.listen(3030);
+
+module.exports = app;

@@ -34,11 +34,43 @@ module.exports = function (grunt) {
           "white": false,
           "curly": false
         }
+      },
+      casper : {
+        options : {
+          test : true,
+          parallel : true,
+          pre : 'tests/pre.js',
+          concurrency : 5
+        },
+        test : {
+          src: ['tests/tests'],
+        }
+      },
+      express: {
+        api: {
+          options: {
+            hostname: '*',
+            port: 3030,
+            server: "api/server.js"
+          }
+        },
+        server: {
+          options: {
+            hostname: '*',
+            port: 3000,
+            server: "src/server-test.js"
+          }
+        }
       }
     });
   
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-casper');
+  grunt.loadNpmTasks('grunt-express');
+//  grunt.registerTask('srvr', ['express', 'express-keepalive']);
   
-  grunt.registerTask('default', ['jshint', 'requirejs']);
+  grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
+  grunt.registerTask('serve', ['express', 'express-keepalive']);
+  grunt.registerTask('test', ['express', 'casper']);
 };
