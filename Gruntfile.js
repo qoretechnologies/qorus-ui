@@ -40,7 +40,8 @@ module.exports = function (grunt) {
           test : true,
           parallel : true,
           pre : 'tests/pre.js',
-          concurrency : 5
+          concurrency : 5,
+          'no-colors': true
         },
         test : {
           src: ['tests/tests'],
@@ -51,7 +52,7 @@ module.exports = function (grunt) {
         api: {
           options: {
             hostname: '*',
-            port: 3030,
+            port: 8001,
             server: "api/server.js"
           }
         },
@@ -62,6 +63,15 @@ module.exports = function (grunt) {
             server: "server-test.js"
           }
         }
+      },
+      watch: {
+        scripts: {
+          files: ['src/**/*.js','src/**/*.css','src/**/*.html'],
+          tasks: 'serve',
+          options: {
+            interrupt: true,
+          },
+        },
       }
     });
   
@@ -69,9 +79,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-express');
-//  grunt.registerTask('srvr', ['express', 'express-keepalive']);
+  grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['express', 'express-keepalive']);
-  grunt.registerTask('test', ['express', 'casper:test']);
+  grunt.registerTask('serve', ['jshint', 'express:server', 'express-keepalive']);
+  grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };

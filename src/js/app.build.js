@@ -56,11 +56,6 @@
         deps: ['bootstrap'],
         exports: 'jQuery.fn.multiselect'
       },
-      // "later": ['underscore'],
-      // "later.cron": {
-      //   deps: ['later', 'later.recur'],
-      //   exports: 'cron'
-      // },
       "jquery.fixedheader": {
         deps: ['jquery'],
         exports: 'jQuery.fn.fixedHeader'
