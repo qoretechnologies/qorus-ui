@@ -438,20 +438,20 @@ define(function (require) {
         var url = this.socket_url + '?token=' + this.token;
       
         try {
-          console.log('Connecting to WS', url);
+          debug.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
           this.socket.onerror = this.wsError;
         } catch (e) {
-          console.log(e);
+          debug.log(e);
         }
         this.socket.onerror = this.wsError; 
       }
     },
     wsError: function (e) {
-      console.log(e);
+      debug.log(e);
     },
 
     wsOpened: function () {
