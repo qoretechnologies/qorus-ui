@@ -66,10 +66,12 @@ module.exports = function (grunt) {
       },
       watch: {
         scripts: {
-          files: ['src/**/*.js','src/**/*.css','src/**/*.html'],
-          tasks: 'serve',
+          files: ['src/**/*.js'],
+          tasks: ['serve'],
           options: {
             interrupt: true,
+            spawn: true,
+            atBegin: true
           },
         },
       }
@@ -82,6 +84,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['jshint', 'express:server', 'express-keepalive']);
+  grunt.registerTask('serve', ['express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };
