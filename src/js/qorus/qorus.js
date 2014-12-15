@@ -387,6 +387,8 @@ define(function (require) {
     counter: 0,
     socket_url: null,
     auto_reconnect: true,
+    max_retries: 10,
+    retries: 0,
 
     initialize: function (opts) {
       opts = opts || {};
@@ -436,32 +438,36 @@ define(function (require) {
         var url = this.socket_url + '?token=' + this.token;
       
         try {
-          debug.log('Connecting to WS', url);
+          console.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
           this.socket.onerror = this.wsError;
         } catch (e) {
-          debug.log(e);
+          console.log(e);
         }
         this.socket.onerror = this.wsError; 
       }
     },
     wsError: function (e) {
-      debug.log(e);
+      console.log(e);
     },
 
     wsOpened: function () {
+      this.retries = 0;
       this.trigger('ws-opened', this); 
     },
 
     wsRetry: function () {
+      if (this.retries >= this.max_retries) return;
+      
       this.trigger('ws-closed', this);
       
       if (this.auto_reconnect) {
         setTimeout(this.connect, 5000); 
       }
+      this.retries++;
     },
 
     next: function (model) {
@@ -554,11 +560,13 @@ define(function (require) {
     },
 
     wsRetry: function () {
+      if (this.retries >= this.max_retries) return;
       this.trigger('ws-closed', this);
 
       if (this.auto_reconnect) {
         setTimeout(this.connect, 5000); 
       }
+      this.retries++;
     }
   });
 
