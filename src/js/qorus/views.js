@@ -1016,7 +1016,8 @@ define(function (require) {
     update: function (initial) {
       var tpl = this.template, tt;
       
-      if (this.collection.size() === 0 && initial === undefined) {
+      if (this.collection.size() === 0 && (initial !== true || _.isObject(initial))) {
+        console.log('here');
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
         this.template = this.opts.template;
