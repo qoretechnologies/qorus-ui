@@ -11,6 +11,7 @@ define(function (require) {
       TableRowTpl     = require('tpl!templates/common/tablerow.html'),
       NoDataTpl       = require('tpl!templates/common/nodata.html'),
       LoadingDataTpl  = require('tpl!templates/common/loadingdata.html'),
+      TabViewTpl      = require('tpl!templates/common/tabview.html'),
       Helpers         = require('qorus/helpers'),
       moment          = require('moment'),
       // Filtered    = require('backbone.filtered.collection'),
@@ -1474,6 +1475,7 @@ define(function (require) {
     views: {},
     tabs: [],
     context: {},
+    template: TabViewTpl,
     
     defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
