@@ -186,7 +186,7 @@ define(function (require) {
     },
     
     // system detail
-    showSystem: function(path) {
+    showSystem: function (path) {
       var query = window.location.search.slice(1);
       var view = new SystemInfoView({ query: query, path: path});
       this.setView(view);

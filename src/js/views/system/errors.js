@@ -4,45 +4,16 @@ define(function (require) {
       ErrorsTableTpl    = require('text!templates/errors/table.html'),
       ErrorsRowTpl      = require('text!templates/errors/row.html'),
       ErrorsCollection  = require('collections/errors'),
-      ErrorsTableView, ErrorsView, ContentView;
+      ErrorsView;
   
-  ContentView = Qorus.View.extend({
-    template: ErrorsTpl,
-    postInit: function () {
-      this.setView(this.options.content_view, '.errors-table');
-    }
-  });
-  
-  ErrorsView = Qorus.TabView.extend({
-//    template: Tpl,
-    url: '/errors',
-    preRender: function () {
-      this.context.tab_css = 'nav-pills';
+  ErrorsView = Qorus.TableView.extend({ 
+    initialize: function (opts) {
+      opts = opts || {};
+      opts.collection = new ErrorsCollection([], { type: 'global' }).fetch();
+      ErrorsView.__super__.initialize.call(this, opts);
     },
-    tabs: {
-      'system': {
-        view: ContentView,
-        options: {
-          content_view: new Qorus.TableView({ 
-            collection: new ErrorsCollection().fetch(),
-            template: ErrorsTableTpl,
-            row_template: ErrorsRowTpl
-          }),
-          name: 'System'
-        }
-      },
-      'global': {
-        view: ContentView,
-        options: {
-          content_view: new Qorus.TableView({ 
-            collection:  new ErrorsCollection([], { type: 'global' }).fetch(),
-            template: ErrorsTableTpl,
-            row_template: ErrorsRowTpl
-          }),
-          name: 'Global'
-        }
-      }
-    }
+    template: ErrorsTableTpl,
+    row_template: ErrorsRowTpl
   });
   
   return ErrorsView;
