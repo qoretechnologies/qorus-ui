@@ -15,6 +15,7 @@ define(function (require) {
   
   ErrorsView = Qorus.TabView.extend({
 //    template: Tpl,
+    url: '/errors',
     preRender: function () {
       this.context.tab_css = 'nav-pills';
     },
@@ -34,7 +35,7 @@ define(function (require) {
         view: ContentView,
         options: {
           content_view: new Qorus.TableView({ 
-            collection:  new ErrorsCollection().fetch(),
+            collection:  new ErrorsCollection([], { type: 'global' }).fetch(),
             template: ErrorsTableTpl,
             row_template: ErrorsRowTpl
           }),

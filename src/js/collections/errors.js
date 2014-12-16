@@ -4,7 +4,10 @@ define(function (require) {
       Collection;
   
   Collection = Qorus.SortedCollection.extend({
-    url: settings.REST_API_PREFIX + '/errors'
+    url: function () {
+      var type = this.opts.type || ''; 
+      return [settings.REST_API_PREFIX, 'errors', type].join('/');
+    }
   });
   
   return Collection;

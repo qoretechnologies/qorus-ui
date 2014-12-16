@@ -1,8 +1,8 @@
-<td><%= item.error %></td>
+<td class="name"><%= item.error %></td>
 <td><%= item.severity %></td>
 <td><%= item.type %></td>
-<td><%= item.description %></td>
+<td class="description"><%= item.description %></td>
 <td><%= statusIcon(item.business_flag) %></td>
 <td><%= statusIcon(item.retry_flag) %></td>
 <td><%= item.retry_delay_secs %></td>
-<td><%= item.object_id %></td>
+<td><%= item.workflowid ? "<a href=\"" + getUrl('showWorkflow', { id: item.workflowid }) + "\">" + item.workflowid + "</a" : 'N/A' %></td>
