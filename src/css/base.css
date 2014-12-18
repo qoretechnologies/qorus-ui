@@ -717,6 +717,9 @@ table .header-fixed {
 td.editable {
   position: relative;
   cursor: pointer;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin-right: 20px;
 }
 
 .editable:after {
@@ -2110,4 +2113,26 @@ a.subtle:hover, a.subtle:focus {
 
 .search-toolbar {
   min-height: 30px;
+}
+
+.options p {
+  margin-bottom: 0;
+}
+
+.options p.muted {
+  font-weight: normal;
+  font-size: 90%;
+}
+
+.form-small {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.form-small input, .form-small button {
+  box-sizing: border-box;
+  height: 25px;
+  padding: 2px 10px;
+  vertical-align: middle;
 }

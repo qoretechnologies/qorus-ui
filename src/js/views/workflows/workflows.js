@@ -1,5 +1,6 @@
 define(function (require) {
-  var _             = require('underscore'),
+  var $             = require('jquery'),
+      _             = require('underscore'),
       Backbone      = require('backbone'),
       Qorus         = require('qorus/qorus'),
       Template      = require('text!templates/workflow/list.html'),
@@ -243,7 +244,8 @@ define(function (require) {
           item.trigger('check');
         });
       }
-
+      this.trigger('highlight');
+      this.trigger('highlight:toggle');
     },
     
     highlightStopped: function (e) {
@@ -260,6 +262,8 @@ define(function (require) {
           item.trigger('check');
         });
       }
+      this.trigger('highlight');
+      this.trigger('highlight:toggle');
     },
     
     showDetail: function (row) {

@@ -445,8 +445,8 @@ define(function (require) {
       'click .check-all': 'checkall',
       'click .uncheck-all': 'checkall',
       'click .invert': 'invert',
-      'submit .form-search': 'search',
-      'keyup .search-query': 'search',
+      'submit .toolbar .form-search': 'search',
+      'keyup .toolbar .search-query': 'search',
       "click button[data-option]": "setOption",
       "click button[data-action]": "runAction",
       "click button[data-action='execute']": "openExecuteModal",
@@ -715,13 +715,13 @@ define(function (require) {
     
     enableActions: function () {
       var ids = this.getCheckedIds();
-      
-      debug.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
-      
+            
       if (ids.length > 0) {
-        $('.toolbar-actions', this.$el).removeClass('hide');
+        this.$('.toolbar-filters', this.$el).addClass('hide');
+        this.$('.toolbar-actions', this.$el).removeClass('hide');
       } else {
-        $('.toolbar-actions', this.$el).addClass('hide');
+        this.$('.toolbar-filters', this.$el).removeClass('hide');
+        this.$('.toolbar-actions', this.$el).addClass('hide');
       }
     },
     
@@ -1017,7 +1017,6 @@ define(function (require) {
       var tpl = this.template, tt;
       
       if (this.collection.size() === 0 && (initial !== true || _.isObject(initial))) {
-        console.log('here');
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
         this.template = this.opts.template;
