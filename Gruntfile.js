@@ -62,6 +62,13 @@ module.exports = function (grunt) {
             port: 3000,
             server: "server-test.js"
           }
+        },
+        proxy: {
+          options: {
+            hostname: '*',
+            port: 8003,
+            server: "server-proxy.js"
+          }
         }
       },
       watch: {
@@ -77,14 +84,15 @@ module.exports = function (grunt) {
       }
     });
   
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-express');
-  grunt.loadNpmTasks('grunt-contrib-watch');
+
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['express:server', 'express-keepalive']);
+  grunt.registerTask('serve', ['express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };

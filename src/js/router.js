@@ -58,20 +58,24 @@ define(function (require) {
         
     // cleans viewport from zombies
     clean: function () {
-      debug.log('cleaning', this.currentView);
-      if (this.currentView) {
+      debug.log('cleaning', this.previousView);
+      if (this.previousView) {
         debug.log('cleaning current view');
-        this.currentView.close();
-        this.currentView.remove();
-        this.currentView = null;
+        this.previousView.close();
+        this.previousView.remove();
+        this.previousView = null;
       }
     },
     
     // resets current view
     setView: function (view) {
-      this.clean();
+      if (this.currentView) {
+        this.previousView = this.currentView;
+      }
+      
       this.currentView = view;
       view.$el.appendTo('#content');
+      this.clean();
     },
     
     // redirects to workflows page

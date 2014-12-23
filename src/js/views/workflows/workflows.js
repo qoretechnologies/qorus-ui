@@ -26,6 +26,10 @@ define(function (require) {
       'click [data-action]': 'doAction'
     },
     
+    constructor: function () {
+      Qorus.View.prototype.constructor.apply(this, arguments);
+    },
+    
     initialize: function () {
       _.bindAll(this, 'render');
       RowView.__super__.initialize.apply(this, arguments);
@@ -65,8 +69,6 @@ define(function (require) {
     __name__: 'WorkflowsTableView',
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
-//       this.stopListening(this.collection);
-      // this.listenToOnce(this.collection, 'sync', this.update);
       this.stopListening(this.collection, 'add');
       this.processPath();
     },
@@ -74,9 +76,6 @@ define(function (require) {
       var id = path.split('/')[0];
  
       if (id) this.detail_id = id;
-    },
-    update: function () {
-      TableView.__super__.update.apply(this, arguments);
     }
   });
 
@@ -94,7 +93,7 @@ define(function (require) {
     },
     
     timers: [],
-    // el: $("#content"),
+
     additionalEvents: {
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',

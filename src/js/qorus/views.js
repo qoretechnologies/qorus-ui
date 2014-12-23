@@ -1,4 +1,5 @@
-// Qorus core objects definitions
+Window.render_stats = [];
+// Qorus core views definitions
 define(function (require) {
   var $               = require('jquery'),
       _               = require('underscore'),
@@ -52,6 +53,25 @@ define(function (require) {
     },
     context: {},
     
+    constructor: function (attributes, options) {
+      Backbone.View.apply(this, arguments);
+      
+      // render stats
+      if (settings.DEBUG) {
+        this.on('prerender', function () {
+          this._rstart = Date.now();
+        }, this);
+        this.on('postrender', function () {
+          Window.render_stats.push({
+            view: this.__name__,
+            cid: this.cid,
+            time: new Date() - this._rstart,
+            tag: this.tagName,
+            id: _.result(this, 'id')
+          });
+        }, this);
+      }
+    },
     
     initialize: function (options) {
       this.preInit();
@@ -92,7 +112,7 @@ define(function (require) {
       this.postInit();
     },
         
-    close: function (remove) {
+    close: function (remove) {  
       this.removeViews();
       
       if (_.isFunction(this.clean)) {
@@ -978,8 +998,9 @@ define(function (require) {
 
       _.each(models, function (m, i) {
         var view = this.appendRow(m, false);
-        frag.appendChild(view.el);
+        frag.appendChild(view.render().el);
       }, this);
+      debug.log(frag.length);
 
 //      console.timeEnd('appending');
       this.$('tbody').empty().append(frag);
@@ -1009,7 +1030,6 @@ define(function (require) {
           this.$('tbody').append(view.render().$el);
         }
       }
-
       return view;
     },
         
@@ -1197,7 +1217,7 @@ define(function (require) {
       this.listenTo(this.model, 'uncheck', this.uncheck);
       this.listenTo(this.model, 'remove', this.close);
 
-      this.render();
+//      this.render();
       this.postInit();
     },
     

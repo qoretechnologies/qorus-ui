@@ -1,6 +1,5 @@
 define(function (require) {
-  var _        = require('underscore'),
-      Backbone = require('backbone'),
+  var Backbone = require('backbone'),
       Qorus    = require('qorus/qorus'),
       Template = require('tpl!templates/notifications/notification.html'),
       View;
