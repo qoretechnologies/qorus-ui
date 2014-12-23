@@ -1,6 +1,6 @@
 define(function (require) {
-  var host = window.location.hostname + ":8003";
-  var wshost = window.location.hostname + ":8001";
+  var host = "localhost:8001";
+  var wshost = "localhost:8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
   

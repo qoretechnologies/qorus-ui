@@ -92,7 +92,7 @@ module.exports = function (grunt) {
 
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['express:server', 'express:proxy', 'express-keepalive']);
+  grunt.registerTask('serve', ['express:server', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };
