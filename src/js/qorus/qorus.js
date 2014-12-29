@@ -13,7 +13,6 @@ define(function (require) {
       setNested, prep;
 
   require('sprintf');
-  require('libs/jquery.gracefulwebsocket');
 
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
