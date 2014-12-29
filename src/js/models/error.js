@@ -4,15 +4,16 @@ define(function (require) {
       Model;
   
   Model = Qorus.Model.extend({
-    idAttribute: "name",
+    idAttribute: "error",
     urlRoot: function () {
       var type = this.get('type');
+      console.log(this.toJSON(), this.get('workflowid'));
       if (type === 'global') {
-        return [settings.REST_API_PREFIX, 'errors', 'global'];
+        return [settings.REST_API_PREFIX, 'errors', 'global'].join('/');
       } else if (type === 'workflow') {
-        return [settings.REST_API_PREFIX, 'errors', 'workflow', this.get('workflowid')];
+        return [settings.REST_API_PREFIX, 'errors', 'workflow', this.get('workflowid')].join('/');
       }
-      return [settings.REST_API_PREFIX, 'errors'];
+      return [settings.REST_API_PREFIX, 'errors'].join('/');
     },
 
     getControls: function () {
@@ -23,7 +24,7 @@ define(function (require) {
         controls.push({ action: 'edit', icon: 'edit', title: 'Edit', css: 'warning' });
         controls.push({ action: 'delete', icon: 'remove', title: 'Remove', css: 'danger' });
       } else if (type === 'global') {
-        controls.push({ action: 'override', icon: 'copy', title: 'Override', css: 'warning' });
+        controls.push({ action: 'clone', icon: 'copy', title: 'Override', css: 'warning' });
       }
       
       return controls;

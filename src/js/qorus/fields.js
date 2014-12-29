@@ -179,6 +179,19 @@ define(function (require) {
     }
   });
   
+  Fields.BooleanView = BaseView.extend({
+    tagName: 'input',
+    attributes: function () {
+      return {
+        name: this.attrName,
+        type: 'checkbox',
+        value: this.getValue(),
+        readonly: this.readonly || false,
+        checked: this.getValue()
+      };
+    }
+  });
+  
   Fields.PillboxView = Fields.MultiSelectView.extend({
     
   });

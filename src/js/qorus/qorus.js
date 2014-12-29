@@ -13,6 +13,7 @@ define(function (require) {
       setNested, prep;
 
   require('sprintf');
+  require('libs/jquery.gracefulwebsocket');
 
   $.extend($.expr[':'], {
     'icontains': function (elem, i, match) //, array)
@@ -436,7 +437,6 @@ define(function (require) {
     wsOpen: function () {
       if (this.socket_url) {
         var url = this.socket_url + '?token=' + this.token;
-      
         try {
           debug.log('Connecting to WS', url);
           this.socket = new WebSocket(url); 
@@ -447,7 +447,7 @@ define(function (require) {
         } catch (e) {
           debug.log(e);
         }
-        this.socket.onerror = this.wsError; 
+//        this.socket.onerror = this.wsError; 
       }
     },
     wsError: function (e) {
