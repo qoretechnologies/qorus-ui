@@ -41,7 +41,8 @@ module.exports = function (grunt) {
           parallel : true,
           pre : 'tests/pre.js',
           concurrency : 5,
-          'no-colors': true
+          'no-colors': true,
+          engine : 'slimerjs'
         },
         test : {
           src: ['tests/tests'],
@@ -92,7 +93,7 @@ module.exports = function (grunt) {
 
   
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['express:server', 'express-keepalive']);
-  grunt.registerTask('serve-both', ['express:api', 'express:server', 'express-keepalive']);
-  grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
+  grunt.registerTask('serve', ['express:server', 'express:proxy', 'express-keepalive']);
+  grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
+  grunt.registerTask('test', ['express:api', 'express:proxy', 'express:server', 'casper:test']);
 };
