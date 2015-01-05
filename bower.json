@@ -29,5 +29,8 @@
     "moment": "~2.8.4",
     "sprintf": "~1.0.2",
     "prism": "temnoregg/prism#gh-pages"
+  },
+  "resolutions": {
+    "backbone": "~1.1.2"
   }
 }
