@@ -13,7 +13,7 @@
       "backbone.keys": 'libs/backbone.keys',
       "backbone.identity": 'libs/backbone.identity',
       'backbone.filtered.collection': 'libs/backbone.filtered.collection',
-      localstorage: 'libs/backbone.localstorage',
+      "backbone.localstorage": 'libs/backbone.localstorage',
       moment: "libs/moment",
       "jquery.fixedheader": "libs/fixedheader",
       "jquery.sticky": "libs/jquery.sticky",
@@ -21,7 +21,7 @@
       "jquery.expanding": "libs/jquery.expanding",
       "messenger": "libs/messenger/js/messenger.min",
       "bootstrap.multiselect": "libs/bootstrap-multiselect/js/bootstrap-multiselect",
-      "chart": "libs/chart",
+      "chartjs": "libs/chart",
       "templates": "../templates",
       "parallel": "libs/parallel",
       "settings": "settings.build",
@@ -96,5 +96,6 @@
     optimize: "uglify2",
     generateSourceMaps: true,
     preserveLicenseComments: false,
-    useSourceUrl: true
+    useSourceUrl: true,
+    fileExclusionRegExp: /^\./
 })

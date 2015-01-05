@@ -1,5 +1,5 @@
 define(function (require) {
-  require('jquery.ui');
+  require('jquery-ui');
   require('bootstrap.multiselect');
   
   var $          = require('jquery'),

@@ -37,7 +37,7 @@ define(function(require) {
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus, Toolbar;
   
-  require('jquery.ui');
+  require('jquery-ui');
   require('bootstrap');
   require('jquery.expanding');
       

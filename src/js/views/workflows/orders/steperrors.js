@@ -16,7 +16,7 @@ define(function (require, exports, module) {
       CopyView        = require('views/common/table.copy'),
       View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
       
-  require('jquery.ui');
+  require('jquery-ui');
   require('bootstrap');
       
   SEVERITIES = [

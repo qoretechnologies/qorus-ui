@@ -7,7 +7,7 @@ define(function (require) {
       Collection, notifications;
   
   // init localstorage
-  require('localstorage');
+  require('backbone.localstorage');
   require('sprintf');
     
   Collection = Backbone.Collection.extend({

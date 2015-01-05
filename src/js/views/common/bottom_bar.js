@@ -1,5 +1,5 @@
 define(function (require) {
-  require('jquery.ui');
+  require('jquery-ui');
   
   var $        = require('jquery'),
       _        = require('underscore'),

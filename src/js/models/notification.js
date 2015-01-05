@@ -5,7 +5,7 @@ define(function (require) {
       moment   = require('moment'),
       Model;
   
-  require('localstorage');
+  require('backbone.localstorage');
   
   Model = Qorus.Model.extend({
     localStorage: new Backbone.LocalStorage('Notifications'),

@@ -45,6 +45,7 @@ define(function (require) {
     initialize: function () {
       Model.__super__.initialize.apply(this, arguments);
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
+      this.on('update:methods', this.sortMethods);
     },
     
     dispatch: function (e, evt) {
@@ -106,8 +107,9 @@ define(function (require) {
     },
     
     parse: function () {
-      response = Model.__super__.parse.apply(this, arguments);
+      var response = Model.__super__.parse.apply(this, arguments);
       response.has_alerts = (response.alerts.length > 0);
+      response.methods = _.sortBy(response.methods, 'name');
       return response;
     },
     
@@ -129,6 +131,11 @@ define(function (require) {
       }
   
       return controls;
+    },
+    
+    sortMethods: function () {
+      var methods = _.sortBy(this.get('methods'), 'name');
+      this.set({ methods: methods }, { silent: true });
     }
   });
   return Model;

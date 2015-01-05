@@ -2,7 +2,7 @@
 
 var x = require('casper').selectXPath;
 
-casper.test.begin('Testing workflow list page', function suite(test) {
+casper.test.begin('Testing jobs list page', function suite(test) {
     casper.start(casper.options.BASE_URL + '/jobs');
 
     casper.waitForSelector(x("//a[normalize-space(text())='Export CSV']"),

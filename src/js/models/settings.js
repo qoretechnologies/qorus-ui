@@ -5,7 +5,7 @@ define(function (require) {
       event_session_changed;
   
   // init localstorage
-  require('localstorage');
+  require('backbone.localstorage');
   
   event_session_changed = { 
     "time" : moment().format("YYYY-MM-DD HH:mm:ss.SSS Z"), 

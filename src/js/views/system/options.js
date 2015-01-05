@@ -14,7 +14,7 @@ define(function (require) {
 //      Toolbar         = require('views/common/toolbar'),
       ListView, RowView;
 
-  require('jquery.ui');
+  require('jquery-ui');
   
   
   RowView = Qorus.RowView.extend({

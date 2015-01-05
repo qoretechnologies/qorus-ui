@@ -1,5 +1,5 @@
 define(function (require) {
-  require('localstorage');
+  require('backbone.localstorage');
   
   var settings   = require('settings'),
       _          = require('underscore'),
