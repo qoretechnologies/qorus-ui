@@ -23,12 +23,12 @@
     "backbone": "~1.1.2",
     "chartjs": "1.0.1-beta.4",
     "jquery-ui": "~1.11.2",
-    "jquery": "~2.1.3",
     "lodash": "~2.4.1",
     "messenger": "~1.4.1",
     "moment": "~2.8.4",
     "sprintf": "~1.0.2",
-    "prism": "temnoregg/prism#gh-pages"
+    "prism": "temnoregg/prism#gh-pages",
+    "jquery": "~2.1.3"
   },
   "resolutions": {
     "backbone": "~1.1.2"

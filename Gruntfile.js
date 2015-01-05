@@ -4,18 +4,40 @@ module.exports = function (grunt) {
       requirejs: {
         compile: {
           options: {
-            baseUrl: "js",
+            paths: {
+              settings: 'settings.build',
+            },
+            mainConfigFile: "src/js/main.js",
             appDir: "src",
-            mainConfigFile: "./src/js/app.build.js",
+            baseUrl: "js",
             dir: "dist",
-            fileExclusionRegExp: /^jquery/
+            name: "main",
+            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)$/,
+            removeCombined: true,
+            keepBuildDir: false,
+            optimize: 'uglify2',
+            findNestedDependencies: true,
+            generateSourceMaps: true,
+            preserveLicenseComments: false
           }
         },
         cmake: {
           options: {
-            baseUrl: "@CMAKE_SOURCE_DIR@/webapp/src",
-            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/app.build.js",
-            dir: "@CMAKE_BINARY_DIR@/webapp"
+            paths: {
+              settings: 'settings.build',
+            },
+            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.js",
+            dir: "@CMAKE_BINARY_DIR@/webapp",
+            appDir: "@CMAKE_SOURCE_DIR@/webapp/src",
+            baseUrl: "js",
+            name: "main",
+            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)$/,
+            removeCombined: true,
+            keepBuildDir: false,
+            optimize: 'uglify2',
+            findNestedDependencies: true,
+            generateSourceMaps: true,
+            preserveLicenseComments: false
           }
         }
       },
@@ -93,20 +115,14 @@ module.exports = function (grunt) {
         },
       },
       bower: {
-        dev: {
+        build: {
           rjsConfig: 'src/js/main.js',
           options: {
             exclude: ['prism']
           }
         },
-        build: {
-          rjsConfig: 'src/js/app.build.js',
-          options: {
-            exclude: ['prism']
-          }
-        },
         cmake: {
-          rjsConfig: '@CMAKE_SOURCE_DIR@/webapp/src/js/app.build.js',
+          rjsConfig: '@CMAKE_SOURCE_DIR@/webapp/src/js/main.js',
           options: {
             exclude: ['prism']
           }
@@ -148,6 +164,10 @@ module.exports = function (grunt) {
             dest: "src/css/font-awesome/fonts/"
           }]
         }
+      },
+      clean: {
+        build: ["dist/components"],
+        cmake: ["@CMAKE_BINARY_DIR@/webapp/components"]
       }
     });
   
@@ -160,6 +180,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-bower-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
 
   
@@ -167,6 +188,6 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', ['copy', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
-  grunt.registerTask('build', ['jshint', 'copy', 'concat', 'bower:build', 'bower_concat', 'requirejs']);
-  grunt.registerTask('cmake', ['copy', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake']);
+  grunt.registerTask('build', ['jshint', 'copy', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
+  grunt.registerTask('cmake', ['copy', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake', 'clean:cmake']);
 };
