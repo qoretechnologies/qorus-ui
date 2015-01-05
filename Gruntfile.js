@@ -4,9 +4,18 @@ module.exports = function (grunt) {
       requirejs: {
         compile: {
           options: {
-            baseUrl: "src",
-            mainConfigFile: "src/js/app.build.js",
-            dir: "dist"
+            baseUrl: "js",
+            appDir: "src",
+            mainConfigFile: "./src/js/app.build.js",
+            dir: "dist",
+            fileExclusionRegExp: /^jquery/
+          }
+        },
+        cmake: {
+          options: {
+            baseUrl: "@CMAKE_SOURCE_DIR@/webapp/src",
+            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/app.build.js",
+            dir: "@CMAKE_BINARY_DIR@/webapp"
           }
         }
       },
@@ -97,7 +106,7 @@ module.exports = function (grunt) {
           }
         },
         cmake: {
-          rjsConfig: 'src/js/app.build.js.cmake',
+          rjsConfig: '@CMAKE_SOURCE_DIR@/webapp/src/js/app.build.js',
           options: {
             exclude: ['prism']
           }
@@ -158,5 +167,6 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', ['copy', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
-  grunt.registerTask('build', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'requirejs']);
+  grunt.registerTask('build', ['jshint', 'copy', 'concat', 'bower:build', 'bower_concat', 'requirejs']);
+  grunt.registerTask('cmake', ['copy', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake']);
 };
