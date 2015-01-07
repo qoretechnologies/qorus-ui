@@ -7,7 +7,7 @@ module.exports = function (grunt) {
             paths: {
               settings: 'settings.build',
             },
-            mainConfigFile: "src/js/main.js",
+            mainConfigFile: "src/js/main.build.js",
             appDir: "src",
             baseUrl: "js",
             dir: "dist",
@@ -163,10 +163,16 @@ module.exports = function (grunt) {
             src: "src/components/fontawesome/fonts/*",
             dest: "src/css/font-awesome/fonts/"
           }]
+        },
+        build: {
+          files: [{
+            src: "src/js/main.js",
+            dest: "src/js/main.build.js"
+          }]
         }
       },
       clean: {
-        build: ["dist/components"],
+        build: ["dist/components", "src/js/main.build.js"],
         cmake: ["@CMAKE_BINARY_DIR@/webapp/components"]
       }
     });
@@ -188,6 +194,6 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', ['copy', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
-  grunt.registerTask('build', ['jshint', 'copy', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
+  grunt.registerTask('build', ['copy', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
   grunt.registerTask('cmake', ['copy', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake', 'clean:cmake']);
 };
