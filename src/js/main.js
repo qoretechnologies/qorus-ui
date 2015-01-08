@@ -1,33 +1,33 @@
 require.config({
   baseUrl: '/js',
   paths: {
-    jquery: '../components/jquery/dist/jquery',
-    lodash: '../components/lodash/dist/lodash.compat',
-    underscore: '../components/lodash/dist/lodash.compat',
-    backbone: '../components/backbone/backbone',
+    jquery: '../../../../build/src/components/jquery/dist/jquery',
+    lodash: '../../../../build/src/components/lodash/dist/lodash.compat',
+    // underscore: '../components/lodash/dist/lodash.compat',
+    backbone: '../../../../build/src/components/backbone/backbone',
     'backbone.keys': 'libs/backbone.keys',
     'backbone.filtered.collection': 'libs/backbone.filtered.collection',
     bootstrap: 'libs/bootstrap/js/bootstrap',
     'backbone.identity': 'libs/backbone.identity',
-    moment: '../components/moment/moment',
+    moment: '../../../../build/src/components/moment/moment',
     'jquery.fixedheader': 'libs/fixedheader',
     'jquery.sticky': 'libs/jquery.sticky',
     'jquery.rest': 'libs/jquery.rest',
     'jquery.pageslide': 'libs/jquery.pageslide.min',
     'jquery.fixedhead': 'libs/jquery.fixedhead',
     'jquery.expanding': 'libs/jquery.expanding',
-    messenger: '../components/messenger/build/js/messenger',
-    sprintf: '../components/sprintf/src/sprintf',
+    messenger: '../../../../build/src/components/messenger/build/js/messenger',
+    sprintf: '../../../../build/src/components/sprintf/src/sprintf',
     'bootstrap.multiselect': 'libs/bootstrap-multiselect/js/bootstrap-multiselect',
     templates: '../templates',
     parallel: 'libs/parallel',
     settings: 'settings.dev',
     react: 'components/react/react',
-    'messenger-theme-future': '../components/messenger/build/js/messenger-theme-future',
-    'messenger-theme-flat': '../components/messenger/build/js/messenger-theme-flat',
-    'backbone.localstorage': '../components/backbone.localstorage/backbone.localStorage',
-    chartjs: '../components/chartjs/Chart.min',
-    'jquery-ui': '../components/jquery-ui/jquery-ui',
+    'messenger-theme-future': '../../../../build/src/components/messenger/build/js/messenger-theme-future',
+    'messenger-theme-flat': '../../../../build/src/components/messenger/build/js/messenger-theme-flat',
+    'backbone.localstorage': '../../../../build/src/components/backbone.localstorage/backbone.localStorage',
+    chartjs: '../../../../build/src/components/chartjs/Chart.min',
+    'jquery-ui': '../../../../build/src/components/jquery-ui/jquery-ui',
     prism: '../components/prism/prism'
   },
   shim: {
@@ -136,9 +136,11 @@ theme: 'block'
   },
   templates: '../templates',
   waitSeconds: 300,
-  packages: [
-
-  ]
+  map: {
+    '*': {
+      'underscore': 'lodash'
+    }
+  }
 });
 
 require([
