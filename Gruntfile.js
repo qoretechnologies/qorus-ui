@@ -7,6 +7,11 @@ module.exports = function (grunt) {
             paths: {
               settings: 'settings.build',
             },
+            map: {
+              '*': {
+                'underscore': 'lodash'
+              }
+            },
             mainConfigFile: "src/js/main.build.js",
             appDir: "src",
             baseUrl: "js",
@@ -25,6 +30,11 @@ module.exports = function (grunt) {
           options: {
             paths: {
               settings: 'settings.build',
+            },
+            map: {
+              '*': {
+                'underscore': 'lodash'
+              }
             },
             mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.js",
             dir: "@CMAKE_BINARY_DIR@/webapp",
@@ -116,7 +126,7 @@ module.exports = function (grunt) {
       },
       bower: {
         build: {
-          rjsConfig: 'src/js/main.js',
+          rjsConfig: 'src/js/main.build.js',
           options: {
             exclude: ['prism']
           }
