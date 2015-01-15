@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 'underscore': 'lodash'
               }
             },
-            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.js",
+            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.build.js",
             dir: "@CMAKE_BINARY_DIR@/webapp",
             appDir: "@CMAKE_SOURCE_DIR@/webapp/src",
             baseUrl: "js",
@@ -125,6 +125,12 @@ module.exports = function (grunt) {
         },
       },
       bower: {
+        serve: {
+          rjsConfig: 'src/js/main.js',
+          options: {
+            exclude: ['prism']
+          }
+        },
         build: {
           rjsConfig: 'src/js/main.build.js',
           options: {
@@ -187,21 +193,10 @@ module.exports = function (grunt) {
       }
     });
   
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-bower-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-casper');
-  grunt.loadNpmTasks('grunt-express');
-  grunt.loadNpmTasks('grunt-bower-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-
-
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
   
   grunt.registerTask('default', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['copy', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
+  grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
   grunt.registerTask('build', ['copy', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);

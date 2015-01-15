@@ -25,6 +25,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express": "^1.4.1",
     "lodash": "^2.4.1",
+    "matchdep": "^0.3.0",
     "request": "^2.51.0"
   },
   "scripts": {
