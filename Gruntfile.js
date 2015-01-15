@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 'underscore': 'lodash'
               }
             },
-            mainConfigFile: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.build.js",
+            mainConfigFile: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
             dir: "@CMAKE_BINARY_DIR@/webapp",
             appDir: "@CMAKE_SOURCE_DIR@/webapp/src",
             baseUrl: "js",
@@ -138,7 +138,7 @@ module.exports = function (grunt) {
           }
         },
         cmake: {
-          rjsConfig: '@CMAKE_SOURCE_DIR@/webapp/src/js/main.js',
+          rjsConfig: '@CMAKE_BINARY_DIR@/src/js/main.build.js',
           options: {
             exclude: ['prism']
           }
@@ -185,6 +185,12 @@ module.exports = function (grunt) {
             src: "src/js/main.js",
             dest: "src/js/main.build.js"
           }]
+        },
+        cmake: {
+          files: [{
+            src: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.js",
+            dest: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
+          }]
         }
       },
       clean: {
@@ -193,12 +199,12 @@ module.exports = function (grunt) {
       }
     });
   
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('matchdep').filterDev(['grunt-*','!grunt-cli']).forEach(grunt.loadNpmTasks);
   
   grunt.registerTask('default', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'express', 'casper', 'requirejs']);
   grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
-  grunt.registerTask('build', ['copy', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
-  grunt.registerTask('cmake', ['copy', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake', 'clean:cmake']);
+  grunt.registerTask('build', ['copy:all', 'copy:build', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
+  grunt.registerTask('cmake', ['copy:all', 'copy:cmake', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake', 'clean:cmake']);
 };
