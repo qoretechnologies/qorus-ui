@@ -142,7 +142,7 @@ module.exports = function (grunt) {
           options: {
             exclude: ['prism'],
             appDir: '@CMAKE_BINARY_DIR@',
-            baseUrl: '@CMAKE_BINARY_DIR@/webapp/js'
+            baseUrl: '@CMAKE_BINARY_DIR@/webapp/src/js'
           }
         }
       },
@@ -197,7 +197,7 @@ module.exports = function (grunt) {
       },
       clean: {
         build: ["dist/components", "src/js/main.build.js"],
-        cmake: ["@CMAKE_BINARY_DIR@/webapp/components"]
+        cmake: ["@CMAKE_BINARY_DIR@/webapp/components", "@CMAKE_BINARY_DIR@/webapp/node_modules"]
       }
     });
   
