@@ -140,7 +140,8 @@ module.exports = function (grunt) {
         cmake: {
           rjsConfig: '@CMAKE_BINARY_DIR@/src/js/main.build.js',
           options: {
-            exclude: ['prism']
+            exclude: ['prism'],
+            baseUrl: '@CMAKE_BINARY_DIR@/src/js'
           }
         }
       },
