@@ -36,10 +36,10 @@ module.exports = function (grunt) {
                 'underscore': 'lodash'
               }
             },
-            mainConfigFile: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
             dir: "@CMAKE_BINARY_DIR@/webapp",
             appDir: "@CMAKE_SOURCE_DIR@/webapp/src",
             baseUrl: "js",
+            mainConfigFile: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
             name: "main",
             fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)$/,
             removeCombined: true,
@@ -141,7 +141,8 @@ module.exports = function (grunt) {
           rjsConfig: '@CMAKE_BINARY_DIR@/src/js/main.build.js',
           options: {
             exclude: ['prism'],
-            baseUrl: '@CMAKE_BINARY_DIR@/src/js'
+            appDir: '@CMAKE_BINARY_DIR@',
+            baseUrl: '@CMAKE_BINARY_DIR@/webapp/js'
           }
         }
       },
