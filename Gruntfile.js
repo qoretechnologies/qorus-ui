@@ -25,30 +25,6 @@ module.exports = function (grunt) {
             generateSourceMaps: true,
             preserveLicenseComments: false
           }
-        },
-        cmake: {
-          options: {
-            paths: {
-              settings: 'settings.build',
-            },
-            map: {
-              '*': {
-                'underscore': 'lodash'
-              }
-            },
-            dir: "@CMAKE_BINARY_DIR@/webapp",
-            appDir: "@CMAKE_SOURCE_DIR@/webapp/src",
-            baseUrl: "js",
-            mainConfigFile: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
-            name: "main",
-            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)$/,
-            removeCombined: true,
-            keepBuildDir: false,
-            optimize: 'uglify2',
-            findNestedDependencies: true,
-            generateSourceMaps: true,
-            preserveLicenseComments: false
-          }
         }
       },
       jshint: {
@@ -136,14 +112,6 @@ module.exports = function (grunt) {
           options: {
             exclude: ['prism']
           }
-        },
-        cmake: {
-          rjsConfig: '@CMAKE_BINARY_DIR@/src/js/main.build.js',
-          options: {
-            exclude: ['prism'],
-            appDir: '@CMAKE_BINARY_DIR@',
-            baseUrl: '@CMAKE_BINARY_DIR@/webapp/src/js'
-          }
         }
       },
       bower_concat: {
@@ -187,17 +155,10 @@ module.exports = function (grunt) {
             src: "src/js/main.js",
             dest: "src/js/main.build.js"
           }]
-        },
-        cmake: {
-          files: [{
-            src: "@CMAKE_SOURCE_DIR@/webapp/src/js/main.js",
-            dest: "@CMAKE_BINARY_DIR@/src/js/main.build.js",
-          }]
         }
       },
       clean: {
-        build: ["dist/components", "src/js/main.build.js"],
-        cmake: ["@CMAKE_BINARY_DIR@/webapp/components", "@CMAKE_BINARY_DIR@/webapp/node_modules"]
+        build: ["dist/components", "src/js/main.build.js"]
       }
     });
   
@@ -208,5 +169,4 @@ module.exports = function (grunt) {
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
   grunt.registerTask('build', ['copy:all', 'copy:build', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
-  grunt.registerTask('cmake', ['copy:all', 'copy:cmake', 'concat', 'bower:cmake', 'bower_concat', 'requirejs:cmake', 'clean:cmake']);
 };
