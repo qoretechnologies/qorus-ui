@@ -94,7 +94,6 @@ define(function (require) {
   
     onProcessPath: function () {
       if (this.path) this.detail_id = this.path;
-      console.log('p', this.detail_id);
     },
 
     preRender: function () {

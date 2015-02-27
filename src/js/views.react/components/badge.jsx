@@ -1,0 +1,35 @@
+define(function (require) {
+  var React = require('react');
+  
+  return React.createClass({
+    mixins: [React.addons.PureRenderMixin],
+    propTypes: {
+      url: React.PropTypes.string,
+      val: React.PropTypes.number
+    },
+    
+    getInitialState: function () {
+      return {
+        val: this.props.val
+      };
+    },
+    
+    render: function () {
+      var content;
+      var cls = { badge: (this.props.val > 0) };
+      var label = "badge-" + this.props.label;
+      var cx = React.addons.classSet;
+      cls[label] = (this.props.val > 0);
+      
+      if (this.props.url) {
+        content = <a href={this.props.url}>{ this.props.val }</a>;
+      } else {
+        content = this.props.val;
+      }
+      
+      return (
+        <span className={cx(cls)}>{ content }</span>
+      );
+    }
+  });
+});

@@ -3,6 +3,7 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       Template      = require('tpl!templates/notifications/header_icon.html'),
       NView         = require('views/notifications/notifications'),
+      UserSettings  = require('models/settings'),
       View;
       
   require('messenger');
@@ -41,8 +42,10 @@ define(function (require) {
     showMessage: function (model) {
       var msg = model.get('title'),
           type = model.get('type');
-          
-      $.globalMessenger().post({ message: msg, type: type || 'info', showCloseButton: true });
+      
+      if (UserSettings.get('show-alerts', false)) {
+        $.globalMessenger().post({ message: msg, type: type || 'info', showCloseButton: true }); 
+      }
     },
     
     getLevelCSS: function () {

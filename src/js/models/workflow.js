@@ -215,6 +215,8 @@ define(function (require) {
     dispatch: function (e, evt) {
       if (parseInt(e.info.id, 10) !== this.id) return;
       
+//      console.log(e, evt, this.collection);
+      
       var evt_types = evt.split(':'),
           obj = evt_types[0],
           id = evt_types[1],
@@ -302,6 +304,8 @@ define(function (require) {
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
       if (response.alerts) response.has_alerts = (response.alerts.length > 0);
+      
+      response.lib = _.extend({}, response.lib, { wffuncs: response.wffuncs, stepfuncs: this.mapStepInfo(response.stepinfo) });
       return response;
     },
     
@@ -310,11 +314,25 @@ define(function (require) {
       var opts = this.get('options') || [];
       var sysopts = System.Options.getFor('workflow');
       
-      return opts.concat(sysopts);
+      // TODO: exclude overrides
+      opts = opts.concat(sysopts);
+      return opts;
     },
     
     setAutostart: function (as) {
       return this.doAction('setAutostart', { autostart: as });
+    },
+    
+    setOption: function (option, value) {
+      var req = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
+          options = this.get('options'),
+          new_opts = {};
+      
+      new_opts[option] = value;
+      
+      this.set('options', _.extend({}, options, new_opts));
+      
+      return value;
     },
     
     prepareSteps: prepareSteps,
@@ -388,7 +406,38 @@ define(function (require) {
         total += this.attributes[state];
       }, this);
     
-      this.attributes.TOTAL = total;      
+      this.attributes.TOTAL = total;
+    },
+    
+    transformName: function (objects, format, attrs) {
+      _.each(objects, function (obj) {
+        obj.formatted_name = sprintf(format, _.pick(obj, attrs));
+      });
+      return objects;
+    },
+    
+    mapStepInfo: function (stepinfo) {
+      var steps = [];
+			
+      _.each(stepinfo, function (step) {
+        _.each(step.functions, function (func) {
+          func.header = step.name;
+          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> %s", 
+            func.type, func.type.slice(0,1).toUpperCase(), func.name);
+          steps.push(func);
+        });
+      });
+      return _.chain(steps).unique('name').sortBy('header').value();
+    },
+    
+    getSources: function () {
+      var self = this;
+      
+      if (!this._lib_source) {
+        this.fetch({ data: { lib_source: true }, success: function () {
+          self._lib_source = true;
+        }});
+      }
     }
   });
 

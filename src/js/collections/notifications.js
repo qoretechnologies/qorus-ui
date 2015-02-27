@@ -67,7 +67,7 @@ define(function (require) {
           if (model instanceof Backbone.Model)
             model.destroy({ silent: true });
         });
-         this.reset();
+        this.reset();
       }
       this.trigger('sync');
     }, 

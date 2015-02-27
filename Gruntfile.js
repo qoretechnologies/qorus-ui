@@ -23,7 +23,14 @@ module.exports = function (grunt) {
             optimize: 'uglify2',
             findNestedDependencies: true,
             generateSourceMaps: true,
-            preserveLicenseComments: false
+            preserveLicenseComments: false,
+		    onBuildWrite: function (moduleName, path, singleContents) {
+              return singleContents.replace(/jsx!/g, '');
+            },
+            modules: [{
+              name: "main",
+              exclude: ['jsx']
+            }]
           }
         }
       },
@@ -104,13 +111,13 @@ module.exports = function (grunt) {
         serve: {
           rjsConfig: 'src/js/main.js',
           options: {
-            exclude: ['prism']
+            exclude: ['prism', 'react']
           }
         },
         build: {
           rjsConfig: 'src/js/main.build.js',
           options: {
-            exclude: ['prism']
+            exclude: ['prism', 'react']
           }
         }
       },
@@ -159,13 +166,19 @@ module.exports = function (grunt) {
       },
       clean: {
         build: ["dist/components", "src/js/main.build.js"]
+      },
+      open : {
+        dev : {
+          path: 'http://127.0.0.1:3000/',
+          app: 'Google Chrome'
+        },
       }
     });
   
   require('matchdep').filterDev(['grunt-*','!grunt-cli']).forEach(grunt.loadNpmTasks);
   
   grunt.registerTask('default', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express:proxy', 'express-keepalive']);
+  grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
   grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
   grunt.registerTask('build', ['copy:all', 'copy:build', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);

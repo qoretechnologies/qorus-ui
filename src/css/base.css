@@ -271,11 +271,11 @@ table .header-fixed {
   position: relative;
 }
 
-.nav a.active {
+#nav-main .nav a.active {
 	background-color: #555;
 }
 
-.nav a.active:after {
+#nav-main .nav a.active:after {
   content: "";
   display: block;
   border: 11px solid transparent;
@@ -540,7 +540,7 @@ table .header-fixed {
 */
 
 .pageslide .content {
-    padding: 40px 20px;
+    padding: 40px 20px 0 20px;
 /*    height: 90%;*/
 }
 .modal.wider {
@@ -719,7 +719,11 @@ td.editable {
   cursor: pointer;
   white-space: nowrap;
   vertical-align: middle;
-  margin-right: 20px;
+  padding-right: 20px;
+}
+
+.table-row td.editable {
+  padding-right: 20px;
 }
 
 .editable:after {
@@ -764,13 +768,15 @@ td.editor {
   border-radius: 0;
   box-shadow: none;
   margin: 0;
+  outline: 0;
   padding: 0;
   background-color: transparent;
   width:100%;
 }
 
-input:focus {
-  outline: 1px solid red;
+.editor input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .editor.invalid {
@@ -932,7 +938,9 @@ input:focus {
 .box {
   display: inline-block;
   background-color: #fff;
+  fill: #fff;
   border: 1px solid rgba(0,0,0,.2);
+  stroke: 1px solid rgba(0,0,0,.2);
   font-weight: bold;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
   min-height: 40px;
@@ -959,10 +967,12 @@ input:focus {
 
 .box.async {
   background-color: #d9edf7;
+  fill: #d9edf7;
 }
 
 .box.subworkflow {
   background-color: #e5c737;
+  fill: #e5c737;
 }
 
 .box.start {
@@ -977,11 +987,13 @@ input:focus {
 
 .box.ok {
   background-color: #c5e08c;
+  fill: #c5e08c;
 }
 
 .box.error {
   background-color: #da4f49;
   *background-color: #bd362f;
+  fill: #da4f49;
 }
 
 .box.error a {
@@ -994,30 +1006,37 @@ input:focus {
 
 .box.waiting {
   background-color: #edd973;
+  fill: #edd973;
 }
 
 .box.important {
   background-color: #ce807f;
+  fill: #ce807f;
 }
 
 .box.warning {
   background-color: #fab451;
+  fill: #fab451;
 }
 
 .box.success {
   background-color: #9ec251;
+  fill: #9ec251;
 }
 
 .box.info {
   background-color: #75abc6;
+  fill: #75abc6;
 }
 
 .box.error {
   background-color: #adadad;
+  fill: #adadad;
 }
 
 .box.canceled {
   background-color: #e2b6b6;
+  fill: #e2b6b6;
 }
 
 .indent {
@@ -1083,8 +1102,9 @@ input:focus {
 	background-color: #0a0f21;
 	overflow: auto;
 	min-height: 200px;
-  padding: 10px;
+    padding: 10px;
 	margin: 0;
+    height: calc(100% - 20px);
 }
 
 .log-area pre {
@@ -1392,16 +1412,17 @@ th.nowrap, td.nowrap {
   left:0;
 }
 
-#controls .autostart {
+#controls .autostart, .controls .autostart {
   display: inline-block;
 }
 
 .autostart-change {
-  height: 22px;
+/*  height: 22px;*/
   min-width: 1em;
+  text-align: center;
 }
 
-#heading #controls {
+#heading #controls, .heading .controls {
   display: block;
   clear: both;
   margin-bottom: 10px;
@@ -1769,7 +1790,7 @@ td.break {
 
 .btn-controls a.label {
   margin: 0;
-  margin-right: -2px;
+/*  margin-right: -2px;*/
 }
 
 .table-condensed .btn-controls {
@@ -2027,7 +2048,7 @@ a.subtle:hover, a.subtle:focus {
   text-decoration: none;
 }
 
-#heading h3 {
+#heading h3, .heading h3 {
   margin-top: 24.5px;
   margin-right: 60px;
   line-height: 1em;
@@ -2135,4 +2156,72 @@ a.subtle:hover, a.subtle:focus {
   height: 25px;
   padding: 2px 10px;
   vertical-align: middle;
+}
+
+.nomargin {
+  margin: 0;
+  padding: 0;
+}
+
+.library-navigation {
+  padding: 8px 0;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.library-content {
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.library-content .tab-pane {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.box-sizing-border {
+  box-sizing: border-box;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-auto-y {
+  overflow-y: auto;
+}
+
+.height-fit {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.diagram {
+  width: 100%;
+}
+
+.diagram text {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  fill: #000;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.diagram rect.box, .diagram ellipse.box {
+  stroke: #000;
+  stroke-width: .1pt;
+}
+/*
+
+.diagram .box:hover {
+  fill: pink;
+}
+*/
+
+.diagram g {
+  cursor: pointer;
 }

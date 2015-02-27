@@ -1,7 +1,9 @@
 define(function (require) {
-  var settings = require('settings'),
-      Qorus    = require('qorus/qorus'),
-      Model    = require('models/workflow'),
+  var settings  = require('settings'),
+      _         = require('underscore'),
+      Qorus     = require('qorus/qorus'),
+      Model     = require('models/workflow'),
+      moment    = require('moment'),
       Collection, defaults;
   
   defaults = {
@@ -46,6 +48,39 @@ define(function (require) {
         _.defaults(model, defaults);
       });
       return response;
+    },
+    
+    setDate: function (date) {
+      this.date_format = settings.DATE_DISPLAY;
+      
+      if (date === undefined || date === null || date === '24h') {
+        date = moment().add('days', -1).format(this.date_format);
+      } else if (date == 'all') {
+        date = moment(settings.DATE_FROM).format(this.date_format);
+      } else if (date.match(/^[0-9]+$/)) {
+        date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
+      } else {
+        date = date;
+      }
+      
+      this.opts.date = date;
+    },
+    
+    getDate: function () {
+      return this.opts.date;
+    },
+    
+    setSortKey: function (key, order) {
+      var prev_key = this.sort_key;
+      
+      this.sort_key = key;
+      this.sort_order = order || this.sort_order;
+
+      if (this.sort_history) {
+        this.sort_history.push(prev_key);
+      }
+      
+      this.sort();
     }
   });
 

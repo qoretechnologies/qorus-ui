@@ -30,6 +30,12 @@ define(function (require) {
       Library           = require('collections/library'),
       LibraryView       = require('views/library/library'),
       OrdersCollection  = require('collections/orders'),
+      React             = require('react'),
+//      Filtered          = require('backbone.filtered.collection'),
+      WorkflowListReact = React.createFactory(require('jsx!views.react/workflows/list.jsx')),
+      ServiceListReact  = React.createFactory(require('jsx!views.react/services/list.jsx')),
+      workflowsStore    = require('views.react/stores/workflows'),
+      workflowsActions  = require('views.react/actions/workflows'),
       
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router;
@@ -39,8 +45,6 @@ define(function (require) {
   require('messenger');
   require('collections/functions');
   require('collections/loggers');
-//  require('piwik');
-
   
   // fetch local notifications
   Notifications.fetch();
@@ -55,6 +59,7 @@ define(function (require) {
     routes: Urls.routes,
     views: {},
     collections: {},
+    components: {},
         
     // cleans viewport from zombies
     clean: function () {
@@ -69,12 +74,21 @@ define(function (require) {
     
     // resets current view
     setView: function (view) {
-      if (this.currentView) {
+      if (this.currentView == 'react-component') {
+        if (view !== 'react-component') {
+          React.unmountComponentAtNode(document.getElementById('content')); 
+        }
+        this.previousView = null;
+      } else if (this.currentView) {
         this.previousView = this.currentView;
       }
       
       this.currentView = view;
-      view.$el.appendTo('#content');
+      
+      if (view && view !== 'react-component') {
+        view.$el.appendTo('#content');  
+      }
+      
       this.clean();
     },
     
@@ -85,43 +99,29 @@ define(function (require) {
     
     // workflow list 
     showWorkflows: function (date, deprecated, path, query) {
-      var opts = {
-            date: utils.prepareDate(date),
-            path: path,
-            deprecated: deprecated || false,
-            query: query,
-            fetch: false
-          },
-          view, d = (deprecated === 'hidden');
+//      var opts = {
+//            date: utils.prepareDate(date),
+//            path: path,
+//            deprecated: deprecated || false,
+//            query: query,
+//            fetch: false
+//          },
+//          view, d = (deprecated === 'hidden');
       
-      if (!this.collections.workflows) {
-        this.collections.workflows = new Workflows([], opts);
-        this.listenToOnce(this.collections.workflows, 'sync', function (col) {
-          var array = [];
-          var args = array.slice.call(arguments, 0);
-          args.unshift('firstsync');
-          col.trigger.apply(col, args);
+      if (!workflowsStore.getCollection()) {
+        workflowsStore.setState({ 
+          collection: new Workflows()
         });
-      } else {
-        d = this.collections.workflows.opts.deprecated;
-        _.extend(this.collections.workflows.opts, opts);
-        this.collections.workflows.trigger('change:date', date);
       }
       
-      this.collections.workflows.fetch();
+      workflowsActions.filterChange({
+        deprecated: deprecated || false,
+        text: query,
+        date: utils.prepareDate(date)
+      });
       
-      if (!(this.currentView instanceof WorkflowListView)) {
-        view = new WorkflowListView(this.collections.workflows, opts);
-        this.setView(view);
-      }
-      
-      var dd = (deprecated === null) ? false : deprecated;
-      
-      if (d !== dd) {
-        this.currentView.getView('.workflows');
-        this.currentView.opts.deprecated = dd;
-        this.currentView.render();
-      }
+      React.render(WorkflowListReact(), document.getElementById('content'));
+      this.setView('react-component');
     },
     
     // workflow detail
@@ -135,7 +135,13 @@ define(function (require) {
       var view = new ServiceListView({ path: path, query: query });
       this.setView(view);
     },
-    
+
+//    // servicee list
+//    showServices: function (path, query) {
+//      React.render(ServiceListReact(), document.getElementById('content'));
+//      this.setView('react-component');
+//    },
+//    
     showService: function (id) {
       this.showServices(id);
     },
@@ -254,6 +260,14 @@ define(function (require) {
 //      event.stopPropagation();
       var url = $(event.currentTarget).attr("href").replace(/^\//, "");
       app_router.navigate(url, { trigger: true });
+      
+      var el = event.target;
+      
+      if (el.localName !== 'a') {
+        el = $(el).parents('a');
+      }
+
+      el.blur();
       return ;
     }
   });

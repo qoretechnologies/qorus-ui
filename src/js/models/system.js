@@ -63,7 +63,7 @@ define(function (require) {
       var opts = _.where(this.toJSON(), props);
       
       _.each(opts, function(opt) {
-        options.push(_.pick(opt, 'name', 'desc', 'default'));
+        options.push(_.pick(opt, 'name', 'desc', 'default', 'value'));
       });
       return options;
     }

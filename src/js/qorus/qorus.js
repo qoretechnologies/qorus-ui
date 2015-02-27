@@ -47,6 +47,11 @@ define(function (require) {
   };
 
   Qorus.Model = Backbone.Model.extend({
+    _fetched: false,
+    store: {},
+    updateStore: function (store) {
+        this.store = _.extend({}, this.store, store);
+    },
     dateAttributes: {},
     api_events_list: [],
     nameAttribute: 'name',
@@ -82,7 +87,7 @@ define(function (require) {
     },
 
     fetch: function (options) {
-      var data = {};
+      var data = {}, error, success;
       
       if (this.opts) {
         data.date = this.opts.date;
@@ -96,11 +101,23 @@ define(function (require) {
         _.extend(data, options.data);
       }
 
+      error = options.error;
+      success = options.success;
+      
       _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
-                 model.trigger('sync:error', model, response, options);
-               }
+          if (error) {
+            error(model, response, options);
+          }
+          model.trigger('sync:error', model, response, options);
+        },
+        success: function syncDone(model, response, options) {
+          if (success) {
+            success(model, response, options);
+          }
+          model._fetched = true;
+        }
       });
 
       Qorus.Model.__super__.fetch.call(this, options);
@@ -155,7 +172,7 @@ define(function (require) {
     },
 
     // gets property from server
-    getProperty: function (property, data, force) {
+    getProperty: function (property, data, force, cb) {
       var self   = this,
           silent = true;
 
@@ -166,13 +183,19 @@ define(function (require) {
           .done(function (data) {
             var atrs = {};
             atrs[property] = data;
-            if (force === true) silent = false;
+            if (force === true) {
+              silent = false;
+            }
             self.set(atrs, { silent: silent });
             self.trigger('update:'+property, self);
             
             if (property === 'alerts') {
               self.set('has_alerts', self.get('alerts').length > 0);
             }
+            if (cb) {
+              cb();
+            }
+//            console.log('udpate', property, self.get(property));
           });
       } else {
         return this.get(property);
@@ -254,6 +277,8 @@ define(function (require) {
     },
 
     fetch: function (options) {
+      var success, error;
+      
       this.trigger('pre:fetch', this);
       
       if (this.opts) {
@@ -285,11 +310,23 @@ define(function (require) {
         });
       }
 
+      error = options.error;
+      success = options.success;
+      
       _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
-                 model.trigger('sync:error', model, response, options);
-               }
+          if (error) {
+            error(model, response, options);
+          }
+          model.trigger('sync:error', model, response, options);
+        },
+        success: function syncDone(model, response, options) {
+          if (success) {
+            success(model, response, options);
+          }
+          model._fetched = true;
+        }
       });
 
       options.reset = false;
