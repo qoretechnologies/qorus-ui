@@ -27,12 +27,17 @@ define(function (require) {
   });
   
   views.ControlsView = React.createBackboneClass({
+    propTypes: {
+      controlView: React.PropTypes.element
+    },
+  
     render: function () {
       var key   = this.props.model.get('id'),
-          model = this.props.model;
+          model = this.props.model,
+          CView = this.props.controlView || views.ControlView;
 
       var controls = _.map(_.result(this.props.model, 'getControls'), function (control) {
-        return <views.ControlView control={control} key={control.title} model={ model } />;
+        return <CView control={control} key={control.title} model={ model } />;
       });
             
       return (

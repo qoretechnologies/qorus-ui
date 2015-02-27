@@ -19,6 +19,7 @@ define(function (require) {
       LogView           = require('jsx!views.react/components/log'),
       StatusIcon        = require('jsx!views.react/components/statusicon'),
       Controls          = require('jsx!views.react/components/controls').ControlsView,
+      ModalView         = require('jsx!views.react/components/modal'),
       
       Actions           = require('views.react/actions/tabs'),
       Store             = require('views.react/stores/tabs'),
@@ -108,6 +109,152 @@ define(function (require) {
     }
   });
   
+  var Field = React.createClass({
+    getInitialState: function () {
+      return {
+        value: this.props.value
+      };
+    },
+  
+    onChange: function (e) {
+      var val = e.target.value;
+      
+      this.setState({
+        value: val
+      });
+    },
+  
+    render: function () {
+      var View, 
+          props = {
+            id: this.props.attrName,
+            value: this.state.value,
+            onChange: this.onChange
+          };
+      
+      switch (this.props.type) {
+        case "string":
+          View = <input type="text" {...props} />;
+          break;
+        case "bool":
+          View = <input type="checkbox" checked={ this.state.value } {...props} />;
+          break;
+        case "text":
+          View = <textarea {...props} />;
+          break;
+      }
+    
+      return (
+        <div className="control-group">
+          <label className="control-label" htmlFor={ this.props.attrName }>{ this.props.name }</label>
+          <div className="controls">
+            { View }
+          </div>
+        </div>
+      );
+    }
+  });
+  
+  var ErrorForm = React.createClass({
+    render: function () {
+      var state = this.state,
+          model = this.props.model,
+          fieldsMap = [
+            {
+              name: 'Error',
+              attrName: 'error',
+              required: true,
+              readonly: true,
+              type: 'string'
+            },
+            {
+              name: 'Severity',
+              attrName: 'severity',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'Retry',
+              attrName: 'retry_flag',
+              type: 'bool'
+            },
+            {
+              name: 'Retry delay secs',
+              attrName: 'retry_delay_secs',
+              type: 'string'
+            },
+            {
+              name: 'Business',
+              attrName: 'business_flag',
+              type: 'bool'
+            },
+            {
+              name: 'Manually updated',
+              attrName: 'manually_updated',
+              type: 'bool'
+            },
+            {
+              name: 'Description',
+              attrName: 'description',
+              required: true,
+              type: 'text'
+            }
+          ];
+      
+      
+      var fields = _.map(fieldsMap, function (field) {
+        return <Field {...field} value={ model.get(field.attrName) } />;
+      });
+    
+      return (
+        <form className="form-horizontal" id="error-edit-form">
+          { fields }
+        </form>
+      );
+    }
+  });
+  
+  var ErrorControlsView = React.createClass({
+    propTypes: {
+      control: React.PropTypes.object.isRequired
+    },
+    
+    onClick: function (e) {
+      var control = this.props.control;
+    
+      e.stopPropagation();
+      e.preventDefault();
+
+      if (control.action == 'edit') {
+        this.showModal();
+      } else if (control.action == 'clone') {
+        this.showCloneModal();
+      } else {
+        this.props.model.doAction(control.action);
+      }
+    },
+  
+    render: function () {      
+      var control  = this.props.control,
+          cls      = "label label-" + control.css,
+          icon_cls = "icon-" + control.icon;
+      
+      return (
+        <a className={cls} title={control.title} onClick={this.onClick}><i className={icon_cls} /></a>
+      );
+    },
+       
+    showModal: function () {
+      var modal = <ModalView title={ this.props.control.action + " " + this.props.model.get('error') }><ErrorForm model={ this.props.model } /></ModalView>;
+      var el = $('<div class="modal-container" />').appendTo('body');
+      React.render(modal, el[0]);
+    },
+    
+    showCloneModal: function () {
+      this.showModal();
+    }
+  });
+  
   var ErrorsTable = React.createBackboneClass({
     getInitialState: function () {
       return {
@@ -190,7 +337,7 @@ define(function (require) {
               <StatusIconContainer dataKey="business_flag" />
             </Col>
             <Col>
-              <Controls model={ this.props.model } />
+              <Controls model={ this.props.model } controlView={ ErrorControlsView } />
             </Col>
           </TableView>
         </div>

@@ -17,14 +17,6 @@ define(function (require) {
       );
     }
   });
-
-  var NotSetView = React.createClass({
-    mixins: [React.addons.ModelPureRenderMixin],
-    render: function () {
-      var value = this.props.model.value || 'not set';
-      return <span onClick={this.props.onClick}>{ value }</span>;
-    }
-  });
   
   var EditableCell = React.createClass({
     getInitialState: function () {
@@ -105,18 +97,16 @@ define(function (require) {
     render: function () {
       var props = _.omit(this.props, ['children']),
           style = { width: this.state.width },
-          cls = React.addons.classSet({
-            editable: true,
-            editor: this.state.edit
-          });
+          cls   = React.addons.classSet({
+                    editable: true,
+                    editor: this.state.edit
+                  });
       
       if (this.state.edit) {
         view = <input type="text" value={ this.state.value } onChange={ this.onChange } onKeyUp={ this.onKeyUp } />;
       } else {
         view = <span>{ this.state.value || 'not set' }</span>;
       }
-    
-      console.log(this.state.value);
     
       return (
         <td {...this.props} className={ cls } onClick={ this.onClick } style={ style }>{ view }</td>
