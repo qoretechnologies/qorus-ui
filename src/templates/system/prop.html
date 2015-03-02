@@ -17,7 +17,7 @@
 <% _.each(domains, function (domain, key) { %>
     <thead class="extra-padding">
         <tr>
-            <td colspan="3" class="name"><%= key.toUpperCase() %></td>
+            <td colspan="3" class="name"><%= key %></td>
             <td><% if (key !== 'omq') { %><a class="btn btn-mini btn-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
     </thead>
