@@ -22,13 +22,13 @@ define(function (require) {
       cls[label] = (this.props.val > 0);
       
       if (this.props.url) {
-        content = <a href={this.props.url}>{ this.props.val }</a>;
+        content = <a href={this.props.url}><span className={cx(cls)}>{ this.props.val }</span></a>;
       } else {
-        content = this.props.val;
+        content = <span className={cx(cls)}>{ this.props.val }</span>;
       }
       
       return (
-        <span className={cx(cls)}>{ content }</span>
+        content
       );
     }
   });

@@ -5,6 +5,7 @@
   "version": "0.9.1",
   "main": "Gruntfile.js",
   "dependencies": {
+    "globule": "^0.2.0",
     "react-tools": "^0.12.2"
   },
   "devDependencies": {

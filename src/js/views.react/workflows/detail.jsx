@@ -2,6 +2,7 @@ define(function (require) {
   var React             = require('react'),
       Reflux            = require('reflux'),
       _                 = require('underscore'),
+      $ = require('jquery'),
       Backbone          = require('backbone'),
       slugify           = require('qorus/helpers').slugify,
       PaneView          = require('jsx!views.react/components/pane'),

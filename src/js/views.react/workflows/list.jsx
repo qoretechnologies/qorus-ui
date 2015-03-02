@@ -23,6 +23,7 @@ define(function (require) {
       tableActions        = require('views.react/actions/table'),
       tableStore          = require('views.react/stores/table'),
       ViewHeightMixin     = require('views.react/mixins/view.height'),
+      helpers             = require('views/workflows/helpers'),
       workflowsStore      = require('views.react/stores/workflows');
   
 //  require('backbone');
@@ -121,8 +122,12 @@ define(function (require) {
     },
     
     render: function () {
+      var model = this.props.model,
+          date  = model.collection.opts.date,
+          url   = helpers.getUrl(this.props.status, this.props.model.id, date);
+      
       return (
-        <a href={ this.props.link }>{ this.props.model.get('name') }</a>
+        <a href={ url }>{ this.props.model.get('name') }</a>
       );
     }
   });
@@ -133,8 +138,12 @@ define(function (require) {
     },
     
     render: function () {
+      var model = this.props.model,
+          date  = model.collection.opts.date,
+          url   = helpers.getUrl(this.props.attr.toLowerCase(), this.props.model.id, date);
+          
       return (
-        <BadgeView val={this.props.model.get(this.props.attr)} url={this.props.url} label={utils.status_map[this.props.attr.toLowerCase()]} />
+        <BadgeView val={this.props.model.get(this.props.attr)} url={ url } label={utils.status_map[this.props.attr.toLowerCase()]} />
       );
     }
   });
@@ -152,7 +161,7 @@ define(function (require) {
     ['I','narrow', 'IN-PROGRESS'],
     ['X','narrow', 'CANCELED'],
     ['B','narrow', 'BLOCKED'],
-    ['Total','narrow', 'TOTAL'],
+/*    ['Total','narrow', 'TOTAL'],*/
   ];
   
   var columns = [
@@ -186,9 +195,15 @@ define(function (require) {
     var [title, css, sort] = col;
     
     return <Col name={ title } dataSort={ sort } className={ css } key={ sort }>
-             <BadgeViewCell attr={ sort } />
+             <BadgeViewCell attr={ sort } className="err" />
            </Col>;
   }));
+  
+  columns = columns.concat([
+    <Col name="Total" dataSort="total" className="narrow" key="TOTAL">
+      <Cell dataKey="TOTAL" className="narrow" />
+    </Col>
+  ]);
   
   var DetailViewWrapper = React.createBackboneClass({
     mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
@@ -330,7 +345,7 @@ define(function (require) {
       var detail;
 
       return (
-        <div>
+        <div id="workflows">
           <ToolbarViewWrapper />
           <TableViewWrapper />
           <DetailViewWrapper />
