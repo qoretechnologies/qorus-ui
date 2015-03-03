@@ -2225,3 +2225,7 @@ a.subtle:hover, a.subtle:focus {
 .diagram g {
   cursor: pointer;
 }
+
+a + a:before {
+  content: " "
+}

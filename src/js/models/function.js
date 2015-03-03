@@ -1,4 +1,6 @@
 define(function (require) {
+  require('sprintf');
+  
   var settings = require('settings'),
       Qorus    = require('qorus/qorus'),
       Model;
@@ -21,6 +23,10 @@ define(function (require) {
       Model.__super__.initialize.call(this, opts);
     },
     
+    defaults: {
+      patch: null
+    },
+    
     parse: function (response, options) {
       response = Model.__super__.parse.call(this, response, options);
 
@@ -30,7 +36,18 @@ define(function (require) {
         response.body = response.body.replace(/\\n/g, '\n');
         response.body = response.body.replace(/\\t/g, '    ');
       }
+      
       return response;
+    },
+    
+    getFullname: function () {
+      var name = sprintf("%s v%s", this.get('name'). this.get('version'));
+      
+      if (this.get('patch')) {
+        name += "." + this.get('patch');
+      }
+      
+      return name;
     }
   });
 

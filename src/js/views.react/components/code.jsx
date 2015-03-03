@@ -9,7 +9,7 @@ define(function (require) {
       return {
         highlighted: false,
         code: this.props.code
-      }
+      };
     },
   
     componentDidMount: function () {
@@ -27,8 +27,8 @@ define(function (require) {
             $(this.getDOMNode()).find('code').html(code);
             this.setState({ highlighted: true, code: code });        
           }.bind(this)
-        )
-      };
+        );  
+      }
     },
     
     render: function () {
@@ -42,7 +42,7 @@ define(function (require) {
         <pre className="language-qore">
           { Code }
         </pre>
-      )
+      );
     }
   });
   

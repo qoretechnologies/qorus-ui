@@ -1,4 +1,6 @@
 define(function (require) {
+  require('sprintf');
+  
   var settings      = require('settings'),
       helpers       = require('qorus/helpers'),
       utils         = require('utils'),
@@ -27,6 +29,7 @@ define(function (require) {
           this.level = 0;
           this.type = type || "process";
           this.info = info;
+          this.fullname = this.getFullname();
       },
     
       size: function () {
@@ -78,7 +81,7 @@ define(function (require) {
     
       toArray: function () {
         var children = this.getAllChildren(),
-            root     = _.pick(this, ['id', 'name', 'type', 'info']),
+            root     = _.pick(this, ['id', 'name', 'type', 'info', 'fullname']),
             steps    = {};
 
         root.links_to = this.depends_on;
@@ -89,7 +92,7 @@ define(function (require) {
         _.each(children, 
           function (step) { 
             var l = step.getDepth(),
-                s = _.pick(step, ['id', 'name', 'type', 'info']);
+                s = _.pick(step, ['id', 'name', 'type', 'info', 'fullname']);
           
             s.links_to = step.depends_on;
             s.children = _.map(step.children, function (c) { return _.parseInt(c.id); });
@@ -102,6 +105,18 @@ define(function (require) {
         });
         
         return _.toArray(steps);
+      },
+    
+      getFullname: function () {
+        if (!this.info) return this.name;
+        
+        var name = sprintf("%s v%s", this.name, this.info.version);
+
+        if (this.info.patch) {
+          name += "." + this.info.patch;
+        }
+
+        return name;
       }
   };
   

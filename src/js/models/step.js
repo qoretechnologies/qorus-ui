@@ -1,4 +1,6 @@
 define(function(require) {
+  require('sprintf');
+  
   var settings = require('settings'),
       _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
@@ -8,6 +10,9 @@ define(function(require) {
     idAttribute: "stepid",
     urlRoot: settings.REST_API_PREFIX + '/steps/',
     dateAttributes: ['last_executed'],
+    defaults: {
+      patch: null
+    },
     
     initialize: function (opts) {
       if (opts.id) {
@@ -29,8 +34,20 @@ define(function(require) {
           func.body = func.body.replace(/\\t/g, '    ');
         });
       }
+      
       return response;
+    },
+    
+    getFullname: function () {
+      var name = sprintf("%s v%s", this.get('name'). this.get('version'));
+      
+      if (this.get('patch')) {
+        name += "." + this.get('patch');
+      }
+      
+      return name;
     }
+    
   });
 
   return Model;

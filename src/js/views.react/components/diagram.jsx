@@ -76,7 +76,7 @@ define(function (require) {
     createDiagram: function () {
       var self    = this,
           levels  = this.props.model.mapSteps(),
-          text_width = _.max(_.flatten(levels, true), function (obj) { return _.size(obj.name); }).name.length,
+          text_width = _.max(_.flatten(levels, true), function (obj) { return _.size(obj.fullname); }).fullname.length,
           bw      = Math.max(100, text_width*8),
           bh      = Math.ceil(bw/4),
           pad     = 10,
@@ -134,7 +134,7 @@ define(function (require) {
        
 
           var mask = <Svg.Mask id={slugify(step.name)} elements={[mask_el]} key={ 'mask-' + slug }/>;
-          var text = <Svg.Text text={ step.name.toUpperCase() } x={ cx+bw/2 } y={ cy+bh/2 } style={ { mask: "url('#" + slugify(step.name) +"')" }} key={ 't-' + slug } />;
+          var text = <Svg.Text text={ step.fullname } x={ cx+bw/2 } y={ cy+bh/2 } style={ { mask: "url('#" + slugify(step.name) +"')" }} key={ 't-' + slug } />;
           
           s_groups.push(<Svg.Group elements={[el, text]} onClick={ self.onClick } step={ step } key={ 'g-' + slug } />);
           s_masks.push(mask);

@@ -1,4 +1,5 @@
 define(function (require) {
+  require('sprintf');
   var settings = require('settings'), 
       Qorus = require('qorus/qorus'),
       Model;
@@ -9,7 +10,8 @@ define(function (require) {
     dateAttributes: ['created', 'modified'],
     
     defaults: {
-      type: 'class'
+      type: 'class',
+      patch: null
     },
     
     initialize: function (opts) {
@@ -20,6 +22,16 @@ define(function (require) {
       
       Model.__super__.initialize.call(this, opts);
     },
+    
+    getFullname: function () {
+      var name = sprintf("%s v%s", this.get('name'). this.get('version'));
+      
+      if (this.get('patch')) {
+        name += "." + this.get('patch');
+      }
+      
+      return name;
+    }
   });
 
   return Model;

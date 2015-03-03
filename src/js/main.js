@@ -130,10 +130,10 @@ require.config({
       ],
       exports: 'Messenger',
       init: function () {
-  this.Messenger.options = {
-    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-    theme: 'block'
-  };
+this.Messenger.options = {
+  extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+  theme: 'block'
+};
 }
     },
     chartjs: {

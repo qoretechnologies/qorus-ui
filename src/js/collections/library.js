@@ -1,5 +1,6 @@
 define(function (require) {
-  var Qorus     = require('qorus/qorus'),
+  var _         = require('underscore'),
+      Qorus     = require('qorus/qorus'),
       Funcs     = require('collections/functions'),
       Constants = require('collections/constants'),
       Classes   = require('collections/classes'),

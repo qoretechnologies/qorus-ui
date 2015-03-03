@@ -20,30 +20,41 @@ define(function (require) {
       if (model_groups) {
         var ctr = 0;
         groups = _.map(model_groups, function (group, name) {
-          var out = [<li className="nav-header">{ name }</li>],
-              header;
+          if (group.length > 0) {
+            var out = [<li className="nav-header">{ name }</li>],
+                header;
 
-          _.each(group, function (g) {
-            var nam;
-            
-            if (g.header !== header) { 
-              out.push(<li className="nav-header nav-subheader">{ g.header }</li>);
-            }
-            
-            if (g.name && g.type) {
-              nam = <span><small className="label">{ g.type }</small><br />{ g.name }</span>;
-            } else {
-              nam = g.name;
-            }
-            
-            if (g.name) {
-              out.push(<NavItem {...props} name={ nam } slug={ slugify( g.name ) } idx={ ctr } />);
-              ctr++;            
-            }
-            header = g.header;
-          });
+            _.each(group, function (g) {
+              var nam, add = '';
+                  
+              if (g.version) {
+                add += 'v' + g.version;
+              }
+              
+              if (g.patch) {
+                add += '.' + g.patch;
+              }
 
-          return out;
+              if (g.header !== header) { 
+                out.push(<li className="nav-header nav-subheader">{ g.name }</li>);
+              }
+
+              if (g.name && g.type) {
+                var append = (add.length > 0) ? <small>{ add }</small> : null;
+                nam = <span><small className="label">{ g.type }</small><br />{ g.name } { append }</span>;
+              } else {
+                nam = g.name;
+              }
+
+              if (g.name) {
+                out.push(<NavItem {...props} name={ nam } slug={ slugify( g.name ) } idx={ ctr } />);
+                ctr++;            
+              }
+              header = g.header;
+            });
+
+            return out;
+          }        
         });      
       }
 

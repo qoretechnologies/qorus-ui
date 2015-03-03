@@ -1,16 +1,16 @@
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'qorus/qorus',
-  'qorus/dispatcher',
-  'collections/functions',
-  'text!templates/functions/list.html',
-  'text!templates/functions/table.html',
-  'text!templates/functions/row.html'
-], function($, _, utils, Qorus, Dispatcher, Collection, Template, TableTpl, RowTpl){
+define(function (require) {
+  var $ = require('jquery'),
+      _ = require('underscore'),
+      utils = require('utils'),
+      Qorus = require('qorus/qorus'),
+      Dispatcher = require('qorus/dispatcher'),
+      Collection = require('collections/functions'),
+      Template = require('text!templates/functions/list.html'),
+      TableTpl = require('text!templates/functions/table.html'),
+      RowTpl = require('text!templates/functions/row.html'),
+      ListView;
 
-  var ListView = Qorus.ListView.extend({
+  ListView = Qorus.ListView.extend({
     title: "Functions",
     model_name: 'function',
     
