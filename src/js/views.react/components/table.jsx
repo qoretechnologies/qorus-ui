@@ -45,8 +45,8 @@ define(function (require) {
     render: function () {
       var model = this.props.model,
           css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
-          children = this.props.children.map(function (child) {
-            return cloneWithProps(child, { model: this.model });
+          children = this.props.children.map(function (child, idx) {
+            return cloneWithProps(child, { model: this.model, key: idx });
           });
 
       return (
@@ -153,19 +153,19 @@ define(function (require) {
           DefaultRowView  = this.props.rowView || RowView;
     
       var rows = collection.map(function (row, idx) {
-        var cols = children.map(function (col, idx) {
+        var cols = children.map(function (col) {
           var child = col.props.children,
               clone = cloneWithProps(child, { model: row }),
               props = child.props;
               
           if (col.props.cellView) {
-            return <col.props.cellView {...props} _model={ props.model } key={idx}>{ clone }</col.props.cellView>;
+            return <col.props.cellView {...props} _model={ props.model }>{ clone }</col.props.cellView>;
           }
               
-          return <td {...props} key={idx}>{ clone }</td>;
+          return <td {...props}>{ clone }</td>;
         });
 
-        return <DefaultRowView key={row.id} 
+        return <DefaultRowView key={idx} 
                  idx={row.id || idx } model={row} 
                  rowClick={props.rowClick} 
                  clicked={(props.current_model && props.current_model == row.id)}>

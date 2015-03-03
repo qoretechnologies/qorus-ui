@@ -49,6 +49,8 @@ define(function (require) {
   var InfoView = React.createClass({
     mixins: [ModelRenderMixin],
     render: function () {
+      console.log(this.props.model.toJSON()._options);
+    
       return (
         <div>
           <GroupsView groups={ this.props.model.get('groups') } />

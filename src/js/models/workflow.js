@@ -321,16 +321,32 @@ define(function (require) {
       if (response.alerts) response.has_alerts = (response.alerts.length > 0);
       
       response.lib = _.extend({}, response.lib, { wffuncs: response.wffuncs, stepfuncs: this.mapStepInfo(response.stepinfo) });
+      response.options = this.prepareOptions(response.options);
       return response;
     },
     
     // return all options for starting workflow
     getOptions: function () {
-      var opts = this.get('options') || [];
-      var sysopts = System.Options.getFor('workflow');
+      return this.get('options');
+    },
+    
+    prepareOptions: function (options) {
+      var opts    = _.clone(options), 
+          exclude = [],
+          sysopts = System.Options.getFor('workflow');
       
-      // TODO: exclude overrides
-      opts = opts.concat(sysopts);
+      _.each(sysopts, function (opt, idx) {
+        var syso = _.find(opts, { name: opt.name });
+        var val;
+          
+        if (syso) {
+          val = syso.value;
+          syso = _.extend(syso, opt, { sysvalue: opt.value, value: val });
+        } else {
+          opts.push(opt);
+        }
+      });
+      
       return opts;
     },
     
@@ -339,13 +355,17 @@ define(function (require) {
     },
     
     setOption: function (option, value) {
-      var req = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
-          options = this.get('options'),
-          new_opts = {};
+      var req       = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
+          options   = this.get('options'),
+          opt       = _.find(options, { name: option });
       
-      new_opts[option] = value;
+      if (opt.system && !value) {
+        opt.value = opt.sysvalue;
+      } else {
+        opt.value = value; 
+      }
       
-      this.set('options', _.extend({}, options, new_opts));
+      this.set('options', options);
       
       return value;
     },

@@ -18,6 +18,23 @@ define(function (require) {
     }
   });
   
+  var SystemIcon = React.createClass({
+    mixins: [React.addons.PureRenderMixin],
+    render: function () {
+      var modified, model = this.props.model;
+      
+      if (model.sysvalue) {
+        modified = '*';
+      }
+      
+      if (model.system) {
+        return <p><i className="icon-cog" title={ (modified) ? "Overriden system option" : "System option" }/>{ modified }</p>;
+      }
+      
+      return (<span />);
+    }
+  });
+  
   var EditableCell = React.createClass({
     getInitialState: function () {
       return {
@@ -48,6 +65,14 @@ define(function (require) {
     componentWillUnmount: function () {
       $(this.getDOMNode()).find('input').off('blur.input.edit');
     },
+    
+    componentWillReceiveProps: function (nextProps) {
+      var val = nextProps.children.props.model.value;
+      
+      if (val !== this.state.value) {
+        this.setState({ value: val });
+      }
+    },
   
     onClick: function (e) {
       this.setState({
@@ -60,10 +85,10 @@ define(function (require) {
           val    = this.state.value;
 
       this.props._model.setOption(option, val);
-      this.getModel().value = val;
       
       this.setState({
-        edit: false
+        edit: false,
+        value: val ? val : this.getModel().sysvalue
       });
     },
     
@@ -128,7 +153,9 @@ define(function (require) {
               collection={ this.props.options } 
               rowClick={ _.noop } 
               cssClass="table table-condensed table-sripped table-align-left">
-
+              <Col name="">
+                <SystemIcon />
+              </Col>
               <Col name="Options">
                 <DescView className="name" />
               </Col>
