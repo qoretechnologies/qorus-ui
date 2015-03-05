@@ -16,8 +16,7 @@ define(function (require) {
   require('jquery.fixedheader');
   
   var ModelRowView = React.createBackboneClass({
-    mixins: [React.addons.PureRenderMixin],
-    
+/*    mixins: []*/
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model).isRequired
     },
@@ -150,6 +149,7 @@ define(function (require) {
       var collection      = false ? this.props.collection.slice(0, 10) : this.props.collection,
           children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           props           = this.props,
+          isBackbone      = collection instanceof Backbone.Collection,
           DefaultRowView  = this.props.rowView || RowView;
     
       var rows = collection.map(function (row, idx) {
@@ -164,6 +164,10 @@ define(function (require) {
               
           return <td {...props}>{ clone }</td>;
         });
+        
+        if (row instanceof Backbone.Model && !props.rowView) {
+          DefaultRowView = ModelRowView;
+        }
 
         return <DefaultRowView key={idx} 
                  idx={row.id || idx } model={row} 

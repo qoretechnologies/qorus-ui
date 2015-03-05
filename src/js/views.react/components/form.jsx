@@ -56,9 +56,10 @@ define(function (require) {
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model).isRequired,
       fields: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-      submit_text: React.PropTypes.string,
+      submitText: React.PropTypes.string,
       store: React.PropTypes.object,
-      actions: React.PropTypes.object
+      actions: React.PropTypes.object,
+      formTag: React.PropTypes.bool
     },
     
     getDefaultProps: function () {
@@ -67,7 +68,8 @@ define(function (require) {
       return {
         actions: actions,
         store: new Store(actions),
-        submit_text: 'Save'
+        submitText: 'Save',
+        formTag: true
       };
     },
     
@@ -92,15 +94,23 @@ define(function (require) {
           model = this.props.model;
       
       var fields = _.map(this.props.fields, function (field) {
-        return <Field {...field} value={ model.get(field.attrName) } ref={ field.attrName } />;
+        return <Field {...field} value={ model.get(field.attrName) } ref={ field.attrName } key={ field.attrName } />;
       });
     
-      return (
-        <form className="form-horizontal" id="error-edit-form" onSubmit={ this.onSave }>
-          { fields }
-          <button className="btn btn-success" type="submit">{ this.props.submit_text } </button>
-        </form>
-      );
+      if (this.props.formTag) {
+        return (
+          <form className="form-horizontal" id="error-edit-form" onSubmit={ this.onSave }>
+            { fields }
+            <button className="btn btn-success" type="submit">{ this.props.submitText } </button>
+          </form>
+        );      
+      } else {
+        return (
+          <span>
+            { fields }
+          </span>
+        );
+      }
     }
   });
   

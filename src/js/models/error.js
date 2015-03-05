@@ -7,7 +7,7 @@ define(function (require) {
     idAttribute: "error",
     urlRoot: function () {
       var type = this.get('type');
-      console.log(this.toJSON(), this.get('workflowid'));
+
       if (type === 'global') {
         return [settings.REST_API_PREFIX, 'errors', 'global'].join('/');
       } else if (type === 'workflow') {

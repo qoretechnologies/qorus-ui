@@ -40,7 +40,6 @@ define(function (require, exports, module) {
         
         $el.off();
         $(window).off(key);
-        console.log('removed listener for', key);
       }
     },
     
@@ -65,7 +64,6 @@ define(function (require, exports, module) {
           _.delay(this._createResizable, 100);
 
           $(window).on(key, $.proxy(this.fixHeight, this));  
-          console.log('added listener for', key);
         }
       }
     },

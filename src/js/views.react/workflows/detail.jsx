@@ -21,6 +21,7 @@ define(function (require) {
       StatusIcon        = require('jsx!views.react/components/statusicon'),
       Controls          = require('jsx!views.react/components/controls').ControlsView,
       ModalView         = require('jsx!views.react/components/modal'),
+      ModelForm         = require('jsx!views.react/components/form').ModelForm,
       
       Actions           = require('views.react/actions/tabs'),
       Store             = require('views.react/stores/tabs'),
@@ -28,6 +29,12 @@ define(function (require) {
       LogActions        = require('views.react/actions/log'),
       ViewHeightMixin   = require('views.react/mixins/view.height'),
       ModelRenderMixin  = require('views.react/mixins/modelrender'),
+      
+      FormActions       = require('views.react/actions/form'),
+      FormStore         = require('views.react/stores/form'),
+      ModalActions      = require('views.react/actions/modal'),
+      
+      ErrorModel        = require('models/error'),
       
       ErrorsCollection  = require('collections/errors'),
       GlobalErrors      = require('collections/errors-global'),
@@ -112,106 +119,115 @@ define(function (require) {
     }
   });
   
-  var Field = React.createClass({
-    getInitialState: function () {
+  var fields = [
+    {
+      name: 'Error',
+      attrName: 'error',
+      required: true,
+      readonly: true,
+      type: 'string'
+    },
+    {
+      name: 'Severity',
+      attrName: 'severity',
+      required: true,
+      type: 'string'
+    },
+    {
+      name: 'Retry',
+      attrName: 'retry_flag',
+      type: 'bool'
+    },
+    {
+      name: 'Retry delay secs',
+      attrName: 'retry_delay_secs',
+      type: 'string'
+    },
+    {
+      name: 'Business',
+      attrName: 'business_flag',
+      type: 'bool'
+    },
+    {
+      name: 'Manually updated',
+      attrName: 'manually_updated',
+      type: 'bool'
+    },
+    {
+      name: 'Description',
+      attrName: 'description',
+      required: true,
+      type: 'text'
+    }
+  ];
+  
+  var ErrorForm = React.createClass({
+    getDefaultProps: function () {
+      var actions = new FormActions();
+      
       return {
-        value: this.props.value
+        actions: actions,
+        store: new FormStore(actions)
       };
     },
-  
-    onChange: function (e) {
-      var val = e.target.value;
-      
-      this.setState({
-        value: val
-      });
+    
+    getInitialState: function () {
+      return {
+        error: null
+      };
     },
-  
-    render: function () {
-      var View, 
-          props = {
-            id: this.props.attrName,
-            value: this.state.value,
-            onChange: this.onChange
-          };
+    
+    componentDidMount: function () {
+      this.unsubscribe = this.props.store.listen(this.onStoreChange);
+    },
+    
+    componentWillUnmount: function () {
+      this.unsubscribe();
+    },
+    
+    onStoreChange: function (state) {
+      var model = this.props.model,
+          self  = this;
       
-      switch (this.props.type) {
-        case "string":
-          View = <input type="text" {...props} />;
-          break;
-        case "bool":
-          View = <input type="checkbox" checked={ this.state.value } {...props} />;
-          break;
-        case "text":
-          View = <textarea {...props} />;
-          break;
+      model.set(state.form);
+    
+      model.save(null, {
+        success: ModalActions.hide,
+        error: function (model, resp) {
+/*          console.log(arguments);*/
+          self.setState({ error: resp.responseJSON.desc });
+        }
+      });
+      
+      if (!model.collection) {
+        this.props.collection.add(model);
+      }
+    },
+    
+    onSave: function (e) {
+      var prepared = this.refs.form.prepare();
+      
+      this.props.actions.submit(prepared);
+      
+      e.preventDefault();
+    },
+    
+    render: function () {
+      var error,
+          state = this.props.state,
+          model = this.props.model;
+    
+      if (this.state.error) {
+        error = <p className="alert">{ this.state.error }</p>;
       }
     
       return (
-        <div className="control-group">
-          <label className="control-label" htmlFor={ this.props.attrName }>{ this.props.name }</label>
-          <div className="controls">
-            { View }
+        <form className="form-horizontal" id="error-edit-form" onSubmit={ this.onSave }>
+          { error }
+          <ModelForm model={ model } formTag={ false } ref="form" fields={ fields} actions={ this.props.actions } store={ this.props.store } />
+          <div className="modal-footer">
+            <button className="btn-success" type="submit">{ state.action }</button>
           </div>
-        </div>
-      );
-    }
-  });
-  
-  var ErrorForm = React.createClass({
-    render: function () {
-      var state = this.state,
-          model = this.props.model,
-          fieldsMap = [
-            {
-              name: 'Error',
-              attrName: 'error',
-              required: true,
-              readonly: true,
-              type: 'string'
-            },
-            {
-              name: 'Severity',
-              attrName: 'severity',
-              required: true,
-              type: 'string'
-            },
-            {
-              name: 'Retry',
-              attrName: 'retry_flag',
-              type: 'bool'
-            },
-            {
-              name: 'Retry delay secs',
-              attrName: 'retry_delay_secs',
-              type: 'string'
-            },
-            {
-              name: 'Business',
-              attrName: 'business_flag',
-              type: 'bool'
-            },
-            {
-              name: 'Manually updated',
-              attrName: 'manually_updated',
-              type: 'bool'
-            },
-            {
-              name: 'Description',
-              attrName: 'description',
-              required: true,
-              type: 'text'
-            }
-          ];
-      
-      
-      var fields = _.map(fieldsMap, function (field) {
-        return <Field {...field} value={ model.get(field.attrName) } />;
-      });
-    
-      return (
-        <form className="form-horizontal" id="error-edit-form">
-          { fields }
         </form>
       );
     }
@@ -229,11 +245,11 @@ define(function (require) {
       e.preventDefault();
 
       if (control.action == 'edit') {
-        this.showModal();
+        ModelActions.edit(this.props.model);
       } else if (control.action == 'clone') {
-        this.showCloneModal();
+        ModelActions.clone(this.props.model);
       } else {
-        this.props.model.doAction(control.action);
+        this.props.model.doAction({ action: control.action });
       }
     },
   
@@ -245,27 +261,20 @@ define(function (require) {
       return (
         <a className={cls} title={control.title} onClick={this.onClick}><i className={icon_cls} /></a>
       );
-    },
-       
-    showModal: function () {
-      var modal = <ModalView title={ this.props.control.action + " " + this.props.model.get('error') }><ErrorForm model={ this.props.model } /></ModalView>;
-      var el = $('<div class="modal-container" />').appendTo('body');
-      React.render(modal, el[0]);
-    },
-    
-    showCloneModal: function () {
-      this.showModal();
     }
   });
   
   var ErrorsTable = React.createBackboneClass({
+    mixins: [React.BackboneMixin('collection', 'filtered:add filtered:remove filtered:reset')],
     getInitialState: function () {
       return {
         fetched: this.props.collection.size() > 0,
         search_text: '',
-        modelId: this.props.model
+        size: this.props.collection.size()
       };
     },
+    
+/*    shouldComponentUpdate: function () {},*/
     
     onSearch: function (e) {
       this.setState({
@@ -278,23 +287,23 @@ define(function (require) {
     },
     
     componentDidUpdate: function () {
-      if (this.state.modelId !== this.props.modelId) {
+      if (!this.state.fetched) {
         this._fetch(true);
       }
     },
     
     _fetch: function (force) {
       if (this.isMounted()) {
-        var self = this,
+        var self       = this,
             isBackbone = this.props.collection instanceof Backbone.Collection;
 
         if ((!this.state.fetched || force) && isBackbone) {
           this.props.collection.fetch({
-            success: function () {
+            success: function (col) {
               self.setState({ 
                 fetched: true,
                 search_text: '',
-                modelId: self.props.modelId
+                size: col.size()
               });
             }
           });
@@ -331,7 +340,7 @@ define(function (require) {
               <Cell dataKey="severity" />
             </Col>
             <Col name="Retry">
-              <StatusIconContainer dataKey="retry" />
+              <StatusIconContainer dataKey="retry_flag" />
             </Col>
             <Col name="Delay">
               <Cell dataKey="retry_delay_secs" />
@@ -340,13 +349,74 @@ define(function (require) {
               <StatusIconContainer dataKey="business_flag" />
             </Col>
             <Col>
-              <Controls model={ this.props.model } controlView={ ErrorControlsView } />
+              <Controls model={ this.props.model } modelId={ this.props.modelId } controlView={ ErrorControlsView } />
             </Col>
           </TableView>
         </div>
       );
     }
   });
+  
+  var ModelActions = Reflux.createActions([
+    'edit',
+    'clone'
+  ]);
+  
+  var ModelStore = Reflux.createStore({
+    listenables: ModelActions,
+    onEdit: function (model) {
+      this.trigger({ action: 'Edit', model: model });
+    },
+    onClone: function (model) {
+      this.trigger({ action: 'Clone', model: model });
+    }
+  });
+
+  
+  var ModalContainer = React.createClass({
+    mixins: [Reflux.listenTo(ModelStore, 'onStoreChange')],
+    
+    onStoreChange: function (state) {
+      this.showModal(state);
+    },
+    
+    render: function () {
+      return <span />;
+    },
+
+    showModal: function (state) {
+      var modal, el;
+      
+      model = this.prepareModel(state.model);
+    
+      modal = (
+        <ModalView title={ state.action + " " + model.get('error') }>
+          <ErrorForm model={ model } state={ state } collection={ this.props.collection } modelId={ this.props.modelId } />
+        </ModalView>
+      );
+      
+      el = $('<div class="modal-container" />').appendTo('body');
+      React.render(modal, el[0]);
+    },
+    
+    prepareModel: function (model) {
+      var attrs = _.pluck(fields, 'attrName');
+      
+      if (model.get('type') === 'global') {
+        var nextModel = _.pick(model.toJSON(), attrs);
+        
+        nextModel.workflowid = this.props.modelId;
+        nextModel.type = 'workflow';
+        
+        model = new ErrorModel(nextModel);
+        
+        model.is_new = true;
+      }
+      
+      return model;
+    }
+  });
+  
   
   var ErrorsContainer = React.createClass({
     getInitialState: function () {
@@ -356,24 +426,27 @@ define(function (require) {
     // set initial collection maybe it would be better via store
     getInitialCollections: function (id) {
       var errors = new ErrorsCollection([], { workflowid: id || this.props.model.id }),
-          global = new Filtered(GlobalErrors);
-          
-      global.listenTo(errors, 'sync add destroy', function (model, collection) {
-        var names;
-        
-        if (model instanceof Backbone.Collection) {
-          collection = model;
+          global  = new Filtered(GlobalErrors),
+          self    = this;
+            
+      global.listenTo(errors, 'sync add', function (model, response) {
+        var filterError = [];
+      
+        if (model instanceof Backbone.Model) {
+          filterError.push(model.get('error'));
+        } else if (model instanceof Backbone.Collection) {
+          filterError = model.pluck('error');
         }
         
-        if (collection instanceof Backbone.Model) {
-          names = [collection.get('error')];
-        } else {
-          names = collection.pluck('error');
-        }
-        
-        this.filterBy('error', function (model) {
-          return _.indexOf(names, model.get('error')) === -1;
-        });
+        _.each(filterError, function (err) {
+          this.filterBy(err, function (m) {
+            return err !== m.get('error');
+          });        
+        }, this);
+      });
+      
+      global.listenTo(errors, 'destroy remove', function (model) {
+        this.removeFilter(model.get('error'));
       });
     
       return {
@@ -383,15 +456,17 @@ define(function (require) {
     },
     
     componentWillReceiveProps: function (nextProps) {
-      this.setState(this.getInitialCollections(nextProps.model.id));
+      if (this.props.model.id != nextProps.model.id) {
+        this.setState(this.getInitialCollections(nextProps.model.id));
+      }
     },
     
     render: function () {
-      
       return (
         <div>
           <ErrorsTable collection={ this.state.errors_collection } name="Workflow definitions" modelId={this.props.model.id} />
           <ErrorsTable collection={ this.state.global_collection } name="Global definitions" modelId={this.props.model.id} />
+          <ModalContainer collection={ this.state.errors_collection } modelId={this.props.model.id} />
         </div>
       );
     }

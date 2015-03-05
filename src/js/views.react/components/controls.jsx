@@ -1,5 +1,7 @@
 define(function (require) {
-  var React = require('react'), views = {};
+  var React = require('react'), 
+      views = {},
+      _     = require('underscore');
   
   require('react.backbone');
   
@@ -28,16 +30,18 @@ define(function (require) {
   
   views.ControlsView = React.createBackboneClass({
     propTypes: {
-      controlView: React.PropTypes.element
+      // expects Element factory
+      controlView: React.PropTypes.func
     },
   
     render: function () {
       var key   = this.props.model.get('id'),
           model = this.props.model,
-          CView = this.props.controlView || views.ControlView;
+          CView = this.props.controlView || views.ControlView,
+          props = _.omit(this.props, ['controlView', 'children']);
 
       var controls = _.map(_.result(this.props.model, 'getControls'), function (control) {
-        return <CView control={control} key={control.title} model={ model } />;
+        return <CView {...props} control={control} key={control.title} model={ model } />;
       });
             
       return (

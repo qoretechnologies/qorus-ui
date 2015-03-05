@@ -237,7 +237,7 @@ define(function (require) {
     }
   });
   
-  var RowViewWrapper = React.createBackboneClass({
+  var RowViewWrapper = React.createClass({
     mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
 
     getInitialState: function () {
