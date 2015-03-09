@@ -54,7 +54,7 @@ define(function (require) {
       
       return cols;
     }
-  }
+  };
 
   var ModelRowView = React.createBackboneClass({
     mixins: [RowMixin],
@@ -189,9 +189,7 @@ define(function (require) {
     
       var rows = collection.map(function (row, idx) {
         var isBackbone = row instanceof Backbone.Model,
-            DefaultRowView = props.rowView || isBackbone ? ModelRowView : RowView;
-            
-        console.log(isBackbone, row);
+            DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView);
 
         return <DefaultRowView key={ idx } 
                  idx={row.id || idx } model={ row } 
