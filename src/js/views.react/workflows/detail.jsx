@@ -319,8 +319,6 @@ define(function (require) {
           return m.get('error').toLowerCase().indexOf(search) !== -1;
         });
       }
-      
-      console.log(col, typeof col);
     
       return (
         <div className="relative">

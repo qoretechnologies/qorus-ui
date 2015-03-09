@@ -132,7 +132,6 @@ define(function (require) {
     
     getDefaultProps: function () {
       return {
-        rowView: RowView,
         chunked: false,
         rowClick: _.noop
       };
