@@ -2,7 +2,8 @@ define(function (require) {
   var _         = require('underscore'),
       moment    = require('moment'),
       settings  = require('settings'),
-      $         = require('jquery');
+      $         = require('jquery'),
+      md5       = require('js-md5');
   
   var utils = {
     settings: settings,
@@ -256,6 +257,12 @@ define(function (require) {
       });
       
       return csv.trim();
+    },
+       
+    hash: function (obj) {
+      var s = JSON.stringify(obj).replace(/\s/, '');
+      
+      return md5(s);
     }
   };
     

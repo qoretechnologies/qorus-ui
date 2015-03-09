@@ -2,7 +2,7 @@ define(function (require) {
   var React             = require('react'),
       Reflux            = require('reflux'),
       _                 = require('underscore'),
-      $ = require('jquery'),
+      $                 = require('jquery'),
       Backbone          = require('backbone'),
       slugify           = require('qorus/helpers').slugify,
       PaneView          = require('jsx!views.react/components/pane'),
@@ -52,12 +52,9 @@ define(function (require) {
     }
   });
   
-  
   var InfoView = React.createClass({
     mixins: [ModelRenderMixin],
     render: function () {
-      console.log(this.props.model.toJSON()._options);
-    
       return (
         <div>
           <GroupsView groups={ this.props.model.get('groups') } />
@@ -274,7 +271,9 @@ define(function (require) {
       };
     },
     
-/*    shouldComponentUpdate: function () {},*/
+    onSubmit: function (e) {
+      e.preventDefault();
+    },
     
     onSearch: function (e) {
       this.setState({
@@ -320,12 +319,14 @@ define(function (require) {
           return m.get('error').toLowerCase().indexOf(search) !== -1;
         });
       }
+      
+      console.log(col, typeof col);
     
       return (
         <div className="relative">
           <h4>{ this.props.name }</h4>
           <div className="pull-right">
-            <form className="form-search form-small">
+            <form className="form-search form-small" onSubmit={ this.onSubmit }>
               <div className="input-append search-box">
                 <input type="text" className="search-query appendInputButton" placeholder="Search..." value={ this.state.search_text } onChange={ this.onSearch } />
                 <button type="submit" className="btn">&nbsp;<i className="icon-search"></i></button>

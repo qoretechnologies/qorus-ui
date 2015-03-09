@@ -75,7 +75,7 @@ define(function (require) {
   
   var HasAlertView = React.createClass({
     shouldComponentUpdate: function (nextProps) {
-      return this.props.model.get('has_alerts') !== nextProps.model.get('alerts');
+      return this.props.model.get('has_alerts') !== nextProps.model.get('has_alerts');
     },
     render: function () {
       if (this.props.model.get('has_alerts')) {
@@ -134,7 +134,11 @@ define(function (require) {
   
   var BadgeViewCell = React.createClass({
     shouldComponentUpdate: function (nextProps) {
+/*
+      console.log('shouldupdate', this.props.model.get(this.props.attr) !== nextProps.model.get(this.props.attr) || (this.props.url !== nextProps.url));
       return this.props.model.get(this.props.attr) !== nextProps.model.get(this.props.attr) || (this.props.url !== nextProps.url);
+*/  
+      return true;
     },
     
     render: function () {
@@ -237,7 +241,7 @@ define(function (require) {
     }
   });
   
-  var RowViewWrapper = React.createClass({
+  var RowViewWrapper = React.createBackboneClass({
     mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
 
     getInitialState: function () {

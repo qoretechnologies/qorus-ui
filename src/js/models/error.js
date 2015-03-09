@@ -29,10 +29,12 @@ define(function (require) {
       
       return controls;
     },
+    
     doAction: function (opts) {
       if (opts.action === "delete") this.destroy();
       return this;
     },
+    
     isNew: function () {
       if (this.is_new)
         return true;

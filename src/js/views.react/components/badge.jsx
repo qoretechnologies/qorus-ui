@@ -2,7 +2,7 @@ define(function (require) {
   var React = require('react');
   
   return React.createClass({
-    mixins: [React.addons.PureRenderMixin],
+/*    mixins: [React.addons.PureRenderMixin],*/
     propTypes: {
       url: React.PropTypes.string,
       val: React.PropTypes.number

@@ -37,7 +37,8 @@ require.config({
     'bootstrap-flat-ui': '../components/bootstrap-flat-ui/docs/assets/js/bootstrap',
     'flat-ui': '../components/flat-ui/dist/js/flat-ui',
     'snap.svg': '../components/snap.svg/dist/snap.svg-min',
-    'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table'
+    'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table',
+    'js-md5': '../components/js-md5/js/md5'
   },
   shim: {
     backbone: {
@@ -131,8 +132,8 @@ require.config({
       exports: 'Messenger',
       init: function () {
 this.Messenger.options = {
-  extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-  theme: 'block'
+extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+theme: 'block'
 };
 }
     },
