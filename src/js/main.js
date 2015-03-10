@@ -38,7 +38,8 @@ require.config({
     'flat-ui': '../components/flat-ui/dist/js/flat-ui',
     'snap.svg': '../components/snap.svg/dist/snap.svg-min',
     'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table',
-    'js-md5': '../components/js-md5/js/md5'
+    'js-md5': '../components/js-md5/js/md5',
+    Rainbow: '../components/Rainbow/rainbow'
   },
   shim: {
     backbone: {

@@ -48,6 +48,7 @@ define(function (require) {
 
   Qorus.Model = Backbone.Model.extend({
     _fetched: false,
+    hash: '',
     store: {},
     updateStore: function (store) {
         this.store = _.extend({}, this.store, store);
@@ -55,6 +56,7 @@ define(function (require) {
     dateAttributes: {},
     api_events_list: [],
     nameAttribute: 'name',
+    
     initialize: function (opts, options) {
       _.bindAll(this);
       opts = opts || {};
@@ -69,6 +71,11 @@ define(function (require) {
 
       this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
+      this.on('change', this.updateHash);
+    },
+    
+    updateHash: function () {
+      this.hash = utils.hash(this.attributes);
     },
 
     dispatch: function () {},
@@ -83,6 +90,8 @@ define(function (require) {
           }
         }
       });
+
+      this.hash = utils.hash(response);
       return response;
     },
 

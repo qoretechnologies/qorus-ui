@@ -291,6 +291,10 @@ define(function (require) {
       }
     },
     
+    componentWillReceiveProps: function () {
+      this._fetch();
+    },
+    
     _fetch: function (force) {
       if (this.isMounted()) {
         var self       = this,
@@ -424,7 +428,8 @@ define(function (require) {
   
     // set initial collection maybe it would be better via store
     getInitialCollections: function (id) {
-      var errors = new ErrorsCollection([], { workflowid: id || this.props.model.id }),
+      console.log(id, this.props.modelId);
+      var errors = new ErrorsCollection([], { workflowid: id || this.props.modelId }),
           global  = new Filtered(GlobalErrors),
           self    = this;
             
@@ -455,9 +460,13 @@ define(function (require) {
     },
     
     componentWillReceiveProps: function (nextProps) {
-      if (this.props.model.id != nextProps.model.id) {
-        this.setState(this.getInitialCollections(nextProps.model.id));
+      if (this.props.modelId !== nextProps.modelId) {
+        this.setState(this.getInitialCollections(nextProps.modelId));
       }
+    },
+    
+    componentWillUnmount: function () {
+      this.state.global_collection.stopListening();
     },
     
     render: function () {
@@ -576,7 +585,7 @@ define(function (require) {
               <LogViewContainer model={ model } name="log" />
             </Tab>,
             <Tab name="Errors" key="errors">
-              <ErrorsContainer model={ model } />
+              <ErrorsContainer model={ model } modelId={ model.id } />
             </Tab>
           ];
           
@@ -602,7 +611,7 @@ define(function (require) {
     }
   });
   
-  var DetailView = React.createClass({
+  var DetailView = React.createBackboneClass({
 /*
     componentWillReceiveProps: function (nextProps) {
       if (this.props.model.toJSON() !== nextProps.model.toJSON()) {

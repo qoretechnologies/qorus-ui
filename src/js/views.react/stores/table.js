@@ -62,6 +62,10 @@ define(function (require) {
        * @returns {Boolean}
        */
       isRowChecked: function (id) {
+        if (this.state.checkedIds.length === 0) {
+          return false;
+        }
+        
         return _.indexOf(this.state.checkedIds, id) !== -1;
       },
       
@@ -71,6 +75,15 @@ define(function (require) {
        */
       getCheckedIds: function () {
         return this.state.checkedIds;
+      },
+      
+      /**
+       * Checks if id is clicked
+       * @param {number} id
+       * @returns {Boolean}
+       */          
+      isRowClicked: function (id) {
+        return this.state.model && (this.state.model === id);
       }
     });      
   };

@@ -19,8 +19,8 @@ define(function (require) {
   
   
   var TdComponent = React.createClass({
-    shouldComponentUpdate: function () {
-      return true;
+    shouldComponentUpdate: function (nextProps) {
+      return (!_.isEqual(this.props, nextProps) || this.props.hash !== nextProps.hash);
     },
     
     render: function () {
@@ -31,25 +31,25 @@ define(function (require) {
   });
   
   var RowMixin = {
-    shouldComponentUpdate: function (nextProps) {
-      return !_.isEqual(this.props, nextProps);
+    shouldComponentUpdate: function (nextProps, nextState) {
+      return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
     },
     
     processColumns: function () {
-      var model    = this.props.model,
-          children = this.props.children,
-          hash     = ''; // utils.hash(model);
-    
+      var model       = this.props.model,
+          children    = this.props.children,
+          isBackbone  = model instanceof Backbone.Model;
+
       var cols = children.map(function (col, indx) {
         var child = col.props.children,
             clone = cloneWithProps(child, { model: model }),
             props = child.props;
 
         if (col.props.cellView) {
-          return <col.props.cellView {...props} hash={ hash } key={ indx } model={ model }>{ clone }</col.props.cellView>;
+          return <col.props.cellView {...props} key={ indx } model={ model }>{ clone }</col.props.cellView>;
         }
 
-        return <TdComponent {...props} hash={ hash } model={ model } key={ indx }>{ clone }</TdComponent>;
+        return <TdComponent {...props} model={ model } hash={ model.hash } key={ indx }>{ clone }</TdComponent>;
       });
       
       return cols;
@@ -221,10 +221,23 @@ define(function (require) {
     }
   });
   
+  var CellBackbone = React.createBackboneClass({
+    propTypes: {
+      model: PropTypes.object.isRequired,
+      dataKey: PropTypes.string.isRequired
+    },
+    
+    render: function () {
+      var obj = this.props.model.toJSON();
+      return <span>{ obj[this.props.dataKey] }</span>;
+    }
+  });
+  
   return {
     TableView: TableView,
     RowView: RowView,
     ModelRowView: ModelRowView,
-    CellView: CellView
+    CellView: CellView,
+    CellBackbone: CellBackbone
   };
 });

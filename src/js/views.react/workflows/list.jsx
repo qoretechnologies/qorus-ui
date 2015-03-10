@@ -18,6 +18,7 @@ define(function (require) {
       TableView           = require('jsx!views.react/components/table').TableView,
       ModelRowView        = require('jsx!views.react/components/table').ModelRowView,
       Cell                = require('jsx!views.react/components/table').CellView,
+      CellBackbone        = require('jsx!views.react/components/table').CellBackbone,
       Col                 = require('jsx!views.react/components/dummy'),
       Actions             = require('views.react/actions/workflows'),
       tableActions        = require('views.react/actions/table'),
@@ -55,10 +56,6 @@ define(function (require) {
     
     getModel: function () {
       return workflowsStore.getCollection().get(this.state.model);
-    },
-    
-    isRowClicked: function (id) {
-      return this.state.model && this.state.model.id === id;
     }
   });
   
@@ -99,9 +96,11 @@ define(function (require) {
   });
   
   var HasAlertView = React.createClass({
+/*
     shouldComponentUpdate: function (nextProps) {
       return this.props.model.get('has_alerts') !== nextProps.model.get('has_alerts');
     },
+*/
     render: function () {
       if (this.props.model.get('has_alerts')) {
         return (
@@ -252,7 +251,7 @@ define(function (require) {
     },
   
     onClose: function () {
-      Actions.toggleDetail(null);
+      tActions.rowClick(null);
     },
     
     render: function () {
@@ -267,7 +266,7 @@ define(function (require) {
   });
   
   var RowViewWrapper = React.createBackboneClass({
-    mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
+    mixins: [Reflux.listenTo(tStore, 'onStoreUpdate')],
 
     getInitialState: function () {
       return {
@@ -278,20 +277,18 @@ define(function (require) {
     
     onStoreUpdate: function () {
       var id      = this.props.model.id,
-          clicked = store.isRowClicked(id),
-/*          checked = tStore.isRowChecked(id),*/
+          clicked = tStore.isRowClicked(id),
+          checked = tStore.isRowChecked(id),
           update  = {};
             
       if (clicked !== this.state.clicked) {
         update.clicked = clicked;
       }
       
-/*
       if (checked !== this.state.checked) {
         update.checked = checked;
       }
-*/
-      
+            
       if (update !== {}) {
         this.setState(update);
       }
@@ -299,11 +296,12 @@ define(function (require) {
   
     render: function () {
       var cls = React.addons.classSet({
-        warning: this.state.checked
+        warning: this.state.checked,
+        info:    this.state.clicked
       });
       
       return (
-        <ModelRowView {...this.props} className={ cls } clicked={this.state.clicked} />
+        <ModelRowView {...this.props} className={ cls } clicked={ this.state.clicked } />
       );
     },
   });
@@ -322,7 +320,7 @@ define(function (require) {
     },
     
     rowClick: function (id) {
-      Actions.toggleDetail(id);
+      tActions.rowClick(id);
     },
     
     onStoreUpdate: function () {

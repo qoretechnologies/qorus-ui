@@ -160,7 +160,7 @@ define(function (require) {
                 <DescView className="name" />
               </Col>
               <Col name="Value" cellView={ EditableCell }>
-                <Col model={ this.props.model } />
+                <Col _model={ this.props.model } />
               </Col>
             </TableView>
           </div>

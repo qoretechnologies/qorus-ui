@@ -356,7 +356,7 @@ define(function (require) {
     
     setOption: function (option, value) {
       var req       = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
-          options   = this.get('options').toJSON(),
+          options   = this.get('options'),
           opt       = _.find(options, { name: option });
       
       if (opt.system && !value) {

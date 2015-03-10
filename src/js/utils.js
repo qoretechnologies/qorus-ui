@@ -260,9 +260,9 @@ define(function (require) {
     },
        
     hash: function (obj) {
-      var s = JSON.stringify(obj).replace(/\s/, '');
+      var s = md5(JSON.stringify(obj).replace(/\s/, ''));
       
-      return md5(s);
+      return s;
     }
   };
     
