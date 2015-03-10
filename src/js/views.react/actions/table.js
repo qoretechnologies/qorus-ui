@@ -3,7 +3,7 @@ define(function (require) {
   
   return function () {
     return Reflux.createActions([
-      'checkRow',
+      'rowCheck',
       'rowClick',
       'filterChange'
     ]);

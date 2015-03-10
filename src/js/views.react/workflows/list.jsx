@@ -30,7 +30,7 @@ define(function (require) {
   require('react.backbone');
   
   var tActions  = tableActions();
-  var tStore    = tableStore(TableView.actions);
+  var tStore    = tableStore(tActions);
   var fixed     = true;
   
   var store = Reflux.createStore({
@@ -55,20 +55,45 @@ define(function (require) {
     
     getModel: function () {
       return workflowsStore.getCollection().get(this.state.model);
+    },
+    
+    isRowClicked: function (id) {
+      return this.state.model && this.state.model.id === id;
     }
   });
   
   var Checker = React.createClass({
-    mixins: [PureRenderMixin],
+    mixins: [PureRenderMixin, Reflux.listenTo(store, 'onStoreChange')],
+    
+    onStoreChange: function () {
+      var isChecked = tStore.isRowChecked(this.props.model.id);
+      
+      if (this.state.checked !== isChecked){
+        this.setState({ checked: isChecked });
+      }
+    },
+    
+    getInitialState: function () {
+      var model = this.props.model;
+      return {
+        checked: tStore.isRowChecked(model.id)
+      };
+    },
+
+    rowCheck: function (e) {
+      e.stopPropagation();
+      tActions.rowCheck(this.props.model.id);
+    },
+    
     render: function () {
       var cls = React.addons.classSet({ 
         'check': true, 
-        'icon-check-empty': !this.props.checked, 
-        'icon-check': this.props.checked 
+        'icon-check-empty': !this.state.checked, 
+        'icon-check': this.state.checked 
       });
       
       return (
-        <i className={cls} onClick={ this.props.onRowCheck }></i>
+        <i className={cls} onClick={ this.rowCheck }></i>
       );
     }
   });
@@ -246,25 +271,39 @@ define(function (require) {
 
     getInitialState: function () {
       return {
-        clicked: false
+        clicked: false,
+        checked: false
       };
     },
     
     onStoreUpdate: function () {
-      var clicked = false;
-      
-      if (store.state.model && store.state.model.id == this.props.model.id) {
-        clicked = true;
+      var id      = this.props.model.id,
+          clicked = store.isRowClicked(id),
+/*          checked = tStore.isRowChecked(id),*/
+          update  = {};
+            
+      if (clicked !== this.state.clicked) {
+        update.clicked = clicked;
       }
       
-      if (clicked !== this.state.clicked) {
-        this.setState({ clicked: clicked });      
+/*
+      if (checked !== this.state.checked) {
+        update.checked = checked;
+      }
+*/
+      
+      if (update !== {}) {
+        this.setState(update);
       }
     },
   
     render: function () {
+      var cls = React.addons.classSet({
+        warning: this.state.checked
+      });
+      
       return (
-        <ModelRowView {...this.props} clicked={this.state.clicked} />
+        <ModelRowView {...this.props} className={ cls } clicked={this.state.clicked} />
       );
     },
   });

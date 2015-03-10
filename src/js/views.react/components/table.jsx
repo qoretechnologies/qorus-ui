@@ -38,7 +38,7 @@ define(function (require) {
     processColumns: function () {
       var model    = this.props.model,
           children = this.props.children,
-          hash     = utils.hash(model);
+          hash     = ''; // utils.hash(model);
     
       var cols = children.map(function (col, indx) {
         var child = col.props.children,
