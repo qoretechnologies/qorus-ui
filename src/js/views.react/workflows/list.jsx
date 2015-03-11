@@ -121,7 +121,7 @@ define(function (require) {
       };
     },
     
-    onStoreUpdate: function () {
+    onStoreUpdate: function (state) {
       this.setState({ 
         filters: store.state.filters
       });

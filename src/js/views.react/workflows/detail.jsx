@@ -262,7 +262,7 @@ define(function (require) {
   });
   
   var ErrorsTable = React.createBackboneClass({
-    mixins: [React.BackboneMixin('collection', 'filtered:add filtered:remove filtered:reset')],
+    mixins: [React.BackboneMixin('collection', 'sync change reset filtered:add filtered:remove filtered:reset')],
     getInitialState: function () {
       return {
         fetched: this.props.collection.size() > 0,
@@ -292,6 +292,8 @@ define(function (require) {
     },
     
     componentWillReceiveProps: function () {
+      var fetched = this.props.collection instanceof Backbone.Collection ? false : true;
+      this.setState({ fetched: fetched });
       this._fetch();
     },
     
@@ -428,12 +430,11 @@ define(function (require) {
   
     // set initial collection maybe it would be better via store
     getInitialCollections: function (id) {
-      console.log(id, this.props.modelId);
       var errors = new ErrorsCollection([], { workflowid: id || this.props.modelId }),
           global  = new Filtered(GlobalErrors),
           self    = this;
             
-      global.listenTo(errors, 'sync add', function (model, response) {
+      global.listenTo(errors, 'sync add remove', function (model, response) {
         var filterError = [];
       
         if (model instanceof Backbone.Model) {
@@ -467,6 +468,7 @@ define(function (require) {
     
     componentWillUnmount: function () {
       this.state.global_collection.stopListening();
+      this.state.global_collection.off();
     },
     
     render: function () {

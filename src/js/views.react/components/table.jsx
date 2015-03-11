@@ -9,7 +9,6 @@ define(function (require) {
       $                   = require('jquery'),
       PropTypes           = React.PropTypes,
       cloneWithProps      = React.addons.cloneWithProps,
-      views               = {},
       CHUNK_SIZE          = 50,
       Filtered            = require('backbone.filtered.collection'),
       utils               = require('utils');
