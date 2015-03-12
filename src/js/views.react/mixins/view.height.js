@@ -6,16 +6,18 @@ define(function (require) {
   
   return {
     _setHeight: function () {
-      var height,
-          $el = $(this.getDOMNode());
-      
-      if (this.props.container) {
-        height = $(this.props.container).height();
-      } else {
-        height = $(window).innerHeight() - $el.position().top - PADDING;
+      if (this.isMounted()) {
+        var height,
+            $el = $(this.getDOMNode());
+
+        if (this.props.container) {
+          height = $(this.props.container).height();
+        } else {
+          height = $(window).innerHeight() - $el.position().top - PADDING;
+        }
+
+        $el.height(height);  
       }
-      
-      $el.height(height);  
     },
     
     componentDidMount: function () {

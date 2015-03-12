@@ -15,7 +15,7 @@ define(function (require) {
       
       /** 
        * Sets initial state hash
-       * @returns: hash this.state
+       * @returns {Object} this.state
        */
       getInitialState: function () {
         return {
@@ -68,7 +68,7 @@ define(function (require) {
       /**
        * Checks if id is in checkedIds
        * @param {number} id
-       * @returns {Boolean}
+       * @returns {boolean}
        */
       isRowChecked: function (id) {
         if (this.state.checkedIds.length === 0) {
@@ -89,7 +89,7 @@ define(function (require) {
       /**
        * Checks if id is clicked
        * @param {number} id
-       * @returns {Boolean}
+       * @returns {boolean}
        */          
       isRowClicked: function (id) {
         return this.state.model && (this.state.model === id);
@@ -97,7 +97,7 @@ define(function (require) {
       
       /**
        * Selects/unselects rows based on action
-       * @param {string|func} action
+       * @param {string|function} action
        */
       onCheck: function (action) {
         var ids = this.state.checkedIds;
@@ -123,10 +123,14 @@ define(function (require) {
 
       /**
        * Runs action with selected rows
-       * @param {string} action
+       * @param {string|function} action
        */
-      onRun: function (action) {
-        console.log(action);
+      onRun: function (action, args, e) {
+        var ids = this.state.checkedIds;
+        action(ids, args);
+        
+        e.preventDefault();
+        document.activeElement.blur();
       }
     });      
   };

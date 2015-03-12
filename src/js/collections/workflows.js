@@ -4,6 +4,7 @@ define(function (require) {
       Qorus     = require('qorus/qorus'),
       Model     = require('models/workflow'),
       moment    = require('moment'),
+      utils     = require('utils'),
       Collection, defaults;
   
   defaults = {
@@ -50,20 +51,16 @@ define(function (require) {
       return response;
     },
     
-    setDate: function (date) {
-      this.date_format = settings.DATE_DISPLAY;
-      
-      if (date === undefined || date === null || date === '24h') {
-        date = moment().add('days', -1).format(this.date_format);
-      } else if (date == 'all') {
-        date = moment(settings.DATE_FROM).format(this.date_format);
-      } else if (date.match(/^[0-9]+$/)) {
-        date = moment(date, 'YYYYMMDDHHmmss').format(this.date_format);
-      } else {
-        date = date;
+    setOptions: function (opts) {
+      if (opts.date) {
+        opts.date = utils.parseDate(opts.date);
       }
       
-      this.opts.date = date;
+      this.opts = _.extend({}, this.opts, opts);
+    },
+    
+    setDate: function (date) {
+      this.setOptions({ date: date });
     },
     
     getDate: function () {

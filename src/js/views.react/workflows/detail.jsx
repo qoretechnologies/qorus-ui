@@ -499,12 +499,16 @@ define(function (require) {
         this.actions.close();
       }
     
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+    
       var url = [settings.WS_HOST, 'log', 'workflows', props.model.id].join('/');
       
       this.actions = new LogActions();
       this.store = new LogStore(this.actions);
       
-      this.store.listen(this.onStoreUpdate);
+      this.unsubscribe = this.store.listen(this.onStoreUpdate);
       
       this.actions.connect(url);
     },
@@ -525,6 +529,7 @@ define(function (require) {
     
     componentWillUnmount: function () {
       this.actions.close();
+      this.unsubscribe();
     },
     
     onStoreUpdate: function (st) {
@@ -612,6 +617,7 @@ define(function (require) {
       );
     }
   });
+  
   
   var DetailView = React.createBackboneClass({
 /*

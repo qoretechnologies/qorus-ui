@@ -39,12 +39,14 @@ define(function (require) {
     },
 
     scroll: function () {
-      if (this.props.scroll) {
-        var $el = $(this.getDOMNode());
+      if (this.isMounted()) {
+        if (this.props.scroll) {
+          var $el = $(this.getDOMNode());
 
-        $el.scrollTop(function () {
-          return this.scrollHeight;
-        });
+          $el.scrollTop(function () {
+            return this.scrollHeight;
+          });
+        }      
       }
     },
 

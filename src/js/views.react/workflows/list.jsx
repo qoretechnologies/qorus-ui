@@ -133,7 +133,7 @@ define(function (require) {
 
       if (this.state.filters) {
         return (
-          <ToolbarView filters={ this.state.filters } onFilterChange={Actions.filterChange} actions={ tActions } store={ store } fixed={ false } />
+          <ToolbarView filters={ this.state.filters } filterChange={Actions.filterChange} actions={ tActions } store={ store } fixed={ false } />
         );      
       } else {
         return (<div />);

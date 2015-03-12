@@ -30,11 +30,13 @@ define(function (require) {
     },
     
     onFetch: function () {
-      var date = this.state.filters.date;
-      var collection = this.getCollection();
+      var date        = this.state.filters.date,
+          deprecated  = this.state.filters.deprecated,
+          collection  = this.getCollection();
       
-      collection.setDate(date);
-
+      
+      collection.setOptions({ date: date, deprecated: deprecated });
+      
       collection.fetch({ 
         success: function () {
           this.setState({ fetch_error: null, collection_fetched: true });
@@ -58,9 +60,12 @@ define(function (require) {
       this.setState({
         filters: _.extend({}, this.state.filters, filter)
       });
-//      console.log(filter);  
+      
+      if (!filter.text) {
+        Actions.fetch();
+      }
+
       this.trigger(this.state);
-//      console.log('filter change', filter, this.state.filters);
     },
     
     getModel: function () {

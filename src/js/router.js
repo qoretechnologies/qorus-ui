@@ -272,6 +272,10 @@ define(function (require) {
     }
   });
   
+  $(document).on("click", 'button', function () {
+    document.activeElement.blur();
+  });
+  
   Backbone.history.start({ pushState: true });
 
   return app_router;

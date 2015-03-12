@@ -1,10 +1,33 @@
 define(function (require) {
   var React     = require('react'),
       Workflows = require('collections/workflows'),
-      _         = require('underscore');
+      _         = require('underscore'),
+      utils     = require('utils'),
+      moment    = require('moment');
   
   require('backbone');
   require('react.backbone');
+  
+  var doAction = function (ids, args) {
+      var url = _.result(Workflows.prototype, 'url'),
+          action = args.action;
+      
+      method = args.method || 'put';
+      params = { action: args.action, ids: ids.join(',') };
+      
+      if (action == 'show' || action == 'hide') {
+        params = { action: 'setDeprecated', ids: ids.join(','), deprecated: (action=='hide') };
+      }
+      
+      if (method == 'get') {
+        $request = $.get(url, params);
+      } else if (method == 'put') {
+        $request = $.put(url, params);
+      } else if (method == 'delete') {
+        $request = $.put(url, params);
+      }
+  };
+  
   
   var SearchFormView = React.createClass({
     filterChange: function (e) {
@@ -40,14 +63,14 @@ define(function (require) {
       
       return (
         <div className="btn-group toolbar-filters">
-            <form className="form-inline nomargin" action="" onSubmit={this.props.handleSubmitDate}>
+            <form className="form-inline nomargin" action="" onSubmit={ this.props.handleSubmitDate }>
             <div className="input-prepend date dp">
               <span className="add-on"><i className="icon-th"></i></span>
               <input type="text" className="" value={ value } onChange={ this.onChange }/>
             </div>
             <div className="btn-group">
-              <button className="btn" data-action="open" data-url="/workflows/all">All</button>
-              <button className="btn" data-action="open" data-url="/workflows">24 h</button>
+              <button className="btn" onClick={ this.props.setDate.bind(null, 'all') }>All</button>
+              <button className="btn" onClick={ this.props.setDate.bind(null, '24h') }>24 h</button>
             </div>
             </form>
         </div>
@@ -57,7 +80,7 @@ define(function (require) {
 
   var Toolbar = React.createClass({
     propTypes: {
-      onFilterChange: React.PropTypes.func.isRequired,
+      filterChange: React.PropTypes.func.isRequired,
       filters: React.PropTypes.object,
       actions: React.PropTypes.object.isRequired,
       store: React.PropTypes.object.isRequired,
@@ -80,10 +103,6 @@ define(function (require) {
       }
 
     },
-  
-    getCollection: function () {
-      return this.props.collection;
-    },
     
     getInitialState: function () {
       return {
@@ -93,9 +112,25 @@ define(function (require) {
     
     handleSubmitDate: function (e) {
       e.preventDefault();
-      if (this.props.actions) {
-        this.props.onFilterChange({ date: this.refs.date.getDOMNode().value.trim() });
+      this.props.filterChange({ date: this.refs.date.getDOMNode().value.trim() });
+    },
+    
+    setDeprecated: function (e) {
+      e.preventDefault();
+      
+      var deprecated = !this.state.filters.deprecated;
+      
+      this.props.filterChange({ deprecated: deprecated });
+    },
+    
+    setDate: function (date, e) {
+      e.preventDefault();
+      
+      if (!moment.isMoment(date)) {
+        date = utils.prepareDate(date);
       }
+    
+      this.props.filterChange({ date: date });
     },
     
     render: function () {
@@ -127,18 +162,18 @@ define(function (require) {
                 </ul>
               </div>
               <div className={ clsActions }>
-                <button className="btn" onClick={ actions.run.bind(null, 'enable') }><i className="icon-off"></i> Enable</button>
-                <button className="btn" onClick={ actions.run.bind(null, 'disable') }><i className="icon-ban-circle"></i> Disable</button>
-                <button className="btn" onClick={ actions.run.bind(null, 'reset') }><i className="icon-refresh"></i> Reset</button>
-                <button className="btn" onClick={ actions.run.bind(null, 'hide') }><i className="icon-flag-alt"></i> Hide</button>
-                <button className="btn" onClick={ actions.run.bind(null, 'show') }><i className="icon-flag"></i> Show</button>
+                <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'enable' }) }><i className="icon-off"></i> Enable</button>
+                <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'disable' }) }><i className="icon-ban-circle"></i> Disable</button>
+                <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'reset' }) }><i className="icon-refresh"></i> Reset</button>
+                <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'hide' }) }><i className="icon-flag-alt"></i> Hide</button>
+                <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'show' }) }><i className="icon-flag"></i> Show</button>
               </div>
-              <DateFilterView filters={ this.props.filters } handleSubmitData={ this.handleSubmitData } />
+              <DateFilterView filters={ this.props.filters } handleSubmitData={ this.handleSubmitData } setDate={ this.setDate } />
               <div className="btn-group toolbar-filters">
-                  <button className="btn" data-action="open" data-url="<%= url %>"><i className={ deprecated }></i> { deprecated_text }</button>
+                  <button className="btn" onClick={ this.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</button>
               </div>
               <div className="pull-right">
-                <SearchFormView filterText={this.props.filters.text} filterChange={this.props.onFilterChange}/>
+                <SearchFormView filterText={this.props.filters.text} filterChange={this.props.filterChange}/>
               </div>
               <div id="table-copy" className="btn-group toolbar-filters"></div>
           </div>
