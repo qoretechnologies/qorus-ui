@@ -58,7 +58,9 @@ define(function (require) {
   var Toolbar = React.createClass({
     propTypes: {
       onFilterChange: React.PropTypes.func.isRequired,
-      filters: React.PropTypes.object
+      filters: React.PropTypes.object,
+      actions: React.PropTypes.object.isRequired,
+      store: React.PropTypes.object.isRequired,
     },
     
     componentDidMount: function () {
@@ -99,7 +101,14 @@ define(function (require) {
     render: function () {
       var deprecated      = "icon-" + (this.state.filters.deprecated) ? 'flag' : 'flag-alt';
       var deprecated_text = (this.state.filters.deprecated) ? 'Only visible' : 'Show hidden';
-      var date = this.state.filters.date;
+      var date = this.state.filters.date,
+          clsActions = React.addons.classSet({
+            "btn-group": true,
+            "toolbar-actions": true,
+            hide: (this.props.store.state.checkedIds.length === 0)
+          }),
+          actions = this.props.actions;
+      
       
       return (
         <div id="workflows-toolbar" className="toolbar">
@@ -110,19 +119,19 @@ define(function (require) {
                   <span className="caret"></span>
                 </button>
                 <ul className="dropdown-menu above">
-                  <li><a href="#" className="check-all">All</a></li>
-                  <li><a href="#" className="uncheck-all">None</a></li>
-                  <li><a href="#" className="invert">Invert</a></li>
-                  <li><a href="#" className="running">Running</a></li>
-                  <li><a href="#" className="stopped">Stopped</a></li>
+                  <li><a href="#" className="check-all" onClick={ actions.check.bind(null, 'all') }>All</a></li>
+                  <li><a href="#" className="uncheck-all" onClick={ actions.check.bind(null, 'none') }>None</a></li>
+                  <li><a href="#" className="invert" onClick={ actions.check.bind(null, 'invert') }>Invert</a></li>
+                  <li><a href="#" className="running" onClick={ actions.check.bind(null, function (m) { if (m.get('exec_count') > 0) return m.id; }) }>Running</a></li>
+                  <li><a href="#" className="stopped" onClick={ actions.check.bind(null, function (m) { if (m.get('exec_count') === 0) return m.id; }) }>Stopped</a></li>
                 </ul>
               </div>
-              <div className="btn-group hide toolbar-actions">
-                <button className="btn" data-id="selected" data-action="enable" data-method="put"><i className="icon-off"></i> Enable</button>
-                <button className="btn" data-id="selected" data-action="disable" data-method="put"><i className="icon-ban-circle"></i> Disable</button>
-                <button className="btn" data-id="selected" data-action="reset" data-method="put"><i className="icon-refresh"></i> Reset</button>
-                <button className="btn" data-id="selected" data-action="hide" data-method="put"><i className="icon-flag-alt"></i> Hide</button>
-                <button className="btn" data-id="selected" data-action="show" data-method="put"><i className="icon-flag"></i> Show</button>
+              <div className={ clsActions }>
+                <button className="btn" onClick={ actions.run.bind(null, 'enable') }><i className="icon-off"></i> Enable</button>
+                <button className="btn" onClick={ actions.run.bind(null, 'disable') }><i className="icon-ban-circle"></i> Disable</button>
+                <button className="btn" onClick={ actions.run.bind(null, 'reset') }><i className="icon-refresh"></i> Reset</button>
+                <button className="btn" onClick={ actions.run.bind(null, 'hide') }><i className="icon-flag-alt"></i> Hide</button>
+                <button className="btn" onClick={ actions.run.bind(null, 'show') }><i className="icon-flag"></i> Show</button>
               </div>
               <DateFilterView filters={ this.props.filters } handleSubmitData={ this.handleSubmitData } />
               <div className="btn-group toolbar-filters">

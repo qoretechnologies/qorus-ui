@@ -117,13 +117,15 @@ define(function (require) {
     
     getInitialState: function () {
       return {
-        filters: store.state.filters
+        filters: store.state.filters,
+        checkedIds: store.state.checkedIds
       };
     },
     
     onStoreUpdate: function (state) {
       this.setState({ 
-        filters: store.state.filters
+        filters: store.state.filters,
+        checkedIds: store.state.checkedIds
       });
     },
     
@@ -131,7 +133,7 @@ define(function (require) {
 
       if (this.state.filters) {
         return (
-          <ToolbarView filters={ this.state.filters } onFilterChange={Actions.filterChange} fixed={ false } />
+          <ToolbarView filters={ this.state.filters } onFilterChange={Actions.filterChange} actions={ tActions } store={ store } fixed={ false } />
         );      
       } else {
         return (<div />);
@@ -310,6 +312,8 @@ define(function (require) {
     mixins: [ViewHeightMixin, Reflux.listenTo(store, 'onStoreUpdate')],
     
     getInitialState: function () {
+      tActions.setCollection(workflowsStore.getCollection());
+      
       return {
         collection: workflowsStore.getCollection().toJSON(),
         collection_fetched: workflowsStore.state.collection_fetched,

@@ -20,14 +20,23 @@ define(function (require) {
       getInitialState: function () {
         return {
           model: null,
-          checkedIds: []
+          checkedIds: [],
+          collection: null
         };
       },
-
+      
+      onSetCollection: function (collection) {
+        this.setState({ collection: collection });
+      },
+      
+      getCollection: function () {
+        return this.state.collection;
+      },
+      
       /**
        * Listens on rowClick event
        * @param {number} id
-       * @listens actions:table:rowClick
+       * @listens actions:table:
        */
       onRowClick: function (id) {
         this.state.model = (this.state.model == id) ? null : id;
@@ -84,6 +93,40 @@ define(function (require) {
        */          
       isRowClicked: function (id) {
         return this.state.model && (this.state.model === id);
+      },
+      
+      /**
+       * Selects/unselects rows based on action
+       * @param {string|func} action
+       */
+      onCheck: function (action) {
+        var ids = this.state.checkedIds;
+        
+        switch (action) {
+            case 'all':
+              ids = _.pluck(this.getCollection().models, 'id');
+              break;
+            case 'none':
+              ids = [];
+              break;
+            case 'invert':
+              ids = _.difference(_.pluck(this.getCollection().models, 'id'), this.state.checkedIds);
+              break;
+            default:
+              if (typeof action == 'function') {
+                ids = this.getCollection().map(action);  
+              }
+        }
+        
+        this.setState({ checkedIds: ids });
+      },
+
+      /**
+       * Runs action with selected rows
+       * @param {string} action
+       */
+      onRun: function (action) {
+        console.log(action);
       }
     });      
   };

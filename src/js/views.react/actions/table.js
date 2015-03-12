@@ -3,9 +3,12 @@ define(function (require) {
   
   return function () {
     return Reflux.createActions([
+      'setCollection',
       'rowCheck',
       'rowClick',
-      'filterChange'
+      'filterChange',
+      'check',
+      'run'
     ]);
   };
 });
