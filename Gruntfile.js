@@ -17,7 +17,7 @@ module.exports = function (grunt) {
             baseUrl: "js",
             dir: "dist",
 //            name: "main",
-            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)$/,
+            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)|(docs)|(JSXTransformer.js)$/,
             removeCombined: true,
             keepBuildDir: false,
             optimize: 'uglify2',
