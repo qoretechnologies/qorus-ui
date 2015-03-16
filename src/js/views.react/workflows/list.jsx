@@ -372,7 +372,7 @@ define(function (require) {
         <div className="overflow-auto-y">
           { error }
           <TableView {...this.state} collection={ collection } current_model={ model } 
-            cssClass="table table-striped table-condensed table-hover" 
+            cssClass="table table-striped table-condensed table-hover clickable" 
             rowClick={this.rowClick} rowView={RowViewWrapper} fixed={ false } chunked={ true }>
             { columns }
           </TableView>
