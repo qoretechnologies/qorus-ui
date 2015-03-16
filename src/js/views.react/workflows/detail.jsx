@@ -97,7 +97,7 @@ define(function (require) {
           <a href={ url }>{ obj.alert }</a><br />
           <p>
             { obj.object }<br />
-            <small>{ _.escape(obj.reason) }</small>
+            <small>{ obj.reason }</small>
           </p>
         </span>  
       );
