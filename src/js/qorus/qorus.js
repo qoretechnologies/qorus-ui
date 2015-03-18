@@ -413,14 +413,7 @@ define(function (require) {
         this.sort_order = ord;
         this.sort_key = key;
         
-        // models = _.sortBy(models, function (m) { 
-        //   return [prep(m.get(key)), prep(m.get(old_key))].join(', '); 
-        // });
         this.sort({ silent: true });
-        // if (this.sort_order === 'des') this.models.reverse();
-        // this.models = models;
-        
-        // console.log('sorting', this.sort_order, this.sort_key);
         this.trigger('resort', this, {});
       }
     }

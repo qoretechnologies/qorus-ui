@@ -31,43 +31,29 @@ define(function (require) {
   
   var RowMixin = {
     shouldComponentUpdate: function (nextProps, nextState) {
-      return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
-    },
-    
-    processColumns: function () {
-      var model       = this.props.model,
-          children    = this.props.children,
-          isBackbone  = model instanceof Backbone.Model;
+      nextProps = _.omit(nextProps, ['children']);
+      nextProps.clicked = nextProps.clicked || false;
 
-      var cols = children.map(function (col, indx) {
-        var child = col.props.children,
-            clone = cloneWithProps(child, { model: model }),
-            props = child.props;
-
-        if (col.props.cellView) {
-          return <col.props.cellView {...props} key={ indx } model={ model }>{ clone }</col.props.cellView>;
-        }
-
-        return <TdComponent {...props} model={ model } hash={ model.hash } key={ indx }>{ clone }</TdComponent>;
-      });
+      var props = _.omit(this.props, ['children']);
+      var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
       
-      return cols;
+      return should;
     }
   };
 
   var ModelRowView = React.createBackboneClass({
     mixins: [RowMixin],
     propTypes: {
-      model: React.PropTypes.instanceOf(Backbone.Model).isRequired
+      model: React.PropTypes.instanceOf(Backbone.Model).isRequired,
+      clicked: React.PropTypes.bool
     },
-    
+
     render: function () {
       var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
-          children = this.processColumns();
+          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked });
     
       return (
-        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ children }</tr>
+        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ this.props.children }</tr>
       );
     }
   });
@@ -81,11 +67,10 @@ define(function (require) {
     
     render: function () {
       var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
-          children = this.processColumns();
+          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked });
 
       return (
-        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ children }</tr>
+        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ this.props.children }</tr>
       );
     }
   });
@@ -139,9 +124,9 @@ define(function (require) {
     // TODO: missing rowview when assigned with props
     render: function () {
       var columns, rows, style, header_columns,
-          props = this.props,
-          children = _.isArray(this.props.children) ? this.props.children : [this.props.children],
-          isBackbone = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection;
+          props       = this.props,
+          children    = _.isArray(this.props.children) ? this.props.children : [this.props.children],
+          isBackbone  = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection;
     
       if (isBackbone && !this.props.collection_fetched) {
         return (<LoaderView />);
@@ -151,11 +136,7 @@ define(function (require) {
         return (<NoDataView />);
       }
       
-      header_columns = children.map(function (child, idx) {
-        var props = _.pick(child.props, ['className', 'dataSort']);
-
-        return <th {...props} key={ idx } data-sort={child.props.dataSort}>{ child.props.name }</th>;
-      });      
+      header_columns = this.renderHeader();
       
       rows = this.renderRows();
       
@@ -185,15 +166,28 @@ define(function (require) {
           props           = this.props,
           DefaultRowView  = this.props.rowView || RowView;
     
-      var rows = collection.map(function (row, idx) {
-        var isBackbone = row instanceof Backbone.Model,
-            DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView);
+      this._rows = collection.map(function (row, idx) {
+        var isBackbone     = row instanceof Backbone.Model,
+            DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
+            clicked        = props.current_model ? props.current_model == row.id : false;
 
-        return <DefaultRowView key={ idx } 
+            var cols = children.map(function (col, indx) {
+              var child = col.props.children,
+                  clone = cloneWithProps(child, { model: row }),
+                  props = child.props;
+
+              if (col.props.cellView) {
+                return <col.props.cellView {...props} key={ indx } model={ row }>{ clone }</col.props.cellView>;
+              }
+
+              return <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
+            });
+
+        return <DefaultRowView key={ row.id || idx } 
                  idx={row.id || idx } model={ row } 
                  rowClick={props.rowClick} 
-                 clicked={(props.current_model && props.current_model == row.id)}>
-                  { children }
+                 clicked={ clicked }>
+                  { cols }
                </DefaultRowView>;
       });
       
@@ -201,11 +195,29 @@ define(function (require) {
       if (_.size(this.props.collection) > slice) {
         _.defer(this._renderNextRows, 500);
       }
-*/
+*/      
+      return this._rows;
+    },
+        
+    renderHeader: function () {
+      var header_columns, 
+          children = this.props.children,
+          tprops   = this.props;
+
+      header_columns = children.map(function (child, idx) {
+        var props     = _.pick(child.props, ['className', 'dataSort']),
+            orderKey  = tprops.orderKey || tprops.collection.sort_key,
+            order     = tprops.order || tprops.collection.sort_order;
+
+        if (orderKey == props.dataSort) {
+          props.className = [props.className, 'sort', 'sort-'+ order].join(' ');
+        }
+
+        return <th {...props} key={ idx } data-sort={child.props.dataSort} onClick={ tprops.sortClick ? tprops.sortClick.bind(null, props.dataSort, null) : _.noop }>{ child.props.name }</th>;
+      });  
       
-      return rows;
+      return header_columns;
     }
-    
   });
   
   var CellView = React.createClass({

@@ -26,7 +26,7 @@ define(function (require) {
     },
     
     onSetCollection: function (collection) {
-      this.data.collection = collection;
+      this.state.collection = collection;
     },
     
     onFetch: function () {

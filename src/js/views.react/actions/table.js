@@ -8,7 +8,8 @@ define(function (require) {
       'rowClick',
       'filterChange',
       'check',
-      'run'
+      'run',
+      'sort'
     ]);
   };
 });

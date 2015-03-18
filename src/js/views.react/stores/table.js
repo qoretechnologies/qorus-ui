@@ -1,6 +1,8 @@
 define(function (require) {
   var _               = require('underscore'),
       Reflux          = require('reflux'),
+      Filtered        = require('backbone.filtered.collection'),
+      Backbone        = require('backbone'),
       stateStoreMixin = require('views.react/stores/mixins/statestore');
   
   return function (actions) {
@@ -21,12 +23,14 @@ define(function (require) {
         return {
           model: null,
           checkedIds: [],
-          collection: null
+          collection: null,
+          order: 'asc',
+          orderKey: ''
         };
       },
       
       onSetCollection: function (collection) {
-        this.setState({ collection: collection });
+        this.setState({ collection: collection }, { silent: true });
       },
       
       getCollection: function () {
@@ -131,6 +135,24 @@ define(function (require) {
         
         e.preventDefault();
         document.activeElement.blur();
+      },
+      
+      onSort: function (key, order) {
+        var collection = this.getCollection();
+        order = (typeof order == 'string') ? order : this.state.order;
+        
+        if (key === this.state.orderKey) {
+          order = (order == 'asc') ? 'des' : 'asc';
+        }
+        
+        if (collection instanceof Filtered) {
+          collection = collection.superset();
+        }
+        
+        if (collection && collection.sortByKey) {
+          collection.sortByKey(key, order);
+          this.setState({ order: order, orderKey: key });          
+        }
       }
     });      
   };

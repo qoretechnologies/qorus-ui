@@ -14,7 +14,7 @@ define(function (require) {
      * @param {object} state
      */
     setState: function (state) {
-      this.state = _.extend({}, this.state, state);
+      this.state = _.extend(this.state, state);
       this.trigger(this.state);
     }
   };

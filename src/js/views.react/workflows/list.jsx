@@ -56,6 +56,10 @@ define(function (require) {
     
     getModel: function () {
       return workflowsStore.getCollection().get(this.state.model);
+    },
+    
+    getCollection: function () {
+      return workflowsStore.getCollection();
     }
   });
   
@@ -207,13 +211,13 @@ define(function (require) {
     <Col name="Autostart" dataSort="autostart" className="autostart narrow" key="autostart">
       <AutostartView className="autostart narrow" />
     </Col>,
-    <Col name="ID" dataSort="id" key="id">
+    <Col name="ID" dataSort="workflowid" key="workflowid">
       <Cell dataKey="workflowid" className="narrow" />
     </Col>,
-    <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts"  className="narrow" key="has_laerts">
+    <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts"  className="narrow" key="has_alerts">
       <HasAlertView className="narrow" />
     </Col>,
-    <Col name="Name" className="name" key="name">
+    <Col name="Name" className="name" key="name" dataSort="name">
       <LinkView className='name' />
     </Col>,
     <Col name="Version" dataSort="version" className="narrow" key="version">
@@ -277,6 +281,12 @@ define(function (require) {
       };
     },
     
+    getDefaultProps: function () {
+      return {
+        clicked: false
+      }
+    },
+    
     onStoreUpdate: function () {
       var id      = this.props.model.id,
           clicked = tStore.isRowClicked(id),
@@ -299,7 +309,8 @@ define(function (require) {
     render: function () {
       var cls = React.addons.classSet({
         warning: this.state.checked,
-        info:    this.state.clicked
+        info:    this.state.clicked,
+        clickable: true
       });
       
       return (
@@ -315,10 +326,12 @@ define(function (require) {
       tActions.setCollection(workflowsStore.getCollection());
       
       return {
-        collection: workflowsStore.getCollection().toJSON(),
-        collection_fetched: workflowsStore.state.collection_fetched,
-        error: workflowsStore.state.error,
-        filters: workflowsStore.state.filters
+/*        hash: utils.hash(store.getCollection().toJSON()),*/
+        collection_fetched: store.state.collection_fetched,
+        error: store.state.error,
+        filters: _.extend({}, store.state.filters),
+        orderKey: store.state.orderKey,
+        order: store.state.order
 /*        model: workflowsStore.getModel()*/
       };
     },
@@ -327,16 +340,22 @@ define(function (require) {
       tActions.rowClick(id);
     },
     
+    sortClick: function (key, ord) {
+      tActions.sort(key, ord);
+    },
+    
     onStoreUpdate: function () {
-      if (!_.isEqual(this.state.collection, workflowsStore.getCollection().toJSON()) || 
-          !_.isEqual(this.state.error, workflowsStore.state.error) ||
-          !_.isEqual(this.state.filters, workflowsStore.state.filters)) {
-        this.setState({
-          collection: workflowsStore.getCollection().toJSON(),
-          collection_fetched: workflowsStore.state.collection_fetched,
-          error: workflowsStore.state.error,
-          filters: workflowsStore.state.filters
-        });
+      var state = _.extend({}, this.state, {          
+            hash: utils.hash(store.getCollection().toJSON()),
+            collection_fetched: store.state.collection_fetched,
+            error: store.state.error,
+            filters: store.state.filters,
+            orderKey: store.state.orderKey,
+            order: store.state.order
+          });
+    
+      if (!_.isEqual(this.state, state)) {
+        this.setState(state);
       }
     },
   
@@ -354,13 +373,13 @@ define(function (require) {
     render: function () {
       var model       = (this.state.model) ? this.state.model.id : null,
           error       = null,
-          collection  = new FilteredCollection(workflowsStore.getCollection()),
           tfilter     = workflowsStore.state.filters.text;
 
+      collection = workflowsStore.getCollection();
+      
       if (tfilter) {
-        tfilter = tfilter.toLowerCase();
-        collection.filterBy(function (m) {
-          return m.get('name').toLowerCase().indexOf(tfilter) != -1 || tfilter == m.id;
+        collection = collection.filter(function (m) {
+          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
         });
       }
 
@@ -372,8 +391,8 @@ define(function (require) {
         <div className="overflow-auto-y">
           { error }
           <TableView {...this.state} collection={ collection } current_model={ model } 
-            cssClass="table table-striped table-condensed table-hover clickable" 
-            rowClick={this.rowClick} rowView={RowViewWrapper} fixed={ false } chunked={ true }>
+            cssClass="table table-striped table-condensed table-hover" 
+            rowClick={this.rowClick} rowView={ RowViewWrapper } fixed={ false } chunked={ true } sortClick={ this.sortClick }>
             { columns }
           </TableView>
         </div>
