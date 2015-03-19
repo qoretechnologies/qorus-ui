@@ -21,18 +21,20 @@ define(function (require) {
       CellBackbone        = require('jsx!views.react/components/table').CellBackbone,
       Col                 = require('jsx!views.react/components/dummy'),
       Actions             = require('views.react/actions/workflows'),
-      tableActions        = require('views.react/actions/table'),
-      tableStore          = require('views.react/stores/table'),
+      tActions            = require('views.react/workflows/actions/table'),
+      tStore              = require('views.react/workflows/stores/table'),
       ViewHeightMixin     = require('views.react/mixins/view.height'),
       helpers             = require('views/workflows/helpers'),
+      qHelpers            = require('qorus/helpers'),
+      HasAlertsView       = require('jsx!views.react/components/hasalerts'),
+      Checker             = require('jsx!views.react/components/checker'),
       workflowsStore      = require('views.react/stores/workflows');
   
 //  require('backbone');
   require('react.backbone');
   
-  var tActions  = tableActions();
-  var tStore    = tableStore(tActions);
-  var fixed     = true;
+
+  var fixed = true;
   
   var store = Reflux.createStore({
     state: {},
@@ -51,6 +53,7 @@ define(function (require) {
     
     setState: function (state) {
       this.state = _.extend(this.state, state);
+      this.updateUrl();
       this.trigger(this.state);
     },
     
@@ -60,12 +63,34 @@ define(function (require) {
     
     getCollection: function () {
       return workflowsStore.getCollection();
+    },
+    
+    updateUrl: function () {
+      if (this.state.filters) {
+        var date = utils.encodeDate(this.state.filters.date),
+            deprecated = this.state.filters.deprecated;
+
+        var url = qHelpers.getUrl('showWorkflows', {
+          date: date,
+          deprecated: deprecated ? 'hidden' : ''
+        });
+        
+        if (this.state.model) {
+          if (!deprecated) {
+            url += "/";
+          }
+          
+          url += "/" + this.state.model;
+        }
+
+        Backbone.history.navigate(url);      
+      }
     }
   });
   
-  var Checker = React.createClass({
-    mixins: [PureRenderMixin, Reflux.listenTo(store, 'onStoreChange')],
-    
+  var CheckerWrapper = React.createClass({
+    mixins: [Reflux.listenTo(store, 'onStoreChange')],
+
     onStoreChange: function () {
       var isChecked = tStore.isRowChecked(this.props.model.id);
       
@@ -85,35 +110,11 @@ define(function (require) {
       e.stopPropagation();
       tActions.rowCheck(this.props.model.id);
     },
-    
+
     render: function () {
-      var cls = React.addons.classSet({ 
-        'check': true, 
-        'icon-check-empty': !this.state.checked, 
-        'icon-check': this.state.checked 
-      });
-      
-      return (
-        <i className={cls} onClick={ this.rowCheck }></i>
-      );
+      return <Checker checked={ this.state.checked } onClick={ this.rowCheck } />;
     }
-  });
-  
-  var HasAlertView = React.createClass({
-/*
-    shouldComponentUpdate: function (nextProps) {
-      return this.props.model.get('has_alerts') !== nextProps.model.get('has_alerts');
-    },
-*/
-    render: function () {
-      if (this.props.model.get('has_alerts')) {
-        return (
-          <i className="icon-warning-sign text-error" />
-        );      
-      }
-      
-      return <i />;
-    }
+
   });
   
   var ToolbarViewWrapper = React.createClass({
@@ -137,7 +138,7 @@ define(function (require) {
 
       if (this.state.filters) {
         return (
-          <ToolbarView filters={ this.state.filters } filterChange={Actions.filterChange} actions={ tActions } store={ store } fixed={ false } />
+          <ToolbarView filters={ this.state.filters } filterChange={ Actions.filterChange } actions={ tActions } store={ store } fixed={ false } />
         );      
       } else {
         return (<div />);
@@ -200,7 +201,7 @@ define(function (require) {
   
   var columns = [
     <Col key="checker">
-      <Checker />
+      <CheckerWrapper />
     </Col>,
     <Col name="Actions" className="actions" key="actions">
       <ControlsView className="connections" />
@@ -215,7 +216,7 @@ define(function (require) {
       <Cell dataKey="workflowid" className="narrow" />
     </Col>,
     <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts"  className="narrow" key="has_alerts">
-      <HasAlertView className="narrow" />
+      <HasAlertsView className="narrow" />
     </Col>,
     <Col name="Name" className="name" key="name" dataSort="name">
       <LinkView className='name' />
@@ -273,6 +274,7 @@ define(function (require) {
   
   var RowViewWrapper = React.createBackboneClass({
     mixins: [Reflux.listenTo(tStore, 'onStoreUpdate')],
+    displayName: 'WorkflowRowView',
 
     getInitialState: function () {
       return {
@@ -284,7 +286,7 @@ define(function (require) {
     getDefaultProps: function () {
       return {
         clicked: false
-      }
+      };
     },
     
     onStoreUpdate: function () {
@@ -314,7 +316,7 @@ define(function (require) {
       });
       
       return (
-        <ModelRowView {...this.props} className={ cls } clicked={ this.state.clicked } />
+        <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } />
       );
     },
   });

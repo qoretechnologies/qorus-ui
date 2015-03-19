@@ -36,6 +36,7 @@ define(function (require) {
       ServiceListReact  = React.createFactory(require('jsx!views.react/services/list.jsx')),
       workflowsStore    = require('views.react/stores/workflows'),
       workflowsActions  = require('views.react/actions/workflows'),
+      wTActions         = require('views.react/workflows/actions/table'),
       
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router;
@@ -108,6 +109,8 @@ define(function (require) {
 //          },
 //          view, d = (deprecated === 'hidden');
       
+      var parts = path ? path.split('/') : [];
+      
       if (!workflowsStore.getCollection()) {
         workflowsStore.setState({ 
           collection: new Workflows()
@@ -119,6 +122,10 @@ define(function (require) {
         text: query,
         date: utils.prepareDate(date)
       });
+      
+      if (parts.length > 0) {
+        wTActions.rowClick(parseInt(parts[0]));
+      }
       
       React.render(WorkflowListReact(), document.getElementById('content'));
       this.setView('react-component');

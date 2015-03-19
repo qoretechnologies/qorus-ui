@@ -38,11 +38,30 @@ define(function (require) {
       var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
       
       return should;
+    },
+    
+    processColumns: function () {
+      var children = this.props.children,
+          row = this.props.model;
+    
+      var cols = children.map(function (col, indx) {
+        var child = col.props.children,
+            clone = cloneWithProps(child, { model: row, displayName: 'Clone' }),
+            props = child.props;
+
+        if (col.props.cellView) {
+          return <col.props.cellView {...props} key={ indx } model={ row }>{ clone }</col.props.cellView>;
+        }
+
+        return <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
+      });
+      return cols;
     }
   };
 
   var ModelRowView = React.createBackboneClass({
     mixins: [RowMixin],
+    
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model).isRequired,
       clicked: React.PropTypes.bool
@@ -50,10 +69,11 @@ define(function (require) {
 
     render: function () {
       var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked });
+          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
+          children = this.processColumns();
     
       return (
-        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ this.props.children }</tr>
+        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ children }</tr>
       );
     }
   });
@@ -67,10 +87,11 @@ define(function (require) {
     
     render: function () {
       var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked });
+          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
+          children = this.processColumns();
 
       return (
-        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ this.props.children }</tr>
+        <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ children }</tr>
       );
     }
   });
@@ -161,7 +182,7 @@ define(function (require) {
     
     renderRows: function () {
 /*      var slice           = this.state.showedItems + CHUNK_SIZE,*/
-      var collection      = false ? this.props.collection.slice(0, 10) : this.props.collection,
+      var collection      = false ? this.props.collection.slice(0, 20) : this.props.collection,
           children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           props           = this.props,
           DefaultRowView  = this.props.rowView || RowView;
@@ -171,23 +192,11 @@ define(function (require) {
             DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
             clicked        = props.current_model ? props.current_model == row.id : false;
 
-            var cols = children.map(function (col, indx) {
-              var child = col.props.children,
-                  clone = cloneWithProps(child, { model: row }),
-                  props = child.props;
-
-              if (col.props.cellView) {
-                return <col.props.cellView {...props} key={ indx } model={ row }>{ clone }</col.props.cellView>;
-              }
-
-              return <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
-            });
-
         return <DefaultRowView key={ row.id || idx } 
                  idx={row.id || idx } model={ row } 
                  rowClick={props.rowClick} 
                  clicked={ clicked }>
-                  { cols }
+                  { children }
                </DefaultRowView>;
       });
       

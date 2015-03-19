@@ -134,9 +134,10 @@ define(function (require) {
     },
     
     render: function () {
-      var deprecated      = "icon-" + (this.state.filters.deprecated) ? 'flag' : 'flag-alt';
-      var deprecated_text = (this.state.filters.deprecated) ? 'Only visible' : 'Show hidden';
-      var date = this.state.filters.date,
+      var filters = this.props.filters,
+          deprecated      = "icon-" + (filters.deprecated) ? 'flag' : 'flag-alt',
+          deprecated_text = (filters.deprecated) ? 'Only visible' : 'Show hidden',
+          date = filters.date,
           clsActions = React.addons.classSet({
             "btn-group": true,
             "toolbar-actions": true,

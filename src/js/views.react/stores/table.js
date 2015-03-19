@@ -103,7 +103,7 @@ define(function (require) {
        * Selects/unselects rows based on action
        * @param {string|function} action
        */
-      onCheck: function (action) {
+      onCheck: function (action, e) {
         var ids = this.state.checkedIds;
         
         switch (action) {
@@ -123,6 +123,7 @@ define(function (require) {
         }
         
         this.setState({ checkedIds: ids });
+        e.preventDefault();
       },
 
       /**

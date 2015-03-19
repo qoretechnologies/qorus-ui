@@ -54,6 +54,7 @@ define(function (require) {
       model = (model && model.id == id) ? null : this.getCollection().get(id);
       this.setState({ model: model });
       this.trigger(this.state);
+      console.log('model', model);
     },
     
     onFilterChange: function (filter) {
