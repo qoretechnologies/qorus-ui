@@ -176,7 +176,7 @@ define(function (require) {
       var order_params  = _.chain(OrdersCollection.prototype.search_params).pluck('name').flatten().uniq().value(),
           search_params = _.pick(utils.parseQuery(query), order_params);
       
-      var collection = new OrdersCollection([], _.clone(search_params)),
+      var collection = new OrdersCollection([], _.extend({}, search_params, { date: '19700101'})),
           view;
     
       collection.fetch();
