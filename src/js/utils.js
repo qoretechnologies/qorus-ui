@@ -177,40 +177,97 @@ define(function (require) {
       return equery.join('&');
     },
     
-    flattenObj: function (obj, path, level, result) {
-      level = level || 0;
-      path = path || "/";
-      result = result || [];
-      var ctr = 1;
-  
-      _.each(obj, function (val, key) {
-        var wal;
-        if (_.isObject(val)) {
-          wal = {
-            key: key,
-            value: "",
-            path: path,
-            level: level,
-            node: true,
-            leaf: false
-          };
-          result.push(wal);
-          this.flattenObj(val, path + key + "/", level+1, result);
-        } else {
-          wal = {
-            key: key,
-            value: val,
-            path: path,
-            level: level,
-            node: false,
-            leaf: (_.keys(obj).length == ctr)
-          };
-          result.push(wal);
-        }
-        ctr++;
-      }, this);
-  
-      return result;
+//    flattenObj: function (obj, path, level, result) {
+//      level = level || 0;
+//      path = path || "/";
+//      result = result || [];
+//      var ctr = 1;
+//  
+//      _.each(obj, function (val, key) {
+//        var wal;
+//        if (_.isObject(val)) {
+//          wal = {
+//            key: key,
+//            value: "",
+//            path: path,
+//            level: level,
+//            node: true,
+//            leaf: false
+//          };
+//          result.push(wal);
+//          this.flattenObj(val, path + key + "/", level+1, result);
+//        } else {
+//          wal = {
+//            key: key,
+//            value: val,
+//            path: path,
+//            level: level,
+//            node: false,
+//            leaf: (_.keys(obj).length == ctr)
+//          };
+//          result.push(wal);
+//        }
+//        ctr++;
+//      }, this);
+//  
+//      return result;
+//    },
+//  
+    spaceToLevel: function (str) {
+      var len = str.search(/[^\s]/);
+      
+      if (len !== -1) {
+        return len;
+      } else {
+        return str.length;
+      }
+    },
+    
+    flattenObj: function (obj) {
+      var lines = JSON.stringify(obj, null, 1)
+                    .replace(/{},$|[],$|^\{$|^\}$|\],$|\},$|\{$|\}$|\[$|\]$|,$|"/mg, '')
+                    .replace(/"/gm, '')
+                    .split('\n'),
+          result = [],
+          total  = lines.length,
+          counter= {};
+      
+      _.each(lines, function (line, i) {
+        var level     = utils.spaceToLevel(line), 
+            nextLevel = lines[i+1] ? utils.spaceToLevel(lines[i+1]) : -1,
+            cnt       = line.slice(level).split(/:(.+)/,2),
+            node      = nextLevel > level,
+            leaf      = nextLevel < level,
+            key       = cnt[0],
+            value     = (cnt.length > 1) ? cnt[1] : '';
+        
+        if (key || node) {
+          if (counter[level] === undefined) {
+            counter[level] = 0;
+          } else {
+            counter[level] = counter[level] + 1;
+          }
+          
+          if (!value && !node) {
+            value = key;
+            key = '';
+          }
+          
+          result.push({
+            key: key || "[" + counter[level]  + "]",
+            value: value,
+            level: level - 1,
+            node: node,
+            leaf: leaf
+          }); 
+          
+          if (leaf) {
+            delete counter[level];
+          }
+        }        
+      });
+      
+      return result.slice(1);
     },
     
     validate: function (obj, type, regex) {
