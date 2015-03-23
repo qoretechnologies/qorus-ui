@@ -71,7 +71,7 @@ define(function (require) {
 
       this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
-//      this.on('change', this.updateHash);
+      this.on('change', this.updateHash);
     },
     
     updateHash: function () {
@@ -91,7 +91,7 @@ define(function (require) {
         }
       });
 
-//      this.hash = utils.hash(response);
+      this.hash = utils.hash(response);
       return response;
     },
 
@@ -437,7 +437,9 @@ define(function (require) {
         this.auto_reconnect = opts.auto_reconnect;
       }
 
-      this.connect();
+      if (!opts.postpone) {
+        this.connect();  
+      }
     },
 
     wsAdd: function (e) {

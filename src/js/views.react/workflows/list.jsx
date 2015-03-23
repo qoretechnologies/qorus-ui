@@ -278,14 +278,8 @@ define(function (require) {
 
     getInitialState: function () {
       return {
-        clicked: false,
+        clicked: tStore.isRowClicked(this.props.model.id),
         checked: false
-      };
-    },
-    
-    getDefaultProps: function () {
-      return {
-        clicked: false
       };
     },
     

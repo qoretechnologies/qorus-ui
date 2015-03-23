@@ -17,7 +17,7 @@ define(function (require) {
         collection: null,
         collection_fetched: false,
         checkedIds: [],
-        model: null
+//        model: null
       };
     },
     

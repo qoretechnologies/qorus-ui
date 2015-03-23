@@ -3,7 +3,7 @@ define(function (require) {
       moment    = require('moment'),
       settings  = require('settings'),
       $         = require('jquery'),
-      md5       = require('js-md5');
+      md5       = require('spark-md5');
   
   var utils = {
     settings: settings,
@@ -315,9 +315,9 @@ define(function (require) {
       
       return csv.trim();
     },
-       
+    
     hash: function (obj) {
-      var s = md5(JSON.stringify(obj).replace(/\s/, ''));
+      var s = md5.hash(JSON.stringify(obj).replace(/\s/, ''));
       
       return s;
     }

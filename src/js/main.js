@@ -39,7 +39,8 @@ require.config({
     'snap.svg': '../components/snap.svg/dist/snap.svg-min',
     'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table',
     'js-md5': '../components/js-md5/js/md5',
-    Rainbow: '../components/Rainbow/rainbow'
+    Rainbow: '../components/Rainbow/rainbow',
+    'spark-md5': '../components/spark-md5/spark-md5'
   },
   shim: {
     backbone: {

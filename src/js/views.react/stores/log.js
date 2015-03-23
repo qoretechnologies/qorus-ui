@@ -58,15 +58,17 @@ define(function (require) {
     _error: function () {},
     
     _close: function () {
-      if (this.socket instanceof WebSocket && this.socket.readyState != 3) {
+      if (this.socket instanceof WebSocket) {
         this.socket.onclose = function (e) { debug.log('Closed', e); };
         this.socket.close(); 
       }
     },
     
     onConnect: function (url) {
-      this._url = url;
-      this._connect();
+      if (url !== this._url) {
+        this._url = url;
+        this._connect();        
+      }
     },
     
     onMessage: function (msg) {

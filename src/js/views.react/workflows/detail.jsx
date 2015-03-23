@@ -305,11 +305,13 @@ define(function (require) {
         if ((!this.state.fetched || force) && isBackbone) {
           this.props.collection.fetch({
             success: function (col) {
-              self.setState({ 
-                fetched: true,
-                search_text: '',
-                size: col.size()
-              });
+              if (self.isMounted()) {
+                self.setState({ 
+                  fetched: true,
+                  search_text: '',
+                  size: col.size()
+                });              
+              }
             }
           });
         }
@@ -533,7 +535,9 @@ define(function (require) {
     },
     
     onStoreUpdate: function (st) {
-      this.setState(st);
+      if (this.isMounted()) {
+        this.setState(st);
+      }
     },
   
     render: function () {

@@ -123,7 +123,6 @@ define(function (require) {
         }
         
         this.setState({ checkedIds: ids });
-        e.preventDefault();
       },
 
       /**

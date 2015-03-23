@@ -34,7 +34,7 @@
     "bootstrap-flat-ui": "~2.3.2",
     "react": "~0.12.2",
     "lodash": "2.4.1",
-    "js-md5": "~1.1.0"
+    "spark-md5": "~0.0.5"
   },
   "resolutions": {
     "backbone": "~1.1.2",
