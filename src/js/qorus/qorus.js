@@ -71,7 +71,7 @@ define(function (require) {
 
       this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
-      this.on('change', this.updateHash);
+//      this.on('change', this.updateHash);
     },
     
     updateHash: function () {
@@ -91,7 +91,7 @@ define(function (require) {
         }
       });
 
-      this.hash = utils.hash(response);
+//      this.hash = utils.hash(response);
       return response;
     },
 

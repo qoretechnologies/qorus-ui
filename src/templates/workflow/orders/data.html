@@ -6,39 +6,39 @@
 
 <div class="tab-content">
   <div id="static-data" class="tab-pane active relative">
-  <% if (item.staticdata) { %>
+  <% if (staticdata) { %>
     <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
     <div class="treeview">
-        <%= createNestedListAsTable(item.staticdata) %>
+        <%= nestedListTableFromArray(staticdata) %>
     </div>
     <div class="textview">
-        <textarea class="span12"><%= createNestedListAsText(item.staticdata) %></textarea>
+        <textarea class="span12"><%=  nestedListTextFromArray(staticdata) %></textarea>
     </div>
   <% } else { %>
   <p>No data</p>
   <% } %>
   </div>
   <div id="dynamic-data" class="tab-pane relative">
-  <% if (item.dynamicdata) { %>
+  <% if (dynamicdata) { %>
     <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
     <div class="treeview">
-        <%= createNestedListAsTable(item.dynamicdata) %>
+        <%= nestedListTableFromArray(dynamicdata) %>
     </div>
     <div class="textview">
-        <textarea class="span12"><%= createNestedListAsText(item.dynamicdata) %></textarea>
+        <textarea class="span12"><%= nestedListTextFromArray(dynamicdata) %></textarea>
     </div>
   <% } else { %>
   <p>No data</p>
   <% } %>
   </div>
   <div id="keys" class="tab-pane relative">
-  <% if (item.keys) { %>
+  <% if (keys) { %>
     <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
     <div class="treeview">
-        <%= createNestedListAsTable(item.keys) %>  
+        <%= nestedListTableFromArray(keys) %>  
     </div>
     <div class="textview">
-        <textarea class="span12"><%= createNestedListAsText(item.keys) %></textarea>
+        <textarea class="span12"><%= nestedListTextFromArray(keys) %></textarea>
     </div>
   <% } else { %>
   <p>No data</p>

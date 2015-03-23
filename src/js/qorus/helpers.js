@@ -76,7 +76,34 @@ define(function (require) {
       
       return output.replace(/\n{2,}/gm,"\n");
     },
+    
+    nestedListTableFromArray: function (obj, tpl) {
+      var tpl_html = NestedListTableTpl,
+          output;
 
+      if (tpl) {
+        tpl_html = _.template(tpl);
+      }
+
+      output = tpl_html({ items: obj });
+      
+      return output.replace(/\n{2,}/gm,"\n");      
+    },
+
+    nestedListTextFromArray: function (obj, tpl) {
+      var tpl_html = NestedListTextTpl,
+          output;
+
+      if (tpl) {
+        tpl_html = _.template(tpl);
+      }
+
+      output = tpl_html({ items: obj, escapeHtml: Helpers.escapeHtml });
+      
+      return output.replace(/\n{2,}/gm,"\n");      
+    },
+
+    
     statusIcon: function(status) {
       if (status === true) {
         return '<i class="icon icon-ok-sign icon-success"></i>';

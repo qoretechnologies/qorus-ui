@@ -251,6 +251,11 @@ define(function(require) {
     },
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
+    },
+    preRender: function () {
+      this.context.staticdata = utils.flattenObj(this.model.get('staticdata'));
+      this.context.dynamicdata = utils.flattenObj(this.model.get('dynamicdata'));
+      this.context.keys = utils.flattenObj(this.model.get('keys'));
     }
   });
   
