@@ -416,14 +416,3 @@ define(function (require) {
   
   return ListView;
 });
-
-
-//          <div className="btn-group">
-//              <ul className="dropdown-menu context-menu pull-right">
-//                  <li><a href="#" className="action" data-action="start"><i className="icon-off"></i> Start</a></li>
-//                  <li><a href="#" className="action-modal" data-action="start"><i className="icon-off"></i> Start Custom</a></li>
-//                  <li><a href="#" className="action" data-action="reset"><i className="icon-refresh"></i> Reset</a></li>
-//                  <li><a href="#" className="action" data-action="stop"><i className="icon-remove"></i> Stop</a></li>
-//              </ul>
-//          </div>
-//          <div id="modal" className="modal hide fade wider" tabIndex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true" />

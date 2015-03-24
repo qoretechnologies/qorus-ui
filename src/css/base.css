@@ -13,6 +13,11 @@ table thead th {
 	font-size: 80%;
 }
 
+table thead th[data-sort] {
+  font-size: 80%;
+  cursor: pointer;
+}
+
 .table td, .table th {
 	text-align: center;
 }

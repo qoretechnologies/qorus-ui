@@ -9,7 +9,7 @@ define(function (require) {
 
     propTypes: {
       checked: React.PropTypes.bool,
-      rowCheck: React.PropTypes.func
+      onClick: React.PropTypes.func
     },
     
     render: function () {
@@ -20,7 +20,7 @@ define(function (require) {
       });
       
       return (
-        <i className={cls}></i>
+        <i className={cls} onClick={ this.props.onClick }></i>
       );
     }
   });
