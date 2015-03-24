@@ -1128,9 +1128,12 @@ define(function (require) {
     },
     
     onSyncError: function (collection, response, options) {
-      this.template = _.template('<div class="alert alert-warning"><h4><%= response.err %></h4><p><%= response.desc %></p></div>', 
+      if (response.responseJSON) {
+        this.template = _.template('<div class="alert alert-warning"><h4><%= response.err %></h4><p><%= response.desc %></p></div>', 
                         { response: response.responseJSON, options: options });
-      this.render();
+      } else {
+        this.template =_.template('<div class="alert=alert-warning"><h4>Sync Error</h4><pre><%= JSON.stringify(response) %></pre></div>');
+      }
     }
   });
   
