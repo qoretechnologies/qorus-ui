@@ -102,7 +102,7 @@ define(function (require) {
               idx: ctr
             });
 
-            plist.push(<TabPane {...p} key={ g.function_instanceid }><CodeView code={ g.body } /></TabPane>);
+            plist.push(<TabPane {...p} key={ g.name }><CodeView code={ g.body } /></TabPane>);
             ctr++;
           });
 
