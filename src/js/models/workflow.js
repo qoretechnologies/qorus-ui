@@ -468,11 +468,12 @@ define(function (require) {
     getSources: function () {
       var self = this;
       
-      if (!this._lib_source) {
+      // TODO: fix caching
+//      if (!this._lib_source) {
         this.fetch({ data: { lib_source: true }, success: function () {
           self._lib_source = true;
         }});
-      }
+//      }
     }
   });
 

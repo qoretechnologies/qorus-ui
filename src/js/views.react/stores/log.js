@@ -12,21 +12,25 @@ define(function (require) {
     },
     
     _connect: function () {
-      $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
-        .done(function (response) {
-          this.token = response;
-          this._open();
-        }.bind(this))
-        .fail(function () {
-          this._retry();
-        }.bind(this));
+//      if (this.status !== 'OPEN') {
+        this.status = 'OPEN';
+        
+        $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
+          .done(function (response) {
+            this.token = response;
+            this._open();
+          }.bind(this))
+          .fail(function () {
+            this._retry();
+          }.bind(this));
+//      }
     },
     
     _open: function () {
       if (this._url) {
         var url = this._url + '?token=' + this.token;
         try {
-          this.socket = new WebSocket(url); 
+          this.socket = new WebSocket(url);
           this.socket.onmessage = this.onMessage;
           this.socket.onclose = this._retry;
           this.socket.onopen = this._opened;
@@ -52,6 +56,7 @@ define(function (require) {
     
     _opened: function () {
       this.state.rows = [];
+      this.status = 'OPENED';
       this.trigger(this.state);
     },
     
@@ -59,8 +64,8 @@ define(function (require) {
     
     _close: function () {
       if (this.socket instanceof WebSocket) {
-        this.socket.onclose = function (e) { debug.log('Closed', e); };
         this.socket.close(); 
+        this.status = 'CLOSED';
       }
     },
     

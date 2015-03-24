@@ -497,25 +497,18 @@ define(function (require) {
     
     _connect: function (props) {
       // close websocket connection if already connected
-      if (this.actions) {
-        this.actions.close();
-      }
-    
-      if (this.unsubscribe) {
-        this.unsubscribe();
-      }
+      this.actions.close();
     
       var url = [settings.WS_HOST, 'log', 'workflows', props.model.id].join('/');
-      
-      this.actions = new LogActions();
-      this.store = new LogStore(this.actions);
-      
-      this.unsubscribe = this.store.listen(this.onStoreUpdate);
       
       this.actions.connect(url);
     },
     
     componentWillMount: function () {
+      this.actions = new LogActions();
+      this.store = new LogStore(this.actions);
+      this.unsubscribe = this.store.listen(this.onStoreUpdate);
+      
       this._connect(this.props);
     },
     
@@ -624,14 +617,6 @@ define(function (require) {
   
   
   var DetailView = React.createBackboneClass({
-/*
-    componentWillReceiveProps: function (nextProps) {
-      if (this.props.model.toJSON() !== nextProps.model.toJSON()) {
-        
-      }
-    },
-*/
-  
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model).isRequired,
       onClose: React.PropTypes.func

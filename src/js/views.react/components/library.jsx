@@ -48,7 +48,7 @@ define(function (require) {
 
               if (g.name) {
                 out.push(<NavItem {...props} name={ nam } slug={ slugify( g.name ) } idx={ ctr } />);
-                ctr++;            
+                ctr++;
               }
               header = g.header;
             });
@@ -68,7 +68,7 @@ define(function (require) {
   });
 
   LibraryView = React.createBackboneClass({
-    mixins: [ModelRenderMixin],
+/*    mixins: [ModelRenderMixin],*/
     getInitialState: function () {
       var actions = Actions();
       return  {
@@ -82,28 +82,33 @@ define(function (require) {
     },
         
     render: function () {
-      var ctr     = 0, 
+      var ctr     = 0,
           props   = this.props,
           store   = this.state.store,
-          actions = this.state.actions;
+          actions = this.state.actions,
+          groups  = props.model.get('lib'),
+          panes   = [];
+      
+      if (groups) {
+        panes = _.map(groups, function (group) {
+          var plist = [];
+
+          _.each(group, function (g) {
           
-      var panes = _.map(this.props.model.get('lib'), function (group) {
-        var panes = [];
-        
-        _.each(group, function (g) {
-          var p = _.extend({}, props, {
-            store: store,
-            actions: actions,
-            slug: slugify(g.name),
-            idx: ctr
+            var p = _.extend({}, props, {
+              store: store,
+              actions: actions,
+              slug: slugify(g.name),
+              idx: ctr
+            });
+
+            plist.push(<TabPane {...p} key={ g.function_instanceid }><CodeView code={ g.body } /></TabPane>);
+            ctr++;
           });
-          
-          panes.push(<TabPane {...p}><CodeView code={ g.body } /></TabPane>);
-          ctr++;
+
+          return plist;
         });
-        
-        return panes;
-      });
+      }
     
       return (
         <div>
@@ -111,7 +116,7 @@ define(function (require) {
             <Navigation model={ props.model } store={ store } actions={ actions } onTabChange={ this.onTabChange } />
           </div>
           <div className="span9 tab-content library-content">
-            { panes }
+            { _.flatten(panes) }
           </div>
         </div>
       );

@@ -20,6 +20,10 @@ define(function (require) {
       this.highlight();
     },
     
+    componentReceiveProps: function () {
+      this.highlight();
+    },
+    
     highlight: function () {
       if (this.props.code && !this.state.highlighted) {
           _.defer(function Highlight() {
@@ -35,6 +39,10 @@ define(function (require) {
     
     render: function () {
       var Code = <LoaderView />;
+      
+      if (this.props.code) {
+        Code = <code className="language-qore">{ this.props.code }</code>;
+      }
       
       if (this.state.code) {
         Code = <code className="language-qore" dangerouslySetInnerHTML={{__html: this.state.code }} />;
