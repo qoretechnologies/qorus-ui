@@ -8,7 +8,7 @@ define(function (require) {
     render: function () {
       return (
         <pre>{ this.props.text || this.props.children }</pre>
-      )
+      );
     }
   });
 
@@ -17,13 +17,13 @@ define(function (require) {
     getDefaultProps: function () {
       return {
         rows: []
-      }
+      };
     },
     
     getInitialState: function () {
       return {
         scroll: true
-      }
+      };
     },
     
     propTypes: {
@@ -63,7 +63,7 @@ define(function (require) {
         <div className="log log-area span12" onScroll={ this.stopAutoscroll }>
           { rows }
         </div>
-      )  
+      );  
     },
     
     stopAutoscroll: function () {

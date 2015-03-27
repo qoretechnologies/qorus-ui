@@ -181,8 +181,9 @@ define(function (require) {
     },
     
     renderRows: function () {
+      console.log('renderRows');
 /*      var slice           = this.state.showedItems + CHUNK_SIZE,*/
-      var collection      = false ? this.props.collection.slice(0, 20) : this.props.collection,
+      var collection      = false ? this.props.collection.slice(0, 30) : this.props.collection,
           children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           props           = this.props,
           DefaultRowView  = this.props.rowView || RowView;

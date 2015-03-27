@@ -133,7 +133,7 @@ define(function (require) {
     render: function (ctx) {
       // var start = new Date().getTime(), tpl;
       var tpl;
-      
+
       if (this.render_lock) return;
       // this.clean();
       // this.removeViews();
@@ -145,7 +145,7 @@ define(function (require) {
         if (ctx && !(ctx instanceof Backbone.Model)) {
           _.extend(this.context, ctx); 
         }
-        
+
         // adding template helpers
         _.extend(this.context, Helpers, this.helpers);
 
@@ -154,9 +154,9 @@ define(function (require) {
         } else {
           tpl = _.template(this.template, this.context);
         }
-        
+
         this.$el.html(tpl);
-        
+
         this.trigger('render', this, {});
       }
 
@@ -165,13 +165,13 @@ define(function (require) {
       this.setTitle();
       this.onRender();
       this.trigger('postrender', this);
-      
+
       if (_.isFunction(this.processUrlParams))
         this.processUrlParams();
-      
+
       this._is_rendered = true;
-      
-      return this;
+
+      return this;      
     },
     
     // removes view by ID

@@ -11,6 +11,7 @@ define(function(require){
       LogsView          = require('views/system/logs'),
       RbacView          = require('views/system/rbac'),
       ErrorsView        = require('views/system/errors'),
+      _ = require('underscore'),
       SystemInfoView;  
 
 

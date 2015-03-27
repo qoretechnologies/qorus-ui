@@ -11,7 +11,7 @@ define(function (require) {
       this.socket = {};
     },
     
-    _connect: function () {
+    _connect: _.debounce(function () {
 //      if (this.status !== 'OPEN') {
         this.status = 'OPEN';
         
@@ -24,7 +24,7 @@ define(function (require) {
             this._retry();
           }.bind(this));
 //      }
-    },
+    }, 500, { trailing: true }),
     
     _open: function () {
       if (this._url) {
@@ -48,6 +48,8 @@ define(function (require) {
         return;
       }
       
+      // this.onMessage({ data: 'Failed to open WebSocket connection' });
+      
       if (this.auto_reconnect) {
         setTimeout(this._connect, 5000); 
       }
@@ -60,7 +62,9 @@ define(function (require) {
       this.trigger(this.state);
     },
     
-    _error: function () {},
+    _error: function (event) {
+      console.log(event);
+    },
     
     _close: function () {
       if (this.socket instanceof WebSocket) {
