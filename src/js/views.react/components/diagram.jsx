@@ -18,26 +18,25 @@ define(function (require) {
   FunctionView = React.createClass({
     render: function () {
       return (
-        <table className="table table-vertical">
-            <tr>
-                <th>Version</th>
-                <td>{ this.props.version }</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{ this.props.description }</td>
-            </tr>
-            <tr>
-                <th>Source</th>
-                <td>{ this.props.source }</td>
-            </tr>
-            <tr>
-                <th>Code</th>
-                <td>
-                  <CodeView code={ this.props.code } />
-                </td>
-            </tr>
-        </table>
+        <div className="step-function">
+          <table className="table table-vertical">
+              <tr>
+                  <th>Version</th>
+                  <td>{ this.props.version }</td>
+              </tr>
+              <tr>
+                  <th>Description</th>
+                  <td>{ this.props.description }</td>
+              </tr>
+              <tr>
+                  <th>Source</th>
+                  <td>{ this.props.source }</td>
+              </tr>
+          </table>
+          <div className="step-source">
+            <CodeView code={ this.props.code } />
+          </div>
+        </div>
       );
     }
   });

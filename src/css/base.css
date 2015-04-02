@@ -2234,3 +2234,8 @@ a.subtle:hover, a.subtle:focus {
 a + a:before {
   content: " "
 }
+
+.step-source {
+  overflow: auto;
+  box-sizing: border-box;
+}

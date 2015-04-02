@@ -181,7 +181,7 @@ define(function (require) {
     },
     
     renderRows: function () {
-      console.log('renderRows');
+/*      console.log('renderRows');*/
 /*      var slice           = this.state.showedItems + CHUNK_SIZE,*/
       var collection      = false ? this.props.collection.slice(0, 30) : this.props.collection,
           children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
@@ -211,7 +211,7 @@ define(function (require) {
         
     renderHeader: function () {
       var header_columns, 
-          children = this.props.children,
+          children = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           tprops   = this.props;
 
       header_columns = children.map(function (child, idx) {

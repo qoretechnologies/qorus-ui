@@ -55,13 +55,16 @@ define(function (require, exports, module) {
         
         if ($el) {
           // fix size on resize event
+
           $el.on("resize.modal", function(event, ui) {
               ui.element.css("margin-left", -ui.size.width/2);
               ui.element.css("left", "50%");
               self.fixHeight();
           });
 
-          _.delay(this._createResizable, 100);
+          this._createResizable();
+          
+          $el.one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", this.fixHeight);
 
           $(window).on(key, $.proxy(this.fixHeight, this));  
         }
@@ -76,9 +79,12 @@ define(function (require, exports, module) {
     },
     
     _createResizable: function () {
-      var $el = this.getElement();
-      var max_height = $(window).innerHeight() - $el.position().top * 2;
-      var max_width = $(window).innerWidth() - $el.position().top * 2;
+      var $el           = this.getElement(),
+          windowHeight  = $(window).innerHeight(),
+          windowWidth   = $(window).innerWidth(),
+          margin        = this.margin ? _.result(this, 'margin') : $el.position().top * 2,
+          max_height    = windowHeight - margin,
+          max_width     = windowWidth - margin;
         
       this.fixHeight();
 
@@ -93,27 +99,25 @@ define(function (require, exports, module) {
     },
     
     fixHeight: function (e) {
-      var $el = this.getElement();
+      var $el           = this.getElement(),
+          windowHeight  = $(window).innerHeight(),
+          windowWidth   = $(window).innerWidth(),
+          margin        = this.margin ? _.result(this, 'margin') : $el.position().top * 2,
+          max_height    = windowHeight - margin;
       
-      $el.css('padding-bottom', $el.find('.modal-footer').outerHeight() + 10);
+      $el.css('padding-bottom', $el.find('.modal-footer').outerHeight() + 10).css('maxHeight', max_height);
       if (!e || !e.target.tagName) {
         var padding = 15;
-        var $modal = $el;
-        var max_height = $(window).innerHeight() - $modal.position().top * 2;
 
-        if ($modal.height() > max_height) {
-          $modal.height(max_height);
+        var $body = $el.find('.modal-body');
+        var cor = $body.innerHeight() - $body.height();
+        var h = max_height - $el.find('.modal-header').outerHeight() - cor - padding;
 
-          var $body = $modal.find('.modal-body');
-          var cor = $body.innerHeight() - $body.height();
-          var h = $modal.height() - $modal.find('.modal-header').outerHeight() - cor - padding;
-
-          if ($modal.find('.modal-footer')) {
-            h -= $modal.find('.modal-footer').outerHeight() - padding;
-          }
-
-          $body.height(h).css('max-height', h);
+        if ($el.find('.modal-footer')) {
+          h -= $el.find('.modal-footer').outerHeight() - padding;
         }
+
+        $body.height(h).css('maxHeight', h);
       }
     }
   };
@@ -188,6 +192,12 @@ define(function (require, exports, module) {
 
   ModalView = React.createClass({
     mixins: [Reflux.ListenerMixin, FadeMixin, ResizableMixin],
+    
+    margin: function () {
+      var windowHeight = $(window).innerHeight();
+      
+      return Math.ceil(windowHeight*0.1) * 2;
+    },
     
     getDefaultProps: function () {
       return {
