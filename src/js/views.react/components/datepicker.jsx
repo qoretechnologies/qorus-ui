@@ -3,11 +3,25 @@ define(function (require) {
       _         = require('underscore'),
       PropTypes = React.PropTypes,
       moment    = require('moment'),
+      $         = require('jquery'),
+      Actions   = require('views.react/actions/date'),
       Calendar, DatePicker;
+      
+  _.mixin({
+    chunk: function(array, unit) {
+      var result;
+      result = _.groupBy(array, function(element, index) {
+        return Math.floor(index / unit);
+      });
+      
+      return _.toArray(result);
+    }
+  });
       
   Calendar = React.createClass({
     propTypes: {
-      date: PropTypes.object.isRequired
+      date: PropTypes.object.isRequired,
+      setDate: PropTypes.func.isRequired
     },
   
     getDaysOfMonth: function () {
@@ -20,7 +34,7 @@ define(function (require) {
           
       
       while (start.valueOf() <= end.valueOf()) {
-        var day = { date: start.date(), month: start.month(), year: start.year(), css: '' };
+        var day = { date: moment(start), day: start.date(), month: start.month(), year: start.year(), css: '' };
         
         if (start.valueOf() === moment([moment().year(), moment().month(), moment().date()]).valueOf()) day.is_today = true;
         if (start.valueOf() === moment([date.year(), date.month(), date.date()]).valueOf()) day.active = true;
@@ -36,31 +50,35 @@ define(function (require) {
       
       return days;
     },
+    
+    setDate: function (date) {
+      this.props.setDate(date);
+    },
   
     render: function () {
       var year  = this.props.date.year(),
-          month = this.props.date.month(),
+          month = this.props.date.format('MMM'),
           weeks = _.chunk(this.getDaysOfMonth(), 7),
           rows  = [];
       
-      rows = _.map(weeks, function (week) { 
-        var days = _.map(week, function (day) {
+      rows = _.map(weeks, function (week, rowidx) { 
+        var days = _.map(week, function (day, idx) {
           return (
-            <td className={ day.css } day={ day }>{ day.date }</td>
+            <td className={ day.css } key={ idx } onClick={ this.setDate.bind(null, day.date) }>{ day.day }</td>
           );
-        });
+        }, this);
         
         return (
-          <tr>{ days }</tr>
+          <tr key={ rowidx }>{ days }</tr>
         );
-      });
+      }, this);
       
       return (
         <table className="table table-condensed">
           <thead>
             <tr>
               <th data-toggle="prev-month"><i className="icon-chevron-left"></i></th>
-              <th colspan="5">{ month } { year }</th>
+              <th colSpan="5">{ month } { year }</th>
               <th data-toggle="next-month"><i className="icon-chevron-right"></i></th>
             </tr>
             <tr>
@@ -82,17 +100,27 @@ define(function (require) {
   });
   
   DatePicker = React.createClass({
+    componentDidMount: function () {
+      var $el = $(this.getDOMNode());
+      
+      $el.css('top', $el.parent().height() + 10);
+    },
+  
     getInitialState: function () {
+      var date = moment.isMoment(this.props.date) ? this.props.date : moment(this.props.date);
+    
       return {
-        date: this.props.date || moment()
+        date: date
       };
     },
   
     render: function () {
+      var date = this.state.date;
+    
       return (
         <div className="datepicker">
           <div className="calendar">
-            <Calendar days={ this.state.days } />
+            <Calendar date={ this.state.date } setDate={ this.setDate } />
           </div>
           <div className="hours row-fluid">
             <span className="text-center span2"><i className="icon-time"></i></span>
@@ -113,6 +141,19 @@ define(function (require) {
     },
     
     setDate: function (date) {
+      this.setState({
+        date: date
+      });
+    },
+    
+    applyDate: function () {
+      Actions.setDate(this.state.date);
+      this._remove();
+    },
+    
+    resetTime: function () {
+      var date = this.state.date;
+      
       this.setState({
         date: date
       });

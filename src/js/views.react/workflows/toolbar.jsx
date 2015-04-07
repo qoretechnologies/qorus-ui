@@ -1,9 +1,10 @@
 define(function (require) {
-  var React     = require('react'),
-      Workflows = require('collections/workflows'),
-      _         = require('underscore'),
-      utils     = require('utils'),
-      moment    = require('moment');
+  var React       = require('react'),
+      Workflows   = require('collections/workflows'),
+      _           = require('underscore'),
+      utils       = require('utils'),
+      DatePicker  = require('jsx!views.react/components/datepicker'),
+      moment      = require('moment');
   
   require('backbone');
   require('react.backbone');
@@ -54,17 +55,33 @@ define(function (require) {
     
     getInitialState: function () {
       return {
-        value: this.props.filters.date
+        value: this.props.filters.date,
+        datepicker: false
       };
     },
     
+    showDatePicker: function () {
+      var show = !this.state.datepicker;
+      
+      this.setState({
+        datepicker: show
+      });
+      
+/*
+      $(window).on('click.datepicker.out', function (e) {
+        console.log($(e.currentTarget), $(e.currentTarget).parents('.datepicker'));
+      })
+*/
+    },
+    
     render: function () {
-      var value = this.state.value || this.props.filters.date;
+      var value = this.state.value || this.props.filters.date,
+          datepicker = this.state.datepicker ? <DatePicker date={ value } onChange={ this.props.handleSubmitDate } /> : '';
       
       return (
         <div className="btn-group toolbar-filters">
             <form className="form-inline nomargin" action="" onSubmit={ this.props.handleSubmitDate }>
-            <div className="input-prepend date dp">
+            <div className="input-prepend date dp" onClick={ this.showDatePicker }>
               <span className="add-on"><i className="icon-th"></i></span>
               <input type="text" className="" value={ value } onChange={ this.onChange }/>
             </div>
@@ -73,6 +90,7 @@ define(function (require) {
               <button className="btn" onClick={ this.props.setDate.bind(null, '24h') }>24 h</button>
             </div>
             </form>
+            { datepicker }
         </div>
       );
     }

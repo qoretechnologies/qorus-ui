@@ -117,6 +117,7 @@ define(function (require) {
       // reassign listening events to collection
       this.stopListening(this.collection);
       
+//      this.listenTo(this.collection, 'sync', this.render);
       this.listenToOnce(this.collection, 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
     },
@@ -129,6 +130,8 @@ define(function (require) {
     
     preRender: function () {
       // this.setView(new BottomBarView(), 'bottombar');
+      console.log(this.collection.size());
+        
       var helpers = _.extend({ date: this.date }, this.helpers),
           tview, toolbar;
 
