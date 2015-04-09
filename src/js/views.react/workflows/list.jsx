@@ -259,7 +259,6 @@ define(function (require) {
     onStoreUpdate: function (ev, model) {
       if (store.getModel()) {
         store.getModel().getSources();
-        console.log('getting sources', 'test');
       }
         
       this.setState({ model: store.getModel() });

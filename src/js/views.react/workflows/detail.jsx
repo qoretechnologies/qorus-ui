@@ -22,6 +22,7 @@ define(function (require) {
       Controls          = require('jsx!views.react/components/controls').ControlsView,
       ModalView         = require('jsx!views.react/components/modal'),
       ModelForm         = require('jsx!views.react/components/form').ModelForm,
+      MetaTable         = require('jsx!views.react/components/metatable'),
 
       Actions           = require('views.react/actions/tabs'),
       Store             = require('views.react/stores/tabs'),
@@ -601,6 +602,12 @@ define(function (require) {
           </Tab>
         );
       }
+
+      tabs.push(
+        <Tab name="Meta" key="meta">
+          <MetaTable data={ _.omit(model.toJSON(), ['options', 'lib', 'stepmap', 'segment', 'steps', 'stepseq', 'stepinfo', 'wffuncs']) } />
+        </Tab>
+      );
 
       return (
         <div className="heading">

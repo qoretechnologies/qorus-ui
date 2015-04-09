@@ -115,9 +115,11 @@ define(function (require) {
         ctr++;
       }.bind(this));
       
+      console.log(this.props);
+      
       return (
         <div>
-          <ul className={this.props.cssClass}>
+          <ul className={this.props.className||this.props.cssClass}>
             { navigation }
           </ul>
           <div className="tab-content">

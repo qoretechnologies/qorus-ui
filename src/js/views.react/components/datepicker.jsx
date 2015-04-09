@@ -112,7 +112,7 @@ define(function (require) {
   DatePicker = React.createClass({
     componentDidMount: function () {
       var $el = $(this.getDOMNode()),
-          onClose = this.props.onClose;
+          self = this;
       
       $el.css('top', $el.parent().height() + 10);
       
@@ -120,8 +120,10 @@ define(function (require) {
         $(window).on('click.datepicker.out', function (e) {
           if ($(e.target).parents('.datepicker').size() === 0) {
             $(window).off('click.datepicker.out');
-            console.log('hiding');
-            onClose();
+
+            if (self.isMounted()) {
+              self.props.onClose();            
+            }
           }
         });
       });
@@ -131,7 +133,9 @@ define(function (require) {
       var date = moment.isMoment(this.props.date) ? this.props.date : moment(this.props.date);
     
       return {
-        date: date
+        date: date,
+        hours: date.hours(),
+        minutes: date.minutes()
       };
     },
   
@@ -145,9 +149,9 @@ define(function (require) {
           </div>
           <div className="hours row-fluid">
             <span className="text-center span2"><i className="icon-time"></i></span>
-            <span className="span3"><input type="number" name="hours" max="23" min="0" value={ date.hours() } className="span12 text-center" /></span>
+            <span className="span3"><input type="number" name="hours" max="23" min="0" value={ this.state.hours } onChange={ this.setHours } className="span12 text-center" /></span>
             <span className="span2 text-center">:</span>
-            <span className="span3"><input type="number" name="minutes" max="59" min="0" value={ date.minutes() } className="span12 text-center" /></span>
+            <span className="span3"><input type="number" name="minutes" max="59" min="0" value={ this.state.minutes } onChange={ this.setMinutes } className="span12 text-center" /></span>
             <span className="span2"><a className="reset-time" onClick={ this.resetTime }><i className="icon-trash text-error"></i></a></span>
           </div>
           <div className="buttons">
@@ -159,6 +163,30 @@ define(function (require) {
           </div>
         </div>
       );
+    },
+    
+    setHours: function (e) {
+      var hours = e.target.value,
+          date  = moment(this.state.date);
+      
+      this.setState({
+        hours: e.target.value
+      });
+      
+      date.hours(hours);
+      this.setDate({ date: date });
+    },
+    
+    setMinutes: function (e) {
+      var minutes = e.target.value,
+          date    = moment(this.state.date);
+    
+      this.setState({
+        hours: e.target.value
+      });
+      
+      date.hours(hours);
+      this.setDate({ date: date });
     },
     
     setDate: function (date) {

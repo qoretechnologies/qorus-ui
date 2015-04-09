@@ -1,41 +1,38 @@
 define(function (require) {
   require('sprintf');
   
-  var _           = require('underscore'),
-      $           = require('jquery'),
-      React       = require('react'),
-      utils       = require('utils'),
-      slugify     = require('qorus/helpers').slugify,
-      ModalView   = require('jsx!views.react/components/modal'),
-      Svg         = require('jsx!views.react/components/svg'),
-      CodeView    = require('jsx!views.react/components/code'),
-      LoaderView  = require('jsx!views.react/components/loader'),
-      TabsView    = require('jsx!views.react/components/tabs').TabsView,
-      TabPane     = require('jsx!views.react/components/tabs').TabPane,
-      Step        = require('models/step'),
+  var _             = require('underscore'),
+      $             = require('jquery'),
+      React         = require('react'),
+      utils         = require('utils'),
+      slugify       = require('qorus/helpers').slugify,
+      ModalView     = require('jsx!views.react/components/modal'),
+      Svg           = require('jsx!views.react/components/svg'),
+      CodeView      = require('jsx!views.react/components/code'),
+      LoaderView    = require('jsx!views.react/components/loader'),
+      TabsView      = require('jsx!views.react/components/tabs').TabsView,
+      TabPane       = require('jsx!views.react/components/tabs').TabPane,
+      MetaTableView = require('jsx!views.react/components/metatable'),
+      Step          = require('models/step'),
       Diagram, ContentView, FunctionView;
 
   FunctionView = React.createClass({
     render: function () {
+      var meta = _.omit(this.props.func, ['body']);
+    
       return (
         <div className="step-function">
-          <table className="table table-vertical">
-              <tr>
-                  <th>Version</th>
-                  <td>{ this.props.version }</td>
-              </tr>
-              <tr>
-                  <th>Description</th>
-                  <td>{ this.props.description }</td>
-              </tr>
-              <tr>
-                  <th>Source</th>
-                  <td>{ this.props.source }</td>
-              </tr>
-          </table>
-          <div className="step-source">
-            <CodeView code={ this.props.code } />
-          </div>
+          <TabsView className="nav nav-pills">
+            <TabPane name="Code">
+              <div className="step-source">
+                <MetaTableView data={ _.pick(meta, ['version', 'description', 'source'])} />
+                <CodeView code={ this.props.func.body } />
+              </div>
+            </TabPane>
+            <TabPane name="Meta">
+              <MetaTableView data={ meta } />
+            </TabPane>
+          </TabsView>
         </div>
       );
     }
@@ -43,17 +40,26 @@ define(function (require) {
 
   ContentView = React.createBackboneClass({
     render: function () {
-      var model = this.props.model, body = <LoaderView />, tabs = [];
-      var functions = model.get('functions');
+      var model     = this.props.model, 
+          body      = <LoaderView />, 
+          tabs      = [],
+          functions = model.get('functions'),
+          step      = _.omit(model.toJSON(), 'functions');
 
       if (functions) {
         _.each(functions, function (f) {
           tabs.push(
             <TabPane name={ f.type } key={ f.type }>
-              <FunctionView version={ f.version } description={ f.description } source={ f.source } code={ f.body } />
+              <FunctionView func={f} />
             </TabPane>
           );
         });
+        
+        tabs.push(
+          <TabPane name="Meta" key="meta">
+            <MetaTableView data={ step } />
+          </TabPane>
+        );
         
         body = <TabsView model={ this.model }>{ tabs }</TabsView>;
       }
