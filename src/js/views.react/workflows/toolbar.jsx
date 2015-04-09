@@ -61,22 +61,26 @@ define(function (require) {
     },
     
     showDatePicker: function () {
-      var show = !this.state.datepicker;
+      var show = !this.state.datepicker,
+          self = this;
       
       this.setState({
         datepicker: show
       });
-      
-/*
-      $(window).on('click.datepicker.out', function (e) {
-        console.log($(e.currentTarget), $(e.currentTarget).parents('.datepicker'));
-      })
-*/
+    },
+    
+    applyDate: function (date) {
+      this.props.setDate(date);
+      this.setState({ datepicker: false });
     },
     
     render: function () {
       var value = this.state.value || this.props.filters.date,
-          datepicker = this.state.datepicker ? <DatePicker date={ value } onChange={ this.props.handleSubmitDate } /> : '';
+          datepicker = this.state.datepicker ? <DatePicker date={ value } onChange={ this.applyDate } onClose={ this.showDatePicker} /> : '';
+          
+      if (moment.isMoment(value)) {
+        value = utils.formatDate(value);
+      }
       
       return (
         <div className="btn-group toolbar-filters">
@@ -142,7 +146,10 @@ define(function (require) {
     },
     
     setDate: function (date, e) {
-      e.preventDefault();
+    
+      if (e) {
+        e.preventDefault();
+      }
       
       if (!moment.isMoment(date)) {
         date = utils.prepareDate(date);

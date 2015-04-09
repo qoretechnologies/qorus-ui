@@ -4,7 +4,6 @@ define(function (require) {
       PropTypes = React.PropTypes,
       moment    = require('moment'),
       $         = require('jquery'),
-      Actions   = require('views.react/actions/date'),
       Calendar, DatePicker;
       
   _.mixin({
@@ -28,13 +27,14 @@ define(function (require) {
       var month = this.props.date.month(),
           year  = this.props.date.year(),
           start = moment([year, month]).startOf('isoweek'),
-          end   = start.clone().add('weeks', 6).add('days', -1),
+          end   = start.clone().add(6, 'weeks').add(-1, 'days'),
           days  = [],
           date  = this.props.date;
           
       
       while (start.valueOf() <= end.valueOf()) {
-        var day = { date: moment(start), day: start.date(), month: start.month(), year: start.year(), css: '' };
+        var dDate = moment(start).hours(date.hours()).minutes(date.minutes()).seconds(date.seconds());
+        var day = { date: dDate, day: start.date(), month: start.month(), year: start.year(), css: '' };
         
         if (start.valueOf() === moment([moment().year(), moment().month(), moment().date()]).valueOf()) day.is_today = true;
         if (start.valueOf() === moment([date.year(), date.month(), date.date()]).valueOf()) day.active = true;
@@ -45,7 +45,7 @@ define(function (require) {
         if (day.active) day.css += ' active';
         
         days.push(day);
-        start.add('days', 1);
+        start.add(1, 'days');
       }
       
       return days;
@@ -53,6 +53,16 @@ define(function (require) {
     
     setDate: function (date) {
       this.props.setDate(date);
+    },
+  
+    nextMonth: function () {
+      var date = moment(this.props.date);
+      this.setDate(date.add(1, 'months'));
+    },
+    
+    prevMonth: function () {
+      var date = moment(this.props.date);
+      this.setDate(date.add(-1, 'months'));
     },
   
     render: function () {
@@ -77,9 +87,9 @@ define(function (require) {
         <table className="table table-condensed">
           <thead>
             <tr>
-              <th data-toggle="prev-month"><i className="icon-chevron-left"></i></th>
+              <th className="month" onClick={ this.prevMonth } ><i className="icon-chevron-left"></i></th>
               <th colSpan="5">{ month } { year }</th>
-              <th data-toggle="next-month"><i className="icon-chevron-right"></i></th>
+              <th className="month" onClick={ this.nextMonth }><i className="icon-chevron-right"></i></th>
             </tr>
             <tr>
               <th>Mon</th>
@@ -101,9 +111,20 @@ define(function (require) {
   
   DatePicker = React.createClass({
     componentDidMount: function () {
-      var $el = $(this.getDOMNode());
+      var $el = $(this.getDOMNode()),
+          onClose = this.props.onClose;
       
       $el.css('top', $el.parent().height() + 10);
+      
+      _.defer(function () {
+        $(window).on('click.datepicker.out', function (e) {
+          if ($(e.target).parents('.datepicker').size() === 0) {
+            $(window).off('click.datepicker.out');
+            console.log('hiding');
+            onClose();
+          }
+        });
+      });
     },
   
     getInitialState: function () {
@@ -147,15 +168,14 @@ define(function (require) {
     },
     
     applyDate: function () {
-      Actions.setDate(this.state.date);
-      this._remove();
+      this.props.onChange(this.state.date);
     },
     
     resetTime: function () {
-      var date = this.state.date;
+      var date = moment(this.state.date);
       
       this.setState({
-        date: date
+        date: date.hours(0).minutes(0)
       });
     }
   });
