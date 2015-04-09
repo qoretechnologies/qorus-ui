@@ -19,7 +19,9 @@ define(function (require) {
   
   var TdComponent = React.createClass({
     shouldComponentUpdate: function (nextProps) {
-      return (!_.isEqual(this.props, nextProps) || this.props.hash !== nextProps.hash);
+      var should = (!_.isEqual(this.props, nextProps) || this.props.hash !== nextProps.hash);
+      
+      return should;
     },
     
     render: function () {
@@ -54,7 +56,7 @@ define(function (require) {
         }
 
         return <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
-      });
+      }, this);
       return cols;
     }
   };
@@ -186,7 +188,8 @@ define(function (require) {
       var collection      = false ? this.props.collection.slice(0, 30) : this.props.collection,
           children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           props           = this.props,
-          DefaultRowView  = this.props.rowView || RowView;
+          DefaultRowView  = this.props.rowView || RowView,
+          tableProps      = _.omit(props, 'children');
     
       this._rows = collection.map(function (row, idx) {
         var isBackbone     = row instanceof Backbone.Model,

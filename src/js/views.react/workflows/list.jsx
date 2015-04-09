@@ -32,6 +32,7 @@ define(function (require) {
   
 //  require('backbone');
   require('react.backbone');
+  require('classnames');
   
 
   var fixed = true;
@@ -138,7 +139,12 @@ define(function (require) {
 
       if (this.state.filters) {
         return (
-          <ToolbarView filters={ this.state.filters } filterChange={ Actions.filterChange } actions={ tActions } store={ store } fixed={ false } />
+          <ToolbarView 
+            filters={ this.state.filters } 
+            filterChange={ Actions.filterChange } 
+            actions={ tActions } 
+            store={ store } 
+            fixed={ false } />
         );      
       } else {
         return (<div />);
@@ -146,16 +152,17 @@ define(function (require) {
 
     }
   });
-  
+    
   var LinkView = React.createClass({
-    shouldComponentUpdate: function (nextProps) {
-      return this.props.model.get('name') !== nextProps.model.get('name') || (this.props.link !== nextProps.link);
+    getInitialState: function () {
+      return {
+        date: store.state.filters.date
+      };
     },
     
     render: function () {
       var model = this.props.model,
-          date  = model.collection.opts.date,
-          url   = helpers.getUrl(this.props.status, this.props.model.id, date);
+          url   = helpers.getUrl(this.props.status, this.props.model.id, store.state.filters.date);
       
       return (
         <a href={ url }>{ this.props.model.get('name') }</a>
@@ -215,11 +222,11 @@ define(function (require) {
     <Col name="ID" dataSort="workflowid" key="workflowid">
       <Cell dataKey="workflowid" className="narrow" />
     </Col>,
-    <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts"  className="narrow" key="has_alerts">
+    <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts" className="narrow" key="has_alerts">
       <HasAlertsView className="narrow" />
     </Col>,
     <Col name="Name" className="name" key="name" dataSort="name">
-      <LinkView className='name' />
+      <LinkView className='name'/>
     </Col>,
     <Col name="Version" dataSort="version" className="narrow" key="version">
       <Cell dataKey="version" className="narrow"/>
@@ -280,7 +287,8 @@ define(function (require) {
     getInitialState: function () {
       return {
         clicked: tStore.isRowClicked(this.props.model.id),
-        checked: false
+        checked: false,
+        date: store.state.filters.date
       };
     },
     
@@ -297,6 +305,10 @@ define(function (require) {
       if (checked !== this.state.checked) {
         update.checked = checked;
       }
+      
+      if (store.state.filters.date !== this.state.date) {
+        update.date = store.state.filters.date;
+      }
             
       if (update !== {}) {
         this.setState(update);
@@ -304,14 +316,13 @@ define(function (require) {
     },
   
     render: function () {
-      var cls = React.addons.classSet({
+      var cls = classNames({
         warning: this.state.checked,
         info:    this.state.clicked,
-        clickable: true
-      });
+      }, 'clickable');
       
       return (
-        <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } />
+        <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } />
       );
     },
   });

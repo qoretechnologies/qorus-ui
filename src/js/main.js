@@ -25,7 +25,7 @@ require.config({
     'messenger-theme-future': '../components/messenger/build/js/messenger-theme-future',
     'messenger-theme-flat': '../components/messenger/build/js/messenger-theme-flat',
     'backbone.localstorage': '../components/backbone.localstorage/backbone.localStorage',
-    chartjs: '../components/chartjs/Chart.min',
+    chartjs: '../components/chartjs/Chart',
     'jquery-ui': '../components/jquery-ui/jquery-ui',
     prism: '../components/prism/prism',
     jsx: '../components/jsx/jsx',
@@ -40,7 +40,8 @@ require.config({
     'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table',
     'js-md5': '../components/js-md5/js/md5',
     Rainbow: '../components/Rainbow/rainbow',
-    'spark-md5': '../components/spark-md5/spark-md5'
+    'spark-md5': '../components/spark-md5/spark-md5',
+    classnames: '../components/classnames/index'
   },
   shim: {
     backbone: {

@@ -1,10 +1,11 @@
 define(function (require) {
   var Reflux      = require('reflux'),
       _           = require('underscore'),
-      Actions     = require('views.react/actions/workflows');
+      Actions     = require('views.react/actions/workflows'),
+      DateActions = require('views.react/actions/date');
   
   return Reflux.createStore({
-    listenables: Actions,
+    listenables: [Actions, DateActions],
     state: {},
     
     init: function () {
@@ -38,7 +39,9 @@ define(function (require) {
       collection.setOptions({ date: date, deprecated: deprecated });
       
       collection.fetch({ 
-        success: function () {
+        success: function (col, models) {
+          // add timestamp for states
+          col.each(function (m) { m.set('timestamp', this.state.filters.date); }, this);
           this.setState({ fetch_error: null, collection_fetched: true });
           this.trigger(this.state);
         }.bind(this),
@@ -80,6 +83,14 @@ define(function (require) {
     setState: function (state) {
       this.state = _.extend(this.state, state);
 //      this.trigger('state');
+    },
+    
+    onSetDate: function (date) {
+      this.setState({
+        filters: _.extend({}, this.state.filters, { date: date })
+      });
+      
+      Actions.fetch();
     }
   });
 });
