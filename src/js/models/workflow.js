@@ -300,6 +300,26 @@ define(function (require) {
                 callback(false);
               }
           });
+        
+        
+        /* 
+          Autostart workaround for the stopped workflows, because there are not system event like 
+          WORKFLOW_START WORKFLOW_STOP we have to do that manually 
+         */
+        if (this.get('exec_count') === 0 && _.contains(['setAutostart', 'decAutostart', 'incAutostart'], action)) {
+          switch (action) {
+            case 'setAutostart':
+              this.set({ autostart: opts.autostart });
+              break;
+            case 'decAutostart':
+              this.decr('autostart');
+              break;
+            case 'incAutostart':
+              this.incr('autostart');
+              break;
+          }
+        }
+        
         return req;
       }
       return false;
@@ -335,15 +355,24 @@ define(function (require) {
           exclude = [],
           sysopts = System.Options.getFor('workflow');
       
-      _.each(sysopts, function (opt, idx) {
-        var syso = _.find(opts, { name: opt.name });
-        var val;
-          
+//      _.each(sysopts, function (opt, idx) {
+//        var syso = _.find(opts, { name: opt.name });
+//        var val;
+//          
+//        if (syso) {
+//          val = syso.value;
+//          syso = _.extend(syso, opt, { sysvalue: opt.value, value: val });
+//        } else {
+//          opts.push(opt);
+//        }
+//      });
+      
+      _.each(opts, function (o) {
+        var syso = _.find(syso, { name: o.name });
+        
         if (syso) {
-          val = syso.value;
-          syso = _.extend(syso, opt, { sysvalue: opt.value, value: val });
-        } else {
-          opts.push(opt);
+          var val = o.value;
+          _.extend(o, syso, { val: val, sysvalue: syso.value });
         }
       });
       
@@ -434,7 +463,7 @@ define(function (require) {
     },
     
     updateTotal: function () {
-      var states = ['IN-PROGRESS','READY','SCHEDULED','COMPLETE','INCOMPLETE','ERROR','CANCELED','RETRY','WAITING','ASYNC-WAITING','EVENT-WAITING','BLOCKED','CRASH'],
+      var states = _.pluck(ORDER_STATES, 'name'),
           total  = 0;
           
       _.each(states, function (state) {
