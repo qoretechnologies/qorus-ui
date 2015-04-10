@@ -12,12 +12,14 @@ define(function (require) {
     render: function () {
       var props = this.props.data,
           rows  = _.map(props, function (prop, idx) {
-            return (<tr><th>{ _.capitalize(idx) }</th><td>{ prop }</td></tr>);
+            return (<tr key={ idx }><th>{ _.capitalize(idx) }</th><td>{ prop }</td></tr>);
           });
     
       return (
         <table className="table table-vertical table-condensed table-striped">
-          { rows }
+          <tbody>
+            { rows }
+          </tbody>
         </table>
       );
     }

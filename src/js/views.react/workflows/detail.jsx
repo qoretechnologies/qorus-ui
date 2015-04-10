@@ -41,7 +41,8 @@ define(function (require) {
       GlobalErrors      = require('collections/errors-global'),
       Filtered          = require('backbone.filtered.collection'),
       settings          = require('settings'),
-      helpers           = require('qorus/helpers');
+      helpers           = require('qorus/helpers'),
+      ORDER_STATES      = require('constants/workflow').ORDER_STATES;
 
   require('react.backbone');
 
@@ -554,7 +555,10 @@ define(function (require) {
             <a className={ cls1 } onClick={ this.actions.toggleScroll }><i className="icon-ok" /> Autoscroll</a>
             <a className={ cls2 } onClick={ this.actions.togglePause }><i className="icon-pause" /> Pause</a>
           </div>
-          <LogView rows={ this.state.rows } actions={ this.actions } scroll={ this.state.scroll } pause={ this.state.pause } model={ this.props.model.id } ref="log"/>
+          <LogView rows={ this.state.rows } 
+              actions={ this.actions } scroll={ this.state.scroll } 
+              pause={ this.state.pause } model={ this.props.model.id } 
+              ref="log"/>
         </div>
       );
     }
@@ -578,34 +582,44 @@ define(function (require) {
           store   = Store(actions),
           model   = this.props.model,
           tabs = [
-            <Tab name="Detail" key="detail">
+            <Tab name="Detail">
               <InfoView model={ model } />
             </Tab>,
-            <Tab name="Library" key="library">
+            <Tab name="Library">
               <LibraryViewContainer model={ model } />
             </Tab>,
-            <Tab name="Steps" key="steps">
+            <Tab name="Steps">
               <DiagramView model={ model } />
             </Tab>,
-            <Tab name="Log" key="log">
+            <Tab name="Log">
               <LogViewContainer model={ model } name="log" />
             </Tab>,
-            <Tab name="Errors" key="errors">
+            <Tab name="Errors">
               <ErrorsContainer model={ model } modelId={ model.id } />
             </Tab>
-          ];
+          ],
+          omit =  ['options', 'lib', 'stepmap', 
+                   'segment', 'steps', 'stepseg', 
+                   'stepinfo', 'wffuncs', 'groups',
+                   'alerts', 'exec_count', 'autostart',
+                   'has_alerts', 'TOTAL', 'timestamp'];
+                   
+                   
+          omit = omit.concat(_.pluck(ORDER_STATES, 'name'));
+                   
+          
 
       if (model.get('has_alerts')) {
         tabs.push(
-          <Tab name="Alerts" key="alerts">
+          <Tab name="Alerts">
             <AlertsTable model={ model } />
           </Tab>
         );
       }
 
       tabs.push(
-        <Tab name="Meta" key="meta">
-          <MetaTable data={ _.omit(model.toJSON(), ['options', 'lib', 'stepmap', 'segment', 'steps', 'stepseq', 'stepinfo', 'wffuncs']) } />
+        <Tab name="Info">
+          <MetaTable data={ _.omit(model.toJSON(), omit) } />
         </Tab>
       );
 

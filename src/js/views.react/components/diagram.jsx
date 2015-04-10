@@ -49,14 +49,14 @@ define(function (require) {
       if (functions) {
         _.each(functions, function (f) {
           tabs.push(
-            <TabPane name={ f.type } key={ f.type }>
+            <TabPane name={ f.type }>
               <FunctionView func={f} />
             </TabPane>
           );
         });
         
         tabs.push(
-          <TabPane name="Meta" key="meta">
+          <TabPane name="Info">
             <MetaTableView data={ step } />
           </TabPane>
         );

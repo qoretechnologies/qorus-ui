@@ -1,8 +1,9 @@
 define(function (require) {
-  var React     = require('react'),
-      TableView = require('jsx!views.react/components/table').TableView,
-      _         = require('underscore'),
-      Col       = require('jsx!views.react/components/dummy'),
+  var React        = require('react'),
+      TableView    = require('jsx!views.react/components/table').TableView,
+      _            = require('underscore'),
+      Col          = require('jsx!views.react/components/dummy'),
+      EditableCell = require('jsx!views.react/components/editablecell'),
       OptionsView;
       
   var DescView = React.createClass({
@@ -35,110 +36,6 @@ define(function (require) {
     }
   });
   
-  var EditableCell = React.createClass({
-    getInitialState: function () {
-      return {
-        value: this.getModel().value,
-        edit: false,
-        width: ''
-      };
-    },
-    
-    componentWillUpdate: function (nextProps, nextState) {
-      if (nextState.edit === true) {
-        nextState.width = $(this.getDOMNode()).width();
-      } else {
-        nextState.width = '';
-      }
-    },
-    
-    componentDidUpdate: function () {
-      var el = this.getDOMNode(),
-          $el = $(el);
-    
-      if (this.state.edit) {
-        $el.find('input').focus();
-        $el.find('input').on('blur.input.edit', this.cancel);
-      }
-    },
-    
-    componentWillUnmount: function () {
-      $(this.getDOMNode()).find('input').off('blur.input.edit');
-    },
-    
-    componentWillReceiveProps: function (nextProps) {
-      var val = nextProps.children.props.model.value;
-      
-      if (val !== this.state.value) {
-        this.setState({ value: val });
-      }
-    },
-  
-    onClick: function (e) {
-      this.setState({
-        edit: true
-      });
-    },
-    
-    save: function () {
-      var option = this.getModel().name,
-          val    = this.state.value;
-
-      this.props._model.setOption(option, val);
-      
-      this.setState({
-        edit: false,
-        value: val ? val : this.getModel().sysvalue
-      });
-    },
-    
-    cancel: function () {
-      $(this.getDOMNode()).find('input').off('blur.input.edit');
-    
-      this.setState({
-        edit: false,
-        value: this.getModel().value
-      });
-    },
-    
-    onChange: function (e) {
-      this.setState({
-        value: e.target.value
-      });
-    },
-    
-    onKeyUp: function (e) {
-      if (e.key === 'Enter') {
-        this.save();
-      } else if (e.key === 'Escape') {
-        this.cancel();
-      }
-    },
-    
-    getModel: function () {
-      return this.props.children.props.model;
-    },
-    
-    render: function () {
-      var props = _.omit(this.props, ['children']),
-          style = { width: this.state.width },
-          cls   = React.addons.classSet({
-                    editable: true,
-                    editor: this.state.edit
-                  });
-      
-      if (this.state.edit) {
-        view = <input type="text" value={ this.state.value } onChange={ this.onChange } onKeyUp={ this.onKeyUp } />;
-      } else {
-        view = <span>{ this.state.value || 'not set' }</span>;
-      }
-    
-      return (
-        <td {...this.props} className={ cls } onClick={ this.onClick } style={ style }>{ view }</td>
-      );
-    }
-  });
-  
   OptionsView = React.createBackboneClass({
     propTypes: {
       options: React.PropTypes.array.isRequired
@@ -153,9 +50,6 @@ define(function (require) {
               collection={ this.props.options } 
               rowClick={ _.noop } 
               cssClass="table table-condensed table-sripped table-align-left">
-              <Col name="">
-                <SystemIcon />
-              </Col>
               <Col name="Options">
                 <DescView className="name" />
               </Col>
@@ -171,3 +65,5 @@ define(function (require) {
   
   return OptionsView;
 });
+
+/*            <a className="btn btn-success btn-small"><i className="icon-plus" /> Add option</a>*/

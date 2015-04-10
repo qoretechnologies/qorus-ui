@@ -103,27 +103,25 @@ define(function (require) {
     },
   
     render: function () {
-      var navigation = [], tabs = [], ctr=0;
+      var navigation = {}, tabs = {}, ctr=0;
       var props = _.omit(this.props, ['tabs', 'cssClass', 'navItemView', 'tabPaneView']);
       
       props = _.extend({}, props, this.state);
 
       this.props.children.forEach(function (tab) {
         var slug = slugify(tab.props.name);
-        navigation.push(<TabsView.NavItem {...props} slug={slug} name={tab.props.name} key={"nav-" + slug} idx={ ctr } />);
-        tabs.push(<TabsView.TabPane {...props} slug={slug} key={"tab"+slug} idx={ ctr }>{ tab.props.children }</TabsView.TabPane>);
+        navigation["nav-"+slug] = <TabsView.NavItem {...props} slug={slug} name={tab.props.name} idx={ ctr } />;
+        tabs["tab"+slug] = <TabsView.TabPane {...props} slug={slug} idx={ ctr }>{ tab.props.children }</TabsView.TabPane>;
         ctr++;
       }.bind(this));
-      
-      console.log(this.props);
       
       return (
         <div>
           <ul className={this.props.className||this.props.cssClass}>
-            { navigation }
+            { React.addons.createFragment(navigation) }
           </ul>
           <div className="tab-content">
-            { tabs }
+            { React.addons.createFragment(tabs) }
           </div>
         </div>
       );

@@ -301,7 +301,6 @@ define(function (require) {
               }
           });
         
-        
         /* 
           Autostart workaround for the stopped workflows, because there are not system event like 
           WORKFLOW_START WORKFLOW_STOP we have to do that manually 
