@@ -333,7 +333,7 @@ define(function (require) {
       tActions.setCollection(workflowsStore.getCollection());
       
       return {
-/*        hash: utils.hash(store.getCollection().toJSON()),*/
+        hash: utils.hash(store.getCollection().toJSON()),
         collection_fetched: store.state.collection_fetched,
         error: store.state.error,
         filters: _.extend({}, store.state.filters),
@@ -415,13 +415,11 @@ define(function (require) {
     render: function () {
       var detail;
 
-      return (
-        <div id="workflows">
-          <ToolbarViewWrapper />
-          <TableViewWrapper />
-          <DetailViewWrapper />
-        </div>
-      );      
+      return  <div id="workflows">
+                <ToolbarViewWrapper />
+                <TableViewWrapper />
+                <DetailViewWrapper />
+              </div>;      
     }
   });
   

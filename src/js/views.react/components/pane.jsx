@@ -43,14 +43,13 @@ define(function (require, exports, module) {
         width: SystemSettings.get(this.getStorageKey()) || defaultWidth
       };
       
-      return (
-        <div className="pageslide left show" ref="pageSlide" style={style}>
-          <a href="#" className="btn btn-small btn-inverse close-view" onClick={this.props.onClose}><i className="icon-remove-sign"></i> Close</a>
-          <div className="content">
-            <ContentView {...props} />
-          </div>  
-        </div>
-      );
+      return <div className="pageslide left show" ref="pageSlide" style={style}>
+                <a href="#" className="btn btn-small btn-inverse close-view" onClick={this.props.onClose}><i className="icon-remove-sign"></i> Close</a>
+                <div className="content">
+                  <ContentView {...props} />
+                </div>  
+              </div>
+      ;
     }
   });
   

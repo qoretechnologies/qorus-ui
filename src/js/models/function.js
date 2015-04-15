@@ -11,7 +11,8 @@ define(function (require) {
     dateAttributes: ['created', 'modified'],
 
     defaults: {
-      type: 'function'
+      type: 'function',
+      patch: 'null'
     },
     
     initialize: function (opts) {
@@ -21,10 +22,6 @@ define(function (require) {
       }
       
       Model.__super__.initialize.call(this, opts);
-    },
-    
-    defaults: {
-      patch: null
     },
     
     parse: function (response, options) {

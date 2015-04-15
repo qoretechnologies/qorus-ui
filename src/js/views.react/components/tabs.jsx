@@ -4,102 +4,103 @@ define(function (require) {
       slugify  = require('qorus/helpers').slugify,
       Actions  = require('views.react/actions/tabs'),
       Store    = require('views.react/stores/tabs'),
-      cloneWithProps = React.addons.cloneWithProps,
-      TabsView = {};
-      
-  var RefluxMixin = {
-    componentDidMount: function () {
-      this.unsubscribe = this.props.store.listen(this.onStoreUpdate);
+      cloneWithProps = React.addons.cloneWithProps;
+  
+  var NavItem = React.createClass({
+    getInitialState: function () {
+      var props = this.props;
+      return {
+        active: props.idx == props.active_index
+      };
     },
     
-    componentWillUnmount: function () {
-      this.unsubscribe();
-    },
-    
-    onStoreUpdate: function () {
-      var state = this.state.active;
+    componentWillReceiveProps: function (nextProps) {
+      var wasActive = this.props.idx == this.props.active_index,
+          isActive  = nextProps.idx == nextProps.active_index;
       
-      if (state != this.isActive()) {
-        this.setState({ active: !state });
+      if (wasActive != isActive) {
+        this.setState({
+          active: isActive
+        });
       }
     },
   
-    isActive: function () {
-      return (this.props.idx == this.props.store.state.active_index);
-    }
-  };
-  
-  TabsView.NavItem = React.createClass({
-    mixins: [RefluxMixin],
-    getInitialState: function () {
-      return {
-        active: this.isActive()
-      };
-    },
-    
-    componentDidMount: function () {
-      $(this.getDOMNode()).on('click.tab', 'a', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-/*        $(e.currentTarget).tab('show');*/
-        this.props.actions.tabChange(this.props.idx);        
-      }.bind(this));
-    },
-    
-    componentWillUnmount: function () {
-      $(this.getDOMNode()).off('click.tab');
-    },
-
-    render: function () {
-      var target = '#' + this.props.slug;
-      return (
-        <li className={React.addons.classSet({ active: this.isActive() })} >
-          <a href={this.props.slug} data-target={target}>{ this.props.name }</a>
-        </li>
-      );
-    }
-  });
-
-  TabsView.TabPane = React.createClass({
-    mixins: [RefluxMixin],
-    getInitialState: function () {
-      return {
-        active: this.isActive()
-      };
-    },
-  
-    render: function () {
-      var props = this.props,
-          children = cloneWithProps(this.props.children, _.pick(this.props, ['idx', 'store', 'actions']));
+    shouldComponentUpdate: function  (nextProps, nextState) {
+      var props = _.omit(this.props, 'active_index'),
+          nProps = _.omit(nextProps, 'active_index');
       
-      return (
-        <div id={this.props.slug} className={ React.addons.classSet({ 'tab-pane': true, active: this.isActive() }) }>
-          { children }
-        </div>
-      );
+      return (props !== nProps || this.state !== nextState);
+    },
+  
+    tabChange: function (e) {
+      e.preventDefault();
+      this.props.tabChange(this.props.idx);
+    },
+    
+    render: function () {
+      var target = '#' + this.props.slug,
+          active = this.state.active;
+
+      return  <li className={React.addons.classSet({ active: active })} >
+                <a data-target={target} onClick={ this.tabChange }>{ this.props.name }</a>
+              </li>;
+    }
+  });
+
+  var TabPane = React.createClass({
+    getInitialState: function () {
+      var props = this.props;
+      return {
+        active: props.idx == props.active_index
+      };
+    },
+    
+    componentWillReceiveProps: function (nextProps) {
+      var wasActive = this.props.idx == this.props.active_index,
+          isActive  = nextProps.idx == nextProps.active_index;
+      
+      if (wasActive != isActive) {
+        this.setState({
+          active: isActive
+        });
+      }
+    },
+  
+    shouldComponentUpdate: function  (nextProps, nextState) {
+      var props = _.omit(this.props, 'active_index'),
+          nProps = _.omit(nextProps, 'active_index');
+      
+      return (props !== nProps || this.state !== nextState);
+    },
+    
+    render: function () {
+      var props     = this.props,
+          children  = cloneWithProps(this.props.children, _.pick(this.props, ['idx', 'store', 'actions'])),
+          active    = this.state.active;
+      
+      return <div id={this.props.slug} className={ React.addons.classSet({ 'tab-pane': true, active: active }) }>
+               { children }
+             </div>;
     }
   });
   
-  TabsView.Tab = TabsView.TabPane;
-  
-  TabsView.TabsView = React.createClass({
+  var TabsView = React.createClass({
     getInitialState: function () {
-      var actions = Actions();
       return {
-        store: Store(actions),
-        actions: actions
+        active_index: 0
+      };
+    },
+    
+    getDefaultProps: function () {
+      return {
+        cssClass: "nav nav-tabs"  
       };
     },
    
-    getDefaultProps: function () {
-      return {
-        cssClass: "nav nav-tabs"
-      };
-    },
-    
-    propTypes: {
-      actions: React.PropTypes.object,
-      store: React.PropTypes.object
+    onTabChange: function (idx) {
+      this.setState({
+        active_index: idx
+      });
     },
   
     render: function () {
@@ -110,23 +111,26 @@ define(function (require) {
 
       this.props.children.forEach(function (tab) {
         var slug = slugify(tab.props.name);
-        navigation["nav-"+slug] = <TabsView.NavItem {...props} slug={slug} name={tab.props.name} idx={ ctr } />;
-        tabs["tab"+slug] = <TabsView.TabPane {...props} slug={slug} idx={ ctr }>{ tab.props.children }</TabsView.TabPane>;
+        navigation["nav-"+slug] = <NavItem {...props} slug={slug} name={tab.props.name} idx={ ctr } tabChange={ this.onTabChange } />;
+        tabs["tab"+slug] = <TabPane {...props} slug={slug} idx={ ctr }>{ tab.props.children }</TabPane>;
         ctr++;
       }.bind(this));
       
-      return (
-        <div>
-          <ul className={this.props.className||this.props.cssClass}>
-            { React.addons.createFragment(navigation) }
-          </ul>
-          <div className="tab-content">
-            { React.addons.createFragment(tabs) }
-          </div>
-        </div>
-      );
+      return  <div>
+                <ul className={this.props.className||this.props.cssClass}>
+                  { React.addons.createFragment(navigation) }
+                </ul>
+                <div className="tab-content">
+                  { React.addons.createFragment(tabs) }
+                </div>
+              </div>;
     }
   });
   
-  return TabsView;
+  return {
+    NavItem: NavItem,
+    Tab: TabPane,
+    TabPane: TabPane,
+    TabsView: TabsView
+  };
 });

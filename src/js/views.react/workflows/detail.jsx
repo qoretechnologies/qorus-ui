@@ -77,9 +77,9 @@ define(function (require) {
 
   var ErrorCell = React.createClass({
     render: function () {
-      var model = this.props.model.toJSON();
-
-      return <span>{ model.error }<span className="tooltip hide">{ model.description }</span></span>;
+      var model = this.props.model;
+    
+      return <span>{ model.get('error') }<span className="tooltip hide">{ model.get('description') }</span></span>;
     }
   });
 
@@ -438,6 +438,11 @@ define(function (require) {
           global  = new Filtered(GlobalErrors),
           self    = this;
 
+      if (this.state && this.state.global_collection) {
+        this.state.global_collection.stopListening();
+        this.state.global_collection.off();
+      }
+
       global.listenTo(errors, 'sync add remove', function (model, response) {
         var filterError = [];
 
@@ -593,9 +598,6 @@ define(function (require) {
             </Tab>,
             <Tab name="Log">
               <LogViewContainer model={ model } name="log" />
-            </Tab>,
-            <Tab name="Errors">
-              <ErrorsContainer model={ model } modelId={ model.id } />
             </Tab>
           ],
           omit =  ['options', 'lib', 'stepmap', 

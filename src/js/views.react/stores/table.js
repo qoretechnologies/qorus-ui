@@ -96,7 +96,7 @@ define(function (require) {
        * @returns {boolean}
        */          
       isRowClicked: function (id) {
-        return this.state.model && (this.state.model === id);
+        return this.state.model ? (this.state.model === id) : false;
       },
       
       /**

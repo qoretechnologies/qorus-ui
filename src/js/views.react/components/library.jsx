@@ -2,6 +2,7 @@ define(function (require) {
   var React      = require('react'),
       Reflux     = require('reflux'),
       _          = require('underscore'),
+      TabsView    = require('jsx!views.react/components/tabs').TabsView,
       TabPane    = require('jsx!views.react/components/tabs').TabPane,
       NavItem    = require('jsx!views.react/components/tabs').NavItem,
       slugify    = require('qorus/helpers').slugify,
@@ -9,11 +10,11 @@ define(function (require) {
       Actions    = require('views.react/actions/tabs'),
       Store      = require('views.react/stores/tabs'),
       ModelRenderMixin = require('views.react/mixins/modelrender'),
-      LibraryView, Tabs, Navigation;
+      Tabs;
 
   require('react.backbone');
 
-  Navigation = React.createClass({
+  var Navigation = React.createClass({
     render: function () {
       var props = this.props, groups = [], model_groups = props.model.get('lib');
       
@@ -67,25 +68,21 @@ define(function (require) {
     }
   });
 
-  LibraryView = React.createBackboneClass({
-/*    mixins: [ModelRenderMixin],*/
+  var LibraryView = React.createBackboneClass({
     getInitialState: function () {
-      var actions = Actions();
-      return  {
-        store: Store(actions),
-        actions: actions
+      return {
+        active_index: 0
       };
     },
     
-    componentWillReceiveProps: function () {
-      this.state.actions.reset();
+    onTabChange: function (idx) {
+      this.setState({ active_index: idx });
     },
-        
-    render: function () {
+    
+    render: function() {
       var ctr     = 0,
           props   = this.props,
-          store   = this.state.store,
-          actions = this.state.actions,
+          state   = this.state,
           groups  = props.model.get('lib'),
           panes   = [];
       
@@ -96,11 +93,9 @@ define(function (require) {
           _.each(group, function (g) {
           
             var p = _.extend({}, props, {
-              store: store,
-              actions: actions,
               slug: slugify(g.name),
-              idx: ctr
-            });
+              idx: ctr,
+            }, state);
 
             plist.push(<TabPane {...p} key={ g.name }><CodeView code={ g.body } /></TabPane>);
             ctr++;
@@ -113,7 +108,7 @@ define(function (require) {
       return (
         <div>
           <div className="well span3 library-navigation">
-            <Navigation model={ props.model } store={ store } actions={ actions } onTabChange={ this.onTabChange } />
+            <Navigation model={ props.model } active_index={ this.state.active_index } tabChange={ this.onTabChange } />
           </div>
           <div className="span9 tab-content library-content">
             { _.flatten(panes) }

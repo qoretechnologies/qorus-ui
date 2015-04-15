@@ -26,18 +26,18 @@ define(function (require) {
     },
   
     render: function () {
-      var model = this.props.model.toJSON();      
+      var model = this.props.model;      
       var cx = React.addons.classSet;
       var classes = cx({
         'label': true,
         'autostart-change': true,
-        'label-success': (model.autostart == model.exec_count && model.autostart > 0),
+        'label-success': (model.get('autostart') == model.get('exec_count') && model.get('autostart') > 0),
       });
       
       return (
         <div className="autostart btn-controls">
           <a className="label" onClick={this.decAutostart}><i className="icon-minus"></i></a>
-          <a className={ classes } title="Click to edit" data-toggle="tooltip">{ model.autostart }</a>
+          <a className={ classes } title="Click to edit" data-toggle="tooltip">{ model.get('autostart') }</a>
           <a className="label" onClick={this.incAutostart}><i className="icon-plus"></i></a>
         </div>
       );

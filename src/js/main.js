@@ -41,7 +41,8 @@ require.config({
     'js-md5': '../components/js-md5/js/md5',
     Rainbow: '../components/Rainbow/rainbow',
     'spark-md5': '../components/spark-md5/spark-md5',
-    classnames: '../components/classnames/index'
+    classnames: '../components/classnames/index',
+    'deep-diff': '../components/deep-diff/index'
   },
   shim: {
     backbone: {
