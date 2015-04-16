@@ -27,7 +27,7 @@ define(function (require) {
     highlight: function () {
       if (this.props.code && !this.state.highlighted) {
           _.defer(function Highlight() {
-            if (this.isMounted()) {
+            if (this.isMounted() && this.props.code) {
               code = Prism.highlight(this.props.code, Prism.languages.qore);
               $(this.getDOMNode()).find('code').html(code);
               this.setState({ highlighted: true, code: code });

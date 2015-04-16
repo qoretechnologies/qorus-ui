@@ -33,7 +33,9 @@ define(function (require, exports, module) {
     },
     
     componentWillUnmount: function () {
-      this._resizable.resizable('destroy');
+      if (this._resizable) {
+        this._resizable.resizable('destroy');
+      }
     },
   
     render: function () {

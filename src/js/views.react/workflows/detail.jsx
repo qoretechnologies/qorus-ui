@@ -586,20 +586,20 @@ define(function (require) {
       var actions = Actions(),
           store   = Store(actions),
           model   = this.props.model,
-          tabs = [
-            <Tab name="Detail">
+          tabs = {
+            detail: <Tab name="Detail">
               <InfoView model={ model } />
             </Tab>,
-            <Tab name="Library">
+            library: <Tab name="Library">
               <LibraryViewContainer model={ model } />
             </Tab>,
-            <Tab name="Steps">
+            steps: <Tab name="Steps">
               <DiagramView model={ model } />
             </Tab>,
-            <Tab name="Log">
+            log: <Tab name="Log">
               <LogViewContainer model={ model } name="log" />
             </Tab>
-          ],
+          },
           omit =  ['options', 'lib', 'stepmap', 
                    'segment', 'steps', 'stepseg', 
                    'stepinfo', 'wffuncs', 'groups',
@@ -612,18 +612,14 @@ define(function (require) {
           
 
       if (model.get('has_alerts')) {
-        tabs.push(
-          <Tab name="Alerts">
-            <AlertsTable model={ model } />
-          </Tab>
-        );
+        tabs.alerts =  <Tab name="Alerts">
+                          <AlertsTable model={ model } />
+                        </Tab>;
       }
 
-      tabs.push(
-        <Tab name="Info">
-          <MetaTable data={ _.omit(model.toJSON(), omit) } />
-        </Tab>
-      );
+      tabs.info = <Tab name="Info">
+                    <MetaTable data={ _.omit(model.toJSON(), omit) } />
+                  </Tab>;
 
       return (
         <div className="heading">
@@ -631,7 +627,7 @@ define(function (require) {
             <h3 className="pull-left"><span className="selectable">{ this.props.model.get('name') }</span> <small>{ this.props.model.get('version') }</small></h3>
             <div className="controls"><ControlsView model={ this.props.model } /> <AutostartView model={ this.props.model } /></div>
             <TabsView store={ store } actions={ actions }>
-            { tabs }
+            { React.addons.createFragment(tabs) }
             </TabsView>
           </div>
         </div>

@@ -58,17 +58,18 @@ define(function (require) {
     
       children.forEach(function (col, indx) {
         var child = col.props.children,
-            clone = cloneWithProps(child, { model: row, displayName: 'Clone' }),
-            props = child.props,
+            clone = child ? cloneWithProps(child, { model: row, displayName: 'Clone' }) : null,
+            props = child ? child.props : col.props,
             tRow;
 
-        if (col.props.cellView) {
-          tRow = <col.props.cellView {...props} key={ indx } model={ row }>{ clone }</col.props.cellView>;
-        }
 
-        tRow = <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
+        if (col.props.cellView) {
+          tRow = <col.props.cellView {...props} model={ row }>{ clone }</col.props.cellView>;
+        } else {
+          tRow = <TdComponent {...props} model={ row } key={ indx }>{ clone }</TdComponent>;
+        }
         
-        cols[indx] = tRow;
+        cols['col-'+indx] = tRow;
       }, this);
 
 
@@ -132,7 +133,7 @@ define(function (require) {
     render: function () {
       return <thead className={ React.addons.classSet({ header: this.props.fixed })}>
                <tr>
-                 { this.props.columns }
+                 { this.props.children }
                </tr>
              </thead>;
     }
@@ -174,9 +175,11 @@ define(function (require) {
       rows = this.renderRows();
       
       return <table className={ this.props.cssClass || this.props.className } style={ style }>
-               <THeadView columns={ header_columns } fixed={ this.props.fixed } />
+               <THeadView fixed={ this.props.fixed }>
+                { React.addons.createFragment(header_columns) }
+               </THeadView>
                <tbody>
-                 { rows }
+                 { React.addons.createFragment(rows) }
                </tbody>
              </table>;
     },
@@ -197,9 +200,13 @@ define(function (require) {
             DefaultRowView  = this.props.rowView || RowView,
             tableProps      = _.omit(props, 'children'),
             isBackbone      = collection instanceof Backbone.Collection,
-            rows = {};
+            rows = null;
 
         _.each(collection, function (row, idx) {
+          if (!rows) {
+            rows = {};
+          }
+        
           row = isBackbone ? collection.at(idx) : row;
           
           var DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
@@ -207,34 +214,37 @@ define(function (require) {
               key            = isBackbone ? row.id : idx;
 
           rows['row'+key] =  <DefaultRowView 
-                         model={ row } 
-                         rowClick={props.rowClick} 
-                         clicked={ clicked }>
-                          { children }
-                       </DefaultRowView>;
+                               model={ row } 
+                               rowClick={props.rowClick} 
+                               clicked={ clicked }>
+                                { children }
+                             </DefaultRowView>;
         });      
 
-      return React.addons.createFragment(rows);
+      return rows;
     },
         
     renderHeader: function () {
-      var header_columns, 
+      var header, 
           children = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           tprops   = this.props;
 
-      header_columns = children.map(function (child, idx) {
+      React.Children.forEach(children, function (child, idx) {
         var props     = _.pick(child.props, ['className', 'dataSort']),
             orderKey  = tprops.orderKey || tprops.collection.sort_key,
             order     = tprops.order || tprops.collection.sort_order;
+            
+        if (!header) header = {};
 
         if (orderKey == props.dataSort) {
           props.className = [props.className, 'sort', 'sort-'+ order].join(' ');
         }
 
-        return <th {...props} key={ idx } data-sort={child.props.dataSort} onClick={ tprops.sortClick ? tprops.sortClick.bind(null, props.dataSort, null) : _.noop }>{ child.props.name }</th>;
+        header['th-'+idx] = <th {...props} key={ idx } data-sort={child.props.dataSort} 
+          onClick={ tprops.sortClick ? tprops.sortClick.bind(null, props.dataSort, null) : _.noop }>{ child.props.name }</th>;
       });  
       
-      return header_columns;
+      return header;
     }
   });
   
@@ -245,7 +255,7 @@ define(function (require) {
     },
     
     render: function () {
-      return <span>{ this.props.model.get(this.props.dataKey) }</span>;
+      return <span>{ _.result(this.props.model, this.props.dataKey, 'N/A') }</span>;
     }
   });
   

@@ -59,10 +59,16 @@ define(function (require) {
         });      
       }
 
+      var groups_obj = {};
+      
+      _.each(groups, function (g,idx) {
+        groups_obj['g-'+idx] = g;
+      });
+      
     
       return (
           <ul className="nav nav-list break-word">
-            { groups }
+            { React.addons.createFragment(groups_obj) }
           </ul>
       );
     }
@@ -80,11 +86,12 @@ define(function (require) {
     },
     
     render: function() {
-      var ctr     = 0,
-          props   = this.props,
-          state   = this.state,
-          groups  = props.model.get('lib'),
-          panes   = [];
+      var ctr         = 0,
+          props       = this.props,
+          state       = this.state,
+          groups      = props.model.get('lib'),
+          panes       = [],
+          panes_dict  = {};
       
       if (groups) {
         panes = _.map(groups, function (group) {
@@ -104,6 +111,12 @@ define(function (require) {
           return plist;
         });
       }
+      
+      panes = _.flatten(panes);
+      
+      _.each(panes, function (pane, idx) {
+        panes_dict['pane-'+idx] = pane;
+      });
     
       return (
         <div>
@@ -111,7 +124,7 @@ define(function (require) {
             <Navigation model={ props.model } active_index={ this.state.active_index } tabChange={ this.onTabChange } />
           </div>
           <div className="span9 tab-content library-content">
-            { _.flatten(panes) }
+            { React.addons.createFragment(panes_dict) }
           </div>
         </div>
       );

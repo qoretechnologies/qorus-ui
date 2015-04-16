@@ -109,7 +109,7 @@ define(function (require) {
       
       props = _.extend({}, props, this.state);
 
-      this.props.children.forEach(function (tab) {
+      React.Children.forEach(this.props.children, function (tab, idx) {
         var slug = slugify(tab.props.name);
         navigation["nav-"+slug] = <NavItem {...props} slug={slug} name={tab.props.name} idx={ ctr } tabChange={ this.onTabChange } />;
         tabs["tab"+slug] = <TabPane {...props} slug={slug} idx={ ctr }>{ tab.props.children }</TabPane>;

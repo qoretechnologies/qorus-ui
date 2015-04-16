@@ -83,7 +83,7 @@ define(function (require) {
     },
     
     getModel: function () {
-      return this.props.children.props.model;
+      return this.props.model;
     },
     
     render: function () {
@@ -99,7 +99,7 @@ define(function (require) {
       } else {
         view = <span>{ this.state.value || 'not set' }</span>;
       }
-    
+
       return (
         <td {...this.props} className={ cls } onClick={ this.onClick } style={ style }>{ view }</td>
       );

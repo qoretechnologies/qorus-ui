@@ -53,7 +53,7 @@ define(function (require) {
               <Col name="Options">
                 <DescView className="name" />
               </Col>
-              <Col name="Value" cellView={ EditableCell }>
+              <Col name="Value" cellView={ EditableCell } model={ this.props.model }>
                 <Col _model={ this.props.model } />
               </Col>
             </TableView>
