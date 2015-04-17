@@ -1,10 +1,11 @@
 define(function (require, exports, module) {
-  var React   = require('react'),
-      Reflux  = require('reflux'),
-      _       = require('underscore'),
-      $       = require('jquery'),
-      Actions = require('views.react/actions/modal'),
-      utils   = require('utils'),
+  var React     = require('react'),
+      Reflux    = require('reflux'),
+      _         = require('underscore'),
+      $         = require('jquery'),
+      Actions   = require('views.react/actions/modal'),
+      utils     = require('utils'),
+      isElement = React.addons.TestUtils.isElement,
       ModalView, HeaderView, FooterView, BackdropView;
   
   var FadeMixin = {
@@ -261,5 +262,9 @@ define(function (require, exports, module) {
 
   module.exports = ModalView;
 
-  return ModalView;
+  return {
+    ModalView: ModalView,
+    HeaderView: HeaderView,
+    FooterView: FooterView
+  };
 });

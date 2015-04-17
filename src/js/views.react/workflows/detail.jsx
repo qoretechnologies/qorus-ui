@@ -20,7 +20,7 @@ define(function (require) {
       LogView           = require('jsx!views.react/components/log'),
       StatusIcon        = require('jsx!views.react/components/statusicon'),
       Controls          = require('jsx!views.react/components/controls').ControlsView,
-      ModalView         = require('jsx!views.react/components/modal'),
+      ModalView         = require('jsx!views.react/components/modal').ModalView,
       ModelForm         = require('jsx!views.react/components/form').ModelForm,
       MetaTable         = require('jsx!views.react/components/metatable'),
 

@@ -6,30 +6,35 @@ define(function (require) {
       React         = require('react'),
       utils         = require('utils'),
       slugify       = require('qorus/helpers').slugify,
-      ModalView     = require('jsx!views.react/components/modal'),
+      ModalView     = require('jsx!views.react/components/modal').ModalView,
+      HeaderView    = require('jsx!views.react/components/modal').HeaderView,
       Svg           = require('jsx!views.react/components/svg'),
       CodeView      = require('jsx!views.react/components/code'),
       LoaderView    = require('jsx!views.react/components/loader'),
       TabsView      = require('jsx!views.react/components/tabs').TabsView,
       TabPane       = require('jsx!views.react/components/tabs').TabPane,
       MetaTableView = require('jsx!views.react/components/metatable'),
+      Name          = require('jsx!views.react/components/normname'),
       Step          = require('models/step'),
-      Diagram, ContentView, FunctionView;
+      Func          = require('models/function'),
+      Title, Diagram, ContentView, FunctionView;
 
   FunctionView = React.createClass({
     render: function () {
-      var meta = _.omit(this.props.func, ['body']);
+      var func      = new Func(this.props.func),
+          meta      = _.omit(func.toJSON(), ['body', 'type']),
+          code_meta = _.extend({}, { 'function': func.getNormalizedName() }, _.pick(meta, ['description', 'source']));
     
       return (
         <div className="step-function">
           <TabsView className="nav nav-pills">
             <TabPane name="Code">
               <div className="step-source">
-                <MetaTableView data={ _.pick(meta, ['version', 'description', 'source'])} />
-                <CodeView code={ this.props.func.body } />
+                <MetaTableView data={ code_meta } />
+                <CodeView code={ func.get('body') } />
               </div>
             </TabPane>
-            <TabPane name="Meta">
+            <TabPane name="Function Info">
               <MetaTableView data={ meta } />
             </TabPane>
           </TabsView>
@@ -45,6 +50,8 @@ define(function (require) {
           tabs      = [],
           functions = model.get('functions'),
           step      = _.omit(model.toJSON(), 'functions');
+          
+          console.log(model);
 
       if (functions) {
         _.each(functions, function (f) {
@@ -56,7 +63,7 @@ define(function (require) {
         });
         
         tabs.push(
-          <TabPane name="Info">
+          <TabPane name="Step info">
             <MetaTableView data={ step } />
           </TabPane>
         );
@@ -69,6 +76,14 @@ define(function (require) {
         { body }
         </div>
       );
+    }
+  });
+  
+  Title = React.createBackboneClass({
+    render: function () {
+      var model = this.props.model;
+      
+      return <span><Name obj={ this.props.model } /> <span className="label">{ model.get('steptype') }</span></span>;
     }
   });
 
@@ -190,7 +205,8 @@ define(function (require) {
     
     showModal: function (step) {
       var model = new Step({ stepid: step.id }).fetch();
-      var modal = <ModalView title={ step.name }><ContentView model={ model } /></ModalView>;
+      var normName = <Title model={ model } />;
+      var modal = <ModalView><HeaderView title={ normName } /><ContentView model={ model } /></ModalView>;
       var el = $('<div class="modal-container" />').appendTo('body');
       React.render(modal, el[0]);
     }

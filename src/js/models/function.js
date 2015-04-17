@@ -12,7 +12,7 @@ define(function (require) {
 
     defaults: {
       type: 'function',
-      patch: 'null'
+      patch: null
     },
     
     initialize: function (opts) {

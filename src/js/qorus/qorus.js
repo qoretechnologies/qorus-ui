@@ -212,6 +212,16 @@ define(function (require) {
     },
     getName: function () {
       return this.get(this.nameAttribute);
+    },
+    getVersionPatch: function () {
+      if (!this.get('patch')) {
+        return sprintf('v%s', this.get('version'));
+      } else {
+        return sprintf('v%s.%s', this.get('version'), this.get('patch'));
+      }
+    },
+    getNormalizedName: function () {
+      return sprintf('%s %s (%s)', this.getName(), this.getVersionPatch(), this.id);
     }
   });
 

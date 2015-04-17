@@ -39,7 +39,7 @@ define(function(require) {
     },
     
     getFullname: function () {
-      var name = sprintf("%s v%s", this.get('name'). this.get('version'));
+      var name = sprintf("%s v%s", this.get('name'), this.get('version'));
       
       if (this.get('patch')) {
         name += "." + this.get('patch');
