@@ -313,7 +313,15 @@ define(function (require) {
         csv += "\n";
       });
       
-      return csv.trim();
+      if (!opts.export) {
+        return csv.trim();  
+      } else {
+        return 'data:application/csv;base64,' + utils.utf8ToB64(csv.trim());
+      }
+    },
+      
+    utf8ToB64: function (str) {
+      return window.btoa(unescape(encodeURIComponent(str)));
     },
     
     hash: function (obj) {
