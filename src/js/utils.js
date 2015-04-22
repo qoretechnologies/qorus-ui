@@ -176,43 +176,7 @@ define(function (require) {
       
       return equery.join('&');
     },
-    
-//    flattenObj: function (obj, path, level, result) {
-//      level = level || 0;
-//      path = path || "/";
-//      result = result || [];
-//      var ctr = 1;
-//  
-//      _.each(obj, function (val, key) {
-//        var wal;
-//        if (_.isObject(val)) {
-//          wal = {
-//            key: key,
-//            value: "",
-//            path: path,
-//            level: level,
-//            node: true,
-//            leaf: false
-//          };
-//          result.push(wal);
-//          this.flattenObj(val, path + key + "/", level+1, result);
-//        } else {
-//          wal = {
-//            key: key,
-//            value: val,
-//            path: path,
-//            level: level,
-//            node: false,
-//            leaf: (_.keys(obj).length == ctr)
-//          };
-//          result.push(wal);
-//        }
-//        ctr++;
-//      }, this);
-//  
-//      return result;
-//    },
-//  
+ 
     spaceToLevel: function (str) {
       var len = str.search(/[^\s]/);
       
@@ -281,11 +245,33 @@ define(function (require) {
       return obj.match(test);
     },
     
+    /**
+      Returns CSV string/base64 data of html table
+      @param {Object} options - Export options
+      @param {string} options.el - Name of table element
+      @param {Boolean} [options.export] - True if you want outuput in data uri format
+      @param {Array} [options.ignore] - Indexes of columns which ignore in export
+      @param {string} [options.separator=";"] - CSV separator
+      @param {string} [options.newline="\n"] - CSV newline separator
+      @returns {string}
+      
+      @example
+      function exportCSV(e) {
+        var el    = $(e.currentTarget),
+            table = el.data('table');
+              
+        el.href = utils.tableToCSV({ el: table, export: true });
+        return true;
+      }
+      
+      <a download="file.csv" onClick="export()" table="#export-table}>Export CSV</a>
+    */
     tableToCSV: function (opts) {
       if (!opts && !opts.el) return 'Options or element not specified';
       var $el       = $(opts.el),
           ignore    = (opts.ignore) ? _(opts.ignore).clone().map(function (ig) { return ":eq("+ig+")"; }).join() : '',
           separator = opts.separator || ';',
+          newline   = opts.newline || "\n",
           csv       = '';
       
       // create header
@@ -296,7 +282,7 @@ define(function (require) {
           return $(el).text().trim();
         }).get().join(separator);        
       }
-      csv += "\n";
+      csv += newline;
       
       // process rows
       $el.find('tbody tr:visible').each(function () {
@@ -319,7 +305,12 @@ define(function (require) {
         return 'data:application/csv;base64,' + utils.utf8ToB64(csv.trim());
       }
     },
-      
+    
+    /**
+      Returns base64 encoded string
+      @param {string}
+      @returns {string}
+    */
     utf8ToB64: function (str) {
       return window.btoa(unescape(encodeURIComponent(str)));
     },
