@@ -46,8 +46,6 @@ define(function (require) {
       var props = _.omit(this.props, ['children']);
       var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
       
-/*      console.log(should, props.hash !== nextProps.hash, props.idx, nextProps.idx);*/
-      
       return should;
     },
     
@@ -199,7 +197,7 @@ define(function (require) {
             props           = this.props,
             DefaultRowView  = this.props.rowView || RowView,
             tableProps      = _.omit(props, 'children'),
-            isBackbone      = collection instanceof Backbone.Collection,
+            isBackbone      = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
             rows = null;
 
         _.each(collection, function (row, idx) {
@@ -254,8 +252,21 @@ define(function (require) {
       dataKey: PropTypes.string.isRequired
     },
     
+    getValue: function () {
+      var model = this.props.model,
+          key = this.props.dataKey;
+          
+      if (model instanceof Backbone.Model) {
+        return model.get(key, 'N/A');
+      } else {
+        return _.result(model, key, 'N/A');
+      }
+    },
+    
     render: function () {
-      return <span>{ _.result(this.props.model, this.props.dataKey, 'N/A') }</span>;
+      var value = this.getValue();
+      
+      return <span>{ value }</span>;
     }
   });
   

@@ -79,7 +79,11 @@ define(function (require) {
     render: function () {
       var model = this.props.model;
     
-      return <span>{ model.get('error') }<span className="tooltip hide">{ model.get('description') }</span></span>;
+      if (model) {
+        return <span>{ model.get('error') }<span className="tooltip hide">{ model.get('description') }</span></span>;
+      } else {
+        return <span />;
+      }
     }
   });
 
@@ -264,12 +268,12 @@ define(function (require) {
   });
 
   var ErrorsTable = React.createBackboneClass({
-    mixins: [React.BackboneMixin('collection', 'sync change reset filtered:add filtered:remove filtered:reset')],
     getInitialState: function () {
       return {
         fetched: this.props.collection.size() > 0,
         search_text: '',
-        size: this.props.collection.size()
+        size: this.props.collection.size(),
+        excludes: this.props.excludes
       };
     },
 
@@ -293,9 +297,12 @@ define(function (require) {
       }
     },
 
-    componentWillReceiveProps: function () {
-      var fetched = this.props.collection instanceof Backbone.Collection ? false : true;
-      this.setState({ fetched: fetched });
+    componentWillReceiveProps: function (nextProps) {
+      this.setState({ 
+        fetched: nextProps.collection.size(),
+        excludes: nextProps.excludes
+      });
+      
       this._fetch();
     },
 
@@ -321,12 +328,18 @@ define(function (require) {
     },
 
     render: function () {
-      var col     = new Filtered(this.props.collection),
-          search  = this.state.search_text;
+      var col     = this.props.collection,
+          search  = this.state.search_text,
+          excludes = this.state.excludes,
+          filtered = col;
 
-      if (search) {
-        col.filterBy(function (m) {
-          return m.get('error').toLowerCase().indexOf(search) !== -1;
+      if (search || this.state.excludes) {
+        filtered = col.filter(function (m) {
+          if (_.contains(excludes, m.get('error'))) {
+            return false;
+          }
+        
+          return  m.get('error').toLowerCase().indexOf(search) !== -1;
         });
       }
 
@@ -341,7 +354,7 @@ define(function (require) {
               </div>
             </form>
           </div>
-          <TableView collection={ col } collection_fetched={ this.state.fetched } className="table table-striped table-condensed">
+          <TableView collection={ filtered } collection_fetched={ this.state.fetched } className="table table-striped table-condensed">
             <Col name="Name" className="name">
               <ErrorCell className="name" />
             </Col>
@@ -432,36 +445,15 @@ define(function (require) {
       return this.getInitialCollections();
     },
 
-    // set initial collection maybe it would be better via store
     getInitialCollections: function (id) {
-      var errors = new ErrorsCollection([], { workflowid: id || this.props.modelId }),
-          global  = new Filtered(GlobalErrors),
-          self    = this;
+      var errors  = new ErrorsCollection([], { workflowid: id || this.props.modelId }),
+          global  = GlobalErrors;
 
-      if (this.state && this.state.global_collection) {
-        this.state.global_collection.stopListening();
-        this.state.global_collection.off();
+      if (this.state && this.state.errors_collection) {
+        this.state.errors_collection.off();
       }
 
-      global.listenTo(errors, 'sync add remove', function (model, response) {
-        var filterError = [];
-
-        if (model instanceof Backbone.Model) {
-          filterError.push(model.get('error'));
-        } else if (model instanceof Backbone.Collection) {
-          filterError = model.pluck('error');
-        }
-
-        _.each(filterError, function (err) {
-          this.filterBy(err, function (m) {
-            return err !== m.get('error');
-          });
-        }, this);
-      });
-
-      global.listenTo(errors, 'destroy remove', function (model) {
-        this.removeFilter(model.get('error'));
-      });
+      errors.on('add remove', function () { this.forceUpdate() }.bind(this));
 
       return {
         errors_collection: errors,
@@ -474,17 +466,18 @@ define(function (require) {
         this.setState(this.getInitialCollections(nextProps.modelId));
       }
     },
-
+    
     componentWillUnmount: function () {
-      this.state.global_collection.stopListening();
-      this.state.global_collection.off();
+      if (this.state.errors_collection) {
+        this.state.errors_collection.off();
+      }
     },
 
     render: function () {
       return (
         <div>
           <ErrorsTable collection={ this.state.errors_collection } name="Workflow definitions" modelId={this.props.model.id} />
-          <ErrorsTable collection={ this.state.global_collection } name="Global definitions" modelId={this.props.model.id} />
+          <ErrorsTable collection={ this.state.global_collection } name="Global definitions" modelId={this.props.model.id} excludes={ this.state.errors_collection.pluck('error') } />
           <ModalContainer collection={ this.state.errors_collection } modelId={this.props.model.id} />
         </div>
       );
@@ -493,6 +486,10 @@ define(function (require) {
 
   var LogViewContainer = React.createBackboneClass({
     mixins: [ViewHeightMixin, TabUpdateRefluxMixin],
+    
+    shouldComponentUpdate: function (nextProps, nextState) {
+      return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
+    },
 
     getInitialState: function () {
       return {
@@ -598,6 +595,9 @@ define(function (require) {
             </Tab>,
             log: <Tab name="Log">
               <LogViewContainer model={ model } name="log" />
+            </Tab>,
+            error: <Tab name="Errors">
+              <ErrorsContainer model={ model } modelId={ model.id } />
             </Tab>
           },
           omit =  ['options', 'lib', 'stepmap', 
