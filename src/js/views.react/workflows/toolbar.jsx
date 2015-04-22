@@ -4,6 +4,7 @@ define(function (require) {
       _           = require('underscore'),
       utils       = require('utils'),
       DatePicker  = require('jsx!views.react/components/datepicker'),
+      ExportCSV   = require('jsx!views.react/components/exportcsv'),
       moment      = require('moment');
   
   require('backbone');
@@ -168,7 +169,12 @@ define(function (require) {
             "toolbar-actions": true,
             hide: (this.props.store.state.checkedIds.length === 0)
           }),
-          actions = this.props.actions;
+          actions = this.props.actions,
+          csv_export = {
+            el: '#workflows table',
+            ignore: [0,1,4],
+            export: true
+          };
       
       
       return (
@@ -197,6 +203,9 @@ define(function (require) {
               <DateFilterView filters={ this.props.filters } handleSubmitData={ this.handleSubmitData } setDate={ this.setDate } />
               <div className="btn-group toolbar-filters">
                   <button className="btn" onClick={ this.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</button>
+              </div>
+              <div className="btn-group">
+                <ExportCSV table="#workflows table" opts={ csv_export } />
               </div>
               <div className="pull-right">
                 <SearchFormView filterText={this.props.filters.text} filterChange={this.props.filterChange}/>
