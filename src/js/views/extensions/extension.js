@@ -76,6 +76,10 @@ define(function (require) {
     catchClick: function (e) {
       var $target = $(e.currentTarget);
       
+      if ($target.attr('href').startsWith('data')) {
+        return true;
+      }
+      
       if ($target.attr('target')) {
         window.open($target.attr('href'), $target.attr('target'));
         e.stopPropagation();
