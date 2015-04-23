@@ -62,9 +62,9 @@ define(function (require) {
 
 
         if (col.props.cellView) {
-          tRow = <col.props.cellView {...props} model={ row }>{ clone }</col.props.cellView>;
+          tRow = <col.props.cellView {...props} model={ row } hash={ row.hash }>{ clone }</col.props.cellView>;
         } else {
-          tRow = <TdComponent {...props} model={ row } key={ indx }>{ clone }</TdComponent>;
+          tRow = <TdComponent {...props} model={ row } hash={ row.hash }>{ clone }</TdComponent>;
         }
         
         cols['col-'+indx] = tRow;

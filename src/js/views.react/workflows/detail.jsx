@@ -453,7 +453,7 @@ define(function (require) {
         this.state.errors_collection.off();
       }
 
-      errors.on('add remove', function () { this.forceUpdate() }.bind(this));
+      errors.on('add remove', function () { this.forceUpdate(); }.bind(this));
 
       return {
         errors_collection: errors,
