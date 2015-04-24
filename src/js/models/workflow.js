@@ -384,15 +384,14 @@ define(function (require) {
     
     setOption: function (option, value) {
       var req       = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
-          options   = this.get('options'),
-          opt       = _.find(options, { name: option });
+          options   = _.filter(this.get('options'), function (o) { return o.name != option; }) ;
       
-      if (opt.system && !value) {
-        opt.value = opt.sysvalue;
-      } else {
-        opt.value = value; 
+      if (value) {
+        options.push({ name: option, value: value }); 
       }
       
+      options = _.filter(options, function (o) { return o.value !== ''; });
+    
       this.set('options', options);
       
       return value;

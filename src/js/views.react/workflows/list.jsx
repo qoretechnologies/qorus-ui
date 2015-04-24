@@ -333,7 +333,7 @@ define(function (require) {
       tActions.setCollection(workflowsStore.getCollection());
       
       return {
-        hash: utils.hash(store.getCollection().toJSON()),
+        hash: utils.hash(store.getCollection()),
         collection_fetched: store.state.collection_fetched,
         error: store.state.error,
         filters: _.extend({}, store.state.filters),
@@ -353,7 +353,7 @@ define(function (require) {
     
     onStoreUpdate: function () {
       var state = _.extend({}, this.state, {          
-            hash: utils.hash(store.getCollection().toJSON()),
+            hash: utils.hash(store.getCollection()),
             collection_fetched: store.state.collection_fetched,
             error: store.state.error,
             filters: store.state.filters,

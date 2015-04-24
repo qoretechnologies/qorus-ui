@@ -5,7 +5,7 @@ define(function (require) {
     render: function () {
       return (
         <div>Service list - test</div>
-      )
+      );
     }
-  })
+  });
 });

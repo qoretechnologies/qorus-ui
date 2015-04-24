@@ -4,7 +4,7 @@ define(function (require) {
       
   return {
     shouldComponentUpdate: function (nextProps) {
-      return !_.isEqual(this.props.model.toJSON(), nextProps.model.toJSON());
+      return !_.isEqual(this.props.model.hash, nextProps.model.hash) || !nextProps.model.hash;
     }
   };
 });
