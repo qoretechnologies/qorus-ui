@@ -67,10 +67,13 @@ define(function (require) {
     },
   
     shouldComponentUpdate: function  (nextProps, nextState) {
-      var props = _.omit(this.props, 'active_index'),
-          nProps = _.omit(nextProps, 'active_index');
+      var props = _.pick(this.props, ['idx', 'slug']),
+          nProps = _.pick(this.props, ['idx', 'slug']),
+          should;
+          
+      should = (!_.isEqual(props, nProps) || !_.isEqual(this.state, nextState));
       
-      return (props !== nProps || this.state !== nextState);
+      return should;
     },
     
     render: function () {
