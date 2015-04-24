@@ -23,6 +23,7 @@ define(function (require) {
       ModalView         = require('jsx!views.react/components/modal').ModalView,
       ModelForm         = require('jsx!views.react/components/form').ModelForm,
       MetaTable         = require('jsx!views.react/components/metatable'),
+      MapperList        = require('jsx!views.react/components/mappers/list'),
 
       Actions           = require('views.react/actions/tabs'),
       Store             = require('views.react/stores/tabs'),
@@ -37,6 +38,7 @@ define(function (require) {
 
       ErrorModel        = require('models/error'),
 
+      MappersCollection = require('collections/mappers'),
       ErrorsCollection  = require('collections/errors'),
       GlobalErrors      = require('collections/errors-global'),
       Filtered          = require('backbone.filtered.collection'),
@@ -598,7 +600,8 @@ define(function (require) {
             </Tab>,
             error: <Tab name="Errors">
               <ErrorsContainer model={ model } modelId={ model.id } />
-            </Tab>
+            </Tab>,
+            mappers: <Tab name="Mappers"><MapperList mappers={ new MappersCollection(model.get('mappers')) } /></Tab>
           },
           omit =  ['options', 'lib', 'stepmap', 
                    'segment', 'steps', 'stepseg', 
@@ -608,18 +611,16 @@ define(function (require) {
                    
                    
           omit = omit.concat(_.pluck(ORDER_STATES, 'name'));
-                   
-          
 
+      tabs.info = <Tab name="Info">
+                    <MetaTable data={ _.omit(model.toJSON(), omit) } />
+                  </Tab>;
+                  
       if (model.get('has_alerts')) {
         tabs.alerts =  <Tab name="Alerts">
                           <AlertsTable model={ model } />
                         </Tab>;
       }
-
-      tabs.info = <Tab name="Info">
-                    <MetaTable data={ _.omit(model.toJSON(), omit) } />
-                  </Tab>;
 
       return (
         <div className="heading">

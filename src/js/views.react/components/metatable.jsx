@@ -8,11 +8,18 @@ define(function (require) {
     }
   });
   
+  function replacer(key, value) {
+    if (value) {
+      return value.replace('\"', '');
+    }
+  }
+  
   var MetaTableView = React.createClass({
     render: function () {
       var props = this.props.data,
           rows  = _.map(props, function (prop, idx) {
-            return (<tr key={ idx }><th>{ _.capitalize(idx) }</th><td>{ prop }</td></tr>);
+            var value = _.isObject(prop) ? <pre>{ JSON.stringify(prop, null, 4) }</pre> : prop;
+            return (<tr key={ idx }><th>{ _.capitalize(idx) }</th><td>{ value }</td></tr>);
           });
     
       return (
