@@ -89,8 +89,9 @@ define(function (require) {
 
   Diagram = React.createClass({
     onClick: function (e, step) {
-      // this.refs.modal.setState({ step: step, hide: false });
-      this.showModal(step);
+      if (step.id !== 0) {
+        this.showModal(step);
+      }
     },
   
     createDiagram: function () {
@@ -175,7 +176,7 @@ define(function (require) {
           var v = box.cy - bh/2 - pad;
           var path = sprintf("M%d,%d L%d,%d L%d,%d L%d,%d", box.cx, box.cy, box.cx, v, bl.cx, v, bl.cx, bl.cy);
 
-          s_paths.push(<Svg.Path d={path} stroke="#000" fill="none" key={   slugify(path) } />);
+          s_paths.push(<Svg.Path d={path} stroke="#000" fill="none" key={ slugify(path) } />);
         });
       });
       
