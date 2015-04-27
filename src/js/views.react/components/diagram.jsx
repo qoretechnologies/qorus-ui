@@ -50,8 +50,6 @@ define(function (require) {
           tabs      = [],
           functions = model.get('functions'),
           step      = _.omit(model.toJSON(), 'functions');
-          
-          console.log(model);
 
       if (functions) {
         _.each(functions, function (f) {
