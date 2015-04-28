@@ -1,75 +1,35 @@
 define(function (require) {
-  var React      = require('react'),
-      LoaderView = require('jsx!views.react/components/loader'),
-      Prism      = require('prism');
-
-  var Numbering = React.createClass({
-    render: function () {
-      var spans = [];
-    
-      if (this.props.lines > 0) {
-        for (var i=0; i<this.props.lines; i++) {
-          spans.push(<span key={i} />);
-        }
-      }
+  var $              = require('jquery'),
+      React          = require('react'),
+      LoaderView     = require('jsx!views.react/components/loader'),
+      Prism          = require('prism'),
+      PrismComponent = require('jsx!views.react/components/prism');
       
-        
-      return <div className="line-numbers-rows">{ spans }</div>;
-    }
-  });
-  
-  var CodeNumbered = React.createClass({
-    getLinesSize: function () {
-      if (!this.props._code) return 0;
-      return this.props._code.replace(/\n+$/, '').split('\n').length;
-    },
-    
-    render: function () {
-      return (
-        <code className={ this.props.className }><Numbering lines={ this.getLinesSize() } /><div dangerouslySetInnerHTML={{ __html: this.props.code }} /></code>
-      );
-    }
-  });
+  PrismComponent._.languages = Prism.languages;
 
   var CodeView = React.createClass({
     mixins: [React.addons.PureRenderMixin],
-    getInitialState: function () {
-      return {
-        highlighted: false,
-        code: this.props.code
-      };
-    },
-  
+    
     componentDidMount: function () {
-      this.highlight();
-    },
-    
-    componentDidUpdate: function () {
-      this.highlight();
-    },
-    
-    componentReceiveProps: function () {
-      this.highlight();
-    },
-    
-    highlight: function () {
-      if (this.props.code && !this.state.highlighted) {
-          _.defer(function Highlight() {
-            if (this.isMounted() && this.props.code) {
-              code = Prism.highlight(this.props.code, Prism.languages.qore);
-/*              $(this.getDOMNode()).find('code').html(code);*/
-              this.setState({ highlighted: true, code: code });
-            }
-          }.bind(this)
-        );  
+      var $el = $(this.getDOMNode()).find('div[class*="language-"]');
+      var html = $el.html();
+      if (html) {
+        var lines = html.split('\n');
+        var lines_html = [];
+
+        for (var i=0;i<=lines.length;i++) {
+          lines_html.push("<span class='line'>" + lines[i] + "</span>");
+        }
+
+        $el.html(lines_html.join('\n'));      
       }
     },
-    
+
     render: function () {
       var Code = <LoaderView />;
         
-      if (this.state.code) {
-        Code = <CodeNumbered className="language-qore" code={ this.state.code } _code={ this.props.code } />;
+      if (this.props.code) {
+        Code = <PrismComponent language="qore">{ this.props.code }</PrismComponent>;
       }
 
       return (

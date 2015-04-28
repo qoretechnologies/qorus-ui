@@ -67,13 +67,13 @@ define(function (require) {
     },
   
     shouldComponentUpdate: function  (nextProps, nextState) {
-      var props = _.pick(this.props, ['idx', 'slug']),
-          nProps = _.pick(this.props, ['idx', 'slug']),
+      var props = _.pick(this.props, ['idx', 'slug', 'children']),
+          nProps = _.pick(this.props, ['idx', 'slug', 'children']),
           should;
           
       should = (!_.isEqual(props, nProps) || !_.isEqual(this.state, nextState));
       
-      return should;
+      return true; //should;
     },
     
     render: function () {
