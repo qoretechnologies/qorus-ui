@@ -126,7 +126,8 @@ module.exports = function (grunt) {
           cssDest: 'src/css/components.min.css',
           exclude: ["fontawesome"],
           mainFiles: {
-            'prism': ['prism.js', 'themes/prism-okaidia.css']
+            'prism': ['prism.js', 'themes/prism-okaidia.css'],
+            'react-chartjs': ['react-chartjs.js']
           }
         }
       },

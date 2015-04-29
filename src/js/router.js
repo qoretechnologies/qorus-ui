@@ -34,6 +34,7 @@ define(function (require) {
 //      Filtered          = require('backbone.filtered.collection'),
       WorkflowListReact = React.createFactory(require('jsx!views.react/workflows/list.jsx')),
       ServiceListReact  = React.createFactory(require('jsx!views.react/services/list.jsx')),
+      Performance       = React.createFactory(require('jsx!views.react/performance/overview.jsx')),
       workflowsStore    = require('views.react/stores/workflows'),
       workflowsActions  = require('views.react/actions/workflows'),
       wTActions         = require('views.react/workflows/actions/table'),
@@ -128,6 +129,12 @@ define(function (require) {
       }
       
       React.render(WorkflowListReact(), document.getElementById('content'));
+      this.setView('react-component');
+    },
+    
+      
+    showPerformance: function () {
+      React.render(Performance(), document.getElementById('content'));
       this.setView('react-component');
     },
     

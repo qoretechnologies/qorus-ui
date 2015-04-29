@@ -2252,3 +2252,7 @@ a + a:before {
   overflow: auto;
   box-sizing: border-box;
 }
+
+pre[class|="language"] {
+  font-size: 10px;
+}

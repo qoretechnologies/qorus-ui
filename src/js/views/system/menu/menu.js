@@ -91,7 +91,7 @@ define(function (require) {
       if (item instanceof Backbone.View) {
         view = this.insertView(item, 'self');
       } else {
-        if (item.has('view')) {
+        if (_.result(item, 'view')) {
           itemView = item.get('view');
           item.set('view', null);
         } else {
@@ -184,7 +184,7 @@ define(function (require) {
       menu = menu || 'main';
       var view = this.getView('.' + menu);
       
-      view.addItemMenu(item);
+      view.addMenuItem(item);
       
       return this;
     }
