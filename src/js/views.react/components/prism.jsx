@@ -78,7 +78,8 @@ var _ = {
         }
       }
 
-      return root[inside] = ret;
+      root[inside] = ret;
+      return root[inside];
     },
 
     // Traverse a language definition with Depth First Search
@@ -142,12 +143,14 @@ var _ = {
             lookbehindLength = match[1].length;
           }
 
-          var from = match.index - 1 + lookbehindLength,
-              match = match[0].slice(lookbehindLength),
-              len = match.length,
-              to = from + len,
-            before = str.slice(0, from + 1),
-            after = str.slice(to + 1);
+          var from = match.index - 1 + lookbehindLength;
+
+          match = match[0].slice(lookbehindLength);
+          
+          var len     = match.length,
+              to      = from + len,
+              before  = str.slice(0, from + 1),
+              after   = str.slice(to + 1);
 
           var args = [i, 1];
 
@@ -202,7 +205,22 @@ var Token = _.Token = function(type, content) {
 };
 
 Token.reactify = function(o) {
-  if (typeof o == 'string') {
+  var ptr = new RegExp(/\n/);
+
+  if (typeof o == 'string') {  
+    if (ptr.test(o)) {
+      var nodes = [];
+      var chunks = o.split('\n');
+      for (var n in chunks) {
+        nodes.push(React.DOM.span(null, chunks[n]));
+
+        if (n < chunks.length - 1) {
+          nodes.push(React.DOM.span({ className: 'line'}, '\n'));
+        }
+      }
+      o = nodes;
+    }
+    
     return o;
   }
 
@@ -214,7 +232,8 @@ Token.reactify = function(o) {
 
   var attributes = {
     className: 'token ' + o.type
-  }
+  };
+  
   if (o.type == 'comment') {
     attributes.spellcheck = true;
   }
@@ -355,7 +374,7 @@ var Prism = React.createClass({
       </div>
     );
   }
-})
+});
 
 module.exports = Prism;
 

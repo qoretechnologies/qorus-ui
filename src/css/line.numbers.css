@@ -4,20 +4,32 @@ pre.line-numbers {
 	counter-reset: linenumber;
 }
 
-span.lines {
-    pointer-events: none;
-    display: block;
+span.line:after {
+    content: counter(linenumber);
+    counter-increment: linenumber;
+    position: absolute;
+    left: 0;
+/*    margin-top: 1.5em;*/
+    width: 3em;
+    display: inline-block;
+    text-align: right;
+    color: #999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div[class|="language"]:before {
+    content: counter(linenumber);
+    color: #999;
+    position: absolute;
+    text-align: right;
+    left: 0;
+    width: 3em;
     counter-increment: linenumber;
   	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-}
-
-span.lines:before {
-    content: counter(linenumber);
-    color: #999;
-    display: block;
-    padding-right: 0.8em;
-    text-align: right;
 }

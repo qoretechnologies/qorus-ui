@@ -104,7 +104,7 @@ define(function (require) {
               idx: ctr,
             }, state);
 
-            plist.push(<TabPane {...p} key={ g.name }><CodeView code={ g.body } /></TabPane>);
+            plist.push(<TabPane {...p} key={ g.name }><CodeView code={ g.body } offset={ g.offset } /></TabPane>);
             ctr++;
           });
 

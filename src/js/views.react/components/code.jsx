@@ -9,31 +9,22 @@ define(function (require) {
 
   var CodeView = React.createClass({
     mixins: [React.addons.PureRenderMixin],
-    
-    componentDidMount: function () {
-      var $el = $(this.getDOMNode()).find('div[class*="language-"]');
-      var html = $el.html();
-      if (html) {
-        var lines = html.split('\n');
-        var lines_html = [];
-
-        for (var i=0;i<=lines.length;i++) {
-          lines_html.push("<span class='line'>" + lines[i] + "</span>");
-        }
-
-        $el.html(lines_html.join('\n'));      
-      }
-    },
-
     render: function () {
+      var props = {};
       var Code = <LoaderView />;
+      
+      if (this.props.offset) {
+        props.style = {
+          'counter-increment': 'linenumber +' + this.props.offset
+        };
+      }
         
       if (this.props.code) {
         Code = <PrismComponent language="qore">{ this.props.code }</PrismComponent>;
       }
-
+      
       return (
-        <pre className="language-qore line-numbers">
+        <pre className="language-qore line-numbers" {...props}>
           { Code }
         </pre>
       );

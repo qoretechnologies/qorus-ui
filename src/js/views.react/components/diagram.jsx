@@ -31,7 +31,7 @@ define(function (require) {
             <TabPane name="Code">
               <div className="step-source">
                 <MetaTableView data={ code_meta } />
-                <CodeView code={ func.get('body') } />
+                <CodeView code={ func.get('body') } offset={ func.get('offset') } />
               </div>
             </TabPane>
             <TabPane name="Function Info">
