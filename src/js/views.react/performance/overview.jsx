@@ -15,6 +15,89 @@ define(function (require, exports, module) {
   
   Menu.render();
   
+  var datasetLength = 300;
+  var emptyArray = _.map(_.range(datasetLength), function () { return null; });
+  
+  var ColorScheme = {
+    clr1: "rgba(250,225,107,1)",
+    clr2: "rgba(169,204,143,1)",
+    clr3: "rgba(178,200,217,1)",
+    clr4: "rgba(190,163,122,1)",
+    clr5: "rgba(243,170,121,1)",
+    clr6: "rgba(181,181,169,1)",
+    clr7: "rgba(230,165,164,1)"
+  };
+  
+  var Config = {
+    datasetFill: false,
+    animation: false,
+    pointDot: false
+  };
+  
+  var ChartLegend = React.createClass({
+    propTypes: {
+      datasets: React.PropTypes.array.isRequired
+    },
+  
+    render: function () {
+      var datasets = _.map(this.props.datasets, function (ds) { 
+      return <li><span className="legend-color-box" style={{ 'background-color': ds.strokeColor }}></span> { ds.label }</li>;
+      });
+    
+      return (
+        <ul className={ this.props.title + "-legend" }>
+          { datasets }
+        </ul>
+      );
+    }
+  });
+  
+  var DataSets =  {
+    AVG: {
+      dataset: [{
+                  label: "Avg 1s",
+                  fillColor : "rgba(250,225,107,0.5)",
+                  strokeColor : ColorScheme.clr1,
+                  pointColor : ColorScheme.clr1,
+                  pointStrokeColor : "#fff"
+              },
+              {
+                  label: "Avg 10s",
+                  fillColor : "rgba(169,204,143,0.5)",
+                  strokeColor : ColorScheme.clr2,
+                  pointColor : ColorScheme.clr2,
+                  pointStrokeColor : "#fff"
+              }
+      ],
+      keys: ['avg_1s', 'avg_10s']
+    },
+    TP: {
+      dataset: [
+              {
+                  label: "TP 1s",
+                  fillColor : "rgba(190,163,122,0.5)",
+                  strokeColor : ColorScheme.clr3,
+                  pointColor : ColorScheme.clr3,
+                  pointStrokeColor : "#fff"
+              },
+              {
+                  label: "TP 10s",
+                  fillColor : "rgba(243,170,121,0.5)",
+                  strokeColor : ColorScheme.clr4,
+                  pointColor : ColorScheme.clr4,
+                  pointStrokeColor : "#fff",
+              }
+                   
+      ],
+      keys: ['tp_1s', 'tp_10s']
+    }
+  
+  };
+  
+  function getDataset(DS) {
+    return _.cloneDeep(DataSets[DS].dataset);
+  }
+  
   var Chart = React.createClass({
     counter: 0,
     componentWillMount: function () {
@@ -29,62 +112,57 @@ define(function (require, exports, module) {
     
     onMessage: function (data) {
       var d = JSON.parse(data.data);
-      this.updateData([moment(), d.avg_1s, d.avg_10s, d.tp_1s, d.tp_10s]);
+      var keys = _.map(this.props.keys, function (k) { return d[k]; });
+      this.updateData([moment()].concat(keys));
     },
   
     getInitialState: function () {
+      var dataset = this.props.dataset;
+      
+      _.each(dataset, function (ds) {
+        ds.data = emptyArray.slice();
+      });
+    
       return {
         data: {
-          labels: _.map(_.range(120), function () { return ''; }),
-          datasets: [
-              {
-                  label: "My First dataset",
-/*                  fillColor: "rgba(220,220,220,0.2)",*/
-                  strokeColor: "rgba(220,220,220,1)",
-                  pointColor: "rgba(220,220,220,1)",
-                  pointStrokeColor: "#fff",
-                  pointHighlightFill: "#fff",
-                  pointHighlightStroke: "rgba(220,220,220,1)",
-                  data: _.map(_.range(120), function () { return null; })
-              },
-              {
-                  label: "My Second dataset",
-/*                  fillColor: "rgba(151,187,205,0.2)",*/
-                  strokeColor: "rgba(151,187,205,1)",
-                  pointColor: "rgba(151,187,205,1)",
-                  pointStrokeColor: "#fff",
-                  pointHighlightFill: "#fff",
-                  pointHighlightStroke: "rgba(151,187,205,1)",
-                  data: _.map(_.range(120), function () { return null; })
-              }
-          ]
+          labels: _.map(_.range(datasetLength), function () { return ''; }),
+          datasets: dataset
         }
       };
     },
     
     updateData: function (ds) {
       var data = _.extend({}, this.state.data),
-          [date, s10, m1] = ds,
-          label = (this.counter == 0) ? date.format('hh:mm:ss') : '';
+          [date, ...values] = ds,
+          label = (this.counter === 0) ? date.format('hh:mm:ss') : '';
       
       data.labels.shift();
-      data.datasets[0].data.shift();
-      data.datasets[1].data.shift();
-      
       data.labels.push(label);
-      data.datasets[0].data.push(s10);
-      data.datasets[1].data.push(m1);
+      _.each(data.datasets, function (dataset, idx) { 
+        dataset.data.shift(); 
+        dataset.data.push(values[idx]);
+      });
       
       this.setState({
         data: data
       });
       
-      this.counter = (this.counter < 9) ? this.counter + 1 : 0;
+      this.counter = (this.counter < 29) ? this.counter + 1 : 0;
     },
   
     render: function () {
+      var title = this.props.title ? <h3>{ this.props.title }</h3> : null;
+    
       return (
-        <LineChart data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ { animation: false } } redraw />
+        <div className="row">
+          { title }
+          <div className="chart-box">
+            <LineChart data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ Config } redraw />
+          </div>
+          <div className="legend span2">  
+            <ChartLegend datasets={ this.state.data.datasets } />
+          </div>
+        </div>
       );
     }
   }); 
@@ -92,7 +170,16 @@ define(function (require, exports, module) {
   var Overview = React.createClass({
     render: function () {
       return (
-      <Chart url="/perfcache/allwfs" width="1000" height="500" />
+        <div className="container-fluid">
+          <Chart url="/perfcache/allwfs" title="All workflows" width="1000" height="200" dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
+          <Chart url="/perfcache/allwfs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+          <Chart url="/perfcache/allsvcs" title="All services" width="1000" height="200" dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
+          <Chart url="/perfcache/allsvcs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+
+          <Chart url="/perfcache/alljobs" title="All jobs" width="1000" height="200" dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
+          <Chart url="/perfcache/alljobs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+
+        </div>
       );
     }
   });
