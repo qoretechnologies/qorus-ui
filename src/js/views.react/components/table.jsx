@@ -11,7 +11,7 @@ define(function (require) {
       cloneWithProps      = React.addons.cloneWithProps,
       CHUNK_SIZE          = 50,
       Filtered            = require('backbone.filtered.collection'),
-/*      diff                = require('deep-diff').diff,*/
+      diff                = require('deep-diff').diff,
       utils               = require('utils');
       
   require('react.backbone');
@@ -45,6 +45,8 @@ define(function (require) {
 
       var props = _.omit(this.props, ['children']);
       var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
+      
+      if (should) { console.log('should', _.pick(props, ['hash']), _.pick(nextProps, ['hash']), diff(props, nextProps)); }
       
       return should;
     },
