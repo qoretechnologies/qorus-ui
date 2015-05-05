@@ -235,7 +235,7 @@ Token.reactify = function(o) {
   };
   
   if (o.type == 'comment') {
-    attributes.spellcheck = true;
+    attributes.spellCheck = true;
   }
 
   return React.DOM.span(attributes, Token.reactify(o.content));

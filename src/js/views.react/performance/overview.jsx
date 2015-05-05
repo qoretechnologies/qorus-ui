@@ -5,6 +5,7 @@ define(function (require, exports, module) {
       Menu      = require('views/system/menu/menu'),
       Backbone  = require('backbone'),
       settings  = require('settings'),
+      helpers   = require('qorus/helpers'),
       moment    = require('moment');
   
   Menu.addMenuItem(new Backbone.Model({ 
@@ -41,7 +42,7 @@ define(function (require, exports, module) {
   
     render: function () {
       var datasets = _.map(this.props.datasets, function (ds) { 
-      return <li><span className="legend-color-box" style={{ 'background-color': ds.strokeColor }}></span> { ds.label }</li>;
+      return <li><span className="legend-color-box" style={{ backgroundColor: ds.strokeColor }}></span> { ds.label }</li>;
       });
     
       return (

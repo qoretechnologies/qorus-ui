@@ -309,7 +309,7 @@ define(function (require) {
         update.date = store.state.filters.date;
       }
             
-      if (update !== {}) {
+      if (!_.isEmpty(update)) {
         this.setState(update);
       }
     },

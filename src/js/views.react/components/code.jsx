@@ -15,7 +15,7 @@ define(function (require) {
       
       if (this.props.offset) {
         props.style = {
-          'counter-increment': 'linenumber +' + this.props.offset
+          'counterIncrement': 'linenumber +' + this.props.offset
         };
       }
         
