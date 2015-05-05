@@ -101,18 +101,8 @@ define(function (require, exports, module) {
   
   var Chart = React.createClass({
     counter: 0,
-    componentWillMount: function () {
-      var url = settings.WS_HOST + this.props.url;
-      this.socket = new WebSocket(url);
-      this.socket.onmessage = this.onMessage;
-    },
-    
-    componentWillUnmount: function () {
-      this.socket.close();
-    },
-    
     onMessage: function (data) {
-      var d = JSON.parse(data.data);
+      var d = data;
       var keys = _.map(this.props.keys, function (k) { return d[k]; });
       this.updateData([moment()].concat(keys));
     },
@@ -151,37 +141,101 @@ define(function (require, exports, module) {
       this.counter = (this.counter < 29) ? this.counter + 1 : 0;
     },
   
-    render: function () {
-      var title = this.props.title ? <h3>{ this.props.title }</h3> : null;
-    
+    render: function () {    
       return (
-        <div className="row">
-          { title }
+        <div className="span6">
           <div className="chart-box">
             <LineChart data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ Config } redraw />
           </div>
-          <div className="legend span2">  
+          <div className="legend">  
             <ChartLegend datasets={ this.state.data.datasets } />
           </div>
         </div>
       );
     }
-  }); 
+  });
+  
+  var ChartGroup = React.createClass({
+    render: function () {
+    var title = this.props.title ? <div className="span12"><h3>{ this.props.title }</h3></div> : null;
+      
+      return (
+        <div className="row-fluid">
+          { title }
+          { this.props.children }
+        </div>  
+      );
+    }
+  });
+
+  var ChartsMap = {
+    allwfls: ['wfls_avg', 'wfls_tp'],
+    allsvcs: ['svcs_avg', 'svcs_tp'],
+    alljobs: ['jobs_avg', 'jobs_tp'],
+  };
 
   var Overview = React.createClass({
+    getInitialState: function () {
+      return {
+        maxWidth: 0
+      };
+    },
+       
+    componentWillMount: function () {
+      var url = settings.WS_HOST + '/perfcache/allwfs,allsvcs,alljobs';
+      this.socket = new WebSocket(url);
+      this.socket.onmessage = this.onMessage;
+    },
+    
+    componentWillUnmount: function () {
+      this.socket.close();
+    },
+    
+    onMessage: function (data) {
+      data = JSON.parse(data.data);
+      var ref = ChartsMap[data.name];
+      
+      if (ref) {
+        _.each(ref, function (ref) {
+          this.refs[ref].onMessage(data);
+        }, this);
+      }
+    },
+    
+    componentDidMount: function () {
+      var node  = this.getDOMNode(), 
+          state = { maxWidth: node.clientWidth };
+      
+      if (node.querySelector('.span2')) {
+        state.legendWidth = node.querySelector('.span2').clientWidth;
+      }
+      
+      this.setState(state);
+    },
+    
     render: function () {
-      return (
-        <div className="container-fluid">
-          <Chart url="/perfcache/allwfs" title="All workflows" width="1000" height="200" dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
-          <Chart url="/perfcache/allwfs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
-          <Chart url="/perfcache/allsvcs" title="All services" width="1000" height="200" dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
-          <Chart url="/perfcache/allsvcs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
-
-          <Chart url="/perfcache/alljobs" title="All jobs" width="1000" height="200" dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
-          <Chart url="/perfcache/alljobs" width="1000" height="200" dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
-
-        </div>
-      );
+      var width = (this.state.maxWidth / 2) - this.state.legendWidth;
+      
+      if (this.state.maxWidth === 0) {
+        return (<div><div className="row"><div className="span2">{ width }</div></div></div>);
+      } else {
+        return (
+          <div>
+            <ChartGroup title="All workflows">
+              <Chart ref="wfl_avg" width={ width } height={ 200 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="wfl_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+            </ChartGroup>
+            <ChartGroup title="All services">
+              <Chart ref="svcs_avg" width={ width } height={ 200 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="svcs_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+            </ChartGroup>
+            <ChartGroup title="All jobs">
+              <Chart ref="jobs_avg" width={ width } height={ 200 } dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="jobs_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+            </ChartGroup>
+          </div>
+        );
+      }
     }
   });
 
