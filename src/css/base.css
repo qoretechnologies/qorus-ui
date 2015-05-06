@@ -1876,6 +1876,7 @@ input.autocomplete {
 
 .legend {
 	float: left;
+    font-size: 80%;
 }
 
 .legend ul, .legend li {

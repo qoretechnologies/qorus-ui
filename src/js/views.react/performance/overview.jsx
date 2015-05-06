@@ -32,7 +32,9 @@ define(function (require, exports, module) {
   var Config = {
     datasetFill: false,
     animation: false,
-    pointDot: false
+    pointDot: false,
+    responsive: true,
+    maintainAspectRatio: false
   };
   
   var ChartLegend = React.createClass({
@@ -41,13 +43,15 @@ define(function (require, exports, module) {
     },
   
     render: function () {
-      var datasets = _.map(this.props.datasets, function (ds) { 
-      return <li><span className="legend-color-box" style={{ backgroundColor: ds.strokeColor }}></span> { ds.label }</li>;
+      var datasets = {};
+      
+      _.each(this.props.datasets, function (ds) { 
+        datasets[ds.label] = <li key={ ds.label }><span className="legend-color-box" style={{ backgroundColor: ds.strokeColor }}></span> { ds.label }</li>;
       });
     
       return (
         <ul className={ this.props.title + "-legend" }>
-          { datasets }
+          { React.addons.createFragment(datasets) }
         </ul>
       );
     }
@@ -101,12 +105,7 @@ define(function (require, exports, module) {
   
   var Chart = React.createClass({
     counter: 0,
-    onMessage: function (data) {
-      var d = data;
-      var keys = _.map(this.props.keys, function (k) { return d[k]; });
-      this.updateData([moment()].concat(keys));
-    },
-  
+      
     getInitialState: function () {
       var dataset = this.props.dataset;
       
@@ -120,6 +119,23 @@ define(function (require, exports, module) {
           datasets: dataset
         }
       };
+    },
+    
+    componentDidUpdate: function (nextProps) {
+      if (_.pick(this.props, ['width', 'height']) != _.pick(nextProps, ['width', 'height'])) {
+        var chart = this.refs.chart.getChart();
+        chart.scale.height = this.props.height;
+        var cnvs = this.refs.chart.getCanvass();
+        cnvs.width = this.props.width;
+        cnvs.height = this.props.height;
+        chart.update();
+      }
+    },
+    
+    onMessage: function (data) {
+      var d = data;
+      var keys = _.map(this.props.keys, function (k) { return d[k]; });
+      this.updateData([moment()].concat(keys));
     },
     
     updateData: function (ds) {
@@ -141,11 +157,13 @@ define(function (require, exports, module) {
       this.counter = (this.counter < 29) ? this.counter + 1 : 0;
     },
   
-    render: function () {    
+    render: function () {
+      var conf = _.extend({}, Config);
+    
       return (
         <div className="span6">
           <div className="chart-box">
-            <LineChart data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ Config } redraw />
+            <LineChart ref="chart" data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ conf } style={{ width: this.props.width }} />
           </div>
           <div className="legend">  
             <ChartLegend datasets={ this.state.data.datasets } />
@@ -160,16 +178,18 @@ define(function (require, exports, module) {
     var title = this.props.title ? <div className="span12"><h3>{ this.props.title }</h3></div> : null;
       
       return (
-        <div className="row-fluid">
+        <div>
           { title }
+          <div className="row-fluid">
           { this.props.children }
+          </div>  
         </div>  
       );
     }
   });
 
   var ChartsMap = {
-    allwfls: ['wfls_avg', 'wfls_tp'],
+    allwfs: ['wfs_avg', 'wfs_tp'],
     allsvcs: ['svcs_avg', 'svcs_tp'],
     alljobs: ['jobs_avg', 'jobs_tp'],
   };
@@ -182,13 +202,14 @@ define(function (require, exports, module) {
     },
        
     componentWillMount: function () {
-      var url = settings.WS_HOST + '/perfcache/allwfs,allsvcs,alljobs';
+      var url = settings.WS_HOST + '/perfcache/' + _.keys(ChartsMap).join(',');
       this.socket = new WebSocket(url);
       this.socket.onmessage = this.onMessage;
     },
     
     componentWillUnmount: function () {
       this.socket.close();
+      $(window).off('resize.graphing');
     },
     
     onMessage: function (data) {
@@ -203,18 +224,21 @@ define(function (require, exports, module) {
     },
     
     componentDidMount: function () {
-      var node  = this.getDOMNode(), 
-          state = { maxWidth: node.clientWidth };
-      
-      if (node.querySelector('.span2')) {
-        state.legendWidth = node.querySelector('.span2').clientWidth;
+      this.setWidth();
+      $(window).on('resize.graphing', this.setWidth);
+    },
+    
+    setWidth: function () {
+      if (this.isMounted()) {
+        var node  = this.getDOMNode(), 
+            state = { maxWidth: node.clientWidth };
+
+        this.setState(state);
       }
-      
-      this.setState(state);
     },
     
     render: function () {
-      var width = (this.state.maxWidth / 2) - this.state.legendWidth;
+      var width = (this.state.maxWidth / 2) - 200;
       
       if (this.state.maxWidth === 0) {
         return (<div><div className="row"><div className="span2">{ width }</div></div></div>);
@@ -222,16 +246,16 @@ define(function (require, exports, module) {
         return (
           <div>
             <ChartGroup title="All workflows">
-              <Chart ref="wfl_avg" width={ width } height={ 200 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
-              <Chart ref="wfl_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="wfs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="wfs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All services">
-              <Chart ref="svcs_avg" width={ width } height={ 200 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
-              <Chart ref="svcs_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="svcs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="svcs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All jobs">
-              <Chart ref="jobs_avg" width={ width } height={ 200 } dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
-              <Chart ref="jobs_tp" width={ width } height={ 200 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="jobs_avg" width={ width } height={ 300 } dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="jobs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
           </div>
         );
