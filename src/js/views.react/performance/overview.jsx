@@ -107,25 +107,15 @@ define(function (require, exports, module) {
     counter: 0,
       
     getInitialState: function () {
-      var dataset = this.props.dataset;
-      
-      _.each(dataset, function (ds) {
-        ds.data = emptyArray.slice();
-      });
-    
-      return {
-        data: {
-          labels: _.map(_.range(datasetLength), function () { return ''; }),
-          datasets: dataset
-        }
-      };
+      return this.emptyDatasets();
     },
     
     componentDidUpdate: function (nextProps) {
       if (_.pick(this.props, ['width', 'height']) != _.pick(nextProps, ['width', 'height'])) {
         var chart = this.refs.chart.getChart();
-        chart.scale.height = this.props.height;
         var cnvs = this.refs.chart.getCanvass();
+        
+        chart.scale.height = this.props.height;
         cnvs.width = this.props.width;
         cnvs.height = this.props.height;
         chart.update();
@@ -143,6 +133,10 @@ define(function (require, exports, module) {
           [date, ...values] = ds,
           label = (this.counter === 0) ? date.format('hh:mm:ss') : '';
       
+      if (date - this.state.date > 2000) {
+        data = this.emptyDatasets().data;
+      }
+
       data.labels.shift();
       data.labels.push(label);
       _.each(data.datasets, function (dataset, idx) { 
@@ -151,10 +145,26 @@ define(function (require, exports, module) {
       });
       
       this.setState({
-        data: data
+        data: data,
+        date: date
       });
       
       this.counter = (this.counter < 29) ? this.counter + 1 : 0;
+    },
+    
+    emptyDatasets: function () {
+      var dataset = this.props.dataset;
+      
+      _.each(dataset, function (ds) {
+        ds.data = emptyArray.slice();
+      });
+    
+      return {
+        data: {
+          labels: _.map(_.range(datasetLength), function () { return ''; }),
+          datasets: dataset
+        }
+      };
     },
   
     render: function () {
@@ -254,7 +264,7 @@ define(function (require, exports, module) {
               <Chart ref="svcs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All jobs">
-              <Chart ref="jobs_avg" width={ width } height={ 300 } dataset={  getDataset('AVG') } keys={ DataSets.AVG.keys } />
+              <Chart ref="jobs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
               <Chart ref="jobs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
           </div>

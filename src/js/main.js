@@ -26,7 +26,7 @@ require.config({
     'messenger-theme-future': '../components/messenger/build/js/messenger-theme-future',
     'messenger-theme-flat': '../components/messenger/build/js/messenger-theme-flat',
     'backbone.localstorage': '../components/backbone.localstorage/backbone.localStorage',
-    chartjs: '../components/chartjs/Chart.min',
+    chartjs: '../components/chartjs/Chart',
     'jquery-ui': '../components/jquery-ui/jquery-ui',
     prism: '../components/prism/prism',
     jsx: '../components/jsx/jsx',
