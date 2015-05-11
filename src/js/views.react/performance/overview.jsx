@@ -1,12 +1,13 @@
 define(function (require, exports, module) {
-  var React     = require('react'),
-      Charts    = require('chartjs'),
-      LineChart = require('react-chartjs').Line,
-      Menu      = require('views/system/menu/menu'),
-      Backbone  = require('backbone'),
-      settings  = require('settings'),
-      helpers   = require('qorus/helpers'),
-      moment    = require('moment');
+  var React           = require('react'),
+      Charts          = require('chartjs'),
+      LineChart       = require('react-chartjs').Line,
+      Menu            = require('views/system/menu/menu'),
+      Backbone        = require('backbone'),
+      settings        = require('settings'),
+      helpers         = require('qorus/helpers'),
+      WebSocketMixin  = require('views.react/mixins/websocket'),
+      moment          = require('moment');
   
   Menu.addMenuItem(new Backbone.Model({ 
       name: 'Graphs',
@@ -34,7 +35,10 @@ define(function (require, exports, module) {
     animation: false,
     pointDot: false,
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    showSingleTooltip: true,
+    pointHitDetectionRadius: 0,
+    tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>"
   };
   
   var ChartLegend = React.createClass({
@@ -84,13 +88,6 @@ define(function (require, exports, module) {
                   strokeColor : ColorScheme.clr3,
                   pointColor : ColorScheme.clr3,
                   pointStrokeColor : "#fff"
-              },
-              {
-                  label: "TP 10s",
-                  fillColor : "rgba(243,170,121,0.5)",
-                  strokeColor : ColorScheme.clr4,
-                  pointColor : ColorScheme.clr4,
-                  pointStrokeColor : "#fff",
               }
                    
       ],
@@ -199,31 +196,22 @@ define(function (require, exports, module) {
   });
 
   var ChartsMap = {
-    allwfs: ['wfs_avg', 'wfs_tp'],
-    allsvcs: ['svcs_avg', 'svcs_tp'],
-    alljobs: ['jobs_avg', 'jobs_tp'],
+    allwfs:  ['wfs_tp'],
+    allsvcs: ['svcs_tp'],
+    alljobs: ['jobs_tp']
   };
 
   var Overview = React.createClass({
+    websocketUrl: settings.WS_HOST + '/perfcache/' + _.keys(ChartsMap).join(','),
+    mixins: [WebSocketMixin],
+  
     getInitialState: function () {
       return {
         maxWidth: 0
       };
     },
-       
-    componentWillMount: function () {
-      var url = settings.WS_HOST + '/perfcache/' + _.keys(ChartsMap).join(',');
-      this.socket = new WebSocket(url);
-      this.socket.onmessage = this.onMessage;
-    },
-    
-    componentWillUnmount: function () {
-      this.socket.close();
-      $(window).off('resize.graphing');
-    },
     
     onMessage: function (data) {
-      data = JSON.parse(data.data);
       var ref = ChartsMap[data.name];
       
       if (ref) {
@@ -238,6 +226,10 @@ define(function (require, exports, module) {
       $(window).on('resize.graphing', this.setWidth);
     },
     
+    componentWillUnmount: function () {
+      $(window).on('resize.graphing');
+    },
+    
     setWidth: function () {
       if (this.isMounted()) {
         var node  = this.getDOMNode(), 
@@ -248,7 +240,7 @@ define(function (require, exports, module) {
     },
     
     render: function () {
-      var width = (this.state.maxWidth / 2) - 200;
+      var width = this.state.maxWidth - 300;
       
       if (this.state.maxWidth === 0) {
         return (<div><div className="row"><div className="span2">{ width }</div></div></div>);
@@ -256,15 +248,12 @@ define(function (require, exports, module) {
         return (
           <div>
             <ChartGroup title="All workflows">
-              <Chart ref="wfs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
               <Chart ref="wfs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All services">
-              <Chart ref="svcs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
               <Chart ref="svcs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All jobs">
-              <Chart ref="jobs_avg" width={ width } height={ 300 } dataset={ getDataset('AVG') } keys={ DataSets.AVG.keys } />
               <Chart ref="jobs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
             </ChartGroup>
           </div>
