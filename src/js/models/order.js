@@ -8,6 +8,7 @@ define(function (require) {
       Dispatcher    = require('qorus/dispatcher'),
       Tree          = require('qorus/tree'),
       Notifications = require('collections/notifications'),
+      System        = require('models/system'),
       Model;
   
   require('sprintf');
@@ -168,7 +169,6 @@ define(function (require) {
       
       var url = helpers.getUrl('showWorkflow', { id: this.id }),
           self = this;
-      
 
       if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
         $.put(this.url(), opts)
@@ -225,6 +225,15 @@ define(function (require) {
     */
     destroy: function () {
       this.trigger('remove');
+    },
+    
+    /**
+      Checks if order is locked
+      @returns {Boolean}
+    */
+    isEditable: function () {
+      if (!this.get('operator_lock')) return true;
+      return this.get('operator_lock') == System.User.get('username');
     }
     
   });

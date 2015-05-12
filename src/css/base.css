@@ -2257,3 +2257,5 @@ a + a:before {
 pre[class|="language"] {
   font-size: 10px;
 }
+
+a[disabled] { pointer-events: none; }
