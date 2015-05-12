@@ -429,12 +429,12 @@ table .header-fixed {
 	margin-left: -15px;
 }
 
-.textview {
+.textview, .rawview {
     display: none;
     height: auto;
 }
 
-.row-fluid .textview textarea {
+.row-fluid .textview textarea, .row-fluid .rawview textarea {
     min-height: 400px;
     height: auto;
 }

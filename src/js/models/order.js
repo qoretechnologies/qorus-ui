@@ -33,7 +33,7 @@ define(function (require) {
     },
     
     /** list of allowed actions */
-    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
+    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep', 'staticdata', 'dynamicdata'],
     dateAttributes: ['started', 'completed', 'modified', 
       'HierarchyInfo.completed', 
       'HierarchyInfo.modified',
@@ -56,7 +56,8 @@ define(function (require) {
       "order:%(id)s:data_locked",
       "order:%(id)s:data_unlocked",
       "order:%(id)s:info_changed",
-      "order:%(id)s:status_changed"
+      "order:%(id)s:status_changed",
+      "order:%(id)s:data_updated"
     ],
 
     /**
@@ -109,6 +110,8 @@ define(function (require) {
           this.set({ workflowstatus: e.info.info.new });
           this.getProperty('actions', null, true);
           this.trigger('workflowstatus:change');
+        } else if (action === 'data_updated') {
+          this.fetch();
         }
         this.trigger('change', this);
       }
@@ -173,14 +176,14 @@ define(function (require) {
             var msg = sprintf('Order %s %s done', self.get('name'), action);
             Notifications.create({ group: 'orders', type: 'success', title: msg, url: url });
             if (_.isFunction(callback)) {
-              callback(false);
+              callback(true, resp);
             }
           })
           .fail(function (resp) {
             var msg = sprintf('Order %s %s failed', self.get('name'), action);
             Notifications.create({ group: 'orders', type: 'error', title: msg, url: url });
             if (_.isFunction(callback)) {
-              callback(false);
+              callback(false, resp);
             }
           });     
       }
