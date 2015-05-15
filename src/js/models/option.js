@@ -29,11 +29,18 @@ define(function(require) {
       return response;
     },
     
-    setValue: function (value) {
+    setValue: function (value, cb) {
       var self = this;
+      
+      cb = cb || _.noop;
+      
       $.put(this.url(), { action: 'set', value: value })
-        .done(function () {
+        .done(function (resp) {
           self.set({ value: value });
+          cb(true, resp);
+        })
+        .fail(function (resp) {
+          cb(false, resp);
         });
     }
   });

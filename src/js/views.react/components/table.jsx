@@ -54,9 +54,9 @@ define(function (require) {
     processColumns: function () {
       var children = this.props.children,
           row = this.props.model,
-          cols = {};
+          cols = [];
     
-      children.forEach(function (col, indx) {
+      cols = _.map(children, function (col, indx) {
         var child = col.props.children,
             clone = child ? cloneWithProps(child, { model: row, displayName: 'Clone' }) : null,
             props = child ? child.props : col.props,
@@ -64,16 +64,15 @@ define(function (require) {
 
 
         if (col.props.cellView) {
-          tRow = <col.props.cellView {...props} model={ row } hash={ row.hash }>{ clone }</col.props.cellView>;
+          tRow = <col.props.cellView {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</col.props.cellView>;
         } else {
-          tRow = <TdComponent {...props} model={ row } hash={ row.hash }>{ clone }</TdComponent>;
+          tRow = <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
         }
         
-        cols['col-'+indx] = tRow;
+        return tRow;
       }, this);
 
-
-      return React.addons.createFragment(cols);
+      return cols;
     }
   };
 
@@ -147,7 +146,7 @@ define(function (require) {
       ]).isRequired,
       rowView: React.PropTypes.func
     },
-    
+      
     getDefaultProps: function () {
       return {
         chunked: false,
@@ -179,33 +178,24 @@ define(function (require) {
                 { React.addons.createFragment(header_columns) }
                </THeadView>
                <tbody>
-                 { React.addons.createFragment(rows) }
+                 { rows }
                </tbody>
              </table>;
     },
-    
-    _renderNextRows: function () {
-      var csize = _.size(this.props.collection);
-      var size = (this.state.showed_items > csize) ? csize : this.state.showed_items + CHUNK_SIZE;
-      
-      this.setState({
-        showed_items: size
-      });
-    },
-    
+
     renderRows: function () {
-        var collection      = false ? this.props.collection.slice(0, 30) : this.props.collection,
+        var collection      = this.props.collection,
             children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
             props           = this.props,
             DefaultRowView  = this.props.rowView || RowView,
             tableProps      = _.omit(props, 'children'),
             isBackbone      = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
-            rows = null;
+            rows            = new Array(_.size(collection)),
+            offset          = props.offset || 0,
+            shownItems      = props.shownItems || _.size(collection);
 
-        _.each(collection, function (row, idx) {
-          if (!rows) {
-            rows = {};
-          }
+        rows = _.map(collection, function (row, idx) {
+          if (idx < offset || idx > (offset+shownItems)) return;
         
           row = isBackbone ? collection.at(idx) : row;
           
@@ -213,12 +203,14 @@ define(function (require) {
               clicked        = props.current_model ? props.current_model == row.id : false,
               key            = isBackbone ? row.id : idx;
 
-          rows['row'+key] =  <DefaultRowView 
-                               model={ row } 
-                               rowClick={props.rowClick} 
-                               clicked={ clicked }>
-                                { children }
-                             </DefaultRowView>;
+          return (
+            <DefaultRowView 
+               model={ row } 
+               rowClick={props.rowClick} 
+               clicked={ clicked } className={ idx % 2 ? 'odd' : 'even' } key={ key }>
+              { children }
+            </DefaultRowView>
+          ); 
         });      
 
       return rows;

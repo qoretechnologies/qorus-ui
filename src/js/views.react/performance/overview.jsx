@@ -7,6 +7,7 @@ define(function (require, exports, module) {
       settings        = require('settings'),
       helpers         = require('qorus/helpers'),
       WebSocketMixin  = require('views.react/mixins/websocket'),
+      utils           = require('utils'),
       moment          = require('moment');
   
   Menu.addMenuItem(new Backbone.Model({ 
@@ -38,7 +39,16 @@ define(function (require, exports, module) {
     maintainAspectRatio: false,
     showSingleTooltip: true,
     pointHitDetectionRadius: 0,
-    tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>"
+    tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+/*
+    customTooltips: function (tooltip) {
+      if (!tooltip) {
+        return;
+      }
+      
+      console.log(_.keys(tooltip), arguments);
+    }
+*/
   };
   
   var ChartLegend = React.createClass({
@@ -85,8 +95,8 @@ define(function (require, exports, module) {
               {
                   label: "TP 1s",
                   fillColor : "rgba(190,163,122,0.5)",
-                  strokeColor : ColorScheme.clr3,
-                  pointColor : ColorScheme.clr3,
+                  strokeColor: ColorScheme.clr3,
+                  pointColor: ColorScheme.clr3,
                   pointStrokeColor : "#fff"
               }
                    
@@ -96,8 +106,14 @@ define(function (require, exports, module) {
   
   };
   
-  function getDataset(DS) {
-    return _.cloneDeep(DataSets[DS].dataset);
+  function getDataset(DS, clr) {
+    var dataset = _.cloneDeep(DataSets[DS].dataset);    
+  
+    if (clr) {
+      dataset[0].strokeColor = dataset[0].pointColor = ColorScheme[clr];
+    }
+    
+    return dataset;
   }
   
   var Chart = React.createClass({
@@ -149,6 +165,10 @@ define(function (require, exports, module) {
       this.counter = (this.counter < 29) ? this.counter + 1 : 0;
     },
     
+    onMouseOver: function (evt) {
+      console.log(this.refs.chart.getChart().getPointsAtEvent(evt));
+    },
+    
     emptyDatasets: function () {
       var dataset = this.props.dataset;
       
@@ -168,7 +188,7 @@ define(function (require, exports, module) {
       var conf = _.extend({}, Config);
     
       return (
-        <div className="span6">
+        <div className="row-fluid">
           <div className="chart-box">
             <LineChart ref="chart" data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ conf } style={{ width: this.props.width }} />
           </div>
@@ -187,9 +207,7 @@ define(function (require, exports, module) {
       return (
         <div>
           { title }
-          <div className="row-fluid">
           { this.props.children }
-          </div>  
         </div>  
       );
     }
@@ -248,13 +266,13 @@ define(function (require, exports, module) {
         return (
           <div>
             <ChartGroup title="All workflows">
-              <Chart ref="wfs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="wfs_tp" width={ width } height={ 300 } dataset={ getDataset('TP', 'clr1') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All services">
-              <Chart ref="svcs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="svcs_tp" width={ width } height={ 300 } dataset={ getDataset('TP', 'clr2') } keys={ DataSets.TP.keys } />
             </ChartGroup>
             <ChartGroup title="All jobs">
-              <Chart ref="jobs_tp" width={ width } height={ 300 } dataset={ getDataset('TP') } keys={ DataSets.TP.keys } />
+              <Chart ref="jobs_tp" width={ width } height={ 300 } dataset={ getDataset('TP', 'clr3') } keys={ DataSets.TP.keys } />
             </ChartGroup>
           </div>
         );

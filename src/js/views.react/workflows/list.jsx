@@ -28,6 +28,7 @@ define(function (require) {
       qHelpers            = require('qorus/helpers'),
       HasAlertsView       = require('jsx!views.react/components/hasalerts'),
       Checker             = require('jsx!views.react/components/checker'),
+      normalizeWheel      = require('views.react/utils/normalizeWheel'),
       workflowsStore      = require('views.react/stores/workflows');
   
 //  require('backbone');
@@ -40,8 +41,8 @@ define(function (require) {
   var store = Reflux.createStore({
     state: {},
     init: function () {
-      this.listenTo(tStore, this.setState, this.setState);
-      this.listenTo(workflowsStore, this.setState,  this.setState);
+      this.listenTo(tStore, this.setState);
+      this.listenTo(workflowsStore, this.setState);
     },
     
     updateStore: function (state) {
@@ -53,7 +54,7 @@ define(function (require) {
     },
     
     setState: function (state) {
-      this.state = _.extend(this.state, state);
+      this.state = _.assign(this.state, state);
       this.updateUrl();
       this.trigger(this.state);
     },
@@ -213,11 +214,11 @@ define(function (require) {
     <Col name="Actions" className="actions" key="actions">
       <ControlsView className="connections" />
     </Col>,
-    <Col name="Execs" dataSort="exec_count" className="narrow" key="execs">
-      <Cell dataKey='exec_count' className="narrow" />
-    </Col>,
     <Col name="Autostart" dataSort="autostart" className="autostart narrow" key="autostart">
       <AutostartView className="autostart narrow" />
+    </Col>,
+    <Col name="Execs" dataSort="exec_count" className="narrow" key="execs">
+      <Cell dataKey='exec_count' className="narrow" />
     </Col>,
     <Col name="ID" dataSort="workflowid" key="workflowid">
       <Cell dataKey="workflowid" className="narrow" />
@@ -279,7 +280,7 @@ define(function (require) {
     }
   });
   
-  var RowViewWrapper = React.createBackboneClass({
+  var RowViewWrapper = React.createClass({
     mixins: [Reflux.listenTo(tStore, 'onStoreUpdate')],
     displayName: 'WorkflowRowView',
 
@@ -318,7 +319,7 @@ define(function (require) {
       var cls = classNames({
         warning: this.state.checked,
         info:    this.state.clicked,
-      }, 'clickable');
+      }, 'clickable', this.props.className);
       
       return (
         <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } />
@@ -329,17 +330,80 @@ define(function (require) {
   var TableViewWrapper = React.createClass({
     mixins: [ViewHeightMixin, Reflux.listenTo(store, 'onStoreUpdate')],
     
+    componentDidMount: function () {
+      this.getDOMNode().addEventListener('scroll', this.onScroll);
+      this.setHeight();
+    },
+    
+    componentWillReceiveProps: function (nextProps, nextState) {
+      this.setHeight(nextState);
+    },
+    
+    componentWillUnmount: function () {
+      this.getDOMNode().removeEventListener('scroll', this.onScroll);
+    },
+    
+    setHeight: function (nextProps, nextState) {
+      var state = nextState || this.state,
+          props = nextProps || this.props;
+    
+      if (this.isMounted()) {
+        var el        = this.getDOMNode(),
+/*            height    = el.clientHeight - (2 * this.props.rowHeight),*/
+            height    = $(window).innerHeight() - $(el).position().top - 80 - (2 * this.props.rowHeight),
+            maxRows   = Math.floor(height/props.rowHeight),
+            maxOffset = (_.size(state.collection) - maxRows - 1) * props.rowHeight;
+
+        this.setState({
+          height: height,
+          maxRows: maxRows,
+          maxOffset: maxOffset,
+          shownItems: new Array(maxRows)
+        });
+      }
+    },
+    
+    onScroll: _.throttle(function (e) {
+      var el        = this.getDOMNode(),
+          rowHeight = this.props.rowHeight;
+
+      if (el.scrollTop <= this.state.maxOffset) {
+        this.setState({
+          scrollTop: el.scrollTop,
+          offset: Math.ceil(Math.max(0, el.scrollTop - rowHeight) / rowHeight)
+        });
+      }
+    }, 20),
+
+    getFirstRow: function (maxRows) {
+      var offset    = this.state.offset,
+          rowHeight = this.props.rowHeight;
+      
+      return offset;
+    },
+    
+    getDefaultProps: function () {
+      return {
+        rowHeight: 21
+      };
+    },
+    
     getInitialState: function () {
       tActions.setCollection(workflowsStore.getCollection());
       
       return {
         hash: utils.hash(store.getCollection()),
+        collection: workflowsStore.getCollection(),
         collection_fetched: store.state.collection_fetched,
         error: store.state.error,
         filters: _.extend({}, store.state.filters),
         orderKey: store.state.orderKey,
-        order: store.state.order
-/*        model: workflowsStore.getModel()*/
+        order: store.state.order,
+        height: 0,
+        maxRows: 50,
+        offset: 0,
+        scrollTop: 0,
+        maxOffset: 0
       };
     },
     
@@ -352,13 +416,15 @@ define(function (require) {
     },
     
     onStoreUpdate: function () {
-      var state = _.extend({}, this.state, {          
-            hash: utils.hash(store.getCollection()),
+      var col = store.getCollection(),
+          state = _.extend({}, this.state, {          
+            hash: utils.hash(col),
             collection_fetched: store.state.collection_fetched,
             error: store.state.error,
             filters: store.state.filters,
             orderKey: store.state.orderKey,
-            order: store.state.order
+            order: store.state.order,
+            maxOffset: (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
           });
     
       if (!_.isEqual(this.state, state)) {
@@ -382,7 +448,31 @@ define(function (require) {
           error       = null,
           tfilter     = workflowsStore.state.filters.text;
 
-      collection = workflowsStore.getCollection();
+      collection = this.prepareCollection();
+
+      if (this.state.error) {
+        error = <div className="alert alert-warning">{ this.state.error }</div>;
+      }
+  
+      return (
+        <div className="overflow-auto-y" style={{ position: 'relative' }}>
+          { error }
+          <div className="scroller" style={{ height: (_.size(this.state.collection) + 1) * this.props.rowHeight }} />
+          <div className="table-fixed" style={{ position: 'absolute', top: 0, transform: "translate3d(0,"+this.state.scrollTop+"px,0)", width: "calc(100% - 10px)" }}>
+            <TableView {...this.state} collection={ collection } current_model={ model } 
+              cssClass="table table-stripes table-condensed table-hover" 
+              rowClick={ this.rowClick } rowView={ RowViewWrapper } fixed={ false } chunked={ true } sortClick={ this.sortClick } offset={ this.state.offset } shownItems={ this.state.maxRows }>
+              { columns }
+            </TableView>
+          </div>
+        </div>
+        );
+    },
+    
+    prepareCollection: function () {
+      var collection  = this.state.collection,
+          tfilter     = this.state.filters.text,
+          firstRow    = 0;
       
       if (tfilter) {
         collection = collection.filter(function (m) {
@@ -390,20 +480,7 @@ define(function (require) {
         });
       }
 
-      if (this.state.error) {
-        error = <div className="alert alert-warning">{ this.state.error }</div>;
-      } 
-      
-      return (
-        <div className="overflow-auto-y">
-          { error }
-          <TableView {...this.state} collection={ collection } current_model={ model } 
-            cssClass="table table-striped table-condensed table-hover" 
-            rowClick={this.rowClick} rowView={ RowViewWrapper } fixed={ false } chunked={ true } sortClick={ this.sortClick }>
-            { columns }
-          </TableView>
-        </div>
-        );
+      return collection;
     }
   });
 

@@ -140,7 +140,7 @@ define(function (require) {
                 <Col _model={ this.props.model } />
               </Col>
               <Col className="narrow">
-                <ActionsCol optionAdd={ this.optionAdd } /> 
+                <ActionsCol optionAdd={ this.optionAdd } className="middle" /> 
               </Col>
             </TableView>
             <SystemOptions exclude={ _.pluck(this.props.options, 'name') } onOptionAdd={ this.optionAdd } />

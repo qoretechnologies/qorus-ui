@@ -65,9 +65,9 @@ define(function (require) {
         filters: _.extend({}, this.state.filters, filter)
       });
       
-      if (!filter.text) {
-        Actions.fetch();
-      }
+//      if (!filter.text) {
+//        Actions.fetch();
+//      }
 
       this.trigger(this.state);
     },

@@ -2,7 +2,7 @@ define(function (require) {
   var $       = require('jquery'),
       _       = require('underscore'),
       utils   = require('utils'),
-      PADDING = 60;
+      PADDING = 80;
   
   return {
     _setHeight: function () {
@@ -16,7 +16,8 @@ define(function (require) {
           height = $(window).innerHeight() - $el.position().top - PADDING;
         }
 
-        $el.height(height);  
+        $el.height(height);
+        this.height = height;
       }
     },
     

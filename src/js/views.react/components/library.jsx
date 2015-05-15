@@ -58,17 +58,10 @@ define(function (require) {
           }        
         });      
       }
-
-      var groups_obj = {};
-      
-      _.each(groups, function (g,idx) {
-        groups_obj['g-'+idx] = g;
-      });
-      
     
       return (
           <ul className="nav nav-list break-word">
-            { React.addons.createFragment(groups_obj) }
+            { groups }
           </ul>
       );
     }
@@ -81,17 +74,24 @@ define(function (require) {
       };
     },
     
+    shouldComponentUpdate: function (nextProps, nextState) {
+      var should = true;
+        
+      should = (!_.isEqual(nextProps, this.props) || !_.isEqual(this.state, nextState));
+      
+      return should;
+    },
+    
     onTabChange: function (idx) {
       this.setState({ active_index: idx });
     },
     
-    render: function() {
-      var ctr         = 0,
-          props       = this.props,
-          state       = this.state,
-          groups      = props.model.get('lib'),
-          panes       = [],
-          panes_dict  = {};
+    preparePanes: function () {
+      var ctr     = 0,
+          props   = this.props,
+          state   = this.state,
+          groups  = props.model.get('lib'),
+          panes   = [];
       
       if (groups) {
         panes = _.map(groups, function (group) {
@@ -99,7 +99,7 @@ define(function (require) {
 
           _.each(group, function (g) {
           
-            var p = _.extend({}, props, {
+            var p = _.extend({}, _.omit(props, 'children'), {
               slug: slugify(g.name),
               idx: ctr,
             }, state);
@@ -114,17 +114,21 @@ define(function (require) {
       
       panes = _.flatten(panes);
       
-      _.each(panes, function (pane, idx) {
-        panes_dict['pane-'+idx] = pane;
-      });
+      return panes;
+    },
     
+    render: function() {
+      var props       = this.props,
+          state       = this.state,
+          panes       = this.preparePanes();
+
       return (
         <div>
           <div className="well span3 library-navigation">
             <Navigation model={ props.model } active_index={ this.state.active_index } tabChange={ this.onTabChange } />
           </div>
           <div className="span9 tab-content library-content">
-            { React.addons.createFragment(panes_dict) }
+            { panes }
           </div>
         </div>
       );

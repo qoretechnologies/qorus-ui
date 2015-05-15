@@ -12,10 +12,15 @@ define(function (require) {
     /**
      * Sets state and triggers updated state object
      * @param {object} state
+     * @param {object} options
      */
-    setState: function (state) {
-      this.state = _.extend(this.state, state);
-      this.trigger(this.state);
+    setState: function (state, options) {
+      options = options || {};
+      this.state = _.assign(this.state, state);
+      
+      if (!options.silent) {
+        this.trigger(this.state); 
+      }
     }
   };
 });

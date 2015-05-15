@@ -358,6 +358,7 @@ _.languages.insertBefore('markup', 'tag', {
 });
 
 var Prism = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
   statics: {
     _: _
   },

@@ -1,8 +1,15 @@
 define(function (require) {
+  var $ = require('jquery');
   var host = window.location.hostname + ":8001";
   var wshost = window.location.hostname + ":8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
+  
+//  $.ajaxSetup({
+//    headers: { 'Authorization': "Basic dGVzdHRlc3Q=" },
+//    crossDomain: true,
+//    withCredentials: true
+//  });
   
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',

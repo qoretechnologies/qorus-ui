@@ -319,6 +319,10 @@ define(function (require) {
       var s = md5.hash(JSON.stringify(obj).replace(/\s/, ''));
       
       return s;
+    },
+    
+    getRandomInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
     }
   };
     
