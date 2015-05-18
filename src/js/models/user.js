@@ -1,23 +1,27 @@
 define(function (require) {
-  var Qorus    = require('qorus/qorus'),
+  var _        = require('underscore'),
+      Qorus    = require('qorus/qorus'),
       settings = require('settings'),
       Model;
-  
+
   Model = Qorus.Model.extend({
     idAttribute: "username",
     urlRoot: settings.REST_API_PREFIX + '/users/',
     hasPermissions: function (perm) {
       if (typeof perm === 'string' && this.get('permissions'))
         return this.get('permissions').indexOf(perm) > -1;
-      
+
+      if(_.isArray(perm) && this.get('permissions'))
+        return _.intersection(this.get('permissions'), perm).length > 0;
+
       return false;
     },
     getControls: function () {
       var controls = [];
-      
+
       controls.push({ action: 'edit', icon: 'edit', title: 'Edit', css: 'warning' });
       controls.push({ action: 'delete', icon: 'remove', title: 'Remove', css: 'danger' });
-      
+
       return controls;
     },
     doAction: function (opts) {

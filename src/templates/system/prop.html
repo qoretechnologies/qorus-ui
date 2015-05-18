@@ -1,9 +1,12 @@
 <% var domains = obj.data %>
 
 <div class="row-fluid">
+<% if (user.hasPermissions(['SET-PROPERTY', 'SERVER-CONTROL'])) { %>
   <div class="create span2">
     <a class="btn btn-small btn-success" data-toggle="modal" data-target="#prop-editor"><i class="icon-plus"></i> Add property</a>
   </div>
+<% } %>
+<% if (_.size(domains) > 0) { %>
   <div class="pull-right">
     <form id="property-search" class="form-search">
       <div class="input-append search-box">
@@ -18,7 +21,7 @@
     <thead class="extra-padding">
         <tr>
             <td colspan="3" class="name"><%= key %></td>
-            <td><% if (key !== 'omq') { %><a class="btn btn-mini btn-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
+            <td><% if (key !== 'omq' && user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
     </thead>
     <tbody>
@@ -27,14 +30,18 @@
           <td class="spacer"></td>
           <td class="property-key"><%= pkey %></td>
           <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>
-          <td class="property-actions"><% if (key !== 'omq') { %><a class="btn btn-mini btn-warning edit-modal" data-toggle="modal" data-target="#prop-editor" 
-              data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i></a>
-              <a class="btn btn-mini btn-danger" data-action-confirm="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
+          <td class="property-actions"><% if (key !== 'omq') { %>
+              <% if (user.hasPermissions(['SET-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-warning edit-modal" data-toggle="modal" data-target="#prop-editor" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i></a><% } %>
+              <% if (user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action-confirm="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<<%= key %>"><i class="icon-remove"></i></a><% } %>
+          <% } %></td>
         </tr>
   <% }) %>
     </tbody>
-<% }) %>  
+<% }) %>
 </table>
+<% } else { %>
+<p class="alert alert-warning span12"><i class="icon-warning-sign"></i> No properties defined or insufficent user permissions</p>
+<% } %>
 
 <div id="prop-editor" class="modal hide fade wider" tabindex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true">
   <div class="modal-header">
