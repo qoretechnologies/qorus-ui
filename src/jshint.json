@@ -1,9 +1,9 @@
 {
     "predef": {
-        "$": true,  
-        "define": true, 
+        "$": true,
+        "define": true,
         "require": true,
-        "jQuery": true, 
+        "jQuery": true,
         "later": true,
         "cronParser": true,
         "moment": true,
@@ -18,5 +18,6 @@
     "devel": true,
     "indent": 2,
     "white": false,
-    "curly": false
+    "curly": false,
+    "esnext": true
 }

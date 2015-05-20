@@ -38,13 +38,16 @@ require.config({
     'bootstrap-flat-ui': '../components/bootstrap-flat-ui/docs/assets/js/bootstrap',
     'flat-ui': '../components/flat-ui/dist/js/flat-ui',
     'snap.svg': '../components/snap.svg/dist/snap.svg-min',
-    'fixed-data-table': '../components/fixed-data-table/dist/fixed-data-table',
+    'fixed-data-table': '../components/fixed-data-table/index',
     'js-md5': '../components/js-md5/js/md5',
     Rainbow: '../components/Rainbow/rainbow',
     'spark-md5': '../components/spark-md5/spark-md5',
     classnames: '../components/classnames/index',
     'deep-diff': '../components/deep-diff/index',
-    'react-chartjs': '../components/react-chartjs/react-chartjs'
+    'react-chartjs': '../components/react-chartjs/react-chartjs',
+    'react-shim': './react-shim',
+    'es6-shim': '../components/es6-shim/es6-shim',
+    'react-fixed-data-table': '../components/react-fixed-data-table/fixed-data-table'
   },
   shim: {
     backbone: {
@@ -151,6 +154,11 @@ theme: 'block'
     },
     react: {
       exports: 'React'
+    },
+    'fixed-data-table': {
+      deps: [
+        'es6-shim'
+      ]
     },
     JSXTransformer: 'JSXTransformer'
   },

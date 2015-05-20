@@ -2,71 +2,75 @@
  * @jsx React.DOM
  */
 define(function (require) {
-  var $                   = require('jquery'),
-      _                   = require('underscore'),
-      React               = require('react'),
-      PureRenderMixin     = React.addons.PureRenderMixin,
-      Reflux              = require('reflux'),
-      utils               = require('utils'),
-      FilteredCollection  = require('backbone.filtered.collection'),
-      ToolbarView         = require('jsx!views.react/workflows/toolbar'),
-      DetailView          = require('jsx!views.react/workflows/detail'),
-      BadgeView           = require('jsx!views.react/components/badge'),
-      ControlsView        = require('jsx!views.react/components/controls').ControlsView,
-      AutostartView       = require('jsx!views.react/workflows/autostart'),
-      LoaderView          = require('jsx!views.react/components/loader'),
-      TableView           = require('jsx!views.react/components/table').TableView,
-      ModelRowView        = require('jsx!views.react/components/table').ModelRowView,
-      Cell                = require('jsx!views.react/components/table').CellView,
-      CellBackbone        = require('jsx!views.react/components/table').CellBackbone,
-      Col                 = require('jsx!views.react/components/dummy'),
-      Actions             = require('views.react/actions/workflows'),
-      tActions            = require('views.react/workflows/actions/table'),
-      tStore              = require('views.react/workflows/stores/table'),
-      ViewHeightMixin     = require('views.react/mixins/view.height'),
-      helpers             = require('views/workflows/helpers'),
-      qHelpers            = require('qorus/helpers'),
-      HasAlertsView       = require('jsx!views.react/components/hasalerts'),
-      Checker             = require('jsx!views.react/components/checker'),
-      normalizeWheel      = require('views.react/utils/normalizeWheel'),
-      workflowsStore      = require('views.react/stores/workflows');
-  
+  var $                  = require('jquery'),
+      _                  = require('underscore'),
+      React              = require('react'),
+      PureRenderMixin    = React.addons.PureRenderMixin,
+      Reflux             = require('reflux'),
+      utils              = require('utils'),
+      FilteredCollection = require('backbone.filtered.collection'),
+      ToolbarView        = require('jsx!views.react/workflows/toolbar'),
+      DetailView         = require('jsx!views.react/workflows/detail'),
+      BadgeView          = require('jsx!views.react/components/badge'),
+      ControlsView       = require('jsx!views.react/components/controls').ControlsView,
+      AutostartView      = require('jsx!views.react/workflows/autostart'),
+      LoaderView         = require('jsx!views.react/components/loader'),
+      TableView          = require('jsx!views.react/components/table').TableView,
+      ModelRowView       = require('jsx!views.react/components/table').ModelRowView,
+      Cell               = require('jsx!views.react/components/table').CellView,
+      CellBackbone       = require('jsx!views.react/components/table').CellBackbone,
+      Col                = require('jsx!views.react/components/dummy'),
+      Actions            = require('views.react/actions/workflows'),
+      tActions           = require('views.react/workflows/actions/table'),
+      tStore             = require('views.react/workflows/stores/table'),
+      ViewHeightMixin    = require('views.react/mixins/view.height'),
+      helpers            = require('views/workflows/helpers'),
+      qHelpers           = require('qorus/helpers'),
+      HasAlertsView      = require('jsx!views.react/components/hasalerts'),
+      Checker            = require('jsx!views.react/components/checker'),
+      normalizeWheel     = require('views.react/utils/normalizeWheel'),
+      workflowsStore     = require('views.react/stores/workflows'),
+      FixedTable         = require('react-fixed-data-table'),
+      Table              = FixedTable.Table,
+      Column             = FixedTable.Column;
+
 //  require('backbone');
   require('react.backbone');
   require('classnames');
-  
+
 
   var fixed = true;
-  
+
   var store = Reflux.createStore({
     state: {},
+
     init: function () {
       this.listenTo(tStore, this.setState);
       this.listenTo(workflowsStore, this.setState);
     },
-    
+
     updateStore: function (state) {
       this.setState(state);
     },
-    
+
     getState: function () {
       return this.state;
     },
-    
+
     setState: function (state) {
       this.state = _.assign(this.state, state);
       this.updateUrl();
       this.trigger(this.state);
     },
-    
+
     getModel: function () {
       return workflowsStore.getCollection().get(this.state.model);
     },
-    
+
     getCollection: function () {
       return workflowsStore.getCollection();
     },
-    
+
     updateUrl: function () {
       if (this.state.filters) {
         var date = utils.encodeDate(this.state.filters.date),
@@ -76,31 +80,31 @@ define(function (require) {
           date: date,
           deprecated: deprecated ? 'hidden' : ''
         });
-        
+
         if (this.state.model) {
           if (!deprecated) {
             url += "/";
           }
-          
+
           url += "/" + this.state.model;
         }
 
-        Backbone.history.navigate(url);      
+        Backbone.history.navigate(url);
       }
     }
   });
-  
+
   var CheckerWrapper = React.createClass({
     mixins: [Reflux.listenTo(store, 'onStoreChange')],
 
     onStoreChange: function () {
       var isChecked = tStore.isRowChecked(this.props.model.id);
-      
+
       if (this.state.checked !== isChecked){
         this.setState({ checked: isChecked });
       }
     },
-    
+
     getInitialState: function () {
       var model = this.props.model;
       return {
@@ -118,79 +122,79 @@ define(function (require) {
     }
 
   });
-  
+
   var ToolbarViewWrapper = React.createClass({
     mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
-    
+
     getInitialState: function () {
       return {
         filters: store.state.filters,
         checkedIds: store.state.checkedIds
       };
     },
-    
+
     onStoreUpdate: function (state) {
-      this.setState({ 
+      this.setState({
         filters: store.state.filters,
         checkedIds: store.state.checkedIds
       });
     },
-    
+
     render: function () {
 
       if (this.state.filters) {
         return (
-          <ToolbarView 
-            filters={ this.state.filters } 
-            filterChange={ Actions.filterChange } 
-            actions={ tActions } 
-            store={ store } 
+          <ToolbarView
+            filters={ this.state.filters }
+            filterChange={ Actions.filterChange }
+            actions={ tActions }
+            store={ store }
             fixed={ false } />
-        );      
+        );
       } else {
         return (<div />);
       }
 
     }
   });
-    
+
   var LinkView = React.createClass({
     getInitialState: function () {
       return {
         date: store.state.filters.date
       };
     },
-    
+
     render: function () {
       var model = this.props.model,
           url   = helpers.getUrl(this.props.status, this.props.model.id, store.state.filters.date);
-      
+
       return (
         <a href={ url }>{ this.props.model.get('name') }</a>
       );
     }
   });
-  
+
   var BadgeViewCell = React.createClass({
     shouldComponentUpdate: function (nextProps) {
 /*
       console.log('shouldupdate', this.props.model.get(this.props.attr) !== nextProps.model.get(this.props.attr) || (this.props.url !== nextProps.url));
       return this.props.model.get(this.props.attr) !== nextProps.model.get(this.props.attr) || (this.props.url !== nextProps.url);
-*/  
+*/
       return true;
     },
-    
+
     render: function () {
       var model = this.props.model,
           date  = model.collection.opts.date,
           url   = helpers.getUrl(this.props.attr.toLowerCase(), this.props.model.id, date);
-          
+
       return (
         <BadgeView val={this.props.model.get(this.props.attr)} url={ url } label={utils.status_map[this.props.attr.toLowerCase()]} />
       );
     }
   });
-  
+
   var status_cols = [
     ['C','narrow', 'COMPLETE'],
     ['Y','narrow', 'READY'],
@@ -206,7 +210,7 @@ define(function (require) {
     ['B','narrow', 'BLOCKED'],
 /*    ['Total','narrow', 'TOTAL'],*/
   ];
-  
+
   var columns = [
     <Col key="checker">
       <CheckerWrapper />
@@ -233,42 +237,42 @@ define(function (require) {
       <Cell dataKey="version" className="narrow"/>
     </Col>
   ];
-  
+
   columns = columns.concat(status_cols.map(function (col) {
     var [title, css, sort] = col;
-    
+
     return <Col name={ title } dataSort={ sort } className={ css } key={ sort }>
              <BadgeViewCell attr={ sort } className="err" />
            </Col>;
   }));
-  
+
   columns = columns.concat([
     <Col name="Total" dataSort="total" className="narrow" key="TOTAL">
       <Cell dataKey="TOTAL" className="narrow" />
     </Col>
   ]);
-  
+
   var DetailViewWrapper = React.createBackboneClass({
     mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
-    
+
     getInitialState: function () {
       return {
         model: store.getModel()
       };
     },
-    
+
     onStoreUpdate: function (ev, model) {
       if (store.getModel()) {
         store.getModel().getSources();
       }
-        
+
       this.setState({ model: store.getModel() });
     },
-  
+
     onClose: function () {
       tActions.rowClick(null);
     },
-    
+
     render: function () {
       if (this.state.model) {
         return (
@@ -279,7 +283,7 @@ define(function (require) {
       }
     }
   });
-  
+
   var RowViewWrapper = React.createClass({
     mixins: [Reflux.listenTo(tStore, 'onStoreUpdate')],
     displayName: 'WorkflowRowView',
@@ -291,106 +295,104 @@ define(function (require) {
         date: store.state.filters.date
       };
     },
-    
+
     onStoreUpdate: function () {
       var id      = this.props.model.id,
           clicked = tStore.isRowClicked(id),
           checked = tStore.isRowChecked(id),
           update  = {};
-            
+
       if (clicked !== this.state.clicked) {
         update.clicked = clicked;
       }
-      
+
       if (checked !== this.state.checked) {
         update.checked = checked;
       }
-      
+
       if (store.state.filters.date !== this.state.date) {
         update.date = store.state.filters.date;
       }
-            
+
       if (!_.isEmpty(update)) {
         this.setState(update);
       }
     },
-  
+
     render: function () {
       var cls = classNames({
         warning: this.state.checked,
         info:    this.state.clicked,
       }, 'clickable', this.props.className);
-      
+
       return (
         <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } />
       );
     },
   });
-  
+
   var TableViewWrapper = React.createClass({
     mixins: [ViewHeightMixin, Reflux.listenTo(store, 'onStoreUpdate')],
-    
+
     componentDidMount: function () {
-      this.getDOMNode().addEventListener('scroll', this.onScroll);
       this.setHeight();
     },
-    
+
     componentWillReceiveProps: function (nextProps, nextState) {
       this.setHeight(nextState);
     },
-    
-    componentWillUnmount: function () {
-      this.getDOMNode().removeEventListener('scroll', this.onScroll);
-    },
-    
+
     setHeight: function (nextProps, nextState) {
       var state = nextState || this.state,
           props = nextProps || this.props;
-    
+
       if (this.isMounted()) {
         var el        = this.getDOMNode(),
-/*            height    = el.clientHeight - (2 * this.props.rowHeight),*/
             height    = $(window).innerHeight() - $(el).position().top - 80 - (2 * this.props.rowHeight),
             maxRows   = Math.floor(height/props.rowHeight),
             maxOffset = (_.size(state.collection) - maxRows - 1) * props.rowHeight;
 
         this.setState({
           height: height,
-          maxRows: maxRows,
+          maxRows: maxRows + 10,
           maxOffset: maxOffset,
           shownItems: new Array(maxRows)
         });
       }
     },
-    
-    onScroll: _.throttle(function (e) {
-      var el        = this.getDOMNode(),
-          rowHeight = this.props.rowHeight;
 
-      if (el.scrollTop <= this.state.maxOffset) {
+    onScroll: function (e) {
+      var el        = this.getDOMNode(),
+          rowHeight = this.props.rowHeight,
+          maxOffset = this.state.maxOffset,
+          offset     = Math.max(0, el.scrollTop - rowHeight) / rowHeight;
+
+      offset = Math.min(offset, maxOffset);
+
+      if (offset != this.state.offset) {
         this.setState({
           scrollTop: el.scrollTop,
-          offset: Math.ceil(Math.max(0, el.scrollTop - rowHeight) / rowHeight)
+          offset: Math.ceil(offset)
         });
       }
-    }, 20),
+    },
 
     getFirstRow: function (maxRows) {
       var offset    = this.state.offset,
           rowHeight = this.props.rowHeight;
-      
+
       return offset;
     },
-    
+
     getDefaultProps: function () {
       return {
         rowHeight: 21
       };
     },
-    
+
     getInitialState: function () {
       tActions.setCollection(workflowsStore.getCollection());
-      
+
       return {
         hash: utils.hash(store.getCollection()),
         collection: workflowsStore.getCollection(),
@@ -406,18 +408,18 @@ define(function (require) {
         maxOffset: 0
       };
     },
-    
+
     rowClick: function (id) {
       tActions.rowClick(id);
     },
-    
+
     sortClick: function (key, ord) {
       tActions.sort(key, ord);
     },
-    
+
     onStoreUpdate: function () {
       var col = store.getCollection(),
-          state = _.extend({}, this.state, {          
+          state = _.extend({}, this.state, {
             hash: utils.hash(col),
             collection_fetched: store.state.collection_fetched,
             error: store.state.error,
@@ -426,23 +428,23 @@ define(function (require) {
             order: store.state.order,
             maxOffset: (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
           });
-    
+
       if (!_.isEqual(this.state, state)) {
         this.setState(state);
       }
     },
-  
+
     _update: function () {
       var width = $('#container').width();
       var offSet = 80;
       var height = $(window).height() - offSet;
-      
+
       this.setState({
         tableWidth: width,
         tableHeight: height
       });
     },
-  
+
     render: function () {
       var model       = (this.state.model) ? this.state.model.id : null,
           error       = null,
@@ -453,14 +455,14 @@ define(function (require) {
       if (this.state.error) {
         error = <div className="alert alert-warning">{ this.state.error }</div>;
       }
-  
+
       return (
-        <div className="overflow-auto-y" style={{ position: 'relative' }}>
+        <div className="overflow-auto-y" style={{ position: 'relative' }} onScroll={ this.onScroll }>
           { error }
           <div className="scroller" style={{ height: (_.size(this.state.collection) + 1) * this.props.rowHeight }} />
           <div className="table-fixed" style={{ position: 'absolute', top: 0, transform: "translate3d(0,"+this.state.scrollTop+"px,0)", width: "calc(100% - 10px)" }}>
-            <TableView {...this.state} collection={ collection } current_model={ model } 
-              cssClass="table table-stripes table-condensed table-hover" 
+            <TableView {...this.state} collection={ collection } current_model={ model }
+              cssClass="table table-stripes table-condensed table-hover"
               rowClick={ this.rowClick } rowView={ RowViewWrapper } fixed={ false } chunked={ true } sortClick={ this.sortClick } offset={ this.state.offset } shownItems={ this.state.maxRows }>
               { columns }
             </TableView>
@@ -468,12 +470,12 @@ define(function (require) {
         </div>
         );
     },
-    
+
     prepareCollection: function () {
       var collection  = this.state.collection,
           tfilter     = this.state.filters.text,
           firstRow    = 0;
-      
+
       if (tfilter) {
         collection = collection.filter(function (m) {
           return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
@@ -481,6 +483,165 @@ define(function (require) {
       }
 
       return collection;
+    }
+  });
+
+
+  // experimental FixedDataTable
+  var MyFixedTable = React.createClass({
+    mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
+
+    rowClick: function (e, rowIndex, rowData) {
+      var model = this.state.collection.at(rowIndex);
+
+      tActions.rowClick(model.id);
+    },
+
+    sortClick: function (key, ord) {
+      tActions.sort(key, ord);
+    },
+
+    onStoreUpdate: function () {
+      this.setState({ collection: workflowsStore.getCollection() });
+    },
+
+    getInitialState: function () {
+      return {
+        collection: workflowsStore.getCollection(),
+        width: 1000,
+        height: 200
+      };
+    },
+
+    prepareCollection: function () {
+      var collection  = this.state.collection,
+          tfilter     = this.state.filters.text,
+          firstRow    = 0;
+
+      if (tfilter) {
+        collection = collection.filter(function (m) {
+          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
+        });
+      }
+
+      return collection;
+    },
+
+    componentDidMount: function () {
+      var el = this.getDOMNode().parentNode,
+          width  = el.clientWidth,
+          height = window.innerHeight - 150;
+
+          console.log(width, height);
+
+      this.setState({ width: width, height: height });
+    },
+
+    _getCellComponent: function (component, props) {
+      props = props || {};
+
+      return function (cellData, cellDataKey, rowData, rowIndex) {
+          var model = this.state.collection.at(rowIndex);
+          return React.addons.cloneWithProps(component, _.extend({}, props, { model: model }));
+      }.bind(this);
+    },
+
+    render: function () {
+      var state = this.state,
+          rows = state.collection.toJSON(),
+          rowGetter = function (idx) { return rows[idx]; };
+
+      var columns = [
+        <Column
+          align="center"
+          width={25}
+          dataKey="checked"
+          cellRenderer={ this._getCellComponent(<CheckerWrapper />) }
+        />,
+        <Column
+          align="center"
+          label="Actions"
+          width={60}
+          dataKey="actions"
+          cellClassNames="connections"
+          cellRenderer={ this._getCellComponent(<ControlsView />) }
+        />,
+        <Column
+          align="center"
+          label="Autostart"
+          width={60}
+          dataKey="autostart"
+          cellClassNames="autostart"
+          cellRenderer={ this._getCellComponent(<AutostartView />) }
+        />,
+        <Column
+          align="center"
+          label="Execs"
+          width={25}
+          dataKey="exec_count"
+        />,
+        <Column
+          align="center"
+          label="ID"
+          width={25}
+          dataKey="workflowid"
+        />,
+        <Column
+          align="center"
+          headerRenderer={ function () { return <i className='icon-warning-sign' />; } }
+          width={25}
+          dataKey="has_alerts"
+          cellRenderer={ this._getCellComponent(<HasAlertsView />) }
+        />,
+        <Column
+          label="Name"
+          width={300}
+          dataKey="name"
+          flexGrow={3}
+          cellRenderer={ this._getCellComponent(<LinkView />) }
+        />,
+        <Column
+          align="center"
+          label="Version"
+          width={25}
+          dataKey="version"
+        />
+      ];
+
+      columns = columns.concat(status_cols.map(function (col) {
+        var [title, css, sort] = col;
+
+        return <Column
+                align="center"
+                label={title}
+                width={50}
+                dataKey={title}
+                cellRenderer={ this._getCellComponent(<BadgeViewCell />, { attr: sort }) }
+              />;
+      }, this));
+
+      columns = columns.concat([
+        <Column
+          align="center"
+          label="Total"
+          width={50}
+          dataKey="TOTAL"
+        />
+      ]);
+
+      return (
+        <Table
+          rowHeight={25}
+          rowGetter={rowGetter}
+          rowsCount={rows.length}
+          width={state.width}
+          height={state.height}
+          minHeight={500}
+          headerHeight={25}
+          onRowClick={this.rowClick}>
+          { columns }
+        </Table>
+      );
     }
   });
 
@@ -492,13 +653,14 @@ define(function (require) {
     render: function () {
       var detail;
 
+      // <MyFixedTable />
       return  <div id="workflows">
                 <ToolbarViewWrapper />
                 <TableViewWrapper />
                 <DetailViewWrapper />
-              </div>;      
+              </div>;
     }
   });
-  
+
   return ListView;
 });

@@ -1,26 +1,30 @@
 define(function (require) {
   var React       = require('react'),
-      Workflows   = require('collections/workflows'),
-      _           = require('underscore'),
-      utils       = require('utils'),
-      DatePicker  = require('jsx!views.react/components/datepicker'),
-      ExportCSV   = require('jsx!views.react/components/exportcsv'),
-      moment      = require('moment');
-  
+      Workflows    = require('collections/workflows'),
+      _            = require('underscore'),
+      utils        = require('utils'),
+      DatePicker   = require('jsx!views.react/components/datepicker'),
+      ExportCSV    = require('jsx!views.react/components/exportcsv'),
+      ORDER_STATES = require('constants/workflow').ORDER_STATES,
+      moment       = require('moment');
+
   require('backbone');
   require('react.backbone');
-  
+
+
+  var states = _.pluck(ORDER_STATES, 'name');
+
   var doAction = function (ids, args) {
       var url = _.result(Workflows.prototype, 'url'),
           action = args.action;
-      
+
       method = args.method || 'put';
       params = { action: args.action, ids: ids.join(',') };
-      
+
       if (action == 'show' || action == 'hide') {
         params = { action: 'setDeprecated', ids: ids.join(','), deprecated: (action=='hide') };
       }
-      
+
       if (method == 'get') {
         $request = $.get(url, params);
       } else if (method == 'put') {
@@ -29,15 +33,15 @@ define(function (require) {
         $request = $.put(url, params);
       }
   };
-  
-  
+
+
   var SearchFormView = React.createClass({
     filterChange: function (e) {
       this.props.filterChange({ text: e.target.value });
     },
-    
+
     render: function () {
-      
+
       return (
         <form className="form-search">
           <div className="input-append search-box">
@@ -48,41 +52,41 @@ define(function (require) {
       );
     }
   });
-  
+
   var DateFilterView = React.createClass({
     onChange: function (e) {
       this.setState({value: e.target.value });
     },
-    
+
     getInitialState: function () {
       return {
         value: this.props.filters.date,
         datepicker: false
       };
     },
-    
+
     showDatePicker: function () {
       var show = !this.state.datepicker,
           self = this;
-      
+
       this.setState({
         datepicker: show
       });
     },
-    
+
     applyDate: function (date) {
       this.props.setDate(date);
       this.setState({ datepicker: false });
     },
-    
+
     render: function () {
       var value = this.state.value || this.props.filters.date,
           datepicker = this.state.datepicker ? <DatePicker date={ value } onChange={ this.applyDate } onClose={ this.showDatePicker} /> : '';
-          
+
       if (moment.isMoment(value)) {
         value = utils.formatDate(value);
       }
-      
+
       return (
         <div className="btn-group toolbar-filters">
             <form className="form-inline nomargin" action="" onSubmit={ this.props.handleSubmitDate }>
@@ -108,10 +112,10 @@ define(function (require) {
       actions: React.PropTypes.object.isRequired,
       store: React.PropTypes.object.isRequired,
     },
-    
+
     componentDidMount: function () {
       var fixed = this.props.fixed;
-    
+
       if (fixed) {
         var $el = $(this.getDOMNode());
         var $push = $('<div class="push" />').height($el.outerHeight(true));
@@ -120,45 +124,45 @@ define(function (require) {
           .width(function () { return $(this).width(); })
           .css('position', 'fixed')
           .after($push);
-      
+
         // bind resize on window size change
 /*        $(window).on('resize.toolbar.' + this.cid, $.proxy(this.resize, this));*/
       }
 
     },
-    
+
     getInitialState: function () {
       return {
         filters: this.props.filters
       };
     },
-    
+
     handleSubmitDate: function (e) {
       e.preventDefault();
       this.props.filterChange({ date: this.refs.date.getDOMNode().value.trim() });
     },
-    
+
     setDeprecated: function (e) {
       e.preventDefault();
-      
+
       var deprecated = !this.state.filters.deprecated;
-      
+
       this.props.filterChange({ deprecated: deprecated });
     },
-    
+
     setDate: function (date, e) {
-    
+
       if (e) {
         e.preventDefault();
       }
-      
+
       if (!moment.isMoment(date)) {
         date = utils.prepareDate(date);
       }
-    
+
       this.props.filterChange({ date: date });
     },
-    
+
     render: function () {
       var filters = this.props.filters,
           deprecated      = "icon-" + (filters.deprecated) ? 'flag' : 'flag-alt',
@@ -170,16 +174,17 @@ define(function (require) {
             hide: (this.props.store.state.checkedIds.length === 0)
           }),
           actions = this.props.actions,
-          csv_export = {
-            el: '#workflows table',
-            ignore: [0,1,4],
+
+          csv_options = {
+            data: this.props.store.getCollection().toJSON(),
+            include: _.union(['autostart', 'exec_count', 'workflowid', 'name', 'version'], states),
             export: true
           };
-      
-      
+
+
       return (
         <div id="workflows-toolbar" className="toolbar">
-          <div className="workflows-toolbar btn-toolbar sticky toolbar"> 
+          <div className="workflows-toolbar btn-toolbar sticky toolbar">
               <div className="btn-group">
                 <button className="btn dropdown-toggle" data-toggle="dropdown">
                   <i className="icon-check-empty check-all checker"></i>
@@ -205,7 +210,7 @@ define(function (require) {
                   <button className="btn" onClick={ this.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</button>
               </div>
               <div className="btn-group">
-                <ExportCSV table="#workflows table" opts={ csv_export } />
+                <ExportCSV opts={ csv_options } filename="workflows" />
               </div>
               <div className="pull-right">
                 <SearchFormView filterText={this.props.filters.text} filterChange={this.props.filterChange}/>
@@ -217,6 +222,6 @@ define(function (require) {
       );
     }
   });
-  
+
   return Toolbar;
 });

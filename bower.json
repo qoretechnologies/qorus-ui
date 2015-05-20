@@ -36,7 +36,9 @@
     "lodash": "2.4.1",
     "spark-md5": "~0.0.5",
     "classnames": "~1.1.4",
-    "react-chartjs": "https://github.com/temnoregg/react-chartjs-bower.git#~0.6.0"
+    "react-chartjs": "https://github.com/temnoregg/react-chartjs-bower.git#~0.6.0",
+    "es6-shim": "~0.31.2",
+    "react-fixed-data-table": "~0.1.2"
   },
   "resolutions": {
     "backbone": "~1.1.2",

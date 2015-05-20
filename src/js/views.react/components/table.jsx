@@ -13,49 +13,49 @@ define(function (require) {
       Filtered            = require('backbone.filtered.collection'),
       diff                = require('deep-diff').diff,
       utils               = require('utils');
-      
+
   require('react.backbone');
   require('jquery.fixedheader');
-  
-  
+
+
   var TdComponent = React.createClass({
     shouldComponentUpdate: function (nextProps) {
       var should = (!_.isEqual(this.props, nextProps) || this.props.hash !== nextProps.hash);
-      
+
       return should;
     },
-    
+
     render: function () {
       var props = _.omit(this.props, 'children');
-      
+
       return <td {...props}>{ this.props.children }</td>;
     }
   });
-  
+
   var RowMixin = {
     getDefaultProps: function () {
       return {
         clicked: false
       };
     },
-    
+
     shouldComponentUpdate: function (nextProps, nextState) {
       nextProps = _.omit(nextProps, ['children']);
       nextProps.clicked = nextProps.clicked || false;
 
       var props = _.omit(this.props, ['children']);
       var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
-      
+
 /*      if (should) { console.log('should', _.pick(props, ['hash']), _.pick(nextProps, ['hash']), !_.isEqual(props, nextProps), this.state, nextState); }*/
-      
+
       return should;
     },
-    
+
     processColumns: function () {
       var children = this.props.children,
           row = this.props.model,
           cols = [];
-    
+
       cols = _.map(children, function (col, indx) {
         var child = col.props.children,
             clone = child ? cloneWithProps(child, { model: row, displayName: 'Clone' }) : null,
@@ -68,7 +68,7 @@ define(function (require) {
         } else {
           tRow = <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
         }
-        
+
         return tRow;
       }, this);
 
@@ -78,30 +78,34 @@ define(function (require) {
 
   var ModelRowView = React.createBackboneClass({
     mixins: [RowMixin],
-    
+
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model).isRequired,
       clicked: React.PropTypes.bool
     },
 
     render: function () {
+      if (this.props.shown) return null;
+
       var model = this.props.model,
           css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
           children = this.processColumns();
-    
+
       return <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ children }</tr>;
     }
   });
-  
+
   var RowView = React.createClass({
     mixins: [RowMixin],
-    
+
     propTypes: {
       model: React.PropTypes.object.isRequired,
       clicked: React.PropTypes.bool
     },
-    
+
     render: function () {
+      if (this.props.shown) return null;
+
       var model = this.props.model,
           css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
           children = this.processColumns();
@@ -109,7 +113,7 @@ define(function (require) {
       return <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ children }</tr>;
     }
   });
-  
+
   var THeadView = React.createClass({
     componentDidMount: function () {
       if (this.props.fixed) {
@@ -121,14 +125,14 @@ define(function (require) {
         $el.find('tr').first().children().each(function () {
           clgrp.append($('<col />').width($(this).outerWidth()));
         });
-        
+
         $el.parent('table')
           .prepend(clgrp)
           .addClass('table-fixed')
           .fixedHeader();
       }
     },
-    
+
     render: function () {
       return <thead className={ React.addons.classSet({ header: this.props.fixed })}>
                <tr>
@@ -137,7 +141,7 @@ define(function (require) {
              </thead>;
     }
   });
-  
+
   var TableView = React.createClass({
     propTypes: {
       collection: React.PropTypes.oneOfType([
@@ -146,33 +150,33 @@ define(function (require) {
       ]).isRequired,
       rowView: React.PropTypes.func
     },
-      
+
     getDefaultProps: function () {
       return {
         chunked: false,
         rowClick: _.noop
       };
     },
-  
+
     // TODO: missing rowview when assigned with props
     render: function () {
       var columns, rows, style, header_columns,
           props       = this.props,
           children    = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           isBackbone  = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection;
-    
+
       if (isBackbone && !this.props.collection_fetched) {
         return (<LoaderView />);
       }
-      
+
       if (_.size(this.props.collection) === 0) {
         return (<NoDataView />);
       }
-      
+
       header_columns = this.renderHeader();
-      
+
       rows = this.renderRows();
-      
+
       return <table className={ this.props.cssClass || this.props.className } style={ style }>
                <THeadView fixed={ this.props.fixed }>
                 { React.addons.createFragment(header_columns) }
@@ -184,40 +188,39 @@ define(function (require) {
     },
 
     renderRows: function () {
-        var collection      = this.props.collection,
-            children        = _.isArray(this.props.children) ? this.props.children : [this.props.children],
-            props           = this.props,
-            DefaultRowView  = this.props.rowView || RowView,
-            tableProps      = _.omit(props, 'children'),
-            isBackbone      = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
-            rows            = new Array(_.size(collection)),
-            offset          = props.offset || 0,
-            shownItems      = props.shownItems || _.size(collection);
+        var collection     = this.props.collection,
+            children       = _.isArray(this.props.children) ? this.props.children : [this.props.children],
+            props          = this.props,
+            DefaultRowView = this.props.rowView || RowView,
+            isBackbone     = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
+            tableProps     = _.omit(props, 'children'),
+            offset         = this.props.offset,
+            shownItems     = this.props.shownItems;
 
-        rows = _.map(collection, function (row, idx) {
-          if (idx < offset || idx > (offset+shownItems)) return;
-        
+        this._rows = _.map(collection, function (row, idx) {
+          if (!(idx >= offset && idx < offset+shownItems)) return;
+
           row = isBackbone ? collection.at(idx) : row;
-          
+
           var DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
               clicked        = props.current_model ? props.current_model == row.id : false,
               key            = isBackbone ? row.id : idx;
 
           return (
-            <DefaultRowView 
-               model={ row } 
-               rowClick={props.rowClick} 
+            <DefaultRowView
+               model={ row }
+               rowClick={props.rowClick}
                clicked={ clicked } className={ idx % 2 ? 'odd' : 'even' } key={ key }>
               { children }
             </DefaultRowView>
-          ); 
-        });      
+          );
+        });
 
-      return rows;
+      return this._rows;
     },
-        
+
     renderHeader: function () {
-      var header, 
+      var header,
           children = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           tprops   = this.props;
 
@@ -225,57 +228,57 @@ define(function (require) {
         var props     = _.pick(child.props, ['className', 'dataSort']),
             orderKey  = tprops.orderKey || tprops.collection.sort_key,
             order     = tprops.order || tprops.collection.sort_order;
-            
+
         if (!header) header = {};
 
         if (orderKey == props.dataSort) {
           props.className = [props.className, 'sort', 'sort-'+ order].join(' ');
         }
 
-        header['th-'+idx] = <th {...props} key={ idx } data-sort={child.props.dataSort} 
+        header['th-'+idx] = <th {...props} key={ idx } data-sort={child.props.dataSort}
           onClick={ tprops.sortClick ? tprops.sortClick.bind(null, props.dataSort, null) : _.noop }>{ child.props.name }</th>;
-      });  
-      
+      });
+
       return header;
     }
   });
-  
+
   var CellView = React.createClass({
     propTypes: {
       model: PropTypes.object.isRequired,
       dataKey: PropTypes.string.isRequired
     },
-    
+
     getValue: function () {
       var model = this.props.model,
           key = this.props.dataKey;
-          
+
       if (model instanceof Backbone.Model) {
         return model.get(key, 'N/A');
       } else {
         return _.result(model, key, 'N/A');
       }
     },
-    
+
     render: function () {
       var value = this.getValue();
-      
+
       return <span>{ value }</span>;
     }
   });
-  
+
   var CellBackbone = React.createBackboneClass({
     propTypes: {
       model: PropTypes.object.isRequired,
       dataKey: PropTypes.string.isRequired
     },
-    
+
     render: function () {
       var obj = this.props.model;
       return <span>{ obj.get(this.props.dataKey) }</span>;
     }
   });
-  
+
   return {
     TableView: TableView,
     RowView: RowView,
