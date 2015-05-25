@@ -40,13 +40,14 @@ define(function (require) {
     },
 
     shouldComponentUpdate: function (nextProps, nextState) {
-      nextProps = _.omit(nextProps, ['children']);
-      nextProps.clicked = nextProps.clicked || false;
+      nProps = _.omit(nextProps, ['children']);
+      nProps.clicked = nProps.clicked || false;
 
       var props = _.omit(this.props, ['children']);
-      var should = (!_.isEqual(props, nextProps) || !_.isEqual(this.state, nextState));
+      var should = (!_.isEqual(props, nProps) || !_.isEqual(this.state, nextState));
 
-/*      if (should) { console.log('should', _.pick(props, ['hash']), _.pick(nextProps, ['hash']), !_.isEqual(props, nextProps), this.state, nextState); }*/
+      if (this.props.children.length !== nextProps.children.length)
+        should = true;
 
       return should;
     },
@@ -85,8 +86,6 @@ define(function (require) {
     },
 
     render: function () {
-      if (this.props.shown) return null;
-
       var model = this.props.model,
           css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
           children = this.processColumns();
@@ -128,8 +127,8 @@ define(function (require) {
 
         $el.parent('table')
           .prepend(clgrp)
-          .addClass('table-fixed')
-          .fixedHeader();
+          .addClass('table-fixed');
+          // .fixedHeader();
       }
     },
 
@@ -154,7 +153,8 @@ define(function (require) {
     getDefaultProps: function () {
       return {
         chunked: false,
-        rowClick: _.noop
+        rowClick: _.noop,
+        offset: 0
       };
     },
 
@@ -194,8 +194,8 @@ define(function (require) {
             DefaultRowView = this.props.rowView || RowView,
             isBackbone     = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
             tableProps     = _.omit(props, 'children'),
-            offset         = this.props.offset,
-            shownItems     = this.props.shownItems;
+            offset         = this.props.offset || 0,
+            shownItems     = this.props.shownItems || _.size(collection);
 
         this._rows = _.map(collection, function (row, idx) {
           if (!(idx >= offset && idx < offset+shownItems)) return;
@@ -231,8 +231,8 @@ define(function (require) {
 
         if (!header) header = {};
 
-        if (orderKey == props.dataSort) {
-          props.className = [props.className, 'sort', 'sort-'+ order].join(' ');
+        if (tprops.nameWidth && props.className && props.className.indexOf('name') !== -1) {
+          props.style = { width: tprops.nameWidth };
         }
 
         header['th-'+idx] = <th {...props} key={ idx } data-sort={child.props.dataSort}

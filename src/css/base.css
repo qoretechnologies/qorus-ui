@@ -39,7 +39,7 @@ table thead th[data-sort] {
 .table .name, .table .description {
 	text-align: left;
 /*  white-space: nowrap;*/
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .table .description div {
@@ -2275,7 +2275,7 @@ a[disabled] { pointer-events: none; }
   background-color: #f9f9f9;
 }
 
-.public_fixedDataTableCell_cellContent {
+/*.public_fixedDataTableCell_cellContent {
 	padding: 0;
 }
 
@@ -2285,4 +2285,10 @@ a[disabled] { pointer-events: none; }
 
 .fixedDataTableCellGroup_cellGroup .public_fixedDataTableCell_cellContent {
 	font-size: 80%;
+}
+*/
+
+
+td.name .overflow-hidden {
+	max-width: 100%;
 }

@@ -29,17 +29,14 @@ define(function (require) {
       HasAlertsView      = require('jsx!views.react/components/hasalerts'),
       Checker            = require('jsx!views.react/components/checker'),
       normalizeWheel     = require('views.react/utils/normalizeWheel'),
-      workflowsStore     = require('views.react/stores/workflows'),
-      FixedTable         = require('react-fixed-data-table'),
-      Table              = FixedTable.Table,
-      Column             = FixedTable.Column;
+      workflowsStore     = require('views.react/stores/workflows');
 
 //  require('backbone');
   require('react.backbone');
   require('classnames');
 
-
-  var fixed = true;
+  var FONT_WIDTH = 12 * 0.8;
+  var nameWidth = 0;
 
   var store = Reflux.createStore({
     state: {},
@@ -60,6 +57,7 @@ define(function (require) {
     setState: function (state) {
       this.state = _.assign(this.state, state);
       this.updateUrl();
+      console.log(this.state);
       this.trigger(this.state);
     },
 
@@ -118,7 +116,9 @@ define(function (require) {
     },
 
     render: function () {
-      return <Checker checked={ this.state.checked } onClick={ this.rowCheck } />;
+      return (
+        <Checker checked={ this.state.checked } onClick={ this.rowCheck } />
+      );
     }
 
   });
@@ -141,7 +141,6 @@ define(function (require) {
     },
 
     render: function () {
-
       if (this.state.filters) {
         return (
           <ToolbarView
@@ -170,7 +169,18 @@ define(function (require) {
           url   = helpers.getUrl(this.props.status, this.props.model.id, store.state.filters.date);
 
       return (
-        <a href={ url }>{ this.props.model.get('name') }</a>
+        <div className="overflow-hidden" style={{ maxWidth: nameWidth }}><a href={ url }>{ this.props.model.get('name') }</a></div>
+      );
+    }
+  });
+
+  var DeprecatedView = React.createClass({
+    render: function () {
+      var model = this.props.model,
+          icon  = model.get('deprecated') ? 'icon-flag-alt' : 'icon-flag';
+
+      return (
+        <i className={ icon } />
       );
     }
   });
@@ -225,7 +235,7 @@ define(function (require) {
       <Cell dataKey='exec_count' className="narrow" />
     </Col>,
     <Col name="ID" dataSort="workflowid" key="workflowid">
-      <Cell dataKey="workflowid" className="narrow" />
+      <Cell dataKey="workflowid" className="narrow" style={{ width: FONT_WIDTH*4 + 'px' }}/>
     </Col>,
     <Col name={ <i className='icon-warning-sign' /> } dataSort="has_alerts" className="narrow" key="has_alerts">
       <HasAlertsView className="narrow" />
@@ -354,7 +364,7 @@ define(function (require) {
 
         this.setState({
           height: height,
-          maxRows: maxRows + 10,
+          maxRows: maxRows,
           maxOffset: maxOffset,
           shownItems: new Array(maxRows)
         });
@@ -420,13 +430,13 @@ define(function (require) {
     onStoreUpdate: function () {
       var col = store.getCollection(),
           state = _.extend({}, this.state, {
-            hash: utils.hash(col),
+            hash              : utils.hash(col),
             collection_fetched: store.state.collection_fetched,
-            error: store.state.error,
-            filters: store.state.filters,
-            orderKey: store.state.orderKey,
-            order: store.state.order,
-            maxOffset: (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
+            error             : store.state.error,
+            filters           : store.state.filters,
+            orderKey          : store.state.orderKey,
+            order             : store.state.order,
+            maxOffset         : (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
           });
 
       if (!_.isEqual(this.state, state)) {
@@ -447,10 +457,22 @@ define(function (require) {
 
     render: function () {
       var model       = (this.state.model) ? this.state.model.id : null,
-          error       = null,
-          tfilter     = workflowsStore.state.filters.text;
+          error      = null,
+          tfilter    = workflowsStore.state.filters.text,
+          deprecated = workflowsStore.state.filters.deprecated,
+          tColumns   = columns.slice();
 
       collection = this.prepareCollection();
+
+      this.setNameWidth();
+
+      if (deprecated) {
+        tColumns.push(
+          <Col key="deprecated">
+            <DeprecatedView />
+          </Col>
+        );
+      }
 
       if (this.state.error) {
         error = <div className="alert alert-warning">{ this.state.error }</div>;
@@ -461,10 +483,17 @@ define(function (require) {
           { error }
           <div className="scroller" style={{ height: (_.size(this.state.collection) + 1) * this.props.rowHeight }} />
           <div className="table-fixed" style={{ position: 'absolute', top: 0, transform: "translate3d(0,"+this.state.scrollTop+"px,0)", width: "calc(100% - 10px)" }}>
-            <TableView {...this.state} collection={ collection } current_model={ model }
+            <TableView {...this.state}
+              collection={ collection }
+              current_model={ model }
               cssClass="table table-stripes table-condensed table-hover"
-              rowClick={ this.rowClick } rowView={ RowViewWrapper } fixed={ false } chunked={ true } sortClick={ this.sortClick } offset={ this.state.offset } shownItems={ this.state.maxRows }>
-              { columns }
+              rowClick={ this.rowClick }
+              rowView={ RowViewWrapper }
+              fixed={ true }
+              sortClick={ this.sortClick }
+              offset={ this.state.offset }
+              shownItems={ this.state.maxRows }>
+              { tColumns }
             </TableView>
           </div>
         </div>
@@ -472,176 +501,34 @@ define(function (require) {
     },
 
     prepareCollection: function () {
-      var collection  = this.state.collection,
-          tfilter     = this.state.filters.text,
-          firstRow    = 0;
+      var collection = workflowsStore.state.collection,
+          tfilter    = workflowsStore.state.filters.text,
+          deprecated = workflowsStore.state.filters.deprecated,
+          firstRow   = 0;
 
-      if (tfilter) {
+      if (tfilter || !deprecated) {
         collection = collection.filter(function (m) {
-          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
-        });
-      }
+          var leave = m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
+          console.log(m.get('name'));
+          if (m.get('name') == 'ARRAYTEST') { console.log(m, m.get('deprecated') === false, deprecated); }
 
-      return collection;
-    }
-  });
+          if (deprecated === false) {
+              leave = leave || (m.get('deprecated') === false);
+          }
 
-
-  // experimental FixedDataTable
-  var MyFixedTable = React.createClass({
-    mixins: [Reflux.listenTo(store, 'onStoreUpdate')],
-
-    rowClick: function (e, rowIndex, rowData) {
-      var model = this.state.collection.at(rowIndex);
-
-      tActions.rowClick(model.id);
-    },
-
-    sortClick: function (key, ord) {
-      tActions.sort(key, ord);
-    },
-
-    onStoreUpdate: function () {
-      this.setState({ collection: workflowsStore.getCollection() });
-    },
-
-    getInitialState: function () {
-      return {
-        collection: workflowsStore.getCollection(),
-        width: 1000,
-        height: 200
-      };
-    },
-
-    prepareCollection: function () {
-      var collection  = this.state.collection,
-          tfilter     = this.state.filters.text,
-          firstRow    = 0;
-
-      if (tfilter) {
-        collection = collection.filter(function (m) {
-          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
+          return leave;
         });
       }
 
       return collection;
     },
 
-    componentDidMount: function () {
-      var el = this.getDOMNode().parentNode,
-          width  = el.clientWidth,
-          height = window.innerHeight - 150;
+    setNameWidth: function () {
+      nameWidth = 0;
 
-          console.log(width, height);
+      _(this.state.collection.toJSON()).pluck('name').each(function (wfl) { nameWidth = Math.max(nameWidth, wfl.length); });
 
-      this.setState({ width: width, height: height });
-    },
-
-    _getCellComponent: function (component, props) {
-      props = props || {};
-
-      return function (cellData, cellDataKey, rowData, rowIndex) {
-          var model = this.state.collection.at(rowIndex);
-          return React.addons.cloneWithProps(component, _.extend({}, props, { model: model }));
-      }.bind(this);
-    },
-
-    render: function () {
-      var state = this.state,
-          rows = state.collection.toJSON(),
-          rowGetter = function (idx) { return rows[idx]; };
-
-      var columns = [
-        <Column
-          align="center"
-          width={25}
-          dataKey="checked"
-          cellRenderer={ this._getCellComponent(<CheckerWrapper />) }
-        />,
-        <Column
-          align="center"
-          label="Actions"
-          width={60}
-          dataKey="actions"
-          cellClassNames="connections"
-          cellRenderer={ this._getCellComponent(<ControlsView />) }
-        />,
-        <Column
-          align="center"
-          label="Autostart"
-          width={60}
-          dataKey="autostart"
-          cellClassNames="autostart"
-          cellRenderer={ this._getCellComponent(<AutostartView />) }
-        />,
-        <Column
-          align="center"
-          label="Execs"
-          width={25}
-          dataKey="exec_count"
-        />,
-        <Column
-          align="center"
-          label="ID"
-          width={25}
-          dataKey="workflowid"
-        />,
-        <Column
-          align="center"
-          headerRenderer={ function () { return <i className='icon-warning-sign' />; } }
-          width={25}
-          dataKey="has_alerts"
-          cellRenderer={ this._getCellComponent(<HasAlertsView />) }
-        />,
-        <Column
-          label="Name"
-          width={300}
-          dataKey="name"
-          flexGrow={3}
-          cellRenderer={ this._getCellComponent(<LinkView />) }
-        />,
-        <Column
-          align="center"
-          label="Version"
-          width={25}
-          dataKey="version"
-        />
-      ];
-
-      columns = columns.concat(status_cols.map(function (col) {
-        var [title, css, sort] = col;
-
-        return <Column
-                align="center"
-                label={title}
-                width={50}
-                dataKey={title}
-                cellRenderer={ this._getCellComponent(<BadgeViewCell />, { attr: sort }) }
-              />;
-      }, this));
-
-      columns = columns.concat([
-        <Column
-          align="center"
-          label="Total"
-          width={50}
-          dataKey="TOTAL"
-        />
-      ]);
-
-      return (
-        <Table
-          rowHeight={25}
-          rowGetter={rowGetter}
-          rowsCount={rows.length}
-          width={state.width}
-          height={state.height}
-          minHeight={500}
-          headerHeight={25}
-          onRowClick={this.rowClick}>
-          { columns }
-        </Table>
-      );
+      nameWidth *= FONT_WIDTH;
     }
   });
 

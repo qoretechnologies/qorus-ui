@@ -1,12 +1,13 @@
 define(function (require) {
-  var React       = require('react'),
-      Workflows    = require('collections/workflows'),
-      _            = require('underscore'),
-      utils        = require('utils'),
-      DatePicker   = require('jsx!views.react/components/datepicker'),
-      ExportCSV    = require('jsx!views.react/components/exportcsv'),
-      ORDER_STATES = require('constants/workflow').ORDER_STATES,
-      moment       = require('moment');
+  var React          = require('react'),
+      Workflows      = require('collections/workflows'),
+      _              = require('underscore'),
+      utils          = require('utils'),
+      DatePicker     = require('jsx!views.react/components/datepicker'),
+      ExportCSV      = require('jsx!views.react/components/exportcsv'),
+      ORDER_STATES   = require('constants/workflow').ORDER_STATES,
+      workflowsStore = require('views.react/stores/workflows'),
+      moment         = require('moment');
 
   require('backbone');
   require('react.backbone');
@@ -15,6 +16,7 @@ define(function (require) {
   var states = _.pluck(ORDER_STATES, 'name');
 
   var doAction = function (ids, args) {
+      console.log(ids, args);
       var url = _.result(Workflows.prototype, 'url'),
           action = args.action;
 
@@ -38,6 +40,7 @@ define(function (require) {
   var SearchFormView = React.createClass({
     filterChange: function (e) {
       this.props.filterChange({ text: e.target.value });
+      e.preventDefault();
     },
 
     render: function () {
@@ -145,7 +148,9 @@ define(function (require) {
     setDeprecated: function (e) {
       e.preventDefault();
 
-      var deprecated = !this.state.filters.deprecated;
+      var deprecated = !workflowsStore.state.filters.deprecated;
+
+      console.log(deprecated, this.state.filters.deprecated);
 
       this.props.filterChange({ deprecated: deprecated });
     },
@@ -164,11 +169,11 @@ define(function (require) {
     },
 
     render: function () {
-      var filters = this.props.filters,
+      var filters         = workflowsStore.state.filters,
           deprecated      = "icon-" + (filters.deprecated) ? 'flag' : 'flag-alt',
           deprecated_text = (filters.deprecated) ? 'Only visible' : 'Show hidden',
-          date = filters.date,
-          clsActions = React.addons.classSet({
+          date            = filters.date,
+          clsActions      = React.addons.classSet({
             "btn-group": true,
             "toolbar-actions": true,
             hide: (this.props.store.state.checkedIds.length === 0)
