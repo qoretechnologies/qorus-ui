@@ -29,7 +29,10 @@ define(function (require) {
       HasAlertsView      = require('jsx!views.react/components/hasalerts'),
       Checker            = require('jsx!views.react/components/checker'),
       normalizeWheel     = require('views.react/utils/normalizeWheel'),
-      workflowsStore     = require('views.react/stores/workflows');
+      workflowsStore     = require('views.react/stores/workflows'),
+      Backbone           = require('backbone');
+
+  Backbone.Obscura   = require('backbone.obscura');
 
 //  require('backbone');
   require('react.backbone');
@@ -57,7 +60,6 @@ define(function (require) {
     setState: function (state) {
       this.state = _.assign(this.state, state);
       this.updateUrl();
-      console.log(this.state);
       this.trigger(this.state);
     },
 
@@ -405,7 +407,7 @@ define(function (require) {
 
       return {
         hash: utils.hash(store.getCollection()),
-        collection: workflowsStore.getCollection(),
+        collection        : new Backbone.Obscura(workflowsStore.getCollection()),
         collection_fetched: store.state.collection_fetched,
         error: store.state.error,
         filters: _.extend({}, store.state.filters),
@@ -432,8 +434,8 @@ define(function (require) {
           state = _.extend({}, this.state, {
             hash              : utils.hash(col),
             collection_fetched: store.state.collection_fetched,
+            collection        : new Backbone.Obscura(workflowsStore.getCollection()),
             error             : store.state.error,
-            filters           : store.state.filters,
             orderKey          : store.state.orderKey,
             order             : store.state.order,
             maxOffset         : (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
@@ -442,17 +444,6 @@ define(function (require) {
       if (!_.isEqual(this.state, state)) {
         this.setState(state);
       }
-    },
-
-    _update: function () {
-      var width = $('#container').width();
-      var offSet = 80;
-      var height = $(window).height() - offSet;
-
-      this.setState({
-        tableWidth: width,
-        tableHeight: height
-      });
     },
 
     render: function () {
@@ -501,22 +492,22 @@ define(function (require) {
     },
 
     prepareCollection: function () {
-      var collection = workflowsStore.state.collection,
+      var collection = this.state.collection,
           tfilter    = workflowsStore.state.filters.text,
           deprecated = workflowsStore.state.filters.deprecated,
           firstRow   = 0;
 
-      if (tfilter || !deprecated) {
-        collection = collection.filter(function (m) {
-          var leave = m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
-          console.log(m.get('name'));
-          if (m.get('name') == 'ARRAYTEST') { console.log(m, m.get('deprecated') === false, deprecated); }
+      collection.resetFilters();
 
-          if (deprecated === false) {
-              leave = leave || (m.get('deprecated') === false);
-          }
+      if (tfilter) {
+        collection.filterBy('search', function (m) {
+          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
+        });
+      }
 
-          return leave;
+      if (!deprecated) {
+        collection.filterBy('deprecated', function (m) {
+          return m.get('deprecated') === false;
         });
       }
 

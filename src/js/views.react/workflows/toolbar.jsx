@@ -7,6 +7,7 @@ define(function (require) {
       ExportCSV      = require('jsx!views.react/components/exportcsv'),
       ORDER_STATES   = require('constants/workflow').ORDER_STATES,
       workflowsStore = require('views.react/stores/workflows'),
+      Actions        = require('views.react/actions/workflows'),
       moment         = require('moment');
 
   require('backbone');
@@ -16,7 +17,6 @@ define(function (require) {
   var states = _.pluck(ORDER_STATES, 'name');
 
   var doAction = function (ids, args) {
-      console.log(ids, args);
       var url = _.result(Workflows.prototype, 'url'),
           action = args.action;
 
@@ -34,6 +34,8 @@ define(function (require) {
       } else if (method == 'delete') {
         $request = $.put(url, params);
       }
+
+      Actions.fetch();
   };
 
 
@@ -43,10 +45,15 @@ define(function (require) {
       e.preventDefault();
     },
 
+    onSubmit: function (e) {
+      e.preventDefault();
+      console.log(e);
+    },
+
     render: function () {
 
       return (
-        <form className="form-search">
+        <form className="form-search" onSubmit={ this.onSubmit }>
           <div className="input-append search-box">
             <input type="text" className="search-query appendInputButton" placeholder="Search..." defaultValue={ this.props.filterText } onChange={this.filterChange} />
             <button type="submit" className="btn">&nbsp;<i className="icon-search"></i></button>

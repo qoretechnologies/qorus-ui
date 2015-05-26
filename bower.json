@@ -38,7 +38,8 @@
     "classnames": "~1.1.4",
     "react-chartjs": "https://github.com/temnoregg/react-chartjs-bower.git#~0.6.0",
     "es6-shim": "~0.31.2",
-    "react-fixed-data-table": "~0.1.2"
+    "react-fixed-data-table": "~0.1.2",
+    "backbone.obscura": "~1.0.1"
   },
   "resolutions": {
     "backbone": "~1.1.2",

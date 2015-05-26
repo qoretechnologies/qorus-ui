@@ -4,18 +4,18 @@ define(function (require) {
       Filtered        = require('backbone.filtered.collection'),
       Backbone        = require('backbone'),
       stateStoreMixin = require('views.react/stores/mixins/statestore');
-  
+
   return function (actions) {
     return Reflux.createStore({
       mixins: [stateStoreMixin],
       listenables: [actions],
-      
+
       /** Init function */
       init: function () {
         this.state = this.getInitialState();
       },
-      
-      /** 
+
+      /**
        * Sets initial state hash
        * @returns {Object} this.state
        */
@@ -28,15 +28,15 @@ define(function (require) {
           orderKey: ''
         };
       },
-      
+
       onSetCollection: function (collection) {
         this.setState({ collection: collection }, { silent: true });
       },
-      
+
       getCollection: function () {
         return this.state.collection;
       },
-      
+
       /**
        * Listens on rowClick event
        * @param {number} id
@@ -46,7 +46,7 @@ define(function (require) {
         this.state.model = (this.state.model == id) ? null : id;
         this.trigger(this.state);
       },
-      
+
       /**
        * Listens on rowCheck event
        * @param {number|Array} id
@@ -54,7 +54,7 @@ define(function (require) {
        */
       onRowCheck: function (id) {
         var ids;
-        
+
         if (typeof id === Array) {
           ids = id;
         } else {
@@ -63,12 +63,12 @@ define(function (require) {
           } else {
             ids = this.state.checkedIds;
             ids.push(id);
-          }  
+          }
         }
-        
+
         this.setState({ checkedIds: ids });
       },
-      
+
       /**
        * Checks if id is in checkedIds
        * @param {number} id
@@ -78,10 +78,10 @@ define(function (require) {
         if (this.state.checkedIds.length === 0) {
           return false;
         }
-        
+
         return _.indexOf(this.state.checkedIds, id) !== -1;
       },
-      
+
       /**
        * Returns list of checked IDs
        * @returns {Array}
@@ -89,23 +89,23 @@ define(function (require) {
       getCheckedIds: function () {
         return this.state.checkedIds;
       },
-      
+
       /**
        * Checks if id is clicked
        * @param {number} id
        * @returns {boolean}
-       */          
+       */
       isRowClicked: function (id) {
         return this.state.model ? (this.state.model === id) : false;
       },
-      
+
       /**
        * Selects/unselects rows based on action
        * @param {string|function} action
        */
       onCheck: function (action, e) {
         var ids = this.state.checkedIds;
-        
+
         switch (action) {
             case 'all':
               ids = _.pluck(this.getCollection().models, 'id');
@@ -118,10 +118,10 @@ define(function (require) {
               break;
             default:
               if (typeof action == 'function') {
-                ids = this.getCollection().map(action);  
+                ids = this.getCollection().map(action);
               }
         }
-        
+
         this.setState({ checkedIds: ids });
       },
 
@@ -132,28 +132,27 @@ define(function (require) {
       onRun: function (action, args, e) {
         var ids = this.state.checkedIds;
         action(ids, args);
-        
-        e.preventDefault();
+
         document.activeElement.blur();
       },
-      
+
       onSort: function (key, order) {
         var collection = this.getCollection();
         order = (typeof order == 'string') ? order : this.state.order;
-        
+
         if (key === this.state.orderKey) {
           order = (order == 'asc') ? 'des' : 'asc';
         }
-        
+
         if (collection instanceof Filtered) {
           collection = collection.superset();
         }
-        
+
         if (collection && collection.sortByKey) {
           collection.sortByKey(key, order);
-          this.setState({ order: order, orderKey: key });          
+          this.setState({ order: order, orderKey: key });
         }
       }
-    });      
+    });
   };
 });

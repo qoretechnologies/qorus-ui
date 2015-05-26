@@ -80,7 +80,7 @@ define(function (require) {
   var ErrorCell = React.createClass({
     render: function () {
       var model = this.props.model;
-    
+
       if (model) {
         return <span>{ model.get('error') }<span className="tooltip hide">{ model.get('description') }</span></span>;
       } else {
@@ -295,17 +295,19 @@ define(function (require) {
 
     componentDidUpdate: function () {
       if (!this.state.fetched) {
+        console.log('update', this.state.fetched);
         this._fetch(true);
       }
     },
 
     componentWillReceiveProps: function (nextProps) {
-      this.setState({ 
-        fetched: nextProps.collection.size(),
+      this.setState({
         excludes: nextProps.excludes
       });
-      
-      this._fetch();
+
+      if (this.props.modelId !== nextProps.modelId) {
+        this._fetch(true);
+      }
     },
 
     _fetch: function (force) {
@@ -317,6 +319,7 @@ define(function (require) {
           this.props.collection.fetch({
             success: function (col) {
               if (self.isMounted()) {
+                console.log(self.props.collection.url());
                 self.setState({
                   fetched: true,
                   search_text: '',
@@ -340,7 +343,7 @@ define(function (require) {
           if (_.contains(excludes, m.get('error'))) {
             return false;
           }
-        
+
           return  m.get('error').toLowerCase().indexOf(search) !== -1;
         });
       }
@@ -468,7 +471,7 @@ define(function (require) {
         this.setState(this.getInitialCollections(nextProps.modelId));
       }
     },
-    
+
     componentWillUnmount: function () {
       if (this.state.errors_collection) {
         this.state.errors_collection.off();
@@ -488,7 +491,7 @@ define(function (require) {
 
   var LogViewContainer = React.createBackboneClass({
     mixins: [ViewHeightMixin, TabUpdateRefluxMixin],
-    
+
     shouldComponentUpdate: function (nextProps, nextState) {
       return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
     },
@@ -559,9 +562,9 @@ define(function (require) {
             <a className={ cls1 } onClick={ this.actions.toggleScroll }><i className="icon-ok" /> Autoscroll</a>
             <a className={ cls2 } onClick={ this.actions.togglePause }><i className="icon-pause" /> Pause</a>
           </div>
-          <LogView rows={ this.state.rows } 
-              actions={ this.actions } scroll={ this.state.scroll } 
-              pause={ this.state.pause } model={ this.props.model.id } 
+          <LogView rows={ this.state.rows }
+              actions={ this.actions } scroll={ this.state.scroll }
+              pause={ this.state.pause } model={ this.props.model.id }
               ref="log"/>
         </div>
       );
@@ -603,19 +606,19 @@ define(function (require) {
             </Tab>,
             mappers: <Tab name="Mappers"><MapperList mappers={ new MappersCollection(model.get('mappers')) } /></Tab>
           },
-          omit =  ['options', 'lib', 'stepmap', 
-                   'segment', 'steps', 'stepseg', 
+          omit =  ['options', 'lib', 'stepmap',
+                   'segment', 'steps', 'stepseg',
                    'stepinfo', 'wffuncs', 'groups',
                    'alerts', 'exec_count', 'autostart',
                    'has_alerts', 'TOTAL', 'timestamp'];
-                   
-                   
+
+
           omit = omit.concat(_.pluck(ORDER_STATES, 'name'));
 
       tabs.info = <Tab name="Info">
                     <MetaTable data={ _.omit(model.toJSON(), omit) } />
                   </Tab>;
-                  
+
       if (model.get('has_alerts')) {
         tabs.alerts =  <Tab name="Alerts">
                           <AlertsTable model={ model } />

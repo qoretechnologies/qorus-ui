@@ -47,7 +47,8 @@ require.config({
     'react-chartjs': '../components/react-chartjs/react-chartjs',
     'react-shim': './react-shim',
     'es6-shim': '../components/es6-shim/es6-shim',
-    'react-fixed-data-table': '../components/react-fixed-data-table/fixed-data-table'
+    'react-fixed-data-table': '../components/react-fixed-data-table/fixed-data-table',
+    'backbone.obscura': '../components/backbone.obscura/backbone.obscura'
   },
   shim: {
     backbone: {
