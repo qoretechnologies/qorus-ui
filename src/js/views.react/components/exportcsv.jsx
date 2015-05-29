@@ -7,8 +7,7 @@ define(function (require) {
 
   Export = React.createClass({
     propTypes: {
-      data: React.PropTypes.string.isRequired,
-      opts: React.PropTypes.object
+      opts: React.PropTypes.object.isRequired
     },
 
     exportCSV: function (e) {
@@ -24,7 +23,7 @@ define(function (require) {
     render: function () {
       var filename = helpers.slugify(this.props.filename) + '.csv';
 
-      return <a download={ filename } className="btn" onClick={ this.exportCSV }><i className="icon-copy"></i> Export</a>;
+      return <a download={ filename } onClick={ this.exportCSV }><i className="icon-copy"></i> Export CSV</a>;
     }
   });
 

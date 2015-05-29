@@ -121,7 +121,7 @@ define(function (require) {
       workflowsActions.filterChange({
         deprecated: deprecated == 'hidden',
         text: query,
-        date: utils.prepareDate(date)
+        date: date
       });
 
       if (parts.length > 0) {

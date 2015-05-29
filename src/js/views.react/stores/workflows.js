@@ -2,7 +2,8 @@ define(function (require) {
   var Reflux      = require('reflux'),
       _           = require('underscore'),
       Actions     = require('views.react/actions/workflows'),
-      DateActions = require('views.react/actions/date');
+      DateActions = require('views.react/actions/date'),
+      utils       = require('utils');
 
   return Reflux.createStore({
     listenables: [Actions, DateActions],
@@ -36,7 +37,7 @@ define(function (require) {
           collection  = this.getCollection();
 
 
-      collection.setOptions({ date: date, deprecated: deprecated });
+      collection.setOptions({ date: utils.prepareDate(date), deprecated: deprecated });
 
       collection.fetch({
         success: function (col, models) {

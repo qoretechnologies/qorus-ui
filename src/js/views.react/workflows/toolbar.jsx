@@ -38,6 +38,30 @@ define(function (require) {
       Actions.fetch();
   };
 
+  var Filters = React.createClass({
+    render: function () {
+      var filters = this.props.filters,
+          csv_options = {
+            data: workflowsStore.getCollection().toJSON(),
+            include: _.union(['autostart', 'exec_count', 'workflowid', 'name', 'version'], states),
+            export: true
+          },
+          deprecated      = (filters.deprecated) ? 'icon-flag' : 'icon-flag-alt',
+          deprecated_text = (filters.deprecated) ? 'Only visible' : 'Show hidden';
+
+      return (
+          <div className="btn-group">
+            <button className="btn  dropdown-toggle" data-toggle="dropdown">
+              More <span className="caret"></span>
+            </button>
+            <div className="dropdown-menu">
+              <li><a onClick={ this.props.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</a></li>
+              <li><ExportCSV opts={ csv_options } filename="workflows" /></li>
+            </div>
+          </div>
+      );
+    }
+  });
 
   var SearchFormView = React.createClass({
     filterChange: function (e) {
@@ -47,7 +71,6 @@ define(function (require) {
 
     onSubmit: function (e) {
       e.preventDefault();
-      console.log(e);
     },
 
     render: function () {
@@ -103,7 +126,15 @@ define(function (require) {
             </div>
             <div className="btn-group">
               <button className="btn" onClick={ this.props.setDate.bind(null, 'all') }>All</button>
-              <button className="btn" onClick={ this.props.setDate.bind(null, '24h') }>24 h</button>
+              <button className="btn dropdown-toggle" data-toggle="dropdown">
+                <span className="caret"></span>
+              </button>
+              <ul className="dropdown-menu">
+                <li><a onClick={ this.props.setDate.bind(null, 'all') }>All</a></li>
+                <li><a onClick={ this.props.setDate.bind(null, '24h') }>24 h</a></li>
+                <li><a onClick={ this.props.setDate.bind(null, 'today') }>Today</a></li>
+                <li><a onClick={ this.props.setDate.bind(null, 'now') }>Now</a></li>
+              </ul>
             </div>
             </form>
             { datepicker }
@@ -172,21 +203,13 @@ define(function (require) {
 
     render: function () {
       var filters         = workflowsStore.state.filters,
-          deprecated      = "icon-" + (filters.deprecated) ? 'flag' : 'flag-alt',
-          deprecated_text = (filters.deprecated) ? 'Only visible' : 'Show hidden',
           date            = filters.date,
           clsActions      = React.addons.classSet({
             "btn-group": true,
             "toolbar-actions": true,
             hide: (this.props.store.state.checkedIds.length === 0)
           }),
-          actions = this.props.actions,
-
-          csv_options = {
-            data: this.props.store.getCollection().toJSON(),
-            include: _.union(['autostart', 'exec_count', 'workflowid', 'name', 'version'], states),
-            export: true
-          };
+          actions = this.props.actions;
 
 
       return (
@@ -194,7 +217,7 @@ define(function (require) {
           <div className="workflows-toolbar btn-toolbar sticky toolbar">
               <div className="btn-group">
                 <button className="btn dropdown-toggle" data-toggle="dropdown">
-                  <i className="icon-check-empty check-all checker"></i>
+                  <i className="icon-check-empty check-all checker"></i>&nbsp;
                   <span className="caret"></span>
                 </button>
                 <ul className="dropdown-menu above">
@@ -213,12 +236,7 @@ define(function (require) {
                 <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'show' }) }><i className="icon-flag"></i> Show</button>
               </div>
               <DateFilterView filters={ filters } handleSubmitData={ this.handleSubmitData } setDate={ this.setDate } />
-              <div className="btn-group toolbar-filters">
-                  <button className="btn" onClick={ this.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</button>
-              </div>
-              <div className="btn-group">
-                <ExportCSV opts={ csv_options } filename="workflows" />
-              </div>
+              <Filters setDeprecated={ this.setDeprecated } collection={ this.props.store.getCollection() } filters={ filters }/>
               <div className="pull-right">
                 <SearchFormView filterText={this.props.filters.text} filterChange={this.props.filterChange}/>
               </div>

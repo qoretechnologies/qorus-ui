@@ -319,7 +319,6 @@ define(function (require) {
           this.props.collection.fetch({
             success: function (col) {
               if (self.isMounted()) {
-                console.log(self.props.collection.url());
                 self.setState({
                   fetched: true,
                   search_text: '',

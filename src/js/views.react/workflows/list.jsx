@@ -225,7 +225,7 @@ define(function (require) {
 
   var columns = [
     <Col key="checker">
-      <CheckerWrapper />
+      <CheckerWrapper style={{ width: FONT_WIDTH*2 + 'px' }} />
     </Col>,
     <Col name="Actions" className="actions" key="actions">
       <ControlsView className="connections" />
@@ -522,6 +522,13 @@ define(function (require) {
 
       if (tfilter) {
         collection.filterBy('search', function (m) {
+          var filters = tfilter.split(','),
+              name = m.get('name').toLowerCase();
+
+          _.each(filters, function (f) {
+
+          });
+
           return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
         });
       }
