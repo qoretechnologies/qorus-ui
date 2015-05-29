@@ -362,7 +362,7 @@ define(function (require) {
         var el        = this.getDOMNode(),
             height    = $(window).innerHeight() - $(el).position().top - 80 - (2 * this.props.rowHeight),
             maxRows   = Math.floor(height/props.rowHeight),
-            maxOffset = (_.size(state.collection) - maxRows - 1) * props.rowHeight;
+            maxOffset = (_.size(state.collection) - maxRows) * props.rowHeight;
 
         this.setState({
           height: height,
@@ -374,17 +374,28 @@ define(function (require) {
     },
 
     onScroll: function (e) {
-      var el        = this.getDOMNode(),
-          rowHeight = this.props.rowHeight,
-          maxOffset = this.state.maxOffset,
-          offset     = Math.max(0, el.scrollTop - rowHeight) / rowHeight;
+      var el         = this.getDOMNode(),
+          rowHeight  = this.props.rowHeight,
+          maxOffset  = this.state.maxOffset,
+          offset     = Math.ceil(Math.max(0, el.scrollTop - rowHeight) / rowHeight),
+          step       = Math.floor(this.state.height * 0.5),
+          ranges     = {},
+          offsetStep = Math.ceil(this.state.maxRows * 0.5) * rowHeight,
+          scrollTop  = 0,
+          range      = 0;
 
-      offset = Math.min(offset, maxOffset);
+          for (var size = 0, i = 0; size < maxOffset; i++) {
+            ranges[i] = size;
+            size += offsetStep;
+          }
 
-      if (offset != this.state.offset) {
+          range = Math.floor(el.scrollTop/offsetStep);
+          scrollTop = ranges[range];
+
+      if (scrollTop != this.state.scrollTop) {
         this.setState({
-          scrollTop: el.scrollTop,
-          offset: Math.ceil(offset)
+          scrollTop: offset * rowHeight,
+          offset: Math.max(0, Math.ceil(offset) -  Math.ceil(this.state.maxRows * 0.5))
         });
       }
     },
@@ -455,6 +466,14 @@ define(function (require) {
 
       collection = this.prepareCollection();
 
+      var styleFixed = {
+        position: 'absolute',
+        top: 0,
+        // transform: "translate3d(0,"+this.state.scrollTop+"px,0)",
+        width: "calc(100% - 10px)",
+        marginTop: this.state.scrollTop
+      };
+
       this.setNameWidth();
 
       if (deprecated) {
@@ -473,7 +492,7 @@ define(function (require) {
         <div className="overflow-auto-y" style={{ position: 'relative' }} onScroll={ this.onScroll }>
           { error }
           <div className="scroller" style={{ height: (_.size(this.state.collection) + 1) * this.props.rowHeight }} />
-          <div className="table-fixed" style={{ position: 'absolute', top: 0, transform: "translate3d(0,"+this.state.scrollTop+"px,0)", width: "calc(100% - 10px)" }}>
+          <div className="table-fixed" style={ styleFixed }>
             <TableView {...this.state}
               collection={ collection }
               current_model={ model }
@@ -483,7 +502,9 @@ define(function (require) {
               fixed={ true }
               sortClick={ this.sortClick }
               offset={ this.state.offset }
-              shownItems={ this.state.maxRows }>
+              shownItems={ Math.ceil(this.state.maxRows * 1.5) }
+              scrollTop={ this.state.scrollTop }
+              showHeader={ false }>
               { tColumns }
             </TableView>
           </div>

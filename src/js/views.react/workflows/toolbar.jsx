@@ -54,10 +54,7 @@ define(function (require) {
 
       return (
         <form className="form-search" onSubmit={ this.onSubmit }>
-          <div className="input-append search-box">
-            <input type="text" className="search-query appendInputButton" placeholder="Search..." defaultValue={ this.props.filterText } onChange={this.filterChange} />
-            <button type="submit" className="btn">&nbsp;<i className="icon-search"></i></button>
-          </div>
+          <input type="text" className="search-query appendInputButton" placeholder="Search..." defaultValue={ this.props.filterText } onChange={this.filterChange} />
         </form>
       );
     }
@@ -90,7 +87,7 @@ define(function (require) {
     },
 
     render: function () {
-      var value = this.state.value || this.props.filters.date,
+      var value = this.props.filters.date,
           datepicker = this.state.datepicker ? <DatePicker date={ value } onChange={ this.applyDate } onClose={ this.showDatePicker} /> : '';
 
       if (moment.isMoment(value)) {
@@ -102,7 +99,7 @@ define(function (require) {
             <form className="form-inline nomargin" action="" onSubmit={ this.props.handleSubmitDate }>
             <div className="input-prepend date dp" onClick={ this.showDatePicker }>
               <span className="add-on"><i className="icon-th"></i></span>
-              <input type="text" className="" value={ value } onChange={ this.onChange }/>
+              <input type="text" className="" value={ value } onChange={ this.onChange } style={{ width: '10em' }}/>
             </div>
             <div className="btn-group">
               <button className="btn" onClick={ this.props.setDate.bind(null, 'all') }>All</button>
@@ -157,8 +154,6 @@ define(function (require) {
 
       var deprecated = !workflowsStore.state.filters.deprecated;
 
-      console.log(deprecated, this.state.filters.deprecated);
-
       this.props.filterChange({ deprecated: deprecated });
     },
 
@@ -172,7 +167,7 @@ define(function (require) {
         date = utils.prepareDate(date);
       }
 
-      this.props.filterChange({ date: date });
+      Actions.filterChange({ date: date });
     },
 
     render: function () {
@@ -217,7 +212,7 @@ define(function (require) {
                 <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'hide' }) }><i className="icon-flag-alt"></i> Hide</button>
                 <button className="btn" onClick={ actions.run.bind(null, doAction, { action: 'show' }) }><i className="icon-flag"></i> Show</button>
               </div>
-              <DateFilterView filters={ this.props.filters } handleSubmitData={ this.handleSubmitData } setDate={ this.setDate } />
+              <DateFilterView filters={ filters } handleSubmitData={ this.handleSubmitData } setDate={ this.setDate } />
               <div className="btn-group toolbar-filters">
                   <button className="btn" onClick={ this.setDeprecated }><i className={ deprecated }></i> { deprecated_text }</button>
               </div>

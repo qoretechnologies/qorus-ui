@@ -114,6 +114,12 @@ define(function (require) {
   });
 
   var THeadView = React.createClass({
+    getDefaultProps: function () {
+      return {
+        scrollTop: 0
+      };
+    },
+
     componentDidMount: function () {
       if (this.props.fixed) {
         var $el = $(this.getDOMNode());
@@ -154,7 +160,8 @@ define(function (require) {
       return {
         chunked: false,
         rowClick: _.noop,
-        offset: 0
+        offset: 0,
+        showHeaders: true
       };
     },
 
@@ -163,7 +170,8 @@ define(function (require) {
       var columns, rows, style, header_columns,
           props       = this.props,
           children    = _.isArray(this.props.children) ? this.props.children : [this.props.children],
-          isBackbone  = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection;
+          isBackbone  = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection,
+          header      = null;
 
       if (isBackbone && !this.props.collection_fetched) {
         return (<LoaderView />);
@@ -173,14 +181,19 @@ define(function (require) {
         return (<NoDataView />);
       }
 
-      header_columns = this.renderHeader();
+
+      if (this.props.showHeader) {
+        header = (
+          <THeadView fixed={ this.props.fixed } scrollTop={ this.props.scrollTop }>
+           { React.addons.createFragment(this.renderHeader()) }
+          </THeadView>
+        );
+      }
 
       rows = this.renderRows();
 
       return <table className={ this.props.cssClass || this.props.className } style={ style }>
-               <THeadView fixed={ this.props.fixed }>
-                { React.addons.createFragment(header_columns) }
-               </THeadView>
+              { header }
                <tbody>
                  { rows }
                </tbody>
