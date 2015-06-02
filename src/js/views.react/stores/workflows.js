@@ -3,6 +3,7 @@ define(function (require) {
       _           = require('underscore'),
       Actions     = require('views.react/actions/workflows'),
       DateActions = require('views.react/actions/date'),
+      moment      = require('moment'),
       utils       = require('utils');
 
   return Reflux.createStore({
@@ -36,8 +37,9 @@ define(function (require) {
           deprecated  = this.state.filters.deprecated,
           collection  = this.getCollection();
 
+      date = moment.isMoment(date) ? date : utils.prepareDate(date);
 
-      collection.setOptions({ date: utils.prepareDate(date), deprecated: deprecated });
+      collection.setOptions({ date: date, deprecated: deprecated });
 
       collection.fetch({
         success: function (col, models) {

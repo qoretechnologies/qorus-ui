@@ -523,13 +523,15 @@ define(function (require) {
       if (tfilter) {
         collection.filterBy('search', function (m) {
           var filters = tfilter.split(','),
-              name = m.get('name').toLowerCase();
+              name = m.get('name').toLowerCase(),
+              result = false;
 
-          _.each(filters, function (f) {
-
+          _.every(filters, function (f) {
+            result = m.get('name').toLowerCase().indexOf(f.toLowerCase()) != -1 || f == m.id;
+            return !result;
           });
 
-          return m.get('name').toLowerCase().indexOf(tfilter.toLowerCase()) != -1 || tfilter == m.id;
+          return result;
         });
       }
 
