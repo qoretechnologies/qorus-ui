@@ -11,7 +11,6 @@ casper.test.begin('Testing workflow list page', function suite(test) {
       this.click('td[data-search="arraytest"]');
 			}, null, 10000);
 
-
     // Test Workflow detail pane
     // wait for ARRAYTEST detail pane
     casper.echo('Testing workflow detail right pane');
@@ -27,23 +26,23 @@ casper.test.begin('Testing workflow list page', function suite(test) {
       test.assertVisible('#workflow-detail .box');
       this.click(select('//a[text()="test_function_1"]'));
     });
-    
+
     // check modal with source code
     casper.waitUntilVisible('div.modal', function () {
       test.assertSelectorHasText('#modalHeader', 'test_function_1');
       this.echo('Closing function modal');
       this.click('div.modal button.close');
-    })
-    
+    });
+
     casper.waitWhileVisible('div.modal', function () {
       test.assertNotVisible('div.modal');
     });
-    
+
     casper.then(function () {
       this.click('a[data-target="#log"]');
       test.assertVisible('#workflow-detail .log-area');
     });
-    
+
     casper.then(function () {
       this.click('a[data-target="#library"]');
       test.assertExists('#library');

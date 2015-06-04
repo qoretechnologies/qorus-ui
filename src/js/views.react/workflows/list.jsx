@@ -17,6 +17,7 @@ define(function (require) {
       LoaderView         = require('jsx!views.react/components/loader'),
       TableView          = require('jsx!views.react/components/table').TableView,
       ModelRowView       = require('jsx!views.react/components/table').ModelRowView,
+      RowView       = require('jsx!views.react/components/table').RowView,
       Cell               = require('jsx!views.react/components/table').CellView,
       CellBackbone       = require('jsx!views.react/components/table').CellBackbone,
       Col                = require('jsx!views.react/components/dummy'),
@@ -296,9 +297,22 @@ define(function (require) {
     }
   });
 
-  var RowViewWrapper = React.createClass({
+  var RowViewWrapper = React.createBackboneClass({
     mixins: [Reflux.listenTo(tStore, 'onStoreUpdate')],
     displayName: 'WorkflowRowView',
+
+    shouldComponentUpdate: function (nextProps, nextState) {
+      var props = this.props,
+          state = this.state,
+          should = true;
+
+      should = !_.isEqual(nextProps.hash, this.props.hash);
+      should = !_.isEqual(nextState, state) || should;
+
+      // if (should) { console.log(props.model.id, nextProps.model.id, state, nextState); }
+
+      return should;
+    },
 
     getInitialState: function () {
       return {
@@ -331,6 +345,11 @@ define(function (require) {
       }
     },
 
+
+    rowClick: function (id) {
+      tActions.rowClick(this.props.model.id);
+    },
+
     render: function () {
       var cls = classNames({
         warning: this.state.checked,
@@ -338,7 +357,7 @@ define(function (require) {
       }, 'clickable', this.props.className);
 
       return (
-        <ModelRowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } />
+        <RowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } rowClick={ this.rowClick } />
       );
     },
   });
@@ -348,6 +367,11 @@ define(function (require) {
 
     componentDidMount: function () {
       this.setHeight();
+      $('body').css('overflow', 'hidden');
+    },
+
+    componentWillUnmount: function () {
+      $('body').css('overflow', null);
     },
 
     componentWillReceiveProps: function (nextProps, nextState) {
@@ -366,38 +390,30 @@ define(function (require) {
 
         this.setState({
           height: height,
-          maxRows: maxRows,
+          maxRows: maxRows - 1,
           maxOffset: maxOffset,
           shownItems: new Array(maxRows)
         });
       }
     },
 
-    onScroll: function (e) {
-      var el         = this.getDOMNode(),
-          rowHeight  = this.props.rowHeight,
-          maxOffset  = this.state.maxOffset,
-          offset     = Math.ceil(Math.max(0, el.scrollTop - rowHeight) / rowHeight),
-          step       = Math.floor(this.state.height * 0.5),
-          ranges     = {},
-          offsetStep = Math.ceil(this.state.maxRows * 0.5) * rowHeight,
-          scrollTop  = 0,
-          range      = 0;
+    onScroll: function () {
+        var el         = this.getDOMNode(),
+            rowHeight  = this.props.rowHeight,
+            maxOffset  = this.state.maxOffset,
+            offset     = Math.floor(Math.max(0, el.scrollTop - rowHeight) / rowHeight),
+            ranges     = {},
+            scrollTop  = el.scrollTop,
+            range      = 0;
 
-          for (var size = 0, i = 0; size < maxOffset; i++) {
-            ranges[i] = size;
-            size += offsetStep;
-          }
 
-          range = Math.floor(el.scrollTop/offsetStep);
-          scrollTop = ranges[range];
-
-      if (scrollTop != this.state.scrollTop) {
-        this.setState({
-          scrollTop: offset * rowHeight,
-          offset: Math.max(0, Math.ceil(offset) -  Math.ceil(this.state.maxRows * 0.5))
-        });
-      }
+        // if (this.state.scrollTop !== scrollTop) {
+        if (offset !== this.state.offset) {
+          this.setState({
+            scrollTop: scrollTop,
+            offset: offset
+          });
+        }
     },
 
     getFirstRow: function (maxRows) {
@@ -432,10 +448,6 @@ define(function (require) {
       };
     },
 
-    rowClick: function (id) {
-      tActions.rowClick(id);
-    },
-
     sortClick: function (key, ord) {
       tActions.sort(key, ord);
     },
@@ -449,7 +461,7 @@ define(function (require) {
             error             : store.state.error,
             orderKey          : store.state.orderKey,
             order             : store.state.order,
-            maxOffset         : (_.size(col) - this.state.maxRows - 1) * this.props.rowHeight
+            maxOffset         : (_.size(col) - this.state.maxRows - 2) * this.props.rowHeight
           });
 
       if (!_.isEqual(this.state, state)) {
@@ -469,9 +481,9 @@ define(function (require) {
       var styleFixed = {
         position: 'absolute',
         top: 0,
-        // transform: "translate3d(0,"+this.state.scrollTop+"px,0)",
+        transform: "translate3d(0,"+this.state.scrollTop+"px,0)",
         width: "calc(100% - 10px)",
-        marginTop: this.state.scrollTop
+        // marginTop: this.state.scrollTop
       };
 
       this.setNameWidth();
@@ -491,7 +503,7 @@ define(function (require) {
       return (
         <div className="overflow-auto-y" style={{ position: 'relative' }} onScroll={ this.onScroll }>
           { error }
-          <div className="scroller" style={{ height: (_.size(this.state.collection) + 1) * this.props.rowHeight }} />
+          <div className="scroller" style={{ height: (_.size(this.state.collection)) * this.props.rowHeight }} />
           <div className="table-fixed" style={ styleFixed }>
             <TableView {...this.state}
               collection={ collection }
@@ -502,9 +514,8 @@ define(function (require) {
               fixed={ true }
               sortClick={ this.sortClick }
               offset={ this.state.offset }
-              shownItems={ Math.ceil(this.state.maxRows * 1.5) }
-              scrollTop={ this.state.scrollTop }
-              showHeader={ false }>
+              shownItems={ this.state.maxRows }
+              scrollTop={ this.state.scrollTop }>
               { tColumns }
             </TableView>
           </div>

@@ -38,10 +38,10 @@ module.exports = function (grunt) {
         files: ['Gruntfile.js', 'src/js/**/*.js', '!src/js/libs/**', '!src/js/app.build.js'],
         options: {
           "predef": {
-              "$": true,  
-              "define": true, 
+              "$": true,
+              "define": true,
               "require": true,
-              "jQuery": true, 
+              "jQuery": true,
               "later": true,
               "cronParser": true,
               "moment": true,
@@ -175,9 +175,9 @@ module.exports = function (grunt) {
         },
       }
     });
-  
+
   require('matchdep').filterDev(['grunt-*','!grunt-cli']).forEach(grunt.loadNpmTasks);
-  
+
   grunt.registerTask('default', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'express', 'casper', 'requirejs']);
   grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express-keepalive']);
   grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);

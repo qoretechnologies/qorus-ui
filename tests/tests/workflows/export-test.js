@@ -14,31 +14,5 @@ casper.test.begin('Testing workflow list page', function suite(test) {
             test.assertExists(x("//a[normalize-space(text())='Export CSV']"));
     });
 
-    casper.waitForSelector("textarea",
-        function success() {
-            test.assertExists("textarea");
-            this.click("textarea");
-        },
-        function fail() {
-            test.assertExists("textarea");
-    });
-
-    casper.waitForSelector(".modal-backdrop.fade.in",
-        function success() {
-            test.assertExists(".modal-backdrop.fade.in");
-            this.click(".modal-backdrop.fade.in");
-        },
-        function fail() {
-            test.assertExists(".modal-backdrop.fade.in");
-    });
-  
-    casper.waitWhileVisible(".modal-backdrop",
-        function success() {
-            test.assertNotVisible('.modal-backdrop');
-        },
-        function fail() {
-            test.assertExists('.modal-backdrop');
-    });
- 
     casper.run(function() {test.done();});
 });

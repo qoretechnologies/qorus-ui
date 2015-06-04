@@ -30,6 +30,7 @@
     "grunt-open": "^0.2.3",
     "lodash": "^2.4.1",
     "matchdep": "^0.3.0",
+    "phantomjs": "^1.9.17",
     "request": "^2.51.0"
   },
   "scripts": {
