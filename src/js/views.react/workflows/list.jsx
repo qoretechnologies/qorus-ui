@@ -371,7 +371,7 @@ define(function (require) {
     },
 
     componentWillUnmount: function () {
-      $('body').css('overflow', null);
+      $('body').removeProp('overflow', 'auto');
     },
 
     componentWillReceiveProps: function (nextProps, nextState) {
