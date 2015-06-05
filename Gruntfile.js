@@ -6,6 +6,7 @@ module.exports = function (grunt) {
           options: {
             paths: {
               settings: 'settings.build',
+              react: '../components/react/react-with-addons.min',
             },
             map: {
               '*': {
