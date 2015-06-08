@@ -16,6 +16,7 @@ define(function (require) {
 
   require('react.backbone');
   require('jquery.fixedheader');
+  require('classnames');
 
 
   var TdComponent = React.createClass({
@@ -116,7 +117,14 @@ define(function (require) {
   var THeadView = React.createClass({
     getDefaultProps: function () {
       return {
-        scrollTop: 0
+        scrollTop: 0,
+        footer: false
+      };
+    },
+
+    getInitialState: function () {
+      return {
+        scrollTop: this.props.scrollTop
       };
     },
 
@@ -139,7 +147,17 @@ define(function (require) {
     },
 
     render: function () {
-      return <thead className={ React.addons.classSet({ header: this.props.fixed })}>
+      var cls = classNames({ header: this.props.fixed }),
+          css;
+
+      if (this.props.footer) {
+        css = {
+          transform: "translate3d(0,"+ this.state.scrollTop + "px, 0)",
+          WebkitTransform: "translate3d(0,"+ this.state.scrollTop + "px, 0)"
+        };
+      }
+
+      return <thead className={ cls } style={ css }>
                <tr>
                  { this.props.children }
                </tr>
@@ -176,13 +194,22 @@ define(function (require) {
       }
     },
 
+    setHeaderOffset: function (scrollTop, scrollOffset) {
+      var val = scrollTop - scrollOffset;
+
+      if (this.refs.footer) {
+        this.refs.footer.setState({ scrollTop: val });  
+      }
+    },
+
     // TODO: missing rowview when assigned with props
     render: function () {
       var columns, rows, style, header_columns,
           props       = this.props,
           children    = _.isArray(this.props.children) ? this.props.children : [this.props.children],
           isBackbone  = this.props.collection instanceof Backbone.Collection || this.props.collection instanceof FilteredCollection,
-          header      = null;
+          header      = null,
+          footer      = null;
 
       if (isBackbone && !this.props.collection_fetched) {
         return (<LoaderView />);
@@ -195,10 +222,16 @@ define(function (require) {
 
       if (this.props.showHeader) {
         header = (
-          <THeadView fixed={ this.props.fixed } scrollTop={ this.props.scrollTop }>
+          <THeadView fixed={ this.props.fixed } scrollTop={ this.props.scrollTop } ref="header">
            { React.addons.createFragment(this.renderHeader()) }
           </THeadView>
         );
+
+        // footer =  (
+        //   <THeadView fixed={ this.props.fixed } scrollTop={ this.props.scrollTop } ref="footer" footer={ true }>
+        //    { React.addons.createFragment(this.renderHeader()) }
+        //   </THeadView>
+        // );
       }
 
       rows = this.renderRows();
@@ -208,74 +241,23 @@ define(function (require) {
                <tbody>
                  { rows }
                </tbody>
+              { footer }
              </table>;
     },
 
-    // renderRows: function () {
-    //     var collection     = this.props.collection,
-    //         children       = _.isArray(this.props.children) ? this.props.children : [this.props.children],
-    //         props          = this.props,
-    //         DefaultRowView = this.props.rowView || RowView,
-    //         isBackbone     = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
-    //         tableProps     = _.omit(props, 'children'),
-    //         offset         = this.props.offset || 0,
-    //         shownItems     = this.props.shownItems || _.size(collection);
-    //
-    //     this._rows = _.map(collection, function (row, idx) {
-    //       if (!(idx >= offset && idx < offset+shownItems)) return;
-    //
-    //       row = isBackbone ? collection.at(idx) : row;
-    //
-    //       var DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
-    //           clicked        = props.current_model ? props.current_model == row.id : false,
-    //           key            = isBackbone ? row.id : idx;
-    //
-    //       return (
-    //         <DefaultRowView
-    //            model={ row }
-    //            rowClick={props.rowClick}
-    //            clicked={ clicked } className={ idx % 2 ? 'odd' : 'even' } key={ key }>
-    //           { children }
-    //         </DefaultRowView>
-    //       );
-    //     });
-    //
-    //   return this._rows;
-    // },
-
     renderRows: function () {
-      var offset         = this.props.offset || 0,
-          shownItems     = this.props.shownItems || _.size(collection),
-          rows           = {};
-
-      // console.log('rendering rows', _.size(this._rows));
-
-      // return _.map(this._rows, function (row, idx) {
-      //   if (idx >= offset && idx < offset+shownItems) {
-      //     return row;
-      //   }
-      //   return false;
-      // });
-      // return this._rows.slice(offset, offset+shownItems);
-
-      _.each(this._rows, function (row, idx) {
-        if (idx >= offset && idx < offset+shownItems) {
-          rows['key-'+idx] = row;
-        }
-      });
-
-      return React.addons.createFragment(rows);
-    },
-
-    prepareRows: function () {
         var collection     = this.props.collection,
             children       = _.isArray(this.props.children) ? this.props.children : [this.props.children],
             props          = this.props,
             DefaultRowView = this.props.rowView || RowView,
             isBackbone     = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
-            tableProps     = _.omit(props, 'children');
+            tableProps     = _.omit(props, 'children'),
+            offset         = this.props.offset || 0,
+            shownItems     = this.props.shownItems || _.size(collection);
 
         this._rows = _.map(collection, function (row, idx) {
+          if (!(idx >= offset && idx < offset+shownItems)) return;
+
           row = isBackbone ? collection.at(idx) : row;
 
           var DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
@@ -294,6 +276,60 @@ define(function (require) {
 
       return this._rows;
     },
+
+    prepareRows: _.noop,
+
+    // renderRows: function () {
+    //   var offset         = this.props.offset || 0,
+    //       shownItems     = this.props.shownItems || _.size(collection),
+    //       rows           = {};
+    //
+    //   // console.log('rendering rows', _.size(this._rows));
+    //
+    //   // return _.map(this._rows, function (row, idx) {
+    //   //   if (idx >= offset && idx < offset+shownItems) {
+    //   //     return row;
+    //   //   }
+    //   //   return false;
+    //   // });
+    //   // return this._rows.slice(offset, offset+shownItems);
+    //
+    //   _.each(this._rows, function (row, idx) {
+    //     if (idx >= offset && idx < offset+shownItems) {
+    //       rows['key-'+idx] = row;
+    //     }
+    //   });
+    //
+    //   return React.addons.createFragment(rows);
+    // },
+
+    // prepareRows: function () {
+    //     var collection     = this.props.collection,
+    //         children       = _.isArray(this.props.children) ? this.props.children : [this.props.children],
+    //         props          = this.props,
+    //         DefaultRowView = this.props.rowView || RowView,
+    //         isBackbone     = collection instanceof Backbone.Collection || collection instanceof FilteredCollection,
+    //         tableProps     = _.omit(props, 'children');
+    //
+    //     this._rows = _.map(collection, function (row, idx) {
+    //       row = isBackbone ? collection.at(idx) : row;
+    //
+    //       var DefaultRowView = props.rowView || (isBackbone ? ModelRowView : RowView),
+    //           clicked        = props.current_model ? props.current_model == row.id : false,
+    //           key            = isBackbone ? row.id : idx;
+    //
+    //       return (
+    //         <DefaultRowView
+    //            model={ row }
+    //            rowClick={props.rowClick}
+    //            clicked={ clicked } className={ idx % 2 ? 'odd' : 'even' } key={ key }>
+    //           { children }
+    //         </DefaultRowView>
+    //       );
+    //     });
+    //
+    //   return this._rows;
+    // },
 
     renderHeader: function () {
       var header,

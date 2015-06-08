@@ -375,7 +375,7 @@ define(function (require) {
     },
 
     componentWillReceiveProps: function (nextProps, nextState) {
-      this.setHeight(nextState);
+      this.setHeight(nextProps, nextState);
     },
 
     setHeight: function (nextProps, nextState) {
@@ -384,37 +384,98 @@ define(function (require) {
 
       if (this.isMounted()) {
         var el        = this.getDOMNode(),
-            height    = $(window).innerHeight() - $(el).position().top - 80 - (2 * this.props.rowHeight),
-            maxRows   = Math.floor(height/props.rowHeight),
-            maxOffset = (_.size(state.collection) - maxRows) * props.rowHeight;
+            self      = this,
+            rowHeight = this.props.rowHeight,
+            height    = $(window).innerHeight() - $(el).position().top - 80 - (2 * rowHeight),
+            maxRows   = Math.floor(height/rowHeight),
+            totalRows = state.collection.size(),
+            maxOffset = (totalRows - maxRows + 2) * rowHeight,
+            chunkSize  = Math.ceil(maxRows/2);
 
         this.setState({
           height: height,
-          maxRows: maxRows - 1,
+          maxRows: maxRows,
           maxOffset: maxOffset,
           shownItems: new Array(maxRows)
         });
+
+        // this.addChunks(chunkSize, maxRows, totalRows);
       }
     },
 
+    // addChunks: function (chunkSize, maxRows, totalRows) {
+    //   var self = this;
+    //   console.log('addchunks', chunkSize, maxRows, totalRows);
+    //   if (totalRows > maxRows) {
+    //     maxRows = Math.min(maxRows + chunkSize, totalRows);
+    //     _.defer(function () {
+    //       // console.log('defer',  chunkSize, maxRows, totalRows);
+    //       self.setState({
+    //         maxRows: maxRows
+    //       });
+    //
+    //       self.addChunks(chunkSize, maxRows, totalRows);
+    //     });
+    //   }
+    // },
+
     onScroll: function () {
-        var el         = this.getDOMNode(),
+        var self       = this,
+            el         = this.getDOMNode(),
             rowHeight  = this.props.rowHeight,
             maxOffset  = this.state.maxOffset,
-            offset     = Math.floor(Math.max(0, el.scrollTop - rowHeight) / rowHeight),
             ranges     = {},
             scrollTop  = el.scrollTop,
-            range      = 0;
+            range      = 0,
+            maxRows    = this.state.maxRows,
+            chunkSize  = Math.ceil(maxRows/4) * rowHeight,
+            chunks     = [],
+            offset;
 
+        offset = Math.floor(Math.max(0, scrollTop - rowHeight) / rowHeight);
 
-        // if (this.state.scrollTop !== scrollTop) {
-        if (offset !== this.state.offset) {
+        if (scrollTop !== this.state.scrollTop) {
           this.setState({
             scrollTop: scrollTop,
-            offset: offset
+            offset: offset,
           });
         }
+
+        this.refs.table.setHeaderOffset(el.scrollTop, scrollTop);
     },
+
+
+    // onScroll: function () {
+    //     var self       = this,
+    //         el         = this.getDOMNode(),
+    //         rowHeight  = this.props.rowHeight,
+    //         maxOffset  = this.state.maxOffset,
+    //         ranges     = {},
+    //         scrollTop  = el.scrollTop,
+    //         range      = 0,
+    //         maxRows    = this.state.maxRows,
+    //         chunkSize  = Math.ceil(maxRows/4) * rowHeight,
+    //         chunks     = [],
+    //         offset;
+    //
+    //     chunks = _.map(_.range((maxOffset+maxRows*rowHeight)/chunkSize + 1), function (r) {
+    //       return r * chunkSize;
+    //     });
+    //
+    //     scrollTop = _.find(chunks, function (c, idx) { return (c <= scrollTop) && (scrollTop < chunks[idx+1]); });
+    //
+    //     offset = Math.floor(Math.max(0, scrollTop - rowHeight) / rowHeight);
+    //
+    //     if (this.state.scrollTop !== scrollTop) {
+    //     // if (scrollTop !== this.state.scrollTop) {
+    //       this.setState({
+    //         scrollTop: scrollTop,
+    //         offset: offset,
+    //       });
+    //     }
+    //
+    //     this.refs.table.setHeaderOffset(el.scrollTop, scrollTop);
+    // },
 
     getFirstRow: function (maxRows) {
       var offset    = this.state.offset,
@@ -466,6 +527,7 @@ define(function (require) {
 
       if (!_.isEqual(this.state, state)) {
         this.setState(state);
+        this.setHeight();
       }
     },
 
@@ -474,7 +536,9 @@ define(function (require) {
           error      = null,
           tfilter    = workflowsStore.state.filters.text,
           deprecated = workflowsStore.state.filters.deprecated,
-          tColumns   = columns.slice();
+          tColumns   = columns.slice(),
+          state      = this.state,
+          collection;
 
       collection = this.prepareCollection();
 
@@ -482,6 +546,7 @@ define(function (require) {
         position: 'absolute',
         top: 0,
         transform: "translate3d(0,"+this.state.scrollTop+"px,0)",
+        WebkitTransform: "translate3d(0,"+this.state.scrollTop+"px,0)",
         width: "calc(100% - 10px)",
         // marginTop: this.state.scrollTop
       };
@@ -503,7 +568,7 @@ define(function (require) {
       return (
         <div className="overflow-auto-y" style={{ position: 'relative' }} onScroll={ this.onScroll }>
           { error }
-          <div className="scroller" style={{ height: (_.size(this.state.collection)) * this.props.rowHeight }} />
+          <div className="scroller" style={{ height: ((_.size(this.state.collection)) + 4) * this.props.rowHeight }} />
           <div className="table-fixed" style={ styleFixed }>
             <TableView {...this.state}
               collection={ collection }
@@ -514,8 +579,10 @@ define(function (require) {
               fixed={ true }
               sortClick={ this.sortClick }
               offset={ this.state.offset }
-              shownItems={ this.state.maxRows }
-              scrollTop={ this.state.scrollTop }>
+              shownItems={ this.state.maxRows + 2 }
+              scrollTop={ this.state.scrollTop }
+              showHeader={ true }
+              ref="table">
               { tColumns }
             </TableView>
           </div>
@@ -536,6 +603,8 @@ define(function (require) {
           var filters = tfilter.split(','),
               name = m.get('name').toLowerCase(),
               result = false;
+
+          filters = _.filter(filters, function (f) { return f.trim().length > 0; });
 
           _.every(filters, function (f) {
             result = m.get('name').toLowerCase().indexOf(f.toLowerCase()) != -1 || f == m.id;
@@ -558,7 +627,9 @@ define(function (require) {
     setNameWidth: function () {
       nameWidth = 0;
 
-      _(this.state.collection.toJSON()).pluck('name').each(function (wfl) { nameWidth = Math.max(nameWidth, wfl.length); });
+      _(this.state.collection.toJSON()).pluck('name').each(function (wfl) {
+        nameWidth = Math.max(nameWidth, wfl.length);
+      });
 
       nameWidth *= FONT_WIDTH;
     }
