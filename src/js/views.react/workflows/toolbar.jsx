@@ -50,8 +50,8 @@ define(function (require) {
           deprecated_text = (filters.deprecated) ? 'Only visible' : 'Show hidden';
 
       return (
-          <div className="btn-group">
-            <button className="btn  dropdown-toggle" data-toggle="dropdown">
+          <div className="btn-group filters">
+            <button className="btn dropdown-toggle" data-toggle="dropdown">
               More <span className="caret"></span>
             </button>
             <div className="dropdown-menu">
@@ -124,7 +124,7 @@ define(function (require) {
               <span className="add-on"><i className="icon-th"></i></span>
               <input type="text" className="" value={ value } onChange={ this.onChange } style={{ width: '10em' }}/>
             </div>
-            <div className="btn-group">
+            <div className="btn-group date-shortcuts">
               <button className="btn" onClick={ this.props.setDate.bind(null, 'all') }>All</button>
               <button className="btn dropdown-toggle" data-toggle="dropdown">
                 <span className="caret"></span>
