@@ -7,15 +7,15 @@ define(function (require) {
       ModalView  = require('jsx!views.react/components/modal').ModalView,
       HeaderView = require('jsx!views.react/components/modal').HeaderView,
       Mapper     = require('jsx!views.react/components/mappers/mapper'),
-      Name          = require('jsx!views.react/components/normname'),
+      Name       = require('jsx!views.react/components/normname'),
       MappersList;
-  
-  
+
+
   var ActionButtons = React.createClass({
     propTypes: {
       model: React.PropTypes.instanceOf(Backbone.Model)
     },
-    
+
     openDetail: function () {
       var model = this.props.model.fetch();
       var normName = <Name obj={ model } />;
@@ -23,23 +23,23 @@ define(function (require) {
       var el = $('<div class="modal-container" />').appendTo('body');
       React.render(modal, el[0]);
     },
-    
+
     render: function () {
       return (
         <span>
           <a className="btn btn-success btn-small" onClick={ this.openDetail }>Detail</a>
         </span>
-      );  
+      );
     }
   });
-  
-  
+
+
   MappersList = React.createClass({
     propTypes: {
       mappers: React.PropTypes.instanceOf(Backbone.Collection)
     },
-  
-    render: function () {      
+
+    render: function () {
       return (
         <Table collection={ this.props.mappers } collection_fetched={ true } className="table table-striped">
           <Col name="ID" className="narrow">
@@ -61,6 +61,6 @@ define(function (require) {
       );
     }
   });
-  
+
   return MappersList;
 });

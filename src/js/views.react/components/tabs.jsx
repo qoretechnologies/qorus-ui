@@ -111,7 +111,7 @@ define(function (require) {
     },
 
     componetWillReceiveProps: function (nextProps) {
-      console.log('children', React.Children.count(nextProps.children), nextProps);
+      // console.log('children', React.Children.count(nextProps.children), nextProps);
     },
 
     render: function () {
