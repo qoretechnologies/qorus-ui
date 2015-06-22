@@ -152,7 +152,10 @@ define(function (require) {
 
       return (
         <div>
-          <h4>{ this.props.name }</h4>
+          <div style={{ marginTop: '10px' }}>
+            <div className="span11" style={{ fontSize: '120%', fontWeight: 'bold' }}>{ this.props.name }</div>
+            <div className="span1"><button className="btn btn-danger btn-mini" onClick={ Actions.clear.bind(null, this.props.name, '') }><i className="icon-trash" /> Clear datasource</button></div>
+          </div>
           <Table collection={ tables } className="table table-striped table-condensed">
             <Col name="Name" className="name">
               <Cell dataKey='name' className="name" />
