@@ -12,11 +12,11 @@ define(function (require) {
       CHUNK_SIZE          = 50,
       Filtered            = require('backbone.filtered.collection'),
       diff                = require('deep-diff').diff,
-      utils               = require('utils');
+      utils               = require('utils'),
+      classNames          = require('classnames');
 
   require('react.backbone');
   require('jquery.fixedheader');
-  require('classnames');
 
 
   var TdComponent = React.createClass({
@@ -198,7 +198,7 @@ define(function (require) {
       var val = scrollTop - scrollOffset;
 
       if (this.refs.footer) {
-        this.refs.footer.setState({ scrollTop: val });  
+        this.refs.footer.setState({ scrollTop: val });
       }
     },
 

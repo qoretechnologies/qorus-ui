@@ -20,8 +20,6 @@
   ],
   "dependencies": {
     "backbone.localstorage": "~1.1.14",
-    "backbone": "~1.1.2",
-    "chartjs": "~1.0.2",
     "jquery-ui": "~1.11.2",
     "messenger": "~1.4.1",
     "moment": "~2.8.4",
@@ -35,16 +33,20 @@
     "react": "~0.13.2",
     "lodash": "2.4.1",
     "spark-md5": "~0.0.5",
-    "classnames": "~1.1.4",
     "react-chartjs": "https://github.com/temnoregg/react-chartjs-bower.git#~0.6.0",
     "es6-shim": "~0.31.2",
     "react-fixed-data-table": "~0.1.2",
-    "backbone.obscura": "~1.0.1"
+    "backbone.obscura": "~1.0.1",
+    "backbone": "1.1.2",
+    "classnames": "~2.1.2",
+    "chartjs": "1.0.1"
   },
   "resolutions": {
-    "backbone": "~1.1.2",
     "jquery": "~2.1.4",
-    "lodash": "2.4.1"
+    "lodash": "2.4.1",
+    "chartjs": "1.0.1",
+    "backbone": "1.1.2",
+    "react": "~0.13.2"
   },
   "devDependencies": {
     "deep-diff": "~0.3.1"

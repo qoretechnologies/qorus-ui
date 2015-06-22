@@ -17,7 +17,7 @@ define(function (require) {
       LoaderView         = require('jsx!views.react/components/loader'),
       TableView          = require('jsx!views.react/components/table').TableView,
       ModelRowView       = require('jsx!views.react/components/table').ModelRowView,
-      RowView       = require('jsx!views.react/components/table').RowView,
+      RowView            = require('jsx!views.react/components/table').RowView,
       Cell               = require('jsx!views.react/components/table').CellView,
       CellBackbone       = require('jsx!views.react/components/table').CellBackbone,
       Col                = require('jsx!views.react/components/dummy'),
@@ -31,13 +31,14 @@ define(function (require) {
       Checker            = require('jsx!views.react/components/checker'),
       normalizeWheel     = require('views.react/utils/normalizeWheel'),
       workflowsStore     = require('views.react/stores/workflows'),
-      Backbone           = require('backbone');
+      Backbone           = require('backbone'),
+      classNames         = require('classnames');
 
   Backbone.Obscura   = require('backbone.obscura');
 
 //  require('backbone');
   require('react.backbone');
-  require('classnames');
+
 
   var FONT_WIDTH = 12 * 0.8;
   var nameWidth = 0;
@@ -113,7 +114,7 @@ define(function (require) {
       };
     },
 
-    rowCheck: function (e) {
+    rowCheck: function (model, e) {
       e.stopPropagation();
       tActions.rowCheck(this.props.model.id);
     },

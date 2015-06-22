@@ -11,19 +11,19 @@ define(function (require) {
       checked: React.PropTypes.bool,
       onClick: React.PropTypes.func
     },
-    
+
     render: function () {
-      var cls = React.addons.classSet({ 
-        'check': true, 
-        'icon-check-empty': !this.props.checked, 
-        'icon-check': this.props.checked 
+      var cls = React.addons.classSet({
+        'check': true,
+        'icon-check-empty': !this.props.checked,
+        'icon-check': this.props.checked
       });
-      
+
       return (
-        <i className={cls} onClick={ this.props.onClick }></i>
+        <i className={cls} onClick={ this.props.onClick.bind(null, this.props.model) }></i>
       );
     }
   });
-  
+
   return Checker;
 });

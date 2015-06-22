@@ -9,18 +9,18 @@ define(function (require, exports, module) {
       WebSocketMixin  = require('views.react/mixins/websocket'),
       utils           = require('utils'),
       moment          = require('moment');
-  
-  Menu.addMenuItem(new Backbone.Model({ 
+
+  Menu.addMenuItem(new Backbone.Model({
       name: 'Graphs',
       url: '/performance',
       icon: 'signal'
   }), 'main');
-  
+
   Menu.render();
-  
+
   var datasetLength = 300;
   var emptyArray = _.map(_.range(datasetLength), function () { return null; });
-  
+
   var ColorScheme = {
     clr1: "rgba(250,225,107,1)",
     clr2: "rgba(169,204,143,1)",
@@ -30,12 +30,12 @@ define(function (require, exports, module) {
     clr6: "rgba(181,181,169,1)",
     clr7: "rgba(230,165,164,1)"
   };
-  
+
   var Config = {
     datasetFill: false,
     animation: false,
     pointDot: false,
-    responsive: true,
+    // responsive: true,
     maintainAspectRatio: false,
     showSingleTooltip: true,
     pointHitDetectionRadius: 0,
@@ -45,24 +45,24 @@ define(function (require, exports, module) {
       if (!tooltip) {
         return;
       }
-      
+
       console.log(_.keys(tooltip), arguments);
     }
 */
   };
-  
+
   var ChartLegend = React.createClass({
     propTypes: {
       datasets: React.PropTypes.array.isRequired
     },
-  
+
     render: function () {
       var datasets = {};
-      
-      _.each(this.props.datasets, function (ds) { 
+
+      _.each(this.props.datasets, function (ds) {
         datasets[ds.label] = <li key={ ds.label }><span className="legend-color-box" style={{ backgroundColor: ds.strokeColor }}></span> { ds.label }</li>;
       });
-    
+
       return (
         <ul className={ this.props.title + "-legend" }>
           { React.addons.createFragment(datasets) }
@@ -70,7 +70,7 @@ define(function (require, exports, module) {
       );
     }
   });
-  
+
   var DataSets =  {
     AVG: {
       dataset: [{
@@ -99,83 +99,83 @@ define(function (require, exports, module) {
                   pointColor: ColorScheme.clr3,
                   pointStrokeColor : "#fff"
               }
-                   
+
       ],
       keys: ['tp_1s', 'tp_10s']
     }
-  
+
   };
-  
+
   function getDataset(DS, clr) {
-    var dataset = _.cloneDeep(DataSets[DS].dataset);    
-  
+    var dataset = _.cloneDeep(DataSets[DS].dataset);
+
     if (clr) {
       dataset[0].strokeColor = dataset[0].pointColor = ColorScheme[clr];
     }
-    
+
     return dataset;
   }
-  
+
   var Chart = React.createClass({
     counter: 0,
-      
+
     getInitialState: function () {
       return this.emptyDatasets();
     },
-    
+
     componentDidUpdate: function (nextProps) {
       if (_.pick(this.props, ['width', 'height']) != _.pick(nextProps, ['width', 'height'])) {
         var chart = this.refs.chart.getChart();
         var cnvs = this.refs.chart.getCanvass();
-        
+
         chart.scale.height = this.props.height;
         cnvs.width = this.props.width;
         cnvs.height = this.props.height;
         chart.update();
       }
     },
-    
+
     onMessage: function (data) {
       var d = data;
       var keys = _.map(this.props.keys, function (k) { return d[k]; });
       this.updateData([moment()].concat(keys));
     },
-    
+
     updateData: function (ds) {
       var data = _.extend({}, this.state.data),
           [date, ...values] = ds,
           label = (this.counter === 0) ? date.format('hh:mm:ss') : '';
-      
+
       if (date - this.state.date > 2000) {
         data = this.emptyDatasets().data;
       }
 
       data.labels.shift();
       data.labels.push(label);
-      _.each(data.datasets, function (dataset, idx) { 
-        dataset.data.shift(); 
+      _.each(data.datasets, function (dataset, idx) {
+        dataset.data.shift();
         dataset.data.push(values[idx]);
       });
-      
+
       this.setState({
         data: data,
         date: date
       });
-      
+
       this.counter = (this.counter < 29) ? this.counter + 1 : 0;
     },
-    
+
     onMouseOver: function (evt) {
       console.log(this.refs.chart.getChart().getPointsAtEvent(evt));
     },
-    
+
     emptyDatasets: function () {
       var dataset = this.props.dataset;
-      
+
       _.each(dataset, function (ds) {
         ds.data = emptyArray.slice();
       });
-    
+
       return {
         data: {
           labels: _.map(_.range(datasetLength), function () { return ''; }),
@@ -183,32 +183,32 @@ define(function (require, exports, module) {
         }
       };
     },
-  
+
     render: function () {
       var conf = _.extend({}, Config);
-    
+
       return (
         <div className="row-fluid">
           <div className="chart-box">
             <LineChart ref="chart" data={ this.state.data } width={ this.props.width } height={ this.props.height } options={ conf } style={{ width: this.props.width }} />
           </div>
-          <div className="legend">  
+          <div className="legend">
             <ChartLegend datasets={ this.state.data.datasets } />
           </div>
         </div>
       );
     }
   });
-  
+
   var ChartGroup = React.createClass({
     render: function () {
     var title = this.props.title ? <div className="span12"><h3>{ this.props.title }</h3></div> : null;
-      
+
       return (
         <div>
           { title }
           { this.props.children }
-        </div>  
+        </div>
       );
     }
   });
@@ -222,44 +222,44 @@ define(function (require, exports, module) {
   var Overview = React.createClass({
     websocketUrl: settings.WS_HOST + '/perfcache/' + _.keys(ChartsMap).join(','),
     mixins: [WebSocketMixin],
-  
+
     getInitialState: function () {
       return {
         maxWidth: 0
       };
     },
-    
+
     onMessage: function (data) {
       var ref = ChartsMap[data.name];
-      
+
       if (ref) {
         _.each(ref, function (ref) {
           this.refs[ref].onMessage(data);
         }, this);
       }
     },
-    
+
     componentDidMount: function () {
       this.setWidth();
       $(window).on('resize.graphing', this.setWidth);
     },
-    
+
     componentWillUnmount: function () {
       $(window).on('resize.graphing');
     },
-    
+
     setWidth: function () {
       if (this.isMounted()) {
-        var node  = this.getDOMNode(), 
+        var node  = this.getDOMNode(),
             state = { maxWidth: node.clientWidth };
 
         this.setState(state);
       }
     },
-    
+
     render: function () {
       var width = this.state.maxWidth - 300;
-      
+
       if (this.state.maxWidth === 0) {
         return (<div><div className="row"><div className="span2">{ width }</div></div></div>);
       } else {
