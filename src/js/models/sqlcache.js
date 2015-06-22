@@ -26,11 +26,6 @@ define(function (require) {
     doAction: function (opts) {
       opts = opts || {};
 
-      if (!opts.datasource || !opts.name) {
-        console.warn('Missing opts keys datasource or name');
-        return null;
-      }
-
       return $.put(this.url, _.pick(opts, ['action', 'datasource', 'name']));
     }
   });

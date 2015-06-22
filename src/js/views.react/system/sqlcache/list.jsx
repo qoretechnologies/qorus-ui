@@ -1,4 +1,6 @@
 define(function (require) {
+  require('sprintf');
+
   var React           = require('react'),
       Reflux          = require('reflux'),
       _               = require('underscore'),
@@ -9,7 +11,10 @@ define(function (require) {
       CheckerBase     = require('jsx!views.react/components/checker'),
       StoreStateMixin = require('views.react/stores/mixins/statestore'),
       SearchFormView  = require('jsx!views.react/components/search'),
+      Loader          = require('jsx!views.react/components/loader'),
       List;
+
+  var FETCH_INIT = 0, FETCH_DONE = 1, FETCH_ERROR = 2;
 
   var Actions = Reflux.createActions(['fetch', 'checkItem', 'clear', 'filter']);
 
@@ -20,6 +25,8 @@ define(function (require) {
     init: function () {
       this.state = {
         sqlCache: new SqlCache(),
+        fetchStatus: FETCH_INIT,
+        fetchError: null,
         checkedIds: [],
         filters: null
       };
@@ -34,7 +41,11 @@ define(function (require) {
 
       this.state.sqlCache.fetch()
         .done(function () {
-          self.setState({ sqlCache: self.state.sqlCache });
+          self.setState({ fetchStatus: FETCH_DONE, sqlCache: self.state.sqlCache });
+        })
+        .fail(function (resp) {
+          var r = resp.responseJSON;
+          self.setState({ fetchStatus: FETCH_ERROR, fetchError: sprintf("%s: %s", r.err, r.desc) });
         });
     },
 
@@ -131,15 +142,9 @@ define(function (require) {
   var DataSource = React.createClass({
     mixins: [Reflux.connect(Store)],
 
-    componentWillReceiveProps: function (nextProps, nextState) {
-      console.log(nextState);
-    },
-
     render: function () {
       var tables = this.props.collection,
           filters = Store.state.filters;
-
-      console.log('render',this.props.name, filters);
 
       if (filters && filters.text) {
         tables = _.filter(tables, function (t) { return t.name.indexOf(filters.text.toLowerCase()) !== -1; });
@@ -167,16 +172,23 @@ define(function (require) {
     }
   });
 
-
   var Toolbar = React.createClass({
     filterChange: function (filter) {
       Actions.filter(filter);
     },
 
+    clearAll: function (e) {
+      e.preventDefault();
+      Actions.clear(null, null);
+    },
+
     render: function () {
       return (
-        <div className="row-fluid">
-          <div className="btn-toolbar pull-right">
+        <div className="toolbar">
+          <div className="btn-group">
+            <button className="btn btn-small" onClick={ this.clearAll }><i className="icon-trash" /> Clear all</button>
+          </div>
+          <div className="btn-group pull-right">
             <SearchFormView filterChange={ this.filterChange } />
           </div>
         </div>
@@ -193,16 +205,28 @@ define(function (require) {
     },
 
     render: function () {
-      var datasources = null,
+      var datasources = <Loader />,
           toolbar     = null,
           state       = this.state;
 
-      if (state.sqlCache.get('datasources')) {
-        datasources = _.map(state.sqlCache.get('datasources'), function (ds) {
-          return <DataSource collection={ ds.tables } name={ ds.name } checkedIds={ state.checkedIds } />;
-        });
+      if (state.fetchStatus === FETCH_DONE) {
+        if (_.size(state.sqlCache.get('datasources')) > 0) {
+          datasources = _.map(state.sqlCache.get('datasources'), function (ds) {
+            return <DataSource collection={ ds.tables } name={ ds.name } checkedIds={ state.checkedIds } key={ ds.name } />;
+          });
 
-        toolbar = <Toolbar />;
+          toolbar = <Toolbar />;
+        } else {
+          datasources = <p>No data found for SQL cache tables</p>;
+        }
+      } else if (state.fetchStatus === FETCH_ERROR) {
+        datasources = (
+          <div className="alert alert-warning">
+            <h4>Failed to fetch SQL cache!</h4>
+            <p>{ state.fetchError }</p>
+            <p><button className="btn btn-small btn-success" onClick={ Actions.fetch }><i className="icon-refresh" /> Retry</button></p>
+          </div>
+        );
       }
 
       return (

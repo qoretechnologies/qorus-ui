@@ -10,7 +10,7 @@ define(function (require) {
     getInitialProps: function () {
       return {
         filterText: ''
-      }
+      };
     },
 
     filterChange: function (e) {
