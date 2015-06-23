@@ -1,6 +1,6 @@
 define(function (require) {
   require('sprintf');
-  
+
   var _             = require('underscore'),
       $             = require('jquery'),
       React         = require('react'),
@@ -24,7 +24,7 @@ define(function (require) {
       var func      = new Func(this.props.func),
           meta      = _.omit(func.toJSON(), ['body', 'type']),
           code_meta = _.extend({}, { 'function': func.getNormalizedName() }, _.pick(meta, ['description', 'source']));
-    
+
       return (
         <div className="step-function">
           <TabsView className="nav nav-pills">
@@ -45,8 +45,8 @@ define(function (require) {
 
   ContentView = React.createBackboneClass({
     render: function () {
-      var model     = this.props.model, 
-          body      = <LoaderView />, 
+      var model     = this.props.model,
+          body      = <LoaderView />,
           tabs      = [],
           functions = model.get('functions'),
           step      = _.omit(model.toJSON(), 'functions');
@@ -59,13 +59,13 @@ define(function (require) {
             </TabPane>
           );
         });
-        
+
         tabs.push(
           <TabPane name="Step info">
             <MetaTableView data={ step } />
           </TabPane>
         );
-        
+
         body = <TabsView model={ this.model }>{ tabs }</TabsView>;
       }
 
@@ -76,11 +76,11 @@ define(function (require) {
       );
     }
   });
-  
+
   Title = React.createBackboneClass({
     render: function () {
       var model = this.props.model;
-      
+
       return <span><Name obj={ this.props.model } /> <span className="label">{ model.get('steptype') }</span></span>;
     }
   });
@@ -91,7 +91,7 @@ define(function (require) {
         this.showModal(step);
       }
     },
-  
+
     createDiagram: function () {
       var self    = this,
           levels  = this.props.model.mapSteps(),
@@ -104,16 +104,16 @@ define(function (require) {
           sw      = Math.max(lw*(2*pad+bw)),
           sh      = lh*(2*pad+bh)
           ;
-      
+
       var boxes = {};
-      
+
       var s_groups = [];
       var s_masks  = [];
       var s_paths  = [];
-      
+
       _.each(levels, function (level, idx) {
         var i = idx;
-        
+
         _.each(level, function (step, idx) {
           var w = _.size(level);
           var box_w = sw / w;
@@ -123,8 +123,8 @@ define(function (require) {
           var cy = (bh+2*pad) * i;
           var slug = slugify(step.name);
           var el, params, mask_el;
-          
-          
+
+
           if (step.type == 'start') {
             params = {
               cx: cx+bw/2,
@@ -133,7 +133,7 @@ define(function (require) {
               ry: bh/2,
               className: "box " + step.type
             };
-            
+
             el = <Svg.Ellipse  {...params} key={ 'b-' + slug } />;
             mask_el = <Svg.Ellipse {..._.extend({}, params, { fill: '#fff', className: undefined })} key={ 'bm-' + slug }/>;
           } else {
@@ -146,28 +146,28 @@ define(function (require) {
               width: bw,
               height: bh
             };
-            
+
             el = <Svg.Rect {...params} key={ 'b-' + slug }/>;
             mask_el = <Svg.Rect {..._.extend({}, params, { fill: '#fff', className: undefined })} key={ 'bm-' + slug } />;
           }
-       
+
 
           var mask = <Svg.Mask id={slugify(step.name)} elements={[mask_el]} key={ 'mask-' + slug }/>;
           var text = <Svg.Text text={ step.fullname } x={ cx+bw/2 } y={ cy+bh/2 } style={ { mask: "url('#" + slugify(step.name) +"')" }} key={ 't-' + slug } />;
-          
+
           s_groups.push(<Svg.Group elements={[el, text]} onClick={ self.onClick } step={ step } key={ 'g-' + slug } />);
           s_masks.push(mask);
-          
+
           var id = step.id.toString();
-          
-          boxes[id] = { 
+
+          boxes[id] = {
             cx: cx+bw/2,
             cy: cy+bh/2,
             links: step.links_to
           };
         });
       });
-      
+
       _.each(boxes, function (box) {
         _.each(box.links, function (link) {
           var bl = boxes[link];
@@ -177,7 +177,7 @@ define(function (require) {
           s_paths.push(<Svg.Path d={path} stroke="#000" fill="none" key={ slugify(path) } />);
         });
       });
-      
+
       return {
         attributes: { 'viewBox': [0,0,sw,sh].join(' ')},
         boxes: s_groups,
@@ -185,10 +185,10 @@ define(function (require) {
         masks: s_masks
       };
     },
-  
+
     render: function () {
       var dia = this.createDiagram();
-    
+
       return (
         <div>
           <svg version="1.1" id="workflow-diagram" className="diagram" xmlns="http://www.w3.org/2000/svg" {...dia.attributes}>
@@ -201,16 +201,17 @@ define(function (require) {
         </div>
       );
     },
-    
+
     showModal: function (step) {
-      var model = new Step({ stepid: step.id }).fetch();
+      var model = new Step({ stepid: step.id });
+      model.fetch();
       var normName = <Title model={ model } />;
       var modal = <ModalView><HeaderView title={ normName } /><ContentView model={ model } /></ModalView>;
       var el = $('<div class="modal-container" />').appendTo('body');
       React.render(modal, el[0]);
     }
-  
+
   });
-  
+
   return Diagram;
 });

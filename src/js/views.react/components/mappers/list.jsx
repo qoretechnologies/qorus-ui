@@ -17,7 +17,8 @@ define(function (require) {
     },
 
     openDetail: function () {
-      var model = this.props.model.fetch();
+      var model = this.props.model;
+      model.fetch();
       var normName = <Name obj={ model } />;
       var modal = <ModalView><HeaderView title={ normName } /><div className="modal-body"><Mapper model={ model } /></div></ModalView>;
       var el = $('<div class="modal-container" />').appendTo('body');

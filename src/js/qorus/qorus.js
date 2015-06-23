@@ -351,9 +351,9 @@ define(function (require) {
       options.reset = false;
       options.merge = true;
 
-      Qorus.Collection.__super__.fetch.call(this, options);
+      var resp = Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
-      return this;
+      return resp;
     },
 
     next: function (model) {

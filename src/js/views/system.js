@@ -11,8 +11,8 @@ define(function(require){
       LogsView         = require('views/system/logs'),
       RbacView         = require('views/system/rbac'),
       ErrorsView       = require('views/system/errors'),
-      ValuesList       = require('jsx!views.react/system/sqlcache/list'),
-
+      SQLCacheList     = require('jsx!views.react/system/sqlcache/list'),
+      ValuesList       = require('jsx!views.react/system/valuesets/list'),
       _                = require('underscore'),
       SystemInfoView;
 
@@ -45,7 +45,8 @@ define(function(require){
       this.setView(new AlertView(), '#alerts');
       this.setView(new RbacView(), '#rbac');
       this.setView(new ErrorsView(), '#errors');
-      this.setView(new Qorus.ReactView({ reactView: ValuesList }), '#sqlcache');
+      this.setView(new Qorus.ReactView({ reactView: SQLCacheList }), '#sqlcache');
+      this.setView(new Qorus.ReactView({ reactView: ValuesList }), '#values');
     }
   });
   return SystemInfoView;
