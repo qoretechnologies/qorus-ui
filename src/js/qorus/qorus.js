@@ -195,7 +195,7 @@ define(function (require) {
             if (force === true) {
               silent = false;
             }
-            self.set(atrs, { silent: silent });
+            self.set(self.parse(atrs), { silent: silent });
             self.trigger('update:'+property, self);
 
             if (property === 'alerts') {
