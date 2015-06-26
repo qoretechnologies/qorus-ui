@@ -39,14 +39,17 @@
     "backbone.obscura": "~1.0.1",
     "backbone": "1.1.2",
     "classnames": "~2.1.2",
-    "chartjs": "1.0.1"
+    "chartjs": "1.0.1",
+    "cjs": "*",
+    "amd-loader": "*"
   },
   "resolutions": {
     "jquery": "~2.1.4",
     "lodash": "2.4.1",
     "chartjs": "1.0.1",
     "backbone": "1.1.2",
-    "react": "~0.13.2"
+    "react": "~0.13.2",
+    "amd-loader": "0.0.1"
   },
   "devDependencies": {
     "deep-diff": "~0.3.1"
