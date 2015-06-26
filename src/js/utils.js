@@ -386,6 +386,32 @@ define(function (require) {
 
     getRandomInt: function(min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
+    },
+
+    getSelected: function () {
+      if (window.getSelection) {
+        return window.getSelection().toString();
+      } else if (document.getSelection) {
+        return document.getSelection().toString();
+      } else {
+        var selection = document.selection && document.selection.createRange();
+        if (selection.text) {
+          return selection.text.toString();
+        }
+        return "";
+      }
+      return "";
+    },
+
+    preventOnSelection: function (fn) {
+      var getSelected = this.getSelected;
+
+      return function () {
+        console.log(this, arguments);
+        if (getSelected() === "") {
+          fn.apply(this, arguments);
+        }
+      };
     }
   };
 
