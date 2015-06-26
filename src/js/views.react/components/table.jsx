@@ -62,10 +62,12 @@ define(function (require) {
         var child = col.props.children,
             clone = child ? cloneWithProps(child, { model: row, displayName: 'Clone' }) : null,
             props = child ? child.props : col.props,
+            isCell = child.props.isCell,
             tRow;
 
-
-        if (col.props.cellView) {
+        if (isCell) {
+          tRow = clone;
+        } else if (col.props.cellView) {
           tRow = <col.props.cellView {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</col.props.cellView>;
         } else {
           tRow = <TdComponent {...props} model={ row } hash={ row.hash } key={ indx }>{ clone }</TdComponent>;
