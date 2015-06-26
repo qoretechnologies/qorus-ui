@@ -48,7 +48,9 @@ require.config({
     'react-shim': './react-shim',
     'es6-shim': '../components/es6-shim/es6-shim',
     'react-fixed-data-table': '../components/react-fixed-data-table/fixed-data-table',
-    'backbone.obscura': '../components/backbone.obscura/backbone.obscura'
+    'backbone.obscura': '../components/backbone.obscura/backbone.obscura',
+    cjs: '../components/cjs/cjs',
+    'amd-loader': '../components/amd-loader/amd-loader'
   },
   shim: {
     backbone: {

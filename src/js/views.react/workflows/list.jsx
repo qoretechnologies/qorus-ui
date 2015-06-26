@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 define(function (require) {
   var $                  = require('jquery'),
       _                  = require('underscore'),

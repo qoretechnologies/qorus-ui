@@ -1,13 +1,18 @@
 define(function (require) {
-  var React           = require('react'),
+  var _               = require('underscore'),
+      React           = require('react'),
       Reflux          = require('reflux'),
       ValueSets       = require('collections/valuesets'),
       Table           = require('jsx!views.react/components/table').TableView,
       Col             = require('jsx!views.react/components/dummy'),
       Cell            = require('jsx!views.react/components/table').CellView,
-      RowViewBase    = require('jsx!views.react/components/table').RowView,
+      RowViewBase     = require('jsx!views.react/components/table').RowView,
       Loader          = require('jsx!views.react/components/loader'),
-      StoreStateMixin = require('views.react/stores/mixins/statestore');
+      SearchFormView  = require('jsx!views.react/components/search'),
+      StoreStateMixin = require('views.react/stores/mixins/statestore'),
+      MetaTable       = require('jsx!views.react/components/metatable'),
+      EditableCell = require('jsx!views.react/components/editablecell'),
+      Pane            = require('jsx!views.react/components/pane');
 
   var FETCH_INIT = 0, FETCH_DONE = 1, FETCH_ERROR = 2;
 
@@ -42,14 +47,14 @@ define(function (require) {
   };
 
   var CollectionActions = Reflux.createActions(['initCollection', 'fetch']);
-  var Actions = Reflux.createActions(['showDetail']);
+  var Actions = Reflux.createActions(['showDetail', 'getValues']);
 
   var Store = Reflux.createStore({
     listenables: [CollectionActions, Actions],
     mixins: [StoreStateMixin, CollectionMixin],
 
     init: function () {
-      this.state = _.extend({}, this.state);
+      this.state = _.extend({}, this.state, { showDetail: null, detailValues: false });
     },
 
     getInitialState: function () {
@@ -57,17 +62,60 @@ define(function (require) {
     },
 
     onShowDetail: function (model) {
-      if (this.state.showDetail === model) {
-        this.setState({ showDetail: null });
+      var self = this;
+
+      if (!model) {
+        this.setState({ showDetail: null, detailValues: false });
+      } else if (this.state.showDetail && this.state.showDetail.id === model.id) {
+        this.setState({ showDetail: null, detailValues: false });
       } else {
-        this.setState({ showDetail: model });
+        var values = model.has('values');
+
+        this.setState({ showDetail: model, detailValues: values });
+
+        if (!values) {
+          model.getProperty('values', null, null, function () {
+            self.setState({ showDetail: model, detailValues: true });
+          });
+        }
       }
+    }
+  });
+
+  var DetailView = React.createClass({
+    setValue: function (key, value) {
+      this.props.model.doAction({ action: 'value', key: key, value: value }).done(this.render.bind(this));
+    },
+
+    setEnabled: function (key, enabled) {
+      var value = _.find(this.props.model.get('values'), { key: key }).value;
+
+      this.props.model.doAction({ action: 'value', key: key, value: value, enabled: enabled }).done(this.render.bind(this));
+    },
+
+    render: function () {
+      return (
+        <Pane idx={ this.props.model.id } model={ this.props.model } onClose={ Actions.showDetail.bind(null, null) } name="valuesets-values">
+          <h3>{ this.props.model.get('name') }</h3>
+          <Table collection={ this.props.model.get('values') } className="table table-striped table-condensed">
+            <Col name="Key" className="name">
+              <Cell dataKey="key" className="name" />
+            </Col>
+            <Col name="Value">
+              <EditableCell dataKey="value" _model={ this.props.model } attributeName="key" onSave={ this.setValue } isCell={ true } />
+            </Col>
+            <Col name="Enabled">
+              <EditableCell dataKey="enabled" _model={ this.props.model } attributeName="key" onSave={ this.setEnabled } isCell={ true } />
+            </Col>
+          </Table>
+        </Pane>
+      );
     }
   });
 
   var RowView = React.createClass({
     rowClick: function (model) {
-      Actions.showDetail(this.props.model.name);
+      Actions.showDetail(this.props.model);
     },
 
     render: function () {
@@ -85,19 +133,14 @@ define(function (require) {
       CollectionActions.fetch();
     },
 
-    showValues: function (model) {
-      Actions.showDetail(model);
-    },
-
     render: function () {
-      var state = this.state;
+      var state = this.state, table = null, detail = null;
 
       if (state.fetchStatus == FETCH_DONE) {
         table = (
           <Table
-            collection={ state.collection.toJSON() }
+            collection={ state.collection.models }
             className="table table-striped table-condensed"
-            rowClick={ this.showValues }
             rowView={ RowView }
             >
             <Col className="name" name="Name">
@@ -135,9 +178,14 @@ define(function (require) {
         );
       }
 
+      if (state.showDetail) {
+        detail = <DetailView model={ state.showDetail } />;
+      }
+
       return (
         <div>
           { table }
+          { detail }
         </div>
       );
     }
