@@ -11,13 +11,15 @@ define(function (require) {
       SearchFormView  = require('jsx!views.react/components/search'),
       StoreStateMixin = require('views.react/stores/mixins/statestore'),
       MetaTable       = require('jsx!views.react/components/metatable'),
-      EditableCell = require('jsx!views.react/components/editablecell'),
+      EditableCell    = require('jsx!views.react/components/editablecell'),
+      utils           = require('utils'),
       Pane            = require('jsx!views.react/components/pane');
 
   var FETCH_INIT = 0, FETCH_DONE = 1, FETCH_ERROR = 2;
 
 
   var CollectionMixin = {
+    actions: ['initCollection', 'fetch'],
     init: function () {
       this.state = _.extend({}, this.state, {
         collection: null,
@@ -46,12 +48,28 @@ define(function (require) {
     },
   };
 
-  var CollectionActions = Reflux.createActions(['initCollection', 'fetch']);
-  var Actions = Reflux.createActions(['showDetail', 'getValues']);
+  var FilterMixin = {
+    actions: ['filter'],
+    init: function () {
+      this.state = _.extend({}, this.state, {
+        filters: {}
+      });
+    },
+
+    onFilter: function (filter) {
+      var filters = _.extend({}, this.state.filters, filter);
+
+      this.setState({
+        filters: filters
+      });
+    }
+  };
+
+  var Actions = Reflux.createActions(_.union(['showDetail', 'getValues'], CollectionMixin.actions, FilterMixin.actions));
 
   var Store = Reflux.createStore({
-    listenables: [CollectionActions, Actions],
-    mixins: [StoreStateMixin, CollectionMixin],
+    listenables: [Actions],
+    mixins: [StoreStateMixin, CollectionMixin, FilterMixin],
 
     init: function () {
       this.state = _.extend({}, this.state, { showDetail: null, detailValues: false });
@@ -114,9 +132,9 @@ define(function (require) {
   });
 
   var RowView = React.createClass({
-    rowClick: function (model) {
+    rowClick: utils.preventOnSelection(function (model, ev) {
       Actions.showDetail(this.props.model);
-    },
+    }),
 
     render: function () {
       return (
@@ -125,21 +143,51 @@ define(function (require) {
     }
   });
 
+  var Toolbar = React.createClass({
+    filterChange: function (filter) {
+      Actions.filter(filter);
+    },
+
+    clearAll: function (e) {
+      e.preventDefault();
+      Actions.clear(null, null);
+    },
+
+    render: function () {
+      return (
+        <div className="toolbar">
+          <div className="btn-group">
+            <SearchFormView filterChange={ this.filterChange }/>
+          </div>
+        </div>
+      );
+    }
+  });
+
   var List = React.createClass({
     mixins: [Reflux.connect(Store)],
 
     componentDidMount: function () {
-      CollectionActions.initCollection(new ValueSets());
-      CollectionActions.fetch();
+      Actions.initCollection(new ValueSets());
+      Actions.fetch();
     },
 
     render: function () {
-      var state = this.state, table = null, detail = null;
+      var state = this.state, table = null, detail = null, toolbar = null,
+          models = null;
+
+
 
       if (state.fetchStatus == FETCH_DONE) {
+        models = state.collection.models;
+
+        if (state.filters.text && state.filters.text !== "") {
+          models = state.collection.filter(function (m) { return m.get('name').indexOf(state.filters.text) !== -1; });
+        }
+
         table = (
           <Table
-            collection={ state.collection.models }
+            collection={ models}
             className="table table-striped table-condensed"
             rowView={ RowView }
             >
@@ -166,6 +214,7 @@ define(function (require) {
             </Col>
           </Table>
         );
+        toolbar = <Toolbar />;
       } else if (state.fetchStatus === FETCH_INIT) {
         table = <Loader />;
       } else if (state.fetchStatus === FETCH_ERROR) {
@@ -184,6 +233,7 @@ define(function (require) {
 
       return (
         <div>
+          { toolbar }
           { table }
           { detail }
         </div>

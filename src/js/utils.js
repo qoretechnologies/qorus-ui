@@ -407,7 +407,6 @@ define(function (require) {
       var getSelected = this.getSelected;
 
       return function () {
-        console.log(this, arguments);
         if (getSelected() === "") {
           fn.apply(this, arguments);
         }
