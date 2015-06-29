@@ -16,7 +16,7 @@ define(function (require) {
       Pane            = require('jsx!views.react/components/pane'),
       FilterMixin     = require('cjs!views.react/stores/mixins/filter.mixin'),
       CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
-      FETCH           = require('cjs!constants/fetch');
+      RestComponent   = require('jsx!views.react/components/rest');
 
   var Actions = Reflux.createActions(_.union(['showDetail', 'getValues'], CollectionMixin.actions, FilterMixin.actions));
 
@@ -127,16 +127,18 @@ define(function (require) {
 
     render: function () {
       var state = this.state, table = null, detail = null, toolbar = null,
-          models = null;
+          models = null,
+          size = 0;
 
-
-
-      if (state.fetchStatus == FETCH.DONE) {
+      if (state.collection) {
+        size = state.collection.size();
         models = state.collection.models;
 
         if (state.filters.text && state.filters.text !== "") {
           models = state.collection.filter(function (m) { return m.get('name').indexOf(state.filters.text) !== -1; });
         }
+
+        toolbar = <Toolbar />;
 
         table = (
           <Table
@@ -167,29 +169,18 @@ define(function (require) {
             </Col>
           </Table>
         );
-        toolbar = <Toolbar />;
-      } else if (state.fetchStatus === FETCH.INIT) {
-        table = <Loader />;
-      } else if (state.fetchStatus === FETCH.ERROR) {
-        table = (
-          <div className="alert alert-warning">
-            <h4>Failed to fetch SQL cache!</h4>
-            <p>{ state.fetchError }</p>
-            <p><button className="btn btn-small btn-success" onClick={ Actions.fetch }><i className="icon-refresh" /> Retry</button></p>
-          </div>
-        );
-      }
 
-      if (state.showDetail) {
-        detail = <DetailView model={ state.showDetail } />;
+        if (state.showDetail) {
+          detail = <DetailView model={ state.showDetail } />;
+        }
       }
 
       return (
-        <div>
+        <RestComponent {...this.state} size={ size }>
           { toolbar }
           { table }
           { detail }
-        </div>
+        </RestComponent>
       );
     }
   });

@@ -12,23 +12,20 @@ define(function (require) {
       StoreStateMixin = require('views.react/stores/mixins/statestore'),
       SearchFormView  = require('jsx!views.react/components/search'),
       Loader          = require('jsx!views.react/components/loader'),
+      FilterMixin     = require('cjs!views.react/stores/mixins/filter.mixin'),
+      CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
+      RestComponent   = require('jsx!views.react/components/rest'),
       List;
 
-  var FETCH_INIT = 0, FETCH_DONE = 1, FETCH_ERROR = 2;
-
-  var Actions = Reflux.createActions(['fetch', 'checkItem', 'clear', 'filter']);
+  var Actions = Reflux.createActions(_.union(['checkItem', 'clear', 'filter'], FilterMixin.actions, CollectionMixin.actions));
 
   var Store = Reflux.createStore({
-    mixins: [StoreStateMixin],
+    mixins: [StoreStateMixin, CollectionMixin, FilterMixin],
     listenables: [Actions],
 
     init: function () {
       this.state = {
-        sqlCache: new SqlCache(),
-        fetchStatus: FETCH_INIT,
-        fetchError: null,
         checkedIds: [],
-        filters: null
       };
     },
 
@@ -36,21 +33,8 @@ define(function (require) {
       return this.state;
     },
 
-    onFetch: function () {
-      var self = this;
-
-      this.state.sqlCache.fetch()
-        .done(function () {
-          self.setState({ fetchStatus: FETCH_DONE, sqlCache: self.state.sqlCache });
-        })
-        .fail(function (resp) {
-          var r = resp.responseJSON;
-          self.setState({ fetchStatus: FETCH_ERROR, fetchError: sprintf("%s: %s", r.err, r.desc) });
-        });
-    },
-
     onClear: function (ds, name) {
-      var promise = this.state.sqlCache.doAction({
+      var promise = this.state.collection.doAction({
         action: 'deleteCache',
         datasource: ds,
         name: name
@@ -76,7 +60,7 @@ define(function (require) {
     },
 
     onCheckAll: function () {
-      var ds = this.state.sqlCache.get('datasources'),
+      var ds = this.state.collection.get('datasources'),
           ids = [];
 
       _.each(ds, function (d) {
@@ -86,12 +70,6 @@ define(function (require) {
       });
 
       this.setState({ checkedIds: ids });
-    },
-
-    onFilter: function (filter) {
-      var filters = _.extend({}, this.state.filters, filter);
-
-      this.setState({ filters: filters });
     }
   });
 
@@ -204,51 +182,32 @@ define(function (require) {
     mixins: [Reflux.connect(Store)],
 
     componentDidMount: function () {
+      Actions.initCollection(new SqlCache());
       Actions.fetch();
     },
 
     render: function () {
-      var datasources = <Loader />,
-          toolbar     = null,
-          state       = this.state;
+      var toolbar = null,
+          state   = this.state,
+          size    = 0;
 
-      if (state.fetchStatus === FETCH_DONE) {
-        if (_.size(state.sqlCache.get('datasources')) > 0) {
-          datasources = _.map(state.sqlCache.get('datasources'), function (ds) {
-            return <DataSource collection={ ds.tables } name={ ds.name } checkedIds={ state.checkedIds } key={ ds.name } />;
-          });
+      if (state.collection) {
+        size = _.size(state.collection.get('datasources'));
+        datasources = _.map(state.collection.get('datasources'), function (ds) {
+          return <DataSource collection={ ds.tables } name={ ds.name } checkedIds={ state.checkedIds } key={ ds.name } />;
+        });
 
-          toolbar = <Toolbar />;
-        } else {
-          datasources = <p>No data found for SQL cache tables</p>;
-        }
-      } else if (state.fetchStatus === FETCH_ERROR) {
-        datasources = (
-          <div className="alert alert-warning">
-            <h4>Failed to fetch SQL cache!</h4>
-            <p>{ state.fetchError }</p>
-            <p><button className="btn btn-small btn-success" onClick={ Actions.fetch }><i className="icon-refresh" /> Retry</button></p>
-          </div>
-        );
+        toolbar = <Toolbar />;
       }
 
       return (
-        <div>
+        <RestComponent {...this.state} size={ size }>
           { toolbar }
           { datasources }
-        </div>
+        </RestComponent>
       );
     }
   });
 
   return List;
 });
-
-
-/*
-
-<Col key="checker" className="narrow">
-  <Checker checkedIds={ this.props.checkedIds }/>
-</Col>
-
-*/
