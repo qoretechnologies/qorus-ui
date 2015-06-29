@@ -13,57 +13,10 @@ define(function (require) {
       MetaTable       = require('jsx!views.react/components/metatable'),
       EditableCell    = require('jsx!views.react/components/editablecell'),
       utils           = require('utils'),
-      Pane            = require('jsx!views.react/components/pane');
-
-  var FETCH_INIT = 0, FETCH_DONE = 1, FETCH_ERROR = 2;
-
-
-  var CollectionMixin = {
-    actions: ['initCollection', 'fetch'],
-    init: function () {
-      this.state = _.extend({}, this.state, {
-        collection: null,
-        fetchStatus: FETCH_INIT,
-        fetchError: null
-      });
-    },
-
-    onInitCollection: function (collection) {
-      this.setState({ collection: collection });
-    },
-
-    onFetch: function () {
-      var self = this;
-
-      if (this.state.collection) {
-        this.state.collection.fetch()
-          .done(function () {
-            self.setState({ fetchStatus: FETCH_DONE, collection: self.state.collection });
-          })
-          .fail(function (resp) {
-            var r = resp.responseJSON;
-            self.setState({ fetchStatus: FETCH_ERROR, fetchError: sprintf("%s: %s", r.err, r.desc) });
-          });
-      }
-    },
-  };
-
-  var FilterMixin = {
-    actions: ['filter'],
-    init: function () {
-      this.state = _.extend({}, this.state, {
-        filters: {}
-      });
-    },
-
-    onFilter: function (filter) {
-      var filters = _.extend({}, this.state.filters, filter);
-
-      this.setState({
-        filters: filters
-      });
-    }
-  };
+      Pane            = require('jsx!views.react/components/pane'),
+      FilterMixin     = require('cjs!views.react/stores/mixins/filter.mixin'),
+      CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
+      FETCH           = require('cjs!constants/fetch');
 
   var Actions = Reflux.createActions(_.union(['showDetail', 'getValues'], CollectionMixin.actions, FilterMixin.actions));
 
@@ -178,7 +131,7 @@ define(function (require) {
 
 
 
-      if (state.fetchStatus == FETCH_DONE) {
+      if (state.fetchStatus == FETCH.DONE) {
         models = state.collection.models;
 
         if (state.filters.text && state.filters.text !== "") {
@@ -215,9 +168,9 @@ define(function (require) {
           </Table>
         );
         toolbar = <Toolbar />;
-      } else if (state.fetchStatus === FETCH_INIT) {
+      } else if (state.fetchStatus === FETCH.INIT) {
         table = <Loader />;
-      } else if (state.fetchStatus === FETCH_ERROR) {
+      } else if (state.fetchStatus === FETCH.ERROR) {
         table = (
           <div className="alert alert-warning">
             <h4>Failed to fetch SQL cache!</h4>
