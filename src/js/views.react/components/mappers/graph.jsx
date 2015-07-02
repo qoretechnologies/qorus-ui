@@ -3,47 +3,94 @@ define(function (require) {
       _     = require('underscore'),
       Graph;
 
-  var InputTable = React.createClass({
+  var Marker = React.createClass({
+    componentDidMount: function () {
+      var el = this.getDOMNode();
+
+      el.setAttribute('refX', 10);
+      el.setAttribute('refY', 10);
+      el.setAttribute('markerUnits', 'strokeWidth');
+      el.setAttribute('markerWidth', 10);
+      el.setAttribute('markerHeight', 10);
+      el.setAttribute('orient', 'auto');
+    },
+
     render: function () {
-      var pos = 0,
-          style = {
-            fill: 'rgb(255,255,255)',
-            'stroke-width': 1,
-            stroke: 'rgb(0,0,0)'
-          };
+      return (
+        <marker id="Triangle"
+          viewBox="0 0 20 20"
+          orient="auto">
+          <path d="M 0 0 L 20 10 L 0 20 z"/>
+        </marker>
+      );
+    }
+  });
+
+  var BoxTable = React.createClass({
+    _boxes: [],
+
+    addBox: function (box) {
+      this._boxes.push(box);
+    },
+
+    getBoxes: function () {
+      return this._boxes;
+    },
+
+    getBox: function (id) {
+      return _.find(this._boxes, { key: id });
+    },
+
+    resetBoxes: function () {
+      this._boxes = [];
+    },
+
+    render: function () {
+      var pos = 15,
+          title = this.props.title,
+          style = _.extend({}, {
+            strokeWidth: 1,
+            stroke: '#000',
+            fill: '#fff'
+          });
+
+      this.resetBoxes();
 
       var nodes = _.map(this.props.inputs, function (input) {
-        pos = pos + 15;
-        return <text key={ input.name } x={ this.props.x + 10 } y={ pos } fill="black">{ input.name }</text>;
+        pos += 15;
+
+        var box = {
+          key: input.name,
+          x: this.props.x + 10,
+          y: pos,
+          width: Math.min(this.props.maxWidth, 200),
+          height: 15,
+          value: input.value
+        }
+
+        this.addBox(box);
+
+        return <BoxCell {...box} ref={ input.name } key={ input.name } title={ input.name } textClassName="box-title" />;
       }, this);
 
       return (
         <g>
-          <rect height={ this.props.height } width={ this.props.width } x={ this.props.x } y={ this.props.y } style={ style } />
+          <rect height={Math.max(pos + 10, 100) } width={ Math.min(this.props.maxWidth, 200) } x={ this.props.x } y={ this.props.y } style={ style } />
+          <BoxCell x={ this.props.x + 10 } y={ this.props.y + 15 } width={ Math.min(this.props.maxWidth, 200) } title={ this.props.title } textClassName="box-title"/>
           { nodes }
         </g>
       );
     }
   });
 
-  var OutputTable = React.createClass({
+  var BoxCell = React.createClass({
     render: function () {
-      var pos = 0,
-          style = {
-            fill: 'rgb(255,255,255)',
-            'stroke-width': 1,
-            stroke: 'rgb(0,0,0)'
-          };
-
-      var nodes = _.map(this.props.outputs, function (input) {
-        pos = pos + 15;
-        return <text key={ input.name } x={ this.props.x + 10 } y={ pos } fill="black">{ input.name }</text>;
-      }, this);
+      var props = this.props;
 
       return (
         <g>
-          <rect height={ this.props.height } width={ this.props.width } x={ this.props.x } y={ this.props.y } style={ style } />
-          { nodes }
+          <text x={ props.x } y={ props.y } fill="black" className={ props.textClassName }>{ props.title }</text>
+          <line x1={ props.x - 10 } x2={ props.x + props.width - 10 } y1={ props.y + 2 } y2={ props.y + 2 } stroke="black" strokeWidth="1"/>
         </g>
       );
     }
@@ -57,7 +104,8 @@ define(function (require) {
     getInitialState: function () {
       return {
         width: 200,
-        height: 400
+        height: 400,
+        lines: []
       };
     },
 
@@ -66,15 +114,35 @@ define(function (require) {
 
       this.setState({
         width: parent.offsetWidth,
-        height: parent.offsetHeight
+        height: parent.offsetHeight,
+        lines: this.getLines()
       });
     },
 
     render: function () {
+      var lines = this.state.lines;
+
       return (
-        <svg width="100%" height="100%">
-          <InputTable inputs={ this.getInputs() } width={ this.state.width/2 } height={ this.state.height } x={ 0 } y={ 0 } />
-          <OutputTable outputs={ this.getOutputs() } width={ this.state.width/2 } height={ this.state.height } x={ this.state.width/2 } y={ 0 }/>
+        <svg width="100%" height="100%" viewBox={ [0,0,1000,1000].join(' ') }>
+          <defs>
+          <Marker />
+          </defs>
+          <BoxTable
+            ref="input"
+            inputs={ this.getInputs() }
+            maxWidth={ 1000/2 - 50 }
+            x={ 0 }
+            y={ 0 }
+            style={{ fill: '#fff' }}
+            title="Datasource" />
+          <BoxTable
+            ref="output"
+            inputs={ this.getOutputs() }
+            maxWidth={ 1000/2 - 50 }
+            x={ 1000/2 } y={ 0 }
+            style={{ fill: '#fff' }}
+            title="Output" />
+          { lines }
         </svg>
       );
     },
@@ -99,6 +167,39 @@ define(function (require) {
       }
 
       return null;
+    },
+
+    getLines: function () {
+      var lines = [];
+
+      if (this.props.mapper && this.props.mapper.opts) {
+        var pointsLeft = [],
+            pointsRight = [];
+
+        _.each(this.props.mapper.field_source, function (fs) {
+          var key = fs.key,
+              type = fs.type,
+              value = fs.value;
+
+          if (type === 'name') {
+            type = 'input';
+            var p = this.refs[type].getBox(value);
+            var p2 = this.refs['output'].getBox(key);
+
+            var x1 = p.width + p.x - 10,
+                x2 = p2.x - 10,
+                y1 = p.y - 5,
+                y2 = p2.y - 5;
+
+            var l = <path d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) } fill="none" stroke="black" strokeWidth="1" markerEnd="url(#Triangle)"/>;
+
+            lines.push(l);
+
+          }
+        }, this);
+
+      }
+      return lines;
     }
 
   });

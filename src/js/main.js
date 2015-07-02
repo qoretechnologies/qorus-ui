@@ -171,7 +171,7 @@ theme: 'block'
     fileExtension: '.jsx',
     transformOptions: {
       harmony: true,
-      stripTypes: false
+      stripTypes: true
     },
     usePragma: false
   },

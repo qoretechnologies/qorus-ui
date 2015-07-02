@@ -272,7 +272,7 @@ define(function (require) {
   var ErrorsTable = React.createBackboneClass({
     getInitialState: function () {
       return {
-        fetched: this.props.collection.size() > 0,
+        fetched: this.props.collection && this.props.collection.size() > 0,
         search_text: '',
         size: this.props.collection.size(),
         excludes: this.props.excludes
@@ -295,7 +295,6 @@ define(function (require) {
 
     componentDidUpdate: function () {
       if (!this.state.fetched) {
-        console.log('update', this.state.fetched);
         this._fetch(true);
       }
     },
