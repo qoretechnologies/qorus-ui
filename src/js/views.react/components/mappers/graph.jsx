@@ -1,30 +1,8 @@
 define(function (require) {
-  var React = require('react'),
-      _     = require('underscore'),
+  var React  = require('react'),
+      _      = require('underscore'),
+      Marker = require('jsx!views.react/components/svg').Marker,
       Graph;
-
-  var Marker = React.createClass({
-    componentDidMount: function () {
-      var el = this.getDOMNode();
-
-      el.setAttribute('refX', 10);
-      el.setAttribute('refY', 10);
-      el.setAttribute('markerUnits', 'strokeWidth');
-      el.setAttribute('markerWidth', 10);
-      el.setAttribute('markerHeight', 10);
-      el.setAttribute('orient', 'auto');
-    },
-
-    render: function () {
-      return (
-        <marker id="Triangle"
-          viewBox="0 0 20 20"
-          orient="auto">
-          <path d="M 0 0 L 20 10 L 0 20 z"/>
-        </marker>
-      );
-    }
-  });
 
   var BoxTable = React.createClass({
     _boxes: [],
@@ -66,7 +44,7 @@ define(function (require) {
           width: Math.min(this.props.maxWidth, 200),
           height: 15,
           value: input.value
-        }
+        };
 
         this.addBox(box);
 
@@ -120,12 +98,13 @@ define(function (require) {
     },
 
     render: function () {
-      var lines = this.state.lines;
+      var lines = this.state.lines.
+          boxes = null;
 
       return (
         <svg width="100%" height="100%" viewBox={ [0,0,1000,1000].join(' ') }>
           <defs>
-          <Marker />
+            <Marker />
           </defs>
           <BoxTable
             ref="input"
@@ -134,14 +113,15 @@ define(function (require) {
             x={ 0 }
             y={ 0 }
             style={{ fill: '#fff' }}
-            title="Datasource" />
+            title="Datasource" key="input" />
           <BoxTable
             ref="output"
             inputs={ this.getOutputs() }
             maxWidth={ 1000/2 - 50 }
             x={ 1000/2 } y={ 0 }
             style={{ fill: '#fff' }}
-            title="Output" />
+            title="Output" key="output" />
+          { boxes }
           { lines }
         </svg>
       );
@@ -169,6 +149,28 @@ define(function (require) {
       return null;
     },
 
+    getTypes: function () {
+      var fields = [];
+
+      if (this.props.mapper && this.props.mapper.field_source) {
+        fields = _.chain().map(this.props.mapper.field_source, function (fs) {
+          return fs.type;
+        }).uniq().value();
+      }
+
+      return fields;
+    },
+
+    // TODO
+    renderBoxes: function (offset) {
+      // name is covered by getInputs
+      var types = _.omit(this.getTypes(), 'name');
+
+      if (types.length > 0) {
+
+      }
+    },
+
     getLines: function () {
       var lines = [];
 
@@ -183,18 +185,21 @@ define(function (require) {
 
           if (type === 'name') {
             type = 'input';
-            var p = this.refs[type].getBox(value);
-            var p2 = this.refs['output'].getBox(key);
-
-            var x1 = p.width + p.x - 10,
+            var p = this.refs[type].getBox(value),
+                p2 = this.refs.output.getBox(key),
+                x1 = p.width + p.x - 10,
                 x2 = p2.x - 10,
                 y1 = p.y - 5,
                 y2 = p2.y - 5;
 
-            var l = <path d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) } fill="none" stroke="black" strokeWidth="1" markerEnd="url(#Triangle)"/>;
+            var l = <path
+                      d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) }
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="1"
+                      markerEnd="url(#Triangle)"/>;
 
             lines.push(l);
-
           }
         }, this);
 

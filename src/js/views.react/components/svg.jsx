@@ -6,24 +6,18 @@ define(function (require, exports, module) {
       return <path {...this.props} />
     }
   });
-  
-  module.exports = Path;
 
   var Rect = React.createClass({
     render: function () {
       return <rect {...this.props} />
     }
   });
-  
-  module.exports = Rect;
 
   var Ellipse = React.createClass({
     render: function () {
       return <ellipse {...this.props} />
     }
   });
-  
-  module.exports = Ellipse;
 
   var Group = React.createClass({
     onClick: function (e) {
@@ -36,15 +30,11 @@ define(function (require, exports, module) {
     }
   });
 
-  module.exports = Group;
-
   var Mask = React.createClass({
     render: function () {
       return <mask id={ this.props.id }>{ this.props.elements }</mask>
     }
   });
-  
-  module.exports = Mask;
 
   var Text = React.createClass({
     render: function () {
@@ -52,15 +42,41 @@ define(function (require, exports, module) {
       return <text {...props} mask={ this.props.mask }>{ this.props.text }</text>;
     }
   });
-  
-  module.exports = Text;
-  
-  return {
+
+  var Marker = React.createClass({
+    componentDidMount: function () {
+      var el = this.getDOMNode();
+
+      el.setAttribute('refX', 20);
+      el.setAttribute('refY', 10);
+      el.setAttribute('markerUnits', 'strokeWidth');
+      el.setAttribute('markerWidth', 10);
+      el.setAttribute('markerHeight', 10);
+      el.setAttribute('orient', 'auto');
+    },
+
+    render: function () {
+      return (
+        <marker id="Triangle"
+          viewBox="0 0 20 20"
+          orient="auto">
+          <path d="M 0 0 L 20 10 L 0 20 z"/>
+        </marker>
+      );
+    }
+  });
+
+  var SVG = {
     Path: Path,
     Rect: Rect,
     Ellipse: Ellipse,
     Group: Group,
     Mask: Mask,
-    Text: Text
+    Text: Text,
+    Marker: Marker
   }
+
+  module.exports = SVG;
+
+  return SVG;
 });
