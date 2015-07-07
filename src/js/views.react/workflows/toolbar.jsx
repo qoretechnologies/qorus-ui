@@ -8,6 +8,7 @@ define(function (require) {
       ORDER_STATES   = require('constants/workflow').ORDER_STATES,
       workflowsStore = require('views.react/stores/workflows'),
       Actions        = require('views.react/actions/workflows'),
+      classNames     = require('classnames'),
       moment         = require('moment');
 
   require('backbone');
@@ -204,7 +205,7 @@ define(function (require) {
     render: function () {
       var filters         = workflowsStore.state.filters,
           date            = filters.date,
-          clsActions      = React.addons.classSet({
+          clsActions      = classNames({
             "btn-group": true,
             "toolbar-actions": true,
             hide: (this.props.store.state.checkedIds.length === 0)

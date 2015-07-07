@@ -26,11 +26,10 @@
     "sprintf": "~1.0.2",
     "prism": "temnoregg/prism#gh-pages",
     "jquery": "~2.1.4",
-    "jsx": "requirejs-react-jsx#~0.13.1",
+    "jsx": "requirejs-react-jsx#~0.14.2",
     "react.backbone": "~0.6.0",
     "reflux": "~0.2.3",
     "bootstrap-flat-ui": "~2.3.2",
-    "react": "~0.13.2",
     "lodash": "2.4.1",
     "spark-md5": "~0.0.5",
     "react-chartjs": "https://github.com/temnoregg/react-chartjs-bower.git#~0.6.0",
@@ -48,7 +47,6 @@
     "lodash": "2.4.1",
     "chartjs": "1.0.1",
     "backbone": "1.1.2",
-    "react": "~0.13.2",
     "amd-loader": "~0.0.2"
   },
   "devDependencies": {

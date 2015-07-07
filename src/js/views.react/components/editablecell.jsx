@@ -1,5 +1,6 @@
 define(function (require) {
-  var React = require('react');
+  var React      = require('react'),
+      classNames = require('classnames');
 
   var EditableCell = React.createClass({
     getInitialState: function () {
@@ -98,7 +99,7 @@ define(function (require) {
     render: function () {
       var props = _.omit(this.props, ['children']),
           style = { width: this.state.width },
-          cls   = React.addons.classSet({
+          cls   = classNames({
                     editable: true,
                     editor: this.state.edit
                   });

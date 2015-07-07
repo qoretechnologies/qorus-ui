@@ -1,5 +1,6 @@
 define(function (require) {
-  var React = require('react');
+  var React      = require('react'),
+      classNames = require('classnames');
 
   return React.createClass({
     mixins: [React.addons.PureRenderMixin],
@@ -18,7 +19,7 @@ define(function (require) {
       var content;
       var cls = { badge: (this.props.val > 0) };
       var label = "badge-" + this.props.label;
-      var cx = React.addons.classSet;
+      var cx = classNames;
       cls[label] = (this.props.val > 0);
 
       if (this.props.url) {

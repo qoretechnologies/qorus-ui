@@ -4,6 +4,9 @@ define(function (require) {
       Marker = require('jsx!views.react/components/svg').Marker,
       Graph;
 
+  var LINE_HEIGHT = 20;
+  var PADDING = 10;
+
   var BoxTable = React.createClass({
     _boxes: [],
 
@@ -24,7 +27,7 @@ define(function (require) {
     },
 
     render: function () {
-      var pos = 15,
+      var pos = LINE_HEIGHT,
           title = this.props.title,
           style = _.extend({}, {
             strokeWidth: 1,
@@ -35,26 +38,26 @@ define(function (require) {
       this.resetBoxes();
 
       var nodes = _.map(this.props.inputs, function (input) {
-        pos += 15;
+        pos += LINE_HEIGHT;
 
         var box = {
           key: input.name,
           x: this.props.x + 10,
           y: pos,
           width: Math.min(this.props.maxWidth, 200),
-          height: 15,
+          height: LINE_HEIGHT,
           value: input.value
         };
 
         this.addBox(box);
 
-        return <BoxCell {...box} ref={ input.name } key={ input.name } title={ input.name } textClassName="box-title" />;
+        return <BoxCell {...box} ref={ input.name } key={ input.name } title={ input.name } />;
       }, this);
 
       return (
         <g>
-          <rect height={Math.max(pos + 10, 100) } width={ Math.min(this.props.maxWidth, 200) } x={ this.props.x } y={ this.props.y } style={ style } />
-          <BoxCell x={ this.props.x + 10 } y={ this.props.y + 15 } width={ Math.min(this.props.maxWidth, 200) } title={ this.props.title } textClassName="box-title"/>
+          <rect height={Math.max(pos + PADDING, 100) } width={ Math.min(this.props.maxWidth, 200) } x={ this.props.x } y={ this.props.y } style={ style } />
+          <BoxCell x={ this.props.x + PADDING } y={ this.props.y + LINE_HEIGHT } width={ Math.min(this.props.maxWidth, 200) } title={ this.props.title } textClassName="box-title"/>
           { nodes }
         </g>
       );
@@ -68,7 +71,7 @@ define(function (require) {
       return (
         <g>
           <text x={ props.x } y={ props.y } fill="black" className={ props.textClassName }>{ props.title }</text>
-          <line x1={ props.x - 10 } x2={ props.x + props.width - 10 } y1={ props.y + 2 } y2={ props.y + 2 } stroke="black" strokeWidth="1"/>
+          <line x1={ props.x - PADDING } x2={ props.x + props.width - PADDING } y1={ props.y + 5 } y2={ props.y + 5 } stroke="black" strokeWidth="1"/>
         </g>
       );
     }
@@ -98,7 +101,7 @@ define(function (require) {
     },
 
     render: function () {
-      var lines = this.state.lines.
+      var lines = this.state.lines,
           boxes = null;
 
       return (
@@ -187,8 +190,8 @@ define(function (require) {
             type = 'input';
             var p = this.refs[type].getBox(value),
                 p2 = this.refs.output.getBox(key),
-                x1 = p.width + p.x - 10,
-                x2 = p2.x - 10,
+                x1 = p.width + p.x - PADDING,
+                x2 = p2.x - PADDING,
                 y1 = p.y - 5,
                 y2 = p2.y - 5;
 
