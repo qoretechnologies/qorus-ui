@@ -6,7 +6,7 @@
   "main": "Gruntfile.js",
   "dependencies": {
     "globule": "^0.2.0",
-    "react-tools": "^0.12.2"
+    "react-tools": "git://github.com/temnoregg/react.git#31a49e7"
   },
   "devDependencies": {
     "bower": "^1.3.12",
