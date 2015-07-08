@@ -40,7 +40,8 @@
     "classnames": "~2.1.2",
     "chartjs": "1.0.1",
     "cjs": "*",
-    "amd-loader": "https://github.com/guybedford/amd-loader.git#~0.0.2"
+    "amd-loader": "https://github.com/guybedford/amd-loader.git#~0.0.2",
+    "react": "react-bower-svg#0.13.3-svg"
   },
   "resolutions": {
     "jquery": "~2.1.4",
