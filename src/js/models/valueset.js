@@ -38,6 +38,15 @@ var Model = Qorus.Model.extend({
       }).then();
 
     return deferred;
+  },
+
+  /**
+   * Get Valueset dump from REST
+   */
+  getDump: function () {
+    var deferred = $.get(_.result(this, 'url'), { action: 'dump'});
+
+    return deferred;
   }
 
 });
