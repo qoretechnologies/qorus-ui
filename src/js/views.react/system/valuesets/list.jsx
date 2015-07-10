@@ -93,7 +93,7 @@ define(function (require) {
 
       if (this.state.download) {
         download = <a ref="download" onClick={ function (e) { e.stopPropagation(); } }  download={ this.state.filename }
-                    href={'data:application/csv;base64,' + utils.utf8ToB64(this.state.data.trim())} />;
+                    href={'data:text/plain;base64,' + utils.utf8ToB64(this.state.data.trim())} />;
       }
 
       return (
