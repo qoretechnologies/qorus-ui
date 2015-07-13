@@ -16,6 +16,7 @@ define(function (require) {
       Pane            = require('jsx!views.react/components/pane'),
       FilterMixin     = require('cjs!views.react/stores/mixins/filter.mixin'),
       CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
+      SaveFile        = require('jsx!views.react/components/savefile'),
       RestComponent   = require('jsx!views.react/components/rest');
 
   var Actions = Reflux.createActions(_.union(['showDetail', 'getValues'], CollectionMixin.actions, FilterMixin.actions));
@@ -50,58 +51,6 @@ define(function (require) {
           });
         }
       }
-    }
-  });
-
-  var DumpToFile = React.createClass({
-    getInitialState: function () {
-      return {
-        download: false
-      };
-    },
-
-    componentDidUpdate: function () {
-      if (this.state.download && this.refs.download) {
-        var node = React.findDOMNode(this.refs.download);
-        node.click();
-        this.setState({ download: false });
-      }
-    },
-
-    onClick: function (e) {
-      var model = this.props.model,
-          def   = model.getDump(),
-          target = e.target;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      def.done(function (resp) {
-        var name = model.get('name');
-
-        this.setState({
-          download: true,
-          filename: name + '.qvset',
-          data: resp[name]
-        });
-
-      }.bind(this));
-    },
-
-    render: function () {
-      var download = null;
-
-      if (this.state.download) {
-        download = <a ref="download" onClick={ function (e) { e.stopPropagation(); } }  download={ this.state.filename }
-                    href={'data:text/plain;base64,' + utils.utf8ToB64(this.state.data.trim())} />;
-      }
-
-      return (
-        <div>
-          <a className="btn btn-success btn-mini" onClick={ this.onClick }><i className="icon-download" /> Dump to File</a>
-          { download }
-        </div>
-      );
     }
   });
 
@@ -220,7 +169,7 @@ define(function (require) {
               <Cell dataKey="modified" />
             </Col>
             <Col name="Dump">
-              <DumpToFile />
+              <SaveFile getDump="getDump" />
             </Col>
           </Table>
         );
