@@ -1,11 +1,12 @@
 define(function (require, module, exports) {
   require('sprintf');
 
-  var React     = require('react'),
-      PropTypes = React.PropTypes,
-      _         = require('underscore'),
-      utils     = require('utils'),
-      $         = require('jquery');
+  var React      = require('react'),
+      PropTypes  = React.PropTypes,
+      _          = require('underscore'),
+      utils      = require('utils'),
+      classNames = require('classnames'),
+      $          = require('jquery');
 
   var SaveToFile = React.createClass({
     propTypes: {
@@ -13,7 +14,8 @@ define(function (require, module, exports) {
       model: PropTypes.object.isRequired,
       mimeType: PropTypes.string,
       buttonText: PropTypes.string,
-      icon: PropTypes.string
+      icon: PropTypes.string,
+      className: PropTypes.string
     },
 
     getDefaultProps: function () {
@@ -47,6 +49,7 @@ define(function (require, module, exports) {
       e.preventDefault();
       e.stopPropagation();
 
+      // ensure deferred object
       def = $.when(def).then();
 
       def.done(function (resp) {
@@ -59,7 +62,8 @@ define(function (require, module, exports) {
     },
 
     render: function () {
-      var download = null;
+      var download = null,
+          cls = classNames("btn btn-success btn-mini", this.props.className);
 
       if (this.state.download) {
         download = <a ref="download" onClick={ function (e) { e.stopPropagation(); } }  download={ this.state.filename }
@@ -68,7 +72,7 @@ define(function (require, module, exports) {
 
       return (
         <div>
-          <a className="btn btn-success btn-mini" onClick={ this.onClick }><i className={ this.props.icon } /> { this.props.buttonText }</a>
+          <a className={ cls } onClick={ this.onClick }><i className={ this.props.icon } /> { this.props.buttonText }</a>
           { download }
         </div>
       );

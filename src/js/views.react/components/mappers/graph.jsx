@@ -44,9 +44,10 @@ define(function (require) {
           key: input.name,
           x: this.props.x + 10,
           y: pos,
-          width: Math.min(this.props.maxWidth, 200),
+          width: Math.max(this.props.maxWidth, 200),
           height: LINE_HEIGHT,
-          value: input.value
+          value: input.value,
+          type: input.type
         };
 
         this.addBox(box);
@@ -56,8 +57,8 @@ define(function (require) {
 
       return (
         <g>
-          <rect height={Math.max(pos + PADDING, 100) } width={ Math.min(this.props.maxWidth, 200) } x={ this.props.x } y={ this.props.y } style={ style } />
-          <BoxCell x={ this.props.x + PADDING } y={ this.props.y + LINE_HEIGHT } width={ Math.min(this.props.maxWidth, 200) } title={ this.props.title } textClassName="box-title"/>
+          <rect height={Math.max(pos + PADDING, 100) } width={ Math.max(this.props.maxWidth, 200) } x={ this.props.x } y={ this.props.y } style={ style } />
+          <BoxCell x={ this.props.x + PADDING } y={ this.props.y + LINE_HEIGHT } width={ Math.max(this.props.maxWidth, 200) } title={ this.props.title } type={ null } textClassName="box-title"/>
           { nodes }
         </g>
       );
@@ -66,11 +67,19 @@ define(function (require) {
 
   var BoxCell = React.createClass({
     render: function () {
-      var props = this.props;
+      var props   = this.props,
+          label   = null,
+          offsetX = props.x;
+
+      if (this.props.type) {
+        label = <text x={ props.x } y={ props.y } fill="black" className="label label-alert">{ props.type }</text>;
+        offsetX = props.x + 60;
+      }
 
       return (
         <g>
-          <text x={ props.x } y={ props.y } fill="black" className={ props.textClassName }>{ props.title }</text>
+          { label }
+          <text x={ offsetX } y={ props.y } fill="black" className={ props.textClassName }>{ props.title.slice(0,20) }</text>
           <line x1={ props.x - PADDING } x2={ props.x + props.width - PADDING } y1={ props.y + 5 } y2={ props.y + 5 } stroke="black" strokeWidth="1"/>
         </g>
       );
@@ -101,7 +110,7 @@ define(function (require) {
     },
 
     render: function () {
-      var lines = this.state.lines,
+      var lines = this.state.lines || this.getLines(),
           boxes = null;
 
       return (
@@ -111,16 +120,16 @@ define(function (require) {
           </defs>
           <BoxTable
             ref="input"
-            inputs={ this.getInputs() }
-            maxWidth={ 1000/2 - 50 }
+            inputs={ this.getFields() }
+            maxWidth={ 300 }
             x={ 0 }
             y={ 0 }
             style={{ fill: '#fff' }}
-            title="Datasource" key="input" />
+            title="Source fields" key="input" />
           <BoxTable
             ref="output"
             inputs={ this.getOutputs() }
-            maxWidth={ 1000/2 - 50 }
+            maxWidth={ 300 }
             x={ 1000/2 } y={ 0 }
             style={{ fill: '#fff' }}
             title="Output" key="output" />
@@ -174,6 +183,21 @@ define(function (require) {
       }
     },
 
+    getFields: function () {
+      var fields = null;
+
+      if (this.props.mapper && this.props.mapper.field_source) {
+        var field_source = _.sortBy(this.props.mapper.field_source, 'type');
+        fields = [];
+
+        fields = _.map(field_source, function (val) {
+          return _.extend({}, val, { name: val.value });
+        });
+      }
+
+      return fields;
+    },
+
     getLines: function () {
       var lines = [];
 
@@ -186,24 +210,21 @@ define(function (require) {
               type = fs.type,
               value = fs.value;
 
-          if (type === 'name') {
-            type = 'input';
-            var p = this.refs[type].getBox(value),
-                p2 = this.refs.output.getBox(key),
-                x1 = p.width + p.x - PADDING,
-                x2 = p2.x - PADDING,
-                y1 = p.y - 5,
-                y2 = p2.y - 5;
+          var p = this.refs.input.getBox(value),
+              p2 = this.refs.output.getBox(key),
+              x1 = p.width + p.x - PADDING,
+              x2 = p2.x - PADDING,
+              y1 = p.y - 5,
+              y2 = p2.y - 5;
 
-            var l = <path
-                      d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) }
-                      fill="none"
-                      stroke="black"
-                      strokeWidth="1"
-                      markerEnd="url(#Triangle)"/>;
+          var l = <path
+                    d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) }
+                    fill="none"
+                    stroke="black"
+                    strokeWidth="1"
+                    markerEnd="url(#Triangle)"/>;
 
-            lines.push(l);
-          }
+          lines.push(l);
         }, this);
 
       }

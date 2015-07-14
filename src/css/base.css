@@ -2294,3 +2294,7 @@ a[disabled] { pointer-events: none; }
 td.name .overflow-hidden {
 	max-width: 100%;
 }
+
+text.label {
+	
+}

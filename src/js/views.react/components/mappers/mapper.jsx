@@ -16,11 +16,11 @@ define(function (require) {
       return (
         <div>
           <TabsView>
-            <Tab name="info">
-              <MetaTable data={ model } />
-            </Tab>
             <Tab name="graph">
               <MapperGraph mapper={ model } />
+            </Tab>
+            <Tab name="info">
+              <MetaTable data={ model } />
             </Tab>
           </TabsView>
         </div>
