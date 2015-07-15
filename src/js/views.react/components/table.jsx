@@ -89,8 +89,8 @@ define(function (require) {
     },
 
     render: function () {
-      var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
+      var model    = this.props.model,
+          css      = classNames({ 'table-row': true, 'info': this.props.clicked }),
           children = this.processColumns();
 
       return <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, model.id)}>{ children }</tr>;
@@ -108,8 +108,8 @@ define(function (require) {
     render: function () {
       if (this.props.shown) return null;
 
-      var model = this.props.model,
-          css = React.addons.classSet({ 'table-row': true, 'info': this.props.clicked }),
+      var model    = this.props.model,
+          css      = classNames({ 'table-row': true, 'info': this.props.clicked }),
           children = this.processColumns();
 
       return <tr className={ [css, this.props.className].join(' ') } onClick={this.props.rowClick.bind(null, this.props.idx)}>{ children }</tr>;

@@ -1,9 +1,10 @@
 define(function (require) {
-  var React    = require('react'),
-      Reflux   = require('reflux'),
-      slugify  = require('qorus/helpers').slugify,
-      Actions  = require('views.react/actions/tabs'),
-      Store    = require('views.react/stores/tabs'),
+  var React          = require('react'),
+      Reflux         = require('reflux'),
+      slugify        = require('qorus/helpers').slugify,
+      Actions        = require('views.react/actions/tabs'),
+      Store          = require('views.react/stores/tabs'),
+      classNames     = require('classnames'),
       cloneWithProps = React.addons.cloneWithProps;
 
   var NavItem = React.createClass({
@@ -41,7 +42,7 @@ define(function (require) {
       var target = '#' + this.props.slug,
           active = this.state.active;
 
-      return  <li className={React.addons.classSet({ active: active })} >
+      return  <li className={ classNames({ active: active })} >
                 <a data-target={target} onClick={ this.tabChange }>{ this.props.name }</a>
               </li>;
     }
@@ -85,7 +86,7 @@ define(function (require) {
         children  = cloneWithProps(this.props.children, _.pick(this.props, ['idx', 'store', 'actions']));
       }
 
-      return <div id={this.props.slug} className={ React.addons.classSet({ 'tab-pane': true, active: active }) }>
+      return <div id={this.props.slug} className={ classNames({ 'tab-pane': true, active: active }) }>
                { children }
              </div>;
     }

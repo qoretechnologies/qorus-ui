@@ -1,10 +1,11 @@
 define(function (require, exports, module) {
-  var React     = require('react'),
-      Reflux    = require('reflux'),
-      _         = require('underscore'),
-      $         = require('jquery'),
-      Actions   = require('views.react/actions/modal'),
-      utils     = require('utils'),
+  var React      = require('react'),
+      Reflux     = require('reflux'),
+      _          = require('underscore'),
+      $          = require('jquery'),
+      Actions    = require('views.react/actions/modal'),
+      utils      = require('utils'),
+      classNames = require('classnames'),
       ModalView, HeaderView, FooterView, BackdropView;
 
   var FadeMixin = {
@@ -182,7 +183,7 @@ define(function (require, exports, module) {
       var style = { display: this.props.hide ? '' : 'block' };
 
       return (
-        <div className={ React.addons.classSet({ 'modal-backdrop': true, fade: true, hide: true }) } style={ style } onClick={ this.close }>
+        <div className={ classNames({ 'modal-backdrop': true, fade: true, hide: true }) } style={ style } onClick={ this.close }>
           { this.props.children }
         </div>
       );
@@ -249,7 +250,7 @@ define(function (require, exports, module) {
       return (
         <div>
           <BackdropView hide={ this.state.hide } />
-          <div className={ React.addons.classSet({ modal: true, fade: true, wider: this.props.wider }) }>
+          <div className={ classNames({ modal: true, fade: true, wider: this.props.wider }) }>
             { header }
             { this.props.children }
             { footer }

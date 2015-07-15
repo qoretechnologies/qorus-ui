@@ -44,6 +44,7 @@ define(function (require) {
       Filtered          = require('backbone.filtered.collection'),
       settings          = require('settings'),
       helpers           = require('qorus/helpers'),
+      classNames        = require('classnames'),
       ORDER_STATES      = require('constants/workflow').ORDER_STATES;
 
   require('react.backbone');
@@ -542,13 +543,13 @@ define(function (require) {
     },
 
     render: function () {
-      var cls1 = React.addons.classSet({
+      var cls1 = classNames({
         btn: true,
         'btn-small': true,
         'btn-success': this.store.state.scroll
       });
 
-      var cls2 = React.addons.classSet({
+      var cls2 = classNames({
         btn: true,
         'btn-small': true,
         'btn-success': this.store.state.pause
