@@ -1,11 +1,19 @@
 define(function (require) {
-  var React  = require('react'),
-      _      = require('underscore'),
-      Marker = require('jsx!views.react/components/svg').Marker,
+  var React   = require('react'),
+      _       = require('underscore'),
+      Marker  = require('jsx!views.react/components/svg').Marker,
+      slugify = require('qorus/helpers').slugify,
       Graph;
 
   var LINE_HEIGHT = 20;
   var PADDING = 10;
+
+  function genKey(obj) {
+    var name = obj.name,
+        key = obj.key || '';
+
+    return slugify(name + ' ' + key);
+  }
 
   var BoxTable = React.createClass({
     _boxes: [],
@@ -19,7 +27,7 @@ define(function (require) {
     },
 
     getBox: function (id) {
-      return _.find(this._boxes, { key: id });
+      return _.find(this._boxes, { id: id });
     },
 
     resetBoxes: function () {
@@ -47,12 +55,13 @@ define(function (require) {
           width: Math.max(this.props.maxWidth, 200),
           height: LINE_HEIGHT,
           value: input.value,
-          type: input.type
+          type: input.type,
+          id: input.id
         };
 
         this.addBox(box);
 
-        return <BoxCell {...box} ref={ input.name } key={ input.name } title={ input.name } />;
+        return <BoxCell {...box} ref={ input.id } key={ input.id } title={ input.name } />;
       }, this);
 
       return (
@@ -99,6 +108,12 @@ define(function (require) {
       };
     },
 
+    componentDidUpdate: function () {
+      if (this.props.mapper.field_source && (this.state.lines.length === 0 && this.props.mapper.field_source.length > 0)) {
+        this.setState({ lines: this.getLines() });
+      }
+    },
+
     componentDidMount: function () {
       var parent = this.getDOMNode().parentNode;
 
@@ -110,8 +125,8 @@ define(function (require) {
     },
 
     render: function () {
-      var lines = this.state.lines || this.getLines(),
-          boxes = null;
+      var boxes = null,
+          lines = this.state.lines || null;
 
       return (
         <svg width="100%" height="100%" viewBox={ [0,0,1000,1000].join(' ') }>
@@ -142,7 +157,7 @@ define(function (require) {
     getInputs: function () {
       if (this.props.mapper && this.props.mapper.opts) {
         var input = _.map(this.props.mapper.opts.input, function (val, key) {
-          return { name: key, desc: val };
+          return { name: key, desc: val, id: key };
         });
         return input;
       }
@@ -153,7 +168,7 @@ define(function (require) {
     getOutputs: function () {
       if (this.props.mapper && this.props.mapper.opts) {
         var input = _.map(this.props.mapper.opts.output, function (val, key) {
-          return _.extend({}, val, { name: key });
+          return _.extend({}, val, { name: key,  id: key });
         });
         return input;
       }
@@ -191,7 +206,7 @@ define(function (require) {
         fields = [];
 
         fields = _.map(field_source, function (val) {
-          return _.extend({}, val, { name: val.value });
+          return _.extend({}, val, { name: val.value , id: genKey({ name: val.value, key: val.key }) });
         });
       }
 
@@ -206,28 +221,32 @@ define(function (require) {
             pointsRight = [];
 
         _.each(this.props.mapper.field_source, function (fs) {
-          var key = fs.key,
-              type = fs.type,
+          var key   = fs.key,
+              type  = fs.type,
               value = fs.value;
 
-          var p = this.refs.input.getBox(value),
-              p2 = this.refs.output.getBox(key),
-              x1 = p.width + p.x - PADDING,
-              x2 = p2.x - PADDING,
-              y1 = p.y - 5,
-              y2 = p2.y - 5;
+          var p  = this.refs.input.getBox(genKey({ name: value, key: key })),
+              p2 = this.refs.output.getBox(key);
 
-          var l = <path
-                    d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) }
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="1"
-                    markerEnd="url(#Triangle)"/>;
+          if (p && p2) {
+            var x1 = p.width + p.x - PADDING,
+                x2 = p2.x - PADDING,
+                y1 = p.y - 5,
+                y2 = p2.y - 5;
 
-          lines.push(l);
+            var l = <path
+                      d={ sprintf("M %s %s L %s %s", x1, y1, x2, y2) }
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="1"
+                      markerEnd="url(#Triangle)"
+                      key={ genKey({ name: value, key: key }) }/>;
+
+            lines.push(l);
+          }
         }, this);
-
       }
+
       return lines;
     }
 
