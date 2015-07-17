@@ -2295,6 +2295,14 @@ td.name .overflow-hidden {
 	max-width: 100%;
 }
 
-text.label {
-	
+.mapper-row {
+	cursor: default;
+}
+
+.mapper-row rect {
+	fill: #fff;
+}
+
+.mapper-row:hover rect {
+	fill: pink;
 }

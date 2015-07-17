@@ -1,12 +1,60 @@
 define(function (require) {
-  var React   = require('react'),
-      _       = require('underscore'),
-      Marker  = require('jsx!views.react/components/svg').Marker,
-      slugify = require('qorus/helpers').slugify,
+  var React           = require('react'),
+      _               = require('underscore'),
+      Marker          = require('jsx!views.react/components/svg').Marker,
+      slugify         = require('qorus/helpers').slugify,
+      Reflux          = require('reflux'),
+      StoreStateMixin = require('cjs!views.react/stores/mixins/statestore'),
       Graph;
 
   var LINE_HEIGHT = 20;
   var PADDING = 10;
+
+  var Store = Reflux.createStore({
+    mixins: [StoreStateMixin,],
+
+    highlight: function(id) {
+      // body...
+    },
+
+    getOutputs: function () {
+      if (this.state.model.mapper && this.state.model.mapper.opts) {
+        var input = _.map(this.props.mapper.opts.output, function (val, key) {
+          return _.extend({}, val, { name: key,  id: key });
+        });
+        return input;
+      }
+
+      return null;
+    },
+
+    getTypes: function () {
+      var fields = [];
+
+      if (this.state.model.mapper && this.state.model.field_source) {
+        fields = _.chain().map(this.props.mapper.field_source, function (fs) {
+          return fs.type;
+        }).uniq().value();
+      }
+
+      return fields;
+    },
+
+    getFields: function () {
+      var fields = null;
+
+      if (this.state.model && this.state.model.field_source) {
+        var field_source = _.sortBy(this.state.model.field_source, 'type');
+        fields = [];
+
+        fields = _.map(field_source, function (val) {
+          return _.extend({}, val, { name: val.value , id: genKey({ name: val.value, key: val.key }) });
+        });
+      }
+
+      return fields;
+    }
+  });
 
   function genKey(obj) {
     var name = obj.name,
@@ -40,7 +88,9 @@ define(function (require) {
           style = _.extend({}, {
             strokeWidth: 1,
             stroke: '#000',
-            fill: '#fff'
+            fill: '#fff',
+            fillOpacity: 0,
+            strokeLocation: 'outside'
           });
 
       this.resetBoxes();
@@ -86,7 +136,8 @@ define(function (require) {
       }
 
       return (
-        <g>
+        <g className="mapper-row">
+          <rect x={ props.x - PADDING } y={ props.y - PADDING * 1.5 } width={ props.width } height={ props.height } />
           { label }
           <text x={ offsetX } y={ props.y } fill="black" className={ props.textClassName }>{ props.title.slice(0,20) }</text>
           <line x1={ props.x - PADDING } x2={ props.x + props.width - PADDING } y1={ props.y + 5 } y2={ props.y + 5 } stroke="black" strokeWidth="1"/>
@@ -154,65 +205,6 @@ define(function (require) {
       );
     },
 
-    getInputs: function () {
-      if (this.props.mapper && this.props.mapper.opts) {
-        var input = _.map(this.props.mapper.opts.input, function (val, key) {
-          return { name: key, desc: val, id: key };
-        });
-        return input;
-      }
-
-      return null;
-    },
-
-    getOutputs: function () {
-      if (this.props.mapper && this.props.mapper.opts) {
-        var input = _.map(this.props.mapper.opts.output, function (val, key) {
-          return _.extend({}, val, { name: key,  id: key });
-        });
-        return input;
-      }
-
-      return null;
-    },
-
-    getTypes: function () {
-      var fields = [];
-
-      if (this.props.mapper && this.props.mapper.field_source) {
-        fields = _.chain().map(this.props.mapper.field_source, function (fs) {
-          return fs.type;
-        }).uniq().value();
-      }
-
-      return fields;
-    },
-
-    // TODO
-    renderBoxes: function (offset) {
-      // name is covered by getInputs
-      var types = _.omit(this.getTypes(), 'name');
-
-      if (types.length > 0) {
-
-      }
-    },
-
-    getFields: function () {
-      var fields = null;
-
-      if (this.props.mapper && this.props.mapper.field_source) {
-        var field_source = _.sortBy(this.props.mapper.field_source, 'type');
-        fields = [];
-
-        fields = _.map(field_source, function (val) {
-          return _.extend({}, val, { name: val.value , id: genKey({ name: val.value, key: val.key }) });
-        });
-      }
-
-      return fields;
-    },
-
     getLines: function () {
       var lines = [];
 
@@ -249,7 +241,6 @@ define(function (require) {
 
       return lines;
     }
-
   });
 
   return Graph;
