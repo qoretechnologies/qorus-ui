@@ -4,7 +4,7 @@ define(function (require) {
       Marker          = require('jsx!views.react/components/svg').Marker,
       slugify         = require('qorus/helpers').slugify,
       Reflux          = require('reflux'),
-      StoreStateMixin = require('cjs!views.react/stores/mixins/statestore'),
+      StoreStateMixin = require('views.react/stores/mixins/statestore'),
       Graph;
 
   var LINE_HEIGHT = 20;
