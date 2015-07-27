@@ -11,14 +11,17 @@ define(function (require) {
   var PADDING = 10;
 
   var Store = Reflux.createStore({
-    mixins: [StoreStateMixin,],
+    mixins: [StoreStateMixin],
+    listenables: [Actions],
 
     highlight: function(id) {
       // body...
     },
 
     getOutputs: function () {
-      if (this.state.model.mapper && this.state.model.mapper.opts) {
+      console.log(this.state);
+
+      if (this.state.mapper && this.state.mapper.opts) {
         var input = _.map(this.props.mapper.opts.output, function (val, key) {
           return _.extend({}, val, { name: key,  id: key });
         });
@@ -31,8 +34,8 @@ define(function (require) {
     getTypes: function () {
       var fields = [];
 
-      if (this.state.model.mapper && this.state.model.field_source) {
-        fields = _.chain().map(this.props.mapper.field_source, function (fs) {
+      if (this.state.mapper && this.state.mapper.field_source) {
+        fields = _.chain().map(this.state.mapper.field_source, function (fs) {
           return fs.type;
         }).uniq().value();
       }
@@ -43,8 +46,8 @@ define(function (require) {
     getFields: function () {
       var fields = null;
 
-      if (this.state.model && this.state.model.field_source) {
-        var field_source = _.sortBy(this.state.model.field_source, 'type');
+      if (this.state.mapper && this.state.mapper.field_source) {
+        var field_source = _.sortBy(this.state.mapper.field_source, 'type');
         fields = [];
 
         fields = _.map(field_source, function (val) {
@@ -53,8 +56,15 @@ define(function (require) {
       }
 
       return fields;
+    },
+
+    onSetMapper: function (mapper) {
+      console.log('hello mapper', mapper);
+      this.setState({ mapper: mapper });
     }
   });
+
+  var Actions = Reflux.createActions(['setMapper']);
 
   function genKey(obj) {
     var name = obj.name,
@@ -147,6 +157,8 @@ define(function (require) {
   });
 
   Graph = React.createClass({
+    mixins: [Reflux.connect(Store,'storeState')],
+
     propTypes: {
       mapper: React.PropTypes.object.isRequired
     },
@@ -159,19 +171,16 @@ define(function (require) {
       };
     },
 
-    componentDidUpdate: function () {
-      if (this.props.mapper.field_source && (this.state.lines.length === 0 && this.props.mapper.field_source.length > 0)) {
-        this.setState({ lines: this.getLines() });
-      }
+    componentWillReceiveProps: function (nextProps) {
+      Actions.setMapper(nextProps.mapper);
     },
 
     componentDidMount: function () {
       var parent = this.getDOMNode().parentNode;
-
+      Actions.setMapper(this.props.mapper);
       this.setState({
         width: parent.offsetWidth,
         height: parent.offsetHeight,
-        lines: this.getLines()
       });
     },
 
@@ -186,7 +195,7 @@ define(function (require) {
           </defs>
           <BoxTable
             ref="input"
-            inputs={ this.getFields() }
+            inputs={ Store.getFields() }
             maxWidth={ 300 }
             x={ 0 }
             y={ 0 }
@@ -194,7 +203,7 @@ define(function (require) {
             title="Source fields" key="input" />
           <BoxTable
             ref="output"
-            inputs={ this.getOutputs() }
+            inputs={ Store.getOutputs() }
             maxWidth={ 300 }
             x={ 1000/2 } y={ 0 }
             style={{ fill: '#fff' }}
