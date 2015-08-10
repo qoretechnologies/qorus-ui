@@ -195,6 +195,8 @@ define(function (require) {
             if (force === true) {
               silent = false;
             }
+
+            atrs = _.extend(self.attributes, atrs);
             self.set(self.parse(atrs), { silent: silent });
             self.trigger('update:'+property, self);
 
