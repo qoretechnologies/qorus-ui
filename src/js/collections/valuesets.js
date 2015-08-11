@@ -1,6 +1,6 @@
 define(function (require) {
   var Qorus    = require('qorus/qorus'),
-      settings = require('settings')
+      settings = require('settings'),
       Model    = require('cjs!models/valueset');
 
   var Collection = Qorus.Collection.extend({
