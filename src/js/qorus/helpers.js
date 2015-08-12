@@ -103,7 +103,6 @@ define(function (require) {
       return output.replace(/\n{2,}/gm,"\n");      
     },
 
-    
     statusIcon: function(status) {
       if (status === true) {
         return '<i class="icon icon-ok-sign icon-success"></i>';
@@ -209,7 +208,7 @@ define(function (require) {
     },
     
     slugify: function (value) {
-      return value.toLowerCase().replace(/\-|\_+/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+      return value.toLowerCase().replace(/\-+/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
     },
     
     autoFormat: function (value, type) {

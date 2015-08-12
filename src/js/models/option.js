@@ -8,11 +8,6 @@ define(function(require) {
   Model = Qorus.Model.extend({
     urlRoot: settings.REST_API_PREFIX + '/system/options',
     idAttribute: 'name',
-    
-    defaults: {
-      system: true
-    },
-    
     parse: function  (response, options) {
       var interval = [];
       response = Model.__super__.parse.call(this, response, options);      
@@ -28,19 +23,11 @@ define(function(require) {
       
       return response;
     },
-    
-    setValue: function (value, cb) {
+    setValue: function (value) {
       var self = this;
-      
-      cb = cb || _.noop;
-      
       $.put(this.url(), { action: 'set', value: value })
-        .done(function (resp) {
+        .done(function () {
           self.set({ value: value });
-          cb(true, resp);
-        })
-        .fail(function (resp) {
-          cb(false, resp);
         });
     }
   });

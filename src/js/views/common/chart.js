@@ -1,9 +1,9 @@
 define(function (require) {
-  var _                 = require('underscore'),
-      Qorus             = require('qorus/qorus'),
-      LineChartTpl      = require('tpl!templates/common/charts/line.html'),
-      DoughnutChartTpl  = require('tpl!templates/common/charts/doughnut.html'),
-      Chart             = require('chartjs'),
+  require('chart');
+  var _                = require('underscore'),
+      Qorus            = require('qorus/qorus'),
+      LineChartTpl     = require('tpl!templates/common/charts/line.html'),
+      DoughnutChartTpl = require('tpl!templates/common/charts/doughnut.html'),
       ColorScheme, LineStyles, ChartView, LineChart, DoughnutChart, Config, DoughnutConfig;
 
 

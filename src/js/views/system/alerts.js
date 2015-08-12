@@ -94,6 +94,7 @@ define(function (require) {
   
     onProcessPath: function () {
       if (this.path) this.detail_id = this.path;
+      console.log('p', this.detail_id);
     },
 
     preRender: function () {
@@ -171,7 +172,7 @@ define(function (require) {
           Collection.add(alert);
         } else if (evt === 'alert:ongoing_cleared') {
           alert = Collection.findWhere({ name: e.info.name, type: e.info.type, alerttype: 'ONGOING' });
-          
+
           if (alert) {
             alert.trigger('destroy', alert, alert.collection);
           }

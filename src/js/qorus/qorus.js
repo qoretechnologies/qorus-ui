@@ -33,12 +33,12 @@ define(function (require) {
     } else if(_.isObject(obj)) {
       var term = terms[0];
       if (_.has(obj, term)) {
-        obj[term] = fn(obj[term]);
+        obj[term] = fn(obj[term]); 
       } else {
         _.each(_.values(obj), function(v) {
           if (_.isObject(v)) {
             if (_.has(v, term)) {
-              v[term] = fn(v[term]);
+              v[term] = fn(v[term]); 
             }
           }
         });
@@ -47,16 +47,9 @@ define(function (require) {
   };
 
   Qorus.Model = Backbone.Model.extend({
-    _fetched: false,
-    hash: '',
-    store: {},
-    updateStore: function (store) {
-        this.store = _.extend({}, this.store, store);
-    },
     dateAttributes: {},
     api_events_list: [],
     nameAttribute: 'name',
-
     initialize: function (opts, options) {
       _.bindAll(this);
       opts = opts || {};
@@ -71,11 +64,6 @@ define(function (require) {
 
       this.api_events = sprintf(_.result(this, 'api_events_list').join(' '), { id: this.id });
       // this.parseDates();
-      this.on('change', this.updateHash);
-    },
-
-    updateHash: function () {
-      this.hash = utils.hash(this.attributes);
     },
 
     dispatch: function () {},
@@ -86,18 +74,16 @@ define(function (require) {
             setNested(response, date, function(val) { if (val) { return moment(val, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); }});
         } else {
           if (response[date]) {
-            response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY);
+            response[date] = moment(response[date], settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
           }
         }
       });
-
-      this.hash = utils.hash(response);
       return response;
     },
 
     fetch: function (options) {
-      var data = {}, error, success;
-
+      var data = {};
+      
       if (this.opts) {
         data.date = this.opts.date;
       }
@@ -110,28 +96,16 @@ define(function (require) {
         _.extend(data, options.data);
       }
 
-      error = options.error;
-      success = options.success;
-
-      _.extend(options, {
+      _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
-          if (error) {
-            error(model, response, options);
-          }
-          model.trigger('sync:error', model, response, options);
-        },
-        success: function syncDone(model, response, options) {
-          if (success) {
-            success(model, response, options);
-          }
-          model._fetched = true;
-        }
+                 model.trigger('sync:error', model, response, options);
+               }
       });
 
-      var resp = Qorus.Model.__super__.fetch.call(this, options);
+      Qorus.Model.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
-      return resp;
+      return this;
     },
 
     incr: function (attr, val) {
@@ -143,19 +117,19 @@ define(function (require) {
     decr: function (attr, val) {
       val = val || 1;
       var value = parseInt(this.get(attr), 10) - val;
-
+      
       this.set(attr, (value > 0) ? value : 0);
     },
 
     next: function () {
       if (!this.collection) return;
-
+      
       return this.collection.next(this);
     },
 
     prev: function () {
       if (!this.collection) return;
-
+      
       return this.collection.prev(this);
     },
 
@@ -167,21 +141,21 @@ define(function (require) {
       var cons = this.getConnections();
 
       if (_(cons).isArray()) return (cons.length > 0);
-
+      
       return false;
     },
 
     getConnectionsStatus: function () {
       var cons;
-
+      
       if (!this.hasConnections()) return undefined;
-
+      
       cons = this.getConnections();
       return _(cons).findWhere({ up: false }) ? false : true;
     },
 
     // gets property from server
-    getProperty: function (property, data, force, cb) {
+    getProperty: function (property, data, force) {
       var self   = this,
           silent = true;
 
@@ -192,21 +166,13 @@ define(function (require) {
           .done(function (data) {
             var atrs = {};
             atrs[property] = data;
-            if (force === true) {
-              silent = false;
-            }
-
-            atrs = _.extend(self.attributes, atrs);
-            self.set(self.parse(atrs), { silent: silent });
+            if (force === true) silent = false;
+            self.set(atrs, { silent: silent });
             self.trigger('update:'+property, self);
-
+            
             if (property === 'alerts') {
               self.set('has_alerts', self.get('alerts').length > 0);
             }
-            if (cb) {
-              cb();
-            }
-//            console.log('udpate', property, self.get(property));
           });
       } else {
         return this.get(property);
@@ -214,16 +180,6 @@ define(function (require) {
     },
     getName: function () {
       return this.get(this.nameAttribute);
-    },
-    getVersionPatch: function () {
-      if (!this.get('patch')) {
-        return sprintf('v%s', this.get('version'));
-      } else {
-        return sprintf('v%s.%s', this.get('version'), this.get('patch'));
-      }
-    },
-    getNormalizedName: function () {
-      return sprintf('%s %s (%s)', this.getName(), this.getVersionPatch(), this.id);
     }
   });
 
@@ -235,7 +191,7 @@ define(function (require) {
       } else {
         response.has_alerts = false;
       }
-
+      
       return response;
     }
   });
@@ -271,7 +227,7 @@ define(function (require) {
 
     hasNextPage: function () {
       // debug.log("Has next page", (this.offset + this.limit - 2 < this.models.length), this.length, this.size());
-      return this.pagination ? (this.offset + this.limit - 2 < this.models.length) : false;
+      return this.pagination ? (this.offset + this.limit - 2 < this.models.length) : false; 
     },
 
     loadNextPage: function () {
@@ -284,7 +240,7 @@ define(function (require) {
           // console.log('loading page', this.page, this.limit, this.offset);
 
           var self = this;
-          this.fetch({
+          this.fetch({ 
             remove: false,
             success: function () {
               debug.log("Fetched ->", self.length);
@@ -298,10 +254,8 @@ define(function (require) {
     },
 
     fetch: function (options) {
-      var success, error;
-
       this.trigger('pre:fetch', this);
-
+      
       if (this.opts) {
         this.opts.limit = this.limit;
         this.opts.offset = this.offset;
@@ -321,7 +275,7 @@ define(function (require) {
       if (data.date) {
         data.date = moment(data.date, settings.DATE_DISPLAY).format(settings.DATE_TSEPARATOR);
       }
-
+      
       // remove any Backbone.Model from data
       if (data) {
         _.each(data, function (d, k) {
@@ -331,44 +285,32 @@ define(function (require) {
         });
       }
 
-      error = options.error;
-      success = options.success;
-
-      _.extend(options, {
+      _.extend(options, { 
         data: data,
         error: function syncError(model, response, options) {
-          if (error) {
-            error(model, response, options);
-          }
-          model.trigger('sync:error', model, response, options);
-        },
-        success: function syncDone(model, response, options) {
-          if (success) {
-            success(model, response, options);
-          }
-          model._fetched = true;
-        }
+                 model.trigger('sync:error', model, response, options);
+               }
       });
 
       options.reset = false;
       options.merge = true;
 
-      var resp = Qorus.Collection.__super__.fetch.call(this, options);
+      Qorus.Collection.__super__.fetch.call(this, options);
       this.trigger('fetch', this);
-      return resp;
+      return this;
     },
-
+    
     next: function (model) {
       var idx = this.indexOf(model) + 1;
       if (idx >= this.size()) return;
-
+      
       return this.at(idx);
     },
-
+    
     prev: function (model) {
       var idx = this.indexOf(model) - 1;
       if (idx < 0) return;
-
+      
       return this.at(idx);
     }
   });
@@ -385,7 +327,7 @@ define(function (require) {
       if (opts) {
         this.date = opts.date;
       }
-
+      
       this.sort_key = this.opts.sort_key || this.sort_key;
       this.sort_order = this.opts.sort_order || this.sort_order;
       this.sort_history = this.opts.sort_history || this.sort_history;
@@ -397,35 +339,42 @@ define(function (require) {
           k20 = prep(c2.get(this.sort_key)),
           r   = 1,
           k11, k21;
-
+      
       if (this.sort_order === 'des') r = -1;
-
+      
       if (k10 < k20) return -1 * r;
       if (k10 > k20) return 1 * r;
-
+      
       k11 = prep(c1.get(this.sort_history[0]));
       k21 = prep(c2.get(this.sort_history[0]));
-
+      
       if (k11 > k21) return -1 * r;
       if (k11 < k21) return 1 * r;
       return 0;
     },
 
     // comparator: function (m) {
-    //   return [prep(m.get(this.sort_key)), prep(m.get(this.sort_history[0]))].join(', ');
+    //   return [prep(m.get(this.sort_key)), prep(m.get(this.sort_history[0]))].join(', '); 
     // },
 
     sortByKey: function (key, ord) {
       var old_key = this.sort_key;
-
+    
       if (key) {
         if (old_key != key) {
           this.sort_history.unshift(old_key);
         }
         this.sort_order = ord;
         this.sort_key = key;
-
+        
+        // models = _.sortBy(models, function (m) { 
+        //   return [prep(m.get(key)), prep(m.get(old_key))].join(', '); 
+        // });
         this.sort({ silent: true });
+        // if (this.sort_order === 'des') this.models.reverse();
+        // this.models = models;
+        
+        // console.log('sorting', this.sort_order, this.sort_key);
         this.trigger('resort', this, {});
       }
     }
@@ -444,14 +393,12 @@ define(function (require) {
     initialize: function (opts) {
       opts = opts || {};
       _.bindAll(this);
-
+      
       if (opts.auto_reconnect === false) {
         this.auto_reconnect = opts.auto_reconnect;
       }
 
-      if (!opts.postpone) {
-        this.connect();
-      }
+      this.connect();
     },
 
     wsAdd: function (e) {
@@ -482,16 +429,17 @@ define(function (require) {
       if (this.socket) {
         debug.log("Closing WS", this.socket_url, this.socket);
         this.socket.onclose = function (e) { debug.log('Closed', e); };
-        this.socket.close();
+        this.socket.close(); 
       }
     },
 
     wsOpen: function () {
       if (this.socket_url) {
         var url = this.socket_url + '?token=' + this.token;
+      
         try {
           debug.log('Connecting to WS', url);
-          this.socket = new WebSocket(url);
+          this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
@@ -499,7 +447,7 @@ define(function (require) {
         } catch (e) {
           debug.log(e);
         }
-//        this.socket.onerror = this.wsError;
+        this.socket.onerror = this.wsError; 
       }
     },
     wsError: function (e) {
@@ -508,16 +456,16 @@ define(function (require) {
 
     wsOpened: function () {
       this.retries = 0;
-      this.trigger('ws-opened', this);
+      this.trigger('ws-opened', this); 
     },
 
     wsRetry: function () {
       if (this.retries >= this.max_retries) return;
-
+      
       this.trigger('ws-closed', this);
-
+      
       if (this.auto_reconnect) {
-        setTimeout(this.connect, 5000);
+        setTimeout(this.connect, 5000); 
       }
       this.retries++;
     },
@@ -549,17 +497,17 @@ define(function (require) {
       this.sort_key = 'time';
       this.sort_order = 'des';
       this.sort_history = [''];
-
+      
       if (opts.auto_reconnect === false) {
         this.auto_reconnect = opts.auto_reconnect;
       }
-
+      
       this.connect();
     },
 
     connect: function () {
       var self = this;
-
+      
       $.get(settings.REST_API_PREFIX + '/system?action=wstoken')
         .done(function (response) {
           self.token = response;
@@ -570,23 +518,23 @@ define(function (require) {
           self.wsRetry();
         });
     },
-
+    
     wsClose: function () {
       this.token = null;
       if (this.socket) {
         debug.log("Closing WS", this.socket_url, this.socket);
         this.socket.onclose = function (e) { debug.log('Closed', e); };
-        this.socket.close();
+        this.socket.close(); 
       }
     },
 
     wsOpen: function () {
       if (this.socket_url) {
         var url = this.socket_url + '?token=' + this.token;
-
+      
         try {
           debug.log('Connecting to WS', url);
-          this.socket = new WebSocket(url);
+          this.socket = new WebSocket(url); 
           this.socket.onmessage = this.wsAdd;
           this.socket.onclose = this.wsRetry;
           this.socket.onopen = this.wsOpened;
@@ -594,7 +542,7 @@ define(function (require) {
         } catch (e) {
           debug.log(e);
         }
-        this.socket.onerror = this.wsError;
+        this.socket.onerror = this.wsError; 
       }
     },
 
@@ -608,7 +556,7 @@ define(function (require) {
     },
 
     wsOpened: function () {
-      this.trigger('ws-opened', this);
+      this.trigger('ws-opened', this); 
     },
 
     wsRetry: function () {
@@ -616,7 +564,7 @@ define(function (require) {
       this.trigger('ws-closed', this);
 
       if (this.auto_reconnect) {
-        setTimeout(this.connect, 5000);
+        setTimeout(this.connect, 5000); 
       }
       this.retries++;
     }
@@ -632,7 +580,7 @@ define(function (require) {
 
       // if (pos > 0) route = route.slice(0, pos);
       route.replace(/\?*/, "?" + utils.encodeQuery(query));
-      // console.log(Backbone.history.fragment, route);
+      // console.log(Backbone.history.fragment, route);      
     }
 
     return _navigate.apply(this, arguments);

@@ -4,34 +4,9 @@ module.exports = function (grunt) {
       requirejs: {
         compile: {
           options: {
-            paths: {
-              settings: 'settings.build',
-              react: '../components/react/react-with-addons.min',
-            },
-            map: {
-              '*': {
-                'underscore': 'lodash'
-              }
-            },
-            mainConfigFile: "src/js/main.build.js",
-            appDir: "src",
-            baseUrl: "js",
-            dir: "dist",
-//            name: "main",
-            fileExclusionRegExp: /^(intro.js)|(outro.js)|(^\.)|(docs)|(JSXTransformer.js)$/,
-            removeCombined: true,
-            keepBuildDir: false,
-            optimize: 'uglify2',
-            findNestedDependencies: true,
-            generateSourceMaps: true,
-            preserveLicenseComments: false,
-		    onBuildWrite: function (moduleName, path, singleContents) {
-              return singleContents.replace(/jsx!/g, '');
-            },
-            modules: [{
-              name: "main",
-              exclude: ['jsx']
-            }]
+            baseUrl: "src",
+            mainConfigFile: "src/js/app.build.js",
+            dir: "dist"
           }
         }
       },
@@ -39,10 +14,10 @@ module.exports = function (grunt) {
         files: ['Gruntfile.js', 'src/js/**/*.js', '!src/js/libs/**', '!src/js/app.build.js'],
         options: {
           "predef": {
-              "$": true,
-              "define": true,
+              "$": true,  
+              "define": true, 
               "require": true,
-              "jQuery": true,
+              "jQuery": true, 
               "later": true,
               "cronParser": true,
               "moment": true,
@@ -66,8 +41,7 @@ module.exports = function (grunt) {
           parallel : true,
           pre : 'tests/pre.js',
           concurrency : 5,
-          'no-colors': true,
-          engine : 'slimerjs'
+          'no-colors': true
         },
         test : {
           src: ['tests/tests'],
@@ -85,15 +59,8 @@ module.exports = function (grunt) {
         server: {
           options: {
             hostname: '*',
-            port: 3000,
+            port: 3001,
             server: "server-test.js"
-          }
-        },
-        proxy: {
-          options: {
-            hostname: '*',
-            port: 8003,
-            server: "server-proxy.js"
           }
         }
       },
@@ -107,81 +74,16 @@ module.exports = function (grunt) {
             atBegin: true
           },
         },
-      },
-      bower: {
-        serve: {
-          rjsConfig: 'src/js/main.js',
-          options: {
-            exclude: ['prism', 'react']
-          }
-        },
-        build: {
-          rjsConfig: 'src/js/main.build.js',
-          options: {
-            exclude: ['prism', 'react']
-          }
-        }
-      },
-      bower_concat: {
-        all: {
-          cssDest: 'src/css/components.min.css',
-          exclude: ["fontawesome"],
-          mainFiles: {
-            'prism': ['prism.js', 'themes/prism-okaidia.css'],
-            'react-chartjs': ['react-chartjs.js']
-          }
-        }
-      },
-      concat: {
-        options: {
-          separator: ';',
-        },
-        prism: {
-          src: [
-            'src/components/prism/components/prism-core.js',
-            'src/components/prism/components/prism-clike.js',
-            'src/components/prism/components/prism-qore.js',
-            'src/components/prism/components/prism-sql.js',
-          ],
-          dest: 'src/components/prism/prism.js',
-        },
-      },
-      copy: {
-        all: {
-          files: [{
-            expand: true,
-            src: "src/components/fontawesome/css/*",
-            dest: "src/css/font-awesome/css/"
-          },
-          {
-            expand: true,
-            src: "src/components/fontawesome/fonts/*",
-            dest: "src/css/font-awesome/fonts/"
-          }]
-        },
-        build: {
-          files: [{
-            src: "src/js/main.js",
-            dest: "src/js/main.build.js"
-          }]
-        }
-      },
-      clean: {
-        build: ["dist/components", "src/js/main.build.js"]
-      },
-      open : {
-        dev : {
-          path: 'http://127.0.0.1:3000/',
-          app: 'Google Chrome'
-        },
       }
     });
-
-  require('matchdep').filterDev(['grunt-*','!grunt-cli']).forEach(grunt.loadNpmTasks);
-
-  grunt.registerTask('default', ['jshint', 'copy', 'concat', 'bower', 'bower_concat', 'express', 'casper', 'requirejs']);
-  grunt.registerTask('serve', ['copy', 'bower:serve', 'concat', 'bower_concat', 'express:server', 'express-keepalive']);
-  grunt.registerTask('serve-both', ['express:api', 'express:proxy', 'express:server', 'express-keepalive']);
-  grunt.registerTask('test', ['copy', 'concat', 'bower_concat', 'express:api', 'express:proxy', 'express:server', 'casper:test']);
-  grunt.registerTask('build', ['copy:all', 'copy:build', 'concat', 'bower:build', 'bower_concat', 'requirejs:compile', 'clean:build']);
+  
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-casper');
+  grunt.loadNpmTasks('grunt-express');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  
+  grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
+  grunt.registerTask('serve', ['express:server', 'express-keepalive']);
+  grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };

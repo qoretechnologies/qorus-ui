@@ -1,5 +1,5 @@
 define(function (require) {
-  require('jquery-ui');
+  require('jquery.ui');
   
   var $        = require('jquery'),
       Qorus    = require('qorus/qorus'),

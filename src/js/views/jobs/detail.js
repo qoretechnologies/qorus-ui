@@ -8,7 +8,6 @@ define(function (require) {
       Prism       = require('prism'),
       View, InfoPaneView, CodePaneView, AlertsView;
   
-  
   InfoPaneView = Qorus.ModelView.extend({
     __name__: 'JobInfoPaneView',
     name: 'Details',

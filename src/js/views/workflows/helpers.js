@@ -8,16 +8,16 @@ define(function (require) {
   
   helpers = _.extend(_.clone(qorus_helpers), {
     getUrl: function (s, id, date) {
-      var params = ['/workflows/view', id, 'orders', s];
-      date = date || this.date || null;
+          var params = ['/workflows/view', id, 'orders', s];
+          date = date || this.date || null;
 
-      if (date) {
-        // encode for URL
-        date = utils.encodeDate(date);
-        params.push(date);
-      }
+          if (date) {
+            // encode for URL
+            date = utils.encodeDate(date);
+            params.push(date);
+          }
 
-      return params.join('/');
+          return params.join('/');
     },
   
     wrapBadge: function (v, u, e){

@@ -1,6 +1,6 @@
 define(function (require) {
-  var $             = require('jquery'),
-      _             = require('underscore'),
+  var _             = require('underscore'),
+      $             = require('jquery'),
       Backbone      = require('backbone'),
       Qorus         = require('qorus/qorus'),
       Template      = require('text!templates/workflow/list.html'),
@@ -24,10 +24,6 @@ define(function (require) {
     
     additionalEvents: {
       'click [data-action]': 'doAction'
-    },
-    
-    constructor: function () {
-      Qorus.View.prototype.constructor.apply(this, arguments);
     },
     
     initialize: function () {
@@ -69,13 +65,18 @@ define(function (require) {
     __name__: 'WorkflowsTableView',
     initialize: function () {
       TableView.__super__.initialize.apply(this, arguments);
-      this.stopListening(this.collection, 'add');
+//      this.stopListening(this.collection);
+//      this.listenToOnce(this.collection, 'sync', this.update);
+//      this.stopListening(this.collection, 'add');
       this.processPath();
     },
     onProcessPath: function (path) {
       var id = path.split('/')[0];
  
       if (id) this.detail_id = id;
+    },
+    update: function () {
+      TableView.__super__.update.apply(this, arguments);
     }
   });
 
@@ -93,7 +94,7 @@ define(function (require) {
     },
     
     timers: [],
-
+    // el: $("#content"),
     additionalEvents: {
       'click .action-modal': 'openModal',
       'click .running': 'highlightRunning',
@@ -110,6 +111,8 @@ define(function (require) {
       this.options = {};
       this.context = {};
       this.opts = options || {};
+      
+      var col = collection;
             
       // call super method
       ListView.__super__.initialize.call(this, this.collection, options.date, options);
@@ -117,7 +120,6 @@ define(function (require) {
       // reassign listening events to collection
       this.stopListening(this.collection);
       
-//      this.listenTo(this.collection, 'sync', this.render);
       this.listenToOnce(this.collection, 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
     },
@@ -129,9 +131,8 @@ define(function (require) {
     },
     
     preRender: function () {
+  
       // this.setView(new BottomBarView(), 'bottombar');
-      console.log(this.collection.size());
-        
       var helpers = _.extend({ date: this.date }, this.helpers),
           tview, toolbar;
 
@@ -246,8 +247,7 @@ define(function (require) {
           item.trigger('check');
         });
       }
-      this.trigger('highlight');
-      this.trigger('highlight:toggle');
+
     },
     
     highlightStopped: function (e) {
@@ -264,8 +264,6 @@ define(function (require) {
           item.trigger('check');
         });
       }
-      this.trigger('highlight');
-      this.trigger('highlight:toggle');
     },
     
     showDetail: function (row) {

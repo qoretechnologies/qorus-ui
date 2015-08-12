@@ -22,7 +22,6 @@ define(function (require) {
     'extensions(/)(:extension)': 'showExtension',
     'functions': 'showFunctions',
     'library': 'showClasses',
-    'performance': 'showPerformance',
     '': 'redirectToDashboard',
 
     // Default

@@ -6,11 +6,11 @@ define(function (require) {
       CopyView    = require('views/common/table.copy'),
       Toolbar;
   
-    var csv_options = {
-      el: '#workflows table',
-      ignore: [0,1,4]
-    };
-
+  var csv_options = {
+    el: '#workflows table',
+    ignore: [0,1,4]
+  };
+  
   Toolbar = BaseToolbar.extend({
     datepicker: true,
     template: Template,

@@ -1,6 +1,4 @@
 define(function (require) {
-  require('sprintf');
-  
   var settings      = require('settings'),
       helpers       = require('qorus/helpers'),
       utils         = require('utils'),
@@ -29,7 +27,6 @@ define(function (require) {
           this.level = 0;
           this.type = type || "process";
           this.info = info;
-          this.fullname = this.getFullname();
       },
     
       size: function () {
@@ -81,7 +78,7 @@ define(function (require) {
     
       toArray: function () {
         var children = this.getAllChildren(),
-            root     = _.pick(this, ['id', 'name', 'type', 'info', 'fullname']),
+            root     = _.pick(this, ['id', 'name', 'type', 'info']),
             steps    = {};
 
         root.links_to = this.depends_on;
@@ -92,7 +89,7 @@ define(function (require) {
         _.each(children, 
           function (step) { 
             var l = step.getDepth(),
-                s = _.pick(step, ['id', 'name', 'type', 'info', 'fullname']);
+                s = _.pick(step, ['id', 'name', 'type', 'info']);
           
             s.links_to = step.depends_on;
             s.children = _.map(step.children, function (c) { return _.parseInt(c.id); });
@@ -105,18 +102,6 @@ define(function (require) {
         });
         
         return _.toArray(steps);
-      },
-    
-      getFullname: function () {
-        if (!this.info) return this.name;
-        
-        var name = sprintf("%s v%s", this.name, this.info.version);
-
-        if (this.info.patch) {
-          name += "." + this.info.patch;
-        }
-
-        return name;
       }
   };
   
@@ -230,8 +215,6 @@ define(function (require) {
     dispatch: function (e, evt) {
       if (parseInt(e.info.id, 10) !== this.id) return;
       
-//      console.log(e, evt, this.collection);
-      
       var evt_types = evt.split(':'),
           obj = evt_types[0],
           id = evt_types[1],
@@ -338,63 +321,19 @@ define(function (require) {
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
       if (response.alerts) response.has_alerts = (response.alerts.length > 0);
-      
-      response.lib = _.extend({}, response.lib, { wffuncs: response.wffuncs, stepfuncs: this.mapStepInfo(response.stepinfo) });
-      response.options = this.prepareOptions(response.options);
       return response;
     },
     
     // return all options for starting workflow
     getOptions: function () {
-      return this.get('options');
-    },
-    
-    prepareOptions: function (options) {
-      var opts    = _.clone(options), 
-          exclude = [],
-          sysopts = System.Options.getFor('workflow');
+      var opts = this.get('options') || [];
+      var sysopts = System.Options.getFor('workflow');
       
-//      _.each(sysopts, function (opt, idx) {
-//        var syso = _.find(opts, { name: opt.name });
-//        var val;
-//          
-//        if (syso) {
-//          val = syso.value;
-//          syso = _.extend(syso, opt, { sysvalue: opt.value, value: val });
-//        } else {
-//          opts.push(opt);
-//        }
-//      });
-      
-      _.each(opts, function (o) {
-        var syso = _.find(syso, { name: o.name });
-        
-        if (syso) {
-          var val = o.value;
-          _.extend(o, syso, { val: val, sysvalue: syso.value });
-        }
-      });
-      
-      return opts;
+      return opts.concat(sysopts);
     },
     
     setAutostart: function (as) {
       return this.doAction('setAutostart', { autostart: as });
-    },
-    
-    setOption: function (option, value) {
-      var req       = this.doAction('setOptions', { options: sprintf("%s=%s", option, value)}),
-          options   = _.filter(this.get('options'), function (o) { return o.name != option; }) ;
-      
-      if (value) {
-        options.push({ name: option, value: value }); 
-      }
-      
-      options = _.filter(options, function (o) { return o.value !== ''; });
-    
-      this.set('options', options);
-      
-      return value;
     },
     
     prepareSteps: prepareSteps,
@@ -460,46 +399,14 @@ define(function (require) {
     },
     
     updateTotal: function () {
-      var states = _.pluck(ORDER_STATES, 'name'),
+      var states = ['IN-PROGRESS','READY','SCHEDULED','COMPLETE','INCOMPLETE','ERROR','CANCELED','RETRY','WAITING','ASYNC-WAITING','EVENT-WAITING','BLOCKED','CRASH'],
           total  = 0;
           
       _.each(states, function (state) {
         total += this.attributes[state];
       }, this);
     
-      this.attributes.TOTAL = total;
-    },
-    
-    transformName: function (objects, format, attrs) {
-      _.each(objects, function (obj) {
-        obj.formatted_name = sprintf(format, _.pick(obj, attrs));
-      });
-      return objects;
-    },
-    
-    mapStepInfo: function (stepinfo) {
-      var steps = [];
-			
-      _.each(stepinfo, function (step) {
-        _.each(step.functions, function (func) {
-          func.header = step.name;
-          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> %s", 
-            func.type, func.type.slice(0,1).toUpperCase(), func.name);
-          steps.push(func);
-        });
-      });
-      return _.chain(steps).unique('name').sortBy('header').value();
-    },
-    
-    getSources: function () {
-      var self = this;
-      
-      // TODO: fix caching
-//      if (!this._lib_source) {
-        this.fetch({ data: { lib_source: true }, success: function () {
-          self._lib_source = true;
-        }});
-//      }
+      this.attributes.TOTAL = total;      
     }
   });
 

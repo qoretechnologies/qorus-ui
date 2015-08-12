@@ -7,7 +7,7 @@ define(function (require) {
       Collection, notifications;
   
   // init localstorage
-  require('backbone.localstorage');
+  require('localstorage');
   require('sprintf');
     
   Collection = Backbone.Collection.extend({
@@ -67,7 +67,7 @@ define(function (require) {
           if (model instanceof Backbone.Model)
             model.destroy({ silent: true });
         });
-        this.reset();
+         this.reset();
       }
       this.trigger('sync');
     }, 

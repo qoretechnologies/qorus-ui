@@ -12,7 +12,7 @@
  * https://github.com/dciccale/requirejs-underscore-tpl/blob/master/LICENSE-MIT
  */
 
-define(['lodash', 'text'], function (_, text) {
+define(['underscore', 'text'], function (_, text) {
 
   'use strict';
 

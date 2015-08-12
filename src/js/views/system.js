@@ -1,7 +1,12 @@
 define(function(require){
-  var Qorus            = require('qorus/qorus'),
+  var $                = require('jquery'),
+      _                = require('underscore'),
+      Backbone         = require('backbone'),
+      utils            = require('utils'),
+      Qorus            = require('qorus/qorus'),
       System           = require('models/system'),
       Template         = require('tpl!templates/system/detail.html'),
+      LogView          = require('views/log'),
       OptionsView      = require('views/system/options'),
       ConnectionsView  = require('views/system/connections'),
       PropView         = require('views/system/prop'),
@@ -10,30 +15,26 @@ define(function(require){
       DashboardView    = require('views/system/dashboard'),
       LogsView         = require('views/system/logs'),
       RbacView         = require('views/system/rbac'),
-      ErrorsView       = require('views/system/errors'),
-      SQLCacheList     = require('jsx!views.react/system/sqlcache/list'),
-      ValuesList       = require('jsx!views.react/system/valuesets/list'),
-      _                = require('underscore'),
-      SystemInfoView;
+      SystemInfoView;  
 
 
   SystemInfoView = Qorus.TabView.extend({
     url: '/system',
     views: {},
     cls: 'SystemInfoView',
-
+    
     initialize: function (opts) {
       this.path = opts.path;
       SystemInfoView.__super__.initialize.call(this, arguments);
       this.opts = opts || {};
       this.info = System.Info;
-
+      
       this.listenTo(this.info, 'sync', this.render);
       this.template = Template;
-
+      
       if (!this.info.id) this.info.fetch();
     },
-
+    
     preRender: function () {
       this.context.item = this.info.toJSON();
       this.setView(new DashboardView({ model: this.info }), '#dashboard');
@@ -44,9 +45,7 @@ define(function(require){
       this.setView(new HttpServicesView(), '#http');
       this.setView(new AlertView(), '#alerts');
       this.setView(new RbacView(), '#rbac');
-      this.setView(new ErrorsView(), '#errors');
-      this.setView(new Qorus.ReactView({ reactView: SQLCacheList }), '#sqlcache');
-      this.setView(new Qorus.ReactView({ reactView: ValuesList }), '#values');
+
     }
   });
   return SystemInfoView;

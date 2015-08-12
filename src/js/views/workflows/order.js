@@ -37,7 +37,7 @@ define(function(require) {
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus, Toolbar;
   
-  require('jquery-ui');
+  require('jquery.ui');
   require('bootstrap');
   require('jquery.expanding');
       
@@ -240,14 +240,12 @@ define(function(require) {
   DataView = Qorus.ModelView.extend({
     template: DataTpl,
     additionalEvents: {
-      'click .nav-pills a': 'tabToggle',
-      'submit': 'submitExternalData',
+      'click .nav-pills a': 'tabToggle'
     },
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
       
       $target.tab('show');
-      this.activeTab = $target.data('target');
       e.preventDefault();
       e.stopPropagation();
     },
@@ -258,43 +256,6 @@ define(function(require) {
       this.context.staticdata = utils.flattenObj(this.model.get('staticdata'));
       this.context.dynamicdata = utils.flattenObj(this.model.get('dynamicdata'));
       this.context.keys = utils.flattenObj(this.model.get('keys'));
-    },
-    onRender: function () {
-        if (this.activeTab) {
-            this.$('[data-target="'+this.activeTab+'"]').tab('show');
-        }
-    },
-    submitExternalData: function (e) {
-      e.preventDefault();
-      if (e.type === 'submit') {
-        var $target = $(e.target);
-
-        try {
-          var data = JSON.parse(_.pluck($target.serializeArray(), 'value')[0]);
-          var opts = { "newdata" : data };
-          this.model.doAction($target.attr('id'), opts, function(status, response) {
-              this.showResponse(status, response, $target);
-              if (status) {
-                  this.model.set($target.attr('id').toLowerCase(), data);
-                  this.render();
-              }
-              }.bind(this));
-          this.showResponse(true, 'Updated', $target);
-        }
-        catch (ex) {
-          this.showResponse(false, ex, $target);
-        }
-      }
-    },
-    showResponse: function (status, response, $target) {
-        $('.alert', $target).removeClass().addClass('alert alert-' + (status ? 'success' : 'error'));
-
-        if (response.responseJSON) {
-            $('.alert', $target).html('<b>' + response.responseJSON.err + '</b>: ' + response.responseJSON.desc);
-        }
-        else {
-            $('.alert', $target).html(response);
-        }
     }
   });
   
@@ -414,7 +375,7 @@ define(function(require) {
       "click .showstep": "stepDetail",
       "click tr.parent": "showSubSteps",
       'click button[data-action]': 'runAction',
-      "click .copy-paste a": 'setDisplayMode',
+      "click .copy-paste": 'enableCopyMode',
       "click .tree-caret": 'toggleTree',
       "click td.editable": 'editTableCell',
       "click .order-lock": 'lockOrder',
@@ -578,15 +539,14 @@ define(function(require) {
       }
     },
     
-    setDisplayMode: function (e) {
+    enableCopyMode: function (e) {
       var $el = $(e.currentTarget);
-      var $parent = $el.parent().parent(); // 2 levels of DIVs
-
-      $('.treeview,.textview,.rawview', $parent).hide();
-      $('a[data-mode="treeview"],a[data-mode="textview"],a[data-mode="rawview"]', $parent).removeClass('disabled');
-      $('.'+$el.data('mode'), $parent).show();
-      $el.addClass('disabled');
-
+      var $parent = $el.parent();
+      
+      $('.treeview', $parent).toggle();
+      $('.textview', $parent).toggle();
+      $el.toggleClass('on');
+      $el.text($el.hasClass('on') ? $el.data('msg-on') : $el.data('msg-off'));
       e.preventDefault();
     },
     

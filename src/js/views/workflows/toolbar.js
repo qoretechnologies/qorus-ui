@@ -35,6 +35,7 @@ define(function (require) {
       if (this.options.statuses){
         this.url = [this.baseUrl, this.options.statuses].join('/');
       }
+      
       this.context.url = this.url;
       this.context.hasStatus = this.hasStatus;
       this.on('render', this.addMultiSelect);

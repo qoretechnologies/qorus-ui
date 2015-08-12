@@ -39,8 +39,7 @@ define(function (require) {
       // console.log(opts);
       this.collection = new Collection([], { 
         socket_url: opts.socket_url, 
-        auto_reconnect: opts.auto_reconnect,
-        postpone: true
+        auto_reconnect: opts.auto_reconnect 
       });
       
       this.listenTo(this.collection, 'message', this.appendTextPre);
@@ -50,7 +49,6 @@ define(function (require) {
     
     onShow: function () {
       // console.log('onshow', this);
-      this.collection.connect();
       _.defer(this.fixHeight);
     },
 

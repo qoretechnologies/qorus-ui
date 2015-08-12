@@ -1,6 +1,5 @@
 define(function (require) {
-  var $             = require('jquery'),
-      _             = require('underscore'),
+  var _             = require('underscore'),
       Qorus         = require('qorus/qorus'),
       Template      = require('tpl!templates/notifications/list.html'),
       Notifications = require('collections/notifications'),

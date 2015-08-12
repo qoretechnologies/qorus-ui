@@ -1,4 +1,4 @@
-  define(function (require) {
+define(function (require) {
   var $               = require('jquery'), 
       _               = require('underscore'),
       utils           = require('utils'),
@@ -16,7 +16,6 @@
       StepView        = require('views/steps/step'),
       TableEditView   = require('views/common/table.edit'),
       OptionsTpl      = require('tpl!templates/workflow/options.html'),
-      ErrorsView      = require('views/workflows/errors'),
       ModelView, HeaderView, AlertsView, PaneView, DiagramView, LibView, TEView;
 
   require('sprintf');
@@ -119,7 +118,7 @@
       }
     }
   });
-
+  
   ModelView = Qorus.TabView.extend({
     __name__: "WorkflowDetailView",
     views: {},
@@ -181,8 +180,6 @@
       dview = this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
       
       logview = this.addTabView(new LogView({ socket_url: url, parent: this }));
-      
-      this.addTabView(new ErrorsView({ model: this.model }));
 
       if (this.model.get('has_alerts')) aview = this.addTabView(new AlertsView({ model: this.model }));
       

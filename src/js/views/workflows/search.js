@@ -105,6 +105,10 @@ define(function (require) {
     fixed: true,
     postInit: function () {
       this.listenTo(this.collection, 'sync', this.update);
+      
+      if (this.collection.size() === 0) {
+        this.template = "<p>Type instance ID or keyvalue to begin the search</p>";
+      }
     }
   });
     

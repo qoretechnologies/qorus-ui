@@ -5,7 +5,7 @@ define(function (require) {
       Template = require('text!templates/workflow/modal.html'),
       View;
   
-  require('jquery-ui');
+  require('jquery.ui');
   
   View = Qorus.View.extend({
     additionalEvents: {

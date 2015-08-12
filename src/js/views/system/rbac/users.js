@@ -1,6 +1,5 @@
 define(function (require) {
   var Qorus       = require('qorus/qorus'),
-      Backbone    = require('backbone'),
       _           = require('underscore'),
       Users       = require('collections/users'),
       Template    = require('tpl!templates/system/rbac/users.html'),
@@ -95,11 +94,9 @@ define(function (require) {
   View = Qorus.ListView.extend({
     collection: new Users(),
     template: Template,
-    
     additionalEvents: {
       "click .add-user": 'showAddView'
     },
-    
     preRender: function () {
       var TView = this.setView(new Qorus.TableView({ 
         collection: this.collection, 
@@ -114,7 +111,6 @@ define(function (require) {
       
       this.setView(new Toolbar({ template: ToolbarTpl }), '.toolbar');
     },
-    
     showDetail: function (row) {
       var view  = this.getView('#user-detail-view'),
           model = row.model,
@@ -146,7 +142,6 @@ define(function (require) {
       }
       Backbone.history.navigate(url);
     },
-    
     showAddView: function () {
       var form = new Forms.User({
           model: new User(),
@@ -162,7 +157,6 @@ define(function (require) {
       
       modal.listenTo(form, 'close', modal.hide);
     },
-    
     showEditView: function (model) {
       var form = new Forms.UserEdit({
           model: model,
