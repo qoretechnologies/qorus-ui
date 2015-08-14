@@ -4,57 +4,66 @@ define(function (require) {
       Reflux          = require('reflux'),
       ValueSets       = require('collections/valuesets'),
       Table           = require('jsx!views.react/components/table').TableView,
+      Td              = require('jsx!views.react/components/table').TdComponent,
       Col             = require('jsx!views.react/components/dummy'),
       Cell            = require('jsx!views.react/components/table').CellView,
       RowViewBase     = require('jsx!views.react/components/table').RowView,
       Loader          = require('jsx!views.react/components/loader'),
       SearchFormView  = require('jsx!views.react/components/search'),
-      StoreStateMixin = require('views.react/stores/mixins/statestore'),
       MetaTable       = require('jsx!views.react/components/metatable'),
       EditableCell    = require('jsx!views.react/components/editablecell'),
       utils           = require('utils'),
       Pane            = require('jsx!views.react/components/pane'),
+      StateStoreMixin = require('views.react/stores/mixins/statestore'),
       FilterMixin     = require('cjs!views.react/stores/mixins/filter.mixin'),
       CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
       SaveFile        = require('jsx!views.react/components/savefile'),
-      RestComponent   = require('jsx!views.react/components/rest');
+      RestComponent   = require('jsx!views.react/components/rest'),
+      DetailMixin     = require('cjs!views.react/stores/mixins/detail.mixin');
 
-  var Actions = Reflux.createActions(_.union(['showDetail', 'getValues'], CollectionMixin.actions, FilterMixin.actions));
+  var Actions = Reflux.createActions(_.union(DetailMixin.actions, CollectionMixin.actions, FilterMixin.actions));
 
-  var Store = Reflux.createStore({
-    listenables: [Actions],
-    mixins: [StoreStateMixin, CollectionMixin, FilterMixin],
+  var Store = Reflux.createStore(_.extend(DetailMixin, { listenables: [Actions], mixins: [StateStoreMixin, CollectionMixin, FilterMixin]}));
 
-    init: function () {
-      this.state = _.extend({}, this.state, { showDetail: null, detailValues: false });
-    },
+  var ValueSetsActions = Reflux.createActions(_.union([FilterMixin.actions], ['setCollection']));
 
+  var ValueSetsStore = Reflux.createStore({
+    mixins: [StateStoreMixin, FilterMixin],
+    listenables: [ValueSetsActions],
     getInitialState: function () {
       return this.state;
     },
+    onReset: function () {
+      this.trigger(this.state);
+    },
+    onSetCollection: function (collection) {
+      console.log(collection);
+      this.setState({ collection: collection });
+    }
+  });
 
-    onShowDetail: function (model) {
-      var self = this;
+  var DeleteRow = React.createClass({
+    deleteValue: function () {
+      this.props._model.doAction({ action: 'value', key: this.props.model.key, value: '' })
+        .done(ValueSetsActions.setCollection(this.props.model.get('values')));
+    },
 
-      if (!model) {
-        this.setState({ showDetail: null, detailValues: false });
-      } else if (this.state.showDetail && this.state.showDetail.id === model.id) {
-        this.setState({ showDetail: null, detailValues: false });
-      } else {
-        var values = model.has('values');
-
-        this.setState({ showDetail: model, detailValues: values });
-
-        if (!values) {
-          model.getProperty('values', null, null, function () {
-            self.setState({ showDetail: model, detailValues: true });
-          });
-        }
-      }
+    render: function () {
+      return (
+        <td><a className="label label-danger" onClick={ this.deleteValue }><i className="icon-trash" /></a></td>
+      );
     }
   });
 
   var DetailView = React.createClass({
+    mixins: [Reflux.connect(ValueSetsStore)],
+
+    componentDidMount: function () {
+      var collection = this.props._model.get('values');
+      console.log(collection);
+      // ValueSetsActions.setCollection(collection);
+    },
+
     setValue: function (key, value) {
       this.props.model.doAction({ action: 'value', key: key, value: value }).done(this.render.bind(this));
     },
@@ -66,10 +75,19 @@ define(function (require) {
     },
 
     render: function () {
+      var state = this.state, collection = state.collection;
+
+      console.log(state);
+
+      if (state.filters.text && state.filters.text !== "") {
+        collection = collection.filter(function (m) { return m.key.indexOf(state.filters.text) !== -1; });
+      }
+
       return (
         <Pane idx={ this.props.model.id } model={ this.props.model } onClose={ Actions.showDetail.bind(null, null) } name="valuesets-values">
           <h3>{ this.props.model.get('name') }</h3>
-          <Table collection={ this.props.model.get('values') } className="table table-striped table-condensed">
+          <Toolbar actions={ ValueSetsActions } className="" />
+          <Table collection={ collection } className="table table-striped table-condensed">
             <Col name="Key" className="name">
               <Cell dataKey="key" className="name" />
             </Col>
@@ -78,6 +96,9 @@ define(function (require) {
             </Col>
             <Col name="Enabled">
               <EditableCell dataKey="enabled" _model={ this.props.model } attributeName="key" onSave={ this.setEnabled } isCell={ true } />
+            </Col>
+            <Col name="">
+              <DeleteRow _model={ this.props.model } />
             </Col>
           </Table>
         </Pane>
@@ -91,27 +112,30 @@ define(function (require) {
     }),
 
     render: function () {
+      var props   = this.props,
+          clicked = (props.model == Store.state.showDetail);
+
       return (
-        <RowViewBase {...this.props} rowClick={ this.rowClick }/>
+        <RowViewBase {...this.props} clicked={ clicked } rowClick={ this.rowClick }/>
       );
     }
   });
 
   var Toolbar = React.createClass({
     filterChange: function (filter) {
-      Actions.filter(filter);
+      this.props.actions.filter(filter);
     },
 
     clearAll: function (e) {
       e.preventDefault();
-      Actions.clear(null, null);
+      this.props.actions.clear(null, null);
     },
 
     render: function () {
       return (
         <div className="toolbar">
           <div className="btn-group">
-            <SearchFormView filterChange={ this.filterChange }/>
+            <SearchFormView filterChange={ this.filterChange } classNames={ this.props.classNames }/>
           </div>
         </div>
       );
@@ -139,7 +163,7 @@ define(function (require) {
           models = state.collection.filter(function (m) { return m.get('name').indexOf(state.filters.text) !== -1; });
         }
 
-        toolbar = <Toolbar />;
+        toolbar = <Toolbar actions={ Actions } />;
 
         table = (
           <Table

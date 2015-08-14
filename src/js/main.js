@@ -50,7 +50,8 @@ require.config({
     'react-fixed-data-table': '../components/react-fixed-data-table/fixed-data-table',
     'backbone.obscura': '../components/backbone.obscura/backbone.obscura',
     cjs: '../components/cjs/cjs',
-    'amd-loader': '../components/amd-loader/amd-loader'
+    'amd-loader': '../components/amd-loader/amd-loader',
+    'react-bower-svg': '../components/react-bower-svg/react'
   },
   shim: {
     backbone: {

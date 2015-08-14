@@ -5,7 +5,8 @@ var Qorus    = require('qorus/qorus'),
 var Model = Qorus.Model.extend({
   urlRoot: settings.REST_API_PREFIX + '/valuesets/',
   dateAttributes: ['created', 'modified', 'values.created', 'values.modified'],
-  parse: function (resp) {
+  parse: function (resp, options) {
+    resp = Model.__super__.parse.call(this, resp, options);
     if (resp.values) {
       var values = _.map(resp.values, function (val) {
         return val;

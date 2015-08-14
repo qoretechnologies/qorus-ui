@@ -35,10 +35,12 @@ define(function (require) {
     },
 
     componentWillReceiveProps: function (nextProps) {
-      var val = nextProps.children.props.model.value;
+      if (nextProps.children) {
+        var val = nextProps.children.props.model.value;
 
-      if (val !== this.state.value) {
-        this.setState({ value: val });
+        if (val !== this.state.value) {
+          this.setState({ value: val });
+        }        
       }
     },
 
