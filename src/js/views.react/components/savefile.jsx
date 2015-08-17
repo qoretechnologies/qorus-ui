@@ -10,7 +10,7 @@ define(function (require, module, exports) {
 
   var SaveToFile = React.createClass({
     propTypes: {
-      getDump: PropTypes.func.isRequired,
+      getDump: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]).isRequired,
       model: PropTypes.object.isRequired,
       mimeType: PropTypes.string,
       buttonText: PropTypes.string,
