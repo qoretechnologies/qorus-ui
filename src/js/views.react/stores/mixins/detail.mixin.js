@@ -2,7 +2,7 @@ module.exports = {
   actions: ['showDetail', 'getValues'],
 
   init: function () {
-    this.state = _.extend({}, this.state, { showDetail: null, detailValues: false });
+    this.state = _.extend({}, this.state, { showDetail: null });
   },
 
   getInitialState: function () {
@@ -13,19 +13,11 @@ module.exports = {
     var self = this;
 
     if (!model) {
-      this.setState({ showDetail: null, detailValues: false });
+      this.setState({ showDetail: null });
     } else if (this.state.showDetail && this.state.showDetail.id === model.id) {
-      this.setState({ showDetail: null, detailValues: false });
+      this.setState({ showDetail: null });
     } else {
-      var values = model.has('values');
-
-      this.setState({ showDetail: model, detailValues: values });
-
-      if (!values) {
-        model.getProperty('values', null, null, function () {
-          self.setState({ showDetail: model, detailValues: true });
-        });
-      }
+      this.setState({ showDetail: model });
     }
   }
 };
