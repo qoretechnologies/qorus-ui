@@ -2306,3 +2306,8 @@ td.name .overflow-hidden {
 .mapper-row:hover rect {
 	fill: #fff387;
 }
+
+
+tr.disabled td {
+	color: #666;
+}

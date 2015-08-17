@@ -19,13 +19,15 @@ define(function (require) {
       CollectionMixin = require('cjs!views.react/stores/mixins/collection.mixin'),
       SaveFile        = require('jsx!views.react/components/savefile'),
       RestComponent   = require('jsx!views.react/components/rest'),
-      DetailMixin     = require('cjs!views.react/stores/mixins/detail.mixin');
+      SwitchButton    = require('jsx!views.react/components/switch'),
+      DetailMixin     = require('cjs!views.react/stores/mixins/detail.mixin'),
+      classNames      = require('classnames');
 
   var Actions = Reflux.createActions(_.union(DetailMixin.actions, CollectionMixin.actions, FilterMixin.actions));
 
-  var Store = Reflux.createStore(_.extend(DetailMixin, { listenables: [Actions], mixins: [StateStoreMixin, CollectionMixin, FilterMixin]}));
+  var Store = Reflux.createStore(_.extend(DetailMixin,{ listenables: [Actions], mixins: [StateStoreMixin, CollectionMixin, FilterMixin]}));
 
-  var ValueSetsActions = Reflux.createActions(_.union([FilterMixin.actions], ['setCollection']));
+  var ValueSetsActions = Reflux.createActions(_.union([FilterMixin.actions], ['setCollection', 'getValues']));
 
   var ValueSetsStore = Reflux.createStore({
     mixins: [StateStoreMixin, FilterMixin],
@@ -36,13 +38,21 @@ define(function (require) {
     onReset: function () {
       this.trigger(this.state);
     },
+    onGetValues: function (model) {
+      this.onSetCollection(model.get('values'));
+
+      if (!model.get('values')) {
+        model.getProperty('values', null, null, function () {
+          this.onSetCollection(model.get('values'));
+        }.bind(this));
+      }
+    },
     onSetCollection: function (collection) {
-      console.log(collection);
       this.setState({ collection: collection });
     }
   });
 
-  var DeleteRow = React.createClass({
+  var DeleteCell = React.createClass({
     deleteValue: function () {
       this.props._model.doAction({ action: 'value', key: this.props.model.key, value: '' })
         .done(ValueSetsActions.setCollection(this.props.model.get('values')));
@@ -55,13 +65,48 @@ define(function (require) {
     }
   });
 
+  var OnOff = React.createClass({
+    getInitialState: function () {
+      return {
+        enabled: this.props.model.enabled
+      };
+    },
+
+    setValue: function (val) {
+      var model = this.props._model,
+          m = this.props.model;
+
+      m.enabled = val;
+
+      model.doAction(_.extend({ action: 'value' }, m)).done(this.setState({ enabled: val }));
+    },
+
+    render: function () {
+      return (
+        <SwitchButton value={ this.state.enabled } setValue={ this.setValue } />
+      );
+    }
+  });
+
+  var ValuesRowView = React.createClass({
+    render: function () {
+      var cls = classNames({ disabled: !this.props.model.enabled });
+
+      return (
+        <RowView {...this.props} className={ cls } />
+      );
+    }
+  });
+
   var DetailView = React.createClass({
     mixins: [Reflux.connect(ValueSetsStore)],
 
-    componentDidMount: function () {
-      var collection = this.props._model.get('values');
-      console.log(collection);
-      // ValueSetsActions.setCollection(collection);
+    componentWillMount: function () {
+      ValueSetsActions.getValues(this.props.model);
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+      ValueSetsActions.getValues(nextProps.model);
     },
 
     setValue: function (key, value) {
@@ -77,17 +122,16 @@ define(function (require) {
     render: function () {
       var state = this.state, collection = state.collection;
 
-      console.log(state);
-
       if (state.filters.text && state.filters.text !== "") {
-        collection = collection.filter(function (m) { return m.key.indexOf(state.filters.text) !== -1; });
+        collection = collection.filter(function (m) { return m.key.indexOf(state.filters.text) !== -1 || m.value.indexOf(state.filters.text) !== -1; });
       }
 
       return (
         <Pane idx={ this.props.model.id } model={ this.props.model } onClose={ Actions.showDetail.bind(null, null) } name="valuesets-values">
           <h3>{ this.props.model.get('name') }</h3>
           <Toolbar actions={ ValueSetsActions } className="" />
-          <Table collection={ collection } className="table table-striped table-condensed">
+          <Table collection={ collection } className="table table-striped table-condensed"
+            rowView={ ValuesRowView }>
             <Col name="Key" className="name">
               <Cell dataKey="key" className="name" />
             </Col>
@@ -95,10 +139,10 @@ define(function (require) {
               <EditableCell dataKey="value" _model={ this.props.model } attributeName="key" onSave={ this.setValue } isCell={ true } />
             </Col>
             <Col name="Enabled">
-              <EditableCell dataKey="enabled" _model={ this.props.model } attributeName="key" onSave={ this.setEnabled } isCell={ true } />
+              <OnOff _model={ this.props.model } />
             </Col>
             <Col name="">
-              <DeleteRow _model={ this.props.model } />
+              <DeleteCell _model={ this.props.model } />
             </Col>
           </Table>
         </Pane>
@@ -150,6 +194,10 @@ define(function (require) {
       Actions.fetch();
     },
 
+    componentWillUnmount: function () {
+      Actions.showDetail(null);
+    },
+
     render: function () {
       var state = this.state, table = null, detail = null, toolbar = null,
           models = null,
@@ -167,10 +215,9 @@ define(function (require) {
 
         table = (
           <Table
-            collection={ models}
+            collection={ models }
             className="table table-striped table-condensed"
-            rowView={ RowView }
-            >
+            rowView={ RowView }>
             <Col className="name" name="Name">
               <Cell className="name" dataKey="name" />
             </Col>
