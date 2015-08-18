@@ -27,14 +27,22 @@ var Model = Qorus.Model.extend({
     var self = this;
 
     var deferred = $.put(_.result(this, 'url'), opts)
-      .done(function () {
-        var values = self.get('values');
-        var value = _.find(values, { key: opts.key });
+      .done(function (resp) {
 
-        _.extend(value, opts);
+        var values = self.get('values');
+        if (resp) {
+          var pos = _.indexOf(values, _.find(values, { key: resp.key }));
+          if (pos !== -1) {
+            values.splice(pos, 1, resp);
+          } else {
+            values.push(resp);
+          }
+        } else {
+          values = _.filter(values, function (v) { return v.key !== opts.key; });
+        }
 
         self.set({
-          values: _.extend({}, values, _.omit(opts, 'action'))
+          values: values
         });
       }).then();
 

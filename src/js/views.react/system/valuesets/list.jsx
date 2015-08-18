@@ -25,9 +25,12 @@ define(function (require) {
 
   var Actions = Reflux.createActions(_.union(DetailMixin.actions, CollectionMixin.actions, FilterMixin.actions));
 
-  var Store = Reflux.createStore(_.extend(DetailMixin,{ listenables: [Actions], mixins: [StateStoreMixin, CollectionMixin, FilterMixin]}));
+  var Store = Reflux.createStore(_.extend(DetailMixin, {
+    listenables: [Actions],
+    mixins: [StateStoreMixin, CollectionMixin, FilterMixin]})
+  );
 
-  var ValueSetsActions = Reflux.createActions(_.union([FilterMixin.actions], ['setCollection', 'getValues']));
+  var ValueSetsActions = Reflux.createActions(_.union([FilterMixin.actions], ['setCollection', 'setModel', 'createValue', 'deleteValue']));
 
   var ValueSetsStore = Reflux.createStore({
     mixins: [StateStoreMixin, FilterMixin],
@@ -38,24 +41,38 @@ define(function (require) {
     onReset: function () {
       this.trigger(this.state);
     },
-    onGetValues: function (model) {
-      this.onSetCollection(model.get('values'));
+    getValues: function (model) {
+      this.setState({ model: model, collection: model.get('values')});
 
       if (!model.get('values')) {
         model.getProperty('values', null, null, function () {
-          this.onSetCollection(model.get('values'));
+          this.setState({ collection: model.get('values')});
         }.bind(this));
       }
     },
-    onSetCollection: function (collection) {
-      this.setState({ collection: collection });
+    onSetModel: function (model) {
+      this.getValues(model);
+    },
+    onDeleteValue: function (key) {
+      var model = this.state.model;
+
+      model.doAction({ action: 'value', key: key, value: '' }).done(function () {
+        this.setState({ model: this.state.model, collection: this.state.model.get('values') });
+      }.bind(this));
+    },
+    onCreateValue: function (value) {
+      var model = this.state.model,
+          values = model.get('values') || [];
+      model.doAction(_.extend({ action: 'value' }, value)).done(function () {
+        this.setState({ model: this.state.model, collection: this.state.model.get('values') });
+      }.bind(this));
     }
   });
 
   var DeleteCell = React.createClass({
     deleteValue: function () {
-      this.props._model.doAction({ action: 'value', key: this.props.model.key, value: '' })
-        .done(ValueSetsActions.setCollection(this.props.model.get('values')));
+      var key = this.props.model.key;
+      ValueSetsActions.deleteValue(key);
     },
 
     render: function () {
@@ -93,7 +110,67 @@ define(function (require) {
       var cls = classNames({ disabled: !this.props.model.enabled });
 
       return (
-        <RowView {...this.props} className={ cls } />
+        <RowViewBase {...this.props} className={ cls } />
+      );
+    }
+  });
+
+  var AddNewValue = React.createClass({
+    valueDefaults: {
+      key: 'key',
+      value: 'value',
+      enabled: true
+    },
+
+    getInitialState: function () {
+      return {
+        edit: false,
+        value: _.extend({}, this.valueDefaults)
+      };
+    },
+
+    createValue: function () {
+      this.setState({ edit: true });
+    },
+
+    addValue: function () {
+      ValueSetsActions.createValue(this.state.value);
+      this.setState({ edit: false, value: _.extend({}, this.valueDefaults)});
+    },
+
+    setValue: function (key, value) {
+      var val = this.state.value;
+      val[key]= value;
+      this.setState({ value: val });
+    },
+
+    render: function () {
+      var edit = null;
+
+      if (this.state.edit) {
+        edit = (
+          <Table collection={ [this.state.value] } className="table table-striped table-condensed">
+            <Col name="Key" className="name">
+              <EditableCell dataKey="key" attributeName="key" onSave={ this.setValue } isCell={ true } />
+            </Col>
+            <Col name="Value">
+              <EditableCell dataKey="value" attributeName="value" onSave={ this.setValue } isCell={ true } />
+            </Col>
+            <Col name="Enabled">
+              <OnOff _model={ this.props.model } />
+            </Col>
+            <Col name="">
+              <a onClick={ this.addValue } className="label label-success">Add</a>
+            </Col>
+          </Table>
+        );
+      }
+
+      return (
+        <div>
+          <a onClick={ this.createValue } className="label label-success">Add value</a>
+          { edit }
+        </div>
       );
     }
   });
@@ -102,11 +179,11 @@ define(function (require) {
     mixins: [Reflux.connect(ValueSetsStore)],
 
     componentWillMount: function () {
-      ValueSetsActions.getValues(this.props.model);
+      ValueSetsActions.setModel(this.props.model);
     },
 
     componentWillReceiveProps: function (nextProps) {
-      ValueSetsActions.getValues(nextProps.model);
+      ValueSetsActions.setModel(nextProps.model);
     },
 
     setValue: function (key, value) {
@@ -117,6 +194,10 @@ define(function (require) {
       var value = _.find(this.props.model.get('values'), { key: key }).value;
 
       this.props.model.doAction({ action: 'value', key: key, value: value, enabled: enabled }).done(this.render.bind(this));
+    },
+
+    createValue: function () {
+      ValueSetsActions.createValue();
     },
 
     render: function () {
@@ -145,6 +226,7 @@ define(function (require) {
               <DeleteCell _model={ this.props.model } />
             </Col>
           </Table>
+          <AddNewValue model={ this.props.model } />
         </Pane>
       );
     }
