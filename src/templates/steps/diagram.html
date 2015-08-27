@@ -1,7 +1,0 @@
-<% _.each(items, function (level) { %>
-  <div class="row">
-  <% var span = 12 / level.length %>
-  <% _.each(level, function (step) { %>
-    <div class="span<%= span %>"><% step.name %></div>
-  </div>
-<% }) %>

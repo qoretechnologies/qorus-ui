@@ -1,5 +1,0 @@
-<% if (obj.model.get('notes')) { %>
-<% _.forEach(obj.model.get('notes'), function (note) { %>
-<p><time datetime="<%= note.modified %>"><%= note.modified %></time> <span class="label"><%= note.username %></span> <span class='note'><%= note.note %></span></p>
-<% }) %>
-<% } %>

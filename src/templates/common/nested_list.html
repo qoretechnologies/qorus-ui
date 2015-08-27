@@ -1,5 +1,0 @@
-<ul<% if (obj.css) return 'css="'+ obj.css +'"' %>>
-<% _.each(obj.items, function(v, k) { %>
-    <li><strong><%= k %></strong>: <% if (_.isObject(v)) { %><%= obj.createNestedList(v, null, null, preformatted) %><%} else {%> <%= (preformatted) ? '<pre>' : '<span>' %><%= escapeHtml(v) %><% } %><%= (preformatted) ? '</pre>' : '</span>' %></li>
-<% }) %>
-</ul>

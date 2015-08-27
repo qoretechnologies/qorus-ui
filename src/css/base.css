@@ -1,5 +1,3 @@
-/* @override http://localhost:8080/css/base.css */
-
 html, body {
 	height: 100%;
 	width: 100%;
@@ -275,7 +273,7 @@ table .header-fixed {
 }
 
 .nav-list a:hover .icon-white {
-  background-image: url(../js/libs/bootstrap/img/glyphicons-halflings.png);
+  /*background-image: url(../js/libs/bootstrap/img/glyphicons-halflings.png);*/
 }
 
 .nav li {
@@ -383,11 +381,11 @@ table .header-fixed {
 }
 
 .qorus-icon.qorus-icon-warning {
-    background: url(../imgs/icon-warning.png) no-repeat;
+    /*background: url(../imgs/icon-warning.png) no-repeat;*/
 }
 
 .qorus-icon.qorus-icon-white {
-    background: url(../imgs/icon-warning-white.png) no-repeat;
+    /*background: url(../imgs/icon-warning-white.png) no-repeat;*/
 }
 
 .treeview {
