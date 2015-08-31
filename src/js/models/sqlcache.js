@@ -6,7 +6,7 @@ define(function (require) {
 
   Model = Backbone.Model.extend({
     url: settings.REST_API_PREFIX + '/system/sqlcache',
-    actions: ['deleteCache'],
+    actions: ['clearCache'],
 
     parse: function (response) {
       var datasources = _.map(response, function (ds, key) {

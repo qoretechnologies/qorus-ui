@@ -35,7 +35,7 @@ define(function (require) {
 
     onClear: function (ds, name) {
       var promise = this.state.collection.doAction({
-        action: 'deleteCache',
+        action: 'clearCache',
         datasource: ds,
         name: name
       });
