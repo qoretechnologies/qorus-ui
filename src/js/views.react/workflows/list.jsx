@@ -369,7 +369,7 @@ define(function (require) {
     },
 
     componentWillUnmount: function () {
-      $('body').removeProp('overflow', 'auto');
+      $('body').css('overflow', '');
     },
 
     componentWillReceiveProps: function (nextProps, nextState) {
