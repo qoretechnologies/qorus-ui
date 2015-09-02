@@ -51,7 +51,10 @@ require.config({
     'backbone.obscura': '../components/backbone.obscura/backbone.obscura',
     cjs: '../components/cjs/cjs',
     'amd-loader': '../components/amd-loader/amd-loader',
-    'react-bower-svg': '../components/react-bower-svg/react'
+    'react-bower-svg': '../components/react-bower-svg/react',
+    baobab: '../components/baobab/build/baobab.min',
+    'baobab-react': '../components/baobab-react/index',
+    'superagent-promises': '../components/superagent-promises/index'
   },
   shim: {
     backbone: {

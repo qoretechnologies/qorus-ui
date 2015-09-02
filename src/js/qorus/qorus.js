@@ -441,7 +441,7 @@ define(function (require) {
     max_retries: 10,
     retries: 0,
 
-    initialize: function (opts) {
+    initialize: function (models, opts) {
       opts = opts || {};
       _.bindAll(this);
 

@@ -2,20 +2,32 @@ define(function (require) {
   var $ = require('jquery');
   var host = window.location.hostname + ":8001";
   var wshost = window.location.hostname + ":8001";
+  // var host = "192.168.20.190:8001";
+  // var wshost = "192.168.20.190:8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
-  
-//  $.ajaxSetup({
-//    headers: { 'Authorization': "Basic dGVzdHRlc3Q=" },
-//    crossDomain: true,
-//    withCredentials: true
-//  });
-  
+
+  function make_base_auth(user, password) {
+    var tok = user + ':' + password;
+    var hash = btoa(tok);
+    return "Basic " + hash;
+  }
+
+ $.ajaxSetup({
+  //  crossDomain: true,
+   username: 'admin',
+   password: 'admin',
+   beforeSend: function(xhr){
+    //  console.log('shit baraboom');
+    xhr.setRequestHeader("Authorization", make_base_auth('admin', 'admin'));
+   }
+ });
+
   var settings = {
       DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
       DATE_DISPLAY_CONDENSED: 'YYYYMMDDHHmmss',
       DATE_DISPLAY: 'YYYY-MM-DD HH:mm:ss',
-      DATE_TSEPARATOR: 'YYYY-MM-DDTHH:mm:ss',      
+      DATE_TSEPARATOR: 'YYYY-MM-DDTHH:mm:ss',
       DATE_FROM: '1970-01-01',
       SEARCH_SEPARATOR: /[ ,]+/,
       PROTOCOL: protocol,
@@ -26,7 +38,7 @@ define(function (require) {
       HOST: host,
       DEBUG: false
     };
-  
+
   if (settings.DEBUG && window.console && console.log) {
     window.debug = window.console;
   } else {
@@ -37,6 +49,6 @@ define(function (require) {
       }
     };
   }
-  
+
   return settings;
 });
