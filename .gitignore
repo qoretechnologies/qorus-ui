@@ -4,5 +4,5 @@ dist/
 src/components
 src/css/components.min.css
 src/js/main.build.js
-
+.idea
 .nfs*
