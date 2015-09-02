@@ -1,9 +1,9 @@
 define(function (require) {
   var $ = require('jquery');
-  var host = window.location.hostname + ":8001";
-  var wshost = window.location.hostname + ":8001";
-  // var host = "192.168.20.190:8001";
-  // var wshost = "192.168.20.190:8001";
+  var hostname = window.location.hostname;
+  //var hostname = "192.168.20.190";
+  var host = hostname + ":8001";
+  var wshost = hostname + ":8001";
   var protocol = "http:"; // window.location.protocol;
   var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
 

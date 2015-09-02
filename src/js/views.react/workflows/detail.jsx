@@ -413,7 +413,7 @@ define(function (require) {
     showModal: function (state) {
       var modal, el;
 
-      model = this.prepareModel(state.model);
+      var model = this.prepareModel(state.model);
 
       modal = (
         <ModalView title={ state.action + " " + model.get('error') }>

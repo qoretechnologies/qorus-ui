@@ -166,11 +166,11 @@ define(function (require) {
     },
 
     render: function () {
-      var model = this.props.model,
-          url   = helpers.getUrl(this.props.status, this.props.model.id, store.state.filters.date);
+      var model = this.props.model;
+      var url   = helpers.getUrl(this.props.status, model.id, store.state.filters.date);
 
       return (
-        <div className="overflow-hidden" style={{ maxWidth: nameWidth }}><a href={ url }>{ this.props.model.get('name') }</a></div>
+        <div className="overflow-hidden" style={{ maxWidth: nameWidth }}><a href={ url }>{ model.get('name') }</a></div>
       );
     }
   });
@@ -357,7 +357,7 @@ define(function (require) {
       return (
         <RowView {...this.props} className={ cls } hash={ this.props.model.hash } clicked={ this.state.clicked } date={ this.state.date } rowClick={ this.rowClick } />
       );
-    },
+    }
   });
 
   var TableViewWrapper = React.createClass({
@@ -591,8 +591,7 @@ define(function (require) {
     prepareCollection: function () {
       var collection = this.state.collection,
           tfilter    = workflowsStore.state.filters.text,
-          deprecated = workflowsStore.state.filters.deprecated,
-          firstRow   = 0;
+          deprecated = workflowsStore.state.filters.deprecated;
 
       collection.resetFilters();
 
