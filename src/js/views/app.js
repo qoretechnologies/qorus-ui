@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
+
 class Navigation extends Component {
   render () {
     return (
@@ -18,6 +19,10 @@ class Navigation extends Component {
 }
 
 class Root extends Component {
+  constructor(...props) {
+    super(...props);
+
+  }
   render () {
     return (
       <div>
