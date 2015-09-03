@@ -11,16 +11,16 @@ export function getCurrentUser() {
   return fetch(`${url}users/?action=current`);
 }
 var models = [
-  'alert',
+  'alerts',
   'class',
-  'constant',
-  'error',
+  'constants',
+  'errors',
   'event',
   'function',
   'group',
   'health',
   'instance',
-  'job',
+  'jobs',
   'mapper',
   'notification',
   'option',
@@ -28,15 +28,15 @@ var models = [
   'permission',
   'remote',
   'result',
-  'role',
-  'service',
+  'roles',
+  'services',
   'settings',
   'sqlcache',
   'step',
   'system',
-  'user',
+  'users',
   'valueset',
-  'workflow'
+  'workflows'
 ];
 const qorusApi = {};
 
