@@ -47,13 +47,16 @@ if (env === 'development') {
   config.debug = true;
   config.devtool = 'eval-source-map';
   config.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
   config.devServer = {
     contentBase: './src',
     noInfo: false,
     hot: true,
-    inline: true
+    inline: true,
+    port: 3000,
+    historyApiFallback: true
   };
 }
 

@@ -42,6 +42,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --hot --port 3000 --history-api-fallback"
+    "start": "webpack-dev-server"
   }
 }
