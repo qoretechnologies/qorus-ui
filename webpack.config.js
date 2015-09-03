@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+var path = require('path');
 var env = process.env.NODE_ENV;
 if (!env) {
   env = 'development';
@@ -9,13 +9,13 @@ if (!env) {
 console.log('weback started in ' + env + ' environment');
 
 var config = {
-  context: __dirname + "/src",
+  context: path.join(__dirname, "src"),
   entry: {
     javascript: "./index.js",
     html: "./index.html"
   },
   output: {
-    path: __dirname + "/dist",
+    path: path.join(__dirname, "dist"),
     filename: "qorus.bundle.js"
   },
   resolve: {
