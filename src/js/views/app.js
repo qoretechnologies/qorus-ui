@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import Navigation from 'components/navigation'
 
 class Root extends Component {
+  constructor(...props) {
+    super(...props);
+
+  }
   render () {
     const info = this.props.info;
 

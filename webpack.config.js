@@ -1,7 +1,14 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+var env = process.env.NODE_ENV;
+if (!env) {
+  env = 'development';
+}
+
+console.log('weback started in ' + env + ' environment');
+
+var config = {
   context: __dirname + "/src",
   entry: {
     javascript: "./index.js",
@@ -10,6 +17,9 @@ module.exports = {
   output: {
     path: __dirname + "/dist",
     filename: "qorus.bundle.js"
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
   },
   module: {
     loaders: [
@@ -38,4 +48,33 @@ module.exports = {
     //   "window.jQuery": "jquery"
     // })
   ]
+};
+
+if (env === 'development') {
+  config.debug = true;
+  config.devtool = 'eval-source-map';
+  config.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  );
+  config.devServer = {
+    contentBase: './src',
+    noInfo: false,
+    hot: true,
+    inline: true
+  };
 }
+
+if (env === 'production') {
+  config.plugins.push(
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  );
+}
+
+module.exports = config;
