@@ -15,7 +15,7 @@ class NavItem extends Component {
   }
 
   render () {
-    let { url, className, icon } = this.props;
+    let { url, className, icon, name } = this.props;
     let cls = clNs("icon-large", icon, className);
 
     return (
