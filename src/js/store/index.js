@@ -6,7 +6,7 @@ function reducer(state = {}, action) {
   console.log('action', action);
   switch (action.type) {
     case 'INIT':
-      return Object.assign({}, state, { 'initialized': true });
+      return Object.assign({}, state, { initialized: true });
   }
 }
 

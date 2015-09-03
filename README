@@ -1,1 +1,4 @@
 Qorus Webapp Interface
+
+## Codestyle
+Write JS according to [AirBnB react style guide](https://github.com/airbnb/javascript/tree/master/react) and [AirBnB ES6 style guide](https://github.com/airbnb/javascript#ecmascript-6-styles)
