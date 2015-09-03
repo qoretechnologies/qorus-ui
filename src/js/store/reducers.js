@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import menu from './menu';
+import workflows from './workflows';
 
 function reducer(state = {}, action) {
   console.log('state', state);

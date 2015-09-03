@@ -1,16 +1,11 @@
-
-function make_base_auth(user, password) {
-  var tok = user + ':' + password;
-  var hash = btoa(tok);
-  return "Basic " + hash;
-}
+import authHeader from './authorization-header';
 
 function authorizedFetch(url, opts) {
   return fetch(url, Object.assign(opts || {}, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': make_base_auth('admin', 'admin') //TODO set this from real user
+      'Authorization': authHeader //TODO set this from real user
     }
   })).then(function(res) {
     return res.json();
