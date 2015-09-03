@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+// var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 var env = process.env.NODE_ENV;
 if (!env) {
@@ -46,7 +47,6 @@ if (env === 'development') {
   config.debug = true;
   config.devtool = 'eval-source-map';
   config.plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
   config.devServer = {
