@@ -29,8 +29,8 @@ class NavItem extends Component {
 
 class Navigation extends Component {
   static propTypes = {
-    mainItems: PropTypes.list,
-    extraItems: PropTypes.list
+    mainItems: PropTypes.array,
+    extraItems: PropTypes.array
   }
 
   static defaultProps = {
@@ -41,11 +41,12 @@ class Navigation extends Component {
   render () {
     let { mainItems, extraItems } = this.props;
 
-    let navItems = [];
-
-    mainItems.forEach((item) => {
-
+    let navItems = mainItems.forEach((item) => {
+      let { url, icon, className } = item;
+      return <NavItem url={ url } icon={ icon } className={ className } />;
     });
+
+    console.log(mainItems, navItems);
 
     return (
       <aside className="affix navigation">

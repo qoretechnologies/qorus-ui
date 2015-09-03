@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Router, Route } from 'react-router'
 import { Provider } from 'react-redux'
-import store from './store/store'
+import store from './store'
 import Root from './views/app'
 
 require("bootstrap-sass!../bootstrap-sass.config.js");

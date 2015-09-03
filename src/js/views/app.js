@@ -1,18 +1,21 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
-import Navigation from 'components/navigation'
+import Navigation from '../components/navigation'
 
 class Root extends Component {
   constructor(...props) {
     super(...props);
 
   }
+
   render () {
-    const info = this.props.info;
+    const { menus, info } = this.props;
+
+    console.log(menus);
 
     return (
       <div>
-        <Navigation mainItems="hello" extraItems="world" />
+        <Navigation mainItems={ menus.mainItems } extraItems={[]} />
         <div id="wrap">
           <header id="header" className="navbar navbar-fixed-top navbar-inverse"></header>
           <section className="section container-fluid">
@@ -42,5 +45,6 @@ class Root extends Component {
 }
 
 export default connect(state => ({
-  info: state.info
+  info: state ? state.info : {},
+  menus: state && state.menus ? state.menus : {}
 }))(Root);

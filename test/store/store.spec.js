@@ -1,4 +1,4 @@
-import store from '../../src/js/store/store'
+import store from '../../src/js/store'
 import chai from 'chai';
 const expect = chai.expect;
 
