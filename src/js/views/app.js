@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Navigation from '../components/navigation'
+import Navigation from '../components/navigation';
 
 class Root extends Component {
   constructor(...props) {
