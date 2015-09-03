@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Router, Route } from 'react-router';
 import { Provider } from 'react-redux';
+import Workflows from './components/workflows';
 import store from './store';
 import Root from './views/app';
 
@@ -25,7 +26,7 @@ class App extends Component {
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system'/>
-              <Route path='workflows'/>
+              <Route path='workflows' component={Workflows}/>
               <Route path='services'/>
               <Route path='jobs'/>
               <Route path='search'/>
