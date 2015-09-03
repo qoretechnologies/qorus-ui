@@ -5,9 +5,9 @@ import store from './store/store'
 import Root from './views/app'
 
 require("bootstrap-sass!../bootstrap-sass.config.js");
-require("style!D:\\WebstormProjects\\qorus-webapp\\src\\css\\base.css");
-//require("style!../css/line.numbers.css");
-//require("style!../css/font-awesome/css/font-awesome.min.css");
+require("style!../css/base.css");
+require("style!../css/line.numbers.css");
+require("style!../css/font-awesome/css/font-awesome.min.css");
 
 class Dashboard extends Component {
   constructor(...props) {
