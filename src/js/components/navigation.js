@@ -20,7 +20,7 @@ class NavItem extends Component {
 
     return (
       <li>
-        <Link to={ url }><i className={ cls }></i><span>{ name }</span></Link>
+        <Link to={ url }><i className={ cls }></i> <span>{ name }</span></Link>
       </li>
     )
   }
