@@ -4,7 +4,8 @@ import settings from '../settings';
 var restful = require('restful.js');
 
 let url = settings.REST_API_PREFIX;
-var api = restful(url);
+
+var api = restful(url.substr(7));
 api.header('Authorization', authHeader);
 
 export function getCurrentUser() {
