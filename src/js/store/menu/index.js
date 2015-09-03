@@ -4,17 +4,17 @@ const initialState = {
     mainItems: [
       {
         name: 'Workflows',
-        url: 'workflows',
+        url: '/workflows',
         icon: 'icon-sitemap'
       },
       {
         name: 'Services',
-        url: 'services',
+        url: '/services',
         icon: 'icon-sitemap'
       },
       {
         name: 'Jobs',
-        url: 'jobs',
+        url: '/jobs',
         icon: 'icon-sitemap'
       }
     ]

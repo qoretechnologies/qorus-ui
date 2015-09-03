@@ -1,5 +1,5 @@
 import React, { Component, PropTypes} from 'react';
-import Link from 'react-router';
+import { Link } from 'react-router';
 import clNs from 'classnames';
 
 
@@ -20,7 +20,7 @@ class NavItem extends Component {
 
     return (
       <li>
-        <Link to={ url }><i className={ cls }></i> <span>{ name }</span></Link>
+        <Link to={ url }><i className={ cls }></i><span>{ name }</span></Link>
       </li>
     )
   }
@@ -44,8 +44,6 @@ class Navigation extends Component {
     let navItems = mainItems.map(item => {
       return <NavItem {...item} key={ item.name } />;
     });
-
-    console.log('navItems', navItems);
 
     return (
       <aside className="affix navigation">
