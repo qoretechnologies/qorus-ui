@@ -1916,7 +1916,7 @@ aside.navigation {
   position: fixed;
   height: 100%;
   overflow: hidden;
-  opacity: 0;
+  opacity: 1;
   -webkit-transition: opacity 0s 0.1s;
           transition: opacity 0s 0.1s;
 }

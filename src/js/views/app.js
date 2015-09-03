@@ -1,24 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-
-class Navigation extends Component {
-  render () {
-    return (
-      <aside className="affix navigation">
-        <nav id="nav-main">
-          <ul className="nav nav-list main">
-            { this.props.mainItems }
-          </ul>
-          <ul className="extra">
-            { this.props.extraItems }
-          </ul>
-        </nav>
-      </aside>
-    )
-  }
-}
+import { connect } from 'react-redux';
+import Navigation from 'components/navigation'
 
 class Root extends Component {
   render () {
+    const info = this.props.info;
+
     return (
       <div>
         <Navigation mainItems="hello" extraItems="world" />
@@ -38,11 +25,11 @@ class Root extends Component {
         </div>
         <ul id="msg" className="messenger messenger-fixed messenger-on-bottom messenger-on-right messenger-theme-block"></ul>
         <footer id="footer" className="footer">
-        <div className="container-fluid">
-          <p className="credit muted pull-right">Qorus Integration Engine <small>(Schema: <span id="schema">Unknown</span>)</small>
-                    <small>(Version: <span id="build">Unknown</span>)</small> &copy; <a href="http://qoretechnologies.com">Qore Technologies</a> |
-                    <a href="http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new">Report Bug</a></p>
-        </div>
+          <div className="container-fluid">
+            <p className="credit muted pull-right">Qorus Integration Engine <small>(Schema: <span id="schema">Unknown</span>)</small>
+                      <small>(Version: <span id="build">{ info.version }</span>)</small> &copy; <a href="http://qoretechnologies.com">Qore Technologies</a> |
+                      <a href="http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new">Report Bug</a></p>
+          </div>
         </footer>
         <div id="notifications-list"></div>
       </div>
@@ -50,4 +37,6 @@ class Root extends Component {
   }
 }
 
-export default Root
+export default connect(state => ({
+  info: state.info
+}))(Root);

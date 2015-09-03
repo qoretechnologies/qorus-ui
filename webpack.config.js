@@ -18,7 +18,7 @@ module.exports = {
 
       { test: /\.jsx?$/, loaders: ["react-hot", "babel-loader?stage=0"], exclude: /node_modules/ },
       { test: /\.html$/, loader: "file?name=[name].[ext]" },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+      { test: /\.css$/, loader: "style!css" }, // ExtractTextPlugin.extract("style-loader", "css-loader") },
       { test: /\.png$/, loader: "url-loader?limit=100000" },
       { test: /\.jpg$/, loader: "file-loader" },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&mimetype=application/font-woff" },
@@ -31,7 +31,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin("css/base.css"),
-    new ExtractTextPlugin("bootstrap-and-customizations.css"),
+    // new ExtractTextPlugin("bootstrap-and-customizations.css"),
     // new webpack.ProvidePlugin({
     //   $: "jquery",
     //   jQuery: "jquery",
