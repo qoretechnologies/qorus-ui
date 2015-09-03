@@ -9,13 +9,14 @@ class Root extends Component {
   }
 
   render () {
-    const { menus, info } = this.props;
+    var { menu, info } = this.props;
 
-    console.log(menus);
+    menu = menu || {};
+    info = info || {};
 
     return (
       <div>
-        <Navigation mainItems={ menus.mainItems } extraItems={[]} />
+        <Navigation mainItems={ menu.mainItems } extraItems={[]} />
         <div id="wrap">
           <header id="header" className="navbar navbar-fixed-top navbar-inverse"></header>
           <section className="section container-fluid">
@@ -44,7 +45,13 @@ class Root extends Component {
   }
 }
 
-export default connect(state => ({
-  info: state ? state.info : {},
-  menus: state && state.menus ? state.menus : {}
-}))(Root);
+function systemInfo(state) {
+  console.log(state);
+
+  return {
+    info: state.info,
+    menu: state.menu
+  }
+}
+
+export default connect(systemInfo)(Root);

@@ -15,7 +15,7 @@ class NavItem extends Component {
   }
 
   render () {
-    let { url, span, icon } = this.props;
+    let { url, className, icon } = this.props;
     let cls = clNs("icon-large", icon, className);
 
     return (
@@ -41,12 +41,11 @@ class Navigation extends Component {
   render () {
     let { mainItems, extraItems } = this.props;
 
-    let navItems = mainItems.forEach((item) => {
-      let { url, icon, className } = item;
-      return <NavItem url={ url } icon={ icon } className={ className } />;
+    let navItems = mainItems.map(item => {
+      return <NavItem {...item} key={ item.name } />;
     });
 
-    console.log(mainItems, navItems);
+    console.log('navItems', navItems);
 
     return (
       <aside className="affix navigation">

@@ -9,19 +9,6 @@ require("style!../css/base.css");
 require("style!../css/line.numbers.css");
 require("style!../css/font-awesome/css/font-awesome.min.css");
 
-class Dashboard extends Component {
-  constructor(...props) {
-    super(...props);
-
-  }
-  render() {
-    return (
-      <div>
-        <h1>fsfa</h1>
-      </div>
-    )
-  }
-}
 
 class App extends Component {
   static propTypes = {
@@ -36,7 +23,7 @@ class App extends Component {
         {() =>
           <Router history={history}>
             <Route path='/' component={Root}>
-              <Route path='dashboard' component={Dashboard}/>
+              <Route path='dashboard' />
               <Route path='system'/>
               <Route path='workflows'/>
               <Route path='services'/>
