@@ -37,7 +37,9 @@ class Workflows extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return state;
+  return {
+    workflows: state.workflows
+  };
 }
 
 export default connect(mapStateToProps)(Workflows);
