@@ -16,5 +16,6 @@ function reducer(state = {}, action) {
 
 export default combineReducers({
   reducer,
-  menu
+  menu,
+  workflows
 });
