@@ -1,21 +1,48 @@
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = {
-  // bootstrapCustomizations: "./bootstrap-customizations.scss",
-  // mainSass: "./main.scss", // path to your main SASS file (optional)
-  verbose: true, // print out your custom files used
-  debug: false, // print out the full generated scss file
-  styleLoader: "style-loader!css-loader!sass-loader", // see example for the ExtractTextPlugin
+  verbose: true,
+  debug: false,
+  styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader!sass?outputStyle=expanded"),
+
   scripts: {
-    // add every bootstrap script you need
-    'transition': false
+    // "transition": true,
+    "dropdown": true,
+    "modal": true,
+    "popover": true,
+    "tooltip": true,
+    "tab": true,
+    "affix": true,
+    "collapse": true,
+    "button": true,
+    "alert": true
+
   },
   styles: {
-    // add every bootstrap style you need
     "mixins": true,
-
     "normalize": true,
     "print": true,
-
     "scaffolding": true,
     "type": true,
+    "tables": true,
+    "forms": true,
+    "buttons": true,
+    "helper": true,
+    "wells": true,
+    "grid": true,
+    "code": true,
+    "dropdowns": true,
+    "button-groups": true,
+    "input-groups": true,
+    "navs": true,
+    "alerts": true,
+    "progress-bars": true,
+    "close": true,
+    "modals": true,
+    "tooltip": true,
+    "popovers": true,
+    "utilities": true,
+    "badges": true,
+    "labels": true
   }
 };

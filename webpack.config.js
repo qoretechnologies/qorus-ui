@@ -24,7 +24,7 @@ var config = {
   },
   module: {
     loaders: [
-      { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
+      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
       { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded" },
 
       { test: /\.jsx?$/, loaders: ["react-hot", "babel-loader?stage=0"], exclude: /node_modules/ },
@@ -39,7 +39,12 @@ var config = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin("css/base.css"),
+    new ExtractTextPlugin("./css/base.css"),
+    // new webpack.ProvidePlugin({
+    //   $: "jquery",
+    //   jQuery: "jquery",
+    //   "window.jQuery": "jquery"
+    // })
   ]
 };
 

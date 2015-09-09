@@ -26,7 +26,7 @@ class App extends Component {
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system'/>
-              <Route path='workflows' component={Workflows} />
+              <Route path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)' component={Workflows}/>
               <Route path='services'/>
               <Route path='jobs'/>
               <Route path='search'/>

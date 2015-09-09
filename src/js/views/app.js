@@ -49,8 +49,8 @@ class Content extends Component {
 
     return (
       <section className="section container-fluid">
-        <div className="row-fluid">
-          <section className="span12 page">
+        <div className="row">
+          <section className="col-md-12 page">
             <article id="content">
               { content }
             </article>
@@ -76,7 +76,7 @@ class Root extends Component {
     info = info || {};
 
     return (
-      <div>
+      <div className="navigation-pinned">
         <Navigation mainItems={ menu.mainItems } extraItems={[]} />
         <div id="wrap">
           <Header />
