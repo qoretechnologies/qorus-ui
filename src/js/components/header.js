@@ -8,8 +8,6 @@ class Header extends Component {
 
     info = info || {};
 
-    console.log('System info', info, this.props);
-
     return (
       <header id="header" className="navbar navbar-fixed-top navbar-inverse">
         <div className="navbar-inner">

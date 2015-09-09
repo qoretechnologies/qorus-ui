@@ -2,7 +2,7 @@ import settings from '../settings';
 
 const url = settings.REST_API_PREFIX;
 
-import "whatwg-fetch";
+import fetch from "whatwg-fetch";
 import reduxApi, {transformers} from "redux-api";
 import adapterFetch from "redux-api/lib/adapters/fetch";
 

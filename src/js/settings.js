@@ -1,4 +1,5 @@
-var hostname = window.location.hostname;
+var window = window || {};
+var hostname = window.location ? window.location.hostname : 'localhost';
 var host = hostname + ":8001";
 var wshost = hostname + ":8001";
 var protocol = "http:"; // window.location.protocol;
