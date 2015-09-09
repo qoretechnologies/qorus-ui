@@ -1,6 +1,0 @@
-{
-  "registry": "http://hq.qoretechnologies.com:5678",
-  "directory": "src/components",
-  "analytics": false,
-  "timeout": 300000
-}

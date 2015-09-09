@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../store';
 import pureRender from 'pure-render-decorator';
-import qorusApi from '../lib/qorus-api.js';
+import qorusApi from '../qorus';
 import Loader from '../components/loader';
 
 
@@ -20,6 +20,8 @@ class Workflows extends React.Component {
   render() {
     let { workflows } = this.props;
 
+		console.log(workflows);
+
     if (!workflows.sync) {
       return <Loader />;
     } else {
@@ -32,7 +34,7 @@ class Workflows extends React.Component {
             </tr>
           </thead>
           <tbody>
-          { workflows.data.data.map((workflow)=> {
+          { workflows.data.map((workflow)=> {
             const data = workflow;
             return (
               <tr key={ `${data.workflowid}-${data.name}` }>

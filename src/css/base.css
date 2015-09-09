@@ -483,6 +483,8 @@ table .header-fixed {
 
 .navbar {
 	margin-bottom: 0;
+	min-height: 40px;
+	max-height: 40px;
 }
 
 

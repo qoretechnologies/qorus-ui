@@ -6,17 +6,16 @@ module.exports = {
   styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader!sass?outputStyle=expanded"),
 
   scripts: {
-    // // "transition": true,
-    // "dropdown": true,
-    // "modal": true,
-    // "popover": true,
-    // "tooltip": true,
-    // "tab": true,
-    // "affix": true,
-    // "collapse": true,
-    // "button": true,
-    // "alert": true
-
+    // "transition": true,
+    "dropdown": true,
+    "modal": true,
+    "popover": true,
+    "tooltip": true,
+    "tab": true,
+    "affix": true,
+    "collapse": true,
+    "button": true,
+    "alert": true
   },
   styles: {
     "mixins": true,

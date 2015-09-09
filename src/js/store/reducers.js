@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import menu from './menu';
-import qorusApi from '../lib/qorus-api';
+import qorusApi from '../qorus';
 
 const restReducers = qorusApi.reducers;
 

@@ -1,5 +1,4 @@
-//var hostname = window.location.hostname;
-var hostname = "192.168.20.190"; //"192.168.0.104"
+var hostname = window.location.hostname;
 var host = hostname + ":8001";
 var wshost = hostname + ":8001";
 var protocol = "http:"; // window.location.protocol;

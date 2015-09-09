@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Navigation from '../components/navigation';
 import Header from '../components/header';
-import restApi from '../lib/qorus-api';
+import restApi from '../qorus';
 
 const restActions = restApi.actions;
 
@@ -68,10 +68,11 @@ class Root extends Component {
   componentWillMount () {
     const { dispatch } = this.props;
     dispatch(restActions.systemInfo.sync());
+    dispatch(restActions.currentUser.sync());
   }
 
   render () {
-    var { menu, info } = this.props;
+    var { menu, info, currentUser } = this.props;
 
     menu = menu || {};
     info = info.data || {};

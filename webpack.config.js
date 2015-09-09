@@ -24,12 +24,12 @@ var config = {
   },
   module: {
     loaders: [
-      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
+      // { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
       { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded" },
 
       { test: /\.jsx?$/, loaders: ["react-hot", "babel-loader?stage=0"], exclude: /node_modules/ },
       { test: /\.html$/, loader: "file?name=[name].[ext]" },
-      { test: /\.css$/, loader: "style!css" }, // ExtractTextPlugin.extract("style-loader", "css-loader") },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
       { test: /\.png$/, loader: "url-loader?limit=100000" },
       { test: /\.jpg$/, loader: "file-loader" },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&mimetype=application/font-woff" },
@@ -40,11 +40,11 @@ var config = {
   },
   plugins: [
     new ExtractTextPlugin("./css/base.css"),
-    // new webpack.ProvidePlugin({
-    //   $: "jquery",
-    //   jQuery: "jquery",
-    //   "window.jQuery": "jquery"
-    // })
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    })
   ]
 };
 
