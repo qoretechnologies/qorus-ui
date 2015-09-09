@@ -1,16 +1,3 @@
-import authHeader from '../lib/authorization-header';
-import fetch from '../lib/authorized-fetch';
-import settings from '../settings';
-var restful = require('restful.js');
-
-let url = settings.REST_API_PREFIX;
-
-var api = restful(url.substr(7));
-api.header('Authorization', authHeader);
-
-export function getCurrentUser() {
-  return fetch(`${url}users/?action=current`);
-}
 var models = [
   'alerts',
   'class',
@@ -39,10 +26,17 @@ var models = [
   'valueset',
   'workflows'
 ];
-const qorusApi = {};
 
-models.forEach(function (modelName){
-   qorusApi[modelName] = api.all(modelName);
-});
+import settings from '../settings';
 
-export default qorusApi;
+const url = settings.REST_API_PREFIX;
+
+import "whatwg-fetch";
+import reduxApi, {transformers} from "redux-api";
+export default reduxApi({
+  // simple edpoint description
+  workflows: {
+    url: `${url}/workflows/:id`,
+
+  }
+}, fetch); // it's nessasary to point using rest backend
