@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetch } from '../store/workflows/actions';
 import store from '../store';
+import pureRender from 'pure-render-decorator';
 
+
+@pureRender
 class Workflows extends React.Component {
   constructor(...props) {
     super(...props);
@@ -13,7 +16,7 @@ class Workflows extends React.Component {
   render() {
     const { workflows } = this.props;
 
-    return <table style={{ marginLeft: '100px', width: '100%' }}>
+    return <table className="table table-striped table-condensed table-hover table-fixed">
       <thead>
         <tr>
           <th>ID</th>
