@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Navigation from '../components/navigation';
+import Header from '../components/header';
+import restApi from '../lib/qorus-api';
 
-class Header extends Component {
-  render () {
-    return (
-      <header id="header" className="navbar navbar-fixed-top navbar-inverse" />
-    );
-  }
-}
+const restActions = restApi.actions;
 
 class Footer extends Component {
   render () {
@@ -69,17 +65,22 @@ class Root extends Component {
 
   }
 
+  componentWillMount () {
+    const { dispatch } = this.props;
+    dispatch(restActions.systemInfo.sync());
+  }
+
   render () {
     var { menu, info } = this.props;
 
     menu = menu || {};
-    info = info || {};
+    info = info.data || {};
 
     return (
       <div className="navigation-pinned">
         <Navigation mainItems={ menu.mainItems } extraItems={[]} />
         <div id="wrap">
-          <Header />
+          <Header info={ info } />
           <Content content={ this.props.children } />
         </div>
         <Messenger />
@@ -94,7 +95,7 @@ function systemInfo(state) {
   console.log(state);
 
   return {
-    info: state.info,
+    info: state.systemInfo,
     menu: state.menu
   }
 }

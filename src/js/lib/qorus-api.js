@@ -33,10 +33,17 @@ const url = settings.REST_API_PREFIX;
 
 import "whatwg-fetch";
 import reduxApi, {transformers} from "redux-api";
+import adapterFetch from "redux-api/lib/adapters/fetch";
+
 export default reduxApi({
   // simple edpoint description
   workflows: {
+    url: `${url}/workflows`,
+  },
+  workflow: {
     url: `${url}/workflows/:id`,
-
+  },
+  systemInfo: {
+    url: `${url}/system`
   }
-}, fetch); // it's nessasary to point using rest backend
+ }, adapterFetch(fetch)); // it's nessasary to point using rest backend

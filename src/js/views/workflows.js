@@ -1,48 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetch } from '../store/workflows/actions';
 import store from '../store';
 import pureRender from 'pure-render-decorator';
+import qorusApi from '../lib/qorus-api.js';
+import Loader from '../components/loader';
 
 
+@connect(state => ({
+  workflows: state.workflows
+}))
 @pureRender
 class Workflows extends React.Component {
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
-    dispatch(fetch());
+    dispatch(qorusApi.actions.workflows.sync());
   }
 
   render() {
-    const { workflows } = this.props;
+    let { workflows } = this.props;
 
-    return <table className="table table-striped table-condensed table-hover table-fixed">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-      { workflows.map((workflow)=> {
-        const data = workflow.data();
-        return (
-          <tr key={ `${data.workflowid}-${data.name}` }>
-            <td>{data.workflowid}</td>
-            <td>{data.name}</td>
-          </tr>
-        );
-        })}
+    if (!workflows.sync) {
+      return <Loader />;
+    } else {
+      return (
+        <table className="table table-striped table-condensed table-hover table-fixed">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+          { workflows.data.data.map((workflow)=> {
+            const data = workflow;
+            return (
+              <tr key={ `${data.workflowid}-${data.name}` }>
+                <td>{data.workflowid}</td>
+                <td>{data.name}</td>
+              </tr>
+            );
+            })}
 
-      </tbody>
-    </table>;
+          </tbody>
+        </table>
+      );
+    }
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    workflows: state.workflows
-  };
-}
-
-export default connect(mapStateToProps)(Workflows);
+export default Workflows;

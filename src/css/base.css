@@ -481,6 +481,10 @@ table .header-fixed {
     text-transform: capitalize;
 }
 
+.navbar {
+	margin-bottom: 0;
+}
+
 
 /* PageSlider */
 .pageslide {
