@@ -17,10 +17,10 @@ class NavItem extends Component {
 
   render() {
     const { url, className, icon, name } = this.props;
-    const cls = clNs('icon-large', icon, className);
+    const cls = clNs('icon-large', icon);
 
     return (
-      <li>
+      <li className={ className }>
         <Link to={ url }><i className={ cls }></i><span>{ name }</span></Link>
       </li>
     );

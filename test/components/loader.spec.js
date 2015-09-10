@@ -6,7 +6,7 @@ const React = require('react/addons');
 const chai = require('chai');
 const expect = chai.expect;
 
-describe('Testing Loader', function () {
+describe('Testing Loader Component', function () {
   jsdom({ skipWindowCheck: true });
 
   it('should contain text: Loading!', function () {

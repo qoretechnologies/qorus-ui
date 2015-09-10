@@ -13,14 +13,17 @@ class Footer extends Component {
   render() {
     const { info } = this.props;
 
+    const schema = info['omq-schema'];
+    const version = `${info['omq-version']}.${info['omq-build']}`;
+
     return (
       <footer id='footer' className='footer'>
         <div className='container-fluid'>
-          <p className='credit muted pull-right'>Qorus Integration Engine
-            <small>(Schema: <span id='schema'>Unknown</span>)</small>
-            <small>(Version: <span id='build'>{ info.version }</span>)</small>
+          <p className='credit muted pull-right'>Qorus Integration Engine&nbsp;
+            <small>(Schema: { schema })</small>&nbsp;
+            <small>(Version: { version })</small>&nbsp;
             &copy; <a href='http://qoretechnologies.com'>Qore Technologies</a> |
-            <a href={ bugUrl }>Report Bug</a></p>
+            &nbsp;<a href={ bugUrl }>Report Bug</a></p>
         </div>
       </footer>
     );

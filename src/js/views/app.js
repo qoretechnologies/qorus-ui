@@ -11,7 +11,8 @@ const restActions = restApi.actions;
 
 class Content extends Component {
   static propTypes = {
-    content: PropTypes.node
+    content: PropTypes.node,
+    instanceKey: PropTypes.string
   }
 
   render() {
@@ -42,33 +43,44 @@ class Content extends Component {
 class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
-    menu: PropTypes.array,
+    menu: PropTypes.object,
     info: PropTypes.object,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    route: PropTypes.object
   }
 
   constructor(...props) {
     super(...props);
-
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
     dispatch(restActions.systemInfo.sync());
     dispatch(restActions.currentUser.sync());
+    this.setTitle();
+  }
+
+  // componentDidUpdate() {
+  //   this.setTitle();
+  // }
+
+  setTitle() {
+    const { info } = this.props;
+
+    if (info.synced) {
+      const inst = `${info.data['instance-key']} | ${info.data['omq-version']}`;
+      document.title = inst;
+    }
   }
 
   render() {
-    let { menu, info } = this.props;
-
-    menu = menu || {};
-    info = info.data || {};
+    const { menu, info } = this.props;
 
     return (
       <div className='navigation-pinned'>
         <Navigation mainItems={ menu.mainItems } extraItems={[]} />
         <div id='wrap'>
-          <Header info={ info } />
+          <Header info={ info.data } />
           <Content content={ this.props.children } />
         </div>
         <Messenger />

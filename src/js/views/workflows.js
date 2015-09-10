@@ -7,13 +7,16 @@ import clNs from 'classnames';
 
 
 @connect(state => ({
-  workflows: state.workflows
+  workflows: state.workflows,
+  info: state.systemInfo.data
 }))
 @pureRender
 class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
-    workflows: PropTypes.object
+    instanceKey: PropTypes.string,
+    workflows: PropTypes.object,
+    info: PropTypes.object
   }
 
   constructor(...props) {
@@ -22,13 +25,28 @@ class Workflows extends Component {
     dispatch(qorusApi.actions.workflows.sync());
   }
 
+  componentDidMount() {
+    this.setTitle();
+  }
+
+  componentDidUpdate() {
+    this.setTitle();
+  }
+
+  setTitle() {
+    const { info } = this.props;
+
+    const inst = info['instance-key'] ? info['instance-key'] : 'Qorus';
+
+    document.title = `Workflows | ${inst}`;
+  }
+
   render() {
     const { workflows } = this.props;
     const cls = clNs([
       'table', 'table-striped', 'table-condensed',
       'table-hover', 'table-fixed'
     ]);
-
 
     if (!workflows.sync) {
       return <Loader />;
