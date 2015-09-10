@@ -33,6 +33,7 @@
     }],
     "strict": [2, "global"],
     "react/react-in-jsx-scope": 2,
+    "func-names": 0,
 
     //Temporarirly disabled due to a possible bug in babel-eslint (todomvc example)
     "block-scoped-var": 0,

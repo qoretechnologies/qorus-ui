@@ -1,32 +1,33 @@
 import React, { Component, PropTypes} from 'react';
 import { Link } from 'react-router';
 import clNs from 'classnames';
-
+import pureRender from 'pure-render-decorator';
 
 class NavItem extends Component {
   static propTypes = {
-    url:       PropTypes.string.isRequired,
-    name:      PropTypes.string.isRequired,
-    className: PropTypes.string
+    url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    icon: PropTypes.string
   }
 
   static defaultProps = {
     className: ''
   }
 
-  render () {
-    let { url, className, icon, name } = this.props;
-    let cls = clNs("icon-large", icon, className);
+  render() {
+    const { url, className, icon, name } = this.props;
+    const cls = clNs('icon-large', icon, className);
 
     return (
       <li>
         <Link to={ url }><i className={ cls }></i><span>{ name }</span></Link>
       </li>
-    )
+    );
   }
 }
 
-
+@pureRender
 class Navigation extends Component {
   static propTypes = {
     mainItems: PropTypes.array,
@@ -38,23 +39,29 @@ class Navigation extends Component {
     extraItems: []
   }
 
-  render () {
-    let { mainItems, extraItems } = this.props;
+  render() {
+    const { mainItems, extraItems } = this.props;
 
-    let navItems = mainItems.map(item => {
+    const navItems = mainItems.map(item => {
+      return <NavItem {...item} key={ item.name } />;
+    });
+
+    const navExtraItems = extraItems.map(item => {
       return <NavItem {...item} key={ item.name } />;
     });
 
     return (
-      <aside className="affix navigation">
-        <nav id="nav-main">
-          <ul className="nav nav-list main">
+      <aside className='affix navigation'>
+        <nav id='nav-main'>
+          <ul className='nav nav-list main'>
             { navItems }
           </ul>
-          <ul className="extra" />
+          <ul className='extra'>
+            { navExtraItems }
+          </ul>
         </nav>
       </aside>
-    )
+    );
   }
 }
 

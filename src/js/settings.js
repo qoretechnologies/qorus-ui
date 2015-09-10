@@ -1,9 +1,12 @@
-var window = window || {};
-var hostname = window.location ? window.location.hostname : 'localhost';
-var host = hostname + ":8001";
-var wshost = hostname + ":8001";
-var protocol = "http:"; // window.location.protocol;
-var ws_protocol = (protocol == 'https:') ? "wss://" : "ws://";
+/* eslint no-console: 0 */
+
+const window = window || {};
+// const hostname = window.location ? window.location.hostname : 'localhost';
+const hostname = '192.168.20.190';
+const host = `${hostname}:8001`;
+const wshost = `${hostname}:8001`;
+const protocol = 'http:'; // window.location.protocol;
+const wsProtocol = (protocol === 'https:') ? 'wss://' : 'ws://';
 
 const settings = {
   DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss.SSS ddd ZZ',
@@ -15,8 +18,8 @@ const settings = {
   PROTOCOL: protocol,
   REST_API_PREFIX: protocol + '//' + host + '/api',
   WS_PREFIX: '',
-  WS_HOST: ws_protocol + wshost,
-  EVENTS_WS_URL: ws_protocol + wshost + '/apievents',
+  WS_HOST: wsProtocol + wshost,
+  EVENTS_WS_URL: wsProtocol + wshost + '/apievents',
   HOST: host,
   DEBUG: false
 };
@@ -25,9 +28,9 @@ if (settings.DEBUG && window.console && console.log) {
   window.debug = window.console;
 } else {
   window.debug = {
-    'log': function() {
+    'log': function log() {
     },
-    'error': function() {
+    'error': function error() {
       console.log.call(console, arguments);
     }
   };

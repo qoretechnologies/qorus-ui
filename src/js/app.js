@@ -5,10 +5,10 @@ import Workflows from './views/workflows';
 import store from './store';
 import Root from './views/app';
 
-require("bootstrap-sass!../bootstrap-sass.config.js");
-require("style!../css/base.css");
-require("style!../css/line.numbers.css");
-require("style!../css/font-awesome/css/font-awesome.min.css");
+require('bootstrap-sass!../bootstrap-sass.config.js');
+require('style!../css/base.css');
+require('style!../css/line.numbers.css');
+require('style!../css/font-awesome/css/font-awesome.min.css');
 
 
 class App extends Component {
@@ -26,7 +26,9 @@ class App extends Component {
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system'/>
-              <Route path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)' component={Workflows}/>
+              <Route
+                path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
+                component={Workflows} />
               <Route path='services'/>
               <Route path='jobs'/>
               <Route path='search'/>

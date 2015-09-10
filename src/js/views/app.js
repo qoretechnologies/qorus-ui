@@ -2,85 +2,72 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Navigation from '../components/navigation';
 import Header from '../components/header';
+import Footer from '../components/footer';
+import Notifications from '../components/notifications';
+import Messenger from '../components/messenger';
 import restApi from '../qorus';
 
 const restActions = restApi.actions;
 
-class Footer extends Component {
-  render () {
-    const { info } = this.props;
-
-    return (
-      <footer id="footer" className="footer">
-        <div className="container-fluid">
-          <p className="credit muted pull-right">Qorus Integration Engine <small>(Schema: <span id="schema">Unknown</span>)</small>
-            <small>(Version: <span id="build">{ info.version }</span>)</small> &copy; <a href="http://qoretechnologies.com">Qore Technologies</a> |
-            <a href="http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new">Report Bug</a></p>
-        </div>
-      </footer>
-    );
-  }
-}
-
-class Notifications extends Component {
-  render () {
-    return (
-      <div id="notifications-list" />
-    );
-  }
-}
-
-
-class Messenger extends Component {
-  render () {
-    return (
-      <ul id="msg" className="messenger messenger-fixed messenger-on-bottom messenger-on-right messenger-theme-block" />
-    );
-  }
-}
-
 class Content extends Component {
-  render () {
+  static propTypes = {
+    content: PropTypes.node
+  }
+
+  render() {
     const { content } = this.props;
 
     return (
-      <section className="section container-fluid">
-        <div className="row">
-          <section className="col-md-12 page">
-            <article id="content">
+      <section className='section container-fluid'>
+        <div className='row'>
+          <section className='col-md-12 page'>
+            <article id='content'>
               { content }
             </article>
-            <div className="push"></div>
+            <div className='push'></div>
           </section>
         </div>
-        <div className="push"></div>
+        <div className='push'></div>
       </section>
     );
   }
 }
 
+@connect((state) => {
+  return {
+    info: state.systemInfo,
+    menu: state.menu
+  };
+})
 class Root extends Component {
+  static propTypes = {
+    children: PropTypes.node,
+    menu: PropTypes.array,
+    info: PropTypes.object,
+    dispatch: PropTypes.func
+  }
+
   constructor(...props) {
     super(...props);
 
   }
 
-  componentWillMount () {
+  componentWillMount() {
     const { dispatch } = this.props;
     dispatch(restActions.systemInfo.sync());
     dispatch(restActions.currentUser.sync());
   }
 
-  render () {
-    var { menu, info, currentUser } = this.props;
+  render() {
+    let { menu, info } = this.props;
 
     menu = menu || {};
     info = info.data || {};
 
     return (
-      <div className="navigation-pinned">
+      <div className='navigation-pinned'>
         <Navigation mainItems={ menu.mainItems } extraItems={[]} />
-        <div id="wrap">
+        <div id='wrap'>
           <Header info={ info } />
           <Content content={ this.props.children } />
         </div>
@@ -88,17 +75,8 @@ class Root extends Component {
         <Footer info={ info } />
         <Notifications />
       </div>
-    )
+    );
   }
 }
 
-function systemInfo(state) {
-  console.log(state);
-
-  return {
-    info: state.systemInfo,
-    menu: state.menu
-  }
-}
-
-export default connect(systemInfo)(Root);
+export default Root;
