@@ -15,7 +15,7 @@ describe('Testing Header Component', function () {
 
 
     const myDiv = TestUtils.renderIntoDocument(
-      <Header info={{ 'instance-key': 'test-1' }} />
+      <Header info={{ 'instance-key': 'test-1' }} currentUser={{ username: 'panda' }} />
     );
 
     const divText = TestUtils.findRenderedDOMComponentWithTag(myDiv, 'h2');
