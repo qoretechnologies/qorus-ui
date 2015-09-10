@@ -5,47 +5,47 @@ const initialState = {
     {
       name: 'System',
       url: '/system',
-      icon: 'icon-cog'
+      icon: 'fa-cog'
     },
     {
       name: 'Workflows',
       url: '/workflows',
-      icon: 'icon-sitemap'
+      icon: 'fa-sitemap'
     },
     {
       name: 'Services',
       url: '/services',
-      icon: 'icon-th-list'
+      icon: 'fa-th-list'
     },
     {
       name: 'Jobs',
       url: '/jobs',
-      icon: 'icon-calendar'
+      icon: 'fa-calendar'
     },
     {
       name: 'Search',
       url: '/search',
-      icon: 'icon-search'
+      icon: 'fa-search'
     },
     {
       name: 'Groups',
       url: '/groups',
-      icon: 'icon-tags'
+      icon: 'fa-tags'
     },
     {
       name: 'Ocmd',
       url: '/ocmd',
-      icon: 'icon-terminal'
+      icon: 'fa-terminal'
     },
     {
       name: 'Library',
       url: '/library',
-      icon: 'icon-book'
+      icon: 'fa-book'
     },
     {
       name: 'Extensions',
       url: '/extensions',
-      icon: 'icon-beer'
+      icon: 'fa-beer'
     }
   ],
   extraItems: []

@@ -7,17 +7,15 @@ if (!env) {
   env = 'development';
 }
 
-console.log('weback started in ' + env + ' environment');
-
 var config = {
-  context: path.join(__dirname, "src"),
+  context: path.join(__dirname, 'src'),
   entry: {
-    javascript: "./index.js",
-    html: "./index.html"
+    javascript: './index.js',
+    html: './index.html'
   },
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: "qorus.bundle.js"
+    path: path.join(__dirname, 'dist'),
+    filename: 'qorus.bundle.js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
@@ -25,25 +23,48 @@ var config = {
   module: {
     loaders: [
       // { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
-      { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded" },
+      { test: /\.scss$/, loader: 'style!css!sass?outputStyle=expanded' },
+      {
+        test: /\.jsx?$/,
+        loaders: ['react-hot', 'babel-loader?stage=0'], exclude: /node_modules/
+      },
+      { test: /\.html$/, loader: 'file?name=[name].[ext]' },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      },
+      { test: /\.png$/, loader: 'url-loader?limit=100000' },
+      { test: /\.jpg$/, loader: 'file-loader' },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&minetype=application/font-woff'
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/octet-stream'
+      },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=image/svg+xml'
+      }
 
-      { test: /\.jsx?$/, loaders: ["react-hot", "babel-loader?stage=0"], exclude: /node_modules/ },
-      { test: /\.html$/, loader: "file?name=[name].[ext]" },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.jpg$/, loader: "file-loader" },
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&mimetype=application/font-woff" },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=application/octet-stream" },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=image/svg+xml" }
     ]
   },
   plugins: [
-    new ExtractTextPlugin("./css/base.css"),
+    new ExtractTextPlugin('./css/base.css'),
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
     })
   ]
 };

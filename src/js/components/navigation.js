@@ -17,7 +17,7 @@ class NavItem extends Component {
 
   render() {
     const { url, className, icon, name } = this.props;
-    const cls = clNs('icon-large', icon);
+    const cls = clNs('fa fa-2x fa-large', icon);
 
     return (
       <li className={ className }>

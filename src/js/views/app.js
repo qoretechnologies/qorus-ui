@@ -37,7 +37,8 @@ class Content extends Component {
 @connect((state) => {
   return {
     info: state.systemInfo,
-    menu: state.menu
+    menu: state.menu,
+    currentUser: state.currentUser
   };
 })
 class Root extends Component {
@@ -46,7 +47,8 @@ class Root extends Component {
     menu: PropTypes.object,
     info: PropTypes.object,
     dispatch: PropTypes.func,
-    route: PropTypes.object
+    route: PropTypes.object,
+    currentUser: PropTypes.object
   }
 
   constructor(...props) {
@@ -74,13 +76,13 @@ class Root extends Component {
   }
 
   render() {
-    const { menu, info } = this.props;
+    const { menu, info, currentUser } = this.props;
 
     return (
       <div className='navigation-pinned'>
         <Navigation mainItems={ menu.mainItems } extraItems={[]} />
         <div id='wrap'>
-          <Header info={ info.data } />
+          <Header info={ info.data } currentUser={ currentUser.data }/>
           <Content content={ this.props.children } />
         </div>
         <Messenger />

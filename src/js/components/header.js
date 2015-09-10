@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import pureRender from 'pure-render-decorator';
+import UserInfo from './user-info';
 
 @pureRender
 class Header extends Component {
   static propTypes = {
-    info: PropTypes.object.isRequired
+    info: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired
   }
 
   render() {
-    let { info } = this.props;
-
-    info = info || {};
+    const { info, currentUser } = this.props;
 
     return (
       <header id='header' className='navbar navbar-fixed-top navbar-inverse'>
@@ -25,7 +25,7 @@ class Header extends Component {
                 </div>
                 <div className='pull-right'>
                   <ul id='taskbar' className='taskbar'></ul>
-                  <div id='user-info'></div>
+                  <UserInfo currentUser={ currentUser }/>
                   <div id='notifications-icon'></div>
                 </div>
             </div>

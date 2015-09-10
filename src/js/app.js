@@ -8,7 +8,7 @@ import Root from './views/app';
 require('bootstrap-sass!../bootstrap-sass.config.js');
 require('style!../css/base.css');
 require('style!../css/line.numbers.css');
-require('style!../css/font-awesome/css/font-awesome.min.css');
+require('font-awesome-webpack!../font-awesome.config.js');
 
 
 class App extends Component {
