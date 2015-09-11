@@ -3,7 +3,7 @@
 const window = window || {};
 const hostname = window.location ? window.location.hostname : 'localhost';
 // const hostname = '192.168.20.190';
-const host = `${hostname}:8001`;
+const host = `${hostname}:3000`;
 const wshost = `${hostname}:8001`;
 const protocol = 'http:'; // window.location.protocol;
 const wsProtocol = (protocol === 'https:') ? 'wss://' : 'ws://';

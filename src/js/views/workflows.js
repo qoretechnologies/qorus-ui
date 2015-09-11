@@ -4,7 +4,8 @@ import pureRender from 'pure-render-decorator';
 import qorusApi from '../qorus';
 import Loader from '../components/loader';
 import clNs from 'classnames';
-
+import Toolbar from '../components/toolbar';
+import Table, { Col, Cell } from '../components/table';
 
 @connect(state => ({
   workflows: state.workflows,
@@ -41,38 +42,34 @@ class Workflows extends Component {
     document.title = `Workflows | ${inst}`;
   }
 
-  render() {
+  renderTable() {
     const { workflows } = this.props;
     const cls = clNs([
       'table', 'table-striped', 'table-condensed',
       'table-hover', 'table-fixed'
     ]);
 
+    return (
+      <Table collection={ workflows.data } className={ cls }>
+        <Col name='ID' dataKey='workflowid' />
+        <Col name='Name' dataKey='name' />
+        <Col name='Version' dataKey='version' />
+      </Table>
+    );
+  }
+
+  render() {
+    const { workflows } = this.props;
+
     if (!workflows.sync) {
       return <Loader />;
     }
 
     return (
-      <table className={ cls }>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-        { workflows.data.map((workflow)=> {
-          const data = workflow;
-          return (
-            <tr key={ `${data.workflowid}-${data.name}` }>
-              <td>{data.workflowid}</td>
-              <td>{data.name}</td>
-            </tr>
-          );
-        })}
-
-        </tbody>
-      </table>
+      <div>
+        <Toolbar />
+        { this.renderTable() }
+      </div>
     );
   }
 }

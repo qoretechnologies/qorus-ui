@@ -64,7 +64,9 @@ var config = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'window.jQuery': 'jquery'
+      'window.jQuery': 'jquery',
+      React: 'react',
+      'window.React': 'react'
     })
   ]
 };
@@ -82,7 +84,10 @@ if (env === 'development') {
     hot: true,
     inline: true,
     port: 3000,
-    historyApiFallback: true
+    historyApiFallback: true,
+    proxy: {
+      "/api/*": "http://localhost:8001"
+    }
   };
 }
 

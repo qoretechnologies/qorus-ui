@@ -6,7 +6,6 @@ import Footer from '../components/footer';
 import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
 import restApi from '../qorus';
-
 const restActions = restApi.actions;
 
 class Content extends Component {

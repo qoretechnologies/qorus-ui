@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import Workflows from './views/workflows';
 import store from './store';
 import Root from './views/app';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+
 
 require('bootstrap-sass!../bootstrap-sass.config.js');
 require('style!../css/base.css');
@@ -20,27 +22,32 @@ class App extends Component {
     const { history } = this.props;
 
     return (
-      <Provider store={store}>
-        {() =>
-          <Router history={history}>
-            <Route path='/' component={Root}>
-              <Route path='dashboard' />
-              <Route path='system'/>
-              <Route
-                path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
-                component={Workflows} />
-              <Route path='services'/>
-              <Route path='jobs'/>
-              <Route path='search'/>
-              <Route path='groups'/>
-              <Route path='ocmd'/>
-              <Route path='library'/>
-              <Route path='extensions'/>
-              <Route path='performance'/>
-            </Route>
-          </Router>
-        }
-      </Provider>
+      <div>
+        <Provider store={store}>
+          {() =>
+            <Router history={history}>
+              <Route path='/' component={Root}>
+                <Route path='dashboard' />
+                <Route path='system'/>
+                <Route
+                  path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
+                  component={Workflows} />
+                <Route path='services'/>
+                <Route path='jobs'/>
+                <Route path='search'/>
+                <Route path='groups'/>
+                <Route path='ocmd'/>
+                <Route path='library'/>
+                <Route path='extensions'/>
+                <Route path='performance'/>
+              </Route>
+            </Router>
+          }
+        </Provider>
+        <DebugPanel top right bottom>
+          <DevTools store={store} monitor={LogMonitor} />
+        </DebugPanel>
+      </div>
     );
   }
 }
