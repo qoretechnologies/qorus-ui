@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
 import pureRender from 'pure-render-decorator';
 
-const Perf = React.addons.Perf;
-
 @pureRender
 class Table extends Component {
   static propTypes = {
@@ -36,8 +34,13 @@ class Table extends Component {
             <Row key={`row-${item.id}`}>
               { React.Children.map(children, (child) => {
                 const { dataKey } = child.props;
+                const onClick = child.props.onCellClick ?
+                  child.props.onCellClick : '';
+
                 return (
-                  <Td>{ dataKey ? item[dataKey] : child.props.children }</Td>
+                  <Td onClick={ onClick }>
+                    { dataKey ? item[dataKey] : child.props.children }
+                  </Td>
                 );
               })}
             </Row>
@@ -90,15 +93,18 @@ export class Row extends Component {
 export class Td extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    onClick: PropTypes.func
   }
 
   render() {
-    const { children, className } = this.props;
+    const { children, className, onClick } = this.props;
     const content = children;
 
     return (
-      <td className={ className }>
+      <td
+        className={ className }
+        onClick={ onClick ? () => onClick.bind(this) : null }>
         { content }
       </td>
     );
