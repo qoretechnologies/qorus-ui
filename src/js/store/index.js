@@ -10,9 +10,8 @@ const finalCreateStore = compose(
   require('redux-devtools').devTools(),
   require('redux-devtools').persistState(
     window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-  ),
-  createStore
-);
+  )
+)(createStore);
 
 const store = finalCreateStore(reducers);
 

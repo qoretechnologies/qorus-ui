@@ -5,13 +5,13 @@ import qorusApi from '../qorus';
 import Loader from '../components/loader';
 import clNs from 'classnames';
 import Toolbar from '../components/toolbar';
-import Table, { Col, Cell } from '../components/table';
+import Table, { Col } from '../components/table';
 
+@pureRender
 @connect(state => ({
   workflows: state.workflows,
   info: state.systemInfo.data
 }))
-@pureRender
 class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -51,9 +51,28 @@ class Workflows extends Component {
 
     return (
       <Table collection={ workflows.data } className={ cls }>
-        <Col name='ID' dataKey='workflowid' />
+        <Col name=''>
+          <i className="fa fa-square-o" />
+        </Col>
+        <Col name='Actions'>
+          <a className="label"><i className="fa fa-power-off" /></a>
+          <a className="label"><i className="fa fa-refresh" /></a>
+        </Col>
+        <Col name='ID' dataKey='id' />
         <Col name='Name' dataKey='name' />
-        <Col name='Version' dataKey='version' />
+        <Col name='C' dataKey='COMPLETE' />
+        <Col name='Y' dataKey='READY' />
+        <Col name='S' dataKey='SCHEDULED' />
+        <Col name='N' dataKey='INCOMPLETE' />
+        <Col name='V' dataKey='EVENT-WAITING' />
+        <Col name='A' dataKey='ASYNC-WAITING' />
+        <Col name='W' dataKey='WAITING' />
+        <Col name='R' dataKey='RETRY' />
+        <Col name='E' dataKey='ERROR' />
+        <Col name='I' dataKey='IN-PROGRESS' />
+        <Col name='X' dataKey='CANCELED' />
+        <Col name='B' dataKey='BLOCKED' />
+        <Col name='Total' dataKey='TOTAL' />
       </Table>
     );
   }
