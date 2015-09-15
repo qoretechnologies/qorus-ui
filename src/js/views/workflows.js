@@ -6,6 +6,35 @@ import Loader from '../components/loader';
 import clNs from 'classnames';
 import Toolbar from '../components/toolbar';
 import Table, { Col } from '../components/table';
+import Badge from '../components/badge';
+
+class Proxy extends Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    transMap: PropTypes.object,
+    model: PropTypes.object
+  }
+
+  render() {
+    let props = {};
+    // const { children, transMap, model } = this.props;
+    const { children } = this.props;
+
+    // if (transMap) {
+    //   Object.keys(transMap).forEach(key => {
+    //     const k = transMap[key];
+    //     props[k] = model[key];
+    //   });
+    // }
+    //
+    console.log('panda', this.props);
+
+
+    return (
+      <children />
+    );
+  }
+}
 
 @pureRender
 @connect(state => ({
@@ -55,12 +84,21 @@ class Workflows extends Component {
           <i className='fa fa-square-o' />
         </Col>
         <Col name='Actions'>
-          <a className='label'><i className='fa fa-power-off' /></a>
-          <a className='label'><i className='fa fa-refresh' /></a>
+          <a className='label label-warning'>
+            <i className='fa fa-power-off' />
+            </a>
+          <a className='label label-success'><i className='fa fa-refresh' /></a>
         </Col>
+        <Col name='Autostart' />
+        <Col name='Execs' dataKey='exec_count' />
         <Col name='ID' dataKey='id' />
-        <Col name='Name' dataKey='name' />
-        <Col name='C' dataKey='COMPLETE' />
+        <Col name='Name' dataKey='name' className='name' cellClassName='name' />
+        <Col name='Version' dataKey='version' />
+        <Col name='C' dataKey='COMPLETE'>
+          <Proxy>
+            <span>Test</span>
+          </Proxy>
+        </Col>
         <Col name='Y' dataKey='READY' />
         <Col name='S' dataKey='SCHEDULED' />
         <Col name='N' dataKey='INCOMPLETE' />

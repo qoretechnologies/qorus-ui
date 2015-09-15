@@ -685,7 +685,8 @@ table .header-fixed {
     padding: 4px 5px;
 }
 
-.table-condensed .table-row td {
+.table-condensed > tbody > tr > th, .table-condensed > tbody > tr > td, .table-condensed > thead > tr > td,
+.table-condensed > thead > tr > th {
   padding: 0 5px;
 }
 

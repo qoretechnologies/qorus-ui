@@ -47,7 +47,9 @@ const ORDER_STATES = [
   { name: 'CRASH', short: 'C'}
 ];
 
-let DEFAULTS = {};
+let DEFAULTS = {
+  TOTAL: 0
+};
 
 ORDER_STATES.forEach((val) => { DEFAULTS[val.name] = 0; });
 
