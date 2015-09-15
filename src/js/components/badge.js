@@ -6,16 +6,25 @@ import pureRender from 'pure-render-decorator';
 class Badge extends Component {
   static propTypes = {
     url: PropTypes.string,
-    val: PropTypes.number
+    val: PropTypes.number,
+    label: PropTypes.string
+  }
+
+  static defaultProps = {
+    label: ''
   }
 
   render() {
     let content;
-    let cls = { badge: (this.props.val > 0) };
-    const label = 'badge-' + this.props.label;
-    const { url, val } = this.props;
+    let cls;
+    const { url, val, label } = this.props;
 
-    cls[label] = (val > 0);
+    cls = { badge: (val > 0) };
+
+    if (label && val > 0) {
+      const lbl = `badge-${label}`;
+      cls[lbl] = true;
+    }
 
     if (url) {
       content = (

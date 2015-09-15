@@ -8,34 +8,6 @@ import Toolbar from '../components/toolbar';
 import Table, { Col } from '../components/table';
 import Badge from '../components/badge';
 
-class Proxy extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    transMap: PropTypes.object,
-    model: PropTypes.object
-  }
-
-  render() {
-    let props = {};
-    // const { children, transMap, model } = this.props;
-    const { children } = this.props;
-
-    // if (transMap) {
-    //   Object.keys(transMap).forEach(key => {
-    //     const k = transMap[key];
-    //     props[k] = model[key];
-    //   });
-    // }
-    //
-    console.log('panda', this.props);
-
-
-    return (
-      <children />
-    );
-  }
-}
-
 @pureRender
 @connect(state => ({
   workflows: state.workflows,
@@ -80,7 +52,7 @@ class Workflows extends Component {
 
     return (
       <Table collection={ workflows.data } className={ cls }>
-        <Col name='' onCellClick={ () => console.log(this.props) }>
+        <Col name=''>
           <i className='fa fa-square-o' />
         </Col>
         <Col name='Actions'>
@@ -94,12 +66,12 @@ class Workflows extends Component {
         <Col name='ID' dataKey='id' />
         <Col name='Name' dataKey='name' className='name' cellClassName='name' />
         <Col name='Version' dataKey='version' />
-        <Col name='C' dataKey='COMPLETE'>
-          <Proxy>
-            <span>Test</span>
-          </Proxy>
+        <Col name='C' transMap={{ COMPLETE: 'val' }}>
+          <Badge label='complete' />
         </Col>
-        <Col name='Y' dataKey='READY' />
+        <Col name='Y' transMap={{ READY: 'val' }}>
+          <Badge label='ready' />
+        </Col>
         <Col name='S' dataKey='SCHEDULED' />
         <Col name='N' dataKey='INCOMPLETE' />
         <Col name='V' dataKey='EVENT-WAITING' />

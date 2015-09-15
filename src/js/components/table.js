@@ -39,11 +39,21 @@ class Table extends Component {
             <Row key={`row-${item.id}`} model={ item }>
               { React.Children.map(children, (child) => {
                 const { dataKey, cellClassName } = child.props;
-                const childs = child.props.children;
+                let childs = child.props.children;
                 const onClick = child.props.cellOnClick ?
                   child.props.onCellClick : '';
 
                 const cls = cellClassName || '';
+
+                if (child.props.transMap && React.Children.count(childs) === 1) {
+                  let props = {};
+                  Object.keys(child.props.transMap).forEach(key => {
+                    if (key in item) {
+                      props[child.props.transMap[key]] = item[key];
+                    }
+                  });
+                  childs = <childs.type {...childs.props} {...props} />;
+                }
 
                 return (
                   <Td onClick={ onClick }
