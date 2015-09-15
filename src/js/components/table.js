@@ -2,10 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
 import pureRender from 'pure-render-decorator';
 
+
+  // React.Children.map(childy, (c) => {
+  //   <c {...c.props} model={ item } />;
+  // })
+
 @pureRender
 class Table extends Component {
   static propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     collection: PropTypes.arrayOf(PropTypes.object).isRequired,
     className: PropTypes.string
   }
@@ -31,15 +36,20 @@ class Table extends Component {
       <tbody>
         { collection.map((item) => {
           return (
-            <Row key={`row-${item.id}`}>
+            <Row key={`row-${item.id}`} model={ item }>
               { React.Children.map(children, (child) => {
-                const { dataKey } = child.props;
-                const onClick = child.props.onCellClick ?
+                const { dataKey, cellClassName } = child.props;
+                const childs = child.props.children;
+                const onClick = child.props.cellOnClick ?
                   child.props.onCellClick : '';
 
+                const cls = cellClassName || '';
+
                 return (
-                  <Td onClick={ onClick }>
-                    { dataKey ? item[dataKey] : child.props.children }
+                  <Td onClick={ onClick }
+                      className={ cls }
+                      model={ item }>
+                    { dataKey ? item[dataKey] : childs }
                   </Td>
                 );
               })}
@@ -94,7 +104,7 @@ export class Td extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.any
   }
 
   render() {
@@ -139,6 +149,15 @@ export class Cell extends Component {
 
 // @pureRender
 export class Col extends Component {
+  static propTypes = {
+    cellClassName: PropTypes.string,
+    cellOnClick: PropTypes.func
+  }
+
+  static defaultProps = {
+    cellClassName: null
+  }
+
   render() {
     return <span />;
   }
