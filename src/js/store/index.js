@@ -13,6 +13,17 @@ const finalCreateStore = compose(
   )
 )(createStore);
 
-const store = finalCreateStore(reducers);
+function configureStore() {
+  const store = finalCreateStore(reducers);
 
-export default store;
+  if (module.hot) {
+    module.hot.accept('./reducers', () => {
+      const nextRootReducer = require('./reducers');
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+
+  return store;
+}
+
+export default configureStore();

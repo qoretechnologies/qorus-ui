@@ -51,12 +51,12 @@ class Workflows extends Component {
 
     return (
       <Table collection={ workflows.data } className={ cls }>
-        <Col name=''>
-          <i className="fa fa-square-o" />
+        <Col name='' onCellClick={ () => console.log(this.props) }>
+          <i className='fa fa-square-o' />
         </Col>
         <Col name='Actions'>
-          <a className="label"><i className="fa fa-power-off" /></a>
-          <a className="label"><i className="fa fa-refresh" /></a>
+          <a className='label'><i className='fa fa-power-off' /></a>
+          <a className='label'><i className='fa fa-refresh' /></a>
         </Col>
         <Col name='ID' dataKey='id' />
         <Col name='Name' dataKey='name' />

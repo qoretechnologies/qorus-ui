@@ -51,8 +51,6 @@ let DEFAULTS = {};
 
 ORDER_STATES.forEach((val) => { DEFAULTS[val.name] = 0; });
 
-console.log(DEFAULTS);
-
 export default reduxApi({
   // simple edpoint description
   workflows: {
