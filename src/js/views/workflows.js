@@ -7,6 +7,7 @@ import clNs from 'classnames';
 import Toolbar from '../components/toolbar';
 import Table, { Col } from '../components/table';
 import Badge from '../components/badge';
+import { ORDER_STATES } from '../constants/orders';
 
 @pureRender
 @connect(state => ({
@@ -66,22 +67,25 @@ class Workflows extends Component {
         <Col name='ID' dataKey='id' />
         <Col name='Name' dataKey='name' className='name' cellClassName='name' />
         <Col name='Version' dataKey='version' />
-        <Col name='C' transMap={{ COMPLETE: 'val' }}>
-          <Badge label='complete' />
-        </Col>
-        <Col name='Y' transMap={{ READY: 'val' }}>
-          <Badge label='ready' />
-        </Col>
-        <Col name='S' dataKey='SCHEDULED' />
-        <Col name='N' dataKey='INCOMPLETE' />
-        <Col name='V' dataKey='EVENT-WAITING' />
-        <Col name='A' dataKey='ASYNC-WAITING' />
-        <Col name='W' dataKey='WAITING' />
-        <Col name='R' dataKey='RETRY' />
-        <Col name='E' dataKey='ERROR' />
-        <Col name='I' dataKey='IN-PROGRESS' />
-        <Col name='X' dataKey='CANCELED' />
-        <Col name='B' dataKey='BLOCKED' />
+        {
+          ORDER_STATES.map(state => {
+            let transMap;
+            const { name, short, label } = state;
+
+            transMap = {};
+            transMap[name] = 'val';
+
+            return (
+              <Col name={ short }
+                className='narrow'
+                cellClassName='narrow'
+                transMap={ transMap }
+                key={ name }>
+                <Badge label={ label } />
+              </Col>
+            );
+          })
+        }
         <Col name='Total' dataKey='TOTAL' />
       </Table>
     );
