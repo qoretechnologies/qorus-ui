@@ -79,7 +79,8 @@ class WorkflowsToolbar extends Component {
   }
 }
 
-// const workflowsSelector = state => state.workflows;
+const workflowsSelector = state => state.workflows;
+const searchSelector = (state, props) => props.location.query.q;
 // const routerSelector = (state, props) => props.router;
 // const infoSelector = state => state.;
 //
@@ -89,17 +90,30 @@ class WorkflowsToolbar extends Component {
 //   infoSelector
 // );
 
+const filterSelector = createSelector(
+  workflowsSelector,
+  searchSelector,
+  (state) => state.systemInfo,
+  (workflows, search, info) => {
+    return {
+      sync: workflows.sync,
+      loading: workflows.loading,
+      workflows: workflows.data.filter(w => w.name.toLowerCase().indexOf(search) !== -1),
+      info: info.data
+    };
+  }
+);
+
 @pureRender
-@connect((state) => ({
-  workflows: state.workflows,
-  info: state.systemInfo.data
-}))
+@connect(filterSelector)
 class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
     workflows: PropTypes.object,
-    info: PropTypes.object
+    info: PropTypes.object,
+    sync: PropTypes.bool,
+    loading: PropTypes.bool
   }
 
   constructor(...props) {
@@ -132,7 +146,7 @@ class Workflows extends Component {
     ]);
 
     return (
-      <Table collection={ workflows.data } className={ cls }>
+      <Table collection={ workflows } className={ cls }>
         <Col name=''>
           <i className='fa fa-square-o' />
         </Col>
@@ -177,11 +191,9 @@ class Workflows extends Component {
   }
 
   render() {
-    const { workflows } = this.props;
+    const { sync, loading  } = this.props;
 
-    console.log(this.props);
-
-    if (!workflows.sync || workflows.loading) {
+    if (!sync || loading) {
       return <Loader />;
     }
 
