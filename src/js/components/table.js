@@ -46,7 +46,7 @@ class Table extends Component {
                 const cls = cellClassName || '';
 
                 if (child.props.transMap && React.Children.count(childs) === 1) {
-                  let props = {};
+                  let props = { id: item.id };
                   Object.keys(child.props.transMap).forEach(key => {
                     if (key in item) {
                       props[child.props.transMap[key]] = item[key];
