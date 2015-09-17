@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import pureRender from 'pure-render-decorator';
 import qorusApi from '../qorus';
 import Loader from '../components/loader';
@@ -7,6 +8,7 @@ import clNs from 'classnames';
 import Toolbar from '../components/toolbar';
 import Table, { Col } from '../components/table';
 import Badge from '../components/badge';
+import AutoStart from '../components/autostart';
 import { ORDER_STATES } from '../constants/orders';
 
 class Dummy extends Component {
@@ -19,8 +21,76 @@ const DateFilterView = Dummy;
 const SearchFormView = Dummy;
 const Filters = Dummy;
 
+class WorkflowsToolbar extends Component {
+  render() {
+    const btnCls = clNs('btn', 'btn-default', 'btn-sm');
+
+    return (
+      <Toolbar>
+        <div className='workflows-toolbar btn-toolbar sticky toolbar'>
+          <div className='btn-group'>
+            <button
+              className={ clNs(btnCls, 'dropdown-toggle') }
+              data-toggle='dropdown'>
+              <i className='fa fa-square-o check-all checker'></i>&nbsp;
+              <span className='caret'></span>
+            </button>
+            <ul className='dropdown-menu above'>
+              <li><a href='#' className='check-all'>All</a></li>
+              <li><a href='#' className='uncheck-all'>None</a></li>
+              <li><a href='#' className='invert'>Invert</a></li>
+              <li><a href='#' className='running'>Running</a></li>
+              <li><a href='#' className='stopped'>Stopped</a></li>
+            </ul>
+          </div>
+          <div className={ clNs('btn-group') }>
+            <button className={ btnCls }>
+              <i className='fa fa-off'></i> Enable
+            </button>
+            <button className={ btnCls }>
+              <i className='fa fa-ban-circle'></i> Disable
+            </button>
+            <button className={ btnCls }>
+              <i className='fa fa-refresh'></i> Reset
+            </button>
+            <button className={ btnCls }>
+              <i className='fa fa-flag-alt'></i> Hide
+            </button>
+            <button className={ btnCls }>
+              <i className='fa fa-flag'></i> Show
+            </button>
+          </div>
+          <DateFilterView
+            filters={ null }
+            handleSubmitData={ null }
+            setDate={ null } />
+          <Filters
+            setDeprecated={ null }
+            filters={ null }/>
+          <div className='pull-right'>
+            <SearchFormView
+              filterText={ null }
+              filterChange={ null } />
+          </div>
+        </div>
+        <div className='datepicker-container'></div>
+      </Toolbar>
+    );
+  }
+}
+
+// const workflowsSelector = state => state.workflows;
+// const routerSelector = (state, props) => props.router;
+// const infoSelector = state => state.;
+//
+// const listSelector = createSelector(
+//   workflowsSelector,
+//   routerSelector,
+//   infoSelector
+// );
+
 @pureRender
-@connect(state => ({
+@connect((state) => ({
   workflows: state.workflows,
   info: state.systemInfo.data
 }))
@@ -72,7 +142,12 @@ class Workflows extends Component {
             </a>
           <a className='label label-success'><i className='fa fa-refresh' /></a>
         </Col>
-        <Col name='Autostart' />
+        <Col name='Autostart'
+          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}>
+          <AutoStart
+            inc={ (...args) => { console.log(args); }}
+            dec={ (...args) => { console.log(args); }} />
+        </Col>
         <Col name='Execs' dataKey='exec_count' />
         <Col name='ID' dataKey='id' />
         <Col name='Name' dataKey='name' className='name' cellClassName='name' />
@@ -104,60 +179,15 @@ class Workflows extends Component {
   render() {
     const { workflows } = this.props;
 
+    console.log(this.props);
+
     if (!workflows.sync || workflows.loading) {
       return <Loader />;
     }
 
     return (
       <div>
-        <Toolbar>
-          <div className='workflows-toolbar btn-toolbar sticky toolbar'>
-            <div className='btn-group'>
-              <button className='btn dropdown-toggle' data-toggle='dropdown'>
-                <i className='fa fa-square-o check-all checker'></i>&nbsp;
-                <span className='caret'></span>
-              </button>
-              <ul className='dropdown-menu above'>
-                <li><a href='#' className='check-all'>All</a></li>
-                <li><a href='#' className='uncheck-all'>None</a></li>
-                <li><a href='#' className='invert'>Invert</a></li>
-                <li><a href='#' className='running'>Running</a></li>
-                <li><a href='#' className='stopped'>Stopped</a></li>
-              </ul>
-            </div>
-            <div className={ null }>
-              <button className='btn'>
-                <i className='fa fa-off'></i> Enable
-              </button>
-              <button className='btn'>
-                <i className='fa fa-ban-circle'></i> Disable
-              </button>
-              <button className='btn'>
-                <i className='fa fa-refresh'></i> Reset
-              </button>
-              <button className='btn'
-                ><i className='fa fa-flag-alt'></i> Hide
-              </button>
-              <button className='btn'>
-                <i className='fa fa-flag'></i> Show
-              </button>
-            </div>
-            <DateFilterView
-              filters={ null }
-              handleSubmitData={ null }
-              setDate={ null } />
-            <Filters
-              setDeprecated={ null }
-              filters={ null }/>
-            <div className='pull-right'>
-              <SearchFormView
-                filterText={ null }
-                filterChange={ null } />
-            </div>
-            <div id='table-copy' className='btn-group toolbar-filters'></div>
-          </div>
-          <div className='datepicker-container'></div>
-        </Toolbar>
+        <WorkflowsToolbar />
         { this.renderTable() }
       </div>
     );

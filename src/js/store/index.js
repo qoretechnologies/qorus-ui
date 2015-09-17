@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import reducers from './reducers';
 
+
 const middleware = [thunk, promise];
 
 const finalCreateStore = compose(

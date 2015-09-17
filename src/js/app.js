@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Router, Route } from 'react-router';
+import { Route, Router } from 'react-router';
 import { Provider } from 'react-redux';
 import Workflows from './views/workflows';
 import store from './store';
 import Root from './views/app';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
-
 
 require('bootstrap-sass!../bootstrap-sass.config.js');
 require('style!../css/base.css');
@@ -25,10 +24,10 @@ class App extends Component {
       <div>
         <Provider store={store}>
           {() =>
-            <Router history={history}>
+            <Router history={ history }>
               <Route path='/' component={Root}>
                 <Route path='dashboard' />
-                <Route path='system'/>
+                <Route path='system' />
                 <Route
                   path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
                   component={Workflows} />
