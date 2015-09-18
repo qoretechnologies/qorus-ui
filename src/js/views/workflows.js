@@ -1,15 +1,24 @@
 import React, { Component, PropTypes } from 'react';
+
+// utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pureRender from 'pure-render-decorator';
-import qorusApi from '../qorus';
-import Loader from '../components/loader';
 import clNs from 'classnames';
+import { get, compose, curry } from 'lodash';
+import { compare } from '../utils';
+
+// data
+import { fetchWorkflows } from '../store/workflows/actions';
+import { ORDER_STATES } from '../constants/orders';
+
+// components
 import Toolbar from '../components/toolbar';
 import Table, { Col } from '../components/table';
 import Badge from '../components/badge';
 import AutoStart from '../components/autostart';
-import { ORDER_STATES } from '../constants/orders';
+import Loader from '../components/loader';
+
 
 class Dummy extends Component {
   render() {
@@ -79,33 +88,57 @@ class WorkflowsToolbar extends Component {
   }
 }
 
-const workflowsSelector = state => state.workflows;
-const searchSelector = (state, props) => props.location.query.q;
-// const routerSelector = (state, props) => props.router;
-// const infoSelector = state => state.;
-//
-// const listSelector = createSelector(
-//   workflowsSelector,
-//   routerSelector,
-//   infoSelector
-// );
+const filterSearch = curry((search, workflows) =>
+  workflows.filter(w =>
+    search === undefined || w.name.toLowerCase().indexOf(search) > -1 ||
+    w.id.toString().indexOf(search) > -1)
+);
 
-const filterSelector = createSelector(
-  workflowsSelector,
-  searchSelector,
-  (state) => state.systemInfo,
-  (workflows, search, info) => {
+const filterDeprecated = curry((hide, workflows) =>
+  workflows.filter(w =>
+    !hide || get(w, 'deprecated') === hide
+  )
+);
+
+const sortWorkflows = (workflows) =>
+  workflows.slice().sort(compare('exec_count', ['name'], 'des'));
+
+const workflowsSelector = state => state.api.workflows;
+const searchSelector = (state, props) => props.location.query.q;
+const infoSelector = (state) => { console.log(state); return {}; };
+const deprecatedSelector = (state, props) => props.params.filter === 'hide';
+
+const collectionSelector = createSelector(
+  [
+    searchSelector,
+    workflowsSelector,
+    deprecatedSelector
+  ],
+  (search, workflows, deprecated) => compose(
+    sortWorkflows,
+    filterDeprecated(deprecated),
+    filterSearch(search)
+  )(workflows.data)
+);
+
+const viewSelector = createSelector(
+  [
+    workflowsSelector,
+    infoSelector,
+    collectionSelector
+  ],
+  (workflows, info, collection) => {
     return {
       sync: workflows.sync,
       loading: workflows.loading,
-      workflows: workflows.data.filter(w => w.name.toLowerCase().indexOf(search) !== -1),
-      info: info.data
+      workflows: collection,
+      info: {}
     };
   }
 );
 
 @pureRender
-@connect(filterSelector)
+@connect(viewSelector)
 class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -119,7 +152,7 @@ class Workflows extends Component {
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
-    dispatch(qorusApi.actions.workflows.sync());
+    dispatch(fetchWorkflows());
   }
 
   componentDidMount() {
@@ -147,25 +180,26 @@ class Workflows extends Component {
 
     return (
       <Table collection={ workflows } className={ cls }>
-        <Col name=''>
+        <Col name='' className='narrow'>
           <i className='fa fa-square-o' />
         </Col>
-        <Col name='Actions'>
+        <Col name='Actions' className='narrow'>
           <a className='label label-warning'>
             <i className='fa fa-power-off' />
             </a>
           <a className='label label-success'><i className='fa fa-refresh' /></a>
         </Col>
         <Col name='Autostart'
-          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}>
+          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}
+          className='narrow'>
           <AutoStart
             inc={ (...args) => { console.log(args); }}
             dec={ (...args) => { console.log(args); }} />
         </Col>
-        <Col name='Execs' dataKey='exec_count' />
-        <Col name='ID' dataKey='id' />
+        <Col name='Execs' dataKey='exec_count' className='narrow' />
+        <Col name='ID' dataKey='id' className='narrow' />
         <Col name='Name' dataKey='name' className='name' cellClassName='name' />
-        <Col name='Version' dataKey='version' />
+        <Col name='Version' dataKey='version' className='narrow' />
         {
           ORDER_STATES.map(state => {
             let transMap;
@@ -185,7 +219,7 @@ class Workflows extends Component {
             );
           })
         }
-        <Col name='Total' dataKey='TOTAL' />
+        <Col name='Total' dataKey='TOTAL' className='narrow' />
       </Table>
     );
   }

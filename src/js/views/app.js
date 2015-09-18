@@ -5,8 +5,6 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
-import restApi from '../qorus';
-const restActions = restApi.actions;
 
 class Content extends Component {
   static propTypes = {
@@ -35,9 +33,9 @@ class Content extends Component {
 
 @connect((state) => {
   return {
-    info: state.systemInfo,
+    info: { data: {}},
     menu: state.menu,
-    currentUser: state.currentUser
+    currentUser: { data: {}}
   };
 })
 class Root extends Component {
@@ -56,8 +54,8 @@ class Root extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
-    dispatch(restActions.systemInfo.sync());
-    dispatch(restActions.currentUser.sync());
+    // dispatch(restActions.systemInfo.sync());
+    // dispatch(restActions.currentUser.sync());
     this.setTitle();
   }
 
