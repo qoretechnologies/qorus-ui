@@ -1,5 +1,6 @@
 // import actions from './actions';
 import { ORDER_STATES } from '../../constants/orders';
+import { handleActions } from 'redux-actions';
 
 let DEFAULTS = {
   TOTAL: 0
@@ -28,25 +29,26 @@ const transform = (data) => {
   return resp;
 };
 
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-  case 'REQUEST_WORKFLOWS':
-    return Object.assign({}, state, {
-      workflows: Object.assign({}, state.workflows, {
-        loading: true
-      })
-    });
-  case 'RECEIVE_WORKFLOWS':
-    return Object.assign({}, state, {
-      workflows: {
-        data: transform(action.payload.response),
-        sync: true,
-        loading: false
-      }
-    });
-  default:
-    return state;
-  }
 
-  return state;
-}
+export default handleActions({
+  'FETCH_WORKFLOWS': {
+    next(state, action) {
+      return {
+        ...state,
+        workflows: {
+          ...state.workflows,
+          data: transform(action.payload),
+          sync: true,
+          loading: false
+        }
+      };
+    },
+    throw(state, action) {
+      console.log(state, action);
+      return {
+        ...state,
+        error: action.payload
+      };
+    }
+  }
+}, initialState);

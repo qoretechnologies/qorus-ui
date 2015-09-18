@@ -143,7 +143,7 @@ class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
-    workflows: PropTypes.object,
+    workflows: PropTypes.array,
     info: PropTypes.object,
     sync: PropTypes.bool,
     loading: PropTypes.bool
