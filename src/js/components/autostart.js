@@ -31,14 +31,14 @@ class AutoStart extends Component {
     return (
       <div className='autostart btn-controls btn-group'>
         <a className='label label-default'
-          onClick={ (...args) => { dec(id, ...args); }}>
+          onClick={ (...args) => { dec(id, autostart - 1, ...args); }}>
           <i className='fa fa-minus'></i>
           </a>
         <a className={ classes } title='Click to edit'>
           { autostart }
           </a>
         <a className='label label-default'
-          onClick={(...args) => { inc(id, ...args); }}>
+          onClick={(...args) => { inc(id, autostart + 1, ...args); }}>
           <i className='fa fa-plus'></i>
         </a>
       </div>

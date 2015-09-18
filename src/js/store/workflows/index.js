@@ -31,7 +31,23 @@ const transform = (data) => {
 
 
 export default handleActions({
-  'FETCH_WORKFLOWS': {
+  WORKFLOWS_AUTOSTART: {
+    next(state, action) {
+      return state;
+    },
+    throw(state, action) {
+      return {
+        ...state,
+        workflows: {
+          ...state.workflows,
+          sync: false,
+          loading: false,
+          error: action.payload
+        }
+      };
+    }
+  },
+  WORKFLOWS_FETCH: {
     next(state, action) {
       return {
         ...state,
@@ -44,10 +60,14 @@ export default handleActions({
       };
     },
     throw(state, action) {
-      console.log(state, action);
       return {
         ...state,
-        error: action.payload
+        workflows: {
+          ...state.workflows,
+          sync: false,
+          loading: false,
+          error: action.payload
+        }
       };
     }
   }
