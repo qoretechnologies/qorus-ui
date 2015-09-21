@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
 import Navigation from '../components/navigation';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
+
+import { fetchSystem } from '../store/system/actions';
 
 class Content extends Component {
   static propTypes = {
@@ -31,13 +35,23 @@ class Content extends Component {
   }
 }
 
-@connect((state) => {
-  return {
-    info: { data: {}},
-    menu: state.menu,
-    currentUser: { data: {}}
-  };
-})
+
+const systemSelector = (state) => state.api.system;
+const currentUserSelector = (state) => state.api.currentUser || {};
+const menuSelector = (state) => state.menu;
+
+@connect(createSelector(
+  systemSelector,
+  currentUserSelector,
+  menuSelector,
+  (info, currentUser, menu) => {
+    return {
+      info,
+      currentUser,
+      menu
+    };
+  }
+))
 class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -54,7 +68,7 @@ class Root extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
-    // dispatch(restActions.systemInfo.sync());
+    dispatch(fetchSystem());
     // dispatch(restActions.currentUser.sync());
     this.setTitle();
   }

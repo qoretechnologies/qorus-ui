@@ -1,6 +1,7 @@
 // import actions from './actions';
 import { ORDER_STATES } from '../../constants/orders';
 import { handleActions } from 'redux-actions';
+import { curry, extend } from 'lodash';
 
 let DEFAULTS = {
   TOTAL: 0
@@ -8,12 +9,19 @@ let DEFAULTS = {
 
 ORDER_STATES.forEach((val) => { DEFAULTS[val.name] = 0; });
 
+const updateItemWithId = curry((id, props, data) => {
+  const idx = data.findIndex((i) => i.id === id);
+  const updatedItem = Object.assign({}, data[idx], props);
+
+  return data.slice(0, idx)
+    .concat([updatedItem])
+    .concat(data.slice(idx + 1));
+});
+
 const initialState = {
-  workflows: {
-    data: [],
-    sync: false,
-    loading: false
-  }
+  data: [],
+  sync: false,
+  loading: false
 };
 
 const transform = (data) => {
@@ -24,7 +32,7 @@ const transform = (data) => {
       item.id = item.workflowid;
       delete item.workflowid;
     }
-    return Object.assign({}, DEFAULTS, item);
+    return extend({}, DEFAULTS, item);
   });
   return resp;
 };
@@ -33,17 +41,20 @@ const transform = (data) => {
 export default handleActions({
   WORKFLOWS_AUTOSTART: {
     next(state, action) {
-      return state;
+      return extend({}, state, {
+        data: updateItemWithId(
+          action.meta.id,
+          { autostart: action.meta.value },
+          state.data
+        )
+      });
     },
     throw(state, action) {
       return {
         ...state,
-        workflows: {
-          ...state.workflows,
-          sync: false,
-          loading: false,
-          error: action.payload
-        }
+        sync: false,
+        loading: false,
+        error: action.payload
       };
     }
   },
@@ -51,23 +62,17 @@ export default handleActions({
     next(state, action) {
       return {
         ...state,
-        workflows: {
-          ...state.workflows,
-          data: transform(action.payload),
-          sync: true,
-          loading: false
-        }
+        data: transform(action.payload),
+        sync: true,
+        loading: false
       };
     },
     throw(state, action) {
       return {
         ...state,
-        workflows: {
-          ...state.workflows,
-          sync: false,
-          loading: false,
-          error: action.payload
-        }
+        sync: false,
+        loading: false,
+        error: action.payload
       };
     }
   }

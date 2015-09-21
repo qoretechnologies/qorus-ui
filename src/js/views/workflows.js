@@ -105,7 +105,7 @@ const sortWorkflows = (workflows) =>
 
 const workflowsSelector = state => state.api.workflows;
 const searchSelector = (state, props) => props.location.query.q;
-const infoSelector = (state) => { console.log(state); return {}; };
+const infoSelector = (state) => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
 
 const collectionSelector = createSelector(

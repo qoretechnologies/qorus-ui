@@ -1,18 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
-import pureRender from 'pure-render-decorator';
+import pureRender from 'react-purerender';
+import { omit, isEqual } from 'lodash';
 
 
-  // React.Children.map(childy, (c) => {
-  //   <c {...c.props} model={ item } />;
-  // })
-
-@pureRender
 class Table extends Component {
   static propTypes = {
     children: PropTypes.node,
     collection: PropTypes.arrayOf(PropTypes.object).isRequired,
     className: PropTypes.string
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
+           || !isEqual(this.state, nextState);
   }
 
   renderHeader() {
@@ -30,42 +31,53 @@ class Table extends Component {
   }
 
   renderBody() {
+    let elements;
     const { collection, children } = this.props;
+
+    elements = {};
+
+    collection.forEach((item) => {
+      elements[`item-${item.id}`] = (
+        <Row key={`row-${item.id}`} model={ item }>
+          { React.Children.map(children, (child) => {
+            const { dataKey, cellClassName } = child.props;
+            let childs = child.props.children;
+            const onClick = child.props.cellOnClick ?
+              child.props.onCellClick : '';
+
+            const cls = cellClassName || '';
+
+            if (child.props.transMap &&
+              React.Children.count(childs) === 1) {
+              let props;
+
+              props = { id: item.id };
+
+              Object.keys(child.props.transMap).forEach(key => {
+                if (key in item) {
+                  props[child.props.transMap[key]] = item[key];
+                }
+              });
+              childs = React.Children.map(childs, c => {
+                return <c.type {...c.props} {...props} />;
+              });
+            }
+
+            return (
+              <Td onClick={ onClick }
+                  className={ cls }
+                  model={ item }>
+                { dataKey ? item[dataKey] : childs }
+              </Td>
+            );
+          })}
+        </Row>
+      );
+    });
 
     return (
       <tbody>
-        { collection.map((item) => {
-          return (
-            <Row key={`row-${item.id}`} model={ item }>
-              { React.Children.map(children, (child) => {
-                const { dataKey, cellClassName } = child.props;
-                let childs = child.props.children;
-                const onClick = child.props.cellOnClick ?
-                  child.props.onCellClick : '';
-
-                const cls = cellClassName || '';
-
-                if (child.props.transMap && React.Children.count(childs) === 1) {
-                  let props = { id: item.id };
-                  Object.keys(child.props.transMap).forEach(key => {
-                    if (key in item) {
-                      props[child.props.transMap[key]] = item[key];
-                    }
-                  });
-                  childs = <childs.type {...childs.props} {...props} />;
-                }
-
-                return (
-                  <Td onClick={ onClick }
-                      className={ cls }
-                      model={ item }>
-                    { dataKey ? item[dataKey] : childs }
-                  </Td>
-                );
-              })}
-            </Row>
-          );
-        })}
+        { React.addons.createFragment(elements) }
       </tbody>
     );
   }
@@ -90,12 +102,16 @@ class Table extends Component {
 
 export default Table = Table;
 
-@pureRender
 export class Row extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     model: PropTypes.object.isRequired,
     className: PropTypes.string
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
+           || !isEqual(this.state, nextState);
   }
 
   render() {

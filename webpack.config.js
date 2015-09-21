@@ -60,7 +60,7 @@ var config = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('./css/base.css'),
+    new ExtractTextPlugin('/css/base.css'),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
