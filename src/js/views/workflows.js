@@ -9,7 +9,7 @@ import { get, compose, curry } from 'lodash';
 import { compare } from '../utils';
 
 // data
-import { fetchWorkflows } from '../store/workflows/actions';
+import { fetchWorkflows, setAutostart } from '../store/workflows/actions';
 import { ORDER_STATES } from '../constants/orders';
 
 // components
@@ -143,7 +143,7 @@ class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
-    workflows: PropTypes.object,
+    workflows: PropTypes.array,
     info: PropTypes.object,
     sync: PropTypes.bool,
     loading: PropTypes.bool
@@ -172,7 +172,7 @@ class Workflows extends Component {
   }
 
   renderTable() {
-    const { workflows } = this.props;
+    const { workflows, dispatch } = this.props;
     const cls = clNs([
       'table', 'table-striped', 'table-condensed',
       'table-hover', 'table-fixed'
@@ -193,8 +193,8 @@ class Workflows extends Component {
           transMap={{ autostart: 'autostart', exec_count: 'execCount'}}
           className='narrow'>
           <AutoStart
-            inc={ (...args) => { console.log(args); }}
-            dec={ (...args) => { console.log(args); }} />
+            inc={ (id, value) => dispatch(setAutostart(id, value)) }
+            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
         </Col>
         <Col name='Execs' dataKey='exec_count' className='narrow' />
         <Col name='ID' dataKey='id' className='narrow' />
