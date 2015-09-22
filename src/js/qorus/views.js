@@ -14,7 +14,7 @@ define(function (require) {
       Helpers         = require('qorus/helpers'),
       moment          = require('moment'),
       // Filtered    = require('backbone.filtered.collection'),
-      LoaderView, View, ListView, TableView, RowView, 
+      LoaderView, View, ListView, TableView, RowView,
       TableAutoView, ServiceView, PluginView, CollectionView,
       TabView, ModelView, THeadView, TBodyView, TFootView, TRowView;
 
@@ -27,7 +27,7 @@ define(function (require) {
       .indexOf((match[3] || "").toLowerCase()) >= 0;
     }
   });
-  
+
   View = Backbone.View.extend({
     is_rendered: false,
     render_lock: false,
@@ -43,15 +43,15 @@ define(function (require) {
     // opts: {},
     path: "",
     _is_rendered: false,
-    
+
     // merging defaultEvents with additionalEvents
     events : function () {
       var aEvents = this.additionalEvents || {};
       return _.extend({}, this.defaultEvents, aEvents);
     },
     context: {},
-    
-    
+
+
     initialize: function (options) {
       this.preInit();
       _.bindAll(this, 'render', 'insertView', 'setView', 'off');
@@ -60,7 +60,7 @@ define(function (require) {
       this.options = {};
       this.opts = {};
       this.helpers = this.helpers || {};
-      
+
       // set DATE format and init date
       this.date_format = settings.DATE_DISPLAY;
 
@@ -69,17 +69,17 @@ define(function (require) {
           options.date = moment().add('days', -1).format(this.date_format);
         } else if (options.date == 'all') {
           options.date = moment(settings.DATE_FROM).format(this.date_format);
-        }        
+        }
       }
-      
+
       View.__super__.initialize.call(this, [options]);
-      
+
       _.extend(this.context, options);
       _.extend(this.options, options);
-      
+
       if (_.has(this.options, 'template')) this.template = this.options.template;
       this.processPath();
-      
+
       if (this.collection || this.model) {
         if (this.collection instanceof Backbone.Collection) {
           this.listenTo(this.collection, 'sync:error', this.onSyncError);
@@ -90,14 +90,14 @@ define(function (require) {
       this.initLoader();
       this.postInit();
     },
-        
+
     close: function (remove) {
       this.removeViews();
-      
+
       if (_.isFunction(this.clean)) {
         this.clean();
       }
-      
+
       this.trigger('destroy', this);
       View.__super__.off.call(this);
       this.undelegateEvents();
@@ -108,11 +108,11 @@ define(function (require) {
       this.views = {};
       return this;
     },
-    
+
     render: function (ctx) {
       // var start = new Date().getTime(), tpl;
       var tpl;
-      
+
       if (this.render_lock) return;
       // this.clean();
       // this.removeViews();
@@ -122,9 +122,9 @@ define(function (require) {
 
       if (this.template) {
         if (ctx && !(ctx instanceof Backbone.Model)) {
-          _.extend(this.context, ctx); 
+          _.extend(this.context, ctx);
         }
-        
+
         // adding template helpers
         _.extend(this.context, Helpers, this.helpers);
 
@@ -133,9 +133,9 @@ define(function (require) {
         } else {
           tpl = _.template(this.template, this.context);
         }
-        
+
         this.$el.html(tpl);
-        
+
         this.trigger('render', this, {});
       }
 
@@ -144,19 +144,19 @@ define(function (require) {
       this.setTitle();
       this.onRender();
       this.trigger('postrender', this);
-      
+
       if (_.isFunction(this.processUrlParams))
         this.processUrlParams();
-      
+
       this._is_rendered = true;
-      
+
       return this;
     },
-    
+
     // removes view by ID
     removeView: function (id) {
       var view = this.getView(id);
-      
+
       if (view instanceof Backbone.View) {
         // console.log(id, 'is backbone view removing');
         view.close();
@@ -167,10 +167,10 @@ define(function (require) {
         });
       }
       if (view) delete this.views[id];
-      
+
       return this;
     },
-    
+
     // removes all subviews
     removeViews: function () {
       _.each(_.result(this, 'views'), function (view) {
@@ -188,7 +188,7 @@ define(function (require) {
       this.views = {};
       return this;
     },
-    
+
     // returns view by specified id, el id attr in the most cases
     getView: function (id) {
       var views = _.result(this, 'views');
@@ -197,35 +197,35 @@ define(function (require) {
 
       return null;
     },
-    
+
     // renders specific subview
     renderView: function (id, view) {
       if (!view) {
         view = this.getView(id);
       }
-      
+
       if (view instanceof Backbone.View) {
         view.setElement(this.$(id)).render();
       } else if (_.isArray(view)) {
         var $el = this.$(id),
             el  = $el.get(0);
-        
+
         if (el) {
           while(el.firstChild)
-            el.removeChild(el.firstChild);            
+            el.removeChild(el.firstChild);
         }
-          
+
         var frag = document.createDocumentFragment();
 
         _.each(view, function (v) {
           if (v.el) frag.appendChild(v.render().el);
         });
-        
+
         if (id === 'self') $el = this.$el;
         $(frag).appendTo($el);
       }
     },
-    
+
     // renders subviews
     renderViews: function () {
       _.each(_.result(this,'views'), function (view, id) {
@@ -233,15 +233,15 @@ define(function (require) {
       }, this);
       return this;
     },
-    
+
     // executes before rendering
     preRender: function () {
     },
-    
+
     // executes after rendering
     onRender: function () {
     },
-    
+
     // adds view into el views array
     // useful for table rows
     insertView: function (view, el, append) {
@@ -249,30 +249,30 @@ define(function (require) {
           views_list = _.result(this, 'views');
 
       this._updateViewUrl(view);
-      
+
       if (views_list[el]) {
         views = views_list[el];
       } else {
         views = views_list[el] = [];
       }
-      
+
       el = el || '';
-      
+
       if (views instanceof Backbone.View) {
         old_view = views;
         views = [old_view];
       }
-        
+
       view.view_idx = views.push(view) - 1;
-      
+
       if (append === true) {
         var $el = (el === 'self') ? this.$el : this.$(el);
         $el.append(view.render().$el);
       }
-      
+
       return view;
     },
-    
+
     // adds subview to el
     setView: function (view, el, set) {
       this.removeView(el);
@@ -283,24 +283,24 @@ define(function (require) {
       // debug.log('setting view', view, el, set);
       if (set === true) {
         // console.log('setting element on view', el, this.$(el));
-        view.setElement(this.$(el));  
+        view.setElement(this.$(el));
         // view.setElement(this.$(el)).render();
       }
-      
+
       return view;
     },
-    
+
     _updateViewUrl: function (view) {
       if (view instanceof Backbone.View && view.processPath) {
         view.processPath(this.processPath(null, true));
         view.upstreamUrl = this.getViewUrl();
       }
     },
-    
+
     // sets document title if defined in view
     setTitle: function () {
       var title, inst;
-      
+
       if (this.title) {
         title = _.result(this, 'title');
         inst = document.title.match(/(.*)\| /g);
@@ -310,17 +310,17 @@ define(function (require) {
           document.title = "";
         }
 
-        document.title += " " + title; 
+        document.title += " " + title;
       }
       return this;
     },
-    
+
     clean: function () {
       // debug.log('called stop listening on', this.cid);
       // this.stopListening();
       return this;
     },
-    
+
     updateModels: function () {
       // if (e.info) {
       //   var m = this.collection.get(e.info.id);
@@ -328,68 +328,68 @@ define(function (require) {
       //   m.fetch();
       // }
     },
-    
+
     doNothing: function (e) {
       debug.log('Do nothing', e);
       e.preventDefault();
       e.stopPropagation();
       return this;
     },
-    
+
     lock: function () {
       // console.log(this.cid, 'locked');
       this.render_lock = true;
       return this;
     },
-    
+
     unlock: function () {
       // console.log(this.cid, 'unlocked');
       this.render_lock = false;
       return this;
     },
-    
+
     getUrlParams: function () {
       return utils.parseURLparams();
     },
-    
+
     processUrlParams: function () {
     },
-    
+
     // process url and executes associated event/method
     // returns path tail
     processPath: function (path, silent) {
       var action, tail;
 
       path = path || this.path;
-      
+
       if (!path) return;
-      
+
       this.path = path;
-      
+
       path = path.split('/');
-      
+
       if (path.length === 0) return;
 
       action = path.shift();
       tail = path.join('/');
-      
+
       // dont execute associated events/methods if in silent mode
       if (silent !== true) {
         this.trigger('processpath', action, tail, this);
         if (this.onProcessPath) this.onProcessPath(action, tail, this);
       }
-      
+
       return tail;
     },
-    
+
     getViewUrl: function () {
       return this.upstreamUrl + _.result(this, 'url');
     },
-    
+
     selectName: function (e) {
       var $target = $(e.currentTarget);
       var range, selection;
-    
+
       if (window.getSelection && document.createRange) {
           selection = window.getSelection();
           range = document.createRange();
@@ -402,20 +402,20 @@ define(function (require) {
           range.select();
       }
     },
-    
+
     slug: function () {
       if (this.name) return Helpers.slugify(this.name);
       return Helpers.slugify(this.__name__);
     },
-    
+
     onSyncError: function () {},
-    
+
     id: function () {
       var name = this.name || this.__name__;
       name = this.cid + '_' + name;
       return Helpers.slugify(name);
     },
-    
+
     preInit: function () {},
     postInit: function () {},
     initLoader: function () {
@@ -438,7 +438,7 @@ define(function (require) {
      keys: {
        'up down': 'navigate'
      },
-     
+
     defaultEvents: {
       'click .check': 'highlight',
       'click .check-all': 'checkall',
@@ -454,11 +454,11 @@ define(function (require) {
       "dblclick .selectable": "selectName"
       // "show": function (e) { console.log('shown', arguments )}
     },
-    
+
     events : function () {
       return _.extend({}, this.defaultEvents, this.additionalEvents);
     },
-    
+
     // TODO: change positional arguments to single hash argument { collection: collection, date: date, more: options }
     initialize: function (collection, date, options) {
       _.bindAll(this, 'render');
@@ -479,35 +479,35 @@ define(function (require) {
       } else {
         this.date = date;
       }
-      
+
       this.opts.date = this.date;
-      
+
       // TODO: improve code for collection checking
       if (!collection || !_.isFunction(collection)) collection = this.collection;
-      
+
       if (collection) {
         if (collection instanceof Backbone.Collection) {
           this.collection = collection;
         } else {
           this.collection = new collection([], this.opts);
         }
-        
+
         if (this.opts.fetch !== false)
           this.collection.fetch();
-      
+
         this.context.page = {
           current_page: this.collection.page,
           has_next: this.collection.hasNextPage,
           has_prev: null
         };
-        
+
         _.extend(this.context, this.opts);
-        
+
         // this.loader = new Loader();
         // this.listenToOnce(this.collection, 'sync error', this.loader.remove);
       }
-      
-      
+
+
       this.on('highlight highlight:none', this.enableActions);
       this.on('highlight highlight:none', this.updateCheckIcon);
       this.on('highlight:none', this.uncheckAll);
@@ -517,12 +517,12 @@ define(function (require) {
 
     render: function (ctx) {
       var tpl;
-            
+
       this.removeViews();
       this.trigger('prerender');
       this.preRender();
       // debug.log('Starts rendering with context ->', this.context.page.has_next);
-      
+
       if (this.template) {
         ctx = {
           date: this.date,
@@ -531,19 +531,19 @@ define(function (require) {
 
         // adding template helpers
         _.extend(this.context, ctx, Helpers, this.helpers);
-        
+
         if (_.isFunction(this.template)) {
           tpl = this.template(this.context);
         } else {
           tpl = _.template(this.template, this.context);
         }
         this.$el.html(tpl);
-        
+
         if (this.loader)
           this.loader.destroy();
         this.trigger('render', this, {});
       }
-    
+
       if (_.isFunction(this.afterRender)) {
         // Run afterRender when attached to DOM
         _.defer(this.afterRender);
@@ -552,24 +552,24 @@ define(function (require) {
       this.setTitle();
       this.onRender();
       debug.log('Finished rendering', this);
-      
+
       if (_.isFunction(this.processUrlParams))
         this.processUrlParams();
-      
+
       this.trigger('postrender', this);
       return this;
     },
-    
+
     historyBack: function (e) {
       e.preventDefault();
       debug.log("back button", e);
       window.history.back();
     },
-    
+
     // toggle select row
     highlight: function (e) {
       var $el = $(e.currentTarget);
-      
+
       $el
         .toggleClass('icon-check-empty')
         .toggleClass('icon-check');
@@ -578,9 +578,9 @@ define(function (require) {
         .parents('.table-row')
         .toggleClass('warning')
         .toggleClass('checked');
-      
+
       this.updateCheckIcon();
-        
+
       e.stopPropagation();
       this.trigger('highlight');
       this.trigger('highlight:toggle');
@@ -608,12 +608,12 @@ define(function (require) {
       }
 
       if (e.target.localName == "i") {
-        e.stopPropagation();        
+        e.stopPropagation();
       }
 
       this.trigger('highlight');
     },
-    
+
     uncheckAll: function () {
       this.$('.table-row')
         .removeClass('warning')
@@ -622,20 +622,20 @@ define(function (require) {
       this.$('.table-row .check')
         .removeClass('icon-check')
         .addClass('icon-check-empty');
-      
+
       this.enableActions();
       this.updateCheckIcon();
     },
-    
+
     checkRow: function (id) {
       var model = this.collection.get(id);
-      
+
       if (model) {
         model.trigger('check');
       }
       this.trigger('highlight:row');
     },
-    
+
     updateCheckIcon: function () {
       var $checker = this.$('i.checker');
       var total = this.$('tbody tr').size();
@@ -663,14 +663,14 @@ define(function (require) {
           .addClass('icon-check-minus')
           .addClass('check-all');
       }
-      
+
     },
-    
+
     invert: function () {
       $('.table-row .check', this.$el)
         .toggleClass('icon-check')
         .toggleClass('icon-check-empty');
-      
+
       $('.table-row')
         .toggleClass('warning')
         .toggleClass('checked');
@@ -678,26 +678,26 @@ define(function (require) {
       this.trigger('highlight');
       this.trigger('highlight:invert');
     },
-    
+
     // get all visible checked rows and its data-id attribute
     getCheckedIds: function () {
       var $checked_rows = $('.icon-check').parents('tr:visible');
       var ids = [];
-      
+
       _.each($checked_rows, function (row) {
         ids.push($(row).data('id'));
       });
 
       return ids;
     },
-    
+
     // do batch action
     runBatchAction: function (action, method, params) {
       var ids = this.getCheckedIds(),
         $request;
       method = method || 'get';
       params = { action: action, ids: ids.join(',') };
-      
+
       if (method == 'get') {
         $request = $.get(this.collection.url, params);
       } else if (method == 'put') {
@@ -705,31 +705,31 @@ define(function (require) {
       } else if (method == 'delete') {
         $request = $.put(this.collection.url, params);
       }
-      
+
       $request
         .done(function (resp){
           debug.log(resp);
         });
     },
-    
+
     enableActions: function () {
       var ids = this.getCheckedIds();
-      
+
       debug.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
-      
+
       if (ids.length > 0) {
         $('.toolbar-actions', this.$el).removeClass('hide');
       } else {
         $('.toolbar-actions', this.$el).addClass('hide');
       }
     },
-    
+
     // end batch section definition
-    
+
     runAction: function (e) {
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
-      
+
       if (data.action && data.action != 'open' && data.action !== 'execute') {
         if (data.id == 'selected') {
           this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
@@ -738,7 +738,7 @@ define(function (require) {
             debug.log("data action", data.id, data.action);
             // $target.text(data.msg.toUpperCase());
             var inst = this.collection.get(data.id);
-            inst.doAction(data.action, data);            
+            inst.doAction(data.action, data);
           }
         }
       } else if (data.action == 'open') {
@@ -746,25 +746,25 @@ define(function (require) {
       }
       e.preventDefault();
     },
-    
+
     search: function (e) {
       var $target = $(e.currentTarget),
           query   = $target.hasClass('search-query') ? $target.val() : $target.find('.search-query').val();
-      
+
       this.applySearch(query);
-      
+
       // prevent reload if submited by form
       if (e.type == "submit") {
         e.preventDefault();
       }
     },
-    
+
     applySearch: function (query) {
       var $el = this.$el, url, url_query;
-      
+
       if (!_.isString(query)) query = null;
       query = query || this.$('.search-query').val();
-      
+
       if (!query || query.length < 1) {
         $el.find('tbody tr').show();
       } else {
@@ -774,39 +774,39 @@ define(function (require) {
           this.$el.find("tbody td:icontains('" + keyword + "')").parent().show();
         }, this);
       }
-      
+
       url_query = utils.parseQuery(Backbone.history.fragment);
       url_query.q = query;
       url = [Backbone.history.location.pathname, utils.encodeQuery(url_query)].join('?');
-      
+
       if (query)
         Backbone.history.navigate(url);
     },
-    
+
     openURL: function (url) {
       Backbone.history.navigate(url, { trigger: true });
     },
-    
+
     nextPage: function () {
       this.collection.loadNextPage();
-    },    
-    
-    navigate: function (e) { 
+    },
+
+    navigate: function (e) {
       var $el, $next, h;
-      
+
       if (this.$el.is(':visible') && this.$('.info')) {
         $el = this.$('.info');
-        
+
         if (e.keyCode === 38) {
           $next = $el.prev();
         } else {
           $next = $el.next();
         }
-        
+
         if ($next.length > 0) {
           $el.removeClass('info');
           $next.addClass('info').click();
-          
+
           if ($('body').scrollTop() + $(window).height() < $next.offset().top + $next.height()) {
             h = $next.offset().top - $(window).height() + $next.height();
             $('body').scrollTop(h);
@@ -816,7 +816,7 @@ define(function (require) {
         }
       }
     },
-    
+
     processUrlParams: function () {
       var params = this.getUrlParams(),
           self   = this;
@@ -826,7 +826,7 @@ define(function (require) {
         self.trigger(event, param, self);
       });
     },
-    
+
     triggerRowClick: function () {
       if (this.detail_id) {
         var m = this.collection.get(this.detail_id);
@@ -850,17 +850,17 @@ define(function (require) {
     template: TableTpl,
     row_template: undefined,
     dispatcher: undefined,
-    
+
     initialize: function (opts) {
       this.preInit();
       _.bindAll(this);
       this.context = {};
       this.views = {};
       this.options = {};
-      
+
       this.RowView = this.row_view || RowView;
       this.opts = opts || {};
-      
+
       debug.log('table view collection', this.collection);
       this.collection = opts.collection;
 
@@ -870,7 +870,7 @@ define(function (require) {
         this.listenToOnce(this.collection, 'sync', this.update);
 
       this.listenTo(this.collection, 'sync:error', this.onSyncError);
-      
+
       if (_.has(opts, 'parent')) this.parent = opts.parent;
       if (_.has(opts, 'template')) this.template = _.template(opts.template);
       if (_.has(opts, 'row_template')) this.row_template = opts.row_template;
@@ -880,41 +880,41 @@ define(function (require) {
       if (_.has(opts, 'dispatcher')) this.dispatcher = opts.dispatcher;
       if (_.has(opts, 'fixed')) this.fixed = opts.fixed;
       if (_.has(opts, 'messages')) _.extend(this.messages, opts.messages);
-      
+
       // pre-compile row template
       this.row_tpl = _.template(this.row_template);
-      
+
       this.opts.template = this.template;
-      
+
       _.extend(this.context, opts);
       _.extend(this.options, opts);
-      
+
       this.update(true);
       this.postInit();
     },
-    
+
     render: function (ctx) {
       this.context.messages = this.messages;
 
       TableView.__super__.render.call(this, ctx);
       return this;
     },
-       
+
     onRender: function () {
       $(window).on('resize.table.'+this.cid, this.resize);
-      
-      // if (this.collection.pagination) 
+
+      // if (this.collection.pagination)
       //   this.$el.closest('.pane').on('scroll', this.scroll);
-      
+
       // load next button
       if (this.collection.hasNextPage) {
         if (this.collection.hasNextPage()) {
           this.$el.append($('<button class="btn btn-primary" data-pagination="loadNextPage">Load Next... </button>'));
-        }        
+        }
       }
       this.sortIcon();
     },
-    
+
     setWidths: function () {
       if (!this.fixed) return;
       var clgrp = $('<colgroup />');
@@ -926,7 +926,7 @@ define(function (require) {
       });
       this.$('.table-fixed').prepend(clgrp);
     },
-    
+
     resize: _.debounce(function (e) {
         if (!e || !e.target.tagName) {
           // fix static header width and pos
@@ -937,21 +937,21 @@ define(function (require) {
         }
       }, 200, { trailing: true, leading: true, maxWait: 5*200 }
     ),
-    
+
     clean: function () {
       this.$('.table-fixed').fixedHeader('remove');
       $(window).off('resize.table.'+this.cid);
       // this.$el.closest('.pane').close('scroll');
     },
-    
+
     scroll: function () {
       // if not visible do nothing
       if (!this.$el.is(':visible')) return;
 
       var pos = this.$el.height() + this.$el.offset().top - $(window).height();
-  
+
       if (pos < 100) {
-        this.collection.loadNextPage(); 
+        this.collection.loadNextPage();
         this.$('button[data-pagination]').html("Loading...");
       }
     },
@@ -988,18 +988,18 @@ define(function (require) {
 
     appendRow: function (m, render) {
       if (this.template === NoDataTpl) this.render();
-      
+
       var view = this.insertView(new this.RowView({
-            model: m, 
-            template: this.row_tpl, 
-            helpers: this.helpers, 
+            model: m,
+            template: this.row_tpl,
+            helpers: this.helpers,
             parent: this,
-            row_attributes: this.row_attributes 
+            row_attributes: this.row_attributes
           }), 'tbody'),
           idx;
-      
+
       render = (render===undefined) ? true : render;
-      
+
       if (render === true) {
         idx = this.collection.indexOf(m-1);
         if (this.$('tbody tr').get(idx)) {
@@ -1011,10 +1011,10 @@ define(function (require) {
 
       return view;
     },
-        
+
     update: function (initial) {
       var tpl = this.template, tt;
-      
+
       if (this.collection.size() === 0 && (initial !== true || _.isObject(initial))) {
         this.template = NoDataTpl;
       } else if (this.collection.size() > 0) {
@@ -1022,32 +1022,43 @@ define(function (require) {
       } else {
         this.template = LoadingDataTpl;
       }
-      
+
 
       if (this.template !== tpl) {
         this.render();
       }
-      
+
       if (this.collection.size() > 0)
         this.appendRows(this.collection.models);
-    
+
       this.trigger('update');
     },
-    
+
     // sort view
     sortView: function (e) {
       debug.log("Sort by ", e);
-      var el = $(e.currentTarget);
+      var el          = $(e.currentTarget);
+      var currentUser = Helpers.user;
+
       if (el.data('sort')) {
         // this.collection.sortByKey(el.data('sort'), el.data('order'));
-        var key = el.data('sort'),
-          order = el.data('order'),
-          prev_key = this.collection.sort_key,
-          views = this.getView('tbody');
-        
+        var key      = el.data('sort'),
+            order    = el.attr('data-order'),
+            prev_key = this.collection.sort_key,
+            views    = this.getView('tbody');
+
         this.collection.sort_order = order;
         this.collection.sort_key = key;
         if (this.collection.sort_history) this.collection.sort_history.push(prev_key);
+
+        if (this.collection.prefKey) {
+          var pref = {
+            order: order,
+            key: key,
+            history: [prev_key]
+          }
+          currentUser.setPreferences(this.collection.prefKey + '.sorting', pref);
+        }
 
         views = views.sort(function (c1, c2) {
           // needs speed improvements
@@ -1055,20 +1066,20 @@ define(function (require) {
               k20 = utils.prep(c2.model.get(key)),
               r   = 1,
               k11, k21;
-          
+
           if (order === 'des') r = -1;
-          
+
           if (k10 < k20) return -1 * r;
           if (k10 > k20) return 1 * r;
-          
+
           k11 = utils.prep(c1.model.get(prev_key));
           k21 = utils.prep(c2.model.get(prev_key));
-          
+
           if (k11 > k21) return -1 * r;
           if (k11 < k21) return 1 * r;
           return 0;
         });
-        
+
 
         // cleaning the view the dirty way
         var tbody = this.$('tbody').get(0);
@@ -1076,7 +1087,7 @@ define(function (require) {
         while (tbody.firstChild)
           tbody.removeChild(tbody.firstChild);
         delete this.views.tbody;
-        
+
         // resetting the element
         this.setView(views, 'tbody');
         this.renderView('tbody');
@@ -1084,54 +1095,54 @@ define(function (require) {
       }
       this.trigger('sort');
     },
-    
+
     sortIcon: function () {
       var key   = this.collection.sort_key,
           order = this.collection.sort_order,
           $el   = this.$('[data-sort="'+ key +'"]');
-      
+
       this.$('.sort')
         .removeClass('sort-asc')
         .removeClass('sort-des')
         .removeClass('sort');
-      
+
       $el.addClass('sort');
-      
+
       if (order == 'des') {
-        $el.data('order', 'asc');
+        $el.attr('data-order', 'asc');
         $el.addClass('sort-asc');
       } else {
-        $el.data('order', 'des');
+        $el.attr('data-order', 'des');
         $el.addClass('sort-des');
       }
     },
-    
+
     onSyncError: function (collection, response, options) {
-      this.template = _.template('<div class="alert alert-warning"><h4><%= response.err %></h4><p><%= response.desc %></p></div>', 
+      this.template = _.template('<div class="alert alert-warning"><h4><%= response.err %></h4><p><%= response.desc %></p></div>',
                         { response: response.responseJSON, options: options });
       this.render();
     }
   });
-  
+
   TableAutoView = TableView.extend({
     columns: []
   });
-  
+
   TBodyView = View.extend({
     tagName: 'tbody',
     context: {}
   });
-  
+
   THeadView = View.extend({
     tagName: 'thead',
     context: {}
   });
-  
+
   TFootView = View.extend({
     tagName: 'tfoot',
     context: {}
   });
-  
+
   TRowView = View.extend({
     tagName: 'tr'
   });
@@ -1150,31 +1161,31 @@ define(function (require) {
     // timer: 0,
     // timer_max: 10,
     click: 0,
-    
+
     attributes: function() {
       var data = { 'data-id': this.model.id },
         self = this;
-      
+
       if (this.row_attributes) {
         _.each(this.row_attributes, function (atr) {
           var key = 'data-' + atr;
           data[key] = self.model.get(atr);
         });
       }
-      
-      if (this.clickable) 
+
+      if (this.clickable)
         data.class = this.className + ' clickable';
-        
+
       return data;
     },
-    
+
     defaultEvents: {
       'click': 'rowClick',
       'shown.bs.dropdown .btn-group': 'lock',
       'hidden.bs.dropdown .btn-group': 'unlock',
       "dblclick .selectable": "selectName"
     },
-        
+
     initialize: function (opts) {
       // _.bindAll(this, 'render', 'off', 'insertView', 'setView');
       this.preInit();
@@ -1187,11 +1198,11 @@ define(function (require) {
       if (_.has(opts, 'template')) this.template = opts.template;
       if (_.has(opts, 'helpers')) this.helpers = opts.helpers;
       if (_.has(opts, 'parent')) this.parent = opts.parent;
-      if (_.has(opts, 'context')) _.extend(this.context, opts.context); 
+      if (_.has(opts, 'context')) _.extend(this.context, opts.context);
 
-      
+
       this.listenTo(this.model, 'change', _.throttle(this.update, 5*1000));
-      
+
       this.listenTo(this.model, 'check', this.check);
       this.listenTo(this.model, 'uncheck', this.uncheck);
       this.listenTo(this.model, 'remove', this.close);
@@ -1199,11 +1210,11 @@ define(function (require) {
       this.render();
       this.postInit();
     },
-    
+
     dispatch: function () {
       this.model.dispatch.apply(this.model, arguments);
     },
-        
+
     render: function (ctx) {
       this.context.item = this.model.toJSON();
       this.context._item = this.model;
@@ -1212,21 +1223,21 @@ define(function (require) {
       this.render_count++;
       return this;
     },
-    
+
     onRender: function () {
       if (this.model.get('caller') === "<webapp>")
         this.$el.addClass('warning');
     },
-    
+
     update: function () {
       if (this.render_lock === true) return;
       this.is_rendered = false;
       var self = this,
           css_classes = this.$el.attr('class').split(/\s+/),
           check_classes = $('i.check', this.$el).attr('class');
-      
+
       this.render();
-      
+
       // restore previous classes
       _.each(css_classes, function (cls) {
         this.$el.addClass(cls);
@@ -1236,34 +1247,34 @@ define(function (require) {
       this.$('i.check').attr('class', check_classes);
 
       this.$el.addClass('changed');
-      
+
       setTimeout(function() {
         self.$el.removeClass('changed');
       }, 5000);
     }, // , { trailing: true, leading: true, maxWait: 5*5*1000 }
-    
+
     // delegate click event with model to parent view
     rowClick: function (e) {
       var trigger = true;
-      
+
       this.click++;
-      
+
       if (this.click > 1) {
         clearTimeout(this.click_timer);
         this.click = 0;
       }
-      
+
       if (e) {
         var $target = $(e.currentTarget),
             $et     = $(e.target),
-            silent = ($et.parents('button').size() > 0) || 
-              ($et.parents('.dropdown-menu').size() > 0) || 
-              ($et.parents('a').size() > 0) || 
+            silent = ($et.parents('button').size() > 0) ||
+              ($et.parents('.dropdown-menu').size() > 0) ||
+              ($et.parents('a').size() > 0) ||
               ($et.is('a')) || ($et.is('button')) ||
               $et.hasClass('check');
         trigger = ($target.is(this.tagName) && !silent);
       }
-      
+
       if (trigger && this.click === 1) {
         var self = this;
 
@@ -1278,9 +1289,9 @@ define(function (require) {
           }
           self.click = 0;
         }, 200);
-      } 
+      }
     },
-    
+
     clean: function () {
       var p_view, self = this;
       p_view = this.parent.getView('tbody');
@@ -1288,7 +1299,7 @@ define(function (require) {
       this.$('.btn-group').off();
       _.reject(p_view, function (view) { return view.cid == self.cid; });
     },
-        
+
     check: function () {
       // console.log('highlighting', this.model.id);
       this.$el
@@ -1299,7 +1310,7 @@ define(function (require) {
         .removeClass('icon-check-empty')
         .addClass('icon-check');
     },
-    
+
     uncheck: function () {
       // console.log('unchecking', this.model.id);
 
@@ -1310,9 +1321,9 @@ define(function (require) {
       this.$('.check')
         .addClass('icon-check-empty')
         .removeClass('icon-check');
-    } 
+    }
   });
-  
+
   ServiceView = View.extend({
     defaultEvents: {
       'submit': 'doAction',
@@ -1320,65 +1331,65 @@ define(function (require) {
       'click button[data-action]': 'doAction',
       "dblclick .selectable": "selectName"
     },
-    
+
     initialize: function (opts) {
       _.bindAll(this);
       this.opts = opts || {};
-      
+
       this.on('fetch', this.render);
       this.getData();
       // debug.log('Events', this.events(), this.$el, this.el);
     },
-    
+
     getUrl: function () {
       return [settings.REST_API_PREFIX, 'services', this.name].join('/');
     },
-    
+
     getData: function () {
       var self = this;
       var url = [this.getUrl(), this.methods.getData].join('/');
-      
+
       $.put(url, { action: 'call'})
         .done(function (data) {
           self.data = data;
           self.trigger('fetch');
         });
     },
-    
+
     render: function (ctx) {
       debug.log('ServiceView', this.el, this.$el);
       _.extend(this.context, { data: this.data });
-      
+
       ServiceView.__super__.render.call(this, ctx);
       return this;
     },
-    
+
     doAction: function (ev) {
       var params = {};
       var $target = $(ev.currentTarget);
       ev.preventDefault();
-      
+
       if ($target.attr('type') == 'submit') {
         var $f = $target.parents('form');
 
         var vals = $f.serializeArray();
-      
+
         _.each(vals, function (v) {
           params[v.name] = v.value;
         });
-        
+
         // close modal
         $f.parents('.modal').modal('hide');
       }
-      
+
       this.runAction($target.data('action'), params);
     },
-    
+
     runAction: function (action, data) {
       var self = this;
       var url = [this.getUrl(), action].join('/');
       var args = _.values(data);
-      
+
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
           debug.log(resp);
@@ -1398,66 +1409,66 @@ define(function (require) {
       'click button[data-action]': 'doAction',
       "dblclick .selectable": "selectName"
     },
-    
+
     initialize: function (opts) {
       _.bindAll(this);
       this.opts = opts || {};
-      
+
       this.on('fetch', this.render);
       this.getData();
       // debug.log('Events', this.events(), this.$el, this.el);
     },
-    
+
     getUrl: function () {
       return [settings.REST_API_PREFIX, 'services', this.name].join('/');
     },
-    
+
     getData: function () {
       var self = this;
       var url = [this.getUrl(), this.methods.getData].join('/');
-      
+
       $.put(url, { action: 'call'})
         .done(function (data) {
           self.data = data;
           self.trigger('fetch');
         });
     },
-    
+
     render: function (ctx) {
       debug.log('ServiceView', this.el, this.$el);
       _.extend(this.context, { data: this.data });
-      
+
       ServiceView.__super__.render.call(this, ctx);
-      
+
       return this;
     },
-    
+
     doAction: function (ev) {
       var params = {};
       var $target = $(ev.currentTarget);
       ev.preventDefault();
-      
+
       if ($target.attr('type') == 'submit') {
         var $f = $target.parents('form');
 
         var vals = $f.serializeArray();
-      
+
         _.each(vals, function (v) {
           params[v.name] = v.value;
         });
-        
+
         // close modal
         $f.parents('.modal').modal('hide');
       }
-      
+
       this.runAction($target.data('action'), params);
     },
-    
+
     runAction: function (action, data) {
       var self = this;
       var url = [this.getUrl(), action].join('/');
       var args = _.values(data);
-      
+
       $.put(url, { action: 'call', args: args })
         .done(function (resp) {
           debug.log(resp);
@@ -1468,19 +1479,19 @@ define(function (require) {
         });
     }
   });
-  
+
   TabView = View.extend({
     __name__: 'TabView',
     views: {},
     tabs: [],
     context: {},
-    
+
     defaultEvents: {
       'click .nav-tabs a': 'tabToggle',
       'click .nav-pills a': 'tabToggle',
       "dblclick .selectable": "selectName"
     },
-    
+
     initialize: function () {
       _.bindAll(this);
       TabView.__super__.initialize.apply(this, arguments);
@@ -1489,29 +1500,29 @@ define(function (require) {
       this.context.tabs = this.getTabs;
       this.initTabs();
     },
-    
+
     activateTab: function () {
       if (this.active_tab) this.showTab(this.active_tab);
     },
-     
+
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
-        
+
       e.preventDefault();
       e.stopPropagation();
       this.showTab($target.attr('href'));
     },
-    
+
     addTabView: function (view, opts) {
       opts = opts || {};
       view = this.insertView(view, 'tabs');
-      
+
       if (opts.name) view.name = opts.name;
-      
+
       this.listenTo(view, 'all', this.tabEvent);
       return view;
     },
-    
+
     renderTabs: function () {
       _.each(this.getTabs(), function (tab) {
         var id = '#' + tab.slug();
@@ -1519,27 +1530,27 @@ define(function (require) {
         tab.render();
       }, this);
     },
-    
+
     getTabs: function () {
       return this.getView('tabs');
     },
-    
+
     getTab: function (name) {
       var tabs = this.getTabs();
       return _(tabs).find(function (tab) { return tab.slug() === name; });
     },
-    
+
     removeTab: function (name) {
       var tab = this.getTab(name);
       var tabs = this.getTabs();
       var idx = _.indexOf(tabs, tab);
-      
+
       if (idx > -1) {
         tab.close();
         tabs.splice(idx, 1);
       }
     },
-    
+
     showTab: function (tab) {
       var name = (tab.charAt(0) === '/') ? tab.slice(1) : tab,
           view = this.getTab(tab),
@@ -1549,54 +1560,54 @@ define(function (require) {
       if (view) view.trigger('show');
 
       $target.tab('show');
-   
+
       if (this.active_tab !== name) {
         this.updateUrl([url, name].join('/'));
         this.active_tab = name;
         this.onTabChange(tab);
       }
     },
-    
+
     onTabChange: function () {},
-    
+
     updateUrl: function (url) {
       Backbone.history.navigate(url);
     },
-    
+
     onProcessPath: function (tab) {
       this.active_tab = tab;
     },
-    
+
     close: function () {
       TabView.__super__.close.apply(this, arguments);
 //      console.log(this.views, this.getTabs());
     },
-    
+
     initTabs: function () {
       if (_.size(this.tabs) > 0) {
         _.each(this.tabs, function (view, tab) {
           var view_obj,
               opts = {};
-          
+
           if (!_.isFunction(view)) {
             view_obj = view;
             view = view_obj.view;
             opts = view_obj.options || {};
           }
-          
+
           opts = _.chain(opts)
             .extend(_.omit(this.options, 'template'))
             .extend(_.omit(this.opts, 'template'))
             .value();
-          
+
           this.addTabView(new view(opts), { name: tab });
         }, this);
       }
     },
-    
+
     tabEvent: function () {}
   });
-  
+
   ModelView = View.extend({
     __name__: 'ModelView',
     initialize: function () {
@@ -1604,11 +1615,11 @@ define(function (require) {
       this.model = this.options.model;
       this.on('prerender', this.addContext);
     },
-    
+
     addContext: function () {
       if (this.model) {
         this.context.item = this.model.toJSON();
-        this.context._item = this.model;        
+        this.context._item = this.model;
       }
     }
   });
@@ -1619,15 +1630,15 @@ define(function (require) {
       CollectionView.__super__.initialize.apply(this, arguments);
       if (this.options.collection) this.collection = this.options.collection;
     },
-    
+
     preRender: function () {
       if (this.collection) {
         this.context.collection = this.collection.toJSON();
-        this.context._collection = this.collection;        
+        this.context._collection = this.collection;
       }
     }
   });
-  
+
   LoaderView = View.extend({
     template: '<p class="loader"><i class="icon-spin icon-spinner"></i> Loading...</p>'
   });
