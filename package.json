@@ -4,7 +4,9 @@
   "author": "Petr Chalupny <petr.chalupny@qoretechnologies.com>",
   "version": "0.9.1",
   "main": "Gruntfile.js",
-  "dependencies": {},
+  "dependencies": {
+    "cors": "^2.7.1"
+  },
   "devDependencies": {
     "express": "^4.10.5",
     "grunt": "^0.4.5",

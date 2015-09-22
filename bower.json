@@ -41,7 +41,8 @@
     "chartjs": "1.0.1",
     "cjs": "*",
     "amd-loader": "https://github.com/guybedford/amd-loader.git#~0.0.2",
-    "react": "react-bower-svg#0.13.3-svg"
+    "react": "react-bower-svg#0.13.3-svg",
+    "cors": "*"
   },
   "resolutions": {
     "jquery": "~2.1.4",
