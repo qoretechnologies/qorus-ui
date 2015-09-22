@@ -3,16 +3,17 @@ define(function (require) {
       Notifications = require('collections/notifications'),
       Template      = require('tpl!templates/notifications/header_icon.html'),
       NView         = require('views/notifications/notifications'),
+      currentUser   = require('models/system').User,
       View;
-      
+
   require('messenger');
-  
+
   View = Qorus.View.extend({
     template: Template,
     additionalEvents: {
       'click': 'showNotifications'
     },
-    
+
     initialize: function () {
       View.__super__.initialize.call(this, arguments);
       this.collection = Notifications;
@@ -33,28 +34,30 @@ define(function (require) {
       if (this.collection.size() === 0)
         this.collection.create({ group: "system", type: 1, title: "test", description: "popis" });
     },
-    
+
     preRender: function () {
       this.context.count = this.collection.size();
     },
-    
+
     showMessage: function (model) {
       var msg = model.get('title'),
           type = model.get('type');
-          
-      $.globalMessenger().post({ message: msg, type: type || 'info', showCloseButton: true });
+
+      if (currentUser.getPreferences('ui.notifications.show')) {
+        $.globalMessenger().post({ message: msg, type: type || 'info', showCloseButton: true });
+      }
     },
-    
+
     getLevelCSS: function () {
       // if (level )
     },
-    
+
     close: function () {
       this.stopListening();
       this.undelegateEvents();
       this.$el.empty();
     }
   });
-  
+
   return View;
 });

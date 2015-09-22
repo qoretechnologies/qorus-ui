@@ -2,6 +2,7 @@ define(function (require) {
   var _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
       settings = require('settings'),
+      __       = require('_lodash'),
       Model;
 
   Model = Qorus.Model.extend({
@@ -33,6 +34,13 @@ define(function (require) {
         return true;
 
       return Model.__super__.isNew.apply(this, arguments);
+    },
+    getPreferences: function (prop) {
+      return __.get(this.get('storage'), prop);
+    },
+    setPreferences: function (prop, value) {
+      __.set(this.get('storage'), prop, value);
+      this.save({ storage: this.get('storage')});
     }
   });
 
