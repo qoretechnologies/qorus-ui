@@ -395,10 +395,10 @@ table .header-fixed {
 	margin: .3em;
 	list-style: none;
 	text-indent: 0;
-	
+
 }
 
-.treeview li {	
+.treeview li {
   background-color: #fff;
 	border-top: 1px solid #eee;
 	padding-left: 15px;
@@ -481,14 +481,14 @@ table .header-fixed {
     top: 0;
     height: 100%;
     z-index: 1022;
-    
+
     /* Specify the width of your pageslide here */
     max-width: 80%;
     /*min-width: 60%;*/
 
     padding: 0;
     overflow-y: auto;
-    
+
     /* These styles are optional, and describe how the pageslide will look */
     background-color: rgba(245,245,245,0.9);
     color: #000;
@@ -557,7 +557,7 @@ table .header-fixed {
     clear: both;
 }*/
 
-/*.table tr td {    
+/*.table tr td {
     -webkit-transition: background-color 1000ms linear;
        -moz-transition: background-color 1000ms linear;
          -o-transition: background-color 1000ms linear;
@@ -576,8 +576,8 @@ table .header-fixed {
 .table td.info {
   text-align: left;
   text-overflow: ellipsis;
-  white-space:nowrap; 
-  width:12em; 
+  white-space:nowrap;
+  width:12em;
   overflow:hidden;
   max-width: 200px;
 }
@@ -640,8 +640,8 @@ table .header-fixed {
     margin-bottom: 20px;
 }*/
 
-.table-numbered { 
-    counter-reset: line-number; 
+.table-numbered {
+    counter-reset: line-number;
 }
 
 .table-numbered-col-1 td:nth-child(1):before {
@@ -707,7 +707,7 @@ table .header-fixed {
 .table thead.extra-padding td {
     font-size: 120%;
     padding-top: 20px;
-    padding-bottom: 10px;    
+    padding-bottom: 10px;
 }
 
 #options td.description div {
@@ -876,7 +876,7 @@ input:focus {
   background-color: '#fff';
 }
 
-/* diagram */ 
+/* diagram */
 
 #canvas-wrapper {
   position: relative;
@@ -885,16 +885,16 @@ input:focus {
   height: auto;
 }
 
-#canvas-container { 
-  position: relative; 
-  width: 100%; 
-  height: 100%; 
-  overflow: hidden; 
-  position: relative; 
+#canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-#canvas { 
-  position: absolute; 
+#canvas {
+  position: absolute;
 }
 
 #diagram {
@@ -1020,7 +1020,7 @@ input:focus {
 .indent {
   display: inline-block;
   width: 1em;
-} 
+}
 
 
 /* chart styling */
@@ -1055,7 +1055,7 @@ input:focus {
   position: absolute;
   bottom: 0;
   left: 50%;
-  margin-left: 0; 
+  margin-left: 0;
 }
 
 .chart-legend {
@@ -1068,8 +1068,8 @@ input:focus {
 
 .chart-legend-box {
   display: inline-block;
-  width: 20px; 
-  height: 10px; 
+  width: 20px;
+  height: 10px;
 }
 
 #log {
@@ -1436,12 +1436,12 @@ th.nowrap, td.nowrap {
 
 .datepicker thead th[data-toggle]:hover {
   background-color: #ccc;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .datepicker tbody td:hover {
   background-color: #ccc;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .datepicker .calendar {
@@ -1452,8 +1452,8 @@ th.nowrap, td.nowrap {
 .datepicker:after {
   content: "";
   position: absolute;
-	width: 0; 
-	height: 0; 
+	width: 0;
+	height: 0;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid #fff;
@@ -1464,8 +1464,8 @@ th.nowrap, td.nowrap {
 .datepicker:before {
   content: "";
   position: absolute;
-	width: 0; 
-	height: 0; 
+	width: 0;
+	height: 0;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid rgba(0,0,0,0.2);
@@ -1609,7 +1609,7 @@ tbody+thead>tr:first-child>td {
 /*.tree .indent {
 	display: inline-block;
 	border-right: 1px dotted red;
-    vertical-align: middle;	
+    vertical-align: middle;
 	height: 100%;
     width: 20px;
 }*/
@@ -1688,7 +1688,7 @@ tbody+thead>tr:first-child>td {
 }
 
 .tree .leaf span:last-child:after {
-	
+
 }
 
 .tree th.node span:last-child:after {
@@ -1981,9 +1981,9 @@ aside.navigation.opacity {
 
 .copy-error, .copy-table {
   width: 100%;
-  -moz-box-sizing: border-box; 
-  -webkit-box-sizing: border-box; 
-  box-sizing: border-box; 
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .table .check {
@@ -2059,8 +2059,8 @@ a.subtle:hover, a.subtle:focus {
   position: absolute;
   top:  100%;
   left: calc(20% + 10px);
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: 5px solid rgba(0,0,0,.8);
@@ -2111,4 +2111,8 @@ a.subtle:hover, a.subtle:focus {
 
 .search-toolbar {
   min-height: 30px;
+}
+
+textarea[readonly] {
+	cursor: auto;
 }
