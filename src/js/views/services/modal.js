@@ -14,32 +14,33 @@ define(function (require) {
     template: Template,
     additionalEvents: {
       'submit': 'executeMethod',
-      'click .nav-pills a': 'tabToggle'
+      'click .nav-pills a': 'tabToggle',
+      'change select': 'updateDescription'
     },
-    
+
     initialize: function (opts) {
       _.bindAll(this);
 
-      this.opts = opts;      
+      this.opts = opts;
       _.extend(this.context, opts);
     },
-    
+
     // starts workflow with params from form
     executeMethod: function (e) {
       var $target = $(e.currentTarget);
       e.preventDefault();
-      
+
       this.methodCall($('#service_name', $target).val(), $('#method', $target).val(), $('#args', $target).val());
       return this;
     },
-    
+
     methodCall: function(service_name, method, args) {
       var url = [settings.REST_API_PREFIX, 'services', service_name, method].join('/');
-      
+
       $.put(url, { action: 'call', parse_args: args })
         .always(this.updateResponse);
     },
-    
+
     updateResponse: function (response) {
       if (_.isObject(response)) {
         response = JSON.stringify(response, null, 4);
@@ -48,15 +49,24 @@ define(function (require) {
       this.$('#response-yaml', this.$el).text(yaml.dump(arguments[2].responseJSON));
       // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
     },
-    
+
+    updateDescription: function (e) {
+      var $el = $(e.target),
+          method = $el.val(),
+          args = this.$('#args').val();
+
+      this.context = _.extend({}, this.context, { name: method, args: args });
+      this.render();
+    },
+
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
-      
+
       $target.tab('show');
       e.preventDefault();
     }
-    
+
   });
-  
+
   return View;
 });
