@@ -1,4 +1,4 @@
-<div class="workflows-toolbar btn-toolbar sticky toolbar"> 
+<div class="workflows-toolbar btn-toolbar sticky toolbar">
     <div class="btn-group">
       <button class="btn dropdown-toggle" data-toggle="dropdown">
         <i class="icon-check-empty check-all checker"></i>
@@ -16,8 +16,8 @@
       <button class="btn" data-id="selected" data-action="enable" data-method="put"><i class="icon-off"></i> Enable</button>
       <button class="btn" data-id="selected" data-action="disable" data-method="put"><i class="icon-ban-circle"></i> Disable</button>
       <button class="btn" data-id="selected" data-action="reset" data-method="put"><i class="icon-refresh"></i> Reset</button>
-      <button class="btn" data-id="selected" data-action="hide" data-method="put"><i class="icon-flag-alt"></i> Hide</button>
-      <button class="btn" data-id="selected" data-action="show" data-method="put"><i class="icon-flag"></i> Show</button>
+      <button class="btn" data-id="selected" data-action="hide" data-method="put"><i class="icon-flag-alt"></i> Set deprecated</button>
+      <button class="btn" data-id="selected" data-action="show" data-method="put"><i class="icon-flag"></i> Unset deprecated</button>
     </div>
     <div class="btn-group">
         <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-MM-dd HH:mm:ss">
@@ -29,9 +29,12 @@
           <button class="btn" data-action="open" data-url="/workflows">24 h</button>
         </div>
     </div>
+    <div id="table-copy" class="btn-group"></div>
     <div class="btn-group">
-        <button class="btn" data-action="open" data-url="<%= url %>"><i class="icon-<%= (deprecated) ? 'flag' : 'flag-alt' %>"></i> <%= (deprecated) ? 'Only visible' : 'Show hidden' %></button>
+        <button class="btn" data-action="open" data-url="<%= setUrl({ deprecated: !deprecated, running: running }) %>"><i class="icon-<%= (deprecated) ? 'check' : 'check-empty' %>"></i> Deprecated</button>
+        <button class="btn" data-action="open" data-url="<%= setUrl({ running: !running, deprecated: deprecated }) %>"><i class="icon-<%= (obj.running) ? 'check' : 'check-empty' %>"></i> Only running</button>
     </div>
+    <%= console.log(obj) %>
     <div class="pull-right">
       <form class="form-search">
         <div class="input-append search-box">
@@ -40,6 +43,5 @@
         </div>
       </form>
     </div>
-    <div id="table-copy" class="btn-group"></div>
 </div>
 <div class="datepicker-container"></div>
