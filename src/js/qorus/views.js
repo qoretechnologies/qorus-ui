@@ -1056,7 +1056,8 @@ define(function (require) {
             order: order,
             key: key,
             history: [prev_key]
-          }
+          };
+          
           currentUser.setPreferences(this.collection.prefKey + '.sorting', pref);
         }
 
