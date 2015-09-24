@@ -81,17 +81,24 @@ define(function (require) {
     },
 
     // workflow list
-    showWorkflows: function (date, deprecated, path, query) {
+    showWorkflows: function (date, filters, path, query) {
       // console.log('deprecated', (deprecated === 'hidden'));
+      filters = filters ? filters.split(',') : [];
+
+      var deprecated = (filters.indexOf('hidden') > -1),
+          running    = (filters.indexOf('running') > -1),
+          d;
 
       var opts = {
             date: utils.prepareDate(date),
             path: path,
-            deprecated: (deprecated === 'hidden'),
+            deprecated: deprecated,
+            running: running,
             query: query,
             fetch: false
           },
-          view, d = (deprecated === 'hidden');
+
+          view;
 
       if (!this.collections.workflows) {
         this.collections.workflows = new Workflows([], opts);
@@ -109,18 +116,17 @@ define(function (require) {
 
       this.collections.workflows.fetch();
 
-      console.log(this.collections.workflows.opts);
-
       if (!(this.currentView instanceof WorkflowListView)) {
         view = new WorkflowListView(this.collections.workflows, opts);
         this.setView(view);
       }
 
-      var dd = (deprecated === null) ? false : deprecated;
+      console.log(d, deprecated, filters);
 
-      if (d !== dd) {
+      if (d !== deprecated) {
         this.currentView.getView('.workflows');
-        this.currentView.opts.deprecated = dd;
+        this.currentView.opts.deprecated = deprecated;
+        this.currentView.opts.running = running;
         this.currentView.render();
       }
     },

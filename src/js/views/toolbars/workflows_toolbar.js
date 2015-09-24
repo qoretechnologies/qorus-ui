@@ -5,12 +5,12 @@ define(function (require) {
       Template    = require('text!templates/workflow/toolbars/workflows_toolbar.html'),
       CopyView    = require('views/common/table.copy'),
       Toolbar;
-  
+
   var csv_options = {
     el: '#workflows table',
     ignore: [0,1,4]
   };
-  
+
   Toolbar = BaseToolbar.extend({
     datepicker: true,
     template: Template,
@@ -21,32 +21,44 @@ define(function (require) {
         deprecated: this.options.deprecated
       };
     },
-    
+
     route: 'showWorkflows',
-    
+
     initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
-      this.getHiddenURL();
+      _.extend(this.context, _.pick(opts, ['deprecated', 'running']));
+      this.context.setUrl = this.setUrl;
+
       this.setView(new CopyView({ csv_options: csv_options }), '#table-copy');
     },
-    
-    getHiddenURL: function () {
+
+    setUrl: function (params) {
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
-      
-      if (parts.length > 2) {
-        this.context.url = [parts[0], parts[1]].join('/');
-        this.context.deprecated = true;
-      } else if (parts.length == 2) {
-        this.context.url = [parts[0], parts[1], 'hidden'].join('/');
-        this.context.deprecated = false;
-      } else {
-        this.context.url = [parts[0], '24h', 'hidden'].join('/');
-        this.context.deprecated = false;
+
+      // var currentFilters = _.pick(this.opts, ['deprecated', 'running']);
+      var filters = [];
+
+      if (params.deprecated) {
+        filters.push('hidden');
       }
-    }    
+
+      if (params.running) {
+        filters.push('running');
+      }
+
+      if (parts.length == 2) {
+        url = [parts[0], parts[1], filters.join(',')].join('/');
+      } else {
+        url = [parts[0], '24h', filters.join(',')].join('/');
+      }
+
+      console.log(params, filters, url);
+
+      return url;
+    }
   });
-  
+
   return Toolbar;
 });

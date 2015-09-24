@@ -84,6 +84,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
+  // grunt.registserTask('serve', ['http']);
   grunt.registerTask('serve', ['express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
 };

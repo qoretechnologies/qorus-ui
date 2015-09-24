@@ -5,8 +5,9 @@
         <option value="<%= method.name %>" <% if (method.name == obj.name) { %>selected<% } %>><%= method.name %></option>
     <% }) %>
 </select>
+<p class="muted"><small><%= (methods) ? _.find(methods, { name: name }).description : '' %></small></p>
 <label for="args">Arguments</label>
-<textarea id="args" name="args" class="span12" rows=5></textarea>
+<textarea id="args" name="args" class="span12" rows=5><%= obj.args %></textarea>
 
 <div id="service-method-response">
   <div class="tab-content">

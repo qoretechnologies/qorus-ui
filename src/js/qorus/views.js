@@ -3,6 +3,7 @@ define(function (require) {
   var $               = require('jquery'),
       _               = require('underscore'),
       Backbone        = require('backbone'),
+      Filtered        = require('backbone.filtered.collection'),
       // Keys         = require('backbone.keys'),
       settings        = require('settings'),
       utils           = require('utils'),
@@ -486,7 +487,7 @@ define(function (require) {
       if (!collection || !_.isFunction(collection)) collection = this.collection;
 
       if (collection) {
-        if (collection instanceof Backbone.Collection) {
+        if (collection instanceof Backbone.Collection || collection instanceof Filtered) {
           this.collection = collection;
         } else {
           this.collection = new collection([], this.opts);
@@ -1056,7 +1057,8 @@ define(function (require) {
             order: order,
             key: key,
             history: [prev_key]
-          }
+          };
+
           currentUser.setPreferences(this.collection.prefKey + '.sorting', pref);
         }
 

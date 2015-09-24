@@ -5,7 +5,8 @@
   "version": "0.9.1",
   "main": "Gruntfile.js",
   "dependencies": {
-    "cors": "^2.7.1"
+    "cors": "^2.7.1",
+    "express-http-proxy": "^0.6.0"
   },
   "devDependencies": {
     "express": "^4.10.5",
