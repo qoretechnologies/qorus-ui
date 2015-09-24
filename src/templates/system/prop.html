@@ -10,7 +10,7 @@
   <div class="pull-right">
     <form id="property-search" class="form-search">
       <div class="input-append search-box">
-        <input type="text" class="search appendInputButton search-query" id="property-filter" placeholder="Filter..." />
+        <input type="text" class="search appendInputButton search-query" id="property-filter" placeholder="Filter..." value="<%= _.result(obj, 'query') %>" />
         <button type="submit" class="btn"><i class="icon-search"></i></button>
       </div>
     </form>

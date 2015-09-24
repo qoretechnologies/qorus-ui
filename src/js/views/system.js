@@ -15,37 +15,57 @@ define(function(require){
       DashboardView    = require('views/system/dashboard'),
       LogsView         = require('views/system/logs'),
       RbacView         = require('views/system/rbac'),
-      SystemInfoView;  
+      SystemInfoView;
 
 
   SystemInfoView = Qorus.TabView.extend({
     url: '/system',
     views: {},
     cls: 'SystemInfoView',
-    
+    tabs: {
+      'dashboard': {
+        view: DashboardView,
+        // options: {
+        //   model: this.info
+        // }
+      },
+      'logs': {
+        view: LogsView
+      },
+      'options': {
+        view: OptionsView
+      },
+      'remote': {
+        view: ConnectionsView
+      },
+      'prop': {
+        view: PropView
+      },
+      'http': {
+        view: HttpServicesView
+      },
+      'alerts': {
+        view: AlertView
+      },
+      'rbac': {
+        view: RbacView
+      }
+    },
+
     initialize: function (opts) {
       this.path = opts.path;
       SystemInfoView.__super__.initialize.call(this, arguments);
       this.opts = opts || {};
       this.info = System.Info;
-      
+
       this.listenTo(this.info, 'sync', this.render);
       this.template = Template;
-      
+
       if (!this.info.id) this.info.fetch();
     },
-    
+
     preRender: function () {
       this.context.item = this.info.toJSON();
-      this.setView(new DashboardView({ model: this.info }), '#dashboard');
-      this.setView(new LogsView(), '#logs');
-      this.setView(new OptionsView(), '#options');
-      this.setView(new ConnectionsView(), '#remote');
-      this.setView(new PropView(), '#prop');
-      this.setView(new HttpServicesView(), '#http');
-      this.setView(new AlertView(), '#alerts');
-      this.setView(new RbacView(), '#rbac');
-
     }
   });
   return SystemInfoView;

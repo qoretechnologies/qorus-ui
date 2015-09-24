@@ -3,7 +3,7 @@ define(function (require) {
       moment    = require('moment'),
       settings  = require('settings'),
       $         = require('jquery');
-  
+
   var utils = {
     settings: settings,
     status_map: {
@@ -25,7 +25,7 @@ define(function (require) {
       "load": "off",
       "reset": "refresh"
     },
-    
+
     input_map: {
       'integer': ['input', 'number'],
       'bool': ['input', 'text'],
@@ -37,7 +37,7 @@ define(function (require) {
       'date': /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
       'boolean': /(1|2|True|False)/i
     },
-    
+
     parseDate: function (date, format) {
       var d;
       if (format===undefined){
@@ -47,17 +47,17 @@ define(function (require) {
       } else {
           d = moment(date, format);
       }
-            
+
       return d;
     },
-    
+
     formatDate: function (date) {
         return date.format(settings.DATE_DISPLAY);
     },
-    
+
     prepareDate: function (date) {
       var mdate;
-      
+
       if (date === undefined || date === null || date === '24h') {
         mdate = moment().add('days', -1).format(settings.DATE_DISPLAY);
       } else if (date == 'all') {
@@ -67,35 +67,35 @@ define(function (require) {
       } else {
         mdate = date;
       }
-      
+
       return mdate;
     },
-    
+
     // getNextDate: function (cron_time) {
     //     var next = later().getNext(cronParser().parse(cron_time));
-    //         
+    //
     //     return this.parseDate(next, null);
     // },
-    
+
     getCurrentLocation: function () {
       return window.location.href;
     },
-    
+
     getCurrentLocationPath: function () {
       return window.location.pathname;
     },
-    
+
     parseURLparams: function () {
-      var loc    = window.location.hash.slice(1), 
+      var loc    = window.location.hash.slice(1),
           params = [];
 
       _(loc.split(';')).each(function (param) {
         params.push(param.split(':'));
       });
-      
+
       return params;
     },
-    
+
     flattenSerializedArray: function (object, except) {
       // buggy when the object should be an array but has only one item selected it becomes a string
       var exclude = _.isArray(except) ? except : [except];
@@ -109,24 +109,24 @@ define(function (require) {
             }
             data[obj.name].push(obj.value);
           } else {
-            data[obj.name] = obj.value; 
+            data[obj.name] = obj.value;
           }
         }
       });
-      
+
       return data;
     },
-    
+
     encodeDate: function (date) {
       var m  = moment(date, settings.DATE_DISPLAY);
-      
+
       if (!m.isValid()) {
         m = moment();
       }
       return m.format('YYYYMMDDHHmmss');
 
     },
-    
+
     prep: function (val, des) {
       if (_.isNumber(val)) {
         val = String('00000000000000' + val).slice(-14);
@@ -138,7 +138,7 @@ define(function (require) {
       }
       return val;
     },
-    
+
     // Generate four random hex digits.
     S4: function () {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -148,25 +148,25 @@ define(function (require) {
     guid: function () {
        return (this.S4()+this.S4()+"-"+this.S4()+"-"+this.S4()+"-"+this.S4()+"-"+this.S4()+this.S4()+this.S4());
     },
-    
+
     parseQuery: function (fragment) {
-      if (!fragment) return {};
+      fragment = this.getCurrentLocation();
       fragment = decodeURIComponent(fragment);
       var query = (fragment.indexOf('?') === -1) ? fragment : fragment.split('?')[1];
       var params = {};
-      
+
       if (query.search(/^\s+/) !== -1) return {};
-      
+
       _.each(query.split(/;|&/), function (pair) {
         pair = pair.split('=');
         if (pair[1]) {
-          params[pair[0]] = pair[1]; 
+          params[pair[0]] = pair[1];
         }
       });
 
       return params;
     },
-    
+
     encodeQuery: function (query) {
       var equery = [];
 
@@ -174,20 +174,20 @@ define(function (require) {
         if (k!=='')
           equery.push([k,v].join('='));
       });
-      
+
       return equery.join('&');
     },
 
     spaceToLevel: function (str) {
       var len = str.search(/[^\s]/);
-      
+
       if (len !== -1) {
         return len;
       } else {
         return str.length;
       }
     },
-    
+
     flattenObj: function (obj) {
       if (!obj) return '';
       var lines = JSON.stringify(obj, null, 1)
@@ -197,78 +197,78 @@ define(function (require) {
           result = [],
           total  = lines.length,
           counter= {};
-      
+
       _.each(lines, function (line, i) {
-        var level     = utils.spaceToLevel(line), 
+        var level     = utils.spaceToLevel(line),
             nextLevel = lines[i+1] ? utils.spaceToLevel(lines[i+1]) : -1,
             cnt       = line.slice(level).split(/:(.+)/,2),
             node      = nextLevel > level,
             leaf      = nextLevel < level,
             key       = cnt[0],
             value     = (cnt.length > 1) ? cnt[1] : '';
-        
+
         if (key || node) {
           if (counter[level] === undefined) {
             counter[level] = 0;
           } else {
             counter[level] = counter[level] + 1;
           }
-          
+
           if (!value && !node) {
             value = key;
             key = '';
           }
-          
+
           result.push({
             key: key || "[" + counter[level]  + "]",
             value: value,
             level: level - 1,
             node: node,
             leaf: leaf
-          }); 
-          
+          });
+
           if (leaf) {
             delete counter[level];
           }
-        }        
+        }
       });
-      
+
       return result.slice(1);
     },
-    
+
     validate: function (obj, type, regex) {
       var test;
-      
+
       if (type in this.data_types)
         test = this.data_types[type];
-        
+
       if (type === 'regex') test = regex;
-      
+
       return obj.match(test);
     },
-    
+
     tableToCSV: function (opts) {
       if (!opts && !opts.el) return 'Options or element not specified';
       var $el       = $(opts.el),
           ignore    = (opts.ignore) ? _(opts.ignore).clone().map(function (ig) { return ":eq("+ig+")"; }).join() : '',
           separator = opts.separator || ';',
           csv       = '';
-      
+
       // create header
       if (opts.header) {
         csv += opts.header.join(separator);
       } else {
         csv += $el.find('thead').first().find('th').not(ignore).map(function (i, el) {
           return $(el).text().trim();
-        }).get().join(separator);        
+        }).get().join(separator);
       }
       csv += "\n";
-      
+
       // process rows
       $el.find('tbody tr:visible').each(function () {
         csv += $(this).find('td').not(ignore).map(function (i, el) {
           var val;
-          
+
           if (_.has($(el).data(), 'value')) {
             val = $(el).data('value').toString();
           } else {
@@ -278,10 +278,10 @@ define(function (require) {
         }).get().join(separator);
         csv += "\n";
       });
-      
+
       return csv.trim();
     }
   };
-    
+
   return utils;
 });
