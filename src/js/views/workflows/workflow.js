@@ -15,8 +15,8 @@ define(function (require) {
       HeaderTpl        = require("tpl!templates/workflow/detail_header.html"),
       AutostartView    = require('views/workflows/autostart'),
       HeaderView, ModelView;
-      
-      
+
+
   HeaderView = Qorus.View.extend({
     template: HeaderTpl,
     initialize: function (options) {
@@ -40,15 +40,15 @@ define(function (require) {
   // TODO; rewrite to Qorus.TabView
 
   ModelView = Qorus.TabView.extend({
-    helpers: helpers, 
+    helpers: helpers,
     url: function () {
-     return '/workflows/view/' + this.opts.id; 
+     return '/workflows/view/' + this.opts.id;
     },
-    
+
     title: function () {
       return this.model.get('name');
     },
-    
+
     additionalEvents: {
       'click #instances tbody tr': 'loadInfo',
       'submit .form-search': 'search',
@@ -56,23 +56,23 @@ define(function (require) {
       'click .action-modal': 'openModal',
       'click [data-action]': 'runAction'
     },
-    
+
     initialize: function (opts) {
       // debug.log("workflow opts", this.opts);
       _.bindAll(this, 'render', 'search');
       // this.path = window.location.pathname.replace("/workflows/view/"+opts.id+"/", "");
       ModelView.__super__.initialize.call(this, opts);
       this.opts = opts;
-      
+
       this.template = Template;
-      
+
       // init model
       this.model = new Workflow({ workflowid: opts.id, date: opts.date });
       this.listenToOnce(this.model, 'sync', this.render);
       this.listenTo(this.model, 'fetch', this.updateViews);
       this.model.fetch();
     },
-    
+
     render: function (ctx) {
       var mctx = { item: this.model };
       if (ctx){
@@ -81,37 +81,37 @@ define(function (require) {
       ModelView.__super__.render.call(this, mctx);
       return this;
     },
-    
+
     updateViews: function () {
       var detail_view = this.getView('#detail');
       if (detail_view) detail_view.render();
     },
-    
+
     preRender: function () {
       var url = '/workflows/' + this.model.id;
-      
+
       if (this.opts.inst === 'instances') {
-        this.setView(new InstanceListView({ 
-          date: this.opts.date, 
-          workflowid: this.opts.id, 
+        this.addTabView(new InstanceListView({
+          date: this.opts.date,
+          workflowid: this.opts.id,
 //          workflow: this.model,
-          url: this.url() 
-        }), '#instances');
+          url: this.url()
+        }), { name: 'instances'});
       } else {
-        this.setView(new OrderListView({ 
-          date: this.opts.date, 
-          workflowid: this.opts.id, 
-          statuses: this.opts.filter, 
-          url: this.url() 
-        }, this.model), '#instances');
+        this.addTabView(new OrderListView({
+          date: this.opts.date,
+          workflowid: this.opts.id,
+          statuses: this.opts.filter,
+          url: this.url()
+        }, this.model), { name: 'instances'});
       }
-      
-      this.setView(new HeaderView({ model: this.model, date: this.opts.date }), '#detail');  
-      this.setView(new LogView({ socket_url: url, parent: this }), '#log');
-      this.setView(new ChartsView({ model_id: this.model.id }), '#stats');
+
+      this.setView(new HeaderView({ model: this.model, date: this.opts.date }), '#detail');
+      this.addTabView(new LogView({ socket_url: url, parent: this }), { name: 'log' });
+      this.addTabView(new ChartsView({ model_id: this.model.id }), { name: 'stats'} );
     },
-    
-    
+
+
     // opens the bottom bar with detail info about the Instance/Order
     loadInfo: function (e) {
       var self = this,
@@ -119,7 +119,7 @@ define(function (require) {
       // var dataview = this.currentDataView();
         bar = this.getView('#bottom-bar'),
         oview;
-      
+
       if (e.target.localName == 'tr' || e.target.localName == 'td') {
         debug.log('load info stop propagation');
         e.stopPropagation();
@@ -131,7 +131,7 @@ define(function (require) {
         } else {
           if (bar) {
             oview = self.setView(new OrderView({ id: el.data('id'), show_header: false }), '#bottom-content');
-      
+
             oview.listenTo(oview.model, 'change', function () {
               bar.render();
               self.renderView('#bottom-content');
@@ -145,13 +145,13 @@ define(function (require) {
         }
       }
     },
-    
+
     // delegate search to current dataview
     search: function (e) {
       var dataview = this.currentDataView();
       dataview.search(e);
     },
-    
+
     // starts workflow
     runAction: function (e) {
       var data = e.currentTarget.dataset;
@@ -160,14 +160,14 @@ define(function (require) {
         e.preventDefault();
       }
     },
-    
+
     // edit action with Modal window form
     openModal: function (e) {
       e.preventDefault();
       e.stopPropagation();
-      
+
       var $target = $(e.currentTarget);
-      
+
       if ($target.data) {
         this.removeView('#modal');
         var view = this.setView(new Modal({ workflow: this.model }), '#modal', true);
@@ -175,7 +175,7 @@ define(function (require) {
       }
 
     },
-        
+
     clean: function () {
       this.undelegateEvents();
       this.stopListening();

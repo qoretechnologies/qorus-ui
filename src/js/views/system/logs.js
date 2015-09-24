@@ -5,34 +5,56 @@ define(function (require) {
     LogView = require('views/log'),
     Template = require('tpl!templates/system/logs.html'),
     View;
-  
+
   View = Qorus.TabView.extend({
     url: '/logs',
     template: Template,
-    
-    initialize: function () {
-      View.__super__.initialize.apply(this, arguments);
-      this.on('show', this.onShow);
+    tabs: {
+      'log-main': {
+        view: LogView,
+        options: {
+          socket_url: "/system"
+        }
+      },
+      'log-audit': {
+        view: LogView,
+        options: {
+          socket_url: "/audit",
+          auto_reconnect: false
+        }
+      },
+      'log-http': {
+        view: LogView,
+        options: {
+          socket_url: "/http",
+          auto_reconnect: false
+        }
+      },
+      'log-alert': {
+        view: LogView,
+        options: {
+          socket_url: "/alert",
+          auto_reconnect: false
+        }
+      },
+      'log-monitor': {
+        view: LogView,
+        options: {
+          socket_url: "/mon",
+          auto_reconnect: false
+        }
+      }
     },
-    
-    preRender: function () {
-      this.setView(new LogView({ socket_url: "/system", parent: this }), '#log-main');
-      this.setView(new LogView({ socket_url: "/audit", parent: this, auto_reconnect: false }), '#log-audit');
-      this.setView(new LogView({ socket_url: "/http", parent: this, auto_reconnect: false }), '#log-http');
-      this.setView(new LogView({ socket_url: "/alert", parent: this, auto_reconnect: false }), '#log-alert');
-      this.setView(new LogView({ socket_url: "/mon", parent: this, auto_reconnect: false }), '#log-monitor');
+    postInit: function () {
+      this.on('show', this.makeConnection);
     },
-
-    onShow: function () {
-      var $target, target_name, view;
-      // console.log('logs onshow');
-      
-      $target = this.$('.nav .active a');
-      target_name = $target.data('target') || $target.attr('href');
-      view = this.getView(target_name);
-      if (view) view.trigger('show');
+    makeConnection: function () {
+      var activeTab = this.active_tab || this.getTabs()[0];
+      if (!activeTab.collection.socket) {
+        activeTab.collection.connect();
+      }
     }
   });
-  
+
   return View;
 });
