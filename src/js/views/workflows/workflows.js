@@ -112,12 +112,6 @@ define(function (require) {
 
       var filtered = new Filtered(collection);
 
-      if (options.running) {
-        filtered.filterBy('running', function (m) {
-          return m.get('exec_count') > 0;
-        });
-      }
-
       filtered.listenTo(collection, 'sync', function () {
         filtered.trigger('sync', filtered);
       });
@@ -152,6 +146,14 @@ define(function (require) {
       // this.setView(new BottomBarView(), 'bottombar');
       var helpers = _.extend({ date: this.date }, this.helpers),
           tview, toolbar;
+
+      this.collection.resetFilters();
+
+      if (this.opts.running) {
+        this.collection.filterBy('running', function (m) {
+          return m.get('exec_count') > 0;
+        });
+      }
 
       // create workflows table
       tview = this.setView(new TableView({

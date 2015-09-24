@@ -34,7 +34,6 @@
         <button class="btn" data-action="open" data-url="<%= setUrl({ deprecated: !deprecated, running: running }) %>"><i class="icon-<%= (deprecated) ? 'check' : 'check-empty' %>"></i> Deprecated</button>
         <button class="btn" data-action="open" data-url="<%= setUrl({ running: !running, deprecated: deprecated }) %>"><i class="icon-<%= (obj.running) ? 'check' : 'check-empty' %>"></i> Only running</button>
     </div>
-    <%= console.log(obj) %>
     <div class="pull-right">
       <form class="form-search">
         <div class="input-append search-box">

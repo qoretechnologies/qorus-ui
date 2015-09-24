@@ -83,11 +83,25 @@ define(function (require) {
     // workflow list
     showWorkflows: function (date, filters, path, query) {
       // console.log('deprecated', (deprecated === 'hidden'));
+      var availableFilters = ['deprecated', 'running'],
+          prevFilters = [];
+
+      var pickOptions = _.curry(function (filters, options) {
+        return _.pick(options, filters);
+      });
+
+      var makeFiltersArray = _.curry(function (filters) {
+        return _.reduce(filters, function (memo, v, k) {
+          if (v) memo.push(k); return memo;
+        }, []);
+      });
+
+      var getFilters = _.compose(makeFiltersArray, pickOptions(availableFilters));
+
       filters = filters ? filters.split(',') : [];
 
       var deprecated = (filters.indexOf('hidden') > -1),
-          running    = (filters.indexOf('running') > -1),
-          d;
+          running    = (filters.indexOf('running') > -1);
 
       var opts = {
             date: utils.prepareDate(date),
@@ -97,7 +111,6 @@ define(function (require) {
             query: query,
             fetch: false
           },
-
           view;
 
       if (!this.collections.workflows) {
@@ -109,9 +122,9 @@ define(function (require) {
           col.trigger.apply(col, args);
         });
       } else {
-        d = this.collections.workflows.opts.deprecated;
+        prevFilters = getFilters(this.collections.workflows.opts);
         _.extend(this.collections.workflows.opts, opts);
-        this.collections.workflows.trigger('change:date', date);
+        this.collections.workflows.trigger('changeDate', date);
       }
 
       this.collections.workflows.fetch();
@@ -121,12 +134,9 @@ define(function (require) {
         this.setView(view);
       }
 
-      console.log(d, deprecated, filters);
-
-      if (d !== deprecated) {
+      if (prevFilters !== getFilters(opts)) {
         this.currentView.getView('.workflows');
-        this.currentView.opts.deprecated = deprecated;
-        this.currentView.opts.running = running;
+        this.currentView.opts = _.extend({}, this.currentView.opts, opts);
         this.currentView.render();
       }
     },

@@ -54,8 +54,6 @@ define(function (require) {
         url = [parts[0], '24h', filters.join(',')].join('/');
       }
 
-      console.log(params, filters, url);
-
       return url;
     }
   });
