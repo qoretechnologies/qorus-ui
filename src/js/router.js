@@ -1,7 +1,8 @@
-define(function (require) {  
+define(function (require) {
   var $                 = require('jquery'),
       _                 = require('underscore'),
       utils             = require('utils'),
+      Qorus             = require('qorus/qorus'),
       Backbone          = require('backbone'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),
@@ -30,10 +31,10 @@ define(function (require) {
       Library           = require('collections/library'),
       LibraryView       = require('views/library/library'),
       OrdersCollection  = require('collections/orders'),
-      
+
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router;
-  
+
 //  require('libs/newrelic');
   require('backbone.identity');
   require('messenger');
@@ -41,7 +42,7 @@ define(function (require) {
   require('collections/loggers');
 //  require('piwik');
 
-  
+
   // fetch local notifications
   Notifications.fetch();
 
@@ -55,7 +56,7 @@ define(function (require) {
     routes: Urls.routes,
     views: {},
     collections: {},
-        
+
     // cleans viewport from zombies
     clean: function () {
       debug.log('cleaning', this.currentView);
@@ -66,23 +67,23 @@ define(function (require) {
         this.currentView = null;
       }
     },
-    
+
     // resets current view
     setView: function (view) {
       this.clean();
       this.currentView = view;
       view.$el.appendTo('#content');
     },
-    
+
     // redirects to workflows page
     redirectToWorkflows: function() {
       Backbone.history.navigate('/workflows', { trigger: true });
     },
-    
-    // workflow list 
+
+    // workflow list
     showWorkflows: function (date, deprecated, path, query) {
       // console.log('deprecated', (deprecated === 'hidden'));
-      
+
       var opts = {
             date: utils.prepareDate(date),
             path: path,
@@ -91,7 +92,7 @@ define(function (require) {
             fetch: false
           },
           view, d = (deprecated === 'hidden');
-      
+
       if (!this.collections.workflows) {
         this.collections.workflows = new Workflows([], opts);
         this.listenToOnce(this.collections.workflows, 'sync', function (col) {
@@ -105,23 +106,25 @@ define(function (require) {
         _.extend(this.collections.workflows.opts, opts);
         this.collections.workflows.trigger('change:date', date);
       }
-      
+
       this.collections.workflows.fetch();
-      
+
+      console.log(this.collections.workflows.opts);
+
       if (!(this.currentView instanceof WorkflowListView)) {
         view = new WorkflowListView(this.collections.workflows, opts);
         this.setView(view);
       }
-      
+
       var dd = (deprecated === null) ? false : deprecated;
-      
+
       if (d !== dd) {
         this.currentView.getView('.workflows');
         this.currentView.opts.deprecated = dd;
         this.currentView.render();
       }
     },
-    
+
     // workflow detail
     showWorkflow: function (id, inst, filter, date) {
       var view = new WorkflowView({ id: id, inst: inst, filter: filter, date: date });
@@ -133,107 +136,107 @@ define(function (require) {
       var view = new ServiceListView({ path: path, query: query });
       this.setView(view);
     },
-    
+
     showService: function (id) {
       this.showServices(id);
     },
-    
+
     // job list
     showJobs: function (date, path, query) {
       var view = new JobListView({}, { date: date, path: path, query: query }, this);
       this.setView(view);
     },
-    
+
     // result list
     showJob: function (id, filter, date) {
       var view = new JobView({ jobid: id, filter: filter, date: date });
       this.setView(view);
     },
-    
+
     // event list
     showEvents: function () {
       var view = new EventListView();
       this.setView(view);
     },
-    
+
     // search
     showSearch: function (ids, keyvalues, query) {
       var order_params  = _.chain(OrdersCollection.prototype.search_params).pluck('name').flatten().uniq().value(),
           search_params = _.pick(utils.parseQuery(query), order_params);
-      
+
       // hotfix search all instances not only last 24h
       search_params.date = '1970-01-01';
-      
+
       var collection = new OrdersCollection([], _.clone(search_params)),
           view;
-    
+
       if (ids || keyvalues || query) {
-        collection.fetch(); 
+        collection.fetch();
       }
-      
+
       view = new SearchListView({ search: search_params, collection: collection });
       this.setView(view);
     },
-    
+
     // order detail
     showOrder: function (id, path){
       var view = new OrderView({ id: id, path: path });
       this.setView(view);
     },
-    
+
     // show group list
     showGroups: function () {
       var view = new GroupsView();
       this.setView(view);
     },
-    
-    // show group detail 
+
+    // show group detail
     showGroup: function (name) {
       var view = new GroupView({ name: name });
       this.setView(view);
     },
-    
+
     // system detail
     showSystem: function(path) {
       var query = window.location.search.slice(1);
       var view = new SystemInfoView({ query: query, path: path});
       this.setView(view);
     },
-    
+
     showOcmd: function () {
       var view = new OcmdView();
       this.setView(view);
     },
-    
+
     showExtension: function (extension) {
-      var view, query; 
-      
+      var view, query;
+
       if (!extension) {
         view = new ExtensionListView();
       } else {
         query = window.location.search.slice(1);
         debug.log(query);
-        view = new ExtensionView({}, extension, query);        
+        view = new ExtensionView({}, extension, query);
       }
       this.setView(view);
     },
-    
+
     showFunctions: function () {
       var view = new FunctionListView();
       this.setView(view);
     },
-    
+
     showClasses: function () {
       var collection = new Library();
       var view = new LibraryView({ collection: collection });
       this.setView(view);
     },
-    
+
     // redirects to workflows page
     redirectToDashboard: function() {
       Backbone.history.navigate('/system/dashboard', { trigger: true });
     },
-    
+
     // default
     defaultAction: function (actions) {
       this.clean();
@@ -244,14 +247,14 @@ define(function (require) {
   new InfoView();
 
   app_router = new AppRouter();
-  
+
   app_router.on('route', function () {
     // update menu and make active item based on fragment
     var fragment = Backbone.history.fragment.split('/')[0];
     $('.nav a').removeClass('active');
     $('.nav a[href*="'+ fragment +'"]').addClass('active');
   });
-  
+
   $(document).on("click", 'a[href]:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
@@ -261,7 +264,7 @@ define(function (require) {
       return ;
     }
   });
-  
+
   Backbone.history.start({ pushState: true });
 
   return app_router;

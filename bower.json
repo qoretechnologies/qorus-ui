@@ -42,7 +42,8 @@
     "cjs": "*",
     "amd-loader": "https://github.com/guybedford/amd-loader.git#~0.0.2",
     "react": "react-bower-svg#0.13.3-svg",
-    "cors": "*"
+    "cors": "*",
+    "node-getobject": "https://github.com/cowboy/node-getobject.git#~0.1.0"
   },
   "resolutions": {
     "jquery": "~2.1.4",

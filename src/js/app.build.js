@@ -25,10 +25,11 @@
       "templates": "../templates",
       "parallel": "libs/parallel",
       "settings": "settings.build",
-      "prism": "libs/prism/prism"
+      "prism": "libs/prism/prism",
+      "lodash": "libs/lodash.3.10"
     },
     wrapShim: true,
-    shim: { 
+    shim: {
       "backbone": {
         deps: ["underscore", "jquery", "jquery.rest", "jquery.ui", "sprintf"],
         exports: "Backbone"

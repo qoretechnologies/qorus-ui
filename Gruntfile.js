@@ -14,10 +14,10 @@ module.exports = function (grunt) {
         files: ['Gruntfile.js', 'src/js/**/*.js', '!src/js/libs/**', '!src/js/app.build.js'],
         options: {
           "predef": {
-              "$": true,  
-              "define": true, 
+              "$": true,
+              "define": true,
               "require": true,
-              "jQuery": true, 
+              "jQuery": true,
               "later": true,
               "cronParser": true,
               "moment": true,
@@ -76,13 +76,13 @@ module.exports = function (grunt) {
         },
       }
     });
-  
+
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-express');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  
+
   grunt.registerTask('default', ['jshint', 'express', 'casper', 'requirejs']);
   grunt.registerTask('serve', ['express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
