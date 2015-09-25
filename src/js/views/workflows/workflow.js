@@ -33,6 +33,7 @@ define(function (require) {
       this.context.pull_right = true;
       this.context.show_groups = true;
       this.context.date = utils.encodeDate(this.context.date);
+      this.context.back = true;
       this.setView(new AutostartView({ model: this.model }), '.autostart');
     }
   });

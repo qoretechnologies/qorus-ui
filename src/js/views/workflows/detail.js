@@ -1,5 +1,5 @@
 define(function (require) {
-  var $               = require('jquery'), 
+  var $               = require('jquery'),
       _               = require('underscore'),
       utils           = require('utils'),
       Qorus           = require('qorus/qorus'),
@@ -31,7 +31,7 @@ define(function (require) {
     name: 'Alerts',
     template: AlertsTpl
   });
-  
+
   LibView = LibraryView.extend({
     initialize: function () {
       LibView.__super__.initialize.apply(this, arguments);
@@ -48,11 +48,11 @@ define(function (require) {
     mapStepInfo: function () {
       var stepinfo = this.model.get('stepinfo');
       var steps = [];
-			
+
       _.each(stepinfo, function (step) {
         _.each(step.functions, function (func) {
 					func.header = step.name;
-          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> %s", 
+          func.formatted_name = sprintf("<small class='label label-info label-small' title='%s'>%s</small> %s",
             func.type, func.type.slice(0,1).toUpperCase(), func.name);
           steps.push(func);
         });
@@ -77,7 +77,7 @@ define(function (require) {
       this.views = {};
       this.model = options.model;
     },
-    
+
     preRender: function () {
       var as_view = new AutostartView({ model: this.model });
       this.context.item = this.model.toJSON();
@@ -87,66 +87,66 @@ define(function (require) {
       this.setView(as_view, '.autostart');
     }
   });
-  
+
   PaneView = Qorus.ModelView.extend({
     template: DetailTpl,
     name: 'Detail',
     postInit: function () {
       var opts = this.model.getOptions();
-      
+
       if (opts.length > 0) {
         this.setView(new TEView({ model: this.model, template: OptionsTpl }), '.options');
       }
     }
   });
-  
+
   DiagramView = DiagramBaseView.extend({
     additionalEvents: {
       "click .box": 'stepDetail'
     },
-    
+
     stepDetail: function (e) {
       var $target = $(e.currentTarget),
         id = $target.data('id');
-    
+
       if (id) {
         e.preventDefault();
         e.stopPropagation();
         this.setView(new ModalView({
-          content_view: new StepView({ id: id }) 
+          content_view: new StepView({ id: id })
         }), '#stepdetail');
       }
     }
   });
-  
+
   ModelView = Qorus.TabView.extend({
     __name__: "WorkflowDetailView",
     views: {},
     url: function () {
-      return "/" + this.model.id;
+      return this.model.id;
     },
-    
+
     additionalEvents: {
       "click a.close-view": "closeView",
       "click td[data-editable]": "editOption",
       "click [data-action]": 'runAction'
     },
-    
+
     initialize: function (opts) {
       ModelView.__super__.initialize.apply(this, arguments);
       this.views = {};
-      
+
       this.template = Template;
-      
+
       if (_.has(opts, 'context')) {
         _.extend(this.context, opts.context);
       }
-      
+
       // console.log(model);
       this.model = opts.model;
       this.listenTo(this.model, 'change:has_alerts', this.render);
     },
-    
+
     dispatch: function () {
       this.model.dispatch.apply(this.model, arguments);
     },
@@ -156,41 +156,41 @@ define(function (require) {
       ModelView.__super__.render.call(this, ctx);
       return this;
     },
-    
+
     onRender: function () {
       if (this.active_tab) {
         $('a[href='+ this.active_tab + ']').tab('show');
       }
     },
-    
+
     preRender: function () {
       var url = '/workflows/' + this.model.id,
           pview, lview, dview, aview, logview, hview;
-      
+
       this.removeView('tabs');
 
       pview = this.addTabView(new PaneView({ model: this.model }));
-      
+
       pview.listenTo(this.model, 'change', pview.render);
-      
+
       lview = this.addTabView(new LibView({ model: this.model }));
-      
+
       lview.listenTo(this.model, 'change:wffunc', lview.render);
-      
+
       dview = this.addTabView(new DiagramView({ steps: this.model.mapSteps() }));
-      
+
       logview = this.addTabView(new LogView({ socket_url: url, parent: this }));
 
       if (this.model.get('has_alerts')) aview = this.addTabView(new AlertsView({ model: this.model }));
-      
+
       hview =  this.setView(new HeaderView({ model: this.model, date: this.date }), '#heading');
     },
-            
+
     closeView: function (e) {
       if (e) {
-        e.preventDefault();  
+        e.preventDefault();
       }
-      
+
       this.$el.parent()
         .removeClass('show')
         .data('id', null);
@@ -201,49 +201,49 @@ define(function (require) {
 
     createDiagram: function () {
       var view = this.getView('#steps');
-      
+
       if (!view) {
         view = this.setView(new DiagramView({ steps: this.model.mapSteps() }), '#steps', true);
       }
       view.render();
     },
-    
+
     // onTabChange: function (name) {
     //   if (name === 'steps') this.createDiagram();
     // },
-    
+
     editOption: function (e) {
       var self = this, $tpl;
-      
+
       if (e.target.localName == 'td') {
         var $target  = $(e.currentTarget),
             value    = $target.data('value'),
             obj_type = $target.data('type'),
             name     = $target.data('name'),
             min      = $target.data('min'),
-            template = EditTemplate({ 
+            template = EditTemplate({
               value: value,
               type: obj_type ? utils.input_map[obj_type][1] : 'string',
               name: name,
               min: min
             });
-        
+
         $tpl = template;
         $target.toggleClass('editable');
         $target.html($tpl);
-        
+
         this.lock();
-        
+
         $('button[data-action=cancel]', $target).click(function () {
           $target.html(value);
           $target.toggleClass('editable');
         });
-        
+
         $('button[data-action=set]').click(function () {
           var val = $(this).prev('input').val();
           self.setOption(name, val, $target);
         });
-        
+
         $('input').keypress(function (e) {
           if(e.which == 13) {
             self.setOption(name, $(this).val(), $target);
@@ -251,18 +251,18 @@ define(function (require) {
         });
       }
     },
- 
+
     setOption: function (option, value, target) {
       var opts = {}, action = 'set', self = this;
 
       opts[option] = value;
       action += option.charAt(0).toUpperCase() + option.slice(1);
-      
+
       if (target.data('method')) {
         opts = { options: option +'='+ value };
         action = target.data('method');
       }
-      
+
       this.model.doAction(action, opts, function () {
         self.unlock();
         target.html(value);
@@ -270,7 +270,7 @@ define(function (require) {
         target.data('value', value);
       });
     },
-    
+
     runAction: function (e) {
       var data = e.currentTarget.dataset;
       if (data.action) {
@@ -278,8 +278,8 @@ define(function (require) {
         e.preventDefault();
       }
     }
-    
+
   });
-  
+
   return ModelView;
 });

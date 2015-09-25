@@ -139,7 +139,7 @@ define(function (require) {
       // reassign listening events to collection
       this.stopListening(this.collection);
 
-      this.listenToOnce(this.collection, 'sync', this.triggerRowClick);
+      this.listenToOnce(this.collection.superset(), 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
     },
 
@@ -378,6 +378,9 @@ define(function (require) {
       }
     },
 
+    clean: function () {
+      this.collection.stopListening();
+    }
   });
 
   return ListView;

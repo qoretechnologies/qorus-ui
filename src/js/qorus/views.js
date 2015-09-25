@@ -830,7 +830,8 @@ define(function (require) {
 
     triggerRowClick: function () {
       if (this.detail_id) {
-        var m = this.collection.get(this.detail_id);
+        var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection;
+        var m = collection.get(this.detail_id);
         if (m) m.trigger('rowClick');
       }
     }
