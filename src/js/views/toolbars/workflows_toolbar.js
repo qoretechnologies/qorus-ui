@@ -16,18 +16,18 @@ define(function (require) {
     template: Template,
     context: {},
     url: '/workflows/',
-    url_options: function () {
-      return {
-        deprecated: this.options.deprecated
-      };
-    },
+    // url_options: function () {
+    //   return {
+    //     deprecated: this.options.deprecated
+    //   };
+    // },
 
     route: 'showWorkflows',
 
     initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
-      _.extend(this.context, _.pick(opts, ['deprecated', 'running']));
+      _.extend(this.context, _.pick(opts, ['deprecated', 'running', 'last']));
       this.context.setUrl = this.setUrl;
 
       this.setView(new CopyView({ csv_options: csv_options }), '#table-copy');
@@ -48,10 +48,14 @@ define(function (require) {
         filters.push('running');
       }
 
+      if (params.last) {
+        filters.push('last');
+      }
+
       if (parts.length == 2) {
         url = [parts[0], parts[1], filters.join(',')].join('/');
       } else {
-        url = [parts[0], '24h', filters.join(',')].join('/');
+        url = [parts[0], parts[1] || '', filters.join(',')].join('/');
       }
 
       return url;

@@ -1,6 +1,6 @@
 define(function (require) {
   var constants = {};
-  
+
   /**
     Defines order states definitions and its acronyms
     @const {array}
@@ -20,6 +20,8 @@ define(function (require) {
     { name: 'BLOCKED', short: 'B'},
     { name: 'CRASH', short: 'C'},
   ];
-  
+
+  constants.AVAILABLE_FILTERS = ['deprecated', 'running', 'last'];
+
   return constants;
 });

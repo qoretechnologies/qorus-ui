@@ -4,6 +4,7 @@ define(function (require) {
       utils             = require('utils'),
       Qorus             = require('qorus/qorus'),
       Backbone          = require('backbone'),
+      Helpers           = require('qorus/helpers'),
       InfoView          = require('views/info'),
       SystemInfoView    = require('views/system'),
       Workflows         = require('collections/workflows'),
@@ -25,6 +26,7 @@ define(function (require) {
       Notifications     = require('collections/notifications'),
       Alerts            = require('collections/alerts'),
       Constants         = require('collections/constants'),
+      WorkflowsUtils    = require('views/workflows/utils'),
 //      Functions         = require('collections/functions'),
 //      Loggers           = require('collections/loggers'),
 //      Qorus             = require('qorus/views'),
@@ -83,31 +85,33 @@ define(function (require) {
     // workflow list
     showWorkflows: function (date, filters, path, query) {
       // console.log('deprecated', (deprecated === 'hidden'));
-      var availableFilters = ['deprecated', 'running'],
-          prevFilters = [];
-
-      var pickOptions = _.curry(function (filters, options) {
-        return _.pick(options, filters);
-      });
-
-      var makeFiltersArray = _.curry(function (filters) {
-        return _.reduce(filters, function (memo, v, k) {
-          if (v) memo.push(k); return memo;
-        }, []);
-      });
-
-      var getFilters = _.compose(makeFiltersArray, pickOptions(availableFilters));
+      var prevFilters   = [],
+          getFilters    = WorkflowsUtils.getFilters,
+          storedFilters = Helpers.user.getPreferences('ui.views.workflows.filters') || [];
 
       filters = filters ? filters.split(',') : [];
 
+      if ((filters.length === 0 && !_.isEqual(filters, storedFilters) && !this.collections.workflows) ||
+          (filters.length === 0 && this.collections.workflows &&
+           !_.isEqual(getFilters(this.collections.workflows.opts),storedFilters))) {
+        filters = _.uniq(storedFilters.concat(filters));
+        var url = '/' + ['workflows', date, filters.join(',')].join('/');
+        if (path) url += '/' + path;
+        if (query) url += '?' + query;
+
+        return Backbone.history.navigate(url, { trigger: true });
+      }
+
       var deprecated = (filters.indexOf('hidden') > -1),
-          running    = (filters.indexOf('running') > -1);
+          running    = (filters.indexOf('running') > -1),
+          last       = (filters.indexOf('last') > -1);
 
       var opts = {
             date: utils.prepareDate(date),
             path: path,
             deprecated: deprecated,
             running: running,
+            last: last,
             query: query,
             fetch: false
           },
@@ -135,6 +139,7 @@ define(function (require) {
       }
 
       if (prevFilters !== getFilters(opts)) {
+        Helpers.user.setPreferences('ui.views.workflows.filters', getFilters(opts));
         this.currentView.getView('.workflows');
         this.currentView.opts = _.extend({}, this.currentView.opts, opts);
         this.currentView.render();

@@ -1,22 +1,23 @@
 define(function (require) {
-  var _             = require('underscore'),
-      $             = require('jquery'),
-      Backbone      = require('backbone'),
-      Qorus         = require('qorus/qorus'),
-      Template      = require('text!templates/workflow/list.html'),
-      Toolbar       = require('views/toolbars/workflows_toolbar'),
-      Dispatcher    = require('qorus/dispatcher'),
-      Modal         = require('views/workflows/modal'),
-      TableTpl      = require('text!templates/workflow/table.html'),
-      RowTpl        = require('text!templates/workflow/row.html'),
-      WorkflowView  = require('views/workflows/detail'),
-      PaneView      = require('views/common/pane'),
-      utils         = require('utils'),
-      qorus_helpers = require('qorus/helpers'),
-      helpers       = require('views/workflows/helpers'),
-      AutostartView = require('views/workflows/autostart'),
-      Filtered      = require('backbone.filtered.collection'),
-      Workflows     = require('collections/workflows'),
+  var _              = require('underscore'),
+      $              = require('jquery'),
+      Backbone       = require('backbone'),
+      Qorus          = require('qorus/qorus'),
+      Template       = require('text!templates/workflow/list.html'),
+      Toolbar        = require('views/toolbars/workflows_toolbar'),
+      Dispatcher     = require('qorus/dispatcher'),
+      Modal          = require('views/workflows/modal'),
+      TableTpl       = require('text!templates/workflow/table.html'),
+      RowTpl         = require('text!templates/workflow/row.html'),
+      WorkflowView   = require('views/workflows/detail'),
+      PaneView       = require('views/common/pane'),
+      utils          = require('utils'),
+      qorus_helpers  = require('qorus/helpers'),
+      helpers        = require('views/workflows/helpers'),
+      AutostartView  = require('views/workflows/autostart'),
+      Filtered       = require('backbone.filtered.collection'),
+      Workflows      = require('collections/workflows'),
+      getFilters     = require('views/workflows/utils').getFilters,
       ListView, RowView, TableView;
 
   // extending base RowView to add workflow related events
@@ -89,9 +90,8 @@ define(function (require) {
     url: function () {
       var url = qorus_helpers.getUrl('showWorkflows', {
         date: utils.encodeDate(this.opts.date),
-        deprecated: (this.opts.deprecated) ? 'hidden' : ''
+        deprecated: getFilters(this.collection.opts).join(',')
       });
-      if (!this.opts.deprecated) url += "/";
       return url;
     },
 
@@ -145,19 +145,38 @@ define(function (require) {
 
       // this.setView(new BottomBarView(), 'bottombar');
       var helpers = _.extend({ date: this.date }, this.helpers),
+          collection = this.collection,
           tview, toolbar;
 
-      this.collection.resetFilters();
+      collection.resetFilters();
 
-      if (this.opts.running) {
-        this.collection.filterBy('running', function (m) {
+      if (this.opts.running && this.opts.last) {
+        collection.filterBy('running-last', function (m) {
+          var last = _(collection.superset().models)
+            .filter(function (i) { return i.get('name') === m.get('name'); })
+            .sortBy(function (n) { return n.get('version'); })
+            .last();
+
+          return m.get('exec_count') > 0 || m.get('id') === last.get('id');
+        });
+      } else if (this.opts.running) {
+        collection.filterBy('running', function (m) {
           return m.get('exec_count') > 0;
+        });
+      } else if (this.opts.last) {
+        collection.filterBy('last', function (m) {
+          var last = _(collection.superset().models)
+            .filter(function (i) { return i.get('name') === m.get('name'); })
+            .sortBy(function (n) { return n.get('version'); })
+            .last();
+
+          return m.get('id') === last.get('id');
         });
       }
 
       // create workflows table
       tview = this.setView(new TableView({
-          collection: this.collection,
+          collection: collection,
           template: TableTpl,
           row_template: RowTpl,
           row_view: RowView,
@@ -165,6 +184,7 @@ define(function (require) {
           dispatcher: Dispatcher,
           deprecated: this.opts.deprecated,
           running: this.opts.running,
+          last: this.opts.last,
           fixed: true
         }), '.workflows');
 
@@ -176,8 +196,9 @@ define(function (require) {
         date: this.date,
         parent: this,
         deprecated: this.opts.deprecated,
-        collection: this.collection,
-        running: this.opts.running
+        collection: collection,
+        running: this.opts.running,
+        last: this.opts.last
       }), '.toolbar');
     },
 
