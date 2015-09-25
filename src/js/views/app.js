@@ -9,6 +9,7 @@ import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
 
 import { fetchSystem } from '../store/system/actions';
+import { fetchCurrentUser } from '../store/current-user/actions';
 
 class Content extends Component {
   static propTypes = {
@@ -64,12 +65,12 @@ class Root extends Component {
 
   constructor(...props) {
     super(...props);
+    const { dispatch } = this.props;
+    dispatch(fetchSystem());
+    dispatch(fetchCurrentUser());
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchSystem());
-    // dispatch(restActions.currentUser.sync());
     this.setTitle();
   }
 

@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { curry, extend } from 'lodash';
 
 const initialState = {
   data: [],
@@ -7,15 +6,13 @@ const initialState = {
   loading: false
 };
 
-
 export default handleActions({
-  SYSTEM_FETCH: {
+  CURRENT_USER_FETCH: {
     next(state, action) {
       return {
-        ...state,
         data: action.payload,
-        sync: true,
         loading: false,
+        sync: true,
         error: null
       };
     },

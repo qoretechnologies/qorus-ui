@@ -44,7 +44,7 @@ class App extends Component {
           }
         </Provider>
         <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} />
+          <DevTools store={store} monitor={LogMonitor}/>
         </DebugPanel>
       </div>
     );
