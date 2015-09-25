@@ -2116,3 +2116,15 @@ a.subtle:hover, a.subtle:focus {
 textarea[readonly] {
 	cursor: auto;
 }
+
+.table tbody tr.running>td {
+	background-color: #EEF9DA;
+}
+
+.table tbody tr.running:hover>td {
+	background-color: #e5f2d3;
+}
+
+.date.dp input {
+	max-width: 10em;
+}

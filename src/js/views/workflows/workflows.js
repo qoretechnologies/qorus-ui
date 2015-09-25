@@ -29,6 +29,14 @@ define(function (require) {
       'click [data-action]': 'doAction'
     },
 
+    className: function () {
+      if (this.model.get('exec_count') > 0) {
+        return 'table-row running';
+      }
+
+      return 'table-row';
+    },
+
     initialize: function () {
       _.bindAll(this, 'render');
       RowView.__super__.initialize.apply(this, arguments);
@@ -99,8 +107,8 @@ define(function (require) {
     // el: $("#content"),
     additionalEvents: {
       'click .action-modal': 'openModal',
-      'click .running': 'highlightRunning',
-      'click .stopped': 'highlightStopped',
+      'click a.running': 'highlightRunning',
+      'click a.stopped': 'highlightStopped',
       'contextmenu .workflows tbody tr': 'onRightClick'
     },
 
@@ -347,14 +355,29 @@ define(function (require) {
           this.$el.removeClass('info');
         });
 
-        url = this.getViewUrl() + "/" + row.model.id;
+        url = this.getViewUrl() + row.model.id;
 
         view.upstreamUrl = this.getViewUrl();
         this.detail_id = row.model.id;
       }
 
       Backbone.history.navigate(url + Backbone.history.location.search);
-    }
+    },
+
+    enableActions: function () {
+      var ids = this.getCheckedIds();
+
+      debug.log(this.$el, $('.toolbar-actions', this.$el).attr('class'));
+
+      if (ids.length > 0) {
+        $('.toolbar-actions', this.$el).removeClass('hide');
+        $('.toolbar-extra', this.$el).addClass('hide');
+      } else {
+        $('.toolbar-actions', this.$el).addClass('hide');
+        $('.toolbar-extra', this.$el).removeClass('hide');
+      }
+    },
+
   });
 
   return ListView;

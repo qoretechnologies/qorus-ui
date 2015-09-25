@@ -4,6 +4,7 @@ define(function (require) {
       BaseToolbar = require('views/toolbars/toolbar'),
       Template    = require('text!templates/workflow/toolbars/workflows_toolbar.html'),
       CopyView    = require('views/common/table.copy'),
+      getFilters  = require('views/workflows/utils').getFilters,
       Toolbar;
 
   var csv_options = {
@@ -16,11 +17,11 @@ define(function (require) {
     template: Template,
     context: {},
     url: '/workflows/',
-    // url_options: function () {
-    //   return {
-    //     deprecated: this.options.deprecated
-    //   };
-    // },
+    url_options: function () {
+      return {
+        deprecated: getFilters(this.options)
+      };
+    },
 
     route: 'showWorkflows',
 

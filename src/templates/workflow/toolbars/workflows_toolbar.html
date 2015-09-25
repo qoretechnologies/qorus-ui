@@ -16,8 +16,13 @@
       <button class="btn" data-id="selected" data-action="enable" data-method="put"><i class="icon-off"></i> Enable</button>
       <button class="btn" data-id="selected" data-action="disable" data-method="put"><i class="icon-ban-circle"></i> Disable</button>
       <button class="btn" data-id="selected" data-action="reset" data-method="put"><i class="icon-refresh"></i> Reset</button>
-      <button class="btn" data-id="selected" data-action="hide" data-method="put"><i class="icon-flag-alt"></i> Set deprecated</button>
-      <button class="btn" data-id="selected" data-action="show" data-method="put"><i class="icon-flag"></i> Unset deprecated</button>
+      <button class="btn dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu above pull-right">
+        <li><a data-id="selected" data-action="hide" data-method="put"><i class="icon-flag-alt"></i> Set deprecated</a></li>
+        <li><a data-id="selected" data-action="show" data-method="put"><i class="icon-flag"></i> Unset deprecated</a></li>
+      </ul>
     </div>
     <div class="btn-group">
         <div class="input-prepend date dp" data-date="<%= date %>" data-format="yyyy-MM-dd HH:mm:ss">
@@ -25,22 +30,29 @@
           <input type="text" class="" value="<%= date %>">
         </div>
         <div class="btn-group">
-          <button class="btn" data-action="open" data-url="/workflows/all">All</button>
-          <button class="btn" data-action="open" data-url="/workflows">24 h</button>
+          <button class="btn" data-action="open" data-url="setUrl({ running: running, deprecated: deprecated, last: last })">All</button>
+          <button class="btn" data-action="open" data-url="setUrl({ running: running, deprecated: deprecated, last: last })">24 h</button>
         </div>
     </div>
-    <div id="table-copy" class="btn-group"></div>
     <div class="btn-group">
-        <button class="btn" data-action="open" data-url="<%= setUrl({ deprecated: !deprecated, running: running, last: last }) %>">
-          <i class="icon-<%= (deprecated) ? 'check' : 'check-empty' %>"></i> Deprecated
-        </button>
-        <button class="btn" data-action="open" data-url="<%= setUrl({ running: !running, deprecated: deprecated, last: last }) %>">
+        <button class="btn<%= (running) ? ' btn-success' : '' %>" data-action="open" data-url="<%= setUrl({ running: !running, deprecated: deprecated, last: last }) %>">
           <i class="icon-<%= (running) ? 'check' : 'check-empty' %>"></i> Running
         </button>
-        <button class="btn" data-action="open" data-url="<%= setUrl({ last: !last, running: running, deprecated: deprecated }) %>">
+        <button class="btn<%= (last) ? ' btn-success' : '' %>" data-action="open" data-url="<%= setUrl({ last: !last, running: running, deprecated: deprecated }) %>">
           <i class="icon-<%= (last) ? 'check' : 'check-empty' %>"></i> Last version
         </button>
+        <button class="btn dropdown-toggle<%= (deprecated) ? ' btn-success' : '' %>" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu above pull-right">
+          <li>
+            <a data-action="open" data-url="<%= setUrl({ deprecated: !deprecated, running: running, last: last }) %>">
+              <i class="icon-<%= (deprecated) ? 'check' : 'check-empty' %>"></i> Deprecated
+            </a>
+          </li>
+        </ul>
     </div>
+    <div id="table-copy" class="btn-group toolbar-extra"></div>
     <div class="pull-right">
       <form class="form-search">
         <div class="input-append search-box">

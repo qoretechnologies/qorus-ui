@@ -20,7 +20,7 @@ define(function (require) {
     getStatusCSS: function (status) {
       if (status) {
         status = status.toLowerCase();
-        return utils.status_map[status];        
+        return utils.status_map[status];
       }
     },
 
@@ -35,15 +35,15 @@ define(function (require) {
         tpl_html = _.template(tpl);
       }
 
-      return tpl_html({ 
-        items: obj, 
-        css: css, 
-        createNestedList: Helpers.createNestedList, 
-        escapeHtml: Helpers.escapeHtml, 
-        preformatted: preformatted 
+      return tpl_html({
+        items: obj,
+        css: css,
+        createNestedList: Helpers.createNestedList,
+        escapeHtml: Helpers.escapeHtml,
+        preformatted: preformatted
       });
     },
-    
+
     createNestedListAsText: function (obj, tpl, level) {
       var tpl_html = NestedListTextTpl,
           output;
@@ -53,13 +53,13 @@ define(function (require) {
         tpl_html = _.template(tpl);
       }
 
-      output = tpl_html({ 
-        items: obj, 
-        createNestedListAsText: Helpers.createNestedListAsText, 
-        level: level, 
-        escapeHtml: Helpers.escapeHtml 
+      output = tpl_html({
+        items: obj,
+        createNestedListAsText: Helpers.createNestedListAsText,
+        level: level,
+        escapeHtml: Helpers.escapeHtml
       });
-      
+
       return output.replace(/\n{2,}/gm,"\n");
     },
 
@@ -73,10 +73,10 @@ define(function (require) {
       }
 
       output = tpl_html({ items: obj, flattenObj: utils.flattenObj, level: level, escapeHtml: Helpers.escapeHtml });
-      
+
       return output.replace(/\n{2,}/gm,"\n");
     },
-    
+
     nestedListTableFromArray: function (obj, tpl) {
       var tpl_html = NestedListTableTpl,
           output;
@@ -86,8 +86,8 @@ define(function (require) {
       }
 
       output = tpl_html({ items: obj });
-      
-      return output.replace(/\n{2,}/gm,"\n");      
+
+      return output.replace(/\n{2,}/gm,"\n");
     },
 
     nestedListTextFromArray: function (obj, tpl) {
@@ -99,8 +99,8 @@ define(function (require) {
       }
 
       output = tpl_html({ items: obj, escapeHtml: Helpers.escapeHtml });
-      
-      return output.replace(/\n{2,}/gm,"\n");      
+
+      return output.replace(/\n{2,}/gm,"\n");
     },
 
     statusIcon: function(status) {
@@ -117,7 +117,7 @@ define(function (require) {
       if (!_.isUndefined(tpl)) {
         tpl_html = _.template(tpl);
       }
-      
+
       return tpl_html({ status: status, data: data });
     },
 
@@ -125,56 +125,56 @@ define(function (require) {
       var url        = Urls.urls[route],
           matches    = url.match(/(%\(.[^\)]*)\)s/g),
           url_params = {};
-      
+
       params = params || {};
-      
+
       _.each(matches, function (match) {
         var m = match.replace(/(%\()|(\)s)/g, '');
         url_params[m] = _.has(params, m) ? (params[m] || '') : '';
       });
-      
+
       if (url.charAt(0) !== "/") url = "/" + url;
-      
-      return sprintf(url, url_params).replace(/\/+$/, '');
+
+      return sprintf(url, url_params);
     },
-    
+
     statusActions: function (status, data, tpl) {
       var tpl_html = tpl || StatusActionTpl,
         context = _.extend(this, data, { status: status });
-    
+
       if (!_.isUndefined(tpl)) {
        tpl_html = _.template(tpl);
       }
-    
+
       // exted this context
       if (data.obj) {
         _.extend(context, data);
       }
       return tpl_html(context);
     },
-    
+
     getActionIcon: function (action) {
       if (_.has(utils.action_icons, action)) {
         return "icon-" + utils.action_icons[action];
       }
       return '';
     },
-    
+
     escapeHtml: function (html) {
       if (_.isString(html)) {
         var new_html;
         new_html = _.escape(html);
         if (html.search(/^<\?xml/) != -1) {
           return '<pre><code data-language="xml">' + new_html + '</code></pre>';
-        } 
+        }
         return new_html;
       }
       return html;
     },
-    
+
     createDiagram: function (step_list, node) {
         var n = node || $('<div class="row" />');
-    
+
         _.each(step_list, function (step) {
             if (_.isArray(step)) {
                 var sw = 12 / step.length;
@@ -186,40 +186,40 @@ define(function (require) {
 
         return n;
     },
-    
+
     nl2br: function (text) {
       if (_.isString(text)) {
         return text.replace(/\n/gi,'<br />');
       }
       return text;
     },
-    
+
     connectionsStatus: function (status, connections) {
       return ConnectionsStatusTpl({ status: status, connections: connections });
     },
-    
+
     groupList: function (groups) {
       return GroupListTpl({ groups: groups, getUrl: this.getUrl });
     },
-    
+
     createControls: function (item) {
       var controls = _.result(item, 'getControls');
       return ControlsTpl({ controls: controls });
     },
-    
+
     slugify: function (value) {
       return value.toLowerCase().replace(/\-+/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
     },
-    
+
     autoFormat: function (value, type) {
       if (type === 'boolean') return this.statusIcon(value);
       if (type === 'list') return this.createNestedList(value);
-      if (type === 'date' && value) return moment(value, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+      if (type === 'date' && value) return moment(value, settings.DATE_FORMAT).format(settings.DATE_DISPLAY);
       return value;
     },
-    
+
     encodeDate: utils.encodeDate,
-    
+
     iconLock: function (lock) {
       var icon;
 
@@ -228,13 +228,13 @@ define(function (require) {
       } else {
         icon = "<i class='icon-unlock'></i>";
       }
-      
+
       return icon;
     },
-    
+
     settings: settings,
     isMac: navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)?true:false
   };
-  
+
   return Helpers;
 });

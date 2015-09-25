@@ -1052,14 +1052,16 @@ define(function (require) {
         this.collection.sort_key = key;
         if (this.collection.sort_history) this.collection.sort_history.push(prev_key);
 
-        if (this.collection.prefKey) {
+        var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection;
+
+        if (collection.prefKey) {
           var pref = {
             order: order,
             key: key,
             history: [prev_key]
           };
 
-          currentUser.setPreferences(this.collection.prefKey + '.sorting', pref);
+          currentUser.setPreferences(collection.prefKey + '.sorting', pref);
         }
 
         views = views.sort(function (c1, c2) {
