@@ -2117,12 +2117,20 @@ textarea[readonly] {
 	cursor: auto;
 }
 
-.table tbody tr.running>td {
+.table tbody tr.running > td {
 	background-color: #EEF9DA;
 }
 
-.table tbody tr.running:hover>td {
+.table tbody tr.running:hover > td {
 	background-color: #e5f2d3;
+}
+
+.table tbody tr.running.info > td {
+	background-color: #d9edf7;
+}
+
+.table tbody tr.running.info:hover > td {
+	background-color: #c4e3f3;
 }
 
 .date.dp input {
