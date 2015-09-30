@@ -1,4 +1,4 @@
-({
+requirejs.config({
     appDir: "../",
     baseUrl: "js",
     dir: "../../dist",
@@ -26,7 +26,7 @@
       "parallel": "libs/parallel",
       "settings": "settings.build",
       "prism": "libs/prism/prism",
-      "lodash": "libs/lodash.3.10"
+      "_lodash": "libs/lodash.3.10"
     },
     wrapShim: true,
     shim: {

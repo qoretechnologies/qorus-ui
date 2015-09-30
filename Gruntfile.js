@@ -6,6 +6,8 @@ module.exports = function (grunt) {
           options: {
             baseUrl: "src",
             mainConfigFile: "src/js/app.build.js",
+            appDir: "src",
+            baseUrl: "js",
             dir: "dist"
           }
         }
