@@ -39,8 +39,10 @@ define(function (require) {
       return __.get(this.get('storage'), prop);
     },
     setPreferences: function (prop, value) {
-      __.set(this.get('storage'), prop, value);
-      this.save({ storage: this.get('storage')});
+      if (this.get('storage')) {
+        __.set(this.get('storage'), prop, value);
+        this.save({ storage: this.get('storage')});
+      }
     }
   });
 
