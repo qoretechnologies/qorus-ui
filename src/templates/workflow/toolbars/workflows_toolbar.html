@@ -30,8 +30,8 @@
           <input type="text" class="" value="<%= date %>">
         </div>
         <div class="btn-group">
-          <button class="btn" data-action="open" data-url="setUrl({ running: running, deprecated: deprecated, last: last })">All</button>
-          <button class="btn" data-action="open" data-url="setUrl({ running: running, deprecated: deprecated, last: last })">24 h</button>
+          <button class="btn" data-action="open" data-url="<%= setUrl({ running: running, deprecated: deprecated, last: last, date: 'all' }) %>">All</button>
+          <button class="btn" data-action="open" data-url="<%= setUrl({ running: running, deprecated: deprecated, last: last, date: '24h' }) %>">24 h</button>
         </div>
     </div>
     <div class="btn-group">

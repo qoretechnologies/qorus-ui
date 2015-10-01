@@ -1,38 +1,39 @@
 define(function (require) {
-  var $                 = require('jquery'),
-      _                 = require('underscore'),
-      utils             = require('utils'),
-      Qorus             = require('qorus/qorus'),
-      Backbone          = require('backbone'),
-      Helpers           = require('qorus/helpers'),
-      InfoView          = require('views/info'),
-      SystemInfoView    = require('views/system'),
-      Workflows         = require('collections/workflows'),
-      WorkflowListView  = require('views/workflows/workflows'),
-      WorkflowView      = require('views/workflows/workflow'),
-      ServiceListView   = require('views/services/services'),
-      JobListView       = require('views/jobs/jobs'),
-      JobView           = require('views/jobs/job'),
-      EventListView     = require('views/events/events'),
-      SearchListView    = require('views/workflows/search'),
-      OrderView         = require('views/workflows/order'),
-      OcmdView          = require('views/system/ocmd'),
-      ExtensionListView = require('views/extensions/extensions'),
-      ExtensionView     = require('views/extensions/extension'),
-      FunctionListView  = require('views/functions/functions'),
-      GroupsView        = require('views/groups/groups'),
-      GroupView         = require('views/groups/group'),
-      Urls              = require('urls'),
-      Notifications     = require('collections/notifications'),
-      Alerts            = require('collections/alerts'),
-      Constants         = require('collections/constants'),
-      WorkflowsUtils    = require('views/workflows/utils'),
-//      Functions         = require('collections/functions'),
-//      Loggers           = require('collections/loggers'),
-//      Qorus             = require('qorus/views'),
-      Library           = require('collections/library'),
-      LibraryView       = require('views/library/library'),
-      OrdersCollection  = require('collections/orders'),
+  var $                  = require('jquery'),
+      _                  = require('underscore'),
+      utils              = require('utils'),
+      Qorus              = require('qorus/qorus'),
+      Backbone           = require('backbone'),
+      Helpers            = require('qorus/helpers'),
+      InfoView           = require('views/info'),
+      SystemInfoView     = require('views/system'),
+      Workflows          = require('collections/workflows'),
+      WorkflowListView   = require('views/workflows/workflows'),
+      WorkflowView       = require('views/workflows/workflow'),
+      ServiceListView    = require('views/services/services'),
+      JobListView        = require('views/jobs/jobs'),
+      JobView            = require('views/jobs/job'),
+      EventListView      = require('views/events/events'),
+      SearchListView     = require('views/workflows/search'),
+      OrderView          = require('views/workflows/order'),
+      OcmdView           = require('views/system/ocmd'),
+      ExtensionListView  = require('views/extensions/extensions'),
+      ExtensionView      = require('views/extensions/extension'),
+      FunctionListView   = require('views/functions/functions'),
+      GroupsView         = require('views/groups/groups'),
+      GroupView          = require('views/groups/group'),
+      Urls               = require('urls'),
+      Notifications      = require('collections/notifications'),
+      Alerts             = require('collections/alerts'),
+      Constants          = require('collections/constants'),
+      WorkflowsUtils     = require('views/workflows/utils'),
+      WorkflowsConstants = require('constants/workflow'),
+//      Functions        = require('collections/functions'),
+//      Loggers          = require('collections/loggers'),
+//      Qorus            = require('qorus/views'),
+      Library            = require('collections/library'),
+      LibraryView        = require('views/library/library'),
+      OrdersCollection   = require('collections/orders'),
 
       // LocalSettings  = require('models/setting'),
       AppRouter, app_router;
@@ -58,6 +59,26 @@ define(function (require) {
     routes: Urls.routes,
     views: {},
     collections: {},
+    routeHistory: [],
+
+    initialize: function () {
+      AppRouter.__super__.initialize.apply(this, arguments);
+      this.on('route', this.pushHistory);
+    },
+
+    pushHistory: function (route, params) {
+      var currentUrl = Backbone.history.getFragment();
+      var lastUrl = _.last(this.routeHistory);
+
+      if (lastUrl !== currentUrl) {
+        this.routeHistory.push(Backbone.history.getFragment());
+        this.routeHistory = _.last(this.routeHistory, 20);
+      }
+    },
+
+    getLastUrl: function () {
+      return _.last(this.routeHistory) || '';
+    },
 
     // cleans viewport from zombies
     clean: function () {
@@ -91,14 +112,15 @@ define(function (require) {
 
       filters = filters ? filters.split(',') : [];
 
-      if ((filters.length === 0 && !_.isEqual(filters, storedFilters) && !this.collections.workflows) ||
-          (filters.length === 0 && this.collections.workflows &&
-           !_.isEqual(getFilters(this.collections.workflows.opts),storedFilters))) {
+      if (filters.length === 0 && this.getLastUrl().indexOf('workflows') == -1) {
         filters = _.uniq(storedFilters.concat(filters));
-        var url = '/' + ['workflows', date, filters.join(',')].join('/');
-        if (path) url += '/' + path;
-        if (query) url += '?' + query;
+      }
 
+      var url = '/' + ['workflows', date || '24h', filters.join(',')].join('/');
+      if (path) url += '/' + path;
+      if (query) url += '?' + query;
+
+      if ("/" + Backbone.history.getFragment() !== url) {
         return Backbone.history.navigate(url, { trigger: true });
       }
 
@@ -279,7 +301,7 @@ define(function (require) {
   $(document).on("click", 'a[href]:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
-//      event.stopPropagation();
+      // event.stopPropagation();
       var url = $(event.currentTarget).attr("href").replace(/^\//, "");
       app_router.navigate(url, { trigger: true });
       return ;

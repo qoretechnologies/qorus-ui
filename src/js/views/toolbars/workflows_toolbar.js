@@ -37,8 +37,9 @@ define(function (require) {
     setUrl: function (params) {
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
+      var date = (parts.length === 2) ? parts[1] : '24h';
+      var url;
 
-      // var currentFilters = _.pick(this.opts, ['deprecated', 'running']);
       var filters = [];
 
       if (params.deprecated) {
@@ -53,11 +54,11 @@ define(function (require) {
         filters.push('last');
       }
 
-      if (parts.length == 2) {
-        url = [parts[0], parts[1], filters.join(',')].join('/');
-      } else {
-        url = [parts[0], parts[1] || '', filters.join(',')].join('/');
+      if (params.date) {
+        date = params.date;
       }
+
+      url = [parts[0], date, filters.join(',')].join('/');
 
       return url;
     }

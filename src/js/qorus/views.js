@@ -1043,17 +1043,17 @@ define(function (require) {
       var currentUser = Helpers.user;
 
       if (el.data('sort')) {
-        // this.collection.sortByKey(el.data('sort'), el.data('order'));
-        var key      = el.data('sort'),
-            order    = el.attr('data-order'),
+        var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection,
+            key      = el.data('sort'),
+            order    = el.attr('data-order') || collection.sort_order,
             prev_key = this.collection.sort_key,
             views    = this.getView('tbody');
 
-        this.collection.sort_order = order;
-        this.collection.sort_key = key;
-        if (this.collection.sort_history) this.collection.sort_history.push(prev_key);
 
-        var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection;
+        collection.sort_order = order;
+        collection.sort_key = key;
+        if (collection.sort_history) collection.sort_history.push(prev_key);
+
 
         if (collection.prefKey) {
           var pref = {
@@ -1102,8 +1102,10 @@ define(function (require) {
     },
 
     sortIcon: function () {
-      var key   = this.collection.sort_key,
-          order = this.collection.sort_order,
+      var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection;
+
+      var key   = collection.sort_key,
+          order = collection.sort_order,
           $el   = this.$('[data-sort="'+ key +'"]');
 
       this.$('.sort')
