@@ -301,7 +301,6 @@ define(function (require) {
   $(document).on("click", 'a[href]:not([href^="http://"], [href^="https://"], [href^="#"])', function(event) {
     if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
-      // event.stopPropagation();
       var url = $(event.currentTarget).attr("href").replace(/^\//, "");
       app_router.navigate(url, { trigger: true });
       return ;

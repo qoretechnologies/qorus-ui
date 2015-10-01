@@ -1,4 +1,4 @@
-define(function (require) {  
+define(function (require) {
   var $          = require('jquery'),
       _          = require('underscore'),
       Backbone   = require('backbone'),
@@ -13,7 +13,7 @@ define(function (require) {
       Alert      = require('models/alert'),
       Filtered   = require('backbone.filtered.collection'),
       columns, css_map, DetailView, TableView, ListView, View;
-  
+
   columns = [
     {
       name: 'alert',
@@ -28,30 +28,29 @@ define(function (require) {
       label: 'When'
     }
   ];
-  
+
   css_map = {
     'workflow': 'label-warning',
     'service': 'label-important'
   };
-  
+
   DetailView = Qorus.View.extend({
     template: DetailTpl,
-    
+
     initialize: function (opts) {
       if (opts.model) {
         this.model = opts.model;
       }
-      
+
       DetailView.__super__.initialize.call(this, opts);
     },
-    
+
     onProcessPath: function (path) {
       var id = path.split('/')[0];
-      
+
       if (id) this.detail_id = id;
-      console.log(this, path);
     },
-    
+
     render: function (ctx) {
       this.context.item = this.model.toJSON();
       DetailView.__super__.render.call(this, ctx);
@@ -64,13 +63,13 @@ define(function (require) {
       this.$el.empty();
     }
   });
-  
+
   TableView = Qorus.TableView.extend({
     update: function () {
       TableView.__super__.update.call(this, false);
     }
   });
-  
+
   ListView = Qorus.ListView.extend({
     __name__: "AlertsListView",
     // tagName: 'div',
@@ -82,40 +81,39 @@ define(function (require) {
       this.context = {};
       this.options = {};
       this.collection = collection;
-      
+
       // this.listenTo(this.collection, 'all', function () { console.log(arguments)} );
 //      this.processPath();
       this.listenTo(this.collection, 'sync', this.triggerRowClick);
     },
-    
+
     template: function () {
       return _.template(sprintf('<div id="alerts-table-%s" />', this.cid));
     },
-  
+
     onProcessPath: function () {
       if (this.path) this.detail_id = this.path;
-      console.log('p', this.detail_id);
     },
 
     preRender: function () {
       var self = this,
           TView;
-            
-      TView = this.setView(new TableView({ 
+
+      TView = this.setView(new TableView({
         parent: this,
-        collection: this.collection, 
+        collection: this.collection,
         template: TableTpl,
         row_template: RowTpl,
         helpers: this.helpers,
         dispatcher: Dispatcher,
         fixed: true
       }), sprintf('#alerts-table-%s', this.cid));
-      
+
       this.listenTo(TView, 'row:clicked', function (row) {
         self.trigger('row:clicked', row);
       });
     },
-    
+
     onRender: function () {
       ListView.__super__.onRender.apply(this, arguments);
       if (this.detail_id) {
@@ -136,37 +134,37 @@ define(function (require) {
       _.extend(ctx, { cid: this.cid });
       return _.template(Template, ctx);
     },
-    
+
     initialize: function () {
-      View.__super__.initialize.apply(this, arguments); 
+      View.__super__.initialize.apply(this, arguments);
       this.listenTo(Collection, 'sync', this.render);
     },
-    
+
     onProcessPath: function () {
       View.__super__.onProcessPath.apply(this, arguments);
     },
-        
+
     preRender: function () {
       var OView, TView, ongoing, transient;
-        
+
       ongoing = new Filtered(Collection);
       ongoing.filterBy({ alerttype: 'ONGOING' });
       transient = new Filtered(Collection);
       transient.filterBy({ alerttype: 'TRANSIENT' });
-      
+
       OView = this.setView(new ListView(ongoing), sprintf('#alerts-ongoing-list-%s', this.cid));
 
       TView = this.setView(new ListView(transient), sprintf('#alerts-transient-list-%s', this.cid));
-      
-      
+
+
       this.listenTo(Dispatcher, 'alert:ongoing_raised alert:ongoing_cleared alert:transient_raised', function (e, evt) {
         var alert, id;
-        
+
         if (!e.info.when) e.info.when = e.time;
-        
+
         if (evt === 'alert:ongoing_raised' || evt === 'alert:transient_raised') {
           var type = (evt === 'alert:ongoing_raised') ? 'ONGOING' : 'TRANSIENT';
-          
+
           _.extend(e.info, { alerttype: type });
           alert = new Alert(e.info, { parse: true });
           Collection.add(alert);
@@ -178,21 +176,21 @@ define(function (require) {
           }
         }
       });
-      
+
       this.listenTo(OView, 'row:clicked', this.showDetail);
       this.listenTo(TView, 'row:clicked', this.showDetail);
-      
+
       OView.url = '/ongoing';
       TView.url = '/transient';
     },
-    
+
     showDetail: function (row) {
       var content_view = new DetailView({ model: row.model }),
           view         = this.getView('.alert-detail'),
           width        = $(document).width() - this.$('[data-sort="object"]').offset().left,
           model        = row.model,
           url          = [this.getViewUrl(), this.active_tab].join('/');
-      
+
       if (this.selected_model != model) {
         row.$el.addClass('info');
         view = this.setView(new PaneView({
@@ -200,29 +198,28 @@ define(function (require) {
           width: width
         }), '.alert-detail', true);
         this.selected_model = model;
-        
+
         view.render();
 
         // close detail on model destroy event
         this.listenToOnce(this.selected_model, 'destroy', function () {
           view.close();
         });
-        
+
         this.listenToOnce(view, 'closed off', function () {
           row.$el.removeClass('info');
         });
-        
-        url = [this.getViewUrl(), this.active_tab, row.model.id].join('/');  
+
+        url = [this.getViewUrl(), this.active_tab, row.model.id].join('/');
       } else {
         if (view) view.closeView();
         if (this.selected_model) this.stopListening(this.selected_model);
         this.selected_model = null;
       }
-      
+
       Backbone.history.navigate(url);
     }
   });
-  
+
   return View;
 });
-
