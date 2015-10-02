@@ -110,16 +110,21 @@ define(function (require) {
     clean: function () {
       debug.log('cleaning log');
       this.collection.wsClose();
+      $(window).off('resize.logview.'+this.cid);
     },
 
     fixHeight: function () {
       // maintain the height of log area
       var $parent = $(window),
-        $log = this.$('.log-area');
+          $log    = this.$('.log-area');
 
       // console.log(this.$('.log-area'), this.$('.log-area').offset());
-      $log.height($parent.height() - $log.offset().top - 40);
+      $log.height($parent.height() - $log.offset().top - 60);
       // console.log($log.height(), $log.position().top, $log.offset().top);
+    },
+
+    onRender: function () {
+      $(window).on('resize.logview.'+this.cid, this.fixHeight);
     }
 
   });

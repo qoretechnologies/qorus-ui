@@ -49,7 +49,7 @@ define(function (require) {
       this.on('show', this.makeConnection);
     },
     makeConnection: function () {
-      var activeTab = this.active_tab || this.getTabs()[0];
+      var activeTab = this.getTab(this.active_tab) || this.getTabs()[0];
       if (!activeTab.collection.socket) {
         activeTab.collection.connect();
       }
