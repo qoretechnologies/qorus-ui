@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import { createAction } from 'redux-actions';
-import settings from '../../settings';
+import settings from 'settings';
 
 const url = settings.REST_API_PREFIX;
 const workflowsUrl = `${url}/workflows`;

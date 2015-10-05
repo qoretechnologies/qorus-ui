@@ -6,18 +6,19 @@ import { createSelector } from 'reselect';
 import pureRender from 'pure-render-decorator';
 import clNs from 'classnames';
 import { get, compose, curry } from 'lodash';
-import { compare } from '../utils';
+import { compare } from 'utils';
 
 // data
-import { fetchWorkflows, setAutostart } from '../store/workflows/actions';
-import { ORDER_STATES } from '../constants/orders';
+// import { fetchWorkflows, setAutostart } from 'store/api/workflows/actions';
+import { workflows } from 'store/api/actions';
+import { ORDER_STATES } from 'constants/orders';
 
 // components
-import Toolbar from '../components/toolbar';
-import Table, { Col } from '../components/table';
-import Badge from '../components/badge';
-import AutoStart from '../components/autostart';
-import Loader from '../components/loader';
+import Toolbar from 'components/toolbar';
+import Table, { Col } from 'components/table';
+import Badge from 'components/badge';
+import AutoStart from 'components/autostart';
+import Loader from 'components/loader';
 
 
 class Dummy extends Component {
@@ -26,6 +27,7 @@ class Dummy extends Component {
   }
 }
 
+const setAutostart = workflows.action;
 const DateFilterView = Dummy;
 const SearchFormView = Dummy;
 const Filters = Dummy;
@@ -152,7 +154,7 @@ class Workflows extends Component {
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
-    dispatch(fetchWorkflows());
+    dispatch(workflows.fetch());
   }
 
   componentDidMount() {

@@ -8,8 +8,12 @@ import Footer from '../components/footer';
 import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
 
-import { fetchSystem } from '../store/system/actions';
-import { fetchCurrentUser } from '../store/current-user/actions';
+import { fetchSystem } from '../store/api/system/actions';
+import { fetchCurrentUser } from '../store/api/current-user/actions';
+
+import ACTIONS from '../store/api/actions';
+
+console.log(ACTIONS.workflows.fetch());
 
 class Content extends Component {
   static propTypes = {

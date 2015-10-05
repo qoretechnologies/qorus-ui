@@ -18,6 +18,7 @@ var config = {
     filename: 'qorus.bundle.js'
   },
   resolve: {
+    root: path.resolve('./src/js'),
     extensions: ['', '.js', '.jsx']
   },
   module: {
@@ -26,7 +27,7 @@ var config = {
       { test: /\.scss$/, loader: 'style!css!sass?outputStyle=expanded' },
       {
         test: /\.jsx?$/,
-        loaders: ['react-hot', 'babel-loader?stage=0'], exclude: /node_modules/
+        loaders: ['react-hot', 'babel-loader?optional[]=runtime&stage=0'], exclude: /node_modules/
       },
       { test: /\.html$/, loader: 'file?name=[name].[ext]' },
       {
