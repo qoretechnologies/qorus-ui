@@ -8,12 +8,10 @@ import Footer from '../components/footer';
 import Notifications from '../components/notifications';
 import Messenger from '../components/messenger';
 
-import { fetchSystem } from '../store/api/system/actions';
-import { fetchCurrentUser } from '../store/api/current-user/actions';
+import apiActions from '../store/api/actions';
 
-import ACTIONS from '../store/api/actions';
-
-console.log(ACTIONS.workflows.fetch());
+const systemActions = apiActions.system;
+const userActions = apiActions.currentUser;
 
 class Content extends Component {
   static propTypes = {
@@ -42,7 +40,7 @@ class Content extends Component {
 
 
 const systemSelector = (state) => state.api.system;
-const currentUserSelector = (state) => state.api.currentUser || {};
+const currentUserSelector = (state) => state.api.currentUser;
 const menuSelector = (state) => state.menu;
 
 @connect(createSelector(
@@ -50,6 +48,7 @@ const menuSelector = (state) => state.menu;
   currentUserSelector,
   menuSelector,
   (info, currentUser, menu) => {
+    console.log(info, currentUser);
     return {
       info,
       currentUser,
@@ -70,8 +69,8 @@ class Root extends Component {
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
-    dispatch(fetchSystem());
-    dispatch(fetchCurrentUser());
+    dispatch(systemActions.fetch());
+    dispatch(userActions.fetch());
   }
 
   componentWillMount() {

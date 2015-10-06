@@ -1,6 +1,7 @@
 import ACTIONS from './actions';
 import RESOURCES from './resources';
-import { handleActions, combineReducers } from 'redux-actions';
+import { combineReducers } from 'redux';
+import { handleActions } from 'redux-actions';
 
 let REDUCERS;
 
@@ -14,15 +15,16 @@ const initialState = {
 
 RESOURCES.forEach(resource => {
   let HANDLERS;
+  const rName = resource.name;
 
   HANDLERS = {};
 
-  REDUCERS[resource] = REDUCERS[resource] || {};
+  REDUCERS[rName] = REDUCERS[rName] || {};
 
-  ACTIONS[resource].forEach((fn, actn) => {
-    HANDLERS[actn] = {
+  Object.keys(ACTIONS[rName]).forEach((actn) => {
+    const handler = `${rName}_${actn}`.toUpperCase();
+    HANDLERS[handler] = {
       next(state, action) {
-        console.log(state, action);
         return {
           ...state,
           data: resource.transform(action.payload),
@@ -41,7 +43,7 @@ RESOURCES.forEach(resource => {
     };
   });
 
-  REDUCERS[resource] = handleActions(HANDLERS, initialState);
+  REDUCERS[rName] = handleActions(HANDLERS, initialState);
 });
 
 export default combineReducers(REDUCERS);
