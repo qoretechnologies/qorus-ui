@@ -178,7 +178,7 @@ define(function (require) {
             .sortBy(function (n) { return n.get('version'); })
             .last();
 
-          return m.get('id') === last.get('id');
+          return m.id === last.id;
         });
       }
 
