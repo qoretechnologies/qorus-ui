@@ -6,15 +6,15 @@ let ACTIONS;
 let DEFAULT_ACTIONS;
 
 DEFAULT_ACTIONS = {
-  FETCH: (url, params) => async () =>  {
+  FETCH: (url) => async (params) =>  {
     const result = await fetch(url, params);
     return result.json();
   },
-  ACTION: (url, params) => async () => {
+  ACTION: (url) => async (params) => {
     const result = await fetch(url, params);
     return result.json();
   },
-  UPDATE: (url, params) => async ()  => {
+  UPDATE: (url) => async (params)  => {
     const result = await fetch(url, params);
     return result.json();
   }
