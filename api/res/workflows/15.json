@@ -1,0 +1,740 @@
+{
+    "alerts": [],
+    "attach_func_instanceid": 68,
+    "author": "Qore Technologies, sro",
+    "autostart": 1,
+    "connections": [],
+    "created": "2012-12-16 17:06:15.000000 +01:00",
+    "deprecated": false,
+    "description": "workflow testing many step types",
+    "detach_func_instanceid": 760,
+    "enabled": true,
+    "errorfunction_instanceid": 65,
+    "exec": [
+        {
+            "alerts": [],
+            "errors": 0,
+            "executionID": 46,
+            "iterations": 0,
+            "log_url": "ws://localhost:8001/log/workflows/14",
+            "logfile": "/export/home/pchalupny/workspace/builds/qorus/log/OMQ-temnor-1-ARRAYTEST.log",
+            "mode": "NORMAL",
+            "options": {
+                "no-init-error": "false",
+                "verbose": 1
+            },
+            "starttime": "2014-12-05 10:22:24.207571 +01:00",
+            "status": "waiting",
+            "totalSegments": 5,
+            "warnings": 0
+        }
+    ],
+    "exec_count": 1,
+    "groups": [
+        {
+            "enabled": true,
+            "name": "test",
+            "size": 32
+        },
+        {
+            "enabled": true,
+            "name": "ARRAYTEST",
+            "size": 1
+        }
+    ],
+    "keylist": null,
+    "lib": {
+        "classes": [],
+        "constants": [],
+        "functions": [
+            {
+                "author": "Qore Technologies, sro",
+                "body": "sub addValue($d) {\n    my $v = \"value-\" + (rand() % 100);\n    if (inlist($v, $d))\n\treturn sprintf(\"SKIPPED (%n)\", $v);\n    \n    if (!exists $d)\n\t$d = $v;\n    else if (type($d) != Type::List)\n\t$d = ($d, $v);\n    else\n\t$d += $v;\n\n    return $v;\n}\n\nsub test_keys() {\n    #my $k = getOrderKeys();\n\n    for (my int $i = 0; $i < 3; $i++) {\n\tmy $h;\n\tmy string $key = \"key\" + (rand() % 10);\n\tif ($key == \"key0\" && getOption(\"no-errors\"))\n\t    $key = \"key1\";\n\tmy $value;\n\tif (!(rand() % 4)) {\n\t    $value = ();\n\t    for (my $x = 0; $x < 3; $x++)\n\t\t$value += addValue(\\$h.$key);\n\t}\n\telse\n\t    $value = addValue(\\$h.$key);\n\n\tlog(LL_INFO, \"%s=%n\", $key, $value);\n\tsetOrderKeys($h);\n    }\n}\n\nsub doTest() {\n    if (get_option(\"throw-error\"))\n        throw \"RETRY-ERROR\", \"stop\";\n\n    if (getOption(\"fast-exec\"))\n\treturn;\n\n    if (getWorkflowInstanceData(\"mode\") == OMQ::WM_Recovery)\n\tlog(LL_INFO, \"stepInfo=%n\", getStepInfo());\n\n    my $hash{\"key\" + (rand() % 100)} = rand() % 100;\n    updateInstanceData($hash);\n    $hash{\"key\" + (rand() % 100)} = rand() % 100;\n    updateDynamicData($hash);\n    $hash{\"key\" + (rand() % 100)} = rand() % 100;\n    updateInstanceData($hash);\n    $hash{\"key\" + (rand() % 100)} = rand() % 100;\n    updateTempData($hash);\n\n    my $a = rand() % 20;\n\n    if (!getOption(\"no-errors\") && $a == 2) {\n\t# 50% chance of throwing \"TEST-BUSINESS-ERROR\"\n\tserror(!(rand() % 2) ? \"TEST-ERROR\" : \"TEST-BUSINESS-ERROR\");\n    }\n\n    log(LL_INFO, \"name: %y\", getWorkflowInstanceData(\"name\"));\n    log(LL_INFO, \"options: %y (no-errors: %y)\", getOption(), getOption(\"no-errors\"));\n\n    if (getWorkflowInstanceData(\"name\") == \"SIMPLETEST\") {\n        test_keys();\n\tif (!getOption(\"no-errors\") && $a == 3)\n\t    throw \"OH-NO!!!!!!!!\", \"scary error occured\";\n    }\n}\n",
+                "created": "2012-12-16 17:06:13.000000 +01:00",
+                "createdby": "omq",
+                "description": "test function for test workflows",
+                "function_type": "GENERIC",
+                "id": 66,
+                "modified": "2014-10-06 09:41:36.000000 +02:00",
+                "modifiedby": "omq",
+                "name": "doTest",
+                "tags": {
+                    "sys": {
+                        "host": "manatee.prague.qoretechnologies.com",
+                        "offset": "355",
+                        "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                        "user": "<shell-unknown>"
+                    }
+                },
+                "version": "2.0"
+            }
+        ]
+    },
+    "manual_autostart": true,
+    "modified": "2014-10-07 16:19:31.000000 +02:00",
+    "name": "ARRAYTEST",
+    "onetimeinit_func_instanceid": 67,
+    "options": [
+        {
+            "name": "no-init-error",
+            "value": "false"
+        },
+        {
+            "name": "verbose",
+            "value": 1
+        }
+    ],
+    "patch": "p1",
+    "segment": [
+        {
+            "prereqfor": [
+                3
+            ],
+            "steplist": [
+                39,
+                40,
+                36,
+                41
+            ],
+            "steps": {
+                "36": [],
+                "39": [
+                    36
+                ],
+                "40": [
+                    36
+                ],
+                "41": [
+                    36
+                ]
+            }
+        },
+        {
+            "linksegment": 0,
+            "linkstepid": 40,
+            "prereqfor": [
+                3
+            ],
+            "start": 40,
+            "steplist": [
+                40,
+                37
+            ],
+            "steps": {
+                "37": [
+                    40
+                ],
+                "40": []
+            }
+        },
+        {
+            "linksegment": 0,
+            "linkstepid": 41,
+            "prereqfor": [
+                3
+            ],
+            "start": 41,
+            "steplist": [
+                41
+            ],
+            "steps": {
+                "41": []
+            },
+            "subworkflow": true
+        },
+        {
+            "segdeps": [
+                0,
+                1,
+                2
+            ],
+            "start": 38,
+            "steplist": [
+                42,
+                38,
+                43,
+                43
+            ],
+            "steps": {
+                "38": [],
+                "42": [],
+                "43": [
+                    42,
+                    38
+                ]
+            }
+        },
+        {
+            "linksegment": 3,
+            "linkstepid": 43,
+            "start": 43,
+            "steplist": [
+                43,
+                44
+            ],
+            "steps": {
+                "43": [],
+                "44": [
+                    43
+                ]
+            },
+            "subworkflow": true
+        }
+    ],
+    "stepinfo": [
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:14.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_function_1() {\n    updateDynamicData((\"test1\":now_us()));\n    setCustomStatus(\"A\");    \n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test function 1",
+                    "function_instanceid": 53,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_function_1",
+                    "offset": "95",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "test_function_1",
+            "sfname": "test_function_1",
+            "stepfunction_instanceid": 53,
+            "steptype": "NORMAL",
+            "version": "1.0"
+        },
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:14.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_function_2() {\n    setCustomStatus(\"B\");\n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test function 2",
+                    "function_instanceid": 54,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_function_2",
+                    "offset": "106",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "test_function_2",
+            "sfname": "test_function_2",
+            "stepfunction_instanceid": 54,
+            "steptype": "NORMAL",
+            "version": "1.0"
+        },
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:14.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_function_3() {\n    setCustomStatus(\"C\");\n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test function 3",
+                    "function_instanceid": 55,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_function_3",
+                    "offset": "116",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "test_function_3",
+            "sfname": "test_function_3",
+            "stepfunction_instanceid": 55,
+            "steptype": "NORMAL",
+            "version": "1.0"
+        },
+        {
+            "afname": "array_test_array",
+            "arrayfunction_instanceid": 50,
+            "arraytype": "SERIES",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_test_f1($element) {\n    #log(LL_INFO, \"workflow metadata=%n\", getWorkflowMetadata());\n    my $si = getStepInfo();\n    setCustomStatus(\"1\");\n    log(LL_INFO, \"element %d/%d = %n\", $si.index + 1, $si.array_size, $element);\n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "array test f1",
+                    "function_instanceid": 51,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_test_f1",
+                    "offset": "71",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_validation($arg) {\n    log(LL_INFO, \"stepInfo=%n\", getStepInfo());\n\n    if (exists $arg)\n\tlog(LL_INFO, \"validation arg=%n\", $arg);\n\n    my $stat;\n\n    if (getStepInfo().name =~ /asyncxxxx/)\n\t$stat = OMQ::StatAsyncWaiting;\n    else {\n\t# 75% chance of setting the step to complete\n\tif (getOption(\"fast-exec\") || getOption(\"no-errors\") || rand() % 4)\n\t    $stat = OMQ::StatComplete;\n\telse {\n\t    my $a = rand() % 10;\n\t    if (!$a)\n\t\t$stat = OMQ::StatError;\n\t    else if ($a < 4)\n\t\t$stat = OMQ::StatAsyncWaiting;\n\t    else if ($a < 8)\n\t\t$stat = OMQ::StatRetry;\n\t    else if ($a == 9) {\n\t\tif (rand() % 2)\n\t\t    serror(\"TEST-VALIDATION-ERROR\");\n\t\telse\n\t\t    throw \"TEST-EXCEPTION\"; \n\t    }\n\t}\n    }\n    #log(LL_INFO, \"returning %N\", $stat);\n    return $stat;\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "validation test function",
+                    "function_instanceid": 64,
+                    "function_type": "VALIDATION",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_validation",
+                    "offset": "275",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "validation",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_test_array() {\n    if (getOption(\"fast-exec\"))\n\treturn True;\n\n    # 1 out of 10 times throw an error\n    if (!getOption(\"no-errors\")) {\n\tif (!(rand() % 10))\n\t    serror(\"TEST-ERROR\");\n\n\t# another chance: 1/10 return NOTHING\n\tif (!(rand() % 10))\n\t    return;\n    }\n\n    # otherwise get array from stepname\n    my $key = getStepInfo().name;\n    my $array = getDynamicData($key);\n    \n    if (!exists $array) {\n\tmy $r = (rand() % 10);\n\n\tfor (my $i; $i < $r; $i++)\n\t    $array[$i] = ( \"key1\" : rand() % 20,\n\t\t\t   \"key2\" : \"this is key2\",\n\t\t\t   \"index\" : $i );\n\tmy $h.$key = $array;\n\tupdateDynamicData($h);\n    }\n    return $array;\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "array function test",
+                    "function_instanceid": 50,
+                    "function_type": "ARRAY",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_test_array",
+                    "offset": "35",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "array",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "array_test_f1",
+            "sfname": "array_test_f1",
+            "stepfunction_instanceid": 51,
+            "steptype": "NORMAL",
+            "validationfunction_instanceid": 64,
+            "version": "1.0",
+            "vfname": "test_validation"
+        },
+        {
+            "afname": "array_test_array",
+            "arrayfunction_instanceid": 50,
+            "arraytype": "SERIES",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "efname": "async_test_f1_end",
+            "endfunction_instanceid": 72,
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_test_async($element) {\n    log(LL_INFO, \"element = %n\", $element);\n\n    setCustomStatus(\"Q\");\n\n    # 10% chance of an error\n    if (getOption(\"fast-exec\") || getOption(\"skip-async\") || !(rand() % 10))\n\tskipAsyncStep();\n    else if (!getOption(\"no-errors\") && !getOption(\"no-async-errors\") && !(rand() % 10))\n\tserror(\"ASYNC-ERROR\");\n    else {\n\tmy $key = sprintf(\"async-test-key-%s-%d\", \n\t\t\t  format_date(\"YYYY-MM-DD-HH:mm:SS\", now()), \n\t\t\t  (rand() % 10000));\n\t#log(LL_INFO, \"sending key: %s\", $key);\n\tsubmitAsyncKey($key);\n    }\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "async test function",
+                    "function_instanceid": 57,
+                    "function_type": "ASYNC-START",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_test_async",
+                    "offset": "137",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub async_validation($arg) {\n    my $stat;\n    log(LL_INFO, \"key=%n\", $arg);\n    if (exists $arg)\n\t$stat = OMQ::StatComplete;\n    else\n\t$stat = OMQ::StatRetry;\n    log(LL_INFO, \"returning status: %n\", $stat);\n    return $stat;\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "asynchronous validation test function",
+                    "function_instanceid": 63,
+                    "function_type": "VALIDATION",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "async_validation",
+                    "offset": "259",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "validation",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_test_array() {\n    if (getOption(\"fast-exec\"))\n\treturn True;\n\n    # 1 out of 10 times throw an error\n    if (!getOption(\"no-errors\")) {\n\tif (!(rand() % 10))\n\t    serror(\"TEST-ERROR\");\n\n\t# another chance: 1/10 return NOTHING\n\tif (!(rand() % 10))\n\t    return;\n    }\n\n    # otherwise get array from stepname\n    my $key = getStepInfo().name;\n    my $array = getDynamicData($key);\n    \n    if (!exists $array) {\n\tmy $r = (rand() % 10);\n\n\tfor (my $i; $i < $r; $i++)\n\t    $array[$i] = ( \"key1\" : rand() % 20,\n\t\t\t   \"key2\" : \"this is key2\",\n\t\t\t   \"index\" : $i );\n\tmy $h.$key = $array;\n\tupdateDynamicData($h);\n    }\n    return $array;\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "array function test",
+                    "function_instanceid": 50,
+                    "function_type": "ARRAY",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_test_array",
+                    "offset": "35",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "array",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub async_test_f1_end($data) {\n    #if ($data.status == \"ERROR\")\n\t#serror(\"ASYNC-RECEIVE-ERROR\");\n    log(LL_INFO, \"data=%n\", $data);\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test async end function",
+                    "function_instanceid": 72,
+                    "function_type": "ASYNC-END",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "async_test_f1_end",
+                    "offset": "508",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "async-end",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "array_test_async",
+            "queueid": 1,
+            "sfname": "array_test_async",
+            "stepfunction_instanceid": 57,
+            "steptype": "ASYNC",
+            "validationfunction_instanceid": 63,
+            "version": "1.0",
+            "vfname": "async_validation"
+        },
+        {
+            "afname": "array_test_array",
+            "arrayfunction_instanceid": 50,
+            "arraytype": "SERIES",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_subworkflow($element) {\n    log(LL_INFO, \"element = %n\", $element);\n    \n    # if \"fast-exec\" is set, or a 10% chance of skipping the subworkflow\n    if (getOption(\"fast-exec\") || getOption(\"skip-subworkflow\") || !(rand() % 10)) {\n\tskipSubWorkflow();\n\treturn;\n    }\n    \n    # 20% chance of an error\n    if (!getOption(\"no-errors\") && !(rand() % 5)) {\n\tserror(\"TEST-ERROR\");\n\treturn;\n    }\n\n    my $h.name = \"SIMPLETEST\";\n    $h.version = \"1.0\";\n    \n    # create workflow data\n    my $key = sprintf(\"%s-%d-%d\", getStepInfo().name, \n\t\t      getWorkflowInstanceData(\"workflow_instanceid\"), \n\t\t      getStepInfo().index);\n\t\n    my $data.external_order_instanceid = $key;\n    $data.staticdata.data = $element;\n\n    bindSubWorkflow($h, $data);\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "subworkflow array test function",
+                    "function_instanceid": 58,
+                    "function_type": "SUBWORKFLOW",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_subworkflow",
+                    "offset": "161",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "2.0"
+                },
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub array_test_array() {\n    if (getOption(\"fast-exec\"))\n\treturn True;\n\n    # 1 out of 10 times throw an error\n    if (!getOption(\"no-errors\")) {\n\tif (!(rand() % 10))\n\t    serror(\"TEST-ERROR\");\n\n\t# another chance: 1/10 return NOTHING\n\tif (!(rand() % 10))\n\t    return;\n    }\n\n    # otherwise get array from stepname\n    my $key = getStepInfo().name;\n    my $array = getDynamicData($key);\n    \n    if (!exists $array) {\n\tmy $r = (rand() % 10);\n\n\tfor (my $i; $i < $r; $i++)\n\t    $array[$i] = ( \"key1\" : rand() % 20,\n\t\t\t   \"key2\" : \"this is key2\",\n\t\t\t   \"index\" : $i );\n\tmy $h.$key = $array;\n\tupdateDynamicData($h);\n    }\n    return $array;\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "array function test",
+                    "function_instanceid": 50,
+                    "function_type": "ARRAY",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "array_test_array",
+                    "offset": "35",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "array",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "array_subworkflow",
+            "sfname": "array_subworkflow",
+            "stepfunction_instanceid": 58,
+            "steptype": "SUBWORKFLOW",
+            "version": "2.0"
+        },
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_function_2() {\n    setCustomStatus(\"B\");\n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test function 2",
+                    "function_instanceid": 54,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_function_2",
+                    "offset": "106",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "test_step_2",
+            "sfname": "test_function_2",
+            "stepfunction_instanceid": 54,
+            "steptype": "NORMAL",
+            "version": "1.0"
+        },
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_subworkflow() {\n    # if \"fast-exec\" is set, or a 10% chance of skipping the subworkflow\n    if (getOption(\"fast-exec\") || getOption(\"skip-subworkflow\") || !(rand() % 10)) {\n\tskipSubWorkflow();\n\treturn;\n    }\n\n    # 20% chance of an error\n    if (!getOption(\"no-errors\") && !(rand() % 5)) {\n\tserror(\"TEST-ERROR\");\n\treturn;\n    }\n    \n    my $h.name = \"SIMPLETEST\";\n    $h.version = \"1.0\";\n\n    # create workflow data\n    my $key = sprintf(\"%s-%d\", getStepInfo().name, \n\t\t      getWorkflowInstanceData(\"workflow_instanceid\"));\n\n    my $data.external_order_instanceid = $key;\n    $data.staticdata = (\n        \"simpledata-key1\" : rand() % 20,\n        \"simpledata-key2\" : \"this is key2\",\n        \"a-random-number\" : rand(),\n        );\n\n    my $r = bindSubWorkflow($h, $data);\n\n    log(LL_INFO, \"subworkflow created, workflow_instance_id=%d\", $r.workflow_instanceid);\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "subworkflow test function",
+                    "function_instanceid": 59,
+                    "function_type": "SUBWORKFLOW",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_subworkflow",
+                    "offset": "195",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "2.0"
+                }
+            ],
+            "name": "test_subworkflow",
+            "sfname": "test_subworkflow",
+            "stepfunction_instanceid": 59,
+            "steptype": "SUBWORKFLOW",
+            "version": "2.0"
+        },
+        {
+            "arraytype": "NONE",
+            "author": "Qore Technologies, sro",
+            "created": "2012-12-16 17:06:15.000000 +01:00",
+            "functions": [
+                {
+                    "author": "Qore Technologies, sro",
+                    "body": "sub test_function_1() {\n    updateDynamicData((\"test1\":now_us()));\n    setCustomStatus(\"A\");    \n    doTest();\n}\n",
+                    "created": "2012-12-16 17:06:13.000000 +01:00",
+                    "createdby": "omq",
+                    "description": "test function 1",
+                    "function_instanceid": 53,
+                    "function_type": "STEP",
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "modified": "2014-10-06 09:41:36.000000 +02:00",
+                    "modifiedby": "omq",
+                    "name": "test_function_1",
+                    "offset": "95",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "tags": {},
+                    "type": "primary",
+                    "user": "<shell-unknown>",
+                    "version": "1.0"
+                }
+            ],
+            "name": "test_step_3",
+            "sfname": "test_function_1",
+            "stepfunction_instanceid": 53,
+            "steptype": "NORMAL",
+            "version": "1.0"
+        }
+    ],
+    "stepmap": {
+        "36": "test_function_1",
+        "37": "test_function_2",
+        "38": "test_function_3",
+        "39": "array_test_f1",
+        "40": "array_test_async",
+        "41": "array_subworkflow",
+        "42": "test_step_2",
+        "43": "test_subworkflow",
+        "44": "test_step_3"
+    },
+    "steps": {
+        "36": [],
+        "37": [
+            40
+        ],
+        "38": [
+            37,
+            39,
+            41
+        ],
+        "39": [
+            36
+        ],
+        "40": [
+            36
+        ],
+        "41": [
+            36
+        ],
+        "42": [
+            37,
+            39,
+            41
+        ],
+        "43": [
+            38,
+            42
+        ],
+        "44": [
+            43
+        ]
+    },
+    "stepseg": {
+        "40": 1,
+        "41": 2,
+        "43": 4
+    },
+    "version": "3.0",
+    "wffuncs": [
+        {
+            "author": "Qore Technologies, sro",
+            "body": "sub test_onetimeinitialization() {\n    my string $wfn = getWorkflowMetadata().name;\n    log(LL_INFO, \"one time initialization executing for workflow %n\", $wfn);\n\n    if (!getOption(\"no-errors\") && !getOption(\"no-init-error\") && !(rand() % 30))\n\tserror(\"TEST-INIT-ERROR\");\n}\n\n",
+            "created": "2012-12-16 17:06:13.000000 +01:00",
+            "createdby": "omq",
+            "description": "test one time initialization function",
+            "function_instanceid": 67,
+            "function_type": "GENERIC",
+            "line": "433",
+            "modified": "2014-10-06 09:41:36.000000 +02:00",
+            "modifiedby": "omq",
+            "name": "test_onetimeinitialization",
+            "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+            "tags": {
+                "sys": {
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "offset": "433",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "user": "<shell-unknown>"
+                }
+            },
+            "type": "onetimeinit",
+            "version": "1.0"
+        },
+        {
+            "author": "Qore Technologies, sro",
+            "body": "sub test_errors() {\n    return \n\t( \"ASYNC-ERROR\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry ),\n\t  \"ASYNC-RECEIVE-ERROR\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry ),\n\t  \"TEST-BUSINESS-ERROR\" :\n\t  ( \"desc\"     : \"test business error\",\n\t    # if no severity is given, default=OMQ::ES_Major\n\t    # if no status is given, default=OMQ::StatError\n\t    \"business\" : True\n\t  ),\n\t  \"TEST-VALIDATION-ERROR\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry ),\n\t  \"TEST-INIT-ERROR\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry ),\n\t  \"TEST-ERROR\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry ),\n\t  \"TEST-EXCEPTION\" :\n\t  ( \"desc\"     : \"test error\",\n\t    \"severity\" : OMQ::ES_Major,\n\t    \"status\"   : OMQ::StatRetry )\n\t  );\n}\n",
+            "created": "2012-12-16 17:06:13.000000 +01:00",
+            "createdby": "omq",
+            "description": "test error function, provides the definitions for errors thrown by the test workflows",
+            "function_instanceid": 65,
+            "function_type": "GENERIC",
+            "line": "314",
+            "modified": "2014-10-06 09:41:36.000000 +02:00",
+            "modifiedby": "omq",
+            "name": "test_errors",
+            "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+            "tags": {
+                "sys": {
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "offset": "314",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "user": "<shell-unknown>"
+                }
+            },
+            "type": "errorfunction",
+            "version": "2.0"
+        },
+        {
+            "author": "Qore Technologies, sro",
+            "body": "sub test_init() {\n    if (!(rand() % 4))\n\tdoTest();\n}\n",
+            "created": "2012-12-16 17:06:13.000000 +01:00",
+            "createdby": "omq",
+            "description": "test function",
+            "function_instanceid": 68,
+            "function_type": "STEP",
+            "line": "447",
+            "modified": "2014-10-06 09:41:36.000000 +02:00",
+            "modifiedby": "omq",
+            "name": "test_init",
+            "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+            "tags": {
+                "sys": {
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "offset": "447",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "user": "<shell-unknown>"
+                }
+            },
+            "type": "attachfunction",
+            "version": "1.0"
+        },
+        {
+            "author": "Qore Technologies, sro",
+            "body": "sub array_detach_test(string $stat) {\n    log(LL_INFO, \"array test detach function test, stat: %y\", $stat);\n}\n",
+            "created": "2013-09-16 13:05:04.000000 +02:00",
+            "createdby": "omq",
+            "description": "array test detach function test",
+            "function_instanceid": 760,
+            "function_type": "GENERIC",
+            "line": "26",
+            "modified": "2014-10-06 09:41:36.000000 +02:00",
+            "modifiedby": "omq",
+            "name": "array_detach_test",
+            "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+            "tags": {
+                "sys": {
+                    "host": "manatee.prague.qoretechnologies.com",
+                    "offset": "26",
+                    "source": "/export/home/dnichols/src/Qorus/svn/trunk/test/TEST-WORKFLOWS/test-functions-v1.0.qfd",
+                    "user": "<shell-unknown>"
+                }
+            },
+            "type": "detachfunction",
+            "version": "1.0"
+        }
+    ],
+    "workflowid": 15
+}
