@@ -89,4 +89,5 @@ module.exports = function (grunt) {
   // grunt.registserTask('serve', ['http']);
   grunt.registerTask('serve', ['express:server', 'express-keepalive']);
   grunt.registerTask('test', ['express:api', 'express:server', 'casper:test']);
+  grunt.registerTask('both', ['express:api', 'express:server', 'express-keepalive']);
 };
