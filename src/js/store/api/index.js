@@ -25,6 +25,7 @@ RESOURCES.forEach(resource => {
     const handler = `${rName}_${actn}`.toUpperCase();
     HANDLERS[handler] = {
       next(state, action) {
+        console.log('test', action, state);
         return {
           ...state,
           data: resource.transform(action.payload),
@@ -43,7 +44,8 @@ RESOURCES.forEach(resource => {
     };
   });
 
+  console.log(Object.keys(HANDLERS));
   REDUCERS[rName] = handleActions(HANDLERS, initialState);
 });
-
+console.log(REDUCERS);
 export default combineReducers(REDUCERS);
