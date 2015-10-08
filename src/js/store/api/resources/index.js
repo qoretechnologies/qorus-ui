@@ -4,8 +4,6 @@ import { DEFAULTS as workflowDefaults } from './workflows';
 
 const url = settings.REST_API_PREFIX;
 
-console.log(workflowDefaults);
-
 export default [
   {
     name: 'workflows',
