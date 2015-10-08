@@ -48,7 +48,6 @@ const menuSelector = (state) => state.menu;
   currentUserSelector,
   menuSelector,
   (info, currentUser, menu) => {
-    console.log(info, currentUser);
     return {
       info,
       currentUser,

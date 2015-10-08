@@ -10,7 +10,7 @@ import { compare } from 'utils';
 
 // data
 // import { fetchWorkflows, setAutostart } from 'store/api/workflows/actions';
-import { workflows } from 'store/api/actions';
+import { workflows as workflowsActions } from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
 // components
@@ -27,7 +27,16 @@ class Dummy extends Component {
   }
 }
 
-const setAutostart = workflows.action;
+const setAutostart = (id, value) => {
+  const params = {
+    body: JSON.stringify({
+      action: 'setAutostart',
+      autostart: value
+    })
+  };
+
+  return workflowsActions.action(params, id);
+};
 const DateFilterView = Dummy;
 const SearchFormView = Dummy;
 const Filters = Dummy;
@@ -154,7 +163,7 @@ class Workflows extends Component {
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
-    dispatch(workflows.fetch());
+    dispatch(workflowsActions.fetch());
   }
 
   componentDidMount() {
