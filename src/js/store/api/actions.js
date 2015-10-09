@@ -1,9 +1,9 @@
 import 'whatwg-fetch';
 import { createAction } from 'redux-actions';
 import RESOURCES from './resources';
-import { isFunction } from 'lodash';
+import { isFunction, merge } from 'lodash';
+import { combineResourceActions } from './utils';
 
-let ACTIONS;
 let DEFAULT_ACTIONS;
 
 DEFAULT_ACTIONS = {
@@ -31,37 +31,37 @@ DEFAULT_ACTIONS = {
   }
 };
 
-ACTIONS = {};
-
-RESOURCES.forEach(r => {
-  const name = r.name;
-
-  ACTIONS[name] = ACTIONS[name] || {};
-
-  const actions = Object.keys(DEFAULT_ACTIONS);
-
-  actions.forEach(a => {
-    let actionFn;
-    let metaCreator = null;
-    const action = a.toLowerCase();
-
-    if (isFunction(DEFAULT_ACTIONS[a])) {
-      actionFn = DEFAULT_ACTIONS[a](r.url);
-    } else {
-      actionFn = DEFAULT_ACTIONS[a]['action'](r.url);
-      metaCreator = DEFAULT_ACTIONS[a]['meta'];
-    }
-
-    ACTIONS[name][action] = createAction(
-      `${name.toUpperCase()}_${a.toUpperCase()}`,
-      actionFn,
-      metaCreator
-    );
-  });
-});
+// ACTIONS = {};
+//
+// RESOURCES.forEach(r => {
+//   const name = r.name;
+//
+//   ACTIONS[name] = ACTIONS[name] || {};
+//
+//   const actions = Object.keys(DEFAULT_ACTIONS);
+//
+//   actions.forEach(a => {
+//     let actionFn;
+//     let metaCreator = null;
+//     const action = a.toLowerCase();
+//
+//     if (isFunction(DEFAULT_ACTIONS[a])) {
+//       actionFn = DEFAULT_ACTIONS[a](r.url);
+//     } else {
+//       actionFn = DEFAULT_ACTIONS[a]['action'](r.url);
+//       metaCreator = DEFAULT_ACTIONS[a]['meta'];
+//     }
+//
+//     ACTIONS[name][action] = createAction(
+//       `${name.toUpperCase()}_${a.toUpperCase()}`,
+//       actionFn,
+//       metaCreator
+//     );
+//   });
+// });
 
 // export function combineApiActions(...actions) {
 //   actions.forEach()
 // }
 
-export default ACTIONS;
+export default combineResourceActions(RESOURCES, DEFAULT_ACTIONS);

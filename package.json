@@ -61,7 +61,7 @@
     "whatwg-fetch": "^0.9.0"
   },
   "scripts": {
-    "test": "node_modules/.bin/istanbul test ./node_modules/.bin/mocha  --report html -- --report html test/**/*.spec.js --reporter spec",
+    "test": "node_modules/.bin/istanbul test ./node_modules/.bin/mocha  --report html -- --report html test/**/*.spec.js --reporter spec ",
     "start": "webpack-dev-server",
     "coveralls": "node_modules/.bin/istanbul cover node_modules/.bin/mocha --report html --report lcovonly -- --require babel/register  test/**/*spec.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "eslint": "node_modules/.bin/eslint src test"
