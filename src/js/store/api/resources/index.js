@@ -1,4 +1,4 @@
-import settings from 'settings';
+import settings from '../../../settings';
 import { extend } from 'lodash';
 import { DEFAULTS as workflowDefaults } from './workflows';
 
