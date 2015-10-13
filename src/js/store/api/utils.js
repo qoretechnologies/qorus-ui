@@ -1,4 +1,4 @@
-import { isFunction, curry, extend, merge } from 'lodash';
+import { isObject, isFunction, curry, extend, merge } from 'lodash';
 
 export const updateItemWithId = curry((id, props, data) => {
   const idx = data.findIndex((i) => i.id === id);
@@ -8,14 +8,6 @@ export const updateItemWithId = curry((id, props, data) => {
     .concat([updatedItem])
     .concat(data.slice(idx + 1));
 });
-
-
-export const extendActions = (name, ...args) => {
-  let obj;
-  obj = {};
-  obj[name] = extend({}, ...args);
-  return obj;
-};
 
 export function combineResourceActions(...actions) {
   return merge(...actions);
@@ -46,13 +38,15 @@ export function prepareApiActions(url, actions) {
   return actionsHash;
 }
 
-export function createDefaultActions(res, defaultActions = {}) {
+export function createResourceActions(res, defaultActions = id => id) {
   return res.map(r => {
     let rr;
     const name = r.name.toLowerCase();
+    const actions = isFunction(defaultActions)
+      ? defaultActions(r.actions) : defaultActions;
 
     rr = {};
-    rr[name] = prepareApiActions(r.url, defaultActions);
+    rr[name] = prepareApiActions(r.url, actions);
     return rr;
   });
 }

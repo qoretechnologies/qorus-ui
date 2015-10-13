@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createDefaultActions, prepareApiActions }
+import { createResourceActions, combineResourceActions }
   from '../../src/js/store/api/utils.js';
 
 describe('Testing API utils', () => {
@@ -16,20 +16,34 @@ describe('Testing API utils', () => {
     FETCH: url => id => `${url}-${id}`
   };
 
-  const defaultActions = createDefaultActions(resources, actions);
-  const resourceActions = resources.map(r => {
-    return prepareApiActions(r.url, r.actions);
+  const defaultActions = createResourceActions(resources, actions);
+  const resourceActions = createResourceActions(resources, r => r);
+
+  const workflowDefaultActions = defaultActions[0];
+  const workflowOwnActions = resourceActions[0];
+  const combinedActions = combineResourceActions(
+    workflowOwnActions,
+    workflowDefaultActions
+  );
+
+  it('workflowDefaultActions should have property workflows', () => {
+    expect(workflowDefaultActions).to.include.keys('workflows');
   });
 
-  it('createDefaultActions should have property workflows', () => {
-    expect(defaultActions[0]).to.have.property('workflows');
+  it('workflowDefaultActions.workflows should have property fetch', () => {
+    expect(workflowDefaultActions.workflows).to.have.property('fetch');
   });
 
-  it('createDefaultActions.workflows should have property fetch', () => {
-    expect(defaultActions[0].workflows).to.have.property('fetch');
+  it('workflowOwnActions.workflows should have property get', () => {
+    expect(workflowOwnActions.workflows).to.have.property('get');
   });
 
-  it('createDefaultActions.workflows should have property fetch', () => {
-    expect(defaultActions[0].workflows).to.have.property('fetch');
+  it('combinedActions should have property workflows', () => {
+    expect(combinedActions).to.have.property('workflows');
   });
+
+  it('combinedActions.workflows should have keys get, fetch', () => {
+    expect(combinedActions.workflows).to.have.keys('get', 'fetch');
+  });
+
 });
