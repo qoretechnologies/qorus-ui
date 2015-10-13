@@ -5,58 +5,76 @@ import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import { omit, extend } from 'lodash';
 
-let REDUCERS;
-
-REDUCERS = {};
-
 const initialState = {
   data: [],
   sync: false,
   loading: false
 };
 
-RESOURCES.forEach(resource => {
-  let HANDLERS;
-  const rName = resource.name;
+function getResourceByName(resources, name) {
+  return resources.find(r => { return r.name === name; });
+}
 
-  HANDLERS = {};
+export function createResourceReducers(
+  actions,
+  resources = [],
+  iniState = initialState
+) {
 
-  REDUCERS[rName] = REDUCERS[rName] || {};
+  let reducers;
+  reducers = {};
 
-  Object.keys(ACTIONS[rName]).forEach((actn) => {
-    const handler = `${rName}_${actn}`.toUpperCase();
-    HANDLERS[handler] = {
-      next(state, action) {
-        if (action.meta && action.meta.id) {
-          const data = omit(JSON.parse(action.meta.params.body), 'action');
-          return extend({}, state, {
-            data: updateItemWithId(
-              action.meta.id,
-              data,
-              state.data
-            )
-          });
+  Object.keys(actions).forEach(resource => {
+    reducers[resource] = {};
+    let handlers;
+
+    handlers = {};
+
+    Object.keys(actions[resource]).forEach(actn => {
+      const name = `${resource}_${actn}`.toUpperCase();
+
+      handlers[name] = {
+        next(state, action) {
+          let data;
+
+          if (action.meta && action.meta.id) {
+            data = omit(JSON.parse(action.meta.params.body), 'action');
+            return extend({}, state, {
+              data: updateItemWithId(
+                action.meta.id,
+                data,
+                state.data
+              )
+            });
+          }
+
+          const resourceOrigin = getResourceByName(resources, resource);
+
+          data = (resourceOrigin && resourceOrigin.transform) ?
+            resourceOrigin.transform(action.payload) : action.payload;
+
+          return {
+            ...state,
+            data: data,
+            sync: true,
+            loading: false
+          };
+        },
+        throw(state, action) {
+          return {
+            ...state,
+            sync: false,
+            loading: false,
+            error: action.payload
+          };
         }
+      };
+    });
 
-        return {
-          ...state,
-          data: resource.transform(action.payload),
-          sync: true,
-          loading: false
-        };
-      },
-      throw(state, action) {
-        return {
-          ...state,
-          sync: false,
-          loading: false,
-          error: action.payload
-        };
-      }
-    };
+    reducers[resource] = handleActions(handlers, iniState);
   });
 
-  REDUCERS[rName] = handleActions(HANDLERS, initialState);
-});
+  return reducers;
+}
 
-export default combineReducers(REDUCERS);
+export default combineReducers(createResourceReducers(ACTIONS, RESOURCES));

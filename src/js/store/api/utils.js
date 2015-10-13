@@ -1,4 +1,5 @@
-import { isObject, isFunction, curry, extend, merge } from 'lodash';
+import { isFunction, curry, merge } from 'lodash';
+import { createAction } from 'redux-actions';
 
 export const updateItemWithId = curry((id, props, data) => {
   const idx = data.findIndex((i) => i.id === id);
@@ -20,7 +21,7 @@ export function prepareApiActions(url, actions) {
   Object.keys(actions).forEach(a => {
     let actionFn;
     let metaCreator = null;
-    let name = a.toLowerCase();
+    const name = a.toLowerCase();
 
     if (isFunction(actions[a])) {
       actionFn = actions[a];
@@ -39,14 +40,36 @@ export function prepareApiActions(url, actions) {
 }
 
 export function createResourceActions(res, defaultActions = id => id) {
-  return res.map(r => {
+  const resp = res.map(r => {
     let rr;
-    const name = r.name.toLowerCase();
+    const name = r.name;
     const actions = isFunction(defaultActions)
-      ? defaultActions(r.actions) : defaultActions;
+      ? defaultActions(r.actions || []) : defaultActions;
 
     rr = {};
     rr[name] = prepareApiActions(r.url, actions);
     return rr;
   });
+
+  return merge(...resp);
+}
+
+export function createApiActions(actions) {
+  let apiActions;
+
+  apiActions = {};
+
+  Object.keys(actions).forEach(key => {
+    apiActions[key] = {};
+
+    Object.keys(actions[key]).forEach(action => {
+      apiActions[key][action] = createAction(
+        `${key}_${action}`.toUpperCase(),
+        actions[key][action].action,
+        actions[key][action].meta
+      );
+    });
+  });
+
+  return apiActions;
 }

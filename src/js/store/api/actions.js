@@ -1,6 +1,10 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
-import { combineResourceActions, createDefaultActions } from './utils';
+import {
+  combineResourceActions,
+  createResourceActions,
+  createApiActions }
+from './utils';
 
 export const DEFAULT_ACTIONS = {
   FETCH: (url) => async (params) =>  {
@@ -27,6 +31,9 @@ export const DEFAULT_ACTIONS = {
   }
 };
 
-export default combineResourceActions(
-  createDefaultActions(RESOURCES, DEFAULT_ACTIONS)
+export default createApiActions(
+  combineResourceActions(
+    createResourceActions(RESOURCES, DEFAULT_ACTIONS),
+    createResourceActions(RESOURCES)
+  )
 );

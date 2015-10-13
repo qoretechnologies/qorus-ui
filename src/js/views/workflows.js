@@ -10,7 +10,7 @@ import { compare } from 'utils';
 
 // data
 // import { fetchWorkflows, setAutostart } from 'store/api/workflows/actions';
-import { workflows as workflowsActions } from 'store/api/actions';
+import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
 // components
@@ -20,6 +20,7 @@ import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Loader from 'components/loader';
 
+const workflowsActions = actions.workflows;
 
 class Dummy extends Component {
   render() {
