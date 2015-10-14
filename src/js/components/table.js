@@ -8,7 +8,12 @@ class Table extends Component {
   static propTypes = {
     children: PropTypes.node,
     collection: PropTypes.arrayOf(PropTypes.object).isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    rowClick: PropTypes.func
+  }
+
+  static defaultProps = {
+    onRowClick: id => id
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -32,13 +37,16 @@ class Table extends Component {
 
   renderBody() {
     let elements;
-    const { collection, children } = this.props;
+    const { collection, children, rowClick } = this.props;
 
     elements = {};
 
     collection.forEach((item) => {
       elements[`item-${item.id}`] = (
-        <Row key={`row-${item.id}`} model={ item }>
+        <Row
+          key={`row-${item.id}`}
+          model={ item }
+          onClick={ () => { rowClick(item.id); }}>
           { React.Children.map(children, (child) => {
             const { dataKey, cellClassName } = child.props;
             let childs = child.props.children;
@@ -106,7 +114,8 @@ export class Row extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     model: PropTypes.object.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    onClick: PropTypes.func
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -115,10 +124,10 @@ export class Row extends Component {
   }
 
   render() {
-    const { className, children } = this.props;
+    const { className, children, onClick } = this.props;
 
     return (
-      <tr className={ clNs(className) }>
+      <tr className={ clNs(className) } onClick={ onClick }>
         { children }
       </tr>
     );

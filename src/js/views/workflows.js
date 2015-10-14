@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pureRender from 'pure-render-decorator';
 import clNs from 'classnames';
-import { get, compose, curry } from 'lodash';
-import { compare } from 'utils';
+import { get, compose, curry, omit } from 'lodash';
+import { compare, makeUrl } from 'utils';
 
 // data
 // import { fetchWorkflows, setAutostart } from 'store/api/workflows/actions';
@@ -19,6 +19,7 @@ import Table, { Col } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Loader from 'components/loader';
+import { PaneView } from 'components/pane';
 
 const workflowsActions = actions.workflows;
 
@@ -38,6 +39,7 @@ const setAutostart = (id, value) => {
 
   return workflowsActions.action(params, id);
 };
+
 const DateFilterView = Dummy;
 const SearchFormView = Dummy;
 const Filters = Dummy;
@@ -117,7 +119,7 @@ const sortWorkflows = (workflows) =>
 
 const workflowsSelector = state => state.api.workflows;
 const searchSelector = (state, props) => props.location.query.q;
-const infoSelector = (state) => { return {}; };
+const infoSelector = () => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
 
 const collectionSelector = createSelector(
@@ -158,7 +160,10 @@ class Workflows extends Component {
     workflows: PropTypes.array,
     info: PropTypes.object,
     sync: PropTypes.bool,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    params: PropTypes.object,
+    history: PropTypes.object,
+    route: PropTypes.object
   }
 
   constructor(...props) {
@@ -184,14 +189,22 @@ class Workflows extends Component {
   }
 
   renderTable() {
-    const { workflows, dispatch } = this.props;
+    const { workflows, dispatch, route, history, params } = this.props;
     const cls = clNs([
       'table', 'table-striped', 'table-condensed',
       'table-hover', 'table-fixed'
     ]);
 
+    const rowClick = (id) => {
+      const url = makeUrl(route.path, {
+        ...params,
+        detailId: id
+      });
+      history.pushState(null, `/${url}`);
+    };
+
     return (
-      <Table collection={ workflows } className={ cls }>
+      <Table collection={ workflows } className={ cls } rowClick={ rowClick }>
         <Col name='' className='narrow'>
           <i className='fa fa-square-o' />
         </Col>
@@ -236,6 +249,25 @@ class Workflows extends Component {
     );
   }
 
+  renderPane() {
+    // console.log(this.props.params.detailId);
+    const { params, route, history, workflows } = this.props;
+
+    if (params.detailId) {
+      const workflow = workflows.find(w => { return w.id === params.detailId; });
+      return (
+        <PaneView width={ 500 } onClose={ () => {
+          const url = makeUrl(route.path, omit(params, 'detailId'));
+          history.pushState(null, `/${url}`);
+        }}>
+        <h3>{ JSON.stringify(workflow) }</h3>
+        </PaneView>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     const { sync, loading  } = this.props;
 
@@ -247,6 +279,7 @@ class Workflows extends Component {
       <div>
         <WorkflowsToolbar />
         { this.renderTable() }
+        { this.renderPane() }
       </div>
     );
   }
