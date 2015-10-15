@@ -10,6 +10,7 @@ require('bootstrap-sass!../bootstrap-sass.config.js');
 require('style!../css/base.css');
 require('style!../css/line.numbers.css');
 require('font-awesome-webpack!../font-awesome.config.js');
+require("expose?React!react");
 
 
 class App extends Component {
