@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
-import pureRender from 'react-purerender';
-import { omit, isEqual } from 'lodash';
+import { pureRender, pureRenderOmit } from './utils';
 
-
+@pureRenderOmit(['children', 'rowClick'])
 class Table extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -14,11 +13,6 @@ class Table extends Component {
 
   static defaultProps = {
     onRowClick: id => id
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
-           || !isEqual(this.state, nextState);
   }
 
   renderHeader() {
@@ -110,17 +104,13 @@ class Table extends Component {
 
 export default Table = Table;
 
+// @pureRender(['onClick', 'children'])
 export class Row extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     model: PropTypes.object.isRequired,
     className: PropTypes.string,
     onClick: PropTypes.func
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
-           || !isEqual(this.state, nextState);
   }
 
   render() {
@@ -134,7 +124,7 @@ export class Row extends Component {
   }
 }
 
-@pureRender
+@pureRenderOmit(['onClick', 'children'])
 export class Td extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
