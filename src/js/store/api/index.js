@@ -3,7 +3,7 @@ import RESOURCES from './resources';
 import { updateItemWithId } from './utils';
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { omit, extend } from 'lodash';
+import { omit, extend, isArray } from 'lodash';
 
 const initialState = {
   data: [],
@@ -50,8 +50,11 @@ export function createResourceReducers(
 
           const resourceOrigin = getResourceByName(resources, resource);
 
-          data = (resourceOrigin && resourceOrigin.transform) ?
-            resourceOrigin.transform(action.payload) : action.payload;
+          data = (resourceOrigin &&
+            resourceOrigin.transform &&
+            isArray(action.payload))
+            ?
+            action.payload.map(resourceOrigin.transform) : action.payload;
 
           return {
             ...state,

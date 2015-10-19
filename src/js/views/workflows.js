@@ -305,7 +305,7 @@ class Workflows extends Component {
           const url = makeUrl(route.path, omit(params, 'detailId'));
           history.pushState(null, `/${url}`);
         }}>
-        <h3>{ workflow.name }</h3>
+        <h3>{ workflow.normalizedName }</h3>
         </PaneView>
       );
     }

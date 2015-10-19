@@ -1,5 +1,6 @@
 import settings from '../../../settings';
-import { extend } from 'lodash';
+import { compose } from 'lodash';
+import { extendDefaults, normalizeId, normalizeName } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 
 const url = settings.REST_API_PREFIX;
@@ -8,17 +9,11 @@ export default [
   {
     name: 'workflows',
     url: `${url}/workflows`,
-    transform: (data) => {
-      if (!data) return [];
-      const resp = data.map((item) => {
-        if (!item.id) {
-          item.id = item.workflowid;
-          delete item.workflowid;
-        }
-        return extend({}, workflowDefaults, item);
-      });
-      return resp;
-    }
+    transform: compose(
+      normalizeName,
+      normalizeId('workflowid'),
+      extendDefaults(workflowDefaults)
+    )
   },
   {
     name: 'system',
