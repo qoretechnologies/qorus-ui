@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pureRender from './utils';
 import clNs from 'classnames';
-import { get, compose, curry } from 'lodash';
-import { compare } from 'utils';
+import { get, compose, curry, omit } from 'lodash';
+import { compare, makeUrl } from 'utils';
+import history from 'history';
 
 // data
 // import { fetchWorkflows, setAutostart } from 'store/api/workflows/actions';
-import { workflows as workflowsActions } from 'store/api/actions';
+import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
 // components
@@ -19,7 +20,9 @@ import Table, { Col } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Loader from 'components/loader';
+import { PaneView } from 'components/pane';
 
+const workflowsActions = actions.workflows;
 
 class Dummy extends Component {
   render() {
@@ -37,10 +40,100 @@ const setAutostart = (id, value) => {
 
   return workflowsActions.action(params, id);
 };
+
 const DateFilterView = Dummy;
 const SearchFormView = Dummy;
 const Filters = Dummy;
 
+const defaultRouteParams = {
+  date: '24h',
+  filter: 'all',
+  detailId: '',
+  tabId: ''
+};
+
+@pureRender
+class WorkflowsTable extends Component {
+  static propTypes = {
+    workflows: PropTypes.array
+  }
+
+  static contextTypes = {
+    dispatch: PropTypes.func,
+    route: PropTypes.object,
+    params: PropTypes.object
+  }
+
+  render() {
+    const { workflows } = this.props;
+    const { dispatch, route, params } = this.context;
+    const cls = clNs([
+      'table', 'table-striped', 'table-condensed',
+      'table-hover', 'table-fixed'
+    ]);
+
+    const rowClick = (id) => {
+      const currentParams = omit(params, p => p);
+      const newParams = Object.assign(
+        {},
+        defaultRouteParams,
+        {
+          currentParams,
+          detailId: id
+        }
+      );
+      const url = makeUrl(route.path, newParams);
+      history.pushState(null, `/${url}`);
+    };
+
+    return (
+      <Table collection={ workflows } className={ cls } rowClick={ rowClick }>
+        <Col name='' className='narrow'>
+          <i className='fa fa-square-o' />
+        </Col>
+        <Col name='Actions' className='narrow'>
+          <a className='label label-warning'>
+            <i className='fa fa-power-off' />
+            </a>
+          <a className='label label-success'><i className='fa fa-refresh' /></a>
+        </Col>
+        <Col name='Autostart'
+          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}
+          className='narrow'>
+          <AutoStart
+            inc={ (id, value) => dispatch(setAutostart(id, value)) }
+            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
+        </Col>
+        <Col name='Execs' dataKey='exec_count' className='narrow' />
+        <Col name='ID' dataKey='id' className='narrow' />
+        <Col name='Name' dataKey='name' className='name' cellClassName='name' />
+        <Col name='Version' dataKey='version' className='narrow' />
+        {
+          ORDER_STATES.map(state => {
+            let transMap;
+            const { name, short, label } = state;
+
+            transMap = {};
+            transMap[name] = 'val';
+
+            return (
+              <Col name={ short }
+                className='narrow'
+                cellClassName='narrow'
+                transMap={ transMap }
+                key={ name }>
+                <Badge label={ label } />
+              </Col>
+            );
+          })
+        }
+        <Col name='Total' dataKey='TOTAL' className='narrow' />
+      </Table>
+    );
+  }
+}
+
+@pureRender
 class WorkflowsToolbar extends Component {
   render() {
     const btnCls = clNs('btn', 'btn-default', 'btn-sm');
@@ -116,7 +209,7 @@ const sortWorkflows = (workflows) =>
 
 const workflowsSelector = state => state.api.workflows;
 const searchSelector = (state, props) => props.location.query.q;
-const infoSelector = (state) => { return {}; };
+const infoSelector = () => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
 
 const collectionSelector = createSelector(
@@ -157,13 +250,29 @@ class Workflows extends Component {
     workflows: PropTypes.array,
     info: PropTypes.object,
     sync: PropTypes.bool,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    params: PropTypes.object,
+    route: PropTypes.object
+  }
+
+  static childContextTypes = {
+    params: PropTypes.object,
+    route: PropTypes.object,
+    dispatch: PropTypes.func
   }
 
   constructor(...props) {
     super(...props);
     const { dispatch } = this.props;
     dispatch(workflowsActions.fetch());
+  }
+
+  getChildContext() {
+    return {
+      params: this.props.params,
+      route: this.props.route,
+      dispatch: this.props.dispatch
+    };
   }
 
   componentDidMount() {
@@ -182,61 +291,30 @@ class Workflows extends Component {
     document.title = `Workflows | ${inst}`;
   }
 
-  renderTable() {
-    const { workflows, dispatch } = this.props;
-    const cls = clNs([
-      'table', 'table-striped', 'table-condensed',
-      'table-hover', 'table-fixed'
-    ]);
+  renderPane() {
+    // console.log(this.props.params.detailId);
+    const { params, route, workflows } = this.props;
 
-    return (
-      <Table collection={ workflows } className={ cls }>
-        <Col name='' className='narrow'>
-          <i className='fa fa-square-o' />
-        </Col>
-        <Col name='Actions' className='narrow'>
-          <a className='label label-warning'>
-            <i className='fa fa-power-off' />
-            </a>
-          <a className='label label-success'><i className='fa fa-refresh' /></a>
-        </Col>
-        <Col name='Autostart'
-          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}
-          className='narrow'>
-          <AutoStart
-            inc={ (id, value) => dispatch(setAutostart(id, value)) }
-            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
-        </Col>
-        <Col name='Execs' dataKey='exec_count' className='narrow' />
-        <Col name='ID' dataKey='id' className='narrow' />
-        <Col name='Name' dataKey='name' className='name' cellClassName='name' />
-        <Col name='Version' dataKey='version' className='narrow' />
-        {
-          ORDER_STATES.map(state => {
-            let transMap;
-            const { name, short, label } = state;
+    if (params.detailId) {
+      const workflow = workflows.find(w => {
+        return w.id === parseInt(params.detailId, 10);
+      });
 
-            transMap = {};
-            transMap[name] = 'val';
+      return (
+        <PaneView width={ 500 } onClose={ () => {
+          const url = makeUrl(route.path, omit(params, 'detailId'));
+          history.pushState(null, `/${url}`);
+        }}>
+        <h3>{ workflow.normalizedName }</h3>
+        </PaneView>
+      );
+    }
 
-            return (
-              <Col name={ short }
-                className='narrow'
-                cellClassName='narrow'
-                transMap={ transMap }
-                key={ name }>
-                <Badge label={ label } />
-              </Col>
-            );
-          })
-        }
-        <Col name='Total' dataKey='TOTAL' className='narrow' />
-      </Table>
-    );
+    return null;
   }
 
   render() {
-    const { sync, loading  } = this.props;
+    const { sync, loading, workflows } = this.props;
 
     if (!sync || loading) {
       return <Loader />;
@@ -245,7 +323,8 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        { this.renderTable() }
+        <WorkflowsTable workflows={ workflows } />
+        { this.renderPane() }
       </div>
     );
   }

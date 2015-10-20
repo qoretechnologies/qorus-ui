@@ -2,6 +2,7 @@ import isNumber from 'lodash/lang/isNumber';
 import isString from 'lodash/lang/isString';
 import curry from 'lodash/function/curry';
 import get from 'lodash/object/get';
+import UrlPattern from 'url-pattern';
 
 
 export function prep(val, des) {
@@ -40,3 +41,10 @@ export function comparator(key, history, order, c1, c2) {
 }
 
 export const compare = curry(comparator);
+
+
+export function makeUrl(pattern, params) {
+  const ptr = new UrlPattern(pattern);
+
+  return ptr.stringify(params);
+}

@@ -1,19 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
-import pureRender from 'react-purerender';
-import { omit, isEqual } from 'lodash';
+import { pureRender, pureRenderOmit } from './utils';
 
-
+@pureRenderOmit(['children', 'rowClick'])
 class Table extends Component {
   static propTypes = {
     children: PropTypes.node,
     collection: PropTypes.arrayOf(PropTypes.object).isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    rowClick: PropTypes.func
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
-           || !isEqual(this.state, nextState);
+  static defaultProps = {
+    onRowClick: id => id
   }
 
   renderHeader() {
@@ -32,13 +31,16 @@ class Table extends Component {
 
   renderBody() {
     let elements;
-    const { collection, children } = this.props;
+    const { collection, children, rowClick } = this.props;
 
     elements = {};
 
     collection.forEach((item) => {
       elements[`item-${item.id}`] = (
-        <Row key={`row-${item.id}`} model={ item }>
+        <Row
+          key={`row-${item.id}`}
+          model={ item }
+          onClick={ () => { rowClick(item.id); }}>
           { React.Children.map(children, (child) => {
             const { dataKey, cellClassName } = child.props;
             let childs = child.props.children;
@@ -102,30 +104,27 @@ class Table extends Component {
 
 export default Table = Table;
 
+// @pureRender(['onClick', 'children'])
 export class Row extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     model: PropTypes.object.isRequired,
-    className: PropTypes.string
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(omit(this.props, 'children'), omit(nextProps, 'children'))
-           || !isEqual(this.state, nextState);
+    className: PropTypes.string,
+    onClick: PropTypes.func
   }
 
   render() {
-    const { className, children } = this.props;
+    const { className, children, onClick } = this.props;
 
     return (
-      <tr className={ clNs(className) }>
+      <tr className={ clNs(className) } onClick={ onClick }>
         { children }
       </tr>
     );
   }
 }
 
-@pureRender
+@pureRenderOmit(['onClick', 'children'])
 export class Td extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,

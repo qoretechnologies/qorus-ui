@@ -65,9 +65,7 @@ var config = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      React: 'react',
-      'window.React': 'react'
+      'window.jQuery': 'jquery'
     })
   ]
 };

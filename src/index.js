@@ -1,7 +1,7 @@
 require('babel/polyfill');
 
 import React from 'react';
-import createHistory from 'history/lib/createBrowserHistory';
 import App from './js/app';
+import history from './js/history';
 
-React.render(<App history={createHistory()} />, document.getElementById('app'));
+React.render(<App history={history} />, document.getElementById('app'));
