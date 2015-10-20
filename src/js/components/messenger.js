@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import clNs from 'classnames';
-import pureRender from 'pure-render-decorator';
+import pureRender from './utils';
 
 @pureRender
 class Messenger extends Component {

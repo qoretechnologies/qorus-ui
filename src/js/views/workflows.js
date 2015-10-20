@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import pureRender from 'pure-render-decorator';
+import pureRender from './utils';
 import clNs from 'classnames';
 import { get, compose, curry } from 'lodash';
 import { compare } from 'utils';

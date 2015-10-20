@@ -15,7 +15,6 @@
     "globule": "^0.2.0",
     "history": "^1.8.4",
     "lodash": "^3.10.1",
-    "pure-render-decorator": "^0.1.0",
     "react": "^0.13.3",
     "react-build": "git://github.com/temnoregg/react.git",
     "react-redux": "^2.1.2",
@@ -25,7 +24,6 @@
     "redux-actions": "^0.8.0",
     "redux-devtools": "^2.1.2",
     "redux-promise": "^0.5.0",
-    "redux-react-router": "^1.0.0-beta2",
     "redux-thunk": "^0.1.0",
     "reselect": "^1.1.0"
   },
@@ -52,7 +50,6 @@
     "mocha-lcov-reporter": "0.0.2",
     "node-sass": "^3.2.0",
     "react-hot-loader": "^1.2.9",
-    "react-purerender": "^0.1.0",
     "sass-loader": "^2.0.1",
     "style-loader": "^0.12.3",
     "url-loader": "^0.5.6",

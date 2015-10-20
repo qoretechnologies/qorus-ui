@@ -2,6 +2,7 @@ import ACTIONS from './actions';
 import RESOURCES from './resources';
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
+import { curry } from 'lodash';
 
 let REDUCERS;
 
@@ -12,7 +13,6 @@ const initialState = {
   sync: false,
   loading: false
 };
-
 
 const updateItemWithId = curry((id, props, data) => {
   const idx = data.findIndex((i) => i.id === id);
