@@ -1,12 +1,9 @@
 import ACTIONS from './actions';
 import RESOURCES from './resources';
+import { updateItemWithId } from './utils';
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { curry } from 'lodash';
-
-let REDUCERS;
-
-REDUCERS = {};
+import { omit, extend, isArray } from 'lodash';
 
 const initialState = {
   data: [],
@@ -14,48 +11,73 @@ const initialState = {
   loading: false
 };
 
-const updateItemWithId = curry((id, props, data) => {
-  const idx = data.findIndex((i) => i.id === id);
-  const updatedItem = Object.assign({}, data[idx], props);
+function getResourceByName(resources, name) {
+  return resources.find(r => { return r.name === name; });
+}
 
-  return data.slice(0, idx)
-    .concat([updatedItem])
-    .concat(data.slice(idx + 1));
-});
+export function createResourceReducers(
+  actions,
+  resources = [],
+  iniState = initialState
+) {
 
-RESOURCES.forEach(resource => {
-  let HANDLERS;
-  const rName = resource.name;
+  let reducers;
+  reducers = {};
 
-  HANDLERS = {};
+  Object.keys(actions).forEach(resource => {
+    reducers[resource] = {};
+    let handlers;
 
-  REDUCERS[rName] = REDUCERS[rName] || {};
+    handlers = {};
 
-  Object.keys(ACTIONS[rName]).forEach((actn) => {
-    const handler = `${rName}_${actn}`.toUpperCase();
-    HANDLERS[handler] = {
-      next(state, action) {
-        console.log('test', action, state);
-        return {
-          ...state,
-          data: resource.transform(action.payload),
-          sync: true,
-          loading: false
-        };
-      },
-      throw(state, action) {
-        return {
-          ...state,
-          sync: false,
-          loading: false,
-          error: action.payload
-        };
-      }
-    };
+    Object.keys(actions[resource]).forEach(actn => {
+      const name = `${resource}_${actn}`.toUpperCase();
+
+      handlers[name] = {
+        next(state, action) {
+          let data;
+
+          if (action.meta && action.meta.id) {
+            data = omit(JSON.parse(action.meta.params.body), 'action');
+            return extend({}, state, {
+              data: updateItemWithId(
+                action.meta.id,
+                data,
+                state.data
+              )
+            });
+          }
+
+          const resourceOrigin = getResourceByName(resources, resource);
+
+          data = (resourceOrigin &&
+            resourceOrigin.transform &&
+            isArray(action.payload))
+            ?
+            action.payload.map(resourceOrigin.transform) : action.payload;
+
+          return {
+            ...state,
+            data: data,
+            sync: true,
+            loading: false
+          };
+        },
+        throw(state, action) {
+          return {
+            ...state,
+            sync: false,
+            loading: false,
+            error: action.payload
+          };
+        }
+      };
+    });
+
+    reducers[resource] = handleActions(handlers, iniState);
   });
 
-  console.log(Object.keys(HANDLERS));
-  REDUCERS[rName] = handleActions(HANDLERS, initialState);
-});
-console.log(REDUCERS);
-export default combineReducers(REDUCERS);
+  return reducers;
+}
+
+export default combineReducers(createResourceReducers(ACTIONS, RESOURCES));
