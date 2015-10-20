@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react/addons';
 import clNs from 'classnames';
 import { pureRender, pureRenderOmit } from './utils';
 

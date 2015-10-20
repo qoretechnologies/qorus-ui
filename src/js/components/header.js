@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import pureRender from './utils';
+import { pureRender } from './utils';
 import UserInfo from './user-info';
 
 @pureRender

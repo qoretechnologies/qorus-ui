@@ -1,7 +1,7 @@
 import React, { Component, PropTypes} from 'react';
 import { Link } from 'react-router';
 import clNs from 'classnames';
-import pureRender from './utils';
+import { pureRender } from './utils';
 
 class NavItem extends Component {
   static propTypes = {

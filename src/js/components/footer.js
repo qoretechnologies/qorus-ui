@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import pureRender from './utils';
+import { pureRender } from './utils';
 
 const bugUrl = 'http://bugs.qoretechnologies.com/projects/' +
                'webapp-interface/issues/new';
