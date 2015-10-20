@@ -16,6 +16,27 @@ export default [
     )
   },
   {
+    name: 'orders',
+    url: `${url}/orders`,
+    transform: normalizeId('workflow_instanceid')
+  },
+  {
+    name: 'services',
+    url: `${url}/services`,
+    transform: compose(
+      normalizeName,
+      normalizeId('serviceid')
+    )
+  },
+  {
+    name: 'jobs',
+    url: `${url}/jobs`,
+    transform: compose(
+      normalizeName,
+      normalizeId('jobid')
+    )
+  },
+  {
     name: 'system',
     url: `${url}/system`,
     transform: item => item
