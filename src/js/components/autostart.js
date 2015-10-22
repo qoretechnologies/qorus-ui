@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
+import { preventDefault } from 'utils';
 
 class AutoStart extends Component {
   static propTypes = {
@@ -31,14 +32,18 @@ class AutoStart extends Component {
     return (
       <div className='autostart btn-controls btn-group'>
         <a className='label label-default'
-          onClick={ (...args) => { dec(id, autostart - 1, ...args); }}>
+          onClick={ preventDefault((...args) => {
+            dec(id, autostart - 1, ...args);
+          }) }>
           <i className='fa fa-minus'></i>
           </a>
         <a className={ classes } title='Click to edit'>
           { autostart }
           </a>
         <a className='label label-default'
-          onClick={(...args) => { inc(id, autostart + 1, ...args); }}>
+          onClick={ preventDefault((...args) => {
+            inc(id, autostart + 1, ...args);
+          }) }>
           <i className='fa fa-plus'></i>
         </a>
       </div>

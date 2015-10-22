@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react/addons';
 import clNs from 'classnames';
 import { pureRender, pureRenderOmit } from './utils';
+import { whenDefaultEnabled } from 'utils';
 
 @pureRenderOmit(['children', 'rowClick'])
 class Table extends Component {
@@ -40,7 +41,7 @@ class Table extends Component {
         <Row
           key={`row-${item.id}`}
           model={ item }
-          onClick={ () => { rowClick(item.id); }}>
+          onClick={ whenDefaultEnabled(() => { rowClick(item.id); }) }>
           { React.Children.map(children, (child) => {
             const { dataKey, cellClassName } = child.props;
             let childs = child.props.children;

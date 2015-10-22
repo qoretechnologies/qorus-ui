@@ -52,10 +52,11 @@ const defaultRouteParams = {
   tabId: ''
 };
 
-@pureRender
+// @pureRender
 class WorkflowsTable extends Component {
   static propTypes = {
-    workflows: PropTypes.array
+    workflows: PropTypes.array,
+    detId: PropTypes.number
   }
 
   static contextTypes = {
@@ -66,20 +67,29 @@ class WorkflowsTable extends Component {
 
   render() {
     const { workflows } = this.props;
-    const { dispatch, route, params } = this.context;
+    const { dispatch, route } = this.context;
     const cls = clNs([
       'table', 'table-striped', 'table-condensed',
       'table-hover', 'table-fixed'
     ]);
 
     const rowClick = (id) => {
+      let detailId;
+      const params = this.context.params;
       const currentParams = omit(params, p => p);
+
+      if (params.detailId && parseInt(params.detailId, 10) === id) {
+        detailId = null;
+      } else {
+        detailId = id;
+      }
+
       const newParams = Object.assign(
         {},
         defaultRouteParams,
         {
           currentParams,
-          detailId: id
+          detailId: detailId
         }
       );
       const url = makeUrl(route.path, newParams);
@@ -323,7 +333,7 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        <WorkflowsTable workflows={ workflows } />
+      <WorkflowsTable workflows={ workflows } />
         { this.renderPane() }
       </div>
     );

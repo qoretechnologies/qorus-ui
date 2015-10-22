@@ -48,3 +48,23 @@ export function makeUrl(pattern, params) {
 
   return ptr.stringify(params);
 }
+
+export function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/\-|\_+/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9\-]/g, '');
+}
+
+export const preventDefault = fn => (...args) => {
+  args[0].preventDefault();
+  return fn(...args);
+};
+
+export const whenDefaultEnabled = fn => (...args) => {
+  const ev = args[0];
+  if (!ev.defaultPrevented) {
+    return fn(...args);
+  }
+};

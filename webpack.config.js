@@ -15,7 +15,8 @@ var config = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'qorus.bundle.js'
+    filename: 'qorus.bundle.js',
+    publicPath: '/'
   },
   resolve: {
     root: path.resolve('./src/js'),
@@ -84,6 +85,7 @@ if (env === 'development') {
     inline: true,
     port: 3000,
     historyApiFallback: true,
+    outputPublicPath: '/',
     proxy: {
       "/api/*": "http://localhost:8001"
     }
