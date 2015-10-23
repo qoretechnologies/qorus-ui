@@ -11,8 +11,16 @@ export class TabGroup extends Component {
     cssClass: PropTypes.string
   }
 
-  onTabChange() {
-    return true;
+  static defaultProps = {
+    cssClass: 'nav nav-tabs'
+  }
+
+  state = {
+    active: slugify(this.props.children[0].props.name)
+  }
+
+  onTabChange = (tab) => {
+    this.setState({ active: tab });
   }
 
   render() {
@@ -28,18 +36,24 @@ export class TabGroup extends Component {
     tabs = {};
     props = extend({}, props, this.state);
     const onTabChange = this.onTabChange;
+    const active = this.state.active;
 
     React.Children.forEach(this.props.children, function (tab) {
       const slug = slugify(tab.props.name);
+
       navigation[`nav-${slug}`] = (
         <TabNavigationItem {...props}
           slug={slug}
           name={tab.props.name}
-          idx={ ctr }
-          tabChange={ onTabChange } />
+          ref={ slug }
+          tabChange={ onTabChange }
+          active={ active === slug } />
       );
       tabs[`tab${slug}`] = (
-        <Tab {...props} slug={slug} idx={ ctr }>
+        <Tab {...props}
+          active={ active === slug }
+          slug={slug}
+          ref={ `pane-${slug}` }>
           { tab.props.children }
         </Tab>
       );
@@ -63,19 +77,17 @@ export class TabNavigationItem extends Component {
   static propTypes = {
     target: PropTypes.string,
     name: PropTypes.string,
-    onTabChange: PropTypes.func
-  }
-
-  tabChange() {
-    return true;
+    slug: PropTypes.string.isRequired,
+    tabChange: PropTypes.func,
+    active: PropTypes.bool
   }
 
   render() {
-    const { target, name, active } = this.props;
+    const { target, name, active, slug, tabChange } = this.props;
 
     return (
       <li className={ clNs({ active: active })} >
-        <a data-target={ target } onClick={ this.tabChange }>
+        <a data-target={ target } onClick={ () => { tabChange(slug); } }>
           { name }
         </a>
       </li>
@@ -91,8 +103,7 @@ export class Tab extends Component {
   }
 
   render() {
-    const { slug, children } = this.props;
-    const { active } = this.state;
+    const { slug, children, active } = this.props;
 
     return (
       <div

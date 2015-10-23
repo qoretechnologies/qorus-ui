@@ -63,12 +63,13 @@ static propTypes = {
     const { model } = this.props;
 
     return (
-      <div>
-        <h3 className='pull-left'>
-          <span className='selectable'>{ model.name }</span>
-          <small>{ model.version }</small>
-        </h3>
-        <div className='controls'>
+      <div className="row">
+        <div className="col-xs-12">
+          <h3 className='pull-left'>
+            <span className='selectable'>{ model.normalizedName }</span>
+          </h3>
+        </div>
+        <div className='controls col-xs-12'>
           <AutoStart model={ model } />
         </div>
       </div>
@@ -339,16 +340,22 @@ class Workflows extends Component {
           const url = makeUrl(route.path, omit(params, 'detailId'));
           history.pushState(null, `/${url}`);
         }}>
-          <Header model={ workflow } />
-          <TabGroup>
-            <Tab name='Detail' />
-            <Tab name='Library' />
-            <Tab name='Steps' />
-            <Tab name='Log' />
-            <Tab name='Errors' />
-            <Tab name='Mappers' />
-            <Tab name='Info' />
-          </TabGroup>
+          <div className='relative'>
+            <Header model={ workflow } />
+            <TabGroup>
+              <Tab name='Detail'>
+                <p>Detail</p>
+              </Tab>
+              <Tab name='Library'>
+                <p>Library</p>
+              </Tab>
+              <Tab name='Steps' />
+              <Tab name='Log' />
+              <Tab name='Errors' />
+              <Tab name='Mappers' />
+              <Tab name='Info' />
+            </TabGroup>
+          </div>
         </PaneView>
       );
     }
