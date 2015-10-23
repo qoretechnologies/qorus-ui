@@ -11,7 +11,6 @@ export class TabGroup extends Component {
     cssClass: PropTypes.string
   }
 
-<<<<<<< HEAD
   static defaultProps = {
     cssClass: 'nav nav-tabs'
   }
@@ -24,13 +23,11 @@ export class TabGroup extends Component {
     this.setState({ active: tab });
   }
 
-=======
->>>>>>> parent of 22da4bd... Tabs  update
   render() {
     let navigation;
     let tabs;
     let ctr = 0;
-    const props = omit(
+    let props = omit(
       this.props,
       ['tabs', 'cssClass', 'navItemView', 'tabPaneView']
     );
@@ -39,11 +36,8 @@ export class TabGroup extends Component {
     tabs = {};
 
     props = extend({}, props, this.state);
-<<<<<<< HEAD
     const onTabChange = this.onTabChange;
     const active = this.state.active;
-=======
->>>>>>> parent of 22da4bd... Tabs  update
 
     React.Children.forEach(this.props.children, function (tab) {
       const slug = slugify(tab.props.name);
@@ -52,7 +46,6 @@ export class TabGroup extends Component {
         <TabNavigationItem {...props}
           slug={slug}
           name={tab.props.name}
-<<<<<<< HEAD
           ref={ slug }
           tabChange={ onTabChange }
           active={ active === slug } />
@@ -62,15 +55,8 @@ export class TabGroup extends Component {
           active={ active === slug }
           slug={slug}
           ref={ `pane-${slug}` }>
-=======
-          idx={ ctr }
-          tabChange={ this.onTabChange } />
-      );
-      tabs[`tab${slug}`] = (
-        <TabPane {...props} slug={slug} idx={ ctr }>
->>>>>>> parent of 22da4bd... Tabs  update
           { tab.props.children }
-        </TabPane>
+        </Tab>
       );
       ctr++;
     });
@@ -91,7 +77,6 @@ export class TabGroup extends Component {
 export class TabNavigationItem extends Component {
   static propTypes = {
     target: PropTypes.string,
-<<<<<<< HEAD
     name: PropTypes.string,
     slug: PropTypes.string.isRequired,
     tabChange: PropTypes.func,
@@ -100,13 +85,6 @@ export class TabNavigationItem extends Component {
 
   render() {
     const { target, name, active, slug, tabChange } = this.props;
-=======
-    name: PropTypes.string
-  }
-
-  render() {
-    const { target, name } = this.props;
->>>>>>> parent of 22da4bd... Tabs  update
 
     return (
       <li className={ clNs({ active: active })} >
@@ -118,9 +96,15 @@ export class TabNavigationItem extends Component {
   }
 }
 
-export class TabPane extends Component {
+export class Tab extends Component {
+  static propTypes = {
+    slug: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    active: PropTypes.bool,
+    children: PropTypes.node
+  }
+
   render() {
-<<<<<<< HEAD
     const { slug, children, active } = this.props;
 
     return (
@@ -130,8 +114,5 @@ export class TabPane extends Component {
         { children }
       </div>
     );
-=======
-    return null;
->>>>>>> parent of 22da4bd... Tabs  update
   }
 }
