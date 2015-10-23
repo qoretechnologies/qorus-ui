@@ -53,9 +53,9 @@ export class PaneView extends Component {
 
     return (
       <div className='pageslide left show' ref='pageSlide' style={style}>
-        <a className='btn btn-small btn-inverse close-view'
+        <a className='btn btn-xs btn-inverse close-view'
           onClick={ onClose }>
-          <i className='icon-remove-sign'></i> Close
+          <i className='fa fa-times-circle'></i> Close
         </a>
         <div className='content'>
           { children }
