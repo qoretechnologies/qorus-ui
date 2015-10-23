@@ -21,7 +21,6 @@ import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Loader from 'components/loader';
 import { PaneView } from 'components/pane';
-import { TabGroup, Tab } from 'components/tabs';
 
 const workflowsActions = actions.workflows;
 
@@ -53,6 +52,7 @@ const defaultRouteParams = {
   tabId: ''
 };
 
+<<<<<<< HEAD
 @pureRender
 class Header extends Component {
 static propTypes = {
@@ -78,6 +78,9 @@ static propTypes = {
 }
 
 @pureRender
+=======
+// @pureRender
+>>>>>>> parent of 22da4bd... Tabs  update
 class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
@@ -340,6 +343,7 @@ class Workflows extends Component {
           const url = makeUrl(route.path, omit(params, 'detailId'));
           history.pushState(null, `/${url}`);
         }}>
+<<<<<<< HEAD
           <div className='relative'>
             <Header model={ workflow } />
             <TabGroup>
@@ -356,6 +360,9 @@ class Workflows extends Component {
               <Tab name='Info' />
             </TabGroup>
           </div>
+=======
+        <h3>{ workflow.normalizedName }</h3>
+>>>>>>> parent of 22da4bd... Tabs  update
         </PaneView>
       );
     }
@@ -373,7 +380,7 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        <WorkflowsTable workflows={ workflows } />
+      <WorkflowsTable workflows={ workflows } />
         { this.renderPane() }
       </div>
     );

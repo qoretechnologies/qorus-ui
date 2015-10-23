@@ -38,6 +38,4 @@ describe('Testing API resources utils', () => {
   it('objWithExtendedDefaults should have property \'defaultKey\'', () => {
     expect(first(objWithExtendedDefaults)).to.have.property('defaultKey');
   });
-
-  console.log(objWithNormalizedName);
 });

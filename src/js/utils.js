@@ -42,6 +42,7 @@ export function comparator(key, history, order, c1, c2) {
 
 export const compare = curry(comparator);
 
+
 export function makeUrl(pattern, params) {
   const ptr = new UrlPattern(pattern);
 
