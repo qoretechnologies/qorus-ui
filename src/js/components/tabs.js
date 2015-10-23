@@ -11,19 +11,23 @@ export class TabGroup extends Component {
     cssClass: PropTypes.string
   }
 
+  onTabChange() {
+    return true;
+  }
+
   render() {
     let navigation;
     let tabs;
     let ctr = 0;
-    const props = omit(
+    let props = omit(
       this.props,
       ['tabs', 'cssClass', 'navItemView', 'tabPaneView']
     );
 
     navigation = {};
     tabs = {};
-
     props = extend({}, props, this.state);
+    const onTabChange = this.onTabChange;
 
     React.Children.forEach(this.props.children, function (tab) {
       const slug = slugify(tab.props.name);
@@ -32,12 +36,12 @@ export class TabGroup extends Component {
           slug={slug}
           name={tab.props.name}
           idx={ ctr }
-          tabChange={ this.onTabChange } />
+          tabChange={ onTabChange } />
       );
       tabs[`tab${slug}`] = (
-        <TabPane {...props} slug={slug} idx={ ctr }>
+        <Tab {...props} slug={slug} idx={ ctr }>
           { tab.props.children }
-        </TabPane>
+        </Tab>
       );
       ctr++;
     });
@@ -58,11 +62,16 @@ export class TabGroup extends Component {
 export class TabNavigationItem extends Component {
   static propTypes = {
     target: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    onTabChange: PropTypes.func
+  }
+
+  tabChange() {
+    return true;
   }
 
   render() {
-    const { target, name } = this.props;
+    const { target, name, active } = this.props;
 
     return (
       <li className={ clNs({ active: active })} >
@@ -74,8 +83,23 @@ export class TabNavigationItem extends Component {
   }
 }
 
-export class TabPane extends Component {
+export class Tab extends Component {
+  static propTypes = {
+    slug: PropTypes.string,
+    children: PropTypes.node,
+    active: PropTypes.bool
+  }
+
   render() {
-    return null;
+    const { slug, children } = this.props;
+    const { active } = this.state;
+
+    return (
+      <div
+        id={ slug }
+        className={ clNs({ 'tab-pane': true, active: active }) }>
+        { children }
+      </div>
+    );
   }
 }

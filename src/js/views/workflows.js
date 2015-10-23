@@ -21,6 +21,7 @@ import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Loader from 'components/loader';
 import { PaneView } from 'components/pane';
+import { TabGroup, Tab } from 'components/tabs';
 
 const workflowsActions = actions.workflows;
 
@@ -52,7 +53,30 @@ const defaultRouteParams = {
   tabId: ''
 };
 
-// @pureRender
+@pureRender
+class Header extends Component {
+static propTypes = {
+  model: PropTypes.object
+}
+
+  render() {
+    const { model } = this.props;
+
+    return (
+      <div>
+        <h3 className='pull-left'>
+          <span className='selectable'>{ model.name }</span>
+          <small>{ model.version }</small>
+        </h3>
+        <div className='controls'>
+          <AutoStart model={ model } />
+        </div>
+      </div>
+    );
+  }
+}
+
+@pureRender
 class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
@@ -315,7 +339,16 @@ class Workflows extends Component {
           const url = makeUrl(route.path, omit(params, 'detailId'));
           history.pushState(null, `/${url}`);
         }}>
-        <h3>{ workflow.normalizedName }</h3>
+          <Header model={ workflow } />
+          <TabGroup>
+            <Tab name='Detail' />
+            <Tab name='Library' />
+            <Tab name='Steps' />
+            <Tab name='Log' />
+            <Tab name='Errors' />
+            <Tab name='Mappers' />
+            <Tab name='Info' />
+          </TabGroup>
         </PaneView>
       );
     }
@@ -333,7 +366,7 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-      <WorkflowsTable workflows={ workflows } />
+        <WorkflowsTable workflows={ workflows } />
         { this.renderPane() }
       </div>
     );
