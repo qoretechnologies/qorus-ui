@@ -55,11 +55,16 @@ const defaultRouteParams = {
 
 @pureRender
 class Header extends Component {
-static propTypes = {
-  model: PropTypes.object
-}
+  static propTypes = {
+    model: PropTypes.object
+  }
+
+  static contextTypes = {
+    dispatch: PropTypes.func
+  }
 
   render() {
+    const { dispatch } = this.context;
     const { model } = this.props;
 
     return (
@@ -70,7 +75,12 @@ static propTypes = {
           </h3>
         </div>
         <div className='controls col-xs-12'>
-          <AutoStart model={ model } />
+          <AutoStart
+            id={ model.id }
+            autostart={ model.autostart }
+            execCount={ model.exec_count }
+            inc={ (id, value) => dispatch(setAutostart(id, value)) }
+            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
         </div>
       </div>
     );
@@ -133,7 +143,7 @@ class WorkflowsTable extends Component {
           <a className='label label-success'><i className='fa fa-refresh' /></a>
         </Col>
         <Col name='Autostart'
-          transMap={{ autostart: 'autostart', exec_count: 'execCount'}}
+          transMap={{ autostart: 'autostart', exec_count: 'execCount' }}
           className='narrow'>
           <AutoStart
             inc={ (id, value) => dispatch(setAutostart(id, value)) }
