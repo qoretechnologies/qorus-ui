@@ -35,7 +35,9 @@ const setAutostart = (id, value) => {
   const params = {
     body: JSON.stringify({
       action: 'setAutostart',
-      autostart: value
+      autostart: value,
+      // XXX This value will update state and is ignored by Workflow REST API
+      exec_count: value
     })
   };
 
