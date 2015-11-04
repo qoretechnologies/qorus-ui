@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import clNs from 'classnames';
-import { preventDefault } from 'utils';
+import { preventDefault } from '../utils';
 
 class AutoStart extends Component {
   static propTypes = {
