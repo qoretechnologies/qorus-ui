@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createResourceActions, combineResourceActions, createApiActions }
+import { createResourceActions, combineResourceActions }
   from '../../src/js/store/api/utils.js';
 
 describe('Testing API utils', () => {

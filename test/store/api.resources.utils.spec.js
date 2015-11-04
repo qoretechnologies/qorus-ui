@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { compose, clone, cloneDeep, first } from 'lodash';
+import { compose, clone, first } from 'lodash';
 import { normalizeName, normalizeId, extendDefaults }
   from '../../src/js/store/api/resources/utils.js';
 

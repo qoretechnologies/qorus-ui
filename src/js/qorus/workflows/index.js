@@ -1,19 +1,19 @@
-import { REST_API_PREFIX } from '../../settings';
 import { ORDER_STATES } from '../../constants/orders';
 
-let DEFAULTS = {
+const DEFAULTS = {
   TOTAL: 0
 };
 
 ORDER_STATES.forEach((val) => { DEFAULTS[val.name] = 0; });
+Object.freeze(DEFAULTS);
 
-const workflowsUrl = `${url}/workflows/:id`;
+const workflowsUrl = `${url}/workflows`;
 const workflowUrl = `${url}/workflows/:id`;
 
 const workflowsApi = {
   // simple edpoint description
   workflows: {
-    url: `${url}/workflows`,
+    url: workflowsUrl,
     transformer: (data) => {
       if (!data) return [];
 

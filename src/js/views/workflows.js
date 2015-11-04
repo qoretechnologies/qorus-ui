@@ -70,8 +70,8 @@ class Header extends Component {
     const { model } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-xs-12">
+      <div className='row'>
+        <div className='col-xs-12'>
           <h3 className='pull-left'>
             <span className='selectable'>{ model.normalizedName }</span>
           </h3>
