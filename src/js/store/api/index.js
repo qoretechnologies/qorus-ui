@@ -25,6 +25,8 @@ export function createResourceReducers(
   reducers = {};
 
   Object.keys(actions).forEach(resource => {
+    const resourceOrigin = getResourceByName(resources, resource);
+
     reducers[resource] = {};
     let handlers;
 
@@ -47,8 +49,6 @@ export function createResourceReducers(
               )
             });
           }
-
-          const resourceOrigin = getResourceByName(resources, resource);
 
           data = (resourceOrigin &&
             resourceOrigin.transform &&
@@ -74,7 +74,10 @@ export function createResourceReducers(
       };
     });
 
-    reducers[resource] = handleActions(handlers, iniState);
+    reducers[resource] = handleActions(
+      handlers,
+      Object.assign({}, iniState, resourceOrigin.initialState)
+    );
   });
 
   return reducers;

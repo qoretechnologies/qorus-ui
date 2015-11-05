@@ -39,11 +39,13 @@ export default [
   {
     name: 'system',
     url: `${url}/system`,
+    initialState: { data: {} },
     transform: item => item
   },
   {
     name: 'currentUser',
     url: `${url}/users?action=current`,
+    initialState: { data: {} },
     transform: item => item
   }
 ];
