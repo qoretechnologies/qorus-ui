@@ -15,17 +15,20 @@
     "globule": "^0.2.0",
     "history": "^1.8.4",
     "lodash": "^3.10.1",
-    "react": "^0.13.3",
     "react-build": "git://github.com/temnoregg/react.git",
     "react-redux": "^2.1.2",
+    "react": "^0.14.0",
+    "react-addons-create-fragment": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "react-redux": "^4.0.0",
     "react-router": "^1.0.0-rc1",
     "react-tools": "git://github.com/temnoregg/react.git#31a49e7",
     "redux": "^3.0.0",
     "redux-actions": "^0.8.0",
     "redux-devtools": "^2.1.2",
     "redux-promise": "^0.5.0",
-    "redux-thunk": "^0.1.0",
-    "reselect": "^1.1.0"
+    "redux-thunk": "^1.0.0",
+    "reselect": "^2.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",

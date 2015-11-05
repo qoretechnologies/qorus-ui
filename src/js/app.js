@@ -24,25 +24,23 @@ class App extends Component {
     return (
       <div>
         <Provider store={store}>
-          {() =>
-            <Router history={ history }>
-              <Route path='/' component={Root}>
-                <Route path='dashboard' />
-                <Route path='system' />
-                <Route
-                  path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
-                  component={Workflows} />
-                <Route path='services'/>
-                <Route path='jobs'/>
-                <Route path='search'/>
-                <Route path='groups'/>
-                <Route path='ocmd'/>
-                <Route path='library'/>
-                <Route path='extensions'/>
-                <Route path='performance'/>
-              </Route>
-            </Router>
-          }
+          <Router history={ history }>
+            <Route path='/' component={Root}>
+              <Route path='dashboard' />
+              <Route path='system' />
+              <Route
+                path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
+                component={Workflows} />
+              <Route path='services'/>
+              <Route path='jobs'/>
+              <Route path='search'/>
+              <Route path='groups'/>
+              <Route path='ocmd'/>
+              <Route path='library'/>
+              <Route path='extensions'/>
+              <Route path='performance'/>
+            </Route>
+          </Router>
         </Provider>
         <DebugPanel top right bottom>
           <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false}/>

@@ -1,15 +1,15 @@
 require('../testdom.js')('<html><body></body></html>');
 
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import jsdom from 'mocha-jsdom';
 import { expect } from 'chai';
-import React from 'react';
 
 describe('Testing UserInfo Component', function () {
   jsdom({ skipWindowCheck: true });
 
   it('should contain text: temnoregg', function () {
     const Component = require('../../src/js/components/user-info.js');
-    const TestUtils = React.addons.TestUtils;
 
     const comp = TestUtils.renderIntoDocument(
       <Component currentUser={{ name: 'temnoregg' }} />
@@ -17,6 +17,6 @@ describe('Testing UserInfo Component', function () {
 
     const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'button');
 
-    expect(el.getDOMNode().textContent.trim()).to.equal('temnoregg');
+    expect(el.textContent.trim()).to.equal('temnoregg');
   });
 });

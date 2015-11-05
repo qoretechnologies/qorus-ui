@@ -1,16 +1,15 @@
 // Mocking window and document object:
 require('../testdom.js')('<html><body></body></html>');
 
-const jsdom = require('mocha-jsdom');
-const React = require('react/addons');
-const chai = require('chai');
-const expect = chai.expect;
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import jsdom from 'mocha-jsdom';
+import { expect } from 'chai';
 
 describe('Testing Navigation Component', function () {
   jsdom({ skipWindowCheck: true });
 
   const Component = require('../../src/js/components/navigation.js');
-  const TestUtils = React.addons.TestUtils;
   const props = {
     mainItems: [{
       url: '/workflows',
@@ -29,21 +28,21 @@ describe('Testing Navigation Component', function () {
   const firstEl = listNode[0];
 
   it('main nav should contains 1 children', function () {
-    expect(firstEl.getDOMNode().childNodes).to.have.length(1);
+    expect(firstEl.childNodes).to.have.length(1);
   });
 
   it('main nav first item should contain text: Workflows', function () {
-    expect(firstEl.getDOMNode().firstChild.textContent.trim())
+    expect(firstEl.firstChild.textContent.trim())
     .to.equal('Workflows');
   });
 
   it('main nav first item should have className: workflow', function () {
-    expect(firstEl.getDOMNode().firstChild.className)
+    expect(firstEl.firstChild.className)
       .to.have.string('workflow');
   });
 
   it('main nav first icon should have className: icon-sitemap', function () {
-    expect(firstEl.getDOMNode().getElementsByTagName('i')[0].className)
+    expect(firstEl.getElementsByTagName('i')[0].className)
       .to.have.string('icon-sitemap');
   });
 });

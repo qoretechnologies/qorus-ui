@@ -1,9 +1,10 @@
 require('../testdom.js')('<html><body></body></html>');
 
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import jsdom from 'mocha-jsdom';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
-import React from 'react';
 
 import AutoStart from '../../src/js/components/autostart';
 
@@ -12,10 +13,7 @@ import AutoStart from '../../src/js/components/autostart';
 describe("AutoStart from 'components/autostart'", () => {
   jsdom({ skipWindowCheck: true });
 
-  let TestUtils;
-
   before(() => {
-    TestUtils = React.addons.TestUtils;
     chai.use(spies);
   });
 
@@ -26,7 +24,7 @@ describe("AutoStart from 'components/autostart'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[1].getDOMNode().textContent.trim()).to.equal('42');
+    expect(els[1].textContent.trim()).to.equal('42');
   });
 
   it('marks autostart if execCount is the same', () => {
@@ -36,7 +34,7 @@ describe("AutoStart from 'components/autostart'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[1].getDOMNode().className.split(/\s+/g)).
+    expect(els[1].className.split(/\s+/g)).
       to.include('label-success');
   });
 
@@ -47,7 +45,7 @@ describe("AutoStart from 'components/autostart'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[1].getDOMNode().className.split(/\s+/g)).
+    expect(els[1].className.split(/\s+/g)).
       to.include('label-default');
   });
 

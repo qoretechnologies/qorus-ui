@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react/addons';
+import React, { Component, PropTypes } from 'react';
+import createFragment from 'react-addons-create-fragment';
 import clNs from 'classnames';
 import { pureRender, pureRenderOmit } from './utils';
 import { whenDefaultEnabled } from 'utils';
@@ -80,7 +81,7 @@ class Table extends Component {
 
     return (
       <tbody>
-        { React.addons.createFragment(elements) }
+        { createFragment(elements) }
       </tbody>
     );
   }

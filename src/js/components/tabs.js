@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react/addons';
+import React, { Component, PropTypes } from 'react';
+import createFragment from 'react-addons-create-fragment';
 import { omit, extend } from 'lodash';
 import clNs from 'classnames';
 import { slugify } from '../utils';
@@ -64,10 +65,10 @@ export class TabGroup extends Component {
     return (
       <div>
         <ul className={this.props.className || this.props.cssClass}>
-          { React.addons.createFragment(navigation) }
+          { createFragment(navigation) }
         </ul>
         <div className='tab-content'>
-          { React.addons.createFragment(tabs) }
+          { createFragment(tabs) }
         </div>
       </div>
     );
