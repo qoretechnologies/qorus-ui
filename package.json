@@ -3,6 +3,8 @@
   "description": "Qorus Web app interface",
   "author": "Petr Chalupny <petr.chalupny@qoretechnologies.com>",
   "version": "0.9.2",
+  "license": "UNLICENSED",
+  "private": true,
   "main": "src/index.js",
   "dependencies": {
     "babel": "^5.8.23",
