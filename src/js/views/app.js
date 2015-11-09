@@ -54,7 +54,7 @@ const menuSelector = (state) => state.menu;
       menu
     };
   }
-))
+), null, null, { pure: false })
 class Root extends Component {
   static propTypes = {
     children: PropTypes.node,

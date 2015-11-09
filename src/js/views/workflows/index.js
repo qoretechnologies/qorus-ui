@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { pureRender } from '../components/utils';
+import { pureRender } from '../../components/utils';
 import clNs from 'classnames';
 import { get, compose, curry, omit } from 'lodash';
 import { compare, makeUrl } from 'utils';
@@ -24,6 +24,7 @@ import { PaneView } from 'components/pane';
 import { TabGroup, Tab } from 'components/tabs';
 
 const workflowsActions = actions.workflows;
+
 
 class Dummy extends Component {
   render() {
@@ -288,7 +289,6 @@ const viewSelector = createSelector(
   }
 );
 
-@pureRender
 @connect(viewSelector)
 class Workflows extends Component {
   static propTypes = {
@@ -385,7 +385,7 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-      <WorkflowsTable workflows={ workflows } />
+        <WorkflowsTable workflows={ workflows } />
         { this.renderPane() }
       </div>
     );
