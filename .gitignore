@@ -1,9 +1,14 @@
-# Webapp
+# Build
 node_modules
 dist/
 src/components
 src/css/components.min.css
 src/js/main.build.js
+
+# Personalization
+.*.webpack.config.js
+
+# Tools
 .idea
 .nfs*
-.*.webpack.config.js
+TAGS
