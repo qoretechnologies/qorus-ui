@@ -2,29 +2,89 @@ import React, { Component, PropTypes } from 'react';
 import { Route, Router } from 'react-router';
 import { Provider } from 'react-redux';
 import Workflows from './views/workflows';
-import store from './store';
+import setupStore from './store';
 import Root from './views/app';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 require('bootstrap-sass!../bootstrap-sass.config.js');
 require('style!../css/base.css');
 require('style!../css/line.numbers.css');
 require('font-awesome-webpack!../font-awesome.config.js');
-require('expose?React!react');
 
 
 class App extends Component {
+
   static propTypes = {
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    env: PropTypes.string.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    this.loadStore();
+    this.loadDevTools();
+  }
+
+  loadStore() {
+    this.state.store = null;
+
+    setupStore(this.props.env).then((store) => {
+      this.setState(Object.assign({}, this.state, { store }));
+    });
+  }
+
+  loadDevTools() {
+    switch (this.props.env) {
+    case 'production':
+      this.state.devToolsReady = true;
+      break;
+    default:
+      this.state.devToolsReady = false;
+      require.ensure(['redux-devtools/lib/react'], (require) => {
+        const { DevTools, DebugPanel, LogMonitor } =
+          require('redux-devtools/lib/react');
+
+        this.setState(Object.assign({}, this.state, {
+          devToolsReady: true,
+          DevTools,
+          DebugPanel,
+          LogMonitor
+        }));
+      }, 'devtools');
+      break;
+    }
+  }
+
+  renderEmpty() {
+    return (
+      <div />
+    );
+  }
+
+  renderDevTools() {
+    if (!this.state.store || !this.state.devToolsReady ||
+        !this.state.DebugPanel) return null;
+
+    const { DebugPanel, DevTools, LogMonitor, store } = this.state;
+
+    return (
+      <DebugPanel top right bottom>
+        <DevTools store={store} monitor={LogMonitor} visibleOnLoad={DEVTOOLS} />
+      </DebugPanel>
+    );
   }
 
   render() {
+    if (!this.state.store) return this.renderEmpty();
+
     const { history } = this.props;
 
     return (
       <div>
-        <Provider store={store}>
-          <Router history={ history }>
+        <Provider store={this.state.store}>
+          <Router history={history}>
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system' />
@@ -42,12 +102,11 @@ class App extends Component {
             </Route>
           </Router>
         </Provider>
-        <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false}/>
-        </DebugPanel>
+        { this.renderDevTools() }
       </div>
     );
   }
+
 }
 
 export default App;

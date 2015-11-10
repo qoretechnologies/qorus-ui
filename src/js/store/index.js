@@ -3,27 +3,51 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import reducers from './reducers';
 
-const middleware = [thunk, promise];
+function productionSetup() {
+  const finalCreateStore = applyMiddleware(
+    thunk,
+    promise
+  )(createStore);
 
-const finalCreateStore = compose(
-  applyMiddleware(...middleware),
-  require('redux-devtools').devTools(),
-  require('redux-devtools').persistState(
-    window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-  )
-)(createStore);
+  return finalCreateStore(reducers);
+}
 
-function configureStore() {
+function developmentSetup(reduxDevTools) {
+  const { devTools, persistState } = reduxDevTools;
+
+  const finalCreateStore = compose(
+    applyMiddleware(thunk, promise),
+    devTools(),
+    persistState(
+      window.location.href.match(/[?&]debug_session=([^&]+)\b/)
+    )
+  )(createStore);
+
   const store = finalCreateStore(reducers);
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      const nextRootReducer = require('./reducers');
-      store.replaceReducer(nextRootReducer);
+      store.replaceReducer(require('./reducers'));
     });
   }
 
   return store;
 }
 
-export default configureStore();
+function setupStore(env) {
+  return new Promise(resolve => {
+    switch (env) {
+    case 'production':
+      resolve(productionSetup());
+      break;
+    default:
+      require.ensure(['redux-devtools'], (require) => {
+        resolve(developmentSetup(require('redux-devtools')));
+      }, 'devtools');
+      break;
+    }
+  });
+}
+
+
+export default setupStore;
