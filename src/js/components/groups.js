@@ -13,7 +13,7 @@ class GroupItem extends Component {
 
   render() {
     const { name, size, url, enabled } = this.props;
-    var cls = clNs({
+    const cls = clNs({
       label: true,
       'label-info': enabled
     });
@@ -38,7 +38,12 @@ class GroupsView extends Component {
         <h4>Groups</h4>
         {
           this.props.groups.map(g => (
-            <GroupItem key={ g.name } name={ g.name } size={ g.size } url={ g.url } enabled={ g.enabled } />
+            <GroupItem
+              key={ g.name }
+              name={ g.name }
+              size={ g.size }
+              url={ g.url }
+              enabled={ g.enabled } />
           ))
         }
       </div>

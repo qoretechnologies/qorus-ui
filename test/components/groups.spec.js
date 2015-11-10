@@ -23,8 +23,10 @@ describe("GroupsView from 'components/groups'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[0].textContent.replace(/\s+/g, ' ').trim()).to.equal('Test Group 1 (0)');
-    expect(els[1].textContent.replace(/\s+/g, ' ').trim()).to.equal('Test Group 2 (42)');
+    expect(els[0].textContent.replace(/\s+/g, ' ').trim()).
+      to.equal('Test Group 1 (0)');
+    expect(els[1].textContent.replace(/\s+/g, ' ').trim()).
+      to.equal('Test Group 2 (42)');
   });
 
   it('highlights enabled group', () => {
@@ -37,7 +39,8 @@ describe("GroupsView from 'components/groups'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[0].firstElementChild.className.split(/\s+/g)).to.include('label-info');
+    expect(els[0].firstElementChild.className.split(/\s+/g)).
+      to.include('label-info');
   });
 
   it('hides disabled group', () => {
@@ -50,7 +53,8 @@ describe("GroupsView from 'components/groups'", () => {
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
 
-    expect(els[0].firstElementChild.className.split(/\s+/g)).not.to.include('label-info');
+    expect(els[0].firstElementChild.className.split(/\s+/g)).
+      not.to.include('label-info');
   });
 
   it('links to group detail', () => {
