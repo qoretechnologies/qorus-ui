@@ -1,5 +1,4 @@
-import { Component, PropTypes } from 'react';
-import { PaneView } from 'components/pane';
+import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
 import WorkflowsHeader from './_header';
 
@@ -20,7 +19,7 @@ export default class WorkflowsDetail extends Component {
     params: PropTypes.object
   }
 
-  changeTab = (tabId) => {
+  changeTab(tabId) {
     const { params, route } = this.context;
 
     goTo(
@@ -33,14 +32,13 @@ export default class WorkflowsDetail extends Component {
 
   render() {
     const { workflow, tabId } = this.props;
-    const { params, route } = this.context;
 
     if (!workflow) return null;
 
     return (
       <div>
         <WorkflowsHeader workflow={workflow} />
-        <TabGroup active={ tabId } tabChange={this.changeTab}>
+        <TabGroup active={ tabId } tabChange={this.changeTab.bind(this)}>
           <Tab name='Detail' />
           <Tab name='Library' />
           <Tab name='Steps' />

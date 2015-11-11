@@ -1,9 +1,8 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import AutoStart from 'components/autostart';
 import { Controls, Control } from 'components/controls';
 
 
-import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 

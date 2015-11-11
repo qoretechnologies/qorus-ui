@@ -22,7 +22,7 @@ export default function goTo(name, path, params, change) {
   const mergedParams = Object.assign({}, params, change);
   const clearParams = pick(mergedParams, v => v);
   const paramsWDefaults = Object.assign({}, DEFAULT_PARAMS[name], clearParams);
-  const newParams = pick(paramsWDefaults, v => v)
+  const newParams = pick(paramsWDefaults, v => v);
   const url = new UrlPattern(path).stringify(newParams);
 
   history.pushState(null, '/' + url);

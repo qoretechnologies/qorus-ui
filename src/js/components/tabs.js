@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
-import { omit, extend } from 'lodash';
 import clNs from 'classnames';
 import { slugify } from '../utils';
 
@@ -18,6 +17,12 @@ export class TabGroup extends Component {
     cssClass: 'nav nav-tabs'
   }
 
+  onTabChange = slug => {
+    if (!this.props.tabChange) return;
+
+    this.props.tabChange(slug);
+  }
+
   activeSlug() {
     return this.props.active || (
       this.props.children &&
@@ -31,20 +36,14 @@ export class TabGroup extends Component {
     return this.activeSlug() === slug;
   }
 
-  onTabChange = slug => {
-    if (!this.props.tabChange) return;
-
-    this.props.tabChange(slug);
-  }
-
   render() {
-    let navigation = {};
-    let tabs = {};
+    const navigation = {};
+    const tabs = {};
 
     React.Children.forEach(this.props.children, tab => {
       const { name, children, ...otherWithSlugh } = tab.props;
-      let { slug, ...other } = otherWithSlugh;
-      slug = slug || slugify(name);
+      const { slug: slugMaybe, ...other } = otherWithSlugh;
+      const slug = slugMaybe || slugify(name);
 
       navigation[`nav-${slug}`] = (
         <TabNavigationItem {...other}

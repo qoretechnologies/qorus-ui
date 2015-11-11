@@ -1,11 +1,10 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import { Controls, Control } from 'components/controls';
 
 
-import { omit, isEqual } from 'lodash';
 import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
@@ -40,6 +39,23 @@ export default class WorkflowsTable extends Component {
     params: PropTypes.object
   }
 
+  activateWorkflow(id) {
+    const shouldDeactivate =
+      this.context.params.detailId &&
+      parseInt(this.context.params.detailId, 10) === id;
+    const change = {
+      detailId: shouldDeactivate ? null : id,
+      tabId: shouldDeactivate ? null : this.context.params.tabId
+    };
+
+    goTo(
+      'workflows',
+      this.context.route.path,
+      this.context.params,
+      change
+    );
+  }
+
   render() {
     const { workflows } = this.props;
     const { dispatch } = this.context;
@@ -47,25 +63,11 @@ export default class WorkflowsTable extends Component {
       'table', 'table-striped', 'table-condensed', 'table-hover', 'table-fixed'
     ]);
 
-    const rowClick = (id) => {
-      const shouldDeactivate =
-        this.context.params.detailId &&
-        parseInt(this.context.params.detailId, 10) === id;
-      const change = {
-        detailId: shouldDeactivate ? null : id,
-        tabId: shouldDeactivate ? null : this.context.params.tabId
-      };
-
-      goTo(
-        'workflows',
-        this.context.route.path,
-        this.context.params,
-        change
-      );
-    };
-
     return (
-      <Table collection={ workflows } className={ cls } rowClick={ rowClick }>
+      <Table
+          collection={ workflows }
+          className={ cls }
+          rowClick={ this.activateWorkflow.bind(this) }>
         <Col name='' className='narrow'>
           <i className='fa fa-square-o' />
         </Col>

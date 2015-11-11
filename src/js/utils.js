@@ -2,7 +2,6 @@ import isNumber from 'lodash/lang/isNumber';
 import isString from 'lodash/lang/isString';
 import curry from 'lodash/function/curry';
 import get from 'lodash/object/get';
-import UrlPattern from 'url-pattern';
 
 
 export function prep(val, des) {

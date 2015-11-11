@@ -13,7 +13,6 @@ describe("'components/groups'", () => {
   jsdom({ skipWindowCheck: true });
 
   describe('Group', () => {
-
     it('displays group names as an info label', () => {
       const comp = TestUtils.renderIntoDocument(
         <Group name='Test Group' />

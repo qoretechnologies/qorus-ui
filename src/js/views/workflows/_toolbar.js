@@ -1,4 +1,4 @@
-import { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Toolbar from 'components/toolbar';
 
 
@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
-function Dummy(props) {
+function Dummy() {
   return <span />;
 }
 

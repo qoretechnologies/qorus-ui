@@ -1,12 +1,11 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { get, compose, curry, omit } from 'lodash';
+import { get, compose, curry } from 'lodash';
 import { compare } from 'utils';
 import goTo from 'routes';
-import history from 'history';
 
 // data
 import actions from 'store/api/actions';
