@@ -26,7 +26,8 @@ describe("'components/controls'", () => {
 
       expect(Array.from(el.classList)).to.include('label');
       expect(Array.from(el.classList)).to.include('label-default');
-      expect(Array.from(el.firstChild.classList)).to.include('icon-refresh');
+      expect(Array.from(el.firstChild.classList)).to.include('fa');
+      expect(Array.from(el.firstChild.classList)).to.include('fa-refresh');
     });
 
     it('applies label style', () => {

@@ -28,7 +28,7 @@ export default class Control extends Component {
           })}
           title={this.props.title}
           onClick={this.onClick.bind(this)}>
-        <i className={classNames(['icon-' + this.props.icon])} />
+        <i className={classNames(['fa', 'fa-' + this.props.icon])} />
       </a>
     );
   }
