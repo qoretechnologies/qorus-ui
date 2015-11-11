@@ -39,9 +39,7 @@ export default class WorkflowsHeader extends Component {
       <div className='row'>
         <div className='col-xs-12'>
           <h3 className='pull-left'>
-            <span className='selectable'>{ workflow.name }</span>
-            { ' ' }
-            <small>{ workflow.version }</small>
+            <span className='selectable'>{ workflow.normalizedName }</span>
           </h3>
         </div>
         <div className='controls col-xs-12'>
