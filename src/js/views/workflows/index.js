@@ -135,7 +135,7 @@ class Workflows extends Component {
           'workflows',
           route.path,
           params,
-          { detailId: null }
+          { detailId: null, tabId: null }
         );
       }}>
         <div className='relative'>
