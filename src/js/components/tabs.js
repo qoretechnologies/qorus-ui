@@ -7,59 +7,62 @@ import { slugify } from '../utils';
 export class TabGroup extends Component {
   static propTypes = {
     children: PropTypes.node,
+    active: PropTypes.string,
     name: PropTypes.string,
     className: PropTypes.string,
-    cssClass: PropTypes.string
+    cssClass: PropTypes.string,
+    tabChange: PropTypes.func
   }
 
   static defaultProps = {
     cssClass: 'nav nav-tabs'
   }
 
-  state = {
-    active: slugify(this.props.children[0].props.name)
+  activeSlug() {
+    return this.props.active || (
+      this.props.children &&
+      this.props.children[0] &&
+      (this.props.children[0].props.slug ||
+       slugify(this.props.children[0].props.name))
+    );
   }
 
-  onTabChange = (tab) => {
-    this.setState({ active: tab });
+  isActive(slug) {
+    return this.activeSlug() === slug;
+  }
+
+  onTabChange = slug => {
+    if (!this.props.tabChange) return;
+
+    this.props.tabChange(slug);
   }
 
   render() {
-    let navigation;
-    let tabs;
-    let ctr = 0;
-    let props = omit(
-      this.props,
-      ['tabs', 'cssClass', 'navItemView', 'tabPaneView']
-    );
+    let navigation = {};
+    let tabs = {};
 
-    navigation = {};
-    tabs = {};
-
-    props = extend({}, props, this.state);
-    const onTabChange = this.onTabChange;
-    const active = this.state.active;
-
-    React.Children.forEach(this.props.children, function (tab) {
-      const slug = slugify(tab.props.name);
+    React.Children.forEach(this.props.children, tab => {
+      const { name, children, ...otherWithSlugh } = tab.props;
+      let { slug, ...other } = otherWithSlugh;
+      slug = slug || slugify(name);
 
       navigation[`nav-${slug}`] = (
-        <TabNavigationItem {...props}
+        <TabNavigationItem {...other}
           slug={slug}
-          name={tab.props.name}
+          name={name}
           ref={ slug }
-          tabChange={ onTabChange }
-          active={ active === slug } />
+          tabChange={ this.onTabChange }
+          active={ this.isActive(slug) } />
       );
       tabs[`tab${slug}`] = (
-        <Tab {...props}
-          active={ active === slug }
+        <Tab {...other}
+          active={ this.isActive(slug) }
           slug={slug}
+          name={name}
           ref={ `pane-${slug}` }>
-          { tab.props.children }
+          { children }
         </Tab>
       );
-      ctr++;
     });
 
     return (
@@ -99,7 +102,7 @@ export class TabNavigationItem extends Component {
 
 export class Tab extends Component {
   static propTypes = {
-    slug: PropTypes.string.isRequired,
+    slug: PropTypes.string,
     name: PropTypes.string.isRequired,
     active: PropTypes.bool,
     children: PropTypes.node
@@ -107,6 +110,10 @@ export class Tab extends Component {
 
   render() {
     const { slug, children, active } = this.props;
+
+    if (!slug) {
+      throw new Error('Property slug must be provided by parent component.');
+    }
 
     return (
       <div
