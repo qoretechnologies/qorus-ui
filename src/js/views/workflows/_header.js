@@ -1,5 +1,6 @@
 import { Component, PropTypes } from 'react';
 import AutoStart from 'components/autostart';
+import { Controls, Control } from 'components/controls';
 
 
 import classNames from 'classnames';
@@ -45,6 +46,11 @@ export default class WorkflowsHeader extends Component {
           </h3>
         </div>
         <div className='controls col-xs-12'>
+          <Controls>
+            <Control title='Disable' icon='power-off' labelStyle='success' />
+            <Control title='Reset' icon='refresh' labelStyle='warning' />
+          </Controls>
+          { ' ' }
           <AutoStart
             id={ workflow.id }
             autostart={ workflow.autostart }

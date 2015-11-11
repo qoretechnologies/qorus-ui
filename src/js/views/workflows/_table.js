@@ -2,6 +2,7 @@ import { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
+import { Controls, Control } from 'components/controls';
 
 
 import { omit, isEqual } from 'lodash';
@@ -69,10 +70,10 @@ export default class WorkflowsTable extends Component {
           <i className='fa fa-square-o' />
         </Col>
         <Col name='Actions' className='narrow'>
-          <a className='label label-warning'>
-            <i className='fa fa-power-off' />
-            </a>
-          <a className='label label-success'><i className='fa fa-refresh' /></a>
+          <Controls>
+            <Control title='Disable' icon='power-off' labelStyle='success' />
+            <Control title='Reset' icon='refresh' labelStyle='warning' />
+          </Controls>
         </Col>
         <Col name='Autostart' className='narrow'
           transMap={{
