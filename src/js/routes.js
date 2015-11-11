@@ -12,8 +12,8 @@ const DEFAULT_PARAMS = Object.freeze({
   workflows: Object.freeze({
     date: '24h',
     filter: 'all',
-    detailId: '',
-    tabId: ''
+    detailId: null,
+    tabId: null
   })
 });
 
@@ -21,7 +21,8 @@ const DEFAULT_PARAMS = Object.freeze({
 export default function goTo(name, path, params, change) {
   const mergedParams = Object.assign({}, params, change);
   const clearParams = pick(mergedParams, v => v);
-  const newParams = Object.assign({}, DEFAULT_PARAMS[name], clearParams);
+  const paramsWDefaults = Object.assign({}, DEFAULT_PARAMS[name], clearParams);
+  const newParams = pick(paramsWDefaults, v => v)
   const url = new UrlPattern(path).stringify(newParams);
 
   history.pushState(null, '/' + url);
