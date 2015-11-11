@@ -19,8 +19,9 @@ const DEFAULT_PARAMS = Object.freeze({
 
 
 export default function goTo(name, path, params, change) {
-  const mergedParams = Object.assign({}, DEFAULT_PARAMS[name], params, change);
-  const newParams = pick(mergedParams, v => v);
+  const mergedParams = Object.assign({}, params, change);
+  const clearParams = pick(mergedParams, v => v);
+  const newParams = Object.assign({}, DEFAULT_PARAMS[name], clearParams);
   const url = new UrlPattern(path).stringify(newParams);
 
   history.pushState(null, '/' + url);
