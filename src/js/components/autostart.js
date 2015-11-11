@@ -8,7 +8,7 @@ class AutoStart extends Component {
     execCount: PropTypes.number.isRequired,
     inc: PropTypes.func.isRequired,
     dec: PropTypes.func.isRequired,
-    id: PropTypes.number.isRequired
+    id: PropTypes.number
   }
 
   static defaultProps = {
@@ -20,8 +20,10 @@ class AutoStart extends Component {
 
   render() {
     const { autostart, execCount, inc, dec, id } = this.props;
-    const equals = (autostart === execCount && autostart > 0);
 
+    if (!id) throw new Error('Property id must be provided.');
+
+    const equals = (autostart === execCount && autostart > 0);
     const classes = clNs({
       'label': true,
       'autostart-change': true,

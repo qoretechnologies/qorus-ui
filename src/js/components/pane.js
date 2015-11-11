@@ -18,7 +18,7 @@ export class PaneView extends Component {
   // }
   //
   componentDidMount() {
-    const $el = this._resizable = $(this.refs.pageSlide.getDOMNode());
+    const $el = this._resizable = $(this.refs.pageSlide);
     // var key = this.getStorageKey();
 
     $el.resizable({
