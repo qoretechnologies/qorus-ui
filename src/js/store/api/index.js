@@ -20,7 +20,6 @@ export function createResourceReducers(
   resources = [],
   iniState = initialState
 ) {
-
   let reducers;
   reducers = {};
 

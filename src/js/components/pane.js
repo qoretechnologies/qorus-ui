@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import $ from 'jquery';
 
 require('jquery-ui/resizable');

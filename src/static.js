@@ -1,11 +1,11 @@
-/* eslint no-console: 0 */
+/* eslint-disable no-console */
 
-const nodeStatic        = require('node-static');
-const proxyServer       = require('http-route-proxy');
-const connect           = require('connect');
-const httpProxy         = require('http-proxy');
-const transformerProxy  = require('transformer-proxy');
-const http              = require('http');
+const nodeStatic = require('node-static');
+const proxyServer = require('http-route-proxy');
+const connect = require('connect');
+const httpProxy = require('http-proxy');
+const transformerProxy = require('transformer-proxy');
+const http = require('http');
 
 //
 // Create a node-static server to serve the current directory

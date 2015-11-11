@@ -50,5 +50,4 @@ describe('Testing API utils', () => {
   it('combinedActions.workflows should have keys get, fetch', () => {
     expect(combinedActions.workflows).to.have.keys('get', 'fetch');
   });
-
 });

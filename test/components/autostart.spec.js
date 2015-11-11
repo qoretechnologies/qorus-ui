@@ -72,5 +72,4 @@ describe("AutoStart from 'components/autostart'", () => {
 
     expect(inc).to.have.been.called.with(7, 1);
   });
-
 });

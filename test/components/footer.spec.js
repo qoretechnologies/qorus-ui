@@ -31,5 +31,4 @@ describe('Testing Footer Component', function () {
   it('<small> version should be 1.test', function () {
     expect(el[1].textContent).to.equal('(Version: 1.test)');
   });
-
 });

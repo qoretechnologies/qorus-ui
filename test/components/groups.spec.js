@@ -69,6 +69,4 @@ describe("GroupsView from 'components/groups'", () => {
 
     expect(els[0].href).to.equal('/test-group');
   });
-
-
 });
