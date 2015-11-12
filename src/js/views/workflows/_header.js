@@ -9,18 +9,6 @@ import { pureRender } from 'components/utils';
 import actions from 'store/api/actions';
 
 
-function setAutostart(id, value) {
-  return actions.workflows.action({
-    body: JSON.stringify({
-      action: 'setAutostart',
-      autostart: value,
-      // XXX This value will update state and is ignored by Workflow REST API
-      exec_count: value
-    })
-  }, id);
-}
-
-
 @pureRender
 export default class WorkflowsHeader extends Component {
   static propTypes = {
@@ -52,8 +40,12 @@ export default class WorkflowsHeader extends Component {
             id={ workflow.id }
             autostart={ workflow.autostart }
             execCount={ workflow.exec_count }
-            inc={ (id, value) => dispatch(setAutostart(id, value)) }
-            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
+            inc={ (id, value) => {
+              dispatch(actions.workflows.setAutostart(id, value))
+            } }
+            dec={ (id, value) => {
+              dispatch(actions.workflows.setAutostart(id, value))
+            } } />
         </div>
       </div>
     );

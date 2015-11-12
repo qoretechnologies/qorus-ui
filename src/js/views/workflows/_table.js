@@ -14,18 +14,6 @@ import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
 
-function setAutostart(id, value) {
-  return actions.workflows.action({
-    body: JSON.stringify({
-      action: 'setAutostart',
-      autostart: value,
-      // XXX This value will update state and is ignored by Workflow REST API
-      exec_count: value
-    })
-  }, id);
-}
-
-
 @pureRender
 export default class WorkflowsTable extends Component {
   static propTypes = {
@@ -83,8 +71,12 @@ export default class WorkflowsTable extends Component {
             exec_count: 'execCount'
           }}>
           <AutoStart
-            inc={ (id, value) => dispatch(setAutostart(id, value)) }
-            dec={ (id, value) => dispatch(setAutostart(id, value)) } />
+            inc={ (id, value) => {
+              dispatch(actions.workflows.setAutostart(id, value))
+            } }
+            dec={ (id, value) => {
+              dispatch(actions.workflows.setAutostart(id, value))
+            } } />
         </Col>
         <Col name='Execs' dataKey='exec_count' className='narrow' />
         <Col name='ID' dataKey='id' className='narrow' />

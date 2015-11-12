@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
+import { setWorkflowAutostart } from './resources/workflows/actions';
 import {
   combineResourceActions,
   createResourceActions,
@@ -31,9 +32,13 @@ export const DEFAULT_ACTIONS = {
   }
 };
 
-export default createApiActions(
+
+const actions = createApiActions(
   combineResourceActions(
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),
     createResourceActions(RESOURCES)
   )
 );
+actions.workflows.setAutostart = setWorkflowAutostart(actions);
+
+export default actions;
