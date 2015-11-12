@@ -9,14 +9,14 @@ import spies from 'chai-spies';
 import { Control, Controls } from '../../src/js/components/controls';
 
 
-describe("'components/controls'", () => {
+describe("* as components from 'components/controls'", () => {
   jsdom({ skipWindowCheck: true });
 
   before(() => {
     chai.use(spies);
   });
 
-  describe('Control', () => {
+  describe('{ Control } = components', () => {
     it('renders icon in label', () => {
       const comp = TestUtils.renderIntoDocument(
         <Control icon='refresh' />
@@ -64,7 +64,7 @@ describe("'components/controls'", () => {
     });
   });
 
-  describe('Controls', () => {
+  describe('{ Controls } = components', () => {
     it('conveniently groups Control instances together', () => {
       const comp = TestUtils.renderIntoDocument(
         <Controls>

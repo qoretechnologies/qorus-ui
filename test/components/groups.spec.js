@@ -8,11 +8,10 @@ import { expect } from 'chai';
 import { Group, Groups } from '../../src/js/components/groups';
 
 
-// XXX Discuss this style as it is definitely different from other specs.
-describe("'components/groups'", () => {
+describe("* as components from 'components/groups'", () => {
   jsdom({ skipWindowCheck: true });
 
-  describe('Group', () => {
+  describe('{ Group } = components', () => {
     it('displays group names as an info label', () => {
       const comp = TestUtils.renderIntoDocument(
         <Group name='Test Group' />
@@ -37,7 +36,7 @@ describe("'components/groups'", () => {
 
     it('hides disabled group', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' disabled={true} />
+        <Group name='Test Group' disabled />
       );
 
       const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
@@ -57,7 +56,7 @@ describe("'components/groups'", () => {
     });
   });
 
-  describe('Groups', () => {
+  describe('{ Groups } = components', () => {
     it('conveniently groups Group instances together', () => {
       const comp = TestUtils.renderIntoDocument(
         <Groups>

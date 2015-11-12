@@ -9,7 +9,6 @@ import spies from 'chai-spies';
 import AutoStart from '../../src/js/components/autostart';
 
 
-// XXX Discuss this style as it is definitely different from other specs.
 describe("AutoStart from 'components/autostart'", () => {
   jsdom({ skipWindowCheck: true });
 
