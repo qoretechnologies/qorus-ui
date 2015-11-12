@@ -37,7 +37,7 @@ describe("'components/groups'", () => {
 
     it('hides disabled group', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' disabled='true' />
+        <Group name='Test Group' disabled={true} />
       );
 
       const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
