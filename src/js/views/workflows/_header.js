@@ -42,10 +42,10 @@ export default class WorkflowsHeader extends Component {
               autostart={ workflow.autostart }
               execCount={ workflow.exec_count }
               inc={ (id, value) => {
-                dispatch(actions.workflows.setAutostart(id, value))
+                dispatch(actions.workflows.setAutostart(id, value));
               } }
               dec={ (id, value) => {
-                dispatch(actions.workflows.setAutostart(id, value))
+                dispatch(actions.workflows.setAutostart(id, value));
               } } />
           </div>
         </div>

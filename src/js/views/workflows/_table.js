@@ -72,10 +72,10 @@ export default class WorkflowsTable extends Component {
           }}>
           <AutoStart
             inc={ (id, value) => {
-              dispatch(actions.workflows.setAutostart(id, value))
+              dispatch(actions.workflows.setAutostart(id, value));
             } }
             dec={ (id, value) => {
-              dispatch(actions.workflows.setAutostart(id, value))
+              dispatch(actions.workflows.setAutostart(id, value));
             } } />
         </Col>
         <Col name='Execs' dataKey='exec_count' className='narrow' />
