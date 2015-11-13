@@ -43,8 +43,9 @@ export default class WorkflowsDetail extends Component {
           <Tab name='Detail'>
             <Groups>
               {
-                workflow.groups.map(g => (
+                (workflow.groups || []).map(g => (
                   <Group
+                      key={g.name}
                       name={g.name}
                       url={`/groups/${g.name}`}
                       size={g.size}
