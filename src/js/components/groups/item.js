@@ -30,10 +30,12 @@ export default class Group extends Component {
   }
 
   render() {
-    if (!this.props.url) return this.renderLabel();
-
-    return (
-      <Link to={this.props.url}>
+    return !this.props.url ? (
+      <span className='group'>
+        {this.renderLabel()}
+      </span>
+    ) : (
+      <Link to={this.props.url} className='group'>
         {this.renderLabel()}
       </Link>
     );

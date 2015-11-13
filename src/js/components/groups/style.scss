@@ -1,0 +1,9 @@
+.groups {
+  & > a {
+    text-decoration: none;
+  }
+
+  & > .group + .group:before {
+    content: " "
+  }
+}

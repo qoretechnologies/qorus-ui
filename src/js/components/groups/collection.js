@@ -10,7 +10,7 @@ export default class Groups extends Component {
 
   render() {
     return (
-      <div>
+      <div className='groups'>
         <h4>Groups</h4>
         {this.props.children}
       </div>

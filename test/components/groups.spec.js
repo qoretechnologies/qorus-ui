@@ -18,10 +18,10 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
+      const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
 
       expect(el.textContent.trim()).to.equal('Test Group');
-      expect(Array.from(el.classList)).to.contain('label-info');
+      expect(Array.from(el.firstChild.classList)).to.contain('label-info');
     });
 
     it('optionally displays group size', () => {
@@ -29,7 +29,7 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' size={0} />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
+      const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
 
       expect(el.textContent.replace(/\s+/g, ' ').trim()).
         to.equal('Test Group (0)');
@@ -40,9 +40,9 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' disabled />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
+      const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
 
-      expect(Array.from(el.classList)).not.to.include('label-info');
+      expect(Array.from(el.firstChild.classList)).not.to.include('label-info');
     });
 
     it('links to group detail', () => {
