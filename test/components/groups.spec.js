@@ -1,6 +1,7 @@
 require('../testdom.js')('<html><body></body></html>');
 
 import React from 'react';
+import { Link } from 'react-router';
 import TestUtils from 'react-addons-test-utils';
 import jsdom from 'mocha-jsdom';
 import { expect } from 'chai';
@@ -17,10 +18,10 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
 
       expect(el.textContent.trim()).to.equal('Test Group');
-      expect(Array.from(el.firstChild.classList)).to.contain('label-info');
+      expect(Array.from(el.classList)).to.contain('label-info');
     });
 
     it('optionally displays group size', () => {
@@ -28,7 +29,7 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' size={0} />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
 
       expect(el.textContent.replace(/\s+/g, ' ').trim()).
         to.equal('Test Group (0)');
@@ -39,10 +40,9 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' disabled />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'span');
 
-      expect(Array.from(el.firstChild.classList)).
-        not.to.include('label-info');
+      expect(Array.from(el.classList)).not.to.include('label-info');
     });
 
     it('links to group detail', () => {
@@ -50,9 +50,9 @@ describe("* as components from 'components/groups'", () => {
         <Group name='Test Group' url='/test-group' />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'a');
+      const linkComp = TestUtils.findRenderedComponentWithType(comp, Link);
 
-      expect(el.href).to.equal('/test-group');
+      expect(linkComp.props.to).to.equal('/test-group');
     });
   });
 
