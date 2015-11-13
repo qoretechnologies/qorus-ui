@@ -8,21 +8,19 @@ import history from 'history';
 import { pick } from 'lodash';
 
 
-const DEFAULT_PARAMS = Object.freeze({
-  workflows: Object.freeze({
+const routes = {
+  workflows: {
     date: '24h',
-    filter: 'all',
-    detailId: null,
-    tabId: null
-  })
-});
+    filter: 'all'
+  },
+  groups: {}
+};
 
 
 export default function goTo(name, path, params, change) {
   const mergedParams = Object.assign({}, params, change);
   const clearParams = pick(mergedParams, v => v);
-  const paramsWDefaults = Object.assign({}, DEFAULT_PARAMS[name], clearParams);
-  const newParams = pick(paramsWDefaults, v => v);
+  const newParams = Object.assign({}, routes[name], clearParams);
   const url = new UrlPattern(path).stringify(newParams);
 
   history.pushState(null, '/' + url);

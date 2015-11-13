@@ -94,7 +94,7 @@ class App extends Component {
               <Route path='services'/>
               <Route path='jobs'/>
               <Route path='search'/>
-              <Route path='groups'/>
+              <Route path='groups(/:name)'/>
               <Route path='ocmd'/>
               <Route path='library'/>
               <Route path='extensions'/>

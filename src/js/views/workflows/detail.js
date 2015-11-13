@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
+import { Groups, Group } from 'components/groups';
 import WorkflowsHeader from './_header';
 
 
@@ -39,7 +40,19 @@ export default class WorkflowsDetail extends Component {
       <div>
         <WorkflowsHeader workflow={workflow} />
         <TabGroup active={ tabId } tabChange={this.changeTab.bind(this)}>
-          <Tab name='Detail' />
+          <Tab name='Detail'>
+            <Groups>
+              {
+                workflow.groups.map(g => (
+                  <Group
+                      name={g.name}
+                      url={`/groups/${g.name}`}
+                      size={g.size}
+                      disabled={!g.enabled} />
+                ))
+              }
+            </Groups>
+          </Tab>
           <Tab name='Library' />
           <Tab name='Steps' />
           <Tab name='Log' />
