@@ -1,14 +1,13 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
-  verbose: true,
-  debug: false,
-  styleLoader: ExtractTextPlugin.extract(
-    'style-loader', 'css-loader!sass?outputStyle=expanded'
-  ),
 
+module.exports = {
+  styleLoader: ExtractTextPlugin.extract(
+    'style',
+    'css?sourceMap!' +
+      'sass?sourceMap&outputStyle=compressed'
+  ),
   scripts: {
-    // "transition": true,
     'dropdown': true,
     'modal': true,
     'popover': true,
@@ -19,7 +18,6 @@ module.exports = {
     'button': true,
     'alert': true
   },
-
   styles: {
     'mixins': true,
     'normalize': true,

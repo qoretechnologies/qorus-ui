@@ -19,18 +19,10 @@ var config = {
   },
   module: {
     loaders: [
-      /* {
-        test: /bootstrap-sass\/assets\/javascripts\//,
-        loader: 'imports?jQuery=jquery'
-      }, */
-      {
-        test: /\.scss$/,
-        loader: 'style!css!sass?outputStyle=expanded'
-      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader?optional[]=runtime&stage=0']
+        loaders: ['babel?optional[]=runtime&stage=0']
       },
       {
         test: /\.html$/,
@@ -38,23 +30,33 @@ var config = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+        loader: ExtractTextPlugin.extract(
+          'style', 'css?sourceMap&minimize'
+        )
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          'style',
+          'css?sourceMap!' +
+            'sass?sourceMap&outputStyle=compressed'
+        )
       },
       {
         test: /\.png$/,
-        loader: 'url-loader?limit=100000'
+        loader: 'url?limit=100000'
       },
       {
         test: /\.jpg$/,
-        loader: 'file-loader'
+        loader: 'file'
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&minetype=application/font-woff'
+        loader: 'url?limit=10000&minetype=application/font-woff'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        loader: 'file'
       },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -89,14 +91,14 @@ var config = {
 };
 
 if (env === 'development') {
-  config.module.loaders[1].loaders.unshift('react-hot');
+  config.module.loaders[0].loaders.unshift('react-hot');
   config.module.loaders.push({
     test: require.resolve('react'),
     loader: 'expose?React'
   });
 
   config.debug = true;
-  config.devtool = 'eval-source-map';
+  config.devtool = 'source-map';
   config.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()

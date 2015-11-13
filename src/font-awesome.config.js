@@ -1,8 +1,12 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+
 module.exports = {
-  // postStyleLoaders: [
-  //   require.resolve('extract-text-webpack-plugin/loader.js') +
-  //   '?{"omit":1,"extract":true,"remove":true}'
-  // ],
+  styleLoader: ExtractTextPlugin.extract(
+    'style',
+    'css?sourceMap!' +
+      'less?sourceMap&compress'
+  ),
   styles: {
     'mixins': true,
 

@@ -5,10 +5,11 @@ import Workflows from './views/workflows';
 import setupStore from './store';
 import Root from './views/app';
 
+
 require('bootstrap-sass!../bootstrap-sass.config.js');
-require('style!../css/base.css');
-require('style!../css/line.numbers.css');
 require('font-awesome-webpack!../font-awesome.config.js');
+require('../css/base.css');
+require('../css/line.numbers.css');
 
 
 class App extends Component {
