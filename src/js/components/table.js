@@ -21,11 +21,11 @@ class Table extends Component {
     return (
       <thead>
         <tr>
-        { React.Children.map(this.props.children, (item) => {
-          return (
-            <Th className={ item.props.className }>{ item.props.name || '' }</Th>
-          );
-        })}
+        { React.Children.map(this.props.children, (item) => (
+          <Th className={ item.props.className }>
+            { item.props.name || '' }
+          </Th>
+        ))}
         </tr>
       </thead>
     );

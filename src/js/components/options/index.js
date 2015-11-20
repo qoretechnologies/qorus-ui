@@ -29,32 +29,6 @@ class DescView extends Component {
 }
 
 
-@pureRender
-class SystemIcon extends Component {
-  static propTypes = {
-    model: PropTypes.object.isRequired,
-    modified: PropTypes.string.isRequired
-  }
-
-  render() {
-    let { modified, model } = this.props;
-
-    if (model.sysvalue) modified = '*';
-
-    if (!model.system) return <span />;
-
-    return (
-      <p>
-        <i
-          className='fa fa-cog'
-          title={modified ? 'Overriden system option' : 'System option'}
-        />
-        {modified}
-      </p>
-    );
-  }
-}
-
 class SystemOptions extends Component {
   static propTypes = {
     options: PropTypes.array.isRequired,
@@ -64,6 +38,10 @@ class SystemOptions extends Component {
   constructor(props) {
     super(props);
     this.state = { edit: false, value: null };
+  }
+
+  onChange(e) {
+    this.setState({ value: e.currentTarget.value });
   }
 
   start() {
@@ -77,10 +55,6 @@ class SystemOptions extends Component {
   commit() {
     this.onAdd(this.state.value);
     this.setState({ edit: false });
-  }
-
-  onChange(e) {
-    this.setState({ value: e.currentTarget.value });
   }
 
   renderOptions() {
@@ -138,7 +112,7 @@ class ActionsCol extends Component {
     return this.props.onDelete && (
       <a
         className='label label-danger'
-        onClick={e => this.props.onDelete(this.props.context)}
+        onClick={() => this.props.onDelete(this.props.context)}
       >
         <i className='fa fa-times' />
       </a>
@@ -168,9 +142,6 @@ export default class Options extends Component {
   }
 
   render() {
-    console.log('wrk options', this.props.workflow.options);
-    console.log('sys options', this.props.options);
-
     return (
       <div>
         <h4>Options</h4>

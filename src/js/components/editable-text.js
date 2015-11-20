@@ -45,6 +45,24 @@ export default class EditableCell extends Component {
     }
   }
 
+  onChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
+  onKeyUp(e) {
+    switch (e.key) {
+    case 'Enter':
+      this.commit();
+      break;
+    case 'Escape':
+      this.cancel();
+      break;
+    default:
+      // Nothing.
+      break;
+    }
+  }
+
   start() {
     this.setState({
       value: this.props.value,
@@ -60,21 +78,6 @@ export default class EditableCell extends Component {
 
   cancel() {
     this.setState({ edit: false });
-  }
-
-  onChange(e) {
-    this.setState({ value: e.target.value });
-  }
-
-  onKeyUp(e) {
-    switch (e.key) {
-    case 'Enter':
-      this.commit();
-      break;
-    case 'Escape':
-      this.cancel();
-      break;
-    }
   }
 
   render() {
