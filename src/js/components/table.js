@@ -4,7 +4,7 @@ import clNs from 'classnames';
 import { pureRender, pureRenderOmit } from './utils';
 import { whenDefaultEnabled } from 'utils';
 
-@pureRenderOmit(['children', 'rowClick'])
+@pureRender
 class Table extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -14,7 +14,7 @@ class Table extends Component {
   }
 
   static defaultProps = {
-    onRowClick: id => id
+    rowClick: () => {}
   }
 
   renderHeader() {
@@ -23,7 +23,7 @@ class Table extends Component {
         <tr>
         { React.Children.map(this.props.children, (item) => {
           return (
-            <Th className={ item.props.className }>{ item.props.name }</Th>
+            <Th className={ item.props.className }>{ item.props.name || '' }</Th>
           );
         })}
         </tr>
