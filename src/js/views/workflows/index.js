@@ -36,6 +36,9 @@ const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
 
 const workflowsSelector = state => state.api.workflows;
+const optionsSelector = state => (
+  state.api.systemOptions.data.filter(opt => opt.workflow)
+);
 const searchSelector = (state, props) => props.location.query.q;
 const infoSelector = () => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
@@ -57,14 +60,16 @@ const viewSelector = createSelector(
   [
     workflowsSelector,
     infoSelector,
-    collectionSelector
+    collectionSelector,
+    optionsSelector
   ],
-  (workflows, info, collection) => {
+  (workflows, info, collection, options) => {
     return {
       sync: workflows.sync,
       loading: workflows.loading,
       workflows: collection,
-      info: {}
+      info: {},
+      options
     };
   }
 );
@@ -78,6 +83,7 @@ class Workflows extends Component {
     info: PropTypes.object,
     sync: PropTypes.bool,
     loading: PropTypes.bool,
+    options: PropTypes.array,
     params: PropTypes.object,
     route: PropTypes.object
   }
@@ -119,7 +125,7 @@ class Workflows extends Component {
   }
 
   renderPane() {
-    const { params, route, workflows } = this.props;
+    const { params, route, workflows, options } = this.props;
 
     if (!params.detailId) return null;
 
@@ -139,7 +145,10 @@ class Workflows extends Component {
         );
       }}>
         <div className='relative'>
-          <WorkflowsDetail workflow={workflow} tabId={params.tabId} />
+          <WorkflowsDetail
+              workflow={workflow}
+              options={options}
+              tabId={params.tabId} />
         </div>
       </PaneView>
     );

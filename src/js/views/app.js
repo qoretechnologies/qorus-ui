@@ -10,8 +10,11 @@ import Messenger from '../components/messenger';
 
 import apiActions from '../store/api/actions';
 
-const systemActions = apiActions.system;
-const userActions = apiActions.currentUser;
+const {
+  system: systemActions,
+  systemOptions: optionsActions,
+  currentUser: userActions
+} = apiActions;
 
 class Content extends Component {
   static propTypes = {
@@ -69,6 +72,7 @@ class Root extends Component {
     super(...props);
     const { dispatch } = this.props;
     dispatch(systemActions.fetch());
+    dispatch(optionsActions.fetch());
     dispatch(userActions.fetch());
   }
 

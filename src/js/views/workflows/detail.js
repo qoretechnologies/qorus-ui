@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
 import { Groups, Group } from 'components/groups';
+import Options from 'components/options';
 import WorkflowsHeader from './_header';
 
 
@@ -12,6 +13,7 @@ import goTo from 'routes';
 export default class WorkflowsDetail extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
     tabId: PropTypes.string
   }
 
@@ -32,7 +34,7 @@ export default class WorkflowsDetail extends Component {
   }
 
   render() {
-    const { workflow, tabId } = this.props;
+    const { workflow, options, tabId } = this.props;
 
     if (!workflow) return null;
 
@@ -53,6 +55,12 @@ export default class WorkflowsDetail extends Component {
                 ))
               }
             </Groups>
+            <Options
+                workflow={workflow}
+                options={options}
+                onAdd={() => {}}
+                onChange={() => {}}
+                onDelete={() => {}} />
           </Tab>
           <Tab name='Library' />
           <Tab name='Steps' />
