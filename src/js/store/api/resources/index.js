@@ -43,6 +43,11 @@ export default [
     transform: item => item
   },
   {
+    name: 'systemOptions',
+    url: `${url}/system/options`,
+    transform: item => item
+  },
+  {
     name: 'currentUser',
     url: `${url}/users?action=current`,
     initialState: { data: {} },
