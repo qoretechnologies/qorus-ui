@@ -56,18 +56,25 @@ export default class WorkflowsTable extends Component {
           collection={ workflows }
           className={ cls }
           rowClick={ this.activateWorkflow.bind(this) }>
-        <Col name='' className='narrow'>
+        <Col className='narrow'>
           <i className='fa fa-square-o' />
         </Col>
-        <Col name='Actions' className='narrow' passItemAs='workflow'>
+        <Col
+          heading='Actions'
+          className='narrow'
+          props={rec => ({ workflow: rec })}
+        >
           <WorkflowsControls />
         </Col>
-        <Col name='Autostart' className='narrow'
-          passItemAs='context'
-          transMap={{
-            autostart: 'autostart',
-            exec_count: 'execCount'
-          }}>
+        <Col
+          heading='Autostart'
+          className='narrow'
+          props={rec => ({
+            context: rec,
+            autostart: rec.autostart,
+            execCount: rec.exec_count
+          })}
+        >
           <AutoStart
             inc={ (id, value) => {
               dispatch(actions.workflows.setAutostart(id, value));
@@ -76,12 +83,29 @@ export default class WorkflowsTable extends Component {
               dispatch(actions.workflows.setAutostart(id, value));
             } } />
         </Col>
-        <Col name='Execs' dataKey='exec_count' className='narrow' />
-        <Col name='ID' dataKey='id' className='narrow' />
-        <Col name='Name' dataKey='name' className='name' cellClassName='name' />
-        <Col name='Version' dataKey='version' className='narrow' />
+        <Col
+          heading='Execs'
+          className='narrow'
+          props={rec => ({ execCount: rec.exec_count })}
+        />
+        <Col
+          heading='ID'
+          className='narrow'
+          props={rec => ({ id: rec.id })}
+        />
+        <Col
+          heading='Name'
+          className='name'
+          cellClassName='name'
+          props={rec => ({ name: rec.name })}
+        />
+        <Col
+          heading='Version'
+          className='narrow'
+          props={rec => ({ version: rec.version })}
+        />
         {
-          ORDER_STATES.map(state => {
+          ORDER_STATES.map((state, idx) => {
             let transMap;
             const { name, short, label } = state;
 
@@ -89,17 +113,23 @@ export default class WorkflowsTable extends Component {
             transMap[name] = 'val';
 
             return (
-              <Col name={ short }
+              <Col
+                key={ idx }
+                name={ short }
                 className='narrow'
                 cellClassName='narrow'
-                transMap={ transMap }
-                key={ name }>
+                props={rec => ({ val: rec[name] })}
+              >
                 <Badge label={ label } />
               </Col>
             );
           })
         }
-        <Col name='Total' dataKey='TOTAL' className='narrow' />
+        <Col
+          heading='Total'
+          className='narrow'
+          props={rec => ({ TOTAL: rec.TOTAL })}
+        />
       </Table>
     );
   }

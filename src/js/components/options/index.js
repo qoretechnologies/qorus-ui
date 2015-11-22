@@ -147,20 +147,25 @@ export default class Options extends Component {
         <h4>Options</h4>
         <div className='options'>
           <Table
-            collection={this.props.workflow.options}
-            cssClass='table table-condensed table-sripped table-align-left'
+            data={this.props.workflow.options}
+            className='table table-condensed table-sriped table-align-left'
           >
-            <Col name='Options' transMap={{ name: 'name' }}>
+            <Col
+              heading='Options'
+              props={rec => ({ name: rec.name })}
+            >
               <DescView className='name' />
             </Col>
             <Col
-              name='Value'
-              passItemAs='context'
-              transMap={{ value: 'value' }}
+              heading='Value'
+              props={rec => ({ context: rec, value: rec.value })}
             >
               <EditableText onSave={this.changeOption.bind(this)} />
             </Col>
-            <Col passItemAs='context' className='narrow'>
+            <Col
+              className='narrow'
+              props={rec => ({ context: rec, value: rec.value })}
+            >
               <ActionsCol
                 onDelete={this.deleteOption.bind(this)}
                 className='middle'
