@@ -15,10 +15,21 @@ describe('', () => {
   jsdom({ skipWindowCheck: true });
 
 
+  /**
+   * Typical data structure for table.
+   */
   const data = [
     { name: 'Row 1', value: 'Value 1' },
     { name: 'Row 2', value: 'Value 2' }
   ];
+
+
+  /**
+   * Helper component to render cell and columns data.
+   */
+  function ChildComp(props) {
+    return <span className={props.className}>{props.value}</span>;
+  }
 
 
   describe("Table from 'components/table'", () => {
@@ -99,6 +110,43 @@ describe('', () => {
 
       expect(comp.tBodies[0].rows[0].cells[0].tagName).to.equal('TH');
     });
+
+
+    it('renders cell value from props and field props', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <tbody>
+            <tr>
+              <Cell props={{ key: 'value' }} field='key' />
+            </tr>
+          </tbody>
+        </table>
+      );
+
+      expect(comp.tBodies[0].rows[0].cells[0].textContent).to.equal('value');
+    });
+
+
+    it('renders cell children and passes childProps to them', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <tbody>
+            <tr>
+              <Cell childProps={{ value: 'Passed to child' }}>
+                <ChildComp className='child' />
+              </Cell>
+            </tr>
+          </tbody>
+        </table>
+      );
+
+      expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.tagName).
+        to.equal('SPAN');
+      expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.textContent).
+        to.equal('Passed to child');
+      expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.className).
+        to.equal('child');
+    });
   });
 
 
@@ -118,8 +166,20 @@ describe('', () => {
       expect(comp.tHead.rows[0].cells[1].tagName).to.equal('TH');
       expect(comp.tHead.rows[0].cells[1].textContent).to.equal('Values');
     });
-  });
 
+
+    it('passes unused Col props to Cell', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <THead>
+            <Col heading='Names' className='name' />
+          </THead>
+        </table>
+      );
+
+      expect(comp.tHead.rows[0].cells[0].className).to.equal('name');
+    });
+  });
 
 
   describe("{ TBody } from 'components/table'", () => {
@@ -128,22 +188,26 @@ describe('', () => {
     });
 
 
-    it('renders table body using given data', () => {
-      const defaultData = [
-        [[ 'name', 'Row 1' ], [ 'value', 'Value 1' ]],
-        [[ 'name', 'Row 2' ], [ 'value', 'Value 2' ]]
-      ];
-
+    it('renders table body using field from given data specified by Col',
+    () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
-          <TBody data={defaultData} />
+          <TBody data={data}>
+            <Col props={rec => ({ name: rec.name })} />
+            <Col props={rec => ({ value: rec.value })} />
+          </TBody>
         </table>
       );
 
+      expect(comp.tBodies[0].rows).to.have.length(2);
+
+      expect(comp.tBodies[0].rows[0].cells).to.have.length(2);
       expect(comp.tBodies[0].rows[0].cells[0].tagName).to.equal('TD');
       expect(comp.tBodies[0].rows[0].cells[0].textContent).to.equal('Row 1');
       expect(comp.tBodies[0].rows[0].cells[1].tagName).to.equal('TD');
       expect(comp.tBodies[0].rows[0].cells[1].textContent).to.equal('Value 1');
+
+      expect(comp.tBodies[0].rows[1].cells).to.have.length(2);
       expect(comp.tBodies[0].rows[1].cells[0].tagName).to.equal('TD');
       expect(comp.tBodies[0].rows[1].cells[0].textContent).to.equal('Row 2');
       expect(comp.tBodies[0].rows[1].cells[1].tagName).to.equal('TD');
@@ -151,20 +215,26 @@ describe('', () => {
     });
 
 
-    it('renders table body using field from given data specified by Col',
+    it('renders table body using Col spec with children and dynamic childProps',
     () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data}>
-            <Col props={rec => ({ value: rec.value })} />
+            <Col childProps={rec => ({ value: rec.value })}>
+              <ChildComp />
+            </Col>
           </TBody>
         </table>
       );
 
-      expect(comp.tBodies[0].rows[0].cells).to.have.length(1);
-      expect(comp.tBodies[0].rows[0].cells[0].textContent).to.equal('Value 1');
-      expect(comp.tBodies[0].rows[1].cells).to.have.length(1);
-      expect(comp.tBodies[0].rows[1].cells[0].textContent).to.equal('Value 2');
+      expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.tagName).
+        to.equal('SPAN');
+      expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.textContent).
+        to.equal('Value 1');
+      expect(comp.tBodies[0].rows[1].cells[0].firstElementChild.tagName).
+        to.equal('SPAN');
+      expect(comp.tBodies[0].rows[1].cells[0].firstElementChild.textContent).
+        to.equal('Value 2');
     });
 
 

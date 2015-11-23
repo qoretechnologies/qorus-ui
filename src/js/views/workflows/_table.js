@@ -27,12 +27,12 @@ export default class WorkflowsTable extends Component {
     params: PropTypes.object
   }
 
-  activateWorkflow(id) {
+  activateWorkflow(workflow) {
     const shouldDeactivate =
       this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === id;
+      parseInt(this.context.params.detailId, 10) === workflow.id;
     const change = {
-      detailId: shouldDeactivate ? null : id,
+      detailId: shouldDeactivate ? null : workflow.id,
       tabId: shouldDeactivate ? null : this.context.params.tabId
     };
 
@@ -45,43 +45,39 @@ export default class WorkflowsTable extends Component {
   }
 
   render() {
-    const { workflows } = this.props;
-    const { dispatch } = this.context;
-    const cls = classNames([
-      'table', 'table-striped', 'table-condensed', 'table-hover', 'table-fixed'
-    ]);
-
     return (
       <Table
-          collection={ workflows }
-          className={ cls }
-          rowClick={ this.activateWorkflow.bind(this) }>
+        data={this.props.workflows}
+        className='table table-striped table-condensed table-hover table-fixed'
+        onRowClick={this.activateWorkflow.bind(this)}
+      >
         <Col className='narrow'>
           <i className='fa fa-square-o' />
         </Col>
         <Col
           heading='Actions'
           className='narrow'
-          props={rec => ({ workflow: rec })}
+          childProps={rec => ({ workflow: rec })}
         >
           <WorkflowsControls />
         </Col>
         <Col
           heading='Autostart'
           className='narrow'
-          props={rec => ({
+          childProps={rec => ({
             context: rec,
             autostart: rec.autostart,
             execCount: rec.exec_count
           })}
         >
           <AutoStart
-            inc={ (id, value) => {
-              dispatch(actions.workflows.setAutostart(id, value));
-            } }
-            dec={ (id, value) => {
-              dispatch(actions.workflows.setAutostart(id, value));
-            } } />
+            inc={(id, value) => {
+              this.context.dispatch(actions.workflows.setAutostart(id, value));
+            }}
+            dec={(id, value) => {
+              this.context.dispatch(actions.workflows.setAutostart(id, value));
+            }}
+          />
         </Col>
         <Col
           heading='Execs'
@@ -96,35 +92,24 @@ export default class WorkflowsTable extends Component {
         <Col
           heading='Name'
           className='name'
-          cellClassName='name'
-          props={rec => ({ name: rec.name })}
+          field='name'
+          props={rec => ({ className: 'name', name: rec.name })}
         />
         <Col
           heading='Version'
           className='narrow'
           props={rec => ({ version: rec.version })}
         />
-        {
-          ORDER_STATES.map((state, idx) => {
-            let transMap;
-            const { name, short, label } = state;
-
-            transMap = {};
-            transMap[name] = 'val';
-
-            return (
-              <Col
-                key={ idx }
-                name={ short }
-                className='narrow'
-                cellClassName='narrow'
-                props={rec => ({ val: rec[name] })}
-              >
-                <Badge label={ label } />
-              </Col>
-            );
-          })
-        }
+        {ORDER_STATES.map((state, idx) => (
+          <Col
+            key={idx}
+            heading={state.short}
+            className='narrow'
+            childProps={rec => ({ val: rec[state.name] })}
+          >
+            <Badge label={state.label} />
+          </Col>
+        ))}
         <Col
           heading='Total'
           className='narrow'

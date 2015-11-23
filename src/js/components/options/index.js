@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from '../table';
-import EditableText from '../editable-text';
+import EditableCell from '../table/editableCell';
 
 
 import { pureRender } from '../utils';
@@ -53,7 +53,7 @@ class SystemOptions extends Component {
   }
 
   commit() {
-    this.onAdd(this.state.value);
+    this.props.onAdd(this.state.value);
     this.setState({ edit: false });
   }
 
@@ -61,11 +61,15 @@ class SystemOptions extends Component {
     return (
       <div>
         <select
+          value={this.state.value}
           ref={c => this.domSelect = c}
           onChange={this.onChange.bind(this)}
         >
           {this.props.options.map(opt => (
-            <option value={opt.name} selected={opt.name === this.state.value}>
+            <option
+              key={opt.name}
+              value={opt.name}
+            >
               {opt.name}
             </option>
           ))}
@@ -158,13 +162,16 @@ export default class Options extends Component {
             </Col>
             <Col
               heading='Value'
-              props={rec => ({ context: rec, value: rec.value })}
-            >
-              <EditableText onSave={this.changeOption.bind(this)} />
-            </Col>
+              comp={EditableCell}
+              props={rec => ({
+                context: rec,
+                value: rec.value,
+                onSave: this.changeOption.bind(this)
+              })}
+            />
             <Col
               className='narrow'
-              props={rec => ({ context: rec, value: rec.value })}
+              childProps={rec => ({ context: rec, value: rec.value })}
             >
               <ActionsCol
                 onDelete={this.deleteOption.bind(this)}

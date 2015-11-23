@@ -22,11 +22,16 @@ export default class THead extends Component {
     return (
       <thead>
         <tr>
-          {React.Children.map(this.props.children, col => (
-            <Cell comp='th'>
-              {col.props.heading}
-            </Cell>
-          ))}
+          {React.Children.map(this.props.children, col => {
+            const { heading, comp, props, childProps, ...otherProps } =
+              col.props;
+
+            return (
+              <Cell comp='th' props={otherProps}>
+                {heading}
+              </Cell>
+            );
+          })}
         </tr>
       </thead>
     );

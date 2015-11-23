@@ -10,14 +10,9 @@ import { pureRender } from '../utils';
 /**
  * Table body section (tbody) component.
  *
- * It expects data prop with array of objects. If no Col element is
- * passed as a child, it just iterates over each data element's
- * property and renders every value of every property. It expects data
- * records as [[key, value], ...] pairs similar to Map build-in
- * object.
- *
- * If there are Col children, it passes to Cell props as de returned
- * by Col#props.props function and comp as is on Col#props.comp.
+ * It expects data prop as an array of records (a record can be
+ * anything). It renders a table row (td element) for each record and
+ * a data cell (Cell element) for Col passed as a child to TBody.
  *
  * Optionally, onRowClick event handler can be attached to each
  * row. It will receive data record and its index as parameters.
@@ -37,17 +32,6 @@ export default class TBody extends Component {
     super(props);
 
     this.rows = [];
-    this.cols = this.findOrCreateCols(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.cols = this.findOrCreateCols(nextProps);
-  }
-
-  findOrCreateCols(props) {
-    return React.Children.count(props.children) ?
-      React.Children.toArray(props.children) :
-      Object.keys(props.data[0]).map(() => <Col />);
   }
 
   getCellChildren(col) {
@@ -64,8 +48,6 @@ export default class TBody extends Component {
   }
 
   render() {
-    this.cols 
-
     return (
       <tbody>
         {this.props.data.map((rec, recIdx) => (
@@ -74,11 +56,11 @@ export default class TBody extends Component {
             onClick={this.onRowClick.bind(this)}
             ref={row => this.rows[recIdx] = row}
           >
-            {this.cols.map((col, colIdx) => (
+            {React.Children.map(this.props.children, (col, colIdx) => (
               <Cell
-                key={colIdx}
                 comp={col.props.comp}
                 props={col.props.props(rec, recIdx, colIdx)}
+                childProps={col.props.childProps(rec, recIdx, colIdx)}
               >
                 {React.Children.map(this.getCellChildren(col), c => c)}
               </Cell>

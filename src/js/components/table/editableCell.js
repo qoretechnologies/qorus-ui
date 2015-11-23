@@ -2,9 +2,20 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 
-import { pureRender } from './utils';
+import { pureRender } from '../utils';
 
 
+/**
+ * Table data cell component which allows editing value.
+ *
+ * On cell click, it starts editing by turning the cell content into
+ * text field. On enter, it commits the value by calling onSave prop
+ * with value and context props as parameters. By definition, value
+ * can be only a string.
+ *
+ * Nothing is updated (except for internal state) so parent component
+ * must trigger app state change.
+ */
 @pureRender
 export default class EditableCell extends Component {
   static propTypes = {
@@ -24,7 +35,7 @@ export default class EditableCell extends Component {
   constructor(props) {
     super(props);
 
-    this.tableCell = null;
+    this.container = null;
     this.editField = null;
     this.state = {
       value: props.value,
@@ -35,7 +46,7 @@ export default class EditableCell extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     nextState.width = nextState.edit ?
-      ('' + this.tableCell.offsetWidth + 'px') :
+      ('' + this.container.offsetWidth + 'px') :
       '';
   }
 
@@ -84,7 +95,7 @@ export default class EditableCell extends Component {
     const { value, onSave, ...props } = this.props;
 
     return (
-      <div
+      <td
         {...props}
         className={classNames({
           editable: true,
@@ -92,7 +103,7 @@ export default class EditableCell extends Component {
         })}
         onClick={this.start.bind(this)}
         style={{ width: this.state.width }}
-        ref={c => this.tableCell = c}
+        ref={c => this.container = c}
       >
         {
           this.state.edit ?
@@ -106,7 +117,7 @@ export default class EditableCell extends Component {
             /> :
             <span>{this.props.value}</span>
         }
-      </div>
+      </td>
     );
   }
 }
