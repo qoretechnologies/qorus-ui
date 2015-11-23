@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
-import WorkflowsControls from './_controls';
+import WorkflowsControls from './controls';
 
 
 import classNames from 'classnames';

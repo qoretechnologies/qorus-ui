@@ -15,8 +15,8 @@ import Loader from 'components/loader';
 import { PaneView } from 'components/pane';
 
 // partials
-import WorkflowsToolbar from './_toolbar';
-import WorkflowsTable from './_table';
+import WorkflowsToolbar from './toolbar';
+import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 
 

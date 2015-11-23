@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
 import { Groups, Group } from 'components/groups';
 import Options from 'components/options';
-import WorkflowsHeader from './_header';
+import WorkflowsHeader from './header';
 
 
 import { pureRender } from 'components/utils';
