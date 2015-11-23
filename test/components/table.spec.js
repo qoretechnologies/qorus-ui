@@ -193,8 +193,14 @@ describe('', () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data}>
-            <Col props={rec => ({ name: rec.name })} />
-            <Col props={rec => ({ value: rec.value })} />
+            <Col
+              field='name'
+              props={rec => ({ name: rec.name, sth: 'to ignore' })}
+            />
+            <Col
+              field='value'
+              props={rec => ({ value: rec.value, sth: 'to ignore' })}
+            />
           </TBody>
         </table>
       );

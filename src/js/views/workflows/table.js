@@ -91,7 +91,6 @@ export default class WorkflowsTable extends Component {
         />
         <Col
           heading='Name'
-          className='name'
           field='name'
           props={rec => ({ className: 'name', name: rec.name })}
         />

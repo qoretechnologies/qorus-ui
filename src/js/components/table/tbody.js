@@ -59,6 +59,7 @@ export default class TBody extends Component {
             {React.Children.map(this.props.children, (col, colIdx) => (
               <Cell
                 comp={col.props.comp}
+                field={col.props.field}
                 props={col.props.props(rec, recIdx, colIdx)}
                 childProps={col.props.childProps(rec, recIdx, colIdx)}
               >
