@@ -6,29 +6,6 @@ import EditableCell from '../table/editableCell';
 import { pureRender } from '../utils';
 
 
-@pureRender
-class DescView extends Component {
-  static propTypes = {
-    name: PropTypes.string,
-    desc: PropTypes.string
-  }
-
-  static defaultProps = {
-    name: '',
-    desc: ''
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.name}<br />
-        <p className='muted'>{this.props.desc}</p>
-      </div>
-    );
-  }
-}
-
-
 class SystemOptions extends Component {
   static propTypes = {
     options: PropTypes.array.isRequired,
@@ -52,15 +29,18 @@ class SystemOptions extends Component {
     this.setState({ edit: false });
   }
 
-  commit() {
+  commit(e) {
+    e.preventDefault();
+
     this.props.onAdd(this.state.value);
     this.setState({ edit: false });
   }
 
   renderOptions() {
     return (
-      <div>
+      <form className='form-inline' onSubmit={this.commit.bind(this)}>
         <select
+          className='form-control'
           value={this.state.value}
           ref={c => this.domSelect = c}
           onChange={this.onChange.bind(this)}
@@ -74,26 +54,27 @@ class SystemOptions extends Component {
             </option>
           ))}
         </select>
-        <a
-          className='btn btn-success btn-small'
-          onClick={this.commit.bind(this)}
+        <button
+          type='submit'
+          className='btn btn-success btn-sm'
         >
           <i className='fa fa-plus' /> Add
-        </a>
-        <a
-          className='btn btn-danger btn-small'
+        </button>
+        <button
+          type='button'
+          className='btn btn-danger btn-sm'
           onClick={this.cancel.bind(this)}
         >
           <i className='fa fa-times' /> Cancel
-        </a>
-      </div>
+        </button>
+      </form>
     );
   }
 
   renderButton() {
     return (
       <a
-        className='btn btn-success btn-small'
+        className='btn btn-success btn-sm'
         onClick={this.start.bind(this)}
       >
         <i className='fa fa-plus' /> Add option
@@ -147,19 +128,18 @@ export default class Options extends Component {
 
   render() {
     return (
-      <div>
+      <div className='options'>
         <h4>Options</h4>
-        <div className='options'>
+        <div>
           <Table
             data={this.props.workflow.options}
             className='table table-condensed table-sriped table-align-left'
           >
             <Col
               heading='Options'
-              props={rec => ({ name: rec.name })}
-            >
-              <DescView className='name' />
-            </Col>
+              field='name'
+              props={rec => ({ name: rec.name, className: 'name' })}
+            />
             <Col
               heading='Value'
               comp={EditableCell}
@@ -174,8 +154,8 @@ export default class Options extends Component {
               childProps={rec => ({ context: rec, value: rec.value })}
             >
               <ActionsCol
-                onDelete={this.deleteOption.bind(this)}
                 className='middle'
+                onDelete={this.deleteOption.bind(this)}
               />
             </Col>
           </Table>
