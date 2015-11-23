@@ -133,7 +133,7 @@ export default class Options extends Component {
         <div>
           <Table
             data={this.props.workflow.options}
-            className='table table-condensed table-sriped table-align-left'
+            className='table table-condensed table-striped table-align-left'
           >
             <Col
               heading='Options'
