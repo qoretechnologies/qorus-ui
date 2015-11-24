@@ -39,9 +39,11 @@ const actions = createApiActions(
     createResourceActions(RESOURCES)
   )
 );
-Object.keys(workflowActions).forEach(a => {
-  actions.workflows[a] = workflowActions[a](actions);
+
+Object.keys(workflowActions.delegates).forEach(a => {
+  actions.workflows[a] = workflowActions.delegates[a](actions);
 });
+Object.assign(actions.workflows, workflowActions.specials);
 
 
 export default actions;
