@@ -14,12 +14,20 @@ export default class Options extends Component {
     onDelete: PropTypes.func.isRequired
   }
 
+  getUnusedSystemOptions() {
+    return this.props.options.filter(sysOpt => (
+      this.props.workflow.options.findIndex(wflOpt => (
+        wflOpt.name === sysOpt.name
+      )) < 0
+    ));
+  }
+
   addOption(opt) {
     this.props.onAdd(opt);
   }
 
   changeOption(value, opt) {
-    this.props.onChange(Object.assign(opt, { value }));
+    this.props.onChange(Object.assign({}, opt, { value }));
   }
 
   deleteOption(opt) {
@@ -60,7 +68,7 @@ export default class Options extends Component {
             </Col>
           </Table>
           <SystemOptions
-            options={this.props.options}
+            options={this.getUnusedSystemOptions()}
             onAdd={this.addOption.bind(this)}
           />
         </div>

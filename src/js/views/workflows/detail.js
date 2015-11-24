@@ -6,6 +6,9 @@ import WorkflowsHeader from './header';
 
 
 import { pureRender } from 'components/utils';
+
+
+import actions from 'store/api/actions';
 import goTo from 'routes';
 
 
@@ -18,17 +21,26 @@ export default class WorkflowsDetail extends Component {
   }
 
   static contextTypes = {
+    dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
   }
 
-  changeTab(tabId) {
-    const { params, route } = this.context;
+  setOption(opt) {
+    this.context.dispatch(
+      actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)
+    );
+  }
 
+  deleteOption(opt) {
+    this.setOption(Object.assign({}, opt, { value: '' }));
+  }
+
+  changeTab(tabId) {
     goTo(
       'workflows',
-      route.path,
-      params,
+      this.context.route.path,
+      this.context.params,
       { tabId }
     );
   }
@@ -47,20 +59,22 @@ export default class WorkflowsDetail extends Component {
               {
                 (workflow.groups || []).map(g => (
                   <Group
-                      key={g.name}
-                      name={g.name}
-                      url={`/groups/${g.name}`}
-                      size={g.size}
-                      disabled={!g.enabled} />
+                    key={g.name}
+                    name={g.name}
+                    url={`/groups/${g.name}`}
+                    size={g.size}
+                    disabled={!g.enabled}
+                  />
                 ))
               }
             </Groups>
             <Options
-                workflow={workflow}
-                options={options}
-                onAdd={() => {}}
-                onChange={() => {}}
-                onDelete={() => {}} />
+              workflow={workflow}
+              options={options}
+              onAdd={this.setOption.bind(this)}
+              onChange={this.setOption.bind(this)}
+              onDelete={this.deleteOption.bind(this)}
+            />
           </Tab>
           <Tab name='Library' />
           <Tab name='Steps' />
