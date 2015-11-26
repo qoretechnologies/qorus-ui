@@ -38,6 +38,15 @@ export default class Cell extends Component {
     childProps: {}
   }
 
+  getRootProps() {
+    if (!this.props.field) return this.props.props;
+
+    let rootProps = Object.assign({}, this.props.props);
+    delete rootProps[this.props.field];
+
+    return rootProps;
+  }
+
   /**
    * Returns whatever will be used as root cell component children.
    *
@@ -71,7 +80,7 @@ export default class Cell extends Component {
   render() {
     return React.createElement(
       this.props.comp,
-      this.props.props,
+      this.getRootProps(),
       ...React.Children.toArray(this.renderChildren())
     );
   }

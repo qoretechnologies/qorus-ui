@@ -157,6 +157,27 @@ describe('', () => {
       expect(comp.tBodies[0].rows[0].cells[0].firstElementChild.className).
         to.equal('child');
     });
+
+
+    it('ignores common attribute in props if it defined as field prop', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <tbody>
+            <tr>
+              <Cell
+                field='title'
+                props={{ title: 'Not an HTML DOM title attribute' }}
+              />
+            </tr>
+          </tbody>
+        </table>
+      );
+
+      expect(comp.tBodies[0].rows[0].cells[0].title).
+        to.equal('');
+      expect(comp.tBodies[0].rows[0].cells[0].textContent).
+        to.equal('Not an HTML DOM title attribute');
+    });
   });
 
 
