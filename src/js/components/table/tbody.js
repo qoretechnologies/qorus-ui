@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Cell from './cell';
-import Col from './col';
 
 
-import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 
@@ -20,6 +18,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class TBody extends Component {
   static propTypes = {
+    children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
     onRowClick: PropTypes.func
   }
@@ -34,17 +33,17 @@ export default class TBody extends Component {
     this.rows = [];
   }
 
-  getCellChildren(col) {
-    return React.Children.count(col.props.children) ?
-      React.Children.toArray(col.props.children) :
-      [];
-  }
-
   onRowClick(e) {
     this.props.onRowClick(
       this.props.data[this.rows.indexOf(e.currentTarget)],
       this.rows.indexOf(e.currentTarget)
     );
+  }
+
+  getCellChildren(col) {
+    return React.Children.count(col.props.children) ?
+      React.Children.toArray(col.props.children) :
+      [];
   }
 
   render() {

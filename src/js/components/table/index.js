@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { pureRender } from '../utils';
 import Col from './col';
 import Cell from './cell';
 import THead from './thead';
 import TBody from './tbody';
+
+
+import { pureRender } from '../utils';
 
 
 /**
@@ -19,6 +21,7 @@ import TBody from './tbody';
 @pureRender
 export default class Table extends Component {
   static propTypes = {
+    children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
     onRowClick: PropTypes.func
   }
@@ -33,10 +36,10 @@ export default class Table extends Component {
     return (
       <table {...props}>
         <THead data={data}>
-          {React.Children.toArray(children)}
+          {children}
         </THead>
         <TBody data={data} onRowClick={onRowClick}>
-          {React.Children.toArray(children)}
+          {children}
         </TBody>
       </table>
     );

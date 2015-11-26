@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Cell from './cell';
 
 
@@ -16,6 +16,10 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class THead extends Component {
+  static propTypes = {
+    children: React.PropTypes.node.isRequired
+  }
+
   render() {
     if (!React.Children.count(this.props.children)) return null;
 

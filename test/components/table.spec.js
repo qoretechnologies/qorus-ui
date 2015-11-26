@@ -1,7 +1,6 @@
 require('../testdom.js')('<html><body></body></html>');
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import jsdom from 'mocha-jsdom';
 import chai, { expect } from 'chai';
@@ -27,8 +26,19 @@ describe('', () => {
   /**
    * Helper component to render cell and columns data.
    */
-  function ChildComp(props) {
-    return <span className={props.className}>{props.value}</span>;
+  class ChildComp extends React.Component {
+    static propTypes = {
+      className: React.PropTypes.string,
+      value: React.PropTypes.string
+    }
+
+    render() {
+      return (
+        <span className={this.props.className}>
+          {this.props.value}
+        </span>
+      );
+    }
   }
 
 

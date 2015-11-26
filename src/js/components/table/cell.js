@@ -22,6 +22,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Cell extends Component {
   static propTypes = {
+    children: React.PropTypes.node,
     comp: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func
@@ -68,11 +69,9 @@ export default class Cell extends Component {
   }
 
   render() {
-    const { comp, props, field, children } = this.props;
-
     return React.createElement(
-      comp,
-      props,
+      this.props.comp,
+      this.props.props,
       ...React.Children.toArray(this.renderChildren())
     );
   }

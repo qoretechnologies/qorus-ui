@@ -1,18 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
 
 
 import { pureRender } from '../utils';
-
-
-/**
- * Key position in default key-value pair record structure.
- */
-const KEY = 0;
-
-/**
- * Value position in default key-value pair record structure.
- */
-const VAL = 1;
 
 
 /**

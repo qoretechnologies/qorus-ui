@@ -5,7 +5,6 @@ import AutoStart from 'components/autostart';
 import WorkflowsControls from './controls';
 
 
-import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
