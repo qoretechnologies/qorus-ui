@@ -13,7 +13,8 @@ import apiActions from '../store/api/actions';
 const {
   system: systemActions,
   systemOptions: optionsActions,
-  currentUser: userActions
+  currentUser: userActions,
+  globalErrors: globalErrorsActions
 } = apiActions;
 
 class Content extends Component {
@@ -74,6 +75,7 @@ class Root extends Component {
     dispatch(systemActions.fetch());
     dispatch(optionsActions.fetch());
     dispatch(userActions.fetch());
+    dispatch(globalErrorsActions.fetch());
   }
 
   componentWillMount() {

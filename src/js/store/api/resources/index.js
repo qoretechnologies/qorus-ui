@@ -48,6 +48,11 @@ export default [
     transform: item => item
   },
   {
+    name: 'globalErrors',
+    url: `${url}/errors/global`,
+    transform: item => item
+  },
+  {
     name: 'currentUser',
     url: `${url}/users?action=current`,
     initialState: { data: {} },

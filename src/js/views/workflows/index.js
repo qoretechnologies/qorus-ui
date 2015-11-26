@@ -39,6 +39,9 @@ const workflowsSelector = state => state.api.workflows;
 const optionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
+const globalErrorsSelector = state => (
+  state.api.globalErrors.data
+);
 const searchSelector = (state, props) => props.location.query.q;
 const infoSelector = () => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
@@ -61,15 +64,17 @@ const viewSelector = createSelector(
     workflowsSelector,
     infoSelector,
     collectionSelector,
-    optionsSelector
+    optionsSelector,
+    globalErrorsSelector
   ],
-  (workflows, info, collection, options) => {
+  (workflows, info, collection, options, globalErrors) => {
     return {
       sync: workflows.sync,
       loading: workflows.loading,
       workflows: collection,
       info: {},
-      options
+      options,
+      globalErrors
     };
   }
 );
@@ -84,6 +89,7 @@ class Workflows extends Component {
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     options: PropTypes.array,
+    globalErrors: PropTypes.array,
     params: PropTypes.object,
     route: PropTypes.object
   }
@@ -125,7 +131,7 @@ class Workflows extends Component {
   }
 
   renderPane() {
-    const { params, route, workflows, options } = this.props;
+    const { params, route, workflows, options, globalErrors } = this.props;
 
     if (!params.detailId) return null;
 
@@ -148,6 +154,7 @@ class Workflows extends Component {
           <WorkflowsDetail
               workflow={workflow}
               options={options}
+              globalErrors={globalErrors}
               tabId={params.tabId} />
         </div>
       </PaneView>

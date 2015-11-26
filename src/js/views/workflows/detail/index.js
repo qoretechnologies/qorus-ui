@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detailTab';
+import ErrorsTab from './errorsTab';
 import InfoTab from './infoTab';
 
 
@@ -16,6 +17,7 @@ export default class WorkflowsDetail extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     options: PropTypes.array.isRequired,
+    globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string
   }
 
@@ -34,7 +36,7 @@ export default class WorkflowsDetail extends Component {
   }
 
   render() {
-    const { workflow, options, tabId } = this.props;
+    const { workflow, options, globalErrors, tabId } = this.props;
 
     if (!workflow) return null;
 
@@ -48,7 +50,9 @@ export default class WorkflowsDetail extends Component {
           <Tab name='Library' />
           <Tab name='Steps' />
           <Tab name='Log' />
-          <Tab name='Errors' />
+          <Tab name='Errors'>
+            <ErrorsTab workflow={workflow} globalErrors={globalErrors} />
+          </Tab>
           <Tab name='Mappers' />
           <Tab name='Info'>
             <InfoTab workflow={workflow} />
