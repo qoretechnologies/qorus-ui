@@ -1,2 +1,15 @@
 @import '../js/components/groups/style';
 @import '../js/components/table/style';
+
+
+.form-search .form-group {
+  margin-top: 5px;
+
+  .form-control.input-sm {
+    border-radius: 15px 0 0 15px;
+  }
+  .btn.btn-sm {
+    border-left: 0;
+    border-radius: 0 15px 15px 0;
+  }
+}

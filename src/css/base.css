@@ -160,14 +160,6 @@ i.sort {
   display: inline-block;
 }
 
-.form-search {
-  float: left;
-  margin-bottom: 0;
-}
-.search-box {
-  float: right;
-}
-
 .loader {
   color: #000;
   margin: 20px 0;
