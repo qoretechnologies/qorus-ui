@@ -41,7 +41,7 @@ export default class Cell extends Component {
   getRootProps() {
     if (!this.props.field) return this.props.props;
 
-    let rootProps = Object.assign({}, this.props.props);
+    const rootProps = Object.assign({}, this.props.props);
     delete rootProps[this.props.field];
 
     return rootProps;
