@@ -14,6 +14,10 @@ export default class DetailTab extends Component {
     options: PropTypes.array.isRequired
   }
 
+  static contextTypes = {
+    dispatch: PropTypes.func
+  }
+
   setOption(opt) {
     this.context.dispatch(
       actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)

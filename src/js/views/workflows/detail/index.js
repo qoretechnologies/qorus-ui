@@ -20,7 +20,6 @@ export default class WorkflowsDetail extends Component {
   }
 
   static contextTypes = {
-    dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
   }
@@ -43,6 +42,7 @@ export default class WorkflowsDetail extends Component {
       <div>
         <WorkflowsHeader workflow={workflow} />
         <TabGroup active={ tabId } tabChange={this.changeTab.bind(this)}>
+        <TabGroup active={tabId} tabChange={this.changeTab.bind(this)}>
           <Tab name='Detail'>
             <DetailTab workflow={workflow} options={options} />
           </Tab>
