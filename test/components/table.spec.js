@@ -189,6 +189,19 @@ describe('', () => {
 
       expect(comp.tHead.rows[0].cells[0].className).to.equal('name');
     });
+
+
+    it('renders empty tHead section if Cols have no heading', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <THead>
+            <Col />
+          </THead>
+        </table>
+      );
+
+      expect(comp.tHead.rows).to.have.length(0);
+    });
   });
 
 

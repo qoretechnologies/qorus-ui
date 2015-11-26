@@ -20,23 +20,28 @@ export default class THead extends Component {
     children: React.PropTypes.node.isRequired
   }
 
-  render() {
-    if (!React.Children.count(this.props.children)) return null;
+  hasHeadings() {
+    return React.Children.toArray(this.props.children).
+      some(col => col.props.heading);
+  }
 
+  render() {
     return (
       <thead>
-        <tr>
-          {React.Children.map(this.props.children, col => {
-            const { heading, comp, props, childProps, ...otherProps } =
-              col.props;
+        {this.hasHeadings() && (
+          <tr>
+            {React.Children.map(this.props.children, col => {
+              const { heading, comp, props, childProps, ...otherProps } =
+                col.props;
 
-            return (
-              <Cell comp='th' props={otherProps}>
-                {heading}
-              </Cell>
-            );
-          })}
-        </tr>
+              return (
+                <Cell comp='th' props={otherProps}>
+                  {heading}
+                </Cell>
+              );
+            })}
+          </tr>
+        )}
       </thead>
     );
   }

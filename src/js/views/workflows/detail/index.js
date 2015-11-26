@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
-import { Groups, Group } from 'components/groups';
-import Options from 'components/options';
 import WorkflowsHeader from './header';
+import DetailTab from './detailTab';
+import InfoTab from './infoTab';
 
 
 import { pureRender } from 'components/utils';
 
 
-import actions from 'store/api/actions';
 import goTo from 'routes';
 
 
@@ -24,16 +23,6 @@ export default class WorkflowsDetail extends Component {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
-  }
-
-  setOption(opt) {
-    this.context.dispatch(
-      actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)
-    );
-  }
-
-  deleteOption(opt) {
-    this.setOption(Object.assign({}, opt, { value: '' }));
   }
 
   changeTab(tabId) {
@@ -55,33 +44,16 @@ export default class WorkflowsDetail extends Component {
         <WorkflowsHeader workflow={workflow} />
         <TabGroup active={ tabId } tabChange={this.changeTab.bind(this)}>
           <Tab name='Detail'>
-            <Groups>
-              {
-                (workflow.groups || []).map(g => (
-                  <Group
-                    key={g.name}
-                    name={g.name}
-                    url={`/groups/${g.name}`}
-                    size={g.size}
-                    disabled={!g.enabled}
-                  />
-                ))
-              }
-            </Groups>
-            <Options
-              workflow={workflow}
-              options={options}
-              onAdd={this.setOption.bind(this)}
-              onChange={this.setOption.bind(this)}
-              onDelete={this.deleteOption.bind(this)}
-            />
+            <DetailTab workflow={workflow} options={options} />
           </Tab>
           <Tab name='Library' />
           <Tab name='Steps' />
           <Tab name='Log' />
           <Tab name='Errors' />
           <Tab name='Mappers' />
-          <Tab name='Info' />
+          <Tab name='Info'>
+            <InfoTab workflow={workflow} />
+          </Tab>
         </TabGroup>
       </div>
     );
