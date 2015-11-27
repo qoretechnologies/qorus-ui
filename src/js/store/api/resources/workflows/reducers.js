@@ -8,10 +8,10 @@ const setOptions = {
     const options = Array.from(workflow.options);
     const optIdx = options.findIndex(o => o.name === name);
 
-    if (value && optIdx < 0) {
+    if (value !== '' && value !== null && optIdx < 0) {
       options.push({ name, value });
-    } else if (value) {
-      options[optIdx].value = value;
+    } else if (value !== '' && value !== null) {
+      options[optIdx] = Object.assign({}, options[optIdx], { value });
     } else if (optIdx >= 0) {
       options.splice(optIdx, 1);
     }
@@ -19,7 +19,7 @@ const setOptions = {
     return Object.assign({}, state, {
       data: updateItemWithId(
         workflow.id,
-        Object.assign({}, workflow, { options }),
+        { options },
         state.data
       )
     });
