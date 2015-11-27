@@ -72,12 +72,13 @@ export default class SystemOptions extends Component {
 
   renderButton() {
     return (
-      <a
+      <button
         className='btn btn-success btn-sm'
         onClick={this.start.bind(this)}
+        disabled={!this.props.options.length}
       >
         <i className='fa fa-plus' /> Add option
-      </a>
+      </button>
     );
   }
 

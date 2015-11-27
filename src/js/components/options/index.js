@@ -39,34 +39,39 @@ export default class Options extends Component {
       <div className='options'>
         <h4>Options</h4>
         <div>
-          <Table
-            data={this.props.workflow.options}
-            className='table table-condensed table-striped table-align-left'
-          >
-            <Col
-              heading='Options'
-              field='name'
-              props={rec => ({ name: rec.name, className: 'name' })}
-            />
-            <Col
-              heading='Value'
-              comp={EditableCell}
-              props={rec => ({
-                context: rec,
-                value: rec.value,
-                onSave: this.changeOption.bind(this)
-              })}
-            />
-            <Col
-              className='narrow'
-              childProps={rec => ({ context: rec, value: rec.value })}
+          {!this.props.workflow.options.length && (
+            <p>No options found.</p>
+          )}
+          {!!this.props.workflow.options.length && (
+            <Table
+              data={this.props.workflow.options}
+              className='table table-condensed table-striped table-align-left'
             >
-              <ActionsCol
-                className='middle'
-                onDelete={this.deleteOption.bind(this)}
+              <Col
+                heading='Options'
+                field='name'
+                props={rec => ({ name: rec.name, className: 'name' })}
               />
-            </Col>
-          </Table>
+              <Col
+                heading='Value'
+                comp={EditableCell}
+                props={rec => ({
+                  context: rec,
+                  value: rec.value,
+                  onSave: this.changeOption.bind(this)
+                })}
+              />
+              <Col
+                className='narrow'
+                childProps={rec => ({ context: rec, value: rec.value })}
+              >
+                <ActionsCol
+                  className='middle'
+                  onDelete={this.deleteOption.bind(this)}
+                />
+              </Col>
+            </Table>
+          )}
           <SystemOptions
             options={this.getUnusedSystemOptions()}
             onAdd={this.addOption.bind(this)}

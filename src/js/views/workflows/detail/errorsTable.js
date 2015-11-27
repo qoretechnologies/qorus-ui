@@ -64,7 +64,9 @@ export default class ErrorsTable extends Component {
             </div>
           </form>
         </div>
-        {!this.state.errors.length && 'No data found.'}
+        {!this.state.errors.length && (
+          <p>No data found.</p>
+        )}
         {!!this.state.errors.length && (
           <Table
             className='table table-striped table-condensed'
