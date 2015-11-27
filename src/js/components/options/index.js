@@ -23,15 +23,19 @@ export default class Options extends Component {
   }
 
   addOption(opt) {
+    let value;
+
     // This ensures that empty default system value does not prevent
     // the option from adding.
     if (opt.value === null && opt.expects === 'integer') {
-      opt = Object.assign({}, opt, { value: '0' });
+      value = '0';
     } else if (opt.value === null) {
-      opt = Object.assign({}, opt, { value: ' ' });
+      value = ' ';
+    } else {
+      value = opt.value;
     }
 
-    this.props.onAdd(opt);
+    this.props.onAdd(Object.assign({}, opt, { value }));
   }
 
   changeOption(value, opt) {
