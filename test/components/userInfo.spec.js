@@ -9,7 +9,7 @@ describe('Testing UserInfo Component', function () {
   jsdom({ skipWindowCheck: true });
 
   it('should contain text: temnoregg', function () {
-    const Component = require('../../src/js/components/user-info.js');
+    const Component = require('../../src/js/components/userInfo.js');
 
     const comp = TestUtils.renderIntoDocument(
       <Component currentUser={{ name: 'temnoregg' }} />

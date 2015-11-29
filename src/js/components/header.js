@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { pureRender } from './utils';
-import UserInfo from './user-info';
+import UserInfo from './userInfo';
 
 @pureRender
 class Header extends Component {
