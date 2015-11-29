@@ -3,6 +3,9 @@ import classNames from 'classnames';
 import { pureRender } from './utils';
 
 
+/**
+ * Status icon component dependent on value prop.
+ */
 @pureRender
 export default class StatusIcon extends Component {
   static propTypes = {
