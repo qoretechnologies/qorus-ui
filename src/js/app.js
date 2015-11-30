@@ -1,9 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Route, Router } from 'react-router';
 import { Provider } from 'react-redux';
-import Workflows from './views/workflows';
-import setupStore from './store';
-import Root from './views/app';
+
+
+import Root from 'views/root';
+import Workflows from 'views/workflows';
+
+
+import setupStore from 'store';
 
 
 require('bootstrap-sass!../bootstrap-sass.config.js');
