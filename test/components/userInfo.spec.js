@@ -1,13 +1,9 @@
-require('../testdom.js')('<html><body></body></html>');
-
+import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'mocha-jsdom';
 import { expect } from 'chai';
 
 describe('Testing UserInfo Component', function () {
-  jsdom({ skipWindowCheck: true });
-
   it('should contain text: temnoregg', function () {
     const Component = require('../../src/js/components/userInfo.js');
 

@@ -1,14 +1,9 @@
-// Mocking window and document object:
-require('../testdom.js')('<html><body></body></html>');
-
+import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'mocha-jsdom';
 import { expect } from 'chai';
 
 describe('Testing Footer Component', function () {
-  jsdom({ skipWindowCheck: true });
-
   const Component = require('../../src/js/components/footer.js');
   const props = {
     info: {

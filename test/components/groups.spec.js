@@ -1,17 +1,13 @@
-require('../testdom.js')('<html><body></body></html>');
-
+import '../jsdom';
 import React from 'react';
 import { Link } from 'react-router';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'mocha-jsdom';
 import { expect } from 'chai';
 
 import { Group, Groups } from '../../src/js/components/groups';
 
 
 describe("* as components from 'components/groups'", () => {
-  jsdom({ skipWindowCheck: true });
-
   describe('{ Group } = components', () => {
     it('displays group names as an info label', () => {
       const comp = TestUtils.renderIntoDocument(

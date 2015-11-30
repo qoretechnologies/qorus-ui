@@ -1,8 +1,6 @@
-require('../testdom.js')('<html><body></body></html>');
-
+import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'mocha-jsdom';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
@@ -11,9 +9,6 @@ import Table, { Col, Cell, THead, TBody } from '../../src/js/components/table';
 
 
 describe('', () => {
-  jsdom({ skipWindowCheck: true });
-
-
   /**
    * Typical data structure for table.
    */

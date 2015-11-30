@@ -1,8 +1,6 @@
-require('../testdom.js')('<html><body></body></html>');
-
+import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'mocha-jsdom';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
@@ -10,8 +8,6 @@ import AutoStart from '../../src/js/components/autostart';
 
 
 describe("AutoStart from 'components/autostart'", () => {
-  jsdom({ skipWindowCheck: true });
-
   before(() => {
     chai.use(spies);
   });
