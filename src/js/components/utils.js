@@ -1,13 +1,14 @@
-import { isEqual } from 'lodash';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 
 /**
- * Provides `shouldComponentUpdate` with deep equality check for props
- * and state changes.
+ * Provides `shouldComponentUpdate` with shallow equality check for
+ * props and state changes.
+ *
+ * It uses React's own PureRender mixin.
  *
  * @param {ReactClass} CompCls
  */
-// TODO Consider using React's PureRenderMixin.
 export function pureRender(CompCls) {
   if (!CompCls || !CompCls.prototype) {
     throw new Error('Only class can be decorated');
@@ -18,11 +19,6 @@ export function pureRender(CompCls) {
   }
 
   Object.assign(CompCls.prototype, {
-    shouldComponentUpdate(nextProps, nextState) {
-      return (
-        !isEqual(this.props, nextProps) ||
-        !isEqual(this.state, nextState)
-      );
-    }
+    shouldComponentUpdate: PureRenderMixin.shouldComponentUpdate
   });
 }
