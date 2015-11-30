@@ -550,14 +550,6 @@ table .header-fixed {
   padding: 40px 20px 0 20px;
 /*  height: 90%;*/
 }
-.modal.wider {
-  margin-left: -480px;
-  width: 960px;
-}
-
-.modal form, .modal .form-actions {
-  margin-bottom: 0;
-}
 
 /*.modal-body .help-inline {
   float: left;
@@ -741,25 +733,6 @@ table .header-fixed {
 
 #output > ul {
   margin-left: 0;
-}
-
-/* resizable modal */
-.modal .content {
-  height: 100%;
-/*  overflow: hidden;*/
-}
-
-.modal .modal-body {
-  max-height: none;
-  height: 100%;
-/*  overflow: visible;*/
-}
-
-.modal-footer {
-  position: absolute;
-  box-sizing: border-box;
-  bottom: 0;
-  width: 100%;
 }
 
 .ui-resizable-handle { z-index: auto !important; }
@@ -2050,16 +2023,6 @@ a.subtle:hover, a.subtle:focus {
 .order-header {
   float: left;
   padding-right: 200px;
-}
-
-.modal textarea {
-  width: 100%;
-  min-height: 100px;
-  box-sizing: border-box;
-}
-
-.modal textarea[name='note'] {
-  min-height: 200px;
 }
 
 .search-group {
