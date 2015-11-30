@@ -215,4 +215,10 @@ export default class Modal extends Component {
 }
 
 
+Modal.Content = Content;
+Modal.Header = Header;
+Modal.Body = Body;
+Modal.Footer = Footer;
+
+
 export { Content, Header, Body, Footer };
