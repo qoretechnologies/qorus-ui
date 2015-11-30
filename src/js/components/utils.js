@@ -1,24 +1,28 @@
-import { isEqual, omit } from 'lodash';
+import { isEqual } from 'lodash';
 
-export const pureRender = (component, toOmit = '') => {
-  if (!component || !component.prototype) {
+
+/**
+ * Provides `shouldComponentUpdate` with deep equality check for props
+ * and state changes.
+ *
+ * @param {ReactClass} CompCls
+ */
+// TODO Consider using React's PureRenderMixin.
+export function pureRender(CompCls) {
+  if (!CompCls || !CompCls.prototype) {
     throw new Error('Only class can be decorated');
   }
 
-  if (component.shouldComponentUpdate) {
+  if (CompCls.prototype.shouldComponentUpdate) {
     throw new Error('Method shouldComponentUpdate already set');
   }
 
-  Object.assign(component.prototype, {
+  Object.assign(CompCls.prototype, {
     shouldComponentUpdate(nextProps, nextState) {
       return (
-        !isEqual(omit(this.props, toOmit), omit(nextProps, toOmit)) ||
+        !isEqual(this.props, nextProps) ||
         !isEqual(this.state, nextState)
       );
     }
   });
-};
-
-export const pureRenderOmit = (toOmit = '') => (component) => {
-  pureRender(component, toOmit);
-};
+}
