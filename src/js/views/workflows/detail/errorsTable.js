@@ -18,18 +18,26 @@ export default class ErrorsTable extends Component {
     super(props);
 
     this.state = {
-      errors: props.errors,
+      errors: props.errors.sort(this.compareByError),
       searchText: ''
     };
+  }
+
+  compareByError(a, b) {
+    if (a.error < b.error) return -1;
+    if (a.error > b.error) return +1;
+    return 0;
   }
 
   onSearch(e) {
     this.setState({
       searchText: e.target.value,
-      errors: this.props.errors.filter(err => (
-        !e.target.value ||
-        err.error.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0
-      ))
+      errors: this.props.errors.
+        filter(err => (
+          !e.target.value ||
+          err.error.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0
+        )).
+        sort(this.compareByError)
     });
   }
 
