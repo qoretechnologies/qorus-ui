@@ -8,6 +8,7 @@ import Header from 'components/header';
 import Footer from 'components/footer';
 import Notifications from 'components/notifications';
 import Messenger from 'components/messenger';
+import { Manager as ModalManager } from 'components/modal';
 
 
 import apiActions from 'store/api/actions';
@@ -40,6 +41,11 @@ export default class Root extends Component {
     currentUser: PropTypes.object
   }
 
+  static childContextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func
+  }
+
   constructor(props) {
     super(props);
     const { dispatch } = this.props;
@@ -50,6 +56,13 @@ export default class Root extends Component {
     dispatch(apiActions.systemOptions.fetch());
     dispatch(apiActions.currentUser.fetch());
     dispatch(apiActions.globalErrors.fetch());
+  }
+
+  getChildContext() {
+    return {
+      openModal: (...args) => this._modal.open(...args),
+      closeModal: (...args) => this._modal.close(...args)
+    };
   }
 
   componentWillMount() {
@@ -91,6 +104,7 @@ export default class Root extends Component {
         <Messenger />
         <Footer info={this.props.info} />
         <Notifications />
+        <ModalManager ref={c => this._modal = c} />
       </div>
     );
   }

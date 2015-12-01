@@ -23,10 +23,13 @@ export default class ErrorsTab extends Component {
         <ErrorsTable
           heading='Workflow definitions'
           errors={this.props.workflowErrors}
+          onRemove={() => {}}
+          onEdit={() => {}}
         />
         <ErrorsTable
           heading='Global definitions'
           errors={this.props.globalErrors}
+          onClone={() => {}}
         />
       </div>
     );

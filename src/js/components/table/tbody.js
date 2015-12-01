@@ -55,16 +55,20 @@ export default class TBody extends Component {
             onClick={this.onRowClick.bind(this)}
             ref={row => this.rows[recIdx] = row}
           >
-            {React.Children.map(this.props.children, (col, colIdx) => (
-              <Cell
-                comp={col.props.comp}
-                field={col.props.field}
-                props={col.props.props(rec, recIdx, colIdx)}
-                childProps={col.props.childProps(rec, recIdx, colIdx)}
-              >
-                {React.Children.map(this.getCellChildren(col), c => c)}
-              </Cell>
-            ))}
+            {React.Children.map(this.props.children, (col, colIdx) => {
+              if (!col) return col;
+
+              return (
+                <Cell
+                  comp={col.props.comp}
+                  field={col.props.field}
+                  props={col.props.props(rec, recIdx, colIdx)}
+                  childProps={col.props.childProps(rec, recIdx, colIdx)}
+                >
+                  {React.Children.map(this.getCellChildren(col), c => c)}
+                </Cell>
+              );
+            })}
           </tr>
         ))}
       </tbody>

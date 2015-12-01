@@ -31,6 +31,8 @@ export default class THead extends Component {
         {this.hasHeadings() && (
           <tr>
             {React.Children.map(this.props.children, col => {
+              if (!col) return col;
+
               const { heading, comp, props, childProps, ...otherProps } =
                 col.props;
 

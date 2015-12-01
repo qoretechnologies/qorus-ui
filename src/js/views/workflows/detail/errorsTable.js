@@ -4,6 +4,9 @@ import { Control } from 'components/controls';
 import StatusIcon from 'components/statusIcon';
 
 
+import ErrorModal from './errorModal';
+
+
 import { pureRender } from 'components/utils';
 
 
@@ -11,22 +14,26 @@ import { pureRender } from 'components/utils';
 export default class ErrorsTable extends Component {
   static propTypes = {
     heading: PropTypes.string.isRequired,
-    errors: PropTypes.array.isRequired
+    errors: PropTypes.array.isRequired,
+    onClone: PropTypes.func,
+    onEdit: PropTypes.func,
+    onRemove: PropTypes.func
+  }
+
+  static contextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func
   }
 
   constructor(props) {
     super(props);
 
+    this._cloneModal = null;
+
     this.state = {
       errors: props.errors.sort(this.compareByError),
       searchText: ''
     };
-  }
-
-  compareByError(a, b) {
-    if (a.error < b.error) return -1;
-    if (a.error > b.error) return +1;
-    return 0;
   }
 
   onSearch(e) {
@@ -45,8 +52,34 @@ export default class ErrorsTable extends Component {
     e.preventDefault();
   }
 
-  startClone() {
-    throw new Error('Not yet implemented');
+  compareByError(a, b) {
+    if (a.error < b.error) return -1;
+    if (a.error > b.error) return +1;
+    return 0;
+  }
+
+  startClone(err) {
+    this._cloneModal = (
+      <ErrorModal
+        actionLabel='Clone'
+        error={Object.assign({}, err)}
+        onCommit={this.commitClone.bind(this)}
+        onCancel={this.cancelClone.bind(this)}
+      />
+    );
+
+    this.context.openModal(this._cloneModal);
+  }
+
+  commitClone(err) {
+    this.props.onClone(err);
+    this.context.closeModal(this._cloneModal);
+    this._cloneModal = null;
+  }
+
+  cancelClone() {
+    this.context.closeModal(this._cloneModal);
+    this._cloneModal = null;
   }
 
   render() {
@@ -106,14 +139,24 @@ export default class ErrorsTable extends Component {
             >
               <StatusIcon />
             </Col>
-            <Col
-              childProps={rec => ({ value: rec.business_flag })}
-            >
-              <Control
-                title='Override' icon='copy' labelStyle='warning'
-                action={this.startClone.bind(this)}
-              />
-            </Col>
+            {this.props.onClone && (
+              <Col
+                childProps={rec => ({
+                  action: () => { this.startClone(rec); }
+                })}
+              >
+                <Control title='Override' icon='copy' labelStyle='warning' />
+              </Col>
+            )}
+            {this.props.onRemove && (
+              <Col
+                childProps={rec => ({
+                  action: () => { this.props.onRemove(rec); }
+                })}
+              >
+                <Control title='Remove' icon='times' labelStyle='danger' />
+              </Col>
+            )}
           </Table>
         )}
       </div>
