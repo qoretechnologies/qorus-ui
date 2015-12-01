@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
 
+import { pureRender } from '../utils';
+
+
+@pureRender
 export default class Header extends Component {
   static propTypes = {
     titleId: PropTypes.string.isRequired,

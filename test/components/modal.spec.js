@@ -1,46 +1,36 @@
 import '../jsdom';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
-import Modal from '../../src/js/components/modal';
+import Modal, { Manager } from '../../src/js/components/modal';
 
 
-describe("Modal from 'components/modal'", () => {
-  it('renders nothing unless #open is called', () => {
-    const modal = TestUtils.renderIntoDocument(
-      <Modal />
-    );
-
-    expect(modal.props.children).to.be.an('undefined');
-  });
-
-
+describe("Modal, { Manager } from 'components/modal'", () => {
   /**
-   * Example component providing method to render modal pane content.
+   * Example modal component with simple content.
    */
-  class Client extends Component {
-    /**
-     * Placeholder method to be used to observe modal close.
-     */
-    onModalClose() {}
+  class SimpleModal extends Component {
+    static propTypes = {
+      heading: PropTypes.string,
+      onClose: PropTypes.func
+    }
 
-    renderModal() {
+    render() {
       return (
-        <Modal.Content>
+        <Modal>
           <Modal.Header
             titleId='modalTitle'
-            onClose={() => { this.onModalClose(); }}
-          />
+            onClose={this.props.onClose}
+          >
+            {this.props.heading}
+          </Modal.Header>
           <Modal.Body>
             <p>Rendered in modal</p>
           </Modal.Body>
           <Modal.Footer />
-        </Modal.Content>
+        </Modal>
       );
-    }
-
-    render() {
-      return null;
     }
   }
 
@@ -48,135 +38,242 @@ describe("Modal from 'components/modal'", () => {
   /**
    * Checks if modal is closed.
    *
-   * @param {ReactComponent} modal
+   * @param {ReactComponent} manager
    */
-  function expectModalToBeClosed(modal) {
+  function expectModalToBeClosed(manager) {
     const modalDom = TestUtils.scryRenderedDOMComponentsWithClass(
-      modal, 'modal'
+      manager, 'modal'
     );
     expect(modalDom).to.have.length(0);
 
 
     const backdropDom = TestUtils.scryRenderedDOMComponentsWithClass(
-      modal, 'modal-backdrop'
+      manager, 'modal-backdrop'
     );
     expect(backdropDom).to.have.length(0);
   }
 
 
-  describe('#open', () => {
-    it('renders Bootstrap modal with backdrop', () => {
-      const modal = TestUtils.renderIntoDocument(
-        <Modal />
+  /**
+   * Checks if simple modal is opened.
+   *
+   * @param {ReactComponent} manager
+   */
+  function expectSimpleModalToBeOpened(manager) {
+    const modalDom = TestUtils.findRenderedDOMComponentWithClass(
+      manager, 'modal'
+    );
+    expect(modalDom.firstChild.className).
+      to.equal('modal-dialog');
+    const modalBodyDom = TestUtils.findRenderedDOMComponentWithClass(
+      manager, 'modal-body'
+    );
+    expect(modalBodyDom.firstChild.firstChild.data).
+      to.equal('Rendered in modal');
+
+
+    TestUtils.findRenderedDOMComponentWithClass(
+      manager, 'modal-backdrop'
+    );
+  }
+
+
+  describe('Manager', () => {
+    it('renders nothing until #open is called', () => {
+      const manager = TestUtils.renderIntoDocument(
+        <Manager />
       );
-      const client = TestUtils.renderIntoDocument(
-        <Client />
-      );
 
-
-      modal.open(client, client.renderModal);
-
-
-      const modalDom = TestUtils.findRenderedDOMComponentWithClass(
-        modal, 'modal'
-      );
-      expect(modalDom.firstChild.className).
-        to.equal('modal-dialog');
-      const modalBodyDom = TestUtils.findRenderedDOMComponentWithClass(
-        modal, 'modal-body'
-      );
-      expect(modalBodyDom.firstChild.firstChild.data).
-        to.equal('Rendered in modal');
-
-
-      TestUtils.findRenderedDOMComponentWithClass(
-        modal, 'modal-backdrop'
-      );
+      expect(manager.props.children).to.be.an('undefined');
     });
 
-    it("sets aria-labelledby to reference Header's prop titleId", () => {
-      const modal = TestUtils.renderIntoDocument(
-        <Modal />
-      );
-      const client = TestUtils.renderIntoDocument(
-        <Client />
-      );
+
+    describe('#open', () => {
+      it('renders Bootstrap modal with backdrop', () => {
+        const manager = TestUtils.renderIntoDocument(
+          <Manager />
+        );
+        const modal = <SimpleModal />;
 
 
-      modal.open(client, client.renderModal);
+        manager.open(modal);
 
 
-      const modalDom = TestUtils.findRenderedDOMComponentWithClass(
-        modal, 'modal'
-      );
-      expect(modalDom.getAttribute('aria-labelledby')).to.equal('modalTitle');
+        expectSimpleModalToBeOpened(manager);
+      });
+
+
+      it('replaces previous modal with a new one if called consecutively',
+      () => {
+        const manager = TestUtils.renderIntoDocument(
+          <Manager />
+        );
+        const modal1 = <SimpleModal heading='first' />;
+        const modal2 = <SimpleModal heading='second' />;
+
+
+        manager.open(modal1);
+        manager.open(modal2);
+
+
+        expectSimpleModalToBeOpened(manager);
+        const modalTitleDom = TestUtils.findRenderedDOMComponentWithClass(
+          manager, 'modal-title'
+        );
+        expect(modalTitleDom.firstChild.data).to.equal('second');
+      });
     });
-  });
 
 
-  describe('#close', () => {
-    it('hides modal and backdrop', () => {
-      const modal = TestUtils.renderIntoDocument(
-        <Modal />
-      );
-      const client = TestUtils.renderIntoDocument(
-        <Client />
-      );
+    describe('#close', () => {
+      it('hides modal and backdrop', () => {
+        const manager = TestUtils.renderIntoDocument(
+          <Manager />
+        );
+        const modal = <SimpleModal />;
 
 
-      modal.open(client, client.renderModal);
-      modal.close(client);
+        manager.open(modal);
+        manager.close(modal);
 
 
-      expectModalToBeClosed(modal);
+        expectModalToBeClosed(manager);
+      });
+
+
+      it('opens previously opened but not closed modal', () => {
+        const manager = TestUtils.renderIntoDocument(
+          <Manager />
+        );
+        const modal1 = <SimpleModal heading='first' />;
+        const modal2 = <SimpleModal heading='second' />;
+
+
+        manager.open(modal1);
+        manager.open(modal2);
+        manager.close(modal2);
+
+
+        expectSimpleModalToBeOpened(manager);
+        const modalTitleDom = TestUtils.findRenderedDOMComponentWithClass(
+          manager, 'modal-title'
+        );
+        expect(modalTitleDom.firstChild.data).to.equal('first');
+
+
+        manager.close(modal1);
+
+
+        expectModalToBeClosed(manager);
+      });
     });
-  });
 
 
-  describe('#onEscape', () => {
-    it('listens on whole document for Escape key press', () => {
-      const modal = TestUtils.renderIntoDocument(
-        <Modal />
-      );
-      const client = TestUtils.renderIntoDocument(
-        <Client />
-      );
-      const escKeyEv = new window.Event('keyup');
-      escKeyEv.keyCode = 27;
+    describe('#onEscape', () => {
+      context('modifies DOM outside of component', () => {
+        let mountNode;
+
+        beforeEach(() => {
+          mountNode = document.createElement('DIV');
+          document.body.appendChild(mountNode);
+        });
+
+        afterEach(() => {
+          document.body.removeChild(mountNode);
+        });
+
+        it("handles Escape key press by triggering modal's close button",
+        () => {
+          const manager = ReactDOM.render(<Manager />, mountNode);
+
+          const modal = (
+            <SimpleModal onClose={() => manager.close(modal)} />
+          );
+          const escKeyEv = new window.KeyboardEvent('keyup', { keyCode: 27 });
 
 
-      modal.open(client, client.renderModal);
-      client.onModalClose = modal.close.bind(modal, client);
-      document.dispatchEvent(escKeyEv);
+          manager.open(modal);
+          document.dispatchEvent(escKeyEv);
 
 
-      const modalDom = TestUtils.scryRenderedDOMComponentsWithClass(
-        modal, 'modal'
-      );
-      expect(modalDom).to.have.length(0);
+          const modalDom = TestUtils.scryRenderedDOMComponentsWithClass(
+            manager, 'modal'
+          );
+          expect(modalDom).to.have.length(0);
+
+
+          ReactDOM.unmountComponentAtNode(mountNode);
+        });
+      });
     });
   });
 
 
   describe('Modal.Header', () => {
-    it('renders close button when onClose handler if specified', () => {
-      const modal = TestUtils.renderIntoDocument(
-        <Modal />
+    it('renders no close button if there is no onClose handler', () => {
+      const manager = TestUtils.renderIntoDocument(
+        <Manager />
       );
-      const client = TestUtils.renderIntoDocument(
-        <Client />
+      const modal = (
+        <SimpleModal />
       );
 
 
-      modal.open(client, client.renderModal);
-      client.onModalClose = modal.close.bind(modal, client);
+      manager.open(modal);
+
+
       const modalHeaderDom = TestUtils.findRenderedDOMComponentWithClass(
-        modal, 'modal-header'
+        manager, 'modal-header'
+      );
+      expect(modalHeaderDom.firstChild).to.be.a('null');
+    });
+
+
+    it('renders close button if onClose handler is specified', () => {
+      const manager = TestUtils.renderIntoDocument(
+        <Manager />
+      );
+      const modal = (
+        <SimpleModal onClose={() => manager.close(modal)} />
+      );
+
+
+      manager.open(modal);
+
+
+      const modalHeaderDom = TestUtils.findRenderedDOMComponentWithClass(
+        manager, 'modal-header'
+      );
+      expect(modalHeaderDom.firstChild.tagName).to.equal('BUTTON');
+      expect(modalHeaderDom.firstChild.className).to.equal('close');
+
+
+      TestUtils.Simulate.click(modalHeaderDom.firstChild);
+
+
+      expectModalToBeClosed(manager);
+    });
+
+
+    it('renders close button calling onClose handler', () => {
+      const manager = TestUtils.renderIntoDocument(
+        <Manager />
+      );
+      const modal = (
+        <SimpleModal onClose={() => manager.close(modal)} />
+      );
+
+
+      manager.open(modal);
+
+
+      const modalHeaderDom = TestUtils.findRenderedDOMComponentWithClass(
+        manager, 'modal-header'
       );
       TestUtils.Simulate.click(modalHeaderDom.firstChild);
 
 
-      expectModalToBeClosed(modal);
+      expectModalToBeClosed(manager);
     });
   });
 });
