@@ -18,6 +18,14 @@ export default class ErrorsTab extends Component {
     dispatch: PropTypes.func
   }
 
+  getUnusedGlobalErrors() {
+    return this.props.globalErrors.filter(gloErr => (
+      this.props.errors.findIndex(err => (
+        err.error === gloErr.error
+      )) < 0
+    ));
+  }
+
   clone(err) {
     this.context.dispatch(
       apiActions.errors.create(`workflow/${this.props.workflow.id}`, err)
@@ -34,14 +42,6 @@ export default class ErrorsTab extends Component {
     this.context.dispatch(
       apiActions.errors.remove(`workflow/${this.props.workflow.id}`, err)
     );
-  }
-
-  getUnusedGlobalErrors() {
-    return this.props.globalErrors.filter(gloErr => (
-      this.props.errors.findIndex(err => (
-        err.error === gloErr.error
-      )) < 0
-    ));
   }
 
   render() {

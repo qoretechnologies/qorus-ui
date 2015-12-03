@@ -53,7 +53,7 @@ export default class EditableCell extends Component {
    */
   componentWillReceiveProps(nextProps) {
     if (!this.state.edit) {
-      this.setState({ value: nextProps.value })
+      this.setState({ value: nextProps.value });
     }
   }
 
