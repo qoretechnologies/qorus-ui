@@ -32,36 +32,63 @@ export default class EditableCell extends Component {
     onSave: () => {}
   }
 
+  /**
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
 
-    this.container = null;
-    this.editField = null;
+    this._container = null;
+    this._editField = null;
     this.state = {
-      value: props.value,
-      edit: false,
-      width: ''
+      value: this.props.value,
+      edit: false
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    nextState.width = nextState.edit ?
-      ('' + this.container.offsetWidth + 'px') :
-      '';
-  }
-
-  componentDidUpdate() {
-    if (this.state.edit) {
-      this.editField.focus();
+  /**
+   * Updates state value with new value prop.
+   *
+   * @param {object} nextProps
+   */
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.edit) {
+      this.setState({ value: nextProps.value })
     }
   }
 
-  onChange(e) {
-    this.setState({ value: e.target.value });
+  /**
+   * Focuses the input field when editing has been started.
+   *
+   * @param {object} prevProps
+   * @param {object} prevState
+   */
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.edit && this.state.edit) {
+      this._editField.focus();
+      this._editField.setSelectionRange(this._editField.value.length,
+                                        this._editField.value.length);
+    }
   }
 
-  onKeyUp(e) {
-    switch (e.key) {
+  /**
+   * Updates state value with latest value from input field.
+   *
+   * @param {Event} ev
+   */
+  onChange(ev) {
+    this.setState({ value: ev.target.value });
+  }
+
+  /**
+   * Translates key presses to edit lifecycle methods.
+   *
+   * Enter triggers {@link commit} and Escape triggers {@link cancel}.
+   *
+   * @param {KeyboardEvent} ev
+   */
+  onKeyUp(ev) {
+    switch (ev.key) {
     case 'Enter':
       this.commit();
       break;
@@ -74,25 +101,42 @@ export default class EditableCell extends Component {
     }
   }
 
+  /**
+   * Starts edit mode.
+   */
   start() {
-    this.setState({
-      value: this.props.value,
-      edit: true
-    });
+    this.setState({ edit: true });
   }
 
+  /**
+   * Calls onSave prop with current value and optional context.
+   *
+   * It also stops the edit mode.
+   */
   commit() {
     this.props.onSave(this.state.value, this.props.context);
 
     this.setState({ edit: false });
   }
 
+  /**
+   * Stops edit mode and revert state value to prop value.
+   */
   cancel() {
-    this.setState({ edit: false });
+    this.setState({
+      value: this.props.value,
+      edit: false
+    });
   }
 
+  /**
+   * @return {ReactElement}
+   */
   render() {
     const { value, onSave, ...props } = this.props;
+    const width = this.state.edit && this._container ?
+      ('' + this._container.offsetWidth + 'px') :
+      '';
 
     return (
       <td
@@ -102,8 +146,8 @@ export default class EditableCell extends Component {
           editor: this.state.edit
         })}
         onClick={this.start.bind(this)}
-        style={{ width: this.state.width }}
-        ref={c => this.container = c}
+        style={{ width }}
+        ref={c => this._container = c}
       >
         {
           this.state.edit ?
@@ -113,9 +157,9 @@ export default class EditableCell extends Component {
               onChange={this.onChange.bind(this)}
               onKeyUp={this.onKeyUp.bind(this)}
               onBlur={this.cancel.bind(this)}
-              ref={c => this.editField = c}
+              ref={c => this._editField = c}
             /> :
-            <span>{this.props.value}</span>
+            <span>{this.state.value}</span>
         }
       </td>
     );
