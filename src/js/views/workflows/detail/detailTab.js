@@ -11,7 +11,7 @@ import actions from 'store/api/actions';
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    options: PropTypes.array.isRequired
+    systemOptions: PropTypes.array.isRequired
   }
 
   static contextTypes = {
@@ -46,7 +46,7 @@ export default class DetailTab extends Component {
         </Groups>
         <Options
           workflow={this.props.workflow}
-          options={this.props.options}
+          systemOptions={this.props.systemOptions}
           onAdd={this.setOption.bind(this)}
           onChange={this.setOption.bind(this)}
           onDelete={this.deleteOption.bind(this)}

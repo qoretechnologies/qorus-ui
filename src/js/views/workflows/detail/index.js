@@ -18,7 +18,7 @@ export default class WorkflowsDetail extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     errors: PropTypes.array.isRequired,
-    options: PropTypes.array.isRequired,
+    systemOptions: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string
   }
@@ -53,7 +53,8 @@ export default class WorkflowsDetail extends Component {
   }
 
   render() {
-    const { workflow, errors, options, globalErrors, tabId } = this.props;
+    const { workflow, errors, systemOptions, globalErrors, tabId } =
+      this.props;
 
     if (!workflow) return null;
 
@@ -62,7 +63,7 @@ export default class WorkflowsDetail extends Component {
         <WorkflowsHeader workflow={workflow} />
         <TabGroup active={tabId} tabChange={this.changeTab.bind(this)}>
           <Tab name='Detail'>
-            <DetailTab workflow={workflow} options={options} />
+            <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Tab>
           <Tab name='Library' />
           <Tab name='Steps' />

@@ -8,14 +8,14 @@ import SystemOptions from './systemOptions';
 export default class Options extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    options: PropTypes.array.isRequired,
+    systemOptions: PropTypes.array.isRequired,
     onAdd: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
   }
 
   getUnusedSystemOptions() {
-    return this.props.options.filter(sysOpt => (
+    return this.props.systemOptions.filter(sysOpt => (
       this.props.workflow.options.findIndex(wflOpt => (
         wflOpt.name === sysOpt.name
       )) < 0

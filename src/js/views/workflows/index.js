@@ -58,7 +58,7 @@ const errorsSelector = state => (
       })
     ), {})
 );
-const optionsSelector = state => (
+const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
 const globalErrorsSelector = state => (
@@ -87,17 +87,17 @@ const viewSelector = createSelector(
     errorsSelector,
     infoSelector,
     collectionSelector,
-    optionsSelector,
+    systemOptionsSelector,
     globalErrorsSelector
   ],
-  (workflows, errors, info, collection, options, globalErrors) => {
+  (workflows, errors, info, collection, systemOptions, globalErrors) => {
     return {
       sync: workflows.sync,
       loading: workflows.loading,
       workflows: collection,
       errors,
       info: {},
-      options,
+      systemOptions,
       globalErrors
     };
   }
@@ -113,7 +113,7 @@ class Workflows extends Component {
     info: PropTypes.object,
     sync: PropTypes.bool,
     loading: PropTypes.bool,
-    options: PropTypes.array,
+    systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
     params: PropTypes.object,
     route: PropTypes.object
@@ -156,7 +156,7 @@ class Workflows extends Component {
   }
 
   renderPane() {
-    const { params, route, workflows, errors, options, globalErrors } =
+    const { params, route, workflows, errors, systemOptions, globalErrors } =
       this.props;
 
     if (!params.detailId) return null;
@@ -179,7 +179,7 @@ class Workflows extends Component {
         <div className='relative'>
           <WorkflowsDetail
               workflow={workflow}
-              options={options}
+              systemOptions={systemOptions}
               errors={errors[workflow.id] || []}
               globalErrors={globalErrors}
               tabId={params.tabId} />
