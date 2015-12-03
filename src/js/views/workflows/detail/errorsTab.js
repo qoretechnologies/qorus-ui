@@ -3,6 +3,7 @@ import ErrorsTable from './errorsTable';
 
 
 import { pureRender } from 'components/utils';
+import apiActions from 'store/api/actions';
 
 
 @pureRender
@@ -11,6 +12,24 @@ export default class ErrorsTab extends Component {
     workflow: PropTypes.object.isRequired,
     errors: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired
+  }
+
+  static contextTypes = {
+    dispatch: PropTypes.func
+  }
+
+  clone(err) {
+    this.context.dispatch(
+      apiActions.errors.save(`workflow/${this.props.workflow.id}`, err)
+    );
+  }
+
+  getUnusedGlobalErrors() {
+    return this.props.globalErrors.filter(gloErr => (
+      this.props.errors.findIndex(err => (
+        err.error === gloErr.error
+      )) < 0
+    ));
   }
 
   render() {
@@ -24,8 +43,8 @@ export default class ErrorsTab extends Component {
         />
         <ErrorsTable
           heading='Global definitions'
-          errors={this.props.globalErrors}
-          onClone={() => {}}
+          errors={this.getUnusedGlobalErrors()}
+          onClone={this.clone.bind(this)}
         />
       </div>
     );
