@@ -30,25 +30,33 @@ export default class ErrorsTable extends Component {
 
     this._cloneModal = null;
 
-    this.state = {
-      errors: this.props.errors,
-      searchText: ''
-    };
+    this.state = this.getErrorsState(this.props, '');
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      this.getErrorsState(nextProps, this.state.searchText)
+    );
   }
 
   onSearch(e) {
-    this.setState({
-      searchText: e.target.value,
-      errors: this.props.errors.
-        filter(err => (
-          !e.target.value ||
-          err.error.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0
-        ))
-    });
+    this.setState(
+      this.getErrorsState(this.props, e.target.value)
+    );
   }
 
   onSubmit(e) {
     e.preventDefault();
+  }
+
+  getErrorsState(props, searchText) {
+    return {
+      searchText,
+      errors: props.errors.filter(err => (
+        !searchText ||
+        err.error.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
+      ))
+    };
   }
 
   startClone(err) {
