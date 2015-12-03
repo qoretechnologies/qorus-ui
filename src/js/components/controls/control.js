@@ -3,6 +3,9 @@ import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 
+/**
+ * Control button component.
+ */
 @pureRender
 export default class Control extends Component {
   static propTypes = {
@@ -12,22 +15,28 @@ export default class Control extends Component {
     action: PropTypes.func
   }
 
-  onClick(e) {
-    e.stopPropagation();
+  static defaultProps = {
+    labelStyle: 'default'
+  }
 
-    if (this.props.action) this.props.action();
+  onClick(e) {
+    if (!this.props.action) return;
+
+    e.stopPropagation();
+    this.props.action();
   }
 
   render() {
     return (
       <a
-          className={classNames({
-            'label': true,
-            ['label-' + this.props.labelStyle]: this.props.labelStyle,
-            'label-default': !this.props.labelStyle
-          })}
-          title={this.props.title}
-          onClick={this.onClick.bind(this)}>
+        className={classNames([
+          'label',
+          'label-' + this.props.labelStyle
+        ])}
+        title={this.props.title}
+        onClick={this.onClick.bind(this)}
+        role='button'
+      >
         <i className={classNames(['fa', 'fa-' + this.props.icon])} />
       </a>
     );

@@ -1,2 +1,2 @@
-export Control from './item';
-export Controls from './collection';
+export Control from './control';
+export Controls from './controls';
