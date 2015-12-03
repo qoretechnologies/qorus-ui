@@ -10,8 +10,8 @@ import { pureRender } from '../utils';
  *
  * On cell click, it starts editing by turning the cell content into
  * text field. On enter, it commits the value by calling onSave prop
- * with value and context props as parameters. By definition, value
- * can be only a string.
+ * with value state as parameters. By definition, value can be only a
+ * string.
  *
  * Nothing is updated (except for internal state) so parent component
  * must trigger app state change.
@@ -23,13 +23,16 @@ export default class EditableCell extends Component {
       React.PropTypes.string,
       React.PropTypes.number
     ]),
-    context: PropTypes.any,
-    onSave: PropTypes.func
+    startEdit: PropTypes.bool,
+    onSave: PropTypes.func,
+    onCancel: PropTypes.func
   }
 
   static defaultProps = {
     value: '',
-    onSave: () => {}
+    startEdit: false,
+    onSave: () => {},
+    onCancel: () => {}
   }
 
   /**
@@ -38,11 +41,12 @@ export default class EditableCell extends Component {
   constructor(props) {
     super(props);
 
-    this._container = null;
+    this._cell = null;
     this._editField = null;
     this.state = {
       value: this.props.value,
-      edit: false
+      edit: this.props.startEdit,
+      width: ''
     };
   }
 
@@ -59,12 +63,9 @@ export default class EditableCell extends Component {
 
   /**
    * Focuses the input field when editing has been started.
-   *
-   * @param {object} prevProps
-   * @param {object} prevState
    */
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.edit && this.state.edit) {
+  componentDidUpdate() {
+    if (this.state.edit && document.activeElement !== this._editField) {
       this._editField.focus();
       this._editField.setSelectionRange(this._editField.value.length,
                                         this._editField.value.length);
@@ -102,30 +103,61 @@ export default class EditableCell extends Component {
   }
 
   /**
-   * Starts edit mode.
+   * Sets a reference to cell and computes cell width if in edit mode.
+   *
+   * @param {HTMLTableCellElement} c
    */
-  start() {
-    this.setState({ edit: true });
+  cellDidRender(c) {
+    this._cell = c;
+
+    if (this._cell && this.state.edit) {
+      this.setState({ width: '' + this._cell.offsetWidth + 'px' });
+    }
   }
 
   /**
-   * Calls onSave prop with current value and optional context.
+   * Waits with edit mode to the moment when cell width is known.
+   *
+   * @return {boolean}
+   */
+  canEdit() {
+    return this.state.edit && this.state.width;
+  }
+
+  /**
+   * Starts edit mode.
+   */
+  start() {
+    this.setState({
+      edit: true,
+      width: '' + this._cell.offsetWidth + 'px'
+    });
+  }
+
+  /**
+   * Calls onSave prop with current value.
    *
    * It also stops the edit mode.
    */
   commit() {
-    this.props.onSave(this.state.value, this.props.context);
+    this.props.onSave(this.state.value);
 
-    this.setState({ edit: false });
+    this.setState({
+      edit: false,
+      width: ''
+    });
   }
 
   /**
    * Stops edit mode and revert state value to prop value.
    */
   cancel() {
+    this.props.onCancel();
+
     this.setState({
       value: this.props.value,
-      edit: false
+      edit: false,
+      width: ''
     });
   }
 
@@ -134,23 +166,20 @@ export default class EditableCell extends Component {
    */
   render() {
     const { value, onSave, ...props } = this.props;
-    const width = this.state.edit && this._container ?
-      ('' + this._container.offsetWidth + 'px') :
-      '';
 
     return (
       <td
         {...props}
         className={classNames({
           editable: true,
-          editor: this.state.edit
+          editor: this.canEdit()
         })}
         onClick={this.start.bind(this)}
-        style={{ width }}
-        ref={c => this._container = c}
+        style={{ width: this.state.width }}
+        ref={this.cellDidRender.bind(this)}
       >
         {
-          this.state.edit ?
+          this.canEdit() ?
             <input
               type='text'
               value={this.state.value}

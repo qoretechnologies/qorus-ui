@@ -1,19 +1,74 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from '../table';
 import EditableCell from '../table/editableCell';
-import ActionsCol from './actionsCol';
+import { Control } from '../controls';
 import SystemOptions from './systemOptions';
 
 
+import { pureRender } from '../utils';
+
+
+/**
+ * Editable key-value table component.
+ *
+ * Available options passed in `systemOption` prop can added to
+ * `options` property on `workflow` prop object. Addition triggers
+ * `onSet` prop function with an option as an argument. Options can be
+ * removed, which triggers `onDelete` prop function.
+ *
+ * Component's clients are responsible for updating props to reflect
+ * changes. The only state which maintained is to streamline user
+ * experience and prevent unwanted flickering.
+ */
+@pureRender
 export default class Options extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
-    onAdd: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onSet: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
   }
 
+  /**
+   * @param {object} props
+   */
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      lastOption: null,
+      lastOptionSet: false
+    };
+  }
+
+  /**
+   * Removes cached last option from state if it has been set.
+   */
+  componentWillReceiveProps() {
+    if (this.state.lastOptionSet) {
+      this.setState({
+        lastOption: null,
+        lastOptionSet: false
+      });
+    }
+  }
+
+  /**
+   * Adds cached last option from state to options from wofkflow prop.
+   *
+   * @return {array}
+   */
+  getWorkflowOptions() {
+    return this.state.lastOption ?
+      this.props.workflow.options.concat(this.state.lastOption) :
+      this.props.workflow.options;
+  }
+
+  /**
+   * Gets available options by filtering options from workflow prop.
+   *
+   * @return {array}
+   */
   getUnusedSystemOptions() {
     return this.props.systemOptions.filter(sysOpt => (
       this.props.workflow.options.findIndex(wflOpt => (
@@ -22,41 +77,74 @@ export default class Options extends Component {
     ));
   }
 
-  addOption(opt) {
-    let value;
+  /**
+   * Sets new option value by calling `onSet` prop.
+   *
+   * If set option is the cached option, it is marked as set.
+   *
+   * @param {object} opt
+   * @param {string} value
+   */
+  setOption(opt, value) {
+    this.props.onSet(Object.assign({}, opt, { value }));
 
-    // This ensures that empty default system value does not prevent
-    // the option from adding.
-    if (opt.value === null && opt.expects === 'integer') {
-      value = '0';
-    } else if (opt.value === null) {
-      value = ' ';
-    } else {
-      value = opt.value;
+    if (opt === this.state.lastOption) {
+      this.setState({ lastOptionSet: true });
     }
-
-    this.props.onAdd(Object.assign({}, opt, { value }));
   }
 
-  changeOption(value, opt) {
-    this.props.onChange(Object.assign({}, opt, { value }));
+  /**
+   * Caches option so it can be edited without setting.
+   *
+   * @param {object} opt
+   */
+  addOption(opt) {
+    this.setState({
+      lastOption: opt,
+      lastOptionSet: false
+    });
   }
 
+  /**
+   * Gets notified when option editing is canceled.
+   *
+   * If editing of cached option is canceled, it is removed if it has
+   * not been set already.
+   *
+   * @param {object} opt
+   */
+  cancelOptionEdit(opt) {
+    if (opt === this.state.lastOption && !this.state.lastOptionSet) {
+      this.setState({
+        lastOption: null,
+        lastOptionSet: false
+      });
+    }
+  }
+
+  /**
+   * Deletes option by calling `onDelete` prop.
+   *
+   * @param {object} opt
+   */
   deleteOption(opt) {
     this.props.onDelete(opt);
   }
 
+  /**
+   * @return {ReactElement}
+   */
   render() {
     return (
       <div className='options'>
         <h4>Options</h4>
         <div>
-          {!this.props.workflow.options.length && (
+          {!this.getWorkflowOptions().length && (
             <p>No options found.</p>
           )}
-          {!!this.props.workflow.options.length && (
+          {!!this.getWorkflowOptions().length && (
             <Table
-              data={this.props.workflow.options}
+              data={this.getWorkflowOptions()}
               className='table table-condensed table-striped table-align-left'
             >
               <Col
@@ -68,18 +156,22 @@ export default class Options extends Component {
                 heading='Value'
                 comp={EditableCell}
                 props={rec => ({
-                  context: rec,
                   value: rec.value,
-                  onSave: this.changeOption.bind(this)
+                  startEdit: rec === this.state.lastOption,
+                  onSave: this.setOption.bind(this, rec),
+                  onCancel: this.cancelOptionEdit.bind(this, rec)
                 })}
               />
               <Col
                 className='narrow'
-                childProps={rec => ({ context: rec, value: rec.value })}
+                childProps={rec => ({
+                  action: this.deleteOption.bind(this, rec)
+                })}
               >
-                <ActionsCol
-                  className='middle'
-                  onDelete={this.deleteOption.bind(this)}
+                <Control
+                  title='Remove'
+                  labelStyle='danger'
+                  icon='times'
                 />
               </Col>
             </Table>

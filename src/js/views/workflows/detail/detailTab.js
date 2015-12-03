@@ -47,8 +47,7 @@ export default class DetailTab extends Component {
         <Options
           workflow={this.props.workflow}
           systemOptions={this.props.systemOptions}
-          onAdd={this.setOption.bind(this)}
-          onChange={this.setOption.bind(this)}
+          onSet={this.setOption.bind(this)}
           onDelete={this.deleteOption.bind(this)}
         />
       </div>
