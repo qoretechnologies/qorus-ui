@@ -31,7 +31,7 @@ export default class ErrorsTable extends Component {
     this._cloneModal = null;
 
     this.state = {
-      errors: props.errors.sort(this.compareByError),
+      errors: this.props.errors,
       searchText: ''
     };
   }
@@ -43,19 +43,12 @@ export default class ErrorsTable extends Component {
         filter(err => (
           !e.target.value ||
           err.error.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0
-        )).
-        sort(this.compareByError)
+        ))
     });
   }
 
   onSubmit(e) {
     e.preventDefault();
-  }
-
-  compareByError(a, b) {
-    if (a.error < b.error) return -1;
-    if (a.error > b.error) return +1;
-    return 0;
   }
 
   startClone(err) {

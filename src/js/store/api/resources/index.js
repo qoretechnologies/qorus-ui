@@ -37,6 +37,10 @@ export default [
     )
   },
   {
+    name: 'errors',
+    url: `${url}/errors`
+  },
+  {
     name: 'system',
     url: `${url}/system`,
     initialState: { data: {} },
@@ -45,11 +49,6 @@ export default [
   {
     name: 'systemOptions',
     url: `${url}/system/options`,
-    transform: item => item
-  },
-  {
-    name: 'globalErrors',
-    url: `${url}/errors/global`,
     transform: item => item
   },
   {

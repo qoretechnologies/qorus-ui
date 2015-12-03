@@ -35,12 +35,34 @@ const filterDeprecated = curry((hide, workflows) =>
 const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
 
+const errorsComparator = (a, b) => {
+  if (a.error < b.error) return -1;
+  if (a.error > b.error) return +1;
+  return 0;
+};
+
+const errorsToArray = (state, ref) => (
+  Object.keys(state.api.errors[ref].data).
+    map(error => state.api.errors[ref].data[error]).
+    sort(errorsComparator)
+);
+
+
 const workflowsSelector = state => state.api.workflows;
+const errorsSelector = state => (
+  Object.keys(state.api.errors).
+    filter(ref => ref.indexOf('workflow/') === 0).
+    reduce((errs, ref) => (
+      Object.assign(errs, {
+        [ref.substring(9)]: errorsToArray(state, ref)
+      })
+    ), {})
+);
 const optionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
 const globalErrorsSelector = state => (
-  state.api.globalErrors.data
+  state.api.errors.global && errorsToArray(state, 'global')
 );
 const searchSelector = (state, props) => props.location.query.q;
 const infoSelector = () => { return {}; };
@@ -62,16 +84,18 @@ const collectionSelector = createSelector(
 const viewSelector = createSelector(
   [
     workflowsSelector,
+    errorsSelector,
     infoSelector,
     collectionSelector,
     optionsSelector,
     globalErrorsSelector
   ],
-  (workflows, info, collection, options, globalErrors) => {
+  (workflows, errors, info, collection, options, globalErrors) => {
     return {
       sync: workflows.sync,
       loading: workflows.loading,
       workflows: collection,
+      errors,
       info: {},
       options,
       globalErrors
@@ -85,6 +109,7 @@ class Workflows extends Component {
     dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
     workflows: PropTypes.array,
+    errors: PropTypes.object,
     info: PropTypes.object,
     sync: PropTypes.bool,
     loading: PropTypes.bool,
@@ -131,7 +156,8 @@ class Workflows extends Component {
   }
 
   renderPane() {
-    const { params, route, workflows, options, globalErrors } = this.props;
+    const { params, route, workflows, errors, options, globalErrors } =
+      this.props;
 
     if (!params.detailId) return null;
 
@@ -154,6 +180,7 @@ class Workflows extends Component {
           <WorkflowsDetail
               workflow={workflow}
               options={options}
+              errors={errors[workflow.id] || []}
               globalErrors={globalErrors}
               tabId={params.tabId} />
         </div>

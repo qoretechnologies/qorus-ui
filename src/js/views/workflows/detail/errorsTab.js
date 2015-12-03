@@ -9,12 +9,8 @@ import { pureRender } from 'components/utils';
 export default class ErrorsTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    workflowErrors: PropTypes.array,
+    errors: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired
-  }
-
-  static defaultProps = {
-    workflowErrors: []
   }
 
   render() {
@@ -22,7 +18,7 @@ export default class ErrorsTab extends Component {
       <div>
         <ErrorsTable
           heading='Workflow definitions'
-          errors={this.props.workflowErrors}
+          errors={this.props.errors}
           onRemove={() => {}}
           onEdit={() => {}}
         />

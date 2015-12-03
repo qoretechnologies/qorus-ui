@@ -55,7 +55,7 @@ export default class Root extends Component {
     dispatch(apiActions.system.fetch());
     dispatch(apiActions.systemOptions.fetch());
     dispatch(apiActions.currentUser.fetch());
-    dispatch(apiActions.globalErrors.fetch());
+    dispatch(apiActions.errors.fetch('global'));
   }
 
   getChildContext() {

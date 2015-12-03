@@ -10,20 +10,37 @@ import { pureRender } from 'components/utils';
 
 
 import goTo from 'routes';
+import apiActions from 'store/api/actions';
 
 
 @pureRender
 export default class WorkflowsDetail extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
+    errors: PropTypes.array.isRequired,
     options: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string
   }
 
   static contextTypes = {
+    dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
+  }
+
+  /**
+   * Initialiazes component and fetches workflow errors.
+   *
+   * @param {object} props
+   * @param {object} context
+   */
+  constructor(props, context) {
+    super(props, context);
+
+    this.context.dispatch(
+      apiActions.errors.fetch(`workflow/${this.props.workflow.id}`)
+    );
   }
 
   changeTab(tabId) {
@@ -36,7 +53,7 @@ export default class WorkflowsDetail extends Component {
   }
 
   render() {
-    const { workflow, options, globalErrors, tabId } = this.props;
+    const { workflow, errors, options, globalErrors, tabId } = this.props;
 
     if (!workflow) return null;
 
@@ -51,7 +68,11 @@ export default class WorkflowsDetail extends Component {
           <Tab name='Steps' />
           <Tab name='Log' />
           <Tab name='Errors'>
-            <ErrorsTab workflow={workflow} globalErrors={globalErrors} />
+            <ErrorsTab
+              workflow={workflow}
+              errors={errors}
+              globalErrors={globalErrors}
+            />
           </Tab>
           <Tab name='Mappers' />
           <Tab name='Info'>

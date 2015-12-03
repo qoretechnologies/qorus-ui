@@ -1,11 +1,12 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
 import * as workflowActions from './resources/workflows/actions';
+import * as errorActions from './resources/errors/actions';
 import {
   combineResourceActions,
   createResourceActions,
-  createApiActions }
-from './utils';
+  createApiActions
+} from './utils';
 
 export const DEFAULT_ACTIONS = {
   FETCH: (url) => async (params) => {
@@ -44,6 +45,8 @@ Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
 });
 Object.assign(actions.workflows, workflowActions.specials);
+
+Object.assign(actions.errors, errorActions);
 
 
 export default actions;
