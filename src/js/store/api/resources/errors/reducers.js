@@ -11,6 +11,17 @@ function ensureStructure(state = {}, action) {
 }
 
 
+function handleError(state = {}, action) {
+  return Object.assign({}, state, {
+    [action.meta.ref]: Object.assign({}, state[action.meta.ref], {
+      sync: false,
+      loading: false,
+      error: action.payload
+    })
+  });
+}
+
+
 const fetch = {
   next(state = {}, action) {
     const data = action.payload.reduce((errs, err) => (
@@ -25,15 +36,7 @@ const fetch = {
       }
     });
   },
-  throw(state = {}, action) {
-    return Object.assign({}, state, {
-      [action.meta.ref]: Object.assign({}, state[action.meta.ref], {
-        sync: false,
-        loading: false,
-        error: action.payload
-      })
-    });
-  }
+  throw: handleError
 };
 
 
@@ -56,19 +59,31 @@ const save = {
       }
     });
   },
-  throw(state = {}, action) {
-    return Object.assign({}, state, {
-      [action.meta.ref]: Object.assign({}, state[action.meta.ref], {
+  throw: handleError
+};
+
+
+const remove = {
+  next(state = {}, action) {
+    const safeState = ensureStructure(state, action);
+
+    const data = Object.assign({}, safeState[action.meta.ref].data);
+    delete data[action.meta.err.error];
+
+    return Object.assign({}, safeState, {
+      [action.meta.ref]: {
+        data,
         sync: false,
-        loading: false,
-        error: action.payload
-      })
+        loading: false
+      }
     });
-  }
+  },
+  throw: handleError
 };
 
 
 export {
   fetch as FETCH,
-  save as SAVE
+  save as SAVE,
+  remove as REMOVE
 };

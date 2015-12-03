@@ -50,7 +50,26 @@ const saveError = createAction(
 );
 
 
+function removePayload(ref, err) {
+  return fetchJson(
+    'DELETE',
+    `${settings.REST_API_PREFIX}/errors/${ref}/${err.error}`
+  );
+}
+
+function removeMeta(ref, err) {
+  return { ref, err };
+}
+
+const removeError = createAction(
+  'ERRORS_REMOVE',
+  removePayload,
+  removeMeta
+);
+
+
 export {
   fetchErrors as fetch,
-  saveError as save
+  saveError as save,
+  removeError as remove
 };

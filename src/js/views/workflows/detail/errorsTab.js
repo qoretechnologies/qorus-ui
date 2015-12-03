@@ -24,6 +24,12 @@ export default class ErrorsTab extends Component {
     );
   }
 
+  remove(err) {
+    this.context.dispatch(
+      apiActions.errors.remove(`workflow/${this.props.workflow.id}`, err)
+    );
+  }
+
   getUnusedGlobalErrors() {
     return this.props.globalErrors.filter(gloErr => (
       this.props.errors.findIndex(err => (
@@ -38,8 +44,8 @@ export default class ErrorsTab extends Component {
         <ErrorsTable
           heading='Workflow definitions'
           errors={this.props.errors}
-          onRemove={() => {}}
           onEdit={() => {}}
+          onRemove={this.remove.bind(this)}
         />
         <ErrorsTable
           heading='Global definitions'
