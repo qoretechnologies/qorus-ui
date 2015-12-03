@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
-import { Control } from 'components/controls';
+import { Controls, Control } from 'components/controls';
 import StatusIcon from 'components/statusIcon';
 
 
@@ -140,22 +140,43 @@ export default class ErrorsTable extends Component {
             >
               <StatusIcon />
             </Col>
-            {this.props.onClone && (
+            {(
+              this.props.onClone ||
+              this.props.onEdit ||
+              this.props.onRemove
+            ) && (
               <Col
                 childProps={rec => ({
-                  action: () => { this.startClone(rec); }
+                  controls: [
+                    { action: () => this.startClone(rec) },
+                    { action: () => this.props.onEdit(rec) },
+                    { action: () => this.props.onRemove(rec) }
+                  ]
                 })}
               >
-                <Control title='Override' icon='copy' labelStyle='warning' />
-              </Col>
-            )}
-            {this.props.onRemove && (
-              <Col
-                childProps={rec => ({
-                  action: () => { this.props.onRemove(rec); }
-                })}
-              >
-                <Control title='Remove' icon='times' labelStyle='danger' />
+                <Controls>
+                  {this.props.onClone && (
+                    <Control
+                      title='Override'
+                      icon='copy'
+                      labelStyle='warning'
+                    />
+                  )}
+                  {this.props.onEdit && (
+                    <Control
+                      title='Edit'
+                      icon='pencil-square-o'
+                      labelStyle='warning'
+                    />
+                  )}
+                  {this.props.onRemove && (
+                    <Control
+                      title='Remove'
+                      icon='times'
+                      labelStyle='danger'
+                    />
+                  )}
+                </Controls>
               </Col>
             )}
           </Table>
