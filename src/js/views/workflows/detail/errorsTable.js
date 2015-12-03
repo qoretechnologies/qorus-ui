@@ -16,7 +16,7 @@ export default class ErrorsTable extends Component {
     heading: PropTypes.string.isRequired,
     errors: PropTypes.array.isRequired,
     onClone: PropTypes.func,
-    onEdit: PropTypes.func,
+    onUpdate: PropTypes.func,
     onRemove: PropTypes.func
   }
 
@@ -25,30 +25,48 @@ export default class ErrorsTable extends Component {
     closeModal: PropTypes.func
   }
 
-  constructor(props) {
-    super(props);
+  /**
+   * @param {object} props
+   * @param {object} context
+   */
+  constructor(props, context) {
+    super(props, context);
 
-    this._cloneModal = null;
+    this._modal = null;
+    this._commitFn = null;
 
     this.state = this.getErrorsState(this.props, '');
   }
 
+  /**
+   * @param {object} nextProps
+   */
   componentWillReceiveProps(nextProps) {
     this.setState(
       this.getErrorsState(nextProps, this.state.searchText)
     );
   }
 
-  onSearch(e) {
+  /**
+   * @param {Event} ev
+   */
+  onSearch(ev) {
     this.setState(
-      this.getErrorsState(this.props, e.target.value)
+      this.getErrorsState(this.props, ev.target.value)
     );
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  /**
+   * @param {Event} ev
+   */
+  onSubmit(ev) {
+    ev.preventDefault();
   }
 
+  /**
+   * @param {object} props
+   * @param {string} searchText
+   */
   getErrorsState(props, searchText) {
     return {
       searchText,
@@ -59,30 +77,42 @@ export default class ErrorsTable extends Component {
     };
   }
 
-  startClone(err) {
-    this._cloneModal = (
+  /**
+   * @param {object} err
+   * @param {function(object)} commitFn
+   * @param {string} label
+   */
+  openModal(err, commmitFn, label) {
+    this._commitFn = commmitFn;
+    this._modal = (
       <ErrorModal
-        actionLabel='Clone'
+        actionLabel={label}
         error={Object.assign({}, err)}
-        onCommit={this.commitClone.bind(this)}
-        onCancel={this.cancelClone.bind(this)}
+        onCommit={this.submitModal.bind(this)}
+        onCancel={this.closeModal.bind(this)}
       />
     );
 
-    this.context.openModal(this._cloneModal);
+    this.context.openModal(this._modal);
   }
 
-  commitClone(err) {
-    this.props.onClone(err);
-    this.context.closeModal(this._cloneModal);
-    this._cloneModal = null;
+  /**
+   * @param {object} err
+   */
+  submitModal(err) {
+    this._commitFn(err);
+    this.closeModal();
   }
 
-  cancelClone() {
-    this.context.closeModal(this._cloneModal);
-    this._cloneModal = null;
+  closeModal() {
+    this.context.closeModal(this._modal);
+    this._modal = null;
+    this._commitFn = null;
   }
 
+  /**
+   * @return {ReactElement}
+   */
   render() {
     return (
       <div className='relative'>
@@ -142,15 +172,21 @@ export default class ErrorsTable extends Component {
             </Col>
             {(
               this.props.onClone ||
-              this.props.onEdit ||
+              this.props.onUpdate ||
               this.props.onRemove
             ) && (
               <Col
                 childProps={rec => ({
                   controls: [
-                    { action: () => this.startClone(rec) },
-                    { action: () => this.props.onEdit(rec) },
-                    { action: () => this.props.onRemove(rec) }
+                    { action: () => {
+                      this.openModal(rec, this.props.onClone, 'Clone');
+                    } },
+                    { action: () => {
+                      this.openModal(rec, this.props.onUpdate, 'Edit');
+                    } },
+                    { action: () => {
+                      this.props.onRemove(rec);
+                    } }
                   ]
                 })}
               >
@@ -162,7 +198,7 @@ export default class ErrorsTable extends Component {
                       labelStyle='warning'
                     />
                   )}
-                  {this.props.onEdit && (
+                  {this.props.onUpdate && (
                     <Control
                       title='Edit'
                       icon='pencil-square-o'

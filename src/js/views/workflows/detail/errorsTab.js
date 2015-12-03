@@ -24,6 +24,12 @@ export default class ErrorsTab extends Component {
     );
   }
 
+  update(err) {
+    this.context.dispatch(
+      apiActions.errors.update(`workflow/${this.props.workflow.id}`, err)
+    );
+  }
+
   remove(err) {
     this.context.dispatch(
       apiActions.errors.remove(`workflow/${this.props.workflow.id}`, err)
@@ -44,8 +50,8 @@ export default class ErrorsTab extends Component {
         <ErrorsTable
           heading='Workflow definitions'
           errors={this.props.errors}
-          onEdit={() => {}}
           onRemove={this.remove.bind(this)}
+          onUpdate={this.update.bind(this)}
         />
         <ErrorsTable
           heading='Global definitions'
