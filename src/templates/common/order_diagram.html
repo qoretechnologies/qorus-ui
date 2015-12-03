@@ -5,6 +5,7 @@
     <div class="level">
       <% _.each(steps, function (step, idx2) { %>
         <% var status = "blank";
+           var skip = false;
            var group = order.step_groups[step.name || step.id];
            var action = (step.type === 'start') ? '' : 'show-detail';
            if (step.type === 'start' && order.workflowstatus === 'ERROR') status = 'important';
@@ -13,8 +14,12 @@
            if (step.info && step.info.subwfls && step.info.subwfls.length > 1) {
                action = 'show-dd';
            }
+
+           if (step.info) {
+             skip = step.info.skip;
+           }
         %>
-        <div class="box <%= step.type %> <%= status %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>" data-action="<%= action %>"><a href="#"><%= step.name || step.id %></a></div>
+        <div class="box <%= step.type %> <%= status %> <%= skip ? 'skipped' : '' %>" id="ds-<%= step.id %>" data-id="<%= step.id %>" data-links="<%= step.links_to.join(',')%>" data-action="<%= action %>"><a href="#"><%= step.name || step.id %></a></div>
       <% }) %>
     </div>
   <% }) %>
