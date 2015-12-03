@@ -20,7 +20,7 @@ export default class ErrorsTab extends Component {
 
   clone(err) {
     this.context.dispatch(
-      apiActions.errors.save(`workflow/${this.props.workflow.id}`, err)
+      apiActions.errors.create(`workflow/${this.props.workflow.id}`, err)
     );
   }
 

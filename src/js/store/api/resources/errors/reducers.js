@@ -40,7 +40,7 @@ const fetch = {
 };
 
 
-const save = {
+const create = {
   next(state = {}, action) {
     const safeState = ensureStructure(state, action);
     const type = action.meta.ref.split('/', 2)[0].toUpperCase();
@@ -111,7 +111,7 @@ const remove = {
 
 export {
   fetch as FETCH,
-  save as SAVE,
+  create as CREATE,
   update as UPDATE,
   remove as REMOVE
 };

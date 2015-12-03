@@ -33,20 +33,20 @@ const fetchErrors = createAction(
 );
 
 
-function savePayload(ref, err) {
+function createPayload(ref, err) {
   return fetchJson('POST', `${settings.REST_API_PREFIX}/errors/${ref}`, {
     body: JSON.stringify(err)
   });
 }
 
-function saveMeta(ref, err) {
+function createMeta(ref, err) {
   return { ref, err };
 }
 
-const saveError = createAction(
-  'ERRORS_SAVE',
-  savePayload,
-  saveMeta
+const createError = createAction(
+  'ERRORS_CREATE',
+  createPayload,
+  createMeta
 );
 
 
@@ -90,7 +90,7 @@ const removeError = createAction(
 
 export {
   fetchErrors as fetch,
-  saveError as save,
+  createError as create,
   updateError as update,
   removeError as remove
 };
