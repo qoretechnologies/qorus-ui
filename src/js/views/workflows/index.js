@@ -62,7 +62,7 @@ const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
 const globalErrorsSelector = state => (
-  state.api.errors.global && errorsToArray(state, 'global')
+  (state.api.errors.global && errorsToArray(state, 'global')) || []
 );
 const searchSelector = (state, props) => props.location.query.q;
 const infoSelector = () => { return {}; };
@@ -104,7 +104,7 @@ const viewSelector = createSelector(
 );
 
 @connect(viewSelector)
-class Workflows extends Component {
+export default class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
@@ -168,7 +168,7 @@ class Workflows extends Component {
     if (!workflow) throw new Error('Requested workflow not found.');
 
     return (
-      <PaneView width={ 500 } onClose={ () => {
+      <PaneView width={550} onClose={() => {
         goTo(
           'workflows',
           route.path,
@@ -178,11 +178,12 @@ class Workflows extends Component {
       }}>
         <div className='relative'>
           <WorkflowsDetail
-              workflow={workflow}
-              systemOptions={systemOptions}
-              errors={errors[workflow.id] || []}
-              globalErrors={globalErrors}
-              tabId={params.tabId} />
+            workflow={workflow}
+            systemOptions={systemOptions}
+            errors={errors[workflow.id] || []}
+            globalErrors={globalErrors}
+            tabId={params.tabId}
+          />
         </div>
       </PaneView>
     );
@@ -198,11 +199,9 @@ class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        <WorkflowsTable workflows={ workflows } />
-        { this.renderPane() }
+        <WorkflowsTable workflows={workflows} />
+        {this.renderPane()}
       </div>
     );
   }
 }
-
-export default Workflows;
