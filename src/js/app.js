@@ -43,23 +43,23 @@ class App extends Component {
 
   loadDevTools() {
     switch (this.props.env) {
-    case 'production':
-      this.state.devToolsReady = true;
-      break;
-    default:
-      this.state.devToolsReady = false;
-      require.ensure(['redux-devtools/lib/react'], (require) => {
-        const { DevTools, DebugPanel, LogMonitor } =
-          require('redux-devtools/lib/react');
+      case 'production':
+        this.state.devToolsReady = true;
+        break;
+      default:
+        this.state.devToolsReady = false;
+        require.ensure(['redux-devtools/lib/react'], (require) => {
+          const { DevTools, DebugPanel, LogMonitor } =
+            require('redux-devtools/lib/react');
 
-        this.setState(Object.assign({}, this.state, {
-          devToolsReady: true,
-          DevTools,
-          DebugPanel,
-          LogMonitor
-        }));
-      }, 'devtools');
-      break;
+          this.setState(Object.assign({}, this.state, {
+            devToolsReady: true,
+            DevTools,
+            DebugPanel,
+            LogMonitor
+          }));
+        }, 'devtools');
+        break;
     }
   }
 

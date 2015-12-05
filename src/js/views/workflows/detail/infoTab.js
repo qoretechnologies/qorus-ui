@@ -33,12 +33,12 @@ export default class DetailTab extends Component {
 
   renderValue(val) {
     switch (typeof val) {
-    case 'object':
-      return val ?
-        <pre>{JSON.stringify(val, null, COMPLEX_VALUE_INDENT)}</pre> :
-        '';
-    default:
-      return '' + val;
+      case 'object':
+        return val ?
+          <pre>{JSON.stringify(val, null, COMPLEX_VALUE_INDENT)}</pre> :
+          '';
+      default:
+        return '' + val;
     }
   }
 

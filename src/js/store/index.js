@@ -37,14 +37,14 @@ function developmentSetup(reduxDevTools) {
 function setupStore(env) {
   return new Promise(resolve => {
     switch (env) {
-    case 'production':
-      resolve(productionSetup());
-      break;
-    default:
-      require.ensure(['redux-devtools'], (require) => {
-        resolve(developmentSetup(require('redux-devtools')));
-      }, 'devtools');
-      break;
+      case 'production':
+        resolve(productionSetup());
+        break;
+      default:
+        require.ensure(['redux-devtools'], (require) => {
+          resolve(developmentSetup(require('redux-devtools')));
+        }, 'devtools');
+        break;
     }
   });
 }

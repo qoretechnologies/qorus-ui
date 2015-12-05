@@ -90,15 +90,15 @@ export default class EditableCell extends Component {
    */
   onKeyUp(ev) {
     switch (ev.key) {
-    case 'Enter':
-      this.commit();
-      break;
-    case 'Escape':
-      this.cancel();
-      break;
-    default:
-      // Nothing.
-      break;
+      case 'Enter':
+        this.commit();
+        break;
+      case 'Escape':
+        this.cancel();
+        break;
+      default:
+        // Nothing.
+        break;
     }
   }
 

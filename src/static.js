@@ -11,7 +11,7 @@ const http = require('http');
 // Create a node-static server to serve the current directory
 //
 const file = new nodeStatic.Server('.', { cache: false, headers: {
-  'Cache-Control': 'no-cache, must-revalidate'}
+  'Cache-Control': 'no-cache, must-revalidate' }
 });
 
 http.createServer(function create(request, response) {
@@ -36,7 +36,7 @@ proxyServer.proxy([
   {
     from: 'localhost:8002',
     to: 'localhost:8001',
-    req: {origin: 'localhost:8001', referer: 'localhost:8001'},
+    req: { origin: 'localhost:8001', referer: 'localhost:8001' },
     headers: {
       res: {
         'access-control-allow-origin': '*',
