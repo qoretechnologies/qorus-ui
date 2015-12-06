@@ -195,21 +195,21 @@ export default class ErrorsTable extends Component {
                     <Control
                       title='Override'
                       icon='copy'
-                      labelStyle='warning'
+                      btnStyle='warning'
                     />
                   )}
                   {this.props.onUpdate && (
                     <Control
                       title='Edit'
                       icon='pencil-square-o'
-                      labelStyle='warning'
+                      btnStyle='warning'
                     />
                   )}
                   {this.props.onRemove && (
                     <Control
                       title='Remove'
                       icon='times'
-                      labelStyle='danger'
+                      btnStyle='danger'
                     />
                   )}
                 </Controls>

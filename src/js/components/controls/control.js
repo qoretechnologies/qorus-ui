@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+
+
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
@@ -10,13 +12,13 @@ import { pureRender } from '../utils';
 export default class Control extends Component {
   static propTypes = {
     title: PropTypes.string,
-    labelStyle: PropTypes.string,
+    btnStyle: PropTypes.string,
     icon: PropTypes.string.isRequired,
     action: PropTypes.func
   }
 
   static defaultProps = {
-    labelStyle: 'default'
+    btnStyle: 'default'
   }
 
   onClick(e) {
@@ -28,18 +30,17 @@ export default class Control extends Component {
 
   render() {
     return (
-      <a
+      <button
         className={classNames([
-          'label',
-          'label-' + this.props.labelStyle
+          'btn',
+          'btn-xs',
+          'btn-' + this.props.btnStyle
         ])}
         title={this.props.title}
         onClick={this.onClick.bind(this)}
-        href='#'
-        role='button'
       >
         <i className={classNames(['fa', 'fa-' + this.props.icon])} />
-      </a>
+      </button>
     );
   }
 }

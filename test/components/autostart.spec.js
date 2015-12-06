@@ -17,7 +17,7 @@ describe("AutoStart from 'components/autostart'", () => {
       <AutoStart context={ 7 } autostart={ 42 } />
     );
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
 
     expect(els[1].textContent.trim()).to.equal('42');
   });
@@ -27,10 +27,10 @@ describe("AutoStart from 'components/autostart'", () => {
       <AutoStart context={ 7 } autostart={ 42 } execCount={ 42 } />
     );
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
 
     expect(els[1].className.split(/\s+/g)).
-      to.include('label-success');
+      to.include('btn-success');
   });
 
   it('keeps default style autostart if execCount is different', () => {
@@ -38,10 +38,10 @@ describe("AutoStart from 'components/autostart'", () => {
       <AutoStart context={ 7 } autostart={ 42 } execCount={ 41 } />
     );
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
 
     expect(els[1].className.split(/\s+/g)).
-      to.include('label-default');
+      to.include('btn-default');
   });
 
   it('calls dec(context, autostart - 1) when minus button is clicked', () => {
@@ -50,7 +50,7 @@ describe("AutoStart from 'components/autostart'", () => {
       <AutoStart context={ 7 } dec={ dec } />
     );
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
     TestUtils.Simulate.click(els[0]);
 
     expect(dec).to.have.been.called.with(7, -1);
@@ -62,7 +62,7 @@ describe("AutoStart from 'components/autostart'", () => {
       <AutoStart context={ 7 } inc={ inc } />
     );
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'a');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
     TestUtils.Simulate.click(els[2]);
 
     expect(inc).to.have.been.called.with(7, 1);

@@ -14,33 +14,33 @@ describe("* from 'components/controls'", () => {
 
 
   describe('Control', () => {
-    it('renders icon in label', () => {
+    it('renders icon in button', () => {
       const control = TestUtils.renderIntoDocument(
         <Control icon='refresh' />
       );
 
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
 
 
-      expect(Array.from(el.classList)).to.include('label');
-      expect(Array.from(el.classList)).to.include('label-default');
+      expect(Array.from(el.classList)).to.include('btn');
+      expect(Array.from(el.classList)).to.include('btn-default');
       expect(Array.from(el.firstChild.classList)).to.include('fa');
       expect(Array.from(el.firstChild.classList)).to.include('fa-refresh');
     });
 
 
-    it('applies label style', () => {
+    it('applies button style', () => {
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' labelStyle='primary' />
+        <Control icon='refresh' btnStyle='primary' />
       );
 
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
 
 
-      expect(Array.from(el.classList)).to.include('label-primary');
-      expect(Array.from(el.classList)).not.to.include('label-default');
+      expect(Array.from(el.classList)).to.include('btn-primary');
+      expect(Array.from(el.classList)).not.to.include('btn-default');
     });
 
 
@@ -50,7 +50,7 @@ describe("* from 'components/controls'", () => {
       );
 
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
 
 
       expect(el.title).to.equal('Restart');
@@ -64,7 +64,7 @@ describe("* from 'components/controls'", () => {
       );
 
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'a');
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
       TestUtils.Simulate.click(el);
 
 
@@ -103,6 +103,18 @@ describe("* from 'components/controls'", () => {
 
 
       expect(comps[1].props.icon).to.equal('times');
+    });
+
+
+    it('applies Bootstrap btn-group when grouped', () => {
+      const controls = TestUtils.renderIntoDocument(
+        <Controls grouped>
+          <Control icon='power-off' />
+        </Controls>
+      );
+
+
+      TestUtils.findRenderedDOMComponentWithClass(controls, 'btn-group');
     });
   });
 });

@@ -170,7 +170,7 @@ export default class Options extends Component {
               >
                 <Control
                   title='Remove'
-                  labelStyle='danger'
+                  btnStyle='danger'
                   icon='times'
                 />
               </Col>

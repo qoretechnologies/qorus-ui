@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+
+
+import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 
@@ -12,17 +15,24 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Controls extends Component {
   static propTypes = {
+    grouped: PropTypes.bool,
     controls: PropTypes.array,
     children: PropTypes.node
   };
 
   static defaultProps = {
+    grouped: false,
     controls: []
   }
 
   render() {
     return (
-      <div className='btn-controls'>
+      <div
+        className={classNames({
+          'btn-controls': true,
+          'btn-group': this.props.grouped
+        })}
+      >
         {React.Children.map(this.props.children, (c, i) => {
           if (!c) return c;
 

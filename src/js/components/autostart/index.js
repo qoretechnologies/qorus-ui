@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { Controls, Control } from '../controls';
+
+
 import classNames from 'classnames';
-import { pureRender } from './utils';
+import { pureRender } from '../utils';
 
 
 /**
@@ -32,11 +35,8 @@ export default class AutoStart extends Component {
    *
    * @param {function} fn
    * @param {number} delta
-   * @param {Event} ev
    */
-  onClick(fn, delta, ev) {
-    ev.preventDefault();
-
+  changeAutostart(fn, delta) {
     fn(this.props.context, this.props.autostart + delta);
   }
 
@@ -47,33 +47,30 @@ export default class AutoStart extends Component {
 
     const equals = (autostart === execCount && autostart > 0);
     const classes = classNames({
-      'label': true,
       'autostart-change': true,
-      'label-default': !equals,
-      'label-success': equals
+      'btn': true,
+      'btn-xs': true,
+      'btn-default': !equals,
+      'btn-success': equals
     });
 
     return (
-      <div className='autostart btn-controls btn-group'>
-        <a
-          className='label label-default'
-          onClick={this.onClick.bind(this, dec, -1)}
-          href='#'
-          role='button'
-        >
-          <i className='fa fa-minus'></i>
-        </a>
-        <a className={classes} title='Click to edit'>
-          {autostart}
-        </a>
-        <a
-          className='label label-default'
-          onClick={this.onClick.bind(this, inc, +1)}
-          href='#'
-          role='button'
-        >
-          <i className='fa fa-plus'></i>
-        </a>
+      <div className='autostart'>
+        <Controls grouped>
+          <Control
+            title='Decrease'
+            icon='minus'
+            action={this.changeAutostart.bind(this, dec, -1)}
+          />
+          <button className={classes} title='Click to edit'>
+            {autostart}
+          </button>
+          <Control
+            title='Increase'
+            icon='plus'
+            action={this.changeAutostart.bind(this, inc, +1)}
+          />
+        </Controls>
       </div>
     );
   }
