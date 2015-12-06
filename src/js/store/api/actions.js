@@ -10,7 +10,11 @@ import {
 
 export const DEFAULT_ACTIONS = {
   FETCH: (url) => async (params) => {
-    const result = await fetch(url, params);
+    const result = await fetch(url, Object.assign({
+      headers: {
+        'Accept': 'application/json'
+      }
+    }, params));
     return result.json();
   },
   ACTION: {
@@ -18,6 +22,7 @@ export const DEFAULT_ACTIONS = {
       const fetchUrl = (id) ? `${url}/${id}` : url;
       const result = await fetch(fetchUrl, Object.assign({
         headers: {
+          'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         method: 'PUT'
@@ -28,7 +33,11 @@ export const DEFAULT_ACTIONS = {
   },
   UPDATE: (url) => async (params, id) => {
     const fetchUrl = (id) ? `${url}/${id}` : url;
-    const result = await fetch(fetchUrl, params);
+    const result = await fetch(fetchUrl, Object.assign({
+      headers: {
+        'Accept': 'application/json'
+      }
+    }, params));
     return result.json();
   }
 };

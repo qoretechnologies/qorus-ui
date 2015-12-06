@@ -42,9 +42,10 @@ const errorsComparator = (a, b) => {
 };
 
 const errorsToArray = (state, ref) => (
-  Object.keys(state.api.errors[ref].data).
-    map(error => state.api.errors[ref].data[error]).
-    sort(errorsComparator)
+  (state.api.errors[ref] && state.api.errors[ref].data &&
+   Object.keys(state.api.errors[ref].data).
+   map(error => state.api.errors[ref].data[error]).
+   sort(errorsComparator)) || []
 );
 
 
@@ -61,9 +62,7 @@ const errorsSelector = state => (
 const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
-const globalErrorsSelector = state => (
-  (state.api.errors.global && errorsToArray(state, 'global')) || []
-);
+const globalErrorsSelector = state => errorsToArray(state, 'global');
 const searchSelector = (state, props) => props.location.query.q;
 const infoSelector = () => { return {}; };
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
