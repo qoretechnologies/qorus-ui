@@ -22,7 +22,7 @@ export default class Control extends Component {
   onClick(e) {
     if (!this.props.action) return;
 
-    e.stopPropagation();
+    e.preventDefault();
     this.props.action();
   }
 
@@ -35,6 +35,7 @@ export default class Control extends Component {
         ])}
         title={this.props.title}
         onClick={this.onClick.bind(this)}
+        href='#'
         role='button'
       >
         <i className={classNames(['fa', 'fa-' + this.props.icon])} />

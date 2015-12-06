@@ -26,7 +26,9 @@ export default class WorkflowsTable extends Component {
     params: PropTypes.object
   }
 
-  activateWorkflow(workflow) {
+  activateWorkflow(workflow, idx, ev) {
+    if (ev.defaultPrevented) return;
+
     const shouldDeactivate =
       this.context.params.detailId &&
       parseInt(this.context.params.detailId, 10) === workflow.id;

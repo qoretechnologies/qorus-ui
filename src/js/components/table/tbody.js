@@ -36,7 +36,8 @@ export default class TBody extends Component {
   onRowClick(e) {
     this.props.onRowClick(
       this.props.data[this.rows.indexOf(e.currentTarget)],
-      this.rows.indexOf(e.currentTarget)
+      this.rows.indexOf(e.currentTarget),
+      e
     );
   }
 

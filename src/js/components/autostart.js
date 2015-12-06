@@ -35,7 +35,7 @@ export default class AutoStart extends Component {
    * @param {Event} ev
    */
   onClick(fn, delta, ev) {
-    ev.stopPropagation();
+    ev.preventDefault();
 
     fn(this.props.context, this.props.autostart + delta);
   }
@@ -58,6 +58,8 @@ export default class AutoStart extends Component {
         <a
           className='label label-default'
           onClick={this.onClick.bind(this, dec, -1)}
+          href='#'
+          role='button'
         >
           <i className='fa fa-minus'></i>
         </a>
@@ -67,6 +69,8 @@ export default class AutoStart extends Component {
         <a
           className='label label-default'
           onClick={this.onClick.bind(this, inc, +1)}
+          href='#'
+          role='button'
         >
           <i className='fa fa-plus'></i>
         </a>
