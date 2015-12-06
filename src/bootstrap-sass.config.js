@@ -8,15 +8,15 @@ module.exports = {
       'sass?sourceMap&outputStyle=compressed'
   ),
   scripts: {
-    'dropdown': true,
-    'modal': true,
-    'popover': true,
-    'tooltip': true,
-    'tab': true,
-    'affix': true,
-    'collapse': true,
-    'button': true,
-    'alert': true
+    'dropdown': false,
+    'modal': false,
+    'popover': false,
+    'tooltip': false,
+    'tab': false,
+    'affix': false,
+    'collapse': false,
+    'button': false,
+    'alert': false
   },
   styles: {
     'mixins': true,

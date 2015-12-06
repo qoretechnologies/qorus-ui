@@ -62,11 +62,6 @@ var config = {
   },
   plugins: [
     new ExtractTextPlugin('/css/base.css'),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    }),
     new webpack.DefinePlugin({
       APP_ENV: JSON.stringify(env),
       DEVTOOLS: false
