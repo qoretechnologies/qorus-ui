@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-
-
 import Modal from 'components/modal';
 
 
+import _ from 'lodash';
+import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
@@ -13,23 +13,43 @@ export default class ErrorModal extends Component {
     actionLabel: PropTypes.string.isRequired,
     error: PropTypes.object.isRequired,
     onCommit: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired
+    onCancel: PropTypes.func.isRequired,
+    requireChanges: PropTypes.bool
   }
 
+  static defaultProps = {
+    requireChanges: false
+  }
+
+  /**
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
 
+    this._form = null;
+
     this.state = {
-      error: Object.assign({}, this.props.error)
+      error: Object.assign({}, this.props.error),
+      changes: null,
+      status: {}
     };
   }
 
+  /**
+   * @param {Event} ev
+   */
   onCommit(ev) {
     ev.preventDefault();
 
-    this.props.onCommit(this.state.error);
+    if (this.validate()) {
+      this.props.onCommit(this.state.error);
+    }
   }
 
+  /**
+   * @param {Event} ev
+   */
   onChange(ev) {
     this.setState({
       error: Object.assign({}, this.state.error, {
@@ -40,23 +60,97 @@ export default class ErrorModal extends Component {
     });
   }
 
+  /**
+   * @param {Event} ev
+   */
+  onBlur(ev) {
+    this.validateElement(ev.target);
+
+    if (this.state.changes === false) {
+      this.validateChanges();
+    }
+  }
+
+  /**
+   * @return {boolean}
+   */
+  validate() {
+    const els = this._form.querySelectorAll(
+      '.form-group input, .form-group textarea'
+    );
+    for (let i = 0; i < els.length; i += 1) {
+      if (!this.validateElement(els[i])) return false;
+    }
+
+    if (!this.validateChanges()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @param {Element} el
+   * @return {boolean}
+   */
+  validateElement(el) {
+    const status = Object.assign({}, this.state.status);
+
+    if (el.checkValidity()) {
+      delete status[el.id];
+      this.setState({ status });
+      return true;
+    }
+
+    if (el.validity.valueMissing) {
+      status[el.id] = '(required value)';
+    } else {
+      status[el.id] = '(invalid value)';
+    }
+    this.setState({ status });
+
+    return false;
+  }
+
+  /**
+   * @return {boolean}
+   */
+  validateChanges() {
+    if (!this.props.requireChanges) return true;
+
+    const changes = !_.isEqual(this.props.error, this.state.error);
+    this.setState({ changes });
+
+    return changes;
+  }
+
+  /**
+   * @return {ReactElement}
+   */
   render() {
     return (
       <Modal>
-        <Modal.Header
-          titleId='errorsTableModalLabel'
-          onClose={this.props.onCancel.bind(this)}
+        <form
+          className='form-horizontal'
+          onSubmit={this.onCommit.bind(this)}
+          ref={c => this._form = c}
+          noValidate
         >
-          {this.props.actionLabel} {this.state.error.error}
-        </Modal.Header>
-        <Modal.Body>
-          <form
-            className='form-horizontal'
-            onSubmit={this.onCommit.bind(this)}
+          <Modal.Header
+            titleId='errorsTableModalLabel'
+            onClose={this.props.onCancel.bind(this)}
           >
+            {this.props.actionLabel} {this.props.error.error}
+          </Modal.Header>
+          <Modal.Body>
+            {this.state.changes === false && (
+              <div className='alert alert-danger' role='alert'>
+                You cannot submit this error without changes.
+              </div>
+            )}
             <div className='form-group'>
               <label
-                htmlFor='cloneError'
+                htmlFor='modalError'
                 className='col-sm-3 control-label'
               >
                 Email
@@ -64,17 +158,23 @@ export default class ErrorModal extends Component {
               <div className='col-sm-9'>
                 <input
                   type='text'
-                  className='form-control'
                   name='error'
-                  id='cloneError'
+                  id='modalError'
+                  className='form-control'
                   value={this.state.error.error}
-                  onChange={this.onChange.bind(this)}
+                  required
+                  readOnly
                 />
               </div>
             </div>
-            <div className='form-group'>
+            <div
+              className={classNames({
+                'form-group': true,
+                'has-error': this.state.status.modalSeverity
+              })}
+            >
               <label
-                htmlFor='cloneSeverity'
+                htmlFor='modalSeverity'
                 className='col-sm-3 control-label'
               >
                 Severity
@@ -82,17 +182,27 @@ export default class ErrorModal extends Component {
               <div className='col-sm-9'>
                 <input
                   type='text'
-                  className='form-control'
                   name='severity'
-                  id='cloneSeverity'
+                  id='modalSeverity'
+                  className='form-control'
                   value={this.state.error.severity}
+                  required
                   onChange={this.onChange.bind(this)}
+                  onBlur={this.onBlur.bind(this)}
+                  aria-invalid={this.state.status.modalSeverity && 'true'}
+                  aria-describedby={this.state.status.modalSeverity &&
+                                    'modalSeverityStatus'}
                 />
+                {this.state.status.modalSeverity && (
+                  <span id='modalSeverityStatus' className='sr-only'>
+                    {this.state.status.modalSeverity}
+                  </span>
+                )}
               </div>
             </div>
             <div className='form-group'>
               <label
-                htmlFor='cloneRetry'
+                htmlFor='modalRetry'
                 className='col-sm-3 control-label'
               >
                 Retry
@@ -101,15 +211,20 @@ export default class ErrorModal extends Component {
                 <input
                   type='checkbox'
                   name='retry_flag'
-                  id='cloneRetry'
+                  id='modalRetry'
                   checked={this.state.error.retry_flag}
                   onChange={this.onChange.bind(this)}
                 />
               </div>
             </div>
-            <div className='form-group'>
+            <div
+              className={classNames({
+                'form-group': true,
+                'has-error': this.state.status.modalDelay
+              })}
+            >
               <label
-                htmlFor='cloneDelay'
+                htmlFor='modalDelay'
                 className='col-sm-3 control-label'
               >
                 Retry delay secs
@@ -119,15 +234,25 @@ export default class ErrorModal extends Component {
                   type='number'
                   className='form-control'
                   name='retry_delay_secs'
-                  id='cloneDelay'
+                  id='modalDelay'
                   value={this.state.error.retry_delay_secs}
+                  min='0'
                   onChange={this.onChange.bind(this)}
+                  onBlur={this.onBlur.bind(this)}
+                  aria-invalid={this.state.status.modalDelay && 'true'}
+                  aria-describedby={this.state.status.modalDelay &&
+                                    'modalDelayStatus'}
                 />
+                {this.state.status.modalDelay && (
+                  <span id='modalDelayStatus' className='sr-only'>
+                    {this.state.status.modalDelay}
+                  </span>
+                )}
               </div>
             </div>
             <div className='form-group'>
               <label
-                htmlFor='cloneBusiness'
+                htmlFor='modalBusiness'
                 className='col-sm-3 control-label'
               >
                 Business
@@ -136,7 +261,7 @@ export default class ErrorModal extends Component {
                 <input
                   type='checkbox'
                   name='business_flag'
-                  id='cloneBusiness'
+                  id='modalBusiness'
                   checked={this.state.error.business_flag}
                   onChange={this.onChange.bind(this)}
                 />
@@ -144,7 +269,7 @@ export default class ErrorModal extends Component {
             </div>
             <div className='form-group'>
               <label
-                htmlFor='cloneManual'
+                htmlFor='modalManual'
                 className='col-sm-3 control-label'
               >
                 Manually updated
@@ -153,39 +278,54 @@ export default class ErrorModal extends Component {
                 <input
                   type='checkbox'
                   name='manually_updated'
-                  id='cloneManual'
+                  id='modalManual'
                   checked={this.state.error.manually_updated}
                   onChange={this.onChange.bind(this)}
                 />
               </div>
             </div>
-            <div className='form-group'>
+            <div
+              className={classNames({
+                'form-group': true,
+                'has-error': this.state.status.modalDescription
+              })}
+            >
               <label
-                htmlFor='cloneDescription'
+                htmlFor='modalDescription'
                 className='col-sm-3 control-label'
               >
                 Description
               </label>
               <div className='col-sm-9'>
                 <textarea
-                  className='form-control'
                   name='description'
-                  id='cloneDescription'
+                  id='modalDescription'
+                  className='form-control'
                   value={this.state.error.description}
+                  required
                   onChange={this.onChange.bind(this)}
+                  onBlur={this.onBlur.bind(this)}
+                  aria-invalid={this.state.status.modalDescription && 'true'}
+                  aria-describedby={this.state.status.modalDescription &&
+                                    'modalDescriptionStatus'}
                 />
+                {this.state.status.modalDescription && (
+                  <span id='modalDescriptionStatus' className='sr-only'>
+                    {this.state.status.modalDescription}
+                  </span>
+                )}
               </div>
             </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            className='btn btn-primary'
-            onClick={this.onCommit.bind(this)}
-          >
-            {this.props.actionLabel}
-          </button>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type='submit'
+              className='btn btn-primary'
+            >
+              {this.props.actionLabel}
+            </button>
+          </Modal.Footer>
+        </form>
       </Modal>
     );
   }

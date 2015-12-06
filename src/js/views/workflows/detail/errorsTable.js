@@ -81,8 +81,9 @@ export default class ErrorsTable extends Component {
    * @param {object} err
    * @param {function(object)} commitFn
    * @param {string} label
+   * @param {?boolean} requireChanges
    */
-  openModal(err, commmitFn, label) {
+  openModal(err, commmitFn, label, requireChanges) {
     this._commitFn = commmitFn;
     this._modal = (
       <ErrorModal
@@ -90,6 +91,7 @@ export default class ErrorsTable extends Component {
         error={Object.assign({}, err)}
         onCommit={this.submitModal.bind(this)}
         onCancel={this.closeModal.bind(this)}
+        requireChanges={requireChanges}
       />
     );
 
@@ -179,7 +181,7 @@ export default class ErrorsTable extends Component {
                 childProps={rec => ({
                   controls: [
                     { action: () => {
-                      this.openModal(rec, this.props.onClone, 'Clone');
+                      this.openModal(rec, this.props.onClone, 'Clone', true);
                     } },
                     { action: () => {
                       this.openModal(rec, this.props.onUpdate, 'Edit');
