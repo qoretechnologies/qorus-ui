@@ -189,7 +189,7 @@ export default class Workflows extends Component {
   }
 
   render() {
-    const { sync, loading, workflows } = this.props;
+    const { sync, loading, params, workflows } = this.props;
 
     if (!sync || loading) {
       return <Loader />;
@@ -198,7 +198,7 @@ export default class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        <WorkflowsTable workflows={workflows} />
+        <WorkflowsTable workflows={workflows} highlight={params.detailId} />
         {this.renderPane()}
       </div>
     );

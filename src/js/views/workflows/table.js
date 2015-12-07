@@ -17,13 +17,25 @@ import { ORDER_STATES } from 'constants/orders';
 export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
-    detId: PropTypes.number
+    highlight: PropTypes.string
   }
 
   static contextTypes = {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
+  }
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { highlight: [] };
+  }
+
+  getHighlightIdx() {
+    return this.props.workflows && this.props.highlight ?
+      [this.props.workflows.findIndex(w => w.id === +this.props.highlight)] :
+      [];
   }
 
   activateWorkflow(workflow, idx, ev) {
@@ -49,6 +61,7 @@ export default class WorkflowsTable extends Component {
     return (
       <Table
         data={this.props.workflows}
+        highlight={this.getHighlightIdx()}
         className='table table-striped table-condensed table-hover table-fixed'
         onRowClick={this.activateWorkflow.bind(this)}
       >

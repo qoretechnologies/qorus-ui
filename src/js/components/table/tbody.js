@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Cell from './cell';
 
 
+import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 
@@ -20,10 +21,12 @@ export default class TBody extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
+    highlight: PropTypes.array,
     onRowClick: PropTypes.func
   }
 
   static defaultProps = {
+    highlight: [],
     onRowClick: () => {}
   }
 
@@ -53,6 +56,9 @@ export default class TBody extends Component {
         {this.props.data.map((rec, recIdx) => (
           <tr
             key={recIdx}
+            className={classNames({
+              info: this.props.highlight.indexOf(recIdx) >= 0
+            })}
             onClick={this.onRowClick.bind(this)}
             ref={row => this.rows[recIdx] = row}
           >

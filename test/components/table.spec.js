@@ -299,5 +299,18 @@ describe('', () => {
 
       expect(handler).to.have.been.called.with(data[0], 0);
     });
+
+
+    it('optionally highlights row from hightlight prop', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <table>
+          <TBody data={data} highlight={[0]}>
+            <Col props={rec => ({ value: rec.value })} />
+          </TBody>
+        </table>
+      );
+
+      expect(Array.from(comp.tBodies[0].rows[0].classList)).to.include('info');
+    });
   });
 });
