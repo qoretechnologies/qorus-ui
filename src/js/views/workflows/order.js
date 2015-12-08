@@ -33,14 +33,15 @@ define(function(require) {
       StepErrorsView  = require('views/workflows/orders/steperrors'),
       ToolbarTpl      = require('tpl!templates/workflow/orders/toolbar.html'),
       CopyView        = require('views/common/table.copy'),
-      context, ModelView, StepsView, ErrorsView, DiagramPaneView, 
+      LogView         = require('views/log'),
+      context, ModelView, StepsView, ErrorsView, DiagramPaneView,
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus, Toolbar;
-  
+
   require('jquery.ui');
   require('bootstrap');
   require('jquery.expanding');
-      
+
   context = {
     action_css: {
       'block': 'btn-inverse',
@@ -48,7 +49,7 @@ define(function(require) {
       'retry': 'btn-success'
     }
   };
-  
+
   Toolbar = Qorus.ModelView.extend({
     template: ToolbarTpl,
     postInit: function () {
@@ -56,7 +57,7 @@ define(function(require) {
       this.context.action_css = context.action_css;
     }
   });
-  
+
   WorkflowStatus = Qorus.ModelView.extend({
     template: StatusTpl,
     initialize: function () {
@@ -64,14 +65,14 @@ define(function(require) {
       this.listenTo(this.model, 'sync', this.render);
     }
   });
-  
+
   OrderLockView = Qorus.ModelView.extend({
     template: LockTemplate,
     additionalEvents: {
       "submit": "lockOrder",
       "click button[type=submit]": "lockOrder"
     },
-        
+
     lockOrder: function () {
       var note = this.$('textarea[name=note]').val();
       this.model.doAction(this.options.action, { note: note });
@@ -79,93 +80,93 @@ define(function(require) {
     }
   });
 
-  
+
   DiagramView = DiagramBaseView.extend({
     template: DiagramTpl,
     additionalEvents: {
       "click .box[data-action='show-dd']": 'showDropdown',
       "contextmenu .box": 'stepDetail'
     },
-    
+
     initialize: function (options) {
       DiagramView.__super__.initialize.apply(this, arguments);
       this.order_model = options.model;
-      
+
       this.model = new Workflow({ workflowid: options.model.get('workflowid') });
       this.listenTo(this.model, 'sync', this.render);
       this.model.fetch();
     },
-    
+
     preRender: function () {
       // alter instances to have name hash with stepname
-      var instances = _(this.order_model.get('StepInstances')).map(function (inst) {
+      var instances = _.map(this.order_model.get('StepInstances'), function (inst) {
         inst.name = inst.stepname;
         return inst;
       });
-      
+
       this.context.steps = this.model.prepareSteps(
         this.model.get('name'),
-        this.model.get('steps'), 
+        this.model.get('steps'),
         this.model.get('stepmap'),
         instances
       );
 
       this.context.order = this.order_model.toJSON();
     },
-    
+
     onRender: function () {
       this.fixCanvas();
       $(window).on('resize.canvas', this.fixCanvas);
     },
-    
+
     render: function () {
       if (this.model.isNew()) return;
       DiagramView.__super__.render.apply(this, arguments);
       return this;
     },
-    
+
     stepDetail: function (e) {
       var $target = $(e.currentTarget),
         id = $target.data('id');
-    
+
       if (id) {
         e.preventDefault();
         e.stopPropagation();
         this.insertView(new ModalView({
-          content_view: new StepView({ id: id }) 
+          content_view: new StepView({ id: id })
         }), '#stepdetail');
       }
     },
-    
+
     showDropdown: function (e) {
-      var tpl      = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" + 
+      var tpl      = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" +
                      " data-action = 'show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
           $target  = $(e.currentTarget),
           stepname = this.order_model.getStepName($target.data('id')),
           step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
-      
+
       this.hideDropdown();
-      
+
       e.preventDefault();
       if (step.length <= 1) return;
 
-      var $dd = $(_.template(tpl, { steps: step }));      
+      var $dd = $(_.template(tpl, { steps: step }));
       $dd
         .css('top', $target.offset().top)
         .css('left', $target.position().left)
         .css('position', 'absolute');
       this.$el.append($dd);
     },
-    
+
     hideDropdown: function () {
       this.$('.dropdown').remove();
     },
-    
+
     clean: function () {
       $(window).off('resize.canvas', this.fixCanvas);
     }
   });
-  
+
   StepsView = Qorus.ModelView.extend({
     name: 'Steps',
     template: StepsTpl,
@@ -178,9 +179,9 @@ define(function(require) {
     },
     onRender: function () {
       this.$('li:has(li)').addClass('parent');
-      
+
       // hide substeps and add plus sign icon
-      this.$('.substep').each(function () { 
+      this.$('.substep').each(function () {
         var $this = $(this);
         $this.hide();
         if ($this.prev('.parent')) {
@@ -193,15 +194,15 @@ define(function(require) {
         if (s.stepid == id)
           return s;
       });
-      
+
       if (steps.length > 0) {
-        return steps[0].stepname; 
+        return steps[0].stepname;
       } else {
         return id;
-      } 
+      }
     }
   });
-  
+
   ErrorsView = Qorus.ModelView.extend({
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
@@ -215,7 +216,7 @@ define(function(require) {
       });
     }
   });
-  
+
   // View showing step info which is used within DiagramView
   StepInfoView = Qorus.View.extend({
     initialize: function (options) {
@@ -224,11 +225,11 @@ define(function(require) {
       this.listenTo(this.model, 'sync', this.render);
       this.model.fetch();
     },
-    
+
     preRender: function () {
       this.context.model = this.model.toJSON();
     },
-    
+
     close: function () {
       if (this.clean) this.clean();
       this.undelegateEvents();
@@ -236,7 +237,7 @@ define(function(require) {
       this.$el.empty();
     }
   });
-  
+
   DataView = Qorus.ModelView.extend({
     template: DataTpl,
     additionalEvents: {
@@ -244,7 +245,7 @@ define(function(require) {
     },
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
-      
+
       $target.tab('show');
       e.preventDefault();
       e.stopPropagation();
@@ -258,8 +259,8 @@ define(function(require) {
       this.context.keys = utils.flattenObj(this.model.get('keys'));
     }
   });
-  
-  
+
+
   NotesView = Qorus.ModelView.extend({
     template: NotesTpl,
     additionalEvents: {
@@ -273,29 +274,29 @@ define(function(require) {
       var notes = this.setView(new Qorus.View({ model: this.model, template: NotesListTpl }), '#notes-list');
       notes.listenTo(this.model, 'update:notes', notes.render);
     },
-    
+
     clean: function () {
       this.$('textarea').expanding('destroy');
       return this;
     },
-    
+
     expand: function () {
       if (this.$('textarea').expanding('active')) return this;
 
       this.$('textarea').expanding();
       this.$('textarea').focus();
     },
-    
+
     addNote: function (e) {
       var code = e.keyCode || e.which;
-      
+
       if ((code === 13 && e.ctrlKey === true) || e.type === 'submit') {
         var $target = $(e.currentTarget);
         if (e.type === 'submit') {
           e.preventDefault();
           $target = $('#add-note', $target);
         }
-        
+
         if ($target.val().trim().length > 2) {
           this.model.addNote($target.val());
           $target.closest('form').get(0).reset();
@@ -309,7 +310,7 @@ define(function(require) {
       this.$('.form-error').text(e).show();
     }
   });
-  
+
   // Diagram tab view
   DiagramPaneView = Qorus.ModelView.extend({
     additionalEvents: {
@@ -317,55 +318,55 @@ define(function(require) {
       "click #step-diagram .box[data-action='show-detail']": 'showDetail',
       "click #step-diagram a[data-action='show-detail']": 'showDetail'
     },
-    
+
     name: 'Diagram',
     template: DiagramPaneTpl,
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
     },
-    preRender: function () {      
+    preRender: function () {
       this.setView(new DiagramView({ model: this.model }), '#step-diagram');
       this.showAllErrors();
     },
-    
+
     showAllErrors: function (e) {
       var view = this.setView(new StepErrorsView({ model: this.model }), '#step-errors', true);
 
       if (e) {
-       e.preventDefault(); 
+       e.preventDefault();
        view.render();
       }
     },
-    
+
     showDetail: function (e) {
       var $target = $(e.currentTarget),
           stepid  = $target.data('id'),
           instances = this.model.get('StepInstances'),
           step;
-      
+
       e.preventDefault();
-      
+
       // exit when click is made on diagram start - no step detail available
       if ($target.hasClass('start')) return;
-      
+
       step   = _.findWhere(instances, { stepid: stepid });
-      
+
       this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
       this.setView(new StepErrorsView({ model: this.model, stepid: stepid }), '#step-errors', true).render();
-      
+
       // box selected styling
       this.$('.box').removeClass('selected');
       $target.addClass('selected');
       this.getView('#step-diagram').hideDropdown();
     }
   });
-  
+
   var MView = Qorus.ModelView.extend({
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
     }
   });
-  
+
   ModelView = Qorus.TabView.extend({
     __name__: "OrderView",
     template: Template,
@@ -382,19 +383,19 @@ define(function(require) {
       "click .order-unlock": 'unlockOrder',
       "click .order-breaklock": 'breakLockOrder'
     },
-    
+
     url: function () {
       var model = this.model || this.options.model;
       return helpers.getUrl('showOrder', { id: model.id });
     },
-    
+
     initialize: function (opts) {
       _.bindAll(this);
       var model = new Model({ workflow_instanceid: opts.id });
       arguments[0].model = model;
-      
+
       ModelView.__super__.initialize.apply(this, arguments);
-      
+
       if (!_.has(opts, 'show_header'))
         this.options.show_header = true;
 
@@ -456,136 +457,138 @@ define(function(require) {
         options: {
           name: 'Notes'
         }
-      } 
+      }
     },
-    
+
     update: function () {
       this.model.fetch();
     },
-    
+
     preRender: function () {
       var workflow = new Workflow({ workflowid: this.model.get('workflowid') });
       this.setView(new WorkflowStatus({ model: workflow }), '.workflow-status');
       workflow.fetch();
-      
+
       this.setView(new Toolbar({ model: this.model }), '.toolbar');
-      
+
       if (this.model.get('has_alerts'))
         this.addTabView(new Qorus.ModelView({ model: this.model, template: AlertsTpl }), { name: 'Alerts'});
-        
-      _.extend(this.context, { 
+
+      _.extend(this.context, {
         show_header: this.options.show_header,
-        getStepName: this.getStepName, 
+        getStepName: this.getStepName,
         action_css: context.action_css,
         user: User
       });
-      
+
+      this.addTabView(new LogView({ socket_url: "/workflows/" + this.model.get('workflowid'), parent: this }), { name: 'log' });
+
       this.context.item = this.model.toJSON();
     },
-    
+
     getStepName: function (id) {
       var steps = _.filter(this.model.get('StepInstances'), function (s) {
         if (s.stepid == id)
           return s;
       });
-      
+
       if (steps.length > 0) {
-        return steps[0].stepname; 
+        return steps[0].stepname;
       } else {
         return id;
-      } 
+      }
     },
-    
+
     toggleRow: function(e){
       var $target = $(e.currentTarget);
       e.stopPropagation();
       $('ul', $target).toggle();
       $target.toggleClass('clps');
     },
-    
+
     runAction: function (e) {
       debug.log('run action stop propagation');
       e.stopPropagation();
       var data = e.currentTarget.dataset;
       if (data.id && data.action) {
         var inst = this.model;
-        inst.doAction(data.action); 
+        inst.doAction(data.action);
       }
     },
-    
+
     showSubSteps: function (e) {
       var $target = $(e.currentTarget);
-      
+
       if($target.hasClass('parent')) {
         if ($target.hasClass('collapse')) {
           $target.nextUntil('.parent').hide();
         } else {
-          $target.nextUntil('.parent').show(); 
+          $target.nextUntil('.parent').show();
         }
         $target.toggleClass('collapse');
         $('td:first-child i', $target).toggleClass('icon-minus-sign').toggleClass('icon-plus-sign');
       }
     },
-    
+
     stepDetail: function(e) {
       var $target = $(e.currentTarget),
         id = $target.data('id');
-    
+
       if (id) {
         e.stopPropagation();
         this.insertView(new ModalView({
-          content_view: new StepView({ id: id }) 
+          content_view: new StepView({ id: id })
         }), '#stepdetail');
       }
     },
-    
+
     enableCopyMode: function (e) {
       var $el = $(e.currentTarget);
       var $parent = $el.parent();
-      
+
       $('.treeview', $parent).toggle();
       $('.textview', $parent).toggle();
       $el.toggleClass('on');
       $el.text($el.hasClass('on') ? $el.data('msg-on') : $el.data('msg-off'));
       e.preventDefault();
     },
-    
+
     toggleTree: function (e) {
       var $el    = $(e.currentTarget),
           branch = $el.data('branch-id');
-        
+
       debug.log($el.data);
-      
+
       $el.children('i')
         .toggleClass('icon-caret-down')
         .toggleClass('icon-caret-right');
-        
+
       this.$('[data-tree-id*='+ branch +'-]').toggle();
       debug.log('[data-tree-id*='+ branch +'-]', this.$('[data-tree-id*='+ branch +'-]'));
 
       e.preventDefault();
       e.stopPropagation();
     },
-    
+
     helpers: {
       action_css: context.action_css
     },
-    
+
     editTableCell: function (e) {
       var $row   = $(e.currentTarget),
           value  = $row.text(),
           $input = $('<input type="text" />'),
           self   = this;
-          
+
       function save (val) {
         var data     = {},
             property = $row.data('name');
-      
+
         if (moment.isMoment(val))
           val = val.format(settings.DATE_DISPLAY);
 
         data[property] = val;
-      
+
         if ($row.data('stepid')) data.stepid = $row.data('stepid');
         if ($row.data('ind')) data.stepid = $row.data('ind');
 
@@ -593,10 +596,10 @@ define(function(require) {
         value = val;
         clean();
       }
-    
+
       function clean (e) {
         if (e && $(e.target).closest('.datepicker').length) {
-        
+
         } else {
           $input.off().remove();
           $row
@@ -604,7 +607,7 @@ define(function(require) {
             .toggleClass('editor')
             .removeClass('invalid')
             .width('');
-      
+
           if ($row.data('type') === 'date') {
             self.stopListening(self.views.datepicker);
             self.views.datepicker.close();
@@ -612,11 +615,11 @@ define(function(require) {
           }
         }
       }
-    
+
       function saveOrClean(e) {
         var $target  = $(e.currentTarget),
             val      = $target.val();
-      
+
         if ($target.key === 13 || e.which === 13) {
           if (utils.validate(val, $row.data('type'))) {
             save(val);
@@ -628,10 +631,10 @@ define(function(require) {
         } else {
           clean(e);
         }
-      
+
         e.preventDefault();
       }
-      
+
       if (!$row.hasClass('editor')) {
         $row.width($row.width());
         $row.addClass('editor');
@@ -639,7 +642,7 @@ define(function(require) {
         $row.empty();
         $row.append($input);
         $input.focus();
-        
+
         if ($row.data('type') === 'date') {
           this.views.datepicker = new datepicker();
           this.views.datepicker.show(e);
@@ -652,7 +655,7 @@ define(function(require) {
         } else {
           $input.blur(saveOrClean);
         }
-        
+
         $input.on('keypress', function (e) {
            if (e.keyCode === 13 || e.which === 13) {
              saveOrClean(e);
@@ -660,23 +663,23 @@ define(function(require) {
              clean();
            }
         });
-        
+
         e.stopPropagation();
       }
     },
-    
+
     lockOrder: function (e) {
       this.applyLock('lock', e);
     },
-    
+
     unlockOrder: function (e) {
       this.applyLock('unlock', e);
     },
-    
+
     breakLockOrder: function (e) {
       this.applyLock('breakLock', e);
     },
-    
+
     applyLock: function (action) {
       this.setView(new ModalView({
         content_view: new OrderLockView({ action: action, model: this.model})
