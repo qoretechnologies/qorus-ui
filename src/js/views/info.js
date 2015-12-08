@@ -4,31 +4,33 @@ define(function (require) {
       Qorus      = require('qorus/qorus'),
       System     = require('models/system'),
       HeaderView = require('views/common/header'),
+      settings   = require('settings'),
       SystemInfoView;
-  
-  SystemInfoView = Qorus.View.extend({    
+
+  SystemInfoView = Qorus.View.extend({
     initialize: function (opts) {
       this.context = {};
       this.views = {};
       this.options = {};
-      
+
       this.opts = opts || {};
       this.user = System.User;
       this.info = System.Info;
-      
+
       _.bindAll(this, 'renderInfo');
-      
+
       this.listenTo(this.info, 'change', this.renderInfo);
       this.header = new HeaderView({ info: this.info, user: this.user });
       this.renderInfo();
     },
-    
+
     renderInfo: function () {
       this.title = this.info.get('instance-key') + " | " + this.info.get('omq-version');
       document.title = this.title;
-      
+
       $('#build').text(this.info.get('omq-version') + '.' + this.info.get('omq-build'));
       $('#schema').text(this.info.get('omq-schema'));
+      $('#ui-version').text(settings.UI_VERSION);
     }
 
   });

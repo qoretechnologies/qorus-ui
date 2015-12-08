@@ -17,7 +17,8 @@ define(function (require) {
       WS_HOST: ws_protocol + wshost,
       EVENTS_WS_URL: ws_protocol + wshost + '/apievents',
       HOST: host,
-      DEBUG: false
+      DEBUG: false,
+      UI_VERSION: "3.0.4.p16"
     };
 
   if (settings.DEBUG && window.console && console.log) {
