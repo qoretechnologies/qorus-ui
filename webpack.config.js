@@ -66,8 +66,10 @@ var config = {
   plugins: [
     new ExtractTextPlugin('/css/base.css'),
     new webpack.DefinePlugin({
-      APP_ENV: JSON.stringify(env),
-      DEVTOOLS: false
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        DEVTOOLS: false
+      }
     })
   ]
 };

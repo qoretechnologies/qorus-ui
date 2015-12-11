@@ -9,6 +9,6 @@ require('./index.html');
 
 
 ReactDOM.render(
-  <App history={history} env={APP_ENV} />,
+  <App history={history} env={process.env} />,
   document.getElementById('app')
 );

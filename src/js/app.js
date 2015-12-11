@@ -21,7 +21,7 @@ class App extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
-    env: PropTypes.string.isRequired
+    env: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -36,13 +36,13 @@ class App extends Component {
   loadStore() {
     this.state.store = null;
 
-    setupStore(this.props.env).then((store) => {
+    setupStore(this.props.env.NODE_ENV).then((store) => {
       this.setState(Object.assign({}, this.state, { store }));
     });
   }
 
   loadDevTools() {
-    switch (this.props.env) {
+    switch (this.props.env.NODE_ENV) {
       case 'production':
         this.state.devToolsReady = true;
         break;
@@ -77,7 +77,11 @@ class App extends Component {
 
     return (
       <DebugPanel top right bottom>
-        <DevTools store={store} monitor={LogMonitor} visibleOnLoad={DEVTOOLS} />
+        <DevTools
+          store={store}
+          monitor={LogMonitor}
+          visibleOnLoad={this.props.env.DEVTOOLS}
+        />
       </DebugPanel>
     );
   }
