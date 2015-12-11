@@ -7,10 +7,13 @@ var env = process.env.NODE_ENV || 'development';
 
 var config = {
   context: path.join(__dirname, 'src'),
-  entry: path.resolve('./src/index.js'),
+  entry: {
+    qorus: path.resolve('./src/index.js')
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'qorus.bundle.js',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
     publicPath: '/'
   },
   resolve: {
@@ -61,11 +64,7 @@ var config = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('/css/base.css'),
-    new webpack.DefinePlugin({
-      APP_ENV: JSON.stringify(env),
-      DEVTOOLS: false
-    })
+    new ExtractTextPlugin('/css/base.css')
   ]
 };
 
@@ -79,6 +78,12 @@ if (env === 'development') {
   config.debug = true;
   config.devtool = 'source-map';
   config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        DEVTOOLS: false
+      }
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
@@ -91,13 +96,20 @@ if (env === 'development') {
     historyApiFallback: true,
     outputPublicPath: '/',
     proxy: {
-      "/api/*": "http://localhost:8001"
+      '/api/*': 'http://localhost:8001'
     }
   };
 }
 
 if (env === 'production') {
   config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        REST_API_BASE_URL: JSON.stringify(process.env.REST_API_BASE_URL ||
+                                          'http://localhost:8001/api')
+      }
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
