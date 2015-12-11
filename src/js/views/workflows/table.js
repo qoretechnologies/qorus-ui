@@ -17,7 +17,7 @@ import { ORDER_STATES } from 'constants/orders';
 export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
-    shouldHighlight: PropTypes.func.isRequired
+    highlight: PropTypes.string
   }
 
   static contextTypes = {
@@ -26,14 +26,24 @@ export default class WorkflowsTable extends Component {
     params: PropTypes.object
   }
 
-  workflowIdentifier(workflow) {
-    return workflow.id;
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { highlight: [] };
   }
 
-  activateWorkflow(workflow) {
+  getHighlightIdx() {
+    return this.props.workflows && this.props.highlight ?
+      [this.props.workflows.findIndex(w => w.id === +this.props.highlight)] :
+      [];
+  }
+
+  activateWorkflow(workflow, idx, ev) {
+    if (ev.defaultPrevented) return;
+
     const shouldDeactivate =
       this.context.params.detailId &&
-      parseInt(this.context.params.detailId) === workflow.id;
+      parseInt(this.context.params.detailId, 10) === workflow.id;
     const change = {
       detailId: shouldDeactivate ? null : workflow.id,
       tabId: shouldDeactivate ? null : this.context.params.tabId
@@ -51,8 +61,7 @@ export default class WorkflowsTable extends Component {
     return (
       <Table
         data={this.props.workflows}
-        identifier={this.workflowIdentifier.bind(this)}
-        shouldHighlight={this.props.shouldHighlight}
+        highlight={this.getHighlightIdx()}
         className='table table-striped table-condensed table-hover table-fixed'
         onRowClick={this.activateWorkflow.bind(this)}
       >

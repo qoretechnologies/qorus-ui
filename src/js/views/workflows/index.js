@@ -154,21 +154,17 @@ export default class Workflows extends Component {
     document.title = `Workflows | ${inst}`;
   }
 
-  getActiveWorkflow() {
-    if (!this.props.params.detailId) return null;
-
-    return this.props.workflows.find(this.isActive.bind(this));
-  }
-
-  isActive(workflow) {
-    return workflow.id === parseInt(this.props.params.detailId);
-  }
-
   renderPane() {
     const { params, route, workflows, errors, systemOptions, globalErrors } =
       this.props;
 
-    if (!this.getActiveWorkflow()) return null;
+    if (!params.detailId) return null;
+
+    const workflow = workflows.find(w => {
+      return w.id === parseInt(params.detailId, 10);
+    });
+
+    if (!workflow) throw new Error('Requested workflow not found.');
 
     return (
       <PaneView width={550} onClose={() => {
@@ -181,9 +177,9 @@ export default class Workflows extends Component {
       }}>
         <div className='relative'>
           <WorkflowsDetail
-            workflow={this.getActiveWorkflow()}
+            workflow={workflow}
             systemOptions={systemOptions}
-            errors={errors[this.getActiveWorkflow().id] || []}
+            errors={errors[workflow.id] || []}
             globalErrors={globalErrors}
             tabId={params.tabId}
           />
@@ -202,10 +198,7 @@ export default class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar />
-        <WorkflowsTable
-          workflows={workflows}
-          shouldHighlight={this.isActive.bind(this)}
-        />
+        <WorkflowsTable workflows={workflows} highlight={params.detailId} />
         {this.renderPane()}
       </div>
     );
