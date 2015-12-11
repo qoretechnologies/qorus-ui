@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Cell from './cell';
 
 
+import _ from 'lodash';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
@@ -21,33 +22,57 @@ export default class TBody extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
-    highlight: PropTypes.array,
+    identifier: PropTypes.func,
+    shouldHighlight: PropTypes.func,
     onRowClick: PropTypes.func
   }
 
   static defaultProps = {
-    highlight: [],
+    identifier: c => c,
+    shouldHighlight: () => false,
     onRowClick: () => {}
   }
 
   constructor(props) {
     super(props);
 
-    this.rows = [];
+    this._rows = [];
+    this._cellCache = new Map();
   }
 
-  onRowClick(e) {
+  onRowClick(ev) {
+    if (ev.defaultPrevented) return;
+
     this.props.onRowClick(
-      this.props.data[this.rows.indexOf(e.currentTarget)],
-      this.rows.indexOf(e.currentTarget),
-      e
+      this.props.data[this._rows.indexOf(ev.currentTarget)],
+      this._rows.indexOf(ev.currentTarget)
     );
   }
 
-  getCellChildren(col) {
-    return React.Children.count(col.props.children) ?
-      React.Children.toArray(col.props.children) :
-      [];
+  getCellKey(col, colIdx, rec, recIdx) {
+    const recId = this.props.identifier(rec, recIdx);
+
+    return `${colIdx}.${recId}`;
+  }
+
+  renderCell(col, colIdx, rec, recIdx) {
+    if (!this._cellCache.has(this.getCellKey(col, colIdx, rec, recIdx))) {
+      this._cellCache.set(
+        this.getCellKey(col, colIdx, rec, recIdx),
+        !col ? col : (
+          <Cell
+            comp={col.props.comp}
+            field={col.props.field}
+            props={col.props.props(rec, recIdx, colIdx)}
+            childProps={col.props.childProps(rec, recIdx, colIdx)}
+          >
+            {React.Children.map(col.props.children, c => c)}
+          </Cell>
+        )
+      );
+    }
+
+    return this._cellCache.get(this.getCellKey(col, colIdx, rec, recIdx));
   }
 
   render() {
@@ -57,25 +82,14 @@ export default class TBody extends Component {
           <tr
             key={recIdx}
             className={classNames({
-              info: this.props.highlight.indexOf(recIdx) >= 0
+              info: this.props.shouldHighlight(rec, recIdx)
             })}
             onClick={this.onRowClick.bind(this)}
-            ref={row => this.rows[recIdx] = row}
+            ref={row => this._rows[recIdx] = row}
           >
-            {React.Children.map(this.props.children, (col, colIdx) => {
-              if (!col) return col;
-
-              return (
-                <Cell
-                  comp={col.props.comp}
-                  field={col.props.field}
-                  props={col.props.props(rec, recIdx, colIdx)}
-                  childProps={col.props.childProps(rec, recIdx, colIdx)}
-                >
-                  {React.Children.map(this.getCellChildren(col), c => c)}
-                </Cell>
-              );
-            })}
+            {React.Children.map(this.props.children, (col, colIdx) => (
+              this.renderCell(col, colIdx, rec, recIdx)
+            ))}
           </tr>
         ))}
       </tbody>

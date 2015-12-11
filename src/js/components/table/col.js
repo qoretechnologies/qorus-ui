@@ -1,7 +1,22 @@
 import { Component, PropTypes } from 'react';
 
 
+import _ from 'lodash';
 import { pureRender } from '../utils';
+
+
+/**
+ * @name PropFn
+ * @typedef {
+ *   function(*, number, number): *
+ * }
+ */
+
+
+const EMPTY_PROPS = {};
+
+
+function emptyPropFn() { return EMPTY_PROPS; }
 
 
 /**
@@ -33,8 +48,8 @@ export default class Col extends Component {
   static defaultProps = {
     heading: '',
     comp: 'td',
-    props: () => ({}),
-    childProps: () => ({})
+    props: emptyPropFn,
+    childProps: emptyPropFn
   }
 
   render() {

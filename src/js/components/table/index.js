@@ -23,24 +23,33 @@ export default class Table extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
-    highlight: PropTypes.array,
+    identifier: PropTypes.func,
+    shouldHighlight: PropTypes.func,
     onRowClick: PropTypes.func
   }
 
   static defaultProps = {
-    highlight: [],
+    identifier: c => c,
+    shouldHighlight: () => false,
     onRowClick: () => {}
   }
 
   render() {
-    const { data, highlight, onRowClick, children, ...props } = this.props;
+    const {
+      data, identifier, shouldHighlight, onRowClick, children, ...props
+    } = this.props;
 
     return (
       <table {...props}>
         <THead data={data}>
           {children}
         </THead>
-        <TBody data={data} highlight={highlight} onRowClick={onRowClick}>
+        <TBody
+          data={data}
+          identifier={identifier}
+          shouldHighlight={shouldHighlight}
+          onRowClick={onRowClick}
+        >
           {children}
         </TBody>
       </table>
