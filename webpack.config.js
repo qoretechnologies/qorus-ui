@@ -64,13 +64,7 @@ var config = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('/css/base.css'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(env),
-        DEVTOOLS: false
-      }
-    })
+    new ExtractTextPlugin('/css/base.css')
   ]
 };
 
@@ -84,6 +78,12 @@ if (env === 'development') {
   config.debug = true;
   config.devtool = 'source-map';
   config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        DEVTOOLS: false
+      }
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
@@ -96,13 +96,20 @@ if (env === 'development') {
     historyApiFallback: true,
     outputPublicPath: '/',
     proxy: {
-      "/api/*": "http://localhost:8001"
+      '/api/*': 'http://localhost:8001'
     }
   };
 }
 
 if (env === 'production') {
   config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        REST_API_BASE_URL: JSON.stringify(process.env.REST_API_BASE_URL ||
+                                          'http://localhost:8001/api')
+      }
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
