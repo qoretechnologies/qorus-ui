@@ -7,10 +7,13 @@ var env = process.env.NODE_ENV || 'development';
 
 var config = {
   context: path.join(__dirname, 'src'),
-  entry: path.resolve('./src/index.js'),
+  entry: {
+    qorus: path.resolve('./src/index.js')
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'qorus.bundle.js',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
     publicPath: '/'
   },
   resolve: {
