@@ -7,7 +7,6 @@ import history from './js/history';
 
 require('./index.html');
 
-
 ReactDOM.render(
   <App history={history} env={APP_ENV} />,
   document.getElementById('app')
