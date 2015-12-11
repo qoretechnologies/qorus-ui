@@ -48,15 +48,21 @@ class App extends Component {
         break;
       default:
         this.state.devToolsReady = false;
-        require.ensure(['redux-devtools/lib/react'], (require) => {
+        require.ensure([
+          'redux-devtools/lib/react', 'react-addons-perf'
+        ], (require) => {
           const { DevTools, DebugPanel, LogMonitor } =
             require('redux-devtools/lib/react');
+          const Perf =
+            require('react-addons-perf');
+          window.Perf = Perf;
 
           this.setState(Object.assign({}, this.state, {
             devToolsReady: true,
             DevTools,
             DebugPanel,
-            LogMonitor
+            LogMonitor,
+            Perf
           }));
         }, 'devtools');
         break;
