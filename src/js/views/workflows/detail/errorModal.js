@@ -153,7 +153,7 @@ export default class ErrorModal extends Component {
                 htmlFor='modalError'
                 className='col-sm-3 control-label'
               >
-                Email
+                Name
               </label>
               <div className='col-sm-9'>
                 <input

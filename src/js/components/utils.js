@@ -3,6 +3,25 @@ import _ from 'lodash';
 
 
 /**
+ * Checks if class has prototype and that prototype has no
+ * shouldComponentUpdate property.
+ *
+ * It throws an error if otherwise.
+ *
+ * @param {ReactClass} CompCls
+ */
+function checkClassForPureRender(CompCls) {
+  if (!CompCls || !CompCls.prototype) {
+    throw new Error('Only class can be decorated');
+  }
+
+  if (CompCls.prototype.shouldComponentUpdate) {
+    throw new Error('Method shouldComponentUpdate already set');
+  }
+}
+
+
+/**
  * Provides `shouldComponentUpdate` with shallow equality check for
  * props and state changes.
  *
@@ -34,7 +53,7 @@ export function pureRenderOmit(predicate) {
     checkClassForPureRender(CompCls);
 
     Object.assign(CompCls.prototype, {
-      shouldComponentUpdate: function(nextProps, nextState) {
+      shouldComponentUpdate: function (nextProps, nextState) {
         return PureRenderMixin.shouldComponentUpdate.call(
           this,
           _.omit(nextProps, predicate),
@@ -43,23 +62,4 @@ export function pureRenderOmit(predicate) {
       }
     });
   };
-}
-
-
-/**
- * Checks if class has prototype and that prototype has no
- * shouldComponentUpdate property.
- *
- * It throws an error if otherwise.
- *
- * @param {ReactClass} CompCls
- */
-function checkClassForPureRender(CompCls) {
-  if (!CompCls || !CompCls.prototype) {
-    throw new Error('Only class can be decorated');
-  }
-
-  if (CompCls.prototype.shouldComponentUpdate) {
-    throw new Error('Method shouldComponentUpdate already set');
-  }
 }

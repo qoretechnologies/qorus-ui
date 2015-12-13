@@ -41,8 +41,16 @@ describe('', () => {
     it('renders table using THead, TBody and Cell', () => {
       const comp = TestUtils.renderIntoDocument(
         <Table data={data}>
-          <Col heading='Rows' props={rec => ({ name: rec.name })} />
-          <Col heading='Values' props={rec => ({ value: rec.value })} />
+          <Col
+            heading='Rows'
+            field='name'
+            props={rec => ({ name: rec.name })}
+          />
+          <Col
+            heading='Values'
+            field='value'
+            props={rec => ({ value: rec.value })}
+          />
         </Table>
       );
 
@@ -73,7 +81,7 @@ describe('', () => {
     it('passes any other prop to table directly', () => {
       const comp = TestUtils.renderIntoDocument(
         <Table data={data} className='table'>
-          <Col props={rec => ({ value: rec.value })} />
+          <Col field='value' props={rec => ({ value: rec.value })} />
         </Table>
       );
 
@@ -289,8 +297,8 @@ describe('', () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data} onRowClick={handler}>
-            <Col props={rec => ({ name: rec.name })} />
-            <Col props={rec => ({ value: rec.value })} />
+            <Col field='name' props={rec => ({ name: rec.name })} />
+            <Col field='value' props={rec => ({ value: rec.value })} />
           </TBody>
         </table>
       );
@@ -304,8 +312,8 @@ describe('', () => {
     it('optionally highlights row from hightlight prop', () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
-          <TBody data={data} highlight={[0]}>
-            <Col props={rec => ({ value: rec.value })} />
+          <TBody data={data} shouldHighlight={(rec, idx) => idx === 0}>
+            <Col field='value' props={rec => ({ value: rec.value })} />
           </TBody>
         </table>
       );

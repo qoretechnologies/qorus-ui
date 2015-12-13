@@ -11,10 +11,7 @@ import { pureRender } from '../utils';
  * default td element.
  *
  * If no child is given, it uses field prop to extract a field from
- * props prop used as cell value. If even field is not defined, it
- * joins all given props pro properties with a single space (' ') as a
- * delimiter. It is expected that only one prop is given in such
- * cases.
+ * props prop used as cell value.
  *
  * If there are children, the props prop is destructured and passed to
  * all of them.
@@ -54,19 +51,13 @@ export default class Cell extends Component {
    * prop defined, it takes value of this field from props
    * prop. Otherwise, it will iterate over props prop properties and
    * contacatenates them with a single space.
+   *
+   * @return {ReactNode|null}
    */
   renderChildren() {
-    if (React.Children.count(this.props.children)) {
-      return this.renderChildrenProps();
-    }
-
-    if (this.props.field) {
-      return this.props.props[this.props.field];
-    }
-
-    return Object.keys(this.props.props).
-      map(p => this.props.props[p]).
-      join(' ');
+    return React.Children.count(this.props.children) ?
+      this.renderChildrenProps() :
+      this.renderChildrenField();
   }
 
   renderChildrenProps() {
@@ -75,6 +66,12 @@ export default class Cell extends Component {
         React.cloneElement(c, this.props.childProps) :
         c
     ));
+  }
+
+  renderChildrenField() {
+    return this.props.field ?
+      this.props.props[this.props.field] :
+      null;
   }
 
   render() {

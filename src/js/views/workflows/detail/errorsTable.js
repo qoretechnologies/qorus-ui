@@ -154,6 +154,7 @@ export default class ErrorsTable extends Component {
             />
             <Col
               heading='Severity'
+              field='severity'
               props={rec => ({ severity: rec.severity })}
             />
             <Col
@@ -164,10 +165,12 @@ export default class ErrorsTable extends Component {
             </Col>
             <Col
               heading='Delay'
+              field='delay'
               props={rec => ({ delay: rec.retry_delay_secs })}
             />
             <Col
               heading='Business'
+              field='value'
               childProps={rec => ({ value: rec.business_flag })}
             >
               <StatusIcon />

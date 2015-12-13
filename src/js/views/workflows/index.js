@@ -161,12 +161,11 @@ export default class Workflows extends Component {
   }
 
   isActive(workflow) {
-    return workflow.id === parseInt(this.props.params.detailId);
+    return workflow.id === parseInt(this.props.params.detailId, 10);
   }
 
   renderPane() {
-    const { params, route, workflows, errors, systemOptions, globalErrors } =
-      this.props;
+    const { params, route, errors, systemOptions, globalErrors } = this.props;
 
     if (!this.getActiveWorkflow()) return null;
 
@@ -193,7 +192,7 @@ export default class Workflows extends Component {
   }
 
   render() {
-    const { sync, loading, params, workflows } = this.props;
+    const { sync, loading, workflows } = this.props;
 
     if (!sync || loading) {
       return <Loader />;

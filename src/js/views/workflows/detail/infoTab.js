@@ -51,6 +51,7 @@ export default class DetailTab extends Component {
         >
           <Col
             comp='th'
+            field='name'
             props={rec => ({ name: _.capitalize(rec.name) })}
           />
           <Col

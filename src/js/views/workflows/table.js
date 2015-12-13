@@ -33,7 +33,7 @@ export default class WorkflowsTable extends Component {
   activateWorkflow(workflow) {
     const shouldDeactivate =
       this.context.params.detailId &&
-      parseInt(this.context.params.detailId) === workflow.id;
+      parseInt(this.context.params.detailId, 10) === workflow.id;
     const change = {
       detailId: shouldDeactivate ? null : workflow.id,
       tabId: shouldDeactivate ? null : this.context.params.tabId
@@ -87,21 +87,25 @@ export default class WorkflowsTable extends Component {
         <Col
           heading='Execs'
           className='narrow'
+          field='execCount'
           props={rec => ({ execCount: rec.exec_count })}
         />
         <Col
           heading='ID'
           className='narrow'
+          field='id'
           props={rec => ({ id: rec.id })}
         />
         <Col
           heading='Name'
+          className='name'
           field='name'
           props={rec => ({ className: 'name', name: rec.name })}
         />
         <Col
           heading='Version'
           className='narrow'
+          field='version'
           props={rec => ({ version: rec.version })}
         />
         {ORDER_STATES.map((state, idx) => (
@@ -117,6 +121,7 @@ export default class WorkflowsTable extends Component {
         <Col
           heading='Total'
           className='narrow'
+          field='TOTAL'
           props={rec => ({ TOTAL: rec.TOTAL })}
         />
       </Table>
