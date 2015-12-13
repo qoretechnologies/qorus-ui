@@ -1,0 +1,45 @@
+# Known Problems with Qorus Webapp Interface
+
+## Record collection with detail pane
+
+### Large HTML tables
+
+Large tables are slow in general. Test with a table with 300 rows each
+with 20 column and one header row show that style recalculation is one
+of the main issues, especially with pseudo classes like `:hover` (it
+can takes couple of hundreds of millisecond).
+
+Replacing HTML tables with custom-positioned elements and
+viewport-aware rendering can be a solution. It has been proven by some
+web application frameworks focusing on this particular issue - e.g.,
+SproutCore). Similar strategy is also in Apple's Cocoa (e.g.,
+UITableView).
+
+
+### Selecting detail
+
+Selection process bubbles through React Router and therefore checks
+everything on its way back down. This is simply an architectural
+limitation. There were two obvious optimization approaches to choose
+from:
+
+* change `shouldComponentUpdate` to omit children from comparison
+* start caching cells
+
+The later is potentially faster, but given the number of edge cases
+which must be taken care of it ends being comparable. Therefore, the
+former option is applied. It has limitations like dynamic column
+specification, but they are not our concern.
+
+Other optimization still close to the current architecture might be to
+get rid of column specification as child elements of Table.
+
+To overcome this, components would have to be organized differently
+(further insight into data flow in React Router and Qorus Webapp
+component tree is needed).
+
+
+### Development mode
+
+Development mode really slows things down significantly (the
+difference can be a couple of seconds).

@@ -27,14 +27,15 @@ export default class Col extends Component {
       PropTypes.func
     ]),
     props: PropTypes.func,
+    field: PropTypes.string,
     childProps: PropTypes.func
   }
 
   static defaultProps = {
     heading: '',
     comp: 'td',
-    props: () => ({}),
-    childProps: () => ({})
+    props: () => {},
+    childProps: rec => rec
   }
 
   render() {

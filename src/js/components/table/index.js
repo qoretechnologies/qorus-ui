@@ -5,7 +5,7 @@ import THead from './thead';
 import TBody from './tbody';
 
 
-import { pureRender } from '../utils';
+import { pureRenderOmit } from '../utils';
 
 
 /**
@@ -18,29 +18,37 @@ import { pureRender } from '../utils';
  * Every other prop apart from children, data and onRowClick is
  * applied to table element directly.
  */
-@pureRender
+@pureRenderOmit('children')
 export default class Table extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired,
     data: PropTypes.array.isRequired,
-    highlight: PropTypes.array,
+    identifier: PropTypes.func,
+    shouldHighlight: PropTypes.func,
     onRowClick: PropTypes.func
   }
 
   static defaultProps = {
-    highlight: [],
+    shouldHighlight: () => false,
     onRowClick: () => {}
   }
 
   render() {
-    const { data, highlight, onRowClick, children, ...props } = this.props;
+    const {
+      data, identifier, shouldHighlight, onRowClick, children, ...props
+    } = this.props;
 
     return (
       <table {...props}>
         <THead data={data}>
           {children}
         </THead>
-        <TBody data={data} highlight={highlight} onRowClick={onRowClick}>
+        <TBody
+          data={data}
+          identifier={identifier}
+          shouldHighlight={shouldHighlight}
+          onRowClick={onRowClick}
+        >
           {children}
         </TBody>
       </table>

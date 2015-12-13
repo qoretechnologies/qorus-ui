@@ -16,8 +16,8 @@ import { pureRender } from '../utils';
 @pureRender
 export default class AutoStart extends Component {
   static propTypes = {
-    autostart: PropTypes.number.isRequired,
-    execCount: PropTypes.number.isRequired,
+    autostart: PropTypes.number,
+    execCount: PropTypes.number,
     inc: PropTypes.func.isRequired,
     dec: PropTypes.func.isRequired,
     context: PropTypes.any

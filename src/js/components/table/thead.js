@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Cell from './cell';
 
 
-import { pureRender } from '../utils';
+import { pureRenderOmit } from '../utils';
 
 
 /**
@@ -14,7 +14,7 @@ import { pureRender } from '../utils';
  *
  * If no child is given, nothing is rendered.
  */
-@pureRender
+@pureRenderOmit('children')
 export default class THead extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired
