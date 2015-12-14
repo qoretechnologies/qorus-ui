@@ -7,8 +7,8 @@ import { expect } from 'chai';
 import { Group, Groups } from '../../src/js/components/groups';
 
 
-describe("* as components from 'components/groups'", () => {
-  describe('{ Group } = components', () => {
+describe("{ Group, Groups } from 'components/groups'", () => {
+  describe('Group', () => {
     it('displays group names as an info label', () => {
       const comp = TestUtils.renderIntoDocument(
         <Group name='Test Group' />
@@ -52,7 +52,7 @@ describe("* as components from 'components/groups'", () => {
     });
   });
 
-  describe('{ Groups } = components', () => {
+  describe('Groups', () => {
     it('conveniently groups Group instances together', () => {
       const comp = TestUtils.renderIntoDocument(
         <Groups>

@@ -8,7 +8,7 @@ import spies from 'chai-spies';
 import Table, { Col, Cell, THead, TBody } from '../../src/js/components/table';
 
 
-describe('', () => {
+describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
   /**
    * Typical data structure for table.
    */
@@ -37,7 +37,7 @@ describe('', () => {
   }
 
 
-  describe("Table from 'components/table'", () => {
+  describe('Table', () => {
     it('renders table using THead, TBody and Cell', () => {
       const comp = TestUtils.renderIntoDocument(
         <Table data={data}>
@@ -92,7 +92,7 @@ describe('', () => {
   });
 
 
-  describe("{ Cell } from 'components/table'", () => {
+  describe('Cell', () => {
     it('renders table data cell passing any props and children', () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
@@ -184,7 +184,7 @@ describe('', () => {
   });
 
 
-  describe("{ THead } from 'components/table'", () => {
+  describe('THead', () => {
     it('renders table heading using Col specs', () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
@@ -229,7 +229,7 @@ describe('', () => {
   });
 
 
-  describe("{ TBody } from 'components/table'", () => {
+  describe('TBody', () => {
     before(() => {
       chai.use(spies);
     });

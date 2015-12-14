@@ -7,7 +7,7 @@ import spies from 'chai-spies';
 import { Control, Controls } from '../../src/js/components/controls';
 
 
-describe("* from 'components/controls'", () => {
+describe("{ Control, Controls } from 'components/controls'", () => {
   before(() => {
     chai.use(spies);
   });

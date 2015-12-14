@@ -6,12 +6,18 @@ import {
   createApiActions
 } from '../../src/js/store/api/utils';
 
-describe("* as utils from 'store/api/utils'", () => {
+describe(
+  '{ ' +
+    'createResourceActions, ' +
+    'combineResourceActions, ' +
+    'createApiActions ' +
+  "} as utils from 'store/api/utils'",
+() => {
   before(() => {
     chai.use(spies);
   });
 
-  describe('{ createResourceActions } = utils', () => {
+  describe('createResourceActions', () => {
     it('transforms resource description to action description', () => {
       const getAction = url => id => `GET ${url}/${id}`;
       const getActionSpy = chai.spy(getAction);
@@ -151,7 +157,7 @@ describe("* as utils from 'store/api/utils'", () => {
     });
   });
 
-  describe('{ combineResourceActions } = utils', () => {
+  describe('combineResourceActions', () => {
     it('combines action descriptions together', () => {
       const defaultGet = id => `GET /${id}`;
       const defaultActions = {
@@ -212,7 +218,7 @@ describe("* as utils from 'store/api/utils'", () => {
     });
   });
 
-  describe('{ createApiActions } = utils', () => {
+  describe('createApiActions', () => {
     it('transforms action description redux action creators', () => {
       const actions = {
         'workflows': {
