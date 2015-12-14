@@ -1,0 +1,91 @@
+.resize-handle {
+  position: absolute;
+
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+
+  &.top {
+    top: 0;
+    height: 10px;
+
+    &:not(.left):not(.right) {
+      left: 0;
+      right: 0;
+      height: 10px;
+
+      cursor: ns-resize;
+      &.min {
+        cursor: n-resize;
+      }
+    }
+    &.left {
+      cursor: nwse-resize;
+      &.min {
+        cursor: nw-resize;
+      }
+    }
+    &.right {
+      cursor: nesw-resize;
+      &.min {
+        cursor: ne-resize;
+      }
+    }
+  }
+
+  &.bottom {
+    bottom: 0;
+    height: 10px;
+
+    &:not(.left):not(.right) {
+      left: 0;
+      right: 0;
+      cursor: ns-resize;
+      &.min {
+        cursor: s-resize;
+      }
+    }
+    &.left {
+      cursor: nesw-resize;
+      &.min {
+        cursor: sw-resize;
+      }
+    }
+    &.right {
+      cursor: nwse-resize;
+      &.min {
+        cursor: se-resize;
+      }
+    }
+  }
+
+  &.left {
+    left: 0;
+    width: 10px;
+
+    &:not(.top):not(.bottom) {
+      top: 0;
+      bottom: 0;
+
+      cursor: ew-resize;
+      &.min {
+        cursor: w-resize;
+      }
+    }
+  }
+  &.right {
+    right: 0;
+    width: 10px;
+
+    &:not(.top):not(.bottom) {
+      top: 0;
+      bottom: 0;
+
+      cursor: ew-resize;
+      &.min {
+        cursor: e-resize;
+      }
+    }
+  }
+}

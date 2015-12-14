@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 
+import ResizeHandle from '../resize/handle';
 import Header from './header';
 import Body from './body';
 import Footer from './footer';
@@ -47,6 +48,8 @@ export default class Modal extends Component {
           <div className='modal-content'>
             {this.props.children}
           </div>
+          <ResizeHandle minCurrent left />
+          <ResizeHandle minCurrent right />
         </div>
       </div>
     );
