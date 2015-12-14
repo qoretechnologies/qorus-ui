@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
-import $ from 'jquery';
-
-require('jquery-ui/resizable');
+import ResizeHandle from './resize/handle';
 
 
 export class PaneView extends Component {
@@ -12,55 +9,30 @@ export class PaneView extends Component {
     onClose: PropTypes.func,
     width: PropTypes.number
   }
-  // getStorageKey() {
-  //   var cvkey = this.props.name || 'pane';
-  //   return [module.id.replace(/\//g, '.'), cvkey].join('.');
-  // }
-  //
-  componentDidMount() {
-    const $el = this._resizable = $(this.refs.pageSlide);
-    // var key = this.getStorageKey();
 
-    $el.resizable({
-      handles: 'w',
-      minWidth: 400,
-      resize: function (event, ui) {
-        // fix the element left position
-        ui.element
-          .css('left', '');
-      // },
-      // stop: function (event, ui) {
-      //   SystemSettings.set(key, ui.size.width);
-      //   SystemSettings.save();
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    if (this._resizable) {
-      this._resizable.resizable('destroy');
-    }
-  }
 
   render() {
-    const { contentView, onClose, width } = this.props;
-    let { children } = this.props;
-    const props = _.omit(this.props, ['contentView', 'children']);
-    const style = { width: width };
-
-    if (contentView) {
-      children = <contentView {...props} />;
-    }
+    const { contentView, children, onClose, width, ...props } = this.props;
 
     return (
-      <div className='pageslide left show' ref='pageSlide' style={style}>
-        <a className='btn btn-xs btn-inverse close-view'
-          onClick={ onClose }>
-          <i className='fa fa-times-circle'></i> Close
-        </a>
+      <div
+        className='pageslide left show'
+        style={{ width }}
+        ref='pageSlide'
+      >
+        <button
+          type='button'
+          className='btn btn-xs btn-inverse close-view'
+          onClick={onClose}
+        >
+          <i className='fa fa-times-circle' /> Close
+        </button>
         <div className='content'>
-          { children }
+          {contentView ? (
+            <contentView {...props} /> 
+          ) : children}
         </div>
+        <ResizeHandle left min={{ width: 400 }} />
       </div>
     );
   }

@@ -41,6 +41,7 @@ const LEFT = 0b1000;
 export default class Handle extends Component {
   static propTypes = {
     minCurrent: PropTypes.bool,
+    min: PropTypes.object,
     top: PropTypes.bool,
     right: PropTypes.bool,
     bottom: PropTypes.bool,
@@ -81,9 +82,13 @@ export default class Handle extends Component {
    * Finds current minimal dimensions if needed.
    */
   componentDidMount() {
-    this._min = this.props.minCurrent ?
-      this.getParentRect() :
-      {};
+    this._min = this.getMinimalDimensions(this.props);
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this._position = this.getDirection(nextProps);
+    this._min = this.getMinimalDimensions(nextProps);
   }
 
 
@@ -125,6 +130,27 @@ export default class Handle extends Component {
     if (props.left) direction = direction | LEFT;
 
     return direction;
+  }
+
+
+  /**
+   * Returns minimal dimensions which limit resizing.
+   *
+   * @param {object} props
+   * @return {DOMRect|object}
+   */
+  getMinimalDimensions(props) {
+    let min;
+
+    if (props.minCurrent) {
+      min = this.getParentRect();
+    } else if (props.min) {
+      min = props.min;
+    } else {
+      min = {};
+    }
+
+    return min;
   }
 
 

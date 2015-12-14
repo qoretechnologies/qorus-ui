@@ -22,8 +22,6 @@
     "font-awesome-webpack": "0.0.4",
     "globule": "^0.2.0",
     "history": "1.13.x",
-    "jquery": "^2.1.4",
-    "jquery-ui": "^1.10.5",
     "less": "^2.5.3",
     "lodash": "^3.10.1",
     "node-sass": "^3.4.2",

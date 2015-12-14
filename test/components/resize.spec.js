@@ -39,12 +39,10 @@ describe("Handle from 'components/resize/handle'", () => {
   });
 
 
-  // JSDOM cannot compute bouding border box which is required for
-  // this to work
-  xit('limits dragging to initial dimension when minCurrent is set', () => {
+  it('limits dragging when minimal dimensions are set', () => {
     const resizable = ReactDOM.render((
       <div style={{ position: 'absolute', left: '0px', width: '100px' }}>
-        <Handle right minCurrent />
+        <Handle right min={{ width: 100 }} />
       </div>
     ), mountNode);
     const moveEv = new window.MouseEvent('mousemove', { clientX: 80 });
