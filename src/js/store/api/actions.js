@@ -7,13 +7,13 @@ import {
   createResourceActions,
   createApiActions
 } from './utils';
+import settings from '../../settings';
+
 
 export const DEFAULT_ACTIONS = {
   FETCH: (url) => async (params) => {
     const result = await fetch(url, Object.assign({
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: settings.DEFAULT_REST_HEADERS
     }, params));
     return result.json();
   },
@@ -21,10 +21,7 @@ export const DEFAULT_ACTIONS = {
     action: (url) => async (params, id) => {
       const fetchUrl = (id) ? `${url}/${id}` : url;
       const result = await fetch(fetchUrl, Object.assign({
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
+        headers: settings.DEFAULT_REST_HEADERS,
         method: 'PUT'
       }, params));
       return result.json();
@@ -34,9 +31,7 @@ export const DEFAULT_ACTIONS = {
   UPDATE: (url) => async (params, id) => {
     const fetchUrl = (id) ? `${url}/${id}` : url;
     const result = await fetch(fetchUrl, Object.assign({
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: settings.DEFAULT_REST_HEADERS
     }, params));
     return result.json();
   }

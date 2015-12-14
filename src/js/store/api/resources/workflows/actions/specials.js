@@ -10,10 +10,7 @@ async function setOptionsPayload(workflow, name, value) {
     `${settings.REST_API_PREFIX}/workflows/${workflow.id}`,
     {
       method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: settings.DEFAULT_REST_HEADERS,
       body: JSON.stringify({
         action: 'setOptions',
         options: `${name}=${value}`

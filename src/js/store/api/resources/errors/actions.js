@@ -10,10 +10,7 @@ async function fetchJson(method, url, opts = {}) {
     url,
     Object.assign({
       method: method,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+      headers: settings.DEFAULT_REST_HEADERS
     }, opts)
   );
 
@@ -56,9 +53,8 @@ const createError = createAction(
 function updatePayload(ref, err) {
   return fetchJson(
     'PUT',
-    `${settings.REST_API_PREFIX}/errors/${ref}/${err.error}`, {
-      body: JSON.stringify(err)
-    }
+    `${settings.REST_API_PREFIX}/errors/${ref}/${err.error}`,
+    { body: JSON.stringify(err) }
   );
 }
 
