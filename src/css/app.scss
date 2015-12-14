@@ -44,3 +44,44 @@ pre {
     }
   }
 }
+
+
+#library {
+  > .row {
+    margin-top: 15px;
+
+    > .col-sm-3 > .well {
+      padding: 0;
+      overflow-y: auto;
+    }
+  }
+
+  .nav {
+    word-wrap: break-word;
+
+    & > li.disabled > a {
+      cursor: inherit;
+    }
+
+    & > li > a > h5,
+    & > li > a > h6 {
+      text-transform: uppercase;
+    }
+
+    & > li > a > h5 {
+      font-size: 100%;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    & > li > a > h6 {
+      font-size: 90%;
+      margin-top: -3px;
+      margin-bottom: -6px;
+    }
+    & > li > a > span {
+      display: block;
+      margin-top: -6px;
+      margin-bottom: -6px;
+    }
+  }
+}

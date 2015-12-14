@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
-import clNs from 'classnames';
+import classNames from 'classnames';
 import { slugify } from '../utils';
+
 
 export class TabGroup extends Component {
   static propTypes = {
@@ -17,7 +18,7 @@ export class TabGroup extends Component {
     cssClass: 'nav nav-tabs'
   }
 
-  onTabChange = slug => {
+  onTabChange(slug) {
     if (!this.props.tabChange) return;
 
     this.props.tabChange(slug);
@@ -49,17 +50,19 @@ export class TabGroup extends Component {
         <TabNavigationItem {...other}
           slug={slug}
           name={name}
-          ref={ slug }
-          tabChange={ this.onTabChange }
-          active={ this.isActive(slug) } />
+          ref={slug}
+          tabChange={this.onTabChange.bind(this)}
+          active={this.isActive(slug)}
+        />
       );
       tabs[`tab${slug}`] = (
         <Tab {...other}
-          active={ this.isActive(slug) }
+          active={this.isActive(slug)}
           slug={slug}
           name={name}
-          ref={ `pane-${slug}` }>
-          { children }
+          ref={`pane-${slug}`}
+        >
+          {children}
         </Tab>
       );
     });
@@ -67,48 +70,52 @@ export class TabGroup extends Component {
     return (
       <div>
         <ul className={this.props.className || this.props.cssClass}>
-          { createFragment(navigation) }
+          {createFragment(navigation)}
         </ul>
         <div className='tab-content'>
-          { createFragment(tabs) }
+          {createFragment(tabs)}
         </div>
       </div>
     );
   }
 }
 
+
 export class TabNavigationItem extends Component {
   static propTypes = {
     target: PropTypes.string,
-    name: PropTypes.string,
+    name: PropTypes.node,
     slug: PropTypes.string.isRequired,
     tabChange: PropTypes.func,
-    active: PropTypes.bool
+    active: PropTypes.bool,
+    disabled: PropTypes.bool
   }
 
   render() {
-    const { target, name, active, slug, tabChange } = this.props;
+    const { target, name, active, disabled, slug, tabChange } = this.props;
 
     return (
-      <li className={ clNs({ active: active })} >
-        <a data-target={ target } onClick={ () => { tabChange(slug); } }>
-          { name }
+      <li role='presentation' className={classNames({ active, disabled })}>
+        <a data-target={target} onClick={() => tabChange(slug)}>
+          {name}
         </a>
       </li>
     );
   }
 }
 
+
 export class Tab extends Component {
   static propTypes = {
     slug: PropTypes.string,
     name: PropTypes.string.isRequired,
     active: PropTypes.bool,
+    disabled: PropTypes.bool,
     children: PropTypes.node
   }
 
   render() {
-    const { slug, children, active } = this.props;
+    const { slug, children, active, disabled } = this.props;
 
     if (!slug) {
       throw new Error('Property slug must be provided by parent component.');
@@ -116,9 +123,10 @@ export class Tab extends Component {
 
     return (
       <div
-        id={ slug }
-        className={ clNs({ 'tab-pane': true, active: active }) }>
-        { children }
+        id={slug}
+        className={classNames({ 'tab-pane': true, active, disabled })}
+      >
+        {children}
       </div>
     );
   }

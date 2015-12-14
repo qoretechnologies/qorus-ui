@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TabGroup, Tab } from 'components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detailTab';
+import LibraryTab from './libraryTab';
 import ErrorsTab from './errorsTab';
 import InfoTab from './infoTab';
 
@@ -41,6 +42,9 @@ export default class WorkflowsDetail extends Component {
     this.context.dispatch(
       apiActions.errors.fetch(`workflow/${this.props.workflow.id}`)
     );
+    this.context.dispatch(
+      apiActions.workflows.fetchLibSources(this.props.workflow)
+    );
   }
 
   changeTab(tabId) {
@@ -65,7 +69,9 @@ export default class WorkflowsDetail extends Component {
           <Tab name='Detail'>
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Tab>
-          <Tab name='Library' />
+          <Tab name='Library'>
+            <LibraryTab workflow={workflow} />
+          </Tab>
           <Tab name='Steps' />
           <Tab name='Log' />
           <Tab name='Errors'>

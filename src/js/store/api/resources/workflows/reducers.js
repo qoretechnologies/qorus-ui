@@ -13,7 +13,7 @@ const initialState = { data: [], sync: false, loading: false };
  * @param {string|number} value
  * @return {array}
  */
-function getUpdatedData(data, workflowId, name, value) {
+function getDataWithOption(data, workflowId, name, value) {
   const workflow = data.find(w => w.id === workflowId);
   const options = Array.from(workflow.options);
   const optIdx = options.findIndex(o => o.name === name);
@@ -52,7 +52,7 @@ function findOption(data, workflowId, name) {
 const setOptions = {
   next(state = initialState, action) {
     return Object.assign({}, state, {
-      data: getUpdatedData(
+      data: getDataWithOption(
         state.data,
         action.meta.workflowId,
         action.meta.option.name,
@@ -64,7 +64,7 @@ const setOptions = {
     const option = findOption(state.data, action.meta.option.name);
 
     return Object.assign({}, state, {
-      data: getUpdatedData(
+      data: getDataWithOption(
         state.data,
         action.meta.workflowId,
         action.meta.option.name,
@@ -78,4 +78,27 @@ const setOptions = {
 };
 
 
-export { setOptions as SETOPTIONS };
+const fetchLibSources = {
+  next(state = initialState, action) {
+    return Object.assign({}, state, {
+      data: updateItemWithId(
+        action.meta.workflowId,
+        action.payload,
+        state.data
+      )
+    });
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload
+    });
+  }
+};
+
+
+export {
+  setOptions as SETOPTIONS,
+  fetchLibSources as FETCHLIBSOURCES
+};

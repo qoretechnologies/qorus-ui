@@ -32,4 +32,22 @@ const setOptions = createAction(
 );
 
 
-export { setOptions };
+function fetchLibSourcesPayload(workflow) {
+  return fetchJson(
+    'GET',
+    `${settings.REST_API_PREFIX}/workflows/${workflow.id}?lib_source=true`
+  );
+}
+
+function fetchLibSourcesMeta(workflow) {
+  return { workflowId: workflow.id };
+}
+
+const fetchLibSources = createAction(
+  'WORKFLOWS_FETCHLIBSOURCES',
+  fetchLibSourcesPayload,
+  fetchLibSourcesMeta
+);
+
+
+export { setOptions, fetchLibSources };
