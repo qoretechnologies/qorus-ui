@@ -11,7 +11,7 @@ describe(
     'createResourceActions, ' +
     'combineResourceActions, ' +
     'createApiActions ' +
-  "} as utils from 'store/api/utils'",
+  "} from 'store/api/utils'",
 () => {
   before(() => {
     chai.use(spies);
