@@ -50,7 +50,6 @@ export default class AutoStart extends Component {
       'autostart-change': true,
       'btn': true,
       'btn-xs': true,
-      'btn-default': !equals,
       'btn-success': equals
     });
 

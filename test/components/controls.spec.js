@@ -24,7 +24,6 @@ describe("* from 'components/controls'", () => {
 
 
       expect(Array.from(el.classList)).to.include('btn');
-      expect(Array.from(el.classList)).to.include('btn-default');
       expect(Array.from(el.firstChild.classList)).to.include('fa');
       expect(Array.from(el.firstChild.classList)).to.include('fa-refresh');
     });
@@ -40,7 +39,6 @@ describe("* from 'components/controls'", () => {
 
 
       expect(Array.from(el.classList)).to.include('btn-primary');
-      expect(Array.from(el.classList)).not.to.include('btn-default');
     });
 
 

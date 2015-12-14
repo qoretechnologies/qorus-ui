@@ -17,10 +17,6 @@ export default class Control extends Component {
     action: PropTypes.func
   }
 
-  static defaultProps = {
-    btnStyle: 'default'
-  }
-
   onClick(e) {
     if (!this.props.action) return;
 
@@ -31,11 +27,11 @@ export default class Control extends Component {
   render() {
     return (
       <button
-        className={classNames([
-          'btn',
-          'btn-xs',
-          'btn-' + this.props.btnStyle
-        ])}
+        className={classNames({
+          'btn': true,
+          'btn-xs': true,
+          ['btn-' + this.props.btnStyle]: this.props.btnStyle
+        })}
         title={this.props.title}
         onClick={this.onClick.bind(this)}
       >

@@ -14,7 +14,7 @@ describe("AutoStart from 'components/autostart'", () => {
 
   it('displays autostart between decrement and increment buttons', () => {
     const comp = TestUtils.renderIntoDocument(
-      <AutoStart context={ 7 } autostart={ 42 } />
+      <AutoStart context={7} autostart={42} />
     );
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
@@ -24,30 +24,28 @@ describe("AutoStart from 'components/autostart'", () => {
 
   it('marks autostart if execCount is the same', () => {
     const comp = TestUtils.renderIntoDocument(
-      <AutoStart context={ 7 } autostart={ 42 } execCount={ 42 } />
+      <AutoStart context={7} autostart={42} execCount={42} />
     );
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
 
-    expect(els[1].className.split(/\s+/g)).
-      to.include('btn-success');
+    expect(Array.from(els[1].classList)).to.include('btn-success');
   });
 
-  it('keeps default style autostart if execCount is different', () => {
+  it('keeps implicit style autostart if execCount is different', () => {
     const comp = TestUtils.renderIntoDocument(
-      <AutoStart context={ 7 } autostart={ 42 } execCount={ 41 } />
+      <AutoStart context={7} autostart={42} execCount={41} />
     );
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
 
-    expect(els[1].className.split(/\s+/g)).
-      to.include('btn-default');
+    expect(Array.from(els[1].classList)).not.to.include('btn-default');
   });
 
   it('calls dec(context, autostart - 1) when minus button is clicked', () => {
     const dec = chai.spy();
     const comp = TestUtils.renderIntoDocument(
-      <AutoStart context={ 7 } dec={ dec } />
+      <AutoStart context={7} dec={dec} />
     );
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
@@ -59,7 +57,7 @@ describe("AutoStart from 'components/autostart'", () => {
   it('calls inc(context, autostart + 1) when plus button is clicked', () => {
     const inc = chai.spy();
     const comp = TestUtils.renderIntoDocument(
-      <AutoStart context={ 7 } inc={ inc } />
+      <AutoStart context={7} inc={inc} />
     );
 
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
