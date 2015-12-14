@@ -7,18 +7,17 @@
         <th></th>
     </thead>
     <tbody>
-    <% _.each(item.methods, function (method) { %>
+    <% _.each(_.sortBy(item.methods, 'name'), function (method) { %>
         <tr>
             <td class="text-left">
-              <p><strong><%= method.name %></strong><br />
-              <small class="muted"><%= method.description %></small></p>
+              <p><strong><%= method.name %></strong>
             </td>
             <td><%= statusIcon(method.locked) %></td>
             <td><%= statusIcon(method.internal) %></td>
             <td><%= statusIcon(method.write) %></td>
             <td>
               <div class="btn-group">
-                <button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= method.service_methodid %>" data-action="execute" title="Execute" data-toggle="tooltip"><i class="icon-play"></i></button> 
+                <button class="btn btn-mini btn-success" data-methodname="<%= method.name %>" data-serviceid="<%= item.id %>" data-id="<%= method.service_methodid %>" data-action="execute" title="Execute" data-toggle="tooltip"><i class="icon-play"></i></button>
                 <button class="btn btn-mini btn-inverse" title="Source" data-action="showSource" data-methodname="<%= method.name %>" data-toggle="tooltip"><i class="icon-code"></i></button>
               </div>
             </td>
