@@ -5,35 +5,31 @@ import * as errorActions from './resources/errors/actions';
 import {
   combineResourceActions,
   createResourceActions,
-  createApiActions
+  createApiActions,
+  fetchJson
 } from './utils';
-import settings from '../../settings';
 
 
 export const DEFAULT_ACTIONS = {
-  FETCH: (url) => async (params) => {
-    const result = await fetch(url, Object.assign({
-      headers: settings.DEFAULT_REST_HEADERS
-    }, params));
-    return result.json();
+  FETCH: url => params => {
+    return fetchJson(null, url, params);
   },
   ACTION: {
-    action: (url) => async (params, id) => {
-      const fetchUrl = (id) ? `${url}/${id}` : url;
-      const result = await fetch(fetchUrl, Object.assign({
-        headers: settings.DEFAULT_REST_HEADERS,
-        method: 'PUT'
-      }, params));
-      return result.json();
+    action: url => (params, id) => {
+      return fetchJson(
+        'PUT',
+        id ? `${url}/${id}` : url,
+        params
+      );
     },
-    meta: (params, id) => { return { params, id }; }
+    meta: (params, id) => ({ params, id })
   },
-  UPDATE: (url) => async (params, id) => {
-    const fetchUrl = (id) ? `${url}/${id}` : url;
-    const result = await fetch(fetchUrl, Object.assign({
-      headers: settings.DEFAULT_REST_HEADERS
-    }, params));
-    return result.json();
+  UPDATE: url => (params, id) => {
+    return fetchJson(
+      null,
+      id ? `${url}/${id}` : url,
+      params
+    );
   }
 };
 

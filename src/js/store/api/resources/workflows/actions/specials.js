@@ -1,24 +1,21 @@
-import 'whatwg-fetch';
 import { createAction } from 'redux-actions';
 
 
+import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
 
 
-async function setOptionsPayload(workflow, name, value) {
-  const res = await fetch(
+function setOptionsPayload(workflow, name, value) {
+  return fetchJson(
+    'PUT',
     `${settings.REST_API_PREFIX}/workflows/${workflow.id}`,
     {
-      method: 'PUT',
-      headers: settings.DEFAULT_REST_HEADERS,
       body: JSON.stringify({
         action: 'setOptions',
         options: `${name}=${value}`
       })
     }
   );
-
-  return res.json();
 }
 
 function setOptionsMeta(workflow, name, value) {

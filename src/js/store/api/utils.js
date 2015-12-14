@@ -1,18 +1,25 @@
-import { isFunction, curry, merge } from 'lodash';
+import _ from 'lodash';
 import { createAction } from 'redux-actions';
+import 'whatwg-fetch';
 
-export const updateItemWithId = curry((id, props, data) => {
-  const idx = data.findIndex((i) => i.id === id);
+
+import settings from '../../settings';
+
+
+export function updateItemWithId(id, props, data) {
+  const idx = data.findIndex(i => i.id === id);
   const updatedItem = Object.assign({}, data[idx], props);
 
   return data.slice(0, idx)
     .concat([updatedItem])
     .concat(data.slice(idx + 1));
-});
+}
+
 
 export function combineResourceActions(...actions) {
-  return merge(...actions);
+  return _.merge(...actions);
 }
+
 
 export function prepareApiActions(url, actions) {
   let actionsHash;
@@ -23,7 +30,7 @@ export function prepareApiActions(url, actions) {
     let metaCreator = null;
     const name = a.toLowerCase();
 
-    if (isFunction(actions[a])) {
+    if (_.isFunction(actions[a])) {
       actionFn = actions[a];
     } else {
       actionFn = actions[a].action;
@@ -39,11 +46,12 @@ export function prepareApiActions(url, actions) {
   return actionsHash;
 }
 
+
 export function createResourceActions(res, defaultActions = id => id) {
   const resp = res.map(r => {
     let rr;
     const name = r.name;
-    const actions = isFunction(defaultActions)
+    const actions = _.isFunction(defaultActions)
       ? defaultActions(r.actions || []) : defaultActions;
 
     rr = {};
@@ -51,8 +59,9 @@ export function createResourceActions(res, defaultActions = id => id) {
     return rr;
   });
 
-  return merge(...resp);
+  return _.merge(...resp);
 }
+
 
 export function createApiActions(actions) {
   let apiActions;
@@ -72,4 +81,26 @@ export function createApiActions(actions) {
   });
 
   return apiActions;
+}
+
+
+/**
+ * Fetches JSON data by requesting given URL via given method.
+ *
+ * @param {?string} method method can be also specified in opts
+ * @param {string} url
+ * @param {RequestInit=} opts
+ * @return {JSON}
+ * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
+ */
+export async function fetchJson(method, url, opts = {}) {
+  const res = await fetch(
+    url,
+    Object.assign({
+      method,
+      headers: settings.DEFAULT_REST_HEADERS
+    }, opts)
+  );
+
+  return res.json();
 }

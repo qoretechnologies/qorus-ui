@@ -2,20 +2,8 @@ import 'whatwg-fetch';
 import { createAction } from 'redux-actions';
 
 
+import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
-
-
-async function fetchJson(method, url, opts = {}) {
-  const res = await fetch(
-    url,
-    Object.assign({
-      method: method,
-      headers: settings.DEFAULT_REST_HEADERS
-    }, opts)
-  );
-
-  return res.json();
-}
 
 
 function fetchPayload(ref) {
