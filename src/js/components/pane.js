@@ -29,7 +29,7 @@ export class PaneView extends Component {
         </button>
         <div className='content'>
           {contentView ? (
-            <contentView {...props} /> 
+            <contentView {...props} />
           ) : children}
         </div>
         <ResizeHandle left min={{ width: 400 }} />
