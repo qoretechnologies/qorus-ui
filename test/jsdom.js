@@ -24,6 +24,10 @@ function ensureDom(ctx) {
     ctx.window = ctx.document.defaultView;
   }
 
+  if (!ctx.self) {
+    ctx.self = ctx.window.self;
+  }
+
   if (!ctx.navigator) {
     ctx.navigator = {
       userAgent: `Node.js (${process.platform}; U; rv:${process.version})`
