@@ -1,8 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import Prism from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-qore';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+
+
+import { TabNavigationItem, Tab } from 'components/tabs';
+
+
 import { pureRender } from 'components/utils';
-
-
-import { TabNavigationItem } from 'components/tabs';
 
 
 @pureRender
@@ -15,19 +21,40 @@ export default class LibraryTab extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeFunc: null };
+    this.state = { activeDomId: null };
   }
 
 
-  onTabChange(funcName) {
-    this.setState({ activeFunc: funcName });
+  onTabChange(domId) {
+    this.setState({ activeDomId: domId });
   }
 
 
-  _compareStepInfoFuncs(a, b) {
+  getDomId(func) {
+    return `func.${func.function_instanceid}`;
+  }
+
+
+  mergeWfAndStepFuncs() {
+    return this.props.workflow.wffuncs.concat(
+      this.props.workflow.stepinfo.reduce((funcs, step) => (
+        funcs.concat(step.functions || [])
+      ), [])
+    );
+  }
+
+
+  compareStepInfoFuncs(a, b) {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
+  }
+
+
+  highlight(codeEl) {
+    if (!codeEl) return;
+
+    Prism.highlightElement(codeEl);
   }
 
 
@@ -63,9 +90,9 @@ export default class LibraryTab extends Component {
           {this.props.workflow.wffuncs.map((func, idx) => (
             <TabNavigationItem
               key={idx}
-              slug={`wf.${func.name}`}
+              slug={this.getDomId(func)}
               name={this.renderFuncHeading(func)}
-              active={`wf.${func.name}` === this.state.activeFunc}
+              active={this.getDomId(func) === this.state.activeDomId}
               tabChange={this.onTabChange.bind(this)}
             />
           ))}
@@ -81,7 +108,7 @@ export default class LibraryTab extends Component {
         <a><h5>StepFuncs</h5></a>
         <ul className='nav nav-pills nav-stacked'>
         {this.props.workflow.stepinfo.
-         sort(this._compareStepInfoFuncs.bind(this)).
+         sort(this.compareStepInfoFuncs.bind(this)).
          map((step, stepIdx) => (
           <li key={stepIdx} role='presentation' className='disabled'>
             <a><h6>{step.name}</h6></a>
@@ -89,9 +116,9 @@ export default class LibraryTab extends Component {
               {(step.functions || []).map((func, funcIdx) => (
                 <TabNavigationItem
                   key={funcIdx}
-                  slug={`step.${func.name}`}
+                  slug={this.getDomId(func)}
                   name={this.renderFuncHeading(func)}
-                  active={`step.${func.name}` === this.state.activeFunc}
+                  active={this.getDomId(func) === this.state.activeDomId}
                   tabChange={this.onTabChange.bind(this)}
                 />
               ))}
@@ -100,6 +127,34 @@ export default class LibraryTab extends Component {
         ))}
         </ul>
       </li>
+    );
+  }
+
+
+  renderCodeTabs() {
+    return (
+      <div className='tab-content'>
+        {this.mergeWfAndStepFuncs().map((func, funcIdx) => (
+          <Tab
+            key={funcIdx}
+            slug={this.getDomId(func)}
+            name={func.name}
+            active={this.getDomId(func) === this.state.activeDomId}
+          >
+            <pre
+              className='line-numbers'
+              data-start={parseInt(func.offset, 10) + 1}
+            >
+              <code
+                className='language-qore'
+                ref={this.highlight.bind(this)}
+              >
+                {func.body}
+              </code>
+            </pre>
+          </Tab>
+        ))}
+      </div>
     );
   }
 
@@ -117,7 +172,9 @@ export default class LibraryTab extends Component {
             </nav>
           </div>
         </div>
-        <div className='col-sm-9' />
+        <div className='col-sm-9'>
+          {this.renderCodeTabs()}
+        </div>
       </div>
     );
   }
