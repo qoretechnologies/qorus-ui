@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
-import 'whatwg-fetch';
 
 
 import settings from '../../settings';

@@ -60,11 +60,22 @@ var config = {
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file'
+      },
+      {
+        test: require.resolve('whatwg-fetch'),
+        loaders: [
+          'imports?this=>global',
+          'exports?global.fetch'
+        ]
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('/css/base.css')
+    new ExtractTextPlugin('/css/base.css'),
+    new webpack.ProvidePlugin({
+      fetch: 'whatwg-fetch',
+      'window.fetch': 'whatwg-fetch'
+    })
   ]
 };
 
