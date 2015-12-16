@@ -39,11 +39,28 @@ export default class WorkflowsDetail extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.state = { lastWorkflowId: null };
+  }
+
+  componentWillMount() {
+    this.loadDetailedDataIfChanged(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.loadDetailedDataIfChanged(nextProps);
+  }
+
+  loadDetailedDataIfChanged(nextProps) {
+    if (this.state.lastWorkflowId === nextProps.workflow.id) return;
+
+    this.setState({ lastWorkflowId: nextProps.workflow.id });
+
     this.context.dispatch(
-      apiActions.errors.fetch(`workflow/${this.props.workflow.id}`)
+      apiActions.errors.fetch(`workflow/${nextProps.workflow.id}`)
     );
+
     this.context.dispatch(
-      apiActions.workflows.fetchLibSources(this.props.workflow)
+      apiActions.workflows.fetchLibSources(nextProps.workflow)
     );
   }
 
