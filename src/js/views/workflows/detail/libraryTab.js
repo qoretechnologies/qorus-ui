@@ -30,8 +30,11 @@ export default class LibraryTab extends Component {
   }
 
 
-  getDomId(func) {
-    return `func.${func.function_instanceid}`;
+  getDomId(func, step) {
+    let id = func.name;
+    if (step) id = `${step.name}.${id}`;
+
+    return `func.${id}`;
   }
 
 
@@ -90,9 +93,9 @@ export default class LibraryTab extends Component {
           {this.props.workflow.wffuncs.map((func, idx) => (
             <TabNavigationItem
               key={idx}
-              slug={this.getDomId(func)}
+              slug={this.getDomId(func, null)}
               name={this.renderFuncHeading(func)}
-              active={this.getDomId(func) === this.state.activeDomId}
+              active={this.getDomId(func, null) === this.state.activeDomId}
               tabChange={this.onTabChange.bind(this)}
             />
           ))}
@@ -116,9 +119,9 @@ export default class LibraryTab extends Component {
               {(step.functions || []).map((func, funcIdx) => (
                 <TabNavigationItem
                   key={funcIdx}
-                  slug={this.getDomId(func)}
+                  slug={this.getDomId(func, step)}
                   name={this.renderFuncHeading(func)}
-                  active={this.getDomId(func) === this.state.activeDomId}
+                  active={this.getDomId(func, step) === this.state.activeDomId}
                   tabChange={this.onTabChange.bind(this)}
                 />
               ))}
