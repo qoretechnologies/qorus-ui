@@ -87,7 +87,7 @@ export function createApiActions(actions) {
 /**
  * Fetches JSON data by requesting given URL via given method.
  *
- * @param {?string} method method can be also specified in opts
+ * @param {string} method method can be also specified in opts
  * @param {string} url
  * @param {RequestInit=} opts
  * @return {JSON}

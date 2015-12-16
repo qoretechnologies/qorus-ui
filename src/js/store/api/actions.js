@@ -12,7 +12,7 @@ import {
 
 export const DEFAULT_ACTIONS = {
   FETCH: url => params => {
-    return fetchJson(null, url, params);
+    return fetchJson('GET', url, params);
   },
   ACTION: {
     action: url => (params, id) => {
@@ -26,7 +26,7 @@ export const DEFAULT_ACTIONS = {
   },
   UPDATE: url => (params, id) => {
     return fetchJson(
-      null,
+      'POST',
       id ? `${url}/${id}` : url,
       params
     );
