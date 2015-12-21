@@ -1,7 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
+
+
 import reducers from './reducers';
+
 
 function productionSetup() {
   const finalCreateStore = applyMiddleware(
@@ -12,15 +15,12 @@ function productionSetup() {
   return finalCreateStore(reducers);
 }
 
-function developmentSetup(reduxDevTools) {
-  const { devTools, persistState } = reduxDevTools;
 
+function developmentSetup({ persistState }, DevTools) {
   const finalCreateStore = compose(
     applyMiddleware(thunk, promise),
-    devTools(),
-    persistState(
-      window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-    )
+    DevTools.instrument(),
+    persistState(getDebugSessionKey())
   )(createStore);
 
   const store = finalCreateStore(reducers);
@@ -34,6 +34,13 @@ function developmentSetup(reduxDevTools) {
   return store;
 }
 
+
+function getDebugSessionKey() {
+  const matches = window.location.href.match(/[?&]debug_session=([^&]+)\b/);
+  return matches && matches[1];
+}
+
+
 function setupStore(env) {
   return new Promise(resolve => {
     switch (env) {
@@ -41,8 +48,14 @@ function setupStore(env) {
         resolve(productionSetup());
         break;
       default:
-        require.ensure(['redux-devtools'], (require) => {
-          resolve(developmentSetup(require('redux-devtools')));
+        require.ensure([
+          'redux-devtools',
+          '../components/devTools'
+        ], require => {
+          resolve(developmentSetup(
+            require('redux-devtools'),
+            require('../components/devTools')
+          ));
         }, 'devtools');
         break;
     }

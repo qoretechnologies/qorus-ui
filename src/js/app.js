@@ -36,34 +36,27 @@ class App extends Component {
   loadStore() {
     this.state.store = null;
 
-    setupStore(this.props.env.NODE_ENV).then((store) => {
-      this.setState(Object.assign({}, this.state, { store }));
-    });
+    setupStore(this.props.env.NODE_ENV).then(store => this.setState({ store }));
   }
 
   loadDevTools() {
     switch (this.props.env.NODE_ENV) {
       case 'production':
-        this.state.devToolsReady = true;
+        this.state.devToolsReady = false;
         break;
       default:
         this.state.devToolsReady = false;
         require.ensure([
-          'redux-devtools/lib/react', 'react-addons-perf'
-        ], (require) => {
-          const { DevTools, DebugPanel, LogMonitor } =
-            require('redux-devtools/lib/react');
-          const Perf =
-            require('react-addons-perf');
-          window.Perf = Perf;
+          'components/devTools',
+          'react-addons-perf'
+        ], require => {
+          const DevTools = require('components/devTools');
+          require('expose?Perf!react-addons-perf');
 
-          this.setState(Object.assign({}, this.state, {
+          this.setState({
             devToolsReady: true,
-            DevTools,
-            DebugPanel,
-            LogMonitor,
-            Perf
-          }));
+            DevTools
+          });
         }, 'devtools');
         break;
     }
@@ -77,18 +70,12 @@ class App extends Component {
 
   renderDevTools() {
     if (!this.state.store || !this.state.devToolsReady ||
-        !this.state.DebugPanel) return null;
+        !this.state.DevTools) return null;
 
-    const { DebugPanel, DevTools, LogMonitor, store } = this.state;
+    const { DevTools, store } = this.state;
 
     return (
-      <DebugPanel top right bottom>
-        <DevTools
-          store={store}
-          monitor={LogMonitor}
-          visibleOnLoad={this.props.env.DEVTOOLS}
-        />
-      </DebugPanel>
+      <DevTools />
     );
   }
 
@@ -98,8 +85,8 @@ class App extends Component {
     const { history } = this.props;
 
     return (
-      <div>
-        <Provider store={this.state.store}>
+      <Provider store={this.state.store}>
+        <div>
           <Router history={history}>
             <Route path='/' component={Root}>
               <Route path='dashboard' />
@@ -117,9 +104,9 @@ class App extends Component {
               <Route path='performance'/>
             </Route>
           </Router>
-        </Provider>
-        { this.renderDevTools() }
-      </div>
+          { this.renderDevTools() }
+        </div>
+      </Provider>
     );
   }
 
