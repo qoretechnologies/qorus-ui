@@ -976,15 +976,15 @@ td.editor {
   border-radius: 5px;
 }
 
-.async {
+.box.async {
   background-color: #d9edf7;
 }
 
-.subworkflow {
+.box.subworkflow {
   background-color: #e5c737;
 }
 
-.error {
+.box.error {
   background-color: #da4f49;
 }
 
