@@ -64,7 +64,7 @@ export function createResourceReducers(
 
           return {
             ...state,
-            data: data,
+            data,
             sync: true,
             loading: false
           };

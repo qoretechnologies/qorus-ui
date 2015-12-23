@@ -170,14 +170,15 @@ export default class Workflows extends Component {
     if (!this.getActiveWorkflow()) return null;
 
     return (
-      <PaneView width={550} onClose={() => {
-        goTo(
+      <PaneView
+        width={550}
+        onClose={() => goTo(
           'workflows',
           route.path,
           params,
           { detailId: null, tabId: null }
-        );
-      }}>
+        )}
+      >
         <div className='relative'>
           <WorkflowsDetail
             workflow={this.getActiveWorkflow()}

@@ -27,14 +27,28 @@ export default class WorkflowsControls extends Component {
   render() {
     return (
       <Controls>
-        {this.props.workflow.enabled ?
-         <Control title='Disable' icon='power-off' btnStyle='success'
-                  action={() => this.dispatchAction('disable')} /> : null}
-        {!this.props.workflow.enabled ?
-         <Control title='Enable' icon='power-off' btnStyle='danger'
-                  action={() => this.dispatchAction('enable')} /> : null}
-        <Control title='Reset' icon='refresh' btnStyle='warning'
-                 action={() => this.dispatchAction('reset')} />
+        {this.props.workflow.enabled && (
+          <Control
+            title='Disable'
+            icon='power-off'
+            btnStyle='success'
+            action={() => this.dispatchAction('disable')}
+          />
+        )}
+        {!this.props.workflow.enabled && (
+          <Control
+            title='Enable'
+            icon='power-off'
+            btnStyle='danger'
+            action={() => this.dispatchAction('enable')}
+          />
+        )}
+        <Control
+          title='Reset'
+          icon='refresh'
+          btnStyle='warning'
+          action={() => this.dispatchAction('reset')}
+        />
       </Controls>
     );
   }

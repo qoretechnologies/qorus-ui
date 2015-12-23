@@ -16,15 +16,16 @@ export default class Group extends Component {
   renderLabel() {
     return (
       <span
-          className={classNames({
-            label: true,
-            'label-info': !this.props.disabled
-          })}>
+        className={classNames({
+          label: true,
+          'label-info': !this.props.disabled
+        })}
+      >
         {this.props.name}
-        {typeof this.props.size !== 'undefined' &&
-         ' '}
-        {typeof this.props.size !== 'undefined' &&
-         <small>({this.props.size})</small>}
+        {typeof this.props.size !== 'undefined' && ' '}
+        {typeof this.props.size !== 'undefined' && (
+          <small>({this.props.size})</small>
+        )}
       </span>
     );
   }

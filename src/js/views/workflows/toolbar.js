@@ -26,10 +26,11 @@ export default class WorkflowsToolbar extends Component {
         <div className='workflows-toolbar btn-toolbar sticky toolbar'>
           <div className='btn-group'>
             <button
-              className={ classNames(btnCls, 'dropdown-toggle') }
-              data-toggle='dropdown'>
+              className={classNames(btnCls, 'dropdown-toggle')}
+              data-toggle='dropdown'
+            >
               <i className='fa fa-square-o check-all checker'></i>&nbsp;
-              <span className='caret'></span>
+              <span className='caret' />
             </button>
             <ul className='dropdown-menu above'>
               <li><a href='#' className='check-all'>All</a></li>
@@ -40,33 +41,36 @@ export default class WorkflowsToolbar extends Component {
             </ul>
           </div>
           <div className='btn-group'>
-            <button className={ btnCls }>
+            <button className={btnCls}>
               <i className='fa fa-off'></i> Enable
             </button>
-            <button className={ btnCls }>
+            <button className={btnCls}>
               <i className='fa fa-ban-circle'></i> Disable
             </button>
-            <button className={ btnCls }>
+            <button className={btnCls}>
               <i className='fa fa-refresh'></i> Reset
             </button>
-            <button className={ btnCls }>
+            <button className={btnCls}>
               <i className='fa fa-flag-alt'></i> Hide
             </button>
-            <button className={ btnCls }>
+            <button className={btnCls}>
               <i className='fa fa-flag'></i> Show
             </button>
           </div>
           <DateFilterView
-            filters={ null }
-            handleSubmitData={ null }
-            setDate={ null } />
+            filters={null}
+            handleSubmitData={null}
+            setDate={null}
+          />
           <Filters
-            setDeprecated={ null }
-            filters={ null }/>
+            setDeprecated={null}
+            filters={null}
+          />
           <div className='pull-right'>
             <SearchFormView
-              filterText={ null }
-              filterChange={ null } />
+              filterText={null}
+              filterChange={null}
+            />
           </div>
         </div>
         <div className='datepicker-container'></div>

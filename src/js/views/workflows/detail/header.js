@@ -43,7 +43,8 @@ export default class WorkflowsHeader extends Component {
               }}
               dec={(context, value) => {
                 dispatch(actions.workflows.setAutostart(context, value));
-              }} />
+              }}
+            />
           </div>
         </div>
       </div>

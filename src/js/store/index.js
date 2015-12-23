@@ -16,6 +16,12 @@ function productionSetup() {
 }
 
 
+function getDebugSessionKey() {
+  const matches = window.location.href.match(/[?&]debug_session=([^&]+)\b/);
+  return matches && matches[1];
+}
+
+
 function developmentSetup({ persistState }, DevTools) {
   const finalCreateStore = compose(
     applyMiddleware(thunk, promise),
@@ -32,12 +38,6 @@ function developmentSetup({ persistState }, DevTools) {
   }
 
   return store;
-}
-
-
-function getDebugSessionKey() {
-  const matches = window.location.href.match(/[?&]debug_session=([^&]+)\b/);
-  return matches && matches[1];
 }
 
 

@@ -69,10 +69,10 @@ class App extends Component {
   }
 
   renderDevTools() {
-    if (!this.props.env.DEVTOOLS || !this.state.store ||
-        !this.state.devToolsReady || !this.state.DevTools) return null;
+    if (!this.props.env.DEVTOOLS || !this.state.devToolsReady ||
+        !this.state.DevTools) return null;
 
-    const { DevTools, store } = this.state;
+    const { DevTools } = this.state;
 
     return (
       <DevTools />
@@ -93,7 +93,8 @@ class App extends Component {
               <Route path='system' />
               <Route
                 path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
-                component={Workflows} />
+                component={Workflows}
+              />
               <Route path='services'/>
               <Route path='jobs'/>
               <Route path='search'/>

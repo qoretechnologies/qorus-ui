@@ -3,6 +3,6 @@ import menu from './menu';
 import apiReducers from './api';
 
 export default combineReducers({
-  menu: menu,
+  menu,
   api: apiReducers
 });

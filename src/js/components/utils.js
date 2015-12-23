@@ -53,7 +53,7 @@ export function pureRenderOmit(predicate) {
     checkClassForPureRender(CompCls);
 
     Object.assign(CompCls.prototype, {
-      shouldComponentUpdate: function (nextProps, nextState) {
+      shouldComponentUpdate(nextProps, nextState) {
         return PureRenderMixin.shouldComponentUpdate.call(
           this,
           _.omit(nextProps, predicate),
