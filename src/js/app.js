@@ -69,8 +69,8 @@ class App extends Component {
   }
 
   renderDevTools() {
-    if (!this.state.store || !this.state.devToolsReady ||
-        !this.state.DevTools) return null;
+    if (!this.props.env.DEVTOOLS || !this.state.store ||
+        !this.state.devToolsReady || !this.state.DevTools) return null;
 
     const { DevTools, store } = this.state;
 
