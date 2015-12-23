@@ -39,11 +39,15 @@ export default class LibraryTab extends Component {
 
 
   mergeWfAndStepFuncs() {
-    return this.props.workflow.wffuncs.concat(
-      this.props.workflow.stepinfo.reduce((funcs, step) => (
-        funcs.concat(step.functions || [])
-      ), [])
-    );
+    const wfFuncs = this.props.workflow.wffuncs.reduce((funcs, func) => (
+      funcs.concat({ id: this.getDomId(func), func })
+    ), []);
+
+    return this.props.workflow.stepinfo.reduce((fns, step) => (
+      (step.functions || []).reduce((funcs, func) => (
+        funcs.concat({ id: this.getDomId(func, step), func })
+      ), fns)
+    ), wfFuncs);
   }
 
 
@@ -137,12 +141,12 @@ export default class LibraryTab extends Component {
   renderCodeTabs() {
     return (
       <div className='tab-content'>
-        {this.mergeWfAndStepFuncs().map((func, funcIdx) => (
+        {this.mergeWfAndStepFuncs().map(({ id, func }, funcIdx) => (
           <Tab
             key={funcIdx}
-            slug={this.getDomId(func)}
+            slug={id}
             name={func.name}
-            active={this.getDomId(func) === this.state.activeDomId}
+            active={id === this.state.activeDomId}
           >
             <pre
               className='line-numbers'
