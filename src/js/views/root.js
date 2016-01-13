@@ -78,6 +78,8 @@ export default class Root extends Component {
   }
 
   render() {
+    const refModal = c => this._modal = c;
+
     return (
       <div className='navigation-pinned'>
         <Navigation
@@ -104,7 +106,7 @@ export default class Root extends Component {
         <Messenger />
         <Footer info={this.props.info} />
         <Notifications />
-        <ModalManager ref={c => this._modal = c} />
+        <ModalManager ref={refModal} />
       </div>
     );
   }

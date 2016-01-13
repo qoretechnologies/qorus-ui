@@ -161,8 +161,8 @@ describe(
     it('combines action descriptions together', () => {
       const defaultGet = id => `GET /${id}`;
       const defaultActions = {
-        'workflows': {
-          'get': {
+        workflows: {
+          get: {
             action: defaultGet,
             meta: null
           }
@@ -171,8 +171,8 @@ describe(
 
       const resourceStart = id => `GET /${id}?action=start`;
       const resourceActions = {
-        'workflows': {
-          'start': {
+        workflows: {
+          start: {
             action: resourceStart,
             meta: id => ({ action: 'start', id })
           }
@@ -191,8 +191,8 @@ describe(
     it('leaves later action descriptions if there is a conflict', () => {
       const defaultGet = id => `GET /${id}`;
       const defaultActions = {
-        'workflows': {
-          'get': {
+        workflows: {
+          get: {
             action: defaultGet,
             meta: null
           }
@@ -201,8 +201,8 @@ describe(
 
       const resourceGet = id => `GET /${id}`;
       const resourceActions = {
-        'workflows': {
-          'get': {
+        workflows: {
+          get: {
             action: resourceGet,
             meta: null
           }
@@ -221,8 +221,8 @@ describe(
   describe('createApiActions', () => {
     it('transforms action description redux action creators', () => {
       const actions = {
-        'workflows': {
-          'get': {
+        workflows: {
+          get: {
             action: id => `GET /${id}`,
             meta: id => id
           }

@@ -22,6 +22,9 @@ export default class LibraryTab extends Component {
     super(props);
 
     this.state = { activeDomId: null };
+
+    this.onTabChange = this.onTabChange.bind(this);
+    this.highlight = this.highlight.bind(this);
   }
 
 
@@ -100,7 +103,7 @@ export default class LibraryTab extends Component {
               slug={this.getDomId(func, null)}
               name={this.renderFuncHeading(func)}
               active={this.getDomId(func, null) === this.state.activeDomId}
-              tabChange={this.onTabChange.bind(this)}
+              tabChange={this.onTabChange}
             />
           ))}
         </ul>
@@ -126,7 +129,7 @@ export default class LibraryTab extends Component {
                   slug={this.getDomId(func, step)}
                   name={this.renderFuncHeading(func)}
                   active={this.getDomId(func, step) === this.state.activeDomId}
-                  tabChange={this.onTabChange.bind(this)}
+                  tabChange={this.onTabChange}
                 />
               ))}
             </ul>
@@ -154,7 +157,7 @@ export default class LibraryTab extends Component {
             >
               <code
                 className='language-qore'
-                ref={this.highlight.bind(this)}
+                ref={this.highlight}
               >
                 {func.body}
               </code>

@@ -36,6 +36,8 @@ export default class TBody extends Component {
 
     this._rows = [];
     this._cellCache = new Map();
+
+    this.onRowClick = this.onRowClick.bind(this);
   }
 
   onRowClick(ev) {
@@ -71,20 +73,24 @@ export default class TBody extends Component {
   render() {
     return (
       <tbody>
-        {this.props.data.map((rec, recIdx) => (
-          <tr
-            key={recIdx}
-            className={classNames({
-              info: this.props.shouldHighlight(rec, recIdx)
-            })}
-            onClick={this.onRowClick.bind(this)}
-            ref={row => this._rows[recIdx] = row}
-          >
-            {React.Children.map(this.props.children, (col, colIdx) => (
-              this.renderCell(col, colIdx, rec, recIdx)
-            ))}
-          </tr>
-        ))}
+        {this.props.data.map((rec, recIdx) => {
+          const refRow = c => this._rows[recIdx] = c;
+
+          return (
+            <tr
+              key={recIdx}
+              className={classNames({
+                info: this.props.shouldHighlight(rec, recIdx)
+              })}
+              onClick={this.onRowClick}
+              ref={refRow}
+            >
+              {React.Children.map(this.props.children, (col, colIdx) => (
+                this.renderCell(col, colIdx, rec, recIdx)
+              ))}
+            </tr>
+          );
+        })}
       </tbody>
     );
   }

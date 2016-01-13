@@ -39,6 +39,11 @@ export default class Options extends Component {
       lastOption: null,
       lastOptionSet: false
     };
+
+    this.optionsColProps = this.optionsColProps.bind(this);
+    this.valueColProps = this.valueColProps.bind(this);
+    this.deleteColProps = this.deleteColProps.bind(this);
+    this.addOption = this.addOption.bind(this);
   }
 
   /**
@@ -131,6 +136,25 @@ export default class Options extends Component {
     this.props.onDelete(opt);
   }
 
+  optionsColProps(rec) {
+    return { name: rec.name, className: 'name' };
+  }
+
+  valueColProps(rec) {
+    return {
+      value: rec.value,
+      startEdit: rec === this.state.lastOption,
+      onSave: this.setOption.bind(this, rec),
+      onCancel: this.cancelOptionEdit.bind(this, rec)
+    };
+  }
+
+  deleteColProps(rec) {
+    return {
+      action: this.deleteOption.bind(this, rec)
+    };
+  }
+
   /**
    * @return {ReactElement}
    */
@@ -150,23 +174,16 @@ export default class Options extends Component {
               <Col
                 heading='Options'
                 field='name'
-                props={rec => ({ name: rec.name, className: 'name' })}
+                props={this.optionsColProps}
               />
               <Col
                 heading='Value'
                 comp={EditableCell}
-                props={rec => ({
-                  value: rec.value,
-                  startEdit: rec === this.state.lastOption,
-                  onSave: this.setOption.bind(this, rec),
-                  onCancel: this.cancelOptionEdit.bind(this, rec)
-                })}
+                props={this.valueColProps}
               />
               <Col
                 className='narrow'
-                childProps={rec => ({
-                  action: this.deleteOption.bind(this, rec)
-                })}
+                childProps={this.deleteColProps}
               >
                 <Control
                   title='Remove'
@@ -178,7 +195,7 @@ export default class Options extends Component {
           )}
           <SystemOptions
             options={this.getUnusedSystemOptions()}
-            onAdd={this.addOption.bind(this)}
+            onAdd={this.addOption}
           />
         </div>
       </div>

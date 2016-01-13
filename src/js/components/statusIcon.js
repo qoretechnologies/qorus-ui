@@ -16,7 +16,7 @@ export default class StatusIcon extends Component {
     return (
       <i
         className={classNames({
-          'fa': true,
+          fa: true,
           'fa-check-circle': this.props.value,
           'fa-minus-circle': !this.props.value,
           'icon-success': this.props.value,

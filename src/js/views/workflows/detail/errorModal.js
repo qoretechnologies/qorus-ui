@@ -34,6 +34,18 @@ export default class ErrorModal extends Component {
       changes: null,
       status: {}
     };
+
+    this.onCommit = this.onCommit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+  }
+
+  componentWillMount() {
+    this.onCancel = this.props.onCancel.bind(this);
+  }
+
+  componentWillUpdate(nextProps) {
+    this.onCancel = nextProps.onCancel.bind(this);
   }
 
   /**
@@ -128,17 +140,19 @@ export default class ErrorModal extends Component {
    * @return {ReactElement}
    */
   render() {
+    const refForm = c => this._form = c;
+
     return (
       <Modal>
         <form
           className='form-horizontal'
-          onSubmit={this.onCommit.bind(this)}
-          ref={c => this._form = c}
+          onSubmit={this.onCommit}
+          ref={refForm}
           noValidate
         >
           <Modal.Header
             titleId='errorsTableModalLabel'
-            onClose={this.props.onCancel.bind(this)}
+            onClose={this.onCancel}
           >
             {this.props.actionLabel} {this.props.error.error}
           </Modal.Header>
@@ -187,8 +201,8 @@ export default class ErrorModal extends Component {
                   className='form-control'
                   value={this.state.error.severity}
                   required
-                  onChange={this.onChange.bind(this)}
-                  onBlur={this.onBlur.bind(this)}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalSeverity && 'true'}
                   aria-describedby={this.state.status.modalSeverity &&
                                     'modalSeverityStatus'}
@@ -213,7 +227,7 @@ export default class ErrorModal extends Component {
                   name='retry_flag'
                   id='modalRetry'
                   checked={this.state.error.retry_flag}
-                  onChange={this.onChange.bind(this)}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -237,8 +251,8 @@ export default class ErrorModal extends Component {
                   id='modalDelay'
                   value={this.state.error.retry_delay_secs}
                   min='0'
-                  onChange={this.onChange.bind(this)}
-                  onBlur={this.onBlur.bind(this)}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalDelay && 'true'}
                   aria-describedby={this.state.status.modalDelay &&
                                     'modalDelayStatus'}
@@ -263,7 +277,7 @@ export default class ErrorModal extends Component {
                   name='business_flag'
                   id='modalBusiness'
                   checked={this.state.error.business_flag}
-                  onChange={this.onChange.bind(this)}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -280,7 +294,7 @@ export default class ErrorModal extends Component {
                   name='manually_updated'
                   id='modalManual'
                   checked={this.state.error.manually_updated}
-                  onChange={this.onChange.bind(this)}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -303,8 +317,8 @@ export default class ErrorModal extends Component {
                   className='form-control'
                   value={this.state.error.description}
                   required
-                  onChange={this.onChange.bind(this)}
-                  onBlur={this.onBlur.bind(this)}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalDescription && 'true'}
                   aria-describedby={this.state.status.modalDescription &&
                                     'modalDescriptionStatus'}

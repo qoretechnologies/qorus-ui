@@ -19,8 +19,19 @@ export default class WorkflowsHeader extends Component {
     dispatch: PropTypes.func
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.setAutostart = this.setAutostart.bind(this);
+  }
+
+  setAutostart(context, value) {
+    this.context.dispatch(
+      actions.workflows.setAutostart(context, value)
+    );
+  }
+
   render() {
-    const { dispatch } = this.context;
     const { workflow } = this.props;
 
     return (
@@ -38,12 +49,8 @@ export default class WorkflowsHeader extends Component {
               context={workflow}
               autostart={workflow.autostart}
               execCount={workflow.exec_count}
-              inc={(context, value) => {
-                dispatch(actions.workflows.setAutostart(context, value));
-              }}
-              dec={(context, value) => {
-                dispatch(actions.workflows.setAutostart(context, value));
-              }}
+              inc={this.setAutostart}
+              dec={this.setAutostart}
             />
           </div>
         </div>

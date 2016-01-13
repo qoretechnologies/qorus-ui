@@ -67,6 +67,8 @@ export default class Handle extends Component {
     this._resizeListener = null;
     this._stopListener = null;
     this._originalCursor = null;
+
+    this.start = this.start.bind(this);
   }
 
 
@@ -331,18 +333,20 @@ export default class Handle extends Component {
    * @return {ReactElement}
    */
   render() {
+    const setHandle = c => this._handle = c;
+
     return (
       <div
         className={classNames({
           'resize-handle': true,
-          'min': this.isMin(),
-          'top': this._position & TOP,
-          'right': this._position & RIGHT,
-          'bottom': this._position & BOTTOM,
-          'left': this._position & LEFT
+          min: this.isMin(),
+          top: this._position & TOP,
+          right: this._position & RIGHT,
+          bottom: this._position & BOTTOM,
+          left: this._position & LEFT
         })}
-        onMouseDown={this.start.bind(this)}
-        ref={c => this._handle = c}
+        onMouseDown={this.start}
+        ref={setHandle}
         aria-hidden='true'
       />
     );

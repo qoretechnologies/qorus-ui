@@ -18,6 +18,12 @@ export class TabGroup extends Component {
     cssClass: 'nav nav-tabs'
   };
 
+  constructor(props) {
+    super(props);
+
+    this.onTabChange = this.onTabChange.bind(this);
+  }
+
   onTabChange(slug) {
     if (!this.props.tabChange) return;
 
@@ -51,7 +57,7 @@ export class TabGroup extends Component {
           slug={slug}
           name={name}
           ref={slug}
-          tabChange={this.onTabChange.bind(this)}
+          tabChange={this.onTabChange}
           active={this.isActive(slug)}
         />
       );
@@ -91,12 +97,20 @@ export class TabNavigationItem extends Component {
     disabled: PropTypes.bool
   };
 
+  componentWillMount() {
+    this.onClick = this.props.tabChange.bind(this, this.props.slug);
+  }
+
+  componentWillUpdate(nextProps) {
+    this.onClick = nextProps.tabChange.bind(this, nextProps.slug);
+  }
+
   render() {
-    const { target, name, active, disabled, slug, tabChange } = this.props;
+    const { target, name, active, disabled } = this.props;
 
     return (
       <li role='presentation' className={classNames({ active, disabled })}>
-        <a data-target={target} onClick={() => tabChange(slug)}>
+        <a data-target={target} onClick={this.onClick}>
           {name}
         </a>
       </li>

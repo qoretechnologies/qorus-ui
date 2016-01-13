@@ -40,6 +40,8 @@ export default class WorkflowsDetail extends Component {
     super(props, context);
 
     this.state = { lastWorkflowId: null };
+
+    this.changeTab = this.changeTab.bind(this);
   }
 
   componentWillMount() {
@@ -82,7 +84,7 @@ export default class WorkflowsDetail extends Component {
     return (
       <div>
         <WorkflowsHeader workflow={workflow} />
-        <TabGroup active={tabId} tabChange={this.changeTab.bind(this)}>
+        <TabGroup active={tabId} tabChange={this.changeTab}>
           <Tab name='Detail'>
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Tab>

@@ -36,6 +36,17 @@ export default class ErrorsTable extends Component {
     this._commitFn = null;
 
     this.state = this.getErrorsState(this.props, '');
+
+    this.submitModal = this.submitModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+    this.nameColProps = this.nameColProps.bind(this);
+    this.severityColProps = this.severityColProps.bind(this);
+    this.retryColProps = this.retryColProps.bind(this);
+    this.delayColProps = this.delayColProps.bind(this);
+    this.businessColProps = this.businessColProps.bind(this);
+    this.controlsColProps = this.controlsColProps.bind(this);
   }
 
   /**
@@ -89,8 +100,8 @@ export default class ErrorsTable extends Component {
       <ErrorModal
         actionLabel={label}
         error={Object.assign({}, err)}
-        onCommit={this.submitModal.bind(this)}
-        onCancel={this.closeModal.bind(this)}
+        onCommit={this.submitModal}
+        onCancel={this.closeModal}
         requireChanges={requireChanges}
       />
     );
@@ -112,6 +123,42 @@ export default class ErrorsTable extends Component {
     this._commitFn = null;
   }
 
+  nameColProps(rec) {
+    return { name: rec.error, className: 'name' };
+  }
+
+  severityColProps(rec) {
+    return { severity: rec.severity };
+  }
+
+  retryColProps(rec) {
+    return { value: rec.retry_flag };
+  }
+
+  delayColProps(rec) {
+    return { delay: rec.retry_delay_secs };
+  }
+
+  businessColProps(rec) {
+    return { value: rec.business_flag };
+  }
+
+  controlsColProps(rec) {
+    return {
+      controls: [
+        { action: () => {
+          this.openModal(rec, this.props.onClone, 'Clone', true);
+        } },
+        { action: () => {
+          this.openModal(rec, this.props.onUpdate, 'Edit');
+        } },
+        { action: () => {
+          this.props.onRemove(rec);
+        } }
+      ]
+    };
+  }
+
   /**
    * @return {ReactElement}
    */
@@ -122,7 +169,7 @@ export default class ErrorsTable extends Component {
           <h4 className='pull-left'>{this.props.heading}</h4>
           <form
             className='form-inline text-right form-search'
-            onSubmit={this.onSubmit.bind(this)}
+            onSubmit={this.onSubmit}
           >
             <div className='form-group'>
               <input
@@ -130,7 +177,7 @@ export default class ErrorsTable extends Component {
                 className='form-control input-sm'
                 placeholder='Search…'
                 value={this.state.searchText}
-                onChange={this.onSearch.bind(this)}
+                onChange={this.onSearch}
               />
               <button type='submit' className='btn btn-default btn-sm'>
                 <i className='fa fa-search' />
@@ -150,28 +197,28 @@ export default class ErrorsTable extends Component {
               heading='Name'
               className='name'
               field='name'
-              props={rec => ({ name: rec.error, className: 'name' })}
+              props={this.nameColProps}
             />
             <Col
               heading='Severity'
               field='severity'
-              props={rec => ({ severity: rec.severity })}
+              props={this.severityColProps}
             />
             <Col
               heading='Retry'
-              childProps={rec => ({ value: rec.retry_flag })}
+              childProps={this.retryColProps}
             >
               <StatusIcon />
             </Col>
             <Col
               heading='Delay'
               field='delay'
-              props={rec => ({ delay: rec.retry_delay_secs })}
+              props={this.delayColProps}
             />
             <Col
               heading='Business'
               field='value'
-              childProps={rec => ({ value: rec.business_flag })}
+              childProps={this.businessColProps}
             >
               <StatusIcon />
             </Col>
@@ -180,21 +227,7 @@ export default class ErrorsTable extends Component {
               this.props.onUpdate ||
               this.props.onRemove
             ) && (
-              <Col
-                childProps={rec => ({
-                  controls: [
-                    { action: () => {
-                      this.openModal(rec, this.props.onClone, 'Clone', true);
-                    } },
-                    { action: () => {
-                      this.openModal(rec, this.props.onUpdate, 'Edit');
-                    } },
-                    { action: () => {
-                      this.props.onRemove(rec);
-                    } }
-                  ]
-                })}
-              >
+              <Col childProps={this.controlsColProps}>
                 <Controls>
                   {this.props.onClone && (
                     <Control

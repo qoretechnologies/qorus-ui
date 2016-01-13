@@ -128,6 +128,9 @@ export default class Workflows extends Component {
     super(...props);
     const { dispatch } = this.props;
     dispatch(actions.workflows.fetch());
+
+    this.isActive = this.isActive.bind(this);
+    this.onClosePane = this.onClosePane.bind(this);
   }
 
   getChildContext() {
@@ -146,6 +149,15 @@ export default class Workflows extends Component {
     this.setTitle();
   }
 
+  onClosePane() {
+    goTo(
+      'workflows',
+      this.props.route.path,
+      this.props.params,
+      { detailId: null, tabId: null }
+    );
+  }
+
   setTitle() {
     const { info } = this.props;
 
@@ -157,7 +169,7 @@ export default class Workflows extends Component {
   getActiveWorkflow() {
     if (!this.props.params.detailId) return null;
 
-    return this.props.workflows.find(this.isActive.bind(this));
+    return this.props.workflows.find(this.isActive);
   }
 
   isActive(workflow) {
@@ -165,19 +177,14 @@ export default class Workflows extends Component {
   }
 
   renderPane() {
-    const { params, route, errors, systemOptions, globalErrors } = this.props;
+    const { params, errors, systemOptions, globalErrors } = this.props;
 
     if (!this.getActiveWorkflow()) return null;
 
     return (
       <PaneView
         width={550}
-        onClose={() => goTo(
-          'workflows',
-          route.path,
-          params,
-          { detailId: null, tabId: null }
-        )}
+        onClose={this.onClosePane}
       >
         <div className='relative'>
           <WorkflowsDetail
@@ -204,7 +211,7 @@ export default class Workflows extends Component {
         <WorkflowsToolbar />
         <WorkflowsTable
           workflows={workflows}
-          shouldHighlight={this.isActive.bind(this)}
+          shouldHighlight={this.isActive}
         />
         {this.renderPane()}
       </div>

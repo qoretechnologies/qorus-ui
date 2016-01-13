@@ -29,6 +29,8 @@ export default class Manager extends Component {
     this._modals = new Set();
     this._globalKeyUp = null;
     this.state = { modal: null };
+
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
   /**
@@ -51,7 +53,7 @@ export default class Manager extends Component {
     }
 
     if (nextState.modal && !this._globalKeyUp) {
-      this._globalKeyUp = this.onKeyUp.bind(this);
+      this._globalKeyUp = this.onKeyUp;
       document.addEventListener('keyup', this._globalKeyUp, false);
     } else if (this._globalKeyUp) {
       document.removeEventListener('keyup', this._globalKeyUp, false);
@@ -154,8 +156,10 @@ export default class Manager extends Component {
   render() {
     if (!this.state.modal) return null;
 
+    const setRoot = c => this._root = c;
+
     return (
-      <div ref={c => this._root = c}>
+      <div ref={setRoot}>
         {this.state.modal}
         <div className='modal-backdrop fade in' />
       </div>

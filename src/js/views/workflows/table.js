@@ -26,6 +26,27 @@ export default class WorkflowsTable extends Component {
     params: PropTypes.object
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.workflowIdentifier = this.workflowIdentifier.bind(this);
+    this.activateWorkflow = this.activateWorkflow.bind(this);
+    this.actionsColChildProps = this.actionsColChildProps.bind(this);
+    this.autostartColChildProps = this.autostartColChildProps.bind(this);
+    this.execColProps = this.execColProps.bind(this);
+    this.idColProps = this.idColProps.bind(this);
+    this.nameColProps = this.nameColProps.bind(this);
+    this.versionColProps = this.versionColProps.bind(this);
+    this.totalColProps = this.totalColProps.bind(this);
+    this.setAutostart = this.setAutostart.bind(this);
+  }
+
+  setAutostart(id, value) {
+    this.context.dispatch(
+      actions.workflows.setAutostart(id, value)
+    );
+  }
+
   workflowIdentifier(workflow) {
     return workflow.id;
   }
@@ -47,14 +68,50 @@ export default class WorkflowsTable extends Component {
     );
   }
 
+  actionsColChildProps(rec) {
+    return { workflow: rec };
+  }
+
+  autostartColChildProps(rec) {
+    return {
+      context: rec,
+      autostart: rec.autostart,
+      execCount: rec.exec_count
+    };
+  }
+
+  execColProps(rec) {
+    return { execCount: rec.exec_count };
+  }
+
+  idColProps(rec) {
+    return { id: rec.id };
+  }
+
+  nameColProps(rec) {
+    return { className: 'name', name: rec.name };
+  }
+
+  versionColProps(rec) {
+    return { version: rec.version };
+  }
+
+  statesColChildProps(state, rec) {
+    return { val: rec[state.name] };
+  }
+
+  totalColProps(rec) {
+    return { TOTAL: rec.TOTAL };
+  }
+
   render() {
     return (
       <Table
         data={this.props.workflows}
-        identifier={this.workflowIdentifier.bind(this)}
+        identifier={this.workflowIdentifier}
         shouldHighlight={this.props.shouldHighlight}
         className='table table-striped table-condensed table-hover table-fixed'
-        onRowClick={this.activateWorkflow.bind(this)}
+        onRowClick={this.activateWorkflow}
       >
         <Col className='narrow'>
           <i className='fa fa-square-o' />
@@ -62,67 +119,60 @@ export default class WorkflowsTable extends Component {
         <Col
           heading='Actions'
           className='narrow'
-          childProps={rec => ({ workflow: rec })}
+          childProps={this.actionsColChildProps}
         >
           <WorkflowsControls />
         </Col>
         <Col
           heading='Autostart'
           className='narrow'
-          childProps={rec => ({
-            context: rec,
-            autostart: rec.autostart,
-            execCount: rec.exec_count
-          })}
+          childProps={this.autostartColChildProps}
         >
-          <AutoStart
-            inc={(id, value) => {
-              this.context.dispatch(actions.workflows.setAutostart(id, value));
-            }}
-            dec={(id, value) => {
-              this.context.dispatch(actions.workflows.setAutostart(id, value));
-            }}
-          />
+          <AutoStart inc={this.setAutostart} dec={this.setAutostart} />
         </Col>
         <Col
           heading='Execs'
           className='narrow'
           field='execCount'
-          props={rec => ({ execCount: rec.exec_count })}
+          props={this.execColProps}
         />
         <Col
           heading='ID'
           className='narrow'
           field='id'
-          props={rec => ({ id: rec.id })}
+          props={this.idColProps}
         />
         <Col
           heading='Name'
           className='name'
           field='name'
-          props={rec => ({ className: 'name', name: rec.name })}
+          props={this.nameColProps}
         />
         <Col
           heading='Version'
           className='narrow'
           field='version'
-          props={rec => ({ version: rec.version })}
+          props={this.versionColProps}
         />
-        {ORDER_STATES.map((state, idx) => (
-          <Col
-            key={idx}
-            heading={state.short}
-            className='narrow'
-            childProps={rec => ({ val: rec[state.name] })}
-          >
-            <Badge label={state.label} />
-          </Col>
-        ))}
+        {ORDER_STATES.map((state, idx) => {
+          const childProps = this.statesColChildProps.bind(this, state);
+
+          return (
+            <Col
+              key={idx}
+              heading={state.short}
+              className='narrow'
+              childProps={childProps}
+            >
+              <Badge label={state.label} />
+            </Col>
+          );
+        })}
         <Col
           heading='Total'
           className='narrow'
           field='TOTAL'
-          props={rec => ({ TOTAL: rec.TOTAL })}
+          props={this.totalColProps}
         />
       </Table>
     );

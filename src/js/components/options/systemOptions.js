@@ -19,7 +19,13 @@ export default class SystemOptions extends Component {
    */
   constructor(props) {
     super(props);
+
     this.state = { edit: false, selected: null };
+
+    this.commit = this.commit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.cancel = this.cancel.bind(this);
+    this.start = this.start.bind(this);
   }
 
   /**
@@ -65,13 +71,15 @@ export default class SystemOptions extends Component {
    * @return {ReactElement}
    */
   renderOptions() {
+    const setDomSelect = c => this.domSelect = c;
+
     return (
-      <form className='form-inline' onSubmit={this.commit.bind(this)}>
+      <form className='form-inline' onSubmit={this.commit}>
         <select
           className='form-control'
           value={this.state.selected && this.state.selected.name}
-          ref={c => this.domSelect = c}
-          onChange={this.onChange.bind(this)}
+          ref={setDomSelect}
+          onChange={this.onChange}
         >
           {this.props.options.map(opt => (
             <option
@@ -91,7 +99,7 @@ export default class SystemOptions extends Component {
         <button
           type='button'
           className='btn btn-danger btn-sm'
-          onClick={this.cancel.bind(this)}
+          onClick={this.cancel}
         >
           <i className='fa fa-times' /> Cancel
         </button>
@@ -106,7 +114,7 @@ export default class SystemOptions extends Component {
     return (
       <button
         className='btn btn-success btn-sm'
-        onClick={this.start.bind(this)}
+        onClick={this.start}
         disabled={!this.props.options.length}
       >
         <i className='fa fa-plus' /> Add option

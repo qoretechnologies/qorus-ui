@@ -30,6 +30,19 @@ export default class AutoStart extends Component {
     dec: (ctx, val) => val
   };
 
+  componentWillMount() {
+    this.prepareActions(this.props);
+  }
+
+  componentWillUpdate(nextProps) {
+    this.prepareActions(nextProps);
+  }
+
+  prepareActions(props) {
+    this.decrement = this.changeAutostart.bind(this, props.dec, -1);
+    this.increment = this.changeAutostart.bind(this, props.inc, +1);
+  }
+
   /**
    * Calls fn with context and autostart modified by delta.
    *
@@ -41,14 +54,14 @@ export default class AutoStart extends Component {
   }
 
   render() {
-    const { autostart, execCount, inc, dec, context } = this.props;
+    const { autostart, execCount, context } = this.props;
 
     if (!context) throw new Error('Property context must be provided.');
 
     const equals = (autostart === execCount && autostart > 0);
     const classes = classNames({
       'autostart-change': true,
-      'btn': true,
+      btn: true,
       'btn-xs': true,
       'btn-success': equals
     });
@@ -59,7 +72,7 @@ export default class AutoStart extends Component {
           <Control
             title='Decrease'
             icon='minus'
-            action={this.changeAutostart.bind(this, dec, -1)}
+            action={this.decrement}
           />
           <button className={classes} title='Click to edit'>
             {autostart}
@@ -67,7 +80,7 @@ export default class AutoStart extends Component {
           <Control
             title='Increase'
             icon='plus'
-            action={this.changeAutostart.bind(this, inc, +1)}
+            action={this.increment}
           />
         </Controls>
       </div>

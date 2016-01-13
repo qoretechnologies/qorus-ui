@@ -17,6 +17,12 @@ export default class Control extends Component {
     action: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+  }
+
   onClick(e) {
     if (!this.props.action) return;
 
@@ -28,12 +34,12 @@ export default class Control extends Component {
     return (
       <button
         className={classNames({
-          'btn': true,
+          btn: true,
           'btn-xs': true,
           ['btn-' + this.props.btnStyle]: this.props.btnStyle
         })}
         title={this.props.title}
-        onClick={this.onClick.bind(this)}
+        onClick={this.onClick}
       >
         <i className={classNames(['fa', 'fa-' + this.props.icon])} />
       </button>

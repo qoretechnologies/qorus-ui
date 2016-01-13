@@ -48,6 +48,12 @@ export default class EditableCell extends Component {
       edit: this.props.startEdit,
       width: ''
     };
+
+    this.start = this.start.bind(this);
+    this.cellDidRender = this.cellDidRender.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
 
   /**
@@ -166,6 +172,7 @@ export default class EditableCell extends Component {
    */
   render() {
     const { value, onSave, ...props } = this.props;
+    const setEditField = c => this._editField = c;
 
     return (
       <td
@@ -174,19 +181,19 @@ export default class EditableCell extends Component {
           editable: true,
           editor: this.canEdit()
         })}
-        onClick={this.start.bind(this)}
+        onClick={this.start}
         style={{ width: this.state.width }}
-        ref={this.cellDidRender.bind(this)}
+        ref={this.cellDidRender}
       >
         {
           this.canEdit() ?
             <input
               type='text'
               value={this.state.value}
-              onChange={this.onChange.bind(this)}
-              onKeyUp={this.onKeyUp.bind(this)}
-              onBlur={this.cancel.bind(this)}
-              ref={c => this._editField = c}
+              onChange={this.onChange}
+              onKeyUp={this.onKeyUp}
+              onBlur={this.cancel}
+              ref={setEditField}
             /> :
             <span>{this.state.value}</span>
         }

@@ -12,6 +12,14 @@ export default class Header extends Component {
     children: PropTypes.node
   };
 
+  componentWillMount() {
+    this.onClose = this.props.onClose && this.props.onClose.bind(this);
+  }
+
+  componentWillUpdate(nextProps) {
+    this.onClose = nextProps.onClose && nextProps.onClose.bind(this);
+  }
+
   render() {
     return (
       <div className='modal-header'>
@@ -21,7 +29,7 @@ export default class Header extends Component {
             className='close'
             data-dismiss='modal'
             aria-label='Close'
-            onClick={this.props.onClose.bind(this)}
+            onClick={this.onClose}
           >
             <span aria-hidden='true'>&times;</span>
           </button>

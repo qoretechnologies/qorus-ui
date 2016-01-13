@@ -8,13 +8,13 @@ module.exports = {
       'less?sourceMap&compress'
   ),
   styles: {
-    'mixins': true,
+    mixins: true,
 
-    'core': true,
-    'icons': true,
+    core: true,
+    icons: true,
 
-    'larger': true,
-    'path': true,
-    'animated': true
+    larger: true,
+    path: true,
+    animated: true
   }
 };

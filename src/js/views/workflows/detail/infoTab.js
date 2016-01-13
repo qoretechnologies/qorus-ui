@@ -16,6 +16,13 @@ export default class DetailTab extends Component {
     workflow: PropTypes.object.isRequired
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.nameColProps = this.nameColProps.bind(this);
+    this.valueColProps = this.valueColProps.bind(this);
+  }
+
   getData() {
     const omit = [
       'options', 'lib', 'stepmap', 'segment', 'steps', 'stepseg', 'stepinfo',
@@ -29,6 +36,14 @@ export default class DetailTab extends Component {
         name: k,
         value: this.props.workflow[k]
       }));
+  }
+
+  nameColProps(rec) {
+    return { name: _.capitalize(rec.name) };
+  }
+
+  valueColProps(rec) {
+    return { value: this.renderValue(rec.value) };
   }
 
   renderValue(val) {
@@ -52,11 +67,11 @@ export default class DetailTab extends Component {
           <Col
             comp='th'
             field='name'
-            props={rec => ({ name: _.capitalize(rec.name) })}
+            props={this.nameColProps}
           />
           <Col
             field='value'
-            props={rec => ({ value: this.renderValue(rec.value) })}
+            props={this.valueColProps}
           />
         </Table>
       </div>

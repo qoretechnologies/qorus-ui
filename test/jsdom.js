@@ -6,9 +6,11 @@ import { jsdom } from 'jsdom';
  *
  * @param {object} ctx
  */
-function ensureDom(ctx) {
+function missingGlobal(ctx) {
+  const global = {};
+
   if (!ctx.document) {
-    ctx.document = jsdom(
+    global.document = jsdom(
       '<!DOCTYPE html>' +
       '<html>' +
         '<head>' +
@@ -18,22 +20,20 @@ function ensureDom(ctx) {
         '</body>' +
       '</html>'
     );
-  }
-
-  if (!ctx.window) {
-    ctx.window = ctx.document.defaultView;
-  }
-
-  if (!ctx.self) {
-    ctx.self = ctx.window.self;
+    global.window = global.document.defaultView;
+    global.self = global.window.self;
   }
 
   if (!ctx.navigator) {
-    ctx.navigator = {
+    global.navigator = {
       userAgent: `Node.js (${process.platform}; U; rv:${process.version})`
     };
   }
+
+  return global;
 }
 
 
-if (typeof global !== 'undefined') ensureDom(global);
+if (typeof global !== 'undefined') {
+  Object.assign(global, missingGlobal(global));
+}

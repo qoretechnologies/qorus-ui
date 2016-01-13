@@ -18,6 +18,13 @@ export default class DetailTab extends Component {
     dispatch: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+
+    this.setOption = this.setOption.bind(this);
+    this.deleteOption = this.deleteOption.bind(this);
+  }
+
   setOption(opt) {
     this.context.dispatch(
       actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)
@@ -47,8 +54,8 @@ export default class DetailTab extends Component {
         <Options
           workflow={this.props.workflow}
           systemOptions={this.props.systemOptions}
-          onSet={this.setOption.bind(this)}
-          onDelete={this.deleteOption.bind(this)}
+          onSet={this.setOption}
+          onDelete={this.deleteOption}
         />
       </div>
     );

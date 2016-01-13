@@ -186,8 +186,10 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         () => {
           const manager = ReactDOM.render(<Manager />, mountNode);
 
-          const modal = (
-            <SimpleModal onClose={() => manager.close(modal)} />
+          let modal;
+          const onClose = () => manager.close(modal);
+          modal = (
+            <SimpleModal onClose={onClose} />
           );
           const escKeyEv = new window.KeyboardEvent('keyup', { keyCode: 27 });
 
@@ -233,8 +235,11 @@ describe("Modal, { Manager } from 'components/modal'", () => {
       const manager = TestUtils.renderIntoDocument(
         <Manager />
       );
-      const modal = (
-        <SimpleModal onClose={() => manager.close(modal)} />
+
+      let modal;
+      const onClose = () => manager.close(modal);
+      modal = (
+        <SimpleModal onClose={onClose} />
       );
 
 
@@ -259,8 +264,11 @@ describe("Modal, { Manager } from 'components/modal'", () => {
       const manager = TestUtils.renderIntoDocument(
         <Manager />
       );
-      const modal = (
-        <SimpleModal onClose={() => manager.close(modal)} />
+
+      let modal;
+      const onClose = () => manager.close(modal);
+      modal = (
+        <SimpleModal onClose={onClose} />
       );
 
 

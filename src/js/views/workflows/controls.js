@@ -25,6 +25,10 @@ export default class WorkflowsControls extends Component {
   }
 
   render() {
+    const dispatchDisable = () => this.dispatchAction('disable');
+    const dispatchEnable = () => this.dispatchAction('enable');
+    const dispatchReset = () => this.dispatchAction('reset');
+
     return (
       <Controls>
         {this.props.workflow.enabled && (
@@ -32,7 +36,7 @@ export default class WorkflowsControls extends Component {
             title='Disable'
             icon='power-off'
             btnStyle='success'
-            action={() => this.dispatchAction('disable')}
+            action={dispatchDisable}
           />
         )}
         {!this.props.workflow.enabled && (
@@ -40,14 +44,14 @@ export default class WorkflowsControls extends Component {
             title='Enable'
             icon='power-off'
             btnStyle='danger'
-            action={() => this.dispatchAction('enable')}
+            action={dispatchEnable}
           />
         )}
         <Control
           title='Reset'
           icon='refresh'
           btnStyle='warning'
-          action={() => this.dispatchAction('reset')}
+          action={dispatchReset}
         />
       </Controls>
     );

@@ -1,10 +1,7 @@
 import { curry, extend } from 'lodash';
 
 export const normalizeId = curry((idAttribute, item) => {
-  if (!item.id) {
-    item.id = item[idAttribute];
-  }
-  return item;
+  return Object.assign({ id: item[idAttribute] }, item);
 });
 
 export const extendDefaults = curry((defaults, item) => {
@@ -14,12 +11,9 @@ export const extendDefaults = curry((defaults, item) => {
 export const normalizeName = curry((item) => {
   //  <name> v<version>[.<patch>] (<id>)
   const { name, version, patch, id } = item;
+  const normalizedName = patch ?
+    `${name} v${version}.${patch} (${id})` :
+    `${name} v${version} (${id})`;
 
-  if (patch) {
-    item.normalizedName = `${name} v${version}.${patch} (${id})`;
-  } else {
-    item.normalizedName = `${name} v${version} (${id})`;
-  }
-
-  return item;
+  return Object.assign({ normalizedName }, item);
 });

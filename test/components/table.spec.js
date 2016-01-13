@@ -39,17 +39,19 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
 
   describe('Table', () => {
     it('renders table using THead, TBody and Cell', () => {
+      const rowsColProps = rec => ({ name: rec.name });
+      const valuesColProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
         <Table data={data}>
           <Col
             heading='Rows'
             field='name'
-            props={rec => ({ name: rec.name })}
+            props={rowsColProps}
           />
           <Col
             heading='Values'
             field='value'
-            props={rec => ({ value: rec.value })}
+            props={valuesColProps}
           />
         </Table>
       );
@@ -79,9 +81,10 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
 
 
     it('passes any other prop to table directly', () => {
+      const colProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
         <Table data={data} className='table'>
-          <Col field='value' props={rec => ({ value: rec.value })} />
+          <Col field='value' props={colProps} />
         </Table>
       );
 
@@ -237,16 +240,18 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
 
     it('renders table body using field from given data specified by Col',
     () => {
+      const nameColProps = rec => ({ name: rec.name, sth: 'to ignore' });
+      const valueColProps = rec => ({ value: rec.value, sth: 'to ignore' });
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data}>
             <Col
               field='name'
-              props={rec => ({ name: rec.name, sth: 'to ignore' })}
+              props={nameColProps}
             />
             <Col
               field='value'
-              props={rec => ({ value: rec.value, sth: 'to ignore' })}
+              props={valueColProps}
             />
           </TBody>
         </table>
@@ -270,10 +275,11 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
 
     it('renders table body using Col spec with children and dynamic childProps',
     () => {
+      const colChildProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data}>
-            <Col childProps={rec => ({ value: rec.value })}>
+            <Col childProps={colChildProps}>
               <ChildComp />
             </Col>
           </TBody>
@@ -294,11 +300,13 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
     it('passes data record when clicked on table row', () => {
       const handler = chai.spy();
 
+      const nameColProps = rec => ({ name: rec.name });
+      const valueColProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data} onRowClick={handler}>
-            <Col field='name' props={rec => ({ name: rec.name })} />
-            <Col field='value' props={rec => ({ value: rec.value })} />
+            <Col field='name' props={nameColProps} />
+            <Col field='value' props={valueColProps} />
           </TBody>
         </table>
       );
@@ -310,10 +318,12 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
 
 
     it('optionally highlights row from hightlight prop', () => {
+      const shouldHighlight = (rec, idx) => idx === 0;
+      const colProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
         <table>
-          <TBody data={data} shouldHighlight={(rec, idx) => idx === 0}>
-            <Col field='value' props={rec => ({ value: rec.value })} />
+          <TBody data={data} shouldHighlight={shouldHighlight}>
+            <Col field='value' props={colProps} />
           </TBody>
         </table>
       );

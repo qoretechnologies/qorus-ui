@@ -18,6 +18,14 @@ export default class ErrorsTab extends Component {
     dispatch: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+
+    this.remove = this.remove.bind(this);
+    this.update = this.update.bind(this);
+    this.clone = this.clone.bind(this);
+  }
+
   getUnusedGlobalErrors() {
     return this.props.globalErrors.filter(gloErr => (
       this.props.errors.findIndex(err => (
@@ -50,13 +58,13 @@ export default class ErrorsTab extends Component {
         <ErrorsTable
           heading='Workflow definitions'
           errors={this.props.errors}
-          onRemove={this.remove.bind(this)}
-          onUpdate={this.update.bind(this)}
+          onRemove={this.remove}
+          onUpdate={this.update}
         />
         <ErrorsTable
           heading='Global definitions'
           errors={this.getUnusedGlobalErrors()}
-          onClone={this.clone.bind(this)}
+          onClone={this.clone}
         />
       </div>
     );
