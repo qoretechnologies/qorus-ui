@@ -10,7 +10,7 @@ import Workflows from 'views/workflows';
 import setupStore from 'store';
 
 
-require('bootstrap-sass!../bootstrap-sass.config.js');
+require('bootstrap-loader/extractStyles');
 require('font-awesome-webpack!../font-awesome.config.js');
 require('../css/base.css');
 require('../css/line.numbers.css');
