@@ -27,7 +27,7 @@ export default class Options extends Component {
     systemOptions: PropTypes.array.isRequired,
     onSet: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
-  }
+  };
 
   /**
    * @param {object} props

@@ -116,13 +116,13 @@ export default class Workflows extends Component {
     globalErrors: PropTypes.array,
     params: PropTypes.object,
     route: PropTypes.object
-  }
+  };
 
   static childContextTypes = {
     params: PropTypes.object,
     route: PropTypes.object,
     dispatch: PropTypes.func
-  }
+  };
 
   constructor(...props) {
     super(...props);

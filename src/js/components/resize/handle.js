@@ -46,7 +46,7 @@ export default class Handle extends Component {
     right: PropTypes.bool,
     bottom: PropTypes.bool,
     left: PropTypes.bool
-  }
+  };
 
 
   static defaultProps = {
@@ -55,7 +55,7 @@ export default class Handle extends Component {
     right: false,
     bottom: false,
     left: false
-  }
+  };
 
 
   constructor(props) {

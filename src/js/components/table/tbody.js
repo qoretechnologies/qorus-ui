@@ -24,12 +24,12 @@ export default class TBody extends Component {
     identifier: PropTypes.func,
     shouldHighlight: PropTypes.func,
     onRowClick: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     shouldHighlight: () => false,
     onRowClick: () => {}
-  }
+  };
 
   constructor(props) {
     super(props);

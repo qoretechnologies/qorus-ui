@@ -12,11 +12,11 @@ import actions from 'store/api/actions';
 export default class WorkflowsControls extends Component {
   static propTypes = {
     workflow: PropTypes.object
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func
-  }
+  };
 
   dispatchAction(action) {
     this.context.dispatch(

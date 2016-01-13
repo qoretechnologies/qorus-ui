@@ -33,7 +33,7 @@ function developmentSetup({ persistState }, DevTools) {
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      store.replaceReducer(require('./reducers'));
+      store.replaceReducer(require('./reducers').default);
     });
   }
 
@@ -54,7 +54,7 @@ function setupStore(env) {
         ], require => {
           resolve(developmentSetup(
             require('redux-devtools'),
-            require('../components/devTools')
+            require('../components/devTools').default
           ));
         }, 'devtools');
         break;

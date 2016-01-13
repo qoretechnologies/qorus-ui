@@ -26,12 +26,12 @@ export default class Table extends Component {
     identifier: PropTypes.func,
     shouldHighlight: PropTypes.func,
     onRowClick: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     shouldHighlight: () => false,
     onRowClick: () => {}
-  }
+  };
 
   render() {
     const {

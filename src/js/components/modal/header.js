@@ -10,7 +10,7 @@ export default class Header extends Component {
     titleId: PropTypes.string.isRequired,
     onClose: PropTypes.func,
     children: PropTypes.node
-  }
+  };
 
   render() {
     return (

@@ -27,13 +27,13 @@ export default class Cell extends Component {
     props: PropTypes.object,
     field: PropTypes.string,
     childProps: PropTypes.object
-  }
+  };
 
   static defaultProps = {
     comp: 'td',
     props: {},
     childProps: {}
-  }
+  };
 
   getRootProps() {
     if (!this.props.field) return this.props.props;

@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 class Toolbar extends Component {
   static propTypes = {
     children: PropTypes.node
-  }
+  };
 
   render() {
     return (

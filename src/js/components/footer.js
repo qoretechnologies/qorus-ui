@@ -8,7 +8,7 @@ const bugUrl = 'http://bugs.qoretechnologies.com/projects/' +
 class Footer extends Component {
   static propTypes = {
     info: PropTypes.object
-  }
+  };
 
   render() {
     const { info } = this.props;

@@ -3,11 +3,12 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+
+import Header from '../../src/js/components/header.js';
+
+
 describe('Testing Header Component', function () {
   it('should contain text: test-1!', function () {
-    const Header = require('../../src/js/components/header.js');
-
-
     const myDiv = TestUtils.renderIntoDocument(
       <Header
         info={{ 'instance-key': 'test-1' }}

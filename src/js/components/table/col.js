@@ -29,14 +29,14 @@ export default class Col extends Component {
     props: PropTypes.func,
     field: PropTypes.string,
     childProps: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     heading: '',
     comp: 'td',
     props: () => {},
     childProps: rec => rec
-  }
+  };
 
   render() {
     return null;

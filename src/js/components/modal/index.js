@@ -17,7 +17,7 @@ import { pureRender } from '../utils';
 export default class Modal extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired
-  }
+  };
 
   /**
    * Finds modal Header component in children.

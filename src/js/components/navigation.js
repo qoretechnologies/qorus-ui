@@ -9,11 +9,11 @@ class NavItem extends Component {
     name: PropTypes.string.isRequired,
     className: PropTypes.string,
     icon: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     className: ''
-  }
+  };
 
   render() {
     const { url, className, icon, name } = this.props;
@@ -32,12 +32,12 @@ class Navigation extends Component {
   static propTypes = {
     mainItems: PropTypes.array,
     extraItems: PropTypes.array
-  }
+  };
 
   static defaultProps = {
     mainItems: [],
     extraItems: []
-  }
+  };
 
   render() {
     const { mainItems, extraItems } = this.props;

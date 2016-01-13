@@ -22,7 +22,7 @@ class App extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
     env: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -50,7 +50,7 @@ class App extends Component {
           'components/devTools',
           'react-addons-perf'
         ], require => {
-          const DevTools = require('components/devTools');
+          const DevTools = require('components/devTools').default;
           require('expose?Perf!react-addons-perf');
 
           this.setState({

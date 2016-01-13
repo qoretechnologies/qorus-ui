@@ -15,11 +15,11 @@ export default class ErrorModal extends Component {
     onCommit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     requireChanges: PropTypes.bool
-  }
+  };
 
   static defaultProps = {
     requireChanges: false
-  }
+  };
 
   /**
    * @param {object} props

@@ -18,13 +18,13 @@ export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
     shouldHighlight: PropTypes.func.isRequired
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
-  }
+  };
 
   workflowIdentifier(workflow) {
     return workflow.id;

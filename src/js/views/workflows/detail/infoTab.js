@@ -14,7 +14,7 @@ const COMPLEX_VALUE_INDENT = 4;
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired
-  }
+  };
 
   getData() {
     const omit = [

@@ -25,7 +25,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
     static propTypes = {
       className: React.PropTypes.string,
       value: React.PropTypes.string
-    }
+    };
 
     render() {
       return (

@@ -3,13 +3,14 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+
+import Loader from '../../src/js/components/loader.js';
+
+
 describe('Testing Loader Component', function () {
   it('should contain text: Loading!', function () {
-    const Component = require('../../src/js/components/loader.js');
-
-
     const nodeEl = TestUtils.renderIntoDocument(
-      <Component />
+      <Loader />
     );
 
     const divText = TestUtils.findRenderedDOMComponentWithTag(nodeEl, 'p');

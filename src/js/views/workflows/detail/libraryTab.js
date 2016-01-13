@@ -15,7 +15,7 @@ import { pureRender } from 'components/utils';
 export default class LibraryTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired
-  }
+  };
 
 
   constructor(props) {

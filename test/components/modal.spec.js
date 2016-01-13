@@ -14,7 +14,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
     static propTypes = {
       heading: PropTypes.string,
       onClose: PropTypes.func
-    }
+    };
 
     render() {
       return (

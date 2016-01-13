@@ -21,14 +21,14 @@ export default class AutoStart extends Component {
     inc: PropTypes.func.isRequired,
     dec: PropTypes.func.isRequired,
     context: PropTypes.any
-  }
+  };
 
   static defaultProps = {
     autostart: 0,
     execCount: 0,
     inc: (ctx, val) => val,
     dec: (ctx, val) => val
-  }
+  };
 
   /**
    * Calls fn with context and autostart modified by delta.

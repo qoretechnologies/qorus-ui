@@ -22,13 +22,13 @@ export default class WorkflowsDetail extends Component {
     systemOptions: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
-  }
+  };
 
   /**
    * Initialiazes component and fetches workflow errors.

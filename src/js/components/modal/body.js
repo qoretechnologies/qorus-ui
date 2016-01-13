@@ -8,7 +8,7 @@ import { pureRender } from '../utils';
 export default class Body extends Component {
   static propTypes = {
     children: PropTypes.node
-  }
+  };
 
   render() {
     return (

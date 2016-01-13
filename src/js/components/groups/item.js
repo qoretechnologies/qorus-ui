@@ -11,7 +11,7 @@ export default class Group extends Component {
     size: PropTypes.number,
     url: PropTypes.string,
     disabled: PropTypes.bool
-  }
+  };
 
   renderLabel() {
     return (

@@ -7,7 +7,7 @@ class Header extends Component {
   static propTypes = {
     info: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired
-  }
+  };
 
   render() {
     const { info, currentUser } = this.props;

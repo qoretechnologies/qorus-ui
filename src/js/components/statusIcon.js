@@ -10,7 +10,7 @@ import { pureRender } from './utils';
 export default class StatusIcon extends Component {
   static propTypes = {
     value: PropTypes.any
-  }
+  };
 
   render() {
     return (

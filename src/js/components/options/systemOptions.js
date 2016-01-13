@@ -12,7 +12,7 @@ export default class SystemOptions extends Component {
   static propTypes = {
     options: PropTypes.array.isRequired,
     onAdd: PropTypes.func.isRequired
-  }
+  };
 
   /**
    * @param {object} props

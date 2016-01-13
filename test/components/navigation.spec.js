@@ -3,8 +3,11 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+
+import Navigation from '../../src/js/components/navigation.js';
+
+
 describe('Testing Navigation Component', function () {
-  const Component = require('../../src/js/components/navigation.js');
   const props = {
     mainItems: [{
       url: '/workflows',
@@ -16,7 +19,7 @@ describe('Testing Navigation Component', function () {
   };
 
   const nodeEl = TestUtils.renderIntoDocument(
-    <Component {...props} />
+    <Navigation {...props} />
   );
 
   const listNode = TestUtils.scryRenderedDOMComponentsWithTag(nodeEl, 'ul');

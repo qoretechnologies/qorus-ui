@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 class UserInfo extends Component {
   static propTypes = {
     currentUser: PropTypes.object.isRequired
-  }
+  };
 
   render() {
     const { currentUser } = this.props;

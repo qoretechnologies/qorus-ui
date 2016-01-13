@@ -12,11 +12,11 @@ export class TabGroup extends Component {
     className: PropTypes.string,
     cssClass: PropTypes.string,
     tabChange: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     cssClass: 'nav nav-tabs'
-  }
+  };
 
   onTabChange(slug) {
     if (!this.props.tabChange) return;
@@ -89,7 +89,7 @@ export class TabNavigationItem extends Component {
     tabChange: PropTypes.func,
     active: PropTypes.bool,
     disabled: PropTypes.bool
-  }
+  };
 
   render() {
     const { target, name, active, disabled, slug, tabChange } = this.props;
@@ -112,7 +112,7 @@ export class Tab extends Component {
     active: PropTypes.bool,
     disabled: PropTypes.bool,
     children: PropTypes.node
-  }
+  };
 
   render() {
     const { slug, children, active, disabled } = this.props;

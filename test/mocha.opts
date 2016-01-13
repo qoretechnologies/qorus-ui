@@ -1,2 +1,2 @@
---require ./test/jsdom.js
---compilers js:babel/register
+--compilers js:babel-register
+--require ./test/babel.js

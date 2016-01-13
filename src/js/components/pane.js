@@ -8,7 +8,7 @@ export class PaneView extends Component {
     children: PropTypes.node,
     onClose: PropTypes.func,
     width: PropTypes.number
-  }
+  };
 
 
   render() {

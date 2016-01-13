@@ -23,7 +23,7 @@ export default class Controls extends Component {
   static defaultProps = {
     grouped: false,
     controls: []
-  }
+  };
 
   render() {
     return (

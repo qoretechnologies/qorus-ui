@@ -13,11 +13,11 @@ import actions from 'store/api/actions';
 export default class WorkflowsHeader extends Component {
   static propTypes = {
     workflow: PropTypes.object
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func
-  }
+  };
 
   render() {
     const { dispatch } = this.context;

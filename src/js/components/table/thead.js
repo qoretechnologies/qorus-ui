@@ -18,7 +18,7 @@ import { pureRenderOmit } from '../utils';
 export default class THead extends Component {
   static propTypes = {
     children: React.PropTypes.node.isRequired
-  }
+  };
 
   hasHeadings() {
     return React.Children.toArray(this.props.children).

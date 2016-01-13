@@ -8,11 +8,11 @@ class Badge extends Component {
     url: PropTypes.string,
     val: PropTypes.number,
     label: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     label: ''
-  }
+  };
 
   render() {
     let content;

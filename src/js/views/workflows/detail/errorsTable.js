@@ -18,12 +18,12 @@ export default class ErrorsTable extends Component {
     onClone: PropTypes.func,
     onUpdate: PropTypes.func,
     onRemove: PropTypes.func
-  }
+  };
 
   static contextTypes = {
     openModal: PropTypes.func,
     closeModal: PropTypes.func
-  }
+  };
 
   /**
    * @param {object} props

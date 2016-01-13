@@ -25,7 +25,11 @@ var config = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel?optional[]=runtime&stage=0']
+        loaders: [
+          'babel?' +
+            'presets[]=es2015&presets[]=react&presets[]=stage-0&' +
+            'plugins[]=transform-decorators-legacy'
+        ]
       },
       {
         test: /\.html$/,

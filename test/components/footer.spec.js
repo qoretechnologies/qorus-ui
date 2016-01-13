@@ -3,8 +3,11 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+
+import Footer from '../../src/js/components/footer.js';
+
+
 describe('Testing Footer Component', function () {
-  const Component = require('../../src/js/components/footer.js');
   const props = {
     info: {
       'omq-schema': 'test@test',
@@ -14,7 +17,7 @@ describe('Testing Footer Component', function () {
   };
 
   const testComponent = TestUtils.renderIntoDocument(
-    <Component {...props} />
+    <Footer {...props} />
   );
 
   const el = TestUtils.scryRenderedDOMComponentsWithTag(testComponent, 'small');

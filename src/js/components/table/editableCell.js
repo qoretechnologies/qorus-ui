@@ -26,14 +26,14 @@ export default class EditableCell extends Component {
     startEdit: PropTypes.bool,
     onSave: PropTypes.func,
     onCancel: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     value: '',
     startEdit: false,
     onSave: () => {},
     onCancel: () => {}
-  }
+  };
 
   /**
    * @param {object} props

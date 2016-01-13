@@ -15,7 +15,7 @@ export default class Control extends Component {
     btnStyle: PropTypes.string,
     icon: PropTypes.string.isRequired,
     action: PropTypes.func
-  }
+  };
 
   onClick(e) {
     if (!this.props.action) return;

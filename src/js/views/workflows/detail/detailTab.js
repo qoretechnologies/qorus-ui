@@ -12,11 +12,11 @@ export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func
-  }
+  };
 
   setOption(opt) {
     this.context.dispatch(

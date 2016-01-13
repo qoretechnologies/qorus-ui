@@ -39,12 +39,12 @@ export default class Root extends Component {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     currentUser: PropTypes.object
-  }
+  };
 
   static childContextTypes = {
     openModal: PropTypes.func,
     closeModal: PropTypes.func
-  }
+  };
 
   constructor(props) {
     super(props);

@@ -12,11 +12,11 @@ export default class ErrorsTab extends Component {
     workflow: PropTypes.object.isRequired,
     errors: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired
-  }
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func
-  }
+  };
 
   getUnusedGlobalErrors() {
     return this.props.globalErrors.filter(gloErr => (
