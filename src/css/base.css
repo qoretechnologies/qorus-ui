@@ -546,9 +546,13 @@ table .header-fixed {
 }
 */
 
-.pageslide .content {
+.pageslide > .content {
   padding: 40px 20px 0 20px;
-/*  height: 90%;*/
+  height: 100%;
+}
+
+.pageslide > .content > .relative {
+  height: 100%;
 }
 
 /*.modal-body .help-inline {

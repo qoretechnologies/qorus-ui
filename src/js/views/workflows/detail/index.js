@@ -82,7 +82,7 @@ export default class WorkflowsDetail extends Component {
     if (!workflow) return null;
 
     return (
-      <div>
+      <div className='relative workflow-pane'>
         <WorkflowsHeader workflow={workflow} />
         <TabGroup active={tabId} tabChange={this.changeTab}>
           <Tab name='Detail'>

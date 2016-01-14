@@ -9,6 +9,9 @@
 @import '../js/components/table/style';
 
 
+@import './workflow';
+
+
 pre {
   white-space: pre-wrap;
 }
@@ -46,53 +49,5 @@ pre {
       padding-left: 4px;
       padding-right: 4px;
     }
-  }
-}
-
-
-#library {
-  > .row {
-    margin-top: 15px;
-
-    > .col-sm-3 > .well {
-      padding: 0;
-    }
-
-    > .col-sm-9 {
-      padding-left: 0;
-    }
-  }
-
-  .nav {
-    word-wrap: break-word;
-
-    & > li.disabled > a {
-      cursor: inherit;
-    }
-
-    & > li > a > h5,
-    & > li > a > h6 {
-      text-transform: uppercase;
-    }
-
-    & > li > a > h5 {
-      font-size: 100%;
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-    & > li > a > h6 {
-      font-size: 90%;
-      margin-top: -3px;
-      margin-bottom: -6px;
-    }
-    & > li > a > span {
-      display: block;
-      margin-top: -6px;
-      margin-bottom: -6px;
-    }
-  }
-
-  pre[class*="language-"] {
-    margin-top: 0;
   }
 }

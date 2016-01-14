@@ -186,15 +186,13 @@ export default class Workflows extends Component {
         width={550}
         onClose={this.onClosePane}
       >
-        <div className='relative'>
-          <WorkflowsDetail
-            workflow={this.getActiveWorkflow()}
-            systemOptions={systemOptions}
-            errors={errors[this.getActiveWorkflow().id] || []}
-            globalErrors={globalErrors}
-            tabId={params.tabId}
-          />
-        </div>
+        <WorkflowsDetail
+          workflow={this.getActiveWorkflow()}
+          systemOptions={systemOptions}
+          errors={errors[this.getActiveWorkflow().id] || []}
+          globalErrors={globalErrors}
+          tabId={params.tabId}
+        />
       </PaneView>
     );
   }
