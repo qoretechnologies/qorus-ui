@@ -28,6 +28,24 @@ export default class LibraryTab extends Component {
   }
 
 
+  componentWillMount() {
+    this.setInitialActiveDomId(this.props);
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this.setInitialActiveDomId(nextProps);
+  }
+
+
+  setInitialActiveDomId(props) {
+    const domIds = this.mergeWfAndStepFuncs(props).map(fn => fn.id);
+    if (domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
+      this.setState({ activeDomId: domIds[0] });
+    }
+  }
+
+
   onTabChange(domId) {
     this.setState({ activeDomId: domId });
   }
@@ -41,12 +59,12 @@ export default class LibraryTab extends Component {
   }
 
 
-  mergeWfAndStepFuncs() {
-    const wfFuncs = this.props.workflow.wffuncs.reduce((funcs, func) => (
+  mergeWfAndStepFuncs(props) {
+    const wfFuncs = props.workflow.wffuncs.reduce((funcs, func) => (
       funcs.concat({ id: this.getDomId(func), func })
     ), []);
 
-    return this.props.workflow.stepinfo.reduce((fns, step) => (
+    return props.workflow.stepinfo.reduce((fns, step) => (
       (step.functions || []).reduce((funcs, func) => (
         funcs.concat({ id: this.getDomId(func, step), func })
       ), fns)
@@ -144,7 +162,7 @@ export default class LibraryTab extends Component {
   renderCodeTabs() {
     return (
       <div className='tab-content'>
-        {this.mergeWfAndStepFuncs().map(({ id, func }, funcIdx) => (
+        {this.mergeWfAndStepFuncs(this.props).map(({ id, func }, funcIdx) => (
           <Tab
             key={funcIdx}
             slug={id}
