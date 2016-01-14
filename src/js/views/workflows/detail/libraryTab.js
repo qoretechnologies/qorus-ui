@@ -22,9 +22,9 @@ export default class LibraryTab extends Component {
     super(props);
 
     this.state = { activeDomId: null };
+    this._codeTabs = null;
 
     this.onTabChange = this.onTabChange.bind(this);
-    this.highlight = this.highlight.bind(this);
   }
 
 
@@ -38,10 +38,29 @@ export default class LibraryTab extends Component {
   }
 
 
+  componentDidMount() {
+    this.highlightEls();
+  }
+
+
+  componentDidUpdate() {
+    this.highlightEls();
+  }
+
+
   setInitialActiveDomId(props) {
     const domIds = this.mergeWfAndStepFuncs(props).map(fn => fn.id);
     if (domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
       this.setState({ activeDomId: domIds[0] });
+    }
+  }
+
+
+  highlightEls() {
+    for (let i = 0, codeEls = this._codeTabs.querySelectorAll('code');
+         i < codeEls.length;
+         i += 1) {
+      Prism.highlightElement(codeEls[i]);
     }
   }
 
@@ -76,13 +95,6 @@ export default class LibraryTab extends Component {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
-  }
-
-
-  highlight(codeEl) {
-    if (!codeEl) return;
-
-    Prism.highlightElement(codeEl);
   }
 
 
@@ -160,8 +172,10 @@ export default class LibraryTab extends Component {
 
 
   renderCodeTabs() {
+    const refCodeTabs = c => this._codeTabs = c;
+
     return (
-      <div className='tab-content'>
+      <div className='tab-content' ref={refCodeTabs}>
         {this.mergeWfAndStepFuncs(this.props).map(({ id, func }, funcIdx) => (
           <Tab
             key={funcIdx}
@@ -173,10 +187,7 @@ export default class LibraryTab extends Component {
               className='line-numbers'
               data-start={parseInt(func.offset, 10) + 1}
             >
-              <code
-                className='language-qore'
-                ref={this.highlight}
-              >
+              <code className='language-qore'>
                 {func.body}
               </code>
             </pre>
