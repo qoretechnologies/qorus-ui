@@ -96,7 +96,8 @@ if (env === 'development') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(env),
-        DEVTOOLS: false
+        DEVTOOLS: false,
+        WS_API_BASE_URL: JSON.stringify('ws://localhost:8001')
       }
     }),
     new webpack.HotModuleReplacementPlugin(),
@@ -122,7 +123,9 @@ if (env === 'production') {
       'process.env': {
         NODE_ENV: JSON.stringify(env),
         REST_API_BASE_URL: JSON.stringify(process.env.REST_API_BASE_URL ||
-                                          'http://localhost:8001/api')
+                                          'http://localhost:8001/api'),
+        WS_API_BASE_URL: JSON.stringify(process.env.WS_API_BASE_URL ||
+                                        'ws://localhost:8001')
       }
     }),
     new webpack.optimize.DedupePlugin(),

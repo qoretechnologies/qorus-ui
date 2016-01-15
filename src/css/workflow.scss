@@ -115,3 +115,40 @@
     }
   }
 }
+
+
+#log {
+  overflow: hidden;
+
+  > :first-child {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    height: 100%;
+
+    > .btn-controls {
+      -ms-flex: initial;
+      flex: initial;
+    }
+
+    > .log-area {
+      position: relative;
+
+      -ms-flex: auto;
+      flex: auto;
+
+      > pre {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 20px;
+        left: 0;
+
+        overflow: auto;
+
+        font-size: 11px;
+      }
+    }
+  }
+}

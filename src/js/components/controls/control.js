@@ -12,6 +12,7 @@ import { pureRender } from '../utils';
 export default class Control extends Component {
   static propTypes = {
     title: PropTypes.string,
+    label: PropTypes.string,
     btnStyle: PropTypes.string,
     icon: PropTypes.string.isRequired,
     action: PropTypes.func
@@ -42,6 +43,7 @@ export default class Control extends Component {
         onClick={this.onClick}
       >
         <i className={classNames(['fa', 'fa-' + this.props.icon])} />
+        {this.props.label ? (' ' + this.props.label) : ''}
       </button>
     );
   }

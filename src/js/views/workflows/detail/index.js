@@ -3,6 +3,7 @@ import { TabGroup, Tab } from 'components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detailTab';
 import LibraryTab from './libraryTab';
+import LogTab from './logTab';
 import ErrorsTab from './errorsTab';
 import InfoTab from './infoTab';
 
@@ -92,7 +93,9 @@ export default class WorkflowsDetail extends Component {
             <LibraryTab workflow={workflow} />
           </Tab>
           <Tab name='Steps' />
-          <Tab name='Log' />
+          <Tab name='Log'>
+            <LogTab workflow={workflow} />
+          </Tab>
           <Tab name='Errors'>
             <ErrorsTab
               workflow={workflow}

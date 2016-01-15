@@ -991,29 +991,6 @@ table .header-fixed {
   height: 10px;
 }
 
-#log {
-  overflow: hidden;
-}
-
-.log-area, .log-area.span12 {
-  background-color: #0a0f21;
-  overflow: auto;
-  min-height: 200px;
-  padding: 10px;
-  margin: 0;
-  height: calc(100% - 20px);
-}
-
-.log-area pre {
-  background-color: #000;
-  color: #fff;
-  font-size: 80%;
-  margin: 0;
-  border-radius: 0;
-  padding: 0;
-  line-height: 1em;
-}
-
 /** fixed header **/
 
 .table-fixed-wrapper {

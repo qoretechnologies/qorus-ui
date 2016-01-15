@@ -89,7 +89,7 @@ export function createApiActions(actions) {
  * @param {string} method method can be also specified in opts
  * @param {string} url
  * @param {RequestInit=} opts
- * @return {JSON}
+ * @return {Promise<JSON>}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
 export async function fetchJson(method, url, opts = {}) {

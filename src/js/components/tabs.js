@@ -68,7 +68,7 @@ export class TabGroup extends Component {
           name={name}
           ref={`pane-${slug}`}
         >
-          {children}
+          {this.isActive(slug) && children}
         </Tab>
       );
     });
@@ -124,9 +124,26 @@ export class Tab extends Component {
     slug: PropTypes.string,
     name: PropTypes.string.isRequired,
     active: PropTypes.bool,
+    onActiveChange: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.node
   };
+
+  componentDidMount() {
+    this.activeDidChange();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.active !== this.props.active) {
+      this.activeDidChange();
+    }
+  }
+
+  activeDidChange() {
+    if (!this.props.onActiveChange) return;
+
+    this.props.onActiveChange(this.props.active);
+  }
 
   render() {
     const { slug, children, active, disabled } = this.props;
