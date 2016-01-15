@@ -1,5 +1,5 @@
 import settings from '../../../settings';
-import { compose } from 'lodash';
+import { flowRight } from 'lodash';
 import { extendDefaults, normalizeId, normalizeName } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 
@@ -9,7 +9,7 @@ export default [
   {
     name: 'workflows',
     url: `${url}/workflows`,
-    transform: compose(
+    transform: flowRight(
       normalizeName,
       normalizeId('workflowid'),
       extendDefaults(workflowDefaults)
@@ -23,7 +23,7 @@ export default [
   {
     name: 'services',
     url: `${url}/services`,
-    transform: compose(
+    transform: flowRight(
       normalizeName,
       normalizeId('serviceid')
     )
@@ -31,7 +31,7 @@ export default [
   {
     name: 'jobs',
     url: `${url}/jobs`,
-    transform: compose(
+    transform: flowRight(
       normalizeName,
       normalizeId('jobid')
     )

@@ -1,7 +1,4 @@
-import isNumber from 'lodash/lang/isNumber';
-import isString from 'lodash/lang/isString';
-import curry from 'lodash/function/curry';
-import get from 'lodash/object/get';
+import { isNumber, isString, curry, get } from 'lodash';
 
 
 export function prep(val, des) {

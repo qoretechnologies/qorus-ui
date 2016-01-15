@@ -5,7 +5,7 @@
 
 import UrlPattern from 'url-pattern';
 import history from 'history';
-import { pick } from 'lodash';
+import { pickBy } from 'lodash';
 
 
 const routes = {
@@ -19,7 +19,7 @@ const routes = {
 
 export default function goTo(name, path, params, change) {
   const mergedParams = Object.assign({}, params, change);
-  const clearParams = pick(mergedParams, v => v);
+  const clearParams = pickBy(mergedParams, v => v);
   const newParams = Object.assign({}, routes[name], clearParams);
   const url = new UrlPattern(path).stringify(newParams);
 

@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { get, compose, curry } from 'lodash';
+import { get, flowRight, curry } from 'lodash';
 import { compare } from 'utils';
 import goTo from 'routes';
 
@@ -73,7 +73,7 @@ const collectionSelector = createSelector(
     workflowsSelector,
     deprecatedSelector
   ],
-  (search, workflows, deprecated) => compose(
+  (search, workflows, deprecated) => flowRight(
     sortWorkflows,
     filterDeprecated(deprecated),
     filterSearch(search)

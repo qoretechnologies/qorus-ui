@@ -45,7 +45,7 @@ export function pureRender(CompCls) {
  * It uses React's own PureRender mixin. But removes props from
  * nextProps according to `predicate` (see, `_.omit`).
  *
- * @param {function(*): boolean|string|string[]} predicate
+ * @param {...(string|string[])} props
  * @return {function(ReactClass)}
  */
 export function pureRenderOmit(predicate) {

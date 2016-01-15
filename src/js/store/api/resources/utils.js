@@ -1,11 +1,11 @@
-import { curry, extend } from 'lodash';
+import { curry, assignIn } from 'lodash';
 
 export const normalizeId = curry((idAttribute, item) => {
   return Object.assign({ id: item[idAttribute] }, item);
 });
 
 export const extendDefaults = curry((defaults, item) => {
-  return extend({}, defaults, item);
+  return assignIn({}, defaults, item);
 });
 
 export const normalizeName = curry((item) => {

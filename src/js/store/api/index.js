@@ -4,7 +4,7 @@ import * as specialReducers from './resources/reducers';
 import { updateItemWithId } from './utils';
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { omit, extend, isArray } from 'lodash';
+import { omit, assignIn, isArray } from 'lodash';
 
 const initialState = {
   data: [],
@@ -47,7 +47,7 @@ export function createResourceReducers(
 
           if (action.meta && action.meta.id) {
             data = omit(JSON.parse(action.meta.params.body), 'action');
-            return extend({}, state, {
+            return assignIn({}, state, {
               data: updateItemWithId(
                 action.meta.id,
                 data,

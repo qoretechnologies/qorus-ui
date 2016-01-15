@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { compose, clone, first } from 'lodash';
+import { flowRight, clone, first } from 'lodash';
 import { normalizeName, normalizeId, extendDefaults }
   from '../../src/js/store/api/resources/utils.js';
 
@@ -18,10 +18,10 @@ const objList = [
 
 describe('Testing API resources utils', () => {
   const objWithNormalizedId = objList.map(
-    compose(normalizeId('normalizeMeId'), clone)
+    flowRight(normalizeId('normalizeMeId'), clone)
   );
   const objWithExtendedDefaults = objList.map(extendDefaults(defaults));
-  const objWithNormalizedName = objList.map(compose(
+  const objWithNormalizedName = objList.map(flowRight(
     normalizeName,
     normalizeId('normalizeMeId'),
     clone
