@@ -33,18 +33,31 @@ export default class LibraryTab extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps) {
-    this.setInitialActiveDomId(nextProps);
-  }
-
-
   componentDidMount() {
     this.highlightEls();
   }
 
 
+  componentWillReceiveProps(nextProps) {
+    this.setInitialActiveDomId(nextProps);
+  }
+
+
   componentDidUpdate() {
     this.highlightEls();
+  }
+
+
+  onTabChange(domId) {
+    this.setState({ activeDomId: domId });
+  }
+
+
+  getDomId(func, step) {
+    let id = func.name;
+    if (step) id = `${step.name}.${id}`;
+
+    return `func.${id}`;
   }
 
 
@@ -62,19 +75,6 @@ export default class LibraryTab extends Component {
          i += 1) {
       Prism.highlightElement(codeEls[i]);
     }
-  }
-
-
-  onTabChange(domId) {
-    this.setState({ activeDomId: domId });
-  }
-
-
-  getDomId(func, step) {
-    let id = func.name;
-    if (step) id = `${step.name}.${id}`;
-
-    return `func.${id}`;
   }
 
 

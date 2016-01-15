@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import './ie10-fix'
+import './ie10-fix';
 
 
 import React from 'react';

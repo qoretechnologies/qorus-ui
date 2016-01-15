@@ -1,3 +1,5 @@
+/* eslint no-proto: 0 */
+
 /**
  * @file
  *
@@ -10,9 +12,9 @@
  */
 
 if (!(Object.setPrototypeOf || {}.__proto__)) {
-  let nativeGetPrototypeOf = Object.getPrototypeOf;
+  const nativeGetPrototypeOf = Object.getPrototypeOf;
 
-  Object.getPrototypeOf = function(object) {
-    return object.__proto__ || nativeGetPrototypeOf.call(Object, object);
-  }
+  Object.getPrototypeOf = (object) => (
+    object.__proto__ || nativeGetPrototypeOf.call(Object, object)
+  );
 }
