@@ -42,7 +42,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     });
 
 
-    it('applies title', () => {
+    it('shows title as button title', () => {
       const control = TestUtils.renderIntoDocument(
         <Control icon='refresh' title='Restart' />
       );
@@ -52,6 +52,19 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
 
       expect(el.title).to.equal('Restart');
+    });
+
+
+    it('shows label as button text after the icon', () => {
+      const control = TestUtils.renderIntoDocument(
+        <Control icon='refresh' label='Restart' />
+      );
+
+
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
+
+
+      expect(el.textContent).to.equal(' Restart');
     });
 
 
