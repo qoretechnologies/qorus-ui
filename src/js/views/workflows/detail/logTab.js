@@ -38,8 +38,9 @@ export default class LibraryTab extends Component {
     this.setState({
       log: [],
       filteredLog: [],
-      filterPlain: '',
-      filterRe: null,
+      filterSource: '',
+      filter: new RegExp('', 'g'),
+      filterError: null,
       isFilterRe: false,
       autoscroll: true,
       pause: false,
@@ -84,19 +85,15 @@ export default class LibraryTab extends Component {
 
 
   onFilter(ev) {
-    let filterRe;
-    try {
-      filterRe = new RegExp(ev.currentTarget.value);
-    } catch (e) {
-      filterRe = this.state.filterRe;
-    }
+    const filterSource = ev.currentTarget.value;
+    const [filter, filterError] = this.filterFromSource(
+      this.state.isFilterRe, filterSource
+    );
+    const filteredLog = this.state.log.filter(
+      this.filterLogLine.bind(this, filter)
+    );
 
-    this.setState({
-      filterPlain: ev.currentTarget.value,
-      filterRe
-    });
-
-    this.applyFilter();
+    this.setState({ filterSource, filter, filterError, filteredLog });
   }
 
 
@@ -121,6 +118,43 @@ export default class LibraryTab extends Component {
   }
 
 
+  filterFromSource(isFilterRe, filterSource) {
+    let source;
+    if (isFilterRe) {
+      source = filterSource;
+    } else {
+      source = filterSource.
+        replace(/\\/g, '\\\\').
+        replace(/\./g, '\\.').
+        replace(/\*/g, '\\*').
+        replace(/\+/g, '\\+').
+        replace(/\?/g, '\\?').
+        replace(/\[/g, '\\[').
+        replace(/\(/g, '\\(').
+        replace(/\{/g, '\\{').
+        replace(/\|/g, '\\|').
+        replace(/^\^/g, '\\^').
+        replace(/\$$/g, '\\$');
+    }
+
+    let filter;
+    let filterError = null;
+    while (!filter && source) {
+      try {
+        filter = new RegExp(source, 'g');
+      } catch (e) {
+        if (!filterError) filterError = e;
+
+        source = source.substring(0, source.length - 1);
+      }
+    }
+
+    if (!filter) filter = new RegExp('', 'g');
+
+    return [filter, filterError];
+  }
+
+
   addChunk(chunk) {
     const logLines = chunk.
       split(/\n/).
@@ -134,7 +168,7 @@ export default class LibraryTab extends Component {
         logLines
       ),
       filteredLog: this.state.filteredLog.concat(
-        logLines.filter(::this.filterLogLine)
+        logLines.filter(this.filterLogLine.bind(this, this.state.filter))
       )
     });
   }
@@ -173,30 +207,27 @@ export default class LibraryTab extends Component {
       this.setState({ pause: true });
       this.addChunk('-- Paused --');
     } else {
-      this.addChunk('-- Continue --');
       this.setState({ pause: false });
+      this.addChunk('-- Continue --');
     }
   }
 
 
-  applyFilter() {
-    this.setState({
-      filteredLog: this.state.log.filter(::this.filterLogLine)
-    });
-  }
-
-
   toggleReFilter() {
-    this.setState({
-      isFilterRe: !this.state.isFilterRe
-    });
+    const isFilterRe = !this.state.isFilterRe;
+    const [filter, filterError] = this.filterFromSource(
+      isFilterRe, this.state.filterSource
+    );
+    const filteredLog = this.state.log.filter(
+      this.filterLogLine.bind(this, filter)
+    );
+
+    this.setState({ isFilterRe, filter, filterError, filteredLog });
   }
 
 
-  filterLogLine({ line }) {
-    return this.state.isFilterRe ?
-      (line.match(this.state.filterRe) !== null) :
-      (line.indexOf(this.state.filterPlain) >= 0);
+  filterLogLine(filter, { line }) {
+    return (new RegExp(filter)).test(line);
   }
 
 
@@ -244,8 +275,52 @@ export default class LibraryTab extends Component {
 
 
   renderLogLine({ line, no }) {
+    const filter = new RegExp(this.state.filter);
+    const parts = [];
+
+    let prevIndex = filter.lastIndex;
+    for (let match = filter.exec(line);
+         match !== null && match.index !== filter.lastIndex;
+         match = filter.exec(line)) {
+      if (prevIndex < match.index) {
+        parts.push({
+          start: prevIndex,
+          end: match.index,
+          highlight: false
+        });
+      }
+
+      parts.push({
+        start: match.index,
+        end: filter.lastIndex,
+        highlight: true
+      });
+
+      prevIndex = filter.lastIndex;
+    }
+
+    if (prevIndex < line.length) {
+      parts.push({
+        start: prevIndex,
+        end: line.length,
+        highlight: false
+      });
+    }
+
     return (
-      <div key={ no }>{ line }</div>
+      <div key={ no }>
+        {parts.map(({ start, end, highlight }) => (
+          highlight ? (
+            <b key={`${start}.${end}`} className='highlight'>
+              {line.substring(start, end)}
+            </b>
+          ) : (
+            <span key={`${start}.${end}`}>
+              {line.substring(start, end)}
+            </span>
+          )
+        ))}
+      </div>
     );
   }
 
@@ -282,7 +357,12 @@ export default class LibraryTab extends Component {
               className='form-inline text-right form-filter'
               onSubmit={this.onSubmit}
             >
-              <div className='form-group'>
+              <div
+                className={classNames({
+                  'form-group': true,
+                  'has-error': this.state.filterError
+                })}
+              >
                 <label
                   className={classNames({
                     btn: true,
@@ -304,7 +384,7 @@ export default class LibraryTab extends Component {
                   type='search'
                   className='form-control form-filter__field'
                   placeholder='Filter…'
-                  value={this.state.filterPlain}
+                  value={this.state.filterSource}
                   onChange={this.onFilter}
                 />
                 <button
