@@ -8,36 +8,53 @@ import settings from 'settings';
 import { pureRender } from 'components/utils';
 
 
+/**
+ * Maximum of reconnect tries to log Web Socket.
+ */
 const MAX_TRIES = 10;
 
 
+/**
+ * Log buffer and controls to manipulate it.
+ *
+ * This tab has following key features:
+ *
+ * - autoscroll which keeps buffer scroll position at the bottom
+ * - pause which stops receiving new log entries
+ * - filter which greps log entries and highlights matches
+ * - download of currently visible log buffer (with filter applied)
+ */
+// TODO refactor Web Sockets code to store.
 @pureRender
-export default class LibraryTab extends Component {
+export default class LogTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired
   };
 
 
+  /**
+   * Prepares internal state.
+   *
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
 
     this._token = null;
     this._socket = null;
     this._scroll = null;
-
-    this.toggleAutoscroll = this.toggleAutoscroll.bind(this);
-    this.togglePause = this.togglePause.bind(this);
-    this.checkAutoscroll = this.checkAutoscroll.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onFilter = this.onFilter.bind(this);
-    this.toggleReFilter = this.toggleReFilter.bind(this);
   }
 
 
+  /**
+   * Initializes default state and connects to log Web Socket.
+   *
+   * @see connect
+   */
   componentWillMount() {
     this.setState({
-      log: [],
-      filteredLog: [],
+      entries: [],
+      filteredEntries: [],
       filterSource: '',
       filter: new RegExp('', 'g'),
       filterError: null,
@@ -46,10 +63,19 @@ export default class LibraryTab extends Component {
       pause: false,
       error: null
     });
-    this.connect();
+    this.connect(this.props.workflow);
   }
 
 
+  /**
+   * Resets log and connects to different log Web Socket.
+   *
+   * This happens only if workflow changes.
+   *
+   * @param {object} nextProps
+   * @see connect
+   * @see disconnect
+   */
   componentWillReceiveProps(nextProps) {
     if (this.props.workflow.workflowid === nextProps.workflow.workflowid) {
       return;
@@ -58,14 +84,19 @@ export default class LibraryTab extends Component {
     this.disconnect();
 
     this.setState({
-      log: [],
-      filteredLog: [],
+      entries: [],
+      filteredEntries: [],
       error: null
     });
-    this.connect();
+    this.connect(nextProps.workflow);
   }
 
 
+  /**
+   * Keeps log buffer scroll position at the bottom.
+   *
+   * This happens only if autoscroll is enabled.
+   */
   componentDidUpdate() {
     if (this.state.autoscroll) {
       this._scroll.scrollTop =
@@ -74,29 +105,131 @@ export default class LibraryTab extends Component {
   }
 
 
+  /**
+   * Disconnects from log Web Socket.
+   *
+   * @see disconnect
+   */
   componentWillUnmount() {
     this.disconnect();
   }
 
 
+  /**
+   * Prevents filter form submit.
+   *
+   * @param {Event} ev
+   */
   onSubmit(ev) {
     ev.preventDefault();
   }
 
 
-  onFilter(ev) {
+  /**
+   * Toggles autoscroll.
+   */
+  onAutoscrollToggle() {
+    this.setState({ autoscroll: !this.state.autoscroll });
+  }
+
+
+  /**
+   * Toggle pause and adds a status message to the buffer.
+   */
+  onPauseToggle() {
+    if (!this.state.pause) {
+      this.setState({ pause: true });
+      this.addEntries('-- Paused --');
+    } else {
+      this.setState({ pause: false });
+      this.addEntries('-- Continue --');
+    }
+  }
+
+
+  /**
+   * Changes filter based on new input as a source.
+   *
+   * The filter is also applied on the buffer.
+   *
+   * @param {Event} ev
+   */
+  onFilterSourceChange(ev) {
     const filterSource = ev.currentTarget.value;
     const [filter, filterError] = this.filterFromSource(
       this.state.isFilterRe, filterSource
     );
-    const filteredLog = this.state.log.filter(
-      this.filterLogLine.bind(this, filter)
+    const filteredEntries = this.state.entries.filter(
+      this.filterEntry.bind(this, filter)
     );
 
-    this.setState({ filterSource, filter, filterError, filteredLog });
+    this.setState({ filterSource, filter, filterError, filteredEntries });
   }
 
 
+  /**
+   * Toggle indicator of filter source being treated as RegExp.
+   *
+   * The filter is changed and then applied on the buffer.
+   */
+  onReFilterToggle() {
+    const isFilterRe = !this.state.isFilterRe;
+    const [filter, filterError] = this.filterFromSource(
+      isFilterRe, this.state.filterSource
+    );
+    const filteredEntries = this.state.entries.filter(
+      this.filterEntry.bind(this, filter)
+    );
+
+    this.setState({ isFilterRe, filter, filterError, filteredEntries });
+  }
+
+
+  /**
+   * Disables autoscroll if scroll to the top is detected.
+   *
+   * @param {Event} ev
+   */
+  onBufferScroll(ev) {
+    if (!this.state.autoscroll) return;
+
+    if (ev.currentTarget.scrollTop <
+        ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) {
+      this.setState({ autoscroll: false });
+    }
+  }
+
+
+  /**
+   * Appends newly received log entries if not paused.
+   *
+   * @param {Event} ev
+   * @see addEntries
+   */
+  onSocketMessage(ev) {
+    if (this.state.pause) return;
+
+    this.addEntries(ev.data);
+  }
+
+
+  /**
+   * Stores Web Socket error and disconnects.
+   *
+   * @param {Event} ev
+   * @see disconnect
+   */
+  onSocketError(ev) {
+    this.setState({ error: ev });
+    this.disconnect();
+  }
+
+
+  /**
+   * Returns log filename based on workflow name (or ID).
+   *
+   * @return {string}
+   */
   getLogName() {
     const basename = this.props.workflow.name ?
       this.props.workflow.name.toLowerCase() :
@@ -106,18 +239,30 @@ export default class LibraryTab extends Component {
   }
 
 
+  /**
+   * Returns log buffer as a data URI.
+   *
+   * @return {string}
+   */
   getLogUri() {
     return 'data:' +
       'text/plain;' +
       'base64,' +
       window.btoa(
-        this.state.filteredLog.
-          map(({ line }) => line).
+        this.state.filteredEntries.
+          map(({ entry }) => entry).
           join('\n')
       );
   }
 
 
+  /**
+   * Creates new filter RegExp.
+   *
+   * @param {boolean} isFilterRe treat filter source as a RegExp
+   * @param {string} filterSource
+   * @return {RegExp}
+   */
   filterFromSource(isFilterRe, filterSource) {
     let source;
     if (isFilterRe) {
@@ -155,83 +300,57 @@ export default class LibraryTab extends Component {
   }
 
 
-  addChunk(chunk) {
-    const logLines = chunk.
+  /**
+   * Appends new log entries to the buffer.
+   *
+   * @param {string} chunk
+   */
+  addEntries(chunk) {
+    const entries = chunk.
       split(/\n/).
-      map((line, delta) => ({
-        line,
-        no: this.state.log.length + delta
+      map((entry, delta) => ({
+        entry,
+        no: this.state.entries.length + delta
       }));
 
     this.setState({
-      log: this.state.log.concat(
-        logLines
+      entries: this.state.entries.concat(
+        entries
       ),
-      filteredLog: this.state.filteredLog.concat(
-        logLines.filter(this.filterLogLine.bind(this, this.state.filter))
+      filteredEntries: this.state.filteredEntries.concat(
+        entries.filter(this.filterEntry.bind(this, this.state.filter))
       )
     });
   }
 
 
-  chunkReceived(ev) {
-    if (this.state.pause) return;
-
-    this.addChunk(ev.data);
+  /**
+   * Checks if log entry complies with current filter.
+   *
+   * @param {RegExp} filter
+   * @param {string} entry
+   * @return {boolean}
+   */
+  filterEntry(filter, { entry }) {
+    return (new RegExp(filter)).test(entry);
   }
 
 
-  socketError(ev) {
-    this.setState({ error: ev });
-    this.disconnect();
-  }
-
-
-  toggleAutoscroll() {
-    this.setState({ autoscroll: !this.state.autoscroll });
-  }
-
-
-  checkAutoscroll() {
-    if (!this.state.autoscroll) return;
-
-    if (this._scroll.scrollTop <
-        this._scroll.scrollHeight - this._scroll.clientHeight) {
-      this.setState({ autoscroll: false });
-    }
-  }
-
-
-  togglePause() {
-    if (!this.state.pause) {
-      this.setState({ pause: true });
-      this.addChunk('-- Paused --');
-    } else {
-      this.setState({ pause: false });
-      this.addChunk('-- Continue --');
-    }
-  }
-
-
-  toggleReFilter() {
-    const isFilterRe = !this.state.isFilterRe;
-    const [filter, filterError] = this.filterFromSource(
-      isFilterRe, this.state.filterSource
-    );
-    const filteredLog = this.state.log.filter(
-      this.filterLogLine.bind(this, filter)
-    );
-
-    this.setState({ isFilterRe, filter, filterError, filteredLog });
-  }
-
-
-  filterLogLine(filter, { line }) {
-    return (new RegExp(filter)).test(line);
-  }
-
-
-  async connect(tries = 0) {
+  /**
+   * Connects to log Web Socket for given workflow.
+   *
+   * Opened Web Socket tries to reconnect on sudden connection
+   * close. It does so by calling this method with number of tries
+   * increased. If number of tries is higher then {@link MAX_TRIES},
+   * it stops.
+   *
+   * @param {{ workflowid: string }} workflow
+   * @param {number=} tries
+   * @see disconnect
+   * @see onSocketMessage
+   * @see onSocketError
+   */
+  async connect(workflow, tries = 0) {
     if (tries >= MAX_TRIES) {
       this.setState({ error: 'Connection dropped.' });
       this.disconnect();
@@ -254,15 +373,18 @@ export default class LibraryTab extends Component {
     if (this._socket) this.disconnect();
     this._socket = new WebSocket(
       settings.WS_API_PREFIX +
-      `/log/workflows/${this.props.workflow.workflowid}` +
+      `/log/workflows/${workflow.workflowid}` +
       `?token=${this._token}`
     );
-    this._socket.onmessage = this.chunkReceived.bind(this);
-    this._socket.onclose = this.connect.bind(this, tries + 1);
-    this._socket.onerror = this.socketError.bind(this);
+    this._socket.onmessage = ::this.onSocketMessage;
+    this._socket.onclose = this.connect.bind(this, workflow, tries + 1);
+    this._socket.onerror = ::this.onSocketError;
   }
 
 
+  /**
+   * Removes event handlers and closes current log Web Socket.
+   */
   disconnect() {
     if (!this._socket) return;
 
@@ -274,14 +396,23 @@ export default class LibraryTab extends Component {
   }
 
 
-  renderLogLine({ line, no }) {
+  /**
+   * Returns element for given log entry.
+   *
+   * It finds and highlights matches for current filter.
+   *
+   * @param {string} entry
+   * @param {number} no
+   * @return {ReactElement}
+   */
+  renderEntry({ entry, no }) {
     const filter = new RegExp(this.state.filter);
     const parts = [];
 
     let prevIndex = filter.lastIndex;
-    for (let match = filter.exec(line);
+    for (let match = filter.exec(entry);
          match !== null && match.index !== filter.lastIndex;
-         match = filter.exec(line)) {
+         match = filter.exec(entry)) {
       if (prevIndex < match.index) {
         parts.push({
           start: prevIndex,
@@ -299,10 +430,10 @@ export default class LibraryTab extends Component {
       prevIndex = filter.lastIndex;
     }
 
-    if (prevIndex < line.length) {
+    if (prevIndex < entry.length) {
       parts.push({
         start: prevIndex,
-        end: line.length,
+        end: entry.length,
         highlight: false
       });
     }
@@ -312,11 +443,11 @@ export default class LibraryTab extends Component {
         {parts.map(({ start, end, highlight }) => (
           highlight ? (
             <b key={`${start}.${end}`} className='highlight'>
-              {line.substring(start, end)}
+              {entry.substring(start, end)}
             </b>
           ) : (
             <span key={`${start}.${end}`}>
-              {line.substring(start, end)}
+              {entry.substring(start, end)}
             </span>
           )
         ))}
@@ -325,11 +456,11 @@ export default class LibraryTab extends Component {
   }
 
 
-  renderLog() {
-    return this.state.filteredLog.map(::this.renderLogLine);
-  }
-
-
+  /**
+   * Returns element for this component.
+   *
+   * @return {ReactElement}
+   */
   render() {
     const refScroll = c => this._scroll = c;
 
@@ -342,20 +473,20 @@ export default class LibraryTab extends Component {
                 label='Autoscroll'
                 btnStyle={this.state.autoscroll ? 'success' : null}
                 icon='check'
-                action={this.toggleAutoscroll}
+                action={::this.onAutoscrollToggle}
               />
               <Control
                 label='Pause'
                 btnStyle={this.state.pause ? 'success' : null}
                 icon='pause'
-                action={this.togglePause}
+                action={::this.onPauseToggle}
               />
             </Controls>
           </div>
           <div className='col-sm-6'>
             <form
               className='form-inline text-right form-filter'
-              onSubmit={this.onSubmit}
+              onSubmit={::this.onSubmit}
             >
               <div
                 className={classNames({
@@ -377,7 +508,7 @@ export default class LibraryTab extends Component {
                     type='checkbox'
                     className='sr-only'
                     checked={this.state.isFilterRe}
-                    onChange={this.toggleReFilter}
+                    onChange={::this.onReFilterToggle}
                   />
                 </label>
                 <input
@@ -385,7 +516,7 @@ export default class LibraryTab extends Component {
                   className='form-control form-filter__field'
                   placeholder='Filter…'
                   value={this.state.filterSource}
-                  onChange={this.onFilter}
+                  onChange={::this.onFilterSourceChange}
                 />
                 <button
                   type='submit'
@@ -415,9 +546,11 @@ export default class LibraryTab extends Component {
           <pre
             className='language-log'
             ref={refScroll}
-            onScroll={this.checkAutoscroll}
+            onScroll={::this.onBufferScroll}
           >
-            <code className='language-log'>{this.renderLog()}</code>
+            <code className='language-log'>
+              {this.state.filteredEntries.map(::this.renderEntry)}
+            </code>
           </pre>
         </div>
       </div>
