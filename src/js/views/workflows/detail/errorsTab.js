@@ -18,8 +18,8 @@ export default class ErrorsTab extends Component {
     dispatch: PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.remove = this.remove.bind(this);
     this.update = this.update.bind(this);
