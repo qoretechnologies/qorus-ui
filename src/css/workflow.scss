@@ -120,6 +120,8 @@
 #log {
   overflow: hidden;
 
+  padding-top: 5px;
+
   > :first-child {
     display: -ms-flexbox;
     display: flex;

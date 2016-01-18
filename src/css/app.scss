@@ -30,6 +30,27 @@ pre {
 }
 
 
+.form-filter {
+  &__field {
+    font-size: 10px;
+
+    height: 22px;
+    padding: 3px 7px;
+    border-radius: 0;
+  }
+
+  &__mod {
+    border-right: 0;
+    border-radius: 11px 0 0 11px;
+  }
+
+  &__btn {
+    border-left: 0;
+    border-radius: 0 11px 11px 0;
+  }
+}
+
+
 .form-horizontal .form-group .checkbox input[type="checkbox"] {
   margin-left: 0;
 }
