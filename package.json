@@ -77,8 +77,8 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
-    "test": "babel-node `which babel-istanbul` test _mocha -- test/**/*.spec.js",
-    "mocha": "mocha --watch --reporter min --compilers js:babel-register --require ./test/babel.js test/**/*.spec.js",
+    "test": "NODE_ENV=test babel-node `which babel-istanbul` test _mocha -- test/**/*.spec.js",
+    "mocha": "NODE_ENV=test mocha --watch --reporter min --compilers js:babel-register --require ./test/babel.js test/**/*.spec.js",
     "coveralls": "babel-node `which babel-istanbul` cover _mocha --report lcovonly -- test/**/*spec.js && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "eslint": "eslint src test"
   }
