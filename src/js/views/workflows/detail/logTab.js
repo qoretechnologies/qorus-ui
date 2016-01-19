@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Controls, Control } from 'components/controls';
+import CollectionSearch from 'components/collectionSearch';
 
 
 import classNames from 'classnames';
@@ -55,10 +56,7 @@ export default class LogTab extends Component {
     this.setState({
       entries: [],
       filteredEntries: [],
-      filterSource: '',
       filter: new RegExp('', 'g'),
-      filterError: null,
-      isFilterRe: false,
       autoscroll: true,
       pause: false,
       error: null
@@ -116,16 +114,6 @@ export default class LogTab extends Component {
 
 
   /**
-   * Prevents filter form submit.
-   *
-   * @param {Event} ev
-   */
-  onSubmit(ev) {
-    ev.preventDefault();
-  }
-
-
-  /**
    * Toggles autoscroll.
    */
   onAutoscrollToggle() {
@@ -148,40 +136,18 @@ export default class LogTab extends Component {
 
 
   /**
-   * Changes filter based on new input as a source.
+   * Changes filter.
    *
    * The filter is also applied on the buffer.
    *
-   * @param {Event} ev
+   * @param {RegExp} filter
    */
-  onFilterSourceChange(ev) {
-    const filterSource = ev.currentTarget.value;
-    const [filter, filterError] = this.filterFromSource(
-      this.state.isFilterRe, filterSource
-    );
+  onFilterChange(filter) {
     const filteredEntries = this.state.entries.filter(
       this.filterEntry.bind(this, filter)
     );
 
-    this.setState({ filterSource, filter, filterError, filteredEntries });
-  }
-
-
-  /**
-   * Toggle indicator of filter source being treated as RegExp.
-   *
-   * The filter is changed and then applied on the buffer.
-   */
-  onReFilterToggle() {
-    const isFilterRe = !this.state.isFilterRe;
-    const [filter, filterError] = this.filterFromSource(
-      isFilterRe, this.state.filterSource
-    );
-    const filteredEntries = this.state.entries.filter(
-      this.filterEntry.bind(this, filter)
-    );
-
-    this.setState({ isFilterRe, filter, filterError, filteredEntries });
+    this.setState({ filter, filteredEntries });
   }
 
 
@@ -253,50 +219,6 @@ export default class LogTab extends Component {
           map(({ entry }) => entry).
           join('\n')
       );
-  }
-
-
-  /**
-   * Creates new filter RegExp.
-   *
-   * @param {boolean} isFilterRe treat filter source as a RegExp
-   * @param {string} filterSource
-   * @return {RegExp}
-   */
-  filterFromSource(isFilterRe, filterSource) {
-    let source;
-    if (isFilterRe) {
-      source = filterSource;
-    } else {
-      source = filterSource.
-        replace(/\\/g, '\\\\').
-        replace(/\./g, '\\.').
-        replace(/\*/g, '\\*').
-        replace(/\+/g, '\\+').
-        replace(/\?/g, '\\?').
-        replace(/\[/g, '\\[').
-        replace(/\(/g, '\\(').
-        replace(/\{/g, '\\{').
-        replace(/\|/g, '\\|').
-        replace(/^\^/g, '\\^').
-        replace(/\$$/g, '\\$');
-    }
-
-    let filter;
-    let filterError = null;
-    while (!filter && source) {
-      try {
-        filter = new RegExp(source, 'g');
-      } catch (e) {
-        if (!filterError) filterError = e;
-
-        source = source.substring(0, source.length - 1);
-      }
-    }
-
-    if (!filter) filter = new RegExp('', 'g');
-
-    return [filter, filterError];
   }
 
 
@@ -484,57 +406,16 @@ export default class LogTab extends Component {
             </Controls>
           </div>
           <div className='col-sm-6'>
-            <form
-              className='form-inline text-right form-filter'
-              onSubmit={::this.onSubmit}
-            >
-              <div
-                className={classNames({
-                  'form-group': true,
-                  'has-error': this.state.filterError
-                })}
+            <CollectionSearch regexp onChange={::this.onFilterChange}>
+              <a
+                href={this.getLogUri()}
+                download={this.getLogName()}
+                className='btn btn-default btn-xs'
+                role='button'
               >
-                <label
-                  className={classNames({
-                    btn: true,
-                    'btn-default': !this.state.isFilterRe,
-                    'btn-xs': true,
-                    'form-filter__mod': true,
-                    'btn-success': this.state.isFilterRe
-                  })}
-                >
-                  RE
-                  <input
-                    type='checkbox'
-                    className='sr-only'
-                    checked={this.state.isFilterRe}
-                    onChange={::this.onReFilterToggle}
-                  />
-                </label>
-                <input
-                  type='search'
-                  className='form-control form-filter__field'
-                  placeholder='Filter…'
-                  value={this.state.filterSource}
-                  onChange={::this.onFilterSourceChange}
-                />
-                <button
-                  type='submit'
-                  className='btn btn-default btn-xs form-filter__btn'
-                >
-                  <i className='fa fa-search' />
-                </button>
-                {' '}
-                <a
-                  href={this.getLogUri()}
-                  download={this.getLogName()}
-                  className='btn btn-default btn-xs'
-                  role='button'
-                >
-                  <i className='fa fa-download' />
-                </a>
-              </div>
-            </form>
+                <i className='fa fa-download' />
+              </a>
+            </CollectionSearch>
           </div>
         </div>
         {this.state.error && (

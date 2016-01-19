@@ -1,0 +1,29 @@
+.form-search {
+  &__field {
+    font-size: 10px;
+
+    height: 22px;
+    padding: 3px 7px;
+    border-radius: 0;
+
+    &:first-child {
+      border-radius: 11px 0 0 11px;
+    }
+  }
+
+  &__mod {
+    border-right: 0;
+
+    &:first-child {
+      border-radius: 11px 0 0 11px;
+    }
+  }
+
+  &__btn {
+    border-left: 0;
+
+    &:last-child {
+      border-radius: 0 11px 11px 0;
+    }
+  }
+}

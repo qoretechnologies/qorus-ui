@@ -3,6 +3,7 @@
 
 
 @import '../js/components/autostart/style';
+@import '../js/components/collectionSearch/style';
 @import '../js/components/groups/style';
 @import '../js/components/modal/style';
 @import '../js/components/resize/style';
@@ -14,40 +15,6 @@
 
 pre {
   white-space: pre-wrap;
-}
-
-
-.form-search .form-group {
-  margin-top: 5px;
-
-  .form-control.input-sm {
-    border-radius: 15px 0 0 15px;
-  }
-  .btn.btn-sm {
-    border-left: 0;
-    border-radius: 0 15px 15px 0;
-  }
-}
-
-
-.form-filter {
-  &__field {
-    font-size: 10px;
-
-    height: 22px;
-    padding: 3px 7px;
-    border-radius: 0;
-  }
-
-  &__mod {
-    border-right: 0;
-    border-radius: 11px 0 0 11px;
-  }
-
-  &__btn {
-    border-left: 0;
-    border-radius: 0 11px 11px 0;
-  }
 }
 
 

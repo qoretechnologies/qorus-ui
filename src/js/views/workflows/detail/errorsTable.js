@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
 import { Controls, Control } from 'components/controls';
+import CollectionSearch from 'components/collectionSearch';
 import StatusIcon from 'components/statusIcon';
 
 
@@ -35,12 +36,11 @@ export default class ErrorsTable extends Component {
     this._modal = null;
     this._commitFn = null;
 
-    this.state = this.getErrorsState(this.props, '');
+    this.state = this.getErrorsState(this.props, new RegExp());
 
+    this.onFilterChange = this.onFilterChange.bind(this);
     this.submitModal = this.submitModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onSearch = this.onSearch.bind(this);
     this.nameColProps = this.nameColProps.bind(this);
     this.severityColProps = this.severityColProps.bind(this);
     this.retryColProps = this.retryColProps.bind(this);
@@ -54,37 +54,27 @@ export default class ErrorsTable extends Component {
    */
   componentWillReceiveProps(nextProps) {
     this.setState(
-      this.getErrorsState(nextProps, this.state.searchText)
+      this.getErrorsState(nextProps, this.state.filter)
     );
   }
 
   /**
-   * @param {Event} ev
+   * @param {RegExp} filter
    */
-  onSearch(ev) {
+  onFilterChange(filter) {
     this.setState(
-      this.getErrorsState(this.props, ev.target.value)
+      this.getErrorsState(this.props, filter)
     );
-  }
-
-  /**
-   * @param {Event} ev
-   */
-  onSubmit(ev) {
-    ev.preventDefault();
   }
 
   /**
    * @param {object} props
-   * @param {string} searchText
+   * @param {RegExp} filter
    */
-  getErrorsState(props, searchText) {
+  getErrorsState(props, filter) {
     return {
-      searchText,
-      errors: props.errors.filter(err => (
-        !searchText ||
-        err.error.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
-      ))
+      filter,
+      errors: props.errors.filter(err => (new RegExp(filter)).test(err.error))
     };
   }
 
@@ -167,23 +157,7 @@ export default class ErrorsTable extends Component {
       <div className='relative'>
         <div className='clearfix'>
           <h4 className='pull-left'>{this.props.heading}</h4>
-          <form
-            className='form-inline text-right form-search'
-            onSubmit={this.onSubmit}
-          >
-            <div className='form-group'>
-              <input
-                type='search'
-                className='form-control input-sm'
-                placeholder='Search…'
-                value={this.state.searchText}
-                onChange={this.onSearch}
-              />
-              <button type='submit' className='btn btn-default btn-sm'>
-                <i className='fa fa-search' />
-              </button>
-            </div>
-          </form>
+          <CollectionSearch onChange={this.onFilterChange} ignoreCase />
         </div>
         {!this.state.errors.length && (
           <p>No data found.</p>
