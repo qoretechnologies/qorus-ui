@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 
-class Toolbar extends Component {
+export default class Toolbar extends Component {
   static propTypes = {
     children: PropTypes.node
   };
@@ -16,5 +16,3 @@ class Toolbar extends Component {
     );
   }
 }
-
-export default Toolbar;

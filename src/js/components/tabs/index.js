@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
 import classNames from 'classnames';
-import { slugify } from '../utils';
+import { slugify } from '../../utils';
 
 
 export class TabGroup extends Component {
@@ -10,13 +10,9 @@ export class TabGroup extends Component {
     active: PropTypes.string,
     name: PropTypes.string,
     className: PropTypes.string,
-    cssClass: PropTypes.string,
     tabChange: PropTypes.func
   };
 
-  static defaultProps = {
-    cssClass: 'nav nav-tabs'
-  };
 
   constructor(props) {
     super(props);
@@ -24,11 +20,13 @@ export class TabGroup extends Component {
     this.onTabChange = this.onTabChange.bind(this);
   }
 
+
   onTabChange(slug) {
     if (!this.props.tabChange) return;
 
     this.props.tabChange(slug);
   }
+
 
   activeSlug() {
     return this.props.active || (
@@ -39,9 +37,11 @@ export class TabGroup extends Component {
     );
   }
 
+
   isActive(slug) {
     return this.activeSlug() === slug;
   }
+
 
   render() {
     const navigation = {};
@@ -74,8 +74,8 @@ export class TabGroup extends Component {
     });
 
     return (
-      <div>
-        <ul className={this.props.className || this.props.cssClass}>
+      <div className={this.props.className}>
+        <ul className='nav nav-tabs'>
           {createFragment(navigation)}
         </ul>
         <div className='tab-content'>

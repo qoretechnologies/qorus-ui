@@ -1,3 +1,8 @@
+/**
+ * Modal is well styled from Bootstrap.
+ *
+ * 1. Just allow textarea resing only vertically.
+ */
 .modal textarea {
-  resize: vertical;
+  resize: vertical; /* [1] */
 }

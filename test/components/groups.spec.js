@@ -1,4 +1,3 @@
-import '../jsdom';
 import React from 'react';
 import { Link } from 'react-router';
 import TestUtils from 'react-addons-test-utils';

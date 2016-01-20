@@ -7,16 +7,16 @@ bootstrapVersion: 3
 
 # Webpack loaders, order matters
 styleLoaders:
-  - style
-  - css
-  - sass
+  - 'style'
+  - 'css?sourceMap'
+  - 'sass?sourceMap&outputStyle=compressed'
 
 # Extract styles to stand-alone css file
 # Different settings for different environments can be used,
 # It depends on value of NODE_ENV environment variable
 # This param can also be set in webpack config:
 #   entry: 'bootstrap-loader/extractStyles'
-extractStyles: false
+extractStyles: true
 # env:
 #   development:
 #     extractStyles: false

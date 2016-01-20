@@ -15,15 +15,11 @@ export default class WorkflowsHeader extends Component {
     workflow: PropTypes.object
   };
 
+
   static contextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func.isRequired
   };
 
-  constructor(props, context) {
-    super(props, context);
-
-    this.setAutostart = this.setAutostart.bind(this);
-  }
 
   setAutostart(context, value) {
     this.context.dispatch(
@@ -31,28 +27,29 @@ export default class WorkflowsHeader extends Component {
     );
   }
 
-  render() {
-    const { workflow } = this.props;
 
+  render() {
     return (
-      <div className='heading'>
-        <div className='row'>
-          <div className='col-xs-12'>
-            <h3 className='pull-left'>
-              <span className='selectable'>{workflow.normalizedName}</span>
-            </h3>
-          </div>
-          <div className='controls col-xs-12'>
-            <WorkflowsControls workflow={workflow} />
+      <div className='row wflw__header'>
+        <div className='col-xs-12'>
+          <h3 className='pull-left'>
+            <span className='selectable'>
+              {this.props.workflow.normalizedName}
+            </span>
+          </h3>
+        </div>
+        <div className='col-xs-12'>
+          <p>
+            <WorkflowsControls workflow={this.props.workflow} />
             {' '}
             <AutoStart
-              context={workflow}
-              autostart={workflow.autostart}
-              execCount={workflow.exec_count}
-              inc={this.setAutostart}
-              dec={this.setAutostart}
+              context={this.props.workflow}
+              autostart={this.props.workflow.autostart}
+              execCount={this.props.workflow.exec_count}
+              inc={::this.setAutostart}
+              dec={::this.setAutostart}
             />
-          </div>
+          </p>
         </div>
       </div>
     );

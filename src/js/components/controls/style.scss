@@ -1,0 +1,11 @@
+/**
+ * Controls groups action buttons.
+ *
+ * 1. Controls can be part of content flow with other widget so they
+ *    are inline.
+ * 2. Prevent text wrapping.
+ */
+.btn-controls {
+  display: inline-block; /* [1] */
+  white-space: nowrap; /* [2] */
+}

@@ -12,7 +12,7 @@ import actions from 'store/api/actions';
 
 // components
 import Loader from 'components/loader';
-import { PaneView } from 'components/pane';
+import Pane from 'components/pane';
 
 // partials
 import WorkflowsToolbar from './toolbar';
@@ -64,7 +64,7 @@ const systemOptionsSelector = state => (
 );
 const globalErrorsSelector = state => errorsToArray(state, 'global');
 const searchSelector = (state, props) => props.location.query.q;
-const infoSelector = () => { return {}; };
+const infoSelector = state => state.api.system;
 const deprecatedSelector = (state, props) => props.params.filter === 'hide';
 
 const collectionSelector = createSelector(
@@ -95,7 +95,7 @@ const viewSelector = createSelector(
       loading: workflows.loading,
       workflows: collection,
       errors,
-      info: {},
+      info,
       systemOptions,
       globalErrors
     };
@@ -118,20 +118,18 @@ export default class Workflows extends Component {
     route: PropTypes.object
   };
 
+
+  static contextTypes = {
+    getTitle: PropTypes.func.isRequired
+  };
+
+
   static childContextTypes = {
     params: PropTypes.object,
     route: PropTypes.object,
     dispatch: PropTypes.func
   };
 
-  constructor(...props) {
-    super(...props);
-    const { dispatch } = this.props;
-    dispatch(actions.workflows.fetch());
-
-    this.isActive = this.isActive.bind(this);
-    this.onClosePane = this.onClosePane.bind(this);
-  }
 
   getChildContext() {
     return {
@@ -141,13 +139,21 @@ export default class Workflows extends Component {
     };
   }
 
+
+  componentWillMount() {
+    this.props.dispatch(actions.workflows.fetch());
+  }
+
+
   componentDidMount() {
     this.setTitle();
   }
 
+
   componentDidUpdate() {
     this.setTitle();
   }
+
 
   onClosePane() {
     goTo(
@@ -158,23 +164,23 @@ export default class Workflows extends Component {
     );
   }
 
+
   setTitle() {
-    const { info } = this.props;
-
-    const inst = info['instance-key'] ? info['instance-key'] : 'Qorus';
-
-    document.title = `Workflows | ${inst}`;
+    document.title = `Workflows | ${this.context.getTitle()}`;
   }
+
 
   getActiveWorkflow() {
     if (!this.props.params.detailId) return null;
 
-    return this.props.workflows.find(this.isActive);
+    return this.props.workflows.find(::this.isActive);
   }
+
 
   isActive(workflow) {
     return workflow.id === parseInt(this.props.params.detailId, 10);
   }
+
 
   renderPane() {
     const { params, errors, systemOptions, globalErrors } = this.props;
@@ -182,9 +188,9 @@ export default class Workflows extends Component {
     if (!this.getActiveWorkflow()) return null;
 
     return (
-      <PaneView
+      <Pane
         width={550}
-        onClose={this.onClosePane}
+        onClose={::this.onClosePane}
       >
         <WorkflowsDetail
           workflow={this.getActiveWorkflow()}
@@ -193,9 +199,10 @@ export default class Workflows extends Component {
           globalErrors={globalErrors}
           tabId={params.tabId}
         />
-      </PaneView>
+      </Pane>
     );
   }
+
 
   render() {
     const { sync, loading, workflows } = this.props;
@@ -209,7 +216,7 @@ export default class Workflows extends Component {
         <WorkflowsToolbar />
         <WorkflowsTable
           workflows={workflows}
-          shouldHighlight={this.isActive}
+          shouldHighlight={::this.isActive}
         />
         {this.renderPane()}
       </div>

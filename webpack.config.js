@@ -45,7 +45,8 @@ var config = {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          'css?sourceMap!' +
+          '' +
+            'css?sourceMap!' +
             'sass?sourceMap&outputStyle=compressed'
         )
       },
@@ -83,7 +84,26 @@ var config = {
   ]
 };
 
-if (env === 'development') {
+
+switch (env) {
+case 'production':
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env)
+      }
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  );
+  break;
+
+default:
   config.module.loaders[0].loaders.unshift('react-hot');
   config.module.loaders.push({
     test: require.resolve('react'),
@@ -115,27 +135,8 @@ if (env === 'development') {
       '/api/*': 'http://localhost:8001'
     }
   };
+  break;
 }
 
-if (env === 'production') {
-  config.plugins.push(
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(env),
-        REST_API_BASE_URL: JSON.stringify(process.env.REST_API_BASE_URL ||
-                                          'http://localhost:8001/api'),
-        WS_API_BASE_URL: JSON.stringify(process.env.WS_API_BASE_URL ||
-                                        'ws://localhost:8001')
-      }
-    }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  );
-}
 
 module.exports = config;

@@ -25,36 +25,29 @@ export default class WorkflowsDetail extends Component {
     tabId: PropTypes.string
   };
 
+
   static contextTypes = {
     dispatch: PropTypes.func,
     route: PropTypes.object,
     params: PropTypes.object
   };
 
-  /**
-   * Initialiazes component and fetches workflow errors.
-   *
-   * @param {object} props
-   * @param {object} context
-   */
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = { lastWorkflowId: null };
-
-    this.changeTab = this.changeTab.bind(this);
-  }
 
   componentWillMount() {
+    this.setState({ lastWorkflowId: null });
     this.loadDetailedDataIfChanged(this.props);
   }
+
 
   componentWillReceiveProps(nextProps) {
     this.loadDetailedDataIfChanged(nextProps);
   }
 
+
   loadDetailedDataIfChanged(nextProps) {
-    if (this.state.lastWorkflowId === nextProps.workflow.id) return;
+    if (this.state && this.state.lastWorkflowId === nextProps.workflow.id) {
+      return;
+    }
 
     this.setState({ lastWorkflowId: nextProps.workflow.id });
 
@@ -67,6 +60,7 @@ export default class WorkflowsDetail extends Component {
     );
   }
 
+
   changeTab(tabId) {
     goTo(
       'workflows',
@@ -76,6 +70,7 @@ export default class WorkflowsDetail extends Component {
     );
   }
 
+
   render() {
     const { workflow, errors, systemOptions, globalErrors, tabId } =
       this.props;
@@ -83,9 +78,13 @@ export default class WorkflowsDetail extends Component {
     if (!workflow) return null;
 
     return (
-      <div className='relative workflow-pane'>
+      <article className='wflw'>
         <WorkflowsHeader workflow={workflow} />
-        <TabGroup active={tabId} tabChange={this.changeTab}>
+        <TabGroup
+          className='wflw__tabs'
+          active={tabId}
+          tabChange={::this.changeTab}
+        >
           <Tab name='Detail'>
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Tab>
@@ -108,7 +107,7 @@ export default class WorkflowsDetail extends Component {
             <InfoTab workflow={workflow} />
           </Tab>
         </TabGroup>
-      </div>
+      </article>
     );
   }
 }

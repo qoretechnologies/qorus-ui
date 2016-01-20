@@ -1,0 +1,65 @@
+/**
+ * Workflow detail log tab.
+ *
+ * 1. Disabled scrolling in tab pane because only the log buffer is
+ *    expected to overflow.
+ * 2. Controls and log buffer are organized in flexbox with column
+ *    flow.
+ * 3. The log buffer stretched to available height.
+ * 4. Buffer's inner element is absolutely positioned to allow
+ *    scrolling independent from page scroll. To prevent tucking to
+ *    the bottom there is some padding.
+ * 5. Makes sure top controls are not tucked to tab pane border.
+ * 6. The log buffer uses Prism to style it, but the default font size
+ *    si too big. We also need custom word highlight which is not part
+ *    of Prism.
+ */
+#log {
+  overflow: hidden; /* [1] */
+
+  > :first-child { /* [2] */
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    height: 100%;
+
+    > .btn-controls {
+      -ms-flex: initial;
+      flex: initial;
+    }
+
+    > .log-area { /* [3] */
+      position: relative;
+
+      -ms-flex: auto;
+      flex: auto;
+
+      > pre { /* [4] */
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: $panel-body-padding;
+        left: 0;
+
+        overflow: auto;
+      }
+    }
+  }
+
+
+  .btn-controls, .form-inline { /* [5] */
+    margin: ($line-height-computed / 2) 0 0;
+  }
+
+
+  .log-area { /* [6] */
+    > pre {
+      font-size: $font-size-extra-small;
+    }
+
+    .highlight {
+      background: slategray;
+    }
+  }
+}

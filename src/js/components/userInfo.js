@@ -1,23 +1,24 @@
 import React, { Component, PropTypes } from 'react';
+import { pureRender } from './utils';
 
-class UserInfo extends Component {
+
+@pureRender
+export default class UserInfo extends Component {
   static propTypes = {
-    currentUser: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
   };
 
-  render() {
-    const { currentUser } = this.props;
 
+  render() {
     return (
-      <div id='user-info'>
-        <button className='btn btn-inverse'>
-          <i className='fa fa-user' />
-          &nbsp;<span className='username'>{ currentUser.name }</span>
-        </button>
-      </div>
+      <button
+        type='button'
+        className='btn btn-inverse navbar-btn navbar-right'
+      >
+        <i className='fa fa-user' />
+        {' '}
+        <span>{this.props.user.name}</span>
+      </button>
     );
   }
 }
-
-
-export default UserInfo;

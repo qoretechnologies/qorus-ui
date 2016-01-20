@@ -10,19 +10,17 @@ import Workflows from 'views/workflows';
 import setupStore from 'store';
 
 
-require('bootstrap-loader/extractStyles');
+require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
-require('../css/base.css');
-require('../css/line.numbers.css');
 require('../css/app.scss');
 
 
-class App extends Component {
-
+export default class App extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
     env: PropTypes.object.isRequired
   };
+
 
   constructor(props) {
     super(props);
@@ -33,11 +31,13 @@ class App extends Component {
     this.loadDevTools();
   }
 
+
   loadStore() {
     this.state.store = null;
 
     setupStore(this.props.env.NODE_ENV).then(store => this.setState({ store }));
   }
+
 
   loadDevTools() {
     switch (this.props.env.NODE_ENV) {
@@ -62,11 +62,13 @@ class App extends Component {
     }
   }
 
+
   renderEmpty() {
     return (
       <div />
     );
   }
+
 
   renderDevTools() {
     if (!this.props.env.DEVTOOLS || !this.state.devToolsReady ||
@@ -79,15 +81,14 @@ class App extends Component {
     );
   }
 
+
   render() {
     if (!this.state.store) return this.renderEmpty();
 
-    const { history } = this.props;
-
     return (
       <Provider store={this.state.store}>
-        <div>
-          <Router history={history}>
+        <div className='app__wrap'>
+          <Router history={this.props.history}>
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system' />
@@ -105,12 +106,9 @@ class App extends Component {
               <Route path='performance'/>
             </Route>
           </Router>
-          { this.renderDevTools() }
+          {this.renderDevTools()}
         </div>
       </Provider>
     );
   }
-
 }
-
-export default App;

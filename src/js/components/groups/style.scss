@@ -1,9 +1,16 @@
+/**
+ * Tag-like group of links. Every link is a Bootstrap label.
+ *
+ * 1. Groups links have no effects.
+ * 2. To prevent tucking links to each other, there's a little gap in
+ *    between them.
+ */
 .groups {
   & > a {
-    text-decoration: none;
+    text-decoration: none; /* [1] */
   }
 
-  & > .group + .group:before {
-    content: " "
+  & > .group + .group::before {
+    content: " "; /* [2] */
   }
 }

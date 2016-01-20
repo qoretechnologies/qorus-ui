@@ -1,41 +1,35 @@
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
 @import '../../node_modules/prismjs/themes/prism-okaidia';
 @import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers';
 
 
+$font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
+
+
+@import './buttons';
+@import './tables';
+
+
 @import '../js/components/autostart/style';
 @import '../js/components/collectionSearch/style';
+@import '../js/components/controls/style';
+@import '../js/components/footer/style';
 @import '../js/components/groups/style';
 @import '../js/components/modal/style';
+@import '../js/components/navigation/style';
+@import '../js/components/pane/style';
 @import '../js/components/resize/style';
 @import '../js/components/table/style';
+@import '../js/components/tabs/style';
+@import '../js/components/topbar/style';
 
 
+@import './not-supported';
+@import './root';
 @import './workflow';
 
 
-pre {
-  white-space: pre-wrap;
-}
-
-
-.form-horizontal .form-group .checkbox input[type="checkbox"] {
-  margin-left: 0;
-}
-
-
-.table-condensed {
-  .btn-controls .btn-xs {
-    margin-top: 4px;
-    padding: 1px 4px 0;
-  }
-
-  .autostart .btn-controls .btn-xs {
-    padding-left: 3px;
-    padding-right: 3px;
-
-    &.autostart-change {
-      padding-left: 4px;
-      padding-right: 4px;
-    }
-  }
+html, body, .app, .app__wrap {
+  height: 100%;
 }

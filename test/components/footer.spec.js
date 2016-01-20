@@ -1,32 +1,26 @@
-import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 
-import Footer from '../../src/js/components/footer.js';
+import Footer from '../../src/js/components/footer';
 
 
-describe('Testing Footer Component', function () {
-  const props = {
-    info: {
+describe("Footer from 'components/footer'", () => {
+  it('displays schema, version and build if passed', () => {
+    const info = {
       'omq-schema': 'test@test',
       'omq-version': '1',
       'omq-build': 'test'
-    }
-  };
+    };
 
-  const testComponent = TestUtils.renderIntoDocument(
-    <Footer {...props} />
-  );
+    const comp = TestUtils.renderIntoDocument(
+      <Footer info={info} />
+    );
 
-  const el = TestUtils.scryRenderedDOMComponentsWithTag(testComponent, 'small');
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'small');
 
-  it('<small> schema should be (Schema: test@test)', function () {
-    expect(el[0].textContent).to.equal('(Schema: test@test)');
-  });
-
-  it('<small> version should be 1.test', function () {
-    expect(el[1].textContent).to.equal('(Version: 1.test)');
+    expect(els[0].textContent).to.equal('(Schema: test@test)');
+    expect(els[1].textContent).to.equal('(Version: 1.test)');
   });
 });

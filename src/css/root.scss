@@ -1,0 +1,82 @@
+/*
+ * Main page layout.
+ *
+ * It is composed of four main parts: topbar, navigation, main section
+ * and footer. Topbar and footer occupy the whole page width and
+ * consist of only one row of content. Navigation is on the left
+ * stretching from top to bottom but only necessary width. The rest
+ * and therefore most of the space is occupied by the main section.
+ *
+ * The layout occupies all of its available screen space. The most
+ * meaningful use is to put closest to the body and make sure that all
+ * ancestors occupy as much space as possible (e.g., `html, body {
+ * height: 100% }`).
+ *
+ * Since topbar and footer have fixed position there are some
+ * adjusments needed:
+ *
+ * 1. Adjust for topbar which is a top-fixed navbar.
+ * 2. Adjust for footer which is bottom-fixed.
+ * 3. Additional white space around the main content.
+ * 4. Fixes overflow issues in stable Safari.
+ * 5. Makes sure that overflowing panes do not interact (overflow over
+ *    or under) with topbar.
+ */
+.root {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-flow: column;
+  -webkit-flex-flow: column;
+  flex-flow: column;
+  height: 100%;
+
+  &::before, &::after { /* [4] */
+    content: "";
+    width: 100%;
+    -ms-flex: none;
+    -webkit-flex: none;
+    flex: none;
+  }
+
+  &::before { /* [1], [4] */
+    height: 50px;
+  }
+
+  &__center {
+    position: relative; /* [5] */
+
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-flow: row;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+
+    -ms-flex: 1 1 auto;
+    -webkit-flex: auto;
+    flex: auto;
+
+    > nav, > section {
+      padding-bottom: 29px; /* [2], [4] */
+    }
+
+    > nav {
+      -ms-flex: none;
+      -webkit-flex: none;
+      flex: none;
+      overflow-x: hidden; /* [4] */
+      overflow-y: auto; /* [4] */
+    }
+
+    > section {
+      -ms-flex: 1 1 auto;
+      -webkit-flex: auto;
+      flex: auto;
+      overflow: auto; /* [4] */
+
+      padding-top: 20px; /* [3] */
+      padding-bottom: 20px; /* [3] */
+    }
+  }
+}

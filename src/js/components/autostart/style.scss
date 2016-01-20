@@ -1,11 +1,15 @@
+/**
+ * Autostast widget is basically a button group with three buttons.
+ *
+ * 1. Autostart can be part of content flow with other widget so it is
+ *    inline.
+ * 2. Center button shows autostart value which is often hard to read
+ *    so it is bold.
+ */
 .autostart {
-  display: inline-block;
-
-  .btn-controls {
-    display: inline-block;
-  }
+  display: inline-block; /* [1] */
 
   .autostart-change {
-    font-weight: bold;
+    font-weight: bold; /* [2] */
   }
 }

@@ -1,0 +1,30 @@
+/**
+ * Special footer style.
+ *
+ * 1. Computes smaller vertical margin.
+ * 2. Fixes footer to the bottom and stretches to the full width.
+ * 3. Mitigates default `p` style which "tucks" it to top without any
+ *    white-space.
+ * 4. Unites `p` style with different margins here.
+ * 5. Makes sure footer does not overflow other parts of the page.
+ */
+footer {
+  $vertical-margin: $line-height-computed / 4; /* [1] */
+
+
+  position: fixed; /* [2] */
+  bottom: 0; /* [2] */
+  width: 100%; /* [2] */
+
+  padding-top: $vertical-margin; /* [3] */
+
+  background-color: #f5f5f5;
+
+  white-space: nowrap; /* [5] */
+  overflow-x: auto; /* [5] */
+  overflow-y: hidden; /* [5] */
+
+  p {
+    margin-bottom: $vertical-margin; /* [4] */
+  }
+}

@@ -4,7 +4,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   styleLoader: ExtractTextPlugin.extract(
     'style',
-    'css?sourceMap!' +
+    '' +
+      'css?sourceMap!' +
       'less?sourceMap&compress'
   ),
   styles: {

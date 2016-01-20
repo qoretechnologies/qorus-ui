@@ -68,8 +68,20 @@ export default class WorkflowsTable extends Component {
     );
   }
 
+  narrowColProps() {
+    return {
+      className: 'narrow'
+    };
+  }
+
   actionsColChildProps(rec) {
     return { workflow: rec };
+  }
+
+  autostartColProps() {
+    return {
+      className: 'col-autostart'
+    };
   }
 
   autostartColChildProps(rec) {
@@ -81,11 +93,17 @@ export default class WorkflowsTable extends Component {
   }
 
   execColProps(rec) {
-    return { execCount: rec.exec_count };
+    return {
+      className: 'narrow',
+      execCount: rec.exec_count
+    };
   }
 
   idColProps(rec) {
-    return { id: rec.id };
+    return {
+      className: 'narrow',
+      id: rec.id
+    };
   }
 
   nameColProps(rec) {
@@ -93,7 +111,10 @@ export default class WorkflowsTable extends Component {
   }
 
   versionColProps(rec) {
-    return { version: rec.version };
+    return {
+      className: 'narrow',
+      version: rec.version
+    };
   }
 
   statesColChildProps(state, rec) {
@@ -101,7 +122,10 @@ export default class WorkflowsTable extends Component {
   }
 
   totalColProps(rec) {
-    return { TOTAL: rec.TOTAL };
+    return {
+      className: 'narrow',
+      TOTAL: rec.TOTAL
+    };
   }
 
   render() {
@@ -110,7 +134,7 @@ export default class WorkflowsTable extends Component {
         data={this.props.workflows}
         identifier={this.workflowIdentifier}
         shouldHighlight={this.props.shouldHighlight}
-        className='table table-striped table-condensed table-hover table-fixed'
+        className='table table-striped table-condensed table-hover table-fixed table--data'
         onRowClick={this.activateWorkflow}
       >
         <Col className='narrow'>
@@ -119,13 +143,15 @@ export default class WorkflowsTable extends Component {
         <Col
           heading='Actions'
           className='narrow'
+          props={this.narrowColProps}
           childProps={this.actionsColChildProps}
         >
           <WorkflowsControls />
         </Col>
         <Col
           heading='Autostart'
-          className='narrow'
+          className='col-autostart'
+          props={this.autostartColProps}
           childProps={this.autostartColChildProps}
         >
           <AutoStart inc={this.setAutostart} dec={this.setAutostart} />
@@ -162,6 +188,7 @@ export default class WorkflowsTable extends Component {
               key={idx}
               heading={state.short}
               className='narrow'
+              props={this.narrowColProps}
               childProps={childProps}
             >
               <Badge label={state.label} />

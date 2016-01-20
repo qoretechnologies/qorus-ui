@@ -169,7 +169,7 @@ export default class Options extends Component {
           {!!this.getWorkflowOptions().length && (
             <Table
               data={this.getWorkflowOptions()}
-              className='table table-condensed table-striped table-align-left'
+              className='table table-condensed table-striped table--small'
             >
               <Col
                 heading='Options'

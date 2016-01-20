@@ -1,19 +1,26 @@
+$resize-handle-width: 10px;
+
+
+/**
+ * Resize handle stretches on the respective border of its (resizable)
+ * parent.
+ */
 .resize-handle {
   position: absolute;
 
-  -ms-user-select: none;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 
   &.top {
     top: 0;
-    height: 10px;
+    height: $resize-handle-width;
 
     &:not(.left):not(.right) {
       left: 0;
       right: 0;
-      height: 10px;
+      height: $resize-handle-width;
 
       cursor: ns-resize;
       &.min {
@@ -36,7 +43,7 @@
 
   &.bottom {
     bottom: 0;
-    height: 10px;
+    height: $resize-handle-width;
 
     &:not(.left):not(.right) {
       left: 0;
@@ -62,7 +69,7 @@
 
   &.left {
     left: 0;
-    width: 10px;
+    width: $resize-handle-width;
 
     &:not(.top):not(.bottom) {
       top: 0;
@@ -76,7 +83,7 @@
   }
   &.right {
     right: 0;
-    width: 10px;
+    width: $resize-handle-width;
 
     &:not(.top):not(.bottom) {
       top: 0;

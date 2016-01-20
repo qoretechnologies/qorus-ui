@@ -1,0 +1,72 @@
+$zindex-pane: 1022;
+$pane-padding: $panel-body-padding;
+$pane-bg-color: rgba(245, 245, 245, .9);
+$pane-font-color: #000;
+
+
+/**
+ * Pane hovers over the rest of the page.
+ *
+ * 1. Hovers.
+ * 2. Can be stretched to 80% width of the page.
+ * 3. Allows vertical overflow.
+ * 4. To visualize hovering, there is a drop shadow.
+ * 5. Can be aligned to the right.
+ * 6. Can be closed via button which is always visible and placed in
+ *    to the top-right corner.
+ * 7. Adds some horizontal whitespace.
+ * 8. Sets 100% height which allows children to setup some nice things
+ *    like flexbox.
+ * 9. Active tab in navigation has transparent background (overrides
+ *    default Bootstrap white), black font color and overlay
+ *    tab content area border so tab the tab and the area look solid.
+ */
+.pane {
+  position: absolute; /* [1] */
+  top: 0; /* [1] */
+  bottom: 0; /* [1] */
+  z-index: $zindex-pane; /* [1] */
+
+  max-width: 80%; /* [2] */
+
+  overflow-y: auto; /* [3] */
+
+  background-color: $pane-bg-color;
+  color: $pane-font-color;
+  -webkit-box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
+     -moz-box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
+          box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
+
+  &.right { /* [5] */
+    right: 0;
+  }
+
+  &__close { /* [6] */
+    position: absolute;
+    top: $pane-padding;
+    right: $pane-padding;
+    z-index: $zindex-pane + 1;
+  }
+
+  &__content {
+    padding-left: $pane-padding; /* [7] */
+    padding-right: $pane-padding; /* [7] */
+    height: 100%; /* [8] */
+  }
+
+
+  .nav-tabs > li.active { /* [9] */
+    > a, > a:hover, > a:focus {
+      /**
+       * Cannot use transpanret border color because tab content are
+       * has it's own border and they overlap. So we the same color as
+       * the one used on pane background which is barely noticable and
+       * creates the illusion of solid space.
+       */
+      border-bottom-color: $pane-bg-color;
+
+      background-color: transparent;
+      color: $pane-font-color;
+    }
+  }
+}

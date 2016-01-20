@@ -164,7 +164,7 @@ export default class ErrorsTable extends Component {
         )}
         {!!this.state.errors.length && (
           <Table
-            className='table table-striped table-condensed'
+            className='table table-striped table-condensed table--small'
             data={this.state.errors}
           >
             <Col

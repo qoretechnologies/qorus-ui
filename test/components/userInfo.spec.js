@@ -1,20 +1,19 @@
-import '../jsdom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 
-import UserInfo from '../../src/js/components/userInfo.js';
+import UserInfo from '../../src/js/components/userInfo';
 
 
-describe('Testing UserInfo Component', function () {
-  it('should contain text: temnoregg', function () {
+describe("UserInfo from 'components/userInfo'", function () {
+  it("displays current user's name", function () {
     const comp = TestUtils.renderIntoDocument(
-      <UserInfo currentUser={{ name: 'temnoregg' }} />
+      <UserInfo user={{ name: 'jon.doe' }} />
     );
 
     const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'button');
 
-    expect(el.textContent.trim()).to.equal('temnoregg');
+    expect(el.textContent).to.equal(' jon.doe');
   });
 });

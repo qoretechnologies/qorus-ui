@@ -1,0 +1,5 @@
+.clearfix {
+  &-push::after {
+    height: 20px;
+  }
+}

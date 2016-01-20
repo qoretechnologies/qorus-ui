@@ -1,71 +1,76 @@
+/**
+ * Editable cell had two states:
+ *
+ * - ready state (only editable class)
+ * - editor state (both editable and editor classes)
+ *
+ * 1. The cell is interactive.
+ * 2. There is a pencil icon floating on the right to indicate
+ *    editability. It is hidden in editor state.
+ * 3. In editor state, the cell is highlighted and fully occupied by
+ *    text input. The input is shrinked.
+ */
 td.editable {
-  position: relative;
-
-  padding-right: 20px;
-
-  cursor: pointer;
+  cursor: pointer; /* [1] */
   vertical-align: middle;
   white-space: nowrap;
 
-  &::after {
-    content: "\f040";
+  & { /* [2] */
+    position: relative;
+    padding-right: 20px;
 
-    position: absolute;
-    top: 10%;
-    right: 5px;
+    &::after {
+      content: "\f040";
+      font-size: $font-size-small;
 
-    font-size: 90%;
+      position: absolute;
+      top: 10%;
+      right: 5px;
 
-    color: #cacaca;
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-    text-decoration: inherit;
-    -webkit-font-smoothing: antialiased;
+      color: #cacaca;
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: inherit;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    &:hover::after {
+      color: #000;
+    }
+
+    &.editor::after {
+      content: "";
+      display: none;
+    }
   }
 
-  &:hover::after {
-    color: #000;
-  }
-}
 
-
-td.editor {
-  background-color: #d9edf7;
-  color: #3a87ad;
-  outline: 1px solid #bce8f1;
-  outline-offset: -1px;
-
-  &.invalid {
-    background-color: pink;
+  &.editor { /* [3] */
+    background-color: #d9edf7;
     color: #3a87ad;
     outline: 1px solid #bce8f1;
     outline-offset: -1px;
-  }
 
-  & input {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
+    &.invalid {
+      background-color: pink;
+    }
 
-    background-color: transparent;
-    box-shadow: none;
-    outline: 0;
-    width:100%;
-  }
+    input {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
 
-  & input:focus {
-    outline: none;
-    box-shadow: none;
-  }
-}
+      background-color: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      outline: 0;
 
-
-.editable.editor {
-  &::after {
-    content: "";
-
-    display: none;
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
   }
 }
