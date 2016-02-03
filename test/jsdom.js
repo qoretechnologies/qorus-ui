@@ -14,11 +14,12 @@ function missingGlobal(ctx) {
       '<!DOCTYPE html>' +
       '<html>' +
         '<head>' +
-          "<meta charset='utf-8'>" +
+          '<meta charset="utf-8">' +
         '</head>' +
         '<body>' +
         '</body>' +
-      '</html>'
+      '</html>',
+      { url: 'http://qorus.example.com/' }
     );
     global.window = global.document.defaultView;
     global.self = global.window.self;

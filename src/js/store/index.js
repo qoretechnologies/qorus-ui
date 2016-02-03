@@ -7,12 +7,10 @@ import reducers from './reducers';
 
 
 function productionSetup() {
-  const finalCreateStore = applyMiddleware(
-    thunk,
-    promise
-  )(createStore);
-
-  return finalCreateStore(reducers);
+  return createStore(
+    reducers,
+    applyMiddleware(thunk, promise)
+  );
 }
 
 
@@ -23,13 +21,14 @@ function getDebugSessionKey() {
 
 
 function developmentSetup({ persistState }, DevTools) {
-  const finalCreateStore = compose(
-    applyMiddleware(thunk, promise),
-    DevTools.instrument(),
-    persistState(getDebugSessionKey())
-  )(createStore);
-
-  const store = finalCreateStore(reducers);
+  const store = createStore(
+    reducers,
+    compose(
+      applyMiddleware(thunk, promise),
+      DevTools.instrument(),
+      persistState(getDebugSessionKey())
+    )
+  );
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {

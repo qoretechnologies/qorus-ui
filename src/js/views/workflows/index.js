@@ -120,6 +120,7 @@ export default class Workflows extends Component {
 
 
   static contextTypes = {
+    router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired
   };
 
@@ -157,6 +158,7 @@ export default class Workflows extends Component {
 
   onClosePane() {
     goTo(
+      this.context.router,
       'workflows',
       this.props.route.path,
       this.props.params,

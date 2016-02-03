@@ -4,7 +4,6 @@
  */
 
 import UrlPattern from 'url-pattern';
-import history from 'history';
 import { pickBy } from 'lodash';
 
 
@@ -17,11 +16,11 @@ const routes = {
 };
 
 
-export default function goTo(name, path, params, change) {
+export default function goTo(router, name, path, params, change) {
   const mergedParams = Object.assign({}, params, change);
   const clearParams = pickBy(mergedParams, v => v);
   const newParams = Object.assign({}, routes[name], clearParams);
   const url = new UrlPattern(path).stringify(newParams);
 
-  history.pushState(null, '/' + url);
+  router.push('/' + url);
 }

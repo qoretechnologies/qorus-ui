@@ -21,7 +21,7 @@ export default class WorkflowsTable extends Component {
   };
 
   static contextTypes = {
-    dispatch: PropTypes.func,
+    router: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object
   };
@@ -61,6 +61,7 @@ export default class WorkflowsTable extends Component {
     };
 
     goTo(
+      this.context.router,
       'workflows',
       this.context.route.path,
       this.context.params,

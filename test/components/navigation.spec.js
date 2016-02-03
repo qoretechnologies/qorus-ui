@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 
-import { Route, Router } from 'react-router';
+import { Route, Router, browserHistory } from 'react-router';
 import Navigation from '../../src/js/components/navigation';
 
 
@@ -34,7 +34,7 @@ describe("Navigation from 'components/navigation'", () => {
     );
 
     const comp = TestUtils.renderIntoDocument(
-      <Router>
+      <Router history={browserHistory}>
         <Route path='/' component={Nav} />
       </Router>
     );
@@ -45,11 +45,11 @@ describe("Navigation from 'components/navigation'", () => {
 
     expect(main.children[0].textContent).to.equal('Workflows');
     expect(main.children[0].firstElementChild.href).
-      to.equal('about:blank#/workflows');
+      to.equal('http://qorus.example.com/workflows');
 
     expect(main.children[1].textContent).to.equal('Services');
     expect(main.children[1].firstElementChild.href).
-      to.equal('about:blank#/services');
+      to.equal('http://qorus.example.com/services');
   });
 
 
@@ -63,7 +63,7 @@ describe("Navigation from 'components/navigation'", () => {
     );
 
     const comp = TestUtils.renderIntoDocument(
-      <Router>
+      <Router history={browserHistory}>
         <Route path='/' component={Nav} />
       </Router>
     );
@@ -74,7 +74,7 @@ describe("Navigation from 'components/navigation'", () => {
 
     expect(extra.children[0].textContent).to.equal('Special');
     expect(extra.children[0].firstElementChild.href).
-      to.equal('about:blank#/');
+      to.equal('http://qorus.example.com/');
   });
 
 

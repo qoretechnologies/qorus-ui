@@ -28,6 +28,7 @@ export default class WorkflowsDetail extends Component {
 
   static contextTypes = {
     dispatch: PropTypes.func,
+    router: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object
   };
@@ -63,6 +64,7 @@ export default class WorkflowsDetail extends Component {
 
   changeTab(tabId) {
     goTo(
+      this.context.router,
       'workflows',
       this.context.route.path,
       this.context.params,

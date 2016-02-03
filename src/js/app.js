@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Route, Router } from 'react-router';
+import { Route, Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
 
@@ -17,7 +17,6 @@ require('../css/app.scss');
 
 export default class App extends Component {
   static propTypes = {
-    history: PropTypes.object.isRequired,
     env: PropTypes.object.isRequired
   };
 
@@ -88,7 +87,7 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className='app__wrap'>
-          <Router history={this.props.history}>
+          <Router history={browserHistory}>
             <Route path='/' component={Root}>
               <Route path='dashboard' />
               <Route path='system' />
