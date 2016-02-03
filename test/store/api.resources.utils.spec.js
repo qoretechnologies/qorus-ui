@@ -1,41 +1,85 @@
 import { expect } from 'chai';
-import { flowRight, clone, first } from 'lodash';
+
+
 import { normalizeName, normalizeId, extendDefaults }
-  from '../../src/js/store/api/resources/utils.js';
+  from '../../src/js/store/api/resources/utils';
 
-const defaults = {
-  defaultKey: 'defaultValue'
-};
 
-const objList = [
-  {
-    name: 'gold',
-    normalizeMeId: 1,
-    version: 1,
-    patch: undefined
-  }
-];
+describe(
+  '{ ' +
+    'normalizeName, ' +
+    'normalizeId, ' +
+    'extendDefaults ' +
+  "} from 'store/api/resources/utils'",
+() => {
+  describe('normalizeId', () => {
+    it('creates `id` from some other field recognized as unique identified',
+    () => {
+      const item = {
+        workflowid: 1,
+        name: 'EXAMPLE',
+        version: '1.0'
+      };
 
-describe('Testing API resources utils', () => {
-  const objWithNormalizedId = objList.map(
-    flowRight(normalizeId('normalizeMeId'), clone)
-  );
-  const objWithExtendedDefaults = objList.map(extendDefaults(defaults));
-  const objWithNormalizedName = objList.map(flowRight(
-    normalizeName,
-    normalizeId('normalizeMeId'),
-    clone
-  ));
+      const normalizedItem = normalizeId('workflowid', item);
 
-  it('objWithNormalized.normalizedName should be \'gold v1 (1)\'', () => {
-    expect(first(objWithNormalizedName).normalizedName).to.equal('gold v1 (1)');
+      expect(normalizedItem.id).to.equal(1);
+      delete normalizedItem.id;
+      expect(normalizedItem).to.not.equal(item);
+      expect(normalizedItem).to.deep.equal(item);
+    });
   });
 
-  it('objWithNormalizedId.id should be \'1\'', () => {
-    expect(first(objWithNormalizedId).id).to.equal(1);
+
+  describe('extendDefaults', () => {
+    it('creates new members on new copy of given object', () => {
+      const item = {
+        workflowid: 1,
+        name: 'EXAMPLE',
+        version: '1.0'
+      };
+
+      const extendedItem = extendDefaults({
+        tags: []
+      }, item);
+
+      expect(extendedItem.tags).to.be.an('array');
+      expect(extendedItem.tags.length).to.equal(0);
+      delete extendedItem.tags;
+      expect(extendedItem).to.not.equal(item);
+      expect(extendedItem).to.deep.equal(item);
+    });
   });
 
-  it('objWithExtendedDefaults should have property \'defaultKey\'', () => {
-    expect(first(objWithExtendedDefaults)).to.have.property('defaultKey');
+
+  describe('normalizeName', () => {
+    it('creates name with version and ID for an item retrieved via API', () => {
+      const item = {
+        id: 1,
+        name: 'EXAMPLE',
+        version: '1.0'
+      };
+
+      const normalizedItem = normalizeName(item);
+
+      expect(normalizedItem.normalizedName).to.equal('EXAMPLE v1.0 (1)');
+      delete normalizedItem.normalizedName;
+      expect(normalizedItem).to.not.equal(item);
+      expect(normalizedItem).to.deep.equal(item);
+    });
+
+
+    it('adds patch if available', () => {
+      const item = {
+        id: 1,
+        name: 'EXAMPLE',
+        version: '1.0',
+        patch: 4
+      };
+
+      const normalizedItem = normalizeName(item);
+
+      expect(normalizedItem.normalizedName).to.equal('EXAMPLE v1.0.4 (1)');
+    });
   });
 });
