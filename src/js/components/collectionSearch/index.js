@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { Controls, Control } from '../controls';
 
 
 import classNames from 'classnames';
@@ -25,7 +24,7 @@ export default class CollectionSearch extends Component {
   static defaultProps = {
     regexp: false,
     ignoreCase: false,
-    onChange: () => {}
+    onChange: () => undefined
   };
 
 

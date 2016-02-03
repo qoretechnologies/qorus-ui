@@ -41,7 +41,7 @@ export default class Topbar extends Component {
               type='button'
               className={classNames({
                 'navbar-toggle': true,
-                'collapsed': !this.state.expanded
+                collapsed: !this.state.expanded
               })}
               aria-expanded={this.state.expanded ? 'true' : 'false'}
               onClick={::this.onToggleExpanded}
@@ -59,8 +59,8 @@ export default class Topbar extends Component {
           <div
             className={classNames({
               'navbar-collapse': true,
-              'collapse': true,
-              'in': this.state.expanded
+              collapse: true,
+              in: this.state.expanded
             })}
             style={{ height: !this.state.expanded && '1px' }}
             aria-expanded={this.state.expanded ? 'true' : 'false'}

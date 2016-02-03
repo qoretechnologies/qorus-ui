@@ -105,7 +105,7 @@ describe(
       const transformedActions = createResourceActions(resources, actions => (
         Object.keys(actions).reduce((newActions, name) => (
           Object.assign(newActions, {
-            ['SUPERB_' + name]: actions[name]
+            [`SUPERB_${name}`]: actions[name]
           })
         ), {})
       ));

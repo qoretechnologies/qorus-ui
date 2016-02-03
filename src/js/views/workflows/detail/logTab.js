@@ -3,7 +3,6 @@ import { Controls, Control } from 'components/controls';
 import CollectionSearch from 'components/collectionSearch';
 
 
-import classNames from 'classnames';
 import { fetchJson } from 'store/api/utils';
 import settings from 'settings';
 import { pureRender } from 'components/utils';
@@ -211,14 +210,11 @@ export default class LogTab extends Component {
    * @return {string}
    */
   getLogUri() {
-    return 'data:' +
-      'text/plain;' +
-      'base64,' +
-      window.btoa(
-        this.state.filteredEntries.
-          map(({ entry }) => entry).
-          join('\n')
-      );
+    return `data:text/plain;base64,${window.btoa(
+      this.state.filteredEntries.
+        map(({ entry }) => entry).
+        join('\n')
+    )}`;
   }
 
 
@@ -294,7 +290,7 @@ export default class LogTab extends Component {
 
     if (this._socket) this.disconnect();
     this._socket = new WebSocket(
-      settings.WS_API_PREFIX +
+      `${settings.WS_API_PREFIX}` +
       `/log/workflows/${workflow.workflowid}` +
       `?token=${this._token}`
     );
@@ -420,7 +416,7 @@ export default class LogTab extends Component {
         </div>
         {this.state.error && (
           <div className='alert alert-danger' role='alert'>
-            {'' + this.state.error}
+            {`${this.state.error}`}
           </div>
         )}
         <div className='log-area'>

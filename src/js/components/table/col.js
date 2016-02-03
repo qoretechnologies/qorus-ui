@@ -34,7 +34,7 @@ export default class Col extends Component {
   static defaultProps = {
     heading: '',
     comp: 'td',
-    props: () => {},
+    props: () => undefined,
     childProps: rec => rec
   };
 

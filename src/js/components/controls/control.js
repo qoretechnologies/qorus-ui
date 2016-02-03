@@ -37,13 +37,13 @@ export default class Control extends Component {
         className={classNames({
           btn: true,
           'btn-xs': true,
-          ['btn-' + this.props.btnStyle]: this.props.btnStyle
+          [`btn-${this.props.btnStyle}`]: this.props.btnStyle
         })}
         title={this.props.title}
         onClick={this.onClick}
       >
-        <i className={classNames(['fa', 'fa-' + this.props.icon])} />
-        {this.props.label ? (' ' + this.props.label) : ''}
+        <i className={classNames(['fa', `fa-${this.props.icon}`])} />
+        {this.props.label ? ` ${this.props.label}` : ''}
       </button>
     );
   }

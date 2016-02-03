@@ -11,26 +11,24 @@ import {
 
 
 export const DEFAULT_ACTIONS = {
-  FETCH: url => params => {
-    return fetchJson('GET', url, params);
-  },
+  FETCH: url => params => fetchJson(
+    'GET',
+    url,
+    params
+  ),
   ACTION: {
-    action: url => (params, id) => {
-      return fetchJson(
-        'PUT',
-        id ? `${url}/${id}` : url,
-        params
-      );
-    },
-    meta: (params, id) => ({ params, id })
-  },
-  UPDATE: url => (params, id) => {
-    return fetchJson(
-      'POST',
+    action: url => (params, id) => fetchJson(
+      'PUT',
       id ? `${url}/${id}` : url,
       params
-    );
-  }
+    ),
+    meta: (params, id) => ({ params, id })
+  },
+  UPDATE: url => (params, id) => fetchJson(
+    'POST',
+    id ? `${url}/${id}` : url,
+    params
+  )
 };
 
 

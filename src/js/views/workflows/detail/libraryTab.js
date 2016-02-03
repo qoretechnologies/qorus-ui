@@ -110,7 +110,7 @@ export default class LibraryTab extends Component {
         {func.version && (
           <small>
             v{func.version}
-            {func.patch && ('.' + func.patch)}
+            {func.patch && (`.${func.patch}`)}
           </small>
         )}
       </span>

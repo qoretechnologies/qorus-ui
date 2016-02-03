@@ -14,14 +14,13 @@ const file = new nodeStatic.Server('.', { cache: false, headers: {
   'Cache-Control': 'no-cache, must-revalidate' }
 });
 
-http.createServer(function create(request, response) {
-  file.serve(request, response, function process(err, res) {
-//        console.log(response, request, res);
+http.createServer((request, response) => {
+  file.serve(request, response, (err, res) => {
     if (err && (err.status === 404)) { // An error as occured
-      console.error('> Error serving ' + request.url + ' - ' + err.message);
+      console.error(`> Error serving ${request.url} - ${err.message}`);
       file.serveFile('/index.html', 200, {}, request, response);
     } else { // The file was served successfully
-      console.log('> ' + request.url + ' - ' + res.message);
+      console.log(`> ${request.url} - ${res.message}`);
     }
   });
 }).listen(3001);
@@ -51,10 +50,9 @@ proxyServer.proxy([
 // The transforming function
 //
 
-const transformerFunction = function transFn(data) {
-  return '/*theseus instrument: false */\n' + data;
-//  return data;
-};
+function transformerFunction(data) {
+  return `/*theseus instrument: false */\n${data}`;
+}
 
 
 //
@@ -66,14 +64,14 @@ const proxyPort = 3000;
 
 const app = connect();
 const proxy = httpProxy.createProxyServer({
-  target: 'http://localhost:' + proxiedPort
+  target: `http://localhost:${proxiedPort}`
 });
 
 app.use(transformerProxy(transformerFunction, {
   match: /^\/js\/libs\/(.*)(\.js)$/
 }));
 
-app.use(function use(req, res) {
+app.use((req, res) => {
   proxy.web(req, res);
 });
 

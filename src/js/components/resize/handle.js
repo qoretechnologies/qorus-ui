@@ -261,7 +261,7 @@ export default class Handle extends Component {
     }
 
     Object.keys(style).forEach(cssProp => {
-      this._handle.parentElement.style[cssProp] = '' + style[cssProp] + 'px';
+      this._handle.parentElement.style[cssProp] = `${style[cssProp]}px`;
     });
 
     if (this.isMin()) {

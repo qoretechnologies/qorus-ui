@@ -37,7 +37,7 @@ export default class NavItem extends Component {
       <li
         role='presentation'
         className={classNames({
-          active: this.props.active,
+          active: this.props.active
         })}
       >
         <Link to={this.props.url}>

@@ -89,17 +89,15 @@ const viewSelector = createSelector(
     systemOptionsSelector,
     globalErrorsSelector
   ],
-  (workflows, errors, info, collection, systemOptions, globalErrors) => {
-    return {
-      sync: workflows.sync,
-      loading: workflows.loading,
-      workflows: collection,
-      errors,
-      info,
-      systemOptions,
-      globalErrors
-    };
-  }
+  (workflows, errors, info, collection, systemOptions, globalErrors) => ({
+    sync: workflows.sync,
+    loading: workflows.loading,
+    workflows: collection,
+    errors,
+    info,
+    systemOptions,
+    globalErrors
+  })
 );
 
 @connect(viewSelector)

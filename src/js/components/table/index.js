@@ -30,7 +30,7 @@ export default class Table extends Component {
 
   static defaultProps = {
     shouldHighlight: () => false,
-    onRowClick: () => {}
+    onRowClick: () => undefined
   };
 
   render() {

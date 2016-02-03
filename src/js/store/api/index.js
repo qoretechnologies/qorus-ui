@@ -13,7 +13,7 @@ const initialState = {
 };
 
 function getResourceByName(resources, name) {
-  return resources.find(r => { return r.name === name; });
+  return resources.find(r => r.name === name);
 }
 
 export function createResourceReducers(

@@ -22,5 +22,5 @@ export default function goTo(router, name, path, params, change) {
   const newParams = Object.assign({}, routes[name], clearParams);
   const url = new UrlPattern(path).stringify(newParams);
 
-  router.push('/' + url);
+  router.push(`/${url}`);
 }

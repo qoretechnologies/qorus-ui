@@ -6,8 +6,8 @@ import { expect } from 'chai';
 import UserInfo from '../../src/js/components/userInfo';
 
 
-describe("UserInfo from 'components/userInfo'", function () {
-  it("displays current user's name", function () {
+describe("UserInfo from 'components/userInfo'", () => {
+  it("displays current user's name", () => {
     const comp = TestUtils.renderIntoDocument(
       <UserInfo user={{ name: 'jon.doe' }} />
     );

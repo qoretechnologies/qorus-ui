@@ -43,7 +43,8 @@ export default class Footer extends Component {
             <a href='http://qoretechnologies.com'>Qore Technologies</a>
             {' | '}
             <a
-              href='http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'
+              href={'http://bugs.qoretechnologies.com/' +
+                    'projects/webapp-interface/issues/new'}
             >
               Report Bug
             </a>

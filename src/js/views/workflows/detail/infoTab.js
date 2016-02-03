@@ -53,7 +53,7 @@ export default class DetailTab extends Component {
           <pre>{JSON.stringify(val, null, COMPLEX_VALUE_INDENT)}</pre> :
           '';
       default:
-        return '' + val;
+        return `${val}`;
     }
   }
 

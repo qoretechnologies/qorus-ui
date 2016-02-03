@@ -135,7 +135,8 @@ export default class WorkflowsTable extends Component {
         data={this.props.workflows}
         identifier={this.workflowIdentifier}
         shouldHighlight={this.props.shouldHighlight}
-        className='table table-striped table-condensed table-hover table-fixed table--data'
+        className={'table table-striped table-condensed table-hover ' +
+                   'table-fixed table--data'}
         onRowClick={this.activateWorkflow}
       >
         <Col className='narrow'>

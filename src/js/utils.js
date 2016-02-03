@@ -5,7 +5,7 @@ export function prep(val, des) {
   let returnVal;
 
   if (isNumber(val)) {
-    returnVal = String('00000000000000' + val).slice(-14);
+    returnVal = String(`00000000000000${val}`).slice(-14);
   } else if (isString(val)) {
     returnVal = val.toLowerCase();
   }

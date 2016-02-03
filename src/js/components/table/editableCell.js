@@ -31,8 +31,8 @@ export default class EditableCell extends Component {
   static defaultProps = {
     value: '',
     startEdit: false,
-    onSave: () => {},
-    onCancel: () => {}
+    onSave: () => undefined,
+    onCancel: () => undefined
   };
 
   /**
@@ -117,7 +117,7 @@ export default class EditableCell extends Component {
     this._cell = c;
 
     if (this._cell && this.state.edit) {
-      this.setState({ width: '' + this._cell.offsetWidth + 'px' });
+      this.setState({ width: `${this._cell.offsetWidth}px` });
     }
   }
 
@@ -136,7 +136,7 @@ export default class EditableCell extends Component {
   start() {
     this.setState({
       edit: true,
-      width: '' + this._cell.offsetWidth + 'px'
+      width: `${this._cell.offsetWidth}px`
     });
   }
 

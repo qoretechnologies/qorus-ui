@@ -1,7 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import chai, { expect } from 'chai';
-import spies from 'chai-spies';
+import { expect } from 'chai';
 
 import CollectionSearch from '../../src/js/components/collectionSearch';
 
@@ -29,8 +28,9 @@ describe("CollectionSearch from 'components/collectionSearch'", () => {
   it('calls onChange prop callback with new RegExp filter on input change',
   () => {
     let result;
+    const onChange = filter => result = filter;
     const comp = TestUtils.renderIntoDocument(
-      <CollectionSearch onChange={filter => result = filter} />
+      <CollectionSearch onChange={onChange} />
     );
 
     const input = TestUtils.findRenderedDOMComponentWithTag(comp, 'input');
@@ -43,8 +43,9 @@ describe("CollectionSearch from 'components/collectionSearch'", () => {
 
   it('escapes special RegExp characters', () => {
     let result;
+    const onChange = filter => result = filter;
     const comp = TestUtils.renderIntoDocument(
-      <CollectionSearch onChange={filter => result = filter} />
+      <CollectionSearch onChange={onChange} />
     );
 
     const input = TestUtils.findRenderedDOMComponentWithTag(comp, 'input');
@@ -59,8 +60,9 @@ describe("CollectionSearch from 'components/collectionSearch'", () => {
 
   it('optionally creates a RegExp filter with ignore-case flag', () => {
     let result;
+    const onChange = filter => result = filter;
     const comp = TestUtils.renderIntoDocument(
-      <CollectionSearch onChange={filter => result = filter} ignoreCase />
+      <CollectionSearch onChange={onChange} ignoreCase />
     );
 
     const input = TestUtils.findRenderedDOMComponentWithTag(comp, 'input');
@@ -74,8 +76,9 @@ describe("CollectionSearch from 'components/collectionSearch'", () => {
 
   it('optionally renders RE switch to treat input as RegExp', () => {
     let result;
+    const onChange = filter => result = filter;
     const comp = TestUtils.renderIntoDocument(
-      <CollectionSearch onChange={filter => result = filter} regexp />
+      <CollectionSearch onChange={onChange} regexp />
     );
 
     const [re, input] =

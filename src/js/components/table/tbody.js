@@ -28,7 +28,7 @@ export default class TBody extends Component {
 
   static defaultProps = {
     shouldHighlight: () => false,
-    onRowClick: () => {}
+    onRowClick: () => undefined
   };
 
   constructor(props) {

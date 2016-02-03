@@ -92,5 +92,5 @@ describe("Navigation from 'components/navigation'", () => {
 
     expect(Array.from(main.children[0].querySelector('i.fa').classList)).
       to.contain('fa-sitemap');
-  });  
+  });
 });
