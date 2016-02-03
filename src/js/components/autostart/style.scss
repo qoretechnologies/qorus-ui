@@ -9,7 +9,7 @@
 .autostart {
   display: inline-block; /* [1] */
 
-  .autostart-change {
+  &__change {
     font-weight: bold; /* [2] */
   }
 }

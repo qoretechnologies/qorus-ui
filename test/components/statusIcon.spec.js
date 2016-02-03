@@ -14,8 +14,9 @@ describe("StatusIcon from 'components/statusIcon'", () => {
 
     const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'i');
     expect(Array.from(el.classList)).to.include('fa-check-circle');
-    expect(Array.from(el.classList)).to.include('icon-success');
+    expect(Array.from(el.classList)).to.include('text-success');
   });
+
 
   it('renders red minus circle if value prop is falsy or undefined', () => {
     const comp = TestUtils.renderIntoDocument(
@@ -24,6 +25,6 @@ describe("StatusIcon from 'components/statusIcon'", () => {
 
     const el = TestUtils.findRenderedDOMComponentWithTag(comp, 'i');
     expect(Array.from(el.classList)).to.include('fa-minus-circle');
-    expect(Array.from(el.classList)).to.include('icon-error');
+    expect(Array.from(el.classList)).to.include('text-danger');
   });
 });

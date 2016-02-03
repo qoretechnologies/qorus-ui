@@ -1,0 +1,21 @@
+.badge {
+  &--ready {
+    color: $text-muted;
+    background-color: $state-success-bg;
+  }
+
+  &--waiting {
+    color: $text-muted;
+    background-color: $state-warning-bg;
+  }
+
+  &--canceled {
+    color: $text-muted;
+    background-color: $state-danger-bg;
+  }
+
+  &--info2 {
+    color: $text-muted;
+    background-color: $state-info-bg;
+  }
+}

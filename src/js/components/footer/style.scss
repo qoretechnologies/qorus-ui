@@ -18,7 +18,7 @@ footer {
 
   padding-top: $vertical-margin; /* [3] */
 
-  background-color: #f5f5f5;
+  background-color: $panel-footer-bg;
 
   white-space: nowrap; /* [5] */
   overflow-x: auto; /* [5] */

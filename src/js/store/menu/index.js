@@ -1,5 +1,3 @@
-// import actions from './actions';
-
 const initialState = {
   mainItems: [
     {
@@ -52,11 +50,6 @@ const initialState = {
 };
 
 
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-    default:
-      return state;
-  }
-
+export default function reducer(state = initialState) {
   return state;
 }

@@ -8,7 +8,7 @@ var env = process.env.NODE_ENV || 'development';
 var config = {
   context: path.join(__dirname, 'src'),
   entry: {
-    qorus: path.resolve('./src/index.js')
+    qorus: path.resolve('./src/index.jsx')
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -23,7 +23,16 @@ var config = {
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: [
+          'babel?' +
+            'presets[]=es2015&presets[]=stage-0&' +
+            'plugins[]=transform-decorators-legacy'
+        ]
+      },
+      {
+        test: /\.jsx$/,
         exclude: /node_modules/,
         loaders: [
           'babel?' +

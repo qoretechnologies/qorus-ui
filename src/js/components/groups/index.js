@@ -1,2 +1,2 @@
-export Group from './item';
-export Groups from './collection';
+export Group from './group';
+export Groups from './groups';

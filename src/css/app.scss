@@ -12,6 +12,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
 
 @import '../js/components/autostart/style';
+@import '../js/components/badge/style';
 @import '../js/components/collectionSearch/style';
 @import '../js/components/controls/style';
 @import '../js/components/footer/style';
@@ -21,7 +22,6 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/pane/style';
 @import '../js/components/resize/style';
 @import '../js/components/table/style';
-@import '../js/components/tabs/style';
 @import '../js/components/topbar/style';
 
 

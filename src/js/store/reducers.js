@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import menu from './menu';
-import apiReducers from './api';
+import api from './api';
 
 export default combineReducers({
   menu,
-  api: apiReducers
+  api
 });

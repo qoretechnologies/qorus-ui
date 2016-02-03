@@ -1,7 +1,7 @@
 /* eslint no-proto: 0 */
 
 /**
- * @file
+ * @fileoverview Babel fix for IE10
  *
  * Fixes issue where Babel cannot find object's prototype in browsers
  * without `__proto__`. This operation most visibly occurs during
