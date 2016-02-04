@@ -107,7 +107,7 @@ switch (env) {
         compress: {
           warnings: false,
         },
-      }),
+      })
     );
     break;
 
@@ -125,7 +125,7 @@ switch (env) {
         },
       }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
+      new webpack.NoErrorsPlugin()
     );
     config.devServer = {
       contentBase: './src',
