@@ -21,7 +21,6 @@ export default class LibraryTab extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { activeDomId: null };
     this._codeTabs = null;
   }
 
@@ -61,7 +60,8 @@ export default class LibraryTab extends Component {
 
   setInitialActiveDomId(props) {
     const domIds = this.mergeWfAndStepFuncs(props).map(fn => fn.id);
-    if (domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
+    if (!this.state ||
+        domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
       this.setState({ activeDomId: domIds[0] });
     }
   }
@@ -93,6 +93,11 @@ export default class LibraryTab extends Component {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
+  }
+
+
+  refCodeTabs(el) {
+    this._codeTabs = el;
   }
 
 
@@ -157,7 +162,7 @@ export default class LibraryTab extends Component {
                   slug={this.getDomId(func, step)}
                   name={this.renderFuncHeading(func)}
                   active={this.getDomId(func, step) === this.state.activeDomId}
-                  tabChange={this.onTabChange}
+                  tabChange={::this.onTabChange}
                 />
               ))}
             </ul>
@@ -170,10 +175,8 @@ export default class LibraryTab extends Component {
 
 
   renderCodeTabs() {
-    const refCodeTabs = c => this._codeTabs = c;
-
     return (
-      <div className="tab-content" ref={refCodeTabs}>
+      <div className="tab-content" ref={::this.refCodeTabs}>
         {this.mergeWfAndStepFuncs(this.props).map(({ id, func }, funcIdx) => (
           <Pane
             key={funcIdx}
