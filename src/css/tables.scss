@@ -1,26 +1,17 @@
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
-
-
-/**
- * Turns on overrides on condensed table.
- *
- * In general, such table becomes even more condensed. It also defines
- * column (cell) classes with specific features:
- *
- * 1. Narrow cells have specific width.
- * 2. Name cells are have larger padding so that the text is not
- *    tucked to the side.
- * 3. Table head cells have smaller font.
- */
-$override-table-condensed: true;
-
-
 /**
  * Data is suited for large data sets.
  *
- * 4. It draw guides around cells in table head using borders.
- * 5. Generally, all cells are aligned to the center.
- * 6. Name cells are bold and aligned to the left.
+ * 1. It draw guides around cells in table head using borders.
+ * 2. Generally, all cells are aligned to the center.
+ * 3. Name cells are bold and aligned to the left.
+ *
+ * Condensed data table are even more condensed expecting certain
+ * columns (and cells) to be defined:
+ *
+ * 4. Narrow cells have specific width.
+ * 5. Name cells are have larger padding so that the text is not
+ *    tucked to the side.
+ * 6. Table head cells have smaller font.
  */
 table.table--data {
   > thead,
@@ -28,9 +19,9 @@ table.table--data {
   > tfoot {
     > tr {
       > th, > td {
-        text-align: center; /* [5] */
+        text-align: center; /* [2] */
 
-        &.name { /* [6] */
+        &.name { /* [2] */
           font-weight: 500;
           text-align: left;
         }
@@ -40,7 +31,7 @@ table.table--data {
 
   > thead {
     > tr {
-      > th, > td { /* [4] */
+      > th, > td { /* [1] */
         border-right: 1px solid $table-border-color;
 
         &:last-child {
@@ -50,48 +41,47 @@ table.table--data {
     }
   }
 
-  @if $override-table-condensed {
-    &.table-condensed {
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th, > td {
-            padding-top: $padding-xs-vertical;
-            padding-bottom: $padding-xs-vertical;
+  &.table-condensed {
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th, > td {
+          padding-top: $padding-xs-vertical;
+          padding-bottom: $padding-xs-vertical;
 
-            &.narrow { /* [1] */
-              width: 50px;
-            }
+          &.narrow { /* [4] */
+            width: 50px;
+          }
 
-            &.name { /* [2] */
-              padding-left: $padding-xs-horizontal;
-              padding-right: $padding-xs-horizontal;
-            }
+          &.name { /* [5] */
+            padding-left: $padding-xs-horizontal;
+            padding-right: $padding-xs-horizontal;
           }
         }
       }
+    }
 
-      > thead { /* [3] */
-        font-size: $font-size-extra-small;
-        line-height: floor($font-size-extra-small * 1.1);
-      }
+    > thead { /* [6] */
+      font-size: $font-size-extra-small;
+      line-height: floor($font-size-extra-small * 1.1);
     }
   }
 }
 
 
+/**
+ * Table with smaller padding on cells.
+ */
 table.table--small {
-  @if $override-table-condensed {
-    &.table-condensed {
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th, > td {
-            padding: $padding-xs-vertical $padding-xs-horizontal;
-            vertical-align: middle;
-          }
+  &.table-condensed {
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th, > td {
+          padding: $padding-xs-vertical $padding-xs-horizontal;
+          vertical-align: middle;
         }
       }
     }

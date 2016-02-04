@@ -25,35 +25,43 @@
  */
 .wflw {
   display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
   -ms-flex-flow: column;
+  -webkit-flex-flow: column;
   flex-flow: column;
 
   height: 100%; /* [1] */
 
   > .wflw__header { /* [2] */
     -ms-flex: initial;
+    -webkit-flex: initial;
     flex: initial;
   }
 
   > .wflw__tabs { /* [3] */
     display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
     -ms-flex-flow: column;
+    -webkit-flex-flow: column;
     flex-flow: column;
 
     -ms-flex: auto;
+    -webkit-flex: auto;
     flex: auto;
     overflow: hidden;
 
     > .nav { /* [4] */
       -ms-flex: initial;
+      -webkit-flex: initial;
       flex: initial;
     }
 
     > .tab-content { /* [5] */
       position: relative;
       -ms-flex: auto;
+      -webkit-flex: auto;
       flex: auto;
       overflow: hidden;
 
@@ -73,19 +81,15 @@
 /**
  * Special column for autostart widget.
  */
-table.table--data {
-  @if $override-table-condensed {
-    &.table-condensed {
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th, > td {
-            &.col-autostart {
-              min-width: 64px;
-              width: 96px;
-            }
-          }
+table.table--data.table-condensed {
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th, > td {
+        &.col-autostart {
+          min-width: 64px;
+          width: 96px;
         }
       }
     }

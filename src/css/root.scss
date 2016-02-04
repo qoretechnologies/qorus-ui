@@ -56,6 +56,7 @@
     -ms-flex: 1 1 auto;
     -webkit-flex: auto;
     flex: auto;
+    overflow: hidden;
 
     > nav, > section {
       padding-bottom: 29px; /* [2], [4] */
@@ -76,7 +77,6 @@
       overflow: auto; /* [4] */
 
       padding-top: 20px; /* [3] */
-      padding-bottom: 20px; /* [3] */
     }
   }
 }

@@ -1,18 +1,17 @@
 /**
- * Turns on overrides on nav pills inside side-menu.
- *
- * In general, the menu becomes dark gray without rounded borders.
- */
-$override-nav-pills: true;
-
-
-/**
  * Side menu contains two stacked pill navigations.
  *
  * Each navigation item has an icon and a descriptive text. They are
  * on top of each other and aligned to the center.
+ *
+ * The default Bootstrap style is overriden and the menu becomes dark
+ * gray without rounded borders.
  */
 .side-menu {
+  font-size: $font-size-extra-small;
+  background-color: #333;
+
+
   &__icon,
   &__text {
     display: block;
@@ -20,49 +19,44 @@ $override-nav-pills: true;
   }
 
 
-  @if $override-nav-pills {
-    font-size: $font-size-extra-small;
-    background-color: #333;
+  > .nav-pills > li {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+    border-bottom: 1px solid rgba(0, 0, 0, .8);
 
-    > .nav-pills > li {
-      margin-top: 0;
-      margin-bottom: 0;
-      border-top: 1px solid rgba(255, 255, 255, .2);
-      border-bottom: 1px solid rgba(0, 0, 0, .8);
+    > a {
+      border-radius: 0;
+      color: #fff;
+      text-shadow: 0 1px 0 #000;
 
-      > a {
-        border-radius: 0;
-        color: #fff;
-        text-shadow: 0 1px 0 #000;
+      &:hover, &:focus {
+        background-color: #eee;
+        color: #333;
+        text-shadow: none;
+      }
+    }
 
-        &:hover, &:focus {
-          background-color: #eee;
-          color: #333;
-          text-shadow: none;
-        }
+    &.active > a {
+      background-color: #555;
+
+      &:hover, &:focus {
+        background-color: #555;
       }
 
-      &.active > a {
-        background-color: #555;
+      /**
+       * Vertically centered triangle on the right.
+       */
+      &::after {
+        content: "";
 
-        &:hover, &:focus {
-          background-color: #555;
-        }
+        position: absolute;
+        right: -1px;
+        top: 50%;
 
-        /**
-         * Vertically centered triangle on the right.
-         */
-        &::after {
-          content: "";
-
-          position: absolute;
-          right: -1px;
-          top: 50%;
-
-          border: 11px solid transparent;
-          border-right: 11px solid #fff;
-          margin-top: -11px;
-        }
+        border: 11px solid transparent;
+        border-right: 11px solid #fff;
+        margin-top: -11px;
       }
     }
   }
