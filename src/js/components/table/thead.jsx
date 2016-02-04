@@ -17,7 +17,7 @@ import { pureRenderOmit } from '../utils';
 @pureRenderOmit('children')
 export default class THead extends Component {
   static propTypes = {
-    children: React.PropTypes.node.isRequired
+    children: React.PropTypes.node.isRequired,
   };
 
 
@@ -49,7 +49,7 @@ export default class THead extends Component {
                 col.props;
 
               return (
-                <Cell comp='th' props={otherProps}>
+                <Cell comp="th" props={otherProps}>
                   {heading}
                 </Cell>
               );

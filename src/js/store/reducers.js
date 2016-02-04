@@ -4,5 +4,5 @@ import api from './api';
 
 export default combineReducers({
   menu,
-  api
+  api,
 });

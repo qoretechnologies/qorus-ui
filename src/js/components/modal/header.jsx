@@ -15,7 +15,7 @@ export default class Header extends Component {
   static propTypes = {
     titleId: PropTypes.string.isRequired,
     onClose: PropTypes.func,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
 
@@ -26,20 +26,20 @@ export default class Header extends Component {
    */
   render() {
     return (
-      <div className='modal-header'>
+      <div className="modal-header">
         {this.props.onClose && (
           <button
-            type='button'
-            className='close'
-            data-dismiss='modal'
-            aria-label='Close'
+            type="button"
+            className="close"
+            data-dismiss="modal"
+            aria-label="Close"
             onClick={this.props.onClose}
           >
-            <span aria-hidden='true'>&times;</span>
+            <span aria-hidden="true">&times;</span>
           </button>
         )}
         {this.props.children && (
-          <h4 className='modal-title' id={this.props.titleId}>
+          <h4 className="modal-title" id={this.props.titleId}>
             {this.props.children}
           </h4>
         )}

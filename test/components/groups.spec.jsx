@@ -10,7 +10,7 @@ describe("{ Group, Groups } from 'components/groups'", () => {
   describe('Group', () => {
     it('displays group names as an info label', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' />
+        <Group name="Test Group" />
       );
 
       const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
@@ -21,7 +21,7 @@ describe("{ Group, Groups } from 'components/groups'", () => {
 
     it('optionally displays group size', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' size={0} />
+        <Group name="Test Group" size={0} />
       );
 
       const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
@@ -32,7 +32,7 @@ describe("{ Group, Groups } from 'components/groups'", () => {
 
     it('hides disabled group', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' disabled />
+        <Group name="Test Group" disabled />
       );
 
       const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
@@ -42,7 +42,7 @@ describe("{ Group, Groups } from 'components/groups'", () => {
 
     it('links to group detail', () => {
       const comp = TestUtils.renderIntoDocument(
-        <Group name='Test Group' url='/test-group' />
+        <Group name="Test Group" url="/test-group" />
       );
 
       const linkComp = TestUtils.findRenderedComponentWithType(comp, Link);
@@ -55,8 +55,8 @@ describe("{ Group, Groups } from 'components/groups'", () => {
     it('conveniently groups Group instances together', () => {
       const comp = TestUtils.renderIntoDocument(
         <Groups>
-          <Group name='Test Group 1' />
-          <Group name='Test Group 2' />
+          <Group name="Test Group 1" />
+          <Group name="Test Group 2" />
         </Groups>
       );
 

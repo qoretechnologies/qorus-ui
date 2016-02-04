@@ -12,8 +12,8 @@ function setOptionsPayload(workflow, name, value) {
     {
       body: JSON.stringify({
         action: 'setOptions',
-        options: `${name}=${value}`
-      })
+        options: `${name}=${value}`,
+      }),
     }
   );
 }
@@ -21,7 +21,7 @@ function setOptionsPayload(workflow, name, value) {
 function setOptionsMeta(workflow, name, value) {
   return {
     workflowId: workflow.id,
-    option: { name, value }
+    option: { name, value },
   };
 }
 

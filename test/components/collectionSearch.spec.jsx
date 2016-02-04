@@ -100,7 +100,7 @@ describe("CollectionSearch from 'components/collectionSearch'", () => {
   it('optionally renders new form group with children', () => {
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch>
-        <button type='button'>Action Button</button>
+        <button type="button">Action Button</button>
       </CollectionSearch>
     );
 

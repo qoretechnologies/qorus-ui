@@ -18,13 +18,13 @@ export default class ErrorsTable extends Component {
     errors: PropTypes.array.isRequired,
     onClone: PropTypes.func,
     onUpdate: PropTypes.func,
-    onRemove: PropTypes.func
+    onRemove: PropTypes.func,
   };
 
 
   static contextTypes = {
     openModal: PropTypes.func,
-    closeModal: PropTypes.func
+    closeModal: PropTypes.func,
   };
 
 
@@ -69,7 +69,7 @@ export default class ErrorsTable extends Component {
   getErrorsState(props, filter) {
     return {
       filter,
-      errors: props.errors.filter(err => (new RegExp(filter)).test(err.error))
+      errors: props.errors.filter(err => (new RegExp(filter)).test(err.error)),
     };
   }
 
@@ -148,8 +148,8 @@ export default class ErrorsTable extends Component {
         } },
         { action: () => {
           this.props.onRemove(rec);
-        } }
-      ]
+        } },
+      ],
     };
   }
 
@@ -159,9 +159,9 @@ export default class ErrorsTable extends Component {
    */
   render() {
     return (
-      <div className='relative'>
-        <div className='clearfix'>
-          <h4 className='pull-left'>{this.props.heading}</h4>
+      <div className="relative">
+        <div className="clearfix">
+          <h4 className="pull-left">{this.props.heading}</h4>
           <CollectionSearch onChange={::this.onFilterChange} ignoreCase />
         </div>
         {!this.state.errors.length && (
@@ -169,34 +169,34 @@ export default class ErrorsTable extends Component {
         )}
         {!!this.state.errors.length && (
           <Table
-            className='table table-striped table-condensed table--small'
+            className="table table-striped table-condensed table--small"
             data={this.state.errors}
           >
             <Col
-              heading='Name'
-              className='name'
-              field='name'
+              heading="Name"
+              className="name"
+              field="name"
               props={::this.nameColProps}
             />
             <Col
-              heading='Severity'
-              field='severity'
+              heading="Severity"
+              field="severity"
               props={::this.severityColProps}
             />
             <Col
-              heading='Retry'
+              heading="Retry"
               childProps={::this.retryColProps}
             >
               <StatusIcon />
             </Col>
             <Col
-              heading='Delay'
-              field='delay'
+              heading="Delay"
+              field="delay"
               props={::this.delayColProps}
             />
             <Col
-              heading='Business'
-              field='value'
+              heading="Business"
+              field="value"
               childProps={::this.businessColProps}
             >
               <StatusIcon />
@@ -210,23 +210,23 @@ export default class ErrorsTable extends Component {
                 <Controls>
                   {this.props.onClone && (
                     <Control
-                      title='Override'
-                      icon='copy'
-                      btnStyle='warning'
+                      title="Override"
+                      icon="copy"
+                      btnStyle="warning"
                     />
                   )}
                   {this.props.onUpdate && (
                     <Control
-                      title='Edit'
-                      icon='pencil-square-o'
-                      btnStyle='warning'
+                      title="Edit"
+                      icon="pencil-square-o"
+                      btnStyle="warning"
                     />
                   )}
                   {this.props.onRemove && (
                     <Control
-                      title='Remove'
-                      icon='times'
-                      btnStyle='danger'
+                      title="Remove"
+                      icon="times"
+                      btnStyle="danger"
                     />
                   )}
                 </Controls>

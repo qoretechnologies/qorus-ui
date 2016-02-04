@@ -5,8 +5,8 @@ function ensureStructure(state = {}, action) {
     [action.meta.ref]: {
       data: {},
       sync: false,
-      loading: false
-    }
+      loading: false,
+    },
   });
 }
 
@@ -16,8 +16,8 @@ function handleError(state = {}, action) {
     [action.meta.ref]: Object.assign({}, state[action.meta.ref], {
       sync: false,
       loading: false,
-      error: action.payload
-    })
+      error: action.payload,
+    }),
   });
 }
 
@@ -32,11 +32,11 @@ const fetch = {
       [action.meta.ref]: {
         data,
         sync: false,
-        loading: false
-      }
+        loading: false,
+      },
     });
   },
-  throw: handleError
+  throw: handleError,
 };
 
 
@@ -50,18 +50,18 @@ const create = {
     }
 
     const data = Object.assign({}, safeState[action.meta.ref].data, {
-      [action.meta.err.error]: action.meta.err
+      [action.meta.err.error]: action.meta.err,
     });
 
     return Object.assign({}, safeState, {
       [action.meta.ref]: {
         data,
         sync: false,
-        loading: false
-      }
+        loading: false,
+      },
     });
   },
-  throw: handleError
+  throw: handleError,
 };
 
 
@@ -75,18 +75,18 @@ const update = {
     }
 
     const data = Object.assign({}, safeState[action.meta.ref].data, {
-      [action.meta.err.error]: action.meta.err
+      [action.meta.err.error]: action.meta.err,
     });
 
     return Object.assign({}, safeState, {
       [action.meta.ref]: {
         data,
         sync: false,
-        loading: false
-      }
+        loading: false,
+      },
     });
   },
-  throw: handleError
+  throw: handleError,
 };
 
 
@@ -101,11 +101,11 @@ const remove = {
       [action.meta.ref]: {
         data,
         sync: false,
-        loading: false
-      }
+        loading: false,
+      },
     });
   },
-  throw: handleError
+  throw: handleError,
 };
 
 
@@ -113,5 +113,5 @@ export {
   fetch as FETCH,
   create as CREATE,
   update as UPDATE,
-  remove as REMOVE
+  remove as REMOVE,
 };

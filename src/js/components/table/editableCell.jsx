@@ -21,11 +21,11 @@ export default class EditableCell extends Component {
   static propTypes = {
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.number
+      React.PropTypes.number,
     ]),
     startEdit: PropTypes.bool,
     onSave: PropTypes.func,
-    onCancel: PropTypes.func
+    onCancel: PropTypes.func,
   };
 
 
@@ -33,7 +33,7 @@ export default class EditableCell extends Component {
     value: '',
     startEdit: false,
     onSave: () => undefined,
-    onCancel: () => undefined
+    onCancel: () => undefined,
   };
 
 
@@ -57,7 +57,7 @@ export default class EditableCell extends Component {
     this.setState({
       value: this.props.value,
       edit: this.props.startEdit,
-      width: ''
+      width: '',
     });
   }
 
@@ -148,7 +148,7 @@ export default class EditableCell extends Component {
   start() {
     this.setState({
       edit: true,
-      width: `${this._cell.offsetWidth}px`
+      width: `${this._cell.offsetWidth}px`,
     });
   }
 
@@ -163,7 +163,7 @@ export default class EditableCell extends Component {
 
     this.setState({
       edit: false,
-      width: ''
+      width: '',
     });
   }
 
@@ -177,7 +177,7 @@ export default class EditableCell extends Component {
     this.setState({
       value: this.props.value,
       edit: false,
-      width: ''
+      width: '',
     });
   }
 
@@ -196,7 +196,7 @@ export default class EditableCell extends Component {
         {...props}
         className={classNames({
           editable: true,
-          editor: this.canEdit()
+          editor: this.canEdit(),
         })}
         onClick={::this.start}
         style={{ width: this.state.width }}
@@ -205,7 +205,7 @@ export default class EditableCell extends Component {
         {
           this.canEdit() ?
             <input
-              type='text'
+              type="text"
               value={this.state.value}
               onChange={::this.onChange}
               onKeyUp={::this.onKeyUp}

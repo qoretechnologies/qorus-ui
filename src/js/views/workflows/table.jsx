@@ -17,14 +17,14 @@ import { ORDER_STATES } from 'constants/orders';
 export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
-    shouldHighlight: PropTypes.func.isRequired
+    shouldHighlight: PropTypes.func.isRequired,
   };
 
 
   static contextTypes = {
     router: PropTypes.object,
     route: PropTypes.object,
-    params: PropTypes.object
+    params: PropTypes.object,
   };
 
 
@@ -46,7 +46,7 @@ export default class WorkflowsTable extends Component {
       parseInt(this.context.params.detailId, 10) === workflow.id;
     const change = {
       detailId: shouldDeactivate ? null : workflow.id,
-      tabId: shouldDeactivate ? null : this.context.params.tabId
+      tabId: shouldDeactivate ? null : this.context.params.tabId,
     };
 
     goTo(
@@ -61,7 +61,7 @@ export default class WorkflowsTable extends Component {
 
   narrowColProps() {
     return {
-      className: 'narrow'
+      className: 'narrow',
     };
   }
 
@@ -73,7 +73,7 @@ export default class WorkflowsTable extends Component {
 
   autostartColProps() {
     return {
-      className: 'col-autostart'
+      className: 'col-autostart',
     };
   }
 
@@ -82,7 +82,7 @@ export default class WorkflowsTable extends Component {
     return {
       context: rec,
       autostart: rec.autostart,
-      execCount: rec.exec_count
+      execCount: rec.exec_count,
     };
   }
 
@@ -90,7 +90,7 @@ export default class WorkflowsTable extends Component {
   execColProps(rec) {
     return {
       className: 'narrow',
-      execCount: rec.exec_count
+      execCount: rec.exec_count,
     };
   }
 
@@ -98,20 +98,23 @@ export default class WorkflowsTable extends Component {
   idColProps(rec) {
     return {
       className: 'narrow',
-      id: rec.id
+      id: rec.id,
     };
   }
 
 
   nameColProps(rec) {
-    return { className: 'name', name: rec.name };
+    return {
+      className: 'name',
+      name: rec.name,
+    };
   }
 
 
   versionColProps(rec) {
     return {
       className: 'narrow',
-      version: rec.version
+      version: rec.version,
     };
   }
 
@@ -124,7 +127,7 @@ export default class WorkflowsTable extends Component {
   totalColProps(rec) {
     return {
       className: 'narrow',
-      TOTAL: rec.TOTAL
+      TOTAL: rec.TOTAL,
     };
   }
 
@@ -139,47 +142,47 @@ export default class WorkflowsTable extends Component {
                    'table-fixed table--data'}
         onRowClick={::this.activateWorkflow}
       >
-        <Col className='narrow'>
-          <i className='fa fa-square-o' />
+        <Col className="narrow">
+          <i className="fa fa-square-o" />
         </Col>
         <Col
-          heading='Actions'
-          className='narrow'
+          heading="Actions"
+          className="narrow"
           props={this.narrowColProps}
           childProps={::this.actionsColChildProps}
         >
           <WorkflowsControls />
         </Col>
         <Col
-          heading='Autostart'
-          className='col-autostart'
+          heading="Autostart"
+          className="col-autostart"
           props={this.autostartColProps}
           childProps={::this.autostartColChildProps}
         >
           <AutoStart inc={::this.setAutostart} dec={::this.setAutostart} />
         </Col>
         <Col
-          heading='Execs'
-          className='narrow'
-          field='execCount'
+          heading="Execs"
+          className="narrow"
+          field="execCount"
           props={::this.execColProps}
         />
         <Col
-          heading='ID'
-          className='narrow'
-          field='id'
+          heading="ID"
+          className="narrow"
+          field="id"
           props={::this.idColProps}
         />
         <Col
-          heading='Name'
-          className='name'
-          field='name'
+          heading="Name"
+          className="name"
+          field="name"
           props={::this.nameColProps}
         />
         <Col
-          heading='Version'
-          className='narrow'
-          field='version'
+          heading="Version"
+          className="narrow"
+          field="version"
           props={::this.versionColProps}
         />
         {ORDER_STATES.map((state, idx) => {
@@ -189,7 +192,7 @@ export default class WorkflowsTable extends Component {
             <Col
               key={idx}
               heading={state.short}
-              className='narrow'
+              className="narrow"
               props={this.narrowColProps}
               childProps={childProps}
             >
@@ -198,9 +201,9 @@ export default class WorkflowsTable extends Component {
           );
         })}
         <Col
-          heading='Total'
-          className='narrow'
-          field='TOTAL'
+          heading="Total"
+          className="narrow"
+          field="TOTAL"
           props={::this.totalColProps}
         />
       </Table>

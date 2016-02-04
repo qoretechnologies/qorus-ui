@@ -61,7 +61,7 @@ const errorsSelector = state => (
     filter(ref => ref.indexOf('workflow/') === 0).
     reduce((errs, ref) => (
       Object.assign(errs, {
-        [ref.substring(9)]: errorsToArray(state, ref)
+        [ref.substring(9)]: errorsToArray(state, ref),
       })
     ), {})
 );
@@ -88,7 +88,7 @@ const collectionSelector = createSelector(
   [
     searchSelector,
     workflowsSelector,
-    deprecatedSelector
+    deprecatedSelector,
   ],
   (search, workflows, deprecated) => flowRight(
     sortWorkflows,
@@ -105,7 +105,7 @@ const viewSelector = createSelector(
     infoSelector,
     collectionSelector,
     systemOptionsSelector,
-    globalErrorsSelector
+    globalErrorsSelector,
   ],
   (workflows, errors, info, collection, systemOptions, globalErrors) => ({
     sync: workflows.sync,
@@ -114,7 +114,7 @@ const viewSelector = createSelector(
     errors,
     info,
     systemOptions,
-    globalErrors
+    globalErrors,
   })
 );
 
@@ -132,20 +132,20 @@ export default class Workflows extends Component {
     systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
     params: PropTypes.object,
-    route: PropTypes.object
+    route: PropTypes.object,
   };
 
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired
+    getTitle: PropTypes.func.isRequired,
   };
 
 
   static childContextTypes = {
     params: PropTypes.object,
     route: PropTypes.object,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
 
@@ -153,7 +153,7 @@ export default class Workflows extends Component {
     return {
       params: this.props.params,
       route: this.props.route,
-      dispatch: this.props.dispatch
+      dispatch: this.props.dispatch,
     };
   }
 

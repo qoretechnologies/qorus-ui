@@ -83,7 +83,7 @@ export default function setupStore(env) {
       default:
         require.ensure([
           'redux-devtools',
-          '../components/devTools'
+          '../components/devTools',
         ], require => {
           resolve(developmentSetup(
             require('redux-devtools'),

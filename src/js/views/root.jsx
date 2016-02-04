@@ -30,7 +30,7 @@ const menuSelector = (state) => state.menu;
   (info, currentUser, menu) => ({
     info,
     currentUser,
-    menu
+    menu,
   })
 ))
 export default class Root extends Component {
@@ -40,14 +40,14 @@ export default class Root extends Component {
     info: PropTypes.object,
     dispatch: PropTypes.func,
     location: PropTypes.object,
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
   };
 
 
   static childContextTypes = {
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
-    getTitle: PropTypes.func
+    getTitle: PropTypes.func,
   };
 
 
@@ -79,7 +79,7 @@ export default class Root extends Component {
     return {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
-      getTitle: () => this.titleFromInfo()
+      getTitle: () => this.titleFromInfo(),
     };
   }
 
@@ -170,19 +170,19 @@ export default class Root extends Component {
    */
   render() {
     return (
-      <div className='root'>
+      <div className="root">
         <Topbar
           info={this.props.info.data}
           currentUser={this.props.currentUser.data}
         />
-        <div className='root__center'>
+        <div className="root__center">
           <Navigation
             location={this.props.location}
             mainItems={this.props.menu.mainItems}
             extraItems={[]}
           />
           <section>
-            <div className='container-fluid'>
+            <div className="container-fluid">
               {this.props.children}
             </div>
           </section>

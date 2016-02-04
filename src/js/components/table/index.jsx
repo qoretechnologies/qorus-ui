@@ -25,13 +25,13 @@ export default class Table extends Component {
     data: PropTypes.array.isRequired,
     identifier: PropTypes.func,
     shouldHighlight: PropTypes.func,
-    onRowClick: PropTypes.func
+    onRowClick: PropTypes.func,
   };
 
 
   static defaultProps = {
     shouldHighlight: () => false,
-    onRowClick: () => undefined
+    onRowClick: () => undefined,
   };
 
 
@@ -42,7 +42,7 @@ export default class Table extends Component {
    */
   render() {
     const {
-      data, identifier, shouldHighlight, onRowClick, children, ...props
+      data, identifier, shouldHighlight, onRowClick, children, ...props,
     } = this.props;
 
     return (

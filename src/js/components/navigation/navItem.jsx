@@ -18,12 +18,12 @@ export default class NavItem extends Component {
     url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     icon: PropTypes.string,
-    active: PropTypes.bool
+    active: PropTypes.bool,
   };
 
 
   static defaultProps = {
-    active: false
+    active: false,
   };
 
 
@@ -35,9 +35,9 @@ export default class NavItem extends Component {
   render() {
     return (
       <li
-        role='presentation'
+        role="presentation"
         className={classNames({
-          active: this.props.active
+          active: this.props.active,
         })}
       >
         <Link to={this.props.url}>
@@ -49,7 +49,7 @@ export default class NavItem extends Component {
               this.props.icon
             )}
           />
-          <span className='side-menu__text'>{this.props.name}</span>
+          <span className="side-menu__text">{this.props.name}</span>
         </Link>
       </li>
     );

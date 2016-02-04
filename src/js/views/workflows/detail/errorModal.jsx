@@ -14,12 +14,12 @@ export default class ErrorModal extends Component {
     error: PropTypes.object.isRequired,
     onCommit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    requireChanges: PropTypes.bool
+    requireChanges: PropTypes.bool,
   };
 
 
   static defaultProps = {
-    requireChanges: false
+    requireChanges: false,
   };
 
 
@@ -34,7 +34,7 @@ export default class ErrorModal extends Component {
     this.state = {
       error: Object.assign({}, this.props.error),
       changes: null,
-      status: {}
+      status: {},
     };
   }
 
@@ -59,8 +59,8 @@ export default class ErrorModal extends Component {
       error: Object.assign({}, this.state.error, {
         [ev.target.name]: ev.target.type !== 'checkbox' ?
           ev.target.value :
-          ev.target.checked
-      })
+          ev.target.checked,
+      }),
     });
   }
 
@@ -142,36 +142,36 @@ export default class ErrorModal extends Component {
     return (
       <Modal>
         <form
-          className='form-horizontal'
+          className="form-horizontal"
           onSubmit={::this.onCommit}
           ref={refForm}
           noValidate
         >
           <Modal.Header
-            titleId='errorsTableModalLabel'
+            titleId="errorsTableModalLabel"
             onClose={this.props.onCancel}
           >
             {this.props.actionLabel} {this.props.error.error}
           </Modal.Header>
           <Modal.Body>
             {this.state.changes === false && (
-              <div className='alert alert-danger' role='alert'>
+              <div className="alert alert-danger" role="alert">
                 You cannot submit this error without changes.
               </div>
             )}
-            <div className='form-group'>
+            <div className="form-group">
               <label
-                htmlFor='modalError'
-                className='col-sm-3 control-label'
+                htmlFor="modalError"
+                className="col-sm-3 control-label"
               >
                 Name
               </label>
-              <div className='col-sm-9'>
+              <div className="col-sm-9">
                 <input
-                  type='text'
-                  name='error'
-                  id='modalError'
-                  className='form-control'
+                  type="text"
+                  name="error"
+                  id="modalError"
+                  className="form-control"
                   value={this.state.error.error}
                   required
                   readOnly
@@ -181,21 +181,21 @@ export default class ErrorModal extends Component {
             <div
               className={classNames({
                 'form-group': true,
-                'has-error': this.state.status.modalSeverity
+                'has-error': this.state.status.modalSeverity,
               })}
             >
               <label
-                htmlFor='modalSeverity'
-                className='col-sm-3 control-label'
+                htmlFor="modalSeverity"
+                className="col-sm-3 control-label"
               >
                 Severity
               </label>
-              <div className='col-sm-9'>
+              <div className="col-sm-9">
                 <input
-                  type='text'
-                  name='severity'
-                  id='modalSeverity'
-                  className='form-control'
+                  type="text"
+                  name="severity"
+                  id="modalSeverity"
+                  className="form-control"
                   value={this.state.error.severity}
                   required
                   onChange={::this.onChange}
@@ -205,24 +205,24 @@ export default class ErrorModal extends Component {
                                     'modalSeverityStatus'}
                 />
                 {this.state.status.modalSeverity && (
-                  <span id='modalSeverityStatus' className='sr-only'>
+                  <span id="modalSeverityStatus" className="sr-only">
                     {this.state.status.modalSeverity}
                   </span>
                 )}
               </div>
             </div>
-            <div className='form-group'>
+            <div className="form-group">
               <label
-                htmlFor='modalRetry'
-                className='col-sm-3 control-label'
+                htmlFor="modalRetry"
+                className="col-sm-3 control-label"
               >
                 Retry
               </label>
-              <div className='col-sm-9 checkbox'>
+              <div className="col-sm-9 checkbox">
                 <input
-                  type='checkbox'
-                  name='retry_flag'
-                  id='modalRetry'
+                  type="checkbox"
+                  name="retry_flag"
+                  id="modalRetry"
                   checked={this.state.error.retry_flag}
                   onChange={::this.onChange}
                 />
@@ -231,23 +231,23 @@ export default class ErrorModal extends Component {
             <div
               className={classNames({
                 'form-group': true,
-                'has-error': this.state.status.modalDelay
+                'has-error': this.state.status.modalDelay,
               })}
             >
               <label
-                htmlFor='modalDelay'
-                className='col-sm-3 control-label'
+                htmlFor="modalDelay"
+                className="col-sm-3 control-label"
               >
                 Retry delay secs
               </label>
-              <div className='col-sm-9'>
+              <div className="col-sm-9">
                 <input
-                  type='number'
-                  className='form-control'
-                  name='retry_delay_secs'
-                  id='modalDelay'
+                  type="number"
+                  className="form-control"
+                  name="retry_delay_secs"
+                  id="modalDelay"
                   value={this.state.error.retry_delay_secs}
-                  min='0'
+                  min="0"
                   onChange={::this.onChange}
                   onBlur={::this.onBlur}
                   aria-invalid={this.state.status.modalDelay && 'true'}
@@ -255,41 +255,41 @@ export default class ErrorModal extends Component {
                                     'modalDelayStatus'}
                 />
                 {this.state.status.modalDelay && (
-                  <span id='modalDelayStatus' className='sr-only'>
+                  <span id="modalDelayStatus" className="sr-only">
                     {this.state.status.modalDelay}
                   </span>
                 )}
               </div>
             </div>
-            <div className='form-group'>
+            <div className="form-group">
               <label
-                htmlFor='modalBusiness'
-                className='col-sm-3 control-label'
+                htmlFor="modalBusiness"
+                className="col-sm-3 control-label"
               >
                 Business
               </label>
-              <div className='col-sm-9 checkbox'>
+              <div className="col-sm-9 checkbox">
                 <input
-                  type='checkbox'
-                  name='business_flag'
-                  id='modalBusiness'
+                  type="checkbox"
+                  name="business_flag"
+                  id="modalBusiness"
                   checked={this.state.error.business_flag}
                   onChange={::this.onChange}
                 />
               </div>
             </div>
-            <div className='form-group'>
+            <div className="form-group">
               <label
-                htmlFor='modalManual'
-                className='col-sm-3 control-label'
+                htmlFor="modalManual"
+                className="col-sm-3 control-label"
               >
                 Manually updated
               </label>
-              <div className='col-sm-9 checkbox'>
+              <div className="col-sm-9 checkbox">
                 <input
-                  type='checkbox'
-                  name='manually_updated'
-                  id='modalManual'
+                  type="checkbox"
+                  name="manually_updated"
+                  id="modalManual"
                   checked={this.state.error.manually_updated}
                   onChange={::this.onChange}
                 />
@@ -298,20 +298,20 @@ export default class ErrorModal extends Component {
             <div
               className={classNames({
                 'form-group': true,
-                'has-error': this.state.status.modalDescription
+                'has-error': this.state.status.modalDescription,
               })}
             >
               <label
-                htmlFor='modalDescription'
-                className='col-sm-3 control-label'
+                htmlFor="modalDescription"
+                className="col-sm-3 control-label"
               >
                 Description
               </label>
-              <div className='col-sm-9'>
+              <div className="col-sm-9">
                 <textarea
-                  name='description'
-                  id='modalDescription'
-                  className='form-control'
+                  name="description"
+                  id="modalDescription"
+                  className="form-control"
                   value={this.state.error.description}
                   required
                   onChange={::this.onChange}
@@ -321,7 +321,7 @@ export default class ErrorModal extends Component {
                                     'modalDescriptionStatus'}
                 />
                 {this.state.status.modalDescription && (
-                  <span id='modalDescriptionStatus' className='sr-only'>
+                  <span id="modalDescriptionStatus" className="sr-only">
                     {this.state.status.modalDescription}
                   </span>
                 )}
@@ -330,8 +330,8 @@ export default class ErrorModal extends Component {
           </Modal.Body>
           <Modal.Footer>
             <button
-              type='submit'
-              className='btn btn-primary'
+              type="submit"
+              className="btn btn-primary"
             >
               {this.props.actionLabel}
             </button>

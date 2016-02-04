@@ -16,7 +16,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Modal extends Component {
   static propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
   };
 
 
@@ -40,14 +40,14 @@ export default class Modal extends Component {
   render() {
     return (
       <div
-        className='modal fade in'
+        className="modal fade in"
         style={{ display: 'block' }}
-        tabIndex='-1'
-        role='dialog'
+        tabIndex="-1"
+        role="dialog"
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
       >
-        <div className='modal-dialog' role='document'>
-          <div className='modal-content'>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
             {this.props.children}
           </div>
           <ResizeHandle minCurrent left />

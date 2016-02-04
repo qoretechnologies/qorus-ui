@@ -11,12 +11,12 @@ export default class ErrorsTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     errors: PropTypes.array.isRequired,
-    globalErrors: PropTypes.array.isRequired
+    globalErrors: PropTypes.array.isRequired,
   };
 
 
   static contextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
 
@@ -54,13 +54,13 @@ export default class ErrorsTab extends Component {
     return (
       <div>
         <ErrorsTable
-          heading='Workflow definitions'
+          heading="Workflow definitions"
           errors={this.props.errors}
           onRemove={::this.remove}
           onUpdate={::this.update}
         />
         <ErrorsTable
-          heading='Global definitions'
+          heading="Global definitions"
           errors={this.getUnusedGlobalErrors()}
           onClone={::this.clone}
         />

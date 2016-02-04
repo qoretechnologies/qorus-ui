@@ -12,7 +12,7 @@ export default class Item extends Component {
     slug: PropTypes.string.isRequired,
     tabChange: PropTypes.func,
     active: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 
 
@@ -40,10 +40,10 @@ export default class Item extends Component {
   render() {
     return (
       <li
-        role='presentation'
+        role="presentation"
         className={classNames({
           active: this.props.active,
-          disabled: this.props.disabled
+          disabled: this.props.disabled,
         })}
       >
         <a data-target={this.props.target} onClick={this.onClick}>

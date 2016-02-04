@@ -8,7 +8,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Groups extends Component {
   static propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element)
+    children: PropTypes.arrayOf(PropTypes.element),
   };
 
 
@@ -19,7 +19,7 @@ export default class Groups extends Component {
    */
   render() {
     return (
-      <div className='groups'>
+      <div className="groups">
         <h4>Groups</h4>
         {this.props.children}
       </div>

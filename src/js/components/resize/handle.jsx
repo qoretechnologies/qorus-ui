@@ -45,7 +45,7 @@ export default class Handle extends Component {
     top: PropTypes.bool,
     right: PropTypes.bool,
     bottom: PropTypes.bool,
-    left: PropTypes.bool
+    left: PropTypes.bool,
   };
 
 
@@ -54,7 +54,7 @@ export default class Handle extends Component {
     top: false,
     right: false,
     bottom: false,
-    left: false
+    left: false,
   };
 
 
@@ -372,11 +372,11 @@ export default class Handle extends Component {
           top: this._position & TOP,
           right: this._position & RIGHT,
           bottom: this._position & BOTTOM,
-          left: this._position & LEFT
+          left: this._position & LEFT,
         })}
         onMouseDown={::this.start}
         ref={::this.refHandle}
-        aria-hidden='true'
+        aria-hidden="true"
       />
     );
   }

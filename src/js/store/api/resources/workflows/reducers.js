@@ -57,7 +57,7 @@ const setOptions = {
         action.meta.workflowId,
         action.meta.option.name,
         action.meta.option.value
-      )
+      ),
     });
   },
   throw(state = initialState, action) {
@@ -72,9 +72,9 @@ const setOptions = {
       ),
       sync: false,
       loading: false,
-      error: action.payload
+      error: action.payload,
     });
-  }
+  },
 };
 
 
@@ -85,20 +85,20 @@ const fetchLibSources = {
         action.meta.workflowId,
         action.payload,
         state.data
-      )
+      ),
     });
   },
   throw(state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
-      error: action.payload
+      error: action.payload,
     });
-  }
+  },
 };
 
 
 export {
   setOptions as SETOPTIONS,
-  fetchLibSources as FETCHLIBSOURCES
+  fetchLibSources as FETCHLIBSOURCES,
 };

@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 
 
-import { normalizeName, normalizeId, extendDefaults }
-  from '../../src/js/store/api/resources/utils';
+import {
+  normalizeName, normalizeId, extendDefaults,
+} from '../../src/js/store/api/resources/utils';
 
 
 describe(
@@ -18,7 +19,7 @@ describe(
       const item = {
         workflowid: 1,
         name: 'EXAMPLE',
-        version: '1.0'
+        version: '1.0',
       };
 
       const normalizedItem = normalizeId('workflowid', item);
@@ -36,11 +37,11 @@ describe(
       const item = {
         workflowid: 1,
         name: 'EXAMPLE',
-        version: '1.0'
+        version: '1.0',
       };
 
       const extendedItem = extendDefaults({
-        tags: []
+        tags: [],
       }, item);
 
       expect(extendedItem.tags).to.be.an('array');
@@ -57,7 +58,7 @@ describe(
       const item = {
         id: 1,
         name: 'EXAMPLE',
-        version: '1.0'
+        version: '1.0',
       };
 
       const normalizedItem = normalizeName(item);
@@ -74,7 +75,7 @@ describe(
         id: 1,
         name: 'EXAMPLE',
         version: '1.0',
-        patch: 4
+        patch: 4,
       };
 
       const normalizedItem = normalizeName(item);

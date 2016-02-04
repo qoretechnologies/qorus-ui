@@ -20,7 +20,7 @@ export default class AutoStart extends Component {
     execCount: PropTypes.number,
     inc: PropTypes.func.isRequired,
     dec: PropTypes.func.isRequired,
-    context: PropTypes.any
+    context: PropTypes.any,
   };
 
 
@@ -28,7 +28,7 @@ export default class AutoStart extends Component {
     autostart: 0,
     execCount: 0,
     inc: (ctx, val) => val,
-    dec: (ctx, val) => val
+    dec: (ctx, val) => val,
   };
 
 
@@ -89,28 +89,28 @@ export default class AutoStart extends Component {
     }
 
     return (
-      <div className='autostart'>
+      <div className="autostart">
         <Controls grouped>
           <Control
-            title='Decrease'
-            icon='minus'
+            title="Decrease"
+            icon="minus"
             action={this.decrement}
           />
           <button
             className={classNames({
-              'autostart__change': true,
+              autostart__change: true,
               btn: true,
               'btn-xs': true,
               'btn-success': this.props.autostart === this.props.execCount &&
-                             this.props.autostart > 0
+                             this.props.autostart > 0,
             })}
-            title='Click to edit'
+            title="Click to edit"
           >
             {this.props.autostart}
           </button>
           <Control
-            title='Increase'
-            icon='plus'
+            title="Increase"
+            icon="plus"
             action={this.increment}
           />
         </Controls>

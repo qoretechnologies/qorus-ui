@@ -1,6 +1,6 @@
 const location = window && window.location ? window.location : {
   protocol: 'http:',
-  host: 'localhost'
+  host: 'localhost',
 };
 
 export default {
@@ -9,6 +9,6 @@ export default {
     `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 };

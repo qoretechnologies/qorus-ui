@@ -8,7 +8,7 @@ import { pureRender } from './utils';
 @pureRender
 export default class UserInfo extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
   };
 
 
@@ -20,10 +20,10 @@ export default class UserInfo extends Component {
   render() {
     return (
       <button
-        type='button'
-        className='btn btn-inverse navbar-btn navbar-right'
+        type="button"
+        className="btn btn-inverse navbar-btn navbar-right"
       >
-        <i className='fa fa-user' />
+        <i className="fa fa-user" />
         {' '}
         <span>{this.props.user.name}</span>
       </button>

@@ -18,12 +18,12 @@ export default class Badge extends Component {
   static propTypes = {
     url: PropTypes.string,
     val: PropTypes.number,
-    label: PropTypes.string
+    label: PropTypes.string,
   };
 
 
   static defaultProps = {
-    label: ''
+    label: '',
   };
 
 
@@ -38,7 +38,7 @@ export default class Badge extends Component {
         className={classNames({
           badge: this.props.val > 0,
           [`badge--${this.props.label}`]: this.props.label &&
-                                          this.props.val > 0
+                                          this.props.val > 0,
         })}
       >
         {this.props.val}

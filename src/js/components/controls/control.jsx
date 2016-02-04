@@ -15,7 +15,7 @@ export default class Control extends Component {
     label: PropTypes.string,
     btnStyle: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    action: PropTypes.func
+    action: PropTypes.func,
   };
 
 
@@ -43,7 +43,7 @@ export default class Control extends Component {
         className={classNames({
           btn: true,
           'btn-xs': true,
-          [`btn-${this.props.btnStyle}`]: this.props.btnStyle
+          [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
         })}
         title={this.props.title}
         onClick={::this.onClick}

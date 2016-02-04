@@ -28,14 +28,14 @@ describe("Navigation from 'components/navigation'", () => {
       <Navigation
         mainItems={[
           { url: '/workflows', name: 'Workflows' },
-          { url: '/services', name: 'Services' }
+          { url: '/services', name: 'Services' },
         ]}
       />
     );
 
     const comp = TestUtils.renderIntoDocument(
       <Router history={browserHistory}>
-        <Route path='/' component={Nav} />
+        <Route path="/" component={Nav} />
       </Router>
     );
 
@@ -57,14 +57,14 @@ describe("Navigation from 'components/navigation'", () => {
     const Nav = () => (
       <Navigation
         extraItems={[
-          { url: '/', name: 'Special' }
+          { url: '/', name: 'Special' },
         ]}
       />
     );
 
     const comp = TestUtils.renderIntoDocument(
       <Router history={browserHistory}>
-        <Route path='/' component={Nav} />
+        <Route path="/" component={Nav} />
       </Router>
     );
 
@@ -82,7 +82,7 @@ describe("Navigation from 'components/navigation'", () => {
     const comp = TestUtils.renderIntoDocument(
       <Navigation
         mainItems={[
-          { url: '/workflows', name: 'Workflows', icon: 'fa-sitemap' }
+          { url: '/workflows', name: 'Workflows', icon: 'fa-sitemap' },
         ]}
       />
     );

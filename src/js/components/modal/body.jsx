@@ -10,7 +10,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Body extends Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
 
@@ -21,7 +21,7 @@ export default class Body extends Component {
    */
   render() {
     return (
-      <div className='modal-body'>
+      <div className="modal-body">
         {this.props.children}
       </div>
     );

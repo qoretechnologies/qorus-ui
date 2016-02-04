@@ -28,8 +28,8 @@ export default class App extends Component {
   static propTypes = {
     env: PropTypes.shape({
       NODE_ENV: PropTypes.string.isRequired,
-      DEVTOOLS: PropTypes.bool
-    }).isRequired
+      DEVTOOLS: PropTypes.bool,
+    }).isRequired,
   };
 
 
@@ -54,14 +54,14 @@ export default class App extends Component {
         this.setState({ devToolsReady: false });
         require.ensure([
           'components/devTools',
-          'react-addons-perf'
+          'react-addons-perf',
         ], require => {
           const DevTools = require('components/devTools').default;
           require('expose?Perf!react-addons-perf');
 
           this.setState({
             devToolsReady: true,
-            DevTools
+            DevTools,
           });
         }, 'devtools');
         break;
@@ -93,23 +93,23 @@ export default class App extends Component {
 
     return (
       <Provider store={this.state.store}>
-        <div className='app__wrap'>
+        <div className="app__wrap">
           <Router history={browserHistory}>
-            <Route path='/' component={Root}>
-              <Route path='dashboard' />
-              <Route path='system' />
+            <Route path="/" component={Root}>
+              <Route path="dashboard" />
+              <Route path="system" />
               <Route
-                path='workflows(/:date)(/:filter)(/:detailId)(/:tabId)'
+                path="workflows(/:date)(/:filter)(/:detailId)(/:tabId)"
                 component={Workflows}
               />
-              <Route path='services'/>
-              <Route path='jobs'/>
-              <Route path='search'/>
-              <Route path='groups(/:name)'/>
-              <Route path='ocmd'/>
-              <Route path='library'/>
-              <Route path='extensions'/>
-              <Route path='performance'/>
+              <Route path="services"/>
+              <Route path="jobs"/>
+              <Route path="search"/>
+              <Route path="groups(/:name)"/>
+              <Route path="ocmd"/>
+              <Route path="library"/>
+              <Route path="extensions"/>
+              <Route path="performance"/>
             </Route>
           </Router>
           {this.renderDevTools()}

@@ -11,12 +11,12 @@ import actions from 'store/api/actions';
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired
+    systemOptions: PropTypes.array.isRequired,
   };
 
 
   static contextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
 

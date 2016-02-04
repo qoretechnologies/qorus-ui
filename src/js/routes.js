@@ -10,9 +10,9 @@ import { pickBy } from 'lodash';
 const routes = {
   workflows: {
     date: '24h',
-    filter: 'all'
+    filter: 'all',
   },
-  groups: {}
+  groups: {},
 };
 
 

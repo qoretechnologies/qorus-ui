@@ -13,7 +13,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
    */
   const data = [
     { name: 'Row 1', value: 'Value 1' },
-    { name: 'Row 2', value: 'Value 2' }
+    { name: 'Row 2', value: 'Value 2' },
   ];
 
 
@@ -23,7 +23,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
   class ChildComp extends React.Component {
     static propTypes = {
       className: React.PropTypes.string,
-      value: React.PropTypes.string
+      value: React.PropTypes.string,
     };
 
     render() {
@@ -43,13 +43,13 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
       const comp = TestUtils.renderIntoDocument(
         <Table data={data}>
           <Col
-            heading='Rows'
-            field='name'
+            heading="Rows"
+            field="name"
             props={rowsColProps}
           />
           <Col
-            heading='Values'
-            field='value'
+            heading="Values"
+            field="value"
             props={valuesColProps}
           />
         </Table>
@@ -82,8 +82,8 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
     it('passes any other prop to table directly', () => {
       const colProps = rec => ({ value: rec.value });
       const comp = TestUtils.renderIntoDocument(
-        <Table data={data} className='table'>
-          <Col field='value' props={colProps} />
+        <Table data={data} className="table">
+          <Col field="value" props={colProps} />
         </Table>
       );
 
@@ -117,7 +117,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
         <table>
           <tbody>
             <tr>
-              <Cell comp='th'>value</Cell>
+              <Cell comp="th">value</Cell>
             </tr>
           </tbody>
         </table>
@@ -132,7 +132,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
         <table>
           <tbody>
             <tr>
-              <Cell props={{ key: 'value' }} field='key' />
+              <Cell props={{ key: 'value' }} field="key" />
             </tr>
           </tbody>
         </table>
@@ -148,7 +148,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
           <tbody>
             <tr>
               <Cell childProps={{ value: 'Passed to child' }}>
-                <ChildComp className='child' />
+                <ChildComp className="child" />
               </Cell>
             </tr>
           </tbody>
@@ -170,7 +170,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
           <tbody>
             <tr>
               <Cell
-                field='title'
+                field="title"
                 props={{ title: 'Not an HTML DOM title attribute' }}
               />
             </tr>
@@ -191,8 +191,8 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <THead>
-            <Col heading='Names' />
-            <Col heading='Values' />
+            <Col heading="Names" />
+            <Col heading="Values" />
           </THead>
         </table>
       );
@@ -208,7 +208,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <THead>
-            <Col heading='Names' className='name' />
+            <Col heading="Names" className="name" />
           </THead>
         </table>
       );
@@ -245,11 +245,11 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
         <table>
           <TBody data={data}>
             <Col
-              field='name'
+              field="name"
               props={nameColProps}
             />
             <Col
-              field='value'
+              field="value"
               props={valueColProps}
             />
           </TBody>
@@ -304,8 +304,8 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data} onRowClick={handler}>
-            <Col field='name' props={nameColProps} />
-            <Col field='value' props={valueColProps} />
+            <Col field="name" props={nameColProps} />
+            <Col field="value" props={valueColProps} />
           </TBody>
         </table>
       );
@@ -322,7 +322,7 @@ describe("Table, { Cell, THead, TBody } from 'components/table'", () => {
       const comp = TestUtils.renderIntoDocument(
         <table>
           <TBody data={data} shouldHighlight={shouldHighlight}>
-            <Col field='value' props={colProps} />
+            <Col field="value" props={colProps} />
           </TBody>
         </table>
       );

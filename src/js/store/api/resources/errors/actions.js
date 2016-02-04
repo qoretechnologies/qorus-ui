@@ -23,7 +23,7 @@ const fetchErrors = createAction(
 
 function createPayload(ref, err) {
   return fetchJson('POST', `${settings.REST_API_PREFIX}/errors/${ref}`, {
-    body: JSON.stringify(err)
+    body: JSON.stringify(err),
   });
 }
 
@@ -79,5 +79,5 @@ export {
   fetchErrors as fetch,
   createError as create,
   updateError as update,
-  removeError as remove
+  removeError as remove,
 };

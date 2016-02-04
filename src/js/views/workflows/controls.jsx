@@ -11,12 +11,12 @@ import actions from 'store/api/actions';
 @pureRender
 export default class WorkflowsControls extends Component {
   static propTypes = {
-    workflow: PropTypes.object
+    workflow: PropTypes.object,
   };
 
 
   static contextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
 
@@ -36,24 +36,24 @@ export default class WorkflowsControls extends Component {
       <Controls>
         {this.props.workflow.enabled && (
           <Control
-            title='Disable'
-            icon='power-off'
-            btnStyle='success'
+            title="Disable"
+            icon="power-off"
+            btnStyle="success"
             action={dispatchDisable}
           />
         )}
         {!this.props.workflow.enabled && (
           <Control
-            title='Enable'
-            icon='power-off'
-            btnStyle='danger'
+            title="Enable"
+            icon="power-off"
+            btnStyle="danger"
             action={dispatchEnable}
           />
         )}
         <Control
-          title='Reset'
-          icon='refresh'
-          btnStyle='warning'
+          title="Reset"
+          icon="refresh"
+          btnStyle="warning"
           action={dispatchReset}
         />
       </Controls>

@@ -191,7 +191,7 @@ export default class Manager extends Component {
     return (
       <div ref={::this.refRoot}>
         {this.state.modal}
-        <div className='modal-backdrop fade in' />
+        <div className="modal-backdrop fade in" />
       </div>
     );
   }

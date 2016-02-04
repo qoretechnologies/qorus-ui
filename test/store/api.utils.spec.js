@@ -3,7 +3,7 @@ import spies from 'chai-spies';
 import {
   createResourceActions,
   combineResourceActions,
-  createApiActions
+  createApiActions,
 } from '../../src/js/store/api/utils';
 
 describe(
@@ -27,14 +27,14 @@ describe(
         name: 'workflows',
         url: 'api/workflows',
         actions: {
-          get: getActionSpy
-        }
+          get: getActionSpy,
+        },
       }, {
         name: 'services',
         url: 'api/services',
         actions: {
-          post: postActionSpy
-        }
+          post: postActionSpy,
+        },
       }];
 
       const actions = createResourceActions(resources);
@@ -52,14 +52,14 @@ describe(
         name: 'workflows',
         url: 'api/workflows',
         actions: {
-          GET: url => id => `GET ${url}/${id}`
-        }
+          GET: url => id => `GET ${url}/${id}`,
+        },
       }, {
         name: 'workflows',
         url: 'api/workflows',
         actions: {
-          PUT: url => (id, params) => `PUT ${url}/${id}?${params}`
-        }
+          PUT: url => (id, params) => `PUT ${url}/${id}?${params}`,
+        },
       }];
 
       const actions = createResourceActions(resources);
@@ -73,18 +73,18 @@ describe(
         name: 'workflows',
         url: 'api/workflows',
         actions: {
-          GET: url => id => `GET ${url}/${id}`
-        }
+          GET: url => id => `GET ${url}/${id}`,
+        },
       }, {
         name: 'services',
         url: 'api/services',
         actions: {
-          POST: url => (id, params) => `POST ${url}/${id}?${params}`
-        }
+          POST: url => (id, params) => `POST ${url}/${id}?${params}`,
+        },
       }];
 
       const actions = createResourceActions(resources, {
-        PUT: url => (id, params) => `PUT ${url}/${id}?${params}`
+        PUT: url => (id, params) => `PUT ${url}/${id}?${params}`,
       });
 
       expect(actions.workflows.get).to.be.an('undefined');
@@ -98,14 +98,14 @@ describe(
         name: 'workflows',
         url: 'api/workflows',
         actions: {
-          GET: url => id => `GET ${url}/${id}`
-        }
+          GET: url => id => `GET ${url}/${id}`,
+        },
       }];
 
       const transformedActions = createResourceActions(resources, actions => (
         Object.keys(actions).reduce((newActions, name) => (
           Object.assign(newActions, {
-            [`SUPERB_${name}`]: actions[name]
+            [`SUPERB_${name}`]: actions[name],
           })
         ), {})
       ));
@@ -127,9 +127,9 @@ describe(
         actions: {
           GET: {
             action: getActionSpy,
-            meta: metaCreator
-          }
-        }
+            meta: metaCreator,
+          },
+        },
       }];
 
       const actions = createResourceActions(resources);
@@ -145,8 +145,8 @@ describe(
       const actionsWithOverride = createResourceActions(resources, {
         PUT: {
           action: putActionSpy,
-          meta: overrideMetaCreator
-        }
+          meta: overrideMetaCreator,
+        },
       });
 
       expect(actionsWithOverride.workflows.put.action).
@@ -164,9 +164,9 @@ describe(
         workflows: {
           get: {
             action: defaultGet,
-            meta: null
-          }
-        }
+            meta: null,
+          },
+        },
       };
 
       const resourceStart = id => `GET /${id}?action=start`;
@@ -174,9 +174,9 @@ describe(
         workflows: {
           start: {
             action: resourceStart,
-            meta: id => ({ action: 'start', id })
-          }
-        }
+            meta: id => ({ action: 'start', id }),
+          },
+        },
       };
 
       const actions = combineResourceActions(
@@ -194,9 +194,9 @@ describe(
         workflows: {
           get: {
             action: defaultGet,
-            meta: null
-          }
-        }
+            meta: null,
+          },
+        },
       };
 
       const resourceGet = id => `GET /${id}`;
@@ -204,9 +204,9 @@ describe(
         workflows: {
           get: {
             action: resourceGet,
-            meta: null
-          }
-        }
+            meta: null,
+          },
+        },
       };
 
       const actions = combineResourceActions(
@@ -224,9 +224,9 @@ describe(
         workflows: {
           get: {
             action: id => `GET /${id}`,
-            meta: id => id
-          }
-        }
+            meta: id => id,
+          },
+        },
       };
 
       const reduxActions = createApiActions(actions);
@@ -234,7 +234,7 @@ describe(
       expect(reduxActions.workflows.get(42)).to.eql({
         type: 'WORKFLOWS_GET',
         payload: 'GET /42',
-        meta: 42
+        meta: 42,
       });
     });
   });

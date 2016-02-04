@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import createFragment from 'react-addons-create-fragment';
 import { slugify } from '../../utils';
 
 
@@ -25,12 +24,12 @@ export default class Tabs extends Component {
     active: PropTypes.string,
     name: PropTypes.string,
     className: PropTypes.string,
-    tabChange: PropTypes.func
+    tabChange: PropTypes.func,
   };
 
 
   static defaultProps = {
-    tabChange: () => undefined
+    tabChange: () => undefined,
   };
 
 
@@ -81,7 +80,7 @@ export default class Tabs extends Component {
   render() {
     return (
       <div className={this.props.className}>
-        <ul className='nav nav-tabs'>
+        <ul className="nav nav-tabs">
           {React.Children.map(this.props.children, tab => {
             const { name, children, slug: slugMaybe, ...other } = tab.props;
             const slug = slugMaybe || slugify(name);
@@ -97,7 +96,7 @@ export default class Tabs extends Component {
             );
           })}
         </ul>
-        <div className='tab-content'>
+        <div className="tab-content">
           {React.Children.map(this.props.children, tab => {
             const { name, children, slug: slugMaybe, ...other } = tab.props;
             const slug = slugMaybe || slugify(name);

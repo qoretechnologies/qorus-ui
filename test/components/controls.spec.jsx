@@ -15,7 +15,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
   describe('Control', () => {
     it('renders icon in button', () => {
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' />
+        <Control icon="refresh" />
       );
 
 
@@ -30,7 +30,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('applies button style', () => {
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' btnStyle='primary' />
+        <Control icon="refresh" btnStyle="primary" />
       );
 
 
@@ -43,7 +43,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('shows title as button title', () => {
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' title='Restart' />
+        <Control icon="refresh" title="Restart" />
       );
 
 
@@ -56,7 +56,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('shows label as button text after the icon', () => {
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' label='Restart' />
+        <Control icon="refresh" label="Restart" />
       );
 
 
@@ -70,7 +70,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('handles action on click', () => {
       const action = chai.spy();
       const control = TestUtils.renderIntoDocument(
-        <Control icon='refresh' action={action} />
+        <Control icon="refresh" action={action} />
       );
 
 
@@ -87,8 +87,8 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('conveniently groups Control instances together', () => {
       const controls = TestUtils.renderIntoDocument(
         <Controls>
-          <Control icon='power-off' />
-          <Control icon='refresh' />
+          <Control icon="power-off" />
+          <Control icon="refresh" />
         </Controls>
       );
 
@@ -103,8 +103,8 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('can override Control props via controls prop', () => {
       const controls = TestUtils.renderIntoDocument(
         <Controls controls={[{}, { icon: 'times' }]}>
-          <Control icon='power-off' />
-          <Control icon='refresh' />
+          <Control icon="power-off" />
+          <Control icon="refresh" />
         </Controls>
       );
 
@@ -119,7 +119,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('applies Bootstrap btn-group when grouped', () => {
       const controls = TestUtils.renderIntoDocument(
         <Controls grouped>
-          <Control icon='power-off' />
+          <Control icon="power-off" />
         </Controls>
       );
 

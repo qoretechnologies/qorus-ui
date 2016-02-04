@@ -23,13 +23,13 @@ export default class TBody extends Component {
     data: PropTypes.array.isRequired,
     identifier: PropTypes.func,
     shouldHighlight: PropTypes.func,
-    onRowClick: PropTypes.func
+    onRowClick: PropTypes.func,
   };
 
 
   static defaultProps = {
     shouldHighlight: () => false,
-    onRowClick: () => undefined
+    onRowClick: () => undefined,
   };
 
 
@@ -124,7 +124,7 @@ export default class TBody extends Component {
             <tr
               key={recIdx}
               className={classNames({
-                info: this.props.shouldHighlight(rec, recIdx)
+                info: this.props.shouldHighlight(rec, recIdx),
               })}
               onClick={::this.onRowClick}
               ref={refRow}

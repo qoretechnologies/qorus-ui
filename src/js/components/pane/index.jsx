@@ -11,7 +11,7 @@ export default class Pane extends Component {
   static propTypes = {
     children: PropTypes.node,
     onClose: PropTypes.func,
-    width: PropTypes.number
+    width: PropTypes.number,
   };
 
 
@@ -23,17 +23,17 @@ export default class Pane extends Component {
   render() {
     return (
       <div
-        className='pane right'
+        className="pane right"
         style={{ width: this.props.width }}
       >
         <button
-          type='button'
-          className='btn btn-xs btn-inverse pane__close'
+          type="button"
+          className="btn btn-xs btn-inverse pane__close"
           onClick={this.props.onClose}
         >
-          <i className='fa fa-times-circle' /> Close
+          <i className="fa fa-times-circle" /> Close
         </button>
-        <div className='pane__content'>
+        <div className="pane__content">
           {this.props.children}
         </div>
         <ResizeHandle left min={{ width: 400 }} />

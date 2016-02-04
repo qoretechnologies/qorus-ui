@@ -27,7 +27,7 @@ function missingGlobal(ctx) {
 
   if (!ctx.navigator) {
     global.navigator = {
-      userAgent: `Node.js (${process.platform}; U; rv:${process.version})`
+      userAgent: `Node.js (${process.platform}; U; rv:${process.version})`,
     };
   }
 

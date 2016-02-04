@@ -11,7 +11,7 @@ import { pureRender } from '../utils';
 export default class SystemOptions extends Component {
   static propTypes = {
     options: PropTypes.array.isRequired,
-    onAdd: PropTypes.func.isRequired
+    onAdd: PropTypes.func.isRequired,
   };
 
 
@@ -32,7 +32,7 @@ export default class SystemOptions extends Component {
     this.setState({
       selected: this.props.options.find(opt => (
         opt.name === ev.currentTarget.value
-      ))
+      )),
     });
   }
 
@@ -73,9 +73,9 @@ export default class SystemOptions extends Component {
    */
   renderOptions() {
     return (
-      <form className='form-inline' onSubmit={::this.commit}>
+      <form className="form-inline" onSubmit={::this.commit}>
         <select
-          className='form-control'
+          className="form-control"
           value={this.state.selected && this.state.selected.name}
           onChange={::this.onChange}
         >
@@ -89,17 +89,17 @@ export default class SystemOptions extends Component {
           ))}
         </select>
         <button
-          type='submit'
-          className='btn btn-success btn-sm'
+          type="submit"
+          className="btn btn-success btn-sm"
         >
-          <i className='fa fa-plus' /> Add
+          <i className="fa fa-plus" /> Add
         </button>
         <button
-          type='button'
-          className='btn btn-danger btn-sm'
+          type="button"
+          className="btn btn-danger btn-sm"
           onClick={::this.cancel}
         >
-          <i className='fa fa-times' /> Cancel
+          <i className="fa fa-times" /> Cancel
         </button>
       </form>
     );
@@ -114,11 +114,11 @@ export default class SystemOptions extends Component {
   renderButton() {
     return (
       <button
-        className='btn btn-success btn-sm'
+        className="btn btn-success btn-sm"
         onClick={::this.start}
         disabled={!this.props.options.length}
       >
-        <i className='fa fa-plus' /> Add option
+        <i className="fa fa-plus" /> Add option
       </button>
     );
   }

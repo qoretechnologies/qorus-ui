@@ -3,50 +3,50 @@ const initialState = {
     {
       name: 'System',
       url: '/system',
-      icon: 'fa-cog'
+      icon: 'fa-cog',
     },
     {
       name: 'Workflows',
       url: '/workflows',
-      icon: 'fa-sitemap'
+      icon: 'fa-sitemap',
     },
     {
       name: 'Services',
       url: '/services',
-      icon: 'fa-th-list'
+      icon: 'fa-th-list',
     },
     {
       name: 'Jobs',
       url: '/jobs',
-      icon: 'fa-calendar'
+      icon: 'fa-calendar',
     },
     {
       name: 'Search',
       url: '/search',
-      icon: 'fa-search'
+      icon: 'fa-search',
     },
     {
       name: 'Groups',
       url: '/groups',
-      icon: 'fa-tags'
+      icon: 'fa-tags',
     },
     {
       name: 'Ocmd',
       url: '/ocmd',
-      icon: 'fa-terminal'
+      icon: 'fa-terminal',
     },
     {
       name: 'Library',
       url: '/library',
-      icon: 'fa-book'
+      icon: 'fa-book',
     },
     {
       name: 'Extensions',
       url: '/extensions',
-      icon: 'fa-beer'
-    }
+      icon: 'fa-beer',
+    },
   ],
-  extraItems: []
+  extraItems: [],
 };
 
 

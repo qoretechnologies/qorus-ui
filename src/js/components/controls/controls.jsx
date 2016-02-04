@@ -17,13 +17,13 @@ export default class Controls extends Component {
   static propTypes = {
     grouped: PropTypes.bool,
     controls: PropTypes.array,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
 
   static defaultProps = {
     grouped: false,
-    controls: []
+    controls: [],
   };
 
 
@@ -37,7 +37,7 @@ export default class Controls extends Component {
       <div
         className={classNames({
           'btn-controls': true,
-          'btn-group': this.props.grouped
+          'btn-group': this.props.grouped,
         })}
       >
         {React.Children.map(this.props.children, (c, i) => {

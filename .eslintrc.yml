@@ -1,0 +1,13 @@
+---
+extends: airbnb
+parser: babel-eslint
+env:
+  browser: true
+  es6: true
+  mocha: true
+  node: true
+globals:
+  process:
+    env:
+      NODE_ENV: production
+      DEVTOOLS: false

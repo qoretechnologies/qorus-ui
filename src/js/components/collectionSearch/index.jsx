@@ -17,14 +17,14 @@ export default class CollectionSearch extends Component {
     children: PropTypes.node,
     regexp: PropTypes.bool,
     ignoreCase: PropTypes.bool,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
   };
 
 
   static defaultProps = {
     regexp: false,
     ignoreCase: false,
-    onChange: () => undefined
+    onChange: () => undefined,
   };
 
 
@@ -38,7 +38,7 @@ export default class CollectionSearch extends Component {
       filter: new RegExp('', this.getFlags()),
       source: '',
       isRegExp: false,
-      error: null
+      error: null,
     });
   }
 
@@ -162,13 +162,13 @@ export default class CollectionSearch extends Component {
   render() {
     return (
       <form
-        className='form-inline text-right form-search'
+        className="form-inline text-right form-search"
         onSubmit={::this.onSubmit}
       >
         <div
           className={classNames({
             'form-group': true,
-            'has-error': this.state.error
+            'has-error': this.state.error,
           })}
         >
           {this.props.regexp && (
@@ -178,35 +178,35 @@ export default class CollectionSearch extends Component {
                 'btn-xs': true,
                 'btn-default': !this.state.isRegExp,
                 'btn-success': this.state.isRegExp,
-                'form-search__mod': true
+                'form-search__mod': true,
               })}
             >
               RE
               <input
-                type='checkbox'
-                className='sr-only'
+                type="checkbox"
+                className="sr-only"
                 checked={this.state.isRegExp}
                 onChange={::this.onRegExpToggle}
               />
             </label>
           )}
           <input
-            type='search'
-            className='form-control form-search__field'
-            placeholder='Search…'
+            type="search"
+            className="form-control form-search__field"
+            placeholder="Search…"
             value={this.state.source}
             onChange={::this.onSourceChange}
           />
           <button
-            type='submit'
-            className='btn btn-default btn-xs form-search__btn'
+            type="submit"
+            className="btn btn-default btn-xs form-search__btn"
           >
-            <i className='fa fa-search' />
+            <i className="fa fa-search" />
           </button>
         </div>
         {React.Children.count(this.props.children) > 0 && ' '}
         {React.Children.count(this.props.children) > 0 && (
-          <div className='form-group'>
+          <div className="form-group">
             {this.props.children}
           </div>
         )}

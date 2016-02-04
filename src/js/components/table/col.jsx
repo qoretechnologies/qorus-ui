@@ -24,11 +24,11 @@ export default class Col extends Component {
     heading: PropTypes.string,
     comp: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.func
+      PropTypes.func,
     ]),
     props: PropTypes.func,
     field: PropTypes.string,
-    childProps: PropTypes.func
+    childProps: PropTypes.func,
   };
 
 
@@ -36,7 +36,7 @@ export default class Col extends Component {
     heading: '',
     comp: 'td',
     props: () => undefined,
-    childProps: rec => rec
+    childProps: rec => rec,
   };
 
 

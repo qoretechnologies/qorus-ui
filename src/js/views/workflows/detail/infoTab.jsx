@@ -13,7 +13,7 @@ const COMPLEX_VALUE_INDENT = 4;
 @pureRender
 export default class DetailTab extends Component {
   static propTypes = {
-    workflow: PropTypes.object.isRequired
+    workflow: PropTypes.object.isRequired,
   };
 
 
@@ -21,14 +21,14 @@ export default class DetailTab extends Component {
     const omit = [
       'options', 'lib', 'stepmap', 'segment', 'steps', 'stepseg', 'stepinfo',
       'wffuncs', 'groups', 'alerts', 'exec_count', 'autostart', 'has_alerts',
-      'TOTAL', 'timestamp', 'id', 'normalizedName'
+      'TOTAL', 'timestamp', 'id', 'normalizedName',
     ].concat(ORDER_STATES.map(os => os.name));
 
     return Object.keys(this.props.workflow).
       filter(k => omit.indexOf(k) < 0).
       map(k => ({
         name: k,
-        value: this.props.workflow[k]
+        value: this.props.workflow[k],
       }));
   }
 
@@ -60,15 +60,15 @@ export default class DetailTab extends Component {
       <div>
         <Table
           data={this.getData()}
-          className='table table-vertical table-condensed table-striped'
+          className="table table-vertical table-condensed table-striped"
         >
           <Col
-            comp='th'
-            field='name'
+            comp="th"
+            field="name"
             props={::this.nameColProps}
           />
           <Col
-            field='value'
+            field="value"
             props={::this.valueColProps}
           />
         </Table>

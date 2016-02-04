@@ -9,7 +9,7 @@ import { omit, assignIn, isArray } from 'lodash';
 const initialState = {
   data: [],
   sync: false,
-  loading: false
+  loading: false,
 };
 
 function getResourceByName(resources, name) {
@@ -52,21 +52,21 @@ export function createResourceReducers(
                 action.meta.id,
                 data,
                 state.data
-              )
+              ),
             });
           }
 
           data = (resourceOrigin &&
-            resourceOrigin.transform &&
-            isArray(action.payload))
-            ?
-            action.payload.map(resourceOrigin.transform) : action.payload;
+                  resourceOrigin.transform &&
+                  isArray(action.payload)) ?
+            action.payload.map(resourceOrigin.transform) :
+            action.payload;
 
           return {
             ...state,
             data,
             sync: true,
-            loading: false
+            loading: false,
           };
         },
         throw(state, action) {
@@ -74,9 +74,9 @@ export function createResourceReducers(
             ...state,
             sync: false,
             loading: false,
-            error: action.payload
+            error: action.payload,
           };
-        }
+        },
       };
     });
 

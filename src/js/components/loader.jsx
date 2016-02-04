@@ -12,7 +12,7 @@ export default class Loader extends Component {
    */
   render() {
     return (
-      <p><i className='fa fa-spinner fa-spin' /> Loading</p>
+      <p><i className="fa fa-spinner fa-spin" /> Loading</p>
     );
   }
 }

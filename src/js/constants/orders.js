@@ -10,5 +10,5 @@ export const ORDER_STATES = [
   { name: 'ERROR', short: 'E', label: 'important' },
   { name: 'IN-PROGRESS', short: 'I', label: 'warning' },
   { name: 'CANCELED', short: 'X', label: 'canceled' },
-  { name: 'BLOCKED', short: 'B', lable: 'blocked' }
+  { name: 'BLOCKED', short: 'B', lable: 'blocked' },
 ];

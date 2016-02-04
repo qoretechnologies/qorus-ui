@@ -26,7 +26,7 @@ export default class Options extends Component {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
     onSet: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired,
   };
 
 
@@ -36,7 +36,7 @@ export default class Options extends Component {
   componentWillMount() {
     this.setState({
       lastOption: null,
-      lastOptionSet: false
+      lastOptionSet: false,
     });
   }
 
@@ -48,7 +48,7 @@ export default class Options extends Component {
     if (this.state.lastOptionSet) {
       this.setState({
         lastOption: null,
-        lastOptionSet: false
+        lastOptionSet: false,
       });
     }
   }
@@ -105,7 +105,7 @@ export default class Options extends Component {
   addOption(opt) {
     this.setState({
       lastOption: opt,
-      lastOptionSet: false
+      lastOptionSet: false,
     });
   }
 
@@ -122,7 +122,7 @@ export default class Options extends Component {
     if (opt === this.state.lastOption && !this.state.lastOptionSet) {
       this.setState({
         lastOption: null,
-        lastOptionSet: false
+        lastOptionSet: false,
       });
     }
   }
@@ -167,7 +167,7 @@ export default class Options extends Component {
       value: rec.value,
       startEdit: rec === this.state.lastOption,
       onSave: this.setOption.bind(this, rec),
-      onCancel: this.cancelOptionEdit.bind(this, rec)
+      onCancel: this.cancelOptionEdit.bind(this, rec),
     };
   }
 
@@ -181,7 +181,7 @@ export default class Options extends Component {
    */
   deleteColProps(rec) {
     return {
-      action: this.deleteOption.bind(this, rec)
+      action: this.deleteOption.bind(this, rec),
     };
   }
 
@@ -193,7 +193,7 @@ export default class Options extends Component {
    */
   render() {
     return (
-      <div className='options'>
+      <div className="options">
         <h4>Options</h4>
         <div>
           {!this.getWorkflowOptions().length && (
@@ -202,26 +202,26 @@ export default class Options extends Component {
           {!!this.getWorkflowOptions().length && (
             <Table
               data={this.getWorkflowOptions()}
-              className='table table-condensed table-striped table--small'
+              className="table table-condensed table-striped table--small"
             >
               <Col
-                heading='Options'
-                field='name'
+                heading="Options"
+                field="name"
                 props={::this.optionsColProps}
               />
               <Col
-                heading='Value'
+                heading="Value"
                 comp={EditableCell}
                 props={::this.valueColProps}
               />
               <Col
-                className='narrow'
+                className="narrow"
                 childProps={::this.deleteColProps}
               >
                 <Control
-                  title='Remove'
-                  btnStyle='danger'
-                  icon='times'
+                  title="Remove"
+                  btnStyle="danger"
+                  icon="times"
                 />
               </Col>
             </Table>

@@ -9,7 +9,7 @@ import { pureRender } from './utils';
 @pureRender
 export default class StatusIcon extends Component {
   static propTypes = {
-    value: PropTypes.any
+    value: PropTypes.any,
   };
 
 
@@ -26,7 +26,7 @@ export default class StatusIcon extends Component {
           'fa-check-circle': this.props.value,
           'fa-minus-circle': !this.props.value,
           'text-success': this.props.value,
-          'text-danger': !this.props.value
+          'text-danger': !this.props.value,
         })}
       />
     );

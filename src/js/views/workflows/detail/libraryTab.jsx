@@ -14,7 +14,7 @@ import { pureRender } from 'components/utils';
 @pureRender
 export default class LibraryTab extends Component {
   static propTypes = {
-    workflow: PropTypes.object.isRequired
+    workflow: PropTypes.object.isRequired,
   };
 
 
@@ -101,7 +101,7 @@ export default class LibraryTab extends Component {
 
     return (
       <span>
-        <span className='label label-default'>{func.type}</span>
+        <span className="label label-default">{func.type}</span>
         <br />
         {func.name}
         {func.version && ' '}
@@ -122,9 +122,9 @@ export default class LibraryTab extends Component {
     }
 
     return (
-      <li role='presentation' className='disabled'>
+      <li role="presentation" className="disabled">
         <a><h5>WfFuncs</h5></a>
-        <ul className='nav nav-pills nav-stacked'>
+        <ul className="nav nav-pills nav-stacked">
           {this.props.workflow.wffuncs.map((func, idx) => (
             <Item
               key={idx}
@@ -142,15 +142,15 @@ export default class LibraryTab extends Component {
 
   renderStepFuncs() {
     return (
-      <li role='presentation' className='disabled'>
+      <li role="presentation" className="disabled">
         <a><h5>StepFuncs</h5></a>
-        <ul className='nav nav-pills nav-stacked'>
+        <ul className="nav nav-pills nav-stacked">
         {this.props.workflow.stepinfo.
          sort(::this.compareStepInfoFuncs).
          map((step, stepIdx) => (
-          <li key={stepIdx} role='presentation' className='disabled'>
+          <li key={stepIdx} role="presentation" className="disabled">
             <a><h6>{step.name}</h6></a>
-            <ul className='nav nav-pills nav-stacked'>
+            <ul className="nav nav-pills nav-stacked">
               {(step.functions || []).map((func, funcIdx) => (
                 <Item
                   key={funcIdx}
@@ -173,7 +173,7 @@ export default class LibraryTab extends Component {
     const refCodeTabs = c => this._codeTabs = c;
 
     return (
-      <div className='tab-content' ref={refCodeTabs}>
+      <div className="tab-content" ref={refCodeTabs}>
         {this.mergeWfAndStepFuncs(this.props).map(({ id, func }, funcIdx) => (
           <Pane
             key={funcIdx}
@@ -182,10 +182,10 @@ export default class LibraryTab extends Component {
             active={id === this.state.activeDomId}
           >
             <pre
-              className='line-numbers'
+              className="line-numbers"
               data-start={parseInt(func.offset, 10) + 1}
             >
-              <code className='language-qore'>
+              <code className="language-qore">
                 {func.body}
               </code>
             </pre>
@@ -198,18 +198,18 @@ export default class LibraryTab extends Component {
 
   render() {
     return (
-      <div className='row wflw-lib'>
-        <div className='col-sm-3 wflw-lib__fns'>
-          <div className='well well-sm'>
+      <div className="row wflw-lib">
+        <div className="col-sm-3 wflw-lib__fns">
+          <div className="well well-sm">
             <nav>
-              <ul className='nav nav-pills nav-stacked'>
+              <ul className="nav nav-pills nav-stacked">
                 {this.renderWfFuncs()}
                 {this.renderStepFuncs()}
               </ul>
             </nav>
           </div>
         </div>
-        <div className='col-sm-9 wflw-lib__src'>
+        <div className="col-sm-9 wflw-lib__src">
           {this.renderCodeTabs()}
         </div>
       </div>

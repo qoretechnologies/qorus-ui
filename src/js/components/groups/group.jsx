@@ -16,7 +16,7 @@ export default class Group extends Component {
     name: PropTypes.string.isRequired,
     size: PropTypes.number,
     url: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 
 
@@ -30,7 +30,7 @@ export default class Group extends Component {
       <span
         className={classNames({
           label: true,
-          'label-info': !this.props.disabled
+          'label-info': !this.props.disabled,
         })}
       >
         {this.props.name}
@@ -50,11 +50,11 @@ export default class Group extends Component {
    */
   render() {
     return !this.props.url ? (
-      <span className='group'>
+      <span className="group">
         {this.renderLabel()}
       </span>
     ) : (
-      <Link to={this.props.url} className='group'>
+      <Link to={this.props.url} className="group">
         {this.renderLabel()}
       </Link>
     );

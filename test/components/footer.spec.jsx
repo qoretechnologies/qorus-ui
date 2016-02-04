@@ -11,7 +11,7 @@ describe("Footer from 'components/footer'", () => {
     const info = {
       'omq-schema': 'test@test',
       'omq-version': '1',
-      'omq-build': 'test'
+      'omq-build': 'test',
     };
 
     const comp = TestUtils.renderIntoDocument(

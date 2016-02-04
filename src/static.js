@@ -10,8 +10,11 @@ const http = require('http');
 //
 // Create a node-static server to serve the current directory
 //
-const file = new nodeStatic.Server('.', { cache: false, headers: {
-  'Cache-Control': 'no-cache, must-revalidate' }
+const file = new nodeStatic.Server('.', {
+  cache: false,
+  headers: {
+    'Cache-Control': 'no-cache, must-revalidate',
+  },
 });
 
 http.createServer((request, response) => {
@@ -39,11 +42,10 @@ proxyServer.proxy([
     headers: {
       res: {
         'access-control-allow-origin': '*',
-        'access-control-allow-credentials': true
-      }
-    }
-
-  }
+        'access-control-allow-credentials': true,
+      },
+    },
+  },
 ]);
 
 //
@@ -64,11 +66,11 @@ const proxyPort = 3000;
 
 const app = connect();
 const proxy = httpProxy.createProxyServer({
-  target: `http://localhost:${proxiedPort}`
+  target: `http://localhost:${proxiedPort}`,
 });
 
 app.use(transformerProxy(transformerFunction, {
-  match: /^\/js\/libs\/(.*)(\.js)$/
+  match: /^\/js\/libs\/(.*)(\.js)$/,
 }));
 
 app.use((req, res) => {

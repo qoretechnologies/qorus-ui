@@ -22,18 +22,18 @@ export default class Cell extends Component {
     children: React.PropTypes.node,
     comp: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.func
+      PropTypes.func,
     ]),
     props: PropTypes.object,
     field: PropTypes.string,
-    childProps: PropTypes.object
+    childProps: PropTypes.object,
   };
 
 
   static defaultProps = {
     comp: 'td',
     props: {},
-    childProps: {}
+    childProps: {},
   };
 
 

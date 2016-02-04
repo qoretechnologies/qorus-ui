@@ -12,14 +12,14 @@ describe("Modal, { Manager } from 'components/modal'", () => {
   class SimpleModal extends Component {
     static propTypes = {
       heading: PropTypes.string,
-      onClose: PropTypes.func
+      onClose: PropTypes.func,
     };
 
     render() {
       return (
         <Modal>
           <Modal.Header
-            titleId='modalTitle'
+            titleId="modalTitle"
             onClose={this.props.onClose}
           >
             {this.props.heading}
@@ -107,8 +107,8 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         const manager = TestUtils.renderIntoDocument(
           <Manager />
         );
-        const modal1 = <SimpleModal heading='first' />;
-        const modal2 = <SimpleModal heading='second' />;
+        const modal1 = <SimpleModal heading="first" />;
+        const modal2 = <SimpleModal heading="second" />;
 
 
         manager.open(modal1);
@@ -144,8 +144,8 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         const manager = TestUtils.renderIntoDocument(
           <Manager />
         );
-        const modal1 = <SimpleModal heading='first' />;
-        const modal2 = <SimpleModal heading='second' />;
+        const modal1 = <SimpleModal heading="first" />;
+        const modal2 = <SimpleModal heading="second" />;
 
 
         manager.open(modal1);

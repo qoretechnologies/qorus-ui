@@ -28,7 +28,7 @@ const MAX_TRIES = 10;
 @pureRender
 export default class LogTab extends Component {
   static propTypes = {
-    workflow: PropTypes.object.isRequired
+    workflow: PropTypes.object.isRequired,
   };
 
 
@@ -58,7 +58,7 @@ export default class LogTab extends Component {
       filter: new RegExp('', 'g'),
       autoscroll: true,
       pause: false,
-      error: null
+      error: null,
     });
     this.connect(this.props.workflow);
   }
@@ -83,7 +83,7 @@ export default class LogTab extends Component {
     this.setState({
       entries: [],
       filteredEntries: [],
-      error: null
+      error: null,
     });
     this.connect(nextProps.workflow);
   }
@@ -228,7 +228,7 @@ export default class LogTab extends Component {
       split(/\n/).
       map((entry, delta) => ({
         entry,
-        no: this.state.entries.length + delta
+        no: this.state.entries.length + delta,
       }));
 
     this.setState({
@@ -237,7 +237,7 @@ export default class LogTab extends Component {
       ),
       filteredEntries: this.state.filteredEntries.concat(
         entries.filter(this.filterEntry.bind(this, this.state.filter))
-      )
+      ),
     });
   }
 
@@ -335,14 +335,14 @@ export default class LogTab extends Component {
         parts.push({
           start: prevIndex,
           end: match.index,
-          highlight: false
+          highlight: false,
         });
       }
 
       parts.push({
         start: match.index,
         end: filter.lastIndex,
-        highlight: true
+        highlight: true,
       });
 
       prevIndex = filter.lastIndex;
@@ -352,7 +352,7 @@ export default class LogTab extends Component {
       parts.push({
         start: prevIndex,
         end: entry.length,
-        highlight: false
+        highlight: false,
       });
     }
 
@@ -360,7 +360,7 @@ export default class LogTab extends Component {
       <div key={ no }>
         {parts.map(({ start, end, highlight }) => (
           highlight ? (
-            <b key={`${start}.${end}`} className='highlight'>
+            <b key={`${start}.${end}`} className="highlight">
               {entry.substring(start, end)}
             </b>
           ) : (
@@ -384,48 +384,48 @@ export default class LogTab extends Component {
 
     return (
       <div>
-        <div className='row'>
-          <div className='col-sm-6'>
+        <div className="row">
+          <div className="col-sm-6">
             <Controls>
               <Control
-                label='Autoscroll'
+                label="Autoscroll"
                 btnStyle={this.state.autoscroll ? 'success' : null}
-                icon='check'
+                icon="check"
                 action={::this.onAutoscrollToggle}
               />
               <Control
-                label='Pause'
+                label="Pause"
                 btnStyle={this.state.pause ? 'success' : null}
-                icon='pause'
+                icon="pause"
                 action={::this.onPauseToggle}
               />
             </Controls>
           </div>
-          <div className='col-sm-6'>
+          <div className="col-sm-6">
             <CollectionSearch regexp onChange={::this.onFilterChange}>
               <a
                 href={this.getLogUri()}
                 download={this.getLogName()}
-                className='btn btn-default btn-xs'
-                role='button'
+                className="btn btn-default btn-xs"
+                role="button"
               >
-                <i className='fa fa-download' />
+                <i className="fa fa-download" />
               </a>
             </CollectionSearch>
           </div>
         </div>
         {this.state.error && (
-          <div className='alert alert-danger' role='alert'>
+          <div className="alert alert-danger" role="alert">
             {`${this.state.error}`}
           </div>
         )}
-        <div className='log-area'>
+        <div className="log-area">
           <pre
-            className='language-log'
+            className="language-log"
             ref={refScroll}
             onScroll={::this.onBufferScroll}
           >
-            <code className='language-log'>
+            <code className="language-log">
               {this.state.filteredEntries.map(::this.renderEntry)}
             </code>
           </pre>

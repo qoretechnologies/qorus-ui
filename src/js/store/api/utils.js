@@ -38,7 +38,7 @@ export function prepareApiActions(url, actions) {
 
     actionsHash[name] = {
       action: actionFn(url),
-      meta: metaCreator
+      meta: metaCreator,
     };
   });
 
@@ -97,7 +97,7 @@ export async function fetchJson(method, url, opts = {}) {
     url,
     Object.assign({
       method,
-      headers: settings.DEFAULT_REST_HEADERS
+      headers: settings.DEFAULT_REST_HEADERS,
     }, opts)
   );
 

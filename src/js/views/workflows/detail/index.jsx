@@ -22,7 +22,7 @@ export default class WorkflowsDetail extends Component {
     errors: PropTypes.array.isRequired,
     systemOptions: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired,
-    tabId: PropTypes.string
+    tabId: PropTypes.string,
   };
 
 
@@ -30,7 +30,7 @@ export default class WorkflowsDetail extends Component {
     dispatch: PropTypes.func,
     router: PropTypes.object,
     route: PropTypes.object,
-    params: PropTypes.object
+    params: PropTypes.object,
   };
 
 
@@ -80,32 +80,32 @@ export default class WorkflowsDetail extends Component {
     if (!workflow) return null;
 
     return (
-      <article className='wflw'>
+      <article className="wflw">
         <WorkflowsHeader workflow={workflow} />
         <Tabs
-          className='wflw__tabs'
+          className="wflw__tabs"
           active={tabId}
           tabChange={::this.changeTab}
         >
-          <Pane name='Detail'>
+          <Pane name="Detail">
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Pane>
-          <Pane name='Library'>
+          <Pane name="Library">
             <LibraryTab workflow={workflow} />
           </Pane>
-          <Pane name='Steps' />
-          <Pane name='Log'>
+          <Pane name="Steps" />
+          <Pane name="Log">
             <LogTab workflow={workflow} />
           </Pane>
-          <Pane name='Errors'>
+          <Pane name="Errors">
             <ErrorsTab
               workflow={workflow}
               errors={errors}
               globalErrors={globalErrors}
             />
           </Pane>
-          <Pane name='Mappers' />
-          <Pane name='Info'>
+          <Pane name="Mappers" />
+          <Pane name="Info">
             <InfoTab workflow={workflow} />
           </Pane>
         </Tabs>

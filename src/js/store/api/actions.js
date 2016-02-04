@@ -6,7 +6,7 @@ import {
   combineResourceActions,
   createResourceActions,
   createApiActions,
-  fetchJson
+  fetchJson,
 } from './utils';
 
 
@@ -22,13 +22,13 @@ export const DEFAULT_ACTIONS = {
       id ? `${url}/${id}` : url,
       params
     ),
-    meta: (params, id) => ({ params, id })
+    meta: (params, id) => ({ params, id }),
   },
   UPDATE: url => (params, id) => fetchJson(
     'POST',
     id ? `${url}/${id}` : url,
     params
-  )
+  ),
 };
 
 

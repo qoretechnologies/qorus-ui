@@ -33,7 +33,7 @@ export function pureRender(CompCls) {
   checkClassForPureRender(CompCls);
 
   Object.assign(CompCls.prototype, {
-    shouldComponentUpdate: PureRenderMixin.shouldComponentUpdate
+    shouldComponentUpdate: PureRenderMixin.shouldComponentUpdate,
   });
 }
 
@@ -59,7 +59,7 @@ export function pureRenderOmit(predicate) {
           _.omit(nextProps, predicate),
           nextState
         );
-      }
+      },
     });
   };
 }

@@ -12,12 +12,12 @@ export default class Pane extends Component {
     active: PropTypes.bool,
     onActiveChange: PropTypes.func,
     disabled: PropTypes.bool,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
 
   static defaultProps = {
-    onActiveChange: () => undefined
+    onActiveChange: () => undefined,
   };
 
 
@@ -67,7 +67,7 @@ export default class Pane extends Component {
         className={classNames({
           'tab-pane': true,
           active: this.props.active,
-          disabled: this.props.disabled
+          disabled: this.props.disabled,
         })}
       >
         {this.props.children}

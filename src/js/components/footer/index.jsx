@@ -10,7 +10,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Footer extends Component {
   static propTypes = {
-    info: PropTypes.object
+    info: PropTypes.object,
   };
 
 
@@ -22,8 +22,8 @@ export default class Footer extends Component {
   render() {
     return (
       <footer>
-        <div className='container-fluid'>
-          <p className='text-right text-muted'>
+        <div className="container-fluid">
+          <p className="text-right text-muted">
             {'Qorus Integration Engine '}
             {this.props.info && this.props.info['omq-schema'] && (
               <small>{`(Schema: ${this.props.info['omq-schema']})`}</small>
@@ -40,7 +40,7 @@ export default class Footer extends Component {
             )}
             {this.props.info && this.props.info['omq-version'] && ' '}
             &copy;&nbsp;
-            <a href='http://qoretechnologies.com'>Qore Technologies</a>
+            <a href="http://qoretechnologies.com">Qore Technologies</a>
             {' | '}
             <a
               href={'http://bugs.qoretechnologies.com/' +
