@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-qore';
-import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prism-plugins/wrapped-line-numbers';
 
 
 import { Item, Pane } from 'components/tabs';
 
 
+import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
@@ -27,6 +28,7 @@ export default class LibraryTab extends Component {
 
   componentWillMount() {
     this.setInitialActiveDomId(this.props);
+    this.setState({ wrapLines: true });
   }
 
 
@@ -93,6 +95,11 @@ export default class LibraryTab extends Component {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
+  }
+
+
+  toggleWrapLines() {
+    this.setState({ wrapLines: !this.state.wrapLines });
   }
 
 
@@ -184,8 +191,27 @@ export default class LibraryTab extends Component {
             name={func.name}
             active={id === this.state.activeDomId}
           >
+            <button
+              type="button"
+              className={classNames({
+                btn: true,
+                'btn-xs': true,
+                'btn-default': !this.state.wrapLines,
+                'btn-success': this.state.wrapLines,
+                'wflw-lib__wrap-toggle': true,
+              })}
+              onClick={::this.toggleWrapLines}
+              title={this.state.wrapLines ?
+                     'Disable line wrap' :
+                     'Wrap lines'}
+            >
+              <i className="fa fa-outdent"></i>
+            </button>
             <pre
-              className="line-numbers"
+              className={classNames({
+                'line-numbers': true,
+                'wrapped-lines': this.state.wrapLines,
+              })}
               data-start={parseInt(func.offset, 10) + 1}
             >
               <code className="language-qore">

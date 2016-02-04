@@ -11,8 +11,9 @@
  *    the bottom there is some padding.
  * 5. Makes sure top controls are not tucked to tab pane border.
  * 6. The log buffer uses Prism to style it, but the default font size
- *    si too big. We also need custom word highlight which is not part
- *    of Prism.
+ *    is too big.
+ * 7. Prevent log lines from overflowing and wrap them.
+ * 8. Custom word highlight which is not part of Prism.
  */
 #log {
   overflow: hidden; /* [1] */
@@ -53,12 +54,18 @@
   }
 
 
-  .log-area { /* [6] */
-    > pre {
+  .log-area {
+    > pre { /* [6] */
       font-size: $font-size-extra-small;
+
+      > code { /* [7] */
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
     }
 
-    .highlight {
+    .highlight { /* [8] */
       background: slategray;
     }
   }

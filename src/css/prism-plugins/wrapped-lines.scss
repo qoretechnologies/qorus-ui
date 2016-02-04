@@ -1,0 +1,11 @@
+/**
+ * Prevents lines from overflowing and wraps them.
+ */
+pre.wrapped-lines {
+  &[class*="language-"],
+  code[class*="language-"] {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+}

@@ -38,11 +38,11 @@
     }
     > .wflw-lib__fns > .well {
       right: floor($padding-large-horizontal / 2);
-      overflow-y: scroll;
+      overflow-y: auto;
     }
     > .wflw-lib__src > .tab-content > .tab-pane > pre {
       left: ceil($padding-large-horizontal / 2);
-      overflow: scroll;
+      overflow: auto;
     }
 
     padding-top: $padding-large-vertical;
@@ -85,5 +85,21 @@
       margin-top: -6px;
       margin-bottom: -6px;
     }
+  }
+}
+
+
+.wflw-lib {
+  /**
+   * Line wrap toggle button hovers above Prism-formatted code.
+   *
+   * The button is a sibling to Prism-formatted code whose parent is a
+   * containing block (Bootstrap grid column).
+   */
+  &__wrap-toggle {
+    position: absolute;
+    top: 2px;
+    right: $grid-gutter-width / 2 + 3px;
+    z-index: $zindex-pane + 1;
   }
 }

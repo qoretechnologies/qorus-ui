@@ -1,7 +1,8 @@
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
 @import '../../node_modules/prismjs/themes/prism-okaidia';
-@import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers';
+@import './prism-plugins/wrapped-lines';
+@import './prism-plugins/wrapped-line-numbers';
 
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
