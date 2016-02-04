@@ -33,3 +33,20 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 html, body, .app, .app__wrap {
   height: 100%;
 }
+
+
+.form-horizontal {
+  /**
+   * Resets Bootstrap position of checkboxes and radio for horizontal
+   * forms.
+   *
+   * Bootstrap shift both types of controls by 20px to the left which
+   * is undesirable in horizontal forms.
+   */
+  .radio input[type="radio"],
+  .radio-inline input[type="radio"],
+  .checkbox input[type="checkbox"],
+  .checkbox-inline input[type="checkbox"] {
+    margin-left: 0;
+  }
+}
