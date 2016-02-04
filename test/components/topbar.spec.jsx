@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 
 import Topbar from '../../src/js/components/topbar';
-import UserInfo from '../../src/js/components/userInfo';
+import UserInfo from '../../src/js/components/user_info';
 
 
 describe("Topbar from 'components/topbar'", () => {

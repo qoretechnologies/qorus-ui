@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 
 
-import NavItem from './navItem';
+import Item from './item';
 
 
 /**
@@ -47,7 +47,7 @@ export default class Navigation extends Component {
    */
   renderItem(item) {
     return (
-      <NavItem
+      <Item
         key={item.url}
         active={this.isActiveItem(item)}
         {...item}

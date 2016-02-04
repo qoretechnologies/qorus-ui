@@ -3,10 +3,10 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 
-import UserInfo from '../../src/js/components/userInfo';
+import UserInfo from '../../src/js/components/user_info';
 
 
-describe("UserInfo from 'components/userInfo'", () => {
+describe("UserInfo from 'components/user_info'", () => {
   it("displays current user's name", () => {
     const comp = TestUtils.renderIntoDocument(
       <UserInfo user={{ name: 'jon.doe' }} />

@@ -2,10 +2,10 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
-import CollectionSearch from '../../src/js/components/collectionSearch';
+import CollectionSearch from '../../src/js/components/collection_search';
 
 
-describe("CollectionSearch from 'components/collectionSearch'", () => {
+describe("CollectionSearch from 'components/collection_search'", () => {
   it('renders input search field and submit button', () => {
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch />

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 
 import { pureRender } from '../utils';
-import UserInfo from '../userInfo';
+import UserInfo from '../user_info';
 
 
 /**

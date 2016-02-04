@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import WorkflowsHeader from './header';
-import DetailTab from './detailTab';
-import LibraryTab from './libraryTab';
-import LogTab from './logTab';
-import ErrorsTab from './errorsTab';
-import InfoTab from './infoTab';
+import DetailTab from './detail_tab';
+import LibraryTab from './library_tab';
+import LogTab from './log_tab';
+import ErrorsTab from './errors_tab';
+import InfoTab from './info_tab';
 
 
 import { pureRender } from 'components/utils';

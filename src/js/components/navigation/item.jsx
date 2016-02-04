@@ -13,7 +13,7 @@ import { pureRender } from '../utils';
  * Router's `Link` component.
  */
 @pureRender
-export default class NavItem extends Component {
+export default class Item extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

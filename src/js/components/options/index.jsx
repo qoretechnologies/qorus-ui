@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from '../table';
-import EditableCell from '../table/editableCell';
+import EditableCell from '../table/editable_cell';
 import { Control } from '../controls';
-import SystemOptions from './systemOptions';
+import SystemOptions from './system_options';
 
 
 import { pureRender } from '../utils';

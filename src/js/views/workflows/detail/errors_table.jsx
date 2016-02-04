@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import Table, { Col } from 'components/table';
 import { Controls, Control } from 'components/controls';
-import CollectionSearch from 'components/collectionSearch';
-import StatusIcon from 'components/statusIcon';
+import CollectionSearch from 'components/collection_search';
+import StatusIcon from 'components/status_icon';
 
 
-import ErrorModal from './errorModal';
+import ErrorModal from './error_modal';
 
 
 import { pureRender } from 'components/utils';

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Controls, Control } from 'components/controls';
-import CollectionSearch from 'components/collectionSearch';
+import CollectionSearch from 'components/collection_search';
 
 
 import { fetchJson } from 'store/api/utils';

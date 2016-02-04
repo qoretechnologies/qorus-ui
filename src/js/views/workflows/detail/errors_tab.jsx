@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import ErrorsTable from './errorsTable';
+import ErrorsTable from './errors_table';
 
 
 import { pureRender } from 'components/utils';

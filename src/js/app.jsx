@@ -53,10 +53,10 @@ export default class App extends Component {
       default:
         this.setState({ devToolsReady: false });
         require.ensure([
-          'components/devTools',
+          'components/dev_tools',
           'react-addons-perf',
         ], require => {
-          const DevTools = require('components/devTools').default;
+          const DevTools = require('components/dev_tools').default;
           require('expose?Perf!react-addons-perf');
 
           this.setState({
