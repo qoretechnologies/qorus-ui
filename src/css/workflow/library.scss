@@ -10,7 +10,8 @@
  * level are not displayed as it is clear from context - there is no
  * indentation.
  *
- * The source code handled by Prism.
+ * The source code handled by Prism. However, the font size is
+ * overriden to be smaller to allow more code on the screen.
  *
  * Columns occupy available height. But their content is absolutely
  * positioned to provide independent scrolling.
@@ -21,13 +22,13 @@
   > .wflw-lib {
     height: 100%;
 
-    & > .wflw-lib__fns,
-    & > .wflw-lib__src {
+    > .wflw-lib__fns,
+    > .wflw-lib__src {
       height: 100%;
     }
 
-    & > .wflw-lib__fns > .well,
-    & > .wflw-lib__src > .tab-content > .tab-pane > pre {
+    > .wflw-lib__fns > .well,
+    > .wflw-lib__src > .tab-content > .tab-pane > pre {
       position: absolute;
       top: 0;
       right: $padding-large-horizontal;
@@ -61,30 +62,35 @@
   .nav {
     word-wrap: break-word;
 
-    & > li.disabled > a {
+    > li.disabled > a {
       cursor: inherit;
     }
 
-    & > li > a > h5,
-    & > li > a > h6 {
+    > li > a > h5,
+    > li > a > h6 {
       text-transform: uppercase;
     }
 
-    & > li > a > h5 {
+    > li > a > h5 {
       font-size: $font-size-base;
       margin-top: 0;
       margin-bottom: 0;
     }
-    & > li > a > h6 {
+    > li > a > h6 {
       font-size: $font-size-small;
       margin-top: -3px;
       margin-bottom: -6px;
     }
-    & > li > a > span {
+    > li > a > span {
+      font-size: $font-size-small;
       display: block;
       margin-top: -6px;
       margin-bottom: -6px;
     }
+  }
+
+  pre {
+    font-size: $font-size-extra-small;
   }
 }
 
