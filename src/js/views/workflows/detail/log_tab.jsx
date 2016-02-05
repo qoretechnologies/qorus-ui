@@ -193,11 +193,13 @@ export default class LogTab extends Component {
   /**
    * Stores Web Socket error and disconnects.
    *
-   * @param {Event} ev
+   * An event fired by error on Web Socket does not have any
+   * diagnostic information so generic error message is used.
+   *
    * @see disconnect
    */
-  onSocketError(ev) {
-    this.setState({ error: ev });
+  onSocketError() {
+    this.setState({ error: 'Connection error.' });
     this.disconnect();
   }
 
