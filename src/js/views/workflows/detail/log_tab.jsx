@@ -23,6 +23,10 @@ const MAX_TRIES = 10;
  * - pause which stops receiving new log entries
  * - filter which greps log entries and highlights matches
  * - download of currently visible log buffer (with filter applied)
+ *
+ * Download is provided via data URI scheme. Browsers supported by
+ * Qorus have virtually no limit for data URIs therefore there no such
+ * limit implemented here.
  */
 // TODO refactor Web Sockets code to store.
 @pureRender
