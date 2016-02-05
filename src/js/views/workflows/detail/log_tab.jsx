@@ -47,6 +47,7 @@ export default class LogTab extends Component {
     this._token = null;
     this._socket = null;
     this._scroll = null;
+    this._addingEntries = false;
   }
 
 
@@ -157,10 +158,17 @@ export default class LogTab extends Component {
   /**
    * Disables autoscroll if scroll to the top is detected.
    *
+   * It checks internal state flag whether the scroll is triggered by
+   * new entries comming in. If so, it prevents from losing autoscroll
+   * flag and resets that flag.
+   *
    * @param {Event} ev
    */
   onBufferScroll(ev) {
-    if (!this.state.autoscroll) return;
+    if (this._addingEntries || !this.state.autoscroll) {
+      this._addingEntries = false;
+      return;
+    }
 
     if (ev.currentTarget.scrollTop <
         ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) {
@@ -225,9 +233,14 @@ export default class LogTab extends Component {
   /**
    * Appends new log entries to the buffer.
    *
+   * It sets internal state flag to prevent the buffer from losing
+   * autoscroll due to event race conditions.
+   *
    * @param {string} chunk
    */
   addEntries(chunk) {
+    this._addingEntries = true;
+
     const entries = chunk.
       split(/\n/).
       map((entry, delta) => ({
@@ -319,6 +332,16 @@ export default class LogTab extends Component {
 
 
   /**
+   * Stores reference to scrollable container for later.
+   *
+   * @param {HTMLElement} el
+   */
+  refScroll(el) {
+    this._scroll = el;
+  }
+
+
+  /**
    * Returns element for given log entry.
    *
    * It finds and highlights matches for current filter.
@@ -361,7 +384,7 @@ export default class LogTab extends Component {
     }
 
     return (
-      <div key={ no }>
+      <div key={no}>
         {parts.map(({ start, end, highlight }) => (
           highlight ? (
             <b key={`${start}.${end}`} className="highlight">
@@ -384,8 +407,6 @@ export default class LogTab extends Component {
    * @return {ReactElement}
    */
   render() {
-    const refScroll = c => this._scroll = c;
-
     return (
       <div>
         <div className="row">
@@ -426,7 +447,7 @@ export default class LogTab extends Component {
         <div className="log-area">
           <pre
             className="language-log"
-            ref={refScroll}
+            ref={::this.refScroll}
             onScroll={::this.onBufferScroll}
           >
             <code className="language-log">
