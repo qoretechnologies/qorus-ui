@@ -4261,9 +4261,9 @@
       "resolved": "https://registry.npmjs.org/redux-actions/-/redux-actions-0.9.1.tgz"
     },
     "redux-devtools": {
-      "version": "3.1.0",
-      "from": "redux-devtools@>=3.0.1 <4.0.0",
-      "resolved": "https://registry.npmjs.org/redux-devtools/-/redux-devtools-3.1.0.tgz"
+      "version": "3.1.1",
+      "from": "redux-devtools@3.1.1",
+      "resolved": "https://registry.npmjs.org/redux-devtools/-/redux-devtools-3.1.1.tgz"
     },
     "redux-devtools-dock-monitor": {
       "version": "1.0.1",
