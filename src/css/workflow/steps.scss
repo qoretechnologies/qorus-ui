@@ -1,0 +1,47 @@
+/**
+ * Diagram is an SVG element with box groups and paths between them.
+ *
+ * Box is a group element with a basic shape (rect or ellipse) and a
+ * text.
+ *
+ * 1. Diagram spread across available horizontal space.
+ * 2. Paths are black lines.
+ * 3. Boxes are clickable with exception of a start (root) box.
+ * 4. Shapes are white with gray-ish border.
+ * 5. Texts are black and aligned to their geometrical center.
+ * 6. Masks are applied on text to prevent overflowing.
+ */
+.diagram {
+  width: 100%; /* [1] */
+
+  &__path { /* [2] */
+    stroke: #000;
+    fill: none;
+  }
+
+  &__box {
+    &:not(.diagram__box--start) { /* [3] */
+      cursor: pointer;
+    }
+
+    > rect,
+    > ellipse { /* [4] */
+      fill: #fff;
+      stroke: rgba(0, 0, 0, .2);
+    }
+
+    > text { /* [5] */
+      fill: #000;
+
+      font-size: 10px;
+      font-weight: bold;
+
+      text-anchor: middle;
+      alignment-baseline: middle;
+    }
+  }
+
+  &__mask { /* [6] */
+    fill: #fff;
+  }
+}
