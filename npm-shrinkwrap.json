@@ -4163,9 +4163,9 @@
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-4.4.0.tgz"
     },
     "react-router": {
-      "version": "2.0.0-rc6",
-      "from": "react-router@2.0.0-rc6",
-      "resolved": "https://registry.npmjs.org/react-router/-/react-router-2.0.0-rc6.tgz"
+      "version": "2.0.0",
+      "from": "react-router@2.0.0",
+      "resolved": "https://registry.npmjs.org/react-router/-/react-router-2.0.0.tgz"
     },
     "read-file-stdin": {
       "version": "0.2.1",
