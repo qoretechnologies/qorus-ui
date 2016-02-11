@@ -19,46 +19,6 @@
 #library {
   overflow: hidden;
 
-  > .wflw-lib {
-    height: 100%;
-
-    > .wflw-lib__fns,
-    > .wflw-lib__src {
-      height: 100%;
-    }
-
-    > .wflw-lib__fns > .well,
-    > .wflw-lib__src > .tab-content > .tab-pane > pre {
-      position: absolute;
-      top: 0;
-      right: $padding-large-horizontal;
-      bottom: 0;
-      left: $padding-large-horizontal;
-
-      width: auto;
-    }
-    > .wflw-lib__fns > .well {
-      right: floor($padding-large-horizontal / 2);
-      overflow-y: auto;
-    }
-    > .wflw-lib__src > .tab-content > .tab-pane > pre {
-      left: ceil($padding-large-horizontal / 2);
-      overflow: auto;
-    }
-
-    padding-top: $padding-large-vertical;
-    padding-bottom: $padding-large-vertical;
-
-    > .wflw-lib__fns > .well {
-      margin-bottom: 0;
-      padding: 0;
-    }
-    > .wflw-lib__src > .tab-content > .tab-pane > pre {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
   .nav {
     word-wrap: break-word;
 
@@ -88,24 +48,45 @@
       margin-bottom: -6px;
     }
   }
-
-  pre {
-    font-size: $font-size-extra-small;
-  }
 }
 
 
 .wflw-lib {
-  /**
-   * Line wrap toggle button hovers above Prism-formatted code.
-   *
-   * The button is a sibling to Prism-formatted code whose parent is a
-   * containing block (Bootstrap grid column).
-   */
-  &__wrap-toggle {
+  height: 100%;
+
+  &__fns,
+  &__src {
+    height: 100%;
+  }
+
+  &__fns > .well,
+  &__src > .tab-content > .tab-pane > .source-code {
     position: absolute;
-    top: 2px;
-    right: $grid-gutter-width / 2 + 3px;
-    z-index: $zindex-pane + 1;
+    top: 0;
+    right: $padding-large-horizontal;
+    bottom: 0;
+    left: $padding-large-horizontal;
+
+    width: auto;
+  }
+  &__fns > .well {
+    right: floor($padding-large-horizontal / 2);
+    overflow-y: auto;
+  }
+  &__src > .tab-content > .tab-pane > .source-code {
+    left: ceil($padding-large-horizontal / 2);
+    overflow: auto;
+  }
+
+  padding-top: $padding-large-vertical;
+  padding-bottom: $padding-large-vertical;
+
+  &__fns > .well {
+    margin-bottom: 0;
+    padding: 0;
+  }
+  &__src > .tab-content > .tab-pane > .source-code > .source-code__code {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }

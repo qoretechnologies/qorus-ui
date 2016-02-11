@@ -1,11 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import Prism from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-qore';
-import 'prism-plugins/wrapped-line-numbers';
 
 
 import { Item, Pane } from 'components/tabs';
+import SourceCode from 'components/source_code';
 
 
 import classNames from 'classnames';
@@ -19,31 +16,13 @@ export default class LibraryTab extends Component {
   };
 
 
-  constructor(props) {
-    super(props);
-
-    this._codeTabs = null;
-  }
-
-
   componentWillMount() {
     this.setInitialActiveDomId(this.props);
-    this.setState({ wrapLines: true });
-  }
-
-
-  componentDidMount() {
-    this.highlightEls();
   }
 
 
   componentWillReceiveProps(nextProps) {
     this.setInitialActiveDomId(nextProps);
-  }
-
-
-  componentDidUpdate() {
-    this.highlightEls();
   }
 
 
@@ -69,15 +48,6 @@ export default class LibraryTab extends Component {
   }
 
 
-  highlightEls() {
-    for (let i = 0, codeEls = this._codeTabs.querySelectorAll('code');
-         i < codeEls.length;
-         i += 1) {
-      Prism.highlightElement(codeEls[i]);
-    }
-  }
-
-
   mergeWfAndStepFuncs(props) {
     const wfFuncs = props.workflow.wffuncs.reduce((funcs, func) => (
       funcs.concat({ id: this.getDomId(func), func })
@@ -98,16 +68,6 @@ export default class LibraryTab extends Component {
   }
 
 
-  toggleWrapLines() {
-    this.setState({ wrapLines: !this.state.wrapLines });
-  }
-
-
-  refCodeTabs(el) {
-    this._codeTabs = el;
-  }
-
-
   renderFuncHeading(func) {
     if (!func.type) return func.name;
 
@@ -120,7 +80,7 @@ export default class LibraryTab extends Component {
         {func.version && (
           <small>
             v{func.version}
-            {func.patch && (`.${func.patch}`)}
+            {func.patch && `.${func.patch}`}
           </small>
         )}
       </span>
@@ -183,7 +143,7 @@ export default class LibraryTab extends Component {
 
   renderCodeTabs() {
     return (
-      <div className="tab-content" ref={::this.refCodeTabs}>
+      <div className="tab-content">
         {this.mergeWfAndStepFuncs(this.props).map(({ id, func }, funcIdx) => (
           <Pane
             key={funcIdx}
@@ -191,33 +151,9 @@ export default class LibraryTab extends Component {
             name={func.name}
             active={id === this.state.activeDomId}
           >
-            <button
-              type="button"
-              className={classNames({
-                btn: true,
-                'btn-xs': true,
-                'btn-default': !this.state.wrapLines,
-                'btn-success': this.state.wrapLines,
-                'wflw-lib__wrap-toggle': true,
-              })}
-              onClick={::this.toggleWrapLines}
-              title={this.state.wrapLines ?
-                     'Disable line wrap' :
-                     'Wrap lines'}
-            >
-              <i className="fa fa-outdent"></i>
-            </button>
-            <pre
-              className={classNames({
-                'line-numbers': true,
-                'wrapped-lines': this.state.wrapLines,
-              })}
-              data-start={parseInt(func.offset, 10) + 1}
-            >
-              <code className="language-qore">
-                {func.body}
-              </code>
-            </pre>
+            <SourceCode lineOffset={parseInt(func.offset, 10)}>
+              {func.body}
+            </SourceCode>
           </Pane>
         ))}
       </div>
