@@ -1402,9 +1402,9 @@
       "resolved": "https://registry.npmjs.org/expand-range/-/expand-range-1.8.1.tgz"
     },
     "exports-loader": {
-      "version": "0.6.2",
-      "from": "exports-loader@>=0.6.2 <0.7.0",
-      "resolved": "https://registry.npmjs.org/exports-loader/-/exports-loader-0.6.2.tgz",
+      "version": "0.6.3",
+      "from": "exports-loader@0.6.3",
+      "resolved": "https://registry.npmjs.org/exports-loader/-/exports-loader-0.6.3.tgz",
       "dependencies": {
         "source-map": {
           "version": "0.1.43",
