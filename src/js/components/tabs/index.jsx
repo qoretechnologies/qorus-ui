@@ -15,6 +15,11 @@ import Pane from './pane';
  * should result in `active` prop change. This is to allow parent
  * components to map tabs to some URL routing scheme.
  *
+ * If `tabChange` prop callback is not set, this component manages
+ * `active` prop on items and panes itself. In such case, `active`
+ * prop should not be set outside of this component to prevent
+ * confusion.
+ *
  * TODO: Explore generating URLs in parent and using Link component
  * from React Router.
  */
@@ -25,21 +30,42 @@ export default class Tabs extends Component {
     name: PropTypes.string,
     className: PropTypes.string,
     tabChange: PropTypes.func,
+    type: PropTypes.string,
   };
 
 
   static defaultProps = {
-    tabChange: () => undefined,
+    type: 'tabs',
   };
 
 
+  componentWillMount() {
+    this.setState({ activeSlug: this.activeSlug(this.props) });
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.activeSlug !== this.activeSlug(nextProps)) {
+      this.setState({ activeSlug: this.activeSlug(nextProps) });
+    }
+  }
+
+
   /**
-   * Calls `tabChange` prop when nav item has been been activated.
+   * Changes active tab.
+   *
+   * If `tabChange` prop callback is not set, it updates internal
+   * state. If it is set, it is expected that the callback changes
+   * active tab by setting pane `active` props accordingly.
    *
    * @param {string} slug
    */
   onTabChange(slug) {
-    this.props.tabChange(slug);
+    if (!this.props.tabChange) {
+      this.setState({ activeSlug: slug });
+    } else {
+      this.props.tabChange(slug);
+    }
   }
 
 
@@ -49,26 +75,16 @@ export default class Tabs extends Component {
    * If `active` prop is set, it is used. Otherwise, the first child
    * is considered as active.
    *
+   * @param {Object} props
    * @return {string}
    */
-  activeSlug() {
-    return this.props.active || (
-      this.props.children &&
-      this.props.children[0] &&
-      (this.props.children[0].props.slug ||
-       slugify(this.props.children[0].props.name))
+  activeSlug(props) {
+    return props.active || (
+      props.children &&
+      props.children[0] &&
+      (props.children[0].props.slug ||
+       slugify(props.children[0].props.name))
     );
-  }
-
-
-  /**
-   * Checks if given slug is an active one.
-   *
-   * @param {string} slug
-   * @return {boolean}
-   */
-  isActive(slug) {
-    return this.activeSlug() === slug;
   }
 
 
@@ -80,7 +96,7 @@ export default class Tabs extends Component {
   render() {
     return (
       <div className={this.props.className}>
-        <ul className="nav nav-tabs">
+        <ul className={`nav nav-${this.props.type}`}>
           {React.Children.map(this.props.children, tab => {
             const { name, children, slug: slugMaybe, ...other } = tab.props;
             const slug = slugMaybe || slugify(name);
@@ -88,7 +104,7 @@ export default class Tabs extends Component {
             return (
               <Item
                 {...other}
-                active={this.isActive(slug)}
+                active={this.state.activeSlug === slug}
                 slug={slug}
                 name={name}
                 tabChange={::this.onTabChange}
@@ -104,11 +120,11 @@ export default class Tabs extends Component {
             return (
               <Pane
                 {...other}
-                active={this.isActive(slug)}
+                active={this.state.activeSlug === slug}
                 slug={slug}
                 name={name}
               >
-                {this.isActive(slug) && children}
+                {this.state.activeSlug === slug && children}
               </Pane>
             );
           })}

@@ -7,7 +7,6 @@ import classNames from 'classnames';
  */
 export default class Item extends Component {
   static propTypes = {
-    target: PropTypes.string,
     name: PropTypes.node,
     slug: PropTypes.string.isRequired,
     tabChange: PropTypes.func,
@@ -46,7 +45,7 @@ export default class Item extends Component {
           disabled: this.props.disabled,
         })}
       >
-        <a data-target={this.props.target} onClick={this.onClick}>
+        <a data-target={this.props.slug} onClick={this.onClick}>
           {this.props.name}
         </a>
       </li>
