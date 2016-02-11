@@ -23,8 +23,8 @@ export default class ErrorsTable extends Component {
 
 
   static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
   };
 
 

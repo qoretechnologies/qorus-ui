@@ -22,9 +22,10 @@ export default class WorkflowsTable extends Component {
 
 
   static contextTypes = {
-    router: PropTypes.object,
-    route: PropTypes.object,
-    params: PropTypes.object,
+    router: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
 
