@@ -1,0 +1,38 @@
+@import './prism-wrapped-line-numbers';
+
+
+/**
+ * Source code is a Prism code element wrapped in pre.
+ *
+ * It uses Prism plugin to show line numbers. Line can be
+ * wrapped. There is a button to toggle wrapping hovering in the top
+ * right corner.
+ *
+ * Default Prism font size is unnecessarily big, so it overriden to
+ * smaller size.
+ */
+.source-code {
+  position: relative;
+
+
+  &__wrap-toggle {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: $zindex-pane + 1;
+  }
+
+
+  &__code {
+    font-size: $font-size-extra-small;
+
+    &--wrap {
+      &[class*="language-"],
+      > code[class*="language-"] {
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+$line-number-width: 3em; /** Works for line-numbers below 1000 lines */
+$line-number-padding: .8em;
+
+
+pre.line-numbers {
+  counter-reset: linenumber;
+
+  padding-left: 0;
+
+  > code > ol.line-numbers-rows {
+    padding-left: 0;
+    list-style: none;
+
+    > li {
+      counter-increment: linenumber;
+
+      display: block;
+      padding-left: $line-number-width;
+
+      &::before {
+        content: counter(linenumber);
+
+        display: block;
+        float: left;
+	margin-left: -1 * $line-number-width;
+	width: $line-number-width - $line-number-padding;
+
+        letter-spacing: -1px;
+        text-align: right;
+
+        pointer-events: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      > .line {
+        min-height: 1.5em;
+	padding-left: $line-number-padding;
+        border-left: 1px solid #999;
+      }
+    }
+  }
+}
