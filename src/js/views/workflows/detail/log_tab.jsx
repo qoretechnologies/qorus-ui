@@ -5,6 +5,7 @@ import CollectionSearch from 'components/collection_search';
 
 import { fetchJson } from 'store/api/utils';
 import settings from 'settings';
+import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
@@ -63,7 +64,6 @@ export default class LogTab extends Component {
       filter: new RegExp('', 'g'),
       autoscroll: true,
       pause: false,
-      error: null,
     });
     this.connect(this.props.workflow);
   }
@@ -88,7 +88,6 @@ export default class LogTab extends Component {
     this.setState({
       entries: [],
       filteredEntries: [],
-      error: null,
     });
     this.connect(nextProps.workflow);
   }
@@ -131,10 +130,10 @@ export default class LogTab extends Component {
   onPauseToggle() {
     if (!this.state.pause) {
       this.setState({ pause: true });
-      this.addEntries('-- Paused --');
+      this.addEntries('-- Paused --', 'comment');
     } else {
       this.setState({ pause: false });
-      this.addEntries('-- Continue --');
+      this.addEntries('-- Continue --', 'comment');
     }
   }
 
@@ -199,7 +198,7 @@ export default class LogTab extends Component {
    * @see disconnect
    */
   onSocketError() {
-    this.setState({ error: 'Connection error.' });
+    this.addErrorEntry('Connection error');
     this.disconnect();
   }
 
@@ -239,8 +238,9 @@ export default class LogTab extends Component {
    * autoscroll due to event race conditions.
    *
    * @param {string} chunk
+   * @param {string?} type
    */
-  addEntries(chunk) {
+  addEntries(chunk, type = null) {
     this._addingEntries = true;
 
     const entries = chunk.
@@ -248,6 +248,7 @@ export default class LogTab extends Component {
       map((entry, delta) => ({
         entry,
         no: this.state.entries.length + delta,
+        type,
       }));
 
     this.setState({
@@ -258,6 +259,17 @@ export default class LogTab extends Component {
         entries.filter(this.filterEntry.bind(this, this.state.filter))
       ),
     });
+  }
+
+
+  /**
+   * Adds special error entry to log buffer.
+   *
+   * @param {(Error|string)} reason
+   * @see addEntries
+   */
+  addErrorEntry(reason) {
+    this.addEntries(`-- Error: ${reason} --`, 'deleted bold');
   }
 
 
@@ -289,7 +301,7 @@ export default class LogTab extends Component {
    */
   async connect(workflow, tries = 0) {
     if (tries >= MAX_TRIES) {
-      this.setState({ error: 'Connection dropped.' });
+      this.addErrorEntry('Cannot establish connection');
       this.disconnect();
       return;
     }
@@ -302,7 +314,7 @@ export default class LogTab extends Component {
         );
       } catch (e) {
         this._token = null;
-        this.setState({ error: e });
+        this.addErrorEntry(e);
         return;
       }
     }
@@ -350,9 +362,10 @@ export default class LogTab extends Component {
    *
    * @param {string} entry
    * @param {number} no
+   * @param {string?} type
    * @return {ReactElement}
    */
-  renderEntry({ entry, no }) {
+  renderEntry({ entry, no, type }) {
     const filter = new RegExp(this.state.filter);
     const parts = [];
 
@@ -386,7 +399,7 @@ export default class LogTab extends Component {
     }
 
     return (
-      <div key={no}>
+      <div key={no} className={classNames(['token', type])}>
         {parts.map(({ start, end, highlight }) => (
           highlight ? (
             <b key={`${start}.${end}`} className="highlight">
@@ -441,11 +454,6 @@ export default class LogTab extends Component {
             </CollectionSearch>
           </div>
         </div>
-        {this.state.error && (
-          <div className="alert alert-danger" role="alert">
-            {`${this.state.error}`}
-          </div>
-        )}
         <div className="log-area">
           <pre
             className="language-log"

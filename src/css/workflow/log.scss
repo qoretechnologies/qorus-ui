@@ -14,7 +14,6 @@
  *    is too big.
  * 7. Prevent log lines from overflowing and wrap them.
  * 8. Custom word highlight which is not part of Prism.
- * 9. Change whitespace around alert with error message.
  */
 #log {
   overflow: hidden; /* [1] */
@@ -52,12 +51,6 @@
 
   .btn-controls, .form-inline { /* [5] */
     margin: ($line-height-computed / 2) 0 0;
-  }
-
-
-  .alert { /* [9] */
-    margin-top: ($line-height-computed / 4);
-    margin-bottom: 0;
   }
 
 
