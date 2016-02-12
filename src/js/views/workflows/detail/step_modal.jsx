@@ -115,10 +115,10 @@ export default class StepModal extends Component {
    */
   renderBody() {
     return (
-      <Tabs>
+      <Tabs className="step-info">
         {this.props.step.functions.map(func => (
           <Pane key={func.type} name={_.capitalize(func.type)}>
-            <Tabs type="pills">
+            <Tabs className="step-info__func" type="pills">
               <Pane name="Code">
                 <InfoTable
                   object={{
