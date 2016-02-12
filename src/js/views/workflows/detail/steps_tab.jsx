@@ -769,33 +769,34 @@ export default class StepsTab extends Component {
   /**
    * Returns path element linking two step boxes (groups).
    *
-   * The path has a joint right in the middle. Obviously, this joint
-   * is invisible for vertically aligned boxes. Otherwise, it makes
-   * sure the path is perpendicular to x- and y-axis.
+   * The path has a joint right above bottom of the two
+   * boxes. Obviously, this joint is invisible for vertically aligned
+   * boxes. Otherwise, it makes sure the path is perpendicular to x-
+   * and y-axis.
    *
    * @param {StepArgs} a
    * @param {StepArgs} b
    * @return {ReactElement}
    * @see getBoxHorizontalCenter
    * @see getBoxVerticalCenter
+   * @see getBoxHeight
+   * @see BOX_MARGIN
    */
   renderPath(a, b) {
-    const startX = this.getBoxHorizontalCenter(a.stepIdx, a.row);
-    const startY = this.getBoxVerticalCenter(a.rowIdx);
+    const aX = this.getBoxHorizontalCenter(a.stepIdx, a.row);
+    const aY = this.getBoxVerticalCenter(a.rowIdx);
 
-    const endX = this.getBoxHorizontalCenter(b.stepIdx, b.row);
-    const endY = this.getBoxVerticalCenter(b.rowIdx);
+    const bX = this.getBoxHorizontalCenter(b.stepIdx, b.row);
+    const bY = this.getBoxVerticalCenter(b.rowIdx);
 
-    const jointY = Math.min(startY, endY) + (
-      Math.max(endY, startY) - Math.min(startY, endY)
-    ) / 2;
+    const jointY = Math.max(aY, bY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2;
 
     return (
       <path
-        d={`M${startX},${startY} ` +
-           `L${startX},${jointY} ` +
-           `L${endX},${jointY} ` +
-           `L${endX},${endY}`}
+        d={`M${aX},${aY} ` +
+           `L${aX},${jointY} ` +
+           `L${bX},${jointY} ` +
+           `L${bX},${bY}`}
         className="diagram__path"
       />
     );
