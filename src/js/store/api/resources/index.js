@@ -16,6 +16,14 @@ export default [
     ),
   },
   {
+    name: 'steps',
+    url: `${url}/steps`,
+    transform: flowRight(
+      normalizeName,
+      normalizeId('stepid')
+    ),
+  },
+  {
     name: 'orders',
     url: `${url}/orders`,
     transform: normalizeId('workflow_instanceid'),

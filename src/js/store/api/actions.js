@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
 import * as workflowActions from './resources/workflows/actions';
+import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
 import {
   combineResourceActions,
@@ -43,6 +44,8 @@ Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
 });
 Object.assign(actions.workflows, workflowActions.specials);
+
+Object.assign(actions.steps, stepActions);
 
 Object.assign(actions.errors, errorActions);
 
