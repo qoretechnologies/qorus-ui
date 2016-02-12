@@ -467,7 +467,7 @@ export default class LogTab extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-4">
             <Controls>
               <Control
                 label="Autoscroll"
@@ -483,7 +483,7 @@ export default class LogTab extends Component {
               />
             </Controls>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-8">
             <CollectionSearch regexp onChange={::this.onFilterChange}>
               <a
                 href={this.getLogUri()}
