@@ -39,9 +39,9 @@ const BOX_MIN_WIDTH = 250;
 /**
  * Approximate width of one character of box text in SVG user units.
  *
- * It is slighly less than a width of letter "a".
+ * It an approximate width of letter "a".
  */
-const BOX_CHARACTER_WIDTH = 14;
+const BOX_CHARACTER_WIDTH = 9;
 
 
 /**
@@ -145,7 +145,8 @@ export default class StepsTab extends Component {
   getStepDeps(stepId) {
     if (!this.props.workflow.steps[stepId]) {
       return [];
-    } else if (this.props.workflow.steps[stepId].length <= 0) {
+    }
+    if (this.props.workflow.steps[stepId].length <= 0) {
       return [ROOT_STEP_ID];
     }
 
@@ -338,7 +339,8 @@ export default class StepsTab extends Component {
 
     if (info && info.patch) {
       return `${this.getStepName(stepId)} v${info.version}.${info.patch}`;
-    } else if (info) {
+    }
+    if (info) {
       return `${this.getStepName(stepId)} v${info.version}`;
     }
 
@@ -355,9 +357,9 @@ export default class StepsTab extends Component {
    * @see getStepFullname
    */
   getStepFullnames() {
-    return Object.keys(this.props.workflow.steps).
-      map(id => this.getStepFullname(id)).
-      splice(0, 0, this.getStepFullname(0));
+    return [this.getStepFullname(0)].concat(
+      Object.keys(this.props.workflow.steps).map(::this.getStepFullname)
+    );
   }
 
 
@@ -368,7 +370,7 @@ export default class StepsTab extends Component {
    * @see getStepFullnames
    */
   getMaxTextWidth() {
-    return Math.max(...this.getStepFullnames().map(n => n.length));
+    return Math.max(...(this.getStepFullnames().map(n => n.length)));
   }
 
 
