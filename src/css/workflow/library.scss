@@ -22,30 +22,37 @@
   .nav {
     word-wrap: break-word;
 
-    > li.disabled > a {
-      cursor: inherit;
-    }
+    > li {
+      > a {
+        cursor: pointer;
+        padding: $padding-large-vertical $padding-small-horizontal;
 
-    > li > a > h5,
-    > li > a > h6 {
-      text-transform: uppercase;
-    }
+        > h5,
+        > h6 {
+          text-transform: uppercase;
+        }
 
-    > li > a > h5 {
-      font-size: $font-size-base;
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-    > li > a > h6 {
-      font-size: $font-size-small;
-      margin-top: -3px;
-      margin-bottom: -6px;
-    }
-    > li > a > span {
-      font-size: $font-size-small;
-      display: block;
-      margin-top: -6px;
-      margin-bottom: -6px;
+        > h5 {
+          font-size: $font-size-base;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+        > h6 {
+          font-size: $font-size-small;
+          margin-top: -3px;
+          margin-bottom: -6px;
+        }
+        > span {
+          font-size: $font-size-small;
+          display: block;
+          margin-top: -6px;
+          margin-bottom: -6px;
+        }
+      }
+
+      &.disabled > a {
+        cursor: inherit;
+      }
     }
   }
 }
