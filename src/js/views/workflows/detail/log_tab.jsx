@@ -12,7 +12,17 @@ import { pureRender } from 'components/utils';
 /**
  * Maximum of reconnect tries to log Web Socket.
  */
-const MAX_TRIES = 10;
+const WEBSOCKET_RECONNECT_TRIES = 10;
+
+
+/**
+ * Number of lines to keep in memory.
+ *
+ * OS X Terminal has a default of 10000 lines, but those lines 80
+ * characters long. Therefore, it is kept lower here as Qorus log
+ * lines are usually longer.
+ */
+const SCROLLBACK_LIMIT = 5000;
 
 
 /**
@@ -59,6 +69,7 @@ export default class LogTab extends Component {
    */
   componentWillMount() {
     this.setState({
+      lines: 0,
       entries: [],
       filteredEntries: [],
       filter: new RegExp('', 'g'),
@@ -86,6 +97,7 @@ export default class LogTab extends Component {
     this.disconnect();
 
     this.setState({
+      lines: 0,
       entries: [],
       filteredEntries: [],
     });
@@ -232,6 +244,31 @@ export default class LogTab extends Component {
 
 
   /**
+   * Limits number of entries for the log buffer.
+   *
+   * If new number of entries (after appending new entries to current
+   * ones) is greater than scrollback limit, it throws away entries
+   * from the beginning.
+   *
+   * An entry is considered a line.
+   *
+   * It returns at least one entry to show something.
+   *
+   * @param {Array<{ entry: string, no: number, type: string? }>} newEntries
+   * @return {Array<{ entry: string, no: number, type: string? }>}
+   * @see SCROLLBACK_LIMIT
+   */
+  limitEntries(newEntries) {
+    return this.state.entries.concat(newEntries).slice(
+      Math.max(0, Math.min(
+        this.state.entries.length + newEntries.length - 1,
+        this.state.entries.length + newEntries.length - SCROLLBACK_LIMIT
+      ))
+    );
+  }
+
+
+  /**
    * Appends new log entries to the buffer.
    *
    * It sets internal state flag to prevent the buffer from losing
@@ -239,24 +276,29 @@ export default class LogTab extends Component {
    *
    * @param {string} chunk
    * @param {string?} type
+   * @see limitEntries
    */
   addEntries(chunk, type = null) {
     this._addingEntries = true;
 
-    const entries = chunk.
+    const newEntries = chunk.
       split(/\n/).
       map((entry, delta) => ({
-        entry,
-        no: this.state.entries.length + delta,
+        entry: `${entry}\n`,
+        no: this.state.lines + delta,
         type,
       }));
+    if (newEntries[newEntries.length - 1].entry === '\n') {
+      newEntries.splice(newEntries.length - 1, 1);
+    }
+
+    let entries = this.limitEntries(newEntries);
 
     this.setState({
-      entries: this.state.entries.concat(
-        entries
-      ),
-      filteredEntries: this.state.filteredEntries.concat(
-        entries.filter(this.filterEntry.bind(this, this.state.filter))
+      lines: this.state.lines + newEntries.length,
+      entries,
+      filteredEntries: entries.filter(
+        this.filterEntry.bind(this, this.state.filter)
       ),
     });
   }
@@ -290,8 +332,8 @@ export default class LogTab extends Component {
    *
    * Opened Web Socket tries to reconnect on sudden connection
    * close. It does so by calling this method with number of tries
-   * increased. If number of tries is higher then {@link MAX_TRIES},
-   * it stops.
+   * increased. If number of tries is higher then {@link
+   * WEBSOCKET_RECONNECT_TRIES}, it stops.
    *
    * @param {{ workflowid: string }} workflow
    * @param {number=} tries
@@ -300,7 +342,7 @@ export default class LogTab extends Component {
    * @see onSocketError
    */
   async connect(workflow, tries = 0) {
-    if (tries >= MAX_TRIES) {
+    if (tries >= WEBSOCKET_RECONNECT_TRIES) {
       this.addErrorEntry('Cannot establish connection');
       this.disconnect();
       return;

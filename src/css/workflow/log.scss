@@ -13,7 +13,8 @@
  * 6. The log buffer uses Prism to style it, but the default font size
  *    is too big.
  * 7. Prevent log lines from overflowing and wrap them.
- * 8. Custom word highlight which is not part of Prism.
+ * 8. Empty lines are visible.
+ * 9. Custom word highlight which is not part of Prism.
  */
 #log {
   overflow: hidden; /* [1] */
@@ -62,10 +63,14 @@
         word-break: break-all;
         word-wrap: break-word;
         white-space: pre-wrap;
+
+        > .token { /* [8] */
+          min-height: 1.5 * $font-size-extra-small;
+        }
       }
     }
 
-    .highlight { /* [8] */
+    .highlight { /* [9] */
       background: slategray;
     }
   }
