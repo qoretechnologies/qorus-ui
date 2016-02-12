@@ -5,6 +5,7 @@ import createFragment from 'react-addons-create-fragment';
 import StepModal from './step_modal';
 
 
+import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
@@ -40,7 +41,7 @@ const BOX_MIN_WIDTH = 250;
  *
  * It is slighly less than a width of letter "a".
  */
-const BOX_CHARACTER_WIDTH = 8;
+const BOX_CHARACTER_WIDTH = 14;
 
 
 /**
@@ -696,7 +697,11 @@ export default class StepsTab extends Component {
   /**
    * Returns group element for a general step.
    *
-   * The group element contains a rect and a text with step name.
+   * The group element contains a rect and a text with step name. Box
+   * can have special styling based on its type which is reflected by
+   * setting class name with that type. It is expected that all
+   * general steps have info available because it is a source of step
+   * type.
    *
    * @param {number} stepId
    * @param {number} stepIdx
@@ -705,14 +710,21 @@ export default class StepsTab extends Component {
    * @return {ReactElement}
    * @see getStepFullname
    * @see getDefaultParams
+   * @see getStepInfo
    * @see getTextParams
    */
   renderDefaultBox(stepId, stepIdx, row, rowIdx) {
     const onClick = this.onBoxClick.bind(this, stepId);
+    const type = this.getStepInfo(stepId) ?
+      this.getStepInfo(stepId).steptype :
+      '';
 
     return (
       <g
-        className="diagram__box"
+        className={classNames({
+          diagram__box: true,
+          [`diagram__box--${type.toLowerCase()}`]: type
+        })}
         transform={this.getBoxTransform(stepIdx, row, rowIdx)}
         onClick={onClick}
       >
