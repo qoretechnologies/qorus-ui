@@ -30,7 +30,7 @@ export default class SourceCode extends Component {
 
 
   static defaultProps = {
-    lineOffset: 0
+    lineOffset: 0,
   };
 
 

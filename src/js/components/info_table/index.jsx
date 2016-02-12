@@ -61,7 +61,7 @@ export default class InfoTable extends Component {
     return Object.keys(this.props.object).
       filter(this.getAttrFilter()).
       map(attr => ({
-        attr: attr,
+        attr,
         value: this.props.object[attr],
       }));
   }

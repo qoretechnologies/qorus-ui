@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
@@ -166,8 +165,8 @@ describe("Tabs, { Item, Pane } from 'components/tabs'", () => {
   });
 
 
-  xdescribe('Item', () => {});
+  xdescribe('Item', () => undefined);
 
 
-  xdescribe('Pane', () => {});
+  xdescribe('Pane', () => undefined);
 });

@@ -5,7 +5,6 @@ import { Item, Pane } from 'components/tabs';
 import SourceCode from 'components/source_code';
 
 
-import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
