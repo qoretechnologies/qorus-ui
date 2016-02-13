@@ -292,7 +292,7 @@ export default class LogTab extends Component {
       newEntries.splice(newEntries.length - 1, 1);
     }
 
-    let entries = this.limitEntries(newEntries);
+    const entries = this.limitEntries(newEntries);
 
     this.setState({
       lines: this.state.lines + newEntries.length,

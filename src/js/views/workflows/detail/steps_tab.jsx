@@ -725,7 +725,7 @@ export default class StepsTab extends Component {
       <g
         className={classNames({
           diagram__box: true,
-          [`diagram__box--${type.toLowerCase()}`]: type
+          [`diagram__box--${type.toLowerCase()}`]: type,
         })}
         transform={this.getBoxTransform(stepIdx, row, rowIdx)}
         onClick={onClick}
