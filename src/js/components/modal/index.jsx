@@ -21,6 +21,22 @@ export default class Modal extends Component {
 
 
   /**
+   * Triggers modal's header `onClose` prop if available.
+   *
+   * It also checks that event has been fired directly on modal
+   * element and not on modal dialog or any of its descendants.
+   *
+   * @param {Event} ev
+   */
+  onEscape(ev) {
+    if (ev.target === this._modal &&
+        this.getHeader() && this.getHeader().props.onClose) {
+      this.getHeader().props.onClose();
+    }
+  }
+
+
+  /**
    * Finds modal Header component in children.
    *
    * @return {Header|null}
@@ -33,6 +49,16 @@ export default class Modal extends Component {
 
 
   /**
+   * Stores modal reference for later.
+   *
+   * @param {HTMLElement} el
+   */
+  refModal(el) {
+    this._modal = el;
+  }
+
+
+  /**
    * Renders necessary elements around modal pane's content.
    *
    * @return {ReactElement}
@@ -40,11 +66,13 @@ export default class Modal extends Component {
   render() {
     return (
       <div
+        ref={::this.refModal}
         className="modal fade in"
         style={{ display: 'block' }}
         tabIndex="-1"
         role="dialog"
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
+        onClick={::this.onEscape}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">

@@ -210,6 +210,36 @@ describe("Modal, { Manager } from 'components/modal'", () => {
   });
 
 
+  describe('Modal', () => {
+    it("calls Header's `onClose` prop when captures click outside modal dialog",
+    () => {
+      const manager = TestUtils.renderIntoDocument(
+        <Manager />
+      );
+
+      let modal;
+      const onClose = () => manager.close(modal);
+      modal = (
+        <SimpleModal onClose={onClose} />
+      );
+
+
+      manager.open(modal);
+
+
+      const modalDom = TestUtils.findRenderedDOMComponentWithClass(
+        manager, 'modal'
+      );
+
+
+      TestUtils.Simulate.click(modalDom);
+
+
+      expectModalToBeClosed(manager);
+    });
+  });
+
+
   describe('Modal.Header', () => {
     it('renders no close button if there is no onClose handler', () => {
       const manager = TestUtils.renderIntoDocument(
