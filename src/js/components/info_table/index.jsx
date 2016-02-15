@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 
-import Table, { Col } from '../table';
+import Table, { Section, Row, Cell } from '../table';
 
 
 import _ from 'lodash';
@@ -68,47 +68,73 @@ export default class InfoTable extends Component {
 
 
   /**
-   * Returns name column properties.
-   *
-   * @param {AttrValuePair} rec
-   * @return {{ name: string }}
-   */
-  nameColProps(rec) {
-    return { name: _.capitalize(rec.attr) };
-  }
-
-
-  /**
-   * Returns value column properties.
-   *
-   * @param {AttrValuePair} rec
-   * @return {{ value: ReactNode }}
-   * @see renderValue
-   */
-  valueColProps(rec) {
-    return { value: this.renderValue(rec.value) };
-  }
-
-
-  /**
    * Returns value representation.
    *
    * Complex value are wrapped in `pre` tag after being stringified
    * with nice indentation.
    *
-   * @param {*} val
-   * @return {ReactNode}
+   * @param {*} value
+   * @return {ReactElement}
    * @see COMPLEX_VALUE_INDENT
    */
-  renderValue(val) {
-    switch (typeof val) {
+  renderValue(value) {
+    switch (typeof value) {
       case 'object':
-        return val ?
-          <pre>{JSON.stringify(val, null, COMPLEX_VALUE_INDENT)}</pre> :
+        return value ?
+          <pre>{JSON.stringify(value, null, COMPLEX_VALUE_INDENT)}</pre> :
           '';
       default:
-        return `${val}`;
+        return `${value}`;
     }
+  }
+
+
+  /**
+   * Yields cells with capitalized attribute name and its value.
+   *
+   * @param {string} attr
+   * @param {*} value
+   * @return {Generator<ReactElement>}
+   * @see renderValue
+   */
+  *renderCells({ attr, value }) {
+    yield (
+      <Cell tag="th">{_.capitalize(attr)}</Cell>
+    );
+
+    yield (
+      <Cell>{this.renderValue(value)}</Cell>
+    );
+  }
+
+
+  /**
+   * Yields rows for table body.
+   *
+   * @param {Array<AttrValuePair>} data
+   * @return {Generator<ReactElement>}
+   * @see renderCells
+   */
+  *renderRows(data) {
+    for (const attr of data) {
+      yield (
+        <Row data={attr} cells={::this.renderCells} />
+      );
+    }
+  }
+
+
+  /**
+   * Yields table body section.
+   *
+   * @param {Array<AttrValuePair>} data
+   * @return {Generator<ReactElement>}
+   * @see renderRows
+   */
+  *renderTBody(data) {
+    yield (
+      <Section type="body" data={data} rows={::this.renderRows} />
+    );
   }
 
 
@@ -121,18 +147,9 @@ export default class InfoTable extends Component {
     return (
       <Table
         data={this.getData()}
+        sections={::this.renderTBody}
         className="table table-condensed table-striped table--info"
-      >
-        <Col
-          comp="th"
-          field="name"
-          props={::this.nameColProps}
-        />
-        <Col
-          field="value"
-          props={::this.valueColProps}
-        />
-      </Table>
+      />
     );
   }
 }

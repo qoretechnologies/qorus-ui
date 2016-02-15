@@ -1,37 +1,35 @@
 import React, { Component, PropTypes } from 'react';
-import Col from './col';
+
+
+import Section from './section';
+import Row from './row';
 import Cell from './cell';
-import THead from './thead';
-import TBody from './tbody';
 
 
-import { pureRenderOmit } from '../utils';
+import { pureRender } from '../utils';
 
 
 /**
- * Combining table component.
+ * Table supporting static and dynamic sections.
  *
- * Delegates data rendering to THead and TBody components. It passes
- * Col specs to both table section components. It also passes
- * onRowClick to TBody.
+ * Dynamic sections are yielded from generator returned by `sections`
+ * prop. This prop is passed `data` prop as an argument (it can be
+ * undefined). Because this is a pure component, `data` prop also acts
+ * as a part of cache key. Therefore, generator returned by `sections`
+ * prop should return the same if `data` does not change.
  *
- * Every other prop apart from children, data and onRowClick is
- * applied to table element directly.
+ * Static sections or other table content can be passed directly as
+ * children.
+ *
+ * Dynamic section rendering is preferred over static if both methods
+ * are defined.
  */
-@pureRenderOmit('children')
+@pureRender
 export default class Table extends Component {
   static propTypes = {
-    children: React.PropTypes.node.isRequired,
-    data: PropTypes.array.isRequired,
-    identifier: PropTypes.func,
-    shouldHighlight: PropTypes.func,
-    onRowClick: PropTypes.func,
-  };
-
-
-  static defaultProps = {
-    shouldHighlight: () => false,
-    onRowClick: () => undefined,
+    sections: PropTypes.func,
+    data: PropTypes.any,
+    children: PropTypes.node,
   };
 
 
@@ -41,27 +39,15 @@ export default class Table extends Component {
    * @return {ReactElement}
    */
   render() {
-    const {
-      data, identifier, shouldHighlight, onRowClick, children, ...props,
-    } = this.props;
+    const { sections, data, children, ...props } = this.props;
 
-    return (
-      <table {...props}>
-        <THead data={data}>
-          {children}
-        </THead>
-        <TBody
-          data={data}
-          identifier={identifier}
-          shouldHighlight={shouldHighlight}
-          onRowClick={onRowClick}
-        >
-          {children}
-        </TBody>
-      </table>
+    return React.createElement(
+      'table',
+      props,
+      ...(sections ? sections(data) : React.Children.toArray(children))
     );
   }
 }
 
 
-export { Col, Cell, THead, TBody };
+export { Section, Row, Cell };

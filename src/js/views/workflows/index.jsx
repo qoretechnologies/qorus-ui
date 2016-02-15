@@ -235,7 +235,7 @@ export default class Workflows extends Component {
         <WorkflowsToolbar />
         <WorkflowsTable
           workflows={workflows}
-          shouldHighlight={::this.isActive}
+          activeWorkflowId={parseInt(this.props.params.detailId, 10)}
         />
         {this.renderPane()}
       </div>

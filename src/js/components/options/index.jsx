@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Table, { Col } from '../table';
+import Table, { Section, Row, Cell } from '../table';
 import EditableCell from '../table/editable_cell';
 import { Control } from '../controls';
 import SystemOptions from './system_options';
@@ -139,50 +139,78 @@ export default class Options extends Component {
 
 
   /**
-   * Properties for option name column cells.
+   * Yields cells with option data and controls to manage it.
    *
-   * @param {Object} rec
-   * @return {{ name: string, className: string }}
+   * @param {Object} opt
+   * @return {Generator<ReactElement>}
    */
-  optionsColProps(rec) {
-    return { name: rec.name, className: 'name' };
+  *renderTableCells(opt) {
+    yield (
+      <Cell className="name">{opt.name}</Cell>
+    );
+
+    const onSave = this.setOption.bind(this, opt);
+    const onCancel = this.cancelOptionEdit.bind(this, opt);
+    yield (
+      <EditableCell
+        value={opt.value}
+        startEdit={opt === this.state.lastOption}
+        onSave={onSave}
+        onCancel={onCancel}
+      />
+    );
+
+    const action = this.deleteOption.bind(this, opt);
+    yield (
+      <Cell>
+        <Control
+          title="Remove"
+          btnStyle="danger"
+          icon="times"
+          action={action}
+        />
+      </Cell>
+    );
   }
 
 
   /**
-   * Properties for value column cells.
+   * Yields rows for table body.
    *
-   * @param {Object} rec
-   * @return {{
-   *   value: string,
-   *   startEdit: boolean,
-   *   onSave: function,
-   *   onCancel: function
-   * }}
-   * @see setOption
-   * @see cancelOptionEdit
+   * @param {Array<Object>} opts
+   * @return {Generator<ReactElement>}
+   * @see renderTableCells
    */
-  valueColProps(rec) {
-    return {
-      value: rec.value,
-      startEdit: rec === this.state.lastOption,
-      onSave: this.setOption.bind(this, rec),
-      onCancel: this.cancelOptionEdit.bind(this, rec),
-    };
+  *renderTableRows(opts) {
+    for (const opt of opts) {
+      yield (
+        <Row data={opt} cells={::this.renderTableCells} />
+      );
+    }
   }
 
 
   /**
-   * Properties for delete column cells.
+   * Yields table sections.
    *
-   * @param {Object} rec
-   * @return {{ action: function }}
-   * @see deleteOption
+   * @param {Array<Object>} opts
+   * @return {Generator<ReactElement>}
+   * @see renderTableRows
    */
-  deleteColProps(rec) {
-    return {
-      action: this.deleteOption.bind(this, rec),
-    };
+  *renderTableSections(opts) {
+    yield (
+      <thead>
+        <tr>
+          <th>Options</th>
+          <th>Value</th>
+          <th className="narrow" />
+        </tr>
+      </thead>
+    );
+
+    yield (
+      <Section type="body" data={opts} rows={::this.renderTableRows} />
+    );
   }
 
 
@@ -202,29 +230,9 @@ export default class Options extends Component {
           {!!this.getWorkflowOptions().length && (
             <Table
               data={this.getWorkflowOptions()}
+              sections={::this.renderTableSections}
               className="table table-condensed table-striped table--small"
-            >
-              <Col
-                heading="Options"
-                field="name"
-                props={::this.optionsColProps}
-              />
-              <Col
-                heading="Value"
-                comp={EditableCell}
-                props={::this.valueColProps}
-              />
-              <Col
-                className="narrow"
-                childProps={::this.deleteColProps}
-              >
-                <Control
-                  title="Remove"
-                  btnStyle="danger"
-                  icon="times"
-                />
-              </Col>
-            </Table>
+            />
           )}
           <SystemOptions
             options={this.getUnusedSystemOptions()}

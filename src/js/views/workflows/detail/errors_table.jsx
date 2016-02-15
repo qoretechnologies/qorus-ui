@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Table, { Col } from 'components/table';
+import Table, { Section, Row, Cell } from 'components/table';
 import { Controls, Control } from 'components/controls';
 import CollectionSearch from 'components/collection_search';
 import StatusIcon from 'components/status_icon';
@@ -11,6 +11,12 @@ import ErrorModal from './error_modal';
 import { pureRender } from 'components/utils';
 
 
+/**
+ * Table to display and manage Qorus erros known to the system or
+ * assigned to individual entities.
+ *
+ * It uses modal dialogs to manage errors.
+ */
 @pureRender
 export default class ErrorsTable extends Component {
   static propTypes = {
@@ -29,21 +35,33 @@ export default class ErrorsTable extends Component {
 
 
   /**
-   * @param {object} props
-   * @param {object} context
+   * Initializes internal state.
+   *
+   * @param {Object} props
+   * @param {Object} context
    */
   constructor(props, context) {
     super(props, context);
 
     this._modal = null;
     this._commitFn = null;
-
-    this.state = this.getErrorsState(this.props, new RegExp());
   }
 
 
   /**
-   * @param {object} nextProps
+   * Sets state to show all errors.
+   */
+  componentWillMount() {
+    this.setState(
+      this.getErrorsState(this.props, new RegExp())
+    );
+  }
+
+
+  /**
+   * Sets state to show coming errors after being filtered.
+   *
+   * @param {Object} nextProps
    */
   componentWillReceiveProps(nextProps) {
     this.setState(
@@ -53,6 +71,8 @@ export default class ErrorsTable extends Component {
 
 
   /**
+   * Sets state to show errors with new filter.
+   *
    * @param {RegExp} filter
    */
   onFilterChange(filter) {
@@ -63,7 +83,9 @@ export default class ErrorsTable extends Component {
 
 
   /**
-   * @param {object} props
+   * Returns state change object with filtered errors.
+   *
+   * @param {Object} props
    * @param {RegExp} filter
    */
   getErrorsState(props, filter) {
@@ -75,8 +97,10 @@ export default class ErrorsTable extends Component {
 
 
   /**
-   * @param {object} err
-   * @param {function(object)} commitFn
+   * Opens modal dialog to manage particular error.
+   *
+   * @param {Object} err
+   * @param {function(Object)} commitFn
    * @param {string} label
    * @param {?boolean} requireChanges
    */
@@ -97,7 +121,12 @@ export default class ErrorsTable extends Component {
 
 
   /**
-   * @param {object} err
+   * Submit changes from currently open modal dialog and closes it.
+   *
+   * It also calls commit function assigned to it with given error.
+   *
+   * @param {Object} err
+   * @see closeModal
    */
   submitModal(err) {
     this._commitFn(err);
@@ -105,6 +134,9 @@ export default class ErrorsTable extends Component {
   }
 
 
+  /**
+   * Closes currently open modal dialog.
+   */
   closeModal() {
     this.context.closeModal(this._modal);
     this._modal = null;
@@ -112,49 +144,126 @@ export default class ErrorsTable extends Component {
   }
 
 
-  nameColProps(rec) {
-    return { name: rec.error, className: 'name' };
-  }
+  /**
+   * Yields cells with error data and controls to manage error.
+   *
+   * @param {Object} error
+   * @return {Generator<ReactElement>}
+   */
+  *renderCells(error) {
+    yield (
+      <Cell className="name">{error.error}</Cell>
+    );
 
+    yield (
+      <Cell>{error.severity}</Cell>
+    );
 
-  severityColProps(rec) {
-    return { severity: rec.severity };
-  }
+    yield (
+      <Cell>
+        <StatusIcon value={error.retry_flag} />
+      </Cell>
+    );
 
+    yield (
+      <Cell>{error.retry_delay_secs && `${error.retry_delay_secs}`}</Cell>
+    );
 
-  retryColProps(rec) {
-    return { value: rec.retry_flag };
-  }
+    yield (
+      <Cell>
+        <StatusIcon value={error.business_flag} />
+      </Cell>
+    );
 
+    const onClone = this.props.onClone && this.openModal.bind(
+      this, error, this.props.onClone, 'Clone', true
+    );
+    const onUpdate = this.props.onUpdate && this.openModal.bind(
+      this, error, this.props.onUpdate, 'Edit'
+    );
+    const onRemove = this.props.onRemove && this.props.onRemove.bind(
+      this, error
+    );
 
-  delayColProps(rec) {
-    return { delay: rec.retry_delay_secs };
-  }
-
-
-  businessColProps(rec) {
-    return { value: rec.business_flag };
-  }
-
-
-  controlsColProps(rec) {
-    return {
-      controls: [
-        { action: () => {
-          this.openModal(rec, this.props.onClone, 'Clone', true);
-        } },
-        { action: () => {
-          this.openModal(rec, this.props.onUpdate, 'Edit');
-        } },
-        { action: () => {
-          this.props.onRemove(rec);
-        } },
-      ],
-    };
+    yield (
+      <Cell>
+        <Controls>
+          {onClone && (
+            <Control
+              title="Override"
+              icon="copy"
+              btnStyle="warning"
+              action={onClone}
+            />
+          )}
+          {onUpdate && (
+            <Control
+              title="Edit"
+              icon="pencil-square-o"
+              btnStyle="warning"
+              action={onUpdate}
+            />
+          )}
+          {onRemove && (
+            <Control
+              title="Remove"
+              icon="times"
+              btnStyle="danger"
+              action={onRemove}
+            />
+          )}
+        </Controls>
+      </Cell>
+    );
   }
 
 
   /**
+   * Yields rows for table body.
+   *
+   * @param {Array<Object>} errors
+   * @return {Generator<ReactElement>}
+   * @see renderCells
+   */
+  *renderRows(errors) {
+    for (const error of errors) {
+      yield (
+        <Row data={error} cells={::this.renderCells} />
+      );
+    }
+  }
+
+
+  /**
+   * Yields table sections.
+   *
+   * @param {Array<Object>} errors
+   * @return {Generator<ReactElement>}
+   * @see renderRows
+   */
+  *renderSections(errors) {
+    yield (
+      <thead>
+        <tr>
+          <th className="name">Name</th>
+          <th>Severity</th>
+          <th>Retry</th>
+          <th>Delay</th>
+          <th>Business</th>
+          <th />
+        </tr>
+      </thead>
+    );
+
+    yield (
+      <Section type="body" data={errors} rows={::this.renderRows} />
+    );
+  }
+
+
+  /**
+   * Returns element for this component.
+   *
    * @return {ReactElement}
    */
   render() {
@@ -169,70 +278,11 @@ export default class ErrorsTable extends Component {
         )}
         {!!this.state.errors.length && (
           <Table
-            className="table table-striped table-condensed table--small"
             data={this.state.errors}
-          >
-            <Col
-              heading="Name"
-              className="name"
-              field="name"
-              props={::this.nameColProps}
-            />
-            <Col
-              heading="Severity"
-              field="severity"
-              props={::this.severityColProps}
-            />
-            <Col
-              heading="Retry"
-              childProps={::this.retryColProps}
-            >
-              <StatusIcon />
-            </Col>
-            <Col
-              heading="Delay"
-              field="delay"
-              props={::this.delayColProps}
-            />
-            <Col
-              heading="Business"
-              field="value"
-              childProps={::this.businessColProps}
-            >
-              <StatusIcon />
-            </Col>
-            {(
-              this.props.onClone ||
-              this.props.onUpdate ||
-              this.props.onRemove
-            ) && (
-              <Col childProps={::this.controlsColProps}>
-                <Controls>
-                  {this.props.onClone && (
-                    <Control
-                      title="Override"
-                      icon="copy"
-                      btnStyle="warning"
-                    />
-                  )}
-                  {this.props.onUpdate && (
-                    <Control
-                      title="Edit"
-                      icon="pencil-square-o"
-                      btnStyle="warning"
-                    />
-                  )}
-                  {this.props.onRemove && (
-                    <Control
-                      title="Remove"
-                      icon="times"
-                      btnStyle="danger"
-                    />
-                  )}
-                </Controls>
-              </Col>
-            )}
-          </Table>
+            sections={::this.renderSections}
+            className={'table table-striped table-condensed table--data ' +
+                       'table--small'}
+          />
         )}
       </div>
     );

@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import Table, { Col } from 'components/table';
+
+
+import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import WorkflowsControls from './controls';
 
 
+import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
@@ -13,11 +16,17 @@ import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
 
+/**
+ * List of all workflows in the system.
+ *
+ * Beware, this component is very performance internsive - even
+ * HTML/CSS without any JS is relatively slow.
+ */
 @pureRender
 export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
-    shouldHighlight: PropTypes.func.isRequired,
+    activeWorkflowId: PropTypes.number,
   };
 
 
@@ -29,6 +38,12 @@ export default class WorkflowsTable extends Component {
   };
 
 
+  /**
+   * Dispatches `setAutostart` action for workflows.
+   *
+   * @param {number} id
+   * @param {number} value
+   */
   setAutostart(id, value) {
     this.context.dispatch(
       actions.workflows.setAutostart(id, value)
@@ -36,12 +51,18 @@ export default class WorkflowsTable extends Component {
   }
 
 
-  workflowIdentifier(workflow) {
-    return workflow.id;
-  }
+  /**
+   * Changes active route to given workflow.
+   *
+   * If the event handled some significant action before (i.e., its
+   * default action is prevented), it does nothing.
+   *
+   * @param {Object} workflow
+   * @param {Event} ev
+   */
+  activateWorkflow(workflow, ev) {
+    if (ev.isDefaultPrevented()) return;
 
-
-  activateWorkflow(workflow) {
     const shouldDeactivate =
       this.context.params.detailId &&
       parseInt(this.context.params.detailId, 10) === workflow.id;
@@ -60,154 +81,193 @@ export default class WorkflowsTable extends Component {
   }
 
 
-  narrowColProps() {
-    return {
-      className: 'narrow',
-    };
+  /**
+   * Yields heading cells for workflow info including order states.
+   *
+   * @return {Generator<ReactElement>}
+   * @see ORDER_STATES
+   */
+  *renderHeadings() {
+    yield (
+      <Cell tag="th" className="narrow" />
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">Actions</Cell>
+    );
+
+    yield (
+      <Cell tag="th" className="col-autostart">Autostart</Cell>
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">Execs</Cell>
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">ID</Cell>
+    );
+
+    yield (
+      <Cell tag="th" className="name">Name</Cell>
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">Version</Cell>
+    );
+
+    for (const state of ORDER_STATES) {
+      yield (
+        <Cell tag="th" className="narrow">{state.short}</Cell>
+      );
+    }
+
+    yield (
+      <Cell tag="th" className="narrow">Total</Cell>
+    );
   }
 
 
-  actionsColChildProps(rec) {
-    return { workflow: rec };
+  /**
+   * Yields cells with workflow data including order states.
+   *
+   * @param {Object} workflow
+   * @return {Generator<ReactElement>}
+   * @see ORDER_STATES
+   */
+  *renderCells(workflow) {
+    yield (
+      <Cell className="narrow">
+        <i className="fa fa-square-o" />
+      </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">
+        <WorkflowsControls workflow={workflow} />
+      </Cell>
+    );
+
+    yield (
+      <Cell className="col-autostart">
+        <AutoStart
+          context={workflow}
+          autostart={workflow.autostart}
+          execCount={workflow.exec_count}
+          inc={::this.setAutostart}
+          dec={::this.setAutostart}
+        />
+      </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{workflow.exec_count}</Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{workflow.id}</Cell>
+    );
+
+    yield (
+      <Cell className="name">{workflow.name}</Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{workflow.version}</Cell>
+    );
+
+    for (const state of ORDER_STATES) {
+      yield (
+        <Cell className="narrow">
+          <Badge label={state.label} val={workflow[state.name]} />
+        </Cell>
+      );
+    }
+
+    yield (
+      <Cell className="narrow">{workflow.TOTAL}</Cell>
+    );
   }
 
 
-  autostartColProps() {
-    return {
-      className: 'col-autostart',
-    };
+  /**
+   * Yields row for table head.
+   *
+   * @return {Generator<ReactElement>}
+   * @see renderHeadings
+   */
+  *renderHeadingRow() {
+    yield (
+      <Row cells={::this.renderHeadings} />
+    );
   }
 
 
-  autostartColChildProps(rec) {
-    return {
-      context: rec,
-      autostart: rec.autostart,
-      execCount: rec.exec_count,
-    };
+  /**
+   * Yields rows for table body.
+   *
+   * Row with active workflow is highlighted. Row are clickable and
+   * trigger route change via {@link activateWorkflow}.
+   *
+   * @param {number} activeId
+   * @param {Array<Object>} workflows
+   * @return {Generator<ReactElement>}
+   * @see activateWorkflow
+   * @see renderCells
+   */
+  *renderRows({ activeId, workflows }) {
+    for (const workflow of workflows) {
+      const onClick = this.activateWorkflow.bind(this, workflow);
+
+      yield (
+        <Row
+          key={workflow.workflowid}
+          data={workflow}
+          cells={::this.renderCells}
+          onClick={onClick}
+          className={classNames({
+            info: workflow.workflowid === activeId,
+          })}
+        />
+      );
+    }
   }
 
 
-  execColProps(rec) {
-    return {
-      className: 'narrow',
-      execCount: rec.exec_count,
-    };
+  /**
+   * Yields table sections.
+   *
+   * @return {Generator<ReactElement>}
+   * @see renderHeadingRow
+   * @see renderRows
+   */
+  *renderSections(data) {
+    yield (
+      <Section type="head" rows={::this.renderHeadingRow} />
+    );
+
+    yield (
+      <Section type="body" data={data} rows={::this.renderRows} />
+    );
   }
 
 
-  idColProps(rec) {
-    return {
-      className: 'narrow',
-      id: rec.id,
-    };
-  }
-
-
-  nameColProps(rec) {
-    return {
-      className: 'name',
-      name: rec.name,
-    };
-  }
-
-
-  versionColProps(rec) {
-    return {
-      className: 'narrow',
-      version: rec.version,
-    };
-  }
-
-
-  statesColChildProps(state, rec) {
-    return { val: rec[state.name] };
-  }
-
-
-  totalColProps(rec) {
-    return {
-      className: 'narrow',
-      TOTAL: rec.TOTAL,
-    };
-  }
-
-
+  /**
+   * Returns element for this component.
+   *
+   * @return {ReactElement}
+   */
   render() {
     return (
       <Table
-        data={this.props.workflows}
-        identifier={::this.workflowIdentifier}
-        shouldHighlight={this.props.shouldHighlight}
+        data={{
+          activeId: this.props.activeWorkflowId,
+          workflows: this.props.workflows,
+        }}
+        sections={::this.renderSections}
         className={'table table-striped table-condensed table-hover ' +
                    'table-fixed table--data'}
-        onRowClick={::this.activateWorkflow}
-      >
-        <Col className="narrow">
-          <i className="fa fa-square-o" />
-        </Col>
-        <Col
-          heading="Actions"
-          className="narrow"
-          props={this.narrowColProps}
-          childProps={::this.actionsColChildProps}
-        >
-          <WorkflowsControls />
-        </Col>
-        <Col
-          heading="Autostart"
-          className="col-autostart"
-          props={this.autostartColProps}
-          childProps={::this.autostartColChildProps}
-        >
-          <AutoStart inc={::this.setAutostart} dec={::this.setAutostart} />
-        </Col>
-        <Col
-          heading="Execs"
-          className="narrow"
-          field="execCount"
-          props={::this.execColProps}
-        />
-        <Col
-          heading="ID"
-          className="narrow"
-          field="id"
-          props={::this.idColProps}
-        />
-        <Col
-          heading="Name"
-          className="name"
-          field="name"
-          props={::this.nameColProps}
-        />
-        <Col
-          heading="Version"
-          className="narrow"
-          field="version"
-          props={::this.versionColProps}
-        />
-        {ORDER_STATES.map((state, idx) => {
-          const childProps = this.statesColChildProps.bind(this, state);
-
-          return (
-            <Col
-              key={idx}
-              heading={state.short}
-              className="narrow"
-              props={this.narrowColProps}
-              childProps={childProps}
-            >
-              <Badge label={state.label} />
-            </Col>
-          );
-        })}
-        <Col
-          heading="Total"
-          className="narrow"
-          field="TOTAL"
-          props={::this.totalColProps}
-        />
-      </Table>
+      />
     );
   }
 }
