@@ -7,11 +7,11 @@ import AutoStart from 'components/autostart';
 import WorkflowsControls from './controls';
 
 
-import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
 
+import classNames from 'classnames';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
 
@@ -39,6 +39,22 @@ export default class WorkflowsTable extends Component {
 
 
   /**
+   * Bounds generators and event handlers to `this` instance.
+   *
+   * This improves render performance as generators and event handlers
+   * are used as cache key by pure render.
+   */
+  componentWillMount() {
+    this._activateWorkflow = ::this.activateWorkflow;
+
+    this._renderSections = ::this.renderSections;
+    this._renderHeadingRow = ::this.renderHeadingRow;
+    this._renderRows = ::this.renderRows;
+    this._renderCells = ::this.renderCells;
+  }
+
+
+  /**
    * Dispatches `setAutostart` action for workflows.
    *
    * @param {number} id
@@ -52,22 +68,41 @@ export default class WorkflowsTable extends Component {
 
 
   /**
-   * Changes active route to given workflow.
+   * Finds workflow associated with given row element.
+   *
+   * @param {HTMLTableRowElement} row
+   * @return {Object}
+   */
+  findActivatedWorkflow(row) {
+    let idx = null;
+    for (let i = 0; i < row.parentElement.rows.length; i += 1) {
+      if (row === row.parentElement.rows[i]) {
+        idx = i;
+        break;
+      }
+    }
+
+    return this.props.workflows[idx] || null;
+  }
+
+
+  /**
+   * Changes active route to workflow associated with clicked element.
    *
    * If the event handled some significant action before (i.e., its
    * default action is prevented), it does nothing.
    *
-   * @param {Object} workflow
    * @param {Event} ev
    */
-  activateWorkflow(workflow, ev) {
+  activateWorkflow(ev) {
     if (ev.isDefaultPrevented()) return;
 
+    const workflow = this.findActivatedWorkflow(ev.currentTarget);
     const shouldDeactivate =
       this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === workflow.id;
+      parseInt(this.context.params.detailId, 10) === workflow.workflowid;
     const change = {
-      detailId: shouldDeactivate ? null : workflow.id,
+      detailId: shouldDeactivate ? null : workflow.workflowid,
       tabId: shouldDeactivate ? null : this.context.params.tabId,
     };
 
@@ -165,7 +200,7 @@ export default class WorkflowsTable extends Component {
     );
 
     yield (
-      <Cell className="narrow">{workflow.id}</Cell>
+      <Cell className="narrow">{workflow.workflowid}</Cell>
     );
 
     yield (
@@ -217,14 +252,12 @@ export default class WorkflowsTable extends Component {
    */
   *renderRows({ activeId, workflows }) {
     for (const workflow of workflows) {
-      const onClick = this.activateWorkflow.bind(this, workflow);
-
       yield (
         <Row
           key={workflow.workflowid}
           data={workflow}
-          cells={::this.renderCells}
-          onClick={onClick}
+          cells={this._renderCells}
+          onClick={this._activateWorkflow}
           className={classNames({
             info: workflow.workflowid === activeId,
           })}
@@ -243,11 +276,11 @@ export default class WorkflowsTable extends Component {
    */
   *renderSections(data) {
     yield (
-      <Section type="head" rows={::this.renderHeadingRow} />
+      <Section type="head" rows={this._renderHeadingRow} />
     );
 
     yield (
-      <Section type="body" data={data} rows={::this.renderRows} />
+      <Section type="body" data={data} rows={this._renderRows} />
     );
   }
 
@@ -264,7 +297,7 @@ export default class WorkflowsTable extends Component {
           activeId: this.props.activeWorkflowId,
           workflows: this.props.workflows,
         }}
-        sections={::this.renderSections}
+        sections={this._renderSections}
         className={'table table-striped table-condensed table-hover ' +
                    'table-fixed table--data'}
       />
