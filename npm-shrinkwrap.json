@@ -350,9 +350,9 @@
       "resolved": "https://registry.npmjs.org/babel-helpers/-/babel-helpers-6.4.5.tgz"
     },
     "babel-loader": {
-      "version": "6.2.2",
-      "from": "babel-loader@6.2.2",
-      "resolved": "https://registry.npmjs.org/babel-loader/-/babel-loader-6.2.2.tgz"
+      "version": "6.2.3",
+      "from": "babel-loader@6.2.3",
+      "resolved": "https://registry.npmjs.org/babel-loader/-/babel-loader-6.2.3.tgz"
     },
     "babel-messages": {
       "version": "6.3.18",
@@ -1100,9 +1100,9 @@
       "resolved": "https://registry.npmjs.org/cssom/-/cssom-0.3.1.tgz"
     },
     "cssstyle": {
-      "version": "0.2.31",
-      "from": "cssstyle@>=0.2.29 <0.3.0",
-      "resolved": "https://registry.npmjs.org/cssstyle/-/cssstyle-0.2.31.tgz"
+      "version": "0.2.34",
+      "from": "cssstyle@>=0.2.34 <0.3.0",
+      "resolved": "https://registry.npmjs.org/cssstyle/-/cssstyle-0.2.34.tgz"
     },
     "d": {
       "version": "0.1.1",
@@ -3116,9 +3116,9 @@
       "resolved": "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.12.tgz"
     },
     "lodash": {
-      "version": "4.3.0",
-      "from": "lodash@4.3.0",
-      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.3.0.tgz"
+      "version": "4.5.0",
+      "from": "lodash@4.5.0",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.5.0.tgz"
     },
     "lodash-es": {
       "version": "4.3.0",
@@ -4283,14 +4283,14 @@
       "resolved": "https://registry.npmjs.org/redux-devtools/-/redux-devtools-3.1.1.tgz"
     },
     "redux-devtools-dock-monitor": {
-      "version": "1.0.1",
-      "from": "redux-devtools-dock-monitor@>=1.0.1 <2.0.0",
-      "resolved": "https://registry.npmjs.org/redux-devtools-dock-monitor/-/redux-devtools-dock-monitor-1.0.1.tgz",
+      "version": "1.1.0",
+      "from": "redux-devtools-dock-monitor@1.1.0",
+      "resolved": "https://registry.npmjs.org/redux-devtools-dock-monitor/-/redux-devtools-dock-monitor-1.1.0.tgz",
       "dependencies": {
         "babel-runtime": {
-          "version": "6.3.19",
+          "version": "6.5.0",
           "from": "babel-runtime@>=6.2.0 <7.0.0",
-          "resolved": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.3.19.tgz"
+          "resolved": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.5.0.tgz"
         }
       }
     },
@@ -5058,9 +5058,9 @@
       "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.11.0.tgz"
     },
     "whatwg-url": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "from": "whatwg-url@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-1.0.0.tgz"
+      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-1.0.1.tgz"
     },
     "whet.extend": {
       "version": "0.9.9",
