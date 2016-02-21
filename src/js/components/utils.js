@@ -1,16 +1,32 @@
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import _ from 'lodash';
+import shallowCompare from 'react-addons-shallow-compare';
 
 
 /**
- * Checks if class has prototype and that prototype has no
- * shouldComponentUpdate property.
+ * Checks if props or state changed on bound React component.
  *
- * It throws an error if otherwise.
+ * It uses `shallowCompare` React add-on.
+ *
+ * @param {Object} nextProps
+ * @param {Object} nextState
+ * @this {ReactComponent}
+ * @return {boolean}
+ */
+function shouldComponentUpdate(nextProps, nextState) {
+  return shallowCompare(this, nextProps, nextState);
+}
+
+
+/**
+ * Provides `shouldComponentUpdate` with shallow equality check for
+ * props and state changes.
+ *
+ * It checks if class has prototype and that prototype has no
+ * `shouldComponentUpdate` property.
  *
  * @param {ReactClass} CompCls
+ * @see shouldComponentUpdate
  */
-function checkClassForPureRender(CompCls) {
+export function pureRender(CompCls) {
   if (!CompCls || !CompCls.prototype) {
     throw new Error('Only class can be decorated');
   }
@@ -18,48 +34,6 @@ function checkClassForPureRender(CompCls) {
   if (CompCls.prototype.shouldComponentUpdate) {
     throw new Error('Method shouldComponentUpdate already set');
   }
-}
 
-
-/**
- * Provides `shouldComponentUpdate` with shallow equality check for
- * props and state changes.
- *
- * It uses React's own PureRender mixin.
- *
- * @param {ReactClass} CompCls
- */
-export function pureRender(CompCls) {
-  checkClassForPureRender(CompCls);
-
-  Object.assign(CompCls.prototype, {
-    shouldComponentUpdate: PureRenderMixin.shouldComponentUpdate,
-  });
-}
-
-
-/**
- * Provides `shouldComponentUpdate` with shallow equality check for
- * props and state changes.
- *
- * It uses React's own PureRender mixin. But removes props from
- * nextProps according to `predicate` (see, `_.omit`).
- *
- * @param {...(string|string[])} props
- * @return {function(ReactClass)}
- */
-export function pureRenderOmit(predicate) {
-  return CompCls => {
-    checkClassForPureRender(CompCls);
-
-    Object.assign(CompCls.prototype, {
-      shouldComponentUpdate(nextProps, nextState) {
-        return PureRenderMixin.shouldComponentUpdate.call(
-          this,
-          _.omit(nextProps, predicate),
-          nextState
-        );
-      },
-    });
-  };
+  Object.assign(CompCls.prototype, { shouldComponentUpdate });
 }

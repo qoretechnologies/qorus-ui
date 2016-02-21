@@ -4125,10 +4125,10 @@
       "from": "react-addons-perf@>=0.14.6 <0.15.0",
       "resolved": "https://registry.npmjs.org/react-addons-perf/-/react-addons-perf-0.14.7.tgz"
     },
-    "react-addons-pure-render-mixin": {
+    "react-addons-shallow-compare": {
       "version": "0.14.7",
-      "from": "react-addons-pure-render-mixin@>=0.14.6 <0.15.0",
-      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-0.14.7.tgz"
+      "from": "react-addons-shallow-compare@latest",
+      "resolved": "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-0.14.7.tgz"
     },
     "react-dock": {
       "version": "0.2.3",
