@@ -11,7 +11,7 @@ define(function (require) {
       Dispatcher    = require('qorus/dispatcher'),
       ORDER_STATES  = require('constants/workflow').ORDER_STATES,
       StepBase, Step, Model, prepareSteps;
-  
+
   require('sprintf');
 
   StepBase = {
@@ -28,15 +28,15 @@ define(function (require) {
           this.type = type || "process";
           this.info = info;
       },
-    
+
       size: function () {
-         return this.depends_on.length;  
+         return this.depends_on.length;
       },
-    
+
       hasChildren: function() {
           return this.children.length > 0;
       },
-    
+
       addChild: function(child) {
           child.parent_id = this.id;
           child.level = Math.max(child.level, this.level + 1);
@@ -44,7 +44,7 @@ define(function (require) {
           this.children.push(child);
           this.children = _.sortBy(this.children, 'id');
       },
-    
+
       addParent: function (parent) {
         if (!this.parent) {
           this.parent = [parent];
@@ -52,30 +52,30 @@ define(function (require) {
           this.parent.push(parent);
         }
       },
-    
+
       getDepth: function () {
         if (!this.parent) return 0;
         var level = 1,
             max = 0;
-        
+
         _.each(this.parent, function (p) {
           max = Math.max(max, p.getDepth());
         });
-        
+
         return level + max;
       },
-    
+
       getAllChildren: function (children) {
         children = children || [];
-    
+
         _.each(this.children, function (child) {
           children.push(child);
           child.getAllChildren(children);
         }, this);
-        
+
         return _.uniq(children);
       },
-    
+
       toArray: function () {
         var children = this.getAllChildren(),
             root     = _.pick(this, ['id', 'name', 'type', 'info']),
@@ -83,35 +83,35 @@ define(function (require) {
 
         root.links_to = this.depends_on;
         root.children = _.map(this.children, function (c) { return _.parseInt(c.id); });
-        
+
         steps[0] = [root];
-        
-        _.each(children, 
-          function (step) { 
+
+        _.each(children,
+          function (step) {
             var l = step.getDepth(),
                 s = _.pick(step, ['id', 'name', 'type', 'info']);
-          
+
             s.links_to = step.depends_on;
             s.children = _.map(step.children, function (c) { return _.parseInt(c.id); });
-          
-            if (!steps[l]) { 
-              steps[l] = [s]; 
-            } else { 
+
+            if (!steps[l]) {
+              steps[l] = [s];
+            } else {
               steps[l].push(s);
-            } 
+            }
         });
-        
+
         return _.toArray(steps);
       }
   };
-  
+
   Step = function () {
       this.initialize.apply(this, arguments);
   };
 
   _.extend(Step.prototype, StepBase);
-  
-  
+
+
   prepareSteps = function (name, steps, stepmap, stepinfo) {
     if (!steps) return;
 
@@ -129,7 +129,7 @@ define(function (require) {
         if (steps[k].length === 0) {
             steps[k] = [0];
         }
-        
+
         var info = _.findWhere(stepinfo, { name: stepmap[k] });
         var sinfo;
         if (info) {
@@ -137,17 +137,17 @@ define(function (require) {
           sinfo = _.clone(info);
           if (info.ind === 0) sinfo.subwfls = _.where(stepinfo, { name: stepmap[k] });
         }
-        
+
         var node = new Step(k, steps[k], stepmap[k], stype, sinfo);
         step_list.push(node);
     });
 
     _.each(step_list, function (step) {
         var parent;
-  
+
         _.each(step.depends_on, function (dep) {
             parent = _.find(step_list, function (n) { return n.id == dep; });
-      
+
             if (parent) {
                 parent.addChild(step);
             }
@@ -156,7 +156,7 @@ define(function (require) {
 
     return step_list[0].toArray();
   };
-  
+
   Model = Qorus.Model.extend({
     __name__: 'Workflow',
     _name: 'workflow',
@@ -166,14 +166,14 @@ define(function (require) {
     // },
     defaults: function () {
       var defaults = {};
-      
+
       _.each(_.pluck(ORDER_STATES, 'name'), function (item ) {
         defaults[item] = 0;
       });
-      
-      return defaults; 
+
+      return defaults;
     },
-    
+
     idAttribute: "workflowid",
     date: null,
     allowedActions: [
@@ -187,7 +187,7 @@ define(function (require) {
       'enable',
       'disable'
     ],
-    
+
     api_events_list: [
       "workflow:%(id)s:start ",
       "workflow:%(id)s:stop",
@@ -208,19 +208,19 @@ define(function (require) {
 
       this.api_events = sprintf(this.api_events_list.join(' '), { id: this.id });
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
-      
+
       this.on('change', this.updateTotal);
     },
-    
+
     dispatch: function (e, evt) {
       if (parseInt(e.info.id, 10) !== this.id) return;
-      
+
       var evt_types = evt.split(':'),
           obj = evt_types[0],
           id = evt_types[1],
           action = evt_types[2] || id,
           alert = /^(alert_).*/;
-      
+
       if (obj === 'workflow') {
         if (action === 'start') {
           this.set('autostart', e.info.autostart);
@@ -240,19 +240,19 @@ define(function (require) {
         if (e.info.id === this.id && e.info.type === 'workflow') {
           this.set('enabled', e.info.enabled);
         }
-      } 
+      }
       // debug.log(m.attributes);
       this.trigger('fetch');
     },
-    
+
     doAction: function (action, opts, callback) {
-      var self  = this, 
+      var self  = this,
           url   = helpers.getUrl('showWorkflow', { id: this.id }),
           params, wflid;
 
       if (_.indexOf(this.allowedActions, action) != -1) {
         wflid = this.id;
-        
+
         if (action == 'hide') {
           params = { action: 'setDeprecated', deprecated: true };
         } else if (action == 'show')  {
@@ -260,11 +260,11 @@ define(function (require) {
         } else {
           params = { action: action };
         }
-        
+
         if (opts) {
           _.extend(params, opts);
         }
-        
+
         var req = $.put(this.url(), params, null, 'application/json')
           .done(
             function () {
@@ -283,10 +283,10 @@ define(function (require) {
                 callback(false);
               }
           });
-        
-        /* 
-          Autostart workaround for the stopped workflows, because there are not system event like 
-          WORKFLOW_START WORKFLOW_STOP we have to do that manually 
+
+        /*
+          Autostart workaround for the stopped workflows, because there are not system event like
+          WORKFLOW_START WORKFLOW_STOP we have to do that manually
          */
         if (this.get('exec_count') === 0 && _.contains(['setAutostart', 'decAutostart', 'incAutostart'], action)) {
           switch (action) {
@@ -301,12 +301,12 @@ define(function (require) {
               break;
           }
         }
-        
+
         return req;
       }
       return false;
     },
-    
+
     fetch: function (options) {
       if (!options) options = {};
       if (!this.date && this.collection){
@@ -315,40 +315,41 @@ define(function (require) {
       }
       Model.__super__.fetch.call(this, options);
     },
-    
+
     parse: function (response, options) {
       // rewrite stepmap
       // response.stepmap = _.invert(response.stepmap);
       response = Model.__super__.parse.call(this, response, options);
+      // response.version = parseFloat(response.version);
       if (response.alerts) response.has_alerts = (response.alerts.length > 0);
       return response;
     },
-    
+
     // return all options for starting workflow
     getOptions: function () {
       var opts = this.get('options') || [];
       var sysopts = System.Options.getFor('workflow');
-      
+
       return opts.concat(sysopts);
     },
-    
+
     setAutostart: function (as) {
       return this.doAction('setAutostart', { autostart: as });
     },
-    
+
     prepareSteps: prepareSteps,
-        
+
     mapSteps: function () {
       return this.prepareSteps(this.get('name'), this.get('steps'), this.get('stepmap'), this.get('stepinfo'));
     },
-    
+
     // sets timerange for chart
     setStep: function (step) {
       step = step - 1;
       this.opts.date = utils.formatDate(moment().days(-step));
       this.fetch();
     },
-    
+
     getDataset: function () {
       var vals = [
          {
@@ -377,36 +378,36 @@ define(function (require) {
           color: '#9ccb3b'
         }
       ];
-      
+
       // console.log('generating graph data', this.get('name'), this.date || this.collection.date);
       // var data = _.map(vals, function (v, idx) { return { name: idx, value: v.count, color: v.color }});
-      
+
       return vals;
     },
-    
+
     getControls: function () {
       var controls = [];
-      
+
       if (this.get('enabled') === true) controls.push({ action: 'disable', icon: 'off', title: 'Disable', css: 'success' });
       if (this.get('enabled') === false) controls.push({ action: 'enable', icon: 'off', title: 'Enable', css: 'danger' });
-      
+
       controls.push({ action: 'reset', icon: 'refresh', title: 'Reset', css: 'warning' });
       // controls.push({ action: 'options', icon: 'cog', title: 'Set options' });
-      
+
       // if (item.deprecated === false) controls.push({ action: 'hide', icon: 'flag-alt', title: 'Hide'});
       // if (item.deprecated === true) controls.push({ action: 'show', icon: 'flag', title: 'Show'});
       return controls;
     },
-    
+
     updateTotal: function () {
       var states = ['IN-PROGRESS','READY','SCHEDULED','COMPLETE','INCOMPLETE','ERROR','CANCELED','RETRY','WAITING','ASYNC-WAITING','EVENT-WAITING','BLOCKED','CRASH'],
           total  = 0;
-          
+
       _.each(states, function (state) {
         total += this.attributes[state];
       }, this);
-    
-      this.attributes.TOTAL = total;      
+
+      this.attributes.TOTAL = total;
     }
   });
 

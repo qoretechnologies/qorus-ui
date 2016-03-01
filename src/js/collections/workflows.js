@@ -35,7 +35,7 @@ define(function (require) {
 
       this.sort_key = currentUser.getPreferences(this.prefKey + '.sorting.key') || 'exec_count';
       this.sort_order = currentUser.getPreferences(this.prefKey + '.sorting.order') || 'des';
-      this.sort_history = currentUser.getPreferences(this.prefKey + '.sorting.history') || ['name'];
+      this.sort_history = currentUser.getPreferences(this.prefKey + '.sorting.history') || ['name', '-version'];
       this.opts = {};
       this.opts.deprecated = false;
 

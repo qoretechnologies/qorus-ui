@@ -29,6 +29,13 @@ define(function (require) {
     }
   });
 
+  function get_prev_key(key, prev_key, order) {
+    if (key == prev_key) {
+      return '';
+    } else
+      return (order=='des') ? '-' + key : key;
+  }
+
   View = Backbone.View.extend({
     is_rendered: false,
     render_lock: false,
@@ -731,21 +738,23 @@ define(function (require) {
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
 
-      if (data.action && data.action != 'open' && data.action !== 'execute') {
-        if (data.id == 'selected') {
-          this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
-        } else if (data.id) {
-          if (!$target.hasClass('action-modal')) {
-            debug.log("data action", data.id, data.action);
-            // $target.text(data.msg.toUpperCase());
-            var inst = this.collection.get(data.id);
-            inst.doAction(data.action, data);
+      if (!e.isDefaultPrevented()) {
+        if (data.action && data.action != 'open' && data.action !== 'execute') {
+          if (data.id == 'selected') {
+            this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
+          } else if (data.id) {
+            if (!$target.hasClass('action-modal')) {
+              debug.log("data action", data.id, data.action);
+              // $target.text(data.msg.toUpperCase());
+              var inst = this.collection.get(data.id);
+              inst.doAction(data.action, data);
+            }
           }
+        } else if (data.action == 'open') {
+          this.openURL($target.data('url') || $target.attr('href'));
         }
-      } else if (data.action == 'open') {
-        this.openURL($target.data('url') || $target.attr('href'));
+        e.preventDefault();
       }
-      e.preventDefault();
     },
 
     search: function (e) {
@@ -782,6 +791,8 @@ define(function (require) {
 
       if (query)
         Backbone.history.navigate(url);
+
+      this.trigger('search',  { query: query });
     },
 
     openURL: function (url) {
@@ -1046,14 +1057,14 @@ define(function (require) {
         var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection,
             key      = el.data('sort'),
             order    = el.attr('data-order') || collection.sort_order,
-            prev_key = this.collection.sort_key,
+            prev_key = get_prev_key(collection.sort_key, collection.sort_history[0], collection.sort_order);
             views    = this.getView('tbody');
-
 
         collection.sort_order = order;
         collection.sort_key = key;
-        if (collection.sort_history) collection.sort_history.push(prev_key);
+        if (prev_key != '') collection.sort_history.unshift(prev_key);
 
+        console.log(_.pick(collection, ['sort_order', 'sort_key', 'sort_history']), collection.sort_key, prev_key);
 
         if (collection.prefKey) {
           var pref = {
@@ -1067,6 +1078,7 @@ define(function (require) {
 
         views = views.sort(function (c1, c2) {
           // needs speed improvements
+          var pkey;
           var k10 = utils.prep(c1.model.get(key)),
               k20 = utils.prep(c2.model.get(key)),
               r   = 1,
@@ -1076,6 +1088,14 @@ define(function (require) {
 
           if (k10 < k20) return -1 * r;
           if (k10 > k20) return 1 * r;
+
+          if (prev_key.startsWith('-')) {
+            pkey = prev_key.slice(1);
+            r = -1;
+          } else {
+            pkey = prev_key;
+            r = 1;
+          }
 
           k11 = utils.prep(c1.model.get(prev_key));
           k21 = utils.prep(c2.model.get(prev_key));
