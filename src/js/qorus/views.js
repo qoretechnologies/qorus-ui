@@ -1064,8 +1064,6 @@ define(function (require) {
         collection.sort_key = key;
         if (prev_key != '') collection.sort_history.unshift(prev_key);
 
-        console.log(_.pick(collection, ['sort_order', 'sort_key', 'sort_history']), collection.sort_key, prev_key);
-
         if (collection.prefKey) {
           var pref = {
             order: order,
