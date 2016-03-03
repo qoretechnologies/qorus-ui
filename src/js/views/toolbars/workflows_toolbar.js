@@ -61,7 +61,7 @@ define(function (require) {
     setUrl: function (params) {
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
-      var date = (parts.length === 2) ? parts[1] : '24h';
+      var date = (parts.length > 2) ? parts[1] : '24h';
       var url;
 
       var filters = [];

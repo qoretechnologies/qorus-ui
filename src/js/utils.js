@@ -280,7 +280,15 @@ define(function (require) {
       });
 
       return csv.trim();
+    },
+
+    getPrevKey: function (key, prev_key, history, order) {
+      if (key == prev_key)
+        return history;
+
+      return (order=='des') ? '-' + key : key;
     }
+
   };
 
   return utils;

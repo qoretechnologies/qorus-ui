@@ -29,7 +29,8 @@ require.config({
     "parallel": "libs/parallel",
     "settings": "settings.dev",
     "prism": "libs/prism/prism",
-    "_lodash": "libs/lodash.3.10"
+    "_lodash": "libs/lodash.3.10",
+    "thenby": "libs/thenBy"
     // "piwik.tracker": "libs/piwik/tracker",
     // "piwik": "libs/piwik/piwik"
   },
