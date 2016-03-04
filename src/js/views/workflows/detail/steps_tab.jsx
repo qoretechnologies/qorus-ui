@@ -66,6 +66,12 @@ const BOX_MARGIN = 20;
 
 
 /**
+ * Margin between box and area where path joints are positioned.
+ */
+const JOINT_MARGIN = 1;
+
+
+/**
  * Box rounded corner radius.
  */
 const BOX_ROUNDED_CORNER = 5;
@@ -789,7 +795,7 @@ export default class StepsTab extends Component {
    * The path has a joint right above bottom of the two
    * boxes. Obviously, this joint is invisible for vertically aligned
    * boxes. Otherwise, it makes sure the path is perpendicular to x-
-   * and y-axis.
+   * and y-axis and does not overlap at the joint.
    *
    * @param {StepArgs} start
    * @param {StepArgs} end
@@ -798,6 +804,7 @@ export default class StepsTab extends Component {
    * @see getBoxVerticalCenter
    * @see getBoxHeight
    * @see BOX_MARGIN
+   * @see JOINT_MARGIN
    */
   renderPath(start, end) {
     const startX = this.getBoxHorizontalCenter(start.colIdx, start.row);
@@ -806,10 +813,15 @@ export default class StepsTab extends Component {
     const endX = this.getBoxHorizontalCenter(end.colIdx, end.row);
     const endY = this.getBoxVerticalCenter(end.rowIdx);
 
+    const jointsOnRow = start.row.length;
+    const jointStep = (BOX_MARGIN - 2 * JOINT_MARGIN) / (jointsOnRow + 1);
+    const jointPos = start.row.findIndex(s => s === start.stepId);
     const joint =
-      Math.max(startY, endY) -
+      endY -
       this.getBoxHeight() / 2 -
-      BOX_MARGIN / 2;
+      BOX_MARGIN +
+      JOINT_MARGIN +
+      (jointPos + 1) * jointStep;
 
     return (
       <path
