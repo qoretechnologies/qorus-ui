@@ -26,7 +26,8 @@ define(function (require) {
     route: 'showWorkflows',
 
     additionalEvents: {
-      "click button[data-action]": 'applyFilter'
+      "click button[data-action]": 'applyFilter',
+      "click a[data-action]": 'applyFilter'
     },
 
     initialize: function (opts) {
@@ -56,6 +57,11 @@ define(function (require) {
       Backbone.history.navigate(url, { trigger: true });
 
       e.preventDefault();
+
+      if ($target.tagName == 'a') {
+        $target.parent().removeClass('open');
+        e.stopPropagation();
+      }
     },
 
     setUrl: function (params) {

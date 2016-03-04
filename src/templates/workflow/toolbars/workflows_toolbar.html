@@ -31,7 +31,14 @@
         </div>
         <div class="btn-group">
           <button class="btn" data-action="open" data-option="date=all">All</button>
-          <button class="btn" data-action="open" data-url="date=24h">24 h</button>
+          <button class="btn dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu above pull-right">
+            <li><a data-id="selected" data-action="open" data-option="date=24h">24h</a></li>
+            <li><a data-id="selected" data-action="open" data-option="date=today">Today</a></li>
+            <li><a data-id="selected" data-action="open" data-option="date=now">Now</a></li>
+          </ul>
         </div>
     </div>
     <div class="btn-group">

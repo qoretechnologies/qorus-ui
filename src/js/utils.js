@@ -62,6 +62,10 @@ define(function (require) {
         mdate = moment().add('days', -1).format(settings.DATE_DISPLAY);
       } else if (date == 'all') {
         mdate = moment(settings.DATE_FROM).format(settings.DATE_DISPLAY);
+      } else if (date == 'today') {
+        mdate = moment().hours(0).minutes(0).seconds(0).format(settings.DATE_DISPLAY);
+      } else if (date == 'now') {
+        mdate = moment().format(settings.DATE_DISPLAY);
       } else if (date.match(/^[0-9]+$/)) {
         mdate = moment(date, 'YYYYMMDDHHmmss').format(settings.DATE_DISPLAY);
       } else {
