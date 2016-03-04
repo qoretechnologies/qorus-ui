@@ -5,9 +5,16 @@
  *   below: Array<!GraphNode>,
  *   depth: number,
  *   weight: number,
- *   width: number
+ *   width: number,
+ *   position: number
  * }} GraphNode
  */
+
+
+/**
+ * Main node above is a refence for position of nodes below.
+ */
+export const ABOVE_MAIN_IDX = 0;
 
 
 /**
@@ -19,7 +26,27 @@
 export function* descendants(node) {
   yield node;
 
-  for (const below of node.below) yield* descendants(below);
+  for (const below of node.below) {
+    if (below.above[ABOVE_MAIN_IDX] !== node) continue;
+
+    yield* descendants(below);
+  }
+}
+
+
+/**
+ * Yields all nodes upwards.
+ *
+ * Unline {@link descendants}, it does not yield given node.
+ *
+ * @param {!GraphNode} node
+ * @return {Generator<!GraphNode>}
+ */
+function* ascendants(node) {
+  for (const above of node.above) {
+    yield above;
+    yield* ascendants(above);
+  }
 }
 
 
@@ -37,41 +64,19 @@ function create(id) {
     depth: 0,
     weight: 1,
     width: 1,
+    position: 0,
   };
-}
-
-
-/**
- * Yields nodes on the way towards the root with given node itself.
- *
- * It uses the first node above so this does not have to be the
- * shortest path.
- *
- * @param {!GraphNode} node
- * @return {Generator<!GraphNode>}
- */
-function* upwardPath(node) {
-  yield node;
-
-  if (node.above[0]) yield* upwardPath(node.above[0]);
 }
 
 
 /**
  * Adds new node below.
  *
- * It also sets depth, width and weight according to their simple
- * sementics without trying to balance the tree.
- *
- * It sets the following features:
- *
- * - node `below`'s depth is set under the deepest of its nodes above,
- * - `node`'s weight is increased is it the first node above for given
- *    node `below`,
- * - width is left at initial value to be set during balancing.
+ * It also sets below node's depth right under its deepest node
+ * above. Other features are computed during {@link balance} phase.
  *
  * @param {!GraphNode} node
- * @param {!GraphNode} above
+ * @param {!GraphNode} below
  */
 function add(node, below) {
   node.below.push(below);
@@ -80,42 +85,133 @@ function add(node, below) {
     Object.assign(below, { depth: node.depth + 1 });
   }
 
-  const isFirstAbove = below.above.push(node) === 1;
-  if (!isFirstAbove) return;
-
-  for (const n of upwardPath(node)) n.weight += 1;
+  below.above.push(node);
 }
 
 
 /**
- * Yields all nodes upwards starting with given node itself.
+ * Direction for node comparator.
+ *
+ * @enum {number}
+ */
+const Dir = {
+  ASC: +1,
+  DESC: -1,
+};
+
+
+/**
+ * Returns node comparator.
+ *
+ * Nodes are compared based on product of their depth and weight.
+ *
+ * @param {Dir} dir
+ * @return {function(!GraphNode, !GraphNode): number}
+ */
+function createComparator(dir) {
+  return function compare(a, b) {
+    return dir * (a.depth * a.weight - b.depth * b.weight);
+  };
+}
+
+
+/**
+ * Returns nodes divided according to their depth.
  *
  * @param {!GraphNode} node
- * @return {Generator<!GraphNode>}
+ * @return {Array<!GraphNode>}
  */
-function* ascendants(node) {
-  yield node;
+function nodesByDepth(node) {
+  const levels = [];
+  for (const n of descendants(node)) {
+    if (!levels[n.depth]) levels[n.depth] = [];
 
-  for (const above of node.above) yield* ascendants(above);
+    levels[n.depth].push(n);
+  }
+
+  return levels;
 }
 
 
 /**
- * Compares to nodes by their weight.
+ * Sets balanced width on all nodes in the graph.
  *
- * It returns value less than zero if weight of `a` is leas then
- * `b`. It returns value greater than zero if weight of `a` is greater
- * then `b`. If weights of `a` and `b` are equal, it returns zero.
- *
- * @param {!GraphNode} a
- * @param {!GraphNode} b
- * @return {number}
+ * @param {!GraphNode} node
+ * @see balance
  */
-function compare(a, b) {
-  if (a.weight < b.weight) return -1;
-  if (a.weight > b.weight) return +1;
+function setBalancedWidth(node) {
+  for (const l of nodesByDepth(node).reverse()) {
+    const maxWidth = Math.max(...l.map(n => n.width));
+    for (const n of l) {
+      n.width = maxWidth;
 
-  return 0;
+      for (const asc of ascendants(n)) {
+        const ascWidth = Math.max(
+          maxWidth,
+          asc.below.reduce((w, nb) => w + nb.width, 0)
+        );
+        if (asc.width < ascWidth) asc.width = ascWidth;
+      }
+    }
+  }
+}
+
+
+/**
+ * Sets balanced weight on all nodes in the graph.
+ *
+ * It also sorts all nodes above so that the heaviest and deepest node
+ * is the first one.
+ *
+ * @param {!GraphNode} node
+ * @see balance
+ */
+function setBalancedWeight(node) {
+  for (const l of nodesByDepth(node).reverse()) {
+    for (const n of l) {
+      for (const na of n.above) {
+        na.weight += n.weight / n.above.length;
+      }
+    }
+  }
+
+  for (const l of nodesByDepth(node).reverse()) {
+    for (const n of l) {
+      n.above.sort(createComparator(Dir.DESC));
+    }
+  }
+}
+
+
+function isMainAbove(node, below) {
+  return below.above[ABOVE_MAIN_IDX] === node;
+}
+
+
+/**
+ * Sets balanced position on all nodes in the graph.
+ *
+ * @param {!GraphNode} node
+ * @see balance
+ */
+function setBalancedPosition(node) {
+  const setPos = (start, n, idx) => Object.assign(n, { position: start + idx });
+
+  for (const n of descendants(node)) {
+    n.below.sort(createComparator(Dir.ASC));
+
+    const centerIdx = Math.floor(n.below.length / 2);
+
+    const left = n.below.slice(0, centerIdx);
+    const right = n.below.slice(centerIdx).reverse();
+
+    n.below = left.concat(right);
+
+    const startPos = -1 * left.length;
+    n.below.
+      filter(isMainAbove.bind(null, n)).
+      forEach(setPos.bind(null, startPos));
+  }
 }
 
 
@@ -126,41 +222,28 @@ function compare(a, b) {
  *
  * - each depth level has nodes with the same width,
  * - node's width is a sum of widths of nodes below,
- * - nodes below are ordered in a way that more weight a node has more
- *   towards center it is placed.
+ * - node's weight is a sum of weights of all nodes below dividens by
+ *   below node's number of nodes above,
+ * - the main node above is the heaviest and deepest node and it can
+ *   be referenced as the first node above,
+ * - nodes below are ordered in a way that more weight and depth a
+ *   node has more towards the center it is placed,
+ * - position on nodes below whose current node is their main one
+ *   above is set relative that main node above (negative on the left,
+ *   positive on the right),
+ * - position of the heaviest and deepest node is always zero, even if
+ *   there is even number of its siblings.
  *
- * @param {!GraphNode}
+ * @param {!GraphNode} node
+ * @see createComparator
+ * @see setBalancedWidth
+ * @see setBalancedWeight
+ * @see setBalancedPosition
  */
 function balance(node) {
-  const levels = [];
-  for (const n of descendants(node)) {
-    if (!levels[n.depth]) {
-      levels[n.depth] = [];
-    }
-    levels[n.depth].push(n);
-  }
-
-  for (const l of levels.reverse()) {
-    const maxWidth = Math.max(...l.map(n => n.width));
-    for (const n of l) {
-      for (const asc of ascendants(n)) {
-        const ascWidth = Math.max(
-          maxWidth,
-          asc.below.reduce((w, nb) => w + nb.width, 0)
-        );
-        if (asc.width < ascWidth) asc.width = ascWidth;
-      }
-    }
-  }
-
-  for (const n of descendants(node)) {
-    const sorted = n.below.sort(compare);
-    const centerIdx = Math.floor(sorted.length / 2);
-    const left = sorted.slice(0, centerIdx);
-    const right = sorted.slice(centerIdx).reverse();
-
-    n.below = left.concat(right);
-  }
+  setBalancedWidth(node);
+  setBalancedWeight(node);
+  setBalancedPosition(node);
 }
 
 
@@ -170,15 +253,16 @@ function balance(node) {
  * Graph is organized with a root on the top. Each node can have many
  * node above and below. The root node has no node above.
  *
- * Dependency map assigns to particular node nodes which are above
- * it. Nodes are referenced as number identifiers.
+ * Dependency map assigns nodes to particular node. These nodes are
+ * above that particular node. Nodes are referenced as number
+ * identifiers.
  *
- * It is expected given dependency map does not contain any cycles but
- * no attempt to detect them is made.
+ * It is expected that given dependency map does not contain any
+ * cycles but no attempt to detect them is made.
  *
  * The implementation also relies on the fact that Object properties
- * with string names are in fact ordered. This is a safe bet against
- * ECMAScript spec because many popular library and frameworks work
+ * with string names are ordered. This is a safe bet against
+ * ECMAScript spec because many popular libraries and frameworks work
  * with this assumption which is true from all key
  * ECMAScript/JavaScript implementations.
  *

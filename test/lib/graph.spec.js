@@ -20,22 +20,43 @@ describe("{ graph, descendants } from 'lib/graph'", () => {
     });
 
 
-    it("sets node's weight to its number of descendants (including self) " +
-       'ignoring those already accounted for elsewhere',
+    it("sets node's depth right below its deepest parent", () => {
+      const node = graph({
+        0: [],
+        1: [0],
+        2: [1],
+        3: [0],
+        4: [2, 3],
+      });
+
+      expect(node.depth).to.equal(0);
+
+      expect(node.below[0].depth).to.equal(1);
+      expect(node.below[0].below[0].depth).to.equal(3);
+
+      expect(node.below[1].id).to.equal(1);
+      expect(node.below[1].below[0].depth).to.equal(2);
+    });
+
+
+    it("sets node's weight to its depth multiplied by its number of " +
+       'descendants (including self) dividing those shared with other nodes',
     () => {
       const node = graph({
         0: [],
         1: [0],
         2: [0],
         3: [2],
+        4: [1, 3],
       });
 
-      expect(node.weight).to.equal(4);
+      expect(node.weight).to.equal(5);
 
-      expect(node.below[0].weight).to.equal(1);
+      expect(node.below[0].weight).to.equal(1.5);
+      expect(node.below[0].below[0].weight).to.equal(1);
 
-      expect(node.below[1].weight).to.equal(2);
-      expect(node.below[1].below[0].weight).to.equal(1);
+      expect(node.below[1].weight).to.equal(2.5);
+      expect(node.below[1].below[0].weight).to.equal(1.5);
     });
 
 
@@ -58,25 +79,6 @@ describe("{ graph, descendants } from 'lib/graph'", () => {
       expect(node.below[1].below[1].id).to.equal(5);
 
       expect(node.below[2].below[0].id).to.equal(6);
-    });
-
-
-    it("sets node's depth right below its deepest parent", () => {
-      const node = graph({
-        0: [],
-        1: [0],
-        2: [1],
-        3: [0],
-        4: [2, 3],
-      });
-
-      expect(node.depth).to.equal(0);
-
-      expect(node.below[0].depth).to.equal(1);
-      expect(node.below[0].below[0].depth).to.equal(3);
-
-      expect(node.below[1].id).to.equal(1);
-      expect(node.below[1].below[0].depth).to.equal(2);
     });
 
 
@@ -129,6 +131,38 @@ describe("{ graph, descendants } from 'lib/graph'", () => {
       expect(node.below[1].below[0].width).to.equal(1);
       expect(node.below[1].below[1].width).to.equal(1);
     });
+
+
+    it('sets position of nodes relative to their main node above', () => {
+      const node = graph({
+        0: [],
+        1: [0],
+        2: [0],
+        3: [2],
+        4: [2],
+        5: [2],
+        6: [5, 1],
+      });
+
+      expect(node.id).to.equal(0);
+      expect(node.position).to.equal(0);
+
+      expect(node.below[0].id).to.equal(1);
+      expect(node.below[0].position).to.equal(-1);
+
+      expect(node.below[1].id).to.equal(2);
+      expect(node.below[1].position).to.equal(0);
+
+      expect(node.below[1].below[0].id).to.equal(3);
+      expect(node.below[1].below[0].position).to.equal(-1);
+      expect(node.below[1].below[1].id).to.equal(5);
+      expect(node.below[1].below[1].position).to.equal(0);
+      expect(node.below[1].below[2].id).to.equal(4);
+      expect(node.below[1].below[2].position).to.equal(+1);
+
+      expect(node.below[1].below[1].below[0].id).to.equal(6);
+      expect(node.below[1].below[1].below[0].position).to.equal(0);
+    });
   });
 
 
@@ -141,10 +175,10 @@ describe("{ graph, descendants } from 'lib/graph'", () => {
         2: [1],
         3: [2],
         4: [0],
-        5: [4],
+        5: [4, 2],
       }))];
 
-      expect(nodes.map(n => n.id)).to.eql([0, 4, 5, 1, 2, 3]);
+      expect(nodes.map(n => n.id)).to.eql([0, 4, 1, 2, 3, 5]);
     });
   });
 });
