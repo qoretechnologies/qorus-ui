@@ -9,6 +9,9 @@ import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
+import { graph, descendants, ABOVE_MAIN_IDX } from 'lib/graph';
+
+
 /**
  * Typical list of arguments for step-specific functions.
  *
@@ -17,7 +20,7 @@ import { pureRender } from 'components/utils';
  *
  * @typedef {{
  *   stepId: number,
- *   stepIdx: number,
+ *   colIdx: number,
  *   row: Array<number>,
  *   rowIdx: number
  * }} StepArgs
@@ -39,9 +42,9 @@ const BOX_MIN_WIDTH = 250;
 /**
  * Approximate width of one character of box text in SVG user units.
  *
- * It an approximate width of letter "a".
+ * It an approximate width of letter "n".
  */
-const BOX_CHARACTER_WIDTH = 9;
+const BOX_CHARACTER_WIDTH = 10;
 
 
 /**
@@ -130,62 +133,83 @@ export default class StepsTab extends Component {
 
 
   /**
-   * Returns dependencies of particular step.
+   * Returns step dependencies.
    *
-   * It handles special case of a step with no dependecies. Such step
-   * has a start (root) step as dependency.
+   * If no step identifier is passed, it returns map of all step
+   * dependencies.
    *
-   * If no dependencies are found in workflow object, an empty array
-   * is returned. This typically happens for start (root) step.
+   * A special step (root) is placed above original root as received
+   * from the API.
    *
-   * @param {string|number} stepId
+   * @param {(string|number)=} stepId
    * @return {Array<number>}
    * @see ROOT_STEP_ID
    */
   getStepDeps(stepId) {
-    if (!this.props.workflow.steps[stepId]) {
-      return [];
-    }
-    if (this.props.workflow.steps[stepId].length <= 0) {
-      return [ROOT_STEP_ID];
-    }
+    const initId = Object.keys(this.props.workflow.steps).
+      find(id => this.props.workflow.steps[id].length === 0);
 
-    return this.props.workflow.steps[stepId];
+    const deps = Object.assign(
+      { [ROOT_STEP_ID]: [] },
+      this.props.workflow.steps,
+      { [initId]: [ROOT_STEP_ID] }
+    );
+
+    return (stepId !== null && typeof stepId !== 'undefined') ?
+      deps[stepId] :
+      deps;
   }
 
 
   /**
    * Computes rows with step identifiers.
    *
-   * Steps are placed to rows based on their dependencies. A special
-   * step (root) is placed to the first row because it has no
-   * dependencies. Other steps are placed in a way that they are
-   * always below all their dependencies. Every row is also sorted by
-   * step identifier.
+   * Steps are placed in a matrix based on their
+   * dependencies. Returned matrix has at least {@link
+   * DIAGRAM_MIN_COLUMNS} columns. Each row has nodes from equivalent
+   * depth with each node positioned relatively to its parent taken
+   * width into account.
    *
    * @return {Array<Array<number>>}
-   * @see getDependencies
-   * @see ROOT_STEP_ID
+   * @see graph
+   * @see getStepDeps
+   * @see DIAGRAM_MIN_COLUMNS
    */
   getRows() {
+    const root = graph(this.getStepDeps());
+
+    const cols = Math.max(
+      DIAGRAM_MIN_COLUMNS,
+      root.width % 2 === 0 ? root.width + 1 : root.width,
+    );
+
     const rows = [];
+    let lmost = cols;
+    let rmost = 0;
+    const isMainAbove = (n, aboveId) => aboveId === n.above[ABOVE_MAIN_IDX].id;
+    for (const n of descendants(graph(this.getStepDeps()))) {
+      let aboveCol = -1;
+      for (const r of rows.slice().reverse()) {
+        aboveCol = (r || []).findIndex(isMainAbove.bind(this, n));
+        if (aboveCol >= 0) break;
+      }
+      if (aboveCol < 0) aboveCol = Math.ceil(cols / 2) - 1;
 
-    rows.push([ROOT_STEP_ID]);
+      if (!rows[n.depth]) rows[n.depth] = new Array(cols);
 
-    Object.keys(this.props.workflow.steps).forEach(stepId => {
-      const rowIdx = this.getStepDeps(stepId).reduce((maxIdx, depId) => (
-        Math.max(
-          maxIdx,
-          rows.findIndex(row => row.some(id => id === depId))
-        )
-      ), 0) + 1;
+      const col = aboveCol + n.position * n.width;
+      rows[n.depth][col] = n.id;
 
-      if (!rows[rowIdx]) rows[rowIdx] = [];
+      lmost = Math.min(lmost, col);
+      rmost = Math.max(rmost, col + 1);
+    }
 
-      rows[rowIdx] = rows[rowIdx].concat(parseInt(stepId, 10)).sort();
-    });
+    if (rmost - lmost < DIAGRAM_MIN_COLUMNS) {
+      lmost -= Math.floor((DIAGRAM_MIN_COLUMNS - rmost + lmost) / 2);
+      rmost += Math.ceil((DIAGRAM_MIN_COLUMNS - rmost + lmost) / 2);
+    }
 
-    return rows;
+    return rows.map(r => r.slice(lmost).slice(0, rmost - lmost));
   }
 
 
@@ -197,12 +221,11 @@ export default class StepsTab extends Component {
    */
   getFlattenRows() {
     return this.getRows().reduce((flatten, row, rowIdx) => (
-      flatten.concat(row.map((stepId, stepIdx) => ({
-        stepId,
-        stepIdx,
-        row,
-        rowIdx,
-      })))
+      flatten.concat(
+        row.
+          map((stepId, colIdx) => ({ stepId, colIdx, row, rowIdx })).
+          filter(s => typeof s.stepId !== 'undefined')
+      )
     ), []);
   }
 
@@ -223,8 +246,8 @@ export default class StepsTab extends Component {
    * Returns flatten dependencies between steps.
    *
    * @return {Array<{
-   *   a: StepArgs,
-   *   b: StepArgs
+   *   start: StepArgs,
+   *   end: StepArgs
    * }>}
    * @see getFlattenRows
    * @see getStepDeps
@@ -233,30 +256,10 @@ export default class StepsTab extends Component {
   getFlattenDeps() {
     return this.getFlattenRows().reduce((flatten, step) => (
       flatten.concat(this.getStepDeps(step.stepId).map(depId => ({
-        a: step,
-        b: this.getStepArgs(depId),
+        start: this.getStepArgs(depId),
+        end: step,
       })))
     ), []);
-  }
-
-
-  /**
-   * Returns number of rows found in the workflow.
-   *
-   * @return {number}
-   */
-  getNumberOfRows() {
-    return this.getRows().length;
-  }
-
-
-  /**
-   * Returns number of columns found in the workflow.
-   *
-   * @return {number}
-   */
-  getNumberOfColumns() {
-    return Math.max(...this.getRows().map(r => r.length));
   }
 
 
@@ -413,13 +416,13 @@ export default class StepsTab extends Component {
    * It cannot be less than {@link DIAGRAM_MIN_COLUMNS}.
    *
    * @return {number}
-   * @see getNumberOfColumns
    * @see DIAGRAM_MIN_COLUMNS
+   * @see getRows
    */
   getDiagramColumns() {
     return Math.max(
       DIAGRAM_MIN_COLUMNS,
-      this.getNumberOfColumns()
+      this.getRows()[0].length
     );
   }
 
@@ -428,10 +431,10 @@ export default class StepsTab extends Component {
    * Returns number of columns on the diagram.
    *
    * @return {number}
-   * @see getNumberOfRows
+   * @see getRows
    */
   getDiagramRows() {
-    return this.getNumberOfRows();
+    return this.getRows().length;
   }
 
 
@@ -448,7 +451,7 @@ export default class StepsTab extends Component {
    */
   getDiagramWidth() {
     return this.getDiagramColumns() * (
-      this.getBoxWidth() + BOX_MARGIN
+      this.getBoxWidth() + BOX_MARGIN / 2
     ) + BOX_MARGIN;
   }
 
@@ -477,16 +480,16 @@ export default class StepsTab extends Component {
    * Boxes are spread across the whole space of a row to occupy the
    * same amount of space each.
    *
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @return {number}
    * @see getDiagramWidth
    * @see BOX_MARGIN
    */
-  getBoxHorizontalCenter(stepIdx, row) {
+  getBoxHorizontalCenter(colIdx, row) {
     const hSpace = this.getDiagramWidth() / row.length;
 
-    return BOX_MARGIN / 2 + hSpace * stepIdx + hSpace / 2;
+    return BOX_MARGIN / 2 + hSpace * colIdx + hSpace / 2;
   }
 
 
@@ -510,14 +513,14 @@ export default class StepsTab extends Component {
   /**
    * Returns top coordinate of a box.
    *
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @return {number}
    * @see getBoxHorizontalCenter
    * @see getBoxWidth
    */
-  getBoxTopCoord(stepIdx, row) {
-    return this.getBoxHorizontalCenter(stepIdx, row) - this.getBoxWidth() / 2;
+  getBoxTopCoord(colIdx, row) {
+    return this.getBoxHorizontalCenter(colIdx, row) - this.getBoxWidth() / 2;
   }
 
 
@@ -603,16 +606,16 @@ export default class StepsTab extends Component {
   /**
    * Returns translate spec for transform attribute of a box.
    *
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {string}
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform(stepIdx, row, rowIdx) {
+  getBoxTransform(colIdx, row, rowIdx) {
     return 'translate(' +
-      `${this.getBoxTopCoord(stepIdx, row)} ` +
+      `${this.getBoxTopCoord(colIdx, row)} ` +
       `${this.getBoxLeftCoord(rowIdx)}` +
     ')';
   }
@@ -625,7 +628,7 @@ export default class StepsTab extends Component {
    * by `mask` attribute.
    *
    * @param {number} stepId
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {ReactElement}
@@ -650,7 +653,7 @@ export default class StepsTab extends Component {
    * The group element contains an ellipse and a text with step name.
    *
    * @param {number} stepId
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {ReactElement}
@@ -658,14 +661,14 @@ export default class StepsTab extends Component {
    * @see getStartParams
    * @see getTextParams
    */
-  renderStartBox(stepId, stepIdx, row, rowIdx) {
+  renderStartBox(stepId, colIdx, row, rowIdx) {
     return (
       <g
         className="diagram__box diagram__box--start"
-        transform={this.getBoxTransform(stepIdx, row, rowIdx)}
+        transform={this.getBoxTransform(colIdx, row, rowIdx)}
       >
         <ellipse {...this.getStartParams()} />
-        <text {...this.getTextParams(stepId, stepIdx, row, rowIdx)}>
+        <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
           {this.getStepFullname(stepId)}
         </text>
       </g>
@@ -706,7 +709,7 @@ export default class StepsTab extends Component {
    * type.
    *
    * @param {number} stepId
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {ReactElement}
@@ -715,7 +718,7 @@ export default class StepsTab extends Component {
    * @see getStepInfo
    * @see getTextParams
    */
-  renderDefaultBox(stepId, stepIdx, row, rowIdx) {
+  renderDefaultBox(stepId, colIdx, row, rowIdx) {
     const onClick = this.onBoxClick.bind(this, stepId);
     const type = this.getStepInfo(stepId) ?
       this.getStepInfo(stepId).steptype :
@@ -727,11 +730,11 @@ export default class StepsTab extends Component {
           diagram__box: true,
           [`diagram__box--${type.toLowerCase()}`]: type,
         })}
-        transform={this.getBoxTransform(stepIdx, row, rowIdx)}
+        transform={this.getBoxTransform(colIdx, row, rowIdx)}
         onClick={onClick}
       >
         <rect {...this.getDefaultParams()} />
-        <text {...this.getTextParams(stepId, stepIdx, row, rowIdx)}>
+        <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
           {this.getStepFullname(stepId)}
         </text>
       </g>
@@ -765,7 +768,7 @@ export default class StepsTab extends Component {
    * (root) step.
    *
    * @param {number} stepId
-   * @param {number} stepIdx
+   * @param {number} colIdx
    * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {ReactElement}
@@ -773,10 +776,10 @@ export default class StepsTab extends Component {
    * @see renderStartBox
    * @see ROOT_STEP_ID
    */
-  renderBox(stepId, stepIdx, row, rowIdx) {
+  renderBox(stepId, colIdx, row, rowIdx) {
     return (stepId === ROOT_STEP_ID) ?
-      this.renderStartBox(stepId, stepIdx, row, rowIdx) :
-      this.renderDefaultBox(stepId, stepIdx, row, rowIdx);
+      this.renderStartBox(stepId, colIdx, row, rowIdx) :
+      this.renderDefaultBox(stepId, colIdx, row, rowIdx);
   }
 
 
@@ -788,29 +791,32 @@ export default class StepsTab extends Component {
    * boxes. Otherwise, it makes sure the path is perpendicular to x-
    * and y-axis.
    *
-   * @param {StepArgs} a
-   * @param {StepArgs} b
+   * @param {StepArgs} start
+   * @param {StepArgs} end
    * @return {ReactElement}
    * @see getBoxHorizontalCenter
    * @see getBoxVerticalCenter
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  renderPath(a, b) {
-    const aX = this.getBoxHorizontalCenter(a.stepIdx, a.row);
-    const aY = this.getBoxVerticalCenter(a.rowIdx);
+  renderPath(start, end) {
+    const startX = this.getBoxHorizontalCenter(start.colIdx, start.row);
+    const startY = this.getBoxVerticalCenter(start.rowIdx);
 
-    const bX = this.getBoxHorizontalCenter(b.stepIdx, b.row);
-    const bY = this.getBoxVerticalCenter(b.rowIdx);
+    const endX = this.getBoxHorizontalCenter(end.colIdx, end.row);
+    const endY = this.getBoxVerticalCenter(end.rowIdx);
 
-    const jointY = Math.max(aY, bY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2;
+    const joint =
+      Math.max(startY, endY) -
+      this.getBoxHeight() / 2 -
+      BOX_MARGIN / 2;
 
     return (
       <path
-        d={`M${aX},${aY} ` +
-           `L${aX},${jointY} ` +
-           `L${bX},${jointY} ` +
-           `L${bX},${bY}`}
+        d={`M${startX},${startY} ` +
+           `L${startX},${joint} ` +
+           `L${endX},${joint} ` +
+           `L${endX},${endY}`}
         className="diagram__path"
       />
     );
@@ -845,10 +851,10 @@ export default class StepsTab extends Component {
    */
   renderBoxes() {
     return createFragment(
-      this.getFlattenRows().reduce((fs, { stepId, stepIdx, row, rowIdx }) => (
+      this.getFlattenRows().reduce((fs, { stepId, colIdx, row, rowIdx }) => (
         Object.assign(fs, {
           [`b-${this.getStepDomId(stepId)}`]:
-            this.renderBox(stepId, stepIdx, row, rowIdx),
+            this.renderBox(stepId, colIdx, row, rowIdx),
         })
       ), {})
     );
@@ -864,10 +870,10 @@ export default class StepsTab extends Component {
    */
   renderPaths() {
     return createFragment(
-      this.getFlattenDeps().reduce((fs, { a, b }) => (
+      this.getFlattenDeps().reduce((fs, { start, end }) => (
         Object.assign(fs, {
-          [`p-${this.getStepDomId(a.stepId)}+` +
-           `${this.getStepDomId(b.stepId)}`]: this.renderPath(a, b),
+          [`p-${this.getStepDomId(start.stepId)}+` +
+           `${this.getStepDomId(end.stepId)}`]: this.renderPath(start, end),
         })
       ), {})
     );
