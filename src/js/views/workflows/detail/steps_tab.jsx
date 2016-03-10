@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
-import { graph, descendants, ABOVE_MAIN_IDX } from 'lib/graph';
+import { graph } from 'lib/graph';
 
 
 /**
@@ -146,16 +146,14 @@ export default class StepsTab extends Component {
    * @see ROOT_STEP_ID
    */
   getStepDeps(stepId) {
-    const initId = Object.keys(this.props.workflow.steps).
-      find(id => this.props.workflow.steps[id].length === 0);
-
+    const initId = Object.keys(this.props.workflow.steps)[0];
     const deps = Object.assign(
       { [ROOT_STEP_ID]: [] },
       this.props.workflow.steps,
       { [initId]: [ROOT_STEP_ID] }
     );
 
-    return (stepId !== null && typeof stepId !== 'undefined') ?
+    return typeof stepId !== 'undefined' ?
       deps[stepId] :
       deps;
   }
@@ -176,40 +174,46 @@ export default class StepsTab extends Component {
    * @see DIAGRAM_MIN_COLUMNS
    */
   getRows() {
-    const root = graph(this.getStepDeps());
+    const nodes = graph(this.getStepDeps());
 
     const cols = Math.max(
       DIAGRAM_MIN_COLUMNS,
-      root.width % 2 === 0 ? root.width + 1 : root.width,
-    );
+      nodes[0].width
+    ) * 2 - 1;
+
+    const findInRow = (n, aIdx, nrId) => nrId === n.above[aIdx].id;
 
     const rows = [];
-    let lmost = cols;
-    let rmost = 0;
-    const isMainAbove = (n, aboveId) => aboveId === n.above[ABOVE_MAIN_IDX].id;
-    for (const n of descendants(graph(this.getStepDeps()))) {
-      let aboveCol = -1;
-      for (const r of rows.slice().reverse()) {
-        aboveCol = (r || []).findIndex(isMainAbove.bind(this, n));
-        if (aboveCol >= 0) break;
+    for (const id in nodes) {
+      if (!rows[nodes[id].depth]) rows[nodes[id].depth] = new Array(cols);
+
+      const refCols = { min: cols - 1, max: 0 };
+      if (nodes[id].above.length > 0) {
+        let col;
+        for (const r of rows.slice().reverse()) {
+          col = (r || []).findIndex(
+            findInRow.bind(null, nodes[id], 0)
+          );
+          if (col >= 0) break;
+        }
+        refCols.min = col;
+
+        for (const r of rows.slice().reverse()) {
+          col = (r || []).findIndex(
+            findInRow.bind(null, nodes[id], nodes[id].above.length - 1)
+          );
+          if (col >= 0) break;
+        }
+        refCols.max = col;
       }
-      if (aboveCol < 0) aboveCol = Math.ceil(cols / 2) - 1;
 
-      if (!rows[n.depth]) rows[n.depth] = new Array(cols);
+      const refCol = refCols.min + (refCols.max - refCols.min) / 2;
+      const col = refCol + nodes[id].position * nodes[id].width * 2;
 
-      const col = aboveCol + n.position * n.width;
-      rows[n.depth][col] = n.id;
-
-      lmost = Math.min(lmost, col);
-      rmost = Math.max(rmost, col + 1);
+      rows[nodes[id].depth][col] = nodes[id].id;
     }
 
-    if (rmost - lmost < DIAGRAM_MIN_COLUMNS) {
-      lmost -= Math.floor((DIAGRAM_MIN_COLUMNS - rmost + lmost) / 2);
-      rmost += Math.ceil((DIAGRAM_MIN_COLUMNS - rmost + lmost) / 2);
-    }
-
-    return rows.map(r => r.slice(lmost).slice(0, rmost - lmost));
+    return rows;
   }
 
 
@@ -450,7 +454,7 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   getDiagramWidth() {
-    return this.getDiagramColumns() * (
+    return Math.ceil(this.getDiagramColumns() / 2) * (
       this.getBoxWidth() + BOX_MARGIN / 2
     ) + BOX_MARGIN;
   }
