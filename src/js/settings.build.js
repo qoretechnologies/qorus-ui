@@ -18,7 +18,7 @@ define(function () {
       EVENTS_WS_URL: ws_protocol + host + '/apievents',
       DEBUG: false,
       HOST: host,
-      UI_VERSION: "3.1.0"
+      UI_VERSION: "3.0.4.p19"
     };
 
   if (settings.DEBUG && window.console && console.log) {
