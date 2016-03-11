@@ -184,7 +184,8 @@ function findRef(node) {
  * @see setBalancedDepth
  */
 function isRef(node, nodesBelow) {
-  return findRef(nodesBelow[0]) === node;
+  return nodesBelow.length > 0 &&
+    findRef(nodesBelow[0]) === node;
 }
 
 
@@ -293,7 +294,12 @@ function setBalancedWidthAndPosition(nodes) {
 
     const relDepth = tmp[bId].depth - n.depth - 1;
 
-    if (!below[relDepth]) below[relDepth] = [];
+    for (let i = relDepth; i >= 0; i -= 1) {
+      if (below[i]) break;
+
+      below[i] = [];
+    }
+
     below[relDepth].push(bId);
 
     return below;
