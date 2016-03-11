@@ -116,8 +116,10 @@ function add(above, below) {
 /**
  * Sets balanced depth on all nodes in the graph.
  *
- * Nodes on the same depth always share the same nodes above. The root
- * node which has no nodes above has depth of zero.
+ * Nodes on the same depth always share the same nodes above. Other
+ * nodes can be on that depth level too if they do not share any other
+ * node above - i.e., there are no conflicts. The root node which has
+ * no nodes above has depth of zero.
  *
  * @param {!Object<number, !TempGraphNode>} nodes
  * @return {!Object<number, !TempGraphNode>}
@@ -129,18 +131,32 @@ function setBalancedDepth(nodes) {
     n.above.length === tmp[bId].above.length &&
     n.above.every((na, i) => na === tmp[bId].above[i])
   );
-  const nextDepth = (bs, d, bId) => (
-    Math.max(d, balanced[bId].depth + 1)
+  const isKnown = (tmp, aId) => (
+    tmp[aId].below.some(bId => bId in tmp)
+  );
+  const nextDepth = (tmp, d, bId) => (
+    Math.max(d, tmp[bId].depth + 1)
   );
 
   for (const id in nodes) { // eslint-disable-line guard-for-in
+    let depth;
+
     const commonId = Object.keys(balanced).reverse().find(
       nodesAboveEql.bind(null, nodes[id], balanced)
     );
+    depth = balanced[commonId] && balanced[commonId].depth;
 
-    const depth = balanced[commonId] ?
-      balanced[commonId].depth :
-      Object.keys(balanced).reduce(nextDepth.bind(null, balanced), 0);
+    if (!depth && !nodes[id].above.some(isKnown.bind(null, balanced))) {
+      depth = nodes[id].above.reduce(
+        nextDepth.bind(null, balanced), 0
+      );
+    }
+
+    if (!depth) {
+      depth = Object.keys(balanced).reduce(
+        nextDepth.bind(null, balanced), 0
+      );
+    }
 
     balanced[id] = Object.assign({}, nodes[id], { depth });
   }

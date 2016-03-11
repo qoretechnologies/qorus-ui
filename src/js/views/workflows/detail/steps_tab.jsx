@@ -181,33 +181,31 @@ export default class StepsTab extends Component {
       nodes[0].width
     ) * 2 - 1;
 
-    const findInRow = (n, aIdx, nrId) => nrId === n.above[aIdx].id;
-
     const rows = [];
     for (const id in nodes) {
       if (!rows[nodes[id].depth]) rows[nodes[id].depth] = new Array(cols);
 
-      const refCols = { min: cols - 1, max: 0 };
-      if (nodes[id].above.length > 0) {
-        let col;
+      let refColMin = cols - 1;
+      for (const na of nodes[id].above) {
+        let col = -1;
         for (const r of rows.slice().reverse()) {
-          col = (r || []).findIndex(
-            findInRow.bind(null, nodes[id], 0)
-          );
+          col = (r || []).indexOf(na.id);
           if (col >= 0) break;
         }
-        refCols.min = col;
-
-        for (const r of rows.slice().reverse()) {
-          col = (r || []).findIndex(
-            findInRow.bind(null, nodes[id], nodes[id].above.length - 1)
-          );
-          if (col >= 0) break;
-        }
-        refCols.max = col;
+        refColMin = Math.min(refColMin, col);
       }
 
-      const refCol = refCols.min + (refCols.max - refCols.min) / 2;
+      let refColMax = 0;
+      for (const na of nodes[id].above) {
+        let col = -1;
+        for (const r of rows.slice().reverse()) {
+          col = (r || []).indexOf(na.id);
+          if (col >= 0) break;
+        }
+        refColMax = Math.max(refColMax, col);
+      }
+
+      const refCol = refColMin + (refColMax - refColMin) / 2;
       const col = refCol + nodes[id].position * nodes[id].width * 2;
 
       rows[nodes[id].depth][col] = nodes[id].id;
