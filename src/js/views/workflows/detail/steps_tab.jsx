@@ -178,15 +178,15 @@ export default class StepsTab extends Component {
 
     const cols = Math.max(
       DIAGRAM_MIN_COLUMNS,
-      nodes[ROOT_STEP_ID].width
+      nodes.get(ROOT_STEP_ID).width
     ) * 2 - 1;
 
     const rows = [];
-    for (const id in nodes) {
-      if (!rows[nodes[id].depth]) rows[nodes[id].depth] = new Array(cols);
+    for (const [id, n] of nodes) {
+      if (!rows[n.depth]) rows[n.depth] = new Array(cols);
 
       let refColMin = cols - 1;
-      for (const na of nodes[id].above) {
+      for (const na of n.above) {
         let col = -1;
         for (const r of rows.slice().reverse()) {
           col = (r || []).indexOf(na.id);
@@ -196,7 +196,7 @@ export default class StepsTab extends Component {
       }
 
       let refColMax = 0;
-      for (const na of nodes[id].above) {
+      for (const na of n.above) {
         let col = -1;
         for (const r of rows.slice().reverse()) {
           col = (r || []).indexOf(na.id);
@@ -206,9 +206,9 @@ export default class StepsTab extends Component {
       }
 
       const refCol = refColMin + (refColMax - refColMin) / 2;
-      const col = refCol + nodes[id].position * nodes[id].width * 2;
+      const col = refCol + n.position * n.width * 2;
 
-      rows[nodes[id].depth][col] = nodes[id].id;
+      rows[n.depth][col] = id;
     }
 
     return rows;

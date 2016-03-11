@@ -78,6 +78,28 @@ function createComparator(dir) {
 
 
 /**
+ * Returns new dependency map with dependencies declared before used.
+ *
+ * @param {!Object<number, !Array<number>>} deps
+ * @return {!Map<number, !Array<number>>}
+ */
+function normalize(deps) {
+  function ensureSafeSet(map, id) {
+    if (map.has(id)) return;
+
+    deps[id].forEach(dId => ensureSafeSet(map, dId));
+    map.set(id, deps[id].slice());
+  }
+
+  return Object.keys(deps).reduce((map, id) => {
+    ensureSafeSet(map, parseInt(id, 10));
+
+    return map;
+  }, new Map());
+}
+
+
+/**
  * Initializes node structure.
  *
  * @param {number} id
@@ -121,44 +143,44 @@ function add(above, below) {
  * node above - i.e., there are no conflicts. The root node which has
  * no nodes above has depth of zero.
  *
- * @param {!Object<number, !TempGraphNode>} nodes
- * @return {!Object<number, !TempGraphNode>}
+ * @param {!Map<number, !TempGraphNode>} nodes
+ * @return {!Map<number, !TempGraphNode>}
  */
 function setBalancedDepth(nodes) {
-  const balanced = Object.create(null);
+  const balanced = new Map();
 
   const nodesAboveEql = (n, tmp, bId) => (
-    n.above.length === tmp[bId].above.length &&
-    n.above.every((na, i) => na === tmp[bId].above[i])
+    n.above.length === tmp.get(bId).above.length &&
+    n.above.every((na, i) => na === tmp.get(bId).above[i])
   );
   const isKnown = (tmp, aId) => (
-    tmp[aId].below.some(bId => bId in tmp)
+    tmp.get(aId).below.some(bId => tmp.has(bId))
   );
   const nextDepth = (tmp, d, bId) => (
-    Math.max(d, tmp[bId].depth + 1)
+    Math.max(d, tmp.get(bId).depth + 1)
   );
 
-  for (const id in nodes) { // eslint-disable-line guard-for-in
+  for (const [id, n] of nodes) {
     let depth;
 
-    const commonId = Object.keys(balanced).reverse().find(
-      nodesAboveEql.bind(null, nodes[id], balanced)
+    const commonId = [...balanced.keys()].reverse().find(
+      nodesAboveEql.bind(null, n, balanced)
     );
-    depth = balanced[commonId] && balanced[commonId].depth;
+    depth = balanced.has(commonId) && balanced.get(commonId).depth;
 
-    if (!depth && !nodes[id].above.some(isKnown.bind(null, balanced))) {
-      depth = nodes[id].above.reduce(
+    if (!depth && !n.above.some(isKnown.bind(null, balanced))) {
+      depth = n.above.reduce(
         nextDepth.bind(null, balanced), 0
       );
     }
 
     if (!depth) {
-      depth = Object.keys(balanced).reduce(
+      depth = [...balanced.keys()].reduce(
         nextDepth.bind(null, balanced), 0
       );
     }
 
-    balanced[id] = Object.assign({}, nodes[id], { depth });
+    balanced.set(id, Object.assign({}, n, { depth }));
   }
 
   return balanced;
@@ -255,20 +277,21 @@ function getPosition(node) {
  * nodes above has a weight of their own plus sum of weights of their
  * nodes below divided by number of those nodes' nodes above.
  *
- * @param {!Object<number, !TempGraphNode>} node
- * @return {!Object<number, !TempGraphNode>}
+ * @param {!Map<number, !TempGraphNode>} node
+ * @return {!Map<number, !TempGraphNode>}
  */
 function setBalancedWeight(nodes) {
-  const balanced = Object.create(null);
+  const balanced = new Map();
 
-  for (const id of Object.keys(nodes).reverse()) {
-    balanced[id] = Object.assign({}, nodes[id]);
-    for (const bId of balanced[id].below) {
-      balanced[id].weight += balanced[bId].weight / balanced[bId].above.length;
+  for (const [id, n] of [...nodes.entries()].reverse()) {
+    balanced.set(id, Object.assign({}, n));
+    for (const bId of balanced.get(id).below) {
+      balanced.get(id).weight +=
+        balanced.get(bId).weight / balanced.get(bId).above.length;
     }
   }
 
-  return balanced;
+  return new Map([...balanced.entries()].reverse());
 }
 
 
@@ -294,21 +317,21 @@ function centerNodes(nodes) {
  * Nodes above and below are transformed so that they comply with
  * {@link GraphNode} contract. Then, width and position is computed.
  *
- * @param {!Object<number, !TempGraphNode>} node
- * @return {!Object<number, !GraphNode>}
+ * @param {!Map<number, !TempGraphNode>} node
+ * @return {!Map<number, !GraphNode>}
  * @see centerNodes
  * @see getWidth
  * @see getPosition
  */
 function setBalancedWidthAndPosition(nodes) {
-  const balanced = Object.create(null);
+  const balanced = new Map();
 
-  const toExport = (exported, id) => exported[id];
+  const toExport = (exported, id) => exported.get(id);
 
   const divideByDepth = (n, tmp, b, bId) => {
     const below = b.slice();
 
-    const relDepth = tmp[bId].depth - n.depth - 1;
+    const relDepth = tmp.get(bId).depth - n.depth - 1;
 
     for (let i = relDepth; i >= 0; i -= 1) {
       if (below[i]) break;
@@ -321,37 +344,37 @@ function setBalancedWidthAndPosition(nodes) {
     return below;
   };
 
-  for (const id in nodes) { // eslint-disable-line guard-for-in
-    balanced[id] = Object.assign({}, nodes[id]);
+  for (const [id, n] of nodes) {
+    balanced.set(id, Object.assign({}, n));
 
-    balanced[id].above = centerNodes(
-      balanced[id].above.map(toExport.bind(null, balanced))
+    balanced.get(id).above = centerNodes(
+      balanced.get(id).above.map(toExport.bind(null, balanced))
     );
 
-    balanced[id].below = nodes[id].below.reduce(
-      divideByDepth.bind(null, nodes[id], nodes),
+    balanced.get(id).below = n.below.reduce(
+      divideByDepth.bind(null, n, nodes),
       []
     );
 
-    balanced[id].width = 1;
+    balanced.get(id).width = 1;
   }
 
   const belowToExport = (tmp, bIds) => (
     centerNodes(bIds.map(toExport.bind(null, tmp)))
   );
 
-  for (const id in balanced) { // eslint-disable-line guard-for-in
-    balanced[id].below = balanced[id].below.map(
+  for (const n of balanced.values()) {
+    n.below = n.below.map(
       belowToExport.bind(null, balanced)
     );
   }
 
-  for (const id of Object.keys(balanced).reverse()) {
-    balanced[id].width = getWidth(balanced[id]);
+  for (const n of [...balanced.values()].reverse()) {
+    n.width = getWidth(n);
   }
 
-  for (const id in balanced) { // eslint-disable-line guard-for-in
-    balanced[id].position = getPosition(balanced[id]);
+  for (const n of balanced.values()) {
+    n.position = getPosition(n);
   }
 
   return balanced;
@@ -392,32 +415,23 @@ function balance(nodes) {
  * It is expected that given dependency map does not contain any
  * cycles but no attempt to detect them is made.
  *
- * The implementation also relies on the fact that Object properties
- * with string names are ordered. This is a safe bet against
- * ECMAScript spec because many popular libraries and frameworks work
- * with this assumption which is true from all key
- * ECMAScript/JavaScript implementations.
- *
  * @param {!Object<number, !Array<number>>} deps
- * @return {!Object<number, !GraphNode>}
+ * @return {!Map<number, !GraphNode>}
  * @see balance
  */
 export function graph(deps) {
-  const nodes = Object.create(null);
+  const normalized = normalize(deps);
+  const nodes = new Map();
 
-  for (const id in deps) {
-    if (!deps.hasOwnProperty(id)) continue;
-
-    nodes[id] = create(parseInt(id, 10));
+  for (const id of normalized.keys()) {
+    nodes.set(id, create(id));
   }
 
-  for (const id in deps) {
-    if (!deps.hasOwnProperty(id)) continue;
-
-    for (const depId of deps[id]) {
-      const [above, below] = add(nodes[depId], nodes[id]);
-      nodes[above.id] = above;
-      nodes[below.id] = below;
+  for (const [id, ds] of normalized) {
+    for (const depId of ds) {
+      const [above, below] = add(nodes.get(depId), nodes.get(id));
+      nodes.set(above.id, above);
+      nodes.set(below.id, below);
     }
   }
 
