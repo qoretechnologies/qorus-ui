@@ -178,7 +178,7 @@ export default class StepsTab extends Component {
 
     const cols = Math.max(
       DIAGRAM_MIN_COLUMNS,
-      nodes[0].width
+      nodes[ROOT_STEP_ID].width
     ) * 2 - 1;
 
     const rows = [];
@@ -453,7 +453,7 @@ export default class StepsTab extends Component {
    */
   getDiagramWidth() {
     return Math.ceil(this.getDiagramColumns() / 2) * (
-      this.getBoxWidth() + BOX_MARGIN / 2
+      this.getBoxWidth() + BOX_MARGIN
     ) + BOX_MARGIN;
   }
 
@@ -489,9 +489,9 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   getBoxHorizontalCenter(colIdx, row) {
-    const hSpace = this.getDiagramWidth() / row.length;
+    const hSpace = (this.getBoxWidth() + BOX_MARGIN) / 2;
 
-    return BOX_MARGIN / 2 + hSpace * colIdx + hSpace / 2;
+    return (colIdx + 1) * hSpace;
   }
 
 
