@@ -483,12 +483,11 @@ export default class StepsTab extends Component {
    * same amount of space each.
    *
    * @param {number} colIdx
-   * @param {Array<number>} row
    * @return {number}
    * @see getDiagramWidth
    * @see BOX_MARGIN
    */
-  getBoxHorizontalCenter(colIdx, row) {
+  getBoxHorizontalCenter(colIdx) {
     const hSpace = (this.getBoxWidth() + BOX_MARGIN) / 2;
 
     return (colIdx + 1) * hSpace;
@@ -516,13 +515,12 @@ export default class StepsTab extends Component {
    * Returns top coordinate of a box.
    *
    * @param {number} colIdx
-   * @param {Array<number>} row
    * @return {number}
    * @see getBoxHorizontalCenter
    * @see getBoxWidth
    */
-  getBoxTopCoord(colIdx, row) {
-    return this.getBoxHorizontalCenter(colIdx, row) - this.getBoxWidth() / 2;
+  getBoxTopCoord(colIdx) {
+    return this.getBoxHorizontalCenter(colIdx) - this.getBoxWidth() / 2;
   }
 
 
@@ -609,15 +607,14 @@ export default class StepsTab extends Component {
    * Returns translate spec for transform attribute of a box.
    *
    * @param {number} colIdx
-   * @param {Array<number>} row
    * @param {number} rowIdx
    * @return {string}
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform(colIdx, row, rowIdx) {
+  getBoxTransform(colIdx, rowIdx) {
     return 'translate(' +
-      `${this.getBoxTopCoord(colIdx, row)} ` +
+      `${this.getBoxTopCoord(colIdx)} ` +
       `${this.getBoxLeftCoord(rowIdx)}` +
     ')';
   }
@@ -667,7 +664,7 @@ export default class StepsTab extends Component {
     return (
       <g
         className="diagram__box diagram__box--start"
-        transform={this.getBoxTransform(colIdx, row, rowIdx)}
+        transform={this.getBoxTransform(colIdx, rowIdx)}
       >
         <ellipse {...this.getStartParams()} />
         <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
@@ -732,7 +729,7 @@ export default class StepsTab extends Component {
           diagram__box: true,
           [`diagram__box--${type.toLowerCase()}`]: type,
         })}
-        transform={this.getBoxTransform(colIdx, row, rowIdx)}
+        transform={this.getBoxTransform(colIdx, rowIdx)}
         onClick={onClick}
       >
         <rect {...this.getDefaultParams()} />
@@ -802,10 +799,10 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   renderPath(start, end) {
-    const startX = this.getBoxHorizontalCenter(start.colIdx, start.row);
+    const startX = this.getBoxHorizontalCenter(start.colIdx);
     const startY = this.getBoxVerticalCenter(start.rowIdx);
 
-    const endX = this.getBoxHorizontalCenter(end.colIdx, end.row);
+    const endX = this.getBoxHorizontalCenter(end.colIdx);
     const endY = this.getBoxVerticalCenter(end.rowIdx);
 
     const joint =
