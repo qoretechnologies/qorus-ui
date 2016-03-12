@@ -1,9 +1,6 @@
 # Build
 node_modules
-dist/
-src/components
-src/css/components.min.css
-src/js/main.build.js
+dist
 
 # Tools
 .idea
