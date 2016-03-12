@@ -2,3 +2,7 @@
 env:
   browser: true
   node: false
+rules:
+  strict:
+    - 2
+    - never

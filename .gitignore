@@ -5,9 +5,6 @@ src/components
 src/css/components.min.css
 src/js/main.build.js
 
-# Personalization
-.*.webpack.config.js
-
 # Tools
 .idea
 .nfs*

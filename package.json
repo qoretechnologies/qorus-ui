@@ -79,6 +79,6 @@
     "test": "NODE_ENV=test babel-node `which babel-istanbul` test _mocha -- test/**/*.spec.{js,jsx}",
     "mocha": "NODE_ENV=test mocha --watch --reporter min --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
     "coveralls": "babel-node `which babel-istanbul` cover _mocha --report lcovonly -- test/**/*spec.{js,jsx} && cat coverage/lcov.info | coveralls && rm -rf coverage",
-    "eslint": "eslint --ext .js --ext .jsx src test webpack.config.js .*.webpack.config.js"
+    "eslint": "eslint --ext .js --ext .jsx src test webpack.config webpack.config.js"
   }
 }
