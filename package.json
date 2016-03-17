@@ -2,7 +2,8 @@
   "name": "qorus-web-app",
   "description": "Qorus Web app interface",
   "author": "Petr Chalupny <petr.chalupny@qoretechnologies.com>",
-  "version": "0.9.1",
+  "version": "3.0.4",
+  "qorus-version": "3.0.4.p15.gui.p1",
   "main": "Gruntfile.js",
   "dependencies": {
     "colors": "^1.1.2",
