@@ -141,6 +141,7 @@ define(function (require) {
 
       this.listenToOnce(this.collection.superset(), 'sync', this.triggerRowClick);
       this.processPath(this.opts.path);
+      this.on('postrender', this.applySearch);
     },
 
     onProcessPath: function (path) {
@@ -162,10 +163,10 @@ define(function (require) {
         collection.filterBy('running-last', function (m) {
           var last = _(collection.superset().models)
             .filter(function (i) { return i.get('name') === m.get('name'); })
-            .sortBy(function (n) { return n.get('version'); })
+            .sortBy(function (n) { return parseFloat(n.get('version')); })
             .last();
 
-          return m.get('exec_count') > 0 || m.get('id') === last.get('id');
+          return m.get('exec_count') > 0 && m.id === last.id;
         });
       } else if (this.opts.running) {
         collection.filterBy('running', function (m) {
@@ -175,7 +176,7 @@ define(function (require) {
         collection.filterBy('last', function (m) {
           var last = _(collection.superset().models)
             .filter(function (i) { return i.get('name') === m.get('name'); })
-            .sortBy(function (n) { return n.get('version'); })
+            .sortBy(function (n) { return parseFloat(n.get('version')); })
             .last();
 
           return m.id === last.id;
@@ -206,10 +207,15 @@ define(function (require) {
         deprecated: this.opts.deprecated,
         collection: collection,
         running: this.opts.running,
-        last: this.opts.last
+        last: this.opts.last,
+        query: this.opts.query
       }), '.toolbar');
-    },
 
+      toolbar.listenTo(this, 'search', function (opts) {
+        _.extend(toolbar.options, { query: opts.query});
+        // _.extend(toolbar.context, { query: opts.query});
+      });
+    },
 
     // edit action with Modal window form
     openModal: function (e) {

@@ -26,7 +26,8 @@ requirejs.config({
       "parallel": "libs/parallel",
       "settings": "settings.build",
       "prism": "libs/prism/prism",
-      "_lodash": "libs/lodash.3.10"
+      "_lodash": "libs/lodash.3.10",
+      "thenby": "libs/thenBy"
     },
     wrapShim: true,
     shim: {

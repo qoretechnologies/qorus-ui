@@ -9,6 +9,7 @@ define(function (require) {
       utils           = require('utils'),
       Views           = require('qorus/views'),
       moment          = require('moment'),
+      firstBy         = require('thenby'),
       Qorus           = {},
       setNested, prep;
 
@@ -333,24 +334,35 @@ define(function (require) {
       this.sort_history = this.opts.sort_history || this.sort_history;
     },
 
-    comparator: function (c1, c2) {
-      // needs speed improvements
-      var k10 = prep(c1.get(this.sort_key)),
-          k20 = prep(c2.get(this.sort_key)),
-          r   = 1,
-          k11, k21;
+    comparator: true,
 
-      if (this.sort_order === 'des') r = -1;
+    sort: function (options) {
+      options || (options = {});
 
-      if (k10 < k20) return -1 * r;
-      if (k10 > k20) return 1 * r;
+      var ord = 1,
+          key = this.sort_key,
+          pkey,
+          pord;
 
-      k11 = prep(c1.get(this.sort_history[0]));
-      k21 = prep(c2.get(this.sort_history[0]));
+      if (this.sort_order === 'des') ord = -1;
 
-      if (k11 > k21) return -1 * r;
-      if (k11 < k21) return 1 * r;
-      return 0;
+      var pkey = _.find(this.sort_history, function (k) { var ptr = new RegExp("-?" + key); return !ptr.test(k); });
+
+      if (pkey) {
+        pord = pkey.startsWith('-') ? -1 : 1;
+      }
+
+      if (pord == -1) pkey = pkey.slice(1);
+
+      // console.log('sorting', this.models[0].attributes, key, pkey, ord, pord);
+
+      this.models.sort(
+        firstBy(function (c1) { return c1.get(key); }, ord)
+        .thenBy(function (c1) { return c1.get(pkey); }, pord)
+      );
+
+      if (!options.silent) this.trigger('sort', this, options);
+      return this;
     },
 
     // comparator: function (m) {

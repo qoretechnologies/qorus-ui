@@ -9,33 +9,33 @@ define(function (require) {
       Tree          = require('qorus/tree'),
       Notifications = require('collections/notifications'),
       Model;
-  
+
   require('sprintf');
-  
+
   var STATUS_PRIORITY = [
+    'COMPLETE',
+    'ERROR',
+    'RETRY',
     'EVENT-WAITING',
     'WAITING',
     'ASYNC-WAITING',
-    'RETRY',
-    'ERROR',
-    'COMPLETE',
-    'IN-PROGRESS' 
+    'IN-PROGRESS'
   ];
-  
+
   Model = Qorus.Model.extend({
     __name__: "OrderModel",
     urlRoot: settings.REST_API_PREFIX + '/orders/',
     idAttribute: "workflow_instanceid",
-    
+
     defaults: {
       'note_count': 0,
       'started': moment().format(settings.DATE_DISPLAY)
     },
-    
+
     /** list of allowed actions */
     allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
-    dateAttributes: ['started', 'completed', 'modified', 
-      'HierarchyInfo.completed', 
+    dateAttributes: ['started', 'completed', 'modified',
+      'HierarchyInfo.completed',
       'HierarchyInfo.modified',
       'HierarchyInfo.started',
       'ErrorInstances.created',
@@ -51,7 +51,7 @@ define(function (require) {
       'notes.created',
       'notes.modified'
     ],
-    
+
     api_events_list: [
       "order:%(id)s:data_locked",
       "order:%(id)s:data_unlocked",
@@ -64,18 +64,18 @@ define(function (require) {
       @constructs
       @param {Object} [opts]
     */
-    initialize: function (opts){      
+    initialize: function (opts){
       // set id if in opts
       if (opts.id){
         this.id = opts.id;
         delete opts.id;
       }
-      
+
       Model.__super__.initialize.call(this, opts);
-      
+
       this.listenTo(Dispatcher, this.api_events, this.dispatch);
     },
-    
+
     /**
       Dispatching events for model
       @param {Object} e
@@ -92,7 +92,7 @@ define(function (require) {
           var notes = this.get('notes') || [];
           var note_count = this.get('note_count');
           var info = e.info.info;
-          info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY); 
+          info.created = moment(info.created, settings.DATE_FORMAT).format(settings.DATE_DISPLAY);
           info.modified = info.created;
           notes.unshift(info);
           this.set({ notes: notes, note_count: note_count+1 });
@@ -113,7 +113,7 @@ define(function (require) {
         this.trigger('change', this);
       }
     },
-    
+
     /**
       Parses the API response
       @param {Object} response
@@ -125,7 +125,7 @@ define(function (require) {
       _.each(response.ErrorInstances, function (err) {
         // is it safe?
         if (err.info) {
-          err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\""); 
+          err.info = err.info.replace(/\\n/g, "\n").replace(/\\"/g, "\"");
         }
       });
 
@@ -133,26 +133,26 @@ define(function (require) {
       _.each(response.StepInstances, function (step) {
         var name = step.stepname;
         var group = step_groups[name] = step_groups[name] || { steps: [], name: name, status: null };
-        
+
         group.steps.push(step);
-        
+
         var max = Math.max(_.indexOf(STATUS_PRIORITY, group.status), _.indexOf(STATUS_PRIORITY, step.stepstatus));
-        
+
         group.status = STATUS_PRIORITY[max];
-        
+
       });
       response.StepInstances = _.sortBy(response.StepInstances, 'started');
       response.step_groups = step_groups;
       response.actions = _.map(response.actions, function (action) { return action.toLowerCase(); });
-      
+
       // create Hierarchy Tree from Hierarchy Info
       response.hierarchy_tree = Tree.createTree(response.HierarchyInfo, 'parent_workflow_instanceid');
-      
+
       response = Model.__super__.parse.call(this, response, options);
-      
+
       return response;
     },
-    
+
     /**
       Executes the action on model and calls REST api
       @param {String} action
@@ -162,10 +162,10 @@ define(function (require) {
     doAction: function(action, opts, callback){
       opts        = opts || {};
       opts.action = action;
-      
+
       var url = helpers.getUrl('showWorkflow', { id: this.id }),
           self = this;
-      
+
 
       if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
         $.put(this.url(), opts)
@@ -182,10 +182,10 @@ define(function (require) {
             if (_.isFunction(callback)) {
               callback(false);
             }
-          });     
+          });
       }
     },
-    
+
     /**
       Gets Step name form StepInstances
       @param {Number|String} id Step ID
@@ -196,14 +196,14 @@ define(function (require) {
         if (s.stepid == id)
           return s;
       });
-      
+
       if (steps.length > 0) {
-        return steps[0].stepname; 
+        return steps[0].stepname;
       } else {
         return id;
-      } 
+      }
     },
-    
+
     /**
       Add note to the order and calls REST API
       @param {String} note
@@ -214,16 +214,16 @@ define(function (require) {
         note: note
       });
     },
-    
+
     update: function (note) {},
-    
+
     /**
       Triggers remove event
     */
     destroy: function () {
       this.trigger('remove');
     }
-    
+
   });
   return Model;
 });

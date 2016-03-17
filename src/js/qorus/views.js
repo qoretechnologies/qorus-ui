@@ -14,6 +14,7 @@ define(function (require) {
       LoadingDataTpl  = require('tpl!templates/common/loadingdata.html'),
       Helpers         = require('qorus/helpers'),
       moment          = require('moment'),
+      firstBy         = require('thenby'),
       // Filtered    = require('backbone.filtered.collection'),
       LoaderView, View, ListView, TableView, RowView,
       TableAutoView, ServiceView, PluginView, CollectionView,
@@ -731,21 +732,23 @@ define(function (require) {
       var $target = $(e.currentTarget);
       var data = e.currentTarget.dataset;
 
-      if (data.action && data.action != 'open' && data.action !== 'execute') {
-        if (data.id == 'selected') {
-          this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
-        } else if (data.id) {
-          if (!$target.hasClass('action-modal')) {
-            debug.log("data action", data.id, data.action);
-            // $target.text(data.msg.toUpperCase());
-            var inst = this.collection.get(data.id);
-            inst.doAction(data.action, data);
+      if (!e.isDefaultPrevented()) {
+        if (data.action && data.action != 'open' && data.action !== 'execute') {
+          if (data.id == 'selected') {
+            this.runBatchAction(data.action, data.method, _.omit(data, 'action', 'method', 'id'));
+          } else if (data.id) {
+            if (!$target.hasClass('action-modal')) {
+              debug.log("data action", data.id, data.action);
+              // $target.text(data.msg.toUpperCase());
+              var inst = this.collection.get(data.id);
+              inst.doAction(data.action, data);
+            }
           }
+        } else if (data.action == 'open') {
+          this.openURL($target.data('url') || $target.attr('href'));
         }
-      } else if (data.action == 'open') {
-        this.openURL($target.data('url') || $target.attr('href'));
+        e.preventDefault();
       }
-      e.preventDefault();
     },
 
     search: function (e) {
@@ -782,6 +785,8 @@ define(function (require) {
 
       if (query)
         Backbone.history.navigate(url);
+
+      this.trigger('search',  { query: query });
     },
 
     openURL: function (url) {
@@ -1043,17 +1048,17 @@ define(function (require) {
       var currentUser = Helpers.user;
 
       if (el.data('sort')) {
-        var collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection,
+        var pre_key,
+            collection = (this.collection instanceof Filtered) ? this.collection.superset() : this.collection,
             key      = el.data('sort'),
             order    = el.attr('data-order') || collection.sort_order,
-            prev_key = this.collection.sort_key,
             views    = this.getView('tbody');
 
+        collection.sort_history.unshift((collection.sort_order == 'asc') ? collection.sort_key : '-' + collection.sort_key);
+        prev_key = _.find(collection.sort_history, function (k) { var ptr = new RegExp("-?" + key); return !ptr.test(k); }),
 
         collection.sort_order = order;
         collection.sort_key = key;
-        if (collection.sort_history) collection.sort_history.push(prev_key);
-
 
         if (collection.prefKey) {
           var pref = {
@@ -1065,26 +1070,47 @@ define(function (require) {
           currentUser.setPreferences(collection.prefKey + '.sorting', pref);
         }
 
-        views = views.sort(function (c1, c2) {
-          // needs speed improvements
-          var k10 = utils.prep(c1.model.get(key)),
-              k20 = utils.prep(c2.model.get(key)),
-              r   = 1,
-              k11, k21;
+        // views = views.sort(function (c1, c2) {
+        //   // needs speed improvements
+        //   var pkey;
+        //   var k10 = utils.prep(c1.model.get(key)),
+        //       k20 = utils.prep(c2.model.get(key)),
+        //       r   = 1,
+        //       k11, k21;
+        //
+        //   if (order === 'des') r = -1;
+        //
+        //   if (k10 < k20) return -1 * r;
+        //   if (k10 > k20) return 1 * r;
+        //
+        //   var des = false;
+        //
+        //   if (prev_key.startsWith('-')) {
+        //     pkey = prev_key.slice(1);
+        //     des = true;
+        //     r = -1;
+        //   } else {
+        //     pkey = prev_key;
+        //     r = 1;
+        //   }
+        //
+        //   k11 = utils.prep(c1.model.get(pkey), des);
+        //   k21 = utils.prep(c2.model.get(pkey), des);
+        //
+        //   // console.log(k11, k21, des);
+        //
+        //   if (k11 > k21) return -1 * r;
+        //   if (k11 < k21) return 1 * r;
+        //   return 0;
+        // });
 
-          if (order === 'des') r = -1;
+        var pkey = prev_key.startsWith('-') ? prev_key.slice(1) : prev_key;
+        var pord = prev_key.startsWith('-') ? -1 : 1;
 
-          if (k10 < k20) return -1 * r;
-          if (k10 > k20) return 1 * r;
-
-          k11 = utils.prep(c1.model.get(prev_key));
-          k21 = utils.prep(c2.model.get(prev_key));
-
-          if (k11 > k21) return -1 * r;
-          if (k11 < k21) return 1 * r;
-          return 0;
-        });
-
+        views = views.sort(
+          firstBy(function (v) { return v.model.get(key); }, (order == 'asc') ? 1 : -1)
+          .thenBy(function (v) { return v.model.get(pkey); }, pord)
+        );
 
         // cleaning the view the dirty way
         var tbody = this.$('tbody').get(0);

@@ -140,10 +140,10 @@ define(function(require) {
 
     showDropdown: function (e) {
       var tpl      = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" +
-                     " data-action = 'show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
+                     " data-action = 'show-detail' data-ind='<%= step.ind %>'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
           $target  = $(e.currentTarget),
           stepname = this.order_model.getStepName($target.data('id')),
-          step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
+          step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname }).value();
 
       this.hideDropdown();
 
@@ -341,6 +341,7 @@ define(function(require) {
     showDetail: function (e) {
       var $target = $(e.currentTarget),
           stepid  = $target.data('id'),
+          indid = $target.data('ind'),
           instances = this.model.get('StepInstances'),
           step;
 
@@ -349,7 +350,12 @@ define(function(require) {
       // exit when click is made on diagram start - no step detail available
       if ($target.hasClass('start')) return;
 
-      step   = _.findWhere(instances, { stepid: stepid });
+      if (indid) {
+        step = _.findWhere(instances, { stepid: stepid, ind: indid });
+      } else {
+        step = _.findWhere(instances, { stepid: stepid });
+      }
+
 
       this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
       this.setView(new StepErrorsView({ model: this.model, stepid: stepid }), '#step-errors', true).render();

@@ -25,6 +25,11 @@ define(function (require) {
 
     route: 'showWorkflows',
 
+    additionalEvents: {
+      "click button[data-action]": 'applyFilter',
+      "click a[data-action]": 'applyFilter'
+    },
+
     initialize: function (opts) {
       _.bindAll(this);
       Toolbar.__super__.initialize.call(this, opts);
@@ -34,10 +39,35 @@ define(function (require) {
       this.setView(new CopyView({ csv_options: csv_options }), '#table-copy');
     },
 
+    applyFilter: function (e) {
+      var url;
+      var params = _.pick(this.options, ['deprecated', 'running', 'last', 'query']);
+      var $target = $(e.target);
+      var filter = $target.attr('data-option');
+
+      if (_.indexOf(filter, '=') >= 0) {
+        var df = filter.split('=');
+        params[df[0]] = df[1];
+      } else {
+        params[filter] = !this.options[filter];
+      }
+
+      url = this.setUrl(params);
+
+      Backbone.history.navigate(url, { trigger: true });
+
+      e.preventDefault();
+
+      if ($target.tagName == 'a') {
+        $target.parent().removeClass('open');
+        e.stopPropagation();
+      }
+    },
+
     setUrl: function (params) {
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
-      var date = (parts.length === 2) ? parts[1] : '24h';
+      var date = (parts.length > 2) ? parts[1] : '24h';
       var url;
 
       var filters = [];
@@ -59,6 +89,10 @@ define(function (require) {
       }
 
       url = [parts[0], date, filters.join(',')].join('/');
+
+      if (params.query) {
+        url += '?q=' + params.query;
+      }
 
       return url;
     }
