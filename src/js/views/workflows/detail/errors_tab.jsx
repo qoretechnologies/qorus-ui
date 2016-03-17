@@ -3,7 +3,7 @@ import ErrorsTable from './errors_table';
 
 
 import { pureRender } from 'components/utils';
-import apiActions from 'store/api/actions';
+import actions from 'store/api/actions';
 
 
 @pureRender
@@ -31,21 +31,21 @@ export default class ErrorsTab extends Component {
 
   clone(err) {
     this.context.dispatch(
-      apiActions.errors.create(`workflow/${this.props.workflow.id}`, err)
+      actions.errors.create(`workflow/${this.props.workflow.id}`, err)
     );
   }
 
 
   update(err) {
     this.context.dispatch(
-      apiActions.errors.update(`workflow/${this.props.workflow.id}`, err)
+      actions.errors.update(`workflow/${this.props.workflow.id}`, err)
     );
   }
 
 
   remove(err) {
     this.context.dispatch(
-      apiActions.errors.remove(`workflow/${this.props.workflow.id}`, err)
+      actions.errors.remove(`workflow/${this.props.workflow.id}`, err)
     );
   }
 

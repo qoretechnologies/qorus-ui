@@ -8,7 +8,7 @@ import InfoTable from 'components/info_table';
 import SourceCode from 'components/source_code';
 
 
-import apiActions from 'store/api/actions';
+import actions from 'store/api/actions';
 
 
 import _ from 'lodash';
@@ -19,7 +19,7 @@ import { bindActionCreators } from 'redux';
 @connect(
   (state, props) => ({ step: state.api.steps.data[props.id] }),
   dispatch => bindActionCreators({
-    fetchStep: apiActions.steps.fetch,
+    fetchStep: actions.steps.fetch,
   }, dispatch)
 )
 export default class StepModal extends Component {

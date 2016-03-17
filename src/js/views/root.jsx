@@ -9,7 +9,7 @@ import Footer from 'components/footer';
 import { Manager as ModalManager } from 'components/modal';
 
 
-import apiActions from 'store/api/actions';
+import actions from 'store/api/actions';
 
 
 const systemSelector = (state) => state.api.system;
@@ -146,10 +146,10 @@ export default class Root extends Component {
    * Fetches data used here or by child components.
    */
   fetchGlobalData() {
-    this.props.dispatch(apiActions.system.fetch());
-    this.props.dispatch(apiActions.systemOptions.fetch());
-    this.props.dispatch(apiActions.currentUser.fetch());
-    this.props.dispatch(apiActions.errors.fetch('global'));
+    this.props.dispatch(actions.system.fetch());
+    this.props.dispatch(actions.systemOptions.fetch());
+    this.props.dispatch(actions.currentUser.fetch());
+    this.props.dispatch(actions.errors.fetch('global'));
   }
 
 
@@ -187,7 +187,7 @@ export default class Root extends Component {
             </div>
           </section>
         </div>
-        <Footer info={this.props.info} />
+        <Footer info={this.props.info.data} />
         <ModalManager ref={::this.refModal} />
       </div>
     );

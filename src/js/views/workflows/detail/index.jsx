@@ -13,7 +13,7 @@ import { pureRender } from 'components/utils';
 
 
 import goTo from 'routes';
-import apiActions from 'store/api/actions';
+import actions from 'store/api/actions';
 
 
 @pureRender
@@ -54,11 +54,11 @@ export default class WorkflowsDetail extends Component {
     this.setState({ lastWorkflowId: props.workflow.id });
 
     this.context.dispatch(
-      apiActions.errors.fetch(`workflow/${props.workflow.id}`)
+      actions.errors.fetch(`workflow/${props.workflow.id}`)
     );
 
     this.context.dispatch(
-      apiActions.workflows.fetchLibSources(props.workflow)
+      actions.workflows.fetchLibSources(props.workflow)
     );
   }
 
