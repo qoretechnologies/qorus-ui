@@ -1,15 +1,15 @@
-import settings from '../../../settings';
-import { flowRight } from 'lodash';
+import _ from 'lodash';
+
 import { extendDefaults, normalizeId, normalizeName } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
+import settings from '../../../settings';
 
-const url = settings.REST_API_PREFIX;
 
 export default [
   {
     name: 'workflows',
-    url: `${url}/workflows`,
-    transform: flowRight(
+    url: `${settings.REST_API_PREFIX}/workflows`,
+    transform: _.flowRight(
       normalizeName,
       normalizeId('workflowid'),
       extendDefaults(workflowDefaults)
@@ -17,51 +17,30 @@ export default [
   },
   {
     name: 'steps',
-    url: `${url}/steps`,
-    transform: flowRight(
+    url: `${settings.REST_API_PREFIX}/steps`,
+    transform: _.flowRight(
       normalizeName,
       normalizeId('stepid')
     ),
   },
   {
-    name: 'orders',
-    url: `${url}/orders`,
-    transform: normalizeId('workflow_instanceid'),
-  },
-  {
-    name: 'services',
-    url: `${url}/services`,
-    transform: flowRight(
-      normalizeName,
-      normalizeId('serviceid'),
-    ),
-  },
-  {
-    name: 'jobs',
-    url: `${url}/jobs`,
-    transform: flowRight(
-      normalizeName,
-      normalizeId('jobid'),
-    ),
-  },
-  {
     name: 'errors',
-    url: `${url}/errors`,
+    url: `${settings.REST_API_PREFIX}/errors`,
   },
   {
     name: 'system',
-    url: `${url}/system`,
+    url: `${settings.REST_API_PREFIX}/system`,
     initialState: { data: {} },
     transform: item => item,
   },
   {
     name: 'systemOptions',
-    url: `${url}/system/options`,
+    url: `${settings.REST_API_PREFIX}/system/options`,
     transform: item => item,
   },
   {
     name: 'currentUser',
-    url: `${url}/users?action=current`,
+    url: `${settings.REST_API_PREFIX}/users?action=current`,
     initialState: { data: {} },
     transform: item => item,
   },

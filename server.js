@@ -9,21 +9,22 @@ const serveStatic = require('serve-static');
 const config = require('./webpack.config');
 
 const app = express();
-app.use(history());
 
 switch (app.get('env')) {
   case 'production':
+    app.use(history());
     app.get('*', serveStatic(config.output.path));
     break;
 
   default:
+    app.use('/api', require('./api'));
+    app.use(history());
     app.use(require('webpack-dev-middleware')(
       require('webpack')(config), config.devServer
     ));
     app.get('*', serveStatic(config.context));
     break;
 }
-
 
 app.listen(
   parseInt(process.env.PORT, 10) || 3000,
