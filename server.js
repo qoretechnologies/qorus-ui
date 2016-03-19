@@ -8,6 +8,9 @@ const serveStatic = require('serve-static');
 
 const config = require('./webpack.config');
 
+const serverConfig = require('./webpack.config/dev')();
+const url = `http://${serverConfig.host}:${serverConfig.port}`;
+
 const app = express();
 
 switch (app.get('env')) {
@@ -20,28 +23,19 @@ switch (app.get('env')) {
     app.use('/api', require('./api'));
     app.use(history());
     app.use(require('webpack-dev-middleware')(
-      require('webpack')(config), config.devServer
+      require('webpack')(config, () => process.send(url)),
+      config.devServer
     ));
     app.get('*', serveStatic(config.context));
     break;
 }
 
 app.listen(
-  parseInt(process.env.PORT, 10) || 3000,
-  process.env.SOCKET || process.env.HOST || 'localhost',
+  serverConfig.port,
+  serverConfig.host,
   () => {
-    if (process.env.SOCKET) {
-      process.stdout.write(
-        `Qorus Webapp ${app.get('env')} server ` +
-        `listening on ${process.env.SOCKET}` +
-        '\n'
-      );
-    } else {
-      process.stdout.write(
-        `Qorus Webapp ${app.get('env')} server listening on http://` +
-        `${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}` +
-        '\n'
-      );
-    }
+    process.stdout.write(
+      `Qorus Webapp ${app.get('env')} server listening on ${url}\n`
+    );
   }
 );
