@@ -34,9 +34,11 @@ app.listen(
   serverConfig.port,
   serverConfig.host,
   () => {
-    process.stdout.write(
-      `Qorus Webapp ${app.get('env')} server listening on ${url}\n`
-    );
+    if (app.get('env') !== 'test') {
+      process.stdout.write(
+        `Qorus Webapp ${app.get('env')} server listening on ${url}\n`
+      );
+    }
 
     if (process.send) process.send(url);
   }

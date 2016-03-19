@@ -4,6 +4,7 @@
 const webpack = require('webpack');
 
 const compiler = require('./compiler');
+const dev = require('./dev');
 
 
 module.exports = function testConfig() {
@@ -17,6 +18,9 @@ module.exports = function testConfig() {
   );
 
   config.debug = true;
+  config.devtool = 'source-map';
+
+  config.devServer = dev();
 
   return config;
 };
