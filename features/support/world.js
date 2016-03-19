@@ -34,7 +34,7 @@ class World {
     this.browser.site = this.constructor.site;
 
     return new Promise((resolve, reject) => {
-      this.browser.visit('/', err => {
+      this.browser.visit('/', '1m', err => {
         if (err) {
           reject(err);
           return;

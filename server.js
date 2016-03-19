@@ -23,7 +23,7 @@ switch (app.get('env')) {
     app.use('/api', require('./api'));
     app.use(history());
     app.use(require('webpack-dev-middleware')(
-      require('webpack')(config, () => process.send(url)),
+      require('webpack')(config),
       config.devServer
     ));
     app.get('*', serveStatic(config.context));
@@ -37,5 +37,7 @@ app.listen(
     process.stdout.write(
       `Qorus Webapp ${app.get('env')} server listening on ${url}\n`
     );
+
+    if (process.send) process.send(url);
   }
 );
