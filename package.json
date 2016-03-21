@@ -56,9 +56,7 @@
     "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.0",
     "babel-eslint": "^5.0.0",
-    "babel-istanbul": "^0.7.0",
     "babel-register": "^6.4.3",
     "chai": "^3.4.1",
     "chai-spies": "^0.7.1",
@@ -83,9 +81,9 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
-    "test": "NODE_ENV=test babel-node `which babel-istanbul` test _mocha -- test/**/*.spec.{js,jsx}",
-    "mocha": "NODE_ENV=test mocha --watch --reporter min --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
-    "coveralls": "babel-node `which babel-istanbul` cover _mocha --report lcovonly -- test/**/*spec.{js,jsx} && cat coverage/lcov.info | coveralls && rm -rf coverage",
-    "eslint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
+    "test": "npm run test-uat && npm run test-unit",
+    "test-uat": "NODE_ENV=test cucumber.js --compiler js:babel-register --compiler jsx:babel-register",
+    "test-unit": "NODE_ENV=test mocha --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
+    "lint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
   }
 }
