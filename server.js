@@ -5,11 +5,9 @@ const express = require('express');
 const history = require('connect-history-api-fallback');
 const serveStatic = require('serve-static');
 
-
 const config = require('./webpack.config');
+const devConfig = require('./webpack.config/dev');
 
-const serverConfig = require('./webpack.config/dev')();
-const url = `http://${serverConfig.host}:${serverConfig.port}`;
 
 const app = express();
 
@@ -20,7 +18,7 @@ switch (app.get('env')) {
     break;
 
   default:
-    app.use('/api', require('./api'));
+    app.use(require('./api'));
     app.use(history());
     app.use(require('webpack-dev-middleware')(
       require('webpack')(config),
@@ -30,10 +28,13 @@ switch (app.get('env')) {
     break;
 }
 
+const serverConfig = devConfig();
 app.listen(
   serverConfig.port,
   serverConfig.host,
   () => {
+    const url = `http://${serverConfig.host}:${serverConfig.port}`;
+
     if (app.get('env') !== 'test') {
       process.stdout.write(
         `Qorus Webapp ${app.get('env')} server listening on ${url}\n`

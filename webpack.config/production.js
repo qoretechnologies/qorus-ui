@@ -3,18 +3,20 @@
 
 const webpack = require('webpack');
 
-const compiler = require('./compiler');
+const compilerConfig = require('./compiler');
 
 
 /**
  * Returns a webpack config for production build.
  */
 module.exports = function productionConfig() {
-  const config = compiler.config();
+  const config = compilerConfig();
 
   config.plugins.push(
     new webpack.DefinePlugin({
-      'process.env': compiler.env(),
+      'process.env': JSON.stringify({
+        NODE_ENV: 'production',
+      }),
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),

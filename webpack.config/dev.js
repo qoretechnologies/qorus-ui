@@ -1,11 +1,11 @@
 'use strict';
 
 
-const compiler = require('./compiler');
+const compilerConfig = require('./compiler');
 
 
-module.exports = function serverConfig() {
-  const config = compiler.config();
+module.exports = function devConfig() {
+  const config = compilerConfig();
 
   return {
     contentBase: config.context,

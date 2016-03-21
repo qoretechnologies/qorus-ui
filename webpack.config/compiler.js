@@ -9,7 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const root = path.resolve(__dirname, '..');
 
-module.exports.config = function config() {
+module.exports = function compilerConfig() {
   return {
     context: `${root}/src`,
     entry: {
@@ -96,29 +96,4 @@ module.exports.config = function config() {
       }),
     ],
   };
-};
-
-
-module.exports.env = function env(opts) {
-  const apiProto = process.env.API_PROTO || 'http';
-  const apiHost = process.env.API_HOST || 'localhost';
-  const apiPort = process.env.API_PORT || 8001;
-
-  const isApiOverride =
-    process.env.API_PROTO || process.env.API_HOST || process.env.API_PORT;
-  const isRestOverride = isApiOverride || process.env.REST_API_BASE_URL;
-  const isWsOverride = isApiOverride || process.env.WS_API_BASE_URL;
-
-  const apiEnv = {};
-  apiEnv.NODE_ENV = process.env.NODE_ENV || 'development';
-  if (isRestOverride) {
-    apiEnv.REST_API_BASE_URL = process.env.REST_API_PREFIX ||
-      `${apiProto}://${apiHost}:${apiPort}/api`;
-  }
-  if (isWsOverride) {
-    apiEnv.WS_API_BASE_URL = process.env.WS_API_BASE_URL ||
-      `${apiProto === 'https' ? 'wss' : 'ws' }://${apiHost}:${apiPort}`;
-  }
-
-  return JSON.stringify(Object.assign({}, apiEnv, opts));
 };

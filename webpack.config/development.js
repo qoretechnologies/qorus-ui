@@ -3,8 +3,8 @@
 
 const webpack = require('webpack');
 
-const compiler = require('./compiler');
-const dev = require('./dev');
+const compilerConfig = require('./compiler');
+const devConfig = require('./dev');
 
 
 /**
@@ -13,13 +13,16 @@ const dev = require('./dev');
  * It has hot reload and debug information (including source maps).
  */
 module.exports = function developmentConfig() {
-  const config = compiler.config();
+  const config = compilerConfig();
 
   config.module.loaders[0].loaders.unshift('react-hot');
 
   config.plugins.push(
     new webpack.DefinePlugin({
-      'process.env': compiler.env({ DEVTOOLS: true }),
+      'process.env': JSON.stringify({
+        NODE_ENV: 'development',
+        DEVTOOLS: true,
+      }),
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
@@ -28,7 +31,7 @@ module.exports = function developmentConfig() {
   config.debug = true;
   config.devtool = 'source-map';
 
-  config.devServer = dev();
+  config.devServer = devConfig();
 
   return config;
 };
