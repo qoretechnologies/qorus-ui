@@ -5,8 +5,8 @@ const location = window && window.location ? window.location : {
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 
 export default {
-  REST_API_PREFIX: '/api',
-  WS_API_PREFIX: `${wsProtocol}//${location.host}`,
+  REST_BASE_URL: '/api',
+  WS_BASE_URL: `${wsProtocol}//${location.host}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

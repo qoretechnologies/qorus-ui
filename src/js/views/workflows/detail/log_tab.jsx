@@ -352,7 +352,7 @@ export default class LogTab extends Component {
       try {
         this._token = await fetchJson(
           'GET',
-          `${settings.REST_API_PREFIX}/system?action=wstoken`
+          `${settings.REST_BASE_URL}/system?action=wstoken`
         );
       } catch (e) {
         this._token = null;
@@ -363,7 +363,7 @@ export default class LogTab extends Component {
 
     if (this._socket) this.disconnect();
     this._socket = new WebSocket(
-      `${settings.WS_API_PREFIX}` +
+      `${settings.WS_BASE_URL}` +
       `/log/workflows/${workflow.workflowid}` +
       `?token=${this._token}`
     );

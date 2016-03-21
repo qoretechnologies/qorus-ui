@@ -8,7 +8,7 @@ import settings from '../../../settings';
 export default [
   {
     name: 'workflows',
-    url: `${settings.REST_API_PREFIX}/workflows`,
+    url: `${settings.REST_BASE_URL}/workflows`,
     transform: _.flowRight(
       normalizeName,
       normalizeId('workflowid'),
@@ -17,7 +17,7 @@ export default [
   },
   {
     name: 'steps',
-    url: `${settings.REST_API_PREFIX}/steps`,
+    url: `${settings.REST_BASE_URL}/steps`,
     transform: _.flowRight(
       normalizeName,
       normalizeId('stepid')
@@ -25,22 +25,22 @@ export default [
   },
   {
     name: 'errors',
-    url: `${settings.REST_API_PREFIX}/errors`,
+    url: `${settings.REST_BASE_URL}/errors`,
   },
   {
     name: 'system',
-    url: `${settings.REST_API_PREFIX}/system`,
+    url: `${settings.REST_BASE_URL}/system`,
     initialState: { data: {} },
     transform: item => item,
   },
   {
     name: 'systemOptions',
-    url: `${settings.REST_API_PREFIX}/system/options`,
+    url: `${settings.REST_BASE_URL}/system/options`,
     transform: item => item,
   },
   {
     name: 'currentUser',
-    url: `${settings.REST_API_PREFIX}/users?action=current`,
+    url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
     transform: item => item,
   },

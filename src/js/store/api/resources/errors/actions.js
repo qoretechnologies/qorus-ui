@@ -7,7 +7,7 @@ import settings from '../../../../settings';
 
 
 function fetchPayload(ref) {
-  return fetchJson('GET', `${settings.REST_API_PREFIX}/errors/${ref}`);
+  return fetchJson('GET', `${settings.REST_BASE_URL}/errors/${ref}`);
 }
 
 function fetchMeta(ref) {
@@ -22,7 +22,7 @@ const fetchErrors = createAction(
 
 
 function createPayload(ref, err) {
-  return fetchJson('POST', `${settings.REST_API_PREFIX}/errors/${ref}`, {
+  return fetchJson('POST', `${settings.REST_BASE_URL}/errors/${ref}`, {
     body: JSON.stringify(err),
   });
 }
@@ -41,7 +41,7 @@ const createError = createAction(
 function updatePayload(ref, err) {
   return fetchJson(
     'PUT',
-    `${settings.REST_API_PREFIX}/errors/${ref}/${err.error}`,
+    `${settings.REST_BASE_URL}/errors/${ref}/${err.error}`,
     { body: JSON.stringify(err) }
   );
 }
@@ -60,7 +60,7 @@ const updateError = createAction(
 function removePayload(ref, err) {
   return fetchJson(
     'DELETE',
-    `${settings.REST_API_PREFIX}/errors/${ref}/${err.error}`
+    `${settings.REST_BASE_URL}/errors/${ref}/${err.error}`
   );
 }
 

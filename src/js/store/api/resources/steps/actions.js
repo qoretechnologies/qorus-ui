@@ -7,7 +7,7 @@ import settings from '../../../../settings';
 
 
 function fetchPayload(id) {
-  return fetchJson('GET', `${settings.REST_API_PREFIX}/steps/${id}`);
+  return fetchJson('GET', `${settings.REST_BASE_URL}/steps/${id}`);
 }
 
 function fetchMeta(id) {

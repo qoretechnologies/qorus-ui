@@ -8,7 +8,7 @@ import settings from '../../../../../settings';
 function setOptionsPayload(workflow, name, value) {
   return fetchJson(
     'PUT',
-    `${settings.REST_API_PREFIX}/workflows/${workflow.id}`,
+    `${settings.REST_BASE_URL}/workflows/${workflow.id}`,
     {
       body: JSON.stringify({
         action: 'setOptions',
@@ -35,7 +35,7 @@ const setOptions = createAction(
 function fetchLibSourcesPayload(workflow) {
   return fetchJson(
     'GET',
-    `${settings.REST_API_PREFIX}/workflows/${workflow.id}?lib_source=true`
+    `${settings.REST_BASE_URL}/workflows/${workflow.id}?lib_source=true`
   );
 }
 
