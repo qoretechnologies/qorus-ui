@@ -6,10 +6,10 @@ Webapp uses [React](https://facebook.github.io/react/),
 [Redux](http://redux.js.org) (with React bindings),
 [React Router](https://www.npmjs.com/package/react-router) and
 [Bootstrap](http://getbootstrap.com). JavaScript is compiled with
-[Babel](http://babeljs.io) with stage-0 features preset and legacy
-decorators. Stylesheets are compiled with
-[Sass](http://sass-lang.com). Resulting static assets are put together by
-[webpack](http://webpack.github.io).
+[Babel](http://babeljs.io) with stage-0 preset and legacy decorators
+plugin. Stylesheets are compiled with
+[Sass](http://sass-lang.com). Resulting static assets are put together
+by [webpack](http://webpack.github.io).
 
 There are two levels of tests following behavior-driven development
 practices. Acceptance tests are written in
@@ -25,9 +25,9 @@ There is also a development and test server written in
 
 ### `src`
 
-The main directory with source code and an
-[entry point](src/index.jsx) for the webapp. Most of other things are
-just support for development or build.
+The main directory with source code and
+[app entry point](src/index.jsx) for the webapp. Most of other things
+are just support for development or build.
 
 ### `src/components`
 
@@ -131,11 +131,11 @@ can review status of integrated effort of the team in
 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 is followed when applicable - which is practically
 everywhere. [ESLint](http://eslint.org) cannot check everything and in
-certain cases (because of AST provided by babel compiler and
-experimental features) is may be reasonable. So, use find esthetic
-self or discuss it with the team.
+certain cases acts quite strangely (because of AST provided by Babel
+compiler and experimental features) it may be reasonable to turn off
+some checks. So, find your esthetic self or discuss it with the team.
 
 Custom stylesheets follow
-[CSS Guidelines by Harry Roberts](http://cssguidelin.es), which the
+[CSS Guidelines by Harry Roberts](http://cssguidelin.es), which is the
 main source of rather vague
 [Airbnb CSS / Sass Styleguide](https://github.com/airbnb/css).
