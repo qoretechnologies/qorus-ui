@@ -19,8 +19,6 @@ class World {
    * Initializes `zombie` browser and test server if needed.
    */
   constructor() {
-    this.constructor.site = process.env.TEST_SITE;
-
     this.init = Promise.resolve().
       then(::this.constructor.initializeServer).
       then(::this.initializeBrowser).
@@ -39,6 +37,10 @@ class World {
    * @return {Promise<string>}
    */
   static initializeServer() {
+    if (!this.site && process.env.TEST_SITE) {
+      this.site = process.env.TEST_SITE;
+    }
+
     if (this.site) return Promise.resolve(this.site);
 
     this.server = fork(path.join(__dirname, '..', '..', 'server.js'));
