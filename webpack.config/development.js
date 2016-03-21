@@ -7,6 +7,11 @@ const compiler = require('./compiler');
 const dev = require('./dev');
 
 
+/**
+ * Returns a webpack config for development environment.
+ *
+ * It has hot reload and debug information (including source maps).
+ */
 module.exports = function developmentConfig() {
   const config = compiler.config();
 

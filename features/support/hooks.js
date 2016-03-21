@@ -1,5 +1,5 @@
 module.exports = function hooks() {
-  this.Before(function waitForWorldInit(scenario, callback) {
-    this.whenReady(callback);
+  this.Before(function waitForWorldInit(scenario, cb) {
+    this.whenReady(cb);
   });
 };

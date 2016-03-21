@@ -6,6 +6,9 @@ const webpack = require('webpack');
 const compiler = require('./compiler');
 
 
+/**
+ * Returns a webpack config for production build.
+ */
 module.exports = function productionConfig() {
   const config = compiler.config();
 
