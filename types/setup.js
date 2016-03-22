@@ -18,5 +18,5 @@ jsf.formats('qorus-system-version', gen => (
 ));
 
 jsf.formats('qorus-system-schema', gen => (
-  gen.randexp('^[a-z][-a-z0-9]+@[a-z][-_a-z0-9]+$')
+  gen.randexp('^[a-z][-a-z0-9]{0,31}@[a-z][_a-z0-9]{0,31}$')
 ));
