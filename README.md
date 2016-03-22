@@ -70,7 +70,7 @@ Configuration of development, test and build environment with webpack
 and its loaders.
 
 
-### Get Started
+## Getting Started
 
 This is not a typical behavior-driven approach, but it is the fastest
 way the get started.
