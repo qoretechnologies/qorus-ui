@@ -1,15 +1,27 @@
+const { selectors } = require('./common_steps');
+
+
+const wflwTable = `${selectors.mainSection} table`;
+const wflwRows = `${wflwTable} > tbody > tr`;
+const wflwPane = `${wflwTable} ~ .pane`;
+const wflwPaneContent = `${wflwPane} .wflw`;
+
+
+/**
+ * Finds workflow row by worflow name.
+ *
+ * @param {Zombie} browser
+ * @param {string} name
+ * @return {?HTMLTableRowElement}
+ */
+function findWorkflowRow(browser, name) {
+  return browser.
+    queryAll(wflwRows).
+    find(r => r.cells[5].textContent === name) || null;
+}
+
+
 module.exports = function workflowSteps() {
-  this.When(/^I activate "([^"]*)" navigation item$/, function(name) {
-    const link = this.browser.
-      queryAll('nav.side-menu li > a').
-      find(link => (
-        this.browser.query('.side-menu__text', link).textContent === name
-      ));
-
-    return this.browser.clickLink(link);
-  });
-
-
   this.Then(/^I should see workflows listing$/, async function() {
     await this.changes();
 
@@ -23,18 +35,8 @@ module.exports = function workflowSteps() {
   });
 
 
-  const mainSection = '.root__center > section';
-  const wflwTable = `${mainSection} table`;
-  const wflwLoader = `${mainSection} p`;
-
-
   this.Given(/^there are no workflows loaded$/, function() {
     this.browser.assert.elements(wflwTable, 0);
-  });
-
-
-  this.Then(/^I should see a loader$/, function() {
-    this.browser.assert.text(wflwLoader, 'Loading');
   });
 
 
@@ -43,19 +45,9 @@ module.exports = function workflowSteps() {
   });
 
 
-  const wflwRows = `${wflwTable} > tbody > tr`;
-
-
   this.Then(/^I should see a table with workflows data$/, function() {
     this.browser.assert.elements(wflwRows, { atLeast: 1 });
   });
-
-
-  function findWorkflowRow(browser, name) {
-    return browser.
-      queryAll(wflwRows).
-      find(r => r.cells[5].textContent === name);
-  }
 
 
   this.When(/^I activate "([^"]*)" workflow$/, async function(name) {
@@ -67,33 +59,29 @@ module.exports = function workflowSteps() {
   });
 
 
-  const pane = `${wflwTable} ~ .pane`;
-  const wflwPane = `${pane} .wflw`;
-
-
   this.Then(/^I should see workflow detail pane$/, async function() {
-    await this.waitForElement(wflwPane);
+    await this.waitForElement(wflwPaneContent);
 
-    this.browser.assert.element(wflwPane);
+    this.browser.assert.element(wflwPaneContent);
   });
 
 
   this.Then(/^I should see workflow details tab$/, async function() {
-    await this.waitForElement(wflwPane);
+    await this.waitForElement(wflwPaneContent);
 
     this.browser.assert.text(
-      `${wflwPane} h3`,
+      `${wflwPaneContent} h3`,
       new RegExp(`^${this.workflowName}\\b`)
     );
     this.browser.assert.text(
-      `${wflwPane} .wflw__tabs > ul.nav > li.active`,
+      `${wflwPaneContent} .wflw__tabs > ul.nav > li.active`,
       'Detail'
     );
   });
 
 
   this.Then(/^I should see activated row highlighted$/, async function() {
-    await this.waitForElement(wflwPane);
+    await this.waitForElement(wflwPaneContent);
 
     this.browser.assert.text(
       `${wflwRows}.info td:nth-child(6)`,
@@ -111,15 +99,15 @@ module.exports = function workflowSteps() {
   });
 
 
-  this.When(/^I click close button on detail pane$/, async function() {
-    await this.waitForElement(pane);
+  this.When(/^I click close button on workflow detail pane$/, async function() {
+    await this.waitForElement(wflwPane);
 
-    await this.browser.pressButton(`${pane} .pane__close`);
+    await this.browser.pressButton(`${wflwPane} .pane__close`);
   });
 
 
-  this.Then(/^I should see no detail pane$/, function() {
-    this.browser.assert.elements(pane, 0);
+  this.Then(/^I should see no workflow detail pane$/, function() {
+    this.browser.assert.elements(wflwPane, 0);
   });
 
 

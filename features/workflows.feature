@@ -30,6 +30,6 @@ Feature: Workflows
   Scenario: Closing detail pane
     Given I am on workflows listing
     And I have "ARRAYTEST" workflow open
-    When I click close button on detail pane
-    Then I should see no detail pane
+    When I click close button on workflow detail pane
+    Then I should see no workflow detail pane
     And I should see no row highlighted
