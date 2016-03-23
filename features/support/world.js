@@ -153,6 +153,36 @@ class World {
       );
     });
   }
+
+
+  /**
+   * Waits for element to appear.
+   *
+   * Checks if the selector returns any element over given limit by
+   * doing at most given number of checks.
+   *
+   * @param {string} selector
+   * @param {number=} limit timeout in milliseconds (default: 5000)
+   * @param {number=} ckecks number of tries (default: 10)
+   * @return {Promise}
+   */
+  waitForElement(selector, limit = 5000, checks = 10) {
+    function check(resolve, reject, tries = 0) {
+      if (this.browser.query(selector)) {
+        resolve();
+        return;
+      }
+
+      if (tries + 1 >= checks) {
+        reject(new Error(`Element "${selector}" not found in given time.`));
+        return;
+      }
+
+      setTimeout(check.bind(this, resolve, reject, tries + 1), limit / checks);
+    }
+
+    return new Promise(check.bind(this));
+  }
 }
 
 
