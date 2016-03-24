@@ -44,4 +44,12 @@ export default [
     initialState: { data: {} },
     transform: item => item,
   },
+  {
+    name: 'services',
+    url: `${settings.REST_BASE_URL}/services`,
+    transform: _.flowRight(
+      normalizeName,
+      normalizeId('serviceid'),
+    ),
+  },
 ];
