@@ -1,24 +1,24 @@
 Feature: Services
 
-  @wip
+  @no-impl
   Scenario: Available from main navigation
     When I activate "Services" navigation item
     Then I should see "services" listing
 
-  @wip
+  @no-impl
   Scenario: Loading
     Given I am on "services" listing
     And there are no "services" loaded
     Then I should see a loader
 
-  @wip
+  @no-impl
   Scenario: Listing
     Given I am on "services" listing
     And there are no "services" loaded
     When "services" get loaded
     Then I should see a table with "services" data
 
-  @wip
+  @no-impl
   Scenario: Activating detail pane
     Given I am on "services" listing
     When I activate "info" workflow
@@ -26,7 +26,7 @@ Feature: Services
     And I should see "service" details tab
     And I should see activated row highlighted
 
-  @wip
+  @no-impl
   Scenario: Closing detail pane
     Given I am on "services" listing
     And I have "info" workflow open
