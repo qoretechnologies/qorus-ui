@@ -80,16 +80,6 @@ module.exports = function workflowSteps() {
   });
 
 
-  this.Then(/^I should see activated row highlighted$/, async function() {
-    await this.waitForElement(wflwPaneContent);
-
-    this.browser.assert.text(
-      `${wflwRows}.info td:nth-child(6)`,
-      this.workflowName
-    );
-  });
-
-
   this.Given(/^I have "([^"]*)" workflow open$/, async function(name) {
     await this.waitForElement(wflwTable);
 
@@ -108,15 +98,5 @@ module.exports = function workflowSteps() {
 
   this.Then(/^I should see no workflow detail pane$/, function() {
     this.browser.assert.elements(wflwPane, 0);
-  });
-
-
-  this.Then(/^I should see no row highlighted$/, async function() {
-    await this.waitForElement(wflwTable);
-
-    this.browser.assert.hasNoClass(
-      findWorkflowRow(this.browser, this.workflowName),
-      'info'
-    );
   });
 };
