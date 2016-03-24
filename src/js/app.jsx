@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import Root from 'views/root';
 import Workflows from 'views/workflows';
+import Services from 'views/services';
 
 
 import setupStore from 'store';
@@ -219,7 +220,10 @@ export default class App extends Component {
                 path="workflows(/:date)(/:filter)(/:detailId)(/:tabId)"
                 component={Workflows}
               />
-              <Route path="services"/>
+              <Route
+                path="services(/:date)(/:filter)(/:detailId)(/:tabId)"
+                component={Services}
+              />
               <Route path="jobs"/>
               <Route path="search"/>
               <Route path="groups(/:name)"/>
