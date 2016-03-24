@@ -1,6 +1,6 @@
 Feature: Workflow Controls
 
-  @wip
+  @no-impl
   Scenario: Dropdown is toggled
     Given I am on workflows listing
     When I click the dropdown toggle
