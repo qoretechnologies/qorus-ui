@@ -14,6 +14,8 @@ import actions from 'store/api/actions';
 import Loader from 'components/loader';
 import Pane from 'components/pane';
 
+import ServicesTable from './table';
+
 const servicesSelector = state => state.api.services;
 
 
@@ -24,12 +26,11 @@ const viewSelector = createSelector(
   (services) => ({
     sync: services.sync,
     loading: services.loading,
-    services,
+    services: services.data,
   })
 );
 
 const ServicesToolbar = () => <p>Services toolbar</p>;
-const ServicesTable = () => <p>Services table</p>;
 
 
 @connect(viewSelector)
@@ -138,7 +139,7 @@ export default class Services extends Component {
       <div>
         <ServicesToolbar />
         <ServicesTable
-          services={services}
+          collection={services}
           activeRowId={parseInt(this.props.params.detailId, 10)}
         />
         {this.renderPane()}
