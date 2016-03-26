@@ -1298,6 +1298,11 @@
       "from": "builtin-modules@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/builtin-modules/-/builtin-modules-1.1.1.tgz"
     },
+    "bytes": {
+      "version": "2.2.0",
+      "from": "bytes@2.2.0",
+      "resolved": "https://registry.npmjs.org/bytes/-/bytes-2.2.0.tgz"
+    },
     "callsite": {
       "version": "1.0.0",
       "from": "callsite@>=1.0.0 <2.0.0",
@@ -3586,11 +3591,6 @@
       "from": "lcid@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/lcid/-/lcid-1.0.0.tgz"
     },
-    "lcov-parse": {
-      "version": "0.0.6",
-      "from": "lcov-parse@0.0.6",
-      "resolved": "https://registry.npmjs.org/lcov-parse/-/lcov-parse-0.0.6.tgz"
-    },
     "left-pad": {
       "version": "0.0.3",
       "from": "left-pad@0.0.3",
@@ -3857,11 +3857,6 @@
       "version": "3.1.2",
       "from": "lodash.words@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/lodash.words/-/lodash.words-3.1.2.tgz"
-    },
-    "log-driver": {
-      "version": "1.2.4",
-      "from": "log-driver@1.2.4",
-      "resolved": "https://registry.npmjs.org/log-driver/-/log-driver-1.2.4.tgz"
     },
     "longest": {
       "version": "1.0.1",
@@ -4617,6 +4612,18 @@
       "from": "range-parser@>=1.0.3 <1.1.0",
       "resolved": "https://registry.npmjs.org/range-parser/-/range-parser-1.0.3.tgz"
     },
+    "raw-body": {
+      "version": "2.1.6",
+      "from": "raw-body@>=2.1.5 <2.2.0",
+      "resolved": "https://registry.npmjs.org/raw-body/-/raw-body-2.1.6.tgz",
+      "dependencies": {
+        "bytes": {
+          "version": "2.3.0",
+          "from": "bytes@2.3.0",
+          "resolved": "https://registry.npmjs.org/bytes/-/bytes-2.3.0.tgz"
+        }
+      }
+    },
     "react": {
       "version": "0.14.7",
       "from": "react@>=0.14.6 <0.15.0",
@@ -5169,9 +5176,9 @@
       "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz"
     },
     "style-loader": {
-      "version": "0.13.0",
-      "from": "style-loader@>=0.13.0 <0.14.0",
-      "resolved": "https://registry.npmjs.org/style-loader/-/style-loader-0.13.0.tgz"
+      "version": "0.13.1",
+      "from": "style-loader@0.13.1",
+      "resolved": "https://registry.npmjs.org/style-loader/-/style-loader-0.13.1.tgz"
     },
     "supports-color": {
       "version": "2.0.0",
@@ -5353,16 +5360,6 @@
       "version": "1.0.2",
       "from": "ultron@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz"
-    },
-    "underscore": {
-      "version": "1.7.0",
-      "from": "underscore@>=1.7.0 <1.8.0",
-      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.7.0.tgz"
-    },
-    "underscore.string": {
-      "version": "2.4.0",
-      "from": "underscore.string@>=2.4.0 <2.5.0",
-      "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
     },
     "uniq": {
       "version": "1.0.1",
