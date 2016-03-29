@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { extendDefaults, normalizeId, normalizeName } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
+import { DEFAULTS as servicesDefaults } from './services';
 import settings from '../../../settings';
 
 
@@ -50,6 +51,7 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('serviceid'),
+      extendDefaults(servicesDefaults)
     ),
   },
 ];
