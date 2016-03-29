@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
+import classNames from 'classnames';
 
 /**
  * Workflow table toolbar.
@@ -19,10 +19,11 @@ export default class Toolbar extends Component {
    */
   render() {
     return (
-      <div id="workflows-toolbar" className="toolbar">
-        <div className="workflows-toolbar btn-toolbar sticky toolbar">
-          {this.props.children}
-        </div>
+      <div
+        className={classNames('btn-toolbar', 'toolbar')}
+        role="toolbar"
+      >
+        {this.props.children}
       </div>
     );
   }
