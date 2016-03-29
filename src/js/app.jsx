@@ -221,7 +221,7 @@ export default class App extends Component {
                 component={Workflows}
               />
               <Route
-                path="services(/:date)(/:filter)(/:detailId)(/:tabId)"
+                path="services(/:detailId)(/:tabId)"
                 component={Services}
               />
               <Route path="jobs" />
