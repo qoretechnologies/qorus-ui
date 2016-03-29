@@ -2,6 +2,8 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+import * as shallow from '../shallow';
+
 
 import Footer from '../../src/js/components/footer';
 
@@ -14,13 +16,17 @@ describe("Footer from 'components/footer'", () => {
       'omq-build': 'test',
     };
 
-    const comp = TestUtils.renderIntoDocument(
+    const renderer = TestUtils.createRenderer();
+    renderer.render(
       <Footer info={info} />
     );
+    const result = renderer.getRenderOutput();
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'small');
+    const els = shallow.filterTree(result, el => (
+      el.type === 'small'
+    ));
 
-    expect(els[0].textContent).to.equal('(Schema: test@test)');
-    expect(els[1].textContent).to.equal('(Version: 1.test)');
+    expect(els[0].props.children).to.eql('(Schema: test@test)');
+    expect(els[1].props.children.join('')).to.eql('(Version: 1.test)');
   });
 });

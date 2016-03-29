@@ -1,7 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-
-
-import { pureRender } from '../utils';
+import React, { PropTypes } from 'react';
 
 
 /**
@@ -17,29 +14,27 @@ import { pureRender } from '../utils';
  *
  * Dynamic row rendering is preferred over static if both methods are
  * defined.
+ *
+ * @param {!{
+ *   cells: ?function,
+ *   data: *,
+ *   children: ReactNode,
+ * }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Section extends Component {
-  static propTypes = {
-    type: PropTypes.oneOf(['head', 'body', 'foot']).isRequired,
-    rows: PropTypes.func,
-    data: PropTypes.any,
-    children: PropTypes.node,
-  };
+export default function Section(props) {
+  const { type, rows, data, children, ...restProps } = props;
 
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    const { type, rows, data, children, ...props } = this.props;
-
-    return React.createElement(
-      `t${type}`,
-      props,
-      ...(rows ? rows(data) : React.Children.toArray(children))
-    );
-  }
+  return React.createElement(
+    `t${type}`,
+    restProps,
+    ...(rows ? rows(data) : React.Children.toArray(children))
+  );
 }
+
+Section.propTypes = {
+  type: PropTypes.oneOf(['head', 'body', 'foot']).isRequired,
+  rows: PropTypes.func,
+  data: PropTypes.any,
+  children: PropTypes.node,
+};

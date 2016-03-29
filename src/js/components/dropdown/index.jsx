@@ -56,24 +56,24 @@ export default class Dropdown extends Component {
 
   renderDropdownList() {
     return React.Children.map(this.props.children, (c) => {
-      if (c.type === Item) {
-        return c;
-      }
+      if (c.type !== Item) return undefined;
+
+      return c;
     });
   }
 
   renderDropdownControl() {
     return React.Children.map(this.props.children, (c) => {
-      if (c.type === Control) {
-        return (
-          <c.type
-            id={this.props.id}
-            onClick={::this.onDropdownToggleClick}
-            onBlur={::this.hideSelectionToggle}
-            {...c.props}
-          />
-        );
-      }
+      if (c.type !== Control) return undefined;
+
+      return (
+        <c.type
+          id={this.props.id}
+          onClick={::this.onDropdownToggleClick}
+          onBlur={::this.hideSelectionToggle}
+          {...c.props}
+        />
+      );
     });
   }
 

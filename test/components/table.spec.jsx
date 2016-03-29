@@ -32,24 +32,6 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
   }
 
 
-  function expectCellStructure(cell) {
-    expect(cell.childNodes).to.have.length(1);
-    expect(cell.childNodes[0].data).to.equal('value');
-  }
-
-
-  function expectRowStructure(row) {
-    expect(row.cells).to.have.length(1);
-    expectCellStructure(row.cells[0]);
-  }
-
-
-  function expectTBodyStructure(tBody) {
-    expect(tBody.rows).to.have.length(1);
-    expectRowStructure(tBody.rows[0]);
-  }
-
-
   describe('Table', () => {
     it('can render dynamic tabular data from generator yielding other ' +
        'Section elements from `data` prop',
@@ -60,14 +42,15 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
         );
       }
 
-      const comp = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Table data={records} sections={genTBodySection} />
       );
+      const table = renderer.getRenderOutput();
 
-      const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
-
-      expect(table.tBodies).to.have.length(1);
-      expectTBodyStructure(table.tBodies[0]);
+      expect(table.type).to.equal('table');
+      expect(table.props.children.type).to.equal(Section);
+      expect(table.props.children.props.type).to.equal('body');
     });
 
 
@@ -86,44 +69,51 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
         );
       }
 
-      const comp = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Table sections={genDomBodyRows} />
       );
+      const table = renderer.getRenderOutput();
 
-      const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
-
-      expect(table.tBodies).to.have.length(1);
-      expect(table.tBodies[0].rows).to.have.length(1);
-      expect(table.tBodies[0].rows[0].cells).to.have.length(1);
-      expect(table.tBodies[0].rows[0].cells[0].firstChild.data).
-        to.equal('DOM cell');
+      expect(
+        table.props.children.type
+      ).to.equal('tbody');
+      expect(
+        table.props.children.props.children.type
+      ).to.equal('tr');
+      expect(
+        table.props.children.props.children.props.children.type
+      ).to.equal('td');
+      expect(
+        table.props.children.props.children.props.children.props.children
+      ).to.equal('DOM cell');
     });
 
 
     it('can render elements passed as children', () => {
-      const comp = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Table>
           <Section type="body" data={records} rows={genBodyRows} />
         </Table>
       );
+      const table = renderer.getRenderOutput();
 
-      const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
-
-      expect(table.tBodies).to.have.length(1);
-      expectTBodyStructure(table.tBodies[0]);
+      expect(table.props.children.type).to.equal(Section);
+      expect(table.props.children.props.type).to.equal('body');
     });
 
 
     it('passes all props except for `data` or `sections` to actual table ' +
        'element',
     () => {
-      const comp = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Table className="data" />
       );
+      const table = renderer.getRenderOutput();
 
-      const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
-
-      expect(table.className).to.equal('data');
+      expect(table.props.className).to.equal('data');
     });
   });
 
@@ -131,28 +121,26 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
   describe('Section', () => {
     it('renders different type of table section based on `type` prop',
     () => {
-      const table = TestUtils.renderIntoDocument(
-        <table>
-          <Section type="body" />
-        </table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Section type="body" />
       );
+      const tBody = renderer.getRenderOutput();
 
-      expect(table.tBodies).to.have.length(1);
+      expect(tBody.type).to.equal('tbody');
     });
 
 
     it('can render rows dynamically from generator yielding Row ' +
        'elements from `data` prop',
     () => {
-      const table = TestUtils.renderIntoDocument(
-        <table>
-          <Section type="body" data={records} rows={genBodyRows} />
-        </table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Section type="body" data={records} rows={genBodyRows} />
       );
+      const tBody = renderer.getRenderOutput();
 
-      const tBody = table.querySelector('tbody');
-
-      expectTBodyStructure(tBody);
+      expect(tBody.props.children.type).to.equal(Row);
     });
 
 
@@ -169,47 +157,47 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
         );
       }
 
-      const table = TestUtils.renderIntoDocument(
-        <table>
-          <Section type="body" rows={genDomRows} />
-        </table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Section type="body" rows={genDomRows} />
       );
+      const tBody = renderer.getRenderOutput();
 
-      const tBody = table.querySelector('tbody');
-
-      expect(tBody.rows).to.have.length(1);
-      expect(tBody.rows[0].cells).to.have.length(1);
-      expect(tBody.rows[0].cells[0].firstChild.data).to.equal('DOM cell');
+      expect(
+        tBody.props.children.type
+      ).to.equal('tr');
+      expect(
+        tBody.props.children.props.children.type
+      ).to.equal('td');
+      expect(
+        tBody.props.children.props.children.props.children
+      ).to.equal('DOM cell');
     });
 
 
     it('can render elements passed as children', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table>
-          <Section type="body">
-            <Row data={records[0]} cells={genCells} />
-          </Section>
-        </table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Section type="body">
+          <Row data={records[0]} cells={genCells} />
+        </Section>
       );
+      const tBody = renderer.getRenderOutput();
 
-      const tBody = table.querySelector('tbody');
-
-      expectTBodyStructure(tBody);
+      expect(tBody.props.children.type).to.equal(Row);
     });
 
 
     it('passes all props except for `type`, `data` or `rows` to actual ' +
        'section element',
     () => {
-      const table = TestUtils.renderIntoDocument(
-        <table>
-          <Section type="body" className="simple" />
-        </table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Section type="body" className="simple" />
       );
+      const tBody = renderer.getRenderOutput();
 
-      const tBody = table.querySelector('tbody');
-
-      expect(tBody.className).to.equal('simple');
+      expect(tBody.props.className).to.equal('simple');
     });
   });
 
@@ -218,15 +206,14 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
     it('can render cells dynamically from generator yielding Cell ' +
        'elements from `data` prop',
     () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody>
-          <Row data={records[0]} cells={genCells} />
-        </tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Row data={records[0]} cells={genCells} />
       );
+      const row = renderer.getRenderOutput();
 
-      const row = table.querySelector('tr');
-
-      expectRowStructure(row);
+      expect(row.type).to.equal('tr');
+      expect(row.props.children.type).to.equal(Cell);
     });
 
 
@@ -241,101 +228,86 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
         );
       }
 
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody>
-          <Row cells={genDomCell} />
-        </tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Row cells={genDomCell} />
       );
+      const row = renderer.getRenderOutput();
 
-      const row = table.querySelector('tr');
-
-      expect(row.cells).to.have.length(1);
-      expect(row.cells[0].firstChild.data).to.equal('DOM cell');
+      expect(row.props.children.type).to.equal('td');
+      expect(row.props.children.props.children).to.equal('DOM cell');
     });
 
 
     it('can render elements passed as children', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody>
-          <Row>
-            <Cell>
-              {records[0].field}
-            </Cell>
-          </Row>
-        </tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Row>
+          <Cell>value</Cell>
+        </Row>
       );
+      const row = renderer.getRenderOutput();
 
-      const row = table.querySelector('tr');
-
-      expectRowStructure(row);
+      expect(row.props.children.type).to.equal(Cell);
+      expect(row.props.children.props.children).to.equal('value');
     });
 
 
     it('passes all props except for `data` or `cells` to actual row element',
     () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody>
-          <Row className="info" />
-        </tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Row className="info" />
       );
+      const row = renderer.getRenderOutput();
 
-      const row = table.querySelector('tr');
-
-      expect(row.className).to.equal('info');
+      expect(row.props.className).to.equal('info');
     });
   });
 
 
   describe('Cell', () => {
     it('renders `td` tag by default', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody><tr>
-          <Cell />
-        </tr></tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Cell />
       );
+      const cell = renderer.getRenderOutput();
 
-      expect(table.tBodies[0].rows[0].cells[0].tagName).to.equal('TD');
+      expect(cell.type).to.equal('td');
     });
 
 
     it('renders different type of table cell based on `tag` prop', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><thead><tr>
-          <Cell tag="th" />
-        </tr></thead></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Cell tag="th" />
       );
+      const cell = renderer.getRenderOutput();
 
-      expect(table.tHead.rows[0].cells[0].tagName).to.equal('TH');
+      expect(cell.type).to.equal('th');
     });
 
 
     it('can render elements passed as children', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody><tr>
-          <Cell>
-            {records[0].field}
-          </Cell>
-        </tr></tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Cell>value</Cell>
       );
+      const cell = renderer.getRenderOutput();
 
-      const cell = table.querySelector('td');
-
-      expectCellStructure(cell);
+      expect(cell.props.children).to.equal('value');
     });
 
 
     it('passes all props except for `tag` to actual cell element', () => {
-      const table = TestUtils.renderIntoDocument(
-        <table><tbody><tr>
-          <Cell className="field">
-            {records[0].field}
-          </Cell>
-        </tr></tbody></table>
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Cell className="field" />
       );
+      const cell = renderer.getRenderOutput();
 
-      const cell = table.querySelector('td');
-
-      expect(cell.className).to.equal('field');
+      expect(cell.props.className).to.equal('field');
     });
   });
 });

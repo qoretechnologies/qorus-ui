@@ -134,17 +134,25 @@ export default class ErrorModal extends Component {
 
 
   /**
+   * References error form.
+   *
+   * @param {HTMLFormElement} el
+   */
+  refForm(el) {
+    this._form = el;
+  }
+
+
+  /**
    * @return {ReactElement}
    */
   render() {
-    const refForm = c => this._form = c;
-
     return (
       <Modal>
         <form
           className="form-horizontal"
           onSubmit={::this.onCommit}
-          ref={refForm}
+          ref={::this.refForm}
           noValidate
         >
           <Modal.Header

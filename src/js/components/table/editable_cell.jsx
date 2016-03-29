@@ -183,13 +183,24 @@ export default class EditableCell extends Component {
 
 
   /**
+   * Stores edit field reference.
+   *
+   * @param {HTMLInputElement} el
+   */
+  refEditField(el) {
+    this._editField = el;
+  }
+
+
+  /**
    * Returns element for this component.
    *
    * @return {ReactElement}
    */
   render() {
-    const { value, onSave, ...props } = this.props;
-    const setEditField = c => this._editField = c;
+    const props = Object.assign({}, this.props);
+    delete props.value;
+    delete props.onSave;
 
     return (
       <td
@@ -210,7 +221,7 @@ export default class EditableCell extends Component {
               onChange={::this.onChange}
               onKeyUp={::this.onKeyUp}
               onBlur={::this.cancel}
-              ref={setEditField}
+              ref={::this.refEditField}
             /> :
             <span>{this.state.value}</span>
         }

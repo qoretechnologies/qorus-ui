@@ -3,6 +3,9 @@ import { Link } from 'react-router';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+import * as shallow from '../shallow';
+
+
 import { Group, Groups } from '../../src/js/components/groups';
 
 
@@ -53,14 +56,18 @@ describe("{ Group, Groups } from 'components/groups'", () => {
 
   describe('Groups', () => {
     it('conveniently groups Group instances together', () => {
-      const comp = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Groups>
           <Group name="Test Group 1" />
           <Group name="Test Group 2" />
         </Groups>
       );
+      const result = renderer.getRenderOutput();
 
-      const comps = TestUtils.scryRenderedComponentsWithType(comp, Group);
+      const comps = shallow.filterTree(result, el => (
+        el.type === Group
+      ));
 
       expect(comps).to.have.length(2);
     });

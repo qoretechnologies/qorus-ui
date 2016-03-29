@@ -1,7 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-
-
-import { pureRender } from '../utils';
+import React, { PropTypes } from 'react';
 
 
 /**
@@ -9,41 +6,39 @@ import { pureRender } from '../utils';
  *
  * Title HTML ID is for ARIA in connection with the whole modal
  * pane. Title itself is represented by children.
+ *
+ * @param {!{
+ *   titleId: string,
+ *   onClose: ?function,
+ *   children: ReactNode,
+ * }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Header extends Component {
-  static propTypes = {
-    titleId: PropTypes.string.isRequired,
-    onClose: PropTypes.func,
-    children: PropTypes.node,
-  };
-
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div className="modal-header">
-        {this.props.onClose && (
-          <button
-            type="button"
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={this.props.onClose}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        )}
-        {this.props.children && (
-          <h4 className="modal-title" id={this.props.titleId}>
-            {this.props.children}
-          </h4>
-        )}
-      </div>
-    );
-  }
+export default function Header(props) {
+  return (
+    <div className="modal-header">
+      {props.onClose && (
+        <button
+          type="button"
+          className="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          onClick={props.onClose}
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      )}
+      {props.children && (
+        <h4 className="modal-title" id={props.titleId}>
+          {props.children}
+        </h4>
+      )}
+    </div>
+  );
 }
+
+Header.propTypes = {
+  titleId: PropTypes.string.isRequired,
+  onClose: PropTypes.func,
+  children: PropTypes.node,
+};

@@ -24,5 +24,5 @@ module.exports = {
     `${apiProto}://${apiHost}:${apiPort}/api`,
   wsProxy: isWsOverride,
   wsBaseUrl: process.env.WS_BASE_URL ||
-    `${apiProto === 'https' ? 'wss' : 'ws' }://${apiHost}:${apiPort}`,
+    `${apiProto === 'https' ? 'wss' : 'ws'}://${apiHost}:${apiPort}`,
 };

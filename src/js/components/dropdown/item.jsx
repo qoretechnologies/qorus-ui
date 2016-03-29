@@ -1,18 +1,20 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
-export default class Item extends Component {
-  static propTypes = {
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-  };
-
-  render() {
-    return (
-      <li>
-        <a href="#">{ this.props.title }</a>
-      </li>
-    );
-  }
+/**
+ * @param {!{ title: ?(string|number) }} props
+ * @return {!ReactElement}
+ */
+export default function Item(props) {
+  return (
+    <li>
+      <a href="#">{props.title}</a>
+    </li>
+  );
 }
+
+Item.propTypes = {
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+};

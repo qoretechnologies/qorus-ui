@@ -2,6 +2,8 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
+import * as shallow from '../shallow';
+
 
 import Topbar from '../../src/js/components/topbar';
 import UserInfo from '../../src/js/components/user_info';
@@ -12,15 +14,21 @@ describe("Topbar from 'components/topbar'", () => {
     const info = { 'instance-key': 'test-1' };
     const user = { username: 'jon.doe' };
 
-    const comp = TestUtils.renderIntoDocument(
+    const renderer = TestUtils.createRenderer();
+    renderer.render(
       <Topbar info={info} currentUser={user} />
     );
+    const result = renderer.getRenderOutput();
 
-    const instanceEl =
-      TestUtils.findRenderedDOMComponentWithClass(comp, 'topbar__instance');
-    expect(instanceEl.textContent).to.equal('test-1');
+    const instanceEl = shallow.filterTree(result, el => (
+      el.props.className &&
+      el.props.className.split(/\s+/).indexOf('topbar__instance') >= 0
+    ))[0];
+    expect(instanceEl.props.children).to.eql('test-1');
 
-    const userComp = TestUtils.findRenderedComponentWithType(comp, UserInfo);
+    const userComp = shallow.filterTree(result, el => (
+      el.type === UserInfo
+    ))[0];
     expect(userComp.props.user).to.equal(user);
   });
 });

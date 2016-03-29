@@ -1,29 +1,20 @@
-import React, { Component, PropTypes } from 'react';
-
-
-import { pureRender } from '../utils';
+import React, { PropTypes } from 'react';
 
 
 /**
  * Wrapper for modal footer content (usually action buttons).
+ *
+ * @param {!{ children: ReactNode }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Footer extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div className="modal-footer">
-        {this.props.children}
-      </div>
-    );
-  }
+export default function Footer(props) {
+  return (
+    <div className="modal-footer">
+      {props.children}
+    </div>
+  );
 }
+
+Footer.propTypes = {
+  children: PropTypes.node,
+};

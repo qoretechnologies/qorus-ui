@@ -1,12 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 
 import Section from './section';
 import Row from './row';
 import Cell from './cell';
-
-
-import { pureRender } from '../utils';
 
 
 /**
@@ -23,31 +20,29 @@ import { pureRender } from '../utils';
  *
  * Dynamic section rendering is preferred over static if both methods
  * are defined.
+ *
+ * @param {!{
+ *   sections: ?function,
+ *   data: *,
+ *   children: ReactNode,
+ * }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Table extends Component {
-  static propTypes = {
-    sections: PropTypes.func,
-    data: PropTypes.any,
-    children: PropTypes.node,
-  };
+export default function Table(props) {
+  const { sections, data, children, ...restProps } = props;
 
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    const { sections, data, children, ...props } = this.props;
-
-    return React.createElement(
-      'table',
-      props,
-      ...(sections ? sections(data) : React.Children.toArray(children))
-    );
-  }
+  return React.createElement(
+    'table',
+    restProps,
+    ...(sections ? sections(data) : React.Children.toArray(children))
+  );
 }
+
+Table.propTypes = {
+  sections: PropTypes.func,
+  data: PropTypes.any,
+  children: PropTypes.node,
+};
 
 
 export { Section, Row, Cell };

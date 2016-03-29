@@ -29,8 +29,8 @@ function buildFromFixtures() {
 
 function generateFromSchema() {
   const jsf = require('json-schema-faker');
-  const system = require(`../../types/system/schema`);
-  const options = require(`../../types/options/schema`);
+  const system = require('../../types/system/schema');
+  const options = require('../../types/options/schema');
 
   return {
     system: jsf(system.schema, system.refs),

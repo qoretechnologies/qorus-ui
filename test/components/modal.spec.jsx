@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
@@ -8,30 +8,30 @@ import Modal, { Manager } from '../../src/js/components/modal';
 describe("Modal, { Manager } from 'components/modal'", () => {
   /**
    * Example modal component with simple content.
+   *
+   * @param {!{ heading: string, onClose: function }} props
+   * @return {!ReactElement}
    */
-  class SimpleModal extends Component {
-    static propTypes = {
-      heading: PropTypes.string,
-      onClose: PropTypes.func,
-    };
-
-    render() {
-      return (
-        <Modal>
-          <Modal.Header
-            titleId="modalTitle"
-            onClose={this.props.onClose}
-          >
-            {this.props.heading}
-          </Modal.Header>
-          <Modal.Body>
-            <p>Rendered in modal</p>
-          </Modal.Body>
-          <Modal.Footer />
-        </Modal>
-      );
-    }
+  function SimpleModal(props) {
+    return (
+      <Modal>
+        <Modal.Header
+          titleId="modalTitle"
+          onClose={props.onClose}
+        >
+          {props.heading}
+        </Modal.Header>
+        <Modal.Body>
+          <p>Rendered in modal</p>
+        </Modal.Body>
+        <Modal.Footer />
+      </Modal>
+    );
   }
+  SimpleModal.propTypes = {
+    heading: PropTypes.string,
+    onClose: PropTypes.func,
+  };
 
 
   /**
@@ -185,7 +185,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         () => {
           const manager = ReactDOM.render(<Manager />, mountNode);
 
-          let modal;
+          let modal = null;
           const onClose = () => manager.close(modal);
           modal = (
             <SimpleModal onClose={onClose} />
@@ -217,7 +217,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         <Manager />
       );
 
-      let modal;
+      let modal = null;
       const onClose = () => manager.close(modal);
       modal = (
         <SimpleModal onClose={onClose} />
@@ -265,7 +265,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         <Manager />
       );
 
-      let modal;
+      let modal = null;
       const onClose = () => manager.close(modal);
       modal = (
         <SimpleModal onClose={onClose} />
@@ -294,7 +294,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
         <Manager />
       );
 
-      let modal;
+      let modal = null;
       const onClose = () => manager.close(modal);
       modal = (
         <SimpleModal onClose={onClose} />

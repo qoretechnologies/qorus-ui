@@ -28,7 +28,7 @@ describe("CollectionSearch from 'components/collection_search'", () => {
   it('calls onChange prop callback with new RegExp filter on input change',
   () => {
     let result;
-    const onChange = filter => result = filter;
+    function onChange(filter) { result = filter; }
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch onChange={onChange} />
     );
@@ -43,7 +43,7 @@ describe("CollectionSearch from 'components/collection_search'", () => {
 
   it('escapes special RegExp characters', () => {
     let result;
-    const onChange = filter => result = filter;
+    function onChange(filter) { result = filter; }
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch onChange={onChange} />
     );
@@ -60,7 +60,7 @@ describe("CollectionSearch from 'components/collection_search'", () => {
 
   it('optionally creates a RegExp filter with ignore-case flag', () => {
     let result;
-    const onChange = filter => result = filter;
+    function onChange(filter) { result = filter; }
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch onChange={onChange} ignoreCase />
     );
@@ -76,7 +76,7 @@ describe("CollectionSearch from 'components/collection_search'", () => {
 
   it('optionally renders RE switch to treat input as RegExp', () => {
     let result;
-    const onChange = filter => result = filter;
+    function onChange(filter) { result = filter; }
     const comp = TestUtils.renderIntoDocument(
       <CollectionSearch onChange={onChange} regexp />
     );

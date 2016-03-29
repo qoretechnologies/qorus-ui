@@ -1,21 +1,22 @@
-import React, { Component, PropTypes } from 'react';
-import classNames from 'classnames';
+import React, { PropTypes } from 'react';
 
-export default class Control extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
-  render() {
-    return (
-      <button
-        className={classNames('btn', 'btn-default', 'dropdown-toggle')}
-        {...this.props}
-      >
-        { this.props.children }
-        {' '}
-        <span className="fa fa-caret-down" />
-      </button>
-    );
-  }
+/**
+ * @param {!Object} props
+ * @return {!ReactElement}
+ */
+export default function Control(props) {
+  return (
+    <button
+      className="btn btn-default dropdown-toggle"
+      {...props}
+    >
+      { props.children }
+      {' '}
+      <span className="fa fa-caret-down" />
+    </button>
+  );
 }
+
+Control.propTypes = {
+  children: PropTypes.node,
+};

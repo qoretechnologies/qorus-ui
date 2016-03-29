@@ -21,16 +21,13 @@ export function createResourceReducers(
   resources = [],
   iniState = initialState
 ) {
-  let reducers;
-  reducers = {};
+  const reducers = {};
 
   Object.keys(actions).forEach(resource => {
     const resourceOrigin = getResourceByName(resources, resource);
 
     reducers[resource] = {};
-    let handlers;
-
-    handlers = {};
+    const handlers = {};
 
     Object.keys(actions[resource]).forEach(actn => {
       const name = `${resource}_${actn}`.toUpperCase();

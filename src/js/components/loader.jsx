@@ -1,18 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
 /**
  * Simple spinning loading indicator.
+ *
+ * @return {!ReactElement}
  */
-export default class Loader extends Component {
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <p><i className="fa fa-spinner fa-spin" /> Loading</p>
-    );
-  }
+export default function Loader() {
+  return (
+    <p><i className="fa fa-spinner fa-spin" /> Loading</p>
+  );
 }

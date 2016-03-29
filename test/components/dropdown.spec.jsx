@@ -3,6 +3,8 @@ import TestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
+import * as shallow from '../shallow';
+
 import Dropdown, { Item, Control } from '../../src/js/components/dropdown';
 
 
@@ -13,13 +15,14 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
   describe('Item', () => {
     it('renders dropdown item with title', () => {
-      const item = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Item title="All" />
       );
+      const result = renderer.getRenderOutput();
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(item, 'li');
-
-      expect(el.textContent).to.equal('All');
+      expect(result.type).to.equal('li');
+      expect(result.props.children.props.children).to.equal('All');
     });
 
     xit('handles action on click', () => {
@@ -37,21 +40,25 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
   describe('Dropdown', () => {
     it('shows Item list when Control is clicked', () => {
-      const dropdown = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Dropdown>
           <Control>
-            <i className="fa fa-square-o check-all checker"/>&nbsp;
+            <i className="fa fa-square-o check-all checker" />&nbsp;
           </Control>
-          <Item title="Hello"/>
-          <Item title="Its me"/>
+          <Item title="Hello" />
+          <Item title="Its me" />
         </Dropdown>
       );
+      let dropdown = renderer.getRenderOutput();
 
-      const btn = TestUtils.findRenderedDOMComponentWithTag(dropdown, 'button');
+      dropdown.props.children[0][0].props.onClick();
 
-      TestUtils.Simulate.click(btn);
+      dropdown = renderer.getRenderOutput();
 
-      const comps = TestUtils.scryRenderedComponentsWithType(dropdown, Item);
+      const comps = shallow.filterTree(dropdown, el => (
+        el.type === Item
+      ));
 
       expect(comps).to.have.length(2);
     });
@@ -59,16 +66,19 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
   describe('Control', () => {
     it('renders toggle button', () => {
-      const control = TestUtils.renderIntoDocument(
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
         <Control>
           Click me
         </Control>
       );
+      const result = renderer.getRenderOutput();
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-      expect(el.firstChild.textContent).to.equal('Click me');
-      expect(Array.from(el.lastChild.classList)).to.include('fa-caret-down');
+      expect(result.type).to.equal('button');
+      expect(result.props.children[0]).to.equal('Click me');
+      expect(result.props.children[2].props.className).to.equal(
+        'fa fa-caret-down'
+      );
     });
   });
 });

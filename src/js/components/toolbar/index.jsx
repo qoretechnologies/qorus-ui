@@ -1,30 +1,24 @@
-import React, { Component, PropTypes } from 'react';
-import classNames from 'classnames';
+import React, { PropTypes } from 'react';
+
 
 /**
  * Workflow table toolbar.
  *
  * The toolbar controls are children.
+ *
+ * @parma {!{ children: ReactNode }} props
+ * @return {ReactElement}
  */
-export default class Toolbar extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div
-        className={classNames('btn-toolbar', 'toolbar')}
-        role="toolbar"
-      >
-        {this.props.children}
+export default function Toolbar(props) {
+  return (
+    <div id="workflows-toolbar" className="btn-toolbar toolbar" role="toolbar">
+      <div className="workflows-toolbar btn-toolbar sticky toolbar">
+        {props.children}
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+Toolbar.propTypes = {
+  children: PropTypes.node,
+};

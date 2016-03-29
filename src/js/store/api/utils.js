@@ -21,8 +21,7 @@ export function combineResourceActions(...actions) {
 
 
 export function prepareApiActions(url, actions) {
-  let actionsHash;
-  actionsHash = {};
+  const actionsHash = {};
 
   Object.keys(actions).forEach(a => {
     let actionFn;
@@ -48,14 +47,13 @@ export function prepareApiActions(url, actions) {
 
 export function createResourceActions(res, defaultActions = id => id) {
   const resp = res.map(r => {
-    let rr;
-    const name = r.name;
-    const actions = _.isFunction(defaultActions)
-      ? defaultActions(r.actions || []) : defaultActions;
+    const actions = _.isFunction(defaultActions) ?
+      defaultActions(r.actions || []) :
+      defaultActions;
 
-    rr = {};
-    rr[name] = prepareApiActions(r.url, actions);
-    return rr;
+    return {
+      [r.name]: prepareApiActions(r.url, actions),
+    };
   });
 
   return _.merge(...resp);
@@ -63,9 +61,7 @@ export function createResourceActions(res, defaultActions = id => id) {
 
 
 export function createApiActions(actions) {
-  let apiActions;
-
-  apiActions = {};
+  const apiActions = {};
 
   Object.keys(actions).forEach(key => {
     apiActions[key] = {};

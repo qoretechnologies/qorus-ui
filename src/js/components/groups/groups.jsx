@@ -1,28 +1,21 @@
-import React, { Component, PropTypes } from 'react';
-import { pureRender } from '../utils';
+import React, { PropTypes } from 'react';
 
 
 /**
  * Wrapper for Group elements.
+ *
+ * @param {!{ children: Array<!ReactElement> }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Groups extends Component {
-  static propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element),
-  };
-
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div className="groups">
-        <h4>Groups</h4>
-        {this.props.children}
-      </div>
-    );
-  }
+export default function Groups(props) {
+  return (
+    <div className="groups">
+      <h4>Groups</h4>
+      {props.children}
+    </div>
+  );
 }
+
+Groups.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.element),
+};

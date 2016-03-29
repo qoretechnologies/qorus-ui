@@ -224,13 +224,13 @@ export default class App extends Component {
                 path="services(/:date)(/:filter)(/:detailId)(/:tabId)"
                 component={Services}
               />
-              <Route path="jobs"/>
-              <Route path="search"/>
-              <Route path="groups(/:name)"/>
-              <Route path="ocmd"/>
-              <Route path="library"/>
-              <Route path="extensions"/>
-              <Route path="performance"/>
+              <Route path="jobs" />
+              <Route path="search" />
+              <Route path="groups(/:name)" />
+              <Route path="ocmd" />
+              <Route path="library" />
+              <Route path="extensions" />
+              <Route path="performance" />
             </Route>
           </Router>
           {this.renderDevTools()}

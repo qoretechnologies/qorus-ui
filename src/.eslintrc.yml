@@ -1,8 +1,13 @@
 ---
 env:
   browser: true
+  commonjs: true
   node: false
 rules:
   strict:
     - 2
     - never
+globals:
+  process:
+    env:
+      NODE_ENV: 'production'

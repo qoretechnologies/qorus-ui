@@ -1,7 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-
-
-import { pureRender } from '../utils';
+import React, { PropTypes } from 'react';
 
 
 /**
@@ -17,28 +14,26 @@ import { pureRender } from '../utils';
  *
  * Dynamic cell rendering is preferred over static if both methods are
  * defined.
+ *
+ * @param {!{
+ *   cells: ?function,
+ *   data: *,
+ *   children: ReactNode,
+ * }} props
+ * @return {!ReactElement}
  */
-@pureRender
-export default class Row extends Component {
-  static propTypes = {
-    cells: PropTypes.func,
-    data: PropTypes.any,
-    children: PropTypes.node,
-  };
+export default function Row(props) {
+  const { cells, data, children, ...restProps } = props;
 
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    const { cells, data, children, ...props } = this.props;
-
-    return React.createElement(
-      'tr',
-      props,
-      ...(cells ? cells(data) : React.Children.toArray(children))
-    );
-  }
+  return React.createElement(
+    'tr',
+    restProps,
+    ...(cells ? cells(data) : React.Children.toArray(children))
+  );
 }
+
+Row.propTypes = {
+  cells: PropTypes.func,
+  data: PropTypes.any,
+  children: PropTypes.node,
+};

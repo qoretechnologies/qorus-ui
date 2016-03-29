@@ -1,9 +1,8 @@
 import { ORDER_STATES } from '../../../../constants/orders';
 
-let defaults;
+const defaults = {};
 
-defaults = { TOTAL: 0 };
-
-ORDER_STATES.forEach((val) => { defaults[val.name] = 0; });
+defaults.TOTAL = 0;
+ORDER_STATES.forEach(val => { defaults[val.name] = 0; });
 
 export const DEFAULTS = defaults;

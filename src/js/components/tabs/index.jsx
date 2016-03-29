@@ -98,8 +98,9 @@ export default class Tabs extends Component {
       <div className={this.props.className}>
         <ul className={`nav nav-${this.props.type}`}>
           {React.Children.map(this.props.children, tab => {
-            const { name, children, slug: slugMaybe, ...other } = tab.props;
+            const { name, slug: slugMaybe, ...other } = tab.props;
             const slug = slugMaybe || slugify(name);
+            delete other.children;
 
             return (
               <Item
