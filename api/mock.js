@@ -17,6 +17,7 @@ router.use('/users', require('./users'));
 router.use('/errors', require('./errors'));
 router.use('/workflows', require('./workflows'));
 router.use('/steps', require('./steps'));
+router.use('/services', require('./services'));
 
 
 module.exports = router;
