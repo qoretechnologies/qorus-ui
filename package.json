@@ -80,7 +80,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
-    "test": "npm run test-unit && npm run test-uat",
+    "test": "npm run test-unit && npm run test-uat -- -t ~@no-impl",
     "test-uat": "NODE_ENV=test cucumber.js --compiler js:babel-register --compiler jsx:babel-register",
     "test-unit": "NODE_ENV=test mocha --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
     "lint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
