@@ -25,6 +25,10 @@ table.table--data {
           font-weight: 500;
           text-align: left;
         }
+
+        &.desc { /* [2] */
+          text-align: left;
+        }
       }
     }
   }

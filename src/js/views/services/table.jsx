@@ -132,7 +132,7 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="description">Description</Cell>
+      <Cell tag="th" className="desc">Description</Cell>
     );
   }
 
@@ -177,7 +177,7 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell className="description">{model.desc}</Cell>
+      <Cell className="desc">{model.desc}</Cell>
     );
   }
 
