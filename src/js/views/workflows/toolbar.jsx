@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Toolbar from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
+import Checkbox from 'components/checkbox';
 
 import classNames from 'classnames';
 import { pureRender } from 'components/utils';
@@ -41,16 +42,21 @@ export default class WorkflowsToolbar extends Component {
 
     return null;
   }
-
+  
   render() {
     return (
       <Toolbar>
         <Dropdown id="selection">
           <DropdownControl>
-            <i className="fa fa-square-o check-all checker" />&nbsp;
+            <Checkbox
+              checked={false}
+            />&nbsp;
           </DropdownControl>
           <DropdownItem title="All" />
           <DropdownItem title="None" />
+          <DropdownItem title="Invert" />
+          <DropdownItem title="Running" />
+          <DropdownItem title="Stopped" />
         </Dropdown>
         {this.renderSelectionControls()}
       </Toolbar>
