@@ -2,6 +2,25 @@
  * @module types
  */
 
+/**
+  * @typedef {{
+  *   service_methodid: number,
+  *   name: string,
+  *   descripton: string,
+  *   author: string,
+  *   locktype: string,
+  *   internal: boolean,
+  *   write: boolean,
+  *   created: string,
+  *   modified: string,
+  *   tags: object,
+  *   source: string,
+  *   offset: string,
+  *   host: string,
+  *   user: string,
+  * }} Method
+  */
+
 
 /**
  * @typedef {{
@@ -17,10 +36,10 @@
  * enabled: boolean,
  * created: string,
  * modified: string,
- * mappers: !Array<object>,
+ * mappers: !Array<!Mapper>,
  * vmaps: !Array<object>,
  * latest: boolean,
- * methods: !Array<object>,
+ * methods: !Array<!Method>,
  * groups: !Array<!Group>,
  * resource_files: !Array<object>,
  * status: string,

@@ -6,6 +6,7 @@
 const React = require('react');
 
 const Option = require('../options/react');
+const Mapper = require('../mappers/react');
 
 const Group = React.PropTypes.shape({
   name: React.PropTypes.string.isRequired,
@@ -28,7 +29,7 @@ const Service = React.PropTypes.shape({
   deprecated: React.PropTypes.bool.isRequired,
   created: React.PropTypes.string.isRequired,
   modified: React.PropTypes.string.isRequired,
-  mappers: React.PropTypes.array.isRequired,
+  mappers: React.PropTypes.arrayOf(Mapper).isRequired,
   vmaps: React.PropTypes.array.isRequired,
   latest: React.PropTypes.bool.isRequired,
   methods: React.PropTypes.array.isRequired,
