@@ -5,6 +5,7 @@
 require('../setup');
 const common = require('../common');
 const Option = require('../options/schema').schema;
+const Method = require('../methods/schema').schema;
 
 const Group = {
   type: 'object',
@@ -30,6 +31,7 @@ const Service = {
     },
     type: {
       type: 'string',
+      pattern: 'user|system',
     },
     name: {
       type: 'string',
@@ -38,7 +40,7 @@ const Service = {
       type: 'string',
       format: 'qorus-version',
     },
-    description: {
+    desc: {
       type: 'string',
     },
     author: {
@@ -127,6 +129,7 @@ module.exports.refs = [
   }, common.nonNegativeInteger),
   Object.assign({ id: 'option' }, Option),
   Object.assign({ id: 'group' }, Group),
+  Object.assign({ id: 'method' }, Method),
   Object.assign({ id: 'nonNegativeInteger' }, common.nonNegativeInteger),
   Object.assign({ id: 'positiveInteger' }, common.positiveInteger),
 ];
