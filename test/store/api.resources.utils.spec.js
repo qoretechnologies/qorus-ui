@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 
 import {
-  normalizeName, normalizeId, extendDefaults,
+  normalizeName, normalizeId, extendDefaults, checkAlerts,
 } from '../../src/js/store/api/resources/utils';
 
 
@@ -11,6 +11,7 @@ describe(
     'normalizeName, ' +
     'normalizeId, ' +
     'extendDefaults ' +
+    'checkAlerts' +
   "} from 'store/api/resources/utils'",
 () => {
   describe('normalizeId', () => {
@@ -81,6 +82,42 @@ describe(
       const normalizedItem = normalizeName(item);
 
       expect(normalizedItem.normalizedName).to.equal('EXAMPLE v1.0.4 (1)');
+    });
+  });
+
+  describe('checkAlerts', () => {
+    it('creates has_alerts with true value',
+    () => {
+      const item = {
+        workflowid: 1,
+        name: 'EXAMPLE',
+        version: '1.0',
+        alerts: [{ name: 'alert' }],
+      };
+
+      const itemWithAlerts = checkAlerts(item);
+
+      expect(itemWithAlerts.has_alerts).to.be.true;
+      delete itemWithAlerts.has_alerts;
+      expect(itemWithAlerts).to.not.equal(item);
+      expect(itemWithAlerts).to.deep.equal(item);
+    });
+
+    it('creates has_alerts with false value',
+    () => {
+      const item = {
+        workflowid: 1,
+        name: 'EXAMPLE',
+        version: '1.0',
+        alerts: [],
+      };
+
+      const itemWithAlerts = checkAlerts(item);
+
+      expect(itemWithAlerts.has_alerts).to.be.false;
+      delete itemWithAlerts.has_alerts;
+      expect(itemWithAlerts).to.not.equal(item);
+      expect(itemWithAlerts).to.deep.equal(item);
     });
   });
 });

@@ -19,3 +19,11 @@ export const normalizeName = curry(item => {
 
   return Object.assign({ normalizedName }, item);
 });
+
+export const checkAlerts = curry(item => {
+  const { alerts } = item;
+
+  const hasAlerts = (alerts && alerts.length > 0);
+
+  return Object.assign({ has_alerts: hasAlerts }, item);
+});

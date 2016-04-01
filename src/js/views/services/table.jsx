@@ -119,7 +119,7 @@ export default class ServicesTable extends Component {
 
     yield (
       <Cell tag="th" className="narrow">
-        <i className="fa fa-warning-sign" />
+        <i className="fa fa-warning" />
       </Cell>
     );
 
@@ -147,6 +147,10 @@ export default class ServicesTable extends Component {
     const typeIcon = (model.type === 'system') ?
       classNames('fa', 'fa-cog') : classNames('fa', 'fa-user');
 
+    const alert = model.has_alerts ?
+      <i className="fa fa-warning text-danger" /> : '';
+
+
     yield (
       <Cell className="narrow">
         <i className="fa fa-square-o" />
@@ -165,7 +169,7 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell className="narrow">{model.has_alerts}</Cell>
+      <Cell className="narrow">{ alert }</Cell>
     );
 
     yield (

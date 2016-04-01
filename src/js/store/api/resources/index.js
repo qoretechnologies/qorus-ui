@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { extendDefaults, normalizeId, normalizeName } from './utils';
+import { extendDefaults, normalizeId, normalizeName, checkAlerts } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
 import settings from '../../../settings';
@@ -13,6 +13,7 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('workflowid'),
+      checkAlerts,
       extendDefaults(workflowDefaults)
     ),
   },
@@ -51,6 +52,7 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('serviceid'),
+      checkAlerts,
       extendDefaults(servicesDefaults)
     ),
   },
