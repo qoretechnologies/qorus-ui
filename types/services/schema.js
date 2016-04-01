@@ -6,6 +6,7 @@ require('../setup');
 const common = require('../common');
 const Option = require('../options/schema').schema;
 const Method = require('../methods/schema').schema;
+const Alert = require('../alerts/schema').schema;
 
 const Group = {
   type: 'object',
@@ -104,6 +105,9 @@ const Service = {
     },
     alerts: {
       type: 'array',
+      items: {
+        $ref: 'alert',
+      },
     },
     options: {
       type: 'array',
@@ -130,6 +134,7 @@ module.exports.refs = [
   Object.assign({ id: 'option' }, Option),
   Object.assign({ id: 'group' }, Group),
   Object.assign({ id: 'method' }, Method),
-  Object.assign({ id: 'nonNegativeInteger' }, common.nonNegativeInteger),
+  Object.assign({ id: 'alert' }, Alert),
   Object.assign({ id: 'positiveInteger' }, common.positiveInteger),
+  Object.assign({ id: 'nonNegativeInteger' }, common.nonNegativeInteger),
 ];
