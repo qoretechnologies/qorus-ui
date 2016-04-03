@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { get, flowRight, curry } from 'lodash';
+import { flow } from 'lodash';
 import { compare } from 'utils';
 import goTo from 'routes';
 
@@ -18,21 +18,6 @@ import Pane from 'components/pane';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
-
-
-const filterSearch = curry((search, workflows) =>
-  workflows.filter(w =>
-    search === undefined || w.name.toLowerCase().indexOf(search) > -1 ||
-    w.id.toString().indexOf(search) > -1)
-);
-
-
-const filterDeprecated = curry((hide, workflows) =>
-  workflows.filter(w =>
-    !hide || get(w, 'deprecated') === hide
-  )
-);
-
 
 const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
@@ -75,25 +60,19 @@ const systemOptionsSelector = state => (
 const globalErrorsSelector = state => errorsToArray(state, 'global');
 
 
-const searchSelector = (state, props) => props.location.query.q;
-
-
 const infoSelector = state => state.api.system;
 
-
-const deprecatedSelector = (state, props) => props.params.filter === 'hide';
+const defaultWorkflowFilter = (workflows) =>
+  workflows.map(w => Object.assign({ filter: false }, w));
 
 
 const collectionSelector = createSelector(
   [
-    searchSelector,
     workflowsSelector,
-    deprecatedSelector,
   ],
-  (search, workflows, deprecated) => flowRight(
+  (workflows) => flow(
     sortWorkflows,
-    filterDeprecated(deprecated),
-    filterSearch(search)
+    defaultWorkflowFilter
   )(workflows.data)
 );
 
@@ -160,6 +139,10 @@ export default class Workflows extends Component {
 
   componentWillMount() {
     this.props.dispatch(actions.workflows.fetch());
+
+    this.setState({
+      filterFn: null,
+    });
   }
 
 
@@ -183,11 +166,19 @@ export default class Workflows extends Component {
     );
   }
 
+  onFilterClick(filterFn) {
+    this.setState({
+      filterFn,
+    });
+  }
+
+  onWorkflowFilterChange(selected) {
+    console.log(selected);
+  }
 
   setTitle() {
     document.title = `Workflows | ${this.context.getTitle()}`;
   }
-
 
   getActiveWorkflow() {
     if (!this.props.params.detailId) return null;
@@ -222,19 +213,20 @@ export default class Workflows extends Component {
     );
   }
 
-
   render() {
-    const { sync, loading, workflows } = this.props;
-
-    if (!sync || loading) {
+    if (!this.props.sync || this.props.loading) {
       return <Loader />;
     }
 
     return (
       <div>
-        <WorkflowsToolbar />
+        <WorkflowsToolbar
+          onFilterClick={::this.onFilterClick}
+        />
         <WorkflowsTable
-          workflows={workflows}
+          initialFilter={this.state.filterFn}
+          onWorkflowFilterChange={::this.onWorkflowFilterChange}
+          workflows={this.props.workflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
         />
         {this.renderPane()}

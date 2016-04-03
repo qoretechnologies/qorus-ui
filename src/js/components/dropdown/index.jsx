@@ -18,8 +18,12 @@ export default class Dropdown extends Component {
   /**
    * Displays / hides the control dropdown
    * based on the current state
+   *
+   * @param {Event} event
    */
-  onDropdownToggleClick() {
+  onDropdownToggleClick(event) {
+    if (event.defaultPrevented) return;
+
     this.setState({
       showDropdown: !this.state.showDropdown,
     });
@@ -70,7 +74,6 @@ export default class Dropdown extends Component {
         <c.type
           id={this.props.id}
           onClick={::this.onDropdownToggleClick}
-          onBlur={::this.hideSelectionToggle}
           {...c.props}
         />
       );

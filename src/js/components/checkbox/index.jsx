@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 export default class extends Component {
   static propTypes = {
-    checked: PropTypes.bool.isRequired,
+    checked: PropTypes.bool,
     action: PropTypes.func,
   };
 
@@ -13,6 +13,14 @@ export default class extends Component {
     });
   }
 
+  componentWillReceiveProps(next) {
+    if(this.props.checked !== next.checked) {
+      this.setState({
+        checked: next.checked,
+      });
+    }
+  }
+
   /**
    * Checks / Unchecks the checkbox based on state
    * Stops further propagation
@@ -20,14 +28,14 @@ export default class extends Component {
    * @param event
    */
   onCheckboxClick(event) {
-    event.stopPropagation();
+    event.preventDefault();
 
     this.setState({
       checked: !this.state.checked,
     });
 
     if (this.props.action) {
-      this.props.action();
+      this.props.action(event);
     }
   }
 

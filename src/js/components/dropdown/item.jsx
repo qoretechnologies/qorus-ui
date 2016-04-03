@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { preventDefault } from '../../utils';
 
 /**
  * @param {!{ title: ?(string|number) }} props
@@ -7,7 +8,10 @@ import React, { PropTypes } from 'react';
 export default function Item(props) {
   return (
     <li>
-      <a href="#">{props.title}</a>
+      <a
+        onClick={preventDefault(props.action)}
+        href="#"
+      >{props.title}</a>
     </li>
   );
 }

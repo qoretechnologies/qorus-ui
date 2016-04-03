@@ -42,6 +42,12 @@ export default class WorkflowsToolbar extends Component {
 
     return null;
   }
+
+  onAllClick() {
+    this.props.onFilterClick((workflow) => {
+      return true;
+    });
+  }
   
   render() {
     return (
@@ -49,10 +55,13 @@ export default class WorkflowsToolbar extends Component {
         <Dropdown id="selection">
           <DropdownControl>
             <Checkbox
+              action={::this.onAllClick}
               checked={false}
             />&nbsp;
           </DropdownControl>
-          <DropdownItem title="All" />
+          <DropdownItem
+            action={::this.onAllClick}
+            title="All" />
           <DropdownItem title="None" />
           <DropdownItem title="Invert" />
           <DropdownItem title="Running" />

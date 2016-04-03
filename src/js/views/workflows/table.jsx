@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
+import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
 
 
@@ -27,6 +28,7 @@ export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
     activeWorkflowId: PropTypes.number,
+    initialFilter: PropTypes.func,
   };
 
 
@@ -46,13 +48,54 @@ export default class WorkflowsTable extends Component {
    */
   componentWillMount() {
     this._activateWorkflow = ::this.activateWorkflow;
-
     this._renderSections = ::this.renderSections;
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
+
+    this.setState({
+      selectedWorkflows: {},
+    })
   }
 
+  componentDidMount() {
+    this.setupFilters(this.props);
+  }
+
+  componentWillReceiveProps(next) {
+    if(this.props.initialFilter !== next.initialFilter) {
+      this.setupFilters(next);
+    }
+  }
+
+  setupFilters(props) {
+    this.setState({
+      selectedWorkflows: props.initialFilter ?
+        props.workflows.reduce((sel, w) => (
+           Object.assign(sel, {[w.id]: props.initialFilter(w)})
+        ), {}) :
+      {}
+    });
+  }
+
+  onCheckboxClick(ev) {
+    const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
+    const selectedWorkflows = Object.assign({}, this.state.selectedWorkflows, { [workflow.id] : !this.state.selectedWorkflows[workflow.id] });
+
+    if (this.props.workflows.every(w => selectedWorkflows[w.id])) {
+      this.props.onWorkflowFilterChange('all');
+    }
+    else if (this.props.workflows.some(w => selectedWorkflows[w.id])) {
+      this.props.onWorkflowFilterChange('some');
+    }
+    else {
+      this.props.onWorkflowFilterChange('none');
+    }
+
+    this.setState({
+      selectedWorkflows,
+    });
+  }
 
   /**
    * Dispatches `setAutostart` action for workflows.
@@ -167,13 +210,17 @@ export default class WorkflowsTable extends Component {
    * Yields cells with workflow data including order states.
    *
    * @param {Object} workflow
+   * @param {bool} selected
    * @return {Generator<ReactElement>}
    * @see ORDER_STATES
    */
-  *renderCells(workflow) {
+  *renderCells({ workflow, selected}) {
     yield (
       <Cell className="narrow">
-        <i className="fa fa-square-o" />
+        <Checkbox
+          action={::this.onCheckboxClick}
+          checked={selected}
+        />
       </Cell>
     );
 
@@ -246,16 +293,20 @@ export default class WorkflowsTable extends Component {
    *
    * @param {number} activeId
    * @param {Array<Object>} workflows
+   * @param {Object<number, boolean>} selectedWorkflows
    * @return {Generator<ReactElement>}
    * @see activateWorkflow
    * @see renderCells
    */
-  *renderRows({ activeId, workflows }) {
+  *renderRows({ activeId, workflows, selectedWorkflows }) {
     for (const workflow of workflows) {
       yield (
         <Row
           key={workflow.workflowid}
-          data={workflow}
+          data={{
+            workflow,
+            selected: selectedWorkflows[workflow.workflowid]
+           }}
           cells={this._renderCells}
           onClick={this._activateWorkflow}
           className={classNames({
@@ -296,6 +347,7 @@ export default class WorkflowsTable extends Component {
         data={{
           activeId: this.props.activeWorkflowId,
           workflows: this.props.workflows,
+          selectedWorkflows: this.state.selectedWorkflows,
         }}
         sections={this._renderSections}
         className={'table table-striped table-condensed table-hover ' +
