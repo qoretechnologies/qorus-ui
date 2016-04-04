@@ -52,7 +52,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick();
+      dropdown.props.children[0][0].props.onClick({ defaultPrevented: false });
 
       dropdown = renderer.getRenderOutput();
 
@@ -62,6 +62,33 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
       expect(comps).to.have.length(2);
     });
+
+    it('hides the Dropdown when Item is clicked', () => {
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Dropdown>
+          <Control>
+            Click me
+          </Control>
+          <Item
+            action={() => true}
+            title="Item"
+          />
+        </Dropdown>
+      );
+      let dropdown = renderer.getRenderOutput();
+
+      dropdown.props.children[0][0].props.onClick({ defaultPrevented: false });
+
+      dropdown = renderer.getRenderOutput();
+
+      dropdown.props.children[1].props.children[0].props.action();
+      dropdown.props.children[1].props.children[0].props.hideDropdown();
+
+      dropdown = renderer.getRenderOutput();
+      
+      expect(dropdown.props.children[1]).to.equal(null);
+    })
   });
 
   describe('Control', () => {
