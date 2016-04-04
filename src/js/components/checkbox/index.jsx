@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { CHECKBOX_CLASSES } from '../../constants/checkbox';
 
 export default class extends Component {
   static propTypes = {
-    checked: PropTypes.bool,
+    checked: PropTypes.string,
     action: PropTypes.func,
   };
 
@@ -14,7 +15,7 @@ export default class extends Component {
   }
 
   componentWillReceiveProps(next) {
-    if(this.props.checked !== next.checked) {
+    if (this.props.checked !== next.checked) {
       this.setState({
         checked: next.checked,
       });
@@ -25,13 +26,14 @@ export default class extends Component {
    * Checks / Unchecks the checkbox based on state
    * Stops further propagation
    * Runs provided function from the props.action
-   * @param event
+   * @param {Event} event
    */
   onCheckboxClick(event) {
     event.preventDefault();
+    const checked = this.state.checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED';
 
     this.setState({
-      checked: !this.state.checked,
+      checked,
     });
 
     if (this.props.action) {
@@ -40,7 +42,7 @@ export default class extends Component {
   }
 
   render() {
-    const className = classNames('fa', this.state.checked ? 'fa-check-square-o' : 'fa-square-o');
+    const className = classNames('fa', CHECKBOX_CLASSES[this.state.checked]);
 
     return (
       <i

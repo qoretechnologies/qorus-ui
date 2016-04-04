@@ -13,7 +13,7 @@ describe("Checkbox from 'components/checkbox'", () => {
   it('renders unchecked checkbox', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked={false} />
+      <Checkbox checked='UNCHECKED' />
     );
     const result = renderer.getRenderOutput();
 
@@ -21,10 +21,21 @@ describe("Checkbox from 'components/checkbox'", () => {
     expect(result.props.className).to.equal('fa fa-square-o');
   });
 
+  it('renders half-checked checkbox', () => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(
+      <Checkbox checked='HALFCHECKED' />
+    );
+    const result = renderer.getRenderOutput();
+
+    expect(result.type).to.equal('i');
+    expect(result.props.className).to.equal('fa fa-minus-square-o');
+  });
+
   it('renders checked chechbox', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked />
+      <Checkbox checked='CHECKED' />
     );
     const result = renderer.getRenderOutput();
 
@@ -39,7 +50,7 @@ describe("Checkbox from 'components/checkbox'", () => {
     );
     let result = renderer.getRenderOutput();
 
-    result.props.onClick({ stopPropagation: () => {} });
+    result.props.onClick({ preventDefault: () => {} });
     result = renderer.getRenderOutput();
 
     expect(result.props.className).to.equal('fa fa-check-square-o');
