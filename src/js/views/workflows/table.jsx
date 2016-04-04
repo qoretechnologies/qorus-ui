@@ -29,6 +29,7 @@ export default class WorkflowsTable extends Component {
     workflows: PropTypes.array,
     activeWorkflowId: PropTypes.number,
     initialFilter: PropTypes.func,
+    onWorkflowFilterChange: PropTypes.func,
   };
 
 
@@ -55,7 +56,7 @@ export default class WorkflowsTable extends Component {
 
     this.setState({
       selectedWorkflows: {},
-    })
+    });
   }
 
   componentDidMount() {
@@ -63,32 +64,54 @@ export default class WorkflowsTable extends Component {
   }
 
   componentWillReceiveProps(next) {
-    if(this.props.initialFilter !== next.initialFilter) {
+    if (this.props.initialFilter !== next.initialFilter) {
       this.setupFilters(next);
     }
   }
 
-  setupFilters(props) {
-    this.setState({
-      selectedWorkflows: props.initialFilter ?
-        props.workflows.reduce((sel, w) => (
-           Object.assign(sel, {[w.id]: props.initialFilter(w)})
-        ), {}) :
-      {}
-    });
-  }
-
+  /**
+   * Handles the individual workflow checkboxes
+   *
+   * @param {Event} ev
+   */
   onCheckboxClick(ev) {
     const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
-    const selectedWorkflows = Object.assign({}, this.state.selectedWorkflows, { [workflow.id] : !this.state.selectedWorkflows[workflow.id] });
+    const selectedWorkflows = Object.assign({},
+      this.state.selectedWorkflows,
+      { [workflow.id]: !this.state.selectedWorkflows[workflow.id] }
+    );
 
+    this.setSelectedWorkflows(selectedWorkflows);
+  }
+
+  /**
+   * Sets the initial selected workflows based on the
+   * filter function received in props
+   *
+   * @param {Object} props
+   */
+  setupFilters(props) {
+    const selectedWorkflows = props.initialFilter ?
+      props.workflows.reduce((sel, w) => (
+        Object.assign(sel, { [w.id]: props.initialFilter(w, this.state.selectedWorkflows) })
+      ), {}) :
+    {};
+
+    this.setSelectedWorkflows(selectedWorkflows);
+  }
+
+  /**
+   * Sends the selected workflows one level up to
+   * the workflows component and sets the state
+   *
+   * @param {Object} selectedWorkflows
+   */
+  setSelectedWorkflows(selectedWorkflows) {
     if (this.props.workflows.every(w => selectedWorkflows[w.id])) {
       this.props.onWorkflowFilterChange('all');
-    }
-    else if (this.props.workflows.some(w => selectedWorkflows[w.id])) {
+    } else if (this.props.workflows.some(w => selectedWorkflows[w.id])) {
       this.props.onWorkflowFilterChange('some');
-    }
-    else {
+    } else {
       this.props.onWorkflowFilterChange('none');
     }
 
@@ -214,12 +237,12 @@ export default class WorkflowsTable extends Component {
    * @return {Generator<ReactElement>}
    * @see ORDER_STATES
    */
-  *renderCells({ workflow, selected}) {
+  *renderCells({ workflow, selected }) {
     yield (
       <Cell className="narrow">
         <Checkbox
           action={::this.onCheckboxClick}
-          checked={selected}
+          checked={selected ? 'CHECKED' : 'UNCHECKED'}
         />
       </Cell>
     );
@@ -305,8 +328,8 @@ export default class WorkflowsTable extends Component {
           key={workflow.workflowid}
           data={{
             workflow,
-            selected: selectedWorkflows[workflow.workflowid]
-           }}
+            selected: selectedWorkflows[workflow.workflowid],
+          }}
           cells={this._renderCells}
           onClick={this._activateWorkflow}
           className={classNames({
