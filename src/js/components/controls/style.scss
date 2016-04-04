@@ -8,4 +8,8 @@
 .btn-controls {
   display: inline-block; /* [1] */
   white-space: nowrap; /* [2] */
+
+  .btn {
+    padding: 0 2px; /* [3] */
+  }
 }
