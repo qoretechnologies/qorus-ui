@@ -62,7 +62,12 @@ export default class Dropdown extends Component {
     return React.Children.map(this.props.children, (c) => {
       if (c.type !== Item) return undefined;
 
-      return c;
+      return (
+        <c.type
+          hideDropdown={::this.hideSelectionToggle}
+          {...c.props}
+        />
+      );
     });
   }
 
