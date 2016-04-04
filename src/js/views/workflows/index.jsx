@@ -127,7 +127,6 @@ export default class Workflows extends Component {
     dispatch: PropTypes.func,
   };
 
-
   getChildContext() {
     return {
       params: this.props.params,
@@ -142,6 +141,7 @@ export default class Workflows extends Component {
 
     this.setState({
       filterFn: null,
+      selected: 'none',
     });
   }
 
@@ -166,14 +166,27 @@ export default class Workflows extends Component {
     );
   }
 
+  /**
+   * Handles the click on the dropdowns checkbox
+   *
+   * @param {Function} filterFn
+   */
   onFilterClick(filterFn) {
     this.setState({
       filterFn,
     });
   }
 
+  /**
+   * Changes the state of what workflows are selected
+   * Used by the dropdown checkbox in Toolbar
+   *
+   * @param {String} selected
+   */
   onWorkflowFilterChange(selected) {
-    console.log(selected);
+    this.setState({
+      selected,
+    });
   }
 
   setTitle() {
@@ -186,11 +199,9 @@ export default class Workflows extends Component {
     return this.props.workflows.find(::this.isActive);
   }
 
-
   isActive(workflow) {
     return workflow.id === parseInt(this.props.params.detailId, 10);
   }
-
 
   renderPane() {
     const { params, errors, systemOptions, globalErrors } = this.props;
@@ -222,6 +233,7 @@ export default class Workflows extends Component {
       <div>
         <WorkflowsToolbar
           onFilterClick={::this.onFilterClick}
+          selected={this.state.selected}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
