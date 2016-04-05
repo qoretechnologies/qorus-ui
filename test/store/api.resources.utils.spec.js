@@ -1,10 +1,13 @@
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import dirtyChai from 'dirty-chai';
 
 
 import {
   normalizeName, normalizeId, extendDefaults, checkAlerts,
 } from '../../src/js/store/api/resources/utils';
 
+
+chai.use(dirtyChai);
 
 describe(
   '{ ' +
@@ -97,7 +100,7 @@ describe(
 
       const itemWithAlerts = checkAlerts(item);
 
-      expect(itemWithAlerts.has_alerts).to.be.true;
+      expect(itemWithAlerts.has_alerts).to.be.true();
       delete itemWithAlerts.has_alerts;
       expect(itemWithAlerts).to.not.equal(item);
       expect(itemWithAlerts).to.deep.equal(item);
@@ -114,7 +117,7 @@ describe(
 
       const itemWithAlerts = checkAlerts(item);
 
-      expect(itemWithAlerts.has_alerts).to.be.false;
+      expect(itemWithAlerts.has_alerts).to.be.false();
       delete itemWithAlerts.has_alerts;
       expect(itemWithAlerts).to.not.equal(item);
       expect(itemWithAlerts).to.deep.equal(item);

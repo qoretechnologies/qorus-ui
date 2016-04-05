@@ -2,8 +2,11 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
+import dirtyChai from 'dirty-chai';
 
 import { Control, Controls } from '../../src/js/components/controls';
+
+chai.use(dirtyChai);
 
 
 describe("{ Control, Controls } from 'components/controls'", () => {
@@ -79,6 +82,18 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
 
       expect(action).to.have.been.called();
+    });
+
+    it('set disabled button', () => {
+      const control = TestUtils.renderIntoDocument(
+        <Control icon="refresh" disabled />
+      );
+
+
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
+
+
+      expect(el.disabled).to.be.true();
     });
   });
 
