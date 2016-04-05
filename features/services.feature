@@ -15,7 +15,6 @@ Feature: Services
     When "services" get loaded
     Then I should see a table with "services" data
 
-  @no-impl
   Scenario: Activating detail pane
     Given I am on "services" listing
     When I activate "info"

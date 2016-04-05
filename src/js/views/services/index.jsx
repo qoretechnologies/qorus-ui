@@ -15,18 +15,24 @@ import Loader from 'components/loader';
 import Pane from 'components/pane';
 
 import ServicesTable from './table';
+import ServicesDetail from './detail';
 
 const servicesSelector = state => state.api.services;
 
+const systemOptionsSelector = state => (
+  state.api.systemOptions.data.filter(opt => opt.service)
+);
 
 const viewSelector = createSelector(
   [
     servicesSelector,
+    systemOptionsSelector,
   ],
-  (services) => ({
+  (services, systemOptions) => ({
     sync: services.sync,
     loading: services.loading,
     services: services.data,
+    systemOptions,
   })
 );
 
@@ -40,6 +46,7 @@ export default class Services extends Component {
     instanceKey: PropTypes.string,
     services: PropTypes.array,
     info: PropTypes.object,
+    systemOptions: PropTypes.array,
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     params: PropTypes.object,
@@ -87,7 +94,7 @@ export default class Services extends Component {
   onClosePane() {
     goTo(
       this.context.router,
-      'serrvices',
+      'services',
       this.props.route.path,
       this.props.params,
       { detailId: null, tabId: null }
@@ -113,7 +120,7 @@ export default class Services extends Component {
 
 
   renderPane() {
-    // const { params } = this.props;
+    const { systemOptions } = this.props;
 
     if (!this.getActiveRow()) return null;
 
@@ -122,7 +129,10 @@ export default class Services extends Component {
         width={550}
         onClose={::this.onClosePane}
       >
-        <h3>Test</h3>
+        <ServicesDetail
+          service={this.getActiveRow()}
+          systemOptions={ systemOptions }
+        />
       </Pane>
     );
   }
