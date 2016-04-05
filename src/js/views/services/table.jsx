@@ -4,6 +4,8 @@ import React, { Component, PropTypes } from 'react';
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
 
+import ServiceControls from './controls';
+
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
@@ -114,6 +116,10 @@ export default class ServicesTable extends Component {
     );
 
     yield (
+      <Cell tag="th" className="narrow">Actions</Cell>
+    );
+
+    yield (
       <Cell tag="th" className="narrow">Threads</Cell>
     );
 
@@ -157,10 +163,15 @@ export default class ServicesTable extends Component {
       </Cell>
     );
 
-
     yield (
       <Cell className="narrow">
         <i className={ typeIcon } />
+      </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">
+        <ServiceControls service={ model } />
       </Cell>
     );
 

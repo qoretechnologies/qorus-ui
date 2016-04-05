@@ -4,6 +4,9 @@
  * 1. Controls can be part of content flow with other widget so they
  *    are inline.
  * 2. Prevent text wrapping.
+ * 3. Controls should be more compact and smaller so padding is
+ *    smaller than default btn
+ * 4. Button should have fixed width to be all the same
  */
 .btn-controls {
   display: inline-block; /* [1] */
@@ -11,5 +14,6 @@
 
   .btn {
     padding: 0 2px; /* [3] */
+    width: 18px; /* [4] */
   }
 }

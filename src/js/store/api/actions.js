@@ -3,6 +3,7 @@ import RESOURCES from './resources';
 import * as workflowActions from './resources/workflows/actions';
 import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
+import * as serviceActions from './resources/services/actions';
 import {
   combineResourceActions,
   createResourceActions,
@@ -36,9 +37,13 @@ export const DEFAULT_ACTIONS = {
 const actions = createApiActions(
   combineResourceActions(
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),
-    createResourceActions(RESOURCES)
+    createResourceActions(RESOURCES),
+// TODO: Add more conveniant way to assign more actions to resource for
+// example like following code
+//    addResourceActions(RESOURCES, 'services', serviceActions.delegates),
   )
 );
+
 
 Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
@@ -49,5 +54,8 @@ Object.assign(actions.steps, stepActions);
 
 Object.assign(actions.errors, errorActions);
 
+Object.keys(serviceActions.delegates).forEach(a => {
+  actions.services[a] = serviceActions.delegates[a](actions);
+});
 
 export default actions;
