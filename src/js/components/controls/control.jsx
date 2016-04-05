@@ -16,6 +16,7 @@ export default class Control extends Component {
     btnStyle: PropTypes.string,
     icon: PropTypes.string.isRequired,
     action: PropTypes.func,
+    disabled: PropTypes.bool,
   };
 
 
@@ -47,6 +48,7 @@ export default class Control extends Component {
         })}
         title={this.props.title}
         onClick={::this.onClick}
+        disabled={this.props.disabled}
       >
         <i className={classNames(['fa', `fa-${this.props.icon}`])} />
         {this.props.label ? ` ${this.props.label}` : ''}
