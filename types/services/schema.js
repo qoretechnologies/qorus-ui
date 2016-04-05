@@ -117,7 +117,7 @@ const Service = {
     },
   },
   required: [
-    'serviceid', 'name', 'version', 'description', 'author', 'autostart',
+    'serviceid', 'name', 'version', 'desc', 'author', 'autostart',
     'manual_autostart', 'enabled', 'created', 'modified',
     'options', 'groups',
   ],
