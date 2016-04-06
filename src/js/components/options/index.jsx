@@ -12,7 +12,7 @@ import { pureRender } from '../utils';
  * Editable key-value table component.
  *
  * Available options passed in `systemOption` prop can added to
- * `options` property on `workflow` prop object. Addition triggers
+ * `options` property on `model` prop object. Addition triggers
  * `onSet` prop function with an option as an argument. Options can be
  * removed, which triggers `onDelete` prop function.
  *
@@ -23,7 +23,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Options extends Component {
   static propTypes = {
-    workflow: PropTypes.object.isRequired,
+    model: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
     onSet: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
@@ -55,26 +55,26 @@ export default class Options extends Component {
 
 
   /**
-   * Adds cached last option from state to options from wofkflow prop.
+   * Adds cached last option from state to options from model prop.
    *
    * @return {array}
    */
-  getWorkflowOptions() {
+  getModelOptions() {
     return this.state.lastOption ?
-      this.props.workflow.options.concat(this.state.lastOption) :
-      this.props.workflow.options;
+      this.props.model.options.concat(this.state.lastOption) :
+      this.props.model.options;
   }
 
 
   /**
-   * Gets available options by filtering options from workflow prop.
+   * Gets available options by filtering options from model prop.
    *
    * @return {array}
    */
   getUnusedSystemOptions() {
     return this.props.systemOptions.filter(sysOpt => (
-      this.props.workflow.options.findIndex(wflOpt => (
-        wflOpt.name === sysOpt.name
+      this.props.model.options.findIndex(mdlOpt => (
+        mdlOpt.name === sysOpt.name
       )) < 0
     ));
   }
@@ -224,12 +224,12 @@ export default class Options extends Component {
       <div className="options">
         <h4>Options</h4>
         <div>
-          {!this.getWorkflowOptions().length && (
+          {!this.getModelOptions().length && (
             <p>No options found.</p>
           )}
-          {!!this.getWorkflowOptions().length && (
+          {!!this.getModelOptions().length && (
             <Table
-              data={this.getWorkflowOptions()}
+              data={this.getModelOptions()}
               sections={::this.renderTableSections}
               className="table table-condensed table-striped table--small"
             />

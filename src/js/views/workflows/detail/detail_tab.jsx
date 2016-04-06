@@ -49,7 +49,7 @@ export default class DetailTab extends Component {
           }
         </Groups>
         <Options
-          workflow={this.props.workflow}
+          model={this.props.workflow}
           systemOptions={this.props.systemOptions}
           onSet={::this.setOption}
           onDelete={::this.deleteOption}
