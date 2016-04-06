@@ -1,6 +1,11 @@
 import _ from 'lodash';
 
-import { extendDefaults, normalizeId, normalizeName, checkAlerts } from './utils';
+import {
+  extendDefaults,
+  normalizeId,
+  normalizeName,
+  checkAlerts,
+} from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
 import settings from '../../../settings';
