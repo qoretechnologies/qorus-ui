@@ -1052,7 +1052,7 @@
   "threads": 0,
   "resources": null,
   "log_url": "ws://localhost:8001/log/services/698",
-  "options": {},
+  "options": [],
   "connections": [],
   "alerts": []
 }
