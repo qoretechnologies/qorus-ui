@@ -120,7 +120,7 @@ export default class Services extends Component {
 
 
   renderPane() {
-    const { systemOptions } = this.props;
+    const { params, systemOptions } = this.props;
 
     if (!this.getActiveRow()) return null;
 
@@ -131,7 +131,8 @@ export default class Services extends Component {
       >
         <ServicesDetail
           service={this.getActiveRow()}
-          systemOptions={ systemOptions }
+          systemOptions={systemOptions}
+          tabId={params.tabId}
         />
       </Pane>
     );

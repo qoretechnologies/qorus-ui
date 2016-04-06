@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-// import Tabs, { Pane } from 'components/tabs';
+import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
-
+import DetailTab from './tabs/detail';
 
 import { pureRender } from 'components/utils';
 
 
 import goTo from 'routes';
-import actions from 'store/api/actions';
+// import actions from 'store/api/actions';
 
 
 @pureRender
@@ -70,42 +70,34 @@ export default class ServicesDetail extends Component {
 
 
   render() {
-    const { service } = this.props;
+    const { service, tabId, systemOptions } = this.props;
 
     if (!service) return null;
 
     return (
       <article className="svc">
         <ServicesHeader service={service} />
-        {/* <Tabs
-          className="svc"
+        <Tabs
+          className="svc__tabs"
           active={tabId}
           tabChange={::this.changeTab}
         >
           <Pane name="Detail">
-            <DetailTab workflow={workflow} systemOptions={systemOptions} />
+            <DetailTab service={service} systemOptions={systemOptions} />
           </Pane>
           <Pane name="Library">
-            <LibraryTab workflow={workflow} />
+            <p>Not implemented yet</p>
           </Pane>
-          <Pane name="Steps">
-            <StepsTab workflow={workflow} />
+          <Pane name="Methods">
+            <p>Not implemented yet</p>
           </Pane>
           <Pane name="Log">
-            <LogTab workflow={workflow} />
+            <p>Not implemented yet</p>
           </Pane>
-          <Pane name="Errors">
-            <ErrorsTab
-              workflow={workflow}
-              errors={errors}
-              globalErrors={globalErrors}
-            />
+          <Pane name="Mappers">
+            <p>Not implemented yet</p>
           </Pane>
-          <Pane name="Mappers" />
-          <Pane name="Info">
-            <InfoTab workflow={workflow} />
-          </Pane>
-        </Tabs> */}
+        </Tabs>
       </article>
     );
   }
