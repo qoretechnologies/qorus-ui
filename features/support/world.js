@@ -117,6 +117,18 @@ class World {
 
 
   /**
+   * Proxy to browser's own fetch method.
+   *
+   * @param {string} url
+   * @param {Object} init
+   * @return {!Promise<Object>}
+   */
+  fetch(url, init) {
+    return this.browser.window.fetch(url, init);
+  }
+
+
+  /**
    * Calls given callback when the world is initialized.
    *
    * @param {function(*)} cb
