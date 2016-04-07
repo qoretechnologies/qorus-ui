@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 export default class Item extends Component {
   static propTypes = {
@@ -6,6 +7,7 @@ export default class Item extends Component {
       PropTypes.string,
       PropTypes.number,
     ]),
+    icon: PropTypes.string,
     action: PropTypes.func,
     hideDropdown: PropTypes.func,
   };
@@ -18,6 +20,18 @@ export default class Item extends Component {
     this.props.action();
     this.props.hideDropdown();
   }
+
+  /**
+   * Renders the icon for the dropdown item
+   * @returns {ReactElement|Void}
+   */
+  renderIcon() {
+    if (this.props.icon) {
+      return <i className={classNames('fa', `fa-${this.props.icon}`)} />;
+    }
+
+    return null;
+  }
   
   render() {
     return (
@@ -25,7 +39,11 @@ export default class Item extends Component {
         <a
           onClick={::this.onItemClick}
           href="#"
-        >{this.props.title}</a>
+        >
+          {this.renderIcon()}
+          {' '}
+          {this.props.title}
+        </a>
       </li>
     );
   }
