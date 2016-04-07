@@ -7,7 +7,6 @@ import AutoStart from 'components/autostart';
 import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
 
-
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
@@ -15,7 +14,6 @@ import goTo from 'routes';
 import classNames from 'classnames';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
-
 
 /**
  * List of all workflows in the system.
