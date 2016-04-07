@@ -27,7 +27,7 @@ class World {
     /**
      * Currently activate detail object.
      *
-     * @type {{ id: ?number, name: string }}
+     * @type {{ id: number, name: string }}
      */
     this.detail = null;
 

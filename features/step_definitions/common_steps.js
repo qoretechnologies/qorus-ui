@@ -7,7 +7,7 @@ const cmpPane = `${pane} article`;
 
 
 /**
- * Finds workflow row by worflow name.
+ * Finds listed object's row element by its name.
  *
  * @param {!module:zombie/Browser} browser
  * @param {string} name
@@ -17,6 +17,23 @@ function findTableRow(browser, name) {
   return browser.
     queryAll(cmpRows).
     find(r => r.cells[5].textContent === name) || null;
+}
+
+
+/**
+ * Finds listed object's unique identifier by given name in table.
+ *
+ * @param {!module:zombie/Browser} browser
+ * @param {string} name
+ * @return {?number}
+ */
+function findTableRowId(browser, name) {
+  const row = findTableRow(browser, name);
+  if (!row) return null;
+
+  const id = parseInt(row.cells[4].textContent, 10);
+
+  return !isNaN(id) ? id : null;
 }
 
 
@@ -70,7 +87,10 @@ module.exports = function commonSteps() {
 
     await this.browser.click(findTableRow(this.browser, name));
 
-    this.detail = { name };
+    this.detail = {
+      id: findTableRowId(this.browser, name),
+      name
+    };
   });
 
   this.Then(/^I should see "([^"]*)" detail pane$/, async function(name) {
@@ -109,7 +129,10 @@ module.exports = function commonSteps() {
 
     await this.browser.click(findTableRow(this.browser, name));
 
-    this.detail = { name };
+    this.detail = {
+      id: findTableRowId(this.browser, name),
+      name
+    };
   });
 
 
@@ -140,3 +163,4 @@ module.exports.selectors = {
   pane, cmpPane,
 };
 module.exports.findTableRow = findTableRow;
+module.exports.findTableRowId = findTableRowId;

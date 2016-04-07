@@ -1,27 +1,10 @@
 import { expect } from 'chai';
 
-import { selectors, findTableRow } from './common_steps';
+import { selectors, findTableRow, findTableRowId } from './common_steps';
 
 
 const wflwRowControls = 'td:nth-child(2) > .btn-controls > button.btn';
 const wflwPaneContent = `${selectors.pane} .wflw`;
-
-
-/**
- * Finds workflow unique identifier by given name in workflow table.
- *
- * @param {!module:zombie/Browser} browser
- * @param {string} name
- * @return {?number}
- */
-function findWorkflowId(browser, name) {
-  const row = findTableRow(browser, name);
-  if (!row) return null;
-
-  const id = parseInt(row.cells[4].textContent, 10);
-
-  return !isNaN(id) ? id : null;
-}
 
 
 /**
@@ -81,7 +64,7 @@ module.exports = function workflowSteps() {
     await this.browser.click(findTableRow(this.browser, name));
 
     this.detail = {
-      id: findWorkflowId(this.browser, name),
+      id: findTableRowId(this.browser, name),
       name,
     };
   });
@@ -114,7 +97,7 @@ module.exports = function workflowSteps() {
     await this.browser.click(findTableRow(this.browser, name));
 
     this.detail = {
-      id: findWorkflowId(this.browser, name),
+      id: findTableRowId(this.browser, name),
       name,
     };
   });
