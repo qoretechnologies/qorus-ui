@@ -1,4 +1,4 @@
-Feature: Workflow Controls
+Feature: Workflow Toolbar
 
   Scenario: Dropdown is toggled
     Given I am on "workflows" listing
