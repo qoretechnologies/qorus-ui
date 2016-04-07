@@ -102,7 +102,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       dropdown.props.children[1].props.children[0].props.hideDropdown();
 
       dropdown = renderer.getRenderOutput();
-      
+
       expect(dropdown.props.children[1]).to.equal(null);
     });
   });
