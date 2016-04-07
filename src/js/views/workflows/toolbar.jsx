@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import Toolbar from 'components/toolbar';
+import Toolbar, { Actions } from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
+import { Control as Button } from 'components/controls';
 import Checkbox from 'components/checkbox';
 
 import { CHECKBOX_STATES } from '../../constants/checkbox';
 
-import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 @pureRender
@@ -44,26 +44,38 @@ export default class WorkflowsToolbar extends Component {
    */
   renderSelectionControls() {
     if (this.props.selected !== 'none') {
-      const btnCls = classNames('btn', 'btn-default', 'btn-sm');
-
       return (
-        <div className="btn-group">
-          <button className={btnCls}>
-            <i className="fa fa-off" /> Enable
-          </button>
-          <button className={btnCls}>
-            <i className="fa fa-ban-circle" /> Disable
-          </button>
-          <button className={btnCls}>
-            <i className="fa fa-refresh" /> Reset
-          </button>
-          <button className={btnCls}>
-            <i className="fa fa-flag-alt" /> Hide
-          </button>
-          <button className={btnCls}>
-            <i className="fa fa-flag" /> Show
-          </button>
-        </div>
+        <Actions>
+          <Button
+            label="Enable"
+            icon="toggle-on"
+            big
+            btnStyle="default"
+          />
+          <Button
+            label="Disable"
+            icon="toggle-off"
+            big
+            btnStyle="default"
+          />
+          <Button
+            label="Reset"
+            icon="power-off"
+            big
+            btnStyle="default"
+          />
+          <Dropdown>
+            <DropdownControl />
+            <DropdownItem
+              title="Set deprecated"
+              icon="flag"
+            />
+            <DropdownItem
+              title="Unset deprecated"
+              icon="flag-o"
+            />
+          </Dropdown>
+        </Actions>
       );
     }
 
