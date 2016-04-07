@@ -30,11 +30,6 @@ module.exports = function workflowSteps() {
   });
 
 
-  this.Given(/^I am on workflows listing$/, function() {
-    return this.browser.visit('/workflows');
-  });
-
-
   this.Given(/^there are no workflows loaded$/, function() {
     this.browser.assert.elements(wflwTable, 0);
   });
