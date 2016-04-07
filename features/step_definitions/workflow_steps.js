@@ -7,33 +7,6 @@ const wflwRowControls = 'td:nth-child(2) > .btn-controls > button.btn';
 const wflwPaneContent = `${selectors.pane} .wflw`;
 
 
-/**
- * Finds control buttons for worflow of given name in workflow table.
- *
- * The first returned button is enable/disable button and the second
- * is reset button.
- *
- * @param {!module:zombie/Browser} browser
- * @param {string} name
- * @return {!Array<HTMLButtonElement>}
- */
-function findRowControlButtons(browser, name) {
-  const row = findTableRow(browser, name);
-  if (!row) return [null, null];
-
-  const buttons = browser.queryAll(wflwRowControls, row);
-
-  if (buttons.length <= 0) return [null, null];
-  if (buttons.length != 2) {
-    throw new Error(
-      `Exactly two control button expected, but ${buttons.length} found.`
-    );
-  }
-
-  return buttons;
-}
-
-
 module.exports = function workflowSteps() {
   this.Then(/^I should see workflows listing$/, async function() {
     await this.changes();
