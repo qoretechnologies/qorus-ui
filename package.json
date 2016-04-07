@@ -76,7 +76,7 @@
     "react-addons-test-utils": "^0.14.6",
     "react-hot-loader": "^1.3.0",
     "webpack-dev-middleware": "^1.6.1",
-    "zombie": "github:frzng/zombie#fetch-arr-obj-headers-fix"
+    "zombie": "^4.2.1"
   },
   "scripts": {
     "start": "node server.js",
