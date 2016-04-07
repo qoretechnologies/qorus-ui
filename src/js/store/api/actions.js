@@ -57,5 +57,6 @@ Object.assign(actions.errors, errorActions);
 Object.keys(serviceActions.delegates).forEach(a => {
   actions.services[a] = serviceActions.delegates[a](actions);
 });
+Object.assign(actions.services, serviceActions.specials);
 
 export default actions;
