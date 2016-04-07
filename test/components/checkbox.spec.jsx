@@ -13,7 +13,7 @@ describe("Checkbox from 'components/checkbox'", () => {
   it('renders unchecked checkbox', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked='UNCHECKED' />
+      <Checkbox checked="UNCHECKED" />
     );
     const result = renderer.getRenderOutput();
 
@@ -24,7 +24,7 @@ describe("Checkbox from 'components/checkbox'", () => {
   it('renders half-checked checkbox', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked='HALFCHECKED' />
+      <Checkbox checked="HALFCHECKED" />
     );
     const result = renderer.getRenderOutput();
 
@@ -35,7 +35,7 @@ describe("Checkbox from 'components/checkbox'", () => {
   it('renders checked chechbox', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked='CHECKED' />
+      <Checkbox checked="CHECKED" />
     );
     const result = renderer.getRenderOutput();
 
@@ -46,7 +46,7 @@ describe("Checkbox from 'components/checkbox'", () => {
   it('changes the checkbox on click', () => {
     const renderer = TestUtils.createRenderer();
     renderer.render(
-      <Checkbox checked={false} />
+      <Checkbox checked="UNCHECKED" />
     );
     let result = renderer.getRenderOutput();
 

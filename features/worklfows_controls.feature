@@ -12,6 +12,13 @@ Feature: Workflow Controls
     When I click the checkbox on the dropdown
     Then all of the workflows are selected
 
+  Scenario: Dropdown checkbox is unchecked when deselecting all workflows
+    Given I am on workflows listing
+    And workflows get loaded
+    And I select one workflow
+    When I deselect all workflows
+    Then the dropdown checkbox should be unchecked
+
   Scenario: Selecting all workflows from dropdown
     Given I am on workflows listing
     And workflows get loaded
@@ -40,6 +47,12 @@ Feature: Workflow Controls
     And workflows get loaded
     When I select one workflow
     Then the dropdown checkbox should be halfchecked
+
+  Scenario: Selection actions are displayed
+    Given I am on workflows listing
+    And workflows get loaded
+    When I select one workflow
+    Then the selection actions are displayed
 
   @no-impl
   Scenario: Dropdown is hidden on toggle blur

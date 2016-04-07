@@ -2,7 +2,8 @@ const findElementByText = (browser, selector, text) => {
   "use strict";
   return browser.
     queryAll(selector).
-    find(el => el.textContent === text) || null;
+    find(el => el.textContent === text)
+    || null;
 };
 
 module.exports = function workFlowControlSteps() {
@@ -43,19 +44,31 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.When(/^I click the Invert item$/, function () {
-    const el = findElementByText(this.browser, '#selection-dropdown > li > a', 'Invert');
+    const el = findElementByText(this.browser, '#selection-dropdown > li > a', ' Invert');
 
-    this.browser.click(el);
+    return this.browser.click(el);
   });
 
   this.When(/^I click the None item$/, function () {
-    const el = findElementByText(this.browser, '#selection-dropdown > li > a', 'None');
+    const el = findElementByText(this.browser, '#selection-dropdown > li > a', ' None');
 
-    this.browser.click(el);
+    return this.browser.click(el);
   });
 
   this.Then(/^no workflows are selected$/, function () {
     this.browser.assert.hasClass('td.narrow > i', 'fa-square-o');
+    this.browser.assert.hasClass('#selection > i', 'fa-square-o');
+  });
+
+  this.Then(/^the selection actions are displayed$/, function () {
+    this.browser.assert.element('#selection-actions');
+  });
+
+  this.When(/^I deselect all workflows$/, function () {
+    this.browser.click('td.narrow > i.fa-check-square-o');
+  });
+
+  this.Then(/^the dropdown checkbox should be unchecked$/, function () {
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 };

@@ -22,7 +22,23 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       const result = renderer.getRenderOutput();
 
       expect(result.type).to.equal('li');
-      expect(result.props.children.props.children).to.equal('All');
+      expect(result.props.children.props.children[2]).to.equal('All');
+    });
+
+    it('renders dropdown item with title and icon', () => {
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Item
+          title="All"
+          icon="power-off"
+        />
+      );
+      const result = renderer.getRenderOutput();
+
+      expect(result.type).to.equal('li');
+      expect(result.props.children.props.children[0].type).to.equal('i');
+      expect(result.props.children.props.children[0].props.className).to.equal('fa fa-power-off');
+      expect(result.props.children.props.children[2]).to.equal('All');
     });
 
     xit('handles action on click', () => {
@@ -88,7 +104,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       dropdown = renderer.getRenderOutput();
       
       expect(dropdown.props.children[1]).to.equal(null);
-    })
+    });
   });
 
   describe('Control', () => {
