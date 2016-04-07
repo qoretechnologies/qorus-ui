@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Container component for {@link Control} components.
