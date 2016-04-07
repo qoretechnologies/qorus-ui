@@ -17,6 +17,7 @@ export default class Control extends Component {
     icon: PropTypes.string.isRequired,
     action: PropTypes.func,
     disabled: PropTypes.bool,
+    big: PropTypes.bool,
   };
 
 
@@ -43,7 +44,7 @@ export default class Control extends Component {
       <button
         className={classNames({
           btn: true,
-          'btn-xs': true,
+          'btn-xs': !this.props.big,
           [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
         })}
         title={this.props.title}
