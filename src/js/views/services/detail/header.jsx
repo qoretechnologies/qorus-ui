@@ -3,7 +3,7 @@ import ServicesControls from '../controls';
 
 function ServicesHeader(props) {
   return (
-    <div className="row svc__header">
+    <div className="row wflw__header">
       <div className="col-xs-12">
         <h3 className="pull-left">
           <span className="selectable">

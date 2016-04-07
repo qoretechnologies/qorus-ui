@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
+// import { DetailTab, LibraryTab, LogTab } from './tabs';
 import DetailTab from './tabs/detail';
+import LogTab from 'components/log';
 
 import { pureRender } from 'components/utils';
 
 
 import goTo from 'routes';
-// import actions from 'store/api/actions';
-
+import actions from 'store/api/actions';
 
 @pureRender
 export default class ServicesDetail extends Component {
@@ -42,7 +43,7 @@ export default class ServicesDetail extends Component {
 
 
   loadDetailedDataIfChanged(props) {
-    if (this.state && this.state.lastWorkflowId === props.service.id) {
+    if (this.state && this.state.lastModelId === props.service.id) {
       return;
     }
 
@@ -52,9 +53,9 @@ export default class ServicesDetail extends Component {
     //   actions.errors.fetch(`service/${props.service.id}`)
     // );
 
-    // this.context.dispatch(
-    //   actions.services.fetchLibSources(props.service)
-    // );
+    this.context.dispatch(
+      actions.services.fetchLibSources(props.service)
+    );
   }
 
 
@@ -75,10 +76,10 @@ export default class ServicesDetail extends Component {
     if (!service) return null;
 
     return (
-      <article className="svc">
+      <article className="wflw">
         <ServicesHeader service={service} />
         <Tabs
-          className="svc__tabs"
+          className="wflw__tabs"
           active={tabId}
           tabChange={::this.changeTab}
         >
@@ -87,12 +88,13 @@ export default class ServicesDetail extends Component {
           </Pane>
           <Pane name="Library">
             <p>Not implemented yet</p>
+            {/* <LibraryTab service={service} />*/}
           </Pane>
           <Pane name="Methods">
             <p>Not implemented yet</p>
           </Pane>
           <Pane name="Log">
-            <p>Not implemented yet</p>
+            <LogTab model={service} resource="services" />
           </Pane>
           <Pane name="Mappers">
             <p>Not implemented yet</p>
