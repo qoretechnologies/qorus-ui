@@ -24,6 +24,13 @@ class World {
       then(::this.initializeBrowser).
       then(::this.initializeChangeHooks);
 
+    /**
+     * Currently activate detail object.
+     *
+     * @type {{ id: ?number, name: string }}
+     */
+    this.detail = null;
+
     this.changed = Promise.reject(new Error('Not initialized'));
   }
 
@@ -158,17 +165,20 @@ class World {
   /**
    * Waits for element to appear.
    *
-   * Checks if the selector returns any element over given limit by
-   * doing at most given number of checks.
+   * Checks if the selector (optionally in context) returns any
+   * element over given limit by doing at most given number of checks.
    *
-   * @param {string} selector
+   * @param {string|!Element} selector
+   * @param {(!Element|!Document)=} context
    * @param {number=} limit timeout in milliseconds (default: 5000)
    * @param {number=} ckecks number of tries (default: 10)
    * @return {Promise}
    */
-  waitForElement(selector, limit = 5000, checks = 10) {
+  waitForElement(
+    selector, context = this.browser.document, limit = 5000, checks = 10
+  ) {
     function check(resolve, reject, tries = 0) {
-      if (this.browser.query(selector)) {
+      if (this.browser.query(selector, context)) {
         resolve();
         return;
       }

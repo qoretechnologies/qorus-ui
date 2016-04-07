@@ -1,23 +1,53 @@
-const { selectors } = require('./common_steps');
+import { expect } from 'chai';
+
+import { selectors, findTableRow } from './common_steps';
 
 
-const wflwTable = `${selectors.mainSection} table`;
-const wflwRows = `${wflwTable} > tbody > tr`;
-const wflwPane = `${wflwTable} ~ .pane`;
-const wflwPaneContent = `${wflwPane} .wflw`;
+const wflwRowControls = 'td:nth-child(2) > .btn-controls > button.btn';
+const wflwPaneContent = `${selectors.pane} .wflw`;
 
 
 /**
- * Finds workflow row by worflow name.
+ * Finds workflow unique identifier by given name in workflow table.
  *
- * @param {Zombie} browser
+ * @param {!module:zombie/Browser} browser
  * @param {string} name
- * @return {?HTMLTableRowElement}
+ * @return {?number}
  */
-function findWorkflowRow(browser, name) {
-  return browser.
-    queryAll(wflwRows).
-    find(r => r.cells[5].textContent === name) || null;
+function findWorkflowId(browser, name) {
+  const row = findTableRow(browser, name);
+  if (!row) return null;
+
+  const id = parseInt(row.cells[4].textContent, 10);
+
+  return !isNaN(id) ? id : null;
+}
+
+
+/**
+ * Finds control buttons for worflow of given name in workflow table.
+ *
+ * The first returned button is enable/disable button and the second
+ * is reset button.
+ *
+ * @param {!module:zombie/Browser} browser
+ * @param {string} name
+ * @return {!Array<HTMLButtonElement>}
+ */
+function findRowControlButtons(browser, name) {
+  const row = findTableRow(browser, name);
+  if (!row) return [null, null];
+
+  const buttons = browser.queryAll(wflwRowControls, row);
+
+  if (buttons.length <= 0) return [null, null];
+  if (buttons.length != 2) {
+    throw new Error(
+      `Exactly two control button expected, but ${buttons.length} found.`
+    );
+  }
+
+  return buttons;
 }
 
 
@@ -31,26 +61,29 @@ module.exports = function workflowSteps() {
 
 
   this.Given(/^there are no workflows loaded$/, function() {
-    this.browser.assert.elements(wflwTable, 0);
+    this.browser.assert.elements(selectors.cmpTable, 0);
   });
 
 
   this.When(/^workflows get loaded$/, function() {
-    return this.waitForElement(wflwTable);
+    return this.waitForElement(selectors.cmpTable);
   });
 
 
   this.Then(/^I should see a table with workflows data$/, function() {
-    this.browser.assert.elements(wflwRows, { atLeast: 1 });
+    this.browser.assert.elements(selectors.cmpRows, { atLeast: 1 });
   });
 
 
   this.When(/^I activate "([^"]*)" workflow$/, async function(name) {
-    await this.waitForElement(wflwTable);
+    await this.waitForElement(selectors.cmpTable);
 
-    await this.browser.click(findWorkflowRow(this.browser, name));
+    await this.browser.click(findTableRow(this.browser, name));
 
-    this.workflowName = name;
+    this.detail = {
+      id: findWorkflowId(this.browser, name),
+      name,
+    };
   });
 
 
@@ -66,7 +99,7 @@ module.exports = function workflowSteps() {
 
     this.browser.assert.text(
       `${wflwPaneContent} h3`,
-      new RegExp(`^${this.workflowName}\\b`)
+      new RegExp(`^${this.detail.name}\\b`)
     );
     this.browser.assert.text(
       `${wflwPaneContent} .wflw__tabs > ul.nav > li.active`,
@@ -76,22 +109,25 @@ module.exports = function workflowSteps() {
 
 
   this.Given(/^I have "([^"]*)" workflow open$/, async function(name) {
-    await this.waitForElement(wflwTable);
+    await this.waitForElement(selectors.cmpTable);
 
-    await this.browser.click(findWorkflowRow(this.browser, name));
+    await this.browser.click(findTableRow(this.browser, name));
 
-    this.workflowName = name;
+    this.detail = {
+      id: findWorkflowId(this.browser, name),
+      name,
+    };
   });
 
 
   this.When(/^I click close button on workflow detail pane$/, async function() {
-    await this.waitForElement(wflwPane);
+    await this.waitForElement(selectors.pane);
 
-    await this.browser.pressButton(`${wflwPane} .pane__close`);
+    await this.browser.pressButton(`${selectors.pane} .pane__close`);
   });
 
 
   this.Then(/^I should see no workflow detail pane$/, function() {
-    this.browser.assert.elements(wflwPane, 0);
+    this.browser.assert.elements(selectors.pane, 0);
   });
 };

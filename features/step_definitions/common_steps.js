@@ -6,6 +6,20 @@ const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
 
 
+/**
+ * Finds workflow row by worflow name.
+ *
+ * @param {!module:zombie/Browser} browser
+ * @param {string} name
+ * @return {HTMLTableRowElement}
+ */
+function findTableRow(browser, name) {
+  return browser.
+    queryAll(cmpRows).
+    find(r => r.cells[5].textContent === name) || null;
+}
+
+
 module.exports = function commonSteps() {
   this.When(/^I activate "([^"]*)" navigation item$/, function(name) {
     const link = this.browser.
@@ -51,19 +65,12 @@ module.exports = function commonSteps() {
   });
 
 
-  function findTableRow(browser, name) {
-    return browser.
-      queryAll(cmpRows).
-      find(r => r.cells[5].textContent === name);
-  }
-
-
   this.When(/^I activate "([^"]*)"$/, async function(name) {
     await this.waitForElement(cmpTable);
 
     await this.browser.click(findTableRow(this.browser, name));
 
-    this.detailName = name;
+    this.detail = { name };
   });
 
   this.Then(/^I should see "([^"]*)" detail pane$/, async function(name) {
@@ -78,7 +85,7 @@ module.exports = function commonSteps() {
 
     this.browser.assert.text(
       `${cmpPane} h3`,
-      new RegExp(`^${this.detailName}\\b`)
+      new RegExp(`^${this.detail.name}\\b`)
     );
     this.browser.assert.text(
       `${cmpPane} div[class$="__tabs"] > ul.nav > li.active`,
@@ -92,7 +99,7 @@ module.exports = function commonSteps() {
 
     this.browser.assert.text(
       `${cmpRows}.info td:nth-child(6)`,
-      this.detailName
+      this.detail.name
     );
   });
 
@@ -102,7 +109,7 @@ module.exports = function commonSteps() {
 
     await this.browser.click(findTableRow(this.browser, name));
 
-    this.detailName = name;
+    this.detail = { name };
   });
 
 
@@ -122,7 +129,7 @@ module.exports = function commonSteps() {
     await this.waitForElement(cmpTable);
 
     this.browser.assert.hasNoClass(
-      findTableRow(this.browser, this.detailName),
+      findTableRow(this.browser, this.detail.name),
       'info'
     );
   });
@@ -132,3 +139,4 @@ module.exports.selectors = {
   mainSection, cmpTable, cmpLoader, cmpRows,
   pane, cmpPane,
 };
+module.exports.findTableRow = findTableRow;
