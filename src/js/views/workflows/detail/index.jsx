@@ -4,7 +4,7 @@ import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import LibraryTab from './library_tab';
 import StepsTab from './steps_tab';
-import LogTab from './log_tab';
+import LogTab from 'components/log';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
 
@@ -98,7 +98,7 @@ export default class WorkflowsDetail extends Component {
             <StepsTab workflow={workflow} />
           </Pane>
           <Pane name="Log">
-            <LogTab workflow={workflow} />
+            <LogTab model={workflow} resource="workflows" />
           </Pane>
           <Pane name="Errors">
             <ErrorsTab
