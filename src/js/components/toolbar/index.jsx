@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-
+import Actions from './actions';
 
 /**
  * Workflow table toolbar.
@@ -22,3 +22,5 @@ export default function Toolbar(props) {
 Toolbar.propTypes = {
   children: PropTypes.node,
 };
+
+export { Actions };
