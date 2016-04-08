@@ -68,10 +68,10 @@ Static data for tests.
 
 Development and test server implementation in Express.
 
-### `webpack.config.js`, `webpack.config` and dot-files
+### `webpack.config.js`, `webpack.config`, `cucumber.js` and dot-files
 
-Configuration of development, test and build environment with webpack
-and its loaders.
+Configuration of development, test and build environment with webpack,
+its loaders and other utilities.
 
 
 ## Getting Started
