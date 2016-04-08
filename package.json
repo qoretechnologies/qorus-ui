@@ -74,6 +74,7 @@
     "json-schema-faker": "^0.3.0",
     "mocha": "^2.3.4",
     "morgan": "^1.7.0",
+    "nodemon": "^1.9.1",
     "react-addons-test-utils": "^0.14.8",
     "react-hot-loader": "^1.3.0",
     "webpack-dev-middleware": "^1.6.1",
@@ -82,12 +83,23 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
-    "bgserver-start": "if test ! -f server.$NODE_ENV.pid; then node server.js & echo $! > server.$NODE_ENV.pid; fi",
-    "bgserver-stop": "if test -f server.$NODE_ENV.pid; then kill -INT `cat server.$NODE_ENV.pid` && rm server.$NODE_ENV.pid; fi",
-    "test": "npm run test-unit && NODE_ENV=test npm run bgserver-start && npm run test-uat -- -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
-    "test-ci": "npm run test-unit -- --no-colors && NODE_ENV=test npm run bgserver-start && npm run test-uat -- --no-colors -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
-    "test-uat": "NODE_ENV=test cucumber.js --compiler js:babel-register --compiler jsx:babel-register",
-    "test-unit": "NODE_ENV=test mocha --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
-    "lint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
+
+    "bgserver:start": "if test ! -f server.$NODE_ENV.pid; then node server.js & echo $! > server.$NODE_ENV.pid; fi",
+    "bgserver:stop": "if test -f server.$NODE_ENV.pid; then kill -INT `cat server.$NODE_ENV.pid` && rm server.$NODE_ENV.pid; fi",
+
+    "test": "npm run test:unit:all && NODE_ENV=test npm run bgserver:start && npm run test:uat:all; NODE_ENV=test npm run bgserver:stop",
+    "test:ci": "npm run test:unit:ci && NODE_ENV=test npm run bgserver:start && npm run test:uat:ci; NODE_ENV=test npm run bgserver:stop",
+
+    "test:uat": "NODE_ENV=test cucumber.js",
+    "test:uat:ci": "npm run test:uat -- -p ci",
+    "test:uat:all": "npm run test:uat -- -t ~@no-impl",
+    "test:uat:wip": "NODE_ENV=test node server.js & NODE_ENV=test nodemon `which cucumber.js` -p wip",
+
+    "test:unit": "NODE_ENV=test mocha",
+    "test:unit:ci": "npm run test:unit -- -C 'test/**/*.spec.{js,jsx}'",
+    "test:unit:all": "npm run test:unit -- 'test/**/*.spec.{js,jsx}'",
+    "test:unit:wip": "npm -s run test:unit -- -R min -w 'test/**/*.spec.{js,jsx}'",
+
+    "lint": "eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js"
   }
 }

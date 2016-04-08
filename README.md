@@ -200,21 +200,15 @@ loopback). It is suggested to:
 - spin up mock API server aside
 - run only `@wip` scenarios
 
-Open new terminal and run mock API server:
+Open new terminal and run WIP scenarios with built-in test server:
 
 ```bash
-NODE_ENV=test PORT=3001 npm start
+PORT=3001 npm run test:uat:wip
 ```
 
-Open another terminal and run WIP scenarios:
-
-```bash
-PORT=3001 npm run test-uat -- -f summary -t @wip
-```
-
-When you change your code, you must run `test-uat` npm script
-again. `PORT` environment variable is specified to prevent collision
-with default value which is normally used in development mode.
+When you change you code, Nodemon reruns the test suite again. `PORT`
+environment variable is specified to prevent collision with default
+value which is normally used in development mode.
 
 ### Unit Tests
 
@@ -225,7 +219,7 @@ during development.
 Open new terminal window and run Mocha in watch mode.
 
 ```bash
-npm run test-unit -- -R min -w
+npm run test:unit:wip
 ```
 
 When you change you code, Mocha reruns the test suite again.
