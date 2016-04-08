@@ -202,7 +202,7 @@ server and DOM polling. It is suggested to:
 Open new terminal window and run mock API server:
 
 ```bash
-NODE_ENV=test POST=3001 npm start
+NODE_ENV=test PORT=3001 npm start
 ```
 
 Open another terminal window and run WIP scenarios:
