@@ -155,7 +155,7 @@ There three main values:
   testing. React is compiled in production mode. Everything is
   minified. No additional are not present.
 
-### `API_PROTO`, `API_HOST`, `API_PORT`
+### `API_PROTO`, `API_HOST` and `API_PORT`
 
 Causes REST and WebSocket API proxy to be created instead of generated
 fake or static mock API.
@@ -173,15 +173,15 @@ defaults to http, `API_HOST` to localhost and `API_PORT` to 8001.
 Overrides any `API_*` variable and causes WebSocket API proxy to be
 created. If this variable is not explictly specified, but any of
 `API_*` variable is, the value default to `${API_PROTO === 'https' ?
-'wss' : 'ws'}://${API_HOST}:${API_PORT}/api` where `API_PROTO`
-defaults to http, `API_HOST` to localhost and `API_PORT` to 8001.
+'wss' : 'ws'}://${API_HOST}:${API_PORT}` where `API_PROTO` defaults to
+http, `API_HOST` to localhost and `API_PORT` to 8001.
 
 ### `TEST_SITE`
 
 If present, prevents internal test server from running and uses given
 URL to the test the webapp. Applies to acceptance tests only.
 
-### `HOST`, `PORT`
+### `HOST` and `PORT`
 
 Changes host and port to which the server binds. Host defaults to
 localhost which almost certainly results to listening to requests on
@@ -208,7 +208,7 @@ NODE_ENV=test POST=3001 npm start
 Open another terminal window and run WIP scenarios:
 
 ```bash
-TEST_SITE=http://localhost:3001 npm run test-uat -- -t @wip
+TEST_SITE=http://localhost:3001 npm run test-uat -- -f summary -t @wip
 ```
 
 When you change you code, you must run `test-uat` npm script again.
