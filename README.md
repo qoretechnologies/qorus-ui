@@ -29,16 +29,20 @@ The main directory with source code and
 [app entry point](src/index.jsx) for the webapp. Most of other things
 are just support for development or build.
 
-### `src/components`
+### `src/js/components`
 
-Reusable React components specific to the webapp.
+Reusable React components specific to the webapp. If necessary,
+components have stylesheets there. The stylesheets are imported by the
+[main CSS file](src/css/app.scss).
 
-### `src/views`
+### `src/js/views`
 
 Application of reusable components and general elements to create the
-whole UI. Internal structure reflects navigation and/or URL structure.
+whole UI. Internal structure reflects navigation and/or URL
+structure. Stylesheets for views are defined in `src/css` unlike
+components.
 
-### `src/store`
+### `src/js/store`
 
 Redux store, reducers and actions.
 
@@ -124,6 +128,104 @@ Commit and push your changes to
 [Qore repository](https://git.qoretechnologies.com/ui/qorus-webapp). You
 can review status of integrated effort of the team in
 [Jenkins](https://hq.qoretechnologies.com/jenkins/job/qorus-webapp-react/).
+
+
+## Environment Variables
+
+### `NODE_ENV`
+
+There three main values:
+
+- `development`: good defaults for "classic" web development (change
+  code, verify in browser). React is compiled in development mode
+  (props type checking, various other checks,
+  ...). [React performance tools](http://facebook.github.io/react/docs/perf.html)
+  are accessible via `Perf` global variable in the browser. Redux
+  DevTools are enabled. Hot module replacement applies new code
+  changes minimazing necessity to reload the page manually. If API
+  proxy is not used, generated fake API is provided.
+
+- `test`: good for running tests and behavior- or test-driven
+  development. React is compiled in production mode. Test
+  instrumentation which dispatches `WebappDomUpdate` event when React
+  finishes DOM updated or `WebappRouterUpdate` event when route is
+  updated. If API proxy is not used, static mock API is provided.
+
+- `production`: good for production build and performance
+  testing. React is compiled in production mode. Everything is
+  minified. No additional are not present.
+
+### `API_PROTO`, `API_HOST`, `API_PORT`
+
+Causes REST and WebSocket API proxy to be created instead of generated
+fake or static mock API.
+
+### `REST_BASE_URL`
+
+Overrides any `API_*` variable and causes REST API proxy to be
+created. If this variable is not explictly specified, but any of
+`API_*` variable is, the value default to
+`${API_PROTO}://${API_HOST}:${API_PORT}/api` where `API_PROTO`
+defaults to http, `API_HOST` to localhost and `API_PORT` to 8001.
+
+### `WS_BASE_URL`
+
+Overrides any `API_*` variable and causes WebSocket API proxy to be
+created. If this variable is not explictly specified, but any of
+`API_*` variable is, the value default to `${API_PROTO === 'https' ?
+'wss' : 'ws'}://${API_HOST}:${API_PORT}/api` where `API_PROTO`
+defaults to http, `API_HOST` to localhost and `API_PORT` to 8001.
+
+### `TEST_SITE`
+
+If present, prevents internal test server from running and uses given
+URL to the test the webapp. Applies to acceptance tests only.
+
+### `HOST`, `PORT`
+
+Changes host and port to which the server binds. Host defaults to
+localhost which almost certainly results to listening to requests on
+IPv4 address 127.0.0.1 or IPv6 address ::1. Port defaults to 3000.
+
+
+## Running Tests
+
+### Acceptance & Integration Tests
+
+Cucumber scenarios are quite slow to run due to spinning up mock API
+server and DOM polling. It is suggested to:
+
+- mark scenarios you are working on with `@wip` tag
+- spin up mock API server aside
+- run only `@wip` scenarios
+
+Open new terminal window and run mock API server:
+
+```bash
+NODE_ENV=test POST=3001 npm start
+```
+
+Open another terminal window and run WIP scenarios:
+
+```bash
+TEST_SITE=http://localhost:3001 npm run test-uat -- -t @wip
+```
+
+When you change you code, you must run `test-uat` npm script again.
+
+### Unit Tests
+
+Mocha specs are fast, do not require anything else to be running and
+Mocha itself has a great capabilities to provide immediate feedback
+during development.
+
+Open new terminal window and run Mocha in watch mode.
+
+```bash
+npm run test-unit -- -R min -w
+```
+
+When you change you code, Mocha reruns the test suite again.
 
 
 ## Code Style
