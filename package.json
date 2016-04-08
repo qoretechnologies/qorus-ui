@@ -68,6 +68,7 @@
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-react": "^4.2.3",
     "expose-loader": "^0.7.1",
+    "faker": "^3.1.0",
     "http-proxy-middleware": "^0.13.0",
     "jsdom": "^8.2.0",
     "json-schema-faker": "^0.3.0",
@@ -81,17 +82,12 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
-
     "bgserver-start": "if test ! -f server.$NODE_ENV.pid; then node server.js & echo $! > server.$NODE_ENV.pid; fi",
     "bgserver-stop": "if test -f server.$NODE_ENV.pid; then kill -INT `cat server.$NODE_ENV.pid` && rm server.$NODE_ENV.pid; fi",
-
     "test": "npm run test-unit && NODE_ENV=test npm run bgserver-start && npm run test-uat -- -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
     "test-ci": "npm run test-unit -- --no-colors && NODE_ENV=test npm run bgserver-start && npm run test-uat -- --no-colors -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
-
     "test-uat": "NODE_ENV=test cucumber.js --compiler js:babel-register --compiler jsx:babel-register",
-
     "test-unit": "NODE_ENV=test mocha --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
-
     "lint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
   }
 }
