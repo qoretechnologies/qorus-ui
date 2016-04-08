@@ -176,16 +176,16 @@ created. If this variable is not explictly specified, but any of
 'wss' : 'ws'}://${API_HOST}:${API_PORT}` where `API_PROTO` defaults to
 http, `API_HOST` to localhost and `API_PORT` to 8001.
 
-### `TEST_SITE`
-
-If present, prevents internal test server from running and uses given
-URL to the test the webapp. Applies to acceptance tests only.
-
 ### `HOST` and `PORT`
 
 Changes host and port to which the server binds. Host defaults to
-localhost which almost certainly results to listening to requests on
-IPv4 address 127.0.0.1 or IPv6 address ::1. Port defaults to 3000.
+localhost which almost certainly results to listening on loopback
+(e.g., 127.0.0.1). Port defaults to 3000.
+
+### `TEST_SITE`
+
+Specifies webapp base URL for acceptance tests. It defaults to
+`http://${HOST}:${POST}` (see above).
 
 
 ## Running Tests
@@ -193,25 +193,28 @@ IPv4 address 127.0.0.1 or IPv6 address ::1. Port defaults to 3000.
 ### Acceptance & Integration Tests
 
 Cucumber scenarios are quite slow to run due to spinning up mock API
-server and DOM polling. It is suggested to:
+server, DOM polling and TCP/IP communication (although on
+loopback). It is suggested to:
 
 - mark scenarios you are working on with `@wip` tag
 - spin up mock API server aside
 - run only `@wip` scenarios
 
-Open new terminal window and run mock API server:
+Open new terminal and run mock API server:
 
 ```bash
 NODE_ENV=test PORT=3001 npm start
 ```
 
-Open another terminal window and run WIP scenarios:
+Open another terminal and run WIP scenarios:
 
 ```bash
-TEST_SITE=http://localhost:3001 npm run test-uat -- -f summary -t @wip
+PORT=3001 npm run test-uat -- -f summary -t @wip
 ```
 
-When you change you code, you must run `test-uat` npm script again.
+When you change your code, you must run `test-uat` npm script
+again. `PORT` environment variable is specified to prevent collision
+with default value which is normally used in development mode.
 
 ### Unit Tests
 

@@ -81,9 +81,17 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
-    "test": "npm run test-unit && npm run test-uat -- -t ~@no-impl",
+
+    "bgserver-start": "if test ! -f server.$NODE_ENV.pid; then node server.js & echo $! > server.$NODE_ENV.pid; fi",
+    "bgserver-stop": "if test -f server.$NODE_ENV.pid; then kill -INT `cat server.$NODE_ENV.pid` && rm server.$NODE_ENV.pid; fi",
+
+    "test": "npm run test-unit && NODE_ENV=test npm run bgserver-start && npm run test-uat -- -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
+    "test-ci": "npm run test-unit -- --no-colors && NODE_ENV=test npm run bgserver-start && npm run test-uat -- --no-colors -t ~@no-impl; NODE_ENV=test npm run bgserver-stop",
+
     "test-uat": "NODE_ENV=test cucumber.js --compiler js:babel-register --compiler jsx:babel-register",
+
     "test-unit": "NODE_ENV=test mocha --compilers js:babel-register,jsx:babel-register --require test/babel.js test/**/*.spec.{js,jsx}",
+
     "lint": "eslint --ext .js --ext .jsx api server.js src test types webpack.config webpack.config.js"
   }
 }

@@ -1,18 +1,21 @@
 import path from 'path';
-import { fork } from 'child_process';
 
 import Browser from 'zombie';
+
+import devConfig from '../../webpack.config/dev';
 
 
 /**
  * Cucumber's World class.
  *
- * If there is no test server already running indicated by `TEST_SITE`
- * environment variable, it launches a new one by forking project's
- * `server.js`.
+ * It connects Zombie browser instance to the test server and provides
+ * useful utilities to work with the webapp.
  *
- * It connects `zombie` browser instance to the test server and
- * provides useful utilities to work with the webapp.
+ * The test server must be already running. Its base URL can be
+ * specified by `TEST_SITE` environment variable or this base URL is
+ * constructed the same way development server for the webapp is
+ * started (by `HOST` and `PORT` environment variables or their
+ * defaults).
  */
 class World {
   /**
@@ -20,9 +23,8 @@ class World {
    */
   constructor() {
     this.init = Promise.resolve().
-      then(::this.constructor.initializeServer).
-      then(::this.initializeBrowser).
-      then(::this.initializeChangeHooks);
+      then(::this.setupBrowser).
+      then(::this.setupChangeHooks);
 
     /**
      * Currently activate detail object.
@@ -36,34 +38,6 @@ class World {
 
 
   /**
-   * Initializes test server if needed and promises it's URL.
-   *
-   * If test server is running, it returns immediately resolved
-   * Promise with its URL.
-   *
-   * @return {Promise<string>}
-   */
-  static initializeServer() {
-    if (!this.site && process.env.TEST_SITE) {
-      this.site = process.env.TEST_SITE;
-    }
-
-    if (this.site) return Promise.resolve(this.site);
-
-    this.server = fork(path.join(__dirname, '..', '..', 'server.js'));
-    process.on('exit', () => this.server.kill());
-
-    return new Promise(resolve => {
-      this.server.once('message', url => {
-        this.site = url;
-
-        resolve(url);
-      });
-    });
-  }
-
-
-  /**
    * Initializes `zombie` browser and visits the webapp index route.
    *
    * This can take some time if the test server is compliling all the
@@ -71,9 +45,9 @@ class World {
    *
    * @return {Promise}
    */
-  initializeBrowser(site) {
+  setupBrowser() {
     this.browser = new Browser();
-    this.browser.site = site;
+    this.browser.site = this.getTestSite();
 
     return new Promise((resolve, reject) => {
       this.browser.visit('/', '1m', err => {
@@ -109,10 +83,29 @@ class World {
   // manager similar to modal manager where the last one to claim
   // control sets the title and no one else can. When someone returns
   // control back, previous claimer receives it.
-  initializeChangeHooks() {
+  setupChangeHooks() {
     this.browser.document.addEventListener('WebappRouterUpdate', () => {
       this.changed = this.waitForChange(100);
     });
+  }
+
+
+  /**
+   * Returns test site base URL.
+   *
+   * It can be specified by `TEST_SITE` environment variable. If not
+   * specified, `SOCKET` or `NODE_ENV` derived base URL is
+   * constructed. This derived URL uses UNIX socket.
+   *
+   * @return {string}
+   */
+  getTestSite() {
+    if (!process.env.TEST_SITE && devConfig().socketPath) {
+      throw new Error('Acceptance tests cannot run against UNIX socket');
+    }
+
+    return process.env.TEST_SITE ||
+      `http://${devConfig().host}:${devConfig().port}`;
   }
 
 
