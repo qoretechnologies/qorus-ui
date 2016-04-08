@@ -162,8 +162,8 @@ export default class LibraryTab extends Component {
 
   render() {
     return (
-      <div className="row wflw-lib">
-        <div className="col-sm-3 wflw-lib__fns">
+      <div className="row pane-lib">
+        <div className="col-sm-3 pane-lib__fns">
           <div className="well well-sm">
             <nav>
               <ul className="nav nav-pills nav-stacked">
@@ -173,7 +173,7 @@ export default class LibraryTab extends Component {
             </nav>
           </div>
         </div>
-        <div className="col-sm-9 wflw-lib__src">
+        <div className="col-sm-9 pane-lib__src">
           {this.renderCodeTabs()}
         </div>
       </div>
