@@ -30,7 +30,7 @@ export default class WorkflowsHeader extends Component {
 
   render() {
     return (
-      <div className="row wflw__header">
+      <div className="row pane__header">
         <div className="col-xs-12">
           <h3 className="pull-left">
             <span className="selectable">
@@ -38,7 +38,7 @@ export default class WorkflowsHeader extends Component {
             </span>
           </h3>
         </div>
-        <div className="col-xs-12 wflw__controls">
+        <div className="col-xs-12 pane__controls">
           <WorkflowsControls workflow={this.props.workflow} />
           {' '}
           <AutoStart

@@ -1,5 +1,5 @@
 /**
- * Workflow detail library tab.
+ * Pane detail library tab.
  *
  * It displays two columns: a list of functions ("fns") and a source
  * code of selected function ("src").
@@ -58,7 +58,7 @@
 }
 
 
-.wflw-lib {
+.pane-lib {
   height: 100%;
 
   &__fns,

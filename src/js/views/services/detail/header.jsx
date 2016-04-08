@@ -3,7 +3,7 @@ import ServicesControls from '../controls';
 
 function ServicesHeader(props) {
   return (
-    <div className="row wflw__header">
+    <div className="row pane__header">
       <div className="col-xs-12">
         <h3 className="pull-left">
           <span className="selectable">
@@ -11,7 +11,7 @@ function ServicesHeader(props) {
           </span>
         </h3>
       </div>
-      <div className="col-xs-12 svc__controls">
+      <div className="col-xs-12 pane__controls">
         <ServicesControls service={props.service} />
       </div>
     </div>

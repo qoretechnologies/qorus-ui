@@ -81,10 +81,10 @@ export default class WorkflowsDetail extends Component {
     if (!workflow) return null;
 
     return (
-      <article className="wflw">
+      <article>
         <WorkflowsHeader workflow={workflow} />
         <Tabs
-          className="wflw__tabs"
+          className="pane__tabs"
           active={tabId}
           tabChange={::this.changeTab}
         >

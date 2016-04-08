@@ -1,0 +1,79 @@
+@import './pane/header';
+@import './pane/library';
+@import './pane/steps';
+@import './pane/log';
+@import './pane/errors';
+
+
+/**
+ * Pane detail is structured as this:
+ *
+ * - At the top, there is a heading.
+ * - Followed by controls with widgets.
+ * - With detailed info in tabs at the end.
+ * - Heading and widgets are contained in the same container.
+ *
+ * They are organized via flexbox with column flow:
+ *
+ * 1. This and its parent blocks are expected to occupy 100% of height
+ *    (e.g., see .pane).
+ * 2. Header does not stretch.
+ * 3. Detailed info occupies the rest of available height.
+ * 4. Similarly to header, tabs themselves do not stretch.
+ * 5. But tab content occupies the rest of available vertical space.
+ * 6. Tab panes are absolutely positioned to allow auto scrolling
+ *    independent of page scroll.
+ */
+.pane__content article {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-flow: column;
+  -webkit-flex-flow: column;
+  flex-flow: column;
+
+  height: 100%; /* [1] */
+
+  > .pane__header { /* [2] */
+    -ms-flex: initial;
+    -webkit-flex: initial;
+    flex: initial;
+  }
+
+  > .pane__tabs { /* [3] */
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-flow: column;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+
+    -ms-flex: auto;
+    -webkit-flex: auto;
+    flex: auto;
+    overflow: hidden;
+
+    > .nav { /* [4] */
+      -ms-flex: initial;
+      -webkit-flex: initial;
+      flex: initial;
+    }
+
+    > .tab-content { /* [5] */
+      position: relative;
+      -ms-flex: auto;
+      -webkit-flex: auto;
+      flex: auto;
+      overflow: hidden;
+
+      > .tab-pane { /* [6] */
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: auto;
+      }
+    }
+  }
+}

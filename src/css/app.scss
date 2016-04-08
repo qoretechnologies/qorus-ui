@@ -30,6 +30,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './not-supported';
 @import './root';
 @import './workflow';
+@import './pane';
 
 
 html, body, .app, .app__wrap {

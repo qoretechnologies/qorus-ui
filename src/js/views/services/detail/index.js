@@ -76,10 +76,10 @@ export default class ServicesDetail extends Component {
     if (!service) return null;
 
     return (
-      <article className="wflw">
+      <article>
         <ServicesHeader service={service} />
         <Tabs
-          className="wflw__tabs"
+          className="pane__tabs"
           active={tabId}
           tabChange={::this.changeTab}
         >
