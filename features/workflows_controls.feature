@@ -1,6 +1,5 @@
 @fetch @no-impl
 Feature: Workflow Controls
-
   Every workflow has two set of widgets associated. One is a group of
   buttons to enable/disable and to reset the workflow. The other is
   also a group of buttons to control the autostart value.
