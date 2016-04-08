@@ -24,7 +24,7 @@
  * 6. Tab panes are absolutely positioned to allow auto scrolling
  *    independent of page scroll.
  */
-.pane__content article {
+.pane__content > article {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
