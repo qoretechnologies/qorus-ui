@@ -12,7 +12,7 @@ Feature: Workflow Controls
 
 
   Scenario: Enabling workflow from list
-    Given I am on "workflows" listing
-    And "ARRAYTEST" workflow is disabled
+    Given "ARRAYTEST" workflow is disabled
+    And I am on "workflows" listing
     When I enable "ARRAYTEST" workflow
     And workflow should be enabled

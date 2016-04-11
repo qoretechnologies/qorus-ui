@@ -55,8 +55,6 @@ module.exports = function workflowsControlsSteps() {
   });
 
   this.Given(/^"([^"]*)" workflow is disabled$/, async function(name) {
-    await this.waitForElement(selectors.cmpTable);
-
     return this.fetch(`/api/workflows/${findTableRowId(this.browser, name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
