@@ -44,14 +44,12 @@ app.listen(
   serverConfig.port,
   serverConfig.host,
   () => {
-    const url = `http://${serverConfig.host}:${serverConfig.port}`;
 
     if (app.get('env') !== 'test') {
       process.stdout.write(
-        `Qorus Webapp ${app.get('env')} server listening on ${url}\n`
+        `Qorus Webapp ${app.get('env')} server listening on ` +
+        `http://${serverConfig.host}:${serverConfig.port}\n`
       );
     }
-
-    if (process.send) process.send(url);
   }
 );
