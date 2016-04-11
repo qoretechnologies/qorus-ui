@@ -5,6 +5,7 @@ import {
   normalizeId,
   normalizeName,
   checkAlerts,
+  normalizeWorkflowLib,
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
@@ -19,6 +20,7 @@ export default [
       normalizeName,
       normalizeId('workflowid'),
       checkAlerts,
+      normalizeWorkflowLib,
       extendDefaults(workflowDefaults)
     ),
   },

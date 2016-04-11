@@ -27,3 +27,15 @@ export const checkAlerts = curry(item => {
 
   return Object.assign({ has_alerts: hasAlerts }, item);
 });
+
+export const normalizeWorkflowLib = curry(item => {
+  const { lib, wffuncs, stepinfo } = item;
+
+  const newLib = Object.assign(
+    {},
+    { wffuncs, stepfuncs: stepinfo },
+    lib,
+  );
+
+  return Object.assign({}, item, { lib: newLib });
+});
