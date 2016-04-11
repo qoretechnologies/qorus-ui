@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
-import LibraryTab from './library_tab';
+import LibraryTab from 'components/library';
 import StepsTab from './steps_tab';
 import LogTab from 'components/log';
 import ErrorsTab from './errors_tab';
@@ -92,7 +92,7 @@ export default class WorkflowsDetail extends Component {
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Pane>
           <Pane name="Library">
-            <LibraryTab workflow={workflow} />
+            <LibraryTab model={workflow} />
           </Pane>
           <Pane name="Steps">
             <StepsTab workflow={workflow} />

@@ -3,6 +3,7 @@ import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
 // import { DetailTab, LibraryTab, LogTab } from './tabs';
 import DetailTab from './tabs/detail';
+import LibraryTab from 'components/library';
 import LogTab from 'components/log';
 
 import { pureRender } from 'components/utils';
@@ -88,7 +89,7 @@ export default class ServicesDetail extends Component {
           </Pane>
           <Pane name="Library">
             <p>Not implemented yet</p>
-            {/* <LibraryTab service={service} />*/}
+          <LibraryTab model={service} />
           </Pane>
           <Pane name="Methods">
             <p>Not implemented yet</p>
