@@ -17,7 +17,10 @@ export default class Item extends Component {
    * provided function
    */
   onItemClick() {
-    this.props.action();
+    if (this.props.action) {
+      this.props.action();
+    }
+
     this.props.hideDropdown();
   }
 
