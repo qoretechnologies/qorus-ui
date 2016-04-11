@@ -21,7 +21,12 @@ switch (app.get('env')) {
     const webpack = require('webpack');
     const compiler = webpack(config);
 
-    app.use(require('./api'));
+    let api;
+    const reload = () => { api = require('./api')(); };
+    process.on('SIGUSR2', reload);
+    reload();
+
+    app.use((req, res, next) => api(req, res, next));
     app.use(history());
     app.use(require('webpack-dev-middleware')(compiler, config.devServer));
     if (config.plugins && config.plugins.some(p => (

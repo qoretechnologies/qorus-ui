@@ -10,6 +10,6 @@
 
 
 /**
- * @type {!Array<!module:types.Step>}
+ * @return {!Array<!module:types.Step>}
  */
-module.exports = require('../data').fixtureData('steps');
+module.exports = () => require('../data').fixtureData('steps');

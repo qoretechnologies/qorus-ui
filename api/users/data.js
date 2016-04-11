@@ -12,6 +12,6 @@
 
 
 /**
- * @type {!Array<!module:types.User>}
+ * @return {!Array<!module:types.User>}
  */
-module.exports = require('../data').getData('users');
+module.exports = () => require('../data').getData('users');

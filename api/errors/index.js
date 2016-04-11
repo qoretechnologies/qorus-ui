@@ -8,19 +8,20 @@
 
 const express = require('express');
 
-const data = require('./data');
 
+module.exports = () => {
+  const data = require('./data')();
 
-const router = new express.Router();
-router.get('/global', (req, res) => {
-  res.json(data);
-});
-router.get('/workflow/:id', (req, res) => {
-  const start = Math.round(Math.random() * (data.length));
-  const end = Math.round(Math.random() * (data.length - start) + start);
+  const router = new express.Router();
+  router.get('/global', (req, res) => {
+    res.json(data);
+  });
+  router.get('/workflow/:id', (req, res) => {
+    const start = Math.round(Math.random() * (data.length));
+    const end = Math.round(Math.random() * (data.length - start) + start);
 
-  res.json(data.slice(start, end));
-});
+    res.json(data.slice(start, end));
+  });
 
-
-module.exports = router;
+  return router;
+};

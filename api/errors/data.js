@@ -9,6 +9,6 @@
 
 
 /**
- * @type {!Array}
+ * @return {!Array}
  */
-module.exports = [];
+module.exports = () => [];

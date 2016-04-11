@@ -46,22 +46,16 @@ function generateFromSchema() {
 
 
 /**
- * @type {{
+ * @return {!{
  *   system: !module:types/system.System,
  *   options: !Array<!module:types/options.Options>,
  * }}
  */
-let data;
-
-switch (process.env.NODE_ENV || 'development') {
-  case 'test':
-    data = buildFromFixtures();
-    break;
-
-  default:
-    data = generateFromSchema();
-    break;
-}
-
-
-module.exports = data;
+module.exports = () => {
+  switch (process.env.NODE_ENV || 'development') {
+    case 'test':
+      return buildFromFixtures();
+    default:
+      return generateFromSchema();
+  }
+};

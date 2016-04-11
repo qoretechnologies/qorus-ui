@@ -12,6 +12,6 @@
 
 
 /**
- * @type {!Array<!module:types.Workflow>}
+ * @return {!Array<!module:types.Workflow>}
  */
-module.exports = require('../data').getData('services');
+module.exports = () => require('../data').getData('services');
