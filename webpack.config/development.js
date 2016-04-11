@@ -17,6 +17,8 @@ module.exports = function developmentConfig() {
 
   config.module.loaders[0].loaders.unshift('react-hot');
 
+  config.entry.qorus.push('webpack-hot-middleware/client');
+
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': JSON.stringify({

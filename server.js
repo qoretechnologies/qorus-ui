@@ -17,15 +17,21 @@ switch (app.get('env')) {
     app.get('*', serveStatic(config.output.path));
     break;
 
-  default:
+  default: {
+    const webpack = require('webpack');
+    const compiler = webpack(config);
+
     app.use(require('./api'));
     app.use(history());
-    app.use(require('webpack-dev-middleware')(
-      require('webpack')(config),
-      config.devServer
-    ));
+    app.use(require('webpack-dev-middleware')(compiler, config.devServer));
+    if (config.plugins && config.plugins.some(p => (
+      p instanceof webpack.HotModuleReplacementPlugin
+    ))) {
+      app.use(require('webpack-hot-middleware')(compiler));
+    }
     app.get('*', serveStatic(config.context));
     break;
+  }
 }
 
 const serverConfig = devConfig();
