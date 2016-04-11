@@ -145,16 +145,13 @@ export default class Workflows extends Component {
     });
   }
 
-
   componentDidMount() {
     this.setTitle();
   }
 
-
   componentDidUpdate() {
     this.setTitle();
   }
-
 
   onClosePane() {
     goTo(
