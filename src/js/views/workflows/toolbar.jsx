@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Toolbar, { Actions } from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
-import { Control as Button } from 'components/controls';
+import { Control as Button, Controls } from 'components/controls';
 import Checkbox from 'components/checkbox';
 
 import { CHECKBOX_STATES } from '../../constants/checkbox';
@@ -116,6 +116,20 @@ export default class WorkflowsToolbar extends Component {
           />
         </Dropdown>
         {this.renderSelectionControls()}
+        <Controls grouped noControls>
+          <Button
+            label="Running"
+            big
+            icon="square-o"
+            btnStyle="default"
+          />
+          <Button
+            label="Last version"
+            big
+            icon="square-o"
+            btnStyle="default"
+          />
+        </Controls>
       </Toolbar>
     );
   }
