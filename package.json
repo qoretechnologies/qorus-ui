@@ -95,7 +95,7 @@
     "test:unit": "NODE_ENV=test mocha",
     "test:unit:ci": "npm run test:unit -- -C 'test/**/*.spec.{js,jsx}'",
     "test:unit:all": "npm run test:unit -- 'test/**/*.spec.{js,jsx}'",
-    "test:unit:wip": "npm -s run test:unit -- -R min -w 'test/**/*.spec.{js,jsx}'",
+    "test:unit:wip": "npm run test:unit -- -R min -w 'test/**/*.spec.{js,jsx}'",
     "lint": "eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js"
   }
 }
