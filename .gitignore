@@ -2,6 +2,9 @@
 /node_modules
 /dist
 
+# Runtime
+/.*.pid
+
 # Tools
 .idea
 .nfs*

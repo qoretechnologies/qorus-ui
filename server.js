@@ -43,7 +43,16 @@ const serverConfig = devConfig();
 app.listen(
   serverConfig.port,
   serverConfig.host,
-  () => {
+  function onListening() {
+    if (process.env.PIDFILE) {
+      const pidfile = require('path').resolve(__dirname, process.env.PIDFILE);
+      require('fs').writeFileSync(pidfile, `${process.pid}`, 'ascii');
+      process.on('SIGINT', () => {
+        require('fs').unlinkSync(pidfile);
+        this.close();
+        process.exit();
+      });
+    }
 
     if (app.get('env') !== 'test') {
       process.stdout.write(
