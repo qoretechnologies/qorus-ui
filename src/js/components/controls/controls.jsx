@@ -16,6 +16,7 @@ export default class Controls extends Component {
     grouped: PropTypes.bool,
     controls: PropTypes.array,
     children: PropTypes.node,
+    noControls: PropTypes.bool,
   };
 
 
@@ -34,7 +35,7 @@ export default class Controls extends Component {
     return (
       <div
         className={classNames({
-          'btn-controls': true,
+          'btn-controls': !this.props.noControls,
           'btn-group': this.props.grouped,
         })}
       >
