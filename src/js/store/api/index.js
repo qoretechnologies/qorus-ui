@@ -31,16 +31,27 @@ export function createResourceReducers(
 
     Object.keys(actions[resource]).forEach(actn => {
       const name = `${resource}_${actn}`.toUpperCase();
-
-      if (specialReducers[resource] &&
-          specialReducers[resource][actn.toUpperCase()]) {
-        handlers[name] = specialReducers[resource][actn.toUpperCase()];
-        return;
-      }
+      const isSpecialReducer = (specialReducers[resource] &&
+          specialReducers[resource][actn.toUpperCase()]);
 
       handlers[name] = {
         next(state, action) {
           let data;
+
+          if (resourceOrigin && resourceOrigin.transform) {
+            data = (isArray(action.payload)) ?
+              action.payload.map(resourceOrigin.transform) :
+              resourceOrigin.transform(action.payload);
+          } else {
+            data = action.payload;
+          }
+
+          if (isSpecialReducer) {
+            return (
+              specialReducers[resource][actn.toUpperCase()]
+                .next(state, { ...action, payload: data })
+            );
+          }
 
           if (action.meta && action.meta.id) {
             data = omit(JSON.parse(action.meta.params.body), 'action');
@@ -53,12 +64,6 @@ export function createResourceReducers(
             });
           }
 
-          data = (resourceOrigin &&
-                  resourceOrigin.transform &&
-                  isArray(action.payload)) ?
-            action.payload.map(resourceOrigin.transform) :
-            action.payload;
-
           return {
             ...state,
             data,
@@ -67,6 +72,14 @@ export function createResourceReducers(
           };
         },
         throw(state, action) {
+          if (isSpecialReducer &&
+              specialReducers[resource][actn.toUpperCase()].throw) {
+            return (
+              specialReducers[resource][actn.toUpperCase()]
+                .throw(state, action)
+            );
+          }
+
           return {
             ...state,
             sync: false,
