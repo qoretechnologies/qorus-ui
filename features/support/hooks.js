@@ -14,7 +14,6 @@ module.exports = function hooks() {
             return;
           }
 
-          console.log(`Killing ${pid}`);
           process.kill(parseInt(pid, 10), 'SIGUSR2');
           setTimeout(cb, 100);
         }
