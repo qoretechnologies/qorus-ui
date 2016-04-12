@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 
 /**
  * @param {!Object} props
@@ -7,7 +8,7 @@ import React, { PropTypes } from 'react';
 export default function Control(props) {
   return (
     <button
-      className="btn btn-default dropdown-toggle"
+      className={classNames('btn', `btn-${props.btnStyle}`, 'dropdown-toggle')}
       {...props}
     >
       { props.children }
@@ -17,6 +18,11 @@ export default function Control(props) {
   );
 }
 
+Control.defaultProps = {
+  btnStyle: 'default',
+};
+
 Control.propTypes = {
   children: PropTypes.node,
+  btnStyle: PropTypes.string,
 };
