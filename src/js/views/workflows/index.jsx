@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flow } from 'lodash';
+import { flow, includes } from 'lodash';
 import { compare } from 'utils';
 import goTo from '../../routes';
 
@@ -231,11 +231,15 @@ export default class Workflows extends Component {
     const filter = workflowHelpers.filterArray(props.params.filter);
 
     const filteredWorkflows = props.workflows.filter(w => {
-      if (filter.indexOf(WORKFLOW_FILTERS.RUNNING) !== -1 && w.exec_count === 0) {
+      if (includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count === 0) {
         return false;
       }
 
-      return !(filter.indexOf(WORKFLOW_FILTERS.DEPRECATED) === -1 && w.deprecated === true);
+      if (!includes(filter, WORKFLOW_FILTERS.DEPRECATED) && w.deprecated === true) {
+        return false;
+      }
+
+      return true;
     });
 
     this.setState({
