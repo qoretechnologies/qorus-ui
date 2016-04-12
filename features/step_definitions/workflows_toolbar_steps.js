@@ -71,4 +71,25 @@ module.exports = function workFlowControlSteps() {
   this.Then(/^the dropdown checkbox should be unchecked$/, function () {
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
+
+  this.When(/^I click the Running button$/, async function() {
+    const el = findElementByText(this.browser, '.btn > span', ' Running');
+
+    return this.browser.click(el.parentElement);
+  });
+
+  this.Then(/^only one workflow is visible$/, async function() {
+    this.browser.assert.elements('tbody > tr', 1);
+  });
+
+  this.When(/^I click the Deprecated button$/, async function() {
+    const el = findElementByText(this.browser, '.btn > span', ' Deprecated');
+
+    return this.browser.click(el.parentElement);
+  });
+
+  this.Then(/^the hidden workflows are displayed$/, async function() {
+    this.browser.assert.elements('tbody > tr', 5);
+  });
+
 };

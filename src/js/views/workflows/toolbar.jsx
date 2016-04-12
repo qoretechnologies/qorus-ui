@@ -13,6 +13,8 @@ export default class WorkflowsToolbar extends Component {
   static propTypes = {
     selected: PropTypes.string,
     onFilterClick: PropTypes.func,
+    onRunningClick: PropTypes.func,
+    onDeprecatedClick: PropTypes.func,
   };
 
   onAllClick() {
@@ -120,12 +122,20 @@ export default class WorkflowsToolbar extends Component {
           <Button
             label="Running"
             big
+            action={::this.props.onRunningClick}
             icon="square-o"
             btnStyle="default"
           />
           <Button
             label="Last version"
             big
+            icon="square-o"
+            btnStyle="default"
+          />
+          <Button
+            label="Deprecated"
+            big
+            action={::this.props.onDeprecatedClick}
             icon="square-o"
             btnStyle="default"
           />

@@ -54,6 +54,19 @@ Feature: Workflow Toolbar
     When I select one workflow
     Then the selection actions are displayed
 
+  Scenario: Filtering only running workflows
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the Running button
+    Then only one workflow is visible
+
+  @wip
+  Scenario: Displaying deprecated workflows
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the Deprecated button
+    Then the hidden workflows are displayed
+
   @no-impl
   Scenario: Dropdown is hidden on toggle blur
     Given I am on "workflows" listing

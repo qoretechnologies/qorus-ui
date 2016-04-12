@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flow } from 'lodash';
 import { compare } from 'utils';
-import goTo from 'routes';
+import goTo from '../../routes';
 
 // data
 import actions from 'store/api/actions';
@@ -18,6 +18,9 @@ import Pane from 'components/pane';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
+
+import { WORKFLOW_FILTERS } from '../../constants/filters';
+import workflowHelpers from '../../helpers/workflows';
 
 const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
@@ -56,15 +59,9 @@ const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
 
-
 const globalErrorsSelector = state => errorsToArray(state, 'global');
 
-
 const infoSelector = state => state.api.system;
-
-const defaultWorkflowFilter = (workflows) =>
-  workflows.map(w => Object.assign({ filter: false }, w));
-
 
 const collectionSelector = createSelector(
   [
@@ -72,10 +69,8 @@ const collectionSelector = createSelector(
   ],
   (workflows) => flow(
     sortWorkflows,
-    defaultWorkflowFilter
   )(workflows.data)
 );
-
 
 const viewSelector = createSelector(
   [
@@ -96,7 +91,6 @@ const viewSelector = createSelector(
     globalErrors,
   })
 );
-
 
 @connect(viewSelector)
 export default class Workflows extends Component {
@@ -135,18 +129,25 @@ export default class Workflows extends Component {
     };
   }
 
-
   componentWillMount() {
     this.props.dispatch(actions.workflows.fetch());
 
     this.setState({
       filterFn: null,
       selected: 'none',
+      filteredWorkflows: {},
     });
   }
 
   componentDidMount() {
     this.setTitle();
+  }
+
+  componentWillReceiveProps(next) {
+    if (this.props.workflows !== next.workflows ||
+      this.props.params.filter !== next.params.filter) {
+      this.filterWorkflows(next);
+    }
   }
 
   componentDidUpdate() {
@@ -161,6 +162,26 @@ export default class Workflows extends Component {
       this.props.params,
       { detailId: null, tabId: null }
     );
+  }
+
+  /**
+   * Handles filtering for only running workflows
+   */
+  onRunningClick() {
+    let urlFilter = workflowHelpers.filterArray(this.props.params.filter);
+    urlFilter = workflowHelpers.handleFilterChange(urlFilter, WORKFLOW_FILTERS.RUNNING);
+
+    this.applyFilter(urlFilter);
+  }
+
+  /**
+   * Handles displaying hidden workflows
+   */
+  onDeprecatedClick() {
+    let urlFilter = workflowHelpers.filterArray(this.props.params.filter);
+    urlFilter = workflowHelpers.handleFilterChange(urlFilter, WORKFLOW_FILTERS.DEPRECATED);
+
+    this.applyFilter(urlFilter);
   }
 
   /**
@@ -200,6 +221,43 @@ export default class Workflows extends Component {
     return workflow.id === parseInt(this.props.params.detailId, 10);
   }
 
+  /**
+   * Displays workflows according to the
+   * URL filters set
+   *
+   * @param {Array} props
+   */
+  filterWorkflows(props) {
+    const filter = workflowHelpers.filterArray(props.params.filter);
+
+    const filteredWorkflows = props.workflows.filter(w => {
+      if (filter.indexOf(WORKFLOW_FILTERS.RUNNING) !== -1 && w.exec_count === 0) {
+        return false;
+      }
+
+      return !(filter.indexOf(WORKFLOW_FILTERS.DEPRECATED) === -1 && w.deprecated === true);
+    });
+
+    this.setState({
+      filteredWorkflows,
+    });
+  }
+
+  /**
+   * Applies the current filter to the URL
+   *
+   * @param {Array} filter
+   */
+  applyFilter(filter) {
+    goTo(
+      this.context.router,
+      'workflows',
+      this.props.route.path,
+      this.props.params,
+      { filter: filter.join(','), detailId: null, tabId: null }
+    );
+  }
+
   renderPane() {
     const { params, errors, systemOptions, globalErrors } = this.props;
 
@@ -230,12 +288,14 @@ export default class Workflows extends Component {
       <div>
         <WorkflowsToolbar
           onFilterClick={::this.onFilterClick}
+          onRunningClick={::this.onRunningClick}
+          onDeprecatedClick={::this.onDeprecatedClick}
           selected={this.state.selected}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
           onWorkflowFilterChange={::this.onWorkflowFilterChange}
-          workflows={this.props.workflows}
+          workflows={this.state.filteredWorkflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
         />
         {this.renderPane()}
