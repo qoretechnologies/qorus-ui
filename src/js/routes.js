@@ -5,13 +5,10 @@
 
 import UrlPattern from 'url-pattern';
 import { pickBy } from 'lodash';
-import { WORKFLOW_FILTERS } from './constants/filters';
-
 
 const routes = {
   workflows: {
     date: '24h',
-    filter: WORKFLOW_FILTERS.ALL,
   },
   groups: {},
 };
