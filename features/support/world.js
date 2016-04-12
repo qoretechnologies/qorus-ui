@@ -11,11 +11,10 @@ import devConfig from '../../webpack.config/dev';
  * It connects Zombie browser instance to the test server and provides
  * useful utilities to work with the webapp.
  *
- * The test server must be already running. Its base URL can be
- * specified by `TEST_SITE` environment variable or this base URL is
- * constructed the same way development server for the webapp is
- * started (by `HOST` and `PORT` environment variables or their
- * defaults).
+ * The test server must be already running. Its base URL is
+ * constructed the same way development server starts listening for
+ * HTTP requests webapp is started (by `HOST` and `PORT` environment
+ * variables or their defaults).
  */
 class World {
   /**
@@ -47,7 +46,7 @@ class World {
    */
   setupBrowser() {
     this.browser = new Browser();
-    this.browser.site = this.getTestSite();
+    this.browser.site = `http://${devConfig().host}:${devConfig().port}`;
 
     return new Promise((resolve, reject) => {
       this.browser.visit('/', '1m', err => {
@@ -87,25 +86,6 @@ class World {
     this.browser.document.addEventListener('WebappRouterUpdate', () => {
       this.changed = this.waitForChange(100);
     });
-  }
-
-
-  /**
-   * Returns test site base URL.
-   *
-   * It can be specified by `TEST_SITE` environment variable. If not
-   * specified, `SOCKET` or `NODE_ENV` derived base URL is
-   * constructed. This derived URL uses UNIX socket.
-   *
-   * @return {string}
-   */
-  getTestSite() {
-    if (!process.env.TEST_SITE && devConfig().socketPath) {
-      throw new Error('Acceptance tests cannot run against UNIX socket');
-    }
-
-    return process.env.TEST_SITE ||
-      `http://${devConfig().host}:${devConfig().port}`;
   }
 
 

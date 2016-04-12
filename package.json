@@ -82,7 +82,7 @@
     "zombie": "^4.2.1"
   },
   "scripts": {
-    "stop": "if [ -z \"$PIDFILE\" ]; then\n    echo Cannot stop the server: unknown PIDFILE\n    exit 1\n  fi\n  kill -INT `cat $PIDFILE`",
+    "stop": "kill -INT `cat \"$PIDFILE\"`",
     "build": "webpack",
     "bgserver:start": "npm start &",
     "bgserver:stop": "npm run-script stop",
