@@ -4,7 +4,10 @@ import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'comp
 import { Control as Button, Controls } from 'components/controls';
 import Checkbox from 'components/checkbox';
 
+import { includes } from 'lodash';
+
 import { CHECKBOX_STATES } from '../../constants/checkbox';
+import { WORKFLOW_FILTERS } from '../../constants/filters';
 
 import { pureRender } from 'components/utils';
 
@@ -15,6 +18,7 @@ export default class WorkflowsToolbar extends Component {
     onFilterClick: PropTypes.func,
     onRunningClick: PropTypes.func,
     onDeprecatedClick: PropTypes.func,
+    filter: PropTypes.array,
   };
 
   onAllClick() {
@@ -123,22 +127,31 @@ export default class WorkflowsToolbar extends Component {
             label="Running"
             big
             action={::this.props.onRunningClick}
-            icon="square-o"
-            btnStyle="default"
+            icon={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
+              'check-square-o' : 'square-o'}
+            btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
+              'success' : 'default'}
           />
           <Button
             label="Last version"
             big
-            icon="square-o"
-            btnStyle="default"
+            icon={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
+              'check-square-o' : 'square-o'}
+            btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
+              'success' : 'default'}
           />
-          <Button
-            label="Deprecated"
-            big
-            action={::this.props.onDeprecatedClick}
-            icon="square-o"
-            btnStyle="default"
-          />
+          <Dropdown>
+            <DropdownControl
+              btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
+                'success' : 'default'}
+            />
+            <DropdownItem
+              title="Deprecated"
+              icon={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
+                'check-square-o' : 'square-o'}
+              action={::this.props.onDeprecatedClick}
+            />
+          </Dropdown>
         </Controls>
       </Toolbar>
     );

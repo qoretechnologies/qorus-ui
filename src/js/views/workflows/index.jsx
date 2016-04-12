@@ -295,6 +295,7 @@ export default class Workflows extends Component {
           onRunningClick={::this.onRunningClick}
           onDeprecatedClick={::this.onDeprecatedClick}
           selected={this.state.selected}
+          filter={workflowHelpers.filterArray(this.props.params.filter)}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
