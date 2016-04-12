@@ -1,4 +1,3 @@
-import { WORKFLOW_FILTERS } from '../constants/filters';
 import { includes } from 'lodash';
 
 /**
@@ -7,14 +6,14 @@ import { includes } from 'lodash';
 export default {
   /**
    * Checks if the filter is currently set,
-   * returns array with 'all' if not
+   * returns empty array if not
    * otherwise returns an array from the url filter
    *
    * @param {String} filter
    * @returns {Array}
    */
   filterArray(filter) {
-    return typeof filter === 'undefined' ? [WORKFLOW_FILTERS.ALL] : filter.split(',');
+    return typeof filter === 'undefined' ? [] : filter.split(',');
   },
   /**
    * Handles the workflow filter change
