@@ -187,13 +187,16 @@ be started locally anyway (see below).
 
 ### `PIDFILE`
 
-Points to a file where the server writes its process ID. If not set,
-the server does not write anything. PIDFILE can be used to `npm start`
-the server in the background and then `npm stop` it. The `stop` script
-does not work without `PIDFILE`.
+Points to a file where the server writes its process ID. The server
+does not start if the file already exists. This prevents from running
+multiple servers in the background by accident. If not set, the server
+does not write anything anywhere.
 
 In acceptance tests, PIDFILE is used to send `SIGUSR2` signal to the
 server to refrest static mock or generated fake data.
+
+PIDFILE can be used to `npm start` the server in the background and
+then `npm stop` it. The `stop` script does not work without `PIDFILE`.
 
 
 ## Running Tests

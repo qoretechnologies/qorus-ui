@@ -46,6 +46,18 @@ app.listen(
   function onListening() {
     if (process.env.PIDFILE) {
       const pidfile = require('path').resolve(__dirname, process.env.PIDFILE);
+
+      try {
+        require('fs').statSync(pidfile);
+        process.stdout.write(
+          `PIDFILE "#{process.env.PIDFILE}" already exists\n`
+        );
+        this.close();
+        process.exit(1);
+      } catch (e) {
+        // Do nothing.
+      }
+
       require('fs').writeFileSync(pidfile, `${process.pid}`, 'ascii');
       process.on('SIGINT', () => {
         require('fs').unlinkSync(pidfile);
