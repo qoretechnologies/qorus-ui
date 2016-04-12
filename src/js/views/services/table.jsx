@@ -1,18 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import Table, { Section, Row, Cell } from 'components/table';
-import Badge from 'components/badge';
-
 import ServiceControls from './controls';
 
 import { pureRender } from 'components/utils';
 import goTo from 'routes';
 
-
 import classNames from 'classnames';
-import actions from 'store/api/actions';
-
 
 /**
  * List of all workflows in the system.
