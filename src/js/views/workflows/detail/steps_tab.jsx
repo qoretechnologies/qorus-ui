@@ -146,7 +146,9 @@ export default class StepsTab extends Component {
    * @see ROOT_STEP_ID
    */
   getStepDeps(stepId) {
-    const initId = Object.keys(this.props.workflow.steps)[0];
+    const initId = Object.keys(this.props.workflow.steps).
+      find(id => this.props.workflow.steps[id].length <= 0);
+
     const deps = Object.assign(
       { [ROOT_STEP_ID]: [] },
       this.props.workflow.steps,

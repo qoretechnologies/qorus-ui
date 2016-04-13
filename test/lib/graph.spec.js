@@ -170,13 +170,13 @@ describe("{ graph } from 'lib/graph'", () => {
 
     it('can handle unordered dependency maps', () => {
       const nodes = graph({
-        0: [],
-        1: [2],
-        2: [0],
+        0: [2],
+        1: [],
+        2: [1],
       });
 
-      expect(nodes.get(1).above).to.have.length(1);
-      expect(nodes.get(1).above[0]).to.equal(nodes.get(2));
+      expect(nodes.get(0).above).to.have.length(1);
+      expect(nodes.get(0).above[0]).to.equal(nodes.get(2));
     });
   });
 });

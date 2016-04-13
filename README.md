@@ -182,10 +182,21 @@ Changes host and port to which the server binds. Host defaults to
 localhost which almost certainly results to listening on loopback
 (e.g., 127.0.0.1). Port defaults to 3000.
 
-### `TEST_SITE`
+In acceptance tests, they point to the test site. The test site must
+be started locally anyway (see below).
 
-Specifies webapp base URL for acceptance tests. It defaults to
-`http://${HOST}:${POST}` (see above).
+### `PIDFILE`
+
+Points to a file where the server writes its process ID. The server
+does not start if the file already exists. This prevents from running
+multiple servers in the background by accident. If not set, the server
+does not write anything anywhere.
+
+In acceptance tests, PIDFILE is used to send `SIGUSR2` signal to the
+server to refrest static mock or generated fake data.
+
+PIDFILE can be used to `npm start` the server in the background and
+then `npm stop` it. The `stop` script does not work without `PIDFILE`.
 
 
 ## Running Tests
