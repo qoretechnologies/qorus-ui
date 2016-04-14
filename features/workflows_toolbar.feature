@@ -59,6 +59,12 @@ Feature: Workflow Toolbar
     And "workflows" get loaded
     When I click the Running button
     Then only one workflow is visible
+    
+  Scenario: Filtering last version workflows
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the Last Version button
+    Then only the last version of workflows are shown
 
   @no-impl
   Scenario: Displaying deprecated workflows
