@@ -88,8 +88,7 @@ export default class ServicesDetail extends Component {
             <DetailTab service={service} systemOptions={systemOptions} />
           </Pane>
           <Pane name="Library">
-            <p>Not implemented yet</p>
-          <LibraryTab model={service} />
+            <LibraryTab library={service.lib || {}} />
           </Pane>
           <Pane name="Methods">
             <p>Not implemented yet</p>
