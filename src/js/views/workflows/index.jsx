@@ -168,7 +168,10 @@ export default class Workflows extends Component {
    * Handles filtering for only running workflows
    */
   onRunningClick() {
-    let urlFilter = workflowHelpers.handleFilterChange(this.props.params.filter, WORKFLOW_FILTERS.RUNNING);
+    const urlFilter = workflowHelpers.handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.RUNNING
+    );
 
     this.applyFilter(urlFilter);
   }
@@ -177,7 +180,22 @@ export default class Workflows extends Component {
    * Handles displaying hidden workflows
    */
   onDeprecatedClick() {
-    let urlFilter = workflowHelpers.handleFilterChange(this.props.params.filter, WORKFLOW_FILTERS.DEPRECATED);
+    const urlFilter = workflowHelpers.handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.DEPRECATED
+    );
+
+    this.applyFilter(urlFilter);
+  }
+
+  /**
+   * Handles displaying hidden workflows
+   */
+  onLastVersionClick() {
+    const urlFilter = workflowHelpers.handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.LAST_VERSION
+    );
 
     this.applyFilter(urlFilter);
   }
@@ -228,7 +246,7 @@ export default class Workflows extends Component {
   filterWorkflows(props) {
     const filter = workflowHelpers.filterArray(props.params.filter);
 
-    const filteredWorkflows = props.workflows.filter(w => {
+    let filteredWorkflows = props.workflows.filter(w => {
       if (includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count === 0) {
         return false;
       }
@@ -239,6 +257,18 @@ export default class Workflows extends Component {
 
       return true;
     });
+
+    if (includes(filter, WORKFLOW_FILTERS.LAST_VERSION)) {
+      filteredWorkflows = filteredWorkflows.filter(w => {
+        for (const workflow of filteredWorkflows) {
+          if (w.name === workflow.name && parseFloat(w.version) < parseFloat(workflow.version)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    }
 
     this.setState({
       filteredWorkflows,
@@ -295,6 +325,7 @@ export default class Workflows extends Component {
           onFilterClick={::this.onFilterClick}
           onRunningClick={::this.onRunningClick}
           onDeprecatedClick={::this.onDeprecatedClick}
+          onLastVersionClick={::this.onLastVersionClick}
           selected={this.state.selected}
           filter={workflowHelpers.filterArray(this.props.params.filter)}
         />
