@@ -50,7 +50,7 @@ app.listen(
       try {
         require('fs').statSync(pidfile);
         process.stdout.write(
-          `PIDFILE "#{process.env.PIDFILE}" already exists\n`
+          `PIDFILE "${process.env.PIDFILE}" already exists\n`
         );
         this.close();
         process.exit(1);
