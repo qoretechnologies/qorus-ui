@@ -21,6 +21,9 @@ export default class WorkflowsToolbar extends Component {
     filter: PropTypes.array,
   };
 
+  /**
+   * Handles selecting/deselecting all workflows
+   */
   onAllClick() {
     if (this.props.selected === 'none' || this.props.selected === 'some') {
       this.props.onFilterClick(() => true);
@@ -29,24 +32,36 @@ export default class WorkflowsToolbar extends Component {
     }
   }
 
+  /**
+   * Handles deselecting all workflows
+   */
   onNoneClick() {
     this.props.onFilterClick(() => false);
   }
 
+  /**
+   * Handles inverting selected workflows
+   */
   onInvertClick() {
     this.props.onFilterClick((workflow, selectedWorkflows) => !selectedWorkflows[workflow.id]);
   }
 
+  /**
+   * Handles selecting only running workflows
+   */
   onRunningClick() {
     this.props.onFilterClick((workflow) => workflow.exec_count > 0);
   }
 
+  /**
+   * Handles selecting only stopped workflows
+   */
   onStoppedClick() {
     this.props.onFilterClick((workflow) => workflow.exec_count === 0);
   }
 
   /**
-   * Renders the seleciton dropdown to the component
+   * Renders the selection dropdown to the component
    */
   renderSelectionControls() {
     if (this.props.selected !== 'none') {
@@ -54,30 +69,30 @@ export default class WorkflowsToolbar extends Component {
         <Actions>
           <Button
             label="Enable"
-            icon="toggle-on"
+            icon="power-off"
             big
             btnStyle="default"
           />
           <Button
             label="Disable"
-            icon="toggle-off"
+            icon="ban"
             big
             btnStyle="default"
           />
           <Button
             label="Reset"
-            icon="power-off"
+            icon="refresh"
             big
             btnStyle="default"
           />
-          <Dropdown>
+          <Dropdown id="hidden">
             <DropdownControl />
             <DropdownItem
-              title="Set deprecated"
+              title="Hide"
               icon="flag"
             />
             <DropdownItem
-              title="Unset deprecated"
+              title="Show"
               icon="flag-o"
             />
           </Dropdown>
@@ -140,7 +155,7 @@ export default class WorkflowsToolbar extends Component {
             btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
               'success' : 'default'}
           />
-          <Dropdown>
+          <Dropdown id="deprecated">
             <DropdownControl
               btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
                 'success' : 'default'}
