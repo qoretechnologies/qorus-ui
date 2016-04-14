@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
 // import { DetailTab, LibraryTab, LogTab } from './tabs';
-import DetailTab from './tabs/detail';
+import { DetailTab, MethodsTab } from './tabs';
 import LibraryTab from 'components/library';
 import LogTab from 'components/log';
 
@@ -91,7 +91,7 @@ export default class ServicesDetail extends Component {
             <LibraryTab library={service.lib || {}} />
           </Pane>
           <Pane name="Methods">
-            <p>Not implemented yet</p>
+            <MethodsTab service={service} />
           </Pane>
           <Pane name="Log">
             <LogTab model={service} resource="services" />

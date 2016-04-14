@@ -1,2 +1,4 @@
-export * from './detail';
-export * from './library';
+import DetailTab from './detail';
+import MethodsTab from './methods';
+
+export { DetailTab, MethodsTab };
