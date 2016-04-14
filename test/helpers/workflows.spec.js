@@ -19,7 +19,7 @@ describe("Workflow Helpers from 'helpers/worklfows'", () => {
     expect(filterArray[0]).to.equal('all');
   });
 
-  it('adds a new URL filter',  () => {
+  it('adds a new URL filter', () => {
     const filterString = 'running,hidden';
     const filterAfter = workflowHelpers.handleFilterChange(filterString, 'last');
 
@@ -28,7 +28,7 @@ describe("Workflow Helpers from 'helpers/worklfows'", () => {
     expect(filterAfter[2]).to.equal('last');
   });
 
-  it('removes a filter if it is already set',  () => {
+  it('removes a filter if it is already set', () => {
     const filterString = 'running,hidden';
     const filterAfter = workflowHelpers.handleFilterChange(filterString, 'running');
 
