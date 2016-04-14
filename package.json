@@ -91,7 +91,7 @@
     "test:uat": "NODE_ENV=test cucumber.js",
     "test:uat:ci": "export npm_config_loglevel=silent\n  npm run-script test:uat -- -p ci",
     "test:uat:all": "export npm_config_loglevel=silent\n  npm run-script test:uat -- -t ~@no-impl",
-    "test:uat:wip": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script bgserver:start && \\\n    nodemon `which cucumber.js` -p wip",
+    "test:uat:wip": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.wip.pid\n  npm run-script bgserver:start && \\\n    nodemon `which cucumber.js` -p wip",
     "test:unit": "NODE_ENV=test mocha",
     "test:unit:ci": "export npm_config_loglevel=silent\n  npm run-script test:unit -- -C 'test/**/*.spec.{js,jsx}'",
     "test:unit:all": "export npm_config_loglevel=silent\n  npm run-script test:unit -- 'test/**/*.spec.{js,jsx}'",
