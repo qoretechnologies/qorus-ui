@@ -62,7 +62,7 @@ export default class Options extends Component {
   getModelOptions() {
     return this.state.lastOption ?
       this.props.model.options.concat(this.state.lastOption) :
-      this.props.model.options;
+      this.props.model.options || [];
   }
 
 
