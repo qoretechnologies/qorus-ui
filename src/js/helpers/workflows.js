@@ -13,7 +13,8 @@ export default {
    * @returns {Array}
    */
   filterArray(filter) {
-    return typeof filter === 'undefined' || filter === '' ? [WORKFLOW_FILTERS.ALL] : filter.split(',');
+    return typeof filter === 'undefined' || filter === '' ?
+      [WORKFLOW_FILTERS.ALL] : filter.split(',');
   },
   /**
    * Handles the workflow filter change
@@ -24,22 +25,22 @@ export default {
    * @returns {Array}
    */
   handleFilterChange(filter, target) {
-    filter = this.filterArray(filter);
+    const filterArr = this.filterArray(filter);
 
-    if (includes(filter, target)) {
-      filter.splice(filter.indexOf(target), 1);
+    if (includes(filterArr, target)) {
+      filterArr.splice(filterArr.indexOf(target), 1);
 
-      if (filter.length === 0) {
-        filter.push(WORKFLOW_FILTERS.ALL);
+      if (filterArr.length === 0) {
+        filterArr.push(WORKFLOW_FILTERS.ALL);
       }
     } else {
-      filter.push(target);
+      filterArr.push(target);
 
-      if(includes(filter, WORKFLOW_FILTERS.ALL)) {
-        filter.splice(filter.indexOf(WORKFLOW_FILTERS.ALL), 1);
+      if (includes(filterArr, WORKFLOW_FILTERS.ALL)) {
+        filterArr.splice(filterArr.indexOf(WORKFLOW_FILTERS.ALL), 1);
       }
     }
 
-    return filter;
+    return filterArr;
   },
 };
