@@ -147,6 +147,7 @@ export default class Workflows extends Component {
     if (this.props.workflows !== next.workflows ||
       this.props.params.filter !== next.params.filter) {
       this.filterWorkflows(next);
+      this.onFilterClick(() => false);
     }
   }
 
@@ -289,8 +290,6 @@ export default class Workflows extends Component {
       this.props.params,
       { filter: filter.join(','), detailId: null, tabId: null }
     );
-
-    this.onFilterClick(() => false);
   }
 
   renderPane() {
