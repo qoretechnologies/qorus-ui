@@ -155,7 +155,7 @@ export default class WorkflowsTable extends Component {
    * @param {Event} ev
    */
   activateWorkflow(ev) {
-    if (ev.isDefaultPrevented()) return;
+    if (ev.defaultPrevented) return;
 
     const workflow = this.findActivatedWorkflow(ev.currentTarget);
     const shouldDeactivate =
