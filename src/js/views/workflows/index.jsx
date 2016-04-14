@@ -135,7 +135,7 @@ export default class Workflows extends Component {
     this.setState({
       filterFn: null,
       selected: 'none',
-      filteredWorkflows: {},
+      filteredWorkflows: [],
     });
   }
 
@@ -147,7 +147,7 @@ export default class Workflows extends Component {
     if (this.props.workflows !== next.workflows ||
       this.props.params.filter !== next.params.filter) {
       this.filterWorkflows(next);
-      this.onFilterClick(() => false);
+      this.onFilterClick(null);
     }
   }
 
@@ -278,7 +278,6 @@ export default class Workflows extends Component {
 
   /**
    * Applies the current filter to the URL
-   * Clears all selected workflows
    *
    * @param {Array} filter
    */

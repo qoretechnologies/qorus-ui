@@ -57,10 +57,6 @@ export default class WorkflowsTable extends Component {
     });
   }
 
-  componentDidMount() {
-    this.setupFilters(this.props);
-  }
-
   componentWillReceiveProps(next) {
     if (this.props.initialFilter !== next.initialFilter) {
       this.setupFilters(next);
