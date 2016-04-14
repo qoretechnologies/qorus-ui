@@ -18,6 +18,7 @@ export default class WorkflowsToolbar extends Component {
     onFilterClick: PropTypes.func,
     onRunningClick: PropTypes.func,
     onDeprecatedClick: PropTypes.func,
+    onLastVersionClick: PropTypes.func,
     filter: PropTypes.array,
   };
 
@@ -150,6 +151,7 @@ export default class WorkflowsToolbar extends Component {
           <Button
             label="Last version"
             big
+            action={::this.props.onLastVersionClick}
             icon={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
               'check-square-o' : 'square-o'}
             btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
