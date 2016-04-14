@@ -1,5 +1,4 @@
 const findElementByText = (browser, selector, text) => {
-  "use strict";
   return browser.
     queryAll(selector).
     find(el => el.textContent === text)
@@ -24,7 +23,7 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.When(/^I click the checkbox on the dropdown$/, function () {
-    this.browser.click('#selection .fa-square-o')
+    this.browser.click('#selection .fa-square-o');
   });
 
   this.Then(/^all of the workflows are selected$/, function () {
@@ -92,5 +91,15 @@ module.exports = function workFlowControlSteps() {
 
   this.Then(/^the hidden workflows are displayed$/, async function() {
     this.browser.assert.elements('tbody > tr', 5);
+  });
+
+  this.When(/^I click the Last Version button$/, async function() {
+    const el = findElementByText(this.browser, '.btn > span', ' Last version');
+
+    return this.browser.click(el.parentElement);
+  });
+
+  this.Then(/^only the last version of workflows are shown$/, async function() {
+    this.browser.assert.elements('tbody > tr', 4);
   });
 };
