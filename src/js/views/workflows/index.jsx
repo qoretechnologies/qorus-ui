@@ -168,8 +168,7 @@ export default class Workflows extends Component {
    * Handles filtering for only running workflows
    */
   onRunningClick() {
-    let urlFilter = workflowHelpers.filterArray(this.props.params.filter);
-    urlFilter = workflowHelpers.handleFilterChange(urlFilter, WORKFLOW_FILTERS.RUNNING);
+    let urlFilter = workflowHelpers.handleFilterChange(this.props.params.filter, WORKFLOW_FILTERS.RUNNING);
 
     this.applyFilter(urlFilter);
   }
@@ -178,8 +177,7 @@ export default class Workflows extends Component {
    * Handles displaying hidden workflows
    */
   onDeprecatedClick() {
-    let urlFilter = workflowHelpers.filterArray(this.props.params.filter);
-    urlFilter = workflowHelpers.handleFilterChange(urlFilter, WORKFLOW_FILTERS.DEPRECATED);
+    let urlFilter = workflowHelpers.handleFilterChange(this.props.params.filter, WORKFLOW_FILTERS.DEPRECATED);
 
     this.applyFilter(urlFilter);
   }
@@ -249,6 +247,7 @@ export default class Workflows extends Component {
 
   /**
    * Applies the current filter to the URL
+   * Clears all selected workflows
    *
    * @param {Array} filter
    */
@@ -260,6 +259,8 @@ export default class Workflows extends Component {
       this.props.params,
       { filter: filter.join(','), detailId: null, tabId: null }
     );
+
+    this.onFilterClick(() => false);
   }
 
   renderPane() {

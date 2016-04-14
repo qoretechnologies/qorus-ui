@@ -1,5 +1,5 @@
 import { includes } from 'lodash';
-
+import { WORKFLOW_FILTERS } from '../constants/filters';
 /**
  * Helpers for workflows manipulations
  */
@@ -13,7 +13,7 @@ export default {
    * @returns {Array}
    */
   filterArray(filter) {
-    return typeof filter === 'undefined' ? [] : filter.split(',');
+    return typeof filter === 'undefined' || filter === '' ? [WORKFLOW_FILTERS.ALL] : filter.split(',');
   },
   /**
    * Handles the workflow filter change
@@ -24,10 +24,20 @@ export default {
    * @returns {Array}
    */
   handleFilterChange(filter, target) {
+    filter = this.filterArray(filter);
+
     if (includes(filter, target)) {
       filter.splice(filter.indexOf(target), 1);
+
+      if (filter.length === 0) {
+        filter.push(WORKFLOW_FILTERS.ALL);
+      }
     } else {
       filter.push(target);
+
+      if(includes(filter, WORKFLOW_FILTERS.ALL)) {
+        filter.splice(filter.indexOf(WORKFLOW_FILTERS.ALL), 1);
+      }
     }
 
     return filter;
