@@ -79,11 +79,13 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.Then(/^only one workflow is visible$/, async function() {
-    this.browser.assert.elements('tbody > tr', 1);
+    this.browser.assert.elements('tbody > tr', 3);
   });
 
   this.When(/^I click the Deprecated button$/, async function() {
-    const el = findElementByText(this.browser, '.btn > span', ' Deprecated');
+    this.browser.click('#deprecated');
+
+    const el = findElementByText(this.browser, '#deprecated-dropdown span', 'Deprecated');
 
     return this.browser.click(el.parentElement);
   });
@@ -91,5 +93,4 @@ module.exports = function workFlowControlSteps() {
   this.Then(/^the hidden workflows are displayed$/, async function() {
     this.browser.assert.elements('tbody > tr', 5);
   });
-
 };

@@ -60,7 +60,7 @@ Feature: Workflow Toolbar
     When I click the Running button
     Then only one workflow is visible
 
-  @wip
+  @no-impl
   Scenario: Displaying deprecated workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
