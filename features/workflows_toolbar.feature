@@ -6,6 +6,11 @@ Feature: Workflow Toolbar
     When I click the dropdown toggle
     Then the dropdown should be shown
 
+  Scenario: Dropdown checkbox is unchecked by default
+    Given I am on "workflows" listing
+    When "workflows" get loaded
+    Then the dropdown checkbox should be unchecked
+
   Scenario: Dropdown checkbox is checked
     Given I am on "workflows" listing
     And "workflows" get loaded
@@ -59,7 +64,7 @@ Feature: Workflow Toolbar
     And "workflows" get loaded
     When I click the Running button
     Then only one workflow is visible
-    
+
   Scenario: Filtering last version workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
