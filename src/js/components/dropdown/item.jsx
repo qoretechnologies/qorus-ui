@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { pureRender } from '../utils';
 
+@pureRender
 export default class Item extends Component {
   static propTypes = {
     title: PropTypes.oneOfType([

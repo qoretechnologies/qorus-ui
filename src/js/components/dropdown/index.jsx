@@ -2,8 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import Item from './item';
 import Control from './control';
 import classNames from 'classnames';
+import { pureRender } from '../utils';
 
-export default class Dropdown extends Component {
+@pureRender
+export default class extends Component {
   static propTypes = {
     children: PropTypes.node,
     id: PropTypes.string,
@@ -38,7 +40,6 @@ export default class Dropdown extends Component {
       showDropdown: false,
     });
   }
-
 
   /**
    * Renders the seleciton dropdown to the component

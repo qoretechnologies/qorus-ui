@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { CHECKBOX_CLASSES } from '../../constants/checkbox';
+import { pureRender } from '../utils';
 
+@pureRender
 export default class extends Component {
   static propTypes = {
     checked: PropTypes.string,
