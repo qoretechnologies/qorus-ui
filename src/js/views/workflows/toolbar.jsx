@@ -3,13 +3,14 @@ import Toolbar, { Actions } from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
 import { Control as Button, Controls } from 'components/controls';
 import Checkbox from 'components/checkbox';
+import Search from 'components/search';
 
 import { includes } from 'lodash';
 
 import { CHECKBOX_STATES } from '../../constants/checkbox';
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 
-import { pureRender } from 'components/utils';
+import { pureRender } from '../../components/utils';
 
 @pureRender
 export default class WorkflowsToolbar extends Component {
@@ -170,6 +171,10 @@ export default class WorkflowsToolbar extends Component {
             />
           </Dropdown>
         </Controls>
+        <Search
+          defaultValue={this.props.defaultSearchValue}
+          onUpdate={::this.props.onSearchUpdate}
+        />
       </Toolbar>
     );
   }
