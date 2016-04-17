@@ -28,7 +28,7 @@ Feature: Workflow Toolbar
     Given I am on "workflows" listing
     And workflows get loaded
     And I click the dropdown toggle
-    When I click the All item
+    When I click the "All" item
     Then all of the workflows are selected
 
   Scenario: Inverting selection of workflows
@@ -36,7 +36,7 @@ Feature: Workflow Toolbar
     And workflows get loaded
     And I click the checkbox on the dropdown
     And I click the dropdown toggle
-    When I click the Invert item
+    When I click the "Invert" item
     Then no workflows are selected
 
   Scenario: Deselecting all workflows from dropdown
@@ -44,7 +44,7 @@ Feature: Workflow Toolbar
     And workflows get loaded
     And I click the checkbox on the dropdown
     And I click the dropdown toggle
-    When I click the None item
+    When I click the "None" item
     Then no workflows are selected
 
   Scenario: Selecting some workflows
@@ -62,21 +62,28 @@ Feature: Workflow Toolbar
   Scenario: Filtering only running workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
-    When I click the Running button
-    Then only one workflow is visible
+    When I click the "Running" button
+    Then "3" workflows are shown
 
   Scenario: Filtering last version workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
-    When I click the Last Version button
-    Then only the last version of workflows are shown
+    When I click the "Last version" button
+    Then "4" workflows are shown
+
+  @wip
+  Scenario: Filtering workflows through search input
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I type "array" in the search input
+    Then "3" workflows are shown
 
   @no-impl
   Scenario: Displaying deprecated workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the Deprecated button
-    Then the hidden workflows are displayed
+    Then "5" workflows are shown
 
   @no-impl
   Scenario: Dropdown is hidden on toggle blur

@@ -38,18 +38,8 @@ module.exports = function workFlowControlSteps() {
     this.browser.assert.hasClass('#selection > i', 'fa-minus-square-o');
   });
 
-  this.When(/^I click the All item$/, function () {
-    this.browser.click('#selection-dropdown > li > a:first-of-type');
-  });
-
-  this.When(/^I click the Invert item$/, function () {
-    const el = findElementByText(this.browser, '#selection-dropdown > li > a', ' Invert');
-
-    return this.browser.click(el);
-  });
-
-  this.When(/^I click the None item$/, function () {
-    const el = findElementByText(this.browser, '#selection-dropdown > li > a', ' None');
+  this.When(/^I click the "([^"]*)" item$/, function (item) {
+    const el = findElementByText(this.browser, '#selection-dropdown > li > a', ` ${item}`);
 
     return this.browser.click(el);
   });
@@ -71,16 +61,6 @@ module.exports = function workFlowControlSteps() {
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 
-  this.When(/^I click the Running button$/, async function() {
-    const el = findElementByText(this.browser, '.btn > span', ' Running');
-
-    return this.browser.click(el.parentElement);
-  });
-
-  this.Then(/^only one workflow is visible$/, async function() {
-    this.browser.assert.elements('tbody > tr', 3);
-  });
-
   this.When(/^I click the Deprecated button$/, async function() {
     this.browser.click('#deprecated');
 
@@ -89,17 +69,17 @@ module.exports = function workFlowControlSteps() {
     return this.browser.click(el.parentElement);
   });
 
-  this.Then(/^the hidden workflows are displayed$/, async function() {
-    this.browser.assert.elements('tbody > tr', 5);
-  });
-
-  this.When(/^I click the Last Version button$/, async function() {
-    const el = findElementByText(this.browser, '.btn > span', ' Last version');
+  this.When(/^I click the "([^"]*)" button$/, async function(button) {
+    const el = findElementByText(this.browser, '.btn > span', ` ${button}`);
 
     return this.browser.click(el.parentElement);
   });
 
-  this.Then(/^only the last version of workflows are shown$/, async function() {
-    this.browser.assert.elements('tbody > tr', 4);
+  this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
+    return this.browser.fill('input[type="text"]', search);
+  });
+
+  this.Then(/^"([^"]*)" workflows are shown$/, async function(workflows) {
+    this.browser.assert.elements('tbody > tr', workflows);
   });
 };

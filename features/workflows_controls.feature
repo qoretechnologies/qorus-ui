@@ -4,12 +4,10 @@ Feature: Workflow Controls
   buttons to enable/disable and to reset the workflow. The other is
   also a group of buttons to control the autostart value.
 
-
   Scenario: Disabling workflow from list
     Given I am on "workflows" listing
     When I disable "ARRAYTEST" workflow
     And workflow should be disabled
-
 
   Scenario: Enabling workflow from list
     Given "ARRAYTEST" workflow is disabled
