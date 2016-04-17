@@ -21,6 +21,8 @@ export default class WorkflowsToolbar extends Component {
     onDeprecatedClick: PropTypes.func,
     onLastVersionClick: PropTypes.func,
     filter: PropTypes.array,
+    defaultSearchValue: PropTypes.string,
+    onSearchUpdate: PropTypes.func,
   };
 
   /**
@@ -173,7 +175,7 @@ export default class WorkflowsToolbar extends Component {
         </Controls>
         <Search
           defaultValue={this.props.defaultSearchValue}
-          onUpdate={::this.props.onSearchUpdate}
+          onSearchUpdate={::this.props.onSearchUpdate}
         />
       </Toolbar>
     );

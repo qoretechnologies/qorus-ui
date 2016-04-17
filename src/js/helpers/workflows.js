@@ -10,8 +10,11 @@ import { WORKFLOW_FILTERS } from '../constants/filters';
  * @returns {Array}
  */
 const filterArray = (filter) => {
-  return typeof filter === 'undefined' || filter === '' ?
-    [WORKFLOW_FILTERS.ALL] : filter.split(',');
+  if (typeof filter === 'undefined' || filter === '') {
+    return [WORKFLOW_FILTERS.ALL];
+  }
+
+  return filter.split(',');
 };
 
 /**

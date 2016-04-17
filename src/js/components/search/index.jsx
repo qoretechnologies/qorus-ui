@@ -4,7 +4,7 @@ import { pureRender } from '../utils';
 @pureRender
 export default class extends Component {
   static propTypes = {
-    onUpdate: PropTypes.func,
+    onSearchUpdate: PropTypes.func,
     defaultValue: PropTypes.string,
   };
 
@@ -19,7 +19,7 @@ export default class extends Component {
       query: event.target.value,
     });
 
-    this.props.onUpdate(event.target.value);
+    this.props.onSearchUpdate(event.target.value);
   }
 
   render() {
