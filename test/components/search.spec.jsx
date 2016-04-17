@@ -41,7 +41,7 @@ describe("Search from 'components/search'", () => {
       const renderer = TestUtils.createRenderer();
       renderer.render(
         <Search
-          onUpdate={action}
+          onSearchUpdate={action}
         />
       );
       const result = renderer.getRenderOutput();
