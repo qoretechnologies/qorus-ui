@@ -7,7 +7,6 @@ import * as shallow from '../shallow';
 
 import Dropdown, { Item, Control } from '../../src/js/components/dropdown';
 
-
 describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
   before(() => {
     chai.use(spies);
@@ -39,18 +38,6 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       expect(result.props.children.props.children[0].type).to.equal('i');
       expect(result.props.children.props.children[0].props.className).to.equal('fa fa-power-off');
       expect(result.props.children.props.children[2]).to.equal('All');
-    });
-
-    xit('handles action on click', () => {
-      const action = chai.spy();
-      const control = TestUtils.renderIntoDocument(
-        <Control icon="refresh" action={action} />
-      );
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-      TestUtils.Simulate.click(el);
-
-      expect(action).to.have.been.called();
     });
   });
 
