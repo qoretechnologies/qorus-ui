@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flow, includes } from 'lodash';
+import { flowRight, includes, curry } from 'lodash';
 import { compare } from 'utils';
 import goTo from '../../routes';
 
@@ -20,18 +20,20 @@ import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 
 import { WORKFLOW_FILTERS } from '../../constants/filters';
-import workflowHelpers from '../../helpers/workflows';
+import { filterArray, handleFilterChange } from '../../helpers/workflows';
+import { findBy } from '../../helpers/search';
 
 const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
 
+const filterSearch = curry((search, workflows) =>
+  findBy(['name', 'id'], search, workflows));
 
 const errorsComparator = (a, b) => {
   if (a.error < b.error) return -1;
   if (a.error > b.error) return +1;
   return 0;
 };
-
 
 const errorsToArray = (state, ref) => (
   (state.api.errors[ref] && state.api.errors[ref].data &&
@@ -40,9 +42,7 @@ const errorsToArray = (state, ref) => (
    sort(errorsComparator)) || []
 );
 
-
 const workflowsSelector = state => state.api.workflows;
-
 
 const errorsSelector = state => (
   Object.keys(state.api.errors).
@@ -54,21 +54,24 @@ const errorsSelector = state => (
     ), {})
 );
 
-
 const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.workflow)
 );
 
 const globalErrorsSelector = state => errorsToArray(state, 'global');
 
+const searchSelector = (state, props) => props.location.query.q;
+
 const infoSelector = state => state.api.system;
 
 const collectionSelector = createSelector(
   [
+    searchSelector,
     workflowsSelector,
   ],
-  (workflows) => flow(
+  (search, workflows) => flowRight(
     sortWorkflows,
+    filterSearch(search),
   )(workflows.data)
 );
 
@@ -106,14 +109,13 @@ export default class Workflows extends Component {
     globalErrors: PropTypes.array,
     params: PropTypes.object,
     route: PropTypes.object,
+    location: PropTypes.object,
   };
-
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
   };
-
 
   static childContextTypes = {
     params: PropTypes.object,
@@ -169,7 +171,7 @@ export default class Workflows extends Component {
    * Handles filtering for only running workflows
    */
   onRunningClick() {
-    const urlFilter = workflowHelpers.handleFilterChange(
+    const urlFilter = handleFilterChange(
       this.props.params.filter,
       WORKFLOW_FILTERS.RUNNING
     );
@@ -181,7 +183,7 @@ export default class Workflows extends Component {
    * Handles displaying hidden workflows
    */
   onDeprecatedClick() {
-    const urlFilter = workflowHelpers.handleFilterChange(
+    const urlFilter = handleFilterChange(
       this.props.params.filter,
       WORKFLOW_FILTERS.DEPRECATED
     );
@@ -193,7 +195,7 @@ export default class Workflows extends Component {
    * Handles displaying hidden workflows
    */
   onLastVersionClick() {
-    const urlFilter = workflowHelpers.handleFilterChange(
+    const urlFilter = handleFilterChange(
       this.props.params.filter,
       WORKFLOW_FILTERS.LAST_VERSION
     );
@@ -245,7 +247,7 @@ export default class Workflows extends Component {
    * @param {Array} props
    */
   filterWorkflows(props) {
-    const filter = workflowHelpers.filterArray(props.params.filter);
+    const filter = filterArray(props.params.filter);
 
     let filteredWorkflows = props.workflows.filter(w => {
       if (includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count === 0) {
@@ -274,6 +276,22 @@ export default class Workflows extends Component {
     this.setState({
       filteredWorkflows,
     });
+  }
+
+  /**
+   * Applies the current filter to the URL
+   *
+   * @param {String} q
+   */
+  handleSearchChange(q) {
+    goTo(
+      this.context.router,
+      'workflows',
+      this.props.route.path,
+      this.props.params,
+      {},
+      { q },
+    );
   }
 
   /**
@@ -324,8 +342,10 @@ export default class Workflows extends Component {
           onRunningClick={::this.onRunningClick}
           onDeprecatedClick={::this.onDeprecatedClick}
           onLastVersionClick={::this.onLastVersionClick}
+          onSearchUpdate={::this.handleSearchChange}
           selected={this.state.selected}
-          filter={workflowHelpers.filterArray(this.props.params.filter)}
+          defaultSearchValue={this.props.location.query.q}
+          filter={filterArray(this.props.params.filter)}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
