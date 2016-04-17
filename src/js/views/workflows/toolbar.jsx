@@ -25,42 +25,50 @@ export default class WorkflowsToolbar extends Component {
     onSearchUpdate: PropTypes.func,
   };
 
+  componentWillMount() {
+    this.handleAllClick = ::this.handleAllClick;
+    this.handleNoneClick = ::this.handleNoneClick;
+    this.handleInvertClick = ::this.handleInvertClick;
+    this.handleRunningClick = ::this.handleRunningClick;
+    this.handleStoppedClick = ::this.handleStoppedClick;
+  }
+
   /**
    * Handles selecting/deselecting all workflows
    */
-  onAllClick() {
+  handleAllClick() {
     if (this.props.selected === 'none' || this.props.selected === 'some') {
       this.props.onFilterClick(() => true);
     } else {
-      this.onNoneClick();
+      this.handleNoneClick();
     }
   }
 
   /**
    * Handles deselecting all workflows
    */
-  onNoneClick() {
+  handleNoneClick() {
     this.props.onFilterClick(() => false);
   }
 
   /**
    * Handles inverting selected workflows
    */
-  onInvertClick() {
+  handleInvertClick() {
     this.props.onFilterClick((workflow, selectedWorkflows) => !selectedWorkflows[workflow.id]);
   }
 
   /**
    * Handles selecting only running workflows
    */
-  onRunningClick() {
+  handleRunningClick() {
     this.props.onFilterClick((workflow) => workflow.exec_count > 0);
   }
 
   /**
    * Handles selecting only stopped workflows
    */
-  onStoppedClick() {
+  handleStoppedClick() {
     this.props.onFilterClick((workflow) => workflow.exec_count === 0);
   }
 
@@ -115,28 +123,28 @@ export default class WorkflowsToolbar extends Component {
         <Dropdown id="selection">
           <DropdownControl>
             <Checkbox
-              action={::this.onAllClick}
+              action={this.handleAllClick}
               checked={checked}
             />&nbsp;
           </DropdownControl>
           <DropdownItem
-            action={::this.onAllClick}
+            action={this.handleAllClick}
             title="All"
           />
           <DropdownItem
-            action={::this.onNoneClick}
+            action={this.handleNoneClick}
             title="None"
           />
           <DropdownItem
-            action={::this.onInvertClick}
+            action={this.handleInvertClick}
             title="Invert"
           />
           <DropdownItem
-            action={::this.onRunningClick}
+            action={this.handleRunningClick}
             title="Running"
           />
           <DropdownItem
-            action={::this.onStoppedClick}
+            action={this.handleStoppedClick}
             title="Stopped"
           />
         </Dropdown>
