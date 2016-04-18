@@ -1,8 +1,3 @@
-/*
- * TODO Take a look at react-router and its Link componet whether it
- * can replace all this.
- */
-
 import UrlPattern from 'url-pattern';
 import qs from 'qs';
 import { pickBy } from 'lodash';
@@ -16,7 +11,17 @@ const routes = {
   groups: {},
 };
 
-export default function goTo(router, name, path, params, change, query = null) {
+/**
+ * Page changing function accepts params and queries
+ *
+ * @param {Object} router
+ * @param {String} name
+ * @param {String} path
+ * @param {Object} params
+ * @param {Object} change
+ * @param {!Object} query
+ */
+const goTo = (router, name, path, params, change, query = null) => {
   let newPath = path;
 
   if (query && Object.keys(query).length !== 0) {
@@ -30,4 +35,9 @@ export default function goTo(router, name, path, params, change, query = null) {
   const url = new UrlPattern(newPath).stringify(newParams);
 
   router.push(`/${url}`);
-}
+};
+
+export {
+  routes,
+  goTo,
+};
