@@ -36,7 +36,7 @@ describe("Search from 'components/search'", () => {
       expect(result.props.children[0].props.value).to.equal('Yolo');
     });
 
-    it('runs the provided function when the input changes', () => {
+    it('runs the provided function when the input changes after 500ms', () => {
       const action = chai.spy();
       const renderer = TestUtils.createRenderer();
       renderer.render(
@@ -46,9 +46,14 @@ describe("Search from 'components/search'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children[0].props.onChange({ target: { value: 'Hello' } });
+      result.props.children[0].props.onChange({
+        target: { value: 'Hello' },
+        persist: () => true,
+      });
 
-      expect(action).to.have.been.called().with('Hello');
+      setTimeout(() => {
+        expect(action).to.have.been.called().with('Hello');
+      }, 500);
     });
   });
 });
