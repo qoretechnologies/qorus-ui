@@ -39,6 +39,22 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       expect(result.props.children.props.children[0].props.className).to.equal('fa fa-power-off');
       expect(result.props.children.props.children[2]).to.equal('All');
     });
+
+    it('runs the provided action when clicked', () => {
+      const action = chai.spy();
+      const hideDropdown = () => true;
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Item
+          action={action}
+          hideDropdown={hideDropdown}
+        />
+      );
+      const result = renderer.getRenderOutput();
+
+      result.props.children.props.onClick();
+      expect(action).to.have.been.called();
+    });
   });
 
   describe('Dropdown', () => {
