@@ -35,6 +35,16 @@ export default class MethodsTable extends Component {
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
+    this.renderHeadings = ::this.renderHeadings;
+  }
+
+  /**
+   * Returns sorted collection
+   *
+   * @return <Array>
+   */
+  getCollection() {
+    return this.props.service.methods.sort(this.compare);
   }
 
   /**
@@ -46,7 +56,6 @@ export default class MethodsTable extends Component {
     return 0;
   }
 
-
   /**
    * Opens modal dialog to manage particular error.
    *
@@ -55,12 +64,12 @@ export default class MethodsTable extends Component {
    * @param {string} label
    * @param {?boolean} requireChanges
    */
-  openModal(service, method) {
+  openModal = (service, method) => {
     this._modal = (
       <ModalRun
         method={Object.assign({}, method)}
         service={service}
-        onClose={::this.closeModal}
+        onClose={this.closeModal}
       />
     );
 
@@ -142,15 +151,12 @@ export default class MethodsTable extends Component {
       </Cell>
     );
 
-    const service = this.props.service;
-    const runCode = this.openModal.bind(this, service, model);
-
     yield (
       <Cell tag="td">
         <div className="btn-group">
           <button
             className="btn btn-xs btn-success"
-            onClick={runCode}
+            onClick={this.openModal}
           >
             <i className="fa fa-play" />
           </button>
@@ -171,7 +177,7 @@ export default class MethodsTable extends Component {
    */
   *renderHeadingRow() {
     yield (
-      <Row cells={::this.renderHeadings} />
+      <Row cells={this.renderHeadings} />
     );
   }
 
@@ -228,7 +234,7 @@ export default class MethodsTable extends Component {
     return (
       <Table
         data={{
-          collection: this.props.service.methods.sort(::this.compare),
+          collection: this.getCollection(),
         }}
         sections={this._renderSections}
         className={'table table-striped table-condensed table-hover ' +

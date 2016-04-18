@@ -25,24 +25,24 @@ export default class ModalRun extends Component {
     });
   }
 
-  onCancel(ev) {
+  handleCancel = (ev) => {
     ev.preventDefault();
     this.props.onClose();
   }
 
-  onCommit(ev) {
+  handleCommit = (ev) => {
     ev.preventDefault();
 
     this.props.onClose();
   }
 
-  onMethodChange() {
+  handleMethodChange = () => {
     this.setState({
       activeMethod: this._select.value,
     });
   }
 
-  selectRef(s) {
+  selectRef = (s) => {
     this._select = s;
   }
 
@@ -50,19 +50,18 @@ export default class ModalRun extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { service } = this.props;
     const { activeMethod, response } = this.state;
 
     return (
       <Modal>
         <form
           className="form-horizontal"
-          onSubmit={::this.onCommit}
+          onSubmit={this.handleCommit}
           noValidate
         >
           <Modal.Header
             titleId="errorsTableModalLabel"
-            onClose={::this.onCancel}
+            onClose={this.handleCancel}
           >
             Method execution for {this.props.service.name} service
           </Modal.Header>
@@ -74,7 +73,7 @@ export default class ModalRun extends Component {
                 name="method"
                 id="method"
                 defaultValue={activeMethod.name}
-                onChange={::this.onMethodChange}
+                onChange={this.handleMethodChange}
                 ref={::this.selectRef}
               >
                 { this.props.service.methods.map((mtd, idx) => (
@@ -123,7 +122,7 @@ export default class ModalRun extends Component {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={::this.onCommit}
+              onClick={this.handleCommit}
             >
               Execute
             </button>
