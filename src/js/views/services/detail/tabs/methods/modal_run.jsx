@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'components/modal';
 
-
-import _ from 'lodash';
 // import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 

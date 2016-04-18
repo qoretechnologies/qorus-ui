@@ -9,7 +9,6 @@ import WorkflowsControls from './controls';
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
 
-
 import classNames from 'classnames';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from 'constants/orders';
@@ -29,14 +28,12 @@ export default class WorkflowsTable extends Component {
     onWorkflowFilterChange: PropTypes.func,
   };
 
-
   static contextTypes = {
     router: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
-
 
   /**
    * Bounds generators and event handlers to `this` instance.
@@ -50,12 +47,11 @@ export default class WorkflowsTable extends Component {
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
+    this.renderHeadings = ::this.renderHeadings;
 
     this.setState({
       selectedWorkflows: {},
     });
-
-    this.renderHeadings = ::this.renderHeadings;
   }
 
   componentWillReceiveProps(next) {
@@ -219,7 +215,6 @@ export default class WorkflowsTable extends Component {
       <Cell tag="th" className="narrow">Total</Cell>
     );
   }
-
 
   /**
    * Yields cells with workflow data including order states.

@@ -71,7 +71,6 @@ Feature: Workflow Toolbar
     When I click the "Last version" button
     Then "4" workflows are shown
 
-  @wip
   Scenario: Filtering workflows through search input
     Given I am on "workflows" listing
     And "workflows" get loaded
