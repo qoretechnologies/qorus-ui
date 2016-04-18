@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 // import { get, flowRight, curry } from 'lodash';
 // import { compare } from 'utils';
-import goTo from 'routes';
+import { goTo } from '../../helpers/router';
 
 // data
 import actions from 'store/api/actions';

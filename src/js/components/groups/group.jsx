@@ -39,7 +39,7 @@ export default class Group extends Component {
       </span>
     );
   }
-  
+
   /**
    * Returns element for this component.
    *

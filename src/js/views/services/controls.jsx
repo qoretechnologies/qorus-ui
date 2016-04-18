@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Controls, Control } from 'components/controls';
 
-
 import { pureRender } from 'components/utils';
-
 
 import actions from 'store/api/actions';
 

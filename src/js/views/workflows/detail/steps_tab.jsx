@@ -1,16 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
 
-
 import StepModal from './step_modal';
-
 
 import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
-
 import { graph } from 'lib/graph';
-
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -26,18 +22,15 @@ import { graph } from 'lib/graph';
  * }} StepArgs
  */
 
-
 /**
  * Identifier of helper root (start) step.
  */
 const ROOT_STEP_ID = 0;
 
-
 /**
  * Width of one box on a diagram in SVG user units.
  */
 const BOX_MIN_WIDTH = 250;
-
 
 /**
  * Approximate width of one character of box text in SVG user units.
@@ -45,7 +38,6 @@ const BOX_MIN_WIDTH = 250;
  * It an approximate width of letter "n".
  */
 const BOX_CHARACTER_WIDTH = 10;
-
 
 /**
  * Ration between width and height.
@@ -94,19 +86,17 @@ export default class StepsTab extends Component {
     workflow: PropTypes.object.isRequired,
   };
 
-
   static contextTypes = {
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
   };
-
 
   /**
    * Opens modal with detailed information about clicked step.
    *
    * @param {number} stepId
    */
-  onBoxClick(stepId) {
+  onBoxClick = (stepId) => {
     // Given step is expected to have info
     this._modal = (
       <StepModal
@@ -115,22 +105,20 @@ export default class StepsTab extends Component {
         version={this.getStepInfo(stepId).version}
         patch={this.getStepInfo(stepId).patch}
         steptype={this.getStepInfo(stepId).steptype}
-        onClose={::this.onModalClose}
+        onClose={this.onModalClose}
       />
     );
 
     this.context.openModal(this._modal);
-  }
-
+  };
 
   /**
    * Closes modal with detailed step information.
    */
-  onModalClose() {
+  onModalClose = () => {
     this.context.closeModal(this._modal);
     this._modal = null;
-  }
-
+  };
 
   /**
    * Returns step dependencies.
@@ -159,7 +147,6 @@ export default class StepsTab extends Component {
       deps[stepId] :
       deps;
   }
-
 
   /**
    * Computes rows with step identifiers.
@@ -216,7 +203,6 @@ export default class StepsTab extends Component {
     return rows;
   }
 
-
   /**
    * Returns rows in a flat array suitable for iteration.
    *
@@ -233,7 +219,6 @@ export default class StepsTab extends Component {
     ), []);
   }
 
-
   /**
    * Returns arguments for step render methods.
    *
@@ -244,7 +229,6 @@ export default class StepsTab extends Component {
   getStepArgs(stepId) {
     return this.getFlattenRows().find(s => s.stepId === stepId) || null;
   }
-
 
   /**
    * Returns flatten dependencies between steps.
@@ -265,7 +249,6 @@ export default class StepsTab extends Component {
       })))
     ), []);
   }
-
 
   /**
    * Returns detailed information about particular step.
@@ -341,7 +324,7 @@ export default class StepsTab extends Component {
    * @see getStepName
    * @see getStepInfo
    */
-  getStepFullname(stepId) {
+  getStepFullname = (stepId) => {
     const info = this.getStepInfo(stepId);
 
     if (info && info.patch) {
@@ -352,7 +335,7 @@ export default class StepsTab extends Component {
     }
 
     return this.getStepName(stepId);
-  }
+  };
 
 
   /**
@@ -365,7 +348,7 @@ export default class StepsTab extends Component {
    */
   getStepFullnames() {
     return [this.getStepFullname(0)].concat(
-      Object.keys(this.props.workflow.steps).map(::this.getStepFullname)
+      Object.keys(this.props.workflow.steps).map(this.getStepFullname)
     );
   }
 
@@ -720,7 +703,7 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderDefaultBox(stepId, colIdx, row, rowIdx) {
-    const onClick = this.onBoxClick.bind(this, stepId);
+    const onClick = this.onBoxClick(stepId);
     const type = this.getStepInfo(stepId) ?
       this.getStepInfo(stepId).steptype :
       '';

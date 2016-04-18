@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, includes, curry } from 'lodash';
 import { compare } from 'utils';
-import goTo from '../../routes';
+import { goTo } from '../../helpers/router';
 
 // data
 import actions from 'store/api/actions';
@@ -149,81 +149,12 @@ export default class Workflows extends Component {
     if (this.props.workflows !== next.workflows ||
       this.props.params.filter !== next.params.filter) {
       this.filterWorkflows(next);
-      this.onFilterClick(null);
+      this.handleFilterClick(null);
     }
   }
 
   componentDidUpdate() {
     this.setTitle();
-  }
-
-  onClosePane() {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.props.route.path,
-      this.props.params,
-      { detailId: null, tabId: null }
-    );
-  }
-
-  /**
-   * Handles filtering for only running workflows
-   */
-  onRunningClick() {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.RUNNING
-    );
-
-    this.applyFilter(urlFilter);
-  }
-
-  /**
-   * Handles displaying hidden workflows
-   */
-  onDeprecatedClick() {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.DEPRECATED
-    );
-
-    this.applyFilter(urlFilter);
-  }
-
-  /**
-   * Handles displaying hidden workflows
-   */
-  onLastVersionClick() {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.LAST_VERSION
-    );
-
-    this.applyFilter(urlFilter);
-  }
-
-  /**
-   * Handles the click on the dropdowns checkbox
-   *
-   * @param {Function} filterFn
-   */
-  onFilterClick(filterFn) {
-    this.setState({
-      filterFn,
-    });
-  }
-
-  /**
-   * Changes the state of what workflows are selected
-   * Used by the dropdown checkbox in Toolbar
-   *
-   * @param {String} selected
-   */
-  onWorkflowFilterChange(selected) {
-    this.setState({
-      selected,
-    });
   }
 
   setTitle() {
@@ -278,12 +209,81 @@ export default class Workflows extends Component {
     });
   }
 
+  handlePaneClose = () => {
+    goTo(
+      this.context.router,
+      'workflows',
+      this.props.route.path,
+      this.props.params,
+      { detailId: null, tabId: null }
+    );
+  };
+
+  /**
+   * Handles filtering for only running workflows
+   */
+  handleRunningClick = () => {
+    const urlFilter = handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.RUNNING
+    );
+
+    this.applyFilter(urlFilter);
+  };
+
+  /**
+   * Handles displaying hidden workflows
+   */
+  handleDeprecatedClick = () => {
+    const urlFilter = handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.DEPRECATED
+    );
+
+    this.applyFilter(urlFilter);
+  };
+
+  /**
+   * Handles displaying hidden workflows
+   */
+  handleLastVersionClick = () => {
+    const urlFilter = handleFilterChange(
+      this.props.params.filter,
+      WORKFLOW_FILTERS.LAST_VERSION
+    );
+
+    this.applyFilter(urlFilter);
+  };
+
+  /**
+   * Handles the click on the dropdowns checkbox
+   *
+   * @param {Function} filterFn
+   */
+  handleFilterClick = (filterFn) => {
+    this.setState({
+      filterFn,
+    });
+  };
+
+  /**
+   * Changes the state of what workflows are selected
+   * Used by the dropdown checkbox in Toolbar
+   *
+   * @param {String} selected
+   */
+  handleWorkflowFilterChange = (selected) => {
+    this.setState({
+      selected,
+    });
+  };
+
   /**
    * Applies the current filter to the URL
    *
    * @param {String} q
    */
-  handleSearchChange(q) {
+  handleSearchChange = (q) => {
     goTo(
       this.context.router,
       'workflows',
@@ -292,7 +292,7 @@ export default class Workflows extends Component {
       {},
       { q },
     );
-  }
+  };
 
   /**
    * Applies the current filter to the URL
@@ -317,7 +317,7 @@ export default class Workflows extends Component {
     return (
       <Pane
         width={550}
-        onClose={::this.onClosePane}
+        onClose={this.handlePaneClose}
       >
         <WorkflowsDetail
           workflow={this.getActiveWorkflow()}
@@ -338,18 +338,18 @@ export default class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar
-          onFilterClick={::this.onFilterClick}
-          onRunningClick={::this.onRunningClick}
-          onDeprecatedClick={::this.onDeprecatedClick}
-          onLastVersionClick={::this.onLastVersionClick}
-          onSearchUpdate={::this.handleSearchChange}
+          onFilterClick={this.handleFilterClick}
+          onRunningClick={this.handleRunningClick}
+          onDeprecatedClick={this.handleDeprecatedClick}
+          onLastVersionClick={this.handleLastVersionClick}
+          onSearchUpdate={this.handleSearchChange}
           selected={this.state.selected}
           defaultSearchValue={this.props.location.query.q}
           filter={filterArray(this.props.params.filter)}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
-          onWorkflowFilterChange={::this.onWorkflowFilterChange}
+          onWorkflowFilterChange={this.handleWorkflowFilterChange}
           workflows={this.state.filteredWorkflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
         />

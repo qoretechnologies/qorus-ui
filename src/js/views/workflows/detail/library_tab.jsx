@@ -14,21 +14,17 @@ export default class LibraryTab extends Component {
     workflow: PropTypes.object.isRequired,
   };
 
-
   componentWillMount() {
     this.setInitialActiveDomId(this.props);
   }
-
 
   componentWillReceiveProps(nextProps) {
     this.setInitialActiveDomId(nextProps);
   }
 
-
-  onTabChange(domId) {
+  onTabChange = (domId) => {
     this.setState({ activeDomId: domId });
-  }
-
+  };
 
   getDomId(func, step) {
     let id = func.name;
@@ -37,7 +33,6 @@ export default class LibraryTab extends Component {
     return `func.${id}`;
   }
 
-
   setInitialActiveDomId(props) {
     const domIds = this.mergeWfAndStepFuncs(props).map(fn => fn.id);
     if (!this.state ||
@@ -45,7 +40,6 @@ export default class LibraryTab extends Component {
       this.setState({ activeDomId: domIds[0] });
     }
   }
-
 
   mergeWfAndStepFuncs(props) {
     const wfFuncs = props.workflow.wffuncs.reduce((funcs, func) => (
@@ -59,13 +53,11 @@ export default class LibraryTab extends Component {
     ), wfFuncs);
   }
 
-
-  compareStepInfoFuncs(a, b) {
+  compareStepInfoFuncs = (a, b) => {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
-  }
-
+  };
 
   renderFuncHeading(func) {
     if (!func.type) return func.name;
@@ -86,7 +78,6 @@ export default class LibraryTab extends Component {
     );
   }
 
-
   renderWfFuncs() {
     if (!this.props.workflow.wffuncs || !this.props.workflow.wffuncs.length) {
       return null;
@@ -102,7 +93,7 @@ export default class LibraryTab extends Component {
               slug={this.getDomId(func, null)}
               name={this.renderFuncHeading(func)}
               active={this.getDomId(func, null) === this.state.activeDomId}
-              tabChange={::this.onTabChange}
+              tabChange={this.onTabChange}
             />
           ))}
         </ul>
@@ -110,14 +101,13 @@ export default class LibraryTab extends Component {
     );
   }
 
-
   renderStepFuncs() {
     return (
       <li role="presentation" className="disabled">
         <a><h5>StepFuncs</h5></a>
         <ul className="nav nav-pills nav-stacked">
         {this.props.workflow.stepinfo.
-         sort(::this.compareStepInfoFuncs).
+         sort(this.compareStepInfoFuncs).
          map((step, stepIdx) => (
           <li key={stepIdx} role="presentation" className="disabled">
             <a><h6>{step.name}</h6></a>
@@ -128,7 +118,7 @@ export default class LibraryTab extends Component {
                   slug={this.getDomId(func, step)}
                   name={this.renderFuncHeading(func)}
                   active={this.getDomId(func, step) === this.state.activeDomId}
-                  tabChange={::this.onTabChange}
+                  tabChange={this.onTabChange}
                 />
               ))}
             </ul>
@@ -138,7 +128,6 @@ export default class LibraryTab extends Component {
       </li>
     );
   }
-
 
   renderCodeTabs() {
     return (
@@ -158,7 +147,6 @@ export default class LibraryTab extends Component {
       </div>
     );
   }
-
 
   render() {
     return (

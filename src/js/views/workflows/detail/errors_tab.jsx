@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import ErrorsTable from './errors_table';
 
-
 import { pureRender } from 'components/utils';
 import actions from 'store/api/actions';
-
 
 @pureRender
 export default class ErrorsTab extends Component {
@@ -14,11 +12,9 @@ export default class ErrorsTab extends Component {
     globalErrors: PropTypes.array.isRequired,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func,
   };
-
 
   getUnusedGlobalErrors() {
     return this.props.globalErrors.filter(gloErr => (
@@ -28,27 +24,23 @@ export default class ErrorsTab extends Component {
     ));
   }
 
-
-  clone(err) {
+  clone = (err) => {
     this.context.dispatch(
       actions.errors.create(`workflow/${this.props.workflow.id}`, err)
     );
-  }
+  };
 
-
-  update(err) {
+  update = (err) => {
     this.context.dispatch(
       actions.errors.update(`workflow/${this.props.workflow.id}`, err)
     );
-  }
+  };
 
-
-  remove(err) {
+  remove = (err) => {
     this.context.dispatch(
       actions.errors.remove(`workflow/${this.props.workflow.id}`, err)
     );
-  }
-
+  };
 
   render() {
     return (
@@ -56,13 +48,13 @@ export default class ErrorsTab extends Component {
         <ErrorsTable
           heading="Workflow definitions"
           errors={this.props.errors}
-          onRemove={::this.remove}
-          onUpdate={::this.update}
+          onRemove={this.remove}
+          onUpdate={this.update}
         />
         <ErrorsTable
           heading="Global definitions"
           errors={this.getUnusedGlobalErrors()}
-          onClone={::this.clone}
+          onClone={this.clone}
         />
       </div>
     );

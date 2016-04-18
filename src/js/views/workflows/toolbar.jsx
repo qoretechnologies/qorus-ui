@@ -25,52 +25,59 @@ export default class WorkflowsToolbar extends Component {
     onSearchUpdate: PropTypes.func,
   };
 
-  componentWillMount() {
-    this.handleAllClick = ::this.handleAllClick;
-    this.handleNoneClick = ::this.handleNoneClick;
-    this.handleInvertClick = ::this.handleInvertClick;
-    this.handleRunningClick = ::this.handleRunningClick;
-    this.handleStoppedClick = ::this.handleStoppedClick;
-  }
-
   /**
    * Handles selecting/deselecting all workflows
    */
-  handleAllClick() {
+  handleAllClick = () => {
     if (this.props.selected === 'none' || this.props.selected === 'some') {
       this.props.onFilterClick(() => true);
     } else {
       this.handleNoneClick();
     }
-  }
+  };
 
   /**
    * Handles deselecting all workflows
    */
-  handleNoneClick() {
+  handleNoneClick = () => {
     this.props.onFilterClick(() => false);
-  }
+  };
 
   /**
    * Handles inverting selected workflows
    */
-  handleInvertClick() {
+  handleInvertClick = () => {
     this.props.onFilterClick((workflow, selectedWorkflows) => !selectedWorkflows[workflow.id]);
-  }
+  };
 
   /**
    * Handles selecting only running workflows
    */
-  handleRunningClick() {
+  handleRunningClick = () => {
     this.props.onFilterClick((workflow) => workflow.exec_count > 0);
-  }
+  };
 
   /**
    * Handles selecting only stopped workflows
    */
-  handleStoppedClick() {
+  handleStoppedClick = () => {
     this.props.onFilterClick((workflow) => workflow.exec_count === 0);
-  }
+  };
+
+  /**
+   * Handles displaying only the running workflows
+   */
+  handleDisplayRunningClick = () => this.props.onRunningClick();
+
+  /**
+   * Handles displaying only the running workflows
+   */
+  handleDisplayLastVersionClick = () => this.props.onLastVersionClick();
+
+  /**
+   * Handles displaying only the running workflows
+   */
+  handleDisplayDeprecatedClick = () => this.props.onDeprecatedClick();
 
   /**
    * Renders the selection dropdown to the component
@@ -153,7 +160,7 @@ export default class WorkflowsToolbar extends Component {
           <Button
             label="Running"
             big
-            action={::this.props.onRunningClick}
+            action={this.handleDisplayRunningClick}
             icon={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
               'check-square-o' : 'square-o'}
             btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
@@ -162,7 +169,7 @@ export default class WorkflowsToolbar extends Component {
           <Button
             label="Last version"
             big
-            action={::this.props.onLastVersionClick}
+            action={this.handleDisplayLastVersionClick}
             icon={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
               'check-square-o' : 'square-o'}
             btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
@@ -177,13 +184,13 @@ export default class WorkflowsToolbar extends Component {
               title="Deprecated"
               icon={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
                 'check-square-o' : 'square-o'}
-              action={::this.props.onDeprecatedClick}
+              action={this.handleDisplayDeprecatedClick}
             />
           </Dropdown>
         </Controls>
         <Search
           defaultValue={this.props.defaultSearchValue}
-          onSearchUpdate={::this.props.onSearchUpdate}
+          onSearchUpdate={this.props.onSearchUpdate}
         />
       </Toolbar>
     );

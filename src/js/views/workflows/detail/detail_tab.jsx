@@ -2,10 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Groups, Group } from 'components/groups';
 import Options from 'components/options';
 
-
 import { pureRender } from 'components/utils';
 import actions from 'store/api/actions';
-
 
 @pureRender
 export default class DetailTab extends Component {
@@ -14,23 +12,19 @@ export default class DetailTab extends Component {
     systemOptions: PropTypes.array.isRequired,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func,
   };
 
-
-  setOption(opt) {
+  setOption = (opt) => {
     this.context.dispatch(
       actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)
     );
-  }
+  };
 
-
-  deleteOption(opt) {
+  deleteOption = (opt) => {
     this.setOption(Object.assign({}, opt, { value: '' }));
-  }
-
+  };
 
   render() {
     return (
@@ -51,8 +45,8 @@ export default class DetailTab extends Component {
         <Options
           model={this.props.workflow}
           systemOptions={this.props.systemOptions}
-          onSet={::this.setOption}
-          onDelete={::this.deleteOption}
+          onSet={this.setOption}
+          onDelete={this.deleteOption}
         />
       </div>
     );

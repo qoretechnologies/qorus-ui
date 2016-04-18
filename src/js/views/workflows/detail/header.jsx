@@ -2,12 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import AutoStart from 'components/autostart';
 import WorkflowsControls from '../controls';
 
-
 import { pureRender } from 'components/utils';
 
-
 import actions from 'store/api/actions';
-
 
 @pureRender
 export default class WorkflowsHeader extends Component {
@@ -15,18 +12,15 @@ export default class WorkflowsHeader extends Component {
     workflow: PropTypes.object,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func.isRequired,
   };
 
-
-  setAutostart(context, value) {
+  setAutostart = (context, value) => {
     this.context.dispatch(
       actions.workflows.setAutostart(context, value)
     );
-  }
-
+  };
 
   render() {
     return (
@@ -45,8 +39,8 @@ export default class WorkflowsHeader extends Component {
             context={this.props.workflow}
             autostart={this.props.workflow.autostart}
             execCount={this.props.workflow.exec_count}
-            inc={::this.setAutostart}
-            dec={::this.setAutostart}
+            inc={this.setAutostart}
+            dec={this.setAutostart}
           />
         </div>
       </div>

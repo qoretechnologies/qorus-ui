@@ -4,9 +4,6 @@ import Table, { Section, Row, Cell } from 'components/table';
 import ModalRun from './modal_run';
 
 import { pureRender } from 'components/utils';
-import goTo from 'routes';
-
-import classNames from 'classnames';
 
 /**
  * List of all workflows in the system.

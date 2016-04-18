@@ -4,7 +4,7 @@ import Table, { Section, Row, Cell } from 'components/table';
 import ServiceControls from './controls';
 
 import { pureRender } from 'components/utils';
-import goTo from 'routes';
+import { goTo } from '../../helpers/router';
 
 import classNames from 'classnames';
 

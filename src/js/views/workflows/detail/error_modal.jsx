@@ -17,11 +17,9 @@ export default class ErrorModal extends Component {
     requireChanges: PropTypes.bool,
   };
 
-
   static defaultProps = {
     requireChanges: false,
   };
-
 
   /**
    * @param {object} props
@@ -42,19 +40,19 @@ export default class ErrorModal extends Component {
   /**
    * @param {Event} ev
    */
-  onCommit(ev) {
+  onCommit = (ev) => {
     ev.preventDefault();
 
     if (this.validate()) {
       this.props.onCommit(this.state.error);
     }
-  }
+  };
 
 
   /**
    * @param {Event} ev
    */
-  onChange(ev) {
+  onChange = (ev) => {
     this.setState({
       error: Object.assign({}, this.state.error, {
         [ev.target.name]: ev.target.type !== 'checkbox' ?
@@ -62,19 +60,18 @@ export default class ErrorModal extends Component {
           ev.target.checked,
       }),
     });
-  }
-
+  };
 
   /**
    * @param {Event} ev
    */
-  onBlur(ev) {
+  onBlur = (ev) => {
     this.validateElement(ev.target);
 
     if (this.state.changes === false) {
       this.validateChanges();
     }
-  }
+  };
 
 
   /**
@@ -138,9 +135,9 @@ export default class ErrorModal extends Component {
    *
    * @param {HTMLFormElement} el
    */
-  refForm(el) {
+  refForm = (el) => {
     this._form = el;
-  }
+  };
 
 
   /**
@@ -151,8 +148,8 @@ export default class ErrorModal extends Component {
       <Modal>
         <form
           className="form-horizontal"
-          onSubmit={::this.onCommit}
-          ref={::this.refForm}
+          onSubmit={this.onCommit}
+          ref={this.refForm}
           noValidate
         >
           <Modal.Header
@@ -206,8 +203,8 @@ export default class ErrorModal extends Component {
                   className="form-control"
                   value={this.state.error.severity}
                   required
-                  onChange={::this.onChange}
-                  onBlur={::this.onBlur}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalSeverity && 'true'}
                   aria-describedby={this.state.status.modalSeverity &&
                                     'modalSeverityStatus'}
@@ -232,7 +229,7 @@ export default class ErrorModal extends Component {
                   name="retry_flag"
                   id="modalRetry"
                   checked={this.state.error.retry_flag}
-                  onChange={::this.onChange}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -256,8 +253,8 @@ export default class ErrorModal extends Component {
                   id="modalDelay"
                   value={this.state.error.retry_delay_secs}
                   min="0"
-                  onChange={::this.onChange}
-                  onBlur={::this.onBlur}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalDelay && 'true'}
                   aria-describedby={this.state.status.modalDelay &&
                                     'modalDelayStatus'}
@@ -282,7 +279,7 @@ export default class ErrorModal extends Component {
                   name="business_flag"
                   id="modalBusiness"
                   checked={this.state.error.business_flag}
-                  onChange={::this.onChange}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -299,7 +296,7 @@ export default class ErrorModal extends Component {
                   name="manually_updated"
                   id="modalManual"
                   checked={this.state.error.manually_updated}
-                  onChange={::this.onChange}
+                  onChange={this.onChange}
                 />
               </div>
             </div>
@@ -322,8 +319,8 @@ export default class ErrorModal extends Component {
                   className="form-control"
                   value={this.state.error.description}
                   required
-                  onChange={::this.onChange}
-                  onBlur={::this.onBlur}
+                  onChange={this.onChange}
+                  onBlur={this.onBlur}
                   aria-invalid={this.state.status.modalDescription && 'true'}
                   aria-describedby={this.state.status.modalDescription &&
                                     'modalDescriptionStatus'}

@@ -1,20 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import Modal from 'components/modal';
 import Loader from 'components/loader';
 import Tabs, { Pane } from 'components/tabs';
 import InfoTable from 'components/info_table';
 import SourceCode from 'components/source_code';
 
-
 import actions from 'store/api/actions';
-
 
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 
 @connect(
   (state, props) => ({ step: state.api.steps.data[props.id] }),
@@ -50,14 +46,12 @@ export default class StepModal extends Component {
     fetchStep: PropTypes.func.isRequired,
   };
 
-
   /**
    * Fetches detailed information about step.
    */
   componentWillMount() {
     this.props.fetchStep(this.props.id);
   }
-
 
   /**
    * Fetches detailed information about step if changed.
@@ -69,7 +63,6 @@ export default class StepModal extends Component {
       nextProps.fetchStep(nextProps.id);
     }
   }
-
 
   /**
    * Returns modal header with step name, version, ID and type.

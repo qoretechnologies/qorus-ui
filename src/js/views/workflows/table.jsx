@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
@@ -8,7 +7,7 @@ import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
 
 import { pureRender } from 'components/utils';
-import goTo from 'routes';
+import { goTo } from '../../helpers/router';
 
 
 import classNames from 'classnames';
@@ -55,27 +54,14 @@ export default class WorkflowsTable extends Component {
     this.setState({
       selectedWorkflows: {},
     });
+
+    this.renderHeadings = ::this.renderHeadings;
   }
 
   componentWillReceiveProps(next) {
     if (this.props.initialFilter !== next.initialFilter) {
       this.setupFilters(next);
     }
-  }
-
-  /**
-   * Handles the individual workflow checkboxes
-   *
-   * @param {Event} ev
-   */
-  onCheckboxClick(ev) {
-    const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
-    const selectedWorkflows = Object.assign({},
-      this.state.selectedWorkflows,
-      { [workflow.id]: !this.state.selectedWorkflows[workflow.id] }
-    );
-
-    this.setSelectedWorkflows(selectedWorkflows);
   }
 
   /**
@@ -120,12 +106,11 @@ export default class WorkflowsTable extends Component {
    * @param {number} id
    * @param {number} value
    */
-  setAutostart(id, value) {
+  setAutostart = (id, value) => {
     this.context.dispatch(
       actions.workflows.setAutostart(id, value)
     );
-  }
-
+  };
 
   /**
    * Finds workflow associated with given row element.
@@ -144,7 +129,6 @@ export default class WorkflowsTable extends Component {
 
     return this.props.workflows[idx] || null;
   }
-
 
   /**
    * Changes active route to workflow associated with clicked element.
@@ -175,6 +159,20 @@ export default class WorkflowsTable extends Component {
     );
   }
 
+  /**
+   * Handles the individual workflow checkboxes
+   *
+   * @param {Event} ev
+   */
+  handleCheckboxClick = (ev) => {
+    const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
+    const selectedWorkflows = Object.assign({},
+      this.state.selectedWorkflows,
+      { [workflow.id]: !this.state.selectedWorkflows[workflow.id] }
+    );
+
+    this.setSelectedWorkflows(selectedWorkflows);
+  };
 
   /**
    * Yields heading cells for workflow info including order states.
@@ -235,7 +233,7 @@ export default class WorkflowsTable extends Component {
     yield (
       <Cell className="narrow">
         <Checkbox
-          action={::this.onCheckboxClick}
+          action={this.handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
         />
       </Cell>
@@ -253,8 +251,8 @@ export default class WorkflowsTable extends Component {
           context={workflow}
           autostart={workflow.autostart}
           execCount={workflow.exec_count}
-          inc={::this.setAutostart}
-          dec={::this.setAutostart}
+          inc={this.setAutostart}
+          dec={this.setAutostart}
         />
       </Cell>
     );
@@ -297,7 +295,7 @@ export default class WorkflowsTable extends Component {
    */
   *renderHeadingRow() {
     yield (
-      <Row cells={::this.renderHeadings} />
+      <Row cells={this.renderHeadings} />
     );
   }
 

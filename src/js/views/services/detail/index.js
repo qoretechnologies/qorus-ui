@@ -9,7 +9,7 @@ import LogTab from 'components/log';
 import { pureRender } from 'components/utils';
 
 
-import goTo from 'routes';
+import { goTo } from '../../../helpers/router';
 import actions from 'store/api/actions';
 
 @pureRender

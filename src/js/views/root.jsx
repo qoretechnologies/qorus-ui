@@ -158,9 +158,9 @@ export default class Root extends Component {
    *
    * @param {ModalManager} modal
    */
-  refModal(modal) {
+  refModal = (modal) => {
     this._modal = modal;
-  }
+  };
 
 
   /**
@@ -188,7 +188,7 @@ export default class Root extends Component {
           </section>
         </div>
         <Footer info={this.props.info.data} />
-        <ModalManager ref={::this.refModal} />
+        <ModalManager ref={this.refModal} />
       </div>
     );
   }

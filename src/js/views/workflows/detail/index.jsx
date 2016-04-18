@@ -8,13 +8,10 @@ import LogTab from 'components/log';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
 
-
 import { pureRender } from 'components/utils';
 
-
-import goTo from 'routes';
+import { goTo } from '../../../helpers/router';
 import actions from 'store/api/actions';
-
 
 @pureRender
 export default class WorkflowsDetail extends Component {
@@ -26,7 +23,6 @@ export default class WorkflowsDetail extends Component {
     tabId: PropTypes.string,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func,
     router: PropTypes.object,
@@ -34,17 +30,14 @@ export default class WorkflowsDetail extends Component {
     params: PropTypes.object,
   };
 
-
   componentWillMount() {
     this.setState({ lastWorkflowId: null });
     this.loadDetailedDataIfChanged(this.props);
   }
 
-
   componentWillReceiveProps(nextProps) {
     this.loadDetailedDataIfChanged(nextProps);
   }
-
 
   loadDetailedDataIfChanged(props) {
     if (this.state && this.state.lastWorkflowId === props.workflow.id) {
@@ -62,8 +55,7 @@ export default class WorkflowsDetail extends Component {
     );
   }
 
-
-  changeTab(tabId) {
+  changeTab = (tabId) => {
     goTo(
       this.context.router,
       'workflows',
@@ -71,8 +63,7 @@ export default class WorkflowsDetail extends Component {
       this.context.params,
       { tabId }
     );
-  }
-
+  };
 
   render() {
     const { workflow, errors, systemOptions, globalErrors, tabId } =
@@ -86,7 +77,7 @@ export default class WorkflowsDetail extends Component {
         <Tabs
           className="pane__tabs"
           active={tabId}
-          tabChange={::this.changeTab}
+          tabChange={this.changeTab}
         >
           <Pane name="Detail">
             <DetailTab workflow={workflow} systemOptions={systemOptions} />

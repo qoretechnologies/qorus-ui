@@ -13,7 +13,7 @@ export default class Item extends Component {
     action: PropTypes.func,
     hideDropdown: PropTypes.func,
   };
-  
+
   /**
    * Hides the dropdown and runs
    * provided function

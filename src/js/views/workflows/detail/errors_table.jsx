@@ -4,12 +4,9 @@ import { Controls, Control } from 'components/controls';
 import CollectionSearch from 'components/collection_search';
 import StatusIcon from 'components/status_icon';
 
-
 import ErrorModal from './error_modal';
 
-
 import { pureRender } from 'components/utils';
-
 
 /**
  * Table to display and manage Qorus erros known to the system or
@@ -27,12 +24,10 @@ export default class ErrorsTable extends Component {
     onRemove: PropTypes.func,
   };
 
-
   static contextTypes = {
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
   };
-
 
   /**
    * Initializes internal state.
@@ -47,7 +42,6 @@ export default class ErrorsTable extends Component {
     this._commitFn = null;
   }
 
-
   /**
    * Sets state to show all errors.
    */
@@ -55,8 +49,11 @@ export default class ErrorsTable extends Component {
     this.setState(
       this.getErrorsState(this.props, new RegExp())
     );
-  }
 
+    this.renderCells = ::this.renderCells;
+    this.renderRows = ::this.renderRows;
+    this.renderSections = ::this.renderSections;
+  }
 
   /**
    * Sets state to show coming errors after being filtered.
@@ -69,18 +66,16 @@ export default class ErrorsTable extends Component {
     );
   }
 
-
   /**
    * Sets state to show errors with new filter.
    *
    * @param {RegExp} filter
    */
-  onFilterChange(filter) {
+  onFilterChange = (filter) => {
     this.setState(
       this.getErrorsState(this.props, filter)
     );
-  }
-
+  };
 
   /**
    * Returns state change object with filtered errors.
@@ -95,7 +90,6 @@ export default class ErrorsTable extends Component {
     };
   }
 
-
   /**
    * Opens modal dialog to manage particular error.
    *
@@ -104,21 +98,20 @@ export default class ErrorsTable extends Component {
    * @param {string} label
    * @param {?boolean} requireChanges
    */
-  openModal(err, commmitFn, label, requireChanges) {
-    this._commitFn = commmitFn;
+  openModal(err, commitFn, label, requireChanges) {
+    this._commitFn = commitFn;
     this._modal = (
       <ErrorModal
         actionLabel={label}
         error={Object.assign({}, err)}
-        onCommit={::this.submitModal}
-        onCancel={::this.closeModal}
+        onCommit={this.submitModal}
+        onCancel={this.closeModal}
         requireChanges={requireChanges}
       />
     );
 
     this.context.openModal(this._modal);
   }
-
 
   /**
    * Submit changes from currently open modal dialog and closes it.
@@ -128,21 +121,19 @@ export default class ErrorsTable extends Component {
    * @param {Object} err
    * @see closeModal
    */
-  submitModal(err) {
+  submitModal = (err) => {
     this._commitFn(err);
     this.closeModal();
-  }
-
+  };
 
   /**
    * Closes currently open modal dialog.
    */
-  closeModal() {
+  closeModal = () => {
     this.context.closeModal(this._modal);
     this._modal = null;
     this._commitFn = null;
-  }
-
+  };
 
   /**
    * Yields cells with error data and controls to manage error.
@@ -228,7 +219,7 @@ export default class ErrorsTable extends Component {
   *renderRows(errors) {
     for (const error of errors) {
       yield (
-        <Row data={error} cells={::this.renderCells} />
+        <Row data={error} cells={this.renderCells} />
       );
     }
   }
@@ -256,7 +247,7 @@ export default class ErrorsTable extends Component {
     );
 
     yield (
-      <Section type="body" data={errors} rows={::this.renderRows} />
+      <Section type="body" data={errors} rows={this.renderRows} />
     );
   }
 
@@ -271,7 +262,7 @@ export default class ErrorsTable extends Component {
       <div className="relative">
         <div className="clearfix">
           <h4 className="pull-left">{this.props.heading}</h4>
-          <CollectionSearch onChange={::this.onFilterChange} ignoreCase />
+          <CollectionSearch onChange={this.onFilterChange} ignoreCase />
         </div>
         {!this.state.errors.length && (
           <p>No data found.</p>
@@ -279,7 +270,7 @@ export default class ErrorsTable extends Component {
         {!!this.state.errors.length && (
           <Table
             data={this.state.errors}
-            sections={::this.renderSections}
+            sections={this.renderSections}
             className={'table table-striped table-condensed table--data ' +
                        'table--small'}
           />
