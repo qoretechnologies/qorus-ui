@@ -38,9 +38,6 @@ export default class MethodsTable extends Component {
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
-
-    this._modal = null;
-    this._commitFn = null;
   }
 
   /**
@@ -61,37 +58,17 @@ export default class MethodsTable extends Component {
    * @param {string} label
    * @param {?boolean} requireChanges
    */
-  openModal(service, method, commmitFn, label, requireChanges) {
-    this._commitFn = commmitFn;
-
+  openModal(service, method) {
     this._modal = (
       <ModalRun
-        actionLabel={label}
         method={Object.assign({}, method)}
         service={service}
-        onCommit={::this.submitModal}
-        onCancel={::this.closeModal}
-        requireChanges={requireChanges}
+        onClose={::this.closeModal}
       />
     );
 
     this.context.openModal(this._modal);
   }
-
-
-  /**
-   * Submit changes from currently open modal dialog and closes it.
-   *
-   * It also calls commit function assigned to it with given error.
-   *
-   * @param {Object} err
-   * @see closeModal
-   */
-  submitModal(err) {
-    this._commitFn(err);
-    this.closeModal();
-  }
-
 
   /**
    * Closes currently open modal dialog.
@@ -99,8 +76,8 @@ export default class MethodsTable extends Component {
   closeModal() {
     this.context.closeModal(this._modal);
     this._modal = null;
-    this._commitFn = null;
   }
+
   /**
    * Yields heading cells for model info.
    *
@@ -169,7 +146,7 @@ export default class MethodsTable extends Component {
     );
 
     const service = this.props.service;
-    const runCode = this.openModal.bind(this, service, model, ::this.closeModal, 'Run', false);
+    const runCode = this.openModal.bind(this, service, model);
 
     yield (
       <Cell tag="td">

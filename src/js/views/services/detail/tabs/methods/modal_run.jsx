@@ -3,174 +3,129 @@ import Modal from 'components/modal';
 
 
 import _ from 'lodash';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
 
 @pureRender
 export default class ModalRun extends Component {
   static propTypes = {
-    actionLabel: PropTypes.string.isRequired,
     method: PropTypes.object.isRequired,
     service: PropTypes.object.isRequired,
-    onCommit: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    requireChanges: PropTypes.bool,
+    response: PropTypes.object,
+    onClose: PropTypes.object,
   };
 
+  componentWillMount() {
+    this._select = null;
 
-  static defaultProps = {
-    requireChanges: false,
-  };
-
-
-  /**
-   * @param {object} props
-   */
-  constructor(props) {
-    super(props);
-
-    this._form = null;
-
-    this.state = {
-      method: Object.assign({}, this.props.method),
-      changes: null,
-      status: {},
-    };
-  }
-
-
-  /**
-   * @param {Event} ev
-   */
-  onCommit(ev) {
-    ev.preventDefault();
-
-    if (this.validate()) {
-      this.props.onCommit(this.state.method);
-    }
-  }
-
-
-  /**
-   * @param {Event} ev
-   */
-  onChange(ev) {
     this.setState({
-      method: Object.assign({}, this.state.method, {
-        [ev.target.name]: ev.target.type !== 'checkbox' ?
-          ev.target.value :
-          ev.target.checked,
-      }),
+      activeMethod: this.props.method,
+      response: false,
     });
   }
 
-
-  /**
-   * @param {Event} ev
-   */
-  onBlur(ev) {
-    this.validateElement(ev.target);
-
-    if (this.state.changes === false) {
-      this.validateChanges();
-    }
+  onCancel(ev) {
+    ev.preventDefault();
+    this.props.onClose();
   }
 
+  onCommit(ev) {
+    ev.preventDefault();
 
-  /**
-   * @return {boolean}
-   */
-  validate() {
-    const els = this._form.querySelectorAll(
-      '.form-group input, .form-group textarea'
-    );
-    for (let i = 0; i < els.length; i += 1) {
-      if (!this.validateElement(els[i])) return false;
-    }
-
-    if (!this.validateChanges()) {
-      return false;
-    }
-
-    return true;
+    this.props.onClose();
   }
 
-
-  /**
-   * @param {Element} el
-   * @return {boolean}
-   */
-  validateElement(el) {
-    const status = Object.assign({}, this.state.status);
-
-    if (el.checkValidity()) {
-      delete status[el.id];
-      this.setState({ status });
-      return true;
-    }
-
-    if (el.validity.valueMissing) {
-      status[el.id] = '(required value)';
-    } else {
-      status[el.id] = '(invalid value)';
-    }
-    this.setState({ status });
-
-    return false;
+  onMethodChange() {
+    this.setState({
+      activeMethod: this._select.value,
+    });
   }
 
-
-  /**
-   * @return {boolean}
-   */
-  validateChanges() {
-    if (!this.props.requireChanges) return true;
-
-    const changes = !_.isEqual(this.props.method, this.state.method);
-    this.setState({ changes });
-
-    return changes;
+  selectRef(s) {
+    this._select = s;
   }
-
-
-  /**
-   * References error form.
-   *
-   * @param {HTMLFormElement} el
-   */
-  refForm(el) {
-    this._form = el;
-  }
-
 
   /**
    * @return {ReactElement}
    */
   render() {
+    const { service } = this.props;
+    const { activeMethod, response } = this.state;
+
     return (
       <Modal>
         <form
           className="form-horizontal"
           onSubmit={::this.onCommit}
-          ref={::this.refForm}
           noValidate
         >
           <Modal.Header
             titleId="errorsTableModalLabel"
-            onClose={this.props.onCancel}
+            onClose={::this.onCancel}
           >
             Method execution for {this.props.service.name} service
           </Modal.Header>
           <Modal.Body>
-            <p>Method - {this.props.method.name}</p>
+            <div className="content">
+              <p><em className="text-muted">{this.props.method.description}</em></p>
+              <label htmlFor="method">Method</label>
+              <select
+                name="method"
+                id="method"
+                defaultValue={activeMethod.name}
+                onChange={::this.onMethodChange}
+                ref={::this.selectRef}
+              >
+                { this.props.service.methods.map((mtd, idx) => (
+                    <option value={mtd.name} key={idx}>
+                      { mtd.name }
+                    </option>
+                ))}
+              </select>
+              <div>
+                <p><label htmlFor="args">Arguments</label></p>
+                <textarea id="args" name="args" className="col-md-12" rows="5" />
+              </div>
+              <div id="service-method-response">
+                <div className="tab-content">
+                  <div id="service-method-response-yaml" className="tab-pane active">
+                    <textarea
+                      id="response-json"
+                      name="response-json"
+                      className="col-md-12"
+                      disabled
+                      rows="5"
+                      defaultValue={ response || 'Response' }
+                    />
+                  </div>
+                  <div id="service-method-response-json" className="tab-pane">
+                    <textarea
+                      id="response-json"
+                      name="response-json"
+                      className="col-md-12"
+                      disabled
+                      rows="5"
+                      defaultValue={ response || 'Response' }
+                    />
+                  </div>
+                </div>
+                <ul className="nav nav-pills">
+                  <li className="active">
+                    <a data-target="#service-method-response-yaml">YAML</a>
+                  </li>
+                  <li><a data-target="#service-method-response-json">JSON</a></li>
+                </ul>
+              </div>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <button
               type="submit"
-              className="btn btn-primary"
+              className="btn btn-success"
+              onClick={::this.onCommit}
             >
-              {this.props.actionLabel}
+              Execute
             </button>
           </Modal.Footer>
         </form>
