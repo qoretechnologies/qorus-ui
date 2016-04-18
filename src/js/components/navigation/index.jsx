@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 
-
 import Item from './item';
-
 
 /**
  * Vertical navigation on the side.
@@ -19,13 +17,11 @@ export default class Navigation extends Component {
     extraItems: PropTypes.array,
   };
 
-
   static defaultProps = {
     location: { pathname: '' },
     mainItems: [],
     extraItems: [],
   };
-
 
   /**
    * Checks if given item URL is base for current location.
@@ -38,23 +34,19 @@ export default class Navigation extends Component {
       this.props.location.pathname.indexOf(url) === 0;
   }
 
-
   /**
    * Renders navigation item and checks if it is active.
    *
    * @param {object} item
    * @return {ReactElement}
    */
-  renderItem(item) {
-    return (
-      <Item
-        key={item.url}
-        active={this.isActiveItem(item)}
-        {...item}
-      />
-    );
-  }
-
+  renderItem = (item) => (
+    <Item
+      key={item.url}
+      active={this.isActiveItem(item)}
+      {...item}
+    />
+  );
 
   /**
    * Returns element for this component.
@@ -65,10 +57,10 @@ export default class Navigation extends Component {
     return (
       <nav className="side-menu pull-left">
         <ul className="nav nav-pills nav-stacked side-menu__main">
-          {this.props.mainItems.map(::this.renderItem)}
+          {this.props.mainItems.map(this.renderItem)}
         </ul>
         <ul className="side-menu__extra">
-          {this.props.extraItems.map(::this.renderItem)}
+          {this.props.extraItems.map(this.renderItem)}
         </ul>
       </nav>
     );

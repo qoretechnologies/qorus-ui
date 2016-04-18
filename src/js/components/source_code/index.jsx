@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-qore';
 import './prism-wrapped-line-numbers';
 
-
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Source code uses Prism to format text.
@@ -28,11 +25,9 @@ export default class SourceCode extends Component {
     children: PropTypes.string,
   };
 
-
   static defaultProps = {
     lineOffset: 0,
   };
-
 
   /**
    * Enables wrap line by defalt.
@@ -41,26 +36,23 @@ export default class SourceCode extends Component {
     this.setState({ wrapLines: true });
   }
 
-
   /**
    * Changes wrap-line state.
    */
-  toggleWrapLines() {
+  toggleWrapLines = () => {
     this.setState({ wrapLines: !this.state.wrapLines });
-  }
-
+  };
 
   /**
    * Uses to Prism to highlight code in `code` element.
    *
    * @param {HTMLElement} el
    */
-  highlightCode(el) {
+  highlightCode = (el) => {
     if (!el) return;
 
     Prism.highlightElement(el);
-  }
-
+  };
 
   /**
    * Returns element for this component.
@@ -79,7 +71,7 @@ export default class SourceCode extends Component {
             'btn-success': this.state.wrapLines,
             'source-code__wrap-toggle': true,
           })}
-          onClick={::this.toggleWrapLines}
+          onClick={this.toggleWrapLines}
           title={this.state.wrapLines ?
                  'Disable line wrap' :
                  'Wrap lines'}
@@ -94,7 +86,7 @@ export default class SourceCode extends Component {
           })}
           data-start={1 + this.props.lineOffset}
         >
-          <code className="language-qore" ref={::this.highlightCode}>
+          <code className="language-qore" ref={this.highlightCode}>
             {this.props.children}
           </code>
         </pre>

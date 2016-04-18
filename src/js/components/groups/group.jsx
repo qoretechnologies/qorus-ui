@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
-
 /**
  * Bootstrap label displaying info about a group.
  *
@@ -18,7 +17,6 @@ export default class Group extends Component {
     url: PropTypes.string,
     disabled: PropTypes.bool,
   };
-
 
   /**
    * Returns label with optional size and with classes set.
@@ -41,8 +39,7 @@ export default class Group extends Component {
       </span>
     );
   }
-
-
+  
   /**
    * Returns element for this component.
    *

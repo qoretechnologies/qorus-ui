@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-
 /**
  * Top handle position.
  */
@@ -21,7 +20,6 @@ const BOTTOM = 0b0100;
  * Left handle position.
  */
 const LEFT = 0b1000;
-
 
 /**
  * Resize handle to change parent element's dimensions.
@@ -48,7 +46,6 @@ export default class Handle extends Component {
     left: PropTypes.bool,
   };
 
-
   static defaultProps = {
     minCurrent: false,
     top: false,
@@ -56,7 +53,6 @@ export default class Handle extends Component {
     bottom: false,
     left: false,
   };
-
 
   /**
    * Initializes internal state.
@@ -74,7 +70,6 @@ export default class Handle extends Component {
     this._originalCursor = null;
   }
 
-
   /**
    * Detects current position from props.
    *
@@ -84,7 +79,6 @@ export default class Handle extends Component {
     this._position = this.getDirection(this.props);
   }
 
-
   /**
    * Finds current minimal dimensions if needed.
    *
@@ -93,7 +87,6 @@ export default class Handle extends Component {
   componentDidMount() {
     this._min = this.getMinimalDimensions(this.props);
   }
-
 
   /**
    * Re-detects position and finds minimal dimensions for next props.
@@ -107,7 +100,6 @@ export default class Handle extends Component {
     this._min = this.getMinimalDimensions(nextProps);
   }
 
-
   /**
    * Cleans up global event listener and styles.
    *
@@ -116,7 +108,6 @@ export default class Handle extends Component {
   componentWillUnmount() {
     this.stop(null);
   }
-
 
   /**
    * Validates position and returns single representation of it.
@@ -150,7 +141,6 @@ export default class Handle extends Component {
     return direction;
   }
 
-
   /**
    * Returns minimal dimensions which limit resizing.
    *
@@ -171,7 +161,6 @@ export default class Handle extends Component {
     return min;
   }
 
-
   /**
    * Finds parent element's bounding border box.
    *
@@ -185,7 +174,6 @@ export default class Handle extends Component {
       this._handle.parentElement &&
       this._handle.parentElement.getBoundingClientRect();
   }
-
 
   /**
    * Checks if current dimensions are minimal.
@@ -214,7 +202,6 @@ export default class Handle extends Component {
     return is;
   }
 
-
   /**
    * Starts resize by attaching `mousemove` and `mouseup` handlers.
    *
@@ -225,17 +212,17 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  start(ev) {
+  start = (ev) => {
     ev.preventDefault();
 
-    this._resizeListener = ::this.resize;
+    this._resizeListener = this.resize;
     this._handle.ownerDocument.addEventListener(
       'mousemove',
       this._resizeListener,
       false
     );
 
-    this._stopListener = ::this.stop;
+    this._stopListener = this.stop;
     this._handle.ownerDocument.addEventListener(
       'mouseup',
       this._stopListener,
@@ -243,7 +230,7 @@ export default class Handle extends Component {
     );
 
     this._originalCursor = this._handle.ownerDocument.body.style.cursor;
-  }
+  };
 
 
   /**
@@ -263,7 +250,7 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  resize(ev) {
+  resize = (ev) => {
     ev.preventDefault();
 
     const style = this.computeNewStyle(ev);
@@ -288,8 +275,7 @@ export default class Handle extends Component {
 
     this._handle.ownerDocument.body.style.cursor =
       window.getComputedStyle(this._handle).cursor;
-  }
-
+  };
 
   /**
    * Computes new new style properties for handle's parent element.
@@ -321,13 +307,12 @@ export default class Handle extends Component {
     return style;
   }
 
-
   /**
    * Removes `mousemove` and `mouseup` handlers and resets the cursor.
    *
    * @param {?MouseEvent} ev
    */
-  stop(ev) {
+  stop = (ev) => {
     if (ev) ev.preventDefault();
 
     this._handle.ownerDocument.body.style.cursor = this._originalCursor;
@@ -345,18 +330,16 @@ export default class Handle extends Component {
       false
     );
     this._stopListener = null;
-  }
-
+  };
 
   /**
    * References handle element for later.
    *
    * @param {HTMLElement} el
    */
-  refHandle(el) {
+  refHandle = (el) => {
     this._handle = el;
-  }
-
+  };
 
   /**
    * Returns element for this component.
@@ -374,8 +357,8 @@ export default class Handle extends Component {
           bottom: this._position & BOTTOM,
           left: this._position & LEFT,
         })}
-        onMouseDown={::this.start}
-        ref={::this.refHandle}
+        onMouseDown={this.start}
+        ref={this.refHandle}
         aria-hidden="true"
       />
     );

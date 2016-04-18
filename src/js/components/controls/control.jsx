@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Control button component.
@@ -20,19 +18,17 @@ export default class Control extends Component {
     big: PropTypes.bool,
   };
 
-
   /**
    * Calls `action` prop if set.
    *
-   * @param {Event} ev
+   * @param {Event} event
    */
-  onClick(ev) {
+  handleClick = (event) => {
     if (!this.props.action) return;
 
-    ev.preventDefault();
-    this.props.action();
-  }
-
+    event.preventDefault();
+    this.props.action(event);
+  };
 
   /**
    * Returns element for this component.
@@ -48,7 +44,7 @@ export default class Control extends Component {
           [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
         })}
         title={this.props.title}
-        onClick={::this.onClick}
+        onClick={this.handleClick}
         disabled={this.props.disabled}
       >
         <i className={classNames(['fa', `fa-${this.props.icon}`])} />

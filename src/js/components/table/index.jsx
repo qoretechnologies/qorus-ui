@@ -5,7 +5,6 @@ import Section from './section';
 import Row from './row';
 import Cell from './cell';
 
-
 /**
  * Table supporting static and dynamic sections.
  *
@@ -43,6 +42,5 @@ Table.propTypes = {
   data: PropTypes.any,
   children: PropTypes.node,
 };
-
 
 export { Section, Row, Cell };

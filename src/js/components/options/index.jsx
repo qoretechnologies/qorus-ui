@@ -4,9 +4,7 @@ import EditableCell from '../table/editable_cell';
 import { Control } from '../controls';
 import SystemOptions from './system_options';
 
-
 import { pureRender } from '../utils';
-
 
 /**
  * Editable key-value table component.
@@ -29,7 +27,6 @@ export default class Options extends Component {
     onDelete: PropTypes.func.isRequired,
   };
 
-
   /**
    * Sets up state to cache last option.
    */
@@ -38,8 +35,11 @@ export default class Options extends Component {
       lastOption: null,
       lastOptionSet: false,
     });
-  }
 
+    this.renderTableCells = ::this.renderTableCells;
+    this.renderTableRows = ::this.renderTableRows;
+    this.renderTableSections = ::this.renderTableSections;
+  }
 
   /**
    * Removes cached last option from state if it has been set.
@@ -53,7 +53,6 @@ export default class Options extends Component {
     }
   }
 
-
   /**
    * Adds cached last option from state to options from model prop.
    *
@@ -64,7 +63,6 @@ export default class Options extends Component {
       this.props.model.options.concat(this.state.lastOption) :
       this.props.model.options || [];
   }
-
 
   /**
    * Gets available options by filtering options from model prop.
@@ -78,7 +76,6 @@ export default class Options extends Component {
       )) < 0
     ));
   }
-
 
   /**
    * Sets new option value by calling `onSet` prop.
@@ -96,19 +93,17 @@ export default class Options extends Component {
     }
   }
 
-
   /**
    * Caches option so it can be edited without setting.
    *
    * @param {object} opt
    */
-  addOption(opt) {
+  addOption = (opt) => {
     this.setState({
       lastOption: opt,
       lastOptionSet: false,
     });
-  }
-
+  };
 
   /**
    * Gets notified when option editing is canceled.
@@ -127,7 +122,6 @@ export default class Options extends Component {
     }
   }
 
-
   /**
    * Deletes option by calling `onDelete` prop.
    *
@@ -136,7 +130,6 @@ export default class Options extends Component {
   deleteOption(opt) {
     this.props.onDelete(opt);
   }
-
 
   /**
    * Yields cells with option data and controls to manage it.
@@ -173,7 +166,6 @@ export default class Options extends Component {
     );
   }
 
-
   /**
    * Yields rows for table body.
    *
@@ -184,7 +176,7 @@ export default class Options extends Component {
   *renderTableRows(opts) {
     for (const opt of opts) {
       yield (
-        <Row data={opt} cells={::this.renderTableCells} />
+        <Row data={opt} cells={this.renderTableCells} />
       );
     }
   }
@@ -209,7 +201,7 @@ export default class Options extends Component {
     );
 
     yield (
-      <Section type="body" data={opts} rows={::this.renderTableRows} />
+      <Section type="body" data={opts} rows={this.renderTableRows} />
     );
   }
 
@@ -230,13 +222,13 @@ export default class Options extends Component {
           {!!this.getModelOptions().length && (
             <Table
               data={this.getModelOptions()}
-              sections={::this.renderTableSections}
+              sections={this.renderTableSections}
               className="table table-condensed table-striped table--small"
             />
           )}
           <SystemOptions
             options={this.getUnusedSystemOptions()}
-            onAdd={::this.addOption}
+            onAdd={this.addOption}
           />
         </div>
       </div>

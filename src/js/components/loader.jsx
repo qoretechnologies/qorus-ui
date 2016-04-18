@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 /**
  * Simple spinning loading indicator.
  *

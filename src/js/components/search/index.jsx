@@ -17,8 +17,6 @@ export default class extends Component {
     this.setState({
       query: this.props.defaultValue,
     });
-
-    this.handleInputChange = ::this.handleInputChange;
   }
 
   /**
@@ -29,7 +27,7 @@ export default class extends Component {
    * @see componentWillMount
    * @param {Event} event
    */
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     event.persist();
 
     this.setState({
@@ -37,7 +35,7 @@ export default class extends Component {
     });
 
     this.delayedSearch(event);
-  }
+  };
 
   render() {
     return (

@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-
 import { pureRender } from '../utils';
-
 
 /**
  * Table data cell component which allows editing value.
@@ -28,14 +26,12 @@ export default class EditableCell extends Component {
     onCancel: PropTypes.func,
   };
 
-
   static defaultProps = {
     value: '',
     startEdit: false,
     onSave: () => undefined,
     onCancel: () => undefined,
   };
-
 
   /**
    * Initializes internal state.
@@ -49,7 +45,6 @@ export default class EditableCell extends Component {
     this._editField = null;
   }
 
-
   /**
    * Sets default state values.
    */
@@ -60,7 +55,6 @@ export default class EditableCell extends Component {
       width: '',
     });
   }
-
 
   /**
    * Updates state value with new value prop.
@@ -73,7 +67,6 @@ export default class EditableCell extends Component {
     }
   }
 
-
   /**
    * Focuses the input field when editing has been started.
    */
@@ -85,16 +78,14 @@ export default class EditableCell extends Component {
     }
   }
 
-
   /**
    * Updates state value with latest value from input field.
    *
    * @param {Event} ev
    */
-  onChange(ev) {
+  onChange = (ev) => {
     this.setState({ value: ev.target.value });
   }
-
 
   /**
    * Translates key presses to edit lifecycle methods.
@@ -103,7 +94,7 @@ export default class EditableCell extends Component {
    *
    * @param {KeyboardEvent} ev
    */
-  onKeyUp(ev) {
+  onKeyUp = (ev) => {
     switch (ev.key) {
       case 'Enter':
         this.commit();
@@ -115,22 +106,20 @@ export default class EditableCell extends Component {
         // Nothing.
         break;
     }
-  }
-
+  };
 
   /**
    * Sets a reference to cell and computes cell width if in edit mode.
    *
    * @param {HTMLTableCellElement} c
    */
-  cellDidRender(c) {
+  cellDidRender = (c) => {
     this._cell = c;
 
     if (this._cell && this.state.edit) {
       this.setState({ width: `${this._cell.offsetWidth}px` });
     }
-  }
-
+  };
 
   /**
    * Waits with edit mode to the moment when cell width is known.
@@ -141,17 +130,15 @@ export default class EditableCell extends Component {
     return this.state.edit && this.state.width;
   }
 
-
   /**
    * Starts edit mode.
    */
-  start() {
+  start = () => {
     this.setState({
       edit: true,
       width: `${this._cell.offsetWidth}px`,
     });
-  }
-
+  };
 
   /**
    * Calls onSave prop with current value.
@@ -167,11 +154,10 @@ export default class EditableCell extends Component {
     });
   }
 
-
   /**
    * Stops edit mode and revert state value to prop value.
    */
-  cancel() {
+  cancel = () => {
     this.props.onCancel();
 
     this.setState({
@@ -179,18 +165,16 @@ export default class EditableCell extends Component {
       edit: false,
       width: '',
     });
-  }
-
+  };
 
   /**
    * Stores edit field reference.
    *
    * @param {HTMLInputElement} el
    */
-  refEditField(el) {
+  refEditField = (el) => {
     this._editField = el;
-  }
-
+  };
 
   /**
    * Returns element for this component.
@@ -209,19 +193,19 @@ export default class EditableCell extends Component {
           editable: true,
           editor: this.canEdit(),
         })}
-        onClick={::this.start}
+        onClick={this.start}
         style={{ width: this.state.width }}
-        ref={::this.cellDidRender}
+        ref={this.cellDidRender}
       >
         {
           this.canEdit() ?
             <input
               type="text"
               value={this.state.value}
-              onChange={::this.onChange}
-              onKeyUp={::this.onKeyUp}
-              onBlur={::this.cancel}
-              ref={::this.refEditField}
+              onChange={this.onChange}
+              onKeyUp={this.onKeyUp}
+              onBlur={this.cancel}
+              ref={this.refEditField}
             /> :
             <span>{this.state.value}</span>
         }

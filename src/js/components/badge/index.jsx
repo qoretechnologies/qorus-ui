@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
-
 /**
  * Value display in a badge potentially with a link.
  *
@@ -21,11 +20,9 @@ export default class Badge extends Component {
     label: PropTypes.string,
   };
 
-
   static defaultProps = {
     label: '',
   };
-
 
   /**
    * Returns badge value wrapped in indicating classes.

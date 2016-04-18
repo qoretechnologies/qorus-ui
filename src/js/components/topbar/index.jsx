@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-
 import { pureRender } from '../utils';
 import UserInfo from '../user_info';
-
 
 /**
  * Display info about Qorus instance and logged in user.
@@ -16,7 +14,6 @@ export default class Topbar extends Component {
     currentUser: PropTypes.object.isRequired,
   };
 
-
   /**
    * Sets up default expanded state to false.
    */
@@ -24,14 +21,12 @@ export default class Topbar extends Component {
     this.setState({ expanded: false });
   }
 
-
   /**
    * Toggle expanded state value.
    */
-  onToggleExpanded() {
+  handleExpand = () => {
     this.setState({ expanded: !this.state.expanded });
-  }
-
+  };
 
   /**
    * Returns element for this component.
@@ -50,7 +45,7 @@ export default class Topbar extends Component {
                 collapsed: !this.state.expanded,
               })}
               aria-expanded={this.state.expanded ? 'true' : 'false'}
-              onClick={::this.onToggleExpanded}
+              onClick={this.handleExpand}
             >
               <span className="sr-only">Toggle navigation</span>
               <span className="icon-bar"></span>

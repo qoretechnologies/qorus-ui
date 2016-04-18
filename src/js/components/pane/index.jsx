@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import ResizeHandle from '../resize/handle';
 
-
 /**
  * Pane flowing above other content sticked to the right.
  *

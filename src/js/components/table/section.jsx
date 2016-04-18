@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 
-
 /**
  * Table section supporting static and dynamic rows.
  *

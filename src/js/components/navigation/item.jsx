@@ -2,9 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 
-
 import { pureRender } from '../utils';
-
 
 /**
  * Navigation item with icon and text.
@@ -21,11 +19,9 @@ export default class Item extends Component {
     active: PropTypes.bool,
   };
 
-
   static defaultProps = {
     active: false,
   };
-
 
   /**
    * Returns element for this component.

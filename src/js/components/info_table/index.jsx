@@ -1,12 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import Table, { Section, Row, Cell } from '../table';
-
 
 import _ from 'lodash';
 import { pureRender } from '../utils';
-
 
 /**
  * Object with attribute name and value.
@@ -14,12 +11,10 @@ import { pureRender } from '../utils';
  * @typedef {{ attr: string, value: * }} AttrValuePair
  */
 
-
 /**
  * Indent value for stringified complex values.
  */
 const COMPLEX_VALUE_INDENT = 4;
-
 
 /**
  * Two-column table with name and value in each column.
@@ -36,6 +31,11 @@ export default class InfoTable extends Component {
     pick: PropTypes.array,
   };
 
+  componentWillMount() {
+    this.renderRows = ::this.renderRows;
+    this.renderTBody = ::this.renderTBody;
+    this.renderCells = ::this.renderCells;
+  }
 
   /**
    * Returns object attribute filter based on `omit` or `pick` props.
@@ -47,7 +47,6 @@ export default class InfoTable extends Component {
     if (this.props.pick) return attr => this.props.pick.indexOf(attr) >= 0;
     return () => true;
   }
-
 
   /**
    * Returns attribute-value pairs from `object` props.
@@ -65,7 +64,6 @@ export default class InfoTable extends Component {
         value: this.props.object[attr],
       }));
   }
-
 
   /**
    * Returns value representation.
@@ -88,7 +86,6 @@ export default class InfoTable extends Component {
     }
   }
 
-
   /**
    * Yields cells with capitalized attribute name and its value.
    *
@@ -107,7 +104,6 @@ export default class InfoTable extends Component {
     );
   }
 
-
   /**
    * Yields rows for table body.
    *
@@ -118,11 +114,10 @@ export default class InfoTable extends Component {
   *renderRows(data) {
     for (const attr of data) {
       yield (
-        <Row data={attr} cells={::this.renderCells} />
+        <Row data={attr} cells={this.renderCells} />
       );
     }
   }
-
 
   /**
    * Yields table body section.
@@ -133,10 +128,9 @@ export default class InfoTable extends Component {
    */
   *renderTBody(data) {
     yield (
-      <Section type="body" data={data} rows={::this.renderRows} />
+      <Section type="body" data={data} rows={this.renderRows} />
     );
   }
-
 
   /**
    * Returns element for this component.
@@ -147,7 +141,7 @@ export default class InfoTable extends Component {
     return (
       <Table
         data={this.getData()}
-        sections={::this.renderTBody}
+        sections={this.renderTBody}
         className="table table-condensed table-striped table--info"
       />
     );

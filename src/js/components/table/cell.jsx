@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import { pureRender } from '../utils';
-
 
 /**
  * Flexible table cell with pure render for improved performance.
@@ -14,11 +12,9 @@ export default class Cell extends Component {
     children: PropTypes.node,
   };
 
-
   static defaultProps = {
     tag: 'td',
   };
-
 
   /**
    * Returns element for this component.

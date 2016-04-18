@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { slugify } from '../../utils';
 
-
 import Item from './item';
 import Pane from './pane';
-
 
 /**
  * Tabs with nav item to switch and tab panes with content.
@@ -33,23 +31,19 @@ export default class Tabs extends Component {
     type: PropTypes.string,
   };
 
-
   static defaultProps = {
     type: 'tabs',
   };
 
-
   componentWillMount() {
     this.setState({ activeSlug: this.activeSlug(this.props) });
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.state.activeSlug !== this.activeSlug(nextProps)) {
       this.setState({ activeSlug: this.activeSlug(nextProps) });
     }
   }
-
 
   /**
    * Changes active tab.
@@ -60,14 +54,13 @@ export default class Tabs extends Component {
    *
    * @param {string} slug
    */
-  onTabChange(slug) {
+  onTabChange = (slug) => {
     if (!this.props.tabChange) {
       this.setState({ activeSlug: slug });
     } else {
       this.props.tabChange(slug);
     }
-  }
-
+  };
 
   /**
    * Finds an active slug.
@@ -86,7 +79,6 @@ export default class Tabs extends Component {
        slugify(props.children[0].props.name))
     );
   }
-
 
   /**
    * Returns element for this component.
@@ -108,7 +100,7 @@ export default class Tabs extends Component {
                 active={this.state.activeSlug === slug}
                 slug={slug}
                 name={name}
-                tabChange={::this.onTabChange}
+                tabChange={this.onTabChange}
               />
             );
           })}

@@ -30,7 +30,7 @@ export default class extends Component {
    * Runs provided function from the props.action
    * @param {Event} event
    */
-  onCheckboxClick(event) {
+  handleClick = (event) => {
     event.preventDefault();
     const checked = this.state.checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED';
 
@@ -41,7 +41,7 @@ export default class extends Component {
     if (this.props.action) {
       this.props.action(event);
     }
-  }
+  };
 
   render() {
     const className = classNames('fa', CHECKBOX_CLASSES[this.state.checked]);
@@ -49,7 +49,7 @@ export default class extends Component {
     return (
       <i
         className={className}
-        onClick={::this.onCheckboxClick}
+        onClick={this.handleClick}
       />
     );
   }

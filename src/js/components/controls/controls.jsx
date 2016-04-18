@@ -19,12 +19,10 @@ export default class Controls extends Component {
     noControls: PropTypes.bool,
   };
 
-
   static defaultProps = {
     grouped: false,
     controls: [],
   };
-
 
   /**
    * Returns element for this component.

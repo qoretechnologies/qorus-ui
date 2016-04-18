@@ -1,12 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 
-
 import { Item, Pane } from './tabs';
 import SourceCode from './source_code';
 
-
 import { pureRender } from './utils';
-
 
 @pureRender
 export default class LibraryTab extends Component {
@@ -14,21 +11,13 @@ export default class LibraryTab extends Component {
     library: PropTypes.object.isRequired,
   };
 
-
   componentWillMount() {
     this.setInitialActiveDomId(this.props);
   }
 
-
   componentWillReceiveProps(nextProps) {
     this.setInitialActiveDomId(nextProps);
   }
-
-
-  onTabChange(domId) {
-    this.setState({ activeDomId: domId });
-  }
-
 
   getDomId(func, step) {
     let id = func.name;
@@ -36,7 +25,6 @@ export default class LibraryTab extends Component {
 
     return `func.${id}`;
   }
-
 
   setInitialActiveDomId() {
     const domIds = this.mergeFuncs().map(fn => fn.id);
@@ -46,13 +34,15 @@ export default class LibraryTab extends Component {
     }
   }
 
+  handleTabChange = (domId) => {
+    this.setState({ activeDomId: domId });
+  };
 
   compareFuncs(a, b) {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return +1;
     return 0;
   }
-
 
   mergeFuncs() {
     const { library } = this.props;
@@ -63,7 +53,6 @@ export default class LibraryTab extends Component {
       ), funcs)
     ), []);
   }
-
 
   renderFuncHeading(func) {
     if (!func.type) return func.name;
@@ -84,7 +73,6 @@ export default class LibraryTab extends Component {
     );
   }
 
-
   renderFuncs() {
     const { library } = this.props;
 
@@ -103,7 +91,7 @@ export default class LibraryTab extends Component {
                     slug={this.getDomId(func, null)}
                     name={this.renderFuncHeading(func)}
                     active={this.getDomId(func, null) === this.state.activeDomId}
-                    tabChange={::this.onTabChange}
+                    tabChange={this.handleTabChange}
                   />
                 ))}
               </ul>
@@ -131,7 +119,7 @@ export default class LibraryTab extends Component {
   //                 slug={this.getDomId(func, step)}
   //                 name={this.renderFuncHeading(func)}
   //                 active={this.getDomId(func, step) === this.state.activeDomId}
-  //                 tabChange={::this.onTabChange}
+  //                 tabChange={this.handleTabChange}
   //               />
   //             ))}
   //           </ul>
@@ -141,7 +129,6 @@ export default class LibraryTab extends Component {
   //     </li>
   //   );
   // }
-
 
   renderCodeTabs() {
     return (

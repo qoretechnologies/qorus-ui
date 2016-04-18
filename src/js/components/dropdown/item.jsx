@@ -13,18 +13,18 @@ export default class Item extends Component {
     action: PropTypes.func,
     hideDropdown: PropTypes.func,
   };
-
+  
   /**
    * Hides the dropdown and runs
    * provided function
    */
-  onItemClick() {
+  handleClick = () => {
     if (this.props.action) {
       this.props.action();
     }
 
     this.props.hideDropdown();
-  }
+  };
 
   /**
    * Renders the icon for the dropdown item
@@ -42,7 +42,7 @@ export default class Item extends Component {
     return (
       <li>
         <a
-          onClick={::this.onItemClick}
+          onClick={this.handleClick}
           href="#"
         >
           {this.renderIcon()}

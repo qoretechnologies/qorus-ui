@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-
-
 import { pureRender } from '../utils';
-
 
 /**
  * Keyboard event keyCode for Escape key.
  */
 const ESCAPE_KEY_CODE = 27;
-
 
 /**
  * Container component to programmatically handle modal panes.
@@ -35,7 +31,6 @@ export default class Manager extends Component {
     this._globalKeyUp = null;
   }
 
-
   /**
    * Sets up storage for modals to manage and state for current modal.
    */
@@ -43,7 +38,6 @@ export default class Manager extends Component {
     this._modals = new Set();
     this.setState({ modal: null });
   }
-
 
   /**
    * Adds or removes global `keyup` listener and body status class.
@@ -98,7 +92,6 @@ export default class Manager extends Component {
     }
   }
 
-
   /**
    * Listens to global key presses.
    *
@@ -112,7 +105,6 @@ export default class Manager extends Component {
     }
   }
 
-
   /**
    * Finds modal close button in modal's header section.
    *
@@ -123,7 +115,6 @@ export default class Manager extends Component {
       this._root.querySelector('.modal-header button.close');
   }
 
-
   /**
    * Opens modal pane using given React element.
    *
@@ -133,7 +124,6 @@ export default class Manager extends Component {
     this._modals.add(modal);
     this.updateModal(modal);
   }
-
 
   /**
    * Closes modal pane with given React element.
@@ -147,7 +137,6 @@ export default class Manager extends Component {
     this._modals.delete(modal);
     this.updateModal();
   }
-
 
   /**
    * Re-renders modal pane content with last modal element added.
@@ -167,16 +156,14 @@ export default class Manager extends Component {
     this.setState({ modal: lastModal });
   }
 
-
   /**
    * Stores root element for later reference.
    *
    * @param {HTMLElement} el
    */
-  refRoot(el) {
+  refRoot = (el) => {
     this._root = el;
-  }
-
+  };
 
   /**
    * Renders modal element and backdrop.
@@ -189,7 +176,7 @@ export default class Manager extends Component {
     if (!this.state.modal) return null;
 
     return (
-      <div ref={::this.refRoot}>
+      <div ref={this.refRoot}>
         {this.state.modal}
         <div className="modal-backdrop fade in" />
       </div>

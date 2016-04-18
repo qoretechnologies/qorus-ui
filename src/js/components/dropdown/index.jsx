@@ -23,23 +23,23 @@ export default class extends Component {
    *
    * @param {Event} event
    */
-  onDropdownToggleClick(event) {
+  handleToggleClick = (event) => {
     if (event.defaultPrevented) return;
 
     this.setState({
       showDropdown: !this.state.showDropdown,
     });
-  }
+  };
 
   /**
    * Hides the control dropdown
    * based on the current state
    */
-  hideSelectionToggle() {
+  hideSelectionToggle = () => {
     this.setState({
       showDropdown: false,
     });
-  }
+  };
 
   /**
    * Renders the seleciton dropdown to the component
@@ -65,7 +65,7 @@ export default class extends Component {
 
       return (
         <c.type
-          hideDropdown={::this.hideSelectionToggle}
+          hideDropdown={this.hideSelectionToggle}
           {...c.props}
         />
       );
@@ -79,7 +79,7 @@ export default class extends Component {
       return (
         <c.type
           id={this.props.id}
-          onClick={::this.onDropdownToggleClick}
+          onClick={this.handleToggleClick}
           {...c.props}
         />
       );
@@ -96,4 +96,7 @@ export default class extends Component {
   }
 }
 
-export { Item, Control };
+export {
+  Item,
+  Control,
+};
