@@ -1,9 +1,5 @@
-const findElementByText = (browser, selector, text) => {
-  return browser.
-    queryAll(selector).
-    find(el => el.textContent === text)
-    || null;
-};
+const findElementByText = (browser, selector, text) => browser.queryAll(selector)
+  .find(el => el.textContent === text) || null;
 
 module.exports = function workFlowControlSteps() {
   this.When(/^I click the dropdown toggle$/, function () {
