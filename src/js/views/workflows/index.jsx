@@ -26,8 +26,25 @@ import { findBy } from '../../helpers/search';
 const sortWorkflows = (workflows) =>
   workflows.slice().sort(compare('exec_count', ['name'], 'des'));
 
-const filterSearch = curry((search, workflows) =>
-  findBy(['name', 'id'], search, workflows));
+const filterSearch = (search) => (workflows) =>
+  findBy(['name', 'id'], search, workflows);
+
+const filterRunning = (filter) => (workflows) =>
+  workflows.filter(w => !(includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count <= 0));
+
+const filterLastVersion = (filter) => (workflows) => {
+  if (!includes(filter, WORKFLOW_FILTERS.LAST_VERSION)) return workflows;
+
+  return workflows.filter(w => {
+    for (const workflow of workflows) {
+      if (w.name === workflow.name && parseFloat(w.version) < parseFloat(workflow.version)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+};
 
 const errorsComparator = (a, b) => {
   if (a.error < b.error) return -1;
@@ -62,15 +79,20 @@ const globalErrorsSelector = state => errorsToArray(state, 'global');
 
 const searchSelector = (state, props) => props.location.query.q;
 
+const filterSelector = (state, props) => filterArray(props.params.filter);
+
 const infoSelector = state => state.api.system;
 
 const collectionSelector = createSelector(
   [
     searchSelector,
+    filterSelector,
     workflowsSelector,
   ],
-  (search, workflows) => flowRight(
+  (search, filter, workflows) => flowRight(
     sortWorkflows,
+    filterLastVersion(filter),
+    filterRunning(filter),
     filterSearch(search),
   )(workflows.data)
 );
@@ -148,7 +170,6 @@ export default class Workflows extends Component {
   componentWillReceiveProps(next) {
     if (this.props.workflows !== next.workflows ||
       this.props.params.filter !== next.params.filter) {
-      this.filterWorkflows(next);
       this.handleFilterClick(null);
     }
   }
@@ -169,44 +190,6 @@ export default class Workflows extends Component {
 
   isActive(workflow) {
     return workflow.id === parseInt(this.props.params.detailId, 10);
-  }
-
-  /**
-   * Displays workflows according to the
-   * URL filters set
-   *
-   * @param {Array} props
-   */
-  filterWorkflows(props) {
-    const filter = filterArray(props.params.filter);
-
-    let filteredWorkflows = props.workflows.filter(w => {
-      if (includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count === 0) {
-        return false;
-      }
-
-      if (!includes(filter, WORKFLOW_FILTERS.DEPRECATED) && w.deprecated === true) {
-        return false;
-      }
-
-      return true;
-    });
-
-    if (includes(filter, WORKFLOW_FILTERS.LAST_VERSION)) {
-      filteredWorkflows = filteredWorkflows.filter(w => {
-        for (const workflow of filteredWorkflows) {
-          if (w.name === workflow.name && parseFloat(w.version) < parseFloat(workflow.version)) {
-            return false;
-          }
-        }
-
-        return true;
-      });
-    }
-
-    this.setState({
-      filteredWorkflows,
-    });
   }
 
   handlePaneClose = () => {
@@ -350,7 +333,7 @@ export default class Workflows extends Component {
         <WorkflowsTable
           initialFilter={this.state.filterFn}
           onWorkflowFilterChange={this.handleWorkflowFilterChange}
-          workflows={this.state.filteredWorkflows}
+          workflows={this.props.workflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
         />
         {this.renderPane()}
