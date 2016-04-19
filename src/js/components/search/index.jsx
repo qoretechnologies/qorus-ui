@@ -10,17 +10,13 @@ export default class extends Component {
     defaultValue: PropTypes.string,
   };
 
-  static contextTypes = {
-    location: PropTypes.object.isRequired,
-  };
-
   componentWillMount() {
     this.delayedSearch = debounce((event) => {
       this.props.onSearchUpdate(event.target.value);
     }, 500);
 
     this.setState({
-      query: this.context.location.query.q,
+      query: this.props.defaultValue,
     });
   }
 
