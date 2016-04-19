@@ -170,8 +170,7 @@ export default class Workflows extends Component {
   }
 
   componentWillReceiveProps(next) {
-    if (this.props.workflows !== next.workflows ||
-      this.props.params.filter !== next.params.filter) {
+    if (this.props.params.filter !== next.params.filter) {
       this.handleFilterClick(null);
     }
   }
@@ -329,7 +328,7 @@ export default class Workflows extends Component {
           onSearchUpdate={this.handleSearchChange}
           selected={this.state.selected}
           defaultSearchValue={this.props.location.query.q}
-          filter={filterArray(this.props.params.filter)}
+          params={this.props.params}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
