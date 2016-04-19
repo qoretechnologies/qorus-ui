@@ -96,7 +96,7 @@ export default class StepsTab extends Component {
    *
    * @param {number} stepId
    */
-  onBoxClick = (stepId) => {
+  onBoxClick = (stepId) => () => {
     // Given step is expected to have info
     this._modal = (
       <StepModal
