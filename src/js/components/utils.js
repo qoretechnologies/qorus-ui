@@ -1,5 +1,4 @@
-import shallowCompare from 'react-addons-shallow-compare';
-
+import { isEqual } from 'lodash';
 
 /**
  * Checks if props or state changed on bound React component.
@@ -12,7 +11,7 @@ import shallowCompare from 'react-addons-shallow-compare';
  * @return {boolean}
  */
 function shouldComponentUpdate(nextProps, nextState) {
-  return shallowCompare(this, nextProps, nextState);
+  return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
 }
 
 

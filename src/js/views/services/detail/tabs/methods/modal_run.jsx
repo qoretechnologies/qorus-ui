@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'components/modal';
 
-
 // import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
