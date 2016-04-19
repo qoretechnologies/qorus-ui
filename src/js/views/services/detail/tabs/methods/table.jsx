@@ -79,10 +79,16 @@ export default class MethodsTable extends Component {
   /**
    * Closes currently open modal dialog.
    */
-  closeModal() {
+  closeModal = () => {
     this.context.closeModal(this._modal);
     this._modal = null;
   }
+
+  handleClick = method => () => {
+    this.openModal(this.props.service, method);
+  }
+
+  fixit() {}
 
   /**
    * Yields heading cells for model info.
@@ -156,7 +162,7 @@ export default class MethodsTable extends Component {
         <div className="btn-group">
           <button
             className="btn btn-xs btn-success"
-            onClick={this.openModal}
+            onClick={this.handleClick}
           >
             <i className="fa fa-play" />
           </button>

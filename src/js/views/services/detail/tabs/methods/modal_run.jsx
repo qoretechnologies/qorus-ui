@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import Modal from 'components/modal';
 
 
-import _ from 'lodash';
 // import classNames from 'classnames';
 import { pureRender } from 'components/utils';
 
@@ -13,7 +12,7 @@ export default class ModalRun extends Component {
     method: PropTypes.object.isRequired,
     service: PropTypes.object.isRequired,
     response: PropTypes.object,
-    onClose: PropTypes.object,
+    onClose: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
@@ -46,11 +45,32 @@ export default class ModalRun extends Component {
     this._select = s;
   }
 
+  renderOptions() {
+    const { service } = this.props;
+    const { activeMethod } = this.state;
+
+    return (
+      <select
+        name="method"
+        id="method"
+        defaultValue={activeMethod.name}
+        onChange={this.handleMethodChange}
+        ref={this.selectRef}
+      >
+        { service.methods.map((mtd, idx) => (
+            <option value={mtd.name} key={idx}>
+              { mtd.name }
+            </option>
+        ))}
+      </select>
+    );
+  }
+
   /**
    * @return {ReactElement}
    */
   render() {
-    const { activeMethod, response } = this.state;
+    const { response } = this.state;
 
     return (
       <Modal>
@@ -69,19 +89,7 @@ export default class ModalRun extends Component {
             <div className="content">
               <p><em className="text-muted">{this.props.method.description}</em></p>
               <label htmlFor="method">Method</label>
-              <select
-                name="method"
-                id="method"
-                defaultValue={activeMethod.name}
-                onChange={this.handleMethodChange}
-                ref={::this.selectRef}
-              >
-                { this.props.service.methods.map((mtd, idx) => (
-                    <option value={mtd.name} key={idx}>
-                      { mtd.name }
-                    </option>
-                ))}
-              </select>
+                { this.renderOptions() }
               <div>
                 <p><label htmlFor="args">Arguments</label></p>
                 <textarea id="args" name="args" className="col-md-12" rows="5" />
