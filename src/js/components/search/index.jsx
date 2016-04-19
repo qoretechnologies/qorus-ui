@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 import { debounce } from 'lodash';
+import { browserHistory } from 'react-router';
 
 @pureRender
 export default class extends Component {
@@ -9,13 +10,25 @@ export default class extends Component {
     defaultValue: PropTypes.string,
   };
 
+  static contextTypes = {
+    location: PropTypes.object.isRequired,
+  };
+
   componentWillMount() {
     this.delayedSearch = debounce((event) => {
       this.props.onSearchUpdate(event.target.value);
     }, 500);
 
     this.setState({
-      query: this.props.defaultValue,
+      query: this.context.location.query.q,
+    });
+  }
+
+  componentDidMount() {
+    browserHistory.listen((router) => {
+      this.setState({
+        query: router.query.q,
+      });
     });
   }
 

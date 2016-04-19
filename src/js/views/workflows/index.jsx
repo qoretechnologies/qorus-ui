@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flowRight, includes, curry } from 'lodash';
+import { flowRight, includes } from 'lodash';
 import { compare } from 'utils';
 import { goTo } from '../../helpers/router';
 
@@ -140,6 +140,7 @@ export default class Workflows extends Component {
   };
 
   static childContextTypes = {
+    location: PropTypes.object,
     params: PropTypes.object,
     route: PropTypes.object,
     dispatch: PropTypes.func,
@@ -147,6 +148,7 @@ export default class Workflows extends Component {
 
   getChildContext() {
     return {
+      location: this.props.location,
       params: this.props.params,
       route: this.props.route,
       dispatch: this.props.dispatch,
@@ -185,12 +187,10 @@ export default class Workflows extends Component {
   getActiveWorkflow() {
     if (!this.props.params.detailId) return null;
 
-    return this.props.workflows.find(::this.isActive);
+    return this.props.workflows.find(this.isActive);
   }
 
-  isActive(workflow) {
-    return workflow.id === parseInt(this.props.params.detailId, 10);
-  }
+  isActive = (workflow) => workflow.id === parseInt(this.props.params.detailId, 10);
 
   handlePaneClose = () => {
     goTo(
@@ -288,7 +288,8 @@ export default class Workflows extends Component {
       'workflows',
       this.props.route.path,
       this.props.params,
-      { filter: filter.join(','), detailId: null, tabId: null }
+      { filter: filter.join(','), detailId: null, tabId: null },
+      this.props.location.query
     );
   }
 
