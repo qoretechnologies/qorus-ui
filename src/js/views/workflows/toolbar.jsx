@@ -4,7 +4,9 @@ import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'comp
 import { Control as Button, Controls } from 'components/controls';
 import Checkbox from 'components/checkbox';
 import Search from 'components/search';
+import Datepicker from 'components/datepicker';
 
+import { filterArray } from '../../helpers/workflows';
 import { includes } from 'lodash';
 
 import { CHECKBOX_STATES } from '../../constants/checkbox';
@@ -20,7 +22,7 @@ export default class WorkflowsToolbar extends Component {
     onRunningClick: PropTypes.func,
     onDeprecatedClick: PropTypes.func,
     onLastVersionClick: PropTypes.func,
-    filter: PropTypes.array,
+    params: PropTypes.object,
     defaultSearchValue: PropTypes.string,
     onSearchUpdate: PropTypes.func,
   };
@@ -124,6 +126,7 @@ export default class WorkflowsToolbar extends Component {
 
   render() {
     const checked = CHECKBOX_STATES[this.props.selected];
+    const filter = filterArray(this.props.params.filter);
 
     return (
       <Toolbar>
@@ -156,33 +159,34 @@ export default class WorkflowsToolbar extends Component {
           />
         </Dropdown>
         {this.renderSelectionControls()}
+        <Datepicker date={this.props.params.date} />
         <Controls grouped noControls>
           <Button
             label="Running"
             big
             action={this.handleDisplayRunningClick}
-            icon={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
+            icon={includes(filter, WORKFLOW_FILTERS.RUNNING) ?
               'check-square-o' : 'square-o'}
-            btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.RUNNING) ?
+            btnStyle={includes(filter, WORKFLOW_FILTERS.RUNNING) ?
               'success' : 'default'}
           />
           <Button
             label="Last version"
             big
             action={this.handleDisplayLastVersionClick}
-            icon={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
+            icon={includes(filter, WORKFLOW_FILTERS.LAST_VERSION) ?
               'check-square-o' : 'square-o'}
-            btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.LAST_VERSION) ?
+            btnStyle={includes(filter, WORKFLOW_FILTERS.LAST_VERSION) ?
               'success' : 'default'}
           />
           <Dropdown id="deprecated">
             <DropdownControl
-              btnStyle={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
+              btnStyle={includes(filter, WORKFLOW_FILTERS.DEPRECATED) ?
                 'success' : 'default'}
             />
             <DropdownItem
               title="Deprecated"
-              icon={includes(this.props.filter, WORKFLOW_FILTERS.DEPRECATED) ?
+              icon={includes(filter, WORKFLOW_FILTERS.DEPRECATED) ?
                 'check-square-o' : 'square-o'}
               action={this.handleDisplayDeprecatedClick}
             />
