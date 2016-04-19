@@ -97,8 +97,28 @@ const fetchLibSources = {
   },
 };
 
+const fetchMethodSources = {
+  next(state = initialState, action) {
+    return Object.assign({}, state, {
+      data: updateItemWithId(
+        action.meta.serviceId,
+        action.payload,
+        state.data
+      ),
+    });
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
+  fetchMethodSources as FETCHMETHODSOURCES,
 };
