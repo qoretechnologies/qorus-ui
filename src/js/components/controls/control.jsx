@@ -12,7 +12,7 @@ export default class Control extends Component {
     title: PropTypes.string,
     label: PropTypes.string,
     btnStyle: PropTypes.string,
-    icon: PropTypes.string.isRequired,
+    icon: PropTypes.string,
     action: PropTypes.func,
     disabled: PropTypes.bool,
     big: PropTypes.bool,
@@ -29,6 +29,12 @@ export default class Control extends Component {
     event.preventDefault();
     this.props.action(event);
   };
+
+  renderIcon() {
+    if (!this.props.icon) return null;
+
+    return <i className={classNames(['fa', `fa-${this.props.icon}`])} />;
+  }
 
   /**
    * Returns element for this component.
@@ -47,7 +53,7 @@ export default class Control extends Component {
         onClick={this.handleClick}
         disabled={this.props.disabled}
       >
-        <i className={classNames(['fa', `fa-${this.props.icon}`])} />
+        {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}
       </button>
     );
