@@ -83,7 +83,7 @@ export default class WorkflowsDetail extends Component {
             <DetailTab workflow={workflow} systemOptions={systemOptions} />
           </Pane>
           <Pane name="Library">
-            <LibraryTab model={workflow} />
+            <LibraryTab library={workflow.lib} />
           </Pane>
           <Pane name="Steps">
             <StepsTab workflow={workflow} />
