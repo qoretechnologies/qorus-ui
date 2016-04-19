@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import ModalRun from './modal_run';
+import ModalCode from './modal_code';
 
 import { pureRender } from 'components/utils';
 
@@ -59,19 +60,29 @@ export default class MethodsTable extends Component {
   /**
    * Opens modal dialog to manage particular error.
    *
-   * @param {Object} err
-   * @param {function(Object)} commitFn
-   * @param {string} label
-   * @param {?boolean} requireChanges
+   * @param {string} modal type
+   * @param {Object} service
+   * @param {Object} method
    */
-  openModal = (service, method) => {
-    this._modal = (
-      <ModalRun
-        method={Object.assign({}, method)}
-        service={service}
-        onClose={this.closeModal}
-      />
-    );
+  openModal = (modal, service, method) => {
+    if (modal === 'run') {
+      this._modal = (
+        <ModalRun
+          method={Object.assign({}, method)}
+          service={service}
+          onClose={this.closeModal}
+        />
+      );
+    } else {
+      this._modal = (
+        <ModalCode
+          method={Object.assign({}, method)}
+          service={service}
+          onClose={this.closeModal}
+        />
+      );
+    }
+
 
     this.context.openModal(this._modal);
   }
@@ -84,17 +95,23 @@ export default class MethodsTable extends Component {
     this._modal = null;
   }
 
-  handleClick = method => () => {
-    this.openModal(this.props.service, method);
+  /**
+   * Opens modal window
+   */
+  handleClick = (modal, method) => () => {
+    this.openModal(modal, this.props.service, method);
   }
 
+  /**
+   * Fixes binding and syntax error when generator is followed
+   * by generator
+   */
   fixit() {}
 
   /**
    * Yields heading cells for model info.
    *
    * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
    */
   *renderHeadings() {
     yield (
@@ -162,11 +179,14 @@ export default class MethodsTable extends Component {
         <div className="btn-group">
           <button
             className="btn btn-xs btn-success"
-            onClick={this.handleClick}
+            onClick={this.handleClick('run', model)}
           >
             <i className="fa fa-play" />
           </button>
-          <button className="btn btn-xs btn-inverse">
+          <button
+            className="btn btn-xs btn-inverse"
+            onClick={this.handleClick('code', model)}
+          >
             <i className="fa fa-code" />
           </button>
         </div>

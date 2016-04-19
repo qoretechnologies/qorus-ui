@@ -1,147 +1,85 @@
+// components
 import React, { Component, PropTypes } from 'react';
 import Modal from 'components/modal';
+import Loader from 'components/loader';
+import SourceCode from 'components/source_code';
 
-
-import _ from 'lodash';
-import classNames from 'classnames';
+// utils
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { pureRender } from 'components/utils';
+import { bindActionCreators } from 'redux';
 
+import actions from 'store/api/actions';
 
-@pureRender
-export default class MethodModal extends Component {
+const methodSelector = (store, props) => {
+  const service = store.api.services.data.find(s => s.id === props.service.id);
+  return service.methods.find(m => m.name === props.method.name);
+};
+
+const serviceSelector = (store, props) => (
+  store.api.services.data.find(s => s.id === props.service.id)
+);
+
+const viewSelector = createSelector(
+  [methodSelector, serviceSelector],
+  (method, service) => ({
+    method,
+    service,
+  })
+);
+
+@connect(
+  viewSelector,
+  dispatch => bindActionCreators({
+    fetchSources: actions.services.fetchMethodSources,
+  }, dispatch)
+)
+export default class ModalCode extends Component {
   static propTypes = {
-    actionLabel: PropTypes.string.isRequired,
     method: PropTypes.object.isRequired,
-    onCommit: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    requireChanges: PropTypes.bool,
+    service: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
+    fetchSources: PropTypes.func,
   };
 
-
-  static defaultProps = {
-    requireChanges: false,
-  };
-
-
-  /**
-   * @param {object} props
-   */
-  constructor(props) {
-    super(props);
-
-    this._form = null;
-
-    this.state = {
-      method: Object.assign({}, this.props.method),
-      changes: null,
-      status: {},
-    };
-  }
-
-
-  /**
-   * @param {Event} ev
-   */
-  onCommit(ev) {
-    ev.preventDefault();
-
-    if (this.validate()) {
-      this.props.onCommit(this.state.method);
+  componentWillMount() {
+    if (!this.props.method.body) {
+      this.props.fetchSources(this.props.service);
     }
   }
 
-
   /**
-   * @param {Event} ev
+   * Handles onClick event for closing the modal window
    */
-  onChange(ev) {
-    this.setState({
-      method: Object.assign({}, this.state.method, {
-        [ev.target.name]: ev.target.type !== 'checkbox' ?
-          ev.target.value :
-          ev.target.checked,
-      }),
-    });
+  handleCancel = (ev) => {
+    if (ev) ev.preventDefault();
+    this.props.onClose();
   }
 
-
   /**
-   * @param {Event} ev
-   */
-  onBlur(ev) {
-    this.validateElement(ev.target);
-
-    if (this.state.changes === false) {
-      this.validateChanges();
-    }
-  }
-
-
-  /**
-   * @return {boolean}
-   */
-  validate() {
-    const els = this._form.querySelectorAll(
-      '.form-group input, .form-group textarea'
-    );
-    for (let i = 0; i < els.length; i += 1) {
-      if (!this.validateElement(els[i])) return false;
-    }
-
-    if (!this.validateChanges()) {
-      return false;
-    }
-
-    return true;
-  }
-
-
-  /**
-   * @param {Element} el
-   * @return {boolean}
-   */
-  validateElement(el) {
-    const status = Object.assign({}, this.state.status);
-
-    if (el.checkValidity()) {
-      delete status[el.id];
-      this.setState({ status });
-      return true;
-    }
-
-    if (el.validity.valueMissing) {
-      status[el.id] = '(required value)';
-    } else {
-      status[el.id] = '(invalid value)';
-    }
-    this.setState({ status });
-
-    return false;
-  }
-
-
-  /**
-   * @return {boolean}
-   */
-  validateChanges() {
-    if (!this.props.requireChanges) return true;
-
-    const changes = !_.isEqual(this.props.method, this.state.method);
-    this.setState({ changes });
-
-    return changes;
-  }
-
-
-  /**
-   * References error form.
+   * Returns loader if method body information are not available.
    *
-   * @param {HTMLFormElement} el
+   * @return {ReactElement}
    */
-  refForm(el) {
-    this._form = el;
+  renderLoader() {
+    return (
+      <Loader />
+    );
   }
 
+  /**
+   * Returns method body source code.
+   *
+   * @return {ReactElement}
+   */
+  renderBody() {
+    return (
+      <SourceCode>
+        {this.props.method.body}
+      </SourceCode>
+    );
+  }
 
   /**
    * @return {ReactElement}
@@ -149,30 +87,15 @@ export default class MethodModal extends Component {
   render() {
     return (
       <Modal>
-        <form
-          className="form-horizontal"
-          onSubmit={::this.onCommit}
-          ref={::this.refForm}
-          noValidate
+        <Modal.Header
+          titleId="methodsTableModalLabel"
+          onClose={this.handleCancel}
         >
-          <Modal.Header
-            titleId="errorsTableModalLabel"
-            onClose={this.props.onCancel}
-          >
-            {this.props.actionLabel} {this.props.method.name}
-          </Modal.Header>
-          <Modal.Body>
-            <p>ModalBody</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <button
-              type="submit"
-              className="btn btn-primary"
-            >
-              {this.props.actionLabel}
-            </button>
-          </Modal.Footer>
-        </form>
+          Source code for {this.props.method.name}
+        </Modal.Header>
+        <Modal.Body>
+          { this.props.method.body ? this.renderBody() : this.renderLoader() }
+        </Modal.Body>
       </Modal>
     );
   }

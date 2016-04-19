@@ -49,5 +49,22 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
+function fetchMethodSourcesPayload(service) {
+  return fetchJson(
+    'GET',
+    `${settings.REST_BASE_URL}/services/${service.id}?method_source=true`
+  );
+}
 
-export { setOptions, fetchLibSources };
+function fetchMethodSourcesMeta(service) {
+  return { serviceId: service.id };
+}
+
+const fetchMethodSources = createAction(
+  'SERVICES_FETCHMETHODSOURCES',
+  fetchMethodSourcesPayload,
+  fetchMethodSourcesMeta
+);
+
+
+export { setOptions, fetchLibSources, fetchMethodSources };
