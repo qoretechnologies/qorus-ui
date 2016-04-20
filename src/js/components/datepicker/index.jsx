@@ -32,14 +32,6 @@ export default class extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.state.showDatepicker) {
-      document.addEventListener('mousedown', this.handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', this.handleOutsideClick);
-    }
-  }
-
   setupDate = (props) => {
     this.hideDatepicker();
 

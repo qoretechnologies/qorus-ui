@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 import { debounce } from 'lodash';
-import { browserHistory } from 'react-router';
 
 @pureRender
 export default class extends Component {
@@ -20,12 +19,12 @@ export default class extends Component {
     });
   }
 
-  componentDidMount() {
-    browserHistory.listen((router) => {
+  componentWillReceiveProps(next) {
+    if (this.props.defaultValue !== next.defaultValue) {
       this.setState({
-        query: router.query.q,
+        query: next.defaultValue,
       });
-    });
+    }
   }
 
   /**
