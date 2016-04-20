@@ -29,10 +29,12 @@ export default class Tabs extends Component {
     className: PropTypes.string,
     tabChange: PropTypes.func,
     type: PropTypes.string,
+    navAtBottom: PropTypes.bool,
   };
 
   static defaultProps = {
     type: 'tabs',
+    navOnBottom: false,
   };
 
   componentWillMount() {
@@ -80,6 +82,28 @@ export default class Tabs extends Component {
     );
   }
 
+  renderNav() {
+    return (
+      <ul className={`nav nav-${this.props.type}`}>
+        {React.Children.map(this.props.children, tab => {
+          const { name, slug: slugMaybe, ...other } = tab.props;
+          const slug = slugMaybe || slugify(name);
+          delete other.children;
+
+          return (
+            <Item
+              {...other}
+              active={this.state.activeSlug === slug}
+              slug={slug}
+              name={name}
+              tabChange={this.onTabChange}
+            />
+          );
+        })}
+      </ul>
+    );
+  }
+
   /**
    * Returns element for this component.
    *
@@ -88,23 +112,7 @@ export default class Tabs extends Component {
   render() {
     return (
       <div className={this.props.className}>
-        <ul className={`nav nav-${this.props.type}`}>
-          {React.Children.map(this.props.children, tab => {
-            const { name, slug: slugMaybe, ...other } = tab.props;
-            const slug = slugMaybe || slugify(name);
-            delete other.children;
-
-            return (
-              <Item
-                {...other}
-                active={this.state.activeSlug === slug}
-                slug={slug}
-                name={name}
-                tabChange={this.onTabChange}
-              />
-            );
-          })}
-        </ul>
+        { !this.props.navAtBottom && this.renderNav() }
         <div className="tab-content">
           {React.Children.map(this.props.children, tab => {
             const { name, children, slug: slugMaybe, ...other } = tab.props;
@@ -122,6 +130,7 @@ export default class Tabs extends Component {
             );
           })}
         </div>
+        { this.props.navAtBottom && this.renderNav() }
       </div>
     );
   }
