@@ -1,14 +1,14 @@
 import React, { PropTypes, Component } from 'react';
-import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { goTo } from '../../helpers/router';
 import { formatDate } from '../../helpers/workflows';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
-import Calendar from './calendar';
 import { Controls, Control } from 'components/controls';
 import Dropdown, { Control as DropdownControl, Item as DropdownItem } from 'components/dropdown';
+import Input from './input';
+import Datepicker from './datepicker';
 
 export default class extends Component {
   static propTypes = {
@@ -26,13 +26,17 @@ export default class extends Component {
     this.setupDate(this.props);
   }
 
-  componentDidMount() {
-    this._el = ReactDOM.findDOMNode(this.refs.datepicker);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.props.date !== nextProps.date) {
       this.setupDate(nextProps);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.showDatepicker) {
+      document.addEventListener('mousedown', this.handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', this.handleOutsideClick);
     }
   }
 
@@ -148,7 +152,7 @@ export default class extends Component {
     event.preventDefault();
     const date = this.state.inputDate;
 
-    if (moment(new Date(date)).isValid()) {
+    if (moment(date).isValid()) {
       this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
     }
   };
@@ -157,87 +161,34 @@ export default class extends Component {
     if (!this.state.showDatepicker) return null;
 
     return (
-      <div className="datepicker" ref="datepicker">
-        <Calendar
-          date={this.state.date}
-          setDate={this.setDate}
-          activeDate={this.state.activeDate}
-          setActiveDate={this.setActiveDate}
-        />
-        <div className="hours row-fluid">
-          <div className="input-group">
-            <div className="input-group-addon">
-              <i className="fa fa-clock-o" />
-            </div>
-            <input
-              type="number"
-              name="hours"
-              max="23"
-              min="0"
-              value={this.state.hours}
-              onChange={this.handleHoursChange}
-              className="text-center form-control"
-            />
-            <div className="input-group-addon">:</div>
-            <input
-              type="number"
-              name="minutes"
-              max="59"
-              min="0"
-              value={this.state.minutes}
-              onChange={this.handleMinutesChange}
-              className="text-center form-control"
-            />
-            <div className="input-group-btn">
-              <Control
-                icon="times"
-                btnStyle="danger"
-                big
-                action={this.handleResetClick}
-              />
-            </div>
-          </div>
-        </div>
-        <Controls grouped noControls>
-          <Control
-            label="24h"
-            btnStyle="default"
-            big
-            action={this.handle24hClick}
-          />
-          <Control
-            label="All"
-            btnStyle="default"
-            big
-            action={this.handleAllClick}
-          />
-        </Controls>
-        <button
-          className="btn btn-primary pull-right"
-          onClick={this.handleApplyClick}
-        >Apply
-        </button>
-      </div>
+      <Datepicker
+        date={this.state.date}
+        activeDate={this.state.activeDate}
+        setDate={this.setDate}
+        setActiveDate={this.setActiveDate}
+        minutes={this.state.minutes}
+        hours={this.state.hours}
+        onAllClick={this.handleAllClick}
+        on24hClick={this.handle24hClick}
+        onApplyClick={this.handleApplyClick}
+        onNowClick={this.handleNowClick}
+        onResetClick={this.handleResetClick}
+        onMinutesChange={this.handleMinutesChange}
+        onHoursChange={this.handleHoursChange}
+        hideDatepicker={this.hideDatepicker}
+      />
     );
   }
 
   render() {
     return (
       <div className="input-group">
-        <form onSubmit={this.handleFormSubmit} className="datepicker-group">
-          <div className="input-group">
-            <span className="input-group-addon">
-              <i className="fa fa-calendar" />
-            </span>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.inputDate}
-              onChange={this.handleInputChange}
-              onFocus={this.toggleDatepicker}
-            />
-          </div>
-        </form>
+        <Input
+          onFormSubmit={this.handleFormSubmit}
+          onInputChange={this.handleInputChange}
+          inputDate={this.state.inputDate}
+          onInputFocus={this.toggleDatepicker}
+        />
         <Controls grouped noControls>
           <Control
             label="All"
