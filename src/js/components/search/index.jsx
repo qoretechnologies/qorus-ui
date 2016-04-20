@@ -47,7 +47,7 @@ export default class extends Component {
 
   render() {
     return (
-      <div className="input-group col-lg-3 pull-right">
+      <div className="input-group col-lg-2 pull-right">
         <input
           type="text"
           className="form-control"
