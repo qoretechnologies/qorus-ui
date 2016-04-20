@@ -1,7 +1,7 @@
 import UrlPattern from 'url-pattern';
 import qs from 'qs';
 import { pickBy } from 'lodash';
-import { WORKFLOW_FILTERS } from 'constants/filters';
+import { WORKFLOW_FILTERS } from '../constants/filters';
 
 const routes = {
   workflows: {
