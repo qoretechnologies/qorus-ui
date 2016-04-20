@@ -54,3 +54,10 @@ html, body, .app, .app__wrap {
     margin-left: 0;
   }
 }
+
+/**
+ * Resets the height of form-control elements to 33px to match the buttons height
+ */
+.form-control {
+  height: 33px;
+}
