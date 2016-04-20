@@ -1,10 +1,18 @@
+.datepicker-group {
+  display: inline;
+
+  .input-group {
+    width: auto;
+  }
+}
+
 .datepicker {
   color: #000;
   position: absolute;
   background-color: #fff;
   border-radius: 5px;
   border: 1px solid #eee;
-  box-shadow: 0 0 5px rgba(0,0,0,.5);
+  box-shadow: 0 0 3px rgba(0,0,0,.5);
   z-index: 1051;
   padding: 10px;
   top: 40px;

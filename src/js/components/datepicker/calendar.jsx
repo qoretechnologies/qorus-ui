@@ -107,8 +107,6 @@ export default class extends Component {
   };
 
   render() {
-    console.log(this.props.date);
-    
     return (
       <table className="table table-condensed">
         <thead>
