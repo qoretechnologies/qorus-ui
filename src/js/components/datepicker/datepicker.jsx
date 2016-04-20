@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import Calendar from './calendar';
-import { Controls, Control } from 'components/controls';
+import { Controls, Control } from '../controls';
 
 export default class extends Component {
   static propTypes = {

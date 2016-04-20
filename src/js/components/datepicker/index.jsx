@@ -5,8 +5,8 @@ import { formatDate } from '../../helpers/workflows';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
-import { Controls, Control } from 'components/controls';
-import Dropdown, { Control as DropdownControl, Item as DropdownItem } from 'components/dropdown';
+import { Controls, Control } from '../controls';
+import Dropdown, { Control as DropdownControl, Item as DropdownItem } from '../dropdown';
 import Input from './input';
 import Datepicker from './datepicker';
 
