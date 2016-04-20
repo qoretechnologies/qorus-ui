@@ -119,19 +119,19 @@ export default class MethodsTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="narrow">
+      <Cell tag="th" className="narrow" title="Locktype">
         <i className="fa fa-lock" />
       </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">
+      <Cell tag="th" className="narrow" title="System">
         <i className="fa fa-cog" />
       </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">
+      <Cell tag="th" className="narrow" title="Write">
         <i className="fa fa-pencil" />
       </Cell>
     );
@@ -155,21 +155,21 @@ export default class MethodsTable extends Component {
 
     yield (
       <Cell tag="td" className="narrow">
-        {(model.lock !== 'none') && <i className="fa fa-ok text-success" />}
-        {!(model.lock === 'none') && <i className="fa fa-minus-circle text-danger" />}
+        {(model.locktype !== 'none') && <i className="fa fa-check-circle text-success" />}
+        {(model.locktype === 'none') && <i className="fa fa-minus-circle text-danger" />}
       </Cell>
     );
 
     yield (
       <Cell tag="td" className="narrow">
-        {model.internal && <i className="fa fa-ok text-success" />}
+        {model.internal && <i className="fa fa-check-circle text-success" />}
         {!model.internal && <i className="fa fa-minus-circle text-danger" />}
       </Cell>
     );
 
     yield (
       <Cell tag="td" className="narrow">
-        {model.write && <i className="fa fa-ok text-success" />}
+        {model.write && <i className="fa fa-check-circle text-success" />}
         {!model.write && <i className="fa fa-minus-circle text-danger" />}
       </Cell>
     );
