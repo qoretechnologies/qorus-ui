@@ -22,6 +22,7 @@ module.exports = () => {
   router.use('/workflows', require('./workflows')());
   router.use('/steps', require('./steps')());
   router.use('/services', require('./services')());
+  router.use('/jobs', require('./jobs')());
 
   return router;
 };

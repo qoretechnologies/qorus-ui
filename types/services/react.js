@@ -1,5 +1,5 @@
 /**
- * @module types/workflows/react
+ * @module types/services/react
  */
 
 
@@ -8,13 +8,7 @@ const React = require('react');
 const Option = require('../options/react');
 const Mapper = require('../mappers/react');
 const Method = require('../methods/react');
-
-const Group = React.PropTypes.shape({
-  name: React.PropTypes.string.isRequired,
-  enabled: React.PropTypes.bool.isRequired,
-  size: React.PropTypes.number.isRequired,
-});
-
+const Group = require('../groups/react');
 
 const Service = React.PropTypes.shape({
   serviceid: React.PropTypes.number.isRequired,
