@@ -2,7 +2,7 @@
 
 
 /**
- * @module api/services
+ * @module api/jobs
  */
 
 
@@ -15,7 +15,7 @@ module.exports = () => {
   const data = require('./data')();
 
   const router = new express.Router();
-  router.use(rest(data, (id, s) => s.serviceid === parseInt(id, 10)));
+  router.use(rest(data, (id, s) => s.jobid === parseInt(id, 10)));
 
   return router;
 };

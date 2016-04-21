@@ -7,5 +7,5 @@
  *   name: string,
  *   enabled: boolean,
  *   size: number,
- * }} WorkflowGroup
+ * }} Group
  */
