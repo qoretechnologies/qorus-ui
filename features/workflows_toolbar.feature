@@ -6,6 +6,13 @@ Feature: Workflow Toolbar
     When I click the dropdown toggle
     Then the dropdown should be shown
 
+  Scenario: Dropdown is hidden on click outside
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    And I click the dropdown toggle
+    When I click on the header
+    Then the dropdown should be hidden
+
   Scenario: Dropdown checkbox is unchecked by default
     Given I am on "workflows" listing
     When "workflows" get loaded
