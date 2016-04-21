@@ -13,8 +13,8 @@ const getDate = (type) => {
 };
 
 module.exports = function workflowDatepickerSteps() {
-  this.When(/^I focus the datepicker input$/, async function() {
-    return this.browser.focus('.datepicker-group input');
+  this.When(/^I click the datepicker input$/, async function() {
+    return this.browser.click('.datepicker-group input');
   });
 
   this.Then(/^the datepicker is shown$/, async function() {
@@ -22,7 +22,8 @@ module.exports = function workflowDatepickerSteps() {
   });
 
   this.Given(/^datepicker is opened$/, async function() {
-    await this.browser.focus('.datepicker-group input');
+    await this.waitForElement('.datepicker-group');
+    this.browser.click('.datepicker-group input');
     this.browser.assert.element('.datepicker');
   });
 
@@ -35,15 +36,29 @@ module.exports = function workflowDatepickerSteps() {
   });
 
   this.Then(/^the month should change to "([^"]*)"$/, async function(month) {
-    let el;
+    const el = findElementByText(this.browser, 'th', getDate(month));
 
-    if (month === 'next') {
-      el = findElementByText(this.browser, 'th', getDate('next'));
-    } else {
-      el = findElementByText(this.browser, 'th', getDate('prev'));
-    }
+    this.browser.assert.element(el);
+  });
 
-    console.log(el);
+  this.When(/^I click on the header$/, async function() {
+    this.browser.click('.navbar-header');
+  });
+
+  this.Then(/^the datepicker is hidden$/, async function() {
+    this.browser.assert.elements('.datepicker', 0);
+  });
+
+  this.Then(/^today should be highlighted$/, async function() {
+    const date = new Date();
+    const el = findElementByText(this.browser, '.today', date.getDate().toString());
+
+    this.browser.assert.element(el);
+  });
+
+  this.Then(/^yesterday should be selected$/, async function() {
+    const date = new Date();
+    const el = findElementByText(this.browser, '.active', (date.getDate() - 1).toString());
 
     this.browser.assert.element(el);
   });
