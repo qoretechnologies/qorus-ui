@@ -21,7 +21,7 @@ const chunk = (array, unit) => {
 
 export default class extends Component {
   static propTypes = {
-    date: PropTypes.object,
+    date: PropTypes.object.isRequired,
     setDate: PropTypes.func,
     activeDate: PropTypes.object,
     setActiveDate: PropTypes.func,
@@ -110,30 +110,30 @@ export default class extends Component {
     return (
       <table className="table table-condensed">
         <thead>
-        <tr>
-          <th
-            className="month"
-            onClick={ this.prevMonth }
-          >
-            <i className="fa fa-angle-left"></i>
-          </th>
-          <th colSpan="5">{ this.renderYearAndMonth() }</th>
-          <th
-            className="month"
-            onClick={ this.nextMonth }
-          >
-            <i className="fa fa-angle-right"></i>
-          </th>
-        </tr>
-        <tr>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-          <th>Sat</th>
-          <th>Sun</th>
-        </tr>
+          <tr>
+            <th
+              className="month"
+              onClick={ this.prevMonth }
+            >
+              <i className="fa fa-angle-left"></i>
+            </th>
+            <th colSpan="5">{ this.renderYearAndMonth() }</th>
+            <th
+              className="month"
+              onClick={ this.nextMonth }
+            >
+              <i className="fa fa-angle-right"></i>
+            </th>
+          </tr>
+          <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
         </thead>
         <tbody>
           { this.renderRows() }
