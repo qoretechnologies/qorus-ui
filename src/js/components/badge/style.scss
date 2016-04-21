@@ -18,4 +18,25 @@
     color: $text-muted;
     background-color: $state-info-bg;
   }
+
+  &--crashed {
+    color: $text-muted;
+    background-color: $state-danger-bg;
+  }
+
+  &--complete {
+    color: $text-muted;
+    background-color: $state-success-bg;
+  }
+
+  &--progress {
+    color: $text-muted;
+    background-color: $state-warning-bg;
+  }
+
+  &--error {
+    color: $text-muted;
+    background-color: $state-danger-bg;
+  }
+
 }

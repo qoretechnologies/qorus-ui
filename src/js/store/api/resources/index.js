@@ -63,4 +63,14 @@ export default [
       extendDefaults(servicesDefaults)
     ),
   },
+  {
+    name: 'jobs',
+    url: `${settings.REST_BASE_URL}/jobs`,
+    transform: _.flowRight(
+      normalizeName,
+      normalizeId('jobid'),
+      checkAlerts,
+      // extendDefaults(servicesDefaults)
+    ),
+  },
 ];
