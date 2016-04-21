@@ -38,6 +38,7 @@ export default class extends Component {
     const el = ReactDOM.findDOMNode(this.refs.datepicker);
 
     if (!el.contains(event.target)) {
+      this.props.onResetClick();
       this.props.hideDatepicker();
     }
   };
