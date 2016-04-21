@@ -91,16 +91,15 @@ export default class extends Component {
     const weeks = chunk(this.getDaysOfMonth(), 7);
 
     return weeks.reduce((wks, week, key) => {
-      const days = week.reduce((ds, day, idx) => {
-        return [...ds,
+      const days = week.reduce((ds, day, idx) => ([...ds,
           <td
             className={day.css}
             key={idx}
             onClick={() => this.setActiveDate(day.date)}
           >
             { day.day }
-          </td>];
-      }, []);
+          </td>]),
+        []);
 
       return [...wks, <tr key={key}>{ days }</tr>];
     }, []);
