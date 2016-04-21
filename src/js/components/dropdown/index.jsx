@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import Item from './item';
 import Control from './control';
 import classNames from 'classnames';
@@ -16,6 +17,24 @@ export default class extends Component {
       showDropdown: false,
     });
   }
+
+  componentDidUpdate() {
+    document.removeEventListener('click', this.handleOutsideClick);
+
+    if (this.state.showDropdown) {
+      document.addEventListener('click', this.handleOutsideClick);
+    }
+  }
+
+  handleOutsideClick = (event) => {
+    const el = ReactDOM.findDOMNode(this.refs.dropdown);
+
+    if (!el.contains(event.target)) {
+      this.setState({
+        showDropdown: false,
+      });
+    }
+  };
 
   /**
    * Displays / hides the control dropdown
@@ -50,6 +69,7 @@ export default class extends Component {
         <ul
           className={classNames('dropdown-menu', 'above', 'show')}
           id={`${this.props.id}-dropdown`}
+          ref="dropdown"
         >
           { this.renderDropdownList() }
         </ul>
