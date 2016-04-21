@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import Calendar from './calendar';
 import { Controls, Control } from '../controls';
 
 export default class extends Component {
@@ -24,14 +23,15 @@ export default class extends Component {
     onMinutesChange: PropTypes.func,
     onHoursChange: PropTypes.func,
     hideDatepicker: PropTypes.func,
+    children: PropTypes.node,
   };
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleOutsideClick);
+    document.addEventListener('click', this.handleOutsideClick);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleOutsideClick);
+    document.removeEventListener('click', this.handleOutsideClick);
   }
 
   handleOutsideClick = (event) => {
@@ -46,16 +46,11 @@ export default class extends Component {
   render() {
     return (
       <div className="datepicker" ref="datepicker">
-        <Calendar
-          date={this.props.date}
-          setDate={this.props.setDate}
-          activeDate={this.props.activeDate}
-          setActiveDate={this.props.setActiveDate}
-        />
+        { this.props.children }
         <div className="hours row-fluid">
           <div className="input-group">
             <div className="input-group-addon">
-              <i className="fa fa-clock-o"/>
+              <i className="fa fa-clock-o" />
             </div>
             <input
               type="number"
