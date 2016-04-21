@@ -12,7 +12,7 @@ export default function Input(props) {
           className="form-control"
           value={props.inputDate}
           onChange={props.onInputChange}
-          onFocus={props.onInputFocus}
+          onClick={props.onInputClick}
         />
       </div>
     </form>
@@ -23,5 +23,5 @@ Input.propTypes = {
   onFormSubmit: PropTypes.func,
   inputDate: PropTypes.string,
   onInputChange: PropTypes.func,
-  onInputFocus: PropTypes.func,
+  onInputClick: PropTypes.func,
 };

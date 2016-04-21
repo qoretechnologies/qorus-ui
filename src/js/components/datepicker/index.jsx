@@ -8,7 +8,8 @@ import { DATES, DATE_FORMATS } from '../../constants/dates';
 import { Controls, Control } from '../controls';
 import Dropdown, { Control as DropdownControl, Item as DropdownItem } from '../dropdown';
 import Input from './input';
-import Datepicker from './datepicker';
+import Picker from './picker';
+import Calendar from './calendar';
 
 export default class extends Component {
   static propTypes = {
@@ -73,9 +74,9 @@ export default class extends Component {
     );
   };
 
-  toggleDatepicker = () => {
+  showDatepicker = () => {
     this.setState({
-      showDatepicker: !this.state.showDatepicker,
+      showDatepicker: true,
     });
   };
 
@@ -153,22 +154,24 @@ export default class extends Component {
     if (!this.state.showDatepicker) return null;
 
     return (
-      <Datepicker
-        date={this.state.date}
-        activeDate={this.state.activeDate}
-        setDate={this.setDate}
-        setActiveDate={this.setActiveDate}
+      <Picker
         minutes={this.state.minutes}
         hours={this.state.hours}
         onAllClick={this.handleAllClick}
         on24hClick={this.handle24hClick}
         onApplyClick={this.handleApplyClick}
-        onNowClick={this.handleNowClick}
         onResetClick={this.handleResetClick}
         onMinutesChange={this.handleMinutesChange}
         onHoursChange={this.handleHoursChange}
         hideDatepicker={this.hideDatepicker}
-      />
+      >
+        <Calendar
+          date={this.state.date}
+          setDate={this.setDate}
+          activeDate={this.state.activeDate}
+          setActiveDate={this.setActiveDate}
+        />
+      </Picker>
     );
   }
 
@@ -179,7 +182,7 @@ export default class extends Component {
           onFormSubmit={this.handleFormSubmit}
           onInputChange={this.handleInputChange}
           inputDate={this.state.inputDate}
-          onInputFocus={this.toggleDatepicker}
+          onInputClick={this.showDatepicker}
         />
         <Controls grouped noControls>
           <Control
