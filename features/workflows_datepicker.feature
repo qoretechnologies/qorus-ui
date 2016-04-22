@@ -29,7 +29,7 @@ Feature: Workflow Datepicker
     And datepicker is opened
     Then today should be highlighted
 
-  Scenario: Yesterday day is selected when opening calendar
+  Scenario: Yesterday is selected when opening calendar
     Given I am on "workflows" listing
     And datepicker is opened
     Then yesterday should be selected
