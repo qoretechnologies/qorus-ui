@@ -162,6 +162,7 @@ export default class Workflows extends Component {
       filterFn: null,
       selected: 'none',
       filteredWorkflows: [],
+      selectedWorkflows: {},
     });
   }
 
@@ -172,6 +173,10 @@ export default class Workflows extends Component {
   componentWillReceiveProps(next) {
     if (this.props.params.filter !== next.params.filter) {
       this.handleFilterClick(null);
+
+      if (includes(filterArray(next.params.filter), WORKFLOW_FILTERS.DEPRECATED)) {
+        this.props.dispatch(actions.workflows.fetch({ deprecated: true }));
+      }
     }
   }
 
@@ -188,6 +193,12 @@ export default class Workflows extends Component {
 
     return this.props.workflows.find(this.isActive);
   }
+
+  setSelectedWorkflows = (selectedWorkflows) => {
+    this.setState({
+      selectedWorkflows,
+    });
+  };
 
   isActive = (workflow) => workflow.id === parseInt(this.props.params.detailId, 10);
 
@@ -277,6 +288,27 @@ export default class Workflows extends Component {
   };
 
   /**
+   * Handles the batch action calls like
+   * enabling, disabling, reseting etc
+   * of multiple workflows
+   *
+   * @param {String} type
+   */
+  handleBatchAction = (type) => {
+    const selectedWorkflows = Object.keys(this.state.selectedWorkflows).map(w => {
+      if (this.state.selectedWorkflows[w]) {
+        return w;
+      }
+
+      return null;
+    });
+
+    this.props.dispatch(
+      actions.workflows[`${type}Batch`](selectedWorkflows)
+    );
+  };
+
+  /**
    * Applies the current filter to the URL
    *
    * @param {Array} filter
@@ -329,12 +361,15 @@ export default class Workflows extends Component {
           selected={this.state.selected}
           defaultSearchValue={this.props.location.query.q}
           params={this.props.params}
+          batchAction={this.handleBatchAction}
         />
         <WorkflowsTable
           initialFilter={this.state.filterFn}
           onWorkflowFilterChange={this.handleWorkflowFilterChange}
           workflows={this.props.workflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
+          setSelectedWorkflows={this.setSelectedWorkflows}
+          selectedWorkflows={this.state.selectedWorkflows}
         />
         {this.renderPane()}
       </div>

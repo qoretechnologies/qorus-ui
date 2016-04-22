@@ -27,13 +27,19 @@ export const DEFAULT_ACTIONS = {
     ),
     meta: (params, id) => ({ params, id }),
   },
+  BATCH_ACTION: {
+    action: url => (action, ids) => fetchJson(
+      'PUT',
+      `${url}?action=${action};ids=${ids}`,
+    ),
+    meta: (action, ids, params) => ({ action, ids, params }),
+  },
   UPDATE: url => (params, id) => fetchJson(
     'POST',
     id ? `${url}/${id}` : url,
     params
   ),
 };
-
 
 const actions = createApiActions(
   combineResourceActions(
@@ -45,10 +51,10 @@ const actions = createApiActions(
   )
 );
 
-
 Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
 });
+
 Object.assign(actions.workflows, workflowActions.specials);
 
 Object.assign(actions.steps, stepActions);

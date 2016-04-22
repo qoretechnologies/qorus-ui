@@ -52,3 +52,21 @@ export function reset(actions) {
     }, workflow.id));
   };
 }
+
+export function enableBatch(actions) {
+  return (ids) => dispatch => {
+    dispatch(actions.workflows.batch_action('enable', ids.join(','), { enabled: true }));
+  };
+}
+
+export function disableBatch(actions) {
+  return (ids) => dispatch => {
+    dispatch(actions.workflows.batch_action('disable', ids.join(','), { enabled: false }));
+  };
+}
+
+export function resetBatch(actions) {
+  return (ids) => dispatch => {
+    dispatch(actions.workflows.batch_action('reset', ids.join(',')));
+  };
+}

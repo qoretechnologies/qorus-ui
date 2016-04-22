@@ -25,6 +25,7 @@ export default class WorkflowsToolbar extends Component {
     params: PropTypes.object,
     defaultSearchValue: PropTypes.string,
     onSearchUpdate: PropTypes.func,
+    batchAction: PropTypes.func,
   };
 
   /**
@@ -82,6 +83,27 @@ export default class WorkflowsToolbar extends Component {
   handleDisplayDeprecatedClick = () => this.props.onDeprecatedClick();
 
   /**
+   * Handles enabling multiple workflows
+   */
+  handleEnableClick = () => {
+    this.props.batchAction('enable');
+  };
+
+  /**
+   * Handles disabling multiple workflows
+   */
+  handleDisableClick = () => {
+    this.props.batchAction('disable');
+  };
+
+  /**
+   * Handles reseting multiple workflows
+   */
+  handleResetClick = () => {
+    this.props.batchAction('reset');
+  };
+
+  /**
    * Renders the selection dropdown to the component
    */
   renderSelectionControls() {
@@ -93,27 +115,30 @@ export default class WorkflowsToolbar extends Component {
             icon="power-off"
             big
             btnStyle="default"
+            action={this.handleEnableClick}
           />
           <Button
             label="Disable"
             icon="ban"
             big
             btnStyle="default"
+            action={this.handleDisableClick}
           />
           <Button
             label="Reset"
             icon="refresh"
             big
             btnStyle="default"
+            action={this.handleResetClick}
           />
           <Dropdown id="hidden">
             <DropdownControl />
             <DropdownItem
-              title="Hide"
+              title="Set deprecated"
               icon="flag"
             />
             <DropdownItem
-              title="Show"
+              title="Unset deprecated"
               icon="flag-o"
             />
           </Dropdown>
