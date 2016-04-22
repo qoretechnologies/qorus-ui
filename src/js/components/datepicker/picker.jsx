@@ -48,7 +48,7 @@ export default class extends Component {
       <div className="datepicker" ref="datepicker">
         { this.props.children }
         <div className="hours row-fluid">
-          <div className="input-group">
+          <div className="input-group input-group-sm">
             <div className="input-group-addon">
               <i className="fa fa-clock-o" />
             </div>
@@ -75,7 +75,6 @@ export default class extends Component {
               <Control
                 icon="times"
                 btnStyle="danger"
-                big
                 action={this.props.onResetClick}
               />
             </div>
@@ -85,18 +84,16 @@ export default class extends Component {
           <Control
             label="24h"
             btnStyle="default"
-            big
             action={this.props.on24hClick}
           />
           <Control
             label="All"
             btnStyle="default"
-            big
             action={this.props.onAllClick}
           />
         </Controls>
         <button
-          className="btn btn-primary pull-right"
+          className="btn btn-primary btn-xs pull-right"
           onClick={this.props.onApplyClick}
         >Apply
         </button>
