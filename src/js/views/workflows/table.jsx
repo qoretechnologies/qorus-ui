@@ -26,6 +26,8 @@ export default class WorkflowsTable extends Component {
     activeWorkflowId: PropTypes.number,
     initialFilter: PropTypes.func,
     onWorkflowFilterChange: PropTypes.func,
+    setSelectedWorkflows: PropTypes.func,
+    selectedWorkflows: PropTypes.object,
   };
 
   static contextTypes = {
@@ -48,10 +50,6 @@ export default class WorkflowsTable extends Component {
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
     this.renderHeadings = ::this.renderHeadings;
-
-    this.setState({
-      selectedWorkflows: {},
-    });
   }
 
   componentWillReceiveProps(next) {
@@ -69,7 +67,7 @@ export default class WorkflowsTable extends Component {
   setupFilters(props) {
     const selectedWorkflows = props.initialFilter ?
       props.workflows.reduce((sel, w) => (
-        Object.assign(sel, { [w.id]: props.initialFilter(w, this.state.selectedWorkflows) })
+        Object.assign(sel, { [w.id]: props.initialFilter(w, this.props.selectedWorkflows) })
       ), {}) :
     {};
 
@@ -91,9 +89,7 @@ export default class WorkflowsTable extends Component {
       this.props.onWorkflowFilterChange('none');
     }
 
-    this.setState({
-      selectedWorkflows,
-    });
+    this.props.setSelectedWorkflows(selectedWorkflows);
   }
 
   /**
@@ -163,8 +159,8 @@ export default class WorkflowsTable extends Component {
   handleCheckboxClick = (ev) => {
     const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
     const selectedWorkflows = Object.assign({},
-      this.state.selectedWorkflows,
-      { [workflow.id]: !this.state.selectedWorkflows[workflow.id] }
+      this.props.selectedWorkflows,
+      { [workflow.id]: !this.props.selectedWorkflows[workflow.id] }
     );
 
     this.setSelectedWorkflows(selectedWorkflows);
@@ -357,7 +353,7 @@ export default class WorkflowsTable extends Component {
         data={{
           activeId: this.props.activeWorkflowId,
           workflows: this.props.workflows,
-          selectedWorkflows: this.state.selectedWorkflows,
+          selectedWorkflows: this.props.selectedWorkflows,
         }}
         sections={this._renderSections}
         className={'table table-striped table-condensed table-hover ' +
