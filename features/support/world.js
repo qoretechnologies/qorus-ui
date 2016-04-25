@@ -146,6 +146,26 @@ class World {
     });
   }
 
+  /**
+   * Waits for URL to change or 4 seconds to pass.
+   *
+   * @return {Promise}
+   */
+  waitForURLChange() {
+    const url = this.browser.window.location.href;
+    let limit = 1;
+
+    return new Promise(resolve => {
+      const int = setInterval(() => {
+        if (this.browser.window.location.href !== url || limit === 4) {
+          clearInterval(int);
+          resolve();
+        }
+
+        limit = limit + 1;
+      }, 4000);
+    });
+  }
 
   /**
    * Waits for element to appear.
@@ -156,7 +176,7 @@ class World {
    * @param {string|!Element} selector
    * @param {(!Element|!Document)=} context
    * @param {number=} limit timeout in milliseconds (default: 5000)
-   * @param {number=} ckecks number of tries (default: 10)
+   * @param {number=} checks number of tries (default: 10)
    * @return {Promise}
    */
   waitForElement(
