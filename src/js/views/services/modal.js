@@ -38,7 +38,8 @@ define(function (require) {
       var url = [settings.REST_API_PREFIX, 'services', service_name, method].join('/');
 
       $.put(url, { action: 'call', parse_args: args })
-        .always(this.updateResponse);
+        .done(this.updateResponse)
+        .fail(this.updateErrorResponse);
     },
 
     updateResponse: function (response) {
@@ -47,6 +48,15 @@ define(function (require) {
       }
       this.$('#response-json', this.$el).text(response);
       this.$('#response-yaml', this.$el).text(yaml.dump(arguments[2].responseJSON));
+      // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
+    },
+
+    updateErrorResponse: function (response) {
+      if (_.isObject(response)) {
+        response = JSON.stringify(response, null, 4);
+      }
+      this.$('#response-json', this.$el).text(response.responseJSON);
+      this.$('#response-yaml', this.$el).text(yaml.dump(response.responseJSON));
       // console.log(console.log(yaml.safeDump(arguments[2].responseJSON)));
     },
 
