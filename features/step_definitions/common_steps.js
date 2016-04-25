@@ -39,6 +39,9 @@ function findTableRowId(browser, name) {
 const findElementByText = (browser, selector, text) => browser.queryAll(selector)
   .find(el => el.textContent === text) || null;
 
+const findElementByValue = (browser, selector, text) => browser.queryAll(selector)
+  .find(el => el.value === text) || null;
+
 module.exports = function commonSteps() {
   this.When(/^I activate "([^"]*)" navigation item$/, function(name) {
     const link = this.browser.
@@ -167,3 +170,4 @@ module.exports.selectors = {
 module.exports.findTableRow = findTableRow;
 module.exports.findTableRowId = findTableRowId;
 module.exports.findElementByText = findElementByText;
+module.exports.findElementByValue = findElementByValue;
