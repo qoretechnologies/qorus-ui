@@ -3,7 +3,7 @@ import ServiceTable from '../services/table';
 
 import { Cell } from 'components/table';
 import Badge from 'components/badge';
-// import ServiceControls from './controls';
+import JobControls from './controls';
 
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
@@ -121,7 +121,7 @@ export default class JobsTable extends ServiceTable {
 
     yield (
       <Cell className="narrow">
-        Controls
+        <JobControls job={model} />
       </Cell>
     );
 
