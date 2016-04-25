@@ -1,10 +1,18 @@
 import React, { PropTypes } from 'react';
+import { Control } from '../controls';
 
 export default function Input(props) {
   return (
-    <form onSubmit={props.onFormSubmit} className="datepicker-group">
+    <form
+      onSubmit={props.onFormSubmit}
+      className="datepicker-group"
+      id="datepicker-form"
+    >
       <div className="input-group">
-        <span className="input-group-addon">
+        <span
+          className="input-group-addon"
+          onClick={props.onInputClick}
+        >
           <i className="fa fa-calendar" />
         </span>
         <input
@@ -15,6 +23,10 @@ export default function Input(props) {
           onClick={props.onInputClick}
         />
       </div>
+      <Control
+        type="submit"
+        css={{ display: 'none' }}
+      />
     </form>
   );
 }

@@ -68,7 +68,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children.props.children[1].props.onClick();
+      result.props.children[0].props.children[1].props.onClick();
       expect(action).to.have.been.called();
     });
 
@@ -80,19 +80,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children.props.children[1].props.onChange();
-      expect(action).to.have.been.called();
-    });
-
-    it('runs the provided change action', () => {
-      const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Input onInputChange={action} />
-      );
-      const result = renderer.getRenderOutput();
-
-      result.props.children.props.children[1].props.onChange();
+      result.props.children[0].props.children[1].props.onChange();
       expect(action).to.have.been.called();
     });
 
