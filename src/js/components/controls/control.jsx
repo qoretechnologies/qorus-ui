@@ -16,6 +16,8 @@ export default class Control extends Component {
     action: PropTypes.func,
     disabled: PropTypes.bool,
     big: PropTypes.bool,
+    type: PropTypes.string,
+    css: PropTypes.object,
   };
 
   /**
@@ -52,6 +54,8 @@ export default class Control extends Component {
         title={this.props.title}
         onClick={this.handleClick}
         disabled={this.props.disabled}
+        type={this.props.type}
+        style={this.props.css}
       >
         {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}

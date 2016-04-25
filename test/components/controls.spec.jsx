@@ -95,6 +95,26 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
       expect(el.disabled).to.be.true();
     });
+
+    it('sets the buttons type', () => {
+      const control = TestUtils.renderIntoDocument(
+        <Control type="submit" />
+      );
+
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
+
+      expect(el.type).to.equal('submit');
+    });
+
+    it('sets the buttons style', () => {
+      const control = TestUtils.renderIntoDocument(
+        <Control css={{ color: '#fff' }} />
+      );
+
+      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
+
+      expect(el.style.color).to.equal('rgb(255, 255, 255)');
+    });
   });
 
 
