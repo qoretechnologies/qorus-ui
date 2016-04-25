@@ -15,12 +15,12 @@ import Loader from 'components/loader';
 import Pane from 'components/pane';
 
 import JobsTable from './table';
-// import ServicesDetail from './detail';
+import Detail from './detail';
 
 const collectionSelector = state => state.api.jobs;
 
 const systemOptionsSelector = state => (
-  state.api.systemOptions.data.filter(opt => opt.service)
+  state.api.systemOptions.data.filter(opt => opt.job)
 );
 
 const viewSelector = createSelector(
@@ -110,7 +110,7 @@ export default class Jobs extends Component {
   getActiveRow() {
     if (!this.props.params.detailId) return null;
 
-    return this.props.services.find(::this.isActive);
+    return this.props.collection.find(::this.isActive);
   }
 
 
@@ -129,8 +129,8 @@ export default class Jobs extends Component {
         width={550}
         onClose={::this.onClosePane}
       >
-        <JobsDetail
-          service={this.getActiveRow()}
+        <Detail
+          model={this.getActiveRow()}
           systemOptions={systemOptions}
           tabId={params.tabId}
         />
@@ -149,10 +149,12 @@ export default class Jobs extends Component {
     return (
       <div>
         <JobsToolbar />
-        <JobsTable
-          collection={collection}
-          activeRowId={parseInt(this.props.params.detailId, 10)}
-        />
+        <div className="table--flex">
+          <JobsTable
+            collection={collection}
+            activeRowId={parseInt(this.props.params.detailId, 10)}
+          />
+        </div>
         {this.renderPane()}
       </div>
     );

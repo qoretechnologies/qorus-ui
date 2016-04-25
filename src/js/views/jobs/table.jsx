@@ -26,7 +26,7 @@ export default class JobsTable extends ServiceTable {
    * @param {Event} ev
    */
   activateRow(ev) {
-    if (ev.preventDefault) return;
+    if (ev.defaultPrevented) return;
 
     const model = this.findActivatedRow(ev.currentTarget);
     const shouldDeactivate =
