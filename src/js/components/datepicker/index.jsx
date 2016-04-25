@@ -143,7 +143,7 @@ export default class extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    const date = this.state.inputDate;
+    const date = new Date(this.state.inputDate);
 
     if (moment(date).isValid()) {
       this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
