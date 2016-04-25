@@ -1,4 +1,5 @@
-import { findElementByText } from './common_steps';
+import { findElementByText, findElementByValue } from './common_steps';
+import moment from 'moment';
 
 const getDate = (type) => {
   const months = [
@@ -61,5 +62,56 @@ module.exports = function workflowDatepickerSteps() {
     const el = findElementByText(this.browser, '.active', (date.getDate() - 1).toString());
 
     this.browser.assert.element(el);
+  });
+
+  this.Given(/^I change hours and minutes$/, async function() {
+    const date = moment();
+    this.hours = date.hours();
+    this.minutes = date.minutes();
+
+    this.browser.fill('.datepicker [name="hours"]', 0);
+    this.browser.fill('.datepicker [name="minutes"]', 0);
+  });
+
+  this.When(/^I click the reset button$/, async function() {
+    return this.browser.click('.hours .fa-times');
+  });
+
+  this.Then(/^hours and change should return to the default value$/, async function() {
+    const hours = findElementByValue(
+      this.browser, '.datepicker [name="hours"]', this.hours.toString()
+    );
+    const minutes = findElementByValue(
+      this.browser, '.datepicker [name="minutes"]', this.minutes.toString()
+    );
+
+    this.browser.assert.element(hours);
+    this.browser.assert.element(minutes);
+  });
+
+  this.When(/^I select today and click on Apply$/, async function() {
+    const el = findElementByText(this.browser, '.datepicker .btn-xs', 'Apply');
+    this.time = moment().format('HHmmss');
+
+    this.browser.click('.datepicker .today');
+    this.browser.click(el);
+  });
+
+  this.Then(/^the URL changes to today$/, async function() {
+    const date = moment().format('YYYYMMDD');
+    this.browser.assert.url({ pathname: `/workflows/${date}${this.time}/all` });
+  });
+
+  this.When(/^I change the input to "([^"]*)"$/, async function(date) {
+    this.browser.fill('.datepicker-group input[type="text"]', date);
+    this.browser.pressButton('.datepicker-group [type="submit"]');
+  });
+
+  this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
+    this.browser.assert.url({ pathname });
+  });
+
+  this.Then(/^the URL does not change$/, async function() {
+    this.browser.assert.url({ pathname: '/workflows' });
   });
 };
