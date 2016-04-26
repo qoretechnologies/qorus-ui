@@ -67,9 +67,33 @@ const formatDate = (date) => {
   }
 };
 
+/**
+ * Creates the object based on the
+ * filters in the URL that is sent to
+ * the FETCH redux action
+ *
+ * @param {String} filter
+ * @param {!String} date
+ * @return {Object}
+ */
+const getFetchParams = (filter, date = DATES.PREV_DAY) => {
+  const params = {};
+
+  if (includes(filterArray(filter), WORKFLOW_FILTERS.DEPRECATED)) {
+    params.deprecated = true;
+  }
+
+  if (date) {
+    params.date = formatDate(date).format();
+  }
+
+  return params;
+};
+
 export {
   filterArray,
   handleFilterChange,
   formatDate,
+  getFetchParams,
 };
 
