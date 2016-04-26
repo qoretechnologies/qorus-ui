@@ -20,7 +20,7 @@ import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 
 import { WORKFLOW_FILTERS } from '../../constants/filters';
-import { filterArray, handleFilterChange } from '../../helpers/workflows';
+import { filterArray, handleFilterChange, getFetchParams } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
 const sortWorkflows = (workflows) =>
@@ -156,8 +156,10 @@ export default class Workflows extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(actions.workflows.fetch());
+    const fetchParams = getFetchParams(this.props.params.filter, this.props.params.date);
 
+    this.props.dispatch(actions.workflows.fetch(fetchParams));
+    
     this.setState({
       filterFn: null,
       selected: 'none',
@@ -171,12 +173,12 @@ export default class Workflows extends Component {
   }
 
   componentWillReceiveProps(next) {
-    if (this.props.params.filter !== next.params.filter) {
-      this.handleFilterClick(null);
+    if (this.props.params.filter !== next.params.filter ||
+        this.props.params.date !== next.params.date) {
+      const fetchParams = getFetchParams(next.params.filter, next.params.date);
 
-      if (includes(filterArray(next.params.filter), WORKFLOW_FILTERS.DEPRECATED)) {
-        this.props.dispatch(actions.workflows.fetch({ deprecated: true }));
-      }
+      this.handleFilterClick(null);
+      this.props.dispatch(actions.workflows.fetch(fetchParams));
     }
   }
 
