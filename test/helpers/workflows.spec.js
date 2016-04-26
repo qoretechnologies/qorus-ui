@@ -1,5 +1,7 @@
 import { expect } from 'chai';
-import { filterArray, handleFilterChange } from '../../src/js/helpers/workflows';
+import { filterArray, handleFilterChange, getFetchParams } from '../../src/js/helpers/workflows';
+import { DATE_FORMATS } from '../../src/js/constants/dates';
+import moment from 'moment';
 
 describe("Workflow Helpers from 'helpers/worklfows'", () => {
   it('transforms filter string to an array', () => {
@@ -35,5 +37,17 @@ describe("Workflow Helpers from 'helpers/worklfows'", () => {
     expect(filter).to.be.an('array');
     expect(filter).to.have.length(1);
     expect(filter[0]).to.equal('hidden');
+  });
+
+  it('returns an object containing deprecated filter and a previous day date', () => {
+    const filterString = 'running,hidden';
+    const filter = getFetchParams(filterString);
+    const date = moment().add(-1, 'days').format();
+
+    expect(filter).to.be.an('object');
+    expect(Object.keys(filter)).to.have.length(2);
+    expect(filter.deprecated).to.equal(true);
+    expect(filter.date).to.be.a('string');
+    expect(filter.date).to.equal(date);
   });
 });
