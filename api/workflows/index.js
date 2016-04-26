@@ -41,5 +41,37 @@ module.exports = () => {
     res.json(item);
   });
 
+  /**
+   * Handles calling batch action
+   * such as enable, disable, reset
+   * etc
+   */
+  router.put('/', (req, res) => {
+    const action = req.query.action.split(';')[0];
+    const ids = req.query.action.substring(req.query.action.indexOf('ids=') + 4).split(',');
+    let result = [];
+
+    switch (action) {
+      case 'disable':
+        result = ids.map(id => {
+          const item = data.find(w => findWorkflow(id, w));
+          item.enabled = false;
+          return item;
+        });
+        break;
+      case 'enable':
+        result = ids.map(id => {
+          const item = data.find(w => findWorkflow(id, w));
+          item.enabled = true;
+          return item;
+        });
+        break;
+      default:
+        break;
+    }
+
+    res.json(result);
+  });
+
   return router;
 };
