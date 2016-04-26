@@ -37,7 +37,7 @@ export default class extends Component {
     this.hideDatepicker();
 
     const date = formatDate(props.date);
-    const inputDate = date.format('YYYY-MM-DD HH:mm:ss');
+    const inputDate = date.format(DATE_FORMATS.DISPLAY);
 
     this.setState({
       date,
