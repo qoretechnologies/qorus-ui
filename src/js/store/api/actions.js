@@ -12,13 +12,24 @@ import {
   fetchJson,
 } from './utils';
 
+import qs from 'qs';
+
 
 export const DEFAULT_ACTIONS = {
-  FETCH: url => params => fetchJson(
-    'GET',
-    url,
-    params
-  ),
+  FETCH: url => params => {
+    let newUrl = url;
+
+    if (params) {
+      const query = qs.stringify(params);
+      newUrl = `${url}?${query}`;
+    }
+
+    return fetchJson(
+      'GET',
+      newUrl,
+      params
+    );
+  },
   ACTION: {
     action: url => (params, id) => fetchJson(
       'PUT',
