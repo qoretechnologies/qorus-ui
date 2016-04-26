@@ -1,13 +1,11 @@
 'use strict';
 
-
 /**
  * @module api/rest
  */
 
-
 const express = require('express');
-
+const moment = require('moment');
 
 /**
  * Generates common rest handler for specific resource type.
@@ -19,7 +17,14 @@ const express = require('express');
 function rest(data, selector) {
   const router = new express.Router();
 
-  router.get('/', (req, res) => res.json(data));
+  router.get('/', (req, res) => {
+    const result = data.filter(w =>
+      !((!req.query.deprecated && w.deprecated) ||
+      (req.query.date && moment(w.created).isBefore(req.query.date)))
+    );
+
+    return res.json(result);
+  });
   router.get('/:id', (req, res) => {
     const item = data.find(selector.bind(null, req.params.id));
     res.status(item ? 200 : 404).json(item);
