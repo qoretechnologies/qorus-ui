@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { selectors, findTableRow, findTableRowId } from './common_steps';
+import { findElementByText, selectors, findTableRow, findTableRowId } from './common_steps';
 
 
 const wflwRowControls = 'td:nth-child(2) > .btn-controls > button.btn';
@@ -86,4 +86,11 @@ module.exports = function workflowSteps() {
   this.Then(/^I should see no workflow detail pane$/, function() {
     this.browser.assert.elements(selectors.pane, 0);
   });
+
+  this.Given(/^I select the "([^"]*)" workflow$/, async function(name) {
+    const el = findElementByText(this.browser, 'td', name).parentElement.children[0].children[0];
+
+    await this.browser.click(el);
+  });
+
 };
