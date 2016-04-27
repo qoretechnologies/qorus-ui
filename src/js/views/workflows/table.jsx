@@ -35,6 +35,7 @@ export default class WorkflowsTable extends Component {
     route: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   /**
@@ -147,7 +148,8 @@ export default class WorkflowsTable extends Component {
       'workflows',
       this.context.route.path,
       this.context.params,
-      change
+      change,
+      this.context.location.query
     );
   }
 

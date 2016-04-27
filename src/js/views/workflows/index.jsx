@@ -217,7 +217,8 @@ export default class Workflows extends Component {
       'workflows',
       this.props.route.path,
       this.props.params,
-      { detailId: null, tabId: null }
+      { filter: this.props.params.filter, detailId: null, tabId: null },
+      this.props.location.query
     );
   };
 
