@@ -55,18 +55,40 @@ export function reset(actions) {
 
 export function enableBatch(actions) {
   return ids => dispatch => {
-    dispatch(actions.workflows.batch_action('enable', ids.join(','), { enabled: true }));
+    dispatch(actions.workflows.batch_action('enable', ids.join(','), null, { enabled: true }));
   };
 }
 
 export function disableBatch(actions) {
   return ids => dispatch => {
-    dispatch(actions.workflows.batch_action('disable', ids.join(','), { enabled: false }));
+    dispatch(actions.workflows.batch_action('disable', ids.join(','), null, { enabled: false }));
   };
 }
 
 export function resetBatch(actions) {
   return ids => dispatch => {
     dispatch(actions.workflows.batch_action('reset', ids.join(',')));
+  };
+}
+
+export function setDeprecatedBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.workflows.batch_action(
+      'setDeprecated',
+      ids.join(','),
+      'deprecated=true',
+      { deprecated: true })
+    );
+  };
+}
+
+export function unsetDeprecatedBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.workflows.batch_action(
+      'setDeprecated',
+      ids.join(','),
+      'deprecated=false',
+      { deprecated: false })
+    );
   };
 }
