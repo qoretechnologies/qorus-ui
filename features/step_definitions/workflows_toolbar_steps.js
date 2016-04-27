@@ -57,20 +57,14 @@ module.exports = function workFlowControlSteps() {
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 
-  this.When(/^I click the Deprecated button$/, async function() {
-    this.browser.pressButton('#deprecated');
+  this.When(/^I click the "([^"]*)" button inside "([^"]*)" dropdown$/, async function(button, dropdown) {
+    this.browser.pressButton(`#${dropdown}`);
 
-    const el = findElementByText(this.browser, '#deprecated-dropdown span', 'Deprecated');
+    const el = findElementByText(this.browser, `#${dropdown}-dropdown span`, button);
 
     this.browser.click(el);
 
     await this.waitForChange(4000);
-  });
-
-  this.When(/^I click the "([^"]*)" button$/, async function(button) {
-    const el = findElementByText(this.browser, '.btn > span', ` ${button}`);
-
-    return this.browser.click(el.parentElement);
   });
 
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
@@ -79,7 +73,7 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.Then(/^"([^"]*)" workflows are shown$/, async function(workflows) {
-    this.browser.queryAll('tbody > tr').forEach(tr => console.log(tr.textContent));
+    await this.waitForChange(1000);
     this.browser.assert.elements('tbody > tr', parseInt(workflows));
   });
 };

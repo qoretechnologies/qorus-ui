@@ -87,7 +87,7 @@ Feature: Workflow Toolbar
   Scenario: Displaying deprecated workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
-    When I click the Deprecated button
+    When I click the "Deprecated" button inside "deprecated" dropdown
     Then "5" workflows are shown
 
   Scenario: Dropdown is hidden on toggle blur

@@ -90,6 +90,12 @@ module.exports = function commonSteps() {
     this.browser.click('.navbar-header');
   });
 
+  this.When(/^I click the "([^"]*)" button$/, async function(button) {
+    const el = findElementByText(this.browser, '.btn > span', ` ${button}`);
+
+    return this.browser.click(el.parentElement);
+  });
+
   this.When(/^I activate "([^"]*)"$/, async function(name) {
     await this.waitForElement(cmpTable);
 
