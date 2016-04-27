@@ -305,12 +305,12 @@ export default class Workflows extends Component {
    * @param {String} type
    */
   handleBatchAction = (type) => {
-    const selectedWorkflows = Object.keys(this.state.selectedWorkflows).map(w => {
-      if (this.state.selectedWorkflows[w]) {
-        return w;
-      }
+    const selectedWorkflows = [];
 
-      return null;
+    Object.keys(this.state.selectedWorkflows).forEach(w => {
+      if (this.state.selectedWorkflows[w]) {
+        selectedWorkflows.push(w);
+      }
     });
 
     this.clearSelection();
