@@ -62,6 +62,8 @@ const formatDate = (date) => {
     case DATES.PREV_DAY:
     case undefined:
       return moment().add(-1, 'days');
+    case DATES.TODAY:
+      return moment().startOf('day');
     default:
       return moment(date, DATE_FORMATS.URL_FORMAT);
   }

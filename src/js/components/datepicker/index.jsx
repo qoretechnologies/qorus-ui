@@ -135,6 +135,10 @@ export default class extends Component {
     this.applyDate(DATES.PREV_DAY);
   };
 
+  handleTodayClick = () => {
+    this.applyDate(DATES.TODAY);
+  };
+
   handleInputChange = (event) => {
     this.setState({
       inputDate: event.target.value,
@@ -196,6 +200,10 @@ export default class extends Component {
             <DropdownItem
               title="24H"
               action={this.handle24hClick}
+            />
+            <DropdownItem
+              title="Today"
+              action={this.handleTodayClick}
             />
             <DropdownItem
               title="Now"

@@ -2,6 +2,7 @@ const DATES = {
   ALL: 'all',
   NOW: 'now',
   PREV_DAY: '24h',
+  TODAY: 'today',
 };
 
 const DATE_FORMATS = {
