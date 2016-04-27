@@ -47,8 +47,8 @@ module.exports = () => {
    * etc
    */
   router.put('/', (req, res) => {
-    const action = req.query.action.split(';')[0];
-    const ids = req.query.action.substring(req.query.action.indexOf('ids=') + 4).split(',');
+    const action = req.query.action;
+    const ids = req.query.ids.split(',');
     let result = [];
 
     switch (action) {
@@ -63,6 +63,13 @@ module.exports = () => {
         result = ids.map(id => {
           const item = data.find(w => findWorkflow(id, w));
           item.enabled = true;
+          return item;
+        });
+        break;
+      case 'setDeprecated':
+        result = ids.map(id => {
+          const item = data.find(w => findWorkflow(id, w));
+          item.deprecated = req.query.deprecated === 'true';
           return item;
         });
         break;
