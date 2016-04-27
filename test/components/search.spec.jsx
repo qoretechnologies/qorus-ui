@@ -4,6 +4,7 @@ import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
 import Search from '../../src/js/components/search';
+import { Control } from '../../src/js/components/controls';
 
 describe("Search from 'components/search'", () => {
   before(() => {
@@ -18,10 +19,13 @@ describe("Search from 'components/search'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      expect(result.type).to.equal('div');
-      expect(result.props.children[0].type).to.equal('input');
-      expect(result.props.children[1].props.children.type).to.equal('i');
-      expect(result.props.children[1].props.children.props.className).to.equal('fa fa-search');
+      expect(result.type).to.equal('form');
+      expect(result.props.children[0].type).to.equal('div');
+      expect(result.props.children[1].type).to.equal(Control);
+      expect(result.props.children[0].props.children[0].type).to.equal('input');
+      expect(result.props.children[0].props.children[1].props.children.type).to.equal('i');
+      expect(result.props.children[0].props.children[1].props.children.props.className)
+        .to.equal('fa fa-search');
     });
 
     it('renders the input with a default value', () => {
@@ -33,7 +37,7 @@ describe("Search from 'components/search'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      expect(result.props.children[0].props.value).to.equal('Yolo');
+      expect(result.props.children[0].props.children[0].props.value).to.equal('Yolo');
     });
 
     it('runs the provided function when the input changes after 500ms', () => {
@@ -46,7 +50,7 @@ describe("Search from 'components/search'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children[0].props.onChange({
+      result.props.children[0].props.children[0].props.onChange({
         target: { value: 'Hello' },
         persist: () => true,
       });

@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 import { debounce } from 'lodash';
 
+import { Control } from '../controls';
+
 @pureRender
 export default class extends Component {
   static propTypes = {
@@ -12,7 +14,7 @@ export default class extends Component {
   componentWillMount() {
     this.delayedSearch = debounce((event) => {
       this.props.onSearchUpdate(event.target.value);
-    }, 500);
+    }, 280);
 
     this.setState({
       query: this.props.defaultValue,
@@ -45,19 +47,36 @@ export default class extends Component {
     this.delayedSearch(event);
   };
 
+  handleFormSubmit = (event) => {
+    event.preventDefault();
+
+    this.props.onSearchUpdate(this.state.query);
+  };
+
   render() {
     return (
-      <div className="input-group col-lg-2 pull-right">
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.handleInputChange}
-          value={this.state.query}
+      <form
+        onSubmit={this.handleFormSubmit}
+        id="search-form"
+      >
+        <div className="input-group col-lg-2 pull-right">
+          <input
+            ref="input"
+            type="text"
+            id="search"
+            className="form-control"
+            onChange={this.handleInputChange}
+            value={this.state.query}
+          />
+          <span className="input-group-addon">
+            <i className="fa fa-search" />
+          </span>
+        </div>
+        <Control
+          type="submit"
+          css={{ display: 'none' }}
         />
-        <span className="input-group-addon">
-          <i className="fa fa-search" />
-        </span>
-      </div>
+      </form>
     );
   }
 }

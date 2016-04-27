@@ -20,7 +20,7 @@ const workflows = [
   },
 ];
 
-describe("searchCollection from 'helpers/search'", () => {
+describe("findBy from 'helpers/search'", () => {
   it('returns workflows with "test" in name', () => {
     const filteredWorkflows = findBy('name', 'test', workflows);
 
