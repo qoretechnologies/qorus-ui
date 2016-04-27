@@ -58,25 +58,21 @@ Feature: Workflow Datepicker
     And "workflows" get loaded
     When I click the "All" button
     Then the URL changes to "/workflows/all/all"
-    And "5" workflows are shown
 
   Scenario: Setting date to Today from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Today" button inside "date-selection" dropdown
     Then the URL changes to "/workflows/today/all"
-    And "4" workflows are shown
 
   Scenario: Setting date to Now from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Now" button inside "date-selection" dropdown
     Then the URL changes to "/workflows/now/all"
-    And "4" workflows are shown
 
   Scenario: Setting date to Now from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "24H" button inside "date-selection" dropdown
     Then the URL changes to "/workflows/24h/all"
-    And "4" workflows are shown
