@@ -86,6 +86,9 @@ module.exports = function commonSteps() {
     this.browser.assert.elements(cmpTable, 0);
   });
 
+  this.When(/^I click on the header$/, async function() {
+    this.browser.click('.navbar-header');
+  });
 
   this.When(/^I activate "([^"]*)"$/, async function(name) {
     await this.waitForElement(cmpTable);
