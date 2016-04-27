@@ -41,12 +41,6 @@ Feature: Workflow Datepicker
     When I click the reset button
     Then hours and change should return to the default value
 
-  Scenario: Selecting date from datepicker
-    Given I am on "workflows" listing
-    And datepicker is opened
-    When I select today and click on Apply
-    Then the URL changes to today
-
   Scenario: Setting valid date manually from the input
     Given I am on "workflows" listing
     And datepicker is opened

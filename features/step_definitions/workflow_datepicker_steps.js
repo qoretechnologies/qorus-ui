@@ -42,10 +42,6 @@ module.exports = function workflowDatepickerSteps() {
     this.browser.assert.element(el);
   });
 
-  this.When(/^I click on the header$/, async function() {
-    this.browser.click('.navbar-header');
-  });
-
   this.Then(/^the datepicker is hidden$/, async function() {
     this.browser.assert.elements('.datepicker', 0);
   });
@@ -87,19 +83,6 @@ module.exports = function workflowDatepickerSteps() {
 
     this.browser.assert.element(hours);
     this.browser.assert.element(minutes);
-  });
-
-  this.When(/^I select today and click on Apply$/, async function() {
-    const el = findElementByText(this.browser, '.datepicker .btn-xs', 'Apply');
-    this.time = moment().format('HHmmss');
-
-    this.browser.click('.datepicker .today');
-    this.browser.click(el);
-  });
-
-  this.Then(/^the URL changes to today$/, async function() {
-    const date = moment().format('YYYYMMDD');
-    this.browser.assert.url({ pathname: `/workflows/${date}${this.time}/all` });
   });
 
   this.When(/^I change the input to "([^"]*)"$/, async function(date) {
