@@ -79,7 +79,7 @@ const formatDate = (date) => {
  * @return {Object}
  */
 const getFetchParams = (filter, date = DATES.PREV_DAY) => {
-  const params = {};
+  const params = { deprecated: false };
 
   if (includes(filterArray(filter), WORKFLOW_FILTERS.DEPRECATED)) {
     params.deprecated = true;
