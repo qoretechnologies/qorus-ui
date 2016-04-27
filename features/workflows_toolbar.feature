@@ -76,7 +76,7 @@ Feature: Workflow Toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Last version" button
-    Then "3" workflows are shown
+    Then "4" workflows are shown
 
   Scenario: Filtering workflows through search input
     Given I am on "workflows" listing
@@ -88,7 +88,7 @@ Feature: Workflow Toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Deprecated" button inside "deprecated" dropdown
-    Then "5" workflows are shown
+    Then "6" workflows are shown
 
   Scenario: Dropdown is hidden on toggle blur
     Given I am on "workflows" listing
