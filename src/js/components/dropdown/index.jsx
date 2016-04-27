@@ -29,7 +29,7 @@ export default class extends Component {
   handleOutsideClick = (event) => {
     const el = ReactDOM.findDOMNode(this.refs.dropdown);
 
-    if (!el.contains(event.target)) {
+    if (el && !el.contains(event.target)) {
       this.setState({
         showDropdown: false,
       });
