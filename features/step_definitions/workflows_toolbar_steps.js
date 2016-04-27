@@ -1,7 +1,8 @@
 import { findElementByText } from './common_steps';
 
 module.exports = function workFlowControlSteps() {
-  this.When(/^I click the dropdown toggle$/, function () {
+  this.When(/^I click the dropdown toggle$/, async function () {
+    await this.waitForElement('#selection');
     return this.browser.pressButton('#selection');
   });
 
@@ -57,11 +58,13 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.When(/^I click the Deprecated button$/, async function() {
-    this.browser.click('#deprecated');
+    this.browser.pressButton('#deprecated');
 
     const el = findElementByText(this.browser, '#deprecated-dropdown span', 'Deprecated');
 
-    return this.browser.click(el.parentElement);
+    this.browser.click(el);
+
+    await this.waitForChange(4000);
   });
 
   this.When(/^I click the "([^"]*)" button$/, async function(button) {
@@ -71,10 +74,12 @@ module.exports = function workFlowControlSteps() {
   });
 
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
-    return this.browser.fill('input[type="text"]', search);
+    this.browser.fill('#search', search);
+    this.browser.pressButton('#search-form [type="submit"]');
   });
 
   this.Then(/^"([^"]*)" workflows are shown$/, async function(workflows) {
-    this.browser.assert.elements('tbody > tr', workflows);
+    this.browser.queryAll('tbody > tr').forEach(tr => console.log(tr.textContent));
+    this.browser.assert.elements('tbody > tr', parseInt(workflows));
   });
 };

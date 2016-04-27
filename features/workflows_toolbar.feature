@@ -70,30 +70,28 @@ Feature: Workflow Toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Running" button
-    Then "3" workflows are shown
+    Then "2" workflows are shown
 
   Scenario: Filtering last version workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Last version" button
-    Then "4" workflows are shown
+    Then "3" workflows are shown
 
   Scenario: Filtering workflows through search input
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I type "array" in the search input
-    Then "3" workflows are shown
+    Then "1" workflows are shown
 
-  @no-impl
   Scenario: Displaying deprecated workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the Deprecated button
     Then "5" workflows are shown
 
-  @no-impl
   Scenario: Dropdown is hidden on toggle blur
     Given I am on "workflows" listing
     And I click the dropdown toggle
-    When I blur the dropdown toggle
+    When I click on the header
     Then the dropdown should be hidden
