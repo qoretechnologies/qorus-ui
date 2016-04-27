@@ -39,11 +39,11 @@ export const DEFAULT_ACTIONS = {
     meta: (params, id) => ({ params, id }),
   },
   BATCH_ACTION: {
-    action: url => (action, ids) => fetchJson(
+    action: url => (action, ids, query = '') => fetchJson(
       'PUT',
-      `${url}?action=${action};ids=${ids}`,
+      `${url}?action=${action}&ids=${ids}&${query}`,
     ),
-    meta: (action, ids, params) => ({ action, ids, params }),
+    meta: (action, ids, query, params) => ({ action, ids, query, params }),
   },
   UPDATE: url => (params, id) => fetchJson(
     'POST',
