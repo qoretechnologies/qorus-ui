@@ -104,6 +104,20 @@ export default class WorkflowsToolbar extends Component {
   };
 
   /**
+   * Handles hiding multiple workflows
+   */
+  handleSetDeprecatedClick = () => {
+    this.props.batchAction('setDeprecated');
+  };
+
+  /**
+   * Handles un-hiding multiple workflows
+   */
+  handleUnsetDeprecatedClick = () => {
+    this.props.batchAction('unsetDeprecated');
+  };
+
+  /**
    * Renders the selection dropdown to the component
    */
   renderSelectionControls() {
@@ -136,10 +150,12 @@ export default class WorkflowsToolbar extends Component {
             <DropdownItem
               title="Set deprecated"
               icon="flag"
+              action={this.handleSetDeprecatedClick}
             />
             <DropdownItem
               title="Unset deprecated"
               icon="flag-o"
+              action={this.handleUnsetDeprecatedClick}
             />
           </Dropdown>
         </Actions>
