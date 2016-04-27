@@ -46,6 +46,12 @@ const filterLastVersion = (filter) => (workflows) => {
   });
 };
 
+const filterDeprecated = (filter) => (workflows) => {
+  if (includes(filter, WORKFLOW_FILTERS.DEPRECATED)) return workflows;
+
+  return workflows.filter(w => !w.deprecated);
+};
+
 const errorsComparator = (a, b) => {
   if (a.error < b.error) return -1;
   if (a.error > b.error) return +1;
@@ -94,6 +100,7 @@ const collectionSelector = createSelector(
     filterLastVersion(filter),
     filterRunning(filter),
     filterSearch(search),
+    filterDeprecated(filter),
   )(workflows.data)
 );
 
@@ -159,7 +166,7 @@ export default class Workflows extends Component {
     const fetchParams = getFetchParams(this.props.params.filter, this.props.params.date);
 
     this.props.dispatch(actions.workflows.fetch(fetchParams));
-    
+
     this.setState({
       filterFn: null,
       selected: 'none',
@@ -177,7 +184,7 @@ export default class Workflows extends Component {
         this.props.params.date !== next.params.date) {
       const fetchParams = getFetchParams(next.params.filter, next.params.date);
 
-      this.handleFilterClick(null);
+      this.clearSelection();
       this.props.dispatch(actions.workflows.fetch(fetchParams));
     }
   }
@@ -305,9 +312,15 @@ export default class Workflows extends Component {
       return null;
     });
 
+    this.clearSelection();
     this.props.dispatch(
       actions.workflows[`${type}Batch`](selectedWorkflows)
     );
+  };
+
+  clearSelection = () => {
+    this.setSelectedWorkflows({});
+    this.handleWorkflowFilterChange('none');
   };
 
   /**
