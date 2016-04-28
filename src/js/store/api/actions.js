@@ -4,7 +4,7 @@ import * as workflowActions from './resources/workflows/actions';
 import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
 import * as serviceActions from './resources/services/actions';
-import * as jobsActions from './resources/jobs/actions';
+import * as jobActions from './resources/jobs/actions';
 import {
   combineResourceActions,
   createResourceActions,
@@ -77,7 +77,10 @@ Object.keys(serviceActions.delegates).forEach(a => {
 });
 Object.assign(actions.services, serviceActions.specials);
 
-Object.assign(actions.jobs, jobsActions.specials);
+Object.assign(actions.jobs, jobActions.specials);
 
+Object.keys(jobActions.delegates).forEach(a => {
+  actions.jobs[a] = jobActions.delegates[a](actions);
+});
 
 export default actions;

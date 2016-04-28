@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import { Controls, Control } from 'components/controls';
+
+import Dropdown, { Control as DControl, Item } from 'components/dropdown';
+import { Control } from 'components/controls';
+
+import { ModalExpiry, ModalReschedule } from './modals';
 
 import { pureRender } from 'components/utils';
 
 import actions from 'store/api/actions';
-
 
 @pureRender
 export default class ServiceControls extends Component {
@@ -17,26 +18,12 @@ export default class ServiceControls extends Component {
 
   static contextTypes = {
     dispatch: PropTypes.func,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
   };
 
-  componentWillMount() {
-    this.setState({
-      dropdown: false,
-    });
-  }
-
-  componentWillUnmount() {
-    this.removeDropdownListener();
-  }
-
-  handleOutsideClick = (event) => {
-    const el = ReactDOM.findDOMNode(this._dropdown);
-
-    console.log(el,'wtf');
-
-    if (!el.contains(event.target)) {
-      this.setState({ dropdown: false });
-    }
+  componentDidMount() {
+    this._modal = null;
   }
 
   dispatchAction(action) {
@@ -45,40 +32,76 @@ export default class ServiceControls extends Component {
     );
   }
 
-  showDropdown = (ev) => {
-    ev.preventDefault();
-    if (!this.state.dropdown) {
-      document.addEventListener('click', this.handleOutsideClick);
+  handleActivate = () => {
+    this.dispatchAction('activate');
+  }
+
+  handleDeactivate = () => {
+    this.dispatchAction('deactivate');
+  }
+
+  handleReset = () => {
+    this.dispatchAction('reset');
+  }
+
+  handleRun = (event) => {
+    event.preventDefault();
+    this.dispatchAction('run');
+  }
+
+  handleExpiration= (event) => {
+    event.preventDefault();
+    this.openModal('expiry', this.props.job);
+  }
+
+  handleReschedule = (event) => {
+    event.preventDefault();
+    this.openModal('reschedule', this.props.job);
+  }
+
+  /**
+   * Opens modal dialog to manage particular error.
+   *
+   * @param {string} modal type
+   * @param {Object} job
+   */
+  openModal = (modal, job) => {
+    if (modal === 'expiry') {
+      this._modal = (
+        <ModalExpiry
+          job={job}
+          onClose={this.closeModal}
+        />
+      );
     } else {
-      this.removeDropdownListener();
+      this._modal = (
+        <ModalReschedule
+          job={job}
+          onClose={this.closeModal}
+        />
+      );
     }
-    this.setState({ dropdown: !this.state.dropdown });
+
+    this.context.openModal(this._modal);
   }
 
-  removeDropdownListener() {
-    document.removeEventListener('click', this.handleOutsideClick);
-  }
-
-  refDropdown = (ref) => {
-    console.log(ref);
-    this._dropdown = ref;
+  /**
+   * Closes currently open modal dialog.
+   */
+  closeModal = () => {
+    this.context.closeModal(this._modal);
+    this._modal = null;
   }
 
   render() {
-    const dispatchDisable = () => this.dispatchAction('disable');
-    const dispatchEnable = () => this.dispatchAction('enable');
-    // const dispatchReset = () => this.dispatchAction('reset');
-    const dispatchActivate = () => this.dispatchAction('setActive');
-    const dispatchDeactivate = () => this.dispatchAction('setDeactive');
-
     return (
-      <div>
+      <div className="btn-controls">
         {this.props.job.enabled && (
           <Control
             title="Disable"
             icon="power-off"
             btnStyle="success"
-            action={dispatchDisable}
+            action={this.handleDisable}
           />
         )}
         {!this.props.job.enabled && (
@@ -86,7 +109,7 @@ export default class ServiceControls extends Component {
             title="Enable"
             icon="power-off"
             btnStyle="danger"
-            action={dispatchEnable}
+            action={this.handleEnable}
           />
         )}
         {this.props.job.active && (
@@ -94,30 +117,24 @@ export default class ServiceControls extends Component {
             title="Deactivate"
             icon="check"
             btnStyle="success"
-            action={dispatchDeactivate}
+            action={this.handleDeactivate}
           />
         )}
         {!this.props.job.active && (
           <Control
-            title="Actovate"
+            title="Activate"
             icon="ban"
             btnStyle="danger"
-            action={dispatchActivate}
+            action={this.handleActivate}
           />
         )}
-        <div
-          ref={this.refDropdown}
-          className={classNames('dropdown', this.state.dropdown ? 'open' : '')}
-        >
-          <Control
-            title="More"
-            icon="caret-down"
-            action={this.showDropdown}
-          />
-          <ul className="dropdown-menu">
-            <li><a href="#">Action</a></li>
-          </ul>
-        </div>
+        <Dropdown>
+          <DControl />
+          <Item action={ this.handleRun } icon="play" title="Run" />
+          <Item action={ this.handleReschedule } icon="clock-o" title="Reschedule" />
+          <Item action={ this.handle } icon="refresh" title="Reset" />
+          <Item action={ this.handleExpiration } icon="tag" title="Set expiration" />
+        </Dropdown>
       </div>
     );
   }

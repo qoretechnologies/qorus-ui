@@ -17,10 +17,11 @@ export default class Item extends Component {
   /**
    * Hides the dropdown and runs
    * provided function
+   * @params {Object} - browser Event
    */
-  handleClick = () => {
+  handleClick = (event) => {
     if (this.props.action) {
-      this.props.action();
+      this.props.action(event);
     }
 
     this.props.hideDropdown();

@@ -7,7 +7,6 @@ import SourceCode from 'components/source_code';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { pureRender } from 'components/utils';
 import { bindActionCreators } from 'redux';
 
 import actions from 'store/api/actions';
