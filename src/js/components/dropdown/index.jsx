@@ -43,7 +43,7 @@ export default class extends Component {
    * @param {Event} event
    */
   handleToggleClick = (event) => {
-    if (event.defaultPrevented) return;
+    event.preventDefault();
 
     this.setState({
       showDropdown: !this.state.showDropdown,

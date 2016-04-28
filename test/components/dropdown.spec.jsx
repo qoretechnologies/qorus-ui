@@ -52,7 +52,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children.props.onClick();
+      result.props.children.props.onClick({ preventDefault: () => {} });
       expect(action).to.have.been.called();
     });
   });
@@ -71,7 +71,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick({ defaultPrevented: false });
+      dropdown.props.children[0][0].props.onClick({ preventDefault: () => {}, defaultPrevented: false });
 
       dropdown = renderer.getRenderOutput();
 
@@ -97,7 +97,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick({ defaultPrevented: false });
+      dropdown.props.children[0][0].props.onClick({ preventDefault: () => {}, defaultPrevented: false });
 
       dropdown = renderer.getRenderOutput();
 
