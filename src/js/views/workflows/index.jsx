@@ -6,9 +6,11 @@ import { createSelector } from 'reselect';
 import { flowRight, includes } from 'lodash';
 import { compare } from 'utils';
 import { goTo } from '../../helpers/router';
+import firstBy from 'thenby';
 
 // data
 import actions from 'store/api/actions';
+import * as ui from 'store/ui/actions';
 
 // components
 import Loader from 'components/loader';
@@ -23,8 +25,12 @@ import { WORKFLOW_FILTERS } from '../../constants/filters';
 import { filterArray, handleFilterChange, getFetchParams } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
-const sortWorkflows = (workflows) =>
-  workflows.slice().sort(compare('exec_count', ['name'], 'des'));
+const sortWorkflows = (sortData) => (workflows) => {
+  console.log(sortData);
+  return workflows.slice().sort(
+    firstBy(w => w[sortData.sortBy], sortData.sortByKey).thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
+  );
+};
 
 const filterSearch = (search) => (workflows) =>
   findBy(['name', 'id'], search, workflows);
@@ -87,6 +93,8 @@ const searchSelector = (state, props) => props.location.query.q;
 
 const filterSelector = (state, props) => filterArray(props.params.filter);
 
+const sortSelector = (state) => state;
+
 const infoSelector = state => state.api.system;
 
 const collectionSelector = createSelector(
@@ -94,9 +102,10 @@ const collectionSelector = createSelector(
     searchSelector,
     filterSelector,
     workflowsSelector,
+    sortSelector,
   ],
-  (search, filter, workflows) => flowRight(
-    sortWorkflows,
+  (search, filter, workflows, sortData) => flowRight(
+    sortWorkflows(sortData),
     filterLastVersion(filter),
     filterRunning(filter),
     filterSearch(search),
@@ -172,6 +181,10 @@ export default class Workflows extends Component {
       selected: 'none',
       filteredWorkflows: [],
       selectedWorkflows: {},
+      sortBy: 'name',
+      sortByKey: 1,
+      historySortBy: 'version',
+      historySortByKey: -1,
     });
   }
 
@@ -232,6 +245,7 @@ export default class Workflows extends Component {
     );
 
     this.applyFilter(urlFilter);
+    this.props.dispatch(ui.workflows.changeSort({ sortBy: 'something', sortByKey: -1 }));
   };
 
   /**
