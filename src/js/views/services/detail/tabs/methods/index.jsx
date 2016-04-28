@@ -12,7 +12,6 @@ export default class MethodsTab extends Component {
     service: PropTypes.object.isRequired,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func,
   };
