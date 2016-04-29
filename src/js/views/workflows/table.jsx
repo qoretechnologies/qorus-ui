@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { includes } from 'lodash';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
@@ -8,6 +9,8 @@ import WorkflowsControls from './controls';
 
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
+import { filterArray } from '../../helpers/workflows';
+import { WORKFLOW_FILTERS } from '../../constants/filters';
 
 import classNames from 'classnames';
 import actions from 'store/api/actions';
@@ -28,6 +31,8 @@ export default class WorkflowsTable extends Component {
     onWorkflowFilterChange: PropTypes.func,
     setSelectedWorkflows: PropTypes.func,
     selectedWorkflows: PropTypes.object,
+    onSortChange: PropTypes.func,
+    sortData: PropTypes.object,
   };
 
   static contextTypes = {
@@ -184,34 +189,101 @@ export default class WorkflowsTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="col-autostart">Autostart</Cell>
+      <Cell
+        tag="th"
+        className="col-autostart"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="autostart"
+      >
+        Autostart
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">Execs</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="exec_count"
+      >
+        Execs
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">ID</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="id"
+      >
+        ID
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="name">Name</Cell>
+      <Cell
+        tag="th"
+        className="name"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="name"
+      >
+        Name
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">Version</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="version"
+      >
+        Version
+      </Cell>
     );
 
     for (const state of ORDER_STATES) {
       yield (
-        <Cell tag="th" className="narrow">{state.short}</Cell>
+        <Cell
+          tag="th"
+          className="narrow"
+          onSortChange={this.props.onSortChange}
+          sortData={this.props.sortData}
+          name={state.name}
+        >
+          {state.short}
+        </Cell>
       );
     }
 
     yield (
-      <Cell tag="th" className="narrow">Total</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="TOTAL"
+      >
+        Total
+      </Cell>
     );
+
+    if (includes(filterArray(this.context.params.filter), WORKFLOW_FILTERS.DEPRECATED)) {
+      yield (
+        <Cell
+          tag="th"
+          className="narrow"
+        >
+          Visible
+        </Cell>
+      );
+    }
   }
 
   /**
@@ -277,6 +349,18 @@ export default class WorkflowsTable extends Component {
     yield (
       <Cell className="narrow">{workflow.TOTAL}</Cell>
     );
+
+    if (includes(filterArray(this.context.params.filter), WORKFLOW_FILTERS.DEPRECATED)) {
+      const flag = workflow.deprecated ? 'fa-flag-o' : 'fa-flag';
+
+      yield (
+        <Cell
+          className="narrow"
+        >
+          <i className={classNames('fa', flag)} />
+        </Cell>
+      );
+    }
   }
 
 

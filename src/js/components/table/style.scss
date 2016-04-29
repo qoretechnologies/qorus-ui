@@ -74,3 +74,22 @@ td.editable {
     }
   }
 }
+
+th.sort {
+  background: #f6f6f6;
+
+  &:after {
+    font-family: FontAwesome;
+    font-size: 120%;
+    margin-left: .4em;
+  }
+
+  &.sort-asc:after {
+    content: "\f106";
+    margin-top: .3em;
+  }
+
+  &.sort-desc:after {
+    content: "\f107";
+  }
+}

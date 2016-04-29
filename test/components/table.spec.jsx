@@ -296,7 +296,7 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
       );
       const cell = renderer.getRenderOutput();
 
-      expect(cell.props.children).to.equal('value');
+      expect(cell.props.children[0]).to.equal('value');
     });
 
 

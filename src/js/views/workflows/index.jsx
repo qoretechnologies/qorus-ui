@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, includes } from 'lodash';
-import { compare } from 'utils';
 import { goTo } from '../../helpers/router';
 import firstBy from 'thenby';
 
@@ -25,12 +24,10 @@ import { WORKFLOW_FILTERS } from '../../constants/filters';
 import { filterArray, handleFilterChange, getFetchParams } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
-const sortWorkflows = (sortData) => (workflows) => {
-  console.log(sortData);
-  return workflows.slice().sort(
-    firstBy(w => w[sortData.sortBy], sortData.sortByKey).thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
+const sortWorkflows = (sortData) => (workflows) => workflows.slice().sort(
+    firstBy(w => w[sortData.sortBy], sortData.sortByKey)
+      .thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
   );
-};
 
 const filterSearch = (search) => (workflows) =>
   findBy(['name', 'id'], search, workflows);
@@ -93,7 +90,7 @@ const searchSelector = (state, props) => props.location.query.q;
 
 const filterSelector = (state, props) => filterArray(props.params.filter);
 
-const sortSelector = (state) => state;
+const sortSelector = (state) => state.ui.workflows;
 
 const infoSelector = state => state.api.system;
 
@@ -121,8 +118,9 @@ const viewSelector = createSelector(
     collectionSelector,
     systemOptionsSelector,
     globalErrorsSelector,
+    sortSelector,
   ],
-  (workflows, errors, info, collection, systemOptions, globalErrors) => ({
+  (workflows, errors, info, collection, systemOptions, globalErrors, sortData) => ({
     sync: workflows.sync,
     loading: workflows.loading,
     workflows: collection,
@@ -130,6 +128,7 @@ const viewSelector = createSelector(
     info,
     systemOptions,
     globalErrors,
+    sortData,
   })
 );
 
@@ -145,6 +144,7 @@ export default class Workflows extends Component {
     loading: PropTypes.bool,
     systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
+    sortData: PropTypes.object,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
@@ -160,6 +160,7 @@ export default class Workflows extends Component {
     params: PropTypes.object,
     route: PropTypes.object,
     dispatch: PropTypes.func,
+    sortData: PropTypes.object,
   };
 
   getChildContext() {
@@ -245,7 +246,6 @@ export default class Workflows extends Component {
     );
 
     this.applyFilter(urlFilter);
-    this.props.dispatch(ui.workflows.changeSort({ sortBy: 'something', sortByKey: -1 }));
   };
 
   /**
@@ -333,6 +333,12 @@ export default class Workflows extends Component {
     );
   };
 
+  handleSortChange = (sortChange) => {
+    this.props.dispatch(
+      ui.workflows.sort(sortChange)
+    );
+  };
+
   clearSelection = () => {
     this.setSelectedWorkflows({});
     this.handleWorkflowFilterChange('none');
@@ -400,6 +406,8 @@ export default class Workflows extends Component {
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedWorkflows={this.setSelectedWorkflows}
           selectedWorkflows={this.state.selectedWorkflows}
+          onSortChange={this.handleSortChange}
+          sortData={this.props.sortData}
         />
         {this.renderPane()}
       </div>
