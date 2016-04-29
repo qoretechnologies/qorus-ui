@@ -4,7 +4,6 @@ import Modal from 'components/modal';
 import { normalizeName } from 'components/utils';
 
 import { connect } from 'react-redux';
-// import { createSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
 import actions from 'store/api/actions';
