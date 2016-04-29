@@ -51,36 +51,27 @@ export default class ServiceControls extends Component {
 
   handleExpiration= (event) => {
     event.preventDefault();
-    this.openModal('expiry', this.props.job);
+    this.openModal(ModalExpiry, this.props.job);
   }
 
   handleReschedule = (event) => {
     event.preventDefault();
-    this.openModal('reschedule', this.props.job);
+    this.openModal(ModalReschedule, this.props.job);
   }
 
   /**
    * Opens modal dialog to manage particular error.
    *
-   * @param {string} modal type
+   * @param {ReactComponent} Modal Component
    * @param {Object} job
    */
-  openModal = (modal, job) => {
-    if (modal === 'expiry') {
-      this._modal = (
-        <ModalExpiry
-          job={job}
-          onClose={this.closeModal}
-        />
-      );
-    } else {
-      this._modal = (
-        <ModalReschedule
-          job={job}
-          onClose={this.closeModal}
-        />
-      );
-    }
+  openModal = (Modal, job) => {
+    this._modal = (
+      <Modal
+        job={job}
+        onClose={this.closeModal}
+      />
+    );
 
     this.context.openModal(this._modal);
   }
