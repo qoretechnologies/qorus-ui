@@ -1,4 +1,4 @@
-module.exports = function workflowDatepickerSteps() {
+module.exports = function workflowBatchActionsSteps() {
   this.When(/^I select three workflows$/, async function () {
     const workflows = this.browser.queryAll('td.narrow > i.fa-square-o');
 
