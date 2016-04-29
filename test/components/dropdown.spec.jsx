@@ -71,7 +71,10 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick({ preventDefault: () => {}, defaultPrevented: false });
+      dropdown.props.children[0][0].props.onClick({
+        preventDefault: () => {},
+        defaultPrevented: false,
+      });
 
       dropdown = renderer.getRenderOutput();
 
@@ -97,7 +100,10 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       );
       let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick({ preventDefault: () => {}, defaultPrevented: false });
+      dropdown.props.children[0][0].props.onClick({
+        preventDefault: () => {},
+        defaultPrevented: false,
+      });
 
       dropdown = renderer.getRenderOutput();
 

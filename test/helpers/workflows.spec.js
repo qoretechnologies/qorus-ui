@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { filterArray, handleFilterChange, getFetchParams, formatDate } from '../../src/js/helpers/workflows';
+import {
+  filterArray,
+  handleFilterChange,
+  getFetchParams,
+  formatDate,
+} from '../../src/js/helpers/workflows';
 import { DATES } from '../../src/js/constants/dates';
 import moment from 'moment';
 
@@ -44,7 +49,7 @@ describe('filterArray,' +
       expect(filter).to.have.length(1);
       expect(filter[0]).to.equal('hidden');
     });
-  })
+  });
 
   describe('getFetchParams', () => {
     it('returns an object containing deprecated filter and a previous day date', () => {
