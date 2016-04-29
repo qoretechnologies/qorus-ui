@@ -36,3 +36,20 @@ export function pureRender(CompCls) {
 
   Object.assign(CompCls.prototype, { shouldComponentUpdate });
 }
+
+/**
+ * Returns model normalizedName as <name> v<version>.<patch> <id>
+ *
+ * @param {Object} model
+ * @param {string} idAttr - id attribute of model
+ * @see shouldComponentUpdate
+ */
+export const normalizeName = (item, idAttr = 'id') => {
+  const { name, version, patch } = item;
+  const id = item[idAttr];
+  const normalizedName = patch ?
+    `${name} v${version}.${patch} (${id})` :
+    `${name} v${version} (${id})`;
+
+  return normalizedName;
+};
