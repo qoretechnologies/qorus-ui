@@ -40,8 +40,8 @@ export function run(actions) {
   };
 }
 
-export function setExpiration(actions, date) {
-  return job => dispatch => {
+export function setExpiration(actions) {
+  return (job, date) => dispatch => {
     dispatch(actions.jobs.action({
       body: JSON.stringify({
         action: 'setExpiry',
@@ -52,8 +52,8 @@ export function setExpiration(actions, date) {
 }
 
 
-export function reschedule(actions, schedule) {
-  return job => dispatch => {
+export function reschedule(actions) {
+  return (job, schedule) => dispatch => {
     dispatch(actions.jobs.action({
       body: JSON.stringify({
         action: 'schedule',

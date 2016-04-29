@@ -15,7 +15,6 @@ export default class ServiceControls extends Component {
     job: PropTypes.object,
   };
 
-
   static contextTypes = {
     dispatch: PropTypes.func,
     openModal: PropTypes.func.isRequired,
