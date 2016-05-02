@@ -60,11 +60,11 @@ module.exports = function workFlowControlSteps() {
   this.When(/^I click the "([^"]*)" button inside "([^"]*)" dropdown$/, async function(button, dropdown) {
     this.browser.pressButton(`#${dropdown}`);
 
-    const el = findElementByText(this.browser, `#${dropdown}-dropdown span`, button);
+    const el = findElementByText(this.browser, `#${dropdown}-dropdown a`, ` ${button}`);
 
     this.browser.click(el);
 
-    await this.waitForChange(4000);
+    await this.waitForChange(1000);
   });
 
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {

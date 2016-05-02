@@ -91,9 +91,9 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I click the "([^"]*)" button$/, async function(button) {
-    const el = findElementByText(this.browser, '.btn > span', ` ${button}`);
+    const el = findElementByText(this.browser, '.btn', ` ${button}`);
 
-    return this.browser.click(el.parentElement);
+    return this.browser.click(el);
   });
 
   this.When(/^I activate "([^"]*)"$/, async function(name) {

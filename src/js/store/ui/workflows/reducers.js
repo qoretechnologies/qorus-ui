@@ -10,9 +10,16 @@ const initialState = {
 export default handleActions({
   CHANGE_WORKFLOWS_SORT: {
     next(state, action) {
-      return Object.assign({}, state, action.payload);
-    },
-    throw(state, action) {
+      const payload = action.payload;
+
+      if (action.payload.sortBy !== state.sortBy) {
+        payload.historySortBy = state.sortBy;
+        payload.historySortByKey = state.sortByKey;
+      } else {
+        payload.sortByKey = state.sortByKey * -1;
+      }
+
+      return Object.assign({}, state, payload);
     },
   },
 }, initialState);
