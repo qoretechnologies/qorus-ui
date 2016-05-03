@@ -5,7 +5,6 @@ import { pureRender } from 'components/utils';
 
 import actions from 'store/api/actions';
 
-
 @pureRender
 export default class ServiceControls extends Component {
   static propTypes = {
@@ -24,16 +23,21 @@ export default class ServiceControls extends Component {
     );
   }
 
+  dispatchDisable = () => this.dispatchAction('disable')
+  dispatchEnable = () => this.dispatchAction('enable')
+  dispatchReset = (event) => {
+    if (this.props.service.status === 'loaded') {
+      this.dispatchAction('reset');
+    }
+    return event;
+  }
+  dispatchLoad = () => this.dispatchAction('load')
+  dispatchUnload = () => this.dispatchAction('unload')
+  dispatchEnableAutostart = () => this.dispatchAction('autostartOn')
+  dispatchDisableAutostart = () => this.dispatchAction('autostartOff')
+
 
   render() {
-    const dispatchDisable = () => this.dispatchAction('disable');
-    const dispatchEnable = () => this.dispatchAction('enable');
-    const dispatchReset = () => this.dispatchAction('reset');
-    const dispatchLoad = () => this.dispatchAction('load');
-    const dispatchUnload = () => this.dispatchAction('unload');
-    const dispatchEnableAutostart = () => this.dispatchAction('autostartOn');
-    const dispatchDisableAutostart = () => this.dispatchAction('autostartOff');
-
     return (
       <Controls>
         {this.props.service.enabled && (
@@ -41,7 +45,7 @@ export default class ServiceControls extends Component {
             title="Disable"
             icon="power-off"
             btnStyle="success"
-            action={dispatchDisable}
+            action={this.dispatchDisable}
           />
         )}
         {!this.props.service.enabled && (
@@ -49,14 +53,14 @@ export default class ServiceControls extends Component {
             title="Enable"
             icon="power-off"
             btnStyle="danger"
-            action={dispatchEnable}
+            action={this.dispatchEnable}
           />
         )}
         {!this.props.service.autostart && (
           <Control
             title="Enable Autostart"
             icon="rocket"
-            action={dispatchEnableAutostart}
+            action={this.dispatchEnableAutostart}
           />
         )}
         {this.props.service.autostart && (
@@ -64,29 +68,29 @@ export default class ServiceControls extends Component {
             title="Disable Autostart"
             icon="rocket"
             btnStyle="success"
-            action={dispatchDisableAutostart}
+            action={this.dispatchDisableAutostart}
           />
         )}
         {this.props.service.status === 'unloaded' && (
           <Control
             title="Load"
             icon="ban"
-            action={dispatchLoad}
+            action={this.dispatchLoad}
           />
         )}
-        {this.props.service.status !== 'unloaded' && (
+        {this.props.service.status === 'loaded' && (
           <Control
             title="Unload"
             icon="check"
             btnStyle="success"
-            action={dispatchUnload}
+            action={this.dispatchUnload}
           />
         )}
         <Control
           title="Reset"
           icon="refresh"
-          btnStyle={ this.props.service.status === 'unloaded' ? '' : 'warning' }
-          action={dispatchReset}
+          btnStyle={ this.props.service.status === 'loaded' ? 'warning' : 'na disabled' }
+          action={ this.dispatchReset }
         />
       </Controls>
     );

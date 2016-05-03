@@ -224,7 +224,7 @@ export default class MethodsTable extends Component {
     for (const model of collection) {
       yield (
         <Row
-          key={model.id}
+          key={model.name}
           data={model}
           cells={this._renderCells}
         />
