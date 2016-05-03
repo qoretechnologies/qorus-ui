@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
-import Table, { Section, Row, Cell } from 'components/table';
+import Table, { Section, Row, Cell } from '../../components/table';
 import ServiceControls from './controls';
+import Checkbox from '../../components/checkbox';
 
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
@@ -19,6 +20,12 @@ export default class ServicesTable extends Component {
   static propTypes = {
     collection: PropTypes.array,
     activeRowId: PropTypes.number,
+    initialFilter: PropTypes.func,
+    onDataFilterChange: PropTypes.func,
+    setSelectedData: PropTypes.func,
+    selectedData: PropTypes.object,
+    onSortChange: PropTypes.func,
+    sortData: PropTypes.object,
   };
 
 
@@ -27,6 +34,7 @@ export default class ServicesTable extends Component {
     route: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
 
@@ -43,6 +51,46 @@ export default class ServicesTable extends Component {
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
+  }
+
+  componentWillReceiveProps(next) {
+    if (this.props.initialFilter !== next.initialFilter) {
+      this.setupFilters(next);
+    }
+  }
+
+  /**
+   * Sets the initial selected workflows based on the
+   * filter function received in props
+   *
+   * @param {Object} props
+   */
+  setupFilters(props) {
+    const selectedData = props.initialFilter ?
+      props.collection.reduce((sel, s) => (
+        Object.assign(sel, { [s.id]: props.initialFilter(s, this.props.selectedData) })
+      ), {}) :
+    {};
+
+    this.setSelectedServices(selectedData);
+  }
+
+  /**
+   * Sends the selected workflows one level up to
+   * the workflows component and sets the state
+   *
+   * @param {Object} selectedData
+   */
+  setSelectedServices(selectedData) {
+    if (this.props.collection.every(s => selectedData[s.id])) {
+      this.props.onDataFilterChange('all');
+    } else if (this.props.collection.some(s => selectedData[s.id])) {
+      this.props.onDataFilterChange('some');
+    } else {
+      this.props.onDataFilterChange('none');
+    }
+
+    this.props.setSelectedData(selectedData);
   }
 
   /**
@@ -73,7 +121,7 @@ export default class ServicesTable extends Component {
    * @param {Event} ev
    */
   activateRow(ev) {
-    if (ev.isDefaultPrevented()) return;
+    if (ev.defaultPrevented) return;
 
     const model = this.findActivatedRow(ev.currentTarget);
     const shouldDeactivate =
@@ -89,10 +137,25 @@ export default class ServicesTable extends Component {
       'services',
       this.context.route.path,
       this.context.params,
-      change
+      change,
+      this.context.location.query
     );
   }
 
+  /**
+   * Handles the individual workflow checkboxes
+   *
+   * @param {Event} ev
+   */
+  handleCheckboxClick = (ev) => {
+    const service = this.findActivatedRow(ev.currentTarget.parentElement.parentElement);
+    const selectedData = Object.assign({},
+      this.props.selectedData,
+      { [service.id]: !this.props.selectedData[service.id] }
+    );
+
+    this.setSelectedServices(selectedData);
+  };
 
   /**
    * Yields heading cells for model info.
@@ -106,7 +169,15 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="narrow">Type</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="type"
+      >
+        Type
+      </Cell>
     );
 
     yield (
@@ -114,7 +185,15 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="narrow">Threads</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="threads"
+      >
+        Threads
+      </Cell>
     );
 
     yield (
@@ -124,15 +203,39 @@ export default class ServicesTable extends Component {
     );
 
     yield (
-      <Cell tag="th" className="name">Name</Cell>
+      <Cell
+        tag="th"
+        className="name"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="name"
+      >
+        Name
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">Version</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="version"
+      >
+        Version
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="desc">Description</Cell>
+      <Cell
+        tag="th"
+        className="desc"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+        name="description"
+      >
+        Description
+      </Cell>
     );
   }
 
@@ -141,9 +244,10 @@ export default class ServicesTable extends Component {
    * Yields cells with model data
    *
    * @param {Object} model
+   * @param {bool} selected
    * @return {Generator<ReactElement>}
    */
-  *renderCells(model) {
+  *renderCells({ model, selected }) {
     const typeIcon = (model.type === 'system') ?
       classNames('fa', 'fa-cog') : classNames('fa', 'fa-user');
 
@@ -153,7 +257,10 @@ export default class ServicesTable extends Component {
 
     yield (
       <Cell className="narrow">
-        <i className="fa fa-square-o" />
+        <Checkbox
+          action={this.handleCheckboxClick}
+          checked={selected ? 'CHECKED' : 'UNCHECKED'}
+        />
       </Cell>
     );
 
@@ -212,16 +319,20 @@ export default class ServicesTable extends Component {
    *
    * @param {number} activeId
    * @param {Array<Object>} collection
+   * @param {Array<Object>} selectedData
    * @return {Generator<ReactElement>}
    * @see activateRow
    * @see renderCells
    */
-  *renderRows({ activeId, collection }) {
+  *renderRows({ activeId, collection, selectedData }) {
     for (const model of collection) {
       yield (
         <Row
           key={model.id}
-          data={model}
+          data={{
+            model,
+            selected: selectedData[model.serviceid],
+          }}
           cells={this._renderCells}
           onClick={this._activateRow}
           className={classNames({
@@ -262,6 +373,7 @@ export default class ServicesTable extends Component {
         data={{
           activeId: this.props.activeRowId,
           collection: this.props.collection,
+          selectedData: this.props.selectedData,
         }}
         sections={this._renderSections}
         className={'table table-striped table-condensed table-hover ' +
