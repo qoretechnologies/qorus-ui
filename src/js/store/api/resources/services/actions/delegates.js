@@ -39,6 +39,7 @@ export function load(actions) {
     dispatch(actions.services.action({
       body: JSON.stringify({
         action: 'load',
+        status: 'loaded',
       }),
     }, service.id));
   };
@@ -49,6 +50,7 @@ export function unload(actions) {
     dispatch(actions.services.action({
       body: JSON.stringify({
         action: 'unload',
+        status: 'unloaded',
       }),
     }, service.id));
   };
