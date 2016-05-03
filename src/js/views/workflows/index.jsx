@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, includes } from 'lodash';
 import { goTo } from '../../helpers/router';
+import { setTitle } from '../../helpers/document';
 import firstBy from 'thenby';
 
 // data
@@ -148,6 +149,20 @@ export default class Workflows extends Component {
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
+    onFilterClick: PropTypes.func,
+    filterFn: PropTypes.func,
+    onSearchChange: PropTypes.func,
+    clearSelection: PropTypes.func,
+    onDataFilterChange: PropTypes.func,
+    setSelectedData: PropTypes.func,
+    onBatchAction: PropTypes.func,
+    selectedData: PropTypes.object,
+    selected: PropTypes.string,
+    onPaneClose: PropTypes.func,
+    getActiveRow: PropTypes.func,
+    onAllClick: PropTypes.func,
+    onNoneClick: PropTypes.func,
+    onInvertClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -178,10 +193,7 @@ export default class Workflows extends Component {
     this.props.dispatch(actions.workflows.fetch(fetchParams));
 
     this.setState({
-      filterFn: null,
-      selected: 'none',
       filteredWorkflows: [],
-      selectedWorkflows: {},
       sortBy: 'name',
       sortByKey: 1,
       historySortBy: 'version',
@@ -190,7 +202,7 @@ export default class Workflows extends Component {
   }
 
   componentDidMount() {
-    this.setTitle();
+    setTitle(`Workflows | ${this.context.getTitle()}`);
   }
 
   componentWillReceiveProps(next) {
@@ -198,43 +210,14 @@ export default class Workflows extends Component {
         this.props.params.date !== next.params.date) {
       const fetchParams = getFetchParams(next.params.filter, next.params.date);
 
-      this.clearSelection();
+      this.props.clearSelection();
       this.props.dispatch(actions.workflows.fetch(fetchParams));
     }
   }
 
   componentDidUpdate() {
-    this.setTitle();
+    setTitle(`Workflows | ${this.context.getTitle()}`);
   }
-
-  setTitle() {
-    document.title = `Workflows | ${this.context.getTitle()}`;
-  }
-
-  getActiveWorkflow() {
-    if (!this.props.params.detailId) return null;
-
-    return this.props.workflows.find(this.isActive);
-  }
-
-  setSelectedWorkflows = (selectedWorkflows) => {
-    this.setState({
-      selectedWorkflows,
-    });
-  };
-
-  isActive = (workflow) => workflow.id === parseInt(this.props.params.detailId, 10);
-
-  handlePaneClose = () => {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.props.route.path,
-      this.props.params,
-      { filter: this.props.params.filter, detailId: null, tabId: null },
-      this.props.location.query
-    );
-  };
 
   /**
    * Handles filtering for only running workflows
@@ -273,45 +256,6 @@ export default class Workflows extends Component {
   };
 
   /**
-   * Handles the click on the dropdowns checkbox
-   *
-   * @param {Function} filterFn
-   */
-  handleFilterClick = (filterFn) => {
-    this.setState({
-      filterFn,
-    });
-  };
-
-  /**
-   * Changes the state of what workflows are selected
-   * Used by the dropdown checkbox in Toolbar
-   *
-   * @param {String} selected
-   */
-  handleWorkflowFilterChange = (selected) => {
-    this.setState({
-      selected,
-    });
-  };
-
-  /**
-   * Applies the current filter to the URL
-   *
-   * @param {String} q
-   */
-  handleSearchChange = (q) => {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.props.route.path,
-      this.props.params,
-      {},
-      { q },
-    );
-  };
-
-  /**
    * Handles the batch action calls like
    * enabling, disabling, reseting etc
    * of multiple workflows
@@ -319,17 +263,17 @@ export default class Workflows extends Component {
    * @param {String} type
    */
   handleBatchAction = (type) => {
-    const selectedWorkflows = [];
+    const selectedData = [];
 
-    Object.keys(this.state.selectedWorkflows).forEach(w => {
-      if (this.state.selectedWorkflows[w]) {
-        selectedWorkflows.push(w);
+    Object.keys(this.props.selectedData).forEach(w => {
+      if (this.props.selectedData[w]) {
+        selectedData.push(w);
       }
     });
 
-    this.clearSelection();
+    this.props.clearSelection();
     this.props.dispatch(
-      actions.workflows[`${type}Batch`](selectedWorkflows)
+      actions.workflows[`${type}Batch`](selectedData)
     );
   };
 
@@ -337,11 +281,6 @@ export default class Workflows extends Component {
     this.props.dispatch(
       ui.workflows.sort(sortChange)
     );
-  };
-
-  clearSelection = () => {
-    this.setSelectedWorkflows({});
-    this.handleWorkflowFilterChange('none');
   };
 
   /**
@@ -363,17 +302,17 @@ export default class Workflows extends Component {
   renderPane() {
     const { params, errors, systemOptions, globalErrors } = this.props;
 
-    if (!this.getActiveWorkflow()) return null;
+    if (!this.props.getActiveRow(this.props.workflows)) return null;
 
     return (
       <Pane
         width={550}
-        onClose={this.handlePaneClose}
+        onClose={this.props.onPaneClose}
       >
         <WorkflowsDetail
-          workflow={this.getActiveWorkflow()}
+          workflow={this.props.getActiveRow(this.props.workflows)}
           systemOptions={systemOptions}
-          errors={errors[this.getActiveWorkflow().id] || []}
+          errors={errors[this.props.getActiveRow(this.props.workflows).id] || []}
           globalErrors={globalErrors}
           tabId={params.tabId}
         />
@@ -389,23 +328,26 @@ export default class Workflows extends Component {
     return (
       <div>
         <WorkflowsToolbar
-          onFilterClick={this.handleFilterClick}
+          onFilterClick={this.props.onFilterClick}
           onRunningClick={this.handleRunningClick}
           onDeprecatedClick={this.handleDeprecatedClick}
           onLastVersionClick={this.handleLastVersionClick}
-          onSearchUpdate={this.handleSearchChange}
-          selected={this.state.selected}
+          onSearchUpdate={this.props.onSearchChange}
+          selected={this.props.selected}
           defaultSearchValue={this.props.location.query.q}
           params={this.props.params}
           batchAction={this.handleBatchAction}
+          onAllClick={this.props.onAllClick}
+          onNoneClick={this.props.onAllClick}
+          onInvertClick={this.props.onAllClick}
         />
         <WorkflowsTable
-          initialFilter={this.state.filterFn}
-          onWorkflowFilterChange={this.handleWorkflowFilterChange}
+          initialFilter={this.props.filterFn}
+          onWorkflowFilterChange={this.props.onDataFilterChange}
           workflows={this.props.workflows}
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
-          setSelectedWorkflows={this.setSelectedWorkflows}
-          selectedWorkflows={this.state.selectedWorkflows}
+          setSelectedWorkflows={this.props.setSelectedData}
+          selectedWorkflows={this.props.selectedData}
           onSortChange={this.handleSortChange}
           sortData={this.props.sortData}
         />

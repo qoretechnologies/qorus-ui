@@ -26,31 +26,9 @@ export default class WorkflowsToolbar extends Component {
     defaultSearchValue: PropTypes.string,
     onSearchUpdate: PropTypes.func,
     batchAction: PropTypes.func,
-  };
-
-  /**
-   * Handles selecting/deselecting all workflows
-   */
-  handleAllClick = () => {
-    if (this.props.selected === 'none' || this.props.selected === 'some') {
-      this.props.onFilterClick(() => true);
-    } else {
-      this.handleNoneClick();
-    }
-  };
-
-  /**
-   * Handles deselecting all workflows
-   */
-  handleNoneClick = () => {
-    this.props.onFilterClick(() => false);
-  };
-
-  /**
-   * Handles inverting selected workflows
-   */
-  handleInvertClick = () => {
-    this.props.onFilterClick((workflow, selectedWorkflows) => !selectedWorkflows[workflow.id]);
+    onAllClick: PropTypes.func,
+    onNoneClick: PropTypes.func,
+    onInvertClick: PropTypes.func,
   };
 
   /**
@@ -174,20 +152,20 @@ export default class WorkflowsToolbar extends Component {
         <Dropdown id="selection">
           <DropdownControl>
             <Checkbox
-              action={this.handleAllClick}
+              action={this.props.onAllClick}
               checked={checked}
             />&nbsp;
           </DropdownControl>
           <DropdownItem
-            action={this.handleAllClick}
+            action={this.props.onAllClick}
             title="All"
           />
           <DropdownItem
-            action={this.handleNoneClick}
+            action={this.props.onNoneClick}
             title="None"
           />
           <DropdownItem
-            action={this.handleInvertClick}
+            action={this.props.onInvertClick}
             title="Invert"
           />
           <DropdownItem
