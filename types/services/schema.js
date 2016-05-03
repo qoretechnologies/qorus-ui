@@ -90,9 +90,10 @@ const Service = {
     },
     status: {
       type: 'string',
+      pattern: 'loaded|unloaded',
     },
     threads: {
-      $ref: 'positiveInteger',
+      $ref: 'smallNonNegativeInteger',
     },
     resources: {
       type: 'array',
@@ -119,7 +120,7 @@ const Service = {
   required: [
     'serviceid', 'name', 'version', 'desc', 'author', 'autostart',
     'manual_autostart', 'enabled', 'created', 'modified',
-    'options', 'groups', 'methods', 'type',
+    'options', 'groups', 'methods', 'status', 'type',
   ],
 };
 
