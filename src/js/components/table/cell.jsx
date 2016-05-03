@@ -44,7 +44,7 @@ export default class Cell extends Component {
   };
 
   handleTagClick = () => {
-    if (this.props.tag === 'th') {
+    if (this.props.tag === 'th' && this.props.onSortChange) {
       this.props.onSortChange({ sortBy: this.props.name });
     }
   };
