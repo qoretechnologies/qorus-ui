@@ -1,5 +1,5 @@
 import { findElementByText } from './common_steps';
-import firstBy from 'thenBy';
+import firstBy from 'thenby';
 
 let workflows = [
   {
