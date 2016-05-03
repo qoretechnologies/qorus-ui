@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 
 import Root from 'views/root';
+import View from 'views/view_wrapper';
 import Workflows from 'views/workflows';
 import Services from 'views/services';
 import Jobs from 'views/jobs';
@@ -219,11 +220,15 @@ export default class App extends Component {
               <Route path="system" />
               <Route
                 path="workflows(/:date)(/:filter)(/:detailId)(/:tabId)"
-                component={Workflows}
+                component={View}
+                view={Workflows}
+                name="Workflows"
               />
               <Route
                 path="services(/:detailId)(/:tabId)"
-                component={Services}
+                component={View}
+                view={Services}
+                name="Services"
               />
               <Route
                 path="jobs(/:detailId)(/:tabId)"
