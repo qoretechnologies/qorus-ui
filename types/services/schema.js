@@ -119,7 +119,7 @@ const Service = {
   required: [
     'serviceid', 'name', 'version', 'desc', 'author', 'autostart',
     'manual_autostart', 'enabled', 'created', 'modified',
-    'options', 'groups', 'methods'
+    'options', 'groups', 'methods', 'type',
   ],
 };
 
