@@ -44,5 +44,51 @@ module.exports = () => {
     res.json(item);
   });
 
+  /**
+   * Handles calling batch action
+   * such as enable, disable, reset
+   * etc
+   */
+  router.put('/', (req, res) => {
+    const action = req.query.action;
+    const ids = req.query.ids.split(',');
+    let result = [];
+
+    switch (action) {
+      case 'disable':
+        result = ids.map(id => {
+          const item = data.find(w => findModel(id, w));
+          item.enabled = false;
+          return item;
+        });
+        break;
+      case 'enable':
+        result = ids.map(id => {
+          const item = data.find(w => findModel(id, w));
+          item.enabled = true;
+          return item;
+        });
+        break;
+      case 'load':
+        result = ids.map(id => {
+          const item = data.find(w => findModel(id, w));
+          item.status = 'loaded';
+          return item;
+        });
+        break;
+      case 'unload':
+        result = ids.map(id => {
+          const item = data.find(w => findModel(id, w));
+          item.status = 'unloaded';
+          return item;
+        });
+        break;
+      default:
+        break;
+    }
+
+    res.json(result);
+  });
+
   return router;
 };
