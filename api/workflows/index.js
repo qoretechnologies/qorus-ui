@@ -1,21 +1,17 @@
 'use strict';
 
-
 /**
  * @module api/workflows
  */
-
 
 const express = require('express');
 
 const config = require('../config');
 const rest = require('../rest');
 
-
 function findWorkflow(id, s) {
   return s.workflowid === parseInt(id, 10);
 }
-
 
 module.exports = () => {
   const data = require('./data')();
