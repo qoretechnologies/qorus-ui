@@ -4,7 +4,7 @@ import { goTo } from '../helpers/router';
 export default class extends Component {
   static propTypes = {
     route: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func,
     location: PropTypes.object,
     params: PropTypes.object,
   };
