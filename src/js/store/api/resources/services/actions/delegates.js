@@ -77,3 +77,33 @@ export function autostartOff(actions) {
     }, service.id));
   };
 }
+
+export function enableBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.services.batch_action('enable', ids.join(','), null, { enabled: true }));
+  };
+}
+
+export function disableBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.services.batch_action('disable', ids.join(','), null, { enabled: false }));
+  };
+}
+
+export function loadBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.services.batch_action('load', ids.join(','), null, { status: 'loaded' }));
+  };
+}
+
+export function unloadBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.services.batch_action('unload', ids.join(','), null, { status: 'unloaded' }));
+  };
+}
+
+export function resetBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.services.batch_action('reset', ids.join(',')));
+  };
+}
