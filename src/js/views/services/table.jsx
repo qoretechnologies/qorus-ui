@@ -232,7 +232,7 @@ export default class ServicesTable extends Component {
         className="desc"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
-        name="description"
+        name="desc"
       >
         Description
       </Cell>
