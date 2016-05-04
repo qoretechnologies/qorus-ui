@@ -87,7 +87,7 @@
     "zombie": "^4.2.1"
   },
   "scripts": {
-    "stop": "kill -INT `cat \"$PIDFILE\"`",
+    "stop": "if [ ! -f \"$PIDFILE\" ]; then\n    echo Error: Expected \\$PIDFILE to be a file path, but it is \\\"$PIDFILE\\\".\n    exit 1\n  fi\n  kill -INT `cat \"$PIDFILE\"`",
     "build": "webpack",
     "bgserver:start": "npm start &",
     "bgserver:stop": "npm run-script stop",
