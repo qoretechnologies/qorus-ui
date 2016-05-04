@@ -3,7 +3,7 @@
   "type": "system",
   "name": "test",
   "version": "3.1.0.0",
-  "description": "status information service",
+  "desc": "a simple test to establish the proper balance of your loud speakers",
   "author": "Qore Technologies, sro",
   "parse_options": "PO_NEW_STYLE,PO_REQUIRE_TYPES,PO_STRICT_ARGS",
   "autostart": false,
