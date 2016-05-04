@@ -48,6 +48,20 @@ export default class extends Component {
   };
 
   /**
+   * Handles reseting multiple workflows
+   */
+  handleLoadClick = () => {
+    this.props.batchAction('load');
+  };
+
+  /**
+   * Handles reseting multiple workflows
+   */
+  handleUnloadClick = () => {
+    this.props.batchAction('unload');
+  };
+
+  /**
    * Renders the selection dropdown to the component
    */
   renderSelectionControls() {
@@ -69,21 +83,21 @@ export default class extends Component {
             action={this.handleDisableClick}
           />
           <Button
-            label="Reset"
-            icon="refresh"
-            big
-            btnStyle="default"
-            action={this.handleResetClick}
-          />
-          <Button
             label="Load"
-            icon="refresh"
+            icon="power-off"
             big
             btnStyle="default"
-            action={this.handleResetClick}
+            action={this.handleLoadClick}
           />
           <Button
             label="Unload"
+            icon="remove"
+            big
+            btnStyle="default"
+            action={this.handleUnloadClick}
+          />
+          <Button
+            label="Reset"
             icon="refresh"
             big
             btnStyle="default"
