@@ -40,13 +40,7 @@ let workflows = [
 ];
 
 module.exports = function workFlowTableSteps() {
-  this.When(/^I click on the "([^"]*)" column header$/, async function(header) {
-    const el = findElementByText(this.browser, 'thead th', header);
-
-    this.browser.click(el);
-  });
-
-  this.Then(/^"([^"]*)" are sorted by "([^"]*)" "([^"]*)"$/, async function(data, header, dir) {
+  this.Then(/^workflows are sorted by "([^"]*)" "([^"]*)"$/, async function(header, dir) {
     const direction = dir === 'asc' ? 1 : -1;
     const key = header.toLowerCase();
     const sorted = workflows.slice().sort(firstBy(w => w[key], direction));

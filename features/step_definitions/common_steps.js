@@ -170,6 +170,12 @@ module.exports = function commonSteps() {
       'info'
     );
   });
+
+  this.When(/^I click on the "([^"]*)" column header$/, async function(header) {
+    const el = findElementByText(this.browser, 'thead th', header);
+
+    this.browser.click(el);
+  });
 };
 
 module.exports.selectors = {
