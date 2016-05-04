@@ -14,13 +14,7 @@ import Calendar from './calendar';
 export default class extends Component {
   static propTypes = {
     date: PropTypes.string,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object,
-    route: PropTypes.object,
+    onApplyDate: PropTypes.func,
   };
 
   componentWillMount() {
@@ -64,14 +58,7 @@ export default class extends Component {
   };
 
   applyDate = (date) => {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.context.route.path,
-      this.context.params,
-      { date },
-      this.context.location.query
-    );
+    this.props.onApplyDate(date);
   };
 
   showDatepicker = () => {

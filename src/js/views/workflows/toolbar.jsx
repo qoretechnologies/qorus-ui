@@ -7,6 +7,7 @@ import Search from 'components/search';
 import Datepicker from 'components/datepicker';
 
 import { filterArray } from '../../helpers/workflows';
+import { goTo } from '../../helpers/router';
 import { includes } from 'lodash';
 
 import { CHECKBOX_STATES } from '../../constants/checkbox';
@@ -29,6 +30,13 @@ export default class WorkflowsToolbar extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+  };
+
+  static contextTypes = {
+    router: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object,
+    route: PropTypes.object,
   };
 
   /**
@@ -93,6 +101,17 @@ export default class WorkflowsToolbar extends Component {
    */
   handleUnsetDeprecatedClick = () => {
     this.props.batchAction('unsetDeprecated');
+  };
+
+  applyDate = (date) => {
+    goTo(
+      this.context.router,
+      'workflows',
+      this.context.route.path,
+      this.context.params,
+      { date },
+      this.context.location.query
+    );
   };
 
   /**
@@ -178,7 +197,10 @@ export default class WorkflowsToolbar extends Component {
           />
         </Dropdown>
         {this.renderSelectionControls()}
-        <Datepicker date={this.props.params.date} />
+        <Datepicker
+          date={this.props.params.date}
+          onApplyDate={this.applyDate}
+        />
         <Controls grouped noControls>
           <Button
             label="Running"
