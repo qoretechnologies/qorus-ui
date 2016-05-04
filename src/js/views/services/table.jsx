@@ -256,7 +256,7 @@ export default class ServicesTable extends Component {
 
 
     yield (
-      <Cell className="narrow">
+      <Cell className="narrow checker">
         <Checkbox
           action={this.handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}

@@ -296,7 +296,7 @@ export default class WorkflowsTable extends Component {
    */
   *renderCells({ workflow, selected }) {
     yield (
-      <Cell className="narrow">
+      <Cell className="narrow checker">
         <Checkbox
           action={this.handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
