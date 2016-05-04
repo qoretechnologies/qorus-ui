@@ -380,56 +380,56 @@ table .header-fixed {
 }
 
 .treeview {
-   position: relative;
+	 position: relative;
 }
 
 .treeview ul {
-  list-style: none;
-  text-indent: 0;
-  position: relative;
-  margin-left: 0;
+	list-style: none;
+	text-indent: 0;
+	position: relative;
+	margin-left: 0;
 }
 
 .treeview ul ul {
-  /*border-left:  1px solid #eee;*/
-  margin: .3em;
-  list-style: none;
-  text-indent: 0;
+	/*border-left:  1px solid #eee;*/
+	margin: .3em;
+	list-style: none;
+	text-indent: 0;
 
 }
 
 .treeview li {
   background-color: #fff;
-  border-top: 1px solid #eee;
-  padding-left: 15px;
+	border-top: 1px solid #eee;
+	padding-left: 15px;
 }
 
 .treeview li:nth-child(odd) {
-  background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
 .treeview li:first-child {
-  border-top: 0;
+	border-top: 0;
 }
 
 .treeview li.parent:before {
-  content:  "-";
-  position: absolute;
-  margin-left: -15px;
+	content:  "-";
+	position: absolute;
+	margin-left: -15px;
 }
 
 .treeview li.clps:before {
-  content:  "+";
-  position: absolute;
-  margin-left: -15px;
+	content:  "+";
+	position: absolute;
+	margin-left: -15px;
 }
 
-.textview {
+.textview, .rawview {
     display: none;
     height: auto;
 }
 
-.row-fluid .textview textarea {
+.row-fluid .textview textarea, .row-fluid .rawview textarea {
     min-height: 400px;
     height: auto;
 }

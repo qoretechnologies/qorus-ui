@@ -8,17 +8,18 @@ define(function (require) {
       Dispatcher    = require('qorus/dispatcher'),
       Tree          = require('qorus/tree'),
       Notifications = require('collections/notifications'),
+      System        = require('models/system'),
       Model;
 
   require('sprintf');
 
   var STATUS_PRIORITY = [
-    'COMPLETE',
-    'ERROR',
-    'RETRY',
     'EVENT-WAITING',
     'WAITING',
     'ASYNC-WAITING',
+    'RETRY',
+    'ERROR',
+    'COMPLETE',
     'IN-PROGRESS'
   ];
 
@@ -33,7 +34,7 @@ define(function (require) {
     },
 
     /** list of allowed actions */
-    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep'],
+    allowedActions: ['uncancel','cancel', 'unblock', 'block', 'retry', 'lock', 'unlock', 'breaklock', 'setpriority', 'reschedule', 'skipstep', 'staticdata', 'dynamicdata'],
     dateAttributes: ['started', 'completed', 'modified',
       'HierarchyInfo.completed',
       'HierarchyInfo.modified',
@@ -56,7 +57,8 @@ define(function (require) {
       "order:%(id)s:data_locked",
       "order:%(id)s:data_unlocked",
       "order:%(id)s:info_changed",
-      "order:%(id)s:status_changed"
+      "order:%(id)s:status_changed",
+      "order:%(id)s:data_updated"
     ],
 
     /**
@@ -109,6 +111,8 @@ define(function (require) {
           this.set({ workflowstatus: e.info.info.new });
           this.getProperty('actions', null, true);
           this.trigger('workflowstatus:change');
+        } else if (action === 'data_updated') {
+          this.fetch();
         }
         this.trigger('change', this);
       }
@@ -166,21 +170,20 @@ define(function (require) {
       var url = helpers.getUrl('showWorkflow', { id: this.id }),
           self = this;
 
-
       if(_.indexOf(this.allowedActions, action.toLowerCase()) != -1){
         $.put(this.url(), opts)
           .done(function (resp) {
             var msg = sprintf('Order %s %s done', self.get('name'), action);
             Notifications.create({ group: 'orders', type: 'success', title: msg, url: url });
             if (_.isFunction(callback)) {
-              callback(false);
+              callback(true, resp);
             }
           })
           .fail(function (resp) {
             var msg = sprintf('Order %s %s failed', self.get('name'), action);
             Notifications.create({ group: 'orders', type: 'error', title: msg, url: url });
             if (_.isFunction(callback)) {
-              callback(false);
+              callback(false, resp);
             }
           });
       }
@@ -222,6 +225,15 @@ define(function (require) {
     */
     destroy: function () {
       this.trigger('remove');
+    },
+
+    /**
+      Checks if order is locked
+      @returns {Boolean}
+    */
+    isEditable: function () {
+      if (!this.get('operator_lock')) return true;
+      return this.get('operator_lock') == System.User.get('username');
     }
 
   });

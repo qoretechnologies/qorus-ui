@@ -33,7 +33,6 @@ define(function(require) {
       StepErrorsView  = require('views/workflows/orders/steperrors'),
       ToolbarTpl      = require('tpl!templates/workflow/orders/toolbar.html'),
       CopyView        = require('views/common/table.copy'),
-      LogView         = require('views/log'),
       context, ModelView, StepsView, ErrorsView, DiagramPaneView,
       DiagramView, DataView, StepInfoView, NotesView, OrderLockView,
       WorkflowStatus, Toolbar;
@@ -99,7 +98,7 @@ define(function(require) {
 
     preRender: function () {
       // alter instances to have name hash with stepname
-      var instances = _.map(this.order_model.get('StepInstances'), function (inst) {
+      var instances = _(this.order_model.get('StepInstances')).map(function (inst) {
         inst.name = inst.stepname;
         return inst;
       });
@@ -140,10 +139,10 @@ define(function(require) {
 
     showDropdown: function (e) {
       var tpl      = "<div class='dropdown open'><ul class='dropdown-menu' role='menu'><% _.each(obj.steps, function (step) { %><li><a data-id='<%= step.stepid %>'" +
-                     " data-action = 'show-detail' data-ind='<%= step.ind %>'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
+                     " data-action = 'show-detail'><%= step.ind %> - <%= step.stepstatus %></a></li> <% }) %></ul></div>",
           $target  = $(e.currentTarget),
           stepname = this.order_model.getStepName($target.data('id')),
-          step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname }).value();
+          step     = _(this.order_model.get('StepInstances')).where({ stepname: stepname });
 
       this.hideDropdown();
 
@@ -241,12 +240,14 @@ define(function(require) {
   DataView = Qorus.ModelView.extend({
     template: DataTpl,
     additionalEvents: {
-      'click .nav-pills a': 'tabToggle'
+      'click .nav-pills a': 'tabToggle',
+      'submit': 'submitExternalData',
     },
     tabToggle: function (e) {
       var $target = $(e.currentTarget);
 
       $target.tab('show');
+      this.activeTab = $target.data('target');
       e.preventDefault();
       e.stopPropagation();
     },
@@ -257,6 +258,43 @@ define(function(require) {
       this.context.staticdata = utils.flattenObj(this.model.get('staticdata'));
       this.context.dynamicdata = utils.flattenObj(this.model.get('dynamicdata'));
       this.context.keys = utils.flattenObj(this.model.get('keys'));
+    },
+    onRender: function () {
+        if (this.activeTab) {
+            this.$('[data-target="'+this.activeTab+'"]').tab('show');
+        }
+    },
+    submitExternalData: function (e) {
+      e.preventDefault();
+      if (e.type === 'submit') {
+        var $target = $(e.target);
+
+        try {
+          var data = JSON.parse(_.pluck($target.serializeArray(), 'value')[0]);
+          var opts = { "newdata" : data };
+          this.model.doAction($target.attr('id'), opts, function(status, response) {
+              this.showResponse(status, response, $target);
+              if (status) {
+                  this.model.set($target.attr('id').toLowerCase(), data);
+                  this.render();
+              }
+              }.bind(this));
+          this.showResponse(true, 'Updated', $target);
+        }
+        catch (ex) {
+          this.showResponse(false, ex, $target);
+        }
+      }
+    },
+    showResponse: function (status, response, $target) {
+        $('.alert', $target).removeClass().addClass('alert alert-' + (status ? 'success' : 'error'));
+
+        if (response.responseJSON) {
+            $('.alert', $target).html('<b>' + response.responseJSON.err + '</b>: ' + response.responseJSON.desc);
+        }
+        else {
+            $('.alert', $target).html(response);
+        }
     }
   });
 
@@ -341,7 +379,6 @@ define(function(require) {
     showDetail: function (e) {
       var $target = $(e.currentTarget),
           stepid  = $target.data('id'),
-          indid = $target.data('ind'),
           instances = this.model.get('StepInstances'),
           step;
 
@@ -350,12 +387,7 @@ define(function(require) {
       // exit when click is made on diagram start - no step detail available
       if ($target.hasClass('start')) return;
 
-      if (indid) {
-        step = _.findWhere(instances, { stepid: stepid, ind: indid });
-      } else {
-        step = _.findWhere(instances, { stepid: stepid });
-      }
-
+      step   = _.findWhere(instances, { stepid: stepid });
 
       this.setView(new StepInfoView({ item: step, stepid: stepid, template: StepInfoTpl }), '#step-detail', true);
       this.setView(new StepErrorsView({ model: this.model, stepid: stepid }), '#step-errors', true).render();
@@ -382,7 +414,7 @@ define(function(require) {
       "click .showstep": "stepDetail",
       "click tr.parent": "showSubSteps",
       'click button[data-action]': 'runAction',
-      "click .copy-paste": 'enableCopyMode',
+      "click .copy-paste a": 'setDisplayMode',
       "click .tree-caret": 'toggleTree',
       "click td.editable": 'editTableCell',
       "click .order-lock": 'lockOrder',
@@ -487,8 +519,6 @@ define(function(require) {
         user: User
       });
 
-      this.addTabView(new LogView({ socket_url: "/workflows/" + this.model.get('workflowid'), parent: this }), { name: 'log' });
-
       this.context.item = this.model.toJSON();
     },
 
@@ -548,14 +578,15 @@ define(function(require) {
       }
     },
 
-    enableCopyMode: function (e) {
+    setDisplayMode: function (e) {
       var $el = $(e.currentTarget);
-      var $parent = $el.parent();
+      var $parent = $el.parent().parent(); // 2 levels of DIVs
 
-      $('.treeview', $parent).toggle();
-      $('.textview', $parent).toggle();
-      $el.toggleClass('on');
-      $el.text($el.hasClass('on') ? $el.data('msg-on') : $el.data('msg-off'));
+      $('.treeview,.textview,.rawview', $parent).hide();
+      $('a[data-mode="treeview"],a[data-mode="textview"],a[data-mode="rawview"]', $parent).removeClass('disabled');
+      $('.'+$el.data('mode'), $parent).show();
+      $el.addClass('disabled');
+
       e.preventDefault();
     },
 

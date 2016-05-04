@@ -7,12 +7,23 @@
 <div class="tab-content">
   <div id="static-data" class="tab-pane active relative">
   <% if (staticdata) { %>
-    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="btn-group copy-paste">
+      <a href="#" class="btn btn-mini disabled" data-mode="treeview">Tree mode</a>
+      <a href="#" class="btn btn-mini" data-mode="textview">Copy paste mode</a>
+      <a href="#" class="btn btn-mini" data-mode="rawview" <%= !_item.isEditable() ? 'disabled' : '' %>>Edit Mode</a>
+    </div>
     <div class="treeview">
         <%= nestedListTableFromArray(staticdata) %>
     </div>
     <div class="textview">
         <textarea class="span12"><%=  nestedListTextFromArray(staticdata) %></textarea>
+    </div>
+    <div class="rawview">
+        <form id="StaticData" action="" method="get" accept-charset="utf-8">
+        <textarea name="content" class="span12" <%= !_item.isEditable() ? 'disabled' : '' %>><%=  JSON.stringify(item.staticdata, null, 4) %></textarea>
+        <div class="alert"><strong>Warning!</strong> Posting new staticdata replaces original content and it can be fatal for business processing.</div>
+        <button type="submit" class="btn btn-small btn-success" <%= !_item.isEditable() ? 'disabled' : '' %>><i class="icon-upload"></i> Replace Staticdata</button>
+        </form>
     </div>
   <% } else { %>
   <p>No data</p>
@@ -20,12 +31,23 @@
   </div>
   <div id="dynamic-data" class="tab-pane relative">
   <% if (dynamicdata) { %>
-    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="btn-group copy-paste">
+      <a href="#" class="btn btn-mini disabled" data-mode="treeview">Tree mode</a>
+      <a href="#" class="btn btn-mini" data-mode="textview">Copy paste mode</a>
+      <a href="#" class="btn btn-mini" data-mode="rawview" <%= !_item.isEditable() ? 'disabled' : '' %>>Edit Mode</a>
+    </div>
     <div class="treeview">
         <%= nestedListTableFromArray(dynamicdata) %>
     </div>
     <div class="textview">
         <textarea class="span12"><%= nestedListTextFromArray(dynamicdata) %></textarea>
+    </div>
+    <div class="rawview">
+        <form id="DynamicData" action="" method="get" accept-charset="utf-8">
+        <textarea name="content" class="span12" <%= !_item.isEditable() ? 'disabled' : '' %>><%=  JSON.stringify(item.dynamicdata, null, 4) %></textarea>
+        <div class="alert"><strong>Warning!</strong> Posting new dynamicdata replaces original content and it can be fatal for business processing.</div>
+        <button type="submit" class="btn btn-small btn-success" <%= !_item.isEditable() ? 'disabled' : '' %>><i class="icon-upload"></i> Replace Dynamicdata</button>
+        </form>
     </div>
   <% } else { %>
   <p>No data</p>
@@ -33,9 +55,12 @@
   </div>
   <div id="keys" class="tab-pane relative">
   <% if (keys) { %>
-    <a href="#" class="btn btn-mini copy-paste" data-msg-off="Copy paste mode" data-msg-on="Tree mode">Copy paste mode</a>
+    <div class="btn-group copy-paste">
+        <a href="#" class="btn btn-mini disabled" data-mode="treeview">Tree mode</a>
+        <a href="#" class="btn btn-mini" data-mode="textview">Copy paste mode</a>
+    </div>
     <div class="treeview">
-        <%= nestedListTableFromArray(keys) %>  
+        <%= nestedListTableFromArray(keys) %>
     </div>
     <div class="textview">
         <textarea class="span12"><%= nestedListTextFromArray(keys) %></textarea>
