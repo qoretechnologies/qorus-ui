@@ -90,7 +90,7 @@
     "stop": "if [ ! -f \"$PIDFILE\" ]; then\n    echo Error: Expected \\$PIDFILE to be a file path, but it is \\\"$PIDFILE\\\".\n    exit 1\n  fi\n  kill -INT `cat \"$PIDFILE\"`",
     "build": "webpack",
     "bgserver:start": "npm start &",
-    "bgserver:stop": "npm run-script stop",
+    "bgserver:stop": "npm stop",
     "test": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script test:unit:all && \\\n    npm run-script bgserver:start && \\\n    npm run-script test:uat:all\n  test_status=$?\n  npm run-script bgserver:stop\n  exit $test_status",
     "test:ci": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script test:unit:ci && \\\n    npm run-script bgserver:start && \\\n    npm run-script test:uat:ci\n  test_status=$?\n  npm run-script bgserver:stop\nexit $test_status",
     "test:uat": "NODE_ENV=test cucumber.js",
