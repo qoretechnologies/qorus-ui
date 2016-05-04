@@ -902,7 +902,6 @@ define(function (require) {
 
     render: function (ctx) {
       this.context.messages = this.messages;
-
       TableView.__super__.render.call(this, ctx);
       return this;
     },

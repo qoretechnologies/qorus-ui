@@ -15,7 +15,7 @@
                action = 'show-dd';
            }
 
-           if (step.info) {
+           if (step.info && group.status === 'COMPLETE') {
              skip = step.info.skip;
            }
         %>
