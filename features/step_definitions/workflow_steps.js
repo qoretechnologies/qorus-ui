@@ -20,16 +20,9 @@ module.exports = function workflowSteps() {
     this.browser.assert.elements(selectors.cmpTable, 0);
   });
 
-
-  this.When(/^workflows get loaded$/, function() {
-    return this.waitForElement(selectors.cmpTable);
-  });
-
-
   this.Then(/^I should see a table with workflows data$/, function() {
     this.browser.assert.elements(selectors.cmpRows, { atLeast: 1 });
   });
-
 
   this.When(/^I activate "([^"]*)" workflow$/, async function(name) {
     await this.waitForElement(selectors.cmpTable);
@@ -41,7 +34,6 @@ module.exports = function workflowSteps() {
       name,
     };
   });
-
 
   this.Then(/^I should see workflow detail pane$/, async function() {
     await this.waitForElement(wflwPaneContent);
