@@ -18,6 +18,11 @@ import classNames from 'classnames';
  * HTML/CSS without any JS is relatively slow.
  */
 export default class JobsTable extends ServiceTable {
+  static defaultProps = {
+    setSelectedData: () => {},
+    selectedData: {},
+  }
+
   /**
    * Changes active route to job associated with clicked element.
    *
@@ -113,7 +118,7 @@ export default class JobsTable extends ServiceTable {
    * @param {Object} model
    * @return {Generator<ReactElement>}
    */
-  *renderCells(model) {
+  *renderCells({model, selected}) {
     yield (
       <Cell className="narrow">
         <i className="fa fa-square-o" />

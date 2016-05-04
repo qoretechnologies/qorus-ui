@@ -331,7 +331,7 @@ export default class ServicesTable extends Component {
           key={model.id}
           data={{
             model,
-            selected: selectedData[model.serviceid],
+            selected: selectedData[model.id],
           }}
           cells={this._renderCells}
           onClick={this._activateRow}
