@@ -1,18 +1,5 @@
 Feature: Services Toolbar
 
-  Scenario: Dropdown is toggled
-    Given I am on "services" listing
-    And "services" get loaded
-    When I click the dropdown toggle
-    Then the dropdown should be shown
-
-  Scenario: Dropdown is hidden on click outside
-    Given I am on "services" listing
-    And "services" get loaded
-    And I click the dropdown toggle
-    When I click on the header
-    Then the dropdown should be hidden
-
   Scenario: Dropdown checkbox is unchecked by default
     Given I am on "services" listing
     When "services" get loaded
@@ -68,9 +55,3 @@ Feature: Services Toolbar
     And "services" get loaded
     When I type "another" in the search input
     Then "1" "services" are shown
-
-  Scenario: Dropdown is hidden on toggle blur
-    Given I am on "services" listing
-    And I click the dropdown toggle
-    When I click on the header
-    Then the dropdown should be hidden
