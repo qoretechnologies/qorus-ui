@@ -14,13 +14,23 @@ export default class extends Component {
   };
 
   componentWillMount() {
+    this.setUp();
+  }
+
+  componentWillReceiveProps(next) {
+    if (this.props.route.name !== next.route.name) {
+      this.setUp();
+    }
+  }
+
+  setUp = () => {
     this.setState({
       filterFn: null,
       selected: 'none',
       selectedData: {},
       name: this.props.route.name.toLowerCase(),
     });
-  }
+  };
 
   setSelectedData = (selectedData) => {
     this.setState({
