@@ -33,30 +33,30 @@ export default class ServiceControls extends Component {
 
   handleActivate = () => {
     this.dispatchAction('activate');
-  }
+  };
 
   handleDeactivate = () => {
     this.dispatchAction('deactivate');
-  }
+  };
 
   handleReset = () => {
     this.dispatchAction('reset');
-  }
+  };
 
   handleRun = (event) => {
     event.preventDefault();
     this.dispatchAction('run');
-  }
+  };
 
   handleExpiration= (event) => {
     event.preventDefault();
     this.openModal(ModalExpiry, this.props.job);
-  }
+  };
 
   handleReschedule = (event) => {
     event.preventDefault();
     this.openModal(ModalReschedule, this.props.job);
-  }
+  };
 
   /**
    * Opens modal dialog to manage particular error.
@@ -73,7 +73,7 @@ export default class ServiceControls extends Component {
     );
 
     this.context.openModal(this._modal);
-  }
+  };
 
   /**
    * Closes currently open modal dialog.
@@ -81,7 +81,7 @@ export default class ServiceControls extends Component {
   closeModal = () => {
     this.context.closeModal(this._modal);
     this._modal = null;
-  }
+  };
 
   render() {
     return (
