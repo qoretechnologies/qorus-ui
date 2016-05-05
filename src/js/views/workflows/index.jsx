@@ -175,7 +175,6 @@ export default class Workflows extends Component {
     params: PropTypes.object,
     route: PropTypes.object,
     dispatch: PropTypes.func,
-    sortData: PropTypes.object,
   };
 
   getChildContext() {
@@ -338,8 +337,8 @@ export default class Workflows extends Component {
           params={this.props.params}
           batchAction={this.handleBatchAction}
           onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onAllClick}
-          onInvertClick={this.props.onAllClick}
+          onNoneClick={this.props.onNoneClick}
+          onInvertClick={this.props.onInvertClick}
         />
         <WorkflowsTable
           initialFilter={this.props.filterFn}
