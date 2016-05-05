@@ -191,8 +191,8 @@ export default class Services extends Component {
           params={this.props.params}
           batchAction={this.handleBatchAction}
           onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onAllClick}
-          onInvertClick={this.props.onAllClick}
+          onNoneClick={this.props.onNoneClick}
+          onInvertClick={this.props.onInvertClick}
         />
         <ServicesTable
           initialFilter={this.props.filterFn}
