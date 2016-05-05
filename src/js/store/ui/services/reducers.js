@@ -2,9 +2,9 @@ import { handleActions } from 'redux-actions';
 
 const initialState = {
   sortBy: 'type',
-  sortByKey: 1,
+  sortByKey: { ignoreCase: true, direction: 1 },
   historySortBy: 'name',
-  historySortByKey: 1,
+  historySortByKey: { ignoreCase: true, direction: 1 },
 };
 
 export default handleActions({
@@ -16,7 +16,7 @@ export default handleActions({
         payload.historySortBy = state.sortBy;
         payload.historySortByKey = state.sortByKey;
       } else {
-        payload.sortByKey = state.sortByKey * -1;
+        payload.sortByKey = { ignoreCase: true, direction: state.sortByKey.direction * -1 };
       }
 
       return Object.assign({}, state, payload);

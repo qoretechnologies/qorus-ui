@@ -35,7 +35,7 @@ export default class Cell extends Component {
     let sortCss;
 
     if (props.sortData && props.sortData.sortBy === props.name) {
-      sortCss = props.sortData.sortByKey > 0 ? 'sort sort-asc' : 'sort sort-desc';
+      sortCss = props.sortData.sortByKey.direction > 0 ? 'sort sort-asc' : 'sort sort-desc';
     }
 
     this.setState({
