@@ -211,6 +211,9 @@ define(function (require, exports, module) {
     row_view: RowView,
     postInit: function () {
       this.update();
+    },
+    preRender: function () {
+      this.context.collection = _(this.collection).sortBy('created').value().reverse().slice(0, 20);
     }
   });
 
