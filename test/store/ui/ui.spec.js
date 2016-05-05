@@ -11,11 +11,11 @@ describe('UI redux store', () => {
     store.subscribe(() => {
       expect(store.getState().workflows).to.be.an('object');
       expect(store.getState().workflows.sortBy).to.equal('id');
-      expect(store.getState().workflows.sortByKey).to.equal(-1);
+      expect(store.getState().workflows.sortByKey.direction).to.equal(-1);
       expect(store.getState().workflows.historySortBy).to.equal('name');
-      expect(store.getState().workflows.historySortByKey).to.equal(1);
+      expect(store.getState().workflows.historySortByKey.direction).to.equal(1);
     });
 
-    store.dispatch(actions.workflows.sort({ sortBy: 'id', sortByKey: -1 }));
+    store.dispatch(actions.workflows.sort({ sortBy: 'id', sortByKey: { ignoreCase: true, direction: -1 } }));
   });
 });

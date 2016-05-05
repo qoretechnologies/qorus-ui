@@ -25,11 +25,11 @@ const services = [
   },
 ];
 
-module.exports = function workFlowTableSteps() {
+module.exports = function servicesTableSteps() {
   this.Then(/^services are sorted by "([^"]*)" "([^"]*)"$/, async function(header, dir) {
     const direction = dir === 'asc' ? 1 : -1;
     const key = header.toLowerCase();
-    const sorted = services.slice().sort(firstBy(w => w[key], direction));
+    const sorted = services.slice().sort(firstBy(w => w[key], { ignoreCase: true, direction }));
     const tableData = this.browser.queryAll('tbody > tr');
     const th = findElementByText(this.browser, `thead th.sort.sort-${dir}`, header);
 

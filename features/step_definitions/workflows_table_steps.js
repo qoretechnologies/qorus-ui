@@ -43,7 +43,7 @@ module.exports = function workFlowTableSteps() {
   this.Then(/^workflows are sorted by "([^"]*)" "([^"]*)"$/, async function(header, dir) {
     const direction = dir === 'asc' ? 1 : -1;
     const key = header.toLowerCase();
-    const sorted = workflows.slice().sort(firstBy(w => w[key], direction));
+    const sorted = workflows.slice().sort(firstBy(w => w[key], { ignoreCase: true, direction }));
     const tableData = this.browser.queryAll('tbody > tr');
     const th = findElementByText(this.browser, `thead th.sort.sort-${dir}`, header);
 
