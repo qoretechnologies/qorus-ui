@@ -8,6 +8,9 @@ const routes = {
     date: '24h',
     filter: WORKFLOW_FILTERS.ALL,
   },
+  jobs: {
+    date: '24h',
+  },
   groups: {},
 };
 
