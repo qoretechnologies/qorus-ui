@@ -131,7 +131,7 @@ const Job = {
     COMPLETE: {
       $ref: 'positiveInteger',
     },
-    CRASHSED: {
+    CRASHED: {
       $ref: 'positiveInteger',
     },
     ERROR: {
