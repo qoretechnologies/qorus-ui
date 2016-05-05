@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
-import { goTo } from '../../helpers/router';
 import { formatDate } from '../../helpers/workflows';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
