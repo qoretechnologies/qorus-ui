@@ -231,8 +231,10 @@ export default class App extends Component {
                 name="Services"
               />
               <Route
-                path="jobs(/:detailId)(/:tabId)"
-                component={Jobs}
+                path="jobs(/:date)(/:detailId)(/:tabId)"
+                component={View}
+                view={Jobs}
+                name="Jobs"
               />
               <Route path="search" />
               <Route path="groups(/:name)" />
