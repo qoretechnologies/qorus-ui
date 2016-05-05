@@ -4,21 +4,19 @@
  * @module api/services
  */
 
-const findModel = (idAttr) => (id, s) => s[idAttr] === parseInt(id, 10);
+const findService = (id, s) => s.serviceid === parseInt(id, 10);
 const config = require('../config');
-
 const express = require('express');
-
 const rest = require('../rest');
 
 module.exports = () => {
   const data = require('./data')();
 
   const router = new express.Router();
-  router.use(rest(data, findModel('serviceid')));
+  router.use(rest(data, findService));
 
   router.put('/:id', (req, res) => {
-    const item = data.find(findModel('serviceid').bind(null, req.params.id));
+    const item = data.find(s => findService(req.params.id, s));
 
     switch (req.body.action) {
       case 'disable':
@@ -57,28 +55,28 @@ module.exports = () => {
     switch (action) {
       case 'disable':
         result = ids.map(id => {
-          const item = data.find(w => findModel(id, w));
+          const item = data.find(s => findService(id, s));
           item.enabled = false;
           return item;
         });
         break;
       case 'enable':
         result = ids.map(id => {
-          const item = data.find(w => findModel(id, w));
+          const item = data.find(s => findService(id, s));
           item.enabled = true;
           return item;
         });
         break;
       case 'load':
         result = ids.map(id => {
-          const item = data.find(w => findModel(id, w));
+          const item = data.find(s => findService(id, s));
           item.status = 'loaded';
           return item;
         });
         break;
       case 'unload':
         result = ids.map(id => {
-          const item = data.find(w => findModel(id, w));
+          const item = data.find(s => findService(id, s));
           item.status = 'unloaded';
           return item;
         });

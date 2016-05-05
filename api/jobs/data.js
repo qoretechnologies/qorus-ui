@@ -1,6 +1,5 @@
 'use strict';
 
-
 /**
  * Services data.
  *
@@ -9,7 +8,6 @@
  * @module api/services/data
  * @see module:api/data.getData
  */
-
 
 /**
  * @return {!Array<!module:types.Workflow>}

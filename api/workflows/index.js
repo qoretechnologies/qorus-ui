@@ -4,14 +4,10 @@
  * @module api/workflows
  */
 
+const findWorkflow = (id, s) => s.workflowid === parseInt(id, 10);
 const express = require('express');
-
 const config = require('../config');
 const rest = require('../rest');
-
-function findWorkflow(id, s) {
-  return s.workflowid === parseInt(id, 10);
-}
 
 module.exports = () => {
   const data = require('./data')();
@@ -19,7 +15,7 @@ module.exports = () => {
   const router = new express.Router();
   router.use(rest(data, findWorkflow));
   router.put('/:id', (req, res) => {
-    const item = data.find(findWorkflow.bind(null, req.params.id));
+    const item = data.find(w => findWorkflow(req.params.id, w));
 
     switch (req.body.action) {
       case 'disable':

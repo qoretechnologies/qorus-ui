@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function activate(actions) {
   return job => dispatch => {
     dispatch(actions.jobs.action({
@@ -60,5 +62,36 @@ export function reschedule(actions) {
         schedule,
       }),
     }, job.id));
+  };
+}
+
+export function enableBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.jobs.batch_action('enable', ids.join(','), null, { enabled: true }));
+  };
+}
+
+export function disableBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.jobs.batch_action('disable', ids.join(','), null, { enabled: false }));
+  };
+}
+
+export function resetBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.jobs.batch_action('reset', ids.join(',')));
+  };
+}
+
+export function runBatch(actions) {
+  return ids => dispatch => {
+    dispatch(
+      actions.jobs.batch_action(
+        'run',
+        ids.join(','),
+        null,
+        { last_executed: moment().format('YYYY-MM-DD HH:mm:ss') }
+      )
+    );
   };
 }

@@ -18,7 +18,7 @@ function rest(data, selector) {
 
   router.get('/', (req, res) => res.json(data));
   router.get('/:id', (req, res) => {
-    const item = data.find(selector.bind(null, req.params.id));
+    const item = data.find(d => selector(req.params.id, d));
     res.status(item ? 200 : 404).json(item);
   });
 
