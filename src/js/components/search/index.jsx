@@ -66,7 +66,7 @@ export default class extends Component {
             id="search"
             className="form-control"
             onChange={this.handleInputChange}
-            value={this.state.query}
+            defaultValue={this.state.query}
           />
           <span className="input-group-addon">
             <i className="fa fa-search" />
