@@ -1,15 +1,13 @@
 import React from 'react';
 import ServiceTable from '../services/table';
 
-import { Cell } from 'components/table';
-import Badge from 'components/badge';
+import { Cell } from '../../components/table';
+import Badge from '../../components/badge';
 import JobControls from './controls';
-import Date from 'components/date';
+import Date from '../../components/date';
+import Checkbox from '../../components/checkbox';
 
-import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
-
-import classNames from 'classnames';
 
 /**
  * List of all jobs in the system.
@@ -21,7 +19,7 @@ export default class JobsTable extends ServiceTable {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
-  }
+  };
 
   /**
    * Changes active route to job associated with clicked element.
@@ -75,11 +73,27 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell tag="th" className="name">Name</Cell>
+      <Cell
+        tag="th"
+        className="name"
+        name="name"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        Name
+      </Cell>
     );
 
     yield (
-      <Cell tag="th" className="narrow">Version</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        name="version"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        Version
+      </Cell>
     );
 
     yield (
@@ -95,19 +109,47 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell tag="th">Complete</Cell>
+      <Cell
+        tag="th"
+        name="COMPLETE"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        Complete
+      </Cell>
     );
 
     yield (
-      <Cell tag="th">Error</Cell>
+      <Cell
+        tag="th"
+        name="ERROR"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        Error
+      </Cell>
     );
 
     yield (
-      <Cell tag="th">In-progress</Cell>
+      <Cell
+        tag="th"
+        name="IN-PROGRESS"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        In-progress
+      </Cell>
     );
 
     yield (
-      <Cell tag="th">Crashed</Cell>
+      <Cell
+        tag="th"
+        name="CRASHED"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
+      >
+        Crashed
+      </Cell>
     );
   }
 
@@ -116,12 +158,16 @@ export default class JobsTable extends ServiceTable {
    * Yields cells with model data
    *
    * @param {Object} model
+   * @param {String} selected
    * @return {Generator<ReactElement>}
    */
-  *renderCells({model, selected}) {
+  *renderCells({ model, selected }) {
     yield (
       <Cell className="narrow">
-        <i className="fa fa-square-o" />
+        <Checkbox
+          action={this.handleCheckboxClick}
+          checked={selected ? 'CHECKED' : 'UNCHECKED'}
+        />
       </Cell>
     );
 
@@ -167,7 +213,7 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell><Badge label="progress" val={model.PROGRESS || 0} /></Cell>
+      <Cell><Badge label="progress" val={model['IN-PROGRESS'] || 0} /></Cell>
     );
 
     yield (
