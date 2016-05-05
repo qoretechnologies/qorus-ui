@@ -54,6 +54,13 @@ export default class extends Component {
     this.props.batchAction('reset');
   };
 
+  /**
+   * Handles reseting multiple workflows
+   */
+  handleRunClick = () => {
+    this.props.batchAction('run');
+  };
+
   applyDate = (date) => {
     goTo(
       this.context.router,
