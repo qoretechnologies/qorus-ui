@@ -163,7 +163,7 @@ export default class JobsTable extends ServiceTable {
    */
   *renderCells({ model, selected }) {
     yield (
-      <Cell className="narrow">
+      <Cell className="narrow checker">
         <Checkbox
           action={this.handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
