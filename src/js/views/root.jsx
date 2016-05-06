@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import Navigation from 'components/navigation';
 import Topbar from 'components/topbar';
 import Footer from 'components/footer';
-import { Manager as ModalManager } from 'components/modal';
+import { Manager as ModalManager } from '../components/modal';
 
 
 import actions from 'store/api/actions';
