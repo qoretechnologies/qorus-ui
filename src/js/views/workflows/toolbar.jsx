@@ -30,6 +30,7 @@ export default class WorkflowsToolbar extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+    onCSVClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -233,6 +234,12 @@ export default class WorkflowsToolbar extends Component {
             />
           </Dropdown>
         </Controls>
+        <Button
+          label="CSV"
+          btnStyle="default"
+          big
+          action={this.props.onCSVClick}
+        />
         <Search
           defaultValue={this.props.defaultSearchValue}
           onSearchUpdate={this.props.onSearchUpdate}

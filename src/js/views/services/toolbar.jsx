@@ -24,6 +24,7 @@ export default class extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+    onCSVClick: PropTypes.func,
   };
 
   /**
@@ -136,6 +137,12 @@ export default class extends Component {
           />
         </Dropdown>
         {this.renderSelectionControls()}
+        <Button
+          label="CSV"
+          btnStyle="default"
+          big
+          action={this.props.onCSVClick}
+        />
         <Search
           defaultValue={this.props.defaultSearchValue}
           onSearchUpdate={this.props.onSearchUpdate}

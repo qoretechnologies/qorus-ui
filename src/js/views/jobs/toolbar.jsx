@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Toolbar, { Actions } from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
-import { Control as Button } from 'components/controls';
+import { Control as Button } from '../../components/controls';
 import Checkbox from 'components/checkbox';
 import Search from 'components/search';
 import Datepicker from 'components/datepicker';
@@ -24,6 +24,7 @@ export default class extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+    onCSVClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -147,6 +148,12 @@ export default class extends Component {
         <Search
           defaultValue={this.props.defaultSearchValue}
           onSearchUpdate={this.props.onSearchUpdate}
+        />
+        <Button
+          label="CSV"
+          btnStyle="default"
+          big
+          action={this.props.onCSVClick}
         />
       </Toolbar>
     );

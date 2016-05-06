@@ -1,11 +1,16 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 import Modal, { Manager } from '../../src/js/components/modal';
 
 
 describe("Modal, { Manager } from 'components/modal'", () => {
+  before(() => {
+    chai.use(spies);
+  });
+
   /**
    * Example modal component with simple content.
    *
@@ -14,7 +19,9 @@ describe("Modal, { Manager } from 'components/modal'", () => {
    */
   function SimpleModal(props) {
     return (
-      <Modal>
+      <Modal
+        onMount={props.onMount}
+      >
         <Modal.Header
           titleId="modalTitle"
           onClose={props.onClose}
@@ -31,6 +38,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
   SimpleModal.propTypes = {
     heading: PropTypes.string,
     onClose: PropTypes.func,
+    onMount: PropTypes.func,
   };
 
 
@@ -99,6 +107,19 @@ describe("Modal, { Manager } from 'components/modal'", () => {
 
 
         expectSimpleModalToBeOpened(manager);
+      });
+
+      it('renders Bootstrap modal and runs the onMount function', () => {
+        const action = chai.spy();
+        const manager = TestUtils.renderIntoDocument(
+          <Manager />
+        );
+        const modal = <SimpleModal onMount={action} />;
+
+        manager.open(modal);
+
+        expectSimpleModalToBeOpened(manager);
+        expect(action).to.have.been.called();
       });
 
 

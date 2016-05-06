@@ -94,6 +94,7 @@ export default class Jobs extends Component {
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     sortData: PropTypes.object,
+    onCSVClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -129,6 +130,8 @@ export default class Jobs extends Component {
     setTitle(`Jobs | ${this.context.getTitle()}`);
   }
 
+  getCSVTable = () => this.props.generateCSV(this.props.collection, 'jobs');
+
   /**
    * Handles the batch action calls like
    * enabling, disabling, reseting etc
@@ -155,6 +158,10 @@ export default class Jobs extends Component {
     this.props.dispatch(
       ui.jobs.sort(sortChange)
     );
+  };
+
+  handleCSVClick = () => {
+    this.props.onCSVClick(this.props.collection, 'jobs');
   };
 
   renderPane() {
@@ -196,6 +203,7 @@ export default class Jobs extends Component {
           onAllClick={this.props.onAllClick}
           onNoneClick={this.props.onNoneClick}
           onInvertClick={this.props.onInvertClick}
+          onCSVClick={this.handleCSVClick}
         />
         <div className="table--flex">
           <JobsTable

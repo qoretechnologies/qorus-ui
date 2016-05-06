@@ -163,6 +163,7 @@ export default class Workflows extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+    onCSVClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -282,6 +283,13 @@ export default class Workflows extends Component {
     );
   };
 
+  handleCSVClick = () => {
+    const collection = this.state.filteredWorkflows.length ?
+      this.state.filteredWorkflows : this.props.workflows;
+
+    this.props.onCSVClick(collection, 'workflows');
+  };
+
   /**
    * Applies the current filter to the URL
    *
@@ -339,6 +347,7 @@ export default class Workflows extends Component {
           onAllClick={this.props.onAllClick}
           onNoneClick={this.props.onNoneClick}
           onInvertClick={this.props.onInvertClick}
+          onCSVClick={this.handleCSVClick}
         />
         <WorkflowsTable
           initialFilter={this.props.filterFn}

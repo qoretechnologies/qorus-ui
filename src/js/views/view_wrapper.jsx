@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { goTo } from '../helpers/router';
+import { getCSVHeaders } from '../helpers/table';
+
+import Modal from '../components/modal';
 
 export default class extends Component {
   static propTypes = {
@@ -11,6 +14,8 @@ export default class extends Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
@@ -42,6 +47,30 @@ export default class extends Component {
     if (!this.props.params.detailId) return null;
 
     return data.find(d => d.id === parseInt(this.props.params.detailId, 10));
+  };
+
+  /**
+   * Generates the CSV string from the collection
+   * @param {Array<Object>} collection
+   * @param {String} type
+   * @returns {String}
+   */
+  generateCSV = (collection, type) => {
+    const headers = getCSVHeaders(type);
+
+    let content = Object.keys(headers).reduce((str, h) => {
+      return str === '' ? headers[h] : `${str};${headers[h]}`;
+    }, '');
+
+    for (const item of collection) {
+      content += `\n${Object.keys(headers).reduce((str, h) => {
+        const value = item[h] || 0;
+
+        return str === '' ? value : `${str};${value}`;
+      }, '')}`;
+    }
+
+    return content;
   };
 
   clearSelection = () => {
@@ -124,6 +153,40 @@ export default class extends Component {
     this.handleFilterClick((item, selectedData) => !selectedData[item.id]);
   };
 
+  selectCSVContent = () => {
+    document.getElementById('csv-text').select();
+  };
+
+  handleCSVClick = (collection, type) => {
+    this._modal = (
+      <Modal
+        onMount={this.selectCSVContent}
+      >
+        <Modal.Header
+          onClose={this.handleCSVCloseClick}
+        >
+          Copy table
+          <small> (Press ⌘ + c)</small>
+        </Modal.Header>
+        <Modal.Body>
+          <textarea
+            rows="12"
+            readOnly
+            id="csv-text"
+            className="form-control"
+            value={this.generateCSV(collection, type)}
+          />
+        </Modal.Body>
+      </Modal>
+    );
+
+    this.context.openModal(this._modal);
+  };
+
+  handleCSVCloseClick = () => {
+    this.context.closeModal(this._modal);
+  };
+
   render() {
     const View = this.props.route.view;
 
@@ -143,6 +206,7 @@ export default class extends Component {
         onAllClick={this.handleAllClick}
         onNoneClick={this.handleNoneClick}
         onInvertClick={this.handleInvertClick}
+        onCSVClick={this.handleCSVClick}
         {...this.props}
       />
     );

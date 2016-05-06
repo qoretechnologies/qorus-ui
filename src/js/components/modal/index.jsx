@@ -17,8 +17,14 @@ import { pureRender } from '../utils';
 export default class Modal extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    onMount: PropTypes.func,
   };
 
+  componentDidMount() {
+    if (this.props.onMount) {
+      this.props.onMount();
+    }
+  }
 
   /**
    * Triggers modal's header `onClose` prop if available.

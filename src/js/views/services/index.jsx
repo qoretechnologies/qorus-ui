@@ -93,6 +93,7 @@ export default class Services extends Component {
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
+    onCSVClick: PropTypes.func,
     sortData: PropTypes.object,
   };
 
@@ -126,6 +127,10 @@ export default class Services extends Component {
   componentDidUpdate() {
     setTitle(`Services | ${this.context.getTitle()}`);
   }
+
+  handleCSVClick = () => {
+    this.props.onCSVClick(this.props.services, 'services');
+  };
 
   /**
    * Handles the batch action calls like
@@ -193,6 +198,7 @@ export default class Services extends Component {
           onAllClick={this.props.onAllClick}
           onNoneClick={this.props.onNoneClick}
           onInvertClick={this.props.onInvertClick}
+          onCSVClick={this.handleCSVClick}
         />
         <ServicesTable
           initialFilter={this.props.filterFn}
