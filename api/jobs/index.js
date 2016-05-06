@@ -23,7 +23,7 @@ module.exports = () => {
     switch (req.body.action) {
       case 'disable':
       case 'enable':
-        item.enabled = !!req.body.enabled;
+        item.enabled = !item.enabled;
         break;
       case 'setActive':
         item.active = !!req.body.active;
