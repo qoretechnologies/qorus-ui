@@ -31,6 +31,14 @@ export default class ServiceControls extends Component {
     );
   }
 
+  handleEnable = () => {
+    this.dispatchAction('enable');
+  };
+
+  handleDisable = () => {
+    this.dispatchAction('disable');
+  };
+
   handleActivate = () => {
     this.dispatchAction('activate');
   };
