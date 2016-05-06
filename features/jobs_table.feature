@@ -1,4 +1,3 @@
-@wip
 Feature: jobs table
 
   Scenario: Table is sorted by name by default

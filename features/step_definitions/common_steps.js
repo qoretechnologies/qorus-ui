@@ -5,7 +5,6 @@ const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
 
-
 /**
  * Finds listed object's row element by its name.
  *
@@ -18,7 +17,6 @@ function findTableRow(browser, name) {
     queryAll(cmpRows).
     find(r => r.cells[5].textContent === name) || null;
 }
-
 
 /**
  * Finds listed object's unique identifier by given name in table.
@@ -93,7 +91,7 @@ module.exports = function commonSteps() {
   this.When(/^I click the "([^"]*)" button$/, async function(button) {
     const el = findElementByText(this.browser, '.btn', ` ${button}`);
 
-    return this.browser.click(el);
+    await this.browser.click(el);
   });
 
   this.When(/^I activate "([^"]*)"$/, async function(name) {
@@ -210,7 +208,7 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I select "([^"]*)" "([^"]*)"$/, async function (count, type) {
-    const rows = this.browser.queryAll('td.narrow > i.fa-square-o');
+    const rows = this.browser.queryAll('td.narrow.checker > i.fa-square-o');
 
     for (let i = 0; i <= count - 1; i++) {
       this.browser.click(rows[i]);
@@ -228,7 +226,7 @@ module.exports = function commonSteps() {
       el = `td.narrow${css} i.fa-${icon}`;
     }
 
-    await this.waitForChange(2000);
+    await this.waitForChange(1000);
     this.browser.assert.elements(el, parseInt(count));
   });
 

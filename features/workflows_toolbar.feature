@@ -76,7 +76,7 @@ Feature: Workflow Toolbar
     Then "4" "workflows" are shown
 
   Scenario: Filtering workflows through search input
-    Given I am on "workflows" listingd
+    Given I am on "workflows" listing
     And "workflows" get loaded
     When I type "array" in the search input
     Then "1" "workflows" are shown
@@ -86,3 +86,10 @@ Feature: Workflow Toolbar
     And "workflows" get loaded
     When I click the "Deprecated" button inside "deprecated" dropdown
     Then "6" "workflows" are shown
+
+  @no-impl
+  Scenario: Displaying CSV data of the table
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the "CSV" button
+    Then I see modal with CSV data in it
