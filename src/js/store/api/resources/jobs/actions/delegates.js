@@ -1,5 +1,27 @@
 import moment from 'moment';
 
+export function enable(actions) {
+  return job => dispatch => {
+    dispatch(actions.jobs.action({
+      body: JSON.stringify({
+        action: 'enable',
+        enabled: true,
+      }),
+    }, job.id));
+  };
+}
+
+export function disable(actions) {
+  return job => dispatch => {
+    dispatch(actions.jobs.action({
+      body: JSON.stringify({
+        action: 'disable',
+        enabled: false,
+      }),
+    }, job.id));
+  };
+}
+
 export function activate(actions) {
   return job => dispatch => {
     dispatch(actions.jobs.action({

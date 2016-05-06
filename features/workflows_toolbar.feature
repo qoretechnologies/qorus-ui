@@ -76,7 +76,7 @@ Feature: Workflow Toolbar
     Then "4" "workflows" are shown
 
   Scenario: Filtering workflows through search input
-    Given I am on "workflows" listing
+    Given I am on "workflows" listingd
     And "workflows" get loaded
     When I type "array" in the search input
     Then "1" "workflows" are shown
