@@ -58,61 +58,361 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
   });
 
   describe('Dropdown', () => {
-    it('shows Item list when Control is clicked', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Dropdown>
-          <Control>
-            <i className="fa fa-square-o check-all checker" />&nbsp;
-          </Control>
-          <Item title="Hello" />
-          <Item title="Its me" />
-        </Dropdown>
-      );
-      let dropdown = renderer.getRenderOutput();
+    describe('Single Dropdown', () => {
+      it('shows Item list when Control is clicked', () => {
+        const renderer = TestUtils.createRenderer();
+        renderer.render(
+          <Dropdown>
+            <Control>
+              <i className="fa fa-square-o check-all checker" />&nbsp;
+            </Control>
+            <Item title="Hello" />
+            <Item title="Its me" />
+          </Dropdown>
+        );
+        let dropdown = renderer.getRenderOutput();
 
-      dropdown.props.children[0][0].props.onClick({
-        preventDefault: () => {},
-        defaultPrevented: false,
+        dropdown.props.children[0][0].props.onClick({
+          preventDefault: () => {},
+          defaultPrevented: false,
+        });
+
+        dropdown = renderer.getRenderOutput();
+
+        const comps = shallow.filterTree(dropdown, el => (
+          el.type === Item
+        ));
+
+        expect(comps).to.have.length(2);
       });
 
-      dropdown = renderer.getRenderOutput();
+      it('hides the Dropdown when Item is clicked', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown>
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
 
-      const comps = shallow.filterTree(dropdown, el => (
-        el.type === Item
-      ));
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
 
-      expect(comps).to.have.length(2);
+        TestUtils.Simulate.click(button[0]);
+
+        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        expect(component.state.showDropdown).to.equal(true);
+
+        TestUtils.Simulate.click(item[0]);
+
+        expect(component.state.showDropdown).to.equal(false);
+      });
     });
 
-    it('hides the Dropdown when Item is clicked', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Dropdown>
-          <Control>
-            Click me
-          </Control>
-          <Item
-            action={() => true}
-            title="Item"
-          />
-        </Dropdown>
-      );
-      let dropdown = renderer.getRenderOutput();
+    describe('Multi select dropdown', () => {
+      it('doesnt hide the Dropdown when Item is clicked', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
 
-      dropdown.props.children[0][0].props.onClick({
-        preventDefault: () => {},
-        defaultPrevented: false,
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(button[0]);
+
+        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        expect(component.state.showDropdown).to.equal(true);
+
+        TestUtils.Simulate.click(item[0]);
+
+        expect(component.state.showDropdown).to.equal(true);
       });
 
-      dropdown = renderer.getRenderOutput();
+      it('runs the provided onSubmit function when submit button clicked', () => {
+        const action = chai.spy();
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+            onSubmit={action}
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+            <Item
+              action={() => true}
+              title="Item"
+            />
+            <Item
+              action={() => true}
+              title="Item two"
+            />
+          </Dropdown>
+        );
 
-      dropdown.props.children[1].props.children[0].props.action();
-      dropdown.props.children[1].props.children[0].props.hideDropdown();
+        const buttons = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
 
-      dropdown = renderer.getRenderOutput();
+        TestUtils.Simulate.click(buttons[0]);
 
-      expect(dropdown.props.children[1]).to.equal(null);
+        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        TestUtils.Simulate.click(item[1]);
+        TestUtils.Simulate.click(item[2]);
+        TestUtils.Simulate.click(buttons[1]);
+
+        expect(action).to.have.been.called().with(['Item two', 'Item']);
+      });
+
+      it('remembers the selected items when closed', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              title="All"
+            />
+            <Item
+              title="Item"
+            />
+            <Item
+              title="Item two"
+            />
+          </Dropdown>
+        );
+
+        const buttons = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(buttons[0]);
+
+        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        TestUtils.Simulate.click(items[1]);
+        TestUtils.Simulate.click(items[2]);
+
+        expect(component.state.selected).to.have.length(2);
+        expect(component.state.selected[0]).to.equal('Item two');
+        expect(component.state.selected[1]).to.equal('Item');
+
+        TestUtils.Simulate.click(buttons[0]);
+
+        expect(component.state.selected).to.have.length(2);
+
+        TestUtils.Simulate.click(buttons[0]);
+
+        expect(items[1].parentElement.className).to.equal('active');
+        expect(items[2].parentElement.className).to.equal('active');
+      });
+
+      it('renders a submit button with "Filter" label when onSubmit func is provided', () => {
+        const action = chai.spy();
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+            onSubmit={action}
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+          </Dropdown>
+        );
+
+        const buttons = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        expect(buttons[1].textContent).to.equal(' Filter');
+      });
+
+      it('renders a submit button with the provided label when onSubmit func is provided', () => {
+        const action = chai.spy();
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+            onSubmit={action}
+            submitLabel="Submit button"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+          </Dropdown>
+        );
+
+        const buttons = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        expect(buttons[1].textContent).to.equal(' Submit button');
+      });
+
+      it('selects the "All" item by default', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
+
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(button[0]);
+
+        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        expect(component.state.selected[0]).to.equal('All');
+        expect(items[0].textContent).to.equal(' All');
+        expect(items[0].parentElement.className).to.equal('active');
+      });
+
+      it('selects the clicked item and the default is deselected', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
+
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(button[0]);
+
+        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        TestUtils.Simulate.click(items[1]);
+
+        expect(component.state.selected).to.have.length(1);
+        expect(component.state.selected[0]).to.equal('Item');
+      });
+
+      it('deselects the clicked item and default is selected', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
+
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(button[0]);
+
+        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        TestUtils.Simulate.click(items[1]);
+        TestUtils.Simulate.click(items[1]);
+
+        expect(component.state.selected).to.have.length(1);
+        expect(component.state.selected[0]).to.equal('All');
+      });
+
+      it('deselects others when default is clicked', () => {
+        const component = TestUtils.renderIntoDocument(
+          <Dropdown
+            multi
+            def="All"
+          >
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
+            <Item
+              action={() => true}
+              title="Item"
+            />
+            <Item
+              action={() => true}
+              title="Item2"
+            />
+            <Item
+              action={() => true}
+              title="Item3"
+            />
+          </Dropdown>
+        );
+
+        const button = TestUtils.scryRenderedDOMComponentsWithTag(component, 'button');
+
+        TestUtils.Simulate.click(button[0]);
+
+        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+        TestUtils.Simulate.click(items[1]);
+        TestUtils.Simulate.click(items[2]);
+        TestUtils.Simulate.click(items[3]);
+
+        expect(component.state.selected).to.have.length(3);
+
+        TestUtils.Simulate.click(items[0]);
+
+        expect(component.state.selected).to.have.length(1);
+        expect(component.state.selected[0]).to.equal('All');
+      });
     });
   });
 

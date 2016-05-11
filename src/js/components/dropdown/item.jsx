@@ -12,6 +12,9 @@ export default class Item extends Component {
     icon: PropTypes.string,
     action: PropTypes.func,
     hideDropdown: PropTypes.func,
+    multi: PropTypes.bool,
+    selected: PropTypes.bool,
+    toggleItem: PropTypes.func,
   };
 
   /**
@@ -24,7 +27,11 @@ export default class Item extends Component {
       this.props.action(event);
     }
 
-    this.props.hideDropdown();
+    if (!this.props.multi) {
+      this.props.hideDropdown();
+    } else {
+      this.props.toggleItem(this.props.title);
+    }
   };
 
   /**
@@ -40,8 +47,10 @@ export default class Item extends Component {
   }
 
   render() {
+    const cls = classNames(this.props.selected ? 'active' : '');
+
     return (
-      <li>
+      <li className={cls}>
         <a
           onClick={this.handleClick}
           href="#"
