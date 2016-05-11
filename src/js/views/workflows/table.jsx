@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { includes } from 'lodash';
+import { Link } from 'react-router';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
@@ -331,7 +332,11 @@ export default class WorkflowsTable extends Component {
     );
 
     yield (
-      <Cell className="name">{workflow.name}</Cell>
+      <Cell className="name">
+        <Link to={`/workflow/${workflow.workflowid}`}>
+          {workflow.name}
+        </Link>
+      </Cell>
     );
 
     yield (
