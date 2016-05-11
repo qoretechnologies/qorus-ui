@@ -32,6 +32,8 @@ Object.keys(ORDER_STATES).forEach(key => {
   CSVheaders.workflows[ORDER_STATES[key].name] = ORDER_STATES[key].short;
 });
 
+CSVheaders.workflows.total = 'Total';
+
 const getCSVHeaders = (view) => CSVheaders[view];
 
 export {
