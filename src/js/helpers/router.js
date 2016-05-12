@@ -8,6 +8,11 @@ const routes = {
     date: '24h',
     filter: WORKFLOW_FILTERS.ALL,
   },
+  workflow: {
+    date: '24h',
+    filter: 'all',
+    tabId: 'list',
+  },
   jobs: {
     date: '24h',
   },
