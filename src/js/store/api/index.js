@@ -41,11 +41,11 @@ export function createResourceReducers(
           if (resourceOrigin && resourceOrigin.transform) {
             data = (isArray(action.payload)) ?
               action.payload.map(resourceOrigin.transform) :
-              resourceOrigin.transform(action.payload);
+              [resourceOrigin.transform(action.payload)];
           } else {
             data = action.payload;
           }
-
+          
           if (isSpecialReducer) {
             return (
               specialReducers[resource][actn.toUpperCase()]
