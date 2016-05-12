@@ -226,7 +226,7 @@ export default class App extends Component {
                 name="Workflows"
               />
               <Route
-                path="workflow(/:id)(/:tab)(/:filter)(/:date)"
+                path="workflow(/:id)(/:tabId)(/:filter)(/:date)"
                 component={View}
                 view={Workflow}
                 name="Workflow"
