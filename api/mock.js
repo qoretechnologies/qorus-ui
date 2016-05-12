@@ -23,6 +23,8 @@ module.exports = () => {
   router.use('/steps', require('./steps')());
   router.use('/services', require('./services')());
   router.use('/jobs', require('./jobs')());
+  router.use('/orders', require('./orders')());
+
 
   return router;
 };
