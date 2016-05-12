@@ -4,7 +4,7 @@ import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'comp
 import { Control as Button, Controls } from 'components/controls';
 import Checkbox from 'components/checkbox';
 import Search from 'components/search';
-import Datepicker from 'components/datepicker';
+import Datepicker from '../../components/datepicker';
 
 import { filterArray } from '../../helpers/workflows';
 import { goTo } from '../../helpers/router';

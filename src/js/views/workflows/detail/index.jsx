@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Tabs, { Pane } from 'components/tabs';
+import Tabs, { Pane } from '../../../components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import LibraryTab from 'components/library';

@@ -21,9 +21,9 @@ export default class WorkflowsControls extends Component {
     );
   }
 
-  dispatchDisable = () => this.dispatchAction('disable')
-  dispatchEnable = () => this.dispatchAction('enable')
-  dispatchReset = () => this.dispatchAction('reset')
+  dispatchDisable = () => this.dispatchAction('disable');
+  dispatchEnable = () => this.dispatchAction('enable');
+  dispatchReset = () => this.dispatchAction('reset');
 
   render() {
     return (

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import AutoStart from 'components/autostart';
+import AutoStart from '../../../components/autostart';
 import WorkflowsControls from '../controls';
 
 import { pureRender } from 'components/utils';
