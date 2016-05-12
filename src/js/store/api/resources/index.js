@@ -73,4 +73,11 @@ export default [
       // extendDefaults(servicesDefaults)
     ),
   },
+  {
+    name: 'orders',
+    url: `${settings.REST_BASE_URL}/orders`,
+    transform: _.flowRight(
+      normalizeId('workflow_instanceid'),
+    ),
+  },
 ];

@@ -5,6 +5,7 @@ import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
 import * as serviceActions from './resources/services/actions';
 import * as jobActions from './resources/jobs/actions';
+import * as orderActions from './resources/orders/actions';
 import {
   combineResourceActions,
   createResourceActions,
@@ -16,12 +17,16 @@ import qs from 'qs';
 
 
 export const DEFAULT_ACTIONS = {
-  FETCH: url => params => {
+  FETCH: url => (params, id) => {
     let newUrl = url;
+
+    if (id) {
+      newUrl = `${url}/${id}`;
+    }
 
     if (params) {
       const query = qs.stringify(params);
-      newUrl = `${url}?${query}`;
+      newUrl = `${newUrl}?${query}`;
     }
 
     return fetchJson(
@@ -69,6 +74,8 @@ Object.keys(workflowActions.delegates).forEach(a => {
 Object.assign(actions.workflows, workflowActions.specials);
 
 Object.assign(actions.steps, stepActions);
+
+Object.assign(actions.orders, orderActions);
 
 Object.assign(actions.errors, errorActions);
 
