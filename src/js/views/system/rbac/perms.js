@@ -7,7 +7,7 @@ define(function (require) {
       RowTpl      = require('text!templates/system/rbac/perms/row.html'),
       PaneView    = require('views/common/pane'),
       ModalView   = require('views/common/modal'),
-      ModalTpl    = require('tpl!templates/system/rbac/roles/modal.html'),
+      ModalTpl    = require('tpl!templates/system/rbac/perms/modal.html'),
       Permissions = require('collections/permissions'),
       BaseToolbar = require('views/toolbars/toolbar'),
       ToolbarTpl  = require('tpl!templates/system/rbac/perms/toolbar.html'),
@@ -19,7 +19,7 @@ define(function (require) {
     fixed: false
   });
 
-  Modal = ModalView.extend({ 
+  Modal = ModalView.extend({
     template: ModalTpl,
     additionalEvents: {
       "submit": 'delegateSubmit',
@@ -29,7 +29,7 @@ define(function (require) {
       this.$('form').trigger('submit', e);
     }
   });
-  
+
   RowView = Qorus.RowView.extend({
     additionalEvents: {
       "click [data-action]": 'doAction'
@@ -37,7 +37,7 @@ define(function (require) {
     doAction: function (e) {
       var $target = $(e.currentTarget),
           opts    = $target.data();
-      
+
       if (opts.action == 'edit') {
         this.trigger('edit', this.model);
         this.parent.trigger('row:edit', this.model);
@@ -49,7 +49,7 @@ define(function (require) {
       }
     }
   });
-  
+
   // Roles listing view
   View = Qorus.ListView.extend({
     additionalEvents: {
@@ -61,14 +61,14 @@ define(function (require) {
     preRender: function () {
       var TView = this.setView(new Qorus.TableView({
         url: "/perms",
-        collection: this.collection, 
-        template: TableTpl, 
+        collection: this.collection,
+        template: TableTpl,
         row_template: RowTpl,
         row_view: RowView
       }), '#perm-list');
-      
+
       this.listenTo(TView, 'row:edit', this.showEditView);
-      
+
       this.setView(new Toolbar({ template: ToolbarTpl }), '.toolbar');
     },
     showAddView: function () {
@@ -76,14 +76,14 @@ define(function (require) {
           model: new Permission(),
           collection: this.collection
       });
-      
+
       var wrap = new Qorus.View();
       wrap.insertView(form, 'self');
-      
+
       var modal = this.setView(new Modal({
         content_view: wrap
       }));
-      
+
       modal.listenTo(form, 'close', modal.hide);
     },
     showEditView: function (model) {
@@ -91,19 +91,19 @@ define(function (require) {
           model: model,
           collection: this.collection
       });
-      
+
       var wrap = new Qorus.View();
       wrap.insertView(form, 'self');
-      
+
       var modal = this.setView(new Modal({
         content_view: wrap,
         edit: true
       }));
       modal.context.edit = true;
-      
+
       modal.listenTo(form, 'close', modal.hide);
     }
   });
-  
+
   return View;
 });

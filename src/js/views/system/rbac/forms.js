@@ -9,17 +9,17 @@ define(function (require) {
       Permission  = require('models/permission'),
       Forms       = {},
       GroupsMod;
-  
+
   require('bootstrap.multiselect');
-      
+
   GroupsMod = Groups.extend({
     initialize: function () {
       this.opts = {};
       this.opts.no_synthetic = true;
       this.sort_key = 'name';
-     } 
+     }
   });
-  
+
   Forms.Role = FormView.extend({
     model: Role,
     className: 'form-horizontal',
@@ -39,18 +39,18 @@ define(function (require) {
       Fields.MultiSelectView.extend({
         name: 'Permissions',
         attrName: 'permissions',
-        collection: new Permissions().fetch()
+        collection: new Permissions()
       }),
       Fields.MultiSelectView.extend({
         name: 'Groups',
         attrName: 'groups',
-        collection: new GroupsMod().fetch()
+        collection: new GroupsMod()
       })
     ],
     save: function () {
       if (this.model) {
         this.model.set(this.cleaned_data);
-        
+
         if (!this.model.collection)
           this.model.is_new = true;
 
@@ -70,32 +70,15 @@ define(function (require) {
         delete this.model.is_new;
         opts = {};
       }
-      
+
       this.collection.add(model, opts);
-      
+
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
-    },
-    onRender: function () {
-      this.$('select').multiselect({
-        enableCaseInsensitiveFiltering : true,
-        maxHeight: 200,
-        onChange: function (option, checked, select) {
-          if (option.val() == 'DEFAULT') {
-            if (checked) {
-              $(option).parent().find('option').not('[value=DEFAULT]').prop('disabled', true);
-              this.refresh();
-            } else {
-              $(option).parent().find('option').not('[value=DEFAULT]').prop('disabled', false);
-              this.refresh();
-            }
-          }
-        }
-      });
     }
   });
-  
+
   Forms.User = FormView.extend({
     model: User,
     className: 'form-horizontal',
@@ -124,13 +107,13 @@ define(function (require) {
       Fields.MultiSelectView.extend({
         name: 'Roles',
         attrName: 'roles',
-        collection: new Roles().fetch()
+        collection: new Roles()
       })
     ],
     save: function () {
       if (this.model) {
         this.model.set(this.cleaned_data);
-        
+
         if (!this.model.collection)
           this.model.is_new = true;
 
@@ -150,21 +133,15 @@ define(function (require) {
         delete this.model.is_new;
         opts = {};
       }
-      
+
       this.collection.add(model, opts);
-      
+
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
-    },
-    onRender: function () {
-      this.$('select').multiselect({
-        enableCaseInsensitiveFiltering : true,
-        maxHeight: 200
-      });
     }
   });
-  
+
   Forms.UserEdit = Forms.User.extend({
     fields: [
       Fields.InputView.extend({
@@ -180,11 +157,11 @@ define(function (require) {
       Fields.MultiSelectView.extend({
         name: 'Roles',
         attrName: 'roles',
-        collection: new Roles().fetch()
+        collection: new Roles()
       })
     ]
   });
-  
+
   Forms.Permission = FormView.extend({
     model: Role,
     className: 'form-horizontal',
@@ -205,7 +182,7 @@ define(function (require) {
     save: function () {
       if (this.model) {
         this.model.set(this.cleaned_data);
-        
+
         if (!this.model.collection)
           this.model.is_new = true;
 
@@ -225,13 +202,13 @@ define(function (require) {
         delete this.model.is_new;
         opts = {};
       }
-      
+
       this.collection.add(model, opts);
-      
+
       this.trigger('close');
       this.stopListening(this.model, 'error');
       this.model = model;
-    }    
+    }
   });
 
   return Forms;

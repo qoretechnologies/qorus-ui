@@ -4,7 +4,7 @@ define(function (require) {
       Model    = require('cjs!models/valueset');
 
   var Collection = Qorus.Collection.extend({
-    url: settings.REST_API_PREFIX + '/valuesets',
+    url: settings.REST_API_PREFIX + '/valuemaps',
     model: Model
   });
 

@@ -25,7 +25,7 @@ module.exports = function (grunt) {
             findNestedDependencies: true,
             generateSourceMaps: true,
             preserveLicenseComments: false,
-		    onBuildWrite: function (moduleName, path, singleContents) {
+        onBuildWrite: function (moduleName, path, singleContents) {
               return singleContents.replace(/jsx!/g, '');
             },
             modules: [{
@@ -85,7 +85,7 @@ module.exports = function (grunt) {
         server: {
           options: {
             hostname: '*',
-            port: 3000,
+            port: 3001,
             server: "server-test.js"
           }
         },

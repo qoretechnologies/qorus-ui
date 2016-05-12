@@ -3,7 +3,7 @@ define(function (require) {
       Qorus     = require('qorus/qorus'),
       Model     = require('models/permission'),
       Collection;
-  
+
   Collection = Qorus.SortedCollection.extend({
     model: Model,
     url: settings.REST_API_PREFIX + '/system/rbac/permissions'
