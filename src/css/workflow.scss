@@ -22,3 +22,17 @@ table.table--data.table-condensed {
 .status-row {
   margin-bottom: 10px;
 }
+
+/**
+* Margin for the tabs in single workflow detail
+*/
+.workflow-detail-tab {
+  margin-top: 10px;
+}
+
+/**
+* Removes the default H3 margin from bootstrap
+*/
+.workflow-title {
+  margin: 0 0 10px 0;
+}
