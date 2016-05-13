@@ -5,10 +5,10 @@
       <th class="text-left nowrap <%= (v.leaf) ? 'leaf': 'branch' %> <%= (v.node) ? 'node' : '' %>">
         <% _.each(_.range(v.level), function () { %><span class="indent"></span><% }) %>
         <% if (v.node) { %><span class='node'></span><% } else { %><span class="child"></span><% } %>
-        <span class="value"><%= _.escape(v.key) %></span>
+        <span class="value"><%= escapeHtml(v.key) %></span>
       </th>
       <td class="text-left">
-        <%= _.escape(v.value) %>
+        <%= escapeHtml(v.value, true) %>
       </td>
     </tr>
 <% }) %>

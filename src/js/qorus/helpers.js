@@ -85,7 +85,7 @@ define(function (require) {
         tpl_html = _.template(tpl);
       }
 
-      output = tpl_html({ items: obj });
+      output = tpl_html({ items: obj, escapeHtml: Helpers.escapeHtml });
 
       return output.replace(/\n{2,}/gm,"\n");
     },
@@ -160,12 +160,15 @@ define(function (require) {
       return '';
     },
 
-    escapeHtml: function (html) {
+    escapeHtml: function (html, nl2br) {
       if (_.isString(html)) {
         var new_html;
         new_html = _.escape(html);
         if (html.search(/^<\?xml/) != -1) {
           return '<pre><code data-language="xml">' + new_html + '</code></pre>';
+        }
+        if (nl2br) {
+          new_html = new_html.replace(/\\n/g, "<br />");
         }
         return new_html;
       }

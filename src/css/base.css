@@ -811,10 +811,13 @@ input:focus {
 }
 
 .modal-footer {
-  position: absolute;
   box-sizing: border-box;
   bottom: 0;
   width: 100%;
+}
+
+.ui-resizable .modal-footer {
+  position: absolute;
 }
 
 .ui-resizable-handle { z-index: auto !important; }
@@ -1643,10 +1646,12 @@ tbody+thead>tr:first-child>td {
 
 .tree .td {
   padding: auto;
+  vertical-align: top;
 }
 
 .tree th {
   position: relative;
+  vertical-align: top;
 }
 
 .tree th.node .value {

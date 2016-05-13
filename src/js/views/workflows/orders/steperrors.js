@@ -14,11 +14,12 @@ define(function (require, exports, module) {
       RowInfoTpl      = require('tpl!templates/workflow/orders/errors/rowinfo.html'),
       Loggers         = require('collections/loggers'),
       CopyView        = require('views/common/table.copy'),
+      Filtered        = require('backbone.filtered.collection'),
       View, TableView, SEVERITIES, Toolbar, ErrorModal, ErrorModalContent, RowView, RowInfoView;
-      
+
   require('jquery.ui');
   require('bootstrap');
-      
+
   SEVERITIES = [
     'FATAL',
     'MAJOR',
@@ -26,16 +27,37 @@ define(function (require, exports, module) {
     'INFO',
     'NONE'
   ];
-  
+
+  var filterCollection = _.curry(function (key, val, col) {
+    // console.log(col, key, val);
+
+    if (_.isFunction(val)) {
+      return col.filterBy(key, val);
+    }
+    return col.filterBy(key, function (m) {
+      return m.get(key) === val;
+    });
+  });
+
+  var hideCompleted = filterCollection('stepid');
+  var hideCompleted = filterCollection('completed', undefined);
+  var filterByStatus = _.curry(function (statuses) {
+    return filterCollection('severity', function (m) {
+      if (statuses === 'all') return true;
+
+      return _.contains(statuses, m.get('severity'));
+    })
+  });
+
   Toolbar = BaseToolbar.extend({
     fixed: true,
     template: ToolbarTpl,
-    
+
     additionalEvents: {
       'click button.warnings': 'toggleWarnings',
       'click .disabled': 'disable'
     },
-    
+
     preRender: function () {
       _.extend(this.context, {
         predefined_statuses: SEVERITIES,
@@ -48,15 +70,15 @@ define(function (require, exports, module) {
       this.addMultiSelect();
       this.enableButtons();
     },
-    
+
     enableButtons: function () {
-      if (this.options.errors) 
+      if (this.options.errors)
         this.$('.disabled').removeClass('disabled');
     },
-    
+
     addMultiSelect: function () {
       var self = this;
-      // apply bootstrap multiselect to #statuses element      
+      // apply bootstrap multiselect to #statuses element
       $('#severities').multiselect({
         buttonClass: "btn btn-small disabled",
         onChange: function(el, checked){
@@ -64,7 +86,7 @@ define(function (require, exports, module) {
           if (self.options.statuses) {
             sl = self.options.statuses.split(',');
           }
-          
+
           if (checked) {
             sl.push(val);
 
@@ -80,7 +102,7 @@ define(function (require, exports, module) {
             if(val=='all'){
               $('option', $(el).parent()).removeAttr('selected');
             }else{
-             sl = _.without(sl, val); 
+             sl = _.without(sl, val);
             }
           }
           // refresh valudes
@@ -90,12 +112,12 @@ define(function (require, exports, module) {
         }
       });
     },
-    
+
     toggleWarnings: function (e) {
       var $el = $(e.currentTarget), text;
-      
+
       if ($el.hasClass('disabled')) return this;
-      
+
       if ($el.hasClass('show-warnings')) {
         this.trigger('errors', 'show');
         this.$('button.warnings i').removeClass('icon-check-empty').addClass('icon-check');
@@ -108,17 +130,17 @@ define(function (require, exports, module) {
       this.$('button.warnings').toggleClass('show-warnings');
       this.$('button.warnings span').text(text);
     },
-    
+
     disable: function (e) {
       e.preventDefault();
       e.stopPropagation();
     }
   });
-  
+
   ErrorModalContent = Qorus.ModelView.extend({
     template: ErrorModalTpl
   });
-  
+
   ErrorModal = Modal.extend({
     postInit: function () {
       var self = this;
@@ -132,7 +154,7 @@ define(function (require, exports, module) {
       this.$('.copy-error').focus().select();
     }
   });
-  
+
   RowInfoView = Qorus.ModelView.extend({
     tagName: 'tr',
     additionalEvents: {
@@ -150,7 +172,7 @@ define(function (require, exports, module) {
       this.parent = this.options.parent = null;
     }
   });
-  
+
   RowView = Qorus.RowView.extend({
     additionalEvents: {
       "click": 'toggleWarning'
@@ -163,7 +185,7 @@ define(function (require, exports, module) {
     showWarning: function (force) {
       if (this.shown && force !== true) return this;
       var view = this.setView(new RowInfoView({ model: this.model, parent: this }), '_info');
-      
+
       this.$el.after(view.render().$el);
       this.shown = true;
       return this;
@@ -180,18 +202,21 @@ define(function (require, exports, module) {
       if (this.shown) _.defer(this.showWarning, true);
     }
   });
-  
+
   TableView = Qorus.TableView.extend({
     __name__: 'StepErrorTableView',
     fixed: true,
-    template: TableTpl, 
+    template: TableTpl,
     row_template: RowTpl,
     row_view: RowView,
     postInit: function () {
       this.update();
+    },
+    preRender: function () {
+      this.context.collection = _(this.collection).sortBy('created').value().reverse().slice(0, 20);
     }
   });
-  
+
   // View showing step associated errors
   View = Qorus.View.extend({
     __name__: 'StepErrorsListView',
@@ -199,25 +224,30 @@ define(function (require, exports, module) {
     additionalEvents: {
       'click .copy-last-error': 'copyLastError'
     },
-    
+
     postInit: function () {
       var errors  = this.model.get('ErrorInstances'),
           toolbar = this.getView('.toolbar'),
           name    = this.model.get('name'),
           log     = Loggers.find(function (item) { return item.get('type') === 'workflow' && item.get('name') === name; }),
           table;
-      
+
       // add logger info to model
       this.model.set({ log: log }, { silent: true });
-        
+
       if (this.options.stepid)
         errors = _.where(errors, { stepid: this.options.stepid });
-    
-      this.collection = new Qorus.SortedCollection(errors, { sort_key: 'created', sort_order: 'des' });
+
+      var collection = new Qorus.SortedCollection(errors, { sort_key: 'created', sort_order: 'des' });
+
+      this.collection = new Filtered(collection);
+
+      hideCompleted(this.collection);
+
       table = this.setView(new TableView({ collection: this.collection }), '.errors-table');
-      
+
       toolbar = this.setView(new Toolbar({ errors: this.collection.size() > 0, count: this.collection.size() }), '.toolbar');
-  
+
       this.listenTo(toolbar, 'filter', this.filterErrors);
       this.listenTo(this.model, 'sync', this.update);
 
@@ -229,7 +259,7 @@ define(function (require, exports, module) {
 
       this.render();
     },
-    
+
     onRender: function () {
       // init popover on info text
       // this.$('td.info').each(function () {
@@ -238,25 +268,30 @@ define(function (require, exports, module) {
       // });
       this.wrap();
     },
-    
+
     filterErrors: function (statuses) {
-      statuses = statuses.toLowerCase();
-      
-      if (statuses === 'all') {
-        this.$('.errors-table tbody tr').show();
-        return this;
-      }
-      
-      var states = statuses.split(',');
-      
-      this.$('.errors-table tbody tr').hide();
-      this.$('.errors-table td').filter(function () {
-        return states.indexOf($(this).text().toLowerCase()) > -1;
-      }).parent().show();
-      
-      return this;
+      // statuses = statuses.toLowerCase();
+      //
+      // if (statuses === 'all') {
+      //   this.$('.errors-table tbody tr').show();
+      //   return this;
+      // }
+      //
+      // var states = statuses.split(',');
+      //
+      // this.$('.errors-table tbody tr').hide();
+      // this.$('.errors-table td').filter(function () {
+      //   return states.indexOf($(this).text().toLowerCase()) > -1;
+      // }).parent().show();
+      //
+      // return this;
+
+      filterByStatus(statuses === 'all' ? statuses : statuses.split(','))(this.collection);
+
+      var errorsView= this.getView('.errors-table');
+      errorsView.render();
     },
-    
+
     close: function () {
       if (this.clean) this.clean();
       if (this.$fixed_pane.hasClass('ui-resizable')) {
@@ -266,7 +301,7 @@ define(function (require, exports, module) {
       }
       this.undelegateEvents();
       this.stopListening();
-      
+
       // remove fixed pane wrappers and empty el
       this.$el
         .unwrap()
@@ -286,22 +321,22 @@ define(function (require, exports, module) {
           $push           = $('<div class="fixed-pane-push push"/>'),
           height_settings = [module.id.replace(/\//g, '.'), this.__name__, 'height'].join('.'),
           height;
-  
+
       $div
         .addClass('fixed-pane-bottom');
-    
-      // add parent pusher      
+
+      // add parent pusher
       this.$el.parent().append($push);
-  
+
       // wrap the view element
       this.$el.wrap($divw).wrap($div).wrap($div_inner);
-  
+
       this.$fixed_pane = this.$el.parents('.fixed-pane');
-  
+
       // get stored height
       height = SystemSettings.get(height_settings);
       if (height) this.$fixed_pane.height(height);
-  
+
       // change push height according to pane height
       $push.height(this.$fixed_pane.outerHeight(true));
 
@@ -311,7 +346,7 @@ define(function (require, exports, module) {
         maxHeight: $(window).height() - 200,
         minHeight: 150
       });
-  
+
       this.$fixed_pane.on('resize', function (e, ui) {
         var $el = ui.element;
         $el.parent().next().height(ui.size.height);
@@ -321,29 +356,29 @@ define(function (require, exports, module) {
         SystemSettings.save();
       }, this));
     },
-    
+
     showErrorModal: function (err) {
       var stepid = err.stepid || err.get('stepid'),
           stepname  = _.find(this.model.get('StepInstances'), { stepid: stepid }).name,
-          ErrorView = new ErrorModalContent({ 
-            model: this.model, 
+          ErrorView = new ErrorModalContent({
+            model: this.model,
             error: (err instanceof Backbone.Model) ? err.toJSON() : err,
             url: this.getViewUrl(),
             stepname: stepname
           });
-          
+
       this.setView(new ErrorModal({ content_view: ErrorView }), '#modal');
     },
-    
+
     copyLastError: function (e) {
       if (e.isDefaultPrevented()) return this;
-      
+
       var errors    = this.model.get('ErrorInstances'),
           err       = _.sortBy(errors, 'created')[0];
 
       this.showErrorModal(err);
     }
   });
-  
+
   return View;
 });

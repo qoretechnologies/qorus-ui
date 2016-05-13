@@ -14,13 +14,13 @@ define(function (require) {
   require('sprintf');
 
   var STATUS_PRIORITY = [
+    'COMPLETE',
+    'RETRY',
     'EVENT-WAITING',
     'WAITING',
     'ASYNC-WAITING',
-    'RETRY',
+    'IN-PROGRESS',
     'ERROR',
-    'COMPLETE',
-    'IN-PROGRESS'
   ];
 
   Model = Qorus.Model.extend({
@@ -144,6 +144,18 @@ define(function (require) {
 
         group.status = STATUS_PRIORITY[max];
 
+        _(response.ErrorInstances).where({ stepid: step.stepid, ind: step.ind })
+          .forEach(function (err) {
+            err.stepname = name;
+          });
+
+        if (step.stepstatus == 'COMPLETE') {
+            _(response.ErrorInstances)
+              .where({ stepid: step.stepid, ind: step.ind })
+              .forEach(function (err) {
+                err.completed = true;
+              });
+        }
       });
       response.StepInstances = _.sortBy(response.StepInstances, 'started');
       response.step_groups = step_groups;

@@ -70,7 +70,7 @@ define(function(require) {
         var vals = $f.serializeArray();
 
         _.each(vals, function (v) {
-          params[v.name] = v.value;
+          params[v.name] = _.escape(v.value);
         });
 
         // close modal

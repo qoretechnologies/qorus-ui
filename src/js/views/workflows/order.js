@@ -203,9 +203,18 @@ define(function(require) {
   });
 
   ErrorsView = Qorus.ModelView.extend({
+    errors_size: 20,
+    additionalEvents: {
+      'change select#errors-pagination': 'setErrorsSize',
+    },
+
     postInit: function () {
       this.listenTo(this.model, 'sync', this.render);
       this.setView(new CopyView({ csv_options:  { el: '#errors table' }, css_class: 'btn-mini' }), '.table-copy');
+    },
+    preRender: function () {
+      this.context.collection = _(this.model.get('ErrorInstances')).sortBy('-created').value().reverse().slice(0, this.errors_size);
+      this.context.errors_size = this.errors_size;
     },
     onRender: function () {
       // init popover on info text
@@ -213,6 +222,17 @@ define(function(require) {
         var text = '<textarea>' + $(this).text() + '</textarea>';
         $(this).popover({ content: text, title: "Info", placement: "left", container: '#errors', html: true});
       });
+    },
+    setErrorsSize: function (event) {
+      var value = event.target.value;
+
+      if (value === 'all') {
+        this.errors_size = this.model.get('ErrorInstances').length;
+      } else {
+        this.errors_size = parseInt(value, 10);
+      }
+
+      this.render();
     }
   });
 
