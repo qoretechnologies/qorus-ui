@@ -27,6 +27,7 @@ export default class extends Component {
         undefined
     ));
 
+  // @TODO Change this to the group component
   renderGroups = () => this.props.data.groups.map(g => (
       <span className="label label-info">{`${g.name} (${g.size})`}</span>
     ));
@@ -36,7 +37,7 @@ export default class extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h3 className="pull-left">
+            <h3 className="workflow-title pull-left">
               {this.props.data.name}
               {' '}
               <small>{this.props.data.version}</small>
