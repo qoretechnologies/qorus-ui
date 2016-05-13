@@ -182,7 +182,7 @@ export default class extends Component {
       return (
         <Button
           big
-          btnStyle="default"
+          btnStyle="info"
           label={this.props.submitLabel}
           action={this.handleSubmit}
         />
