@@ -6,9 +6,11 @@ define(function(require) {
       utils       = require('utils'),
       Template    = require('tpl!templates/system/prop.html'),
       ConfirmView = require('views/common/confirm'),
-      ServiceView;
+      FilteredCollection = require('backbone.filtered.collection'),
+      PropsCollection = require('collections/props'),
+      PropsView;
 
-  ServiceView = Qorus.View.extend({
+  PropsView = Qorus.View.extend({
     views: {},
     defaultEvents: {
       'submit': 'doAction',
@@ -31,33 +33,16 @@ define(function(require) {
         }.bind(this)
       };
 
-      this.on('fetch', this.render);
-      this.on('show', this.applySearch);
+      this.collection = new PropsCollection();
 
-      this.getData();
+      this.listenTo(this.collection, 'sync', this.render);
+      this.collection.fetch();
+      this.on('show', this.applySearch);
     },
 
     getUrl: function () {
       return [settings.REST_API_PREFIX, 'system', 'props'].join('/');
     },
-
-    getData: function () {
-      var self = this;
-      var url = this.getUrl();
-
-      $.get(url)
-        .done(function (data) {
-          self.data = data;
-          self.context.data = data;
-          self.trigger('fetch');
-        });
-    },
-
-    // render: function (ctx) {
-    //   this.context.data = this.data;
-    //
-    //   ServiceView.__super__.render.call(this, ctx);
-    // },
 
     doAction: function (ev) {
       var params = {};
@@ -99,7 +84,7 @@ define(function(require) {
       if (action == 'update') {
         $.put(url, { action: 'set', parse_args: data.value })
           .done(function () {
-            self.getData();
+            self.collection.fetch();
           })
           .fail(function (resp) {
             debug.log(resp);
@@ -107,7 +92,7 @@ define(function(require) {
       } else if (action == 'delete') {
         $.delete(url)
           .done(function () {
-            self.getData();
+            self.collection.fetch();
           })
           .fail(function (resp) {
             debug.log(resp);
@@ -117,30 +102,13 @@ define(function(require) {
 
     search: function (e) {
       var query = this.$('#property-filter').val();
+      this.updateUrl({ q: query });
       this.applySearch(query);
     },
 
-    applySearch: function (query) {
-      query = query || '';
-
-      this.updateUrl({ q: query });
-      if (query === '') {
-        this.$('#property-filter').val('');
-      }
-
-      if (query.length < 1) {
-        this.$('tr').show();
-        return this;
-      }
-
-      this.$('tr').hide();
-      this.$('tr[data-search*='+ query.toLowerCase() +']')
-        .show()
-        .parent()
-        .prev('thead')
-        .find('tr')
-        .show();
-    },
+    applySearch: _.debounce(function (query) {
+      this.render();
+    }, 300),
 
     updateUrl: function (params) {
       var url = utils.getCurrentLocationPath();
@@ -160,13 +128,25 @@ define(function(require) {
       return '';
     },
 
-    onRender: function () {
-      var q = this.getQueryFromUrl();
-      if (q) {
-        this.applySearch(q);
+    preRender: function () {
+      var q = this.getQueryFromUrl().toLowerCase();
+      var filtered = this.collection.toJSON();
+
+      if (q !== '') {
+        filtered = _.filter(filtered, function (m) {
+          var res = m.domain.toLowerCase().indexOf(q) !== -1;
+          if (m.prop.key) {
+            return res || m.prop.key.toLowerCase().indexOf(q) !== -1;
+          }
+          return res;
+        });
       }
+      this.context.domains = _(filtered).pluck('domain').uniq().value();
+
+      this.context.items = filtered;
+      this.context.query = q;
     }
   });
 
-  return ServiceView;
+  return PropsView;
 });

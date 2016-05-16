@@ -1,4 +1,4 @@
-<% var domains = obj.data %>
+<% var domains = domains %>
 
 <div class="row-fluid">
 <% if (user.hasPermissions(['SET-PROPERTY', 'SERVER-CONTROL'])) { %>
@@ -17,30 +17,32 @@
   </div>
 </div>
   <table class="table table-condensed table-striped">
-<% _.each(domains, function (domain, key) { %>
+  <% _.each(domains, function (domain) { %>
     <thead class="extra-padding">
         <tr>
-            <td colspan="3" class="name"><%= key %></td>
-            <td><% if (key !== 'omq' && user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action="delete" data-key="" data-value="" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %></td>
+            <td colspan="3" class="name"><%= domain %></td>
+            <td><% if (domain !== 'omq' && user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action="delete" data-key="" data-value="" data-domain="<%= domain %>"><i class="icon-remove"></i></a><% } %></td>
         </tr>
     </thead>
     <tbody>
-  <% _.each(domain, function(prop, pkey) { %>
-        <tr data-search="<%= key %>,<%= prop %>,<%= pkey %>">
+    <% _.each(_.filter(items, { domain: domain }), function(prop, shit) { %>
+        <tr>
           <td class="spacer"></td>
-          <td class="property-key"><%= pkey %></td>
-          <td class="property-value"><%= (_.isObject(prop)) ? JSON.stringify(prop) : prop %></td>
-          <td class="property-actions"><% if (key !== 'omq') { %>
-              <% if (user.hasPermissions(['SET-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-warning edit-modal" data-toggle="modal" data-target="#prop-editor" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-pencil"></i></a><% } %>
-              <% if (user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action-confirm="delete" data-key="<%= pkey %>" data-value="<%= prop %>" data-domain="<%= key %>"><i class="icon-remove"></i></a><% } %>
+          <td class="property-key"><%= prop.prop.key %></td>
+          <td class="property-value"><%= (_.isObject(prop.prop.value)) ? JSON.stringify(prop.prop.value) : prop.prop.value %></td>
+          <td class="property-actions"><% if (domain !== 'omq') { %>
+              <% if (user.hasPermissions(['SET-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-warning edit-modal" data-toggle="modal" data-target="#prop-editor" data-key="<%= prop.prop.key %>" data-value='<%= (_.isObject(prop.prop.value)) ? JSON.stringify(prop.prop.value) : prop.prop.value %>' data-domain="<%= domain %>"><i class="icon-pencil"></i></a><% } %>
+              <% if (user.hasPermissions(['DELETE-PROPERTY', 'SERVER-CONTROL'])) { %><a class="label label-danger" data-action-confirm="delete" data-key="<%= prop.prop.key %>" data-value="<%= prop.prop.value %>" data-domain="<%= domain %>"><i class="icon-remove"></i></a><% } %>
           <% } %></td>
         </tr>
-  <% }) %>
+    <% }) %>
     </tbody>
-<% }) %>
+  <% }) %>
 </table>
+<% } else if(_.result(obj, 'query') !== '') { %>
+  <p class="alert alert-warning span12"><i class="icon-warning-sign"></i> No properties defined or insufficient user permissions</p>
 <% } else { %>
-<p class="alert alert-warning span12"><i class="icon-warning-sign"></i> No properties defined or insufficent user permissions</p>
+<p class="alert alert-warning span12"><i class="icon-warning-sign"></i> No properties defined or insufficient user permissions</p>
 <% } %>
 
 <div id="prop-editor" class="modal hide fade wider" tabindex="-1" role="dialog" aria-labelledby="modalHeader" aria-hidden="true">
@@ -69,7 +71,7 @@
 $('.edit-modal').click(function (e) {
    var $target = $(e.currentTarget);
    $('#key').val($target.data('key'));
-   $('#value').val($target.data('value'));
+   $('#value').val(_.isObject($target.data('value')) ? JSON.stringify($target.data('value')) : $target.data('value'));
    $('#domain').val($target.data('domain'));
 });
 </script>
