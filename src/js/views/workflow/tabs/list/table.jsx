@@ -1,12 +1,14 @@
 import React from 'react';
-import ServiceTable from '../../../services/table';
+import Table from '../../../services/table';
 
 import { Cell } from '../../../../components/table';
 import OrderControls from './controls';
 import Date from '../../../../components/date';
 import Checkbox from '../../../../components/checkbox';
 
-export default class extends ServiceTable {
+import { ORDER_STATES } from '../../../../constants/orders';
+
+export default class extends Table {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
@@ -170,8 +172,8 @@ export default class extends ServiceTable {
     yield (
       <Cell className="narrow checker">
         <Checkbox
-          action={this.handleCheckboxClick}
-          checked={selected ? 'CHECKED' : 'UNCHECKED'}
+          action={ this.handleCheckboxClick }
+          checked={ selected ? 'CHECKED' : 'UNCHECKED'}
         />
       </Cell>
     );
@@ -182,52 +184,58 @@ export default class extends ServiceTable {
 
     yield (
       <Cell className="narrow">
-        <OrderControls order={model} />
+        <OrderControls data={ model } />
+      </Cell>
+    );
+
+    const { label } = ORDER_STATES.find(o => o.name === model.workflowstatus);
+
+    yield (
+      <Cell className="narrow">
+        <span className={`label label-${label}`}>
+          { model.workflowstatus }
+        </span>
       </Cell>
     );
 
     yield (
-      <Cell className="narrow">{model.status}</Cell>
+      <Cell className="narrow">{ model.business_error }</Cell>
     );
 
     yield (
-      <Cell className="narrow">{model.business_error}</Cell>
-    );
-
-    yield (
-      <Cell className="name">{model.name}</Cell>
+      <Cell className="name">{ model.name }</Cell>
     );
 
     yield (
       <Cell>
-        <Date date={model.started} />
-      </Cell>
-    );
-
-    yield (
-      <Cell>
-        <Date date={model.completed} />
-      </Cell>
-    );
-
-    yield (
-      <Cell>
-        <Date date={model.modified} />
+        <Date date={ model.started } />
       </Cell>
     );
 
     yield (
       <Cell>
-        <Date date={model.scheduled} />
+        <Date date={ model.completed } />
       </Cell>
     );
 
     yield (
-      <Cell className="narrow">{model.error_count}</Cell>
+      <Cell>
+        <Date date={ model.modified } />
+      </Cell>
     );
 
     yield (
-      <Cell className="narrow">{model.warning_count}</Cell>
+      <Cell>
+        <Date date={ model.scheduled } />
+      </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{ model.error_count }</Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{ model.warning_count }</Cell>
     );
 
     yield (
