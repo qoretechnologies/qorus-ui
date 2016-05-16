@@ -77,7 +77,8 @@ export default class extends Component {
       'workflow',
       this.props.route.path,
       this.props.params,
-      { tabId }
+      { tabId },
+      this.props.location.query
     );
   };
 
