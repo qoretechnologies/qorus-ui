@@ -1,0 +1,52 @@
+/**
+* Colors for the different states of orders
+**/
+.badge-black, .label-black, .btn-black {
+  background-color: #333;
+  color: #fff;
+
+  &.btn-black:hover {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+.badge-gray, .label-gray, .btn-gray {
+  background-color: #a9a9a9;
+  color: #fff;
+
+  &.btn-gray:hover {
+    background-color: darken(#a9a9a9, 10);
+    color: #fff;
+  }
+}
+
+.badge-ready, .label-ready, .btn-ready {
+  background-color: #c5e08c;
+  color: #fff;
+
+  &.btn-ready:hover {
+    background-color: darken(#c5e08c, 10);
+    color: #fff;
+  }
+}
+
+.badge-waiting, .label-waiting, .btn-waiting {
+  background-color: #e5c737;
+  color: #fff;
+
+  &.btn-waiting:hover {
+    background-color: darken(#e5c737, 10);
+    color: #fff;
+  }
+}
+
+.badge-canceled, .label-canceled, .btn-canceled {
+  background-color: #f2dede;
+  color: #fff;
+
+  &.btn-canceled:hover {
+    background-color: darken(#f2dede, 10);
+    color: #fff;
+  }
+}

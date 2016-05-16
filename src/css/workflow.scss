@@ -36,3 +36,15 @@ table.table--data.table-condensed {
 .workflow-title {
   margin: 0 0 10px 0;
 }
+
+/**
+* Creates the counter for lines in the Order table
+*/
+.table--data {
+  counter-reset: line-number;
+}
+
+td.line-counter::before {
+  content: counter(line-number) ".";
+  counter-increment: line-number;
+}
