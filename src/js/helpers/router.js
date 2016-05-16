@@ -10,7 +10,7 @@ const routes = {
   },
   workflow: {
     date: '24h',
-    filter: 'all',
+    filter: 'All',
     tabId: 'list',
   },
   jobs: {
