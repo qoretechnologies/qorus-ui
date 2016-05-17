@@ -6,12 +6,14 @@ import { flowRight, includes, union } from 'lodash';
 
 import actions from 'store/api/actions';
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from 'constants/orders';
+import { DATE_FORMATS } from 'constants/dates';
 
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';
 import Loader from '../../../../components/loader';
 
 import { findBy } from '../../../../helpers/search';
+import { formatDate } from '../../../../helpers/workflows';
 
 const filterOrders = (filter) => (orders) => {
   if (!filter || includes(filter, 'All')) return orders;
@@ -79,11 +81,27 @@ export default class extends Component {
   };
 
   componentWillMount() {
-    this.props.dispatch(actions.orders.fetch({ workflowid: this.props.id, date: this.props.location }));
-
     this.setState({
       filteredData: [],
     });
+
+    this.fetchData(this.props);
+  }
+
+  componentWillReceiveProps(next) {
+    if (this.props.params.date !== next.params.date) {
+      this.fetchData(next);
+    }
+  }
+
+  /**
+   * Fetches the orders based on workflowid and
+   * the date provided
+   */
+  fetchData(props) {
+    const date = formatDate(props.params.date).format(DATE_FORMATS.URL_FORMAT);
+
+    props.dispatch(actions.orders.fetch({ workflowid: props.id, date, sort: 'started' }));
   }
 
   /**
@@ -115,6 +133,22 @@ export default class extends Component {
     this.props.onCSVClick(collection, 'workflows');
   };
 
+  renderTable() {
+    if (!this.props.collection.length) return <h5> No data found </h5>;
+
+    return (
+      <OrdersTable
+        initialFilter={this.props.filterFn}
+        onDataFilterChange={this.props.onDataFilterChange}
+        collection={this.props.collection}
+        setSelectedData={this.props.setSelectedData}
+        selectedData={this.props.selectedData}
+        onSortChange={this.handleSortChange}
+        sortData={this.props.sortData}
+      />
+    );
+  }
+
   render() {
     if (!this.props.sync || this.props.loading) {
       return <Loader />;
@@ -134,15 +168,7 @@ export default class extends Component {
           batchAction={this.handleBatchAction}
           onCSVClick={this.handleCSVClick}
         />
-        <OrdersTable
-          initialFilter={this.props.filterFn}
-          onDataFilterChange={this.props.onDataFilterChange}
-          collection={this.props.collection}
-          setSelectedData={this.props.setSelectedData}
-          selectedData={this.props.selectedData}
-          onSortChange={this.handleSortChange}
-          sortData={this.props.sortData}
-        />
+        { this.renderTable() }
       </div>
     );
   }
