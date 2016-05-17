@@ -11,7 +11,11 @@ import { goTo } from '../../helpers/router';
 
 import actions from 'store/api/actions';
 
-const workflowSelector = state => state.api.workflows.data[0];
+const workflowSelector = (state, props) => (
+  state.api.workflows.data.find(w => (
+    parseInt(props.params.id, 10) === parseInt(w.workflowid, 10)
+  ))
+);
 
 const selector = createSelector(
   [
