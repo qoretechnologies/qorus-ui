@@ -119,6 +119,7 @@ export default class OrdersToolbar extends Component {
 
   render() {
     const checked = CHECKBOX_STATES[this.props.selected];
+    const filter = this.props.params.filter.split(',');
 
     return (
       <Toolbar>
@@ -151,6 +152,7 @@ export default class OrdersToolbar extends Component {
           multi
           def="All"
           onSubmit={this.applyFilter}
+          selected={filter}
         >
           <DropdownControl />
           <DropdownItem title="All" />
