@@ -13,6 +13,13 @@ export const ORDER_STATES = [
   { name: 'BLOCKED', short: 'B', label: 'gray', title: 'Blocked' },
 ];
 
+export const CUSTOM_ORDER_STATES = [
+  { name: 'UNBLOCKING', label: 'gray', title: 'Unblocking' },
+  { name: 'BLOCKING', label: 'gray', title: 'Blocking' },
+  { name: 'CANCELING', label: 'gray', title: 'Canceling' },
+  { name: 'UNCANCELING', label: 'gray', title: 'Uncanceling' },
+];
+
 export const ORDER_ACTIONS = {
   ALL: [
     { name: 'Block', action: 'block', icon: 'minus-circle', style: 'black' },
