@@ -10,7 +10,7 @@ import WorkflowsControls from './controls';
 
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
-import { filterArray } from '../../helpers/workflows';
+import { filterArray, formatDate } from '../../helpers/workflows';
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 
 import classNames from 'classnames';
@@ -34,6 +34,7 @@ export default class WorkflowsTable extends Component {
     selectedWorkflows: PropTypes.object,
     onSortChange: PropTypes.func,
     sortData: PropTypes.object,
+    linkDate: PropTypes.string,
   };
 
   static contextTypes = {
@@ -333,7 +334,7 @@ export default class WorkflowsTable extends Component {
 
     yield (
       <Cell className="name">
-        <Link to={`/workflow/${workflow.workflowid}`}>
+        <Link to={`/workflow/${workflow.workflowid}/list/All/${this.props.linkDate}`}>
           {workflow.name}
         </Link>
       </Cell>
