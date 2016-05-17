@@ -29,7 +29,7 @@ module.exports = () => {
 
     if (req.query.sort) {
       filteredData = filteredData.sort(
-        firstBy(req.query.sort, { ignoreCase: true, direction: (req.query.desc) ? -1 : 1 })
+        firstBy(req.query.sort, { ignoreCase: true, direction: -1 })
       );
     }
 
@@ -44,6 +44,27 @@ module.exports = () => {
   router.get('/:id', (req, res) => {
     const item = data.find(s => findOrder(req.params.id, s));
     res.status(item ? 200 : 404).json(item);
+  });
+
+  router.put('/:id', (req, res) => {
+    const order = data.find(o => findOrder(req.params.id, o));
+
+    switch (req.body.action) {
+      case 'cancel':
+      case 'uncancel':
+      case 'block':
+      case 'unblock':
+      case 'retry':
+        order.workflowstatus = req.body.workflowstatus;
+        break;
+      default:
+        if (config.env !== 'test') {
+          process.stderr.write(`Unknown action ${req.body.action}.\n`);
+        }
+        break;
+    }
+
+    res.json(order);
   });
 
   return router;
