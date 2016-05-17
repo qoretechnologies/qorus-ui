@@ -2,31 +2,40 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { flowRight, includes } from 'lodash';
+import { flowRight, includes, union } from 'lodash';
 
 import actions from 'store/api/actions';
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES, CUSTOM_ORDER_STATES } from 'constants/orders';
 
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';
 import Loader from '../../../../components/loader';
 
+import { findBy } from '../../../../helpers/search';
+
 const filterOrders = (filter) => (orders) => {
   if (!filter || includes(filter, 'All')) return orders;
 
+  const states = union(ORDER_STATES, CUSTOM_ORDER_STATES);
+
   return orders.filter(o => (
-    includes(filter, ORDER_STATES.find(s => s.name === o.workflowstatus).title))
+    includes(filter, states.find(s => s.name === o.workflowstatus).title))
   );
 };
 
+const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], search, orders);
+
 const orderSelector = state => state.api.orders;
 const filterSelector = (state, props) => props.params.filter;
+const searchSelector = (state, props) => props.location.query.q;
 
 const collectionSelector = createSelector(
   [
     orderSelector,
     filterSelector,
-  ], (orders, filter) => flowRight(
+    searchSelector,
+  ], (orders, filter, search) => flowRight(
+    filterSearch(search),
     filterOrders(filter)
   )(orders.data)
 );
@@ -69,12 +78,8 @@ export default class extends Component {
     sortData: PropTypes.object,
   };
 
-  static contextTypes = {
-
-  };
-
   componentWillMount() {
-    this.props.dispatch(actions.orders.fetch({ workflowid: this.props.id }));
+    this.props.dispatch(actions.orders.fetch({ workflowid: this.props.id, date: this.props.location }));
 
     this.setState({
       filteredData: [],
