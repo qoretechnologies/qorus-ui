@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { pureRender } from 'components/utils';
 import { includes } from 'lodash';
 
+import actions from 'store/api/actions';
+
 import { Control as Button, Controls } from '../../../../components/controls';
 
 import { ORDER_ACTIONS } from 'constants/orders';
@@ -17,52 +19,34 @@ export default class extends Component {
   };
 
   componentWillMount() {
-    this._actions = ORDER_ACTIONS.ALL;
+    this._allActions = ORDER_ACTIONS.ALL;
   }
 
-  renderControls = () => {
-    const allActions = ORDER_ACTIONS.ALL;
-    const currentActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-
-    return allActions.map(a => {
-      let style = 'default';
-      let disabled = true;
-
-      if (includes(currentActions, a.name)) {
-        style = a.style;
-        disabled = false;
-      }
-
-      return (
-        <Button
-          btnStyle={style}
-          icon={a.icon}
-          disabled={disabled}
-        />
-      );
-    });
+  handleAction = (action) => {
+    this.context.dispatch(actions.orders[action](this.props.data));
   };
 
   renderBlock = () => {
-    const action = this.props.data.workflowstatus === 'BLOCKED' ?
+    const control = this.props.data.workflowstatus === 'BLOCKED' ?
       'Unblock' : 'Block';
 
-    return this.renderAction(action);
+    return this.renderControl(control);
   };
 
   renderCancel = () => {
-    const action = this.props.data.workflowstatus === 'CANCELED' ?
+    const control = this.props.data.workflowstatus === 'CANCELED' ?
       'Uncancel' : 'Cancel';
 
-    return this.renderAction(action);
+    return this.renderControl(control);
   };
 
-  renderAction = (action) => {
-    const actions = ORDER_ACTIONS[this.props.data.workflowstatus];
-    let { name, icon, style } = this._actions.find(a => a.name === action);
+  renderControl = (control) => {
+    const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
+    let { name, icon, style, action } = this._allActions.find(a => a.name === control);
+    const onClick = () => this.handleAction(action);
     let disabled = false;
 
-    if (!includes(actions, action)) {
+    if (!includes(orderActions, control)) {
       style = 'default';
       disabled = true;
     }
@@ -73,6 +57,7 @@ export default class extends Component {
         icon={icon}
         disabled={disabled}
         title={name}
+        action={onClick}
       />
     );
   };
@@ -82,8 +67,8 @@ export default class extends Component {
       <Controls>
         { this.renderBlock() }
         { this.renderCancel() }
-        { this.renderAction('Retry') }
-        { this.renderAction('Schedule') }
+        { this.renderControl('Retry') }
+        { this.renderControl('Schedule') }
       </Controls>
     );
   }
