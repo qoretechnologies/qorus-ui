@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Route, Router, browserHistory } from 'react-router';
+import { Route, Router, browserHistory, IndexRedirect } from 'react-router';
 import { Provider } from 'react-redux';
 
 
@@ -9,6 +9,7 @@ import Workflows from 'views/workflows';
 import Workflow from 'views/workflow';
 import Services from 'views/services';
 import Jobs from 'views/jobs';
+import System from 'views/system';
 
 
 import setupStore from 'store';
@@ -217,8 +218,22 @@ export default class App extends Component {
         <div className="app__wrap">
           <Router {...this.getRouterProps()}>
             <Route path="/" component={Root}>
-              <Route path="dashboard" />
-              <Route path="system" />
+              <IndexRedirect to="/system/dashboard" />
+              <Route path="/system" component={System}>
+                <IndexRedirect to="dashboard" />
+                <Route path="dashboard" component={System.Dashboard} />
+                <Route path="alerts" component={System.Alerts} />
+                <Route path="options" component={System.Options} />
+                <Route path="remote" component={System.Connections} />
+                <Route path="props" component={System.Properties} />
+                <Route path="valuemaps" component={System.ValueMaps} />
+                <Route path="sqlcache" component={System.SqlCache} />
+                <Route path="http" component={System.HttpServices} />
+                <Route path="info" component={System.Info} />
+                <Route path="logs" component={System.Logs} />
+                <Route path="rbac" component={System.RBAC} />
+                <Route path="errors" component={System.Errors} />
+              </Route>
               <Route
                 path="workflows(/:date)(/:filter)(/:detailId)(/:tabId)"
                 component={View}
