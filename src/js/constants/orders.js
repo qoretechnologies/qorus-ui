@@ -18,6 +18,7 @@ export const CUSTOM_ORDER_STATES = [
   { name: 'BLOCKING', label: 'gray', title: 'Blocking' },
   { name: 'CANCELING', label: 'gray', title: 'Canceling' },
   { name: 'UNCANCELING', label: 'gray', title: 'Uncanceling' },
+  { name: 'RETRYING', label: 'gray', title: 'Retrying' },
 ];
 
 export const ORDER_ACTIONS = {
