@@ -22,7 +22,8 @@ import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 
 import { WORKFLOW_FILTERS } from '../../constants/filters';
-import { filterArray, handleFilterChange, getFetchParams } from '../../helpers/workflows';
+import { DATE_FORMATS } from '../../constants/dates';
+import { filterArray, handleFilterChange, getFetchParams, formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
 const sortWorkflows = (sortData) => (workflows) => workflows.slice().sort(
@@ -291,6 +292,12 @@ export default class Workflows extends Component {
   };
 
   /**
+   * Gets the formatted date for the
+   * workflow link in the workflow table
+   */
+  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
+
+  /**
    * Applies the current filter to the URL
    *
    * @param {Array} filter
@@ -358,6 +365,7 @@ export default class Workflows extends Component {
           selectedWorkflows={this.props.selectedData}
           onSortChange={this.handleSortChange}
           sortData={this.props.sortData}
+          linkDate={this.getDate()}
         />
         {this.renderPane()}
       </div>
