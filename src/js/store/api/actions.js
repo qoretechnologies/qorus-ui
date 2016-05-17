@@ -17,23 +17,26 @@ import qs from 'qs';
 
 
 export const DEFAULT_ACTIONS = {
-  FETCH: url => (params, id) => {
-    let newUrl = url;
+  FETCH: {
+    action: url => (params, id) => {
+      let newUrl = url;
 
-    if (id) {
-      newUrl = `${url}/${id}`;
-    }
+      if (id) {
+        newUrl = `${url}/${id}`;
+      }
 
-    if (params) {
-      const query = qs.stringify(params);
-      newUrl = `${newUrl}?${query}`;
-    }
+      if (params) {
+        const query = qs.stringify(params);
+        newUrl = `${newUrl}?${query}`;
+      }
 
-    return fetchJson(
-      'GET',
-      newUrl,
-      params
-    );
+      return fetchJson(
+          'GET',
+          newUrl,
+          params
+      );
+    },
+    meta: (params, id) => ({ params, id }),
   },
   ACTION: {
     action: url => (params, id) => fetchJson(

@@ -41,11 +41,11 @@ export function createResourceReducers(
           if (resourceOrigin && resourceOrigin.transform) {
             data = (isArray(action.payload)) ?
               action.payload.map(resourceOrigin.transform) :
-              [resourceOrigin.transform(action.payload)];
+              resourceOrigin.transform(action.payload);
           } else {
             data = action.payload;
           }
-          
+
           if (isSpecialReducer) {
             return (
               specialReducers[resource][actn.toUpperCase()]
@@ -55,7 +55,10 @@ export function createResourceReducers(
 
           if (action.meta) {
             if (action.meta.id) {
-              data = omit(JSON.parse(action.meta.params.body), 'action');
+              if (action.meta.params.body) {
+                data = omit(JSON.parse(action.meta.params.body), 'action');
+              }
+
               return assignIn({}, state, {
                 data: updateItemWithId(
                   action.meta.id,
