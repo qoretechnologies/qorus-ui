@@ -78,7 +78,9 @@ Object.assign(actions.workflows, workflowActions.specials);
 
 Object.assign(actions.steps, stepActions);
 
-Object.assign(actions.orders, orderActions);
+Object.keys(orderActions).forEach(a => {
+  actions.orders[a] = orderActions[a](actions);
+});
 
 Object.assign(actions.errors, errorActions);
 
