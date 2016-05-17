@@ -29,7 +29,16 @@ module.exports = () => {
 
     if (req.query.sort) {
       filteredData = filteredData.sort(
-        firstBy(req.query.sort, { ignoreCase: true, direction: -1 })
+        firstBy((v1, v2) => {
+          const prev = v1[req.query.sort];
+          const cur = v2[req.query.sort];
+
+          if (moment(prev).isValid() && moment(cur).isValid()) {
+            return moment(prev).isBefore(cur) ? -1 : 1;
+          }
+
+          return prev.toLowerCase() < cur.toLowerCase() ? -1 : 1;
+        }, -1)
       );
     }
 
