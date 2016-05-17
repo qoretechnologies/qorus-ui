@@ -18,6 +18,7 @@ export default class extends Component {
     selectedIcon: PropTypes.string,
     onSubmit: PropTypes.func,
     submitLabel: PropTypes.string,
+    selected: PropTypes.array,
   };
 
   static defaultProps = {
@@ -26,9 +27,11 @@ export default class extends Component {
   };
 
   componentWillMount() {
+    const selected = this.props.selected || this.props.def;
+
     this.setState({
       showDropdown: false,
-      selected: [this.props.def],
+      selected,
     });
   }
 
