@@ -6,7 +6,9 @@ import OrderControls from './controls';
 import Date from '../../../../components/date';
 import Checkbox from '../../../../components/checkbox';
 
-import { ORDER_STATES } from '../../../../constants/orders';
+import { union } from 'lodash';
+
+import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
 
 export default class extends Table {
   static defaultProps = {
@@ -188,7 +190,8 @@ export default class extends Table {
       </Cell>
     );
 
-    const { label } = ORDER_STATES.find(o => o.name === model.workflowstatus);
+    const states = union(ORDER_STATES, CUSTOM_ORDER_STATES);
+    const { label } = states.find(o => o.name === model.workflowstatus);
 
     yield (
       <Cell className="narrow">
