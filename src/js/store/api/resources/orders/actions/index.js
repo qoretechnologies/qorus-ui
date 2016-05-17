@@ -18,7 +18,7 @@ export function block(actions) {
         action: 'block',
         // XXX This value will update state and is ignored by Service
         // REST API
-        workflowstatus: 'BLOCKED',
+        workflowstatus: 'BLOCKING',
       }),
     }, order.id));
   };
