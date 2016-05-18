@@ -1,4 +1,6 @@
 import { ORDER_STATES } from '../constants/orders';
+import firstBy from 'thenby';
+import moment from 'moment';
 
 const CSVheaders = {
   workflows: {
@@ -48,6 +50,31 @@ CSVheaders.workflows.total = 'Total';
 
 const getCSVHeaders = (view) => CSVheaders[view];
 
+const sortFunc = (sort, v1, v2) => {
+  const val1 = v1[sort.sortBy];
+  const val2 = v2[sort.sortBy];
+
+  if (moment(val1).isValid() && moment(val2).isValid()) {
+    return moment(val1).isBefore(val2) ? -1 : 1;
+  }
+
+  if (!val1) {
+    return -1;
+  }
+
+  if (!val2) {
+    return 1;
+  }
+
+  return val1.toLowerCase() < val2.toLowerCase() ? -1 : 1;
+};
+
+const sortTable = (data, sort) => data.slice().sort(
+  firstBy((v1, v2) => sortFunc(sort, v1, v2), sort.sortByKey.direction)
+    .thenBy((v1, v2) => sortFunc(sort, v1, v2), sort.historySortByKey.direction)
+);
+
 export {
   getCSVHeaders,
+  sortTable,
 };
