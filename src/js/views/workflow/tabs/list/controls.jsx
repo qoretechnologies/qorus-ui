@@ -28,21 +28,21 @@ export default class extends Component {
 
   renderBlock = () => {
     const control = this.props.data.workflowstatus === 'BLOCKED' ?
-      'Unblock' : 'Block';
+      'unblock' : 'block';
 
     return this.renderControl(control);
   };
 
   renderCancel = () => {
     const control = this.props.data.workflowstatus === 'CANCELED' ?
-      'Uncancel' : 'Cancel';
+      'uncancel' : 'cancel';
 
     return this.renderControl(control);
   };
 
   renderControl = (control) => {
     const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-    let { name, icon, style, action } = this._allActions.find(a => a.name === control);
+    let { name, icon, style, action } = this._allActions.find(a => a.action === control);
     const onClick = () => this.handleAction(action);
     let disabled = false;
 
@@ -67,8 +67,8 @@ export default class extends Component {
       <Controls>
         { this.renderBlock() }
         { this.renderCancel() }
-        { this.renderControl('Retry') }
-        { this.renderControl('Schedule') }
+        { this.renderControl('retry') }
+        { this.renderControl('schedule') }
       </Controls>
     );
   }
