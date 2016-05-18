@@ -26,6 +26,18 @@ const CSVheaders = {
     'IN-PROGRESS': 'In-progress',
     CRASHED: 'Crash',
   },
+  orders: {
+    status: 'Status',
+    business_error: 'Bus. Err.',
+    name: 'Order',
+    started: 'Started',
+    completed: 'Completed',
+    modified: 'Modified',
+    scheduled: 'Scheduled',
+    error_count: 'Errors',
+    warning_count: 'Warnings',
+    note_count: 'Notes',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {
