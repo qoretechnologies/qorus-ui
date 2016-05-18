@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { flowRight, includes, union } from 'lodash';
 
 import actions from 'store/api/actions';
+import * as ui from 'store/ui/actions';
 import { ORDER_STATES, CUSTOM_ORDER_STATES, ORDER_ACTIONS } from 'constants/orders';
 import { DATE_FORMATS } from 'constants/dates';
 
@@ -15,6 +16,7 @@ import Modal from '../../../../components/modal';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
+import { sortTable } from '../../../../helpers/table';
 
 const filterOrders = (filter) => (orders) => {
   if (!filter || includes(filter, 'All')) return orders;
@@ -27,17 +29,21 @@ const filterOrders = (filter) => (orders) => {
 };
 
 const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], search, orders);
+const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
 
 const orderSelector = state => state.api.orders;
 const filterSelector = (state, props) => props.params.filter;
 const searchSelector = (state, props) => props.location.query.q;
+const sortSelector = state => state.ui.orders;
 
 const collectionSelector = createSelector(
   [
     orderSelector,
     filterSelector,
     searchSelector,
-  ], (orders, filter, search) => flowRight(
+    sortSelector,
+  ], (orders, filter, search, sortData) => flowRight(
+    sortOrders(sortData),
     filterSearch(search),
     filterOrders(filter)
   )(orders.data)
@@ -47,10 +53,12 @@ const selector = createSelector(
   [
     orderSelector,
     collectionSelector,
-  ], (ordersData, collection) => ({
+    sortSelector,
+  ], (ordersData, collection, sortData) => ({
     sync: ordersData.sync,
     loading: ordersData.loading,
     collection,
+    sortData,
   })
 );
 
@@ -159,6 +167,12 @@ export default class extends Component {
 
       this.context.openModal(this._modal);
     }
+  };
+
+  handleSortChange = (sortChange) => {
+    this.props.dispatch(
+      ui.orders.sort(sortChange)
+    );
   };
 
   handleModalCloseClick = () => {

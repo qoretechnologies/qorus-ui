@@ -41,7 +41,7 @@ export default class extends Table {
       <Cell
         tag="th"
         className="narrow"
-        name="status"
+        name="workflowstatus"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
       >
