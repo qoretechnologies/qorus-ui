@@ -121,6 +121,7 @@ export default class extends Component {
                   setSelectedData={this.props.setSelectedData}
                   selectedData={this.props.selectedData}
                   sortData={this.props.sortData}
+                  onCSVClick={this.props.onCSVClick}
                 />
               </Pane>
               <Pane name="Performance" />
