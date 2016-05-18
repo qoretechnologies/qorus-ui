@@ -7,9 +7,10 @@ import Search from 'components/search';
 import Datepicker from 'components/datepicker';
 
 import { goTo } from 'helpers/router';
+import { getActionData } from 'helpers/orders';
 
 import { CHECKBOX_STATES } from 'constants/checkbox';
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES, ORDER_ACTIONS } from 'constants/orders';
 
 import { pureRender } from 'components/utils';
 
@@ -38,22 +39,36 @@ export default class OrdersToolbar extends Component {
   /**
    * Handles enabling multiple workflows
    */
-  handleEnableClick = () => {
-    this.props.batchAction('enable');
+  handleRetryClick = () => {
+    this.props.batchAction('retry');
   };
 
   /**
    * Handles disabling multiple workflows
    */
-  handleDisableClick = () => {
-    this.props.batchAction('disable');
+  handleBlockClick = () => {
+    this.props.batchAction('block');
   };
 
   /**
    * Handles reseting multiple workflows
    */
-  handleResetClick = () => {
-    this.props.batchAction('reset');
+  handleUnblockClick = () => {
+    this.props.batchAction('unblock');
+  };
+
+  /**
+   * Handles reseting multiple workflows
+   */
+  handleCancelClick = () => {
+    this.props.batchAction('cancel');
+  };
+
+  /**
+   * Handles reseting multiple workflows
+   */
+  handleUncancelClick = () => {
+    this.props.batchAction('uncancel');
   };
 
   applyDate = (date) => {
@@ -86,25 +101,39 @@ export default class OrdersToolbar extends Component {
       return (
         <Actions>
           <Button
-            label="Enable"
-            icon="power-off"
+            label={getActionData('retry', 'name')}
+            icon={getActionData('retry', 'icon')}
             big
             btnStyle="default"
-            action={this.handleEnableClick}
+            action={this.handleRetryClick}
           />
           <Button
-            label="Disable"
-            icon="ban"
+            label={getActionData('cancel', 'name')}
+            icon={getActionData('cancel', 'icon')}
             big
             btnStyle="default"
-            action={this.handleDisableClick}
+            action={this.handleCancelClick}
           />
           <Button
-            label="Reset"
-            icon="refresh"
+            label={getActionData('uncancel', 'name')}
+            icon={getActionData('uncancel', 'icon')}
             big
             btnStyle="default"
-            action={this.handleResetClick}
+            action={this.handleUncancelClick}
+          />
+          <Button
+            label={getActionData('block', 'name')}
+            icon={getActionData('block', 'icon')}
+            big
+            btnStyle="default"
+            action={this.handleBlockClick}
+          />
+          <Button
+            label={getActionData('unblock', 'name')}
+            icon={getActionData('unblock', 'icon')}
+            big
+            btnStyle="default"
+            action={this.handleUnblockClick}
           />
         </Actions>
       );
