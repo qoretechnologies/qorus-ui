@@ -76,5 +76,58 @@ module.exports = () => {
     res.json(order);
   });
 
+  /**
+   * Handles calling batch action
+   * such as enable, disable, reset
+   * etc
+   */
+  router.put('/', (req, res) => {
+    const action = req.query.action;
+    const ids = req.query.ids.split(',');
+    let result = [];
+
+    switch (action) {
+      case 'block':
+        result = ids.map(id => {
+          const item = data.find(w => findOrder(id, w));
+          item.workflowstatus = 'BLOCKING';
+          return item;
+        });
+        break;
+      case 'retry':
+        result = ids.map(id => {
+          const item = data.find(w => findOrder(id, w));
+          item.workflowstatus = 'RETRYING';
+          return item;
+        });
+        break;
+      case 'cancel':
+        result = ids.map(id => {
+          const item = data.find(w => findOrder(id, w));
+          item.workflowstatus = 'CANCELING';
+          return item;
+        });
+        break;
+      case 'unblock':
+        result = ids.map(id => {
+          const item = data.find(w => findOrder(id, w));
+          item.workflowstatus = 'UNBLOCKING';
+          return item;
+        });
+        break;
+      case 'uncancel':
+        result = ids.map(id => {
+          const item = data.find(w => findOrder(id, w));
+          item.workflowstatus = 'UNCANCELING';
+          return item;
+        });
+        break;
+      default:
+        break;
+    }
+
+    res.json(result);
+  });
+
   return router;
 };
