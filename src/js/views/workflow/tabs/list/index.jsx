@@ -5,12 +5,13 @@ import { createSelector } from 'reselect';
 import { flowRight, includes, union } from 'lodash';
 
 import actions from 'store/api/actions';
-import { ORDER_STATES, CUSTOM_ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES, CUSTOM_ORDER_STATES, ORDER_ACTIONS } from 'constants/orders';
 import { DATE_FORMATS } from 'constants/dates';
 
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';
 import Loader from '../../../../components/loader';
+import Modal from '../../../../components/modal';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
@@ -80,6 +81,11 @@ export default class extends Component {
     sortData: PropTypes.object,
   };
 
+  static contextTypes = {
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+  };
+
   componentWillMount() {
     this.setState({
       filteredData: [],
@@ -120,17 +126,50 @@ export default class extends Component {
       }
     });
 
-    this.props.clearSelection();
-    this.props.dispatch(
-      actions.workflows[`${type}Batch`](selectedData)
+    const canBatch = selectedData.some(o => (
+        !includes(
+          ORDER_ACTIONS[this.props.collection.find(order => (
+            order.id === parseInt(o, 10))
+          ).workflowstatus],
+          type
+        )
+      )
     );
+
+    if (canBatch) {
+      this.props.clearSelection();
+      this.props.dispatch(
+        actions.orders[`${type}Batch`](selectedData)
+      );
+    } else {
+      this._modal = (
+        <Modal>
+          <Modal.Header
+            onClose={this.handleModalCloseClick}
+          >
+            Error
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-danger">
+              There was an error running the { type } batch call.
+            </p>
+          </Modal.Body>
+        </Modal>
+      );
+
+      this.context.openModal(this._modal);
+    }
+  };
+
+  handleModalCloseClick = () => {
+    this.context.closeModal(this._modal);
   };
 
   handleCSVClick = () => {
     const collection = this.state.filteredData.length ?
       this.state.filteredData : this.props.collection;
 
-    this.props.onCSVClick(collection, 'workflows');
+    this.props.onCSVClick(collection, 'orders');
   };
 
   renderTable() {
