@@ -80,4 +80,11 @@ export default [
       normalizeId('workflow_instanceid'),
     ),
   },
+  {
+    name: 'alerts',
+    url: `${settings.REST_BASE_URL}/system/alerts`,
+    transform: _.flowRight(
+      normalizeId('alertid'),
+    ),
+  },
 ];

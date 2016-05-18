@@ -17,10 +17,10 @@ const Alert = RPT.shape({
   source: RPT.string.isRequired,
   object: RPT.string.isRequired,
   instance: RPT.string.isRequired,
-  name: RPT.string.isRequired,
-  version: RPT.string.isRequired,
-  auditid: RPT.number.isRequired,
-  first_raised: RPT.string.isRequired,
+  name: RPT.string,
+  version: RPT.string,
+  auditid: RPT.number,
+  first_raised: RPT.string,
 });
 
 module.exports = Alert;
