@@ -14,6 +14,7 @@ export default class extends Component {
   static propTypes = {
     date: PropTypes.string,
     onApplyDate: PropTypes.func,
+    futureOnly: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -154,6 +155,7 @@ export default class extends Component {
         onMinutesChange={this.handleMinutesChange}
         onHoursChange={this.handleHoursChange}
         hideDatepicker={this.hideDatepicker}
+        futureOnly={this.props.futureOnly}
       >
         <Calendar
           date={this.state.date}
@@ -162,6 +164,36 @@ export default class extends Component {
           setActiveDate={this.setActiveDate}
         />
       </Picker>
+    );
+  }
+
+  renderControls() {
+    if (this.props.futureOnly) return undefined;
+
+    return (
+      <Controls grouped noControls>
+        <Control
+          label="All"
+          btnStyle="default"
+          big
+          action={this.handleAllClick}
+        />
+        <Dropdown id="date-selection">
+          <DropdownControl btnStyle="default" />
+          <DropdownItem
+            title="24H"
+            action={this.handle24hClick}
+          />
+          <DropdownItem
+            title="Today"
+            action={this.handleTodayClick}
+          />
+          <DropdownItem
+            title="Now"
+            action={this.handleNowClick}
+          />
+        </Dropdown>
+      </Controls>
     );
   }
 
@@ -174,30 +206,8 @@ export default class extends Component {
           inputDate={this.state.inputDate}
           onInputClick={this.showDatepicker}
         />
-        <Controls grouped noControls>
-          <Control
-            label="All"
-            btnStyle="default"
-            big
-            action={this.handleAllClick}
-          />
-          <Dropdown id="date-selection">
-            <DropdownControl btnStyle="default" />
-            <DropdownItem
-              title="24H"
-              action={this.handle24hClick}
-            />
-            <DropdownItem
-              title="Today"
-              action={this.handleTodayClick}
-            />
-            <DropdownItem
-              title="Now"
-              action={this.handleNowClick}
-            />
-          </Dropdown>
-        </Controls>
-        {this.renderDatepicker()}
+        { this.renderControls() }
+        { this.renderDatepicker() }
       </div>
     );
   }
