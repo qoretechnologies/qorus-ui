@@ -8,7 +8,11 @@ import classNames from 'classnames';
 export default function Control(props) {
   return (
     <button
-      className={classNames('btn', `btn-${props.btnStyle}`, 'dropdown-toggle')}
+      className={classNames('btn',
+       props.small ? 'btn-xs' : '',
+       `btn-${props.btnStyle}`,
+       'dropdown-toggle'
+      )}
       {...props}
     >
       { props.children }
@@ -25,4 +29,5 @@ Control.defaultProps = {
 Control.propTypes = {
   children: PropTypes.node,
   btnStyle: PropTypes.string,
+  small: PropTypes.bool,
 };
