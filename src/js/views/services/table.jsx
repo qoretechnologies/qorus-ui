@@ -35,6 +35,8 @@ export default class ServicesTable extends Component {
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
   };
 
 
