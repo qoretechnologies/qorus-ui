@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import WorkflowControls from '../workflows/controls';
 import AutoStart from '../../components/autostart';
+import Badge from '../../components/badge';
+import { Group } from '../../components/groups';
 
 import { ORDER_STATES } from '../../constants/orders';
 
@@ -23,13 +25,18 @@ export default class extends Component {
 
   renderBadges = () => ORDER_STATES.map(o => (
       this.props.data[o.name] > 0 ?
-        <span className="badge alert-danger">{`${o.short}: ${this.props.data[o.name]}`}</span> :
+        <Badge
+          label={o.label}
+          val={`${o.short}: ${this.props.data[o.name]}`}
+        /> :
         undefined
     ));
 
-  // @TODO Change this to the group component
   renderGroups = () => this.props.data.groups.map(g => (
-      <span className="label label-info">{`${g.name} (${g.size})`}</span>
+      <Group
+        name={g.name}
+        size={g.size}
+      />
     ));
 
   render() {
@@ -60,7 +67,7 @@ export default class extends Component {
           </div>
         </div>
         <div className="row status-row">
-          <div className="col-xs-12">
+          <div className="col-xs-12 groups">
             {this.renderGroups()}
           </div>
         </div>

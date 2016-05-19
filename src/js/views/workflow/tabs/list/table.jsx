@@ -5,6 +5,8 @@ import { Cell } from '../../../../components/table';
 import OrderControls from './controls';
 import Date from '../../../../components/date';
 import Checkbox from '../../../../components/checkbox';
+import Dropdown, { Item, Control } from '../../../../components/dropdown';
+import Lock from './modals/lock';
 
 import { union } from 'lodash';
 
@@ -14,6 +16,25 @@ export default class extends Table {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
+  };
+
+  handleLockClick = (model) => () => {
+    const label = model.operator_lock ? 'Unlock' : 'Lock';
+
+    this._modal = (
+      <Lock
+        onClose={this.handleModalCloseClick}
+        data={model}
+        label={label}
+        username={this.props.username}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  };
+
+  handleModalCloseClick = () => {
+    this.context.closeModal(this._modal);
   };
 
   /**
@@ -186,7 +207,10 @@ export default class extends Table {
 
     yield (
       <Cell className="narrow">
-        <OrderControls data={ model } />
+        <OrderControls
+          data={ model }
+          onScheduleClick={this.props.onScheduleClick}
+        />
       </Cell>
     );
 
@@ -241,8 +265,32 @@ export default class extends Table {
       <Cell className="narrow">{ model.warning_count }</Cell>
     );
 
+    const icon = model.operator_lock ? 'lock' : 'unlock';
+    const itemIcon = model.operator_lock ? 'unlock' : 'lock';
+    const locked = model.operator_lock || '';
+    const title = model.operator_lock ? 'Unlock' : 'Lock';
+    const style = model.operator_lock ? 'danger' : 'success';
+    const disabled = model.operator_lock && model.operator_lock !== this.props.username;
+
     yield (
-      <Cell className="narrow"> Lock </Cell>
+      <Cell className="narrow">
+        <Dropdown>
+          <Control
+            disabled={disabled}
+            small
+            btnStyle={style}
+          >
+            <i className={`fa fa-${icon}`} />
+            {' '}
+            { locked }
+          </Control>
+          <Item
+            icon={itemIcon}
+            title={title}
+            action={this.handleLockClick(model)}
+          />
+        </Dropdown>
+      </Cell>
     );
 
     yield (

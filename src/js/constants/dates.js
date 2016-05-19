@@ -9,6 +9,7 @@ const DATE_FORMATS = {
   URL_FORMAT: 'YYYYMMDDHHmmss',
   ALL: '1970/1/1',
   DISPLAY: 'YYYY-MM-DD HH:mm:ss',
+  PROP: 'YYYY-MM-DDTHH:mm:ss',
 };
 
 export {

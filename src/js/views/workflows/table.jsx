@@ -10,7 +10,7 @@ import WorkflowsControls from './controls';
 
 import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
-import { filterArray, formatDate } from '../../helpers/workflows';
+import { filterArray } from '../../helpers/workflows';
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 
 import classNames from 'classnames';

@@ -24,6 +24,7 @@ export default class extends Component {
     onHoursChange: PropTypes.func,
     hideDatepicker: PropTypes.func,
     children: PropTypes.node,
+    futureOnly: PropTypes.bool,
   };
 
   componentDidMount() {
@@ -42,6 +43,25 @@ export default class extends Component {
       this.props.hideDatepicker();
     }
   };
+
+  renderControls() {
+    if (this.props.futureOnly) return undefined;
+
+    return (
+      <Controls grouped noControls>
+        <Control
+          label="24h"
+          btnStyle="default"
+          action={this.props.on24hClick}
+        />
+        <Control
+          label="All"
+          btnStyle="default"
+          action={this.props.onAllClick}
+        />
+      </Controls>
+    );
+  }
 
   render() {
     return (
@@ -80,18 +100,7 @@ export default class extends Component {
             </div>
           </div>
         </div>
-        <Controls grouped noControls>
-          <Control
-            label="24h"
-            btnStyle="default"
-            action={this.props.on24hClick}
-          />
-          <Control
-            label="All"
-            btnStyle="default"
-            action={this.props.onAllClick}
-          />
-        </Controls>
+        { this.renderControls() }
         <button
           className="btn btn-primary btn-xs pull-right"
           onClick={this.props.onApplyClick}

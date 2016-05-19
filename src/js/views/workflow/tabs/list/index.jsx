@@ -12,7 +12,8 @@ import { DATE_FORMATS } from 'constants/dates';
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';
 import Loader from '../../../../components/loader';
-import Modal from '../../../../components/modal';
+import Reschedule from './modals/reschedule';
+import Error from './modals/error';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
@@ -35,6 +36,7 @@ const orderSelector = state => state.api.orders;
 const filterSelector = (state, props) => props.params.filter;
 const searchSelector = (state, props) => props.location.query.q;
 const sortSelector = state => state.ui.orders;
+const userSelector = state => state.api.currentUser.data.username;
 
 const collectionSelector = createSelector(
   [
@@ -54,11 +56,13 @@ const selector = createSelector(
     orderSelector,
     collectionSelector,
     sortSelector,
-  ], (ordersData, collection, sortData) => ({
+    userSelector,
+  ], (ordersData, collection, sortData, username) => ({
     sync: ordersData.sync,
     loading: ordersData.loading,
     collection,
     sortData,
+    username,
   })
 );
 
@@ -87,6 +91,7 @@ export default class extends Component {
     onDataFilterChange: PropTypes.func,
     setSelectedData: PropTypes.func,
     sortData: PropTypes.object,
+    username: PropTypes.string,
   };
 
   static contextTypes = {
@@ -134,7 +139,7 @@ export default class extends Component {
       }
     });
 
-    const canBatch = selectedData.some(o => (
+    const cantBatch = selectedData.some(o => (
         !includes(
           ORDER_ACTIONS[this.props.collection.find(order => (
             order.id === parseInt(o, 10))
@@ -144,25 +149,17 @@ export default class extends Component {
       )
     );
 
-    if (canBatch) {
+    if (!cantBatch) {
       this.props.clearSelection();
       this.props.dispatch(
         actions.orders[`${type}Batch`](selectedData)
       );
     } else {
       this._modal = (
-        <Modal>
-          <Modal.Header
-            onClose={this.handleModalCloseClick}
-          >
-            Error
-          </Modal.Header>
-          <Modal.Body>
-            <p className="text-danger">
-              There was an error running the { type } batch call.
-            </p>
-          </Modal.Body>
-        </Modal>
+        <Error
+          onClose={this.handleModalCloseClick}
+          message={`There was an error running the ${type} call`}
+        />
       );
 
       this.context.openModal(this._modal);
@@ -186,6 +183,17 @@ export default class extends Component {
     this.props.onCSVClick(collection, 'orders');
   };
 
+  handleScheduleClick = (order) => {
+    this._modal = (
+      <Reschedule
+        data={order}
+        onClose={this.handleModalCloseClick}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  };
+
   renderTable() {
     if (!this.props.collection.length) return <h5> No data found </h5>;
 
@@ -198,6 +206,8 @@ export default class extends Component {
         selectedData={this.props.selectedData}
         onSortChange={this.handleSortChange}
         sortData={this.props.sortData}
+        onScheduleClick={this.handleScheduleClick}
+        username={this.props.username}
       />
     );
   }

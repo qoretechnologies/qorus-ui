@@ -59,6 +59,10 @@ export function createResourceReducers(
                 data = omit(JSON.parse(action.meta.params.body), 'action');
               }
 
+              if (action.meta.params.update) {
+                data = Object.assign({}, data, action.meta.params.update);
+              }
+
               return assignIn({}, state, {
                 data: updateItemWithId(
                   action.meta.id,

@@ -9,6 +9,8 @@ const config = require('../config');
 const express = require('express');
 const moment = require('moment');
 const firstBy = require('thenby');
+const lockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').lockOrder;
+const unlockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').unlockOrder;
 
 module.exports = () => {
   const data = require('./data')();
@@ -65,6 +67,16 @@ module.exports = () => {
       case 'unblock':
       case 'retry':
         order.workflowstatus = req.body.workflowstatus;
+        break;
+      case 'schedule':
+        order.workflowstatus = req.body.workflowstatus;
+        order.scheduled = req.body.date;
+        break;
+      case 'lock':
+        Object.assign(order, lockOrder(order, req.body.note, req.body.username));
+        break;
+      case 'unlock':
+        Object.assign(order, unlockOrder(order, req.body.note, req.body.username));
         break;
       default:
         if (config.env !== 'test') {

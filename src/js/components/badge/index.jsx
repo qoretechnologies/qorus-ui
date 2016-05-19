@@ -33,9 +33,8 @@ export default class Badge extends Component {
     return (
       <span
         className={classNames({
-          badge: this.props.val > 0,
-          [`badge--${this.props.label}`]: this.props.label &&
-                                          this.props.val > 0,
+          badge: this.props.val || false,
+          [`alert-${this.props.label}`]: this.props.label && this.props.val || false,
         })}
       >
         {this.props.val}

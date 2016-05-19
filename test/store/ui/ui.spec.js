@@ -16,6 +16,10 @@ describe('UI redux store', () => {
       expect(store.getState().workflows.historySortByKey.direction).to.equal(1);
     });
 
-    store.dispatch(actions.workflows.sort({ sortBy: 'id', sortByKey: { ignoreCase: true, direction: -1 } }));
+    store.dispatch(
+      actions.workflows.sort(
+        { sortBy: 'id', sortByKey: { ignoreCase: true, direction: -1 } }
+      )
+    );
   });
 });

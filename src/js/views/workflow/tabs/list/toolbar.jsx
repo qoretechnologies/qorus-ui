@@ -10,7 +10,7 @@ import { goTo } from 'helpers/router';
 import { getActionData } from 'helpers/orders';
 
 import { CHECKBOX_STATES } from 'constants/checkbox';
-import { ORDER_STATES, ORDER_ACTIONS } from 'constants/orders';
+import { ORDER_STATES } from 'constants/orders';
 
 import { pureRender } from 'components/utils';
 

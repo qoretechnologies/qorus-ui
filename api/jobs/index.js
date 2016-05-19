@@ -56,7 +56,7 @@ module.exports = () => {
   });
 
   router.put('/:id', (req, res) => {
-    const item = data.find(findModel('jobid').bind(null, req.params.id));
+    const item = data.find(findJob('jobid').bind(null, req.params.id));
 
     switch (req.body.action) {
       case 'disable':
