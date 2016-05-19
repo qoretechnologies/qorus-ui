@@ -1,3 +1,5 @@
+import { lockOrder, unlockOrder } from './helpers';
+
 export function retry(actions) {
   return order => dispatch => {
     dispatch(actions.orders.action({
@@ -44,7 +46,7 @@ export function cancel(actions) {
         action: 'cancel',
         // XXX This value will update state and is ignored by Service
         // REST API
-        workflowstatus: 'CANCELED',
+        workflowstatus: 'CANCELING',
       }),
     }, order.id));
   };
@@ -59,6 +61,47 @@ export function uncancel(actions) {
         // REST API
         workflowstatus: 'UNCANCELING',
       }),
+    }, order.id));
+  };
+}
+
+export function reschedule(actions) {
+  return (order, date) => dispatch => {
+    dispatch(actions.orders.action({
+      body: JSON.stringify({
+        action: 'schedule',
+        date,
+        // XXX This value will update state and is ignored by Service
+        // REST API
+        workflowstatus: 'SCHEDULED',
+        scheduled: date,
+      }),
+    }, order.id));
+  };
+}
+
+export function lock(actions) {
+  return (order, note, username) => dispatch => {
+    dispatch(actions.orders.action({
+      body: JSON.stringify({
+        action: 'lock',
+        note,
+        username,
+      }),
+      update: lockOrder(order, note, username),
+    }, order.id));
+  };
+}
+
+export function unlock(actions) {
+  return (order, note, username) => dispatch => {
+    dispatch(actions.orders.action({
+      body: JSON.stringify({
+        action: 'unlock',
+        note,
+        username,
+      }),
+      update: unlockOrder(order, note, username),
     }, order.id));
   };
 }
