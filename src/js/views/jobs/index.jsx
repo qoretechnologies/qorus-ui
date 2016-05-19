@@ -95,6 +95,7 @@ export default class Jobs extends Component {
     onInvertClick: PropTypes.func,
     sortData: PropTypes.object,
     onCSVClick: PropTypes.func,
+    generateCSV: PropTypes.func,
   };
 
   static contextTypes = {
