@@ -12,6 +12,7 @@ import { ORDER_ACTIONS } from 'constants/orders';
 export default class extends Component {
   static propTypes = {
     data: PropTypes.object,
+    onScheduleClick: PropTypes.func,
   };
 
   static contextTypes = {
@@ -23,7 +24,11 @@ export default class extends Component {
   }
 
   handleAction = (action) => {
-    this.context.dispatch(actions.orders[action](this.props.data));
+    if (action === 'schedule') {
+      this.props.onScheduleClick(this.props.data);
+    } else {
+      this.context.dispatch(actions.orders[action](this.props.data));
+    }
   };
 
   renderBlock = () => {
