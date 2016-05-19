@@ -32,14 +32,18 @@ export const ORDER_ACTIONS = {
   ],
   BLOCKED: ['unblock'],
   CANCELED: ['uncancel'],
-  RETRY: ['block', 'cancel', 'retry', 'schedule'],
+  SCHEDULED: ['block', 'cancel', 'schedule'],
+  READY: ['block', 'cancel', 'schedule'],
+  RETRY: ['block', 'cancel', 'retry'],
+  'EVENT-WAITING': ['block', 'cancel', 'retry'],
+  'ASYNC-WAITING': ['block', 'cancel', 'retry'],
+  WAITING: ['block', 'cancel', 'retry'],
   ERROR: ['block', 'cancel', 'retry'],
   COMPLETE: [],
+  INCOMPLETE: [],
   UNBLOCKING: [],
   BLOCKING: [],
   CANCELING: [],
   UNCANCELING: [],
   RETRYING: [],
 };
-
-
