@@ -27,7 +27,7 @@ export default class extends Component {
   };
 
   componentWillMount() {
-    const selected = this.props.selected || this.props.def;
+    const selected = this.props.selected || [this.props.def];
 
     this.setState({
       showDropdown: false,
@@ -42,45 +42,6 @@ export default class extends Component {
       document.addEventListener('click', this.handleOutsideClick);
     }
   }
-
-  handleOutsideClick = (event) => {
-    const el = ReactDOM.findDOMNode(this.refs.dropdown);
-
-    if (el && !el.contains(event.target)) {
-      this.setState({
-        showDropdown: false,
-      });
-    }
-  };
-
-  /**
-   * Displays / hides the control dropdown
-   * based on the current state
-   *
-   * @param {Event} event
-   */
-  handleToggleClick = (event) => {
-    if (event.defaultPrevented) return null;
-    event.preventDefault();
-
-    this.setState({
-      showDropdown: !this.state.showDropdown,
-    });
-  };
-
-  handleSubmit = () => {
-    this.props.onSubmit(this.state.selected);
-  };
-
-  /**
-   * Hides the control dropdown
-   * based on the current state
-   */
-  hideToggle = () => {
-    this.setState({
-      showDropdown: false,
-    });
-  };
 
   /**
    * Toggles the items selection in the
@@ -118,6 +79,46 @@ export default class extends Component {
     }
 
     return null;
+  };
+
+  handleOutsideClick = (event) => {
+    const el = ReactDOM.findDOMNode(this.refs.dropdown);
+
+    if (el && !el.contains(event.target)) {
+      this.setState({
+        showDropdown: false,
+      });
+    }
+  };
+
+  /**
+   * Displays / hides the control dropdown
+   * based on the current state
+   *
+   * @param {Event} event
+   */
+  handleToggleClick = (event) => {
+    if (!event.defaultPrevented) {
+      event.preventDefault();
+
+      this.setState({
+        showDropdown: !this.state.showDropdown,
+      });
+    }
+  };
+
+  handleSubmit = () => {
+    this.props.onSubmit(this.state.selected);
+  };
+
+  /**
+   * Hides the control dropdown
+   * based on the current state
+   */
+  hideToggle = () => {
+    this.setState({
+      showDropdown: false,
+    });
   };
 
   /**
