@@ -23,7 +23,12 @@ import WorkflowsDetail from './detail';
 
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 import { DATE_FORMATS } from '../../constants/dates';
-import { filterArray, handleFilterChange, getFetchParams, formatDate } from '../../helpers/workflows';
+import {
+  filterArray,
+  handleFilterChange,
+  getFetchParams,
+  formatDate,
+} from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
 const sortWorkflows = (sortData) => (workflows) => workflows.slice().sort(
@@ -221,6 +226,28 @@ export default class Workflows extends Component {
   }
 
   /**
+   * Gets the formatted date for the
+   * workflow link in the workflow table
+   */
+  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
+
+  /**
+   * Applies the current filter to the URL
+   *
+   * @param {Array} filter
+   */
+  applyFilter(filter) {
+    goTo(
+      this.context.router,
+      'workflows',
+      this.props.route.path,
+      this.props.params,
+      { filter: filter.join(','), detailId: null, tabId: null },
+      this.props.location.query
+    );
+  }
+
+  /**
    * Handles filtering for only running workflows
    */
   handleRunningClick = () => {
@@ -290,28 +317,6 @@ export default class Workflows extends Component {
 
     this.props.onCSVClick(collection, 'workflows');
   };
-
-  /**
-   * Gets the formatted date for the
-   * workflow link in the workflow table
-   */
-  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
-
-  /**
-   * Applies the current filter to the URL
-   *
-   * @param {Array} filter
-   */
-  applyFilter(filter) {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.props.route.path,
-      this.props.params,
-      { filter: filter.join(','), detailId: null, tabId: null },
-      this.props.location.query
-    );
-  }
 
   renderPane() {
     const { params, errors, systemOptions, globalErrors } = this.props;

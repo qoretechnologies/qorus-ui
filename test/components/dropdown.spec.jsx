@@ -118,10 +118,15 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
         const component = TestUtils.renderIntoDocument(
           <Dropdown
             multi
+            def="All"
           >
             <Control>
               Click me
             </Control>
+            <Item
+              action={() => true}
+              title="All"
+            />
             <Item
               action={() => true}
               title="Item"
