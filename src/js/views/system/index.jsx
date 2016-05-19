@@ -1,13 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-
 import Dashboard from './dashboard';
-
-function NavLink(props) {
-  return (
-    <Link {...props} activeClassName="active" />
-  );
-}
+import Alerts from './alerts';
+import NavLink from '../../components/navlink';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
@@ -20,20 +14,20 @@ export default class System extends Component {
 
   render() {
     return (
-      <div>
+      <div className='tabbable'>
         <ul className="nav nav-tabs">
-          <li><NavLink to="/system/dashboard">Dashboard</NavLink></li>
-          <li><NavLink to="/system/alerts">Alerts</NavLink></li>
-          <li><NavLink to="/system/options">Options</NavLink></li>
-          <li><NavLink to="/system/remote">Connections</NavLink></li>
-          <li><NavLink to="/system/props">Properties</NavLink></li>
-          <li><NavLink to="/system/valuemaps">Valuemaps</NavLink></li>
-          <li><NavLink to="/system/sqlcache">SQL cache</NavLink></li>
-          <li><NavLink to="/system/http">Http Services</NavLink></li>
-          <li><NavLink to="/system/info">Info</NavLink></li>
-          <li><NavLink to="/system/logs">Logs</NavLink></li>
-          <li><NavLink to="/system/rbac">RBAC</NavLink></li>
-          <li><NavLink to="/system/errors">Errors</NavLink></li>
+          <NavLink to="/system/dashboard">Dashboard</NavLink>
+          <NavLink to="/system/alerts">Alerts</NavLink>
+          <NavLink to="/system/options">Options</NavLink>
+          <NavLink to="/system/remote">Connections</NavLink>
+          <NavLink to="/system/props">Properties</NavLink>
+          <NavLink to="/system/valuemaps">Valuemaps</NavLink>
+          <NavLink to="/system/sqlcache">SQL cache</NavLink>
+          <NavLink to="/system/http">Http Services</NavLink>
+          <NavLink to="/system/info">Info</NavLink>
+          <NavLink to="/system/logs">Logs</NavLink>
+          <NavLink to="/system/rbac">RBAC</NavLink>
+          <NavLink to="/system/errors">Errors</NavLink>
         </ul>
         <div className="tab-content">
           {this.props.children}
@@ -44,7 +38,7 @@ export default class System extends Component {
 }
 
 System.Dashboard = Dashboard;
-System.Alerts = NotImplemented;
+System.Alerts = Alerts;
 System.Options = NotImplemented;
 System.Connections = NotImplemented;
 System.Properties = NotImplemented;

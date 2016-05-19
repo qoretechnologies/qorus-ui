@@ -2,23 +2,13 @@ import React, { Component, PropTypes } from 'react';
 
 import { Link } from 'react-router';
 
-import AlertsTable from './alerts' ;
-
-function NavLink(props) {
-  return (
-    <Link {...props} activeClassName="active" />
-  );
-}
-
-function NotImplemented() {
-  return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
-}
+import AlertsTable from './alerts/table';
+import NavLink from '../../components/navlink';
 
 export default class Dashboard extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     route: PropTypes.object,
-    location: PropTypes.object
   }
 
   static contextTypes = {
@@ -29,29 +19,20 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div>
-        <div><h3>System health</h3></div>
-        <div><h3>Performance charts</h3></div>
-        <div>
+        <div className="container-fluid">
+          <div className="col-md-4"><h4>System health</h4></div>
+          <div className="col-md-8"><h4>Performance charts</h4></div>
+        </div>
+        <div className="container-fluid">
           <ul className="nav nav-pills">
-            <li
-              role="presentation"
-              className={ this.context.router.isActive(this.props.location) ? 'active' : '' }
-            >
-              <NavLink to="/system/dashboard/ongoing">Ongoing</NavLink>
-            </li>
-            <li
-              role="presentation"
-              className={ this.context.router.isActive(this.props.location) ? 'active' : '' }
-            >
-              <NavLink to="/system/dashboard/transient">Transient</NavLink>
-            </li>
+            <NavLink to="/system/dashboard/ongoing">Ongoing</NavLink>
+            <NavLink to="/system/dashboard/transient">Transient</NavLink>
           </ul>
-          { this.props.children }
+          <div className="col-md-12">
+            { this.props.children }
+          </div>
         </div>
       </div>
     );
   }
 }
-
-Dashboard.Ongoing = AlertsTable;
-Dashboard.Transient = AlertsTable;

@@ -1,13 +1,10 @@
 'use strict';
 
-
 /**
  * @module api/system
  */
 
-
 const express = require('express');
-
 
 module.exports = () => {
   const data = require('./data')();

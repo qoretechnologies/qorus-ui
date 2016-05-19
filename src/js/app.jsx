@@ -223,10 +223,14 @@ export default class App extends Component {
                 <IndexRedirect to="dashboard" />
                 <Route path="dashboard" component={System.Dashboard}>
                   <IndexRedirect to="ongoing" />
-                  <Route path="ongoing" component={System.Dashboard.Ongoing} />
-                  <Route path="transient" component={System.Dashboard.Transient} />
+                  <Route path="ongoing" component={System.Alerts.Ongoing} />
+                  <Route path="transient" component={System.Alerts.Transient} />
                 </Route>
-                <Route path="alerts" component={System.Alerts} />
+                <Route path="alerts" component={System.Alerts}>
+                  <IndexRedirect to="ongoing" />
+                  <Route path="ongoing" component={System.Alerts.Ongoing} />
+                  <Route path="transient" component={System.Alerts.Transient} />
+                </Route>
                 <Route path="options" component={System.Options} />
                 <Route path="remote" component={System.Connections} />
                 <Route path="props" component={System.Properties} />
