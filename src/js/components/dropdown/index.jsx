@@ -109,6 +109,7 @@ export default class extends Component {
 
   handleSubmit = () => {
     this.props.onSubmit(this.state.selected);
+    this.hideToggle();
   };
 
   /**

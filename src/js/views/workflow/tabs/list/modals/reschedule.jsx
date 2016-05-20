@@ -48,6 +48,7 @@ export default class extends Component {
       <Modal>
         <Modal.Header
           onClose={this.props.onClose}
+          titleId="reschedule-modal"
         >
           Reschedule order
         </Modal.Header>

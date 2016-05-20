@@ -23,17 +23,19 @@ export default class extends Component {
     );
   };
 
-  renderBadges = () => ORDER_STATES.map(o => (
+  renderBadges = () => ORDER_STATES.map((o, k) => (
       this.props.data[o.name] > 0 ?
         <Badge
+          key={k}
           label={o.label}
           val={`${o.short}: ${this.props.data[o.name]}`}
         /> :
         undefined
     ));
 
-  renderGroups = () => this.props.data.groups.map(g => (
+  renderGroups = () => this.props.data.groups.map((g, k) => (
       <Group
+        key={k}
         name={g.name}
         size={g.size}
       />

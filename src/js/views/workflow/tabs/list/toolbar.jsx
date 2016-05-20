@@ -142,8 +142,8 @@ export default class OrdersToolbar extends Component {
     return null;
   }
 
-  renderOrderStates = () => ORDER_STATES.map(o => (
-    <DropdownItem title={o.title} />
+  renderOrderStates = () => ORDER_STATES.map((o, k) => (
+    <DropdownItem key={k} title={o.title} />
   ));
 
   render() {

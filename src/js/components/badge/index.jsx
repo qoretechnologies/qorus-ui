@@ -16,7 +16,10 @@ import { pureRender } from '../utils';
 export default class Badge extends Component {
   static propTypes = {
     url: PropTypes.string,
-    val: PropTypes.number,
+    val: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
     label: PropTypes.string,
   };
 

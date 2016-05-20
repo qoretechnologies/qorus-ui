@@ -71,7 +71,7 @@ export default class extends Component {
   static propTypes = {
     collection: PropTypes.array,
     dispatch: PropTypes.func,
-    id: PropTypes.object,
+    id: PropTypes.string,
     loading: PropTypes.bool,
     sync: PropTypes.bool,
     selected: PropTypes.string,

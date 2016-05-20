@@ -164,6 +164,7 @@ export default class extends Component {
       >
         <Modal.Header
           onClose={this.handleCSVCloseClick}
+          titleId="csv-modal"
         >
           Copy table
           <small> (Press ⌘ + c)</small>

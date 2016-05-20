@@ -50,7 +50,7 @@ export default class extends Component {
   };
 
   static contextTypes = {
-    router: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired,
   };
 
   static childContextTypes = {

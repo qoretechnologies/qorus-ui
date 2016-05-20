@@ -6,6 +6,7 @@ export default function ErrorModal(props) {
     <Modal>
       <Modal.Header
         onClose={ props.onClose }
+        titleId="error-modal"
       >
         Error
       </Modal.Header>
