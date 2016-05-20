@@ -1,7 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import Dashboard from './dashboard';
-import Alerts from './alerts';
+
 import NavLink from '../../components/navlink';
+
+import Alerts from './alerts';
+import Dashboard from './dashboard';
+import Options from './options';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
@@ -14,7 +17,7 @@ export default class System extends Component {
 
   render() {
     return (
-      <div className='tabbable'>
+      <div>
         <ul className="nav nav-tabs">
           <NavLink to="/system/dashboard">Dashboard</NavLink>
           <NavLink to="/system/alerts">Alerts</NavLink>
@@ -39,7 +42,7 @@ export default class System extends Component {
 
 System.Dashboard = Dashboard;
 System.Alerts = Alerts;
-System.Options = NotImplemented;
+System.Options = Options;
 System.Connections = NotImplemented;
 System.Properties = NotImplemented;
 System.ValueMaps = NotImplemented;
