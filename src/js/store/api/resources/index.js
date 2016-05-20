@@ -87,4 +87,9 @@ export default [
       normalizeId('alertid'),
     ),
   },
+  {
+    name: 'health',
+    url: `${settings.REST_BASE_URL}/system/health`,
+    transform: item => item,
+  },
 ];
