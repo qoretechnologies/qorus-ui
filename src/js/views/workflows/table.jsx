@@ -347,13 +347,19 @@ export default class WorkflowsTable extends Component {
     for (const state of ORDER_STATES) {
       yield (
         <Cell className="narrow">
-          <Badge label={state.label} val={workflow[state.name]} />
+          <Link to={`/workflow/${workflow.workflowid}/list/${state.title}/${this.props.linkDate}`}>
+            <Badge label={state.label} val={workflow[state.name]} />
+          </Link>
         </Cell>
       );
     }
 
     yield (
-      <Cell className="narrow">{workflow.TOTAL}</Cell>
+      <Cell className="narrow">
+        <Link to={`/workflow/${workflow.workflowid}/list/All/${this.props.linkDate}`}>
+          {workflow.TOTAL}
+        </Link>
+      </Cell>
     );
 
     if (includes(filterArray(this.context.params.filter), WORKFLOW_FILTERS.DEPRECATED)) {
