@@ -6,6 +6,7 @@ import Header from './header';
 import Tabs, { Pane } from '../../components/tabs';
 import List from './tabs/list';
 import Loader from '../../components/loader';
+import Log from 'components/log';
 
 import { goTo } from '../../helpers/router';
 
@@ -125,7 +126,12 @@ export default class extends Component {
                 />
               </Pane>
               <Pane name="Performance" />
-              <Pane name="Log" />
+              <Pane name="Log">
+                <Log
+                  model={this.props.workflow}
+                  resource="workflows"
+                />
+              </Pane>
               <Pane name="Info" />
             </Tabs>
           </div>
