@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const lockOrder = (order, note, username) => {
-  let notes;
+  var notes;
 
   if (!order.notes) {
     notes = [{
@@ -29,7 +29,7 @@ const lockOrder = (order, note, username) => {
 };
 
 const unlockOrder = (order, note, username) => {
-  let notes;
+  var notes;
 
   if (!order.notes) {
     notes = [{
