@@ -55,6 +55,7 @@ function fixtureData(source) {
 function getData(source) {
   switch (process.env.NODE_ENV || 'development') {
     case 'test':
+    case 'dev_fix':
       return fixtureData(source);
     default:
       return generateData(source);
