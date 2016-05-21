@@ -14,6 +14,7 @@ import OrdersTable from './table';
 import Loader from '../../../../components/loader';
 import Reschedule from './modals/reschedule';
 import Error from './modals/error';
+import { Control as Button } from 'components/controls';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
@@ -100,16 +101,21 @@ export default class extends Component {
   };
 
   componentWillMount() {
+    const offset = 0;
+    const limit = 2;
+
     this.setState({
       filteredData: [],
+      offset,
+      limit,
     });
 
-    this.fetchData(this.props);
+    this.fetchData(this.props, offset, limit);
   }
 
-  componentWillReceiveProps(next) {
-    if (this.props.params.date !== next.params.date) {
-      this.fetchData(next);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.date !== nextProps.params.date) {
+      this.fetchData(nextProps, this.state.offset, this.state.limit);
     }
   }
 
@@ -117,10 +123,12 @@ export default class extends Component {
    * Fetches the orders based on workflowid and
    * the date provided
    */
-  fetchData(props) {
+  fetchData(props, offset, limit) {
     const date = formatDate(props.params.date).format(DATE_FORMATS.URL_FORMAT);
 
-    props.dispatch(actions.orders.fetch({ workflowid: props.id, date, sort: 'started' }));
+    props.dispatch(
+      actions.orders.fetch({ workflowid: props.id, date, sort: 'started', offset, limit })
+    );
   }
 
   /**
@@ -194,9 +202,22 @@ export default class extends Component {
     this.context.openModal(this._modal);
   };
 
+  handleLoadMoreClick = () => {
+    const offset = this.state.offset + 2;
+    const limit = this.state.limit + 2;
+
+    this.fetchData(this.props, offset, limit);
+
+    this.setState({
+      offset,
+      limit,
+    });
+  };
+
   renderTable() {
     if (!this.props.collection.length) return <h5> No data found </h5>;
 
+    console.log(this.props.collection);
     return (
       <OrdersTable
         initialFilter={this.props.filterFn}
@@ -232,6 +253,12 @@ export default class extends Component {
           onCSVClick={this.handleCSVClick}
         />
         { this.renderTable() }
+        <Button
+          big
+          btnStyle="success"
+          label="Load more..."
+          action={this.handleLoadMoreClick}
+        />
       </div>
     );
   }
