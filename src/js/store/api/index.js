@@ -90,6 +90,14 @@ export function createResourceReducers(
             }
           }
 
+          if (
+            action.meta.params &&
+            action.meta.params.limit &&
+            state.data.length !== action.meta.params.limit
+          ) {
+            data = state.data.slice().concat(data);
+          }
+
           return {
             ...state,
             data,
