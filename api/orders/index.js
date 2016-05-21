@@ -46,7 +46,9 @@ module.exports = () => {
 
     if (req.query.limit) {
       const start = parseInt(req.query.offset, 10) || 0;
-      filteredData = filteredData.slice(start, start + parseInt(req.query.limit, 10));
+      const end = parseInt(req.query.limit, 10);
+      
+      filteredData = filteredData.slice(start, end);
     }
 
     res.json(filteredData);
