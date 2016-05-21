@@ -93,6 +93,13 @@ export default class extends Component {
     setSelectedData: PropTypes.func,
     sortData: PropTypes.object,
     username: PropTypes.string,
+    offset: PropTypes.number,
+    limit: PropTypes.number,
+  };
+
+  static defaultProps = {
+    offset: 0,
+    limit: 2,
   };
 
   static contextTypes = {
@@ -101,21 +108,33 @@ export default class extends Component {
   };
 
   componentWillMount() {
-    const offset = 0;
-    const limit = 2;
+    const offset = this.props.offset;
+    const limit = this.props.limit;
 
     this.setState({
       filteredData: [],
       offset,
       limit,
+      fetchMore: false,
     });
 
-    this.fetchData(this.props, offset, limit);
+    this.fetchData(this.props, { offset, limit, fetchMore: false });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.params.date !== nextProps.params.date) {
-      this.fetchData(nextProps, this.state.offset, this.state.limit);
+      this.setState({
+        offset: this.props.offset,
+        limit: this.props.limit,
+        fetchMore: false,
+      });
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.props.params.date !== nextProps.params.date ||
+      this.state.limit !== nextState.limit) {
+      this.fetchData(nextProps, nextState);
     }
   }
 
@@ -123,11 +142,18 @@ export default class extends Component {
    * Fetches the orders based on workflowid and
    * the date provided
    */
-  fetchData(props, offset, limit) {
+  fetchData(props, state) {
     const date = formatDate(props.params.date).format(DATE_FORMATS.URL_FORMAT);
 
     props.dispatch(
-      actions.orders.fetch({ workflowid: props.id, date, sort: 'started', offset, limit })
+      actions.orders.fetch({
+        workflowid: props.id,
+        date,
+        sort: 'started',
+        offset: state.offset,
+        limit: state.limit,
+        fetchMore: state.fetchMore,
+      })
     );
   }
 
@@ -206,11 +232,10 @@ export default class extends Component {
     const offset = this.state.offset + 2;
     const limit = this.state.limit + 2;
 
-    this.fetchData(this.props, offset, limit);
-
     this.setState({
       offset,
       limit,
+      fetchMore: true,
     });
   };
 
