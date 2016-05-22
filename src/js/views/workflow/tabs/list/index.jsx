@@ -99,7 +99,7 @@ export default class extends Component {
 
   static defaultProps = {
     offset: 0,
-    limit: 2,
+    limit: 100,
   };
 
   static contextTypes = {
@@ -229,8 +229,8 @@ export default class extends Component {
   };
 
   handleLoadMoreClick = () => {
-    const offset = this.state.offset + 2;
-    const limit = this.state.limit + 2;
+    const offset = this.state.offset + this.props.limit;
+    const limit = this.state.limit + this.props.limit;
 
     this.setState({
       offset,
@@ -241,8 +241,7 @@ export default class extends Component {
 
   renderTable() {
     if (!this.props.collection.length) return <h5> No data found </h5>;
-
-    console.log(this.props.collection);
+    
     return (
       <OrdersTable
         initialFilter={this.props.filterFn}
