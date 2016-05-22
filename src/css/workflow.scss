@@ -48,3 +48,12 @@ td.line-counter::before {
   content: counter(line-number) ".";
   counter-increment: line-number;
 }
+
+/**
+* Styles the tabs inside the single workflow page
+*/
+.workflow-detail-tabs {
+  #log .log-area {
+    min-height: 350px;
+  }
+}
