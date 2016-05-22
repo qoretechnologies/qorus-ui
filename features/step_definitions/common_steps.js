@@ -192,7 +192,13 @@ module.exports = function commonSteps() {
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 
+  this.Then(/^"([^"]*)" "([^"]*)" are selected$/, function (count, type) {
+    this.browser.assert.elements('td.narrow.checker > i.fa-check-square-o', parseInt(count, 10));
+  });
+
   this.When(/^I click the "([^"]*)" button inside "([^"]*)" dropdown$/, async function(button, dropdown) {
+    await this.waitForElement(`#${dropdown}`);
+
     this.browser.pressButton(`#${dropdown}`);
 
     const el = findElementByText(this.browser, `#${dropdown}-dropdown a`, ` ${button}`);
@@ -203,8 +209,8 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
-    await this.waitForChange(1000);
-    this.browser.assert.elements('tbody > tr', parseInt(workflows));
+    await this.waitForChange(2000);
+    this.browser.assert.elements('tbody > tr', parseInt(workflows, 10));
   });
 
   this.When(/^I select "([^"]*)" "([^"]*)"$/, async function (count, type) {
@@ -243,8 +249,8 @@ module.exports = function commonSteps() {
     this.browser.assert.elements('#selection-dropdown', 0);
   });
 
-  this.When(/^I click the checkbox on the dropdown$/, function () {
-    this.browser.click('#selection .fa-square-o');
+  this.When(/^I click the checkbox on the dropdown$/, async function () {
+    return this.browser.click('#selection .fa-square-o');
   });
 
   this.Then(/^the dropdown checkbox should be halfchecked$/, function () {
@@ -263,6 +269,18 @@ module.exports = function commonSteps() {
     this.browser.fill('#search', search);
     this.browser.pressButton('#search-form [type="submit"]');
   });
+
+  this.Then(/^I see modal with CSV data in it$/, async function () {
+    await this.waitForElement('.modal');
+    this.browser.assert.element('.modal');
+  });
+
+  this.Given(/^I click the "([^"]*)" date button$/, async function(btn) {
+    const el = findElementByText(this.browser, '.btn', ` ${btn}`);
+
+    await this.browser.pressButton(el);
+  });
+
 };
 
 module.exports.selectors = {

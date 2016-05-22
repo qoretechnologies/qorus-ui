@@ -1,4 +1,4 @@
-import { findTableRow } from './common_steps';
+import { findTableRow, findElementByText } from './common_steps';
 import { expect } from 'chai';
 import moment from 'moment';
 
@@ -38,4 +38,74 @@ module.exports = function orderSteps() {
     expect(url[6]).to.equal('All');
   });
 
+  this.Given(/^I am on "([^"]*)" with "([^"]*)" states and "([^"]*)" dates$/, async function(workflow, state, date) {
+    await this.browser.visit('/workflows');
+    await this.waitForElement('.root__center > section table');
+    const row = findTableRow(this.browser, workflow);
+    const el = row.cells[stateCells[state]].children[0];
+
+    if (date !== 'default') {
+      const dt = new Date(date);
+
+      if (moment(dt).isValid()) {
+        this.browser.fill('.datepicker-group input[type="text"]', date);
+        this.browser.pressButton('.datepicker-group [type="submit"]');
+      } else {
+        let btn;
+
+        if (date === 'All') {
+          btn = findElementByText(this.browser, '.btn', ' All');
+        } else {
+          this.browser.pressButton('#date-selection');
+          btn = findElementByText(this.browser, '#date-selection-dropdown a', ` ${date}`);
+        }
+
+        this.browser.click(btn);
+
+        await this.waitForChange(1000);
+      }
+    }
+
+    this.browser.click(el);
+  });
+
+  this.Then(/^the header says "([^"]*)"$/, async function(name) {
+    const el = findElementByText(this.browser, 'h3.workflow-title', name);
+
+    this.browser.assert.element(el);
+  });
+
+  this.Then(/^there are "([^"]*)" badges shown$/, async function(count) {
+    this.browser.assert.elements('div.states span.badge', parseInt(count, 10));
+  });
+
+  this.Then(/^there are "([^"]*)" groups shown$/, async function(count) {
+    this.browser.assert.elements('div.groups span.group', parseInt(count, 10));
+  });
+
+  this.When(/^I click the "([^"]*)" tab$/, async function(name) {
+    const tab = findElementByText(this.browser, '.nav-tabs a', name);
+
+    return this.browser.click(tab);
+  });
+
+  this.Then(/^I should see the performance content$/, async function() {
+    const url = this.browser.location.href.split('/');
+
+    expect(url[5]).to.equal('performance');
+  });
+
+  this.Then(/^I should see the log content$/, async function() {
+    const url = this.browser.location.href.split('/');
+
+    expect(url[5]).to.equal('log');
+    this.browser.assert.element('.log-area');
+  });
+
+  this.Then(/^I should see the info content$/, async function() {
+    const url = this.browser.location.href.split('/');
+
+    expect(url[5]).to.equal('info');
+    this.browser.assert.element('.table--info');
+  });
 };
