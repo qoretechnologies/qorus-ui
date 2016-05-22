@@ -199,7 +199,7 @@ export default class extends Component {
 
   render() {
     return (
-      <div className="input-group">
+      <div className="input-group date-controls">
         <Input
           onFormSubmit={this.handleFormSubmit}
           onInputChange={this.handleInputChange}

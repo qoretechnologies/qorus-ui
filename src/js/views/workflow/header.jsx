@@ -64,7 +64,7 @@ export default class extends Component {
           </div>
         </div>
         <div className="row status-row">
-          <div className="col-xs-12">
+          <div className="col-xs-12 states">
             {this.renderBadges()}
           </div>
         </div>
