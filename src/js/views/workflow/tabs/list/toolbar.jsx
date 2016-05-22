@@ -178,6 +178,7 @@ export default class OrdersToolbar extends Component {
           onApplyDate={this.applyDate}
         />
         <Dropdown
+          id="filters"
           multi
           def="All"
           onSubmit={this.applyFilter}
