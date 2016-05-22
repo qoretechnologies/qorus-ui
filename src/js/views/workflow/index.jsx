@@ -7,9 +7,10 @@ import Tabs, { Pane } from '../../components/tabs';
 import List from './tabs/list';
 import Loader from '../../components/loader';
 import Log from 'components/log';
+import InfoTable from 'components/info_table';
 
 import { goTo } from '../../helpers/router';
-
+import { ORDER_STATES } from '../../constants/orders';
 import actions from 'store/api/actions';
 
 const workflowSelector = (state, props) => (
@@ -101,6 +102,7 @@ export default class extends Component {
         <div className="row">
           <div className="col-xs-12">
             <Tabs
+              className="workflow-detail-tabs"
               active={this.props.params.tabId}
               tabChange={this.handleTabChange}
             >
@@ -132,7 +134,16 @@ export default class extends Component {
                   resource="workflows"
                 />
               </Pane>
-              <Pane name="Info" />
+              <Pane name="Info">
+                <InfoTable
+                  object={this.props.workflow}
+                  omit={[
+                    'options', 'lib', 'stepmap', 'segment', 'steps', 'stepseg',
+                    'stepinfo', 'wffuncs', 'groups', 'alerts', 'exec_count', 'autostart',
+                    'has_alerts', 'TOTAL', 'timestamp', 'id', 'normalizedName',
+                  ].concat(ORDER_STATES.map(os => os.name))}
+                />
+              </Pane>
             </Tabs>
           </div>
         </div>
