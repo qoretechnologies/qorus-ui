@@ -52,7 +52,7 @@ export default class Options extends Component {
     );
 
     yield (
-      <Cell>{model.desc}</Cell>
+      <Cell className="desc"><div className="shorten">{model.desc}</div></Cell>
     );
 
     yield (
@@ -141,7 +141,7 @@ export default class Options extends Component {
       <div className="container-fluid">
         <Table
           data={ collection.data }
-          className="tabel table-striped table-condensed"
+          className="tabel table-striped table-condensed table--data"
           sections={this.renderSections}
         />
       </div>
