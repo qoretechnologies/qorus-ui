@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import Table, { Cell, Section, Row } from '../../../components/table';
 import Date from '../../../components/date';
 import Loader from '../../../components/loader';
+import Shorten from '../../../components/shorten';
 
 import Alerts from '../../../../../types/alerts/react';
 
@@ -160,19 +161,21 @@ export default class AlertsTable extends Component {
     );
 
     yield (
-      <Cell className="name">{ model.type }</Cell>
+      <Cell className="name nowrap">{ model.type }</Cell>
     );
 
     yield (
-      <Cell className="name">{ model.alert }</Cell>
+      <Cell className="name nowrap">{ model.alert }</Cell>
     );
 
     yield (
-      <Cell>{ model.object }</Cell>
+      <Cell className="desc">
+        <Shorten extraClassname="text-left">{ model.object }</Shorten>
+      </Cell>
     );
 
     yield (
-      <Cell><Date date={ model.when } /></Cell>
+      <Cell className="nowrap"><Date date={ model.when } /></Cell>
     );
   }
 
@@ -235,7 +238,7 @@ export default class AlertsTable extends Component {
       <div className="tab-pane active">
         <Table
           data={ data }
-          className="table table-condensed table-fixed table-striped"
+          className="table table-condensed table-fixed table-striped table--data"
         >
           <Section type="head" rows={this._renderHeadingRow} />
           <Section type="body" data={ data } rows={this._renderRows} />

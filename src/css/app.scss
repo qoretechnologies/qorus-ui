@@ -26,7 +26,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/topbar/style';
 @import '../js/components/toolbar/style';
 @import '../js/components/datepicker/style';
-
+@import '../js/components/shorten/style';
 
 @import './not-supported';
 @import './root';
