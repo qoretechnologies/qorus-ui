@@ -92,12 +92,21 @@ Feature: Tests all the features of the orders list toolbar
     And "orders" get loaded
     When I type "retry complete" in the search input
     Then "2" "orders" are shown
-    
+
   Scenario: Filtering orders by name and id
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
     When I type "retry 3660 3661" in the search input
-    Then "5" "orders" are shown
+    Then "3" "orders" are shown
+
+  @no-impl
+  Scenario: Changing multiple filters
+    Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
+    And "orders" get loaded
+    And I click the "Complete" button inside "filters" dropdown
+    And I click the "Retry" item
+    When I click the "Filter" button
+    Then "2" "orders" are shown
 
 
 
