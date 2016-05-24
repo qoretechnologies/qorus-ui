@@ -208,6 +208,12 @@ module.exports = function commonSteps() {
     await this.waitForChange(1000);
   });
 
+  this.When(/^I click the "([^"]*)" item$/, async function(item) {
+    const el = findElementByText(this.browser, '.dropdown-menu a', ` ${item}`);
+
+    await this.browser.click(el);
+  });
+
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
     await this.waitForChange(2000);
     this.browser.assert.elements('tbody > tr', parseInt(workflows, 10));

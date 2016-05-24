@@ -108,4 +108,20 @@ module.exports = function orderSteps() {
     expect(url[5]).to.equal('info');
     this.browser.assert.element('.table--info');
   });
+
+  this.Given(/^I select "([^"]*)" order with "([^"]*)" status$/, async function(count, state) {
+    const row = this.browser.queryAll('tbody > tr').filter(r => r.cells[3].textContent === state);
+
+    for (let i = 0; i <= count - 1; i++) {
+      this.browser.click(row[i].cells[0].children[0]);
+    }
+  });
+
+  this.Then(/^there should be "([^"]*)" order with "([^"]*)" status$/, async function(count, state) {
+    await this.waitForChange(2000);
+
+    const els = this.browser.queryAll('td > span.label').filter(s => s.textContent === state);
+
+    this.browser.assert.elements(els, parseInt(count, 10));
+  });
 };
