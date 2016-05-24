@@ -133,7 +133,7 @@ export default class extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     if (this.props.params.date !== nextProps.params.date ||
-      this.state.limit !== nextState.limit) {
+      this.state.offset !== nextState.offset) {
       this.fetchData(nextProps, nextState);
     }
   }
@@ -230,7 +230,7 @@ export default class extends Component {
 
   handleLoadMoreClick = () => {
     const offset = this.state.offset + this.props.limit;
-    const limit = this.state.limit + this.props.limit;
+    const limit = this.state.limit;
 
     this.setState({
       offset,
@@ -241,7 +241,7 @@ export default class extends Component {
 
   renderTable() {
     if (!this.props.collection.length) return <h5> No data found </h5>;
-    
+
     return (
       <OrdersTable
         initialFilter={this.props.filterFn}
