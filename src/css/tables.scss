@@ -29,6 +29,10 @@ table.table--data {
         &.desc { /* [2] */
           text-align: left;
         }
+
+        &.nowrap {
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -62,11 +66,6 @@ table.table--data {
             padding-left: $padding-xs-horizontal;
             padding-right: $padding-xs-horizontal;
           }
-
-          &.desc {
-            max-width: 400px;
-            text-align: left;
-          }
         }
       }
     }
@@ -82,7 +81,7 @@ table.table--data {
     height: $line-height-base;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 95%;
+    width: auto;
   }
 }
 

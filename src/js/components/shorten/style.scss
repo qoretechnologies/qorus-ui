@@ -1,0 +1,28 @@
+/**
+ * Displays tooltip for shorened text
+ */
+
+[data-tooltip] {
+  cursor: context-menu;
+
+  &:hover {
+    &:before {
+      content: attr(data-tooltip);
+      color: white;
+      background: lighten(black, .9);
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,.7);
+      left: 10px;
+      max-width: 400px;
+      padding: 5px 10px;
+      position: absolute;
+      top: 1.1em;
+      white-space: normal;
+      z-index: 10;
+    }
+  }
+}
+
+.shorten-wrapper {
+  max-width: 400px;
+}
