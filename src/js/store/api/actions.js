@@ -6,6 +6,8 @@ import * as errorActions from './resources/errors/actions';
 import * as serviceActions from './resources/services/actions';
 import * as jobActions from './resources/jobs/actions';
 import * as orderActions from './resources/orders/actions';
+import * as optionActions from './resources/options/actions';
+
 import {
   combineResourceActions,
   createResourceActions,
@@ -93,6 +95,10 @@ Object.assign(actions.jobs, jobActions.specials);
 
 Object.keys(jobActions.delegates).forEach(a => {
   actions.jobs[a] = jobActions.delegates[a](actions);
+});
+
+Object.keys(optionActions.delegates).forEach(a => {
+  actions.systemOptions[a] = optionActions.delegates[a](actions);
 });
 
 export default actions;

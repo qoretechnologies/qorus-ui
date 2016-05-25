@@ -45,7 +45,9 @@ export default [
   {
     name: 'systemOptions',
     url: `${settings.REST_BASE_URL}/system/options`,
-    transform: item => item,
+    transform: _.flowRight(
+      normalizeId('name'),
+    ),
   },
   {
     name: 'currentUser',
