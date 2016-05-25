@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { flowRight, includes, union } from 'lodash';
+import { normalizeName } from '../../../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
 import * as ui from 'store/ui/actions';
@@ -32,6 +33,11 @@ const filterOrders = (filter) => (orders) => {
 
 const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], search, orders);
 const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
+const normalize = (orders) => orders.map(o => {
+  if (o.normalizedName) return o;
+  
+  return normalizeName(o);
+});
 
 const orderSelector = state => state.api.orders;
 const filterSelector = (state, props) => props.params.filter;
@@ -48,7 +54,8 @@ const collectionSelector = createSelector(
   ], (orders, filter, search, sortData) => flowRight(
     sortOrders(sortData),
     filterSearch(search),
-    filterOrders(filter)
+    filterOrders(filter),
+    normalize
   )(orders.data)
 );
 
