@@ -6,7 +6,8 @@ import settings from '../../settings';
 
 
 export function updateItemWithId(id, props, data) {
-  const idx = data.findIndex(i => i.id === parseInt(id, 10));
+  const parsedId = parseFloat(id, 10) || id;
+  const idx = data.findIndex(i => i.id === parsedId);
   const updatedItem = Object.assign({}, data[idx], props);
 
   return data.slice(0, idx)
