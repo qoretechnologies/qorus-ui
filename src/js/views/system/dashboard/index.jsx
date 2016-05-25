@@ -40,7 +40,7 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div>
+      <div className="tab-pane active">
         <div className="container-fluid">
           <SystemHealth health={this.props.health} className="col-md-4" />
           <PerformanceCharts data={{}} className="col-md-8" />

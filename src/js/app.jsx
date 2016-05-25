@@ -232,7 +232,11 @@ export default class App extends Component {
                   <Route path="transient" component={System.Alerts.Transient} />
                 </Route>
                 <Route path="options" component={System.Options} />
-                <Route path="remote" component={System.Connections} />
+                <Route path="remote" component={System.Connections}>
+                  <Route path="datasources(/:id)" component={System.Remote.Datasources} />
+                  <Route path="qorus(/:id)" component={System.Remote.Qorus} />
+                  <Route path="user(/:id)" component={System.Remote.User} />
+                </Route>
                 <Route path="props" component={System.Properties} />
                 <Route path="valuemaps" component={System.ValueMaps} />
                 <Route path="sqlcache" component={System.SqlCache} />

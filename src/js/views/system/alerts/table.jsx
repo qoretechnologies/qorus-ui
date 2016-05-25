@@ -222,11 +222,19 @@ export default class AlertsTable extends Component {
 
   render() {
     if (!this.props.sync || this.props.loading) {
-      return <Loader />;
+      return (
+        <div className="tab-pane active">
+          <Loader />
+        </div>
+      );
     }
 
     if (this.props.collection.length === 0) {
-      return <p>No alerts found</p>;
+      return (
+        <div className="tab-pane active">
+          <p>No alerts found</p>
+        </div>
+      );
     }
 
     const data = {

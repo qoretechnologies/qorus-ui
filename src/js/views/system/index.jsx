@@ -10,6 +10,10 @@ function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
 }
 
+NotImplemented.Qorus = NotImplemented;
+NotImplemented.Datasources = NotImplemented;
+NotImplemented.User = NotImplemented;
+
 export default class System extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -33,7 +37,7 @@ export default class System extends Component {
           <NavLink to="/system/errors">Errors</NavLink>
         </ul>
         <div className="tab-content">
-          {this.props.children}
+            {this.props.children}
         </div>
       </div>
     );
@@ -43,7 +47,7 @@ export default class System extends Component {
 System.Dashboard = Dashboard;
 System.Alerts = Alerts;
 System.Options = Options;
-System.Connections = NotImplemented;
+System.Remote = NotImplemented;
 System.Properties = NotImplemented;
 System.ValueMaps = NotImplemented;
 System.SqlCache = NotImplemented;

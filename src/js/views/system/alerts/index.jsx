@@ -17,7 +17,7 @@ export default class Alerts extends Component {
 
   render() {
     return (
-      <div>
+      <div className="tab-pane active">
           <ul className="nav nav-pills">
             <NavLink to="/system/alerts/ongoing">Ongoing</NavLink>
             <NavLink to="/system/alerts/transient">Transient</NavLink>
