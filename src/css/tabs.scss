@@ -1,0 +1,16 @@
+/*
+ * Bootstrap tabs modifications
+ *
+ * 1. tab-pane content should be padded from top, becaus it doesn't looks as desired
+ */
+
+.tab-pane {
+  padding-top: 10px;
+}
+
+.nav-pills {
+  > li
+    > a {
+      padding: 5px 10px;
+    }
+}

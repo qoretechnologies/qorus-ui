@@ -33,6 +33,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './workflow';
 @import './orders';
 @import './pane';
+@import './tabs';
 
 
 html, body, .app, .app__wrap {
