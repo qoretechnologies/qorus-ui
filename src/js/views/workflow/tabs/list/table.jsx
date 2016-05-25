@@ -8,6 +8,7 @@ import Checkbox from '../../../../components/checkbox';
 import Dropdown, { Item, Control } from '../../../../components/dropdown';
 import Lock from './modals/lock';
 
+import { normalizeName } from 'components/utils';
 import { union } from 'lodash';
 
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
@@ -85,7 +86,7 @@ export default class extends Table {
       <Cell
         tag="th"
         className="name"
-        name="name"
+        name="normalizedName"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
       >
@@ -230,7 +231,7 @@ export default class extends Table {
     );
 
     yield (
-      <Cell className="name">{ model.name }</Cell>
+      <Cell className="name">{ model.normalizedName }</Cell>
     );
 
     yield (
