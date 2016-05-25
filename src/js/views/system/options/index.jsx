@@ -7,6 +7,8 @@ import actions from 'store/api/actions';
 
 import StatusIcon from '../../../components/status_icon';
 import Loader from '../../../components/loader';
+import Shorten from '../../../components/shorten';
+import EditableCell from '../../../components/table/editable_cell';
 import Table, { Section, Row, Cell } from '../../../components/table';
 
 
@@ -34,6 +36,12 @@ export default class Options extends Component {
     this.renderSections = ::this.renderSections;
   }
 
+  setOption = (model) => (value) => {
+    this.props.dispatch(actions.systemOptions.setOption(model.name, value));
+  }
+
+  fixEslint() {}
+
   /**
    * Yields cells with model data.
    *
@@ -43,7 +51,12 @@ export default class Options extends Component {
   *renderCells(model) {
     yield (
       <Cell>
+        { model.status === 'locked' &&
         <i className="fa fa-lock" />
+        }
+        { model.status === 'unlocked' &&
+        <i className="fa fa-unlock" />
+        }
       </Cell>
     );
 
@@ -52,7 +65,7 @@ export default class Options extends Component {
     );
 
     yield (
-      <Cell className="desc"><div className="shorten">{model.desc}</div></Cell>
+      <Cell className="desc"><Shorten>{model.desc}</Shorten></Cell>
     );
 
     yield (
@@ -79,9 +92,22 @@ export default class Options extends Component {
       <Cell><StatusIcon value={ model.workflow } /></Cell>
     );
 
-    yield (
-      <Cell>{JSON.stringify(model.value)}</Cell>
-    );
+
+    const onSave = this.setOption(model);
+
+    if (model.status === 'unlocked') {
+      yield (
+        <EditableCell
+          value={JSON.stringify(model.value)}
+          startEdit={false}
+          onSave={onSave}
+        />
+      );
+    } else {
+      yield (
+        <Cell>{JSON.stringify(model.value)}</Cell>
+      );
+    }
   }
 
 
@@ -138,12 +164,14 @@ export default class Options extends Component {
     }
 
     return (
-      <div className="container-fluid">
-        <Table
-          data={ collection.data }
-          className="tabel table-striped table-condensed table--data"
-          sections={this.renderSections}
-        />
+      <div className="tab-pane active">
+        <div className="container-fluid">
+          <Table
+            data={ collection.data }
+            className="table table-striped table-condensed table--data"
+            sections={this.renderSections}
+          />
+        </div>
       </div>
     );
   }
