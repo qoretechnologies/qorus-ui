@@ -18,7 +18,7 @@ export default handleActions({
       } else {
         payload.sortByKey = { ignoreCase: true, direction: state.sortByKey.direction * -1 };
       }
-
+      
       return Object.assign({}, state, payload);
     },
   },
