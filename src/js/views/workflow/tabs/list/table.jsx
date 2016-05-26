@@ -8,7 +8,6 @@ import Checkbox from '../../../../components/checkbox';
 import Dropdown, { Item, Control } from '../../../../components/dropdown';
 import Lock from './modals/lock';
 
-import { normalizeName } from 'components/utils';
 import { union } from 'lodash';
 
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
