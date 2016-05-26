@@ -8,6 +8,7 @@ import List from './tabs/list';
 import Loader from '../../components/loader';
 import Log from 'components/log';
 import InfoTable from 'components/info_table';
+import Performance from './tabs/performance';
 
 import { goTo } from '../../helpers/router';
 import { ORDER_STATES } from '../../constants/orders';
@@ -127,7 +128,9 @@ export default class extends Component {
                   onCSVClick={this.props.onCSVClick}
                 />
               </Pane>
-              <Pane name="Performance" />
+              <Pane name="Performance">
+                <Performance />
+              </Pane>
               <Pane name="Log">
                 <Log
                   model={this.props.workflow}
