@@ -27,6 +27,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/toolbar/style';
 @import '../js/components/datepicker/style';
 @import '../js/components/shorten/style';
+@import '../js/components/chart/style';
 
 @import './not-supported';
 @import './root';
@@ -62,4 +63,11 @@ html, body, .app, .app__wrap {
  */
 .form-control {
   height: 33px;
+}
+
+/**
+* Adds red border for any invalid input or textarea
+*/
+.form-error {
+  border-color: #cf0000
 }
