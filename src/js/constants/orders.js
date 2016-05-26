@@ -47,3 +47,13 @@ export const ORDER_ACTIONS = {
   UNCANCELING: [],
   RETRYING: [],
 };
+
+export const DATASETS = [
+  'avgduration',
+  'avgprocessing',
+  'maxduration',
+  'maxprocessing',
+  'minduration',
+  'minprocessing',
+];
+
