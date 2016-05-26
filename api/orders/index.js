@@ -17,38 +17,44 @@ module.exports = () => {
   const router = new express.Router();
 
   router.get('/', (req, res) => {
-    let filteredData = data;
+    let filteredData;
+    
+    if (req.query.action && req.query.action === 'processingSummary') {
+      filteredData = require('./summary/data')();
+    } else {
+      filteredData = data;
 
-    if (req.query.workflowid) {
-      filteredData = filteredData.filter(o => (
-        o.workflowid === parseInt(req.query.workflowid, 10)
-      ));
-    }
+      if (req.query.workflowid) {
+        filteredData = filteredData.filter(o => (
+          o.workflowid === parseInt(req.query.workflowid, 10)
+        ));
+      }
 
-    if (req.query.date) {
-      filteredData = filteredData.filter(o => (moment(req.query.date) <= moment(o.started)));
-    }
+      if (req.query.date) {
+        filteredData = filteredData.filter(o => (moment(req.query.date) <= moment(o.started)));
+      }
 
-    if (req.query.sort) {
-      filteredData = filteredData.sort(
-        firstBy((v1, v2) => {
-          const prev = v1[req.query.sort];
-          const cur = v2[req.query.sort];
+      if (req.query.sort) {
+        filteredData = filteredData.sort(
+          firstBy((v1, v2) => {
+            const prev = v1[req.query.sort];
+            const cur = v2[req.query.sort];
 
-          if (moment(prev).isValid() && moment(cur).isValid()) {
-            return moment(prev).isBefore(cur) ? -1 : 1;
-          }
+            if (moment(prev).isValid() && moment(cur).isValid()) {
+              return moment(prev).isBefore(cur) ? -1 : 1;
+            }
 
-          return prev.toLowerCase() < cur.toLowerCase() ? -1 : 1;
-        }, -1)
-      );
-    }
+            return prev.toLowerCase() < cur.toLowerCase() ? -1 : 1;
+          }, -1)
+        );
+      }
 
-    if (req.query.limit) {
-      const start = parseInt(req.query.offset, 10) || 0;
-      const end = parseInt(req.query.limit, 10);
+      if (req.query.limit) {
+        const start = parseInt(req.query.offset, 10) || 0;
+        const end = parseInt(req.query.limit, 10);
 
-      filteredData = filteredData.slice(start, start + end);
+        filteredData = filteredData.slice(start, start + end);
+      }
     }
 
     res.json(filteredData);
