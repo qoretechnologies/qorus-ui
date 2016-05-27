@@ -129,7 +129,9 @@ export default class extends Component {
                 />
               </Pane>
               <Pane name="Performance">
-                <Performance />
+                <Performance
+                  workflow={this.props.workflow}
+                />
               </Pane>
               <Pane name="Log">
                 <Log
