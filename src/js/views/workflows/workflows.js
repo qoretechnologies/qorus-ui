@@ -109,7 +109,7 @@ define(function (require) {
       'click .action-modal': 'openModal',
       'click a.running': 'highlightRunning',
       'click a.stopped': 'highlightStopped',
-      'contextmenu .workflows tbody tr': 'onRightClick'
+      'contextmenu .workflows tbody tr': 'onRightClick',
     },
 
     title: "Workflows",
@@ -235,7 +235,8 @@ define(function (require) {
     // do batch action
     runBatchAction: function (action, method, params) {
       var ids = this.getCheckedIds(),
-        $request;
+          url = Workflows.prototype.url,
+          $request;
 
       method = method || 'get';
       params = { action: action, ids: ids.join(',') };
@@ -245,11 +246,11 @@ define(function (require) {
       }
 
       if (method == 'get') {
-        $request = $.get(this.collection.url, params);
+        $request = $.get(url, params);
       } else if (method == 'put') {
-        $request = $.put(this.collection.url, params);
+        $request = $.put(url, params);
       } else if (method == 'dekete') {
-        $request = $.put(this.collection.url, params);
+        $request = $.put(url, params);
       }
 
       $request

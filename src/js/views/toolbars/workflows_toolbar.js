@@ -45,6 +45,8 @@ define(function (require) {
       var $target = $(e.target);
       var filter = $target.attr('data-option');
 
+      console.log('filter');
+
       if (_.indexOf(filter, '=') >= 0) {
         var df = filter.split('=');
         params[df[0]] = df[1];
@@ -55,8 +57,6 @@ define(function (require) {
       url = this.setUrl(params);
 
       Backbone.history.navigate(url, { trigger: true });
-
-      e.preventDefault();
 
       if ($target.tagName == 'a') {
         $target.parent().removeClass('open');
