@@ -12,4 +12,4 @@
 /**
  * @return {!Array<!module:types.Order>}
  */
-module.exports = () => require('../../data').getData('orders/summary');
+module.exports = () => require('../../../data').getData('orders/summary/daily');

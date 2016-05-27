@@ -9,6 +9,7 @@ const config = require('../config');
 const express = require('express');
 const moment = require('moment');
 const firstBy = require('thenby');
+const random = require('lodash').random;
 const lockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').lockOrder;
 const unlockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').unlockOrder;
 
@@ -18,9 +19,33 @@ module.exports = () => {
 
   router.get('/', (req, res) => {
     let filteredData;
-    
+
     if (req.query.action && req.query.action === 'processingSummary') {
-      filteredData = require('./summary/data')();
+      const hours = [];
+      filteredData = req.query.grouping === 'hourly' ?
+        require('./summary/hourly/data')() : require('./summary/daily/data')();
+
+      // Formats the data for the correct date
+      filteredData = filteredData.map(p => {
+        const modified = {};
+        const sub = req.query.grouping === 'hourly' ? random(23) : random(90);
+        const type = req.query.grouping === 'hourly' ? 'hours' : 'days';
+        const format = req.query.grouping === 'hourly' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD';
+
+        modified.grouping = moment().add(-sub, type).format(format);
+        modified.minstarted = moment().add(-sub, type).format();
+        modified.avgduration = random(5);
+        modified.avgprocessing = random(5);
+        modified.maxduration = random(5);
+        modified.maxprocessing = random(5);
+        modified.minduration = random(5);
+        modified.minprocessing = random(5);
+
+        return Object.assign({}, p, modified);
+      });
+
+
+      filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.minDate));
     } else {
       filteredData = data;
 
