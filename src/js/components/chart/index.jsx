@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 
+import { pureRender } from 'components/utils';
+
+@pureRender
 export default class extends Component {
   static propTypes = {
     id: PropTypes.string,
@@ -43,6 +46,40 @@ export default class extends Component {
     }
   }
 
+  getOptions() {
+    const options = {
+      legend: {
+        display: false,
+      },
+      animation: false,
+    };
+
+    switch (this.props.type) {
+      case 'line':
+      default:
+        return Object.assign(options, {
+          tooltips: {
+            mode: 'label',
+            callbacks: {
+              label(item) {
+                return item.yLabel;
+              },
+            },
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                stepSize: 1,
+              },
+            }],
+          },
+        });
+      case 'doughnut':
+        return options;
+    }
+  }
+
   renderChart = (props) => {
     const el = ReactDOM.findDOMNode(this.refs.chart);
     const chart = new Chart(el, {
@@ -51,27 +88,7 @@ export default class extends Component {
         labels: props.labels,
         datasets: props.datasets,
       },
-      options: {
-        legend: {
-          display: false,
-        },
-        tooltips: {
-          mode: 'label',
-          callbacks: {
-            label(item) {
-              return item.yLabel;
-            },
-          },
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              min: 0,
-              stepSize: 1,
-            },
-          }],
-        },
-      },
+      options: this.getOptions(),
     });
 
     this.setState({
@@ -79,18 +96,36 @@ export default class extends Component {
     });
   };
 
-  renderLegend = () => this.props.datasets.map((d, key) => (
-      <li className="chart-legend" key={key}>
-        <span className="color-box" style={{ backgroundColor: d.backgroundColor }} />
-        { d.label }
-      </li>
-    )
-  );
+  renderLegend = () => {
+    switch (this.props.type) {
+      case 'line':
+      default:
+        return this.props.datasets.map((d, key) => (
+          <li className="chart-legend" key={key}>
+            <span
+              className="color-box"
+              style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
+            />
+            { d.label }
+          </li>
+        ));
+      case 'doughnut':
+        return this.props.labels.map((d, key) => (
+          <li className="chart-legend" key={key}>
+            <span
+              className="color-box"
+              style={{ backgroundColor: this.props.datasets[0].backgroundColor[key] || '#d7d7d7' }}
+            />
+            { `${d} (${this.props.datasets[0].data[key]})` }
+          </li>
+        ));
+    }
+  };
 
   render() {
     return (
       <div
-        className="chart-wrapper pull-left"
+        className="chart-wrapper"
       >
         <p className="chart-axis-label y-axis">
           {this.props.yAxisLabel}
