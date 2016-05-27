@@ -8,7 +8,6 @@ import Checkbox from '../../../../components/checkbox';
 import Dropdown, { Item, Control } from '../../../../components/dropdown';
 import Lock from './modals/lock';
 
-import { normalizeName } from 'components/utils';
 import { union } from 'lodash';
 
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
@@ -231,29 +230,29 @@ export default class extends Table {
     );
 
     yield (
-      <Cell className="name">{ model.normalizedName }</Cell>
+      <Cell className="name nowrap">{ model.normalizedName }</Cell>
     );
 
     yield (
-      <Cell>
+      <Cell className="nowrap">
         <Date date={ model.started } />
       </Cell>
     );
 
     yield (
-      <Cell>
+      <Cell className="nowrap">
         <Date date={ model.completed } />
       </Cell>
     );
 
     yield (
-      <Cell>
+      <Cell className="nowrap">
         <Date date={ model.modified } />
       </Cell>
     );
 
     yield (
-      <Cell>
+      <Cell className="nowrap">
         <Date date={ model.scheduled } />
       </Cell>
     );

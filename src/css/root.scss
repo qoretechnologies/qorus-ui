@@ -49,7 +49,7 @@
     margin-top: $navbar-height; /* [1], [4] */
 
     > nav, > section {
-      padding-bottom: $footer-height; /* [2], [4] */
+      margin-bottom: $footer-height; /* [2], [4] */
     }
 
     > nav {

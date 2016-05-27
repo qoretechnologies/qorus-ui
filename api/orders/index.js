@@ -9,6 +9,7 @@ const config = require('../config');
 const express = require('express');
 const moment = require('moment');
 const firstBy = require('thenby');
+const random = require('lodash').random;
 const lockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').lockOrder;
 const unlockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').unlockOrder;
 
@@ -17,38 +18,68 @@ module.exports = () => {
   const router = new express.Router();
 
   router.get('/', (req, res) => {
-    let filteredData = data;
+    let filteredData;
 
-    if (req.query.workflowid) {
-      filteredData = filteredData.filter(o => (
-        o.workflowid === parseInt(req.query.workflowid, 10)
-      ));
-    }
+    if (req.query.action && req.query.action === 'processingSummary') {
+      const hours = [];
+      filteredData = req.query.grouping === 'hourly' ?
+        require('./summary/hourly/data')() : require('./summary/daily/data')();
 
-    if (req.query.date) {
-      filteredData = filteredData.filter(o => (moment(req.query.date) <= moment(o.started)));
-    }
+      // Formats the data for the correct date
+      filteredData = filteredData.map(p => {
+        const modified = {};
+        const sub = req.query.grouping === 'hourly' ? random(23) : random(90);
+        const type = req.query.grouping === 'hourly' ? 'hours' : 'days';
+        const format = req.query.grouping === 'hourly' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD';
 
-    if (req.query.sort) {
-      filteredData = filteredData.sort(
-        firstBy((v1, v2) => {
-          const prev = v1[req.query.sort];
-          const cur = v2[req.query.sort];
+        modified.grouping = moment().add(-sub, type).format(format);
+        modified.minstarted = moment().add(-sub, type).format();
+        modified.avgduration = random(5);
+        modified.avgprocessing = random(5);
+        modified.maxduration = random(5);
+        modified.maxprocessing = random(5);
+        modified.minduration = random(5);
+        modified.minprocessing = random(5);
 
-          if (moment(prev).isValid() && moment(cur).isValid()) {
-            return moment(prev).isBefore(cur) ? -1 : 1;
-          }
+        return Object.assign({}, p, modified);
+      });
 
-          return prev.toLowerCase() < cur.toLowerCase() ? -1 : 1;
-        }, -1)
-      );
-    }
 
-    if (req.query.limit) {
-      const start = parseInt(req.query.offset, 10) || 0;
-      const end = parseInt(req.query.limit, 10);
+      filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.mindate));
+    } else {
+      filteredData = data;
 
-      filteredData = filteredData.slice(start, start + end);
+      if (req.query.workflowid) {
+        filteredData = filteredData.filter(o => (
+          o.workflowid === parseInt(req.query.workflowid, 10)
+        ));
+      }
+
+      if (req.query.date) {
+        filteredData = filteredData.filter(o => (moment(req.query.date) <= moment(o.started)));
+      }
+
+      if (req.query.sort) {
+        filteredData = filteredData.sort(
+          firstBy((v1, v2) => {
+            const prev = v1[req.query.sort];
+            const cur = v2[req.query.sort];
+
+            if (moment(prev).isValid() && moment(cur).isValid()) {
+              return moment(prev).isBefore(cur) ? -1 : 1;
+            }
+
+            return prev.toLowerCase() < cur.toLowerCase() ? -1 : 1;
+          }, -1)
+        );
+      }
+
+      if (req.query.limit) {
+        const start = parseInt(req.query.offset, 10) || 0;
+        const end = parseInt(req.query.limit, 10);
+
+        filteredData = filteredData.slice(start, start + end);
+      }
     }
 
     res.json(filteredData);

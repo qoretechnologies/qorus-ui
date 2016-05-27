@@ -47,3 +47,41 @@ export const ORDER_ACTIONS = {
   UNCANCELING: [],
   RETRYING: [],
 };
+
+export const DATASETS = {
+  avgduration: 'rgba(250,225,107,1)',
+  avgprocessing: 'rgba(169,204,143,1)',
+  maxduration: 'rgba(178,200,217,1)',
+  maxprocessing: 'rgba(190,163,122,1)',
+  minduration: 'rgba(243,170,121,1)',
+  minprocessing: 'rgba(181,181,169,1)',
+};
+
+export const DOUGH_LABELS = {
+  'READY/SCHD': '#aded9b',
+  'RUN/WAIT': '#e5c737',
+  'ERR/BLOCK': '#B94A49',
+  CANCELED: '#f2dede',
+  COMPLETED: '#9ccb3b',
+};
+
+export const ORDER_GROUPS = {
+  'READY/SCHD': [
+    'READY',
+    'SCHEDULED',
+  ],
+  'RUN/WAIT': [
+    'ASYNC-WAITING',
+    'WAITING',
+    'EVENT-WAITING',
+    'RETRY',
+    'INCOMPLETE',
+  ],
+  'ERR/BLOCK': [
+    'ERROR',
+    'BLOCKED',
+  ],
+  CANCELED: ['CANCELED'],
+  COMPLETED: ['COMPLETED'],
+};
+

@@ -1,0 +1,52 @@
+/**
+* Styles the chart wrapper
+*/
+.chart-wrapper {
+  display: inline-block;
+  position: relative;
+  margin-top: 30px;
+  width: auto;
+}
+
+/**
+* Styles the first parent wrapper of the chart
+* Needs to have overflow:hidden otherwise the
+* chart will spread over the whole space
+*/
+.chart-box {
+  margin: 0 0 10px 30px;
+  overflow: hidden;
+}
+
+.chart-axis-label {
+  position: absolute;
+
+  &.y-axis {
+    left: -15px;
+    top: 50%;
+    transform: rotateZ(-90deg) translateY(-50%);
+  }
+
+  &.x-axis {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/**
+* Generates the legend for the chart
+*/
+ul.chart-legend,
+ul.chart-legend li {
+  list-style: none;
+  text-indent: 0;
+
+  .color-box {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    border-radius: 2px;
+    margin-right: 10px;
+    vertical-align: text-bottom;
+  }
+}
