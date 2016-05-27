@@ -73,7 +73,7 @@ export default class extends Component {
   fetchData = async (days) => {
     const query = {
       grouping: days > 1 ? 'daily' : 'hourly',
-      minDate: moment().add(-days, 'days').format('YYYY-MM-DD HH:mm:ss'),
+      mindate: moment().add(-days, 'days').format('YYYY-MM-DD HH:mm:ss'),
       wfids: this.props.workflow.workflowid,
       id: this.props.workflow.workflowid,
       global: false,

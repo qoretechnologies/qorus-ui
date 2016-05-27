@@ -45,7 +45,7 @@ module.exports = () => {
       });
 
 
-      filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.minDate));
+      filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.mindate));
     } else {
       filteredData = data;
 
