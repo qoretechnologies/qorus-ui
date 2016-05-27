@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 
 import NavLink from '../../../components/navlink';
 
-import AlertsTable from './table' ;
+import AlertsTable from './table';
+import AlertsPane from './pane';
 
 export default class Alerts extends Component {
   static propTypes = {
@@ -28,5 +29,5 @@ export default class Alerts extends Component {
   }
 }
 
-Alerts.Ongoing = AlertsTable;
-Alerts.Transient = AlertsTable;
+Alerts.Table = AlertsTable;
+Alerts.Pane = AlertsPane;

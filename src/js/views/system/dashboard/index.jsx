@@ -50,7 +50,7 @@ export default class Dashboard extends Component {
             <NavLink to="/system/dashboard/ongoing">Ongoing</NavLink>
             <NavLink to="/system/dashboard/transient">Transient</NavLink>
           </ul>
-          <div className="col-md-12">
+          <div>
             { this.props.children }
           </div>
         </div>

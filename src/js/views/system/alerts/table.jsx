@@ -23,18 +23,22 @@ const alertsMetaSelector = (state) => ({
 });
 
 const alertsSelector = (state, props) => (
-  state.api.alerts.data.filter(a => (a.alerttype.toLowerCase() === props.route.path.toLowerCase()))
+  state.api.alerts.data.filter(a => (a.alerttype.toLowerCase() === props.params.type.toLowerCase()))
 );
+
+const activeRowId = (state, props) => parseFloat(props.params.id, 10);
 
 const viewSelector = createSelector(
   [
     alertsSelector,
     alertsMetaSelector,
+    activeRowId,
   ],
-  (alerts, meta) => ({
+  (alerts, meta, rowId) => ({
     collection: alerts,
     sync: meta.sync,
     loading: meta.loading,
+    activeRowId: rowId,
   })
 );
 
@@ -47,6 +51,8 @@ export default class AlertsTable extends Component {
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     route: PropTypes.object,
+    children: PropTypes.node,
+    location: PropTypes.object,
   }
 
   static defaultProps = {
@@ -71,52 +77,32 @@ export default class AlertsTable extends Component {
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
-    this._activateRow = ::this.activateRow;
   }
 
   /**
-   * Finds workflow associated with given row element.
-   *
-   * @param {HTMLTableRowElement} row
-   * @return {Object}
-   */
-  findActivatedRow(row) {
-    let idx = null;
-    for (let i = 0; i < row.parentElement.rows.length; i += 1) {
-      if (row === row.parentElement.rows[i]) {
-        idx = i;
-        break;
-      }
-    }
-
-    return this.props.collection[idx] || null;
-  }
-
-
-  /**
-   * Changes active route to workflow associated with clicked element.
+   * Changes active route to alert associated with clicked element.
    *
    * If the event handled some significant action before (i.e., its
    * default action is prevented), it does nothing.
    *
    * @param {Event} ev
    */
-  activateRow(ev) {
+  activateRow = (modelId) => (ev) => {
     if (ev.defaultPrevented) return;
 
-    const model = this.findActivatedRow(ev.currentTarget);
-    const shouldDeactivate =
-      this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === model.id;
+    const shouldDeactivate = modelId === this.props.activeRowId;
 
-    const type = this.props.route.path;
+    const urlChunks = this.props.location.pathname.split('/');
+    const url = urlChunks.length === 5 ? urlChunks.slice(0, 4).join('/') : urlChunks.join('/');
 
     if (shouldDeactivate) {
-      browserHistory.push(`/system/dashboard/${type}/`);
+      browserHistory.push(url);
     } else {
-      browserHistory.push(`/system/dashboard/${type}/${model.id}`);
+      browserHistory.push(`${url}/${modelId}`);
     }
   }
+
+  fixEslint() {}
 
   /**
    * Yields heading cells for model info.
@@ -170,7 +156,10 @@ export default class AlertsTable extends Component {
 
     yield (
       <Cell className="desc">
-        <Shorten extraClassname="text-left">{ model.object }</Shorten>
+        <Shorten extraClassname="text-left">
+          {model.version && `${model.name} v${model.version} ${model.id}` }
+          {!model.version && `${model.name}` }
+        </Shorten>
       </Cell>
     );
 
@@ -211,9 +200,9 @@ export default class AlertsTable extends Component {
           key={model.alertid}
           data={{ model }}
           cells={this._renderCells}
-          onClick={this._activateRow}
+          onClick={this.activateRow(model.alertid)}
           className={classNames({
-            info: model.alertid === activeId,
+            info: model.alertid === parseInt(activeId, 10),
           })}
         />
       );
@@ -251,6 +240,7 @@ export default class AlertsTable extends Component {
           <Section type="head" rows={this._renderHeadingRow} />
           <Section type="body" data={ data } rows={this._renderRows} />
         </Table>
+        { this.props.children }
       </div>
     );
   }
