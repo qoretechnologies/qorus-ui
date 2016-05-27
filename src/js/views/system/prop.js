@@ -8,20 +8,7 @@ define(function(require) {
       ConfirmView = require('views/common/confirm'),
       FilteredCollection = require('backbone.filtered.collection'),
       PropsCollection = require('collections/props'),
-      // DomainTableTpl = require('tpl!templates/system/props/table.html'),
-      // DomainRowTpl = require('tpl!templates/system/props/row.html'),
       PropsView;
-
-  // DomainTable = Qorus.TableView.extend({
-  //   tpl: DomainTableTpl,
-  //   row_template: DomainRowTpl,
-  //
-  //   initialize: function (opts) {
-  //     this.opts = opts || {};
-  //     this.collection = new FilteredCollection(collection);
-  //     this.collection.filterBy('domain', { domain: opts.domain });
-  //   }
-  // });
 
   PropsView = Qorus.View.extend({
     views: {},
@@ -97,7 +84,7 @@ define(function(require) {
       if (action == 'update') {
         $.put(url, { action: 'set', parse_args: data.value })
           .done(function () {
-            self.getData();
+            self.collection.fetch();
           })
           .fail(function (resp) {
             debug.log(resp);
@@ -105,7 +92,7 @@ define(function(require) {
       } else if (action == 'delete') {
         $.delete(url)
           .done(function () {
-            self.getData();
+            self.collection.fetch();
           })
           .fail(function (resp) {
             debug.log(resp);
@@ -142,12 +129,16 @@ define(function(require) {
     },
 
     preRender: function () {
-      var q = this.getQueryFromUrl();
+      var q = this.getQueryFromUrl().toLowerCase();
       var filtered = this.collection.toJSON();
 
       if (q !== '') {
         filtered = _.filter(filtered, function (m) {
-          return m.domain.indexOf(q) !== -1;
+          var res = m.domain.toLowerCase().indexOf(q) !== -1;
+          if (m.prop.key) {
+            return res || m.prop.key.toLowerCase().indexOf(q) !== -1;
+          }
+          return res;
         });
       }
       this.context.domains = _(filtered).pluck('domain').uniq().value();
