@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 
 import Loader from '../../../components/loader';
 
+import classNames from 'classnames';
+
 
 function renderRemotes(remote) {
   return (
@@ -12,12 +14,22 @@ function renderRemotes(remote) {
   );
 }
 
+function statusHealth(health) {
+  return classNames({
+    danger: health === 'RED',
+    success: health === 'GREEN',
+    warning: health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
+  });
+}
+
 export function SystemHealth(props) {
   const { health } = props;
 
   if (!health.sync || health.loading) {
     return <Loader />;
   }
+
+  const healthStatus = health.data.health;
 
   return (
     <div className={ props.className }>
@@ -28,7 +40,13 @@ export function SystemHealth(props) {
           <tbody>
             <tr>
               <th>Status</th>
-              <td>{ health.data.health }</td>
+              <td>
+                <span
+                  className={ classNames('label', `label-${statusHealth(healthStatus)}`) }
+                >
+                  { healthStatus }
+                </span>
+              </td>
             </tr>
             <tr>
               <th>Ongoing</th>
