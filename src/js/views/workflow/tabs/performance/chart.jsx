@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { Control as Button } from 'components/controls';
 
 import Loader from 'components/loader';
 import Chart from 'components/chart';
+import Editable from 'components/editable';
 
 import { DATASETS, DOUGH_LABELS } from 'constants/orders';
 import { groupOrders } from 'helpers/chart';
 
-import classNames from 'classnames';
 import { fetchJson } from 'store/api/utils';
 import { range, values } from 'lodash';
 import { pureRender } from 'components/utils';
@@ -15,7 +14,7 @@ import moment from 'moment';
 import qs from 'qs';
 
 @pureRender
-export default class extends Component {
+export default class ChartView extends Component {
   static propTypes = {
     days: PropTypes.number,
     workflow: PropTypes.object,
@@ -35,39 +34,12 @@ export default class extends Component {
     });
   }
 
-  handleHeaderClick = () => {
+  handleEditableSubmit = (value) => {
     this.setState({
-      editing: true,
+      days: value,
     });
-  };
 
-  handleCancelClick = () => {
-    this.setState({
-      editing: false,
-    });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (!/^-?\d+$/.test(this.state.value)) {
-      this.setState({
-        error: true,
-      });
-    } else {
-      this.setState({
-        days: this.state.value,
-        editing: false,
-      });
-
-      this.fetchData(this.state.value);
-    }
-  };
-
-  handleInputChange = (event) => {
-    this.setState({
-      value: event.target.value,
-    });
+    this.fetchData(value);
   };
 
   fetchData = async (days) => {
@@ -150,45 +122,7 @@ export default class extends Component {
     };
   }
 
-  renderHeader() {
-    if (this.state.editing) {
-      const css = classNames('form-control', this.state.error ? 'form-error' : '');
-
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-group col-sm-2">
-            <input
-              type="number"
-              min="1"
-              max="90"
-              className={css}
-              defaultValue={this.state.days}
-              onChange={this.handleInputChange}
-            />
-            <div className="input-group-btn">
-              <Button
-                type="submit"
-                big
-                btnStyle="success"
-                icon="save"
-              />
-              <Button
-                type="button"
-                big
-                btnStyle="default"
-                icon="times"
-                action={this.handleCancelClick}
-              />
-            </div>
-          </div>
-        </form>
-      );
-    }
-
-    return (
-      <h3 onClick={this.handleHeaderClick}> Last { this.state.days } days </h3>
-    );
-  }
+  errorChecker = (value) => !(!/^-?\d+$/.test(value) || value > 90 || value < 1);
 
   render() {
     if (!this.state.lineLabels.length || !this.state.doughLabels.length) {
@@ -197,7 +131,13 @@ export default class extends Component {
 
     return (
       <div className="chart-view">
-        { this.renderHeader() }
+        <Editable
+          text={`Last ${this.state.days} days`}
+          value={this.state.days}
+          onSubmit={this.handleEditableSubmit}
+          errorChecker={this.errorChecker}
+          type="number"
+        />
         <Chart
           type="line"
           id="test"
