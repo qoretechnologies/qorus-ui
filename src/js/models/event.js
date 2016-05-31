@@ -4,13 +4,13 @@ define(function (require) {
       utils = require('utils'),
       Model;
 
-  Model = Qorus.Model.extend({    
+  Model = Qorus.Model.extend({
     dateAttributes: ['time'],
 
     parse: function(response, options){
       response = Model.__super__.parse.call(this, response, options);
       var cls = response.classstr.toLowerCase() || '';
-      
+
       if(response.info){
         if (!response.info.id) response.info.id = response.info[cls + 'id'];
         response.info.cls = cls;
@@ -21,18 +21,18 @@ define(function (require) {
           response.info.desc = response.info.error.err || "";
         }
       }
-      
+
       if (response.id) {
         response.eventid = response.id;
       }
 
       // generate guid only if not already guid
-      if (_.indexOf(response.id, '-') === -1) 
+      if (_.indexOf(response.id, '-') === -1)
         response.id = utils.guid();
 
       return response;
     },
-    
+
     isNew: function () {
       return false;
     }
