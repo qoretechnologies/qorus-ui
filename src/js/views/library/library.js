@@ -67,7 +67,8 @@ define(function (require) {
 
     preRender: function () {
       _.each(this.collection.collections, function (col, name) {
-        var view = this.setView(new Qorus.TableView({ collection: col, row_view: RowView, row_template: RowTpl, template: TableTpl, name: name }), '#'+name).render();
+        var view = this.setView(new Qorus.TableView({ collection: col, row_view: RowView, row_template: RowTpl, template: TableTpl, name: name }), '#'+name);
+
         this.listenTo(view, 'row:clicked', this.fetch);
       }, this);
       this.setView(new ToolbarView(), '#toolbar');
