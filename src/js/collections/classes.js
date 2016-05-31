@@ -3,11 +3,12 @@ define(function (require) {
       settings = require('settings'),
       Model    = require('models/class'),
       Collection;
-  
-  Collection = Qorus.Collection.extend({
+
+  Collection =  Qorus.SortedCollection.extend({
     url: settings.REST_API_PREFIX + '/classes',
-    model: Model
+    model: Model,
+    pagination: false
   });
-  
+
   return new Collection();
 });

@@ -34,7 +34,7 @@ define(function (require) {
       var currentUser = Helpers.user;
 
       this.sort_key = currentUser.getPreferences(this.prefKey + '.sorting.key') || 'name';
-      this.sort_order = currentUser.getPreferences(this.prefKey + '.sorting.order') || 'des';
+      this.sort_order = currentUser.getPreferences(this.prefKey + '.sorting.order') || 'asc';
       this.sort_history = currentUser.getPreferences(this.prefKey + '.sorting.history') || ['-version'];
       this.opts = {};
       this.opts.deprecated = false;
