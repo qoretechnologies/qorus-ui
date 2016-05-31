@@ -1,5 +1,5 @@
-<div class="toolbar sticky row">
-  <div class="span2 btn-toolbar toolbar">
+<div class="row-fluid">
+  <div class="span2 btn-toolbar">
       <select id="errors-pagination" class="span6">
         <option value="20"<%= (errors_size === 20) ? "selected" : '' %>>20 items</option>
         <option value="50"<%= (errors_size === 50) ? "selected" : '' %>>50 items</option>
@@ -8,7 +8,7 @@
         <option value="all"<%= (errors_size > 150) ? "selected" : '' %>>All</option>
       </select>
   </div>
-  <div class="pull-right btn-toolbar toolbar table-copy"></div>
+  <div class="pull-right btn-toolbar table-copy"></div>
 </div>
 <table class="table table-striped table-hover table-condensed">
   <thead>
