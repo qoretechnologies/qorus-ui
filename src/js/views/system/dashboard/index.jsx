@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import NavLink from '../../../components/navlink';
+import Nav, { NavLink } from '../../../components/navlink';
 import { SystemHealth } from './health';
 import PerformanceCharts from './perf';
 
@@ -27,12 +27,13 @@ export default class Dashboard extends Component {
     route: PropTypes.object,
     health: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-  }
+  };
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
-  }
+  };
 
   componentWillMount() {
     this.props.dispatch(actions.health.fetch());
@@ -46,10 +47,13 @@ export default class Dashboard extends Component {
           <PerformanceCharts data={{}} className="col-md-8" />
         </div>
         <div className="container-fluid">
-          <ul className="nav nav-pills">
-            <NavLink to="/system/dashboard/ongoing">Ongoing</NavLink>
-            <NavLink to="/system/dashboard/transient">Transient</NavLink>
-          </ul>
+          <Nav
+            path={this.context.location.pathname}
+            type="nav-pills"
+          >
+            <NavLink to="./ongoing">Ongoing</NavLink>
+            <NavLink to="./transient">Transient</NavLink>
+          </Nav>
           <div>
             { this.props.children }
           </div>

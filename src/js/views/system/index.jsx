@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import NavLink from '../../components/navlink';
+import Nav, { NavLink } from '../../components/navlink';
 
 import Alerts from './alerts';
 import Dashboard from './dashboard';
@@ -17,25 +17,36 @@ NotImplemented.User = NotImplemented;
 export default class System extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    location: PropTypes.object.isRequired,
+  };
+
+  static childContextTypes = {
+    location: PropTypes.object,
+  };
+
+  getChildContext() {
+    return {
+      location: this.props.location,
+    }
   }
 
   render() {
     return (
       <div>
-        <ul className="nav nav-tabs">
-          <NavLink to="/system/dashboard">Dashboard</NavLink>
-          <NavLink to="/system/alerts">Alerts</NavLink>
-          <NavLink to="/system/options">Options</NavLink>
-          <NavLink to="/system/remote">Connections</NavLink>
-          <NavLink to="/system/props">Properties</NavLink>
-          <NavLink to="/system/valuemaps">Valuemaps</NavLink>
-          <NavLink to="/system/sqlcache">SQL cache</NavLink>
-          <NavLink to="/system/http">Http Services</NavLink>
-          <NavLink to="/system/info">Info</NavLink>
-          <NavLink to="/system/logs">Logs</NavLink>
-          <NavLink to="/system/rbac">RBAC</NavLink>
-          <NavLink to="/system/errors">Errors</NavLink>
-        </ul>
+        <Nav path={this.props.location.pathname}>
+          <NavLink to="./dashboard">Dashboard</NavLink>
+          <NavLink to="./alerts">Alerts</NavLink>
+          <NavLink to="./options">Options</NavLink>
+          <NavLink to="./remote">Connections</NavLink>
+          <NavLink to="./props">Properties</NavLink>
+          <NavLink to="./valuemaps">Valuemaps</NavLink>
+          <NavLink to="./sqlcache">SQL cache</NavLink>
+          <NavLink to="./http">Http Services</NavLink>
+          <NavLink to="./info">Info</NavLink>
+          <NavLink to="./logs">Logs</NavLink>
+          <NavLink to="./rbac">RBAC</NavLink>
+          <NavLink to="./errors">Errors</NavLink>
+        </Nav>
         <div className="tab-content">
             {this.props.children}
         </div>
