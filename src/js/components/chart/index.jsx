@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 
 import { pureRender } from 'components/utils';
-import { getMaxValue, getStepSize } from '../../helpers/chart';
+import { getMaxValue, getStepSize, scaleData } from '../../helpers/chart';
 
 @pureRender
 export default class ChartComponent extends Component {
@@ -39,16 +39,16 @@ export default class ChartComponent extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.labels !== nextProps.labels) {
       const chart = this.state.chart;
-      const optionsData = this.getOptionsData(nextProps.datasets);
+      const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
       const datasets = nextProps.type === 'line' ?
-        this.scaleData(nextProps.datasets) : nextProps.datasets;
+        scaleData(nextProps.datasets) : nextProps.datasets;
 
       chart.data.labels = nextProps.labels;
       chart.data.datasets = datasets;
 
       if (nextProps.type === 'line') {
-        chart.options.scales.yAxes[0].ticks.callback = (val) => val + optionsData.scale;
-        chart.options.scales.yAxes[0].ticks.stepSize = optionsData.stepSize;
+        chart.options.scales.yAxes[0].ticks.callback = (val) => val + unit;
+        chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
       }
 
       chart.update();
@@ -56,17 +56,17 @@ export default class ChartComponent extends Component {
   }
 
   getOptionsData(data) {
-    const scale = getMaxValue(data) > 60 ? 'm' : 's';
+    const unit = getMaxValue(data) > 60 ? 'm' : 's';
     const stepSize = getStepSize(data);
 
     return {
-      scale,
+      unit,
       stepSize,
     };
   }
 
   getOptions(data) {
-    const optionsData = this.getOptionsData(data);
+    const { stepSize, unit } = this.getOptionsData(data);
     const options = {
       legend: {
         display: false,
@@ -82,7 +82,7 @@ export default class ChartComponent extends Component {
             mode: 'label',
             callbacks: {
               label(item) {
-                return item.yLabel;
+                return Math.round(item.yLabel);
               },
             },
           },
@@ -90,8 +90,8 @@ export default class ChartComponent extends Component {
             yAxes: [{
               ticks: {
                 min: 0,
-                stepSize: optionsData.stepSize,
-                callback: (val) => val + optionsData.scale,
+                stepSize,
+                callback: (val) => val + unit,
               },
               scaleLabel: {
                 display: true,
@@ -111,23 +111,10 @@ export default class ChartComponent extends Component {
     }
   }
 
-  scaleData(data) {
-    const mx = getMaxValue(data);
-    return data.map(ds => {
-      const set = ds;
-      set.data = set.data.map(sd => {
-        let d = sd;
-        d = mx > 60 ? d / 60 : d;
-        return d;
-      });
-      return set;
-    });
-  }
-
   renderChart = (props) => {
     const el = ReactDOM.findDOMNode(this.refs.chart);
     const options = this.getOptions(props.datasets);
-    const datasets = this.scaleData(props.datasets);
+    const datasets = scaleData(props.datasets);
     const chart = new Chart(el, {
       type: props.type,
       data: {
