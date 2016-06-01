@@ -25,7 +25,7 @@ const getStepSize = (data) => {
     maxValue /= 60;
   }
 
-  return Math.round(maxValue / 4);
+  return maxValue === 0 ? 1 : Math.round(maxValue / 4);
 };
 
 export {

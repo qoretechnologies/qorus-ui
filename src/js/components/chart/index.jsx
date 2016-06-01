@@ -91,7 +91,17 @@ export default class ChartComponent extends Component {
               ticks: {
                 min: 0,
                 stepSize: optionsData.stepSize,
-                callback: (val) => `${val}${optionsData.scale}`,
+                callback: (val) => val + optionsData.scale,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: this.props.yAxisLabel,
+              },
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: this.props.xAxisLabel,
               },
             }],
           },
@@ -163,9 +173,6 @@ export default class ChartComponent extends Component {
       <div
         className="chart-wrapper"
       >
-        <p className="chart-axis-label y-axis">
-          {this.props.yAxisLabel}
-        </p>
         <div
           className="chart-box pull-left"
           style={{ width: this.props.width, height: this.props.height }}
@@ -176,9 +183,6 @@ export default class ChartComponent extends Component {
             width={this.props.width}
             height={this.props.height}
           />
-          <p className="chart-axis-label x-axis">
-            {this.props.xAxisLabel}
-          </p>
         </div>
         <ul className="chart-legend pull-right">
           { this.renderLegend() }
