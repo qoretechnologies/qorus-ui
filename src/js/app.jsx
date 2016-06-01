@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Route, Router, browserHistory, IndexRedirect } from 'react-router';
+import applyMiddleware from 'react-router-apply-middleware';
+import { useRelativeLinks } from 'react-router-relative-links';
 import { Provider } from 'react-redux';
 
 
@@ -10,6 +12,7 @@ import Workflow from 'views/workflow';
 import Services from 'views/services';
 import Jobs from 'views/jobs';
 import System from 'views/system';
+import Order from 'views/order';
 
 
 import setupStore from 'store';
@@ -216,7 +219,7 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className="app__wrap">
-          <Router {...this.getRouterProps()}>
+          <Router {...this.getRouterProps()} render={applyMiddleware(useRelativeLinks())}>
             <Route path="/" component={Root}>
               <IndexRedirect to="/system/dashboard" />
               <Route path="/system" component={System}>
@@ -260,6 +263,21 @@ export default class App extends Component {
                 view={Workflow}
                 name="Workflow"
               />
+              <Route
+                path="order/:id"
+                component={Order}
+              >
+                <IndexRedirect to="diagram" />
+                <Route path="diagram" component={Order.Diagram} />
+                <Route path="steps" component={Order.Steps} />
+                <Route path="data" component={Order.Data} />
+                <Route path="errors" component={Order.Errors} />
+                <Route path="hierarchy" component={Order.Hierarchy} />
+                <Route path="audit" component={Order.Audit} />
+                <Route path="info" component={Order.Info} />
+                <Route path="notes" component={Order.Notes} />
+                <Route path="log" component={Order.Log} />
+              </Route>
               <Route
                 path="services(/:detailId)(/:tabId)"
                 component={View}

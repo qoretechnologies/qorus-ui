@@ -1,23 +1,32 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-import { Link } from 'react-router';
+export default class Nav extends Component {
+  static propTypes = {
+    path: PropTypes.string,
+    children: PropTypes.node,
+    type: PropTypes.string,
+  };
 
+  renderChildren() {
+    return React.Children.map(this.props.children, (c) => {
+      return (
+        <c.type
+          {...c.props}
+          path={this.props.path}
+        />
+      );
+    });
+  }
 
-export default function NavLink(props, context) {
-  return (
-    <li
-      role="presentation"
-      className={ context.router.isActive(props.to) ? 'active' : '' }
-    >
-      <Link {...props} activeClassName="active" />
-    </li>
-  );
+  render() {
+    const cls = this.props.type || 'nav-tabs';
+
+    return (
+      <ul className={`nav ${cls}`}>
+        { this.renderChildren() }
+      </ul>
+    );
+  }
 }
 
-NavLink.propTypes = {
-  to: PropTypes.string.isRequired,
-};
-
-NavLink.contextTypes = {
-  router: PropTypes.object.isRequired,
-};
+export NavLink from './link';

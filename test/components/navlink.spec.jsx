@@ -1,30 +1,35 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import TestUtils from 'react-addons-test-utils';
-import chai, { expect } from 'chai';
-import spies from 'chai-spies';
+import { expect } from 'chai';
 
-import NavLink from '../../src/js/components/navlink';
+import Nav, { NavLink } from '../../src/js/components/navlink';
 
-class NavLinkWithContext extends React.Component {
+class NavLinkWithContext extends Component {
   static propTypes = {
-    children: React.PropTypes.node.isRequired,
-  }
+    children: PropTypes.node.isRequired,
+  };
 
   static childContextTypes = {
-    router: React.PropTypes.object,
-  }
+    route: PropTypes.object,
+    params: PropTypes.object,
+    routes: PropTypes.object,
+    relativeLinks: PropTypes.object,
+  };
 
   getChildContext() {
     return {
-      router: {
-        isActive: p => (p === 'http://example.com/success'),
-        push: p => p,
-        replace: p => p,
-        go: p => p,
-        goBack: p => p,
-        goForward: p => p,
-        setRouteLeaveHook: p => p,
-        createHref: p => p,
+      relativeLinks: {
+        params: {},
+        route: {
+          childRoutes: [],
+          component: () => true,
+          indexRoute: {
+            onEnter: () => true,
+            to: 'meh',
+          },
+          path: 'my/awesome/path',
+        },
+        routes: [],
       },
     };
   }
@@ -38,33 +43,70 @@ class NavLinkWithContext extends React.Component {
   }
 }
 
-describe("NavLink from 'components/navlink'", () => {
-  before(() => {
-    chai.use(spies);
+
+describe("Nav, { NavLink } from 'components/navlink'", () => {
+  describe('Nav', () => {
+    it('renders the navigation wrapper', () => {
+      const renderer = TestUtils.createRenderer();
+
+      renderer.render(
+        <Nav path="/my/awesome/path" />
+      );
+
+      const result = renderer.getRenderOutput();
+
+      expect(result.type).to.equal('ul');
+    });
   });
 
-  it('renders list element with a tag with href="http://example.com/" and text equals "Go to mainpage"', () => {
-    const comp = TestUtils.renderIntoDocument(
-      <NavLinkWithContext to="http://example.com/">
-        Go to mainpage
-      </NavLinkWithContext>
-    );
+  describe('Nav with NavLink', () => {
+    it('renders the navigation with 1 tab', () => {
+      const renderer = TestUtils.createRenderer();
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'li');
+      renderer.render(
+        <Nav path="/my/awesome/path">
+          <NavLink to="/my/awesome/path">Awesome</NavLink>
+        </Nav>
+      );
 
-    expect(els[0].childNodes[0].textContent).to.equal('Go to mainpage');
-    expect(els[0].childNodes[0].href).to.equal('http://example.com/');
-  });
+      const result = renderer.getRenderOutput();
 
-  it('should have className="active"', () => {
-    const comp = TestUtils.renderIntoDocument(
-      <NavLinkWithContext to="http://example.com/success">
-        Go to mainpage
-      </NavLinkWithContext>
-    );
+      expect(result.props.children[0].type).to.equal(NavLink);
+      expect(result.props.children[0].props.children).to.equal('Awesome');
+    });
 
-    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'li');
+    it('renders the navigation with 2 tabs, the first is active', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <Nav path="/my/awesome/path">
+          <NavLinkWithContext to="/my/awesome/path">Awesome</NavLinkWithContext>
+          <NavLinkWithContext to="/my/another/path">Another</NavLinkWithContext>
+        </Nav>
+      );
 
-    expect(els[0].childNodes[0].className).to.equal('active');
+      const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'li');
+
+      expect(els[0].className).to.equal('active');
+      expect(els[1].className).to.not.equal('active');
+    });
+
+    it('renders the navigation with 2 tabs, and 2 deeper tabs resulting in 2 active tabs for the one url', () => {
+      const comp = TestUtils.renderIntoDocument(
+        <Nav path="/my/awesome/path/deep/">
+          <NavLinkWithContext to="/my/awesome/path">Awesome</NavLinkWithContext>
+          <NavLinkWithContext to="/my/another/path">Another</NavLinkWithContext>
+          <Nav path="/my/awesome/path/deep/">
+            <NavLinkWithContext to="/my/awesome/path/deep">Awesome deep</NavLinkWithContext>
+            <NavLinkWithContext to="/my/another/path/deep">Another deep</NavLinkWithContext>
+          </Nav>
+        </Nav>
+      );
+
+      const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'li');
+
+      expect(els[0].className).to.equal('active');
+      expect(els[1].className).to.not.equal('active');
+      expect(els[2].className).to.equal('active');
+      expect(els[3].className).to.not.equal('active');
+    });
   });
 });
