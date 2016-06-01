@@ -98,6 +98,7 @@ export default class extends Component {
       <div>
         <Header
           data={this.props.workflow}
+          date={this.props.params.date}
           tabId={this.props.params.tabId}
         />
         <div className="row">

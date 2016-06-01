@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+
 import WorkflowControls from '../workflows/controls';
 import AutoStart from '../../components/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
 
 import { ORDER_STATES } from '../../constants/orders';
-
 import actions from 'store/api/actions';
 
 export default class extends Component {
   static propTypes = {
     data: PropTypes.object,
+    date: PropTypes.string,
   };
 
   static contextTypes = {
@@ -47,6 +49,12 @@ export default class extends Component {
         <div className="row">
           <div className="col-xs-12">
             <h3 className="workflow-title pull-left">
+              <Link
+                to={`/workflows/${this.props.date}`}
+              >
+                <i className="fa fa-angle-left" />
+              </Link>
+              {' '}
               {this.props.data.name}
               {' '}
               <small>{this.props.data.version}</small>
