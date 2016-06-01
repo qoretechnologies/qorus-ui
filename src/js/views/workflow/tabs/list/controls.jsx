@@ -13,6 +13,7 @@ export default class extends Component {
   static propTypes = {
     data: PropTypes.object,
     onScheduleClick: PropTypes.func,
+    showText: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -56,6 +57,18 @@ export default class extends Component {
       disabled = true;
     }
 
+    if (this.props.showText) {
+      return (
+        <Button
+          btnStyle={style}
+          label={action.toUpperCase()}
+          disabled={disabled}
+          title={name}
+          action={onClick}
+        />
+      );
+    }
+
     return (
       <Button
         btnStyle={style}
@@ -68,8 +81,10 @@ export default class extends Component {
   };
 
   render() {
+    const props = this.props.showText ? { noControls: true, grouped: true } : {};
+
     return (
-      <Controls>
+      <Controls {...props}>
         { this.renderBlock() }
         { this.renderCancel() }
         { this.renderControl('retry') }
