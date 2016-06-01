@@ -4,6 +4,8 @@ import Chart from 'chart.js';
 
 import { pureRender } from 'components/utils';
 
+import { max, flatten } from 'lodash';
+
 @pureRender
 export default class extends Component {
   static propTypes = {
@@ -80,13 +82,46 @@ export default class extends Component {
     }
   }
 
+  getScale(data) {
+    const mx = this.getMaxValue(data);
+    let i;
+    let ctr;
+
+    for (i = mx, ctr = 0; i > 1000; ctr++) {
+      i /= 1000;
+    }
+
+    return Math.pow(1000, ctr);
+  }
+
+  getMaxValue(data) {
+    const dataset = data.map(d => d.data);
+
+    return max(flatten(dataset), (set) => set);
+  }
+
+  scaleData(data) {
+    const scale = this.getScale(data);
+
+    return data.map(ds => {
+      const set = ds;
+      set.data = set.data.map(sd => {
+        let d = sd;
+        d /= scale;
+        return d;
+      });
+      return set;
+    });
+  }
+
   renderChart = (props) => {
     const el = ReactDOM.findDOMNode(this.refs.chart);
+    const datasets = this.scaleData(props.datasets);
     const chart = new Chart(el, {
       type: props.type,
       data: {
         labels: props.labels,
-        datasets: props.datasets,
+        datasets,
       },
       options: this.getOptions(),
     });
