@@ -1,6 +1,6 @@
 import UrlPattern from 'url-pattern';
 import qs from 'qs';
-import { pickBy } from 'lodash';
+import { pickBy, includes } from 'lodash';
 import { WORKFLOW_FILTERS } from '../constants/filters';
 
 const routes = {
@@ -12,6 +12,9 @@ const routes = {
     date: '24h',
     filter: 'All',
     tabId: 'list',
+  },
+  order: {
+    tabId: 'diagram',
   },
   jobs: {
     date: '24h',
@@ -45,7 +48,10 @@ const goTo = (router, name, path, params, change, query = null) => {
   router.push(`/${url}`);
 };
 
+const isActive = (to, location) => location.startsWith(to);
+
 export {
   routes,
   goTo,
+  isActive,
 };
