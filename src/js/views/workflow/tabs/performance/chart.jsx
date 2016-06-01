@@ -143,7 +143,7 @@ export default class ChartView extends Component {
           id="test"
           width={600}
           height={200}
-          yAxisLabel="Time in 1 sec"
+          yAxisLabel="Time"
           xAxisLabel="Hour/Day [orders processed]"
           labels={this.state.lineLabels}
           datasets={this.state.lineDatasets}

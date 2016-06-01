@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 
 import { pureRender } from 'components/utils';
-
-import { max, flatten } from 'lodash';
+import { getMaxValue, getStepSize } from '../../helpers/chart';
 
 @pureRender
-export default class extends Component {
+export default class ChartComponent extends Component {
   static propTypes = {
     id: PropTypes.string,
     width: PropTypes.number,
@@ -40,15 +39,34 @@ export default class extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.labels !== nextProps.labels) {
       const chart = this.state.chart;
+      const optionsData = this.getOptionsData(nextProps.datasets);
+      const datasets = nextProps.type === 'line' ?
+        this.scaleData(nextProps.datasets) : nextProps.datasets;
 
       chart.data.labels = nextProps.labels;
-      chart.data.datasets = nextProps.datasets;
+      chart.data.datasets = datasets;
+
+      if (nextProps.type === 'line') {
+        chart.options.scales.yAxes[0].ticks.callback = (val) => val + optionsData.scale;
+        chart.options.scales.yAxes[0].ticks.stepSize = optionsData.stepSize;
+      }
 
       chart.update();
     }
   }
 
-  getOptions() {
+  getOptionsData(data) {
+    const scale = getMaxValue(data) > 60 ? 'm' : 's';
+    const stepSize = getStepSize(data);
+
+    return {
+      scale,
+      stepSize,
+    };
+  }
+
+  getOptions(data) {
+    const optionsData = this.getOptionsData(data);
     const options = {
       legend: {
         display: false,
@@ -72,7 +90,8 @@ export default class extends Component {
             yAxes: [{
               ticks: {
                 min: 0,
-                stepSize: 1,
+                stepSize: optionsData.stepSize,
+                callback: (val) => `${val}${optionsData.scale}`,
               },
             }],
           },
@@ -82,32 +101,13 @@ export default class extends Component {
     }
   }
 
-  getScale(data) {
-    const mx = this.getMaxValue(data);
-    let i;
-    let ctr;
-
-    for (i = mx, ctr = 0; i > 1000; ctr++) {
-      i /= 1000;
-    }
-
-    return Math.pow(1000, ctr);
-  }
-
-  getMaxValue(data) {
-    const dataset = data.map(d => d.data);
-
-    return max(flatten(dataset), (set) => set);
-  }
-
   scaleData(data) {
-    const scale = this.getScale(data);
-
+    const mx = getMaxValue(data);
     return data.map(ds => {
       const set = ds;
       set.data = set.data.map(sd => {
         let d = sd;
-        d /= scale;
+        d = mx > 60 ? d / 60 : d;
         return d;
       });
       return set;
@@ -116,6 +116,7 @@ export default class extends Component {
 
   renderChart = (props) => {
     const el = ReactDOM.findDOMNode(this.refs.chart);
+    const options = this.getOptions(props.datasets);
     const datasets = this.scaleData(props.datasets);
     const chart = new Chart(el, {
       type: props.type,
@@ -123,7 +124,7 @@ export default class extends Component {
         labels: props.labels,
         datasets,
       },
-      options: this.getOptions(),
+      options,
     });
 
     this.setState({
