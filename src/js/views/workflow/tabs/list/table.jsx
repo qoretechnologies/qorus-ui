@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Table from '../../../services/table';
 
 import { Cell } from '../../../../components/table';
@@ -230,7 +231,11 @@ export default class extends Table {
     );
 
     yield (
-      <Cell className="name nowrap">{ model.normalizedName }</Cell>
+      <Cell className="name nowrap">
+        <Link to={`/order/${model.id}`}>
+          { model.normalizedName }
+        </Link>
+      </Cell>
     );
 
     yield (
