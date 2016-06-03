@@ -270,7 +270,12 @@ export default class App extends Component {
                 <IndexRedirect to="diagram" />
                 <Route path="diagram" component={Order.Diagram} />
                 <Route path="steps" component={Order.Steps} />
-                <Route path="data" component={Order.Data} />
+                <Route path="data" component={Order.Data}>
+                  <IndexRedirect to="static" />
+                  <Route path="static" component={Order.Data.Static} />
+                  <Route path="dynamic" component={Order.Data.Dynamic} />
+                  <Route path="keys" component={Order.Data.Keys} />
+                </Route>
                 <Route path="errors" component={Order.Errors} />
                 <Route path="hierarchy" component={Order.Hierarchy} />
                 <Route path="audit" component={Order.Audit} />
