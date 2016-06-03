@@ -85,3 +85,13 @@ export const ORDER_GROUPS = {
   COMPLETED: ['COMPLETED'],
 };
 
+export const STATUS_PRIORITY = [
+  'COMPLETE',
+  'RETRY',
+  'EVENT-WAITING',
+  'WAITING',
+  'ASYNC-WAITING',
+  'IN-PROGRESS',
+  'ERROR',
+];
+
