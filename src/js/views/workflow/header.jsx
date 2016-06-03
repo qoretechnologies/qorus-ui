@@ -48,7 +48,7 @@ export default class extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h3 className="workflow-title pull-left">
+            <h3 className="detail-title pull-left">
               <Link
                 to={`/workflows/${this.props.date}`}
               >
