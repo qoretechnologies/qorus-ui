@@ -15,7 +15,7 @@ export default class extends Component {
     return (
       <div className="row">
         <div className="col-xs-12">
-          <h3 className="workflow-title pull-left">
+          <h3 className="detail-title pull-left">
             <Link
               to={`/workflow/${this.props.data.workflowid}/list/All`}
             >
@@ -30,7 +30,7 @@ export default class extends Component {
               {`ID#${this.props.data.id}`}
             </small>
           </h3>
-          <div className="pull-right">
+          <div className="order-actions pull-right">
             <OrderControls
               data={this.props.data}
               showText
