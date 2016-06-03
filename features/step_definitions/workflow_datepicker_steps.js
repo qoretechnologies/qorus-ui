@@ -91,6 +91,8 @@ module.exports = function workflowDatepickerSteps() {
   });
 
   this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
+    await this.waitForURLChange();
+    
     this.browser.assert.url({ pathname });
   });
 

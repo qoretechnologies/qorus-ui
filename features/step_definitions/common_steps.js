@@ -287,6 +287,17 @@ module.exports = function commonSteps() {
     await this.browser.pressButton(el);
   });
 
+  this.Then(/^the header says "([^"]*)"$/, async function(name) {
+    const el = findElementByText(this.browser, 'h3.detail-title', name);
+
+    this.browser.assert.element(el);
+  });
+
+  this.Then(/^there are "([^"]*)" tabs$/, async function(count) {
+    await this.waitForElement('ul.nav-tabs');
+
+    return this.browser.assert.elements('ul.nav-tabs li', parseInt(count, 10));
+  });
 };
 
 module.exports.selectors = {

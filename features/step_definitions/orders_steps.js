@@ -69,12 +69,6 @@ module.exports = function orderSteps() {
     this.browser.click(el);
   });
 
-  this.Then(/^the header says "([^"]*)"$/, async function(name) {
-    const el = findElementByText(this.browser, 'h3.workflow-title', name);
-
-    this.browser.assert.element(el);
-  });
-
   this.Then(/^there are "([^"]*)" badges shown$/, async function(count) {
     this.browser.assert.elements('div.states span.badge', parseInt(count, 10));
   });
@@ -86,7 +80,9 @@ module.exports = function orderSteps() {
   this.When(/^I click the "([^"]*)" tab$/, async function(name) {
     const tab = findElementByText(this.browser, '.nav-tabs a', name);
 
-    return this.browser.click(tab);
+    this.browser.click(tab);
+
+    await this.waitForChange(1000);
   });
 
   this.Then(/^I should see the performance content$/, async function() {
