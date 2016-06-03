@@ -1,0 +1,59 @@
+/**
+* Wrapper for the tree view in the order detail data tab
+*/
+.tree-wrapper {
+  span {
+    font-weight: bold;
+
+    &.expand:before {
+      font-family: FontAwesome;
+      content: "\f147";
+      display: table;
+      color: red;
+      left: 10px;
+      position: absolute;
+      top: 7px;
+    }
+  }
+
+  div {
+    padding: 5px 0 5px 30px;
+    position: relative;
+  }
+
+  div:not(.tree-top) {
+    border-left: 1px dotted red;
+
+    &.last:last-child {
+      border-left: 0;
+    }
+
+    span:not(.expand):before {
+      content: '';
+      display: table;
+      position: absolute;
+      width: 25px;
+      height: 1px;
+      border-top: 1px dotted red;
+      top: 15px;
+      left: 0;
+    }
+
+    &:last-child > span:not(.expand):after {
+      content: '';
+      display: table;
+      position: absolute;
+      width: 1px;
+      height: 15px;
+      left: 0;
+      top: 0;
+      border-left: 1px dotted red;
+    }
+  }
+}
+
+.button--copy {
+  position: absolute;
+  right: 25px;
+  top: 10px;
+}
