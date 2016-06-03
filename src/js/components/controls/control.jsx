@@ -18,6 +18,7 @@ export default class Control extends Component {
     big: PropTypes.bool,
     type: PropTypes.string,
     css: PropTypes.object,
+    className: PropTypes.string,
   };
 
   /**
@@ -44,13 +45,15 @@ export default class Control extends Component {
    * @return {ReactElement}
    */
   render() {
+    const className = classNames(this.props.className, {
+      btn: true,
+      'btn-xs': !this.props.big,
+      [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
+    });
+
     return (
       <button
-        className={classNames({
-          btn: true,
-          'btn-xs': !this.props.big,
-          [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
-        })}
+        className={className}
         title={this.props.title}
         onClick={this.handleClick}
         disabled={this.props.disabled}
