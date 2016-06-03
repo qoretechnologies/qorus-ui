@@ -8,6 +8,9 @@ import Header from './header';
 import Loader from 'components/loader';
 import Nav, { NavLink } from 'components/navlink';
 
+import StepsView from './steps';
+import DataView from './data';
+
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
     parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
@@ -23,13 +26,14 @@ const selector = createSelector(
 );
 
 @connect(selector)
-export default class extends Component {
+export default class Order extends Component {
   static propTypes = {
     order: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
+    children: PropTypes.node,
   };
 
   componentDidMount() {
@@ -53,18 +57,26 @@ export default class extends Component {
         <div className="row">
           <div className="col-xs-12">
             <Nav path={this.props.location.pathname}>
-              <NavLink to="./diagram"> Diagram </NavLink>
-              <NavLink to="./steps"> Steps </NavLink>
-              <NavLink to="./data"> Data </NavLink>
-              <NavLink to="./hierarchy"> Hierarchy </NavLink>
-              <NavLink to="./audit"> Audit </NavLink>
-              <NavLink to="./info"> Info </NavLink>
-              <NavLink to="./notes"> Notes </NavLink>
-              <NavLink to="./log"> Log </NavLink>
+              <NavLink to="./diagram">Diagram</NavLink>
+              <NavLink to="./steps">Steps</NavLink>
+              <NavLink to="./data">Data</NavLink>
+              <NavLink to="./hierarchy">Hierarchy</NavLink>
+              <NavLink to="./audit">Audit</NavLink>
+              <NavLink to="./info">Info</NavLink>
+              <NavLink to="./notes">Notes</NavLink>
+              <NavLink to="./log">Log</NavLink>
             </Nav>
+          </div>
+        </div>
+        <div className="row tab-pane">
+          <div className="col-xs-12">
+            { this.props.children }
           </div>
         </div>
       </div>
     );
   }
 }
+
+Order.Steps = StepsView;
+Order.Data = DataView;
