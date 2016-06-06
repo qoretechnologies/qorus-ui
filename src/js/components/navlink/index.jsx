@@ -8,14 +8,12 @@ export default class Nav extends Component {
   };
 
   renderChildren() {
-    return React.Children.map(this.props.children, (c) => {
-      return (
-        <c.type
-          {...c.props}
-          path={this.props.path}
-        />
-      );
-    });
+    return React.Children.map(this.props.children, (c) => (
+      <c.type
+        {...c.props}
+        path={this.props.path}
+      />
+    ));
   }
 
   render() {
