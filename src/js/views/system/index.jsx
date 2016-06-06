@@ -5,14 +5,11 @@ import Nav, { NavLink } from '../../components/navlink';
 import Alerts from './alerts';
 import Dashboard from './dashboard';
 import Options from './options';
+import Connections from './connections';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
 }
-
-NotImplemented.Qorus = NotImplemented;
-NotImplemented.Datasources = NotImplemented;
-NotImplemented.User = NotImplemented;
 
 export default class System extends Component {
   static propTypes = {
@@ -58,7 +55,7 @@ export default class System extends Component {
 System.Dashboard = Dashboard;
 System.Alerts = Alerts;
 System.Options = Options;
-System.Remote = NotImplemented;
+System.Connections = Connections;
 System.Properties = NotImplemented;
 System.ValueMaps = NotImplemented;
 System.SqlCache = NotImplemented;
@@ -67,3 +64,4 @@ System.RBAC = NotImplemented;
 System.Info = NotImplemented;
 System.Logs = NotImplemented;
 System.Errors = NotImplemented;
+System.NotImplemented = NotImplemented;
