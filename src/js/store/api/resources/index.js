@@ -94,4 +94,11 @@ export default [
     url: `${settings.REST_BASE_URL}/system/health`,
     transform: item => item,
   },
+  {
+    name: 'remotes',
+    url: `${settings.REST_BASE_URL}/remote`,
+    transform: _.flowRight(
+      normalizeId('name'),
+    ),
+  },
 ];
