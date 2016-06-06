@@ -98,7 +98,7 @@ export default class Options extends Component {
     if (model.status === 'unlocked') {
       yield (
         <EditableCell
-          value={JSON.stringify(model.value)}
+          value={`${model.value}`}
           startEdit={false}
           onSave={onSave}
         />
