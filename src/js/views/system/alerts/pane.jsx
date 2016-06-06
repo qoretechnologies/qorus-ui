@@ -22,7 +22,6 @@ const viewSelector = createSelector(
   })
 );
 
-const attrs = ['alert', 'type', 'object', 'source', 'system', 'who', 'reason', 'local', 'instance', 'auditid'];
 
 @connect(viewSelector)
 export default class AlertPane extends Component {
@@ -34,8 +33,15 @@ export default class AlertPane extends Component {
     route: PropTypes.object,
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  }
+
   onClose = () => {
-    console.log(this.props);
+    const pathArr = this.props.location.pathname.split('/');
+    const newPath = pathArr.slice(0, pathArr.length - 1).join('/');
+
+    this.context.router.push(newPath);
   }
 
   getData() {
