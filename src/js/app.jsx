@@ -244,7 +244,6 @@ export default class App extends Component {
                     </Route>
                 </Route>
                 <Route path="props" component={System.Properties} />
-                <Route path="valuemaps" component={System.ValueMaps} />
                 <Route path="sqlcache" component={System.SqlCache} />
                 <Route path="http" component={System.HttpServices} />
                 <Route path="info" component={System.Info} />

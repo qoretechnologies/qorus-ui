@@ -9,3 +9,6 @@
 .idea
 .nfs*
 TAGS
+
+# FS
+._*

@@ -35,7 +35,7 @@ const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], se
 const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
 const normalize = (orders) => orders.map(o => {
   if (o.normalizedName) return o;
-  
+
   return normalizeName(o);
 });
 

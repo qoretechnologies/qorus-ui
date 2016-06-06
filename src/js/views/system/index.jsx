@@ -36,7 +36,6 @@ export default class System extends Component {
           <NavLink to="./options">Options</NavLink>
           <NavLink to="./remote">Connections</NavLink>
           <NavLink to="./props">Properties</NavLink>
-          <NavLink to="./valuemaps">Valuemaps</NavLink>
           <NavLink to="./sqlcache">SQL cache</NavLink>
           <NavLink to="./http">Http Services</NavLink>
           <NavLink to="./info">Info</NavLink>
@@ -57,7 +56,6 @@ System.Alerts = Alerts;
 System.Options = Options;
 System.Connections = Connections;
 System.Properties = NotImplemented;
-System.ValueMaps = NotImplemented;
 System.SqlCache = NotImplemented;
 System.HttpServices = NotImplemented;
 System.RBAC = NotImplemented;
