@@ -104,6 +104,25 @@ table.table--small {
   }
 }
 
+table {
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th, > td {
+        &.align-right {
+          text-align: right;
+        }
+        &.align-left {
+          text-align: left;
+        }
+        &.align-center {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
 
 table.table--centered {
   margin: auto;
