@@ -117,15 +117,18 @@ const sortFunc = (sort, v1, v2) => {
 };
 
 const sortTable = (data, sort) => {
+  const direction = sort.sortByKey ? sort.sortByKey.direction : 1;
+  const historyDirection = sort.historySortByKey ? sort.historySortByKey.direction : 1;
+
   if (sort.historySortBy) {
     return data.slice().sort(
-      firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), sort.sortByKey.direction)
-        .thenBy((v1, v2) => sortFunc(sort.historySortBy, v1, v2), sort.historySortByKey.direction)
+      firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction)
+        .thenBy((v1, v2) => sortFunc(sort.historySortBy, v1, v2), historyDirection)
     );
   }
 
   return data.slice().sort(
-    firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), sort.sortByKey.direction)
+    firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction)
   );
 };
 
