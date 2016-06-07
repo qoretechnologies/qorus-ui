@@ -30,13 +30,13 @@ export default class ServicesTable extends Component {
 
 
   static contextTypes = {
-    router: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
-    openModal: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
+    router: PropTypes.object,
+    route: PropTypes.object,
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    location: PropTypes.object,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
   };
 
 
