@@ -12,6 +12,7 @@ const firstBy = require('thenby');
 const random = require('lodash').random;
 const lockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').lockOrder;
 const unlockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').unlockOrder;
+const addNote = require('../../src/js/store/api/resources/orders/actions/helpers').addNote;
 
 module.exports = () => {
   const data = require('./data')();
@@ -36,7 +37,7 @@ module.exports = () => {
         modified.minstarted = moment().add(-sub, type).format();
         modified.avgduration = random(5);
         modified.avgprocessing = random(5);
-        modified.maxduration = random(5);
+        modified.maxduration = random(500, 4000);
         modified.maxprocessing = random(5);
         modified.minduration = random(5);
         modified.minprocessing = random(5);
@@ -172,6 +173,20 @@ module.exports = () => {
     }
 
     res.json(result);
+  });
+
+  router.post('/:id', (req, res) => {
+    const order = data.find(o => findOrder(req.params.id, o));
+
+    switch (req.body.action) {
+      case 'notes':
+        Object.assign(order, addNote(order, true, req.body.username, req.body.note));
+        break;
+      default:
+        break;
+    }
+
+    res.json(order);
   });
 
   return router;
