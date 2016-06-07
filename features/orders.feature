@@ -12,11 +12,11 @@ Feature: Workflow details and orders listing
 
   Scenario: Accessing workflow detail with all states and all dates
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
-    Then "10" "orders" are shown
+    Then "12" "orders" are shown
 
   Scenario: Accessing workflow detail with all states and all dates
     Given I am on "ARRAYTEST" with "TOTAL" states and "2016-05-10 00:00:00" dates
-    Then "8" "orders" are shown
+    Then "10" "orders" are shown
 
   Scenario: Accessing workflow details with COMPLETE state and all dates
     Given I am on "ARRAYTEST" with "COMPLETE" states and "All" dates

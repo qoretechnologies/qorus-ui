@@ -14,7 +14,7 @@ Feature: Order detail
   Scenario: Tabs are displayed correctly
     Given I am on order "3659"
     And the header gets loaded
-    Then there are "8" tabs
+    Then there are "9" tabs
 
   Scenario: Actions are displayed in the header
     Given I am on order "3659"

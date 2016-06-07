@@ -11,7 +11,7 @@ Feature: Tests all the features of the orders list toolbar
     And "orders" get loaded
     And I select "3" "orders"
     When I click the "Invert" button inside "selection" dropdown
-    Then "7" "orders" are selected
+    Then "9" "orders" are selected
 
   Scenario: Deselects all selected orders
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
@@ -67,7 +67,7 @@ Feature: Tests all the features of the orders list toolbar
     And "orders" get loaded
     When I change the input to "2016-05-10 10:10:10"
     Then the URL changes to "/workflow/14/list/All/20160510101010"
-    And "8" "orders" are shown
+    And "10" "orders" are shown
 
   Scenario: Changing the date to 24h
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates

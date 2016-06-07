@@ -92,6 +92,24 @@ const orders = [
     warnings: 0,
     notes: 0,
   },
+  {
+    name: 'ARRAYTEST',
+    id: 4000,
+    workflowstatus: 'ERROR',
+    started: '2016-06-06 10:30:00',
+    error: 0,
+    warnings: 0,
+    notes: 0,
+  },
+  {
+    name: 'ARRAYTEST',
+    id: 31380,
+    workflowstatus: 'ERROR',
+    started: '2016-05-31 17:15:02',
+    error: 0,
+    warnings: 0,
+    notes: 0,
+  },
 ];
 
 const actions = {
