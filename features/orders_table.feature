@@ -11,11 +11,12 @@ Feature: Orders table tests
     When I click on the "Status" column header
     Then orders are sorted by "Status" "desc"
 
+  @no-impl
   Scenario: Order column is clicked but table is sorted by workflow status desc
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
     And I click on the "Status" column header
-    And I click on the "Order" column header
+    And I click on the "Errors" column header
     Then orders are history sorted by "Status" "desc"
 
   Scenario: Blocking single workflow from actions
