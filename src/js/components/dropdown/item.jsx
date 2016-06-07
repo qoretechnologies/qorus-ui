@@ -24,7 +24,7 @@ export default class Item extends Component {
    */
   handleClick = (event) => {
     if (this.props.action) {
-      this.props.action(event);
+      this.props.action(event, this.props.title);
     }
 
     if (!this.props.multi) {
