@@ -1,4 +1,4 @@
-import { lockOrder, unlockOrder } from './helpers';
+import { lockOrder, unlockOrder, addNote as addNoteFunc } from './helpers';
 
 export function retry(actions) {
   return order => dispatch => {
@@ -102,6 +102,19 @@ export function unlock(actions) {
         username,
       }),
       update: unlockOrder(order, note, username),
+    }, order.id));
+  };
+}
+
+export function addNote(actions) {
+  return (order, note, username) => dispatch => {
+    dispatch(actions.orders.update({
+      body: JSON.stringify({
+        action: 'notes',
+        note,
+        username,
+      }),
+      update: addNoteFunc(order, true, username, note),
     }, order.id));
   };
 }
