@@ -1,60 +1,41 @@
 const moment = require('moment');
 
-const lockOrder = (order, note, username) => {
+const addNote = (order, saved, username, note) => {
   var notes;
+  var data = {
+    saved,
+    username,
+    note,
+    created: moment().format(),
+    modified: moment().format(),
+  };
 
   if (!order.notes) {
-    notes = [{
-      saved: true,
-      username,
-      note: `ORDER LOCK: ${note}`,
-      created: moment().format(),
-      modified: moment().format(),
-    }];
+    notes = [data];
   } else {
-    notes = order.notes.slice().concat({
-      saved: true,
-      username,
-      note: `ORDER LOCK: ${note}`,
-      created: moment().format(),
-      modified: moment().format(),
-    });
+    notes = order.notes.slice().concat(data);
   }
 
   return {
-    operator_lock: username,
     note_count: order.note_count + 1,
     notes,
   };
 };
 
+const lockOrder = (order, note, username) => {
+  var obj = addNote(order, true, username, note);
+  obj.operator_lock = username;
+
+  return obj;
+};
+
 const unlockOrder = (order, note, username) => {
-  var notes;
+  var obj = addNote(order, true, username, note);
+  obj.operator_lock = null;
 
-  if (!order.notes) {
-    notes = [{
-      saved: true,
-      username,
-      note: `ORDER LOCK: ${note}`,
-      created: moment().format(),
-      modified: moment().format(),
-    }];
-  } else {
-    notes = order.notes.slice().concat({
-      saved: true,
-      username,
-      note: `ORDER LOCK: ${note}`,
-      created: moment().format(),
-      modified: moment().format(),
-    });
-  }
-
-  return {
-    operator_lock: null,
-    note_count: order.note_count + 1,
-    notes,
-  };
+  return obj;
 };
 
 module.exports.lockOrder = lockOrder;
 module.exports.unlockOrder = unlockOrder;
+module.exports.addNote = addNote;
