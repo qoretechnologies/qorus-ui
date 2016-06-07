@@ -1,6 +1,6 @@
-import { ORDER_GROUPS } from 'constants/orders';
+import { ORDER_GROUPS } from '../constants/orders';
 import { max, flatten, range, values } from 'lodash';
-import { DATASETS, DOUGH_LABELS } from 'constants/orders';
+import { DATASETS, DOUGH_LABELS } from '../constants/orders';
 import moment from 'moment';
 
 const groupOrders = (data) => {
@@ -27,18 +27,30 @@ const getStepSize = (data) => {
     maxValue /= 60;
   }
 
+  if (maxValue > 60) {
+    maxValue /= 60;
+  }
+
   return maxValue === 0 ? 1 : Math.round(maxValue / 4);
 };
 
 const scaleData = (data) => {
-  const maxValue = getMaxValue(data);
+  let maxValue = getMaxValue(data);
 
   return data.map(dataset => {
     const set = dataset;
 
-    set.data = set.data.map(value => (
-      maxValue > 60 ? value / 60 : value
-    ));
+    set.data = set.data.map(value => {
+      let val = value;
+
+      if (maxValue >= 3600) {
+        val /= 3600;
+      } else if (maxValue >= 60) {
+        val /= 60;
+      }
+      
+      return val;
+    });
 
     return set;
   });
@@ -93,6 +105,16 @@ const createDoughDatasets = (data) => {
   };
 };
 
+const getUnit = (val) => {
+  if (val >= 3600) {
+    return 'h';
+  } else if (val >= 60) {
+    return 'm';
+  }
+
+  return 's';
+};
+
 export {
   groupOrders,
   getMaxValue,
@@ -100,4 +122,5 @@ export {
   scaleData,
   createLineDatasets,
   createDoughDatasets,
+  getUnit,
 };

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 
 import { pureRender } from 'components/utils';
-import { getMaxValue, getStepSize, scaleData } from '../../helpers/chart';
+import { getMaxValue, getStepSize, scaleData, getUnit } from '../../helpers/chart';
 
 @pureRender
 export default class ChartComponent extends Component {
@@ -56,7 +56,7 @@ export default class ChartComponent extends Component {
   }
 
   getOptionsData(data) {
-    const unit = getMaxValue(data) > 60 ? 'm' : 's';
+    const unit = getUnit(getMaxValue(data));
     const stepSize = getStepSize(data);
 
     return {
