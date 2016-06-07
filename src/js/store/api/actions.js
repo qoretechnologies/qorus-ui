@@ -55,11 +55,14 @@ export const DEFAULT_ACTIONS = {
     ),
     meta: (action, ids, query, params) => ({ action, ids, query, params }),
   },
-  UPDATE: url => (params, id) => fetchJson(
-    'POST',
-    id ? `${url}/${id}` : url,
-    params
-  ),
+  UPDATE: {
+    action: url => (params, id) => fetchJson(
+      'POST',
+      id ? `${url}/${id}` : url,
+      params
+    ),
+    meta: (params, id) => ({ params, id }),
+  },
 };
 
 const actions = createApiActions(
