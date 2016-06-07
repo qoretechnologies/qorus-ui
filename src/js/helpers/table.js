@@ -40,6 +40,17 @@ const CSVheaders = {
     warning_count: 'Warnings',
     note_count: 'Notes',
   },
+  order_errors: {
+    severity: 'Severity',
+    error: 'Error Code',
+    description: 'Description',
+    step_name: 'Step name',
+    ind: 'Ind',
+    created: 'Created',
+    error_type: 'Error Type',
+    info: 'Info',
+    retry: 'Retry',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {
@@ -49,6 +60,30 @@ Object.keys(ORDER_STATES).forEach(key => {
 CSVheaders.workflows.total = 'Total';
 
 const getCSVHeaders = (view) => CSVheaders[view];
+
+/**
+ * Generates the CSV string from the collection
+ * @param {Array<Object>} collection
+ * @param {String} type
+ * @returns {String}
+ */
+const generateCSV = (collection, type) => {
+  const headers = getCSVHeaders(type);
+
+  let content = Object.keys(headers).reduce((str, h) => {
+    return str === '' ? headers[h] : `${str};${headers[h]}`;
+  }, '');
+
+  for (const item of collection) {
+    content += `\n${Object.keys(headers).reduce((str, h) => {
+      const value = item[h] || 0;
+
+      return str === '' ? value : `${str};${value}`;
+    }, '')}`;
+  }
+
+  return content;
+};
 
 const sortFunc = (sort, v1, v2) => {
   const val1 = v1[sort];
@@ -96,5 +131,6 @@ const sortTable = (data, sort) => {
 
 export {
   getCSVHeaders,
+  generateCSV,
   sortTable,
 };
