@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { goTo } from '../helpers/router';
-import { getCSVHeaders } from '../helpers/table';
+import { generateCSV } from '../helpers/table';
 
 import Modal from '../components/modal';
 
@@ -47,30 +47,6 @@ export default class extends Component {
     if (!this.props.params.detailId) return null;
 
     return data.find(d => d.id === parseInt(this.props.params.detailId, 10));
-  };
-
-  /**
-   * Generates the CSV string from the collection
-   * @param {Array<Object>} collection
-   * @param {String} type
-   * @returns {String}
-   */
-  generateCSV = (collection, type) => {
-    const headers = getCSVHeaders(type);
-
-    let content = Object.keys(headers).reduce((str, h) => {
-      return str === '' ? headers[h] : `${str};${headers[h]}`;
-    }, '');
-
-    for (const item of collection) {
-      content += `\n${Object.keys(headers).reduce((str, h) => {
-        const value = item[h] || 0;
-
-        return str === '' ? value : `${str};${value}`;
-      }, '')}`;
-    }
-
-    return content;
   };
 
   clearSelection = () => {
@@ -175,7 +151,7 @@ export default class extends Component {
             readOnly
             id="csv-text"
             className="form-control"
-            value={this.generateCSV(collection, type)}
+            value={generateCSV(collection, type)}
           />
         </Modal.Body>
       </Modal>
