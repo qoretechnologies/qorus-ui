@@ -10,6 +10,10 @@ import Nav, { NavLink } from 'components/navlink';
 
 import StepsView from './steps';
 import DataView from './data';
+import InfoView from './info';
+import LogView from './log';
+import NotesView from './notes';
+import ErrorsView from './errors';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -60,6 +64,7 @@ export default class Order extends Component {
               <NavLink to="./diagram">Diagram</NavLink>
               <NavLink to="./steps">Steps</NavLink>
               <NavLink to="./data">Data</NavLink>
+              <NavLink to="./errors">Errors</NavLink>
               <NavLink to="./hierarchy">Hierarchy</NavLink>
               <NavLink to="./audit">Audit</NavLink>
               <NavLink to="./info">Info</NavLink>
@@ -80,3 +85,7 @@ export default class Order extends Component {
 
 Order.Steps = StepsView;
 Order.Data = DataView;
+Order.Info = InfoView;
+Order.Log = LogView;
+Order.Notes = NotesView;
+Order.Errors = ErrorsView;
