@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { getCSVHeaders } from '../../src/js/helpers/table';
+import { getCSVHeaders, generateCSV, sortTable } from '../../src/js/helpers/table';
 
-describe('getCSVHeaders from helpers/table', () => {
+describe('{ getCSVHeaders } from helpers/table', () => {
   it('returns the workflows headers used for CSV export', () => {
     const headers = getCSVHeaders('workflows');
 
