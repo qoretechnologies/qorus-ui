@@ -35,7 +35,7 @@ const getStepSize = (data) => {
 };
 
 const scaleData = (data) => {
-  let maxValue = getMaxValue(data);
+  const maxValue = getMaxValue(data);
 
   return data.map(dataset => {
     const set = dataset;
@@ -48,7 +48,7 @@ const scaleData = (data) => {
       } else if (maxValue >= 60) {
         val /= 60;
       }
-      
+
       return val;
     });
 
