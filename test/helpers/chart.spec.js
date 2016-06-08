@@ -73,7 +73,7 @@ describe('Helpers from helpers/table', () => {
   });
 
   describe('getStepSize', () => {
-    it.only('gets the scaled data in minutes based on the max value', () => {
+    it('gets the scaled data in minutes based on the max value', () => {
       const data = [
         {
           data: [0, 21, 39, 3000],
@@ -222,7 +222,7 @@ describe('Helpers from helpers/table', () => {
   });
 
   describe('createLineDatasets', () => {
-    it.only('creates the data for the dough chart', () => {
+    it('creates the data for the dough chart', () => {
       const data = {
         READY: 1,
         COMPLETED: 2,
