@@ -8,9 +8,8 @@ import classNames from 'classnames';
 // import firstBy from 'thenby';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
-import Date from '../../../components/date';
 import Loader from '../../../components/loader';
-import Shorten from '../../../components/shorten';
+import ModalPing from './modals/ping';
 
 import actions from 'store/api/actions';
 import { browserHistory } from 'react-router';
@@ -59,10 +58,16 @@ export default class AlertsTable extends Component {
     route: PropTypes.object,
     children: PropTypes.node,
     location: PropTypes.object,
+    params: PropTypes.object,
   }
 
   static defaultProps = {
     activeRowId: null,
+  }
+
+  static contextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
   }
 
   static childContextTypes = {
@@ -107,6 +112,37 @@ export default class AlertsTable extends Component {
       browserHistory.push(`${url}/${modelId}`);
     }
   }
+
+  handleOpenModal = (model) => (ev) => {
+    ev.preventDefault();
+
+    this.openModal(model);
+  }
+
+  /**
+   * Opens modal dialog to manage particular remote.
+   *
+   * @param {Object} remote
+   */
+  openModal = (model) => {
+    this._modal = (
+      <ModalPing
+        model={model}
+        onClose={this.closeModal}
+        params={this.props.params}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  }
+
+  /**
+   * Closes currently open modal dialog.
+   */
+  closeModal = () => {
+    this.context.closeModal(this._modal);
+    this._modal = null;
+  };
 
   fixEslint() {}
 
@@ -177,7 +213,7 @@ export default class AlertsTable extends Component {
 
     yield (
       <Cell className="nowrap align-right">
-        <button className="btn btn-success btn-xs">
+        <button className="btn btn-success btn-xs" onClick={this.handleOpenModal(model)}>
            <i className="fa fa-exchange" /> Ping
         </button>
       </Cell>
