@@ -8,6 +8,7 @@ import List from './tabs/list';
 import Loader from '../../components/loader';
 import Log from 'components/log';
 import InfoTable from 'components/info_table';
+import Library from 'components/library';
 import Performance from './tabs/performance';
 
 import { goTo } from '../../helpers/router';
@@ -138,6 +139,11 @@ export default class extends Component {
                 <Log
                   model={this.props.workflow}
                   resource="workflows"
+                />
+              </Pane>
+              <Pane name="Library">
+                <Library
+                  library={this.props.workflow.lib}
                 />
               </Pane>
               <Pane name="Info">

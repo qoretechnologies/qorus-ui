@@ -14,12 +14,12 @@ Feature: Order detail
   Scenario: Tabs are displayed correctly
     Given I am on order "3659"
     And the header gets loaded
-    Then there are "9" tabs
+    Then there are "10" tabs
 
   Scenario: Actions are displayed in the header
     Given I am on order "3659"
     And the header gets loaded
-    Then there are "4" action buttons
+    Then there are "5" action buttons
     And "1" action is disabled
 
   Scenario: Url changes when tab is clicked

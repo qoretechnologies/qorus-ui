@@ -78,7 +78,7 @@ module.exports = function orderSteps() {
   });
 
   this.When(/^I click the "([^"]*)" tab$/, async function(name) {
-    const tab = findElementByText(this.browser, '.nav-tabs a', name);
+    const tab = findElementByText(this.browser, '.nav a', name);
 
     this.browser.click(tab);
 

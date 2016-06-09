@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { ORDER_STATES } from 'constants/orders';
 
-import moment from 'moment';
+import Date from 'components/date';
 
 export default class extends Component {
   static propTypes = {
@@ -38,10 +38,6 @@ export default class extends Component {
 
     return this.props.stepdata.steps.map((step, index) => {
       const { label } = ORDER_STATES.find(o => o.name === step.stepstatus);
-      const started = moment(step.started).isValid() ?
-        moment(step.started).format('YYYY-MM-DD HH:mm:ss') : '';
-      const completed = moment(step.completed).isValid() ?
-        moment(step.completed).format('YYYY-MM-DD HH:mm:ss') : '';
 
       return (
         <tr key={index}>
@@ -51,15 +47,19 @@ export default class extends Component {
               { step.stepstatus }
             </span>
           </td>
-          <td> { step.stepname } </td>
-          <td> { step.error_type } </td>
-          <td> { step.custom_status } </td>
-          <td> { step.ind } </td>
-          <td> { step.retries } </td>
-          <td> { this.renderSkip(step.skip) } </td>
-          <td> { started } </td>
-          <td> { completed } </td>
-          <td> { step.subworkflow_instanceid } </td>
+          <td>{ step.stepname }</td>
+          <td>{ step.error_type }</td>
+          <td>{ step.custom_status }</td>
+          <td>{ step.ind }</td>
+          <td>{ step.retries }</td>
+          <td>{ this.renderSkip(step.skip) }</td>
+          <td>
+            <Date date={step.started} />
+          </td>
+          <td>
+            <Date date={step.completed} />
+          </td>
+          <td>{ step.subworkflow_instanceid }</td>
         </tr>
       );
     });
@@ -85,7 +85,7 @@ export default class extends Component {
               { status }
             </span>
           </td>
-          <td> { name } </td>
+          <td>{ name }</td>
           <td></td>
           <td></td>
           <td></td>

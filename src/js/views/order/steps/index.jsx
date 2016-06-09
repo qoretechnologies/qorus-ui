@@ -47,17 +47,14 @@ export default class StepsView extends Component {
 
     this.props.steps.forEach(step => {
       const name = step.stepname;
-      const group = stepGroups[name] = stepGroups[name] || { steps: [], name, status: null };
+      const group = stepGroups[name] =
+        stepGroups[name] || { steps: [], name, status: null };
       const max = Math.max(
         indexOf(STATUS_PRIORITY, group.status), indexOf(STATUS_PRIORITY, step.stepstatus)
       );
 
       group.status = STATUS_PRIORITY[max];
-
-      if (group.status !== 'COMPLETE' ||
-        (group.status === 'COMPLETE' && step.stepstatus !== 'ERROR')) {
-        group.steps.push(step);
-      }
+      group.steps.push(step);
     });
 
     return stepGroups;

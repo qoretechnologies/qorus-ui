@@ -2,14 +2,70 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import OrderControls from '../workflow/tabs/list/controls';
+import Lock from '../workflow/tabs/list/modals/lock';
+import Dropdown, { Control, Item } from 'components/dropdown';
 
 import { pureRender } from 'components/utils';
 
 @pureRender
-export default class extends Component {
+export default class OrderHeader extends Component {
   static propTypes = {
     data: PropTypes.object,
+    username: PropTypes.string,
   };
+
+  static contextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+  };
+
+  handleLockClick = (model) => () => {
+    const label = model.operator_lock ? 'Unlock' : 'Lock';
+
+    this._modal = (
+      <Lock
+        onClose={this.handleModalCloseClick}
+        data={model}
+        label={label}
+        username={this.props.username}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  };
+
+  handleModalCloseClick = () => {
+    this.context.closeModal(this._modal);
+  };
+
+  renderLock() {
+    const { data } = this.props;
+    const icon = data.operator_lock ? 'lock' : 'unlock';
+    const itemIcon = data.operator_lock ? 'unlock' : 'lock';
+    const locked = data.operator_lock || '';
+    const title = data.operator_lock ? 'Unlock' : 'Lock';
+    const style = data.operator_lock ? 'danger' : 'success';
+    const disabled = data.operator_lock && data.operator_lock !== this.props.username;
+
+    return (
+      <Dropdown>
+        <Control
+          disabled={disabled}
+          small
+          btnStyle={style}
+        >
+          <i className={`fa fa-${icon}`} />
+          {' '}
+          { locked }
+        </Control>
+        <Item
+          icon={itemIcon}
+          title={title}
+          action={this.handleLockClick(data)}
+        />
+      </Dropdown>
+    );
+  }
 
   render() {
     return (
@@ -35,6 +91,7 @@ export default class extends Component {
               data={this.props.data}
               showText
             />
+            { this.renderLock() }
           </div>
         </div>
       </div>
