@@ -14,6 +14,9 @@ import InfoView from './info';
 import LogView from './log';
 import NotesView from './notes';
 import ErrorsView from './errors';
+import HierarchyView from './hierarchy';
+import AuditView from './audit';
+import LibraryView from './library';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -21,11 +24,15 @@ const orderSelector = (state, props) => (
   ))
 );
 
+const userSelector = state => state.api.currentUser.data;
+
 const selector = createSelector(
   [
     orderSelector,
-  ], (order) => ({
+    userSelector,
+  ], (order, user) => ({
     order,
+    user,
   })
 );
 
@@ -38,7 +45,18 @@ export default class Order extends Component {
     route: PropTypes.object,
     location: PropTypes.object,
     children: PropTypes.node,
+    user: PropTypes.object,
   };
+
+  static childContextTypes = {
+    dispatch: PropTypes.func,
+  };
+
+  getChildContext() {
+    return {
+      dispatch: this.props.dispatch,
+    };
+  }
 
   componentDidMount() {
     const { id } = this.props.params;
@@ -57,6 +75,7 @@ export default class Order extends Component {
       <div>
         <Header
           data={this.props.order}
+          username={this.props.user.username}
         />
         <div className="row">
           <div className="col-xs-12">
@@ -70,6 +89,7 @@ export default class Order extends Component {
               <NavLink to="./info">Info</NavLink>
               <NavLink to="./notes">Notes</NavLink>
               <NavLink to="./log">Log</NavLink>
+              <NavLink to="./library">Library</NavLink>
             </Nav>
           </div>
         </div>
@@ -89,3 +109,6 @@ Order.Info = InfoView;
 Order.Log = LogView;
 Order.Notes = NotesView;
 Order.Errors = ErrorsView;
+Order.Hierarchy = HierarchyView;
+Order.Audit = AuditView;
+Order.Library = LibraryView;
