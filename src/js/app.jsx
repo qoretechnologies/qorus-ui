@@ -282,6 +282,7 @@ export default class App extends Component {
                 <Route path="info" component={Order.Info} />
                 <Route path="notes" component={Order.Notes} />
                 <Route path="log" component={Order.Log} />
+                <Route path="library" component={Order.Library} />
               </Route>
               <Route
                 path="services(/:detailId)(/:tabId)"
