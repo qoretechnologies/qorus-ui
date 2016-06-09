@@ -264,6 +264,19 @@ export default class extends Component {
     );
   }
 
+  renderLoadMore() {
+    if (this.props.collection.length < (this.state.limit + this.state.offset)) return undefined;
+
+    return (
+      <Button
+        big
+        btnStyle="success"
+        label="Load more..."
+        action={this.handleLoadMoreClick}
+      />
+    );
+  }
+
   render() {
     if (!this.props.sync || this.props.loading) {
       return <Loader />;
@@ -284,12 +297,7 @@ export default class extends Component {
           onCSVClick={this.handleCSVClick}
         />
         { this.renderTable() }
-        <Button
-          big
-          btnStyle="success"
-          label="Load more..."
-          action={this.handleLoadMoreClick}
-        />
+        { this.renderLoadMore() }
       </div>
     );
   }
