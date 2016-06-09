@@ -53,7 +53,9 @@ td.line-counter::before {
 * Styles the tabs inside the single workflow page
 */
 .workflow-detail-tabs {
-  #log .log-area {
+  #log .log-area,
+  .pane-lib,
+  .pane-lib > div {
     min-height: 350px;
   }
 }
