@@ -6,6 +6,26 @@ import InfoTable from 'components/info_table';
 
 import { fetchJson } from 'store/api/utils';
 
+const makeCancelable = (promise) => {
+  let hasCanceled_ = false;
+
+  const wrappedPromise = new Promise((resolve, reject) => {
+    promise.then((val) =>
+      hasCanceled_ ? reject({ isCanceled: true }) : resolve(val)
+    );
+    promise.catch((error) =>
+      hasCanceled_ ? reject({ isCanceled: true }) : reject(error)
+    );
+  });
+
+  return {
+    promise: wrappedPromise,
+    cancel() {
+      hasCanceled_ = true;
+    },
+  };
+};
+
 export default class ModalPing extends Component {
   static propTypes = {
     onClose: PropTypes.func,
@@ -21,16 +41,26 @@ export default class ModalPing extends Component {
       response: null,
     });
 
-    this.ping();
+    this._ping = this.ping();
   }
 
-  ping = async () => {
-    const resp = await fetchJson(
-      'PUT',
-       `/api/remote/${this.props.params.type}/${this.props.model.name}?action=ping`
-     );
+  componentWillUnmount() {
+    this._ping.cancel();
+  }
 
-    this.setState({ response: resp });
+  ping = () => {
+    const resp = makeCancelable(
+      fetchJson(
+        'PUT',
+         `/api/remote/${this.props.params.type}/${this.props.model.name}?action=ping`
+      )
+    );
+
+    resp.promise
+      .then((r) => { this.setState({ response: r }); })
+      .catch(() => {});
+
+    return resp;
   }
 
   render() {
