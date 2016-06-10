@@ -40,22 +40,22 @@ export default class LibraryView extends Component {
     dispatch: PropTypes.func,
     order: PropTypes.object,
     workflow: PropTypes.object,
-  };
+  }
+
+  static contextTypes = {
+    dispatch: PropTypes.func,
+  }
 
   componentDidMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(
+    this.context.dispatch(
       actions.orders.fetch({}, id)
     );
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.order !== nextProps.order) {
-      this.props.dispatch(
-        actions.workflows.fetch({}, this.props.order.workflowid)
-      );
-    }
+    this.context.dispatch(
+      actions.workflows.fetch({ lib_source: true }, this.props.order.workflowid)
+    );
   }
 
   render() {

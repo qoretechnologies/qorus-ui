@@ -13,13 +13,16 @@ import Performance from './tabs/performance';
 
 import { goTo } from '../../helpers/router';
 import { ORDER_STATES } from '../../constants/orders';
+
 import actions from 'store/api/actions';
 
-const workflowSelector = (state, props) => (
-  state.api.workflows.data.find(w => (
+const workflowSelector = (state, props) => {
+  const wfl = state.api.workflows.data.find(w => (
     parseInt(props.params.id, 10) === parseInt(w.workflowid, 10)
-  ))
-);
+  ));
+
+  return wfl;
+};
 
 const selector = createSelector(
   [
@@ -76,7 +79,7 @@ export default class extends Component {
   componentDidMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(actions.workflows.fetch({}, id));
+    this.props.dispatch(actions.workflows.fetch({ lib_source: true }, id));
   }
 
   handleTabChange = (tabId) => {
