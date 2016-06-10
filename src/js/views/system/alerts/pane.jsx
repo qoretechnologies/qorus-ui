@@ -44,49 +44,6 @@ export default class AlertPane extends Component {
     this.context.router.push(newPath);
   }
 
-  getData() {
-    let data = [];
-
-    for (const attr of attrs) {
-      data.push({ attr, value: this.props.alert[attr] });
-    }
-
-    return data;
-  }
-
-  /**
-   * Yields cells with capitalized attribute name and its value.
-   *
-   * @param {string} attr
-   * @param {*} value
-   * @return {Generator<ReactElement>}
-   * @see renderValue
-   */
-  *renderCells({ attr, value }) {
-    yield (
-      <Cell tag="th">{capitalize(attr)}</Cell>
-    );
-
-    yield (
-      <Cell>{this.renderValue(value)}</Cell>
-    );
-  }
-
-  /**
-   * Yields rows for table body.
-   *
-   * @param {Array<AttrValuePair>} data
-   * @return {Generator<ReactElement>}
-   * @see renderCells
-   */
-  *renderRows(data) {
-    for (const attr of data) {
-      yield (
-        <Row data={attr} cells={this.renderCells} />
-      );
-    }
-  }
-
   render() {
     return (
       <Pane width={400} onClose={ this.onClose }>
