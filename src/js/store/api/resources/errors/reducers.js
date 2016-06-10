@@ -31,7 +31,7 @@ const fetch = {
     return Object.assign({}, ensureStructure(state, action), {
       [action.meta.ref]: {
         data,
-        sync: false,
+        sync: true,
         loading: false,
       },
     });
