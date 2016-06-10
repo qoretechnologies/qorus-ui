@@ -10,6 +10,7 @@ const DATE_FORMATS = {
   ALL: '1970/1/1',
   DISPLAY: 'YYYY-MM-DD HH:mm:ss',
   PROP: 'YYYY-MM-DDTHH:mm:ss',
+  DURATION: '0000-00-00 00:00:00.000000Z',
 };
 
 export {
