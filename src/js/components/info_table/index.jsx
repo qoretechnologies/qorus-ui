@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from '../table';
 
+import AutoComponent from '../autocomponent';
+
 import _ from 'lodash';
 import { pureRender } from '../utils';
 
@@ -79,10 +81,11 @@ export default class InfoTable extends Component {
     switch (typeof value) {
       case 'object':
         return value ?
-          <pre>{JSON.stringify(value, null, COMPLEX_VALUE_INDENT)}</pre> :
-          '';
+          <AutoComponent>
+            <pre>{JSON.stringify(value, null, COMPLEX_VALUE_INDENT)}</pre>
+          </AutoComponent> : '';
       default:
-        return `${value}`;
+        return <AutoComponent>{ value }</AutoComponent>;
     }
   }
 
