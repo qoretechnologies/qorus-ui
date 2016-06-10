@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import { DATE_FORMATS } from 'constants/dates';
+
 export default function Date(props) {
   if (props.date) {
     return (
@@ -11,10 +13,13 @@ export default function Date(props) {
 }
 
 Date.defaultProps = {
-  format: 'YYYY-MM-DD HH:mm:ss',
+  format: DATE_FORMATS.DISPLAY,
 };
 
 Date.propTypes = {
-  date: React.PropTypes.string,
+  date: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number,
+  ]),
   format: React.PropTypes.string,
 };
