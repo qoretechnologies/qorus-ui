@@ -6,6 +6,7 @@ import Alerts from './alerts';
 import Dashboard from './dashboard';
 import Options from './options';
 import Connections from './connections';
+import Errors from './errors';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
@@ -24,7 +25,7 @@ export default class System extends Component {
   getChildContext() {
     return {
       location: this.props.location,
-    }
+    };
   }
 
   render() {
@@ -61,5 +62,5 @@ System.HttpServices = NotImplemented;
 System.RBAC = NotImplemented;
 System.Info = NotImplemented;
 System.Logs = NotImplemented;
-System.Errors = NotImplemented;
+System.Errors = Errors;
 System.NotImplemented = NotImplemented;
