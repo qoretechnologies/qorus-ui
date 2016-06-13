@@ -9,7 +9,7 @@ import { Group } from '../../components/groups';
 import { ORDER_STATES } from '../../constants/orders';
 import actions from 'store/api/actions';
 
-export default class extends Component {
+export default class DetailHeader extends Component {
   static propTypes = {
     data: PropTypes.object,
     date: PropTypes.string,

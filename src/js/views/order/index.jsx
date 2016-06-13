@@ -75,6 +75,7 @@ export default class Order extends Component {
       <div>
         <Header
           data={this.props.order}
+          linkDate={this.props.params.date}
           username={this.props.user.username}
         />
         <div className="row">

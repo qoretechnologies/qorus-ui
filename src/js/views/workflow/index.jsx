@@ -12,7 +12,9 @@ import Library from 'components/library';
 import Performance from './tabs/performance';
 
 import { goTo } from '../../helpers/router';
+import { formatDate } from '../../helpers/workflows';
 import { ORDER_STATES } from '../../constants/orders';
+import { DATE_FORMATS } from '../../constants/dates';
 
 import actions from 'store/api/actions';
 
@@ -82,6 +84,12 @@ export default class extends Component {
     this.props.dispatch(actions.workflows.fetch({ lib_source: true }, id));
   }
 
+  /**
+   * Gets the formatted date for the
+   * workflow link in the workflow table
+   */
+  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
+
   handleTabChange = (tabId) => {
     goTo(
       this.context.router,
@@ -102,7 +110,7 @@ export default class extends Component {
       <div>
         <Header
           data={this.props.workflow}
-          date={this.props.params.date}
+          date={this.getDate()}
           tabId={this.props.params.tabId}
         />
         <div className="row">
@@ -131,6 +139,7 @@ export default class extends Component {
                   selectedData={this.props.selectedData}
                   sortData={this.props.sortData}
                   onCSVClick={this.props.onCSVClick}
+                  linkDate={this.getDate()}
                 />
               </Pane>
               <Pane name="Performance">

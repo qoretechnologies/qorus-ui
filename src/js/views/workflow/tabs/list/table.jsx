@@ -13,7 +13,7 @@ import { union } from 'lodash';
 
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
 
-export default class extends Table {
+export default class OrdersTable extends Table {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
@@ -232,7 +232,7 @@ export default class extends Table {
 
     yield (
       <Cell className="name nowrap">
-        <Link to={`/order/${model.id}`}>
+        <Link to={`/order/${model.id}/${this.props.linkDate}`}>
           { model.normalizedName }
         </Link>
       </Cell>

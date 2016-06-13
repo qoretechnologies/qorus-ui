@@ -102,6 +102,7 @@ export default class extends Component {
     username: PropTypes.string,
     offset: PropTypes.number,
     limit: PropTypes.number,
+    linkDate: PropTypes.string,
   };
 
   static defaultProps = {
@@ -251,6 +252,7 @@ export default class extends Component {
 
     return (
       <OrdersTable
+        linkDate={this.props.linkDate}
         initialFilter={this.props.filterFn}
         onDataFilterChange={this.props.onDataFilterChange}
         collection={this.props.collection}

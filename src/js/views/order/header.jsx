@@ -12,6 +12,7 @@ export default class OrderHeader extends Component {
   static propTypes = {
     data: PropTypes.object,
     username: PropTypes.string,
+    linkDate: PropTypes.string,
   };
 
   static contextTypes = {
@@ -73,7 +74,7 @@ export default class OrderHeader extends Component {
         <div className="col-xs-12">
           <h3 className="detail-title pull-left">
             <Link
-              to={`/workflow/${this.props.data.workflowid}/list/All`}
+              to={`/workflow/${this.props.data.workflowid}/list/All/${this.props.linkDate}`}
             >
               <i className="fa fa-angle-left" />
             </Link>
