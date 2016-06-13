@@ -78,15 +78,7 @@ export default class InfoTable extends Component {
    * @see COMPLEX_VALUE_INDENT
    */
   renderValue(value) {
-    switch (typeof value) {
-      case 'object':
-        return value ?
-          <AutoComponent>
-            <pre>{JSON.stringify(value, null, COMPLEX_VALUE_INDENT)}</pre>
-          </AutoComponent> : '';
-      default:
-        return <AutoComponent>{ value }</AutoComponent>;
-    }
+    return <AutoComponent>{ value }</AutoComponent>;
   }
 
   /**

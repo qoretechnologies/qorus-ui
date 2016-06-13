@@ -7,8 +7,8 @@ import { normalizeName } from '../../../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
 import * as ui from 'store/ui/actions';
-import { ORDER_STATES, CUSTOM_ORDER_STATES, ORDER_ACTIONS } from 'constants/orders';
-import { DATE_FORMATS } from 'constants/dates';
+import { ORDER_STATES, CUSTOM_ORDER_STATES, ORDER_ACTIONS } from '../../../../constants/orders';
+import { DATE_FORMATS } from '../../../../constants/dates';
 
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';

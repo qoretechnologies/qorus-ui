@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { DATE_FORMATS } from 'constants/dates';
+import { DATE_FORMATS } from '../../constants/dates';
 
 export default function Date(props) {
   if (props.date) {

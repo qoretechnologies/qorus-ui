@@ -65,7 +65,7 @@ describe("InfoTable from 'components/info_table'", () => {
 
     const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
 
-    expect(table.tBodies[0].rows[0].cells[1].firstElementChild.tagName).
+    expect(table.tBodies[0].rows[0].cells[1].firstElementChild.children[0].tagName).
       to.equal('PRE');
     expect(table.tBodies[0].rows[0].cells[1].firstElementChild.textContent).
       to.equal('{\n    "foo": "bar"\n}');

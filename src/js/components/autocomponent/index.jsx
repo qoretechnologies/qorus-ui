@@ -1,12 +1,17 @@
 import React, { PropTypes } from 'react';
-import { isBoolean, startsWith } from 'lodash';
+import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
 
-import { DATE_FORMATS } from 'constants/dates';
+import { DATE_FORMATS } from '../../constants/dates';
 
 import Date from '../date';
 
 const DURATION_PTR = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
+
+/**
+ * Indent value for stringified complex values.
+ */
+const COMPLEX_VALUE_INDENT = 4;
 
 function humanizeDuration(dur) {
   const groups = DURATION_PTR.exec(dur);
@@ -46,13 +51,15 @@ export default function AutoComponent(props) {
   } else if (isDate(props.children)) {
     if (!props.children.match(DURATION_PTR)) {
       comp = <Date date={ props.children } />;
+    } else {
+      comp = (
+        <span>
+          { humanizeDuration(props.children) }
+        </span>
+      );
     }
-
-    comp = (
-      <span>
-        { humanizeDuration(props.children) }
-      </span>
-    );
+  } else if (isObject(props.children)) {
+    comp = <pre>{JSON.stringify(props.children, null, COMPLEX_VALUE_INDENT)}</pre>;
   } else {
     comp = props.children;
   }
