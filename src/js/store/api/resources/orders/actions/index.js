@@ -119,6 +119,20 @@ export function addNote(actions) {
   };
 }
 
+export function setPriority(actions) {
+  return (order, priority) => dispatch => {
+    dispatch(actions.orders.action({
+      body: JSON.stringify({
+        action: 'setPriority',
+        priority,
+      }),
+      update: {
+        priority,
+      },
+    }, order.id));
+  };
+}
+
 export function retryBatch(actions) {
   return ids => dispatch => {
     dispatch(
