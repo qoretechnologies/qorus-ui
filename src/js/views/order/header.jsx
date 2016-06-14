@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 
 import OrderControls from '../workflow/tabs/list/controls';
 import Lock from '../workflow/tabs/list/modals/lock';
+import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
 
 import { pureRender } from 'components/utils';
@@ -11,6 +12,7 @@ import { pureRender } from 'components/utils';
 export default class OrderHeader extends Component {
   static propTypes = {
     data: PropTypes.object,
+    workflow: PropTypes.object,
     username: PropTypes.string,
     linkDate: PropTypes.string,
   };
@@ -29,6 +31,17 @@ export default class OrderHeader extends Component {
         data={model}
         label={label}
         username={this.props.username}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  };
+
+  handleScheduleClick = (order) => {
+    this._modal = (
+      <Reschedule
+        data={order}
+        onClose={this.handleModalCloseClick}
       />
     );
 
@@ -68,6 +81,18 @@ export default class OrderHeader extends Component {
     );
   }
 
+  renderIcon() {
+    if (this.props.workflow.enabled) {
+      return (
+        <i className="fa fa-check-circle icon-success" />
+      );
+    }
+
+    return (
+      <i className="fa fa-times-circle icon-danger" />
+    );
+  }
+
   render() {
     return (
       <div className="row">
@@ -78,8 +103,10 @@ export default class OrderHeader extends Component {
             >
               <i className="fa fa-angle-left" />
             </Link>
-              {' '}
-              {this.props.data.name}
+            {' '}
+            { this.renderIcon() }
+            {' '}
+            {this.props.data.name}
             <small>
               {' '}
               {this.props.data.version}
@@ -90,6 +117,7 @@ export default class OrderHeader extends Component {
           <div className="order-actions pull-right">
             <OrderControls
               data={this.props.data}
+              onScheduleClick={this.handleScheduleClick}
               showText
             />
             { this.renderLock() }
