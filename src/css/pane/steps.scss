@@ -20,7 +20,9 @@
   }
 
   &__box {
-    &:not(.diagram__box--start) { /* [3] */
+    &:not(.diagram__box--start) .link {
+      font-family: FontAwesome;
+      font-size: 18px;
       cursor: pointer;
     }
 
