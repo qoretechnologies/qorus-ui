@@ -17,6 +17,7 @@ import ErrorsView from './errors';
 import HierarchyView from './hierarchy';
 import AuditView from './audit';
 import LibraryView from './library';
+import DiagramView from './diagram';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -24,15 +25,27 @@ const orderSelector = (state, props) => (
   ))
 );
 
+const workflowSelector = (state, props) => {
+  const workflow = state.api.orders.data.find(w => (
+    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
+  )) || null;
+
+  return workflow ? state.api.workflows.data.find(w => (
+    parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
+  )) : null;
+};
+
 const userSelector = state => state.api.currentUser.data;
 
 const selector = createSelector(
   [
     orderSelector,
     userSelector,
-  ], (order, user) => ({
+    workflowSelector,
+  ], (order, user, workflow) => ({
     order,
     user,
+    workflow,
   })
 );
 
@@ -40,6 +53,7 @@ const selector = createSelector(
 export default class Order extends Component {
   static propTypes = {
     order: PropTypes.object,
+    workflow: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
@@ -66,8 +80,16 @@ export default class Order extends Component {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.order !== nextProps.order) {
+      this.props.dispatch(
+        actions.workflows.fetch({}, nextProps.order.workflowid)
+      );
+    }
+  }
+
   render() {
-    if (!this.props.order) {
+    if (!this.props.workflow) {
       return <Loader />;
     }
 
@@ -75,6 +97,7 @@ export default class Order extends Component {
       <div>
         <Header
           data={this.props.order}
+          workflow={this.props.workflow}
           linkDate={this.props.params.date}
           username={this.props.user.username}
         />
@@ -113,3 +136,4 @@ Order.Errors = ErrorsView;
 Order.Hierarchy = HierarchyView;
 Order.Audit = AuditView;
 Order.Library = LibraryView;
+Order.Diagram = DiagramView;
