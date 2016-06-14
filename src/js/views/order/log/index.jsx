@@ -53,7 +53,7 @@ export default class LogView extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.order !== nextProps.order) {
       this.props.dispatch(
-        actions.workflows.fetch({}, this.props.order.workflowid)
+        actions.workflows.fetch({}, nextProps.order.workflowid)
       );
     }
   }
