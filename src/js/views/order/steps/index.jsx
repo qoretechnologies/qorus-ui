@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { indexOf } from 'lodash';
 
 import Row from './row';
 
+import { groupInstances } from 'helpers/orders';
+
 import actions from 'store/api/actions';
-import { STATUS_PRIORITY } from 'constants/orders';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -42,26 +42,8 @@ export default class StepsView extends Component {
     );
   }
 
-  groupInstances() {
-    const stepGroups = [];
-
-    this.props.steps.forEach(step => {
-      const name = step.stepname;
-      const group = stepGroups[name] =
-        stepGroups[name] || { steps: [], name, status: null };
-      const max = Math.max(
-        indexOf(STATUS_PRIORITY, group.status), indexOf(STATUS_PRIORITY, step.stepstatus)
-      );
-
-      group.status = STATUS_PRIORITY[max];
-      group.steps.push(step);
-    });
-
-    return stepGroups;
-  }
-
   renderTableBody() {
-    const data = this.groupInstances();
+    const data = groupInstances(this.props.steps);
 
     return Object.keys(data).map((d, index) => (
         <Row stepdata={data[d]} key={index} />
