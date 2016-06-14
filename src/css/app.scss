@@ -70,5 +70,5 @@ html, body, .app, .app__wrap {
 * Adds red border for any invalid input or textarea
 */
 .form-error {
-  border-color: #cf0000
+  border: 1px solid #cf0000 !important;
 }
