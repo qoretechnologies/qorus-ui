@@ -15,6 +15,7 @@ export default class Cell extends Component {
     name: PropTypes.string,
     className: PropTypes.string,
     sortData: PropTypes.object,
+    colspan: PropTypes.number,
   };
 
   static defaultProps = {
@@ -61,6 +62,7 @@ export default class Cell extends Component {
       <Tag
         onClick={this.handleTagClick}
         className={this.state.css}
+        colSpan={this.props.colspan}
       >
         { React.Children.toArray(this.props.children) }
       </Tag>
