@@ -24,11 +24,15 @@ export default class EditableCell extends Component {
     startEdit: PropTypes.bool,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
+    type: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   static defaultProps = {
     value: '',
     startEdit: false,
+    type: 'text',
     onSave: () => undefined,
     onCancel: () => undefined,
   };
@@ -53,6 +57,7 @@ export default class EditableCell extends Component {
       value: this.props.value,
       edit: this.props.startEdit,
       width: '',
+      error: false,
     });
   }
 
@@ -73,8 +78,11 @@ export default class EditableCell extends Component {
   componentDidUpdate() {
     if (this.state.edit && document.activeElement !== this._editField) {
       this._editField.focus();
-      this._editField.setSelectionRange(this._editField.value.length,
-                                        this._editField.value.length);
+
+      if (this.props.type !== 'number') {
+        this._editField.setSelectionRange(this._editField.value.length,
+          this._editField.value.length);
+      }
     }
   }
 
@@ -146,12 +154,21 @@ export default class EditableCell extends Component {
    * It also stops the edit mode.
    */
   commit() {
-    this.props.onSave(this.state.value);
+    if (this.props.type === 'number' &&
+        (this.props.min && this.state.value < this.props.min) ||
+        (this.props.max && this.state.value > this.props.max)) {
+      this.setState({
+        error: true,
+      });
+    } else {
+      this.props.onSave(this.state.value);
 
-    this.setState({
-      edit: false,
-      width: '',
-    });
+      this.setState({
+        edit: false,
+        width: '',
+        error: false,
+      });
+    }
   }
 
   /**
@@ -164,6 +181,7 @@ export default class EditableCell extends Component {
       value: this.props.value,
       edit: false,
       width: '',
+      error: false,
     });
   };
 
@@ -200,12 +218,15 @@ export default class EditableCell extends Component {
         {
           this.canEdit() ?
             <input
-              type="text"
+              type={this.props.type}
               value={this.state.value}
               onChange={this.onChange}
               onKeyUp={this.onKeyUp}
               onBlur={this.cancel}
               ref={this.refEditField}
+              min={this.props.min}
+              max={this.props.max}
+              className={this.state.error ? 'form-error' : ''}
             /> :
             <span>{this.state.value}</span>
         }
