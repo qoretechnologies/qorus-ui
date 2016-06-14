@@ -4,6 +4,7 @@ import React, { PropTypes } from 'react';
 import Section from './section';
 import Row from './row';
 import Cell from './cell';
+import EditableCell from './editable_cell';
 
 /**
  * Table supporting static and dynamic sections.
@@ -43,4 +44,4 @@ Table.propTypes = {
   children: PropTypes.node,
 };
 
-export { Section, Row, Cell };
+export { Section, Row, Cell, EditableCell };
