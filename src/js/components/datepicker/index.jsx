@@ -30,8 +30,8 @@ export default class extends Component {
   setupDate = (props) => {
     this.hideDatepicker();
 
-    const date = formatDate(props.date);
-    const inputDate = date.format(DATE_FORMATS.DISPLAY);
+    const date = props.date ? formatDate(props.date) : moment();
+    const inputDate = props.date ? date.format(DATE_FORMATS.DISPLAY) : '';
 
     this.setState({
       date,
