@@ -106,6 +106,9 @@ module.exports = () => {
         order.workflowstatus = req.body.workflowstatus;
         order.scheduled = req.body.date;
         break;
+      case 'setPriority':
+        order.priority = req.body.priority;
+        break;
       case 'lock':
         Object.assign(order, lockOrder(order, req.body.note, req.body.username));
         break;
