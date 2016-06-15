@@ -43,7 +43,7 @@ const BOX_CHARACTER_WIDTH = 10;
 /**
  * Ration between width and height.
  */
-const BOX_DIMENSION_RATIO = 4 / 1;
+const BOX_DIMENSION_RATIO = 3 / 1;
 
 
 /**
@@ -593,8 +593,8 @@ export default class StepsTab extends Component {
 
   getIconParams(ord) {
     return {
-      x: (this.getBoxWidth() - 15) - (20 * ord),
-      y: 12,
+      x: (this.getBoxWidth() - 20) - (22 * ord),
+      y: 16,
     };
   }
 
@@ -665,9 +665,13 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderStartBox(stepId, colIdx, row, rowIdx) {
+    const instances = groupInstances(this.props.order.StepInstances);
+    const css = Object.keys(instances).some(i => instances[i].status === 'ERROR')
+      ? 'error' : 'start';
+
     return (
       <g
-        className="diagram__box diagram__box--start"
+        className={`diagram__box diagram__box--${css}`}
         transform={this.getBoxTransform(colIdx, rowIdx)}
       >
         <ellipse {...this.getStartParams()} />
@@ -742,16 +746,20 @@ export default class StepsTab extends Component {
    */
   renderDefaultBox(stepId, colIdx, row, rowIdx) {
     const onClick = this.onBoxClick(stepId);
-    const handleStepClick = this.handleStepClick(this.getStepName(stepId));
     const type = this.getStepInfo(stepId) ?
       this.getStepInfo(stepId).steptype :
       '';
+
+    const name = this.getStepName(stepId);
+    const instances = groupInstances(this.props.order.StepInstances);
+    const css = instances[name] ?
+        instances[name].status.toLowerCase() : 'normal';
 
     return (
       <g
         className={classNames({
           diagram__box: true,
-          [`diagram__box--${type.toLowerCase()}`]: type,
+          [`diagram__box--${css}`]: type,
         })}
         transform={this.getBoxTransform(colIdx, rowIdx)}
       >

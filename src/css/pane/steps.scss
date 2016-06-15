@@ -42,8 +42,16 @@
       alignment-baseline: middle;
     }
 
-    &--async > rect {
-      fill: #d9edf7;
+    &--async-waiting > rect {
+      fill: #f7bb32;
+    }
+
+    &--complete > rect {
+      fill: #34bb33;
+    }
+
+    &--complete > text {
+      fill: #fff;
     }
 
     &--subworkflow > rect {
@@ -74,8 +82,13 @@
       fill: #75abc6;
     }
 
-    &--error > rect {
-      fill: #adadad;
+    &--error > rect,
+    &--error > ellipse {
+      fill: #ef312c;
+    }
+
+    &--error > text {
+      fill: #fff;
     }
 
     &--canceled > rect {
