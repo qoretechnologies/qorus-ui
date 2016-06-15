@@ -33,15 +33,51 @@ export default class extends Component {
     );
   }
 
+  renderFirstRow() {
+    if (this.props.stepdata.steps.length === 1) return undefined;
+
+    const { name, status } = this.props.stepdata;
+    const { label } = ORDER_STATES.find(o => o.name === this.props.stepdata.status);
+
+    return (
+      <tr onClick={this.handleRowClick}>
+        <td>
+          {this.state.expand && (
+            <i className="fa fa-minus-circle" />
+          )}
+          {!this.state.expand && (
+            <i className="fa fa-plus-circle" />
+          )}
+        </td>
+        <td>
+            <span className={`label label-${label}`}>
+              { status }
+            </span>
+        </td>
+        <td>{ name }</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    );
+  }
+
   renderRows() {
-    if (!this.state.expand) return undefined;
+    const count = this.props.stepdata.steps.length;
+
+    if (!this.state.expand && count !== 1) return undefined;
 
     return this.props.stepdata.steps.map((step, index) => {
       const { label } = ORDER_STATES.find(o => o.name === step.stepstatus);
 
       return (
         <tr key={index}>
-          <td>|</td>
+          <td>{ count === 1 ? '' : '|' }</td>
           <td>
             <span className={`label label-${label}`}>
               { step.stepstatus }
@@ -66,36 +102,10 @@ export default class extends Component {
   }
 
   render() {
-    const { name, status } = this.props.stepdata;
-    const { label } = ORDER_STATES.find(o => o.name === this.props.stepdata.status);
-
     return (
       <tbody>
-        <tr onClick={this.handleRowClick}>
-          <td>
-            {this.state.expand && (
-              <i className="fa fa-minus-circle" />
-            )}
-            {!this.state.expand && (
-              <i className="fa fa-plus-circle" />
-            )}
-          </td>
-          <td>
-            <span className={`label label-${label}`}>
-              { status }
-            </span>
-          </td>
-          <td>{ name }</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        {this.renderRows()}
+        { this.renderFirstRow() }
+        { this.renderRows() }
       </tbody>
     );
   }
