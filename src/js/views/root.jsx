@@ -48,6 +48,7 @@ export default class Root extends Component {
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
     getTitle: PropTypes.func,
+    selectModalText: PropTypes.func,
   };
 
 
@@ -80,6 +81,7 @@ export default class Root extends Component {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
       getTitle: () => this.titleFromInfo(),
+      selectModalText: this.selectCSVContent,
     };
   }
 
@@ -125,6 +127,9 @@ export default class Root extends Component {
     document.title = this.titleFromInfo();
   }
 
+  selectCSVContent = () => {
+    document.getElementById('csv-text').select();
+  };
 
   /**
    * Computes title from system info or uses default title.
