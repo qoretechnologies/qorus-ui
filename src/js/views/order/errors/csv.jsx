@@ -11,7 +11,7 @@ export default function CSVModal(props) {
         titleId="csv-modal"
       >
         Copy table
-        <small> (Press ⌘ + c)</small>
+        <small> (Press CTRL/⌘ + c)</small>
       </Modal.Header>
       <Modal.Body>
           <textarea
