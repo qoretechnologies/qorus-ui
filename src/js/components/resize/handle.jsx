@@ -44,6 +44,8 @@ export default class Handle extends Component {
     right: PropTypes.bool,
     bottom: PropTypes.bool,
     left: PropTypes.bool,
+    onStart: PropTypes.func,
+    onStop: PropTypes.func,
   };
 
   static defaultProps = {
@@ -314,6 +316,13 @@ export default class Handle extends Component {
    */
   stop = (ev) => {
     if (ev) ev.preventDefault();
+
+    if (this.props.onStop) {
+      this.props.onStop(
+        this._handle.parentElement.offsetWidth,
+        this._handle.parentElement.offsetHeight
+      );
+    }
 
     this._handle.ownerDocument.body.style.cursor = this._originalCursor;
 
