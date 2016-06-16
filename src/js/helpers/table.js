@@ -51,6 +51,13 @@ const CSVheaders = {
     info: 'Info',
     retry: 'Retry',
   },
+  order_errors_pane: {
+    severity: 'Severity',
+    error: 'Error Code',
+    created: 'Created',
+    description: 'Description',
+    business_error: 'Business',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {
