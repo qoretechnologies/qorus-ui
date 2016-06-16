@@ -4,11 +4,15 @@ import { createSelector } from 'reselect';
 
 import actions from 'store/api/actions';
 
+import { groupInstances } from 'helpers/orders';
+
 import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
 import Graph from './graph';
 import StepDetails from './step_details';
+import Errors from './errors';
+import Resize from 'components/resize/handle';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -17,12 +21,12 @@ const orderSelector = (state, props) => (
 );
 
 const workflowSelector = (state, props) => {
-  const workflow = state.api.orders.data.find(w => (
+  const order = state.api.orders.data.find(w => (
       parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
     )) || null;
 
-  return workflow ? state.api.workflows.data.find(w => (
-    parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
+  return order ? state.api.workflows.data.find(w => (
+    parseInt(order.workflowid, 10) === parseInt(w.id, 10)
   )) : null;
 };
 
@@ -54,6 +58,7 @@ export default class DiagramView extends Component {
 
     this.setState({
       step: null,
+      paneSize: 200,
     });
   }
 
@@ -71,6 +76,12 @@ export default class DiagramView extends Component {
     });
   };
 
+  handleResizeStop = (width, height) => {
+    this.setState({
+      paneSize: height,
+    });
+  };
+
   renderStepDetails() {
     if (!this.state.step) return undefined;
 
@@ -82,11 +93,45 @@ export default class DiagramView extends Component {
     );
   }
 
+  renderErrorPane() {
+    if (!this.props.order.ErrorInstances) return undefined;
+
+    let errors = this.props.order.ErrorInstances;
+
+    if (this.state.step) {
+      const stepId = this.props.order.StepInstances.find(s => (
+        s.stepname === this.state.step
+      )).stepid;
+
+      errors = errors.filter(e => (
+        e.stepid === stepId
+      ));
+    }
+
+    return (
+      <div className="error-pane fixed">
+        <Resize
+          top
+          min={{ height: 200 }}
+          onStop={this.handleResizeStop}
+        />
+        <Errors
+          data={errors}
+          paneSize={this.state.paneSize}
+        />
+      </div>
+    );
+  }
+
   render() {
     if (!this.props.workflow) return <Loader />;
 
     return (
-      <div>
+      <div
+        ref="wrapper"
+        className="diagram-wrapper"
+        style={{ paddingBottom: this.state.paneSize }}
+      >
         <div className="pull-left diagram-view">
           <Graph
             workflow={this.props.workflow}
@@ -104,6 +149,7 @@ export default class DiagramView extends Component {
           />
           { this.renderStepDetails() }
         </div>
+        { this.renderErrorPane() }
       </div>
     );
   }

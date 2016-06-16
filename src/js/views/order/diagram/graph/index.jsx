@@ -665,7 +665,8 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderStartBox(stepId, colIdx, row, rowIdx) {
-    const instances = groupInstances(this.props.order.StepInstances);
+    const instances = this.props.order.StepInstances ?
+      groupInstances(this.props.order.StepInstances) : {};
     const css = Object.keys(instances).some(i => instances[i].status === 'ERROR')
       ? 'error' : 'start';
 
@@ -707,7 +708,8 @@ export default class StepsTab extends Component {
 
   renderInfoIcon(id) {
     const name = this.getStepName(id);
-    const instances = groupInstances(this.props.order.StepInstances);
+    const instances = this.props.order.StepInstances ?
+      groupInstances(this.props.order.StepInstances) : {};
 
     if (!instances[name]) return undefined;
 
@@ -751,7 +753,8 @@ export default class StepsTab extends Component {
       '';
 
     const name = this.getStepName(stepId);
-    const instances = groupInstances(this.props.order.StepInstances);
+    const instances = this.props.order.StepInstances ?
+      groupInstances(this.props.order.StepInstances) : {};
     const css = instances[name] ?
         instances[name].status.toLowerCase() : 'normal';
 

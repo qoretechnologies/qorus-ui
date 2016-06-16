@@ -38,7 +38,7 @@ export default class StepDetailTable extends Component {
 
   handleDropdownItemClick = (ind) => (event, item) => {
     this.setState({
-      currentStep: this.state.steps[ind],
+      currentStep: this.state.steps.find(s => s.ind === ind),
     });
   };
 
