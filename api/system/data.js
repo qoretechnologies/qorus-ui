@@ -31,6 +31,7 @@ function generateFromSchema() {
   const jsf = require('json-schema-faker');
   const system = require('../../types/system/schema');
   const options = require('../../types/options/schema');
+  const http = require('../../types/userhtttp/schema');
 
   return {
     system: jsf(system.schema, system.refs),
@@ -39,6 +40,13 @@ function generateFromSchema() {
       items: options.schema,
       minItems: 5,
       maxItems: 50,
+      uniqueItems: true,
+    }),
+    http: jsf({
+      type: 'object',
+      items: http.schema,
+      minItems: 1,
+      maxItems: 10,
       uniqueItems: true,
     }),
   };
