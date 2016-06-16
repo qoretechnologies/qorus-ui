@@ -71,6 +71,10 @@
 /**
 * Styles for the diagram view
 **/
+.diagram-wrapper {
+  overflow: hidden;
+}
+
 .diagram-view {
   width: 48%;
 }
@@ -80,8 +84,33 @@
 }
 
 /**
-* Diagram tables styling
+* Error panel
 */
-.diagram-table {
+.error-pane {
+  background-color: #fff;
+  position: fixed;
+  min-height: 200px;
+  width: 93%;
+  bottom: 29px;
+  z-index: 1000;
+  margin-left: -15px;
 
+  .resize-handle {
+    background: #cdcdcd;
+  }
+
+  .error-toolbar {
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+
+  .error-pane-inner {
+    top: 10px;
+  }
+
+  .error-pane-table {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
+
