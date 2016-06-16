@@ -4,7 +4,7 @@ Feature: Order detail
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
     When I click on the "ARRAYTEST v2.0 (3659)" order
-    Then the URL changes to "/order/3659/diagram"
+    Then the URL changes to "/order/3659/19700101000000/diagram"
 
   Scenario: Header is displayed correctly
     Given I am on order "3659"
@@ -26,5 +26,5 @@ Feature: Order detail
     Given I am on order "3659"
     And the header gets loaded
     When I click the "Steps" tab
-    Then the URL changes to "/order/3659/steps"
+    Then the URL changes to "/order/3659/19700101000000/steps"
 

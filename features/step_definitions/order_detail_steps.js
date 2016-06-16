@@ -9,11 +9,11 @@ module.exports = function orderDetailSteps() {
   });
 
   this.Given(/^I am on order "([^"]*)"$/, async function(order) {
-    return this.browser.visit(`/order/${order}`);
+    return this.browser.visit(`/order/${order}/19700101000000`);
   });
 
   this.Given(/^I am on order "([^"]*)" and "([^"]*)" tab$/, async function(order, name) {
-    await this.browser.visit(`/order/${order}`);
+    await this.browser.visit(`/order/${order}/19700101000000`);
 
     await this.waitForElement('.nav-tabs');
 
