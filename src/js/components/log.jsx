@@ -43,7 +43,7 @@ const SCROLLBACK_LIMIT = 5000;
 @pureRender
 export default class LogTab extends Component {
   static propTypes = {
-    model: PropTypes.object.isRequired,
+    model: PropTypes.object,
     resource: PropTypes.string.isRequired,
   };
 
@@ -91,8 +91,14 @@ export default class LogTab extends Component {
    * @see disconnect
    */
   componentWillReceiveProps(nextProps) {
-    if (this.props.model.id === nextProps.model.id) {
-      return;
+    if (this.props.model) {
+      if (this.props.model.id === nextProps.model.id) {
+        return;
+      }
+    } else {
+      if (this.props.resource === nextProps.resource) {
+        return;
+      }
     }
 
     this.disconnect();
@@ -222,13 +228,30 @@ export default class LogTab extends Component {
    * @return {string}
    */
   getLogName() {
-    const basename = this.props.model.name ?
-      this.props.model.name.toLowerCase() :
-      `${this.props.resource}-${this.props.model.id}`;
+    let basename = `${this.props.resource}`;
+
+    if (this.props.model) {
+      basename = this.props.model.name ?
+        this.props.model.name.toLowerCase() :
+        `${this.props.resource}-${this.props.model.id}`;
+    }
 
     return `${basename}.log`;
   }
 
+  getLogUrl() {
+    let url = `${settings.WS_BASE_URL}` +
+    `/log/${this.props.resource}` +
+    `?token=${this._token}`;
+
+    if (this.props.model && this.props.model.id) {
+      url = `${settings.WS_BASE_URL}` +
+      `/log/${this.props.resource}/${this.props.model.id}` +
+      `?token=${this._token}`;
+    }
+
+    return url;
+  }
 
   /**
    * Returns log buffer as a data URI.
@@ -364,9 +387,7 @@ export default class LogTab extends Component {
 
     if (this._socket) this.disconnect();
     this._socket = new WebSocket(
-      `${settings.WS_BASE_URL}` +
-      `/log/${resource}/${model.id}` +
-      `?token=${this._token}`
+      this.getLogUrl()
     );
     this._socket.onmessage = ::this.onSocketMessage;
     this._socket.onclose = this.connect.bind(this, model, tries + 1);

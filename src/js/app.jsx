@@ -247,7 +247,10 @@ export default class App extends Component {
                 <Route path="sqlcache" component={System.SqlCache} />
                 <Route path="http" component={System.HttpServices} />
                 <Route path="info" component={System.Info} />
-                <Route path="logs" component={System.Logs} />
+                <Route path="logs" component={System.Logs}>
+                  <IndexRedirect to="main" />
+                    <Route path=":log" component={System.Logs.Log} />
+                </Route>
                 <Route path="rbac" component={System.RBAC} />
                 <Route path="errors" component={System.Errors} />
               </Route>

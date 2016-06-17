@@ -101,4 +101,14 @@ export default [
       normalizeId('name'),
     ),
   },
+  {
+    name: 'userhttp',
+    url: `${settings.REST_BASE_URL}/system/userhttp`,
+    transform: item => item,
+  },
+  {
+  name: 'sqlcache',
+    url: `${settings.REST_BASE_URL}/system/sqlcache`,
+    transform: item => item,
+  },
 ];

@@ -7,6 +7,10 @@ import Dashboard from './dashboard';
 import Options from './options';
 import Connections from './connections';
 import Errors from './errors';
+import UserHttp from './http';
+import Logs from './logs';
+import SystemInfoTable from './info';
+import SqlCache from './sqlcache';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
@@ -57,10 +61,10 @@ System.Alerts = Alerts;
 System.Options = Options;
 System.Connections = Connections;
 System.Properties = NotImplemented;
-System.SqlCache = NotImplemented;
-System.HttpServices = NotImplemented;
+System.SqlCache = SqlCache;
+System.HttpServices = UserHttp;
 System.RBAC = NotImplemented;
-System.Info = NotImplemented;
-System.Logs = NotImplemented;
+System.Info = SystemInfoTable;
+System.Logs = Logs;
 System.Errors = Errors;
 System.NotImplemented = NotImplemented;
