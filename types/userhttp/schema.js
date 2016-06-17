@@ -1,23 +1,35 @@
 /**
- * @module types/options/schema
+ * @module types/http/schema
  */
 
 
 require('../setup');
 
 
-const Http = {
+const UserHttp = {
   type: 'object',
   properties: {
-    name: {
+    group: {
       type: 'string',
     },
-    value: {
-      type: ['string', 'number'],
+    title: {
+      type: 'string',
+    },
+    url: {
+      type: 'string',
+    },
+    service: {
+      type: 'string',
+    },
+    serviceid: {
+      type: 'number',
+    },
+    version: {
+      type: 'string',
     },
   },
-  required: ['name', 'value'],
+  required: ['name', 'value', 'group', 'url', 'serviceid', 'version', 'service'],
 };
 
 
-module.exports.schema = Http;
+module.exports.schema = UserHttp;

@@ -11,6 +11,7 @@ const Alert = {
   properties: {
     type: {
       type: 'string',
+      pattern: 'ONGOING|TRANSIENT',
     },
     id: {
       type: 'string',
@@ -61,9 +62,15 @@ const Alert = {
     'who', 'source', 'object', 'instance', 'name', 'version', 'auditid',
     'first_raised',
   ],
+  definitions: {
+    smallPositiveInteger: Object.assign({
+      maximum: 500 },
+      common.positiveInteger
+    ),
+  },
 };
 
 module.exports.schema = Alert;
 module.exports.refs = [
-  Object.assign({ id: 'positiveInteger' }, common.positiveInteger),
+  Object.assign({ id: 'positiveInteger', maximum: 500 }, common.positiveInteger),
 ];

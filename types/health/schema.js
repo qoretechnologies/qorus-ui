@@ -28,6 +28,9 @@ const Remote = {
       type: 'string',
     },
   },
+  required: [
+    'name', 'url', 'health',
+  ],
 };
 
 const Health = {
@@ -49,7 +52,7 @@ const Health = {
     remote: {
       type: 'array',
       items: {
-        $ref: Remote,
+        $ref: 'remote',
       },
     },
   },
@@ -60,6 +63,6 @@ const Health = {
 
 module.exports.schema = Health;
 module.exports.refs = [
-  Object.assign({ id: 'remote' }, Remote),
   Object.assign({ id: 'positiveInteger' }, common.positiveInteger),
+  Object.assign({ id: 'remote' }, Remote),
 ];

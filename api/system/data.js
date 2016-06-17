@@ -31,7 +31,10 @@ function generateFromSchema() {
   const jsf = require('json-schema-faker');
   const system = require('../../types/system/schema');
   const options = require('../../types/options/schema');
-  const http = require('../../types/userhtttp/schema');
+  const http = require('../../types/userhttp/schema');
+  const health = require('../../types/health/schema');
+  const alerts = require('../../types/alerts/schema');
+  // const rbac = require('../../types/rbac/schema');
 
   return {
     system: jsf(system.schema, system.refs),
@@ -42,13 +45,21 @@ function generateFromSchema() {
       maxItems: 50,
       uniqueItems: true,
     }),
-    http: jsf({
-      type: 'object',
+    userhttp: jsf({
+      type: 'array',
       items: http.schema,
       minItems: 1,
       maxItems: 10,
       uniqueItems: true,
     }),
+    health: jsf(health.schema, health.refs),
+    alerts: jsf({
+      type: 'array',
+      items: alerts.schema,
+      minItems: 0,
+      maxItems: 50,
+      uniqueItems: true,
+    }, alerts.refs),
   };
 }
 
