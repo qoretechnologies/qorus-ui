@@ -67,13 +67,13 @@ export default class UserHttp extends Component {
   *renderCells(row) {
     yield(
       <Cell>
-        <a href={ row.url } blank>{ row.ttle }</a>
+        <a href={ row.url } target="blank">{ row.title }</a>
       </Cell>
     );
 
     yield(
       <Cell>
-        { row.service } {row.version} {row.serviceid }
+        { row.service } {row.version} #{row.serviceid }
       </Cell>
     );
   }
@@ -101,7 +101,7 @@ export default class UserHttp extends Component {
         <Table className="table table-data table-striped table-condensed">
           <Section
             type="body"
-            data={ collection.filter((m) => m.group === name)}
+            data={ collection.filter((m) => m.group === table) }
             rows={this._renderRows}
           />
         </Table>
@@ -111,10 +111,9 @@ export default class UserHttp extends Component {
   }
 
   render() {
-    console.log(this.renderTables());
     return (
       <div>
-        { this.renderTables() }
+        { React.Children.toArray(this.renderTables()) }
       </div>
     );
   }
