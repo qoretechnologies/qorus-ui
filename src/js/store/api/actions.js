@@ -7,6 +7,7 @@ import * as serviceActions from './resources/services/actions';
 import * as jobActions from './resources/jobs/actions';
 import * as orderActions from './resources/orders/actions';
 import * as optionActions from './resources/options/actions';
+import * as propActions from './resources/system/props/actions';
 
 import {
   combineResourceActions,
@@ -41,9 +42,9 @@ export const DEFAULT_ACTIONS = {
     meta: (params, id) => ({ params, id }),
   },
   ACTION: {
-    action: url => (params, id) => fetchJson(
+    action: url => (params, id, urlParams) => fetchJson(
       'PUT',
-      id ? `${url}/${id}` : url,
+      id ? `${url}/${id}` : `${url}/${urlParams}`,
       params
     ),
     meta: (params, id) => ({ params, id }),
@@ -59,6 +60,14 @@ export const DEFAULT_ACTIONS = {
     action: url => (params, id) => fetchJson(
       'POST',
       id ? `${url}/${id}` : url,
+      params
+    ),
+    meta: (params, id) => ({ params, id }),
+  },
+  REMOVE: {
+    action: url => (params, id, urlParams) => fetchJson(
+      'DELETE',
+      id ? `${url}/${id}` : `${url}/${urlParams}`,
       params
     ),
     meta: (params, id) => ({ params, id }),
@@ -85,6 +94,10 @@ Object.assign(actions.steps, stepActions);
 
 Object.keys(orderActions).forEach(a => {
   actions.orders[a] = orderActions[a](actions);
+});
+
+Object.keys(propActions).forEach(a => {
+  actions.props[a] = propActions[a](actions);
 });
 
 Object.assign(actions.errors, errorActions);
