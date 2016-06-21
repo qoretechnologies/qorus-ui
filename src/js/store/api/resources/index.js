@@ -95,6 +95,11 @@ export default [
     transform: item => item,
   },
   {
+    name: 'props',
+    url: `${settings.REST_BASE_URL}/system/props`,
+    transform: item => item,
+  },
+  {
     name: 'remotes',
     url: `${settings.REST_BASE_URL}/remote`,
     transform: _.flowRight(
