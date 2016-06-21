@@ -78,8 +78,6 @@ export default class ErrorsView extends Component {
   }
 
   render() {
-    console.log(this.props.audits);
-
     return (
       <div>
         <div className="col-xs-3 pull-right">
@@ -90,7 +88,7 @@ export default class ErrorsView extends Component {
               value="Showing:"
             />
             <div className="input-group-btn">
-              <Dropdown>
+              <Dropdown id="show">
                 <DropdownToggle>
                   {this.state.limit}
                 </DropdownToggle>
