@@ -42,6 +42,8 @@ function isDate(val) {
 export default function AutoComponent(props) {
   let comp;
 
+  if (!props.children) return null;
+
   if (isBoolean(props.children)) {
     if (props.children) {
       comp = <i className="fa fa-check-circle text-success" />;
@@ -71,5 +73,5 @@ export default function AutoComponent(props) {
 
 
 AutoComponent.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
 };
