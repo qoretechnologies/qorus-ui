@@ -66,7 +66,7 @@ module.exports = function commonSteps() {
 
 
   this.Then(/^I should see a loader$/, function() {
-    this.browser.assert.text(cmpLoader, 'Loading');
+    this.browser.assert.text(cmpLoader, 'Loading...');
   });
 
 
@@ -297,6 +297,14 @@ module.exports = function commonSteps() {
     await this.waitForElement('ul.nav-tabs');
 
     return this.browser.assert.elements('ul.nav-tabs li', parseInt(count, 10));
+  });
+
+  this.Given(/^I click on the "([^"]*)" row - "([^"]*)"$/, async function(name, nameCell) {
+    const row = this.browser.
+      queryAll(cmpRows).
+      find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
+
+    return this.browser.click(row);
   });
 };
 

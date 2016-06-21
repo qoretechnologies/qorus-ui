@@ -6,11 +6,6 @@ Feature: Order detail
     When I click on the "ARRAYTEST v2.0 (3659)" order
     Then the URL changes to "/order/3659/19700101000000/diagram"
 
-  Scenario: Header is displayed correctly
-    Given I am on order "3659"
-    And the header gets loaded
-    Then the header says " ARRAYTEST 2.0 ID#3659"
-
   Scenario: Tabs are displayed correctly
     Given I am on order "3659"
     And the header gets loaded
@@ -27,4 +22,8 @@ Feature: Order detail
     And the header gets loaded
     When I click the "Steps" tab
     Then the URL changes to "/order/3659/19700101000000/steps"
+
+  Scenario: Table with info is displayed
+    Given I am on order "31380" and "Info" tab
+    Then "info" get loaded
 

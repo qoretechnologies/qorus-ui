@@ -1,4 +1,5 @@
 import { selectors, findTableRow, findElementByText } from './common_steps';
+import { expect } from 'chai';
 
 module.exports = function orderDetailSteps() {
   this.Given(/^I click on the "([^"]*)" order$/, async function(order) {
@@ -38,15 +39,7 @@ module.exports = function orderDetailSteps() {
     await this.waitForElement('.order-actions');
   });
 
-  // STEPS
-  this.Given(/^I click on the "([^"]*)" step$/, async function(step) {
-    const row = this.browser.
-      queryAll(selectors.cmpRows).
-      find(r => r.cells[2].textContent === step) || null;
-
-    return this.browser.click(row);
-  });
-
+  // STEP
   this.Then(/^I should see "([^"]*)" subtabs$/, async function(count) {
     return this.browser.assert.elements('.tab-pane .nav-pills li', parseInt(count, 10));
   });
@@ -57,5 +50,39 @@ module.exports = function orderDetailSteps() {
     this.browser.assert.element(el);
     this.browser.assert.element('.tree-wrapper');
     this.browser.assert.element('.button--copy');
+  });
+
+  this.Then(/^there should be a textarea with the data$/, async function() {
+    this.browser.assert.element('textarea');
+  });
+
+  this.Given(/^notes get loaded$/, async function() {
+    await this.waitForElement('#notes-wrapper');
+
+    return this.browser.assert.element('#notes-wrapper');
+  });
+
+  this.Then(/^there are "([^"]*)" notes$/, async function(count) {
+    return this.browser.assert.elements('p.note', parseInt(count, 10));
+  });
+
+  this.When(/^I add a new note "([^"]*)"$/, async function(note) {
+    this.browser.fill('#notes-wrapper textarea', note);
+
+    const el = findElementByText(this.browser, '.btn', ' Add note');
+
+    this.browser.click(el);
+    await this.waitForChange(500);
+  });
+
+  this.Then(/^the last note says "([^"]*)"$/, async function(note) {
+    const notes = this.browser.queryAll('p.note');
+
+    expect(notes[0].children[2].textContent).to.equal(note);
+    expect(notes[0].children[1].textContent).to.equal('admin');
+  });
+
+  this.Given(/^diagram gets loaded$/, async function() {
+    await this.waitForElement('svg.diagram');
   });
 };
