@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import InfoTable from 'components/info_table';
+import InfoTable from '../../../components/info_table';
 
 import { ORDER_STATES } from 'constants/orders';
 
