@@ -169,6 +169,7 @@ export default class WorkflowsToolbar extends Component {
   render() {
     const checked = CHECKBOX_STATES[this.props.selected];
     const filter = filterArray(this.props.params.filter);
+    const date = this.props.params.date || '24h';
 
     return (
       <Toolbar>
@@ -202,7 +203,7 @@ export default class WorkflowsToolbar extends Component {
         </Dropdown>
         {this.renderSelectionControls()}
         <Datepicker
-          date={this.props.params.date}
+          date={date}
           onApplyDate={this.applyDate}
         />
         <Controls grouped noControls>
