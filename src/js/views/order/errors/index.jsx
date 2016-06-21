@@ -56,6 +56,7 @@ export default class ErrorsView extends Component {
   static contextTypes = {
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
+    selectModalText: PropTypes.func,
   };
 
   componentWillMount() {
@@ -79,7 +80,7 @@ export default class ErrorsView extends Component {
   handleCSVClick = () => {
     this._modal = (
       <CSVModal
-        onMount={this.handleModalMount}
+        onMount={this.context.selectModalText}
         onClose={this.handleModalCloseClick}
         data={generateCSV(this.props.errors, 'order_errors')}
       />
@@ -130,7 +131,7 @@ export default class ErrorsView extends Component {
               value="Showing:"
             />
             <div className="input-group-btn">
-              <Dropdown>
+              <Dropdown id="show">
                 <DropdownToggle>
                   {this.state.limit}
                 </DropdownToggle>
