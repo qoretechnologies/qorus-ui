@@ -141,3 +141,22 @@ table.table--centered {
     width: 40px;
   }
 }
+
+.props-table {
+  margin-left: 10%;
+  width: 90%;
+
+  th {
+    width: 20%;
+  }
+
+  td:first-of-type {
+    width: 70%;
+    text-align: left;
+  }
+
+  td:last-of-type {
+    width: 10%;
+    text-align: right;
+  }
+}
