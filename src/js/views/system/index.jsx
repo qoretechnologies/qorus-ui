@@ -11,6 +11,7 @@ import UserHttp from './http';
 import Logs from './logs';
 import SystemInfoTable from './info';
 import SqlCache from './sqlcache';
+import Properties from './properties';
 
 function NotImplemented() {
   return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
@@ -60,7 +61,7 @@ System.Dashboard = Dashboard;
 System.Alerts = Alerts;
 System.Options = Options;
 System.Connections = Connections;
-System.Properties = NotImplemented;
+System.Properties = Properties;
 System.SqlCache = SqlCache;
 System.HttpServices = UserHttp;
 System.RBAC = NotImplemented;
