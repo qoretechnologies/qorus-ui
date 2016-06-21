@@ -73,6 +73,7 @@ function generateFromSchema() {
 module.exports = () => {
   switch (process.env.NODE_ENV || 'development') {
     case 'test':
+    case 'dev_fix':
       return buildFromFixtures();
     default:
       return generateFromSchema();
