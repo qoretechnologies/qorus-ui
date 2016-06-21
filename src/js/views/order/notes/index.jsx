@@ -112,7 +112,7 @@ export default class NotesView extends Component {
 
   render() {
     return (
-      <div>
+      <div id="notes-wrapper">
         {this.state.error && (
           <p className="alert alert-danger"> Note too short (please type at least 3 characters) </p>
         )}
