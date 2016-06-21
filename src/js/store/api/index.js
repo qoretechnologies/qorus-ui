@@ -90,10 +90,12 @@ export function createResourceReducers(
             }
           }
 
-          if (
-            action.meta.params && action.meta.params.fetchMore
-          ) {
+          if (action.meta.params && action.meta.params.fetchMore) {
             data = state.data.slice().concat(data);
+          }
+
+          if (action.meta.params && action.meta.params.update.data) {
+            data = Object.assign(data, action.meta.params.update.data);
           }
 
           return {
