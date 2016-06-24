@@ -10,9 +10,90 @@ const express = require('express');
 const moment = require('moment');
 const firstBy = require('thenby');
 const random = require('lodash').random;
-const lockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').lockOrder;
-const unlockOrder = require('../../src/js/store/api/resources/orders/actions/helpers').unlockOrder;
-const addNote = require('../../src/js/store/api/resources/orders/actions/helpers').addNote;
+const includes = require('lodash').includes;
+const range = require('lodash').range;
+
+const addNote = (order, saved, username, note) => {
+  var notes;
+  var data = {
+    saved,
+    username,
+    note,
+    created: moment().format(),
+    modified: moment().format(),
+  };
+
+  if (!order.notes) {
+    notes = [data];
+  } else {
+    notes = order.notes.slice().concat(data);
+  }
+
+  return {
+    note_count: order.note_count + 1,
+    notes,
+  };
+};
+
+const lockOrder = (order, note, username) => {
+  var obj = addNote(order, true, username, note);
+  obj.operator_lock = username;
+
+  return obj;
+};
+
+const unlockOrder = (order, note, username) => {
+  var obj = addNote(order, true, username, note);
+  obj.operator_lock = null;
+
+  return obj;
+};
+
+const canSkip = (step) => {
+  return (
+      step.stepstatus === 'RETRY' ||
+      step.stepstatus === 'ERROR' ||
+      step.stepstatus === 'EVENT-WAITING' ||
+      step.stepstatus === 'ASYNC-WAITING'
+    ) && !step.skip && step.steptype !== 'SUBWORKFLOW';
+};
+
+const skipIndexes = (order, stepid, value) => {
+  var indexes = value.split(',');
+  var steps = order.StepInstances.slice();
+
+  indexes.forEach(i => {
+    var ind = i;
+
+    if (includes(i, '-')) {
+      ind = i.split('-');
+      var rng = range(ind[0], ind[1]);
+      rng.push(ind[1]);
+
+      rng.forEach(r => {
+        steps.forEach((st, index) => {
+          var skipped = st;
+
+          if (st.stepid === stepid && st.ind === parseInt(r, 10) && canSkip(st)) {
+            skipped.skip = true;
+            steps[index] = skipped;
+          }
+        });
+      });
+    } else {
+      steps.forEach((st, index) => {
+        var skipped = st;
+
+        if (st.stepid === stepid && st.ind === parseInt(ind, 10) && canSkip(st)) {
+          skipped.skip = true;
+          steps[index] = skipped;
+        }
+      });
+    }
+  });
+
+  return steps;
+};
 
 module.exports = () => {
   const data = require('./data')();
@@ -114,6 +195,11 @@ module.exports = () => {
         break;
       case 'unlock':
         Object.assign(order, unlockOrder(order, req.body.note, req.body.username));
+        break;
+      case 'skipStep':
+        const steps = skipIndexes(order, req.body.stepid, req.body.ind);
+
+        order.StepInstances = steps;
         break;
       default:
         if (config.env !== 'test') {
