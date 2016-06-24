@@ -92,8 +92,14 @@ module.exports = function workflowDatepickerSteps() {
 
   this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
     await this.waitForURLChange();
-    
+
     this.browser.assert.url({ pathname });
+  });
+
+  this.Then(/^the query "([^"]*)" changes to "([^"]*)"$/, async function(qn, q) {
+    await this.waitForURLChange();
+
+    this.browser.assert.url({ query: { [qn]: q } });
   });
 
   this.Then(/^the URL does not change$/, async function() {
