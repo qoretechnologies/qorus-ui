@@ -4,7 +4,7 @@ import { generateCSV } from '../helpers/table';
 
 import Modal from '../components/modal';
 
-export default class extends Component {
+export default class ViewWrapper extends Component {
   static propTypes = {
     route: PropTypes.object,
     dispatch: PropTypes.func,
