@@ -94,7 +94,7 @@ export function createResourceReducers(
             data = state.data.slice().concat(data);
           }
 
-          if (action.meta.params && action.meta.params.update.data) {
+          if (action.meta.params && action.meta.params.update && action.meta.params.update.data) {
             data = Object.assign(data, action.meta.params.update.data);
           }
 
