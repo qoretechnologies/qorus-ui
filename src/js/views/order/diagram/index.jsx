@@ -82,6 +82,12 @@ export default class DiagramView extends Component {
     });
   };
 
+  handleSkipSubmit = (step, value) => {
+    this.props.dispatch(
+      actions.orders.skipStep(this.props.order, step.stepid, value)
+    );
+  };
+
   renderStepDetails() {
     if (!this.state.step) return undefined;
 
@@ -89,6 +95,7 @@ export default class DiagramView extends Component {
       <StepDetails
         step={this.state.step}
         instances={this.props.order.StepInstances}
+        onSkipSubmit={this.handleSkipSubmit}
       />
     );
   }
