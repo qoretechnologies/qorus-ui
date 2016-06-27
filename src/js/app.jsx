@@ -13,6 +13,7 @@ import Services from 'views/services';
 import Jobs from 'views/jobs';
 import System from 'views/system';
 import Order from 'views/order';
+import Search from 'views/search';
 
 
 import setupStore from 'store';
@@ -299,7 +300,12 @@ export default class App extends Component {
                 view={Jobs}
                 name="Jobs"
               />
-              <Route path="search" />
+              <Route
+                path="search"
+                component={View}
+                view={Search}
+                name="Search"
+              />
               <Route path="groups(/:name)" />
               <Route path="ocmd" />
               <Route path="library" />
