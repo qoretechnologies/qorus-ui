@@ -42,7 +42,7 @@ function isDate(val) {
 export default function AutoComponent(props) {
   let comp;
 
-  if (!props.children) return null;
+  if (props.children === null || props.children === 'undefined') return null;
 
   if (isBoolean(props.children)) {
     if (props.children) {
