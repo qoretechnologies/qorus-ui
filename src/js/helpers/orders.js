@@ -31,8 +31,20 @@ const groupInstances = (steps) => {
   return stepGroups;
 };
 
+const canSkip = (step) => {
+  const { skip, stepstatus, steptype } = step;
+
+  return (
+    stepstatus === 'RETRY' ||
+    stepstatus === 'ERROR' ||
+    stepstatus === 'EVENT-WAITING' ||
+    stepstatus === 'ASYNC-WAITING'
+    ) && !skip && steptype !== 'SUBWORKFLOW';
+};
+
 export {
   getActionData,
   getStatusLabel,
   groupInstances,
+  canSkip,
 };
