@@ -1,4 +1,4 @@
-import { lockOrder, unlockOrder, addNote as addNoteFunc } from './helpers';
+import { lockOrder, unlockOrder, addNote as addNoteFunc, skipIndexes } from './helpers';
 
 export function retry(actions) {
   return order => dispatch => {
@@ -128,6 +128,22 @@ export function setPriority(actions) {
       }),
       update: {
         priority,
+      },
+    }, order.id));
+  };
+}
+
+export function skipStep(actions) {
+  return (order, stepid, value) => dispatch => {
+    dispatch(actions.orders.action({
+      body: JSON.stringify({
+        action: 'skipStep',
+        stepid,
+        ind: value,
+        noretry: true,
+      }),
+      update: {
+        StepInstances: skipIndexes(order, stepid, value),
       },
     }, order.id));
   };
