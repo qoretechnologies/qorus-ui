@@ -1,7 +1,7 @@
 import ACTIONS from './actions';
 import RESOURCES from './resources';
 import * as specialReducers from './resources/reducers';
-import { updateItemWithId } from './utils';
+import { updateItemWithId, updateItemWithName } from './utils';
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import { omit, assignIn, isArray, includes } from 'lodash';
@@ -63,11 +63,21 @@ export function createResourceReducers(
                 data = Object.assign({}, data, action.meta.params.update);
               }
 
+              if (typeof action.meta.id === 'string') {
+                return assignIn({}, state, {
+                  data: updateItemWithName(
+                    action.meta.id,
+                    data,
+                    state.data,
+                  ),
+                });
+              }
+
               return assignIn({}, state, {
                 data: updateItemWithId(
                   action.meta.id,
                   data,
-                  state.data
+                  state.data,
                 ),
               });
             }
@@ -79,7 +89,17 @@ export function createResourceReducers(
               const ids = action.meta.ids.split(',');
 
               newState.data = stateData.map(w => {
-                if (includes(ids, w.id.toString())) {
+                let key = 'id';
+
+                /**
+                 * Groups have to be modified based on name
+                 * due to server implementation
+                 */
+                if (name === 'GROUPS_BATCH_ACTION') {
+                  key = 'name';
+                }
+
+                if (includes(ids, w[key].toString())) {
                   return Object.assign({}, w, params);
                 }
 
