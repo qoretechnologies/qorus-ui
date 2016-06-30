@@ -58,6 +58,17 @@ const CSVheaders = {
     description: 'Description',
     business_error: 'Business',
   },
+  groups: {
+    enabled: 'Enabled',
+    name: 'Name',
+    description: 'Description',
+    jobs_count: 'Jobs',
+    mappers_count: 'Mappers',
+    services_count: 'Services',
+    workflows_count: 'Workflows',
+    roles_count: 'Roles',
+    vmaps_count: 'Vmaps',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {
@@ -104,7 +115,8 @@ const sortFunc = (sort, v1, v2) => {
     return 1;
   }
 
-  if (moment(new Date(val1)).isValid() && moment(new Date(val2)).isValid()) {
+  if (val1 !== true && val2 !== true &&
+      moment(new Date(val1)).isValid() && moment(new Date(val2)).isValid()) {
     if (moment(val1).isBefore(val2)) {
       return -1;
     } else if (moment(val1).isAfter(val2)) {
@@ -114,10 +126,12 @@ const sortFunc = (sort, v1, v2) => {
     return 0;
   }
 
-  if (val1.toLowerCase() < val2.toLowerCase()) {
-    return -1;
-  } else if (val1.toLowerCase() === val2.toLowerCase()) {
-    return 0;
+  if (typeof val1 === 'string' && typeof val2 === 'string') {
+    if (val1.toLowerCase() < val2.toLowerCase()) {
+      return -1;
+    } else if (val1.toLowerCase() === val2.toLowerCase()) {
+      return 0;
+    }
   }
 
   return 1;
