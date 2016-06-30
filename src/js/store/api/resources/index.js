@@ -100,6 +100,11 @@ export default [
     transform: item => item,
   },
   {
+    name: 'groups',
+    url: `${settings.REST_BASE_URL}/groups`,
+    transform: item => item,
+  },
+  {
     name: 'remotes',
     url: `${settings.REST_BASE_URL}/remote`,
     transform: _.flowRight(
@@ -112,7 +117,7 @@ export default [
     transform: item => item,
   },
   {
-  name: 'sqlcache',
+    name: 'sqlcache',
     url: `${settings.REST_BASE_URL}/system/sqlcache`,
     transform: item => item,
   },
