@@ -15,6 +15,14 @@ export function updateItemWithId(id, props, data) {
     .concat(data.slice(idx + 1));
 }
 
+export function updateItemWithName(name, props, data) {
+  const idx = data.findIndex(i => i.name === name);
+  const updatedItem = Object.assign({}, data[idx], props);
+
+  return data.slice(0, idx)
+    .concat([updatedItem])
+    .concat(data.slice(idx + 1));
+}
 
 export function combineResourceActions(...actions) {
   return _.merge(...actions);
