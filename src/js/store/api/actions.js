@@ -8,6 +8,7 @@ import * as jobActions from './resources/jobs/actions';
 import * as orderActions from './resources/orders/actions';
 import * as optionActions from './resources/options/actions';
 import * as propActions from './resources/system/props/actions';
+import * as groupsActions from './resources/groups/actions';
 
 import {
   combineResourceActions,
@@ -50,9 +51,9 @@ export const DEFAULT_ACTIONS = {
     meta: (params, id) => ({ params, id }),
   },
   BATCH_ACTION: {
-    action: url => (action, ids, query = '') => fetchJson(
+    action: url => (action, ids, query = '', params, key = 'ids') => fetchJson(
       'PUT',
-      `${url}?action=${action}&ids=${ids}&${query}`,
+      `${url}?action=${action}&${key}=${ids}&${query}`,
     ),
     meta: (action, ids, query, params) => ({ action, ids, query, params }),
   },
@@ -98,6 +99,10 @@ Object.keys(orderActions).forEach(a => {
 
 Object.keys(propActions).forEach(a => {
   actions.props[a] = propActions[a](actions);
+});
+
+Object.keys(groupsActions).forEach(a => {
+  actions.groups[a] = groupsActions[a](actions);
 });
 
 Object.assign(actions.errors, errorActions);
