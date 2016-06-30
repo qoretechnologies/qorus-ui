@@ -198,6 +198,14 @@ class World {
 
     return new Promise(check.bind(this));
   }
+
+  keyUp = (target, key) => {
+    const event = this.browser.window.document.createEvent('HTMLEvents');
+    event.initEvent('keyup', true, true);
+    event.which = key;
+    const tr = this.browser.queryAll(target);
+    tr && tr.dispatchEvent(event);
+  }
 }
 
 
