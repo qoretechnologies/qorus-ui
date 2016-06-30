@@ -104,9 +104,6 @@ export default class EditableCell extends Component {
    */
   onKeyUp = (ev) => {
     switch (ev.key) {
-      case 'Enter':
-        this.commit();
-        break;
       case 'Escape':
         this.cancel();
         break;
@@ -153,7 +150,9 @@ export default class EditableCell extends Component {
    *
    * It also stops the edit mode.
    */
-  commit() {
+  commit = (ev) => {
+    if (ev) ev.preventDefault();
+
     if (this.props.type === 'number' &&
         (this.props.min && this.state.value < this.props.min) ||
         (this.props.max && this.state.value > this.props.max)) {
@@ -215,21 +214,27 @@ export default class EditableCell extends Component {
         style={{ width: this.state.width }}
         ref={this.cellDidRender}
       >
-        {
-          this.canEdit() ?
-            <input
-              type={this.props.type}
-              value={this.state.value}
-              onChange={this.onChange}
-              onKeyUp={this.onKeyUp}
-              onBlur={this.cancel}
-              ref={this.refEditField}
-              min={this.props.min}
-              max={this.props.max}
-              className={this.state.error ? 'form-error' : ''}
-            /> :
-            <span>{this.state.value}</span>
-        }
+        <form
+          onSubmit={this.commit}
+          className="editable-form"
+        >
+          {
+            this.canEdit() ?
+              <input
+                type={this.props.type}
+                value={this.state.value}
+                onChange={this.onChange}
+                onKeyUp={this.onKeyUp}
+                onBlur={this.cancel}
+                ref={this.refEditField}
+                min={this.props.min}
+                max={this.props.max}
+                className={this.state.error ? 'form-error' : ''}
+              /> :
+              <span>{this.state.value}</span>
+          }
+          <button type="submit" style={{ display: 'none' }} />
+        </form>
       </td>
     );
   }
