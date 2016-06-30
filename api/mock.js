@@ -24,6 +24,7 @@ module.exports = () => {
   router.use('/services', require('./services')());
   router.use('/jobs', require('./jobs')());
   router.use('/orders', require('./orders')());
+  router.use('/groups', require('./groups')());
 
 
   return router;
