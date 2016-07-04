@@ -6,13 +6,28 @@
 
 const findGroup = (name, g) => g.name === name;
 const express = require('express');
-const rest = require('../rest');
 
 module.exports = () => {
   const data = require('./data')();
-
   const router = new express.Router();
-  router.use(rest(data, findGroup));
+
+  router.get('/', (req, res) => {
+    let filteredData = data;
+
+    if (req.query.limit) {
+      const start = parseInt(req.query.offset, 10) || 0;
+      const end = parseInt(req.query.limit, 10);
+
+      filteredData = filteredData.slice(start, start + end);
+    }
+
+    res.json(filteredData);
+  });
+
+  router.get('/:id', (req, res) => {
+    const item = data.find(d => findGroup(req.params.id, d));
+    res.status(item ? 200 : 404).json(item);
+  });
 
   router.put('/:id', (req, res) => {
     const group = data.find(d => findGroup(req.params.id, d));

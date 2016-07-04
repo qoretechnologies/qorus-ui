@@ -13,6 +13,7 @@ import * as ui from 'store/ui/actions';
 
 // components
 import Loader from 'components/loader';
+import { Control as Button } from 'components/controls';
 
 // partials
 import GroupsToolbar from './toolbar';
@@ -100,6 +101,13 @@ export default class Workflows extends Component {
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
+    offset: PropTypes.number,
+    limit: PropTypes.number,
+  };
+
+  static defaultProps = {
+    limit: 100,
+    offset: 0,
   };
 
   static contextTypes = {
@@ -124,22 +132,48 @@ export default class Workflows extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(actions.groups.fetch());
+    const offset = this.props.offset;
+    const limit = this.props.limit;
 
     this.setState({
+      limit,
+      offset,
+      fetchMore: false,
       sortBy: 'enabled',
       sortByKey: 1,
       historySortBy: 'name',
       historySortByKey: -1,
     });
+
+    this.fetchData(this.props, { limit, offset, fetchMore: false });
   }
 
   componentDidMount() {
     setTitle(`Groups | ${this.context.getTitle()}`);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.offset !== nextState.offset) {
+      this.fetchData(nextProps, nextState);
+    }
+  }
+
   componentDidUpdate() {
     setTitle(`Groups | ${this.context.getTitle()}`);
+  }
+
+  /**
+   * Fetches the orders based on workflowid and
+   * the date provided
+   */
+  fetchData(props, state) {
+    props.dispatch(
+      actions.groups.fetch({
+        offset: state.offset,
+        limit: state.limit,
+        fetchMore: state.fetchMore,
+      })
+    );
   }
 
   /**
@@ -178,6 +212,30 @@ export default class Workflows extends Component {
     this.props.onCSVClick(this.props.collection, 'groups');
   };
 
+  handleLoadMoreClick = () => {
+    const offset = this.state.offset + this.props.limit;
+    const limit = this.state.limit;
+
+    this.setState({
+      offset,
+      limit,
+      fetchMore: true,
+    });
+  };
+
+  renderLoadMore() {
+    if (this.props.collection.length < (this.state.limit + this.state.offset)) return undefined;
+
+    return (
+      <Button
+        big
+        btnStyle="success"
+        label="Load more..."
+        action={this.handleLoadMoreClick}
+      />
+    );
+  }
+
   render() {
     if (!this.props.sync || this.props.loading) {
       return <Loader />;
@@ -214,6 +272,7 @@ export default class Workflows extends Component {
             sortData={this.props.sortData}
             collection={this.props.collection}
           />
+          { this.renderLoadMore() }
         </div>
       </div>
     );
