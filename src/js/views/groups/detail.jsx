@@ -12,7 +12,7 @@ export default function GroupDetail(props) {
           </h2>
           <small>{ props.group.description }</small>
         </div>
-        <div className="col-xs-1">
+        <div className="col-xs-1 group-detail-controls">
           <div className="pull-right">
             <Controls group={props.group} />
           </div>
