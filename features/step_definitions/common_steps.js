@@ -288,7 +288,8 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^the header says "([^"]*)"$/, async function(name) {
-    const el = findElementByText(this.browser, 'h3.detail-title', name);
+    console.log(this.browser.queryAll('.detail-title').map(t => t.textContent));
+    const el = findElementByText(this.browser, '.detail-title', name);
 
     this.browser.assert.element(el);
   });
@@ -305,6 +306,14 @@ module.exports = function commonSteps() {
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
     return this.browser.click(row);
+  });
+
+  this.Given(/^I click on the "([^"]*)" link - "([^"]*)"$/, async function(name, nameCell) {
+    const row = this.browser.
+      queryAll(cmpRows).
+      find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
+
+    return this.browser.click(row.cells[parseInt(nameCell, 10)].children[0]);
   });
 };
 

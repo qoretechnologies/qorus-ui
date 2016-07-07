@@ -34,7 +34,7 @@ module.exports = function orderDetailSteps() {
   });
 
   this.Given(/^the header gets loaded$/, async function() {
-    await this.waitForElement('h3.detail-title');
+    await this.waitForElement('.detail-title');
     await this.waitForElement('ul.nav-tabs');
     await this.waitForElement('.order-actions');
   });
