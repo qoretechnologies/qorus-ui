@@ -45,9 +45,11 @@ export default class OrdersTable extends Table {
    * @see ORDER_STATES
    */
   *renderHeadings() {
-    yield (
-      <Cell tag="th" className="narrow" />
-    );
+    if (!this.props.noCheckbox) {
+      yield (
+        <Cell tag="th" className="narrow" />
+      );
+    }
 
     yield (
       <Cell tag="th" className="narrow" />
@@ -193,14 +195,16 @@ export default class OrdersTable extends Table {
    * @return {Generator<ReactElement>}
    */
   *renderCells({ model, selected }) {
-    yield (
-      <Cell className="narrow checker">
-        <Checkbox
-          action={ this.handleCheckboxClick }
-          checked={ selected ? 'CHECKED' : 'UNCHECKED'}
-        />
-      </Cell>
-    );
+    if (!this.props.noCheckbox) {
+      yield (
+        <Cell className="narrow checker">
+          <Checkbox
+            action={ this.handleCheckboxClick }
+            checked={ selected ? 'CHECKED' : 'UNCHECKED'}
+          />
+        </Cell>
+      );
+    }
 
     yield (
       <Cell className="narrow line-counter" />
@@ -227,7 +231,7 @@ export default class OrdersTable extends Table {
     );
 
     yield (
-      <Cell className="narrow">{ model.business_error }</Cell>
+      <Cell>{ model.business_error }</Cell>
     );
 
     yield (
