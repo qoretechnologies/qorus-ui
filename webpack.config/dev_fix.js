@@ -29,7 +29,7 @@ module.exports = function developmentConfig() {
   );
 
   config.debug = true;
-  config.devtool = 'source-map';
+  config.devtool = 'inline-source-map';
 
   config.devServer = devConfig();
 
