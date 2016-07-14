@@ -11,6 +11,7 @@ const moment = require('moment');
 const firstBy = require('thenby');
 const random = require('lodash').random;
 const includes = require('lodash').includes;
+const values = require('lodash').values;
 const range = require('lodash').range;
 
 const addNote = (order, saved, username, note) => {
@@ -137,8 +138,48 @@ module.exports = () => {
         ));
       }
 
+      if (req.query.ids) {
+        const ids = req.query.ids.split(',');
+
+        filteredData = filteredData.filter(o => includes(ids, o.workflow_instanceid.toString()));
+      }
+
+      if (req.query.keyvalue) {
+        filteredData = filteredData.filter(o => {
+          const val = o.keys ? values(o.keys) : [];
+          const result = val.filter(v => includes(v, req.query.keyvalue));
+
+
+          return result.length;
+        });
+      }
+
+      if (req.query.keyname) {
+        filteredData = filteredData.filter(o => {
+          const val = o.keys ? Object.keys(o.keys) : [];
+          const result = val.filter(v => includes(v, req.query.keyname));
+
+
+          return result.length;
+        });
+      }
+
       if (req.query.date) {
-        filteredData = filteredData.filter(o => (moment(req.query.date) <= moment(o.started)));
+        filteredData = filteredData.filter(o => moment(o.modified).isAfter(
+          moment(req.query.date, 'YYYY-MM-DD HH:mm:ss').format()
+        ));
+      }
+
+      if (req.query.maxmodified) {
+        filteredData = filteredData.filter(o => moment(o.modified).isBefore(
+          moment(req.query.maxmodified, 'YYYY-MM-DD HH:mm:ss').format()
+        ));
+      }
+
+      if (req.query.status) {
+        const statuses = req.query.status.split(',');
+
+        filteredData = filteredData.filter(o => includes(statuses, o.workflowstatus));
       }
 
       if (req.query.sort) {
