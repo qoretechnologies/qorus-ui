@@ -10,7 +10,7 @@ module.exports = function orderDetailSteps() {
   });
 
   this.Given(/^I am on order "([^"]*)"$/, async function(order) {
-    return this.browser.visit(`/order/${order}/19700101000000`);
+    return this.browser.visit(`/order/${order}/19700101000000/diagram`);
   });
 
   this.Given(/^I am on order "([^"]*)" and "([^"]*)" tab$/, async function(order, name) {

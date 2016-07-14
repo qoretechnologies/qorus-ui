@@ -6,17 +6,20 @@ Feature: Order detail
     When I click on the "ARRAYTEST v2.0 (3659)" order
     Then the URL changes to "/order/3659/19700101000000/diagram"
 
+  @no-impl
   Scenario: Tabs are displayed correctly
     Given I am on order "3659"
     And the header gets loaded
     Then there are "10" tabs
 
+  @no-impl
   Scenario: Actions are displayed in the header
     Given I am on order "3659"
     And the header gets loaded
     Then there are "5" action buttons
     And "1" action is disabled
 
+  @no-impl
   Scenario: Url changes when tab is clicked
     Given I am on order "3659"
     And the header gets loaded
