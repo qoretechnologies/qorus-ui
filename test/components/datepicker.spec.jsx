@@ -57,6 +57,21 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
       expect(result.props.children[0].props.inputDate).to.equal('1988-08-09 12:34:56');
     });
+
+    it('renders the Datepicker without the selection buttons', () => {
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Datepicker
+          futureOnly
+          date="19880809123456"
+        />
+      );
+      const result = renderer.getRenderOutput();
+
+      expect(result.props.children).to.have.length(3);
+      expect(result.props.children[1]).to.equal(null);
+      expect(result.props.children[2]).to.equal(null);
+    });
   });
 
   describe('Input', () => {
@@ -93,6 +108,21 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       const result = renderer.getRenderOutput();
 
       result.props.onSubmit();
+      expect(action).to.have.been.called();
+    });
+
+    it('runs the provided blur action', () => {
+      const action = chai.spy();
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Input
+          submitOnBlur
+          onFormSubmit={action}
+        />
+      );
+      const result = renderer.getRenderOutput();
+
+      result.props.children[0].props.children[1].props.onBlur();
       expect(action).to.have.been.called();
     });
   });
