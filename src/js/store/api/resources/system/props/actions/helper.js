@@ -1,5 +1,5 @@
 const updateProp = (props, prop) => {
-  var newProps = props;
+  const newProps = props;
 
   if (props[prop.domain]) {
     newProps[prop.domain][prop.key] = prop.value;
@@ -11,7 +11,7 @@ const updateProp = (props, prop) => {
 };
 
 const deleteProp = (props, prop) => {
-  var newProps = props;
+  const newProps = props;
 
   if (!prop.key) {
     delete newProps[prop.domain];

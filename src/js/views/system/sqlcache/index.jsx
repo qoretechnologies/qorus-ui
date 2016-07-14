@@ -12,7 +12,7 @@ import actions from 'store/api/actions';
 import { isObject } from 'lodash';
 
 const collectionSelector = (state) => {
-  let collection = [];
+  const collection = [];
   const col = state.api.sqlcache.data;
 
   if (isObject(col)) {
@@ -24,16 +24,14 @@ const collectionSelector = (state) => {
   return col;
 };
 
-const metaSelector = (state) => {
-  return {
+const metaSelector = (state) => (
+  {
     sync: state.api.sqlcache.sync,
     loading: state.api.sqlcache.loading,
-  };
-};
+  }
+);
 
-const tablesSelector = (state) => {
-  return Object.keys(state.api.sqlcache.data);
-};
+const tablesSelector = (state) => Object.keys(state.api.sqlcache.data);
 
 const viewSelector = createSelector(
   [
@@ -149,7 +147,10 @@ export default class SqlCache extends Component {
           <div className="row-fluid">
             <h3 className="col-xs-8">{ table }</h3>
             <div className="pull-right col-xs-2 text-right">
-              <a className="btn btn-danger btn-xs" style={{ position: 'absolute', top: '2em', right: 0}}>
+              <a
+                className="btn btn-danger btn-xs"
+                style={{ position: 'absolute', top: '2em', right: 0 }}
+              >
                 <i className="fa fa-trash" /> Clear datasource
               </a>
             </div>

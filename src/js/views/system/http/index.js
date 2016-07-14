@@ -20,7 +20,7 @@ const userHttpMetaSelector = (state) => {
 
 const userHttpSelector = (state) => {
   if (state.api.userhttp) {
-    let col = [];
+    const col = [];
 
     Object.keys(state.api.userhttp.data)
       .forEach((key) => col.push(state.api.userhttp.data[key]));

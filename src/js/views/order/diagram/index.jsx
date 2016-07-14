@@ -4,8 +4,6 @@ import { createSelector } from 'reselect';
 
 import actions from 'store/api/actions';
 
-import { groupInstances } from 'helpers/orders';
-
 import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
@@ -152,7 +150,7 @@ export default class DiagramView extends Component {
             dispatch={this.props.dispatch}
           />
           <Keys
-            data={this.props.order}
+            data={this.props.order.keys}
           />
           { this.renderStepDetails() }
         </div>

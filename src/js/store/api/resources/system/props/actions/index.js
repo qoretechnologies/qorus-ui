@@ -17,7 +17,7 @@ export function addProp(actions) {
 export function deleteProp(actions) {
   return (props, prop) => dispatch => {
     const url = prop.key ? `${prop.domain}/${prop.key}` : prop.domain;
-    
+
     dispatch(actions.props.remove({
       update: {
         data: deleteProp(props, prop),

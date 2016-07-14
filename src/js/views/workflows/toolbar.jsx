@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Toolbar, { Actions } from '../../components/toolbar';
 import Dropdown, {
   Item as DropdownItem,
-  Control as DropdownControl
+  Control as DropdownControl,
 } from '../../components/dropdown';
 import { Control as Button, Controls } from '../../components/controls';
 import Checkbox from '../../components/checkbox';

@@ -15,8 +15,8 @@ const values = require('lodash').values;
 const range = require('lodash').range;
 
 const addNote = (order, saved, username, note) => {
-  var notes;
-  var data = {
+  let notes;
+  const data = {
     saved,
     username,
     note,
@@ -37,43 +37,41 @@ const addNote = (order, saved, username, note) => {
 };
 
 const lockOrder = (order, note, username) => {
-  var obj = addNote(order, true, username, note);
+  const obj = addNote(order, true, username, note);
   obj.operator_lock = username;
 
   return obj;
 };
 
 const unlockOrder = (order, note, username) => {
-  var obj = addNote(order, true, username, note);
+  const obj = addNote(order, true, username, note);
   obj.operator_lock = null;
 
   return obj;
 };
 
-const canSkip = (step) => {
-  return (
+const canSkip = (step) => (
       step.stepstatus === 'RETRY' ||
       step.stepstatus === 'ERROR' ||
       step.stepstatus === 'EVENT-WAITING' ||
       step.stepstatus === 'ASYNC-WAITING'
     ) && !step.skip && step.steptype !== 'SUBWORKFLOW';
-};
 
 const skipIndexes = (order, stepid, value) => {
-  var indexes = value.split(',');
-  var steps = order.StepInstances.slice();
+  const indexes = value.split(',');
+  const steps = order.StepInstances.slice();
 
   indexes.forEach(i => {
-    var ind = i;
+    let ind = i;
 
     if (includes(i, '-')) {
       ind = i.split('-');
-      var rng = range(ind[0], ind[1]);
+      const rng = range(ind[0], ind[1]);
       rng.push(ind[1]);
 
       rng.forEach(r => {
         steps.forEach((st, index) => {
-          var skipped = st;
+          const skipped = st;
 
           if (st.stepid === stepid && st.ind === parseInt(r, 10) && canSkip(st)) {
             skipped.skip = true;
@@ -83,7 +81,7 @@ const skipIndexes = (order, stepid, value) => {
       });
     } else {
       steps.forEach((st, index) => {
-        var skipped = st;
+        const skipped = st;
 
         if (st.stepid === stepid && st.ind === parseInt(ind, 10) && canSkip(st)) {
           skipped.skip = true;
@@ -104,7 +102,6 @@ module.exports = () => {
     let filteredData;
 
     if (req.query.action && req.query.action === 'processingSummary') {
-      const hours = [];
       filteredData = req.query.grouping === 'hourly' ?
         require('./summary/hourly/data')() : require('./summary/daily/data')();
 
@@ -215,6 +212,7 @@ module.exports = () => {
 
   router.put('/:id', (req, res) => {
     const order = data.find(o => findOrder(req.params.id, o));
+    let steps;
 
     switch (req.body.action) {
       case 'cancel':
@@ -238,7 +236,7 @@ module.exports = () => {
         Object.assign(order, unlockOrder(order, req.body.note, req.body.username));
         break;
       case 'skipStep':
-        const steps = skipIndexes(order, req.body.stepid, req.body.ind);
+        steps = skipIndexes(order, req.body.stepid, req.body.ind);
 
         order.StepInstances = steps;
         break;

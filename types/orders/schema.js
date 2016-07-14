@@ -26,7 +26,8 @@ const Order = {
     },
     workflowstatus: {
       type: 'string',
-      pattern: 'COMPLETED|READY|RETRY|SCHEDULED|CANCELED|BLOCKED|WAITING|ASYNC-WAITING|EVENT-WAITING|INCOMPLETE|ERROR',
+      pattern: 'COMPLETED|READY|RETRY|SCHEDULED|CANCELED|BLOCKED|' +
+      'WAITING|ASYNC-WAITING|EVENT-WAITING|INCOMPLETE|ERROR',
     },
     status_sessionid: {
       $ref: 'smallNonNegativeInteger',

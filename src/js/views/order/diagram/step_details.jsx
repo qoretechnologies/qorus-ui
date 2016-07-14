@@ -32,7 +32,6 @@ export default class StepDetailTable extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.step !== nextProps.step ||
       this.props.instances !== nextProps.instances) {
-      console.log(nextProps);
       this.setup(nextProps);
     }
   }

@@ -41,7 +41,7 @@ export default class LibraryView extends Component {
     order: PropTypes.object,
     workflow: PropTypes.object,
   };
-  
+
   componentDidMount() {
     const { id } = this.props.params;
 

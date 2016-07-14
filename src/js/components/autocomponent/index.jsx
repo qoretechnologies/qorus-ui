@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
 import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
-
-import { DATE_FORMATS } from '../../constants/dates';
-
 import Date from '../date';
 
+/* eslint-disable */
 const DURATION_PTR = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
+/* eslint-enable */
 
 /**
  * Indent value for stringified complex values.

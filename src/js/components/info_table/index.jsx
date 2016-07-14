@@ -14,11 +14,6 @@ import { pureRender } from '../utils';
  */
 
 /**
- * Indent value for stringified complex values.
- */
-const COMPLEX_VALUE_INDENT = 4;
-
-/**
  * Two-column table with name and value in each column.
  *
  * Name-value pairs are retrived by iterating over `object`

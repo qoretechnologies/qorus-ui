@@ -16,6 +16,7 @@ export default class extends Component {
     onApplyDate: PropTypes.func,
     futureOnly: PropTypes.bool,
     submitOnBlur: PropTypes.bool,
+    placeholder: PropTypes.string,
   };
 
   componentWillMount() {
@@ -138,8 +139,7 @@ export default class extends Component {
 
     if (this.state.inputDate === '') {
       this.applyDate('');
-    }
-    else {
+    } else {
       const date = new Date(this.state.inputDate);
 
       if (moment(date).isValid()) {

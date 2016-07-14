@@ -1,4 +1,9 @@
-import { ORDER_ACTIONS, ORDER_STATES, CUSTOM_ORDER_STATES, STATUS_PRIORITY } from '../constants/orders';
+import {
+  ORDER_ACTIONS,
+  ORDER_STATES,
+  CUSTOM_ORDER_STATES,
+  STATUS_PRIORITY,
+} from '../constants/orders';
 import { indexOf } from 'lodash';
 
 const getActionData = (action, prop) => {

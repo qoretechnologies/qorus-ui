@@ -2,12 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { flowRight, includes, union, isEqual } from 'lodash';
+import { flowRight, isEqual } from 'lodash';
 import { normalizeName } from '../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
 import * as ui from 'store/ui/actions';
-import moment from 'moment';
 
 import SearchToolbar from './toolbar';
 import OrdersTable from '../workflow/tabs/list/table';

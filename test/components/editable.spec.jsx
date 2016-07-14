@@ -142,7 +142,9 @@ describe("Editable from 'components/editable'", () => {
       result = renderer.getRenderOutput();
 
       expect(action).to.have.not.been.called();
-      expect(result.props.children.props.children[0].props.className).to.equal('form-control form-error');
+      expect(
+        result.props.children.props.children[0].props.className
+      ).to.equal('form-control form-error');
     });
 
     it('runs the provided function when the error checker succeeds', () => {

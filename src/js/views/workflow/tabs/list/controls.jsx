@@ -48,8 +48,8 @@ export default class extends Component {
 
   renderControl = (control) => {
     const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-    let { name, icon, style, action } = this._allActions.find(a => a.action === control);
-    const onClick = () => this.handleAction(action);
+    let { name, icon, style, ...other } = this._allActions.find(a => a.action === control);
+    const onClick = () => this.handleAction(other.action);
     let disabled = false;
 
     if (!includes(orderActions, control)) {
@@ -61,7 +61,7 @@ export default class extends Component {
       return (
         <Button
           btnStyle={style}
-          label={action.toUpperCase()}
+          label={other.action.toUpperCase()}
           disabled={disabled}
           title={name}
           action={onClick}

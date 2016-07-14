@@ -43,6 +43,19 @@ export default class extends Component {
     }
   }
 
+  getToggleTitle = (children) => {
+    if (children) {
+      return children;
+    }
+
+    if (this.props.multi) {
+      const length = this.state.selected.length;
+      return length > 3 ? `${length} selected` : this.state.selected.join(', ');
+    }
+
+    return null;
+  };
+
   /**
    * Toggles the items selection in the
    * multi select dropdown. The def prop is
@@ -66,19 +79,6 @@ export default class extends Component {
     this.setState({
       selected,
     });
-  };
-
-  getToggleTitle = (children) => {
-    if (children) {
-      return children;
-    }
-
-    if (this.props.multi) {
-      const length = this.state.selected.length;
-      return length > 3 ? `${length} selected` : this.state.selected.join(', ');
-    }
-
-    return null;
   };
 
   handleOutsideClick = (event) => {

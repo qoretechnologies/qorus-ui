@@ -146,7 +146,7 @@ const Job = {
     'created', 'modified', 'last', 'options', 'active', 'month', 'day',
     'wday', 'hour', 'minute', 'run_skipped', 'manually_updated', 'source',
     'line', 'lib', 'tags', 'groups', 'offset', 'host', 'user', 'code',
-    'options'
+    'options',
   ],
 };
 

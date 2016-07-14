@@ -41,11 +41,11 @@ export default class ConnectionsPane extends Component {
     location: PropTypes.object,
     router: PropTypes.object,
     route: PropTypes.object,
-  }
+  };
 
   static contextTypes = {
     router: React.PropTypes.object,
-  }
+  };
 
   componentWillMount() {
     this._renderCells = ::this.renderCells;
@@ -57,10 +57,10 @@ export default class ConnectionsPane extends Component {
     const newPath = pathArr.slice(0, pathArr.length - 1).join('/');
 
     this.context.router.push(newPath);
-  }
+  };
 
   getData() {
-    let data = [];
+    const data = [];
 
     for (const attr of attrs) {
       data.push({ attr, value: this.props.remote[attr] });

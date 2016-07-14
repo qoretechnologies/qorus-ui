@@ -5,8 +5,12 @@
  */
 
 const express = require('express');
-const updateProp = require('../../src/js/store/api/resources/system/props/actions/helper').updateProp;
-const deleteProp = require('../../src/js/store/api/resources/system/props/actions/helper').deleteProp;
+const updateProp = require(
+  '../../src/js/store/api/resources/system/props/actions/helper'
+).updateProp;
+const deleteProp = require(
+  '../../src/js/store/api/resources/system/props/actions/helper'
+).deleteProp;
 
 module.exports = () => {
   const data = require('./data')();

@@ -88,9 +88,9 @@ const getCSVHeaders = (view) => CSVheaders[view];
 const generateCSV = (collection, type) => {
   const headers = getCSVHeaders(type);
 
-  let content = Object.keys(headers).reduce((str, h) => {
-    return str === '' ? headers[h] : `${str};${headers[h]}`;
-  }, '');
+  let content = Object.keys(headers).reduce((str, h) => (
+    str === '' ? headers[h] : `${str};${headers[h]}`
+  ), '');
 
   for (const item of collection) {
     content += `\n${Object.keys(headers).reduce((str, h) => {

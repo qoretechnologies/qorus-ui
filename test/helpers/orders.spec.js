@@ -3,7 +3,8 @@ import { canSkip } from '../../src/js/helpers/orders';
 
 describe('{ canSkip } from helpers/orders', () => {
   describe('canSkip', () => {
-    it('returns true when the step has type ASYNC has ERROR status and hasnt been skipped yet', () => {
+    it('returns true when the step has type ASYNC has ERROR ' +
+      'status and hasnt been skipped yet', () => {
       const step = {
         steptype: 'ASYNC',
         stepstatus: 'ERROR',
@@ -27,7 +28,8 @@ describe('{ canSkip } from helpers/orders', () => {
       expect(result).to.equal(false);
     });
 
-    it('returns false when the skip has type SUBWORKFLOW, ERROR status and hasnt been skipped yet', () => {
+    it('returns false when the skip has type SUBWORKFLOW, ERROR ' +
+      'status and hasnt been skipped yet', () => {
       const step = {
         steptype: 'SUBWORKFLOW',
         stepstatus: 'ERROR',

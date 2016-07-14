@@ -25,7 +25,7 @@ const errorsMetaSelector = (state) => {
 
 const errorsSelector = (state) => {
   if (state.api.errors.global) {
-    let col = [];
+    const col = [];
 
     Object.keys(state.api.errors.global.data)
       .forEach((key) => col.push(state.api.errors.global.data[key]));
@@ -54,7 +54,7 @@ export default class Errors extends Component {
     loading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired,
     dispatch: PropTypes.func,
-  }
+  };
 
   componentWillMount() {
     this.props.dispatch(actions.errors.fetch('global'));
@@ -189,7 +189,10 @@ export default class Errors extends Component {
     }
 
     return (
-      <Table data={ this.props.collection } className="table table-condensed table-striped table--data">
+      <Table
+        data={ this.props.collection }
+        className="table table-condensed table-striped table--data"
+      >
         <Section type="head" rows={this._renderHeadingRow} />
         <Section type="body" data={ this.props.collection } rows={this._renderRows} />
       </Table>

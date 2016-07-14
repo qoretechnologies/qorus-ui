@@ -1,27 +1,36 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from 'components/table';
 
-export default class DiagramKeysTable extends Component {
-  static propTypes = {
-    data: PropTypes.object.isRequired,
-  };
 
-  render() {
-    const { ...data } = this.props.data;
+const renderRows = (data) => (
+  Object.keys(data).map((d, key) => (
+    <Section type="body" key={key}>
+      <Row>
+        <Cell>{ d }</Cell>
+        <Cell>{ data[d] }</Cell>
+      </Row>
+    </Section>
+  ))
+);
 
-    return (
-      <div>
-        <h4> Keys </h4>
-        <Table className="table table-bordered table-condensed">
-          <Section type="head">
-            <Row>
-              <Cell tag="th"> Key </Cell>
-              <Cell tag="th"> Value </Cell>
-            </Row>
-          </Section>
-        </Table>
-      </div>
-    );
-  }
+export default function DiagramKeysTable(props) {
+  return (
+    <div>
+      <h4> Keys </h4>
+      <Table className="table table-bordered table-condensed">
+        <Section type="head">
+          <Row>
+            <Cell tag="th"> Key </Cell>
+            <Cell tag="th"> Value </Cell>
+          </Row>
+        </Section>
+        { renderRows(props.data) }
+      </Table>
+    </div>
+  );
 }
+
+DiagramKeysTable.propTypes = {
+  data: PropTypes.object.isRequired,
+};

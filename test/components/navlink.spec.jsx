@@ -89,7 +89,8 @@ describe("Nav, { NavLink } from 'components/navlink'", () => {
       expect(els[1].className).to.not.equal('active');
     });
 
-    it('renders the navigation with 2 tabs, and 2 deeper tabs resulting in 2 active tabs for the one url', () => {
+    it('renders the navigation with 2 tabs, and 2 deeper ' +
+      'tabs resulting in 2 active tabs for the one url', () => {
       const comp = TestUtils.renderIntoDocument(
         <Nav path="/my/awesome/path/deep/">
           <NavLinkWithContext to="/my/awesome/path">Awesome</NavLinkWithContext>
