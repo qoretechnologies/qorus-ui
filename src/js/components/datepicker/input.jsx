@@ -18,9 +18,11 @@ export default function Input(props) {
         <input
           type="text"
           className="form-control"
+          onBlur={props.submitOnBlur ? props.onFormSubmit : null}
           value={props.inputDate}
           onChange={props.onInputChange}
           onClick={props.onInputClick}
+          placeholder={props.placeholder}
         />
       </div>
       <Control
@@ -32,7 +34,9 @@ export default function Input(props) {
 }
 
 Input.propTypes = {
+  placeholder: PropTypes.string,
   onFormSubmit: PropTypes.func,
+  submitOnBlur: PropTypes.bool,
   inputDate: PropTypes.string,
   onInputChange: PropTypes.func,
   onInputClick: PropTypes.func,

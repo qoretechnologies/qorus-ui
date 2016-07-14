@@ -15,6 +15,7 @@ export default class extends Component {
     date: PropTypes.string,
     onApplyDate: PropTypes.func,
     futureOnly: PropTypes.bool,
+    submitOnBlur: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -134,10 +135,16 @@ export default class extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    const date = new Date(this.state.inputDate);
 
-    if (moment(date).isValid()) {
-      this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
+    if (this.state.inputDate === '') {
+      this.applyDate('');
+    }
+    else {
+      const date = new Date(this.state.inputDate);
+
+      if (moment(date).isValid()) {
+        this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
+      }
     }
   };
 
@@ -168,7 +175,7 @@ export default class extends Component {
   }
 
   renderControls() {
-    if (this.props.futureOnly) return undefined;
+    if (this.props.futureOnly) return null;
 
     return (
       <Controls grouped noControls>
@@ -202,9 +209,11 @@ export default class extends Component {
       <div className="input-group date-controls">
         <Input
           onFormSubmit={this.handleFormSubmit}
+          submitOnBlur={this.props.submitOnBlur}
           onInputChange={this.handleInputChange}
           inputDate={this.state.inputDate}
           onInputClick={this.showDatepicker}
+          placeholder={this.props.placeholder}
         />
         { this.renderControls() }
         { this.renderDatepicker() }
