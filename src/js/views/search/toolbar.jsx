@@ -1,48 +1,66 @@
 import React, { Component, PropTypes } from 'react';
 import { Control as Button } from 'components/controls';
 import Toolbar from 'components/toolbar';
+import DatePicker from 'components/datepicker';
 
-import { omit } from 'lodash';
+import { omit, debounce } from 'lodash';
 
 export default class SearchToolbar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
-    id: PropTypes.string,
+    ids: PropTypes.string,
     keyvalue: PropTypes.string,
+    keyname: PropTypes.string,
     status: PropTypes.string,
     date: PropTypes.string,
+    maxmodified: PropTypes.string,
   };
 
   componentWillMount() {
+    this.delayedSearch = debounce((data) => {
+      this.props.onSubmit(data);
+    }, 280);
+
     this.setState({
-      advanced: false,
+      datetype: 'Modified',
     });
 
-    this.setUp(this.props);
+    this.setUp(this.props, {});
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.id !== nextProps.id ||
+    if (this.props.ids !== nextProps.ids ||
         this.props.keyvalue !== nextProps.keyvalue ||
+        this.props.keyname !== nextProps.keyname ||
         this.props.status !== nextProps.status ||
+        this.props.maxmodified !== nextProps.maxmodified ||
         this.props.date !== nextProps.date) {
-      this.setUp(nextProps);
+      this.setUp(nextProps, this.state);
     }
   }
 
-  setUp(props) {
+  setUp = (props, state) => {
     this.setState({
-      id: props.id,
+      ids: props.ids,
       keyvalue: props.keyvalue,
+      keyname: props.keyname,
       status: props.status,
       date: props.date,
+      maxmodified: props.maxmodified,
+      advanced: state.advanced ||
+                props.status ||
+                props.date ||
+                props.maxmodified,
     });
-  }
+  };
 
   handleInputChange = (type) => (event) => {
-    this.setState({
-      [type]: event.target.value,
-    });
+    const state = {
+      [type]: type === 'date' || type === 'maxmodified' ? event : event.target.value,
+    };
+
+    this.setState(state);
+    this.delayedSearch(omit(Object.assign({}, this.state, state), ['advanced', 'datetype']));
   };
 
   handleSwitchClick = () => {
@@ -51,43 +69,34 @@ export default class SearchToolbar extends Component {
     });
   };
 
-  handleFormSubmit = (event) => {
-    event.preventDefault();
-
-    this.props.onSubmit(omit(this.state, 'advanced'));
-  };
-
-  renderToolbar() {
-    if (this.state.advanced) return <div></div>;
+  renderAdvanced() {
+    if (!this.state.advanced) return undefined;
 
     return (
-      <div>
-        <div className="form-group">
+      <div className="form-group">
+        <div className="pull-left">
           <input
             className="form-control"
             type="text"
-            placeholder="Instance ID..."
-            onChange={this.handleInputChange('id')}
-            value={this.state.id || ''}
+            placeholder="Status..."
+            onChange={this.handleInputChange('status')}
+            value={this.state.status || ''}
           />
         </div>
-        {' '}
-        <div className="form-group">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Key/Value"
-            onChange={this.handleInputChange('keyvalue')}
-            value={this.state.keyvalue || ''}
+        <div className="pull-left">
+          <DatePicker
+            placeholder="Min date..."
+            date={this.state.date}
+            onApplyDate={this.handleInputChange('date')}
+            submitOnBlur
+            futureOnly
           />
-        </div>
-        {' '}
-        <div className="form-group">
-          <Button
-            type="submit"
-            icon="search"
-            btnStyle="success"
-            big
+          <DatePicker
+            placeholder="Max date..."
+            date={this.state.maxmodified}
+            onApplyDate={this.handleInputChange('maxmodified')}
+            submitOnBlur
+            futureOnly
           />
         </div>
       </div>
@@ -97,16 +106,43 @@ export default class SearchToolbar extends Component {
   render() {
     return (
       <Toolbar>
-        <form
-          className="form-inline pull-left"
-          onSubmit={this.handleFormSubmit}
-        >
-          { this.renderToolbar() }
-        </form>
+        <div className="pull-left">
+          <div className="form-group search-toolbar">
+            <div className="pull-left">
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Instance ID..."
+                onChange={this.handleInputChange('ids')}
+                value={this.state.ids || ''}
+              />
+            </div>
+            <div className="pull-left">
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Keyname"
+                onChange={this.handleInputChange('keyname')}
+                value={this.state.keyname || ''}
+              />
+            </div>
+            <div className="pull-left">
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Keyvalue"
+                onChange={this.handleInputChange('keyvalue')}
+                value={this.state.keyvalue || ''}
+              />
+            </div>
+          </div>
+          { this.renderAdvanced() }
+        </div>
         <div className="pull-right">
           <Button
-            label={this.state.advanced ? 'Simple search' : 'Advanced search'}
-            btnStyle="default"
+            label="Advanced search"
+            icon={this.state.advanced ? 'check-square-o' : 'square-o'}
+            btnStyle={this.state.advanced ? 'success' : 'default'}
             big
             action={this.handleSwitchClick}
           />

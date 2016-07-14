@@ -7,7 +7,7 @@ import { normalizeName } from '../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
 import * as ui from 'store/ui/actions';
-import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../constants/orders';
+import moment from 'moment';
 
 import SearchToolbar from './toolbar';
 import OrdersTable from '../workflow/tabs/list/table';
@@ -15,21 +15,9 @@ import Loader from '../../components/loader';
 import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import { Control as Button } from 'components/controls';
 
-import { findBy } from '../../helpers/search';
 import { sortTable } from '../../helpers/table';
 import { goTo } from '../../helpers/router';
 
-const filterOrders = (filter) => (orders) => {
-  if (!filter || includes(filter, 'All')) return orders;
-
-  const states = union(ORDER_STATES, CUSTOM_ORDER_STATES);
-
-  return orders.filter(o => (
-    includes(filter, states.find(s => s.name === o.workflowstatus).title))
-  );
-};
-
-const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], search, orders);
 const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
 const normalize = (orders) => orders.map(o => {
   if (o.normalizedName) return o;
@@ -38,21 +26,15 @@ const normalize = (orders) => orders.map(o => {
 });
 
 const orderSelector = state => state.api.orders;
-const filterSelector = (state, props) => props.params.filter;
-const searchSelector = (state, props) => props.location.query.q;
 const sortSelector = state => state.ui.orders;
 const userSelector = state => state.api.currentUser.data.username;
 
 const collectionSelector = createSelector(
   [
     orderSelector,
-    filterSelector,
-    searchSelector,
     sortSelector,
-  ], (orders, filter, search, sortData) => flowRight(
+  ], (orders, sortData) => flowRight(
     sortOrders(sortData),
-    filterSearch(search),
-    filterOrders(filter),
     normalize
   )(orders.data)
 );
@@ -106,7 +88,7 @@ export default class SearchView extends Component {
 
   static defaultProps = {
     offset: 0,
-    limit: 2,
+    limit: 100,
   };
 
   static contextTypes = {
@@ -140,6 +122,7 @@ export default class SearchView extends Component {
       offset,
       limit,
       fetchMore: false,
+      search: false,
     });
 
     this.fetchData(this.props, { offset, limit, fetchMore: false });
@@ -147,7 +130,14 @@ export default class SearchView extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!isEqual(this.props.location.query, nextProps.location.query)) {
-      this.fetchData(nextProps, this.state);
+      const state = {
+        limit: this.props.limit,
+        offset: this.props.offset,
+        fetchMore: false,
+      };
+
+      this.setState(state);
+      this.fetchData(nextProps, state);
     }
   }
 
@@ -164,7 +154,7 @@ export default class SearchView extends Component {
   fetchData(props, state) {
     const { query } = props.location;
 
-    if (!Object.keys(query).length || !Object.keys(query).every(k => query[k] === '')) {
+    if (Object.keys(query).length && !Object.keys(query).every(k => query[k] === '')) {
       props.dispatch(
         actions.orders.fetch(Object.assign({}, {
           sort: 'started',
