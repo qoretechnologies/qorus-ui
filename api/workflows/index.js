@@ -23,6 +23,10 @@ module.exports = () => {
         item.enabled = !!req.body.enabled;
         item.exec_count = parseInt(req.body.exec_count, 10);
         break;
+      case 'setAutostart':
+        item.autostart = req.body.autostart;
+        item.exec_count = req.body.exec_count;
+        break;
       default:
         if (config.env !== 'test') {
           process.stderr.write(`Unknown action ${req.body.action}.\n`);
@@ -66,6 +70,9 @@ module.exports = () => {
         });
         break;
       default:
+        if (config.env !== 'test') {
+          process.stderr.write(`Unknown action ${req.body.action}.\n`);
+        }
         break;
     }
 
