@@ -9,12 +9,12 @@ import { setTitle } from '../../helpers/document';
 import firstBy from 'thenby';
 
 // data
-import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
+import actions from '../../store/api/actions';
+import * as ui from '../../store/ui/actions';
 
 // components
-import Loader from 'components/loader';
-import Pane from 'components/pane';
+import Loader from '../../components/loader';
+import Pane from '../../components/pane';
 
 // partials
 import WorkflowsToolbar from './toolbar';
@@ -31,7 +31,7 @@ import {
 } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 
-const sortWorkflows = (sortData) => (workflows) => workflows.slice().sort(
+const sortWorkflows = (sortData: Object) => (workflows: Array<Object>) => workflows.slice().sort(
     firstBy(w => w[sortData.sortBy], sortData.sortByKey)
       .thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
   );
@@ -184,6 +184,14 @@ export default class Workflows extends Component {
     dispatch: PropTypes.func,
   };
 
+  state = {
+    filteredWorkflows: [],
+    sortBy: 'name',
+    sortByKey: 1,
+    historySortBy: 'version',
+    historySortByKey: -1,
+  };
+
   getChildContext() {
     return {
       location: this.props.location,
@@ -197,14 +205,6 @@ export default class Workflows extends Component {
     const fetchParams = getFetchParams(this.props.params.filter, this.props.params.date);
 
     this.props.dispatch(actions.workflows.fetch(fetchParams));
-
-    this.setState({
-      filteredWorkflows: [],
-      sortBy: 'name',
-      sortByKey: 1,
-      historySortBy: 'version',
-      historySortByKey: -1,
-    });
   }
 
   componentDidMount() {

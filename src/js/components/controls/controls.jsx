@@ -1,5 +1,7 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 
+import Control from './control';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
@@ -12,16 +14,16 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class Controls extends Component {
-  static propTypes = {
-    grouped: PropTypes.bool,
-    controls: PropTypes.array,
-    children: PropTypes.node,
-    noControls: PropTypes.bool,
-  };
-
   static defaultProps = {
     grouped: false,
     controls: [],
+  };
+
+  props: {
+    grouped: boolean,
+    controls: Array<React.Element<Control>>,
+    children: Array<React.Element<any>>,
+    noControls: boolean,
   };
 
   /**
@@ -37,7 +39,7 @@ export default class Controls extends Component {
           'btn-group': this.props.grouped,
         })}
       >
-        {React.Children.map(this.props.children, (c, i) => {
+        {React.Children.map(this.props.children, (c, i): ?React.Element<any> => {
           if (!c) return c;
 
           return (
@@ -48,3 +50,10 @@ export default class Controls extends Component {
     );
   }
 }
+
+Controls.propTypes = {
+  grouped: PropTypes.bool,
+  controls: PropTypes.array,
+  children: PropTypes.node,
+  noControls: PropTypes.bool,
+};

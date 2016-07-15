@@ -1,41 +1,33 @@
+/* @flow */
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
 
-export default class extends Component {
-  static propTypes = {
-    date: PropTypes.object,
-    setDate: PropTypes.func,
-    activeDate: PropTypes.object,
-    setActiveDate: PropTypes.func,
-    minutes: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    hours: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    onAllClick: PropTypes.func,
-    onApplyClick: PropTypes.func,
-    on24hClick: PropTypes.func,
-    onResetClick: PropTypes.func,
-    onMinutesChange: PropTypes.func,
-    onHoursChange: PropTypes.func,
-    hideDatepicker: PropTypes.func,
-    children: PropTypes.node,
-    futureOnly: PropTypes.bool,
+export default class Picker extends Component {
+  props: {
+    minutes: string | number,
+    hours: string | number,
+    onAllClick: () => void,
+    onApplyClick: () => void,
+    on24hClick: () => void,
+    onResetClick: () => void,
+    onMinutesChange: () => void,
+    onHoursChange: () => void,
+    hideDatepicker: () => void,
+    children?: Array<React.Element<any>>,
+    futureOnly: boolean,
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
+    console.log(this.props);
     document.addEventListener('click', this.handleOutsideClick);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     document.removeEventListener('click', this.handleOutsideClick);
   }
 
-  handleOutsideClick = (event) => {
+  handleOutsideClick: Function = (event: Object): void => {
     const el = ReactDOM.findDOMNode(this.refs.datepicker);
 
     if (!el.contains(event.target)) {
@@ -44,7 +36,7 @@ export default class extends Component {
     }
   };
 
-  renderControls() {
+  renderControls(): ?React.Element<Controls> {
     if (this.props.futureOnly) return undefined;
 
     return (
@@ -63,7 +55,7 @@ export default class extends Component {
     );
   }
 
-  render() {
+  render(): React.Element<any> {
     return (
       <div className="datepicker" ref="datepicker">
         { this.props.children }
@@ -110,3 +102,23 @@ export default class extends Component {
     );
   }
 }
+
+Picker.propTypes = {
+  minutes: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  hours: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  onAllClick: PropTypes.func,
+  onApplyClick: PropTypes.func,
+  on24hClick: PropTypes.func,
+  onResetClick: PropTypes.func,
+  onMinutesChange: PropTypes.func,
+  onHoursChange: PropTypes.func,
+  hideDatepicker: PropTypes.func,
+  children: PropTypes.node,
+  futureOnly: PropTypes.bool,
+};

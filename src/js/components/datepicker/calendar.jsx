@@ -1,45 +1,45 @@
+/* @flow */
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 
-const chunk = (array, unit) => {
-  const arr = {};
+const chunk = (arr: Array<Object>, unit: number): Array<any> => {
+  const res: Object = {};
 
-  for (const k in array) {
-    if (array.hasOwnProperty(k)) {
-      const v = Math.floor(k / unit);
-      if (arr[v]) {
-        arr[v].push(array[k]);
-      } else {
-        arr[v] = [array[k]];
-      }
+  arr.forEach((k, index) => {
+    const v: number = Math.floor(parseInt(index, 10) / unit);
+
+    if (res[v]) {
+      res[v].push(k);
+    } else {
+      res[v] = [k];
     }
-  }
+  });
 
-  return _.toArray(arr);
+  return _.toArray(res);
 };
 
-export default class extends Component {
-  static propTypes = {
-    date: PropTypes.object.isRequired,
-    setDate: PropTypes.func,
-    activeDate: PropTypes.object,
-    setActiveDate: PropTypes.func,
+export default class Calendar extends Component {
+  props: {
+    date: Object,
+    setDate: (date: Object) => void,
+    activeDate: Object,
+    setActiveDate: () => void,
   };
 
-  getDaysOfMonth() {
-    const month = this.props.date.month();
-    const year = this.props.date.year();
-    const start = moment([year, month]).startOf('isoweek');
-    const end = start.clone().add(6, 'weeks').add(-1, 'days');
-    const days = [];
-    const date = this.props.date;
-    const activeDate = this.props.activeDate;
+  getDaysOfMonth(): Array<Object> {
+    const month: number = this.props.date.month();
+    const year: number = this.props.date.year();
+    const start: Object = moment([year, month]).startOf('isoweek');
+    const end: Object = start.clone().add(6, 'weeks').add(-1, 'days');
+    const days: Array<Object> = [];
+    const date: Object = this.props.date;
+    const activeDate: Object = this.props.activeDate;
 
     while (start.valueOf() <= end.valueOf()) {
-      const dDate = moment(start)
+      const dDate: Object = moment(start)
         .hours(date.hours()).minutes(date.minutes()).seconds(date.seconds());
-      const day = {
+      const day: Object = {
         date: dDate,
         day: start.date(),
         month: start.month(),
@@ -67,31 +67,33 @@ export default class extends Component {
     return days;
   }
 
-  setDate = (date) => {
+  setDate: Function = (date: Object): void => {
     this.props.setDate(date);
   };
 
-  setActiveDate = (date) => {
+  setActiveDate: Function = (date: Object): void => {
     this.props.setActiveDate(date);
   };
 
-  nextMonth = () => {
-    const date = moment(this.props.date);
+  nextMonth: Function = (): void => {
+    const date: Object = moment(this.props.date);
     this.setDate(date.add(1, 'months'));
   };
 
-  prevMonth = () => {
-    const date = moment(this.props.date);
+  prevMonth: Function = (): void => {
+    const date: Object = moment(this.props.date);
     this.setDate(date.add(-1, 'months'));
   };
 
-  renderYearAndMonth = () => `${this.props.date.format('MMM')} ${this.props.date.year()}`;
+  renderYearAndMonth: Function = (): string => (
+    `${this.props.date.format('MMM')} ${this.props.date.year()}`
+  );
 
-  renderRows = () => {
-    const weeks = chunk(this.getDaysOfMonth(), 7);
+  renderRows: Function = (): Array<React.Element<any>> => {
+    const weeks: Array<Object> = chunk(this.getDaysOfMonth(), 7);
 
     return weeks.reduce((wks, week, key) => {
-      const days = week.reduce((ds, day, idx) => ([...ds,
+      const days: Array<number> = week.reduce((ds, day, idx) => ([...ds,
           <td
             className={day.css}
             key={idx}
@@ -105,7 +107,7 @@ export default class extends Component {
     }, []);
   };
 
-  render() {
+  render(): React.Element<any> {
     return (
       <table className="table table-condensed">
         <thead>
@@ -141,3 +143,10 @@ export default class extends Component {
     );
   }
 }
+
+Calendar.propTypes = {
+  date: PropTypes.object.isRequired,
+  setDate: PropTypes.func,
+  activeDate: PropTypes.object,
+  setActiveDate: PropTypes.func,
+};

@@ -33,7 +33,7 @@ module.exports = function compilerConfig() {
           loaders: [
             'babel?' +
               'presets[]=es2015&presets[]=react&presets[]=stage-0&' +
-              'plugins[]=transform-decorators-legacy',
+              'plugins[]=transform-decorators-legacy&plugins[]=transform-flow-strip-types',
           ],
         },
         {

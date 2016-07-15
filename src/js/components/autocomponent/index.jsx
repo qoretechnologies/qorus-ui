@@ -1,26 +1,27 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
-import Date from '../date';
+import DateComponent from '../date';
 
 /* eslint-disable */
-const DURATION_PTR = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
+const DURATION_PTR: any = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
 /* eslint-enable */
 
 /**
  * Indent value for stringified complex values.
  */
-const COMPLEX_VALUE_INDENT = 4;
+const COMPLEX_VALUE_INDENT: number = 4;
 
-function humanizeDuration(dur) {
-  const groups = DURATION_PTR.exec(dur);
+function humanizeDuration(dur: string): string {
+  const groups: Array<number> = DURATION_PTR.exec(dur);
   const [
     years, months, days, hours,
     minutes, seconds, milliseconds,
     microseconds,
-  ] = groups.slice(1, 9);
+  ]: Array<number> = groups.slice(1, 9);
 
-  let output = '';
+  let output: string = '';
 
   if (years > 0) output += `${years} yrs `;
   if (months > 0) output += `${months} months `;
@@ -34,11 +35,14 @@ function humanizeDuration(dur) {
   return output;
 }
 
-function isDate(val) {
-  return moment.isDate(new Date(val)) || startsWith(val, '0000-00-00');
+function isDate(val: string): boolean {
+  return moment(val, 'YYYY-MM-DD HH:mm:ss', true).isValid() ||
+    moment(val, 'YYYY-MM-DDTHH:mm:ss', true).isValid() ||
+    moment(val, 'YYYY-MM-DDTHH:mm:ss.SSSSSS +01:00', true).isValid() ||
+    startsWith(val, '0000-00-00');
 }
 
-export default function AutoComponent(props) {
+export default function AutoComponent(props: { children: any }) {
   let comp;
 
   if (props.children === null || props.children === 'undefined') return null;
@@ -51,7 +55,7 @@ export default function AutoComponent(props) {
     }
   } else if (isDate(props.children)) {
     if (!props.children.match(DURATION_PTR)) {
-      comp = <Date date={ props.children } />;
+      comp = <DateComponent date={ props.children } />;
     } else {
       comp = (
         <span>

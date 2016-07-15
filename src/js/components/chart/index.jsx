@@ -1,24 +1,13 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 
-import { pureRender } from 'components/utils';
+import { pureRender } from '../../components/utils';
 import { getMaxValue, getStepSize, scaleData, getUnit } from '../../helpers/chart';
 
 @pureRender
 export default class ChartComponent extends Component {
-  static propTypes = {
-    id: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-    type: PropTypes.string,
-    labels: PropTypes.array,
-    datasets: PropTypes.arrayOf(PropTypes.object),
-    yAxisLabel: PropTypes.string,
-    xAxisLabel: PropTypes.string,
-    beginAtZero: PropTypes.bool,
-  };
-
   static defaultProps = {
     width: 400,
     height: 200,
@@ -26,17 +15,31 @@ export default class ChartComponent extends Component {
     beginAtZero: true,
   };
 
-  componentWillMount() {
-    this.setState({
-      chart: null,
-    });
-  }
+  props: {
+    id: string,
+    width: number,
+    height: number,
+    type: string,
+    labels: Array<any>,
+    datasets: Array<Object>,
+    yAxisLabel: string,
+    xAxisLabel: string,
+    beginAtZero: boolean,
+  };
+
+  state: {
+    chart: Object,
+  };
+
+  state = {
+    chart: {},
+  };
 
   componentDidMount() {
     this.renderChart(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Object) {
     if (this.props.labels !== nextProps.labels) {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
@@ -55,9 +58,9 @@ export default class ChartComponent extends Component {
     }
   }
 
-  getOptionsData(data) {
-    const unit = getUnit(getMaxValue(data));
-    const stepSize = getStepSize(data);
+  getOptionsData(data: Array<Object>): Object {
+    const unit: string = getUnit(getMaxValue(data));
+    const stepSize: number = getStepSize(data);
 
     return {
       unit,
@@ -65,9 +68,10 @@ export default class ChartComponent extends Component {
     };
   }
 
-  getOptions(data) {
+  getOptions(data: Array<Object>) {
     const { stepSize, unit } = this.getOptionsData(data);
-    const options = {
+    // stepSize: number, unit: string
+    const options: Object = {
       legend: {
         display: false,
       },
@@ -77,7 +81,7 @@ export default class ChartComponent extends Component {
     switch (this.props.type) {
       case 'line':
       default:
-        return Object.assign(options, {
+        return Object.assign({}, options, {
           tooltips: {
             mode: 'label',
             callbacks: {
@@ -111,11 +115,11 @@ export default class ChartComponent extends Component {
     }
   }
 
-  renderChart = (props) => {
-    const el = ReactDOM.findDOMNode(this.refs.chart);
-    const options = this.getOptions(props.datasets);
-    const datasets = scaleData(props.datasets);
-    const chart = new Chart(el, {
+  renderChart: Function = (props: Object): void => {
+    const el: Object = ReactDOM.findDOMNode(this.refs.chart);
+    const options: Object = this.getOptions(props.datasets);
+    const datasets: Array<Object> = scaleData(props.datasets);
+    const chart: Object = new Chart(el, {
       type: props.type,
       data: {
         labels: props.labels,
@@ -129,7 +133,7 @@ export default class ChartComponent extends Component {
     });
   };
 
-  renderLegend = () => {
+  renderLegend: Function = (): Array<React.Element<any>> => {
     switch (this.props.type) {
       case 'line':
       default:
@@ -178,3 +182,15 @@ export default class ChartComponent extends Component {
     );
   }
 }
+
+ChartComponent.propTypes = {
+  id: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  type: PropTypes.string,
+  labels: PropTypes.array,
+  datasets: PropTypes.arrayOf(PropTypes.object),
+  yAxisLabel: PropTypes.string,
+  xAxisLabel: PropTypes.string,
+  beginAtZero: PropTypes.bool,
+};

@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 
 import classNames from 'classnames';
@@ -8,32 +9,31 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class Control extends Component {
-  static propTypes = {
-    title: PropTypes.string,
-    label: PropTypes.string,
-    btnStyle: PropTypes.string,
-    icon: PropTypes.string,
-    action: PropTypes.func,
-    disabled: PropTypes.bool,
-    big: PropTypes.bool,
-    type: PropTypes.string,
-    css: PropTypes.object,
-    className: PropTypes.string,
+  props: {
+    title: string,
+    label: string,
+    btnStyle: string,
+    icon: string,
+    action: () => void,
+    disabled: boolean,
+    big: boolean,
+    type: string,
+    css: Object,
+    className: string,
   };
 
   /**
    * Calls `action` prop if set.
    *
-   * @param {Event} event
    */
-  handleClick = (event) => {
+  handleClick = (event: Object): void => {
     if (!this.props.action) return;
 
     event.preventDefault();
     this.props.action(event);
   };
 
-  renderIcon() {
+  renderIcon(): ?React.Element<any> {
     if (!this.props.icon) return null;
 
     return <i className={classNames(['fa', `fa-${this.props.icon}`])} />;
@@ -41,11 +41,9 @@ export default class Control extends Component {
 
   /**
    * Returns element for this component.
-   *
-   * @return {ReactElement}
    */
-  render() {
-    const className = classNames(this.props.className, {
+  render(): React.Element<any> {
+    const className: string = classNames(this.props.className, {
       btn: true,
       'btn-xs': !this.props.big,
       [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
@@ -66,3 +64,16 @@ export default class Control extends Component {
     );
   }
 }
+
+Control.propTypes = {
+  title: PropTypes.string,
+  label: PropTypes.string,
+  btnStyle: PropTypes.string,
+  icon: PropTypes.string,
+  action: PropTypes.func,
+  disabled: PropTypes.bool,
+  big: PropTypes.bool,
+  type: PropTypes.string,
+  css: PropTypes.object,
+  className: PropTypes.string,
+};

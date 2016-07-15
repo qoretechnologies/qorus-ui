@@ -1,3 +1,4 @@
+/* @flow */
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
@@ -10,30 +11,43 @@ import Input from './input';
 import Picker from './picker';
 import Calendar from './calendar';
 
-export default class extends Component {
-  static propTypes = {
-    date: PropTypes.string,
-    onApplyDate: PropTypes.func,
-    futureOnly: PropTypes.bool,
-    submitOnBlur: PropTypes.bool,
-    placeholder: PropTypes.string,
+type Props = {
+  date: string,
+  onApplyDate: (date: string) => void,
+  futureOnly?: boolean,
+  submitOnBlur?: boolean,
+  placeholder?: string,
+}
+
+export default class DatePicker extends Component {
+  props: Props;
+
+  state: {
+    date: Object,
+    inputDate: string,
+    activeDate: Object,
+    hours: string,
+    defaultHours: string,
+    minutes: string,
+    defaultMinutes: string,
+    showDatepicker: boolean,
   };
 
-  componentWillMount() {
+  componentWillMount(): void {
     this.setupDate(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props): void {
     if (this.props.date !== nextProps.date) {
       this.setupDate(nextProps);
     }
   }
 
-  setupDate = (props) => {
+  setupDate = (props: Props): void => {
     this.hideDatepicker();
 
-    const date = props.date ? formatDate(props.date) : moment();
-    const inputDate = props.date ? date.format(DATE_FORMATS.DISPLAY) : '';
+    const date: Object = props.date ? formatDate(props.date) : moment();
+    const inputDate: string = props.date ? date.format(DATE_FORMATS.DISPLAY) : '';
 
     this.setState({
       date,
@@ -47,37 +61,37 @@ export default class extends Component {
     });
   };
 
-  setDate = (date) => {
+  setDate: Function = (date: Object): void => {
     this.setState({
       date,
     });
   };
 
-  setActiveDate = (activeDate) => {
+  setActiveDate: Function = (activeDate: Object): void => {
     this.setState({
       activeDate,
     });
   };
 
-  applyDate = (date) => {
+  applyDate: Function = (date: string): void => {
     this.props.onApplyDate(date);
   };
 
-  showDatepicker = () => {
+  showDatepicker: Function = (): void => {
     this.setState({
       showDatepicker: true,
     });
   };
 
-  hideDatepicker = () => {
+  hideDatepicker: Function = (): void => {
     this.setState({
       showDatepicker: false,
     });
   };
 
-  handleHoursChange = (event) => {
-    const hours = event.target.value;
-    const activeDate = this.state.activeDate;
+  handleHoursChange: Function = (event: Object): void => {
+    const hours: string = event.target.value;
+    const activeDate: Object = this.state.activeDate;
 
     activeDate.hours(hours);
 
@@ -87,9 +101,9 @@ export default class extends Component {
     });
   };
 
-  handleMinutesChange = (event) => {
-    const minutes = event.target.value;
-    const activeDate = this.state.activeDate;
+  handleMinutesChange: Function = (event: Object): void => {
+    const minutes: string = event.target.value;
+    const activeDate: Object = this.state.activeDate;
 
     activeDate.minutes(minutes);
 
@@ -99,48 +113,48 @@ export default class extends Component {
     });
   };
 
-  handleResetClick = () => {
+  handleResetClick: Function = (): void => {
     this.setState({
       hours: this.state.defaultHours,
       minutes: this.state.defaultMinutes,
     });
   };
 
-  handleApplyClick = () => {
-    const date = this.state.activeDate.format(DATE_FORMATS.URL_FORMAT);
+  handleApplyClick: Function = (): void => {
+    const date: string = this.state.activeDate.format(DATE_FORMATS.URL_FORMAT);
 
     this.applyDate(date);
   };
 
-  handleAllClick = () => {
+  handleAllClick: Function = (): void => {
     this.applyDate(DATES.ALL);
   };
 
-  handleNowClick = () => {
+  handleNowClick: Function = (): void => {
     this.applyDate(DATES.NOW);
   };
 
-  handle24hClick = () => {
+  handle24hClick: Function = (): void => {
     this.applyDate(DATES.PREV_DAY);
   };
 
-  handleTodayClick = () => {
+  handleTodayClick: Function = (): void => {
     this.applyDate(DATES.TODAY);
   };
 
-  handleInputChange = (event) => {
+  handleInputChange: Function = (event: Object): void => {
     this.setState({
       inputDate: event.target.value,
     });
   };
 
-  handleFormSubmit = (event) => {
+  handleFormSubmit: Function = (event: Object): void => {
     event.preventDefault();
 
     if (this.state.inputDate === '') {
       this.applyDate('');
     } else {
-      const date = new Date(this.state.inputDate);
+      const date: Object = new Date(this.state.inputDate);
 
       if (moment(date).isValid()) {
         this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
@@ -148,7 +162,7 @@ export default class extends Component {
     }
   };
 
-  renderDatepicker() {
+  renderDatepicker(): ?React.Element<any> {
     if (!this.state.showDatepicker) return null;
 
     return (
@@ -174,7 +188,7 @@ export default class extends Component {
     );
   }
 
-  renderControls() {
+  renderControls(): ?React.Element<Controls> {
     if (this.props.futureOnly) return null;
 
     return (
@@ -204,7 +218,7 @@ export default class extends Component {
     );
   }
 
-  render() {
+  render(): React.Element<any> {
     return (
       <div className="input-group date-controls">
         <Input
@@ -221,3 +235,11 @@ export default class extends Component {
     );
   }
 }
+
+DatePicker.propTypes = {
+  date: PropTypes.string,
+  onApplyDate: PropTypes.func,
+  futureOnly: PropTypes.bool,
+  submitOnBlur: PropTypes.bool,
+  placeholder: PropTypes.string,
+};

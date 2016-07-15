@@ -1,9 +1,8 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
-
 
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Form suited for entry of collection filter criteria.
@@ -13,44 +12,34 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class CollectionSearch extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    regexp: PropTypes.bool,
-    ignoreCase: PropTypes.bool,
-    onChange: PropTypes.func,
-  };
-
-
   static defaultProps = {
     regexp: false,
     ignoreCase: false,
     onChange: () => undefined,
   };
 
+  props: {
+    children: Array<React.Element<any>>,
+    regexp: boolean,
+    ignoreCase: boolean,
+    onChange: () => void,
+  };
 
-  /**
-   * Initializes default state and connects to log Web Socket.
-   *
-   * @see connect
-   */
-  componentWillMount() {
-    this.setState({
-      filter: new RegExp('', this.getFlags()),
-      source: '',
-      isRegExp: false,
-      error: null,
-    });
-  }
-
+  state = {
+    filter: new RegExp('', this.getFlags()),
+    source: '',
+    isRegExp: false,
+    error: null,
+  };
 
   /**
    * Prevents search form from being submitted.
    *
    * @param {Event} ev
    */
-  onSubmit(ev) {
+  onSubmit: Function = (ev: Object): void => {
     ev.preventDefault();
-  }
+  };
 
 
   /**
@@ -61,8 +50,8 @@ export default class CollectionSearch extends Component {
    *
    * @param {Event} ev
    */
-  onSourceChange(ev) {
-    const source = ev.currentTarget.value;
+  onSourceChange: Function = (ev: Object): void => {
+    const source: string = ev.currentTarget.value;
     const [filter, error] = this.filterFromSource(
       this.state.isRegExp, source
     );
@@ -70,7 +59,7 @@ export default class CollectionSearch extends Component {
     this.setState({ source, filter, error });
 
     this.props.onChange(filter);
-  }
+  };
 
 
   /**
@@ -79,8 +68,8 @@ export default class CollectionSearch extends Component {
    * The filter is changed and onChange prop callback is called with
    * filter as a parameter.
    */
-  onRegExpToggle() {
-    const isRegExp = !this.state.isRegExp;
+  onRegExpToggle: Function = (): void => {
+    const isRegExp: boolean = !this.state.isRegExp;
     const [filter, error] = this.filterFromSource(
       isRegExp, this.state.source
     );
@@ -88,13 +77,12 @@ export default class CollectionSearch extends Component {
     this.setState({ isRegExp, filter, error });
 
     this.props.onChange(filter);
-  }
+  };
 
 
   /**
    * Flags for RegExp constructor based on props.
    *
-   * @return {string}
    */
   getFlags() {
     return this.props.ignoreCase ? 'gi' : 'g';
@@ -110,12 +98,9 @@ export default class CollectionSearch extends Component {
    * source, it returns Error as the second element. Otherwise, the
    * second element of returned array is `null`.
    *
-   * @param {boolean} isRegExp treat `rawSource` as a RegExp
-   * @param {string} rawSource
-   * @return {Array<{!RegExp|Error}>}
    */
-  filterFromSource(isRegExp, rawSource) {
-    let source;
+  filterFromSource(isRegExp: boolean, rawSource: string): Array<any> {
+    let source: string;
     if (isRegExp) {
       source = rawSource;
     } else {
@@ -136,8 +121,8 @@ export default class CollectionSearch extends Component {
         replace(/\$$/g, '\\$');
     }
 
-    let filter;
-    let error = null;
+    let filter: ?RegExp;
+    let error: ?string = null;
     while (!filter && source) {
       try {
         filter = new RegExp(source, this.getFlags());
@@ -153,17 +138,11 @@ export default class CollectionSearch extends Component {
     return [filter, error];
   }
 
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
+  render(): React.Element<any> {
     return (
       <form
         className="form-inline text-right form-search"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
       >
         <div
           className={classNames({
@@ -186,7 +165,7 @@ export default class CollectionSearch extends Component {
                 type="checkbox"
                 className="sr-only"
                 checked={this.state.isRegExp}
-                onChange={::this.onRegExpToggle}
+                onChange={this.onRegExpToggle}
               />
             </label>
           )}
@@ -195,7 +174,7 @@ export default class CollectionSearch extends Component {
             className="form-control form-search__field"
             placeholder="Search…"
             value={this.state.source}
-            onChange={::this.onSourceChange}
+            onChange={this.onSourceChange}
           />
           <button
             type="submit"
@@ -214,3 +193,10 @@ export default class CollectionSearch extends Component {
     );
   }
 }
+
+CollectionSearch.propTypes = {
+  children: PropTypes.node,
+  regexp: PropTypes.bool,
+  ignoreCase: PropTypes.bool,
+  onChange: PropTypes.func,
+};

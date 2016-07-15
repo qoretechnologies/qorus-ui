@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
@@ -14,17 +15,14 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class Badge extends Component {
-  static propTypes = {
-    url: PropTypes.string,
-    val: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-    label: PropTypes.string,
-  };
-
   static defaultProps = {
     label: '',
+  };
+
+  props: {
+    url: string,
+    val: [number, string],
+    label: string,
   };
 
   /**
@@ -59,3 +57,12 @@ export default class Badge extends Component {
     );
   }
 }
+
+Badge.propTypes = {
+  url: PropTypes.string,
+  val: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  label: PropTypes.string,
+};

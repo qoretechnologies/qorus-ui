@@ -4,7 +4,7 @@ import ServiceTable from '../services/table';
 import { Cell } from '../../components/table';
 import Badge from '../../components/badge';
 import JobControls from './controls';
-import Date from '../../components/date';
+import DateComponent from '../../components/date';
 import Checkbox from '../../components/checkbox';
 
 import { goTo } from '../../helpers/router';
@@ -193,15 +193,15 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell><Date date={model.last_executed} /></Cell>
+      <Cell><DateComponent date={model.last_executed} /></Cell>
     );
 
     yield (
-      <Cell><Date date={model.next} /></Cell>
+      <Cell><DateComponent date={model.next} /></Cell>
     );
 
     yield (
-      <Cell><Date date={model.expiry_date} /></Cell>
+      <Cell><DateComponent date={model.expiry_date} /></Cell>
     );
 
     yield (

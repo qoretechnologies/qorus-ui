@@ -1,22 +1,25 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { CHECKBOX_CLASSES } from '../../constants/checkbox';
 import { pureRender } from '../utils';
 
 @pureRender
-export default class extends Component {
-  static propTypes = {
-    checked: PropTypes.string,
-    action: PropTypes.func,
+export default class Checkbox extends Component {
+  props: {
+    checked: string,
+    action: () => void,
   };
 
-  componentWillMount() {
-    this.setState({
-      checked: this.props.checked,
-    });
-  }
+  state: {
+    checked: string,
+  };
 
-  componentWillReceiveProps(next) {
+  state = {
+    checked: this.props.checked,
+  };
+
+  componentWillReceiveProps(next: Object) {
     if (this.props.checked !== next.checked) {
       this.setState({
         checked: next.checked,
@@ -28,11 +31,10 @@ export default class extends Component {
    * Checks / Unchecks the checkbox based on state
    * Stops further propagation
    * Runs provided function from the props.action
-   * @param {Event} event
    */
-  handleClick = (event) => {
+  handleClick = (event: Object) => {
     event.preventDefault();
-    const checked = this.state.checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED';
+    const checked: string = (this.state.checked: string) === 'CHECKED' ? 'UNCHECKED' : 'CHECKED';
 
     this.setState({
       checked,
@@ -44,7 +46,7 @@ export default class extends Component {
   };
 
   render() {
-    const className = classNames('fa', CHECKBOX_CLASSES[this.state.checked]);
+    const className: string = classNames('fa', CHECKBOX_CLASSES[this.state.checked]);
 
     return (
       <i
@@ -54,3 +56,8 @@ export default class extends Component {
     );
   }
 }
+
+Checkbox.propTypes = {
+  checked: PropTypes.string,
+  action: PropTypes.func,
+};

@@ -1,7 +1,17 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import { Control } from '../controls';
 
-export default function Input(props) {
+type Props = {
+  placeholder?: string,
+  onFormSubmit: (event: Object) => void,
+  submitOnBlur?: boolean,
+  inputDate: string,
+  onInputChange: (event: Object) => void,
+  onInputClick: (event: Object) => void,
+}
+
+export default function Input(props: Props) {
   return (
     <form
       onSubmit={props.onFormSubmit}

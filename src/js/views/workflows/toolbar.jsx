@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import Toolbar, { Actions } from '../../components/toolbar';
 import Dropdown, {
@@ -20,27 +21,27 @@ import { pureRender } from '../../components/utils';
 
 @pureRender
 export default class WorkflowsToolbar extends Component {
-  static propTypes = {
-    selected: PropTypes.string,
-    onFilterClick: PropTypes.func,
-    onRunningClick: PropTypes.func,
-    onDeprecatedClick: PropTypes.func,
-    onLastVersionClick: PropTypes.func,
-    params: PropTypes.object,
-    defaultSearchValue: PropTypes.string,
-    onSearchUpdate: PropTypes.func,
-    batchAction: PropTypes.func,
-    onAllClick: PropTypes.func,
-    onNoneClick: PropTypes.func,
-    onInvertClick: PropTypes.func,
-    onCSVClick: PropTypes.func,
-  };
-
   static contextTypes = {
     router: PropTypes.object,
     location: PropTypes.object,
     params: PropTypes.object,
     route: PropTypes.object,
+  };
+
+  props: {
+    selected: string,
+    onFilterClick: () => boolean,
+    onRunningClick: () => void,
+    onDeprecatedClick: () => void,
+    onLastVersionClick: () => void,
+    params: Object,
+    defaultSearchValue: string,
+    onSearchUpdate: () => void,
+    batchAction: () => void,
+    onAllClick: () => void,
+    onNoneClick: () => void,
+    onInvertClick: () => void,
+    onCSVClick: () => void,
   };
 
   /**
@@ -107,7 +108,7 @@ export default class WorkflowsToolbar extends Component {
     this.props.batchAction('unsetDeprecated');
   };
 
-  applyDate = (date) => {
+  applyDate = (date: string) => {
     goTo(
       this.context.router,
       'workflows',

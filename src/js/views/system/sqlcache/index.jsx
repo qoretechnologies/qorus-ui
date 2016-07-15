@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 import Table, { Section, Cell, Row } from '../../../components/table';
 import Loader from '../../../components/loader';
-import Date from '../../../components/date';
+import DateComponent from '../../../components/date';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -105,7 +105,7 @@ export default class SqlCache extends Component {
 
     yield (
       <Cell>
-        <Date date={ row.created } />
+        <DateComponent date={ row.created } />
       </Cell>
     );
 

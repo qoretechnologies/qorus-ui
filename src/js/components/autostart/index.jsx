@@ -1,10 +1,9 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { Controls, Control } from '../controls';
 
-
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Counter component relying on inc and dec props to change the value.
@@ -15,15 +14,6 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class AutoStart extends Component {
-  static propTypes = {
-    autostart: PropTypes.number,
-    execCount: PropTypes.number,
-    inc: PropTypes.func.isRequired,
-    dec: PropTypes.func.isRequired,
-    context: PropTypes.any,
-  };
-
-
   static defaultProps = {
     autostart: 0,
     execCount: 0,
@@ -31,52 +21,21 @@ export default class AutoStart extends Component {
     dec: (ctx, val) => val,
   };
 
+  props: {
+    autostart: number,
+    execCount: number,
+    inc: () => number,
+    dec: () => number,
+    context: any,
+  };
 
-  /**
-   * Creates decrement and increment function from given props.
-   *
-   * @see prepareActions
-   */
-  componentWillMount() {
-    this.prepareActions(this.props);
-  }
+  handleDecrementClick: Function = () => {
+    this.props.dec(this.props.context, this.props.autostart - 1);
+  };
 
-
-  /**
-   * Creates decrement and increment function from next props.
-   *
-   * @see prepareActions
-   */
-  componentWillUpdate(nextProps) {
-    this.prepareActions(nextProps);
-  }
-
-
-  /**
-   * Creates decrement and increment function.
-   *
-   * They are created by binding changeAutostart to dec and inc
-   * functions with delta value.
-   *
-   * @param {function} dec
-   * @param {function} inc
-   */
-  prepareActions({ dec, inc }) {
-    this.decrement = this.changeAutostart.bind(this, dec, -1);
-    this.increment = this.changeAutostart.bind(this, inc, +1);
-  }
-
-
-  /**
-   * Calls fn with context and autostart modified by delta.
-   *
-   * @param {function} fn
-   * @param {number} delta
-   */
-  changeAutostart(fn, delta) {
-    fn(this.props.context, this.props.autostart + delta);
-  }
-
+  handleIncrementClick: Function = () => {
+    this.props.inc(this.props.context, this.props.autostart + 1);
+  };
 
   /**
    * Returns element for this component.
@@ -84,17 +43,13 @@ export default class AutoStart extends Component {
    * @return {ReactElement}
    */
   render() {
-    if (!this.props.context) {
-      throw new Error('Property context must be provided.');
-    }
-
     return (
       <div className="autostart">
         <Controls grouped>
           <Control
             title="Decrease"
             icon="minus"
-            action={this.decrement}
+            action={this.handleDecrementClick}
           />
           <button
             className={classNames({
@@ -102,7 +57,7 @@ export default class AutoStart extends Component {
               btn: true,
               'btn-xs': true,
               'btn-success': this.props.autostart === this.props.execCount &&
-                             this.props.autostart > 0,
+                             this.props.autostart && this.props.autostart > 0,
             })}
             title="Click to edit"
           >
@@ -111,10 +66,18 @@ export default class AutoStart extends Component {
           <Control
             title="Increase"
             icon="plus"
-            action={this.increment}
+            action={this.handleIncrementClick}
           />
         </Controls>
       </div>
     );
   }
 }
+
+AutoStart.propTypes = {
+  autostart: PropTypes.number,
+  execCount: PropTypes.number,
+  inc: PropTypes.func.isRequired,
+  dec: PropTypes.func.isRequired,
+  context: PropTypes.any.isRequired,
+};

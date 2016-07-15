@@ -11,7 +11,7 @@ describe("AutoStart from 'components/autostart'", () => {
     chai.use(spies);
   });
 
-  it('displays autostart between decrement and increment buttons', () => {
+  it('displays autostart between _decrement and increment buttons', () => {
     const comp = TestUtils.renderIntoDocument(
       <AutoStart context={7} autostart={42} />
     );
