@@ -4,6 +4,9 @@ parser: babel-eslint
 env:
   browser: false
   node: true
+plugins: [
+  "flowtype"
+]
 rules:
   strict: 0
   "react/jsx-no-bind": 1
@@ -42,3 +45,8 @@ rules:
         }
     }
 ]
+settings:
+  flowtype:
+    onlyFilesWithFlowAnnotation: true
+globals:
+  ReactClass: true
