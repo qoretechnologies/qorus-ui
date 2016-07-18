@@ -7,7 +7,7 @@ const LoginForm = ({
   submitting,
   fields: { login, password },
 }: {
-  handleSubmit: () => void,
+  handleSubmit: Function,
   submitting: boolean,
   fields: {
     login: any,
