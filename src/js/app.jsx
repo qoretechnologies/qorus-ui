@@ -17,6 +17,7 @@ import Search from 'views/search';
 import Groups from 'views/groups';
 import Library from 'views/library';
 import Ocmd from 'views/ocmd';
+import Login from 'views/auth';
 
 
 import setupStore from 'store';
@@ -317,6 +318,7 @@ export default class App extends Component {
               <Route path="extensions" />
               <Route path="performance" />
             </Route>
+              <Route path="/login" component={Login} />
           </Router>
           {this.renderDevTools()}
         </div>
