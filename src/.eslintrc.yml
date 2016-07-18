@@ -11,3 +11,4 @@ globals:
   process:
     env:
       NODE_ENV: 'production'
+  Generator: true
