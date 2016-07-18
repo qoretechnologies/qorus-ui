@@ -159,7 +159,7 @@ export default class ChartComponent extends Component {
     }
   };
 
-  render() {
+  render(): React.Element<any> {
     return (
       <div
         className="chart-wrapper"

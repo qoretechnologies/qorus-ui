@@ -1,14 +1,12 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
-
 
 import ResizeHandle from '../resize/handle';
 import Header from './header';
 import Body from './body';
 import Footer from './footer';
 
-
 import { pureRender } from '../utils';
-
 
 /**
  * Modal pane component.
@@ -41,7 +39,6 @@ export default class Modal extends Component {
     }
   }
 
-
   /**
    * Finds modal Header component in children.
    *
@@ -53,7 +50,6 @@ export default class Modal extends Component {
     ))[0] || null;
   }
 
-
   /**
    * Stores modal reference for later.
    *
@@ -62,7 +58,6 @@ export default class Modal extends Component {
   refModal(el) {
     this._modal = el;
   }
-
 
   /**
    * Renders necessary elements around modal pane's content.
@@ -92,10 +87,8 @@ export default class Modal extends Component {
   }
 }
 
-
 Modal.Header = Header;
 Modal.Body = Body;
 Modal.Footer = Footer;
-
 
 export Manager from './manager';

@@ -1,3 +1,4 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 
 
@@ -7,7 +8,7 @@ import React, { PropTypes } from 'react';
  * @param {!{ children: Array<!ReactElement> }} props
  * @return {!ReactElement}
  */
-export default function Groups(props) {
+export default function Groups(props: { children: any }): React.Element<any> {
   return (
     <div className="groups">
       <h4>Groups</h4>

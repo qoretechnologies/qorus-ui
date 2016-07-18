@@ -1,5 +1,5 @@
+/* @flow */
 import React, { PropTypes } from 'react';
-
 
 /**
  * Wrapper for modal main content.
@@ -7,7 +7,7 @@ import React, { PropTypes } from 'react';
  * @param {!{ children: ReactNode }} props
  * @return {!ReactElement}
  */
-export default function Body(props) {
+export default function Body(props: { children: any }) {
   return (
     <div className="modal-body">
       {props.children}

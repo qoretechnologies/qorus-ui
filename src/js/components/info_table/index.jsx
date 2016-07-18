@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from '../table';
@@ -22,24 +23,22 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class InfoTable extends Component {
-  static propTypes = {
-    object: PropTypes.object.isRequired,
-    omit: PropTypes.array,
-    pick: PropTypes.array,
+  props: {
+    object: Object,
+    omit: Array<string | number>,
+    pick: Array<string | number>,
   };
 
-  componentWillMount() {
-    this.renderRows = ::this.renderRows;
-    this.renderTBody = ::this.renderTBody;
-    this.renderCells = ::this.renderCells;
-  }
+  renderRows = this.renderRows.bind(this);
+  renderTBody = this.renderTBody.bind(this);
+  renderCells = this.renderCells.bind(this);
 
   /**
    * Returns object attribute filter based on `omit` or `pick` props.
    *
    * @return {function(attr: string): boolean}
    */
-  getAttrFilter() {
+  getAttrFilter(): Function {
     if (this.props.omit) return attr => this.props.omit.indexOf(attr) < 0;
     if (this.props.pick) return attr => this.props.pick.indexOf(attr) >= 0;
     return () => true;
@@ -53,7 +52,7 @@ export default class InfoTable extends Component {
    * @return {Array<AttrValuePair>}
    * @see getAttrFilter
    */
-  getData() {
+  getData(): Array<Object> {
     return Object.keys(this.props.object).
       filter(this.getAttrFilter()).
       map(attr => ({
@@ -72,7 +71,7 @@ export default class InfoTable extends Component {
    * @return {ReactElement}
    * @see COMPLEX_VALUE_INDENT
    */
-  renderValue(value) {
+  renderValue(value: any): React.Element<any> {
     return <AutoComponent>{ value }</AutoComponent>;
   }
 
@@ -84,7 +83,7 @@ export default class InfoTable extends Component {
    * @return {Generator<ReactElement>}
    * @see renderValue
    */
-  *renderCells({ attr, value }) {
+  *renderCells({ attr, value }: { attr: string, value: string }): Generator<*, *, *> {
     yield (
       <Cell tag="th">{_.capitalize(attr)}</Cell>
     );
@@ -101,7 +100,7 @@ export default class InfoTable extends Component {
    * @return {Generator<ReactElement>}
    * @see renderCells
    */
-  *renderRows(data) {
+  *renderRows(data: Object): Generator<*, *, *> {
     for (const attr of data) {
       yield (
         <Row data={attr} cells={this.renderCells} />
@@ -116,7 +115,7 @@ export default class InfoTable extends Component {
    * @return {Generator<ReactElement>}
    * @see renderRows
    */
-  *renderTBody(data) {
+  *renderTBody(data: Object): Generator<*, *, *> {
     yield (
       <Section type="body" data={data} rows={this.renderRows} />
     );
@@ -127,7 +126,7 @@ export default class InfoTable extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render(): React.Element<Table> {
     return (
       <Table
         data={this.getData()}
@@ -137,3 +136,9 @@ export default class InfoTable extends Component {
     );
   }
 }
+
+InfoTable.propTypes = {
+  object: PropTypes.object.isRequired,
+  omit: PropTypes.array,
+  pick: PropTypes.array,
+};

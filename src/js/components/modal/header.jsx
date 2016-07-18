@@ -1,5 +1,11 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 
+type Props = {
+  titleId: string,
+  onClose?: Function,
+  children: any,
+}
 
 /**
  * Modal header with title, title HTML ID and close button.
@@ -14,7 +20,7 @@ import React, { PropTypes } from 'react';
  * }} props
  * @return {!ReactElement}
  */
-export default function Header(props) {
+export default function Header(props: Props) {
   return (
     <div className="modal-header">
       {props.onClose && (

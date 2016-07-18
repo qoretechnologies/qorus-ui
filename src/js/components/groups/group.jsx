@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
@@ -11,11 +12,11 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class Group extends Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    size: PropTypes.number,
-    url: PropTypes.string,
-    disabled: PropTypes.bool,
+  props: {
+    name: string,
+    size?: number,
+    url?: string,
+    disabled?: boolean,
   };
 
   /**
@@ -23,7 +24,7 @@ export default class Group extends Component {
    *
    * @return {ReactElement}
    */
-  renderLabel() {
+  renderLabel(): React.Element<any> {
     return (
       <span
         className={classNames({
@@ -45,7 +46,7 @@ export default class Group extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render(): React.Element<any> {
     return !this.props.url ? (
       <span className="group">
         {this.renderLabel()}
@@ -57,3 +58,10 @@ export default class Group extends Component {
     );
   }
 }
+
+Group.propTypes = {
+  name: PropTypes.string.isRequired,
+  size: PropTypes.number,
+  url: PropTypes.string,
+  disabled: PropTypes.bool,
+};

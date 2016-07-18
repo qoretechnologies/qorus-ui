@@ -1,4 +1,3 @@
-/* @flow */
 import React, { PropTypes } from 'react';
 import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
@@ -45,7 +44,9 @@ function isDate(val: string): boolean {
 export default function AutoComponent(props: { children: any }) {
   let comp;
 
-  if (props.children === null || props.children === 'undefined') return null;
+  if (props.children === null || props.children === 'undefined') {
+    return null;
+  }
 
   if (isBoolean(props.children)) {
     if (props.children) {
@@ -74,6 +75,9 @@ export default function AutoComponent(props: { children: any }) {
   );
 }
 
+AutoComponent.defaultProps = {
+  children: null,
+};
 
 AutoComponent.propTypes = {
   children: PropTypes.any,

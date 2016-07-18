@@ -1,32 +1,34 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { Control as Button } from '../controls';
-
 import classNames from 'classnames';
-
 import { pureRender } from '../utils';
+
+type Props = {
+  onSubmit?: () => void,
+  text?: string,
+  value?: string | number,
+  type: string,
+  errorChecker?: () => boolean,
+}
 
 @pureRender
 export default class Editable extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func,
-    text: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    type: PropTypes.string,
-    errorChecker: PropTypes.func,
+  props: Props;
+
+  state: {
+    error: boolean,
+    editing: boolean,
+    value: string | number,
   };
 
-  componentWillMount() {
-    this.setState({
-      error: false,
-      editing: false,
-      value: this.props.value,
-    });
-  }
+  state = {
+    error: false,
+    editing: false,
+    value: this.props.value,
+  };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props): void {
     if (this.props.value !== nextProps.value) {
       this.setState({
         value: nextProps.value,
@@ -34,7 +36,7 @@ export default class Editable extends Component {
     }
   }
 
-  handleFormSubmit = (event) => {
+  handleFormSubmit: Function = (event: Object): void => {
     event.preventDefault();
 
     if (this.props.errorChecker && !this.props.errorChecker(this.state.value)) {
@@ -53,26 +55,26 @@ export default class Editable extends Component {
     }
   };
 
-  handleHeaderClick = () => {
+  handleHeaderClick: Function = (): void => {
     this.setState({
       editing: true,
     });
   };
 
-  handleCancelClick = () => {
+  handleCancelClick: Function = (): void => {
     this.setState({
       editing: false,
     });
   };
 
-  handleInputChange = (event) => {
+  handleInputChange: Function = (event: Object): void => {
     this.setState({
       value: event.target.value,
     });
   };
 
-  render() {
-    const css = classNames('form-control', this.state.error ? 'form-error' : '');
+  render(): React.Element<any> {
+    const css: string = classNames('form-control', this.state.error ? 'form-error' : '');
 
     if (!this.state.editing) {
       return (
@@ -111,3 +113,14 @@ export default class Editable extends Component {
     );
   }
 }
+
+Editable.propTypes = {
+  onSubmit: PropTypes.func,
+  text: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  type: PropTypes.string,
+  errorChecker: PropTypes.func,
+};

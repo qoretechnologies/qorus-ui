@@ -1,16 +1,19 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-/**
- * @param {!Object} props
- * @return {!ReactElement}
- */
-export default function Control(props) {
+type Props = {
+  children?: React.Element<any>,
+  btnStyle?: string,
+  small?: boolean,
+}
+
+export default function Control(props: Props) {
   return (
     <button
       className={classNames('btn',
        props.small ? 'btn-xs' : '',
-       `btn-${props.btnStyle}`,
+       props.btnStyle || 'btn-default',
        'dropdown-toggle'
       )}
       {...props}
@@ -21,10 +24,6 @@ export default function Control(props) {
     </button>
   );
 }
-
-Control.defaultProps = {
-  btnStyle: 'default',
-};
 
 Control.propTypes = {
   children: PropTypes.node,

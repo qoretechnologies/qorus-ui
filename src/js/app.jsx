@@ -180,7 +180,6 @@ export default class App extends Component {
     document.dispatchEvent(ev);
   }
 
-
   /**
    * Returns empty DIV element.
    *
@@ -191,7 +190,6 @@ export default class App extends Component {
       <div />
     );
   }
-
 
   /**
    * Returns DevTools element if enabled and loaded.
@@ -209,7 +207,6 @@ export default class App extends Component {
     );
   }
 
-
   /**
    * Returns element for this component.
    *
@@ -222,7 +219,7 @@ export default class App extends Component {
       <Provider store={this.state.store}>
         <div className="app__wrap">
           <Router {...this.getRouterProps()} render={applyMiddleware(useRelativeLinks())}>
-            <Route path="/" component={Root}>
+            <Route path="/" component={Root} onEnter={this.requireAuth}>
               <IndexRedirect to="/system/dashboard" />
               <Route path="/system" component={System}>
                 <IndexRedirect to="dashboard" />

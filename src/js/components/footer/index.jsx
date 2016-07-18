@@ -1,3 +1,4 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 
 
@@ -7,7 +8,7 @@ import React, { PropTypes } from 'react';
  * @param {!{ info: !Object }} props
  * @return {!ReactElement}
  */
-export default function Footer(props) {
+export default function Footer(props: { info: Object }) {
   return (
     <footer>
       <div className="container-fluid">

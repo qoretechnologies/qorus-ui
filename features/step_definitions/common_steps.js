@@ -101,7 +101,7 @@ module.exports = function commonSteps() {
 
     this.detail = {
       id: findTableRowId(this.browser, name),
-      name
+      name,
     };
   });
 

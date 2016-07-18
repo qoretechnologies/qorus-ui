@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
@@ -9,33 +10,29 @@ import { pureRender } from '../utils';
 import { includes, remove, xor } from 'lodash';
 
 @pureRender
-export default class extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    id: PropTypes.string,
-    multi: PropTypes.bool,
-    def: PropTypes.string,
-    selectedIcon: PropTypes.string,
-    onSubmit: PropTypes.func,
-    submitLabel: PropTypes.string,
-    selected: PropTypes.array,
-  };
-
+export default class Dropdown extends Component {
   static defaultProps = {
     selectedIcon: 'check-square-o',
     submitLabel: 'Filter',
   };
 
-  componentWillMount() {
-    const selected = this.props.selected || [this.props.def];
+  props: {
+    children?: Array<React.Element<any>>,
+    id: string,
+    multi?: boolean,
+    def?: string,
+    selectedIcon?: string,
+    onSubmit?: () => void,
+    submitLabel?: string,
+    selected?: Array<?string>,
+  };
 
-    this.setState({
-      showDropdown: false,
-      selected,
-    });
-  }
+  state = {
+    showDropdown: false,
+    selected: this.props.selected || [(this.props.def: ?string)],
+  };
 
-  componentDidUpdate() {
+  componentDidUpdate(): void {
     document.removeEventListener('click', this.handleOutsideClick);
 
     if (this.state.showDropdown) {
@@ -43,7 +40,7 @@ export default class extends Component {
     }
   }
 
-  getToggleTitle = (children) => {
+  getToggleTitle: Function = (children: any): ?string => {
     if (children) {
       return children;
     }
@@ -64,8 +61,8 @@ export default class extends Component {
    *
    * @param {String} item
    */
-  toggleItem = (item) => {
-    let selected = this.state.selected.slice();
+  toggleItem: Function = (item: string): void => {
+    let selected: Array<?string> = this.state.selected.slice();
 
     if (item !== this.props.def) {
       remove(selected, v => v === this.props.def);
@@ -81,8 +78,8 @@ export default class extends Component {
     });
   };
 
-  handleOutsideClick = (event) => {
-    const el = ReactDOM.findDOMNode(this.refs.dropdown);
+  handleOutsideClick: Function = (event: Object): void => {
+    const el: Object = ReactDOM.findDOMNode(this.refs.dropdown);
 
     if (el && !el.contains(event.target)) {
       this.setState({
@@ -97,7 +94,7 @@ export default class extends Component {
    *
    * @param {Event} event
    */
-  handleToggleClick = (event) => {
+  handleToggleClick: Function = (event: Object): void => {
     if (!event.defaultPrevented) {
       event.preventDefault();
 
@@ -107,16 +104,18 @@ export default class extends Component {
     }
   };
 
-  handleSubmit = () => {
-    this.props.onSubmit(this.state.selected);
-    this.hideToggle();
+  handleSubmit: Function = (): void => {
+    if (this.props.onSubmit) {
+      this.props.onSubmit(this.state.selected);
+      this.hideToggle();
+    }
   };
 
   /**
    * Hides the control dropdown
    * based on the current state
    */
-  hideToggle = () => {
+  hideToggle: Function = (): void => {
     this.setState({
       showDropdown: false,
     });
@@ -125,7 +124,7 @@ export default class extends Component {
   /**
    * Renders the seleciton dropdown to the component
    */
-  renderDropdown() {
+  renderDropdown(): ?React.Element<any> {
     if (this.state.showDropdown) {
       return (
         <ul
@@ -141,12 +140,12 @@ export default class extends Component {
     return null;
   }
 
-  renderDropdownList() {
+  renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c) => {
       if (c.type !== Item) return undefined;
 
-      let selected = false;
-      let icon = c.props.icon;
+      let selected: boolean = false;
+      let icon: ?string = c.props.icon;
 
       if (includes(this.state.selected, c.props.title)) {
         selected = true;
@@ -166,7 +165,7 @@ export default class extends Component {
     });
   }
 
-  renderDropdownControl() {
+  renderDropdownControl(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c) => {
       if (c.type !== Control) return undefined;
 
@@ -182,7 +181,7 @@ export default class extends Component {
     });
   }
 
-  renderSubmit() {
+  renderSubmit(): ?React.Element<Button> {
     if (this.props.multi && this.props.onSubmit) {
       return (
         <Button
@@ -197,7 +196,7 @@ export default class extends Component {
     return undefined;
   }
 
-  render() {
+  render(): React.Element<any> {
     return (
       <div className="btn-group">
         {this.renderDropdownControl()}
@@ -208,7 +207,19 @@ export default class extends Component {
   }
 }
 
+Dropdown.propTypes = {
+  children: PropTypes.node,
+  id: PropTypes.string,
+  multi: PropTypes.bool,
+  def: PropTypes.string,
+  selectedIcon: PropTypes.string,
+  onSubmit: PropTypes.func,
+  submitLabel: PropTypes.string,
+  selected: PropTypes.array,
+};
+
 export {
   Item,
   Control,
 };
+

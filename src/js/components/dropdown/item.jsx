@@ -1,20 +1,18 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 @pureRender
 export default class Item extends Component {
-  static propTypes = {
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    icon: PropTypes.string,
-    action: PropTypes.func,
-    hideDropdown: PropTypes.func,
-    multi: PropTypes.bool,
-    selected: PropTypes.bool,
-    toggleItem: PropTypes.func,
+  props: {
+    title: string | number,
+    icon?: string,
+    action: () => void,
+    hideDropdown?: () => void,
+    multi?: boolean,
+    selected?: boolean,
+    toggleItem?: () => void,
   };
 
   /**
@@ -22,15 +20,15 @@ export default class Item extends Component {
    * provided function
    * @params {Object} - browser Event
    */
-  handleClick = (event) => {
+  handleClick: Function = (event: Object): void => {
     if (this.props.action) {
       this.props.action(event, this.props.title);
     }
 
     if (!this.props.multi) {
-      this.props.hideDropdown();
+      if (this.props.hideDropdown) this.props.hideDropdown();
     } else {
-      this.props.toggleItem(this.props.title);
+      if (this.props.toggleItem) this.props.toggleItem(this.props.title);
     }
   };
 
@@ -38,7 +36,7 @@ export default class Item extends Component {
    * Renders the icon for the dropdown item
    * @returns {ReactElement|Void}
    */
-  renderIcon() {
+  renderIcon(): ?React.Element<any> {
     if (this.props.icon) {
       return <i className={classNames('fa', `fa-${this.props.icon}`)} />;
     }
@@ -46,7 +44,7 @@ export default class Item extends Component {
     return null;
   }
 
-  render() {
+  render(): React.Element<any> {
     const cls = classNames(this.props.selected ? 'active' : '');
 
     return (
@@ -63,3 +61,16 @@ export default class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  icon: PropTypes.string,
+  action: PropTypes.func,
+  hideDropdown: PropTypes.func,
+  multi: PropTypes.bool,
+  selected: PropTypes.bool,
+  toggleItem: PropTypes.func,
+};

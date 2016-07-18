@@ -49,7 +49,6 @@ export default class Root extends Component {
     selectModalText: PropTypes.func,
   };
 
-
   /**
    * Initializes internal state.
    *
