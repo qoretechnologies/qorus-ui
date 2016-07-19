@@ -66,7 +66,7 @@ app.listen(
       });
     }
 
-    if (app.get('env') !== 'test') {
+    if (app.get('env') !== 'test1') {
       process.stdout.write(
         `Qorus Webapp ${app.get('env')} server listening on ` +
         `http://${serverConfig.host}:${serverConfig.port}\n`

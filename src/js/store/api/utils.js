@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
 

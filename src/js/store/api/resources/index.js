@@ -147,4 +147,9 @@ export default [
     url: `${settings.REST_BASE_URL}/system/api`,
     transform: item => item,
   },
+  {
+    name: 'auth',
+    url: `${settings.REST_BASE_URL}/users/auth`,
+    transform: item => item,
+  },
 ];

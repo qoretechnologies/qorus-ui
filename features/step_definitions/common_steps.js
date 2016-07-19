@@ -4,6 +4,7 @@ const cmpLoader = `${mainSection} p`;
 const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
+const cmpForm = `form`;
 
 /**
  * Finds listed object's row element by its name.
@@ -66,6 +67,10 @@ module.exports = function commonSteps() {
     return this.browser.visit(`/${name}`);
   });
 
+  this.Given(/^I am on "([^"]*)" page$/, function(name) {
+    return this.browser.visit(`/${name}`);
+  });
+
 
   this.Then(/^I should see a loader$/, function() {
     this.browser.assert.text(cmpLoader, 'Loading...');
@@ -76,11 +81,13 @@ module.exports = function commonSteps() {
     this.browser.assert.elements(cmpRows, { atLeast: 1 });
   });
 
+  this.Then(/^I should see "([^"]*)" form$/, function(name) {
+    this.browser.assert.elements(`form.${name}`, { atLesat: 1 });
+  });
 
   this.When(/^"([^"]*)" get loaded$/, function(name) {
     return this.waitForElement(cmpTable);
   });
-
 
   this.Given(/^there are no "([^"]*)" loaded$/, function(name) {
     this.browser.assert.elements(cmpTable, 0);
@@ -276,6 +283,20 @@ module.exports = function commonSteps() {
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
     this.browser.fill('#search', search);
     this.browser.pressButton('#search-form [type="submit"]');
+  });
+
+  this.When(/^I type "([^"]*)" in "([^"]*)" input$/, async function(text, input) {
+    this.browser.fill(input, text);
+  });
+
+  this.When(/^I submit "([^"]*)" form$/, async function(formClass) {
+    this.browser.pressButton(`form.${formClass} button[type=submit]`);
+  });
+
+  this.Then(/^I see "([^"]*)" alert$/, async function(alertType) {
+    const elementName = `.alert-${alertType}`;
+    await this.waitForElement(elementName);
+    this.browser.assert.element(elementName);
   });
 
   this.Then(/^I see modal with CSV data in it$/, async function () {

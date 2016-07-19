@@ -48,6 +48,22 @@ class World {
     this.browser = new Browser();
     this.browser.site = `http://${devConfig().host}:${devConfig().port}`;
 
+    const customHeaders = [
+      { name: 'accept', value: 'application/json' },
+      { name: 'content-type', value: 'application/json' },
+    ];
+
+    const addCustomHeaders = (browser, request) => {
+      if (request.method === 'POST') {
+        customHeaders.forEach(headerInfo => {
+          request.headers.set(headerInfo.name, headerInfo.value);
+        });
+      }
+      return null;
+    };
+
+    this.browser.pipeline.addHandler(addCustomHeaders);
+
     return new Promise((resolve, reject) => {
       this.browser.visit('/', '1m', err => {
         if (err) {
@@ -180,7 +196,7 @@ class World {
    * @return {Promise}
    */
   waitForElement(
-    selector, context = this.browser.document, limit = 5000, checks = 10
+    selector, context = this.browser.document, limit = 10000, checks = 10
   ) {
     function check(resolve, reject, tries = 0) {
       if (this.browser.query(selector, context)) {

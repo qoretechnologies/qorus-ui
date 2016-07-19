@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
+import * as authActions from './resources/auth/actions';
 import * as workflowActions from './resources/workflows/actions';
 import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
@@ -79,11 +80,15 @@ const actions = createApiActions(
   combineResourceActions(
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),
     createResourceActions(RESOURCES),
-// TODO: Add more conveniant way to assign more actions to resource for
-// example like following code
-//    addResourceActions(RESOURCES, 'services', serviceActions.delegates),
+    // TODO: Add more conveniant way to assign more actions to resource for
+    // example like following code
+    //    addResourceActions(RESOURCES, 'services', serviceActions.delegates),
   )
 );
+
+// Object.keys(authActions).forEach(a => {
+//   actions.auth[a] = authActions[a];
+// });
 
 Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
@@ -120,6 +125,10 @@ Object.keys(jobActions.delegates).forEach(a => {
 
 Object.keys(optionActions.delegates).forEach(a => {
   actions.systemOptions[a] = optionActions.delegates[a](actions);
+});
+
+Object.keys(authActions).forEach(a => {
+  actions.auth[a] = authActions[a](actions);
 });
 
 export default actions;
