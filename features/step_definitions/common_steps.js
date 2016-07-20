@@ -299,6 +299,14 @@ module.exports = function commonSteps() {
     this.browser.assert.element(elementName);
   });
 
+  this.Then(/^"([^"]*)" exists in localStorage$/, function(itemName) {
+    const item = this.browser.window.localStorage.getItem(itemName);
+    if (!item) {
+      throw new Error(`${itemName} hasn't been set`);
+    }
+    this.browser.assert.success();
+  });
+
   this.Then(/^I see modal with CSV data in it$/, async function () {
     await this.waitForElement('.modal');
     this.browser.assert.element('.modal');
@@ -337,6 +345,12 @@ module.exports = function commonSteps() {
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
     return this.browser.click(row.cells[parseInt(nameCell, 10)].children[0]);
+  });
+
+  this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
+    await this.waitForURLChange();
+
+    this.browser.assert.url({ pathname });
   });
 };
 

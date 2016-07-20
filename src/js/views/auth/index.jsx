@@ -7,27 +7,37 @@ import actions from '../../store/api/actions';
 import LoginForm from './form';
 
 class Login extends Component {
-  static defaultProps = {
-    setToken: () => {},
-  }
+
+  static contextTypes = {
+    router: PropTypes.object,
+  };
 
   props: {
+    location: any,
     sendAuthCredentials: () => Promise<*>,
-    setToken: Function,
+  }
+
+  onSubmitSuccess = async () => {
+    const { router } = this.context;
+    const { location } = this.props;
+
+    const nextUrl = location.query.next || '/';
+    router.push(nextUrl);
   }
 
   handleSubmit = (
     { login, password }: { login: string, password: string }
   ): Promise<*> => {
-    const { sendAuthCredentials, setToken } = this.props;
+    const { sendAuthCredentials } = this.props;
     return new Promise(async (resolve, reject) => {
       try {
         const result = await sendAuthCredentials(login, password);
         if (result.payload.error) {
           reject({ _error: result.payload.error });
+        } else {
+          this.onSubmitSuccess(result);
+          resolve(result);
         }
-        setToken(result.payload.token);
-        resolve(result);
       } catch (e) {
         reject({ _error: 'Un expected error' });
       }
@@ -44,8 +54,8 @@ class Login extends Component {
   }
 }
 Login.propTypes = {
+  location: PropTypes.obj,
   sendAuthCredentials: PropTypes.func.isRequired,
-  setToken: PropTypes.func,
 };
 
 export default connect(
