@@ -8,6 +8,21 @@ import { jsdom } from 'jsdom';
  */
 function missingGlobal(ctx) {
   const global = {};
+  const storage = {};
+
+  const localStorage = {
+    setItem(key, value) {
+      storage[key] = value;
+    },
+
+    getItem(key) {
+      return storage[key];
+    },
+
+    deleteItem(key) {
+      storage[key] = undefined;
+    }
+  };
 
   if (!ctx.document) {
     global.document = jsdom(
@@ -22,7 +37,9 @@ function missingGlobal(ctx) {
       { url: 'http://qorus.example.com/' }
     );
     global.window = global.document.defaultView;
+    global.window.localStorage = localStorage;
     global.self = global.window.self;
+    global.localStorage = localStorage;
   }
 
   if (!ctx.navigator) {
