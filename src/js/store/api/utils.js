@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
+import { browserHistory } from 'react-router';
 
 
 import settings from '../../settings';
@@ -90,7 +91,32 @@ export function createApiActions(actions) {
 
 
 /**
+ * getHeaders - add Qorus-Token header to default headers
+ * if token set in localStorage
+ *
+ * @return {*}  headers for request
+ */
+function getRestHeaders() {
+  let headers = settings.DEFAULT_REST_HEADERS;
+
+  const token = window.localStorage.getItem('token');
+
+  if (token) {
+    headers = Object.assign(
+      {},
+      headers,
+      {
+        'Qorus-Token': token,
+      }
+    );
+  }
+  return headers;
+}
+
+/**
  * Fetches JSON data by requesting given URL via given method.
+ * If response.status === 401 then remove localStorage.token and
+ * go to /login page
  *
  * @param {string} method method can be also specified in opts
  * @param {string} url
@@ -99,13 +125,20 @@ export function createApiActions(actions) {
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
 export async function fetchJson(method, url, opts = {}) {
+  const currentPath = window.location.pathname;
   const res = await fetch(
     url,
     Object.assign({
       method,
-      headers: settings.DEFAULT_REST_HEADERS,
+      headers: getRestHeaders(),
     }, opts)
   );
+
+  const pathname = window.location.pathname;
+  if (res.status === 401 && currentPath === pathname) {
+    window.localStorage.removeItem('token');
+    browserHistory.push(`/login?next=${pathname}`);
+  }
 
   return res.json();
 }

@@ -67,6 +67,10 @@ module.exports = function commonSteps() {
     this.token = null;
   });
 
+  this.Given(/^I am user with fake token$/, function() {
+    this.token = 'fake';
+  });
+
   this.Given(/^I am on "([^"]*)" listing$/, function(name) {
     return this.browser.visit(`/${name}`);
   });

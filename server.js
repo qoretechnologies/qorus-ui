@@ -26,7 +26,17 @@ switch (app.get('env')) {
     process.on('SIGUSR2', reload);
     reload();
 
-    app.use((req, res, next) => api(req, res, next));
+    app.use((req, res, next) => {
+      if (
+        req.originalUrl.includes('/api') &&
+        req.headers['qorus-token'] &&
+        req.headers['qorus-token'] === 'fake'
+      ) {
+        res.status(401).send('Wrong token');
+        return;
+      }
+      api(req, res, next);
+    });
     app.use(history());
     app.use(require('webpack-dev-middleware')(compiler, config.devServer));
     if (config.plugins && config.plugins.some(p => (

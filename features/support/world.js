@@ -60,6 +60,10 @@ class World {
     }.bind(this));
 
     const addCustomHeaders = (browser, request) => {
+      if (this.token) {
+        request.headers.set('Qorus-Token', this.token);
+      }
+      
       if (request.method === 'POST') {
         customHeaders.forEach(headerInfo => {
           request.headers.set(headerInfo.name, headerInfo.value);
@@ -68,7 +72,7 @@ class World {
       return null;
     };
 
-    this.browser.pipeline.addHandler(addCustomHeaders);
+    this.browser.pipeline.addHandler(addCustomHeaders.bind(this));
 
     return new Promise((resolve, reject) => {
       this.browser.visit('/', '1m', err => {
