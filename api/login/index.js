@@ -18,7 +18,7 @@ module.exports = () => {
     switch (req.body.action) {
       case 'login':
         user = data.find(u => (
-          u.username === req.body.login && u.password === req.body.password
+          u.username === req.body.user && u.password === req.body.pass
         ));
         if (user) {
           const token = `sometkn ${Math.random(1, 100)}`;

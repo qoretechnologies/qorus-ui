@@ -22,7 +22,7 @@
 export function sendAuthCredentials(actions: any) {
   return (login: string, password: string) => (dispatch: Function) => (
     dispatch(actions.auth.update({
-      body: JSON.stringify({ login, password, action: 'login' }),
+      body: JSON.stringify({ user: login, pass: password, action: 'login' }),
     }))
   );
 }
