@@ -53,6 +53,12 @@ class World {
       { name: 'content-type', value: 'application/json' },
     ];
 
+    this.token = 'asdf123'
+
+    this.browser.on('active', function setToken() {
+      this.browser.window.localStorage.setItem('token', this.token);
+    }.bind(this));
+
     const addCustomHeaders = (browser, request) => {
       if (request.method === 'POST') {
         customHeaders.forEach(headerInfo => {

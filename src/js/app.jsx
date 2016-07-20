@@ -211,6 +211,32 @@ export default class App extends Component {
   }
 
   /**
+   * requireAnonymous - redirect to main page if user authenticated
+   * @param  {*} nextState next router state
+   * @param  {Function} replace change state function
+   */
+  requireAnonymous(nextState, replace) {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      replace('/');
+    }
+  }
+
+
+  /**
+   * requireAuthenticated - redirect to login page is user isn't authenticated
+   * add current path as get param "next"
+   * @param  {*} nextState next router state
+   * @param  {Function} replace change state function
+   */
+  requireAuthenticated(nextState, replace) {
+    const token = window.localStorage.getItem('token');
+    if (!token) {
+      replace(`/login?next=${nextState.location.pathname}`);
+    }
+  }
+
+  /**
    * Returns element for this component.
    *
    * @return {ReactElement}
@@ -221,8 +247,15 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className="app__wrap">
-          <Router {...this.getRouterProps()} render={applyMiddleware(useRelativeLinks())}>
-            <Route path="/" component={Root} onEnter={this.requireAuth}>
+          <Router
+            {...this.getRouterProps()}
+            render={applyMiddleware(useRelativeLinks())}
+          >
+            <Route
+              path="/"
+              component={Root}
+              onEnter={this.requireAuthenticated}
+            >
               <IndexRedirect to="/system/dashboard" />
               <Route path="/system" component={System}>
                 <IndexRedirect to="dashboard" />
@@ -318,7 +351,11 @@ export default class App extends Component {
               <Route path="extensions" />
               <Route path="performance" />
             </Route>
-              <Route path="/login" component={Login} />
+            <Route
+              path="/login"
+              component={Login}
+              onEnter={this.requireAnonymous}
+            />
           </Router>
           {this.renderDevTools()}
         </div>

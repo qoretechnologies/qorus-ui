@@ -63,6 +63,10 @@ module.exports = function commonSteps() {
     this.browser.assert.text('title', new RegExp(`^${title} \|`));
   });
 
+  this.Given(/^I am anonymous user$/, function() {
+    this.token = null;
+  });
+
   this.Given(/^I am on "([^"]*)" listing$/, function(name) {
     return this.browser.visit(`/${name}`);
   });
@@ -351,6 +355,10 @@ module.exports = function commonSteps() {
     await this.waitForURLChange();
 
     this.browser.assert.url({ pathname });
+  });
+
+  this.Then(/^query param "([^"]*)" equals to "([^"]*)"$/, function(name, value) {
+    this.browser.assert.url({ query: { [name]: value } });
   });
 };
 
