@@ -54,7 +54,7 @@ class Login extends Component {
   }
 }
 Login.propTypes = {
-  location: PropTypes.obj,
+  location: PropTypes.object,
   sendAuthCredentials: PropTypes.func.isRequired,
 };
 

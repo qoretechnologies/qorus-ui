@@ -21,7 +21,7 @@ function missingGlobal(ctx) {
 
     deleteItem(key) {
       storage[key] = undefined;
-    }
+    },
   };
 
   if (!ctx.document) {
