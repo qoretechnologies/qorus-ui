@@ -53,7 +53,7 @@ class World {
       { name: 'content-type', value: 'application/json' },
     ];
 
-    this.token = 'asdf123'
+    this.token = 'admin';
 
     this.browser.on('active', function setToken() {
       this.browser.window.localStorage.setItem('token', this.token);
@@ -63,7 +63,7 @@ class World {
       if (this.token) {
         request.headers.set('Qorus-Token', this.token);
       }
-      
+
       if (request.method === 'POST') {
         customHeaders.forEach(headerInfo => {
           request.headers.set(headerInfo.name, headerInfo.value);

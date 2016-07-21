@@ -21,7 +21,7 @@ module.exports = () => {
           u.username === req.body.user && u.password === req.body.pass
         ));
         if (user) {
-          const token = `sometkn ${Math.random(1, 100)}`;
+          const token = user.token;
           res.status(200).json({ token });
         } else {
           res.status(400).json({ error: 'some error' });
