@@ -37,6 +37,7 @@ export default class LibraryView extends Component {
 
   state: {
     value: string,
+    id: ?string | ?number,
     functions: Array<Object>,
     classes: Array<Object>,
     constants: Array<Object>,
@@ -44,6 +45,7 @@ export default class LibraryView extends Component {
 
   state = {
     searchValue: '',
+    id: null,
     functions: this.props.functions,
     classes: this.props.classes,
     constants: this.props.constants,
@@ -68,7 +70,9 @@ export default class LibraryView extends Component {
   };
 
   handleRowClick: Function = (id: string | number): void => {
-    console.log(id);
+    this.setState({
+      id,
+    });
   };
 
   render(): React.Element<any> {
