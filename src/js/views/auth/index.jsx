@@ -6,6 +6,8 @@ import { CenterWrapper } from '../../components/layout';
 import actions from '../../store/api/actions';
 import LoginForm from './form';
 
+import { auth } from '../../helpers/user';
+
 class Login extends Component {
 
   static contextTypes = {
@@ -15,7 +17,7 @@ class Login extends Component {
   props: {
     location: any,
     sendAuthCredentials: () => Promise<*>,
-  }
+  };
 
   onSubmitSuccess = async () => {
     const { router } = this.context;
@@ -23,26 +25,13 @@ class Login extends Component {
 
     const nextUrl = location.query.next || '/';
     router.push(nextUrl);
-  }
+  };
 
   handleSubmit = (
     { login, password }: { login: string, password: string }
-  ): Promise<*> => {
-    const { sendAuthCredentials } = this.props;
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await sendAuthCredentials(login, password);
-        if (result.payload.error) {
-          reject({ _error: result.payload.error });
-        } else {
-          this.onSubmitSuccess(result);
-          resolve(result);
-        }
-      } catch (e) {
-        reject({ _error: 'Un expected error' });
-      }
-    });
-  };
+  ): Promise<*> => (
+    auth(login, password, this.props.sendAuthCredentials).then(this.onSubmitSuccess)
+  );
 
   render() {
     return (
@@ -53,6 +42,7 @@ class Login extends Component {
     );
   }
 }
+
 Login.propTypes = {
   location: PropTypes.object,
   sendAuthCredentials: PropTypes.func.isRequired,
