@@ -1,15 +1,11 @@
 /* @flow */
 import React from 'react';
+import classNames from 'classnames';
 
 const Alert = (
   { children, bsStyle }: { children?: string, bsStyle: string }
-) => {
-  let alertClass = '';
-
-  if (bsStyle) {
-    alertClass = `alert-${bsStyle}`;
-  }
-  return <div className={`alert ${alertClass}`}>{children}</div>;
-};
+) => (
+  <div className={classNames('alert', bsStyle ? `alert-${bsStyle}` : '')}>{children}</div>
+);
 
 export default Alert;
