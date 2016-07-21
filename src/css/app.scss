@@ -37,9 +37,10 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './pane';
 @import './tabs';
 @import './search';
+@import './library';
 
 
-html, body, .app, .app__wrap {
+html, body, .app, .app__wrap, .container-fluid {
   height: 100%;
 }
 

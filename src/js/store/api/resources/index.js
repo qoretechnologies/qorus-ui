@@ -121,4 +121,25 @@ export default [
     url: `${settings.REST_BASE_URL}/system/sqlcache`,
     transform: item => item,
   },
+  {
+    name: 'classes',
+    url: `${settings.REST_BASE_URL}/classes`,
+    transform: _.flowRight(
+      normalizeId('classid'),
+    ),
+  },
+  {
+    name: 'constants',
+    url: `${settings.REST_BASE_URL}/constants`,
+    transform: _.flowRight(
+      normalizeId('constantid'),
+    ),
+  },
+  {
+    name: 'functions',
+    url: `${settings.REST_BASE_URL}/functions`,
+    transform: _.flowRight(
+      normalizeId('function_instanceid'),
+    ),
+  },
 ];

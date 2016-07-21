@@ -14,9 +14,11 @@ describe("Search from 'components/search'", () => {
   describe('Search', () => {
     it('renders search input with icon', () => {
       const renderer = TestUtils.createRenderer();
+
       renderer.render(
         <Search />
       );
+
       const result = renderer.getRenderOutput();
 
       expect(result.type).to.equal('form');
@@ -30,11 +32,13 @@ describe("Search from 'components/search'", () => {
 
     it('renders the input with a default value', () => {
       const renderer = TestUtils.createRenderer();
+
       renderer.render(
         <Search
           defaultValue="Yolo"
         />
       );
+
       const result = renderer.getRenderOutput();
 
       expect(result.props.children[0].props.children[0].props.defaultValue).to.equal('Yolo');
@@ -43,6 +47,7 @@ describe("Search from 'components/search'", () => {
     it('runs the provided function when the input changes after 500ms', () => {
       const action = chai.spy();
       const renderer = TestUtils.createRenderer();
+
       renderer.render(
         <Search
           onSearchUpdate={action}
@@ -58,6 +63,20 @@ describe("Search from 'components/search'", () => {
       setTimeout(() => {
         expect(action).to.have.been.called().with('Hello');
       }, 500);
+    });
+
+    it('renders the input wrapper without the pull-right class', () => {
+      const renderer = TestUtils.createRenderer();
+
+      renderer.render(
+        <Search
+          pullLeft
+        />
+      );
+
+      const result = renderer.getRenderOutput();
+
+      expect(result.props.children[0].props.className).to.equal('input-group col-lg-2 ');
     });
   });
 });
