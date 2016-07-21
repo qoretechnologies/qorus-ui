@@ -1,21 +1,23 @@
-/* eslint no-unused-expressions: 0 */
-import { expect } from 'chai';
-import sinon from 'sinon';
-
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 import auth from '../../src/js/middlewares/auth';
 
-describe('{ auth } from middlewares/auth', () => {
+describe.only('{ auth } from middlewares/auth', () => {
+  before(() => {
+    chai.use(spies);
+  });
+
   it('not AUTH_UPDATE action', () => {
     const action = {
       type: 'SOME_ACTION',
       payload: { test: 'test' },
     };
-    const next = sinon.spy();
+    const next = chai.spy();
     const state = {};
 
     auth(state)(next)(action);
 
-    expect(next.calledWith(action)).to.be.true;
+    expect(next).to.have.been.called.with(action);
   });
 
   it('AUTH_UPDATE action with error', () => {
@@ -23,12 +25,12 @@ describe('{ auth } from middlewares/auth', () => {
       type: 'AUTH_UPDATE',
       payload: { error: 'error' },
     };
-    const next = sinon.spy();
+    const next = chai.spy();
     const state = {};
 
     auth(state)(next)(action);
 
-    expect(next.calledWith(action)).to.be.true;
+    expect(next).to.have.been.called.with(action);
   });
 
   it('AUTH_UPDATE action with token', () => {
@@ -40,12 +42,12 @@ describe('{ auth } from middlewares/auth', () => {
       type: 'AUTH_UPDATE',
       payload: { status: 'ok' },
     };
-    const next = sinon.spy();
+    const next = chai.spy();
     const state = {};
 
     auth(state)(next)(action);
 
-    expect(next.calledWith(expectedAction)).to.be.true;
+    expect(next).to.have.been.called.with(expectedAction);
 
     const token = window.localStorage.getItem('token');
     expect(token).to.equal('tkn123');
