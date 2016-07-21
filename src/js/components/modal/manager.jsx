@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { pureRender } from '../utils';
 
@@ -18,25 +19,19 @@ const ESCAPE_KEY_CODE = 27;
  */
 @pureRender
 export default class Manager extends Component {
-  /**
-   * Initializes internal state.
-   *
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
+  state: {
+    modal: ?React.Element<any>,
+  };
 
-    this._root = null;
-    this._modals = null;
-    this._globalKeyUp = null;
-  }
+  state = {
+    modal: (null: ?React.Element<any>),
+  };
 
   /**
    * Sets up storage for modals to manage and state for current modal.
    */
-  componentWillMount() {
+  componentWillMount(): void {
     this._modals = new Set();
-    this.setState({ modal: null });
   }
 
   /**
@@ -51,7 +46,7 @@ export default class Manager extends Component {
    * @param {object} nextProps
    * @param {object} nextState
    */
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps: Object, nextState: Object): void {
     if (nextState.modal) {
       document.body.classList.add('modal-open');
     } else {
@@ -59,7 +54,7 @@ export default class Manager extends Component {
     }
 
     if (nextState.modal && !this._globalKeyUp) {
-      this._globalKeyUp = ::this.onKeyUp;
+      this._globalKeyUp = this.onKeyUp;
       document.addEventListener('keyup', this._globalKeyUp, false);
     } else if (this._globalKeyUp) {
       document.removeEventListener('keyup', this._globalKeyUp, false);
@@ -71,7 +66,7 @@ export default class Manager extends Component {
   /**
    * Removes global `keyup` listener and `modal-open` class from body.
    */
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     if (this._globalKeyUp) {
       document.removeEventListener('keyup', this._globalKeyUp, false);
       this._globalKeyUp = null;
@@ -82,13 +77,18 @@ export default class Manager extends Component {
     this._modals = null;
   }
 
+  _root: ?Object = null;
+  _modals: ?Set<*> = null;
+  _globalKeyUp: ?EventHandler = null;
 
   /**
    * Triggers modal's close button.
    */
   onEscape() {
-    if (this.getCloseButton()) {
-      this.getCloseButton().click();
+    const closeButton = this.getCloseButton();
+
+    if (closeButton) {
+      closeButton.click();
     }
   }
 
@@ -99,20 +99,23 @@ export default class Manager extends Component {
    *
    * @param {KeyboardEvent} ev
    */
-  onKeyUp(ev) {
-    if (ev.keyCode === ESCAPE_KEY_CODE) {
+  onKeyUp: Function = (ev: KeyboardEvent): void => {
+    if (ev.keyCode && ev.keyCode === ESCAPE_KEY_CODE) {
       this.onEscape();
     }
-  }
+  };
 
   /**
    * Finds modal close button in modal's header section.
    *
    * @return {HTMLButtonElement|null}
    */
-  getCloseButton() {
-    return this._root &&
-      this._root.querySelector('.modal-header button.close');
+  getCloseButton(): ?Object {
+    if (this._root) {
+      return this._root.querySelector('.modal-header button.close');
+    }
+
+    return null;
   }
 
   /**
@@ -120,9 +123,11 @@ export default class Manager extends Component {
    *
    * @param {ReactElement} modal
    */
-  open(modal) {
-    this._modals.add(modal);
-    this.updateModal(modal);
+  open(modal: React.Element<any>): void {
+    if (this._modals) {
+      this._modals.add(modal);
+      this.updateModal(modal);
+    }
   }
 
   /**
@@ -133,9 +138,11 @@ export default class Manager extends Component {
    *
    * @param {ReactElement} modal
    */
-  close(modal) {
-    this._modals.delete(modal);
-    this.updateModal();
+  close(modal: React.Element<any>): void {
+    if (this._modals) {
+      this._modals.delete(modal);
+      this.updateModal();
+    }
   }
 
   /**
@@ -147,13 +154,22 @@ export default class Manager extends Component {
    *
    * @param {?ReactElement} modal
    */
-  updateModal(modal) {
-    let lastModal;
-    for (const m of this._modals.values()) lastModal = m;
+  updateModal(modal: ?React.Element<any>): void {
+    const modals: ?Set<*> = this._modals;
 
-    if (modal && modal !== lastModal) return;
+    if (modals) {
+      const values: ?Object = modals.values();
 
-    this.setState({ modal: lastModal });
+      if (values) {
+        let lastModal: ?React.Element<any>;
+
+        for (const m of values) lastModal = m;
+
+        if (modal && modal !== lastModal) return;
+
+        this.setState({ modal: lastModal });
+      }
+    }
   }
 
   /**
@@ -161,7 +177,7 @@ export default class Manager extends Component {
    *
    * @param {HTMLElement} el
    */
-  refRoot = (el) => {
+  refRoot: Function = (el: Object): void => {
     this._root = el;
   };
 
@@ -172,7 +188,7 @@ export default class Manager extends Component {
    *
    * @return {ReactElement|null}
    */
-  render() {
+  render(): ?React.Element<any> {
     if (!this.state.modal) return null;
 
     return (

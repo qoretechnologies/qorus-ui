@@ -5,12 +5,7 @@ import { debounce } from 'lodash';
 import { Control } from '../controls';
 
 @pureRender
-export default class extends Component {
-  static propTypes = {
-    onSearchUpdate: PropTypes.func,
-    defaultValue: PropTypes.string,
-  };
-
+export default class Search extends Component {
   componentWillMount() {
     this.delayedSearch = debounce((event) => {
       this.props.onSearchUpdate(event.target.value);
@@ -80,3 +75,8 @@ export default class extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  onSearchUpdate: PropTypes.func,
+  defaultValue: PropTypes.string,
+};

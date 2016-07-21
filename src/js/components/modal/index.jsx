@@ -5,6 +5,7 @@ import ResizeHandle from '../resize/handle';
 import Header from './header';
 import Body from './body';
 import Footer from './footer';
+import Manager from './manager';
 
 import { pureRender } from '../utils';
 
@@ -18,11 +19,17 @@ export default class Modal extends Component {
     onMount: PropTypes.func,
   };
 
-  componentDidMount() {
+  static Footer = null;
+  static Header = null;
+  static Body = null;
+
+  componentDidMount(): void {
     if (this.props.onMount) {
       this.props.onMount();
     }
   }
+
+  _modal = null;
 
   /**
    * Triggers modal's header `onClose` prop if available.
@@ -32,19 +39,19 @@ export default class Modal extends Component {
    *
    * @param {Event} ev
    */
-  onEscape(ev) {
+  onEscape: Function = (ev: SyntheticEvent): void => {
     if (ev.target === this._modal &&
         this.getHeader() && this.getHeader().props.onClose) {
       this.getHeader().props.onClose();
     }
-  }
+  };
 
   /**
    * Finds modal Header component in children.
    *
    * @return {Header|null}
    */
-  getHeader() {
+  getHeader(): React.Element<any> {
     return React.Children.toArray(this.props.children).filter(c => (
       c.type === Header
     ))[0] || null;
@@ -55,25 +62,25 @@ export default class Modal extends Component {
    *
    * @param {HTMLElement} el
    */
-  refModal(el) {
+  refModal: Function = (el: Object): void => {
     this._modal = el;
-  }
+  };
 
   /**
    * Renders necessary elements around modal pane's content.
    *
    * @return {ReactElement}
    */
-  render() {
+  render(): React.Element<any> {
     return (
       <div
-        ref={::this.refModal}
+        ref={this.refModal}
         className="modal fade in"
         style={{ display: 'block' }}
         tabIndex="-1"
         role="dialog"
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
-        onClick={::this.onEscape}
+        onClick={this.onEscape}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -91,4 +98,6 @@ Modal.Header = Header;
 Modal.Body = Body;
 Modal.Footer = Footer;
 
-export Manager from './manager';
+export {
+  Manager,
+};

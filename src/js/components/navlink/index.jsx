@@ -1,30 +1,39 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React, { PropTypes } from 'react';
+import NavLink from './link';
 
-export default class Nav extends Component {
-  static propTypes = {
-    path: PropTypes.string,
-    children: PropTypes.node,
-    type: PropTypes.string,
-  };
+type Props = {
+  path: string,
+  children: any,
+  type: string,
+};
 
-  renderChildren() {
-    return React.Children.map(this.props.children, (c) => (
-      <c.type
-        {...c.props}
-        path={this.props.path}
-      />
-    ));
-  }
+const renderChildren: Function = (children: any, path: string): React.Element<any> => (
+  React.Children.map(children, (c) => (
+    <c.type
+      {...c.props}
+      path={path}
+    />
+  ))
+);
 
-  render() {
-    const cls = this.props.type || 'nav-tabs';
+const Nav: Function = ({ children, type, path }: Props): React.Element<any> => {
+  const cls = type || 'nav-tabs';
 
-    return (
-      <ul className={`nav ${cls}`}>
-        { this.renderChildren() }
-      </ul>
-    );
-  }
-}
+  return (
+    <ul className={`nav ${cls}`}>
+      { renderChildren(children, path) }
+    </ul>
+  );
+};
 
-export NavLink from './link';
+Nav.propTypes = {
+  path: PropTypes.string,
+  children: PropTypes.node,
+  type: PropTypes.string,
+};
+
+export default Nav;
+export {
+  NavLink,
+};

@@ -1,12 +1,13 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import { isActive } from '../../helpers/router';
 
 import { RelativeLink } from 'react-router-relative-links';
 
 export default class NavLink extends RelativeLink {
-  static propTypes = {
-    to: PropTypes.string.isRequired,
-    path: PropTypes.string,
+  props: {
+    to: string,
+    path?: string,
   };
 
   render() {
@@ -20,3 +21,8 @@ export default class NavLink extends RelativeLink {
     );
   }
 }
+
+NavLink.propTypes = {
+  to: PropTypes.string.isRequired,
+  path: PropTypes.string,
+};

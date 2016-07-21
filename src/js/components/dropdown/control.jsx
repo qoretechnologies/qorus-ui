@@ -13,7 +13,7 @@ export default function Control(props: Props) {
     <button
       className={classNames('btn',
        props.small ? 'btn-xs' : '',
-       props.btnStyle || 'btn-default',
+       props.btnStyle ? `btn-${props.btnStyle}` : 'btn-default',
        'dropdown-toggle'
       )}
       {...props}

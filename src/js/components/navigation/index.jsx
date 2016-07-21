@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { pureRender } from '../utils';
 
@@ -11,16 +12,16 @@ import Item from './item';
  */
 @pureRender
 export default class Navigation extends Component {
-  static propTypes = {
-    location: PropTypes.object,
-    mainItems: PropTypes.array,
-    extraItems: PropTypes.array,
-  };
-
   static defaultProps = {
     location: { pathname: '' },
     mainItems: [],
     extraItems: [],
+  };
+
+  props: {
+    location: Object,
+    mainItems: Array<any>,
+    extraItems: Array<any>,
   };
 
   /**
@@ -29,7 +30,7 @@ export default class Navigation extends Component {
    * @param {string} url
    * @return {boolean}
    */
-  isActiveItem({ url }) {
+  isActiveItem({ url }: { url: string }): boolean {
     return !!this.props.location.pathname &&
       this.props.location.pathname.indexOf(url) === 0;
   }
@@ -40,11 +41,13 @@ export default class Navigation extends Component {
    * @param {object} item
    * @return {ReactElement}
    */
-  renderItem = (item) => (
+  renderItem: Function = (item: Object): React.Element<any> => (
     <Item
       key={item.url}
       active={this.isActiveItem(item)}
-      {...item}
+      url={item.url}
+      name={item.name}
+      icon={item.icon}
     />
   );
 
@@ -53,7 +56,7 @@ export default class Navigation extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render(): React.Element<any> {
     return (
       <nav className="side-menu pull-left">
         <ul className="nav nav-pills nav-stacked side-menu__main">
@@ -66,3 +69,9 @@ export default class Navigation extends Component {
     );
   }
 }
+
+Navigation.propTypes = {
+  location: PropTypes.object,
+  mainItems: PropTypes.array,
+  extraItems: PropTypes.array,
+};
