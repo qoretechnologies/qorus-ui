@@ -19,7 +19,6 @@ export default class Picker extends Component {
   };
 
   componentDidMount(): void {
-    console.log(this.props);
     document.addEventListener('click', this.handleOutsideClick);
   }
 

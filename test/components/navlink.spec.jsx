@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 import Nav, { NavLink } from '../../src/js/components/navlink';
 
-class NavLinkWithContext extends Component {
+/* class NavLinkWithContext extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     to: PropTypes.string,
@@ -43,7 +43,7 @@ class NavLinkWithContext extends Component {
       </NavLink>
     );
   }
-}
+} */
 
 
 describe("Nav, { NavLink } from 'components/navlink'", () => {
