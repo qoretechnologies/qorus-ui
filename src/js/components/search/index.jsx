@@ -54,7 +54,7 @@ export default class Search extends Component {
         onSubmit={this.handleFormSubmit}
         id="search-form"
       >
-        <div className="input-group col-lg-2 pull-right">
+        <div className={`input-group col-lg-2 ${this.props.pullLeft ? '' : 'pull-right'}`}>
           <input
             ref="input"
             type="text"
@@ -79,4 +79,5 @@ export default class Search extends Component {
 Search.propTypes = {
   onSearchUpdate: PropTypes.func,
   defaultValue: PropTypes.string,
+  pullLeft: PropTypes.bool,
 };
