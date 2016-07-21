@@ -91,7 +91,6 @@
     "nodemon": "^1.9.1",
     "react-addons-test-utils": "^0.14.8",
     "react-hot-loader": "^1.3.0",
-    "sinon": "^1.17.4",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0",
     "zombie": "^4.2.1"
@@ -103,7 +102,7 @@
     "bgserver:stop": "npm stop",
     "test": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script test:unit:all && \\\n    npm run-script bgserver:start && \\\n    npm run-script test:uat:all\n  test_status=$?\n  npm run-script bgserver:stop\n  exit $test_status",
     "test:ci": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script test:unit:ci && \\\n    npm run-script bgserver:start && \\\n    npm run-script test:uat:ci\n  test_status=$?\n  npm run-script bgserver:stop\nexit $test_status",
-    "test:uat": "NODE_ENV=test cucumber.js",
+    "test:uat": "NODE_ENV=  test cucumber.js",
     "test:uat:all": "export npm_config_loglevel=silent\n  npm run-script test:uat -- -t ~@no-impl",
     "test:uat:feature": "export npm_config_loglevel=silent NODE_ENV=test PIDFILE=.test.pid\n  npm run-script bgserver:start && \\\n  npm run-script test:uat -- -t ~@no-impl\n  test_status=$?\n  npm run-script bgserver:stop\n  exit $test_status",
     "test:uat:ci": "export npm_config_loglevel=silent\n  npm run-script test:uat -- -p ci",
