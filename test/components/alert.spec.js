@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 
 import Alert from '../../src/js/components/alert';
 
-describe.only('Alert from components/alert', () => {
+describe('Alert from components/alert', () => {
   it('render without specified bsStyle', () => {
     const wrapper = shallow(<Alert>test</Alert>);
     expect(wrapper.find('.alert').length).to.equal(1);

@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import showIfDefined from '../../src/js/helpers/show-if-defined';
 
-describe.only('showIfDefined from \'helpers/show-if-defined\'', () => {
+describe('showIfDefined from \'helpers/show-if-defined\'', () => {
   const FakeComponent = ({ someProp }) => (
     <div>{someProp}</div>
   );
