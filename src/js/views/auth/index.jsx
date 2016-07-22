@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { CenterWrapper } from '../../components/layout';
 import actions from '../../store/api/actions';
 import LoginForm from './form';
+import SystemInfo from '../system-info';
 
 import { auth } from '../../helpers/user';
 
@@ -38,6 +39,7 @@ class Login extends Component {
       <CenterWrapper>
         <h1>Qorus web application</h1>
         <LoginForm onSubmit={this.handleSubmit} />
+        <SystemInfo />
       </CenterWrapper>
     );
   }
