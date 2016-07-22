@@ -1,5 +1,4 @@
 /* @flow */
-import { PropTypes } from 'react';
 import { compose } from 'redux';
 
 import loadIfUndefined from './load-if-undefined';

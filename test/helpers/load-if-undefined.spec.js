@@ -29,4 +29,4 @@ describe('loadIfundefined from \'helpers/load-if-undefined\'', () => {
 
     expect(load).to.not.have.been.called;
   });
-})
+});

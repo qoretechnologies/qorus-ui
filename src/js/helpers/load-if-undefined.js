@@ -10,7 +10,7 @@ import _ from 'lodash';
 export default (
   propName: string,
   propType: any
-) => ((
+) => (
   Component: ReactClass<{}>
 ) => {
   class WrappedComponent extends React.Component {
@@ -22,17 +22,16 @@ export default (
     }
 
     render() {
-      const { load, ...other } = this.props;
-      return <Component {...other} />;
+      return <Component {...this.props} />;
     }
   }
   WrappedComponent.propTypes = {
-    load: PropTypes.func.isRequried,
+    load: PropTypes.func.isRequired,
     [propName]: propType,
-  }
+  };
 
   const displayName = `loadIfUndeinfed(${propName})(${Component.displayName})`;
   WrappedComponent.displayName = displayName;
 
   return WrappedComponent;
-});
+};
