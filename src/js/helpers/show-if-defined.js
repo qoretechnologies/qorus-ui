@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import _ from 'lodash';
 
 
@@ -7,7 +7,7 @@ export default (
   propName: string,
   propType: any
 ) => (
-  Component: React.Component
+  Component: ReactClass<{}>
 ) => {
   class WrappedComponent extends React.Component {
     render() {

@@ -11,7 +11,7 @@ export default (
   propName: string,
   propType: any
 ) => ((
-  Component: React.Component
+  Component: ReactClass<{}>
 ) => {
   class WrappedComponent extends React.Component {
 

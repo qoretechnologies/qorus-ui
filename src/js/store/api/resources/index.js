@@ -149,7 +149,12 @@ export default [
   },
   {
     name: 'auth',
-    url: `${settings.REST_BASE_URL}/login`,
+    url: `${settings.REST_BASE_URL}/public/login`,
+    transform: item => item,
+  },
+  {
+    name: 'info',
+    url: `${settings.REST_BASE_URL}/public/info`,
     transform: item => item,
   },
 ];

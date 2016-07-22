@@ -4,7 +4,6 @@ import applyMiddleware from 'react-router-apply-middleware';
 import { useRelativeLinks } from 'react-router-relative-links';
 import { Provider } from 'react-redux';
 
-
 import Root from 'views/root';
 import View from 'views/view_wrapper';
 import Workflows from 'views/workflows';
@@ -18,6 +17,7 @@ import Groups from 'views/groups';
 import Library from 'views/library';
 import Ocmd from 'views/ocmd';
 import Login from 'views/auth';
+import AppInfo from 'views/app-info';
 
 
 import setupStore from 'store';
@@ -246,7 +246,7 @@ export default class App extends Component {
 
     return (
       <Provider store={this.state.store}>
-        <div className="app__wrap">
+        <AppInfo>
           <Router
             {...this.getRouterProps()}
             render={applyMiddleware(useRelativeLinks())}
@@ -358,7 +358,7 @@ export default class App extends Component {
             />
           </Router>
           {this.renderDevTools()}
-        </div>
+        </AppInfo>
       </Provider>
     );
   }
