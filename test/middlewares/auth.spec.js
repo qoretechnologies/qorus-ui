@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import auth from '../../src/js/middlewares/auth';
 
-describe.only('{ auth } from middlewares/auth', () => {
+describe('{ auth } from middlewares/auth', () => {
   before(() => {
     chai.use(spies);
   });
