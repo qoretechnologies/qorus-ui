@@ -16,7 +16,7 @@ const express = require('express');
 function rest(data, selector) {
   const router = new express.Router();
 
-  router.get('/', (req, res) => res.json(data));
+  router.get('/', (req, res) => setTimeout(() => res.json(data), 1000));
   router.get('/:id', (req, res) => {
     const item = data.find(d => selector(req.params.id, d));
     res.status(item ? 200 : 404).json(item);

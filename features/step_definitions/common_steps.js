@@ -44,7 +44,8 @@ const findElementByValue = (browser, selector, text) => browser.queryAll(selecto
   .find(el => el.value === text) || null;
 
 module.exports = function commonSteps() {
-  this.When(/^I activate "([^"]*)" navigation item$/, function(name) {
+  this.When(/^I activate "([^"]*)" navigation item$/, async function(name) {
+    await this.waitForElement('nav.side-menu')
     const link = this.browser.
       queryAll('nav.side-menu li > a').
       find(link => (
@@ -71,7 +72,7 @@ module.exports = function commonSteps() {
     this.token = 'fake';
   });
 
-  this.Given(/^I am on "([^"]*)" listing$/, function(name) {
+  this.Given(/^I am on "([^"]*)" listing$/, async function(name) {
     return this.browser.visit(`/${name}`);
   });
 
@@ -80,7 +81,8 @@ module.exports = function commonSteps() {
   });
 
 
-  this.Then(/^I should see a loader$/, function() {
+  this.Then(/^I should see a loader$/, async function() {
+    await this.waitForElement('.root__center > section');
     this.browser.assert.text(cmpLoader, 'Loading...');
   });
 
@@ -294,6 +296,7 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I type "([^"]*)" in "([^"]*)" input$/, async function(text, input) {
+    await this.waitForElement(`[name=${input}]`);
     this.browser.fill(input, text);
   });
 
