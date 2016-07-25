@@ -21,7 +21,10 @@ module.exports = () => {
       const token = user.token;
       res.status(200).json({ token });
     } else {
-      res.status(400).json({ error: 'some error' });
+      res.status(400).json({
+        err: 'AUTHENTICATION-ERROR',
+        desc: 'Invalid user or password'
+      });
     }
   });
 
