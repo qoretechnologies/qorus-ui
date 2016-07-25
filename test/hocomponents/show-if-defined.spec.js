@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 
-import showIfDefined from '../../src/js/helpers/show-if-defined';
+import showIfDefined from '../../src/js/hocomponents/show-if-defined';
 
 describe('showIfDefined from \'helpers/show-if-defined\'', () => {
   const FakeComponent = ({ someProp }) => (

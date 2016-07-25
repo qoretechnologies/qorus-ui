@@ -4,7 +4,7 @@ import chai, { expect } from 'chai';
 import { mount } from 'enzyme';
 import spies from 'chai-spies';
 
-import showOrLoad from '../../src/js/helpers/show-or-load';
+import showOrLoad from '../../src/js/hocomponents/show-or-load';
 
 describe('showOrLoad from \'helpers/show-or-load\'', () => {
   const FakeComponent = () => <div>component</div>;

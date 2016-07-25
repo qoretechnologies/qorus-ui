@@ -19,7 +19,7 @@ import Groups from '../groups';
 import Login from '../auth';
 import Ocmd from '../ocmd';
 
-import showOrLoad from '../../helpers/show-or-load';
+import showOrLoad from '../../hocomponents/show-or-load';
 import actions from '../../store/api/actions';
 
 class AppInfo extends React.Component {

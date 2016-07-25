@@ -4,7 +4,7 @@ import chai, { expect } from 'chai';
 import { mount } from 'enzyme';
 import spies from 'chai-spies';
 
-import loadIfUndefined from '../../src/js/helpers/load-if-undefined';
+import loadIfUndefined from '../../src/js/hocomponents/load-if-undefined';
 
 describe('loadIfundefined from \'helpers/load-if-undefined\'', () => {
   const FakeComponent = () => <div />;
