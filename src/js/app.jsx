@@ -267,7 +267,7 @@ export default class App extends Component {
                 name="Workflow"
               />
               <Route
-                path="order/:id/:date"
+                path="order/:id(/:date)"
                 component={Order}
               >
                 <IndexRedirect to="diagram" />

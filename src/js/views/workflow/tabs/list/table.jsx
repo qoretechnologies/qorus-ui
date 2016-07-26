@@ -236,7 +236,7 @@ export default class OrdersTable extends Table {
 
     yield (
       <Cell className="name nowrap">
-        <Link to={`/order/${model.id}/${this.props.linkDate}`}>
+        <Link to={`/order/${model.id}/${this.props.linkDate || ''}`}>
           { model.normalizedName }
         </Link>
       </Cell>
