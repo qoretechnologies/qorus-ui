@@ -9,6 +9,7 @@ type Props = {
   inputDate: string,
   onInputChange: (event: Object) => void,
   onInputClick: (event: Object) => void,
+  id?: string,
 }
 
 export default function Input(props: Props) {
@@ -33,6 +34,7 @@ export default function Input(props: Props) {
           onChange={props.onInputChange}
           onClick={props.onInputClick}
           placeholder={props.placeholder}
+          id={props.id}
         />
       </div>
       <Control
@@ -42,12 +44,3 @@ export default function Input(props: Props) {
     </form>
   );
 }
-
-Input.propTypes = {
-  placeholder: PropTypes.string,
-  onFormSubmit: PropTypes.func,
-  submitOnBlur: PropTypes.bool,
-  inputDate: PropTypes.string,
-  onInputChange: PropTypes.func,
-  onInputClick: PropTypes.func,
-};

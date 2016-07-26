@@ -17,6 +17,7 @@ type Props = {
   futureOnly?: boolean,
   submitOnBlur?: boolean,
   placeholder?: string,
+  id?: string,
 }
 
 export default class DatePicker extends Component {
@@ -228,6 +229,7 @@ export default class DatePicker extends Component {
           inputDate={this.state.inputDate}
           onInputClick={this.showDatepicker}
           placeholder={this.props.placeholder}
+          id={this.props.id}
         />
         { this.renderControls() }
         { this.renderDatepicker() }
@@ -235,11 +237,3 @@ export default class DatePicker extends Component {
     );
   }
 }
-
-DatePicker.propTypes = {
-  date: PropTypes.string,
-  onApplyDate: PropTypes.func,
-  futureOnly: PropTypes.bool,
-  submitOnBlur: PropTypes.bool,
-  placeholder: PropTypes.string,
-};
