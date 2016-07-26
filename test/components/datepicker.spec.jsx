@@ -125,6 +125,18 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       result.props.children[0].props.children[1].props.onBlur();
       expect(action).to.have.been.called();
     });
+
+    it('has the correct id assigned', () => {
+      const renderer = TestUtils.createRenderer();
+      renderer.render(
+        <Input
+          id="test"
+        />
+      );
+      const result = renderer.getRenderOutput();
+
+      expect(result.props.children[0].props.children[1].props.id).to.eql('test');
+    });
   });
 
   describe('Picker', () => {
