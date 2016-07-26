@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
 

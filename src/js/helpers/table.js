@@ -89,10 +89,7 @@ Object.keys(ORDER_STATES).forEach(key => {
 
 CSVheaders.workflows.total = 'Total';
 
-const getCSVHeaders = (view) => {
-  console.log(view);
-  return CSVheaders[view];
-}
+const getCSVHeaders = (view) => CSVheaders[view];
 
 /**
  * Generates the CSV string from the collection
