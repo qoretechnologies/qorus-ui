@@ -6,7 +6,6 @@ Feature: Workflows
     Then I should see "workflows" listing
 
 
-  @wip
   Scenario: Loading
     Given I am on "workflows" listing
     And there are no "workflows" loaded

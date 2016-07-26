@@ -48,6 +48,8 @@ class World {
     this.browser = new Browser();
     this.browser.site = `http://${devConfig().host}:${devConfig().port}`;
 
+    this.noauth = false;
+
     const customHeaders = [
       { name: 'accept', value: 'application/json' },
       { name: 'content-type', value: 'application/json' },
@@ -62,6 +64,10 @@ class World {
     const addCustomHeaders = (browser, request) => {
       if (this.token) {
         request.headers.set('Qorus-Token', this.token);
+      }
+
+      if (this.noauth) {
+        request.headers.set('NoAuth', `${this.noauth}`);
       }
 
       if (request.method === 'POST') {

@@ -76,6 +76,10 @@ module.exports = function commonSteps() {
     return this.browser.visit(`/${name}`);
   });
 
+  this.Given(/^Auth not required$/, function() {
+    this.noauth = true;
+  });
+
   this.Given(/^I am on "([^"]*)" page$/, function(name) {
     return this.browser.visit(`/${name}`);
   });
@@ -92,7 +96,7 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^I should see "([^"]*)" form$/, function(name) {
-    this.browser.assert.elements(`form.${name}`, { atLesat: 1 });
+    this.browser.assert.elements(`form.${name}`, { atLeast: 1 });
   });
 
   this.When(/^"([^"]*)" get loaded$/, function(name) {

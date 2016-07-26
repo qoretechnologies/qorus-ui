@@ -5,7 +5,6 @@ Feature: Tests for the Notes tab
     And notes get loaded
     Then there are "3" notes
 
-  @wip
   Scenario: Adds a new note
     Given I am on order "31380" and "Notes" tab
     And notes get loaded

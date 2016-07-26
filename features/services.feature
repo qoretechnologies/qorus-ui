@@ -4,7 +4,6 @@ Feature: Services
     When I activate "Services" navigation item
     Then I should see "services" listing
 
-  @wip
   Scenario: Loading
     Given I am on "services" listing
     And there are no "services" loaded
