@@ -52,6 +52,13 @@ class AppInfo extends React.Component {
     }
   }
 
+  logout = (nextState, replace) => {
+    const { logout } = this.props;
+    window.localStorage.removeItem('token');
+    logout();
+    replace('/login');
+  }
+
   render() {
     return (
       <Router
@@ -163,12 +170,17 @@ class AppInfo extends React.Component {
           component={Login}
           onEnter={this.requireAnonymous}
         />
+        <Route
+          path="/logout"
+          onEnter={this.logout}
+        />
       </Router>
     );
   }
 }
 AppInfo.propTypes = {
   noauth: PropTypes.bool,
+  logout: PropTypes.func,
   routerProps: PropTypes.object,
 };
 
@@ -179,6 +191,7 @@ export default compose(
     }),
     {
       load: actions.info.loadPublicInfo,
+      logout: actions.logout.logout,
     }
   ),
   showOrLoad('noauth', PropTypes.bool)

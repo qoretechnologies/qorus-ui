@@ -1,6 +1,7 @@
 /* @flow */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import Dropdown, { Control as DropdownControl, CustomItem } from '../../components/dropdown';
 import { Control } from '../../components/controls';
@@ -25,10 +26,10 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
           {user.name}
         </DropdownControl>
         <CustomItem>
-          <a href className="logout">
+          <Link to="/logout" className="logout">
             <i className="fa fa-sign-out" />
             Logout
-          </a>
+          </Link>
         </CustomItem>
       </Dropdown>
   );

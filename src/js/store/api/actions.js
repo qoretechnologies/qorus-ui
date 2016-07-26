@@ -11,6 +11,7 @@ import * as orderActions from './resources/orders/actions';
 import * as optionActions from './resources/options/actions';
 import * as propActions from './resources/system/props/actions';
 import * as groupsActions from './resources/groups/actions';
+import * as logoutActions from './resources/logout/actions';
 
 import {
   combineResourceActions,
@@ -134,6 +135,10 @@ Object.keys(authActions).forEach(a => {
 
 Object.keys(infoActions).forEach(a => {
   actions.info[a] = infoActions[a](actions);
+});
+
+Object.keys(logoutActions).forEach(a => {
+  actions.logout[a] = logoutActions[a](actions);
 });
 
 export default actions;
