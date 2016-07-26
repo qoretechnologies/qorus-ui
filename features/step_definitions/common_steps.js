@@ -12,10 +12,12 @@ const cmpPane = `${pane} article`;
  * @param {string} name
  * @return {HTMLTableRowElement}
  */
-function findTableRow(browser, name) {
+function findTableRow(browser, name, cellId) {
+  const cell = cellId || 5;
+
   return browser.
     queryAll(cmpRows).
-    find(r => r.cells[5].textContent === name) || null;
+    find(r => r.cells[cell].textContent === name) || null;
 }
 
 /**
