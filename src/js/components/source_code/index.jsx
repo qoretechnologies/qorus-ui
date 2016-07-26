@@ -29,12 +29,9 @@ export default class SourceCode extends Component {
     lineOffset: 0,
   };
 
-  /**
-   * Enables wrap line by defalt.
-   */
-  componentWillMount() {
-    this.setState({ wrapLines: true });
-  }
+  state = {
+    wrapLines: true,
+  };
 
   /**
    * Changes wrap-line state.
@@ -43,16 +40,11 @@ export default class SourceCode extends Component {
     this.setState({ wrapLines: !this.state.wrapLines });
   };
 
-  /**
-   * Uses to Prism to highlight code in `code` element.
-   *
-   * @param {HTMLElement} el
-   */
-  highlightCode = (el) => {
-    if (!el) return;
+  createCode() {
+    if (!this.props.children) return null;
 
-    Prism.highlightElement(el);
-  };
+    return { __html: Prism.highlight(this.props.children, Prism.languages.qore) };
+  }
 
   /**
    * Returns element for this component.
@@ -83,12 +75,14 @@ export default class SourceCode extends Component {
             'line-numbers': true,
             'source-code__code': true,
             'source-code__code--wrap': this.state.wrapLines,
+            'language-qore': true,
           })}
           data-start={1 + this.props.lineOffset}
         >
-          <code className="language-qore" ref={this.highlightCode}>
-            {this.props.children}
-          </code>
+          <code
+            className="language-qore"
+            dangerouslySetInnerHTML={this.createCode()}
+          />
         </pre>
       </div>
     );
