@@ -14,6 +14,7 @@ export default class SearchToolbar extends Component {
     status: PropTypes.string,
     date: PropTypes.string,
     maxmodified: PropTypes.string,
+    onCSVClick: PropTypes.func,
   };
 
   componentWillMount() {
@@ -81,6 +82,7 @@ export default class SearchToolbar extends Component {
             placeholder="Status..."
             onChange={this.handleInputChange('status')}
             value={this.state.status || ''}
+            id="status"
           />
         </div>
         <div className="pull-left">
@@ -90,6 +92,7 @@ export default class SearchToolbar extends Component {
             onApplyDate={this.handleInputChange('date')}
             submitOnBlur
             futureOnly
+            id="mindate"
           />
           <DatePicker
             placeholder="Max date..."
@@ -97,6 +100,7 @@ export default class SearchToolbar extends Component {
             onApplyDate={this.handleInputChange('maxmodified')}
             submitOnBlur
             futureOnly
+            id="maxdate"
           />
         </div>
       </div>
@@ -115,6 +119,7 @@ export default class SearchToolbar extends Component {
                 placeholder="Instance ID..."
                 onChange={this.handleInputChange('ids')}
                 value={this.state.ids || ''}
+                id="instance-id"
               />
             </div>
             <div className="pull-left">
@@ -124,6 +129,7 @@ export default class SearchToolbar extends Component {
                 placeholder="Keyname"
                 onChange={this.handleInputChange('keyname')}
                 value={this.state.keyname || ''}
+                id="keyname"
               />
             </div>
             <div className="pull-left">
@@ -133,6 +139,7 @@ export default class SearchToolbar extends Component {
                 placeholder="Keyvalue"
                 onChange={this.handleInputChange('keyvalue')}
                 value={this.state.keyvalue || ''}
+                id="keyvalue"
               />
             </div>
           </div>
@@ -151,7 +158,7 @@ export default class SearchToolbar extends Component {
             icon="copy"
             btnStyle="default"
             big
-            action={this.handleCSVClick}
+            action={this.props.onCSVClick}
           />
         </div>
       </Toolbar>

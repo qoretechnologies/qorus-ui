@@ -187,7 +187,7 @@ export default class SearchView extends Component {
     const collection = this.state.filteredData.length ?
       this.state.filteredData : this.props.collection;
 
-    this.props.onCSVClick(collection, 'orders');
+    this.props.onCSVClick(collection, 'search');
   };
 
   handleScheduleClick = (order) => {
@@ -268,6 +268,7 @@ export default class SearchView extends Component {
       <div className="workflow-detail-tab">
         <SearchToolbar
           onSubmit={this.handleSearchChange}
+          onCSVClick={this.handleCSVClick}
           {...this.props.location.query}
         />
         { this.renderTable() }

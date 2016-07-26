@@ -69,6 +69,18 @@ const CSVheaders = {
     roles_count: 'Roles',
     vmaps_count: 'Vmaps',
   },
+  search: {
+    status: 'Status',
+    business_error: 'Bus. Err.',
+    name: 'Order',
+    started: 'Started',
+    completed: 'Completed',
+    modified: 'Modified',
+    scheduled: 'Scheduled',
+    error_count: 'Errors',
+    warning_count: 'Warnings',
+    note_count: 'Notes',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {
@@ -77,7 +89,10 @@ Object.keys(ORDER_STATES).forEach(key => {
 
 CSVheaders.workflows.total = 'Total';
 
-const getCSVHeaders = (view) => CSVheaders[view];
+const getCSVHeaders = (view) => {
+  console.log(view);
+  return CSVheaders[view];
+}
 
 /**
  * Generates the CSV string from the collection
