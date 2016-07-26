@@ -113,8 +113,12 @@ module.exports = function commonSteps() {
 
   this.When(/^I click the "([^"]*)" button$/, async function(button) {
     const el = findElementByText(this.browser, '.btn', ` ${button}`);
-
     await this.browser.click(el);
+  });
+
+  this.When(/^I click on "([^"]*)" item$/, async function(selector) {
+    await this.waitForElement(mainSection);
+    return this.browser.click(selector);
   });
 
   this.When(/^I activate "([^"]*)"$/, async function(name) {
@@ -312,6 +316,11 @@ module.exports = function commonSteps() {
     const elementName = `.alert-${alertType}`;
     await this.waitForElement(elementName);
     this.browser.assert.element(elementName);
+  });
+
+  this.Then(/^I see "([^"]*)" item$/, async function(selector) {
+    await this.waitForElement(selector);
+    this.browser.assert.element(selector);
   });
 
   this.Then(/^"([^"]*)" exists in localStorage$/, function(itemName) {

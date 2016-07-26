@@ -27,6 +27,7 @@ export default function Control(props: Props) {
 
 Control.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
   btnStyle: PropTypes.string,
   small: PropTypes.bool,
 };

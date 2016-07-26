@@ -4,6 +4,7 @@ parser: babel-eslint
 env:
   browser: false
   node: true
+  mocha: true
 plugins: [
   "flowtype"
 ]

@@ -15,7 +15,6 @@ Feature: Tests user redirects
     And I am on "workflows" page
     Then the URL changes to "/login"
 
-  @wip
   Scenario: Anonymous user and auth not required
     Given Auth not required
     And I am anonymous user

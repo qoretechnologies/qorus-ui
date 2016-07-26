@@ -212,7 +212,7 @@ class World {
    * @return {Promise}
    */
   waitForElement(
-    selector, context = this.browser.document, limit = 10000, checks = 10
+    selector, context = this.browser.document, limit = 10000, checks = 50
   ) {
     function check(resolve, reject, tries = 0) {
       if (this.browser.query(selector, context)) {

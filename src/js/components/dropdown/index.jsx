@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
+import CustomItem from './custom-item';
 import Control from './control';
 import { Control as Button } from '../controls';
 
@@ -157,7 +158,11 @@ export default class Dropdown extends Component {
 
   renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c) => {
-      if (c.type !== Item) return undefined;
+      if (c.type !== Item && c.type !== CustomItem) return undefined;
+
+      if (c.type === CustomItem) {
+        return c;
+      }
 
       let selected: boolean = false;
       let icon: ?string = c.props.icon;
@@ -235,6 +240,7 @@ Dropdown.propTypes = {
 
 export {
   Item,
+  CustomItem,
   Control,
 };
 

@@ -23,7 +23,7 @@ module.exports = () => {
     } else {
       res.status(400).json({
         err: 'AUTHENTICATION-ERROR',
-        desc: 'Invalid user or password'
+        desc: 'Invalid user or password',
       });
     }
   });

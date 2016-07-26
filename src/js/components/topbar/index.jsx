@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { pureRender } from '../utils';
-import UserInfo from '../user_info';
+import UserInfo from '../../views/user-info';
 
 /**
  * Display info about Qorus instance and logged in user.
@@ -66,7 +66,9 @@ export default class Topbar extends Component {
             style={{ height: !this.state.expanded && '1px' }}
             aria-expanded={this.state.expanded ? 'true' : 'false'}
           >
-            <UserInfo user={this.props.currentUser} />
+            <div className="nav nav-bar navbar-right">
+              <UserInfo user={this.props.currentUser} />
+            </div>
           </div>
         </div>
       </nav>
