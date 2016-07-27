@@ -95,7 +95,8 @@ module.exports = function commonSteps() {
     this.browser.assert.elements(cmpRows, { atLeast: 1 });
   });
 
-  this.Then(/^I should see "([^"]*)" form$/, function(name) {
+  this.Then(/^I should see "([^"]*)" form$/, async function(name) {
+    await this.waitForElement(`form.${name}`);
     this.browser.assert.elements(`form.${name}`, { atLeast: 1 });
   });
 
