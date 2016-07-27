@@ -7,10 +7,10 @@ import Datepicker from 'components/datepicker';
 import AutoComponent from 'components/autocomponent';
 import Error from '../../workflow/tabs/list/modals/error';
 
-import actions from 'store/api/actions';
 import { pureRender } from 'components/utils';
 
-import { getStatusLabel } from 'helpers/orders';
+import { getStatusLabel } from '../../../helpers/orders';
+import actions from 'store/api/actions';
 
 @pureRender
 export default class DiagramInfoTable extends Component {

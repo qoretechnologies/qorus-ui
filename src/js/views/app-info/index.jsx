@@ -18,6 +18,7 @@ import Search from '../search';
 import Groups from '../groups';
 import Login from '../auth';
 import Ocmd from '../ocmd';
+import Library from '../library';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';

@@ -4,9 +4,9 @@ import React from 'react';
 import HealthItem from './item';
 
 const Health = (
-  { title, children }: { title: string, children: ?React.Element<*>}
+  { title, className, children }: { title: string, className: string, children?: any}
 ) => (
-  <div>
+  <div className={className}>
     <h6>{title}</h6>
     <table className="table table-condensed">
       <tbody>

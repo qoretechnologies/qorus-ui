@@ -4,9 +4,8 @@ import { createSelector } from 'reselect';
 
 import Row from './row';
 
-import { groupInstances } from 'helpers/orders';
-
-import actions from 'store/api/actions';
+import { groupInstances } from '../../../helpers/orders';
+import actions from '../../../store/api/actions';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (

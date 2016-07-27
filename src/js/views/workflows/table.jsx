@@ -15,7 +15,7 @@ import { WORKFLOW_FILTERS } from '../../constants/filters';
 
 import classNames from 'classnames';
 import actions from 'store/api/actions';
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES } from '../../constants/orders';
 
 /**
  * List of all workflows in the system.

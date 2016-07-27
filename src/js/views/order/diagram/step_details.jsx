@@ -9,7 +9,7 @@ import Autocomponent from 'components/autocomponent';
 
 import { pureRender } from 'components/utils';
 
-import { getStatusLabel, groupInstances, canSkip } from 'helpers/orders';
+import { getStatusLabel, groupInstances, canSkip } from '../../../helpers/orders';
 
 @pureRender
 export default class StepDetailTable extends Component {
