@@ -19,7 +19,7 @@ import Groups from '../groups';
 import Login from '../auth';
 import Ocmd from '../ocmd';
 
-import showOrLoad from '../../hocomponents/show-or-load';
+import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
 
 class AppInfo extends React.Component {
@@ -30,7 +30,7 @@ class AppInfo extends React.Component {
    * @param  {Function} replace change state function
    */
   requireAnonymous = (nextState, replace) => {
-    const { noauth } = this.props;
+    const { info: { data: { noauth } } } = this.props;
     const token = window.localStorage.getItem('token');
     if (token || noauth) {
       replace('/');
@@ -45,7 +45,7 @@ class AppInfo extends React.Component {
    * @param  {Function} replace change state function
    */
   requireAuthenticated = (nextState, replace) => {
-    const { noauth } = this.props;
+    const { noauth } = this.props.info.data;
     const token = window.localStorage.getItem('token');
     if (!token && !noauth) {
       replace(`/login?next=${nextState.location.pathname}`);
@@ -179,7 +179,7 @@ class AppInfo extends React.Component {
   }
 }
 AppInfo.propTypes = {
-  noauth: PropTypes.bool,
+  info: PropTypes.object,
   logout: PropTypes.func,
   routerProps: PropTypes.object,
 };
@@ -187,12 +187,12 @@ AppInfo.propTypes = {
 export default compose(
   connect(
     state => ({
-      noauth: state.api.info.data.noauth,
+      info: state.api.info,
     }),
     {
       load: actions.info.loadPublicInfo,
       logout: actions.logout.logout,
     }
   ),
-  showOrLoad('noauth', PropTypes.bool)
+  sync('info')
 )(AppInfo);
