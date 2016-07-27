@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import { Health, HealthItem } from '../../src/js/components/health';
 
-describe.only('{  Health, HealthItem } from components/health', () => {
+describe('{ Health, HealthItem } from components/health', () => {
   it('Show all items with health item layout', () => {
     const wrapper = mount(
       <Health title="test">
