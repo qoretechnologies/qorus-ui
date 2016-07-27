@@ -28,7 +28,7 @@ export default (
     }
 
     render() {
-      return <LoadComponent {...this.props}/>;
+      return <LoadComponent {...this.props} />;
     }
   }
   WrappedComponent.propTypes = {

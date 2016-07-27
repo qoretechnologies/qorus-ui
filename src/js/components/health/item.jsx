@@ -8,4 +8,4 @@ const HealthItem = ({ title, children }: { title: string, children?: any}) => (
   </tr>
 );
 
-export default HealthItem
+export default HealthItem;

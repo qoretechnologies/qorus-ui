@@ -33,4 +33,5 @@ Control.propTypes = {
   className: PropTypes.string,
   btnStyle: PropTypes.string,
   small: PropTypes.bool,
+  noCaret: PropTypes.bool,
 };

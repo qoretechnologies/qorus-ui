@@ -7,7 +7,7 @@ import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
 import Dropdown, { Control as DropdownControl, CustomItem } from '../../components/dropdown';
 import LocalInfo from './local-info';
-import { statusHealth }from '../../helpers/system';
+import { statusHealth } from '../../helpers/system';
 
 const LocalHealth = ({ health }: { health: Object }) => (
   <Dropdown>
