@@ -45,7 +45,7 @@ export const DEFAULT_ACTIONS = {
   ACTION: {
     action: url => (params, id, urlParams) => fetchJson(
       'PUT',
-      id ? `${url}/${id}` : `${url}/${urlParams}`,
+      id ? `${url}/${id}` : `${url}/${urlParams || ''}`,
       params
     ),
     meta: (params, id) => ({ params, id }),
