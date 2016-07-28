@@ -142,4 +142,9 @@ export default [
       normalizeId('function_instanceid'),
     ),
   },
+  {
+    name: 'ocmd',
+    url: `${settings.REST_BASE_URL}/system/api`,
+    transform: item => item,
+  },
 ];
