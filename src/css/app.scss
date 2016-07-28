@@ -29,6 +29,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/shorten/style';
 @import '../js/components/chart/style';
 @import '../js/components/tree/style';
+@import '../js/components/dropdown/style';
 
 @import './not-supported';
 @import './root';
@@ -38,6 +39,8 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './tabs';
 @import './search';
 @import './library';
+@import './ocmd';
+
 
 
 html, body, .app, .app__wrap, .container-fluid {

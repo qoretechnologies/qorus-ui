@@ -1,0 +1,32 @@
+.ocmd-input {
+  width: 200px;
+  float: left;
+
+  &:not(:last-of-type) {
+    border-radius: 0;
+    border-right: 0;
+  }
+
+  &:first-of-type {
+    width: 600px;
+  }
+
+  &:last-of-type {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.command-info {
+  line-height: 3.0;
+}
+
+.ocmd-output {
+  border-top: 1px solid #d7d7d7;
+  padding-top: 5px;
+  overflow: hidden;
+}
+
+.command-error {
+  color: #c64041;
+}

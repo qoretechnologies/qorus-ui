@@ -1,4 +1,4 @@
-import { findTableRow} from './common_steps';
+import { findTableRow } from './common_steps';
 
 module.exports = function searchSteps() {
   this.Then(/^library gets loaded$/, async function() {

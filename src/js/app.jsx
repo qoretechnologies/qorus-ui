@@ -16,6 +16,7 @@ import Order from 'views/order';
 import Search from 'views/search';
 import Groups from 'views/groups';
 import Library from 'views/library';
+import Ocmd from 'views/ocmd';
 
 
 import setupStore from 'store';
@@ -311,7 +312,7 @@ export default class App extends Component {
                 view={Groups}
                 name="Groups"
               />
-              <Route path="ocmd" />
+              <Route path="ocmd" component={Ocmd} />
               <Route path="library" component={Library} />
               <Route path="extensions" />
               <Route path="performance" />

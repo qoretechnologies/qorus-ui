@@ -1,4 +1,3 @@
-/* @flow */
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
@@ -9,6 +8,18 @@ import classNames from 'classnames';
 import { pureRender } from '../utils';
 import { includes, remove, xor } from 'lodash';
 
+type Props = {
+  children?: Array<React.Element<any>>,
+  id: string,
+  multi?: boolean,
+  def?: string,
+  selectedIcon?: string,
+  onSubmit?: () => void,
+  submitLabel?: string,
+  selected?: Array<?string>,
+  show?: ?boolean,
+}
+
 @pureRender
 export default class Dropdown extends Component {
   static defaultProps = {
@@ -16,21 +27,25 @@ export default class Dropdown extends Component {
     submitLabel: 'Filter',
   };
 
-  props: {
-    children?: Array<React.Element<any>>,
-    id: string,
-    multi?: boolean,
-    def?: string,
-    selectedIcon?: string,
-    onSubmit?: () => void,
-    submitLabel?: string,
-    selected?: Array<?string>,
+  props: Props;
+
+  state: {
+    showDropdown: ?boolean,
+    selected: Array<*>,
   };
 
   state = {
-    showDropdown: false,
+    showDropdown: this.props.show,
     selected: this.props.selected || [(this.props.def: ?string)],
   };
+
+  componentWillReceiveProps(nextProps: Props): void {
+    if (this.state.showDropdown !== nextProps.show) {
+      this.setState({
+        showDropdown: nextProps.show,
+      });
+    }
+  }
 
   componentDidUpdate(): void {
     document.removeEventListener('click', this.handleOutsideClick);
