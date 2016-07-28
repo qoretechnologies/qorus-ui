@@ -48,5 +48,21 @@ module.exports = () => {
     res.json(data.props);
   });
 
+  router.put('/api', (req, res) => {
+    const action = req.body.action;
+    const method = req.body.method;
+
+    if (action === 'call') {
+      switch (method) {
+        case 'help':
+          res.json(data.api);
+          break;
+        default:
+          res.status(409).json({ callstack: { desc: 'Error' } });
+          break;
+      }
+    }
+  });
+
   return router;
 };
