@@ -5,7 +5,10 @@ import { Control as Button } from '../controls';
 
 export default class Tree extends Component {
   static propTypes = {
-    data: PropTypes.object,
+    data: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array,
+    ]),
   };
 
   componentWillMount() {
