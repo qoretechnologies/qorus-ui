@@ -1,6 +1,5 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
-import * as infoActions from './resources/info/actions';
 import * as authActions from './resources/auth/actions';
 import * as workflowActions from './resources/workflows/actions';
 import * as stepActions from './resources/steps/actions';
@@ -131,10 +130,6 @@ Object.keys(optionActions.delegates).forEach(a => {
 
 Object.keys(authActions).forEach(a => {
   actions.auth[a] = authActions[a](actions);
-});
-
-Object.keys(infoActions).forEach(a => {
-  actions.info[a] = infoActions[a](actions);
 });
 
 Object.keys(logoutActions).forEach(a => {

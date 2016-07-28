@@ -1,12 +1,12 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
 import Dropdown, { Control as DropdownControl, CustomItem } from '../../components/dropdown';
-import LocalInfo from './local-info';
+import LocalInfo from './local_info';
 import { statusHealth } from '../../helpers/system';
 
 const LocalHealth = ({ health }: { health: Object }) => (
@@ -22,9 +22,6 @@ const LocalHealth = ({ health }: { health: Object }) => (
     </CustomItem>
   </Dropdown>
 );
-LocalHealth.propTypes = {
-  health: PropTypes.object,
-};
 
 export default compose(
   connect(

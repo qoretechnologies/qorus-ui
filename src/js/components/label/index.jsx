@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 const Label = (
@@ -14,9 +14,5 @@ const Label = (
     {children}
   </span>
 );
-Label.propTypes = {
-  style: PropTypes.string,
-  childrend: PropTypes.string,
-};
 
 export default Label;

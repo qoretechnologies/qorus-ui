@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import showIfLoaded from '../../hocomponents/show-if-loaded';
 import { statusHealth } from '../../helpers/system';
@@ -19,8 +19,5 @@ const RemoteInfo = ({ health }: { health: Object }) => (
     ))}
   </Health>
 );
-RemoteInfo.propTypes = {
-  health: PropTypes.object,
-};
 
 export default showIfLoaded('health')(RemoteInfo);

@@ -3,10 +3,10 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 
 
-import { UserInfo } from '../../src/js/views/user-info';
+import { UserInfo } from '../../src/js/containers/user_info';
 
 
-describe("UserInfo from 'components/user_info'", () => {
+describe("UserInfo from 'containers/user_info'", () => {
   it("displays current user's name", () => {
     const wrapper = mount(
       <UserInfo user={{ name: 'jon.doe' }} />

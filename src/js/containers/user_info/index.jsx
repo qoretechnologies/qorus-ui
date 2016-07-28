@@ -22,7 +22,7 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
     <Dropdown>
       <DropdownControl className="btn navbar-btn btn-inverse user-dropdown" noCaret>
         <i className="fa fa-user" />
-          &nbsp;
+          {' '}
           {user.name}
         </DropdownControl>
         <CustomItem>

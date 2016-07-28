@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
-import CustomItem from './custom-item';
+import CustomItem from './custom_item';
 import Control from './control';
 import { Control as Button } from '../controls';
 

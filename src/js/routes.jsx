@@ -6,22 +6,22 @@ import { Route, Router, IndexRedirect } from 'react-router';
 import applyMiddleware from 'react-router-apply-middleware';
 import { useRelativeLinks } from 'react-router-relative-links';
 
-import Root from '../root';
-import View from '../view_wrapper';
-import Workflows from '../workflows';
-import Workflow from '../workflow';
-import Services from '../services';
-import Jobs from '../jobs';
-import System from '../system';
-import Order from '../order';
-import Search from '../search';
-import Groups from '../groups';
-import Login from '../auth';
-import Ocmd from '../ocmd';
-import Library from '../library';
+import Root from './views/root';
+import View from './views/view_wrapper';
+import Workflows from './views/workflows';
+import Workflow from './views/workflow';
+import Services from './views/services';
+import Jobs from './views/jobs';
+import System from './views/system';
+import Order from './views/order';
+import Search from './views/search';
+import Groups from './views/groups';
+import Login from './views/auth';
+import Ocmd from './views/ocmd';
+import Library from './views/library';
 
-import sync from '../../hocomponents/sync';
-import actions from '../../store/api/actions';
+import sync from './hocomponents/sync';
+import actions from './store/api/actions';
 
 class AppInfo extends React.Component {
 
@@ -191,7 +191,7 @@ export default compose(
       info: state.api.info,
     }),
     {
-      load: actions.info.loadPublicInfo,
+      load: actions.info.fetch,
       logout: actions.logout.logout,
     }
   ),

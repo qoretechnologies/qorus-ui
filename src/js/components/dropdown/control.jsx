@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function Control(
-  { children, small = false, btnStyle = '', noCaret = true, ...other }: Props
+  { children, small = false, btnStyle = '', noCaret = false, ...other }: Props
 ) {
   return (
     <button

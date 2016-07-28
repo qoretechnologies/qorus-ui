@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { CenterWrapper } from '../../components/layout';
 import actions from '../../store/api/actions';
-import LoginForm from './form';
-import SystemInfo from '../system-info';
+import LoginForm from '../../containers/auth/form';
+import SystemInfo from '../../containers/system_info';
 
 import { auth } from '../../helpers/user';
 

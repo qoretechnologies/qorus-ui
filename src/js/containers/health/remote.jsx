@@ -1,12 +1,12 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
 import Dropdown, { Control as DropdownControl, CustomItem } from '../../components/dropdown';
-import RemoteInfo from './remote-info';
+import RemoteInfo from './remote_info';
 
 const RemoteHealth = ({ health }: { health: Object }) => (
   <Dropdown>
@@ -18,9 +18,6 @@ const RemoteHealth = ({ health }: { health: Object }) => (
     </CustomItem>
   </Dropdown>
 );
-RemoteHealth.propTypes = {
-  health: PropTypes.object,
-};
 
 export default compose(
   connect(

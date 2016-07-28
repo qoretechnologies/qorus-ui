@@ -6,7 +6,7 @@ import * as shallow from '../shallow';
 
 
 import Topbar from '../../src/js/components/topbar';
-import UserInfo from '../../src/js/views/user-info';
+import UserInfo from '../../src/js/containers/user_info';
 
 
 describe("Topbar from 'components/topbar'", () => {

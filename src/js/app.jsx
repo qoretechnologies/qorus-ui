@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import setupStore from 'store';
+import { browserHistory } from 'react-router';
 
-import AppInfo from 'views/app-info';
+import Routes from './routes';
 
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
@@ -202,7 +203,7 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className="app__wrap">
-          <AppInfo routerProps={this.getRouterProps()} />
+          <Routes routerProps={this.getRouterProps()} />
           {this.renderDevTools()}
         </div>
       </Provider>
