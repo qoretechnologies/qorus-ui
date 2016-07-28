@@ -9,6 +9,7 @@ Feature: Tests for the library view
     And library gets loaded
     Then "3" "rows" are shown
 
+  @wip
   Scenario: Filtering via the search field
     Given I am on "library" listing
     And library gets loaded

@@ -1,4 +1,4 @@
-import { findTableRow } from './common_steps';
+import { findTableRow, mainSection } from './common_steps';
 
 module.exports = function searchSteps() {
   this.Then(/^library gets loaded$/, async function() {
@@ -9,9 +9,9 @@ module.exports = function searchSteps() {
   });
 
   this.When(/^I click on the "([^"]*)" constant$/, async function(name) {
+    await this.waitForChange(2000);
     const row = findTableRow(this.browser, name, 1);
-
-    await this.browser.click(row);
+    return this.browser.click(row);
   });
 
   this.Then(/^the "([^"]*)" row is highlighted$/, async function(name) {

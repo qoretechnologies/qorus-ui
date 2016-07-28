@@ -243,7 +243,7 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
-    await this.waitForChange(2000);
+    await this.waitForChange(4000);
     this.browser.assert.elements('tbody > tr', parseInt(workflows, 10));
   });
 
@@ -300,8 +300,9 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
+    await this.waitForElement('#search');
     this.browser.fill('#search', search);
-    this.browser.pressButton('#search-form [type="submit"]');
+    return this.browser.pressButton('#search-form [type="submit"]');
   });
 
   this.When(/^I type "([^"]*)" in "([^"]*)" input$/, async function(text, input) {
