@@ -179,7 +179,8 @@ export default class WorkflowsToolbar extends Component {
             <Checkbox
               action={this.props.onAllClick}
               checked={checked}
-            />&nbsp;
+            />
+            {' '}
           </DropdownControl>
           <DropdownItem
             action={this.props.onAllClick}

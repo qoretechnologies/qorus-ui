@@ -1,4 +1,4 @@
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES } from '../../../../constants/orders';
 
 const defaults = {};
 

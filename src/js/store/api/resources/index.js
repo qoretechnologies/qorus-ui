@@ -147,4 +147,19 @@ export default [
     url: `${settings.REST_BASE_URL}/system/api`,
     transform: item => item,
   },
+  {
+    name: 'auth',
+    url: `${settings.REST_BASE_URL}/public/login`,
+    transform: item => item,
+  },
+  {
+    name: 'info',
+    url: `${settings.REST_BASE_URL}/public/info`,
+    transform: item => item,
+  },
+  {
+    name: 'logout',
+    url: `${settings.REST_BASE_URL}/logout`,
+    transform: item => item,
+  },
 ];

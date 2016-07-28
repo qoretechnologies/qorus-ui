@@ -1,7 +1,7 @@
 const moment = require('moment');
 const range = require('lodash').range;
 const includes = require('lodash').includes;
-const canSkip = require('helpers/orders').canSkip;
+const canSkip = require('../../../../../helpers/orders').canSkip;
 
 const addNote = (order, saved, username, note) => {
   let notes;

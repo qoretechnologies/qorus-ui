@@ -6,7 +6,7 @@ import actions from 'store/api/actions';
 
 import { Control as Button, Controls } from '../../../../components/controls';
 
-import { ORDER_ACTIONS } from 'constants/orders';
+import { ORDER_ACTIONS } from '../../../../constants/orders';
 
 @pureRender
 export default class extends Component {

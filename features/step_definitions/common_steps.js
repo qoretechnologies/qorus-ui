@@ -4,6 +4,7 @@ const cmpLoader = `${mainSection} p`;
 const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
+const cmpForm = `form`;
 
 /**
  * Finds listed object's row element by its name.
@@ -43,7 +44,8 @@ const findElementByValue = (browser, selector, text) => browser.queryAll(selecto
   .find(el => el.value === text) || null;
 
 module.exports = function commonSteps() {
-  this.When(/^I activate "([^"]*)" navigation item$/, function(name) {
+  this.When(/^I activate "([^"]*)" navigation item$/, async function(name) {
+    await this.waitForElement('nav.side-menu')
     const link = this.browser.
       queryAll('nav.side-menu li > a').
       find(link => (
@@ -62,12 +64,29 @@ module.exports = function commonSteps() {
     this.browser.assert.text('title', new RegExp(`^${title} \|`));
   });
 
-  this.Given(/^I am on "([^"]*)" listing$/, function(name) {
+  this.Given(/^I am anonymous user$/, function() {
+    this.token = null;
+  });
+
+  this.Given(/^I am user with fake token$/, function() {
+    this.token = 'fake';
+  });
+
+  this.Given(/^I am on "([^"]*)" listing$/, async function(name) {
+    return this.browser.visit(`/${name}`);
+  });
+
+  this.Given(/^Auth not required$/, function() {
+    this.noauth = true;
+  });
+
+  this.Given(/^I am on "([^"]*)" page$/, function(name) {
     return this.browser.visit(`/${name}`);
   });
 
 
-  this.Then(/^I should see a loader$/, function() {
+  this.Then(/^I should see a loader$/, async function() {
+    await this.waitForElement('.root__center > section');
     this.browser.assert.text(cmpLoader, 'Loading...');
   });
 
@@ -76,11 +95,14 @@ module.exports = function commonSteps() {
     this.browser.assert.elements(cmpRows, { atLeast: 1 });
   });
 
+  this.Then(/^I should see "([^"]*)" form$/, async function(name) {
+    await this.waitForElement(`form.${name}`);
+    this.browser.assert.elements(`form.${name}`, { atLeast: 1 });
+  });
 
   this.When(/^"([^"]*)" get loaded$/, function(name) {
     return this.waitForElement(cmpTable);
   });
-
 
   this.Given(/^there are no "([^"]*)" loaded$/, function(name) {
     this.browser.assert.elements(cmpTable, 0);
@@ -92,8 +114,12 @@ module.exports = function commonSteps() {
 
   this.When(/^I click the "([^"]*)" button$/, async function(button) {
     const el = findElementByText(this.browser, '.btn', ` ${button}`);
-
     await this.browser.click(el);
+  });
+
+  this.When(/^I click on "([^"]*)" item$/, async function(selector) {
+    await this.waitForElement(mainSection);
+    return this.browser.click(selector);
   });
 
   this.When(/^I activate "([^"]*)"$/, async function(name) {
@@ -217,7 +243,7 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
-    await this.waitForChange(2000);
+    await this.waitForChange(4000);
     this.browser.assert.elements('tbody > tr', parseInt(workflows, 10));
   });
 
@@ -274,8 +300,37 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I type "([^"]*)" in the search input$/, async function(search) {
+    await this.waitForElement('#search');
     this.browser.fill('#search', search);
-    this.browser.pressButton('#search-form [type="submit"]');
+    return this.browser.pressButton('#search-form [type="submit"]');
+  });
+
+  this.When(/^I type "([^"]*)" in "([^"]*)" input$/, async function(text, input) {
+    await this.waitForElement(`[name=${input}]`);
+    this.browser.fill(input, text);
+  });
+
+  this.When(/^I submit "([^"]*)" form$/, async function(formClass) {
+    this.browser.pressButton(`form.${formClass} button[type=submit]`);
+  });
+
+  this.Then(/^I see "([^"]*)" alert$/, async function(alertType) {
+    const elementName = `.alert-${alertType}`;
+    await this.waitForElement(elementName);
+    this.browser.assert.element(elementName);
+  });
+
+  this.Then(/^I see "([^"]*)" item$/, async function(selector) {
+    await this.waitForElement(selector);
+    this.browser.assert.element(selector);
+  });
+
+  this.Then(/^"([^"]*)" exists in localStorage$/, function(itemName) {
+    const item = this.browser.window.localStorage.getItem(itemName);
+    if (!item) {
+      throw new Error(`${itemName} hasn't been set`);
+    }
+    this.browser.assert.success();
   });
 
   this.Then(/^I see modal with CSV data in it$/, async function () {
@@ -316,6 +371,16 @@ module.exports = function commonSteps() {
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
     return this.browser.click(row.cells[parseInt(nameCell, 10)].children[0]);
+  });
+
+  this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
+    await this.waitForURLChange();
+
+    this.browser.assert.url({ pathname });
+  });
+
+  this.Then(/^query param "([^"]*)" equals to "([^"]*)"$/, function(name, value) {
+    this.browser.assert.url({ query: { [name]: value } });
   });
 };
 

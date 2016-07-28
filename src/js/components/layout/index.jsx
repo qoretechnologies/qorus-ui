@@ -1,0 +1,1 @@
+export CenterWrapper from './center';

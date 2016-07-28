@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
-
-import Loader from '../../../components/loader';
-
 import classNames from 'classnames';
 
+import { statusHealth } from '../../../helpers/system';
+import Loader from '../../../components/loader';
 
 function renderRemotes(remote) {
   return (
@@ -12,14 +11,6 @@ function renderRemotes(remote) {
       <td>{ remote.health }</td>
     </tr>
   );
-}
-
-function statusHealth(health) {
-  return classNames({
-    danger: health === 'RED',
-    success: health === 'GREEN',
-    warning: health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
-  });
 }
 
 export function SystemHealth(props) {

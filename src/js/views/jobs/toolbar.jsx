@@ -125,7 +125,8 @@ export default class extends Component {
             <Checkbox
               action={this.props.onAllClick}
               checked={checked}
-            />&nbsp;
+            />
+            {' '}
           </DropdownControl>
           <DropdownItem
             action={this.props.onAllClick}

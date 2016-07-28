@@ -26,7 +26,7 @@ There is also a development and test server written in
 ### `src`
 
 The main directory with source code and
-[app entry point](src/index.jsx) for the webapp. Most of other things
+[app entry point](src/app.jsx) for the webapp. Most of other things
 are just support for development or build.
 
 ### `src/js/components`

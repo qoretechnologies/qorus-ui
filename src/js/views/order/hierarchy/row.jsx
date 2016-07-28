@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import Date from 'components/date';
 
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES } from '../../../constants/orders';
 
 export default class extends Component {
   static propTypes = {

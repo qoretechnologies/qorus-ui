@@ -1,18 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import Toolbar, { Actions } from 'components/toolbar';
-import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
-import { Control as Button } from 'components/controls';
-import Checkbox from 'components/checkbox';
-import Search from 'components/search';
-import Datepicker from 'components/datepicker';
 
-import { goTo } from 'helpers/router';
-import { getActionData } from 'helpers/orders';
+import Toolbar, { Actions } from '../../../../components/toolbar';
+import Dropdown, {
+  Item as DropdownItem,
+  Control as DropdownControl,
+} from '../../../../components/dropdown';
+import { Control as Button } from '../../../../components/controls';
+import Checkbox from '../../../../components/checkbox';
+import Search from '../../../../components/search';
+import Datepicker from '../../../../components/datepicker';
+import { pureRender } from '../../../../components/utils';
+import { goTo } from '../../../../helpers/router';
+import { getActionData } from '../../../../helpers/orders';
 
-import { CHECKBOX_STATES } from 'constants/checkbox';
-import { ORDER_STATES } from 'constants/orders';
+import { CHECKBOX_STATES } from '../../../../constants/checkbox';
+import { ORDER_STATES } from '../../../../constants/orders';
 
-import { pureRender } from 'components/utils';
 
 @pureRender
 export default class OrdersToolbar extends Component {
@@ -157,7 +160,8 @@ export default class OrdersToolbar extends Component {
             <Checkbox
               action={this.props.onAllClick}
               checked={checked}
-            />&nbsp;
+            />
+            {' '}
           </DropdownControl>
           <DropdownItem
             action={this.props.onAllClick}

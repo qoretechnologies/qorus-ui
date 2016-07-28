@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
+import classNames from 'classnames';
 
 import StepModal from '../../../workflows/detail/step_modal';
 
-import classNames from 'classnames';
-import { pureRender } from 'components/utils';
-import { groupInstances } from 'helpers/orders';
-
-import { graph } from 'lib/graph';
+import { pureRender } from '../../../../components/utils';
+import { groupInstances } from '../../../../helpers/orders';
+import { graph } from '../../../../lib/graph';
 
 /**
  * Typical list of arguments for step-specific functions.

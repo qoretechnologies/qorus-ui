@@ -79,7 +79,6 @@ module.exports = function orderDetailSteps() {
     const notes = this.browser.queryAll('p.note');
 
     expect(notes[0].children[2].textContent).to.equal(note);
-    expect(notes[0].children[1].textContent).to.equal('admin');
   });
 
   this.Given(/^diagram, tables and error pane get loaded$/, async function() {

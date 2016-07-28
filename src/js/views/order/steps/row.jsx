@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import { ORDER_STATES } from 'constants/orders';
+import { ORDER_STATES } from '../../../constants/orders';
 
 import Date from 'components/date';
 

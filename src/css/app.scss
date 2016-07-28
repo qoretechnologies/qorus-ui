@@ -9,7 +9,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './buttons';
 @import './tables';
 
-
+@import '../js/components/layout/style';
 @import '../js/components/autostart/style';
 @import '../js/components/badge/style';
 @import '../js/components/collection_search/style';

@@ -17,7 +17,10 @@ module.exports = () => {
   const router = new express.Router();
   router.get('/', (req, res, next) => {
     if (req.query.action === 'current') {
-      req.url = `/${data[0].username}`; // eslint-disable-line no-param-reassign
+      const user = data.find(u => (
+        u.token === req.headers['qorus-token']
+      ));
+      req.url = `/${user.username}`; // eslint-disable-line no-param-reassign
     }
 
     next();

@@ -48,6 +48,38 @@ class World {
     this.browser = new Browser();
     this.browser.site = `http://${devConfig().host}:${devConfig().port}`;
 
+    this.noauth = false;
+
+    const customHeaders = [
+      { name: 'accept', value: 'application/json' },
+      { name: 'content-type', value: 'application/json' },
+    ];
+
+    this.token = 'admin';
+
+    this.browser.on('active', function setToken() {
+      this.browser.window.localStorage.setItem('token', this.token);
+    }.bind(this));
+
+    const addCustomHeaders = (browser, request) => {
+      if (this.token) {
+        request.headers.set('Qorus-Token', this.token);
+      }
+
+      if (this.noauth) {
+        request.headers.set('NoAuth', `${this.noauth}`);
+      }
+
+      if (request.method === 'POST') {
+        customHeaders.forEach(headerInfo => {
+          request.headers.set(headerInfo.name, headerInfo.value);
+        });
+      }
+      return null;
+    };
+
+    this.browser.pipeline.addHandler(addCustomHeaders.bind(this));
+
     return new Promise((resolve, reject) => {
       this.browser.visit('/', '1m', err => {
         if (err) {
@@ -180,7 +212,7 @@ class World {
    * @return {Promise}
    */
   waitForElement(
-    selector, context = this.browser.document, limit = 5000, checks = 10
+    selector, context = this.browser.document, limit = 10000, checks = 50
   ) {
     function check(resolve, reject, tries = 0) {
       if (this.browser.query(selector, context)) {

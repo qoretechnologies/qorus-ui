@@ -1,19 +1,26 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
 
 
-import UserInfo from '../../src/js/components/user_info';
+import { UserInfo } from '../../src/js/containers/user_info';
 
 
-describe("UserInfo from 'components/user_info'", () => {
+describe("UserInfo from 'containers/user_info'", () => {
   it("displays current user's name", () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
+    const wrapper = mount(
       <UserInfo user={{ name: 'jon.doe' }} />
     );
-    const result = renderer.getRenderOutput();
+    expect(wrapper.find('button').text().trim()).to.equal('jon.doe');
+  });
 
-    expect(result.props.children[2].props.children).to.equal('jon.doe');
+  it('No authentcation - no dropdown', () => {
+    const wrapper = mount(
+      <UserInfo
+        user={{ name: 'jon.doe' }}
+        noauth
+      />
+    );
+    expect(wrapper.find('.user-dropdown').length).to.equal(0);
   });
 });

@@ -27,7 +27,8 @@ export default function Footer(props: { info: Object }) {
             </small>
           )}
           {props.info && props.info['omq-version'] && ' '}
-          &copy;&nbsp;
+          &copy;
+          {' '}
           <a href="http://qoretechnologies.com">Qore Technologies</a>
           {' | '}
           <a

@@ -28,6 +28,8 @@ module.exports = () => {
   router.use('/functions', require('./functions')());
   router.use('/classes', require('./classes')());
   router.use('/constants', require('./constants')());
+  router.use('/public', require('./public')());
+  router.use('/logout', require('./logout')());
 
   return router;
 };

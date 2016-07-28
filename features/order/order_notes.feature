@@ -11,4 +11,3 @@ Feature: Tests for the Notes tab
     When I add a new note "Test"
     Then there are "4" notes
     And the last note says "Test"
-

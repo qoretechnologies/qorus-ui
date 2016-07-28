@@ -4,29 +4,34 @@ import classNames from 'classnames';
 
 type Props = {
   children?: React.Element<any>,
-  btnStyle?: string,
+  btnStyle: string,
   small?: boolean,
+  noCaret?: boolean
 }
 
-export default function Control(props: Props) {
+export default function Control(
+  { children, small = false, btnStyle = '', noCaret = false, ...other }: Props
+) {
   return (
     <button
       className={classNames('btn',
-       props.small ? 'btn-xs' : '',
-       props.btnStyle ? `btn-${props.btnStyle}` : 'btn-default',
+       small ? 'btn-xs' : '',
+       `btn-${btnStyle}`,
        'dropdown-toggle'
       )}
-      {...props}
+      {...other}
     >
-      { props.children }
-      {' '}
-      <span className="fa fa-caret-down" />
+      { children }
+      { !noCaret ? ' ' : null }
+      { !noCaret ? <span className="fa fa-caret-down" /> : null }
     </button>
   );
 }
 
 Control.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
   btnStyle: PropTypes.string,
   small: PropTypes.bool,
+  noCaret: PropTypes.bool,
 };

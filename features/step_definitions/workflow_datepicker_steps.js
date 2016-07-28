@@ -90,12 +90,6 @@ module.exports = function workflowDatepickerSteps() {
     this.browser.pressButton('.datepicker-group [type="submit"]');
   });
 
-  this.Then(/^the URL changes to "([^"]*)"$/, async function(pathname) {
-    await this.waitForURLChange();
-
-    this.browser.assert.url({ pathname });
-  });
-
   this.Then(/^the query "([^"]*)" changes to "([^"]*)"$/, async function(qn, q) {
     await this.waitForURLChange();
 
