@@ -57,6 +57,7 @@ export default class Control extends Component {
         disabled={this.props.disabled}
         type={this.props.type}
         style={this.props.css}
+        {...this.props}
       >
         {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}

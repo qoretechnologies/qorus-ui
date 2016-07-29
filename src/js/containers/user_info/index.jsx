@@ -1,10 +1,10 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import Dropdown, { Control as DropdownControl, CustomItem } from '../../components/dropdown';
 import { Control } from '../../components/controls';
+import Dialog from '../../components/dialog';
 
 
 export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) => {
@@ -19,24 +19,23 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
   }
 
   return (
-    <Dropdown>
-      <DropdownControl className="btn navbar-btn btn-inverse user-dropdown" noCaret>
-        <i className="fa fa-user" />
-          {' '}
-          {user.name}
-        </DropdownControl>
-        <CustomItem>
-          <Link to="/logout" className="logout">
-            <i className="fa fa-sign-out" />
-            Logout
-          </Link>
-        </CustomItem>
-      </Dropdown>
+    <Dialog
+      className="nav-btn-tooltip"
+      mainElement={
+        <Control
+          big
+          className="btn navbar-btn btn-inverse remote-health-dropdown"
+          icon="user"
+          label={user.name}
+        />
+      }
+    >
+      <Link to="/logout" className="btn btn-danger logout">
+        <i className="fa fa-sign-out" />
+        Logout
+      </Link>
+    </Dialog>
   );
-};
-UserInfo.propTypes = {
-  user: PropTypes.object.isRequired,
-  noauth: PropTypes.bool,
 };
 
 export default connect(

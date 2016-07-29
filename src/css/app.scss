@@ -30,6 +30,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/chart/style';
 @import '../js/components/tree/style';
 @import '../js/components/dropdown/style';
+@import '../js/components/dialog/style';
 
 @import './not-supported';
 @import './root';
