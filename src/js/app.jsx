@@ -4,6 +4,7 @@ import setupStore from 'store';
 import { browserHistory } from 'react-router';
 
 import Routes from './routes';
+import { Notification, NotificationList } from './components/notifications';
 
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
@@ -203,6 +204,13 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className="app__wrap">
+          <NotificationList>
+            <Notification type="success">Some element has been created</Notification>
+            <Notification type="warning">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            </Notification>
+            <Notification type="error">Wrong token</Notification>
+          </NotificationList>
           <Routes routerProps={this.getRouterProps()} />
           {this.renderDevTools()}
         </div>
