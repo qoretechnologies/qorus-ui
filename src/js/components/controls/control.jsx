@@ -15,10 +15,12 @@ export default class Control extends Component {
     btnStyle: string,
     icon: string,
     action: () => void,
+    onClick: () => void,
     disabled: boolean,
     big: boolean,
     type: string,
     css: Object,
+    id?: string,
     className: string,
   };
 
@@ -27,10 +29,11 @@ export default class Control extends Component {
    *
    */
   handleClick = (event: Object): void => {
-    if (!this.props.action) return;
+    const action = this.props.action || this.props.onClick;
+    if (!action) return;
 
     event.preventDefault();
-    this.props.action(event);
+    action(event);
   };
 
   renderIcon(): ?React.Element<any> {
@@ -47,17 +50,18 @@ export default class Control extends Component {
       btn: true,
       'btn-xs': !this.props.big,
       [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
+      [this.props.className]: true,
     });
 
     return (
       <button
+        id={this.props.id}
         className={className}
         title={this.props.title}
         onClick={this.handleClick}
         disabled={this.props.disabled}
         type={this.props.type}
         style={this.props.css}
-        {...this.props}
       >
         {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}

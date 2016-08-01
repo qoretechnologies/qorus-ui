@@ -1,4 +1,4 @@
-import { findTableRow, findElementByText } from './common_steps';
+import { findTableRow, findElementByText, selectors } from './common_steps';
 import { expect } from 'chai';
 import moment from 'moment';
 
@@ -106,7 +106,11 @@ module.exports = function orderSteps() {
   });
 
   this.Given(/^I select "([^"]*)" order with "([^"]*)" status$/, async function(count, state) {
-    const row = this.browser.queryAll('tbody > tr').filter(r => r.cells[3].textContent === state);
+    const row = this.browser.queryAll(
+      `${selectors.mainSection} tbody > tr`
+    ).filter(
+      r => r.cells[3].textContent === state
+    );
 
     for (let i = 0; i <= count - 1; i++) {
       this.browser.click(row[i].cells[0].children[0]);
