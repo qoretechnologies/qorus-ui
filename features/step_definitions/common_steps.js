@@ -244,7 +244,7 @@ module.exports = function commonSteps() {
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
     await this.waitForChange(4000);
-    this.browser.assert.elements('tbody > tr', parseInt(workflows, 10));
+    this.browser.assert.elements(`${mainSection} tbody > tr`, parseInt(workflows, 10));
   });
 
   this.When(/^I select "([^"]*)" "([^"]*)"$/, async function (count, type) {

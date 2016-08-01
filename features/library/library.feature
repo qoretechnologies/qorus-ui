@@ -4,6 +4,7 @@ Feature: Tests for the library view
     Given I am on "library" listing
     Then library gets loaded
 
+  @wip
   Scenario: Default data are loaded
     Given I am on "library" listing
     And library gets loaded

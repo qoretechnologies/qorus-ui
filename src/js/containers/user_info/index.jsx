@@ -24,7 +24,7 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
       mainElement={
         <Control
           big
-          className="btn navbar-btn btn-inverse remote-health-dropdown"
+          className="btn navbar-btn btn-inverse user-dropdown"
           icon="user"
           label={user.name}
         />

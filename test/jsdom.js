@@ -25,7 +25,7 @@ function missingGlobal(ctx) {
   };
 
   if (!ctx.document) {
-    var doc = jsdom(
+    global.document = jsdom(
       '<!DOCTYPE html>' +
       '<html>' +
         '<head>' +
@@ -36,8 +36,7 @@ function missingGlobal(ctx) {
       '</html>',
       { url: 'http://qorus.example.com/' }
     );
-    global.window = doc.defaultView;
-    global.document = global.window.document;
+    global.window = global.document.defaultView;
     global.window.localStorage = localStorage;
     global.self = global.window.self;
     global.localStorage = localStorage;

@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import Dialog from '../../src/js/components/dialog';
 
-describe.only('Dialog from \'components/dialog\'', () => {
+describe('Dialog from \'components/dialog\'', () => {
   let originalGetElementById;
   const fakeElement = {
     offsetTop: 200,
