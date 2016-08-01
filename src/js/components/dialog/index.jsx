@@ -116,8 +116,7 @@ class Dialog extends React.Component {
         <div
           className="dialog-wrapper"
           style={{
-            display: 'block',
-            visibility: this.state.isOpen ? 'visible' : 'hidden',
+            display: this.state.isOpen ? 'block' : 'none',
           }}
           id={this.getDialogId()}
         >
