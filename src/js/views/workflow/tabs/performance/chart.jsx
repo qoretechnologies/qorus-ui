@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Loader from 'components/loader';
 import Chart from 'components/chart';
@@ -10,7 +10,7 @@ import { fetchJson } from 'store/api/utils';
 import moment from 'moment';
 import qs from 'qs';
 
-export default class ChartView extends PureComponent {
+export default class ChartView extends Component {
   static propTypes = {
     days: PropTypes.number,
     workflow: PropTypes.object,
