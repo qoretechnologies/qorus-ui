@@ -44,9 +44,6 @@ export default class AlertPane extends Component {
       <Pane width={400} onClose={ this.onClose }>
         <h3>Alert detail</h3>
         <InfoTable object={ this.props.alert } />
-        {/* <Table data={this.props.alert}>
-          <Section type="body" data={ this.getData() } rows={this.renderRows} />
-        </Table>*/}
       </Pane>
     );
   }

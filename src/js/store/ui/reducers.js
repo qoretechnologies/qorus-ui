@@ -3,4 +3,5 @@ export services from './services/reducers';
 export jobs from './jobs/reducers';
 export orders from './orders/reducers';
 export groups from './groups/reducers';
+export alerts from './alerts/reducers';
 

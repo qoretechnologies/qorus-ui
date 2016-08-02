@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 
 import Nav, { NavLink } from '../../../components/navlink';
 import { SystemHealth } from './health';
-import PerformanceCharts from './perf';
+import PerformanceChart from '../../workflow/tabs/performance/chart';
 
 
 import actions from 'store/api/actions';
@@ -22,17 +22,17 @@ const viewSelector = createSelector(
 
 @connect(viewSelector)
 export default class Dashboard extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    route: PropTypes.object,
-    health: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-  };
-
   static contextTypes = {
     router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
+  };
+
+  props: {
+    children: any,
+    route?: Object,
+    health: Object,
+    dispatch: Function,
   };
 
   componentWillMount() {
@@ -43,8 +43,8 @@ export default class Dashboard extends Component {
     return (
       <div className="tab-pane active">
         <div className="container-fluid">
-          <SystemHealth health={this.props.health} className="col-md-4" />
-          <PerformanceCharts data={{}} className="col-md-8" />
+          <SystemHealth health={this.props.health} className="health-block" />
+          <PerformanceChart days={1} />
         </div>
         <div className="container-fluid">
           <Nav

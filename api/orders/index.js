@@ -124,8 +124,25 @@ module.exports = () => {
         return Object.assign({}, p, modified);
       });
 
-
       filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.mindate));
+
+      if (req.query.global) {
+        const addValues = (v1, v2) => parseInt(v1, 10) + parseInt(v2, 10);
+
+        filteredData = [filteredData.reduce((result, cur) => {
+          if (!result) return cur;
+
+          const copy = result;
+          copy.avgduration = addValues(copy.avgduration, cur.avgduration);
+          copy.avgprocessing = addValues(copy.avgprocessing, cur.avgprocessing);
+          copy.minduration = addValues(copy.minduration, cur.minduration);
+          copy.minprocessing = addValues(copy.minprocessing, cur.minprocessing);
+          copy.maxduration = addValues(copy.maxduration, cur.maxduration);
+          copy.maxprocessing = addValues(copy.maxprocessing, cur.maxprocessing);
+
+          return copy;
+        })];
+      }
     } else {
       filteredData = data;
 

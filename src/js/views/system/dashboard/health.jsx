@@ -4,15 +4,6 @@ import classNames from 'classnames';
 import { statusHealth } from '../../../helpers/system';
 import Loader from '../../../components/loader';
 
-function renderRemotes(remote) {
-  return (
-    <tr key={ remote.name }>
-      <th>{ remote.name }</th>
-      <td>{ remote.health }</td>
-    </tr>
-  );
-}
-
 export function SystemHealth(props) {
   const { health } = props;
 
@@ -25,40 +16,13 @@ export function SystemHealth(props) {
   return (
     <div className={ props.className }>
       <h4>System health</h4>
-      <div className="health col-md-8">
-        <h6>Local</h6>
-        <table className="table table-condensed">
-          <tbody>
-            <tr>
-              <th>Status</th>
-              <td>
-                <span
-                  className={ classNames('label', `label-${statusHealth(healthStatus)}`) }
-                >
-                  { healthStatus }
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <th>Ongoing</th>
-              <td>{ health.data.ongoing }</td>
-            </tr>
-            <tr>
-              <th>Transient</th>
-              <td>{ health.data.transient }</td>
-            </tr>
-          </tbody>
-        </table>
+      <div>
+        <span
+          className={ classNames('label', `label-${statusHealth(healthStatus)}`) }
+        >
+          { healthStatus }
+        </span>
       </div>
-      <div className="health col-md-4">
-        <h6>Remote</h6>
-        <table className="table table-condensed">
-          <tbody>
-            { health.data.remote.map((r) => (renderRemotes(r))) }
-          </tbody>
-        </table>
-      </div>
-
     </div>
   );
 }
