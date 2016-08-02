@@ -1,6 +1,5 @@
 Feature: Tests login page
 
-  @wip
   Scenario: Check login page redirect for authenticated user
     Given I am on "login" page
     Then the URL changes to "/system/dashboard/ongoing"
@@ -10,7 +9,6 @@ Feature: Tests login page
     Given I am on "login" page
     Then I should see "loginForm" form
 
-  @wip
   Scenario: Submit wrong credentials
     Given I am anonymous user
     And I am on "login" page
@@ -19,7 +17,6 @@ Feature: Tests login page
     And I submit "loginForm" form
     Then I see "warning" alert
 
-  @wip
   Scenario: Submit right credentials
     Given I am anonymous user
     And I am on "login" page
