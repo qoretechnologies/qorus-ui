@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 
 import Loader from 'components/loader';
 import Chart from 'components/chart';
@@ -7,15 +7,14 @@ import Editable from 'components/editable';
 import { createLineDatasets, createDoughDatasets } from 'helpers/chart';
 
 import { fetchJson } from 'store/api/utils';
-import { pureRender } from 'components/utils';
 import moment from 'moment';
 import qs from 'qs';
 
-@pureRender
-export default class ChartView extends Component {
+export default class ChartView extends PureComponent {
   static propTypes = {
     days: PropTypes.number,
     workflow: PropTypes.object,
+    global: PropTypes.boolean,
   };
 
   componentWillMount() {
@@ -41,12 +40,13 @@ export default class ChartView extends Component {
   };
 
   fetchData = async (days) => {
+    const id = this.props.workflow ? this.props.workflow.workflowid : '';
     const query = {
       grouping: days > 1 ? 'daily' : 'hourly',
       mindate: moment().add(-days, 'days').format('YYYY-MM-DD HH:mm:ss'),
-      wfids: this.props.workflow.workflowid,
-      id: this.props.workflow.workflowid,
-      global: false,
+      wfids: id,
+      id,
+      global: this.props.global || false,
       seconds: true,
       step: days,
     };
@@ -55,26 +55,35 @@ export default class ChartView extends Component {
       'GET',
       `/api/orders?action=processingSummary&${queryString}`
     );
-    const doughData = await fetchJson(
-      'GET',
-      `/api/workflows/${this.props.workflow.workflowid}?date=${encodeURIComponent(query.minDate)}`
-    );
 
     const line = createLineDatasets(lineData, days);
-    const dough = createDoughDatasets(doughData, days);
 
-    this.setState({
+    let state = {
       lineLabels: line.labels,
       lineDatasets: line.data,
-      doughLabels: dough.labels,
-      doughDatasets: dough.data,
-    });
+    };
+
+    if (this.props.workflow) {
+      const doughData = await fetchJson(
+        'GET',
+        `/api/workflows/${this.props.workflow.workflowid}?date=${encodeURIComponent(query.minDate)}`
+      );
+
+      const dough = createDoughDatasets(doughData, days);
+
+      state = Object.assign({}, state, {
+        doughLabels: dough.labels,
+        doughDatasets: dough.data,
+      });
+    }
+
+    this.setState(state);
   };
 
   errorChecker = (value) => !(!/^-?\d+$/.test(value) || value > 90 || value < 1);
 
   render() {
-    if (!this.state.lineLabels.length || !this.state.doughLabels.length) {
+    if (!this.state.lineLabels.length || (this.props.workflow && !this.state.doughLabels.length)) {
       return <Loader />;
     }
 
@@ -97,14 +106,16 @@ export default class ChartView extends Component {
           labels={this.state.lineLabels}
           datasets={this.state.lineDatasets}
         />
-        <Chart
-          type="doughnut"
-          id="test2"
-          width={200}
-          height={200}
-          labels={this.state.doughLabels}
-          datasets={this.state.doughDatasets}
-        />
+        {this.props.workflow && (
+          <Chart
+            type="doughnut"
+            id="test2"
+            width={200}
+            height={200}
+            labels={this.state.doughLabels}
+            datasets={this.state.doughDatasets}
+          />
+        )}
       </div>
     );
   }
