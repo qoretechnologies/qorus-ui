@@ -42,10 +42,19 @@ class World {
    * This can take some time if the test server is compliling all the
    * assets. There is a limit set to one minute.
    *
+   * @param {string} userAgent - set user agent if required
+   *
    * @return {Promise}
    */
-  setupBrowser() {
-    this.browser = new Browser();
+  setupBrowser(userAgent) {
+    const options = {
+      // eslint-disable-next-line
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
+    };
+    if (userAgent) {
+      options.userAgent = userAgent;
+    }
+    this.browser = new Browser(options);
     this.browser.site = `http://${devConfig().host}:${devConfig().port}`;
 
     this.noauth = false;
