@@ -1,4 +1,4 @@
-import { findTableRow, findElementByText } from './common_steps';
+import { findTableRow, findElementByText, selectors } from './common_steps';
 
 module.exports = function groupsSteps() {
   this.Given(/^the group header gets loaded$/, async function() {
@@ -18,6 +18,9 @@ module.exports = function groupsSteps() {
   });
 
   this.Then(/^^(\d+) "([^"]*)" are loaded$/, async function(count, arg2) {
-    this.browser.assert.elements('.container-fluid table', parseInt(count, 10));
+    this.browser.assert.elements(
+      `${selectors.mainSection} .container-fluid table`,
+      parseInt(count, 10)
+    );
   });
 };

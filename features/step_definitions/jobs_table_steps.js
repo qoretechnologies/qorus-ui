@@ -1,4 +1,4 @@
-import { findElementByText } from './common_steps';
+import { findElementByText, selectors } from './common_steps';
 import firstBy from 'thenby';
 
 const collection = [
@@ -27,8 +27,8 @@ module.exports = function jobsTableSteps() {
     const direction = dir === 'asc' ? 1 : -1;
     const key = header.toLowerCase();
     const sorted = collection.slice().sort(firstBy(w => w[key], { ignoreCase: true, direction }));
-    const tableData = this.browser.queryAll('tbody > tr');
-    const th = findElementByText(this.browser, `thead th.sort.sort-${dir}`, header);
+    const tableData = this.browser.queryAll(`${selectors.mainSection} tbody > tr`);
+    const th = findElementByText(this.browser, `${selectors.mainSection} thead th.sort.sort-${dir}`, header);
 
     this.browser.assert.elements(th, 1);
 

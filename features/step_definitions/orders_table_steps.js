@@ -1,4 +1,4 @@
-import { findElementByText } from './common_steps';
+import { findElementByText, selectors } from './common_steps';
 import { sortTable } from '../../src/js/helpers/table';
 
 const orders = [
@@ -140,8 +140,12 @@ module.exports = function orderTableSteps() {
 
   this.Then(/^orders are sorted by "([^"]*)" "([^"]*)"$/, async function(header, dir) {
     const direction = dir === 'asc' ? 1 : -1;
-    const tableData = this.browser.queryAll('tbody > tr');
-    const th = findElementByText(this.browser, `thead th.sort.sort-${dir}`, header);
+    const tableData = this.browser.queryAll(`${selectors.mainSection} tbody > tr`);
+    const th = findElementByText(
+      this.browser,
+      `${selectors.mainSection} thead th.sort.sort-${dir}`,
+      header
+    );
     const sortData = {
       sortBy: transformHeader(header),
       sortByKey: { ignoreCase: true, direction },
@@ -179,7 +183,11 @@ module.exports = function orderTableSteps() {
   });
 
   this.When(/^I "([^"]*)" an order with "([^"]*)" status$/, async function(action, state) {
-    const row = this.browser.queryAll('tbody > tr').filter(r => r.cells[3].textContent === state);
+    const row = this.browser.queryAll(
+      `${selectors.mainSection} tbody > tr`
+    ).filter(
+      r => r.cells[3].textContent === state
+    );
 
     this.browser.click(row[0].cells[2].children[0].children[actions[action]]);
 

@@ -1,0 +1,47 @@
+.dialog-wrapper {
+  position: absolute;
+  min-width: 200px;
+  z-index: 1100;
+
+  .popover {
+    display: block;
+
+    &.bottom {
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+
+    &.top {
+      -webkit-transform: translate(-50%, -100%);
+      -moz-transform: translate(-50%, -100%);
+      -ms-transform: translate(-50%, -100%);
+      -o-transform: translate(-50%, -100%);
+      transform: translate(-50%, -100%);
+    }
+
+    &.right {
+      -webkit-transform: translate(0, -50%);
+      -moz-transform: translate(0, -50%);
+      -ms-transform: translate(0, -50%);
+      -o-transform: translate(0, -50%);
+      transform: translate(0, -50%);
+    }
+    
+    &.left {
+      -webkit-transform: translate(-100%, -50%);
+      -moz-transform: translate(-100%, -50%);
+      -ms-transform: translate(-100%, -50%);
+      -o-transform: translate(-100%, -50%);
+      transform: translate(-100%, -50%);
+    }
+  }
+}
+
+.nav-btn-tooltip {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}

@@ -7,7 +7,6 @@ import Nav, { NavLink } from '../../../components/navlink';
 import { SystemHealth } from './health';
 import PerformanceChart from '../../workflow/tabs/performance/chart';
 
-
 import actions from 'store/api/actions';
 
 
