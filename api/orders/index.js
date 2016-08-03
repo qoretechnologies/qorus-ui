@@ -126,7 +126,7 @@ module.exports = () => {
 
       filteredData = filteredData.filter(d => moment(d.minstarted).isAfter(req.query.mindate));
 
-      if (req.query.global) {
+      if (req.query.global === 'true' && filteredData.length) {
         const addValues = (v1, v2) => parseInt(v1, 10) + parseInt(v2, 10);
 
         filteredData = [filteredData.reduce((result, cur) => {
