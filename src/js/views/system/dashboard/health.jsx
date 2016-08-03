@@ -3,24 +3,41 @@ import classNames from 'classnames';
 
 import { statusHealth } from '../../../helpers/system';
 import Loader from '../../../components/loader';
+import Badge from '../../../components/badge';
 
-export function SystemHealth(props) {
-  const { health } = props;
-
+export function SystemHealth({ health, className }) {
   if (!health.sync || health.loading) {
     return <Loader />;
   }
 
-  const healthStatus = health.data.health;
+  const { ongoing, transient, ...data } = health.data;
 
   return (
-    <div className={ props.className }>
+    <div className={className}>
       <h4>System health</h4>
-      <div>
+      <div className="health-info">
         <span
-          className={ classNames('label', `label-${statusHealth(healthStatus)}`) }
+          className={ classNames('label', `label-${statusHealth(data.health)}`) }
         >
-          { healthStatus }
+          { data.health }
+        </span>
+        {' '}
+        <span>
+          Ongoing
+          {' '}
+          <Badge
+            val={ongoing}
+            label={ongoing === 0 ? 'warning' : 'danger'}
+          />
+        </span>
+        {' '}
+        <span>
+          Transient
+          {' '}
+          <Badge
+            val={transient}
+            label={transient === 0 ? 'warning' : 'danger'}
+          />
         </span>
       </div>
     </div>

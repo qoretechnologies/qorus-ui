@@ -43,7 +43,10 @@ export default class Dashboard extends Component {
       <div className="tab-pane active">
         <div className="container-fluid">
           <SystemHealth health={this.props.health} className="health-block" />
-          <PerformanceChart days={1} />
+          <PerformanceChart
+            days={1}
+            global
+          />
         </div>
         <div className="container-fluid">
           <Nav
