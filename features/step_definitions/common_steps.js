@@ -4,7 +4,7 @@ const cmpLoader = `${mainSection} p`;
 const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
-const cmpForm = `form`;
+const cmpForm = 'form';
 
 /**
  * Finds listed object's row element by its name.
@@ -345,7 +345,6 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^the header says "([^"]*)"$/, async function(name) {
-    console.log(this.browser.queryAll('.detail-title').map(t => t.textContent));
     const el = findElementByText(this.browser, '.detail-title', name);
 
     this.browser.assert.element(el);

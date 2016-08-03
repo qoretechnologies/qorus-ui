@@ -14,7 +14,7 @@ export default class ChartView extends Component {
   static propTypes = {
     days: PropTypes.number,
     workflow: PropTypes.object,
-    global: PropTypes.boolean,
+    global: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -90,7 +90,7 @@ export default class ChartView extends Component {
     return (
       <div className="chart-view">
         <Editable
-          text={`Last ${this.state.days} days`}
+          text={this.props.days > 1 ? `Last ${this.state.days} days` : 'Last 24 hours'}
           value={this.state.days}
           onSubmit={this.handleEditableSubmit}
           errorChecker={this.errorChecker}
