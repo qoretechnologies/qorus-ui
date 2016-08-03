@@ -382,6 +382,10 @@ module.exports = function commonSteps() {
   this.Then(/^query param "([^"]*)" equals to "([^"]*)"$/, function(name, value) {
     this.browser.assert.url({ query: { [name]: value } });
   });
+
+  this.Given(/^An old browser$/, function () {
+    this.setupBrowser('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)');
+  });
 };
 
 module.exports.selectors = {
