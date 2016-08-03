@@ -32,6 +32,7 @@ function missingGlobal(ctx) {
           '<meta charset="utf-8">' +
         '</head>' +
         '<body>' +
+          '<div id="test-app"></div>' +
         '</body>' +
       '</html>',
       { url: 'http://qorus.example.com/' }
