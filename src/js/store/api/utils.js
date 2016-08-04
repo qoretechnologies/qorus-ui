@@ -115,16 +115,25 @@ function getRestHeaders() {
 
 /**
  * Fetches JSON data by requesting given URL via given method.
+ * If dispatch method does not passsed then print warning that
+ * ajax errors couldn't been handled as required.
  * If response.status === 401 then remove localStorage.token and
  * go to /login page
  *
  * @param {string} method method can be also specified in opts
  * @param {string} url
  * @param {RequestInit=} opts
+ * @param {Function} dispatch - store dispatch method
  * @return {Promise<JSON>}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchJson(method, url, opts = {}) {
+export async function fetchJson(method, url, opts = {}, dispatch) {
+  if (_.isFunction(dispatch)) {
+    console.log(`Can handle fetch with dispatch for ${method} ${url}`);
+  } else {
+    console.warn(`Can't handle fetch for ${method} ${url}`);
+  }
+
   const currentPath = window.location.pathname;
   const res = await fetch(
     url,
@@ -138,6 +147,12 @@ export async function fetchJson(method, url, opts = {}) {
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
     browserHistory.push(`/login?next=${pathname}`);
+  }
+
+  if (res.status === 409 || res.status === 400 || res.status >= 500 && res.status < 600) {
+    const error = new Error();
+    error.res = res;
+    throw error;
   }
 
   return res.json();

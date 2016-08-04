@@ -14,7 +14,7 @@ module.exports = () => {
 
   const router = new express.Router();
   router.get('/global', (req, res) => {
-    res.json(data);
+    res.status(409).json({ error: 'my error' });
   });
   router.get('/workflow/:id', (req, res) => {
     const start = Math.round(Math.random() * (data.length));
