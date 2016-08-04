@@ -6,7 +6,7 @@ import { statuses } from '../../../src/js/constants/notifications';
 import { createStore } from 'redux';
 
 
-describe.only('UI redux store', () => {
+describe('UI redux store', () => {
   let store;
 
   beforeEach(() => {

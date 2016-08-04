@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import Nav, { NavLink } from '../../../components/navlink';
 import { SystemHealth } from './health';
 import PerformanceChart from '../../workflow/tabs/performance/chart';
+import ButtonsBar from '../../../containers/notifications/buttons';
 
 import actions from 'store/api/actions';
 
@@ -56,6 +57,9 @@ export default class Dashboard extends Component {
             <NavLink to="./ongoing">Ongoing</NavLink>
             <NavLink to="./transient">Transient</NavLink>
           </Nav>
+          <div>
+            <ButtonsBar />
+          </div>
           <div>
             { this.props.children }
           </div>

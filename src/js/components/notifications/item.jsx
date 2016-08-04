@@ -2,9 +2,20 @@
 import React from 'react';
 
 const Notification = (
-  { type, children }: { type: 'success' | 'warning' | 'error', children?: string }
+  {
+    type,
+    children,
+    onClick: handleClick,
+  }: {
+    type: 'success' | 'warning' | 'error',
+    children?: string,
+    onClick: Function,
+  }
 ) => (
-  <div className={`notification ${type}`}>
+  <div
+    className={`notification ${type}`}
+    onClick={handleClick}
+  >
     {children}
   </div>
 );

@@ -11,4 +11,5 @@ export default {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
+  NOTIFICATION_TIMEOUT: 5000,
 };

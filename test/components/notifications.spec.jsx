@@ -1,8 +1,12 @@
+/* eslint no-unused-expressions: 0 */
 import React from 'react';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 import { mount } from 'enzyme';
 
 import { NotificationList, Notification } from '../../src/js/components/notifications';
+
+chai.use(spies);
 
 describe('{ NotificationList, Notification } from \'components/notifications\'', () => {
   it('Show different notification types', () => {
@@ -20,14 +24,20 @@ describe('{ NotificationList, Notification } from \'components/notifications\'',
     expect(wrapper.find('.error').length).to.equals(1);
   });
 
-  it('Show only Notification items', () => {
+  it('Handle notification click', () => {
+    const handleClick = chai.spy();
+
     const wrapper = mount(
-      <NotificationList>
-        <Notification type="success">Notify</Notification>
-        <div className="notification">some notification</div>
-      </NotificationList>
+      <Notification
+        type="success"
+        onClick={handleClick}
+      >
+        Success
+      </Notification>
     );
 
-    expect(wrapper.find('.notification').length).to.equals(1);
+    wrapper.find(Notification).simulate('click');
+
+    expect(handleClick).to.have.been.called();
   });
 });
