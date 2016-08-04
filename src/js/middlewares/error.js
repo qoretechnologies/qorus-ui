@@ -17,7 +17,7 @@ export default (store: Object) => (next: Function) => async (action: Object): Ob
 
     if (res.status >= 500 && res.status < 600) {
       newAction.payload = 'Server error';
-      store.dispatch('Server error');
+      store.dispatch(notifications.error('Server error'));
     } else if (res.status === 409) {
       newAction.payload = await res.json();
       store.dispatch(
