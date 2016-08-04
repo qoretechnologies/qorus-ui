@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: 0 */
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
@@ -5,7 +6,7 @@ import error from '../../src/js/middlewares/error';
 
 chai.use(spies);
 
-describe.only('{ error } from middleware/error', () => {
+describe('{ error } from middleware/error', () => {
   let result;
   const next = data => {
     result = data;

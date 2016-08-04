@@ -123,17 +123,10 @@ function getRestHeaders() {
  * @param {string} method method can be also specified in opts
  * @param {string} url
  * @param {RequestInit=} opts
- * @param {Function} dispatch - store dispatch method
  * @return {Promise<JSON>}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchJson(method, url, opts = {}, dispatch) {
-  if (_.isFunction(dispatch)) {
-    console.log(`Can handle fetch with dispatch for ${method} ${url}`);
-  } else {
-    console.warn(`Can't handle fetch for ${method} ${url}`);
-  }
-
+export async function fetchJson(method, url, opts = {}) {
   const currentPath = window.location.pathname;
   const res = await fetch(
     url,

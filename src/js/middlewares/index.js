@@ -3,5 +3,5 @@ import error from './error';
 
 export default [
   auth,
-  error
+  error,
 ];
