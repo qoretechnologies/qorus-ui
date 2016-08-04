@@ -58,11 +58,14 @@ export default class Dashboard extends Component {
             <NavLink to="./transient">Transient</NavLink>
           </Nav>
           <div>
-            <ButtonsBar />
-          </div>
-          <div>
             { this.props.children }
           </div>
+          {global.env.NODE_ENV !== 'production' ? (
+            <div>
+              Notifications:
+              <ButtonsBar />
+            </div>
+          ) : null}
         </div>
       </div>
     );
