@@ -64,7 +64,7 @@ class World {
       { name: 'content-type', value: 'application/json' },
     ];
 
-    this.token = 'admin';
+    this.token = 'amdintkn';
 
     this.browser.on('active', function setToken() {
       this.browser.window.localStorage.setItem('token', this.token);
