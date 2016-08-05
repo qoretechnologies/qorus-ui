@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import ui from '../../../src/js/store/ui';
 import * as actions from '../../../src/js/store/ui/actions';
-import { statuses } from '../../../src/js/constants/notifications';
+import { statuses } from '../../../src/js/constants/bubbles';
 
 import { createStore } from 'redux';
 
@@ -29,69 +29,69 @@ describe('UI redux store', () => {
     );
   });
 
-  it('add notification', () => {
+  it('add bubble', () => {
     store.subscribe(() => {
       const state = store.getState();
-      const notificationList = state.notifications.list;
-      expect(notificationList).to.be.instanceOf(Array);
-      expect(notificationList.length).to.equals(1);
+      const bubbleList = state.bubbles.list;
+      expect(bubbleList).to.be.instanceOf(Array);
+      expect(bubbleList.length).to.equals(1);
     });
 
     store.dispatch(
-      actions.notifications.success('test')
+      actions.bubbles.success('test')
     );
   });
 
-  it('Newest notification at first', () => {
+  it('Newest bubble at first', () => {
     store.dispatch(
-      actions.notifications.error('something goes wrong')
+      actions.bubbles.error('something goes wrong')
     );
 
     store.subscribe(() => {
       const state = store.getState();
-      const notificationList = state.notifications.list;
+      const bubbleList = state.bubbles.list;
 
-      expect(notificationList[0].type).to.equals(statuses.SUCCESS);
-      expect(notificationList[1].type).to.equals(statuses.ERROR);
+      expect(bubbleList[0].type).to.equals(statuses.SUCCESS);
+      expect(bubbleList[1].type).to.equals(statuses.ERROR);
     });
 
     store.dispatch(
-      actions.notifications.success('good news')
+      actions.bubbles.success('good news')
     );
   });
 
   Object.keys(statuses).forEach(item => {
     const name = item.toLowerCase();
-    it(`add ${name} notification`, () => {
+    it(`add ${name} bubble`, () => {
       store.subscribe(() => {
         const state = store.getState();
-        const notificationList = state.notifications.list;
-        const notification = notificationList[0];
-        expect(notification.type).to.equals(item);
+        const bubbleList = state.bubbles.list;
+        const bubble = bubbleList[0];
+        expect(bubble.type).to.equals(item);
       });
 
       store.dispatch(
-        actions.notifications[name]('test')
+        actions.bubbles[name]('test')
       );
     });
   });
 
-  it('Delete notification', () => {
-    store.dispatch(actions.notifications.success('1'));
-    store.dispatch(actions.notifications.success('2'));
-    store.dispatch(actions.notifications.success('3'));
+  it('Delete bubble', () => {
+    store.dispatch(actions.bubbles.success('1'));
+    store.dispatch(actions.bubbles.success('2'));
+    store.dispatch(actions.bubbles.success('3'));
 
     const state = store.getState();
-    const notificationId = state.notifications.list[1].id;
+    const bubbleId = state.bubbles.list[1].id;
 
     store.subscribe(() => {
       const updatedState = store.getState();
-      const notificationList = updatedState.notifications.list;
-      expect(notificationList.length).to.equals(2);
+      const bubbleList = updatedState.bubbles.list;
+      expect(bubbleList.length).to.equals(2);
     });
 
     store.dispatch(
-      actions.notifications.deleteNotification(notificationId)
+      actions.bubbles.deleteBubble(bubbleId)
     );
   });
 });

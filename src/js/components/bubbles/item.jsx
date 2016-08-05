@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
 
-const Notification = (
+const Bubble = (
   {
     type,
     children,
@@ -13,11 +13,11 @@ const Notification = (
   }
 ) => (
   <div
-    className={`notification ${type}`}
+    className={`bubble ${type}`}
     onClick={handleClick}
   >
     {children}
   </div>
 );
 
-export default Notification;
+export default Bubble;

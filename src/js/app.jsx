@@ -4,7 +4,7 @@ import setupStore from 'store';
 import { browserHistory } from 'react-router';
 
 import Routes from './routes';
-import Notifications from './containers/notifications';
+import Notifications from './containers/bubbles';
 
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
@@ -88,7 +88,7 @@ export default class App extends Component {
    * Mounts lifecycle methods in test to notify of DOM changes.
    *
    * Methods just notify change by dispatching `WebappDomUpdate`.
-   * Because the notification is required after DOM changes, the
+   * Because the bubble is required after DOM changes, the
    * following lifecycle methods are aliased:
    *
    * - componentDidMount

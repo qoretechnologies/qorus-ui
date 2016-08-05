@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { notifications } from '../../store/ui/actions';
+import { bubbles } from '../../store/ui/actions';
 import { Control } from '../../components/controls';
 
 
@@ -30,5 +30,5 @@ const ButtonsBar = (
 
 export default connect(
   () => ({}),
-  notifications
+ bubbles
 )(ButtonsBar);
