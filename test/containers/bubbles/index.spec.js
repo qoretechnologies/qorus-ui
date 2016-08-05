@@ -8,7 +8,7 @@ import { Bubbles } from '../../../src/js/containers/bubbles';
 
 const store = createStore(() => {});
 
-describe.only('import { Bubbles } from \'containers/bubbles\'', () => {
+describe('import { Bubbles } from \'containers/bubbles\'', () => {
   it('Empty array', () => {
     const bubbleList = [];
     const wrapper = mount(
