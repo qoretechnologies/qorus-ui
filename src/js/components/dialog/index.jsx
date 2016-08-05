@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import shortid from 'shortid';
 
 type coord = {
@@ -24,12 +25,17 @@ class Dialog extends React.Component {
     this.setState({ id: shortid.generate() });
   }
 
-  getElementId() {
-    return this.state.id;
-  }
+  componentDidUpdate() {
+    const { isOpen } = this.state;
 
-  getDialogId() {
-    return `dialog-${this.getElementId()}`;
+    if (isOpen) {
+      window.addEventListener('resize', this.setDialogPosition);
+      window.addEventListener('click', this.handleOutsideClick);
+      this.setDialogPosition();
+    } else {
+      window.removeEventListener('resize', this.setDialogPosition);
+      window.removeEventListener('click', this.handleOutsideClick);
+    }
   }
 
   setBottomPosition = (element: HTMLElement): coord => {
@@ -73,10 +79,8 @@ class Dialog extends React.Component {
   }
 
   setDialogPosition = () => {
-    const elementId = this.getElementId();
-    const element = document.getElementById(elementId);
-    const dialogId = this.getDialogId();
-    const dialog = document.getElementById(dialogId);
+    const element = ReactDOM.findDOMNode(this.refs.mainElement);
+    const dialogWrapper = ReactDOM.findDOMNode(this.refs.dialogWrapper);
 
     const map = {
       bottom: this.setBottomPosition,
@@ -87,46 +91,58 @@ class Dialog extends React.Component {
 
     const { position = 'bottom' } = this.props;
     const { top, left }: coord = map[position](element);
-    dialog.style.left = left;
-    dialog.style.top = top;
+    dialogWrapper.style.left = left;
+    dialogWrapper.style.top = top;
   }
 
   handleClick = () => {
     const isOpen = !this.state.isOpen;
-    if (isOpen) {
-      window.addEventListener('resize', this.setDialogPosition);
-      this.setDialogPosition();
-    } else {
-      window.removeEventListener('resize', this.setDialogPosition);
-    }
     this.setState({ isOpen });
   }
 
-  render() {
-    const { children, mainElement, className, position = 'bottom' } = this.props;
+  handleOutsideClick = (event: Object): void => {
+    const el: Object = ReactDOM.findDOMNode(this.refs.dialog);
+
+    if (el && !el.contains(event.target)) {
+      this.setState({
+        isOpen: false,
+      });
+    }
+  };
+
+
+  renderDialog() {
+    const { children, position = 'bottom' } = this.props;
     return (
-      <div className={className}>
+      <div
+        className="dialog-wrapper"
+        ref="dialogWrapper"
+      >
+        <div className={`popover ${position}`}>
+          <div className="arrow"></div>
+          <div className="popover-content">
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { mainElement, className } = this.props;
+    return (
+      <div
+        ref="dialog"
+        className={className}
+      >
         {React.cloneElement(
           mainElement,
           {
-            id: this.getElementId(),
+            ref: 'mainElement',
             onClick: this.handleClick,
           }
         )}
-        <div
-          className="dialog-wrapper"
-          style={{
-            display: this.state.isOpen ? 'block' : 'none',
-          }}
-          id={this.getDialogId()}
-        >
-          <div className={`popover ${position}`}>
-            <div className="arrow"></div>
-            <div className="popover-content">
-              {children}
-            </div>
-          </div>
-        </div>
+        { this.state.isOpen ? this.renderDialog() : null }
       </div>
     );
   }

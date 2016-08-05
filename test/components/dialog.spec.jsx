@@ -5,36 +5,15 @@ import { mount } from 'enzyme';
 import Dialog from '../../src/js/components/dialog';
 
 describe('Dialog from \'components/dialog\'', () => {
-  let originalGetElementById;
-  const fakeElement = {
-    offsetTop: 200,
-    offsetLeft: 300,
-    offsetHeight: 100,
-    offsetWidth: 200,
-  };
+  const rootEl = document.querySelector('#test-app');
 
-  let fakeDialog;
-
-  beforeEach(() => {
-    fakeDialog = {
-      style: {
-        left: '',
-        top: '',
-      },
-    };
-
-    originalGetElementById = document.getElementById;
-
-    document.getElementById = name => {
-      if (name.startsWith('dialog')) {
-        return fakeDialog;
-      }
-      return fakeElement;
-    };
-  });
-
-  afterEach(() => {
-    document.getElementById = originalGetElementById;
+  before(() => {
+    Object.defineProperties(window.HTMLElement.prototype, {
+      offsetLeft: { value: 300 },
+      offsetTop: { value: 200 },
+      offsetHeight: { value: 100 },
+      offsetWidth: { value: 200 },
+    });
   });
 
   it('Show dialog on click', () => {
@@ -47,68 +26,93 @@ describe('Dialog from \'components/dialog\'', () => {
     );
 
     wrapper.find('button').simulate('click');
-    expect(
-      wrapper.find('.dialog-wrapper').first().node.style.display
-    ).to.equals('block');
+    expect(wrapper.find('.dialog-wrapper').length).to.equals(1);
   });
 
-  it('Show dialog position bottom', () => {
+  it('Hide dialog on second click', () => {
     const wrapper = mount(
       <Dialog
-        position="bottom"
         mainElement={<button>Open</button>}
       >
         <strong>test dialog</strong>
       </Dialog>
     );
-    wrapper.find('button').simulate('click');
 
-    expect(fakeDialog.style.top).to.equals('300px');
-    expect(fakeDialog.style.left).to.equals('400px');
+    wrapper.find('button').simulate('click');
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find('.dialog-wrapper').length).to.equals(0);
   });
 
-  it('Show dialog position top', () => {
+  it('Hide on other element click', () => {
     const wrapper = mount(
-      <Dialog
-        position="top"
-        mainElement={<button>Open</button>}
-      >
-        <strong>test dialog</strong>
-      </Dialog>
+      <div>
+        <Dialog
+          mainElement={<button>Open</button>}
+        >
+          <strong>test data</strong>
+        </Dialog>
+        <a id="something">something</a>
+      </div>
     );
+
     wrapper.find('button').simulate('click');
 
-    expect(fakeDialog.style.top).to.equals('200px');
-    expect(fakeDialog.style.left).to.equals('400px');
+    const event = document.createEvent('Event');
+    event.initEvent('click', true, true);
+    event.memo = {};
+
+    const el = document.querySelector('body');
+    el.dispatchEvent(event);
+    expect(wrapper.find('.dialog-wrapper').length).to.equals(0);
   });
 
-  it('Show dialog position left', () => {
+  it('Not hide on dialog element click', () => {
     const wrapper = mount(
-      <Dialog
-        position="left"
-        mainElement={<button>Open</button>}
-      >
-        <strong>test dialog</strong>
-      </Dialog>
+      <div>
+        <Dialog
+          mainElement={<button>Open</button>}
+        >
+          <strong>test data</strong>
+        </Dialog>
+        <a id="something">something</a>
+      </div>,
+      { attachTo: rootEl }
     );
-    wrapper.find('button').simulate('click');
 
-    expect(fakeDialog.style.top).to.equals('250px');
-    expect(fakeDialog.style.left).to.equals('300px');
+    wrapper.find('button').simulate('click');
+    const event = document.createEvent('Event');
+    event.initEvent('click', true, true);
+    event.memo = {};
+
+    const el = document.querySelector('strong');
+    el.dispatchEvent(event);
+
+    expect(wrapper.find('.dialog-wrapper').length).to.equals(1);
   });
 
-  it('Show dialog position right', () => {
-    const wrapper = mount(
-      <Dialog
-        position="right"
-        mainElement={<button>Open</button>}
-      >
-        <strong>test dialog</strong>
-      </Dialog>
-    );
-    wrapper.find('button').simulate('click');
+  [
+    { position: 'bottom', top: '300px', left: '400px' },
+    { position: 'top', top: '200px', left: '400px' },
+    { position: 'left', top: '250px', left: '300px' },
+    { position: 'right', top: '250px', left: '500px' },
+  ].forEach(item => {
+    it(`Show dialog position ${item.position}`, () => {
+      const wrapper = mount(
+        <Dialog
+          position={item.position}
+          mainElement={<button>Open</button>}
+        >
+          <strong>test dialog</strong>
+        </Dialog>,
+        {
+          attachTo: rootEl,
+        }
+      );
+      wrapper.find('button').simulate('click');
 
-    expect(fakeDialog.style.top).to.equals('250px');
-    expect(fakeDialog.style.left).to.equals('500px');
+      const dialogWrapper = document.querySelector('.dialog-wrapper');
+      expect(dialogWrapper.style.top).to.equals(item.top);
+      expect(dialogWrapper.style.left).to.equals(item.left);
+    });
   });
 });
