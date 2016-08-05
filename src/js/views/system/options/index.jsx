@@ -2,22 +2,58 @@ import React, { Component, PropTypes } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { flowRight } from 'lodash';
 
 import actions from 'store/api/actions';
+import * as ui from 'store/ui/actions';
 
-import StatusIcon from '../../../components/status_icon';
+import { sortTable } from '../../../helpers/table';
+import { findBy } from '../../../helpers/search';
+import { goTo } from '../../../helpers/router';
+import { hasPermission } from '../../../helpers/user';
+
 import Loader from '../../../components/loader';
-import Shorten from '../../../components/shorten';
-import EditableCell from '../../../components/table/editable_cell';
+import Badge from '../../../components/badge';
 import Table, { Section, Row, Cell } from '../../../components/table';
+import Toolbar from '../../../components/toolbar';
+import Search from '../../../components/search';
+import OptionModal from './modal';
+import { Control } from '../../../components/controls';
 
+const sortOptions = sortData => collection => sortTable(collection, sortData);
+const filterOptions = search => collection => (
+  findBy(['name', 'default', 'expects', 'value', 'description'], search, collection)
+);
+
+const optionsSelector = state => state.api.systemOptions;
+const sortSelector = state => state.ui.options;
+const searchSelector = (state, props) => props.location.query.q;
+const userSelector = state => state.api.currentUser;
+
+const collectionSelector = createSelector(
+  [
+    optionsSelector,
+    sortSelector,
+    searchSelector,
+  ], (options, sortData, search) => flowRight(
+    sortOptions(sortData),
+    filterOptions(search)
+  )(options.data)
+);
 
 const viewSelector = createSelector(
   [
-    state => state.api.systemOptions,
+    optionsSelector,
+    collectionSelector,
+    sortSelector,
+    userSelector,
   ],
-  (options) => ({
-    collection: options,
+  (options, collection, sortData, user) => ({
+    collection,
+    loading: options.loading,
+    sync: options.sync,
+    sortData,
+    user,
   })
 );
 
@@ -25,29 +61,137 @@ const viewSelector = createSelector(
 export default class Options extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    collection: PropTypes.object.isRequired,
-  }
+    collection: PropTypes.array,
+    params: PropTypes.object,
+    location: PropTypes.object,
+    route: PropTypes.object,
+    loading: PropTypes.bool,
+    sync: PropTypes.bool,
+    sortData: PropTypes.object,
+    user: PropTypes.object,
+  };
+
+  static contextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    router: PropTypes.object,
+  };
 
   componentWillMount() {
     this.props.dispatch(actions.systemOptions.fetch());
 
     this.renderCells = ::this.renderCells;
     this.renderRows = ::this.renderRows;
+    this.renderHeaders = ::this.renderHeaders;
+    this.renderHeadingRow = ::this.renderHeadingRow;
     this.renderSections = ::this.renderSections;
   }
 
-  setOption = (model) => (value) => {
-    this.props.dispatch(actions.systemOptions.setOption(model.name, value));
-  }
-
-  fixEslint() {}
+  handleModalClose = () => {
+    this.context.closeModal(this._modal);
+  };
 
   /**
-   * Yields cells with model data.
+   * Applies the current filter to the URL
    *
-   * @param {Object} error
-   * @return {Generator<ReactElement>}
+   * @param {String} q
    */
+  handleSearchChange = (q) => {
+    goTo(
+      this.context.router,
+      'system/options',
+      `system/${this.props.route.path}`,
+      this.props.params,
+      {},
+      { q },
+    );
+  };
+
+  handleSortChange = (sortChange) => {
+    this.props.dispatch(
+      ui.options.sort(sortChange)
+    );
+  };
+
+  handleEditClick = (model) => () => {
+    this._modal = (
+      <OptionModal
+        onCloseClick={this.handleModalClose}
+        onSaveClick={this.handleSaveClick}
+        model={model}
+      />
+    );
+
+    this.context.openModal(this._modal);
+  };
+
+  handleSaveClick = async (model, value) => {
+    await this.props.dispatch(actions.systemOptions.setOption(model.name, value));
+    this.context.closeModal(this._modal);
+  };
+
+  *renderHeaders() {
+    const { sortData } = this.props;
+
+    yield (
+      <Cell
+        tag="th"
+        name="status"
+        sortData={sortData}
+        onSortChange={this.handleSortChange}
+      >
+        Status
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+        name="name"
+        sortData={sortData}
+        onSortChange={this.handleSortChange}
+      >
+        Name
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+      >
+        Type
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+        name="default"
+        sortData={sortData}
+        onSortChange={this.handleSortChange}
+      >
+        Default Value
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+        name="value"
+        sortData={sortData}
+        onSortChange={this.handleSortChange}
+      >
+        Current Value
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+      />
+    );
+  }
+
   *renderCells(model) {
     yield (
       <Cell>
@@ -65,7 +209,22 @@ export default class Options extends Component {
     );
 
     yield (
-      <Cell className="desc"><Shorten>{model.desc}</Shorten></Cell>
+      <Cell>
+        <Badge
+          val="W"
+          label={model.workflow ? 'success' : 'default'}
+        />
+        {' '}
+        <Badge
+          val="S"
+          label={model.service ? 'success' : 'default'}
+        />
+        {' '}
+        <Badge
+          val="J"
+          label={model.job ? 'success' : 'default'}
+        />
+      </Cell>
     );
 
     yield (
@@ -73,82 +232,53 @@ export default class Options extends Component {
     );
 
     yield (
-      <Cell>{JSON.stringify(model.expects)}</Cell>
+      <Cell>{JSON.stringify(model.value)}</Cell>
     );
+
+    const handleClick = this.handleEditClick(model);
+    const user = this.props.user.data;
 
     yield (
-      <Cell>{JSON.stringify(model.interval)}</Cell>
+      <Cell>
+        {model.status === 'unlocked' && hasPermission(user.permissions, 'OPTION-CONTROL') && (
+          <Control
+            icon="edit"
+            action={handleClick}
+            btnStyle="success"
+            className="options-edit"
+          />
+        )}
+      </Cell>
     );
-
-    yield (
-      <Cell><StatusIcon value={ model.job } /></Cell>
-    );
-
-    yield (
-      <Cell><StatusIcon value={ model.service } /></Cell>
-    );
-
-    yield (
-      <Cell><StatusIcon value={ model.workflow } /></Cell>
-    );
-
-
-    const onSave = this.setOption(model);
-
-    if (model.status === 'unlocked') {
-      yield (
-        <EditableCell
-          value={`${model.value}`}
-          startEdit={false}
-          onSave={onSave}
-        />
-      );
-    } else {
-      yield (
-        <Cell>{JSON.stringify(model.value)}</Cell>
-      );
-    }
   }
 
-
   /**
-   * Yields rows for table body.
+   * Yields row for table head.
    *
-   * @param {Array<Object>} collection
    * @return {Generator<ReactElement>}
-   * @see renderCells
+   * @see renderHeadings
    */
+  *renderHeadingRow() {
+    yield (
+      <Row cells={this.renderHeaders} />
+    );
+  }
+
   *renderRows(collection) {
     for (const model of collection) {
       yield (
-        <Row key={model.name} data={model} cells={this.renderCells} />
+        <Row
+          key={model.name}
+          data={model}
+          cells={this.renderCells}
+        />
       );
     }
   }
 
-  /**
-   * Yields table sections.
-   *
-   * @param {Array<Object>} options
-   * @return {Generator<ReactElement>}
-   * @see renderRows
-   */
   *renderSections(collection) {
     yield (
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th className="name">Name</th>
-          <th>Description</th>
-          <th>Default</th>
-          <th>Expects</th>
-          <th>Interval</th>
-          <th>Job</th>
-          <th>Service</th>
-          <th>Workflow</th>
-          <th>Value</th>
-        </tr>
-      </thead>
+      <Section type="head" data={collection} rows={this.renderHeadingRow} />
     );
 
     yield (
@@ -157,17 +287,23 @@ export default class Options extends Component {
   }
 
   render() {
-    const { collection } = this.props;
+    const { collection, location, loading, sync } = this.props;
 
-    if (!collection.sync || collection.loading) {
+    if (!sync || loading) {
       return <Loader />;
     }
 
     return (
       <div className="tab-pane active">
         <div className="container-fluid">
+          <Toolbar>
+            <Search
+              defaultValue={location.query.q}
+              onSearchUpdate={this.handleSearchChange}
+            />
+          </Toolbar>
           <Table
-            data={ collection.data }
+            data={ collection }
             className="table table-striped table-condensed table--data"
             sections={this.renderSections}
           />

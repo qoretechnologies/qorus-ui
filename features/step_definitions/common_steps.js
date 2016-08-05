@@ -385,6 +385,10 @@ module.exports = function commonSteps() {
   this.Given(/^An old browser$/, function () {
     this.setupBrowser('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)');
   });
+
+  this.Given(/^I am logged in as "([^"]*)" user$/, function(user) {
+    this.token = `${user}tkn`;
+  });
 };
 
 module.exports.selectors = {

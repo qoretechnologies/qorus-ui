@@ -64,5 +64,22 @@ module.exports = () => {
     }
   });
 
+  router.put('/options/:option', (req, res) => {
+    const option = req.params.option;
+    const action = req.body.action;
+    const value = req.body.value;
+    const item = data.options.find(d => d.name === option);
+
+    switch (action) {
+      case 'set':
+        item.value = value;
+        break;
+      default:
+        break;
+    }
+
+    res.json(item);
+  });
+
   return router;
 };
