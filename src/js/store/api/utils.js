@@ -115,6 +115,8 @@ function getRestHeaders() {
 
 /**
  * Fetches JSON data by requesting given URL via given method.
+ * If dispatch method does not passsed then print warning that
+ * ajax errors couldn't been handled as required.
  * If response.status === 401 then remove localStorage.token and
  * go to /login page
  *
@@ -138,6 +140,12 @@ export async function fetchJson(method, url, opts = {}) {
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
     browserHistory.push(`/login?next=${pathname}`);
+  }
+
+  if (res.status === 409 || res.status === 400 || res.status >= 500 && res.status < 600) {
+    const error = new Error();
+    error.res = res;
+    throw error;
   }
 
   return res.json();

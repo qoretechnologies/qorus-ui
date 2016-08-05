@@ -10,6 +10,8 @@ import isSupported from './js/helpers/is_supported';
 
 require('./index.html');
 
+global.env = process.env;
+
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
     <App env={process.env} />,
