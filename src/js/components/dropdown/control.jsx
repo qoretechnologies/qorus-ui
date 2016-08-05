@@ -16,7 +16,7 @@ export default function Control(
     <button
       className={classNames('btn',
        small ? 'btn-xs' : '',
-       `btn-${btnStyle}`,
+       `btn-${btnStyle || 'default'}`,
        'dropdown-toggle'
       )}
       {...other}
