@@ -140,7 +140,7 @@ export default class EditableCell extends Component {
    */
   start = (event) => {
     event.stopPropagation();
-    
+
     this.setState({
       edit: true,
       width: `${this._cell.offsetWidth}px`,
