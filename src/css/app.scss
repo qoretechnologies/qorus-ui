@@ -31,7 +31,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/tree/style';
 @import '../js/components/dropdown/style';
 @import '../js/components/dialog/style';
-@import '../js/components/notifications/style';
+@import '../js/components/bubbles/style';
 
 @import './not-supported';
 @import './root';

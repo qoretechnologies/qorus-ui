@@ -1,4 +1,4 @@
-.notifications {
+.bubbles {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -9,7 +9,7 @@
   max-height: 80%;
   overflow: scroll;
 
-  .notification {
+  .bubble {
     min-width: 200px;
     padding: 15px;
     height: 50px;
@@ -37,20 +37,20 @@
   }
 }
 
-.notification-enter {
+.bubble-enter {
   opacity: 0.01;
 }
 
-.notification-enter.notification-enter-active {
+.bubble-enter.bubble-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
 
-.notification-leave {
+.bubble-leave {
   opacity: 1;
 }
 
-.notification-leave.notification-leave-active {
+.bubble-leave.bubble-leave-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }

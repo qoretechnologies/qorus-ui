@@ -1,8 +1,8 @@
 import keyMirror from 'keymirror';
 
 export default keyMirror({
-  ADD_NOTIFICATION: null,
-  DELETE_NOTIFICATION: null,
+  ADD_BUBBLE: null,
+  DELETE_BUBBLE: null,
 });
 
 export const statuses = keyMirror({
