@@ -14,3 +14,4 @@ TAGS
 ._*
 
 npm-debug.log*
+/i.txt
