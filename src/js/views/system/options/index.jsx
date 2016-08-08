@@ -66,6 +66,8 @@ class Options extends Component {
     route: PropTypes.object,
     sortData: PropTypes.object,
     user: PropTypes.object,
+    sort: PropTypes.func,
+    setOption: PropTypes.func,
   };
 
   static contextTypes = {
