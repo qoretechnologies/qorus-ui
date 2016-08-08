@@ -3,70 +3,8 @@ import classNames from 'classnames';
 
 import { pureRender } from '../utils';
 import UserInfo from '../../containers/user_info';
-import NotificationPanel from '../notifications';
+import NotificationPanel from '../../containers/system/alerts';
 import { LocalHealth, RemoteHealth } from '../../containers/health';
-
-const notificationList = [{
-  type: 'GROUP',
-  id: -3,
-  alerttype: 'ONGOING',
-  when: '2016-08-05 19:29:01.231166 +06:00',
-  local: true,
-  alert: 'INTERFACE-GROUP-DISABLED',
-  alertid: 2,
-  reason: 'external API call',
-  who: 'admin',
-  source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
-  object: 'GROUP info (-3)',
-  instance: 'qorus-test-instance',
-  name: 'info',
-  auditid: null,
-}, {
-  type: 'GROUP',
-  id: -6,
-  alerttype: 'ONGOING',
-  when: '2016-08-05 19:29:49.811845 +06:00',
-  local: true,
-  alert: 'INTERFACE-GROUP-DISABLED',
-  alertid: 3,
-  reason: 'external API call',
-  who: 'admin',
-  source: 'ipv6[::1]:64890 listener: ipv6[::]:8001',
-  object: 'GROUP queue (-6)',
-  instance: 'qorus-test-instance',
-  name: 'queue',
-  auditid: null,
-}, {
-  type: 'GROUP',
-  id: -8,
-  alerttype: 'ONGOING',
-  when: '2016-08-05 19:29:57.977416 +06:00',
-  local: true,
-  alert: 'INTERFACE-GROUP-DISABLED',
-  alertid: 6,
-  reason: 'external API call',
-  who: 'admin',
-  source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
-  object: 'GROUP sqlutil (-8)',
-  instance: 'qorus-test-instance',
-  name: 'sqlutil',
-  auditid: null,
-}, {
-  type: 'GROUP',
-  id: -2,
-  alerttype: 'ONGOING',
-  when: '2016-08-05 19:30:03.283602 +06:00',
-  local: true,
-  alert: 'INTERFACE-GROUP-DISABLED',
-  alertid: 7,
-  reason: 'external API call',
-  who: 'admin',
-  source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
-  object: 'GROUP fs (-2)',
-  instance: 'qorus-test-instance',
-  name: 'fs',
-  auditid: null,
-}];
 
 /**
  * Display info about Qorus instance and logged in user.
@@ -137,7 +75,7 @@ export default class Topbar extends Component {
               {' '}
               <UserInfo user={this.props.currentUser} />
               {' '}
-              <NotificationPanel notificationList={notificationList} />
+              <NotificationPanel />
             </div>
           </div>
         </div>

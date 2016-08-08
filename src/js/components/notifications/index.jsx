@@ -7,8 +7,14 @@ import Badge from '../badge';
 
 
 class NotificationPanel extends React.Component {
+  static defaultProps = {
+    alerts: { data: [] },
+    clearNotifications: () => {},
+  }
+
   props: {
-    notificationList: Array<*>,
+    alerts: Object,
+    clearNotifications: Function,
   }
 
   state: {
@@ -24,13 +30,14 @@ class NotificationPanel extends React.Component {
   }
 
   renderNotificationList() {
-    const { notificationList } = this.props;
+    const { clearNotifications, alerts: { data: notificationList } } = this.props;
     return (
       <div className="notification-list">
         <div className="clear-button-place">
           <Control
             btnStyle="primary"
             className="btn-block clear-button"
+            onClick={clearNotifications}
             big
           >
             clear
@@ -51,7 +58,7 @@ class NotificationPanel extends React.Component {
   }
 
   render() {
-    const { notificationList = [] } = this.props;
+    const { alerts: { data: notificationList = [] } } = this.props;
     const listLength = notificationList.length;
     return (
       <div className="notification-panel nav-btn-tooltip">
@@ -59,6 +66,7 @@ class NotificationPanel extends React.Component {
           icon="bell"
           btnStyle="inverse"
           onClick={this.handleClick}
+          className="notification-button"
           big
         >
           {' '}
