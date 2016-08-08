@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
+import sync from '../../../hocomponents/sync';
+import { compose } from 'redux';
 
 import actions from 'store/api/actions';
 import * as ui from 'store/ui/actions';
@@ -12,7 +14,6 @@ import { findBy } from '../../../helpers/search';
 import { goTo } from '../../../helpers/router';
 import { hasPermission } from '../../../helpers/user';
 
-import Loader from '../../../components/loader';
 import Badge from '../../../components/badge';
 import Table, { Section, Row, Cell } from '../../../components/table';
 import Toolbar from '../../../components/toolbar';
@@ -50,23 +51,19 @@ const viewSelector = createSelector(
   ],
   (options, collection, sortData, user) => ({
     collection,
-    loading: options.loading,
-    sync: options.sync,
+    options,
     sortData,
     user,
   })
 );
 
-@connect(viewSelector)
-export default class Options extends Component {
+class Options extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    load: PropTypes.func.isRequired,
     collection: PropTypes.array,
     params: PropTypes.object,
     location: PropTypes.object,
     route: PropTypes.object,
-    loading: PropTypes.bool,
-    sync: PropTypes.bool,
     sortData: PropTypes.object,
     user: PropTypes.object,
   };
@@ -78,7 +75,7 @@ export default class Options extends Component {
   };
 
   componentWillMount() {
-    this.props.dispatch(actions.systemOptions.fetch());
+    this.props.load();
 
     this.renderCells = ::this.renderCells;
     this.renderRows = ::this.renderRows;
@@ -108,9 +105,7 @@ export default class Options extends Component {
   };
 
   handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.options.sort(sortChange)
-    );
+    this.props.sort(sortChange);
   };
 
   handleEditClick = (model) => () => {
@@ -126,7 +121,7 @@ export default class Options extends Component {
   };
 
   handleSaveClick = async (model, value) => {
-    await this.props.dispatch(actions.systemOptions.setOption(model.name, value));
+    await this.props.setOption(model.name, value);
     this.context.closeModal(this._modal);
   };
 
@@ -287,11 +282,7 @@ export default class Options extends Component {
   }
 
   render() {
-    const { collection, location, loading, sync } = this.props;
-
-    if (!sync || loading) {
-      return <Loader />;
-    }
+    const { collection, location } = this.props;
 
     return (
       <div className="tab-pane active">
@@ -312,3 +303,15 @@ export default class Options extends Component {
     );
   }
 }
+
+export default compose(
+  connect(
+    viewSelector,
+    {
+      setOption: actions.systemOptions.setOption,
+      load: actions.systemOptions.fetch,
+      sort: ui.options.sort,
+    }
+  ),
+  sync('options'),
+)(Options);
