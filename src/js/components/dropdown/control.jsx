@@ -10,13 +10,13 @@ type Props = {
 }
 
 export default function Control(
-  { children, small = false, btnStyle = '', noCaret = false, ...other }: Props
+  { children, small = false, btnStyle = 'default', noCaret = false, ...other }: Props
 ) {
   return (
     <button
       className={classNames('btn',
        small ? 'btn-xs' : '',
-       `btn-${btnStyle || 'default'}`,
+       `btn-${btnStyle}`,
        'dropdown-toggle'
       )}
       {...other}
