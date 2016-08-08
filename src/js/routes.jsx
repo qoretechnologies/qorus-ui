@@ -36,7 +36,7 @@ class AppInfo extends React.Component {
     if (token || noauth) {
       replace('/');
     }
-  }
+  };
 
 
   /**
@@ -51,14 +51,14 @@ class AppInfo extends React.Component {
     if (!token && !noauth) {
       replace(`/login?next=${nextState.location.pathname}`);
     }
-  }
+  };
 
   logout = (nextState, replace) => {
     const { logout } = this.props;
     window.localStorage.removeItem('token');
     logout();
     replace('/login');
-  }
+  };
 
   render() {
     return (

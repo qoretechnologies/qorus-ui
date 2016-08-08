@@ -34,4 +34,8 @@ module.exports = function systemSteps() {
 
     this.browser.assert.element(el);
   });
+
+  this.Then(/^I cannot edit any options$/, async function() {
+    this.browser.assert.elements('.options-edit', 0);
+  });
 };
