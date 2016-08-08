@@ -1,0 +1,43 @@
+.notification-list{
+  position: fixed;
+  right: 0;
+  top: 51px;
+
+  width: 300px;
+  height: 100%;
+  background: #3D3F32;
+  opacity: 0.8;
+
+  overflow: hidden;
+  overflow-y: auto;
+
+  .clear-button-place {
+    padding: 15px;
+  }
+
+  .notification {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    margin-top: 10px;
+    padding: 5px;
+  }
+
+}
+
+.notification-list-enter {
+  right: -300px;
+
+  &.notification-list-enter-active {
+    right: 0;
+    transition: right 500ms ease-in;
+  }
+}
+
+.notification-list-leave {
+  right: 0;
+
+  &.notification-list-leave-active {
+    right: -300px;
+    transition: right 500ms ease-in;
+  }
+}

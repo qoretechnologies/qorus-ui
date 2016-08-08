@@ -22,6 +22,7 @@ export default class Control extends Component {
     css: Object,
     id?: string,
     className: string,
+    children?: ReactClass<*>,
   };
 
   /**
@@ -65,6 +66,7 @@ export default class Control extends Component {
       >
         {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}
+        {this.props.children}
       </button>
     );
   }
