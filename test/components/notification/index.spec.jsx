@@ -3,11 +3,11 @@ import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
-import NotificationPanel from '../../src/js/components/notifications';
+import NotificationPanel from '../../../src/js/components/notifications';
 
 chai.use(spies);
 
-describe.only('Notification from \'components/notifications\'', () => {
+describe('Notification from \'components/notifications\'', () => {
   it('no alerts', () => {
     const wrapper = mount(<NotificationPanel />);
     expect(wrapper.find('Badge')).to.have.length(0);
@@ -64,7 +64,7 @@ describe.only('Notification from \'components/notifications\'', () => {
     }, {
       type: 'GROUP',
       id: -2,
-      alerttype: 'ONGOING',
+      alerttype: 'TRANSIENT',
       when: '2016-08-05 19:30:03.283602 +06:00',
       local: true,
       alert: 'INTERFACE-GROUP-DISABLED',
@@ -97,14 +97,90 @@ describe.only('Notification from \'components/notifications\'', () => {
     expect(wrapper.find('.notification-list')).to.have.length(1);
   });
 
-  it('clear notifications', () => {
-    const clearNotifications = chai.spy();
+  it('only ongoing list', () => {
+    const notificationList = [{
+      type: 'GROUP',
+      id: -3,
+      alerttype: 'ONGOING',
+      when: '2016-08-05 19:29:01.231166 +06:00',
+      local: true,
+      alert: 'INTERFACE-GROUP-DISABLED',
+      alertid: 2,
+      reason: 'external API call',
+      who: 'admin',
+      source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
+      object: 'GROUP info (-3)',
+      instance: 'qorus-test-instance',
+      name: 'info',
+      auditid: null,
+    }, {
+      type: 'GROUP',
+      id: -6,
+      alerttype: 'ONGOING',
+      when: '2016-08-05 19:29:49.811845 +06:00',
+      local: true,
+      alert: 'INTERFACE-GROUP-DISABLED',
+      alertid: 3,
+      reason: 'external API call',
+      who: 'admin',
+      source: 'ipv6[::1]:64890 listener: ipv6[::]:8001',
+      object: 'GROUP queue (-6)',
+      instance: 'qorus-test-instance',
+      name: 'queue',
+      auditid: null,
+    }, {
+      type: 'GROUP',
+      id: -8,
+      alerttype: 'ONGOING',
+      when: '2016-08-05 19:29:57.977416 +06:00',
+      local: true,
+      alert: 'INTERFACE-GROUP-DISABLED',
+      alertid: 6,
+      reason: 'external API call',
+      who: 'admin',
+      source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
+      object: 'GROUP sqlutil (-8)',
+      instance: 'qorus-test-instance',
+      name: 'sqlutil',
+      auditid: null,
+    }];
+    const alerts = {
+      data: notificationList,
+    };
 
-    const wrapper = mount(<NotificationPanel {...{ clearNotifications }} />);
+    const wrapper = mount(<NotificationPanel {...{ alerts }} />);
 
     wrapper.find('.notification-button').simulate('click');
-    wrapper.find('.clear-button').simulate('click');
 
-    expect(clearNotifications).to.have.been.called();
+    expect(wrapper.find('.ongoing')).to.have.length(1);
+    expect(wrapper.find('.transient')).to.have.length(0);
   });
+
+  it('only transient list', () => {
+    const notificationList = [{
+      type: 'GROUP',
+      id: -2,
+      alerttype: 'TRANSIENT',
+      when: '2016-08-05 19:30:03.283602 +06:00',
+      local: true,
+      alert: 'INTERFACE-GROUP-DISABLED',
+      alertid: 7,
+      reason: 'external API call',
+      who: 'admin',
+      source: 'ipv6[::1]:64878 listener: ipv6[::]:8001',
+      object: 'GROUP fs (-2)',
+      instance: 'qorus-test-instance',
+      name: 'fs',
+      auditid: null,
+    }];
+    const alerts = { data: notificationList };
+
+    const wrapper = mount(<NotificationPanel {...{ alerts }} />);
+
+    wrapper.find('.notification-button').simulate('click');
+
+    expect(wrapper.find('.ongoing')).to.have.length(0);
+    expect(wrapper.find('.transient')).to.have.length(1);
+  });
+
 });

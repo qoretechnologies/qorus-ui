@@ -4,6 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { Control } from '../controls';
 import Badge from '../badge';
+import NotificationList from './list';
 
 
 class NotificationPanel extends React.Component {
@@ -31,28 +32,29 @@ class NotificationPanel extends React.Component {
 
   renderNotificationList() {
     const { clearNotifications, alerts: { data: notificationList } } = this.props;
+    const ongoingNotifications = notificationList.filter(item => item.alerttype === 'ONGOING');
+    const transientNotifications = notificationList.filter(item => item.alerttype === 'TRANSIENT');
+
     return (
       <div className="notification-list">
-        <div className="clear-button-place">
-          <Control
-            btnStyle="primary"
-            className="btn-block clear-button"
-            onClick={clearNotifications}
-            big
-          >
-            clear
-          </Control>
-        </div>
-        {notificationList.map(item => (
-          <div
-            key={`notification_${item.alertid}`}
-            className="notification"
-          >
-            <h5>{item.alert}</h5>
-            <div><strong>Date:</strong>{item.when}</div>
-            <p>{item.name}</p>
-          </div>
-        ))}
+        {ongoingNotifications.length > 0 ? (
+          <NotificationList
+            title="Ongoing"
+            type="ONGOING"
+            className="ongoing"
+            clearNotifications={clearNotifications}
+            notifications={ongoingNotifications}
+          />
+        ) : null}
+        {transientNotifications.length > 0 ? (
+          <NotificationList
+            title="Transient"
+            type="TRANSIENT"
+            className="transient"
+            clearNotifications={clearNotifications}
+            notifications={transientNotifications}
+          />
+        ) : null}
       </div>
     );
   }
