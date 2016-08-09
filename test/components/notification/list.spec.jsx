@@ -7,7 +7,7 @@ import NotificationList from '../../../src/js/components/notifications/list';
 
 chai.use(spies);
 
-describe.only('NotificationList form \'components/notifications/list\'', () => {
+describe('NotificationList form \'components/notifications/list\'', () => {
   const notifications = [{
     type: 'GROUP',
     id: -3,
