@@ -10,7 +10,6 @@ import NotificationList from './list';
 class NotificationPanel extends React.Component {
   static defaultProps = {
     alerts: { data: [] },
-    clearNotifications: () => {},
   }
 
   props: {
