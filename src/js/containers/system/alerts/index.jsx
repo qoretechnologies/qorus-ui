@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import mapProps from 'recompose/mapProps'
+import mapProps from 'recompose/mapProps';
 
 import sync from '../../../hocomponents/sync';
 import actions from '../../../store/api/actions';
