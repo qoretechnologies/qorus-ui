@@ -1,0 +1,49 @@
+.notification-list{
+  position: fixed;
+  right: 0;
+  top: 51px;
+
+  width: 300px;
+  height: 100%;
+  background: #333;
+  opacity: 0.95;
+
+  overflow: hidden;
+  overflow-y: auto;
+
+  color: #fff;
+
+  h4 {
+    text-align: center;
+  }
+
+  .clear-button-place {
+    padding: 15px;
+  }
+
+  .notification {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    margin-top: 10px;
+    padding: 5px;
+  }
+
+}
+
+.notification-list-enter {
+  right: -300px;
+
+  &.notification-list-enter-active {
+    right: 0;
+    transition: right 500ms ease-in;
+  }
+}
+
+.notification-list-leave {
+  right: 0;
+
+  &.notification-list-leave-active {
+    right: -300px;
+    transition: right 500ms ease-in;
+  }
+}

@@ -16,12 +16,14 @@ export default class Control extends Component {
     icon: string,
     action: () => void,
     onClick: () => void,
+    stopPropagation: boolean,
     disabled: boolean,
     big: boolean,
     type: string,
     css: Object,
     id?: string,
     className: string,
+    children?: React.Element<*> | Array<React.Element<*>>,
   };
 
   /**
@@ -33,6 +35,11 @@ export default class Control extends Component {
     if (!action) return;
 
     event.preventDefault();
+
+    if (this.props.stopPropagation) {
+      event.stopPropagation();
+    }
+
     action(event);
   };
 
@@ -65,6 +72,7 @@ export default class Control extends Component {
       >
         {this.renderIcon()}
         {this.props.label ? ` ${this.props.label}` : ''}
+        {this.props.children}
       </button>
     );
   }

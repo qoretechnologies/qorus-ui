@@ -20,8 +20,8 @@ export default class Badge extends Component {
   };
 
   props: {
-    url: string,
-    val: [number, string],
+    url?: string,
+    val: number | string,
     label: string,
   };
 

@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { pureRender } from '../utils';
 import UserInfo from '../../containers/user_info';
+import NotificationPanel from '../../containers/system/alerts';
 import { LocalHealth, RemoteHealth } from '../../containers/health';
 
 /**
@@ -45,7 +46,7 @@ export default class Topbar extends Component {
                 'navbar-toggle': true,
                 collapsed: !this.state.expanded,
               })}
-              aria-expanded={this.state.expanded ? 'true' : 'false'}
+              aria-expanded={this.state.expanded ? true : 'false'}
               onClick={this.handleExpand}
             >
               <span className="sr-only">Toggle navigation</span>
@@ -73,6 +74,8 @@ export default class Topbar extends Component {
               <RemoteHealth />
               {' '}
               <UserInfo user={this.props.currentUser} />
+              {' '}
+              <NotificationPanel />
             </div>
           </div>
         </div>
