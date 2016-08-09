@@ -6,6 +6,8 @@ import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import { omit, assignIn, isArray, includes } from 'lodash';
 
+console.log(specialReducers);
+
 const initialState = {
   data: [],
   sync: false,
@@ -33,6 +35,7 @@ export function createResourceReducers(
       const name = `${resource}_${actn}`.toUpperCase();
       const isSpecialReducer = (specialReducers[resource] &&
           specialReducers[resource][actn.toUpperCase()]);
+      console.log(resource, actn, isSpecialReducer);
 
       handlers[name] = {
         next(state, action) {
