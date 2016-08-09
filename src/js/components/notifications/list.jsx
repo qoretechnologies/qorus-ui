@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { Control } from '../controls';
+import DateComponent from '../date';
 
 class NotificationList extends React.Component {
   props: {
@@ -39,7 +40,14 @@ class NotificationList extends React.Component {
             className="notification"
           >
             <h5>{item.alert}</h5>
-            <div><strong>Date:</strong>{item.when}</div>
+            <div>
+              <strong>Date:</strong>
+              {' '}
+              <DateComponent
+                date={item.when}
+                format="YYYY-MM-DD HH:mm:ss"
+              />
+            </div>
             <p>{item.name}</p>
           </div>
         ))}
