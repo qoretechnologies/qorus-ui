@@ -29,6 +29,7 @@ class NotificationList extends React.Component {
             btnStyle="primary"
             className="btn-block clear-button"
             onClick={this.clear}
+            stopPropagation
             big
           >
             clear

@@ -16,6 +16,7 @@ export default class Control extends Component {
     icon: string,
     action: () => void,
     onClick: () => void,
+    stopPropagation: boolean,
     disabled: boolean,
     big: boolean,
     type: string,
@@ -34,6 +35,11 @@ export default class Control extends Component {
     if (!action) return;
 
     event.preventDefault();
+
+    if (this.props.stopPropagation) {
+      event.stopPropagation();
+    }
+
     action(event);
   };
 

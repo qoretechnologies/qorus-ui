@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { Control } from '../controls';
@@ -25,9 +26,27 @@ class NotificationPanel extends React.Component {
     isOpen: false,
   }
 
+  componentDidUpdate() {
+    if (this.state.isOpen) {
+      window.addEventListener('click', this.handleOutsideClick);
+    } else {
+      window.removeEventListener('click', this.handleOutsideClick);
+    }
+  }
+
   handleClick = () => {
     this.setState({ isOpen: !this.state.isOpen });
   }
+
+  handleOutsideClick = (event: Object): void => {
+    const el: Object = ReactDOM.findDOMNode(this.refs.panel);
+
+    if (el && !el.contains(event.target)) {
+      this.setState({
+        isOpen: false,
+      });
+    }
+  };
 
   render() {
     const { clearNotifications, alerts: { data = [] } } = this.props;
@@ -76,7 +95,10 @@ class NotificationPanel extends React.Component {
     }
 
     return (
-      <div className="notification-panel nav-btn-tooltip">
+      <div
+        ref="panel"
+        className="notification-panel nav-btn-tooltip"
+      >
         <Control
           icon="bell"
           btnStyle="inverse"

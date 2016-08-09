@@ -8,6 +8,8 @@ import NotificationPanel from '../../../src/js/components/notifications';
 chai.use(spies);
 
 describe('Notification from \'components/notifications\'', () => {
+  const rootEl = document.querySelector('#test-app');
+
   it('no alerts', () => {
     const wrapper = mount(<NotificationPanel />);
     expect(wrapper.find('Badge')).to.have.length(0);
@@ -92,6 +94,54 @@ describe('Notification from \'components/notifications\'', () => {
     const wrapper = mount(<NotificationPanel />);
     wrapper.find('.notification-button').simulate('click');
 
+    expect(wrapper.find('.notification-list')).to.have.length(1);
+  });
+
+  it('hide on second click', done => {
+    const wrapper = mount(<NotificationPanel />);
+
+    wrapper.find('.notification-button').simulate('click');
+    wrapper.find('.notification-button').simulate('click');
+
+    setTimeout(() => {
+      expect(wrapper.find('.notification-list')).to.have.length(0);
+      done();
+    }, 1000);
+  });
+
+  it('hide on other element click', () => {
+    const wrapper = mount(
+      <NotificationPanel />,
+      {
+        attachTo: rootEl,
+      }
+    );
+    wrapper.find('.notification-button').simulate('click');
+
+    const event = document.createEvent('Event');
+    event.initEvent('click', true, true);
+    event.memo = {};
+
+    const el = document.querySelector('body');
+    el.dispatchEvent(event);
+    expect(wrapper.state().isOpen).to.be.false();
+  });
+
+  it('do not hide on inner element click', () => {
+    const wrapper = mount(
+      <NotificationPanel />,
+      {
+        attachTo: rootEl,
+      }
+    );
+    wrapper.find('.notification-button').simulate('click');
+
+    const event = document.createEvent('Event');
+    event.initEvent('click', true, true);
+    event.memo = {};
+
+    const el = document.querySelector('.notification-list');
+    el.dispatchEvent(event);
     expect(wrapper.find('.notification-list')).to.have.length(1);
   });
 
