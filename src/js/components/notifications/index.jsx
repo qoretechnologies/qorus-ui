@@ -29,38 +29,52 @@ class NotificationPanel extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  renderNotificationList() {
-    const { clearNotifications, alerts: { data: notificationList } } = this.props;
-    const ongoingNotifications = notificationList.filter(item => item.alerttype === 'ONGOING');
-    const transientNotifications = notificationList.filter(item => item.alerttype === 'TRANSIENT');
-
-    return (
-      <div className="notification-list">
-        {ongoingNotifications.length > 0 ? (
-          <NotificationList
-            title="Ongoing"
-            type="ONGOING"
-            className="ongoing"
-            clearNotifications={clearNotifications}
-            notifications={ongoingNotifications}
-          />
-        ) : null}
-        {transientNotifications.length > 0 ? (
-          <NotificationList
-            title="Transient"
-            type="TRANSIENT"
-            className="transient"
-            clearNotifications={clearNotifications}
-            notifications={transientNotifications}
-          />
-        ) : null}
-      </div>
-    );
-  }
-
   render() {
-    const { alerts: { data: notificationList = [] } } = this.props;
+    const { clearNotifications, alerts: { data = [] } } = this.props;
+    const notificationList = data.filter(item => !item._read);
     const listLength = notificationList.length;
+    let panel = null;
+
+    if (this.state.isOpen && notificationList.length > 0) {
+      const ongoingNotifications = notificationList.filter(
+        item => item.alerttype === 'ONGOING'
+      );
+      const transientNotifications = notificationList.filter(
+        item => item.alerttype === 'TRANSIENT'
+      );
+
+      panel = (
+        <div className="notification-list">
+          {ongoingNotifications.length > 0 ? (
+            <NotificationList
+              title="Ongoing"
+              type="ONGOING"
+              className="ongoing"
+              clearNotifications={clearNotifications}
+              notifications={ongoingNotifications}
+            />
+          ) : null}
+          {transientNotifications.length > 0 ? (
+            <NotificationList
+              title="Transient"
+              type="TRANSIENT"
+              className="transient"
+              clearNotifications={clearNotifications}
+              notifications={transientNotifications}
+            />
+          ) : null}
+        </div>
+      );
+    }
+
+    if (this.state.isOpen && notificationList.length === 0) {
+      panel = (
+        <div className="notification-list">
+          <h4 className="no-notifications">No notifications</h4>
+        </div>
+      );
+    }
+
     return (
       <div className="notification-panel nav-btn-tooltip">
         <Control
@@ -79,7 +93,7 @@ class NotificationPanel extends React.Component {
           transitionLeaveTimeout={500}
           component="div"
         >
-          { this.state.isOpen ? this.renderNotificationList() : null }
+          {panel}
         </ReactCSSTransitionGroup>
       </div>
     );

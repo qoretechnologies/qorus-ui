@@ -11,11 +11,9 @@ describe('Notification from \'components/notifications\'', () => {
   it('no alerts', () => {
     const wrapper = mount(<NotificationPanel />);
     expect(wrapper.find('Badge')).to.have.length(0);
-
-    expect(wrapper.find('.notification-list')).to.have.length(0);
   });
 
-  it('4 alerts', () => {
+  it('render 4 alerts', () => {
     const notificationList = [{
       type: 'GROUP',
       id: -3,
@@ -181,5 +179,18 @@ describe('Notification from \'components/notifications\'', () => {
 
     expect(wrapper.find('.ongoing')).to.have.length(0);
     expect(wrapper.find('.transient')).to.have.length(1);
+  });
+
+  it('no notifications', () => {
+    const notificationList = [];
+    const alerts = { data: notificationList };
+
+    const wrapper = mount(<NotificationPanel {...{ alerts }} />);
+
+    wrapper.find('.notification-button').simulate('click');
+
+    expect(wrapper.find('.ongoing')).to.have.length(0);
+    expect(wrapper.find('.transient')).to.have.length(0);
+    expect(wrapper.find('.no-notifications')).to.have.length(1);
   });
 });
