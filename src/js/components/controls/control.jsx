@@ -22,7 +22,7 @@ export default class Control extends Component {
     css: Object,
     id?: string,
     className: string,
-    children?: ReactClass<*>,
+    children?: React.Element<*> | Array<React.Element<*>>,
   };
 
   /**
