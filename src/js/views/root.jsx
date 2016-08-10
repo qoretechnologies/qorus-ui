@@ -151,7 +151,6 @@ export default class Root extends Component {
     this.props.dispatch(actions.system.fetch());
     this.props.dispatch(actions.systemOptions.fetch());
     this.props.dispatch(actions.currentUser.fetch());
-    this.props.dispatch(actions.errors.fetch('global'));
   }
 
 

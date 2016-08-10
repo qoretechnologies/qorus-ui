@@ -1,16 +1,17 @@
 import React, { Component, PropTypes } from 'react';
-
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 
-import Table, { Section, Row, Cell } from 'components/table';
-import Loader from 'components/loader';
-import Shorten from 'components/shorten';
-import AutoComponent from 'components/autocomponent';
+import Table, { Section, Row, Cell } from '../../../components/table';
+import Shorten from '../../../components/shorten';
+import AutoComponent from '../../../components/autocomponent';
+import sync from '../../../hocomponents/sync';
 
 // import Error from '../../../../../types/error/react';
 
-import actions from 'store/api/actions';
+import actions from '../../../store/api/actions';
 
 const errorsMetaSelector = (state) => {
   if (state.api.errors.global) {
@@ -24,15 +25,12 @@ const errorsMetaSelector = (state) => {
 };
 
 const errorsSelector = (state) => {
+  const col = [];
   if (state.api.errors.global) {
-    const col = [];
-
     Object.keys(state.api.errors.global.data)
       .forEach((key) => col.push(state.api.errors.global.data[key]));
-
-    return col;
   }
-  return [];
+  return col;
 };
 
 const viewSelector = createSelector(
@@ -40,14 +38,19 @@ const viewSelector = createSelector(
     errorsSelector,
     errorsMetaSelector,
   ],
-  (errors, meta) => ({
-    collection: errors,
-    sync: meta.sync,
-    loading: meta.loading,
-  })
+  (collection, meta) => ({ meta, collection })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(
+    viewSelector,
+    { load: actions.errors.fetch }
+  ),
+  withHandlers({
+    load: props => () => props.load('global'),
+  }),
+  sync('meta')
+)
 export default class Errors extends Component {
   static propTypes = {
     sync: PropTypes.bool.isRequired,
@@ -57,8 +60,6 @@ export default class Errors extends Component {
   };
 
   componentWillMount() {
-    this.props.dispatch(actions.errors.fetch('global'));
-
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
@@ -184,10 +185,6 @@ export default class Errors extends Component {
   }
 
   render() {
-    if (!this.props.sync || this.props.loading) {
-      return <Loader />;
-    }
-
     return (
       <Table
         data={ this.props.collection }
