@@ -1,0 +1,1 @@
+[{"title": "SEPL Workflow Trigger Page","url": "http://xbox:8091/TRIGGER-FLOWS","service": "sepl-http-gui-trigger-flows","version": "1.0","serviceid": 198,"group": "SEPL"},{"title": "SEPL Archive Browser Page","url": "http://xbox:8091/FILE-ARCHIVE","service": "sepl-http-gui-archive-browser","version": "1.0","serviceid": 200,"group": "SEPL"}]
