@@ -1,13 +1,15 @@
-import React, { PropTypes, Component } from 'react';
-
-import Table, { Section, Cell, Row } from '../../../components/table';
-
+/* @flow */
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
+import _ from 'lodash';
 
-import actions from 'store/api/actions';
+import Table, { Section, Cell, Row } from '../../../components/table';
+import actions from '../../../store/api/actions';
+import sync from '../../../hocomponents/sync';
 
-const userHttpMetaSelector = (state) => {
+const userHttpMetaSelector = (state: Object): Object => {
   if (state.api.userhttp) {
     return {
       sync: state.api.userhttp.sync,
@@ -18,7 +20,7 @@ const userHttpMetaSelector = (state) => {
   return { sync: false, loading: false };
 };
 
-const userHttpSelector = (state) => {
+const userHttpSelector = (state:Object): Array<Object> => {
   if (state.api.userhttp) {
     const col = [];
 
@@ -30,8 +32,8 @@ const userHttpSelector = (state) => {
   return [];
 };
 
-const tablesSelector = (state) => (
-  [... new Set(state.api.userhttp.data.map(r => r.group))]
+const tablesSelector = (state: Object): Array<string> => (
+  [..._.unique(state.api.userhttp.data.map(r => r.group))]
 );
 
 const viewSelector = createSelector(
@@ -40,31 +42,37 @@ const viewSelector = createSelector(
     userHttpMetaSelector,
     tablesSelector,
   ],
-  (userhttp, meta, tables) => ({
-    collection: userhttp,
-    sync: meta.sync,
-    loading: meta.loading,
+  (userhttp: Array<Object>, meta: Object, tables: Array<string>) => ({
+    meta,
     tables,
+    collection: userhttp,
   })
 );
 
 
-@connect(viewSelector)
+@compose(
+  connect(
+    viewSelector,
+    { load: actions.userhttp.fetch }
+  ),
+  sync('meta')
+)
 export default class UserHttp extends Component {
-  static propTypes = {
-    collection: PropTypes.array.isRequired,
-    tables: PropTypes.array.isRequired,
-    dispatch: PropTypes.func.isRequired,
-  }
+  props: {
+    collection: Array<Object>,
+    tables: Array<string>,
+  };
 
   componentWillMount() {
-    this._renderCells = ::this.renderCells;
-    this._renderRows = ::this.renderRows;
-
-    this.props.dispatch(actions.userhttp.fetch());
+    this._renderCells = this.renderCells.bind(this);
+    this._renderRows = this.renderRows.bind(this);
   }
 
-  *renderCells(row) {
+  _renderCells: any;
+  _renderRows: any;
+
+
+  *renderCells(row: Object): Generator<*, *, *> {
     yield(
       <Cell>
         <a href={ row.url } target="blank">{ row.title }</a>
@@ -78,7 +86,7 @@ export default class UserHttp extends Component {
     );
   }
 
-  *renderRows(collection) {
+  *renderRows(collection: Array<Object>): Generator<*, *, *> {
     for (const model of collection) {
       yield (
         <Row
@@ -90,7 +98,7 @@ export default class UserHttp extends Component {
     }
   }
 
-  *renderTables() {
+  *renderTables(): Generator<*, *, *> {
     const collection = this.props.collection;
     const tables = this.props.tables;
 
@@ -111,6 +119,15 @@ export default class UserHttp extends Component {
   }
 
   render() {
+    const { tables } = this.props;
+
+    if (tables.length === 0) {
+      return (
+        <div>
+          No Http Services Available
+        </div>
+      );
+    }
     return (
       <div>
         { React.Children.toArray(this.renderTables()) }
