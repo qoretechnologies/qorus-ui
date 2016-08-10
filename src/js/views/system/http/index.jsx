@@ -33,7 +33,7 @@ const userHttpSelector = (state:Object): Array<Object> => {
 };
 
 const tablesSelector = (state: Object): Array<string> => (
-  [..._.unique(state.api.userhttp.data.map(r => r.group))]
+  [..._.uniq(state.api.userhttp.data.map(r => r.group))]
 );
 
 const viewSelector = createSelector(
