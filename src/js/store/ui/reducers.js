@@ -6,4 +6,4 @@ export groups from './groups/reducers';
 export alerts from './alerts/reducers';
 export bubbles from './bubbles/reducers';
 export options from './options/reducers';
-
+export sort from './sort/reducers';

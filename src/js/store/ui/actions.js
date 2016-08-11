@@ -6,3 +6,4 @@ export * as groups from './groups/actions';
 export * as alerts from './alerts/actions';
 export * as bubbles from './bubbles/actions';
 export * as options from './options/actions';
+export * as sort from './sort/actions';

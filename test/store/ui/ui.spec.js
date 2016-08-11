@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: 0 */
 import { expect } from 'chai';
 import ui from '../../../src/js/store/ui';
 import * as actions from '../../../src/js/store/ui/actions';
@@ -29,69 +30,92 @@ describe('UI redux store', () => {
     );
   });
 
-  it('add bubble', () => {
-    store.subscribe(() => {
-      const state = store.getState();
-      const bubbleList = state.bubbles.list;
-      expect(bubbleList).to.be.instanceOf(Array);
-      expect(bubbleList.length).to.equals(1);
-    });
-
-    store.dispatch(
-      actions.bubbles.success('test')
-    );
-  });
-
-  it('Newest bubble at first', () => {
-    store.dispatch(
-      actions.bubbles.error('something goes wrong')
-    );
-
-    store.subscribe(() => {
-      const state = store.getState();
-      const bubbleList = state.bubbles.list;
-
-      expect(bubbleList[0].type).to.equals(statuses.SUCCESS);
-      expect(bubbleList[1].type).to.equals(statuses.ERROR);
-    });
-
-    store.dispatch(
-      actions.bubbles.success('good news')
-    );
-  });
-
-  Object.keys(statuses).forEach(item => {
-    const name = item.toLowerCase();
-    it(`add ${name} bubble`, () => {
+  describe('bubbles', () => {
+    it('add bubble', () => {
       store.subscribe(() => {
         const state = store.getState();
         const bubbleList = state.bubbles.list;
-        const bubble = bubbleList[0];
-        expect(bubble.type).to.equals(item);
+        expect(bubbleList).to.be.instanceOf(Array);
+        expect(bubbleList.length).to.equals(1);
       });
 
       store.dispatch(
-        actions.bubbles[name]('test')
+        actions.bubbles.success('test')
       );
     });
-  });
 
-  it('Delete bubble', () => {
-    store.dispatch(actions.bubbles.success('1'));
-    store.dispatch(actions.bubbles.success('2'));
-    store.dispatch(actions.bubbles.success('3'));
+    it('Newest bubble at first', () => {
+      store.dispatch(
+        actions.bubbles.error('something goes wrong')
+      );
 
-    const state = store.getState();
-    const bubbleId = state.bubbles.list[1].id;
+      store.subscribe(() => {
+        const state = store.getState();
+        const bubbleList = state.bubbles.list;
 
-    store.subscribe(() => {
-      const updatedState = store.getState();
-      const bubbleList = updatedState.bubbles.list;
-      expect(bubbleList.length).to.equals(2);
+        expect(bubbleList[0].type).to.equals(statuses.SUCCESS);
+        expect(bubbleList[1].type).to.equals(statuses.ERROR);
+      });
+
+      store.dispatch(
+        actions.bubbles.success('good news')
+      );
     });
 
-    store.dispatch(
-      actions.bubbles.deleteBubble(bubbleId)
-    );
+    Object.keys(statuses).forEach(item => {
+      const name = item.toLowerCase();
+      it(`add ${name} bubble`, () => {
+        store.subscribe(() => {
+          const state = store.getState();
+          const bubbleList = state.bubbles.list;
+          const bubble = bubbleList[0];
+          expect(bubble.type).to.equals(item);
+        });
+
+        store.dispatch(
+          actions.bubbles[name]('test')
+        );
+      });
+    });
+
+    it('Delete bubble', () => {
+      store.dispatch(actions.bubbles.success('1'));
+      store.dispatch(actions.bubbles.success('2'));
+      store.dispatch(actions.bubbles.success('3'));
+
+      const state = store.getState();
+      const bubbleId = state.bubbles.list[1].id;
+
+      store.subscribe(() => {
+        const updatedState = store.getState();
+        const bubbleList = updatedState.bubbles.list;
+        expect(bubbleList.length).to.equals(2);
+      });
+
+      store.dispatch(
+        actions.bubbles.deleteBubble(bubbleId)
+      );
+    });
+
+  });
+
+  describe('sort', () => {
+    it('Change sort for table', () => {
+      const tableName = 'test';
+
+      store.subscribe(() => {
+        const updatedState = store.getState();
+
+        const tableInfo = updatedState.sort[tableName];
+
+        expect(tableInfo.field).to.equals('field');
+        expect(tableInfo.direction).to.equals(-1);
+        expect(tableInfo.ignoreCase).to.be.true;
+      });
+
+      store.dispatch(
+        actions.sort.changeSort(tableName, 'field', -1)
+      );
+    });
   });
 });
