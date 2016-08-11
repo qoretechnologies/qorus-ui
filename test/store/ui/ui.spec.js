@@ -1,10 +1,10 @@
 /* eslint no-unused-expressions: 0 */
 import { expect } from 'chai';
+import { createStore } from 'redux';
+
 import ui from '../../../src/js/store/ui';
 import * as actions from '../../../src/js/store/ui/actions';
 import { statuses } from '../../../src/js/constants/bubbles';
-
-import { createStore } from 'redux';
 
 
 describe('UI redux store', () => {
@@ -96,7 +96,6 @@ describe('UI redux store', () => {
         actions.bubbles.deleteBubble(bubbleId)
       );
     });
-
   });
 
   describe('sort', () => {
@@ -108,9 +107,9 @@ describe('UI redux store', () => {
 
         const tableInfo = updatedState.sort[tableName];
 
-        expect(tableInfo.field).to.equals('field');
-        expect(tableInfo.direction).to.equals(-1);
-        expect(tableInfo.ignoreCase).to.be.true;
+        expect(tableInfo.sortBy).to.equals('field');
+        expect(tableInfo.sortByKey.direction).to.equals(-1);
+        expect(tableInfo.sortByKey.ignoreCase).to.be.true;
       });
 
       store.dispatch(

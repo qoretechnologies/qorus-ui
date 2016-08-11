@@ -4,6 +4,13 @@ import actions from '../../../constants/sort';
 
 export const changeSort = createAction(
   actions.CHANGE_SORT,
-  (tableName, field, direction, ignoreCase = true) => ({ tableName, field, direction, ignoreCase })
+  (tableName, sortBy, direction, ignoreCase = true) => ({
+    tableName,
+    sortBy,
+    sortByKey: {
+      direction,
+      ignoreCase,
+    },
+  })
 );
 
