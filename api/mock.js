@@ -30,6 +30,7 @@ module.exports = () => {
   router.use('/constants', require('./constants')());
   router.use('/public', require('./public')());
   router.use('/logout', require('./logout')());
+  router.use('/remote', require('./remote')());
 
   return router;
 };

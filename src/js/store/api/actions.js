@@ -12,6 +12,7 @@ import * as propActions from './resources/system/props/actions';
 import * as groupsActions from './resources/groups/actions';
 import * as logoutActions from './resources/logout/actions';
 import * as alertsActions from './resources/alerts/actions';
+import * as remoteActions from './resources/remotes/actions';
 
 import {
   combineResourceActions,
@@ -97,6 +98,8 @@ Object.keys(workflowActions.delegates).forEach(a => {
 });
 
 Object.assign(actions.workflows, workflowActions.specials);
+
+Object.assign(actions.remotes, remoteActions);
 
 Object.assign(actions.steps, stepActions);
 

@@ -1,4 +1,4 @@
-import { findTableRow, findElementByText } from './common_steps';
+import { findTableRow, findElementByText, findTableRowId } from './common_steps';
 
 module.exports = function systemSteps() {
   this.Then(/^properties get loaded$/, async function() {
@@ -37,5 +37,14 @@ module.exports = function systemSteps() {
 
   this.Then(/^I cannot edit any options$/, async function() {
     this.browser.assert.elements('.options-edit', 0);
+  });
+
+  this.When(/^I activate "([^"]*)" connection$/, async function(name) {
+    await this.browser.click(findTableRow(this.browser, name, 2));
+
+    this.detail = {
+      id: findTableRowId(this.browser, name, 2),
+      name,
+    };
   });
 };

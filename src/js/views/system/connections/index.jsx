@@ -1,3 +1,4 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 
 import Nav, { NavLink } from '../../../components/navlink';
@@ -5,7 +6,12 @@ import Nav, { NavLink } from '../../../components/navlink';
 import ConnectionsTable from './table';
 import ConnectionsPane from './pane';
 
-export default function Connections(props, context) {
+type Props = {
+  children: any,
+  route: Object,
+}
+
+export default function Connections(props: Props, context: Object): React.Element<any> {
   return (
     <div className="tab-pane active">
       <Nav
@@ -20,11 +26,6 @@ export default function Connections(props, context) {
     </div>
   );
 }
-
-Connections.propTypes = {
-  children: PropTypes.node.isRequired,
-  route: PropTypes.object,
-};
 
 Connections.contextTypes = {
   router: PropTypes.object.isRequired,
