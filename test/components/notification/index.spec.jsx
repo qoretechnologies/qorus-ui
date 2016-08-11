@@ -106,7 +106,7 @@ describe('Notification from \'components/notifications\'', () => {
     setTimeout(() => {
       expect(wrapper.find('.notification-list')).to.have.length(0);
       done();
-    }, 1000);
+    }, 2000);
   });
 
   it('hide on other element click', () => {
