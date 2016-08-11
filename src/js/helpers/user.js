@@ -6,6 +6,7 @@ const hasPermission = (userPerms, permissions) => {
   return perms.every(p => includes(userPerms, p));
 };
 
+// @TODO: Rewrite as only async/await?
 const auth: Function = (username: string, password: string, action: Function): Promise<*> => (
   new Promise(async (resolve, reject) => {
     try {
