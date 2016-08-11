@@ -6,11 +6,10 @@ import { capitalize } from 'lodash';
 
 import Pane from '../../../components/pane';
 import Table, { Section, Row, Cell } from '../../../components/table';
-
+import AutoComponent from '../../../components/autocomponent';
 
 const remoteSelector = (state, props) =>
   (state.api.remotes.data.find(a => a.id === props.params.id));
-
 
 const viewSelector = createSelector(
   [
@@ -83,7 +82,7 @@ export default class ConnectionsPane extends Component {
     );
 
     yield (
-      <Cell>{`${value}`}</Cell>
+      <Cell><AutoComponent>{ value }</AutoComponent></Cell>
     );
   }
 

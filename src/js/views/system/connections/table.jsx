@@ -1,158 +1,120 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 
-// utils
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { createSelector } from 'reselect';
+import { defaultProps } from 'recompose';
 import classNames from 'classnames';
-// import { setTitle } from '../../helpers/document';
-// import firstBy from 'thenby';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
-import Loader from '../../../components/loader';
+import AutoComponent from '../../../components/autocomponent';
 import ModalPing from './modals/ping';
+import sync from '../../../hocomponents/sync';
+import patch from '../../../hocomponents/patchFuncArgs';
 
-import actions from 'store/api/actions';
+import actions from '../../../store/api/actions';
 import { browserHistory } from 'react-router';
 
-const CONN_MAP = {
+const CONN_MAP: Object = {
   datasources: 'DATASOURCE',
   user: 'USER-CONNECTION',
   qorus: 'REMOTE',
 };
 
-const remotesMetaSelector = (state) => ({
-  sync: state.api.remotes.sync,
-  loading: state.api.remotes.loading,
-});
-
-const remotesSelector = (state, props) => (
+const remotesSel: Function = (state: Object): Object => state.api.remotes;
+const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
   state.api.remotes.data.filter(a =>
     (a.conntype.toLowerCase() === CONN_MAP[props.params.type].toLowerCase())
   )
 );
 
-const activeRowId = (state, props) => props.params.id;
+const activeRowId: Function = (state: Object, props: Object): string => props.params.id;
 
-const viewSelector = createSelector(
+const viewSelector: Function = createSelector(
   [
+    remotesSel,
     remotesSelector,
-    remotesMetaSelector,
     activeRowId,
   ],
-  (alerts, meta, rowId) => ({
+  (remotes, alerts, rowId) => ({
+    remotes,
     collection: alerts,
-    sync: meta.sync,
-    loading: meta.loading,
     activeRowId: rowId,
   })
 );
 
-@connect(viewSelector)
-export default class AlertsTable extends Component {
-  static propTypes = {
-    collection: PropTypes.array,
-    activeRowId: PropTypes.string,
-    dispatch: PropTypes.func,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
-    route: PropTypes.object,
-    children: PropTypes.node,
-    location: PropTypes.object,
-    params: PropTypes.object,
-  }
-
+class Connections extends Component {
   static defaultProps = {
     activeRowId: null,
-  }
+  };
 
   static contextTypes = {
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
-  }
-
-  static childContextTypes = {
-    dispatch: PropTypes.func,
-    route: PropTypes.object,
   };
 
-  getChildContext() {
-    return {
-      dispatch: this.props.dispatch,
-      route: this.props.route,
-    };
-  }
+  props: {
+    activeRowId: string,
+    route: Object,
+    children: any,
+    location: Object,
+    params: Object,
+    load: Function,
+    collection: Array<any>,
+  };
 
   componentWillMount() {
-    this.props.dispatch(actions.remotes.fetch({ action: 'all' }));
-
-    this._renderHeadingRow = ::this.renderHeadingRow;
-    this._renderRows = ::this.renderRows;
-    this._renderCells = ::this.renderCells;
+    this._renderHeadingRow = this.renderHeadingRow.bind(this);
+    this._renderRows = this.renderRows.bind(this);
+    this._renderCells = this.renderCells.bind(this);
   }
 
-  /**
-   * Changes active route to alert associated with clicked element.
-   *
-   * If the event handled some significant action before (i.e., its
-   * default action is prevented), it does nothing.
-   *
-   * @param {Event} ev
-   */
-  activateRow = (modelId) => (ev) => {
+  _renderHeadingRow: ?Function = null;
+  _renderRows: ?Function = null;
+  _renderCells: ?Function = null;
+  _modal: ?React.Element<any> = null;
+
+  activateRow: Function= (modelId: number): Function => (ev: EventHandler): void => {
     if (ev.defaultPrevented) return;
 
-    const shouldDeactivate = modelId === this.props.activeRowId;
+    const shouldDeactivate: boolean = modelId === this.props.activeRowId;
 
-    const urlChunks = this.props.location.pathname.split('/');
-    const url = urlChunks.length === 5 ? urlChunks.slice(0, 4).join('/') : urlChunks.join('/');
+    const urlChunks: Array<any> = this.props.location.pathname.split('/');
+    const url: string = urlChunks.length === 5 ?
+      urlChunks.slice(0, 4).join('/') :
+      urlChunks.join('/');
 
     if (shouldDeactivate) {
       browserHistory.push(url);
     } else {
       browserHistory.push(`${url}/${modelId}`);
     }
-  }
+  };
 
-  handleOpenModal = (model) => (ev) => {
+  handleOpenModal: Function = (model: Object): Function => (ev: EventHandler): void => {
     ev.preventDefault();
 
     this.openModal(model);
-  }
+  };
 
-  /**
-   * Opens modal dialog to manage particular remote.
-   *
-   * @param {Object} remote
-   */
-  openModal = (model) => {
+  openModal: Function = (model: Object): void => {
     this._modal = (
       <ModalPing
         model={model}
-        onClose={this.closeModal}
-        params={this.props.params}
+        onClose={this.handlecloseModal}
       />
     );
 
     this.context.openModal(this._modal);
-  }
+  };
 
-  /**
-   * Closes currently open modal dialog.
-   */
-  closeModal = () => {
+  handlecloseModal: Function = (): void => {
     this.context.closeModal(this._modal);
     this._modal = null;
   };
 
-  fixEslint() {}
-
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
+  *renderHeadings(): Generator<*, *, *> {
     yield (
       <Cell tag="th" className="narrow">Up</Cell>
     );
@@ -176,22 +138,12 @@ export default class AlertsTable extends Component {
     );
   }
 
-  /**
-   * Yields cells with model data
-   *
-   * @param {Object} model
-   * @param {String} selected
-   * @return {Generator<ReactElement>}
-   */
-  *renderCells({ model }) {
+  *renderCells({ model }: { model: Object }): Generator<*, *, *> {
     yield (
       <Cell className="narrow">
-        <i
-          className={classNames(
-            'fa fa-check-circle',
-            { 'text-danger': !model.up, 'text-success': model.up }
-          )}
-        />
+        <AutoComponent>
+          { model.up }
+        </AutoComponent>
       </Cell>
     );
 
@@ -220,32 +172,15 @@ export default class AlertsTable extends Component {
     );
   }
 
-  /**
-   * Yields row for table head.
-   *
-   * @return {Generator<ReactElement>}
-   * @see renderHeadings
-   */
-  *renderHeadingRow() {
+  *renderHeadingRow(): Generator<*, *, *> {
     yield (
-      <Row cells={::this.renderHeadings} />
+      <Row cells={this.renderHeadings.bind(this)} />
     );
   }
 
-
-  /**
-   * Yields rows for table body.
-   *
-   * Row with active model is highlighted. Row are clickable and
-   * trigger route change via {@link activateRow}.
-   *
-   * @param {number} activeId
-   * @param {Array<Object>} collection
-   * @return {Generator<ReactElement>}
-   * @see activateRow
-   * @see renderCells
-   */
-  *renderRows({ activeId, collection }) {
+  *renderRows(
+    { activeId, collection }: { activeId: number, collection: Object }
+  ): Generator<*, *, *> {
     for (const model of collection) {
       yield (
         <Row
@@ -262,14 +197,6 @@ export default class AlertsTable extends Component {
   }
 
   render() {
-    if (!this.props.sync || this.props.loading) {
-      return (
-        <div className="tab-pane active">
-          <Loader />
-        </div>
-      );
-    }
-
     if (this.props.collection.length === 0) {
       return (
         <div className="tab-pane active">
@@ -278,7 +205,7 @@ export default class AlertsTable extends Component {
       );
     }
 
-    const data = {
+    const data: Object = {
       activeId: this.props.params.id,
       collection: this.props.collection,
     };
@@ -297,3 +224,25 @@ export default class AlertsTable extends Component {
     );
   }
 }
+
+Connections.propTypes = {
+  activeRowId: PropTypes.string,
+  route: PropTypes.object,
+  children: PropTypes.node,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  load: PropTypes.func.isRequired,
+  collection: PropTypes.array,
+};
+
+export default compose(
+  connect(
+    viewSelector,
+    {
+      load: actions.remotes.fetch,
+    }
+  ),
+  defaultProps({ query: { action: 'all' } }),
+  patch('load', ['query']),
+  sync('remotes')
+)(Connections);

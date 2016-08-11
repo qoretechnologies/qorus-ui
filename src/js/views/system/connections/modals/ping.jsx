@@ -1,91 +1,124 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React, { Component } from 'react';
+import Modal from '../../../../components/modal';
+import Loader from '../../../../components/loader';
+import Alert from '../../../../components/alert';
+import AutoComponent from '../../../../components/autocomponent';
+import Table, { Section, Row, Cell } from '../../../../components/table';
+import { Controls, Control as Button } from '../../../../components/controls';
 
-import Modal from 'components/modal';
-import Loader from 'components/loader';
-import InfoTable from 'components/info_table';
+import actions from '../../../../store/api/actions';
+import { connect } from 'react-redux';
 
-import { fetchJson } from 'store/api/utils';
-
-const makeCancelable = (promise) => {
-  let hasCanceled_ = false;
-
-  const wrappedPromise = new Promise((resolve, reject) => {
-    promise.then((val) => {
-      if (hasCanceled_) {
-        return reject({ isCanceled: true });
-      }
-
-      return resolve(val);
-    });
-
-    promise.catch((error) => {
-      if (hasCanceled_) {
-        return reject({ isCanceled: true });
-      }
-
-      return reject(error);
-    });
-  });
-
-  return {
-    promise: wrappedPromise,
-    cancel() {
-      hasCanceled_ = true;
-    },
-  };
-};
-
-export default class ModalPing extends Component {
-  static propTypes = {
-    onClose: PropTypes.func,
-    ping: PropTypes.func,
-    data: PropTypes.object,
-    model: PropTypes.object,
-    params: PropTypes.object,
+@connect(
+  state => state,
+  {
+    pingRemote: actions.remotes.pingRemote,
+  }
+)
+export default class Ping extends Component {
+  props: {
+    pingRemote?: Function,
+    model: Object,
+    onClose: Function,
   };
 
+  state: {
+    error: boolean,
+    data: ?Object,
+  } = {
+    error: false,
+    data: null,
+  };
 
   componentWillMount() {
-    this.setState({
-      response: null,
-    });
-
-    this._ping = this.ping();
+    this.ping();
   }
 
-  componentWillUnmount() {
-    this._ping.cancel();
-  }
+  ping: Function = async (): Promise<*> => {
+    if (this.props.pingRemote) {
+      const payload:Object = await this.props.pingRemote(this.props.model.name);
 
-  ping = () => {
-    const resp = makeCancelable(
-      fetchJson(
-        'PUT',
-         `/api/remote/${this.props.params.type}/${this.props.model.name}?action=ping`
-      )
+      this.setState({
+        error: payload.error,
+        data: payload.payload,
+      });
+    }
+  };
+
+  renderBody() {
+    if (!this.state.data) return <Loader />;
+
+    if (this.state.error) {
+      return (
+        <Alert bsStyle="danger">
+          { this.state.data.message }
+        </Alert>
+      );
+    }
+
+    const { url, time, ok, info } = this.state.data;
+
+    return (
+      <Table className="table">
+        <Section type="body">
+          <Row>
+            <Cell tag="th"> URL </Cell>
+            <Cell>{ url }</Cell>
+          </Row>
+          <Row>
+            <Cell tag="th"> Status </Cell>
+            <Cell>
+              <AutoComponent>
+                { ok }
+              </AutoComponent>
+            </Cell>
+          </Row>
+          {!ok && (
+            <Row>
+              <Cell tag="th"> Error </Cell>
+              <Cell> { info } </Cell>
+            </Row>
+          )}
+          {ok && (
+            <Row>
+              <Cell tag="th"> Response Time </Cell>
+              <Cell> { time } </Cell>
+            </Row>
+          )}
+        </Section>
+      </Table>
     );
-
-    resp.promise
-      .then((r) => { this.setState({ response: r }); })
-      .catch(() => {});
-
-    return resp;
   }
 
   render() {
     return (
       <Modal>
         <Modal.Header
+          titleId="ping"
           onClose={this.props.onClose}
-          titleId="system-connections-ping-modal"
         >
-          Ping { this.props.model.name }
+          Pinging { this.props.model.name }
         </Modal.Header>
         <Modal.Body>
-          {!this.state.response && <Loader message="Waiting for response..." />}
-          {this.state.response &&
-            <InfoTable object={this.state.response} /> }
+          { this.renderBody() }
         </Modal.Body>
+        <Modal.Footer>
+          <Controls noControls grouped>
+            <Button
+              label="Close"
+              btnStyle="default"
+              action={this.props.onClose}
+              big
+            />
+            <Button
+              label="Try again"
+              btnStyle="success"
+              action={this.ping}
+              big
+            />
+          </Controls>
+        </Modal.Footer>
       </Modal>
     );
   }

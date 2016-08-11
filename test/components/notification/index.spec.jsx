@@ -97,16 +97,13 @@ describe('Notification from \'components/notifications\'', () => {
     expect(wrapper.find('.notification-list')).to.have.length(1);
   });
 
-  it('hide on second click', done => {
+  it('hide on second click', () => {
     const wrapper = mount(<NotificationPanel />);
 
     wrapper.find('.notification-button').simulate('click');
     wrapper.find('.notification-button').simulate('click');
 
-    setTimeout(() => {
-      expect(wrapper.find('.notification-list')).to.have.length(0);
-      done();
-    }, 1000);
+    expect(wrapper.state().isOpen).to.eql(false);
   });
 
   it('hide on other element click', () => {

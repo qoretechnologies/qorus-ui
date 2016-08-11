@@ -28,11 +28,12 @@ function findTableRow(browser, name, cellId) {
  * @param {string} name
  * @return {?number}
  */
-function findTableRowId(browser, name) {
-  const row = findTableRow(browser, name);
+function findTableRowId(browser, name, cellId) {
+  const cell = cellId || 4;
+  const row = findTableRow(browser, name, cellId);
   if (!row) return null;
 
-  const id = parseInt(row.cells[4].textContent, 10);
+  const id = parseInt(row.cells[cell].textContent, 10);
 
   return !isNaN(id) ? id : null;
 }
@@ -134,9 +135,9 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^I should see "([^"]*)" detail pane$/, async function(name) {
-    await this.waitForElement(cmpPane);
+    await this.waitForElement(pane);
 
-    this.browser.assert.element(cmpPane);
+    this.browser.assert.element(pane);
   });
 
 

@@ -108,14 +108,14 @@ export function createResourceReducers(
 
               return Object.assign({}, state, newState);
             }
-          }
 
-          if (action.meta.params && action.meta.params.fetchMore) {
-            data = state.data.slice().concat(data);
-          }
+            if (action.meta.params && action.meta.params.fetchMore) {
+              data = state.data.slice().concat(data);
+            }
 
-          if (action.meta.params && action.meta.params.update && action.meta.params.update.data) {
-            data = Object.assign(data, action.meta.params.update.data);
+            if (action.meta.params && action.meta.params.update && action.meta.params.update.data) {
+              data = Object.assign(data, action.meta.params.update.data);
+            }
           }
 
           return {
