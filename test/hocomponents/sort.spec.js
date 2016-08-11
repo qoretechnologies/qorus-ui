@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import sort from '../../src/js/hocomponents/sort';
 import ui from '../../src/js/store/ui';
 
-describe.only('sort from \'hocomponents/sort\'', () => {
+describe('sort from \'hocomponents/sort\'', () => {
   const incomeData = [
     { a: 2, b: 'a' },
     { a: 1, b: 'c' },
