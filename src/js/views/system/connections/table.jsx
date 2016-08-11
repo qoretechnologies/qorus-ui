@@ -65,11 +65,13 @@ class Connections extends Component {
   };
 
   componentWillMount() {
+    this._renderHeadings = this.renderHeadings.bind(this);
     this._renderHeadingRow = this.renderHeadingRow.bind(this);
     this._renderRows = this.renderRows.bind(this);
     this._renderCells = this.renderCells.bind(this);
   }
 
+  _renderHeadings: ?Function = null;
   _renderHeadingRow: ?Function = null;
   _renderRows: ?Function = null;
   _renderCells: ?Function = null;
@@ -174,7 +176,7 @@ class Connections extends Component {
 
   *renderHeadingRow(): Generator<*, *, *> {
     yield (
-      <Row cells={this.renderHeadings.bind(this)} />
+      <Row cells={this._renderHeadings} />
     );
   }
 
