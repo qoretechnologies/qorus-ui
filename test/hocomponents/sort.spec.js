@@ -22,19 +22,19 @@ describe('sort from \'hocomponents/sort\'', () => {
     store = createStore(combineReducers({ ui }));
   });
 
-  const FakeComponent = ({ data, onSortChange }) => {
+  const FakeComponent = ({ data, handleSortChange }) => {
     renderedData = data;
     return (
       <div>
         <button
           className="first-field"
-          onClick={() => onSortChange({ sortBy: 'a' })}
+          onClick={() => handleSortChange({ sortBy: 'a' })}
         >
           sort by a
         </button>
         <button
           className="second-field"
-          onClick={() => onSortChange({ sortBy: 'b' })}
+          onClick={() => handleSortChange({ sortBy: 'b' })}
         >
           sort by b
         </button>
@@ -140,5 +140,36 @@ describe('sort from \'hocomponents/sort\'', () => {
         { a: 1, b: 'c' },
       ]
     );
+  });
+
+  it('sort with default history key', () => {
+    const Component = sort(
+      'something',
+      'data',
+      {
+        sortBy: 'b',
+        sortByKey: { direction: -1 },
+      }
+    )(FakeComponent);
+
+    const initialData = [
+      { a: 1, b: 'a' },
+      { a: 1, b: 'b' },
+      { a: 2, b: 'c' },
+    ];
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <Component data={initialData} />
+      </Provider>
+    );
+
+    wrapper.find('.first-field').simulate('click');
+
+    expect(renderedData).to.deep.equal([
+      { a: 1, b: 'b' },
+      { a: 1, b: 'a' },
+      { a: 2, b: 'c' },
+    ]);
   });
 });

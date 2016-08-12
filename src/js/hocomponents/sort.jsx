@@ -19,7 +19,15 @@ export default (
       sortData: Object
     }
 
-    onSortChange = ({ sortBy }: { sortBy: string }) => {
+    componentWillMount() {
+      if (defaultSortData) {
+        const { changeSort } = this.props;
+        const { sortBy, sortByKey: { direction, ingoreCase } } = defaultSortData;
+        changeSort(tableName, sortBy, direction, ingoreCase);
+      }
+    }
+
+    handleSortChange = ({ sortBy }: { sortBy: string }) => {
       const { changeSort, sortData } = this.props;
       if (!sortData || sortData.sortBy !== sortBy) {
         changeSort(tableName, sortBy, 1);
@@ -41,7 +49,7 @@ export default (
       const newProps = { ...this.props };
       newProps[collectionProp] = collection;
 
-      return <Component {...newProps} onSortChange={this.onSortChange} />;
+      return <Component {...newProps} handleSortChange={this.handleSortChange} />;
     }
   }
   WrappedComponent.propTypes = {
@@ -55,7 +63,7 @@ export default (
 
   WrappedComponent = connect(
     state => ({
-      sortData: state.ui.sort[tableName] || defaultSortData,
+      sortData: state.ui.sort[tableName],
     }),
     { changeSort: sort.changeSort }
   )(WrappedComponent);

@@ -116,5 +116,30 @@ describe('UI redux store', () => {
         actions.sort.changeSort(tableName, 'field', -1)
       );
     });
+
+    it('Change sort for table twice', () => {
+      const tableName = 'test';
+
+      store.dispatch(
+        actions.sort.changeSort(tableName, 'field', -1)
+      );
+
+      store.subscribe(() => {
+        const updatedState = store.getState();
+
+        const tableInfo = updatedState.sort[tableName];
+
+        expect(tableInfo.sortBy).to.equals('other');
+        expect(tableInfo.sortByKey.direction).to.equals(1);
+        expect(tableInfo.sortByKey.ignoreCase).to.be.true;
+        expect(tableInfo.historySortBy).to.equals('field');
+        expect(tableInfo.historySortByKey.direction).to.equals(-1);
+        expect(tableInfo.historySortByKey.ignoreCase).to.be.true;
+      });
+
+      store.dispatch(
+        actions.sort.changeSort(tableName, 'other', 1)
+      );
+    });
   });
 });
