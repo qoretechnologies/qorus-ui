@@ -3,11 +3,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
+import defaultProps from 'recompose/defaultProps';
 
 import Table, { Section, Row, Cell } from '../../../components/table';
 import Shorten from '../../../components/shorten';
 import AutoComponent from '../../../components/autocomponent';
+import patch from '../../../hocomponents/patchFuncArgs';
 import sort from '../../../hocomponents/sort';
 import sync from '../../../hocomponents/sync';
 import apiActions from '../../../store/api/actions';
@@ -47,9 +48,10 @@ const viewSelector = createSelector(
       load: apiActions.errors.fetch,
     }
   ),
-  withHandlers({
-    load: props => () => props.load('global'),
+  defaultProps({
+    errorType: 'global',
   }),
+  patch('load', ['errorType']),
   sort(
     'errors',
     'collection',
