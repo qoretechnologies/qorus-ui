@@ -67,13 +67,13 @@ export default class Errors extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
+    handleSortChange: PropTypes.func,
   };
 
   props: {
     collection: Array<Object>,
     sortData: Object,
-    onSortChange: Function,
+    handleSortChange: Function,
   }
 
   componentWillMount() {
@@ -95,13 +95,13 @@ export default class Errors extends Component {
    * @see ORDER_STATES
    */
   *renderHeadings(): Generator<*, *, *> {
-    const { sortData, onSortChange } = this.props;
+    const { sortData, handleSortChange } = this.props;
     yield (
       <Cell
         tag="th"
         className="name"
         name="error"
-        {...{ sortData, onSortChange }}
+        {...{ sortData, onSortChange: handleSortChange }}
       >
         Error
       </Cell>
@@ -119,7 +119,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="description"
-        {...{ sortData, onSortChange }}
+        {...{ sortData, onSortChange: handleSortChange }}
       >
         Description
       </Cell>
@@ -129,7 +129,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="business_flag"
-        {...{ sortData, onSortChange }}
+        {...{ sortData, onSortChange: handleSortChange }}
       >
         Business
       </Cell>
@@ -139,7 +139,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="retry_flag"
-        {...{ sortData, onSortChange }}
+        {...{ sortData, onSortChange: handleSortChange }}
       >
         Retry
       </Cell>

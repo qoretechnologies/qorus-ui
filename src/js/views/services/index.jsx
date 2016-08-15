@@ -3,11 +3,12 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 import { setTitle } from '../../helpers/document';
+import sort from '../../hocomponents/sort';
 
 // data
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
 
 // components
 import Loader from 'components/loader';
@@ -19,12 +20,6 @@ import ServicesDetail from './detail';
 
 import { findBy } from '../../helpers/search';
 import { flowRight } from 'lodash';
-import firstBy from 'thenby';
-
-const sortServices = (sortData) => (services) => services.slice().sort(
-  firstBy(w => w[sortData.sortBy], sortData.sortByKey)
-    .thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
-  );
 
 const filterSearch = (search) => (services) =>
   findBy('name', search, services);
@@ -35,17 +30,14 @@ const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.service)
 );
 
-const sortSelector = state => state.ui.services;
 const searchSelector = (state, props) => props.location.query.q;
 
 const collectionSelector = createSelector(
   [
-    sortSelector,
     searchSelector,
     servicesSelector,
   ],
-  (sortData, search, services) => flowRight(
-    sortServices(sortData),
+  (search, services) => flowRight(
     filterSearch(search)
   )(services.data)
 );
@@ -55,18 +47,19 @@ const viewSelector = createSelector(
     servicesSelector,
     systemOptionsSelector,
     collectionSelector,
-    sortSelector,
   ],
-  (services, systemOptions, collection, sortData) => ({
+  (services, systemOptions, collection) => ({
     sync: services.sync,
     loading: services.loading,
     services: collection,
     systemOptions,
-    sortData,
-  })
+  }),
 );
 
-@connect(viewSelector)
+@compose(
+  connect(viewSelector),
+  sort('services', 'services')
+)
 export default class Services extends Component {
   static propTypes = {
     location: PropTypes.object,
@@ -95,6 +88,7 @@ export default class Services extends Component {
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
   };
 
   static contextTypes = {
@@ -154,12 +148,6 @@ export default class Services extends Component {
     );
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.services.sort(sortChange)
-    );
-  };
-
   renderPane() {
     const { params, systemOptions } = this.props;
 
@@ -206,7 +194,7 @@ export default class Services extends Component {
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedData={this.props.setSelectedData}
           selectedData={this.props.selectedData}
-          onSortChange={this.handleSortChange}
+          onSortChange={this.props.handleSortChange}
           sortData={this.props.sortData}
           collection={services}
           activeRowId={parseInt(this.props.params.detailId, 10)}

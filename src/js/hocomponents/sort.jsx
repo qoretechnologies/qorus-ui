@@ -58,8 +58,7 @@ export default (
     [collectionProp]: PropTypes.array,
   };
 
-  const displayName = wrapDisplayName(Component, 'sort');
-  WrappedComponent.displayName = displayName;
+  WrappedComponent.displayName = wrapDisplayName(Component, 'sort');
 
   WrappedComponent = connect(
     state => ({

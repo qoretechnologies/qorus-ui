@@ -43,7 +43,7 @@ describe('sort from \'hocomponents/sort\'', () => {
   };
   FakeComponent.propTypes = {
     data: PropTypes.array,
-    onSortChange: PropTypes.func,
+    handleSortChange: PropTypes.func,
   };
 
   it('without sort', () => {

@@ -4,13 +4,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, includes } from 'lodash';
+import compose from 'recompose/compose';
+
 import { goTo } from '../../helpers/router';
 import { setTitle } from '../../helpers/document';
-import firstBy from 'thenby';
-
+import sort from '../../hocomponents/sort';
 // data
 import actions from '../../store/api/actions';
-import * as ui from '../../store/ui/actions';
 
 // components
 import Loader from '../../components/loader';
@@ -30,11 +30,6 @@ import {
   formatDate,
 } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
-
-const sortWorkflows = (sortData: Object) => (workflows: Array<Object>) => workflows.slice().sort(
-    firstBy(w => w[sortData.sortBy], sortData.sortByKey)
-      .thenBy(w => w[sortData.historySortBy], sortData.historySortByKey)
-  );
 
 const filterSearch = (search) => (workflows) =>
   findBy(['name', 'id'], search, workflows);
@@ -97,8 +92,6 @@ const searchSelector = (state, props) => props.location.query.q;
 
 const filterSelector = (state, props) => filterArray(props.params.filter);
 
-const sortSelector = (state) => state.ui.workflows;
-
 const infoSelector = state => state.api.system;
 
 const collectionSelector = createSelector(
@@ -106,10 +99,8 @@ const collectionSelector = createSelector(
     searchSelector,
     filterSelector,
     workflowsSelector,
-    sortSelector,
   ],
-  (search, filter, workflows, sortData) => flowRight(
-    sortWorkflows(sortData),
+  (search, filter, workflows) => flowRight(
     filterLastVersion(filter),
     filterRunning(filter),
     filterSearch(search),
@@ -125,9 +116,8 @@ const viewSelector = createSelector(
     collectionSelector,
     systemOptionsSelector,
     globalErrorsSelector,
-    sortSelector,
   ],
-  (workflows, errors, info, collection, systemOptions, globalErrors, sortData) => ({
+  (workflows, errors, info, collection, systemOptions, globalErrors) => ({
     sync: workflows.sync,
     loading: workflows.loading,
     workflows: collection,
@@ -135,11 +125,13 @@ const viewSelector = createSelector(
     info,
     systemOptions,
     globalErrors,
-    sortData,
   })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(viewSelector),
+  sort('workflows', 'workflows')
+)
 export default class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -152,6 +144,7 @@ export default class Workflows extends Component {
     systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
@@ -305,12 +298,6 @@ export default class Workflows extends Component {
     );
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.workflows.sort(sortChange)
-    );
-  };
-
   handleCSVClick = () => {
     const collection = this.state.filteredWorkflows.length ?
       this.state.filteredWorkflows : this.props.workflows;
@@ -368,7 +355,7 @@ export default class Workflows extends Component {
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedWorkflows={this.props.setSelectedData}
           selectedWorkflows={this.props.selectedData}
-          onSortChange={this.handleSortChange}
+          onSortChange={this.props.handleSortChange}
           sortData={this.props.sortData}
           linkDate={this.getDate()}
         />

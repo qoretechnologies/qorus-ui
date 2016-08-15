@@ -3,11 +3,13 @@ import React, { Component, PropTypes } from 'react';
 // utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
+
 import { setTitle } from '../../helpers/document';
+import sort from '../../hocomponents/sort';
 
 // data
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
 
 // components
 import Loader from 'components/loader';
@@ -19,12 +21,6 @@ import JobsDetail from './detail';
 
 import { findBy } from '../../helpers/search';
 import { flowRight } from 'lodash';
-import firstBy from 'thenby';
-
-const sortCollection = (sortData) => (collection) => collection.slice().sort(
-  firstBy(w => w[sortData.sortBy] || 0, sortData.sortByKey)
-    .thenBy(w => w[sortData.historySortBy] || 0, sortData.historySortByKey)
-);
 
 const filterSearch = (search) => (collection) =>
   findBy('name', search, collection);
@@ -35,17 +31,14 @@ const systemOptionsSelector = state => (
   state.api.systemOptions.data.filter(opt => opt.job)
 );
 
-const sortSelector = state => state.ui.jobs;
 const searchSelector = (state, props) => props.location.query.q;
 
 const collectionSelector = createSelector(
   [
-    sortSelector,
     searchSelector,
     jobsSelector,
   ],
-  (sortData, search, jobs) => flowRight(
-    sortCollection(sortData),
+  (search, jobs) => flowRight(
     filterSearch(search)
   )(jobs.data)
 );
@@ -55,7 +48,6 @@ const viewSelector = createSelector(
     jobsSelector,
     systemOptionsSelector,
     collectionSelector,
-    sortSelector,
   ],
   (jobs, systemOptions, collection, sortData) => ({
     sync: jobs.sync,
@@ -66,7 +58,10 @@ const viewSelector = createSelector(
   })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(viewSelector),
+  sort('jobs', 'collection')
+)
 export default class Jobs extends Component {
   static propTypes = {
     location: PropTypes.object,
@@ -94,6 +89,7 @@ export default class Jobs extends Component {
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
     onCSVClick: PropTypes.func,
     generateCSV: PropTypes.func,
   };
@@ -155,12 +151,6 @@ export default class Jobs extends Component {
     );
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.jobs.sort(sortChange)
-    );
-  };
-
   handleCSVClick = () => {
     this.props.onCSVClick(this.props.collection, 'jobs');
   };
@@ -213,7 +203,7 @@ export default class Jobs extends Component {
             activeWorkflowId={parseInt(this.props.params.detailId, 10)}
             setSelectedData={this.props.setSelectedData}
             selectedData={this.props.selectedData}
-            onSortChange={this.handleSortChange}
+            onSortChange={this.props.handleSortChange}
             sortData={this.props.sortData}
             collection={collection}
             activeRowId={parseInt(this.props.params.detailId, 10)}

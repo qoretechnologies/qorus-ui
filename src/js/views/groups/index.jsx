@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
 import { setTitle } from '../../helpers/document';
-import { sortTable } from '../../helpers/table';
+import compose from 'recompose/compose';
 
 // data
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
+import sort from '../../hocomponents/sort';
 
 // components
 import Loader from 'components/loader';
@@ -21,8 +21,6 @@ import GroupsTable from './table';
 import GroupsDetail from './detail';
 
 import { findBy } from '../../helpers/search';
-
-const sortGroups = (sortData) => (groups) => sortTable(groups, sortData);
 
 const filterSearch = (search) => (groups) =>
   findBy(['name', 'description'], search, groups);
@@ -48,16 +46,12 @@ const groupsSelector = state => {
 
 const searchSelector = (state, props) => props.location.query.q;
 
-const sortSelector = (state) => state.ui.groups;
-
 const collectionSelector = createSelector(
   [
     searchSelector,
     groupsSelector,
-    sortSelector,
   ],
-  (search, groups, sortData) => flowRight(
-    sortGroups(sortData),
+  (search, groups) => flowRight(
     filterSearch(search),
   )(groups.data)
 );
@@ -66,17 +60,18 @@ const viewSelector = createSelector(
   [
     groupsSelector,
     collectionSelector,
-    sortSelector,
   ],
-  (groups, collection, sortData) => ({
+  (groups, collection) => ({
     sync: groups.sync,
     loading: groups.loading,
     collection,
-    sortData,
   })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(viewSelector),
+  sort('groups', 'collection')
+)
 export default class Workflows extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -85,6 +80,7 @@ export default class Workflows extends Component {
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
@@ -202,12 +198,6 @@ export default class Workflows extends Component {
     );
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.groups.sort(sortChange)
-    );
-  };
-
   handleCSVClick = () => {
     this.props.onCSVClick(this.props.collection, 'groups');
   };
@@ -268,7 +258,7 @@ export default class Workflows extends Component {
             onDataFilterChange={this.props.onDataFilterChange}
             setSelectedData={this.props.setSelectedData}
             selectedData={this.props.selectedData}
-            onSortChange={this.handleSortChange}
+            onSortChange={this.props.handleSortChange}
             sortData={this.props.sortData}
             collection={this.props.collection}
           />

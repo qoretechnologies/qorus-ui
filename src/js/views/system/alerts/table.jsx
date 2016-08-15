@@ -5,23 +5,19 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 import { flowRight } from 'lodash';
+import { browserHistory } from 'react-router';
+import compose from 'recompose/compose';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
 import Date from '../../../components/date';
 import Loader from '../../../components/loader';
 import Shorten from '../../../components/shorten';
-
-import { sortTable } from '../../../helpers/table';
-
 import Alerts from '../../../../../types/alerts/react';
-
-import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
-import { browserHistory } from 'react-router';
+import sort from '../../../hocomponents/sort';
+import actions from '../../../store/api/actions';
 
 const alertsSelector = state => state.api.alerts;
 const typeSelector = (state, props) => props.params.type;
-const sortSelector = state => state.ui.alerts;
 
 const activeRowId = (state, props) => parseFloat(props.params.id, 10);
 
@@ -29,17 +25,11 @@ const filterCollection = type => collection => (
   collection.filter(c => c.alerttype.toLowerCase() === type)
 );
 
-const sortCollection = sortData => collection => (
-  sortTable(collection, sortData)
-);
-
 const collectionSelector = createSelector(
   [
     alertsSelector,
     typeSelector,
-    sortSelector,
-  ], (alerts, type, sortData) => flowRight(
-    sortCollection(sortData),
+  ], (alerts, type) => flowRight(
     filterCollection(type)
   )(alerts.data)
 );
@@ -49,7 +39,6 @@ const viewSelector = createSelector(
     alertsSelector,
     collectionSelector,
     activeRowId,
-    sortSelector,
   ],
   (meta, collection, rowId, sortData) => ({
     loading: meta.loading,
@@ -60,7 +49,10 @@ const viewSelector = createSelector(
   })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(viewSelector),
+  sort('alert', 'collection')
+)
 export default class AlertsTable extends Component {
   static propTypes = {
     collection: PropTypes.arrayOf(Alerts),
@@ -72,6 +64,7 @@ export default class AlertsTable extends Component {
     children: PropTypes.node,
     location: PropTypes.object,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -113,12 +106,6 @@ export default class AlertsTable extends Component {
     }
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.alerts.sort(sortChange)
-    );
-  };
-
   /**
    * Yields heading cells for model info.
    *
@@ -126,6 +113,7 @@ export default class AlertsTable extends Component {
    * @see ORDER_STATES
    */
   *renderHeadings() {
+    const { sortData, handleSortChange } = this.props;
     yield (
       <Cell
         tag="th"
@@ -137,8 +125,8 @@ export default class AlertsTable extends Component {
       <Cell
         tag="th"
         name="type"
-        sortData={this.props.sortData}
-        onSortChange={this.handleSortChange}
+        sortData={sortData}
+        onSortChange={handleSortChange}
       >
         Type
       </Cell>
@@ -148,8 +136,8 @@ export default class AlertsTable extends Component {
       <Cell
         tag="th"
         name="alert"
-        sortData={this.props.sortData}
-        onSortChange={this.handleSortChange}
+        sortData={sortData}
+        onSortChange={handleSortChange}
       >
         Alert
       </Cell>
@@ -159,8 +147,6 @@ export default class AlertsTable extends Component {
       <Cell
         tag="th"
         name="object"
-        sortData={this.props.sortData}
-        onSortChange={this.handleSortChange}
       >
         Object
       </Cell>
@@ -170,8 +156,8 @@ export default class AlertsTable extends Component {
       <Cell
         tag="th"
         name="when"
-        sortData={this.props.sortData}
-        onSortChange={this.handleSortChange}
+        sortData={sortData}
+        onSortChange={handleSortChange}
       >
         When
       </Cell>
