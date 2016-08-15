@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 
 import { flowRight, includes, union } from 'lodash';
 import { normalizeName } from '../../../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
 import { ORDER_STATES, CUSTOM_ORDER_STATES, ORDER_ACTIONS } from '../../../../constants/orders';
 import { DATE_FORMATS } from '../../../../constants/dates';
+import sort from '../../../../hocomponents/sort';
 
 import OrdersToolbar from './toolbar';
 import OrdersTable from './table';
@@ -19,7 +20,6 @@ import { Control as Button } from 'components/controls';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
-import { sortTable } from '../../../../helpers/table';
 
 const filterOrders = (filter) => (orders) => {
   if (!filter || includes(filter, 'All')) return orders;
@@ -32,7 +32,6 @@ const filterOrders = (filter) => (orders) => {
 };
 
 const filterSearch = (search) => (orders) => findBy(['id', 'workflowstatus'], search, orders);
-const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
 const normalize = (orders) => orders.map(o => {
   if (o.normalizedName) return o;
 
@@ -51,8 +50,7 @@ const collectionSelector = createSelector(
     filterSelector,
     searchSelector,
     sortSelector,
-  ], (orders, filter, search, sortData) => flowRight(
-    sortOrders(sortData),
+  ], (orders, filter, search) => flowRight(
     filterSearch(search),
     filterOrders(filter),
     normalize
@@ -74,7 +72,25 @@ const selector = createSelector(
   })
 );
 
-@connect(selector)
+@compose(
+  connect(selector),
+  sort(
+    'workflow-detail',
+    'collection',
+    {
+      sortBy: 'started',
+      sortByKey: {
+        direction: -1,
+        ignoreCase: true,
+      },
+      historySortBy: 'workflowstatus',
+      historySortyByKey: {
+        direction: 1,
+        ignoreCase: true,
+      },
+    }
+  )
+)
 export default class extends Component {
   static propTypes = {
     collection: PropTypes.array,
@@ -99,6 +115,7 @@ export default class extends Component {
     onDataFilterChange: PropTypes.func,
     setSelectedData: PropTypes.func,
     sortData: PropTypes.object,
+    handleSortChange: PropTypes.func,
     username: PropTypes.string,
     offset: PropTypes.number,
     limit: PropTypes.number,
@@ -208,12 +225,6 @@ export default class extends Component {
     }
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.orders.sort(sortChange)
-    );
-  };
-
   handleModalCloseClick = () => {
     this.context.closeModal(this._modal);
   };
@@ -258,7 +269,7 @@ export default class extends Component {
         collection={this.props.collection}
         setSelectedData={this.props.setSelectedData}
         selectedData={this.props.selectedData}
-        onSortChange={this.handleSortChange}
+        onSortChange={this.props.handleSortChange}
         sortData={this.props.sortData}
         onScheduleClick={this.handleScheduleClick}
         username={this.props.username}

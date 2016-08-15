@@ -16,14 +16,14 @@ export default (
   class WrappedComponent extends React.Component {
     props: {
       changeSort: Function,
+      initSort: Function,
       sortData: Object
     }
 
     componentWillMount() {
       if (defaultSortData) {
-        const { changeSort } = this.props;
-        const { sortBy, sortByKey: { direction, ingoreCase } } = defaultSortData;
-        changeSort(tableName, sortBy, direction, ingoreCase);
+        const { initSort } = this.props;
+        initSort(tableName, defaultSortData);
       }
     }
 
@@ -54,6 +54,7 @@ export default (
   }
   WrappedComponent.propTypes = {
     changeSort: PropTypes.func,
+    initSort: PropTypes.func,
     sortData: PropTypes.object,
     [collectionProp]: PropTypes.array,
   };
@@ -64,7 +65,7 @@ export default (
     state => ({
       sortData: state.ui.sort[tableName],
     }),
-    { changeSort: sort.changeSort }
+    sort
   )(WrappedComponent);
 
   return WrappedComponent;

@@ -14,3 +14,7 @@ export const changeSort = createAction(
   })
 );
 
+export const initSort = createAction(
+  actions.INIT_SORT,
+  (tableName, sortData) => ({ tableName, sortData })
+);

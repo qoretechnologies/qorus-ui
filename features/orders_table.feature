@@ -9,7 +9,7 @@ Feature: Orders table tests
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
     When I click on the "Status" column header
-    Then orders are sorted by "Status" "desc"
+    Then orders are sorted by "Status" "asc"
 
   @no-impl
   Scenario: Order column is clicked but table is sorted by workflow status desc

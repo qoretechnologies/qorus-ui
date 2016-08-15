@@ -58,7 +58,16 @@ const viewSelector = createSelector(
 
 @compose(
   connect(viewSelector),
-  sort('services', 'services')
+  sort(
+    'services',
+    'services',
+    {
+      sortBy: 'type',
+      sortByKey: { ignoreCase: true, direction: 1 },
+      historySortBy: 'name',
+      historySortByKey: { ignoreCase: true, direction: 1 },
+    }
+  )
 )
 export default class Services extends Component {
   static propTypes = {

@@ -18,4 +18,9 @@ handlers[actions.CHANGE_SORT] = (state, { payload: { tableName, ...sortOption } 
   return newState;
 };
 
+handlers[actions.INIT_SORT] = (state, { payload: { tableName, sortData } }) => ({
+  ...state,
+  ...{ [tableName]: sortData },
+});
+
 export default handleActions(handlers, initialState);

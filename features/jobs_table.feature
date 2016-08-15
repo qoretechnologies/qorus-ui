@@ -24,5 +24,5 @@ Feature: jobs table
     When I click on the "Version" column header
     And I click on the "Version" column header
     And I click on the "Name" column header
-    Then jobs are sorted by "Name" "desc"
+    Then jobs are sorted by "Name" "asc"
 

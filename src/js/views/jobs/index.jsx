@@ -60,7 +60,7 @@ const viewSelector = createSelector(
 
 @compose(
   connect(viewSelector),
-  sort('jobs', 'collection')
+  sort('jobs', 'collection', { sortBy: 'name', sortByKey: { direction: 1 } })
 )
 export default class Jobs extends Component {
   static propTypes = {

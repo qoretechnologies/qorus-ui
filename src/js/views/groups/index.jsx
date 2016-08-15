@@ -70,7 +70,16 @@ const viewSelector = createSelector(
 
 @compose(
   connect(viewSelector),
-  sort('groups', 'collection')
+  sort(
+    'groups',
+    'collection',
+    {
+      sortBy: 'enabled',
+      sortByKey: { ignoreCase: true, direction: 1 },
+      historySortBy: 'name',
+      historySortByKey: { ignoreCase: true, direction: 1 },
+    }
+  )
 )
 export default class Workflows extends Component {
   static propTypes = {
