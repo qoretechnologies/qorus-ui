@@ -27,7 +27,7 @@ describe('sync from hocomponents/sync', () => {
 
     mount(<Comp {...{ load, value }} />);
 
-    expect(load).to.have.been.called;
+    expect(load).to.have.been.called();
   });
 
   it('Do not load if loading', () => {
@@ -39,7 +39,7 @@ describe('sync from hocomponents/sync', () => {
 
     mount(<Comp {...{ load, value }} />);
 
-    expect(load).to.not.have.been.called;
+    expect(load).to.not.have.been.called();
   });
 
   it('Do not load if sync', () => {
@@ -51,7 +51,7 @@ describe('sync from hocomponents/sync', () => {
 
     mount(<Comp {...{ load, value }} />);
 
-    expect(load).to.not.have.been.called;
+    expect(load).to.not.have.been.called();
   });
 
   it('Show loader on loading', () => {
