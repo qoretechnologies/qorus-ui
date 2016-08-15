@@ -5,7 +5,7 @@ import moment from 'moment';
 import { DATE_FORMATS } from '../../constants/dates';
 
 type Props = {
-  date: [number, string],
+  date: number | string,
   format?: string,
 }
 
@@ -21,12 +21,4 @@ export default function DateComponent(props: Props): React.Element<any> {
 
 DateComponent.defaultProps = {
   format: DATE_FORMATS.DISPLAY,
-};
-
-DateComponent.propTypes = {
-  date: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  format: React.PropTypes.string,
 };

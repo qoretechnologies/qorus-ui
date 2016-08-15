@@ -47,4 +47,16 @@ module.exports = function systemSteps() {
       name,
     };
   });
+
+  this.When(/^I click the first "([^"]*)" button$/, async function(button) {
+    const el = findElementByText(this.browser, '.btn', ` ${button}`);
+    await this.browser.pressButton(el[0]);
+  });
+
+  this.When(/^I clear the "([^"]*)" cache$/, async function(name) {
+    const row = findTableRow(this.browser, name, 0);
+
+    await this.browser.pressButton(row.cells[3].children[0]);
+  });
+
 };
