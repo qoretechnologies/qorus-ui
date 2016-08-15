@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createSelector } from 'reselect';
-import { defaultProps } from 'recompose';
+import defaultProps from 'recompose/defaultProps';
 import classNames from 'classnames';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
