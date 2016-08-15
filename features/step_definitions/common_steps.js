@@ -14,7 +14,7 @@ const cmpForm = 'form';
  * @return {HTMLTableRowElement}
  */
 function findTableRow(browser, name, cellId) {
-  const cell = cellId || 5;
+  const cell = cellId === undefined ? 5 : cellId;
 
   return browser.
     queryAll(cmpRows).

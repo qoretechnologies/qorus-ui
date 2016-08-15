@@ -13,6 +13,7 @@ import * as groupsActions from './resources/groups/actions';
 import * as logoutActions from './resources/logout/actions';
 import * as alertsActions from './resources/alerts/actions';
 import * as remoteActions from './resources/remotes/actions';
+import * as sqlcacheActions from './resources/sqlcache/actions';
 
 import {
   combineResourceActions,
@@ -142,6 +143,10 @@ Object.keys(logoutActions).forEach(a => {
 
 Object.keys(alertsActions).forEach(a => {
   actions.alerts[a] = alertsActions[a];
+});
+
+Object.keys(sqlcacheActions).forEach(a => {
+  actions.sqlcache[a] = sqlcacheActions[a];
 });
 
 export default actions;

@@ -5,3 +5,4 @@ export * as services from './services/reducers';
 export * as jobs from './jobs/reducers';
 export * as alerts from './alerts/reducers';
 export * as remotes from './remotes/reducers';
+export * as sqlcache from './sqlcache/reducers';

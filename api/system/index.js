@@ -81,5 +81,19 @@ module.exports = () => {
     res.json(item);
   });
 
+  router.put('/sqlcache', (req, res) => {
+    if (req.body.action === 'deleteCache') {
+      if (req.body.name) {
+        delete data.sqlcache[req.body.datasource].tables[req.body.name];
+      } else if (req.body.datasource) {
+        delete data.sqlcache[req.body.datasource];
+      } else {
+        data.sqlcache = {};
+      }
+    }
+
+    res.json(data.sqlcache);
+  });
+
   return router;
 };
