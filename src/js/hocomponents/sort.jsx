@@ -50,7 +50,7 @@ export default (
       const newProps = { ...this.props };
       newProps[collectionProp] = collection;
 
-      return <Component {...newProps} handleSortChange={this.handleSortChange} />;
+      return <Component {...newProps} onSortChange={this.handleSortChange} />;
     }
   }
   WrappedComponent.propTypes = {

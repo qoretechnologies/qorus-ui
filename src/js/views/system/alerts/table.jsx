@@ -15,6 +15,7 @@ import Shorten from '../../../components/shorten';
 import Alerts from '../../../../../types/alerts/react';
 import sort from '../../../hocomponents/sort';
 import actions from '../../../store/api/actions';
+import { sortDefaults } from '../../../constants/sort';
 
 const alertsSelector = state => state.api.alerts;
 const typeSelector = (state, props) => props.params.type;
@@ -51,7 +52,11 @@ const viewSelector = createSelector(
 
 @compose(
   connect(viewSelector),
-  sort('alert', 'collection')
+  sort(
+    'alert',
+    'collection',
+    sortDefaults.alerts
+  ),
 )
 export default class AlertsTable extends Component {
   static propTypes = {
@@ -64,7 +69,7 @@ export default class AlertsTable extends Component {
     children: PropTypes.node,
     location: PropTypes.object,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -113,7 +118,7 @@ export default class AlertsTable extends Component {
    * @see ORDER_STATES
    */
   *renderHeadings() {
-    const { sortData, handleSortChange } = this.props;
+    const { sortData, onSortChange } = this.props;
     yield (
       <Cell
         tag="th"
@@ -126,7 +131,7 @@ export default class AlertsTable extends Component {
         tag="th"
         name="type"
         sortData={sortData}
-        onSortChange={handleSortChange}
+        onSortChange={onSortChange}
       >
         Type
       </Cell>
@@ -137,7 +142,7 @@ export default class AlertsTable extends Component {
         tag="th"
         name="alert"
         sortData={sortData}
-        onSortChange={handleSortChange}
+        onSortChange={onSortChange}
       >
         Alert
       </Cell>
@@ -157,7 +162,7 @@ export default class AlertsTable extends Component {
         tag="th"
         name="when"
         sortData={sortData}
-        onSortChange={handleSortChange}
+        onSortChange={onSortChange}
       >
         When
       </Cell>

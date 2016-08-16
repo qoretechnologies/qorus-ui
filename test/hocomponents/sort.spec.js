@@ -22,7 +22,7 @@ describe('sort from \'hocomponents/sort\'', () => {
     store = createStore(combineReducers({ ui }));
   });
 
-  const FakeComponent = ({ data, handleSortChange }) => {
+  const FakeComponent = ({ data, onSortChange: handleSortChange }) => {
     renderedData = data;
     return (
       <div>
@@ -43,7 +43,7 @@ describe('sort from \'hocomponents/sort\'', () => {
   };
   FakeComponent.propTypes = {
     data: PropTypes.array,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
   };
 
   it('without sort', () => {

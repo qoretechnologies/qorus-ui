@@ -9,6 +9,7 @@ import compose from 'recompose/compose';
 import { goTo } from '../../helpers/router';
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
+import { sortDefaults } from '../../constants/sort';
 // data
 import actions from '../../store/api/actions';
 
@@ -133,12 +134,7 @@ const viewSelector = createSelector(
   sort(
     'workflows',
     'workflows',
-    {
-      sortBy: 'name',
-      sortByKey: { ignoreCase: true, direction: 1 },
-      historySortBy: 'version',
-      historySortByKey: { ignoreCase: true, direction: -1 },
-    }
+    sortDefaults.workflows
   )
 )
 export default class Workflows extends Component {
@@ -153,7 +149,7 @@ export default class Workflows extends Component {
     systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
@@ -364,7 +360,7 @@ export default class Workflows extends Component {
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedWorkflows={this.props.setSelectedData}
           selectedWorkflows={this.props.selectedData}
-          onSortChange={this.props.handleSortChange}
+          onSortChange={this.props.onSortChange}
           sortData={this.props.sortData}
           linkDate={this.getDate()}
         />

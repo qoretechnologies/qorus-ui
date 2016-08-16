@@ -20,6 +20,7 @@ import { Control as Button } from 'components/controls';
 
 import { findBy } from '../../../../helpers/search';
 import { formatDate } from '../../../../helpers/workflows';
+import { sortDefaults } from '../../../../constants/sort';
 
 const filterOrders = (filter) => (orders) => {
   if (!filter || includes(filter, 'All')) return orders;
@@ -77,18 +78,7 @@ const selector = createSelector(
   sort(
     'workflow-detail',
     'collection',
-    {
-      sortBy: 'started',
-      sortByKey: {
-        direction: -1,
-        ignoreCase: true,
-      },
-      historySortBy: 'workflowstatus',
-      historySortyByKey: {
-        direction: 1,
-        ignoreCase: true,
-      },
-    }
+    sortDefaults.orders
   )
 )
 export default class extends Component {
@@ -115,7 +105,7 @@ export default class extends Component {
     onDataFilterChange: PropTypes.func,
     setSelectedData: PropTypes.func,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
     username: PropTypes.string,
     offset: PropTypes.number,
     limit: PropTypes.number,
@@ -269,7 +259,7 @@ export default class extends Component {
         collection={this.props.collection}
         setSelectedData={this.props.setSelectedData}
         selectedData={this.props.selectedData}
-        onSortChange={this.props.handleSortChange}
+        onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
         onScheduleClick={this.handleScheduleClick}
         username={this.props.username}

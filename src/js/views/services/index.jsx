@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
+import { sortDefaults } from '../../constants/sort';
 
 // data
 import actions from 'store/api/actions';
@@ -61,12 +62,7 @@ const viewSelector = createSelector(
   sort(
     'services',
     'services',
-    {
-      sortBy: 'type',
-      sortByKey: { ignoreCase: true, direction: 1 },
-      historySortBy: 'name',
-      historySortByKey: { ignoreCase: true, direction: 1 },
-    }
+    sortDefaults.services
   )
 )
 export default class Services extends Component {
@@ -97,7 +93,7 @@ export default class Services extends Component {
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
   };
 
   static contextTypes = {
@@ -203,7 +199,7 @@ export default class Services extends Component {
           activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedData={this.props.setSelectedData}
           selectedData={this.props.selectedData}
-          onSortChange={this.props.handleSortChange}
+          onSortChange={this.props.onSortChange}
           sortData={this.props.sortData}
           collection={services}
           activeRowId={parseInt(this.props.params.detailId, 10)}

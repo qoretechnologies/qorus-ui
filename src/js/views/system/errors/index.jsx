@@ -12,6 +12,7 @@ import patch from '../../../hocomponents/patchFuncArgs';
 import sort from '../../../hocomponents/sort';
 import sync from '../../../hocomponents/sync';
 import apiActions from '../../../store/api/actions';
+import { sortDefaults } from '../../../constants/sort';
 
 const errorsMetaSelector = (state: Object): Object => {
   if (state.api.errors.global) {
@@ -55,18 +56,7 @@ const viewSelector = createSelector(
   sort(
     'errors',
     'collection',
-    {
-      sortBy: 'error',
-      sortByKey: {
-        direction: -1,
-        ignoreCase: true,
-      },
-      historySortBy: 'description',
-      historySortByKey: {
-        direction: 1,
-        ignoreCase: true,
-      },
-    }
+    sortDefaults.errors
   ),
   sync('meta')
 )
@@ -74,13 +64,13 @@ export default class Errors extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
   };
 
   props: {
     collection: Array<Object>,
     sortData: Object,
-    handleSortChange: Function,
+    onSortChange: Function,
   }
 
   componentWillMount() {
@@ -102,13 +92,13 @@ export default class Errors extends Component {
    * @see ORDER_STATES
    */
   *renderHeadings(): Generator<*, *, *> {
-    const { sortData, handleSortChange } = this.props;
+    const { sortData, onSortChange } = this.props;
     yield (
       <Cell
         tag="th"
         className="name"
         name="error"
-        {...{ sortData, onSortChange: handleSortChange }}
+        {...{ sortData, onSortChange }}
       >
         Error
       </Cell>
@@ -126,7 +116,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="description"
-        {...{ sortData, onSortChange: handleSortChange }}
+        {...{ sortData, onSortChange }}
       >
         Description
       </Cell>
@@ -136,7 +126,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="business_flag"
-        {...{ sortData, onSortChange: handleSortChange }}
+        {...{ sortData, onSortChange }}
       >
         Business
       </Cell>
@@ -146,7 +136,7 @@ export default class Errors extends Component {
       <Cell
         tag="th"
         name="retry_flag"
-        {...{ sortData, onSortChange: handleSortChange }}
+        {...{ sortData, onSortChange }}
       >
         Retry
       </Cell>

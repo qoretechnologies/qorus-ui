@@ -15,4 +15,4 @@ Feature: Check errors page
     Given I am on "system/errors" page
     And "errors" get loaded
     When I click on the "Business" column header
-    Then errors are sorted by "Business" "asc" and "Error" "desc"
+    Then errors are sorted by "Business" "desc" and "Error" "desc"

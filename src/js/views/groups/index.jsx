@@ -4,8 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
-import { setTitle } from '../../helpers/document';
 import compose from 'recompose/compose';
+
+import { setTitle } from '../../helpers/document';
+import { sortDefaults } from '../../constants/sort';
 
 // data
 import actions from 'store/api/actions';
@@ -73,12 +75,7 @@ const viewSelector = createSelector(
   sort(
     'groups',
     'collection',
-    {
-      sortBy: 'enabled',
-      sortByKey: { ignoreCase: true, direction: 1 },
-      historySortBy: 'name',
-      historySortByKey: { ignoreCase: true, direction: 1 },
-    }
+    sortDefaults.groups
   )
 )
 export default class Workflows extends Component {
@@ -89,7 +86,7 @@ export default class Workflows extends Component {
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
     params: PropTypes.object,
     route: PropTypes.object,
     location: PropTypes.object,
@@ -267,7 +264,7 @@ export default class Workflows extends Component {
             onDataFilterChange={this.props.onDataFilterChange}
             setSelectedData={this.props.setSelectedData}
             selectedData={this.props.selectedData}
-            onSortChange={this.props.handleSortChange}
+            onSortChange={this.props.onSortChange}
             sortData={this.props.sortData}
             collection={this.props.collection}
           />

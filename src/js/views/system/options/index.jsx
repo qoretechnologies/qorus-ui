@@ -3,8 +3,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
-import sync from '../../../hocomponents/sync';
 import { compose } from 'redux';
+import sync from '../../../hocomponents/sync';
+import { sortDefaults } from '../../../constants/sort';
 
 import actions from 'store/api/actions';
 
@@ -58,7 +59,7 @@ class Options extends Component {
     location: PropTypes.object,
     route: PropTypes.object,
     sortData: PropTypes.object,
-    handleSortChange: PropTypes.func,
+    onSortChange: PropTypes.func,
     user: PropTypes.object,
     setOption: PropTypes.func,
   };
@@ -117,7 +118,7 @@ class Options extends Component {
   };
 
   *renderHeaders() {
-    const { sortData, handleSortChange } = this.props;
+    const { sortData, onSortChange: handleSortChange } = this.props;
 
     yield (
       <Cell
@@ -303,6 +304,6 @@ export default compose(
       load: actions.systemOptions.fetch,
     }
   ),
-  sort('options', 'collection'),
+  sort('options', 'collection', sortDefaults.options),
   sync('options'),
 )(Options);
