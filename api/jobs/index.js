@@ -55,6 +55,11 @@ module.exports = () => {
     res.json(result);
   });
 
+  router.get('/:id', (req, res) => {
+    const item = data.find(findJob('jobid').bind(null, req.params.id));
+    res.json(item);
+  });
+
   router.put('/:id', (req, res) => {
     const item = data.find(findJob('jobid').bind(null, req.params.id));
 
