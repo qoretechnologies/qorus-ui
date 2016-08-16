@@ -59,7 +59,12 @@ const viewSelector = createSelector(
       sortBy: 'error',
       sortByKey: {
         direction: -1,
-        ignoreKeys: true,
+        ignoreCase: true,
+      },
+      historySortBy: 'description',
+      historySortByKey: {
+        direction: 1,
+        ignoreCase: true
       },
     }
   ),
