@@ -121,7 +121,17 @@ describe('sort from \'hocomponents/sort\'', () => {
   });
 
   it('change sort b field desc', () => {
-    const Component = sort('error', 'data')(FakeComponent);
+    const Component = sort(
+      'error',
+      'data',
+      {
+        sortBy: 'b',
+        sortByKey: {
+          direction: 1,
+          ignoreCase: true,
+        },
+      }
+    )(FakeComponent);
 
     const wrapper = mount(
       <Provider store={store}>
@@ -135,9 +145,9 @@ describe('sort from \'hocomponents/sort\'', () => {
       renderedData
     ).to.deep.equal(
       [
-        { a: 2, b: 'a' },
-        { a: 3, b: 'b' },
         { a: 1, b: 'c' },
+        { a: 3, b: 'b' },
+        { a: 2, b: 'a' },
       ]
     );
   });
@@ -148,7 +158,9 @@ describe('sort from \'hocomponents/sort\'', () => {
       'data',
       {
         sortBy: 'b',
-        sortByKey: { direction: -1 },
+        sortByKey: {
+          direction: -1,
+        },
       }
     )(FakeComponent);
 
@@ -167,9 +179,9 @@ describe('sort from \'hocomponents/sort\'', () => {
     wrapper.find('.first-field').simulate('click');
 
     expect(renderedData).to.deep.equal([
+      { a: 2, b: 'c' },
       { a: 1, b: 'b' },
       { a: 1, b: 'a' },
-      { a: 2, b: 'c' },
     ]);
   });
 });

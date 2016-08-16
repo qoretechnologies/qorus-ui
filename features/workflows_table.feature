@@ -24,5 +24,5 @@ Feature: Workflows table
     When I click on the "ID" column header
     And I click on the "ID" column header
     And I click on the "Name" column header
-    Then workflows are sorted by "Name" "asc"
+    Then workflows are sorted by "Name" "desc"
 

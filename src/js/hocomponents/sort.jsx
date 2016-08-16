@@ -30,7 +30,8 @@ export default (
     handleSortChange = ({ sortBy }: { sortBy: string }) => {
       const { changeSort, sortData } = this.props;
       if (!sortData || sortData.sortBy !== sortBy) {
-        changeSort(tableName, sortBy, 1);
+        const { sortByKey: { direction } } = sortData;
+        changeSort(tableName, sortBy, direction);
       } else {
         const { sortByKey: { direction, ignoreCase } } = sortData;
 
