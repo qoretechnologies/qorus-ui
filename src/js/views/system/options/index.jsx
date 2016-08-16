@@ -3,16 +3,16 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
-import sync from '../../../hocomponents/sync';
 import { compose } from 'redux';
+import sync from '../../../hocomponents/sync';
+import { sortDefaults } from '../../../constants/sort';
 
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
 
-import { sortTable } from '../../../helpers/table';
 import { findBy } from '../../../helpers/search';
 import { goTo } from '../../../helpers/router';
 import { hasPermission } from '../../../helpers/user';
+import sort from '../../../hocomponents/sort';
 
 import Badge from '../../../components/badge';
 import Table, { Section, Row, Cell } from '../../../components/table';
@@ -21,23 +21,19 @@ import Search from '../../../components/search';
 import OptionModal from './modal';
 import { Control } from '../../../components/controls';
 
-const sortOptions = sortData => collection => sortTable(collection, sortData);
 const filterOptions = search => collection => (
   findBy(['name', 'default', 'expects', 'value', 'description'], search, collection)
 );
 
 const optionsSelector = state => state.api.systemOptions;
-const sortSelector = state => state.ui.options;
 const searchSelector = (state, props) => props.location.query.q;
 const userSelector = state => state.api.currentUser;
 
 const collectionSelector = createSelector(
   [
     optionsSelector,
-    sortSelector,
     searchSelector,
-  ], (options, sortData, search) => flowRight(
-    sortOptions(sortData),
+  ], (options, search) => flowRight(
     filterOptions(search)
   )(options.data)
 );
@@ -46,13 +42,11 @@ const viewSelector = createSelector(
   [
     optionsSelector,
     collectionSelector,
-    sortSelector,
     userSelector,
   ],
-  (options, collection, sortData, user) => ({
+  (options, collection, user) => ({
     collection,
     options,
-    sortData,
     user,
   })
 );
@@ -65,8 +59,8 @@ class Options extends Component {
     location: PropTypes.object,
     route: PropTypes.object,
     sortData: PropTypes.object,
+    onSortChange: PropTypes.func,
     user: PropTypes.object,
-    sort: PropTypes.func,
     setOption: PropTypes.func,
   };
 
@@ -106,10 +100,6 @@ class Options extends Component {
     );
   };
 
-  handleSortChange = (sortChange) => {
-    this.props.sort(sortChange);
-  };
-
   handleEditClick = (model) => () => {
     this._modal = (
       <OptionModal
@@ -128,14 +118,14 @@ class Options extends Component {
   };
 
   *renderHeaders() {
-    const { sortData } = this.props;
+    const { sortData, onSortChange: handleSortChange } = this.props;
 
     yield (
       <Cell
         tag="th"
         name="status"
         sortData={sortData}
-        onSortChange={this.handleSortChange}
+        onSortChange={handleSortChange}
       >
         Status
       </Cell>
@@ -146,7 +136,7 @@ class Options extends Component {
         tag="th"
         name="name"
         sortData={sortData}
-        onSortChange={this.handleSortChange}
+        onSortChange={handleSortChange}
       >
         Name
       </Cell>
@@ -165,7 +155,7 @@ class Options extends Component {
         tag="th"
         name="default"
         sortData={sortData}
-        onSortChange={this.handleSortChange}
+        onSortChange={handleSortChange}
       >
         Default Value
       </Cell>
@@ -176,7 +166,7 @@ class Options extends Component {
         tag="th"
         name="value"
         sortData={sortData}
-        onSortChange={this.handleSortChange}
+        onSortChange={handleSortChange}
       >
         Current Value
       </Cell>
@@ -312,8 +302,8 @@ export default compose(
     {
       setOption: actions.systemOptions.setOption,
       load: actions.systemOptions.fetch,
-      sort: ui.options.sort,
     }
   ),
+  sort('options', 'collection', sortDefaults.options),
   sync('options'),
 )(Options);

@@ -1,18 +1,20 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
-
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
+import defaultProps from 'recompose/defaultProps';
 
-import Table, { Section, Row, Cell } from 'components/table';
-import Loader from 'components/loader';
-import Shorten from 'components/shorten';
-import AutoComponent from 'components/autocomponent';
+import Table, { Section, Row, Cell } from '../../../components/table';
+import Shorten from '../../../components/shorten';
+import AutoComponent from '../../../components/autocomponent';
+import patch from '../../../hocomponents/patchFuncArgs';
+import sort from '../../../hocomponents/sort';
+import sync from '../../../hocomponents/sync';
+import apiActions from '../../../store/api/actions';
+import { sortDefaults } from '../../../constants/sort';
 
-// import Error from '../../../../../types/error/react';
-
-import actions from 'store/api/actions';
-
-const errorsMetaSelector = (state) => {
+const errorsMetaSelector = (state: Object): Object => {
   if (state.api.errors.global) {
     return {
       sync: state.api.errors.global.sync,
@@ -23,16 +25,13 @@ const errorsMetaSelector = (state) => {
   return { sync: false, loading: false };
 };
 
-const errorsSelector = (state) => {
+const errorsSelector = (state: Object): Array<Object> => {
+  const col = [];
   if (state.api.errors.global) {
-    const col = [];
-
     Object.keys(state.api.errors.global.data)
       .forEach((key) => col.push(state.api.errors.global.data[key]));
-
-    return col;
   }
-  return [];
+  return col;
 };
 
 const viewSelector = createSelector(
@@ -40,30 +39,51 @@ const viewSelector = createSelector(
     errorsSelector,
     errorsMetaSelector,
   ],
-  (errors, meta) => ({
-    collection: errors,
-    sync: meta.sync,
-    loading: meta.loading,
-  })
+  (collection: Array<Object>, meta: Object): Object => ({ meta, collection })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(
+    viewSelector,
+    {
+      load: apiActions.errors.fetch,
+    }
+  ),
+  defaultProps({
+    errorType: 'global',
+  }),
+  patch('load', ['errorType']),
+  sort(
+    'errors',
+    'collection',
+    sortDefaults.errors
+  ),
+  sync('meta')
+)
 export default class Errors extends Component {
   static propTypes = {
-    sync: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired,
     collection: PropTypes.array.isRequired,
-    dispatch: PropTypes.func,
+    sortData: PropTypes.object,
+    onSortChange: PropTypes.func,
   };
 
-  componentWillMount() {
-    this.props.dispatch(actions.errors.fetch('global'));
-
-    this._renderHeadingRow = ::this.renderHeadingRow;
-    this._renderRows = ::this.renderRows;
-    this._renderCells = ::this.renderCells;
-    this._renderHeadings = ::this.renderHeadings;
+  props: {
+    collection: Array<Object>,
+    sortData: Object,
+    onSortChange: Function,
   }
+
+  componentWillMount() {
+    this._renderHeadingRow = this.renderHeadingRow.bind(this);
+    this._renderRows = this.renderRows.bind(this);
+    this._renderCells = this.renderCells.bind(this);
+    this._renderHeadings = this.renderHeadings.bind(this);
+  }
+
+  _renderHeadingRow:? Function = null;
+  _renderRows:? Function = null;
+  _renderCells:? Function = null;
+  _renderHeadings:? Function = null;
 
   /**
    * Yields heading cells for model info.
@@ -71,9 +91,15 @@ export default class Errors extends Component {
    * @return {Generator<ReactElement>}
    * @see ORDER_STATES
    */
-  *renderHeadings() {
+  *renderHeadings(): Generator<*, *, *> {
+    const { sortData, onSortChange } = this.props;
     yield (
-      <Cell tag="th" className="name">
+      <Cell
+        tag="th"
+        className="name"
+        name="error"
+        {...{ sortData, onSortChange }}
+      >
         Error
       </Cell>
     );
@@ -87,15 +113,33 @@ export default class Errors extends Component {
     );
 
     yield (
-      <Cell tag="th">Description</Cell>
+      <Cell
+        tag="th"
+        name="description"
+        {...{ sortData, onSortChange }}
+      >
+        Description
+      </Cell>
     );
 
     yield (
-      <Cell tag="th">Business</Cell>
+      <Cell
+        tag="th"
+        name="business_flag"
+        {...{ sortData, onSortChange }}
+      >
+        Business
+      </Cell>
     );
 
     yield (
-      <Cell tag="th">Retry</Cell>
+      <Cell
+        tag="th"
+        name="retry_flag"
+        {...{ sortData, onSortChange }}
+      >
+        Retry
+      </Cell>
     );
 
     yield (
@@ -110,7 +154,7 @@ export default class Errors extends Component {
    * @param {String} selected
    * @return {Generator<ReactElement>}
    */
-  *renderCells(model) {
+  *renderCells(model: Object): Generator<*, *, *> {
     yield (
       <Cell className="name nowrap">
         { model.error }
@@ -152,7 +196,7 @@ export default class Errors extends Component {
    * @return {Generator<ReactElement>}
    * @see renderHeadings
    */
-  *renderHeadingRow() {
+  *renderHeadingRow(): Generator<*, *, *> {
     yield (
       <Row cells={this._renderHeadings} />
     );
@@ -171,7 +215,7 @@ export default class Errors extends Component {
    * @see activateRow
    * @see renderCells
    */
-  *renderRows(collection) {
+  *renderRows(collection: Array<Object>): Generator<*, *, *> {
     for (const model of collection) {
       yield (
         <Row
@@ -184,10 +228,6 @@ export default class Errors extends Component {
   }
 
   render() {
-    if (!this.props.sync || this.props.loading) {
-      return <Loader />;
-    }
-
     return (
       <Table
         data={ this.props.collection }

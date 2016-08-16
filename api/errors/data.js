@@ -11,4 +11,4 @@
 /**
  * @return {!Array}
  */
-module.exports = () => [];
+module.exports = () => require('../data').getData('errors');

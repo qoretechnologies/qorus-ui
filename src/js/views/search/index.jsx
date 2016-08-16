@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 
 import { flowRight, isEqual } from 'lodash';
 import { normalizeName } from '../../store/api/resources/utils';
 
 import actions from 'store/api/actions';
-import * as ui from 'store/ui/actions';
 
 import SearchToolbar from './toolbar';
 import OrdersTable from '../workflow/tabs/list/table';
@@ -14,10 +14,9 @@ import Loader from '../../components/loader';
 import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import { Control as Button } from 'components/controls';
 
-import { sortTable } from '../../helpers/table';
 import { goTo } from '../../helpers/router';
+import sort from '../../hocomponents/sort';
 
-const sortOrders = (sortData) => (orders) => sortTable(orders, sortData);
 const normalize = (orders) => orders.map(o => {
   if (o.normalizedName) return o;
 
@@ -25,15 +24,12 @@ const normalize = (orders) => orders.map(o => {
 });
 
 const orderSelector = state => state.api.orders;
-const sortSelector = state => state.ui.orders;
 const userSelector = state => state.api.currentUser.data.username;
 
 const collectionSelector = createSelector(
   [
     orderSelector,
-    sortSelector,
-  ], (orders, sortData) => flowRight(
-    sortOrders(sortData),
+  ], (orders) => flowRight(
     normalize
   )(orders.data)
 );
@@ -42,18 +38,19 @@ const selector = createSelector(
   [
     orderSelector,
     collectionSelector,
-    sortSelector,
     userSelector,
-  ], (ordersData, collection, sortData, username) => ({
+  ], (ordersData, collection, username) => ({
     sync: ordersData.sync,
     loading: ordersData.loading,
     collection,
-    sortData,
     username,
   })
 );
 
-@connect(selector)
+@compose(
+  connect(selector),
+  sort('orders', 'collection')
+)
 export default class SearchView extends Component {
   static propTypes = {
     collection: PropTypes.array,
@@ -78,6 +75,7 @@ export default class SearchView extends Component {
     onDataFilterChange: PropTypes.func,
     setSelectedData: PropTypes.func,
     sortData: PropTypes.object,
+    onSortChange: PropTypes.func,
     username: PropTypes.string,
     offset: PropTypes.number,
     limit: PropTypes.number,
@@ -173,12 +171,6 @@ export default class SearchView extends Component {
     }
   }
 
-  handleSortChange = (sortChange) => {
-    this.props.dispatch(
-      ui.orders.sort(sortChange)
-    );
-  };
-
   handleModalCloseClick = () => {
     this.context.closeModal(this._modal);
   };
@@ -239,7 +231,7 @@ export default class SearchView extends Component {
         collection={this.props.collection}
         setSelectedData={this.props.setSelectedData}
         selectedData={this.props.selectedData}
-        onSortChange={this.handleSortChange}
+        onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
         onScheduleClick={this.handleScheduleClick}
         username={this.props.username}

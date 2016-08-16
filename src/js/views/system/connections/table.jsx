@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createSelector } from 'reselect';
-import { defaultProps } from 'recompose';
+import defaultProps from 'recompose/defaultProps';
 import classNames from 'classnames';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
@@ -65,11 +65,13 @@ class Connections extends Component {
   };
 
   componentWillMount() {
+    this._renderHeadings = this.renderHeadings.bind(this);
     this._renderHeadingRow = this.renderHeadingRow.bind(this);
     this._renderRows = this.renderRows.bind(this);
     this._renderCells = this.renderCells.bind(this);
   }
 
+  _renderHeadings: ?Function = null;
   _renderHeadingRow: ?Function = null;
   _renderRows: ?Function = null;
   _renderCells: ?Function = null;
@@ -174,7 +176,7 @@ class Connections extends Component {
 
   *renderHeadingRow(): Generator<*, *, *> {
     yield (
-      <Row cells={this.renderHeadings.bind(this)} />
+      <Row cells={this._renderHeadings} />
     );
   }
 
