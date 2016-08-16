@@ -64,7 +64,7 @@ const viewSelector = createSelector(
       historySortBy: 'description',
       historySortByKey: {
         direction: 1,
-        ignoreCase: true
+        ignoreCase: true,
       },
     }
   ),
