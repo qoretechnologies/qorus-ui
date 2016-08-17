@@ -83,7 +83,7 @@ const fetchLibSources = {
     return Object.assign({}, state, {
       data: updateItemWithId(
         action.meta.modelId,
-        action.payload,
+        { ...action.payload, loading: false, sync: true },
         state.data
       ),
     });
