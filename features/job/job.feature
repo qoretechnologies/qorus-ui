@@ -1,6 +1,5 @@
 Feature: Job page test
 
-  @wip
   Scenario: Load page
     Given I am on "job/110" page
     Then I see ".job-page" item

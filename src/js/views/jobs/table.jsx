@@ -1,12 +1,13 @@
 import React from 'react';
-import ServiceTable from '../services/table';
+import { Link } from 'react-router';
 
+
+import ServiceTable from '../services/table';
 import { Cell } from '../../components/table';
 import Badge from '../../components/badge';
 import JobControls from './controls';
 import DateComponent from '../../components/date';
 import Checkbox from '../../components/checkbox';
-
 import { goTo } from '../../helpers/router';
 
 /**
@@ -185,7 +186,9 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell className="name">{model.name}</Cell>
+      <Cell className="name">
+        <Link to={`/job/${model.jobid}`}>{model.name}</Link>
+      </Cell>
     );
 
     yield (
