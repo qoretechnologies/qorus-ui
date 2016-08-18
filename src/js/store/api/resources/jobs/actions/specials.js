@@ -52,13 +52,28 @@ const fetchLibSources = createAction(
 );
 
 
-const fetchResultsPayload = baseUrl => model => fetchJson('GET', `${baseUrl}/${model.id}/results`);
-const fetchResultsMeta = ({ id: modelId }) => ({ modelId });
-
-const fetchResults = createAction(
+const fetchResultsPayload = baseUrl => (model, offset = 0, limit = 50) => fetchJson(
+  'GET', `${baseUrl}/${model.id}/results?offset=${offset}&limit=${limit}`
+);
+const fetchResultsMeta = ({ id: modelId }, offset = 0, limit = 50) => (
+  { modelId, offset, limit }
+);
+const fetchResultsCall = createAction(
   'JOBS_FETCHRESULTS',
   fetchResultsPayload(jobsUrl),
   fetchResultsMeta
 );
 
-export { setOptions, fetchLibSources, fetchResults };
+const startFetchingResults = createAction(
+  'JOBS_STARTFETCHINGRESULTS',
+  () => ({}),
+  ({ id: modelId }) => ({ modelId })
+);
+
+
+const fetchResults = (model, offset, limit) => dispatch => {
+  dispatch(startFetchingResults(model));
+  dispatch(fetchResultsCall(model, offset, limit));
+};
+
+export { setOptions, fetchLibSources, fetchResults, startFetchingResults };

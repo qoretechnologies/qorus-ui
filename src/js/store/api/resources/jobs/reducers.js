@@ -97,7 +97,7 @@ const fetchLibSources = {
   },
 };
 
-const fetchResults = {
+const startFetchingResults = {
   next(state, action) {
     const { modelId } = action.meta;
     const job = state.data.find(item => item.id === modelId);
@@ -105,18 +105,44 @@ const fetchResults = {
       return state;
     }
 
-    job.results = {
-      loading: false,
-      sync: true,
-      data: action.payload,
-      hasMore: false,
-    };
+    const { results = {} } = job;
+    results.loading = true;
+    const newJob = { ...job, results };
 
-    return Object.assign(
-      {},
-      state,
-      { data: updateItemWithId(modelId, job, state.data) }
-    );
+    return {
+      ...state,
+      ...{ data: updateItemWithId(modelId, newJob, state.data) },
+    };
+  },
+  throw(state) { return state; },
+};
+
+const fetchResults = {
+  next(state, action) {
+    const { modelId, offset, limit } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    if (!action.payload || action.payload.length === 0) {
+      job.results = { ...job.results, loading: false, hasMore: false };
+    } else {
+      const { results: { data: resultsData = [] } = {} } = job;
+      job.results = {
+        offset,
+        limit,
+        loading: false,
+        sync: true,
+        data: [...resultsData, ...action.payload],
+        hasMore: true,
+      };
+    }
+
+    return {
+      ...state,
+      ...{ data: updateItemWithId(modelId, job, state.data) },
+    };
   },
   throw(state) {
     return state;
@@ -128,4 +154,5 @@ export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
   fetchResults as FETCHRESULTS,
+  startFetchingResults as STARTFETCHINGRESULTS,
 };

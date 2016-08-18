@@ -101,6 +101,11 @@ module.exports = function commonSteps() {
     this.browser.assert.elements(`form.${name}`, { atLeast: 1 });
   });
 
+  this.Then(/^I see "([^"]*)" table rows$/, async function(rowCount) {
+    await this.waitForChange(1000);
+    this.browser.assert.elements(`${cmpTable} tbody tr`, { atLeast: parseInt(rowCount, 10) });
+  });
+
   this.When(/^"([^"]*)" get loaded$/, function(name) {
     return this.waitForElement(cmpTable);
   });
@@ -324,6 +329,11 @@ module.exports = function commonSteps() {
   this.Then(/^I see "([^"]*)" item$/, async function(selector) {
     await this.waitForElement(selector);
     this.browser.assert.element(selector);
+  });
+
+  this.Then(/^I do not see "([^"]*)" item$/, async function(selector) {
+    await this.waitForChange(1000);
+    this.browser.assert.element(selector, { equals: 0 });
   });
 
   this.Then(/^"([^"]*)" exists in localStorage$/, function(itemName) {

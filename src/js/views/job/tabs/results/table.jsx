@@ -7,7 +7,7 @@ import mapProps from 'recompose/mapProps';
 import Date from '../../../../components/date';
 import Label from '../../../../components/label';
 import Table, { Section, Row, Th, Td } from '../../../../components/table';
-import showIfLoaded from '../../../../hocomponents/show-if-loaded';
+import showIfPassed from '../../../../hocomponents/show-if-passed';
 
 function getStyleByStatus(status: string): string {
   return {
@@ -58,6 +58,6 @@ const ResultTable = ({ data = [] }: { data: Array<Object> }) => (
 );
 
 export default compose(
-  showIfLoaded('results'),
+  showIfPassed(({ results }) => results && results.data && results.data.length > 0),
   mapProps(props => ({ ...props, data: props.results.data }))
 )(ResultTable);
