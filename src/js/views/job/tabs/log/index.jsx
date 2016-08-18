@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import Log from '../../../components/log';
+import Log from '../../../../components/log';
 
 const JobLog = ({ job }: { job: Object }) => (
   <div className="job-log">

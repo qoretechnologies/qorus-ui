@@ -3,6 +3,7 @@
 /**
  * @module api/jobs
  */
+import getJobData, { jobResults } from './data';
 
 const findJob = (id, s) => s.jobid === parseInt(id, 10);
 const config = require('../config');
@@ -11,7 +12,8 @@ const rest = require('../rest');
 const moment = require('moment');
 
 module.exports = () => {
-  const data = require('./data')();
+  const data = getJobData();
+  const jobResultsData = jobResults();
 
   const router = new express.Router();
   router.use(rest(data, findJob));
@@ -58,6 +60,16 @@ module.exports = () => {
   router.get('/:id', (req, res) => {
     const item = data.find(findJob('jobid').bind(null, req.params.id));
     res.json(item);
+  });
+
+  router.get('/:id/results', (req, res) => {
+    let results = jobResultsData[0];
+    let { offset = '0', limit = '10' } = req.query;
+    offset = parseInt(offset, 10);
+    limit = parseInt(limit, 10);
+
+    results = results.slice(offset, offset + limit);
+    res.json(results);
   });
 
   router.put('/:id', (req, res) => {

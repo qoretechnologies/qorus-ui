@@ -10,8 +10,8 @@ import patch from '../../hocomponents/patchFuncArgs';
 import actions from '../../store/api/actions';
 import JobHeader from './header';
 import JobDescription from './description';
-import JobLog from './tabs/log';
-import JobResults from './tabs/results';
+import JobLog from './tabs/log/index';
+import JobResults from './tabs/results/index';
 
 const jobSelector = (state, props) => {
   const { api: { jobs: { data } } } = state;
@@ -65,6 +65,8 @@ const JobPage = ({
     </div>
   </div>
 );
+
+export { JobLog, JobResults };
 
 export default compose(
   connect(

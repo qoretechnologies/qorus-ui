@@ -52,4 +52,13 @@ const fetchLibSources = createAction(
 );
 
 
-export { setOptions, fetchLibSources };
+const fetchResultsPayload = baseUrl => model => fetchJson('GET', `${baseUrl}/${model.id}/results`);
+const fetchResultsMeta = ({ id: modelId }) => ({ modelId });
+
+const fetchResults = createAction(
+  'JOBS_FETCHRESULTS',
+  fetchResultsPayload(jobsUrl),
+  fetchResultsMeta
+);
+
+export { setOptions, fetchLibSources, fetchResults };

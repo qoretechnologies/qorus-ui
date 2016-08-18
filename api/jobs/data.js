@@ -12,4 +12,5 @@
 /**
  * @return {!Array<!module:types.Workflow>}
  */
-module.exports = () => require('../data').getData('jobs');
+export default () => require('../data').getData('jobs');
+export const jobResults = () => require('../data').getData('job_results');

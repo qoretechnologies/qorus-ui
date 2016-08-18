@@ -97,8 +97,35 @@ const fetchLibSources = {
   },
 };
 
+const fetchResults = {
+  next(state, action) {
+    const { modelId } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    job.results = {
+      loading: false,
+      sync: true,
+      data: action.payload,
+      hasMore: false,
+    };
+
+    return Object.assign(
+      {},
+      state,
+      { data: updateItemWithId(modelId, job, state.data) }
+    );
+  },
+  throw(state) {
+    return state;
+  },
+};
+
 
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
+  fetchResults as FETCHRESULTS,
 };
