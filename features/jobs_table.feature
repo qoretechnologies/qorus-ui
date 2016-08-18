@@ -26,8 +26,9 @@ Feature: jobs table
     And I click on the "Name" column header
     Then jobs are sorted by "Name" "desc"
 
+  @wip
   Scenario: Go to job detail page
     Given I am on "jobs" listing
     And "jobs" get loaded
     When I click on the "jobtest" link - "3"
-    Then the URL changes to "/job/110"
+    Then the URL changes to "/job/110/results"
