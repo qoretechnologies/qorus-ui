@@ -7,3 +7,4 @@ export function statusHealth(health) {
     warning: health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
   });
 }
+

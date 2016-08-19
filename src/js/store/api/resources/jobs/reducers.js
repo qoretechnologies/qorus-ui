@@ -113,7 +113,7 @@ const startFetchingResults = {
 
     return {
       ...state,
-      ...{ data: updateItemWithId(modelId, newJob, state.data) },
+      data: updateItemWithId(modelId, newJob, state.data),
     };
   },
   throw(state) { return state; },
@@ -127,24 +127,41 @@ const fetchResults = {
       return state;
     }
 
-    if (!action.payload || action.payload.length === 0) {
-      job.results = { ...job.results, loading: false, hasMore: false };
-    } else {
-      const { results: { data: resultsData = [] } = {} } = job;
-      job.results = {
-        offset,
-        limit,
-        loading: false,
-        sync: true,
-        data: _.uniqBy([...resultsData, ...action.payload], item => item.job_instanceid),
-        hasMore: true,
-      };
-    }
+    const { results: { data: resultsData = [] } = {} } = job;
+    job.results = {
+      offset,
+      limit,
+      loading: false,
+      sync: true,
+      data: _.uniqBy([...resultsData, ...action.payload], item => item.job_instanceid),
+      hasMore: action.payload && action.payload.length === limit,
+    };
 
     return {
       ...state,
-      ...{ data: updateItemWithId(modelId, job, state.data) },
+      data: updateItemWithId(modelId, job, state.data),
     };
+  },
+  throw(state) {
+    return state;
+  },
+};
+
+const clearResults = {
+  next(state, action) {
+    const { modelId } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    job.results = {
+      loading: false,
+      sync: false,
+      data: [],
+    };
+
+    return { ...state, data: updateItemWithId(modelId, job, state.data) };
   },
   throw(state) {
     return state;
@@ -157,4 +174,5 @@ export {
   fetchLibSources as FETCHLIBSOURCES,
   fetchResults as FETCHRESULTS,
   startFetchingResults as STARTFETCHINGRESULTS,
+  clearResults as CLEARRESULTS,
 };

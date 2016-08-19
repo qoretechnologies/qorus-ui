@@ -58,6 +58,10 @@ const ResultTable = ({ data = [] }: { data: Array<Object> }) => (
 );
 
 export default compose(
-  showIfPassed(({ results }) => results && results.data && results.data.length > 0),
-  mapProps(props => ({ ...props, data: props.results.data }))
+  showIfPassed(({ results }) => results && results.data),
+  mapProps(props => ({ ...props, data: props.results.data })),
+  showIfPassed(
+    ({ data }) => data.length > 0,
+    <p className="data-not-found">Data not found</p>
+  )
 )(ResultTable);

@@ -65,8 +65,23 @@ module.exports = () => {
   router.get('/:id/results', (req, res) => {
     let results = jobResultsData[0];
     let { offset = '0', limit = '10' } = req.query;
+    const { status, date: dateStr } = req.query;
     offset = parseInt(offset, 10);
     limit = parseInt(limit, 10);
+
+    let date;
+    if (dateStr) {
+      date = moment(dateStr).format();
+    } else {
+      date = moment().substract(1, 'days');
+    }
+
+    if (status && status !== 'all') {
+      results = results.filter(item => item.jobstatus.toLowerCase() === status.toLowerCase());
+    }
+
+    results = results.filter(o => moment(o.modified).isAfter(date));
+
 
     results = results.slice(offset, offset + limit);
     res.json(results);

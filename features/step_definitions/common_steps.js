@@ -103,7 +103,7 @@ module.exports = function commonSteps() {
 
   this.Then(/^I see "([^"]*)" table rows$/, async function(rowCount) {
     await this.waitForChange(1000);
-    this.browser.assert.elements(`${cmpTable} tbody tr`, { atLeast: parseInt(rowCount, 10) });
+    this.browser.assert.elements(`${cmpTable} tbody tr`, { exactly: parseInt(rowCount, 10) });
   });
 
   this.When(/^"([^"]*)" get loaded$/, function(name) {
