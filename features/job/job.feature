@@ -46,4 +46,7 @@ Feature: Job page test
     Given I am on "job/110/results" page
     Then I see ".data-not-found" item
 
-
+  @wip
+  Scenario: Search by query
+    Given I am on "job/33/results?date=all&filter=all&q=302" page
+    Then I see "2" table rows

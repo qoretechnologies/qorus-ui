@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 
+import { findBy } from '../../../../helpers/search';
 import Date from '../../../../components/date';
 import Label from '../../../../components/label';
 import Table, { Section, Row, Th, Td } from '../../../../components/table';
@@ -59,7 +60,13 @@ const ResultTable = ({ data = [] }: { data: Array<Object> }) => (
 
 export default compose(
   showIfPassed(({ results }) => results && results.data),
-  mapProps(props => ({ ...props, data: props.results.data })),
+  mapProps(props => ({
+    ...props,
+    data: findBy(
+      ['job_instanceid', 'name'],
+      props.searchQuery,
+      props.results.data),
+  })),
   showIfPassed(
     ({ data }) => data.length > 0,
     <p className="data-not-found">Data not found</p>
