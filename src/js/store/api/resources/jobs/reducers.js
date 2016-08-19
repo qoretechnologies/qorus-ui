@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { updateItemWithId } from '../../utils';
 
 
@@ -134,7 +136,7 @@ const fetchResults = {
         limit,
         loading: false,
         sync: true,
-        data: [...resultsData, ...action.payload],
+        data: _.uniqBy([...resultsData, ...action.payload], item => item.job_instanceid),
         hasMore: true,
       };
     }
