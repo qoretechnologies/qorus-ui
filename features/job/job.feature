@@ -50,3 +50,10 @@ Feature: Job page test
   Scenario: Search by query
     Given I am on "job/33/results?date=all&filter=all&q=302" page
     Then I see "2" table rows
+
+  @wip
+  Scenario: Show job results detail
+    Given I am on "job/110/results/?date=all" page
+    When "results-table" get loaded
+    And I click on the "3007007" row - "1"
+    Then I see ".job-result-info" item

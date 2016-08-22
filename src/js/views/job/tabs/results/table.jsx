@@ -24,10 +24,12 @@ const ResultTable = ({
   data = [],
   sortData,
   onSortChange,
+  onSelectJobResult,
 }: {
   data: Array<Object>,
   sortData: Object,
   onSortChange: Function,
+  onSelectJobResult: Function,
 }) => (
   <Table
     className={classNames(
@@ -52,7 +54,7 @@ const ResultTable = ({
     </Section>
     <Section type="body">
       {data.map((item, idx) => (
-        <Row key={`item_${item.job_instanceid}`}>
+        <Row key={`item_${item.job_instanceid}`} onClick={() => onSelectJobResult(item)}>
           <Td>{idx + 1}</Td>
           <Td>{item.job_instanceid}</Td>
           <Td>

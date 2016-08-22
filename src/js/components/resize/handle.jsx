@@ -369,7 +369,9 @@ export default class Handle extends Component {
         onMouseDown={this.start}
         ref={this.refHandle}
         aria-hidden="true"
-      />
+      >
+        {this.props.children}
+      </div>
     );
   }
 }
