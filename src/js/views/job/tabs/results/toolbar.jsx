@@ -4,7 +4,7 @@ import compose from 'recompose/compose';
 
 import ResultsFilter from './filter';
 import applyDate from '../../../../hocomponents/apply-date';
-import applyJobFilter from '../../../../hocomponents/apply-job-filter';
+import applyJobFilter from '../../../../hocomponents/jobs/apply-job-filter';
 import search from '../../../../hocomponents/search';
 import Toolbar from '../../../../components/toolbar';
 import DatePicker from '../../../../components/datepicker';

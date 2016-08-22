@@ -53,7 +53,22 @@ Feature: Job page test
 
   @wip
   Scenario: Show job results detail
-    Given I am on "job/110/results/?date=all" page
+    Given I am on "job/110/results?date=all" page
     When "results-table" get loaded
     And I click on the "3007007" row - "1"
+    Then the URL changes to "/job/110/results/3007007"
     Then I see ".job-result-info" item
+
+  @wip
+  Scenario: Go back to result detail page
+    Given I am on "job/110/results/3007007?date=all" page
+    When "results-table" get loaded
+    When I click the "close" button
+    Then the URL changes to "/job/110/results"
+
+  @wip
+  Scenario: Move from one instance result to another
+    Given I am on "job/110/results/3007007?date=all" page
+    When "results-table" get loaded
+    And I click on the "2993243" row - "1"
+    Then the URL changes to "/job/110/results/2993243"

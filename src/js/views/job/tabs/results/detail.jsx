@@ -1,9 +1,17 @@
 /* @flow */
 import React from 'react';
+
 import { Control } from '../../../../components/controls';
 import Resize from '../../../../components/resize/handle';
+import allowBackToResultList from '../../../../hocomponents/jobs/allow-back-to-result-list';
 
-export default ({ result, clear }: { result: Object, clear: Function }) => (
+const ResultDetail = ({
+  result,
+  backToResultList,
+}: {
+  result: Object,
+  backToResultList: Function,
+}) => (
   <div className="job-result-info">
     <Resize top>
       <i className="fa fa-bars" />
@@ -13,7 +21,7 @@ export default ({ result, clear }: { result: Object, clear: Function }) => (
         <Control
           btnStyle="inverse"
           icon="close"
-          onClick={clear}
+          onClick={backToResultList}
           label="close"
           className="close-result-item"
         />
@@ -21,3 +29,5 @@ export default ({ result, clear }: { result: Object, clear: Function }) => (
     </div>
   </div>
 );
+
+export default allowBackToResultList(ResultDetail);

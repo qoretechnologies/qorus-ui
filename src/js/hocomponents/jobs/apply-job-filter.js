@@ -4,7 +4,7 @@ import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import withHandlers from 'recompose/withHandlers';
 
-import { goTo } from '../helpers/router';
+import { goTo } from '../../helpers/router';
 
 export default (name: string, path: string) => compose(
   getContext({

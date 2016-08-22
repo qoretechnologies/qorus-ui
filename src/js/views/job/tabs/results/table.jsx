@@ -10,6 +10,7 @@ import Label from '../../../../components/label';
 import Table, { Section, Row, Th, Td } from '../../../../components/table';
 import sort from '../../../../hocomponents/sort';
 import showIfPassed from '../../../../hocomponents/show-if-passed';
+import selectableResult from '../../../../hocomponents/jobs/selectable-result';
 import { sortDefaults } from '../../../../constants/sort';
 
 function getStyleByStatus(status: string): string {
@@ -24,12 +25,12 @@ const ResultTable = ({
   data = [],
   sortData,
   onSortChange,
-  onSelectJobResult,
+  selectResult,
 }: {
   data: Array<Object>,
   sortData: Object,
   onSortChange: Function,
-  onSelectJobResult: Function,
+  selectResult: Function,
 }) => (
   <Table
     className={classNames(
@@ -54,7 +55,7 @@ const ResultTable = ({
     </Section>
     <Section type="body">
       {data.map((item, idx) => (
-        <Row key={`item_${item.job_instanceid}`} onClick={() => onSelectJobResult(item)}>
+        <Row key={`item_${item.job_instanceid}`} onClick={() => selectResult(item)}>
           <Td>{idx + 1}</Td>
           <Td>{item.job_instanceid}</Td>
           <Td>
@@ -86,9 +87,11 @@ const showNoData = showIfPassed(
   <p className="data-not-found">Data not found</p>
 );
 
+
 export default compose(
   hideWhileLoading,
   filterResults,
   showNoData,
+  selectableResult,
   sort('job-results', 'data', sortDefaults.jobResults)
 )(ResultTable);

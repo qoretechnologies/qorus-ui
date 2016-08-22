@@ -5,11 +5,9 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import lifecycle from 'recompose/lifecycle';
-import withState from 'recompose/withState';
 
 import ResultsTable from './table';
 import ResultsToolbar from './toolbar';
-import ResultDetail from './detail';
 import { formatDate } from '../../../../helpers/date';
 import LoadMore from '../../../../components/load_more';
 import getRouterContext from '../../../../hocomponents/get-router-context';
@@ -18,17 +16,14 @@ import actions from '../../../../store/api/actions';
 
 const JobResults = ({
   job,
-  jobResult,
   location,
-  selectJobResult,
-  clearJobResult,
+  children,
   onLoadMore,
 }: {
   job: Object,
   jobResult: Object,
   location: Object,
-  selectJobResult: Function,
-  clearJobResult: Function,
+  children:? any,
   onLoadMore: Function,
 }) => (
   <div className="job-results">
@@ -36,12 +31,12 @@ const JobResults = ({
     <div className="job-results-table">
       <ResultsTable
         results={job.results}
+        location={location}
         searchQuery={location.query.q}
-        onSelectJobResult={selectJobResult}
       />
       <LoadMore dataObject={job.results} onLoadMore={onLoadMore} />
     </div>
-    {jobResult && <ResultDetail result={jobResult} clear={clearJobResult} />}
+    {children}
   </div>
 );
 
@@ -77,15 +72,6 @@ const addLoadMoreHandler = withHandlers({
   },
 });
 
-const resultSelector = compose(
-  withState('jobResult', 'selectJobResult', null),
-  mapProps(({ selectJobResult, ...rest }: { selectJobResult: Function, rest: Object }) => ({
-    ...rest,
-    selectJobResult,
-    clearJobResult: () => selectJobResult(null),
-  }))
-);
-
 export default compose(
   getRouterContext,
   connect(
@@ -101,5 +87,4 @@ export default compose(
   fetchOnMount,
   fetchOnQueryParamsUpdate,
   addLoadMoreHandler,
-  resultSelector
 )(JobResults);

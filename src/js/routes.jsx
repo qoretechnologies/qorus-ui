@@ -13,6 +13,7 @@ import Workflow from './views/workflow';
 import Services from './views/services';
 import Jobs from './views/jobs';
 import Job, { JobResults, JobLog } from './views/job';
+import ResultDetail from './views/job/tabs/results/detail';
 import System from './views/system';
 import Order from './views/order';
 import Search from './views/search';
@@ -158,7 +159,12 @@ class AppInfo extends React.Component {
             <Route
               path="results"
               component={JobResults}
-            />
+            >
+              <Route
+                path=":instanceId"
+                component={ResultDetail}
+              />
+            </Route>
             <Route
               path="log"
               component={JobLog}
