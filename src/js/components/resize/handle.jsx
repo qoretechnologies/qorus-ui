@@ -46,6 +46,7 @@ export default class Handle extends Component {
     left: PropTypes.bool,
     onStart: PropTypes.func,
     onStop: PropTypes.func,
+    children: PropTypes.any,
   };
 
   static defaultProps = {

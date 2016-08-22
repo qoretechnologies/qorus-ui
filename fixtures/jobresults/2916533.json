@@ -1,1 +1,27 @@
-{"name": "at-m1301-ran_items_spl-out","version": "1.0","jobid": 105,"job_instanceid": 2916533,"sessionid": 0,"jobstatus": "COMPLETE","info": {"info": "no data available; skipping workflow order creation"},"started": "2016-08-10 02:00:00.758239 +02:00","completed": "2016-08-10 02:00:00.865687 +02:00","modified": "2016-08-10 02:00:00.865694 +02:00","errors": [],"audit": []}
+{
+  "name": "at-m1301-ran_items_spl-out",
+  "version": "1.0",
+  "jobid": 105,
+  "job_instanceid": 2916533,
+  "sessionid": 0,
+  "jobstatus": "COMPLETE",
+  "info": {
+    "info": "no data available; skipping workflow order creation"
+  },
+  "started": "2016-08-10 02:00:00.758239 +02:00",
+  "completed": "2016-08-10 02:00:00.865687 +02:00",
+  "modified": "2016-08-10 02:00:00.865694 +02:00",
+  "errors": [],
+  "audit": [
+    {
+      "audit_event_code": 6,
+      "reason": "internal call",
+      "who": "Qorus",
+      "source": "system",
+      "info1": "I",
+      "info2": "C",
+      "created": "2014-06-18 12:49:58.329436 Wed +02:00 (CEST)",
+      "event" : "WORKFLOW-STATUS-CHANGE"
+    }
+  ]
+}

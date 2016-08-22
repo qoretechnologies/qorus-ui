@@ -18,7 +18,6 @@ module.exports = () => {
     } else {
       res.statusCode(404).send('Not found');
     }
-
   });
 
   return router;

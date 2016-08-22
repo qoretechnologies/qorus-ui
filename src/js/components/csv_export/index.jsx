@@ -51,6 +51,7 @@ class CsvExport extends React.Component {
   }
 
   selectCSVContent = () => {
+    // $FlowIssue
     document.getElementById('csv-text').select();
   };
 

@@ -26,7 +26,6 @@ Feature: jobs table
     And I click on the "Name" column header
     Then jobs are sorted by "Name" "desc"
 
-  @wip
   Scenario: Go to job detail page
     Given I am on "jobs" listing
     And "jobs" get loaded
