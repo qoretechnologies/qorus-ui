@@ -9,9 +9,11 @@ import search from '../../../../hocomponents/search';
 import Toolbar from '../../../../components/toolbar';
 import DatePicker from '../../../../components/datepicker';
 import Search from '../../../../components/search';
+import CsvExport from '../../../../components/csv_export';
 
 const ResultsToolbar = ({
   date,
+  job,
   defaultSearchValue,
   jobFilter,
   onApplyDate,
@@ -19,6 +21,7 @@ const ResultsToolbar = ({
   onApplyJobFilter,
 }: {
   date: string,
+  job: Object,
   defaultSearchValue: string,
   jobFilter: string,
   onApplyDate: Function,
@@ -28,6 +31,10 @@ const ResultsToolbar = ({
   <Toolbar>
     <DatePicker {...{ date, onApplyDate }} />
     <ResultsFilter {...{ jobFilter, onApplyJobFilter }} />
+    <CsvExport
+      collection={job.results && job.results.data || []}
+      type="jobResults"
+    />
     <Search
       defaultValue={defaultSearchValue}
       onSearchUpdate={onSearchChange}

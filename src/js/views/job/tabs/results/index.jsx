@@ -24,7 +24,7 @@ const JobResults = ({
   onLoadMore: Function,
 }) => (
   <div className="job-results">
-    <ResultsToolbar {...{ location }} />
+    <ResultsToolbar {...{ location, job }} />
     <ResultsTable results={job.results} searchQuery={location.query.q} />
     <LoadMore dataObject={job.results} onLoadMore={onLoadMore} />
   </div>
