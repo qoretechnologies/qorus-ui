@@ -1,4 +1,4 @@
-import { updateProp } from './helper';
+import { updateProp, delProp } from './helper';
 
 export function addProp(actions) {
   return (props, prop) => dispatch => {
@@ -20,7 +20,7 @@ export function deleteProp(actions) {
 
     dispatch(actions.props.remove({
       update: {
-        data: deleteProp(props, prop),
+        data: delProp(props, prop),
       },
     }, null, url));
   };

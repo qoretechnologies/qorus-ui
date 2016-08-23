@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import {
   updateProp,
-  deleteProp,
+  delProp as deleteProp,
 } from '../../src/js/store/api/resources/system/props/actions/helper';
 
 const getProps = () => ({

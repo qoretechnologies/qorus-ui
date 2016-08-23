@@ -12,7 +12,6 @@ import Table, { Cell, Section, Row } from '../../../components/table';
 import Date from '../../../components/date';
 import Loader from '../../../components/loader';
 import Shorten from '../../../components/shorten';
-import Alerts from '../../../../../types/alerts/react';
 import sort from '../../../hocomponents/sort';
 import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
@@ -60,7 +59,7 @@ const viewSelector = createSelector(
 )
 export default class AlertsTable extends Component {
   static propTypes = {
-    collection: PropTypes.arrayOf(Alerts),
+    collection: PropTypes.array,
     activeRowId: PropTypes.number,
     dispatch: PropTypes.func,
     sync: PropTypes.bool,

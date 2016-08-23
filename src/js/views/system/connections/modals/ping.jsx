@@ -21,6 +21,7 @@ export default class Ping extends Component {
     pingRemote?: Function,
     model: Object,
     onClose: Function,
+    type: 'datasources' | 'user',
   };
 
   state: {
@@ -37,7 +38,7 @@ export default class Ping extends Component {
 
   ping: Function = async (): Promise<*> => {
     if (this.props.pingRemote) {
-      const payload:Object = await this.props.pingRemote(this.props.model.name);
+      const payload: Object = await this.props.pingRemote(this.props.model.name, this.props.type);
 
       this.setState({
         error: payload.error,
@@ -52,7 +53,7 @@ export default class Ping extends Component {
     if (this.state.error) {
       return (
         <Alert bsStyle="danger">
-          { this.state.data.message }
+          { this.state.data.desc }
         </Alert>
       );
     }

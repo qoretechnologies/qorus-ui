@@ -105,6 +105,7 @@ class Connections extends Component {
       <ModalPing
         model={model}
         onClose={this.handlecloseModal}
+        type={this.props.params.type}
       />
     );
 
