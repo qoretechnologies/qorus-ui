@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import mapProps from 'recompose/mapProps';
 
 
 import Section from './section';
@@ -44,4 +45,16 @@ Table.propTypes = {
   children: PropTypes.node,
 };
 
-export { Section, Row, Cell, EditableCell };
+export const Th = mapProps(props => ({ ...props, tag: 'th' }))(Cell);
+Th.displayName = 'Th';
+export const Td = mapProps(props => ({ ...props, tag: 'td' }))(Cell);
+Td.displayName = 'Td';
+
+export {
+  Section,
+  Row,
+  Cell,
+  EditableCell,
+  Th,
+  Td,
+};

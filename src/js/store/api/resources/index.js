@@ -162,4 +162,9 @@ export default [
     url: `${settings.REST_BASE_URL}/logout`,
     transform: item => item,
   },
+  {
+    name: 'jobresults',
+    url: `${settings.REST_BASE_URL}/jobresults`,
+    transform: item => item,
+  },
 ];

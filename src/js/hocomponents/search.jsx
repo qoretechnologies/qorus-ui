@@ -14,24 +14,32 @@ export default (
     props: {
       route: Object,
       params: Object,
+      location: Object,
     };
 
     handleSearch: Function = (q): void => {
+      const { router } = this.context;
+      const { params, location } = this.props;
       goTo(
-        this.context.router,
+        router,
         name,
         path,
-        this.props.params,
+        params,
         {},
-        { q },
+        { ...location.query, q },
       );
     };
 
     render() {
       const func = customFunc || this.handleSearch;
+      const { location: { query: { q = '' } } } = this.props;
 
       return (
-        <Component onSearchChange={func} {...this.props} />
+        <Component
+          onSearchChange={func}
+          defaultSearchValue={q}
+          {...this.props}
+        />
       );
     }
   }

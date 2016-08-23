@@ -57,7 +57,7 @@ export default class Control extends Component {
       btn: true,
       'btn-xs': !this.props.big,
       [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
-      [this.props.className]: true,
+      [this.props.className || '']: true,
     });
 
     return (

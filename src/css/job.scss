@@ -1,0 +1,39 @@
+.job-results {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .job-results-table {
+    overflow-y: auto;
+  }
+
+  .job-result-info {
+    position: fixed;
+    bottom: 29px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 500;
+    min-height: 50px;
+
+    .resize-handle {
+      background: #000;
+      height: 18px!important;
+      text-align: center;
+      color: #fff;
+    }
+
+    .inner {
+      margin-top: 18px;
+      padding: 20px;
+    }
+  }
+}
+
+.job-result-detail-errors {
+  .error-info {
+    text-align: left;
+    color: #999999!important;
+    font-style: italic;
+  }
+}

@@ -31,6 +31,7 @@ module.exports = () => {
   router.use('/public', require('./public')());
   router.use('/logout', require('./logout')());
   router.use('/remote', require('./remote')());
+  router.use('/jobresults', require('./jobresults')());
 
   return router;
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 const Label = (
-  { style = '', children }: { style?: 'danger' | 'success' | 'warning', children?: string }
+  { style = '', children }: { style?: string, children?: string }
 ) => (
   <span
     className={classNames({

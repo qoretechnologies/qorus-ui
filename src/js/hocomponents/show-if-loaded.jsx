@@ -16,7 +16,7 @@ export default (
   Component: ReactClass<*>
 ): ReactClass<*> => {
   const WrappedComponent : ReactClass<*> = showIfPassed(
-    props => props[propName].sync && !props[propName].loading,
+    props => props[propName] && props[propName].sync && !props[propName].loading,
     <Loader />
   )(
     Component

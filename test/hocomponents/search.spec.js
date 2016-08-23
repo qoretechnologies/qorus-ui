@@ -9,7 +9,7 @@ import search from '../../src/js/hocomponents/search';
 
 chai.use(spies);
 
-describe('search from hocomponents/sync', () => {
+describe('search from hocomponents/search', () => {
   const ActualComp = ({ onSearchChange }) => (
     <SearchComponent onSearchUpdate={onSearchChange} />
   );
@@ -17,9 +17,11 @@ describe('search from hocomponents/sync', () => {
     onSearchChange: PropTypes.func,
   };
 
+  const location = { query: { q: 'test' } };
+
   it('search func is in props', () => {
     const Comp = search('test', 'test')(ActualComp);
-    const wrapper = mount(<Comp />);
+    const wrapper = mount(<Comp {...{ location }} />);
 
     expect(wrapper.find(ActualComp).first().props().onSearchChange).to.be.a('function');
   });
@@ -27,7 +29,7 @@ describe('search from hocomponents/sync', () => {
   it('calls the search function passed as a prop', () => {
     const Comp = search('test', 'test')(ActualComp);
     const func = chai.spy();
-    const wrapper = mount(<Comp onSearchChange={func} />);
+    const wrapper = mount(<Comp onSearchChange={func} {...{ location }} />);
 
     wrapper.find(ActualComp).find(SearchComponent).props().onSearchUpdate('Test');
 
@@ -37,7 +39,7 @@ describe('search from hocomponents/sync', () => {
   it('calls the search function passed as a custom argument', () => {
     const func = chai.spy();
     const Comp = search('test', 'test', func)(ActualComp);
-    const wrapper = mount(<Comp />);
+    const wrapper = mount(<Comp {...{ location }} />);
 
     wrapper.find(ActualComp).find(SearchComponent).props().onSearchUpdate('Hello');
 

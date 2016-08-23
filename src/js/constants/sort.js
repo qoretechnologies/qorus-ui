@@ -55,4 +55,10 @@ export const sortDefaults = {
     historySortBy: 'version',
     historySortByKey: { ignoreCase: true, direction: -1 },
   },
+  jobResults: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+    historySortBy: 'modified',
+    historySortByKey: { ignoreCase: true, direction: -1 },
+  },
 };

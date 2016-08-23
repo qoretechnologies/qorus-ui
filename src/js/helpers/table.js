@@ -81,6 +81,17 @@ const CSVheaders = {
     warning_count: 'Warnings',
     note_count: 'Notes',
   },
+  jobResults: {
+    job_instanceid: 'Id',
+    jobstatus: 'Status',
+    name: 'Name',
+    started: 'Started',
+    modified: 'Modified',
+  },
+  test: {  // only test data
+    a: 'A',
+    b: 'B',
+  },
 };
 
 Object.keys(ORDER_STATES).forEach(key => {

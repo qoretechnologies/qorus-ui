@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { updateItemWithId } from '../../utils';
 
 
@@ -83,7 +85,7 @@ const fetchLibSources = {
     return Object.assign({}, state, {
       data: updateItemWithId(
         action.meta.modelId,
-        action.payload,
+        { ...action.payload, loading: false, sync: true },
         state.data
       ),
     });
@@ -97,8 +99,80 @@ const fetchLibSources = {
   },
 };
 
+const startFetchingResults = {
+  next(state, action) {
+    const { modelId } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    const { results = {} } = job;
+    results.loading = true;
+    const newJob = { ...job, results };
+
+    return {
+      ...state,
+      data: updateItemWithId(modelId, newJob, state.data),
+    };
+  },
+  throw(state) { return state; },
+};
+
+const fetchResults = {
+  next(state, action) {
+    const { modelId, offset, limit } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    const { results: { data: resultsData = [] } = {} } = job;
+    job.results = {
+      offset,
+      limit,
+      loading: false,
+      sync: true,
+      data: _.uniqBy([...resultsData, ...action.payload], item => item.job_instanceid),
+      hasMore: action.payload && action.payload.length === limit,
+    };
+
+    return {
+      ...state,
+      data: updateItemWithId(modelId, job, state.data),
+    };
+  },
+  throw(state) {
+    return state;
+  },
+};
+
+const clearResults = {
+  next(state, action) {
+    const { modelId } = action.meta;
+    const job = state.data.find(item => item.id === modelId);
+    if (!job) {
+      return state;
+    }
+
+    job.results = {
+      loading: false,
+      sync: false,
+      data: [],
+    };
+
+    return { ...state, data: updateItemWithId(modelId, job, state.data) };
+  },
+  throw(state) {
+    return state;
+  },
+};
+
 
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
+  fetchResults as FETCHRESULTS,
+  startFetchingResults as STARTFETCHINGRESULTS,
+  clearResults as CLEARRESULTS,
 };

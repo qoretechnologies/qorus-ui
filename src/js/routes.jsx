@@ -12,6 +12,8 @@ import Workflows from './views/workflows';
 import Workflow from './views/workflow';
 import Services from './views/services';
 import Jobs from './views/jobs';
+import Job, { JobResults, JobLog } from './views/job';
+import ResultDetail from './views/job/tabs/results/detail';
 import System from './views/system';
 import Order from './views/order';
 import Search from './views/search';
@@ -149,6 +151,25 @@ class AppInfo extends React.Component {
             view={Jobs}
             name="Jobs"
           />
+          <Route
+            path="job/:id"
+            component={Job}
+          >
+            <IndexRedirect to="results" />
+            <Route
+              path="results"
+              component={JobResults}
+            >
+              <Route
+                path=":instanceId"
+                component={ResultDetail}
+              />
+            </Route>
+            <Route
+              path="log"
+              component={JobLog}
+            />
+          </Route>
           <Route
             path="search"
             component={View}

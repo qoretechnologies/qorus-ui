@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import queryString from 'query-string';
 
 
 import { fetchJson } from '../../../utils';
@@ -52,4 +53,33 @@ const fetchLibSources = createAction(
 );
 
 
-export { setOptions, fetchLibSources };
+const fetchResultsPayload = baseUrl => (model, query, offset = 0, limit = 50) => fetchJson(
+  'GET', `${baseUrl}/${model.id}/results?${queryString.stringify({ ...query, limit, offset })}`
+);
+const fetchResultsMeta = ({ id: modelId }, query, offset = 0, limit = 50) => (
+  { modelId, offset, limit }
+);
+const fetchResultsCall = createAction(
+  'JOBS_FETCHRESULTS',
+  fetchResultsPayload(jobsUrl),
+  fetchResultsMeta
+);
+
+const startFetchingResults = createAction(
+  'JOBS_STARTFETCHINGRESULTS',
+  () => ({}),
+  ({ id: modelId }) => ({ modelId })
+);
+
+const fetchResults = (...args) => dispatch => {
+  dispatch(startFetchingResults(...args));
+  dispatch(fetchResultsCall(...args));
+};
+
+const clearResults = createAction(
+  'JOBS_CLEARRESULTS',
+  () => ({}),
+  ({ id: modelId }) => ({ modelId })
+);
+
+export { setOptions, fetchLibSources, fetchResults, clearResults, startFetchingResults };
