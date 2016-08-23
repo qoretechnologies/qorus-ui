@@ -11,6 +11,7 @@ plugins: [
 rules:
   strict: 0
   "react/jsx-no-bind": 1
+  "space-infix-ops": 0
   "react/sort-comp": [
     2,
     {
