@@ -16,6 +16,7 @@ type Props = {
   def?: string,
   selectedIcon?: string,
   onSubmit?: () => void,
+  onSelect?: () => Array<string>,
   submitLabel?: string,
   selected?: Array<?string>,
   show?: ?boolean,
@@ -35,10 +36,21 @@ export default class Dropdown extends Component {
     selected: Array<*>,
   };
 
-  state = {
-    showDropdown: this.props.show,
-    selected: this.props.selected || [(this.props.def: ?string)],
-  };
+  componentWillMount(): void {
+    let sel;
+    const { selected, def } = this.props;
+
+    if (this.props.selected) {
+      sel = selected;
+    } else {
+      sel = def ? [def] : [];
+    }
+
+    this.setState({
+      showDropdown: this.props.show,
+      selected: sel,
+    });
+  }
 
   componentWillReceiveProps(nextProps: Props): void {
     if (this.state.showDropdown !== nextProps.show) {
@@ -57,13 +69,17 @@ export default class Dropdown extends Component {
   }
 
   getToggleTitle: Function = (children: any): ?string => {
-    if (children) {
-      return children;
-    }
-
     if (this.props.multi) {
       const length = this.state.selected.length;
+      if (length === 0) {
+        return children || 'Please select';
+      }
+
       return length > 3 ? `${length} selected` : this.state.selected.join(', ');
+    }
+
+    if (children) {
+      return children;
     }
 
     return null;
@@ -86,12 +102,14 @@ export default class Dropdown extends Component {
     }
 
     if (!selected.length || (item === this.props.def && !includes(this.state.selected, item))) {
-      selected = [this.props.def];
+      selected = this.props.def ? [this.props.def] : [];
     }
 
     this.setState({
       selected,
     });
+
+    if (this.props.onSelect) this.props.onSelect(selected);
   };
 
   handleOutsideClick: Function = (event: Object): void => {
