@@ -21,6 +21,8 @@ import Groups from './views/groups';
 import Login from './views/auth';
 import Ocmd from './views/ocmd';
 import Library from './views/library';
+import Extensions from './views/extensions';
+import ExtensionDetail from './views/extensions/detail';
 
 import sync from './hocomponents/sync';
 import actions from './store/api/actions';
@@ -189,7 +191,8 @@ class AppInfo extends React.Component {
           />
           <Route path="ocmd" component={Ocmd} />
           <Route path="library" component={Library} />
-          <Route path="extensions" />
+          <Route path="extensions" component={Extensions} />
+          <Route path="extension/:name" component={ExtensionDetail} />
           <Route path="performance" />
         </Route>
         <Route

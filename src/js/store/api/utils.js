@@ -114,28 +114,11 @@ function getRestHeaders() {
 }
 
 /**
- * Fetches JSON data by requesting given URL via given method.
- * If dispatch method does not passsed then print warning that
- * ajax errors couldn't been handled as required.
- * If response.status === 401 then remove localStorage.token and
- * go to /login page
- *
- * @param {string} method method can be also specified in opts
- * @param {string} url
- * @param {RequestInit=} opts
- * @return {Promise<JSON>}
- * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
+ * Checks that server return not 401 and finished without error
+ * @param {Object} res
+ * @param {string} currentPath
  */
-export async function fetchJson(method, url, opts = {}) {
-  const currentPath = window.location.pathname;
-  const res = await fetch(
-    url,
-    Object.assign({
-      method,
-      headers: getRestHeaders(),
-    }, opts)
-  );
-
+function checkResponse(res, currentPath) {
   const pathname = window.location.pathname;
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
@@ -147,6 +130,42 @@ export async function fetchJson(method, url, opts = {}) {
     error.res = res;
     throw error;
   }
+}
 
+/**
+ * Fetches data by requesting given URL via given method.
+ * If dispatch method does not passsed then print warning that
+ * ajax errors couldn't been handled as required.
+ * If response.status === 401 then remove localStorage.token and
+ * go to /login page
+ *
+ * @param {string} method method can be also specified in opts
+ * @param {string} url
+ * @param {RequestInit=} opts
+ * @return {Object}
+ * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
+ */
+export async function fetchData(method, url, opts) {
+  const currentPath = window.location.pathname;
+  const res = await fetch(
+    url,
+    Object.assign({
+      method,
+      headers: getRestHeaders(),
+    }, opts)
+  );
+
+  checkResponse(res, currentPath);
+
+  return res;
+}
+
+export async function fetchJson(method, url, opts = {}) {
+  const res = await fetchData(method, url, opts);
   return res.json();
+}
+
+export async function fetchText(method, url, opts) {
+  const res = await fetchData(method, url, opts);
+  return res.text();
 }

@@ -107,5 +107,10 @@ module.exports = () => {
     res.json(extensions);
   });
 
+  router.get('/ui/extensions/:name', (req, res) => {
+    const extension = extensions.find(item => item.name === req.params.name);
+    res.json(extension);
+  });
+
   return router;
 };
