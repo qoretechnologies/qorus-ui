@@ -14,6 +14,10 @@ import * as logoutActions from './resources/logout/actions';
 import * as alertsActions from './resources/alerts/actions';
 import * as remoteActions from './resources/remotes/actions';
 import * as sqlcacheActions from './resources/sqlcache/actions';
+import * as usersActions from './resources/users/actions';
+import * as rolesActions from './resources/roles/actions';
+import * as permsActions from './resources/perms/actions';
+import * as currentUserActions from './resources/currentUser/actions';
 
 import {
   combineResourceActions,
@@ -101,6 +105,14 @@ Object.keys(workflowActions.delegates).forEach(a => {
 Object.assign(actions.workflows, workflowActions.specials);
 
 Object.assign(actions.remotes, remoteActions);
+
+Object.assign(actions.users, usersActions);
+
+Object.assign(actions.currentUser, currentUserActions);
+
+Object.assign(actions.roles, rolesActions);
+
+Object.assign(actions.perms, permsActions);
 
 Object.assign(actions.steps, stepActions);
 

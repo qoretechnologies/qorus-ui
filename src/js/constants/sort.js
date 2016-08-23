@@ -61,4 +61,18 @@ export const sortDefaults = {
     historySortBy: 'modified',
     historySortByKey: { ignoreCase: true, direction: -1 },
   },
+  rbacUsers: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  rbacRoles: {
+    sortBy: 'role',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  rbacPerms: {
+    sortBy: 'permission_type',
+    sortByKey: { ignoreCase: true, direction: -1 },
+    historySortBy: 'name',
+    historySortByKey: { ignoreCase: true, direction: 1 },
+  },
 };

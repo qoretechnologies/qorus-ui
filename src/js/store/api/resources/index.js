@@ -50,6 +50,16 @@ export default [
     ),
   },
   {
+    name: 'users',
+    url: `${settings.REST_BASE_URL}/users`,
+    transform: item => item,
+  },
+  {
+    name: 'roles',
+    url: `${settings.REST_BASE_URL}/roles`,
+    transform: item => item,
+  },
+  {
     name: 'currentUser',
     url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
@@ -165,6 +175,11 @@ export default [
   {
     name: 'jobresults',
     url: `${settings.REST_BASE_URL}/jobresults`,
+    transform: item => item,
+  },
+  {
+    name: 'perms',
+    url: `${settings.REST_BASE_URL}/perms/`,
     transform: item => item,
   },
 ];

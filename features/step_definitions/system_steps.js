@@ -59,4 +59,23 @@ module.exports = function systemSteps() {
     await this.browser.pressButton(row.cells[3].children[0]);
   });
 
+  this.Then(/^there should be a button to add new "([^"]*)"$/, async function(button) {
+    const el = findElementByText(this.browser, '.btn', ` Add ${button}`);
+
+    this.browser.assert.element(el);
+  });
+
+  this.Then(/^there should not be a button to add new "([^"]*)"$/, async function(button) {
+    const el = findElementByText(this.browser, '.btn', ` Add ${button}`);
+
+    this.browser.assert.elements(el, 0);
+  });
+
+  this.When(/^I delete the "([^"]*)" "([^"]*)"$/, async function(name, type) {
+    const cellId = type === 'role' ? 1 : 2;
+    const row = findTableRow(this.browser, name, cellId);
+
+    this.browser.pressButton(row.cells[0].children[0].children[1]);
+  });
+
 };
