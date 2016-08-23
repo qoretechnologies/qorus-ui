@@ -15,10 +15,8 @@ describe('sync from hocomponents/sync', () => {
     value: PropTypes.object,
   };
 
-  const CompOrLoader = sync('value')(ActualComp);
-  const Comp = sync('value', false)(ActualComp);
-
   it('Load if not loading and not sync', () => {
+    const Comp = sync('value', false)(ActualComp);
     const load = chai.spy();
     const value = {
       loading: false,
@@ -30,7 +28,21 @@ describe('sync from hocomponents/sync', () => {
     expect(load).to.have.been.called();
   });
 
+  it('Load if not loading and not sync using custom function', () => {
+    const load = chai.spy();
+    const Comp = sync('value', false, 'loadMyFunc')(ActualComp);
+    const value = {
+      loading: false,
+      sync: false,
+    };
+
+    mount(<Comp {...{ value }} loadMyFunc={load} />);
+
+    expect(load).to.have.been.called();
+  });
+
   it('Do not load if loading', () => {
+    const Comp = sync('value', false)(ActualComp);
     const load = chai.spy();
     const value = {
       loading: true,
@@ -43,6 +55,7 @@ describe('sync from hocomponents/sync', () => {
   });
 
   it('Do not load if sync', () => {
+    const Comp = sync('value', false)(ActualComp);
     const load = chai.spy();
     const value = {
       loading: false,
@@ -55,6 +68,7 @@ describe('sync from hocomponents/sync', () => {
   });
 
   it('Show loader on loading', () => {
+    const CompOrLoader = sync('value')(ActualComp);
     const load = chai.spy();
     const value = {
       loading: true,
@@ -68,6 +82,7 @@ describe('sync from hocomponents/sync', () => {
   });
 
   it('Show actual on loading', () => {
+    const Comp = sync('value', false)(ActualComp);
     const load = chai.spy();
     const value = {
       loading: true,
@@ -81,6 +96,7 @@ describe('sync from hocomponents/sync', () => {
   });
 
   it('Show actual if not loading and sync', () => {
+    const CompOrLoader = sync('value')(ActualComp);
     const load = chai.spy();
     const value = {
       loading: false,
