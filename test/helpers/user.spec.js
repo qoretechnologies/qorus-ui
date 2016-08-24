@@ -20,7 +20,7 @@ describe('hasPermission from helpers/user', () => {
     expect(result).to.equal(false);
   });
 
-  it('returns false when asked for array of permissions', () => {
+  it('returns true when asked for array of permissions', () => {
     const result = hasPermission(perms, ['TEST', 'TEST2']);
 
     expect(result).to.equal(true);
@@ -30,5 +30,11 @@ describe('hasPermission from helpers/user', () => {
     const result = hasPermission(perms, ['TEST', 'SUPERTEST']);
 
     expect(result).to.equal(false);
+  });
+
+  it('returns true when asked for one or other permission', () => {
+    const result = hasPermission(perms, ['TEST', 'SUPERTEST'], 'or');
+
+    expect(result).to.equal(true);
   });
 });

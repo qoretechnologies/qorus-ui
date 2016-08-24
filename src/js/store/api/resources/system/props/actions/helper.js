@@ -10,7 +10,7 @@ const updateProp = (props, prop) => {
   return newProps;
 };
 
-const deleteProp = (props, prop) => {
+const delProp = (props, prop) => {
   const newProps = props;
 
   if (!prop.key) {
@@ -23,4 +23,4 @@ const deleteProp = (props, prop) => {
 };
 
 module.exports.updateProp = updateProp;
-module.exports.deleteProp = deleteProp;
+module.exports.delProp = delProp;

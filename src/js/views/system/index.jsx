@@ -12,10 +12,7 @@ import Logs from './logs';
 import SystemInfoTable from './info';
 import SqlCache from './sqlcache';
 import Properties from './properties';
-
-function NotImplemented() {
-  return (<div className="tab-pane active"><p>Not implemented yet</p></div>);
-}
+import Rbac from './rbac';
 
 export default class System extends Component {
   static propTypes = {
@@ -64,8 +61,7 @@ System.Connections = Connections;
 System.Properties = Properties;
 System.SqlCache = SqlCache;
 System.HttpServices = UserHttp;
-System.RBAC = NotImplemented;
+System.RBAC = Rbac;
 System.Info = SystemInfoTable;
 System.Logs = Logs;
 System.Errors = Errors;
-System.NotImplemented = NotImplemented;

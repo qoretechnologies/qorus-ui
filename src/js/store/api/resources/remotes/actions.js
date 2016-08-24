@@ -3,9 +3,9 @@ import { createAction } from 'redux-actions';
 import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
 
-const ping = (model) => (fetchJson(
+const ping = (model, type) => (fetchJson(
     'PUT',
-    `${settings.REST_BASE_URL}/remote/${model}?action=ping`
+    `${settings.REST_BASE_URL}/remote/${type}/${model}?action=ping`
   )
 );
 

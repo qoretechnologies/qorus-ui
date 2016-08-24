@@ -10,7 +10,7 @@ const updateProp = require(
 ).updateProp;
 const deleteProp = require(
   '../../src/js/store/api/resources/system/props/actions/helper'
-).deleteProp;
+).delProp;
 
 module.exports = () => {
   const data = require('./data')();
@@ -28,7 +28,7 @@ module.exports = () => {
       value: req.body.parse_args,
     });
 
-    res.json(data.props);
+    res.json('Successfuly updated');
   });
 
   router.delete('/props/:domain', (req, res) => {
@@ -36,7 +36,7 @@ module.exports = () => {
       domain: req.params.domain,
     });
 
-    res.json(data.props);
+    res.json('Successfuly deleted');
   });
 
   router.delete('/props/:domain/:key', (req, res) => {
@@ -45,7 +45,7 @@ module.exports = () => {
       key: req.params.key,
     });
 
-    res.json(data.props);
+    res.json('Successfuly deleted');
   });
 
   router.put('/api', (req, res) => {
@@ -82,7 +82,7 @@ module.exports = () => {
   });
 
   router.put('/sqlcache', (req, res) => {
-    if (req.body.action === 'deleteCache') {
+    if (req.body.action === 'clearCache') {
       if (req.body.name) {
         delete data.sqlcache[req.body.datasource].tables[req.body.name];
       } else if (req.body.datasource) {

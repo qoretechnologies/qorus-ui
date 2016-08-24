@@ -1,5 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
@@ -277,7 +278,31 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
         expect(buttons[1].textContent).to.equal(' Submit button');
       });
 
-      it('selects the "All" item by default', () => {
+      it('sets the control title to "Please select"', () => {
+        const component = mount(
+          <Dropdown
+            multi
+          >
+            <Control />
+          </Dropdown>
+        );
+
+        expect(component.find(Control).props().children).to.eql('Please select');
+      });
+
+      it('sets the control title to children', () => {
+        const component = mount(
+          <Dropdown
+            multi
+          >
+            <Control>Click me</Control>
+          </Dropdown>
+        );
+
+        expect(component.find(Control).props().children).to.eql('Click me');
+      });
+
+      it('selects the "All" item by default if def provided', () => {
         const component = TestUtils.renderIntoDocument(
           <Dropdown
             multi

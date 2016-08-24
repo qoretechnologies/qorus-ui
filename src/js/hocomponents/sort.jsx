@@ -18,7 +18,7 @@ export default (
       changeSort: Function,
       initSort: Function,
       sortData: Object
-    }
+    };
 
     componentWillMount() {
       if (defaultSortData) {
@@ -37,7 +37,7 @@ export default (
 
         changeSort(tableName, sortBy, -1 * direction, ignoreCase);
       }
-    }
+    };
 
     render() {
       const { sortData } = this.props;
@@ -53,6 +53,7 @@ export default (
       return <Component {...newProps} onSortChange={this.handleSortChange} />;
     }
   }
+
   WrappedComponent.propTypes = {
     changeSort: PropTypes.func,
     initSort: PropTypes.func,

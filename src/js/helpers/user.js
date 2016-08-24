@@ -1,9 +1,11 @@
 import { includes } from 'lodash';
 
-const hasPermission = (userPerms, permissions) => {
+const hasPermission = (userPerms, permissions, cond = 'and') => {
   const perms = typeof permissions === 'string' ? [permissions] : permissions;
 
-  return perms.every(p => includes(userPerms, p));
+  return cond === 'and' ?
+    perms.every(p => includes(userPerms, p)) :
+    perms.some(p => includes(userPerms, p));
 };
 
 // @TODO: Rewrite as only async/await?

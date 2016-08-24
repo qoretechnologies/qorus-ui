@@ -19,6 +19,7 @@ export default function Control(
        `btn-${btnStyle}`,
        'dropdown-toggle'
       )}
+      type="button"
       {...other}
     >
       { children }

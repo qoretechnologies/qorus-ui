@@ -16,7 +16,7 @@ module.exports = () => {
     }
   });
 
-  router.put('/:remote', (req, res) => {
+  router.put('/datasources/:remote', (req, res) => {
     if (req.params.remote === 'falsetest') {
       res.json(
         {

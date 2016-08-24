@@ -91,9 +91,9 @@ class AppInfo extends React.Component {
             <Route path="options" component={System.Options} />
             <Route path="remote" component={System.Connections}>
               <IndexRedirect to="datasources" />
-                <Route path=":type" component={System.Connections.Table}>
-                  <Route path=":id" component={System.Connections.Pane} />
-                </Route>
+              <Route path=":type" component={System.Connections.Table}>
+                <Route path=":id" component={System.Connections.Pane} />
+              </Route>
             </Route>
             <Route path="props" component={System.Properties} />
             <Route path="sqlcache" component={System.SqlCache} />
@@ -103,7 +103,12 @@ class AppInfo extends React.Component {
               <IndexRedirect to="main" />
                 <Route path=":log" component={System.Logs.Log} />
             </Route>
-            <Route path="rbac" component={System.RBAC} />
+            <Route path="rbac" component={System.RBAC}>
+              <IndexRedirect to="users" />
+              <Route path="users" component={System.RBAC.Users} />
+              <Route path="roles" component={System.RBAC.Roles} />
+              <Route path="permissions" component={System.RBAC.Permissions} />
+            </Route>
             <Route path="errors" component={System.Errors} />
           </Route>
           <Route
