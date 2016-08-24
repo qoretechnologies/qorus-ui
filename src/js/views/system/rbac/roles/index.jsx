@@ -10,7 +10,7 @@ import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import Search from '../../../../components/search';
 import Toolbar from '../../../../components/toolbar';
-import { Control as Button } from '../../../../components/controls';
+import AddButton from '../add_button';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
 import Modal from './modal';
@@ -150,20 +150,6 @@ export default class RBACRoles extends Component {
     this.props.removeRole(role);
   };
 
-  renderAddButton(canCreate: boolean) {
-    if (!canCreate) return null;
-
-    return (
-      <Button
-        label="Add role"
-        icon="plus"
-        big
-        btnStyle="success"
-        action={this.handleAddRoleClick}
-      />
-    );
-  }
-
   render() {
     const { permissions } = this.props.user;
     const canEdit = hasPermission(permissions, ['USER-CONTROL', 'MODIFY-ROLE'], 'or');
@@ -175,7 +161,12 @@ export default class RBACRoles extends Component {
         <div className="tab-pane active">
           <Toolbar>
             <div className="pull-left">
-              { this.renderAddButton(canCreate) }
+              <AddButton
+                perms={permissions}
+                reqPerms={['USER-CONTROL', 'ADD-ROLE']}
+                title="Add role"
+                onClick={this.handleAddRoleClick}
+              />
             </div>
             <Search
               onSearchUpdate={this.props.onSearchChange}

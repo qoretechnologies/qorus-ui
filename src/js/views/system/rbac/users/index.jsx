@@ -10,11 +10,11 @@ import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import Search from '../../../../components/search';
 import Toolbar from '../../../../components/toolbar';
-import { Control as Button } from '../../../../components/controls';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
 import Modal from './modal';
 import Table from './table';
+import AddButton from '../add_button';
 import actions from '../../../../store/api/actions';
 
 const currentUserSelector: Function = (state: Object): Object => state.api.currentUser;
@@ -131,22 +131,6 @@ export default class RBACUsers extends Component {
     this.props.removeUser(username);
   };
 
-  renderAddButton() {
-    const { permissions } = this.props.user;
-
-    if (!hasPermission(permissions, ['USER-CONTROL', 'ADD-USER'], 'or')) return null;
-
-    return (
-      <Button
-        label="Add user"
-        icon="plus"
-        big
-        btnStyle="success"
-        action={this.handleAddUserClick}
-      />
-    );
-  }
-
   render() {
     const { permissions } = this.props.user;
     const canEdit = hasPermission(permissions, ['USER-CONTROL', 'MODIFY-USER'], 'or');
@@ -157,7 +141,12 @@ export default class RBACUsers extends Component {
         <div className="tab-pane active">
           <Toolbar>
             <div className="pull-left">
-              { this.renderAddButton() }
+              <AddButton
+                perms={permissions}
+                reqPerms={['USER-CONTROL', 'ADD-USER']}
+                title="Add user"
+                onClick={this.handleAddUserClick}
+              />
             </div>
             <Search
               onSearchUpdate={this.props.onSearchChange}

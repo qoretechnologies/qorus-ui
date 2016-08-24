@@ -111,6 +111,16 @@ export default class AddUserModal extends Component {
     }
   };
 
+  handleFormSubmit: Function = (event: EventHandler): void => {
+    event.preventDefault();
+
+    if (this.props.model) {
+      this.handleSaveClick();
+    } else {
+      this.handleCreateClick();
+    }
+  };
+
   renderRoles: Function = (): ?Array<React.Element<DropItem>> => (
     this.props.rolesModel ? this.props.rolesModel.map(role => (
       <DropItem
@@ -129,11 +139,14 @@ export default class AddUserModal extends Component {
           titleId="addUserModal"
           onClose={onClose}
         >{ this.props.title } </Modal.Header>
-        <Modal.Body>
-          { this.state.error && (
-            <Alert bsStyle="danger">{ this.state.error }</Alert>
-          )}
-          <form className="form-horizontal">
+        <form
+          className="form-horizontal"
+          onSubmit={this.handleFormSubmit}
+        >
+          <Modal.Body>
+            { this.state.error && (
+              <Alert bsStyle="danger">{ this.state.error }</Alert>
+            )}
             <div className="form-group">
               <label htmlFor="username" className="col-sm-4 control-label">Username *</label>
               <div className="col-sm-6">
@@ -207,24 +220,25 @@ export default class AddUserModal extends Component {
                 </Dropdown>
               </div>
             </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Controls noControls grouped>
-            <Button
-              label="Cancel"
-              big
-              btnStyle="default"
-              action={onClose}
-            />
-            <Button
-              label="Save"
-              big
-              btnStyle="success"
-              action={model ? this.handleSaveClick : this.handleCreateClick}
-            />
-          </Controls>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <Controls noControls grouped>
+              <Button
+                label="Cancel"
+                big
+                btnStyle="default"
+                action={onClose}
+                type="button"
+              />
+              <Button
+                label="Save"
+                big
+                btnStyle="success"
+                type="submit"
+              />
+            </Controls>
+          </Modal.Footer>
+        </form>
       </Modal>
     );
   }
