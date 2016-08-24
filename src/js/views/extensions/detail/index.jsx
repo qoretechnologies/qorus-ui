@@ -1,6 +1,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 
 import actions from '../../../store/api/actions';
@@ -21,6 +22,17 @@ const prepareToLoadExtension = mapProps(
   })
 );
 
+const loadExtensionData = lifecycle({
+  componentWillReceiveProps(nextProps) {
+    const { loadExtensionData, extension: { url, name } = {} } = nextProps;
+    const { extension: { url: prevUrl } = {} } = this.props;
+
+    if (url !== prevUrl) {
+      loadExtensionData(name, url);
+    }
+  },
+});
+
 const extensionSelector = (state: Object, { extensionName }: { extensionName: string }) => {
   const extensionList = state.api.extensions.data;
 
@@ -38,5 +50,6 @@ export default compose(
     }
   ),
   patch('load', ['extensionQuery', 'extensionName']),
-  sync('extension', false)
+  sync('extension', false),
+  loadExtensionData
 )(ExtensionDetail);
