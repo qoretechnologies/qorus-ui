@@ -16,6 +16,10 @@ module.exports = () => {
     router.use('/api', require('./mock')());
   }
 
+  if (config.extensionProxy) {
+    router.use(proxyMiddleware(config.extensionProxy));
+  }
+
   if (config.wsProxy) {
     router.use(proxyMiddleware(`${config.wsBaseUrl}/log`));
   } else if (config.env !== 'test') {

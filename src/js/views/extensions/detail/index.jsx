@@ -1,3 +1,4 @@
+/* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -9,8 +10,8 @@ import patch from '../../../hocomponents/patchFuncArgs';
 import sync from '../../../hocomponents/sync';
 
 
-const ExtensionDetail = () => (
-  <div>here will be extensions application</div>
+const ExtensionDetail = ({ extension }: { extension: Object }): React.Element<any> => (
+  <div dangerouslySetInnerHTML={{ __html: extension.data }} />
 );
 
 
@@ -22,7 +23,14 @@ const prepareToLoadExtension = mapProps(
   })
 );
 
-const loadExtensionData = lifecycle({
+const loadData = lifecycle({
+  componentDidMount() {
+    const { loadExtensionData, extension: { url, name } = {} } = this.props;
+    if (url) {
+      loadExtensionData(name, url);
+    }
+  },
+
   componentWillReceiveProps(nextProps) {
     const { loadExtensionData, extension: { url, name } = {} } = nextProps;
     const { extension: { url: prevUrl } = {} } = this.props;
@@ -51,5 +59,5 @@ export default compose(
   ),
   patch('load', ['extensionQuery', 'extensionName']),
   sync('extension', false),
-  loadExtensionData
+  loadData
 )(ExtensionDetail);
