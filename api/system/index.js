@@ -23,7 +23,7 @@ module.exports = () => {
       value: req.body.parse_args,
     });
 
-    res.json('INSERT');
+    res.send('INSERT');
   });
 
   router.put('/props/:domain/:key', (req, res) => {
@@ -33,7 +33,7 @@ module.exports = () => {
       value: req.body.parse_args,
     });
 
-    res.json('UPDATE');
+    res.send('UPDATE');
   });
 
   router.delete('/props/:domain', (req, res) => {
@@ -41,7 +41,7 @@ module.exports = () => {
       domain: req.params.domain,
     });
 
-    res.json('DELETE');
+    res.send('DELETE');
   });
 
   router.delete('/props/:domain/:key', (req, res) => {
@@ -50,7 +50,7 @@ module.exports = () => {
       key: req.params.key,
     });
 
-    res.json('DELETE');
+    res.send('DELETE');
   });
 
   router.put('/api', (req, res) => {
