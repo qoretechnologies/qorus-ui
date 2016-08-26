@@ -5,12 +5,11 @@ import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 import { includes, flowRight } from 'lodash';
 
-import { CondControl as ConditionButton } from '../../../components/controls';
 import actions from '../../../store/api/actions';
 import Prop from './prop';
 import Search from '../../../components/search';
 import Modal from './modal';
-import { hasPermission } from '../../../helpers/user';
+import PermButton from './perm_control';
 import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
@@ -115,9 +114,7 @@ export default class PropertiesView extends Component {
   };
 
   renderProperties() {
-    const { collection } = this.props;
-
-    console.log(collection);
+    const { collection, user } = this.props;
 
     if (!Object.keys(collection).length) return null;
 
@@ -125,8 +122,7 @@ export default class PropertiesView extends Component {
       <Prop
         data={collection[p]}
         title={p}
-        canSet={this.canSet}
-        canDelete={this.canDelete}
+        perms={user.data.permissions}
         key={key}
         onDelete={this.handleDeleteClick}
         onEdit={this.handleAddClick}
@@ -134,20 +130,13 @@ export default class PropertiesView extends Component {
     ));
   }
 
-  canSet: Function = (): boolean => (
-    hasPermission(this.props.user.data.permissions, ['SERVER-CONTROL', 'SET-PROPERTY'], 'or')
-  );
-
-  canDelete: Function = (): boolean => (
-    hasPermission(this.props.user.data.permissions, ['SERVER-CONTROL', 'DELETE-PROPERTY'], 'or')
-  );
-
   render() {
     return (
       <div className="tab-pane active">
         <div className="container-fluid">
-          <ConditionButton
-            condition={this.canSet}
+          <PermButton
+            perms={this.props.user.data.permissions}
+            reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
             label="Add property"
             big
             btnStyle="success"

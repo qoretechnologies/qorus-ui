@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from 'components/table';
-import { Controls, CondControl } from 'components/controls';
+import PermButton from './perm_control';
+import { Controls } from 'components/controls';
 
 export default class Property extends Component {
   static propTypes = {
     data: PropTypes.object,
     title: PropTypes.string,
-    canDelete: PropTypes.func,
-    canSet: PropTypes.func,
+    perms: PropTypes.array,
     onDelete: PropTypes.func,
     onEdit: PropTypes.func,
   };
@@ -26,20 +26,22 @@ export default class Property extends Component {
   );
 
   renderControls(key, value) {
-    const { title, canSet, canDelete } = this.props;
+    const { title, perms } = this.props;
 
     if (title === 'omq') return null;
 
     return (
       <Controls grouped>
-        <CondControl
-          condition={canSet}
+        <PermButton
+          perms={perms}
+          reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
           icon="pencil"
           btnStyle="warning"
           onClick={this.handleEditClick(key, value)}
         />
-        <CondControl
-          condition={canDelete}
+        <PermButton
+          perms={perms}
+          reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
           icon="times"
           btnStyle="danger"
           onClick={this.handleKeyDeleteClick(key)}
@@ -63,7 +65,7 @@ export default class Property extends Component {
   }
 
   render() {
-    const { title, canDelete } = this.props;
+    const { title, perms } = this.props;
 
     return (
       <div className="container-fluid">
@@ -72,8 +74,9 @@ export default class Property extends Component {
           { title !== 'omq' && (
             <div className="pull-right">
               <Controls grouped>
-                <CondControl
-                  condition={canDelete}
+                <PermButton
+                  perms={perms}
+                  reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
                   icon="times"
                   btnStyle="danger"
                   onClick={this.handlePropDeleteClick}
