@@ -15,6 +15,7 @@ export default (
       route: Object,
       params: Object,
       location: Object,
+      query: string,
     };
 
     handleSearch: Function = (q): void => {
@@ -32,12 +33,11 @@ export default (
 
     render() {
       const func = customFunc || this.handleSearch;
-      const { location: { query: { q = '' } } } = this.props;
 
       return (
         <Component
           onSearchChange={func}
-          defaultSearchValue={q}
+          defaultSearchValue={this.props.query || ''}
           {...this.props}
         />
       );
