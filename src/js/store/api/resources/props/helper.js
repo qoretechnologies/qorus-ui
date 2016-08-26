@@ -1,4 +1,4 @@
-const updateProp = (props, prop) => {
+const updateProps = (props, prop) => {
   const newProps = props;
 
   if (props[prop.domain]) {
@@ -10,7 +10,7 @@ const updateProp = (props, prop) => {
   return newProps;
 };
 
-const delProp = (props, prop) => {
+const deleteProps = (props, prop) => {
   const newProps = props;
 
   if (!prop.key) {
@@ -22,5 +22,7 @@ const delProp = (props, prop) => {
   return newProps;
 };
 
-module.exports.updateProp = updateProp;
-module.exports.delProp = delProp;
+export {
+  updateProps,
+  deleteProps,
+};

@@ -5,12 +5,7 @@
  */
 
 const express = require('express');
-const updateProp = require(
-  '../../src/js/store/api/resources/system/props/actions/helper'
-).updateProp;
-const deleteProp = require(
-  '../../src/js/store/api/resources/system/props/actions/helper'
-).delProp;
+import { updateProps, deleteProps } from '../../src/js/store/api/resources/props/helper';
 
 module.exports = () => {
   const data = require('./data')();
@@ -21,31 +16,41 @@ module.exports = () => {
     res.status(data[req.params.attr] ? 200 : 404).json(data[req.params.attr])
   ));
 
-  router.put('/props/:domain/:key', (req, res) => {
-    data.props = updateProp(data.props, {
+  router.post('/props/:domain/:key', (req, res) => {
+    data.props = updateProps(data.props, {
       domain: req.params.domain,
       key: req.params.key,
       value: req.body.parse_args,
     });
 
-    res.json('Successfuly updated');
+    res.send('INSERT');
+  });
+
+  router.put('/props/:domain/:key', (req, res) => {
+    data.props = updateProps(data.props, {
+      domain: req.params.domain,
+      key: req.params.key,
+      value: req.body.parse_args,
+    });
+
+    res.send('UPDATE');
   });
 
   router.delete('/props/:domain', (req, res) => {
-    data.props = deleteProp(data.props, {
+    data.props = deleteProps(data.props, {
       domain: req.params.domain,
     });
 
-    res.json('Successfuly deleted');
+    res.send('DELETE');
   });
 
   router.delete('/props/:domain/:key', (req, res) => {
-    data.props = deleteProp(data.props, {
+    data.props = deleteProps(data.props, {
       domain: req.params.domain,
       key: req.params.key,
     });
 
-    res.json('Successfuly deleted');
+    res.send('DELETE');
   });
 
   router.put('/api', (req, res) => {

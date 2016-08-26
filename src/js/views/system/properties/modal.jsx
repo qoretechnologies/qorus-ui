@@ -11,32 +11,23 @@ export default class extends Component {
     data: PropTypes.object,
   };
 
-  componentWillMount() {
-    const domain = this.props.data.domain || '';
-    const key = this.props.data.key || '';
-    const value = this.props.data.value || '';
-
-    this.setState({
-      domain,
-      key,
-      value,
-    });
-  }
-
-  handleInputChange = (input) => (event) => {
-    this.setState({
-      [input]: event.target.value,
-    });
-  };
-
   handleFormSubmit = (event) => {
     event.preventDefault();
 
-    this.props.onSubmit(this.state);
+    const { domain, key, value } = this.refs;
+
+    this.props.onSubmit({
+      domain: domain.value,
+      key: key.value,
+      value: value.value,
+    });
+
     this.props.onClose();
   };
 
   render() {
+    const { data } = this.props;
+
     return (
       <Modal>
         <Modal.Header
@@ -50,29 +41,31 @@ export default class extends Component {
             <div className="form-group">
               <label htmlFor="domain"> Domain </label>
               <input
+                readOnly={data}
+                ref="domain"
                 type="text"
                 id="domain"
-                onChange={this.handleInputChange('domain')}
-                defaultValue={this.state.domain}
+                defaultValue={data ? data.domain : ''}
                 className="form-control"
               />
             </div>
             <div className="form-group">
               <label htmlFor="key"> Key </label>
               <input
+                readOnly={data}
+                ref="key"
                 type="text"
                 id="key"
-                onChange={this.handleInputChange('key')}
-                defaultValue={this.state.key}
+                defaultValue={data ? data.key : ''}
                 className="form-control"
               />
             </div>
             <div className="form-group">
               <label htmlFor="value"> Value </label>
               <textarea
+                ref="value"
                 id="value"
-                onChange={this.handleInputChange('value')}
-                defaultValue={this.state.value}
+                defaultValue={data ? data.value : ''}
                 className="form-control"
               />
             </div>

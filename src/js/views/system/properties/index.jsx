@@ -1,151 +1,152 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
+import { includes, flowRight } from 'lodash';
 
-import actions from 'store/api/actions';
-
+import actions from '../../../store/api/actions';
 import Prop from './prop';
-import { Control as Button } from 'components/controls';
-import Search from 'components/search';
-import Loader from 'components/loader';
+import Search from '../../../components/search';
 import Modal from './modal';
+import PermButton from './perm_control';
+import sync from '../../../hocomponents/sync';
+import search from '../../../hocomponents/search';
+import modal from '../../../hocomponents/modal';
 
-import { goTo } from 'helpers/router';
-import { hasPermission } from 'helpers/user';
-import { includes } from 'lodash';
+const dataSelector: Function = (state: Object): Object => state.api.props;
+const querySelector: Function = (state: Object, props: Object): Object => props.location.query.q;
+const filterData = (query: string): Function => (collection: Object): Object => {
+  if (!query) return collection;
+
+  return Object.keys(collection).reduce((n, k) => {
+    const obj = Object.keys(collection[k]).reduce((deep, deepkey) => (
+      includes(deepkey, query) || includes(collection[k][deepkey], query) ?
+        Object.assign(deep, { [deepkey]: collection[k][deepkey] }) :
+        deep
+    ), {});
+
+    if (Object.keys(obj).length) {
+      return Object.assign(n, { [k]: obj });
+    }
+
+    if (includes(k, query)) {
+      return Object.assign(n, { [k]: collection[k] });
+    }
+
+    return n;
+  }, {});
+};
+
+const collectionSelector = createSelector(
+  [
+    dataSelector,
+    querySelector,
+  ], (properties, query) => flowRight(
+    filterData(query)
+  )(properties.data)
+);
 
 const viewSelector = createSelector(
   [
-    state => state.api.props,
+    dataSelector,
     state => state.api.currentUser,
+    querySelector,
+    collectionSelector,
   ],
-  (properties, user) => ({
+  (properties, user, query, collection) => ({
     properties,
     user,
+    query,
+    collection,
   })
 );
 
-@connect(viewSelector)
+@compose(
+  connect(
+    viewSelector,
+    {
+      load: actions.props.fetch,
+      addProp: actions.props.addProp,
+      updateProp: actions.props.updateProp,
+      removeProp: actions.props.removeProp,
+    }
+  ),
+  modal(),
+  search('props', 'system/props'),
+  sync('properties')
+)
 export default class PropertiesView extends Component {
   static propTypes = {
-    properties: PropTypes.object,
+    collection: PropTypes.object,
     user: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    location: PropTypes.object,
-    route: PropTypes.object,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object,
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
+    addProp: PropTypes.func,
+    updateProp: PropTypes.func,
+    removeProp: PropTypes.func,
+    query: PropTypes.string,
+    onSearchChange: PropTypes.func,
   };
 
-  componentWillMount() {
-    this.props.dispatch(actions.props.fetch());
-  }
+  handleAddClick = (event: EventHandler, data: Object) => {
+    const onSubmit = data ? this.handleEditFormSubmit : this.handleAddFormSubmit;
 
-  handleSearchUpdate = (q) => {
-    goTo(
-      this.context.router,
-      'system/props',
-      'system/props',
-      this.props.params,
-      {},
-      { q }
-    );
-  };
-
-  handleAddClick = (data = {}) => {
-    this._modal = (
+    this.props.openModal(
       <Modal
-        onClose={this.handleModalClose}
-        onSubmit={this.handleFormSubmit}
+        onClose={this.props.closeModal}
+        onSubmit={onSubmit}
         data={data}
       />
     );
-
-    this.context.openModal(this._modal);
   };
 
-  handleModalClose = () => {
-    this.context.closeModal(this._modal);
+  handleAddFormSubmit = (data: Object) => {
+    this.props.addProp(data);
   };
 
-  handleFormSubmit = (data) => {
-    this.props.dispatch(
-      actions.props.addProp(this.props.properties.data, data)
-    );
+  handleEditFormSubmit = (data: Object) => {
+    this.props.updateProp(data);
   };
 
-  handleDeleteClick = (prop) => {
-    this.props.dispatch(
-      actions.props.deleteProp(this.props.properties.data, prop)
-    );
+  handleDeleteClick = (prop: Object) => {
+    this.props.removeProp(prop);
   };
 
   renderProperties() {
-    const filter = this.props.location.query.q;
-    return Object.keys(this.props.properties.data).map((p, key) => {
-      let manage = hasPermission(
-        this.props.user.data.permissions,
-        ['SERVER-CONTROL']
-      );
-      const data = this.props.properties.data[p];
-      const filtered = Object.keys(data).reduce((n, k) => {
-        if (!filter || (includes(p, filter) || includes(k, filter) || includes(data[k], filter))) {
-          return Object.assign(n, { [k]: data[k] });
-        }
+    const { collection, user } = this.props;
 
-        return n;
-      }, {});
+    if (!Object.keys(collection).length) return null;
 
-      if (!Object.keys(filtered).length) return undefined;
-
-      manage = p !== 'omq' && manage;
-
-      return (
-        <Prop
-          data={filtered}
-          filter={this.props.location.query.q}
-          title={p}
-          manage={manage}
-          key={key}
-          onDelete={this.handleDeleteClick}
-          onEdit={this.handleAddClick}
-        />
-      );
-    });
-  }
-
-  renderAddButton() {
-    if (!hasPermission(this.props.user.data.permissions, [
-      'SERVER-CONTROL',
-    ])) return undefined;
-
-    return (
-      <Button
-        label="Add property"
-        big
-        btnStyle="success"
-        action={this.handleAddClick}
-        className="pull-left"
-        icon="plus"
+    return Object.keys(collection).map((p, key) => (
+      <Prop
+        data={collection[p]}
+        title={p}
+        perms={user.data.permissions}
+        key={key}
+        onDelete={this.handleDeleteClick}
+        onEdit={this.handleAddClick}
       />
-    );
+    ));
   }
 
   render() {
-    if (!this.props.properties.sync) return <Loader />;
-
     return (
       <div className="tab-pane active">
         <div className="container-fluid">
-          { this.renderAddButton() }
+          <PermButton
+            perms={this.props.user.data.permissions}
+            reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
+            label="Add property"
+            big
+            btnStyle="success"
+            icon="plus"
+            className="pull-left"
+            onClick={this.handleAddClick}
+          />
           <Search
-            onSearchUpdate={this.handleSearchUpdate}
-            defaultValue={this.props.location.query.q}
+            onSearchUpdate={this.props.onSearchChange}
+            defaultValue={this.props.query}
           />
         </div>
         { this.renderProperties() }
