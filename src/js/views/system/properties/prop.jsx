@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 
 import Table, { Section, Row, Cell } from 'components/table';
-import { Controls, Control } from 'components/controls';
-import { pureRender } from 'components/utils';
+import { Controls, CondControl } from 'components/controls';
 
-@pureRender
 export default class Property extends Component {
   static propTypes = {
     data: PropTypes.object,
     title: PropTypes.string,
-    filter: PropTypes.string,
-    manage: PropTypes.bool,
+    canDelete: PropTypes.func,
+    canSet: PropTypes.func,
     onDelete: PropTypes.func,
     onEdit: PropTypes.func,
   };
@@ -19,54 +17,66 @@ export default class Property extends Component {
     this.props.onDelete({ domain: this.props.title });
   };
 
-  handleKeyDeleteClick = key => () => this.props.onDelete({ domain: this.props.title, key });
+  handleKeyDeleteClick = key => () => {
+    this.props.onDelete({ domain: this.props.title, key });
+  };
 
   handleEditClick = (key, value) => () => (
-    this.props.onEdit({ domain: this.props.title, key, value })
+    this.props.onEdit(null, { domain: this.props.title, key, value })
   );
 
   renderControls(key, value) {
-    if (!this.props.manage) return undefined;
+    const { title, canSet, canDelete } = this.props;
+
+    if (title === 'omq') return null;
 
     return (
       <Controls grouped>
-        <Control
+        <CondControl
+          condition={canSet}
           icon="pencil"
           btnStyle="warning"
-          action={this.handleEditClick(key, value)}
+          onClick={this.handleEditClick(key, value)}
         />
-        <Control
+        <CondControl
+          condition={canDelete}
           icon="times"
           btnStyle="danger"
-          action={this.handleKeyDeleteClick(key)}
+          onClick={this.handleKeyDeleteClick(key)}
         />
       </Controls>
     );
   }
 
   renderRows() {
-    return Object.keys(this.props.data).map((d, key) => (
+    const { data } = this.props;
+
+    return Object.keys(data).map((d, key) => (
       <Row key={key}>
         <Cell tag="th">{ d }</Cell>
-        <Cell>{ this.props.data[d] }</Cell>
-        <Cell>{ this.renderControls(d, this.props.data[d]) }</Cell>
+        <Cell>
+          { typeof data[d] === 'string' ? data[d] : JSON.stringify(data[d]) }
+        </Cell>
+        <Cell>{ this.renderControls(d, data[d]) }</Cell>
       </Row>
     ));
   }
 
   render() {
-    const { title } = this.props;
+    const { title, canDelete } = this.props;
+
     return (
       <div className="container-fluid">
         <h4>
           { title }
-          { this.props.manage && (
+          { title !== 'omq' && (
             <div className="pull-right">
               <Controls grouped>
-                <Control
+                <CondControl
+                  condition={canDelete}
                   icon="times"
                   btnStyle="danger"
-                  action={this.handlePropDeleteClick}
+                  onClick={this.handlePropDeleteClick}
                 />
               </Controls>
             </div>

@@ -10,3 +10,4 @@ export * as users from './users/reducers';
 export * as roles from './roles/reducers';
 export * as perms from './perms/reducers';
 export * as currentUser from './currentUser/reducers';
+export * as props from './props/reducers';

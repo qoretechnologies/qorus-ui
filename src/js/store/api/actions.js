@@ -8,7 +8,7 @@ import * as serviceActions from './resources/services/actions';
 import * as jobActions from './resources/jobs/actions';
 import * as orderActions from './resources/orders/actions';
 import * as optionActions from './resources/options/actions';
-import * as propActions from './resources/system/props/actions';
+import * as propActions from './resources/props/actions';
 import * as groupsActions from './resources/groups/actions';
 import * as logoutActions from './resources/logout/actions';
 import * as alertsActions from './resources/alerts/actions';
@@ -27,7 +27,6 @@ import {
 } from './utils';
 
 import qs from 'qs';
-
 
 export const DEFAULT_ACTIONS = {
   FETCH: {
@@ -88,15 +87,8 @@ const actions = createApiActions(
   combineResourceActions(
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),
     createResourceActions(RESOURCES),
-    // TODO: Add more conveniant way to assign more actions to resource for
-    // example like following code
-    //    addResourceActions(RESOURCES, 'services', serviceActions.delegates),
   )
 );
-
-// Object.keys(authActions).forEach(a => {
-//   actions.auth[a] = authActions[a];
-// });
 
 Object.keys(workflowActions.delegates).forEach(a => {
   actions.workflows[a] = workflowActions.delegates[a](actions);
@@ -116,12 +108,10 @@ Object.assign(actions.perms, permsActions);
 
 Object.assign(actions.steps, stepActions);
 
+Object.assign(actions.props, propActions);
+
 Object.keys(orderActions).forEach(a => {
   actions.orders[a] = orderActions[a](actions);
-});
-
-Object.keys(propActions).forEach(a => {
-  actions.props[a] = propActions[a](actions);
 });
 
 Object.keys(groupsActions).forEach(a => {
