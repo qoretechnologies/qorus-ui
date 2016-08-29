@@ -17,8 +17,6 @@ const apiPort = isApiOverride ?
   (process.env.API_PORT || 8001) :
   devConfig().port;
 
-
-
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   restProxy: isRestOverride,
