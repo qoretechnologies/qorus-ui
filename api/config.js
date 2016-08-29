@@ -17,12 +17,15 @@ const apiPort = isApiOverride ?
   (process.env.API_PORT || 8001) :
   devConfig().port;
 
+
+
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   restProxy: isRestOverride,
   restBaseUrl: process.env.REST_BASE_URL ||
     `${apiProto}://${apiHost}:${apiPort}/api`,
-  extensionProxy: `${apiProto}://${apiHost}:${apiPort}/UIExtension`,
+  extensionProxy: isApiOverride && `${apiProto}://${apiHost}:${apiPort}/UIExtension`,
+  dbProxy: isApiOverride && `${apiProto}://${apiHost}:${apiPort}/db`,
   wsProxy: isWsOverride,
   wsBaseUrl: process.env.WS_BASE_URL ||
     `${apiProto === 'https' ? 'wss' : 'ws'}://${apiHost}:${apiPort}`,

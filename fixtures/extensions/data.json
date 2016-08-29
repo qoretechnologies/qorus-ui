@@ -1,1 +1,52 @@
-[{"name": "ui-extension-user-sql-data-view-1-1","group": "SQL","type": "user","service": "sql-data-view","menuname": "SQL Data View","desc": "Allows database and table browsing","url": "http://xbox:8091/UIExtension/user-sql-data-view-1","url_name": "user-sql-data-view-1"},{"name": "ui-extension-user-qorus-universal-fixit-extension-pro-1-1","group": "OPS","type": "user","service": "qorus-universal-fixit-extension-pro","menuname": "Qorus Universal FixIt! extension","desc": "An enterprise solution for all problems","url": "http://xbox:8091/UIExtension/user-qorus-universal-fixit-extension-pro-1","url_name": "user-qorus-universal-fixit-extension-pro-1"},{"name": "ui-extension-user-sepl-hybris-soap-msg-sender-1-1","group": "SEPL","type": "user","service": "sepl-hybris-soap-msg-sender","menuname": "Soap Message Sender","desc": "soap message sender","url": "http://xbox:8091/UIExtension/user-sepl-hybris-soap-msg-sender-1","url_name": "user-sepl-hybris-soap-msg-sender-1"},{"name": "ui-extension-user-sepl-monitor-1-1","group": "SEPL","type": "user","service": "sepl-monitor","menuname": "SEPL System Monitor","desc": "System status dashboard","url": "http://xbox:8091/UIExtension/user-sepl-monitor-1","url_name": "user-sepl-monitor-1"},{"name": "ui-extension-user-sepl-http-gui-soap-uploader-1-1","group": "SEPL","type": "user","service": "sepl-http-gui-soap-uploader","menuname": "Universal SOAP message uploader","desc": "A helper tool for uploading raw SOAP messages/xml files to the SOAP listeners","url": "http://xbox:8091/UIExtension/user-sepl-http-gui-soap-uploader-1","url_name": "user-sepl-http-gui-soap-uploader-1"}]
+[
+  {
+    "name": "test",
+    "group": "TEST",
+    "type": "user",
+    "service": "test",
+    "menuname": "TEST new app",
+    "desc": "Allows database and table browsing",
+    "url": "http://localhost:3000/UIExtension/test",
+    "url_name": "test"
+  },
+  {
+    "name": "ui-extension-user-qorus-universal-fixit-extension-pro-1-1",
+    "group": "OPS",
+    "type": "user",
+    "service": "qorus-universal-fixit-extension-pro",
+    "menuname": "Qorus Universal FixIt! extension",
+    "desc": "An enterprise solution for all problems",
+    "url": "http://xbox:8091/UIExtension/user-qorus-universal-fixit-extension-pro-1",
+    "url_name": "user-qorus-universal-fixit-extension-pro-1"
+  },
+  {
+    "name": "ui-extension-user-sepl-hybris-soap-msg-sender-1-1",
+    "group": "SEPL",
+    "type": "user",
+    "service": "sepl-hybris-soap-msg-sender",
+    "menuname": "Soap Message Sender",
+    "desc": "soap message sender",
+    "url": "http://xbox:8091/UIExtension/user-sepl-hybris-soap-msg-sender-1",
+    "url_name": "user-sepl-hybris-soap-msg-sender-1"
+  },
+  {
+    "name": "ui-extension-user-sepl-monitor-1-1",
+    "group": "SEPL",
+    "type": "user",
+    "service": "sepl-monitor",
+    "menuname": "SEPL System Monitor",
+    "desc": "System status dashboard",
+    "url": "http://xbox:8091/UIExtension/user-sepl-monitor-1",
+    "url_name": "user-sepl-monitor-1"
+  },
+  {
+    "name": "ui-extension-user-sepl-http-gui-soap-uploader-1-1",
+    "group": "SEPL",
+    "type": "user",
+    "service": "sepl-http-gui-soap-uploader",
+    "menuname": "Universal SOAP message uploader",
+    "desc": "A helper tool for uploading raw SOAP messages/xml files to the SOAP listeners",
+    "url": "http://xbox:8091/UIExtension/user-sepl-http-gui-soap-uploader-1",
+    "url_name": "user-sepl-http-gui-soap-uploader-1"
+  }
+]

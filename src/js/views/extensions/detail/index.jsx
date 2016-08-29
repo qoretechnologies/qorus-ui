@@ -8,10 +8,15 @@ import { connect } from 'react-redux';
 import actions from '../../../store/api/actions';
 import patch from '../../../hocomponents/patchFuncArgs';
 import sync from '../../../hocomponents/sync';
+import showIfPassed from '../../../hocomponents/show-if-passed';
 
 
-const ExtensionDetail = ({ extension }: { extension: Object }): React.Element<any> => (
-  <div dangerouslySetInnerHTML={{ __html: extension.data }} />
+const ExtensionDetail = ({ extension }:{ extension: Object }): React.Element<any> => (
+  <div
+    dangerouslySetInnerHTML={{
+      __html: `<iframe src="${extension.url}" />`,
+    }}
+  />
 );
 
 
@@ -59,5 +64,7 @@ export default compose(
   ),
   patch('load', ['extensionQuery', 'extensionName']),
   sync('extension', false),
-  loadData
+  loadData,
+  showIfPassed(({ extension }: { extension: Object }): boolean => !!extension.url)
 )(ExtensionDetail);
+

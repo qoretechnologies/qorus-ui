@@ -1,8 +1,9 @@
 'use strict';
 
 
-const express = require('express');
-const proxyMiddleware = require('http-proxy-middleware');
+import express from 'express';
+import proxyMiddleware from 'http-proxy-middleware';
+import serveStatic from 'serve-static';
 
 const config = require('./config');
 
@@ -18,6 +19,13 @@ module.exports = () => {
 
   if (config.extensionProxy) {
     router.use(proxyMiddleware(config.extensionProxy));
+  } else {
+    console.log('Use fake extensions');
+    router.use('/UIExtension', serveStatic('./UIExtension'));
+  }
+
+  if (config.dbProxy) {
+    router.use(proxyMiddleware(config.dbProxy));
   }
 
   if (config.wsProxy) {
