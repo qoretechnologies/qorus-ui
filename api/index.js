@@ -20,7 +20,6 @@ module.exports = () => {
   if (config.extensionProxy) {
     router.use(proxyMiddleware(config.extensionProxy));
   } else {
-    console.log('Use fake extensions');
     router.use('/UIExtension', serveStatic('./UIExtension'));
   }
 

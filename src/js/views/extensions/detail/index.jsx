@@ -13,7 +13,7 @@ import showIfPassed from '../../../hocomponents/show-if-passed';
 const ExtensionDetail = ({ extension }:{ extension: Object }): React.Element<any> => (
   <div
     dangerouslySetInnerHTML={{
-      __html: `<iframe src="${extension.url}" />`,
+      __html: `<iframe class="extension-iframe" src="${extension.url}" />`,
     }}
   />
 );
