@@ -10,6 +10,7 @@ const config = require('../config');
 const express = require('express');
 const rest = require('../rest');
 const moment = require('moment');
+import _ from 'lodash';
 
 module.exports = () => {
   const data = getJobData();
@@ -65,7 +66,12 @@ module.exports = () => {
   router.get('/:id/results', (req, res) => {
     let results = jobResultsData[0];
     let { offset = '0', limit = '10' } = req.query;
-    const { status, date: dateStr } = req.query;
+    let normolizedStatuses = [];
+    const { statuses, date: dateStr } = req.query;
+    const normolizeStatus = item => item.toLowerCase();
+    if (statuses) {
+      normolizedStatuses = statuses.split(',').map(normolizeStatus);
+    }
     offset = parseInt(offset, 10);
     limit = parseInt(limit, 10);
 
@@ -76,8 +82,14 @@ module.exports = () => {
       date = moment().substract(1, 'days');
     }
 
-    if (status && status !== 'all') {
-      results = results.filter(item => item.jobstatus.toLowerCase() === status.toLowerCase());
+    if (normolizedStatuses.length > 0 && !normolizedStatuses.find(status => status === 'all')) {
+      const findByStatus = _.flowRight(
+        resStatus => normolizedStatuses.find(status => status === resStatus),
+        normolizeStatus,
+        item => item.jobstatus
+      );
+
+      results = results.filter(findByStatus);
     }
 
     results = results.filter(o => moment(o.modified).isAfter(date));

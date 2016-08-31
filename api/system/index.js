@@ -7,8 +7,11 @@
 const express = require('express');
 import { updateProps, deleteProps } from '../../src/js/store/api/resources/props/helper';
 
+import { getExtensions } from '../extensions/data';
+
 module.exports = () => {
   const data = require('./data')();
+  const extensions = getExtensions();
 
   const router = new express.Router();
   router.get('/', (req, res) => res.json(data.system));
@@ -98,6 +101,15 @@ module.exports = () => {
     }
 
     res.json(data.sqlcache);
+  });
+
+  router.get('/ui/extensions', (req, res) => {
+    res.json(extensions);
+  });
+
+  router.get('/ui/extensions/:name', (req, res) => {
+    const extension = extensions.find(item => item.name === req.params.name);
+    res.json(extension);
   });
 
   return router;

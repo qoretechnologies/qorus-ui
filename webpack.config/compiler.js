@@ -5,7 +5,6 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
 const root = path.resolve(__dirname, '..');
 
 module.exports = function compilerConfig() {

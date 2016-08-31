@@ -81,3 +81,9 @@ html, body, .app, .app__wrap, .container-fluid {
 .form-error {
   border: 1px solid #cf0000 !important;
 }
+
+iframe {
+  width: 100%;
+  height: calc(100vh - 100px);
+  border: none;
+}

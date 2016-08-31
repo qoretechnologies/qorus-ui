@@ -182,4 +182,9 @@ export default [
     url: `${settings.REST_BASE_URL}/perms/`,
     transform: item => item,
   },
+  {
+    name: 'extensions',
+    url: `${settings.REST_BASE_URL}/system/ui/extensions`,
+    transform: item => item,
+  },
 ];

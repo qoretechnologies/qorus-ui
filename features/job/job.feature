@@ -29,6 +29,7 @@ Feature: Job page test
     And I click the "Load more" button
     Then I do not see ".load-more" item
 
+
   Scenario: Show only complete resutls
     Given I am on "job/110/results?date=all" page
     When "results-table" get loaded

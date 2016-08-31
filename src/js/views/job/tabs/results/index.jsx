@@ -43,8 +43,14 @@ const JobResults = ({
 const addUrlParams = mapProps((props:Object) => {
   const { location: { query } } = props;
   const { filter: status, date } = query;
-  const searchableData = formatDate(date).format();
-  return { ...props, urlParams: { status, date: searchableData } };
+  const searchableDate = formatDate(date).format();
+  return {
+    ...props,
+    urlParams: {
+      statuses: status !== 'all' ? status : undefined,
+      date: searchableDate,
+    },
+  };
 });
 
 const fetchOnMount = lifecycle({
