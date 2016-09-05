@@ -12,6 +12,12 @@ require('./index.html');
 
 global.env = process.env;
 
+
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update', { exclude: /^(Connect|Route)/ });
+  whyDidYouUpdate(React);
+}
+
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
     <App env={process.env} />,
