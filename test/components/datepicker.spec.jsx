@@ -6,6 +6,7 @@ import Datepicker from '../../src/js/components/datepicker';
 import Input from '../../src/js/components/datepicker/input';
 import Calendar from '../../src/js/components/datepicker/calendar';
 import Picker from '../../src/js/components/datepicker/picker';
+import { mount } from 'enzyme';
 
 import moment from 'moment';
 
@@ -16,46 +17,35 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
   describe('Datepicker', () => {
     it('renders the Datepicker input with default date', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Datepicker date="24h" />
-      );
-      const result = renderer.getRenderOutput();
+      const wrapper = mount(<Datepicker date="24h" />);
+      const { inputDate } = wrapper.find('Input').props();
       const date = moment().add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(result.props.children[0].props.inputDate).to.equal(date);
+      expect(inputDate).to.equal(date);
     });
 
     it('renders the Datepicker input with current date', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Datepicker date="now" />
-      );
-      const result = renderer.getRenderOutput();
+      const wrapper = mount(<Datepicker date="now" />);
+      const { inputDate } = wrapper.find('Input').props();
       const date = moment().format('YYYY-MM-DD HH:mm:ss');
 
-      expect(result.props.children[0].props.inputDate).to.equal(date);
+      expect(inputDate).to.equal(date);
     });
 
     it('renders the Datepicker input with the "all" date', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Datepicker date="all" />
-      );
-      const result = renderer.getRenderOutput();
+      const wrapper = mount(<Datepicker date="all" />);
+      const { inputDate } = wrapper.find('Input').props();
       const date = moment('19700101000000').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(result.props.children[0].props.inputDate).to.equal(date);
+      expect(inputDate).to.equal(date);
     });
 
     it('renders the Datepicker input with provided date', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Datepicker date="19880809123456" />
-      );
-      const result = renderer.getRenderOutput();
+      const wrapper = mount(<Datepicker date="19880809123456" />);
+      const { inputDate } = wrapper.find('Input').props();
+      const date = '1988-08-09 12:34:56';
 
-      expect(result.props.children[0].props.inputDate).to.equal('1988-08-09 12:34:56');
+      expect(inputDate).to.equal(date);
     });
 
     it('renders the Datepicker without the selection buttons', () => {
