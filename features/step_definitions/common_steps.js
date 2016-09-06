@@ -125,6 +125,7 @@ module.exports = function commonSteps() {
 
   this.When(/^I click on "([^"]*)" item$/, async function(selector) {
     await this.waitForElement(mainSection);
+    await this.waitForElement(selector);
     return this.browser.click(selector);
   });
 
@@ -334,6 +335,12 @@ module.exports = function commonSteps() {
   this.Then(/^I do not see "([^"]*)" item$/, async function(selector) {
     await this.waitForChange(1000);
     this.browser.assert.element(selector, { equals: 0 });
+  });
+
+  this.Then(/^I see modal$/, async function () {
+    await this.waitForElement('.modal-root');
+    await this.waitForElement('.modal');
+    this.browser.assert.element('.modal');
   });
 
   this.Then(/^"([^"]*)" exists in localStorage$/, function(itemName) {

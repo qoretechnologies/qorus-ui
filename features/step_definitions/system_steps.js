@@ -53,6 +53,13 @@ module.exports = function systemSteps() {
     await this.browser.pressButton(el[0]);
   });
 
+  this.When(/^I click the first button with "([^"]*)" selector$/, async function(buttonSelector) {
+    const selector = `${buttonSelector}.btn`;
+    await this.waitForElement(selector);
+    const el = this.browser.queryAll(selector);
+    await this.browser.pressButton(el[0]);
+  });
+
   this.When(/^I clear the "([^"]*)" cache$/, async function(name) {
     const row = findTableRow(this.browser, name, 0);
 
@@ -86,5 +93,9 @@ module.exports = function systemSteps() {
     await this.waitForChange(seconds * 1000);
 
     this.browser.assert.text(this.browser.queryAll('code')[0], data);
+  });
+
+  this.When(/^I wait some time$/, async function() {
+    await new Promise(resolve => setTimeout(resolve, 500));
   });
 };

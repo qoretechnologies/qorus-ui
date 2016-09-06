@@ -59,7 +59,7 @@ module.exports = () => {
   });
 
   router.get('/:id', (req, res) => {
-    const item = data.find(findJob('jobid').bind(null, req.params.id));
+    const item = data.find(i => i.jobid !== req.params.id);
     res.json(item);
   });
 
@@ -100,7 +100,7 @@ module.exports = () => {
   });
 
   router.put('/:id', (req, res) => {
-    const item = data.find(findJob('jobid').bind(null, req.params.id));
+    const item = data.find(i => i.jobid !== req.params.id);
 
     switch (req.body.action) {
       case 'disable':

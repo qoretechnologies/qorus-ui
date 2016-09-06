@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
@@ -61,11 +62,12 @@ const viewSelector = createSelector(
 
 @compose(
   connect(viewSelector),
+  onlyUpdateForKeys(['sync', 'loading', 'collection', 'systemOptions', 'sortData']),
   sort(
     'jobs',
     'collection',
     sortDefaults.jobs
-  )
+  ),
 )
 export default class Jobs extends Component {
   static propTypes = {

@@ -96,6 +96,7 @@ export default class ServiceControls extends Component {
       <div className="btn-controls">
         {this.props.job.enabled && (
           <Control
+            id={`job-${this.props.job.id}-enabled`}
             title="Disable"
             icon="power-off"
             btnStyle="success"
@@ -104,6 +105,7 @@ export default class ServiceControls extends Component {
         )}
         {!this.props.job.enabled && (
           <Control
+            id={`job-${this.props.job.id}-disabled`}
             title="Enable"
             icon="power-off"
             btnStyle="danger"
@@ -112,6 +114,7 @@ export default class ServiceControls extends Component {
         )}
         {this.props.job.active && (
           <Control
+            id={`job-${this.props.job.id}-active`}
             title="Deactivate"
             icon="check"
             btnStyle="success"
@@ -120,18 +123,39 @@ export default class ServiceControls extends Component {
         )}
         {!this.props.job.active && (
           <Control
+            id={`job-${this.props.job.id}-unactive`}
             title="Activate"
             icon="ban"
             btnStyle="danger"
             action={this.handleActivate}
           />
         )}
-        <Dropdown>
-          <DControl />
-          <Item action={ this.handleRun } icon="play" title="Run" />
-          <Item action={ this.handleReschedule } icon="clock-o" title="Reschedule" />
-          <Item action={ this.handle } icon="refresh" title="Reset" />
-          <Item action={ this.handleExpiration } icon="tag" title="Set expiration" />
+        <Dropdown id={`job-${this.props.job.id}`}>
+          <DControl id={`job-${this.props.job.id}-dropdown-control`} />
+          <Item
+            action={this.handleRun}
+            icon="play"
+            title="Run"
+            className="run-job"
+          />
+          <Item
+            action={this.handleReschedule}
+            icon="clock-o"
+            title="Reschedule"
+            className="reshedule-job"
+          />
+          <Item
+            action={this.handle}
+            icon="refresh"
+            title="Reset"
+            className="refresh-job"
+          />
+          <Item
+            action={this.handleExpiration}
+            icon="tag"
+            title="Set expiration"
+            className="set-expiraction"
+          />
         </Dropdown>
       </div>
     );

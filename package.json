@@ -124,6 +124,7 @@
     "test:unit:all": "export npm_config_loglevel=silent\n  npm run-script test:unit -- 'test/**/*.spec.{js,jsx}'",
     "test:unit:wip": "export npm_config_loglevel=silent\n  npm run-script test:unit -- -R min -w 'test/**/*.spec.{js,jsx}'",
     "lint": "eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js",
+    "lint:watch": "watch eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js",
     "flow": "flow check"
   }
 }

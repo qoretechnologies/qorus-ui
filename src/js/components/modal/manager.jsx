@@ -192,9 +192,9 @@ export default class Manager extends Component {
     if (!this.state.modal) return null;
 
     return (
-      <div ref={this.refRoot}>
+      <div className="modal-root" ref={this.refRoot}>
         {this.state.modal}
-        <div className="modal-backdrop fade in" />
+        {this.state.modal && <div className="modal-backdrop fade in" />}
       </div>
     );
   }
