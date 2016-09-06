@@ -14,8 +14,8 @@ global.env = process.env;
 
 
 if (process.env.NODE_ENV !== 'production') {
-  const { whyDidYouUpdate } = require('why-did-you-update', { exclude: /^(Connect|Route)/ });
-  whyDidYouUpdate(React);
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React, { exclude: /^(Connect|Route|DockMonitor)/ });
 }
 
 if (isSupported(window.navigator.userAgent)) {
