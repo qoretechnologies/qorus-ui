@@ -207,6 +207,8 @@ export default class Jobs extends Component {
         <div className="table--flex">
           <JobsTable
             initialFilter={this.props.filterFn}
+            location={this.props.location}
+            params={this.props.params}
             onDataFilterChange={this.props.onDataFilterChange}
             activeWorkflowId={parseInt(this.props.params.detailId, 10)}
             setSelectedData={this.props.setSelectedData}
