@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';

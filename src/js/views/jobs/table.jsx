@@ -163,7 +163,7 @@ export default class JobsTable extends ServiceTable {
    * @return {Generator<ReactElement>}
    */
   *renderCells({ model, selected }) {
-    const { params: { date = ''} = {} } = this.props;
+    const { params: { date = '' } = {} } = this.props;
     yield (
       <Cell className="narrow checker">
         <Checkbox

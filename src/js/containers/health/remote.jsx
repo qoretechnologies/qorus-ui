@@ -3,7 +3,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import shouldUpdate from 'recompose/shouldUpdate';
-import shallowEqual from 'recompose/shallowEqual';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
