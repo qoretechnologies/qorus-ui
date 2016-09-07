@@ -7,6 +7,10 @@ describe('{ auth } from middlewares/auth', () => {
     chai.use(spies);
   });
 
+  after(() => {
+    window.localStorage.deleteItem('token');
+  });
+
   it('not AUTH_UPDATE action', () => {
     const action = {
       type: 'SOME_ACTION',
