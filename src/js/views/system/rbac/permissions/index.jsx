@@ -58,7 +58,7 @@ const viewSelector: Function = createSelector(
       removePerm: actions.perms.removePerm,
     }
   ),
-  search('permissions', 'system/rbac/permissions'),
+  search(),
   modal(),
   sync('perms'),
 )

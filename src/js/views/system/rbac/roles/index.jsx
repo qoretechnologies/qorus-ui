@@ -58,7 +58,7 @@ const viewSelector: Function = createSelector(
       removeRole: actions.roles.removeRole,
     }
   ),
-  search('roles', 'system/rbac/roles'),
+  search(),
   modal(),
   sync('roles', true, 'loadRoles'),
 )
