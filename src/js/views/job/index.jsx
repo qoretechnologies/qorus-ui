@@ -42,8 +42,6 @@ const JobPage = ({
   <div className="job-page">
     <JobHeader {...{ job }} />
     <JobDescription {...{ job }} />
-
-
     <div className="row">
       <div className="col-xs-12">
         <div className="job-tabs">
