@@ -2,6 +2,7 @@ const location = window && window.location ? window.location : {
   protocol: 'http:',
   host: 'localhost',
 };
+
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 
 export default {
