@@ -326,6 +326,7 @@ export default class Workflows extends Component {
           errors={errors[this.props.getActiveRow(this.props.workflows).id] || []}
           globalErrors={globalErrors}
           tabId={params.tabId}
+          location={this.props.location}
         />
       </Pane>
     );

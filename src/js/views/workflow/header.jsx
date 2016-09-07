@@ -45,7 +45,7 @@ export default class DetailHeader extends Component {
 
   render() {
     return (
-      <div>
+      <div className="workflow-header">
         <div className="row">
           <div className="col-xs-12">
             <h3 className="detail-title pull-left">

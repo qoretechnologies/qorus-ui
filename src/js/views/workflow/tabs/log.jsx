@@ -1,15 +1,15 @@
 /* @flow */
 import React from 'react';
+import LogContainer from '../../../containers/log';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
-import LogContainer from '../../../../containers/log';
+type Props = {
+  resource: string,
+}
 
-const JobLog = ({ job, ...other }: { job: Object }) => (
-  <LogContainer
-    {...other}
-    resource={`jobs/${job.id}`}
-  />
+const LogTab: Function = (props: Props): React.Element<any> => (
+  <LogContainer {...props} />
 );
 
 export default compose(
@@ -17,13 +17,11 @@ export default compose(
     heightUpdater: (): Function => (): number => {
       const navbar = document.querySelector('.navbar').clientHeight;
       const footer = document.querySelector('footer').clientHeight;
-      const header = document.querySelector('.job-header').clientHeight;
-      const desc = document.querySelector('.job-description').clientHeight;
+      const header = document.querySelector('.workflow-header').clientHeight;
       const tabs = document.querySelector('.nav-tabs').clientHeight;
-      const top = navbar + footer + header + + desc + tabs;
+      const top = navbar + footer + header + tabs;
 
       return window.innerHeight - top;
     },
   })
-)(JobLog);
-
+)(LogTab);

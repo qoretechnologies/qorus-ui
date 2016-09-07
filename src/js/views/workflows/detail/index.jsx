@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+
+import { pureRender } from 'components/utils';
+import { goTo } from '../../../helpers/router';
+import actions from 'store/api/actions';
 import Tabs, { Pane } from '../../../components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import LibraryTab from 'components/library';
 import StepsTab from './steps_tab';
-import LogTab from 'components/log';
+import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
-
-import { pureRender } from 'components/utils';
-
-import { goTo } from '../../../helpers/router';
-import actions from 'store/api/actions';
 
 @pureRender
 export default class WorkflowsDetail extends Component {
@@ -21,6 +20,8 @@ export default class WorkflowsDetail extends Component {
     systemOptions: PropTypes.array.isRequired,
     globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string,
+    query: PropTypes.string,
+    location: PropTypes.object,
   };
 
   static contextTypes = {
@@ -89,7 +90,10 @@ export default class WorkflowsDetail extends Component {
             <StepsTab workflow={workflow} />
           </Pane>
           <Pane name="Log">
-            <LogTab model={workflow} resource="workflows" />
+            <LogTab
+              resource={`workflows/${workflow.id}`}
+              location={this.props.location}
+            />
           </Pane>
           <Pane name="Errors">
             <ErrorsTab

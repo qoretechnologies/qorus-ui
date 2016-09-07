@@ -167,6 +167,7 @@ export default class Services extends Component {
           service={this.props.getActiveRow(this.props.services)}
           systemOptions={systemOptions}
           tabId={params.tabId}
+          location={this.props.location}
         />
       </Pane>
     );
