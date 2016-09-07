@@ -6,6 +6,7 @@ const JobHeader = ({ job }: { job: Object }) => (
     <div className="col-xs-12">
       <h3 className="detail-title pull-left">
         {job.name}
+        {' '}
         <small>{job.version}</small>
       </h3>
     </div>
