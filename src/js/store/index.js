@@ -2,19 +2,17 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
-
 import reducers from './reducers';
 import middlewares from '../middlewares';
 
-/**
- * Creates a Redux store with thunk and promise middlewares.
- *
- * @return {Store}
- */
 function productionSetup() {
   return createStore(
     reducers,
-    applyMiddleware(thunk, promise, ...middlewares)
+    applyMiddleware(
+      thunk,
+      promise,
+      ...middlewares
+    )
   );
 }
 
@@ -48,7 +46,11 @@ function developmentSetup({ persistState }, DevTools) {
   const store = createStore(
     reducers,
     compose(
-      applyMiddleware(thunk, promise, ...middlewares),
+      applyMiddleware(
+        thunk,
+        promise,
+        ...middlewares
+      ),
       DevTools.instrument(),
       persistState(getDebugSessionKey())
     )
