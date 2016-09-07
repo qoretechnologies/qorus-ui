@@ -48,10 +48,21 @@ const goTo = (router, name, path, params, change, query = null) => {
   router.push(`/${url}`);
 };
 
+const changeQuery = (router, location, queryName, querySearch) => {
+  const { pathname, query } = location;
+  const newQuery = Object.assign(query, { [queryName]: querySearch });
+
+  router.push({
+    pathname,
+    query: newQuery,
+  });
+};
+
 const isActive = (to, location) => location.startsWith(to);
 
 export {
   routes,
   goTo,
   isActive,
+  changeQuery,
 };
