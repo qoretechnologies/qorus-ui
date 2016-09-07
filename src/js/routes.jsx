@@ -102,7 +102,7 @@ class AppInfo extends React.Component {
             <Route path="http" component={System.HttpServices} />
             <Route path="info" component={System.Info} />
             <Route path="logs" component={System.Logs}>
-              <IndexRedirect to="main" />
+              <IndexRedirect to="system" />
                 <Route path=":log" component={System.Logs.Log} />
             </Route>
             <Route path="rbac" component={System.RBAC}>
