@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import Nav, { NavLink } from '../../../components/navlink';
 
-import LogsLog from './log';
+import LogView from './log';
 
 export default function Logs(props, context) {
   return (
@@ -11,11 +11,11 @@ export default function Logs(props, context) {
           path={context.location.pathname}
           type="nav-pills"
         >
-          <NavLink to="./main">Main</NavLink>
+          <NavLink to="./system">System</NavLink>
           <NavLink to="./http">Http</NavLink>
           <NavLink to="./audit">Audit</NavLink>
           <NavLink to="./alert">Alert</NavLink>
-          <NavLink to="./monitor">Monitor</NavLink>
+          <NavLink to="./mon">Monitor</NavLink>
         </Nav>
         { props.children }
     </div>
@@ -33,4 +33,4 @@ Logs.contextTypes = {
   location: PropTypes.object.isRequired,
 };
 
-Logs.Log = LogsLog;
+Logs.Log = LogView;
