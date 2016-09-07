@@ -91,7 +91,11 @@ export default class LogComponent extends Component {
           />
         </Toolbar>
         <div className="log-area">
-        <pre className="language-log" style={{ height: `${height === 'auto' ? height : height - 90}px` }} ref={this.scrollRef}>
+        <pre
+          className="language-log"
+          style={{ height: `${height === 'auto' ? height : height - 90}px` }}
+          ref={this.scrollRef}
+        >
           <code className="language-log">
             { messages.map((m, key) => (
               <p key={key}>{ m }</p>
