@@ -16,62 +16,23 @@
  * 8. Empty lines are visible.
  * 9. Custom word highlight which is not part of Prism.
  */
-#log {
-  overflow: hidden; /* [1] */
 
-  > :first-child { /* [2] */
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-flow: column;
-    flex-flow: column;
-    height: 100%;
+.log-area {
+  > pre { /* [6] */
+    font-size: $font-size-extra-small;
 
-    > .btn-controls {
-      -ms-flex: initial;
-      flex: initial;
-    }
+    > code { /* [7] */
+      word-break: break-all;
+      word-wrap: break-word;
+      white-space: pre-wrap;
 
-    > .log-area { /* [3] */
-      position: relative;
-
-      -ms-flex: auto;
-      flex: auto;
-
-      > pre { /* [4] */
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: $panel-body-padding;
-        left: 0;
-
-        overflow: auto;
+      > .token { /* [8] */
+        min-height: 1.5 * $font-size-extra-small;
       }
     }
   }
 
-
-  .btn-controls, .form-inline { /* [5] */
-    margin: ($line-height-computed / 2) 0 0;
-  }
-
-
-  .log-area {
-    > pre { /* [6] */
-      font-size: $font-size-extra-small;
-
-      > code { /* [7] */
-        word-break: break-all;
-        word-wrap: break-word;
-        white-space: pre-wrap;
-
-        > .token { /* [8] */
-          min-height: 1.5 * $font-size-extra-small;
-        }
-      }
-    }
-
-    .highlight { /* [9] */
-      background: slategray;
-    }
+  .highlight { /* [9] */
+    background: slategray;
   }
 }
