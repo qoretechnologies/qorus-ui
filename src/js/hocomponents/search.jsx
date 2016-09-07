@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
-import { goTo } from '../helpers/router';
+import { changeQuery } from '../helpers/router';
 
 export default (
-  name: string,
-  path: string,
+  queryName: string = 'q',
   customFunc: Function,
 ): Function => (Component: any): ?React.Element<any> => {
   class WrappedComponent extends React.Component {
@@ -18,16 +17,12 @@ export default (
       query: string,
     };
 
-    handleSearch: Function = (q): void => {
-      const { router } = this.context;
-      const { params, location } = this.props;
-      goTo(
-        router,
-        name,
-        path,
-        params,
-        {},
-        { ...location.query, q },
+    handleSearch: Function = (querySearch): void => {
+      changeQuery(
+        this.context.router,
+        this.props.location,
+        queryName,
+        querySearch
       );
     };
 
