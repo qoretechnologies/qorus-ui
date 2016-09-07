@@ -4,17 +4,32 @@
  * @module api/system
  */
 
-const express = require('express');
 import { updateProps, deleteProps } from '../../src/js/store/api/resources/props/helper';
-
 import { getExtensions } from '../extensions/data';
 
-module.exports = () => {
-  const data = require('./data')();
-  const extensions = getExtensions();
+const express = require('express');
+const data = require('./data')();
+const extensions = getExtensions();
 
+module.exports = () => {
   const router = new express.Router();
-  router.get('/', (req, res) => res.json(data.system));
+
+  router.get('/', (req, res) => {
+    const action = req.body.action || req.query.action;
+
+    if (action) {
+      switch (action) {
+        case 'wstoken':
+          res.json('testwstoken');
+          break;
+        default:
+          break;
+      }
+    } else {
+      res.json(data.system);
+    }
+  });
+
   router.get('/:attr', (req, res) => (
     res.status(data[req.params.attr] ? 200 : 404).json(data[req.params.attr])
   ));

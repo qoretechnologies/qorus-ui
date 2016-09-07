@@ -29,10 +29,8 @@ module.exports = () => {
 
   if (config.wsProxy) {
     router.use(proxyMiddleware(`${config.wsBaseUrl}/log`));
-  } else if (config.env !== 'test') {
-    process.stderr.write(
-      'Mock WebSocket API not yet implemented.\n'
-    );
+  } else {
+    router.use('/log', require('./websockets/log')());
   }
 
   return router;
