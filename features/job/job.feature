@@ -10,7 +10,7 @@ Feature: Job page test
     Given I am on "job/110/results?date=all" page
     Then I see ".job-results" item
     And "results-job" get loaded
-    
+
   Scenario: Show log  tab
     Given I am on "job/110/log" page
     Then I see ".log-area" item
