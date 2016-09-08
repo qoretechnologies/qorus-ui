@@ -17,20 +17,6 @@ import { querySelector } from '../selectors';
 import Log from '../components/log';
 import { DEFAULTSTATE, LABELS } from '../constants/log';
 
-type Props = {
-  resource: string,
-  messages: Array<string>,
-  onClearClick: Function,
-  onSearchChange: Function,
-  defaultSearchValue: string,
-  heightUpdater: ?Function,
-  height: number | string,
-};
-
-const LogContainer: Function = (props: Props): React.Element<any> => (
-  <Log {...props} />
-);
-
 const dataSelector: Function = (
   state: Object,
   props: Object
@@ -113,4 +99,4 @@ export default compose(
     },
   }),
   search('logQuery')
-)(LogContainer);
+)(Log);
