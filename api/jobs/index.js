@@ -3,7 +3,7 @@
 /**
  * @module api/jobs
  */
-import getJobData, { jobResults } from './data';
+import getJobData, { jobResults, getSystemData } from './data';
 
 const findJob = (id, s) => s.jobid === parseInt(id, 10);
 const config = require('../config');
@@ -13,8 +13,9 @@ const moment = require('moment');
 import _ from 'lodash';
 
 module.exports = () => {
-  const data = getJobData();
+  let data = getJobData();
   const jobResultsData = jobResults();
+  const systemData = getSystemData();
 
   const router = new express.Router();
   router.use(rest(data, findJob));
@@ -120,6 +121,22 @@ module.exports = () => {
 
         cronAttr.forEach((el, i) => { item[el] = cron[i]; });
         break;
+      }
+      case 'setOptions': {
+        const optionName = Object.keys(req.body.options)[0];
+        const optionValue = req.body.options[optionName];
+        const options = { name: optionName, value: optionValue };
+        const jobOption = systemData.options
+          .filter(option => option.job)
+          .find(option => option.name === options.name);
+        item.options = [
+          ...item.options.filter(option => option.name !== jobOption.name),
+          { ...options, desc: 'desc here' },
+        ];
+
+        data = data.map(job => (job.jobid === item.id ? item : job));
+        res.send('OK');
+        return;
       }
       case 'run':
       case 'reset':
