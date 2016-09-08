@@ -13,7 +13,7 @@ Feature: Job page test
 
   Scenario: Show log  tab
     Given I am on "job/110/log" page
-    Then I see ".job-log" item
+    Then I see ".log-area" item
 
   Scenario: Load more results
     Given I am on "job/110/results?date=all" page

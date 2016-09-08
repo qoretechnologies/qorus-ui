@@ -174,6 +174,7 @@ export default class Jobs extends Component {
           model={this.props.getActiveRow(this.props.collection)}
           systemOptions={systemOptions}
           tabId={params.tabId}
+          location={this.props.location}
         />
       </Pane>
     );

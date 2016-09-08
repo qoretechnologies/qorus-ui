@@ -46,10 +46,10 @@ const toolbar = (name: string, path: string): Function => compose(
     ...[
       applyDate,
       applyJobFilter,
-      search,
     ].map(func => func(name, path))
 );
 
 export default compose(
-  toolbar('job', 'job/(:id)/results')
+  toolbar('job', 'job/(:id)/results'),
+  search()
 )(ResultsToolbar);

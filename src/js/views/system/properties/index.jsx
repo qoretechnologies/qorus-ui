@@ -73,7 +73,7 @@ const viewSelector = createSelector(
     }
   ),
   modal(),
-  search('props', 'system/props'),
+  search(),
   sync('properties')
 )
 export default class PropertiesView extends Component {

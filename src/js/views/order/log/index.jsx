@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Log from 'components/log';
+import Log from './log';
 import Loader from 'components/loader';
 
 import actions from 'store/api/actions';
@@ -40,6 +40,7 @@ export default class LogView extends Component {
     dispatch: PropTypes.func,
     order: PropTypes.object,
     workflow: PropTypes.object,
+    location: PropTypes.object,
   };
 
   componentDidMount() {
@@ -63,8 +64,8 @@ export default class LogView extends Component {
 
     return (
       <Log
-        model={this.props.workflow}
-        resource="workflows"
+        resource={`workflows/${this.props.workflow.id}`}
+        location={this.props.location}
       />
     );
   }

@@ -4,12 +4,15 @@
 const express = require('express');
 const history = require('connect-history-api-fallback');
 const serveStatic = require('serve-static');
-
 const config = require('./webpack.config');
 const devConfig = require('./webpack.config/dev');
-
+const APIconfig = require('./api/config');
 
 const app = express();
+
+if (!APIconfig.wsProxy) {
+  require('express-ws')(app);
+}
 
 switch (app.get('env')) {
   case 'production':

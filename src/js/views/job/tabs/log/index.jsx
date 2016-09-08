@@ -1,14 +1,29 @@
 /* @flow */
 import React from 'react';
-import Log from '../../../../components/log';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 
-const JobLog = ({ job }: { job: Object }) => (
-  <div className="job-log">
-    <Log
-      model={job}
-      resource="jobs"
-    />
-  </div>
+import LogContainer from '../../../../containers/log';
+
+const JobLog = ({ job, ...other }: { job: Object }) => (
+  <LogContainer
+    {...other}
+    resource={`jobs/${job.id}`}
+  />
 );
 
-export default JobLog;
+export default compose(
+  withHandlers({
+    heightUpdater: (): Function => (): number => {
+      const navbar = document.querySelector('.navbar').clientHeight;
+      const footer = document.querySelector('footer').clientHeight;
+      const header = document.querySelector('.job-header').clientHeight;
+      const desc = document.querySelector('.job-description').clientHeight;
+      const tabs = document.querySelector('.nav-tabs').clientHeight;
+      const top = navbar + footer + header + + desc + tabs;
+
+      return window.innerHeight - top;
+    },
+  })
+)(JobLog);
+

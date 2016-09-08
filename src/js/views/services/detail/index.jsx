@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
-// import { DetailTab, LibraryTab, LogTab } from './tabs';
 import { DetailTab, MethodsTab } from './tabs';
 import LibraryTab from 'components/library';
-import LogTab from 'components/log';
+import LogTab from '../../workflows/detail/log_tab';
 
 import { pureRender } from 'components/utils';
 
@@ -14,13 +13,11 @@ import actions from 'store/api/actions';
 
 @pureRender
 export default class ServicesDetail extends Component {
-  /* TODO: get if errors are applicable for Services */
   static propTypes = {
     service: PropTypes.object.isRequired,
-    // errors: PropTypes.array.isRequired,
     systemOptions: PropTypes.array.isRequired,
-    // globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string,
+    location: PropTypes.func,
   };
 
 
@@ -31,17 +28,14 @@ export default class ServicesDetail extends Component {
     params: PropTypes.object,
   };
 
-
   componentWillMount() {
     this.setState({ lastModelId: null });
     this.loadDetailedDataIfChanged(this.props);
   }
 
-
   componentWillReceiveProps(nextProps) {
     this.loadDetailedDataIfChanged(nextProps);
   }
-
 
   loadDetailedDataIfChanged(props) {
     if (this.state && this.state.lastModelId === props.service.id) {
@@ -50,15 +44,10 @@ export default class ServicesDetail extends Component {
 
     this.setState({ lastModelId: props.service.id });
 
-    // this.context.dispatch(
-    //   actions.errors.fetch(`service/${props.service.id}`)
-    // );
-
     this.context.dispatch(
       actions.services.fetchLibSources(props.service)
     );
   }
-
 
   changeTab(tabId) {
     goTo(
@@ -94,7 +83,10 @@ export default class ServicesDetail extends Component {
             <MethodsTab service={service} />
           </Pane>
           <Pane name="Log">
-            <LogTab model={service} resource="services" />
+            <LogTab
+              resource={`services/${service.id}`}
+              location={this.props.location}
+            />
           </Pane>
           <Pane name="Mappers">
             <p>Not implemented yet</p>

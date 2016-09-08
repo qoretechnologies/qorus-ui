@@ -78,4 +78,13 @@ module.exports = function systemSteps() {
     this.browser.pressButton(row.cells[0].children[0].children[1]);
   });
 
+  this.When(/^the log loads$/, async function() {
+    await this.waitForElement('pre');
+  });
+
+  this.Then(/^the log should contain "([^"]*)" after (\d+) seconds$/, async function(data, seconds) {
+    await this.waitForChange(seconds * 1000);
+
+    this.browser.assert.text(this.browser.queryAll('code')[0], data);
+  });
 };

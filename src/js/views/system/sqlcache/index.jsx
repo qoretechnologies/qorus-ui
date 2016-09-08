@@ -120,6 +120,6 @@ export default compose(
       clearCache: actions.sqlcache.clearCache,
     }
   ),
-  search('sqlcache', 'system/sqlcache'),
+  search(),
   sync('sqlcache')
 )(SQLCache);

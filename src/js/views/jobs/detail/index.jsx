@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import { default as Header } from './header';
-// import { DetailTab, LibraryTab, LogTab } from './tabs';
 import { DetailTab } from './tabs';
 import LibraryTab from 'components/library';
-import LogTab from 'components/log';
+import LogTab from '../../workflows/detail/log_tab';
 
 import { pureRender } from 'components/utils';
 
@@ -14,15 +13,12 @@ import actions from 'store/api/actions';
 
 @pureRender
 export default class Detail extends Component {
-  /* TODO: get if errors are applicable for Jobs */
   static propTypes = {
     model: PropTypes.object.isRequired,
-    // errors: PropTypes.array.isRequired,
     systemOptions: PropTypes.array.isRequired,
-    // globalErrors: PropTypes.array.isRequired,
     tabId: PropTypes.string,
+    location: PropTypes.func,
   };
-
 
   static contextTypes = {
     dispatch: PropTypes.func,
@@ -31,17 +27,14 @@ export default class Detail extends Component {
     params: PropTypes.object,
   };
 
-
   componentWillMount() {
     this.setState({ lastModelId: null });
     this.loadDetailedDataIfChanged(this.props);
   }
 
-
   componentWillReceiveProps(nextProps) {
     this.loadDetailedDataIfChanged(nextProps);
   }
-
 
   loadDetailedDataIfChanged(props) {
     if (this.state && this.state.lastModelId === props.model.id) {
@@ -49,10 +42,6 @@ export default class Detail extends Component {
     }
 
     this.setState({ lastModelId: props.model.id });
-
-    // this.context.dispatch(
-    //   actions.errors.fetch(`service/${props.service.id}`)
-    // );
 
     this.context.dispatch(
       actions.jobs.fetchLibSources(props.model)
@@ -91,7 +80,10 @@ export default class Detail extends Component {
             <LibraryTab library={model.lib || {}} />
           </Pane>
           <Pane name="Log">
-            <LogTab model={model} resource="jobs" />
+            <LogTab
+              resource={`jobs/${model.id}`}
+              location={this.props.location}
+            />
           </Pane>
           <Pane name="Mappers">
             <p>Not implemented yet</p>

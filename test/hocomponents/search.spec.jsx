@@ -20,14 +20,14 @@ describe('search from hocomponents/search', () => {
   const location = { query: { q: 'test' } };
 
   it('search func is in props', () => {
-    const Comp = search('test', 'test')(ActualComp);
+    const Comp = search()(ActualComp);
     const wrapper = mount(<Comp {...{ location }} />);
 
     expect(wrapper.find(ActualComp).first().props().onSearchChange).to.be.a('function');
   });
 
   it('calls the search function passed as a prop', () => {
-    const Comp = search('test', 'test')(ActualComp);
+    const Comp = search()(ActualComp);
     const func = chai.spy();
     const wrapper = mount(<Comp onSearchChange={func} {...{ location }} />);
 
@@ -38,7 +38,7 @@ describe('search from hocomponents/search', () => {
 
   it('calls the search function passed as a custom argument', () => {
     const func = chai.spy();
-    const Comp = search('test', 'test', func)(ActualComp);
+    const Comp = search('q', func)(ActualComp);
     const wrapper = mount(<Comp {...{ location }} />);
 
     wrapper.find(ActualComp).find(SearchComponent).props().onSearchUpdate('Hello');

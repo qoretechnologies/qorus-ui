@@ -6,7 +6,7 @@ import Header from './header';
 import Tabs, { Pane } from '../../components/tabs';
 import List from './tabs/list';
 import Loader from '../../components/loader';
-import Log from 'components/log';
+import Log from './tabs/log';
 import InfoTable from 'components/info_table';
 import Library from 'components/library';
 import Performance from './tabs/performance';
@@ -149,8 +149,8 @@ export default class extends Component {
               </Pane>
               <Pane name="Log">
                 <Log
-                  model={this.props.workflow}
-                  resource="workflows"
+                  resource={`workflows/${this.props.workflow.id}`}
+                  location={this.props.location}
                 />
               </Pane>
               <Pane name="Library">

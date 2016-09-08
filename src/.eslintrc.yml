@@ -18,3 +18,4 @@ globals:
   document: true
   window: true
   localStorage: true
+  WebSocket: true

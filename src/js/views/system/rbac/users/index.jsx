@@ -57,7 +57,7 @@ const viewSelector: Function = createSelector(
       updateUser: actions.users.updateUser,
     }
   ),
-  search('users', 'system/rbac/users'),
+  search(),
   modal(),
   sync('users')
 )

@@ -95,7 +95,7 @@ export default class OrderHeader extends Component {
 
   render() {
     return (
-      <div className="row">
+      <div className="row order-header">
         <div className="col-xs-12">
           <h3 className="detail-title pull-left">
             <Link
