@@ -57,7 +57,7 @@ td.editable {
     }
 
     input {
-      width: 100%;
+      width: 80%;
       margin: 0;
       padding: 0;
       border: 0;
@@ -71,6 +71,10 @@ td.editable {
         outline: none;
         box-shadow: none;
       }
+    }
+
+    button[type=submit] {
+      width: 20%;
     }
   }
 }

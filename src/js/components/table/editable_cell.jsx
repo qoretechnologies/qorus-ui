@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { pureRender } from '../utils';
+import { Control } from '../controls';
 
 /**
  * Table data cell component which allows editing value.
@@ -222,20 +223,29 @@ export default class EditableCell extends Component {
         >
           {
             this.canEdit() ?
-              <input
-                type={this.props.type}
-                value={this.state.value}
-                onChange={this.onChange}
-                onKeyUp={this.onKeyUp}
-                onBlur={this.cancel}
-                ref={this.refEditField}
-                min={this.props.min}
-                max={this.props.max}
-                className={this.state.error ? 'form-error' : ''}
-              /> :
+              [
+                <input
+                  key="input"
+                  name="newValue"
+                  type={this.props.type}
+                  value={this.state.value}
+                  onChange={this.onChange}
+                  onKeyUp={this.onKeyUp}
+                  ref={this.refEditField}
+                  min={this.props.min}
+                  max={this.props.max}
+                  className={this.state.error ? 'form-error' : ''}
+                />,
+                <Control
+                  key="button"
+                  type="submit"
+                  icon="plus"
+                  btnStyle="primary"
+                />,
+              ]
+            :
               <span>{this.state.value}</span>
           }
-          <button type="submit" style={{ display: 'none' }} />
         </form>
       </td>
     );
