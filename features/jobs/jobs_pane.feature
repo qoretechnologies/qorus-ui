@@ -1,5 +1,4 @@
 Feature: Jobs pane
-  @wip
   Scenario: See no options
     Given I am on "jobs/24h/33" page
     When "jobs" get loaded
@@ -7,7 +6,6 @@ Feature: Jobs pane
     And I see ".options" item
     And I see ".groups" item
 
-  @wip
   Scenario: Set option with error
     Given I am on "jobs/24h/33" page
     When "jobs" get loaded
@@ -17,7 +15,6 @@ Feature: Jobs pane
     And I submit "editable-form" form
     Then I do not see ".options .table" item
 
-  @wip
   Scenario: Set option success
     Given I am on "jobs/24h/33" page
     When "jobs" get loaded
@@ -27,7 +24,6 @@ Feature: Jobs pane
     And I submit "editable-form" form
     Then I see ".options .table" item
 
-  @wip
   Scenario: Delete option
     Given I am on "jobs/24h/33" page
     When "jobs" get loaded
@@ -37,4 +33,10 @@ Feature: Jobs pane
     And I submit "editable-form" form
     And I click on ".options .table .remove-option" item
     Then I see ".options .table" item
+
+  Scenario: Go to job group
+    Given I am on "jobs/24h/33" page
+    When "jobs" get loaded
+    And I click on ".group" item
+    Then the URL changes to "/groups/anothertest"
 
