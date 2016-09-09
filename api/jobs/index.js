@@ -3,7 +3,7 @@
 /**
  * @module api/jobs
  */
-import getJobData, { jobResults, getSystemData } from './data';
+import getJobData, { jobResults, getSystemData, getOptionErrorData } from './data';
 
 const findJob = (id, s) => s.jobid === parseInt(id, 10);
 const config = require('../config');
@@ -125,6 +125,10 @@ module.exports = () => {
       case 'setOptions': {
         const optionName = Object.keys(req.body.options)[0];
         const optionValue = req.body.options[optionName];
+        if (optionValue === 'error') {
+          res.status(409).json(getOptionErrorData());
+          return;
+        }
         const options = { name: optionName, value: optionValue };
         const jobOption = systemData.options
           .filter(option => option.job)
