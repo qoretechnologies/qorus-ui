@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 /**
  * Checks if props or state changed on bound React component.
  *
- * It uses `shallowCompare` React add-on.
+ * It uses deep equals.
  *
  * @param {Object} nextProps
  * @param {Object} nextState

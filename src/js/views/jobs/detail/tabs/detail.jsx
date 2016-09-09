@@ -1,65 +1,32 @@
-import React, { Component, PropTypes } from 'react';
-import { Groups, Group } from 'components/groups';
-import Options from 'components/options';
+/* @flow */
+import React from 'react';
+import pure from 'recompose/compose';
 
+import Options from './options';
+import { Groups, Group } from '../../../../components/groups';
 
-import { pureRender } from 'components/utils';
-import actions from 'store/api/actions';
+const DetailTab = ({ model }: { model: Object }) => (
+  <div>
+    <div className="svc__desc">
+      <p className="text-muted">
+        <em>{model.description}</em>
+      </p>
+    </div>
+    <Groups>
+      {
+        (model.groups || []).map(g => (
+          <Group
+            key={g.name}
+            name={g.name}
+            url={`/groups/${g.name}`}
+            size={g.size}
+            disabled={!g.enabled}
+          />
+        ))
+      }
+    </Groups>
+    <Options model={model} />
+  </div>
+);
 
-
-@pureRender
-export default class DetailTab extends Component {
-  static propTypes = {
-    model: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired,
-  };
-
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
-
-  setOption(opt) {
-    this.context.dispatch(
-      actions.jobs.setOptions(this.props.model, opt.name, opt.value)
-    );
-  }
-
-
-  deleteOption(opt) {
-    this.setOption(Object.assign({}, opt, { value: '' }));
-  }
-
-
-  render() {
-    return (
-      <div>
-        <div className="svc__desc">
-          <p className="text-muted">
-            <em>{this.props.model.description}</em>
-          </p>
-        </div>
-        <Groups>
-          {
-            (this.props.model.groups || []).map(g => (
-              <Group
-                key={g.name}
-                name={g.name}
-                url={`/groups/${g.name}`}
-                size={g.size}
-                disabled={!g.enabled}
-              />
-            ))
-          }
-        </Groups>
-        <Options
-          model={this.props.model}
-          systemOptions={this.props.systemOptions}
-          onSet={::this.setOption}
-          onDelete={::this.deleteOption}
-        />
-      </div>
-    );
-  }
-}
+export default pure(DetailTab);

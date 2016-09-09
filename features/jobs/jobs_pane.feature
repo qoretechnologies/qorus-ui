@@ -26,3 +26,15 @@ Feature: Jobs pane
     And I type "88" in "newValue" input
     And I submit "editable-form" form
     Then I see ".options .table" item
+
+  @wip
+  Scenario: Delete option
+    Given I am on "jobs/24h/33" page
+    When "jobs" get loaded
+    And I click the "Add option" button
+    And I click the "Add" button
+    And I type "88" in "newValue" input
+    And I submit "editable-form" form
+    And I click on ".options .table .remove-option" item
+    Then I see ".options .table" item
+

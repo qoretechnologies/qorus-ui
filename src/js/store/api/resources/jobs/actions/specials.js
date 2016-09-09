@@ -2,37 +2,63 @@ import { createAction } from 'redux-actions';
 import queryString from 'query-string';
 
 
-import { fetchJson } from '../../../utils';
+import { fetchJson, fetchData } from '../../../utils';
 import settings from '../../../../../settings';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
 
+/**
+ * If action is optimistic return payload { modelId, option }.
+ * If action isn't optimistic then send real request
+ * If real request is success return payload { modelId, option }
+ * If real request is failed then error will throws
+ * @param {Object} model
+ * @param {Object} opt
+ * @param {Boolean} optimistic
+ * @returns {*}
+ */
+const setOptionsPayload = async (model, opt, optimistic) => {
+  const newOpt = { name: opt.name, value: opt.value, desc: opt.desc };
+  if (optimistic) {
+    return {
+      option: newOpt,
+    };
+  }
 
-const setOptionsPayload = baseUrl => (model, name, value) => (
-  fetchJson(
+  await fetchData(
     'PUT',
-    `${baseUrl}/${model.id}`,
+    `${settings.REST_BASE_URL}/jobs/${model.id}`,
     {
       body: JSON.stringify({
         action: 'setOptions',
-        options: `${name}=${value}`,
+        options: { [opt.name]: opt.value },
       }),
     }
-  )
-);
+  );
+  return { option: newOpt };
+};
 
-function setOptionsMeta(model, name, value) {
-  return {
-    modelId: model.id,
-    option: { name, value },
-  };
-}
+const setOptionsMeta = (model, opt, optimistic) => ({
+  modelId: model.id,
+  option: { name: opt.name, value: opt.value },
+  optimistic,
+});
 
-const setOptions = createAction(
+const setOptionsAction = createAction(
   'JOBS_SETOPTIONS',
   setOptionsPayload,
   setOptionsMeta
 );
+
+/**
+ * Sends real and optimistic actions to set option
+ * @param {Object} model model that should be updated
+ * @param {Object} opt updated option
+ */
+const setOptions = (model, opt) => dispatch => {
+  dispatch(setOptionsAction(model, opt, true));
+  dispatch(setOptionsAction(model, opt));
+};
 
 
 const fetchLibSourcesPayload = baseUrl => model => (

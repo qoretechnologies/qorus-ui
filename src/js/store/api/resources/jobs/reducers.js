@@ -5,77 +5,55 @@ import { updateItemWithId } from '../../utils';
 
 const initialState = { data: [], sync: false, loading: false };
 
-
-/**
- * Updates model data with new option value.
- *
- * @param {array} data
- * @param {string} serviceId
- * @param {string} name
- * @param {string|number} value
- * @return {array}
- */
-function getDataWithOption(data, modelId, name, value) {
-  const model = data.find(w => w.id === modelId);
-  const options = Array.from(model.options);
-  const optIdx = options.findIndex(o => o.name === name);
-
-  if (value !== '' && value !== null && optIdx < 0) {
-    options.push({ name, value });
-  } else if (value !== '' && value !== null) {
-    options[optIdx] = Object.assign({}, options[optIdx], { value });
-  } else if (optIdx >= 0) {
-    options.splice(optIdx, 1);
-  }
-
-  return updateItemWithId(
-    model.id,
-    { options },
-    data
-  );
-}
-
-
-/**
- * Finds an option in model data.
- *
- * @param {array} data
- * @param {string} serviceId
- * @param {string} name
- * @return {object|null}
- */
-function findOption(data, modelId, name) {
-  const model = data.find(w => w.id === modelId);
-
-  return model ? model.options.find(o => o.name === name) : null;
-}
-
-
 const setOptions = {
+  /**
+   * Update job with new option. if action is optimistic then add oldOption to option.
+   * @param state
+   * @param action
+   * @returns {{data: *}}
+   */
   next(state = initialState, action) {
-    return Object.assign({}, state, {
-      data: getDataWithOption(
-        state.data,
-        action.meta.modelId,
-        action.meta.option.name,
-        action.meta.option.value
-      ),
-    });
-  },
-  throw(state = initialState, action) {
-    const option = findOption(state.data, action.meta.option.name);
+    const { payload: { option }, meta: { modelId, optimistic } } = action;
 
-    return Object.assign({}, state, {
-      data: getDataWithOption(
-        state.data,
-        action.meta.modelId,
-        action.meta.option.name,
-        option && option.value
+    const model = state.data.find(job => job.id === modelId);
+    const { options = [] } = model;
+    let newOptions;
+    const oldOption = options.find(item => item.name === option.name);
+
+    if (optimistic) {
+      option.oldOption = oldOption;
+      option.optimistic = true;
+    }
+
+    if (oldOption) {
+      newOptions = options.map(item => (item.name === option.name ? option : item));
+    } else {
+      newOptions = [...options, option];
+    }
+
+    return { ...state, data: updateItemWithId(modelId, { options: newOptions }, state.data) };
+  },
+  /**
+   * If get option by meta.option.name and replace it with oldOption
+   * @param state
+   * @param action
+   * @returns {{data: Array, sync: boolean, loading: boolean}}
+   */
+  throw(state = initialState, action) {
+    const { meta: { modelId, option } } = action;
+    const model = state.data.find(job => job.id === modelId);
+    const { options } = model;
+    return {
+      ...state,
+      data: updateItemWithId(
+        modelId,
+        { options: options
+          .map(item => (item.name === option.name ? item.oldOption : item))
+          .filter(item => item),
+        },
+        state.data
       ),
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
+    };
   },
 };
 

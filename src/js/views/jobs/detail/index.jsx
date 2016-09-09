@@ -1,53 +1,33 @@
 import React, { Component, PropTypes } from 'react';
-import Tabs, { Pane } from 'components/tabs';
-import { default as Header } from './header';
-import { DetailTab } from './tabs';
-import LibraryTab from 'components/library';
-import LogTab from '../../workflows/detail/log_tab';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
 
-import { pureRender } from 'components/utils';
+import Header from './header';
+import { DetailTab } from './tabs';
+import Tabs, { Pane } from '../../../components/tabs';
+import LibraryTab from '../../../components/library';
+import { pureRender } from '../../../components/utils';
+import actions from '../../../store/api/actions';
+import LogTab from '../../workflows/detail/log_tab';
 
 
 import { goTo } from '../../../helpers/router';
-import actions from 'store/api/actions';
 
 @pureRender
-export default class Detail extends Component {
+class Detail extends Component {
+  /* TODO: get if errors are applicable for Jobs */
   static propTypes = {
     model: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired,
     tabId: PropTypes.string,
     location: PropTypes.func,
   };
 
   static contextTypes = {
-    dispatch: PropTypes.func,
     router: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object,
   };
-
-  componentWillMount() {
-    this.setState({ lastModelId: null });
-    this.loadDetailedDataIfChanged(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.loadDetailedDataIfChanged(nextProps);
-  }
-
-  loadDetailedDataIfChanged(props) {
-    if (this.state && this.state.lastModelId === props.model.id) {
-      return;
-    }
-
-    this.setState({ lastModelId: props.model.id });
-
-    this.context.dispatch(
-      actions.jobs.fetchLibSources(props.model)
-    );
-  }
-
 
   changeTab(tabId) {
     goTo(
@@ -59,11 +39,8 @@ export default class Detail extends Component {
     );
   }
 
-
   render() {
-    const { model, tabId, systemOptions } = this.props;
-
-    if (!model) return null;
+    const { model, tabId } = this.props;
 
     return (
       <article>
@@ -74,7 +51,7 @@ export default class Detail extends Component {
           tabChange={::this.changeTab}
         >
           <Pane name="Detail">
-            <DetailTab model={model} systemOptions={systemOptions} />
+            <DetailTab model={model} />
           </Pane>
           <Pane name="Library">
             <LibraryTab library={model.lib || {}} />
@@ -93,3 +70,27 @@ export default class Detail extends Component {
     );
   }
 }
+
+const fetchLibSourceOnMountAndOnChange = lifecycle({
+  componentWillMount() {
+    const { model, fetchLibSources } = this.props;
+    fetchLibSources(model);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    const { model } = this.props;
+    const { model: nextModel, fetchLibSources } = nextProps;
+
+    if (nextModel.id !== model.id) {
+      fetchLibSources(nextModel);
+    }
+  },
+});
+
+export default compose(
+  connect(
+    () => ({}),
+    { fetchLibSources: actions.jobs.fetchLibSources }
+  ),
+  fetchLibSourceOnMountAndOnChange
+)(Detail);

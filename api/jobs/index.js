@@ -134,9 +134,9 @@ module.exports = () => {
           .filter(option => option.job)
           .find(option => option.name === options.name);
         item.options = [
-          ...item.options.filter(option => option.name !== jobOption.name),
-          { ...options, desc: 'desc here' },
-        ];
+          ...item.options.filter(option => option.name !== option.name),
+          optionValue ? { ...options, desc: jobOption.desc } : undefined,
+        ].filter(option => option);
 
         data = data.map(job => (job.jobid === item.id ? item : job));
         res.send('OK');

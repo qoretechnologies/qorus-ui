@@ -5,17 +5,22 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
+import shallowEqual from 'recompose/shallowEqual';
 
 import { setTitle } from '../../helpers/document';
+import patch from '../../hocomponents/patchFuncArgs';
 import sort from '../../hocomponents/sort';
+import sync from '../../hocomponents/sync';
 import { sortDefaults } from '../../constants/sort';
+import { formatDate } from '../../helpers/date';
 
 // data
-import actions from 'store/api/actions';
+import actions from '../../store/api/actions';
 
 // components
-import Loader from 'components/loader';
-import Pane from 'components/pane';
+import Pane from '../../components/pane';
 
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
@@ -52,22 +57,50 @@ const viewSelector = createSelector(
     collectionSelector,
   ],
   (jobs, systemOptions, collection, sortData) => ({
-    sync: jobs.sync,
-    loading: jobs.loading,
+    meta: {
+      sync: jobs.sync,
+      loading: jobs.loading,
+    },
     collection,
     systemOptions,
     sortData,
   })
 );
 
+const prepareUrlParams = mapProps(props => {
+  const { date: urlDate } = props.params;
+  const urlParams = {};
+  if (urlDate) {
+    urlParams.date = formatDate(urlDate).format();
+  }
+  return { ...props, urlParams };
+});
+
+const fetchOnUrlParamsChange = lifecycle({
+  componentWillReceiveProps(newProps) {
+    const { params: newParams, fetch } = newProps;
+    const { params } = this.props;
+    if (!shallowEqual(params.date, newParams.date)) {
+      fetch();
+    }
+  },
+});
+
 @compose(
-  connect(viewSelector),
-  onlyUpdateForKeys(['sync', 'loading', 'collection', 'systemOptions', 'sortData']),
+  connect(
+    viewSelector,
+    actions.jobs
+  ),
+  onlyUpdateForKeys(['meta', 'collection', 'systemOptions', 'sortData', 'params']),
+  prepareUrlParams,
+  patch('fetch', ['urlParams']),
+  sync('meta', true, 'fetch'),
+  fetchOnUrlParamsChange,
   sort(
     'jobs',
     'collection',
     sortDefaults.jobs
-  ),
+  )
 )
 export default class Jobs extends Component {
   static propTypes = {
@@ -122,10 +155,6 @@ export default class Jobs extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.dispatch(actions.jobs.fetch());
-  }
-
   componentDidMount() {
     setTitle(`Jobs | ${this.context.getTitle()}`);
   }
@@ -153,9 +182,7 @@ export default class Jobs extends Component {
     });
 
     this.props.clearSelection();
-    this.props.dispatch(
-      actions.jobs[`${type}Batch`](selectedData)
-    );
+    this.props[`${type}Batch`](selectedData);
   };
 
   handleCSVClick = () => {
@@ -163,9 +190,10 @@ export default class Jobs extends Component {
   };
 
   renderPane() {
-    const { params, systemOptions } = this.props;
+    const { params } = this.props;
+    const model = this.props.getActiveRow(this.props.collection);
 
-    if (!this.props.getActiveRow(this.props.collection)) return null;
+    if (!model) return null;
 
     return (
       <Pane
@@ -174,7 +202,6 @@ export default class Jobs extends Component {
       >
         <JobsDetail
           model={this.props.getActiveRow(this.props.collection)}
-          systemOptions={systemOptions}
           tabId={params.tabId}
           location={this.props.location}
         />
@@ -184,11 +211,7 @@ export default class Jobs extends Component {
 
 
   render() {
-    const { sync, loading, collection } = this.props;
-
-    if (!sync || loading) {
-      return <Loader />;
-    }
+    const { collection } = this.props;
 
     return (
       <div>

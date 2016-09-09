@@ -1,22 +1,28 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 import Dropdown, { Control as DControl, Item } from 'components/dropdown';
 import { Control } from 'components/controls';
-
 import { ModalExpiry, ModalReschedule } from './modals';
-
-import { pureRender } from 'components/utils';
 
 import actions from 'store/api/actions';
 
-@pureRender
+
+@compose(
+  onlyUpdateForKeys(['job']),
+  connect(
+    () => ({}),
+    actions.jobs
+  ),
+)
 export default class ServiceControls extends Component {
   static propTypes = {
     job: PropTypes.object,
   };
 
   static contextTypes = {
-    dispatch: PropTypes.func,
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
   };
@@ -26,9 +32,7 @@ export default class ServiceControls extends Component {
   }
 
   dispatchAction(action) {
-    this.context.dispatch(
-      actions.jobs[action](this.props.job)
-    );
+    this.props[action](this.props.job);
   }
 
   handleEnable = () => {
