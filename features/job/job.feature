@@ -29,11 +29,9 @@ Feature: Job page test
     And I click the "Load more" button
     Then I do not see ".load-more" item
 
-
   Scenario: Show only complete resutls
-    Given I am on "job/110/results?date=all" page
+    Given I am on "job/110/results?date=all&filter=complete" page
     When "results-table" get loaded
-    And I click the "Complete" button
     Then I see "27" table rows
 
   Scenario: Show default
