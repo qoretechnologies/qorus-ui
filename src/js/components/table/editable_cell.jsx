@@ -28,6 +28,7 @@ export default class EditableCell extends Component {
     type: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
+    showControl: PropTypes.boolean,
   };
 
   static defaultProps = {
@@ -36,6 +37,7 @@ export default class EditableCell extends Component {
     type: 'text',
     onSave: () => undefined,
     onCancel: () => undefined,
+    showControl: false,
   };
 
   /**
@@ -79,13 +81,26 @@ export default class EditableCell extends Component {
   componentDidUpdate() {
     if (this.state.edit && document.activeElement !== this._editField) {
       this._editField.focus();
+      document.addEventListener('click', this.handleOutsideClick);
 
       if (this.props.type !== 'number') {
         this._editField.setSelectionRange(this._editField.value.length,
           this._editField.value.length);
       }
+    } else {
+      document.removeEventListener('click', this.handleOutsideClick);
     }
   }
+
+  /**
+   * Close editable if click outside cell
+   * @param e
+   */
+  handleOutsideClick = (e) => {
+    if (this._cell && !this._cell.contains(e.target)) {
+      this.cancel();
+    }
+  };
 
   /**
    * Updates state value with latest value from input field.
@@ -237,6 +252,7 @@ export default class EditableCell extends Component {
                   className={this.state.error ? 'form-error' : ''}
                 />,
                 <Control
+                  className={classNames({ hide: !this.props.showControl })}
                   key="button"
                   type="submit"
                   icon="plus"
