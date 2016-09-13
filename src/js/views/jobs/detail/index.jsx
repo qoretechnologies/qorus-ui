@@ -1,75 +1,82 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
+import pure from 'recompose/pure';
 
 import Header from './header';
 import { DetailTab } from './tabs';
 import Tabs, { Pane } from '../../../components/tabs';
 import LibraryTab from '../../../components/library';
-import { pureRender } from '../../../components/utils';
 import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
 
 
 import { goTo } from '../../../helpers/router';
 
-@pureRender
-class Detail extends Component {
-  /* TODO: get if errors are applicable for Jobs */
-  static propTypes = {
-    model: PropTypes.object.isRequired,
-    tabId: PropTypes.string,
-    location: PropTypes.func,
-  };
+const Detail = ({
+  location,
+  tabId,
+  model,
+  changeTab,
+}: {
+  location: Object,
+  tabId: string,
+  model: Object,
+  changeTab: Function,
+}): React.Element<*> => (
+  <article>
+    <Header model={model} />
+    <Tabs
+      className="pane__tabs"
+      active={tabId}
+      tabChange={changeTab}
+    >
+      <Pane name="Detail">
+        <DetailTab model={model} />
+      </Pane>
+      <Pane name="Library">
+        <LibraryTab library={model.lib || {}} />
+      </Pane>
+      <Pane name="Log">
+        <LogTab
+          resource={`jobs/${model.id}`}
+          location={location}
+        />
+      </Pane>
+      <Pane name="Mappers">
+        <p>Not implemented yet</p>
+      </Pane>
+    </Tabs>
+  </article>
+);
 
-  static contextTypes = {
-    router: PropTypes.object,
-    route: PropTypes.object,
-    params: PropTypes.object,
-  };
+const getRouterContext = getContext({
+  router: PropTypes.object,
+  route: PropTypes.object,
+  params: PropTypes.object,
+});
 
-  changeTab(tabId) {
-    goTo(
-      this.context.router,
-      'jobs',
-      this.context.route.path,
-      this.context.params,
-      { tabId }
-    );
-  }
-
-  render() {
-    const { model, tabId } = this.props;
-
-    return (
-      <article>
-        <Header model={model} />
-        <Tabs
-          className="pane__tabs"
-          active={tabId}
-          tabChange={::this.changeTab}
-        >
-          <Pane name="Detail">
-            <DetailTab model={model} />
-          </Pane>
-          <Pane name="Library">
-            <LibraryTab library={model.lib || {}} />
-          </Pane>
-          <Pane name="Log">
-            <LogTab
-              resource={`jobs/${model.id}`}
-              location={this.props.location}
-            />
-          </Pane>
-          <Pane name="Mappers">
-            <p>Not implemented yet</p>
-          </Pane>
-        </Tabs>
-      </article>
-    );
-  }
-}
+const allowChangeTab = mapProps(({
+  router,
+  route,
+  params,
+  ...other,
+}: {
+  router: Object,
+  route: Object,
+  params: Object,
+  other: Object,
+}): Object => ({
+  router,
+  route,
+  params,
+  ...other,
+  changeTab: (tabId: string): void => goTo(router, 'jobs', route.path, params, { tabId }),
+}));
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
   componentWillMount() {
@@ -92,5 +99,8 @@ export default compose(
     () => ({}),
     { fetchLibSources: actions.jobs.fetchLibSources }
   ),
+  getRouterContext,
+  pure,
+  allowChangeTab,
   fetchLibSourceOnMountAndOnChange
 )(Detail);
