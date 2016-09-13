@@ -51,7 +51,25 @@
   "ERROR": 0,
   "COMPLETE": 2,
   "connections": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "type": "JOB",
+      "id": "247",
+      "alerttype": "ONGOING",
+      "when": "2016-09-09 15:18:54.454803 +02:00",
+      "local": true,
+      "alert": "STOPPED-JOB",
+      "alertid": 563,
+      "reason": "REST PUT api/jobs/247?action=setActive",
+      "who": "admin",
+      "source": "ipv6[::ffff:192.168.214.17]:57447 listener: ipv6[::]:8091",
+      "object": "JOB 00-line_status_usage-out 00-line_status_usage-out (247)",
+      "instance": "xbox",
+      "name": "00-line_status_usage-out",
+      "version": "1.0",
+      "auditid": null
+    }
+  ],
   "enabled": true,
   "db_active": true,
   "expiry_date": null,
