@@ -106,7 +106,6 @@ export default class EditableCell extends Component {
    * @param e
    */
   handleOutsideClick = (e) => {
-    console.log('handle outside click');
     if (this._cell && !this._cell.contains(e.target)) {
       this.cancel();
     }
