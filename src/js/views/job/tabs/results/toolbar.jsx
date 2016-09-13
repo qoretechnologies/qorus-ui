@@ -29,7 +29,7 @@ const ResultsToolbar = ({
   onApplyJobFilter: Function,
 }) => (
   <Toolbar>
-    <DatePicker {...{ date, onApplyDate }} />
+    <DatePicker className="toolbar-item" {...{ date, onApplyDate }} />
     <ResultsFilter {...{ jobFilter, onApplyJobFilter }} />
     <CsvExport
       collection={job.results && job.results.data || []}

@@ -207,6 +207,7 @@ export default class WorkflowsToolbar extends Component {
         <Datepicker
           date={date}
           onApplyDate={this.applyDate}
+          className="toolbar-item"
         />
         <Controls grouped noControls>
           <Button

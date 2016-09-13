@@ -1,6 +1,10 @@
 .datepicker-wrapper {
   display: inline-block;
-  float: left;
+  position: relative;
+
+  &.toolbar-item {
+    float: left;
+  }
 }
 
 .datepicker-group {
