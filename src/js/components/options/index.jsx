@@ -133,19 +133,19 @@ export default class Options extends Component {
       <Cell className="name">{opt.name}</Cell>
     );
 
-    const onSave = value => this.setOption(opt, value);
-    const onCancel = () => this.cancelOptionEdit(opt);
+    const handleSave = value => this.setOption(opt, value);
+    const handleCancel = () => this.cancelOptionEdit(opt);
     yield (
       <EditableCell
         value={opt.value}
         startEdit={opt === this.state.lastOption}
-        onSave={onSave}
-        onCancel={onCancel}
+        onSave={handleSave}
+        onCancel={handleCancel}
         showControl
       />
     );
 
-    const onDelete = () => this.props.onDelete(opt);
+    const handleDelete = () => this.props.onDelete(opt);
     yield (
       <Cell>
         <Control
@@ -153,7 +153,7 @@ export default class Options extends Component {
           btnStyle="danger"
           className="remove-option"
           icon="times"
-          action={onDelete}
+          action={handleDelete}
         />
       </Cell>
     );
