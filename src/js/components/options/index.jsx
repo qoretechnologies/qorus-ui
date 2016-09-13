@@ -106,15 +106,6 @@ export default class Options extends Component {
   };
 
   /**
-   * Deletes option by calling `onDelete` prop.
-   *
-   * @param {object} opt
-   */
-  deleteOption = (opt) => {
-    this.props.onDelete(opt);
-  }
-
-  /**
    * Gets notified when option editing is canceled.
    *
    * If editing of cached option is canceled, it is removed if it has
@@ -150,10 +141,11 @@ export default class Options extends Component {
         startEdit={opt === this.state.lastOption}
         onSave={onSave}
         onCancel={onCancel}
+        showControl
       />
     );
 
-    const onDelete = () => this.deleteOption(opt);
+    const onDelete = () => this.props.onDelete(opt);
     yield (
       <Cell>
         <Control
