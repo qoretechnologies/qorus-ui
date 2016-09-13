@@ -221,7 +221,7 @@ export default class DatePicker extends Component {
 
   render(): React.Element<any> {
     return (
-      <div style={{ display: 'inline-block', float: 'left' }}>
+      <div className="datepicker-wrapper">
         <div className="input-group date-controls">
           <Input
             onFormSubmit={this.handleFormSubmit}
@@ -233,8 +233,8 @@ export default class DatePicker extends Component {
             id={this.props.id}
           />
         </div>
-        { this.renderControls() }
-        { this.renderDatepicker() }
+        {this.renderControls()}
+        {this.renderDatepicker()}
       </div>
     );
   }
