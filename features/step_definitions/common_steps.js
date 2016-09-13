@@ -110,6 +110,10 @@ module.exports = function commonSteps() {
     return this.waitForElement(cmpTable);
   });
 
+  this.When(/^"([^"]*)" item get loaded$/, function(name) {
+    return this.waitForElement(name);
+  });
+
   this.Given(/^there are no "([^"]*)" loaded$/, function(name) {
     this.browser.assert.elements(cmpTable, 0);
   });
