@@ -13,6 +13,7 @@ export default class Item extends Component {
     multi?: boolean,
     selected?: boolean,
     toggleItem?: () => void,
+    className?: string,
   };
 
   /**
@@ -45,7 +46,11 @@ export default class Item extends Component {
   }
 
   render(): React.Element<any> {
-    const cls = classNames(this.props.selected ? 'active' : '');
+    const { className = '', selected, title } = this.props;
+    const cls = classNames({
+      active: selected,
+      [className]: className,
+    });
 
     return (
       <li className={cls}>
@@ -55,7 +60,7 @@ export default class Item extends Component {
         >
           {this.renderIcon()}
           {' '}
-          {this.props.title}
+          {title}
         </a>
       </li>
     );
@@ -67,6 +72,7 @@ Item.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]),
+  className: PropTypes.string,
   icon: PropTypes.string,
   action: PropTypes.func,
   hideDropdown: PropTypes.func,

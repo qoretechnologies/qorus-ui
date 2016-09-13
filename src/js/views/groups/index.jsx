@@ -238,7 +238,8 @@ export default class Workflows extends Component {
     }
 
     if (this.props.params.id) {
-      const group = this.props.collection.find(c => c.name === this.props.params.id);
+      const groupName = this.props.params.id.toLowerCase();
+      const group = this.props.collection.find(c => c.name.toLowerCase() === groupName);
       return (
         <GroupsDetail group={group} />
       );

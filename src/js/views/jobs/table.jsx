@@ -163,6 +163,7 @@ export default class JobsTable extends ServiceTable {
    * @return {Generator<ReactElement>}
    */
   *renderCells({ model, selected }) {
+    const { params: { date = '' } = {} } = this.props;
     yield (
       <Cell className="narrow checker">
         <Checkbox
@@ -187,7 +188,7 @@ export default class JobsTable extends ServiceTable {
 
     yield (
       <Cell className="name">
-        <Link to={`/job/${model.jobid}`}>{model.name}</Link>
+        <Link to={`/job/${model.jobid}?date=${date}`}>{model.name}</Link>
       </Cell>
     );
 

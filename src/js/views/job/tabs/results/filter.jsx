@@ -4,46 +4,47 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import defaultProps from 'recompose/defaultProps';
 
-import { Controls, Control } from '../../../../components/controls';
+import { Controls } from '../../../../components/controls';
+import Dropdown, {
+  Item as DropdownItem,
+  Control as DropdownControl,
+} from '../../../../components/dropdown';
+import { JOB_STATES } from '../../../../constants/jobs';
 
 const ResultsFilter = ({
   jobFilter,
-  onFilterAll,
-  onFilterComplete,
-  onFilterError,
+  onFilterSelected: handleFilterSelected,
 }: {
   jobFilter: string,
-  onFilterAll: Function,
-  onFilterComplete: Function,
-  onFilterError: Function
+  onFilterSelected: Function,
 }) => (
   <Controls grouped noControls>
-    <Control
-      label="All"
-      btnStyle={jobFilter === 'all' ? 'primary' : 'default'}
-      onClick={onFilterAll}
-      big
-    />
-    <Control
-      label="Complete"
-      btnStyle={jobFilter === 'complete' ? 'primary' : 'default'}
-      onClick={onFilterComplete}
-      big
-    />
-    <Control
-      label="Error"
-      btnStyle={jobFilter === 'error' ? 'primary' : 'default'}
-      onClick={onFilterError}
-      big
-    />
+    <Dropdown
+      id="result-fitlers"
+      multi
+      def="all"
+      submitLabel="Filter"
+      selected={jobFilter.split(',')}
+      onSubmit={handleFilterSelected}
+    >
+      <DropdownControl />
+      <DropdownItem title="all" />
+      {JOB_STATES.map(item => (
+        <DropdownItem
+          key={`job_result_${item.name}`}
+          title={item.title.toLowerCase()}
+        />
+      ))}
+    </Dropdown>
   </Controls>
+
 );
 
 export default compose(
   withHandlers({
-    onFilterAll: ({ onApplyJobFilter }) => () => onApplyJobFilter('all'),
-    onFilterComplete: ({ onApplyJobFilter }) => () => onApplyJobFilter('complete'),
-    onFilterError: ({ onApplyJobFilter }) => () => onApplyJobFilter('error'),
+    onFilterSelected: ({ onApplyJobFilter }) => selected => onApplyJobFilter(
+      selected.join(',').toLowerCase()
+    ),
   }),
   defaultProps({ jobFilter: 'all' })
 )(ResultsFilter);

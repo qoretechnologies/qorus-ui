@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+
+import SystemOptions from './system_options';
 import Table, { Section, Row, Cell } from '../table';
 import EditableCell from '../table/editable_cell';
 import { Control } from '../controls';
-import SystemOptions from './system_options';
-
 import { pureRender } from '../utils';
 
 /**
@@ -28,7 +28,7 @@ export default class Options extends Component {
   };
 
   /**
-   * Sets up state to cache last option.
+   * Sets up state to cache last opton.
    */
   componentWillMount() {
     this.setState({
@@ -59,9 +59,8 @@ export default class Options extends Component {
    * @return {array}
    */
   getModelOptions() {
-    return this.state.lastOption ?
-      this.props.model.options.concat(this.state.lastOption) :
-      this.props.model.options || [];
+    const { model: { options = [] } = {} } = this.props;
+    return this.state.lastOption ? options.concat(this.state.lastOption) : options || [];
   }
 
   /**
@@ -70,8 +69,9 @@ export default class Options extends Component {
    * @return {array}
    */
   getUnusedSystemOptions() {
-    return this.props.systemOptions.filter(sysOpt => (
-      this.props.model.options.findIndex(mdlOpt => (
+    const { systemOptions = [], model: { options = [] } = {} } =this.props;
+    return systemOptions.filter(sysOpt => (
+      options.findIndex(mdlOpt => (
         mdlOpt.name === sysOpt.name
       )) < 0
     ));
@@ -85,8 +85,8 @@ export default class Options extends Component {
    * @param {object} opt
    * @param {string} value
    */
-  setOption(opt, value) {
-    this.props.onSet(Object.assign({}, opt, { value }));
+  setOption = (opt, value) => {
+    this.props.onSet({ ...opt, value });
 
     if (opt === this.state.lastOption) {
       this.setState({ lastOptionSet: true });
@@ -123,15 +123,6 @@ export default class Options extends Component {
   }
 
   /**
-   * Deletes option by calling `onDelete` prop.
-   *
-   * @param {object} opt
-   */
-  deleteOption(opt) {
-    this.props.onDelete(opt);
-  }
-
-  /**
    * Yields cells with option data and controls to manage it.
    *
    * @param {Object} opt
@@ -142,25 +133,27 @@ export default class Options extends Component {
       <Cell className="name">{opt.name}</Cell>
     );
 
-    const onSave = this.setOption.bind(this, opt);
-    const onCancel = this.cancelOptionEdit.bind(this, opt);
+    const handleSave = value => this.setOption(opt, value);
+    const handleCancel = () => this.cancelOptionEdit(opt);
     yield (
       <EditableCell
         value={opt.value}
         startEdit={opt === this.state.lastOption}
-        onSave={onSave}
-        onCancel={onCancel}
+        onSave={handleSave}
+        onCancel={handleCancel}
+        showControl
       />
     );
 
-    const action = this.deleteOption.bind(this, opt);
+    const handleDelete = () => this.props.onDelete(opt);
     yield (
       <Cell>
         <Control
           title="Remove"
           btnStyle="danger"
+          className="remove-option"
           icon="times"
-          action={action}
+          action={handleDelete}
         />
       </Cell>
     );

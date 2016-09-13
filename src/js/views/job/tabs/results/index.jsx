@@ -54,17 +54,17 @@ const addUrlParams = mapProps((props:Object) => {
 });
 
 const fetchOnMount = lifecycle({
-  componentDidMount() {
+  componentWillMount() {
     this.props.fetchResults();
   },
 });
 
 const fetchOnQueryParamsUpdate = lifecycle({
-  componentDidUpdate(prevProps) {
-    const { location: { query: prevQuery } } = prevProps;
-    const { clearResults, fetchResults, location: { query } } = this.props;
+  componentWillReceiveProps(newProps) {
+    const { clearResults, fetchResults, location: { query: newQuery } } = newProps;
+    const { location: { query } } = this.props;
 
-    if (query.filter !== prevQuery.filter || query.date !== prevQuery.date) {
+    if (query.filter !== newQuery.filter || query.date !== newQuery.date) {
       clearResults();
       fetchResults();
     }

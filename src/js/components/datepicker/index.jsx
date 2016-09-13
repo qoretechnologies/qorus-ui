@@ -221,18 +221,20 @@ export default class DatePicker extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className="input-group date-controls">
-        <Input
-          onFormSubmit={this.handleFormSubmit}
-          submitOnBlur={this.props.submitOnBlur}
-          onInputChange={this.handleInputChange}
-          inputDate={this.state.inputDate}
-          onInputClick={this.showDatepicker}
-          placeholder={this.props.placeholder}
-          id={this.props.id}
-        />
-        { this.renderControls() }
-        { this.renderDatepicker() }
+      <div className="datepicker-wrapper">
+        <div className="input-group date-controls">
+          <Input
+            onFormSubmit={this.handleFormSubmit}
+            submitOnBlur={this.props.submitOnBlur}
+            onInputChange={this.handleInputChange}
+            inputDate={this.state.inputDate}
+            onInputClick={this.showDatepicker}
+            placeholder={this.props.placeholder}
+            id={this.props.id}
+          />
+        </div>
+        {this.renderControls()}
+        {this.renderDatepicker()}
       </div>
     );
   }

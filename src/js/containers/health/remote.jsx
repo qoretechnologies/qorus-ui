@@ -2,6 +2,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import shouldUpdate from 'recompose/shouldUpdate';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
@@ -29,6 +30,13 @@ export default compose(
     state => ({ health: state.api.health }),
     {
       load: actions.health.fetch,
+    }
+  ),
+  shouldUpdate(
+    (props: Object, nextProps: Object): boolean => {
+      const { sync: syncData, loading } = props.health;
+      const { sync: nextSync, loading: nextLoading } = nextProps.health;
+      return syncData !== nextSync || loading !== nextLoading;
     }
   ),
   sync('health', false)

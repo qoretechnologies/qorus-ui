@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { pureRender } from '../utils';
+import { Control } from '../controls';
 
 /**
  * Table data cell component which allows editing value.
@@ -27,6 +28,7 @@ export default class EditableCell extends Component {
     type: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
+    showControl: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -35,6 +37,7 @@ export default class EditableCell extends Component {
     type: 'text',
     onSave: () => undefined,
     onCancel: () => undefined,
+    showControl: false,
   };
 
   /**
@@ -47,6 +50,7 @@ export default class EditableCell extends Component {
 
     this._cell = null;
     this._editField = null;
+    this._cancelablePromise = null;
   }
 
   /**
@@ -75,16 +79,37 @@ export default class EditableCell extends Component {
   /**
    * Focuses the input field when editing has been started.
    */
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.edit && document.activeElement !== this._editField) {
       this._editField.focus();
+      document.addEventListener('click', this.handleOutsideClick);
 
       if (this.props.type !== 'number') {
         this._editField.setSelectionRange(this._editField.value.length,
           this._editField.value.length);
       }
     }
+
+    // call this.props.onCancel if canceled avoid error to setState on unmounted component
+    if (!this.state.edit && prevState.edit) {
+      document.removeEventListener('click', this.handleOutsideClick);
+      this.props.onCancel();
+    }
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  /**
+   * Close editable if click outside cell
+   * @param e
+   */
+  handleOutsideClick = (e) => {
+    if (this._cell && !this._cell.contains(e.target)) {
+      this.cancel();
+    }
+  };
 
   /**
    * Updates state value with latest value from input field.
@@ -176,8 +201,6 @@ export default class EditableCell extends Component {
    * Stops edit mode and revert state value to prop value.
    */
   cancel = () => {
-    this.props.onCancel();
-
     this.setState({
       value: this.props.value,
       edit: false,
@@ -222,20 +245,30 @@ export default class EditableCell extends Component {
         >
           {
             this.canEdit() ?
-              <input
-                type={this.props.type}
-                value={this.state.value}
-                onChange={this.onChange}
-                onKeyUp={this.onKeyUp}
-                onBlur={this.cancel}
-                ref={this.refEditField}
-                min={this.props.min}
-                max={this.props.max}
-                className={this.state.error ? 'form-error' : ''}
-              /> :
+              [
+                <input
+                  key="input"
+                  name="newValue"
+                  type={this.props.type}
+                  value={this.state.value || ''}
+                  onChange={this.onChange}
+                  onKeyUp={this.onKeyUp}
+                  ref={this.refEditField}
+                  min={this.props.min}
+                  max={this.props.max}
+                  className={this.state.error ? 'form-error' : ''}
+                />,
+                <Control
+                  className={classNames({ hide: !this.props.showControl })}
+                  key="button"
+                  type="submit"
+                  icon="plus"
+                  btnStyle="primary"
+                />,
+              ]
+            :
               <span>{this.state.value}</span>
           }
-          <button type="submit" style={{ display: 'none' }} />
         </form>
       </td>
     );
