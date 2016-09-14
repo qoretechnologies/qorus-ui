@@ -40,3 +40,19 @@ Feature: Jobs pane
     And I click on ".group" item
     Then the URL changes to "/groups/anothertest"
 
+  Scenario: Alert tab show alerts
+    Given I am on "jobs/all/110/alerts" page
+    When "jobs" get loaded
+    Then I see "2" ".job-alert" items
+
+  Scenario: Alert tab no alerts
+    Given I am on "jobs/all/4/alerts" page
+    When "jobs" get loaded
+    Then I see ".no-data" item
+  
+  Scenario: Go to system alerts
+    Given I am on "jobs/all/110/alerts" page
+    When "jobs" get loaded
+    And I click on ".job-alert:first-child a" item
+    Then the URL changes to "/system/alerts/ongoing/2"
+
