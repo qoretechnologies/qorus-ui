@@ -1,9 +1,10 @@
 /* @flow */
 import React from 'react';
 
-import Tabs, { Pane } from '../../../../../components/tabs';
 import ErrorTable from './errors';
 import AuditTable from './audit';
+import Tabs, { Pane } from '../../../../../components/tabs';
+import Tree from '../../../../../components/tree';
 
 const ResultData = ({ result }: { result: Object }) => (
   <Tabs>
@@ -13,7 +14,9 @@ const ResultData = ({ result }: { result: Object }) => (
     <Pane name="Audit">
       <AuditTable audit={result.audit} />
     </Pane>
-    <Pane name="Info">{result.info && result.info.info || 'No data found'}</Pane>
+    <Pane name="Info">
+      <Tree data={result.info} />
+    </Pane>
   </Tabs>
 );
 

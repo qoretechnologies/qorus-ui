@@ -60,3 +60,29 @@ Feature: Job page test
     When "results-table" get loaded
     And I click on the "2993243" row - "1"
     Then the URL changes to "/job/110/results/2993243"
+
+  Scenario: Show info tab with tree
+    Given I am on "job/33/results/3007007?date=all" page
+    When "results-table" get loaded
+    And ".job-result-info" item get loaded
+    And I wait some time
+    And I click the "Info" tab
+    Then I see ".tree-wrapper" item
+
+  Scenario: Show info tab without tree
+    Given I am on "job/33/results/3021635?date=all&q=" page
+    When "results-table" get loaded
+    And ".job-result-info" item get loaded
+    And I wait some time
+    And I click the "Info" tab
+    And I see ".no-data" item
+
+  Scenario: Go back to jobs main with all date
+    Given I am on "job/110/results/3007007?date=all" page
+    And I click on ".go-back" item
+    Then the URL changes to "/jobs/all"
+
+  Scenario: Go back with no date
+    Given I am on "job/110/results" page
+    And I click on ".go-back" item
+    Then the URL changes to "/jobs"
