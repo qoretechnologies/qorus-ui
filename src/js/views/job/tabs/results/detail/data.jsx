@@ -15,8 +15,7 @@ const ResultData = ({ result }: { result: Object }) => (
       <AuditTable audit={result.audit} />
     </Pane>
     <Pane name="Info">
-      {result.info && (<Tree data={result.info} />)}
-      {!result.info && (<p className="no-data">No data found</p>)}
+      <Tree data={result.info} />
     </Pane>
   </Tabs>
 );

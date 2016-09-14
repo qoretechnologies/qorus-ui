@@ -77,7 +77,7 @@ export default class Tree extends Component {
   render() {
     const { data } = this.props;
 
-    if (!data || !Object.keys(data).length) return <p> No data </p>;
+    if (!data || !Object.keys(data).length) return <p className="no-data"> No data </p>;
 
     return (
       <div>
