@@ -76,3 +76,13 @@ Feature: Job page test
     And I wait some time
     And I click the "Info" tab
     And I see ".no-data" item
+
+  Scenario: Go back to jobs main with all date
+    Given I am on "job/110/results/3007007?date=all" page
+    And I click on ".go-back" item
+    Then the URL changes to "/jobs/all"
+
+  Scenario: Go back with no date
+    Given I am on "job/110/results" page
+    And I click on ".go-back" item
+    Then the URL changes to "/jobs"

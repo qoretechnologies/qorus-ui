@@ -40,7 +40,7 @@ const JobPage = ({
   children:? Object,
 }) => (
   <div className="job-page">
-    <JobHeader {...{ job }} />
+    <JobHeader {...{ job, location }} />
     <JobDescription {...{ job }} />
     <div className="row">
       <div className="col-xs-12">
