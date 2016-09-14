@@ -322,7 +322,8 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I submit "([^"]*)" form$/, async function(formClass) {
-    this.browser.pressButton(`form.${formClass} button[type=submit]`);
+    console.log(`Submit form ${formClass}`);
+    return this.browser.pressButton(`form.${formClass} button[type=submit]`);
   });
 
   this.Then(/^I see "([^"]*)" alert$/, async function(alertType) {
