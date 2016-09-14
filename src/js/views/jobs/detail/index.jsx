@@ -8,7 +8,7 @@ import getContext from 'recompose/getContext';
 import pure from 'recompose/pure';
 
 import Header from './header';
-import { DetailTab } from './tabs';
+import { DetailTab, AlertsTab } from './tabs';
 import Tabs, { Pane } from '../../../components/tabs';
 import LibraryTab from '../../../components/library';
 import actions from '../../../store/api/actions';
@@ -46,6 +46,9 @@ const Detail = ({
           resource={`jobs/${model.id}`}
           location={location}
         />
+      </Pane>
+      <Pane name="Alerts">
+        <AlertsTab alerts={model.alerts} />
       </Pane>
       <Pane name="Mappers">
         <p>Not implemented yet</p>
