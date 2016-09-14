@@ -143,6 +143,7 @@ export default class extends Component {
         </Dropdown>
         {this.renderSelectionControls()}
         <Datepicker
+          className="toolbar-item"
           date={this.props.params.date}
           onApplyDate={this.applyDate}
         />

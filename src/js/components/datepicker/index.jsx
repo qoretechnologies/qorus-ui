@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
+import classNames from 'classnames';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
@@ -17,6 +18,7 @@ type Props = {
   futureOnly?: boolean,
   submitOnBlur?: boolean,
   placeholder?: string,
+  className?: string,
   id?: string,
 }
 
@@ -221,7 +223,7 @@ export default class DatePicker extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className="datepicker-wrapper">
+      <div className={classNames(this.props.className, 'datepicker-wrapper')}>
         <div className="input-group date-controls">
           <Input
             onFormSubmit={this.handleFormSubmit}
