@@ -87,7 +87,7 @@ module.exports = function workflowDatepickerSteps() {
 
   this.When(/^I change the input to "([^"]*)"$/, async function(date) {
     this.browser.fill('.datepicker-group input[type="text"]', date);
-    this.browser.pressButton('.datepicker-group [type="submit"]');
+    this.keyUp('.datepicker-group input[type="text"]', 13);
   });
 
   this.Then(/^the query "([^"]*)" changes to "([^"]*)"$/, async function(qn, q) {

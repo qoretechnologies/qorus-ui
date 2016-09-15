@@ -49,7 +49,7 @@ module.exports = function orderSteps() {
 
       if (moment(dt).isValid()) {
         this.browser.fill('.datepicker-group input[type="text"]', date);
-        this.browser.pressButton('.datepicker-group [type="submit"]');
+        this.keyUp('.datepicker-group input[type="text"]', 13);
       } else {
         let btn;
 
