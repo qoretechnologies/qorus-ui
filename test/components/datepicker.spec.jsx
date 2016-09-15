@@ -18,7 +18,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
   describe('Datepicker', () => {
     it('renders the Datepicker input with default date', () => {
       const wrapper = mount(<Datepicker date="24h" />);
-      const { inputDate } = wrapper.find('mapProps(Input)').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment().add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -26,7 +26,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with current date', () => {
       const wrapper = mount(<Datepicker date="now" />);
-      const { inputDate } = wrapper.find('mapProps(Input)').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment().format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -34,7 +34,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with the "all" date', () => {
       const wrapper = mount(<Datepicker date="all" />);
-      const { inputDate } = wrapper.find('mapProps(Input)').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment('19700101000000').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -42,7 +42,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with provided date', () => {
       const wrapper = mount(<Datepicker date="19880809123456" />);
-      const { inputDate } = wrapper.find('mapProps(Input)').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = '1988-08-09 12:34:56';
 
       expect(inputDate).to.equal(date);

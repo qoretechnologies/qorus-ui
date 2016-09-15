@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
 
 type Props = {
   placeholder?: string,
@@ -37,21 +37,12 @@ const Input = (props: Props) => (
   </div>
 );
 
-type KeyUpHandlerProps = {
-  other: Object;
-  onApplyDate: Function
-}
-
-const addKeyUpHandler = mapProps(
-  ({ onApplyDate, ...other }: KeyUpHandlerProps) => ({
-    ...other,
-    onApplyDate,
-    onKeyUp: (e: Object) => {
-      if (e.keyCode === 13) {
-        onApplyDate();
-      }
-    },
-  })
-);
+const addKeyUpHandler = withHandlers({
+  onKeyUp: ({ onApplyDate }: { onApplyDate: Function }): Function => (e: Object) => {
+    if (e.keyCode === 13) {
+      onApplyDate();
+    }
+  },
+});
 
 export default addKeyUpHandler(Input);
