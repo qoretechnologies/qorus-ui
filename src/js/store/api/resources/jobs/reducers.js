@@ -146,6 +146,16 @@ const clearResults = {
   },
 };
 
+const setExpirationDate = {
+  next(state, action) {
+    const { meta: { job }, payload: updatedJob } = action;
+    return { ...state, data: updateItemWithId(job.id, updatedJob, state.data) };
+  },
+  throw(state, action) {
+    const { meta: { job } } = action;
+    return { ...state, data: updateItemWithId(job.id, job, state.data) };
+  },
+};
 
 export {
   setOptions as SETOPTIONS,
@@ -153,4 +163,5 @@ export {
   fetchResults as FETCHRESULTS,
   startFetchingResults as STARTFETCHINGRESULTS,
   clearResults as CLEARRESULTS,
+  setExpirationDate as SETEXPIRATIONDATE,
 };

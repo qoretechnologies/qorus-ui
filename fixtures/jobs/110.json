@@ -89,7 +89,7 @@
   ],
   "enabled": true,
   "db_active": true,
-  "expiry_date": null,
+  "expiry_date": "2016-09-18 18:21:06.000000 +02:00",
   "next": "2014-12-11 15:30:00.000000 +01:00",
   "job_instanceid": null,
   "trigger": "minutes=0,10,20,30,40,50 hours=* days=* months=* dow=1-5",
