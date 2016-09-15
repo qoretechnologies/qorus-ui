@@ -240,11 +240,12 @@ class World {
     return new Promise(check.bind(this));
   }
 
-  keyUp = (target, key) => {
+  keyUp = async (target, key) => {
     const event = this.browser.window.document.createEvent('HTMLEvents');
     event.initEvent('keyup', true, true);
     event.which = key;
-    const tr = this.browser.queryAll(target);
+    event.keyCode = key;
+    const tr = this.browser.window.document.querySelector(target);
     tr && tr.dispatchEvent(event);
   }
 }

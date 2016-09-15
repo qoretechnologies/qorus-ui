@@ -18,7 +18,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
   describe('Datepicker', () => {
     it('renders the Datepicker input with default date', () => {
       const wrapper = mount(<Datepicker date="24h" />);
-      const { inputDate } = wrapper.find('Input').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment().add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -26,7 +26,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with current date', () => {
       const wrapper = mount(<Datepicker date="now" />);
-      const { inputDate } = wrapper.find('Input').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment().format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -34,7 +34,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with the "all" date', () => {
       const wrapper = mount(<Datepicker date="all" />);
-      const { inputDate } = wrapper.find('Input').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = moment('19700101000000').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
@@ -42,7 +42,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
     it('renders the Datepicker input with provided date', () => {
       const wrapper = mount(<Datepicker date="19880809123456" />);
-      const { inputDate } = wrapper.find('Input').props();
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
       const date = '1988-08-09 12:34:56';
 
       expect(inputDate).to.equal(date);
@@ -67,65 +67,48 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
   describe('Input', () => {
     it('runs the provided click action', () => {
       const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Input onInputClick={action} />
       );
-      const result = renderer.getRenderOutput();
-
-      result.props.children[0].props.children[1].props.onClick();
+      wrapper.find('input').simulate('click');
       expect(action).to.have.been.called();
     });
 
     it('runs the provided change action', () => {
       const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Input onInputChange={action} />
       );
-      const result = renderer.getRenderOutput();
 
-      result.props.children[0].props.children[1].props.onChange();
+      wrapper.find('input').simulate('change');
       expect(action).to.have.been.called();
     });
 
-    it('runs the provided submit action', () => {
+    it('runs the provided apply action on `enter` keypress', () => {
       const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Input onFormSubmit={action} />
+      const wrapper = mount(
+        <Input onApplyDate={action} />
       );
-      const result = renderer.getRenderOutput();
-
-      result.props.onSubmit();
+      wrapper.find('input').simulate('keyup', { keyCode: 13 });
       expect(action).to.have.been.called();
     });
 
     it('runs the provided blur action', () => {
       const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Input
-          submitOnBlur
-          onFormSubmit={action}
+          applyOnBlur
+          onApplyDate={action}
         />
       );
-      const result = renderer.getRenderOutput();
 
-      result.props.children[0].props.children[1].props.onBlur();
+      wrapper.find('input').simulate('blur');
       expect(action).to.have.been.called();
     });
 
     it('has the correct id assigned', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
-        <Input
-          id="test"
-        />
-      );
-      const result = renderer.getRenderOutput();
-
-      expect(result.props.children[0].props.children[1].props.id).to.eql('test');
+      const wrapper = mount(<Input id="test" />);
+      expect(wrapper.find('#test').length).to.eql(1);
     });
   });
 
