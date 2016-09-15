@@ -108,4 +108,47 @@ const clearResults = createAction(
   ({ id: modelId }) => ({ modelId })
 );
 
-export { setOptions, fetchLibSources, fetchResults, clearResults, startFetchingResults };
+const setExpirationDatePayload = async (job, date, optimistic) => {
+  if (optimistic) {
+    return { ...job, expiry_date: date };
+  }
+
+  const updatedInfo = await fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/jobs/${job.id}`,
+    {
+      body: JSON.stringify({
+        date,
+        action: 'setExpiry',
+      }),
+    }
+  );
+
+  return { ...job, ...updatedInfo };
+};
+
+const setExpirationDateMeta = (job, date, optimistic = false) => ({
+  job,
+  date,
+  optimistic,
+});
+
+const setExpirationDateAction = createAction(
+  'JOBS_SETEXPIRATIONDATE',
+  setExpirationDatePayload,
+  setExpirationDateMeta
+);
+
+const setExpirationDate = (job, date) => dispatch => {
+  dispatch(setExpirationDateAction(job, date, true));
+  dispatch(setExpirationDateAction(job, date));
+};
+
+export {
+  setOptions,
+  fetchLibSources,
+  fetchResults,
+  clearResults,
+  startFetchingResults,
+  setExpirationDate,
+};

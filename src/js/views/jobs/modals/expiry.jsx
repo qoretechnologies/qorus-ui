@@ -1,68 +1,110 @@
-import React, { Component, PropTypes } from 'react';
-
-import Modal from 'components/modal';
-
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+/* @flow */
+import React from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import withProps from 'recompose/withProps';
 
-import { normalizeName } from 'components/utils';
+import { DATE_FORMATS } from '../../../constants/dates.js';
+import { formatDate } from '../../../helpers/date';
+import { Control } from '../../../components/controls';
+import Modal from '../../../components/modal';
+import DatePicker from '../../../components/datepicker';
+import { normalizeName } from '../../../components/utils';
+import actions from '../../../store/api/actions';
 
-import actions from 'store/api/actions';
 
-@connect(
-  null,
-  dispatch => bindActionCreators({
-    expire: actions.jobs.setExpiration,
-  }, dispatch)
-)
-export default class ModalExpiry extends Component {
-  static propTypes = {
-    job: PropTypes.object.isRequired,
-    onClose: PropTypes.func.isRequired,
-    expire: PropTypes.func.isRequired,
-  }
+const ModalExpiry = ({
+  job,
+  date,
+  setDate,
+  handleSubmit,
+  handleClear,
+  handleCancel,
+}: {
+  job: Object,
+  date: string,
+  setDate: Function,
+  handleSubmit: Function,
+  handleClear: Function,
+  handleCancel: Function,
+}) => (
+  <Modal>
+    <form onSubmit={handleSubmit} className="expire-date-form">
+      <Modal.Header
+        onClose={handleCancel}
+        titleId="jobExpiration"
+      >
+        Set expiration for job { normalizeName(job, 'jobid') }
+      </Modal.Header>
+      <Modal.Body>
+        <div className="form-group">
+          <label className="sr-only" htmlFor="date">Set expiration date</label>
+          <DatePicker onApplyDate={setDate} date={date} applyOnBlur futureOnly />
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Control onClick={handleCancel} btnStyle="default" label="Cancel" big />
+        <Control onClick={handleClear} btnStyle="default" label="Clear" big />
+        <Control type="submit" btnStyle="success" label="Set expiry" big />
+      </Modal.Footer>
+    </form>
+  </Modal>
+);
 
-  handleCancel = event => {
-    event.preventDefault();
-    this.props.onClose(event);
-  }
+const addDateState = withState('date', 'setDate', '');
 
-  handleSubmit = event => {
-    event.preventDefault();
+const setExpireDateFromJob = withProps(
+  ({ job, date }: { job: Object, date: string }): Object => ({
+    date: date || job.expiry_date && moment(job.expiry_date).format(DATE_FORMATS.URL_FORMAT) || '',
+  })
+);
 
-    this.props.expire(this.props.job, moment(this.refs.date).format());
+const addSubmitHandler = withHandlers({
+  handleSubmit: (
+    {
+      job,
+      date,
+      expire,
+      onClose,
+    }: {
+      job: Object,
+      date: string,
+      expire: Function,
+      onClose: Function,
+    }
+  ) => (e: Object) => {
+    e.preventDefault();
+    expire(job, formatDate(date).format());
+    onClose();
+  },
+});
 
-    this.props.onClose();
-  }
+const addClearHandler = withHandlers({
+  handleClear: ({ job, expire, onClose }: { job: Object, expire: Function, onClose: Function}) => {
+    expire(job, '');
+    onClose();
+  },
+});
 
-  render() {
-    const { job } = this.props;
+const addCancelHandler = withHandlers({
+  handleCancel: ({ onClose }: { onClose: Function }) => (e: Object) => {
+    e.preventDefault();
+    onClose();
+  },
+});
 
-    return (
-      <Modal>
-        <form onSubmit={this.handleSubmit}>
-          <Modal.Header
-            onClose={ this.handleCancel }
-            titleId="jobExpiration"
-          >
-            Set expiration for job { normalizeName(job, 'jobid') }
-          </Modal.Header>
-          <Modal.Body>
-            <div className="form-group">
-              <label className="sr-only" htmlFor="date">Set expiration date</label>
-              <div className="input-group">
-                <div className="input-group-addon"><i className="fa fa-calendar" /></div>
-                <input type="text" className="form-control" ref="date" id="date" />
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <btn className="btn" onClick={this.handleCancel}>Cancel</btn>
-            <btn className="btn btn-success" type="submit">Set expiry</btn>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    );
-  }
-}
+
+export default compose(
+  connect(
+    () => ({}),
+    { expire: actions.jobs.setExpirationDate }
+  ),
+  addDateState,
+  setExpireDateFromJob,
+  addSubmitHandler,
+  addClearHandler,
+  addCancelHandler,
+)(ModalExpiry);

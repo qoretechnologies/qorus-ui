@@ -101,7 +101,7 @@ module.exports = () => {
   });
 
   router.put('/:id', (req, res) => {
-    const item = data.find(i => i.jobid !== req.params.id);
+    const item = data.find(i => i.jobid === parseInt(req.params.id, 10));
 
     switch (req.body.action) {
       case 'disable':
@@ -112,7 +112,7 @@ module.exports = () => {
         item.active = !!req.body.active;
         break;
       case 'setExpiry':
-        item.expiry_date = req.body.expiry_date;
+        item.expiry_date = req.body.date;
         break;
       case 'schedule': {
         const cron = req.body.schedule.split(' ');
@@ -133,6 +133,7 @@ module.exports = () => {
         const jobOption = systemData.options
           .filter(option => option.job)
           .find(option => option.name === options.name);
+        item.options = item.options || [];
         item.options = [
           ...item.options.filter(option => option.name !== option.name),
           optionValue ? { ...options, desc: jobOption.desc } : undefined,
