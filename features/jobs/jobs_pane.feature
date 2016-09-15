@@ -6,8 +6,9 @@ Feature: Jobs pane
     And I see ".options" item
     And I see ".groups" item
 
+  @no-impl
   Scenario: Set option with error
-    Given I am on "jobs/24h/33" page
+    Given I am on "jobs/24h/110" page
     When "jobs" get loaded
     And I click the "Add option" button
     And I click the "Add" button
