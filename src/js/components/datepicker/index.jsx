@@ -16,7 +16,7 @@ type Props = {
   date: string,
   onApplyDate: (date: string) => void,
   futureOnly?: boolean,
-  submitOnBlur?: boolean,
+  applyOnBlur?: boolean,
   placeholder?: string,
   className?: string,
   id?: string,
@@ -151,9 +151,7 @@ export default class DatePicker extends Component {
     });
   };
 
-  handleFormSubmit: Function = (event: Object): void => {
-    event.preventDefault();
-
+  handleApplyDate: Function = (): void => {
     if (this.state.inputDate === '') {
       this.applyDate('');
     } else {
@@ -226,8 +224,8 @@ export default class DatePicker extends Component {
       <div className={classNames(this.props.className, 'datepicker-wrapper')}>
         <div className="input-group date-controls">
           <Input
-            onFormSubmit={this.handleFormSubmit}
-            submitOnBlur={this.props.submitOnBlur}
+            onApplyDate={this.handleApplyDate}
+            applyOnBlur={this.props.applyOnBlur}
             onInputChange={this.handleInputChange}
             inputDate={this.state.inputDate}
             onInputClick={this.showDatepicker}

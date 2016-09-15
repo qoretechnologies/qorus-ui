@@ -90,7 +90,7 @@ export default class SearchToolbar extends Component {
             placeholder="Min date..."
             date={this.state.date}
             onApplyDate={this.handleInputChange('date')}
-            submitOnBlur
+            applyOnBlur
             futureOnly
             id="mindate"
           />
@@ -98,7 +98,7 @@ export default class SearchToolbar extends Component {
             placeholder="Max date..."
             date={this.state.maxmodified}
             onApplyDate={this.handleInputChange('maxmodified')}
-            submitOnBlur
+            applyOnBlur
             futureOnly
             id="maxdate"
           />
