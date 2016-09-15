@@ -41,14 +41,12 @@ Feature: Workflow Datepicker
     When I click the reset button
     Then hours and change should return to the default value
 
-  @wip
   Scenario: Setting valid date manually from the input
     Given I am on "workflows" listing
     And datepicker is opened
     When I change the input to "2015-03-05 12:34:56"
     Then the URL changes to "/workflows/20150305123456/all"
 
-  @wip
   Scenario: Setting invalid date manually from the input
     Given I am on "workflows" listing
     And datepicker is opened

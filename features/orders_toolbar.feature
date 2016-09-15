@@ -62,7 +62,6 @@ Feature: Tests all the features of the orders list toolbar
     And I click the "Filter" button
     Then "1" "order" are shown
 
-  @wip
   Scenario: Changing the input date
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
