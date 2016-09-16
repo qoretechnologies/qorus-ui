@@ -3,7 +3,7 @@
 /**
  * @module api/jobs
  */
-import getJobData, { jobResults, getSystemData, getOptionErrorData } from './data';
+import getJobData, { jobResults, getSystemData, getOptionErrorData, getJobsCode } from './data';
 
 const findJob = (id, s) => s.jobid === parseInt(id, 10);
 const config = require('../config');
@@ -16,6 +16,7 @@ module.exports = () => {
   let data = getJobData();
   const jobResultsData = jobResults();
   const systemData = getSystemData();
+  const jobsCode = getJobsCode();
 
   const router = new express.Router();
   router.use(rest(data, findJob));
@@ -98,6 +99,11 @@ module.exports = () => {
 
     results = results.slice(offset, offset + limit);
     res.json(results);
+  });
+
+  router.get('/:id/code', (req, res) => {
+    const item = jobsCode.find(i => i.jobid === parseInt(req.params.id, 10));
+    res.send(item && item.code || '');
   });
 
   router.put('/:id', (req, res) => {
