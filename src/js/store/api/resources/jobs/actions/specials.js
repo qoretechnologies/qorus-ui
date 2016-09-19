@@ -144,6 +144,11 @@ const setExpirationDate = (job, date) => dispatch => {
   dispatch(setExpirationDateAction(job, date));
 };
 
+const fetchCodePayload = (job) => fetchJson('GET', `${settings.REST_BASE_URL}/jobs/${job.id}/code`);
+const fetchCodeMeta = (job) => ({ job });
+
+const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
+
 export {
   setOptions,
   fetchLibSources,
@@ -151,4 +156,5 @@ export {
   clearResults,
   startFetchingResults,
   setExpirationDate,
+  fetchCode,
 };
