@@ -9,9 +9,18 @@ import { pureRender } from './utils';
 export default class LibraryTab extends Component {
   static propTypes = {
     library: PropTypes.object.isRequired,
+    mainCode: PropTypes.string,
   };
 
-  componentWillMount() {
+  defaultProps = {
+    library: {},
+  };
+
+  state = {
+    activeDomId: null,
+  };
+
+  componentDidMount() {
     this.setInitialActiveDomId(this.props);
   }
 
@@ -27,10 +36,20 @@ export default class LibraryTab extends Component {
   }
 
   setInitialActiveDomId() {
-    const domIds = this.mergeFuncs().map(fn => fn.id);
-    if (!this.state ||
+    let activeDomId;
+    if (this.props.mainCode) {
+      activeDomId = 'main_code';
+    } else {
+      const domIds = this.mergeFuncs().map(fn => fn.id);
+      activeDomId = domIds[0];
+      if (!this.state ||
         domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
-      this.setState({ activeDomId: domIds[0] });
+        this.setState({ activeDomId: domIds[0] });
+      }
+    }
+
+    if (!this.state || activeDomId !== this.state.activeDomId) {
+      this.setState({ activeDomId });
     }
   }
 
@@ -45,7 +64,7 @@ export default class LibraryTab extends Component {
   }
 
   mergeFuncs() {
-    const { library } = this.props;
+    const { library = {} } = this.props;
 
     return Object.keys(library).reduce((funcs, name) => (
       library[name].reduce((fns, fn) => (
@@ -74,10 +93,20 @@ export default class LibraryTab extends Component {
   }
 
   renderFuncs() {
-    const { library } = this.props;
+    const { library = {}, mainCode } = this.props;
+    const { activeDomId = null } = this.state;
 
     return (
       <ul className="nav nav-pills nav-stacked">
+        {mainCode ? (
+          <Item
+            key="main_code"
+            slug="main_code"
+            name="Main code"
+            tabChange={this.handleTabChange}
+            active={activeDomId === 'main_code'}
+          />
+        ) : null }
         {Object.keys(library).map((name) => {
           if (!library[name].length) return null;
 
@@ -90,7 +119,7 @@ export default class LibraryTab extends Component {
                     key={idx}
                     slug={this.getDomId(func, null)}
                     name={this.renderFuncHeading(func)}
-                    active={this.getDomId(func, null) === this.state.activeDomId}
+                    active={this.getDomId(func, null) === activeDomId}
                     tabChange={this.handleTabChange}
                   />
                 ))}
@@ -102,37 +131,24 @@ export default class LibraryTab extends Component {
     );
   }
 
-  // renderStepFuncs() {
-  //   return (
-  //     <li role="presentation" className="disabled">
-  //       <a><h5>StepFuncs</h5></a>
-  //       <ul className="nav nav-pills nav-stacked">
-  //       {this.props.library.stepfuncs.
-  //        sort(::this.compareStepInfoFuncs).
-  //        map((step, stepIdx) => (
-  //         <li key={stepIdx} role="presentation" className="disabled">
-  //           <a><h6>{step.name}</h6></a>
-  //           <ul className="nav nav-pills nav-stacked">
-  //             {(step.functions || []).map((func, funcIdx) => (
-  //               <Item
-  //                 key={funcIdx}
-  //                 slug={this.getDomId(func, step)}
-  //                 name={this.renderFuncHeading(func)}
-  //                 active={this.getDomId(func, step) === this.state.activeDomId}
-  //                 tabChange={this.handleTabChange}
-  //               />
-  //             ))}
-  //           </ul>
-  //         </li>
-  //       ))}
-  //       </ul>
-  //     </li>
-  //   );
-  // }
-
   renderCodeTabs() {
     return (
       <div className="tab-content">
+        {
+          this.props.mainCode ? (
+            <Pane
+              slug="main_code"
+              name="main_code"
+              key="main_code"
+              active={this.state.activeDomId === 'main_code'}
+            >
+              <SourceCode >
+                {this.props.mainCode}
+              </SourceCode>
+            </Pane>
+
+          ) : null
+        }
         {this.mergeFuncs().map(({ id, fn }, funcIdx) => (
           <Pane
             key={funcIdx}
@@ -151,10 +167,10 @@ export default class LibraryTab extends Component {
 
 
   render() {
-    if (!this.mergeFuncs().length) {
+    if (!this.mergeFuncs().length && !this.props.mainCode) {
       return (
         <div className="pane-lib">
-          <p>Library not defined</p>
+          <p className="no-data">Library not defined</p>
         </div>
       );
     }

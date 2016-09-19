@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import queryString from 'query-string';
 
 
-import { fetchJson, fetchData } from '../../../utils';
+import { fetchJson, fetchText, fetchData } from '../../../utils';
 import settings from '../../../../../settings';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
@@ -144,6 +144,13 @@ const setExpirationDate = (job, date) => dispatch => {
   dispatch(setExpirationDateAction(job, date));
 };
 
+const fetchCodePayload = async (job) => ({
+  code: await fetchText('GET', `${settings.REST_BASE_URL}/jobs/${job.id}/code`),
+});
+const fetchCodeMeta = (job) => ({ job });
+
+const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
+
 export {
   setOptions,
   fetchLibSources,
@@ -151,4 +158,5 @@ export {
   clearResults,
   startFetchingResults,
   setExpirationDate,
+  fetchCode,
 };

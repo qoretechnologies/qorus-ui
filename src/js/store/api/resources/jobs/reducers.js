@@ -157,6 +157,17 @@ const setExpirationDate = {
   },
 };
 
+const fetchCode = {
+  next(state, action) {
+    const { meta: { job }, payload: { code } } = action;
+    const updatedJob = { ...job, code };
+    return { ...state, data: updateItemWithId(job.id, updatedJob, state.data) };
+  },
+  throw(state) {
+    return state;
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -164,4 +175,5 @@ export {
   startFetchingResults as STARTFETCHINGRESULTS,
   clearResults as CLEARRESULTS,
   setExpirationDate as SETEXPIRATIONDATE,
+  fetchCode as FETCHCODE,
 };

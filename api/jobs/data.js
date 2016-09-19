@@ -15,6 +15,7 @@
 export default () => require('../data').getData('jobs');
 export const jobResults = () => require('../data').getData('job_results');
 export const getSystemData = () => require('../system/data')();
+export const getJobsCode = () => require('../data').getData('jobs_code');
 export const getOptionErrorData = () => ({
   type: 'User',
   file: 'JobManager.qc',
