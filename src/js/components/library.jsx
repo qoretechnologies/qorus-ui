@@ -41,7 +41,7 @@ export default class LibraryTab extends Component {
       activeDomId = 'main_code';
     } else {
       const domIds = this.mergeFuncs().map(fn => fn.id);
-      activeDomId = domIds[0]
+      activeDomId = domIds[0];
       if (!this.state ||
         domIds.findIndex(domId => domId === this.state.activeDomId) < 0) {
         this.setState({ activeDomId: domIds[0] });
@@ -102,7 +102,7 @@ export default class LibraryTab extends Component {
           <Item
             key="main_code"
             slug="main_code"
-            name="main_code"
+            name="Main code"
             tabChange={this.handleTabChange}
             active={activeDomId === 'main_code'}
           />

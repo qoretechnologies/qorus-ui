@@ -68,7 +68,7 @@ describe("{ LibraryTab } from 'components/library'", () => {
       expect(wrapper.find('Item')).to.have.length(1);
 
       const itemProps = wrapper.find('Item').props();
-      expect(itemProps.name).to.equal('main_code');
+      expect(itemProps.name).to.equal('Main code');
 
       const codeProps = wrapper.find('Pane').props();
       expect(codeProps.active).to.be.true();
@@ -111,7 +111,6 @@ describe("{ LibraryTab } from 'components/library'", () => {
 
       const mainCodeProps = wrapper.find('Item').first().props();
       expect(mainCodeProps.active).to.be.true();
-
     });
   });
 });
