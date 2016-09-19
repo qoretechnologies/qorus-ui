@@ -39,7 +39,10 @@ const Detail = ({
         <DetailTab model={model} />
       </Pane>
       <Pane name="Library">
-        <LibraryTab library={model.lib || {}} />
+        <LibraryTab
+          library={model.lib || {}}
+          mainCode={model.code || undefined}
+        />
       </Pane>
       <Pane name="Log">
         <LogTab
@@ -97,13 +100,33 @@ const fetchLibSourceOnMountAndOnChange = lifecycle({
   },
 });
 
+const fetchCodeOnMountAndOnChange = lifecycle({
+  componentWillMount() {
+    const { model, fetchCode } = this.props;
+    fetchCode(model);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    const { model } = this.props;
+    const { model: nextModel, fetchCode } = nextProps;
+
+    if (nextModel.id !== model.id) {
+      fetchCode(nextModel);
+    }
+  },
+});
+
 export default compose(
   connect(
     () => ({}),
-    { fetchLibSources: actions.jobs.fetchLibSources }
+    {
+      fetchLibSources: actions.jobs.fetchLibSources,
+      fetchCode: actions.jobs.fetchCode,
+    }
   ),
   getRouterContext,
   pure,
   allowChangeTab,
-  fetchLibSourceOnMountAndOnChange
+  fetchLibSourceOnMountAndOnChange,
+  fetchCodeOnMountAndOnChange,
 )(Detail);
