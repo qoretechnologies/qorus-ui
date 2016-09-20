@@ -3,10 +3,12 @@ import React, { Component, PropTypes } from 'react';
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-qore';
-import './prism-wrapped-line-numbers';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+
 
 import classNames from 'classnames';
 import { pureRender } from '../utils';
+
 
 /**
  * Source code uses Prism to format text.
@@ -30,8 +32,16 @@ export default class SourceCode extends Component {
   };
 
   state = {
-    wrapLines: true,
+    wrapLines: false,
   };
+
+  componentDidMount() {
+    Prism.highlightElement(this.code);
+  }
+
+  componentDidUpdate() {
+    Prism.highlightElement(this.code);
+  }
 
   /**
    * Changes wrap-line state.
@@ -40,10 +50,8 @@ export default class SourceCode extends Component {
     this.setState({ wrapLines: !this.state.wrapLines });
   };
 
-  createCode() {
-    if (!this.props.children) return null;
-
-    return { __html: Prism.highlight(this.props.children, Prism.languages.qore) };
+  bindCodeRef = code => {
+    this.code = code;
   }
 
   /**
@@ -72,17 +80,18 @@ export default class SourceCode extends Component {
         </button>
         <pre
           className={classNames({
-            'line-numbers': true,
+            'line-numbers': !this.state.wrapLines,
             'source-code__code': true,
             'source-code__code--wrap': this.state.wrapLines,
             'language-qore': true,
           })}
-          data-start={1 + this.props.lineOffset}
         >
           <code
             className="language-qore"
-            dangerouslySetInnerHTML={this.createCode()}
-          />
+            ref={this.bindCodeRef}
+          >
+            {this.props.children}
+          </code>
         </pre>
       </div>
     );
