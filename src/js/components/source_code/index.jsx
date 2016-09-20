@@ -50,6 +50,10 @@ export default class SourceCode extends Component {
     this.setState({ wrapLines: !this.state.wrapLines });
   };
 
+  bindCodeRef = code => {
+    this.code = code;
+  }
+
   /**
    * Returns element for this component.
    *
@@ -84,7 +88,7 @@ export default class SourceCode extends Component {
         >
           <code
             className="language-qore"
-            ref={code => { this.code = code; }}
+            ref={this.bindCodeRef}
           >
             {this.props.children}
           </code>
