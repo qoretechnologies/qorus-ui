@@ -1,6 +1,7 @@
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
 @import '../../node_modules/prismjs/themes/prism-okaidia';
+@import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
 
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
@@ -88,4 +89,9 @@ iframe {
   width: 100%;
   height: calc(100vh - 100px);
   border: none;
+}
+
+pre.line-numbers {
+  padding-left: 4em;
+
 }
