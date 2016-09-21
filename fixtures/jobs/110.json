@@ -98,5 +98,19 @@
   "log_url": "ws://localhost:8001/log/jobs/110",
   "sched_type": "cron",
   "sched_txt": "minutes: */10, hours: *, days: *, months: *, wdays: mon-fri",
-  "options": []
+  "options": [],
+  "mappers": [
+    {
+      "mapperid": 22,
+      "name": "it-108-usim_vendor_files-out",
+      "type": "Mapper",
+      "version": "1.0"
+    },
+    {
+      "mapperid": 486,
+      "name": "it-31-rma_receipt-rev_credit_cc-dhl-in",
+      "type": "EbsSingleTableInboundMapper",
+      "version": "1.0"
+    }
+  ]
 }

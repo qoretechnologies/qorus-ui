@@ -34,6 +34,7 @@ module.exports = () => {
   router.use('/jobresults', require('./jobresults')());
   router.use('/roles', require('./roles')());
   router.use('/perms', require('./perms')());
+  router.use('/mappers', require('./mappers')());
 
   return router;
 };
