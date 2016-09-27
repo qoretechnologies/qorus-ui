@@ -14,6 +14,10 @@
  * 6. Table head cells have smaller font.
  */
 table.table--data {
+  tr.row-highlight {
+    background-color: #deffdf !important;
+  }
+
   > thead,
   > tbody,
   > tfoot {
