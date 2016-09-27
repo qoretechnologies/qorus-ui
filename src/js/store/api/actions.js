@@ -110,13 +110,15 @@ Object.assign(actions.steps, stepActions);
 
 Object.assign(actions.props, propActions);
 
-Object.keys(orderActions).forEach(a => {
-  actions.orders[a] = orderActions[a](actions);
+Object.keys(orderActions.delegates).forEach(a => {
+  actions.orders[a] = orderActions.delegates[a](actions);
 });
+Object.assign(actions.orders, orderActions.specials);
 
-Object.keys(groupsActions).forEach(a => {
-  actions.groups[a] = groupsActions[a](actions);
+Object.keys(groupsActions.delegates).forEach(a => {
+  actions.groups[a] = groupsActions.delegates[a](actions);
 });
+Object.assign(actions.groups, groupsActions.specials);
 
 Object.assign(actions.errors, errorActions);
 

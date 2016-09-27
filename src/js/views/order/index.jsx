@@ -72,20 +72,16 @@ export default class Order extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(
+    const order = await this.props.dispatch(
       actions.orders.fetch({}, id)
     );
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.order !== nextProps.order) {
-      this.props.dispatch(
-        actions.workflows.fetch({}, nextProps.order.workflowid)
-      );
-    }
+    this.props.dispatch(
+      actions.workflows.fetch({}, order.payload.workflowid)
+    );
   }
 
   render() {

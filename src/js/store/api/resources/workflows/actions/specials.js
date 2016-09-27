@@ -49,5 +49,37 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
+const setExecCount = createAction(
+  'WORKFLOWS_SETEXECCOUNT',
+  (workflowid, value) => ({ workflowid, value })
+);
 
-export { setOptions, fetchLibSources };
+const setEnabled = createAction(
+  'WORKFLOWS_SETENABLED',
+  (workflowid, value) => ({ workflowid, value })
+);
+
+const updateDone = createAction(
+  'WORKFLOWS_UPDATEDONE',
+  (id) => ({ id })
+);
+
+const addOrder = createAction(
+  'WORKFLOWS_ADDORDER',
+  (id, status) => ({ id, status })
+);
+
+const modifyOrder = createAction(
+  'WORKFLOWS_MODIFYORDER',
+  (id, oldStatus, newStatus) => ({ id, oldStatus, newStatus })
+);
+
+export {
+  setOptions,
+  fetchLibSources,
+  setExecCount,
+  setEnabled,
+  updateDone,
+  addOrder,
+  modifyOrder,
+};

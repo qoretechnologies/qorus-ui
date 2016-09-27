@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import ServiceTable from '../services/table';
-import { Cell } from '../../components/table';
+import { Row, Cell } from '../../components/table';
 import GroupControls from './controls';
 import Checkbox from '../../components/checkbox';
+import actions from '../../store/api/actions';
 
 /**
  * List of all jobs in the system.
@@ -16,6 +17,12 @@ export default class JobsTable extends ServiceTable {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
+  };
+
+  handleHighlightEnd = (name) => () => {
+    this.context.dispatch(
+      actions.groups.updateDone(name)
+    );
   };
 
   /**
@@ -194,5 +201,36 @@ export default class JobsTable extends ServiceTable {
     yield (
       <Cell className="narrow">{ model.vmaps_count }</Cell>
     );
+  }
+
+  /**
+   * Yields rows for table body.
+   *
+   * Row with active model is highlighted. Row are clickable and
+   * trigger route change via {@link activateRow}.
+   *
+   * @param {number} activeId
+   * @param {Array<Object>} collection
+   * @param {Array<Object>} selectedData
+   * @return {Generator<ReactElement>}
+   * @see activateRow
+   * @see renderCells
+   */
+  *renderRows({ collection, selectedData }) {
+    for (const model of collection) {
+      yield (
+        <Row
+          key={model.id}
+          data={{
+            model,
+            selected: selectedData[model.id],
+          }}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.name)}
+          cells={this._renderCells}
+          onClick={this._activateRow}
+        />
+      );
+    }
   }
 }

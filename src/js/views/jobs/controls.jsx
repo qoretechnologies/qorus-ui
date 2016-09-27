@@ -11,7 +11,7 @@ import actions from 'store/api/actions';
 
 
 @compose(
-  onlyUpdateForKeys(['job']),
+  onlyUpdateForKeys(['job', 'active', 'enabled']),
   connect(
     () => ({}),
     actions.jobs
@@ -20,6 +20,9 @@ import actions from 'store/api/actions';
 export default class ServiceControls extends Component {
   static propTypes = {
     job: PropTypes.object,
+    enabled: PropTypes.bool,
+    active: PropTypes.bool,
+    id: PropTypes.number,
   };
 
   static contextTypes = {
@@ -98,44 +101,46 @@ export default class ServiceControls extends Component {
   render() {
     return (
       <div className="btn-controls">
-        {this.props.job.enabled && (
+        {this.props.enabled && (
           <Control
-            id={`job-${this.props.job.id}-enabled`}
+            id={`job-${this.props.id}-enabled`}
             title="Disable"
             icon="power-off"
             btnStyle="success"
             action={this.handleDisable}
           />
         )}
-        {!this.props.job.enabled && (
+        {!this.props.enabled && (
           <Control
-            id={`job-${this.props.job.id}-disabled`}
+            id={`job-${this.props.id}-disabled`}
             title="Enable"
             icon="power-off"
             btnStyle="danger"
             action={this.handleEnable}
           />
         )}
-        {this.props.job.active && (
+        {this.props.active && (
           <Control
-            id={`job-${this.props.job.id}-active`}
+            id={`job-${this.props.id}-active`}
             title="Deactivate"
             icon="check"
             btnStyle="success"
+            className="job-set-inactive"
             action={this.handleDeactivate}
           />
         )}
-        {!this.props.job.active && (
+        {!this.props.active && (
           <Control
-            id={`job-${this.props.job.id}-unactive`}
+            id={`job-${this.props.id}-unactive`}
             title="Activate"
             icon="ban"
             btnStyle="danger"
+            className="job-set-active"
             action={this.handleActivate}
           />
         )}
-        <Dropdown id={`job-${this.props.job.id}`}>
-          <DControl id={`job-${this.props.job.id}-dropdown-control`} />
+        <Dropdown id={`job-${this.props.id}`}>
+          <DControl id={`job-${this.props.id}-dropdown-control`} />
           <Item
             action={this.handleRun}
             icon="play"
@@ -149,7 +154,7 @@ export default class ServiceControls extends Component {
             className="reshedule-job"
           />
           <Item
-            action={this.handle}
+            action={this.handleReset}
             icon="refresh"
             title="Reset"
             className="refresh-job"

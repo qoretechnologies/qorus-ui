@@ -1,8 +1,6 @@
-import { updateItemWithId } from '../../utils';
-
+import { updateItemWithId, setUpdatedToNull } from '../../utils';
 
 const initialState = { data: [], sync: false, loading: false };
-
 
 /**
  * Updates service data with new option value.
@@ -116,9 +114,72 @@ const fetchMethodSources = {
   },
 };
 
+const setStatus = {
+  next(state = initialState, { payload: { serviceid, status } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const newData = updateItemWithId(serviceid, { status, _updated: true }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const setEnabled = {
+  next(state, { payload: { id, value } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const updateDone = {
+  next(state, { payload: { id } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const newData = updateItemWithId(id, { _updated: null }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
 
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
   fetchMethodSources as FETCHMETHODSOURCES,
+  setStatus as SETSTATUS,
+  setEnabled as SETENABLED,
+  updateDone as UPDATEDONE,
 };

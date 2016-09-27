@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Controls, Control } from 'components/controls';
-
-import { pureRender } from 'components/utils';
-
 import actions from 'store/api/actions';
 
-@pureRender
 export default class ServiceControls extends Component {
   static propTypes = {
     service: PropTypes.object,
+    status: PropTypes.string,
+    enabled: PropTypes.bool,
+    autostart: PropTypes.bool,
   };
 
 
@@ -16,31 +15,30 @@ export default class ServiceControls extends Component {
     dispatch: PropTypes.func,
   };
 
-
   dispatchAction(action) {
     this.context.dispatch(
       actions.services[action](this.props.service)
     );
   }
 
-  dispatchDisable = () => this.dispatchAction('disable')
-  dispatchEnable = () => this.dispatchAction('enable')
+  dispatchDisable = () => this.dispatchAction('disable');
+  dispatchEnable = () => this.dispatchAction('enable');
   dispatchReset = (event) => {
-    if (this.props.service.status === 'loaded') {
+    if (this.props.status === 'loaded') {
       this.dispatchAction('reset');
     }
     return event;
-  }
-  dispatchLoad = () => this.dispatchAction('load')
-  dispatchUnload = () => this.dispatchAction('unload')
-  dispatchEnableAutostart = () => this.dispatchAction('autostartOn')
-  dispatchDisableAutostart = () => this.dispatchAction('autostartOff')
+  };
+  dispatchLoad = () => this.dispatchAction('load');
+  dispatchUnload = () => this.dispatchAction('unload');
+  dispatchEnableAutostart = () => this.dispatchAction('autostartOn');
+  dispatchDisableAutostart = () => this.dispatchAction('autostartOff');
 
 
   render() {
     return (
       <Controls>
-        {this.props.service.enabled && (
+        {this.props.enabled && (
           <Control
             title="Disable"
             icon="power-off"
@@ -48,7 +46,7 @@ export default class ServiceControls extends Component {
             action={this.dispatchDisable}
           />
         )}
-        {!this.props.service.enabled && (
+        {!this.props.enabled && (
           <Control
             title="Enable"
             icon="power-off"
@@ -56,14 +54,14 @@ export default class ServiceControls extends Component {
             action={this.dispatchEnable}
           />
         )}
-        {!this.props.service.autostart && (
+        {!this.props.autostart && (
           <Control
             title="Enable Autostart"
             icon="rocket"
             action={this.dispatchEnableAutostart}
           />
         )}
-        {this.props.service.autostart && (
+        {this.props.autostart && (
           <Control
             title="Disable Autostart"
             icon="rocket"
@@ -71,14 +69,14 @@ export default class ServiceControls extends Component {
             action={this.dispatchDisableAutostart}
           />
         )}
-        {this.props.service.status === 'unloaded' && (
+        {this.props.status === 'unloaded' && (
           <Control
             title="Load"
             icon="ban"
             action={this.dispatchLoad}
           />
         )}
-        {this.props.service.status === 'loaded' && (
+        {this.props.status === 'loaded' && (
           <Control
             title="Unload"
             icon="check"
@@ -89,7 +87,7 @@ export default class ServiceControls extends Component {
         <Control
           title="Reset"
           icon="refresh"
-          btnStyle={ this.props.service.status === 'loaded' ? 'warning' : 'na disabled' }
+          btnStyle={ this.props.status === 'loaded' ? 'warning' : 'na disabled' }
           action={ this.dispatchReset }
         />
       </Controls>

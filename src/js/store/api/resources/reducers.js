@@ -11,3 +11,5 @@ export * as roles from './roles/reducers';
 export * as perms from './perms/reducers';
 export * as currentUser from './currentUser/reducers';
 export * as props from './props/reducers';
+export * as groups from './groups/reducers';
+export * as orders from './orders/reducers';

@@ -82,6 +82,12 @@ export default class WorkflowsTable extends Component {
     this.setSelectedWorkflows(selectedWorkflows);
   }
 
+  handleHighlightEnd = (id) => () => {
+    this.context.dispatch(
+      actions.workflows.updateDone(id)
+    );
+  };
+
   /**
    * Sends the selected workflows one level up to
    * the workflows component and sets the state
@@ -413,6 +419,8 @@ export default class WorkflowsTable extends Component {
           }}
           cells={this._renderCells}
           onClick={this._activateWorkflow}
+          highlight={workflow._updated}
+          onHighlightEnd={this.handleHighlightEnd(workflow.workflowid)}
           className={classNames({
             info: workflow.workflowid === activeId,
           })}

@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Table from '../../../services/table';
+import { union } from 'lodash';
 
-import { Cell } from '../../../../components/table';
+import Table from '../../../services/table';
+import { Cell, Row } from '../../../../components/table';
 import OrderControls from './controls';
 import Date from '../../../../components/date';
 import Checkbox from '../../../../components/checkbox';
 import Dropdown, { Item, Control } from '../../../../components/dropdown';
 import Lock from './modals/lock';
-
-import { union } from 'lodash';
-
 import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
+import { updateDone } from '../../../../store/api/resources/orders/actions/specials';
 
 export default class OrdersTable extends Table {
   static defaultProps = {
@@ -36,6 +35,12 @@ export default class OrdersTable extends Table {
 
   handleModalCloseClick = () => {
     this.context.closeModal(this._modal);
+  };
+
+  handleHighlightEnd = (id) => () => {
+    this.context.dispatch(
+      updateDone(id)
+    );
   };
 
   /**
@@ -305,5 +310,22 @@ export default class OrdersTable extends Table {
     yield (
       <Cell>{ model.note_count }</Cell>
     );
+  }
+
+  *renderRows({ collection, selectedData }) {
+    for (const model of collection) {
+      yield (
+        <Row
+          key={model.id}
+          data={{
+            model,
+            selected: selectedData[model.id],
+          }}
+          cells={this._renderCells}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.id)}
+        />
+      );
+    }
   }
 }
