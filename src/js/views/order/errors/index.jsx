@@ -17,14 +17,18 @@ const orderSelector = (state, props) => (
   ))
 );
 
-const transformErrors = order => order.ErrorInstances.map((e, index) => {
-  const copy = e;
-  copy.id = index;
-  copy.error_type = e.business_error ? 'Business' : 'Other';
-  copy.step_name = order.StepInstances.find(s => s.stepid === e.stepid).stepname;
+const transformErrors = order => {
+  if (!order.ErrorInstances) return null;
 
-  return copy;
-});
+  return order.ErrorInstances.map((e, index) => {
+    const copy = e;
+    copy.id = index;
+    copy.error_type = e.business_error ? 'Business' : 'Other';
+    copy.step_name = order.StepInstances.find(s => s.stepid === e.stepid).stepname;
+
+    return copy;
+  });
+};
 
 const errorSelector = createSelector(
   [
@@ -121,6 +125,8 @@ export default class ErrorsView extends Component {
   }
 
   render() {
+    if (!this.props.errors) return <p className="no-data"> No data </p>;
+
     return (
       <div>
         <div className="col-xs-3 pull-right">

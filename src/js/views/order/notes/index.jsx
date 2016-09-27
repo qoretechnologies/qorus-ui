@@ -22,6 +22,7 @@ const selector = createSelector(
     userSelector,
   ], (order, user) => ({
     notes: order.notes,
+    count: order.note_count,
     order,
     user,
   })
@@ -38,12 +39,6 @@ export default class NotesView extends Component {
   };
 
   componentWillMount() {
-    const { id } = this.props.params;
-
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
-
     this.setState({
       value: '',
       error: false,

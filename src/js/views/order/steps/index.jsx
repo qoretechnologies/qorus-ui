@@ -51,6 +51,8 @@ export default class StepsView extends Component {
   }
 
   render() {
+    if (!this.props.steps) return <p className="no-data"> No data </p>;
+
     return (
       <div>
         <table
