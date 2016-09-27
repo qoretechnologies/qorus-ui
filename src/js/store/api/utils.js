@@ -7,9 +7,9 @@ import { browserHistory } from 'react-router';
 import settings from '../../settings';
 
 
-export function updateItemWithId(id, props, data) {
+export function updateItemWithId(id, props, data, idkey = 'id') {
   const parsedId = parseFloat(id, 10) || id;
-  const idx = data.findIndex(i => i.id === parsedId);
+  const idx = data.findIndex(i => i[idkey] === parsedId);
   const updatedItem = Object.assign({}, data[idx], props);
 
   return data.slice(0, idx)
@@ -30,6 +30,11 @@ export function combineResourceActions(...actions) {
   return _.merge(...actions);
 }
 
+export function setUpdatedToNull(collection) {
+  return collection.reduce((newArray, workflow) => (
+    [...newArray, { ...workflow, ...{ _updated: null } }]
+  ), []);
+}
 
 export function prepareApiActions(url, actions) {
   const actionsHash = {};
