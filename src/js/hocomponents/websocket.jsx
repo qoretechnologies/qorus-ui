@@ -40,6 +40,9 @@ const selector: Function = createSelector(
  */
 export default (
   funcs: Object,
+  showLoading: boolean = true,
+  showError: boolean = true,
+  showDisconnect: boolean = true,
 ): Function => (
   Component: ReactClass<*>
 ): ReactClass<*> => {
@@ -127,19 +130,19 @@ export default (
     render() {
       const { connected, loading, paused, error } = this.props;
 
-      if (error) {
+      if (error && showError) {
         return (
           <Alert bsStyle="danger">{ error }</Alert>
         );
       }
 
-      if (loading) {
+      if (loading && showLoading) {
         return (
           <p> Establishing connection... </p>
         );
       }
 
-      if (!connected && !paused) {
+      if (!connected && !paused && showDisconnect) {
         return (
           <Alert bsStyle="warning"> Connection closed. </Alert>
         );
