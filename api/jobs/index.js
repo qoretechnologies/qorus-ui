@@ -66,7 +66,7 @@ module.exports = () => {
   });
 
   router.get('/:id/results', (req, res) => {
-    let results = jobResultsData[0];
+    let results = jobResultsData[0].filter(d => d.jobid === parseInt(req.params.id, 10));
     let { offset = '0', limit = '10' } = req.query;
     let normolizedStatuses = [];
     const { statuses, date: dateStr } = req.query;
