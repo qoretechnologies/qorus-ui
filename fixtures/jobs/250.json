@@ -1,0 +1,102 @@
+{
+  "jobid": 250,
+  "name": "wstest",
+  "description": "test for websockets",
+  "version": "1.0",
+  "single_instance": false,
+  "sessionid": 2358,
+  "run_skipped": true,
+  "code": "sub run() {\nlog(LL_INFO, \"job info: %y\", job_info());\ntest_job_1();\n}\n",
+  "month": "*",
+  "day": "*",
+  "wday": "mon-fri",
+  "hour": "*",
+  "minute": "*/10",
+  "last_executed": "2014-12-11 15:22:11.293635 +01:00",
+  "created": "2012-12-16 17:06:04.000000 +01:00",
+  "modified": "2014-12-11 15:22:11.000000 +01:00",
+  "manually_updated": 0,
+  "groups": [
+    {
+      "name": "jobtest",
+      "enabled": true,
+      "size": 32
+    },
+    {
+      "name": "jobtest v1.0",
+      "enabled": true,
+      "size": 1
+    }
+  ],
+  "lib": {
+    "functions": [
+      {
+        "name": "jobtest_job_1",
+        "version": "1.0",
+        "id": 30
+      }
+    ],
+    "classes": [],
+    "constants": []
+  },
+  "tags": {
+    "sys": {
+      "host": "stimpy",
+      "offset": "11",
+      "source": "/export/home/jvaclavik/tmp/hello.qjob",
+      "user": "<shell-unknown>"
+    },
+    "example-code": "true"
+  },
+  "ERROR": 0,
+  "COMPLETE": 2,
+  "connections": [],
+  "alerts": [
+    {
+      "type": "JOB",
+      "id": "247",
+      "alerttype": "ONGOING",
+      "when": "2016-09-09 15:18:54.454803 +02:00",
+      "local": true,
+      "alert": "STOPPED-JOB",
+      "alertid": 2,
+      "reason": "REST PUT api/jobs/247?action=setActive",
+      "who": "admin",
+      "source": "ipv6[::ffff:192.168.214.17]:57447 listener: ipv6[::]:8091",
+      "object": "JOB 00-line_status_usage-out 00-line_status_usage-out (247)",
+      "instance": "xbox",
+      "name": "00-line_status_usage-out",
+      "version": "1.0",
+      "auditid": null
+    },
+    {
+      "type": "JOB",
+      "id": "248",
+      "alerttype": "ONGOING",
+      "when": "2016-09-09 15:18:54.454803 +02:00",
+      "local": true,
+      "alert": "STOPPED-JOB",
+      "alertid": 2,
+      "reason": "REST PUT api/jobs/247?action=setActive",
+      "who": "admin",
+      "source": "ipv6[::ffff:192.168.214.17]:57447 listener: ipv6[::]:8091",
+      "object": "JOB 00-line_status_usage-out 00-line_status_usage-out (247)",
+      "instance": "xbox",
+      "name": "00-line_status_usage-out",
+      "version": "1.0",
+      "auditid": null
+    }
+  ],
+  "enabled": true,
+  "db_active": true,
+  "expiry_date": "2016-09-18 18:21:06.000000 +02:00",
+  "next": "2014-12-11 15:30:00.000000 +01:00",
+  "job_instanceid": null,
+  "trigger": "minutes=0,10,20,30,40,50 hours=* days=* months=* dow=1-5",
+  "active": false,
+  "log": "/export/home/pchalupny/workspace/builds/qorus/log/OMQ-temnor-1-JOB-test.log",
+  "log_url": "ws://localhost:8001/log/jobs/110",
+  "sched_type": "cron",
+  "sched_txt": "minutes: */10, hours: *, days: *, months: *, wdays: mon-fri",
+  "options": []
+}
