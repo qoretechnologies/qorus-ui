@@ -14,8 +14,8 @@ export const sortDefaults = {
     historySortyByKey: { direction: 1, ignoreCase: true },
   },
   alerts: {
-    sortBy: 'type',
-    sortByKey: { ignoreCase: true, direction: 1 },
+    sortBy: 'when',
+    sortByKey: { ignoreCase: true, direction: -1 },
     historySortBy: 'alert',
     historySortByKey: { ignoreCase: true, direction: -1 },
   },
