@@ -1,10 +1,12 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { expect } from 'chai';
-
+import { mount } from 'enzyme';
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 
 import Table, { Section, Row, Cell } from '../../src/js/components/table';
 
+chai.use(spies);
 
 describe("Table, { Section, Row, Cell } from 'components/table'", () => {
   const records = [
@@ -262,6 +264,31 @@ describe("Table, { Section, Row, Cell } from 'components/table'", () => {
       const row = renderer.getRenderOutput();
 
       expect(row.props.className).to.equal('info');
+    });
+
+    it('adds the row-highlight class if highlight prop is true', () => {
+      const comp = mount(
+        <Row highlight />
+      );
+
+      expect(comp.find('tr').hasClass('row-highlight')).to.eql(true);
+    });
+
+    it('runs the onHighlightEnd function after 2500ms', function (done) {
+      this.timeout(2600);
+      const func = chai.spy();
+
+      mount(
+        <Row
+          highlight
+          onHighlightEnd={func}
+        />
+      );
+
+      setTimeout(() => {
+        expect(func).to.have.been.called();
+        done();
+      }, 2500);
     });
   });
 
