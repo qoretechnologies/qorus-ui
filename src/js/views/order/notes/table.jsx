@@ -2,7 +2,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { sortTable } from 'helpers/table';
+import { sortTable } from '../../../helpers/table';
 import checkNoData from '../../../hocomponents/check-no-data';
 
 type Props = {
