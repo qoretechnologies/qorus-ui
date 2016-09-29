@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 
 import AuditTable from './table';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
-
 import { sortTable } from 'helpers/table';
-
 import actions from 'store/api/actions';
+import checkNoData from '../../../hocomponents/check-no-data';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -24,7 +24,15 @@ const selector = createSelector(
   })
 );
 
-@connect(selector)
+@compose(
+  connect(
+    selector,
+    {
+      fetch: actions.orders.fetch,
+    }
+  ),
+  checkNoData((props) => props.audits && props.audits.length)
+)
 export default class ErrorsView extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -36,9 +44,7 @@ export default class ErrorsView extends Component {
   componentWillMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    this.props.fetch({}, id);
 
     this.setState({
       limit: 10,
@@ -52,6 +58,7 @@ export default class ErrorsView extends Component {
   };
 
   renderTable() {
+    console.log(this.props.audits);
     let audits = sortTable(this.props.audits, {
       sortBy: 'created',
       sortByKey: {

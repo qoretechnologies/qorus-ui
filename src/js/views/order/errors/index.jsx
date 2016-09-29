@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 
 import ErrorsTable from './table';
 import { Control as Button } from 'components/controls';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import CSVModal from './csv';
-
 import { sortTable, generateCSV } from 'helpers/table';
-
 import actions from 'store/api/actions';
+import checkNoData from '../../../hocomponents/check-no-data';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -47,7 +47,15 @@ const selector = createSelector(
   })
 );
 
-@connect(selector)
+@compose(
+  connect(
+    selector,
+    {
+      fetch: actions.orders.fetch,
+    }
+  ),
+  checkNoData((props) => props.errors && props.errors.length)
+)
 export default class ErrorsView extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -66,9 +74,7 @@ export default class ErrorsView extends Component {
   componentWillMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    this.props.fetch({}, id);
 
     this.setState({
       limit: 10,
@@ -125,8 +131,6 @@ export default class ErrorsView extends Component {
   }
 
   render() {
-    if (!this.props.errors) return <p className="no-data"> No data </p>;
-
     return (
       <div>
         <div className="col-xs-3 pull-right">
