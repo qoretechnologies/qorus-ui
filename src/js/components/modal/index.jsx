@@ -1,5 +1,6 @@
 /* @flow */
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 import ResizeHandle from '../resize/handle';
 import Header from './header';
@@ -17,7 +18,12 @@ export default class Modal extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onMount: PropTypes.func,
+    size: PropTypes.string,
   };
+
+  static defaultProps = {
+    size: '',
+  }
 
   static Footer = null;
   static Header = null;
@@ -82,7 +88,14 @@ export default class Modal extends Component {
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
         onClick={this.onEscape}
       >
-        <div className="modal-dialog" role="document">
+        <div
+          className={classNames({
+            'modal-dialog': true,
+            'modal-lg': this.props.size === 'lg',
+            'modal-sm': this.props.size === 'sm',
+          })}
+          role="document"
+        >
           <div className="modal-content">
             {this.props.children}
           </div>

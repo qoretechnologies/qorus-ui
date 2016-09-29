@@ -4,6 +4,8 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/pure';
 
+import MapperModal from './modal';
+import modal from '../../hocomponents/modal';
 import { Control } from '../../components/controls';
 
 const DetailButton = ({ handleClick }: { handleClick: Function }) => (
@@ -14,11 +16,16 @@ const DetailButton = ({ handleClick }: { handleClick: Function }) => (
   />
 );
 
-const addOpenDetailHandler = withHandlers({
-  handleClick: ({ mapper }: { mapper: Object }) => () => console.log('Show detail for', mapper),
+const addOpenModalHandler = withHandlers({
+  handleClick: (
+    { openModal, closeModal, mapper }: { openModal: Function, closeModal: Function, mapper: Object }
+  ) => () => {
+    openModal(<MapperModal mapper={mapper} onClose={closeModal} />);
+  },
 });
 
 export default compose(
   pure,
-  addOpenDetailHandler
+  modal(),
+  addOpenModalHandler,
 )(DetailButton);

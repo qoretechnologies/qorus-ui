@@ -25,8 +25,8 @@ import { pureRender } from '../utils';
 export default class InfoTable extends Component {
   props: {
     object: Object,
-    omit: Array<string | number>,
-    pick: Array<string | number>,
+    omit?: Array<string | number>,
+    pick?: Array<string | number>,
   };
 
   renderRows = this.renderRows.bind(this);
@@ -39,8 +39,9 @@ export default class InfoTable extends Component {
    * @return {function(attr: string): boolean}
    */
   getAttrFilter(): Function {
-    if (this.props.omit) return attr => this.props.omit.indexOf(attr) < 0;
-    if (this.props.pick) return attr => this.props.pick.indexOf(attr) >= 0;
+    const { omit = [], pick = [] } = this.props;
+    if (omit.length > 0) return attr => omit.indexOf(attr) < 0;
+    if (pick.length > 0) return attr => pick.indexOf(attr) >= 0;
     return () => true;
   }
 

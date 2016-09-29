@@ -187,4 +187,9 @@ export default [
     url: `${settings.REST_BASE_URL}/system/ui/extensions`,
     transform: item => item,
   },
+  {
+    name: 'mappers',
+    url: `${settings.REST_BASE_URL}/mappers`,
+    transform: item => item,
+  },
 ];
