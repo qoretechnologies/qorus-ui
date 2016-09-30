@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 
 import Row from './row';
-
 import { groupInstances } from '../../../helpers/orders';
 import actions from '../../../store/api/actions';
+import checkNoData from '../../../hocomponents/check-no-data';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -23,7 +24,15 @@ const selector = createSelector(
   })
 );
 
-@connect(selector)
+@compose(
+  connect(
+    selector,
+    {
+      fetch: actions.orders.fetch,
+    }
+  ),
+  checkNoData((props) => props.steps && Object.keys(props.steps).length)
+)
 export default class StepsView extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
@@ -36,9 +45,7 @@ export default class StepsView extends Component {
   componentDidMount() {
     const { id } = this.props.params;
 
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    this.props.fetch({}, id);
   }
 
   renderTableBody() {

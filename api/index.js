@@ -29,8 +29,10 @@ module.exports = () => {
 
   if (config.wsProxy) {
     router.use(proxyMiddleware(`${config.wsBaseUrl}/log`));
+    router.use(proxyMiddleware(`${config.wsBaseUrl}/apievents`));
   } else {
     router.use('/log', require('./websockets/log')());
+    router.use('/apievents', require('./websockets/apievents')());
   }
 
   return router;

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-
 import ServiceTable from '../services/table';
-import { Cell } from '../../components/table';
+import { Cell, Row } from '../../components/table';
 import Badge from '../../components/badge';
 import JobControls from './controls';
 import DateComponent from '../../components/date';
@@ -20,6 +19,10 @@ export default class JobsTable extends ServiceTable {
   static defaultProps = {
     setSelectedData: () => {},
     selectedData: {},
+  };
+
+  handleHighlightEnd = (id) => () => {
+    this.props.onUpdateDone(id);
   };
 
   /**
@@ -50,7 +53,6 @@ export default class JobsTable extends ServiceTable {
       change
     );
   }
-
 
   /**
    * Yields heading cells for model info.
@@ -173,9 +175,20 @@ export default class JobsTable extends ServiceTable {
       </Cell>
     );
 
+    const {
+      id,
+      enabled,
+      active,
+    } = model;
+
     yield (
       <Cell className="narrow">
-        <JobControls job={model} />
+        <JobControls
+          id={id}
+          enabled={enabled}
+          active={active}
+          job={model}
+        />
       </Cell>
     );
 
@@ -223,5 +236,23 @@ export default class JobsTable extends ServiceTable {
     yield (
       <Cell><Badge label="crashed" val={model.CRASHED || 0} /></Cell>
     );
+  }
+
+  *renderRows({ collection, selectedData }) {
+    for (const model of collection) {
+      yield (
+        <Row
+          key={model.id}
+          data={{
+            model,
+            selected: selectedData[model.id],
+          }}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.id)}
+          cells={this._renderCells}
+          onClick={this._activateRow}
+        />
+      );
+    }
   }
 }

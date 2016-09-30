@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
-import { updateItemWithId } from '../../utils';
-
+import { updateItemWithId, setUpdatedToNull } from '../../utils';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -56,7 +55,6 @@ const setOptions = {
     };
   },
 };
-
 
 const fetchLibSources = {
   next(state = initialState, action) {
@@ -168,6 +166,185 @@ const fetchCode = {
   },
 };
 
+const setActive = {
+  next(state, { payload: { id, value } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const newData = updateItemWithId(id, { active: value, _updated: true }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state) {
+    return state;
+  },
+};
+
+const setEnabled = {
+  next(state, { payload: { id, value } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const updateDone = {
+  next(state, { payload: { id } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const newData = updateItemWithId(id, { _updated: null }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const instanceUpdateDone = {
+  next(state, { payload: { jobid, id } }) {
+    const data = state.data.slice();
+    const job = data.find(d => d.id === jobid);
+
+    if (job) {
+      const instanceData = job.results.data.slice();
+      const newInstanceData = updateItemWithId(id, { _updated: null }, instanceData);
+      const newData = updateItemWithId(jobid, {
+        results: { ...job.results, ...{ data: newInstanceData } },
+      }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const addInstance = {
+  next(state, { payload: { data: { jobid, job_instanceid, name, version }, started } }) {
+    const data = state.data.slice();
+    const job = data.find(d => d.id === jobid);
+
+    if (job) {
+      let newData;
+      const updatedData = setUpdatedToNull(data);
+
+      if (job.results && job.results.sync) {
+        const resultData = job.results.data.slice();
+        const updatedResultData = setUpdatedToNull(resultData);
+        const newResultData = [...updatedResultData, {
+          jobid,
+          job_instanceid,
+          id: job_instanceid,
+          name,
+          version,
+          started,
+          jobstatus: 'IN-PROGRESS',
+          _updated: true,
+        }];
+
+        newData = updateItemWithId(jobid, {
+          results: { ...job.results, ...{ data: newResultData } },
+        }, updatedData);
+      } else {
+        const progressCount = job['IN-PROGRESS'] ? job['IN-PROGRESS'] + 1 : 1;
+
+        newData = updateItemWithId(jobid, {
+          _updated: true,
+          'IN-PROGRESS': progressCount,
+        }, updatedData);
+      }
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const modifyInstance = {
+  next(state, { payload: { data: { jobid, job_instanceid, status }, modified } }) {
+    const data = state.data.slice();
+    const job = data.find(d => d.id === jobid);
+
+    if (job) {
+      let newData;
+      const updatedData = setUpdatedToNull(data);
+
+      if (job.results && job.results.sync) {
+        const instances = job.results.data.slice();
+        const updatedInstances = setUpdatedToNull(instances);
+        const resultsData = updateItemWithId(job_instanceid, {
+          _updated: true,
+          jobstatus: status,
+          modified,
+        }, updatedInstances);
+
+        newData = updateItemWithId(jobid, {
+          results: { ...job.results, ...{ data: resultsData } },
+        }, updatedData);
+      } else {
+        const progressCount = !job['IN-PROGRESS'] || job['IN-PROGRESS'] - 1 < 0 ?
+          0 : job['IN-PROGRESS'] - 1;
+        const statusCount = job[status] ? job[status] + 1 : 1;
+
+        newData = updateItemWithId(jobid, {
+          _updated: true,
+          'IN-PROGRESS': progressCount,
+          [status]: statusCount,
+        }, updatedData);
+      }
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -176,4 +353,10 @@ export {
   clearResults as CLEARRESULTS,
   setExpirationDate as SETEXPIRATIONDATE,
   fetchCode as FETCHCODE,
+  setActive as SETACTIVE,
+  setEnabled as SETENABLED,
+  updateDone as UPDATEDONE,
+  instanceUpdateDone as INSTANCEUPDATEDONE,
+  addInstance as ADDINSTANCE,
+  modifyInstance as MODIFYINSTANCE,
 };

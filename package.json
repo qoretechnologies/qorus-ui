@@ -104,7 +104,7 @@
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0",
     "why-did-you-update": "0.0.8",
-    "zombie": "^4.2.1"
+    "zombie-latest": "^4.2.1-a"
   },
   "scripts": {
     "start": "babel-node server.js",

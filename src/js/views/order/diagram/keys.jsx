@@ -3,16 +3,18 @@ import React, { PropTypes } from 'react';
 import Table, { Section, Row, Cell } from 'components/table';
 
 
-const renderRows = (data) => (
-  Object.keys(data).map((d, key) => (
+const renderRows = (data) => {
+  if (!data) return undefined;
+
+  return Object.keys(data).map((d, key) => (
     <Section type="body" key={key}>
       <Row>
         <Cell>{ d }</Cell>
         <Cell>{ data[d] }</Cell>
       </Row>
     </Section>
-  ))
-);
+  ));
+};
 
 export default function DiagramKeysTable(props) {
   return (

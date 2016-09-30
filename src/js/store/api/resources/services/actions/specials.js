@@ -66,5 +66,26 @@ const fetchMethodSources = createAction(
   fetchMethodSourcesMeta
 );
 
+const setStatus = createAction(
+  'SERVICES_SETSTATUS',
+  (serviceid, status) => ({ serviceid, status })
+);
 
-export { setOptions, fetchLibSources, fetchMethodSources };
+const setEnabled = createAction(
+  'SERVICES_SETENABLED',
+  (id, value) => ({ id, value })
+);
+
+const updateDone = createAction(
+  'SERVICES_UPDATEDONE',
+  (id) => ({ id })
+);
+
+export {
+  setOptions,
+  fetchLibSources,
+  fetchMethodSources,
+  setStatus,
+  setEnabled,
+  updateDone,
+};

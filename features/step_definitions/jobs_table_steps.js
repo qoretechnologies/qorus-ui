@@ -20,6 +20,12 @@ const collection = [
     COMPLETE: 2,
     ERROR: 0,
   },
+  {
+    name: 'wstest',
+    version: '1.1',
+    COMPLETE: 2,
+    ERROR: 0,
+  },
 ];
 
 module.exports = function jobsTableSteps() {
@@ -35,5 +41,11 @@ module.exports = function jobsTableSteps() {
     tableData.forEach((row, index) => {
       this.browser.assert.text(row.cells[3], sorted[index].name);
     });
+  });
+
+  this.Then(/^there should be "([^"]*)" job result with "([^"]*)" status$/, async function(count, state) {
+    const els = this.browser.queryAll('td > span.label').filter(s => s.textContent === state);
+
+    this.browser.assert.elements(els, parseInt(count, 10));
   });
 };

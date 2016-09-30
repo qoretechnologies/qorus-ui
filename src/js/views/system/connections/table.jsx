@@ -62,6 +62,7 @@ class Connections extends Component {
     params: Object,
     load: Function,
     collection: Array<any>,
+    updateDone: Function,
   };
 
   componentWillMount() {
@@ -115,6 +116,10 @@ class Connections extends Component {
   handlecloseModal: Function = (): void => {
     this.context.closeModal(this._modal);
     this._modal = null;
+  };
+
+  handleHighlightEnd: Function = (name: string): Function => (): void => {
+    this.props.updateDone(name);
   };
 
   *renderHeadings(): Generator<*, *, *> {
@@ -191,6 +196,8 @@ class Connections extends Component {
           data={{ model }}
           cells={this._renderCells}
           onClick={this.activateRow(model.name)}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.name)}
           className={classNames({
             info: model.id === activeId,
           })}
@@ -236,6 +243,7 @@ Connections.propTypes = {
   params: PropTypes.object,
   load: PropTypes.func.isRequired,
   collection: PropTypes.array,
+  updateDone: PropTypes.func,
 };
 
 export default compose(
@@ -243,6 +251,7 @@ export default compose(
     viewSelector,
     {
       load: actions.remotes.fetch,
+      updateDone: actions.remotes.updateDone,
     }
   ),
   defaultProps({ query: { action: 'all' } }),

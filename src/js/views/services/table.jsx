@@ -1,13 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 import Table, { Section, Row, Cell } from '../../components/table';
 import ServiceControls from './controls';
 import Checkbox from '../../components/checkbox';
-
-import { pureRender } from 'components/utils';
 import { goTo } from '../../helpers/router';
-
-import classNames from 'classnames';
+import actions from '../../store/api/actions';
 
 /**
  * List of all workflows in the system.
@@ -15,7 +13,6 @@ import classNames from 'classnames';
  * Beware, this component is very performance internsive - even
  * HTML/CSS without any JS is relatively slow.
  */
-@pureRender
 export default class ServicesTable extends Component {
   static propTypes = {
     collection: PropTypes.array,
@@ -159,6 +156,12 @@ export default class ServicesTable extends Component {
     this.setSelectedServices(selectedData);
   };
 
+  handleHighlightEnd = (id) => () => {
+    this.context.dispatch(
+      actions.services.updateDone(id)
+    );
+  };
+
   /**
    * Yields heading cells for model info.
    *
@@ -176,7 +179,7 @@ export default class ServicesTable extends Component {
         className="narrow"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
-        name="type"
+        name="type"r
       >
         Type
       </Cell>
@@ -272,9 +275,20 @@ export default class ServicesTable extends Component {
       </Cell>
     );
 
+    const {
+      status,
+      enabled,
+      autostart,
+    } = model;
+
     yield (
       <Cell className="narrow">
-        <ServiceControls service={ model } />
+        <ServiceControls
+          status={status}
+          enabled={enabled}
+          autostart={autostart}
+          service={model}
+        />
       </Cell>
     );
 
@@ -337,6 +351,8 @@ export default class ServicesTable extends Component {
           }}
           cells={this._renderCells}
           onClick={this._activateRow}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.id)}
           className={classNames({
             info: model.id === activeId,
           })}

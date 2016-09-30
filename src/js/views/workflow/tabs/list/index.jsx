@@ -165,6 +165,7 @@ export default class extends Component {
         workflowid: props.id,
         date,
         sort: 'started',
+        desc: true,
         offset: state.offset,
         limit: state.limit,
         fetchMore: state.fetchMore,

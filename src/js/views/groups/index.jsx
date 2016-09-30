@@ -29,8 +29,7 @@ const filterSearch = (search) => (groups) =>
 
 const groupsSelector = state => {
   const groups = state.api.groups;
-
-  groups.data.map(d => {
+  const updatedData = groups.data.map(d => {
     const newData = d;
 
     newData.workflows_count = newData.workflows.length;
@@ -43,7 +42,7 @@ const groupsSelector = state => {
     return newData;
   });
 
-  return groups;
+  return { ...groups, ...{ data: updatedData } };
 };
 
 const searchSelector = (state, props) => props.location.query.q;
@@ -174,6 +173,7 @@ export default class Workflows extends Component {
         offset: state.offset,
         limit: state.limit,
         fetchMore: state.fetchMore,
+        no_synthetic: 1,
       })
     );
   }

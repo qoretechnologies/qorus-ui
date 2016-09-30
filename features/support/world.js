@@ -1,7 +1,4 @@
-import path from 'path';
-
-import Browser from 'zombie';
-
+import Browser from 'zombie-latest';
 import devConfig from '../../webpack.config/dev';
 
 
@@ -118,7 +115,7 @@ class World {
    *
    * @see changes
    */
-  //TODO This crazy thing seems to be necessary only due to an issue
+  // TODO This crazy thing seems to be necessary only due to an issue
   // with setting document title. A solution can be creating title
   // manager similar to modal manager where the last one to claim
   // control sets the title and no one else can. When someone returns

@@ -150,6 +150,35 @@ const fetchCodePayload = async (job) => ({
 const fetchCodeMeta = (job) => ({ job });
 
 const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
+const setActive = createAction(
+  'JOBS_SETACTIVE',
+  (id, value) => ({ id, value })
+);
+
+const setEnabled = createAction(
+  'JOBS_SETENABLED',
+  (id, value) => ({ id, value })
+);
+
+const updateDone = createAction(
+  'JOBS_UPDATEDONE',
+  (id) => ({ id })
+);
+
+const instanceUpdateDone = createAction(
+  'JOBS_INSTANCEUPDATEDONE',
+  (jobid, id) => ({ jobid, id })
+);
+
+const addInstance = createAction(
+  'JOBS_ADDINSTANCE',
+  (data, started) => ({ data, started })
+);
+
+const modifyInstance = createAction(
+  'JOBS_MODIFYINSTANCE',
+  (data, modified) => ({ data, modified })
+);
 
 export {
   setOptions,
@@ -159,4 +188,10 @@ export {
   startFetchingResults,
   setExpirationDate,
   fetchCode,
+  setActive,
+  setEnabled,
+  updateDone,
+  addInstance,
+  modifyInstance,
+  instanceUpdateDone,
 };

@@ -110,6 +110,12 @@ export default class AlertsTable extends Component {
     }
   };
 
+  handleHighlightEnd = (id) => () => {
+    this.props.dispatch(
+      actions.alerts.updateDone(id)
+    );
+  };
+
   /**
    * Yields heading cells for model info.
    *
@@ -230,6 +236,8 @@ export default class AlertsTable extends Component {
           data={{ model }}
           cells={this._renderCells}
           onClick={this.activateRow(model.alertid)}
+          highlight={model._updated}
+          onHighlightEnd={this.handleHighlightEnd(model.alertid)}
           className={classNames({
             info: model.alertid === parseInt(activeId, 10),
           })}

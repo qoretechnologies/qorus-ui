@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 
@@ -8,29 +9,26 @@ import { findBy } from '../../../../helpers/search';
 import Date from '../../../../components/date';
 import Label from '../../../../components/label';
 import Table, { Section, Row, Th, Td } from '../../../../components/table';
+import InstanceRow from './row';
 import sort from '../../../../hocomponents/sort';
 import showIfPassed from '../../../../hocomponents/show-if-passed';
 import selectableResult from '../../../../hocomponents/jobs/selectable-result';
 import { sortDefaults } from '../../../../constants/sort';
-
-function getStyleByStatus(status: string): string {
-  return {
-    error: 'danger',
-    complete: 'success',
-    crash: 'warning',
-  }[status.toLowerCase()] || 'info';
-}
+import actions from '../../../../store/api/actions';
+import { JOB_LABELS } from '../../../../constants/jobs';
 
 const ResultTable = ({
   data = [],
   sortData,
   onSortChange,
   selectResult,
+  updateDone,
 }: {
   data: Array<Object>,
   sortData: Object,
   onSortChange: Function,
   selectResult: Function,
+  updateDone: Function,
 }) => (
   <Table
     className={classNames(
@@ -55,17 +53,22 @@ const ResultTable = ({
     </Section>
     <Section type="body">
       {data.map((item, idx) => (
-        <Row key={`item_${item.job_instanceid}`} onClick={() => selectResult(item)}>
+        <InstanceRow
+          key={`item_${item.job_instanceid}`}
+          item={item}
+          selectResult={selectResult}
+          updateDone={updateDone}
+        >
           <Td>{idx + 1}</Td>
           <Td>{item.job_instanceid}</Td>
           <Td>
-            <Label style={getStyleByStatus(item.jobstatus)}>{item.jobstatus}</Label>
+            <Label style={JOB_LABELS[item.jobstatus]}>{item.jobstatus}</Label>
           </Td>
           <Td />
           <Td>{item.name}</Td>
           <Td><Date date={item.started} /></Td>
           <Td><Date date={item.modified} /></Td>
-        </Row>
+        </InstanceRow>
       ))}
     </Section>
   </Table>
@@ -89,6 +92,12 @@ const showNoData = showIfPassed(
 
 
 export default compose(
+  connect(
+    () => ({}),
+    {
+      updateDone: actions.jobs.instanceUpdateDone,
+    }
+  ),
   hideWhileLoading,
   filterResults,
   showNoData,

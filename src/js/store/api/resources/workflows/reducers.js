@@ -1,4 +1,4 @@
-import { updateItemWithId } from '../../utils';
+import { updateItemWithId, setUpdatedToNull } from '../../utils';
 
 
 const initialState = { data: [], sync: false, loading: false };
@@ -97,8 +97,136 @@ const fetchLibSources = {
   },
 };
 
+const setExecCount = {
+  next(state = initialState, { payload: { workflowid, value } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const workflow = data.find(d => d.id === workflowid);
+      const execCount = workflow.exec_count + value < 0 ? 0 : workflow.exec_count + value;
+      const updatedData = setUpdatedToNull(data);
+      const newData = updateItemWithId(
+        workflowid,
+        { exec_count: execCount, _updated: true },
+        updatedData
+      );
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const setEnabled = {
+  next(state, { payload: { id, value } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const updateDone = {
+  next(state, { payload: { id } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const newData = updateItemWithId(id, { _updated: null }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const addOrder = {
+  next(state = initialState, { payload: { id, status } }) {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      const workflow = data.find(d => d.id === id);
+      const newStatus = workflow[status] + 1;
+      const newTotal = workflow.TOTAL + 1;
+      const newData = updateItemWithId(id, {
+        [status]: newStatus,
+        TOTAL: newTotal,
+        _updated: true,
+      }, updatedData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const modifyOrder = {
+  next(state = initialState, { payload: { id, oldStatus, newStatus } }) {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      const workflow = data.find(d => d.id === id);
+      const statusBefore = workflow[oldStatus] - 1 < 0 ? 0 : workflow[oldStatus] - 1;
+      const status = workflow[newStatus] + 1;
+      const newData = updateItemWithId(id, {
+        [oldStatus]: statusBefore,
+        [newStatus]: status,
+        _updated: true,
+      }, updatedData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
 
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
+  setExecCount as SETEXECCOUNT,
+  addOrder as ADDORDER,
+  modifyOrder as MODIFYORDER,
+  setEnabled as SETENABLED,
+  updateDone as UPDATEDONE,
 };

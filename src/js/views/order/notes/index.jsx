@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment';
-import { sortTable } from 'helpers/table';
 
 import { Control as Button } from 'components/controls';
-
 import actions from 'store/api/actions';
+import NotesList from './table';
 
 const orderSelector = (state, props) => (
   state.api.orders.data.find(w => (
@@ -22,6 +20,7 @@ const selector = createSelector(
     userSelector,
   ], (order, user) => ({
     notes: order.notes,
+    count: order.note_count,
     order,
     user,
   })
@@ -38,12 +37,6 @@ export default class NotesView extends Component {
   };
 
   componentWillMount() {
-    const { id } = this.props.params;
-
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
-
     this.setState({
       value: '',
       error: false,
@@ -91,25 +84,6 @@ export default class NotesView extends Component {
     }
   }
 
-  renderNotes() {
-    const notes = sortTable(this.props.notes, {
-      sortBy: 'created',
-      sortByKey: {
-        direction: -1,
-      },
-    });
-
-    return notes.map((note, index) => (
-      <p key={index} className="note">
-        <time>{ moment(note.created).format('YYYY-MM-DD HH:mm:ss') }</time>
-        {' '}
-        <span className="label label-default">{ note.username }</span>
-        {' '}
-        <span>{ note.note }</span>
-      </p>
-    ));
-  }
-
   render() {
     return (
       <div id="notes-wrapper">
@@ -135,7 +109,7 @@ export default class NotesView extends Component {
             btnStyle="success"
           />
         </form>
-        { this.renderNotes() }
+        <NotesList notes={this.props.notes} />
       </div>
     );
   }

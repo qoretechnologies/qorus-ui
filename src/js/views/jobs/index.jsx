@@ -132,6 +132,7 @@ export default class Jobs extends Component {
     onSortChange: PropTypes.func,
     onCSVClick: PropTypes.func,
     generateCSV: PropTypes.func,
+    updateDone: PropTypes.func,
   };
 
   static contextTypes = {
@@ -239,6 +240,7 @@ export default class Jobs extends Component {
             onSortChange={this.props.onSortChange}
             sortData={this.props.sortData}
             collection={collection}
+            onUpdateDone={this.props.updateDone}
             activeRowId={parseInt(this.props.params.detailId, 10)}
           />
         </div>

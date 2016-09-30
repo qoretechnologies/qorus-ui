@@ -12,4 +12,4 @@ Feature: Tests jobs batch actions
     And "jobs" get loaded
     And I select "3" "jobs"
     When I click the "Enable" button
-    Then there are "3" "enabled" "jobs"
+    Then there are "4" "enabled" "jobs"

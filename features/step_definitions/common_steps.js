@@ -44,6 +44,18 @@ const findElementByText = (browser, selector, text) => browser.queryAll(selector
 const findElementByValue = (browser, selector, text) => browser.queryAll(selector)
   .find(el => el.value === text) || null;
 
+const instanceColumns = {
+  job: {
+    'in-progress': 10,
+    error: 9,
+    complete: 8,
+  },
+  workflow: {
+    ready: 8,
+    'in-progress': 16,
+  },
+};
+
 module.exports = function commonSteps() {
   this.When(/^I activate "([^"]*)" navigation item$/, async function(name) {
     await this.waitForElement('nav.side-menu')
@@ -268,17 +280,22 @@ module.exports = function commonSteps() {
 
   this.Then(/^there are "([^"]*)" "([^"]*)" "([^"]*)"$/, async function(count, type, data) {
     let el;
+    let css;
+
     if (type === 'disabled' || type === 'enabled') {
-      const css = type === 'disabled' ? 'danger' : 'success';
+      css = type === 'disabled' ? 'danger' : 'success';
       el = `td.narrow .btn-${css} i.fa-power-off`;
     } else if (type === 'loaded' || type === 'unloaded') {
-      const css = type === 'loaded' ? ' .btn-success' : '';
+      css = type === 'loaded' ? ' .btn-success' : '';
       const icon = type === 'loaded' ? 'check' : 'ban';
       el = `td.narrow${css} i.fa-${icon}`;
+    } else if (type === 'active' || type === 'inactive') {
+      css = type === 'active' ? ' .job-set-inactive' : ' .job-set-active';
+      el = `td.narrow${css}`;
     }
 
     await this.waitForChange(1000);
-    this.browser.assert.elements(el, parseInt(count));
+    this.browser.assert.elements(el, parseInt(count, 10));
   });
 
   this.When(/^I click the dropdown toggle$/, async function () {
@@ -417,6 +434,51 @@ module.exports = function commonSteps() {
 
   this.Given(/^I am logged in as "([^"]*)" user$/, function(user) {
     this.token = `${user}tkn`;
+  });
+
+  this.Given(
+    /^I send a ws request for "([^"]*)"$/,
+    async function(event) {
+      await this.browser.fetch(`/apievents/${event}`);
+      await this.waitForChange(500);
+    }
+  );
+
+  this.Given(
+    /^I send a ws request for "([^"]*)" event with "([^"]*)"$/,
+    async function(event, query) {
+      await this.browser.fetch(`/apievents/${event}${query ? `?${query}` : ''}`);
+      await this.waitForChange(500);
+    }
+  );
+
+  this.Then(
+    /^There are "([^"]*)" updated rows$/,
+    function(count) {
+      this.browser.assert.elements('tr.row-highlight', parseInt(count, 10));
+    }
+  );
+
+  this.Then(/^the "([^"]*)" workflow has "([^"]*)" execs$/, function (name, execCount) {
+    const row = findTableRow(this.browser, name);
+
+    this.browser.assert.text(row.cells[3], execCount);
+  });
+
+  this.Then(
+    /^the "([^"]*)" "([^"]*)" has "([^"]*)" "([^"]*)" instances$/,
+    function(name, resource, count, column) {
+      const row = findTableRow(this.browser, name, resource === 'job' ? 3 : 5);
+      const cell = instanceColumns[resource][column];
+
+      this.browser.assert.text(row.cells[cell], count);
+    }
+  );
+
+  this.Then(/^there are "([^"]*)" "([^"]*)" connections$/, function (count, type) {
+    const css = type === 'active' ? '.fa-check-circle' : '.fa-minus-circle';
+
+    this.browser.assert.elements(`${cmpTable} ${css}`, parseInt(count, 10));
   });
 };
 
