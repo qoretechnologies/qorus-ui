@@ -1,4 +1,4 @@
-import Browser from 'zombie';
+import Browser from 'zombie-latest';
 import devConfig from '../../webpack.config/dev';
 
 

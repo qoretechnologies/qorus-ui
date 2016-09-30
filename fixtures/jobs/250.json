@@ -2,7 +2,7 @@
   "jobid": 250,
   "name": "wstest",
   "description": "test for websockets",
-  "version": "1.0",
+  "version": "1.1",
   "single_instance": false,
   "sessionid": 2358,
   "run_skipped": true,

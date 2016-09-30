@@ -58,7 +58,6 @@ export default class ErrorsView extends Component {
   };
 
   renderTable() {
-    console.log(this.props.audits);
     let audits = sortTable(this.props.audits, {
       sortBy: 'created',
       sortByKey: {

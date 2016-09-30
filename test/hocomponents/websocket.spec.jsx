@@ -76,7 +76,7 @@ describe('websocket hoc from "hocomponents/websocket"', () => {
   });
 
   it('runs the websockets functions', (done) => {
-    const server = new Server('ws://qorus.example.com/test?token=undefined');
+    const server = new Server('ws://qorus.example.com/test1?token=undefined');
 
     const connectAction = chai.spy();
     const resumeAction = chai.spy();
@@ -95,7 +95,7 @@ describe('websocket hoc from "hocomponents/websocket"', () => {
     const wrapper = mount(
       <Provider store={store}>
         <Component
-          url="test"
+          url="test1"
         />
       </Provider>
     );
@@ -103,11 +103,11 @@ describe('websocket hoc from "hocomponents/websocket"', () => {
     setTimeout(() => {
       wrapper.find('#connect').simulate('click');
 
-      expect(connectAction).to.have.been.called().with('test');
+      expect(connectAction).to.have.been.called().with('test1');
 
       wrapper.find('#disconnect').simulate('click');
 
-      expect(disconnectAction).to.have.been.called().with('test');
+      expect(disconnectAction).to.have.been.called().with('test1');
 
       server.stop();
       done();

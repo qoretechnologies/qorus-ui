@@ -1,5 +1,4 @@
 Feature: Tests various websocket apievents
-
   Scenario: Ongoing alert raised
     Given I am on "system/alerts/ongoing" listing
     And "alerts" get loaded

@@ -17,15 +17,19 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => {
     },
   });
 
-  return sortedNotes.map((note, index) => (
-    <p key={index} className="note">
-      <time>{ moment(note.created).format('YYYY-MM-DD HH:mm:ss') }</time>
-      {' '}
-      <span className="label label-default">{ note.username }</span>
-      {' '}
-      <span>{ note.note }</span>
-    </p>
-  ));
+  return (
+    <div>
+      {sortedNotes.map((note, index) => (
+        <p key={index} className="note">
+          <time>{ moment(note.created).format('YYYY-MM-DD HH:mm:ss') }</time>
+          {' '}
+          <span className="label label-default">{ note.username }</span>
+          {' '}
+          <span>{ note.note }</span>
+        </p>
+      ))}
+    </div>
+  );
 };
 
 export default checkNoData((props) => props.notes && props.notes.length)(NotesList);

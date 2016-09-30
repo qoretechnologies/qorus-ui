@@ -22,7 +22,7 @@ const collection = [
   },
   {
     name: 'wstest',
-    version: '1.0',
+    version: '1.1',
     COMPLETE: 2,
     ERROR: 0,
   },

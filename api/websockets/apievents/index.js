@@ -20,6 +20,9 @@ module.exports = () => {
     const { query } = req;
 
     switch (eventstr) {
+      case 'CLOSE':
+        websocket.close(1000);
+        break;
       case 'ALERT_ONGOING_RAISED':
         send({
           eventstr,

@@ -22,4 +22,9 @@ module.exports = function hooks() {
   this.Before({ timeout: 60 * 1000 }, function waitForWorldInit(scenario, cb) {
     this.whenReady(cb);
   });
+
+  this.After(async function() {
+    await this.browser.fetch('/apievents/CLOSE');
+    this.browser.destroy();
+  });
 };
