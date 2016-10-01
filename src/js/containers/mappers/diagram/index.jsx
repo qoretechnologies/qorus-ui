@@ -8,6 +8,7 @@ import withState from 'recompose/withState';
 
 import Header from './header';
 import SelectableLabel from './selectable-label';
+import FieldDetail from './field-detail';
 
 const getRelations = (fieldSource: Object): Array<Object> => (
   Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
@@ -45,6 +46,8 @@ export const Diagramm = ({
   lineColor,
   selectedInput,
   selectedOutput,
+  activeOutput,
+  activeOutputFieldSource,
   inputMap,
   outputMap,
   relations,
@@ -52,6 +55,7 @@ export const Diagramm = ({
   handleInputUnselected,
   handleOutputSelected,
   handleOutputUnselected,
+  setActiveOutput,
 }: {
   id: string,
   svgWidth: number,
@@ -69,6 +73,8 @@ export const Diagramm = ({
   lineColor: string,
   selectedInput: string,
   selectedOutput: string,
+  activeOutput: string,
+  activeOutputFieldSource: string,
   inputMap: Object,
   outputMap: Object,
   relations: Object,
@@ -76,6 +82,7 @@ export const Diagramm = ({
   handleInputUnselected: Function,
   handleOutputSelected: Function,
   handleOutputUnselected: Function,
+  setActiveOutput: Function,
 }) => (
   <div id={id} className="svg-diagramm">
     <svg height={svgHeight} width={svgWidth}>
@@ -125,6 +132,7 @@ export const Diagramm = ({
           }
           onInputSelected={handleOutputSelected}
           onInputUnselected={handleOutputUnselected}
+          setActive={setActiveOutput}
         >
           {name}
         </SelectableLabel>
@@ -147,6 +155,7 @@ export const Diagramm = ({
         );
       })}
     </svg>
+    <FieldDetail name={activeOutput} fieldSource={activeOutputFieldSource} />
   </div>);
 
 const SVG_WIDTH = 800;
@@ -213,11 +222,19 @@ const addOutputSelection = compose(
   }))
 );
 
+const addActiveOutput = compose(
+  withState('activeOutput', 'setActiveOutput', null),
+  withProps(({ activeOutput, mapper }) => ({
+    activeOutputFieldSource: activeOutput && mapper.data.field_source[activeOutput],
+  }))
+);
+
 export default compose(
   pure,
   getRelationsData,
   appendMaxElementCount,
   appendDiagramParams,
   addInputSelection,
-  addOutputSelection
+  addOutputSelection,
+  addActiveOutput
 )(Diagramm);

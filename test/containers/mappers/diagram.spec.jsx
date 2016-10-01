@@ -113,4 +113,24 @@ describe('default', () => {
 
     expect(wrapper.find('rect[fill="red"]')).to.have.length(0);
   });
+
+  it('Click on input field without relation', () => {
+    const wrapper = mount(
+      <Diagram mapper={mapper} />
+    );
+
+    const textNode = wrapper.find('text[children="imei"]');
+    textNode.simulate('click');
+    expect(wrapper.find('FieldDetail')).to.have.length(1);
+  });
+
+  it('Click on input field with relation', () => {
+    const wrapper = mount(
+      <Diagram mapper={mapper} />
+    );
+
+    const textNode = wrapper.find('text[children="status"]');
+    textNode.simulate('click');
+    expect(wrapper.find('FieldDetail')).to.have.length(1);
+  });
 });

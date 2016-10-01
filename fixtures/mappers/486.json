@@ -20,7 +20,7 @@
     "imei": "(\"name\": \"SERIAL_NUMBER\"\n)",
     "delivery_detail_id": "(\"name\": \"SYS_REF\"\n)",
     "change_date": "(\"name\": \"LAST_UPDATE_DATE\"\n)",
-    "status": "(\"constant\" : \"N\")",
+    "status": "(\"name\": \"SERIAL_NUMBER\"\n)",
     "previous_status": "(\"constant\" : \"I\")",
     "i_sepl_status": "(\"constant\" : \"C\")"
   },

@@ -13,6 +13,7 @@ const Label = ({
   children,
   onMouseOver: handleMouseOver,
   onMouseOut: handleMouseOut,
+  onClick: handleClick,
 }: {
   x: Number | string,
   y: Number | string,
@@ -24,6 +25,7 @@ const Label = ({
   children?: string,
   onMouseOver?: Function,
   onMouseOut?: Function,
+  onClick?: Function,
 }) => (
   <svg
     x={x}
@@ -32,6 +34,7 @@ const Label = ({
     width={width}
     onMouseOver={handleMouseOver}
     onMouseOut={handleMouseOut}
+    onClick={handleClick}
   >
     <rect
       x="0"
