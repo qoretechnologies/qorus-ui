@@ -20,6 +20,7 @@ import Toolbar from '../../../components/toolbar';
 import Search from '../../../components/search';
 import OptionModal from './modal';
 import { Control } from '../../../components/controls';
+import Shorten from '../../../components/shorten';
 
 const filterOptions = search => collection => (
   findBy(['name', 'default', 'expects', 'value', 'description'], search, collection)
@@ -192,24 +193,24 @@ class Options extends Component {
     );
 
     yield (
-      <Cell className="name">{model.name}</Cell>
+      <Cell className="name nowrap">{model.name}</Cell>
     );
 
     yield (
-      <Cell>
+      <Cell className="nowrap">
         <Badge
           val="W"
-          label={model.workflow ? 'success' : 'default'}
+          label={model.workflow ? 'checked' : 'unchecked'}
         />
         {' '}
         <Badge
           val="S"
-          label={model.service ? 'success' : 'default'}
+          label={model.service ? 'checked' : 'unchecked'}
         />
         {' '}
         <Badge
           val="J"
-          label={model.job ? 'success' : 'default'}
+          label={model.job ? 'checked' : 'unchecked'}
         />
       </Cell>
     );
@@ -219,7 +220,7 @@ class Options extends Component {
     );
 
     yield (
-      <Cell>{JSON.stringify(model.value)}</Cell>
+      <Cell><Shorten>{JSON.stringify(model.value)}</Shorten></Cell>
     );
 
     const handleClick = this.handleEditClick(model);
