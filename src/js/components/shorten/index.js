@@ -29,7 +29,7 @@ export default class Shorten extends Component {
   render() {
     if (!this.state.showTooltip) {
       return (
-        <div className="relative">
+        <div className="relative shorten-wrapper">
           <div className={classNames('shorten', this.props.extraClassname)}>
             { this.props.children }
           </div>
