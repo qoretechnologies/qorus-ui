@@ -11,6 +11,7 @@ import StepsTab from './steps_tab';
 import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
+import MappersTable from '../../../containers/mappers';
 
 @pureRender
 export default class WorkflowsDetail extends Component {
@@ -102,7 +103,9 @@ export default class WorkflowsDetail extends Component {
               globalErrors={globalErrors}
             />
           </Pane>
-          <Pane name="Mappers" />
+          <Pane name="Mappers">
+            <MappersTable mappers={workflow.mappers} />
+          </Pane>
           <Pane name="Info">
             <InfoTab workflow={workflow} />
           </Pane>

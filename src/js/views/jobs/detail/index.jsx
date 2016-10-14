@@ -9,6 +9,7 @@ import pure from 'recompose/pure';
 
 import Header from './header';
 import { DetailTab, AlertsTab } from './tabs';
+import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
 import LibraryTab from '../../../components/library';
 import actions from '../../../store/api/actions';
@@ -54,7 +55,7 @@ const Detail = ({
         <AlertsTab alerts={model.alerts} />
       </Pane>
       <Pane name="Mappers">
-        <p>Not implemented yet</p>
+        <MappersTable mappers={model.mappers} />
       </Pane>
     </Tabs>
   </article>

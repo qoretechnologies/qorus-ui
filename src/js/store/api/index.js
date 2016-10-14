@@ -70,6 +70,7 @@ export function createResourceReducers(
                     data,
                     state.data,
                   ),
+                  sync: true,
                 });
               }
 
@@ -79,6 +80,7 @@ export function createResourceReducers(
                   data,
                   state.data,
                 ),
+                sync: true,
               });
             }
 

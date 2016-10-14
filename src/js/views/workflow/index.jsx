@@ -10,6 +10,7 @@ import Log from './tabs/log';
 import InfoTable from 'components/info_table';
 import Library from 'components/library';
 import Performance from './tabs/performance';
+import MappersTable from '../../containers/mappers';
 
 import { goTo } from '../../helpers/router';
 import { formatDate } from '../../helpers/workflows';
@@ -167,6 +168,9 @@ export default class extends Component {
                     'has_alerts', 'TOTAL', 'timestamp', 'id', 'normalizedName',
                   ].concat(ORDER_STATES.map(os => os.name))}
                 />
+              </Pane>
+              <Pane name="Mappers">
+                <MappersTable mappers={this.props.workflow.mappers} />
               </Pane>
             </Tabs>
           </div>

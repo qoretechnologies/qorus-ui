@@ -2,7 +2,7 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 
-import Job, { JobResults, JobLog } from '../views/job';
+import Job, { JobResults, JobLog, JobMappers } from '../views/job';
 import ResultDetail from '../views/job/tabs/results/detail';
 
 const JobRoutes = (): React.Element<any> => (
@@ -23,6 +23,10 @@ const JobRoutes = (): React.Element<any> => (
     <Route
       path="log"
       component={JobLog}
+    />
+    <Route
+      path="mappers"
+      component={JobMappers}
     />
   </Route>
 );

@@ -1,12 +1,11 @@
 import { findElementByText, findElementByValue } from './common_steps';
 import moment from 'moment';
 
-const getDate = (type) => {
+const getMonthByDate = (type, date = new Date()) => {
   const months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
 
-  const date = new Date();
   const month = type === 'next' ? months[date.getMonth() + 1] : months[date.getMonth() - 1];
   const year = date.getFullYear();
 
@@ -37,7 +36,8 @@ module.exports = function workflowDatepickerSteps() {
   });
 
   this.Then(/^the month should change to "([^"]*)"$/, async function(month) {
-    const el = findElementByText(this.browser, 'th', getDate(month));
+    const yesterday = moment(new Date()).subtract(1, 'day').toDate();
+    const el = findElementByText(this.browser, 'th', getMonthByDate(month, yesterday));
 
     this.browser.assert.element(el);
   });
@@ -55,7 +55,9 @@ module.exports = function workflowDatepickerSteps() {
 
   this.Then(/^yesterday should be selected$/, async function() {
     const date = new Date();
-    const el = findElementByText(this.browser, '.active', (date.getDate() - 1).toString());
+    const yesterday = moment(date).subtract(1, 'day').toDate();
+    console.log(yesterday.getDate());
+    const el = findElementByText(this.browser, '.active', (yesterday.getDate()).toString());
 
     this.browser.assert.element(el);
   });

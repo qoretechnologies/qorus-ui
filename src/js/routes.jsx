@@ -10,6 +10,7 @@ import { useRelativeLinks } from 'react-router-relative-links';
 import Root from './views/root';
 import Login from './views/auth';
 import Ocmd from './views/ocmd';
+import Mapper from './views/mapper';
 import Library from './views/library';
 import Extensions from './views/extensions';
 import ExtensionDetail from './views/extensions/detail';
@@ -87,6 +88,7 @@ class AppInfo extends React.Component {
           { searchRoutes() }
           { groupsRoutes() }
           <Route path="ocmd" component={Ocmd} />
+          <Route path="mappers/:id" component={Mapper} />
           <Route path="library" component={Library} />
           <Route path="extensions" component={Extensions} />
           <Route path="extension/:name" component={ExtensionDetail} />
