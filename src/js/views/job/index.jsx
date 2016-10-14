@@ -12,6 +12,7 @@ import JobHeader from './header';
 import JobDescription from './description';
 import JobLog from './tabs/log/index';
 import JobResults from './tabs/results/index';
+import JobMappers from './tabs/mappers/index';
 
 const jobSelector = (state, props) => {
   const { api: { jobs: { data } } } = state;
@@ -48,6 +49,7 @@ const JobPage = ({
           <Nav path={location.pathname}>
             <NavLink to="./results">Results</NavLink>
             <NavLink to="./log">Log</NavLink>
+            <NavLink to="./mappers">Mappers</NavLink>
           </Nav>
           <div className="job-tab" style={{ paddingTop: '10px' }}>
             {React.Children.map(
@@ -64,7 +66,7 @@ const JobPage = ({
   </div>
 );
 
-export { JobLog, JobResults };
+export { JobLog, JobResults, JobMappers };
 
 export default compose(
   connect(

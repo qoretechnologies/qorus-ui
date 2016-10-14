@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
+
 import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
 import { DetailTab, MethodsTab } from './tabs';
 import LibraryTab from 'components/library';
 import LogTab from '../../workflows/detail/log_tab';
-
 import { pureRender } from 'components/utils';
-
-
 import { goTo } from '../../../helpers/router';
+import MappersTable from '../../../containers/mappers';
 import actions from 'store/api/actions';
 
 @pureRender
@@ -89,7 +88,7 @@ export default class ServicesDetail extends Component {
             />
           </Pane>
           <Pane name="Mappers">
-            <p>Not implemented yet</p>
+            <MappersTable mappers={service.mappers} />
           </Pane>
         </Tabs>
       </article>

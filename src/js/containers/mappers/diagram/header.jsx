@@ -23,14 +23,14 @@ const Header = ({
     width={svgWidth}
   >
     <text
-      x={offsetX}
+      x={0}
       y={offsetY}
       fill={textColor}
     >
       Input
     </text>
     <text
-      x={svgWidth - rectWidth - offsetX}
+      x={svgWidth - (rectWidth * 2.5) + offsetX}
       y={offsetY}
       fill={textColor}
     >

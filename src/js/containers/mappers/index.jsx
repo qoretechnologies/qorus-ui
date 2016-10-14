@@ -1,9 +1,8 @@
 /* @flow */
 import React from 'react';
+import { Link } from 'react-router';
 
 import checkNoData from '../../hocomponents/check-no-data';
-
-import DetailButton from './detail-button';
 
 const MappersTable = ({ mappers }: { mappers: Array<Object> }) => (
   <table className="table table-stripped">
@@ -23,7 +22,7 @@ const MappersTable = ({ mappers }: { mappers: Array<Object> }) => (
           <td>{item.name}</td>
           <td>{item.version}</td>
           <td>{item.type}</td>
-          <td><DetailButton mapper={item} /></td>
+          <td><Link to={`/mappers/${item.mapperid}`}> Detail </Link></td>
         </tr>
       ))}
     </tbody>

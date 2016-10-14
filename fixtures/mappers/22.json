@@ -20,8 +20,8 @@
     "Print_Article_Code": "(\"name\": \"PRINT_ITEM_CODE\"\n)",
     "Ean_Code": "(\"name\": \"ITEM_EAN_CODE\"\n)",
     "Quantity": "(\"name\": \"LOT_QUANTITY\"\n)",
-    "A38": "(\"name\": \"A38\"\n)",
-    "A4": "(\"name\": \"A4_VALUE\"\n)",
+    "A38": "(\"constant\" : \"TEST_CONSTANT\", \"code\": string sub (softstring rid, hash rec) {return rid + \".\" +rec.transaction_id;}, \"les\": \"vlocka\")",
+    "A4": "(\"constant\": \"A4_VALUE\"\n)",
     "Type": "(\"name\": \"USIM_TYPE\"\n)",
     "Profile": "(\"name\": \"USIM_PROFILE\"\n)",
     "Num_of_IMSI": "(\"name\": \"USIM_IMSI_NUM\"\n)",
@@ -51,7 +51,11 @@
       "Print_Article_Code": {},
       "Ean_Code": {},
       "Quantity": {},
-      "A38": {},
+      "A38": {
+        "mand": true,
+        "type": "number",
+        "desc": "This is a description. There are many like this but this one is mine. It's no ordinary description, it's a magical description, an ancient one, forged thousands of eons ago."
+      },
       "A4": {},
       "Type": {},
       "Profile": {},
