@@ -1,4 +1,3 @@
-@wip
 Feature: Tests system/valuemaps features
 
   Scenario: Valuemaps are loaded
