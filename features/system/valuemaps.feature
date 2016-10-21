@@ -1,3 +1,4 @@
+@wip
 Feature: Tests system/valuemaps features
 
   Scenario: Valuemaps are loaded
@@ -42,6 +43,7 @@ Feature: Tests system/valuemaps features
   Scenario: Adding new values
     Given I am on "system/values?paneId=2" listing
     And values get loaded
+    And "2" values are shown
     And I click the "Add value" button
     And I type "Test" in "value-key" input
     And I type "Test" in "value-value" input

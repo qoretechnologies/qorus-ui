@@ -2,7 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
-import pickBy from 'lodash/pickby';
+import pickBy from 'lodash/pickBy';
 import includes from 'lodash/includes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';

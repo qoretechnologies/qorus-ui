@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { valuemapsData as data, valuesData } from '../fixtures';
 
 module.exports = () => {
   const router = new Router();
+  const data = require('./data')();
+  const valuesData = require('./values')();
 
   router.get('/', (req, res) => {
     res.json(data);
