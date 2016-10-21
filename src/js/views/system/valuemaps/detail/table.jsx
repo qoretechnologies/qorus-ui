@@ -54,7 +54,7 @@ const DetailTable: Function = ({ update, remove, paneId, data }: Props): React.E
 const findValuemap: Function = (id: number): Function => (data: Array<Object>): Object => {
   const vm = data.find((valuemap: Object): boolean => valuemap.id === parseInt(id, 10));
 
-  return vm.vals || { sync: false, loading: false, data: {} };
+  return vm && vm.vals ? vm.vals : { sync: false, loading: false, data: {} };
 };
 
 const filterValues: Function = (query: string): Function => (data: Object): Object => (

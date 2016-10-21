@@ -39,7 +39,7 @@ class CompWithContext extends Component {
   }
 }
 
-describe.only('pane from hocomponents/pane', () => {
+describe('pane from hocomponents/pane', () => {
   const ActualComp = ({ openPane }: { openPane: Function }) => (
     <div onClick={openPane} />
   );
