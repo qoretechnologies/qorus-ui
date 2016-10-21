@@ -27,6 +27,7 @@ const DashboardRoutes = (): React.Element<any> => (
       </Route>
     </Route>
     <Route path="props" component={System.Properties} />
+    <Route path="values" component={System.Valuemaps} />
     <Route path="sqlcache" component={System.SqlCache} />
     <Route path="http" component={System.HttpServices} />
     <Route path="info" component={System.Info} />

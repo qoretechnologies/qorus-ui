@@ -13,6 +13,7 @@ import SystemInfoTable from './info';
 import SqlCache from './sqlcache';
 import Properties from './properties';
 import Rbac from './rbac';
+import Valuemaps from './valuemaps';
 
 export default class System extends Component {
   static propTypes = {
@@ -39,6 +40,7 @@ export default class System extends Component {
           <NavLink to="./options">Options</NavLink>
           <NavLink to="./remote">Connections</NavLink>
           <NavLink to="./props">Properties</NavLink>
+          <NavLink to="./values">Valuemaps</NavLink>
           <NavLink to="./sqlcache">SQL cache</NavLink>
           <NavLink to="./http">Http Services</NavLink>
           <NavLink to="./info">Info</NavLink>
@@ -65,3 +67,4 @@ System.RBAC = Rbac;
 System.Info = SystemInfoTable;
 System.Logs = Logs;
 System.Errors = Errors;
+System.Valuemaps = Valuemaps;
