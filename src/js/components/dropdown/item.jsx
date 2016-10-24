@@ -35,7 +35,7 @@ export default class Item extends Component {
     this.action(event);
   };
 
-  handleKeyPress: Function = (event: EventHandler): void => {
+  handleKeyPress: Function = (event: KeyboardEvent): void => {
     if (event.which === 13) {
       event.preventDefault();
 
