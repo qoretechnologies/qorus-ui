@@ -14,15 +14,45 @@ export default class Item extends Component {
     selected?: boolean,
     toggleItem?: () => void,
     className?: string,
+    marked: number,
   };
 
-  /**
-   * Hides the dropdown and runs
-   * provided function
-   * @params {Object} - browser Event
-   */
+  componentDidMount() {
+    this.setup();
+  }
+
+  componentDidUpdate() {
+    this.setup();
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.handleKeyPress);
+  }
+
   handleClick: Function = (event: Object): void => {
-    if (this.props.action) {
+    event.preventDefault();
+
+    this.action(event);
+  };
+
+  handleKeyPress: Function = (event: EventHandler): void => {
+    if (event.which === 13) {
+      event.preventDefault();
+
+      this.action(event);
+    }
+  };
+
+  setup: Function = () => {
+    document.removeEventListener('keypress', this.handleKeyPress);
+
+    if (this.props.marked) {
+      document.addEventListener('keypress', this.handleKeyPress);
+    }
+  };
+
+  action: Function = (event: EventHandler): void => {
+    if (this.props.action && event) {
       this.props.action(event, this.props.title);
     }
 
@@ -46,22 +76,23 @@ export default class Item extends Component {
   }
 
   render(): React.Element<any> {
-    const { className = '', selected, title } = this.props;
+    const { className = '', selected, title, marked } = this.props;
     const cls = classNames({
       active: selected,
+      marked,
       [className]: className,
     });
 
     return (
       <li className={cls}>
-        <a
+        <span
+          className="dropdown-item"
           onClick={this.handleClick}
-          href="#"
         >
           {this.renderIcon()}
           {' '}
           {title}
-        </a>
+        </span>
       </li>
     );
   }
