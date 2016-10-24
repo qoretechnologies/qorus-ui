@@ -156,12 +156,18 @@ module.exports = function commonSteps() {
     };
   });
 
+  // TODO: Why is this "pane" in table??
   this.Then(/^I should see "([^"]*)" detail pane$/, async function(name) {
     await this.waitForElement(pane);
 
     this.browser.assert.element(pane);
   });
 
+  this.Then(/^I should see detail pane$/, async function() {
+    await this.waitForElement('.pane');
+
+    this.browser.assert.element('.pane');
+  });
 
   this.Then(/^I should see "([^"]*)" details tab$/, async function(name) {
     await this.waitForElement(cmpPane);
@@ -194,7 +200,7 @@ module.exports = function commonSteps() {
 
     this.detail = {
       id: findTableRowId(this.browser, name),
-      name
+      name,
     };
   });
 
@@ -339,7 +345,6 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I submit "([^"]*)" form$/, async function(formClass) {
-    console.log(`Submit form ${formClass}`);
     return this.browser.pressButton(`form.${formClass} button[type=submit]`);
   });
 

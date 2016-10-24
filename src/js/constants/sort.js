@@ -75,4 +75,14 @@ export const sortDefaults = {
     historySortBy: 'name',
     historySortByKey: { ignoreCase: true, direction: 1 },
   },
+  valuemaps: {
+    sortBy: 'created',
+    sortByKey: { ignoreCase: true, direction: -1 },
+    historySortBy: 'name',
+    historySortByKey: { ignoreCase: true, direction: 1 },
+  },
+  valuemapsValues: {
+    sortBy: 'enabled',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };

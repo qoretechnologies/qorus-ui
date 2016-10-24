@@ -40,12 +40,13 @@ class CompWithContext extends Component {
 }
 
 describe('pane from hocomponents/pane', () => {
-  const ActualComp = () => (
-    <div></div>
+  const ActualComp = ({ openPane }: { openPane: Function }) => (
+    <div onClick={openPane} />
   );
 
   type Props = {
     onClose: Function,
+    openPane: Function,
     paneId: string,
     width: number,
   }
@@ -79,7 +80,7 @@ describe('pane from hocomponents/pane', () => {
     expect(wrapper.find(Pane)).to.have.length(0);
   });
 
-  it('renders the pane', () => {
+  it('renders the pane automatically', () => {
     const Comp = compose(
       defaultProps({
         width: 400,
@@ -104,6 +105,31 @@ describe('pane from hocomponents/pane', () => {
     expect(wrapper.find(Pane).props().width).to.eql(400);
     expect(wrapper.find(Pane).props().onClose).to.be.a('function');
     expect(wrapper.find(Pane).find('.pane__content').text()).to.eql('This is pane - testPane');
+  });
+
+  it('renders the pane when openPane is called with id', () => {
+    const Comp = compose(
+      defaultProps({
+        width: 400,
+        location: {
+          query: {
+            q: 'searchQuery',
+          },
+          pathname: 'localhost:3000/system/rbac/users',
+        },
+      }),
+      withPane(PaneComp, ['width'])
+    )(ActualComp);
+
+    const wrapper = mount(
+      <CompWithContext>
+        <Comp />
+      </CompWithContext>
+    );
+
+    wrapper.find(ActualComp).props().openPane('testPane');
+
+    expect(url).to.eql('localhost:3000/system/rbac/users?q=searchQuery&paneId=testPane');
   });
 
   it('closes the pane and modifies the url', () => {

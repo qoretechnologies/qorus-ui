@@ -48,9 +48,9 @@ const goTo = (router, name, path, params, change, query = null) => {
   router.push(`/${url}`);
 };
 
-const changeQuery = (router, location, queryName, querySearch) => {
+const changeQuery = (router, location, queryName, queryData) => {
   const { pathname, query } = location;
-  const newQuery = Object.assign(query, { [queryName]: querySearch });
+  const newQuery = Object.assign(query, { [queryName]: queryData });
 
   router.push({
     pathname,

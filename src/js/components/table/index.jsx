@@ -45,9 +45,9 @@ Table.propTypes = {
   children: PropTypes.node,
 };
 
-export const Th = mapProps(props => ({ ...props, tag: 'th' }))(Cell);
+const Th = mapProps(props => ({ ...props, tag: 'th' }))(Cell);
 Th.displayName = 'Th';
-export const Td = mapProps(props => ({ ...props, tag: 'td' }))(Cell);
+const Td = mapProps(props => ({ ...props, tag: 'td' }))(Cell);
 Td.displayName = 'Td';
 
 export {

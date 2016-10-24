@@ -48,6 +48,15 @@ module.exports = function systemSteps() {
     };
   });
 
+  this.When(/^I activate "([^"]*)" valuemap$/, async function(name) {
+    await this.browser.click(findTableRow(this.browser, name, 0));
+
+    this.detail = {
+      id: findTableRowId(this.browser, name, 0),
+      name,
+    };
+  });
+
   this.When(/^I click the first "([^"]*)" button$/, async function(button) {
     const el = findElementByText(this.browser, '.btn', ` ${button}`);
     await this.browser.pressButton(el[0]);

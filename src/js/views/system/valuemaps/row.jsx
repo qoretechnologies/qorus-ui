@@ -1,0 +1,86 @@
+/* @flow */
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { Row, Td } from '../../../components/table';
+import { Control as Button } from '../../../components/controls';
+import { getDump, removeDump } from '../../../store/api/resources/valuemaps/actions';
+import { utf8ToB64 } from '../../../helpers/system';
+
+type Props = {
+  openPane: Function,
+  dump?: Function,
+  remove?: Function,
+  data: Object,
+}
+
+@connect(
+  () => ({}),
+  {
+    dump: getDump,
+    remove: removeDump,
+  }
+)
+export default class ValuemapRow extends Component {
+  props: Props;
+
+  componentDidUpdate(): void {
+    const { data, remove } = this.props;
+    const { download } = this.refs;
+
+    if (data.dump && remove) {
+      download.click();
+      remove(data.id);
+    }
+  }
+
+  handleRowClick: Function = (): void => {
+    this.props.openPane(this.props.data.id);
+  };
+
+  handleDumpClick: Function = (event: EventHandler): void => {
+    event.stopPropagation();
+
+    const { dump } = this.props;
+
+    if (dump) {
+      dump(this.props.data.id);
+    }
+  };
+
+  handleDownloadClick: Function = (event: EventHandler): void => {
+    event.stopPropagation();
+  };
+
+  render() {
+    const { data } = this.props;
+
+    return (
+      <Row onClick={this.handleRowClick}>
+        <Td>{ data.name }</Td>
+        <Td>{ data.description }</Td>
+        <Td>{ data.author }</Td>
+        <Td><code>{ data.valuetype }</code></Td>
+        <Td>{ data.mapsize }</Td>
+        <Td>{ data.created }</Td>
+        <Td>{ data.modified }</Td>
+        <Td>
+          <Button
+            label="Dump to file"
+            icon="download"
+            btnStyle="success"
+            onClick={this.handleDumpClick}
+          />
+          {data.dump && (
+            <a
+              ref="download"
+              download={`${data.name}.qvset`}
+              onClick={this.handleDownloadClick}
+              href={`data:text/plain;base64,${utf8ToB64(data.dump[data.name])}`}
+            />
+          )}
+        </Td>
+      </Row>
+    );
+  }
+}

@@ -1,9 +1,4 @@
 Feature: Tests various websocket apievents
-  Scenario: Ongoing alert raised
-    Given I am on "system/alerts/ongoing" listing
-    And "alerts" get loaded
-    When I send a ws request for "ALERT_ONGOING_RAISED"
-    Then "5" "alerts" are shown
 
   Scenario: Transient alert raised
     Given I am on "system/alerts/transient" listing

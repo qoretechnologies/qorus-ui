@@ -69,17 +69,6 @@ describe('default', () => {
     expect(wrapper.find('rect[fill="#729C1C"]')).to.have.length(0);
   });
 
-  it('Mouseover on output field without relations', () => {
-    const wrapper = mount(
-      <Diagram mapper={mapper} />
-    );
-
-    const textNode = wrapper.find('text[children="status"]');
-    textNode.simulate('mouseover');
-
-    expect(wrapper.find('rect[fill="#729C1C"]').first()).to.have.length(1);
-  });
-
   it('Mouseout on output field', () => {
     const wrapper = mount(
       <Diagram mapper={mapper} />

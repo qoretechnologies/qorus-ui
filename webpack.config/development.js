@@ -15,8 +15,6 @@ const devConfig = require('./dev');
 module.exports = function developmentConfig() {
   const config = compilerConfig();
 
-  config.module.loaders[0].loaders.unshift('react-hot');
-
   config.entry.qorus.push('webpack-hot-middleware/client');
 
   config.plugins.push(

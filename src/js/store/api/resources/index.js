@@ -192,4 +192,9 @@ export default [
     url: `${settings.REST_BASE_URL}/mappers`,
     transform: item => item,
   },
+  {
+    name: 'valuemaps',
+    url: `${settings.REST_BASE_URL}/valuemaps`,
+    transform: item => item,
+  },
 ];

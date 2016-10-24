@@ -34,8 +34,10 @@ const connectCall: Function = (
   onClose: Function,
   onPause: Function,
 ): Object => {
+  const token = localStorage.getItem('token') || 'undefined';
+
   connections[url] = new WebSocket(
-    `${settings.WS_BASE_URL}/${url}?token=${localStorage.getItem('token')}`
+    `${settings.WS_BASE_URL}/${url}?token=${token}`
   );
 
   const ws = connections[url];

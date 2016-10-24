@@ -198,6 +198,7 @@ export const Diagramm = ({
 
           return (
             <line
+              // $FlowIssue: wtf??
               key={`${inputValue}_to_${outputValue}`}
               x1={rectWidth}
               y1={

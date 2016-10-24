@@ -13,3 +13,4 @@ export * as currentUser from './currentUser/reducers';
 export * as props from './props/reducers';
 export * as groups from './groups/reducers';
 export * as orders from './orders/reducers';
+export * as valuemaps from './valuemaps/reducers';
