@@ -21,8 +21,9 @@ export default (
       changeQuery(
         this.context.router,
         this.props.location,
-        queryName,
-        querySearch
+        {
+          [queryName]: querySearch,
+        }
       );
     };
 
