@@ -33,14 +33,18 @@ const setOptions = createAction(
 
 
 function fetchLibSourcesPayload(workflow) {
+  const id = typeof workflow === 'object' ? workflow.id : workflow;
+
   return fetchJson(
     'GET',
-    `${settings.REST_BASE_URL}/workflows/${workflow.id}?lib_source=true`
+    `${settings.REST_BASE_URL}/workflows/${id}?lib_source=true`
   );
 }
 
 function fetchLibSourcesMeta(workflow) {
-  return { workflowId: workflow.id };
+  const workflowId = typeof workflow === 'object' ? workflow.id : workflow;
+
+  return { workflowId };
 }
 
 const fetchLibSources = createAction(
