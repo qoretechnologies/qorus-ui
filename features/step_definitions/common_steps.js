@@ -258,7 +258,7 @@ module.exports = function commonSteps() {
 
     this.browser.pressButton(`#${dropdown}`);
 
-    const el = findElementByText(this.browser, `#${dropdown}-dropdown a`, ` ${button}`);
+    const el = findElementByText(this.browser, `#${dropdown}-dropdown span`, ` ${button}`);
 
     this.browser.click(el);
 
@@ -266,7 +266,7 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I click the "([^"]*)" item$/, async function(item) {
-    const el = findElementByText(this.browser, '.dropdown-menu a', ` ${item}`);
+    const el = findElementByText(this.browser, '.dropdown-menu span', ` ${item}`);
 
     this.browser.click(el);
   });

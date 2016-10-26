@@ -104,13 +104,33 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const item = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         expect(component.state.showDropdown).to.equal(true);
 
         TestUtils.Simulate.click(item[0]);
 
         expect(component.state.showDropdown).to.equal(false);
+      });
+
+      it('marks the first item when dropdown is opened', () => {
+        const wrapper = mount(
+          <Dropdown show>
+            <Control>
+              Click me
+            </Control>
+            <Item
+              action={() => true}
+              title="Item"
+            />
+            <Item
+              action={() => true}
+              title="Item two"
+            />
+          </Dropdown>
+        );
+
+        expect(wrapper.find(Item).first().props().marked).to.eql(true);
       });
     });
 
@@ -139,7 +159,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const item = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         expect(component.state.showDropdown).to.equal(true);
 
@@ -178,7 +198,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(buttons[0]);
 
-        const item = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const item = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         TestUtils.Simulate.click(item[1]);
         TestUtils.Simulate.click(item[2]);
@@ -212,7 +232,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(buttons[0]);
 
-        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const items = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         TestUtils.Simulate.click(items[1]);
         TestUtils.Simulate.click(items[2]);
@@ -326,11 +346,11 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const items = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         expect(component.state.selected[0]).to.equal('All');
         expect(items[0].textContent).to.equal(' All');
-        expect(items[0].parentElement.className).to.equal('active');
+        expect(items[0].parentElement.className).to.equal('active marked');
       });
 
       it('selects the clicked item and the default is deselected', () => {
@@ -357,7 +377,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const items = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         TestUtils.Simulate.click(items[1]);
 
@@ -389,7 +409,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const items = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         TestUtils.Simulate.click(items[1]);
         TestUtils.Simulate.click(items[1]);
@@ -430,7 +450,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         TestUtils.Simulate.click(button[0]);
 
-        const items = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+        const items = TestUtils.scryRenderedDOMComponentsWithClass(component, 'dropdown-item');
 
         TestUtils.Simulate.click(items[1]);
         TestUtils.Simulate.click(items[2]);

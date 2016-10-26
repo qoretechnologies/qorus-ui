@@ -34,6 +34,7 @@ export default class Dropdown extends Component {
   state: {
     showDropdown: ?boolean,
     selected: Array<*>,
+    marked: number,
   };
 
   componentWillMount(): void {
@@ -49,6 +50,7 @@ export default class Dropdown extends Component {
     this.setState({
       showDropdown: this.props.show,
       selected: sel,
+      marked: 1,
     });
   }
 
@@ -62,10 +64,17 @@ export default class Dropdown extends Component {
 
   componentDidUpdate(): void {
     document.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener('keyup', this.handleMarkedChange);
 
     if (this.state.showDropdown) {
       document.addEventListener('click', this.handleOutsideClick);
+      document.addEventListener('keyup', this.handleMarkedChange);
     }
+  }
+
+  componentWillUnmount(): void {
+    document.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener('keyup', this.handleMarkedChange);
   }
 
   getToggleTitle: Function = (children: any): ?string => {
@@ -122,6 +131,33 @@ export default class Dropdown extends Component {
     }
   };
 
+  handleMarkedChange: Function = (event: EventHandler): void => {
+    const { which } = event;
+    const { marked } = this.state;
+    const items = React.Children.count(this.props.children) - 1;
+    let newPos;
+
+    if (which === 40 || which === 38) {
+      if (which === 40) {
+        newPos = marked + 1;
+
+        if (newPos > items) {
+          newPos = 1;
+        }
+      } else if (which === 38) {
+        newPos = marked - 1;
+
+        if (newPos === 0) {
+          newPos = items;
+        }
+      }
+
+      this.setState({
+        marked: newPos,
+      });
+    }
+  };
+
   /**
    * Displays / hides the control dropdown
    * based on the current state
@@ -135,6 +171,12 @@ export default class Dropdown extends Component {
       this.setState({
         showDropdown: !this.state.showDropdown,
       });
+    }
+  };
+
+  handleToggleKeyPress: Function = (event: EventHandler): void => {
+    if (event.which === 13) {
+      event.preventDefault();
     }
   };
 
@@ -175,7 +217,7 @@ export default class Dropdown extends Component {
   }
 
   renderDropdownList(): ?React.Element<any> {
-    return React.Children.map(this.props.children, (c) => {
+    return React.Children.map(this.props.children, (c, index) => {
       if (c.type !== Item && c.type !== CustomItem) return undefined;
 
       if (c.type === CustomItem) {
@@ -192,11 +234,12 @@ export default class Dropdown extends Component {
 
       return (
         <c.type
+          {...c.props}
+          marked={index === this.state.marked}
           selected={selected}
           toggleItem={this.toggleItem}
           hideDropdown={this.hideToggle}
           multi={this.props.multi}
-          {...c.props}
           icon={icon}
         />
       );
@@ -211,6 +254,7 @@ export default class Dropdown extends Component {
         <c.type
           id={this.props.id}
           onClick={this.handleToggleClick}
+          onKeyPress={this.handleToggleKeyPress}
           {...c.props}
         >
           {this.getToggleTitle(c.props.children)}
