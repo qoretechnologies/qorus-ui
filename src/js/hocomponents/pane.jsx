@@ -10,10 +10,12 @@ import { changeQuery } from '../helpers/router';
  * if a "paneId" URL query is present.
  * @param Pane - The Pane component
  * @param propNames - Props that the Pane component receives
+ * @param defaultTab - If the panel has tab, which one is displayed by default
  */
 export default (
   Pane: ReactClass<*>,
-  propNames: Array<string>,
+  propNames: ?Array<string>,
+  defaultTab: ?string,
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   class ComponentWithPanel extends React.Component {
     static contextTypes = {
@@ -26,7 +28,7 @@ export default (
 
     handleClose: Function = (): void => {
       const { query, pathname }: { query: Object, pathname: string } = this.props.location;
-      const newQuery: Object = omit(query, 'paneId');
+      const newQuery: Object = omit(query, 'paneId', 'paneTab');
 
       this.context.router.push({
         pathname,
@@ -34,12 +36,23 @@ export default (
       });
     };
 
-    handleOpen: Function = (id): void => {
+    handleOpen: Function = (paneId: number): void => {
+      const query = defaultTab ? { paneId, paneTab: defaultTab } : { paneId };
+
       changeQuery(
         this.context.router,
         this.props.location,
-        'paneId',
-        id
+        query,
+      );
+    };
+
+    handleTabChange: Function = (paneTab: number | string): void => {
+      changeQuery(
+        this.context.router,
+        this.props.location,
+        {
+          paneTab,
+        }
       );
     };
 
@@ -48,25 +61,32 @@ export default (
 
       if (!query || !query.paneId) return undefined;
 
-      const props: Object = propNames.reduce((obj, cur) => (
+      const props: Object = propNames ? propNames.reduce((obj, cur) => (
         Object.assign(obj, { [cur]: this.props[cur] })
-      ), {});
+      ), {}) : {};
 
       return (
         <Pane
           {...props}
           onClose={this.handleClose}
+          vymrdanaPicaZkurvena={() => true}
+          changePaneTab={this.handleTabChange}
           paneId={query.paneId}
+          paneTab={query.paneTab}
         />
       );
     }
 
     render() {
+      const { query } = this.props.location;
+
       return (
         <div>
           <Component
             {...this.props}
             openPane={this.handleOpen}
+            paneId={query.paneId}
+            paneTab={query.paneTab}
           />
           { this.renderPane() }
         </div>
