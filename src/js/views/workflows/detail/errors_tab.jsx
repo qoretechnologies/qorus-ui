@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import ErrorsTable from './errors_table';
 
+import ErrorsTable from './errors_table';
 import { pureRender } from 'components/utils';
+import Loader from 'components/loader';
 import actions from 'store/api/actions';
 
 @pureRender
@@ -43,6 +44,8 @@ export default class ErrorsTab extends Component {
   };
 
   render() {
+    if (!this.props.errors) return <Loader />;
+
     return (
       <div>
         <ErrorsTable

@@ -1,18 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { includes } from 'lodash';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
 import AutoStart from 'components/autostart';
 import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
-
-import { pureRender } from 'components/utils';
-import { goTo } from '../../helpers/router';
 import { filterArray } from '../../helpers/workflows';
 import { WORKFLOW_FILTERS } from '../../constants/filters';
-
 import classNames from 'classnames';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../constants/orders';
@@ -23,7 +20,13 @@ import { ORDER_STATES } from '../../constants/orders';
  * Beware, this component is very performance internsive - even
  * HTML/CSS without any JS is relatively slow.
  */
-@pureRender
+@connect(
+  () => ({}),
+  {
+    setAutostart: actions.workflows.setAutostart,
+    updateDone: actions.workflows.updateDone,
+  }
+)
 export default class WorkflowsTable extends Component {
   static propTypes = {
     workflows: PropTypes.array,
@@ -35,14 +38,13 @@ export default class WorkflowsTable extends Component {
     onSortChange: PropTypes.func,
     sortData: PropTypes.object,
     linkDate: PropTypes.string,
+    openPane: PropTypes.func,
+    updateDone: PropTypes.func,
+    setAutostart: PropTypes.func,
   };
 
   static contextTypes = {
-    router: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
   };
 
   /**
@@ -52,7 +54,6 @@ export default class WorkflowsTable extends Component {
    * are used as cache key by pure render.
    */
   componentWillMount() {
-    this._activateWorkflow = ::this.activateWorkflow;
     this._renderSections = ::this.renderSections;
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
@@ -83,9 +84,7 @@ export default class WorkflowsTable extends Component {
   }
 
   handleHighlightEnd = (id) => () => {
-    this.context.dispatch(
-      actions.workflows.updateDone(id)
-    );
+    this.props.updateDone(id);
   };
 
   /**
@@ -113,9 +112,7 @@ export default class WorkflowsTable extends Component {
    * @param {number} value
    */
   setAutostart = (id, value) => {
-    this.context.dispatch(
-      actions.workflows.setAutostart(id, value)
-    );
+    this.props.setAutostart(id, value);
   };
 
   /**
@@ -134,36 +131,6 @@ export default class WorkflowsTable extends Component {
     }
 
     return this.props.workflows[idx] || null;
-  }
-
-  /**
-   * Changes active route to workflow associated with clicked element.
-   *
-   * If the event handled some significant action before (i.e., its
-   * default action is prevented), it does nothing.
-   *
-   * @param {Event} ev
-   */
-  activateWorkflow(ev) {
-    if (ev.defaultPrevented) return;
-
-    const workflow = this.findActivatedWorkflow(ev.currentTarget);
-    const shouldDeactivate =
-      this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === workflow.workflowid;
-    const change = {
-      detailId: shouldDeactivate ? null : workflow.workflowid,
-      tabId: shouldDeactivate ? null : this.context.params.tabId,
-    };
-
-    goTo(
-      this.context.router,
-      'workflows',
-      this.context.route.path,
-      this.context.params,
-      change,
-      this.context.location.query
-    );
   }
 
   /**
@@ -410,6 +377,12 @@ export default class WorkflowsTable extends Component {
    */
   *renderRows({ activeId, workflows, selectedWorkflows }) {
     for (const workflow of workflows) {
+      const handleRowClick = (e) => {
+        if (e.defaultPrevented) return;
+
+        this.props.openPane(workflow.workflowid);
+      };
+
       yield (
         <Row
           key={workflow.workflowid}
@@ -418,7 +391,7 @@ export default class WorkflowsTable extends Component {
             selected: selectedWorkflows[workflow.workflowid],
           }}
           cells={this._renderCells}
-          onClick={this._activateWorkflow}
+          onClick={handleRowClick}
           highlight={workflow._updated}
           onHighlightEnd={this.handleHighlightEnd(workflow.workflowid)}
           className={classNames({

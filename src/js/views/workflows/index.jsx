@@ -1,27 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-
-// utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, includes } from 'lodash';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 import { goTo } from '../../helpers/router';
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
+import withPane from '../../hocomponents/pane';
+import sync from '../../hocomponents/sync';
+import patch from '../../hocomponents/patchFuncArgs';
 import { sortDefaults } from '../../constants/sort';
-// data
 import actions from '../../store/api/actions';
-
-// components
-import Loader from '../../components/loader';
-import Pane from '../../components/pane';
-
-// partials
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
-
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 import { DATE_FORMATS } from '../../constants/dates';
 import {
@@ -121,6 +115,7 @@ const viewSelector = createSelector(
   (workflows, errors, info, collection, systemOptions, globalErrors) => ({
     sync: workflows.sync,
     loading: workflows.loading,
+    meta: workflows,
     workflows: collection,
     errors,
     info,
@@ -130,12 +125,35 @@ const viewSelector = createSelector(
 );
 
 @compose(
-  connect(viewSelector),
+  connect(
+    viewSelector,
+    {
+      load: actions.workflows.fetch,
+      fetch: actions.workflows.fetch,
+    }
+  ),
+  mapProps(({ params, ...rest }) => ({
+    fetchParams: getFetchParams(params.filter, params.date),
+    params,
+    ...rest,
+  })),
+  patch('load', ['fetchParams']),
+  sync('meta'),
+  withPane(
+    WorkflowsDetail,
+    [
+      'errors',
+      'systemOptions',
+      'globalErrors',
+      'location',
+    ],
+    'detail'
+  ),
   sort(
     'workflows',
     'workflows',
     sortDefaults.workflows
-  )
+  ),
 )
 export default class Workflows extends Component {
   static propTypes = {
@@ -144,8 +162,6 @@ export default class Workflows extends Component {
     workflows: PropTypes.array,
     errors: PropTypes.object,
     info: PropTypes.object,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
     systemOptions: PropTypes.array,
     globalErrors: PropTypes.array,
     sortData: PropTypes.object,
@@ -162,12 +178,15 @@ export default class Workflows extends Component {
     onBatchAction: PropTypes.func,
     selectedData: PropTypes.object,
     selected: PropTypes.string,
-    onPaneClose: PropTypes.func,
     getActiveRow: PropTypes.func,
     onAllClick: PropTypes.func,
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
+    paneId: PropTypes.number,
+    openPane: PropTypes.func,
+    changePaneTab: PropTypes.func,
+    fetch: PropTypes.func,
   };
 
   static contextTypes = {
@@ -195,14 +214,7 @@ export default class Workflows extends Component {
       location: this.props.location,
       params: this.props.params,
       route: this.props.route,
-      dispatch: this.props.dispatch,
     };
-  }
-
-  componentWillMount() {
-    const fetchParams = getFetchParams(this.props.params.filter, this.props.params.date);
-
-    this.props.dispatch(actions.workflows.fetch(fetchParams));
   }
 
   componentDidMount() {
@@ -215,7 +227,7 @@ export default class Workflows extends Component {
       const fetchParams = getFetchParams(next.params.filter, next.params.date);
 
       this.props.clearSelection();
-      this.props.dispatch(actions.workflows.fetch(fetchParams));
+      this.props.fetch(fetchParams);
     }
   }
 
@@ -310,33 +322,7 @@ export default class Workflows extends Component {
     this.props.onCSVClick(collection, 'workflows');
   };
 
-  renderPane() {
-    const { params, errors, systemOptions, globalErrors } = this.props;
-
-    if (!this.props.getActiveRow(this.props.workflows)) return null;
-
-    return (
-      <Pane
-        width={550}
-        onClose={this.props.onPaneClose}
-      >
-        <WorkflowsDetail
-          workflow={this.props.getActiveRow(this.props.workflows)}
-          systemOptions={systemOptions}
-          errors={errors[this.props.getActiveRow(this.props.workflows).id] || []}
-          globalErrors={globalErrors}
-          tabId={params.tabId}
-          location={this.props.location}
-        />
-      </Pane>
-    );
-  }
-
   render() {
-    if (!this.props.sync || this.props.loading) {
-      return <Loader />;
-    }
-
     return (
       <div>
         <WorkflowsToolbar
@@ -358,14 +344,14 @@ export default class Workflows extends Component {
           initialFilter={this.props.filterFn}
           onWorkflowFilterChange={this.props.onDataFilterChange}
           workflows={this.props.workflows}
-          activeWorkflowId={parseInt(this.props.params.detailId, 10)}
+          activeWorkflowId={parseInt(this.props.paneId, 10)}
           setSelectedWorkflows={this.props.setSelectedData}
           selectedWorkflows={this.props.selectedData}
           onSortChange={this.props.onSortChange}
           sortData={this.props.sortData}
           linkDate={this.getDate()}
+          openPane={this.props.openPane}
         />
-        {this.renderPane()}
       </div>
     );
   }

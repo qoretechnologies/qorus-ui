@@ -40,8 +40,8 @@ class CompWithContext extends Component {
 }
 
 describe('pane from hocomponents/pane', () => {
-  const ActualComp = ({ openPane }: { openPane: Function }) => (
-    <div onClick={openPane} />
+  const ActualComp = () => (
+    <div />
   );
 
   type Props = {
@@ -49,10 +49,11 @@ describe('pane from hocomponents/pane', () => {
     openPane: Function,
     paneId: string,
     width: number,
+    changePaneTab: Function,
   }
 
-  const PaneComp = ({ onClose, paneId, width }: Props) => (
-    <Pane width={width} onClose={onClose}>
+  const PaneComp = ({ onClose, changePaneTab, paneId, width }: Props) => (
+    <Pane width={width} onClose={onClose} changePaneTab={changePaneTab}>
       This is pane - { paneId }
     </Pane>
   );
@@ -104,7 +105,9 @@ describe('pane from hocomponents/pane', () => {
     expect(wrapper.find(Pane)).to.have.length(1);
     expect(wrapper.find(Pane).props().width).to.eql(400);
     expect(wrapper.find(Pane).props().onClose).to.be.a('function');
+    expect(wrapper.find(Pane).props().changePaneTab).to.be.a('function');
     expect(wrapper.find(Pane).find('.pane__content').text()).to.eql('This is pane - testPane');
+    expect(wrapper.find(ActualComp).props().openPane).to.be.a('function');
   });
 
   it('renders the pane when openPane is called with id', () => {
@@ -132,6 +135,61 @@ describe('pane from hocomponents/pane', () => {
     expect(url).to.eql('localhost:3000/system/rbac/users?q=searchQuery&paneId=testPane');
   });
 
+  it('opens the pane on a default tab when specified', () => {
+    const Comp = compose(
+      defaultProps({
+        width: 400,
+        location: {
+          query: {
+            q: 'searchQuery',
+          },
+          pathname: 'localhost:3000/system/rbac/users',
+        },
+      }),
+      withPane(PaneComp, ['width'], 'testTab')
+    )(ActualComp);
+
+    const wrapper = mount(
+      <CompWithContext>
+        <Comp />
+      </CompWithContext>
+    );
+
+    wrapper.find(ActualComp).props().openPane('testPane');
+
+    expect(url).to.eql(
+      'localhost:3000/system/rbac/users?q=searchQuery&paneId=testPane&paneTab=testTab'
+    );
+  });
+
+  it('changes the pane tab', () => {
+    const Comp = compose(
+      defaultProps({
+        width: 400,
+        location: {
+          query: {
+            q: 'searchQuery',
+            paneId: 'testPane',
+          },
+          pathname: 'localhost:3000/system/rbac/users',
+        },
+      }),
+      withPane(PaneComp, ['width'], 'testTab')
+    )(ActualComp);
+
+    const wrapper = mount(
+      <CompWithContext>
+        <Comp />
+      </CompWithContext>
+    );
+
+    wrapper.find(Pane).props().changePaneTab('anotherTab');
+
+    expect(url).to.eql(
+      'localhost:3000/system/rbac/users?q=searchQuery&paneId=testPane&paneTab=anotherTab'
+    );
+  });
+
   it('closes the pane and modifies the url', () => {
     const Comp = compose(
       defaultProps({
@@ -144,7 +202,7 @@ describe('pane from hocomponents/pane', () => {
           pathname: 'localhost:3000/system/rbac/users',
         },
       }),
-      withPane(PaneComp, ['width'])
+      withPane(PaneComp, ['width'], 'testTab')
     )(ActualComp);
 
     const wrapper = mount(

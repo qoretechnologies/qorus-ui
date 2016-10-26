@@ -1,25 +1,25 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+
 import AutoStart from '../../../components/autostart';
 import WorkflowsControls from '../controls';
 
-import { pureRender } from 'components/utils';
-
 import actions from 'store/api/actions';
 
-@pureRender
+@connect(
+  () => ({}),
+  {
+    setAutostart: actions.workflows.setAutostart,
+  }
+)
 export default class WorkflowsHeader extends Component {
   static propTypes = {
     workflow: PropTypes.object,
-  };
-
-  static contextTypes = {
-    dispatch: PropTypes.func.isRequired,
+    setAutostart: PropTypes.func,
   };
 
   setAutostart = (context, value) => {
-    this.context.dispatch(
-      actions.workflows.setAutostart(context, value)
-    );
+    this.props.setAutostart(context, value);
   };
 
   render() {

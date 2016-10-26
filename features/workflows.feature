@@ -24,7 +24,7 @@ Feature: Workflows
     Then I should see "workflow" detail pane
     And I should see "workflow" details tab
     And I should see activated row highlighted
-
+    
   Scenario: Closing detail pane
     Given I am on "workflows" listing
     And I have "ARRAYTEST" workflow open
