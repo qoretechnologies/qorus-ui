@@ -167,7 +167,7 @@ export default class LibraryView extends Component {
   renderTable(): ?React.Element<any> {
     const { functions, classes, constants, height } = this.state;
 
-    if (!functions || !classes || !constants || !height) {
+    if (!functions || !classes || !constants) {
       return <Loader />;
     }
 
