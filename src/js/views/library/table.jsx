@@ -22,8 +22,8 @@ const LibraryTable: Function = (
     >
       <Section type="head">
         <Row>
-          <Cell tag="th"> ID </Cell>
           <Cell tag="th"> Name </Cell>
+          <Cell tag="th"> ID </Cell>
           <Cell tag="th"> Version </Cell>
         </Row>
       </Section>
@@ -36,8 +36,8 @@ const LibraryTable: Function = (
             id={c.id}
             active={active}
           >
+            <Cell className="name">{ c.name }</Cell>
             <Cell>{ c.id }</Cell>
-            <Cell>{ c.name }</Cell>
             <Cell>{ c.version }</Cell>
           </LibraryRow>
         )) }
