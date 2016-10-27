@@ -130,6 +130,12 @@ const viewSelector = createSelector(
     {
       load: actions.workflows.fetch,
       fetch: actions.workflows.fetch,
+      enable: actions.workflows.enableBatch,
+      disable: actions.workflows.disableBatch,
+      setDeprecated: actions.workflows.setDeprecatedBatch,
+      unsetDeprecated: actions.workflows.unsetDeprecatedBatch,
+      reset: actions.workflows.resetBatch,
+      actions: actions.workflows,
     }
   ),
   mapProps(({ params, ...rest }) => ({
@@ -157,7 +163,6 @@ const viewSelector = createSelector(
 )
 export default class Workflows extends Component {
   static propTypes = {
-    dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
     workflows: PropTypes.array,
     errors: PropTypes.object,
@@ -187,11 +192,17 @@ export default class Workflows extends Component {
     openPane: PropTypes.func,
     changePaneTab: PropTypes.func,
     fetch: PropTypes.func,
+    enable: PropTypes.func,
+    disable: PropTypes.func,
+    setDeprecated: PropTypes.func,
+    unsetDeprecated: PropTypes.func,
+    reset: PropTypes.func,
   };
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   static childContextTypes = {
@@ -310,9 +321,26 @@ export default class Workflows extends Component {
     });
 
     this.props.clearSelection();
-    this.props.dispatch(
-      actions.workflows[`${type}Batch`](selectedData)
-    );
+
+    switch (type) {
+      case 'enable':
+        this.props.enable(selectedData);
+        break;
+      case 'disable':
+        this.props.disable(selectedData);
+        break;
+      case 'setDeprecated':
+        this.props.setDeprecated(selectedData);
+        break;
+      case 'unsetDeprecated':
+        this.props.unsetDeprecated(selectedData);
+        break;
+      case 'reset':
+        this.props.reset(selectedData);
+        break;
+      default:
+        break;
+    }
   };
 
   handleCSVClick = () => {
