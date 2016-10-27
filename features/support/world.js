@@ -244,6 +244,24 @@ class World {
     event.keyCode = key;
     const tr = this.browser.window.document.querySelector(target);
     tr && tr.dispatchEvent(event);
+  };
+
+  keyDown = async (target, key) => {
+    const event = this.browser.window.document.createEvent('HTMLEvents');
+    event.initEvent('keydown', true, true);
+    event.which = key;
+    event.keyCode = key;
+    const tr = this.browser.window.document.querySelector(target);
+    tr && tr.dispatchEvent(event);
+  };
+
+  keyPress = async (target, key) => {
+    const event = this.browser.window.document.createEvent('HTMLEvents');
+    event.initEvent('keypress', true, true);
+    event.which = key;
+    event.keyCode = key;
+    const tr = this.browser.window.document.querySelector(target);
+    tr && tr.dispatchEvent(event);
   }
 }
 

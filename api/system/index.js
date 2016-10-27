@@ -78,6 +78,7 @@ module.exports = () => {
     if (action === 'call') {
       switch (method) {
         case 'help':
+        case 'omq.system.help':
           res.json(data.api);
           break;
         default:

@@ -86,6 +86,10 @@ export default class OCMDView extends Component {
     }
   }
 
+  componentDidUpdate(prevProps: Object, prevState: Object) {
+    if (size(prevState.collection) === 0 && this.refs.command) this.refs.command.focus();
+  }
+
   handleDropdownItemClick: Function = (event: Object, value: string): void => {
     this.setState({
       value,
@@ -247,12 +251,13 @@ export default class OCMDView extends Component {
                   { this.renderCommands() }
                 </Dropdown>
                 <form
-                  className="pull-left"
+                  className="pull-left ocmd"
                   onSubmit={this.handleFormSubmit}
                 >
                   <input
                     type="text"
                     className="form-control ocmd-input"
+                    name="ocmd-command"
                     onChange={this.handleInputChange}
                     onKeyDown={this.handleInputKeyPress}
                     placeholder="Type or select command..."
@@ -262,6 +267,7 @@ export default class OCMDView extends Component {
                   <input
                     type="text"
                     className="form-control ocmd-input"
+                    name="ocmd-args"
                     ref="args"
                     onChange={this.handleArgsChange}
                     placeholder="Arguments..."
