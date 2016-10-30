@@ -183,7 +183,7 @@ export default class Root extends Component {
             extraItems={[]}
           />
           <section>
-            <div className="container-fluid">
+            <div className="container-fluid" id="content-wrapper">
               {this.props.children}
             </div>
           </section>

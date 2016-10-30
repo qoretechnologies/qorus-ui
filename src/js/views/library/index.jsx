@@ -57,6 +57,7 @@ export default class LibraryView extends Component {
     classes: (null: ?Array<Object>),
     constants: (null: ?Array<Object>),
     type: (null: ?string),
+    height: (0: number),
   };
 
   componentWillMount() {
@@ -80,8 +81,35 @@ export default class LibraryView extends Component {
         classes,
         constants,
       });
+
+      this.updateHeight();
+
+      window.addEventListener('resize', () => {
+        this.updateHeight();
+      });
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => {
+      this.updateHeight();
+    });
+  }
+
+  updateHeight: Function = (): void => {
+    const height = this.getHeight();
+
+    this.setState({
+      height,
+    });
+  };
+
+  getHeight: Function = (): number => {
+    const content = document.querySelector('#content-wrapper').clientHeight;
+    const toolbar = document.querySelector('#workflows-toolbar').clientHeight;
+
+    return content - (toolbar + 20);
+  };
 
   filterData: Function = (fn: Function): Function =>
     (collection: Array<Object>): Array<Object> => (
@@ -136,35 +164,67 @@ export default class LibraryView extends Component {
     id === this.state.id && type === this.state.type
   );
 
-  renderSource(): ?React.Element<SourceCode> {
-    if (!this.state.id || !this.state.type) return undefined;
-
-    const { id, type } = this.state;
-    const item: ?Object = this.props[type].find(d => d.id === id);
-
-    if (!item || !item.body) return <Loader />;
-
-    return (
-      <div>
-        <h4>
-          { item.name }
-          {' '}
-          <small>{ item.version }</small>
-        </h4>
-        <SourceCode>
-          { item.body }
-        </SourceCode>
-      </div>
-    );
-  }
-
-  render(): React.Element<any> {
-    const { functions, classes, constants } = this.state;
+  renderTable(): ?React.Element<any> {
+    const { functions, classes, constants, height } = this.state;
 
     if (!functions || !classes || !constants) {
       return <Loader />;
     }
 
+    return (
+      <div
+        className="col-sm-3 pane-lib__fns"
+        style={{ height: `${height}px` }}
+      >
+        <div className="well well-sm">
+          <LibraryTable
+            name="Constants"
+            collection={this.state.constants}
+            onClick={this.handleRowClick}
+            active={this.isActive}
+          />
+          <LibraryTable
+            name="Functions"
+            collection={this.state.functions}
+            onClick={this.handleRowClick}
+            active={this.isActive}
+          />
+          <LibraryTable
+            name="Classes"
+            collection={this.state.classes}
+            onClick={this.handleRowClick}
+            active={this.isActive}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  renderSource(): ?React.Element<SourceCode> {
+    if (!this.state.id || !this.state.type) return undefined;
+
+    const { id, type, height } = this.state;
+    const item: ?Object = this.props[type].find(d => d.id === id);
+
+    if (!item || !item.body) return <Loader />;
+
+    return (
+      <div className="col-sm-9 pane-lib__src">
+        <div>
+          <h4>
+            { item.name }
+            {' '}
+            <small>{ item.version }</small>
+          </h4>
+          <SourceCode height={height - 39}>
+            { item.body }
+          </SourceCode>
+        </div>
+      </div>
+    );
+  }
+
+  render(): React.Element<any> {
     return (
       <div className="library-view__wrapper">
         <Toolbar>
@@ -174,32 +234,9 @@ export default class LibraryView extends Component {
             defaultValue={this.state.searchValue}
           />
         </Toolbar>
-        <div className="row pane-lib">
-          <div className="col-sm-3 pane-lib__fns">
-            <div className="well well-sm">
-              <LibraryTable
-                name="Constants"
-                collection={this.state.constants}
-                onClick={this.handleRowClick}
-                active={this.isActive}
-              />
-              <LibraryTable
-                name="Functions"
-                collection={this.state.functions}
-                onClick={this.handleRowClick}
-                active={this.isActive}
-              />
-              <LibraryTable
-                name="Classes"
-                collection={this.state.classes}
-                onClick={this.handleRowClick}
-                active={this.isActive}
-              />
-            </div>
-          </div>
-          <div className="col-sm-9 pane-lib__src">
-            { this.renderSource() }
-          </div>
+        <div className="row">
+          { this.renderTable() }
+          { this.renderSource() }
         </div>
       </div>
     );

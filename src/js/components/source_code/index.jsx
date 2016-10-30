@@ -25,6 +25,7 @@ export default class SourceCode extends Component {
   static propTypes = {
     lineOffset: PropTypes.number,
     children: PropTypes.string,
+    height: PropTypes.number,
   };
 
   static defaultProps = {
@@ -52,7 +53,7 @@ export default class SourceCode extends Component {
 
   bindCodeRef = code => {
     this.code = code;
-  }
+  };
 
   /**
    * Returns element for this component.
@@ -85,6 +86,9 @@ export default class SourceCode extends Component {
             'source-code__code--wrap': this.state.wrapLines,
             'language-qore': true,
           })}
+          style={{
+            maxHeight: this.props.height || 'auto',
+          }}
         >
           <code
             className="language-qore"
