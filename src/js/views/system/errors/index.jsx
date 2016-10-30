@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
@@ -8,11 +8,16 @@ import defaultProps from 'recompose/defaultProps';
 import Table, { Section, Row, Cell } from '../../../components/table';
 import Shorten from '../../../components/shorten';
 import AutoComponent from '../../../components/autocomponent';
+import Toolbar from '../../../components/toolbar';
+import Search from '../../../components/search';
 import patch from '../../../hocomponents/patchFuncArgs';
 import sort from '../../../hocomponents/sort';
 import sync from '../../../hocomponents/sync';
+import search from '../../../hocomponents/search';
 import apiActions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
+import { querySelector } from '../../../selectors/';
+import { findBy } from '../../../helpers/search';
 
 const errorsMetaSelector = (state: Object): Object => {
   if (state.api.errors.global) {
@@ -34,12 +39,29 @@ const errorsSelector = (state: Object): Array<Object> => {
   return col;
 };
 
-const viewSelector = createSelector(
+const filterErrors: Function = (query: string): Function =>
+  (collection: Array<Object>): Array<Object> => (
+  findBy(['error', 'severity', 'type', 'description'], query, collection)
+);
+
+const errors = createSelector(
   [
     errorsSelector,
+    querySelector('q'),
+  ], (err, q) => filterErrors(q)(err)
+);
+
+const viewSelector = createSelector(
+  [
+    errors,
     errorsMetaSelector,
+    querySelector('q'),
   ],
-  (collection: Array<Object>, meta: Object): Object => ({ meta, collection })
+  (collection: Array<Object>, meta: Object, query: string): Object => ({
+    meta,
+    collection,
+    query,
+  })
 );
 
 @compose(
@@ -58,20 +80,18 @@ const viewSelector = createSelector(
     'collection',
     sortDefaults.errors
   ),
-  sync('meta')
+  sync('meta'),
+  search()
 )
 export default class Errors extends Component {
-  static propTypes = {
-    collection: PropTypes.array.isRequired,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-  };
-
   props: {
     collection: Array<Object>,
     sortData: Object,
     onSortChange: Function,
-  }
+    query: string,
+    onSearchChange: Function,
+    defaultSearchValue: number | string,
+  };
 
   componentWillMount() {
     this._renderHeadingRow = this.renderHeadingRow.bind(this);
@@ -229,13 +249,21 @@ export default class Errors extends Component {
 
   render() {
     return (
-      <Table
-        data={ this.props.collection }
-        className="table table-condensed table-striped table--data"
-      >
-        <Section type="head" rows={this._renderHeadingRow} />
-        <Section type="body" data={ this.props.collection } rows={this._renderRows} />
-      </Table>
+      <div className="tab-pane active">
+        <Toolbar>
+          <Search
+            onSearchUpdate={this.props.onSearchChange}
+            defaultValue={this.props.defaultSearchValue}
+          />
+        </Toolbar>
+        <Table
+          data={ this.props.collection }
+          className="table table-condensed table-striped table--data"
+        >
+          <Section type="head" rows={this._renderHeadingRow} />
+          <Section type="body" data={ this.props.collection } rows={this._renderRows} />
+        </Table>
+      </div>
     );
   }
 }

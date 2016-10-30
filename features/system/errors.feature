@@ -16,3 +16,9 @@ Feature: Check errors page
     And "errors" get loaded
     When I click on the "Business" column header
     Then errors are sorted by "Business" "desc" and "Error" "desc"
+  
+  Scenario: Filters errors when search input changes
+    Given I am on "system/errors" page
+    And "errors" get loaded
+    When I type "timeout" in the search input
+    Then "5" "errors" are shown
