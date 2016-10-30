@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import omit from 'lodash/omit';
 
 import { pureRender } from '../utils';
 import { Control } from '../controls';
@@ -224,9 +225,7 @@ export default class EditableCell extends Component {
    * @return {ReactElement}
    */
   render() {
-    const props = Object.assign({}, this.props);
-    delete props.value;
-    delete props.onSave;
+    const props = omit(this.props, ['value', 'onSave', 'startEdit', 'onCancel', 'showControl']);
 
     return (
       <td

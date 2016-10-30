@@ -20,10 +20,10 @@ export default class Controls extends Component {
   };
 
   props: {
-    grouped: boolean,
+    grouped?: boolean,
     controls: Array<React.Element<Control>>,
     children: Array<React.Element<any>>,
-    noControls: boolean,
+    noControls?: boolean,
   };
 
   /**
