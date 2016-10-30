@@ -188,7 +188,10 @@ export default class Workflows extends Component {
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
-    paneId: PropTypes.number,
+    paneId: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
     openPane: PropTypes.func,
     changePaneTab: PropTypes.func,
     fetch: PropTypes.func,
@@ -202,14 +205,12 @@ export default class Workflows extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
   };
 
   static childContextTypes = {
     location: PropTypes.object,
     params: PropTypes.object,
     route: PropTypes.object,
-    dispatch: PropTypes.func,
   };
 
   state = {

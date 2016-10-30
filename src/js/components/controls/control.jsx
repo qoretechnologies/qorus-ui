@@ -10,19 +10,19 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Control extends Component {
   props: {
-    title: string,
-    label: string,
+    title?: string,
+    label?: string,
     btnStyle: string,
-    icon: string,
-    action: () => void,
-    onClick: () => void,
-    stopPropagation: boolean,
-    disabled: boolean,
-    big: boolean,
-    type: string,
-    css: Object,
+    icon?: string,
+    action?: () => void,
+    onClick?: () => void,
+    stopPropagation?: boolean,
+    disabled?: boolean,
+    big?: boolean,
+    type?: string,
+    css?: Object,
     id?: string,
-    className: string,
+    className?: string,
     children?: React.Element<*> | Array<React.Element<*>>,
   };
 

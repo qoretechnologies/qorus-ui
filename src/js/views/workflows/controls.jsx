@@ -1,29 +1,37 @@
-import React, { Component, PropTypes } from 'react';
-import { Controls, Control } from 'components/controls';
+/* @flow */
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { pureRender } from 'components/utils';
+import { Controls, Control } from '../../components/controls';
+import actions from '../../store/api/actions';
 
-import actions from 'store/api/actions';
-
-@pureRender
-export default class WorkflowsControls extends Component {
-  static propTypes = {
-    workflow: PropTypes.object,
-  };
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
-  dispatchAction(action) {
-    this.context.dispatch(
-      actions.workflows[action](this.props.workflow)
-    );
+@connect(
+  () => ({}),
+  {
+    enable: actions.workflows.enable,
+    disable: actions.workflows.disable,
+    reset: actions.workflows.reset,
   }
+)
+export default class WorkflowsControls extends Component {
+  props: {
+    workflow: number,
+    enable: Function,
+    disable: Function,
+    reset: Function,
+  };
 
-  dispatchDisable = () => this.dispatchAction('disable');
-  dispatchEnable = () => this.dispatchAction('enable');
-  dispatchReset = () => this.dispatchAction('reset');
+  handleDisableClick: Function = (): void => {
+    this.props.disable(this.props.workflow);
+  };
+
+  handleEnableClick: Function = (): void => {
+    this.props.enable(this.props.workflow);
+  };
+
+  handleResetClick: Function = (): void => {
+    this.props.reset(this.props.workflow);
+  };
 
   render() {
     return (
@@ -33,7 +41,7 @@ export default class WorkflowsControls extends Component {
             title="Disable"
             icon="power-off"
             btnStyle="success"
-            action={this.dispatchDisable}
+            onClick={this.handleDisableClick}
           />
         )}
         {!this.props.workflow.enabled && (
@@ -41,14 +49,14 @@ export default class WorkflowsControls extends Component {
             title="Enable"
             icon="power-off"
             btnStyle="danger"
-            action={this.dispatchEnable}
+            onClick={this.handleEnableClick}
           />
         )}
         <Control
           title="Reset"
           icon="refresh"
           btnStyle="warning"
-          action={this.dispatchReset}
+          onClick={this.handleResetClick}
         />
       </Controls>
     );

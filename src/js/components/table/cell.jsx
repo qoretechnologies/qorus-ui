@@ -16,6 +16,7 @@ export default class Cell extends Component {
     className: PropTypes.string,
     sortData: PropTypes.object,
     colspan: PropTypes.number,
+    onClick: PropTypes.func,
   };
 
   static defaultProps = {
@@ -48,6 +49,8 @@ export default class Cell extends Component {
     if (this.props.tag === 'th' && this.props.onSortChange) {
       this.props.onSortChange({ sortBy: this.props.name });
     }
+
+    if (this.props.onClick) this.props.onClick();
   };
 
   /**

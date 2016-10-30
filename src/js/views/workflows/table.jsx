@@ -320,7 +320,10 @@ export default class WorkflowsTable extends Component {
     for (const state of ORDER_STATES) {
       yield (
         <Cell className="narrow">
-          <Link to={`/workflow/${workflow.workflowid}/list/${state.title}/${this.props.linkDate}`}>
+          <Link
+            className="workflow-status-link"
+            to={`/workflow/${workflow.workflowid}/list/${state.title}/${this.props.linkDate}`}
+          >
             <Badge label={state.label} val={workflow[state.name]} />
           </Link>
         </Cell>
