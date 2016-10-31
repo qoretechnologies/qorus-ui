@@ -9,6 +9,7 @@ import mapProps from 'recompose/mapProps';
 
 import Pane from '../../../../components/pane';
 import Search from '../../../../components/search';
+import Autocomponent from '../../../../components/autocomponent';
 import { Control as Button } from '../../../../components/controls';
 import search from '../../../../hocomponents/search';
 import Table from './table';
@@ -19,7 +20,7 @@ import { querySelector } from '../../../../selectors';
 type Props = {
   onClose: Function,
   paneId: number,
-  valuemaps: Object,
+  valuemap: Object,
   onSearchChange: Function,
   defaultSearchValue: string,
   adding: boolean,
@@ -31,7 +32,7 @@ type Props = {
 const ValuemapsPane: Function = ({
   onClose,
   paneId,
-  valuemaps,
+  valuemap,
   onSearchChange,
   defaultSearchValue,
   adding,
@@ -44,7 +45,13 @@ const ValuemapsPane: Function = ({
     width={500}
     onClose={onClose}
   >
-    <h3>{valuemaps.data.find((vm: Object): boolean => vm.id === parseInt(paneId, 10)).name}</h3>
+    <h3>{valuemap.name}</h3>
+    <p>{valuemap.description}</p>
+    <p>
+      Type: <code>{valuemap.valuetype}</code>
+      {' | '}
+      Throws exception: <Autocomponent>{valuemap.throws_exception}</Autocomponent>
+    </p>
     <Search
       onSearchUpdate={onSearchChange}
       defaultValue={defaultSearchValue}
@@ -78,8 +85,10 @@ export default compose(
     }
   ),
   withState('adding', 'setAdding', false),
-  mapProps(({ setAdding, ...rest }): Object => ({
+  mapProps(({ setAdding, valuemaps, paneId, ...rest }): Object => ({
     toggleAdding: () => setAdding((adding: boolean): boolean => !adding),
+    valuemap: valuemaps.data.find((vm: Object): boolean => vm.id === parseInt(paneId, 10)),
+    paneId,
     ...rest,
   })),
   withHandlers({
