@@ -12,6 +12,7 @@ import AutoComponent from '../../../components/autocomponent';
 import ModalPing from './modals/ping';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
+import checkNoData from '../../../hocomponents/check-no-data';
 
 import actions from '../../../store/api/actions';
 import { browserHistory } from 'react-router';
@@ -207,14 +208,6 @@ class Connections extends Component {
   }
 
   render() {
-    if (this.props.collection.length === 0) {
-      return (
-        <div className="tab-pane active">
-          <p>No alerts found</p>
-        </div>
-      );
-    }
-
     const data: Object = {
       activeId: this.props.params.id,
       collection: this.props.collection,
@@ -256,5 +249,6 @@ export default compose(
   ),
   defaultProps({ query: { action: 'all' } }),
   patch('load', ['query']),
-  sync('remotes')
+  sync('remotes'),
+  checkNoData(({ collection }: { collection: Array<Object> }): boolean => collection.length)
 )(Connections);
