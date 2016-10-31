@@ -15,8 +15,8 @@ const LocalInfo = ({ health }: { health: Object }) => (
         {health.data.health}
       </Label>
     </HealthItem>
-    <HealthItem title="Ongoing">{health.data.ongoing}</HealthItem>
-    <HealthItem title="Transient">{health.data.transient}</HealthItem>
+    <HealthItem link title="Ongoing">{health.data.ongoing}</HealthItem>
+    <HealthItem link title="Transient">{health.data.transient}</HealthItem>
   </Health>
 );
 
