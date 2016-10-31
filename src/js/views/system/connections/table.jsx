@@ -250,5 +250,5 @@ export default compose(
   defaultProps({ query: { action: 'all' } }),
   patch('load', ['query']),
   sync('remotes'),
-  checkNoData(({ collection }: { collection: Array<Object> }): boolean => collection.length)
+  checkNoData(({ collection }: { collection: Array<Object> }): number => collection.length)
 )(Connections);
