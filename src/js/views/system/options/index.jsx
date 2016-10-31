@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -10,10 +10,10 @@ import { sortDefaults } from '../../../constants/sort';
 import actions from 'store/api/actions';
 
 import { findBy } from '../../../helpers/search';
-import { goTo } from '../../../helpers/router';
 import { hasPermission } from '../../../helpers/user';
 import sort from '../../../hocomponents/sort';
-
+import search from '../../../hocomponents/search';
+import modal from '../../../hocomponents/modal';
 import Badge from '../../../components/badge';
 import Table, { Section, Row, Cell } from '../../../components/table';
 import Toolbar from '../../../components/toolbar';
@@ -21,54 +21,62 @@ import Search from '../../../components/search';
 import OptionModal from './modal';
 import { Control } from '../../../components/controls';
 import Shorten from '../../../components/shorten';
+import { querySelector, resourceSelector } from '../../../selectors';
 
-const filterOptions = search => collection => (
-  findBy(['name', 'default', 'expects', 'value', 'description'], search, collection)
+const filterOptions = srch => collection => (
+  findBy(['name', 'default', 'expects', 'value', 'description'], srch, collection)
 );
-
-const optionsSelector = state => state.api.systemOptions;
-const searchSelector = (state, props) => props.location.query.q;
-const userSelector = state => state.api.currentUser;
 
 const collectionSelector = createSelector(
   [
-    optionsSelector,
-    searchSelector,
-  ], (options, search) => flowRight(
-    filterOptions(search)
+    resourceSelector('systemOptions'),
+    querySelector('q'),
+  ], (options, s) => flowRight(
+    filterOptions(s)
   )(options.data)
 );
 
 const viewSelector = createSelector(
   [
-    optionsSelector,
+    resourceSelector('systemOptions'),
     collectionSelector,
-    userSelector,
+    resourceSelector('currentUser'),
+    querySelector('q'),
   ],
-  (options, collection, user) => ({
+  (options, collection, user, query) => ({
     collection,
     options,
     user,
+    query,
   })
 );
 
-class Options extends Component {
-  static propTypes = {
-    load: PropTypes.func.isRequired,
-    collection: PropTypes.array,
-    params: PropTypes.object,
-    location: PropTypes.object,
-    route: PropTypes.object,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    user: PropTypes.object,
-    setOption: PropTypes.func,
-  };
-
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    router: PropTypes.object,
+@compose(
+  connect(
+    viewSelector,
+    {
+      setOption: actions.systemOptions.setOption,
+      load: actions.systemOptions.fetch,
+    }
+  ),
+  sort('options', 'collection', sortDefaults.options),
+  sync('options'),
+  search(),
+  modal(),
+)
+export default class Options extends Component {
+  props: {
+    load: Function,
+    collection: Array<Object>,
+    params: Object,
+    sortData: Object,
+    onSortChange: Function,
+    user: Object,
+    setOption: Function,
+    onSearchChange: Function,
+    defaultSearchValue: Function,
+    openModal: Function,
+    closeModal: Function,
   };
 
   componentWillMount() {
@@ -81,41 +89,19 @@ class Options extends Component {
     this.renderSections = ::this.renderSections;
   }
 
-  handleModalClose = () => {
-    this.context.closeModal(this._modal);
-  };
-
-  /**
-   * Applies the current filter to the URL
-   *
-   * @param {String} q
-   */
-  handleSearchChange = (q) => {
-    goTo(
-      this.context.router,
-      'system/options',
-      `system/${this.props.route.path}`,
-      this.props.params,
-      {},
-      { q },
-    );
-  };
-
   handleEditClick = (model) => () => {
-    this._modal = (
+    this.props.openModal(
       <OptionModal
-        onCloseClick={this.handleModalClose}
+        onCloseClick={this.props.closeModal}
         onSaveClick={this.handleSaveClick}
         model={model}
       />
     );
-
-    this.context.openModal(this._modal);
   };
 
   handleSaveClick = async (model, value) => {
     await this.props.setOption(model.name, value);
-    this.context.closeModal(this._modal);
+    this.props.closeModal();
   };
 
   *renderHeaders() {
@@ -199,16 +185,19 @@ class Options extends Component {
     yield (
       <Cell className="nowrap">
         <Badge
+          title="Workflow"
           val="W"
           label={model.workflow ? 'checked' : 'unchecked'}
         />
         {' '}
         <Badge
+          title="Service"
           val="S"
           label={model.service ? 'checked' : 'unchecked'}
         />
         {' '}
         <Badge
+          title="Job"
           val="J"
           label={model.job ? 'checked' : 'unchecked'}
         />
@@ -275,15 +264,15 @@ class Options extends Component {
   }
 
   render() {
-    const { collection, location } = this.props;
+    const { collection, defaultSearchValue, onSearchChange } = this.props;
 
     return (
       <div className="tab-pane active">
         <div className="container-fluid">
           <Toolbar>
             <Search
-              defaultValue={location.query.q}
-              onSearchUpdate={this.handleSearchChange}
+              defaultValue={defaultSearchValue}
+              onSearchUpdate={onSearchChange}
             />
           </Toolbar>
           <Table
@@ -296,15 +285,3 @@ class Options extends Component {
     );
   }
 }
-
-export default compose(
-  connect(
-    viewSelector,
-    {
-      setOption: actions.systemOptions.setOption,
-      load: actions.systemOptions.fetch,
-    }
-  ),
-  sort('options', 'collection', sortDefaults.options),
-  sync('options'),
-)(Options);

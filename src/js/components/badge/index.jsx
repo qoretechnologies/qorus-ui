@@ -23,6 +23,7 @@ export default class Badge extends Component {
     url?: string,
     val: number | string,
     label: string,
+    title?: string,
   };
 
   /**
@@ -33,6 +34,7 @@ export default class Badge extends Component {
   renderValue() {
     return (
       <span
+        title={this.props.title}
         className={classNames({
           badge: this.props.val || false,
           [`alert-${this.props.label}`]: this.props.label && this.props.val || false,
@@ -51,7 +53,7 @@ export default class Badge extends Component {
    */
   render() {
     return this.props.url ? (
-      <a href={this.props.url}>{this.renderValue()}</a>
+      <a title={this.props.title} href={this.props.url}>{this.renderValue()}</a>
     ) : (
       this.renderValue()
     );
