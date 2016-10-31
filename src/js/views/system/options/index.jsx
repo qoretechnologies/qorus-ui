@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -10,7 +10,6 @@ import { sortDefaults } from '../../../constants/sort';
 import actions from 'store/api/actions';
 
 import { findBy } from '../../../helpers/search';
-import { goTo } from '../../../helpers/router';
 import { hasPermission } from '../../../helpers/user';
 import sort from '../../../hocomponents/sort';
 import search from '../../../hocomponents/search';
@@ -24,16 +23,16 @@ import { Control } from '../../../components/controls';
 import Shorten from '../../../components/shorten';
 import { querySelector, resourceSelector } from '../../../selectors';
 
-const filterOptions = search => collection => (
-  findBy(['name', 'default', 'expects', 'value', 'description'], search, collection)
+const filterOptions = srch => collection => (
+  findBy(['name', 'default', 'expects', 'value', 'description'], srch, collection)
 );
 
 const collectionSelector = createSelector(
   [
     resourceSelector('systemOptions'),
     querySelector('q'),
-  ], (options, search) => flowRight(
-    filterOptions(search)
+  ], (options, s) => flowRight(
+    filterOptions(s)
   )(options.data)
 );
 
