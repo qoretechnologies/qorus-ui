@@ -14,7 +14,7 @@ export default class OptionModal extends Component {
   state: {
     value: string | number
   } = {
-    value: this.props.model.value,
+    value: this.props.model.value || 'null',
   };
 
   handleInputChange: Function = (event: EventHandler): void => {
@@ -103,7 +103,7 @@ export default class OptionModal extends Component {
             <h4> Interval </h4>
             <p>{ model.interval ? JSON.stringify(model.interval) : 'No data' }</p>
             <h4> Default Value </h4>
-            <code>{ model.default.toString() }</code>
+            <code>{ model.default ? model.default.toString() : 'null' }</code>
             <h4> Current  Value </h4>
             { this.renderValue() }
           </Modal.Body>
