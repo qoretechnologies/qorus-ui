@@ -33,7 +33,7 @@ const RowDetail: Function = ({
 
   return (
     <Row>
-      <Td>{name}</Td>
+      <Td className="name">{name}</Td>
       <EditableCell
         value={value}
         onSave={handleValueChange}

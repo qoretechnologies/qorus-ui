@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { Row, Td } from '../../../components/table';
 import { Control as Button } from '../../../components/controls';
+import DateComponent from '../../../components/date';
 import { getDump, removeDump } from '../../../store/api/resources/valuemaps/actions';
 import { utf8ToB64 } from '../../../helpers/system';
 
@@ -57,13 +58,17 @@ export default class ValuemapRow extends Component {
 
     return (
       <Row onClick={this.handleRowClick}>
-        <Td>{ data.name }</Td>
-        <Td>{ data.description }</Td>
-        <Td>{ data.author }</Td>
+        <Td className="name">{ data.name }</Td>
+        <Td className="text">{ data.description }</Td>
+        <Td className="text">{ data.author }</Td>
         <Td><code>{ data.valuetype }</code></Td>
         <Td>{ data.mapsize }</Td>
-        <Td>{ data.created }</Td>
-        <Td>{ data.modified }</Td>
+        <Td>
+          <DateComponent date={data.created} />
+        </Td>
+        <Td>
+          <DateComponent date={data.modified} />
+        </Td>
         <Td>
           <Button
             label="Dump to file"
