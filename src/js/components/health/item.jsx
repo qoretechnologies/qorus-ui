@@ -2,7 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const HealthItem = ({ title, children, link }: { title: string, children?: any}) => (
+const HealthItem = ({
+  title,
+  children,
+  link,
+}: {
+  title: string,
+  children?: any,
+  link?: boolean
+}) => (
   <tr>
     <th>
       { link ? (
