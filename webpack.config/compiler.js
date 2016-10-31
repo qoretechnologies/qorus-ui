@@ -11,7 +11,7 @@ module.exports = function compilerConfig() {
   return {
     context: `${root}/src`,
     entry: {
-      qorus: [`${root}/src/index.jsx`],
+      qorus: ['react-hot-loader/patch', `${root}/src/index.jsx`],
     },
     output: {
       path: `${root}/dist`,

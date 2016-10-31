@@ -71,6 +71,7 @@ class AppInfo extends React.Component {
       <Router
         {...this.props.routerProps}
         render={applyMiddleware(useRelativeLinks())}
+        key={Math.random()}
       >
         <Route
           path="/"
