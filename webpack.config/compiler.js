@@ -1,17 +1,15 @@
 'use strict';
 
 const path = require('path');
-
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const root = path.resolve(__dirname, '..');
 
 module.exports = function compilerConfig() {
   return {
     context: `${root}/src`,
     entry: {
-      qorus: [`${root}/src/index.jsx`],
+      qorus: ['react-hot-loader/patch', `${root}/src/index.jsx`],
     },
     output: {
       path: `${root}/dist`,
@@ -26,21 +24,13 @@ module.exports = function compilerConfig() {
     module: {
       loaders: [
         {
-          test: /\.jsx$/,
+          test: /\.js(x)?$/,
           exclude: /node_modules/,
           loaders: [
             'babel?' +
               'presets[]=es2015&presets[]=react&presets[]=stage-0&' +
               'plugins[]=transform-decorators-legacy&plugins[]=transform-flow-strip-types',
           ],
-        },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader:
-          'babel?' +
-            'presets[]=es2015&presets[]=stage-0&' +
-            'plugins[]=transform-decorators-legacy',
         },
         {
           test: /\.html$/,

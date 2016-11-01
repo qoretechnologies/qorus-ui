@@ -14,7 +14,6 @@ module.exports = function developmentConfig() {
   const config = compilerConfig();
 
   config.entry.qorus.push('webpack-hot-middleware/client');
-
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': JSON.stringify({
@@ -25,10 +24,8 @@ module.exports = function developmentConfig() {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
-
   config.debug = true;
-  config.devtool = 'inline-source-map';
-
+  config.devtool = 'eval-source-map';
   config.devServer = devConfig();
 
   return config;
