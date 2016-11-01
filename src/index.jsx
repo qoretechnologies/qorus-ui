@@ -27,7 +27,7 @@ if (isSupported(window.navigator.userAgent)) {
   );
 
   // Hot Module Replacement API
-  if (module.hot) {
+  if (module.hot && !process.env.TESTINST) {
     module.hot.decline('./js/routes.jsx');
     module.hot.accept('./js/app', () => {
       const NextApp = require('./js/app').default;

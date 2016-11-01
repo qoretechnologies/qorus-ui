@@ -70,7 +70,7 @@ export default class Topbar extends Component {
           >
             <div className="nav nav-bar navbar-right info-nav">
               <LocalHealth />
-              {' |a'}
+              {'  '}
               <RemoteHealth />
               {' '}
               <UserInfo user={this.props.currentUser} />
