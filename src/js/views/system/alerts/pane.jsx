@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-
+/* @flow */
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -19,20 +19,17 @@ const viewSelector = createSelector(
   })
 );
 
-@connect(viewSelector)
-export default class AlertPane extends Component {
-  static propTypes = {
-    alert: PropTypes.object.isRequired,
-    onClose: PropTypes.func,
-    width: PropTypes.number,
-  };
-
-  render() {
-    return (
-      <Pane width={this.props.width} onClose={this.props.onClose}>
-        <h3>Alert detail</h3>
-        <InfoTable object={ this.props.alert } />
-      </Pane>
-    );
-  }
+type Props = {
+  alert: Object,
+  onClose: Function,
+  width: number
 }
+
+const AlertPane: Function = ({ alert, onClose, width }: Props) => (
+  <Pane width={width} onClose={onClose}>
+    <h3>Alert detail</h3>
+    <InfoTable object={alert} />
+  </Pane>
+);
+
+export default connect(viewSelector)(AlertPane);
