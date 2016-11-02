@@ -20,17 +20,12 @@ const viewSelector = createSelector(
 
 @connect(viewSelector)
 export default class Dashboard extends Component {
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired,
-  };
-
   props: {
     children: any,
     route?: Object,
     health: Object,
     dispatch: Function,
+    location: Object,
   };
 
   componentWillMount() {
@@ -49,7 +44,7 @@ export default class Dashboard extends Component {
         </div>
         <div className="container-fluid">
           <Nav
-            path={this.context.location.pathname}
+            path={this.props.location.pathname}
             type="nav-pills"
           >
             <NavLink to="./ongoing">Ongoing</NavLink>
