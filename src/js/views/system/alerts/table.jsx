@@ -1,20 +1,26 @@
 import React, { Component, PropTypes } from 'react';
-
-// utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classNames from 'classnames';
 import { flowRight } from 'lodash';
-import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import compose from 'recompose/compose';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
 import Date from '../../../components/date';
-import Loader from '../../../components/loader';
 import Shorten from '../../../components/shorten';
 import sort from '../../../hocomponents/sort';
+import sync from '../../../hocomponents/sync';
+import withPane from '../../../hocomponents/pane';
 import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
+import { getAlertObjectLink } from '../../../helpers/system';
+import { findBy } from '../../../helpers/search';
+import { propSelector } from '../../../selectors';
+import Pane from './pane';
+import withSearch from '../../../hocomponents/search';
+import Search from '../../../components/search';
+import Toolbar from '../../../components/toolbar';
 
 const alertsSelector = state => state.api.alerts;
 const typeSelector = (state, props) => props.params.type;
@@ -25,12 +31,22 @@ const filterCollection = type => collection => (
   collection.filter(c => c.alerttype.toLowerCase() === type)
 );
 
+const searchCollection: Function = (
+  query: string
+): Function => (
+  collection: Array<Object>
+): Array<Object> => (
+  findBy(['alerttype', 'alert', 'name'], query, collection)
+);
+
 const collectionSelector = createSelector(
   [
     alertsSelector,
     typeSelector,
-  ], (alerts, type) => flowRight(
-    filterCollection(type)
+    propSelector('query'),
+  ], (alerts, type, query) => flowRight(
+    filterCollection(type),
+    searchCollection(query)
   )(alerts.data)
 );
 
@@ -40,28 +56,34 @@ const viewSelector = createSelector(
     collectionSelector,
     activeRowId,
   ],
-  (meta, collection, rowId, sortData) => ({
-    loading: meta.loading,
-    sync: meta.sync,
+  (meta, collection, rowId) => ({
+    meta,
     collection,
     activeRowId: rowId,
-    sortData,
   })
 );
 
 @compose(
-  connect(viewSelector),
+  withSearch('alertQuery'),
+  connect(
+    viewSelector,
+    {
+      load: actions.alerts.fetch,
+      updateDone: actions.alerts.updateDone,
+    }
+  ),
   sort(
     'alert',
     'collection',
     sortDefaults.alerts
   ),
+  sync('meta'),
+  withPane(Pane)
 )
 export default class AlertsTable extends Component {
   static propTypes = {
     collection: PropTypes.array,
     activeRowId: PropTypes.number,
-    dispatch: PropTypes.func,
     sync: PropTypes.bool,
     loading: PropTypes.bool,
     route: PropTypes.object,
@@ -69,51 +91,22 @@ export default class AlertsTable extends Component {
     location: PropTypes.object,
     sortData: PropTypes.object,
     onSortChange: PropTypes.func,
+    updateDone: PropTypes.func,
+    openPane: PropTypes.func,
+    onSearchChange: PropTypes.func,
+    defaultSearchValue: PropTypes.string,
+    paneId: PropTypes.string,
+    query: PropTypes.string,
   };
-
-  static defaultProps = {
-    activeRowId: null,
-  };
-
-  static childContextTypes = {
-    dispatch: PropTypes.func,
-    route: PropTypes.object,
-  };
-
-  getChildContext() {
-    return {
-      dispatch: this.props.dispatch,
-      route: this.props.route,
-    };
-  }
 
   componentWillMount() {
-    this.props.dispatch(actions.alerts.fetch());
-
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
   }
 
-  activateRow = (modelId) => (ev) => {
-    if (ev.defaultPrevented) return;
-
-    const shouldDeactivate = modelId === this.props.activeRowId;
-
-    const urlChunks = this.props.location.pathname.split('/');
-    const url = urlChunks.length === 5 ? urlChunks.slice(0, 4).join('/') : urlChunks.join('/');
-
-    if (shouldDeactivate) {
-      browserHistory.push(url);
-    } else {
-      browserHistory.push(`${url}/${modelId}`);
-    }
-  };
-
   handleHighlightEnd = (id) => () => {
-    this.props.dispatch(
-      actions.alerts.updateDone(id)
-    );
+    this.props.updateDone(id);
   };
 
   /**
@@ -189,14 +182,27 @@ export default class AlertsTable extends Component {
       <Cell className="name nowrap">{ model.alert }</Cell>
     );
 
-    yield (
-      <Cell className="desc">
-        <Shorten extraClassname="text-left">
-          {model.version && `${model.name} v${model.version} ${model.id}` }
-          {!model.version && `${model.name}` }
-        </Shorten>
-      </Cell>
-    );
+    if (model.type === 'RBAC' || (model.type === 'GROUP' && model.id < 0)) {
+      yield (
+        <Cell className="desc">
+          <Shorten extraClassname="text-left">
+            {model.version && `${model.name} v${model.version} ${model.id}` }
+            {!model.version && `${model.name}` }
+          </Shorten>
+        </Cell>
+      );
+    } else {
+      yield (
+        <Cell className="desc">
+          <Link to={getAlertObjectLink(model.type, model)}>
+            <Shorten extraClassname="text-left">
+              {model.version && `${model.name} v${model.version} ${model.id}` }
+              {!model.version && `${model.name}` }
+            </Shorten>
+          </Link>
+        </Cell>
+      );
+    }
 
     yield (
       <Cell className="nowrap"><Date date={ model.when } /></Cell>
@@ -222,61 +228,69 @@ export default class AlertsTable extends Component {
    * Row with active model is highlighted. Row are clickable and
    * trigger route change via {@link activateRow}.
    *
-   * @param {number} activeId
    * @param {Array<Object>} collection
    * @return {Generator<ReactElement>}
    * @see activateRow
    * @see renderCells
    */
-  *renderRows({ activeId, collection }) {
+  *renderRows({ collection }) {
     for (const model of collection) {
+      const handleRowClick: Function = (event: EventHandler): void => {
+        if (!event.defaultPrevented) {
+          this.props.openPane(model.alertid);
+        }
+      };
+
       yield (
         <Row
           key={model.alertid}
           data={{ model }}
+          onClick={handleRowClick}
           cells={this._renderCells}
-          onClick={this.activateRow(model.alertid)}
           highlight={model._updated}
           onHighlightEnd={this.handleHighlightEnd(model.alertid)}
           className={classNames({
-            info: model.alertid === parseInt(activeId, 10),
+            info: model.alertid === parseInt(this.props.paneId, 10),
           })}
         />
       );
     }
   }
 
-  render() {
-    if (!this.props.sync || this.props.loading) {
+  renderTable() {
+    if (!this.props.collection.length) {
       return (
         <div className="tab-pane active">
-          <Loader />
-        </div>
-      );
-    }
-
-    if (this.props.collection.length === 0) {
-      return (
-        <div className="tab-pane active">
-          <p>No alerts found</p>
+          <p> No data </p>
         </div>
       );
     }
 
     const data = {
-      activeId: this.props.activeRowId,
       collection: this.props.collection,
     };
 
     return (
-      <div className="tab-pane active">
-        <Table
-          data={ data }
-          className="table table-condensed table-fixed table-striped table--data"
-        >
-          <Section type="head" rows={this._renderHeadingRow} />
-          <Section type="body" data={ data } rows={this._renderRows} />
-        </Table>
+      <Table
+        data={ data }
+        className="table table-condensed table-fixed table-striped table--data"
+      >
+        <Section type="head" rows={this._renderHeadingRow} />
+        <Section type="body" data={ data } rows={this._renderRows} />
+      </Table>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <Toolbar>
+          <Search
+            onSearchUpdate={this.props.onSearchChange}
+            defaultValue={this.props.query}
+          />
+        </Toolbar>
+        { this.renderTable() }
         { this.props.children }
       </div>
     );
