@@ -41,7 +41,7 @@ describe("Search from 'components/search'", () => {
 
       const result = renderer.getRenderOutput();
 
-      expect(result.props.children[0].props.children[0].props.defaultValue).to.equal('Yolo');
+      expect(result.props.children[0].props.children[0].props.value).to.equal('Yolo');
     });
 
     it('runs the provided function when the input changes after 500ms', () => {
