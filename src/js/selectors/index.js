@@ -12,7 +12,15 @@ const resourceSelector: Function = (resource: string): Function => (
   state.api[resource]
 );
 
+const propSelector: Function = (prop: string): Function => (
+  state: Object,
+  props: Object
+) => (
+  props[prop]
+);
+
 export {
   querySelector,
   resourceSelector,
+  propSelector,
 };
