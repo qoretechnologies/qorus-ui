@@ -6,6 +6,7 @@ type Props = {
   path: string,
   children: any,
   type: string,
+  className: string,
 };
 
 const renderChildren: Function = (children: any, path: string): React.Element<any> => (
@@ -17,15 +18,16 @@ const renderChildren: Function = (children: any, path: string): React.Element<an
   ))
 );
 
-const Nav: Function = ({ children, type, path }: Props): React.Element<any> => {
-  const cls = type || 'nav-tabs';
-
-  return (
-    <ul className={`nav ${cls}`}>
-      { renderChildren(children, path) }
-    </ul>
-  );
-};
+const Nav: Function = ({
+  children,
+  type: tp = 'nav-tabs',
+  path,
+  className: cls = '',
+}: Props): React.Element<any> => (
+  <ul className={`nav ${tp} ${cls || ''}`}>
+    { renderChildren(children, path) }
+  </ul>
+);
 
 Nav.propTypes = {
   path: PropTypes.string,
