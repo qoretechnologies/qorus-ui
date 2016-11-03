@@ -154,7 +154,7 @@ export default class SearchView extends Component {
       query.date = !query.date || query.date === '' ?
         moment().add(-1, 'weeks').format(DATE_FORMATS.DISPLAY) :
         query.date;
-      
+
       props.dispatch(
         actions.orders.fetch(Object.assign({}, {
           sort: 'started',
