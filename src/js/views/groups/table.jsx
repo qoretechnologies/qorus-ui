@@ -175,7 +175,7 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
-      <Cell>{ model.description }</Cell>
+      <Cell className="text">{ model.description }</Cell>
     );
 
     yield (

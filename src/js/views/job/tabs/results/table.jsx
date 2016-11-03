@@ -65,7 +65,7 @@ const ResultTable = ({
             <Label style={JOB_LABELS[item.jobstatus]}>{item.jobstatus}</Label>
           </Td>
           <Td />
-          <Td>{item.name}</Td>
+          <Td className="name">{item.name}</Td>
           <Td><Date date={item.started} /></Td>
           <Td><Date date={item.modified} /></Td>
         </InstanceRow>
