@@ -9,9 +9,7 @@ const DashboardRoutes = (): React.Element<any> => (
     <IndexRedirect to="dashboard" />
     <Route path="dashboard" component={System.Dashboard}>
       <IndexRedirect to="ongoing" />
-      <Route path=":type" component={System.Alerts.Table}>
-        <Route path=":id" component={System.Alerts.Pane} />
-      </Route>
+      <Route path=":type" component={System.Alerts.Table} />
     </Route>
     <Route path="alerts" component={System.Alerts}>
       <IndexRedirect to="ongoing" />

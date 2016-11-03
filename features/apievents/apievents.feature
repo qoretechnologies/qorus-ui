@@ -10,9 +10,9 @@ Feature: Tests various websocket apievents
     Given I am on "system/alerts/ongoing" listing
     And "alerts" get loaded
     And I send a ws request for "ALERT_ONGOING_RAISED"
-    And "5" "alerts" are shown
+    And "6" "alerts" are shown
     When I send a ws request for "ALERT_ONGOING_CLEARED"
-    Then "4" "alerts" are shown
+    Then "5" "alerts" are shown
 
   Scenario: Stops a service
     Given I am on "services" listing

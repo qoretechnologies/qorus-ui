@@ -69,7 +69,6 @@ export default (
         <Pane
           {...props}
           onClose={this.handleClose}
-          vymrdanaPicaZkurvena={() => true}
           changePaneTab={this.handleTabChange}
           paneId={query.paneId}
           paneTab={query.paneTab}

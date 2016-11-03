@@ -8,6 +8,7 @@ export default (
   class WrappedComponent extends React.Component {
     static contextTypes = {
       router: PropTypes.object,
+      location: PropTypes.object,
     };
 
     props: {
@@ -20,7 +21,7 @@ export default (
     handleSearch: Function = (querySearch): void => {
       changeQuery(
         this.context.router,
-        this.props.location,
+        this.props.location || this.context.location,
         {
           [queryName]: querySearch,
         }
@@ -29,11 +30,13 @@ export default (
 
     render() {
       const func = customFunc || this.handleSearch;
+      const query = this.props.location.query[queryName];
 
       return (
         <Component
           onSearchChange={func}
           defaultSearchValue={this.props.query || ''}
+          query={query}
           {...this.props}
         />
       );

@@ -12,14 +12,14 @@ export default class Search extends Component {
     }, 280);
 
     this.setState({
-      query: this.props.defaultValue,
+      query: this.props.defaultValue || '',
     });
   }
 
   componentWillReceiveProps(next) {
     if (this.props.defaultValue !== next.defaultValue) {
       this.setState({
-        query: next.defaultValue,
+        query: next.defaultValue || '',
       });
     }
   }
@@ -61,7 +61,7 @@ export default class Search extends Component {
             id="search"
             className="form-control"
             onChange={this.handleInputChange}
-            defaultValue={this.state.query}
+            value={this.state.query}
           />
           <span className="input-group-addon">
             <i className="fa fa-search" />
