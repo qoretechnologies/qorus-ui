@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { omit, debounce } from 'lodash';
+import moment from 'moment';
+
 import { Control as Button } from 'components/controls';
 import Toolbar from 'components/toolbar';
 import DatePicker from 'components/datepicker';
-
-import { omit, debounce } from 'lodash';
+import { DATE_FORMATS } from '../../constants/dates';
 
 export default class SearchToolbar extends Component {
   static propTypes = {
@@ -41,16 +43,19 @@ export default class SearchToolbar extends Component {
   }
 
   setUp = (props, state) => {
+    const date = !props.date || props.date === '' ?
+      moment().add(-1, 'weeks').format(DATE_FORMATS.DISPLAY) :
+      props.date;
+
     this.setState({
       ids: props.ids,
       keyvalue: props.keyvalue,
       keyname: props.keyname,
       status: props.status,
-      date: props.date,
+      date,
       maxmodified: props.maxmodified,
       advanced: state.advanced ||
                 props.status ||
-                props.date ||
                 props.maxmodified,
     });
   };
@@ -86,14 +91,6 @@ export default class SearchToolbar extends Component {
           />
         </div>
         <div className="pull-left">
-          <DatePicker
-            placeholder="Min date..."
-            date={this.state.date}
-            onApplyDate={this.handleInputChange('date')}
-            applyOnBlur
-            futureOnly
-            id="mindate"
-          />
           <DatePicker
             placeholder="Max date..."
             date={this.state.maxmodified}
@@ -140,6 +137,16 @@ export default class SearchToolbar extends Component {
                 onChange={this.handleInputChange('keyvalue')}
                 value={this.state.keyvalue || ''}
                 id="keyvalue"
+              />
+            </div>
+            <div className="pull-left">
+              <DatePicker
+                placeholder="Min date..."
+                date={this.state.date}
+                onApplyDate={this.handleInputChange('date')}
+                applyOnBlur
+                futureOnly
+                id="mindate"
               />
             </div>
           </div>

@@ -2,20 +2,19 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-
+import moment from 'moment';
 import { flowRight, isEqual } from 'lodash';
+
 import { normalizeName } from '../../store/api/resources/utils';
-
 import actions from 'store/api/actions';
-
 import SearchToolbar from './toolbar';
 import OrdersTable from '../workflow/tabs/list/table';
 import Loader from '../../components/loader';
 import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import { Control as Button } from 'components/controls';
-
 import { goTo } from '../../helpers/router';
 import sort from '../../hocomponents/sort';
+import { DATE_FORMATS } from '../../constants/dates';
 
 const normalize = (orders) => orders.map(o => {
   if (o.normalizedName) return o;
@@ -152,13 +151,17 @@ export default class SearchView extends Component {
     const { query } = props.location;
 
     if (Object.keys(query).length && !Object.keys(query).every(k => query[k] === '')) {
+      query.date = !query.date || query.date === '' ?
+        moment().add(-1, 'weeks').format(DATE_FORMATS.DISPLAY) :
+        query.date;
+      
       props.dispatch(
         actions.orders.fetch(Object.assign({}, {
           sort: 'started',
           offset: state.offset,
           limit: state.limit,
           fetchMore: state.fetchMore,
-        }, props.location.query))
+        }, query))
       );
 
       this.setState({
