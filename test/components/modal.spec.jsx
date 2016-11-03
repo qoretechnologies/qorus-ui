@@ -253,7 +253,7 @@ describe("Modal, { Manager } from 'components/modal'", () => {
       );
 
 
-      TestUtils.Simulate.click(modalDom);
+      TestUtils.Simulate.mouseDown(modalDom);
 
 
       expectModalToBeClosed(manager);

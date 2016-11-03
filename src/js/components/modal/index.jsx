@@ -86,7 +86,7 @@ export default class Modal extends Component {
         tabIndex="-1"
         role="dialog"
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
-        onClick={this.onEscape}
+        onMouseDown={this.onEscape}
       >
         <div
           className={classNames({
@@ -101,6 +101,7 @@ export default class Modal extends Component {
           </div>
           <ResizeHandle minCurrent left />
           <ResizeHandle minCurrent right />
+          <ResizeHandle minCurrent bottom />
         </div>
       </div>
     );
