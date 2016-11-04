@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import Tabs, { Pane } from 'components/tabs';
 import ServicesHeader from './header';
 import { DetailTab, MethodsTab } from './tabs';
-import LibraryTab from 'components/library';
+import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import { pureRender } from 'components/utils';
 import { goTo } from '../../../helpers/router';
@@ -16,7 +16,7 @@ export default class ServicesDetail extends Component {
     service: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
     tabId: PropTypes.string,
-    location: PropTypes.func,
+    location: PropTypes.object,
   };
 
 
@@ -48,6 +48,15 @@ export default class ServicesDetail extends Component {
     );
   }
 
+  getHeight: Function = (): number => {
+    const navbar = document.querySelector('.navbar').clientHeight;
+    const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
+    const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
+    const top = navbar + paneHeader + panetabs + 20;
+
+    return window.innerHeight - top;
+  };
+
   changeTab(tabId) {
     goTo(
       this.context.router,
@@ -75,8 +84,11 @@ export default class ServicesDetail extends Component {
           <Pane name="Detail">
             <DetailTab service={service} systemOptions={systemOptions} />
           </Pane>
-          <Pane name="Library">
-            <LibraryTab library={service.lib || {}} />
+          <Pane name="Code">
+            <Code
+              data={service.lib || {}}
+              heightUpdater={this.getHeight}
+            />
           </Pane>
           <Pane name="Methods">
             <MethodsTab service={service} />

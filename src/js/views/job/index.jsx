@@ -11,6 +11,7 @@ import actions from '../../store/api/actions';
 import JobHeader from './header';
 import JobDescription from './description';
 import JobLog from './tabs/log/index';
+import JobCode from './tabs/code';
 import JobResults from './tabs/results/index';
 import JobMappers from './tabs/mappers/index';
 
@@ -48,6 +49,7 @@ const JobPage = ({
         <div className="job-tabs">
           <Nav path={location.pathname}>
             <NavLink to="./results">Results</NavLink>
+            <NavLink to="./code">Code</NavLink>
             <NavLink to="./log">Log</NavLink>
             <NavLink to="./mappers">Mappers</NavLink>
           </Nav>
@@ -66,7 +68,7 @@ const JobPage = ({
   </div>
 );
 
-export { JobLog, JobResults, JobMappers };
+export { JobLog, JobResults, JobMappers, JobCode };
 
 export default compose(
   connect(

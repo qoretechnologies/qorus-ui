@@ -7,11 +7,10 @@ import Tabs, { Pane } from '../../components/tabs';
 import List from './tabs/list';
 import Loader from '../../components/loader';
 import Log from './tabs/log';
-import InfoTable from 'components/info_table';
-import Library from 'components/library';
+import InfoTable from '../../components/info_table';
+import Code from '../../components/code';
 import Performance from './tabs/performance';
 import MappersTable from '../../containers/mappers';
-
 import { goTo } from '../../helpers/router';
 import { formatDate } from '../../helpers/workflows';
 import { ORDER_STATES } from '../../constants/orders';
@@ -85,6 +84,16 @@ export default class extends Component {
     this.props.dispatch(actions.workflows.fetch({ lib_source: true }, id));
   }
 
+  getHeight: Function = (): number => {
+    const navbar = document.querySelector('.navbar').clientHeight;
+    const header = document.querySelector('.workflow-header').clientHeight;
+    const tabs = document.querySelector('#content-wrapper .nav-tabs').clientHeight;
+    const footer = document.querySelector('footer').clientHeight;
+    const top = navbar + header + tabs + footer + 40;
+
+    return window.innerHeight - top;
+  };
+
   /**
    * Gets the formatted date for the
    * workflow link in the workflow table
@@ -134,7 +143,7 @@ export default class extends Component {
                   onInvertClick={this.props.onInvertClick}
                   clearSelection={this.props.clearSelection}
                   location={this.props.location}
-                  filterFn={this.props.filterFn}
+                  filterFn={this.props.filterFn}r
                   onDataFilterChange={this.props.onDataFilterChange}
                   setSelectedData={this.props.setSelectedData}
                   selectedData={this.props.selectedData}
@@ -154,9 +163,10 @@ export default class extends Component {
                   location={this.props.location}
                 />
               </Pane>
-              <Pane name="Library">
-                <Library
-                  library={this.props.workflow.lib}
+              <Pane name="Code">
+                <Code
+                  data={this.props.workflow.lib}
+                  heightUpdater={this.getHeight}
                 />
               </Pane>
               <Pane name="Info">
