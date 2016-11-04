@@ -11,11 +11,9 @@ module.exports = function searchSteps() {
   });
 
   this.When(/^I search for "([^"]*)" by "([^"]*)"$/, async function(value, input) {
-    this.browser.fill('#${input}', value);
+    this.browser.fill(`#${input}`, value);
 
     await this.waitForURLChange();
-
-    console.log(this.browser.location.href);
 
     return this.browser.assert.url({ query: { ids: value } });
   });
