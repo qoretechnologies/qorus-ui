@@ -37,7 +37,7 @@ const Code: Function = ({
       { selected && (
         <div>
           <h5>{ selected.name }</h5>
-          <SourceCode height={height - 35}>
+          <SourceCode height={typeof height === 'number' ? height - 35 : height}>
             { selected.code }
           </SourceCode>
         </div>

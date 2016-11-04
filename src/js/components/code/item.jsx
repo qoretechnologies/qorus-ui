@@ -6,7 +6,7 @@ type Props = {
   type: string,
   item: Object,
   onClick: Function,
-  selected: boolean,
+  selected: Object,
 }
 
 const Item: Function = ({ item, onClick, selected, type }: Props): React.Element<any> => {
