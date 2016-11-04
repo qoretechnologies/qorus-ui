@@ -16,7 +16,7 @@ import NotesView from './notes';
 import ErrorsView from './errors';
 import HierarchyView from './hierarchy';
 import AuditView from './audit';
-import LibraryView from './library';
+import CodeView from './code';
 import DiagramView from './diagram';
 
 const orderSelector = (state, props) => (
@@ -109,7 +109,7 @@ export default class Order extends Component {
               <NavLink to="./info">Info</NavLink>
               <NavLink to="./notes">Notes</NavLink>
               <NavLink to="./log">Log</NavLink>
-              <NavLink to="./library">Library</NavLink>
+              <NavLink to="./code">Code</NavLink>
             </Nav>
           </div>
         </div>
@@ -131,5 +131,5 @@ Order.Notes = NotesView;
 Order.Errors = ErrorsView;
 Order.Hierarchy = HierarchyView;
 Order.Audit = AuditView;
-Order.Library = LibraryView;
+Order.Code = CodeView;
 Order.Diagram = DiagramView;

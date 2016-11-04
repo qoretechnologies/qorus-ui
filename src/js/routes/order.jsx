@@ -24,7 +24,7 @@ const OrderRoutes = (): React.Element<any> => (
     <Route path="info" component={Order.Info} />
     <Route path="notes" component={Order.Notes} />
     <Route path="log" component={Order.Log} />
-    <Route path="library" component={Order.Library} />
+    <Route path="code" component={Order.Code} />
   </Route>
 );
 
