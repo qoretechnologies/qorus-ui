@@ -54,7 +54,7 @@ export default class extends Component {
               { status }
             </span>
         </td>
-        <td>{ name }</td>
+        <td className="name">{ name }</td>
         <td></td>
         <td></td>
         <td></td>
@@ -83,9 +83,9 @@ export default class extends Component {
               { step.stepstatus }
             </span>
           </td>
-          <td>{ step.stepname }</td>
-          <td>{ step.error_type }</td>
-          <td>{ step.custom_status }</td>
+          <td className="name">{ step.stepname }</td>
+          <td className="text">{ step.error_type }</td>
+          <td className="text">{ step.custom_status }</td>
           <td>{ step.ind }</td>
           <td>{ step.retries }</td>
           <td>{ this.renderSkip(step.skip) }</td>

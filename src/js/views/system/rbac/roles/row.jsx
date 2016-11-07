@@ -56,11 +56,10 @@ const RolesRow: Function = (
         </Controls>
       </Cell>
       <Cell className="name">{ model.role }</Cell>
-      <Cell>{ model.provider }</Cell>
-      <Cell>{ model.desc }</Cell>
+      <Cell className="text">{ model.provider }</Cell>
+      <Cell className="text">{ model.desc }</Cell>
     </Row>
   );
-}
-;
+};
 
 export default RolesRow;

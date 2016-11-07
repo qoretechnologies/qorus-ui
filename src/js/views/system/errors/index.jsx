@@ -182,18 +182,16 @@ export default class Errors extends Component {
     );
 
     yield (
-      <Cell className="narrow">{ model.severity }</Cell>
+      <Cell className="narrow text">{ model.severity }</Cell>
     );
 
     yield (
-      <Cell className="narrow">{ model.type }</Cell>
+      <Cell className="narrow text">{ model.type }</Cell>
     );
 
     yield (
       <Cell className="desc nowrap">
-        <Shorten extraClassname="text-left">
-          { model.description }
-        </Shorten>
+        { model.description }
       </Cell>
     );
 
