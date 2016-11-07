@@ -6,7 +6,6 @@ import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 
 import Table, { Section, Row, Cell } from '../../../components/table';
-import Shorten from '../../../components/shorten';
 import AutoComponent from '../../../components/autocomponent';
 import Toolbar from '../../../components/toolbar';
 import Search from '../../../components/search';
