@@ -17,7 +17,7 @@ describe('Log store from "store/log"', () => {
 
       expect(data).to.eql({
         testlog: {
-          messages: [],
+          messages: ['-- READY TO RECEIVE DATA --'],
         },
       });
     });
@@ -35,6 +35,7 @@ describe('Log store from "store/log"', () => {
       expect(data).to.eql({
         testlog: {
           messages: [
+            '-- READY TO RECEIVE DATA --',
             'This is a test message 1',
             'This is a test message 2',
           ],
@@ -55,7 +56,7 @@ describe('Log store from "store/log"', () => {
 
       expect(data).to.eql({
         testlog: {
-          messages: [],
+          messages: ['-- READY TO RECEIVE DATA --'],
         },
       });
     });

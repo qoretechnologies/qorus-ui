@@ -8,7 +8,7 @@ const ACTIONS: Object = keyMirror({
 });
 
 const DEFAULTSTATE: Object = {
-  messages: [],
+  messages: ['-- READY TO RECEIVE DATA --'],
 };
 
 const LABELS: Object = {
