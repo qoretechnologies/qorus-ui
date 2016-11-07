@@ -53,7 +53,7 @@ describe('Websockets store handlers', () => {
       )
     );
 
-    const server = new Server('ws://qorus.example.com/log/main/1?token=undefined');
+    const server = new Server('ws://qorus.example.com/log/main/1');
 
     store.dispatch(actions.connect('log/main/1'));
 
@@ -89,7 +89,7 @@ describe('Websockets store handlers', () => {
       )
     );
 
-    const server = new Server('ws://qorus.example.com/log/main/3?token=undefined');
+    const server = new Server('ws://qorus.example.com/log/main/3');
 
     store.dispatch(actions.connect('log/main/3'));
 

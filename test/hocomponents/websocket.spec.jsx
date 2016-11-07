@@ -44,7 +44,7 @@ describe('websocket hoc from "hocomponents/websocket"', () => {
   };
 
   it('renders the component', (done) => {
-    const server = new Server('ws://qorus.example.com/test?token=undefined');
+    const server = new Server('ws://qorus.example.com/test');
 
     const Component = compose(
       websocket({})
@@ -76,7 +76,7 @@ describe('websocket hoc from "hocomponents/websocket"', () => {
   });
 
   it('runs the websockets functions', (done) => {
-    const server = new Server('ws://qorus.example.com/test1?token=undefined');
+    const server = new Server('ws://qorus.example.com/test1');
 
     const connectAction = chai.spy();
     const resumeAction = chai.spy();
