@@ -9,7 +9,7 @@ import DetailPane from '../../../components/pane';
 import Tabs, { Pane } from '../../../components/tabs';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
-import LibraryTab from '../../../components/library';
+import Code from '../../../components/code';
 import StepsTab from './steps_tab';
 import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
@@ -64,6 +64,15 @@ export default class WorkflowsDetail extends Component {
     this.props.loadErrors(`workflow/${this.props.paneId}`);
   }
 
+  getHeight: Function = (): number => {
+    const navbar = document.querySelector('.navbar').clientHeight;
+    const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
+    const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
+    const top = navbar + paneHeader + panetabs + 20;
+
+    return window.innerHeight - top;
+  };
+
   render() {
     const { workflow, errors, systemOptions, globalErrors, paneTab } =
       this.props;
@@ -85,8 +94,11 @@ export default class WorkflowsDetail extends Component {
             <Pane name="Detail">
               <DetailTab workflow={workflow} systemOptions={systemOptions} />
             </Pane>
-            <Pane name="Library">
-              <LibraryTab library={workflow.lib} />
+            <Pane name="Code">
+              <Code
+                data={workflow.lib}
+                heightUpdater={this.getHeight}
+              />
             </Pane>
             <Pane name="Steps">
               <StepsTab workflow={workflow} />

@@ -6,12 +6,13 @@ import lifecycle from 'recompose/lifecycle';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import pure from 'recompose/pure';
+import withHandlers from 'recompose/withHandlers';
 
 import Header from './header';
 import { DetailTab, AlertsTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
-import LibraryTab from '../../../components/library';
+import Code from '../../../components/code';
 import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
 
@@ -23,11 +24,13 @@ const Detail = ({
   tabId,
   model,
   changeTab,
+  getHeight,
 }: {
   location: Object,
   tabId: string,
   model: Object,
   changeTab: Function,
+  getHeight: Function,
 }): React.Element<*> => (
   <article>
     <Header model={model} />
@@ -39,10 +42,10 @@ const Detail = ({
       <Pane name="Detail">
         <DetailTab model={model} />
       </Pane>
-      <Pane name="Library">
-        <LibraryTab
-          library={model.lib || {}}
-          mainCode={model.code || undefined}
+      <Pane name="Code">
+        <Code
+          data={model.lib || {}}
+          heightUpdater={getHeight}
         />
       </Pane>
       <Pane name="Log">
@@ -130,4 +133,14 @@ export default compose(
   allowChangeTab,
   fetchLibSourceOnMountAndOnChange,
   fetchCodeOnMountAndOnChange,
+  withHandlers({
+    getHeight: (): Function => (): number => {
+      const navbar = document.querySelector('.navbar').clientHeight;
+      const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
+      const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
+      const top = navbar + paneHeader + panetabs + 20;
+
+      return window.innerHeight - top;
+    },
+  })
 )(Detail);

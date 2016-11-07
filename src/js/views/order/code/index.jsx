@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Library from 'components/library';
+import Code from 'components/code';
 import Loader from 'components/loader';
 
 import actions from 'store/api/actions';
@@ -54,13 +54,24 @@ export default class LibraryView extends Component {
     );
   }
 
+  getHeight: Function = (): number => {
+    const navbar = document.querySelector('.navbar').clientHeight;
+    const header = document.querySelector('.order-header').clientHeight;
+    const tabs = document.querySelector('#content-wrapper .nav-tabs').clientHeight;
+    const footer = document.querySelector('footer').clientHeight;
+    const top = navbar + header + tabs + footer + 40;
+
+    return window.innerHeight - top;
+  };
+
   render() {
     if (!this.props.workflow) return <Loader />;
 
     return (
       <div className="workflow-detail-tabs">
-        <Library
-          library={this.props.workflow.lib}
+        <Code
+          data={this.props.workflow.lib}
+          heightUpdater={this.getHeight}
         />
       </div>
     );
