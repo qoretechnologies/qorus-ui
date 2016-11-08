@@ -42,9 +42,9 @@ const PermsRow: Function = (
           )}
         </Controls>
       </Cell>
-      <Cell>{ model.permission_type }</Cell>
+      <Cell className="text">{ model.permission_type }</Cell>
       <Cell className="name">{ model.name }</Cell>
-      <Cell>{ model.desc }</Cell>
+      <Cell className="text">{ model.desc }</Cell>
     </Row>
   );
 };

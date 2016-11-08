@@ -96,21 +96,21 @@ export default class extends Table {
    */
   *renderCells({ model }) {
     yield (
-      <Cell className="narrow">{ model.severity }</Cell>
+      <Cell className="narrow text">{ model.severity }</Cell>
     );
 
     yield (
-      <Cell>{ model.error }</Cell>
+      <Cell className="text">{ model.error }</Cell>
     );
 
     yield (
-      <Cell>{ model.description }</Cell>
+      <Cell className="text">{ model.description }</Cell>
     );
 
     const stepName = this.props.steps.find(s => s.stepid === model.stepid).stepname;
 
     yield (
-      <Cell className="narrow">{ stepName }</Cell>
+      <Cell className="narrow name">{ stepName }</Cell>
     );
 
     yield (
@@ -124,11 +124,11 @@ export default class extends Table {
     );
 
     yield (
-      <Cell>{ model.business_error ? 'Business' : 'Other' }</Cell>
+      <Cell className="text">{ model.business_error ? 'Business' : 'Other' }</Cell>
     );
 
     yield (
-      <Cell>{ model.info }</Cell>
+      <Cell className="text">{ model.info }</Cell>
     );
 
     yield (

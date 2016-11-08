@@ -43,7 +43,7 @@ export default class extends Component {
         <tr key={index}>
           <td>|</td>
           <td>{ h.workflow_instanceid }</td>
-          <td>{ h.name }</td>
+          <td className="name">{ h.name }</td>
           <td>
            <span className={`label label-${label}`}>
               { h.workflowstatus }
@@ -52,8 +52,8 @@ export default class extends Component {
           <td>
             { this.renderIcon(h.business_error) }
           </td>
-          <td>{ h.custom_status }</td>
-          <td>{ h.custom_status_desc }</td>
+          <td className="text">{ h.custom_status }</td>
+          <td className="text">{ h.custom_status_desc }</td>
           <td>{ h.error_count }</td>
           <td>{ h.priority }</td>
           <td>
@@ -91,7 +91,7 @@ export default class extends Component {
             )}
           </td>
           <td>{ data.workflow_instanceid }</td>
-          <td>{ data.name }</td>
+          <td className="name">{ data.name }</td>
           <td>
              <span className={`label label-${label}`}>
                 { data.workflowstatus }
@@ -100,8 +100,8 @@ export default class extends Component {
           <td>
             { this.renderIcon(data.business_error) }
           </td>
-          <td>{ data.custom_status }</td>
-          <td>{ data.custom_status_desc }</td>
+          <td className="text">{ data.custom_status }</td>
+          <td className="text">{ data.custom_status_desc }</td>
           <td>{ data.error_count }</td>
           <td>{ data.priority }</td>
           <td>

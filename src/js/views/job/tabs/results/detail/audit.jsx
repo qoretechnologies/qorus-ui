@@ -35,12 +35,12 @@ const AuditTable = ({ audit = [] }: { audit: Array<Object> }) => (
         <Row key={`audit_info_${idx}`}>
           <Td>{idx}</Td>
           <Td>{item.audit_event_code}</Td>
-          <Td>{item.event}</Td>
-          <Td>{item.reason}</Td>
-          <Td>{item.info1}</Td>
-          <Td>{item.info2}</Td>
-          <Td>{item.who}</Td>
-          <Td>{item.source}</Td>
+          <Td className="name">{item.event}</Td>
+          <Td className="text">{item.reason}</Td>
+          <Td className="text">{item.info1}</Td>
+          <Td className="text">{item.info2}</Td>
+          <Td className="text">{item.who}</Td>
+          <Td className="text">{item.source}</Td>
           <Td><Date date={item.created} /></Td>
         </Row>
       ))}

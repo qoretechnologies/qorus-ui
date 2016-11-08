@@ -6,7 +6,6 @@ import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 
 import Table, { Section, Row, Cell } from '../../../components/table';
-import Shorten from '../../../components/shorten';
 import AutoComponent from '../../../components/autocomponent';
 import Toolbar from '../../../components/toolbar';
 import Search from '../../../components/search';
@@ -182,18 +181,16 @@ export default class Errors extends Component {
     );
 
     yield (
-      <Cell className="narrow">{ model.severity }</Cell>
+      <Cell className="narrow text">{ model.severity }</Cell>
     );
 
     yield (
-      <Cell className="narrow">{ model.type }</Cell>
+      <Cell className="narrow text">{ model.type }</Cell>
     );
 
     yield (
       <Cell className="desc nowrap">
-        <Shorten extraClassname="text-left">
-          { model.description }
-        </Shorten>
+        { model.description }
       </Cell>
     );
 

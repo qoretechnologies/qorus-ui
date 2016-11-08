@@ -102,7 +102,7 @@ export default class extends Table {
     );
 
     yield (
-      <Cell>{ model.event }</Cell>
+      <Cell className="name">{ model.event }</Cell>
     );
 
     yield (
@@ -110,15 +110,15 @@ export default class extends Table {
     );
 
     yield (
-      <Cell className="narrow">{ model.reason }</Cell>
+      <Cell className="narrow text">{ model.reason }</Cell>
     );
 
     yield (
-      <Cell>{ model.source }</Cell>
+      <Cell className="text">{ model.source }</Cell>
     );
 
     yield (
-      <Cell className="narrow">{ model.who }</Cell>
+      <Cell className="narrow text">{ model.who }</Cell>
     );
   }
 }

@@ -35,11 +35,11 @@ const ErrorTable = ({ errors = [] }: { errors: Array<Object> }) => (
         .map(item => [
           <Row key={`error_main_${item.job_errorid}`}>
             <Td>{item.job_errorid}</Td>
-            <Td>{item.severity}</Td>
-            <Td>{item.error}</Td>
+            <Td className="text">{item.severity}</Td>
+            <Td className="name">{item.error}</Td>
             <Td><Auto>{item.business_error}</Auto></Td>
             <Td><Date date={item.created} /></Td>
-            <Td>{item.description}</Td>
+            <Td className="text">{item.description}</Td>
           </Row>,
           item.info && <Row key={`error_info_${item.job_errorid}`}>
             <Td className="error-info" colspan={6}>{item.info}</Td>

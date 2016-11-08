@@ -20,9 +20,7 @@ const ResultDetail = ({
   backToResultList: Function,
 }) => (
   <div className="job-result-info">
-    <Resize top>
-      <i className="fa fa-bars" />
-    </Resize>
+    <Resize top />
     <div className="inner">
       <div className="pull-right">
         <Control
