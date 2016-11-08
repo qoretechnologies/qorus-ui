@@ -1,20 +1,22 @@
 /* @flow */
 import React from 'react';
 import classNames from 'classnames';
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
 
 type Props = {
   type: string,
   item: Object,
   onClick: Function,
-  selected: Object,
+  selected: string,
 }
 
-const Item: Function = ({ item, onClick, selected, type }: Props): React.Element<any> => {
+let Item: Function = ({ item, onClick, selected, type }: Props): React.Element<any> => {
   const handleClick: Function = (): void => {
-    onClick(`${type} - ${item.name}`, item.body);
+    onClick(`${type} - ${item.name}`, item.body, type, item.id);
   };
 
-  const isSelected: boolean = selected && selected.name === `${type} - ${item.name}`;
+  const isSelected: boolean = selected === `${type} - ${item.name}`;
 
   return (
     <div
@@ -29,8 +31,18 @@ const Item: Function = ({ item, onClick, selected, type }: Props): React.Element
   );
 };
 
+Item = compose(
+  lifecycle({
+    shouldComponentUpdate(nextProps) {
+      const name = `${this.props.type} - ${this.props.item.name}`;
+
+      return nextProps.selected === name || this.props.selected === name;
+    },
+  })
+)(Item);
+
 const CodeItem: Function = ({ item, onClick, selected, type }: Props): React.Element<any> => {
-  if (item.body) {
+  if (item.body || !item.functions) {
     return (
       <Item
         type={type}
@@ -47,7 +59,7 @@ const CodeItem: Function = ({ item, onClick, selected, type }: Props): React.Ele
       { item.functions ? item.functions.map((func: Object, index: number): React.Element<any> => (
         <Item
           type={`${type} - ${item.name}`}
-          key={index}
+          key={`${type}_${item.name}_${index}`}
           item={func}
           onClick={onClick}
           selected={selected}
@@ -59,4 +71,4 @@ const CodeItem: Function = ({ item, onClick, selected, type }: Props): React.Ele
   );
 };
 
-export default CodeItem;
+export default (CodeItem);

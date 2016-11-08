@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
+import pure from 'recompose/pure';
 
 import CodeItem from './item';
 
@@ -34,10 +35,10 @@ const CodeSection: Function = ({
             items.map((item: Object, index: number): React.Element<any> => (
               <CodeItem
                 type={name}
-                key={index}
+                key={`${index}_${name}_${item.name}`}
                 item={item}
                 onClick={onItemClick}
-                selected={selected}
+                selected={selected ? selected.name : null}
               />
             ))
           ) : (
@@ -50,6 +51,7 @@ const CodeSection: Function = ({
 );
 
 export default compose(
+  pure,
   withState('open', 'toggler', true),
   mapProps(({ toggler, ...rest }) => ({
     onToggleClick: () => toggler((open: boolean): boolean => !open),
