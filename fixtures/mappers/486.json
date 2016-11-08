@@ -22,7 +22,8 @@
     "change_date": "(\"name\": \"LAST_UPDATE_DATE\"\n)",
     "status": "(\"name\": \"SERIAL_NUMBER\"\n)",
     "previous_status": "(\"constant\" : \"I\")",
-    "i_sepl_status": "(\"constant\" : \"C\")"
+    "i_sepl_status": "(\"constant\" : \"C\")",
+    "Total": "int sub (any x, hash rec) { return rec.Available.toInt() + rec.Ordered.toInt() + rec.InTransit.toInt(); }"
   },
   "opts": {
     "datasource": "gsi_staging",
@@ -44,7 +45,8 @@
       "change_date": {},
       "status": {},
       "previous_status": {},
-      "i_sepl_status": {}
+      "i_sepl_status": {},
+      "Total": {}
     },
     "name": "it-31-rma_receipt-rev_credit_cc-dhl-in"
   },

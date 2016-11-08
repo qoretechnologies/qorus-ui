@@ -10,7 +10,8 @@ type Props = {
 }
 
 const DiagramDetail: Function = ({ data: { name, data, code } }: Props): React.Element<any> => {
-  const newCode = code.substring(code.indexOf(':') + 2, code.length);
+  const newCode = code.indexOf('code') > 0 ?
+    code.substring(code.indexOf(':') + 2, code.length) : code;
   const newData = omit(data, 'code');
 
   return (
