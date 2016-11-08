@@ -26,9 +26,6 @@
     padding: 5px 5px;
     margin: 2px 0;
     cursor: pointer;
-  }
-
-  &:not(:last-of-type) h5 {
     border-bottom: 1px solid darken(#fff, 11);
   }
 

@@ -13,10 +13,10 @@ global.env = process.env;
 
 
 // Uncomment when work on performance
-// if (process.env.NODE_ENV !== 'production') {
-//   const { whyDidYouUpdate } = require('why-did-you-update');
-//   whyDidYouUpdate(React, { exclude: /^(Connect|Route|DockMonitor)/ });
-// }
+/* if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React, { exclude: /^(Connect|Route|DockMonitor)/ });
+} */
 
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
