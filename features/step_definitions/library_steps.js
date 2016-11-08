@@ -1,27 +1,29 @@
-import { findTableRow } from './common_steps';
+import { findElementByText } from './common_steps';
 
 module.exports = function searchSteps() {
   this.Then(/^library gets loaded$/, async function() {
     await this.waitForElement('#search');
-    await this.waitForElement('.constants-table');
-    await this.waitForElement('.functions-table');
-    await this.waitForElement('.classes-table');
+    await this.waitForElement('.code-item');
   });
 
   this.When(/^I click on the "([^"]*)" constant$/, async function(name) {
-    await this.waitForChange(2000);
-    const row = findTableRow(this.browser, name, 0);
-    return this.browser.click(row);
+    const el = findElementByText(this.browser, '.code-item', name);
+
+    return this.browser.click(el);
   });
 
   this.Then(/^the "([^"]*)" row is highlighted$/, async function(name) {
-    const row = findTableRow(this.browser, name, 0);
+    await this.waitForChange(500);
 
-    this.browser.assert.className(row, 'info');
+    this.browser.assert.elements('.code-item.selected', 1);
   });
 
   this.Then(/^I see the source code$/, async function() {
-    this.browser.assert.text('.pane-lib__src h4', 'TestConstants1 1.0');
-    this.browser.assert.text('.pane-lib__src .source-code pre code', 'const t1 = 1;');
+    this.browser.assert.text('.code-source h5', 'Constants - TestConstants1');
+    this.browser.assert.text('code', 'const t1 = 1;');
+  });
+
+  this.Then(/^(\d+) library items are shown$/, async function(count) {
+    this.browser.assert.elements('.code-item', parseInt(count, 10));
   });
 };

@@ -1,24 +1,18 @@
 /* @flow */
 import React, { Component } from 'react';
+import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { includes } from 'lodash';
-
 import actions from '../../store/api/actions';
-
 import Toolbar from '../../components/toolbar';
 import Loader from '../../components/loader';
 import Search from '../../components/search';
-import LibraryTable from './table';
+import CodeSection from '../../components/code/section';
 import SourceCode from '../../components/source_code';
-
-type Props = {
-  dispatch: Function,
-  functions: Array<Object>,
-  classes: Array<Object>,
-  constants: Array<Object>,
-};
+import search from '../../hocomponents/search';
+import { querySelector, resourceSelector } from '../../selectors';
+import { findBy } from '../../helpers/search';
 
 type State = {
   searchValue: string,
@@ -29,63 +23,95 @@ type State = {
   type: ?string,
 };
 
-const functionsSelector = state => state.api.functions.data;
-const classesSelector = state => state.api.classes.data;
-const constantsSelector = state => state.api.constants.data;
+const filterCollection: Function = (query: string, collection: Array<Object>): Array<Object> => (
+  findBy(['name', 'version'], query, collection)
+);
+
+const functionsSelector = createSelector(
+  [
+    resourceSelector('functions'),
+    querySelector('q'),
+  ], (collection, query) => filterCollection(query, collection.data)
+);
+
+const classesSelector = createSelector(
+  [
+    resourceSelector('classes'),
+    querySelector('q'),
+  ], (collection, query) => filterCollection(query, collection.data)
+);
+
+const constantsSelector = createSelector(
+  [
+    resourceSelector('constants'),
+    querySelector('q'),
+  ], (collection, query) => filterCollection(query, collection.data)
+);
 
 const viewSelector = createSelector(
   [
     functionsSelector,
     classesSelector,
     constantsSelector,
-  ], (f, c, cons) => ({
-    functions: f,
-    classes: c,
-    constants: cons,
+  ], (functions, classes, constants): Object => ({
+    functions,
+    classes,
+    constants,
   })
 );
 
-@connect(viewSelector)
+type Props = {
+  dispatch: Function,
+  functions: Array<Object>,
+  fetchFunctions: Function,
+  classes: Array<Object>,
+  fetchClasses: Function,
+  constants: Array<Object>,
+  fetchConstants: Function,
+  query: string,
+  onSearchChange: Function,
+};
+
+@compose(
+  connect(
+    viewSelector,
+    {
+      fetchFunctions: actions.functions.fetch,
+      fetchClasses: actions.classes.fetch,
+      fetchConstants: actions.constants.fetch,
+    }
+  ),
+  search(),
+)
 export default class LibraryView extends Component {
   props: Props;
   state: State;
 
   state = {
-    searchValue: '',
-    id: (null: ?string | ?number),
-    functions: (null: ?Array<Object>),
-    classes: (null: ?Array<Object>),
-    constants: (null: ?Array<Object>),
-    type: (null: ?string),
+    selected: (null: ?Object),
     height: (0: number),
   };
 
   componentWillMount() {
-    this.props.dispatch(
-      actions.functions.fetch()
-    );
-    this.props.dispatch(
-      actions.classes.fetch()
-    );
-    this.props.dispatch(
-      actions.constants.fetch()
-    );
+    this.props.fetchFunctions();
+    this.props.fetchClasses();
+    this.props.fetchConstants();
+
+    window.addEventListener('resize', () => {
+      this.updateHeight();
+    });
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.classes && nextProps.constants && nextProps.functions) {
-      const { functions, classes, constants } = nextProps;
+    const { functions, classes, constants, query } = nextProps;
 
-      this.setState({
-        functions,
-        classes,
-        constants,
-      });
-
+    if (functions && classes && constants) {
       this.updateHeight();
+    }
 
-      window.addEventListener('resize', () => {
-        this.updateHeight();
+    if (this.props.query !== query) {
+      this.setState({
+        selected: null,
       });
     }
   }
@@ -111,112 +137,72 @@ export default class LibraryView extends Component {
     return content - (toolbar + 20);
   };
 
-  filterData: Function = (fn: Function): Function =>
-    (collection: Array<Object>): Array<Object> => (
-    collection.filter(fn)
-  );
-
-  handleSearchUpdate: Function = (searchValue: string): void => {
-    let state = {
-      searchValue,
-    };
-
-    if (searchValue !== '') {
-      const filter: Function = this.filterData(d => includes(d.name, searchValue));
-
-      state = Object.assign({}, state, {
-        functions: filter(this.props.functions) || [],
-        classes: filter(this.props.classes) || [],
-        constants: filter(this.props.constants) || [],
-      });
-    } else {
-      const { functions, classes, constants } = this.props;
-
-      state = Object.assign({}, state, {
-        functions,
-        classes,
-        constants,
-      });
-    }
-
-    this.setState(state);
-  };
-
-  handleRowClick: Function = (id: string | number, type: string): void => {
+  handleRowClick: Function = (
+    name: string,
+    body: string,
+    type: string,
+    id: number
+  ): void => {
     this.setState({
-      id,
-      type,
+      selected: {
+        name,
+        body,
+        id,
+        type,
+      },
     });
 
-    const item: Object = this.props[type].find(d => d.id === id);
+    const item: Object = this.props[type.toLowerCase()].find(d => d.id === id);
 
-    /**
-     * Fetch the resource only if it hasnt been fetched yet
-     */
     if (!item.body) {
-      this.props.dispatch(
-        actions[type].fetch({}, id)
-      );
+      this.props[`fetch${type}`]({}, id);
     }
   };
 
-  isActive: Function = (id: string | number, type: string): boolean => (
-    id === this.state.id && type === this.state.type
-  );
-
   renderTable(): ?React.Element<any> {
-    const { functions, classes, constants, height } = this.state;
+    const { functions, classes, constants } = this.props;
 
     if (!functions || !classes || !constants) {
       return <Loader />;
     }
 
     return (
-      <div
-        className="col-sm-3 pane-lib__fns"
-        style={{ height: `${height}px` }}
-      >
-        <div className="well well-sm">
-          <LibraryTable
-            name="Constants"
-            collection={this.state.constants}
-            onClick={this.handleRowClick}
-            active={this.isActive}
-          />
-          <LibraryTable
-            name="Functions"
-            collection={this.state.functions}
-            onClick={this.handleRowClick}
-            active={this.isActive}
-          />
-          <LibraryTable
-            name="Classes"
-            collection={this.state.classes}
-            onClick={this.handleRowClick}
-            active={this.isActive}
-          />
-        </div>
+      <div className="code-list" style={{ height: `${this.state.height}px` }}>
+        <CodeSection
+          name="Constants"
+          items={this.props.constants}
+          onItemClick={this.handleRowClick}
+          selected={this.state.selected}
+        />
+        <CodeSection
+          name="Functions"
+          items={this.props.functions}
+          onItemClick={this.handleRowClick}
+          selected={this.state.selected}
+        />
+        <CodeSection
+          name="Classes"
+          items={this.props.classes}
+          onItemClick={this.handleRowClick}
+          selected={this.state.selected}
+        />
       </div>
     );
   }
 
   renderSource(): ?React.Element<SourceCode> {
-    if (!this.state.id || !this.state.type) return undefined;
+    if (!this.state.selected) return undefined;
 
-    const { id, type, height } = this.state;
-    const item: ?Object = this.props[type].find(d => d.id === id);
+    const { selected: { id, type, name }, height } = this.state;
+    const item: ?Object = this.props[type.toLowerCase()].find(d => d.id === id);
 
     if (!item || !item.body) return <Loader />;
 
     return (
-      <div className="col-sm-9 pane-lib__src">
+      <div className="code-source">
         <div>
-          <h4>
-            { item.name }
-            {' '}
-            <small>{ item.version }</small>
-          </h4>
-          <SourceCode height={height - 39}>
+          <h5>{ name }</h5>
+          <SourceCode height={height - 35}>
             { item.body }
           </SourceCode>
         </div>
@@ -230,11 +216,11 @@ export default class LibraryView extends Component {
         <Toolbar>
           <Search
             pullLeft
-            onSearchUpdate={this.handleSearchUpdate}
-            defaultValue={this.state.searchValue}
+            onSearchUpdate={this.props.onSearchChange}
+            defaultValue={this.props.query}
           />
         </Toolbar>
-        <div className="row">
+        <div className="code">
           { this.renderTable() }
           { this.renderSource() }
         </div>
