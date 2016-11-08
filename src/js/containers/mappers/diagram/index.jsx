@@ -178,7 +178,6 @@ export const Diagramm = ({
               outputOffsetY + (headerHeight + parseInt(position, 10) *
               (rectHeight + paddingElements))
             }
-            offsetX={offsetX}
             width={rectWidth}
             height={rectHeight}
             style={{ overflow: 'hidden' }}
