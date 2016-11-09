@@ -266,8 +266,10 @@ export default class SearchView extends Component {
           onCSVClick={this.handleCSVClick}
           {...this.props.location.query}
         />
-        { this.renderTable() }
-        { this.renderLoadMore() }
+        <div className="view-content">
+          { this.renderTable() }
+          { this.renderLoadMore() }
+        </div>
       </div>
     );
   }
