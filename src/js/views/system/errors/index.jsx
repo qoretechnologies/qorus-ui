@@ -89,7 +89,7 @@ export default class Errors extends Component {
     onSortChange: Function,
     query: string,
     onSearchChange: Function,
-    defaultSearchValue: number | string,
+    defaultSearchValue: string,
   };
 
   componentWillMount() {

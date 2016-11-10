@@ -11,8 +11,8 @@ import Actions from './actions';
  */
 export default function Toolbar(props) {
   return (
-    <div id="workflows-toolbar" className="btn-toolbar toolbar" role="toolbar">
-      <div className="workflows-toolbar btn-toolbar sticky toolbar">
+    <div id="workflows-toolbar" className="toolbar" role="toolbar">
+      <div className="workflows-toolbar">
         {props.children}
       </div>
     </div>

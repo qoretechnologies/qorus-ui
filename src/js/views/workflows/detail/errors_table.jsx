@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+
 import Table, { Section, Row, Cell } from 'components/table';
 import { Controls, Control } from 'components/controls';
-import CollectionSearch from 'components/collection_search';
+import Search from 'components/search';
 import StatusIcon from 'components/status_icon';
-
 import ErrorModal from './error_modal';
-
 import { pureRender } from 'components/utils';
 
 /**
@@ -262,7 +261,7 @@ export default class ErrorsTable extends Component {
       <div className="relative">
         <div className="clearfix">
           <h4 className="pull-left">{this.props.heading}</h4>
-          <CollectionSearch onChange={this.onFilterChange} ignoreCase />
+          <Search onSearchUpdate={this.onFilterChange} />
         </div>
         {!this.state.errors.length && (
           <p>No data found.</p>
