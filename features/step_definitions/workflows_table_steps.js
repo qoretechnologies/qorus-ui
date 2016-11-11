@@ -54,7 +54,7 @@ module.exports = function workFlowTableSteps() {
     this.browser.assert.elements(th, 1);
 
     tableData.forEach((row, index) => {
-      this.browser.assert.text(row.cells[5], sorted[index].name);
+      this.browser.assert.text(row.cells[6], sorted[index].name);
     });
   });
 };

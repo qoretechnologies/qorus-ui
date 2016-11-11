@@ -4,7 +4,6 @@ const cmpLoader = `${mainSection} p`;
 const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
-const cmpForm = 'form';
 
 /**
  * Finds listed object's row element by its name.
@@ -14,7 +13,7 @@ const cmpForm = 'form';
  * @return {HTMLTableRowElement}
  */
 function findTableRow(browser, name, cellId) {
-  const cell = cellId === undefined ? 5 : cellId;
+  const cell = cellId === undefined ? 6 : cellId;
 
   return browser.
     queryAll(cmpRows).
@@ -29,7 +28,7 @@ function findTableRow(browser, name, cellId) {
  * @return {?number}
  */
 function findTableRowId(browser, name, cellId) {
-  const cell = cellId || 4;
+  const cell = cellId || 5;
   const row = findTableRow(browser, name, cellId);
   if (!row) return null;
 
@@ -46,13 +45,13 @@ const findElementByValue = (browser, selector, text) => browser.queryAll(selecto
 
 const instanceColumns = {
   job: {
-    'in-progress': 10,
-    error: 9,
-    complete: 8,
+    'in-progress': 11,
+    error: 10,
+    complete: 9,
   },
   workflow: {
     ready: 8,
-    'in-progress': 16,
+    'in-progress': 9,
   },
 };
 
@@ -145,10 +144,13 @@ module.exports = function commonSteps() {
     return this.browser.click(selector);
   });
 
-  this.When(/^I activate "([^"]*)"$/, async function(name) {
+  this.When(/^I activate "([^"]*)" - "([^"]*)"$/, async function(name, nameCell) {
     await this.waitForElement(cmpTable);
+    const row = this.browser.
+      queryAll(cmpRows).
+      find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
-    await this.browser.click(findTableRow(this.browser, name));
+    await this.browser.pressButton(row.cells[1].childNodes[0]);
 
     this.detail = {
       id: findTableRowId(this.browser, name),
@@ -457,13 +459,13 @@ module.exports = function commonSteps() {
   this.Then(/^the "([^"]*)" workflow has "([^"]*)" execs$/, function (name, execCount) {
     const row = findTableRow(this.browser, name);
 
-    this.browser.assert.text(row.cells[3], execCount);
+    this.browser.assert.text(row.cells[4], execCount);
   });
 
   this.Then(
     /^the "([^"]*)" "([^"]*)" has "([^"]*)" "([^"]*)" instances$/,
     function(name, resource, count, column) {
-      const row = findTableRow(this.browser, name, resource === 'job' ? 3 : 5);
+      const row = findTableRow(this.browser, name, resource === 'job' ? 4 : 6);
       const cell = instanceColumns[resource][column];
 
       this.browser.assert.text(row.cells[cell], count);

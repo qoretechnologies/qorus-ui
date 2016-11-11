@@ -51,7 +51,7 @@ Feature: Tests various websocket apievents
     And "workflows" get loaded
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     When I send a ws request for "WORKFLOW_STATUS_CHANGED"
-    Then the "ARRAYTEST" "workflow" has "1" "in-progress" instances
+    Then the "ARRAYTEST" "workflow" has "16" "in-progress" instances
     And the "ARRAYTEST" "workflow" has "0" "ready" instances
 
   Scenario: Adds new order instance

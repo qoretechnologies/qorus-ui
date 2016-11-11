@@ -3,6 +3,7 @@ Feature: Workflow details and orders listing
   Scenario: Accessing workflow detail page
     Given I am on "workflows" listing
     And "workflows" get loaded
+    And I click the "Expand states" button
     When I click the "TOTAL" cell on "ARRAYTEST"
     Then I should see workflow detail page
 

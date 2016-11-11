@@ -3,19 +3,19 @@ import { expect } from 'chai';
 import moment from 'moment';
 
 const stateCells = {
-  COMPLETE: 7,
-  READY: 8,
-  SCHEDULED: 9,
-  INCOMPLETE: 10,
-  'EVENT-WAITING': 11,
-  'ASYNC-WAITING': 12,
-  WAITING: 13,
-  RETRY: 14,
-  ERROR: 15,
-  'IN-PROGRESS': 16,
-  CANCELED: 17,
-  BLOCKED: 18,
-  TOTAL: 19,
+  COMPLETE: 8,
+  READY: 9,
+  SCHEDULED: 10,
+  INCOMPLETE: 11,
+  'EVENT-WAITING': 12,
+  'ASYNC-WAITING': 13,
+  WAITING: 14,
+  RETRY: 15,
+  ERROR: 16,
+  'IN-PROGRESS': 17,
+  CANCELED: 18,
+  BLOCKED: 19,
+  TOTAL: 20,
 };
 
 module.exports = function orderSteps() {
@@ -41,6 +41,8 @@ module.exports = function orderSteps() {
   this.Given(/^I am on "([^"]*)" with "([^"]*)" states and "([^"]*)" dates$/, async function(workflow, state, date) {
     await this.browser.visit('/workflows');
     await this.waitForElement('.root__center > section table');
+    await this.browser.pressButton(findElementByText(this.browser, 'button', ' Expand states'));
+
     const row = findTableRow(this.browser, workflow);
     const el = row.cells[stateCells[state]].children[0];
 

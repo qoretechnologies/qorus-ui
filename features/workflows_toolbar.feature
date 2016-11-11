@@ -86,10 +86,3 @@ Feature: Workflow Toolbar
     And "workflows" get loaded
     When I click the "Deprecated" button inside "deprecated" dropdown
     Then "6" "workflows" are shown
-
-  @no-impl
-  Scenario: Displaying CSV data of the table
-    Given I am on "workflows" listing
-    And "workflows" get loaded
-    When I click the "CSV" button
-    Then I see modal with CSV data in it
