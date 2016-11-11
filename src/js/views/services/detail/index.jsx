@@ -1,30 +1,30 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import Tabs, { Pane } from 'components/tabs';
+import DetailPane from 'components/pane';
 import ServicesHeader from './header';
 import { DetailTab, MethodsTab } from './tabs';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
-import { pureRender } from 'components/utils';
-import { goTo } from '../../../helpers/router';
 import MappersTable from '../../../containers/mappers';
 import actions from 'store/api/actions';
 
-@pureRender
+@connect(
+  (state, props) => ({
+    service: state.api.services.data.find((service) => service.id === parseInt(props.paneId, 10)),
+  })
+)
 export default class ServicesDetail extends Component {
   static propTypes = {
     service: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
-    tabId: PropTypes.string,
+    paneTab: PropTypes.string,
+    paneId: PropTypes.string,
+    onClose: PropTypes.func,
     location: PropTypes.object,
-  };
-
-
-  static contextTypes = {
     dispatch: PropTypes.func,
-    router: PropTypes.object,
-    route: PropTypes.object,
-    params: PropTypes.object,
+    changePaneTab: PropTypes.func,
   };
 
   componentWillMount() {
@@ -43,7 +43,7 @@ export default class ServicesDetail extends Component {
 
     this.setState({ lastModelId: props.service.id });
 
-    this.context.dispatch(
+    this.props.dispatch(
       actions.services.fetchLibSources(props.service)
     );
   }
@@ -57,53 +57,47 @@ export default class ServicesDetail extends Component {
     return window.innerHeight - top;
   };
 
-  changeTab(tabId) {
-    goTo(
-      this.context.router,
-      'services',
-      this.context.route.path,
-      this.context.params,
-      { tabId }
-    );
-  }
-
-
   render() {
-    const { service, tabId, systemOptions } = this.props;
+    const { service, paneTab, systemOptions } = this.props;
 
     if (!service) return null;
 
     return (
-      <article>
-        <ServicesHeader service={service} />
-        <Tabs
-          className="pane__tabs"
-          active={tabId}
-          tabChange={::this.changeTab}
-        >
-          <Pane name="Detail">
-            <DetailTab service={service} systemOptions={systemOptions} />
-          </Pane>
-          <Pane name="Code">
-            <Code
-              data={service.lib || {}}
-              heightUpdater={this.getHeight}
-            />
-          </Pane>
-          <Pane name="Methods">
-            <MethodsTab service={service} />
-          </Pane>
-          <Pane name="Log">
-            <LogTab
-              resource={`services/${service.id}`}
-              location={this.props.location}
-            />
-          </Pane>
-          <Pane name="Mappers">
-            <MappersTable mappers={service.mappers} />
-          </Pane>
-        </Tabs>
-      </article>
+      <DetailPane
+        width={550}
+        onClose={this.props.onClose}
+      >
+        <article>
+          <ServicesHeader service={service} />
+          <Tabs
+            className="pane__tabs"
+            active={paneTab}
+            tabChange={this.props.changePaneTab}
+          >
+            <Pane name="Detail">
+              <DetailTab service={service} systemOptions={systemOptions} />
+            </Pane>
+            <Pane name="Code">
+              <Code
+                data={service.lib || {}}
+                heightUpdater={this.getHeight}
+              />
+            </Pane>
+            <Pane name="Methods">
+              <MethodsTab service={service} />
+            </Pane>
+            <Pane name="Log">
+              <LogTab
+                resource={`services/${service.id}`}
+                location={this.props.location}
+              />
+            </Pane>
+            <Pane name="Mappers">
+              <MappersTable mappers={service.mappers} />
+            </Pane>
+          </Tabs>
+        </article>
+      </DetailPane>
     );
   }
 }

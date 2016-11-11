@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Toolbar, { Actions } from 'components/toolbar';
+import Toolbar, { Actions } from '../../components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
 import { Control as Button } from 'components/controls';
 import Checkbox from 'components/checkbox';
@@ -17,7 +17,6 @@ export default class extends Component {
     onRunningClick: PropTypes.func,
     onDeprecatedClick: PropTypes.func,
     onLastVersionClick: PropTypes.func,
-    params: PropTypes.object,
     defaultSearchValue: PropTypes.string,
     onSearchUpdate: PropTypes.func,
     batchAction: PropTypes.func,

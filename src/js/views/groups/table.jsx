@@ -13,10 +13,9 @@ import actions from '../../store/api/actions';
  * Beware, this component is very performance internsive - even
  * HTML/CSS without any JS is relatively slow.
  */
-export default class JobsTable extends ServiceTable {
+export default class GroupsTable extends ServiceTable {
   static defaultProps = {
     setSelectedData: () => {},
-    selectedData: {},
   };
 
   handleHighlightEnd = (name) => () => {
@@ -151,10 +150,19 @@ export default class JobsTable extends ServiceTable {
    * @return {Generator<ReactElement>}
    */
   *renderCells({ model, selected }) {
+    const handleCheckboxClick = () => {
+      const selectedData = Object.assign({},
+        this.props.selectedData,
+        { [model.id]: !this.props.selectedData[model.id] }
+      );
+
+      this.setSelectedServices(selectedData);
+    };
+
     yield (
       <Cell className="narrow checker">
         <Checkbox
-          action={this.handleCheckboxClick}
+          action={handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
         />
       </Cell>
@@ -228,7 +236,6 @@ export default class JobsTable extends ServiceTable {
           highlight={model._updated}
           onHighlightEnd={this.handleHighlightEnd(model.name)}
           cells={this._renderCells}
-          onClick={this._activateRow}
         />
       );
     }

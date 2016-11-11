@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 
 import ServiceTable from '../services/table';
 import { Cell, Row } from '../../components/table';
+import { Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import JobControls from './controls';
 import DateComponent from '../../components/date';
 import Checkbox from '../../components/checkbox';
-import { goTo } from '../../helpers/router';
 
 /**
  * List of all jobs in the system.
@@ -26,35 +27,6 @@ export default class JobsTable extends ServiceTable {
   };
 
   /**
-   * Changes active route to job associated with clicked element.
-   *
-   * If the event handled some significant action before (i.e., its
-   * default action is prevented), it does nothing.
-   *
-   * @param {Event} ev
-   */
-  activateRow(ev) {
-    if (ev.defaultPrevented) return;
-
-    const model = this.findActivatedRow(ev.currentTarget);
-    const shouldDeactivate =
-      this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === model.id;
-    const change = {
-      detailId: shouldDeactivate ? null : model.id,
-      tabId: shouldDeactivate ? null : this.context.params.tabId,
-    };
-
-    goTo(
-      this.context.router,
-      'jobs',
-      this.context.route.path,
-      this.context.params,
-      change
-    );
-  }
-
-  /**
    * Yields heading cells for model info.
    *
    * @return {Generator<ReactElement>}
@@ -63,6 +35,10 @@ export default class JobsTable extends ServiceTable {
   *renderHeadings() {
     yield (
       <Cell tag="th" className="narrow" />
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">-</Cell>
     );
 
     yield (
@@ -165,12 +141,35 @@ export default class JobsTable extends ServiceTable {
    * @return {Generator<ReactElement>}
    */
   *renderCells({ model, selected }) {
-    const { params: { date = '' } = {} } = this.props;
+    const { params: { date = '24h' } = {} } = this.props;
+    const handleCheckboxClick = () => {
+      const selectedData = Object.assign({},
+        this.props.selectedData,
+        { [model.id]: !this.props.selectedData[model.id] }
+      );
+
+      this.setSelectedServices(selectedData);
+    };
+
     yield (
       <Cell className="narrow checker">
         <Checkbox
-          action={this.handleCheckboxClick}
+          action={handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
+        />
+      </Cell>
+    );
+
+    const handleDetailClick = () => {
+      this.props.onDetailClick(model.jobid);
+    };
+
+    yield (
+      <Cell className="narrow">
+        <Button
+          label="Detail"
+          btnStyle="success"
+          onClick={handleDetailClick}
         />
       </Cell>
     );
@@ -201,7 +200,12 @@ export default class JobsTable extends ServiceTable {
 
     yield (
       <Cell className="name">
-        <Link to={`/job/${model.jobid}?date=${date}`}>{model.name}</Link>
+        <Link
+          to={`/job/${model.jobid}?date=${date}`}
+          className="resource-name-link"
+        >
+          {model.name}
+        </Link>
       </Cell>
     );
 
@@ -250,7 +254,9 @@ export default class JobsTable extends ServiceTable {
           highlight={model._updated}
           onHighlightEnd={this.handleHighlightEnd(model.id)}
           cells={this._renderCells}
-          onClick={this._activateRow}
+          className={classNames('resource-row', {
+            info: model.id === parseInt(this.props.paneId, 10),
+          })}
         />
       );
     }

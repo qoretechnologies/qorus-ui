@@ -201,10 +201,19 @@ export default class OrdersTable extends Table {
    */
   *renderCells({ model, selected }) {
     if (!this.props.noCheckbox) {
+      const handleCheckboxClick = () => {
+        const selectedData = Object.assign({},
+          this.props.selectedData,
+          { [model.id]: !this.props.selectedData[model.id] }
+        );
+
+        this.setSelectedServices(selectedData);
+      };
+
       yield (
         <Cell className="narrow checker">
           <Checkbox
-            action={ this.handleCheckboxClick }
+            action={handleCheckboxClick}
             checked={ selected ? 'CHECKED' : 'UNCHECKED'}
           />
         </Cell>

@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-
-// utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import lifecycle from 'recompose/lifecycle';
@@ -13,21 +12,14 @@ import { setTitle } from '../../helpers/document';
 import patch from '../../hocomponents/patchFuncArgs';
 import sort from '../../hocomponents/sort';
 import sync from '../../hocomponents/sync';
+import withPane from '../../hocomponents/pane';
 import { sortDefaults } from '../../constants/sort';
 import { formatDate } from '../../helpers/date';
-
-// data
 import actions from '../../store/api/actions';
-
-// components
-import Pane from '../../components/pane';
-
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
 import JobsDetail from './detail';
-
 import { findBy } from '../../helpers/search';
-import { flowRight } from 'lodash';
 
 const filterSearch = (search) => (collection) =>
   findBy('name', search, collection);
@@ -100,22 +92,19 @@ const fetchOnUrlParamsChange = lifecycle({
     'jobs',
     'collection',
     sortDefaults.jobs
-  )
+  ),
+  withPane(JobsDetail, ['location'], 'detail')
 )
 export default class Jobs extends Component {
   static propTypes = {
     location: PropTypes.object,
-    dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
     collection: PropTypes.array,
     info: PropTypes.object,
-    systemOptions: PropTypes.array,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
     params: PropTypes.object,
     route: PropTypes.object,
+    systemOptions: PropTypes.array,
     onPaneClose: PropTypes.func,
-    getActiveRow: PropTypes.func,
     onFilterClick: PropTypes.func,
     filterFn: PropTypes.func,
     onSearchChange: PropTypes.func,
@@ -133,28 +122,19 @@ export default class Jobs extends Component {
     onCSVClick: PropTypes.func,
     generateCSV: PropTypes.func,
     updateDone: PropTypes.func,
+    paneId: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    paneTab: PropTypes.string,
+    closePane: PropTypes.func,
+    openPane: PropTypes.func,
   };
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
   };
-
-  static childContextTypes = {
-    params: PropTypes.object,
-    route: PropTypes.object,
-    dispatch: PropTypes.func,
-    location: PropTypes.object,
-  };
-
-  getChildContext() {
-    return {
-      params: this.props.params,
-      route: this.props.route,
-      dispatch: this.props.dispatch,
-      location: this.props.location,
-    };
-  }
 
   componentDidMount() {
     setTitle(`Jobs | ${this.context.getTitle()}`);
@@ -163,8 +143,6 @@ export default class Jobs extends Component {
   componentDidUpdate() {
     setTitle(`Jobs | ${this.context.getTitle()}`);
   }
-
-  getCSVTable = () => this.props.generateCSV(this.props.collection, 'jobs');
 
   /**
    * Handles the batch action calls like
@@ -190,27 +168,6 @@ export default class Jobs extends Component {
     this.props.onCSVClick(this.props.collection, 'jobs');
   };
 
-  renderPane() {
-    const { params } = this.props;
-    const model = this.props.getActiveRow(this.props.collection);
-
-    if (!model) return null;
-
-    return (
-      <Pane
-        width={550}
-        onClose={this.props.onPaneClose}
-      >
-        <JobsDetail
-          model={this.props.getActiveRow(this.props.collection)}
-          tabId={params.tabId}
-          location={this.props.location}
-        />
-      </Pane>
-    );
-  }
-
-
   render() {
     const { collection } = this.props;
 
@@ -222,6 +179,9 @@ export default class Jobs extends Component {
           selected={this.props.selected}
           defaultSearchValue={this.props.location.query.q}
           params={this.props.params}
+          location={this.props.location}
+          route={this.props.route}
+          router={this.context.router}
           batchAction={this.handleBatchAction}
           onAllClick={this.props.onAllClick}
           onNoneClick={this.props.onNoneClick}
@@ -232,19 +192,18 @@ export default class Jobs extends Component {
           <JobsTable
             initialFilter={this.props.filterFn}
             location={this.props.location}
-            params={this.props.params}
             onDataFilterChange={this.props.onDataFilterChange}
-            activeWorkflowId={parseInt(this.props.params.detailId, 10)}
             setSelectedData={this.props.setSelectedData}
             selectedData={this.props.selectedData}
             onSortChange={this.props.onSortChange}
             sortData={this.props.sortData}
             collection={collection}
             onUpdateDone={this.props.updateDone}
-            activeRowId={parseInt(this.props.params.detailId, 10)}
+            onDetailClick={this.props.openPane}
+            paneId={this.props.paneId}
+            params={this.props.params}
           />
         </div>
-        {this.renderPane()}
       </div>
     );
   }

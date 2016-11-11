@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
-import Loader from 'components/loader';
-import Chart from 'components/chart';
-import Editable from 'components/editable';
+import Loader from '../../../../components/loader';
+import Chart from '../../../../components/chart';
+import Editable from '../../../../components/editable';
 
-import { createLineDatasets, createDoughDatasets } from 'helpers/chart';
+import { createLineDatasets, createDoughDatasets } from '../../../../helpers/chart';
 
 import { fetchJson } from 'store/api/utils';
 import moment from 'moment';

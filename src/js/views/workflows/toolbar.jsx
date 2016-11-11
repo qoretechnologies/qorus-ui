@@ -1,6 +1,6 @@
 /* @flow */
 import React, { Component, PropTypes } from 'react';
-import Toolbar, { Actions } from '../../components/toolbar';
+import Toolbar from '../../components/toolbar';
 import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
@@ -42,6 +42,8 @@ export default class WorkflowsToolbar extends Component {
     onNoneClick: () => void,
     onInvertClick: () => void,
     onCSVClick: () => void,
+    expanded: boolean,
+    onToggleStatesClick: Function,
   };
 
   /**
@@ -125,7 +127,10 @@ export default class WorkflowsToolbar extends Component {
   renderSelectionControls() {
     if (this.props.selected !== 'none') {
       return (
-        <Actions>
+        <div
+          className="btn-group pull-left"
+          id="selection-actions"
+        >
           <Button
             label="Enable"
             icon="power-off"
@@ -160,7 +165,7 @@ export default class WorkflowsToolbar extends Component {
               action={this.handleUnsetDeprecatedClick}
             />
           </Dropdown>
-        </Actions>
+        </div>
       );
     }
 
@@ -174,7 +179,10 @@ export default class WorkflowsToolbar extends Component {
 
     return (
       <Toolbar>
-        <Dropdown id="selection">
+        <Dropdown
+          id="selection"
+          className="pull-left"
+        >
           <DropdownControl>
             <Checkbox
               action={this.props.onAllClick}
@@ -246,6 +254,12 @@ export default class WorkflowsToolbar extends Component {
           btnStyle="default"
           big
           action={this.props.onCSVClick}
+        />
+        <Button
+          label={this.props.expanded ? 'Collapse states' : 'Expand states'}
+          btnStyle={this.props.expanded ? 'success' : 'default'}
+          big
+          action={this.props.onToggleStatesClick}
         />
         <Search
           defaultValue={this.props.defaultSearchValue}

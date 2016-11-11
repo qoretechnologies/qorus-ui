@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import Toolbar, { Actions } from '../../../../components/toolbar';
+import Toolbar from '../../../../components/toolbar';
 import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
@@ -102,7 +102,10 @@ export default class OrdersToolbar extends Component {
   renderSelectionControls() {
     if (this.props.selected !== 'none') {
       return (
-        <Actions>
+        <div
+          className="btn-group pull-left"
+          id="selection-actions"
+        >
           <Button
             label={getActionData('retry', 'name')}
             icon={getActionData('retry', 'icon')}
@@ -138,7 +141,7 @@ export default class OrdersToolbar extends Component {
             btnStyle="default"
             action={this.handleUnblockClick}
           />
-        </Actions>
+        </div>
       );
     }
 
@@ -155,7 +158,10 @@ export default class OrdersToolbar extends Component {
 
     return (
       <Toolbar>
-        <Dropdown id="selection">
+        <Dropdown
+          id="selection"
+          className="pull-left"
+        >
           <DropdownControl>
             <Checkbox
               action={this.props.onAllClick}

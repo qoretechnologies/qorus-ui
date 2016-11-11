@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import Table, { Section, Row, Cell } from '../../components/table';
+import { Control as Button } from '../../components/controls';
 import ServiceControls from './controls';
 import Checkbox from '../../components/checkbox';
-import { goTo } from '../../helpers/router';
 import actions from '../../store/api/actions';
 
 /**
@@ -23,6 +23,7 @@ export default class ServicesTable extends Component {
     selectedData: PropTypes.object,
     onSortChange: PropTypes.func,
     sortData: PropTypes.object,
+    onDetailClick: PropTypes.func,
   };
 
 
@@ -44,8 +45,6 @@ export default class ServicesTable extends Component {
    * are used as cache key by pure render.
    */
   componentWillMount() {
-    this._activateRow = ::this.activateRow;
-
     this._renderSections = ::this.renderSections;
     this._renderHeadingRow = ::this.renderHeadingRow;
     this._renderRows = ::this.renderRows;
@@ -92,70 +91,6 @@ export default class ServicesTable extends Component {
     this.props.setSelectedData(selectedData);
   }
 
-  /**
-   * Finds workflow associated with given row element.
-   *
-   * @param {HTMLTableRowElement} row
-   * @return {Object}
-   */
-  findActivatedRow(row) {
-    let idx = null;
-    for (let i = 0; i < row.parentElement.rows.length; i += 1) {
-      if (row === row.parentElement.rows[i]) {
-        idx = i;
-        break;
-      }
-    }
-
-    return this.props.collection[idx] || null;
-  }
-
-
-  /**
-   * Changes active route to workflow associated with clicked element.
-   *
-   * If the event handled some significant action before (i.e., its
-   * default action is prevented), it does nothing.
-   *
-   * @param {Event} ev
-   */
-  activateRow(ev) {
-    if (ev.defaultPrevented) return;
-
-    const model = this.findActivatedRow(ev.currentTarget);
-    const shouldDeactivate =
-      this.context.params.detailId &&
-      parseInt(this.context.params.detailId, 10) === model.id;
-    const change = {
-      detailId: shouldDeactivate ? null : model.id,
-      tabId: shouldDeactivate ? null : this.context.params.tabId,
-    };
-
-    goTo(
-      this.context.router,
-      'services',
-      this.context.route.path,
-      this.context.params,
-      change,
-      this.context.location.query
-    );
-  }
-
-  /**
-   * Handles the individual workflow checkboxes
-   *
-   * @param {Event} ev
-   */
-  handleCheckboxClick = (ev) => {
-    const service = this.findActivatedRow(ev.currentTarget.parentElement.parentElement);
-    const selectedData = Object.assign({},
-      this.props.selectedData,
-      { [service.id]: !this.props.selectedData[service.id] }
-    );
-
-    this.setSelectedServices(selectedData);
-  };
-
   handleHighlightEnd = (id) => () => {
     this.context.dispatch(
       actions.services.updateDone(id)
@@ -174,12 +109,16 @@ export default class ServicesTable extends Component {
     );
 
     yield (
+      <Cell tag="th" className="narrow">-</Cell>
+    );
+
+    yield (
       <Cell
         tag="th"
         className="narrow"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
-        name="type"r
+        name="type"
       >
         Type
       </Cell>
@@ -259,12 +198,34 @@ export default class ServicesTable extends Component {
     const alert = model.has_alerts ?
       <i className="fa fa-warning text-danger" /> : '';
 
+    const handleCheckboxClick = () => {
+      const selectedData = Object.assign({},
+        this.props.selectedData,
+        { [model.id]: !this.props.selectedData[model.id] }
+      );
+
+      this.setSelectedServices(selectedData);
+    };
 
     yield (
       <Cell className="narrow checker">
         <Checkbox
-          action={this.handleCheckboxClick}
+          action={handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
+        />
+      </Cell>
+    );
+
+    const handleDetailClick = () => {
+      this.props.onDetailClick(model.id);
+    };
+
+    yield (
+      <Cell className="narrow">
+        <Button
+          label="Detail"
+          btnStyle="success"
+          onClick={handleDetailClick}
         />
       </Cell>
     );
@@ -350,7 +311,6 @@ export default class ServicesTable extends Component {
             selected: selectedData[model.id],
           }}
           cells={this._renderCells}
-          onClick={this._activateRow}
           highlight={model._updated}
           onHighlightEnd={this.handleHighlightEnd(model.id)}
           className={classNames({
