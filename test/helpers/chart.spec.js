@@ -14,7 +14,7 @@ describe('Helpers from helpers/table', () => {
     it('groups order states', () => {
       const data = {
         READY: 1,
-        COMPLETED: 2,
+        COMPLETE: 2,
         ERROR: 5,
         BLOCKED: 3,
         INCOMPLETE: 1,
@@ -225,7 +225,7 @@ describe('Helpers from helpers/table', () => {
     it('creates the data for the dough chart', () => {
       const data = {
         READY: 1,
-        COMPLETED: 2,
+        COMPLETE: 2,
         ERROR: 5,
         BLOCKED: 3,
         INCOMPLETE: 1,

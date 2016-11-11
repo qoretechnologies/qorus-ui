@@ -17,15 +17,13 @@ Feature: Services
 
   Scenario: Activating detail pane
     Given I am on "services" listing
-    When I activate "info"
+    When I activate "info" - "6"
     Then I should see "service" detail pane
     And I should see "service" details tab
     And I should see activated row highlighted
 
-  @no-impl
   Scenario: Closing detail pane
-    Given I am on "services" listing
-    And I have "info" open
+    Given I am on "services?paneId=698&paneTab=detail" listing
     When I click close button on detail pane
     Then I should see no detail pane
     And I should see no row highlighted

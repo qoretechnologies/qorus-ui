@@ -219,6 +219,7 @@ export default class Workflows extends Component {
     sortByKey: 1,
     historySortBy: 'version',
     historySortByKey: -1,
+    statesExpanded: false,
   };
 
   getChildContext() {
@@ -305,6 +306,12 @@ export default class Workflows extends Component {
     this.applyFilter(urlFilter);
   };
 
+  handleToggleStateClick = () => {
+    this.setState({
+      statesExpanded: !this.state.statesExpanded,
+    });
+  };
+
   /**
    * Handles the batch action calls like
    * enabling, disabling, reseting etc
@@ -368,6 +375,8 @@ export default class Workflows extends Component {
           onNoneClick={this.props.onNoneClick}
           onInvertClick={this.props.onInvertClick}
           onCSVClick={this.handleCSVClick}
+          expanded={this.state.statesExpanded}
+          onToggleStatesClick={this.handleToggleStateClick}
         />
         <WorkflowsTable
           initialFilter={this.props.filterFn}
@@ -380,6 +389,7 @@ export default class Workflows extends Component {
           sortData={this.props.sortData}
           linkDate={this.getDate()}
           openPane={this.props.openPane}
+          expanded={this.state.statesExpanded}
         />
       </div>
     );

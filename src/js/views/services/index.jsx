@@ -1,26 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-
-// utils
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import { flowRight } from 'lodash';
+
 import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
+import withPane from '../../hocomponents/pane';
+import sync from '../../hocomponents/sync';
 import { sortDefaults } from '../../constants/sort';
-
-// data
-import actions from 'store/api/actions';
-
-// components
-import Loader from 'components/loader';
-import Pane from 'components/pane';
-
+import actions from '../../store/api/actions';
 import ServicesToolbar from './toolbar';
 import ServicesTable from './table';
 import ServicesDetail from './detail';
-
 import { findBy } from '../../helpers/search';
-import { flowRight } from 'lodash';
 
 const filterSearch = (search) => (services) =>
   findBy('name', search, services);
@@ -50,35 +43,35 @@ const viewSelector = createSelector(
     collectionSelector,
   ],
   (services, systemOptions, collection) => ({
-    sync: services.sync,
-    loading: services.loading,
+    meta: services,
     services: collection,
     systemOptions,
   }),
 );
 
 @compose(
-  connect(viewSelector),
-  sort(
-    'services',
-    'services',
-    sortDefaults.services
+  connect(viewSelector, actions.services),
+  sync('meta', true, 'fetch'),
+  sort('services', 'services', sortDefaults.services),
+  withPane(
+    ServicesDetail,
+    [
+      'systemOptions',
+      'dispatch',
+      'location',
+    ],
+    'detail'
   )
 )
 export default class Services extends Component {
   static propTypes = {
     location: PropTypes.object,
-    dispatch: PropTypes.func,
     instanceKey: PropTypes.string,
     services: PropTypes.array,
     info: PropTypes.object,
     systemOptions: PropTypes.array,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
     params: PropTypes.object,
     route: PropTypes.object,
-    onPaneClose: PropTypes.func,
-    getActiveRow: PropTypes.func,
     onFilterClick: PropTypes.func,
     filterFn: PropTypes.func,
     onSearchChange: PropTypes.func,
@@ -94,30 +87,17 @@ export default class Services extends Component {
     onCSVClick: PropTypes.func,
     sortData: PropTypes.object,
     onSortChange: PropTypes.func,
+    paneId: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    openPane: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
     getTitle: PropTypes.func.isRequired,
   };
-
-  static childContextTypes = {
-    params: PropTypes.object,
-    route: PropTypes.object,
-    dispatch: PropTypes.func,
-  };
-
-  getChildContext() {
-    return {
-      params: this.props.params,
-      route: this.props.route,
-      dispatch: this.props.dispatch,
-    };
-  }
-
-  componentWillMount() {
-    this.props.dispatch(actions.services.fetch());
-  }
 
   componentDidMount() {
     setTitle(`Services | ${this.context.getTitle()}`);
@@ -148,38 +128,10 @@ export default class Services extends Component {
     });
 
     this.props.clearSelection();
-    this.props.dispatch(
-      actions.services[`${type}Batch`](selectedData)
-    );
+    this.props[`${type}Batch`](selectedData);
   };
 
-  renderPane() {
-    const { params, systemOptions } = this.props;
-
-    if (!this.props.getActiveRow(this.props.services)) return null;
-
-    return (
-      <Pane
-        width={550}
-        onClose={this.props.onPaneClose}
-      >
-        <ServicesDetail
-          service={this.props.getActiveRow(this.props.services)}
-          systemOptions={systemOptions}
-          tabId={params.tabId}
-          location={this.props.location}
-        />
-      </Pane>
-    );
-  }
-
   render() {
-    const { sync, loading, services } = this.props;
-
-    if (!sync || loading) {
-      return <Loader />;
-    }
-
     return (
       <div>
         <ServicesToolbar
@@ -187,7 +139,6 @@ export default class Services extends Component {
           onSearchUpdate={this.props.onSearchChange}
           selected={this.props.selected}
           defaultSearchValue={this.props.location.query.q}
-          params={this.props.params}
           batchAction={this.handleBatchAction}
           onAllClick={this.props.onAllClick}
           onNoneClick={this.props.onNoneClick}
@@ -197,15 +148,14 @@ export default class Services extends Component {
         <ServicesTable
           initialFilter={this.props.filterFn}
           onDataFilterChange={this.props.onDataFilterChange}
-          activeWorkflowId={parseInt(this.props.params.detailId, 10)}
           setSelectedData={this.props.setSelectedData}
           selectedData={this.props.selectedData}
           onSortChange={this.props.onSortChange}
           sortData={this.props.sortData}
-          collection={services}
-          activeRowId={parseInt(this.props.params.detailId, 10)}
+          collection={this.props.services}
+          activeRowId={parseInt(this.props.paneId, 10)}
+          onDetailClick={this.props.openPane}
         />
-        {this.renderPane()}
       </div>
     );
   }

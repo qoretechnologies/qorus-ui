@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Toolbar, { Actions } from 'components/toolbar';
+import Toolbar from 'components/toolbar';
 import Dropdown, { Item as DropdownItem, Control as DropdownControl } from 'components/dropdown';
 import { Control as Button } from '../../components/controls';
 import Checkbox from 'components/checkbox';
@@ -18,6 +18,9 @@ export default class extends Component {
     selected: PropTypes.string,
     onFilterClick: PropTypes.func,
     params: PropTypes.object,
+    location: PropTypes.object,
+    route: PropTypes.object,
+    router: PropTypes.object,
     defaultSearchValue: PropTypes.string,
     onSearchUpdate: PropTypes.func,
     batchAction: PropTypes.func,
@@ -25,13 +28,6 @@ export default class extends Component {
     onNoneClick: PropTypes.func,
     onInvertClick: PropTypes.func,
     onCSVClick: PropTypes.func,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object,
-    route: PropTypes.object,
   };
 
   /**
@@ -64,12 +60,12 @@ export default class extends Component {
 
   applyDate = (date) => {
     goTo(
-      this.context.router,
+      this.props.router,
       'jobs',
-      this.context.route.path,
-      this.context.params,
+      this.props.route.path,
+      this.props.params,
       { date },
-      this.context.location.query
+      this.props.location.query
     );
   };
 
@@ -79,7 +75,10 @@ export default class extends Component {
   renderSelectionControls() {
     if (this.props.selected !== 'none') {
       return (
-        <Actions>
+        <div
+          className="btn-group pull-left"
+          id="selection-actions"
+        >
           <Button
             label="Enable"
             icon="power-off"
@@ -108,7 +107,7 @@ export default class extends Component {
             btnStyle="default"
             action={this.handleResetClick}
           />
-        </Actions>
+        </div>
       );
     }
 
@@ -120,7 +119,10 @@ export default class extends Component {
 
     return (
       <Toolbar>
-        <Dropdown id="selection">
+        <Dropdown
+          id="selection"
+          className="pull-left"
+        >
           <DropdownControl>
             <Checkbox
               action={this.props.onAllClick}

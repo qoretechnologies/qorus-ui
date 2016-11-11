@@ -29,7 +29,7 @@ Feature: jobs table
   Scenario: Go to job detail page
     Given I am on "jobs" listing
     And "jobs" get loaded
-    When I click on the "jobtest" link - "3"
+    When I click on the "jobtest" link - "4"
     Then the URL changes to "/job/110/results"
 
   Scenario: Disable job
@@ -66,16 +66,8 @@ Feature: jobs table
     When I click the first button with "#job-33-dropdown-control" selector
     Then I see "#job-33-dropdown" item
 
-  @no-impl
-  Scenario:
-    Given I am on "jobs" page
-    And "jobs" get loaded
-    When I click the first button with "#job-33-dropdown-control" selector
-    And I click on "#job-33-dropdown .reshedule-job a" item
-    Then I see modal
-
   Scenario: check jobs detail page
     Given I am on "jobs" page
     And "jobs" get loaded
-    When I click on the "3.0" row - "4"
-    Then I see ".pane" item
+    When I activate "anothertest" - "4"
+    Then I should see detail pane

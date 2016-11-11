@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
+import { Control as Button } from '../../components/controls';
 import AutoStart from 'components/autostart';
 import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
@@ -12,7 +13,7 @@ import { filterArray } from '../../helpers/workflows';
 import { WORKFLOW_FILTERS } from '../../constants/filters';
 import classNames from 'classnames';
 import actions from 'store/api/actions';
-import { ORDER_STATES } from '../../constants/orders';
+import { ORDER_STATES, ORDER_GROUPS, GROUPED_ORDER_STATES } from '../../constants/orders';
 
 /**
  * List of all workflows in the system.
@@ -41,6 +42,7 @@ export default class WorkflowsTable extends Component {
     openPane: PropTypes.func,
     updateDone: PropTypes.func,
     setAutostart: PropTypes.func,
+    expanded: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -59,6 +61,10 @@ export default class WorkflowsTable extends Component {
     this._renderRows = ::this.renderRows;
     this._renderCells = ::this.renderCells;
     this.renderHeadings = ::this.renderHeadings;
+
+    this.setState({
+      expanded: false,
+    });
   }
 
   componentWillReceiveProps(next) {
@@ -134,21 +140,6 @@ export default class WorkflowsTable extends Component {
   }
 
   /**
-   * Handles the individual workflow checkboxes
-   *
-   * @param {Event} ev
-   */
-  handleCheckboxClick = (ev) => {
-    const workflow = this.findActivatedWorkflow(ev.currentTarget.parentElement.parentElement);
-    const selectedWorkflows = Object.assign({},
-      this.props.selectedWorkflows,
-      { [workflow.id]: !this.props.selectedWorkflows[workflow.id] }
-    );
-
-    this.setSelectedWorkflows(selectedWorkflows);
-  };
-
-  /**
    * Yields heading cells for workflow info including order states.
    *
    * @return {Generator<ReactElement>}
@@ -157,6 +148,10 @@ export default class WorkflowsTable extends Component {
   *renderHeadings() {
     yield (
       <Cell tag="th" className="narrow" />
+    );
+
+    yield (
+      <Cell tag="th" className="narrow">-</Cell>
     );
 
     yield (
@@ -223,18 +218,32 @@ export default class WorkflowsTable extends Component {
       </Cell>
     );
 
-    for (const state of ORDER_STATES) {
-      yield (
-        <Cell
-          tag="th"
-          className="narrow"
-          onSortChange={this.props.onSortChange}
-          sortData={this.props.sortData}
-          name={state.name}
-        >
-          {state.short}
-        </Cell>
-      );
+    if (!this.props.expanded) {
+      for (const state of GROUPED_ORDER_STATES) {
+        yield (
+          <Cell
+            tag="th"
+            className="narrow"
+            name={state.name}
+          >
+            {state.short}
+          </Cell>
+        );
+      }
+    } else {
+      for (const state of ORDER_STATES) {
+        yield (
+          <Cell
+            tag="th"
+            className="narrow"
+            onSortChange={this.props.onSortChange}
+            sortData={this.props.sortData}
+            name={state.name}
+          >
+            {state.short}
+          </Cell>
+        );
+      }
     }
 
     yield (
@@ -270,11 +279,34 @@ export default class WorkflowsTable extends Component {
    * @see ORDER_STATES
    */
   *renderCells({ workflow, selected }) {
+    const handleCheckboxClick = () => {
+      const selectedWorkflows = Object.assign({},
+        this.props.selectedWorkflows,
+        { [workflow.id]: !this.props.selectedWorkflows[workflow.id] }
+      );
+
+      this.setSelectedWorkflows(selectedWorkflows);
+    };
+
     yield (
       <Cell className="narrow checker">
         <Checkbox
-          action={this.handleCheckboxClick}
+          action={handleCheckboxClick}
           checked={selected ? 'CHECKED' : 'UNCHECKED'}
+        />
+      </Cell>
+    );
+
+    const handleDetailClick = () => {
+      this.props.openPane(workflow.workflowid);
+    };
+
+    yield (
+      <Cell className="narrow">
+        <Button
+          label="Detail"
+          btnStyle="success"
+          onClick={handleDetailClick}
         />
       </Cell>
     );
@@ -307,7 +339,10 @@ export default class WorkflowsTable extends Component {
 
     yield (
       <Cell className="name">
-        <Link to={`/workflow/${workflow.workflowid}/list/All/${this.props.linkDate}`}>
+        <Link
+          className="resource-name-link"
+          to={`/workflow/${workflow.workflowid}/list/All/${this.props.linkDate}`}
+        >
           {workflow.name}
         </Link>
       </Cell>
@@ -317,17 +352,40 @@ export default class WorkflowsTable extends Component {
       <Cell className="narrow">{workflow.version}</Cell>
     );
 
-    for (const state of ORDER_STATES) {
-      yield (
-        <Cell className="narrow">
-          <Link
-            className="workflow-status-link"
-            to={`/workflow/${workflow.workflowid}/list/${state.title}/${this.props.linkDate}`}
-          >
-            <Badge label={state.label} val={workflow[state.name]} />
-          </Link>
-        </Cell>
-      );
+    if (!this.props.expanded) {
+      for (const group in ORDER_GROUPS) {
+        if (ORDER_GROUPS.hasOwnProperty(group)) {
+          const count = ORDER_GROUPS[group].reduce((cnt, cur) => cnt + workflow[cur], 0);
+          const label = GROUPED_ORDER_STATES.find((grp) => grp.name === group).label;
+          const states = ORDER_GROUPS[group].map((orderGrp) => (
+            ORDER_STATES.find((grp) => grp.name === orderGrp).title)
+          );
+
+          // eslint-disable-next-line
+          const url = `/workflow/${workflow.workflowid}/list/${states.join(',')}/${this.props.linkDate}`;
+
+          yield (
+            <Cell className="narrow">
+              <Link className="workflow-status-link" to={url}>
+                <Badge label={label} val={count} />
+              </Link>
+            </Cell>
+          );
+        }
+      }
+    } else {
+      for (const state of ORDER_STATES) {
+        yield (
+          <Cell className="narrow">
+            <Link
+              className="workflow-status-link"
+              to={`/workflow/${workflow.workflowid}/list/${state.title}/${this.props.linkDate}`}
+            >
+              <Badge label={state.label} val={workflow[state.name]} />
+            </Link>
+          </Cell>
+        );
+      }
     }
 
     yield (
@@ -380,12 +438,6 @@ export default class WorkflowsTable extends Component {
    */
   *renderRows({ activeId, workflows, selectedWorkflows }) {
     for (const workflow of workflows) {
-      const handleRowClick = (e) => {
-        if (e.defaultPrevented) return;
-
-        this.props.openPane(workflow.workflowid);
-      };
-
       yield (
         <Row
           key={workflow.workflowid}
@@ -394,10 +446,9 @@ export default class WorkflowsTable extends Component {
             selected: selectedWorkflows[workflow.workflowid],
           }}
           cells={this._renderCells}
-          onClick={handleRowClick}
           highlight={workflow._updated}
           onHighlightEnd={this.handleHighlightEnd(workflow.workflowid)}
-          className={classNames({
+          className={classNames('resource-row', {
             info: workflow.workflowid === activeId,
           })}
         />

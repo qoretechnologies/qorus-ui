@@ -1,15 +1,5 @@
 Feature: Tests workflows batch actions
 
-  @no-impl
-  Scenario: Unsets workflow's deprecated status
-    Given I am on "workflows" listing
-    And "workflows" get loaded
-    And I click the "Deprecated" button inside "deprecated" dropdown
-    And I select the "DEPRECATEDTEST" workflow
-    When I click the "Unset deprecated" button inside "hidden" dropdown
-    And I click the "Deprecated" button inside "deprecated" dropdown
-    Then "6" "workflows" are shown
-
   Scenario: Disables multiple workflows
     Given I am on "workflows" listing
     And "workflows" get loaded

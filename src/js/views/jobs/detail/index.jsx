@@ -1,10 +1,8 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 
@@ -12,81 +10,64 @@ import Header from './header';
 import { DetailTab, AlertsTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
+import DetailPane from '../../../components/pane';
 import Code from '../../../components/code';
 import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
 
-
-import { goTo } from '../../../helpers/router';
-
 const Detail = ({
   location,
-  tabId,
+  paneTab,
+  changePaneTab,
+  onClose,
   model,
-  changeTab,
   getHeight,
 }: {
   location: Object,
-  tabId: string,
+  paneTab: string,
   model: Object,
-  changeTab: Function,
+  changePaneTab: Function,
+  onClose: Function,
+  paneId: string | number,
   getHeight: Function,
 }): React.Element<*> => (
-  <article>
-    <Header model={model} />
-    <Tabs
-      className="pane__tabs"
-      active={tabId}
-      tabChange={changeTab}
-    >
-      <Pane name="Detail">
-        <DetailTab model={model} />
-      </Pane>
-      <Pane name="Code">
-        <Code
-          data={model.lib || {}}
-          heightUpdater={getHeight}
-        />
-      </Pane>
-      <Pane name="Log">
-        <LogTab
-          resource={`jobs/${model.id}`}
-          location={location}
-        />
-      </Pane>
-      <Pane name="Alerts">
-        <AlertsTab alerts={model.alerts} />
-      </Pane>
-      <Pane name="Mappers">
-        <MappersTable mappers={model.mappers} />
-      </Pane>
-    </Tabs>
-  </article>
+  <DetailPane
+    name="jobs-detail-pane"
+    width={550}
+    onClose={onClose}
+  >
+    <article>
+      <Header model={model} />
+      <Tabs
+        className="pane__tabs"
+        active={paneTab}
+        tabChange={changePaneTab}
+      >
+        <Pane name="Detail">
+          <DetailTab model={model} />
+        </Pane>
+        <Pane name="Code">
+          <Code
+            data={model.lib || {}}
+            heightUpdater={getHeight}
+          />
+        </Pane>
+        <Pane name="Log">
+          <LogTab
+            resource={`jobs/${model.id}`}
+            location={location}
+          />
+        </Pane>
+        <Pane name="Alerts">
+          <AlertsTab alerts={model.alerts} />
+        </Pane>
+        <Pane name="Mappers">
+          <MappersTable mappers={model.mappers} />
+        </Pane>
+      </Tabs>
+    </article>
+  </DetailPane>
 );
-
-const getRouterContext = getContext({
-  router: PropTypes.object,
-  route: PropTypes.object,
-  params: PropTypes.object,
-});
-
-const allowChangeTab = mapProps(({
-  router,
-  route,
-  params,
-  ...other,
-}: {
-  router: Object,
-  route: Object,
-  params: Object,
-  other: Object,
-}): Object => ({
-  router,
-  route,
-  params,
-  ...other,
-  changeTab: (tabId: string): void => goTo(router, 'jobs', route.path, params, { tabId }),
-}));
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
   componentWillMount() {
@@ -122,15 +103,17 @@ const fetchCodeOnMountAndOnChange = lifecycle({
 
 export default compose(
   connect(
-    () => ({}),
+    (state: Object, props: Object): Object => ({
+      model: state.api.jobs.data.find((job: Object): boolean => (
+        job.id === parseInt(props.paneId, 10))
+      ),
+    }),
     {
       fetchLibSources: actions.jobs.fetchLibSources,
       fetchCode: actions.jobs.fetchCode,
     }
   ),
-  getRouterContext,
   pure,
-  allowChangeTab,
   fetchLibSourceOnMountAndOnChange,
   fetchCodeOnMountAndOnChange,
   withHandlers({
