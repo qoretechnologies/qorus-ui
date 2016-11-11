@@ -13,6 +13,14 @@ export const ORDER_STATES = [
   { name: 'BLOCKED', short: 'B', label: 'gray', title: 'Blocked' },
 ];
 
+export const GROUPED_ORDER_STATES = [
+  { name: 'READY/SCHD', short: 'READY/SCHD', label: 'info', title: 'Ready / Scheduled' },
+  { name: 'RUN/WAIT', short: 'RUN/WAIT', label: 'waiting', title: 'Run / Wait' },
+  { name: 'ERR/BLOCK', short: 'ERR/BLOCK', label: 'danger', title: 'Error / Blocked' },
+  { name: 'CANCELED', short: 'CANCELED', label: 'gray', title: 'Canceled' },
+  { name: 'COMPLETE', short: 'COMPLETE', label: 'success', title: 'Complete' },
+];
+
 export const CUSTOM_ORDER_STATES = [
   { name: 'UNBLOCKING', label: 'gray', title: 'Unblocking' },
   { name: 'BLOCKING', label: 'gray', title: 'Blocking' },
@@ -62,7 +70,7 @@ export const DOUGH_LABELS = {
   'RUN/WAIT': '#e5c737',
   'ERR/BLOCK': '#B94A49',
   CANCELED: '#f2dede',
-  COMPLETED: '#9ccb3b',
+  COMPLETE: '#9ccb3b',
 };
 
 export const ORDER_GROUPS = {
@@ -71,6 +79,7 @@ export const ORDER_GROUPS = {
     'SCHEDULED',
   ],
   'RUN/WAIT': [
+    'IN-PROGRESS',
     'ASYNC-WAITING',
     'WAITING',
     'EVENT-WAITING',
@@ -82,7 +91,7 @@ export const ORDER_GROUPS = {
     'BLOCKED',
   ],
   CANCELED: ['CANCELED'],
-  COMPLETED: ['COMPLETED'],
+  COMPLETE: ['COMPLETE'],
 };
 
 export const STATUS_PRIORITY = [
