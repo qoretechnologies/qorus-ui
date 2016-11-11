@@ -20,6 +20,7 @@ type Props = {
   submitLabel?: string,
   selected?: Array<?string>,
   show?: ?boolean,
+  className?: string,
 }
 
 @pureRender
@@ -280,7 +281,7 @@ export default class Dropdown extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className="btn-group">
+      <div className={classNames('btn-group', this.props.className)}>
         {this.renderDropdownControl()}
         {this.renderDropdown()}
         {this.renderSubmit()}
