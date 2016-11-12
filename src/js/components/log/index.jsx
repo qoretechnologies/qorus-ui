@@ -98,7 +98,7 @@ export default class LogComponent extends Component {
         >
           <code className="language-log">
             { messages.map((m, key) => (
-              <p key={key}>{ m }</p>
+              <p className="log-message" key={key}>{ m }</p>
             ))}
           </code>
         </pre>
