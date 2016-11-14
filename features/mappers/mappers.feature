@@ -11,3 +11,8 @@ Feature: Tests the mapper view and functionalities
     When I click on show details
     Then the detail panel is shown
     And there are table and code elements
+
+  Scenario: Invalid mapper shows an error message
+    Given I am on "mappers/3" listing
+    When the mapper gets loaded
+    Then I see an error message

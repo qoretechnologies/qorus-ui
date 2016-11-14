@@ -17,13 +17,13 @@
     "output": "(\n    \"imei\" : {},\n    \"delivery_detail_id\" : {},\n    \"change_date\" : {},\n    \"status\" : {},\n    \"previous_status\" : {},\n    \"i_sepl_status\" : {},\n)"
   },
   "field_source": {
-    "imei": "(\"name\": \"SERIAL_NUMBER\"\n)",
+    "imei": "(\"constant\" : \"I\")",
     "delivery_detail_id": "(\"name\": \"SYS_REF\"\n)",
     "change_date": "(\"name\": \"LAST_UPDATE_DATE\"\n)",
     "status": "(\"name\": \"SERIAL_NUMBER\"\n)",
-    "previous_status": "(\"constant\" : \"I\")",
     "i_sepl_status": "(\"constant\" : \"C\")",
-    "Total": "int sub (any x, hash rec) { return rec.Available.toInt() + rec.Ordered.toInt() + rec.InTransit.toInt(); }"
+    "Total": "int sub (any x, hash rec) { return rec.Available.toInt() + rec.Ordered.toInt() + rec.InTransit.toInt(); }",
+    "previous_status": "(\"name\": \"SERIAL_NUMBER\"\n)"
   },
   "opts": {
     "datasource": "gsi_staging",
@@ -50,7 +50,7 @@
     },
     "name": "it-31-rma_receipt-rev_credit_cc-dhl-in"
   },
-  "valid": false,
+  "valid": true,
   "error": "mapper \"it-31-rma_receipt-rev_credit_cc-dhl-in\" v1.0 (486) refers to unknown mapper type \"EbsSingleTableInboundMapper\"; known mapper types: [\"Mapper\", \"InboundTableMapper\", \"QorusSqlStatementOutboundMapper\", \"QorusRawSqlStatementOutboundMapper\"]",
   "groups": [
     {

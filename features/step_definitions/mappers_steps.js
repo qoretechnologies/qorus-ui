@@ -19,4 +19,8 @@ module.exports = function mappersSteps() {
     this.browser.assert.element('.mapper-detail table');
     this.browser.assert.element('.mapper-detail .source-code');
   });
+
+  this.Then(/^I see an error message$/, async function() {
+    this.browser.assert.element('.alert.alert-danger');
+  });
 };
