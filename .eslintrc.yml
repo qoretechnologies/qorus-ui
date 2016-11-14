@@ -53,3 +53,4 @@ settings:
 globals:
   ReactClass: true
   window: true
+  history: true
