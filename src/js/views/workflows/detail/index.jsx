@@ -111,7 +111,7 @@ export default class WorkflowsDetail extends Component {
               />
             </Pane>
             <Pane name="Alerts">
-              <AlertsTab alerts={workflow.alerts}/>
+              <AlertsTab alerts={workflow.alerts} />
             </Pane>
             <Pane name="Errors">
               <ErrorsTab
