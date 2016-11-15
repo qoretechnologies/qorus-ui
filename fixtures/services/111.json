@@ -1054,5 +1054,24 @@
   "log_url": "ws://localhost:8001/log/services/698",
   "options": [],
   "connections": [],
-  "alerts": []
+  "has_alerts": true,
+  "alerts": [
+    {
+      "type": "SERVICE",
+      "id": 111,
+      "alerttype": "ONGOING",
+      "when": "2016-07-28 06:18:53.414118Z",
+      "local": true,
+      "alert": "SERVICE-NOT-CREATED",
+      "alertid": 2,
+      "reason": "test alert for service",
+      "who": "Qorus",
+      "source": "ipv6[::ffff:192.168.33.1]:50186 listener: ipv6[::]:8001",
+      "object": "SERVICE test (111)",
+      "instance": "qorus-test-instance",
+      "name": "test",
+      "version": "1.0",
+      "auditid": null
+    }
+  ]
 }

@@ -1,11 +1,20 @@
-import React, { PropTypes } from 'react';
+/* @flow */
+import React from 'react';
 
-import Toolbar from 'components/toolbar';
+import Toolbar from '../../../../components/toolbar';
+import { Controls, Control as Button } from '../../../../components/controls';
+import Dropdown, { Control as DToggle, Item as DItem } from '../../../../components/dropdown';
 
-import { Controls, Control as Button } from 'components/controls';
-import Dropdown, { Control as DToggle, Item as DItem } from 'components/dropdown';
+type Props = {
+  data: Array<Object>,
+  onSubmit: Function,
+  onShowDetailClick: Function,
+  onCopyErrorClick: Function,
+  onCSVClick: Function,
+  showDetail: boolean,
+};
 
-export default function DiagramErrorsToolbar(props) {
+export default function DiagramErrorsToolbar(props: Props) {
   return (
     <Toolbar>
       <h4 className="pull-left">
@@ -54,12 +63,3 @@ export default function DiagramErrorsToolbar(props) {
     </Toolbar>
   );
 }
-
-DiagramErrorsToolbar.propTypes = {
-  data: PropTypes.array,
-  onSubmit: PropTypes.func,
-  onShowDetailClick: PropTypes.func,
-  onCopyErrorClick: PropTypes.func,
-  onCSVClick: PropTypes.func,
-  showDetail: PropTypes.bool,
-};

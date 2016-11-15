@@ -41,9 +41,3 @@ Feature: Jobs pane
     When "jobs" get loaded
     Then I see ".no-data" item
 
-  Scenario: Go to system alerts
-    Given I am on "jobs/all?paneId=110&paneTab=alerts" page
-    When "jobs" get loaded
-    And I click on ".job-alert:first-child a" item
-    Then the URL changes to "/system/alerts/ongoing/2"
-

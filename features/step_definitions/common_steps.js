@@ -13,7 +13,7 @@ const cmpPane = `${pane} article`;
  * @return {HTMLTableRowElement}
  */
 function findTableRow(browser, name, cellId) {
-  const cell = cellId === undefined ? 6 : cellId;
+  const cell = cellId === undefined ? 7 : cellId;
 
   return browser.
     queryAll(cmpRows).
@@ -28,7 +28,7 @@ function findTableRow(browser, name, cellId) {
  * @return {?number}
  */
 function findTableRowId(browser, name, cellId) {
-  const cell = cellId || 5;
+  const cell = cellId || 6;
   const row = findTableRow(browser, name, cellId);
   if (!row) return null;
 
@@ -50,9 +50,21 @@ const instanceColumns = {
     complete: 9,
   },
   workflow: {
-    ready: 8,
-    'in-progress': 9,
+    ready: 9,
+    'in-progress': 10,
   },
+};
+
+const nameColumns = {
+  workflow: 7,
+  service: 6,
+  job: 4,
+};
+
+const alertColums = {
+  workflow: 4,
+  service: 5,
+  job: 3,
 };
 
 module.exports = function commonSteps() {
@@ -421,6 +433,12 @@ module.exports = function commonSteps() {
     this.browser.assert.url({ pathname });
   });
 
+  this.Then(/^the complete URL changes to "([^"]*)"$/, async function(url) {
+    await this.waitForURLChange();
+
+    this.browser.assert.url(url);
+  });
+
   this.Then(/^query param "([^"]*)" equals to "([^"]*)"$/, function(name, value) {
     this.browser.assert.url({ query: { [name]: value } });
   });
@@ -459,13 +477,13 @@ module.exports = function commonSteps() {
   this.Then(/^the "([^"]*)" workflow has "([^"]*)" execs$/, function (name, execCount) {
     const row = findTableRow(this.browser, name);
 
-    this.browser.assert.text(row.cells[4], execCount);
+    this.browser.assert.text(row.cells[5], execCount);
   });
 
   this.Then(
     /^the "([^"]*)" "([^"]*)" has "([^"]*)" "([^"]*)" instances$/,
     function(name, resource, count, column) {
-      const row = findTableRow(this.browser, name, resource === 'job' ? 4 : 6);
+      const row = findTableRow(this.browser, name, resource === 'job' ? nameColumns['job'] : nameColumns['workflow']);
       const cell = instanceColumns[resource][column];
 
       this.browser.assert.text(row.cells[cell], count);
@@ -476,6 +494,19 @@ module.exports = function commonSteps() {
     const css = type === 'active' ? '.fa-check-circle' : '.fa-minus-circle';
 
     this.browser.assert.elements(`${cmpTable} ${css}`, parseInt(count, 10));
+  });
+
+  this.When(/^I click on the alert icon of "([^"]*)" "([^"]*)"$/, async function(name, type) {
+    const row = findTableRow(this.browser, name, nameColumns[type]);
+    const cell = row.cells[alertColums[type]];
+
+    await this.browser.pressButton(cell.childNodes[0].childNodes[0]);
+  });
+
+  this.When(/^I click on the alert item$/, async function() {
+    const el = this.browser.queryAll('.alerts-item')[0].childNodes[0];
+
+    await this.browser.click(el);
   });
 };
 

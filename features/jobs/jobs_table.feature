@@ -71,3 +71,14 @@ Feature: jobs table
     And "jobs" get loaded
     When I activate "anothertest" - "4"
     Then I should see detail pane
+
+  Scenario: Clicking on alert icon opens detail pane on the alerts tab
+    Given I am on "jobs" listing
+    And "jobs" get loaded
+    When I click on the alert icon of "jobtest" "job"
+    Then the complete URL changes to "jobs?paneId=110&paneTab=alerts"
+
+  Scenario: Row with alerts is shown
+    Given I am on "jobs" listing
+    When "jobs" get loaded
+    Then I should see 2 table row with alerts"

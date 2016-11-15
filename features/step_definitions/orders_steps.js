@@ -3,19 +3,19 @@ import { expect } from 'chai';
 import moment from 'moment';
 
 const stateCells = {
-  COMPLETE: 8,
-  READY: 9,
-  SCHEDULED: 10,
-  INCOMPLETE: 11,
-  'EVENT-WAITING': 12,
-  'ASYNC-WAITING': 13,
-  WAITING: 14,
-  RETRY: 15,
-  ERROR: 16,
-  'IN-PROGRESS': 17,
-  CANCELED: 18,
-  BLOCKED: 19,
-  TOTAL: 20,
+  COMPLETE: 9,
+  READY: 10,
+  SCHEDULED: 11,
+  INCOMPLETE: 12,
+  'EVENT-WAITING': 13,
+  'ASYNC-WAITING': 14,
+  WAITING: 15,
+  RETRY: 16,
+  ERROR: 17,
+  'IN-PROGRESS': 18,
+  CANCELED: 19,
+  BLOCKED: 20,
+  TOTAL: 21,
 };
 
 module.exports = function orderSteps() {
