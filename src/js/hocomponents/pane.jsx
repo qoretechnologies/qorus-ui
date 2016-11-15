@@ -36,8 +36,9 @@ export default (
       });
     };
 
-    handleOpen: Function = (paneId: number): void => {
-      const query = defaultTab ? { paneId, paneTab: defaultTab } : { paneId };
+    handleOpen: Function = (paneId: number, openOnTab: string): void => {
+      const defTab = openOnTab || defaultTab;
+      const query = defTab ? { paneId, paneTab: defTab } : { paneId };
 
       changeQuery(
         this.context.router,
