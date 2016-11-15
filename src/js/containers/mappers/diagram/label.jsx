@@ -61,6 +61,7 @@ const Label = ({
       fill={textColor}
       textAnchor="start"
       alignmentBaseline="middle"
+      className="diagram-rect-name"
     >
       {children}
     </text>
@@ -154,6 +155,6 @@ export default compose(
     },
   }),
   onlyUpdateForKeys(
-    ['x', 'y', 'offsetX', 'width', 'height', 'background', 'textColor', 'children']
+    ['background']
   ),
 )(Label);

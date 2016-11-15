@@ -55,6 +55,7 @@ describe('default', () => {
 
     expect(wrapper.find('rect')).to.have.length(9);
     expect(wrapper.find('line')).to.have.length(3);
+    expect(wrapper.find('polygon')).to.have.length(6);
   });
 
   it('Mouseout on input field', () => {
@@ -90,5 +91,40 @@ describe('default', () => {
     textNode.simulate('mouseover');
 
     expect(wrapper.find('.svg-tooltip')).to.have.length(1);
+  });
+
+  it('sorts the wrapper by putting non-connected fields last', () => {
+    const wrapper = mount(
+      <Diagram mapper={mapper} />
+    );
+
+    expect(
+      wrapper.find('withState(withProps(Diagramm))')
+        .props()
+        .outputMap
+        .find(obj => obj.name === 'change_date')
+        .position
+    ).to.not.eql(null);
+    expect(
+      wrapper.find('withState(withProps(Diagramm))')
+        .props()
+        .outputMap
+        .find(obj => obj.name === 'i_sepl_status')
+        .position
+    ).to.eql(null);
+    expect(
+      wrapper.find('withState(withProps(Diagramm))')
+        .props()
+        .outputMap
+        .find(obj => obj.name === 'status')
+        .position
+    ).to.eql(null);
+    expect(
+      wrapper.find('withState(withProps(Diagramm))')
+        .props()
+        .outputMap
+        .find(obj => obj.name === 'previous_status')
+        .position
+    ).to.eql(null);
   });
 });

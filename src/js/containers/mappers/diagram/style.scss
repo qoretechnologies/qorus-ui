@@ -3,6 +3,14 @@
   overflow: hidden;
 }
 
+.mapper-error-msg {
+  margin-top: 10px;
+
+  h5 {
+    color: #a94442;
+  }
+}
+
 .field-detail {
   font-size: 12px;
   position: relative;
