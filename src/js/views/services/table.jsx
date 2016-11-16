@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import Table, { Section, Row, Cell } from '../../components/table';
-import { Control as Button } from '../../components/controls';
+import { Controls, Control as Button } from '../../components/controls';
 import ServiceControls from './controls';
 import Checkbox from '../../components/checkbox';
 import actions from '../../store/api/actions';
@@ -195,9 +195,6 @@ export default class ServicesTable extends Component {
     const typeIcon = (model.type === 'system') ?
       classNames('fa', 'fa-cog') : classNames('fa', 'fa-user');
 
-    const alert = model.has_alerts ?
-      <i className="fa fa-warning text-danger" /> : '';
-
     const handleCheckboxClick = () => {
       const selectedData = Object.assign({},
         this.props.selectedData,
@@ -257,8 +254,22 @@ export default class ServicesTable extends Component {
       <Cell className="narrow">{model.threads}</Cell>
     );
 
+    const handleAlertClick = () => {
+      this.props.onDetailClick(model.id, 'alerts');
+    };
+
     yield (
-      <Cell className="narrow">{ alert }</Cell>
+      <Cell className="narrow">
+        {model.has_alerts && (
+          <Controls>
+            <Button
+              icon="warning"
+              btnStyle="danger"
+              onClick={handleAlertClick}
+            />
+          </Controls>
+        )}
+      </Cell>
     );
 
     yield (

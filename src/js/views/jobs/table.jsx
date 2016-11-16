@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import ServiceTable from '../services/table';
 import { Cell, Row } from '../../components/table';
-import { Control as Button } from '../../components/controls';
+import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import JobControls from './controls';
 import DateComponent from '../../components/date';
@@ -191,11 +191,22 @@ export default class JobsTable extends ServiceTable {
       </Cell>
     );
 
-    const alert = model.has_alerts ?
-      <i className="fa fa-warning text-danger" /> : '';
+    const handleAlertClick = () => {
+      this.props.onDetailClick(model.jobid, 'alerts');
+    };
 
     yield (
-      <Cell className="narrow">{ alert }</Cell>
+      <Cell className="narrow">
+        {model.has_alerts && (
+          <Controls>
+            <Button
+              btnStyle="danger"
+              icon="warning"
+              onClick={handleAlertClick}
+            />
+          </Controls>
+        )}
+      </Cell>
     );
 
     yield (

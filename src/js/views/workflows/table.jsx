@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Table, { Section, Row, Cell } from 'components/table';
 import Badge from 'components/badge';
-import { Control as Button } from '../../components/controls';
+import { Controls, Control as Button } from '../../components/controls';
 import AutoStart from 'components/autostart';
 import Checkbox from 'components/checkbox';
 import WorkflowsControls from './controls';
@@ -176,6 +176,18 @@ export default class WorkflowsTable extends Component {
         className="narrow"
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
+        name="has_alerts"
+      >
+        <i className="fa fa-warning" />
+      </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
+        className="narrow"
+        onSortChange={this.props.onSortChange}
+        sortData={this.props.sortData}
         name="exec_count"
       >
         Execs
@@ -326,6 +338,24 @@ export default class WorkflowsTable extends Component {
           inc={this.setAutostart}
           dec={this.setAutostart}
         />
+      </Cell>
+    );
+
+    const onWarningClick = () => {
+      this.props.openPane(workflow.workflowid, 'alerts');
+    };
+
+    yield (
+      <Cell className="narrow">
+        { workflow.has_alerts && (
+          <Controls>
+            <Button
+              icon="warning"
+              btnStyle="danger"
+              onClick={onWarningClick}
+            />
+          </Controls>
+        )}
       </Cell>
     );
 

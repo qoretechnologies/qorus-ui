@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import actions from '../../../store/api/actions';
 import DetailPane from '../../../components/pane';
 import Tabs, { Pane } from '../../../components/tabs';
+import AlertsTab from '../../../components/alerts_table';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import Code from '../../../components/code';
@@ -81,7 +82,7 @@ export default class WorkflowsDetail extends Component {
 
     return (
       <DetailPane
-        width={550}
+        width={600}
         onClose={this.props.onClose}
       >
         <article>
@@ -108,6 +109,9 @@ export default class WorkflowsDetail extends Component {
                 resource={`workflows/${workflow.id}`}
                 location={this.props.location}
               />
+            </Pane>
+            <Pane name="Alerts">
+              <AlertsTab alerts={workflow.alerts} />
             </Pane>
             <Pane name="Errors">
               <ErrorsTab
