@@ -29,7 +29,21 @@ module.exports = () => {
           time: '2020-01-01 12:34:56',
           info: {
             type: 'GROUP',
+            id: 1,
             alertid: 123,
+            alert: 'THIS IS A TEST ALERT',
+            name: 'SOMETHING HAPPENED HEHE',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_UPDATE':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2020-01-01 13:24:50',
+          info: {
+            type: 'GROUP',
+            id: 1,
+            alertid: 124,
             alert: 'THIS IS A TEST ALERT',
             name: 'SOMETHING HAPPENED HEHE',
           },

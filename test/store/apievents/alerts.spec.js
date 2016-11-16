@@ -23,6 +23,22 @@ const raiseAlert = (store, type) => {
   );
 };
 
+const raiseAlertUpdate = (store) => {
+  store.dispatch(
+    events.message('test', JSON.stringify([{
+      eventstr: 'ALERT_ONGOING_RAISED',
+      time: '2000-01-01 00:00:00',
+      info: {
+        alert: 'TEST-ONGOING',
+        name: 'TEST-ONGOING',
+        alertid: 2,
+        id: 5,
+        type: 'GROUP',
+      },
+    }]))
+  );
+};
+
 describe('Alerts apievents from store/api & store/api/alerts', () => {
   let store;
 
@@ -51,9 +67,27 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
         expect(alerts[0]._updated).to.eql(true);
         expect(alerts[0].alerttype).to.eql('ONGOING');
         expect(alerts[0].name).to.eql('TEST-ONGOING');
+        expect(alerts[0].alertid).to.eql(1);
       });
 
       raiseAlert(store, 'ONGOING');
+    });
+
+    it('updates ongoing alert', () => {
+      raiseAlert(store, 'ONGOING');
+
+      store.subscribe(() => {
+        const alerts = store.getState().alerts.data;
+
+        expect(alerts).to.have.length(1);
+        expect(alerts[0]._updated).to.eql(true);
+        expect(alerts[0].alerttype).to.eql('ONGOING');
+        expect(alerts[0].name).to.eql('TEST-ONGOING');
+        expect(alerts[0].when).to.eql('2000-01-01 00:00:00');
+        expect(alerts[0].alertid).to.eql(2);
+      });
+
+      raiseAlertUpdate(store);
     });
 
     it('raises new transient alert', () => {

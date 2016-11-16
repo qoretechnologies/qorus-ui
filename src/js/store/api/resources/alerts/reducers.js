@@ -25,9 +25,28 @@ const alertRaised = {
   next(state = initialState, { payload: { data, type } }) {
     if (state.sync) {
       const stateData = state.data.slice();
-      const alert = { ...data, ...{ alerttype: type, _updated: true } };
-      const updatedData = setUpdatedToNull(stateData);
-      const newData = [...updatedData, alert];
+      const findAlert = stateData.findIndex((alert) => (
+        alert.type === data.type && alert.id === data.id
+      ));
+
+      let newData;
+
+      // Alert exists, update it instead
+      if (findAlert >= 0) {
+        const updatedItem = Object.assign({}, data[findAlert], {
+          ...data,
+          ...{ _updated: true, alerttype: type },
+        });
+
+        newData = stateData.slice(0, findAlert)
+          .concat([updatedItem])
+          .concat(stateData.slice(findAlert + 1));
+      } else {
+        const alert = {...data, ...{alerttype: type, _updated: true}};
+        const updatedData = setUpdatedToNull(stateData);
+
+        newData = [...updatedData, alert];
+      }
 
       return { ...state, ...{ data: newData } };
     }
