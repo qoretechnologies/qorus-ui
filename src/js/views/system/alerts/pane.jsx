@@ -2,13 +2,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
 import InfoTable from '../../../components/info_table';
+import { getAlertObjectLink } from '../../../helpers/system';
 
-const alertSelector = (state, props) => (
-  (state.api.alerts.data.find(a => a.alertid === parseInt(props.paneId, 10)))
-);
+const alertSelector = (state, props) => {
+  const dt = props.paneId.split(':');
+
+  return state.api.alerts.data.find(a => (
+    a.type === dt[0] && (a.id === parseInt(dt[1], 10) || a.id === dt[1])
+  ));
+};
 
 const viewSelector = createSelector(
   [
@@ -22,14 +28,31 @@ const viewSelector = createSelector(
 type Props = {
   alert: Object,
   onClose: Function,
-  width: number
 }
 
-const AlertPane: Function = ({ alert, onClose, width }: Props) => (
-  <Pane width={width} onClose={onClose}>
-    <h3>Alert detail</h3>
-    <InfoTable object={alert} />
-  </Pane>
-);
+const AlertPane: Function = ({ alert, onClose }: Props) => {
+  if (!alert) {
+    onClose();
+
+    return null;
+  }
+
+  return (
+    <Pane width={550} onClose={onClose}>
+      <h3>Alert detail</h3>
+      {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
+        <p>
+          Related object:
+          {' '}
+          <Link className="alert-pane-object" to={getAlertObjectLink(alert.type, alert)}>
+            {alert.version && `${alert.name} v${alert.version} (${alert.id})` }
+            {!alert.version && `${alert.name}` }
+          </Link>
+        </p>
+      )}
+      <InfoTable object={alert} omit={['object', '_updated']} />
+    </Pane>
+  );
+};
 
 export default connect(viewSelector)(AlertPane);

@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import compose from 'recompose/compose';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
+import { Control as Button } from '../../../components/controls';
 import Date from '../../../components/date';
 import Shorten from '../../../components/shorten';
 import sort from '../../../hocomponents/sort';
@@ -127,6 +128,13 @@ export default class AlertsTable extends Component {
     yield (
       <Cell
         tag="th"
+        className="narrow"
+      > - </Cell>
+    );
+
+    yield (
+      <Cell
+        tag="th"
         name="type"
         sortData={sortData}
         onSortChange={onSortChange}
@@ -174,6 +182,20 @@ export default class AlertsTable extends Component {
       </Cell>
     );
 
+    const handleDetailClick = () => {
+      this.props.openPane(`${model.type}:${model.id}`);
+    };
+
+    yield (
+      <Cell className="narrow">
+        <Button
+          label="Detail"
+          btnStyle="success"
+          onClick={handleDetailClick}
+        />
+      </Cell>
+    );
+
     yield (
       <Cell className="name nowrap">{ model.type }</Cell>
     );
@@ -182,23 +204,21 @@ export default class AlertsTable extends Component {
       <Cell className="name nowrap">{ model.alert }</Cell>
     );
 
+    const name = model.version ?
+      `${model.name} v${model.version} (${model.id})` :
+      `${model.name} (${model.id})`;
+
     if (model.type === 'RBAC' || (model.type === 'GROUP' && model.id < 0)) {
       yield (
         <Cell className="desc">
-          <Shorten extraClassname="text-left">
-            {model.version && `${model.name} v${model.version} ${model.id}` }
-            {!model.version && `${model.name}` }
-          </Shorten>
+          { name }
         </Cell>
       );
     } else {
       yield (
         <Cell className="desc">
           <Link to={getAlertObjectLink(model.type, model)}>
-            <Shorten extraClassname="text-left">
-              {model.version && `${model.name} v${model.version} ${model.id}` }
-              {!model.version && `${model.name}` }
-            </Shorten>
+            { name }
           </Link>
         </Cell>
       );
@@ -235,17 +255,10 @@ export default class AlertsTable extends Component {
    */
   *renderRows({ collection }) {
     for (const model of collection) {
-      const handleRowClick: Function = (event: EventHandler): void => {
-        if (!event.defaultPrevented) {
-          this.props.openPane(model.alertid);
-        }
-      };
-
       yield (
         <Row
           key={model.alertid}
           data={{ model }}
-          onClick={handleRowClick}
           cells={this._renderCells}
           highlight={model._updated}
           onHighlightEnd={this.handleHighlightEnd(model.alertid)}
