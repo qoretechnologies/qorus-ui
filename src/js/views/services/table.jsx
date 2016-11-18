@@ -1,25 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
 
 import Table, { Section, Row, Cell } from '../../components/table';
 import { Controls, Control as Button } from '../../components/controls';
 import ServiceControls from './controls';
 import Checkbox from '../../components/checkbox';
-import actions from '../../store/api/actions';
 
-/**
- * List of all workflows in the system.
- *
- * Beware, this component is very performance internsive - even
- * HTML/CSS without any JS is relatively slow.
- */
-@connect(
-  () => ({}),
-  {
-    updateDone: actions.services.updateDone,
-  }
-)
 export default class ServicesTable extends Component {
   static propTypes = {
     collection: PropTypes.array,
@@ -31,9 +17,8 @@ export default class ServicesTable extends Component {
     onSortChange: PropTypes.func,
     sortData: PropTypes.object,
     onDetailClick: PropTypes.func,
-    updateDone: PropTypes.func,
+    onUpdateDone: PropTypes.func,
   };
-
 
   static contextTypes = {
     router: PropTypes.object,
@@ -100,7 +85,7 @@ export default class ServicesTable extends Component {
   }
 
   handleHighlightEnd = (id) => () => {
-    this.props.updateDone(id);
+    this.props.onUpdateDone(id);
   };
 
   /**

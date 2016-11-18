@@ -155,6 +155,7 @@ export default class Services extends Component {
           collection={this.props.services}
           activeRowId={parseInt(this.props.paneId, 10)}
           onDetailClick={this.props.openPane}
+          onUpdateDone={actions.services.updateDone}
         />
       </div>
     );
