@@ -1,4 +1,5 @@
 import remove from 'lodash/remove';
+
 import { setUpdatedToNull, updateItemWithId } from '../../utils';
 
 const initialState = {};
