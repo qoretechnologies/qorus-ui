@@ -24,8 +24,20 @@ const updateDone: Function = createAction(
   (name: string): Object => ({ name })
 );
 
+const addAlert = createAction(
+  'REMOTES_ADDALERT',
+  (data) => ({ data })
+);
+
+const clearAlert = createAction(
+  'REMOTES_CLEARALERT',
+  (id, type, alertid) => ({ id, type, alertid })
+);
+
 export {
   pingRemote,
   connectionChange,
   updateDone,
+  addAlert,
+  clearAlert,
 };

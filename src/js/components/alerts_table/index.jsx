@@ -8,7 +8,7 @@ const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => (
   <div>
     {alerts.map(item => (
       <div key={`alert_${item.id}`} className="job-alert alerts-item">
-        <Link to={`/system/alerts/${item.alerttype.toLowerCase()}?paneId=${item.alertid}`}>
+        <Link to={`/system/alerts/${item.alerttype.toLowerCase()}?paneId=${item.type}:${item.id}`}>
           {item.alert}
         </Link>
         <p>{item.object}</p>

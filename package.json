@@ -100,7 +100,7 @@
     "mock-socket": "^4.0.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.9.1",
-    "react-addons-test-utils": "^15.3.2",
+    "react-addons-test-utils": "15.3.2",
     "react-hot-loader": "^3.0.0-beta.6",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0",
@@ -126,6 +126,8 @@
     "test:unit:wip": "export npm_config_loglevel=silent\n  npm run-script test:unit -- -R min -w 'test/**/*.spec.{js,jsx}'",
     "lint": "eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js",
     "lint:watch": "watch eslint --ext .js --ext .jsx api cucumber.js server.js src test types webpack.config webpack.config.js",
-    "flow": "flow check"
+    "flow": "flow check",
+    "uat": "PORT=3005 npm run test:uat:wip",
+    "unit": "npm run test:unit:wip"
   }
 }

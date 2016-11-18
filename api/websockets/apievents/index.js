@@ -29,7 +29,80 @@ module.exports = () => {
           time: '2020-01-01 12:34:56',
           info: {
             type: 'GROUP',
+            id: 1,
             alertid: 123,
+            alert: 'THIS IS A TEST ALERT',
+            name: 'SOMETHING HAPPENED HEHE',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_WORKFLOW':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2016-01-01 10:10:10',
+          info: {
+            type: 'WORKFLOW',
+            id: 14,
+            alertid: 999,
+            alert: 'WORKFLOW-NOT-RUNNING',
+            name: 'ARRAYTEST',
+            version: 2.0,
+            reason: 'Testing workflow alerts from websockets',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_JOB':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2016-01-01 10:10:10',
+          info: {
+            type: 'JOB',
+            id: 33,
+            alertid: 2999,
+            alert: 'JOB-NOT-RUNNING',
+            name: 'anothertest',
+            version: '3.0',
+            reason: 'Testing job alerts from websockets',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_SERVICE':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2016-01-01 10:10:10',
+          info: {
+            type: 'SERVICE',
+            id: 698,
+            alertid: 1999,
+            alert: 'SERVICE-NOT-RUNNING',
+            name: 'info',
+            version: '3.1.9.9',
+            reason: 'Testing service alerts from websockets',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_DATASOURCE':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2016-01-01 10:10:10',
+          info: {
+            type: 'DATASOURCE',
+            id: 'omquser',
+            alertid: 3999,
+            alert: 'DATASOURCE-OFFLINE',
+            name: 'omquser',
+            reason: 'Testing remote alerts from websockets',
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_RAISED_UPDATE':
+        send({
+          eventstr: 'ALERT_ONGOING_RAISED',
+          time: '2020-01-01 13:24:50',
+          info: {
+            type: 'GROUP',
+            id: 1,
+            alertid: 124,
             alert: 'THIS IS A TEST ALERT',
             name: 'SOMETHING HAPPENED HEHE',
           },
@@ -52,6 +125,46 @@ module.exports = () => {
           eventstr,
           info: {
             alertid: 123,
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_CLEARED_WORKFLOW':
+        send({
+          eventstr: 'ALERT_ONGOING_CLEARED',
+          info: {
+            type: 'WORKFLOW',
+            id: 14,
+            alertid: 999,
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_CLEARED_SERVICE':
+        send({
+          eventstr: 'ALERT_ONGOING_CLEARED',
+          info: {
+            type: 'SERVICE',
+            id: 698,
+            alertid: 1999,
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_CLEARED_JOB':
+        send({
+          eventstr: 'ALERT_ONGOING_CLEARED',
+          info: {
+            type: 'JOB',
+            id: 33,
+            alertid: 2999,
+          },
+        });
+        break;
+      case 'ALERT_ONGOING_CLEARED_DATASOURCE':
+        send({
+          eventstr: 'ALERT_ONGOING_CLEARED',
+          info: {
+            type: 'DATASOURCE',
+            id: 'omquser',
+            alertid: 3999,
           },
         });
         break;

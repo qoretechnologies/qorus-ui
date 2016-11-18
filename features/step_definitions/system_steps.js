@@ -107,4 +107,16 @@ module.exports = function systemSteps() {
   this.When(/^I wait some time$/, async function() {
     await new Promise(resolve => setTimeout(resolve, 500));
   });
+
+  this.Then(/^there should be (\d+) related object links$/, async function(count) {
+    return this.browser.assert.elements('.alert-pane-object', parseInt(count, 10));
+  });
+
+  this.Then(/^the time says "([^"]*)" and alertid is "([^"]*)"$/, async function(when, alertId) {
+    const time = this.browser.queryAll('.pane__content table tr')[5].cells[1];
+    const alert = this.browser.queryAll('.pane__content table tr')[2].cells[1];
+
+    this.browser.assert.text(time, when);
+    this.browser.assert.text(alert, alertId);
+  });
 };

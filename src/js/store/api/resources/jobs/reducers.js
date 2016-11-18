@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import remove from 'lodash/remove';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 
@@ -345,6 +346,61 @@ const modifyInstance = {
   },
 };
 
+const addAlert = {
+  next(state = initialState, { payload: { data } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      const job = stateData.find((s) => s.id === parseInt(data.id, 10));
+      const alerts = [...job.alerts, data];
+      const newData = updateItemWithId(data.id, {
+        alerts,
+        has_alerts: true,
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const clearAlert = {
+  next(state = initialState, { payload: { id, alertid } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      const job = stateData.find((s) => s.id === parseInt(id, 10));
+      const alerts = [...job.alerts];
+
+      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+
+      const newData = updateItemWithId(id, {
+        alerts,
+        has_alerts: !(alerts.length === 0),
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -359,4 +415,6 @@ export {
   instanceUpdateDone as INSTANCEUPDATEDONE,
   addInstance as ADDINSTANCE,
   modifyInstance as MODIFYINSTANCE,
+  addAlert as ADDALERT,
+  clearAlert as CLEARALERT,
 };

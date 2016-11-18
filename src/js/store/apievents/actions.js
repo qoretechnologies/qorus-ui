@@ -16,9 +16,48 @@ const handleEvent = (url, data, dispatch, state) => {
 
     switch (eventstr) {
       case 'ALERT_ONGOING_RAISED':
+        switch (info.type) {
+          case 'WORKFLOW':
+            dispatch(workflows.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            break;
+          case 'SERVICE':
+            dispatch(services.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            break;
+          case 'JOB':
+            dispatch(jobs.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            break;
+          case 'REMOTE':
+          case 'DATASOURCE':
+          case 'USER-CONNECTION':
+            dispatch(remotes.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            break;
+          default:
+            break;
+        }
+
         dispatch(alerts.raised({ ...info, ...{ when: d.time } }, 'ONGOING'));
+
         break;
       case 'ALERT_ONGOING_CLEARED':
+        switch (info.type) {
+          case 'WORKFLOW':
+            dispatch(workflows.clearAlert(info.id, info.alertid));
+            break;
+          case 'SERVICE':
+            dispatch(services.clearAlert(info.id, info.alertid));
+            break;
+          case 'JOB':
+            dispatch(jobs.clearAlert(info.id, info.alertid));
+            break;
+          case 'REMOTE':
+          case 'USER-CONNECTION':
+          case 'DATASOURCE':
+            dispatch(remotes.clearAlert(info.id, info.type, info.alertid));
+            break;
+          default:
+            break;
+        }
+
         dispatch(alerts.cleared(info.alertid));
         break;
       case 'ALERT_TRANSIENT_RAISED':

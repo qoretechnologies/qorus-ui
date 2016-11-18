@@ -43,7 +43,7 @@ Feature: Services
     Given I am on "services?paneId=111&paneTab=alerts" listing
     And "services" get loaded
     When I click on the alert item
-    Then the complete URL changes to "/system/alerts/ongoing?paneId=2"
+    Then the complete URL changes to "/system/alerts/ongoing?paneId=SERVICE:111"
     And "alerts" get loaded
     And I should see detail pane
 
