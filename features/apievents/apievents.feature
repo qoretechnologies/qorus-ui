@@ -6,12 +6,72 @@ Feature: Tests various websocket apievents
     When I send a ws request for "ALERT_ONGOING_RAISED"
     Then "6" "alerts" are shown
 
-  Scenario: Ongoing alert raised
+  Scenario: Ongoing alert updated
     Given I am on "system/alerts/ongoing" listing
     And "alerts" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED"
     And I send a ws request for "ALERT_ONGOING_RAISED_UPDATE"
     Then "6" "alerts" are shown
+
+  Scenario: Ongoing alert raised updates workflow
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
+    And I wait some time
+    Then I should see 2 table row with alerts"
+
+  Scenario: Ongoing alert cleared updates workflow
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    And I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
+    When I send a ws request for "ALERT_ONGOING_CLEARED_WORKFLOW"
+    And I wait some time
+    Then I should see 1 table row with alerts"
+
+  Scenario: Ongoing alert cleared updates service
+    Given I am on "services" listing
+    And "services" get loaded
+    And I send a ws request for "ALERT_ONGOING_RAISED_SERVICE"
+    When I send a ws request for "ALERT_ONGOING_CLEARED_SERVICE"
+    And I wait some time
+    Then I should see 1 table row with alerts"
+
+  Scenario: Ongoing alert raised updates service
+    Given I am on "services" listing
+    And "services" get loaded
+    When I send a ws request for "ALERT_ONGOING_RAISED_SERVICE"
+    And I wait some time
+    Then I should see 2 table row with alerts"
+
+  Scenario: Ongoing alert raised updates jobs
+    Given I am on "jobs" listing
+    And "jobs" get loaded
+    When I send a ws request for "ALERT_ONGOING_RAISED_JOB"
+    And I wait some time
+    Then I should see 3 table row with alerts"
+
+  Scenario: Ongoing alert cleared updates jobs
+    Given I am on "jobs" listing
+    And "jobs" get loaded
+    And I send a ws request for "ALERT_ONGOING_RAISED_JOB"
+    When I send a ws request for "ALERT_ONGOING_CLEARED_JOB"
+    And I wait some time
+    Then I should see 2 table row with alerts"
+
+  Scenario: Ongoing alert raised updates jobs
+    Given I am on "system/remote/datasources" listing
+    And "datasources" get loaded
+    When I send a ws request for "ALERT_ONGOING_RAISED_DATASOURCE"
+    And I wait some time
+    Then I should see 1 table row with alerts"
+
+  Scenario: Ongoing alert cleared updates datasources
+    Given I am on "system/remote/datasources" listing
+    And "datasources" get loaded
+    And I send a ws request for "ALERT_ONGOING_RAISED_DATASROUCE"
+    When I send a ws request for "ALERT_ONGOING_CLEARED_DATASOURCE"
+    And I wait some time
+    Then I should see 0 table row with alerts"
 
   Scenario: Transient alert raised
     Given I am on "system/alerts/transient" listing

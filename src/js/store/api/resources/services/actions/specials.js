@@ -81,6 +81,16 @@ const updateDone = createAction(
   (id) => ({ id })
 );
 
+const addAlert = createAction(
+  'SERVICES_ADDALERT',
+  (data) => ({ data })
+);
+
+const clearAlert = createAction(
+  'SERVICES_CLEARALERT',
+  (id, alertid) => ({ id, alertid })
+);
+
 export {
   setOptions,
   fetchLibSources,
@@ -88,4 +98,6 @@ export {
   setStatus,
   setEnabled,
   updateDone,
+  addAlert,
+  clearAlert,
 };

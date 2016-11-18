@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
 import Table, { Section, Row, Cell } from '../../components/table';
 import { Controls, Control as Button } from '../../components/controls';
@@ -13,6 +14,12 @@ import actions from '../../store/api/actions';
  * Beware, this component is very performance internsive - even
  * HTML/CSS without any JS is relatively slow.
  */
+@connect(
+  () => ({}),
+  {
+    updateDone: actions.services.updateDone,
+  }
+)
 export default class ServicesTable extends Component {
   static propTypes = {
     collection: PropTypes.array,
@@ -24,6 +31,7 @@ export default class ServicesTable extends Component {
     onSortChange: PropTypes.func,
     sortData: PropTypes.object,
     onDetailClick: PropTypes.func,
+    updateDone: PropTypes.func,
   };
 
 
@@ -92,9 +100,7 @@ export default class ServicesTable extends Component {
   }
 
   handleHighlightEnd = (id) => () => {
-    this.context.dispatch(
-      actions.services.updateDone(id)
-    );
+    this.props.updateDone(id);
   };
 
   /**

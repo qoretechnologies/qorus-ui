@@ -9,7 +9,6 @@ import compose from 'recompose/compose';
 import Table, { Cell, Section, Row } from '../../../components/table';
 import { Control as Button } from '../../../components/controls';
 import Date from '../../../components/date';
-import Shorten from '../../../components/shorten';
 import sort from '../../../hocomponents/sort';
 import sync from '../../../hocomponents/sync';
 import withPane from '../../../hocomponents/pane';

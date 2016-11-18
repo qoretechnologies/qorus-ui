@@ -1,4 +1,5 @@
 import { updateItemWithName, setUpdatedToNull } from '../../utils';
+import remove from 'lodash/remove';
 
 const initialState = {
   data: [],
@@ -52,8 +53,66 @@ const updateDone = {
   },
 };
 
+const addAlert = {
+  next(state = initialState, { payload: { data } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      const remote = stateData.find((r) => r.id === data.id && r.conntype === data.type);
+      const alerts = [...remote.alerts, data];
+      const newData = updateItemWithName(data.id, {
+        alerts,
+        has_alerts: true,
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const clearAlert = {
+  next(state = initialState, { payload: { id, type, alertid } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      console.log(id, type);
+      const remote = stateData.find((r) => r.id === id && r.conntype === type);
+      const alerts = [...remote.alerts];
+
+      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+
+      const newData = updateItemWithName(id, {
+        alerts,
+        has_alerts: !(alerts.length === 0),
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
   updateDone as UPDATEDONE,
+  addAlert as ADDALERT,
+  clearAlert as CLEARALERT,
 };

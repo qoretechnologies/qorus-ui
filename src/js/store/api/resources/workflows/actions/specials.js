@@ -1,9 +1,7 @@
 import { createAction } from 'redux-actions';
 
-
 import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
-
 
 function setOptionsPayload(workflow, name, value) {
   return fetchJson(
@@ -78,6 +76,16 @@ const modifyOrder = createAction(
   (id, oldStatus, newStatus) => ({ id, oldStatus, newStatus })
 );
 
+const addAlert = createAction(
+  'WORKFLOWS_ADDALERT',
+  (data) => ({ data })
+);
+
+const clearAlert = createAction(
+  'WORKFLOWS_CLEARALERT',
+  (id, alertid) => ({ id, alertid })
+);
+
 export {
   setOptions,
   fetchLibSources,
@@ -86,4 +94,6 @@ export {
   updateDone,
   addOrder,
   modifyOrder,
+  addAlert,
+  clearAlert,
 };

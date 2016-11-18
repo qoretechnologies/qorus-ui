@@ -180,6 +180,16 @@ const modifyInstance = createAction(
   (data, modified) => ({ data, modified })
 );
 
+const addAlert = createAction(
+  'JOBS_ADDALERT',
+  (data) => ({ data })
+);
+
+const clearAlert = createAction(
+  'JOBS_CLEARALERT',
+  (id, alertid) => ({ id, alertid })
+);
+
 export {
   setOptions,
   fetchLibSources,
@@ -194,4 +204,6 @@ export {
   addInstance,
   modifyInstance,
   instanceUpdateDone,
+  addAlert,
+  clearAlert,
 };

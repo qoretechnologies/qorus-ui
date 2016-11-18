@@ -1,8 +1,7 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
-
+import remove from 'lodash/remove';
 
 const initialState = { data: [], sync: false, loading: false };
-
 
 /**
  * Updates workflow data with new option value.
@@ -221,6 +220,61 @@ const modifyOrder = {
   },
 };
 
+const addAlert = {
+  next(state = initialState, { payload: { data } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      const workflow = stateData.find((w) => w.id === parseInt(data.id, 10));
+      const alerts = [...workflow.alerts, data];
+      const newData = updateItemWithId(data.id, {
+        alerts,
+        has_alerts: true,
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const clearAlert = {
+  next(state = initialState, { payload: { id, alertid } }) {
+    if (state.sync) {
+      const stateData = [...state.data];
+      const workflow = stateData.find((w) => w.id === parseInt(id, 10));
+      const alerts = [...workflow.alerts];
+
+      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+
+      const newData = updateItemWithId(id, {
+        alerts,
+        has_alerts: !(alerts.length === 0),
+        _updated: true,
+      }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state = initialState, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -229,4 +283,6 @@ export {
   modifyOrder as MODIFYORDER,
   setEnabled as SETENABLED,
   updateDone as UPDATEDONE,
+  addAlert as ADDALERT,
+  clearAlert as CLEARALERT,
 };

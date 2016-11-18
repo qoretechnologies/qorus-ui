@@ -8,6 +8,7 @@ import defaultProps from 'recompose/defaultProps';
 import classNames from 'classnames';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
+import { Controls, Control as Button } from '../../../components/controls';
 import AutoComponent from '../../../components/autocomponent';
 import ModalPing from './modals/ping';
 import sync from '../../../hocomponents/sync';
@@ -159,7 +160,12 @@ class Connections extends Component {
     yield (
       <Cell className="narrow">
         {model.alerts.length > 0 &&
-          <i className="text-danger fa fa-exclamation-triangle" />
+          <Controls>
+            <Button
+              icon="warning"
+              btnStyle="danger"
+            />
+          </Controls>
         }
       </Cell>
     );

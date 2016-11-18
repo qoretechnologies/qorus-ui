@@ -42,7 +42,7 @@ const alertRaised = {
           .concat([updatedItem])
           .concat(stateData.slice(findAlert + 1));
       } else {
-        const alert = {...data, ...{alerttype: type, _updated: true}};
+        const alert = { ...data, ...{ alerttype: type, _updated: true } };
         const updatedData = setUpdatedToNull(stateData);
 
         newData = [...updatedData, alert];
