@@ -83,7 +83,6 @@ const clearAlert = {
   next(state = initialState, { payload: { id, type, alertid } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      console.log(id, type);
       const remote = stateData.find((r) => r.id === id && r.conntype === type);
       const alerts = [...remote.alerts];
 
