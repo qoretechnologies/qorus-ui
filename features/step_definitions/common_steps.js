@@ -4,6 +4,8 @@ const cmpLoader = `${mainSection} p`;
 const cmpRows = `${cmpTable} > tbody > tr`;
 const pane = `${cmpTable} ~ .pane`;
 const cmpPane = `${pane} article`;
+import { expect } from 'chai';
+import moment from 'moment';
 
 /**
  * Finds listed object's row element by its name.
@@ -507,6 +509,13 @@ module.exports = function commonSteps() {
     const el = this.browser.queryAll('.alerts-item')[0].childNodes[0];
 
     await this.browser.click(el);
+  });
+
+  this.Then(/^datepicker is not empty$/, async function() {
+    const el = this.browser.queryAll('.datepicker-group input');
+    const yday = moment().add(-1, 'days').format('YYYY-MM-DD');
+
+    expect(el[0].value.startsWith(yday)).to.eql(true);
   });
 };
 

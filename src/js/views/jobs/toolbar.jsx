@@ -116,6 +116,7 @@ export default class extends Component {
 
   render() {
     const checked = CHECKBOX_STATES[this.props.selected];
+    const date = this.props.params.date || '24h';
 
     return (
       <Toolbar>
@@ -146,7 +147,7 @@ export default class extends Component {
         {this.renderSelectionControls()}
         <Datepicker
           className="toolbar-item"
-          date={this.props.params.date}
+          date={date}
           onApplyDate={this.applyDate}
         />
         <Search

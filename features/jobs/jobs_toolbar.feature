@@ -5,6 +5,11 @@ Feature: Jobs Toolbar
     When "jobs" get loaded
     Then the dropdown checkbox should be unchecked
 
+  Scenario: Datepicker is not empty by default
+    Given I am on "jobs" listing
+    When "jobs" get loaded
+    Then datepicker is not empty
+
   Scenario: Dropdown checkbox is checked
     Given I am on "jobs" listing
     And "jobs" get loaded

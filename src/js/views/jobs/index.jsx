@@ -20,6 +20,7 @@ import JobsToolbar from './toolbar';
 import JobsTable from './table';
 import JobsDetail from './detail';
 import { findBy } from '../../helpers/search';
+import { DATES } from '../../constants/dates';
 
 const filterSearch = (search) => (collection) =>
   findBy('name', search, collection);
@@ -60,7 +61,7 @@ const viewSelector = createSelector(
 );
 
 const prepareUrlParams = mapProps(props => {
-  const { date: urlDate } = props.params;
+  const { date: urlDate = DATES.PREV_DAY } = props.params;
   const urlParams = {};
   if (urlDate) {
     urlParams.date = formatDate(urlDate).format();
