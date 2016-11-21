@@ -23,4 +23,10 @@ module.exports = function searchSteps() {
 
     return expect(val).to.eql(value);
   });
+
+  this.When(/^I click on the order link$/, async function() {
+    const el = this.browser.queryAll('td.name a')[0];
+
+    await this.browser.click(el);
+  });
 };

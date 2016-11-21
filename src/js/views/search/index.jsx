@@ -225,10 +225,13 @@ export default class SearchView extends Component {
 
     if (!this.props.collection.length) return <h5> No data found </h5>;
 
+    const defaultDate = moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT);
+    const { date = defaultDate } = this.props.location.query;
+
     return (
       <OrdersTable
         noCheckbox
-        linkDate={this.props.linkDate}
+        linkDate={this.props.linkDate || date}
         initialFilter={this.props.filterFn}
         onDataFilterChange={this.props.onDataFilterChange}
         collection={this.props.collection}

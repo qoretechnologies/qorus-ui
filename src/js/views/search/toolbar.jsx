@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import { Control as Button } from 'components/controls';
 import Toolbar from 'components/toolbar';
-import DatePicker from 'components/datepicker';
+import DatePicker from '../../components/datepicker';
 import { DATE_FORMATS } from '../../constants/dates';
 
 export default class SearchToolbar extends Component {
@@ -44,7 +44,7 @@ export default class SearchToolbar extends Component {
 
   setUp = (props, state) => {
     const date = !props.date || props.date === '' ?
-      moment().add(-1, 'weeks').format(DATE_FORMATS.DISPLAY) :
+      moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
       props.date;
 
     this.setState({
