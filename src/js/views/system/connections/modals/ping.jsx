@@ -94,7 +94,7 @@ export default class Ping extends Component {
 
   render() {
     return (
-      <Modal>
+      <Modal hasFooter>
         <Modal.Header
           titleId="ping"
           onClose={this.props.onClose}

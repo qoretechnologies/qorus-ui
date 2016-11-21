@@ -19,11 +19,13 @@ export default class Modal extends Component {
     children: PropTypes.node.isRequired,
     onMount: PropTypes.func,
     size: PropTypes.string,
+    hasFooter: PropTypes.bool,
+    height: PropTypes.number,
   };
 
   static defaultProps = {
     size: '',
-  }
+  };
 
   static Footer = null;
   static Header = null;
@@ -95,13 +97,18 @@ export default class Modal extends Component {
             'modal-sm': this.props.size === 'sm',
           })}
           role="document"
+          style={{
+            height: this.props.height ? `${this.props.height}px` : 'auto',
+          }}
         >
-          <div className="modal-content">
+          <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
             {this.props.children}
           </div>
           <ResizeHandle minCurrent left />
           <ResizeHandle minCurrent right />
           <ResizeHandle minCurrent bottom />
+          <ResizeHandle minCurrent left bottom />
+          <ResizeHandle minCurrent right bottom />
         </div>
       </div>
     );

@@ -50,7 +50,7 @@ export default class extends Component {
 
   render() {
     return (
-      <Modal>
+      <Modal hasFooter>
         <Modal.Header
           titleId="skip-modal"
           onClose={this.props.onClose}

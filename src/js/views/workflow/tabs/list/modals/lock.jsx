@@ -48,7 +48,7 @@ export default class extends Component {
 
   render() {
     return (
-      <Modal>
+      <Modal hasFooter>
         <Modal.Header
           onClose={this.props.onClose}
           titleId="lock-modal"

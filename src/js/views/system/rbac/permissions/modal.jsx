@@ -55,7 +55,7 @@ export default class AddRoleModal extends Component {
     const { model, onClose } = this.props;
 
     return (
-      <Modal>
+      <Modal hasFooter>
         <Modal.Header
           titleId="addUserModal"
           onClose={onClose}

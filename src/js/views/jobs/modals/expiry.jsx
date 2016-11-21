@@ -31,8 +31,8 @@ const ModalExpiry = ({
   handleClear: Function,
   handleCancel: Function,
 }) => (
-  <Modal>
-    <form onSubmit={handleSubmit} className="expire-date-form">
+  <form onSubmit={handleSubmit} className="expire-date-form">
+    <Modal hasFooter height={500}>
       <Modal.Header
         onClose={handleCancel}
         titleId="jobExpiration"
@@ -50,8 +50,8 @@ const ModalExpiry = ({
         <Control onClick={handleClear} btnStyle="default" label="Clear" big />
         <Control type="submit" btnStyle="success" label="Set expiry" big />
       </Modal.Footer>
-    </form>
-  </Modal>
+    </Modal>
+  </form>
 );
 
 const addDateState = withState('date', 'setDate', '');
@@ -83,7 +83,17 @@ const addSubmitHandler = withHandlers({
 });
 
 const addClearHandler = withHandlers({
-  handleClear: ({ job, expire, onClose }: { job: Object, expire: Function, onClose: Function}) => {
+  handleClear: (
+    {
+      job,
+      expire,
+      onClose,
+    }: {
+      job: Object,
+      expire: Function,
+      onClose: Function,
+    }
+  ) => () => {
     expire(job, '');
     onClose();
   },

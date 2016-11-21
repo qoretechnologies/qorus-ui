@@ -29,7 +29,7 @@ export default class extends Component {
     const { data } = this.props;
 
     return (
-      <Modal>
+      <Modal hasFooter>
         <Modal.Header
           titleId="props-modal"
           onClose={this.props.onClose}
@@ -65,7 +65,7 @@ export default class extends Component {
               <textarea
                 ref="value"
                 id="value"
-                defaultValue={data ? data.value : ''}
+                defaultValue={data ? JSON.stringify(data.value) : ''}
                 className="form-control"
               />
             </div>
