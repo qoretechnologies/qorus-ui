@@ -45,7 +45,7 @@ export default class extends Component {
 
   render() {
     return (
-      <Modal>
+      <Modal height={420}>
         <Modal.Header
           onClose={this.props.onClose}
           titleId="reschedule-modal"

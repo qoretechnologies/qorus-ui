@@ -46,8 +46,8 @@ $resize-handle-width: 10px;
     height: $resize-handle-width;
 
     &:not(.left):not(.right) {
-      left: 0;
-      right: 0;
+      left: $resize-handle-width;
+      right: $resize-handle-width;
       cursor: ns-resize;
       &.min {
         cursor: s-resize;
@@ -72,8 +72,8 @@ $resize-handle-width: 10px;
     width: $resize-handle-width;
 
     &:not(.top):not(.bottom) {
-      top: 0;
-      bottom: 0;
+      top: $resize-handle-width;
+      bottom: $resize-handle-width;
 
       cursor: ew-resize;
       &.min {
@@ -86,8 +86,8 @@ $resize-handle-width: 10px;
     width: $resize-handle-width;
 
     &:not(.top):not(.bottom) {
-      top: 0;
-      bottom: 0;
+      top: $resize-handle-width;
+      bottom: $resize-handle-width;
 
       cursor: ew-resize;
       &.min {

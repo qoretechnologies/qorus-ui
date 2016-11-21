@@ -1,8 +1,9 @@
 /* @flow */
 import React from 'react';
-import LogContainer from '../../../containers/log';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+
+import LogContainer from '../../../containers/log';
 
 type Props = {
   params: Object,

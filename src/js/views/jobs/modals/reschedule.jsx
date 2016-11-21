@@ -53,7 +53,7 @@ export default class ModalReschedule extends Component {
     const { job } = this.props;
 
     return (
-      <Modal>
+      <Modal hasFooter>
         <form onSubmit={ this.handleSubmit }>
           <Modal.Header
             onClose={this.handleCancel}

@@ -87,14 +87,14 @@ export default class OptionModal extends Component {
     const { model, onCloseClick } = this.props;
 
     return (
-      <Modal>
-        <Modal.Header
-          titleId="option"
-          onClose={onCloseClick}
-        >
-          { model.name }
-        </Modal.Header>
-        <form onSubmit={this.handleFormSubmit}>
+      <form onSubmit={this.handleFormSubmit}>
+        <Modal hasFooter>
+          <Modal.Header
+            titleId="option"
+            onClose={onCloseClick}
+          >
+            { model.name }
+          </Modal.Header>
           <Modal.Body>
             <h4> Description </h4>
             <p>{ model.desc }</p>
@@ -117,8 +117,8 @@ export default class OptionModal extends Component {
               />
             </Controls>
           </Modal.Footer>
-        </form>
-      </Modal>
+        </Modal>
+      </form>
     );
   }
 }

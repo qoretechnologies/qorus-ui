@@ -134,15 +134,15 @@ export default class AddUserModal extends Component {
     const { model, onClose } = this.props;
 
     return (
-      <Modal>
-        <Modal.Header
-          titleId="addUserModal"
-          onClose={onClose}
-        >{ this.props.title } </Modal.Header>
-        <form
-          className="form-horizontal"
-          onSubmit={this.handleFormSubmit}
-        >
+      <form
+        className="form-horizontal"
+        onSubmit={this.handleFormSubmit}
+      >
+        <Modal hasFooter>
+          <Modal.Header
+            titleId="addUserModal"
+            onClose={onClose}
+          >{ this.props.title } </Modal.Header>
           <Modal.Body>
             { this.state.error && (
               <Alert bsStyle="danger">{ this.state.error }</Alert>
@@ -238,8 +238,8 @@ export default class AddUserModal extends Component {
               />
             </Controls>
           </Modal.Footer>
-        </form>
-      </Modal>
+        </Modal>
+      </form>
     );
   }
 }
