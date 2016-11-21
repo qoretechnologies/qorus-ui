@@ -33,4 +33,11 @@ Feature: tests for the the Search view
     And there are 6 inputs displayed
     And "maxdate" value is "2016-10-10 00:00:00"
 
+  Scenario: Link has the proper date
+    Given I am on "search?ids=31380&date=19900101" listing
+    And the search page is shown
+    And "1" "orders" are shown
+    When I click on the order link
+    Then the URL changes to "/order/31380/19900101/diagram"
+
 
