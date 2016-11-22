@@ -20,7 +20,7 @@ const addOrder: Object = {
           started: time,
           workflowstatus: order.status,
           note_count: 0,
-        },a
+        },
       }];
 
       return { ...state, ...{ data: newData } };
