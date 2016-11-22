@@ -39,8 +39,13 @@ const normalize = (orders) => orders.map(o => {
   return normalizeName(o);
 });
 
+const getWfOrders = (id) => (collection) => (
+  collection.filter(order => order.workflowid === parseInt(id, 10))
+);
+
 const orderSelector = state => state.api.orders;
 const filterSelector = (state, props) => props.params.filter;
+const idSelector = (state, props) => props.params.id;
 const searchSelector = (state, props) => props.location.query.q;
 const sortSelector = state => state.ui.orders;
 const userSelector = state => state.api.currentUser.data.username;
@@ -50,11 +55,12 @@ const collectionSelector = createSelector(
     orderSelector,
     filterSelector,
     searchSelector,
-    sortSelector,
-  ], (orders, filter, search) => flowRight(
+    idSelector,
+  ], (orders, filter, search, id) => flowRight(
     filterSearch(search),
     filterOrders(filter),
-    normalize
+    normalize,
+    getWfOrders(id)
   )(orders.data)
 );
 

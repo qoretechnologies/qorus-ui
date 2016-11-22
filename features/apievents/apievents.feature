@@ -133,6 +133,12 @@ Feature: Tests various websocket apievents
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     Then "13" "orders" are shown
 
+  Scenario: Does not add new order instance to wrong workflow
+    Given I am on "workflow/132/list/All/all" listing
+    And "orders" get loaded
+    And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
+    Then "1" "orders" are shown
+
   Scenario: Modifies existing order instance
     Given I am on "workflow/14/list/All/all" listing
     And "orders" get loaded
