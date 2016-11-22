@@ -111,7 +111,7 @@ export default class OrderHeader extends Component {
               {' '}
               {this.props.data.version}
               {' '}
-              {`ID#${this.props.data.id}`}
+              ({this.props.data.id})
             </small>
           </h3>
           <div className="order-actions pull-right">

@@ -16,6 +16,8 @@ const JobHeader = ({ job, location }: { job: Object, location: Object }) => (
         {job.name}
         {' '}
         <small>{job.version}</small>
+        {' '}
+        <small>({job.id})</small>
       </h3>
     </div>
   </div>

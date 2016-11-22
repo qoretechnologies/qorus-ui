@@ -58,6 +58,8 @@ export default class DetailHeader extends Component {
               {this.props.data.name}
               {' '}
               <small>{this.props.data.version}</small>
+              {' '}
+              <small>({this.props.data.id})</small>
             </h3>
             <div className="pull-right">
               <WorkflowControls workflow={this.props.data} />
