@@ -25,7 +25,7 @@ Feature: Workflow details and orders listing
 
   Scenario: Header data are shown
     Given I am on "ARRAYTEST" with "TOTAL" states and "default" dates
-    Then the header says " ARRAYTEST 2.0"
+    Then the header says " ARRAYTEST 2.0 (14)"
     And there are "5" badges shown
     And there are "2" groups shown
 
