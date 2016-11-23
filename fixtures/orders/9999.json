@@ -1,16 +1,16 @@
 {
-  "name": "ARRAYTEST",
-  "version": "2.0",
+  "name": "VERSIONTEST",
+  "version": "1.0",
   "author": "Qore Technologies, sro",
-  "workflow_instanceid": 31380,
-  "workflowid": 14,
-  "workflowstatus": "ERROR",
+  "workflow_instanceid": 9999,
+  "workflowid": 132,
+  "workflowstatus": "READY",
   "status_sessionid": 0,
   "parent_workflow_instanceid": null,
   "subworkflow": null,
   "synchronous": 0,
-  "errors": 5,
-  "note_count": 3,
+  "errors": 0,
+  "note_count": 0,
   "business_error": false,
   "workflowstatus_orig": "Y",
   "custom_status": "Q",
@@ -1579,27 +1579,5 @@
     "cancel",
     "retry"
   ],
-  "notes": [
-    {
-      "saved": true,
-      "username": "admin",
-      "note": "Roura",
-      "created": "2016-06-06 13:56:25.000000 +02:00",
-      "modified": "2016-06-06 13:56:25.000000 +02:00"
-    },
-    {
-      "saved": true,
-      "username": "admin",
-      "note": "Neasi",
-      "created": "2016-06-06 13:56:31.000000 +02:00",
-      "modified": "2016-06-06 13:56:31.000000 +02:00"
-    },
-    {
-      "saved": true,
-      "username": "admin",
-      "note": "wtf",
-      "created": "2016-06-06 13:57:21.000000 +02:00",
-      "modified": "2016-06-06 13:57:21.000000 +02:00"
-    }
-  ]
+  "notes": []
 }

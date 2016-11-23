@@ -29,7 +29,7 @@ Feature: tests for the the Search view
   Scenario: Input values are taken from the URL and advanced search is displayed (date)
     Given I am on "search?date=19900101&maxmodified=20161010" listing
     And the search page is shown
-    Then "12" "orders" are shown
+    Then "13" "orders" are shown
     And there are 6 inputs displayed
     And "maxdate" value is "2016-10-10 00:00:00"
 
