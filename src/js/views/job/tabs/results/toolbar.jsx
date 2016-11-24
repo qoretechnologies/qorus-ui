@@ -28,7 +28,7 @@ const ResultsToolbar = ({
   onSearchChange: Function,
   onApplyJobFilter: Function,
 }) => (
-  <Toolbar>
+  <Toolbar sticky>
     <DatePicker className="toolbar-item" {...{ date, onApplyDate }} />
     <ResultsFilter {...{ jobFilter, onApplyJobFilter }} />
     <CsvExport

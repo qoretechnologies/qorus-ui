@@ -114,7 +114,7 @@ export default class extends Component {
     const checked = CHECKBOX_STATES[this.props.selected];
 
     return (
-      <Toolbar>
+      <Toolbar sticky>
         <Dropdown id="selection">
           <DropdownControl>
             <Checkbox

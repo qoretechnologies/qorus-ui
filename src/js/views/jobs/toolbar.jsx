@@ -119,7 +119,7 @@ export default class extends Component {
     const date = this.props.params.date || '24h';
 
     return (
-      <Toolbar>
+      <Toolbar sticky>
         <Dropdown
           id="selection"
           className="pull-left"
