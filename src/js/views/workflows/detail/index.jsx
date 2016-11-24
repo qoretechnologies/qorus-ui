@@ -74,8 +74,12 @@ export default class WorkflowsDetail extends Component {
     return window.innerHeight - top;
   };
 
+  handleClose: Function = (): void => {
+    this.props.onClose(['globalErrQuery', 'workflowErrQuery']);
+  };
+
   render() {
-    const { workflow, errors, systemOptions, globalErrors, paneTab } =
+    const { workflow, systemOptions, paneTab } =
       this.props;
 
     if (!workflow) return null;
@@ -83,7 +87,7 @@ export default class WorkflowsDetail extends Component {
     return (
       <DetailPane
         width={600}
-        onClose={this.props.onClose}
+        onClose={this.handleClose}
       >
         <article>
           <WorkflowsHeader workflow={workflow} />
@@ -114,11 +118,7 @@ export default class WorkflowsDetail extends Component {
               <AlertsTab alerts={workflow.alerts} />
             </Pane>
             <Pane name="Errors">
-              <ErrorsTab
-                workflow={workflow}
-                errors={errors.data}
-                globalErrors={globalErrors}
-              />
+              <ErrorsTab location={this.props.location} workflow={workflow} />
             </Pane>
             <Pane name="Mappers">
               <MappersTable mappers={workflow.mappers} />

@@ -215,4 +215,32 @@ describe('pane from hocomponents/pane', () => {
 
     expect(url).to.eql('localhost:3000/system/rbac/users?q=searchQuery');
   });
+
+  it('closes the pane and removes provided queries', () => {
+    const Comp = compose(
+      defaultProps({
+        width: 400,
+        location: {
+          query: {
+            paneId: 'testPane',
+            testQuery: 'test',
+            anotherQuery: 'test',
+            q: 'searchQuery',
+          },
+          pathname: 'localhost:3000/system/rbac/users',
+        },
+      }),
+      withPane(PaneComp, ['width'])
+    )(ActualComp);
+
+    const wrapper = mount(
+      <CompWithContext>
+        <Comp />
+      </CompWithContext>
+    );
+
+    wrapper.find(Pane).props().onClose(['testQuery', 'anotherQuery']);
+
+    expect(url).to.eql('localhost:3000/system/rbac/users?q=searchQuery');
+  });
 });

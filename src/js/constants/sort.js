@@ -19,9 +19,15 @@ export const sortDefaults = {
     historySortBy: 'alert',
     historySortByKey: { ignoreCase: true, direction: -1 },
   },
-  errors: {
+  globalErrors: {
     sortBy: 'error',
-    sortByKey: { direction: -1, ignoreCase: true },
+    sortByKey: { direction: 1, ignoreCase: true },
+    historySortBy: 'description',
+    historySortByKey: { direction: 1, ignoreCase: true },
+  },
+  workflowErrors: {
+    sortBy: 'error',
+    sortByKey: { direction: 1, ignoreCase: true },
     historySortBy: 'description',
     historySortByKey: { direction: 1, ignoreCase: true },
   },

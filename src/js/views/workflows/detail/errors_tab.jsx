@@ -1,65 +1,29 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React from 'react';
 
-import ErrorsTable from './errors_table';
-import { pureRender } from 'components/utils';
-import Loader from 'components/loader';
-import actions from 'store/api/actions';
+import ErrorsContainer from '../../../containers/errors';
 
-@pureRender
-export default class ErrorsTab extends Component {
-  static propTypes = {
-    workflow: PropTypes.object.isRequired,
-    errors: PropTypes.array.isRequired,
-    globalErrors: PropTypes.array.isRequired,
-  };
+type Props = {
+  workflow: Object,
+  location: Object,
+};
 
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
+const ErrorsTab: Function = ({ workflow, location }: Props): React.Element<any> => (
+  <div>
+    <ErrorsContainer
+      title="Workflow errors"
+      type="workflow"
+      id={workflow.id}
+      compact
+      location={location}
+    />
+    <ErrorsContainer
+      title="Global errors"
+      type="global"
+      compact
+      location={location}
+    />
+  </div>
+);
 
-  getUnusedGlobalErrors() {
-    return this.props.globalErrors.filter(gloErr => (
-      this.props.errors.findIndex(err => (
-        err.error === gloErr.error
-      )) < 0
-    ));
-  }
-
-  clone = (err) => {
-    this.context.dispatch(
-      actions.errors.create(`workflow/${this.props.workflow.id}`, err)
-    );
-  };
-
-  update = (err) => {
-    this.context.dispatch(
-      actions.errors.update(`workflow/${this.props.workflow.id}`, err)
-    );
-  };
-
-  remove = (err) => {
-    this.context.dispatch(
-      actions.errors.remove(`workflow/${this.props.workflow.id}`, err)
-    );
-  };
-
-  render() {
-    if (!this.props.errors) return <Loader />;
-
-    return (
-      <div>
-        <ErrorsTable
-          heading="Workflow definitions"
-          errors={this.props.errors}
-          onRemove={this.remove}
-          onUpdate={this.update}
-        />
-        <ErrorsTable
-          heading="Global definitions"
-          errors={this.getUnusedGlobalErrors()}
-          onClone={this.clone}
-        />
-      </div>
-    );
-  }
-}
+export default ErrorsTab;
