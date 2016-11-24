@@ -80,7 +80,7 @@ export default class ServicesDetail extends Component {
             </Pane>
             <Pane name="Code">
               <Code
-                data={service.lib || {}}
+                data={{ ...service.lib, ...{ methods: service.methods } } || {}}
                 heightUpdater={this.getHeight}
               />
             </Pane>
