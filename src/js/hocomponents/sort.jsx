@@ -7,9 +7,9 @@ import { sort } from '../store/ui/actions';
 import { sortTable } from '../helpers/table';
 
 export default (
-  tableName: string,
+  tableName: string | Function,
   collectionProp: string,
-  defaultSortData:? Object
+  defaultSortData:? Object | Function,
 ) => (
   Component: ReactClass<*>
 ) => {
@@ -21,21 +21,28 @@ export default (
     };
 
     componentWillMount() {
+      const tbl = typeof tableName === 'function' ? tableName(this.props) : tableName;
+      const defaultSort = typeof defaultSortData === 'function' ?
+        defaultSortData(this.props) :
+        defaultSortData;
+
       if (defaultSortData) {
         const { initSort } = this.props;
-        initSort(tableName, defaultSortData);
+        initSort(tbl, defaultSort);
       }
     }
 
     handleSortChange = ({ sortBy }: { sortBy: string }) => {
       const { changeSort, sortData } = this.props;
+      const tbl = typeof tableName === 'function' ? tableName(this.props) : tableName;
+
       if (!sortData || sortData.sortBy !== sortBy) {
         const { sortByKey: { direction } } = sortData;
-        changeSort(tableName, sortBy, direction);
+        changeSort(tbl, sortBy, direction);
       } else {
         const { sortByKey: { direction, ignoreCase } } = sortData;
 
-        changeSort(tableName, sortBy, -1 * direction, ignoreCase);
+        changeSort(tbl, sortBy, -1 * direction, ignoreCase);
       }
     };
 
@@ -64,8 +71,8 @@ export default (
   WrappedComponent.displayName = wrapDisplayName(Component, 'sort');
 
   WrappedComponent = connect(
-    state => ({
-      sortData: state.ui.sort[tableName],
+    (state, props) => ({
+      sortData: state.ui.sort[typeof tableName === 'function' ? tableName(props) : tableName],
     }),
     sort
   )(WrappedComponent);
