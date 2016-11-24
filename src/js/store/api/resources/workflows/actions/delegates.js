@@ -54,6 +54,18 @@ export function enableBatch(actions) {
   };
 }
 
+export function startBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.workflows.batch_action('start', ids.join(',')));
+  };
+}
+
+export function stopBatch(actions) {
+  return ids => dispatch => {
+    dispatch(actions.workflows.batch_action('stop', ids.join(',')));
+  };
+}
+
 export function disableBatch(actions) {
   return ids => dispatch => {
     dispatch(actions.workflows.batch_action('disable', ids.join(','), null, { enabled: false }));

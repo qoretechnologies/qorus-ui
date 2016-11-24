@@ -132,6 +132,8 @@ const viewSelector = createSelector(
       fetch: actions.workflows.fetch,
       enable: actions.workflows.enableBatch,
       disable: actions.workflows.disableBatch,
+      start: actions.workflows.startBatch,
+      stop: actions.workflows.stopBatch,
       setDeprecated: actions.workflows.setDeprecatedBatch,
       unsetDeprecated: actions.workflows.unsetDeprecatedBatch,
       reset: actions.workflows.resetBatch,
@@ -341,6 +343,12 @@ export default class Workflows extends Component {
         break;
       case 'disable':
         this.props.disable(selectedData);
+        break;
+      case 'start':
+        this.props.start(selectedData);
+        break;
+      case 'stop':
+        this.props.stop(selectedData);
         break;
       case 'setDeprecated':
         this.props.setDeprecated(selectedData);
