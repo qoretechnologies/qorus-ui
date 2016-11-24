@@ -11,6 +11,7 @@ import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
+import InfoTable from '../../components/info_table'
 
 const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Function }) => {
   if (!mapper) return <Loader />;
@@ -27,18 +28,28 @@ const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Func
         <small>({ mapper.version })</small>
       </h3>
       <p className="mapper-subtitle">{ mapper.desc }</p>
-      <p className="mapper-type">
+      <p className="mapper-desc">
         <span> Type </span>: { mapper.type }
       </p>
-      { !mapper.valid && (
-        <div className="mapper-error-msg">
-          <h5> Warning: This mapper contains an error and might not be rendered correctly </h5>
-          <Alert bsStyle="danger">
-            { mapper.error }
-          </Alert>
+      <p className="mapper-desc">
+        <span> Options </span>:
+      </p>
+      <div className="row mapper-opts">
+        <div className="col-lg-4">
+          <InfoTable object={mapper.opts} omit={['input', 'output', 'name']} />
         </div>
-      )}
-      <MapperDiagram mapper={mapper} />
+      </div>
+      <div className="view-content">
+        { !mapper.valid && (
+          <div className="mapper-error-msg">
+            <h5> Warning: This mapper contains an error and might not be rendered correctly </h5>
+            <Alert bsStyle="danger">
+              { mapper.error }
+            </Alert>
+          </div>
+        )}
+        <MapperDiagram mapper={mapper} />
+      </div>
     </div>
   );
 };
