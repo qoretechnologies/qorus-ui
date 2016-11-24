@@ -146,10 +146,21 @@ export function createResourceReducers(
       };
     });
 
-    reducers[resource] = handleActions(
-      handlers,
-      Object.assign({}, iniState, resourceOrigin.initialState)
-    );
+    const inState = resource === 'errors' ?
+    {
+      global: {
+        data: [],
+        loading: false,
+        sync: false,
+      },
+      workflow: {
+        data: [],
+        loading: false,
+        sync: false,
+      },
+    } : Object.assign({}, iniState, resourceOrigin.initialState);
+
+    reducers[resource] = handleActions(handlers, inState);
   });
 
   return reducers;

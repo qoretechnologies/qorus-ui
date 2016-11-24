@@ -412,5 +412,18 @@
     "severity": "MAJOR",
     "error": "TEST-EXCEPTION",
     "type": "global"
+  },
+  {
+    "error": "SOCKET-CONNECT-ERROR",
+    "description": "the remote host could not be contacted; see details for more information",
+    "severity": "MAJOR",
+    "retry_flag": true,
+    "business_flag": false,
+    "retry_delay_secs": 900,
+    "manually_updated": false,
+    "type": "workflow",
+    "workflowname": "ARRAYTEST",
+    "workflowversion": "1.0",
+    "workflowid": 14
   }
 ]

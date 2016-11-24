@@ -1,83 +1,57 @@
-import 'whatwg-fetch';
+/* @flow */
 import { createAction } from 'redux-actions';
-
 
 import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
 
-
-function fetchPayload(ref) {
-  return fetchJson('GET', `${settings.REST_BASE_URL}/errors/${ref}`);
-}
-
-function fetchMeta(ref) {
-  return { ref };
-}
-
-const fetchErrors = createAction(
+const fetch: Function = createAction(
   'ERRORS_FETCH',
-  fetchPayload,
-  fetchMeta
+  async (type: string, id: number | string): Object => {
+    const errors = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/errors/${type}${id && id !== 'omit' ? `/${id}` : ''}`
+    );
+
+    return { type, errors };
+  }
 );
 
+const createOrUpdate: Function = createAction(
+  'ERRORS_CREATEORUPDATE',
+  (type: string, id: number | string, data: Object): Object => {
+    const dt = type === 'workflow' ? { ...data, ...{ forceworfklow: true } } : data;
 
-function createPayload(ref, err) {
-  return fetchJson('POST', `${settings.REST_BASE_URL}/errors/${ref}`, {
-    body: JSON.stringify(err),
-  });
-}
+    fetchJson(
+      'POST',
+      `${settings.REST_BASE_URL}/errors/${type}${
+        id && id !== 'omit' ? `/${id}` : ''
+      }?action=createOrUpdate`,
+      { body: JSON.stringify(dt) }
+    );
 
-function createMeta(ref, err) {
-  return { ref, err };
-}
-
-const createError = createAction(
-  'ERRORS_CREATE',
-  createPayload,
-  createMeta
+    return { type, id, data };
+  }
 );
 
-
-function updatePayload(ref, err) {
-  return fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/errors/${ref}/${err.error}`,
-    { body: JSON.stringify(err) }
-  );
-}
-
-function updateMeta(ref, err) {
-  return { ref, err };
-}
-
-const updateError = createAction(
-  'ERRORS_UPDATE',
-  updatePayload,
-  updateMeta
-);
-
-
-function removePayload(ref, err) {
-  return fetchJson(
-    'DELETE',
-    `${settings.REST_BASE_URL}/errors/${ref}/${err.error}`
-  );
-}
-
-function removeMeta(ref, err) {
-  return { ref, err };
-}
-
-const removeError = createAction(
+const removeError: Function = createAction(
   'ERRORS_REMOVE',
-  removePayload,
-  removeMeta
+  (type: string, id: number | string, name: string): Object => {
+    fetchJson(
+      'DELETE',
+      `${settings.REST_BASE_URL}/errors/${type}${
+        id && id !== 'omit' ? `/${id}` : ''
+        }/${name}`
+    );
+
+    return { type, name };
+  }
 );
 
+const unsync: Function = createAction('ERRORS_UNSYNC');
 
 export {
-  fetchErrors as fetch,
-  createError as create,
-  updateError as update,
-  removeError as remove,
+  fetch,
+  createOrUpdate,
+  removeError,
+  unsync,
 };

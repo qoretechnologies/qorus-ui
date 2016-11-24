@@ -1,117 +1,74 @@
-function ensureStructure(state = {}, action) {
-  if (state[action.meta.ref]) return state;
+/* @flow */
+import remove from 'lodash/remove';
 
-  return Object.assign({}, state, {
-    [action.meta.ref]: {
-      data: {},
-      sync: false,
-      loading: false,
-    },
-  });
-}
+import { updateItemWithName } from '../../utils';
 
-
-function handleError(state = {}, action) {
-  return Object.assign({}, state, {
-    [action.meta.ref]: Object.assign({}, state[action.meta.ref], {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    }),
-  });
-}
-
-
-const fetch = {
-  next(state = {}, action) {
-    const data = action.payload.reduce((errs, err) => (
-      Object.assign(errs, { [err.error]: err })
-    ), {});
-
-    return Object.assign({}, ensureStructure(state, action), {
-      [action.meta.ref]: {
-        data,
-        sync: true,
-        loading: false,
-      },
-    });
+const initialState: Object = {
+  global: {
+    data: [],
+    loading: false,
+    sync: false,
   },
-  throw: handleError,
+  workflow: {
+    data: [],
+    loading: false,
+    sync: false,
+  },
 };
 
+const fetch: Object = {
+  next(
+    state: Object = initialState,
+    { payload: { errors, type } }: { payload: { errors: Object, type: string } }
+  ) {
+    return { ...state, ...{ [type]: { data: errors, sync: true, loading: false } } };
+  },
+};
 
-const create = {
-  next(state = {}, action) {
-    const safeState = ensureStructure(state, action);
-    const type = action.meta.ref.split('/', 2)[0].toUpperCase();
+const createOrUpdate: Object = {
+  next(
+    state: Object = initialState,
+    { payload: { id, data, type } }: { payload: { id: number, data: Object, type: string } }
+  ) {
+    const exists = state[type].data.find((obj: Object): boolean => obj.error === data.error);
+    let newData;
 
-    if (action.payload !== `CREATED-${type}`) {
-      return handleError(state, action);
+    if (exists) {
+      const stateData = [...state[type].data];
+
+      newData = updateItemWithName(data.error, { ...data }, stateData, 'error');
+    } else {
+      const dataObj = id && id !== 'omit' ? { ...data, ...{ workflowid: id } } : data;
+
+      newData = [...state[type].data, dataObj];
     }
 
-    const data = Object.assign({}, safeState[action.meta.ref].data, {
-      [action.meta.err.error]: action.meta.err,
-    });
-
-    return Object.assign({}, safeState, {
-      [action.meta.ref]: {
-        data,
-        sync: false,
-        loading: false,
-      },
-    });
+    return { ...state, ...{ [type]: { ...state[type], data: newData } } };
   },
-  throw: handleError,
 };
 
+const removeError: Object = {
+  next(
+    state: Object = initialState,
+    { payload: { name, type } }: { payload: { name: string, type: string } }
+  ) {
+    const data = [...state[type].data];
 
-const update = {
-  next(state = {}, action) {
-    const safeState = ensureStructure(state, action);
-    const type = action.meta.ref.split('/', 2)[0].toUpperCase();
+    remove(data, (error: Object) => error.error === name);
 
-    if (action.payload !== `UPDATED-${type}`) {
-      return handleError(state, action);
-    }
-
-    const data = Object.assign({}, safeState[action.meta.ref].data, {
-      [action.meta.err.error]: action.meta.err,
-    });
-
-    return Object.assign({}, safeState, {
-      [action.meta.ref]: {
-        data,
-        sync: false,
-        loading: false,
-      },
-    });
+    return { ...state, ...{ [type]: { ...state[type], data } } };
   },
-  throw: handleError,
 };
 
-
-const remove = {
-  next(state = {}, action) {
-    const safeState = ensureStructure(state, action);
-
-    const data = Object.assign({}, safeState[action.meta.ref].data);
-    delete data[action.meta.err.error];
-
-    return Object.assign({}, safeState, {
-      [action.meta.ref]: {
-        data,
-        sync: false,
-        loading: false,
-      },
-    });
+const unsync: Object = {
+  next() {
+    return { ...initialState };
   },
-  throw: handleError,
 };
-
 
 export {
   fetch as FETCH,
-  create as CREATE,
-  update as UPDATE,
-  remove as REMOVE,
+  createOrUpdate as CREATEORUPDATE,
+  removeError as REMOVE,
+  unsync as UNSYNC,
 };

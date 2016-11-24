@@ -1,31 +1,37 @@
 'use strict';
-
-
-/**
- * @module api/errors
- */
-
+import remove from 'lodash/remove';
 
 const express = require('express');
 
 
 module.exports = () => {
-  const data = require('./data')();
+  const data = require('./data')()[0];
 
   const router = new express.Router();
-  router.get('/', (req, res) => {
-    res.json(data[1]);
-  });
-
   router.get('/global', (req, res) => {
-    res.json(data[0]);
+    const errors = data.filter(e => e.type === 'global');
+
+    res.json(errors);
   });
 
   router.get('/workflow/:id', (req, res) => {
-    const start = Math.round(Math.random() * (data.length));
-    const end = Math.round(Math.random() * (data.length - start) + start);
+    const errors = data.filter(e => (
+      e.type === 'workflow' && e.workflowid === parseInt(req.params.id, 10)
+    ));
 
-    res.json(data.slice(start, end));
+    res.json(errors);
+  });
+
+  router.delete('/workflow/:id/:error', (req, res) => {
+    remove(data, error => error.type === 'workflow' && error.error === req.params.error);
+
+    res.json('OK');
+  });
+
+  router.delete('/global/:error', (req, res) => {
+    remove(data, error => error.type === 'global' && error.error === req.params.error);
+
+    res.json('OK');
   });
 
   return router;
