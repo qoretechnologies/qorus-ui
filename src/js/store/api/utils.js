@@ -17,8 +17,8 @@ export function updateItemWithId(id, props, data, idkey = 'id') {
     .concat(data.slice(idx + 1));
 }
 
-export function updateItemWithName(name, props, data) {
-  const idx = data.findIndex(i => i.name === name);
+export function updateItemWithName(name, props, data, nameKey = 'name') {
+  const idx = data.findIndex(i => i[nameKey] === name);
   const updatedItem = Object.assign({}, data[idx], props);
 
   return data.slice(0, idx)
