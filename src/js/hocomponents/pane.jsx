@@ -26,9 +26,9 @@ export default (
       location: Object,
     };
 
-    handleClose: Function = (): void => {
+    handleClose: Function = (omitQueries: Array<String> = []): void => {
       const { query, pathname }: { query: Object, pathname: string } = this.props.location;
-      const newQuery: Object = omit(query, 'paneId', 'paneTab');
+      const newQuery: Object = omit(query, ['paneTab', 'paneId', ...omitQueries]);
 
       this.context.router.push({
         pathname,
