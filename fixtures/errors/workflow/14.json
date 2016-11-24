@@ -1,1 +1,0 @@
-[ { "manually_updated" : true, "retry_flag" : true, "retry_delay_secs" : 5, "description" : "test error", "business_flag" : false, "severity" : "MAJOR", "error" : "ASYNC-RECEIVE-ERROR", "type" : "workflow", "workflowname" : "INVENTORY-EXAMPLE-1", "workflowversion" : "1.0", "workflowid" : 1 } ]

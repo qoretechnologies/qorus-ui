@@ -1,0 +1,416 @@
+[
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An SSL error occurred while sending or receiving data on a socket",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-SSL-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O error occurred while sending socket data",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-SEND-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O error occurred while receiving socket data",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-RECV-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "The socket transfer exceeded the timeout period",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-TIMEOUT",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O error occurred while attempting to connect to a remote socket",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-CONNECT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O error occurred while sending or receiving data on a socket",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-CLOSED",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "I/O or protocol error occurred while reading HTTP data",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "HTTP-CLIENT-RECEIVE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O or protocol error occurred while reading HTTP data on the socket",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SOCKET-HTTP-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O or protocol error occurred while reading FTP data",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTP-RECEIVE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred connecting to the FTP server",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTP-CONNECT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O or protocol error occurred on the secure FTP data channel",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTPS-SECURE-DATA-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "The FTP data channel was closed prematurely",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTP-DATA-SOCKET-CLOSED",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An I/O error occurred on the FTP data channel",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTP-DATA-SOCKET-RECV-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "the FTP transfer exceeded the timeout period",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "FTP-TIMEOUT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SSH2-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "A timeout occurred communicating with the remote server",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-TIMEOUT",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::list() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-LIST-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::listFull() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-LISTFULL-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::chmod() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-CHMOD-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::mkdir() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-MKDIR-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::rmdir() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-RMDIR-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::rename() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-RENAME-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::removeFile() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-REMOVEFILE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating while connecting to the remote server",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-CONNECT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::getFile() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-GETFILE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::getTextFile() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-GETTEXTFILE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::putFile() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-PUTFILE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SFTPClient::stat() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SFTPCLIENT-STAT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SSH2Client::scpGet() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SSH2CLIENT-SCPGET-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the remote server in the SSH2Client::scpPut() method",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SSH2CLIENT-SCPPUT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "A timeout error occurred communicating with the remote server",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "SSH2CLIENT-TIMEOUT",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "a shared database connection could not be acquired within the timeout period",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "TRANSACTION-LOCK-TIMEOUT",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occurred communicating with the database",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "DATASOURCE-RETRY-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "An error occured that results in a workflow order retry; see info for details",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "RETRY-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": false,
+    "retry_delay_secs": null,
+    "description": "A business error was detected; see info for details",
+    "business_flag": true,
+    "severity": "MAJOR",
+    "error": "BUSINESS-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "A business error was detected that results in a workflow order retry; see info for details",
+    "business_flag": true,
+    "severity": "MAJOR",
+    "error": "BUSINESS-RETRY-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": false,
+    "retry_delay_secs": null,
+    "description": "A condition was detected affecting the business logic that results in a warning; see info for details",
+    "business_flag": true,
+    "severity": "WARNING",
+    "error": "BUSINESS-WARNING",
+    "type": "global"
+  },
+  {
+    "retry_flag": false,
+    "retry_delay_secs": null,
+    "description": "A technical condition was detected that results in a warning; see info for details",
+    "business_flag": false,
+    "severity": "WARNING",
+    "error": "TECHNICAL-WARNING",
+    "type": "global"
+  },
+  {
+    "retry_flag": false,
+    "retry_delay_secs": null,
+    "description": "the workflow order instance has exceeeded its retry limit and will be set to ERROR",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "RETRIES-EXCEEDED-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "ASYNC-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "ASYNC-RECEIVE-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": false,
+    "retry_delay_secs": null,
+    "description": "test business error",
+    "business_flag": true,
+    "severity": "MAJOR",
+    "error": "TEST-BUSINESS-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "TEST-VALIDATION-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "TEST-INIT-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "TEST-ERROR",
+    "type": "global"
+  },
+  {
+    "retry_flag": true,
+    "retry_delay_secs": null,
+    "description": "test error",
+    "business_flag": false,
+    "severity": "MAJOR",
+    "error": "TEST-EXCEPTION",
+    "type": "global"
+  }
+]
