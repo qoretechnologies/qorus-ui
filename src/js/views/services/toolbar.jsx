@@ -84,7 +84,7 @@ export default class extends Component {
           />
           <Button
             label="Load"
-            icon="power-off"
+            icon="check"
             big
             btnStyle="default"
             action={this.handleLoadClick}
