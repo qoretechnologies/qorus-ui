@@ -136,6 +136,7 @@ const viewSelector = createSelector(
       unsetDeprecated: actions.workflows.unsetDeprecatedBatch,
       reset: actions.workflows.resetBatch,
       actions: actions.workflows,
+      unsync: actions.workflows.unsync,
     }
   ),
   mapProps(({ params, ...rest }) => ({
@@ -246,6 +247,10 @@ export default class Workflows extends Component {
 
   componentDidUpdate() {
     setTitle(`Workflows | ${this.context.getTitle()}`);
+  }
+
+  componentWillUnmount() {
+    this.props.unsync();
   }
 
   /**

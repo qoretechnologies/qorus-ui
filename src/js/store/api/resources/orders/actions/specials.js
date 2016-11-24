@@ -37,10 +37,13 @@ const fetchData = createAction(
   }
 );
 
+const unsync = createAction('ORDERS_UNSYNC');
+
 export {
   addOrder,
   modifyOrder,
   addNoteWebsocket,
   updateDone,
   fetchData,
+  unsync,
 };

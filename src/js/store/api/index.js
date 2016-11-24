@@ -38,12 +38,14 @@ export function createResourceReducers(
         next(state, action) {
           let data;
 
-          if (resourceOrigin && resourceOrigin.transform) {
-            data = (isArray(action.payload)) ?
-              action.payload.map(resourceOrigin.transform) :
-              resourceOrigin.transform(action.payload);
-          } else {
-            data = action.payload;
+          if (action.payload) {
+            if (resourceOrigin && resourceOrigin.transform) {
+              data = (isArray(action.payload)) ?
+                action.payload.map(resourceOrigin.transform) :
+                resourceOrigin.transform(action.payload);
+            } else {
+              data = action.payload;
+            }
           }
 
           if (isSpecialReducer) {
@@ -119,6 +121,8 @@ export function createResourceReducers(
               data = Object.assign(data, action.meta.params.update.data);
             }
           }
+
+          data = data || [];
 
           return {
             ...state,
