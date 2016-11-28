@@ -170,7 +170,7 @@ export default class extends Component {
       this.setState({
         loading: false,
       });
-    };
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {

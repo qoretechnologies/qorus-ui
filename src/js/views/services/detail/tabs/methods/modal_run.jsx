@@ -43,7 +43,7 @@ export default class ModalRun extends Component {
     fetchJson(
       'PUT',
       `/api/services/${this.props.service.name}/${this.state.activeMethod.name}`,
-      { body: JSON.stringify({ action: 'call', parse_args: request }), },
+      { body: JSON.stringify({ action: 'call', parse_args: request }) },
       true
     ).
     then(response => {
