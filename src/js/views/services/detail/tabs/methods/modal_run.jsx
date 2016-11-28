@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'components/modal';
 import Tabs, { Pane } from 'components/tabs';
+import Alert from '../../../../../components/alert';
 
-import { fetchJson } from 'store/api/utils';
+import { fetchJson } from '../../../../../store/api/utils';
 import yaml from 'js-yaml';
 
 // import classNames from 'classnames';
@@ -24,13 +25,14 @@ export default class ModalRun extends Component {
     this.setState({
       activeMethod: this.props.method,
       response: false,
+      error: null,
     });
   }
 
   handleCancel = (ev) => {
     ev.preventDefault();
     this.props.onClose();
-  }
+  };
 
   handleCommit = (ev) => {
     const request = this._request.value;
@@ -41,23 +43,37 @@ export default class ModalRun extends Component {
     fetchJson(
       'PUT',
       `/api/services/${this.props.service.name}/${this.state.activeMethod.name}`,
-      { body: JSON.stringify({ action: 'call', parse_args: request }) }
-    ).then(response => { this.setState({ response, request }); });
-  }
+      { body: JSON.stringify({ action: 'call', parse_args: request }), },
+      true
+    ).
+    then(response => {
+      if (response.err && response.desc) {
+        this.setState({
+          error: response.desc,
+        });
+      } else {
+        this.setState({
+          response,
+          request,
+          error: null,
+        });
+      }
+    });
+  };
 
   handleMethodChange = (ev) => {
     this.setState({
       activeMethod: this.props.service.methods.find(m => m.name === ev.target.value),
     });
-  }
+  };
 
   requestRef = (s) => {
     this._request = s;
-  }
+  };
 
   selectRef = (s) => {
     this._select = s;
-  }
+  };
 
   renderOptions() {
     const { service, method } = this.props;
@@ -86,10 +102,10 @@ export default class ModalRun extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { response, request, activeMethod } = this.state;
+    const { response, request, activeMethod, error } = this.state;
 
     return (
-      <Modal>
+      <Modal hasFooter>
           <Modal.Header
             titleId="errorsTableModalLabel"
             onClose={this.handleCancel}
@@ -98,6 +114,12 @@ export default class ModalRun extends Component {
           </Modal.Header>
           <Modal.Body>
             <div className="content">
+              { error && (
+                <Alert bsStyle="danger">
+                  <h4> Error occured </h4>
+                  { error }
+                </Alert>
+              )}
               <form
                 onSubmit={this.handleCommit}
                 noValidate
