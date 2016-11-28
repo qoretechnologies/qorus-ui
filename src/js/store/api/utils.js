@@ -150,7 +150,7 @@ function checkResponse(res, currentPath) {
  * @return {Object}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchData(method, url, opts) {
+export async function fetchData(method, url, opts, dontCheck) {
   const currentPath = window.location.pathname;
   const res = await fetch(
     url,
@@ -160,17 +160,19 @@ export async function fetchData(method, url, opts) {
     }, opts)
   );
 
-  checkResponse(res, currentPath);
+  if (!dontCheck) {
+    checkResponse(res, currentPath);
+  }
 
   return res;
 }
 
-export async function fetchJson(method, url, opts = {}) {
-  const res = await fetchData(method, url, opts);
+export async function fetchJson(method, url, opts = {}, dontCheck) {
+  const res = await fetchData(method, url, opts, dontCheck);
   return res.json();
 }
 
-export async function fetchText(method, url, opts) {
-  const res = await fetchData(method, url, opts);
+export async function fetchText(method, url, opts, dontCheck) {
+  const res = await fetchData(method, url, opts, dontCheck);
   return res.text();
 }
