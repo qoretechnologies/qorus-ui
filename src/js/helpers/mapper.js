@@ -2,7 +2,7 @@
 import trimStart from 'lodash/trimStart';
 import trimEnd from 'lodash/trimEnd';
 
-const formatFieldSource: Function = (fieldSource: string): Array<string> => {
+const formatFieldSource: Function = (fieldSource: string): Object => {
   let newSource = fieldSource;
   newSource = trimStart(newSource, '(');
   newSource = trimEnd(newSource, ')');

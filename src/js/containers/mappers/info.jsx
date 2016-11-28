@@ -11,7 +11,7 @@ import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
-import InfoTable from '../../components/info_table'
+import InfoTable from '../../components/info_table';
 
 const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Function }) => {
   if (!mapper) return <Loader />;

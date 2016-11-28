@@ -299,7 +299,7 @@ module.exports = function commonSteps() {
       el = `td.narrow .btn-${css} i.fa-power-off`;
     } else if (type === 'loaded' || type === 'unloaded') {
       css = type === 'loaded' ? ' .btn-success' : '';
-      const icon = type === 'loaded' ? 'check' : 'ban';
+      const icon = type === 'loaded' ? 'check' : 'remove';
       el = `td.narrow${css} i.fa-${icon}`;
     } else if (type === 'active' || type === 'inactive') {
       css = type === 'active' ? ' .job-set-inactive' : ' .job-set-active';
@@ -402,6 +402,8 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^the header says "([^"]*)"$/, async function(name) {
+    await this.waitForElement('.detail-title');
+
     const el = findElementByText(this.browser, '.detail-title', name);
 
     this.browser.assert.element(el);

@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import actions from 'store/api/actions';
-
 import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
@@ -21,8 +18,6 @@ export default class DiagramView extends Component {
   };
 
   componentWillMount() {
-    console.log(this.props);
-
     this.setState({
       step: null,
       paneSize: 200,

@@ -1,14 +1,12 @@
 /* @flow */
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Actions from './actions';
 
-type Props = {
-  children: any,
-  sticky: boolean,
-}
-
 class Toolbar extends Component {
-  props: Props;
+  static propTypes = {
+    children: PropTypes.any,
+    sticky: PropTypes.bool,
+  };
 
   state: {
     sticky: boolean,
@@ -60,7 +58,7 @@ class Toolbar extends Component {
           {this.props.children}
         </div>
       </div>
-    )
+    );
   }
 }
 

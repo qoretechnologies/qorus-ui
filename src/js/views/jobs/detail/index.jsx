@@ -10,7 +10,6 @@ import mapProps from 'recompose/mapProps';
 
 import Header from './header';
 import { DetailTab } from './tabs';
-import Loader from '../../../components/loader';
 import AlertsTable from '../../../components/alerts_table';
 import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
