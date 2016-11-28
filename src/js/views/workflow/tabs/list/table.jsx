@@ -101,10 +101,15 @@ export default class OrdersTable extends Table {
       </Cell>
     );
 
+    const handleStartedClick = () => {
+      this.props.onServerSortChange('started');
+    };
+
     yield (
       <Cell
         tag="th"
         name="started"
+        onClick={handleStartedClick}
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
       >
@@ -112,10 +117,15 @@ export default class OrdersTable extends Table {
       </Cell>
     );
 
+    const handleCompletedClick = () => {
+      this.props.onServerSortChange('completed');
+    };
+
     yield (
       <Cell
         tag="th"
         name="completed"
+        onClick={handleCompletedClick}
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
       >
@@ -123,10 +133,15 @@ export default class OrdersTable extends Table {
       </Cell>
     );
 
+    const handleModifiedClick = () => {
+      this.props.onServerSortChange('modified');
+    };
+
     yield (
       <Cell
         tag="th"
         name="modified"
+        onClick={handleModifiedClick}
         onSortChange={this.props.onSortChange}
         sortData={this.props.sortData}
       >
