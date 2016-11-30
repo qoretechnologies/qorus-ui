@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
+
 import DetailTable from './detail_table';
 import Controls from './controls';
+import Icon from '../../components/icon';
 
 export default function GroupDetail(props) {
   const handleBackClick = (e) => {
@@ -9,15 +11,13 @@ export default function GroupDetail(props) {
     history.go(-1);
   };
 
-  console.log(props.group);
-
   return (
     <div>
       <div className="row">
         <div className="col-xs-11">
           <h3 className="detail-title">
             <a onClick={handleBackClick}>
-              <i className="fa fa-angle-left" />
+              <Icon icon="angle-left" tooltip="Back to groups" />
             </a>
             {' '}
             { props.group.name }

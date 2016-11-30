@@ -21,6 +21,7 @@ import Search from '../../../components/search';
 import OptionModal from './modal';
 import { Control } from '../../../components/controls';
 import Shorten from '../../../components/shorten';
+import Icon from '../../../components/icon';
 import { querySelector, resourceSelector } from '../../../selectors';
 
 const filterOptions = srch => collection => (
@@ -169,12 +170,11 @@ export default class Options extends Component {
   *renderCells(model) {
     yield (
       <Cell>
-        { model.status === 'locked' &&
-        <i className="fa fa-lock" />
-        }
-        { model.status === 'unlocked' &&
-        <i className="fa fa-unlock" />
-        }
+        { model.status === 'locked' ? (
+          <Icon icon="lock" tooltip="Option locked" />
+        ) : (
+          <Icon icon="unlock" tooltip="Option unlocked" />
+        )}
       </Cell>
     );
 
@@ -223,6 +223,7 @@ export default class Options extends Component {
             action={handleClick}
             btnStyle="success"
             className="options-edit"
+            title="Edit option"
           />
         )}
       </Cell>

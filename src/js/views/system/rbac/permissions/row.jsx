@@ -31,6 +31,7 @@ const PermsRow: Function = (
               icon="edit"
               btnStyle="warning"
               action={handleEditClick}
+              title="Edit permission"
             />
           )}
           { canDelete && model.permission_type !== 'SYSTEM' && (
@@ -38,6 +39,7 @@ const PermsRow: Function = (
               icon="close"
               btnStyle="danger"
               action={handleDeleteClick}
+              title="Remove permission"
             />
           )}
         </Controls>

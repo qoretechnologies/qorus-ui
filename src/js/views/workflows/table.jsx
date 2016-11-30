@@ -319,6 +319,7 @@ export default class WorkflowsTable extends Component {
           label="Detail"
           btnStyle="success"
           onClick={handleDetailClick}
+          title="Open detail pane"
         />
       </Cell>
     );
@@ -353,6 +354,7 @@ export default class WorkflowsTable extends Component {
               icon="warning"
               btnStyle="danger"
               onClick={onWarningClick}
+              title="Show alerts"
             />
           </Controls>
         )}

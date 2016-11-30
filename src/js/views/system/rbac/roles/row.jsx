@@ -37,6 +37,7 @@ const RolesRow: Function = (
               icon="edit"
               btnStyle="warning"
               action={handleEditClick}
+              title="Edit role"
             />
           )}
           { canDelete && (
@@ -44,6 +45,7 @@ const RolesRow: Function = (
               icon="close"
               btnStyle="danger"
               action={handleDeleteClick}
+              title="Remove role"
             />
           )}
           { canCreate && (
@@ -51,6 +53,7 @@ const RolesRow: Function = (
               icon="copy"
               btnStyle="success"
               action={handleCloneClick}
+              title="Duplicate role"
             />
           )}
         </Controls>

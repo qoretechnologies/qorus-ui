@@ -38,6 +38,7 @@ export default class Property extends Component {
           icon="pencil"
           btnStyle="warning"
           onClick={this.handleEditClick(key, value)}
+          title="Edit permission"
         />
         <PermButton
           perms={perms}
@@ -45,6 +46,7 @@ export default class Property extends Component {
           icon="times"
           btnStyle="danger"
           onClick={this.handleKeyDeleteClick(key)}
+          title="Remove permission"
         />
       </Controls>
     );
@@ -80,6 +82,7 @@ export default class Property extends Component {
                   icon="times"
                   btnStyle="danger"
                   onClick={this.handlePropDeleteClick}
+                  title="Remove permission group"
                 />
               </Controls>
             </div>
