@@ -2,4 +2,15 @@
   position: relative;
   margin: 0 0 5px 0;
   min-height: 45px;
+
+  &.sticky {
+    position: fixed;
+    top: 51px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    right: 20px;
+    left: 89px;
+    background-color: #fff;
+    z-index: 5000;
+  }
 }

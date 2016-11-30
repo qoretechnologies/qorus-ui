@@ -64,7 +64,7 @@ const setOptions = (model, opt) => dispatch => {
 const fetchLibSourcesPayload = baseUrl => model => (
   fetchJson(
     'GET',
-    `${baseUrl}/${model.id}?lib_source=true`
+    `${baseUrl}/${model.id}?lib_source=true&method_source=true`
   )
 );
 

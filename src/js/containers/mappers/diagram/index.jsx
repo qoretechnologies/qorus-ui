@@ -13,6 +13,7 @@ import FieldDetail from './field-detail';
 import Detail from './detail';
 import Tooltip from './tooltip';
 import Connection from './connection';
+import { formatFieldSource } from '../../../helpers/mapper';
 
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
   Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
@@ -309,7 +310,7 @@ const getInputFieldsMap = (source, relations) => (
     .map((item, idx) => ({ ...item, position: idx }))
 );
 
-const getOutputFieldsMap = (source, relations, inputs) => (
+const getOutputFieldsMap = (source, relations, inputs, fieldSources) => (
   Object
   .keys(source)
   .map((item, idx) => [item, idx])
@@ -318,16 +319,28 @@ const getOutputFieldsMap = (source, relations, inputs) => (
       includes(obj.relation, current[0])
     ));
 
+    const { data, code }= formatFieldSource(fieldSources[current[0]]);
+    const hasData = data.length > 0 || code !== '';
+
     return ([...prev, {
       name: current[0],
       position: hasRel ?
         getNewPosition(hasRel.position, prev) : null,
       relation: hasRel || null,
+      hasData,
     }]);
   }, [])
-  .sort(a => (
-    a.position || a.position === 0 ? -1 : 1
-  ))
+  .sort(a => {
+    if (a.position || a.position === 0) {
+      return -1;
+    }
+
+    if (a.hasData) {
+      return 0;
+    }
+
+    return 1;
+  })
 );
 
 const getRelationsData = mapProps(props => ({
@@ -350,6 +363,7 @@ const getOutputMap = mapProps(props => ({
     props.mapper.opts.output,
     props.relations,
     props.inputMap,
+    props.mapper.field_source,
   ),
 }));
 
@@ -368,8 +382,8 @@ const appendDiagramParams = compose(
     offsetY: OFFSET_Y,
     paddingElements: PADDING_ELEMENTS,
     headerHeight: HEADER_HEIGHT,
-    rectBackgroundColor: '#9ccb3b',
-    rectSelectedBackgroundColor: '#729C1C',
+    rectBackgroundColor: '#7da832',
+    rectSelectedBackgroundColor: '#5f8316',
     rectTextColor: 'white',
     headerTextColor: 'black',
     lineColor: 'black',

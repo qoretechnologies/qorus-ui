@@ -157,7 +157,7 @@ export default class OrdersToolbar extends Component {
     const filter = this.props.params.filter.split(',');
 
     return (
-      <Toolbar>
+      <Toolbar sticky>
         <Dropdown
           id="selection"
           className="pull-left"

@@ -84,6 +84,16 @@ export default class Order extends Component {
     );
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(
+      actions.orders.unsync()
+    );
+
+    this.props.dispatch(
+      actions.workflows.unsync()
+    );
+  }
+
   render() {
     if (!this.props.workflow) {
       return <Loader />;
@@ -115,7 +125,20 @@ export default class Order extends Component {
         </div>
         <div className="row tab-pane">
           <div className="col-xs-12">
-            { this.props.children }
+            {React.Children.map(
+              this.props.children,
+              child => React.cloneElement(
+                child,
+                { createElement: (Comp, props) => (
+                  <Comp {...{
+                    ...props,
+                    order: this.props.order,
+                    workflow: this.props.workflow,
+                  }}
+                  />
+                ) }
+              )
+            )}
           </div>
         </div>
       </div>

@@ -140,6 +140,10 @@ class Connections extends Component {
     );
 
     yield (
+      <Cell tag="th" className="desc"> URL </Cell>
+    );
+
+    yield (
       <Cell tag="th" className="desc">Description</Cell>
     );
 
@@ -172,6 +176,10 @@ class Connections extends Component {
 
     yield (
       <Cell className="name nowrap">{ model.name }</Cell>
+    );
+
+    yield (
+      <Cell className="text">{ model.url || '-' }</Cell>
     );
 
     yield (

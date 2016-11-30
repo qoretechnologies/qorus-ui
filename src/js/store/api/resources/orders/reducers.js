@@ -142,10 +142,17 @@ const fetchData = {
   },
 };
 
+const unsync = {
+  next() {
+    return { ...initialState };
+  },
+};
+
 export {
   addOrder as ADDORDER,
   modifyOrder as MODIFYORDER,
   addNoteWebsocket as ADDNOTEWEBSOCKET,
   updateDone as UPDATEDONE,
   fetchData as FETCHDATA,
+  unsync as UNSYNC,
 };

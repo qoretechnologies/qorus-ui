@@ -116,11 +116,15 @@ export default class extends Component {
     offset: PropTypes.number,
     limit: PropTypes.number,
     linkDate: PropTypes.string,
+    sort: PropTypes.string,
+    sortDir: PropTypes.boolean,
   };
 
   static defaultProps = {
     offset: 0,
     limit: 100,
+    sort: 'started',
+    sortDir: true,
   };
 
   static contextTypes = {
@@ -131,15 +135,28 @@ export default class extends Component {
   componentWillMount() {
     const offset = this.props.offset;
     const limit = this.props.limit;
+    const sortBy = this.props.sort;
+    const sortDir = this.props.sortDir;
 
     this.setState({
       filteredData: [],
       offset,
       limit,
+      sort: sortBy,
+      sortDir,
       fetchMore: false,
     });
 
-    this.fetchData(this.props, { offset, limit, fetchMore: false });
+    this.fetchData(
+      this.props,
+      {
+        offset,
+        limit,
+        sort: sortBy,
+        fetchMore: false,
+        sortDir,
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -149,12 +166,19 @@ export default class extends Component {
         limit: this.props.limit,
         fetchMore: false,
       });
+    } else {
+      this.setState({
+        loading: false,
+      });
     }
   }
 
   componentWillUpdate(nextProps, nextState) {
     if (this.props.params.date !== nextProps.params.date ||
-      this.state.offset !== nextState.offset) {
+      this.state.offset !== nextState.offset ||
+      this.state.sort !== nextState.sort ||
+      this.state.sortDir !== nextState.sortDir
+    ) {
       this.fetchData(nextProps, nextState);
     }
   }
@@ -170,14 +194,22 @@ export default class extends Component {
       actions.orders.fetch({
         workflowid: props.id,
         date,
-        sort: 'started',
-        desc: true,
+        sort: state.sort,
+        desc: state.sortDir,
         offset: state.offset,
         limit: state.limit,
         fetchMore: state.fetchMore,
       })
     );
   }
+
+  handleChangeSort = (sortBy) => {
+    const newState = sortBy === this.state.sort ?
+      { sortDir: !this.state.sortDir } :
+      { sort: sortBy };
+
+    this.setState({ ...newState, ...{ loading: true } });
+  };
 
   /**
    * Handles the batch action calls like
@@ -270,6 +302,7 @@ export default class extends Component {
         sortData={this.props.sortData}
         onScheduleClick={this.handleScheduleClick}
         username={this.props.username}
+        onServerSortChange={this.handleChangeSort}
       />
     );
   }
@@ -288,7 +321,7 @@ export default class extends Component {
   }
 
   render() {
-    if (!this.props.sync || this.props.loading) {
+    if (!this.props.sync || this.props.loading || this.state.loading) {
       return <Loader />;
     }
 

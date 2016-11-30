@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import actions from 'store/api/actions';
-
 import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
@@ -12,33 +9,6 @@ import StepDetails from './step_details';
 import Errors from './errors';
 import Resize from 'components/resize/handle';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
-
-const workflowSelector = (state, props) => {
-  const order = state.api.orders.data.find(w => (
-      parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-    )) || null;
-
-  return order ? state.api.workflows.data.find(w => (
-    parseInt(order.workflowid, 10) === parseInt(w.id, 10)
-  )) : null;
-};
-
-const selector = createSelector(
-  [
-    orderSelector,
-    workflowSelector,
-  ], (order, workflow) => ({
-    order,
-    workflow,
-  })
-);
-
-@connect(selector)
 export default class DiagramView extends Component {
   static propTypes = {
     order: PropTypes.object,
@@ -48,24 +18,10 @@ export default class DiagramView extends Component {
   };
 
   componentWillMount() {
-    const { id } = this.props.params;
-
-    this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
-
     this.setState({
       step: null,
       paneSize: 200,
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.order !== nextProps.order) {
-      this.props.dispatch(
-        actions.workflows.fetch({}, nextProps.order.workflowid)
-      );
-    }
   }
 
   handleStepClick = (step) => {

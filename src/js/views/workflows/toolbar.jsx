@@ -110,6 +110,14 @@ export default class WorkflowsToolbar extends Component {
     this.props.batchAction('unsetDeprecated');
   };
 
+  handleStartClick = () => {
+    this.props.batchAction('start');
+  };
+
+  handleStopClick = () => {
+    this.props.batchAction('stop');
+  };
+
   applyDate = (date: string) => {
     goTo(
       this.context.router,
@@ -155,6 +163,16 @@ export default class WorkflowsToolbar extends Component {
           <Dropdown id="hidden">
             <DropdownControl />
             <DropdownItem
+              title="Start"
+              icon="rocket"
+              action={this.handleStartClick}
+            />
+            <DropdownItem
+              title="Stop"
+              icon="ban"
+              action={this.handleStopClick}
+            />
+            <DropdownItem
               title="Set deprecated"
               icon="flag"
               action={this.handleSetDeprecatedClick}
@@ -178,7 +196,7 @@ export default class WorkflowsToolbar extends Component {
     const date = this.props.params.date || '24h';
 
     return (
-      <Toolbar>
+      <Toolbar sticky>
         <Dropdown
           id="selection"
           className="pull-left"

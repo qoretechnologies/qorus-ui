@@ -275,6 +275,12 @@ const clearAlert = {
   },
 };
 
+const unsync = {
+  next() {
+    return { ...initialState };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -285,4 +291,5 @@ export {
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  unsync as UNSYNC,
 };

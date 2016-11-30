@@ -35,7 +35,7 @@ const setOptions = createAction(
 function fetchLibSourcesPayload(service) {
   return fetchJson(
     'GET',
-    `${settings.REST_BASE_URL}/services/${service.id}?lib_source=true`
+    `${settings.REST_BASE_URL}/services/${service.id}?lib_source=true&method_source=true`
   );
 }
 

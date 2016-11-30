@@ -80,6 +80,8 @@ module.exports = function orderSteps() {
   });
 
   this.When(/^I click the "([^"]*)" tab$/, async function(name) {
+    await this.waitForElement('section .nav');
+
     const tab = findElementByText(this.browser, '.nav a', name);
 
     this.browser.click(tab);

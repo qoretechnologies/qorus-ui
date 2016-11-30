@@ -86,6 +86,8 @@ const clearAlert = createAction(
   (id, alertid) => ({ id, alertid })
 );
 
+const unsync = createAction('WORKFLOWS_UNSYNC');
+
 export {
   setOptions,
   fetchLibSources,
@@ -96,4 +98,5 @@ export {
   modifyOrder,
   addAlert,
   clearAlert,
+  unsync,
 };

@@ -57,14 +57,14 @@ export default class ServiceControls extends Component {
         {!this.props.autostart && (
           <Control
             title="Enable Autostart"
-            icon="rocket"
+            icon="play"
             action={this.dispatchEnableAutostart}
           />
         )}
         {this.props.autostart && (
           <Control
             title="Disable Autostart"
-            icon="rocket"
+            icon="pause"
             btnStyle="success"
             action={this.dispatchDisableAutostart}
           />
@@ -72,7 +72,7 @@ export default class ServiceControls extends Component {
         {this.props.status === 'unloaded' && (
           <Control
             title="Load"
-            icon="ban"
+            icon="remove"
             action={this.dispatchLoad}
           />
         )}

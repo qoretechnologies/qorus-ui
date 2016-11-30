@@ -7,13 +7,17 @@
 const findService = (id, s) => s.serviceid === parseInt(id, 10);
 const config = require('../config');
 const express = require('express');
-const rest = require('../rest');
 
 module.exports = () => {
   const data = require('./data')();
 
   const router = new express.Router();
-  router.use(rest(data, findService));
+
+  router.get('/', (req, res) => setTimeout(() => res.json(data), 200));
+  router.get('/:id', (req, res) => {
+    const item = data.find(d => findService(req.params.id, d));
+    res.status(item ? 200 : 404).json(item);
+  });
 
   router.put('/:id', (req, res) => {
     const item = data.find(s => findService(req.params.id, s));

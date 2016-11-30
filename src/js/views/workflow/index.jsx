@@ -84,6 +84,16 @@ export default class extends Component {
     this.props.dispatch(actions.workflows.fetch({ lib_source: true }, id));
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(
+      actions.orders.unsync()
+    );
+
+    this.props.dispatch(
+      actions.workflows.unsync()
+    );
+  }
+
   getHeight: Function = (): number => {
     const navbar = document.querySelector('.navbar').clientHeight;
     const header = document.querySelector('.workflow-header').clientHeight;

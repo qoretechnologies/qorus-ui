@@ -132,10 +132,13 @@ const viewSelector = createSelector(
       fetch: actions.workflows.fetch,
       enable: actions.workflows.enableBatch,
       disable: actions.workflows.disableBatch,
+      start: actions.workflows.startBatch,
+      stop: actions.workflows.stopBatch,
       setDeprecated: actions.workflows.setDeprecatedBatch,
       unsetDeprecated: actions.workflows.unsetDeprecatedBatch,
       reset: actions.workflows.resetBatch,
       actions: actions.workflows,
+      unsync: actions.workflows.unsync,
     }
   ),
   mapProps(({ params, ...rest }) => ({
@@ -181,6 +184,9 @@ export default class Workflows extends Component {
     onDataFilterChange: PropTypes.func,
     setSelectedData: PropTypes.func,
     onBatchAction: PropTypes.func,
+    start: PropTypes.func,
+    stop: PropTypes.func,
+    unsync: PropTypes.func,
     selectedData: PropTypes.object,
     selected: PropTypes.string,
     getActiveRow: PropTypes.func,
@@ -246,6 +252,10 @@ export default class Workflows extends Component {
 
   componentDidUpdate() {
     setTitle(`Workflows | ${this.context.getTitle()}`);
+  }
+
+  componentWillUnmount() {
+    this.props.unsync();
   }
 
   /**
@@ -336,6 +346,12 @@ export default class Workflows extends Component {
         break;
       case 'disable':
         this.props.disable(selectedData);
+        break;
+      case 'start':
+        this.props.start(selectedData);
+        break;
+      case 'stop':
+        this.props.stop(selectedData);
         break;
       case 'setDeprecated':
         this.props.setDeprecated(selectedData);
