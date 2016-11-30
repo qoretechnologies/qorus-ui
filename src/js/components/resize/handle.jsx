@@ -51,6 +51,10 @@ export default class Handle extends Component {
 
   static defaultProps = {
     minCurrent: false,
+    min: {
+      width: 400,
+      height: 200,
+    },
     top: false,
     right: false,
     bottom: false,
