@@ -3,13 +3,27 @@ import DetailTable from './detail_table';
 import Controls from './controls';
 
 export default function GroupDetail(props) {
+  const handleBackClick = (e) => {
+    e.preventDefault();
+
+    history.go(-1);
+  };
+
+  console.log(props.group);
+
   return (
     <div>
       <div className="row">
         <div className="col-xs-11">
-          <h2 className="detail-title">
-            Group: { props.group.name }
-          </h2>
+          <h3 className="detail-title">
+            <a onClick={handleBackClick}>
+              <i className="fa fa-angle-left" />
+            </a>
+            {' '}
+            { props.group.name }
+            {' '}
+            <small>({ props.group.id })</small>
+          </h3>
           <small>{ props.group.description }</small>
         </div>
         <div className="col-xs-1 group-detail-controls">
