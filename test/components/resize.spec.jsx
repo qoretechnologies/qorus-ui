@@ -34,7 +34,7 @@ describe("Handle from 'components/resize/handle'", () => {
     resizable.firstElementChild.dispatchEvent(upEv);
 
 
-    expect(resizable.style.width).to.equal('80px');
+    expect(resizable.style.width).to.equal('400px');
   });
 
 
