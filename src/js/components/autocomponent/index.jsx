@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
 import DateComponent from '../date';
+import Icon from '../icon';
 
 /* eslint-disable */
 const DURATION_PTR: any = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
@@ -50,9 +51,9 @@ export default function AutoComponent(props: { children: any }) {
 
   if (isBoolean(props.children)) {
     if (props.children) {
-      comp = <i className="fa fa-check-circle text-success" />;
+      comp = <Icon icon="check-circle" className="text-success" />;
     } else {
-      comp = <i className="fa fa-minus-circle text-danger" />;
+      comp = <Icon icon="minus-circle" className="text-danger" />;
     }
   } else if (isDate(props.children)) {
     if (!props.children.match(DURATION_PTR)) {

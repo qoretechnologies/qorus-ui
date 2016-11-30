@@ -14,6 +14,7 @@ import ModalPing from './modals/ping';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
 import checkNoData from '../../../hocomponents/check-no-data';
+import Icon from '../../../components/icon';
 
 import actions from '../../../store/api/actions';
 import { browserHistory } from 'react-router';
@@ -168,6 +169,7 @@ class Connections extends Component {
             <Button
               icon="warning"
               btnStyle="danger"
+              title="Connection has an alert"
             />
           </Controls>
         }
@@ -188,8 +190,12 @@ class Connections extends Component {
 
     yield (
       <Cell className="nowrap align-right">
-        <button className="btn btn-success btn-xs" onClick={this.handleOpenModal(model)}>
-           <i className="fa fa-exchange" /> Ping
+        <button
+          className="btn btn-success btn-xs"
+          onClick={this.handleOpenModal(model)}
+          title="Ping connection"
+        >
+           <Icon icon="exchange" /> Ping
         </button>
       </Cell>
     );

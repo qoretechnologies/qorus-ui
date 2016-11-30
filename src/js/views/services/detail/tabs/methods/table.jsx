@@ -180,12 +180,14 @@ export default class MethodsTable extends Component {
           <button
             className="btn btn-xs btn-success"
             onClick={this.handleClick('run', model)}
+            title="Run method"
           >
             <i className="fa fa-play" />
           </button>
           <button
             className="btn btn-xs btn-inverse"
             onClick={this.handleClick('code', model)}
+            title="Show code"
           >
             <i className="fa fa-code" />
           </button>

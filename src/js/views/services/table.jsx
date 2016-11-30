@@ -214,6 +214,7 @@ export default class ServicesTable extends Component {
           label="Detail"
           btnStyle="success"
           onClick={handleDetailClick}
+          title="Open detail pane"
         />
       </Cell>
     );
@@ -257,6 +258,7 @@ export default class ServicesTable extends Component {
               icon="warning"
               btnStyle="danger"
               onClick={handleAlertClick}
+              title="Show alerts"
             />
           </Controls>
         )}

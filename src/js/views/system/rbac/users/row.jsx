@@ -32,6 +32,7 @@ const UsersRow: Function = (
               icon="edit"
               btnStyle="warning"
               action={handleEditClick}
+              title="Edit user"
             />
           )}
           { canDelete && (
@@ -39,6 +40,7 @@ const UsersRow: Function = (
               icon="close"
               btnStyle="danger"
               action={handleDeleteClick}
+              title="Remove user"
             />
           )}
         </Controls>

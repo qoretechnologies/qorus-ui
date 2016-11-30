@@ -104,11 +104,11 @@ export default class Modal extends Component {
           <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
             {this.props.children}
           </div>
-          <ResizeHandle minCurrent left />
-          <ResizeHandle minCurrent right />
-          <ResizeHandle minCurrent bottom />
-          <ResizeHandle minCurrent left bottom />
-          <ResizeHandle minCurrent right bottom />
+          <ResizeHandle left />
+          <ResizeHandle right />
+          <ResizeHandle bottom />
+          <ResizeHandle left bottom />
+          <ResizeHandle right bottom />
         </div>
       </div>
     );

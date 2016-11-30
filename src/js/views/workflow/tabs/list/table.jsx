@@ -317,6 +317,7 @@ export default class OrdersTable extends Table {
             disabled={disabled}
             small
             btnStyle={style}
+            title={title}
           >
             <i className={`fa fa-${icon}`} />
             {' '}

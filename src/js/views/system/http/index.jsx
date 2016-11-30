@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import _ from 'lodash';
 
 import Table, { Section, Cell, Row } from '../../../components/table';
 import actions from '../../../store/api/actions';
@@ -20,31 +19,15 @@ const userHttpMetaSelector = (state: Object): Object => {
   return { sync: false, loading: false };
 };
 
-const userHttpSelector = (state:Object): Array<Object> => {
-  if (state.api.userhttp) {
-    const col = [];
-
-    Object.keys(state.api.userhttp.data)
-      .forEach((key) => col.push(state.api.userhttp.data[key]));
-
-    return col;
-  }
-  return [];
-};
-
-const tablesSelector = (state: Object): Array<string> => (
-  [..._.uniq(state.api.userhttp.data.map(r => r.group))]
-);
+const userHttpSelector = (state:Object): Array<Object> => state.api.userhttp.data;
 
 const viewSelector = createSelector(
   [
     userHttpSelector,
     userHttpMetaSelector,
-    tablesSelector,
   ],
-  (userhttp: Array<Object>, meta: Object, tables: Array<string>) => ({
+  (userhttp: Array<Object>, meta: Object) => ({
     meta,
-    tables,
     collection: userhttp,
   })
 );
@@ -59,8 +42,7 @@ const viewSelector = createSelector(
 )
 export default class UserHttp extends Component {
   props: {
-    collection: Array<Object>,
-    tables: Array<string>,
+    collection: Object,
   };
 
   componentWillMount() {
@@ -100,28 +82,28 @@ export default class UserHttp extends Component {
 
   *renderTables(): Generator<*, *, *> {
     const collection = this.props.collection;
-    const tables = this.props.tables;
+    const groups = Object.keys(collection);
 
-    for (const table of tables) {
+    for (const group of groups) {
       yield (
-      <div key={table}>
-        <h3>{ table }</h3>
-        <Table className="table table-data table-striped table-condensed">
-          <Section
-            type="body"
-            data={ collection.filter((m) => m.group === table) }
-            rows={this._renderRows}
-          />
-        </Table>
-      </div>
+        <div key={group}>
+          <h3>{ group }</h3>
+          <Table className="table table-data table-striped table-condensed">
+            <Section
+              type="body"
+              data={ collection[group] }
+              rows={this._renderRows}
+            />
+          </Table>
+        </div>
       );
     }
   }
 
   render() {
-    const { tables } = this.props;
+    const { collection } = this.props;
 
-    if (tables.length === 0) {
+    if (Object.keys(collection).length === 0) {
       return (
         <div>
           No Http Services Available

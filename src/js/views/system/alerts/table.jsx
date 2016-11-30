@@ -191,6 +191,7 @@ export default class AlertsTable extends Component {
           label="Detail"
           btnStyle="success"
           onClick={handleDetailClick}
+          title="Open detail pane"
         />
       </Cell>
     );

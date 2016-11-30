@@ -170,6 +170,7 @@ export default class JobsTable extends ServiceTable {
           label="Detail"
           btnStyle="success"
           onClick={handleDetailClick}
+          title="Open detail pane"
         />
       </Cell>
     );
@@ -203,6 +204,7 @@ export default class JobsTable extends ServiceTable {
               btnStyle="danger"
               icon="warning"
               onClick={handleAlertClick}
+              title="Show alerts"
             />
           </Controls>
         )}
