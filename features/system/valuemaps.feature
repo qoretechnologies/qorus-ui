@@ -28,7 +28,7 @@ Feature: Tests system/valuemaps features
     Given I am on "system/values?paneId=1" listing
     And values get loaded
     When I change enabled of the "Test" value
-    Then there are "1" "disabled" values
+    Then there are "2" "disabled" values
     When I change enabled of the "Test" value
     Then there are "1" "enabled" values
 

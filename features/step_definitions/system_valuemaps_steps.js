@@ -18,7 +18,7 @@ module.exports = function systemValuemapsSteps() {
   });
 
   this.Then(/^there are "([^"]*)" "([^"]*)" values$/, async function(count, type) {
-    const css = type === 'enabled' ? 'success' : 'default';
+    const css = type === 'enabled' ? 'success' : 'danger';
 
     // eslint-disable-next-line
     this.browser.assert.elements(`.pane__content table > tbody > tr > td .btn-group .btn-${css}`, parseInt(count, 10));
