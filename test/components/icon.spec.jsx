@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import Icon from '../../src/js/components/icon';
 
-describe.only('Icon from components/icon', () => {
+describe('Icon from components/icon', () => {
   it('renders the Icon with the correct glyph', () => {
     const Component = mount(
       <Icon icon="remove" />

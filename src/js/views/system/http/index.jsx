@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import _ from 'lodash';
 
 import Table, { Section, Cell, Row } from '../../../components/table';
 import actions from '../../../store/api/actions';
