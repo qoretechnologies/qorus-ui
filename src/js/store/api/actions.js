@@ -91,10 +91,6 @@ const actions = createApiActions(
   )
 );
 
-Object.keys(workflowActions.delegates).forEach(a => {
-  actions.workflows[a] = workflowActions.delegates[a](actions);
-});
-
 Object.assign(actions.workflows, workflowActions.specials);
 
 Object.assign(actions.remotes, remoteActions);
