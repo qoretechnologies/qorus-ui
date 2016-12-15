@@ -134,6 +134,7 @@ export default class Order extends Component {
                     ...props,
                     order: this.props.order,
                     workflow: this.props.workflow,
+                    dispatch: this.props.dispatch,
                   }}
                   />
                 ) }
