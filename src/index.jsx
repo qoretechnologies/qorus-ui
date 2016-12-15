@@ -4,13 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/app';
 import isSupported from './js/helpers/is_supported';
-import { AppContainer } from 'react-hot-loader';
-
 
 require('./index.html');
-
 global.env = process.env;
-
 
 // Uncomment when work on performance
 /* if (process.env.NODE_ENV !== 'production') {
@@ -20,9 +16,7 @@ global.env = process.env;
 
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
-    <AppContainer>
-      <App env={process.env} />
-    </AppContainer>,
+    <App env={process.env} />,
     document.body.firstElementChild
   );
 
@@ -32,10 +26,7 @@ if (isSupported(window.navigator.userAgent)) {
     module.hot.accept('./js/app', () => {
       const NextApp = require('./js/app').default;
       ReactDOM.render(
-        <AppContainer>
-          <NextApp env={process.env} />
-        </AppContainer>
-        ,
+        <NextApp env={process.env} />,
         document.body.firstElementChild
       );
     });
