@@ -85,7 +85,7 @@ module.exports = function workflowSteps() {
     await this.browser.click(el);
   });
 
-  this.Then(/^I should see (\d+) table row with alerts"$/, async function(count) {
+  this.Then(/^I should see (\d+) table row with alerts$/, async function(count) {
     this.browser.assert.elements('tr button .fa-warning', parseInt(count, 10));
   });
 };

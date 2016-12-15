@@ -18,15 +18,17 @@ Feature: Tests various websocket apievents
     And "workflows" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
     And I wait some time
-    Then I should see 2 table row with alerts"
+    And I wait some time
+    Then I should see 2 table row with alerts
 
+  @no-impl
   Scenario: Ongoing alert cleared updates workflow
     Given I am on "workflows" listing
     And "workflows" get loaded
     And I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
     When I send a ws request for "ALERT_ONGOING_CLEARED_WORKFLOW"
     And I wait some time
-    Then I should see 1 table row with alerts"
+    Then I should see 1 table row with alerts
 
   Scenario: Ongoing alert cleared updates service
     Given I am on "services" listing
@@ -34,21 +36,21 @@ Feature: Tests various websocket apievents
     And I send a ws request for "ALERT_ONGOING_RAISED_SERVICE"
     When I send a ws request for "ALERT_ONGOING_CLEARED_SERVICE"
     And I wait some time
-    Then I should see 1 table row with alerts"
+    Then I should see 1 table row with alerts
 
   Scenario: Ongoing alert raised updates service
     Given I am on "services" listing
     And "services" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_SERVICE"
     And I wait some time
-    Then I should see 2 table row with alerts"
+    Then I should see 2 table row with alerts
 
   Scenario: Ongoing alert raised updates jobs
     Given I am on "jobs" listing
     And "jobs" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_JOB"
     And I wait some time
-    Then I should see 3 table row with alerts"
+    Then I should see 3 table row with alerts
 
   Scenario: Ongoing alert cleared updates jobs
     Given I am on "jobs" listing
@@ -56,14 +58,14 @@ Feature: Tests various websocket apievents
     And I send a ws request for "ALERT_ONGOING_RAISED_JOB"
     When I send a ws request for "ALERT_ONGOING_CLEARED_JOB"
     And I wait some time
-    Then I should see 2 table row with alerts"
+    Then I should see 2 table row with alerts
 
   Scenario: Ongoing alert raised updates jobs
     Given I am on "system/remote/datasources" listing
     And "datasources" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_DATASOURCE"
     And I wait some time
-    Then I should see 1 table row with alerts"
+    Then I should see 1 table row with alerts
 
   Scenario: Ongoing alert cleared updates datasources
     Given I am on "system/remote/datasources" listing
@@ -71,7 +73,7 @@ Feature: Tests various websocket apievents
     And I send a ws request for "ALERT_ONGOING_RAISED_DATASROUCE"
     When I send a ws request for "ALERT_ONGOING_CLEARED_DATASOURCE"
     And I wait some time
-    Then I should see 0 table row with alerts"
+    Then I should see 0 table row with alerts
 
   Scenario: Transient alert raised
     Given I am on "system/alerts/transient" listing
@@ -118,14 +120,6 @@ Feature: Tests various websocket apievents
     And "workflows" get loaded
     When I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     Then the "ARRAYTEST" "workflow" has "1" "ready" instances
-
-  Scenario: Adds 1 to in-progress on a workflow, substracts 1 from ready
-    Given I am on "workflows" listing
-    And "workflows" get loaded
-    And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
-    When I send a ws request for "WORKFLOW_STATUS_CHANGED"
-    Then the "ARRAYTEST" "workflow" has "16" "in-progress" instances
-    And the "ARRAYTEST" "workflow" has "0" "ready" instances
 
   Scenario: Adds new order instance
     Given I am on "workflow/14/list/All/all" listing
@@ -251,8 +245,3 @@ Feature: Tests various websocket apievents
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=false&id=33&synthetic=true&type=job"
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=true&id=33&synthetic=true&type=job"
     Then there are "0" "disabled" "jobs"
-
-
-
-
-

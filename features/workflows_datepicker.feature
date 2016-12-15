@@ -45,7 +45,7 @@ Feature: Workflow Datepicker
     Given I am on "workflows" listing
     And datepicker is opened
     When I change the input to "2015-03-05 12:34:56"
-    Then the URL changes to "/workflows/20150305123456/all"
+    Then query param "date" equals to "20150305123456"
 
   Scenario: Setting invalid date manually from the input
     Given I am on "workflows" listing
@@ -57,22 +57,22 @@ Feature: Workflow Datepicker
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "All" button
-    Then the URL changes to "/workflows/all/all"
+    Then query param "date" equals to "all"
 
   Scenario: Setting date to Today from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Today" button inside "date-selection" dropdown
-    Then the URL changes to "/workflows/today/all"
+    Then query param "date" equals to "today"
 
   Scenario: Setting date to Now from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "Now" button inside "date-selection" dropdown
-    Then the URL changes to "/workflows/now/all"
+    Then query param "date" equals to "now"
 
   Scenario: Setting date to Now from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click the "24H" button inside "date-selection" dropdown
-    Then the URL changes to "/workflows/24h/all"
+    Then query param "date" equals to "24h"
