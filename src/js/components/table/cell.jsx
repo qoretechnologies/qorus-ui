@@ -23,28 +23,6 @@ export default class Cell extends Component {
     tag: 'td',
   };
 
-  componentWillMount() {
-    this.setupSorting(this.props);
-  }
-
-  componentWillReceiveProps(next) {
-    if (this.props.sortData !== next.sortData) {
-      this.setupSorting(next);
-    }
-  }
-
-  setupSorting = (props) => {
-    let sortCss;
-
-    if (props.sortData && props.sortData.sortBy === props.name) {
-      sortCss = props.sortData.sortByKey.direction > 0 ? 'sort sort-asc' : 'sort sort-desc';
-    }
-
-    this.setState({
-      css: classNames(this.props.className, sortCss),
-    });
-  };
-
   handleTagClick = () => {
     if (this.props.tag === 'th' && this.props.onSortChange) {
       this.props.onSortChange({ sortBy: this.props.name });
@@ -60,11 +38,16 @@ export default class Cell extends Component {
    */
   render() {
     const Tag = this.props.tag;
+    let sortCss;
+
+    if (this.props.sortData && this.props.sortData.sortBy === this.props.name) {
+      sortCss = this.props.sortData.sortByKey.direction > 0 ? 'sort sort-asc' : 'sort sort-desc';
+    }
 
     return (
       <Tag
         onClick={this.handleTagClick}
-        className={this.state.css}
+        className={classNames(this.props.className, sortCss)}
         colSpan={this.props.colspan}
       >
         { React.Children.toArray(this.props.children) }
