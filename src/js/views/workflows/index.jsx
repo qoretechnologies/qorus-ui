@@ -1,153 +1,212 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flowRight, includes } from 'lodash';
+import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import withState from 'recompose/withState';
+import lifecycle from 'recompose/lifecycle';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 
-import { goTo } from '../../helpers/router';
-import { setTitle } from '../../helpers/document';
 import sort from '../../hocomponents/sort';
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
+import selectable from '../../hocomponents/selectable';
+import unsync from '../../hocomponents/unsync.js';
+import withCSV from '../../hocomponents/csv';
 import { sortDefaults } from '../../constants/sort';
 import actions from '../../store/api/actions';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
-import { WORKFLOW_FILTERS } from '../../constants/filters';
-import { DATE_FORMATS } from '../../constants/dates';
-import {
-  filterArray,
-  handleFilterChange,
-  getFetchParams,
-  formatDate,
-} from '../../helpers/workflows';
+import { DATES } from '../../constants/dates';
+import { ORDER_STATES, ORDER_GROUPS, GROUPED_ORDER_STATES } from '../../constants/orders';
+import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
+import { querySelector, resourceSelector } from '../../selectors';
 
-const filterSearch = (search) => (workflows) =>
-  findBy(['name', 'id'], search, workflows);
+const filterSearch: Function = (search: string): Function =>
+  (workflows: Array<Object>): Array<Object> => (
+    findBy(['name', 'id'], search, workflows)
+  );
 
-const filterRunning = (filter) => (workflows) =>
-  workflows.filter(w => !(includes(filter, WORKFLOW_FILTERS.RUNNING) && w.exec_count <= 0));
+const filterRunning: Function = (running: string): Function =>
+  (workflows: Array<Object>): Array<Object> => (
+    running === 'true' ? workflows.filter(w => (
+      w.exec_count > 0
+    )) : workflows
+  );
 
-const filterLastVersion = (filter) => (workflows) => {
-  if (!includes(filter, WORKFLOW_FILTERS.LAST_VERSION)) return workflows;
-
-  return workflows.filter(w => {
-    for (const workflow of workflows) {
-      if (w.name === workflow.name && parseFloat(w.version) < parseFloat(workflow.version)) {
-        return false;
+const filterLastVersion: Function = (latest: string): Function =>
+  (workflows: Array<Object>): Array<Object> => (
+    latest && latest !== '' ? workflows.filter(w => {
+      for (const workflow of workflows) {
+        if (w.name === workflow.name && parseFloat(w.version) < parseFloat(workflow.version)) {
+          return false;
+        }
       }
-    }
 
-    return true;
-  });
-};
+      return true;
+    }) : workflows
+  );
 
-const filterDeprecated = (filter) => (workflows) => {
-  if (includes(filter, WORKFLOW_FILTERS.DEPRECATED)) return workflows;
+const filterDeprecated: Function = (deprecated: string): Function =>
+  (workflows: Array<Object>): Array<Object> => (
+    deprecated && deprecated !== '' ? workflows : workflows.filter(w => !w.deprecated)
+  );
 
-  return workflows.filter(w => !w.deprecated);
-};
-
-const errorsComparator = (a, b) => {
-  if (a.error < b.error) return -1;
-  if (a.error > b.error) return +1;
-  return 0;
-};
-
-const errorsToArray = (state, ref) => (
-  (state.api.errors[ref] && state.api.errors[ref].data &&
-   Object.keys(state.api.errors[ref].data).
-   map(error => state.api.errors[ref].data[error]).
-   sort(errorsComparator)) || []
+const systemOptionsSelector: Function = (state: Object): Array<Object> => (
+  state.api.systemOptions.data.filter((opt: Object): boolean => opt.workflow)
 );
 
-const workflowsSelector = state => state.api.workflows;
+const groupStatuses: Function = (): Function => (workflows: Array<Object>): Array<Object> => (
+  workflows.map((workflow: Object): Object => {
+    const newWf: Object = { ...workflow };
+    Object.keys(ORDER_GROUPS).forEach((group: string): void => {
+      newWf[`GROUPED_${group}`] = ORDER_GROUPS[group].reduce((cnt, cur) => (
+        cnt + workflow[cur]
+      ), 0);
+      newWf[`GROUPED_${group}_STATES`] = ORDER_GROUPS[group].map((orderGrp) => (
+        ORDER_STATES.find((grp) => grp.name === orderGrp).title)
+      ).join(',');
+    });
 
-const errorsSelector = state => (
-  Object.keys(state.api.errors).
-    filter(ref => ref.indexOf('workflow/') === 0).
-    reduce((errs, ref) => (
-      Object.assign(errs, {
-        [ref.substring(9)]: errorsToArray(state, ref),
-      })
-    ), {})
+    return newWf;
+  })
 );
 
-const systemOptionsSelector = state => (
-  state.api.systemOptions.data.filter(opt => opt.workflow)
-);
-
-const globalErrorsSelector = state => errorsToArray(state, 'global');
-
-const searchSelector = (state, props) => props.location.query.q;
-
-const filterSelector = (state, props) => filterArray(props.params.filter);
-
-const infoSelector = state => state.api.system;
-
-const collectionSelector = createSelector(
+const collectionSelector: Function = createSelector(
   [
-    searchSelector,
-    filterSelector,
-    workflowsSelector,
+    querySelector('search'),
+    querySelector('running'),
+    querySelector('latest'),
+    querySelector('deprecated'),
+    resourceSelector('workflows'),
   ],
-  (search, filter, workflows) => flowRight(
-    filterLastVersion(filter),
-    filterRunning(filter),
+  (search, running, latest, deprecated, workflows) => flowRight(
+    filterLastVersion(latest),
+    filterRunning(running),
     filterSearch(search),
-    filterDeprecated(filter),
+    filterDeprecated(deprecated),
+    groupStatuses(),
   )(workflows.data)
 );
 
 const viewSelector = createSelector(
   [
-    workflowsSelector,
-    errorsSelector,
-    infoSelector,
+    resourceSelector('workflows'),
     collectionSelector,
     systemOptionsSelector,
-    globalErrorsSelector,
+    querySelector('deprecated'),
+    querySelector('date'),
   ],
-  (workflows, errors, info, collection, systemOptions, globalErrors) => ({
-    sync: workflows.sync,
-    loading: workflows.loading,
+  (workflows, collection, systemOptions, deprecated, date) => ({
     meta: workflows,
     workflows: collection,
-    errors,
-    info,
     systemOptions,
-    globalErrors,
+    deprecated: deprecated === 'true',
+    date,
   })
 );
 
-@compose(
+type Props = {
+  workflows: Array<Object>,
+  systemOptions: Array<Object>,
+  location: Object,
+  selected: string,
+  onCSVClick: Function,
+  paneId: string | number,
+  openPane: Function,
+  changePaneTab: Function,
+  fetch: Function,
+  deprecated: boolean,
+  selectedIds: Array<number>,
+  date: string,
+  unselectAll: Function,
+  expanded: boolean,
+  handleExpandClick: Function,
+  toggleExpand: Function,
+};
+
+const Workflows: Function = ({
+  selected,
+  onCSVClick,
+  expanded,
+  handleExpandClick,
+  location,
+  selectedIds,
+  workflows,
+  paneId,
+  openPane,
+  deprecated,
+  date,
+}: Props): React.Element<any> => (
+  <div>
+    <WorkflowsToolbar
+      selected={selected}
+      onCSVClick={onCSVClick}
+      expanded={expanded}
+      onToggleStatesClick={handleExpandClick}
+      location={location}
+      selectedIds={selectedIds}
+    />
+    <WorkflowsTable
+      collection={workflows}
+      paneId={paneId}
+      openPane={openPane}
+      states={expanded ? ORDER_STATES : GROUPED_ORDER_STATES}
+      expanded={expanded}
+      deprecated={deprecated}
+      date={date}
+    />
+  </div>
+);
+
+export default compose(
   connect(
     viewSelector,
     {
       load: actions.workflows.fetch,
       fetch: actions.workflows.fetch,
-      enable: actions.workflows.enableBatch,
-      disable: actions.workflows.disableBatch,
-      start: actions.workflows.startBatch,
-      stop: actions.workflows.stopBatch,
-      setDeprecated: actions.workflows.setDeprecatedBatch,
-      unsetDeprecated: actions.workflows.unsetDeprecatedBatch,
-      reset: actions.workflows.resetBatch,
-      actions: actions.workflows,
       unsync: actions.workflows.unsync,
+      unselectAll: actions.workflows.unselectAll,
     }
   ),
-  mapProps(({ params, ...rest }) => ({
-    fetchParams: getFetchParams(params.filter, params.date),
-    params,
+  mapProps(({ date, ...rest }: Props): Object => ({
+    date: date ? formatDate(date).format() : DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, deprecated, ...rest }: Props): Object => ({
+    fetchParams: { deprecated, date },
+    date,
+    deprecated,
     ...rest,
   })),
   patch('load', ['fetchParams']),
   sync('meta'),
+  withState('expanded', 'toggleExpand', false),
+  mapProps(({ toggleExpand, ...rest }: Props) => ({
+    onToggleExpand: (): Function => toggleExpand((val: boolean): boolean => !val),
+    ...rest,
+  })),
+  withHandlers({
+    handleExpandClick: ({ onToggleExpand }: Object): Function => (): void => {
+      onToggleExpand();
+    },
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const { deprecated, date, unselectAll, fetch } = this.props;
+
+      if (deprecated !== nextProps.deprecated || date !== nextProps.date) {
+        unselectAll();
+        fetch(nextProps.fetchParams);
+      }
+    },
+  }),
   withPane(
     WorkflowsDetail,
     [
@@ -158,256 +217,22 @@ const viewSelector = createSelector(
     ],
     'detail'
   ),
+  selectable('workflows'),
   sort(
     'workflows',
     'workflows',
     sortDefaults.workflows
   ),
-)
-export default class Workflows extends Component {
-  static propTypes = {
-    instanceKey: PropTypes.string,
-    workflows: PropTypes.array,
-    errors: PropTypes.object,
-    info: PropTypes.object,
-    systemOptions: PropTypes.array,
-    globalErrors: PropTypes.array,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    location: PropTypes.object,
-    onFilterClick: PropTypes.func,
-    filterFn: PropTypes.func,
-    onSearchChange: PropTypes.func,
-    clearSelection: PropTypes.func,
-    onDataFilterChange: PropTypes.func,
-    setSelectedData: PropTypes.func,
-    onBatchAction: PropTypes.func,
-    start: PropTypes.func,
-    stop: PropTypes.func,
-    unsync: PropTypes.func,
-    selectedData: PropTypes.object,
-    selected: PropTypes.string,
-    getActiveRow: PropTypes.func,
-    onAllClick: PropTypes.func,
-    onNoneClick: PropTypes.func,
-    onInvertClick: PropTypes.func,
-    onCSVClick: PropTypes.func,
-    paneId: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-    openPane: PropTypes.func,
-    changePaneTab: PropTypes.func,
-    fetch: PropTypes.func,
-    enable: PropTypes.func,
-    disable: PropTypes.func,
-    setDeprecated: PropTypes.func,
-    unsetDeprecated: PropTypes.func,
-    reset: PropTypes.func,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired,
-  };
-
-  static childContextTypes = {
-    location: PropTypes.object,
-    params: PropTypes.object,
-    route: PropTypes.object,
-  };
-
-  state = {
-    filteredWorkflows: [],
-    sortBy: 'name',
-    sortByKey: 1,
-    historySortBy: 'version',
-    historySortByKey: -1,
-    statesExpanded: false,
-  };
-
-  getChildContext() {
-    return {
-      location: this.props.location,
-      params: this.props.params,
-      route: this.props.route,
-    };
-  }
-
-  componentDidMount() {
-    setTitle(`Workflows | ${this.context.getTitle()}`);
-  }
-
-  componentWillReceiveProps(next) {
-    if (this.props.params.filter !== next.params.filter ||
-        this.props.params.date !== next.params.date) {
-      const fetchParams = getFetchParams(next.params.filter, next.params.date);
-
-      this.props.clearSelection();
-      this.props.fetch(fetchParams);
-    }
-  }
-
-  componentDidUpdate() {
-    setTitle(`Workflows | ${this.context.getTitle()}`);
-  }
-
-  componentWillUnmount() {
-    this.props.unsync();
-  }
-
-  /**
-   * Gets the formatted date for the
-   * workflow link in the workflow table
-   */
-  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
-
-  /**
-   * Applies the current filter to the URL
-   *
-   * @param {Array} filter
-   */
-  applyFilter(filter) {
-    goTo(
-      this.context.router,
-      'workflows',
-      this.props.route.path,
-      this.props.params,
-      { filter: filter.join(','), detailId: null, tabId: null },
-      this.props.location.query
-    );
-  }
-
-  /**
-   * Handles filtering for only running workflows
-   */
-  handleRunningClick = () => {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.RUNNING
-    );
-
-    this.applyFilter(urlFilter);
-  };
-
-  /**
-   * Handles displaying hidden workflows
-   */
-  handleDeprecatedClick = () => {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.DEPRECATED
-    );
-
-    this.applyFilter(urlFilter);
-  };
-
-  /**
-   * Handles displaying hidden workflows
-   */
-  handleLastVersionClick = () => {
-    const urlFilter = handleFilterChange(
-      this.props.params.filter,
-      WORKFLOW_FILTERS.LAST_VERSION
-    );
-
-    this.applyFilter(urlFilter);
-  };
-
-  handleToggleStateClick = () => {
-    this.setState({
-      statesExpanded: !this.state.statesExpanded,
-    });
-  };
-
-  /**
-   * Handles the batch action calls like
-   * enabling, disabling, reseting etc
-   * of multiple workflows
-   *
-   * @param {String} type
-   */
-  handleBatchAction = (type) => {
-    const selectedData = [];
-
-    Object.keys(this.props.selectedData).forEach(w => {
-      if (this.props.selectedData[w]) {
-        selectedData.push(w);
-      }
-    });
-
-    this.props.clearSelection();
-
-    switch (type) {
-      case 'enable':
-        this.props.enable(selectedData);
-        break;
-      case 'disable':
-        this.props.disable(selectedData);
-        break;
-      case 'start':
-        this.props.start(selectedData);
-        break;
-      case 'stop':
-        this.props.stop(selectedData);
-        break;
-      case 'setDeprecated':
-        this.props.setDeprecated(selectedData);
-        break;
-      case 'unsetDeprecated':
-        this.props.unsetDeprecated(selectedData);
-        break;
-      case 'reset':
-        this.props.reset(selectedData);
-        break;
-      default:
-        break;
-    }
-  };
-
-  handleCSVClick = () => {
-    const collection = this.state.filteredWorkflows.length ?
-      this.state.filteredWorkflows : this.props.workflows;
-
-    this.props.onCSVClick(collection, 'workflows');
-  };
-
-  render() {
-    return (
-      <div>
-        <WorkflowsToolbar
-          onFilterClick={this.props.onFilterClick}
-          onRunningClick={this.handleRunningClick}
-          onDeprecatedClick={this.handleDeprecatedClick}
-          onLastVersionClick={this.handleLastVersionClick}
-          onSearchUpdate={this.props.onSearchChange}
-          selected={this.props.selected}
-          defaultSearchValue={this.props.location.query.q}
-          params={this.props.params}
-          batchAction={this.handleBatchAction}
-          onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onNoneClick}
-          onInvertClick={this.props.onInvertClick}
-          onCSVClick={this.handleCSVClick}
-          expanded={this.state.statesExpanded}
-          onToggleStatesClick={this.handleToggleStateClick}
-        />
-        <WorkflowsTable
-          initialFilter={this.props.filterFn}
-          onWorkflowFilterChange={this.props.onDataFilterChange}
-          workflows={this.props.workflows}
-          activeWorkflowId={parseInt(this.props.paneId, 10)}
-          setSelectedWorkflows={this.props.setSelectedData}
-          selectedWorkflows={this.props.selectedData}
-          onSortChange={this.props.onSortChange}
-          sortData={this.props.sortData}
-          linkDate={this.getDate()}
-          openPane={this.props.openPane}
-          expanded={this.state.statesExpanded}
-        />
-      </div>
-    );
-  }
-}
+  withCSV('workflows', 'workflows'),
+  pure([
+    'expanded',
+    'workflows',
+    'systemOptions',
+    'selected',
+    'selectedIds',
+    'paneId',
+    'deprecated',
+    'date',
+  ]),
+  unsync()
+)(Workflows);
