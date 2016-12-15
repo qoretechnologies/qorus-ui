@@ -20,7 +20,7 @@ const PermsTable: Function = (
   { collection,
     onSortChange,
     sortData,
-    ...other,
+    ...other
   }: Props
 ): React.Element<Table> => (
   <Table className="table table--data table-striped table-condensed">

@@ -1,7 +1,6 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 import includes from 'lodash/includes';
-import isArray from 'lodash/isArray';
 
 const initialState = { data: [], sync: false, loading: false };
 

@@ -17,7 +17,9 @@ export default (
     };
 
     handleModalMount: Function = (): void => {
-      document.querySelector('#CSV-modal-text').select();
+      const el: Object = document.querySelector('#CSV-modal-text');
+
+      if (el) el.select();
     };
 
     handleCSVClick: Function = (): void => {
