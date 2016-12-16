@@ -12,7 +12,12 @@ function ServicesHeader(props) {
         </h3>
       </div>
       <div className="col-xs-12 pane__controls">
-        <ServicesControls service={props.service} />
+        <ServicesControls
+          status={props.service.status}
+          enabled={props.service.enabled}
+          autostart={props.service.autostart}
+          service={props.service}
+        />
       </div>
     </div>
   );

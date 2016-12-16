@@ -1,29 +1,20 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+
 import { Groups, Group } from 'components/groups';
 import Options from 'components/options';
-
-
-import { pureRender } from 'components/utils';
 import actions from 'store/api/actions';
 
-
-@pureRender
+@connect(() => ({}), actions.services)
 export default class DetailTab extends Component {
   static propTypes = {
     service: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
+    setOptions: PropTypes.func.isRequired,
   };
-
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
 
   setOption(opt) {
-    this.context.dispatch(
-      actions.services.setOptions(this.props.service, opt.name, opt.value)
-    );
+    this.props.setOptions(this.props.service, opt.name, opt.value);
   }
 
 

@@ -1,24 +1,31 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+
 import { Controls, Control } from 'components/controls';
 import actions from 'store/api/actions';
 
+@connect(() => ({}), actions.services)
 export default class ServiceControls extends Component {
   static propTypes = {
     service: PropTypes.object,
     status: PropTypes.string,
     enabled: PropTypes.bool,
     autostart: PropTypes.bool,
+    enable: PropTypes.func.isRequired,
+    disable: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    load: PropTypes.func.isRequired,
+    unload: PropTypes.func.isRequired,
+    autostartOn: PropTypes.func.isRequired,
+    autostartOff: PropTypes.func.isRequired,
   };
-
 
   static contextTypes = {
     dispatch: PropTypes.func,
   };
 
   dispatchAction(action) {
-    this.context.dispatch(
-      actions.services[action](this.props.service)
-    );
+    this.props[action](this.props.service);
   }
 
   dispatchDisable = () => this.dispatchAction('disable');
