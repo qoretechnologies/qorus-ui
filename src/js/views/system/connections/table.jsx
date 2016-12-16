@@ -1,23 +1,23 @@
 /* @flow */
 import React, { Component, PropTypes } from 'react';
-
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createSelector } from 'reselect';
 import defaultProps from 'recompose/defaultProps';
 import classNames from 'classnames';
+import { browserHistory } from 'react-router';
 
 import Table, { Cell, Section, Row } from '../../../components/table';
 import { Controls, Control as Button } from '../../../components/controls';
 import AutoComponent from '../../../components/autocomponent';
 import ModalPing from './modals/ping';
 import sync from '../../../hocomponents/sync';
+import sort from '../../../hocomponents/sort';
 import patch from '../../../hocomponents/patchFuncArgs';
 import checkNoData from '../../../hocomponents/check-no-data';
 import Icon from '../../../components/icon';
-
 import actions from '../../../store/api/actions';
-import { browserHistory } from 'react-router';
+import { sortDefaults } from '../../../constants/sort';
 
 const CONN_MAP: Object = {
   datasources: 'DATASOURCE',
@@ -66,6 +66,8 @@ class Connections extends Component {
     load: Function,
     collection: Array<any>,
     updateDone: Function,
+    sortData: Object,
+    onSortChange: Function,
   };
 
   componentWillMount() {
@@ -126,8 +128,15 @@ class Connections extends Component {
   };
 
   *renderHeadings(): Generator<*, *, *> {
+    const { onSortChange, sortData } = this.props;
+
     yield (
-      <Cell tag="th" className="narrow">Up</Cell>
+      <Cell
+        tag="th"
+        className="narrow"
+        name="up"
+        {...{ onSortChange, sortData }}
+      >Up</Cell>
     );
 
     yield (
@@ -137,15 +146,30 @@ class Connections extends Component {
     );
 
     yield (
-      <Cell tag="th" className="name">Name</Cell>
+      <Cell
+        tag="th"
+        className="name"
+        name="name"
+        {...{ onSortChange, sortData }}
+      >Name</Cell>
     );
 
     yield (
-      <Cell tag="th" className="desc"> URL </Cell>
+      <Cell
+        tag="th"
+        className="desc"
+        name="url"
+        {...{ onSortChange, sortData }}
+      >URL</Cell>
     );
 
     yield (
-      <Cell tag="th" className="desc">Description</Cell>
+      <Cell
+        tag="th"
+        className="desc"
+        name="desc"
+        {...{ onSortChange, sortData }}
+      >Description</Cell>
     );
 
     yield (
@@ -257,6 +281,8 @@ Connections.propTypes = {
   load: PropTypes.func.isRequired,
   collection: PropTypes.array,
   updateDone: PropTypes.func,
+  onSortChange: PropTypes.func,
+  sortData: PropTypes.object,
 };
 
 export default compose(
@@ -270,5 +296,10 @@ export default compose(
   defaultProps({ query: { action: 'all' } }),
   patch('load', ['query']),
   sync('remotes'),
+  sort(
+    (props: Object): string => props.params.type,
+    'collection',
+    sortDefaults.remote
+  ),
   checkNoData(({ collection }: { collection: Array<Object> }): number => collection.length)
 )(Connections);
