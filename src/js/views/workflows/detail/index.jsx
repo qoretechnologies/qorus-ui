@@ -11,7 +11,7 @@ import AlertsTab from '../../../components/alerts_table';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import Code from '../../../components/code';
-import StepsTab from './steps_tab';
+import StepsTab from '../../order/diagram/graph';
 import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';

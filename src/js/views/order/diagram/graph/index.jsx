@@ -84,13 +84,27 @@ const DIAGRAM_MIN_COLUMNS = 3;
 export default class StepsTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    order: PropTypes.object.isRequired,
+    order: PropTypes.object,
     onStepClick: PropTypes.func,
   };
 
   static contextTypes = {
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
+  };
+
+  state: {
+    tooltip?: string,
+    left: number,
+    top: number,
+    width: number,
+    height: number,
+  } = {
+    tooltip: null,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
   };
 
   /**
@@ -586,6 +600,7 @@ export default class StepsTab extends Component {
       y: this.getBoxHeight() / 2,
       style: {
         mask: `url('#${this.getStepDomId(stepId)}')`,
+        pointerEvents: 'none',
       },
     };
   }
@@ -664,7 +679,7 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderStartBox(stepId, colIdx, row, rowIdx) {
-    const instances = this.props.order.StepInstances ?
+    const instances = this.props.order && this.props.order.StepInstances ?
       groupInstances(this.props.order.StepInstances) : {};
     const css = Object.keys(instances).some(i => instances[i].status === 'ERROR')
       ? 'error' : 'start';
@@ -706,6 +721,8 @@ export default class StepsTab extends Component {
   }
 
   renderInfoIcon(id) {
+    if (!this.props.order) return null;
+
     const name = this.getStepName(id);
     const instances = this.props.order.StepInstances ?
       groupInstances(this.props.order.StepInstances) : {};
@@ -724,7 +741,6 @@ export default class StepsTab extends Component {
       </text>
     );
   }
-
 
   /**
    * Returns group element for a general step.
@@ -747,15 +763,44 @@ export default class StepsTab extends Component {
    */
   renderDefaultBox(stepId, colIdx, row, rowIdx) {
     const onClick = this.onBoxClick(stepId);
+    const handleMouseOver = (event) => {
+      event.persist();
+      event.stopPropagation();
+
+      if (event.target.tagName === 'rect') {
+        const { left, top, width, height } = event.target.getBoundingClientRect();
+
+        this.setState({
+          tooltip: this.props.workflow.stepinfo.find(step => step.stepid === stepId).desc,
+          left,
+          top,
+          width,
+          height,
+        });
+      }
+    };
+
+    const handleMouseOut = () => {
+      this.setState({
+        tooltip: null,
+      });
+    };
+
     const type = this.getStepInfo(stepId) ?
       this.getStepInfo(stepId).steptype :
       '';
 
     const name = this.getStepName(stepId);
-    const instances = this.props.order.StepInstances ?
-      groupInstances(this.props.order.StepInstances) : {};
-    const css = instances[name] ?
-        instances[name].status.toLowerCase() : 'normal';
+    let css;
+
+    if (this.props.order) {
+      const instances = this.props.order.StepInstances ?
+        groupInstances(this.props.order.StepInstances) : {};
+      css = instances[name] ?
+          instances[name].status.toLowerCase() : 'normal';
+    } else {
+      css = type.toLowerCase();
+    }
 
     return (
       <g
@@ -764,6 +809,8 @@ export default class StepsTab extends Component {
           [`diagram__box--${css}`]: type,
         })}
         transform={this.getBoxTransform(colIdx, rowIdx)}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
       >
         <rect {...this.getDefaultParams()} />
         <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
@@ -926,17 +973,34 @@ export default class StepsTab extends Component {
    * @return {ReactElement}
    */
   render() {
+    const { tooltip, left, top, width, height } = this.state;
+
     return (
-      <svg
-        viewBox={`0 0 ${this.getDiagramWidth()} ${this.getDiagramHeight()}`}
-        className="diagram"
-      >
-        <defs>
-          {this.renderMasks()}
-        </defs>
-        {this.renderPaths()}
-        {this.renderBoxes()}
-      </svg>
+      <div>
+        { tooltip && (
+          <div
+            className="svg-tooltip"
+            style={{
+              width,
+              left,
+              top: top + height + 10,
+            }}
+          >
+            <div className="svg-tooltip-arrow" />
+            <p><span> Description: </span> { tooltip }</p>
+          </div>
+        )}
+        <svg
+          viewBox={`0 0 ${this.getDiagramWidth()} ${this.getDiagramHeight()}`}
+          className="diagram"
+        >
+          <defs>
+            {this.renderMasks()}
+          </defs>
+          {this.renderPaths()}
+          {this.renderBoxes()}
+        </svg>
+      </div>
     );
   }
 }

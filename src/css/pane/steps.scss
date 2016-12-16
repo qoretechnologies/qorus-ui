@@ -78,7 +78,8 @@
       fill: #9ec251;
     }
 
-    &--info > rect {
+    &--info > rect,
+    &--async > rect {
       fill: #75abc6;
     }
 
