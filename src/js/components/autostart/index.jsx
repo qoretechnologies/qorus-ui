@@ -1,83 +1,64 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import classNames from 'classnames';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
+
 import { Controls, Control } from '../controls';
 
-import classNames from 'classnames';
-import { pureRender } from '../utils';
-
-/**
- * Counter component relying on inc and dec props to change the value.
- *
- * It also visualizes difference between autostart (counter value) and
- * execCount (a value actually used by something). If they are the
- * same, it is considered healthy.
- */
-@pureRender
-export default class AutoStart extends Component {
-  static defaultProps = {
-    autostart: 0,
-    execCount: 0,
-    inc: (ctx, val) => val,
-    dec: (ctx, val) => val,
-  };
-
-  props: {
-    autostart: number,
-    execCount: number,
-    inc: () => number,
-    dec: () => number,
-    context: any,
-  };
-
-  handleDecrementClick: Function = () => {
-    this.props.dec(this.props.context, this.props.autostart - 1);
-  };
-
-  handleIncrementClick: Function = () => {
-    this.props.inc(this.props.context, this.props.autostart + 1);
-  };
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div className="autostart">
-        <Controls grouped>
-          <Control
-            title="Decrease"
-            icon="minus"
-            action={this.handleDecrementClick}
-          />
-          <button
-            className={classNames({
-              autostart__change: true,
-              btn: true,
-              'btn-xs': true,
-              'btn-success': this.props.autostart === this.props.execCount &&
-                             this.props.autostart && this.props.autostart > 0,
-            })}
-            title="Click to edit"
-          >
-            {this.props.autostart}
-          </button>
-          <Control
-            title="Increase"
-            icon="plus"
-            action={this.handleIncrementClick}
-          />
-        </Controls>
-      </div>
-    );
-  }
-}
-
-AutoStart.propTypes = {
-  autostart: PropTypes.number,
-  execCount: PropTypes.number,
-  inc: PropTypes.func.isRequired,
-  dec: PropTypes.func.isRequired,
-  context: PropTypes.any.isRequired,
+type Props = {
+  autostart: number,
+  execCount: number,
+  onIncrementClick: Function,
+  handleIncrementClick: Function,
+  onDecrementClick: Function,
+  handleDecrementClick: Function,
 };
+
+const AutoStart = ({
+  autostart,
+  execCount,
+  handleIncrementClick,
+  handleDecrementClick,
+}: Props): React.Element<any> => (
+  <div className="autostart">
+    <Controls grouped>
+      <Control
+        title="Decrease"
+        icon="minus"
+        action={handleDecrementClick}
+      />
+      <button
+        className={classNames({
+          autostart__change: true,
+          btn: true,
+          'btn-xs': true,
+          'btn-success': autostart === execCount && autostart && autostart > 0,
+        })}
+      >
+        { autostart }
+      </button>
+      <Control
+        title="Increase"
+        icon="plus"
+        action={handleIncrementClick}
+      />
+    </Controls>
+  </div>
+);
+
+export default compose(
+  withHandlers({
+    handleIncrementClick: ({ onIncrementClick, autostart }: Props): Function => (): void => {
+      onIncrementClick(autostart + 1);
+    },
+    handleDecrementClick: ({ onDecrementClick, autostart }: Props): Function => (): void => {
+      onDecrementClick(autostart - 1);
+    },
+  }),
+  pure([
+    'autostart',
+    'execCount',
+  ])
+)(AutoStart);

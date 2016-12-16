@@ -1,5 +1,6 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
+import includes from 'lodash/includes';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -114,35 +115,37 @@ const setExecCount = {
 
     return state;
   },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
-  },
 };
 
 const setEnabled = {
-  next(state, { payload: { id, value } }) {
+  next(state, { payload: { workflowid, value, update = true } }) {
     if (state.sync) {
-      const data = state.data.slice();
+      const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+      const props = update ? { enabled: value, _updated: true } : { enabled: value };
+      const newData = updateItemWithId(workflowid, props, updatedData);
 
       return { ...state, ...{ data: newData } };
     }
 
     return state;
   },
-  throw(state, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
+};
+
+const unselectAll = {
+  next(state) {
+    const data = [...state.data];
+    const newData = data.map(w => (
+      w._selected ? ({
+        ...w,
+        ...{ _selected: false },
+      }) : w)
+    );
+
+    return { ...state, ...{ data: newData } };
   },
 };
+
 
 const updateDone = {
   next(state, { payload: { id } }) {
@@ -154,13 +157,6 @@ const updateDone = {
     }
 
     return state;
-  },
-  throw(state, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
   },
 };
 
@@ -183,13 +179,6 @@ const addOrder = {
 
     return state;
   },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
-  },
 };
 
 const modifyOrder = {
@@ -211,13 +200,6 @@ const modifyOrder = {
 
     return state;
   },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
-  },
 };
 
 const addAlert = {
@@ -236,13 +218,6 @@ const addAlert = {
     }
 
     return state;
-  },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
-    });
   },
 };
 
@@ -266,12 +241,112 @@ const clearAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
+};
+
+const selectWorkflow = {
+  next(state = initialState, { payload: { id } }) {
+    const stateData = [...state.data];
+    const workflow = stateData.find((w) => w.id === parseInt(id, 10));
+    const newData = updateItemWithId(id, { _selected: !workflow._selected }, stateData);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectAll = {
+  next(state = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => ({ ...w, ...{ _selected: true } }));
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectNone = {
+  next(state = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => {
+      const copy = { ...w };
+
+      if (w._selected) {
+        copy._selected = null;
+      }
+
+      return copy;
     });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectInvert = {
+  next(state = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => ({ ...w, ...{ _selected: !w._selected } }));
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectRunning = {
+  next(state = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => {
+      const copy = { ...w };
+
+      if (w.exec_count > 0) {
+        copy._selected = true;
+      } else {
+        if (w._selected) copy._selected = null;
+      }
+
+      return copy;
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectStopped = {
+  next(state = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => {
+      const copy = { ...w };
+
+      if (w.exec_count === 0) {
+        copy._selected = true;
+      } else {
+        if (w._selected) copy._selected = null;
+      }
+
+      return copy;
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const setDeprecated = {
+  next(state = initialState, { payload: { ids, value } }) {
+    const data = [...state.data];
+    const newData = data.map((w) => {
+      if (includes(ids, w.id)) {
+        return { ...w, ...{ deprecated: value } };
+      }
+
+      return w;
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const setAutostart = {
+  next(state = initialState, { payload: { id, value } }) {
+    const stateData = [...state.data];
+    const newData = updateItemWithId(id, { autostart: value }, stateData);
+
+    return { ...state, ...{ data: newData } };
   },
 };
 
@@ -292,4 +367,13 @@ export {
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
   unsync as UNSYNC,
+  selectWorkflow as SELECT,
+  selectAll as SELECTALL,
+  selectNone as SELECTNONE,
+  selectInvert as SELECTINVERT,
+  selectRunning as SELECTRUNNING,
+  selectStopped as SELECTSTOPPED,
+  setAutostart as SETAUTOSTART,
+  unselectAll as UNSELECTALL,
+  setDeprecated as TOGGLEDEPRECATED,
 };

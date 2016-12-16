@@ -50,7 +50,7 @@ export default class DetailHeader extends Component {
           <div className="col-xs-12">
             <h3 className="detail-title pull-left">
               <Link
-                to={`/workflows/${this.props.date}`}
+                to={`/workflows?date=${this.props.date}`}
               >
                 <i className="fa fa-angle-left" />
               </Link>

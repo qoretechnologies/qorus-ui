@@ -19,6 +19,7 @@ import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
 import dashboardRoutes from './routes/dashboard';
 import workflowsRoutes from './routes/workflows';
+import oldWorkflowRoutes from './routes/old_workflows';
 import workflowRoutes from './routes/workflow';
 import orderRoutes from './routes/order';
 import servicesRoutes from './routes/services';
@@ -82,6 +83,7 @@ class AppInfo extends React.Component {
           { dashboardRoutes() }
           { workflowsRoutes() }
           { workflowRoutes() }
+          { oldWorkflowRoutes() }
           { orderRoutes() }
           { servicesRoutes() }
           { jobsRoutes() }

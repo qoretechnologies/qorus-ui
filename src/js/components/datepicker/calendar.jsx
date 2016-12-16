@@ -94,14 +94,14 @@ export default class Calendar extends Component {
 
     return weeks.reduce((wks, week, key) => {
       const days: Array<number> = week.reduce((ds, day, idx) => ([...ds,
-          <td
-            className={day.css}
-            key={idx}
-            onClick={() => this.setActiveDate(day.date)}
-          >
-            { day.day }
-          </td>]),
-        []);
+        <td
+          className={day.css}
+          key={idx}
+          onClick={() => this.setActiveDate(day.date)}
+        >
+          { day.day }
+        </td>]),
+      []);
 
       return [...wks, <tr key={key}>{ days }</tr>];
     }, []);

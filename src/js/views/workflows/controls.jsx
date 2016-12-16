@@ -1,64 +1,60 @@
 /* @flow */
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
+import { Controls, Control as Button } from '../../components/controls';
 
-import { Controls, Control } from '../../components/controls';
 import actions from '../../store/api/actions';
 
-@connect(
-  () => ({}),
-  {
-    enable: actions.workflows.enable,
-    disable: actions.workflows.disable,
-    reset: actions.workflows.reset,
-  }
-)
-export default class WorkflowsControls extends Component {
-  props: {
-    workflow: number,
-    enable: Function,
-    disable: Function,
-    reset: Function,
-  };
+type Props = {
+  id: number,
+  enabled: boolean,
+  toggleEnabled: Function,
+  reset: Function,
+  handleToggleEnabledClick: Function,
+  handleResetClick: Function,
+};
 
-  handleDisableClick: Function = (): void => {
-    this.props.disable(this.props.workflow);
-  };
+const WorkflowControls: Function = ({
+  enabled,
+  handleToggleEnabledClick,
+  handleResetClick,
+}: Props): React.Element<any> => (
+  <Controls grouped>
+    <Button
+      title={enabled ? 'Disable' : 'Enable'}
+      icon="power-off"
+      btnStyle={enabled ? 'success' : 'danger'}
+      onClick={handleToggleEnabledClick}
+    />
+    <Button
+      title="Reset"
+      icon="refresh"
+      btnStyle="warning"
+      onClick={handleResetClick}
+    />
+  </Controls>
+);
 
-  handleEnableClick: Function = (): void => {
-    this.props.enable(this.props.workflow);
-  };
-
-  handleResetClick: Function = (): void => {
-    this.props.reset(this.props.workflow);
-  };
-
-  render() {
-    return (
-      <Controls>
-        {this.props.workflow.enabled && (
-          <Control
-            title="Disable"
-            icon="power-off"
-            btnStyle="success"
-            onClick={this.handleDisableClick}
-          />
-        )}
-        {!this.props.workflow.enabled && (
-          <Control
-            title="Enable"
-            icon="power-off"
-            btnStyle="danger"
-            onClick={this.handleEnableClick}
-          />
-        )}
-        <Control
-          title="Reset"
-          icon="refresh"
-          btnStyle="warning"
-          onClick={this.handleResetClick}
-        />
-      </Controls>
-    );
-  }
-}
+export default compose(
+  connect(
+    () => ({}),
+    {
+      toggleEnabled: actions.workflows.toggleEnabled,
+      reset: actions.workflows.reset,
+    }
+  ),
+  withHandlers({
+    handleToggleEnabledClick: ({ toggleEnabled, id, enabled }: Props): Function => (): void => {
+      toggleEnabled(id, !enabled);
+    },
+    handleResetClick: ({ reset, id }: Props): Function => (): void => {
+      reset(id);
+    },
+  }),
+  pure([
+    'enabled',
+  ])
+)(WorkflowControls);

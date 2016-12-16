@@ -1,5 +1,6 @@
 /* @flow */
 import React, { PropTypes } from 'react';
+
 import { changeQuery } from '../helpers/router';
 
 export default (
@@ -13,8 +14,6 @@ export default (
     };
 
     props: {
-      route: Object,
-      params: Object,
       location: Object,
       query: string,
     };

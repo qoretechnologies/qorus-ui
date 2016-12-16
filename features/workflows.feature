@@ -18,7 +18,7 @@ Feature: Workflows
   Scenario: Row with alerts is shown
     Given I am on "workflows" listing
     When "workflows" get loaded
-    Then I should see 1 table row with alerts"
+    Then I should see 1 table row with alerts
 
   Scenario: Activating detail pane
     Given I am on "workflows" listing

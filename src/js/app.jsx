@@ -10,7 +10,6 @@ require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
 require('../css/app.scss');
 
-
 /**
  * Main application component.
  *

@@ -48,7 +48,8 @@ export default class extends Component {
 
   renderControl = (control) => {
     const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-    let { name, icon, style, ...other } = this._allActions.find(a => a.action === control);
+    const { name, icon, ...other } = this._allActions.find(a => a.action === control);
+    let { style } = this._allActions.find(a => a.action === control);
     const onClick = () => this.handleAction(other.action);
     let disabled = false;
 

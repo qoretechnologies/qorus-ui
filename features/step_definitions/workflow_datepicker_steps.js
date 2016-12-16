@@ -6,10 +6,27 @@ const getMonthByDate = (type, date = new Date()) => {
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
 
-  const month = type === 'next' ? months[date.getMonth() + 1] : months[date.getMonth() - 1];
-  const year = date.getFullYear();
+  let month;
+  let year = date.getFullYear();
+  const currentMonth = date.getMonth();
 
-  return `${month} ${year}`;
+  if (type === 'next') {
+    if (currentMonth === 11) {
+      month = 0;
+      year = year + 1;
+    } else {
+      month = currentMonth + 1;
+    }
+  } else {
+    if (currentMonth === 0) {
+      month = 11;
+      year = year - 1;
+    } else {
+      month = currentMonth - 1;
+    }
+  }
+
+  return `${months[month]} ${year}`;
 };
 
 module.exports = function workflowDatepickerSteps() {
@@ -56,7 +73,6 @@ module.exports = function workflowDatepickerSteps() {
   this.Then(/^yesterday should be selected$/, async function() {
     const date = new Date();
     const yesterday = moment(date).subtract(1, 'day').toDate();
-    console.log(yesterday.getDate());
     const el = findElementByText(this.browser, '.active', (yesterday.getDate()).toString());
 
     this.browser.assert.element(el);

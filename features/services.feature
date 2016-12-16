@@ -18,7 +18,7 @@ Feature: Services
   Scenario: Row with alerts is shown
     Given I am on "services" listing
     When "services" get loaded
-    Then I should see 1 table row with alerts"
+    Then I should see 1 table row with alerts
 
   Scenario: Activating detail pane
     Given I am on "services" listing
@@ -46,4 +46,3 @@ Feature: Services
     Then the complete URL changes to "/system/alerts/ongoing?paneId=SERVICE:111"
     And "alerts" get loaded
     And I should see detail pane
-

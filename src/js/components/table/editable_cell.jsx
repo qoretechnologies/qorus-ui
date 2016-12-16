@@ -238,37 +238,34 @@ export default class EditableCell extends Component {
         style={{ width: this.state.width }}
         ref={this.cellDidRender}
       >
-        <form
-          onSubmit={this.commit}
-          className="editable-form"
-        >
-          {
-            this.canEdit() ?
-              [
-                <input
-                  key="input"
-                  name="newValue"
-                  type={this.props.type}
-                  value={this.state.value || ''}
-                  onChange={this.onChange}
-                  onKeyUp={this.onKeyUp}
-                  ref={this.refEditField}
-                  min={this.props.min}
-                  max={this.props.max}
-                  className={this.state.error ? 'form-error' : ''}
-                />,
-                <Control
-                  className={classNames({ hide: !this.props.showControl })}
-                  key="button"
-                  type="submit"
-                  icon="plus"
-                  btnStyle="primary"
-                />,
-              ]
-            :
-              <span>{this.state.value}</span>
-          }
-        </form>
+        {this.canEdit() ? (
+          <form
+            onSubmit={this.commit}
+            className="editable-form"
+          >
+            <input
+              key="input"
+              name="newValue"
+              type={this.props.type}
+              value={this.state.value || ''}
+              onChange={this.onChange}
+              onKeyUp={this.onKeyUp}
+              ref={this.refEditField}
+              min={this.props.min}
+              max={this.props.max}
+              className={this.state.error ? 'form-error' : ''}
+            />
+            <Control
+              className={classNames({ hide: !this.props.showControl })}
+              key="button"
+              type="submit"
+              icon="plus"
+              btnStyle="primary"
+            />
+          </form>
+        ) : (
+          <span>{this.state.value}</span>
+        )}
       </td>
     );
   }

@@ -9,4 +9,3 @@ Feature: Order detail
   Scenario: Table with info is displayed
     Given I am on order "31380" and "Info" tab
     Then "info" get loaded
-

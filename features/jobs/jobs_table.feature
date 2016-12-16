@@ -81,4 +81,4 @@ Feature: jobs table
   Scenario: Row with alerts is shown
     Given I am on "jobs" listing
     When "jobs" get loaded
-    Then I should see 2 table row with alerts"
+    Then I should see 2 table row with alerts

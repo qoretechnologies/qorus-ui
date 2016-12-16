@@ -18,8 +18,8 @@ export default class WorkflowsHeader extends Component {
     setAutostart: PropTypes.func,
   };
 
-  setAutostart = (context, value) => {
-    this.props.setAutostart(context, value);
+  handleAutostartChange = (value) => {
+    this.props.setAutostart(this.props.workflow.id, value);
   };
 
   render() {
@@ -33,14 +33,16 @@ export default class WorkflowsHeader extends Component {
           </h3>
         </div>
         <div className="col-xs-12 pane__controls">
-          <WorkflowsControls workflow={this.props.workflow} />
+          <WorkflowsControls
+            id={this.props.workflow.id}
+            enabled={this.props.workflow.enabled}
+          />
           {' '}
           <AutoStart
-            context={this.props.workflow}
             autostart={this.props.workflow.autostart}
             execCount={this.props.workflow.exec_count}
-            inc={this.setAutostart}
-            dec={this.setAutostart}
+            onIncrementClick={this.handleAutostartChange}
+            onDecrementClick={this.handleAutostartChange}
           />
         </div>
       </div>
