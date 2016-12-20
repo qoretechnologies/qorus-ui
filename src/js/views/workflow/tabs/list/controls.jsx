@@ -28,7 +28,13 @@ export default class extends Component {
     if (action === 'schedule') {
       this.props.onScheduleClick(this.props.data);
     } else {
-      this.context.dispatch(actions.orders[action](this.props.data));
+      this.context.dispatch(
+        actions.orders.action(
+          action,
+          this.props.data.id,
+          this.props.data.workflowstatus
+        )
+      );
     }
   };
 

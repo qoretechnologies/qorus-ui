@@ -231,13 +231,13 @@ module.exports = () => {
     const order = data.find(o => findOrder(req.params.id, o));
     let steps;
 
-    switch (req.body.action) {
+    switch (req.query.action) {
       case 'cancel':
       case 'uncancel':
       case 'block':
       case 'unblock':
       case 'retry':
-        order.workflowstatus = req.body.workflowstatus;
+        order.workflowstatus = req.query.action.toUpperCase();
         break;
       case 'schedule':
         order.workflowstatus = req.body.workflowstatus;
@@ -264,7 +264,13 @@ module.exports = () => {
         break;
     }
 
-    res.json(order);
+    setTimeout(() => {
+      if (req.params.id === '4000') {
+        res.status(409).json({ err: true, desc: 'There was an error' });
+      } else {
+        res.json('OK');
+      }
+    }, 1000);
   });
 
   /**

@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 
 import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
+import { error } from '../../../../ui/bubbles/actions';
 
 const addOrder: Function = createAction(
   'ORDERS_ADDORDER',
@@ -37,6 +38,43 @@ const fetchData = createAction(
   }
 );
 
+const orderAction: Function = createAction(
+  'ORDERS_ORDERACTION',
+  async (
+    actn: string,
+    id: number,
+    optimistic: boolean,
+    origStatus: string,
+    dispatch: Function
+  ): ?Object => {
+    if (optimistic) return { id, action: actn };
+
+    const result = await fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}?action=${actn}`,
+      {},
+      true
+    );
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return { id, origStatus, result };
+  }
+);
+
+const action: Function = (
+  actn: string,
+  id: number,
+  origStatus: string
+): Function => (
+  dispatch: Function
+): void => {
+  dispatch(orderAction(actn, id, false, origStatus, dispatch));
+  dispatch(orderAction(actn, id, true));
+};
+
 const unsync = createAction('ORDERS_UNSYNC');
 
 export {
@@ -46,4 +84,6 @@ export {
   updateDone,
   fetchData,
   unsync,
+  action,
+  orderAction,
 };

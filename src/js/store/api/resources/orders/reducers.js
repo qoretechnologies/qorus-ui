@@ -118,7 +118,7 @@ const updateDone = {
   },
 };
 
-const fetchData = {
+const fetchData: Object = {
   next(
     state: Object,
     { payload: { id, type, data } }: {
@@ -142,6 +142,23 @@ const fetchData = {
   },
 };
 
+const orderAction: Object = {
+  next(state: Object, { payload: { id, action, origStatus, result } }: Object) {
+    const data = [...state.data];
+    let newData = data;
+
+    if (result) {
+      if (result.err) {
+        newData = updateItemWithId(id, { workflowstatus: origStatus }, data);
+      }
+    } else {
+      newData = updateItemWithId(id, { workflowstatus: `${action.toUpperCase()}ING` }, data);
+    }
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -155,4 +172,5 @@ export {
   updateDone as UPDATEDONE,
   fetchData as FETCHDATA,
   unsync as UNSYNC,
+  orderAction as ORDERACTION,
 };
