@@ -1,4 +1,6 @@
 /* @flow */
+import isArray from 'lodash/isArray';
+
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import { normalizeName } from '../utils';
 
@@ -143,16 +145,27 @@ const fetchData: Object = {
 };
 
 const orderAction: Object = {
-  next(state: Object, { payload: { id, action, origStatus, result } }: Object) {
+  next(state: Object, { payload: { ids, action, origStatus, result } }: Object) {
     const data = [...state.data];
     let newData = data;
 
     if (result) {
-      if (result.err) {
-        newData = updateItemWithId(id, { workflowstatus: origStatus }, data);
+      if (isArray(ids)) {
+        ids.forEach((id: number): void => {
+          newData = updateItemWithId(id, { workflowstatus: origStatus[id] }, newData);
+        });
+      } else {
+        newData = updateItemWithId(ids, { workflowstatus: origStatus[ids] }, newData);
       }
+
     } else {
-      newData = updateItemWithId(id, { workflowstatus: `${action.toUpperCase()}ING` }, data);
+      if (isArray(ids)) {
+        ids.forEach((id: number): void => {
+          newData = updateItemWithId(id, { workflowstatus: `${action.toUpperCase()}ING` }, newData);
+        });
+      } else {
+        newData = updateItemWithId(ids, { workflowstatus: `${action.toUpperCase()}ING` }, newData);
+      }
     }
 
     return { ...state, ...{ data: newData } };

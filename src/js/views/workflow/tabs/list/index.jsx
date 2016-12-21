@@ -237,10 +237,22 @@ export default class extends Component {
       )
     );
 
+    const originalStatuses = {};
+
+    selectedData.forEach(id => {
+      originalStatuses[id] = this.props.collection.find(order => (
+        order.id === parseInt(id, 10)
+      )).workflowstatus;
+    });
+
     if (!cantBatch) {
       this.props.clearSelection();
       this.props.dispatch(
-        actions.orders[`${type}Batch`](selectedData)
+        actions.orders.action(
+          type,
+          selectedData,
+          originalStatuses,
+        )
       );
     } else {
       this._modal = (

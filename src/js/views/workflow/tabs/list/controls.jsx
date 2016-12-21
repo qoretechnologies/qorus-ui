@@ -32,7 +32,9 @@ export default class extends Component {
         actions.orders.action(
           action,
           this.props.data.id,
-          this.props.data.workflowstatus
+          {
+            [this.props.data.id]: this.props.data.workflowstatus,
+          }
         )
       );
     }

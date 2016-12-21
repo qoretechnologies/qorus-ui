@@ -19,9 +19,9 @@ export default class DetailHeader extends Component {
     dispatch: PropTypes.func,
   };
 
-  setAutostart = (context, value) => {
+  setAutostart = (value) => {
     this.context.dispatch(
-      actions.workflows.setAutostart(context, value)
+      actions.workflows.setAutostart(this.props.data.id, value)
     );
   };
 
@@ -62,13 +62,15 @@ export default class DetailHeader extends Component {
               <small>({this.props.data.id})</small>
             </h3>
             <div className="pull-right">
-              <WorkflowControls workflow={this.props.data} />
+              <WorkflowControls
+                id={this.props.data.id}
+                enabled={this.props.data.enabled}
+              />
               <AutoStart
-                context={this.props.data}
                 autostart={this.props.data.autostart}
                 execCount={this.props.data.exec_count}
-                inc={this.setAutostart}
-                dec={this.setAutostart}
+                onIncrementClick={this.setAutostart}
+                onDecrementClick={this.setAutostart}
               />
             </div>
           </div>

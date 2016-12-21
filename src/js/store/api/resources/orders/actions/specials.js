@@ -1,5 +1,6 @@
 /* @flow */
 import { createAction } from 'redux-actions';
+import isArray from 'lodash/isArray';
 
 import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
@@ -42,25 +43,28 @@ const orderAction: Function = createAction(
   'ORDERS_ORDERACTION',
   async (
     actn: string,
-    id: number,
+    id: any,
     optimistic: boolean,
-    origStatus: string,
+    origStatus: Object,
     dispatch: Function
   ): ?Object => {
-    if (optimistic) return { id, action: actn };
+    if (optimistic) return { ids: id, action: actn };
 
+    const ids: string = isArray(id) ? id.join(',') : id;
     const result = await fetchJson(
       'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}?action=${actn}`,
+      `${settings.REST_BASE_URL}/orders?ids=${ids}&action=${actn}`,
       {},
       true
     );
 
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
+    Object.keys(result).forEach((res: string): void => {
+      if (typeof result[res] === 'string') {
+        dispatch(error(result[res]));
+      }
+    });
 
-    return { id, origStatus, result };
+    return { ids: id, origStatus, result };
   }
 );
 
