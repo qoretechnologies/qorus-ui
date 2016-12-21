@@ -150,14 +150,15 @@ const orderAction: Object = {
     let newData = data;
 
     if (result) {
-      if (isArray(ids)) {
-        ids.forEach((id: number): void => {
-          newData = updateItemWithId(id, { workflowstatus: origStatus[id] }, newData);
-        });
-      } else {
-        newData = updateItemWithId(ids, { workflowstatus: origStatus[ids] }, newData);
-      }
-
+      Object.keys(result).forEach((res: string): void => {
+        if (typeof result[res] === 'string') {
+          newData = updateItemWithId(
+            parseInt(res, 10),
+            { workflowstatus: origStatus[parseInt(res, 10)] },
+            newData
+          );
+        }
+      });
     } else {
       if (isArray(ids)) {
         ids.forEach((id: number): void => {

@@ -323,7 +323,13 @@ module.exports = () => {
         break;
     }
 
-    res.json(result);
+    const retrn = {};
+
+    ids.forEach(id => {
+      retrn[id] = parseInt(id, 10) === 4000 ? 'Error: there was an error' : { success: true }
+    });
+
+    res.json(retrn);
   });
 
   router.post('/:id', (req, res) => {
