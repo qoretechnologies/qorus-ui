@@ -281,42 +281,36 @@ module.exports = () => {
   router.put('/', (req, res) => {
     const action = req.query.action;
     const ids = req.query.ids.split(',');
-    let result = [];
 
     switch (action) {
       case 'block':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'BLOCKING';
-          return item;
         });
         break;
       case 'retry':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'RETRYING';
-          return item;
         });
         break;
       case 'cancel':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'CANCELING';
-          return item;
         });
         break;
       case 'unblock':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'UNBLOCKING';
-          return item;
         });
         break;
       case 'uncancel':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'UNCANCELING';
-          return item;
         });
         break;
       default:
@@ -326,7 +320,7 @@ module.exports = () => {
     const retrn = {};
 
     ids.forEach(id => {
-      retrn[id] = parseInt(id, 10) === 4000 ? 'Error: there was an error' : { success: true }
+      retrn[id] = parseInt(id, 10) === 4000 ? 'Error: there was an error' : { success: true };
     });
 
     res.json(retrn);
