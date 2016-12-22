@@ -253,7 +253,7 @@ export default class OrdersTable extends Table {
 
     yield (
       <Cell className="narrow">
-        <span className={`label label-${label}`}>
+        <span className={`label status-${label}`}>
           { model.workflowstatus }
         </span>
       </Cell>

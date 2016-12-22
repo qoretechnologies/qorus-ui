@@ -133,7 +133,10 @@ const TableRow: Function = ({
               className="workflow-status-link"
               to={`/workflow/${id}/list/${title}/${date}`}
             >
-              <Badge label={state.label} val={value} />
+              <Badge
+                className={`status-${state.label}`}
+                val={value}
+              />
             </Link>
           </Td>
         );

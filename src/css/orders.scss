@@ -51,6 +51,139 @@
   }
 }
 
+$status-green: #418e22;
+$status-light-green: lighten($status-green, 30);
+$status-red: #d11f1f;
+$status-light-red: lighten($status-red, 30);
+$status-yellow: #e5d957;
+$status-light-yellow: lighten($status-yellow, 30);
+$status-orange: #f29a3c;
+$status-light-orange: lighten($status-orange, 20);
+$status-blue: #3197e0;
+$status-light-blue: lighten($status-blue, 30);
+$status-gray: #696969;
+$status-light-gray: lighten($status-gray, 30);
+
+.status {
+  &-complete {
+    background-color: $status-green;
+    color: #fff;
+    text-shadow: -1px -1px 0 darken($status-green, 20);
+  }
+
+  &-complete-diagram {
+    rect, ellipse { fill: lighten($status-green, 33) }
+    text { fill: #000 }
+  }
+
+  &-ready {
+    background-color: $status-light-green;
+    color: #fff;
+    text-shadow: -1px -1px 0 $status-green;
+  }
+
+  &-ready-diagram {
+    rect, ellipse { fill: lighten($status-light-green, 10) }
+    text { fill: #000 }
+  }
+
+  &-scheduled {
+    background-color: $status-blue;
+    color: #fff;
+    text-shadow: -1px -1px 0 darken($status-blue, 20);
+  }
+
+  &-scheduled-diagram {
+    rect, ellipse { fill: $status-blue }
+    text { fill: #000 }
+  }
+
+  &-waiting {
+    background-color: $status-yellow;
+    color: #fff;
+    text-shadow: -1px -1px 0 darken($status-yellow, 20);
+  }
+
+  &-waiting-diagram,
+  &-subworkflow-diagram {
+    rect, ellipse { fill: $status-light-yellow }
+    text { fill: #000 }
+  }
+
+  &-incomplete {
+    background-color: $status-light-blue;
+    color: #fff;
+    text-shadow: -1px -1px 0 $status-blue;
+  }
+
+  &-incomplete-diagram,
+  &-async-diagram {
+    rect, ellipse { fill: $status-light-blue }
+    text { fill: #000 }
+  }
+
+  &-retry {
+    background-color: $status-light-gray;
+    color: #fff;
+    text-shadow: -1px -1px 0 $status-gray;
+  }
+
+  &-retry-diagram {
+    rect, ellipse { fill: lighten($status-light-gray, 10) }
+    text { fill: #000 }
+  }
+
+  &-error {
+    background-color: $status-red;
+    color: #fff;
+    text-shadow: -1px -1px 0 darken($status-red, 20);
+  }
+
+  &-error-diagram {
+    rect, ellipse { fill: $status-light-red }
+    text { fill: #000 }
+  }
+
+  &-in-progress {
+    background-color: $status-orange;
+    color: #fff;
+    text-shadow: -1px -1px 0 darken($status-orange, 20);
+  }
+
+  &-in-progress-diagram {
+    rect, ellipse { fill: $status-light-orange }
+    text { fill: #000 }
+  }
+
+  &-canceled {
+    background-color: $status-light-red;
+    color: #fff;
+    text-shadow: -1px -1px 0 $status-red;
+  }
+
+  &-in-progress-diagram {
+    rect, ellipse { fill: lighten($status-light-red, 10) }
+    text { fill: #000 }
+  }
+
+  &-blocked {
+    background-color: $status-gray;
+    color: #fff;
+    text-shadow: -1px -1px 0 #000;
+  }
+
+  &-in-progress-diagram {
+    rect, ellipse { fill: $status-light-gray }
+    text { fill: #000 }
+  }
+
+  &-normal-diagram {
+    rect, ellipse { fill: #fff }
+    text { fill: #000 }
+  }
+}
+
+
 /**
 * The global wrapper for the chart view in orders
 */
@@ -76,11 +209,11 @@
 }
 
 .diagram-view {
-  width: 48%;
+  width: 42%;
 }
 
 .order-info-view {
-  width: 48%;
+  width: 54%;
 }
 
 /**
@@ -113,4 +246,3 @@
     overflow-y: auto;
   }
 }
-

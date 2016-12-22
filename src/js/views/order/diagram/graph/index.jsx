@@ -113,7 +113,6 @@ export default class StepsTab extends Component {
    * @param {number} stepId
    */
   onBoxClick = (stepId) => () => {
-    // Given step is expected to have info
     this._modal = (
       <StepModal
         id={stepId}
@@ -682,11 +681,11 @@ export default class StepsTab extends Component {
     const instances = this.props.order && this.props.order.StepInstances ?
       groupInstances(this.props.order.StepInstances) : {};
     const css = Object.keys(instances).some(i => instances[i].status === 'ERROR')
-      ? 'error' : 'start';
+      ? 'error' : 'normal';
 
     return (
       <g
-        className={`diagram__box diagram__box--${css}`}
+        className={`diagram__box status-${css}-diagram`}
         transform={this.getBoxTransform(colIdx, rowIdx)}
       >
         <ellipse {...this.getStartParams()} />
@@ -720,28 +719,6 @@ export default class StepsTab extends Component {
     );
   }
 
-  renderInfoIcon(id) {
-    if (!this.props.order) return null;
-
-    const name = this.getStepName(id);
-    const instances = this.props.order.StepInstances ?
-      groupInstances(this.props.order.StepInstances) : {};
-
-    if (!instances[name]) return undefined;
-
-    const handleStepClick = this.handleStepClick(name);
-
-    return (
-      <text
-        {...this.getIconParams(1)}
-        className="link"
-        onClick={handleStepClick}
-      >
-        &#xf05a;
-      </text>
-    );
-  }
-
   /**
    * Returns group element for a general step.
    *
@@ -762,7 +739,7 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderDefaultBox(stepId, colIdx, row, rowIdx) {
-    const onClick = this.onBoxClick(stepId);
+    const onCodeClick = this.onBoxClick(stepId);
     const handleMouseOver = (event) => {
       event.persist();
       event.stopPropagation();
@@ -791,38 +768,41 @@ export default class StepsTab extends Component {
       '';
 
     const name = this.getStepName(stepId);
-    let css;
+    let css = type.toLowerCase();
+    let onBoxClick;
+    let instances
 
     if (this.props.order) {
-      const instances = this.props.order.StepInstances ?
+      instances = this.props.order.StepInstances ?
         groupInstances(this.props.order.StepInstances) : {};
       css = instances[name] ?
           instances[name].status.toLowerCase() : 'normal';
-    } else {
-      css = type.toLowerCase();
+      onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
     }
 
     return (
       <g
         className={classNames({
           diagram__box: true,
-          [`diagram__box--${css}`]: type,
+          [`status-${css}-diagram`]: css,
+          clickable: instances && instances[name],
         })}
         transform={this.getBoxTransform(colIdx, rowIdx)}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
+        onClick={onBoxClick}
       >
         <rect {...this.getDefaultParams()} />
         <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
           {this.getStepFullname(stepId)}
         </text>
-        { this.renderInfoIcon(stepId) }
         <text
-          {...this.getIconParams(0)}
+          x={225}
+          y={13}
           className="link"
-          onClick={onClick}
+          onClick={onCodeClick}
         >
-          &#xf121;
+          CODE
         </text>
       </g>
     );

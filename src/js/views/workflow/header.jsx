@@ -29,7 +29,7 @@ export default class DetailHeader extends Component {
       this.props.data[o.name] > 0 ?
         <Badge
           key={k}
-          label={o.label}
+          className={`status-${o.label}`}
           val={`${o.short}: ${this.props.data[o.name]}`}
         /> :
         undefined

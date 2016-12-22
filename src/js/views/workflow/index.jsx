@@ -16,7 +16,7 @@ import { formatDate } from '../../helpers/workflows';
 import { ORDER_STATES } from '../../constants/orders';
 import { DATE_FORMATS } from '../../constants/dates';
 
-import actions from 'store/api/actions';
+import actions from '../../store/api/actions';
 
 const workflowSelector = (state, props) => {
   const wfl = state.api.workflows.data.find(w => (
@@ -79,9 +79,13 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.params;
+    this.fetchWorkflow(this.props);
+  }
 
-    this.props.dispatch(actions.workflows.fetch({ lib_source: true }, id));
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.date !== nextProps.params.date) {
+      this.fetchWorkflow(nextProps);
+    }
   }
 
   componentWillUnmount() {
@@ -93,6 +97,16 @@ export default class extends Component {
       actions.workflows.unsync()
     );
   }
+
+  fetchWorkflow: Function = (props: Object): void => {
+    const { id } = props.params;
+    const fetchParams = {
+      lib_source: true,
+      date: this.getDate(props),
+    };
+
+    props.dispatch(actions.workflows.fetch(fetchParams, id));
+  };
 
   getHeight: Function = (): number => {
     const navbar = document.querySelector('.navbar').clientHeight;
@@ -108,7 +122,7 @@ export default class extends Component {
    * Gets the formatted date for the
    * workflow link in the workflow table
    */
-  getDate = () => formatDate(this.props.params.date).format(DATE_FORMATS.URL_FORMAT);
+  getDate = (props) => formatDate(props.params.date).format(DATE_FORMATS.URL_FORMAT);
 
   handleTabChange = (tabId) => {
     goTo(
@@ -126,11 +140,13 @@ export default class extends Component {
       return <Loader />;
     }
 
+    console.log(this.props.workflow)
+
     return (
       <div>
         <Header
           data={this.props.workflow}
-          date={this.getDate()}
+          date={this.getDate(this.props)}
           tabId={this.props.params.tabId}
         />
         <div className="row">
@@ -159,7 +175,7 @@ export default class extends Component {
                   selectedData={this.props.selectedData}
                   sortData={this.props.sortData}
                   onCSVClick={this.props.onCSVClick}
-                  linkDate={this.getDate()}
+                  linkDate={this.getDate(this.props)}
                 />
               </Pane>
               <Pane name="Performance">

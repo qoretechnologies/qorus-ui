@@ -24,6 +24,7 @@ export default class Badge extends Component {
     val: number | string,
     label: string,
     title?: string,
+    className?: string,
   };
 
   /**
@@ -38,7 +39,7 @@ export default class Badge extends Component {
         className={classNames({
           badge: this.props.val || false,
           [`alert-${this.props.label}`]: this.props.label && this.props.val || false,
-        })}
+        }, this.props.val ? this.props.className : '')}
       >
         {this.props.val}
       </span>
