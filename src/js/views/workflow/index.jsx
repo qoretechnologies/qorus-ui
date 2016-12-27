@@ -140,8 +140,6 @@ export default class extends Component {
       return <Loader />;
     }
 
-    console.log(this.props.workflow)
-
     return (
       <div>
         <Header

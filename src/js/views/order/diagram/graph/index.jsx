@@ -770,7 +770,7 @@ export default class StepsTab extends Component {
     const name = this.getStepName(stepId);
     let css = type.toLowerCase();
     let onBoxClick;
-    let instances
+    let instances;
 
     if (this.props.order) {
       instances = this.props.order.StepInstances ?
