@@ -1,4 +1,3 @@
-@wip
 Feature: Tests for the Diagram tab
 
   Scenario: Diagram is displayed
