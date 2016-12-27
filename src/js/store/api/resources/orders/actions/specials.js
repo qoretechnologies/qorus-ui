@@ -79,6 +79,31 @@ const action: Function = (
   dispatch(orderAction(actn, id, true));
 };
 
+const skipStep: Function = createAction(
+  'ORDERS_SKIPSTEP',
+  (
+    orderId: number,
+    stepid: number,
+    ind: string,
+    noretry: boolean
+  ): Object => {
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${orderId}`,
+      {
+        body: JSON.stringify({
+          action: 'skipStep',
+          stepid,
+          ind,
+          noretry,
+        }),
+      }
+    );
+
+    return { orderId, stepid, ind };
+  }
+);
+
 const unsync = createAction('ORDERS_UNSYNC');
 
 export {
@@ -90,4 +115,5 @@ export {
   unsync,
   action,
   orderAction,
+  skipStep,
 };

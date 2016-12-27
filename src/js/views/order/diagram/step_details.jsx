@@ -46,8 +46,8 @@ export default class StepDetailTable extends Component {
     });
   }
 
-  handleSkipSubmit = (value) => {
-    this.props.onSkipSubmit(this.state.currentStep, value);
+  handleSkipSubmit = (value, noretry) => {
+    this.props.onSkipSubmit(this.state.currentStep, value, noretry);
   };
 
   handleSkipClick = () => {

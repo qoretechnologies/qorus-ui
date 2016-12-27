@@ -64,7 +64,7 @@ export default class DiagramInfoTable extends Component {
             <Cell>{ data.workflow_instanceid }</Cell>
             <Cell tag="th"> Status </Cell>
             <Cell>
-              <span className={`label label-${getStatusLabel(data.workflowstatus)}`}>
+              <span className={`label status-${getStatusLabel(data.workflowstatus)}`}>
                 {data.workflowstatus}
               </span>
             </Cell>

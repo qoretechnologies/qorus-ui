@@ -67,19 +67,3 @@ export function setPriority(actions) {
     }, order.id));
   };
 }
-
-export function skipStep(actions) {
-  return (order, stepid, value) => dispatch => {
-    dispatch(actions.orders.action({
-      body: JSON.stringify({
-        action: 'skipStep',
-        stepid,
-        ind: value,
-        noretry: true,
-      }),
-      update: {
-        StepInstances: skipIndexes(order, stepid, value),
-      },
-    }, order.id));
-  };
-}

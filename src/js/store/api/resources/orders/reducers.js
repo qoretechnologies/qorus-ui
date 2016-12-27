@@ -3,6 +3,7 @@ import isArray from 'lodash/isArray';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import { normalizeName } from '../utils';
+import { skipIndexes } from './actions/helpers';
 
 const initialState: Object = { data: [], sync: false, loading: false };
 
@@ -173,6 +174,25 @@ const orderAction: Object = {
   },
 };
 
+const skipStep: Object = {
+  next(
+    state: Object,
+    { payload: { orderId, stepid, ind } }: {
+      payload: Object,
+      orderId: number,
+      stepid: number,
+      ind: string,
+    }
+  ): Object {
+    const data = [...state.data];
+    const order: ?Object = data.find((ord: Object): boolean => ord.id === orderId);
+    const newInstances = skipIndexes(order, stepid, ind);
+    const newData = updateItemWithId(orderId, { StepInstances: newInstances }, data);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -187,4 +207,5 @@ export {
   fetchData as FETCHDATA,
   unsync as UNSYNC,
   orderAction as ORDERACTION,
+  skipStep as SKIPSTEP,
 };

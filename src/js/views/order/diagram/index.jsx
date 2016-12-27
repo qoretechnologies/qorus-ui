@@ -36,9 +36,9 @@ export default class DiagramView extends Component {
     });
   };
 
-  handleSkipSubmit = (step, value) => {
+  handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatch(
-      actions.orders.skipStep(this.props.order, step.stepid, value)
+      actions.orders.skipStep(this.props.order.id, step.stepid, value, noretry)
     );
   };
 

@@ -23,9 +23,19 @@ export default class extends Component {
     });
   };
 
+  handleSkipClick = () => {
+    this.skipStep(true);
+  };
+
+  handleSkipRetryClick = () => {
+    this.skipStep(false);
+  }
+
   handleFormSubmit = (event) => {
     event.preventDefault();
+  };
 
+  skipStep = (type) => {
     let corr = true;
     const vals = this.state.value.split(',');
     const regexVal = /^[0-9]+$/;
@@ -38,7 +48,7 @@ export default class extends Component {
     });
 
     if (corr) {
-      this.props.onSubmit(this.state.value);
+      this.props.onSubmit(this.state.value, type);
 
       this.props.onClose();
     }
@@ -59,6 +69,9 @@ export default class extends Component {
           onSubmit={this.handleFormSubmit}
         >
           <Modal.Body>
+            <p> You can skip a step using: </p>
+            <p> - individual step indexes separated by comma (1, 2, 3)</p>
+            <p> - index ranges (1, 3, 5-10)</p>
             <input
               type="text"
               value={this.state.value}
@@ -77,9 +90,17 @@ export default class extends Component {
               />
               <Control
                 type="submit"
-                label="Save"
+                label="Skip"
                 big
                 btnStyle="success"
+                onClick={this.handleSkipClick}
+              />
+              <Control
+                type="submit"
+                label="Skip & Retry"
+                big
+                btnStyle="success"
+                onClick={this.handleSkipRetryClick}
               />
             </Controls>
           </Modal.Footer>
