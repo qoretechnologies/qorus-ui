@@ -24,10 +24,26 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       expect(inputDate).to.equal(date);
     });
 
-    it('renders the Datepicker input with current date', () => {
-      const wrapper = mount(<Datepicker date="now" />);
+    it('renders the Datepicker input with week date', () => {
+      const wrapper = mount(<Datepicker date="week" />);
       const { inputDate } = wrapper.find('withHandlers(Input)').props();
-      const date = moment().format('YYYY-MM-DD HH:mm:ss');
+      const date = moment().add(-1, 'weeks').format('YYYY-MM-DD HH:mm:ss');
+
+      expect(inputDate).to.equal(date);
+    });
+
+    it('renders the Datepicker input with month date', () => {
+      const wrapper = mount(<Datepicker date="month" />);
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const date = moment().startOf('month').format('YYYY-MM-DD HH:mm:ss');
+
+      expect(inputDate).to.equal(date);
+    });
+
+    it('renders the Datepicker input with 30 days date', () => {
+      const wrapper = mount(<Datepicker date="thirty" />);
+      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const date = moment().add(-30, 'days').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
     });
