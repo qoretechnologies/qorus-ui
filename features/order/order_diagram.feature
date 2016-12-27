@@ -1,3 +1,4 @@
+@wip
 Feature: Tests for the Diagram tab
 
   Scenario: Diagram is displayed
@@ -13,13 +14,6 @@ Feature: Tests for the Diagram tab
     And there are 2 "error" boxes
     And there are 1 "async-waiting" boxes
     And there are 5 "normal" boxes
-
-  @no-impl
-  Scenario: Clicking the info icon shows the step detail
-    Given I am on order "31380" and "Diagram" tab
-    And diagram, tables and error pane get loaded
-    When I click the info icon on "array_test_async v1.0"
-    Then the step detail table is shown
 
   Scenario: Changes order priority
     Given I am on order "31380" and "Diagram" tab
@@ -49,4 +43,3 @@ Feature: Tests for the Diagram tab
     And diagram, tables and error pane get loaded
     When I click on a row
     Then the the copy button is displayed
-

@@ -95,11 +95,11 @@ module.exports = function orderDetailSteps() {
   this.Then(/^start box is "([^"]*)"$/, async function(css) {
     const el = this.browser.queryAll('.diagram__box')[0];
 
-    this.browser.assert.className(el, `diagram__box diagram__box--${css}`);
+    this.browser.assert.className(el, `diagram__box status-${css}-diagram`);
   });
 
   this.Then(/^there are (\d+) "([^"]*)" boxes$/, async function(count, css) {
-    return this.browser.assert.elements(`.diagram .diagram__box--${css}`, parseInt(count, 10));
+    return this.browser.assert.elements(`.diagram .status-${css}-diagram`, parseInt(count, 10));
   });
 
   this.When(/^I click the info icon on "([^"]*)"$/, async function(text) {

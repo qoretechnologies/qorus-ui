@@ -105,6 +105,8 @@ $status-light-gray: lighten($status-gray, 30);
   }
 
   &-waiting-diagram,
+  &-async-waiting-diagram,
+  &-event-waiting-diagram,
   &-subworkflow-diagram {
     rect, ellipse { fill: $status-light-yellow }
     text { fill: #000 }
