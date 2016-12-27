@@ -1,4 +1,4 @@
-import { lockOrder, unlockOrder, addNote as addNoteFunc, skipIndexes } from './helpers';
+import { lockOrder, unlockOrder, addNote as addNoteFunc } from './helpers';
 
 export function reschedule(actions) {
   return (order, date) => dispatch => {
