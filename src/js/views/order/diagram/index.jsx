@@ -5,6 +5,7 @@ import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
 import Graph from './graph';
+import Hierarchy from '../hierarchy/';
 import StepDetails from './step_details';
 import Errors from './errors';
 import Resize from 'components/resize/handle';
@@ -108,6 +109,7 @@ export default class DiagramView extends Component {
           <Keys
             data={this.props.order.keys}
           />
+          <Hierarchy params={this.props.params} compact />
           { this.renderStepDetails() }
         </div>
         { this.renderErrorPane() }

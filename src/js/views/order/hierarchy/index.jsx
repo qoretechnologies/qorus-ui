@@ -34,9 +34,9 @@ const selector = createSelector(
 export default class HierarchyView extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
     hierarchy: PropTypes.object,
     order: PropTypes.object,
+    compact: PropTypes.bool,
   };
 
   componentDidMount() {
@@ -68,11 +68,13 @@ export default class HierarchyView extends Component {
     const data = this.groupHierarchy();
 
     return Object.keys(data).map((h, index) => (
-      <Row data={data[h]} key={index} />
+      <Row data={data[h]} key={index} compact={this.props.compact} />
     ));
   }
 
   render() {
+    const { compact } = this.props;
+
     return (
       <div>
         <table
@@ -86,14 +88,26 @@ export default class HierarchyView extends Component {
             <th className="narrow">Status</th>
             <th>Business Error</th>
             <th className="narrow">Custom Status</th>
-            <th>Custom Status Description</th>
+            { !compact && (
+              <th>Custom Status Description</th>
+            )}
             <th className="narrow">Errors</th>
             <th className="narrow">Priority</th>
-            <th>Scheduled</th>
-            <th className="narrow">Subworkflow</th>
-            <th className="narrow">Synchronous</th>
-            <th className="narrow">Warnings</th>
-            <th>Started</th>
+            { !compact && (
+              <th>Scheduled</th>
+            )}
+            { !compact && (
+              <th className="narrow">Subworkflow</th>
+            )}
+            { !compact && (
+              <th className="narrow">Synchronous</th>
+            )}
+            { !compact && (
+              <th className="narrow">Warnings</th>
+            )}
+            { !compact && (
+              <th>Started</th>
+            )}
             <th>Completed</th>
           </tr>
           </thead>
