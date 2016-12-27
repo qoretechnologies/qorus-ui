@@ -11,8 +11,12 @@ export const formatDate = (date) => {
   switch (date) {
     case DATES.ALL:
       return moment(new Date(DATE_FORMATS.ALL));
-    case DATES.NOW:
-      return moment();
+    case DATES.WEEK:
+      return moment().add(-1, 'weeks');
+    case DATES.MONTH:
+      return moment().startOf('month');
+    case DATES.THIRTY:
+      return moment().add(-30, 'days');
     case DATES.PREV_DAY:
     case undefined:
       return moment().add(-1, 'days');

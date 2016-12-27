@@ -133,8 +133,16 @@ export default class DatePicker extends Component {
     this.applyDate(DATES.ALL);
   };
 
-  handleNowClick: Function = (): void => {
-    this.applyDate(DATES.NOW);
+  handleWeekClick: Function = (): void => {
+    this.applyDate(DATES.WEEK);
+  };
+
+  handleMonthClick: Function = (): void => {
+    this.applyDate(DATES.MONTH);
+  };
+
+  handleThirtyClick: Function = (): void => {
+    this.applyDate(DATES.THIRTY);
   };
 
   handle24hClick: Function = (): void => {
@@ -211,8 +219,16 @@ export default class DatePicker extends Component {
             action={this.handleTodayClick}
           />
           <DropdownItem
-            title="Now"
-            action={this.handleNowClick}
+            title="Week"
+            action={this.handleWeekClick}
+          />
+          <DropdownItem
+            title="This month"
+            action={this.handleMonthClick}
+          />
+          <DropdownItem
+            title="30 days"
+            action={this.handleThirtyClick}
           />
         </Dropdown>
       </Controls>

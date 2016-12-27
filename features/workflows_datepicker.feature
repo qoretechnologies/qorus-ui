@@ -65,11 +65,23 @@ Feature: Workflow Datepicker
     When I click the "Today" button inside "date-selection" dropdown
     Then query param "date" equals to "today"
 
-  Scenario: Setting date to Now from the toolbar
+  Scenario: Setting date to Week from the toolbar
     Given I am on "workflows" listing
     And "workflows" get loaded
-    When I click the "Now" button inside "date-selection" dropdown
-    Then query param "date" equals to "now"
+    When I click the "Week" button inside "date-selection" dropdown
+    Then query param "date" equals to "week"
+
+  Scenario: Setting date to Month from the toolbar
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the "This month" button inside "date-selection" dropdown
+    Then query param "date" equals to "month"
+
+  Scenario: Setting date to 30 days from the toolbar
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I click the "30 days" button inside "date-selection" dropdown
+    Then query param "date" equals to "thirty"
 
   Scenario: Setting date to Now from the toolbar
     Given I am on "workflows" listing

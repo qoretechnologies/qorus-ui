@@ -1,6 +1,8 @@
 const DATES = {
   ALL: 'all',
-  NOW: 'now',
+  WEEK: 'week',
+  MONTH: 'month',
+  THIRTY: 'thirty',
   PREV_DAY: '24h',
   TODAY: 'today',
 };
