@@ -3,6 +3,7 @@ const DATES = {
   WEEK: 'week',
   MONTH: 'month',
   THIRTY: 'thirty',
+  NOW: 'now',
   PREV_DAY: '24h',
   TODAY: 'today',
 };

@@ -13,6 +13,8 @@ export const formatDate = (date) => {
       return moment(new Date(DATE_FORMATS.ALL));
     case DATES.WEEK:
       return moment().add(-1, 'weeks');
+    case DATES.NOW:
+      return moment()
     case DATES.MONTH:
       return moment().startOf('month');
     case DATES.THIRTY:

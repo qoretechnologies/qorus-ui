@@ -75,10 +75,10 @@ Feature: Tests all the features of the orders list toolbar
     When I click the "24H" button inside "date-selection" dropdown
     Then "0" "orders" are shown
 
-  Scenario: Changing the date to now
+  Scenario: Changing the date to week
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
-    When I click the "Now" button inside "date-selection" dropdown
+    When I click the "Week" button inside "date-selection" dropdown
     Then "0" "orders" are shown
 
   Scenario: Filtering retry orders through search
@@ -107,7 +107,3 @@ Feature: Tests all the features of the orders list toolbar
     And I click the "Retry" item
     When I click the "Filter" button
     Then "2" "orders" are shown
-
-
-
-
