@@ -14,7 +14,7 @@ export const formatDate = (date) => {
     case DATES.WEEK:
       return moment().add(-1, 'weeks');
     case DATES.NOW:
-      return moment()
+      return moment();
     case DATES.MONTH:
       return moment().startOf('month');
     case DATES.THIRTY:
