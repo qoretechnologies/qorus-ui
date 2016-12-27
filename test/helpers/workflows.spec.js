@@ -86,14 +86,14 @@ describe('filterArray,' +
       expect(date.format('YYYYMMDDHHmmss')).to.equal(`${today.format('YYYYMMDD')}000000`);
     });
 
-    it('returns formatted moment object with current date and time when passed "now"', () => {
-      const str = DATES.NOW;
+    it('returns formatted moment object with current date and time when passed "week"', () => {
+      const str = DATES.WEEK;
       const date = formatDate(str);
-      const now = moment();
+      const week = moment().add(-1, 'weeks');
 
-      expect(str).to.equal('now');
+      expect(str).to.equal('week');
       expect(date).to.be.an('object');
-      expect(date.format('YYYYMMDDHHmmss')).to.equal(now.format('YYYYMMDDHHmmss'));
+      expect(date.format('YYYYMMDDHHmmss')).to.equal(week.format('YYYYMMDDHHmmss'));
     });
 
     it('returns formatted moment object with "1970/01/01" when passed "all"', () => {
