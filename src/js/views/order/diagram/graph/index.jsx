@@ -746,9 +746,10 @@ export default class StepsTab extends Component {
 
       if (event.target.tagName === 'rect') {
         const { left, top, width, height } = event.target.getBoundingClientRect();
+        const tooltip = this.props.workflow.stepinfo.find(step => step.stepid === stepId);
 
         this.setState({
-          tooltip: this.props.workflow.stepinfo.find(step => step.stepid === stepId).desc,
+          tooltip: tooltip ? tooltip.desc : null,
           left,
           top,
           width,
