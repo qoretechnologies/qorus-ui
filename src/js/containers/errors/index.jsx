@@ -91,6 +91,7 @@ const ErrorsContainer: Function = ({
           icon="plus"
           onClick={handleCreateClick}
           btnStyle="success"
+          big
         />
       </Toolbar>
       <Table
