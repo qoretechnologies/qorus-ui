@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -13,29 +13,31 @@ describe('Workflows apievents from store/api & store/api/resources/workflows', (
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        workflows: {
-          data: [
-            {
-              id: 1,
-              exec_count: 0,
-              enabled: true,
-            },
-            {
-              id: 2,
-              exec_count: 1,
-              READY: 0,
-              enabled: false,
-            },
-            {
-              id: 3,
-              exec_count: 2,
-              READY: 1,
-              ERROR: 0,
-            },
-          ],
-          sync: true,
+        api: {
+          workflows: {
+            data: [
+              {
+                id: 1,
+                exec_count: 0,
+                enabled: true,
+              },
+              {
+                id: 2,
+                exec_count: 1,
+                READY: 0,
+                enabled: false,
+              },
+              {
+                id: 3,
+                exec_count: 2,
+                READY: 1,
+                ERROR: 0,
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(

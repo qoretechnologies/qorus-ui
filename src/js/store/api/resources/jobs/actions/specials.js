@@ -152,12 +152,12 @@ const fetchCodeMeta = (job) => ({ job });
 const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
 const setActive = createAction(
   'JOBS_SETACTIVE',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
 );
 
 const setEnabled = createAction(
   'JOBS_SETENABLED',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
 );
 
 const updateDone = createAction(
@@ -172,22 +172,22 @@ const instanceUpdateDone = createAction(
 
 const addInstance = createAction(
   'JOBS_ADDINSTANCE',
-  (data, started) => ({ data, started })
+  (events) => ({ events })
 );
 
 const modifyInstance = createAction(
   'JOBS_MODIFYINSTANCE',
-  (data, modified) => ({ data, modified })
+  (events) => ({ events })
 );
 
 const addAlert = createAction(
   'JOBS_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'JOBS_CLEARALERT',
-  (id, alertid) => ({ id, alertid })
+  (events) => ({ events })
 );
 
 export {

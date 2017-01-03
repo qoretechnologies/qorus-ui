@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -60,31 +60,49 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        alerts: {
-          data: [],
-          sync: true,
-        },
-        workflows: {
-          data: [
-            {
-              id: 14,
-              has_alerts: false,
-              alerts: [],
-            },
-          ],
-          sync: true,
-        },
-        services: {
-          data: [
-            {
-              id: 698,
-              has_alerts: false,
-              alerts: [],
-            },
-          ],
-          sync: true,
+        api: {
+          alerts: {
+            data: [],
+            sync: true,
+          },
+          groups: {
+            data: [],
+            sync: false,
+          },
+          orders: {
+            data: [],
+            sync: false,
+          },
+          remotes: {
+            data: [],
+            sync: false,
+          },
+          jobs: {
+            data: [],
+            sync: false,
+          },
+          workflows: {
+            data: [
+              {
+                id: 14,
+                has_alerts: false,
+                alerts: [],
+              },
+            ],
+            sync: true,
+          },
+          services: {
+            data: [
+              {
+                id: 698,
+                has_alerts: false,
+                alerts: [],
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(
@@ -97,7 +115,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
   describe('Alerts: ', () => {
     it('raises new ongoing alert', () => {
       store.subscribe(() => {
-        const alerts = store.getState().alerts.data;
+        const alerts = store.getState().api.alerts.data;
 
         expect(alerts).to.have.length(1);
         expect(alerts[0]._updated).to.eql(true);
@@ -113,7 +131,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
       raiseAlert(store, 'ONGOING');
 
       store.subscribe(() => {
-        const alerts = store.getState().alerts.data;
+        const alerts = store.getState().api.alerts.data;
 
         expect(alerts).to.have.length(1);
         expect(alerts[0]._updated).to.eql(true);
@@ -128,7 +146,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
 
     it('new resource alert updates workflow alerts', () => {
       store.subscribe(() => {
-        const workflows = store.getState().workflows.data;
+        const workflows = store.getState().api.workflows.data;
 
         expect(workflows).to.have.length(1);
         expect(workflows[0]._updated).to.eql(true);
@@ -146,7 +164,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
       raiseResourceAlert(store, 1000);
 
       store.subscribe(() => {
-        const workflows = store.getState().workflows.data;
+        const workflows = store.getState().api.workflows.data;
 
         expect(workflows).to.have.length(1);
         expect(workflows[0]._updated).to.eql(true);
@@ -170,7 +188,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
       raiseResourceAlert(store);
 
       store.subscribe(() => {
-        const workflows = store.getState().workflows.data;
+        const workflows = store.getState().api.workflows.data;
 
         expect(workflows).to.have.length(1);
         expect(workflows[0]._updated).to.eql(true);
@@ -192,7 +210,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
 
     it('raises new transient alert', () => {
       store.subscribe(() => {
-        const alerts = store.getState().alerts.data;
+        const alerts = store.getState().api.alerts.data;
 
         expect(alerts).to.have.length(1);
         expect(alerts[0]._updated).to.eql(true);
@@ -207,7 +225,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
       raiseAlert(store, 'ONGOING');
 
       store.subscribe(() => {
-        const alerts = store.getState().alerts.data;
+        const alerts = store.getState().api.alerts.data;
 
         expect(alerts).to.have.length(0);
       });
@@ -226,7 +244,7 @@ describe('Alerts apievents from store/api & store/api/alerts', () => {
       raiseAlert(store, 'ONGOING');
 
       store.subscribe(() => {
-        const alerts = store.getState().alerts.data;
+        const alerts = store.getState().api.alerts.data;
 
         expect(alerts).to.have.length(1);
         expect(alerts[0]._updated).to.eql(null);

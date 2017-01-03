@@ -4,11 +4,15 @@ import { updateItemWithName, setUpdatedToNull } from '../../utils';
 const initialState: Object = { data: [], sync: false, loading: false };
 
 const setEnabled: Object = {
-  next(state: Object = initialState, { payload: { name, value } }): Object {
+  next(state: Object = initialState, { payload: { events } }): Object {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithName(name, { enabled: value, _updated: true }, updatedData);
+      let newData = updatedData;
+
+      events.forEach((dt: Object): void => {
+        newData = updateItemWithName(dt.name, { enabled: dt.enabled, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }

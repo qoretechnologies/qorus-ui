@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -13,20 +13,22 @@ describe('Groups apievents from store/api/apievents & store/api/resources/groups
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        groups: {
-          data: [
-            {
-              name: 'testgroup',
-              enabled: true,
-            },
-            {
-              name: 'anothergroup',
-              enabled: false,
-            },
-          ],
-          sync: true,
+        api: {
+          groups: {
+            data: [
+              {
+                name: 'testgroup',
+                enabled: true,
+              },
+              {
+                name: 'anothergroup',
+                enabled: false,
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(

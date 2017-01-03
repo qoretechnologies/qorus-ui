@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -13,22 +13,24 @@ describe('Services apievents from store/api & store/api/resources/services', () 
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        services: {
-          data: [
-            {
-              id: 1,
-              status: 'loaded',
-              enabled: true,
-            },
-            {
-              id: 2,
-              status: 'unloaded',
-              enabled: false,
-            },
-          ],
-          sync: true,
+        api: {
+          services: {
+            data: [
+              {
+                id: 1,
+                status: 'loaded',
+                enabled: true,
+              },
+              {
+                id: 2,
+                status: 'unloaded',
+                enabled: false,
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(

@@ -164,7 +164,7 @@ module.exports = function commonSteps() {
       queryAll(cmpRows).
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
-    await this.browser.pressButton(row.cells[1].childNodes[0]);
+    this.browser.pressButton(row.cells[1].childNodes[0]);
 
     this.detail = {
       id: findTableRowId(this.browser, name, parseInt(nameCell, 10)),

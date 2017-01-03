@@ -1,6 +1,6 @@
 /* @flow */
 const getResourceData: Function = (store: Object, resource: string): Array<Object> => (
-  store.getState()[resource].data
+  store.getState().api[resource].data
 );
 
 const getItem: Function = (

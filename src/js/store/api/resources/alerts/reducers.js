@@ -23,31 +23,33 @@ const markAllAsRead = {
 };
 
 const alertRaised = {
-  next(state = initialState, { payload: { data, type } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = state.data.slice();
-      const findAlert = stateData.findIndex((alert) => (
-        alert.type === data.type && alert.id === data.id
-      ));
+      const updatedData = setUpdatedToNull(stateData);
+      let newData = updatedData;
 
-      let newData;
+      events.forEach(dt => {
+        const findAlert = newData.findIndex((alert) => (
+          alert.type === dt.type && alert.id === dt.id
+        ));
 
-      // Alert exists, update it instead
-      if (findAlert >= 0) {
-        const updatedItem = Object.assign({}, data[findAlert], {
-          ...data,
-          ...{ _updated: true, alerttype: type },
-        });
+        // Alert exists, update it instead
+        if (findAlert >= 0) {
+          const updatedItem = Object.assign({}, dt[findAlert], {
+            ...dt,
+            ...{ _updated: true, alerttype: dt.alerttype },
+          });
 
-        newData = stateData.slice(0, findAlert)
-          .concat([updatedItem])
-          .concat(stateData.slice(findAlert + 1));
-      } else {
-        const alert = { ...data, ...{ alerttype: type, _updated: true } };
-        const updatedData = setUpdatedToNull(stateData);
+          newData = stateData.slice(0, findAlert)
+            .concat([updatedItem])
+            .concat(newData.slice(findAlert + 1));
+        } else {
+          const alert = { ...dt, ...{ alerttype: dt.alerttype, _updated: true } };
 
-        newData = [...updatedData, alert];
-      }
+          newData = [...newData, alert];
+        }
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -60,15 +62,18 @@ const alertRaised = {
 };
 
 const alertCleared = {
-  next(state = initialState, { payload: { id } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
-      const data = state.data.slice();
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
 
-      remove(data, alert => (
-        alert.alertid === id
-      ));
+      events.forEach(({ id }) => {
+        remove(updatedData, alert => (
+          alert.alertid === id
+        ));
+      });
 
-      return { ...state, ...{ data } };
+      return { ...state, ...{ data: updatedData } };
     }
 
     return state;

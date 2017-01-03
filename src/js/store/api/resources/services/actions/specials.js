@@ -68,12 +68,12 @@ const fetchMethodSources = createAction(
 
 const setStatus = createAction(
   'SERVICES_SETSTATUS',
-  (serviceid, status) => ({ serviceid, status })
+  (events) => ({ events })
 );
 
 const setEnabled = createAction(
   'SERVICES_SETENABLED',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
 );
 
 const updateDone = createAction(
@@ -83,12 +83,12 @@ const updateDone = createAction(
 
 const addAlert = createAction(
   'SERVICES_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'SERVICES_CLEARALERT',
-  (id, alertid) => ({ id, alertid })
+  (events) => ({ events })
 );
 
 export {

@@ -21,15 +21,6 @@ Feature: Tests various websocket apievents
     And I wait some time
     Then I should see 2 table row with alerts
 
-  @no-impl
-  Scenario: Ongoing alert cleared updates workflow
-    Given I am on "workflows" listing
-    And "workflows" get loaded
-    And I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
-    When I send a ws request for "ALERT_ONGOING_CLEARED_WORKFLOW"
-    And I wait some time
-    Then I should see 1 table row with alerts
-
   Scenario: Ongoing alert cleared updates service
     Given I am on "services" listing
     And "services" get loaded
@@ -60,7 +51,7 @@ Feature: Tests various websocket apievents
     And I wait some time
     Then I should see 2 table row with alerts
 
-  Scenario: Ongoing alert raised updates jobs
+  Scenario: Ongoing alert raised updates remotes
     Given I am on "system/remote/datasources" listing
     And "datasources" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_DATASOURCE"
@@ -200,7 +191,7 @@ Feature: Tests various websocket apievents
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=false"
     Then there are "2" "disabled" "groups"
 
-  Scenario: Group is disabled
+  Scenario: Group is enabled
     Given I am on "groups" listing
     And "groups" get loaded
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=false"

@@ -7,6 +7,7 @@ import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
 import * as groups from '../api/resources/groups/actions/specials';
 import * as remotes from '../api/resources/remotes/actions';
+import { pipeline } from '../../helpers/apievents';
 
 const handleEvent = (url, data, dispatch, state) => {
   const dt = JSON.parse(data);
@@ -18,119 +19,403 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'ALERT_ONGOING_RAISED':
         switch (info.type) {
           case 'WORKFLOW':
-            dispatch(workflows.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            if (state.api.workflows.sync) {
+              pipeline(
+                `${eventstr}_WORKFLOW`,
+                workflows.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+            }
             break;
           case 'SERVICE':
-            dispatch(services.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            if (state.api.services.sync) {
+              pipeline(
+                `${eventstr}_SERVICE`,
+                services.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+            }
             break;
           case 'JOB':
-            dispatch(jobs.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            if (state.api.jobs.sync) {
+              pipeline(
+                `${eventstr}_JOB`,
+                jobs.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+            }
             break;
           case 'REMOTE':
           case 'DATASOURCE':
           case 'USER-CONNECTION':
-            dispatch(remotes.addAlert({ ...info, ...{ alerttype: 'ONGOING' } }));
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+            }
             break;
           default:
             break;
         }
 
-        dispatch(alerts.raised({ ...info, ...{ when: d.time } }, 'ONGOING'));
+        if (state.api.alerts.sync) {
+          pipeline(
+            eventstr,
+            alerts.raised,
+            {
+              ...info,
+              ...{
+                when: d.time,
+                alerttype: 'ONGOING',
+              },
+            },
+            dispatch
+          );
+        }
 
         break;
       case 'ALERT_ONGOING_CLEARED':
         switch (info.type) {
           case 'WORKFLOW':
-            dispatch(workflows.clearAlert(info.id, info.alertid));
+            if (state.api.workflows.sync) {
+              pipeline(
+                `${eventstr}_WORKFLOW`,
+                workflows.clearAlert,
+                { id: info.id, alertid: info.alertid },
+                dispatch
+              );
+            }
             break;
           case 'SERVICE':
-            dispatch(services.clearAlert(info.id, info.alertid));
+            if (state.api.services.sync) {
+              pipeline(
+                `${eventstr}_SERVICE`,
+                services.clearAlert,
+                { id: info.id, alertid: info.alertid },
+                dispatch
+              );
+            }
             break;
           case 'JOB':
-            dispatch(jobs.clearAlert(info.id, info.alertid));
+            if (state.api.jobs.sync) {
+              pipeline(
+                `${eventstr}_JOB`,
+                jobs.clearAlert,
+                { id: info.id, alertid: info.alertid },
+                dispatch
+              );
+            }
             break;
           case 'REMOTE':
           case 'USER-CONNECTION':
           case 'DATASOURCE':
-            dispatch(remotes.clearAlert(info.id, info.type, info.alertid));
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.clearAlert,
+                { id: info.id, alertid: info.alertid, type: info.type },
+                dispatch
+              );
+            }
             break;
           default:
             break;
         }
 
-        dispatch(alerts.cleared(info.alertid));
+        if (state.api.alerts.sync) {
+          pipeline(
+            eventstr,
+            alerts.cleared,
+            { id: info.alertid },
+            dispatch
+          );
+        }
+
         break;
       case 'ALERT_TRANSIENT_RAISED':
-        dispatch(alerts.raised({ ...info, ...{ when: d.time } }, 'TRANSIENT'));
+        if (state.api.alerts.sync) {
+          pipeline(
+            eventstr,
+            alerts.raised,
+            {
+              ...info,
+              ...{
+                when: d.time,
+                alerttype: 'TRANSIENT',
+              },
+            },
+            dispatch
+          );
+        }
         break;
       case 'SERVICE_STOP':
-        dispatch(services.setStatus(info.serviceid, 'unloaded'));
+        if (state.api.services.sync) {
+          pipeline(
+            eventstr,
+            services.setStatus,
+            {
+              id: info.serviceid,
+              status: 'unloaded',
+            },
+            dispatch
+          );
+        }
         break;
       case 'SERVICE_START':
-        dispatch(services.setStatus(info.serviceid, 'loaded'));
+        if (state.api.services.sync) {
+          pipeline(
+            eventstr,
+            services.setStatus,
+            {
+              id: info.serviceid,
+              status: 'loaded',
+            },
+            dispatch
+          );
+        }
         break;
       case 'WORKFLOW_STOP':
-        dispatch(workflows.setExecCount(info.workflowid, -1));
+        if (state.api.workflows.sync) {
+          pipeline(
+            eventstr,
+            workflows.setExecCount,
+            {
+              id: info.workflowid,
+              value: -1,
+            },
+            dispatch
+          );
+        }
         break;
       case 'WORKFLOW_START':
-        dispatch(workflows.setExecCount(info.workflowid, 1));
+        if (state.api.workflows.sync) {
+          pipeline(
+            eventstr,
+            workflows.setExecCount,
+            {
+              id: info.workflowid,
+              value: 1,
+            },
+            dispatch
+          );
+        }
         break;
       case 'WORKFLOW_DATA_SUBMITTED':
-        dispatch(workflows.addOrder(info.workflowid, info.status));
-        dispatch(orders.addOrder(info, d.time));
+        if (state.api.orders.sync) {
+          const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+
+          if (workflow) {
+            pipeline(
+              eventstr,
+              orders.addOrder,
+              { info, time: d.time },
+              dispatch
+            );
+          }
+        } else if (state.api.workflows.sync) {
+          pipeline(
+            eventstr,
+            workflows.addOrder,
+            {
+              id: info.workflowid,
+              status: info.status,
+            },
+            dispatch
+          );
+        }
+
         break;
       case 'WORKFLOW_STATUS_CHANGED':
-        dispatch(workflows.modifyOrder(info.workflowid, info.info.old, info.info.new));
-        dispatch(orders.modifyOrder(info.workflow_instanceid, info.info.new, d.time));
+        if (state.api.orders.sync) {
+          const order = state.api.orders.data.find(ord => ord.id === info.workflow_instanceid);
+          if (order) {
+            pipeline(
+              eventstr,
+              orders.modifyOrder,
+              {
+                id: info.workflow_instanceid,
+                new: info.info.new,
+                time: d.time,
+              },
+              dispatch
+            );
+          }
+        } else if (state.api.workflows.sync) {
+          pipeline(
+            eventstr,
+            workflows.modifyOrder,
+            {
+              id: info.workflowid,
+              old: info.info.old,
+              new: info.info.new,
+            },
+            dispatch
+          );
+        }
+
         break;
       case 'WORKFLOW_INFO_CHANGED':
-        dispatch(orders.addNoteWebsocket(info.workflow_instanceid, info.info));
+        if (state.api.orders.sync) {
+          pipeline(
+            eventstr,
+            orders.addNoteWebsocket,
+            {
+              id: info.workflow_instanceid,
+              note: info.info,
+            },
+            dispatch
+          );
+        }
         break;
       case 'WORKFLOW_DATA_UPDATED': {
         const order = state.api.orders.data.find(ord => ord.id === info.workflow_instanceid);
 
-        if (order) {
+        if (order && state.api.orders.sync) {
           dispatch(orders.fetchData(info.workflow_instanceid, info.datatype));
         }
         break;
       }
       case 'JOB_STOP':
-        dispatch(jobs.setActive(info.jobid, false));
+        if (state.api.jobs.sync) {
+          pipeline(
+            eventstr,
+            jobs.setActive,
+            { id: info.jobid, value: false },
+            dispatch
+          );
+        }
         break;
       case 'JOB_START':
-        dispatch(jobs.setActive(info.jobid, true));
+        if (state.api.jobs.sync) {
+          pipeline(
+            eventstr,
+            jobs.setActive,
+            { id: info.jobid, value: true },
+            dispatch
+          );
+        }
         break;
-      case 'JOB_INSTANCE_START':
-        dispatch(jobs.addInstance(info, d.time));
+      case 'JOB_INSTANCE_START': {
+        const job = state.api.jobs.data.find(jb => jb.id === info.jobid);
+
+        if (job) {
+          pipeline(
+            eventstr,
+            jobs.addInstance,
+            {
+              data: info,
+              started: d.time,
+            },
+            dispatch
+          );
+        }
         break;
-      case 'JOB_INSTANCE_STOP':
-        dispatch(jobs.modifyInstance(info, d.time));
+      }
+      case 'JOB_INSTANCE_STOP': {
+        const job = state.api.jobs.data.find(jb => jb.id === info.jobid);
+
+        if (job) {
+          pipeline(
+            eventstr,
+            jobs.modifyInstance,
+            {
+              data: info,
+              modified: d.time,
+            },
+            dispatch
+          );
+        }
         break;
+      }
       case 'CONNECTION_UP':
-        dispatch(remotes.connectionChange(info.name, true));
+        if (state.api.remotes.sync) {
+          pipeline(
+            eventstr,
+            remotes.connectionChange,
+            {
+              name: info.name,
+              up: true,
+            },
+            dispatch
+          );
+        }
         break;
       case 'CONNECTION_DOWN':
-        dispatch(remotes.connectionChange(info.name, false));
-        break;
-      case 'SYSTEM_HEALTH_CHANGE':
+        if (state.api.remotes.sync) {
+          pipeline(
+            eventstr,
+            remotes.connectionChange,
+            {
+              name: info.name,
+              up: false,
+            },
+            dispatch
+          );
+        }
         break;
       case 'GROUP_STATUS_CHANGED':
         if (info.synthetic) {
           switch (info.type) {
             case 'workflow':
-              dispatch(workflows.setEnabled(info.id, info.enabled));
+              if (state.api.workflows.sync) {
+                pipeline(
+                  `${eventstr}_WORKFLOW`,
+                  workflows.setEnabled,
+                  {
+                    id: info.id,
+                    enabled: info.enabled,
+                  },
+                  dispatch
+                );
+              }
               break;
             case 'service':
-              dispatch(services.setEnabled(info.id, info.enabled));
+              if (state.api.services.sync) {
+                pipeline(
+                  `${eventstr}_SERVICE`,
+                  services.setEnabled,
+                  {
+                    id: info.id,
+                    enabled: info.enabled,
+                  },
+                  dispatch
+                );
+              }
               break;
             case 'job':
-              dispatch(jobs.setEnabled(info.id, info.enabled));
+              if (state.api.jobs.sync) {
+                pipeline(
+                  `${eventstr}_JOB`,
+                  jobs.setEnabled,
+                  {
+                    id: info.id,
+                    enabled: info.enabled,
+                  },
+                  dispatch
+                );
+              }
               break;
             default:
               break;
           }
         } else {
-          dispatch(groups.setEnabled(info.name, info.enabled));
+          if (state.api.groups.sync) {
+            pipeline(
+              eventstr,
+              groups.setEnabled,
+              {
+                name: info.name,
+                enabled: info.enabled,
+              },
+              dispatch
+            );
+          }
         }
 
         break;

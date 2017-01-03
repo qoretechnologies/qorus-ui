@@ -98,17 +98,21 @@ const fetchLibSources = {
 };
 
 const setExecCount = {
-  next(state = initialState, { payload: { workflowid, value } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const data = state.data.slice();
-      const workflow = data.find(d => d.id === workflowid);
-      const execCount = workflow.exec_count + value < 0 ? 0 : workflow.exec_count + value;
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithId(
-        workflowid,
-        { exec_count: execCount, _updated: true },
-        updatedData
-      );
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow = newData.find(d => d.id === dt.id);
+        const execCount = workflow.exec_count + dt.value < 0 ? 0 : workflow.exec_count + dt.value;
+        newData = updateItemWithId(
+          dt.id,
+          { exec_count: execCount, _updated: true },
+          newData
+        );
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -118,12 +122,15 @@ const setExecCount = {
 };
 
 const setEnabled = {
-  next(state, { payload: { workflowid, value, update = true } }) {
+  next(state, { payload: { events } }) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const props = update ? { enabled: value, _updated: true } : { enabled: value };
-      const newData = updateItemWithId(workflowid, props, updatedData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -161,18 +168,23 @@ const updateDone = {
 };
 
 const addOrder = {
-  next(state = initialState, { payload: { id, status } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const workflow = data.find(d => d.id === id);
-      const newStatus = workflow[status] + 1;
-      const newTotal = workflow.TOTAL + 1;
-      const newData = updateItemWithId(id, {
-        [status]: newStatus,
-        TOTAL: newTotal,
-        _updated: true,
-      }, updatedData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow = newData.find(d => d.id === dt.id);
+        const newStatus = workflow[dt.status] + 1;
+        const newTotal = workflow.TOTAL + 1;
+
+        newData = updateItemWithId(dt.id, {
+          [dt.status]: newStatus,
+          TOTAL: newTotal,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -182,18 +194,22 @@ const addOrder = {
 };
 
 const modifyOrder = {
-  next(state = initialState, { payload: { id, oldStatus, newStatus } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const workflow = data.find(d => d.id === id);
-      const statusBefore = workflow[oldStatus] - 1 < 0 ? 0 : workflow[oldStatus] - 1;
-      const status = workflow[newStatus] + 1;
-      const newData = updateItemWithId(id, {
-        [oldStatus]: statusBefore,
-        [newStatus]: status,
-        _updated: true,
-      }, updatedData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow = newData.find(d => d.id === dt.id);
+        const statusBefore = workflow[dt.old] - 1 < 0 ? 0 : workflow[dt.old] - 1;
+        const status = workflow[dt.new] + 1;
+        newData = updateItemWithId(dt.id, {
+          [dt.old]: statusBefore,
+          [dt.new]: status,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -203,16 +219,21 @@ const modifyOrder = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { data } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const workflow = stateData.find((w) => w.id === parseInt(data.id, 10));
-      const alerts = [...workflow.alerts, data];
-      const newData = updateItemWithId(data.id, {
-        alerts,
-        has_alerts: true,
-        _updated: true,
-      }, stateData);
+      const updatedData = setUpdatedToNull(stateData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow = newData.find((w) => w.id === parseInt(dt.id, 10));
+        const alerts = [...workflow.alerts, dt];
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: true,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -222,19 +243,23 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { id, alertid } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const workflow = stateData.find((w) => w.id === parseInt(id, 10));
-      const alerts = [...workflow.alerts];
+      let newData = stateData;
 
-      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+      events.forEach(dt => {
+        const workflow = newData.find((w) => w.id === parseInt(dt.id, 10));
+        const alerts = [...workflow.alerts];
 
-      const newData = updateItemWithId(id, {
-        alerts,
-        has_alerts: !(alerts.length === 0),
-        _updated: true,
-      }, stateData);
+        remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
+
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: !(alerts.length === 0),
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }

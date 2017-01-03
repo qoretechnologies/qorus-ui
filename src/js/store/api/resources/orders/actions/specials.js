@@ -8,17 +8,17 @@ import { error } from '../../../../ui/bubbles/actions';
 
 const addOrder: Function = createAction(
   'ORDERS_ADDORDER',
-  (order: Object, time: string) => ({ order, time })
+  (events: Array<Object>) => ({ events })
 );
 
 const modifyOrder: Function = createAction(
   'ORDERS_MODIFYORDER',
-  (id: number, status: string, modified: string) => ({ id, status, modified })
+  (events: Array<Object>) => ({ events })
 );
 
 const addNoteWebsocket: Function = createAction(
   'ORDERS_ADDNOTEWEBSOCKET',
-  (id: number, note: Object) => ({ id, note })
+  (events: Array<Object>) => ({ events })
 );
 
 const updateDone = createAction(

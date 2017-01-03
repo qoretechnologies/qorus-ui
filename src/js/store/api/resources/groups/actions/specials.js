@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 
 const setEnabled: Function = createAction(
   'GROUPS_SETENABLED',
-  (name: string, value: boolean) => ({ name, value })
+  (events) => ({ events })
 );
 
 const updateDone: Function = createAction(

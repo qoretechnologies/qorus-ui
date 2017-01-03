@@ -32,6 +32,7 @@ Feature: Tests contents of the system/alerts tab
     Then I should see detail pane
     And there should be 0 related object links
 
+  @wip  
   Scenario: Panel is not hidden  when alert is updated via WS
     Given I am on "system/alerts/ongoing" listing
     And "alerts" get loaded

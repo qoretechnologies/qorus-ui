@@ -10,21 +10,26 @@ const initialState: Object = { data: [], sync: false, loading: false };
 const addOrder: Object = {
   next(
     state: Object = initialState,
-    { payload: { order, time } }: { payload: Object, order: Object, time: string }
+    { payload: { events } }: { payload: Object, events: Array<Object> }
   ): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const normalized = normalizeName({ ...order, ...{ id: order.workflow_instanceid } });
-      const newData = [...updatedData, {
-        ...normalized,
-        ...{
-          _updated: true,
-          started: time,
-          workflowstatus: order.status,
-          note_count: 0,
-        },
-      }];
+      let newData = updatedData;
+
+      events.forEach((obj: Object): void => {
+        const normalized = normalizeName({ ...obj.info, ...{ id: obj.info.workflow_instanceid } });
+
+        newData = [...newData, {
+          ...normalized,
+          ...{
+            _updated: true,
+            started: obj.time,
+            workflowstatus: obj.info.status,
+            note_count: 0,
+          },
+        }];
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -44,22 +49,24 @@ const modifyOrder: Object = {
   next(
     state: Object = initialState,
     {
-      payload: { id, status, modified },
+      payload: { events },
     }: {
       payload: Object,
-      id: number,
-      status: string,
-      modified: string
+      events: Array<Object>,
     }
   ): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithId(id, {
-        workflowstatus: status,
-        modified,
-        _updated: true,
-      }, updatedData);
+      let newData = updatedData;
+
+      events.forEach((dt: Object): void => {
+        newData = updateItemWithId(dt.id, {
+          workflowstatus: dt.new,
+          modified: dt.time,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -78,14 +85,18 @@ const modifyOrder: Object = {
 const addNoteWebsocket = {
   next(
     state: Object = initialState,
-    { payload: { id, note } }: { payload: Object, id: number, note: Object }
+    { payload: { events } }: { payload: Object, events: Array<Object> }
   ): Object {
     if (state.data.length) {
       const data = state.data.slice();
-      const order = data.find(d => d.id === id);
-      const notes = [...order.notes, note];
-      const noteCount = order.note_count + 1;
-      const newData = updateItemWithId(id, { notes, note_count: noteCount }, data);
+      let newData = data;
+
+      events.forEach((dt: Object): void => {
+        const order = newData.find(d => d.id === dt.id);
+        const notes = [...order.notes, dt.note];
+        const noteCount = order.note_count + 1;
+        newData = updateItemWithId(dt.id, { notes, note_count: noteCount }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }

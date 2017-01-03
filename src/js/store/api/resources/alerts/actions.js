@@ -10,7 +10,7 @@ const markAllAsRead: Function = createAction(
 
 const raised: Function = createAction(
   actions.RAISED,
-  (data: Object, type: string): Object => ({ data, type })
+  (events: Array<Object>): Object => ({ events })
 );
 
 const updateDone: Function = createAction(
@@ -20,7 +20,7 @@ const updateDone: Function = createAction(
 
 const cleared: Function = createAction(
   actions.CLEARED,
-  (id: number): Object => ({ id })
+  (events: Array<Object>): Object => ({ events })
 );
 
 export {
