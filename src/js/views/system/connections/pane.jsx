@@ -10,27 +10,63 @@ import AutoComponent from '../../../components/autocomponent';
 
 const remoteSelector = (state, props) =>
   (state.api.remotes.data.find(a => a.id === props.params.id));
+const attrsSelector = (state, props) => {
+  const type = props.params.type;
+  let attrs;
+
+  switch (type) {
+    case 'datasources': {
+      attrs = [
+        'conntype',
+        'locked',
+        'up',
+        'monitor',
+        'status',
+        'last_check',
+        'type',
+        'user',
+        'db',
+      ];
+
+      break;
+    }
+    case 'qorus': {
+      attrs = [
+        'conntype',
+        'up',
+        'monitor',
+        'status',
+      ];
+
+      break;
+    }
+    default: {
+      attrs = [
+        'conntype',
+        'up',
+        'monitor',
+        'status',
+        'last_check',
+        'type',
+      ];
+
+      break;
+    }
+  }
+
+  return attrs;
+};
 
 const viewSelector = createSelector(
   [
     remoteSelector,
+    attrsSelector,
   ],
-  (remote) => ({
+  (remote, attrs) => ({
     remote,
+    attrs,
   })
 );
-
-const attrs = [
-  'conntype',
-  'locked',
-  'up',
-  'monitor',
-  'status',
-  'last_check',
-  'type',
-  'user',
-  'db',
-];
 
 @connect(viewSelector)
 export default class ConnectionsPane extends Component {
@@ -40,6 +76,7 @@ export default class ConnectionsPane extends Component {
     location: PropTypes.object,
     router: PropTypes.object,
     route: PropTypes.object,
+    attrs: PropTypes.array,
   };
 
   static contextTypes = {
@@ -61,7 +98,7 @@ export default class ConnectionsPane extends Component {
   getData() {
     const data = [];
 
-    for (const attr of attrs) {
+    for (const attr of this.props.attrs) {
       data.push({ attr, value: this.props.remote[attr] });
     }
 
