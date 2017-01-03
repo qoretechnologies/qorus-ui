@@ -176,11 +176,11 @@ export default compose(
     }
   ),
   mapProps(({ date, ...rest }: Props): Object => ({
-    date: date ? formatDate(date).format() : DATES.PREV_DAY,
+    date: date || DATES.PREV_DAY,
     ...rest,
   })),
   mapProps(({ date, deprecated, ...rest }: Props): Object => ({
-    fetchParams: { deprecated, date },
+    fetchParams: { deprecated, date: formatDate(date).format() },
     date,
     deprecated,
     ...rest,
