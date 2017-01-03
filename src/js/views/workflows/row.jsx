@@ -184,5 +184,6 @@ export default compose(
     'showDeprecated',
     'deprecated',
     'expanded',
+    'TOTAL',
   ])
 )(TableRow);
