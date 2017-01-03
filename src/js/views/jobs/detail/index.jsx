@@ -15,8 +15,10 @@ import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
 import DetailPane from '../../../components/pane';
 import Code from '../../../components/code';
+import Loader from '../../../components/loader';
 import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
+import show from '../../../hocomponents/show-if-passed';
 
 const Detail = ({
   location,
@@ -54,14 +56,15 @@ const Detail = ({
         <Pane name="Code">
           {model.code ? (
             <Code
+              selected={{
+                name: `code - ${lib.code[0].name}`,
+                code: lib.code[0].body,
+              }}
               data={lib || {}}
               heightUpdater={getHeight}
             />
           ) : (
-            <Code
-              data={model.lib || {}}
-              heightUpdater={getHeight}
-            />
+            <Loader />
           )}
         </Pane>
         <Pane name="Log">
@@ -82,33 +85,17 @@ const Detail = ({
 );
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
-  componentWillMount() {
+  async componentWillMount() {
     const { model, fetchLibSources } = this.props;
-    fetchLibSources(model);
+    await fetchLibSources(model);
   },
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     const { model } = this.props;
     const { model: nextModel, fetchLibSources } = nextProps;
 
     if (nextModel.id !== model.id) {
-      fetchLibSources(nextModel);
-    }
-  },
-});
-
-const fetchCodeOnMountAndOnChange = lifecycle({
-  componentWillMount() {
-    const { model, fetchCode } = this.props;
-    fetchCode(model);
-  },
-
-  componentWillReceiveProps(nextProps) {
-    const { model } = this.props;
-    const { model: nextModel, fetchCode } = nextProps;
-
-    if (nextModel.id !== model.id) {
-      fetchCode(nextModel);
+      await fetchLibSources(nextModel);
     }
   },
 });
@@ -116,6 +103,7 @@ const fetchCodeOnMountAndOnChange = lifecycle({
 export default compose(
   connect(
     (state: Object, props: Object): Object => ({
+      jobsLoaded: state.api.jobs.sync,
       model: state.api.jobs.data.find((job: Object): boolean => (
         job.id === parseInt(props.paneId, 10))
       ),
@@ -125,13 +113,12 @@ export default compose(
       fetchCode: actions.jobs.fetchCode,
     }
   ),
+  show((props: Object) => props.jobsLoaded),
   pure,
   fetchLibSourceOnMountAndOnChange,
-  fetchCodeOnMountAndOnChange,
   mapProps((props: Object): Object => ({
     ...props,
     lib: {
-      ...props.model.lib,
       ...{
         code: [
           {
@@ -140,6 +127,7 @@ export default compose(
           },
         ],
       },
+      ...props.model.lib,
     },
   })),
   withHandlers({

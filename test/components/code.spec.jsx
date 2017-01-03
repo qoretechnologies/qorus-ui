@@ -30,6 +30,26 @@ describe('Code from "components/code"', () => {
     ],
   };
 
+  it.only('renders the component with preselected data', () => {
+    const wrapper = mount(
+      <Code
+        selected={{
+          name: 'firstArray - Function',
+          code: 'const hello=2;',
+        }}
+        data={data}
+      />
+    );
+
+    expect(wrapper.find('lifecycle(Code)').props().selected.name)
+      .to.eql('firstArray - Function');
+    expect(wrapper.find('lifecycle(Code)').props().selected.code)
+      .to.eql('const hello=2;');
+    expect(wrapper.find('.code-item').first().props().className)
+      .to.eql('code-item selected');
+    expect(wrapper.find('code').first().text()).to.eql('const hello=2;');
+  });
+
   it('renders the component with auto height', () => {
     const wrapper = mount(
       <Code data={{}} />

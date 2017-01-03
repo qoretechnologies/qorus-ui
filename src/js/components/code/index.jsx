@@ -48,7 +48,7 @@ const Code: Function = ({
 
 export default compose(
   withState('height', 'setHeight', 'auto'),
-  withState('selected', 'setSelected', null),
+  withState('selected', 'setSelected', ({ selected }) => selected || null),
   mapProps(({ heightUpdater, setHeight, setSelected, ...rest }): Object => ({
     calculateHeight: () => setHeight((height: string | number) => (
       heightUpdater ? heightUpdater() : height
