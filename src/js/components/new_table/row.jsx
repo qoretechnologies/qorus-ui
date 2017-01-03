@@ -39,7 +39,7 @@ export default class Row extends Component {
   _highlightTimeout = null;
 
   startHighlight: Function = (highlight: boolean): void => {
-    if (highlight) {
+    if (highlight && !this._highlightTimeout) {
       clearTimeout(this._highlightTimeout);
       this._highlightTimeout = setTimeout(this.stopHighlight, 2500);
 
