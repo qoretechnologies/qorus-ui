@@ -263,6 +263,7 @@ export default class OCMDView extends Component {
                     placeholder="Type or select command..."
                     value={this.state.value}
                     ref="command"
+                    autoComplete="off"
                   />
                   <input
                     type="text"
@@ -272,6 +273,7 @@ export default class OCMDView extends Component {
                     onChange={this.handleArgsChange}
                     placeholder="Arguments..."
                     value={this.state.args}
+                    autoComplete="off"
                   />
                   <Button
                     type="submit"
