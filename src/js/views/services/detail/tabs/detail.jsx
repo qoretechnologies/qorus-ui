@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Groups, Group } from 'components/groups';
 import Options from 'components/options';
 import actions from 'store/api/actions';
+import AlertsTable from '../../../../components/alerts_table';
 
 @connect(() => ({}), actions.services)
 export default class DetailTab extends Component {
@@ -31,6 +32,7 @@ export default class DetailTab extends Component {
             <em>{this.props.service.desc}</em>
           </p>
         </div>
+        <AlertsTable alerts={this.props.service.alerts} />
         <Groups>
           {
             (this.props.service.groups || []).map(g => (

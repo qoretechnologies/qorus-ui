@@ -193,7 +193,7 @@ export default class JobsTable extends ServiceTable {
     );
 
     const handleAlertClick = () => {
-      this.props.onDetailClick(model.jobid, 'alerts');
+      this.props.onDetailClick(model.jobid, 'detail');
     };
 
     yield (

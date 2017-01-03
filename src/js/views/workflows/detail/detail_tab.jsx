@@ -3,6 +3,7 @@ import { Groups, Group } from 'components/groups';
 import Options from 'components/options';
 
 import { pureRender } from 'components/utils';
+import AlertsTab from '../../../components/alerts_table';
 import actions from 'store/api/actions';
 
 @pureRender
@@ -29,6 +30,7 @@ export default class DetailTab extends Component {
   render() {
     return (
       <div>
+        <AlertsTab alerts={this.props.workflow.alerts} />
         <Groups>
           {
             (this.props.workflow.groups || []).map(g => (

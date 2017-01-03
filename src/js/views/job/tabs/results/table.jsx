@@ -15,7 +15,6 @@ import showIfPassed from '../../../../hocomponents/show-if-passed';
 import selectableResult from '../../../../hocomponents/jobs/selectable-result';
 import { sortDefaults } from '../../../../constants/sort';
 import actions from '../../../../store/api/actions';
-import { JOB_LABELS } from '../../../../constants/jobs';
 
 const ResultTable = ({
   data = [],

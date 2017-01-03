@@ -247,7 +247,7 @@ export default class ServicesTable extends Component {
     );
 
     const handleAlertClick = () => {
-      this.props.onDetailClick(model.id, 'alerts');
+      this.props.onDetailClick(model.id, 'detail');
     };
 
     yield (

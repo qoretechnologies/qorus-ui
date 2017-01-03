@@ -4,6 +4,7 @@ import pure from 'recompose/compose';
 
 import Options from './options';
 import { Groups, Group } from '../../../../components/groups';
+import AlertsTable from '../../../../components/alerts_table';
 
 const DetailTab = ({ model }: { model: Object }) => (
   <div>
@@ -12,6 +13,7 @@ const DetailTab = ({ model }: { model: Object }) => (
         <em>{model.description}</em>
       </p>
     </div>
+    <AlertsTable alerts={model.alerts} />
     <Groups>
       {
         (model.groups || []).map(g => (

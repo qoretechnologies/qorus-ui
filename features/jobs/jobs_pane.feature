@@ -32,17 +32,11 @@ Feature: Jobs pane
     Then the URL changes to "/groups/anothertest"
 
   Scenario: Alert tab show alerts
-    Given I am on "jobs/all?paneId=110&paneTab=alerts" page
+    Given I am on "jobs/all?paneId=110&paneTab=detail" page
     When "jobs" get loaded
     Then I see "2" ".job-alert" items
-
-  Scenario: Alert tab no alerts
-    Given I am on "jobs/all?paneId=4&paneTab=alerts" page
-    When "jobs" get loaded
-    Then I see ".no-data" item
 
   Scenario: Job detail displays the code item
     Given I am on "jobs/all?paneId=33&paneTab=code" page
     When "jobs" get loaded
     Then 2 library items are shown
-

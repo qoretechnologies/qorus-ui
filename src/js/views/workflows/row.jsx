@@ -169,7 +169,7 @@ export default compose(
       setAutostart(id, value);
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id, 'alerts');
+      openPane(id, 'detail');
     },
   }),
   pure([

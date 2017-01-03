@@ -76,7 +76,7 @@ Feature: jobs table
     Given I am on "jobs" listing
     And "jobs" get loaded
     When I click on the alert icon of "jobtest" "job"
-    Then the complete URL changes to "jobs?paneId=110&paneTab=alerts"
+    Then the complete URL changes to "jobs?paneId=110&paneTab=detail"
 
   Scenario: Row with alerts is shown
     Given I am on "jobs" listing

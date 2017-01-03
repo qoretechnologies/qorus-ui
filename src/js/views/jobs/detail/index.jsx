@@ -10,7 +10,6 @@ import mapProps from 'recompose/mapProps';
 
 import Header from './header';
 import { DetailTab } from './tabs';
-import AlertsTable from '../../../components/alerts_table';
 import MappersTable from '../../../containers/mappers';
 import Tabs, { Pane } from '../../../components/tabs';
 import DetailPane from '../../../components/pane';
@@ -72,9 +71,6 @@ const Detail = ({
             resource={`jobs/${model.id}`}
             location={location}
           />
-        </Pane>
-        <Pane name="Alerts">
-          <AlertsTable alerts={model.alerts} />
         </Pane>
         <Pane name="Mappers">
           <MappersTable mappers={model.mappers} />

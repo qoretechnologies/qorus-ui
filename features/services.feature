@@ -37,7 +37,7 @@ Feature: Services
     Given I am on "services" listing
     And "services" get loaded
     When I click on the alert icon of "test" "service"
-    Then the complete URL changes to "services?paneId=111&paneTab=alerts"
+    Then the complete URL changes to "services?paneId=111&paneTab=detail"
 
   Scenario: Clicking on an alert shows the alert in system\
     Given I am on "services?paneId=111&paneTab=alerts" listing

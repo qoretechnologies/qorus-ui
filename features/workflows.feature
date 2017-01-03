@@ -37,4 +37,4 @@ Feature: Workflows
     Given I am on "workflows" listing
     And "workflows" get loaded
     When I click on the alert icon of "OLDWORKFLOWTEST" "workflow"
-    Then the complete URL changes to "workflows?paneId=1&paneTab=alerts"
+    Then the complete URL changes to "workflows?paneId=1&paneTab=detail"

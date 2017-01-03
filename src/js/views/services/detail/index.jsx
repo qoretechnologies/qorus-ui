@@ -5,7 +5,6 @@ import Tabs, { Pane } from 'components/tabs';
 import DetailPane from 'components/pane';
 import ServicesHeader from './header';
 import { DetailTab, MethodsTab } from './tabs';
-import AlertsTable from '../../../components/alerts_table';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
@@ -95,9 +94,6 @@ export default class ServicesDetail extends Component {
             </Pane>
             <Pane name="Mappers">
               <MappersTable mappers={service.mappers} />
-            </Pane>
-            <Pane name="Alerts">
-              <AlertsTable alerts={service.alerts} />
             </Pane>
           </Tabs>
         </article>
