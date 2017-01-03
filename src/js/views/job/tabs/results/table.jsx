@@ -62,7 +62,7 @@ const ResultTable = ({
           <Td>{idx + 1}</Td>
           <Td>{item.job_instanceid}</Td>
           <Td>
-            <Label style={JOB_LABELS[item.jobstatus]}>{item.jobstatus}</Label>
+            <Label style={`label status-${item.jobstatus.toLowerCase()}`}>{item.jobstatus}</Label>
           </Td>
           <Td />
           <Td className="name">{item.name}</Td>
