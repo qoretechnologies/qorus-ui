@@ -30,7 +30,7 @@ describe('Code from "components/code"', () => {
     ],
   };
 
-  it.only('renders the component with preselected data', () => {
+  it('renders the component with preselected data', () => {
     const wrapper = mount(
       <Code
         selected={{

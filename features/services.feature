@@ -40,7 +40,7 @@ Feature: Services
     Then the complete URL changes to "services?paneId=111&paneTab=detail"
 
   Scenario: Clicking on an alert shows the alert in system\
-    Given I am on "services?paneId=111&paneTab=alerts" listing
+    Given I am on "services?paneId=111&paneTab=detail" listing
     And "services" get loaded
     When I click on the alert item
     Then the complete URL changes to "/system/alerts/ongoing?paneId=SERVICE:111"
