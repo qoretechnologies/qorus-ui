@@ -211,7 +211,13 @@ $status-light-gray: lighten($status-gray, 30);
 }
 
 .diagram-view {
+  overflow-x: auto;
+  overflow-y: hidden;
   width: 42%;
+
+  .diagram-inner {
+    min-width: 500px;
+  }
 }
 
 .order-info-view {

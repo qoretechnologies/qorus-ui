@@ -957,7 +957,7 @@ export default class StepsTab extends Component {
     const { tooltip, left, top, width, height } = this.state;
 
     return (
-      <div>
+      <div className="diagram-inner">
         { tooltip && (
           <div
             className="svg-tooltip"
