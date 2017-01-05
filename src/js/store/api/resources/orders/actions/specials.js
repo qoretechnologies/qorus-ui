@@ -68,6 +68,37 @@ const orderAction: Function = createAction(
   }
 );
 
+const scheduleAction: Function = createAction(
+  'ORDERS_SCHEDULE',
+  async (
+    id: number,
+    date: string,
+    optimistic: boolean,
+    origStatus: string,
+    dispatch: Function,
+  ): Object => {
+    if (optimistic) return { id, date };
+
+    const result = await fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}?action=reschedule&date=${date}`,
+      {},
+      true
+    );
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {
+      id,
+      date,
+      origStatus,
+      error: result.err,
+    };
+  }
+);
+
 const action: Function = (
   actn: string,
   id: number,
@@ -77,6 +108,17 @@ const action: Function = (
 ): void => {
   dispatch(orderAction(actn, id, false, origStatus, dispatch));
   dispatch(orderAction(actn, id, true));
+};
+
+const schedule: Function = (
+  id: number,
+  date: string,
+  origStatus: string,
+): Function => (
+  dispatch: Function
+): void => {
+  dispatch(scheduleAction(id, date, false, origStatus, dispatch));
+  dispatch(scheduleAction(id, date, true));
 };
 
 const skipStep: Function = createAction(
@@ -116,4 +158,6 @@ export {
   action,
   orderAction,
   skipStep,
+  schedule,
+  scheduleAction,
 };

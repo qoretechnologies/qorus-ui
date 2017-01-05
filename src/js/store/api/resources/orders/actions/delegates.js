@@ -1,20 +1,5 @@
 import { lockOrder, unlockOrder, addNote as addNoteFunc } from './helpers';
 
-export function reschedule(actions) {
-  return (order, date) => dispatch => {
-    dispatch(actions.orders.action({
-      body: JSON.stringify({
-        action: 'schedule',
-        date,
-        // XXX This value will update state and is ignored by Service
-        // REST API
-        workflowstatus: 'SCHEDULED',
-        scheduled: date,
-      }),
-    }, order.id));
-  };
-}
-
 export function lock(actions) {
   return (order, note, username) => dispatch => {
     dispatch(actions.orders.action({

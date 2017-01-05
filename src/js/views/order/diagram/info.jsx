@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import includes from 'lodash/includes';
 
 import Table, { Section, Row, Cell, EditableCell } from 'components/table';
 import Date from 'components/date';
 import Datepicker from 'components/datepicker';
 import AutoComponent from 'components/autocomponent';
 import Error from '../../workflow/tabs/list/modals/error';
-
 import { pureRender } from 'components/utils';
-
 import { getStatusLabel } from '../../../helpers/orders';
 import actions from 'store/api/actions';
+import { ORDER_ACTIONS } from '../../../constants/orders';
 
 @pureRender
 export default class DiagramInfoTable extends Component {
@@ -44,7 +44,7 @@ export default class DiagramInfoTable extends Component {
       const date = moment(d).format();
 
       this.props.dispatch(
-        actions.orders.reschedule(this.props.data, date)
+        actions.orders.schedule(this.props.data.id, date, this.props.data.workflowstatus)
       );
     }
   };
@@ -55,6 +55,7 @@ export default class DiagramInfoTable extends Component {
 
   render() {
     const { ...data } = this.props.data;
+    const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
 
     return (
       <Table className="table table-bordered table-condensed">
@@ -102,11 +103,15 @@ export default class DiagramInfoTable extends Component {
           <Row>
             <Cell tag="th"> Scheduled </Cell>
             <Cell>
-              <Datepicker
-                date={data.scheduled}
-                onApplyDate={this.handleDateChange}
-                futureOnly
-              />
+              { includes(orderActions, 'schedule') ? (
+                <Datepicker
+                  date={data.scheduled}
+                  onApplyDate={this.handleDateChange}
+                  futureOnly
+                />
+              ) : (
+                <Date date={data.scheduled} />
+              )}
             </Cell>
             <Cell tag="th"> Synchronous </Cell>
             <Cell>

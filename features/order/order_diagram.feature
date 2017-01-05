@@ -24,6 +24,16 @@ Feature: Tests for the Diagram tab
     And diagram, tables and error pane get loaded
     Then there are "51" errors shown
 
+  Scenario: Order can be rescheduled
+    Given I am on order "3663" and "Diagram" tab
+    And diagram, tables and error pane get loaded
+    Then I see "1" ".datepicker-wrapper" items
+
+  Scenario: Order cannot be rescheduled
+    Given I am on order "31380" and "Diagram" tab
+    And diagram, tables and error pane get loaded
+    Then I see "0" ".datepicker-wrapper" items
+
   Scenario: Filtering errors based on severity
     Given I am on order "31380" and "Diagram" tab
     And diagram, tables and error pane get loaded

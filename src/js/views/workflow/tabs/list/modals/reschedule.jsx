@@ -14,7 +14,7 @@ import actions from 'store/api/actions';
 @connect(
   null,
   dispatch => bindActionCreators({
-    schedule: actions.orders.reschedule,
+    schedule: actions.orders.schedule,
   }, dispatch)
 )
 export default class extends Component {
@@ -34,7 +34,7 @@ export default class extends Component {
     if (moment().isBefore(d)) {
       const date = moment(d, DATE_FORMATS.PROP).format(DATE_FORMATS.PROP);
 
-      this.props.schedule(this.props.data, date);
+      this.props.schedule(this.props.data.id, date, this.props.data.workflowstatus);
       this.props.onClose();
     } else {
       this.setState({

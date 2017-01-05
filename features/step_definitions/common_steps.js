@@ -366,9 +366,12 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^I see "([^"]*)" "([^"]*)" items$/, async function(count, selector) {
-    await this.waitForElement(selector);
-    console.log(parseInt(count, 10));
-    this.browser.assert.elements(selector, { exactly: parseInt(count, 10) });
+    if (parseInt(count, 10) === 0) {
+      this.browser.assert.elements(selector, { exactly: 0 });
+    } else {
+      await this.waitForElement(selector);
+      this.browser.assert.elements(selector, { exactly: parseInt(count, 10) });
+    }
   });
 
   this.Then(/^I do not see "([^"]*)" item$/, async function(selector) {

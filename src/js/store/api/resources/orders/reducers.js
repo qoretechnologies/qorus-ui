@@ -204,6 +204,27 @@ const skipStep: Object = {
   },
 };
 
+const schedule: Object = {
+  next(
+    state: Object,
+    { payload: { id, date, error, origStatus } }: {
+      payload: Object,
+      id: number,
+      date: string,
+      error: boolean,
+      origStatus: string,
+    }
+  ): Object {
+    const data = [...state.data];
+    const newData = updateItemWithId(id, {
+      workflowstatus: error ? origStatus : 'SCHEDULED',
+      scheduled: error ? null : date,
+    }, data);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -219,4 +240,5 @@ export {
   unsync as UNSYNC,
   orderAction as ORDERACTION,
   skipStep as SKIPSTEP,
+  schedule as SCHEDULE,
 };
