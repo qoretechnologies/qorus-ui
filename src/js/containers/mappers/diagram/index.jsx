@@ -5,7 +5,7 @@ import pure from 'recompose/pure';
 import mapProps from 'recompose/mapProps';
 import withProps from 'recompose/withProps';
 import withState from 'recompose/withState';
-import includes from 'lodash/includes';
+// import includes from 'lodash/includes';
 
 import Header from './header';
 import SelectableLabel from './selectable-label';
@@ -13,7 +13,7 @@ import FieldDetail from './field-detail';
 import Detail from './detail';
 import Tooltip from './tooltip';
 import Connection from './connection';
-import { formatFieldSource } from '../../../helpers/mapper';
+// import { formatFieldSource } from '../../../helpers/mapper';
 
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
   Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
