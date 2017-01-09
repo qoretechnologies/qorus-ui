@@ -5,11 +5,11 @@ export default function DynamicView(props) {
   return (
     <TreeView
       data="dynamicdata"
-      params={props.params}
+      order={props.order}
     />
   );
 }
 
 DynamicView.propTypes = {
-  params: PropTypes.object,
+  order: PropTypes.object,
 };

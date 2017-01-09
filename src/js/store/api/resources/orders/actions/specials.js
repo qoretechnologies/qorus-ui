@@ -21,6 +21,15 @@ const addNoteWebsocket: Function = createAction(
   (events: Array<Object>) => ({ events })
 );
 
+const updateErrors: Function = createAction(
+  'ORDERS_UPDATEERRORS',
+  async (id) => {
+    const errors = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`);
+
+    return { id, errors }
+  }
+)
+
 const updateDone = createAction(
   'ORDERS_UPDATEDONE',
   (id: number) => ({ id })
@@ -160,4 +169,5 @@ export {
   skipStep,
   schedule,
   scheduleAction,
+  updateErrors,
 };

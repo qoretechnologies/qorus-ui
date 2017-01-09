@@ -1,49 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 import Row from './row';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
-
-const selector = createSelector(
-  [
-    orderSelector,
-  ], (order) => ({
+@compose(
+  mapProps(({ order, ...rest }) => ({
     hierarchy: order.HierarchyInfo,
     order,
-  })
-);
-
-@compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
-  checkNoData((props) => props.hierarchy && Object.keys(props.hierarchy).length)
+    ...rest,
+  })),
+  checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length)
 )
 export default class HierarchyView extends Component {
   static propTypes = {
-    params: PropTypes.object.isRequired,
     hierarchy: PropTypes.object,
     order: PropTypes.object,
     compact: PropTypes.bool,
   };
-
-  componentDidMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-  }
 
   groupHierarchy() {
     const groups = {};

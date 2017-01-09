@@ -225,6 +225,24 @@ const schedule: Object = {
   },
 };
 
+const updateErrors: Object = {
+  next(
+    state: Object,
+    { payload: { id, errors } }: {
+      payload: Object,
+      id: number,
+      errors: Array<Object>,
+    }
+  ): Object {
+    const data = [...state.data];
+    const newData = updateItemWithId(id, {
+      ErrorInstances: errors
+    }, data);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -241,4 +259,5 @@ export {
   orderAction as ORDERACTION,
   skipStep as SKIPSTEP,
   schedule as SCHEDULE,
+  updateErrors as UPDATEERRORS,
 };

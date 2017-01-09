@@ -6,6 +6,14 @@ import ErrorRow from './row';
 import { sortTable } from 'helpers/table';
 import { pureRender } from 'components/utils';
 
+const sortData = {
+  sortBy: 'created',
+  sortByKey: {
+    ignoreCase: true,
+    direction: -1,
+  },
+};
+
 @pureRender
 export default class DiagramErrorsTable extends Component {
   static propTypes = {
@@ -15,13 +23,6 @@ export default class DiagramErrorsTable extends Component {
   };
 
   componentWillMount() {
-    const sortData = {
-      sortBy: 'created',
-      sortByKey: {
-        ignoreCase: true,
-        direction: -1,
-      },
-    };
     const data = sortTable(this.props.data, sortData);
 
     this.setState({
@@ -32,8 +33,10 @@ export default class DiagramErrorsTable extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data) {
+      const data = sortTable(nextProps.data, sortData);
+
       this.setState({
-        data: nextProps.data,
+        data,
       });
     }
   }

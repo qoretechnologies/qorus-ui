@@ -1,52 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 import Row from './row';
 import { groupInstances } from '../../../helpers/orders';
-import actions from '../../../store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
-
-const selector = createSelector(
-  [
-    orderSelector,
-  ], (order) => ({
-    steps: order.StepInstances,
-    errors: order.ErrorInstances,
-    order,
-  })
-);
-
 @compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
-  checkNoData((props) => props.steps && Object.keys(props.steps).length)
+  mapProps(({ order, ...rest }): Object => ({
+    steps: order.StepInstances,
+    order,
+    ...rest,
+  })),
+  checkNoData(({ steps }) => steps && Object.keys(steps).length)
 )
 export default class StepsView extends Component {
   static propTypes = {
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
     steps: PropTypes.array,
-    errors: PropTypes.array,
     order: PropTypes.object,
   };
-
-  componentDidMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-  }
 
   renderTableBody() {
     const data = groupInstances(this.props.steps);

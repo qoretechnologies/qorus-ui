@@ -245,6 +245,12 @@ const handleEvent = (url, data, dispatch, state) => {
               },
               dispatch
             );
+
+            // We are on orders/:id, we should only update the errors
+            // on the detail page, not on the orders list
+            if (state.api.orders.data.length === 1) {
+              dispatch(orders.updateErrors(info.workflow_instanceid));
+            }
           }
         } else if (state.api.workflows.sync) {
           pipeline(
