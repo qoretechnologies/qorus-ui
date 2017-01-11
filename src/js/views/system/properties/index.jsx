@@ -97,6 +97,7 @@ export default class PropertiesView extends Component {
         onClose={this.props.closeModal}
         onSubmit={onSubmit}
         data={data}
+        collection={this.props.collection}
       />
     );
   };
