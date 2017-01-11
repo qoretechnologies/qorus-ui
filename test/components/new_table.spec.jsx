@@ -5,7 +5,7 @@ import spies from 'chai-spies';
 
 import { Table, Thead, Tbody, Tfooter, Tr, Th, Td } from '../../src/js/components/new_table';
 
-describe.only('Table, Sections, Row and Cell from components/table', () => {
+describe('Table, Sections, Row and Cell from components/table', () => {
   before(() => {
     chai.use(spies);
   });
