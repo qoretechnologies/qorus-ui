@@ -8,11 +8,22 @@ type Props = {
   children: any,
 }
 
-let Section: Function = ({ type: Tag, children }: Props): React.Element<any> => (
-  <Tag>
-    { children }
-  </Tag>
-);
+let Section: Function = ({ type: Tag, children }: Props): React.Element<any> => {
+  if (Tag === 'thead') {
+    return (
+      <Tag>
+        { React.cloneElement(children, { fixed: true })}
+        { children }
+      </Tag>
+    );
+  }
+
+  return (
+    <Tag>
+      { children }
+    </Tag>
+  );
+};
 
 Section = updateOnlyForKeys([
   'children',

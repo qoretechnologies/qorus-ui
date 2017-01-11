@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import React, { Component } from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
@@ -16,27 +16,64 @@ type Props = {
   onSortChange?: Function,
   onClick?: Function,
   sortData?: Object,
+  fixed?: boolean,
 }
 
-const Th: Function = ({
-  children,
-  handleClick,
-  className,
-  direction,
-}: Props): React.Element<any> => (
-  <th
-    className={
-      classNames({
-        sort: direction,
-        'sort-asc': direction && direction > 0,
-        'sort-desc': direction && direction < 0,
-      }, className)
+class Th extends Component {
+  props: Props;
+
+  state: {
+    width: ?number,
+  } = {
+    width: null,
+  };
+
+  componentWillReceiveProps(nextProps: Props): void {
+    if (nextProps.fixed !== this.props.fixed && !nextProps.fixed) {
+      this.setWidth();
     }
-    onClick={handleClick}
-  >
-    { children }
-  </th>
-);
+  }
+
+  _col: ?HTMLElement = null;
+
+  handleRef: Function = (ref: Object): void => {
+    this._col = ref;
+
+    this.setWidth();
+  };
+
+  setWidth: Function = () => {
+    if (this._col) {
+      const { width } = this._col.getBoundingClientRect();
+
+      this.setState({ width });
+    }
+  }
+
+  render() {
+    const { direction, handleClick, children, className } = this.props;
+    const { width } = this.state;
+
+    return (
+      <th
+        ref={this.handleRef}
+        className={
+          classNames({
+            sort: direction,
+            'sort-asc': direction && direction > 0,
+            'sort-desc': direction && direction < 0,
+          }, className)
+        }
+        style={{
+          width,
+        }}
+        onClick={handleClick}
+      >
+        { children }
+      </th>
+    );
+  }
+}
 
 export default compose(
   withHandlers({
@@ -56,5 +93,6 @@ export default compose(
     'className',
     'sortData',
     'direction',
+    'fixed',
   ])
 )(Th);

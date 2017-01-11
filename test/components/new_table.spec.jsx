@@ -5,7 +5,7 @@ import spies from 'chai-spies';
 
 import { Table, Thead, Tbody, Tfooter, Tr, Th, Td } from '../../src/js/components/new_table';
 
-describe('Table, Sections, Row and Cell from components/table', () => {
+describe.only('Table, Sections, Row and Cell from components/table', () => {
   before(() => {
     chai.use(spies);
   });
@@ -64,7 +64,9 @@ describe('Table, Sections, Row and Cell from components/table', () => {
     it('renders sections', () => {
       const wrapper = mount(
         <Table>
-          <Thead />
+          <Thead>
+            <tr />
+          </Thead>
           <Tbody />
           <Tfooter />
         </Table>
@@ -90,7 +92,19 @@ describe('Table, Sections, Row and Cell from components/table', () => {
         </Table>
       );
 
-      expect(wrapper.find('tr')).to.have.length(3);
+      expect(wrapper.find('tr')).to.have.length(4);
+    });
+
+    it('renders 2 rows inside thead, one with fixed: true', () => {
+      const wrapper = mount(
+        <Table>
+          <Thead>
+            <Tr />
+          </Thead>
+        </Table>
+      );
+
+      expect(wrapper.find('tr')).to.have.length(2);
     });
   });
 

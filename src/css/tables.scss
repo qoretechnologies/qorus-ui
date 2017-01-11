@@ -18,6 +18,16 @@ table.table--data {
     background-color: #deffdf !important;
   }
 
+  tr.row-fixed {
+    position: fixed;
+    z-index: 201;
+    background-color: #fff;
+  }
+
+  tr.row-hidden {
+    visibility: hidden;
+  }
+
   > thead,
   > tbody,
   > tfoot {
