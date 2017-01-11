@@ -21,7 +21,9 @@ type Props = {
   selected?: Array<?string>,
   show?: ?boolean,
   className?: string,
-}
+  diabled?: boolean,
+  onHide?: Function,
+};
 
 @pureRender
 export default class Dropdown extends Component {
@@ -126,9 +128,7 @@ export default class Dropdown extends Component {
     const el: Object = ReactDOM.findDOMNode(this.refs.dropdown);
 
     if (el && !el.contains(event.target)) {
-      this.setState({
-        showDropdown: false,
-      });
+      this.hideToggle();
     }
   };
 
@@ -169,9 +169,13 @@ export default class Dropdown extends Component {
     if (!event.defaultPrevented) {
       event.preventDefault();
 
-      this.setState({
-        showDropdown: !this.state.showDropdown,
-      });
+      const showDropdown = !this.state.showDropdown;
+
+      if (!showDropdown && this.props.onHide) {
+        this.props.onHide();
+      }
+
+      this.setState({ showDropdown });
     }
   };
 
@@ -193,6 +197,8 @@ export default class Dropdown extends Component {
    * based on the current state
    */
   hideToggle: Function = (): void => {
+    if (this.props.onHide) this.props.onHide();
+
     this.setState({
       showDropdown: false,
     });
@@ -202,7 +208,7 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   renderDropdown(): ?React.Element<any> {
-    if (this.state.showDropdown) {
+    if (this.state.showDropdown && !this.props.disabled) {
       return (
         <ul
           className={classNames('dropdown-menu', 'above', 'show')}
@@ -219,7 +225,7 @@ export default class Dropdown extends Component {
 
   renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c, index) => {
-      if (c.type !== Item && c.type !== CustomItem) return undefined;
+      if (!c || (c.type !== Item && c.type !== CustomItem)) return null;
 
       if (c.type === CustomItem) {
         return c;
@@ -249,13 +255,14 @@ export default class Dropdown extends Component {
 
   renderDropdownControl(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c) => {
-      if (c.type !== Control) return undefined;
+      if (!c || c.type !== Control) return undefined;
 
       return (
         <c.type
           id={this.props.id}
           onClick={this.handleToggleClick}
           onKeyPress={this.handleToggleKeyPress}
+          disabled={this.props.disabled}
           {...c.props}
         >
           {this.getToggleTitle(c.props.children)}
@@ -299,6 +306,8 @@ Dropdown.propTypes = {
   onSubmit: PropTypes.func,
   submitLabel: PropTypes.string,
   selected: PropTypes.array,
+  disabled: PropTypes.bool,
+  onHide: PropTypes.func,
 };
 
 export {
@@ -306,4 +315,3 @@ export {
   CustomItem,
   Control,
 };
-
