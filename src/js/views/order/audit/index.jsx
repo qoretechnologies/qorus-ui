@@ -6,7 +6,6 @@ import compose from 'recompose/compose';
 import AuditTable from './table';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import { sortTable } from 'helpers/table';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
 const orderSelector = (state, props) => props.order;

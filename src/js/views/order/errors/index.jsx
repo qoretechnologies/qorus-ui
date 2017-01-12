@@ -8,10 +8,9 @@ import { Control as Button } from 'components/controls';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import CSVModal from './csv';
 import { sortTable, generateCSV } from 'helpers/table';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
-const orderSelector = (state, props) => props.order
+const orderSelector = (state, props) => props.order;
 
 const transformErrors = order => {
   if (!order.ErrorInstances) return null;

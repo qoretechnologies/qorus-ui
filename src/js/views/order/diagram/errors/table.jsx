@@ -48,18 +48,18 @@ export default class DiagramErrorsTable extends Component {
       direction *= -1;
     }
 
-    const sortData = {
+    const sort = {
       sortBy,
       sortByKey: {
         ignoreCase: true,
         direction,
       },
     };
-    const data = sortTable(this.state.data, sortData);
+    const data = sortTable(this.state.data, sort);
 
     this.setState({
       data,
-      sortData,
+      sort,
     });
   };
 

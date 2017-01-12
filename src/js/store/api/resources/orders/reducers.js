@@ -236,7 +236,7 @@ const updateErrors: Object = {
   ): Object {
     const data = [...state.data];
     const newData = updateItemWithId(id, {
-      ErrorInstances: errors
+      ErrorInstances: errors,
     }, data);
 
     return { ...state, ...{ data: newData } };

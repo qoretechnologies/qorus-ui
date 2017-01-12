@@ -26,9 +26,9 @@ const updateErrors: Function = createAction(
   async (id) => {
     const errors = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`);
 
-    return { id, errors }
+    return { id, errors };
   }
-)
+);
 
 const updateDone = createAction(
   'ORDERS_UPDATEDONE',
