@@ -24,6 +24,10 @@ table.table--data {
     background-color: #fff;
   }
 
+  tr.row-alert {
+    background-color: lighten($status-light-red, 20);
+  }
+
   tr.row-hidden {
     visibility: hidden;
   }

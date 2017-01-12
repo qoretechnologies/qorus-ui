@@ -94,18 +94,6 @@ describe('Table, Sections, Row and Cell from components/table', () => {
 
       expect(wrapper.find('tr')).to.have.length(4);
     });
-
-    it('renders 2 rows inside thead, one with fixed: true', () => {
-      const wrapper = mount(
-        <Table>
-          <Thead>
-            <Tr />
-          </Thead>
-        </Table>
-      );
-
-      expect(wrapper.find('tr')).to.have.length(2);
-    });
   });
 
   describe('Tr', () => {

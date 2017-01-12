@@ -5,8 +5,8 @@ import OrderControls from '../workflow/tabs/list/controls';
 import Lock from '../workflow/tabs/list/modals/lock';
 import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
-
-import { pureRender } from 'components/utils';
+import Alert from '../../components/alert';
+import { pureRender } from '../../components/utils';
 
 @pureRender
 export default class OrderHeader extends Component {
@@ -95,34 +95,47 @@ export default class OrderHeader extends Component {
 
   render() {
     return (
-      <div className="row order-header">
-        <div className="col-xs-12">
-          <h3 className="detail-title pull-left">
-            <Link
-              to={`/workflow/${this.props.data.workflowid}/list/All/${this.props.linkDate}`}
-            >
-              <i className="fa fa-angle-left" />
-            </Link>
-            {' '}
-            { this.renderIcon() }
-            {' '}
-            {this.props.data.name}
-            <small>
+      <div className="order-header">
+        <div className="row">
+          <div className="col-xs-12">
+            <h3 className="detail-title pull-left">
+              <Link
+                to={`/workflow/${this.props.data.workflowid}/list/All/${this.props.linkDate}`}
+              >
+                <i className="fa fa-angle-left" />
+              </Link>
               {' '}
-              {this.props.data.version}
+              { this.renderIcon() }
               {' '}
-              ({this.props.data.id})
-            </small>
-          </h3>
-          <div className="order-actions pull-right">
-            <OrderControls
-              data={this.props.data}
-              onScheduleClick={this.handleScheduleClick}
-              showText
-            />
-            { this.renderLock() }
+              {this.props.data.name}
+              <small>
+                {' '}
+                {this.props.data.version}
+                {' '}
+                ({this.props.data.id})
+              </small>
+            </h3>
+            <div className="order-actions pull-right">
+              <OrderControls
+                data={this.props.data}
+                onScheduleClick={this.handleScheduleClick}
+                showText
+              />
+              { this.renderLock() }
+            </div>
           </div>
         </div>
+        { this.props.workflow.has_alerts && (
+          <Alert bsStyle="danger">
+            <i className="fa fa-warning" />
+            <strong> Warning: </strong> the parent workflow has alerts raised against it
+            that may prevent it from operating properly.
+            {' '}
+            <Link to={`/workflows?date=${this.props.linkDate}&paneId=${this.props.workflow.id}`}>
+              View alerts ({this.props.workflow.alerts.length}).
+            </Link>
+          </Alert>
+        )}
       </div>
     );
   }

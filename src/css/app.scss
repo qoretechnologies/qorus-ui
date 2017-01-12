@@ -6,6 +6,18 @@
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
+$status-green: #418e22;
+$status-light-green: lighten($status-green, 30);
+$status-red: #d11f1f;
+$status-light-red: lighten($status-red, 30);
+$status-yellow: #e5d957;
+$status-light-yellow: lighten($status-yellow, 30);
+$status-orange: #f29a3c;
+$status-light-orange: lighten($status-orange, 20);
+$status-blue: #3197e0;
+$status-light-blue: lighten($status-blue, 30);
+$status-gray: #696969;
+$status-light-gray: lighten($status-gray, 30);
 
 @import './buttons';
 @import './tables';

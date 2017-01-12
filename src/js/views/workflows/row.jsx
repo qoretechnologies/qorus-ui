@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
 import Checkbox from '../../components/checkbox';
@@ -64,7 +65,10 @@ const TableRow: Function = ({
   ...rest
 }: Props): React.Element<any> => (
   <Tr
-    className={isActive ? 'info' : ''}
+    className={classNames({
+      info: isActive,
+      'row-alert': hasAlerts,
+    })}
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
   >

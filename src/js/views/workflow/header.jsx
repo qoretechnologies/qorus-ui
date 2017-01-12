@@ -5,6 +5,7 @@ import WorkflowControls from '../workflows/controls';
 import AutoStart from '../../components/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
+import Alert from '../../components/alert';
 
 import { ORDER_STATES } from '../../constants/orders';
 import actions from 'store/api/actions';
@@ -85,6 +86,17 @@ export default class DetailHeader extends Component {
             {this.renderGroups()}
           </div>
         </div>
+        { this.props.data.has_alerts && (
+          <Alert bsStyle="danger">
+            <i className="fa fa-warning" />
+            <strong> Warning: </strong> this workflow has alerts raised against it
+            that may prevent it from operating properly.
+            {' '}
+            <Link to={`/workflows?date=${this.props.date}&paneId=${this.props.data.id}`}>
+              View alerts ({this.props.data.alerts.length}).
+            </Link>
+          </Alert>
+        )}
       </div>
     );
   }
