@@ -6,7 +6,7 @@ import AutoStart from '../../components/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
 import Alert from '../../components/alert';
-
+import Icon from '../../components/icon';
 import { ORDER_STATES } from '../../constants/orders';
 import actions from 'store/api/actions';
 
@@ -18,6 +18,12 @@ export default class DetailHeader extends Component {
 
   static contextTypes = {
     dispatch: PropTypes.func,
+  };
+
+  handleBackClick = (ev) => {
+    ev.preventDefault();
+
+    history.go(-1);
   };
 
   setAutostart = (value) => {
@@ -50,11 +56,9 @@ export default class DetailHeader extends Component {
         <div className="row">
           <div className="col-xs-12">
             <h3 className="detail-title pull-left">
-              <Link
-                to={`/workflows?date=${this.props.date}`}
-              >
-                <i className="fa fa-angle-left" />
-              </Link>
+              <a href="#" onClick={this.handleBackClick}>
+                <Icon icon="angle-left" />
+              </a>
               {' '}
               {this.props.data.name}
               {' '}

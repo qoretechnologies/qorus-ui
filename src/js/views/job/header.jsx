@@ -1,17 +1,18 @@
 /* @flow */
 import React from 'react';
-import { Link } from 'react-router';
+import withHandlers from 'recompose/withHandlers';
 
-const JobHeader = ({ job, location }: { job: Object, location: Object }) => (
+import Icon from '../../components/icon';
+
+type Props = { job: Object, handleBackClick: Function };
+
+const JobHeader = ({ job, handleBackClick }: Props) => (
   <div className="job-header row">
     <div className="col-xs-12">
       <h3 className="detail-title pull-left">
-        <Link
-          className="go-back"
-          to={`/jobs${location.query.date && `/${location.query.date}` || ''}`}
-        >
-          <i className="fa fa-angle-left" />
-        </Link>
+        <a href="#" onClick={handleBackClick}>
+          <Icon icon="angle-left" />
+        </a>
         {' '}
         {job.name}
         {' '}
@@ -23,4 +24,10 @@ const JobHeader = ({ job, location }: { job: Object, location: Object }) => (
   </div>
 );
 
-export default JobHeader;
+export default withHandlers({
+  handleBackClick: (): Function => (ev: EventHandler): void => {
+    ev.preventDefault();
+
+    history.go(-1);
+  },
+})(JobHeader);

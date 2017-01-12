@@ -7,6 +7,7 @@ import Reschedule from '../workflow/tabs/list/modals/reschedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
 import Alert from '../../components/alert';
 import { pureRender } from '../../components/utils';
+import Icon from '../../components/icon';
 
 @pureRender
 export default class OrderHeader extends Component {
@@ -81,6 +82,12 @@ export default class OrderHeader extends Component {
     );
   }
 
+  handleBackClick = (ev) => {
+    ev.preventDefault();
+
+    history.go(-1);
+  };
+
   renderIcon() {
     if (this.props.workflow.enabled) {
       return (
@@ -99,11 +106,9 @@ export default class OrderHeader extends Component {
         <div className="row">
           <div className="col-xs-12">
             <h3 className="detail-title pull-left">
-              <Link
-                to={`/workflow/${this.props.data.workflowid}/list/All/${this.props.linkDate}`}
-              >
-                <i className="fa fa-angle-left" />
-              </Link>
+              <a href="#" onClick={this.handleBackClick}>
+                <Icon icon="angle-left" />
+              </a>
               {' '}
               { this.renderIcon() }
               {' '}
