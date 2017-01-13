@@ -234,12 +234,47 @@ const updateErrors: Object = {
       errors: Array<Object>,
     }
   ): Object {
+    if (errors.err) return state;
+
     const data = [...state.data];
     const newData = updateItemWithId(id, {
       ErrorInstances: errors,
     }, data);
 
     return { ...state, ...{ data: newData } };
+  },
+};
+
+const updateHierarchy: Object = {
+  next(
+    state: Object,
+    { payload: { id, targetId, status } }: {
+      payload: Object,
+      id: number,
+      targetId: number,
+      status: string,
+    }
+  ): Object {
+    const data = [...state.data];
+    const order = data.find((ord: Object): boolean => ord.id === id);
+
+    if (order) {
+      const hierarchy = {
+        ...order.HierarchyInfo,
+        ...{ [targetId]: {
+          ...order.HierarchyInfo[targetId],
+          ...{ workflowstatus: status },
+        } },
+      };
+
+      const newData = updateItemWithId(id, {
+        HierarchyInfo: hierarchy,
+      }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
   },
 };
 
@@ -260,4 +295,5 @@ export {
   skipStep as SKIPSTEP,
   schedule as SCHEDULE,
   updateErrors as UPDATEERRORS,
+  updateHierarchy as UPDATEHIERARCHY,
 };

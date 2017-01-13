@@ -234,6 +234,17 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'WORKFLOW_STATUS_CHANGED':
         if (state.api.orders.sync) {
           const order = state.api.orders.data.find(ord => ord.id === info.workflow_instanceid);
+          const ordersCount = state.api.orders.data.length;
+          const currentOrder = state.api.orders.data[0];
+
+          if (ordersCount === 1 && currentOrder.HierarchyInfo[info.workflow_instanceid]) {
+            dispatch(orders.updateHierarchy(
+              currentOrder.id,
+              info.workflow_instanceid,
+              info.info.new
+            ));
+          }
+
           if (order) {
             pipeline(
               eventstr,
@@ -248,7 +259,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
             // We are on orders/:id, we should only update the errors
             // on the detail page, not on the orders list
-            if (state.api.orders.data.length === 1) {
+            if (ordersCount === 1 && info.info.new === 'ERROR') {
               dispatch(orders.updateErrors(info.workflow_instanceid));
             }
           }

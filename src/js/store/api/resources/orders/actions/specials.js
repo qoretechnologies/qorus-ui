@@ -21,10 +21,15 @@ const addNoteWebsocket: Function = createAction(
   (events: Array<Object>) => ({ events })
 );
 
+const updateHierarchy: Function = createAction(
+  'ORDERS_UPDATEHIERARCHY',
+  (id, targetId, status) => console.log('UPDATING HIERARCHY') || ({ id, targetId, status })
+);
+
 const updateErrors: Function = createAction(
   'ORDERS_UPDATEERRORS',
   async (id) => {
-    const errors = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`);
+    const errors = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`, null, true);
 
     return { id, errors };
   }
@@ -170,4 +175,5 @@ export {
   schedule,
   scheduleAction,
   updateErrors,
+  updateHierarchy,
 };

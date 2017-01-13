@@ -56,7 +56,7 @@ export default class App extends Component {
    */
   componentWillMount() {
     this.setupStore();
-    this.setupDevTools();
+    // this.setupDevTools();
   }
 
 
