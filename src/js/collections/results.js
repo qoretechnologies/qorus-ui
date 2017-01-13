@@ -3,6 +3,7 @@ define(function (require) {
       _        = require('underscore'),
       Qorus    = require('qorus/qorus'),
       Model    = require('models/result'),
+      Dispatcher = require('qorus/dispatcher'),
       Collection;
 
   Collection = Qorus.SortedCollection.extend({
