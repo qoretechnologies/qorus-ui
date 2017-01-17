@@ -40,7 +40,7 @@ module.exports = function servicesTableSteps() {
     this.browser.assert.elements(th, 1);
 
     tableData.forEach((row, index) => {
-      this.browser.assert.text(row.cells[5], sorted[index].name);
+      this.browser.assert.text(row.cells[7], sorted[index].name);
     });
   });
 };

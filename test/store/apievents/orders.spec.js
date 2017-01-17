@@ -21,6 +21,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                   id: 1,
                   note_count: 0,
                   notes: [],
+                  HierarchyInfo: {},
                 },
               ],
               sync: true,
@@ -136,6 +137,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                   name: 'TEST WORKFLOW',
                   status: 'RETRY',
                   version: '1.0',
+                  HierarchyInfo: {},
                 },
               ],
               sync: true,
@@ -191,6 +193,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
               data: [{
                 id: 123,
                 _updated: true,
+                HierarchyInfo: {},
               }],
               sync: true,
             },

@@ -52,6 +52,12 @@ export default class JobsTable extends ServiceTable {
     );
 
     yield (
+      <Cell tag="th" className="narrow">
+        ID
+      </Cell>
+    );
+
+    yield (
       <Cell
         tag="th"
         className="name"
@@ -209,6 +215,10 @@ export default class JobsTable extends ServiceTable {
           </Controls>
         )}
       </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{model.id}</Cell>
     );
 
     yield (

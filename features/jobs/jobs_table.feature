@@ -29,7 +29,7 @@ Feature: jobs table
   Scenario: Go to job detail page
     Given I am on "jobs" listing
     And "jobs" get loaded
-    When I click on the "jobtest" link - "4"
+    When I click on the "jobtest" link - "5"
     Then the URL changes to "/job/110/results"
 
   Scenario: Disable job
@@ -69,7 +69,7 @@ Feature: jobs table
   Scenario: check jobs detail page
     Given I am on "jobs" page
     And "jobs" get loaded
-    When I activate "anothertest" - "4"
+    When I activate "anothertest" - "5"
     Then I should see detail pane
 
   Scenario: Clicking on alert icon opens detail pane on the alerts tab

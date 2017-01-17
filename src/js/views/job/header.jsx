@@ -10,7 +10,7 @@ const JobHeader = ({ job, handleBackClick }: Props) => (
   <div className="job-header row">
     <div className="col-xs-12">
       <h3 className="detail-title pull-left">
-        <a href="#" onClick={handleBackClick}>
+        <a href="#" onClick={handleBackClick} className="go-back">
           <Icon icon="angle-left" />
         </a>
         {' '}

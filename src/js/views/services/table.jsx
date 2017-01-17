@@ -138,6 +138,12 @@ export default class ServicesTable extends Component {
     );
 
     yield (
+      <Cell tag="th" className="narrow">
+        ID
+      </Cell>
+    );
+
+    yield (
       <Cell
         tag="th"
         className="name"
@@ -263,6 +269,10 @@ export default class ServicesTable extends Component {
           </Controls>
         )}
       </Cell>
+    );
+
+    yield (
+      <Cell className="narrow">{model.id}</Cell>
     );
 
     yield (

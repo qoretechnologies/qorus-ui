@@ -80,11 +80,15 @@ Feature: Job page test
     And I see ".no-data" item
 
   Scenario: Go back to jobs main with all date
-    Given I am on "job/33/results/3007007?date=all" page
+    Given I am on "jobs/all" listing
+    And "jobs" get loaded
+    And I click on the "jobtest" link - "5"
     And I click on ".go-back" item
     Then the URL changes to "/jobs/all"
 
   Scenario: Go back with no date
-    Given I am on "job/33/results" page
+    Given I am on "jobs" listing
+    And "jobs" get loaded
+    And I click on the "jobtest" link - "5"
     And I click on ".go-back" item
     Then the URL changes to "/jobs"

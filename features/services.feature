@@ -22,7 +22,7 @@ Feature: Services
 
   Scenario: Activating detail pane
     Given I am on "services" listing
-    When I activate "info" - "6"
+    When I activate "info" - "7"
     Then I should see "service" detail pane
     And I should see "service" details tab
     And I should see activated row highlighted

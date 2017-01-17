@@ -47,9 +47,9 @@ const findElementByValue = (browser, selector, text) => browser.queryAll(selecto
 
 const instanceColumns = {
   job: {
-    'in-progress': 11,
-    error: 10,
-    complete: 9,
+    'in-progress': 12,
+    error: 11,
+    complete: 10,
   },
   workflow: {
     ready: 9,
@@ -59,8 +59,8 @@ const instanceColumns = {
 
 const nameColumns = {
   workflow: 7,
-  service: 6,
-  job: 4,
+  service: 7,
+  job: 5,
 };
 
 const alertColums = {

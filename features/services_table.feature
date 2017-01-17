@@ -25,4 +25,3 @@ Feature: Services table
     And I click on the "Version" column header
     And I click on the "Description" column header
     Then services are sorted by "Description" "desc"
-
