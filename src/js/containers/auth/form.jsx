@@ -79,7 +79,7 @@ export const LoginForm = ({
       errorText={error}
       underlineStyle={underlineStyle}
       underlineFocusStyle={underlineFocusStyle}
-      autoComplete="off"
+      autoComplete="new-password"
       {...password}
     />
     <RaisedButton
