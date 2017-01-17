@@ -354,6 +354,12 @@ module.exports = function commonSteps() {
     return this.browser.pressButton(`form.${formClass} button[type=submit]`);
   });
 
+  this.Then(/^I see invalid user text$/, async function() {
+    const el = findElementByText(this.browser, 'div', 'Invalid user or password');
+
+    return this.browser.assert.element(el);
+  });
+
   this.Then(/^I see "([^"]*)" alert$/, async function(alertType) {
     const elementName = `.alert-${alertType}`;
     await this.waitForElement(elementName);

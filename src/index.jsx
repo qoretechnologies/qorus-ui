@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/app';
 import isSupported from './js/helpers/is_supported';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 require('./index.html');
 global.env = process.env;
@@ -16,7 +17,9 @@ global.env = process.env;
 
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
-    <App env={process.env} />,
+    <MuiThemeProvider>
+      <App env={process.env} />
+    </MuiThemeProvider>,
     document.body.firstElementChild
   );
 
@@ -26,7 +29,9 @@ if (isSupported(window.navigator.userAgent)) {
     module.hot.accept('./js/app', () => {
       const NextApp = require('./js/app').default;
       ReactDOM.render(
-        <NextApp env={process.env} />,
+        <MuiThemeProvider>
+          <NextApp env={process.env} />
+        </MuiThemeProvider>,
         document.body.firstElementChild
       );
     });

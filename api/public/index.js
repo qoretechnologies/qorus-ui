@@ -33,6 +33,7 @@ module.exports = () => {
     res.status(200).json({
       noauth,
       'instance-key': 'qorus-test-instance',
+      'omq-schema': 'omq@xbox',
       'omq-version': '3.2.0_git',
       'omq-build': 'd086f3843c4f25547821f3f1a45a61673792b6e7',
       'qore-version': '0.8.13',
