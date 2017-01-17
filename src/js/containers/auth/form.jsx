@@ -54,49 +54,45 @@ export const LoginForm = ({
     login: any,
     password: any,
   }
-}) => {
-  console.log(submitting);
-
-  return (
-    <form onSubmit={handleSubmit} className="loginForm">
-      <TextField
-        style={inputRootStyle}
-        inputStyle={inputStyle}
-        fullWidth
-        floatingLabelText="Username"
-        floatingLabelShrinkStyle={labelShrinkStyle}
-        floatingLabelStyle={labelFocusStyle}
-        underlineStyle={underlineStyle}
-        underlineFocusStyle={underlineFocusStyle}
-        autoComplete="off"
-        {...login}
-      />
-      <TextField
-        style={inputRootStyle}
-        inputStyle={inputStyle}
-        fullWidth
-        type="password"
-        floatingLabelText="Password"
-        floatingLabelShrinkStyle={labelShrinkStyle}
-        floatingLabelStyle={labelFocusStyle}
-        errorText={error}
-        underlineStyle={underlineStyle}
-        underlineFocusStyle={underlineFocusStyle}
-        autoComplete="off"
-        {...password}
-      />
-      <RaisedButton
-        backgroundColor="#6172bf"
-        style={buttonStyle}
-        labelStyle={labelStyle}
-        label="LOG IN"
-        fullWidth
-        type="submit"
-        disabled={submitting}
-      />
-    </form>
-  );
-};
+}) => (
+  <form onSubmit={handleSubmit} className="loginForm">
+    <TextField
+      style={inputRootStyle}
+      inputStyle={inputStyle}
+      fullWidth
+      floatingLabelText="Username"
+      floatingLabelShrinkStyle={labelShrinkStyle}
+      floatingLabelStyle={labelFocusStyle}
+      underlineStyle={underlineStyle}
+      underlineFocusStyle={underlineFocusStyle}
+      autoComplete="off"
+      {...login}
+    />
+    <TextField
+      style={inputRootStyle}
+      inputStyle={inputStyle}
+      fullWidth
+      type="password"
+      floatingLabelText="Password"
+      floatingLabelShrinkStyle={labelShrinkStyle}
+      floatingLabelStyle={labelFocusStyle}
+      errorText={error}
+      underlineStyle={underlineStyle}
+      underlineFocusStyle={underlineFocusStyle}
+      autoComplete="off"
+      {...password}
+    />
+    <RaisedButton
+      backgroundColor="#6172bf"
+      style={buttonStyle}
+      labelStyle={labelStyle}
+      label="LOG IN"
+      fullWidth
+      type="submit"
+      disabled={submitting}
+    />
+  </form>
+);
 
 export default reduxForm({
   form: 'login',
