@@ -23,13 +23,18 @@ const addNoteWebsocket: Function = createAction(
 
 const updateHierarchy: Function = createAction(
   'ORDERS_UPDATEHIERARCHY',
-  (id, targetId, status) => console.log('UPDATING HIERARCHY') || ({ id, targetId, status })
+  (id, targetId, status) => ({ id, targetId, status })
 );
 
 const updateErrors: Function = createAction(
   'ORDERS_UPDATEERRORS',
   async (id) => {
-    const errors = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`, null, true);
+    const errors = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`,
+      null,
+      true
+    );
 
     return { id, errors };
   }
