@@ -25,7 +25,14 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
       return { [key]: matching[1] };
     }
 
-    if (inputs[key]) return { [key]: key };
+    if (inputs[key]) {
+      const seq = /^\("sequence":+"(\w+)"/;
+      const con = /^\("constant":+"(\w+)"/;
+
+      if (!str.match(seq) && !str.match(con)) {
+        return { [key]: key };
+      }
+    }
 
     return null;
   }).filter(item => item)
