@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
 
-import { Section, Row, Td } from '../../components/table';
+import { Tr, Td } from '../../components/new_table';
 import { Controls, Control as Button } from '../../components/controls';
 import Auto from '../../components/autocomponent';
 
@@ -29,53 +29,41 @@ const ErrorsRow: Function = ({
   };
 
   return (
-    <Section type="body">
-      <Row>
-        <Td className="name">{ data.error }</Td>
-        { !compact && (
-          <Td className="text">{ data.description }</Td>
-        )}
-        <Td className="narrow">{ data.severity }</Td>
-        <Td className="narrow">
-          <Auto>{ data.retry_flag }</Auto>
-        </Td>
-        <Td>{ data.retry_delay_secs }</Td>
-        <Td className="business">
-          <Auto>{ data.business_flag }</Auto>
-        </Td>
-        { type === 'workflow' && (
-          <Td className="narrow">
-            <Auto>{ data.manually_updated }</Auto>
-          </Td>
-        )}
-        <Td className="narrow">
-          <Controls grouped>
-            <Button
-              onClick={handleEditClick}
-              btnStyle="warning"
-              icon="edit"
-              title="Edit error"
-            />
-            <Button
-              onClick={handleDeleteClick}
-              btnStyle="danger"
-              icon="times"
-              title="Remove error"
-            />
-          </Controls>
-        </Td>
-      </Row>
-      { compact && (
-        <Row>
-          <Td
-            className="text error-info"
-            colspan={type === 'workflow' ? 7 : 6}
-          >
-            { data.description}
-          </Td>
-        </Row>
+    <Tr>
+      <Td className="name"><p>{ data.error }</p></Td>
+      { !compact && (
+        <Td className="text">{ data.description }</Td>
       )}
-    </Section>
+      <Td className="medium">{ data.severity }</Td>
+      <Td className="narrow">
+        <Auto>{ data.retry_flag }</Auto>
+      </Td>
+      <Td className="narrow">{ data.retry_delay_secs }</Td>
+      <Td className="medium">
+        <Auto>{ data.business_flag }</Auto>
+      </Td>
+      { type === 'workflow' && (
+        <Td className="medium">
+          <Auto>{ data.manually_updated }</Auto>
+        </Td>
+      )}
+      <Td className="medium">
+        <Controls grouped>
+          <Button
+            onClick={handleEditClick}
+            btnStyle="warning"
+            icon="edit"
+            title="Edit error"
+          />
+          <Button
+            onClick={handleDeleteClick}
+            btnStyle="danger"
+            icon="times"
+            title="Remove error"
+          />
+        </Controls>
+      </Td>
+    </Tr>
   );
 };
 

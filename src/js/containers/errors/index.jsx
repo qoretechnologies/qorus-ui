@@ -5,6 +5,7 @@ import defaultProps from 'recompose/defaultProps';
 import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -30,6 +31,8 @@ type Props = {
   createOrUpdate: Function,
   removeError: Function,
   id: string | number,
+  fixed: boolean,
+  height: string | number,
 }
 
 const ErrorsContainer: Function = ({
@@ -44,6 +47,8 @@ const ErrorsContainer: Function = ({
   createOrUpdate,
   removeError,
   id,
+  fixed,
+  height,
 }: Props): React.Element<any> => {
   const handleFormSubmit: Function = (data: Object) => {
     createOrUpdate(type, id, data);
@@ -100,6 +105,8 @@ const ErrorsContainer: Function = ({
         compact={compact}
         onEditClick={handleEditClick}
         onDeleteClick={handleDeleteClick}
+        fixed={fixed}
+        height={height}
       />
     </div>
   );
@@ -149,6 +156,14 @@ export default compose(
       unsync: actions.errors.unsync,
     }
   ),
+  pure([
+    'query',
+    'errors',
+    'compact',
+    'id',
+    'fixed',
+    'height',
+  ]),
   defaultProps({
     id: 'omit',
   }),
