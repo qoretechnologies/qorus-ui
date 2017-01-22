@@ -95,7 +95,7 @@ const TableRow: Function = ({
     <Td
       key="autostart"
       name="autostart"
-      className="narrow"
+      className="medium"
     >
       <AutoStart
         autostart={autostart}
@@ -127,31 +127,31 @@ const TableRow: Function = ({
       </Link>
     </Td>
     <Td className="narrow">{ version }</Td>
-      {states.map((state: Object, index: number): React.Element<Td> => {
-        const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
-        const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
+    {states.map((state: Object, index: number): React.Element<Td> => {
+      const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
+      const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
 
-        return (
-          <Td key={`wf_state_${index}`} className="narrow">
-            <Link
-              className="workflow-status-link"
-              to={`/workflow/${id}/list/${title}/${date}`}
-            >
-              <Badge
-                className={`status-${state.label}`}
-                val={value}
-              />
-            </Link>
-          </Td>
-        );
-      })}
-    <Td className="narrow">
+      return (
+        <Td key={`wf_state_${index}`} className={expanded ? 'narrow' : 'medium'}>
+          <Link
+            className="workflow-status-link"
+            to={`/workflow/${id}/list/${title}/${date}`}
+          >
+            <Badge
+              className={`status-${state.label}`}
+              val={value}
+            />
+          </Link>
+        </Td>
+      );
+    })}
+    <Td className="medium">
       <Link to={`/workflow/${id}/list/All/${date}`}>
         { rest.TOTAL }
       </Link>
     </Td>
     { showDeprecated && (
-      <Td className="narrow">
+      <Td className="medium">
         <Icon icon={deprecated ? 'flag' : 'flag-o'} />
       </Td>
     )}

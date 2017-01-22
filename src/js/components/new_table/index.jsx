@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
-import classnames from 'classnames';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
+import classnames from 'classnames';
 
 import { Thead, Tbody, Tfooter } from './section';
 import Tr from './row';
@@ -11,37 +11,48 @@ import Td from './td';
 type Props = {
   children: any,
   className: string,
+  condensed: string,
   striped: boolean,
-  condensed: boolean,
   hover: boolean,
   fixed: boolean,
+  height: string | number,
 }
 
 let Table: Function = ({
   children,
-  className,
-  striped,
-  condensed,
-  hover,
   fixed,
+  striped,
+  hover,
+  condensed,
+  className,
+  height,
 }: Props): React.Element<any> => (
-  <table
-    className={
-      classnames(
-        'table',
-        'table--data',
-        {
-          'table-striped': striped,
-          'table-condensed': condensed,
-          'table-hover': hover,
-          'table-fixed': fixed,
-        },
-        className
-      )
-    }
-  >
-    { children }
-  </table>
+  fixed ?
+    <div
+      className="table-wrapper"
+    >
+      {React.Children.map(children, (child: Object): React.Element<any> => (
+        React.cloneElement(child, { fixed, striped, hover, condensed, className, height })
+      ))}
+    </div> :
+    <table
+      className={
+        classnames(
+          'table',
+          'table--data',
+          {
+            'table-striped': striped,
+            'table-condensed': condensed,
+            'table-hover': hover,
+          },
+          className
+        )
+      }
+    >
+      {React.Children.map(children, (child: Object): React.Element<any> => (
+        React.cloneElement(child, { fixed })
+      ))}
+    </table>
 );
 
 Table = updateOnlyForKeys([

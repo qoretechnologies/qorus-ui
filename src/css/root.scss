@@ -32,6 +32,7 @@
   height: 100%;
 
   &__center {
+    min-width: 1300px;
     position: relative; /* [5] */
 
     display: -ms-flexbox;
@@ -44,7 +45,8 @@
     -ms-flex: 1 1 auto;
     -webkit-flex: auto;
     flex: auto;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     margin-top: $navbar-height; /* [1], [4] */
 

@@ -18,18 +18,24 @@ table.table--data {
     background-color: #deffdf !important;
   }
 
-  tr.row-fixed {
-    position: fixed;
-    z-index: 201;
-    background-color: #fff;
-  }
-
   tr.row-alert {
     background-color: lighten($status-light-red, 20);
   }
 
   tr.row-hidden {
     visibility: hidden;
+  }
+
+  td {
+    a, p, span {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  thead th {
+    border-bottom: 1px solid #ddd !important;
   }
 
   > thead,
@@ -55,7 +61,8 @@ table.table--data {
     }
   }
 
-  > thead {
+  > thead,
+  > tfoot {
     > tr {
       > th, > td { /* [1] */
         border-right: 1px solid $table-border-color;
@@ -80,6 +87,14 @@ table.table--data {
             width: 50px;
           }
 
+          &.medium { /* [4] */
+            width: 100px;
+          }
+
+          &.large { /* [4] */
+            width: 200px;
+          }
+
           &.name { /* [5] */
             padding-left: $padding-xs-horizontal;
             padding-right: $padding-xs-horizontal;
@@ -88,9 +103,14 @@ table.table--data {
       }
     }
 
-    > thead { /* [6] */
+    > thead,
+    > tfoot { /* [6] */
       font-size: $font-size-extra-small;
       line-height: floor($font-size-extra-small * 1.1);
+    }
+
+    > tbody tr:first-of-type td {
+      border-top: 0 !important;
     }
   }
 
@@ -159,6 +179,26 @@ table.table--centered {
     width: 40px;
   }
 }
+
+div.table-wrapper {
+  height: auto;
+  overflow: auto;
+}
+
+div.table-body-wrapper,
+div.table-header-wrapper {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+table.table-body,
+table.table-header {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 0;
+}
+
 
 .props-table {
   margin-left: 10%;

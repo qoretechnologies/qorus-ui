@@ -5,7 +5,7 @@ import spies from 'chai-spies';
 
 import { Table, Thead, Tbody, Tfooter, Tr, Th, Td } from '../../src/js/components/new_table';
 
-describe('Table, Sections, Row and Cell from components/table', () => {
+describe.only('Table, Sections, Row and Cell from components/table', () => {
   before(() => {
     chai.use(spies);
   });
@@ -39,12 +39,11 @@ describe('Table, Sections, Row and Cell from components/table', () => {
 
     it('renders table with predefined classes', () => {
       const wrapper = mount(
-        <Table hover condensed striped fixed />
+        <Table hover condensed striped />
       );
 
       expect(wrapper.find('table').hasClass('table-hover')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-striped')).to.eql(true);
-      expect(wrapper.find('table').hasClass('table-fixed')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-condensed')).to.eql(true);
     });
 
@@ -57,6 +56,24 @@ describe('Table, Sections, Row and Cell from components/table', () => {
       expect(wrapper.find('table').hasClass('table--data')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-hover')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-custom')).to.eql(true);
+    });
+
+    it('renders table with fixed header and auto height', () => {
+      const wrapper = mount(
+        <Table fixed hover striped className="table-custom">
+          <Thead />
+          <Tbody />
+          <Tfooter />
+        </Table>
+      );
+
+      expect(wrapper.find('div')).to.have.length(4);
+      expect(wrapper.find('tbody').first().props().style.height).to.eql('auto');
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table--data')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-hover')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-custom')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-striped')).to.eql(true);
     });
   });
 
@@ -92,7 +109,7 @@ describe('Table, Sections, Row and Cell from components/table', () => {
         </Table>
       );
 
-      expect(wrapper.find('tr')).to.have.length(4);
+      expect(wrapper.find('tr')).to.have.length(3);
     });
   });
 

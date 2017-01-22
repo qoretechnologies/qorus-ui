@@ -10,7 +10,6 @@ type Props = {
   onSortChange?: Function,
   highlight?: boolean,
   onHighlightEnd?: Function,
-  fixed?: boolean,
 }
 
 @updateOnlyForKeys([
@@ -18,30 +17,15 @@ type Props = {
   'className',
   'sortData',
   'highlight',
-  'fixed',
 ])
 export default class Row extends Component {
   props: Props;
 
   state: {
     highlight: ?boolean,
-    fixed: boolean,
   } = {
     highlight: this.props.highlight,
-    fixed: false,
   };
-
-  componentDidMount() {
-    if (this.props.fixed && this.refs.row) {
-      this._scrollStart = this.refs.row.getBoundingClientRect().top;
-
-      window.addEventListener('resize', this.handleWindowResize);
-      document.querySelector('.root__center>section').addEventListener(
-        'scroll',
-        this.handleScrolling
-      );
-    }
-  }
 
   componentWillReceiveProps(nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
@@ -53,34 +37,6 @@ export default class Row extends Component {
   }
 
   _highlightTimeout = null;
-  _resizeTimeout = null;
-  _scrollStart: number = 0;
-
-  handleWindowResize: Function = (): void => {
-    clearTimeout(this._resizeTimeout);
-
-    this._resizeTimeout = setTimeout(() => {
-      if (this.state.fixed) {
-        this.setState({ fixed: false });
-
-        setTimeout(() => {
-          this.setState({ fixed: true });
-        }, 300);
-      }
-    }, 500);
-  }
-
-  handleScrolling: Function = (e: EventHandler) => {
-    if (e.target.scrollTop > this._scrollStart - 80 && !this.state.fixed) {
-      this.setState({
-        fixed: true,
-      });
-    } else if (e.target.scrollTop <= this._scrollStart - 81 && this.state.fixed) {
-      this.setState({
-        fixed: false,
-      });
-    }
-  };
 
   startHighlight: Function = (highlight: boolean): void => {
     if (highlight && !this._highlightTimeout) {
@@ -110,27 +66,18 @@ export default class Row extends Component {
       className,
       sortData,
       onSortChange,
-      fixed: fixedProp,
     } = this.props;
-    const { highlight, fixed } = this.state;
-
-    const css = classNames({
-      'row-highlight': highlight,
-      'row-fixed': fixed,
-      'row-hidden': fixedProp && !fixed,
-    }, className);
+    const { highlight } = this.state;
 
     return (
       <tr
-        ref="row"
-        className={css}
-        style={{
-          top: fixed ? this._scrollStart - 10 : null,
-        }}
+        className={classNames({
+          'row-highlight': highlight,
+        }, className)}
       >
         { sortData && onSortChange ? (
           React.Children.map(children, (child: any, key) => (
-            child ? React.cloneElement(child, { key, sortData, onSortChange, fixed }) : undefined
+            child ? React.cloneElement(child, { key, sortData, onSortChange }) : undefined
           ))
         ) : (
           children

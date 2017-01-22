@@ -40,7 +40,13 @@ const WorkflowsTable: Function = ({
   setAutostart,
   expanded,
 }: Props): React.Element<any> => (
-  <Table striped hover condensed>
+  <Table
+    striped
+    hover
+    condensed
+    fixed
+    className="resource-table"
+  >
     <Thead>
       <Tr
         sortData={sortData}
@@ -49,7 +55,7 @@ const WorkflowsTable: Function = ({
         <Th className="narrow" />
         <Th className="narrow">-</Th>
         <Th className="narrow">Actions</Th>
-        <Th className="col-autostart" name="autostart">Autostart</Th>
+        <Th className="medium" name="autostart">Autostart</Th>
         <Th className="narrow" name="has_alerts">
           <Icon icon="warning" />
         </Th>
@@ -60,13 +66,13 @@ const WorkflowsTable: Function = ({
         { states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}
-            className="narrow"
+            className={expanded ? 'narrow' : 'medium'}
             name={!expanded ? `GROUPED_${state.name}` : state.name}
           >{ state.short }</Th>
         ))}
-        <Th className="narrow">TOTAL</Th>
+        <Th className="medium" name="TOTAL">TOTAL</Th>
         { deprecated && (
-          <Th className="narrow">Deprecated</Th>
+          <Th className="medium" name="deprecated">Deprecated</Th>
         )}
       </Tr>
     </Thead>
