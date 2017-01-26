@@ -63,14 +63,10 @@ export default compose(
     componentWillMount() {
       this.props.calculateHeight();
 
-      window.addEventListener('resize', () => {
-        this.props.calculateHeight();
-      });
+      window.addEventListener('resize', this.props.calculateHeight);
     },
     componentWillUnmount() {
-      window.removeEventListener('resize', () => {
-        this.props.calculateHeight();
-      });
+      window.removeEventListener('resize', this.props.calculateHeight);
     },
   })
 )(Code);
