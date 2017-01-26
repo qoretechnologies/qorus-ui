@@ -10,19 +10,19 @@ import Manager from './manager';
 
 import { pureRender } from '../utils';
 
+type Props = {
+  children?: any,
+  onMount?: Function,
+  size: string,
+  hasFooter?: boolean,
+  height?: number,
+};
+
 /**
  * Modal pane component.
  */
 @pureRender
 export default class Modal extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    onMount: PropTypes.func,
-    size: PropTypes.string,
-    hasFooter: PropTypes.bool,
-    height: PropTypes.number,
-  };
-
   static defaultProps = {
     size: '',
   };
@@ -30,6 +30,8 @@ export default class Modal extends Component {
   static Footer = null;
   static Header = null;
   static Body = null;
+
+  props: Props;
 
   componentDidMount(): void {
     if (this.props.onMount) {
