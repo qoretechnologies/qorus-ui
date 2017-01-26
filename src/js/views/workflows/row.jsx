@@ -13,6 +13,7 @@ import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import Icon from '../../components/icon';
 import AutoStart from '../../components/autostart';
+import { ORDER_STATES_ARRAY } from '../../constants/orders';
 
 type Props = {
   isActive?: boolean,
@@ -189,5 +190,6 @@ export default compose(
     'deprecated',
     'expanded',
     'TOTAL',
+    ...ORDER_STATES_ARRAY,
   ])
 )(TableRow);
