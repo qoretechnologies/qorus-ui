@@ -1,3 +1,5 @@
+import union from 'lodash/union';
+
 export const ORDER_STATES = [
   { name: 'COMPLETE', short: 'C', label: 'complete', title: 'Complete' },
   { name: 'READY', short: 'Y', label: 'ready', title: 'Ready' },
@@ -13,6 +15,8 @@ export const ORDER_STATES = [
   { name: 'BLOCKED', short: 'B', label: 'blocked', title: 'Blocked' },
 ];
 
+export const ORDER_STATES_ARRAY = ORDER_STATES.map((order) => order.name);
+
 export const GROUPED_ORDER_STATES = [
   { name: 'READY/SCHD', short: 'READY/SCHD', label: 'ready', title: 'Ready / Scheduled' },
   { name: 'RUN/WAIT', short: 'RUN/WAIT', label: 'waiting', title: 'Run / Wait' },
@@ -24,10 +28,12 @@ export const GROUPED_ORDER_STATES = [
 export const CUSTOM_ORDER_STATES = [
   { name: 'UNBLOCKING', label: 'blocked', title: 'Unblocking' },
   { name: 'BLOCKING', label: 'blocked', title: 'Blocking' },
-  { name: 'CANCELING', label: 'blockec', title: 'Canceling' },
+  { name: 'CANCELING', label: 'blocked', title: 'Canceling' },
   { name: 'UNCANCELING', label: 'blocked', title: 'Uncanceling' },
   { name: 'RETRYING', label: 'blocked', title: 'Retrying' },
 ];
+
+export const ALL_ORDER_STATES = union(ORDER_STATES, CUSTOM_ORDER_STATES);
 
 export const ORDER_ACTIONS = {
   ALL: [
