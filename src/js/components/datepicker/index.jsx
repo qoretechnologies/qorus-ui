@@ -71,9 +71,18 @@ export default class DatePicker extends Component {
   };
 
   setActiveDate: Function = (activeDate: Object): void => {
-    this.setState({
-      activeDate,
-    });
+    const { hours, minutes } = this.state;
+    const { futureOnly } = this.props;
+    const potentialDate = activeDate;
+
+    potentialDate.minutes(minutes);
+    potentialDate.hours(hours);
+
+    if (!futureOnly || moment().isSameOrBefore(potentialDate)) {
+      this.setState({
+        activeDate,
+      });
+    }
   };
 
   applyDate: Function = (date: string): void => {
