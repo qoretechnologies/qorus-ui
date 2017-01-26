@@ -83,12 +83,24 @@ table.table--data {
           padding-top: $padding-xs-vertical;
           padding-bottom: $padding-xs-vertical;
 
+          &.tiny {
+            width: 25px;
+          }
+
           &.narrow { /* [4] */
             width: 50px;
           }
 
+          &.normal { /* [4] */
+            width: 75px;
+          }
+
           &.medium { /* [4] */
             width: 100px;
+          }
+
+          &.big { /* [4] */
+            width: 150px;
           }
 
           &.large { /* [4] */
@@ -183,6 +195,7 @@ table.table--centered {
 div.table-wrapper {
   height: auto;
   overflow: auto;
+  margin: 10px 0;
 }
 
 div.table-body-wrapper,
