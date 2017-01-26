@@ -10,12 +10,13 @@ import Td from './td';
 
 type Props = {
   children: any,
-  className: string,
-  condensed: string,
-  striped: boolean,
-  hover: boolean,
-  fixed: boolean,
-  height: string | number,
+  className?: string,
+  condensed?: string,
+  striped?: boolean,
+  hover?: boolean,
+  fixed?: boolean,
+  height?: string | number,
+  marginBottom?: number
 }
 
 let Table: Function = ({
@@ -26,13 +27,22 @@ let Table: Function = ({
   condensed,
   className,
   height,
+  marginBottom,
 }: Props): React.Element<any> => (
   fixed ?
     <div
       className="table-wrapper"
     >
       {React.Children.map(children, (child: Object): React.Element<any> => (
-        React.cloneElement(child, { fixed, striped, hover, condensed, className, height })
+        React.cloneElement(child, {
+          fixed,
+          striped,
+          hover,
+          condensed,
+          className,
+          height,
+          marginBottom: marginBottom || 0,
+        })
       ))}
     </div> :
     <table
@@ -58,6 +68,8 @@ let Table: Function = ({
 Table = updateOnlyForKeys([
   'children',
   'className',
+  'marginBottom',
+  'height',
 ])(Table);
 
 export {

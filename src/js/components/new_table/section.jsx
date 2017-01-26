@@ -7,13 +7,14 @@ import classNames from 'classnames';
 type Props = {
   type: string,
   children: any,
-  className: string,
-  hover: boolean,
-  striped: boolean,
+  className?: string,
+  hover?: boolean,
+  striped?: boolean,
   condensed: boolean,
-  height: number | string,
-  fixed: boolean,
+  height?: number | string,
+  fixed?: boolean,
   Tag: string,
+  marginBottom: number,
 };
 
 class Section extends Component {
@@ -54,7 +55,7 @@ class Section extends Component {
     if (this._el) {
       const { top } = this._el.getBoundingClientRect();
       const winHeight = window.innerHeight;
-      const height = winHeight - top - 50;
+      const height = winHeight - top - 50 - this.props.marginBottom;
       const h = typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
       if (h > height) {
