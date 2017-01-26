@@ -43,7 +43,7 @@ export default compose(
     handleClick: ({ onSortChange, onClick, name }: Props) => () => {
       if (name) {
         if (onSortChange) onSortChange({ sortBy: name });
-        if (onClick) onClick();
+        if (onClick) onClick(name);
       }
     },
   }),
