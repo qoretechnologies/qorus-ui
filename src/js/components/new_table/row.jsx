@@ -24,8 +24,12 @@ export default class Row extends Component {
   state: {
     highlight: ?boolean,
   } = {
-    highlight: this.props.highlight,
+    highlight: false,
   };
+
+  componentDidMount() {
+    this.startHighlight(this.props.highlight);
+  }
 
   componentWillReceiveProps(nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
@@ -40,7 +44,6 @@ export default class Row extends Component {
 
   startHighlight: Function = (highlight: boolean): void => {
     if (highlight && !this._highlightTimeout) {
-      clearTimeout(this._highlightTimeout);
       this._highlightTimeout = setTimeout(this.stopHighlight, 2500);
 
       this.setState({
