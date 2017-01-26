@@ -10,14 +10,12 @@ import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 
-import sort from '../../hocomponents/sort';
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
 import selectable from '../../hocomponents/selectable';
-import unsync from '../../hocomponents/unsync.js';
+import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
-import { sortDefaults } from '../../constants/sort';
 import actions from '../../store/api/actions';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
@@ -218,11 +216,6 @@ export default compose(
     'detail'
   ),
   selectable('workflows'),
-  sort(
-    'workflows',
-    'workflows',
-    sortDefaults.workflows
-  ),
   withCSV('workflows', 'workflows'),
   pure([
     'expanded',
