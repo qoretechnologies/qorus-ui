@@ -42,7 +42,7 @@ const ErrorsTable: Function = ({
         sortData={sortData}
         onSortChange={onSortChange}
       >
-        <Th name="name">Error</Th>
+        <Th name="error">Error</Th>
         { !compact && (
           <Th name="description">Description</Th>
         )}
