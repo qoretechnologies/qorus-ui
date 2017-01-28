@@ -1,104 +1,138 @@
-import React, { Component, PropTypes } from 'react';
-import { pureRender } from 'components/utils';
-import { includes } from 'lodash';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import mapProps from 'recompose/mapProps';
+import { connect } from 'react-redux';
+import includes from 'lodash/includes';
 
-import actions from 'store/api/actions';
-
-import { Control as Button, Controls } from '../../../../components/controls';
-
+import { Control, Controls } from '../../../../components/controls';
+import withModal from '../../../../hocomponents/modal';
+import actions from '../../../../store/api/actions';
 import { ORDER_ACTIONS } from '../../../../constants/orders';
+import Schedule from './modals/schedule';
 
-@pureRender
-export default class extends Component {
-  static propTypes = {
-    data: PropTypes.object,
-    onScheduleClick: PropTypes.func,
-    showText: PropTypes.bool,
-  };
+type Props = {
+  action: Function,
+  schedule: Function,
+  openModal: Function,
+  closeModal: Function,
+  workflowstatus: string,
+  id: number,
+  handleActionClick: Function,
+  compact: boolean,
+  availableActions: Array<string>,
+};
 
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
-  componentWillMount() {
-    this._allActions = ORDER_ACTIONS.ALL;
-  }
-
-  handleAction = (action) => {
-    if (action === 'schedule') {
-      this.props.onScheduleClick(this.props.data);
-    } else {
-      this.context.dispatch(
-        actions.orders.action(
-          action,
-          this.props.data.id,
-          {
-            [this.props.data.id]: this.props.data.workflowstatus,
-          }
-        )
-      );
-    }
-  };
-
-  renderBlock = () => {
-    const control = this.props.data.workflowstatus === 'BLOCKED' ?
-      'unblock' : 'block';
-
-    return this.renderControl(control);
-  };
-
-  renderCancel = () => {
-    const control = this.props.data.workflowstatus === 'CANCELED' ?
-      'uncancel' : 'cancel';
-
-    return this.renderControl(control);
-  };
-
-  renderControl = (control) => {
-    const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-    const { name, icon, ...other } = this._allActions.find(a => a.action === control);
-    let { style } = this._allActions.find(a => a.action === control);
-    const onClick = () => this.handleAction(other.action);
-    let disabled = false;
-
-    if (!includes(orderActions, control)) {
-      style = 'default';
-      disabled = true;
-    }
-
-    if (this.props.showText) {
-      return (
-        <Button
-          btnStyle={style}
-          label={other.action.toUpperCase()}
-          disabled={disabled}
-          title={name}
-          action={onClick}
-        />
-      );
-    }
-
-    return (
-      <Button
-        btnStyle={style}
-        icon={icon}
-        disabled={disabled}
-        title={name}
-        action={onClick}
-      />
-    );
-  };
-
-  render() {
-    const props = this.props.showText ? { noControls: true, grouped: true } : {};
-
-    return (
-      <Controls {...props}>
-        { this.renderBlock() }
-        { this.renderCancel() }
-        { this.renderControl('retry') }
-        { this.renderControl('schedule') }
-      </Controls>
-    );
-  }
+type ControlProps = {
+  action: string,
+  onActionClick: Function,
+  compact: boolean,
+  availableActions: Array<string>,
 }
+
+const ActionButton: Function = ({
+  action,
+  onActionClick,
+  compact,
+  availableActions,
+}: ControlProps): React.Element<Control> => {
+  const {
+    style,
+    name,
+    action: actionName,
+    icon,
+  } = ORDER_ACTIONS.ALL.find((item: Object): boolean => (
+    item.action === action
+  ));
+  const disabled: boolean = !includes(availableActions, action);
+  const handleClick: Function = (): void => {
+    onActionClick(actionName);
+  };
+
+  return (
+    <Control
+      btnStyle={disabled ? 'default' : style}
+      label={compact ? null : actionName.toUpperCase()}
+      disabled={disabled}
+      title={name}
+      icon={icon}
+      action={handleClick}
+    />
+  );
+};
+
+const OrderControls: Function = ({
+  workflowstatus,
+  handleActionClick,
+  compact,
+  availableActions,
+}: Props): React.Element<any> => (
+  <Controls noControls grouped>
+    <ActionButton
+      action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action="retry"
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action="schedule"
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+  </Controls>
+);
+
+export default compose(
+  connect(
+    () => ({}),
+    {
+      action: actions.orders.action,
+      schedule: actions.orders.schedule,
+    }
+  ),
+  withModal(),
+  mapProps(({ workflowstatus, ...rest }): Object => ({
+    availableActions: ORDER_ACTIONS[workflowstatus],
+    workflowstatus,
+    ...rest,
+  })),
+  withHandlers({
+    handleActionClick: ({
+      action,
+      openModal,
+      closeModal,
+      id,
+      schedule,
+      workflowstatus,
+    }: Props): Function => (actionType: string): void => {
+      if (actionType === 'schedule') {
+        openModal(
+          <Schedule
+            onClose={closeModal}
+            action={schedule}
+            id={id}
+            status={workflowstatus}
+          />
+        );
+      } else {
+        action(actionType, id);
+      }
+    },
+  }),
+  pure(['workflowstatus'])
+)(OrderControls);

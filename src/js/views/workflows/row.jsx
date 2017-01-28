@@ -122,7 +122,7 @@ const TableRow: Function = ({
     <Td className="name">
       <Link
         className="resource-name-link"
-        to={`/workflow/${id}/list/All/${date}`}
+        to={`/workflow/${id}?filter=All&date=${date}`}
       >
         { name }
       </Link>
@@ -136,7 +136,7 @@ const TableRow: Function = ({
         <Td key={`wf_state_${index}`} className={expanded ? 'narrow' : 'medium'}>
           <Link
             className="workflow-status-link"
-            to={`/workflow/${id}/list/${title}/${date}`}
+            to={`/workflow/${id}?filter=${title}&date=${date}`}
           >
             <Badge
               className={`status-${state.label}`}
@@ -147,7 +147,7 @@ const TableRow: Function = ({
       );
     })}
     <Td className="medium">
-      <Link to={`/workflow/${id}/list/All/${date}`}>
+      <Link to={`/workflow/${id}?filter=All&date=${date}`}>
         { rest.TOTAL }
       </Link>
     </Td>

@@ -5,7 +5,121 @@ import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import { normalizeName } from '../utils';
 import { skipIndexes } from './actions/helpers';
 
-const initialState: Object = { data: [], sync: false, loading: false };
+const initialState: Object = {
+  data: [],
+  sync: false,
+  loading: false,
+  offset: 0,
+  limit: 50,
+  sort: 'started',
+  sortDir: true,
+};
+
+const fetchOrders: Object = {
+  next(
+    state: Object,
+    { payload: {
+      orders,
+      fetchMore,
+    } } : {
+      payload: Object,
+      orders: Array<Object>,
+      fetchMore: boolean,
+    }
+  ): Object {
+    const data = [...state.data];
+    const newData = fetchMore ? [...data, ...orders] : setUpdatedToNull(orders);
+    const normalizedIds = newData.map((order: Object): Object => ({
+      ...order,
+      ...{
+        id: order.workflow_instanceid,
+      },
+    }));
+    const normalized = normalizedIds.map((order: Object): Object => normalizeName(order));
+
+    return { ...state, ...{ data: normalized, loading: false, sync: true } };
+  },
+};
+
+const changeOffset: Object = {
+  next(state: Object = initialState, { payload: { newOffset } }: Object): Object {
+    const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
+
+    return { ...state, ...{ offset } };
+  },
+};
+
+const changeServerSort: Object = {
+  next(state: Object = initialState, { payload: { sort } }: Object): Object {
+    const sortDir = state.sort === sort ? !state.sortDir : state.sortDir;
+
+    return { ...state, ...{ offset: 0, sort, sortDir } };
+  },
+};
+
+const selectOrder: Object = {
+  next(state = initialState, { payload: { id } }) {
+    const stateData = [...state.data];
+    const order = stateData.find((ord: Object) => ord.id === parseInt(id, 10));
+
+    if (order) {
+      const newData = updateItemWithId(id, { _selected: !order._selected }, stateData);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
+const selectAll = {
+  next(state: Object = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => ({ ...w, ...{ _selected: true } }));
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectNone = {
+  next(state: Object = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => {
+      const copy = { ...w };
+
+      if (w._selected) {
+        copy._selected = null;
+      }
+
+      return copy;
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const selectInvert = {
+  next(state: Object = initialState) {
+    const data = [...state.data];
+    const newData = data.map(w => ({ ...w, ...{ _selected: !w._selected } }));
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const unselectAll = {
+  next(state: Object) {
+    const data = [...state.data];
+    const newData = data.map(w => (
+      w._selected ? ({
+        ...w,
+        ...{ _selected: false },
+      }) : w)
+    );
+
+    return { ...state, ...{ data: newData } };
+  },
+};
 
 const addOrder: Object = {
   next(
@@ -20,7 +134,7 @@ const addOrder: Object = {
       events.forEach((obj: Object): void => {
         const normalized = normalizeName({ ...obj.info, ...{ id: obj.info.workflow_instanceid } });
 
-        newData = [...newData, {
+        newData = [{
           ...normalized,
           ...{
             _updated: true,
@@ -28,10 +142,12 @@ const addOrder: Object = {
             workflowstatus: obj.info.status,
             note_count: 0,
           },
-        }];
+        }, ...newData];
       });
 
-      return { ...state, ...{ data: newData } };
+      const reducedData: Array<Object> = newData.slice(0, state.offset + state.limit);
+
+      return { ...state, ...{ data: reducedData } };
     }
 
     return state;
@@ -157,28 +273,42 @@ const fetchData: Object = {
 };
 
 const orderAction: Object = {
-  next(state: Object, { payload: { ids, action, origStatus, result } }: Object) {
+  next(state: Object, { payload: { ids, action, result } }: Object) {
     const data = [...state.data];
     let newData = data;
 
     if (result) {
       Object.keys(result).forEach((res: string): void => {
         if (typeof result[res] === 'string') {
+          let workflowstatus;
+          const ord = newData.find((order: Object): boolean => (
+            order.id === parseInt(res, 10)
+          ));
+
+          if (ord) workflowstatus = ord._originalStatus;
+
           newData = updateItemWithId(
             parseInt(res, 10),
-            { workflowstatus: origStatus[parseInt(res, 10)] },
+            { workflowstatus },
             newData
           );
         }
       });
     } else {
-      if (isArray(ids)) {
-        ids.forEach((id: number): void => {
-          newData = updateItemWithId(id, { workflowstatus: `${action.toUpperCase()}ING` }, newData);
-        });
-      } else {
-        newData = updateItemWithId(ids, { workflowstatus: `${action.toUpperCase()}ING` }, newData);
-      }
+      const orders: Array<number> = isArray(ids) ? ids : [ids];
+
+      orders.forEach((id: number): void => {
+        const ord = newData.find((order: Object): boolean => (
+          order.id === parseInt(id, 10)
+        ));
+
+        const origStatus = ord ? ord.workflowstatus : '';
+
+        newData = updateItemWithId(id, {
+          workflowstatus: `${action.toUpperCase()}ING`,
+          _originalStatus: origStatus,
+        }, newData);
+      });
     }
 
     return { ...state, ...{ data: newData } };
@@ -222,6 +352,41 @@ const schedule: Object = {
     }, data);
 
     return { ...state, ...{ data: newData } };
+  },
+};
+
+const lock: Object = {
+  next(
+    state: Object,
+    { payload: { id, note, username, type } }: {
+      payload: Object,
+      id: number,
+      note: string,
+      username: string,
+      type: string,
+    }
+  ): Object {
+    const data = [...state.data];
+    const order: ?Object = data.find((ord: Object): boolean => ord.id === id);
+
+    if (order) {
+      const currentNotes = order.notes || [];
+      const notes = [...currentNotes, {
+        saved: true,
+        username,
+        note,
+      }];
+
+      const newData = updateItemWithId(id, {
+        operator_lock: type === 'lock' ? username : null,
+        notes,
+        note_count: order.note_count + 1,
+      }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
   },
 };
 
@@ -296,4 +461,13 @@ export {
   schedule as SCHEDULE,
   updateErrors as UPDATEERRORS,
   updateHierarchy as UPDATEHIERARCHY,
+  fetchOrders as FETCHORDERS,
+  changeOffset as CHANGEOFFSET,
+  changeServerSort as CHANGESERVERSORT,
+  selectOrder as SELECT,
+  selectAll as SELECTALL,
+  selectNone as SELECTNONE,
+  selectInvert as SELECTINVERT,
+  unselectAll as UNSELECTALL,
+  lock as LOCK,
 };

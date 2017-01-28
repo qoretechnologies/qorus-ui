@@ -6,6 +6,44 @@ import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
 
+const fetchOrders = createAction(
+  'ORDERS_FETCHORDERS',
+  async (
+    id: number,
+    fetchMore: boolean,
+    offset: number,
+    date: string,
+    limit: number,
+    sortDir: boolean,
+    sort: string,
+  ): Object => {
+    const orders: Array<Object> = await fetchJson(
+      'GET',
+      // eslint-disable-next-line
+      `${settings.REST_BASE_URL}/orders?workflowid=${id}&date=${date}&sort=${sort}&desc=${sortDir.toString()}&offset=${offset}&limit=${limit}`,
+      null,
+      true
+    );
+
+    return { orders, fetchMore };
+  }
+);
+
+const changeOffset = createAction('ORDERS_CHANGEOFFSET', (newOffset: number): Object => (
+  { newOffset }
+));
+const changeServerSort = createAction('ORDERS_CHANGESERVERSORT', (sort: string): Object => (
+  { sort }
+));
+const select = createAction(
+  'ORDERS_SELECT',
+  (id: number) => ({ id })
+);
+const selectAll = createAction('ORDERS_SELECTALL');
+const selectNone = createAction('ORDERS_SELECTNONE');
+const selectInvert = createAction('ORDERS_SELECTINVERT');
+const unselectAll = createAction('ORDERS_UNSELECTALL');
+
 const addOrder: Function = createAction(
   'ORDERS_ADDORDER',
   (events: Array<Object>) => ({ events })
@@ -64,7 +102,6 @@ const orderAction: Function = createAction(
     actn: string,
     id: any,
     optimistic: boolean,
-    origStatus: Object,
     dispatch: Function
   ): ?Object => {
     if (optimistic) return { ids: id, action: actn };
@@ -83,7 +120,7 @@ const orderAction: Function = createAction(
       }
     });
 
-    return { ids: id, origStatus, result };
+    return { ids: id, result };
   }
 );
 
@@ -121,12 +158,11 @@ const scheduleAction: Function = createAction(
 const action: Function = (
   actn: string,
   id: number,
-  origStatus: string
 ): Function => (
   dispatch: Function
 ): void => {
-  dispatch(orderAction(actn, id, false, origStatus, dispatch));
   dispatch(orderAction(actn, id, true));
+  dispatch(orderAction(actn, id, false, dispatch));
 };
 
 const schedule: Function = (
@@ -139,6 +175,30 @@ const schedule: Function = (
   dispatch(scheduleAction(id, date, false, origStatus, dispatch));
   dispatch(scheduleAction(id, date, true));
 };
+
+const lock: Function = createAction(
+  'ORDERS_LOCK',
+  (
+    id: number,
+    username: string,
+    note: string,
+    type: string,
+  ): Object => {
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}`,
+      {
+        body: JSON.stringify({
+          action: type,
+          username,
+          note,
+        }),
+      }
+    );
+
+    return { id, username, note, type };
+  }
+);
 
 const skipStep: Function = createAction(
   'ORDERS_SKIPSTEP',
@@ -181,4 +241,13 @@ export {
   scheduleAction,
   updateErrors,
   updateHierarchy,
+  selectAll,
+  selectNone,
+  selectInvert,
+  unselectAll,
+  fetchOrders,
+  changeOffset,
+  changeServerSort,
+  select,
+  lock,
 };

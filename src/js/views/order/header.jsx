@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import OrderControls from '../workflow/tabs/list/controls';
-import Lock from '../workflow/tabs/list/modals/lock';
-import Reschedule from '../workflow/tabs/list/modals/reschedule';
+import Lock from '../workflow/tabs/list/lock';
+import Reschedule from '../workflow/tabs/list/modals/schedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
 import Alert from '../../components/alert';
 import { pureRender } from '../../components/utils';
@@ -122,11 +122,13 @@ export default class OrderHeader extends Component {
             </h3>
             <div className="order-actions pull-right">
               <OrderControls
-                data={this.props.data}
-                onScheduleClick={this.handleScheduleClick}
-                showText
+                id={this.props.data.id}
+                workflowstatus={this.props.data.workflowstatus}
               />
-              { this.renderLock() }
+              <Lock
+                id={this.props.data.id}
+                lock={this.props.data.operator_lock}
+              />
             </div>
           </div>
         </div>

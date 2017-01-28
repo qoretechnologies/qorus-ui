@@ -6,7 +6,6 @@ import Table, { Section, Row, Cell, EditableCell } from 'components/table';
 import Date from 'components/date';
 import Datepicker from 'components/datepicker';
 import AutoComponent from 'components/autocomponent';
-import Error from '../../workflow/tabs/list/modals/error';
 import { pureRender } from 'components/utils';
 import { getStatusLabel } from '../../../helpers/orders';
 import actions from 'store/api/actions';
@@ -31,22 +30,11 @@ export default class DiagramInfoTable extends Component {
   };
 
   handleDateChange = (d) => {
-    if (moment().isAfter(d)) {
-      this._modal = (
-        <Error
-          onClose={this.handleModalCloseClick}
-          message="Cannot reschedule to a date in past"
-        />
-      );
+    const date = moment(d).format();
 
-      this.context.openModal(this._modal);
-    } else {
-      const date = moment(d).format();
-
-      this.props.dispatch(
-        actions.orders.schedule(this.props.data.id, date, this.props.data.workflowstatus)
-      );
-    }
+    this.props.dispatch(
+      actions.orders.schedule(this.props.data.id, date, this.props.data.workflowstatus)
+    );
   };
 
   handleModalCloseClick = () => {

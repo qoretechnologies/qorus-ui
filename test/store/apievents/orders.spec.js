@@ -87,6 +87,8 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
             orders: {
               data: [],
               sync: true,
+              offset: 0,
+              limit: 50,
             },
             workflows: {
               data: [
@@ -94,6 +96,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                   id: 3,
                 },
               ],
+              sync: true,
             },
           },
         },
@@ -135,12 +138,14 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                   workflowid: 3,
                   workflow_instanceid: 123,
                   name: 'TEST WORKFLOW',
-                  status: 'RETRY',
+                  workflowstatus: 'RETRY',
                   version: '1.0',
                   HierarchyInfo: {},
                 },
               ],
               sync: true,
+              offset: 0,
+              limit: 50,
             },
             workflows: {
               data: [
@@ -178,6 +183,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                 new: 'ERROR',
               },
               workflow_instanceid: 123,
+              workflowid: 3,
             },
           }])
         )

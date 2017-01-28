@@ -1,15 +1,16 @@
 /* @flow */
 import React from 'react';
-import LogContainer from '../../../containers/log';
+import Code from '../../../components/code';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
 type Props = {
   workflow: Object,
+  heightUpdater: Function,
 }
 
-const LogTab: Function = (props: Props): React.Element<any> => (
-  <LogContainer resource={`workflows/${props.workflow.id}`} {...props} />
+const CodeTab: Function = ({ workflow, heightUpdater }: Props): React.Element<any> => (
+  <Code data={workflow.lib} heightUpdater={heightUpdater} />
 );
 
 export default compose(
@@ -24,4 +25,4 @@ export default compose(
       return window.innerHeight - top;
     },
   })
-)(LogTab);
+)(CodeTab);

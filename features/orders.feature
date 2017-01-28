@@ -37,5 +37,3 @@ Feature: Workflow details and orders listing
     Then I should see the performance content
     When I click the "Info" tab
     Then I should see the info content
-
-

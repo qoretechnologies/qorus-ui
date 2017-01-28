@@ -239,7 +239,7 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^all of the "([^"]*)" are selected$/, async function (wf) {
-    this.browser.assert.hasClass('td.narrow.checker > i', 'fa-check-square-o');
+    this.browser.assert.hasClass('td.checker > i', 'fa-check-square-o');
   });
 
   this.When(/^I select one "([^"]*)"$/, function (wf) {
@@ -251,12 +251,12 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^no "([^"]*)" are selected$/, function (wf) {
-    this.browser.assert.hasClass('td.narrow.checker > i', 'fa-square-o');
+    this.browser.assert.hasClass('td.checker > i', 'fa-square-o');
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 
   this.Then(/^"([^"]*)" "([^"]*)" are selected$/, function (count, type) {
-    this.browser.assert.elements('td.narrow.checker > i.fa-check-square-o', parseInt(count, 10));
+    this.browser.assert.elements('td.checker > i.fa-check-square-o', parseInt(count, 10));
   });
 
   this.When(/^I click the "([^"]*)" button inside "([^"]*)" dropdown$/, async function(button, dropdown) {
@@ -279,11 +279,12 @@ module.exports = function commonSteps() {
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
     await this.waitForChange(4000);
+
     this.browser.assert.elements(`${mainSection} tbody > tr`, parseInt(workflows, 10));
   });
 
   this.When(/^I select "([^"]*)" "([^"]*)"$/, async function (count, type) {
-    const rows = this.browser.queryAll('td.narrow.checker > i.fa-square-o');
+    const rows = this.browser.queryAll('td.checker > i.fa-square-o');
 
     for (let i = 0; i <= count - 1; i++) {
       this.browser.click(rows[i]);

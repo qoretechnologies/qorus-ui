@@ -206,19 +206,19 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
-      case 'WORKFLOW_DATA_SUBMITTED':
-        if (state.api.orders.sync) {
-          const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+      case 'WORKFLOW_DATA_SUBMITTED': {
+        const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
 
-          if (workflow) {
-            pipeline(
-              eventstr,
-              orders.addOrder,
-              { info, time: d.time },
-              dispatch
-            );
-          }
-        } else if (state.api.workflows.sync) {
+        if (state.api.orders.sync && workflow) {
+          pipeline(
+            `${eventstr}_ORDER`,
+            orders.addOrder,
+            { info, time: d.time },
+            dispatch
+          );
+        }
+
+        if (state.api.workflows.sync && workflow) {
           pipeline(
             eventstr,
             workflows.addOrder,
@@ -231,15 +231,20 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         break;
-      case 'WORKFLOW_STATUS_CHANGED':
-        if (state.api.orders.sync) {
-          const order = state.api.orders.data.find(ord => ord.id === info.workflow_instanceid);
+      }
+      case 'WORKFLOW_STATUS_CHANGED': {
+        const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+
+        if (state.api.orders.sync && workflow) {
+          const order = state.api.orders.data.find(ord => (
+            ord.workflow_instanceid === info.workflow_instanceid
+          ));
           const ordersCount = state.api.orders.data.length;
           const currentOrder = state.api.orders.data[0];
 
           if (ordersCount === 1 && currentOrder.HierarchyInfo[info.workflow_instanceid]) {
             dispatch(orders.updateHierarchy(
-              currentOrder.id,
+              currentOrder.workflow_instanceid,
               info.workflow_instanceid,
               info.info.new
             ));
@@ -247,7 +252,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           if (order) {
             pipeline(
-              eventstr,
+              `${eventstr}_ORDER`,
               orders.modifyOrder,
               {
                 id: info.workflow_instanceid,
@@ -263,7 +268,9 @@ const handleEvent = (url, data, dispatch, state) => {
               dispatch(orders.updateErrors(info.workflow_instanceid));
             }
           }
-        } else if (state.api.workflows.sync) {
+        }
+
+        if (state.api.workflows.sync && workflow) {
           pipeline(
             eventstr,
             workflows.modifyOrder,
@@ -277,6 +284,7 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         break;
+      }
       case 'WORKFLOW_INFO_CHANGED':
         if (state.api.orders.sync) {
           pipeline(

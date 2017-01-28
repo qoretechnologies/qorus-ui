@@ -62,13 +62,6 @@ Feature: Tests all the features of the orders list toolbar
     And I click the "Filter" button
     Then "1" "order" are shown
 
-  Scenario: Changing the input date
-    Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
-    And "orders" get loaded
-    When I change the input to "2016-06-06 10:10:10"
-    Then the URL changes to "/workflow/14/list/All/20160606101010"
-    And "2" "orders" are shown
-
   Scenario: Changing the date to 24h
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded

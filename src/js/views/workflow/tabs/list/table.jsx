@@ -1,356 +1,92 @@
+/* @flow */
 import React from 'react';
-import { Link } from 'react-router';
-import { union } from 'lodash';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import Table from '../../../services/table';
-import { Cell, Row } from '../../../../components/table';
-import OrderControls from './controls';
-import Date from '../../../../components/date';
-import Checkbox from '../../../../components/checkbox';
-import Dropdown, { Item, Control } from '../../../../components/dropdown';
-import Lock from './modals/lock';
-import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
-import { updateDone } from '../../../../store/api/resources/orders/actions/specials';
+import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
+import withSort from '../../../../hocomponents/sort';
+import noData from '../../../../hocomponents/check-no-data';
+import { sortDefaults } from '../../../../constants/sort';
+import Row from './row';
+import actions from '../../../../store/api/actions';
 
-export default class OrdersTable extends Table {
-  static defaultProps = {
-    setSelectedData: () => {},
-    selectedData: {},
-  };
+type Props = {
+  sortData: Object,
+  sort: Function,
+  handleHeaderClick: Function,
+  onSortChange: Function,
+  collection: Array<Object>,
+  date: string,
+  select: Function,
+  updateDone: Function,
+};
 
-  handleLockClick = (model) => () => {
-    const label = model.operator_lock ? 'Unlock' : 'Lock';
-
-    this._modal = (
-      <Lock
-        onClose={this.handleModalCloseClick}
-        data={model}
-        label={label}
-        username={this.props.username}
-      />
-    );
-
-    this.context.openModal(this._modal);
-  };
-
-  handleModalCloseClick = () => {
-    this.context.closeModal(this._modal);
-  };
-
-  handleHighlightEnd = (id) => () => {
-    this.context.dispatch(
-      updateDone(id)
-    );
-  };
-
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
-    if (!this.props.noCheckbox) {
-      yield (
-        <Cell tag="th" className="narrow" />
-      );
-    }
-
-    yield (
-      <Cell tag="th" className="narrow" />
-    );
-
-    yield (
-      <Cell tag="th" className="narrow">
-        Actions
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="workflowstatus"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
+const WorkflowsTable: Function = ({
+  sortData,
+  onSortChange,
+  collection,
+  date,
+  handleHeaderClick,
+}: Props): React.Element<any> => (
+  <Table
+    striped
+    condensed
+    fixed
+    className="resource-table"
+    marginBottom={30}
+  >
+    <Thead>
+      <Tr
+        sortData={sortData}
+        onSortChange={onSortChange}
       >
-        Status
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="business_error"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Bus. Err.
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="name"
-        name="normalizedName"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Order
-      </Cell>
-    );
-
-    const handleStartedClick = () => {
-      this.props.onServerSortChange('started');
-    };
-
-    yield (
-      <Cell
-        tag="th"
-        name="started"
-        onClick={handleStartedClick}
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Started
-      </Cell>
-    );
-
-    const handleCompletedClick = () => {
-      this.props.onServerSortChange('completed');
-    };
-
-    yield (
-      <Cell
-        tag="th"
-        name="completed"
-        onClick={handleCompletedClick}
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Completed
-      </Cell>
-    );
-
-    const handleModifiedClick = () => {
-      this.props.onServerSortChange('modified');
-    };
-
-    yield (
-      <Cell
-        tag="th"
-        name="modified"
-        onClick={handleModifiedClick}
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Modified
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="scheduled"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Scheduled
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="error_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Errors
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="warning_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Warning
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Lock
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="note_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Notes
-      </Cell>
-    );
-  }
-
-
-  /**
-   * Yields cells with model data
-   *
-   * @param {Object} model
-   * @param {String} selected
-   * @return {Generator<ReactElement>}
-   */
-  *renderCells({ model, selected }) {
-    if (!this.props.noCheckbox) {
-      const handleCheckboxClick = () => {
-        const selectedData = Object.assign({},
-          this.props.selectedData,
-          { [model.id]: !this.props.selectedData[model.id] }
-        );
-
-        this.setSelectedServices(selectedData);
-      };
-
-      yield (
-        <Cell className="narrow checker">
-          <Checkbox
-            action={handleCheckboxClick}
-            checked={ selected ? 'CHECKED' : 'UNCHECKED'}
-          />
-        </Cell>
-      );
-    }
-
-    yield (
-      <Cell className="narrow line-counter" />
-    );
-
-    yield (
-      <Cell className="narrow">
-        <OrderControls
-          data={ model }
-          onScheduleClick={this.props.onScheduleClick}
-        />
-      </Cell>
-    );
-
-    const states = union(ORDER_STATES, CUSTOM_ORDER_STATES);
-    const { label } = states.find(o => o.name === model.workflowstatus);
-
-    yield (
-      <Cell className="narrow">
-        <span className={`label status-${label}`}>
-          { model.workflowstatus }
-        </span>
-      </Cell>
-    );
-
-    yield (
-      <Cell>{ model.business_error }</Cell>
-    );
-
-    yield (
-      <Cell className="name nowrap">
-        <Link to={`/order/${model.id}/${this.props.linkDate || '24h'}`}>
-          { model.normalizedName }
-        </Link>
-      </Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.started } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.completed } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.modified } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.scheduled } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.error_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.warning_count }</Cell>
-    );
-
-    const icon = model.operator_lock ? 'lock' : 'unlock';
-    const itemIcon = model.operator_lock ? 'unlock' : 'lock';
-    const locked = model.operator_lock || '';
-    const title = model.operator_lock ? 'Unlock' : 'Lock';
-    const style = model.operator_lock ? 'danger' : 'success';
-    const disabled = model.operator_lock && model.operator_lock !== this.props.username;
-
-    yield (
-      <Cell className="narrow">
-        <Dropdown>
-          <Control
-            disabled={disabled}
-            small
-            btnStyle={style}
-            title={title}
-          >
-            <i className={`fa fa-${icon}`} />
-            {' '}
-            { locked }
-          </Control>
-          <Item
-            icon={itemIcon}
-            title={title}
-            action={this.handleLockClick(model)}
-          />
-        </Dropdown>
-      </Cell>
-    );
-
-    yield (
-      <Cell>{ model.note_count }</Cell>
-    );
-  }
-
-  *renderRows({ collection, selectedData }) {
-    for (const model of collection) {
-      yield (
+        <Th className="tiny"> - </Th>
+        <Th className="narrow"> - </Th>
+        <Th className="medium"> Actions </Th>
+        <Th className="medium"> Status </Th>
+        <Th className="narrow" name="business_error"> Bus. Err. </Th>
+        <Th name="name"> Order name </Th>
+        <Th className="big" name="started" onClick={handleHeaderClick}> Started </Th>
+        <Th className="big" name="completed" onClick={handleHeaderClick}> Completed </Th>
+        <Th className="big" name="modified" onClick={handleHeaderClick}> Modified </Th>
+        <Th className="big" name="scheduled" onClick={handleHeaderClick}> Scheduled </Th>
+        <Th className="narrow" name="error_count"> Errors </Th>
+        <Th className="narrow" name="warning_count"> Warns. </Th>
+        <Th className="medium" name="operator_lock"> Lock </Th>
+        <Th className="narrow" name="note_count"> Notes </Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {collection.map((order: Object): React.Element<Row> => (
         <Row
-          key={model.id}
-          data={{
-            model,
-            selected: selectedData[model.id],
-          }}
-          cells={this._renderCells}
-          highlight={model._updated}
-          onHighlightEnd={this.handleHighlightEnd(model.id)}
+          key={`order_${order.workflow_instanceid}`}
+          date={date}
+          {...order}
         />
-      );
+      ))}
+    </Tbody>
+  </Table>
+);
+
+export default compose(
+  noData(({ collection }: Props): boolean => collection.length > 0),
+  connect(
+    null,
+    {
+      sort: actions.orders.changeServerSort,
     }
-  }
-}
+  ),
+  withHandlers({
+    handleHeaderClick: ({ sort }: Props): Function => (name: string): void => {
+      sort(name);
+    },
+  }),
+  withSort('orders', 'collection', sortDefaults.orders),
+  pure([
+    'sortData',
+    'collection',
+    'date',
+  ])
+)(WorkflowsTable);
