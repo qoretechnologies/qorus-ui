@@ -1,6 +1,14 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
+
 const initialState = { data: [], sync: false, loading: false };
 
 /**
@@ -164,6 +172,31 @@ const setEnabled = {
   },
 };
 
+const setAutostart = {
+  next(state, { payload: { events } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(dt.id, { autostart: dt.autostart, _updated: true }, newData);
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
 const updateDone = {
   next(state, { payload: { id } }) {
     if (state.sync) {
@@ -247,6 +280,42 @@ const clearAlert = {
   },
 };
 
+const selectService = {
+  next(state = initialState, { payload: { id } }) {
+    return select(state, id);
+  },
+};
+
+const selectAllServices = {
+  next(state = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneServices = {
+  next(state = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state = initialState) {
+    return selectInvert(state);
+  },
+};
+
+const serviceAction = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const unsync = {
+  next() {
+    return initialState;
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -256,4 +325,11 @@ export {
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  selectService as SELECT,
+  selectAllServices as SELECTALL,
+  selectNoneServices as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  setAutostart as SETAUTOSTART,
+  serviceAction as ACTION,
+  unsync as UNSYNC,
 };

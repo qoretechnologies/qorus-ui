@@ -22,7 +22,7 @@ Feature: Services
 
   Scenario: Activating detail pane
     Given I am on "services" listing
-    When I activate "info" - "7"
+    When I activate "info v3.1.9.9 (698)" - "7"
     Then I should see "service" detail pane
     And I should see "service" details tab
     And I should see activated row highlighted
@@ -36,7 +36,7 @@ Feature: Services
   Scenario: Clicking on alert icon opens detail pane on the alerts tab
     Given I am on "services" listing
     And "services" get loaded
-    When I click on the alert icon of "test" "service"
+    When I click on the alert icon of "test v3.1.0.0 (111)" "service"
     Then the complete URL changes to "services?paneId=111&paneTab=detail"
 
   Scenario: Clicking on an alert shows the alert in system\

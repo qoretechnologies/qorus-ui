@@ -1,4 +1,4 @@
 export const DEFAULTS = {
-  threads: '-',
+  threads: 0,
   options: [],
 };

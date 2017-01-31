@@ -1,163 +1,112 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import compose from 'recompose/compose';
-import { flowRight } from 'lodash';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import { setTitle } from '../../helpers/document';
-import sort from '../../hocomponents/sort';
+import { querySelector, resourceSelector } from '../../selectors';
+import actions from '../../store/api/actions';
+import { findBy } from '../../helpers/search';
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
-import { sortDefaults } from '../../constants/sort';
-import actions from '../../store/api/actions';
+import withCSV from '../../hocomponents/csv';
+import unsync from '../../hocomponents/unsync';
+import selectable from '../../hocomponents/selectable';
+import ServicesDetail from './detail';
 import ServicesToolbar from './toolbar';
 import ServicesTable from './table';
-import ServicesDetail from './detail';
-import { findBy } from '../../helpers/search';
 
-const filterSearch = (search) => (services) =>
-  findBy('name', search, services);
+type Props = {
+  onCSVClick: Function,
+  selected: string,
+  selectedIds: Array<number>,
+  location: Object,
+  services: Array<Object>,
+  paneId: number | string,
+  openPane: Function,
+};
 
-const servicesSelector = state => state.api.services;
-
-const systemOptionsSelector = state => (
-  state.api.systemOptions.data.filter(opt => opt.service)
+const Services: Function = ({
+  selected,
+  selectedIds,
+  onCSVClick,
+  openPane,
+  paneId,
+  services,
+  location,
+}: Props): React.Element<any> => (
+  <div>
+    <ServicesToolbar
+      selected={selected}
+      selectedIds={selectedIds}
+      onCSVClick={onCSVClick}
+      location={location}
+    />
+    <ServicesTable
+      collection={services}
+      paneId={paneId}
+      openPane={openPane}
+    />
+  </div>
 );
 
-const searchSelector = (state, props) => props.location.query.q;
+const filterSearch: Function = (
+  search: string
+): Function => (
+  services: Array<Object>
+): Array<Object> => (
+  findBy('name', search, services)
+);
 
-const collectionSelector = createSelector(
+const servicesSelector: Function = createSelector(
   [
-    searchSelector,
-    servicesSelector,
-  ],
-  (search, services) => flowRight(
-    filterSearch(search)
-  )(services.data)
+    resourceSelector('services'),
+    querySelector('search'),
+  ], (services, search) => filterSearch(search)(services.data)
 );
 
-const viewSelector = createSelector(
+const systemOptionsSelector: Function = (state: Object): Array<Object> => (
+  state.api.systemOptions.data.filter((option: Object): boolean => option.service)
+);
+
+const selector: Function = createSelector(
   [
     servicesSelector,
     systemOptionsSelector,
-    collectionSelector,
-  ],
-  (services, systemOptions, collection) => ({
-    meta: services,
-    services: collection,
+    resourceSelector('services'),
+  ], (services, systemOptions, meta) => ({
+    services,
     systemOptions,
-  }),
+    meta,
+  })
 );
 
-@compose(
-  connect(viewSelector, actions.services),
-  sync('meta', true, 'fetch'),
-  sort('services', 'services', sortDefaults.services),
+export default compose(
+  connect(
+    selector,
+    {
+      load: actions.services.fetch,
+      unsync: actions.services.unsync,
+    }
+  ),
+  sync('meta'),
   withPane(
     ServicesDetail,
     [
       'systemOptions',
-      'dispatch',
       'location',
     ],
     'detail'
-  )
-)
-export default class Services extends Component {
-  static propTypes = {
-    location: PropTypes.object,
-    instanceKey: PropTypes.string,
-    services: PropTypes.array,
-    info: PropTypes.object,
-    systemOptions: PropTypes.array,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    onFilterClick: PropTypes.func,
-    filterFn: PropTypes.func,
-    onSearchChange: PropTypes.func,
-    clearSelection: PropTypes.func,
-    onDataFilterChange: PropTypes.func,
-    setSelectedData: PropTypes.func,
-    onBatchAction: PropTypes.func,
-    selectedData: PropTypes.object,
-    selected: PropTypes.string,
-    onAllClick: PropTypes.func,
-    onNoneClick: PropTypes.func,
-    onInvertClick: PropTypes.func,
-    onCSVClick: PropTypes.func,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    paneId: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    openPane: PropTypes.func.isRequired,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-    setTitle(`Services | ${this.context.getTitle()}`);
-  }
-
-  componentDidUpdate() {
-    setTitle(`Services | ${this.context.getTitle()}`);
-  }
-
-  handleCSVClick = () => {
-    this.props.onCSVClick(this.props.services, 'services');
-  };
-
-  /**
-   * Handles the batch action calls like
-   * enabling, disabling, reseting etc
-   * of multiple workflows
-   *
-   * @param {String} type
-   */
-  handleBatchAction = (type) => {
-    const selectedData = [];
-
-    Object.keys(this.props.selectedData).forEach(w => {
-      if (this.props.selectedData[w]) {
-        selectedData.push(w);
-      }
-    });
-
-    this.props.clearSelection();
-    this.props[`${type}Batch`](selectedData);
-  };
-
-  render() {
-    return (
-      <div>
-        <ServicesToolbar
-          onFilterClick={this.props.onFilterClick}
-          onSearchUpdate={this.props.onSearchChange}
-          selected={this.props.selected}
-          defaultSearchValue={this.props.location.query.q}
-          batchAction={this.handleBatchAction}
-          onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onNoneClick}
-          onInvertClick={this.props.onInvertClick}
-          onCSVClick={this.handleCSVClick}
-        />
-        <ServicesTable
-          initialFilter={this.props.filterFn}
-          onDataFilterChange={this.props.onDataFilterChange}
-          setSelectedData={this.props.setSelectedData}
-          selectedData={this.props.selectedData}
-          onSortChange={this.props.onSortChange}
-          sortData={this.props.sortData}
-          collection={this.props.services}
-          activeRowId={parseInt(this.props.paneId, 10)}
-          onDetailClick={this.props.openPane}
-          onUpdateDone={actions.services.updateDone}
-        />
-      </div>
-    );
-  }
-}
+  ),
+  selectable('services'),
+  withCSV('services', 'services'),
+  pure([
+    'services',
+    'systemOptions',
+    'selected',
+    'selectedIds',
+    'paneId',
+  ]),
+  unsync()
+)(Services);

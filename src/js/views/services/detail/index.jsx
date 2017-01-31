@@ -13,39 +13,27 @@ import actions from 'store/api/actions';
 @connect(
   (state, props) => ({
     service: state.api.services.data.find((service) => service.id === parseInt(props.paneId, 10)),
-  })
+  }), {
+    load: actions.services.fetchLibSources,
+  }
 )
 export default class ServicesDetail extends Component {
   static propTypes = {
-    service: PropTypes.object.isRequired,
+    service: PropTypes.object,
     systemOptions: PropTypes.array.isRequired,
     paneTab: PropTypes.string,
     paneId: PropTypes.string,
     onClose: PropTypes.func,
     location: PropTypes.object,
-    dispatch: PropTypes.func,
     changePaneTab: PropTypes.func,
   };
 
   componentWillMount() {
-    this.setState({ lastModelId: null });
-    this.loadDetailedDataIfChanged(this.props);
+    this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.loadDetailedDataIfChanged(nextProps);
-  }
-
-  loadDetailedDataIfChanged(props) {
-    if (this.state && this.state.lastModelId === props.service.id) {
-      return;
-    }
-
-    this.setState({ lastModelId: props.service.id });
-
-    this.props.dispatch(
-      actions.services.fetchLibSources(props.service)
-    );
+  handlePaneClose = () => {
+    this.props.onClose(['logQuery']);
   }
 
   getHeight: Function = (): number => {
@@ -65,7 +53,7 @@ export default class ServicesDetail extends Component {
     return (
       <DetailPane
         width={550}
-        onClose={this.props.onClose}
+        onClose={this.handlePaneClose}
       >
         <article>
           <ServicesHeader service={service} />

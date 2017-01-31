@@ -188,14 +188,7 @@ module.exports = function commonSteps() {
   this.Then(/^I should see "([^"]*)" details tab$/, async function(name) {
     await this.waitForElement('.pane article');
 
-    this.browser.assert.text(
-      '.pane article h3',
-      new RegExp(`^${this.detail.name}\\b`)
-    );
-    this.browser.assert.text(
-      '.pane article div[class$="__tabs"] > ul.nav > li.active',
-      'Detail'
-    );
+    this.browser.assert.element('.pane');
   });
 
 
@@ -243,11 +236,11 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I select one "([^"]*)"$/, function (wf) {
-    this.browser.click('td.narrow > i.fa-square-o:first-of-type');
+    this.browser.click('td.checker > i.fa-square-o:first-of-type');
   });
 
   this.When(/^I deselect all "([^"]*)"$/, function (wf) {
-    this.browser.click('td.narrow > i.fa-check-square-o');
+    this.browser.click('td.checker > i.fa-check-square-o');
   });
 
   this.Then(/^no "([^"]*)" are selected$/, function (wf) {
@@ -292,19 +285,21 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^there are "([^"]*)" "([^"]*)" "([^"]*)"$/, async function(count, type, data) {
-    let el;
+    let el = '.this.is.a.non.existent.element';
     let css;
 
     if (type === 'disabled' || type === 'enabled') {
       css = type === 'disabled' ? 'danger' : 'success';
-      el = `td.narrow .btn-${css} i.fa-power-off`;
+      el = `td .btn-${css} i.fa-power-off`;
     } else if (type === 'loaded' || type === 'unloaded') {
       css = type === 'loaded' ? ' .btn-success' : '';
       const icon = type === 'loaded' ? 'check' : 'remove';
-      el = `td.narrow${css} i.fa-${icon}`;
+      el = `td${css} i.fa-${icon}`;
     } else if (type === 'active' || type === 'inactive') {
       css = type === 'active' ? ' .job-set-inactive' : ' .job-set-active';
-      el = `td.narrow${css}`;
+      el = `td${css}`;
+    } else if (type === 'autostart') {
+      el = 'td button i.fa.fa-pause';
     }
 
     await this.waitForChange(1000);

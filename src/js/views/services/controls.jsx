@@ -1,103 +1,93 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
-import { Controls, Control } from 'components/controls';
-import actions from 'store/api/actions';
+import { Controls, Control as Button } from '../../components/controls';
+import actions from '../../store/api/actions';
 
-@connect(() => ({}), actions.services)
-export default class ServiceControls extends Component {
-  static propTypes = {
-    service: PropTypes.object,
-    status: PropTypes.string,
-    enabled: PropTypes.bool,
-    autostart: PropTypes.bool,
-    enable: PropTypes.func.isRequired,
-    disable: PropTypes.func.isRequired,
-    reset: PropTypes.func.isRequired,
-    load: PropTypes.func.isRequired,
-    unload: PropTypes.func.isRequired,
-    autostartOn: PropTypes.func.isRequired,
-    autostartOff: PropTypes.func.isRequired,
-  };
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
-  dispatchAction(action) {
-    this.props[action](this.props.service);
-  }
-
-  dispatchDisable = () => this.dispatchAction('disable');
-  dispatchEnable = () => this.dispatchAction('enable');
-  dispatchReset = (event) => {
-    if (this.props.status === 'loaded') {
-      this.dispatchAction('reset');
-    }
-    return event;
-  };
-  dispatchLoad = () => this.dispatchAction('load');
-  dispatchUnload = () => this.dispatchAction('unload');
-  dispatchEnableAutostart = () => this.dispatchAction('autostartOn');
-  dispatchDisableAutostart = () => this.dispatchAction('autostartOff');
-
-
-  render() {
-    return (
-      <Controls>
-        {this.props.enabled && (
-          <Control
-            title="Disable"
-            icon="power-off"
-            btnStyle="success"
-            action={this.dispatchDisable}
-          />
-        )}
-        {!this.props.enabled && (
-          <Control
-            title="Enable"
-            icon="power-off"
-            btnStyle="danger"
-            action={this.dispatchEnable}
-          />
-        )}
-        {!this.props.autostart && (
-          <Control
-            title="Enable Autostart"
-            icon="play"
-            action={this.dispatchEnableAutostart}
-          />
-        )}
-        {this.props.autostart && (
-          <Control
-            title="Disable Autostart"
-            icon="pause"
-            btnStyle="success"
-            action={this.dispatchDisableAutostart}
-          />
-        )}
-        {this.props.status === 'unloaded' && (
-          <Control
-            title="Load"
-            icon="remove"
-            action={this.dispatchLoad}
-          />
-        )}
-        {this.props.status === 'loaded' && (
-          <Control
-            title="Unload"
-            icon="check"
-            btnStyle="success"
-            action={this.dispatchUnload}
-          />
-        )}
-        <Control
-          title="Reset"
-          icon="refresh"
-          btnStyle={ this.props.status === 'loaded' ? 'warning' : 'na disabled' }
-          action={ this.dispatchReset }
-        />
-      </Controls>
-    );
-  }
+type Props = {
+  handleEnableClick: Function,
+  handleLoadClick: Function,
+  handleResetClick: Function,
+  handleAutostartClick: Function,
+  enabled: boolean,
+  loaded: boolean,
+  autostart: boolean,
+  status: string,
+  action: Function,
+  id: number,
 }
+
+const ServiceControls: Function = ({
+  handleEnableClick,
+  handleLoadClick,
+  handleResetClick,
+  handleAutostartClick,
+  loaded,
+  enabled,
+  autostart,
+}: Props): React.Element<any> => (
+  <Controls grouped>
+    <Button
+      title={enabled ? 'Disable' : 'Enable'}
+      icon="power-off"
+      btnStyle={enabled ? 'success' : 'danger'}
+      onClick={handleEnableClick}
+    />
+    <Button
+      title={autostart ? 'Disable autostart' : 'Enable autostart'}
+      icon={autostart ? 'pause' : 'play'}
+      btnStyle={autostart ? 'success' : 'default'}
+      onClick={handleAutostartClick}
+    />
+    <Button
+      title={loaded ? 'Disable' : 'Enable'}
+      icon={loaded ? 'check' : 'remove'}
+      btnStyle={loaded ? 'success' : 'default'}
+      onClick={handleLoadClick}
+    />
+    <Button
+      title="Reset"
+      icon="refresh"
+      btnStyle={loaded ? 'warning' : 'default'}
+      disabled={!loaded}
+      onClick={handleResetClick}
+    />
+  </Controls>
+);
+
+export default compose(
+  connect(
+    null,
+    {
+      action: actions.services.serviceAction,
+    }
+  ),
+  mapProps(({ status, ...rest }: Props): Object => ({
+    loaded: status === 'loaded',
+    ...rest,
+  })),
+  withHandlers({
+    handleEnableClick: ({ enabled, action, id }: Props): Function => (): void => {
+      action(enabled ? 'disable' : 'enable', id);
+    },
+    handleAutostartClick: ({ autostart, action, id }: Props): Function => (): void => {
+      action('autostart', id, autostart);
+    },
+    handleLoadClick: ({ loaded, action, id }: Props): Function => (): void => {
+      action(loaded ? 'unload' : 'load', id);
+    },
+    handleResetClick: ({ action, id }: Props): Function => (): void => {
+      action('reset', id);
+    },
+  }),
+  pure([
+    'enabled',
+    'loaded',
+    'autostart',
+  ])
+)(ServiceControls);

@@ -9,7 +9,6 @@ import { Control as Button } from '../../../../../components/controls';
 import actions from '../../../../../store/api/actions';
 
 type Props = {
-  show: boolean,
   unselectAll: Function,
   selectedIds: Array<number>,
   orderAction: Function,
@@ -108,7 +107,6 @@ export default compose(
     },
   }),
   pure([
-    'show',
     'selectedIds',
   ]),
 )(ToolbarActions);

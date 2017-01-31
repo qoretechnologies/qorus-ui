@@ -180,6 +180,19 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'SERVICE_AUTOSTART_CHANGE':
+        if (state.api.services.sync) {
+          pipeline(
+            eventstr,
+            services.setAutostart,
+            {
+              id: info.serviceid,
+              autostart: info.autostart,
+            },
+            dispatch
+          );
+        }
+        break;
       case 'WORKFLOW_STOP':
         if (state.api.workflows.sync) {
           pipeline(

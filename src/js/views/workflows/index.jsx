@@ -118,7 +118,6 @@ type Props = {
   onCSVClick: Function,
   paneId: string | number,
   openPane: Function,
-  changePaneTab: Function,
   fetch: Function,
   deprecated: boolean,
   selectedIds: Array<number>,

@@ -2,6 +2,13 @@ import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 import includes from 'lodash/includes';
 
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
 const initialState = { data: [], sync: false, loading: false };
 
 /**
@@ -270,46 +277,25 @@ const clearAlert = {
 
 const selectWorkflow = {
   next(state = initialState, { payload: { id } }) {
-    const stateData = [...state.data];
-    const workflow = stateData.find((w) => w.id === parseInt(id, 10));
-    const newData = updateItemWithId(id, { _selected: !workflow._selected }, stateData);
-
-    return { ...state, ...{ data: newData } };
+    return select(state, id);
   },
 };
 
-const selectAll = {
+const selectAllWorkflows = {
   next(state = initialState) {
-    const data = [...state.data];
-    const newData = data.map(w => ({ ...w, ...{ _selected: true } }));
-
-    return { ...state, ...{ data: newData } };
+    return selectAll(state);
   },
 };
 
-const selectNone = {
+const selectNoneWorkflows = {
   next(state = initialState) {
-    const data = [...state.data];
-    const newData = data.map(w => {
-      const copy = { ...w };
-
-      if (w._selected) {
-        copy._selected = null;
-      }
-
-      return copy;
-    });
-
-    return { ...state, ...{ data: newData } };
+    return selectNone(state);
   },
 };
 
-const selectInvert = {
+const invertSelection = {
   next(state = initialState) {
-    const data = [...state.data];
-    const newData = data.map(w => ({ ...w, ...{ _selected: !w._selected } }));
-
-    return { ...state, ...{ data: newData } };
+    return selectInvert(state);
   },
 };
 
@@ -393,9 +379,9 @@ export {
   clearAlert as CLEARALERT,
   unsync as UNSYNC,
   selectWorkflow as SELECT,
-  selectAll as SELECTALL,
-  selectNone as SELECTNONE,
-  selectInvert as SELECTINVERT,
+  selectAllWorkflows as SELECTALL,
+  selectNoneWorkflows as SELECTNONE,
+  invertSelection as SELECTINVERT,
   selectRunning as SELECTRUNNING,
   selectStopped as SELECTSTOPPED,
   setAutostart as SETAUTOSTART,

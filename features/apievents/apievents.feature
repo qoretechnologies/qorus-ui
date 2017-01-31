@@ -93,6 +93,12 @@ Feature: Tests various websocket apievents
     When I send a ws request for "SERVICE_START"
     Then there are "1" "unloaded" "services"
 
+  Scenario: Changes service autostart
+    Given I am on "services" listing
+    And "services" get loaded
+    And I send a ws request for "SERVICE_AUTOSTART_CHANGE"
+    Then there are "1" "autostart" "services"
+
   Scenario: Starts a workflow
     Given I am on "workflows" listing
     And "workflows" get loaded

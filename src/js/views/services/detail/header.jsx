@@ -16,7 +16,7 @@ function ServicesHeader(props) {
           status={props.service.status}
           enabled={props.service.enabled}
           autostart={props.service.autostart}
-          service={props.service}
+          id={props.service.id}
         />
       </div>
     </div>
