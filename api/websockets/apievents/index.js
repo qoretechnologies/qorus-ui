@@ -177,6 +177,15 @@ module.exports = () => {
           },
         });
         break;
+      case 'SERVICE_AUTOSTART_CHANGE':
+        send({
+          eventstr,
+          info: {
+            serviceid: 222,
+            autostart: true,
+          },
+        });
+        break;
       case 'WORKFLOW_START':
       case 'WORKFLOW_STOP':
         send({
