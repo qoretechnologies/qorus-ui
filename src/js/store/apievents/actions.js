@@ -248,7 +248,7 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'WORKFLOW_STATUS_CHANGED': {
         const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
 
-        if (state.api.orders.sync && workflow) {
+        if (state.api.orders.sync) {
           const order = state.api.orders.data.find(ord => (
             ord.workflow_instanceid === info.workflow_instanceid
           ));

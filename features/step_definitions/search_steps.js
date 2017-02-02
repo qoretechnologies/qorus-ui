@@ -3,7 +3,7 @@ import { expect } from 'chai';
 module.exports = function searchSteps() {
   this.Then(/^the search page is shown$/, async function() {
     await this.waitForElement('.workflows-toolbar');
-    this.browser.assert.element('.workflows-toolbar');
+    this.browser.assert.elements('.workflows-toolbar', 2);
   });
 
   this.Then(/^there are (\d+) inputs displayed$/, async function(count) {

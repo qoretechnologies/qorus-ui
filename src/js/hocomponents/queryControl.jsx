@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { changeQuery } from '../helpers/router';
 
 export default (
-  queryName: string | Function,
+  queryName: ?string | ?Function,
   customFunc: ?Function,
   toggle: ?boolean,
 ): Function => (Component: any): ?ReactClass<*> => {
@@ -28,27 +28,36 @@ export default (
     getLocation: Function = (): Object => this.props.location || this.context.location;
 
     handleQueryChange: Function = (value: string): void => {
-      const query = this.getQueryName(queryName);
       const location = this.getLocation();
-      let val = value;
 
-      if (toggle) {
-        val = location.query[query] ? '' : true;
-      }
+      if (!queryName) {
+        changeQuery(
+          this.context.router,
+          location,
+          value,
+        );
+      } else {
+        const query = this.getQueryName(queryName);
+        let val = value;
 
-      changeQuery(
-        this.context.router,
-        location,
-        {
-          [query]: val,
+        if (toggle) {
+          val = location.query[query] ? '' : true;
         }
-      );
+
+        changeQuery(
+          this.context.router,
+          location,
+          {
+            [query]: val,
+          }
+        );
+      }
     };
 
     render() {
       const func: Function = customFunc || this.handleQueryChange;
-      const qName: string = this.getQueryName(queryName);
       const location: Object = this.getLocation();
+      const qName: string = !queryName ? 'all' : this.getQueryName(queryName);
       const query: string = location.query[qName];
       const newProps = {
         ...{

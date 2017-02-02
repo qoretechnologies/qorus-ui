@@ -27,7 +27,7 @@ import { Control } from '../../../../components/controls';
 type Props = {
   date: string,
   linkDate: string,
-  workflow: Object,
+  workflow?: Object,
   selected: string,
   onCSVClick: Function,
   fetch: Function,
@@ -40,6 +40,8 @@ type Props = {
   offsetLimit: number,
   offset: number,
   limit: number,
+  searchData?: Object,
+  searchPage?: boolean,
 };
 
 const WorkflowOrders: Function = ({
@@ -51,6 +53,7 @@ const WorkflowOrders: Function = ({
   linkDate,
   handleMoreClick,
   offsetLimit,
+  searchPage,
 }: Props): React.Element<any> => (
   <div>
     <Toolbar
@@ -58,6 +61,7 @@ const WorkflowOrders: Function = ({
       selectedIds={selectedIds}
       onCSVClick={onCSVClick}
       location={location}
+      searchPage={searchPage}
     />
     <Table
       collection={orders}
@@ -131,14 +135,23 @@ export default compose(
     }
   ),
   mapProps(({ workflow, offset, limit, ...rest }: Props): Object => ({
-    id: workflow.id,
+    id: workflow ? workflow.id : null,
     offsetLimit: offset + limit,
     workflow,
     offset,
     limit,
     ...rest,
   })),
-  patch('load', ['id', false, 'offset', 'linkDate', 'limit', 'sortDir', 'sort']),
+  patch('load', [
+    'id',
+    false,
+    'offset',
+    'linkDate',
+    'limit',
+    'sortDir',
+    'sort',
+    'searchData',
+  ]),
   sync('meta'),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
@@ -151,15 +164,18 @@ export default compose(
         sortDir,
         offset,
         changeOffset,
+        searchData,
       } = this.props;
 
-      if (date !== nextProps.date && nextProps.offset !== 0) {
+      if ((date !== nextProps.date || searchData !== nextProps.searchData)
+      && nextProps.offset !== 0) {
         changeOffset(0);
       } else if (
         date !== nextProps.date ||
         sort !== nextProps.sort ||
         sortDir !== nextProps.sortDir ||
-        offset !== nextProps.offset
+        offset !== nextProps.offset ||
+        searchData !== nextProps.searchData
       ) {
         fetch(
           id,
@@ -169,6 +185,7 @@ export default compose(
           nextProps.limit,
           nextProps.sortDir,
           nextProps.sort,
+          nextProps.searchData,
         );
         unselectAll();
       }

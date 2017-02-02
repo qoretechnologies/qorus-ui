@@ -16,6 +16,7 @@ type Props = {
   date: string,
   onApplyDate: (date: string) => void,
   futureOnly?: boolean,
+  noButtons?: boolean,
   applyOnBlur?: boolean,
   placeholder?: string,
   className?: string,
@@ -211,7 +212,7 @@ export default class DatePicker extends Component {
   }
 
   renderControls(): ?React.Element<Controls> {
-    if (this.props.futureOnly) return null;
+    if (this.props.futureOnly || this.props.noButtons) return null;
 
     return (
       <Controls grouped noControls>

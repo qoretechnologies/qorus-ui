@@ -16,11 +16,35 @@ const fetchOrders = createAction(
     limit: number,
     sortDir: boolean,
     sort: string,
+    searchData: Object,
   ): Object => {
+    let url;
+
+    if (!id || id === 'id') {
+      url = `${settings.REST_BASE_URL}/orders?` +
+      `ids=${searchData.ids || ''}&` +
+      `date=${searchData.minDate}&` +
+      `maxmodified=${searchData.maxDate || '29991231'}&` +
+      `keyname=${searchData.keyName || ''}&` +
+      `keyvalue=${searchData.keyValue || ''}&` +
+      `status=${searchData.status || ''}&` +
+      `sort=${sort}&` +
+      `desc=${sortDir.toString()}&` +
+      `offset=${offset}&` +
+      `limit=${limit}`;
+    } else {
+      url = `${settings.REST_BASE_URL}/orders?` +
+      `workflowid=${id}&` +
+      `date=${date}&` +
+      `sort=${sort}&` +
+      `desc=${sortDir.toString()}&` +
+      `offset=${offset}&` +
+      `limit=${limit}`;
+    }
+
     const orders: Array<Object> = await fetchJson(
       'GET',
-      // eslint-disable-next-line
-      `${settings.REST_BASE_URL}/orders?workflowid=${id}&date=${date}&sort=${sort}&desc=${sortDir.toString()}&offset=${offset}&limit=${limit}`,
+      url,
       null,
       true
     );

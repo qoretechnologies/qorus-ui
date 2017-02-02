@@ -21,6 +21,7 @@ type Props = {
   changeDateQuery: Function,
   onCSVClick: Function,
   location: Object,
+  searchPage?: boolean,
 };
 
 const OrdersToolbar: Function = ({
@@ -32,28 +33,35 @@ const OrdersToolbar: Function = ({
   changeDateQuery,
   onCSVClick,
   location,
+  searchPage,
 }: Props): React.Element<any> => (
   <Toolbar sticky>
     <Selector selected={selected} />
     { selected !== 'none' && (
       <Actions selectedIds={selectedIds} />
     )}
-    <Datepicker
-      date={dateQuery || '24h'}
-      onApplyDate={changeDateQuery}
-      className="toolbar-item"
-    />
-    <Filters location={location} />
+    { !searchPage && (
+      <Datepicker
+        date={dateQuery || '24h'}
+        onApplyDate={changeDateQuery}
+        className="toolbar-item"
+      />
+    )}
+    { !searchPage && (
+      <Filters location={location} />
+    )}
     <Button
       label="CSV"
       btnStyle="default"
       big
       action={onCSVClick}
     />
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-    />
+    { !searchPage && (
+      <Search
+        defaultValue={searchQuery}
+        onSearchUpdate={changeSearchQuery}
+      />
+    )}
   </Toolbar>
 );
 
