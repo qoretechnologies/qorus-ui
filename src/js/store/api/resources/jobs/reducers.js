@@ -2,6 +2,13 @@ import _ from 'lodash';
 import remove from 'lodash/remove';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -142,17 +149,6 @@ const clearResults = {
   },
   throw(state) {
     return state;
-  },
-};
-
-const setExpirationDate = {
-  next(state, action) {
-    const { meta: { job }, payload: updatedJob } = action;
-    return { ...state, data: updateItemWithId(job.id, updatedJob, state.data) };
-  },
-  throw(state, action) {
-    const { meta: { job } } = action;
-    return { ...state, data: updateItemWithId(job.id, job, state.data) };
   },
 };
 
@@ -417,13 +413,95 @@ const clearAlert = {
   },
 };
 
+const selectJob = {
+  next(state = initialState, { payload: { id } }) {
+    return select(state, id);
+  },
+};
+
+const selectAllJobs = {
+  next(state = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneJobs = {
+  next(state = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state = initialState) {
+    return selectInvert(state);
+  },
+};
+
+const unsync = {
+  next() {
+    return initialState;
+  },
+};
+
+const jobsAction = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const reschedule = {
+  next(state = initialState, {
+    payload: {
+      minute,
+      hour,
+      day,
+      month,
+      wday,
+      id,
+    },
+  }
+) {
+    const data = updateItemWithId(id, {
+      minute,
+      hour,
+      day,
+      month,
+      wday,
+    }, [...state.data]);
+
+    return { ...state, ...{ data } };
+  },
+};
+
+const activate = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const expire = {
+  next(state = initialState, { payload: { id, date, error } }) {
+    const data = [...state.data];
+    let newData;
+
+    if (error) {
+      newData = updateItemWithId(id, { expiry_date: null }, data);
+    } else if (date) {
+      newData = updateItemWithId(id, { expiry_date: date }, data);
+    } else {
+      return state;
+    }
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
   fetchResults as FETCHRESULTS,
   startFetchingResults as STARTFETCHINGRESULTS,
   clearResults as CLEARRESULTS,
-  setExpirationDate as SETEXPIRATIONDATE,
   fetchCode as FETCHCODE,
   setActive as SETACTIVE,
   setEnabled as SETENABLED,
@@ -433,4 +511,13 @@ export {
   modifyInstance as MODIFYINSTANCE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  selectJob as SELECT,
+  selectAllJobs as SELECTALL,
+  selectNoneJobs as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  unsync as UNSYNC,
+  jobsAction as ACTION,
+  expire as EXPIRE,
+  reschedule as RESCHEDULE,
+  activate as ACTIVATE,
 };

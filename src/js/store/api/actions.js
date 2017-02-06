@@ -128,11 +128,6 @@ Object.assign(actions.services, serviceActions.specials);
 
 actions.jobs = { ...actions.jobs, ...jobActions.specials };
 
-Object.keys(jobActions.delegates).forEach(a => {
-  actions.jobs[a] = jobActions.delegates[a](actions);
-});
-
-
 Object.keys(optionActions.delegates).forEach(a => {
   actions.systemOptions[a] = optionActions.delegates[a](actions);
 });

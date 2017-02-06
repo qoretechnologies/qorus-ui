@@ -1,211 +1,143 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { flowRight } from 'lodash';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import lifecycle from 'recompose/lifecycle';
 import mapProps from 'recompose/mapProps';
-import shallowEqual from 'recompose/shallowEqual';
+import pure from 'recompose/onlyUpdateForKeys';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import { setTitle } from '../../helpers/document';
-import patch from '../../hocomponents/patchFuncArgs';
-import sort from '../../hocomponents/sort';
 import sync from '../../hocomponents/sync';
 import withPane from '../../hocomponents/pane';
-import { sortDefaults } from '../../constants/sort';
-import { formatDate } from '../../helpers/date';
+import unsync from '../../hocomponents/unsync';
+import patch from '../../hocomponents/patchFuncArgs';
+import selectable from '../../hocomponents/selectable';
+import withCSV from '../../hocomponents/csv';
+import { querySelector, resourceSelector } from '../../selectors';
 import actions from '../../store/api/actions';
+import { DATES } from '../../constants/dates';
+import { formatDate } from '../../helpers/workflows';
+import { findBy } from '../../helpers/search';
+import JobsDetail from './detail';
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
-import JobsDetail from './detail';
-import { findBy } from '../../helpers/search';
-import { DATES } from '../../constants/dates';
 
-const filterSearch = (search) => (collection) =>
-  findBy('name', search, collection);
+type Props = {
+  jobs: Array<Object>,
+  date: string,
+  selectNone: Function,
+  fetch: Function,
+  fetchParams: Object,
+  systemOptions: Array<Object>,
+  location: Object,
+  selected: string,
+  onCSVClick: Function,
+  paneId: string | number,
+  openPane: Function,
+  selectedIds: Array<number>,
+};
 
-const jobsSelector = state => state.api.jobs;
-
-const systemOptionsSelector = state => (
-  state.api.systemOptions.data.filter(opt => opt.job)
+const JobsView: Function = ({
+  selected,
+  selectedIds,
+  onCSVClick,
+  jobs,
+  openPane,
+  paneId,
+  date,
+}: Props): React.Element<any> => (
+  <div>
+    <JobsToolbar
+      selected={selected}
+      selectedIds={selectedIds}
+      onCSVClick={onCSVClick}
+    />
+    <JobsTable
+      collection={jobs}
+      openPane={openPane}
+      paneId={paneId}
+      date={date}
+    />
+  </div>
 );
 
-const searchSelector = (state, props) => props.location.query.q;
-
-const collectionSelector = createSelector(
-  [
-    searchSelector,
-    jobsSelector,
-  ],
-  (search, jobs) => flowRight(
-    filterSearch(search)
-  )(jobs.data)
+const filterSearch: Function = (
+  search: string
+): Function => (
+  jobs: Array<Object>
+): Array<Object> => (
+  findBy('name', search, jobs)
 );
 
-const viewSelector = createSelector(
+const collectionSelector: Function = createSelector(
   [
-    jobsSelector,
-    systemOptionsSelector,
+    resourceSelector('jobs'),
+    querySelector('search'),
+  ], (jobs, search) => filterSearch(search)(jobs.data)
+);
+
+const selector: Function = createSelector(
+  [
+    resourceSelector('jobs'),
+    resourceSelector('systemOptions'),
     collectionSelector,
-  ],
-  (jobs, systemOptions, collection, sortData) => ({
-    meta: {
-      sync: jobs.sync,
-      loading: jobs.loading,
-    },
-    collection,
+    querySelector('date'),
+  ], (meta, systemOptions, jobs, date) => ({
+    meta,
     systemOptions,
-    sortData,
+    jobs,
+    date,
   })
 );
 
-const prepareUrlParams = mapProps(props => {
-  const { date: urlDate = DATES.PREV_DAY } = props.params;
-  const urlParams = {};
-  if (urlDate) {
-    urlParams.date = formatDate(urlDate).format();
-  }
-  return { ...props, urlParams };
-});
-
-const fetchOnUrlParamsChange = lifecycle({
-  componentWillReceiveProps(newProps) {
-    const { params: newParams, fetch } = newProps;
-    const { params } = this.props;
-    if (!shallowEqual(params.date, newParams.date)) {
-      fetch();
-    }
-  },
-});
-
-@compose(
+export default compose(
   connect(
-    viewSelector,
-    actions.jobs
+    selector,
+    {
+      load: actions.jobs.fetch,
+      fetch: actions.jobs.fetch,
+      unsync: actions.jobs.unsync,
+      selectNone: actions.jobs.selectNone,
+    }
   ),
-  onlyUpdateForKeys(['meta', 'collection', 'systemOptions', 'sortData', 'params']),
-  prepareUrlParams,
-  patch('fetch', ['urlParams']),
-  sync('meta', true, 'fetch'),
-  fetchOnUrlParamsChange,
-  sort(
-    'jobs',
-    'collection',
-    sortDefaults.jobs
-  ),
-  withPane(JobsDetail, ['location'], 'detail')
-)
-export default class Jobs extends Component {
-  static propTypes = {
-    location: PropTypes.object,
-    instanceKey: PropTypes.string,
-    collection: PropTypes.array,
-    info: PropTypes.object,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    systemOptions: PropTypes.array,
-    onPaneClose: PropTypes.func,
-    onFilterClick: PropTypes.func,
-    filterFn: PropTypes.func,
-    onSearchChange: PropTypes.func,
-    clearSelection: PropTypes.func,
-    onDataFilterChange: PropTypes.func,
-    setSelectedData: PropTypes.func,
-    onBatchAction: PropTypes.func,
-    selectedData: PropTypes.object,
-    selected: PropTypes.string,
-    onAllClick: PropTypes.func,
-    onNoneClick: PropTypes.func,
-    onInvertClick: PropTypes.func,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    onCSVClick: PropTypes.func,
-    generateCSV: PropTypes.func,
-    updateDone: PropTypes.func,
-    paneId: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    paneTab: PropTypes.string,
-    closePane: PropTypes.func,
-    openPane: PropTypes.func,
-  };
+  mapProps(({ date, ...rest }: Props): Object => ({
+    date: date || DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    fetchParams: { date: formatDate(date).format() },
+    date,
+    ...rest,
+  })),
+  patch('load', ['fetchParams']),
+  sync('meta'),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const { date, selectNone, fetch }: Props = this.props;
 
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-    setTitle(`Jobs | ${this.context.getTitle()}`);
-  }
-
-  componentDidUpdate() {
-    setTitle(`Jobs | ${this.context.getTitle()}`);
-  }
-
-  /**
-   * Handles the batch action calls like
-   * enabling, disabling, reseting etc
-   * of multiple workflows
-   *
-   * @param {String} type
-   */
-  handleBatchAction = (type) => {
-    const selectedData = [];
-
-    Object.keys(this.props.selectedData).forEach(w => {
-      if (this.props.selectedData[w]) {
-        selectedData.push(w);
+      if (date !== nextProps.date) {
+        selectNone();
+        fetch(nextProps.fetchParams);
       }
-    });
-
-    this.props.clearSelection();
-    this.props[`${type}Batch`](selectedData);
-  };
-
-  handleCSVClick = () => {
-    this.props.onCSVClick(this.props.collection, 'jobs');
-  };
-
-  render() {
-    const { collection } = this.props;
-
-    return (
-      <div>
-        <JobsToolbar
-          onFilterClick={this.props.onFilterClick}
-          onSearchUpdate={this.props.onSearchChange}
-          selected={this.props.selected}
-          defaultSearchValue={this.props.location.query.q}
-          params={this.props.params}
-          location={this.props.location}
-          route={this.props.route}
-          router={this.context.router}
-          batchAction={this.handleBatchAction}
-          onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onNoneClick}
-          onInvertClick={this.props.onInvertClick}
-          onCSVClick={this.handleCSVClick}
-        />
-        <div className="table--flex">
-          <JobsTable
-            initialFilter={this.props.filterFn}
-            location={this.props.location}
-            onDataFilterChange={this.props.onDataFilterChange}
-            setSelectedData={this.props.setSelectedData}
-            selectedData={this.props.selectedData}
-            onSortChange={this.props.onSortChange}
-            sortData={this.props.sortData}
-            collection={collection}
-            onUpdateDone={this.props.updateDone}
-            onDetailClick={this.props.openPane}
-            paneId={this.props.paneId}
-            params={this.props.params}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+    },
+  }),
+  withPane(
+    JobsDetail,
+    [
+      'systemOptions',
+      'location',
+    ],
+    'detail'
+  ),
+  selectable('jobs'),
+  withCSV('jobs', 'jobs'),
+  pure([
+    'jobs',
+    'date',
+    'systemOptions',
+    'selected',
+    'selectedIds',
+    'paneId',
+  ]),
+  unsync()
+)(JobsView);

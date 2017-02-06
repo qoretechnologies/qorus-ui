@@ -7,7 +7,6 @@ import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 
-
 import Header from './header';
 import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';

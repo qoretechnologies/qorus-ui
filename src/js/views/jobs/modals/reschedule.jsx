@@ -1,138 +1,191 @@
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
 
-import Modal from 'components/modal';
-import { normalizeName } from 'components/utils';
+import Modal from '../../../components/modal';
+import { Controls, Control } from '../../../components/controls';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+type Props = {
+  id: number,
+  minute: string,
+  hour: string,
+  day: string,
+  month: string,
+  week: string,
+  onClose: Function,
+  action: Function,
+  handleChange: Function,
+  handleFormSubmit: Function,
+  handleMinuteChange: Function,
+  handleHourChange: Function,
+  handleDayChange: Function,
+  handleMonthChange: Function,
+  handleWeekChange: Function,
+  onClose: Function,
+};
 
-import actions from 'store/api/actions';
+const Schedule: Function = ({
+  onClose,
+  handleFormSubmit,
+  handleMinuteChange,
+  handleHourChange,
+  handleDayChange,
+  handleMonthChange,
+  handleWeekChange,
+  minute,
+  hour,
+  day,
+  month,
+  week,
+}: Props): React.Element<any> => (
+  <Modal hasFooter>
+    <Modal.Header
+      onClose={onClose}
+      titleId="reschedule-modal"
+    >
+      Reschedule job
+    </Modal.Header>
+    <form
+      onSubmit={handleFormSubmit}
+    >
+      <Modal.Body>
+        <div className="row">
+          <div className="col-lg-2 col-lg-offset-1"> Minute </div>
+          <div className="col-lg-2"> Hour </div>
+          <div className="col-lg-2"> Day </div>
+          <div className="col-lg-2"> Month </div>
+          <div className="col-lg-2"> Week </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-2 col-lg-offset-1">
+            <input
+              type="text"
+              className="form-control"
+              id="minute"
+              value={minute}
+              onChange={handleMinuteChange}
+            />
+          </div>
+          <div className="col-lg-2">
+            <input
+              type="text"
+              className="form-control"
+              id="hour"
+              value={hour}
+              onChange={handleHourChange}
+            />
+          </div>
+          <div className="col-lg-2">
+            <input
+              type="text"
+              className="form-control"
+              id="day"
+              value={day}
+              onChange={handleDayChange}
+            />
+          </div>
+          <div className="col-lg-2">
+            <input
+              type="text"
+              className="form-control"
+              id="month"
+              value={month}
+              onChange={handleMonthChange}
+            />
+          </div>
+          <div className="col-lg-2">
+            <input
+              type="text"
+              className="form-control"
+              id="week"
+              value={week}
+              onChange={handleWeekChange}
+            />
+          </div>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="pull-right">
+          <Controls noControls grouped>
+            <Control
+              label="Cancel"
+              big
+              btnStyle="default"
+              action={onClose}
+            />
+            <Control
+              type="submit"
+              big
+              label="Save"
+              btnStyle="success"
+            />
+          </Controls>
+        </div>
+      </Modal.Footer>
+    </form>
+  </Modal>
+);
 
-@connect(
-  null,
-  dispatch => bindActionCreators({
-    schedule: actions.jobs.reschedule,
-  }, dispatch)
-)
-export default class ModalReschedule extends Component {
-  static propTypes = {
-    job: React.PropTypes.object.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    schedule: React.PropTypes.func,
-  }
+export default compose(
+  withState('minute', 'changeMinute', ({ minute }) => minute || ''),
+  withState('hour', 'changeHour', ({ hour }) => hour || ''),
+  withState('day', 'changeDay', ({ day }) => day || ''),
+  withState('month', 'changeMonth', ({ month }) => month || ''),
+  withState('week', 'changeWeek', ({ week }) => week || ''),
+  withHandlers({
+    handleChange: (props: Props): Function => (type: string, event: Object): void => {
+      const { value } = event.target;
+      const fun = props[`change${type}`];
 
-  validate = () => {}
-
-  handleCancel = event => {
-    event.preventDefault();
-    this.props.onClose();
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const values = ['minute', 'hour', 'day', 'month', 'wday'];
-
-    const reschedule = values.reduce((r, v) => {
-      const val = this.refs[v].value;
-      r.push(val);
-      return r;
-    }, []);
-
-    this.props.schedule(this.props.job, reschedule.join(' '));
-    this.props.onClose();
-  }
-
-  next = ref => event => {
-    if (event.key === 'Enter') {
+      fun(() => value);
+    },
+  }),
+  withHandlers({
+    handleMinuteChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+      handleChange('Minute', event);
+    },
+    handleHourChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+      handleChange('Hour', event);
+    },
+    handleDayChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+      handleChange('Day', event);
+    },
+    handleMonthChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+      handleChange('Month', event);
+    },
+    handleWeekChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+      handleChange('Week', event);
+    },
+    handleFormSubmit: ({
+      action,
+      id,
+      onClose,
+      minute,
+      hour,
+      day,
+      month,
+      week,
+    }: Props): Function => (event: EventHandler): void => {
       event.preventDefault();
-      this.refs[ref].focus();
-    }
-  }
 
-  render() {
-    const { job } = this.props;
-
-    return (
-      <Modal hasFooter>
-        <form onSubmit={ this.handleSubmit }>
-          <Modal.Header
-            onClose={this.handleCancel}
-            titleId="jobReschedule"
-          >
-            Reschedule job { normalizeName(job, 'jobid') }
-          </Modal.Header>
-          <Modal.Body>
-            <table className="table table--centered">
-              <thead>
-                <tr>
-                  <th>Minutes</th>
-                  <th>Hours</th>
-                  <th>Days</th>
-                  <th>Months</th>
-                  <th>Weekdays</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ width: '20%' }}>
-                    <input
-                      type="text"
-                      ref="minute"
-                      id="minute"
-                      defaultValue={ job.minute }
-                      onKeyPress={ this.next('hour') }
-                    />
-                  </td>
-                  <td style={{ width: '20%' }}>
-                      <input
-                        type="text"
-                        ref="hour"
-                        id="hour"
-                        defaultValue={ job.hour }
-                        onKeyPress={ this.next('day') }
-                      />
-                  </td>
-                  <td style={{ width: '20%' }}>
-                    <input
-                      type="text"
-                      ref="day"
-                      id="day"
-                      defaultValue={ job.day }
-                      onKeyPress={ this.next('month') }
-                    />
-                  </td>
-                  <td style={{ width: '20%' }}>
-                    <input
-                      type="text"
-                      ref="month"
-                      id="month"
-                      defaultValue={ job.month }
-                      onKeyPress={ this.next('wday') }
-                    />
-                  </td>
-                  <td style={{ width: '20%' }}>
-                    <input
-                      type="text"
-                      ref="wday"
-                      id="wday"
-                      defaultValue={ job.wday }
-                      onKeyPress={ this.next('reschedule') }
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Modal.Body>
-          <Modal.Footer>
-            <button className="btn btn-default" onClick={ this.handleCancel }>
-              Cancel
-            </button>
-            <button ref="reschedule" className="btn btn-success" type="submit">
-              Reschedule
-            </button>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    );
-  }
-}
+      action(id, {
+        minute,
+        hour,
+        day,
+        month,
+        wday: week,
+      });
+      onClose();
+    },
+  }),
+  pure([
+    'minute',
+    'hour',
+    'day',
+    'month',
+    'week',
+  ])
+)(Schedule);
