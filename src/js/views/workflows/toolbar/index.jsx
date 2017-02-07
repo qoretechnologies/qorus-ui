@@ -37,7 +37,7 @@ const WorkflowsToolbar: Function = ({
   onToggleStatesClick,
   location,
 }: Props): React.Element<any> => (
-  <Toolbar sticky>
+  <Toolbar>
     <Selector selected={selected} />
     <Actions
       selectedIds={selectedIds}
