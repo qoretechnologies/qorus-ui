@@ -296,7 +296,7 @@ module.exports = function commonSteps() {
       const icon = type === 'loaded' ? 'check' : 'remove';
       el = `td${css} i.fa-${icon}`;
     } else if (type === 'active' || type === 'inactive') {
-      css = type === 'active' ? ' .job-set-inactive' : ' .job-set-active';
+      css = type === 'active' ? ' i.fa-check' : 'i.fa-ban';
       el = `td${css}`;
     } else if (type === 'autostart') {
       el = 'td button i.fa.fa-pause';

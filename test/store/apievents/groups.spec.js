@@ -6,7 +6,7 @@ import promise from 'redux-promise';
 import { getItem } from '../../utils';
 import api from '../../../src/js/store/api';
 import * as events from '../../../src/js/store/apievents/actions';
-import { updateDone } from '../../../src/js/store/api/resources/groups/actions/specials';
+import { updateDone } from '../../../src/js/store/api/resources/groups/actions';
 
 describe('Groups apievents from store/api/apievents & store/api/resources/groups', () => {
   let store;
