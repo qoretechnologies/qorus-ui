@@ -6,9 +6,7 @@ import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
-import withSort from '../../../../hocomponents/sort';
 import noData from '../../../../hocomponents/check-no-data';
-import { sortDefaults } from '../../../../constants/sort';
 import Row from './row';
 import actions from '../../../../store/api/actions';
 
@@ -83,7 +81,6 @@ export default compose(
       sort(name);
     },
   }),
-  withSort('orders', 'collection', sortDefaults.orders),
   pure([
     'sortData',
     'collection',

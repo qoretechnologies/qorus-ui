@@ -16,6 +16,7 @@ import patch from '../../hocomponents/patchFuncArgs';
 import selectable from '../../hocomponents/selectable';
 import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
+import loadMore from '../../hocomponents/loadMore';
 import actions from '../../store/api/actions';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
@@ -25,6 +26,9 @@ import { ORDER_STATES, ORDER_GROUPS, GROUPED_ORDER_STATES } from '../../constant
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 import { querySelector, resourceSelector } from '../../selectors';
+import withSort from '../../hocomponents/sort';
+import { sortDefaults } from '../../constants/sort';
+import { Control } from '../../components/controls';
 
 const filterSearch: Function = (search: string): Function =>
   (workflows: Array<Object>): Array<Object> => (
@@ -126,6 +130,11 @@ type Props = {
   expanded: boolean,
   handleExpandClick: Function,
   toggleExpand: Function,
+  sortData: Object,
+  onSortChange: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const Workflows: Function = ({
@@ -140,6 +149,11 @@ const Workflows: Function = ({
   openPane,
   deprecated,
   date,
+  sortData,
+  onSortChange,
+  limit,
+  canLoadMore,
+  handleLoadMore,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -158,7 +172,17 @@ const Workflows: Function = ({
       expanded={expanded}
       deprecated={deprecated}
       date={date}
+      sortData={sortData}
+      onSortChange={onSortChange}
     />
+    { canLoadMore && (
+      <Control
+        label={`Load ${limit} more...`}
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
   </div>
 );
 
@@ -172,6 +196,8 @@ export default compose(
       unselectAll: actions.workflows.unselectAll,
     }
   ),
+  withSort('workflows', 'workflows', sortDefaults.workflows),
+  loadMore('workflows', 'workflows', true, 50),
   mapProps(({ date, ...rest }: Props): Object => ({
     date: date || DATES.PREV_DAY,
     ...rest,
@@ -217,6 +243,7 @@ export default compose(
   selectable('workflows'),
   withCSV('workflows', 'workflows'),
   pure([
+    'sortData',
     'expanded',
     'workflows',
     'systemOptions',
@@ -225,6 +252,7 @@ export default compose(
     'paneId',
     'deprecated',
     'date',
+    'canLoadMore',
   ]),
   unsync()
 )(Workflows);

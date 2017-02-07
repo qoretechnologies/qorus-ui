@@ -21,6 +21,10 @@ import { findBy } from '../../helpers/search';
 import JobsDetail from './detail';
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
+import { Control } from '../../components/controls';
+import { sortDefaults } from '../../constants/sort';
+import withSort from '../../hocomponents/sort';
+import loadMore from '../../hocomponents/loadMore';
 
 type Props = {
   jobs: Array<Object>,
@@ -35,6 +39,11 @@ type Props = {
   paneId: string | number,
   openPane: Function,
   selectedIds: Array<number>,
+  sortData: Object,
+  onSortChange: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const JobsView: Function = ({
@@ -45,6 +54,11 @@ const JobsView: Function = ({
   openPane,
   paneId,
   date,
+  limit,
+  canLoadMore,
+  handleLoadMore,
+  sortData,
+  onSortChange,
 }: Props): React.Element<any> => (
   <div>
     <JobsToolbar
@@ -57,7 +71,17 @@ const JobsView: Function = ({
       openPane={openPane}
       paneId={paneId}
       date={date}
+      sortData={sortData}
+      onSortChange={onSortChange}
     />
+    { canLoadMore && (
+      <Control
+        label={`Load ${limit} more...`}
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
   </div>
 );
 
@@ -100,6 +124,8 @@ export default compose(
       selectNone: actions.jobs.selectNone,
     }
   ),
+  withSort('jobs', 'jobs', sortDefaults.jobs),
+  loadMore('jobs', 'jobs', true, 50),
   mapProps(({ date, ...rest }: Props): Object => ({
     date: date || DATES.PREV_DAY,
     ...rest,
@@ -138,6 +164,7 @@ export default compose(
     'selected',
     'selectedIds',
     'paneId',
+    'canLoadMore',
   ]),
   unsync()
 )(JobsView);

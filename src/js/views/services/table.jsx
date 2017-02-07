@@ -4,9 +4,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
-import withSort from '../../hocomponents/sort';
 import actions from '../../store/api/actions';
-import { sortDefaults } from '../../constants/sort';
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import Icon from '../../components/icon';
 import Row from './row';
@@ -36,6 +34,7 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
+    marginBottom={30}
   >
     <Thead>
       <Tr
@@ -79,7 +78,6 @@ export default compose(
       select: actions.services.select,
     }
   ),
-  withSort('services', 'collection', sortDefaults.services),
   pure([
     'collection',
     'sortData',

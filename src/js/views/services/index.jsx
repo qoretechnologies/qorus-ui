@@ -16,8 +16,14 @@ import selectable from '../../hocomponents/selectable';
 import ServicesDetail from './detail';
 import ServicesToolbar from './toolbar';
 import ServicesTable from './table';
+import withSort from '../../hocomponents/sort';
+import loadMore from '../../hocomponents/loadMore';
+import { sortDefaults } from '../../constants/sort';
+import { Control } from '../../components/controls';
 
 type Props = {
+  sortData: Object,
+  onSortChange: Function,
   onCSVClick: Function,
   selected: string,
   selectedIds: Array<number>,
@@ -25,6 +31,9 @@ type Props = {
   services: Array<Object>,
   paneId: number | string,
   openPane: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const Services: Function = ({
@@ -35,6 +44,11 @@ const Services: Function = ({
   paneId,
   services,
   location,
+  sortData,
+  onSortChange,
+  limit,
+  canLoadMore,
+  handleLoadMore,
 }: Props): React.Element<any> => (
   <div>
     <ServicesToolbar
@@ -47,7 +61,17 @@ const Services: Function = ({
       collection={services}
       paneId={paneId}
       openPane={openPane}
+      sortData={sortData}
+      onSortChange={onSortChange}
     />
+    { canLoadMore && (
+      <Control
+        label={`Load ${limit} more...`}
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
   </div>
 );
 
@@ -90,6 +114,8 @@ export default compose(
       unsync: actions.services.unsync,
     }
   ),
+  withSort('services', 'services', sortDefaults.services),
+  loadMore('services', 'services', true, 50),
   sync('meta'),
   withPane(
     ServicesDetail,
@@ -107,6 +133,7 @@ export default compose(
     'selected',
     'selectedIds',
     'paneId',
+    'canLoadMore',
   ]),
   unsync()
 )(Services);

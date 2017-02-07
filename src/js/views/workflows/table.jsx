@@ -5,9 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
-import withSort from '../../hocomponents/sort';
 import Icon from '../../components/icon';
-import { sortDefaults } from '../../constants/sort';
 import Row from './row';
 import actions from '../../store/api/actions';
 
@@ -46,6 +44,7 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
+    marginBottom={30}
   >
     <Thead>
       <Tr
@@ -105,7 +104,6 @@ export default compose(
       select: actions.workflows.select,
     }
   ),
-  withSort('workflows', 'collection', sortDefaults.workflows),
   pure([
     'sortData',
     'expanded',

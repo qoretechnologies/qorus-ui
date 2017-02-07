@@ -20,6 +20,9 @@ import patch from '../../../../hocomponents/patchFuncArgs';
 import selectable from '../../../../hocomponents/selectable';
 import unsync from '../../../../hocomponents/unsync';
 import withCSV from '../../../../hocomponents/csv';
+import loadMore from '../../../../hocomponents/loadMore';
+import withSort from '../../../../hocomponents/sort';
+import { sortDefaults } from '../../../../constants/sort';
 import Toolbar from './toolbar';
 import Table from './table';
 import { Control } from '../../../../components/controls';
@@ -35,13 +38,14 @@ type Props = {
   unselectAll: Function,
   location: Object,
   orders: Array<Object>,
-  handleMoreClick: Function,
   changeOffset: Function,
-  offsetLimit: number,
-  offset: number,
   limit: number,
   searchData?: Object,
   searchPage?: boolean,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  sortData: Object,
+  onSortChange: Function,
 };
 
 const WorkflowOrders: Function = ({
@@ -51,9 +55,12 @@ const WorkflowOrders: Function = ({
   location,
   orders,
   linkDate,
-  handleMoreClick,
-  offsetLimit,
   searchPage,
+  limit,
+  canLoadMore,
+  handleLoadMore,
+  sortData,
+  onSortChange,
 }: Props): React.Element<any> => (
   <div>
     <Toolbar
@@ -66,13 +73,15 @@ const WorkflowOrders: Function = ({
     <Table
       collection={orders}
       date={linkDate}
+      sortData={sortData}
+      onSortChange={onSortChange}
     />
-    { offsetLimit <= orders.length && (
+    { canLoadMore && (
       <Control
-        label="Load 50 more..."
+        label={`Load ${limit} more...`}
         btnStyle="success"
         big
-        onClick={handleMoreClick}
+        onClick={handleLoadMore}
       />
     )}
   </div>
@@ -114,8 +123,6 @@ const viewSelector: Function = createSelector(
     resourceSelector('currentUser'),
   ], (meta, orders, user) => ({
     meta,
-    offset: meta.offset,
-    limit: meta.limit,
     sort: meta.sort,
     sortDir: meta.sortDir,
     orders,
@@ -131,15 +138,13 @@ export default compose(
       fetch: actions.orders.fetchOrders,
       unsync: actions.orders.unsync,
       unselectAll: actions.orders.unselectAll,
-      changeOffset: actions.orders.changeOffset,
     }
   ),
-  mapProps(({ workflow, offset, limit, ...rest }: Props): Object => ({
+  withSort('orders', 'orders', sortDefaults.orders),
+  loadMore('orders', 'orders'),
+  mapProps(({ workflow, ...rest }: Props): Object => ({
     id: workflow ? workflow.id : null,
-    offsetLimit: offset + limit,
     workflow,
-    offset,
-    limit,
     ...rest,
   })),
   patch('load', [
@@ -199,6 +204,7 @@ export default compose(
   selectable('orders'),
   withCSV('orders', 'orders'),
   pure([
+    'sortData',
     'workflow',
     'orders',
     'selected',
