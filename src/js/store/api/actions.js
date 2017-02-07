@@ -114,10 +114,7 @@ Object.keys(orderActions.delegates).forEach(a => {
 });
 Object.assign(actions.orders, orderActions.specials);
 
-Object.keys(groupsActions.delegates).forEach(a => {
-  actions.groups[a] = groupsActions.delegates[a](actions);
-});
-Object.assign(actions.groups, groupsActions.specials);
+Object.assign(actions.groups, groupsActions);
 
 Object.assign(actions.errors, errorActions);
 

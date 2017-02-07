@@ -1,243 +1,77 @@
+// @flow
 import React from 'react';
-import { Link } from 'react-router';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import { connect } from 'react-redux';
 
-import ServiceTable from '../services/table';
-import { Row, Cell } from '../../components/table';
-import GroupControls from './controls';
-import Checkbox from '../../components/checkbox';
 import actions from '../../store/api/actions';
+import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
+import Row from './row';
 
-/**
- * List of all jobs in the system.
- *
- * Beware, this component is very performance internsive - even
- * HTML/CSS without any JS is relatively slow.
- */
-export default class GroupsTable extends ServiceTable {
-  static defaultProps = {
-    setSelectedData: () => {},
-  };
+type Props = {
+  sortData: Object,
+  onSortChange: Function,
+  collection: Array<Object>,
+  select: Function,
+  updateDone: Function,
+};
 
-  handleHighlightEnd = (name) => () => {
-    this.context.dispatch(
-      actions.groups.updateDone(name)
-    );
-  };
-
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
-    yield (
-      <Cell tag="th" className="narrow" />
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="enabled"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >Enabled</Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="name"
-        name="name"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
+const GroupsTable: Function = ({
+  sortData,
+  onSortChange,
+  collection,
+  select,
+  updateDone,
+}: Props): React.Element<any> => (
+  <Table
+    fixed
+    hover
+    condensed
+    striped
+    className="resource-table"
+    marginBottom={30}
+  >
+    <Thead>
+      <Tr
+        sortData={sortData}
+        onSortChange={onSortChange}
       >
-        Name
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="description"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Description
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="jobs_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Jobs
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="mappers_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Mappers
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="services_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Services
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="workflows_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Workflows
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="roles_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Roles
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-        name="vmaps_count"
-        onSortChange={this.props.onSortChange}
-        sortData={this.props.sortData}
-      >
-        Vmaps
-      </Cell>
-    );
-  }
-
-
-  /**
-   * Yields cells with model data
-   *
-   * @param {Object} model
-   * @param {String} selected
-   * @return {Generator<ReactElement>}
-   */
-  *renderCells({ model, selected }) {
-    const handleCheckboxClick = () => {
-      const selectedData = Object.assign({},
-        this.props.selectedData,
-        { [model.id]: !this.props.selectedData[model.id] }
-      );
-
-      this.setSelectedServices(selectedData);
-    };
-
-    yield (
-      <Cell className="narrow checker">
-        <Checkbox
-          action={handleCheckboxClick}
-          checked={selected ? 'CHECKED' : 'UNCHECKED'}
-        />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="narrow">
-        <GroupControls group={model} />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="name">
-        <Link to={`/groups/${model.name}`}>
-          { model.name }
-        </Link>
-      </Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.description }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.jobs_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.mappers_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.services_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.workflows_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.roles_count }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.vmaps_count }</Cell>
-    );
-  }
-
-  /**
-   * Yields rows for table body.
-   *
-   * Row with active model is highlighted. Row are clickable and
-   * trigger route change via {@link activateRow}.
-   *
-   * @param {number} activeId
-   * @param {Array<Object>} collection
-   * @param {Array<Object>} selectedData
-   * @return {Generator<ReactElement>}
-   * @see activateRow
-   * @see renderCells
-   */
-  *renderRows({ collection, selectedData }) {
-    for (const model of collection) {
-      yield (
+        <Th className="tiny">-</Th>
+        <Th className="medium" name="enabled">Enabled</Th>
+        <Th className="narrow" name="id">ID</Th>
+        <Th className="name" name="name">Name</Th>
+        <Th name="description">Description</Th>
+        <Th className="medium" name="workflows_count"> Workflows </Th>
+        <Th className="medium" name="services_count"> Services </Th>
+        <Th className="medium" name="jobs_count"> Jobs </Th>
+        <Th className="medium" name="vmaps_count"> Vmaps </Th>
+        <Th className="medium" name="roles_count"> Roles </Th>
+        <Th className="medium" name="mappers_count"> Mappers </Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {collection.map((group: Object): React.Element<Row> => (
         <Row
-          key={model.id}
-          data={{
-            model,
-            selected: selectedData[model.id],
-          }}
-          highlight={model._updated}
-          onHighlightEnd={this.handleHighlightEnd(model.name)}
-          cells={this._renderCells}
+          key={`group_${group.id}`}
+          select={select}
+          updateDone={updateDone}
+          {...group}
         />
-      );
+      ))}
+    </Tbody>
+  </Table>
+);
+
+export default compose(
+  connect(
+    null,
+    {
+      updateDone: actions.groups.updateDone,
+      select: actions.groups.select,
     }
-  }
-}
+  ),
+  pure([
+    'collection',
+    'sortData',
+  ])
+)(GroupsTable);

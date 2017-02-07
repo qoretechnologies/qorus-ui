@@ -5,7 +5,7 @@ import * as services from '../api/resources/services/actions/specials';
 import * as workflows from '../api/resources/workflows/actions/specials';
 import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
-import * as groups from '../api/resources/groups/actions/specials';
+import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
 import { pipeline } from '../../helpers/apievents';
 

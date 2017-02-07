@@ -1,5 +1,12 @@
 /* @flow */
 import { updateItemWithName, setUpdatedToNull } from '../../utils';
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
 
 const initialState: Object = { data: [], sync: false, loading: false };
 
@@ -41,7 +48,42 @@ const updateDone = {
   },
 };
 
+const groupAction = {
+  next(state: Object = initialState) {
+    return state;
+  },
+};
+
+const selectGroup = {
+  next(state: Object = initialState, { payload: { id } }: { payload: Object, id: string}) {
+    return select(state, id);
+  },
+};
+
+const selectAllGroups = {
+  next(state: Object = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneGroups = {
+  next(state: Object = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state: Object = initialState) {
+    return selectInvert(state);
+  },
+};
+
 export {
   setEnabled as SETENABLED,
   updateDone as UPDATEDONE,
+  selectGroup as SELECT,
+  selectAllGroups as SELECTALL,
+  selectNoneGroups as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  groupAction as GROUPACTION,
 };
