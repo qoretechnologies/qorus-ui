@@ -13,8 +13,8 @@ export default compose(
   showIfLoaded('dataObject'),
   showIfPassed(props => props.dataObject.hasMore),
   mapProps(props => ({
-    label: 'Load more',
-    btnStyle: 'primary',
+    label: 'Load 50 more...',
+    btnStyle: 'success',
     className: 'load-more',
     big: true,
     onClick: props.onLoadMore,

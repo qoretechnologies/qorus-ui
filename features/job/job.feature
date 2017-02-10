@@ -18,16 +18,16 @@ Feature: Job page test
   Scenario: Load more results
     Given I am on "job/33/results?date=all" page
     When "results-table" get loaded
-    And I click the "Load more" button
+    And I click the "Load 50 more..." button
     Then I see "100" table rows
     And I see ".load-more" item
 
   Scenario: Hide button if no more results
     Given I am on "job/33/results?date=all" page
     When "results-table" get loaded
-    And I click the "Load more" button
+    And I click the "Load 50 more..." button
     And I wait some time
-    And I click the "Load more" button
+    And I click the "Load 50 more..." button
     And I wait some time
     Then I do not see ".load-more" item
 
@@ -47,24 +47,24 @@ Feature: Job page test
   Scenario: Show job results detail
     Given I am on "job/33/results?date=all" page
     When "results-table" get loaded
-    And I click on the "3007007" row - "1"
-    Then the URL changes to "/job/33/results/3007007"
+    And I activate "3007007" - "0"
+    Then the complete URL changes to "/job/33/results?date=all&job=3007007"
     Then I see ".job-result-info" item
 
   Scenario: Go back to result detail page
-    Given I am on "job/33/results/3007007?date=all" page
+    Given I am on "job/33/results?job=3007007&date=all" page
     When "results-table" get loaded
     When I click the "close" button
     Then the URL changes to "/job/33/results"
 
   Scenario: Move from one instance result to another
-    Given I am on "job/33/results/3007007?date=all" page
+    Given I am on "job/33/results?job=3007007&date=all" page
     When "results-table" get loaded
-    And I click on the "2993243" row - "1"
-    Then the URL changes to "/job/33/results/2993243"
+    And I activate "2993243" - "0"
+    Then the complete URL changes to "/job/33/results?date=all&job=2993243"
 
   Scenario: Show info tab with tree
-    Given I am on "job/33/results/3007007?date=all" page
+    Given I am on "job/33/results?job=3007007&date=all" page
     When "results-table" get loaded
     And ".job-result-info" item get loaded
     And I wait some time
@@ -72,7 +72,7 @@ Feature: Job page test
     Then I see ".tree-wrapper" item
 
   Scenario: Show info tab without tree
-    Given I am on "job/33/results/3021635?date=all&q=" page
+    Given I am on "job/33/results?job=3021635&date=all&q=" page
     When "results-table" get loaded
     And ".job-result-info" item get loaded
     And I wait some time

@@ -319,8 +319,10 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
-      case 'JOB_STOP':
-        if (state.api.jobs.sync) {
+      case 'JOB_STOP': {
+        const job = state.api.jobs.data(jb => jb.id === parseInt(info.jobid, 10));
+
+        if (job) {
           pipeline(
             eventstr,
             jobs.setActive,
@@ -329,8 +331,11 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
-      case 'JOB_START':
-        if (state.api.jobs.sync) {
+      }
+      case 'JOB_START': {
+        const job = state.api.jobs.data(jb => jb.id === parseInt(info.jobid, 10));
+
+        if (job) {
           pipeline(
             eventstr,
             jobs.setActive,
@@ -338,7 +343,9 @@ const handleEvent = (url, data, dispatch, state) => {
             dispatch
           );
         }
+
         break;
+      }
       case 'JOB_INSTANCE_START': {
         const job = state.api.jobs.data.find(jb => jb.id === info.jobid);
 
@@ -400,8 +407,12 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'GROUP_STATUS_CHANGED':
         if (info.synthetic) {
           switch (info.type) {
-            case 'workflow':
-              if (state.api.workflows.sync) {
+            case 'workflow': {
+              const workflow = state.api.workflows.data.find((wf) => (
+                wf.id === parseInt(info.id, 10)
+              ));
+
+              if (workflow) {
                 pipeline(
                   `${eventstr}_WORKFLOW`,
                   workflows.setEnabled,
@@ -413,8 +424,13 @@ const handleEvent = (url, data, dispatch, state) => {
                 );
               }
               break;
-            case 'service':
-              if (state.api.services.sync) {
+            }
+            case 'service': {
+              const service = state.api.services.data.find((srv) => (
+                srv.id === parseInt(info.id, 10)
+              ));
+
+              if (service) {
                 pipeline(
                   `${eventstr}_SERVICE`,
                   services.setEnabled,
@@ -426,8 +442,13 @@ const handleEvent = (url, data, dispatch, state) => {
                 );
               }
               break;
-            case 'job':
-              if (state.api.jobs.sync) {
+            }
+            case 'job': {
+              const job = state.api.jobs.data.find((jb) => (
+                jb.id === parseInt(info.id, 10)
+              ));
+
+              if (job) {
                 pipeline(
                   `${eventstr}_JOB`,
                   jobs.setEnabled,
@@ -439,6 +460,7 @@ const handleEvent = (url, data, dispatch, state) => {
                 );
               }
               break;
+            }
             default:
               break;
           }

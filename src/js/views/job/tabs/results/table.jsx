@@ -1,75 +1,60 @@
 /* @flow */
 import React from 'react';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import { findBy } from '../../../../helpers/search';
-import Date from '../../../../components/date';
-import Label from '../../../../components/label';
-import Table, { Section, Row, Th, Td } from '../../../../components/table';
+import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
 import InstanceRow from './row';
 import sort from '../../../../hocomponents/sort';
 import showIfPassed from '../../../../hocomponents/show-if-passed';
-import selectableResult from '../../../../hocomponents/jobs/selectable-result';
 import { sortDefaults } from '../../../../constants/sort';
-import actions from '../../../../store/api/actions';
 
 const ResultTable = ({
   data = [],
   sortData,
   onSortChange,
-  selectResult,
-  updateDone,
+  jobQuery,
+  changeJobQuery,
 }: {
   data: Array<Object>,
   sortData: Object,
   onSortChange: Function,
-  selectResult: Function,
-  updateDone: Function,
+  jobQuery: string | number,
+  changeJobQuery: Function,
 }) => (
   <Table
-    className={classNames(
-      'table',
-      'table-stripped',
-      'table-condensed',
-      'table-hover',
-      'table-fixed',
-      'table--data'
-    )}
+    fixed
+    condensed
+    hover
+    striped
+    className="resource-table"
+    marginBottom={30}
   >
-    <Section type="head">
-      <Row>
-        <Th />
-        <Th name="job_instanceid" {...{ sortData, onSortChange }}>Id</Th>
-        <Th name="jobstatus" {...{ sortData, onSortChange }}>Status</Th>
-        <Th>Buss. Err.</Th>
-        <Th name="name" {...{ sortData, onSortChange }}>Job</Th>
-        <Th name="started" {...{ sortData, onSortChange }}>Started</Th>
-        <Th name="modified" {...{ sortData, onSortChange }}>Modified</Th>
-      </Row>
-    </Section>
-    <Section type="body">
-      {data.map((item, idx) => (
+    <Thead>
+      <Tr
+        onSortChange={onSortChange}
+        sortData={sortData}
+      >
+        <Th name="job_instanceid" className="big">ID</Th>
+        <Th className="narrow">Detail</Th>
+        <Th name="jobstatus" className="medium">Status</Th>
+        <Th name="started" className="big">Started</Th>
+        <Th name="modified" className="big">Modified</Th>
+        <Th name="completed" className="big">Completed</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {data.map((item: Object): React.Element<InstanceRow> => (
         <InstanceRow
           key={`item_${item.job_instanceid}`}
-          item={item}
-          selectResult={selectResult}
-          updateDone={updateDone}
-        >
-          <Td>{idx + 1}</Td>
-          <Td>{item.job_instanceid}</Td>
-          <Td>
-            <Label style={`label status-${item.jobstatus.toLowerCase()}`}>{item.jobstatus}</Label>
-          </Td>
-          <Td />
-          <Td className="name">{item.name}</Td>
-          <Td><Date date={item.started} /></Td>
-          <Td><Date date={item.modified} /></Td>
-        </InstanceRow>
+          active={item.job_instanceid === parseInt(jobQuery, 10)}
+          changeJobQuery={changeJobQuery}
+          {...item}
+        />
       ))}
-    </Section>
+    </Tbody>
   </Table>
 );
 
@@ -89,17 +74,14 @@ const showNoData = showIfPassed(
   <p className="data-not-found">Data not found</p>
 );
 
-
 export default compose(
-  connect(
-    () => ({}),
-    {
-      updateDone: actions.jobs.instanceUpdateDone,
-    }
-  ),
   hideWhileLoading,
   filterResults,
   showNoData,
-  selectableResult,
-  sort('job-results', 'data', sortDefaults.jobResults)
+  sort('job-results', 'data', sortDefaults.jobResults),
+  pure([
+    'jobQuery',
+    'sortData',
+    'data',
+  ])
 )(ResultTable);

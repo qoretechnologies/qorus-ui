@@ -3,21 +3,21 @@ import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import lifecycle from 'recompose/lifecycle';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
 import ResultData from './data';
 import actions from '../../../../../store/api/actions';
 import { Control } from '../../../../../components/controls';
 import Resize from '../../../../../components/resize/handle';
-import allowBackToResultList from '../../../../../hocomponents/jobs/allow-back-to-result-list';
 import patch from '../../../../../hocomponents/patchFuncArgs';
 
 const ResultDetail = ({
   result,
-  backToResultList,
+  handleCloseClick,
 }: {
   result: Object,
-  backToResultList: Function,
+  handleCloseClick: Function,
 }) => (
   <div className="job-result-info">
     <Resize top />
@@ -26,7 +26,7 @@ const ResultDetail = ({
         <Control
           btnStyle="inverse"
           icon="close"
-          onClick={backToResultList}
+          onClick={handleCloseClick}
           label="close"
           className="close-result-item"
         />
@@ -37,8 +37,8 @@ const ResultDetail = ({
 );
 
 const jobResultSelector = (state, props) => {
-  const { params: { instanceId } } = props;
-  const jobInstanceId = parseInt(instanceId, 10);
+  const { location: { query: { job } } } = props;
+  const jobInstanceId = parseInt(job, 10);
   const result = state.api.jobresults.data.find(item => item.job_instanceid === jobInstanceId);
   return { result };
 };
@@ -46,7 +46,7 @@ const jobResultSelector = (state, props) => {
 const prepareRequestParams = mapProps((props: Object) => ({
   ...props,
   queryParams: {},
-  instanceId: props.params.instanceId,
+  instanceId: props.location.query.job,
 }));
 
 const loadOnMount = lifecycle({ // TODO: use sync with force in future
@@ -76,5 +76,9 @@ export default compose(
   patch('load', ['queryParams', 'instanceId']),
   loadOnMount,
   loadOnInstanceIdChanged,
-  allowBackToResultList
+  withHandlers({
+    handleCloseClick: ({ changeJobQuery }: Object) => (): void => {
+      changeJobQuery('');
+    },
+  })
 )(ResultDetail);

@@ -3,6 +3,7 @@ import React from 'react';
 import withHandlers from 'recompose/withHandlers';
 
 import Icon from '../../components/icon';
+import Controls from '../jobs/controls';
 
 type Props = { job: Object, handleBackClick: Function };
 
@@ -20,6 +21,9 @@ const JobHeader = ({ job, handleBackClick }: Props) => (
         {' '}
         <small>({job.id})</small>
       </h3>
+      <div className="pull-right">
+        <Controls {...job} />
+      </div>
     </div>
   </div>
 );

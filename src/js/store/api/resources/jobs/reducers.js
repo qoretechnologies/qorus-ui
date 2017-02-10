@@ -185,19 +185,15 @@ const setActive = {
 
 const setEnabled = {
   next(state, { payload: { events } }) {
-    if (state.sync) {
-      const data = state.data.slice();
-      const updatedData = setUpdatedToNull(data);
-      let newData = updatedData;
+    const data = state.data.slice();
+    const updatedData = setUpdatedToNull(data);
+    let newData = updatedData;
 
-      events.forEach(dt => {
-        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
-      });
+    events.forEach(dt => {
+      newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+    });
 
-      return { ...state, ...{ data: newData } };
-    }
-
-    return state;
+    return { ...state, ...{ data: newData } };
   },
   throw(state, action) {
     return Object.assign({}, state, {

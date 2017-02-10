@@ -165,11 +165,6 @@ module.exports = function commonSteps() {
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
     this.browser.pressButton(row.cells[1].childNodes[0]);
-
-    this.detail = {
-      id: findTableRowId(this.browser, name, parseInt(nameCell, 10)),
-      name,
-    };
   });
 
   // TODO: Why is this "pane" in table??
