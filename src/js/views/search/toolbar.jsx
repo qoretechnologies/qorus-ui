@@ -3,18 +3,23 @@ import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
+import moment from 'moment';
 
 import Toolbar from '../../components/toolbar';
 import Datepicker from '../../components/datepicker';
 import { Controls, Control as Button } from '../../components/controls';
+import Dropdown, { Item, Control } from '../../components/dropdown';
+import { ORDER_STATES } from '../../constants/orders';
+import { formatDate } from '../../helpers/date';
+import { DATE_FORMATS } from '../../constants/dates';
 
 type Props = {
   mindateQuery: string,
   changeMindateQuery: Function,
   maxdateQuery: string,
   changeMaxdateQuery: Function,
-  statusQuery: string,
-  changeStatusQuery: Function,
+  filterQuery: string,
+  changeFilterQuery: Function,
   idsQuery: string,
   changeIdsQuery: Function,
   keynameQuery: string,
@@ -28,7 +33,7 @@ type Props = {
 @pure([
   'mindateQuery',
   'maxdateQuery',
-  'statusQuery',
+  'filterQuery',
   'keyvalueQuery',
   'keynameQuery',
   'idsQuery',
@@ -39,7 +44,7 @@ export default class SearchToolbar extends Component {
   state: {
     mindate: string,
     maxdate: string,
-    status: string,
+    filter: string,
     ids: string,
     keyname: string,
     keyvalue: string,
@@ -47,11 +52,11 @@ export default class SearchToolbar extends Component {
   } = {
     mindate: this.props.mindateQuery,
     maxdate: this.props.maxdateQuery,
-    status: this.props.statusQuery,
+    filter: this.props.filterQuery,
     ids: this.props.idsQuery,
     keyname: this.props.keynameQuery,
     keyvalue: this.props.keyvalueQuery,
-    showAdvanced: !!(this.props.statusQuery || this.props.maxdateQuery),
+    showAdvanced: !!(this.props.filterQuery || this.props.maxdateQuery),
   };
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -68,7 +73,7 @@ export default class SearchToolbar extends Component {
     if (this.state.showAdvanced) {
       this.setState({
         maxdate: '',
-        status: '',
+        filter: '',
         showAdvanced: false,
       });
     } else {
@@ -82,7 +87,7 @@ export default class SearchToolbar extends Component {
     this.setState({
       mindate: this.props.defaultDate,
       maxdate: '',
-      status: '',
+      filter: '',
       ids: '',
       keyname: '',
       keyvalue: '',
@@ -90,15 +95,17 @@ export default class SearchToolbar extends Component {
   };
 
   handleMinDateChange: Function = (mindate: string): void => {
-    this.setState({ mindate });
+    const date = formatDate(mindate);
+
+    this.setState({ mindate: moment(date).format(DATE_FORMATS.URL_FORMAT) });
   };
 
   handleMaxDateChange: Function = (maxdate: string): void => {
     this.setState({ maxdate });
   };
 
-  handleStatusChange: Function = (event: EventHandler): void => {
-    this.setState({ status: event.target.value });
+  handleFilterChange: Function = (value: Array<string>): void => {
+    this.setState({ filter: value[0] === 'All' ? '' : value.join(',') });
   };
 
   handleIdsChange: Function = (event: EventHandler): void => {
@@ -154,7 +161,6 @@ export default class SearchToolbar extends Component {
                 date={this.state.mindate}
                 onApplyDate={this.handleMinDateChange}
                 applyOnBlur
-                noButtons
                 id="mindate"
               />
             </div>
@@ -171,16 +177,22 @@ export default class SearchToolbar extends Component {
               </div>
             )}
             {this.state.showAdvanced && (
-              <div className="pull-left">
-                <input
-                  className="form-control search-input"
-                  type="text"
-                  placeholder="Status..."
-                  onChange={this.handleStatusChange}
-                  value={this.state.status || ''}
-                  id="status"
-                />
-              </div>
+              <Dropdown
+                id="filters"
+                multi
+                def="All"
+                onSubmit={this.handleFilterChange}
+                selected={!this.state.filter || this.state.filter === '' ?
+                  ['All'] :
+                  this.state.filter.split(',')
+                }
+              >
+                <Control />
+                <Item title="All" />
+                {ORDER_STATES.map((o, k) => (
+                  <Item key={k} title={o.title} />
+                ))}
+              </Dropdown>
             )}
           </div>
         </div>

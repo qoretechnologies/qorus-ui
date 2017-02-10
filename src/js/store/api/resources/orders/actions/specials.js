@@ -13,12 +13,14 @@ const fetchOrders = createAction(
     fetchMore: boolean,
     offset: number,
     date: string,
+    filter: string,
     limit: number,
     sortDir: boolean,
     sort: string,
     searchData: Object,
   ): Object => {
     let url;
+    const status = !filter || filter === 'filter' ? '' : filter;
 
     if (!id || id === 'id') {
       url = `${settings.REST_BASE_URL}/orders?` +
@@ -27,7 +29,7 @@ const fetchOrders = createAction(
       `maxmodified=${searchData.maxDate || '29991231'}&` +
       `keyname=${searchData.keyName || ''}&` +
       `keyvalue=${searchData.keyValue || ''}&` +
-      `status=${searchData.status || ''}&` +
+      `status=${status}&` +
       `sort=${sort}&` +
       `desc=${sortDir.toString()}&` +
       `offset=${offset}&` +
@@ -36,6 +38,7 @@ const fetchOrders = createAction(
       url = `${settings.REST_BASE_URL}/orders?` +
       `workflowid=${id}&` +
       `date=${date}&` +
+      `status=${status}&` +
       `sort=${sort}&` +
       `desc=${sortDir.toString()}&` +
       `offset=${offset}&` +

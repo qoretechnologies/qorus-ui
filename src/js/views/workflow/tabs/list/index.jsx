@@ -4,8 +4,6 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
-import includes from 'lodash/includes';
-import union from 'lodash/union';
 import flowRight from 'lodash/flowRight';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
@@ -13,7 +11,6 @@ import { createSelector } from 'reselect';
 
 import actions from '../../../../store/api/actions';
 import { querySelector, resourceSelector } from '../../../../selectors';
-import { ORDER_STATES, CUSTOM_ORDER_STATES } from '../../../../constants/orders';
 import { findBy } from '../../../../helpers/search';
 import sync from '../../../../hocomponents/sync';
 import patch from '../../../../hocomponents/patchFuncArgs';
@@ -46,6 +43,7 @@ type Props = {
   handleLoadMore: Function,
   sortData: Object,
   onSortChange: Function,
+  filter: string,
 };
 
 const WorkflowOrders: Function = ({
@@ -87,18 +85,6 @@ const WorkflowOrders: Function = ({
   </div>
 );
 
-const filterOrders: Function = (
-  filter: Array<string>
-): Function => (orders: Array<Object>): Array<Object> => {
-  if (!filter || includes(filter, 'All')) return orders;
-
-  const states = union(ORDER_STATES, CUSTOM_ORDER_STATES);
-
-  return orders.filter(o => (
-    includes(filter, states.find((s: Object) => s.name === o.workflowstatus).title))
-  );
-};
-
 const filterSearch: Function = (
   search: string
 ): Function => (orders: Array<Object>): Array<Object> => (
@@ -108,10 +94,8 @@ const filterSearch: Function = (
 const collectionSelector: Function = createSelector(
   [
     querySelector('search'),
-    querySelector('filter'),
     resourceSelector('orders'),
-  ], (search: string, filter: string, orders: Object) => flowRight(
-    filterOrders(filter),
+  ], (search: string, orders: Object) => flowRight(
     filterSearch(search)
   )(orders.data)
 );
@@ -121,12 +105,14 @@ const viewSelector: Function = createSelector(
     resourceSelector('orders'),
     collectionSelector,
     resourceSelector('currentUser'),
-  ], (meta, orders, user) => ({
+    querySelector('filter'),
+  ], (meta, orders, user, filter) => ({
     meta,
     sort: meta.sort,
     sortDir: meta.sortDir,
     orders,
     user,
+    filter,
   })
 );
 
@@ -152,6 +138,7 @@ export default compose(
     false,
     'offset',
     'linkDate',
+    'filter',
     'limit',
     'sortDir',
     'sort',
@@ -163,6 +150,7 @@ export default compose(
       const {
         id,
         date,
+        filter,
         unselectAll,
         fetch,
         sort,
@@ -177,6 +165,7 @@ export default compose(
         changeOffset(0);
       } else if (
         date !== nextProps.date ||
+        filter !== nextProps.filter ||
         sort !== nextProps.sort ||
         sortDir !== nextProps.sortDir ||
         offset !== nextProps.offset ||
@@ -187,6 +176,7 @@ export default compose(
           nextProps.offset !== 0,
           nextProps.offset,
           nextProps.linkDate,
+          nextProps.filter,
           nextProps.limit,
           nextProps.sortDir,
           nextProps.sort,

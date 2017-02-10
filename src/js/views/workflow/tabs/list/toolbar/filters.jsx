@@ -39,7 +39,11 @@ export default compose(
     handleFilterChange: ({
       changeFilterQuery,
     }: Props): Function => (filters: Array<string>): void => {
-      changeFilterQuery(filters.join(','));
+      if (filters[0] === 'All') {
+        changeFilterQuery();
+      } else {
+        changeFilterQuery(filters.join(','));
+      }
     },
   }),
   pure([
