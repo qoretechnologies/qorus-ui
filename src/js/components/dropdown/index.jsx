@@ -63,6 +63,12 @@ export default class Dropdown extends Component {
         showDropdown: nextProps.show,
       });
     }
+
+    if (this.state.selected !== nextProps.selected) {
+      this.setState({
+        selected: nextProps.selected,
+      });
+    }
   }
 
   componentDidUpdate(): void {
