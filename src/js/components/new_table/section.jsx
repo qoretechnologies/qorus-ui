@@ -32,6 +32,12 @@ class Section extends Component {
     window.addEventListener('resize', this.adjustHeight);
   }
 
+  componentWillReceiveProps(nextProps: Props): void {
+    if (this.props.marginBottom !== nextProps.marginBottom) {
+      this.adjustHeight(null, nextProps.marginBottom);
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.adjustHeight);
   }
@@ -51,11 +57,14 @@ class Section extends Component {
     }
   }
 
-  adjustHeight: Function = (initHeight: ?number): void => {
+  adjustHeight: Function = (initHeight: ?number, marginBottom: ?number): void => {
     if (this._el) {
       const { top } = this._el.getBoundingClientRect();
       const winHeight = window.innerHeight;
-      const height = winHeight - top - 50 - this.props.marginBottom;
+      const mb: number = marginBottom || marginBottom === 0 ?
+        marginBottom :
+        this.props.marginBottom;
+      const height: number = winHeight - top - 40 - mb;
       const h = typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
       if (h > height) {

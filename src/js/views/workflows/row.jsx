@@ -122,12 +122,13 @@ const TableRow: Function = ({
     <Td className="name">
       <Link
         className="resource-name-link"
-        to={`/workflow/${id}?filter=All&date=${date}`}
+        to={`/workflow/${id}?date=${date}`}
+        title={name}
       >
         { name }
       </Link>
     </Td>
-    <Td className="narrow">{ version }</Td>
+    <Td className="narrow text">{ version }</Td>
     {states.map((state: Object, index: number): React.Element<Td> => {
       const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
       const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
@@ -147,7 +148,7 @@ const TableRow: Function = ({
       );
     })}
     <Td className="medium">
-      <Link to={`/workflow/${id}?filter=All&date=${date}`}>
+      <Link to={`/workflow/${id}?date=${date}`}>
         { rest.TOTAL }
       </Link>
     </Td>

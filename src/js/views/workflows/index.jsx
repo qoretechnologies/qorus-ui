@@ -174,6 +174,7 @@ const Workflows: Function = ({
       date={date}
       sortData={sortData}
       onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
     />
     { canLoadMore && (
       <Control

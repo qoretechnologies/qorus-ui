@@ -19,21 +19,23 @@ type Props = {
   date: string,
   select: Function,
   updateDone: Function,
+  canLoadMore: boolean,
 };
 
-const WorkflowsTable: Function = ({
+const WorkflowTable: Function = ({
   sortData,
   onSortChange,
   collection,
   date,
   handleHeaderClick,
+  canLoadMore,
 }: Props): React.Element<any> => (
   <Table
     striped
     condensed
     fixed
     className="resource-table"
-    marginBottom={30}
+    marginBottom={canLoadMore ? 40 : 0}
   >
     <Thead>
       <Tr
@@ -86,4 +88,4 @@ export default compose(
     'collection',
     'date',
   ])
-)(WorkflowsTable);
+)(WorkflowTable);

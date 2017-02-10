@@ -28,6 +28,7 @@ type Props = {
   _updated: boolean,
   business_error: boolean,
   normalizedName: string,
+  name: string,
   started: string,
   completed: string,
   modified: string,
@@ -49,6 +50,7 @@ const TableRow: Function = ({
   _updated,
   business_error: busErr,
   normalizedName,
+  name,
   started,
   completed,
   modified,
@@ -88,6 +90,7 @@ const TableRow: Function = ({
       <Link
         to={`/order/${id}/${date}`}
         className="resource-name-link"
+        title={name}
       >
         { normalizedName }
       </Link>

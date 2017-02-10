@@ -18,6 +18,7 @@ type Props = {
   date: string,
   select: Function,
   updateDone: Function,
+  canLoadMore: boolean,
 };
 
 const JobsTable: Function = ({
@@ -29,6 +30,7 @@ const JobsTable: Function = ({
   date,
   select,
   updateDone,
+  canLoadMore,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -36,7 +38,7 @@ const JobsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={30}
+    marginBottom={canLoadMore ? 40 : 0}
   >
     <Thead>
       <Tr

@@ -30,7 +30,7 @@ const ResultTable = ({
     hover
     striped
     className="resource-table"
-    marginBottom={30}
+    marginBottom={40}
   >
     <Thead>
       <Tr

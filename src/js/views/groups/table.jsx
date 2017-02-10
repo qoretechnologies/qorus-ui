@@ -14,6 +14,7 @@ type Props = {
   collection: Array<Object>,
   select: Function,
   updateDone: Function,
+  canLoadMore: boolean,
 };
 
 const GroupsTable: Function = ({
@@ -22,6 +23,7 @@ const GroupsTable: Function = ({
   collection,
   select,
   updateDone,
+  canLoadMore,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -29,7 +31,7 @@ const GroupsTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={30}
+    marginBottom={canLoadMore ? 40 : 0}
   >
     <Thead>
       <Tr

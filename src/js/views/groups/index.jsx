@@ -64,6 +64,7 @@ const GroupsView: Function = ({
       collection={groups}
       sortData={sortData}
       onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
     />
     { canLoadMore && (
       <Control

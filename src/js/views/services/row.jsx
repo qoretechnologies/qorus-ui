@@ -27,6 +27,7 @@ type Props = {
   type?: string,
   threads: number,
   normalizedName: string,
+  name: string,
   version: string,
   desc: string,
   enabled: boolean,
@@ -47,6 +48,7 @@ const ServiceRow: Function = ({
   threads,
   id,
   normalizedName,
+  name,
   version,
   desc,
   enabled,
@@ -101,11 +103,11 @@ const ServiceRow: Function = ({
     </Td>
     <Td className="narrow">{ id }</Td>
     <Td className="name">
-      <p>{ normalizedName }</p>
+      <p title={name}>{ normalizedName }</p>
     </Td>
-    <Td className="medium">{ version }</Td>
-    <Td>
-      <p>{ desc }</p>
+    <Td className="medium text">{ version }</Td>
+    <Td className="text">
+      <p title={desc}>{ desc }</p>
     </Td>
   </Tr>
 );

@@ -22,6 +22,7 @@ type Props = {
   updateDone: Function,
   setAutostart: Function,
   expanded: boolean,
+  canLoadMore: boolean,
 };
 
 const WorkflowsTable: Function = ({
@@ -37,6 +38,7 @@ const WorkflowsTable: Function = ({
   updateDone,
   setAutostart,
   expanded,
+  canLoadMore,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -44,7 +46,7 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={30}
+    marginBottom={canLoadMore ? 40 : 0}
   >
     <Thead>
       <Tr

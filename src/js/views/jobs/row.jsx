@@ -126,11 +126,12 @@ const ServiceRow: Function = ({
       <Link
         to={`/job/${id}?date=${date}`}
         className="resource-name-link"
+        title={name}
       >
         {name}
       </Link>
     </Td>
-    <Td className="normal">{version}</Td>
+    <Td className="normal text">{version}</Td>
     <Td className="big">
       <Date date={executed} />
     </Td>

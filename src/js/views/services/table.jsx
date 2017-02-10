@@ -17,6 +17,7 @@ type Props = {
   openPane: Function,
   select: Function,
   updateDone: Function,
+  canLoadMore: boolean,
 };
 
 const ServicesTable: Function = ({
@@ -27,6 +28,7 @@ const ServicesTable: Function = ({
   openPane,
   select,
   updateDone,
+  canLoadMore,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -34,7 +36,7 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={30}
+    marginBottom={canLoadMore ? 40 : 0}
   >
     <Thead>
       <Tr

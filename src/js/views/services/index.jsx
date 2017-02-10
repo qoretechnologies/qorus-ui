@@ -63,6 +63,7 @@ const Services: Function = ({
       openPane={openPane}
       sortData={sortData}
       onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
     />
     { canLoadMore && (
       <Control

@@ -73,6 +73,7 @@ const WorkflowOrders: Function = ({
       date={linkDate}
       sortData={sortData}
       onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
     />
     { canLoadMore && (
       <Control

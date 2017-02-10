@@ -69,12 +69,16 @@ const ServiceRow: Function = ({
     </Td>
     <Td className="narrow">{id}</Td>
     <Td className="name">
-      <a className="resource-name-link" onClick={handleNameClick}>
+      <a
+        className="resource-name-link"
+        onClick={handleNameClick}
+        title={name}
+      >
         {name}
       </a>
     </Td>
     <Td className="text">
-      <p>{ description }</p>
+      <p title={description}>{ description }</p>
     </Td>
     <Td className="medium">{workflowsCount}</Td>
     <Td className="medium">{servicesCount}</Td>
