@@ -7,12 +7,14 @@ import { Thead, Tbody, Tfooter } from './section';
 import Tr from './row';
 import Th from './th';
 import Td from './td';
+import EditableCell from './editable_cell';
 
 type Props = {
   children: any,
   className?: string,
   condensed?: string,
   striped?: boolean,
+  bordered?: boolean,
   hover?: boolean,
   fixed?: boolean,
   height?: string | number,
@@ -25,6 +27,7 @@ let Table: Function = ({
   striped,
   hover,
   condensed,
+  bordered,
   className,
   height,
   marginBottom,
@@ -39,6 +42,7 @@ let Table: Function = ({
           striped,
           hover,
           condensed,
+          bordered,
           className,
           height,
           marginBottom: marginBottom || 0,
@@ -54,6 +58,7 @@ let Table: Function = ({
             'table-striped': striped,
             'table-condensed': condensed,
             'table-hover': hover,
+            'table-bordered': bordered,
           },
           className
         )
@@ -80,4 +85,5 @@ export {
   Tr,
   Th,
   Td,
+  EditableCell,
 };

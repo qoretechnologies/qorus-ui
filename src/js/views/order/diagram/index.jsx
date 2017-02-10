@@ -102,10 +102,7 @@ export default class DiagramView extends Component {
           />
         </div>
         <div className="pull-right order-info-view">
-          <Info
-            data={this.props.order}
-            dispatch={this.props.dispatch}
-          />
+          <Info {...this.props.order} />
           <Keys
             data={this.props.order.keys}
           />

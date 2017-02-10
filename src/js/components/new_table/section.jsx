@@ -10,7 +10,7 @@ type Props = {
   className?: string,
   hover?: boolean,
   striped?: boolean,
-  condensed: boolean,
+  bordered?: boolean,
   height?: number | string,
   fixed?: boolean,
   Tag: string,
@@ -76,7 +76,7 @@ class Section extends Component {
   }
 
   render() {
-    const { type, hover, striped, children, className, fixed, Tag } = this.props;
+    const { type, hover, striped, children, className, fixed, Tag, bordered } = this.props;
     const { height } = this.state;
 
     if (!fixed) {
@@ -117,6 +117,7 @@ class Section extends Component {
                 {
                   'table-hover': hover,
                   'table-striped': striped,
+                  'table-bordered': bordered,
                 },
                 className
               )

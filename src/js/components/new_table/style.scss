@@ -1,0 +1,10 @@
+table.text-table {
+  th, td {
+    text-align: left !important;
+    padding: 5px !important;
+  }
+
+  th {
+    background-color: darken(#fff, 5);
+  }
+}

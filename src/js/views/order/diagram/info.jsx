@@ -1,115 +1,153 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
 import includes from 'lodash/includes';
+import mapProps from 'recompose/mapProps';
 
-import Table, { Section, Row, Cell, EditableCell } from 'components/table';
+import { Table, Tbody, Tr, Td, Th, EditableCell } from '../../../components/new_table';
 import Date from 'components/date';
 import Datepicker from 'components/datepicker';
 import AutoComponent from 'components/autocomponent';
-import { pureRender } from 'components/utils';
-import { getStatusLabel } from '../../../helpers/orders';
 import actions from 'store/api/actions';
-import { ORDER_ACTIONS } from '../../../constants/orders';
+import { ORDER_ACTIONS, ALL_ORDER_STATES } from '../../../constants/orders';
 
-@pureRender
-export default class DiagramInfoTable extends Component {
-  static propTypes = {
-    data: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
-  };
+type Props = {
+  setPriority: Function,
+  schedule: Function,
+  id: number,
+  workflowstatus: string,
+  handleSchedule: Function,
+  handlePriorityChange: Function,
+  workflow_instanceid?: number,
+  started?: string,
+  custom_status?: string,
+  modified?: string,
+  priority?: number,
+  completed?: string,
+  parent_workflow_instanceid?: number,
+  scheduled?: string,
+  synchronous?: boolean,
+  label: string,
+};
 
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-  };
-
-  handlePriorityChange = (priority) => {
-    this.props.dispatch(
-      actions.orders.setPriority(this.props.data, priority)
-    );
-  };
-
-  handleDateChange = (d) => {
-    const date = moment(d).format();
-
-    this.props.dispatch(
-      actions.orders.schedule(this.props.data.id, date, this.props.data.workflowstatus)
-    );
-  };
-
-  handleModalCloseClick = () => {
-    this.context.closeModal(this._modal);
-  };
-
-  render() {
-    const { ...data } = this.props.data;
-    const orderActions = ORDER_ACTIONS[this.props.data.workflowstatus];
-
-    return (
-      <Table className="table table-bordered table-condensed">
-        <Section type="body">
-          <Row>
-            <Cell tag="th"> Instance ID </Cell>
-            <Cell>{ data.workflow_instanceid }</Cell>
-            <Cell tag="th"> Status </Cell>
-            <Cell>
-              <span className={`label status-${getStatusLabel(data.workflowstatus)}`}>
-                {data.workflowstatus}
-              </span>
-            </Cell>
-          </Row>
-          <Row>
-            <Cell tag="th"> Started </Cell>
-            <Cell>
-              <Date date={data.started} />
-            </Cell>
-            <Cell tag="th"> Custom </Cell>
-            <Cell>{ data.custom_status }</Cell>
-          </Row>
-          <Row>
-            <Cell tag="th"> Modified </Cell>
-            <Cell>
-              <Date date={data.modified} />
-            </Cell>
-            <Cell tag="th"> Priority </Cell>
-            <EditableCell
-              value={data.priority}
-              type="number"
-              min={0}
-              max={999}
-              onSave={this.handlePriorityChange}
+const DiagramInfoTable: Function = ({
+  id,
+  workflowstatus,
+  label,
+  custom_status: customStatus,
+  started,
+  modified,
+  priority,
+  handlePriorityChange,
+  completed,
+  parent_workflow_instanceid: parentId,
+  scheduled,
+  handleSchedule,
+  synchronous,
+}: Props): React.Element<any> => (
+  <Table
+    bordered
+    condensed
+    className="text-table"
+  >
+    <Tbody>
+      <Tr>
+        <Th className="text"> Instance ID </Th>
+        <Td>{id}</Td>
+        <Th> Status </Th>
+        <Td>
+          <span className={`label status-${label}`}>
+            {workflowstatus}
+          </span>
+        </Td>
+      </Tr>
+      <Tr>
+        <Th> Started </Th>
+        <Td>
+          <Date date={started} />
+        </Td>
+        <Th> Custom </Th>
+        <Td>{ customStatus }</Td>
+      </Tr>
+      <Tr>
+        <Th> Modified </Th>
+        <Td>
+          <Date date={modified} />
+        </Td>
+        <Th> Priority </Th>
+        <EditableCell
+          value={priority}
+          type="number"
+          min={0}
+          max={999}
+          onSave={handlePriorityChange}
+        />
+      </Tr>
+      <Tr>
+        <Th> Completed </Th>
+        <Td>
+          <Date date={completed} />
+        </Td>
+        <Th> Parent ID </Th>
+        <Td>{ parentId }</Td>
+      </Tr>
+      <Tr>
+        <Th> Scheduled </Th>
+        <Td>
+          { includes(ORDER_ACTIONS[workflowstatus], 'schedule') ? (
+            <Datepicker
+              date={scheduled}
+              onApplyDate={handleSchedule}
+              futureOnly
             />
-          </Row>
-          <Row>
-            <Cell tag="th"> Completed </Cell>
-            <Cell>
-              <Date date={data.completed} />
-            </Cell>
-            <Cell tag="th"> Parent ID </Cell>
-            <Cell>{ data.workflow_parent_instanceid }</Cell>
-          </Row>
-          <Row>
-            <Cell tag="th"> Scheduled </Cell>
-            <Cell>
-              { includes(orderActions, 'schedule') ? (
-                <Datepicker
-                  date={data.scheduled}
-                  onApplyDate={this.handleDateChange}
-                  futureOnly
-                />
-              ) : (
-                <Date date={data.scheduled} />
-              )}
-            </Cell>
-            <Cell tag="th"> Synchronous </Cell>
-            <Cell>
-              <AutoComponent>
-                { data.synchronous !== 0 }
-              </AutoComponent>
-            </Cell>
-          </Row>
-        </Section>
-      </Table>
-    );
-  }
-}
+          ) : (
+            <Date date={scheduled} />
+          )}
+        </Td>
+        <Th> Synchronous </Th>
+        <Td>
+          <AutoComponent>
+            {synchronous !== 0}
+          </AutoComponent>
+        </Td>
+      </Tr>
+    </Tbody>
+  </Table>
+);
+
+export default compose(
+  connect(
+    null,
+    {
+      setPriority: actions.orders.setPriority,
+      schedule: actions.orders.schedule,
+    }
+  ),
+  withHandlers({
+    handleSchedule: ({
+      schedule,
+      id,
+      workflowstatus,
+    }: Props): Function => (date: string): void => {
+      schedule(id, moment(date).format(), workflowstatus);
+    },
+    handlePriorityChange: ({ id, setPriority }: Props): Function => (priority: number): void => {
+      setPriority(id, priority);
+    },
+  }),
+  mapProps(({ workflowstatus, ...rest }): Props => ({
+    label: ALL_ORDER_STATES.find((state: Object): boolean => (
+      state.name === workflowstatus
+    )).label,
+    workflowstatus,
+    ...rest,
+  })),
+  pure([
+    'scheduled',
+    'priority',
+    'workflowstatus',
+  ])
+)(DiagramInfoTable);

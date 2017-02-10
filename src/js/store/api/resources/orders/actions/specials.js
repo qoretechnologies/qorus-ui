@@ -182,6 +182,35 @@ const scheduleAction: Function = createAction(
   }
 );
 
+const priorityAction: Function = createAction(
+  'ORDERS_SETPRIORITY',
+  async (
+    id: number,
+    priority: number,
+    optimistic: boolean,
+    dispatch: Function,
+  ): Object => {
+    if (optimistic) return { id, priority };
+
+    const result = await fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}?action=setPriority&priority=${priority}`,
+      {},
+      true
+    );
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {
+      id,
+      priority,
+      error: result.err,
+    };
+  }
+);
+
 const action: Function = (
   actn: string,
   id: number,
@@ -201,6 +230,16 @@ const schedule: Function = (
 ): void => {
   dispatch(scheduleAction(id, date, false, origStatus, dispatch));
   dispatch(scheduleAction(id, date, true));
+};
+
+const setPriority: Function = (
+  id: number,
+  priority: string,
+): Function => (
+  dispatch: Function
+): void => {
+  dispatch(priorityAction(id, priority, false, dispatch));
+  dispatch(priorityAction(id, priority, true));
 };
 
 const lock: Function = createAction(
@@ -277,4 +316,6 @@ export {
   changeServerSort,
   select,
   lock,
+  setPriority,
+  priorityAction,
 };

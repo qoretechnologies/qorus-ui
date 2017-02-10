@@ -355,6 +355,21 @@ const schedule: Object = {
   },
 };
 
+const setPriority: Object = {
+  next(
+    state: Object,
+    { payload: { id, priority } }: {
+      payload: Object,
+      id: number,
+      priority: number,
+    }
+  ): Object {
+    const data = updateItemWithId(id, { priority }, [...state.data]);
+
+    return { ...state, ...{ data } };
+  },
+};
+
 const lock: Object = {
   next(
     state: Object,
@@ -470,4 +485,5 @@ export {
   selectInvert as SELECTINVERT,
   unselectAll as UNSELECTALL,
   lock as LOCK,
+  setPriority as SETPRIORITY,
 };
