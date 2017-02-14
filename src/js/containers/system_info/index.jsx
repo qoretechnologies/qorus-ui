@@ -1,7 +1,5 @@
 /* @flow */
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-
 
 const SystemInfo = ({ info }: { info: Object }) => (
   <div className="login-footer">
@@ -23,6 +21,4 @@ SystemInfo.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-export default connect(
-  state => ({ info: state.api.info.data })
-)(SystemInfo);
+export default SystemInfo;

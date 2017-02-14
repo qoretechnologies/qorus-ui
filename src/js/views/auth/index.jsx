@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Transition from 'react-addons-css-transition-group';
@@ -11,7 +11,6 @@ import { auth } from '../../helpers/user';
 import logo from '../../../img/qore_logo.png';
 
 class Login extends Component {
-
   static contextTypes = {
     router: PropTypes.object,
   };
@@ -19,6 +18,7 @@ class Login extends Component {
   props: {
     location: any,
     sendAuthCredentials: () => Promise<*>,
+    info: Object,
   };
 
   handleSubmit = async (
@@ -50,25 +50,20 @@ class Login extends Component {
                 <img src={logo} />
                 Qorus Integration Engine
                 <p className="login-instance-wrapper">
-                  <span> qorus-test-instance </span>
+                  <span> {this.props.info['instance-key']} </span>
                 </p>
               </h1>
               <LoginForm onSubmit={this.handleSubmit} />
             </div>
           </Transition>
         </CenterWrapper>
-        <SystemInfo />
+        <SystemInfo info={this.props.info}/>
       </div>
     );
   }
 }
 
-Login.propTypes = {
-  location: PropTypes.object,
-  sendAuthCredentials: PropTypes.func.isRequired,
-};
-
 export default connect(
-  () => ({}),
+  state => ({ info: state.api.info.data }),
   actions.auth
 )(Login);
