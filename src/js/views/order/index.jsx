@@ -75,13 +75,16 @@ export default class Order extends Component {
   async componentWillMount() {
     const { id } = this.props.params;
 
-    const order = await this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    this.fetch(id);
+  }
 
-    this.props.dispatch(
-      actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
-    );
+  componentWillReceiveProps(nextProps: Object) {
+    const { id } = this.props.params;
+    const { id: nextId } = nextProps.params;
+
+    if (parseInt(id, 10) !== parseInt(nextId, 10)) {
+      this.fetch(nextId);
+    }
   }
 
   componentWillUnmount() {
@@ -91,6 +94,24 @@ export default class Order extends Component {
 
     this.props.dispatch(
       actions.workflows.unsync()
+    );
+  }
+
+  fetch: Function = async (id: number): void => {
+    this.props.dispatch(
+      actions.orders.unsync()
+    );
+
+    this.props.dispatch(
+      actions.workflows.unsync()
+    );
+
+    const order = await this.props.dispatch(
+      actions.orders.fetch({}, id)
+    );
+
+    this.props.dispatch(
+      actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
     );
   }
 

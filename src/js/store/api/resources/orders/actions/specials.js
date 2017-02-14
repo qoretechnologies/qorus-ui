@@ -88,7 +88,16 @@ const addNoteWebsocket: Function = createAction(
 
 const updateHierarchy: Function = createAction(
   'ORDERS_UPDATEHIERARCHY',
-  (id, targetId, status) => ({ id, targetId, status })
+  async (id: number) => {
+    const hierarchy: Object = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`,
+      null,
+      true
+    );
+
+    return { id, hierarchy };
+  }
 );
 
 const updateErrors: Function = createAction(

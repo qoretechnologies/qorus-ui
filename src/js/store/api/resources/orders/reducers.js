@@ -428,33 +428,17 @@ const updateErrors: Object = {
 const updateHierarchy: Object = {
   next(
     state: Object,
-    { payload: { id, targetId, status } }: {
+    { payload: { id, hierarchy } }: {
       payload: Object,
       id: number,
-      targetId: number,
-      status: string,
+      hierarchy: Object,
     }
   ): Object {
-    const data = [...state.data];
-    const order = data.find((ord: Object): boolean => ord.id === id);
+    const data = updateItemWithId(id, {
+      HierarchyInfo: hierarchy,
+    }, [...state.data]);
 
-    if (order) {
-      const hierarchy = {
-        ...order.HierarchyInfo,
-        ...{ [targetId]: {
-          ...order.HierarchyInfo[targetId],
-          ...{ workflowstatus: status },
-        } },
-      };
-
-      const newData = updateItemWithId(id, {
-        HierarchyInfo: hierarchy,
-      }, data);
-
-      return { ...state, ...{ data: newData } };
-    }
-
-    return state;
+    return { ...state, ...{ data } };
   },
 };
 

@@ -223,6 +223,17 @@ const handleEvent = (url, data, dispatch, state) => {
         const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
 
         if (state.api.orders.sync && workflow) {
+          if (info.parent_workflow_instanceid) {
+            const ordersCount = state.api.orders.data.length;
+            const currentOrder = state.api.orders.data[0];
+
+            if (ordersCount === 1 &&
+              currentOrder.HierarchyInfo &&
+              currentOrder.HierarchyInfo[info.parent_workflow_instanceid]) {
+              dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
+            }
+          }
+
           pipeline(
             `${eventstr}_ORDER`,
             orders.addOrder,
@@ -255,12 +266,10 @@ const handleEvent = (url, data, dispatch, state) => {
           const ordersCount = state.api.orders.data.length;
           const currentOrder = state.api.orders.data[0];
 
-          if (ordersCount === 1 && currentOrder.HierarchyInfo[info.workflow_instanceid]) {
-            dispatch(orders.updateHierarchy(
-              currentOrder.workflow_instanceid,
-              info.workflow_instanceid,
-              info.info.new
-            ));
+          if (ordersCount === 1 &&
+            currentOrder.HierarchyInfo &&
+            currentOrder.HierarchyInfo[info.workflow_instanceid]) {
+            dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
           }
 
           if (order) {

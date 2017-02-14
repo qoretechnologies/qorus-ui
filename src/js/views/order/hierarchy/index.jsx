@@ -1,94 +1,83 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 
-import Row from './row';
 import checkNoData from '../../../hocomponents/check-no-data';
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import HierarchyRow from './row';
 
-@compose(
-  mapProps(({ order, ...rest }) => ({
+type Props = {
+  hierarchy: Object,
+  hierarchyKeys: Array<string | number>,
+  compact?: boolean,
+  expanded: Object,
+  order: Object,
+  toggleRow: Function,
+  handleExpandClick: Function,
+};
+
+const HierarchyTable: Function = ({
+  hierarchy,
+  hierarchyKeys,
+  compact,
+}: Props): React.Element<any> => (
+  <Table
+    fixed={!compact}
+    hover
+    condensed
+    striped
+  >
+    <Thead>
+      <Tr>
+        <Th className="narrow">ID</Th>
+        <Th className="name">Workflow</Th>
+        <Th className="medium">Status</Th>
+        <Th className="narrow">Bus.Err.</Th>
+        <Th className="narrow">Errors</Th>
+        <Th className="narrow">Priority</Th>
+        { !compact && (
+          <Th className="big">Scheduled</Th>
+        )}
+        { !compact && (
+          <Th className="big">Started</Th>
+        )}
+        <Th className="big">Completed</Th>
+        { !compact && (
+          <Th className="narrow">Sub WF</Th>
+        )}
+        { !compact && (
+          <Th className="narrow">Sync</Th>
+        )}
+        { !compact && (
+          <Th className="medium">Warnings</Th>
+        )}
+      </Tr>
+    </Thead>
+    <Tbody>
+      {hierarchyKeys.map((id: string | number): ?React.Element<any> => {
+        const item: Object = hierarchy[id];
+        const parentId: ?number = item.parent_workflow_instanceid;
+
+        return (
+          <HierarchyRow
+            key={id}
+            id={item.workflow_instanceid}
+            compact={compact}
+            item={item}
+            hasParent={parentId}
+          />
+        );
+      })}
+    </Tbody>
+  </Table>
+);
+
+export default compose(
+  mapProps(({ order, ...rest }: Props): Object => ({
     hierarchy: order.HierarchyInfo,
-    order,
+    hierarchyKeys: Object.keys(order.HierarchyInfo),
     ...rest,
   })),
   checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length)
-)
-export default class HierarchyView extends Component {
-  static propTypes = {
-    hierarchy: PropTypes.object,
-    order: PropTypes.object,
-    compact: PropTypes.bool,
-  };
-
-  groupHierarchy() {
-    const groups = {};
-    const { hierarchy } = this.props;
-
-    Object.keys(this.props.hierarchy).forEach(h => {
-      const id = hierarchy[h].subworkflow ?
-        hierarchy[h].parent_workflow_instanceid : hierarchy[h].workflow_instanceid;
-      const group = groups[id] = groups[id] || { children: [] };
-
-      if (hierarchy[h].subworkflow) {
-        group.children.push(hierarchy[h]);
-      } else {
-        Object.assign(group, hierarchy[h]);
-      }
-    });
-
-    return groups;
-  }
-
-  renderRows() {
-    const data = this.groupHierarchy();
-
-    return Object.keys(data).map((h, index) => (
-      <Row data={data[h]} key={index} compact={this.props.compact} />
-    ));
-  }
-
-  render() {
-    const { compact } = this.props;
-
-    return (
-      <div>
-        <table
-          className="table table-striped table-condensed table-hover table-fixed table--data"
-        >
-          <thead>
-          <tr>
-            <th className="narrow"></th>
-            <th className="narrow"></th>
-            <th>Workflow</th>
-            <th className="narrow">Status</th>
-            <th>Business Error</th>
-            <th className="narrow">Custom Status</th>
-            { !compact && (
-              <th>Custom Status Description</th>
-            )}
-            <th className="narrow">Errors</th>
-            <th className="narrow">Priority</th>
-            { !compact && (
-              <th>Scheduled</th>
-            )}
-            { !compact && (
-              <th className="narrow">Subworkflow</th>
-            )}
-            { !compact && (
-              <th className="narrow">Synchronous</th>
-            )}
-            { !compact && (
-              <th className="narrow">Warnings</th>
-            )}
-            { !compact && (
-              <th>Started</th>
-            )}
-            <th>Completed</th>
-          </tr>
-          </thead>
-          { this.renderRows() }
-        </table>
-      </div>
-    );
-  }
-}
+)(HierarchyTable);
