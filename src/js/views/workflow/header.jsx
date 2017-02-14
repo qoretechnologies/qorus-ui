@@ -2,14 +2,11 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import withBackHandler from '../../hocomponents/withBackHandler';
-import actions from '../../store/api/actions';
 import WorkflowControls from '../workflows/controls';
-import AutoStart from '../../components/autostart';
+import WorkflowAutostart from '../workflows/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
 import Alert from '../../components/alert';
@@ -29,7 +26,6 @@ type Props = {
   alerts: Array<Object>,
   onBackClick: Function,
   setAutostart: Function,
-  handleAutostartClick: Function,
   date: string,
 };
 
@@ -43,7 +39,6 @@ const WorkflowHeader: Function = ({
   groups,
   has_alerts: hasAlerts,
   alerts,
-  handleAutostartClick,
   onBackClick,
   date,
   ...rest
@@ -67,11 +62,10 @@ const WorkflowHeader: Function = ({
             id={id}
             enabled={enabled}
           />
-          <AutoStart
+          <WorkflowAutostart
+            id={id}
             autostart={autostart}
             execCount={execCount}
-            onIncrementClick={handleAutostartClick}
-            onDecrementClick={handleAutostartClick}
           />
         </div>
       </div>
@@ -115,17 +109,6 @@ const WorkflowHeader: Function = ({
 );
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      setAutostart: actions.workflows.setAutostart,
-    }
-  ),
-  withHandlers({
-    handleAutostartClick: ({ setAutostart, id }: Props): Function => (value: number): void => {
-      setAutostart(id, value);
-    },
-  }),
   withBackHandler(),
   pure([
     ...ORDER_STATES_ARRAY,

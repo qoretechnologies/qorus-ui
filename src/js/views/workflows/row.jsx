@@ -12,7 +12,7 @@ import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import Icon from '../../components/icon';
-import AutoStart from '../../components/autostart';
+import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
 
 type Props = {
@@ -26,7 +26,6 @@ type Props = {
   handleAutostartChange: Function,
   handleWarningClick: Function,
   updateDone: Function,
-  setAutostart: Function,
   id: number,
   _selected: boolean,
   _updated: boolean,
@@ -48,7 +47,6 @@ const TableRow: Function = ({
   handleCheckboxClick,
   handleDetailClick,
   handleHighlightEnd,
-  handleAutostartChange,
   handleWarningClick,
   id,
   _selected,
@@ -99,10 +97,9 @@ const TableRow: Function = ({
       className="medium"
     >
       <AutoStart
+        id={id}
         autostart={autostart}
         execCount={execs}
-        onIncrementClick={handleAutostartChange}
-        onDecrementClick={handleAutostartChange}
       />
     </Td>
     <Td className="narrow">
@@ -170,9 +167,6 @@ export default compose(
     },
     handleDetailClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id);
-    },
-    handleAutostartChange: ({ setAutostart, id }: Props): Function => (value: number): void => {
-      setAutostart(id, value);
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id, 'detail');

@@ -20,7 +20,6 @@ type Props = {
   date: string,
   select: Function,
   updateDone: Function,
-  setAutostart: Function,
   expanded: boolean,
   canLoadMore: boolean,
 };
@@ -36,7 +35,6 @@ const WorkflowsTable: Function = ({
   date,
   select,
   updateDone,
-  setAutostart,
   expanded,
   canLoadMore,
 }: Props): React.Element<any> => (
@@ -86,7 +84,6 @@ const WorkflowsTable: Function = ({
           date={date}
           select={select}
           updateDone={updateDone}
-          setAutostart={setAutostart}
           states={states}
           showDeprecated={deprecated}
           expanded={expanded}
@@ -101,7 +98,6 @@ export default compose(
   connect(
     () => ({}),
     {
-      setAutostart: actions.workflows.setAutostart,
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
     }

@@ -34,7 +34,8 @@ const AutoStart = ({
           autostart__change: true,
           btn: true,
           'btn-xs': true,
-          'btn-success': autostart === execCount && autostart && autostart > 0,
+          'btn-success': parseInt(autostart, 10) === parseInt(execCount, 10) &&
+            autostart && autostart > 0,
         })}
       >
         { autostart }

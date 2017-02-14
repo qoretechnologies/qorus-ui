@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import OrderControls from '../workflow/tabs/list/controls';
+import WorkflowControls from '../workflows/controls';
+import WorkflowAutostart from '../workflows/autostart';
 import Lock from '../workflow/tabs/list/lock';
 import Reschedule from '../workflow/tabs/list/modals/schedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
@@ -121,6 +123,16 @@ export default class OrderHeader extends Component {
               </small>
             </h3>
             <div className="order-actions pull-right">
+              <WorkflowControls
+                id={this.props.workflow.id}
+                enabled={this.props.workflow.enabled}
+              />
+              <WorkflowAutostart
+                id={this.props.workflow.id}
+                autostart={this.props.workflow.autostart}
+                execCount={this.props.workflow.exec_count}
+              />
+              {' '}
               <OrderControls
                 id={this.props.data.id}
                 workflowstatus={this.props.data.workflowstatus}
