@@ -6,7 +6,7 @@ import spies from 'chai-spies';
 import AutoStart from '../../src/js/components/autostart';
 
 
-describe.only("AutoStart from 'components/autostart'", () => {
+describe("AutoStart from 'components/autostart'", () => {
   before(() => {
     chai.use(spies);
   });
