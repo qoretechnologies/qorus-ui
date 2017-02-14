@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import checkNoData from '../../../hocomponents/check-no-data';
 import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
@@ -23,7 +24,7 @@ const HierarchyTable: Function = ({
   compact,
 }: Props): React.Element<any> => (
   <Table
-    fixed={!compact}
+    fixed
     hover
     condensed
     striped
@@ -79,5 +80,6 @@ export default compose(
     hierarchyKeys: Object.keys(order.HierarchyInfo),
     ...rest,
   })),
-  checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length)
+  checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
+  pure(['hierarchy'])
 )(HierarchyTable);

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Link } from 'react-router';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import { Tr, Td } from '../../../components/new_table';
 import AutoComp from '../../../components/autocomponent';
@@ -27,8 +28,9 @@ const HierarchyRow: Function = ({
       <Link
         to={`/order/${id}/24h`}
         className="resource-name-link"
+        title={item.name}
       >
-        {[...Array(item.hierarchy_level)].map((): string => ('-'))}
+        {[...Array(item.hierarchy_level)].map((): string => ('--'))}
         {' '}
         {item.name}
       </Link>
@@ -72,4 +74,4 @@ const HierarchyRow: Function = ({
   </Tr>
 );
 
-export default HierarchyRow;
+export default pure(['item'])(HierarchyRow);

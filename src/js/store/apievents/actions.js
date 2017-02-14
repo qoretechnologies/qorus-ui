@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import startsWith from 'lodash/startsWith';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
@@ -220,26 +221,29 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       case 'WORKFLOW_DATA_SUBMITTED': {
+        if (state.api.orders.sync && info.parent_workflow_instanceid) {
+          const ordersCount = state.api.orders.data.length;
+          const currentOrder = state.api.orders.data[0];
+
+          if (ordersCount === 1 &&
+            currentOrder.HierarchyInfo &&
+            currentOrder.HierarchyInfo[info.parent_workflow_instanceid]) {
+            dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
+          }
+        }
+
         const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
 
         if (state.api.orders.sync && workflow) {
-          if (info.parent_workflow_instanceid) {
-            const ordersCount = state.api.orders.data.length;
-            const currentOrder = state.api.orders.data[0];
-
-            if (ordersCount === 1 &&
-              currentOrder.HierarchyInfo &&
-              currentOrder.HierarchyInfo[info.parent_workflow_instanceid]) {
-              dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
-            }
+          // Add new orders only if we aren't on the order page detail
+          if (!startsWith(window.location.pathname, '/order')) {
+            pipeline(
+              `${eventstr}_ORDER`,
+              orders.addOrder,
+              { info, time: d.time },
+              dispatch
+            );
           }
-
-          pipeline(
-            `${eventstr}_ORDER`,
-            orders.addOrder,
-            { info, time: d.time },
-            dispatch
-          );
         }
 
         if (state.api.workflows.sync && workflow) {
