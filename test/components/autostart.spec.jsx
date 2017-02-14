@@ -6,7 +6,7 @@ import spies from 'chai-spies';
 import AutoStart from '../../src/js/components/autostart';
 
 
-describe("AutoStart from 'components/autostart'", () => {
+describe.only("AutoStart from 'components/autostart'", () => {
   before(() => {
     chai.use(spies);
   });
@@ -41,7 +41,7 @@ describe("AutoStart from 'components/autostart'", () => {
     expect(Array.from(els[1].classList)).not.to.include('btn-default');
   });
 
-  it('calls dec(context, autostart - 1) when minus button is clicked', () => {
+  it('does not go to negative', () => {
     const dec = chai.spy();
     const comp = TestUtils.renderIntoDocument(
       <AutoStart autostart={0} onDecrementClick={dec} />
@@ -50,7 +50,7 @@ describe("AutoStart from 'components/autostart'", () => {
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
     TestUtils.Simulate.click(els[0]);
 
-    expect(dec).to.have.been.called.with(-1);
+    expect(dec).to.have.not.been.called();
   });
 
   it('calls inc(context, autostart + 1) when plus button is clicked', () => {

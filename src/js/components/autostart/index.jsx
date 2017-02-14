@@ -54,7 +54,9 @@ export default compose(
       onIncrementClick(autostart + 1);
     },
     handleDecrementClick: ({ onDecrementClick, autostart }: Props): Function => (): void => {
-      onDecrementClick(autostart - 1);
+      if (autostart - 1 >= 0) {
+        onDecrementClick(autostart - 1);
+      }
     },
   }),
   pure([
