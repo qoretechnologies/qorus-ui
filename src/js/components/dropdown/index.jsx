@@ -94,7 +94,7 @@ export default class Dropdown extends Component {
         return children || 'Please select';
       }
 
-      return length > 3 ? `${length} selected` : this.state.selected.join(', ');
+      return selected.length > 3 ? `${selected.length} selected` : selected.join(', ');
     }
 
     if (children) {
