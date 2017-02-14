@@ -60,7 +60,7 @@ Feature: Tests all the features of the orders list toolbar
     And "orders" get loaded
     When I click the "Complete" button inside "filters" dropdown
     And I click the "Filter" button
-    Then "1" "order" are shown
+    Then the complete URL changes to "/workflow/14/list?date=all&filter=Complete"
 
   Scenario: Changing the date to 24h
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates

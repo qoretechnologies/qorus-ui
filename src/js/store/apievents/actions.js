@@ -333,7 +333,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_STOP': {
-        const job = state.api.jobs.data(jb => jb.id === parseInt(info.jobid, 10));
+        const job = state.api.jobs.data.find(jb => jb.id === parseInt(info.jobid, 10));
 
         if (job) {
           pipeline(
@@ -346,7 +346,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_START': {
-        const job = state.api.jobs.data(jb => jb.id === parseInt(info.jobid, 10));
+        const job = state.api.jobs.data.find(jb => jb.id === parseInt(info.jobid, 10));
 
         if (job) {
           pipeline(

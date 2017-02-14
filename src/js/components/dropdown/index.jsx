@@ -64,7 +64,7 @@ export default class Dropdown extends Component {
       });
     }
 
-    if (this.state.selected !== nextProps.selected) {
+    if (this.state.selected !== nextProps.selected && nextProps.selected) {
       this.setState({
         selected: nextProps.selected,
       });
@@ -88,8 +88,9 @@ export default class Dropdown extends Component {
 
   getToggleTitle: Function = (children: any): ?string => {
     if (this.props.multi) {
-      const length = this.state.selected.length;
-      if (length === 0) {
+      const { selected } = this.state;
+
+      if (!selected || selected.length === 0) {
         return children || 'Please select';
       }
 

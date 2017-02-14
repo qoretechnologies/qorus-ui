@@ -30,7 +30,7 @@ module.exports = function orderSteps() {
     await this.changes();
 
     this.browser.assert.url({ pathname: '/workflow/14/list' });
-    this.browser.assert.url({ query: { filter: 'All', date: '24h' } });
+    this.browser.assert.url({ query: { date: '24h' } });
   });
 
   this.Given(/^I am on "([^"]*)" with "([^"]*)" states and "([^"]*)" dates$/, async function(workflow, state, date) {

@@ -84,7 +84,7 @@ module.exports = function orderDetailSteps() {
   this.Given(/^diagram, tables and error pane get loaded$/, async function() {
     await this.waitForElement('svg.diagram');
 
-    this.browser.assert.elements('.order-info-view table', 3);
+    this.browser.assert.elements('.order-info-view tbody', 3);
     this.browser.assert.element('.error-pane');
   });
 
