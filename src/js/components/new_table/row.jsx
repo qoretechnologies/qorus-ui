@@ -10,6 +10,7 @@ type Props = {
   onSortChange?: Function,
   highlight?: boolean,
   onHighlightEnd?: Function,
+  onClick?: Function,
 }
 
 @updateOnlyForKeys([
@@ -77,6 +78,7 @@ export default class Row extends Component {
         className={classNames({
           'row-highlight': highlight,
         }, className)}
+        onClick={this.props.onClick}
       >
         { sortData && onSortChange ? (
           React.Children.map(children, (child: any, key) => (

@@ -1,58 +1,48 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 
 import Row from './row';
 import { groupInstances } from '../../../helpers/orders';
 import checkNoData from '../../../hocomponents/check-no-data';
+import { Table, Thead, Tr, Th } from '../../../components/new_table';
 
-@compose(
-  mapProps(({ order, ...rest }): Object => ({
-    steps: order.StepInstances,
+type Props = {
+  order: Object,
+  steps: Object,
+};
+
+const StepsTable: Function = ({
+  steps,
+}: Props): React.Element<Table> => (
+  <Table condensed hover>
+    <Thead>
+      <Tr>
+        <Th className="narrow">-</Th>
+        <Th className="narrow">Status</Th>
+        <Th className="name">Name</Th>
+        <Th>Error Type</Th>
+        <Th>Custom Status</Th>
+        <Th className="narrow">Ind</Th>
+        <Th className="narrow">Retries</Th>
+        <Th className="narrow">Skip</Th>
+        <Th>Started</Th>
+        <Th>Completed</Th>
+        <Th>SubWFL IID</Th>
+      </Tr>
+    </Thead>
+    {Object.keys(steps).map((step: string, index: number): React.Element<Row> => (
+      <Row stepdata={steps[step]} key={index} />
+    ))}
+  </Table>
+);
+
+export default compose(
+  mapProps(({ order, ...rest }: Props): Props => ({
+    steps: groupInstances(order.StepInstances),
     order,
     ...rest,
   })),
-  checkNoData(({ steps }) => steps && Object.keys(steps).length)
-)
-export default class StepsView extends Component {
-  static propTypes = {
-    steps: PropTypes.array,
-    order: PropTypes.object,
-  };
-
-  renderTableBody() {
-    const data = groupInstances(this.props.steps);
-
-    return Object.keys(data).map((d, index) => (
-        <Row stepdata={data[d]} key={index} />
-      )
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <table
-          className="table table-striped table-condensed table-hover table-fixed table--data"
-        >
-          <thead>
-            <tr>
-              <th className="narrow"></th>
-              <th className="narrow">Status</th>
-              <th className="narrow">Name</th>
-              <th>Error Type</th>
-              <th>Custom Status</th>
-              <th className="narrow">Ind</th>
-              <th className="narrow">Retries</th>
-              <th className="narrow">Skip</th>
-              <th>Started</th>
-              <th>Completed</th>
-              <th>SubWFL IID</th>
-            </tr>
-          </thead>
-          { this.renderTableBody() }
-        </table>
-      </div>
-    );
-  }
-}
+  checkNoData(({ steps }: Object): boolean => steps && Object.keys(steps).length)
+)(StepsTable);
