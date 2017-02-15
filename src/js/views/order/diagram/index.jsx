@@ -106,6 +106,7 @@ export default class DiagramView extends Component {
           <Keys
             data={this.props.order.keys}
           />
+          <h4> Hierarchy </h4>
           <Hierarchy order={this.props.order} compact />
           { this.renderStepDetails() }
         </div>
