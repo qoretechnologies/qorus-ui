@@ -2,24 +2,29 @@
 import React from 'react';
 import { Link } from 'react-router';
 import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 import { Tr, Td } from '../../../components/new_table';
 import AutoComp from '../../../components/autocomponent';
 import Date from '../../../components/date';
+import { ALL_ORDER_STATES } from '../../../constants/orders';
 
 type Props = {
   item: Object,
   id: number,
   compact: boolean,
+  label: string,
 };
 
 const HierarchyRow: Function = ({
   item,
   id,
   compact,
+  label,
 }: Props): React.Element<any> => (
   <Tr>
-    <Td className="narrow">
+    <Td className="normal">
       <Link to={`/order/${id}/24h`}>
         {id}
       </Link>
@@ -36,7 +41,7 @@ const HierarchyRow: Function = ({
       </Link>
     </Td>
     <Td className="medium">
-      <span className={`label status-${item.workflowstatus.toLowerCase()}`}>
+      <span className={`label status-${label}`}>
         {item.workflowstatus}
       </span>
     </Td>
@@ -74,4 +79,13 @@ const HierarchyRow: Function = ({
   </Tr>
 );
 
-export default pure(['item'])(HierarchyRow);
+export default compose(
+  mapProps(({ item, ...rest }: Props): Props => ({
+    label: ALL_ORDER_STATES.find((order: Object): boolean => (
+      order.name === item.workflowstatus
+    )).label,
+    item,
+    ...rest,
+  })),
+  pure(['item'])
+)(HierarchyRow);

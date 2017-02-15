@@ -31,7 +31,7 @@ const HierarchyTable: Function = ({
   >
     <Thead>
       <Tr>
-        <Th className="narrow">ID</Th>
+        <Th className="normal">ID</Th>
         <Th className="name">Workflow</Th>
         <Th className="medium">Status</Th>
         <Th className="narrow">Bus.Err.</Th>
