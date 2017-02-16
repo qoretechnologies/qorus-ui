@@ -7,12 +7,12 @@ Feature: Tests for the Diagram tab
   Scenario: Diagram is correct
     Given I am on order "31380" and "Diagram" tab
     And diagram, tables and error pane get loaded
-    Then the diagram has 10 boxes
+    Then the diagram has 16 boxes
     And start box is "error"
     And there are 2 "complete" boxes
     And there are 2 "error" boxes
     And there are 1 "async-waiting" boxes
-    And there are 5 "normal" boxes
+    And there are 11 "normal" boxes
 
   Scenario: Changes order priority
     Given I am on order "31380" and "Diagram" tab
