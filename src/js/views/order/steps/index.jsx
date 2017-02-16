@@ -40,8 +40,12 @@ const StepsTable: Function = ({
 
 export default compose(
   mapProps(({ order, ...rest }: Props): Props => ({
-    steps: groupInstances(order.StepInstances),
+    steps: order.StepInstances,
     order,
+    ...rest,
+  })),
+  mapProps(({ steps, ...rest }: Props): Props => ({
+    steps: steps && steps.length ? groupInstances(steps) : {},
     ...rest,
   })),
   checkNoData(({ steps }: Object): boolean => steps && Object.keys(steps).length)

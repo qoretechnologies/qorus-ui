@@ -442,6 +442,23 @@ const updateHierarchy: Object = {
   },
 };
 
+const updateStepInstances: Object = {
+  next(
+    state: Object,
+    { payload: { id, steps } }: {
+      payload: Object,
+      id: number,
+      steps: Object,
+    }
+  ): Object {
+    const data = updateItemWithId(id, {
+      StepInstances: steps,
+    }, [...state.data]);
+
+    return { ...state, ...{ data } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -470,4 +487,5 @@ export {
   unselectAll as UNSELECTALL,
   lock as LOCK,
   setPriority as SETPRIORITY,
+  updateStepInstances as UPDATESTEPINSTANCES,
 };

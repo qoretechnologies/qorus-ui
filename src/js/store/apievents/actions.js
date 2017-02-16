@@ -288,6 +288,9 @@ const handleEvent = (url, data, dispatch, state) => {
               dispatch
             );
 
+            // Update diagram Step instances
+            dispatch(orders.updateStepInstances(info.workflow_instanceid));
+
             // We are on orders/:id, we should only update the errors
             // on the detail page, not on the orders list
             if (ordersCount === 1 && info.info.new === 'ERROR') {

@@ -100,6 +100,20 @@ const updateHierarchy: Function = createAction(
   }
 );
 
+const updateStepInstances: Function = createAction(
+  'ORDERS_UPDATESTEPINSTANCES',
+  async (id: number) => {
+    const steps: Object = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/orders/${id}/StepInstances`,
+      null,
+      true
+    );
+
+    return { id, steps };
+  }
+);
+
 const updateErrors: Function = createAction(
   'ORDERS_UPDATEERRORS',
   async (id) => {
@@ -327,4 +341,5 @@ export {
   lock,
   setPriority,
   priorityAction,
+  updateStepInstances,
 };
