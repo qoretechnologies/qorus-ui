@@ -1,138 +1,60 @@
-import React, { PropTypes } from 'react';
-import Table from '../../services/table';
+// @flow
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import { Cell } from '../../../components/table';
-
+import { Table, Tbody, Thead, Tr, Th, Td } from '../../../components/new_table';
 import Date from '../../../components/date';
 
-export default class extends Table {
-  static defaultProps = {
-    setSelectedData: () => {},
-    selectedData: {},
-    steps: PropTypes.array,
-  };
+type Props = {
+  collection: Array<Object>,
+  steps: Array<Object>,
+};
 
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
-    yield (
-      <Cell tag="th" className="narrow">
-        Severity
-      </Cell>
-    );
+const ErrorsTable: Function = ({
+  collection,
+  steps,
+}: Props): React.Element<Table> => (
+  <Table condensed striped>
+    <Thead>
+      <Tr>
+        <Th className="narrow">Severity</Th>
+        <Th>Error code</Th>
+        <Th className="text">Description</Th>
+        <Th className="name">Step Name</Th>
+        <Th className="narrow">Index</Th>
+        <Th>Created</Th>
+        <Th className="text">Error Type</Th>
+        <Th className="text">Info</Th>
+        <Th className="narrow">Retry</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {collection.map((error: Object, index: number): React.Element<any> => {
+        const currentStep: ?Object = steps.find((step: Object): boolean => (
+          step.stepid === error.stepid
+        ));
+        const stepName: string = currentStep ? currentStep.stepname : '-';
 
-    yield (
-      <Cell tag="th">
-        Error Code
-      </Cell>
-    );
+        return (
+          <Tr key={index}>
+            <Td className="narrow">{error.severity}</Td>
+            <Td>{error.error}</Td>
+            <Td className="text">{error.description}</Td>
+            <Td className="name">
+              {stepName}
+            </Td>
+            <Td className="narro">{error.ind}</Td>
+            <Td>
+              <Date date={error.created} />
+            </Td>
+            <Td className="text">{error.business_error ? 'Business' : 'Other'}</Td>
+            <Td className="text">{error.info}</Td>
+            <Td className="narrow">{error.retry}</Td>
+          </Tr>
+        );
+      })}
+    </Tbody>
+  </Table>
+);
 
-    yield (
-      <Cell tag="th">
-        Description
-      </Cell>
-    );
-
-    yield (
-      <Cell tag="th">
-        Step name
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Ind
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-      >
-        Created
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-      >
-        Error Type
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Info
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Retry
-      </Cell>
-    );
-  }
-
-
-  /**
-   * Yields cells with model data
-   *
-   * @param {Object} model
-   * @return {Generator<ReactElement>}
-   */
-  *renderCells({ model }) {
-    yield (
-      <Cell className="narrow text">{ model.severity }</Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.error }</Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.description }</Cell>
-    );
-
-    const stepName = this.props.steps.find(s => s.stepid === model.stepid).stepname;
-
-    yield (
-      <Cell className="narrow name">{ stepName }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.ind }</Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.created } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.business_error ? 'Business' : 'Other' }</Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.info }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.retry }</Cell>
-    );
-  }
-}
+export default pure(['collection', 'steps'])(ErrorsTable);
