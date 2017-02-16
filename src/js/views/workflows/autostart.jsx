@@ -14,18 +14,21 @@ type Props = {
   execCount: number,
   handleAutostartChange: Function,
   setAutostart: Function,
+  withExec?: boolean,
 };
 
 const WorkflowAutostart: Function = ({
   autostart,
   execCount,
   handleAutostartChange,
+  withExec,
 }: Props): React.Element<any> => (
   <AutoStart
     autostart={autostart}
     execCount={execCount}
     onIncrementClick={handleAutostartChange}
     onDecrementClick={handleAutostartChange}
+    withExec={withExec}
   />
 );
 

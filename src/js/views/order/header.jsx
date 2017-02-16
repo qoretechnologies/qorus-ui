@@ -131,6 +131,7 @@ export default class OrderHeader extends Component {
                 id={this.props.workflow.id}
                 autostart={this.props.workflow.autostart}
                 execCount={this.props.workflow.exec_count}
+                withExec
               />
               {' '}
               <OrderControls

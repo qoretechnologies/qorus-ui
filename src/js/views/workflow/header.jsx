@@ -66,6 +66,7 @@ const WorkflowHeader: Function = ({
             id={id}
             autostart={autostart}
             execCount={execCount}
+            withExec
           />
         </div>
       </div>

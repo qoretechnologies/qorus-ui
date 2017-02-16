@@ -64,4 +64,18 @@ describe("AutoStart from 'components/autostart'", () => {
 
     expect(inc).to.have.been.called.with(1);
   });
+
+  it('renders button with execs', () => {
+    const comp = TestUtils.renderIntoDocument(
+      <AutoStart
+        autostart={0}
+        execCount={10}
+        withExec
+      />
+    );
+
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
+
+    expect(els[1].textContent).to.eql('0 / Execs: 10');
+  });
 });

@@ -14,6 +14,7 @@ type Props = {
   handleIncrementClick: Function,
   onDecrementClick: Function,
   handleDecrementClick: Function,
+  withExec?: boolean,
 };
 
 const AutoStart = ({
@@ -21,9 +22,10 @@ const AutoStart = ({
   execCount,
   handleIncrementClick,
   handleDecrementClick,
+  withExec,
 }: Props): React.Element<any> => (
   <div className="autostart">
-    <Controls grouped>
+    <Controls noControls grouped>
       <Control
         title="Decrease"
         icon="minus"
@@ -38,7 +40,7 @@ const AutoStart = ({
             autostart && autostart > 0,
         })}
       >
-        { autostart }
+        { !withExec ? autostart : `${autostart} / Execs: ${execCount}` }
       </button>
       <Control
         title="Increase"
