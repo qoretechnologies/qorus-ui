@@ -38,7 +38,15 @@ export default class StepDetailTable extends Component {
 
   setup(props) {
     const grouped = groupInstances(props.instances);
-    const steps = grouped[props.step].steps;
+    let steps = grouped[props.step].steps;
+
+    steps = steps.sort((a, b) => {
+      if (a.ind < b.ind) {
+        return -1;
+      }
+
+      return 1;
+    });
 
     this.setState({
       steps,

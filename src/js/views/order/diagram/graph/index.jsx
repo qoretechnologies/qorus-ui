@@ -621,10 +621,10 @@ export default class StepsTab extends Component {
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform(colIdx, rowIdx) {
+  getBoxTransform(colIdx, rowIdx, margin = 0) {
     return 'translate(' +
-      `${this.getBoxTopCoord(colIdx)} ` +
-      `${this.getBoxLeftCoord(rowIdx)}` +
+      `${this.getBoxTopCoord(colIdx) - margin} ` +
+      `${this.getBoxLeftCoord(rowIdx) + margin}` +
       ')';
   }
 
@@ -764,14 +764,13 @@ export default class StepsTab extends Component {
       });
     };
 
-    const type = this.getStepInfo(stepId) ?
-      this.getStepInfo(stepId).steptype :
-      '';
-
+    const stepInfo = this.getStepInfo(stepId);
+    const type = stepInfo ? stepInfo.steptype : '';
     const name = this.getStepName(stepId);
     let css = type.toLowerCase();
     let onBoxClick;
     let instances;
+    let arrayStep = [];
 
     if (this.props.order) {
       instances = this.props.order.StepInstances ?
@@ -779,33 +778,69 @@ export default class StepsTab extends Component {
       css = instances[name] ?
           instances[name].status.toLowerCase() : 'normal';
       onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
+
+      if (stepInfo.arraytype !== 'NONE') {
+        arrayStep = instances[name].steps;
+      }
     }
 
     return (
-      <g
-        className={classNames({
-          diagram__box: true,
-          [`status-${css}-diagram`]: css,
-          clickable: instances && instances[name],
-        })}
-        transform={this.getBoxTransform(colIdx, rowIdx)}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-        onClick={onBoxClick}
-      >
-        <rect {...this.getDefaultParams()} />
-        <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
-          {this.getStepFullname(stepId)}
-        </text>
-        <text
-          x={225}
-          y={13}
-          className="link"
-          onClick={onCodeClick}
+      <svg>
+        {stepInfo.arraytype !== 'NONE' && (
+          <svg>
+            <g
+              className={classNames({
+                diagram__box: true,
+                'status-normal-diagram': true,
+              })}
+              transform={this.getBoxTransform(colIdx, rowIdx, 8)}
+            >
+              <rect {...this.getDefaultParams()} />
+            </g>
+            <g
+              className={classNames({
+                diagram__box: true,
+                'status-normal-diagram': true,
+              })}
+              transform={this.getBoxTransform(colIdx, rowIdx, 4)}
+            >
+              <rect {...this.getDefaultParams()} />
+            </g>
+          </svg>
+        )}
+        <g
+          className={classNames({
+            diagram__box: true,
+            [`status-${css}-diagram`]: css,
+            clickable: instances && instances[name],
+          })}
+          transform={this.getBoxTransform(colIdx, rowIdx)}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+          onClick={onBoxClick}
         >
-          CODE
-        </text>
-      </g>
+          <rect {...this.getDefaultParams()} />
+          <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
+            {this.getStepFullname(stepId)}
+          </text>
+          {stepInfo.arraytype !== 'NONE' && (
+            <text
+              x={15}
+              y={13}
+            >
+              [{arrayStep.length}]
+            </text>
+          )}
+          <text
+            x={225}
+            y={13}
+            className="link"
+            onClick={onCodeClick}
+          >
+            CODE
+          </text>
+        </g>
+      </svg>
     );
   }
 
