@@ -18,5 +18,5 @@ Feature: Tests the conenctions view
     Given I am on "system/remote" listing
     And the URL changes to "/system/remote/datasources"
     And "datasources" get loaded
-    When I activate "omq" connection
+    When I activate "omq" - "3"
     Then I should see "connection" detail pane

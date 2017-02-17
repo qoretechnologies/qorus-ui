@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Nav, { NavLink } from '../../../components/navlink';
+import Loader from '../../../components/loader';
 import { SystemHealth } from './health';
 import PerformanceChart from '../../workflow/tabs/performance/chart';
-import ButtonsBar from '../../../containers/bubbles/buttons';
 import actions from 'store/api/actions';
 
 const viewSelector = createSelector(
@@ -33,9 +33,11 @@ export default class Dashboard extends Component {
   }
 
   render() {
+    if (!this.props.health) return <Loader />;
+
     return (
       <div className="tab-pane active">
-        <div className="container-fluid">
+        <div className="container-fluid" style={{ height: 380 }}>
           <SystemHealth health={this.props.health} className="health-block" />
           <PerformanceChart
             days={1}
@@ -53,12 +55,6 @@ export default class Dashboard extends Component {
           <div>
             { this.props.children }
           </div>
-          {global.env.NODE_ENV !== 'production' ? (
-            <div>
-              Notifications:
-              <ButtonsBar />
-            </div>
-          ) : null}
         </div>
       </div>
     );

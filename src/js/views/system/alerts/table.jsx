@@ -1,34 +1,98 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import classNames from 'classnames';
 import { flowRight } from 'lodash';
-import { Link } from 'react-router';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import mapProps from 'recompose/mapProps';
 
-import Table, { Cell, Section, Row } from '../../../components/table';
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
-import Date from '../../../components/date';
-import sort from '../../../hocomponents/sort';
+import withSort from '../../../hocomponents/sort';
+import withLoadMore from '../../../hocomponents/loadMore';
 import sync from '../../../hocomponents/sync';
 import withPane from '../../../hocomponents/pane';
 import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
-import { getAlertObjectLink } from '../../../helpers/system';
 import { findBy } from '../../../helpers/search';
-import { propSelector } from '../../../selectors';
-import Pane from './pane';
-import withSearch from '../../../hocomponents/search';
-import Search from '../../../components/search';
-import Toolbar from '../../../components/toolbar';
+import { querySelector, paramSelector, resourceSelector } from '../../../selectors';
+import AlertsPane from './pane';
+import AlertRow from './row';
+import AlertsToolbar from './toolbar';
 
-const alertsSelector = state => state.api.alerts;
-const typeSelector = (state, props) => props.params.type;
+type Props = {
+  type: string,
+  params: Object,
+  sortData: Object,
+  onSortChange: Function,
+  alerts: Array<Object>,
+  canLoadMore?: boolean,
+  handleLoadMore: Function,
+  openPane: Function,
+  paneId: string,
+  location: Object,
+}
 
-const activeRowId = (state, props) => parseFloat(props.params.id, 10);
+const AlertsTable: Function = ({
+  sortData,
+  onSortChange,
+  alerts,
+  canLoadMore,
+  handleLoadMore,
+  openPane,
+  paneId,
+  location,
+  type,
+}: Props): React.Element<any> => (
+  <div>
+    <AlertsToolbar location={location} />
+    <Table
+      fixed
+      hover
+      striped
+      marginBottom={canLoadMore ? 40 : 0}
+      key={type}
+    >
+      <Thead>
+        <Tr
+          sortData={sortData}
+          onSortChange={onSortChange}
+        >
+          <Th className="tiny" />
+          <Th className="narrow">-</Th>
+          <Th className="text" name="type">Type</Th>
+          <Th className="text" name="alert">Alert</Th>
+          <Th className="name" name="object">Object</Th>
+          <Th className="big" name="when">When</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {alerts.map((alert: Object): React.Element<any> => (
+          <AlertRow
+            key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
+            openPane={openPane}
+            isActive={paneId === `${alert.type}:${alert.id}`}
+            {...alert}
+          />
+        ))}
+      </Tbody>
+    </Table>
+    {canLoadMore && (
+      <Button
+        label="Load 50 more..."
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
+  </div>
+);
 
-const filterCollection = type => collection => (
-  collection.filter(c => c.alerttype.toLowerCase() === type)
+const filterCollection: Function = (
+  type: string
+): Function => (alerts: Array<Object>): Array<Object> => (
+  alerts.filter((alert: Object): boolean => alert.alerttype.toLowerCase() === type)
 );
 
 const searchCollection: Function = (
@@ -41,271 +105,49 @@ const searchCollection: Function = (
 
 const collectionSelector = createSelector(
   [
-    alertsSelector,
-    typeSelector,
-    propSelector('query'),
-  ], (alerts, type, query) => flowRight(
+    resourceSelector('alerts'),
+    paramSelector('type'),
+    querySelector('search'),
+  ], (alerts, type, search) => flowRight(
     filterCollection(type),
-    searchCollection(query)
+    searchCollection(search)
   )(alerts.data)
 );
 
 const viewSelector = createSelector(
   [
-    alertsSelector,
+    resourceSelector('alerts'),
     collectionSelector,
-    activeRowId,
   ],
-  (meta, collection, rowId) => ({
+  (meta, alerts) => ({
     meta,
-    collection,
-    activeRowId: rowId,
+    alerts,
   })
 );
 
-@compose(
-  withSearch('alertQuery'),
+export default compose(
   connect(
     viewSelector,
     {
       load: actions.alerts.fetch,
-      updateDone: actions.alerts.updateDone,
     }
   ),
-  sort(
-    'alert',
-    'collection',
+  mapProps(({ params, ...rest }: Props): Props => ({
+    type: params.type,
+    params,
+    ...rest,
+  })),
+  withSort(
+    ({ type }: Props): string => type,
+    'alerts',
     sortDefaults.alerts
   ),
+  withLoadMore('alerts', 'alerts', true, 50),
   sync('meta'),
-  withPane(Pane)
-)
-export default class AlertsTable extends Component {
-  static propTypes = {
-    collection: PropTypes.array,
-    activeRowId: PropTypes.number,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
-    route: PropTypes.object,
-    children: PropTypes.node,
-    location: PropTypes.object,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    updateDone: PropTypes.func,
-    openPane: PropTypes.func,
-    onSearchChange: PropTypes.func,
-    defaultSearchValue: PropTypes.string,
-    paneId: PropTypes.string,
-    query: PropTypes.string,
-  };
-
-  componentWillMount() {
-    this._renderHeadingRow = ::this.renderHeadingRow;
-    this._renderRows = ::this.renderRows;
-    this._renderCells = ::this.renderCells;
-  }
-
-  handleHighlightEnd = (id) => () => {
-    this.props.updateDone(id);
-  };
-
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
-    const { sortData, onSortChange } = this.props;
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      />
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      > - </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="type"
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
-        Type
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="alert"
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
-        Alert
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="object"
-      >
-        Object
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        name="when"
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
-        When
-      </Cell>
-    );
-  }
-
-  *renderCells({ model }) {
-    yield (
-      <Cell className="narrow">
-        <i className="text-danger fa fa-exclamation-triangle" />
-      </Cell>
-    );
-
-    const handleDetailClick = () => {
-      this.props.openPane(`${model.type}:${model.id}`);
-    };
-
-    yield (
-      <Cell className="narrow">
-        <Button
-          label="Detail"
-          btnStyle="success"
-          onClick={handleDetailClick}
-          title="Open detail pane"
-        />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="name nowrap">{ model.type }</Cell>
-    );
-
-    yield (
-      <Cell className="name nowrap">{ model.alert }</Cell>
-    );
-
-    const name = model.version ?
-      `${model.name} v${model.version} (${model.id})` :
-      `${model.name} (${model.id})`;
-
-    if (model.type === 'RBAC' || (model.type === 'GROUP' && model.id < 0)) {
-      yield (
-        <Cell className="desc">
-          { name }
-        </Cell>
-      );
-    } else {
-      yield (
-        <Cell className="desc">
-          <Link to={getAlertObjectLink(model.type, model)}>
-            { name }
-          </Link>
-        </Cell>
-      );
-    }
-
-    yield (
-      <Cell className="nowrap"><Date date={ model.when } /></Cell>
-    );
-  }
-
-  /**
-   * Yields row for table head.
-   *
-   * @return {Generator<ReactElement>}
-   * @see renderHeadings
-   */
-  *renderHeadingRow() {
-    yield (
-      <Row cells={::this.renderHeadings} />
-    );
-  }
-
-
-  /**
-   * Yields rows for table body.
-   *
-   * Row with active model is highlighted. Row are clickable and
-   * trigger route change via {@link activateRow}.
-   *
-   * @param {Array<Object>} collection
-   * @return {Generator<ReactElement>}
-   * @see activateRow
-   * @see renderCells
-   */
-  *renderRows({ collection }) {
-    for (const model of collection) {
-      yield (
-        <Row
-          key={model.alertid}
-          data={{ model }}
-          cells={this._renderCells}
-          highlight={model._updated}
-          onHighlightEnd={this.handleHighlightEnd(model.alertid)}
-          className={classNames({
-            info: model.alertid === parseInt(this.props.paneId, 10),
-          })}
-        />
-      );
-    }
-  }
-
-  renderTable() {
-    if (!this.props.collection.length) {
-      return (
-        <div className="tab-pane active">
-          <p> No data </p>
-        </div>
-      );
-    }
-
-    const data = {
-      collection: this.props.collection,
-    };
-
-    return (
-      <Table
-        data={ data }
-        className="table table-condensed table-fixed table-striped table--data"
-      >
-        <Section type="head" rows={this._renderHeadingRow} />
-        <Section type="body" data={ data } rows={this._renderRows} />
-      </Table>
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <Toolbar>
-          <Search
-            onSearchUpdate={this.props.onSearchChange}
-            defaultValue={this.props.query}
-          />
-        </Toolbar>
-        { this.renderTable() }
-        { this.props.children }
-      </div>
-    );
-  }
-}
+  withPane(AlertsPane),
+  pure([
+    'alerts',
+    'location',
+    'paneId',
+  ])
+)(AlertsTable);

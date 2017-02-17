@@ -19,9 +19,9 @@ import { connect } from 'react-redux';
 export default class Ping extends Component {
   props: {
     pingRemote?: Function,
-    model: Object,
+    name: string,
     onClose: Function,
-    type: 'datasources' | 'user',
+    type: string,
   };
 
   state: {
@@ -38,7 +38,7 @@ export default class Ping extends Component {
 
   ping: Function = async (): Promise<*> => {
     if (this.props.pingRemote) {
-      const payload: Object = await this.props.pingRemote(this.props.model.name, this.props.type);
+      const payload: Object = await this.props.pingRemote(this.props.name, this.props.type);
 
       this.setState({
         error: payload.error,
@@ -99,7 +99,7 @@ export default class Ping extends Component {
           titleId="ping"
           onClose={this.props.onClose}
         >
-          Pinging { this.props.model.name }
+          Pinging { this.props.name }
         </Modal.Header>
         <Modal.Body>
           { this.renderBody() }
