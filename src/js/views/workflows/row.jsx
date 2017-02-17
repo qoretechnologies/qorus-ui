@@ -14,7 +14,6 @@ import Badge from '../../components/badge';
 import Icon from '../../components/icon';
 import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
-import { formatCount } from '../../helpers/orders';
 
 type Props = {
   isActive?: boolean,
@@ -139,7 +138,7 @@ const TableRow: Function = ({
           >
             <Badge
               className={`status-${state.label}`}
-              val={formatCount(value)}
+              val={value}
             />
           </Link>
         </Td>
