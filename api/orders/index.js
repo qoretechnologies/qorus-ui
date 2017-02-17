@@ -227,6 +227,10 @@ module.exports = () => {
     res.status(item ? 200 : 404).json(item);
   });
 
+  router.get('/:id/StepInstances', (req, res) => {
+    res.json([]);
+  });
+
   router.put('/:id', (req, res) => {
     const order = data.find(o => findOrder(req.params.id, o));
     let steps;

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 
 import Nav, { NavLink } from '../../../components/navlink';
 import AlertsTable from './table';

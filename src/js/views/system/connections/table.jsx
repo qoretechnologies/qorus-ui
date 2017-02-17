@@ -70,7 +70,7 @@ const ConnectionTable: Function = ({
   type,
   canLoadMore,
   handleLoadMore,
-}: Props): React.Element<any> => console.log(sortData) || (
+}: Props): React.Element<any> => (
   <div>
     <Table
       fixed
