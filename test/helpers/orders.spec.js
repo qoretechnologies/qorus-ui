@@ -66,7 +66,7 @@ describe('canSkip, formatCount from helpers/orders', () => {
     });
   });
 
-  describe.only('formatCount', () => {
+  describe('formatCount', () => {
     it('returns the given number unchanged', () => {
       const num = formatCount(10);
 
