@@ -79,7 +79,7 @@ describe('NotificationList form \'components/notifications/list\'', () => {
       />
     );
 
-    wrapper.find('.clear-button').simulate('click');
+    wrapper.find('button').simulate('click');
 
     expect(clearNotifications).to.have.been.called();
   });
