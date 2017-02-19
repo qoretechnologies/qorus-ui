@@ -78,7 +78,10 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <Icon icon={type === 'system' ? 'cog' : 'user'} />
+      <Icon
+        icon={type === 'system' ? 'cog' : 'user'}
+        tooltip={type === 'system' ? 'System' : 'User'}
+      />
     </Td>
     <Td className="medium">
       <ServiceControls
