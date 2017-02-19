@@ -45,7 +45,7 @@ const ServiceControls: Function = ({
       onClick={handleAutostartClick}
     />
     <Button
-      title={loaded ? 'Disable' : 'Enable'}
+      title={loaded ? 'Unload' : 'Load'}
       icon={loaded ? 'check' : 'remove'}
       btnStyle={loaded ? 'success' : 'default'}
       onClick={handleLoadClick}
