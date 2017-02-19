@@ -18,8 +18,8 @@ type Props = {
   handleRunClick: Function,
   handleScheduleClick: Function,
   handleExpiryClick: Function,
-  enabled: boolean,
-  active: boolean,
+  enabled?: boolean,
+  active?: boolean,
   action: Function,
   schedule: Function,
   activate: Function,
@@ -32,7 +32,8 @@ type Props = {
   day: string,
   month: string,
   week: string,
-}
+  scheduleOnly?: boolean,
+};
 
 const ServiceControls: Function = ({
   handleEnableClick,
@@ -43,45 +44,64 @@ const ServiceControls: Function = ({
   handleExpiryClick,
   active,
   enabled,
+  scheduleOnly,
+  minute,
+  hour,
+  day,
+  month,
+  week,
 }: Props): React.Element<any> => (
-  <Controls grouped>
-    <Button
-      title={enabled ? 'Disable' : 'Enable'}
-      icon="power-off"
-      btnStyle={enabled ? 'success' : 'danger'}
-      onClick={handleEnableClick}
-    />
-    <Button
-      title={active ? 'Deactivate' : 'Activate'}
-      icon={active ? 'check' : 'ban'}
-      btnStyle={active ? 'success' : 'danger'}
-      onClick={handleActivateClick}
-    />
-    <Button
-      title="Reset"
-      icon="refresh"
-      btnStyle="warning"
-      onClick={handleResetClick}
-    />
-    <Button
-      title="Run"
-      icon="play"
-      btnStyle="default"
-      onClick={handleRunClick}
-    />
-    <Button
-      title="Reschedule"
-      icon="clock-o"
-      btnStyle="default"
-      onClick={handleScheduleClick}
-    />
-    <Button
-      title="Set expiry"
-      icon="tag"
-      btnStyle="default"
-      onClick={handleExpiryClick}
-    />
-  </Controls>
+  scheduleOnly ?
+    <div>
+      <span>
+        {`${minute} ${hour} ${day} ${month} ${week}`}
+      </span>
+      {' '}
+      <Button
+        label="Reschedule"
+        icon="clock-o"
+        btnStyle="default"
+        onClick={handleScheduleClick}
+      />
+    </div> :
+    <Controls grouped>
+      <Button
+        title={enabled ? 'Disable' : 'Enable'}
+        icon="power-off"
+        btnStyle={enabled ? 'success' : 'danger'}
+        onClick={handleEnableClick}
+      />
+      <Button
+        title={active ? 'Deactivate' : 'Activate'}
+        icon={active ? 'check' : 'ban'}
+        btnStyle={active ? 'success' : 'danger'}
+        onClick={handleActivateClick}
+      />
+      <Button
+        title="Reset"
+        icon="refresh"
+        btnStyle="warning"
+        onClick={handleResetClick}
+      />
+      <Button
+        title="Run"
+        icon="play"
+        btnStyle="default"
+        onClick={handleRunClick}
+      />
+      <Button
+        title="Reschedule"
+        icon="clock-o"
+        btnStyle="default"
+        onClick={handleScheduleClick}
+      />
+      <Button
+        title="Set expiry"
+        icon="tag"
+        btnStyle="default"
+        onClick={handleExpiryClick}
+      />
+    </Controls>
 );
 
 export default compose(
@@ -145,5 +165,6 @@ export default compose(
   pure([
     'enabled',
     'active',
+    'id',
   ])
 )(ServiceControls);
