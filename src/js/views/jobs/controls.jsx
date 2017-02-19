@@ -76,7 +76,7 @@ const ServiceControls: Function = ({
       onClick={handleScheduleClick}
     />
     <Button
-      title="Reset"
+      title="Set expiry"
       icon="tag"
       btnStyle="default"
       onClick={handleExpiryClick}
