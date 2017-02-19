@@ -142,28 +142,44 @@ const ServiceRow: Function = ({
       <Date date={expiry} />
     </Td>
     <Td className="normal">
-      <Badge
-        className="status-complete"
-        val={COMPLETE || 0}
-      />
+      <Link
+        to={`/job/${id}?date=${date}&filter=complete`}
+      >
+        <Badge
+          className="status-complete"
+          val={COMPLETE || 0}
+        />
+      </Link>
     </Td>
     <Td className="normal">
-      <Badge
-        className="status-error"
-        val={ERROR || 0}
-      />
+      <Link
+        to={`/job/${id}?date=${date}&filter=error`}
+      >
+        <Badge
+          className="status-error"
+          val={ERROR || 0}
+        />
+      </Link>
     </Td>
     <Td className="normal">
-      <Badge
-        className="status-in-progress"
-        val={PROGRESS || 0}
-      />
+      <Link
+        to={`/job/${id}?date=${date}&filter=in-progress`}
+      >
+        <Badge
+          className="status-in-progress"
+          val={PROGRESS || 0}
+        />
+      </Link>
     </Td>
     <Td className="normal">
-      <Badge
-        className="status-canceled"
-        val={CRASHED || 0}
-      />
+      <Link
+        to={`/job/${id}?date=${date}&filter=crashed`}
+      >
+        <Badge
+          className="status-canceled"
+          val={CRASHED || 0}
+        />
+      </Link>
     </Td>
   </Tr>
 );
