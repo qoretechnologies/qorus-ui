@@ -29,7 +29,7 @@ class NotificationList extends React.Component {
           {title}
           <Control
             btnStyle="danger"
-            className="pull-right"
+            className="clear-button pull-right"
             onClick={this.clear}
             stopPropagation
             label="Clear"
