@@ -56,7 +56,7 @@ export default class DiagramErrors extends Component {
 
   handleShowDetailClick = () => {
     this.setState({
-      showDetail: !this.state.showDetail,
+      showDetail: true,
     });
   };
 
@@ -70,10 +70,6 @@ export default class DiagramErrors extends Component {
 
     this.openCSVModal(data);
   };
-
-  stringifyError = (data) => Object.keys(data).reduce((str, key) => (
-    `${str}${key}: ${data[key]}\r\n`
-  ), '');
 
   openCSVModal = (data) => {
     this._modal = (
@@ -91,6 +87,10 @@ export default class DiagramErrors extends Component {
     this.context.closeModal(this._modal);
   };
 
+  stringifyError: Function = (data: Object): string => Object.keys(data).reduce((str, key) => (
+    `${str}${key}: ${data[key]}\r\n`
+  ), '');
+
   render() {
     return (
       <div className="col-xs-12 error-pane-inner">
@@ -99,6 +99,7 @@ export default class DiagramErrors extends Component {
           showDetail={this.state.showDetail}
           onCSVClick={this.handleCSVClick}
           onShowDetailClick={this.handleShowDetailClick}
+          onHideDetailClick={this.handleHideDetailClick}
           onSubmit={this.handleDropdownSubmit}
           onCopyErrorClick={this.handleCopyLastClick}
         />
@@ -109,7 +110,7 @@ export default class DiagramErrors extends Component {
           <ErrorsTable
             data={this.state.data}
             expand={this.state.showDetail}
-            stringifyError={this.stringifyError}
+            onModalMount={this.context.selectModalText}
           />
         </div>
       </div>

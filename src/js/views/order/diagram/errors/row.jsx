@@ -1,101 +1,125 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+import lifecycle from 'recompose/lifecycle';
 
-import { Control as Button } from 'components/controls';
-import { Section, Row, Cell } from 'components/table';
-import Date from 'components/date';
-import AutoComponent from 'components/autocomponent';
+import { Control as Button } from '../../../../components/controls';
+import { Tbody, Tr, Td } from '../../../../components/new_table';
+import Date from '../../../../components/date';
+import AutoComponent from '../../../../components/autocomponent';
+import withModal from '../../../../hocomponents/modal';
 import CSVModal from '../../errors/csv';
 
-export default class DiagramErrorsRow extends Component {
-  static propTypes = {
-    data: PropTypes.object,
-    expand: PropTypes.bool,
-    stringifyError: PropTypes.func,
-  };
+type Props = {
+  handleCopyClick: Function,
+  handleDetailClick: Function,
+  severity: string,
+  error: string,
+  created: string,
+  description?: string,
+  business_error?: boolean,
+  error_instanceid: number,
+  info: string,
+  setExpand: Function,
+  expand: boolean,
+  stateExpand: boolean,
+  openModal: Function,
+  closeModal: Function,
+  onDetailClick: Function,
+  onModalMount: Function,
+  data: Object,
+};
 
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    selectModalText: PropTypes.func,
-  };
-
-  componentWillMount() {
-    this.setState({
-      expand: this.props.expand,
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.expand !== nextProps.expand) {
-      this.setState({
-        expand: nextProps.expand,
-      });
-    }
-  }
-
-  handleRowClick = () => {
-    this.setState({
-      expand: !this.state.expand,
-    });
-  };
-
-  handleCopyClick = () => {
-    const data = this.props.stringifyError(this.props.data);
-
-    this._modal = (
-      <CSVModal
-        onMount={this.context.selectModalText}
-        onClose={this.handleModalCloseClick}
-        data={data}
-      />
-    );
-
-    this.context.openModal(this._modal);
-  };
-
-  handleModalCloseClick = () => {
-    this.context.closeModal(this._modal);
-  };
-
-  renderDetail() {
-    if (!this.state.expand) return undefined;
-
-    return (
-      <Row>
-        <Cell colspan={5}>
-          { this.props.data.info }
+const ErrorRow: Function = ({
+  severity,
+  error,
+  created,
+  description,
+  handleDetailClick,
+  handleCopyClick,
+  info,
+  stateExpand,
+  business_error: busErr,
+}: Props): React.Element<any> => (
+  <Tbody>
+    <Tr>
+      <Td className="narrow">
+        <Button
+          label={stateExpand ? 'Hide' : 'Detail'}
+          btnStyle={stateExpand ? 'danger' : 'success'}
+          onClick={handleDetailClick}
+        />
+      </Td>
+      <Td>{severity}</Td>
+      <Td className="name">{error}</Td>
+      <Td>
+        <Date date={created} />
+      </Td>
+      <Td className="text">{description}</Td>
+      <Td className="narrow">
+        <AutoComponent>{busErr}</AutoComponent>
+      </Td>
+    </Tr>
+    {stateExpand && (
+      <Tr>
+        <Td colspan={5} className="text">
+          <p>{info || 'No info'}</p>
+        </Td>
+        <Td className="narrow">
           <Button
-            label="Copy error"
+            label="Copy"
             icon="copy"
-            className="pull-right"
             btnStyle="success"
-            action={this.handleCopyClick}
+            onClick={handleCopyClick}
           />
-        </Cell>
-      </Row>
-    );
-  }
+        </Td>
+      </Tr>
+    )}
+  </Tbody>
+);
 
-  render() {
-    const { ...data } = this.props.data;
+const stringifyError: Function = (data: Object): string => Object.keys(data).reduce((str, key) => (
+  `${str}${key}: ${data[key]}\r\n`
+), '');
 
-    return (
-      <Section type="body">
-        <Row onClick={this.handleRowClick}>
-          <Cell>{ data.severity }</Cell>
-          <Cell>{ data.error }</Cell>
-          <Cell>
-            <Date date={data.created} />
-          </Cell>
-          <Cell>{ data.description }</Cell>
-          <Cell className="narrow">
-            <AutoComponent>
-              { data.business_error }
-            </AutoComponent>
-          </Cell>
-        </Row>
-        { this.renderDetail() }
-      </Section>
-    );
-  }
-}
+export default compose(
+  withState('stateExpand', 'setExpand', ({ expand }: Props): boolean => expand),
+  mapProps(({ stateExpand, setExpand, ...rest }: Props): Props => ({
+    onDetailClick: (expand): Function => setExpand((): boolean => expand),
+    stateExpand,
+    setExpand,
+    ...rest,
+  })),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      if (this.props.expand !== nextProps.expand) {
+        this.props.onDetailClick(nextProps.expand);
+      }
+    },
+  }),
+  withModal(),
+  withHandlers({
+    handleDetailClick: ({ stateExpand, onDetailClick }: Props): Function => (): void => {
+      onDetailClick(!stateExpand);
+    },
+    handleCopyClick: ({
+      openModal,
+      closeModal,
+      data,
+      onModalMount,
+    }: Props): Function => (): void => {
+      openModal(
+        <CSVModal
+          onClose={closeModal}
+          data={stringifyError(data)}
+          onMount={onModalMount}
+        />
+      );
+    },
+  }),
+  pure(['stateExpand']),
+)(ErrorRow);

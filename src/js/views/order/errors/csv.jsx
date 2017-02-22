@@ -10,7 +10,7 @@ export default function CSVModal(props) {
         onClose={props.onClose}
         titleId="csv-modal"
       >
-        Copy table
+        Copy data
         <small> (Press ⌘ + c / CTRL + c)</small>
       </Modal.Header>
       <Modal.Body>

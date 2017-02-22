@@ -38,13 +38,6 @@ export default function DiagramErrorsToolbar(props: Props) {
             <DItem title="NONE" />
           </Dropdown>
           <Button
-            label="Show errors detail"
-            big
-            btnStyle="default"
-            icon={props.showDetail ? 'check-square-o' : 'square-o'}
-            action={props.onShowDetailClick}
-          />
-          <Button
             label="Copy last error"
             big
             btnStyle="default"
