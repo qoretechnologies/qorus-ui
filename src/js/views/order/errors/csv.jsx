@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Modal from 'components/modal';
+import { getControlChar } from '../../../helpers/document';
 
 export default function CSVModal(props) {
   return (
@@ -11,7 +12,7 @@ export default function CSVModal(props) {
         titleId="csv-modal"
       >
         Copy data
-        <small> (Press ⌘ + c / CTRL + c)</small>
+        <small> (Press {getControlChar()} + c)</small>
       </Modal.Header>
       <Modal.Body>
           <textarea
