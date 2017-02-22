@@ -44,9 +44,9 @@ const DiagramErrorsTable: Function = ({
         <Th name="business_error">Bus.Err.</Th>
       </Tr>
     </Thead>
-    {data.map((error: Object): React.Element<ErrorsRow> => (
+    {data.map((error: Object, key: number): React.Element<ErrorsRow> => (
       <ErrorsRow
-        key={error.error_instanceid}
+        key={`${key}_${error.error_instanceid}`}
         expand={expand}
         data={error}
         onModalMount={onModalMount}
