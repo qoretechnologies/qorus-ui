@@ -53,8 +53,7 @@ const ServiceControls: Function = ({
     <Button
       title="Reset"
       icon="refresh"
-      btnStyle={loaded ? 'warning' : 'default'}
-      disabled={!loaded}
+      btnStyle="warning"
       onClick={handleResetClick}
     />
   </Controls>
