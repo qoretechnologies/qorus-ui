@@ -68,7 +68,7 @@ export default compose(
     }
   ),
   mapProps(({ status, ...rest }: Props): Object => ({
-    loaded: status === 'loaded',
+    loaded: status !== 'unloaded',
     ...rest,
   })),
   withHandlers({
