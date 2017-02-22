@@ -40,15 +40,3 @@ Feature: Tests for the Diagram tab
     When I click the "WARNING" button inside "errors" dropdown
     And I click the "Filter" button
     Then there are "2" errors shown
-
-  Scenario: Showing all errors details
-    Given I am on order "31380" and "Diagram" tab
-    And diagram, tables and error pane get loaded
-    When I click the "Show errors detail" button
-    Then there are "102" errors shown
-
-  Scenario: Shows error detail when row is clicked
-    Given I am on order "31380" and "Diagram" tab
-    And diagram, tables and error pane get loaded
-    When I click on a row
-    Then the the copy button is displayed
