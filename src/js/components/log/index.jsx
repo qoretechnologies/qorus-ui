@@ -2,15 +2,14 @@
 import React, { Component } from 'react';
 
 import Toolbar from '../toolbar';
-import Search from '../search';
 import { Controls, Control as Button } from '../controls';
+import { getControlChar } from '../../helpers/document';
+import Icon from '../../components/icon';
 
 export default class LogComponent extends Component {
   props: {
     messages: Array<string>,
-    onSearchChange: Function,
     onClearClick: Function,
-    defaultSearchValue: string,
     height: any,
   };
 
@@ -51,8 +50,6 @@ export default class LogComponent extends Component {
   render() {
     const {
       onClearClick,
-      defaultSearchValue,
-      onSearchChange,
       height,
       messages,
     } = this.props;
@@ -87,10 +84,11 @@ export default class LogComponent extends Component {
               />
             </Controls>
           </div>
-          <Search
-            defaultValue={defaultSearchValue}
-            onSearchUpdate={onSearchChange}
-          />
+          <p className="pull-right log-search">
+            <Icon icon="info-circle" />
+            {' '}
+            Use <strong>"{getControlChar()} + f"</strong> to search the log
+          </p>
         </Toolbar>
         <div className="log-area">
         <pre
