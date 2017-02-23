@@ -233,6 +233,7 @@ describe('Table, Sections, Row and Cell from components/table', () => {
       expect(wrapper.find('th').first().hasClass('sort')).to.eql(true);
       expect(wrapper.find('th').first().hasClass('custom-class')).to.eql(true);
       expect(wrapper.find('th').first().hasClass('sort-desc')).to.eql(true);
+      expect(wrapper.find('th').first().hasClass('has-sort')).to.eql(true);
     });
 
     it('runs the provided functions when clicked', () => {

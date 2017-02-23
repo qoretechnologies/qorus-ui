@@ -13,6 +13,7 @@ type Props = {
   colspan?: number,
   handleClick: Function,
   direction: number,
+  historyDirection: number,
   onSortChange?: Function,
   onClick?: Function,
   sortData?: Object,
@@ -21,15 +22,21 @@ type Props = {
 const Th: Function = ({
   children,
   direction,
+  historyDirection,
   handleClick,
   className,
+  name,
 }: Props) => (
   <th
     className={
       classNames({
         sort: direction,
+        'history-sort': historyDirection,
+        'has-sort': name,
         'sort-asc': direction && direction > 0,
         'sort-desc': direction && direction < 0,
+        'history-sort-asc': historyDirection && historyDirection > 0,
+        'history-sort-desc': historyDirection && historyDirection < 0,
       }, className)
     }
     onClick={handleClick}
@@ -49,11 +56,16 @@ export default compose(
   }),
   mapProps(({ sortData, name, ...rest }: Props) => ({
     direction: sortData && sortData.sortBy === name ? sortData.sortByKey.direction : null,
+    historyDirection: sortData && sortData.historySortBy && sortData.historySortBy === name ?
+      sortData.historySortByKey.direction :
+      null,
+    name,
     ...rest,
   })),
   updateOnlyForKeys([
     'children',
     'className',
     'direction',
+    'historyDirection',
   ])
 )(Th);
