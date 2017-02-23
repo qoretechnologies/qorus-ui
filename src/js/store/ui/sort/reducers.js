@@ -13,7 +13,7 @@ handlers[actions.CHANGE_SORT] = (state, { payload: { tableName, ...sortOption } 
   if (currentOption && currentOption.sortBy !== sortOption.sortBy) {
     option.historySortBy = currentOption.sortBy;
     option.historySortByKey = currentOption.sortByKey;
-  } else {
+  } else if (currentOption) {
     option.historySortBy = currentOption.historySortBy;
     option.historySortByKey = currentOption.historySortByKey;
   }
