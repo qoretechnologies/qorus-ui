@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Tabs, { Pane } from 'components/tabs';
 import DetailPane from 'components/pane';
 import ServicesHeader from './header';
-import { DetailTab, MethodsTab } from './tabs';
+import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
@@ -82,6 +82,12 @@ export default class ServicesDetail extends Component {
             </Pane>
             <Pane name="Mappers">
               <MappersTable mappers={service.mappers} />
+            </Pane>
+            <Pane name="Resources">
+              <ResourceTab
+                resources={service.resources}
+                resourceFiles={service.resource_files}
+              />
             </Pane>
           </Tabs>
         </article>
