@@ -56,10 +56,10 @@ describe("Tree from 'components/tree'", () => {
 
     const result = renderer.getRenderOutput();
 
-    expect(result.props.children[2].type).to.equal('div');
-    expect(result.props.children[2].props.className).to.equal('pull-right');
-    expect(result.props.children[2].props.children.type).to.equal(Control);
-    expect(result.props.children[2].props.children.props.label).to.equal('Copy view');
+    expect(result.props.children[0].type).to.equal('div');
+    expect(result.props.children[0].props.className).to.equal('pull-right');
+    expect(result.props.children[0].props.children.type).to.equal(Control);
+    expect(result.props.children[0].props.children.props.label).to.equal('Copy view');
   });
 
   it('renders the the textarea when button is clicked', () => {
@@ -71,10 +71,10 @@ describe("Tree from 'components/tree'", () => {
 
     let result = renderer.getRenderOutput();
 
-    result.props.children[2].props.children.props.action();
+    result.props.children[0].props.children.props.action();
 
     result = renderer.getRenderOutput();
 
-    expect(result.props.children[1].type).to.equal('textarea');
+    expect(result.props.children[2].type).to.equal('textarea');
   });
 });

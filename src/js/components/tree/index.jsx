@@ -81,6 +81,13 @@ export default class Tree extends Component {
 
     return (
       <div>
+        <div className="pull-right">
+          <Button
+            label={this.state.copy ? 'Tree View' : 'Copy view'}
+            btnStyle="info"
+            action={this.handleClick}
+          />
+        </div>
         {!this.state.copy &&
           <div className="tree-wrapper pull-left" ref="tree">
             { this.renderTree(this.props.data, true) }
@@ -95,15 +102,6 @@ export default class Tree extends Component {
             cols="50"
           />
         }
-        <div className="pull-right">
-          <Button
-            label={this.state.copy ? 'Tree View' : 'Copy view'}
-            big
-            btnStyle="info"
-            action={this.handleClick}
-            className="button--copy"
-          />
-        </div>
       </div>
     );
   }
