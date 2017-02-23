@@ -61,7 +61,7 @@ const WorkflowsTable: Function = ({
         <Th className="narrow" name="exec_count">Execs</Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
-        <Th className="narrow" name="version">Version</Th>
+        <Th className="normal" name="version">Version</Th>
         { states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}

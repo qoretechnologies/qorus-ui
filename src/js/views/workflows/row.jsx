@@ -126,7 +126,7 @@ const TableRow: Function = ({
         { name }
       </Link>
     </Td>
-    <Td className="narrow text">{ version }</Td>
+    <Td className="normal text">{ version }</Td>
     {states.map((state: Object, index: number): React.Element<Td> => {
       const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
       const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
