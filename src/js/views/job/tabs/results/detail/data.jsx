@@ -8,14 +8,14 @@ import Tree from '../../../../../components/tree';
 
 const ResultData = ({ result }: { result: Object }) => (
   <Tabs>
+    <Pane name="Info">
+      <Tree data={result.info} />
+    </Pane>
     <Pane name="Error">
       <ErrorTable errors={result.errors} />
     </Pane>
     <Pane name="Audit">
       <AuditTable audit={result.audit} />
-    </Pane>
-    <Pane name="Info">
-      <Tree data={result.info} />
     </Pane>
   </Tabs>
 );
