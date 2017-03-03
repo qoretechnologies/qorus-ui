@@ -1,3 +1,4 @@
+@wip
 Feature: Tests functionalities of the Data tab
 
   Scenario: Tabs with the data are displayed
@@ -16,4 +17,3 @@ Feature: Tests functionalities of the Data tab
     And I should see the "Static" data
     When I click the "Copy view" button
     Then there should be a textarea with the data
-

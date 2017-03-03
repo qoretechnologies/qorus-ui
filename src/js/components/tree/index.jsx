@@ -83,6 +83,7 @@ export default class Tree extends Component {
       <div>
         <div className="pull-right">
           <Button
+            className="button--copy"
             label={this.state.copy ? 'Tree View' : 'Copy view'}
             btnStyle="info"
             action={this.handleClick}
