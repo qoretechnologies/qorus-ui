@@ -33,6 +33,7 @@ type Props = {
   month: string,
   week: string,
   scheduleOnly?: boolean,
+  schedText: string,
 };
 
 const ServiceControls: Function = ({
@@ -45,17 +46,11 @@ const ServiceControls: Function = ({
   active,
   enabled,
   scheduleOnly,
-  minute,
-  hour,
-  day,
-  month,
-  week,
+  schedText,
 }: Props): React.Element<any> => (
   scheduleOnly ?
     <div>
-      <span>
-        {`${minute} ${hour} ${day} ${month} ${week}`}
-      </span>
+      <span>{schedText}</span>
       {' '}
       <Button
         label="Reschedule"

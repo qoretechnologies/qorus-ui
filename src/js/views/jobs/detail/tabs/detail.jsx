@@ -14,6 +14,7 @@ const DetailTab = ({ model }: { model: Object }) => (
       <JobControls
         scheduleOnly
         id={model.id}
+        schedText={model.sched_txt}
         minute={model.minute}
         hour={model.hour}
         day={model.day}
