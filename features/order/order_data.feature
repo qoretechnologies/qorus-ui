@@ -1,4 +1,3 @@
-@wip
 Feature: Tests functionalities of the Data tab
 
   Scenario: Tabs with the data are displayed
