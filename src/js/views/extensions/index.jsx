@@ -9,6 +9,7 @@ import ExtensionList from './list';
 import Tabs, { Pane } from '../../components/tabs';
 import actions from '../../store/api/actions';
 import sync from '../../hocomponents/sync';
+import unsync from '../../hocomponents/unsync';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
   <div className="extensions">
@@ -36,8 +37,10 @@ export default compose(
     state => ({ extensions: state.api.extensions }),
     {
       load: actions.extensions.fetch,
+      unsync: actions.extensions.unsync,
     }
   ),
   sync('extensions'),
-  groupExtensions
+  groupExtensions,
+  unsync(),
 )(Extensions);
