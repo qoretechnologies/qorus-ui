@@ -77,6 +77,17 @@ export default class WorkflowsDetail extends Component {
     this.props.onClose(['globalErrQuery', 'workflowErrQuery']);
   };
 
+  diagramRef = (el: Object) => {
+    if (el) {
+      const copy = el;
+      copy.scrollLeft = el.scrollWidth;
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
+  }
+
   render() {
     const { workflow, systemOptions, paneTab } =
       this.props;
@@ -104,8 +115,19 @@ export default class WorkflowsDetail extends Component {
                 heightUpdater={this.getHeight}
               />
             </Pane>
-            <Pane name="Steps">
-              <StepsTab workflow={workflow} />
+            <Pane
+              name="Steps"
+
+            >
+              <div
+                style={{
+                  height: '100%',
+                  overflow: 'auto',
+                }}
+                ref={this.diagramRef}
+              >
+                <StepsTab workflow={workflow} />
+              </div>
             </Pane>
             <Pane name="Log">
               <LogTab

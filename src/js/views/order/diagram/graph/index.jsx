@@ -37,7 +37,7 @@ const BOX_MIN_WIDTH = 250;
  *
  * It an approximate width of letter "n".
  */
-const BOX_CHARACTER_WIDTH = 10;
+// const BOX_CHARACTER_WIDTH = 10;
 
 /**
  * Ration between width and height.
@@ -392,10 +392,7 @@ export default class StepsTab extends Component {
    * @see BOX_CHARACTER_WIDTH
    */
   getBoxWidth() {
-    return Math.max(
-      BOX_MIN_WIDTH,
-      this.getMaxTextWidth() * BOX_CHARACTER_WIDTH
-    );
+    return BOX_MIN_WIDTH;
   }
 
 
@@ -521,7 +518,9 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    */
   getBoxTopCoord(colIdx) {
-    return this.getBoxHorizontalCenter(colIdx) - this.getBoxWidth() / 2;
+    const top = this.getBoxHorizontalCenter(colIdx);
+
+    return top;
   }
 
 
@@ -534,7 +533,9 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    */
   getBoxLeftCoord(rowIdx) {
-    return this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
+    const left = this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
+
+    return left;
   }
 
 
@@ -903,10 +904,10 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   renderPath(start, end) {
-    const startX = this.getBoxHorizontalCenter(start.colIdx);
+    const startX = this.getBoxHorizontalCenter(start.colIdx) + (this.getBoxWidth() / 2);
     const startY = this.getBoxVerticalCenter(start.rowIdx);
 
-    const endX = this.getBoxHorizontalCenter(end.colIdx);
+    const endX = this.getBoxHorizontalCenter(end.colIdx) + (this.getBoxWidth() / 2);
     const endY = this.getBoxVerticalCenter(end.rowIdx);
 
     const joint =
@@ -982,7 +983,6 @@ export default class StepsTab extends Component {
     );
   }
 
-
   /**
    * Returns element for this component.
    *
@@ -990,9 +990,18 @@ export default class StepsTab extends Component {
    */
   render() {
     const { tooltip, left, top, width, height } = this.state;
+    const nodes = graph(this.getStepDeps());
+
+    const diaWidth = Math.max(3, nodes.get(ROOT_STEP_ID).width) * (this.getBoxWidth() + BOX_MARGIN);
 
     return (
-      <div className="diagram-inner">
+      <div
+        ref={this.wrapperRef}
+        className="diagram-inner"
+        style={{
+          width: diaWidth,
+        }}
+      >
         { tooltip && (
           <div
             className="svg-tooltip"
@@ -1007,7 +1016,7 @@ export default class StepsTab extends Component {
           </div>
         )}
         <svg
-          viewBox={`0 0 ${this.getDiagramWidth()} ${this.getDiagramHeight()}`}
+          viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
           className="diagram"
         >
           <defs>

@@ -55,6 +55,17 @@ export default class DiagramView extends Component {
     );
   }
 
+  diagramRef = (el) => {
+    if (el) {
+      const copy = el;
+      copy.scrollLeft = el.scrollWidth;
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
+  }
+
   renderErrorPane() {
     if (!this.props.order.ErrorInstances) return undefined;
 
@@ -94,7 +105,10 @@ export default class DiagramView extends Component {
         className="diagram-wrapper"
         style={{ paddingBottom: this.state.paneSize }}
       >
-        <div className="pull-left diagram-view">
+        <div
+          className="pull-left diagram-view"
+          ref={this.diagramRef}
+        >
           <Graph
             workflow={this.props.workflow}
             order={this.props.order}

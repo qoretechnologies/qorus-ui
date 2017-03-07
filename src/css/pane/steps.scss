@@ -21,7 +21,7 @@
 
   &__box {
     &:not(.diagram__box--start) .link {
-      font-size: 14px;
+      font-size: 10px;
       cursor: pointer;
       text-transform: uppercase;
       fill: #337ab7;
@@ -39,9 +39,9 @@
     }
 
     > text { /* [5] */
-      font-size: 14px;
+      font-size: 10px;
       font-weight: bold;
-      
+
       text-anchor: middle;
       alignment-baseline: middle;
     }
