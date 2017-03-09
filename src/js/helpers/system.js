@@ -15,9 +15,9 @@ const utf8ToB64: Function = (str: string): string => (
 
 const alertTypeToResource: Object = {
   WORKFLOW: {
-    resource: 'workflow',
+    resource: 'workflows',
     uses: 'id',
-    suffix: '/list?filter=All',
+    query: 'paneId',
   },
   SERVICE: {
     resource: 'services',
@@ -25,8 +25,9 @@ const alertTypeToResource: Object = {
     query: 'paneId',
   },
   JOB: {
-    resource: 'job',
+    resource: 'jobs',
     uses: 'id',
+    query: 'paneId',
   },
   'USER-CONNECTION': {
     resource: 'system/remote/user',
