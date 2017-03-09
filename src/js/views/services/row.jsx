@@ -7,6 +7,7 @@ import classnames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
 import Icon from '../../components/icon';
+import Text from '../../components/text';
 import Checkbox from '../../components/checkbox';
 import ServiceControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
@@ -110,7 +111,7 @@ const ServiceRow: Function = ({
     </Td>
     <Td className="medium text">{ version }</Td>
     <Td className="text">
-      <p title={desc}>{ desc }</p>
+      <Text text={desc} />
     </Td>
   </Tr>
 );
