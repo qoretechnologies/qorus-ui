@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import actions from '../../../store/api/actions';
 import patch from '../../../hocomponents/patchFuncArgs';
 import sync from '../../../hocomponents/sync';
+import unsync from '../../../hocomponents/unsync';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 
 
@@ -40,10 +41,11 @@ export default compose(
     extensionSelector,
     {
       load: actions.extensions.fetch,
+      unsync: actions.extensions.unsync,
     }
   ),
   patch('load', ['extensionQuery', 'extensionName']),
   sync('extension', false),
-  showIfPassed(({ extension }: { extension: Object }): boolean => !!extension.url)
+  showIfPassed(({ extension }: { extension: Object }): boolean => !!extension.url),
+  unsync()
 )(ExtensionDetail);
-
