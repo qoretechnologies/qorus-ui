@@ -17,6 +17,6 @@ describe("getAlertObjectLink from 'helpers/search'", () => {
   it('returns a correct url chunk with suffix', () => {
     const url = getAlertObjectLink('WORKFLOW', { id: 20 });
 
-    expect(url).to.eql('/workflow/20/list?filter=All');
+    expect(url).to.eql('/workflows?paneId=20');
   });
 });
