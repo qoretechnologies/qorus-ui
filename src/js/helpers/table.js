@@ -126,6 +126,21 @@ const generateCSV = (collection, type) => {
   return content;
 };
 
+const buildSorting = (sortData, tableName, state) => {
+  const option = { ...sortData };
+  const currentOption = state[tableName];
+
+  if (currentOption && currentOption.sortBy !== sortData.sortBy) {
+    option.historySortBy = currentOption.sortBy;
+    option.historySortByKey = currentOption.sortByKey;
+  } else if (currentOption) {
+    option.historySortBy = currentOption.historySortBy;
+    option.historySortByKey = currentOption.historySortByKey;
+  }
+
+  return option;
+};
+
 const sortFunc = (sort, v1, v2) => {
   const val1 = v1[sort];
   const val2 = v2[sort];
@@ -180,4 +195,5 @@ export {
   getCSVHeaders,
   generateCSV,
   sortTable,
+  buildSorting,
 };

@@ -13,6 +13,22 @@ const unSync: Object = {
   },
 };
 
+const storeSortChange: Object = {
+  next(state: Object = initialState, { payload: { table, sort } }: Object): Object {
+    const data: Object = { ...state.data };
+
+    if (!data.storage[table]) {
+      data.storage[table] = {};
+    }
+
+    data.storage[table].sort = sort;
+
+    return { ...state, ...{ data } };
+  },
+};
+
+
 export {
   unSync as UNSYNCCURRENTUSER,
+  storeSortChange as STORESORTCHANGE,
 };

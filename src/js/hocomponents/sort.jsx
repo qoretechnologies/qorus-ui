@@ -9,7 +9,8 @@ import { sortTable } from '../helpers/table';
 type Props = {
   changeSort: Function,
   initSort: Function,
-  sortData: Object
+  sortData: Object,
+  storage: Object,
 };
 
 export default (
@@ -38,11 +39,17 @@ export default (
     }
 
     setupSorting(table: string, props: Props) {
-      const defaultSort = typeof defaultSortData === 'function' ?
-        defaultSortData(props) :
-        defaultSortData;
-
       if (defaultSortData) {
+        let defaultSort;
+
+        if (!props.storage[table] || !props.storage[table].sort) {
+          defaultSort = typeof defaultSortData === 'function' ?
+            defaultSortData(props) :
+            defaultSortData;
+        } else {
+          defaultSort = props.storage[table].sort;
+        }
+
         const { initSort } = props;
         initSort(table, defaultSort);
       }
@@ -89,6 +96,7 @@ export default (
   WrappedComponent = connect(
     (state, props) => ({
       sortData: state.ui.sort[typeof tableName === 'function' ? tableName(props) : tableName],
+      storage: state.api.currentUser.data.storage || {},
     }),
     sort
   )(WrappedComponent);

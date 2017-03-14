@@ -96,7 +96,6 @@ const unSyncUsers: Function = createAction(
   'USERS_UNSYNCUSERS'
 );
 
-
 const createUser: Function = (
   name: string, username: string, pass: string, roles: Array<string>
 ) => dispatch => {
