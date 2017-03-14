@@ -10,10 +10,11 @@ Feature: jobs table
     And "jobs" get loaded
     When I click on the "Version" column header
     Then jobs are sorted by "Version" "asc"
-
+  
   Scenario: Changing sort of the table to descending
     Given I am on "jobs" listing
     And "jobs" get loaded
+    When I click on the "Version" column header
     And I click on the "Version" column header
     Then jobs are sorted by "Version" "desc"
 
