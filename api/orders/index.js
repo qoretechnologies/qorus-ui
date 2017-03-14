@@ -268,6 +268,24 @@ module.exports = () => {
         break;
     }
 
+    if (req.body.action) {
+      switch (req.body.action) {
+        case 'staticData':
+        case 'dynamicData':
+        case 'updateKeys': {
+          const key = req.body.action === 'updateKeys' ? 'keys' : req.body.action.toLowerCase();
+
+          order[key] = key === 'keys' ? req.body.orderkeys : req.body.newdata;
+          break;
+        }
+        default:
+          if (config.env !== 'test') {
+            process.stderr.write(`Unknown action ${req.body.action}.\n`);
+          }
+          break;
+      }
+    }
+
     setTimeout(() => {
       if (req.params.id === '4000') {
         res.status(409).json({ err: true, desc: 'There was an error' });

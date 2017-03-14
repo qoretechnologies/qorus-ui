@@ -10,5 +10,12 @@
   "services" : [  ],
   "jobs" : [  ],
   "groups" : [  ],
-  "storage" : {  }
+  "storage" : {
+    "workflows": {
+      "search": [
+        "This is a test",
+        "This is a text"
+      ]
+    }
+  }
 }

@@ -110,6 +110,9 @@ module.exports = function commonSteps() {
     return this.browser.visit(`/${name}`);
   });
 
+  this.Then(/^I should see a preloader$/, async function() {
+    this.browser.assert.element('.preloader');
+  });
 
   this.Then(/^I should see a loader$/, async function() {
     await this.waitForElement('.root__center > section');

@@ -49,7 +49,11 @@ module.exports = function orderDetailSteps() {
 
     this.browser.assert.element(el);
     this.browser.assert.element('.tree-wrapper');
-    this.browser.assert.element('.button--copy');
+    this.browser.assert.elements('.button--copy', 3);
+  });
+
+  this.When(/^I replace the data in the textarea$/, async function() {
+    this.browser.fill('#tree-content', '{ a: 1 }');
   });
 
   this.Then(/^there should be a textarea with the data$/, async function() {

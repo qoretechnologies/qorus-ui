@@ -89,13 +89,21 @@ module.exports = () => {
 
   router.put('/:username', (req, res) => {
     const username = req.params.username;
-    const { roles, name } = req.body;
     const user = data.find(u => u.username === username);
 
-    user.name = name;
-    user.roles = roles;
+    if (req.body.storage) {
+      const { storage } = req.body;
+      const currentStorage = user.storage;
 
-    res.json(user);
+      user.storage = { ...currentStorage, ...storage };
+      res.json('OK');
+    } else {
+      const { roles, name } = req.body;
+
+      user.name = name;
+      user.roles = roles;
+      res.json(user);
+    }
   });
 
   return router;
