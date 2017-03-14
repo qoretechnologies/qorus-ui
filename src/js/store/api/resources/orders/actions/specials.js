@@ -136,11 +136,12 @@ const updateDone = createAction(
 const fetchData = createAction(
   'ORDERS_FETCHDATA',
   async (id: number, type: string) => {
-    const newData = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/${type}`);
+    const data = type === 'dynamic' ? 'dynamicdata' : type;
+    const newData = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/${data}`);
 
     return {
       id,
-      type,
+      type: data,
       data: newData,
     };
   }
@@ -314,6 +315,28 @@ const skipStep: Function = createAction(
   }
 );
 
+const updateData: Function = createAction(
+  'ORDERS_UPDATEDATA',
+  (
+    type: string,
+    newData: Object,
+    id: number
+  ): void => {
+    const key: string = type === 'updateKeys' ? 'orderkeys' : 'newdata';
+
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}`,
+      {
+        body: JSON.stringify({
+          action: type,
+          [key]: newData,
+        }),
+      }
+    );
+  }
+);
+
 const unsync = createAction('ORDERS_UNSYNC');
 
 export {
@@ -322,6 +345,7 @@ export {
   addNoteWebsocket,
   updateDone,
   fetchData,
+  updateData,
   unsync,
   action,
   orderAction,

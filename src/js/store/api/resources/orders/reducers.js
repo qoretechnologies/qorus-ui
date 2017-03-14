@@ -459,6 +459,12 @@ const updateStepInstances: Object = {
   },
 };
 
+const updateData: Object = {
+  next(state: Object): Object {
+    return state;
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -488,4 +494,5 @@ export {
   lock as LOCK,
   setPriority as SETPRIORITY,
   updateStepInstances as UPDATESTEPINSTANCES,
+  updateData as UPDATEDATA,
 };
