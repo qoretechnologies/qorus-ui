@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
 import Tree from '../../src/js/components/tree';
-import { Control } from '../../src/js/components/controls';
+import { Controls } from '../../src/js/components/controls';
 
 const data = {
   account: {
@@ -58,23 +58,6 @@ describe("Tree from 'components/tree'", () => {
 
     expect(result.props.children[0].type).to.equal('div');
     expect(result.props.children[0].props.className).to.equal('pull-right');
-    expect(result.props.children[0].props.children.type).to.equal(Control);
-    expect(result.props.children[0].props.children.props.label).to.equal('Copy view');
-  });
-
-  it('renders the the textarea when button is clicked', () => {
-    const renderer = TestUtils.createRenderer();
-
-    renderer.render(
-      <Tree data={data} />
-    );
-
-    let result = renderer.getRenderOutput();
-
-    result.props.children[0].props.children.props.action();
-
-    result = renderer.getRenderOutput();
-
-    expect(result.props.children[2].type).to.equal('textarea');
+    expect(result.props.children[0].props.children.type).to.equal(Controls);
   });
 });

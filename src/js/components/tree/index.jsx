@@ -1,7 +1,9 @@
+
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-import { Control as Button } from '../controls';
+import { Controls, Control as Button } from '../controls';
+import Alert from '../alert';
 
 export default class Tree extends Component {
   static propTypes = {
@@ -9,23 +11,37 @@ export default class Tree extends Component {
       PropTypes.object,
       PropTypes.array,
     ]),
+    withEdit: PropTypes.bool,
+    onUpdateClick: PropTypes.func,
   };
 
   componentWillMount() {
     this.setState({
-      copy: false,
+      mode: 'normal',
     });
   }
 
   componentDidUpdate() {
-    if (this.state.copy && document.getElementById('tree-content')) {
+    if (this.state.mode === 'copy' && document.getElementById('tree-content')) {
       document.getElementById('tree-content').select();
     }
   }
 
-  handleClick = () => {
+  handleCopyClick = () => {
     this.setState({
-      copy: !this.state.copy,
+      mode: 'copy',
+    });
+  };
+
+  handleEditClick = () => {
+    this.setState({
+      mode: 'edit',
+    });
+  };
+
+  handleTreeClick = () => {
+    this.setState({
+      mode: 'normal',
     });
   };
 
@@ -74,34 +90,89 @@ export default class Tree extends Component {
     return text;
   }
 
+  renderEdit(data) {
+    return JSON.stringify(data, null, 4);
+  }
+
+  handleUpdateClick = () => {
+    this.props.onUpdateClick(this.refs.editedData.value);
+    this.setState({
+      mode: 'normal',
+    });
+  }
+
   render() {
-    const { data } = this.props;
+    const { data, withEdit } = this.props;
 
     if (!data || !Object.keys(data).length) return <p className="no-data"> No data </p>;
 
     return (
       <div>
         <div className="pull-right">
-          <Button
-            className="button--copy"
-            label={this.state.copy ? 'Tree View' : 'Copy view'}
-            btnStyle="info"
-            action={this.handleClick}
-          />
+          <Controls noControls grouped>
+            <Button
+              className="button--copy"
+              label="Tree view"
+              btnStyle="info"
+              disabled={this.state.mode === 'normal'}
+              action={this.handleTreeClick}
+            />
+            <Button
+              className="button--copy"
+              label="Copy view"
+              btnStyle="info"
+              disabled={this.state.mode === 'copy'}
+              action={this.handleCopyClick}
+            />
+            { withEdit && (
+              <Button
+                className="button--copy"
+                label="Edit mode"
+                btnStyle="info"
+                disabled={this.state.mode === 'edit'}
+                action={this.handleEditClick}
+              />
+            )}
+          </Controls>
         </div>
-        {!this.state.copy &&
+        {this.state.mode === 'normal' &&
           <div className="tree-wrapper pull-left" ref="tree">
             { this.renderTree(this.props.data, true) }
           </div>
         }
-        {this.state.copy &&
+        {this.state.mode === 'copy' &&
           <textarea
             id="tree-content"
             className="form-control"
             defaultValue={this.renderText(this.props.data)}
             rows="20"
             cols="50"
+            readOnly
           />
+        }
+        {this.state.mode === 'edit' &&
+          <div>
+            <textarea
+              ref="editedData"
+              id="tree-content"
+              className="form-control"
+              defaultValue={this.renderEdit(this.props.data)}
+              rows="20"
+              cols="50"
+            />
+            <Alert bsStyle="warning">
+              <strong>Warning!</strong>
+              {' '}
+              Posting new staticdata replaces original content and it can be
+              fatal for business processing.
+            </Alert>
+            <Button
+              big
+              label="Update data"
+              btnStyle="success"
+              action={this.handleUpdateClick}
+            />
+          </div>
         }
       </div>
     );
