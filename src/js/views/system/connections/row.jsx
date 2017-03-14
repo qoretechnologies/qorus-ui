@@ -29,6 +29,7 @@ type Props = {
   openPane: Function,
   up?: boolean,
   name: string,
+  safe_url?: string,
   url?: string,
   desc?: string,
 };
@@ -42,8 +43,10 @@ const ConnectionRow: Function = ({
   handlePingClick,
   up,
   name,
+  safe_url: safeUrl,
   url,
   desc,
+  remoteType,
 }: Props): React.Element<any> => (
   <Tr
     className={classnames({
@@ -80,11 +83,13 @@ const ConnectionRow: Function = ({
         {name}
       </p>
     </Td>
-    <Td className="text">
-      <p title={url}>
-        {url}
-      </p>
-    </Td>
+    {remoteType !== 'datasources' && (
+      <Td className="text">
+        <p title={safeUrl || url}>
+          {safeUrl || url}
+        </p>
+      </Td>
+    )}
     <Td className="text">
       <p title={desc}>
         {desc}

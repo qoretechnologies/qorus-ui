@@ -90,7 +90,9 @@ const ConnectionTable: Function = ({
             <Icon icon="exclamation-triangle" />
           </Th>
           <Th className="name" name="name">Name</Th>
-          <Th className="text" name="url">URL</Th>
+          {type !== 'datasources' && (
+            <Th className="text" name="url">URL</Th>
+          )}
           <Th className="text" name="desc">Description</Th>
           <Th className="normal">-</Th>
         </Tr>
