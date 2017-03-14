@@ -72,7 +72,7 @@ const TableRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    <Td className="narrow line-counter" />
+    <Td className="medium">{id}</Td>
     <Td className="medium">
       <OrderControls
         id={id}

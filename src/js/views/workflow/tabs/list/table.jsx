@@ -43,7 +43,7 @@ const WorkflowTable: Function = ({
         onSortChange={onSortChange}
       >
         <Th className="tiny"> - </Th>
-        <Th className="narrow"> - </Th>
+        <Th className="medium"> ID </Th>
         <Th className="medium"> Actions </Th>
         <Th className="medium"> Status </Th>
         <Th className="narrow" name="business_error"> Bus. Err. </Th>
