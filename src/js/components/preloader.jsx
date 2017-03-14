@@ -2,19 +2,14 @@
 import React from 'react';
 import pure from 'recompose/pure';
 
-import { CenterWrapper } from './layout';
-
 const Preloader: Function = (): React.Element<any> => (
-  <CenterWrapper>
-    <div className="preloader loading">
-      <span className="slice"></span>
-      <span className="slice"></span>
-      <span className="slice"></span>
-      <span className="slice"></span>
-      <span className="slice"></span>
-      <span className="slice"></span>
-    </div>
-  </CenterWrapper>
+  <div className="center-wrapper default-wrapper">
+    <svg className="preloader" width="40" height="40" viewBox="0 0 40 40">
+      <polygon points="0 0 0 40 40 40 40 0" className="preloader-rect" />
+      <text className="preloader-text" y="25" x="14"> Q </text>
+    </svg>
+    <h3 className="main-loading-text"> Now loading... </h3>
+  </div>
 );
 
 export default pure(Preloader);
