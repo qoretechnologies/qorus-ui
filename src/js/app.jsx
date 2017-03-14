@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 
 import Routes from './routes';
 import Notifications from './containers/bubbles';
+import Preloader from './components/preloader';
 
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
@@ -172,7 +173,7 @@ export default class App extends Component {
    */
   renderEmpty() {
     return (
-      <div />
+      <Preloader />
     );
   }
 

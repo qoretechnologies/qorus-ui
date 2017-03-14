@@ -30,4 +30,17 @@ describe('showIfLoaded from hocomponents/show-if-loaded', () => {
     expect(wrapper.find('.actual').length).to.equals(0);
     expect(wrapper.find('.fa-spin').length).to.equals(1);
   });
+
+  it('show big loader', () => {
+    const Cmp = showIfLoaded('value', true)(ActualComp);
+
+    const value = {
+      loading: true,
+      sync: true,
+    };
+    const wrapper = mount(<Cmp {...{ value }} />);
+
+    expect(wrapper.find('.actual').length).to.equals(0);
+    expect(wrapper.find('.preloader').length).to.equals(1);
+  });
 });

@@ -81,6 +81,20 @@ describe('sync from hocomponents/sync', () => {
     expect(wrapper.find('.actual').length).to.equals(0);
   });
 
+  it('Show big loader on loading if specified', () => {
+    const CompOrLoader = sync('value', true, null, true)(ActualComp);
+    const load = chai.spy();
+    const value = {
+      loading: true,
+      sync: false,
+    };
+
+    const wrapper = mount(<CompOrLoader {...{ load, value }} />);
+
+    expect(wrapper.find('.preloader').length).to.equals(1);
+    expect(wrapper.find('.actual').length).to.equals(0);
+  });
+
   it('Show actual on loading', () => {
     const Comp = sync('value', false)(ActualComp);
     const load = chai.spy();

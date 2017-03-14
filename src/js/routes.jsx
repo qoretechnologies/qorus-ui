@@ -130,5 +130,5 @@ export default compose(
   websocket({
     onMessage: 'message',
   }, false, false, false),
-  sync('info')
+  sync('info', true, null, true)
 )(AppInfo);

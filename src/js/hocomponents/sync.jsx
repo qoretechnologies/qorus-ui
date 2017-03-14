@@ -14,10 +14,11 @@ import showIfLoaded from './show-if-loaded';
  */
 export default (
   propName: string,
-  showLoader : bool = true,
-  loadFunc : ? Function = null
+  showLoader : boolean = true,
+  loadFunc : ? Function = null,
+  bigLoader: boolean = false,
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
-  const LoadComponent = showLoader ? showIfLoaded(propName)(Component) : Component;
+  const LoadComponent = showLoader ? showIfLoaded(propName, bigLoader)(Component) : Component;
 
   class WrappedComponent extends React.Component {
     componentDidMount() {
