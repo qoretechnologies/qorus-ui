@@ -780,7 +780,7 @@ export default class StepsTab extends Component {
           instances[name].status.toLowerCase() : 'normal';
       onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
 
-      if (stepInfo.arraytype !== 'NONE') {
+      if (stepInfo.arraytype !== 'NONE' && instances[name]) {
         arrayStep = instances[name].steps;
       }
     }
