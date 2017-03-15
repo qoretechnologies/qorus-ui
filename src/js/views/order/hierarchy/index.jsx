@@ -5,6 +5,8 @@ import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import checkNoData from '../../../hocomponents/check-no-data';
+import withLoadMore from '../../../hocomponents/loadMore';
+import { Control as Button } from '../../../components/controls';
 import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import HierarchyRow from './row';
 
@@ -16,62 +18,76 @@ type Props = {
   order: Object,
   toggleRow: Function,
   handleExpandClick: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
 };
 
 const HierarchyTable: Function = ({
   hierarchy,
   hierarchyKeys,
   compact,
+  canLoadMore,
+  handleLoadMore,
 }: Props): React.Element<any> => (
-  <Table
-    fixed
-    hover
-    condensed
-    striped
-  >
-    <Thead>
-      <Tr>
-        <Th className="normal">ID</Th>
-        <Th className="name">Workflow</Th>
-        <Th className="medium">Status</Th>
-        <Th className="narrow">Bus.Err.</Th>
-        <Th className="narrow">Errors</Th>
-        <Th className="narrow">Priority</Th>
-        { !compact && (
-          <Th className="big">Scheduled</Th>
-        )}
-        { !compact && (
-          <Th className="big">Started</Th>
-        )}
-        <Th className="big">Completed</Th>
-        { !compact && (
-          <Th className="narrow">Sub WF</Th>
-        )}
-        { !compact && (
-          <Th className="narrow">Sync</Th>
-        )}
-        { !compact && (
-          <Th className="medium">Warnings</Th>
-        )}
-      </Tr>
-    </Thead>
-    <Tbody>
-      {hierarchyKeys.map((id: string | number): ?React.Element<any> => {
-        const item: Object = hierarchy[id];
-        const parentId: ?number = item.parent_workflow_instanceid;
+  <div>
+    <Table
+      fixed
+      hover
+      condensed
+      striped
+    >
+      <Thead>
+        <Tr>
+          <Th className="normal">ID</Th>
+          <Th className="name">Workflow</Th>
+          <Th className="medium">Status</Th>
+          <Th className="narrow">Bus.Err.</Th>
+          <Th className="narrow">Errors</Th>
+          <Th className="narrow">Priority</Th>
+          { !compact && (
+            <Th className="big">Scheduled</Th>
+          )}
+          { !compact && (
+            <Th className="big">Started</Th>
+          )}
+          <Th className="big">Completed</Th>
+          { !compact && (
+            <Th className="narrow">Sub WF</Th>
+          )}
+          { !compact && (
+            <Th className="narrow">Sync</Th>
+          )}
+          { !compact && (
+            <Th className="medium">Warnings</Th>
+          )}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {hierarchyKeys.map((id: string | number): ?React.Element<any> => {
+          const item: Object = hierarchy[id];
+          const parentId: ?number = item.parent_workflow_instanceid;
 
-        return (
-          <HierarchyRow
-            key={id}
-            id={item.workflow_instanceid}
-            compact={compact}
-            item={item}
-            hasParent={parentId}
-          />
-        );
-      })}
-    </Tbody>
-  </Table>
+          return (
+            <HierarchyRow
+              key={id}
+              id={item.workflow_instanceid}
+              compact={compact}
+              item={item}
+              hasParent={parentId}
+            />
+          );
+        })}
+      </Tbody>
+    </Table>
+    { canLoadMore && (
+      <Button
+        action={handleLoadMore}
+        big
+        btnStyle="success"
+        label="Load 50 more..."
+      />
+    )}
+  </div>
 );
 
 export default compose(
@@ -81,5 +97,6 @@ export default compose(
     ...rest,
   })),
   checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
-  pure(['hierarchy'])
+  withLoadMore('hierarchyKeys', null, true, 50),
+  pure(['hierarchy', 'hierarchyKeys', 'canLoadMore'])
 )(HierarchyTable);

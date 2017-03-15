@@ -11,7 +11,7 @@ import actions from '../store/api/actions';
 
 export default (
   collectionProp: string,
-  resource: string,
+  resource: ?string,
   local: ?boolean,
   localLimit: ?number,
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
@@ -38,11 +38,11 @@ export default (
   return compose(
     connect(
       (state: Object) => ({
-        offset: state.api[resource].offset,
-        limit: state.api[resource].limit,
+        offset: resource ? state.api[resource].offset : null,
+        limit: resource ? state.api[resource].limit : null,
       }),
       {
-        changeOffset: actions[resource].changeOffset,
+        changeOffset: resource ? actions[resource].changeOffset : null,
       }
     ),
     withState('localOffset', 'setLocalOffset', 0),
