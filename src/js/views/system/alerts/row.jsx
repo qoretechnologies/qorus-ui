@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 import { Tr, Td } from '../../../components/new_table';
 import Text from '../../../components/text';
 import Date from '../../../components/date';
+import Icon from '../../../components/icon';
 import { Control as Button } from '../../../components/controls';
 import { getAlertObjectLink } from '../../../helpers/system';
 import actions from '../../../store/api/actions';
@@ -46,7 +47,9 @@ const AlertRow: Function = ({
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
   >
-    <Td className="tiny" />
+    <Td className="tiny">
+      <Icon icon="warning" />
+    </Td>
     <Td className="narrow">
       <Button
         label="Detail"

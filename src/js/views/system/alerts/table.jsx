@@ -20,6 +20,7 @@ import { querySelector, paramSelector, resourceSelector } from '../../../selecto
 import AlertsPane from './pane';
 import AlertRow from './row';
 import AlertsToolbar from './toolbar';
+import Icon from '../../../components/icon';
 
 type Props = {
   type: string,
@@ -59,7 +60,9 @@ const AlertsTable: Function = ({
           sortData={sortData}
           onSortChange={onSortChange}
         >
-          <Th className="tiny" />
+          <Th className="tiny">
+            <Icon icon="warning" />
+          </Th>
           <Th className="narrow">-</Th>
           <Th className="text" name="type">Type</Th>
           <Th className="text" name="alert">Alert</Th>
