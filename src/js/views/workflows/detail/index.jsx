@@ -57,6 +57,8 @@ export default class WorkflowsDetail extends Component {
     location: Object,
     loadErrors: Function,
     load: Function,
+    onResize: Function,
+    width: number,
   };
 
   componentWillMount() {
@@ -96,8 +98,9 @@ export default class WorkflowsDetail extends Component {
 
     return (
       <DetailPane
-        width={600}
+        width={this.props.width || 600}
         onClose={this.handleClose}
+        onResize={this.props.onResize}
       >
         <article>
           <WorkflowsHeader workflow={workflow} />

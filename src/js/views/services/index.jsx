@@ -124,7 +124,8 @@ export default compose(
       'systemOptions',
       'location',
     ],
-    'detail'
+    'detail',
+    'services'
   ),
   selectable('services'),
   withCSV('services', 'services'),

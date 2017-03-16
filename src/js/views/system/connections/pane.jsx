@@ -77,6 +77,8 @@ export default class ConnectionsPane extends Component {
     onClose: PropTypes.func,
     attrs: PropTypes.array,
     type: PropTypes.string,
+    width: PropTypes.number,
+    onResize: PropTypes.func,
   };
 
   static contextTypes = {
@@ -133,7 +135,11 @@ export default class ConnectionsPane extends Component {
 
   render() {
     return (
-      <Pane width={400} onClose={this.props.onClose}>
+      <Pane
+        width={this.props.width || 400}
+        onClose={this.props.onClose}
+        onResize={this.props.onResize}
+      >
         <h3>{ this.props.remote.name } detail</h3>
         <Table data={ this.getData() } className="table table-stripped table-condensed">
           <Section type="body" data={this.getData()} rows={this._renderRows} />

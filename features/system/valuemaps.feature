@@ -15,7 +15,7 @@ Feature: Tests system/valuemaps features
   Scenario: Opens detail pane when row is clicked
     Given I am on "system/values" listing
     And "valuemaps" get loaded
-    When I activate "valuemap1" valuemap
+    When I activate "valuemap1" - "0"
     Then query param "paneId" equals to "1"
     And I should see detail pane
 

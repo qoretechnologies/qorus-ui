@@ -239,7 +239,8 @@ export default compose(
       'globalErrors',
       'location',
     ],
-    'detail'
+    'detail',
+    'workflows'
   ),
   selectable('workflows'),
   withCSV('workflows', 'workflows'),

@@ -26,6 +26,8 @@ export default class ServicesDetail extends Component {
     onClose: PropTypes.func,
     location: PropTypes.object,
     changePaneTab: PropTypes.func,
+    width: PropTypes.number,
+    onResize: PropTypes.func,
   };
 
   componentWillMount() {
@@ -52,8 +54,9 @@ export default class ServicesDetail extends Component {
 
     return (
       <DetailPane
-        width={550}
+        width={this.props.width || 550}
         onClose={this.handlePaneClose}
+        onResize={this.props.onResize}
       >
         <article>
           <ServicesHeader service={service} />

@@ -143,7 +143,7 @@ export default compose(
     sortDefaults.remote
   ),
   withLoadMore('remotes', 'remotes', true, 50),
-  withPane(ConnectionPane, ['type']),
+  withPane(ConnectionPane, ['type'], null, 'connections'),
   pure([
     'location',
     'remotes',

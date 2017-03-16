@@ -154,7 +154,8 @@ export default compose(
       'systemOptions',
       'location',
     ],
-    'detail'
+    'detail',
+    'jobs'
   ),
   selectable('jobs'),
   withCSV('jobs', 'jobs'),

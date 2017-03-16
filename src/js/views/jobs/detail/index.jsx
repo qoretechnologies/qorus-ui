@@ -26,6 +26,8 @@ const Detail = ({
   model,
   getHeight,
   lib,
+  width,
+  onResize,
 }: {
   location: Object,
   paneTab: string,
@@ -35,10 +37,13 @@ const Detail = ({
   paneId: string | number,
   getHeight: Function,
   lib: Object,
+  width: number,
+  onResize: Function,
 }): React.Element<*> => (
   <DetailPane
     name="jobs-detail-pane"
-    width={550}
+    width={width || 550}
+    onResize={onResize}
     onClose={onClose}
   >
     <article>

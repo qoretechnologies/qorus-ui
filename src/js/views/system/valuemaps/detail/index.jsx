@@ -27,6 +27,8 @@ type Props = {
   onAddClick: Function,
   onSaveClick: Function,
   location: Object,
+  width: number,
+  onResize: Function,
 }
 
 const ValuemapsPane: Function = ({
@@ -39,11 +41,14 @@ const ValuemapsPane: Function = ({
   onAddClick,
   onSaveClick,
   location,
+  width,
+  onResize,
 }: Props): React.Element<any> => (
   <Pane
     name="valuemaps"
-    width={500}
+    width={width || 500}
     onClose={onClose}
+    onResize={onResize}
   >
     <h3>{valuemap.name}</h3>
     <p>{valuemap.description}</p>

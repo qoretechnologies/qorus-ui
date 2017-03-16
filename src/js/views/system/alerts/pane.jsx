@@ -28,9 +28,11 @@ const viewSelector = createSelector(
 type Props = {
   alert: Object,
   onClose: Function,
+  width: number,
+  onResize: Function,
 }
 
-const AlertPane: Function = ({ alert, onClose }: Props) => {
+const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
   if (!alert) {
     onClose();
 
@@ -38,7 +40,7 @@ const AlertPane: Function = ({ alert, onClose }: Props) => {
   }
 
   return (
-    <Pane width={550} onClose={onClose}>
+    <Pane width={width || 550} onClose={onClose} onResize={onResize}>
       <h3>Alert detail</h3>
       {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
         <p>

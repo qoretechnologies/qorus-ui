@@ -75,5 +75,5 @@ export default compose(
   ),
   sync('valuemaps'),
   search(),
-  withPane(Pane, ['valuemaps', 'location']),
+  withPane(Pane, ['valuemaps', 'location'], null, 'valuemaps'),
 )(ValueMaps);

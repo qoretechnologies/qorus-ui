@@ -147,7 +147,7 @@ export default compose(
   ),
   withLoadMore('alerts', 'alerts', true, 50),
   sync('meta'),
-  withPane(AlertsPane),
+  withPane(AlertsPane, null, null, 'alerts'),
   pure([
     'alerts',
     'location',
