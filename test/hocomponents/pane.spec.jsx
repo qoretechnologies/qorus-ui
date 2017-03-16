@@ -1,5 +1,4 @@
 /* eslint no-unused-expressions: 0 */
-/* @flow */
 import React, { PropTypes, Component } from 'react';
 import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
