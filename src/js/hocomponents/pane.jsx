@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import omit from 'lodash/omit';
 import { connect } from 'react-redux';
-import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
 import { changeQuery } from '../helpers/router';
