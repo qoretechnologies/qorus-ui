@@ -1,41 +1,41 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+
 import ResizeHandle from '../resize/handle';
+import Icon from '../icon';
 
-/**
- * Pane flowing above other content sticked to the right.
- *
- * It also has convenient close button.
- *
- * @param {!{
- *   titleId: string,
- *   onClose: ?function,
- *   children: ReactNode,
- * }} props
- * @return {!ReactElement}
- */
-export default function Pane(props) {
-  return (
-    <div
-      className="pane right"
-      style={{ width: props.width }}
-    >
-      <button
-        type="button"
-        className="btn btn-xs btn-inverse pane__close"
-        onClick={props.onClose}
-      >
-        <i className="fa fa-times-circle" /> Close
-      </button>
-      <div className="pane__content">
-        {props.children}
-      </div>
-      <ResizeHandle left min={{ width: 400 }} />
-    </div>
-  );
-}
-
-Pane.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func,
-  width: PropTypes.number,
+type Props = {
+  width?: number,
+  onClose: Function,
+  children: any,
+  onResize?: Function,
 };
+
+const Pane: Function = ({ width, onClose, children, onResize }: Props) => (
+  <div
+    className="pane right"
+    style={{ width }}
+  >
+    <button
+      type="button"
+      className="btn btn-xs btn-inverse pane__close"
+      onClick={onClose}
+    >
+      <Icon icon="times-circle" /> Close
+    </button>
+    <div className="pane__content">
+      {children}
+    </div>
+    <ResizeHandle
+      onStop={onResize}
+      left
+      min={{ width: 400 }}
+    />
+  </div>
+);
+
+export default pure([
+  'width',
+  'children',
+])(Pane);
