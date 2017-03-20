@@ -9,6 +9,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { Tr, Td } from '../../../components/new_table';
 import { Controls, Control as Button } from '../../../components/controls';
 import Autocomponent from '../../../components/autocomponent';
+import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
@@ -32,6 +33,7 @@ type Props = {
   safe_url?: string,
   url?: string,
   desc?: string,
+  options: Object,
 };
 
 const ConnectionRow: Function = ({
@@ -47,6 +49,7 @@ const ConnectionRow: Function = ({
   url,
   desc,
   remoteType,
+  options,
 }: Props): React.Element<any> => (
   <Tr
     className={classnames({
@@ -79,21 +82,19 @@ const ConnectionRow: Function = ({
       )}
     </Td>
     <Td className="name">
-      <p title={name}>
-        {name}
-      </p>
+      <Text text={name} />
     </Td>
-    {remoteType !== 'datasources' && (
+    {remoteType === 'datasources' ? (
       <Td className="text">
-        <p title={safeUrl || url}>
-          {safeUrl || url}
-        </p>
+        <Text text={JSON.stringify(options)} />
+      </Td>
+    ) : (
+      <Td className="text">
+        <Text text={safeUrl || url} />
       </Td>
     )}
     <Td className="text">
-      <p title={desc}>
-        {desc}
-      </p>
+      <Text text={desc} />
     </Td>
     <Td className="normal">
       <Button

@@ -42,6 +42,8 @@ type Props = {
   type: string,
   canLoadMore?: boolean,
   handleLoadMore: Function,
+  openModal: Function,
+  closeModal: Function,
 };
 
 const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
@@ -72,6 +74,11 @@ const ConnectionTable: Function = ({
   handleLoadMore,
 }: Props): React.Element<any> => (
   <div>
+    <div className="row">
+      <div className="col-lg-12">
+
+      </div>
+    </div>
     <Table
       fixed
       hover
@@ -90,7 +97,9 @@ const ConnectionTable: Function = ({
             <Icon icon="exclamation-triangle" />
           </Th>
           <Th className="name" name="name">Name</Th>
-          {type !== 'datasources' && (
+          {type === 'datasources' ? (
+            <Th className="text">Options</Th>
+          ) : (
             <Th className="text" name="url">URL</Th>
           )}
           <Th className="text" name="desc">Description</Th>
