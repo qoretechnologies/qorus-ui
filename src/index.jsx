@@ -4,7 +4,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/app';
 import isSupported from './js/helpers/is_supported';
+import { getCookie } from './js/helpers/document';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const cookie = getCookie('react');
+
+if (!cookie) {
+  window.location = '/index-backbone.html';
+}
 
 require('./index.html');
 global.env = process.env;
