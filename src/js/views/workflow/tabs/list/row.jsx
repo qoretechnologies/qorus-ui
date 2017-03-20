@@ -49,7 +49,6 @@ const TableRow: Function = ({
   _selected,
   _updated,
   business_error: busErr,
-  normalizedName,
   name,
   started,
   completed,
@@ -72,7 +71,15 @@ const TableRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    <Td className="medium">{id}</Td>
+    <Td className="medium">
+      <Link
+        to={`/order/${id}/${date}`}
+        className="resource-name-link"
+        title={name}
+      >
+        {id}
+      </Link>
+    </Td>
     <Td className="medium">
       <OrderControls
         id={id}
@@ -85,15 +92,6 @@ const TableRow: Function = ({
     </Td>
     <Td className="narrow">
       <AutoComp>{busErr}</AutoComp>
-    </Td>
-    <Td className="name">
-      <Link
-        to={`/order/${id}/${date}`}
-        className="resource-name-link"
-        title={name}
-      >
-        { normalizedName }
-      </Link>
     </Td>
     <Td className="big">
       <Date date={started} />

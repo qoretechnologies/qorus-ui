@@ -47,7 +47,6 @@ const WorkflowTable: Function = ({
         <Th className="medium"> Actions </Th>
         <Th className="medium"> Status </Th>
         <Th className="narrow" name="business_error"> Bus. Err. </Th>
-        <Th name="name"> Order name </Th>
         <Th className="big" name="started" onClick={handleHeaderClick}> Started </Th>
         <Th className="big" name="completed" onClick={handleHeaderClick}> Completed </Th>
         <Th className="big" name="modified" onClick={handleHeaderClick}> Modified </Th>
