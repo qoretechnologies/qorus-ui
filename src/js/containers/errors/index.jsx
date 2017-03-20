@@ -13,7 +13,7 @@ import withModal from '../../hocomponents/modal';
 import withSearch from '../../hocomponents/search';
 import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
-import Search from '../../components/search';
+import Search from '../../containers/search';
 import Toolbar from '../../components/toolbar';
 import { Control as Button } from '../../components/controls';
 import Table from './table';
@@ -87,7 +87,11 @@ const ErrorsContainer: Function = ({
           <h4 className="pull-left">{ title }</h4>
         )}
 
-        <Search onSearchUpdate={onSearchChange} defaultValue={query} />
+        <Search
+          onSearchUpdate={onSearchChange}
+          defaultValue={query}
+          resource={`${type}Errors`}
+        />
       </Toolbar>
       <Toolbar>
         <Button

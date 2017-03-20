@@ -4,7 +4,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import Toolbar from '../../../components/toolbar';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import Datepicker from '../../../components/datepicker';
 import queryControl from '../../../hocomponents/queryControl';
 import { Control as Button } from '../../../components/controls';
@@ -64,6 +64,7 @@ const WorkflowsToolbar: Function = ({
     <Search
       defaultValue={searchQuery}
       onSearchUpdate={changeSearchQuery}
+      resource="workflows"
     />
   </Toolbar>
 );

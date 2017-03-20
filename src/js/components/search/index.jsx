@@ -1,9 +1,11 @@
 /* @flow */
 import React, { Component } from 'react';
 import { pureRender } from '../utils';
-import { debounce } from 'lodash';
+import { debounce, includes } from 'lodash';
 
 import { Control as Button } from '../controls';
+import Icon from '../icon';
+import Dropdown, { Item, Control } from '../dropdown';
 
 @pureRender
 export default class Search extends Component {
@@ -11,12 +13,15 @@ export default class Search extends Component {
     onSearchUpdate: Function,
     defaultValue?: ?string,
     pullLeft?: boolean,
+    searches?: Array<string>,
   };
 
   state: {
     query: string,
+    history: boolean,
   } = {
     query: this.props.defaultValue || '',
+    history: false,
   };
 
   componentWillReceiveProps(nextProps: Object) {
@@ -27,8 +32,8 @@ export default class Search extends Component {
     }
   }
 
-  delayedSearch: Function = debounce((event: EventHandler): void => {
-    this.props.onSearchUpdate(event.target.value);
+  delayedSearch: Function = debounce((value: string): void => {
+    this.props.onSearchUpdate(value, false);
   }, 280);
 
   /**
@@ -42,17 +47,27 @@ export default class Search extends Component {
   handleInputChange: Function = (event: EventHandler): void => {
     event.persist();
 
+    const { value } = event.target;
+    const hit = this.props.searches ? this.props.searches.filter((qry: string): boolean => (
+      includes(qry, value) && value !== qry
+    )) : false;
+
     this.setState({
-      query: event.target.value,
+      query: value,
+      history: value && value.length >= 2 && hit && hit.length > 0,
     });
 
-    this.delayedSearch(event);
+    this.delayedSearch(value);
   };
 
   handleFormSubmit: Function = (event: EventHandler): void => {
     event.preventDefault();
 
-    this.props.onSearchUpdate(this.state.query);
+    this.setState({
+      history: false,
+    });
+
+    this.props.onSearchUpdate(this.state.query, true);
   };
 
   handleClearClick: Function = (): void => {
@@ -63,7 +78,34 @@ export default class Search extends Component {
     this.props.onSearchUpdate('');
   };
 
+  handleHistoryClick: Function = (event: EventHandler, query: string): void => {
+    this.setState({
+      query,
+      history: false,
+    });
+
+    this.delayedSearch(query);
+  }
+
+  renderHistoryItems: Function = (): ?Array<React.Element<any>> => {
+    if (!this.props.searches) return null;
+
+    const searches: Array<string> = this.props.searches.filter((qry: string): boolean => (
+      includes(qry, this.state.query) && this.state.query !== qry
+    ));
+
+    return searches.map((qry: string, index: number): React.Element<any> => (
+      <Item
+        key={`${qry}_${index}`}
+        title={qry}
+        action={this.handleHistoryClick}
+      />
+    ));
+  }
+
   render() {
+    const { searches } = this.props;
+
     return (
       <form
         onSubmit={this.handleFormSubmit}
@@ -71,6 +113,18 @@ export default class Search extends Component {
         className={`col-lg-3 ${this.props.pullLeft ? '' : 'pull-right'}`}
       >
         <div className="input-group">
+          {(searches && searches.length) && (
+            <div className="input-group-btn">
+              <Dropdown
+                show={this.state.history}
+              >
+                <Control>
+                  <Icon icon="history" />
+                </Control>
+                {this.renderHistoryItems()}
+              </Dropdown>
+            </div>
+          )}
           <input
             ref="input"
             type="text"
@@ -78,6 +132,7 @@ export default class Search extends Component {
             className="form-control"
             onChange={this.handleInputChange}
             value={this.state.query}
+            autoComplete="off"
           />
           <div className="input-group-btn">
             <Button

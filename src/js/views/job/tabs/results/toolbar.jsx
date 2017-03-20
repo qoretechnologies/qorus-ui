@@ -8,7 +8,7 @@ import applyJobFilter from '../../../../hocomponents/jobs/apply-job-filter';
 import search from '../../../../hocomponents/search';
 import Toolbar from '../../../../components/toolbar';
 import DatePicker from '../../../../components/datepicker';
-import Search from '../../../../components/search';
+import Search from '../../../../containers/search';
 import CsvExport from '../../../../components/csv_export';
 
 const ResultsToolbar = ({
@@ -38,6 +38,7 @@ const ResultsToolbar = ({
     <Search
       defaultValue={defaultSearchValue}
       onSearchUpdate={onSearchChange}
+      resource="job"
     />
   </Toolbar>
 );

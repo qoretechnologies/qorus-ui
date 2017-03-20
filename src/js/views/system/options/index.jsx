@@ -17,7 +17,7 @@ import modal from '../../../hocomponents/modal';
 import Badge from '../../../components/badge';
 import Table, { Section, Row, Cell } from '../../../components/table';
 import Toolbar from '../../../components/toolbar';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import OptionModal from './modal';
 import { Control } from '../../../components/controls';
 import Shorten from '../../../components/shorten';
@@ -274,6 +274,7 @@ export default class Options extends Component {
             <Search
               defaultValue={defaultSearchValue}
               onSearchUpdate={onSearchChange}
+              resource="options"
             />
           </Toolbar>
           <Table

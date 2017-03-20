@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { flowRight, pickBy, includes } from 'lodash';
 
 import Toolbar from '../../../components/toolbar';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import { Control as Button } from '../../../components/controls';
 import search from '../../../hocomponents/search';
 import sync from '../../../hocomponents/sync';
@@ -89,6 +89,7 @@ class SQLCache extends Component {
           <Search
             defaultValue={this.props.query}
             onSearchUpdate={this.props.onSearchChange}
+            resource="sqlcache"
           />
         </Toolbar>
         <div>

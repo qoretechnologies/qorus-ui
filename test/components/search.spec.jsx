@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: 0 */
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { mount } from 'enzyme';
@@ -24,10 +25,11 @@ describe("Search from 'components/search'", () => {
 
       expect(result.type).to.equal('form');
       expect(result.props.children.type).to.equal('div');
-      expect(result.props.children.props.children[0].type).to.equal('input');
-      expect(result.props.children.props.children[1].type).to.equal('div');
-      expect(result.props.children.props.children[1].props.children[0].type).to.equal(Control);
-      expect(result.props.children.props.children[1].props.children[1].type).to.equal(Control);
+      expect(result.props.children.props.children[0]).to.equal.null;
+      expect(result.props.children.props.children[1].type).to.equal('input');
+      expect(result.props.children.props.children[2].type).to.equal('div');
+      expect(result.props.children.props.children[2].props.children[0].type).to.equal(Control);
+      expect(result.props.children.props.children[2].props.children[1].type).to.equal(Control);
     });
 
     it('renders the input with a default value', () => {
@@ -41,7 +43,7 @@ describe("Search from 'components/search'", () => {
 
       const result = renderer.getRenderOutput();
 
-      expect(result.props.children.props.children[0].props.value).to.equal('Yolo');
+      expect(result.props.children.props.children[1].props.value).to.equal('Yolo');
     });
 
     it('runs the provided function when the input changes after 500ms', () => {
@@ -55,7 +57,7 @@ describe("Search from 'components/search'", () => {
       );
       const result = renderer.getRenderOutput();
 
-      result.props.children.props.children[0].props.onChange({
+      result.props.children.props.children[1].props.onChange({
         target: { value: 'Hello' },
         persist: () => true,
       });
@@ -113,6 +115,98 @@ describe("Search from 'components/search'", () => {
       const result = renderer.getRenderOutput();
 
       expect(result.props.className).to.equal('col-lg-3 ');
+    });
+
+    it('renders a history button if the searches are provided', () => {
+      const wrapper = mount(
+        <Search
+          defaultValue="test"
+          onSearchUpdate={() => true}
+          searches={[
+            'kek',
+            'topkek',
+          ]}
+        />
+      );
+
+      expect(wrapper.find('button')).to.have.length(3);
+    });
+
+    it('renders the dropdown with values when searches match the input value', () => {
+      const wrapper = mount(
+        <Search
+          defaultValue="test"
+          onSearchUpdate={() => true}
+          searches={[
+            'kek',
+            'topkek',
+          ]}
+        />
+      );
+
+      wrapper.find('input').simulate('change', {
+        target: { value: 'top' },
+        persist: () => true,
+      });
+
+      expect(wrapper.find('li')).to.have.length(1);
+
+      wrapper.find('input').simulate('change', {
+        target: { value: 'ke' },
+        persist: () => true,
+      });
+
+      expect(wrapper.find('li')).to.have.length(2);
+    });
+
+    it('does not render the dropdown when values are identical or no matches found', () => {
+      const wrapper = mount(
+        <Search
+          defaultValue="test"
+          onSearchUpdate={() => true}
+          searches={[
+            'kek',
+            'topkek',
+          ]}
+        />
+      );
+
+      wrapper.find('input').simulate('change', {
+        target: { value: 'topkeke' },
+        persist: () => true,
+      });
+
+      expect(wrapper.find('li')).to.have.length(0);
+
+      wrapper.find('input').simulate('change', {
+        target: { value: 'kek' },
+        persist: () => true,
+      });
+
+      expect(wrapper.find('li')).to.have.length(1);
+    });
+
+    it('hides the dropdown and inserts the value when a dropdown item is clicked', () => {
+      const wrapper = mount(
+        <Search
+          defaultValue="test"
+          onSearchUpdate={() => true}
+          searches={[
+            'kek',
+            'topkek',
+          ]}
+        />
+      );
+
+      wrapper.find('input').simulate('change', {
+        target: { value: 'top' },
+        persist: () => true,
+      });
+
+      wrapper.find('.dropdown-menu span').first().simulate('click');
+
+      expect(wrapper.find('input').props().value).to.eql('topkek');
+      expect(wrapper.find('.dropdown-menu')).to.have.length(0);
     });
   });
 });

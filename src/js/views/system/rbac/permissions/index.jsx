@@ -8,7 +8,7 @@ import flowRight from 'lodash/flowRight';
 import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
-import Search from '../../../../components/search';
+import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import AddButton from '../add_button';
 import { findBy } from '../../../../helpers/search';
@@ -146,6 +146,7 @@ export default class RBACPerms extends Component {
             <Search
               onSearchUpdate={this.props.onSearchChange}
               defaultValue={this.props.query}
+              resource="rbacperms"
             />
           </Toolbar>
           <Table

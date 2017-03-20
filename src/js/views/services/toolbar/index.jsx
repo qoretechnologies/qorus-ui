@@ -6,7 +6,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import Toolbar from '../../../components/toolbar';
 import Selector from './selector';
 import Actions from './actions';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import { Control as Button } from '../../../components/controls';
 import queryControl from '../../../hocomponents/queryControl';
 
@@ -40,6 +40,7 @@ const ServicesToolbar: Function = ({
     <Search
       defaultValue={searchQuery}
       onSearchUpdate={changeSearchQuery}
+      resource="services"
     />
   </Toolbar>
 );
