@@ -54,6 +54,8 @@ define(function (require) {
   Constants.fetch();
 //  Loggers.fetch();
 
+    console.log(Urls, Urls.routes);
+
   AppRouter = Backbone.Router.extend({
     currentView: null,
     routes: Urls.routes,
