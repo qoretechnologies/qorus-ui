@@ -27,6 +27,8 @@ define(function (require) {
     // Default
     '*actions': 'defaultAction'
   };
+  
+  console.warn('!!!!!!! CHANGES APPLIEEEEEEEEED !!!!!!');
 
   urls = function () {
     var rts = _.invert(routes);
