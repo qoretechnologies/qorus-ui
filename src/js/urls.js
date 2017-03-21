@@ -28,7 +28,7 @@ define(function (require) {
     '*actions': 'defaultAction'
   };
   
-  console.warn('!!!!!!! CHANGES APPLIEEEEEEEEED !!!!!!');
+  console.warn(routes);
 
   urls = function () {
     var rts = _.invert(routes);
@@ -38,7 +38,9 @@ define(function (require) {
       rts[k] = "/backbone/" + route;
     });
     return rts;
-  };  
+  };
+  
+  console.warn(new urls());
   
   return {
     routes: routes,
