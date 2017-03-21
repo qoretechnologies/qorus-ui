@@ -54,8 +54,6 @@ define(function (require) {
   Constants.fetch();
 //  Loggers.fetch();
 
-    console.log(Urls, Urls.routes);
-
   AppRouter = Backbone.Router.extend({
     currentView: null,
     routes: Urls.routes,
@@ -309,7 +307,7 @@ define(function (require) {
     }
   });
 
-  Backbone.history.start({ pushState: true });
+  Backbone.history.start({ pushState: true, root: '/backbone/' });
 
   return app_router;
 });
