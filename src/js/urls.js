@@ -33,7 +33,7 @@ define(function (require) {
     _.each(rts, function(route, k){
       // remove optional paramaters
       route = route.replace(/\(|\)/g, '').replace(/(\:)(\w+)/g, '%($2)s').replace(/(\*\w+)/, '');
-      rts[k] = "/" + route;
+      rts[k] = "/backbone/" + route;
     });
     return rts;
   };  
