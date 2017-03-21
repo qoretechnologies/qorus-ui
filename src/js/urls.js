@@ -4,25 +4,25 @@ define(function (require) {
   
   routes = {
     // Define some URL routes
-    'backbone/workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
-    'backbone/workflows(/)(:date)(/)(:deprecated)(/)*path': 'showWorkflows',
+    'workflows/view/:id(/:inst)(/)(:filter)(/)(:date)(/)(:wfiid)': 'showWorkflow',
+    'workflows(/)(:date)(/)(:deprecated)(/)*path': 'showWorkflows',
 
-    'backbone/orders/view/:id(/)*path': 'showOrder',
-    'backbone/service/view/:id': 'showService',
-    'backbone/services(/)*path': 'showServices',
-    'backbone/jobs/view/:id(/)(:filter)(/)(:date)': 'showJob',
-    'backbone/jobs(/)(:date)(/)*path': 'showJobs',
-    'backbone/events': 'showEvents',
-    'backbone/search(/)(:ids)(/)(:keyvalues)': 'showSearch',
+    'orders/view/:id(/)*path': 'showOrder',
+    'service/view/:id': 'showService',
+    'services(/)*path': 'showServices',
+    'jobs/view/:id(/)(:filter)(/)(:date)': 'showJob',
+    'jobs(/)(:date)(/)*path': 'showJobs',
+    'events': 'showEvents',
+    'search(/)(:ids)(/)(:keyvalues)': 'showSearch',
 //    'search?*queryString': 'showSearch',
-    'backbone/system(/)*path': 'showSystem',
-    'backbone/ocmd': 'showOcmd',
-    'backbone/groups/:name': 'showGroup',
-    'backbone/groups': 'showGroups',
-    'backbone/extensions(/)(:extension)': 'showExtension',
-    'backbone/functions': 'showFunctions',
-    'backbone/library': 'showClasses',
-    'backbone/': 'redirectToDashboard',
+    'system(/)*path': 'showSystem',
+    'ocmd': 'showOcmd',
+    'groups/:name': 'showGroup',
+    'groups': 'showGroups',
+    'extensions(/)(:extension)': 'showExtension',
+    'functions': 'showFunctions',
+    'library': 'showClasses',
+    '': 'redirectToDashboard',
 
     // Default
     '*actions': 'defaultAction'
@@ -35,7 +35,7 @@ define(function (require) {
     _.each(rts, function(route, k){
       // remove optional paramaters
       route = route.replace(/\(|\)/g, '').replace(/(\:)(\w+)/g, '%($2)s').replace(/(\*\w+)/, '');
-      rts[k] = "/backbone/" + route;
+      rts[k] = "/" + route;
     });
     return rts;
   };
