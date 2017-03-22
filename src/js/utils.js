@@ -158,8 +158,6 @@ define(function (require) {
       fragment = decodeURIComponent(fragment);
       var query = (fragment.indexOf('?') === -1) ? fragment : fragment.split('?')[1];
       
-      console.log('QUERY', query);
-      
       var params = {};
 
       if (query.search(/^\s+/) !== -1) return {};
@@ -171,8 +169,6 @@ define(function (require) {
         }
       });
       
-      console.log('PARAMS', params);
-
       return params;
     },
 
@@ -184,8 +180,6 @@ define(function (require) {
           equery.push([k,v].join('='));
       });
       
-      console.log('EQUERY', equery);
-
       return equery.join('&');
     },
 
