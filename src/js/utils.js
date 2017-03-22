@@ -86,7 +86,7 @@ define(function (require) {
     },
 
     getCurrentLocationPath: function () {
-      return window.location.pathname;
+      return window.location.pathname.replace('/backbone', '');
     },
 
     parseURLparams: function () {
