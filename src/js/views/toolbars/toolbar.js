@@ -30,7 +30,6 @@ define(function (require) {
       
       this.context.date = this.options.date;
       this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
-      console.log(_.result(utils.parseQuery(Backbone.history.fragment), 'q'));
       
       if (this.collection)
         this.listenTo(this.collection, 'sync', this.update);
@@ -43,7 +42,6 @@ define(function (require) {
     update: function () {
       this.options.date = this.context.date = this.collection.opts.date;
       this.context.query = _.result(utils.parseQuery(Backbone.history.fragment), 'q');
-      console.log(_.result(utils.parseQuery(Backbone.history.fragment), 'q'));
       this.render();
     },
     
