@@ -65,6 +65,9 @@ define(function (require) {
     },
 
     setUrl: function (params) {
+      console.log(utils.getCurrentLoctionPath());
+      console.log(utils.getCurrentLoctionPath().slice(1));
+      console.log(utils.getCurrentLoctionPath().slice(2));
       var path = utils.getCurrentLocationPath().slice(1);
       var parts = path.split('/');
       var date = (parts.length > 2) ? parts[1] : '24h';
