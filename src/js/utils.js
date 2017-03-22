@@ -157,6 +157,9 @@ define(function (require) {
       fragment = this.getCurrentLocation();
       fragment = decodeURIComponent(fragment);
       var query = (fragment.indexOf('?') === -1) ? fragment : fragment.split('?')[1];
+      
+      console.log('QUERY', query);
+      
       var params = {};
 
       if (query.search(/^\s+/) !== -1) return {};
@@ -167,6 +170,8 @@ define(function (require) {
           params[pair[0]] = pair[1];
         }
       });
+      
+      console.log('PARAMS', params);
 
       return params;
     },
@@ -178,6 +183,8 @@ define(function (require) {
         if (k!=='')
           equery.push([k,v].join('='));
       });
+      
+      console.log('EQUERY', equery);
 
       return equery.join('&');
     },
