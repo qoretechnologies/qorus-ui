@@ -29,10 +29,6 @@ define(function (require) {
       .indexOf((match[3] || "").toLowerCase()) >= 0;
     }
   });
-  
-  $('#react-beta').on('click', function() {
-    document.cookie = 'react=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/' 
-  });
 
   View = Backbone.View.extend({
     is_rendered: false,
@@ -143,6 +139,11 @@ define(function (require) {
         this.$el.html(tpl);
 
         this.trigger('render', this, {});
+        
+        $('#react-beta').on('click', function() {
+          console.log('BETA UI CLICKED');
+          document.cookie = 'react=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/' 
+        });
       }
 
 
