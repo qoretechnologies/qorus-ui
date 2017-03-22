@@ -292,7 +292,7 @@ define(function (require) {
         return history;
 
       return (order=='des') ? '-' + key : key;
-    }
+    },
     
     getCookie: function (name) {
       var value = "; " + document.cookie;
