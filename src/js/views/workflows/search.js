@@ -283,6 +283,8 @@ define(function (require) {
       this.collection.reset();
       table.update(true);
       this.collection.fetch({ data: data });
+      
+      console.log(this.url(), utils.encodeQuery(data));
 
       Backbone.history.navigate([this.url(), utils.encodeQuery(data)].join("?"));
     }
