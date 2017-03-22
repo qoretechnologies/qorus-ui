@@ -90,8 +90,12 @@ define(function (require) {
 
       url = [parts[0], date, filters.join(',')].join('/');
 
+      console.log(url);
+
       if (params.query) {
+        console.log(params.query);
         url += '?q=' + params.query;
+        console.log('KONECNA URL - ', url);
       }
 
       return url;
