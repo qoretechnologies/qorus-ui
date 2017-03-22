@@ -28,8 +28,6 @@ define(function (require) {
     '*actions': 'defaultAction'
   };
   
-  console.warn(routes);
-
   urls = function () {
     var rts = _.invert(routes);
     _.each(rts, function(route, k){
@@ -39,8 +37,6 @@ define(function (require) {
     });
     return rts;
   };
-  
-  console.warn(new urls());
   
   return {
     routes: routes,
