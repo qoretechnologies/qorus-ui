@@ -141,7 +141,7 @@ define(function (require) {
         this.trigger('render', this, {});
         
         $('#react-beta').on('click', function() {
-          document.cookie = 'react=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/' 
+          document.cookie = 'backbone=; expires=Tue, 31 Dec 1970 20:47:11 UTC; path=/' 
           window.location.href = '/';
         });
       }
