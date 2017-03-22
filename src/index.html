@@ -73,6 +73,10 @@
     window.location.href = '/';
   }
   
+  $('#react-beta').on('click'. function() {
+     document.cookie = 'react=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/' 
+  });
+  
   if (window.location.pathname === '/backbone') window.location.href = '/backbone/';
   // remove unsupported banner if browser supports following features
   if (Modernizr.websockets && Modernizr.localstorage) {
