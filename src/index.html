@@ -4,19 +4,19 @@
   <title>Qorus Integration Engine</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="js/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/backbone/js/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- <link rel="stylesheet" type="text/css" media="screen"
-       href="js/libs/datetime-picker/bootstrap-datetimepicker.min.css"> -->
+       href="/backbone/js/libs/datetime-picker/bootstrap-datetimepicker.min.css"> -->
   <link rel="stylesheet" type="text/css" media="screen"
-      href="js/libs/messenger/css/messenger.css">
+      href="/backbone/js/libs/messenger/css/messenger.css">
   <link rel="stylesheet" type="text/css" media="screen"
-      href="js/libs/messenger/css/messenger-theme-qore.css">
-  <link href="js/libs/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css">
-  <link href="css/base.css" rel="stylesheet" type="text/css">
-  <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="js/libs/prism/prism.css" rel="stylesheet" type="text/css">
-  <script src="js/libs/modernizr.js?theseus=no"></script>
-  <script data-main="js/main" src="js/libs/require.js?theseus=no"></script>
+      href="/backbone/js/libs/messenger/css/messenger-theme-qore.css">
+  <link href="/backbone/js/libs/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css">
+  <link href="/backbone/css/base.css" rel="stylesheet" type="text/css">
+  <link href="/backbone/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="/backbone/js/libs/prism/prism.css" rel="stylesheet" type="text/css">
+  <script src="/backbone/js/libs/modernizr.js?theseus=no"></script>
+  <script data-main="/backbone/js/main" src="/backbone/js/libs/require.js?theseus=no"></script>
 </head>
 <body>
   <div id="not-supported">
@@ -69,7 +69,7 @@
     if (parts.length >= 2) return parts.pop().split(";").shift();
   }
   
-  if (getCookie('react')) {
+  if (!getCookie('backbone')) {
     window.location.href = '/';
   }
   
