@@ -5,6 +5,7 @@ import { pureRender } from '../utils';
 import UserInfo from '../../containers/user_info';
 import NotificationPanel from '../../containers/system/alerts';
 import { LocalHealth, RemoteHealth } from '../../containers/health';
+import { Control as Button } from '../../components/controls';
 
 /**
  * Display info about Qorus instance and logged in user.
@@ -29,6 +30,11 @@ export default class Topbar extends Component {
   handleExpand = () => {
     this.setState({ expanded: !this.state.expanded });
   };
+
+  handleSwitchClick = () => {
+    document.cookie = 'backbone=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/';
+    window.location.href = '/backbone/';
+  }
 
   /**
    * Returns element for this component.
@@ -69,8 +75,18 @@ export default class Topbar extends Component {
             aria-expanded={this.state.expanded ? 'true' : 'false'}
           >
             <div className="nav nav-bar navbar-right info-nav">
+              <div className="nav-btn-tooltip">
+                <Button
+                  big
+                  btnStyle="warning"
+                  onClick={this.handleSwitchClick}
+                  label="Switch to old UI"
+                  icon="warning"
+                />
+              </div>
+              {' '}
               <LocalHealth />
-              {'  '}
+              {' '}
               <RemoteHealth />
               {' '}
               <UserInfo user={this.props.currentUser} />
