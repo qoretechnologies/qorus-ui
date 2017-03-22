@@ -141,8 +141,8 @@ define(function (require) {
         this.trigger('render', this, {});
         
         $('#react-beta').on('click', function() {
-          console.log('BETA UI CLICKED');
           document.cookie = 'react=true; expires=Tue, 31 Dec 2030 20:47:11 UTC; path=/' 
+          window.location.href = '/';
         });
       }
 
