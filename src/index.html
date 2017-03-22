@@ -63,6 +63,7 @@
   </footer>
   <div id="notifications-list"></div>
   <script type="text/javascript">
+  if (window.location.pathname === '/backbone') window.location.href = '/backbone/';
   // remove unsupported banner if browser supports following features
   if (Modernizr.websockets && Modernizr.localstorage) {
     var el = document.getElementById('not-supported');
