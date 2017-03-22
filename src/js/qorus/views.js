@@ -781,7 +781,7 @@ define(function (require) {
 
       url_query = utils.parseQuery(Backbone.history.fragment);
       url_query.q = query;
-      url = [Backbone.history.location.pathname.replace('/backbone'), utils.encodeQuery(url_query)].join('?');
+      url = [Backbone.history.location.pathname.replace('/backbone', ''), utils.encodeQuery(url_query)].join('?');
 
       if (query)
         Backbone.history.navigate(url);
