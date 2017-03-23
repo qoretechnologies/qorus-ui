@@ -3,14 +3,8 @@ import './ie10-fix';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/app';
-import { getCookie } from './js/helpers/document';
 import isSupported from './js/helpers/is_supported';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-// Go to the old UI if the user has active cookie
-if (getCookie('backbone')) {
-  window.location.href = '/backbone/';
-}
 
 require('./index.html');
 global.env = process.env;
