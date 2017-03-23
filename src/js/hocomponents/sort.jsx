@@ -6,6 +6,13 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 import { sort } from '../store/ui/actions';
 import { sortTable } from '../helpers/table';
 
+type Props = {
+  changeSort: Function,
+  initSort: Function,
+  sortData: Object,
+  storage: Object,
+};
+
 export default (
   tableName: string | Function,
   collectionProp: string,
@@ -14,21 +21,37 @@ export default (
   Component: ReactClass<*>
 ) => {
   class WrappedComponent extends React.Component {
-    props: {
-      changeSort: Function,
-      initSort: Function,
-      sortData: Object
-    };
+    props: Props;
 
     componentWillMount() {
       const tbl = typeof tableName === 'function' ? tableName(this.props) : tableName;
-      const defaultSort = typeof defaultSortData === 'function' ?
-        defaultSortData(this.props) :
-        defaultSortData;
 
+      this.setupSorting(tbl, this.props);
+    }
+
+    componentWillReceiveProps(nextProps: Props) {
+      const tbl = typeof tableName === 'function' ? tableName(this.props) : tableName;
+      const nextTbl = typeof tableName === 'function' ? tableName(nextProps) : tableName;
+
+      if (tbl !== nextTbl) {
+        this.setupSorting(nextTbl, nextProps);
+      }
+    }
+
+    setupSorting(table: string, props: Props) {
       if (defaultSortData) {
-        const { initSort } = this.props;
-        initSort(tbl, defaultSort);
+        let defaultSort;
+
+        if (!props.storage[table] || !props.storage[table].sort) {
+          defaultSort = typeof defaultSortData === 'function' ?
+            defaultSortData(props) :
+            defaultSortData;
+        } else {
+          defaultSort = props.storage[table].sort;
+        }
+
+        const { initSort } = props;
+        initSort(table, defaultSort);
       }
     }
 
@@ -73,6 +96,7 @@ export default (
   WrappedComponent = connect(
     (state, props) => ({
       sortData: state.ui.sort[typeof tableName === 'function' ? tableName(props) : tableName],
+      storage: state.api.currentUser.data.storage || {},
     }),
     sort
   )(WrappedComponent);

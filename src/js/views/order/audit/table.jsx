@@ -1,124 +1,47 @@
-import React, { PropTypes } from 'react';
-import Table from '../../services/table';
+// @flow
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import { Cell } from '../../../components/table';
-
+import { Table, Tbody, Thead, Tr, Th, Td } from '../../../components/new_table';
 import Date from '../../../components/date';
 
-export default class extends Table {
-  static defaultProps = {
-    setSelectedData: () => {},
-    selectedData: {},
-    steps: PropTypes.array,
-  };
+type Props = {
+  collection: Array<Object>,
+};
 
-  /**
-   * Yields heading cells for model info.
-   *
-   * @return {Generator<ReactElement>}
-   * @see ORDER_STATES
-   */
-  *renderHeadings() {
-    yield (
-      <Cell tag="th" className="narrow">
-        Event Code
-      </Cell>
-    );
+const AuditTable: Function = ({
+  collection,
+}: Props): React.Element<Table> => (
+  <Table condensed striped>
+    <Thead>
+      <Tr>
+        <Th className="narrow">Event code</Th>
+        <Th className="narrow">Event ID</Th>
+        <Th>Created</Th>
+        <Th className="name">Event</Th>
+        <Th>Info</Th>
+        <Th>Reason</Th>
+        <Th>Source</Th>
+        <Th className="narrow">Who</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {collection.map((step: Object, index: number): React.Element<any> => (
+        <Tr key={index}>
+          <Td className="narrow">{step.audit_event_code}</Td>
+          <Td className="narrow">{step.audit_eventid}</Td>
+          <Td>
+            <Date date={step.created} />
+          </Td>
+          <Td className="name">{step.event}</Td>
+          <Td className="text">{step.info1}</Td>
+          <Td className="text">{step.reason}</Td>
+          <Td className="text">{step.source}</Td>
+          <Td className="narrow">{step.who}</Td>
+        </Tr>
+      ))}
+    </Tbody>
+  </Table>
+);
 
-    yield (
-      <Cell tag="th">
-        Event ID
-      </Cell>
-    );
-
-    yield (
-      <Cell tag="th">
-        Created
-      </Cell>
-    );
-
-    yield (
-      <Cell tag="th">
-        Event
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Info
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Reason
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-      >
-        Source
-      </Cell>
-    );
-
-    yield (
-      <Cell
-        tag="th"
-        className="narrow"
-      >
-        Who
-      </Cell>
-    );
-  }
-
-
-  /**
-   * Yields cells with model data
-   *
-   * @param {Object} model
-   * @return {Generator<ReactElement>}
-   */
-  *renderCells({ model }) {
-    yield (
-      <Cell className="narrow">{ model.audit_event_code }</Cell>
-    );
-
-    yield (
-      <Cell>{ model.audit_eventid }</Cell>
-    );
-
-    yield (
-      <Cell className="nowrap">
-        <Date date={ model.created } />
-      </Cell>
-    );
-
-    yield (
-      <Cell className="name">{ model.event }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow">{ model.info1 }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow text">{ model.reason }</Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.source }</Cell>
-    );
-
-    yield (
-      <Cell className="narrow text">{ model.who }</Cell>
-    );
-  }
-}
+export default pure(['collection'])(AuditTable);

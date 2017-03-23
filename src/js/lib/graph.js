@@ -239,7 +239,7 @@ function isRef(node, nodesBelow) {
  * @return {number}
  */
 function getWidth(node) {
-  return Math.max(
+  const width = Math.max(
     node.width,
     node.below.
       filter(isRef.bind(null, node)).
@@ -247,6 +247,8 @@ function getWidth(node) {
         ws + nbs.reduce((w, nb) => w + nb.width, 0)
       ), 0)
   );
+
+  return width;
 }
 
 

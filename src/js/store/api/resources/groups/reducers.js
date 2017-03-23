@@ -1,14 +1,25 @@
 /* @flow */
 import { updateItemWithName, setUpdatedToNull } from '../../utils';
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
 
 const initialState: Object = { data: [], sync: false, loading: false };
 
 const setEnabled: Object = {
-  next(state: Object = initialState, { payload: { name, value } }): Object {
+  next(state: Object = initialState, { payload: { events } }): Object {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithName(name, { enabled: value, _updated: true }, updatedData);
+      let newData = updatedData;
+
+      events.forEach((dt: Object): void => {
+        newData = updateItemWithName(dt.name, { enabled: dt.enabled, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -37,7 +48,42 @@ const updateDone = {
   },
 };
 
+const groupAction = {
+  next(state: Object = initialState) {
+    return state;
+  },
+};
+
+const selectGroup = {
+  next(state: Object = initialState, { payload: { id } }: { payload: Object, id: string}) {
+    return select(state, id);
+  },
+};
+
+const selectAllGroups = {
+  next(state: Object = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneGroups = {
+  next(state: Object = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state: Object = initialState) {
+    return selectInvert(state);
+  },
+};
+
 export {
   setEnabled as SETENABLED,
   updateDone as UPDATEDONE,
+  selectGroup as SELECT,
+  selectAllGroups as SELECTALL,
+  selectNoneGroups as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  groupAction as GROUPACTION,
 };

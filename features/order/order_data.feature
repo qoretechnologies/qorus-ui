@@ -16,4 +16,10 @@ Feature: Tests functionalities of the Data tab
     And I should see the "Static" data
     When I click the "Copy view" button
     Then there should be a textarea with the data
-
+    
+  Scenario: Tabs with the data are displayed
+    Given I am on order "31380" and "Data" tab
+    And I should see the "Static" data
+    And I click the "Edit mode" button
+    And there should be a textarea with the data
+    Then I replace the data in the textarea

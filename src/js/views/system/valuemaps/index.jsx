@@ -11,7 +11,7 @@ import withPane from '../../../hocomponents/pane';
 import { resourceSelector, querySelector } from '../../../selectors';
 import actions from '../../../store/api/actions';
 import Toolbar from '../../../components/toolbar';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import Table from './table';
 import Pane from './detail';
 
@@ -33,6 +33,7 @@ const ValueMaps: Function = ({
       <Search
         onSearchUpdate={onSearchChange}
         defaultValue={defaultSearchValue}
+        resource="valuemaps"
       />
     </Toolbar>
     <Table
@@ -75,5 +76,5 @@ export default compose(
   ),
   sync('valuemaps'),
   search(),
-  withPane(Pane, ['valuemaps', 'location']),
+  withPane(Pane, ['valuemaps', 'location'], null, 'valuemaps'),
 )(ValueMaps);

@@ -5,6 +5,7 @@ import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
 import Graph from './graph';
+import Hierarchy from '../hierarchy/';
 import StepDetails from './step_details';
 import Errors from './errors';
 import Resize from 'components/resize/handle';
@@ -36,9 +37,9 @@ export default class DiagramView extends Component {
     });
   };
 
-  handleSkipSubmit = (step, value) => {
+  handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatch(
-      actions.orders.skipStep(this.props.order, step.stepid, value)
+      actions.orders.skipStep(this.props.order.id, step.stepid, value, noretry)
     );
   };
 
@@ -52,6 +53,17 @@ export default class DiagramView extends Component {
         onSkipSubmit={this.handleSkipSubmit}
       />
     );
+  }
+
+  diagramRef = (el) => {
+    if (el) {
+      const copy = el;
+      copy.scrollLeft = el.scrollWidth;
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
   }
 
   renderErrorPane() {
@@ -93,7 +105,10 @@ export default class DiagramView extends Component {
         className="diagram-wrapper"
         style={{ paddingBottom: this.state.paneSize }}
       >
-        <div className="pull-left diagram-view">
+        <div
+          className="pull-left diagram-view"
+          ref={this.diagramRef}
+        >
           <Graph
             workflow={this.props.workflow}
             order={this.props.order}
@@ -101,13 +116,12 @@ export default class DiagramView extends Component {
           />
         </div>
         <div className="pull-right order-info-view">
-          <Info
-            data={this.props.order}
-            dispatch={this.props.dispatch}
-          />
+          <Info {...this.props.order} />
           <Keys
             data={this.props.order.keys}
           />
+          <h4> Hierarchy </h4>
+          <Hierarchy order={this.props.order} compact />
           { this.renderStepDetails() }
         </div>
         { this.renderErrorPane() }

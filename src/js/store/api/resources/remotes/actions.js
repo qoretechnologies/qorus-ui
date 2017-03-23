@@ -16,7 +16,7 @@ const pingRemote = createAction(
 
 const connectionChange = createAction(
   'REMOTES_CONNECTIONCHANGE',
-  (name: string, up: boolean) => ({ name, up })
+  (events) => ({ events })
 );
 
 const updateDone: Function = createAction(
@@ -26,12 +26,12 @@ const updateDone: Function = createAction(
 
 const addAlert = createAction(
   'REMOTES_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'REMOTES_CLEARALERT',
-  (id, type, alertid) => ({ id, type, alertid })
+  (events) => ({ events })
 );
 
 export {

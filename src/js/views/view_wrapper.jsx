@@ -143,7 +143,7 @@ export default class ViewWrapper extends Component {
           titleId="csv-modal"
         >
           Copy table
-          <small> (Press ⌘ + c)</small>
+          <small> (Press ⌘ + c / CTRL + c)</small>
         </Modal.Header>
         <Modal.Body>
           <textarea

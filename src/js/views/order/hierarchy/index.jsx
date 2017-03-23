@@ -1,105 +1,102 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import Row from './row';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
+import withLoadMore from '../../../hocomponents/loadMore';
+import { Control as Button } from '../../../components/controls';
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import HierarchyRow from './row';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
+type Props = {
+  hierarchy: Object,
+  hierarchyKeys: Array<string | number>,
+  compact?: boolean,
+  expanded: Object,
+  order: Object,
+  toggleRow: Function,
+  handleExpandClick: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+};
+
+const HierarchyTable: Function = ({
+  hierarchy,
+  hierarchyKeys,
+  compact,
+  canLoadMore,
+  handleLoadMore,
+}: Props): React.Element<any> => (
+  <div>
+    <Table
+      fixed
+      hover
+      condensed
+      striped
+    >
+      <Thead>
+        <Tr>
+          <Th className="normal">ID</Th>
+          <Th className="name">Workflow</Th>
+          <Th className="medium">Status</Th>
+          <Th className="narrow">Bus.Err.</Th>
+          <Th className="narrow">Errors</Th>
+          <Th className="narrow">Priority</Th>
+          { !compact && (
+            <Th className="big">Scheduled</Th>
+          )}
+          { !compact && (
+            <Th className="big">Started</Th>
+          )}
+          <Th className="big">Completed</Th>
+          { !compact && (
+            <Th className="narrow">Sub WF</Th>
+          )}
+          { !compact && (
+            <Th className="narrow">Sync</Th>
+          )}
+          { !compact && (
+            <Th className="medium">Warnings</Th>
+          )}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {hierarchyKeys.map((id: string | number): ?React.Element<any> => {
+          const item: Object = hierarchy[id];
+          const parentId: ?number = item.parent_workflow_instanceid;
+
+          return (
+            <HierarchyRow
+              key={id}
+              id={item.workflow_instanceid}
+              compact={compact}
+              item={item}
+              hasParent={parentId}
+            />
+          );
+        })}
+      </Tbody>
+    </Table>
+    { canLoadMore && (
+      <Button
+        action={handleLoadMore}
+        big
+        btnStyle="success"
+        label="Load 50 more..."
+      />
+    )}
+  </div>
 );
 
-const selector = createSelector(
-  [
-    orderSelector,
-  ], (order) => ({
+export default compose(
+  mapProps(({ order, ...rest }: Props): Object => ({
     hierarchy: order.HierarchyInfo,
-    order,
-  })
-);
-
-@compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
-  checkNoData((props) => props.hierarchy && Object.keys(props.hierarchy).length)
-)
-export default class HierarchyView extends Component {
-  static propTypes = {
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
-    hierarchy: PropTypes.object,
-    order: PropTypes.object,
-  };
-
-  componentDidMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-  }
-
-  groupHierarchy() {
-    const groups = {};
-    const { hierarchy } = this.props;
-
-    Object.keys(this.props.hierarchy).forEach(h => {
-      const id = hierarchy[h].subworkflow ?
-        hierarchy[h].parent_workflow_instanceid : hierarchy[h].workflow_instanceid;
-      const group = groups[id] = groups[id] || { children: [] };
-
-      if (hierarchy[h].subworkflow) {
-        group.children.push(hierarchy[h]);
-      } else {
-        Object.assign(group, hierarchy[h]);
-      }
-    });
-
-    return groups;
-  }
-
-  renderRows() {
-    const data = this.groupHierarchy();
-
-    return Object.keys(data).map((h, index) => (
-      <Row data={data[h]} key={index} />
-    ));
-  }
-
-  render() {
-    return (
-      <div>
-        <table
-          className="table table-striped table-condensed table-hover table-fixed table--data"
-        >
-          <thead>
-          <tr>
-            <th className="narrow"></th>
-            <th className="narrow"></th>
-            <th>Workflow</th>
-            <th className="narrow">Status</th>
-            <th>Business Error</th>
-            <th className="narrow">Custom Status</th>
-            <th>Custom Status Description</th>
-            <th className="narrow">Errors</th>
-            <th className="narrow">Priority</th>
-            <th>Scheduled</th>
-            <th className="narrow">Subworkflow</th>
-            <th className="narrow">Synchronous</th>
-            <th className="narrow">Warnings</th>
-            <th>Started</th>
-            <th>Completed</th>
-          </tr>
-          </thead>
-          { this.renderRows() }
-        </table>
-      </div>
-    );
-  }
-}
+    hierarchyKeys: Object.keys(order.HierarchyInfo),
+    ...rest,
+  })),
+  checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
+  withLoadMore('hierarchyKeys', null, true, 50),
+  pure(['hierarchy', 'hierarchyKeys', 'canLoadMore'])
+)(HierarchyTable);

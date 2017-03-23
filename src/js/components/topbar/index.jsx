@@ -69,8 +69,9 @@ export default class Topbar extends Component {
             aria-expanded={this.state.expanded ? 'true' : 'false'}
           >
             <div className="nav nav-bar navbar-right info-nav">
+              {' '}
               <LocalHealth />
-              {'  '}
+              {' '}
               <RemoteHealth />
               {' '}
               <UserInfo user={this.props.currentUser} />

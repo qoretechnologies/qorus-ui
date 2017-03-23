@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 
 import Nav, { NavLink } from '../../../components/navlink';
@@ -8,7 +9,7 @@ type Props = {
   children: any,
 };
 
-const Alerts = ({ location, children }: Props): React.Element<any> => (
+const Alerts: Function = ({ location, children }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <Nav
       path={location.pathname}
@@ -17,7 +18,7 @@ const Alerts = ({ location, children }: Props): React.Element<any> => (
       <NavLink to="./ongoing">Ongoing</NavLink>
       <NavLink to="./transient">Transient</NavLink>
     </Nav>
-    { children }
+    { React.cloneElement(children, { location }) }
   </div>
 );
 

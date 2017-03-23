@@ -49,7 +49,11 @@ module.exports = function orderDetailSteps() {
 
     this.browser.assert.element(el);
     this.browser.assert.element('.tree-wrapper');
-    this.browser.assert.element('.button--copy');
+    this.browser.assert.elements('.button--copy', 3);
+  });
+
+  this.When(/^I replace the data in the textarea$/, async function() {
+    this.browser.fill('#tree-content', '{ a: 1 }');
   });
 
   this.Then(/^there should be a textarea with the data$/, async function() {
@@ -84,7 +88,7 @@ module.exports = function orderDetailSteps() {
   this.Given(/^diagram, tables and error pane get loaded$/, async function() {
     await this.waitForElement('svg.diagram');
 
-    this.browser.assert.elements('.order-info-view table', 2);
+    this.browser.assert.elements('.order-info-view tbody', 3);
     this.browser.assert.element('.error-pane');
   });
 
@@ -95,11 +99,11 @@ module.exports = function orderDetailSteps() {
   this.Then(/^start box is "([^"]*)"$/, async function(css) {
     const el = this.browser.queryAll('.diagram__box')[0];
 
-    this.browser.assert.className(el, `diagram__box diagram__box--${css}`);
+    this.browser.assert.className(el, `diagram__box status-${css}-diagram`);
   });
 
   this.Then(/^there are (\d+) "([^"]*)" boxes$/, async function(count, css) {
-    return this.browser.assert.elements(`.diagram .diagram__box--${css}`, parseInt(count, 10));
+    return this.browser.assert.elements(`.diagram .status-${css}-diagram`, parseInt(count, 10));
   });
 
   this.When(/^I click the info icon on "([^"]*)"$/, async function(text) {

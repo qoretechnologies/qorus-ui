@@ -6,14 +6,9 @@ import compose from 'recompose/compose';
 import AuditTable from './table';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import { sortTable } from 'helpers/table';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
+const orderSelector = (state, props) => props.order;
 
 const selector = createSelector(
   [
@@ -25,12 +20,7 @@ const selector = createSelector(
 );
 
 @compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
+  connect(selector),
   checkNoData((props) => props.audits && props.audits.length)
 )
 export default class ErrorsView extends Component {
@@ -42,10 +32,6 @@ export default class ErrorsView extends Component {
   };
 
   componentWillMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-
     this.setState({
       limit: 10,
     });

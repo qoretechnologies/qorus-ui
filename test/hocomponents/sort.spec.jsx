@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import promise from 'redux-promise';
 
 import sort from '../../src/js/hocomponents/sort';
 import ui from '../../src/js/store/ui';
+import api from '../../src/js/store/api';
 
 describe('sort from \'hocomponents/sort\'', () => {
   const incomeData = [
@@ -19,7 +22,22 @@ describe('sort from \'hocomponents/sort\'', () => {
 
   beforeEach(() => {
     renderedData = null;
-    store = createStore(combineReducers({ ui }));
+    store = createStore(
+      combineReducers({ ui, api }),
+      {
+        api: {
+          currentUser: {
+            data: {
+              storage: {},
+            },
+          },
+        },
+      },
+      applyMiddleware(
+        thunk,
+        promise
+      )
+    );
   });
 
   const FakeComponent = ({ data, onSortChange: handleSortChange }) => {

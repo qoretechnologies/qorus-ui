@@ -1,25 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { Groups, Group } from 'components/groups';
-import Options from 'components/options';
+import Options from '../../../components/options';
+import { connect } from 'react-redux';
 
-import { pureRender } from 'components/utils';
+import AlertsTab from '../../../components/alerts_table';
 import actions from 'store/api/actions';
 
-@pureRender
+@connect(
+  null,
+  {
+    setOptions: actions.workflows.setOptions,
+  }
+)
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
-  };
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
+    setOptions: PropTypes.func.isRequired,
   };
 
   setOption = (opt) => {
-    this.context.dispatch(
-      actions.workflows.setOptions(this.props.workflow, opt.name, opt.value)
-    );
+    this.props.setOptions(this.props.workflow, opt.name, opt.value);
   };
 
   deleteOption = (opt) => {
@@ -29,6 +30,7 @@ export default class DetailTab extends Component {
   render() {
     return (
       <div>
+        <AlertsTab alerts={this.props.workflow.alerts} />
         <Groups>
           {
             (this.props.workflow.groups || []).map(g => (

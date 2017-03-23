@@ -15,44 +15,52 @@ const utf8ToB64: Function = (str: string): string => (
 
 const alertTypeToResource: Object = {
   WORKFLOW: {
-    resource: 'workflow',
+    resource: 'workflows',
     uses: 'id',
-    suffix: '/list/All',
+    query: 'paneId',
   },
   SERVICE: {
     resource: 'services',
     uses: 'id',
+    query: 'paneId',
   },
   JOB: {
-    resource: 'job',
+    resource: 'jobs',
     uses: 'id',
+    query: 'paneId',
   },
   'USER-CONNECTION': {
     resource: 'system/remote/user',
     uses: 'name',
+    query: 'paneId',
   },
   REMOTE: {
     resource: 'system/remote/qorus',
     uses: 'name',
+    query: 'paneId',
   },
   GROUP: {
     resource: 'groups',
     uses: 'name',
+    query: 'group',
   },
   ORDER: {
     resource: 'order',
     uses: 'id',
+    suffix: '/19700101',
   },
   DATASOURCE: {
     resource: 'system/remote/datasources',
     uses: 'name',
+    query: 'paneId',
   },
 };
 
 const getAlertObjectLink: Function = (type: string, data: Object): string => {
   const res = alertTypeToResource[type];
 
-  return `/${res.resource}/${data[res.uses]}${res.suffix || ''}`;
+  // eslint-disable-next-line
+  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}${res.suffix || ''}`;
 };
 
 export {

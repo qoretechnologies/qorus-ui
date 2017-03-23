@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 
 import showIfPassed from './show-if-passed';
 import Loader from '../components/loader';
+import Preloader from '../components/preloader';
 
 /**
  * Return high order components that check is data under propName has been loaded
@@ -11,13 +12,14 @@ import Loader from '../components/loader';
  * @return {Function} - High order component
  */
 export default (
-  propName: string
+  propName: string,
+  bigLoader: boolean = false,
 ): Function => (
   Component: ReactClass<*>
 ): ReactClass<*> => {
   const WrappedComponent : ReactClass<*> = showIfPassed(
     props => props[propName] && props[propName].sync && !props[propName].loading,
-    <Loader />
+    bigLoader ? <Preloader /> : <Loader />
   )(
     Component
   );

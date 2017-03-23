@@ -5,6 +5,7 @@ import defaultProps from 'recompose/defaultProps';
 import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -12,7 +13,7 @@ import withModal from '../../hocomponents/modal';
 import withSearch from '../../hocomponents/search';
 import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
-import Search from '../../components/search';
+import Search from '../../containers/search';
 import Toolbar from '../../components/toolbar';
 import { Control as Button } from '../../components/controls';
 import Table from './table';
@@ -30,6 +31,8 @@ type Props = {
   createOrUpdate: Function,
   removeError: Function,
   id: string | number,
+  fixed: boolean,
+  height: string | number,
 }
 
 const ErrorsContainer: Function = ({
@@ -44,6 +47,8 @@ const ErrorsContainer: Function = ({
   createOrUpdate,
   removeError,
   id,
+  fixed,
+  height,
 }: Props): React.Element<any> => {
   const handleFormSubmit: Function = (data: Object) => {
     createOrUpdate(type, id, data);
@@ -82,7 +87,11 @@ const ErrorsContainer: Function = ({
           <h4 className="pull-left">{ title }</h4>
         )}
 
-        <Search onSearchUpdate={onSearchChange} defaultValue={query} />
+        <Search
+          onSearchUpdate={onSearchChange}
+          defaultValue={query}
+          resource={`${type}Errors`}
+        />
       </Toolbar>
       <Toolbar>
         <Button
@@ -91,6 +100,7 @@ const ErrorsContainer: Function = ({
           icon="plus"
           onClick={handleCreateClick}
           btnStyle="success"
+          big
         />
       </Toolbar>
       <Table
@@ -99,6 +109,8 @@ const ErrorsContainer: Function = ({
         compact={compact}
         onEditClick={handleEditClick}
         onDeleteClick={handleDeleteClick}
+        fixed={fixed}
+        height={height}
       />
     </div>
   );
@@ -148,6 +160,14 @@ export default compose(
       unsync: actions.errors.unsync,
     }
   ),
+  pure([
+    'query',
+    'errors',
+    'compact',
+    'id',
+    'fixed',
+    'height',
+  ]),
   defaultProps({
     id: 'omit',
   }),

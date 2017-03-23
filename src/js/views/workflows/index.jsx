@@ -10,14 +10,13 @@ import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 
-import sort from '../../hocomponents/sort';
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
 import selectable from '../../hocomponents/selectable';
-import unsync from '../../hocomponents/unsync.js';
+import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
-import { sortDefaults } from '../../constants/sort';
+import loadMore from '../../hocomponents/loadMore';
 import actions from '../../store/api/actions';
 import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
@@ -27,6 +26,9 @@ import { ORDER_STATES, ORDER_GROUPS, GROUPED_ORDER_STATES } from '../../constant
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 import { querySelector, resourceSelector } from '../../selectors';
+import withSort from '../../hocomponents/sort';
+import { sortDefaults } from '../../constants/sort';
+import { Control } from '../../components/controls';
 
 const filterSearch: Function = (search: string): Function =>
   (workflows: Array<Object>): Array<Object> => (
@@ -120,7 +122,6 @@ type Props = {
   onCSVClick: Function,
   paneId: string | number,
   openPane: Function,
-  changePaneTab: Function,
   fetch: Function,
   deprecated: boolean,
   selectedIds: Array<number>,
@@ -129,6 +130,11 @@ type Props = {
   expanded: boolean,
   handleExpandClick: Function,
   toggleExpand: Function,
+  sortData: Object,
+  onSortChange: Function,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const Workflows: Function = ({
@@ -143,6 +149,11 @@ const Workflows: Function = ({
   openPane,
   deprecated,
   date,
+  sortData,
+  onSortChange,
+  limit,
+  canLoadMore,
+  handleLoadMore,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -161,7 +172,18 @@ const Workflows: Function = ({
       expanded={expanded}
       deprecated={deprecated}
       date={date}
+      sortData={sortData}
+      onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
     />
+    { canLoadMore && (
+      <Control
+        label={`Load ${limit} more...`}
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
   </div>
 );
 
@@ -175,12 +197,14 @@ export default compose(
       unselectAll: actions.workflows.unselectAll,
     }
   ),
+  withSort('workflows', 'workflows', sortDefaults.workflows),
+  loadMore('workflows', 'workflows', true, 50),
   mapProps(({ date, ...rest }: Props): Object => ({
-    date: date ? formatDate(date).format() : DATES.PREV_DAY,
+    date: date || DATES.PREV_DAY,
     ...rest,
   })),
   mapProps(({ date, deprecated, ...rest }: Props): Object => ({
-    fetchParams: { deprecated, date },
+    fetchParams: { deprecated, date: formatDate(date).format() },
     date,
     deprecated,
     ...rest,
@@ -215,16 +239,13 @@ export default compose(
       'globalErrors',
       'location',
     ],
-    'detail'
+    'detail',
+    'workflows'
   ),
   selectable('workflows'),
-  sort(
-    'workflows',
-    'workflows',
-    sortDefaults.workflows
-  ),
   withCSV('workflows', 'workflows'),
   pure([
+    'sortData',
     'expanded',
     'workflows',
     'systemOptions',
@@ -233,6 +254,7 @@ export default compose(
     'paneId',
     'deprecated',
     'date',
+    'canLoadMore',
   ]),
   unsync()
 )(Workflows);

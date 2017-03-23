@@ -60,14 +60,7 @@ Feature: Tests all the features of the orders list toolbar
     And "orders" get loaded
     When I click the "Complete" button inside "filters" dropdown
     And I click the "Filter" button
-    Then "1" "order" are shown
-
-  Scenario: Changing the input date
-    Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
-    And "orders" get loaded
-    When I change the input to "2016-06-06 10:10:10"
-    Then the URL changes to "/workflow/14/list/All/20160606101010"
-    And "2" "orders" are shown
+    Then the complete URL changes to "/workflow/14/list?date=all&filter=Complete"
 
   Scenario: Changing the date to 24h
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
@@ -75,10 +68,10 @@ Feature: Tests all the features of the orders list toolbar
     When I click the "24H" button inside "date-selection" dropdown
     Then "0" "orders" are shown
 
-  Scenario: Changing the date to now
+  Scenario: Changing the date to week
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
-    When I click the "Now" button inside "date-selection" dropdown
+    When I click the "Week" button inside "date-selection" dropdown
     Then "0" "orders" are shown
 
   Scenario: Filtering retry orders through search
@@ -107,7 +100,3 @@ Feature: Tests all the features of the orders list toolbar
     And I click the "Retry" item
     When I click the "Filter" button
     Then "2" "orders" are shown
-
-
-
-

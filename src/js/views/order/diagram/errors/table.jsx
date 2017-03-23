@@ -1,126 +1,88 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withState from 'recompose/withState';
+import mapProps from 'recompose/mapProps';
 
-import Table, { Section, Row, Cell } from 'components/table';
-import ErrorRow from './row';
+import { Table, Thead, Tr, Th } from '../../../../components/new_table';
+import check from '../../../../hocomponents/check-no-data';
+import ErrorsRow from './row';
+import { sortTable } from '../../../../helpers/table';
 
-import { sortTable } from 'helpers/table';
-import { pureRender } from 'components/utils';
+type Props = {
+  data: Array<Object>,
+  expand: boolean,
+  stringifyError: Function,
+  sortData: Object,
+  setSortData: Function,
+  onSortChange: Function,
+  onModalMount: Function,
+};
 
-@pureRender
-export default class DiagramErrorsTable extends Component {
-  static propTypes = {
-    data: PropTypes.array,
-    expand: PropTypes.bool,
-    stringifyError: PropTypes.func,
-  };
+const DiagramErrorsTable: Function = ({
+  data,
+  expand,
+  onSortChange,
+  sortData,
+  onModalMount,
+}: Props): React.Element<Table> => (
+  <Table
+    bordered
+    condensed
+  >
+    <Thead>
+      <Tr
+        sortData={sortData}
+        onSortChange={onSortChange}
+      >
+        <Th name="severity" className="narrow">-</Th>
+        <Th name="severity">Severity</Th>
+        <Th name="error" className="name">Error</Th>
+        <Th name="created">Created</Th>
+        <Th name="error_desc" className="text">Description</Th>
+        <Th name="business_error">Bus.Err.</Th>
+      </Tr>
+    </Thead>
+    {data.map((error: Object, key: number): React.Element<ErrorsRow> => (
+      <ErrorsRow
+        key={`${key}_${error.error_instanceid}`}
+        expand={expand}
+        data={error}
+        onModalMount={onModalMount}
+        {...error}
+      />
+    ))}
+  </Table>
+);
 
-  componentWillMount() {
-    const sortData = {
-      sortBy: 'created',
-      sortByKey: {
-        ignoreCase: true,
-        direction: -1,
-      },
-    };
-    const data = sortTable(this.props.data, sortData);
-
-    this.setState({
-      data,
-      sortData,
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({
-        data: nextProps.data,
-      });
-    }
-  }
-
-  handleSortChange = ({ sortBy }) => {
-    let direction = this.state.sortData.sortByKey.direction;
-
-    if (this.state.sortData.sortBy === sortBy) {
-      direction *= -1;
-    }
-
-    const sortData = {
+export default compose(
+  check(({ data }: Props): boolean => data && data.length > 0),
+  withState('sortData', 'setSortData', {
+    sortBy: 'created',
+    sortByKey: {
+      ignoreCase: true,
+      direction: -1,
+    },
+  }),
+  mapProps(({ sortData, setSortData, data, ...rest }: Props): Props => ({
+    onSortChange: ({ sortBy }: Object): Function => setSortData((currentSort: Object): Object => ({
       sortBy,
       sortByKey: {
         ignoreCase: true,
-        direction,
+        direction: currentSort.sortBy === sortBy ?
+          currentSort.sortByKey.direction * -1 :
+          currentSort.sortByKey.direction,
       },
-    };
-    const data = sortTable(this.state.data, sortData);
-
-    this.setState({
-      data,
-      sortData,
-    });
-  };
-
-  renderRows() {
-    return this.state.data.map((e, key) => (
-      <ErrorRow
-        key={key}
-        data={e}
-        expand={this.props.expand}
-        stringifyError={this.props.stringifyError}
-      />
-    ));
-  }
-
-  render() {
-    return (
-      <Table className="table table-bordered table-condensed">
-        <Section type="head">
-          <Row>
-            <Cell
-              tag="th"
-              name="severity"
-              sortData={this.state.sortData}
-              onSortChange={this.handleSortChange}
-            >
-              Severity
-            </Cell>
-            <Cell
-              tag="th"
-              name="error"
-              sortData={this.state.sortData}
-              onSortChange={this.handleSortChange}
-            >
-              Error
-            </Cell>
-            <Cell
-              tag="th"
-              name="created"
-              sortData={this.state.sortData}
-              onSortChange={this.handleSortChange}
-            >
-              Created
-            </Cell>
-            <Cell
-              tag="th"
-              name="error_desc"
-              sortData={this.state.sortData}
-              onSortChange={this.handleSortChange}
-            >
-              Description
-            </Cell>
-            <Cell
-              tag="th"
-              className="narrow"
-              name="business"
-              sortData={this.state.sortData}
-              onSortChange={this.handleSortChange}
-            >
-              Business
-            </Cell>
-          </Row>
-        </Section>
-        { this.renderRows() }
-      </Table>
-    );
-  }
-}
+    })),
+    data: sortTable(data, sortData),
+    sortData,
+    setSortData,
+    ...rest,
+  })),
+  pure([
+    'data',
+    'sortData',
+    'expand',
+  ])
+)(DiagramErrorsTable);

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -13,20 +13,22 @@ describe('Remotes apievents from store/api/apievents & store/api/resources/remot
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        remotes: {
-          data: [
-            {
-              name: 'test',
-              up: true,
-            },
-            {
-              name: 'anothertest',
-              up: false,
-            },
-          ],
-          sync: true,
+        api: {
+          remotes: {
+            data: [
+              {
+                name: 'test',
+                up: true,
+              },
+              {
+                name: 'anothertest',
+                up: false,
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(

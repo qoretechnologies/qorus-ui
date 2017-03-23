@@ -80,7 +80,7 @@ td.editable {
 }
 
 th.sort {
-  background: #f6f6f6;
+  background: lighten(#9ccb3b, 37);
 
   &:after {
     font-family: FontAwesome;
@@ -96,4 +96,9 @@ th.sort {
   &.sort-desc:after {
     content: "\f107";
   }
+}
+
+th.has-sort:hover {
+  background-color: #f4f4f4;
+  cursor: pointer;
 }

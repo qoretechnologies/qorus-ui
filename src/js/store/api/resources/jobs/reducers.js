@@ -2,6 +2,13 @@ import _ from 'lodash';
 import remove from 'lodash/remove';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -145,17 +152,6 @@ const clearResults = {
   },
 };
 
-const setExpirationDate = {
-  next(state, action) {
-    const { meta: { job }, payload: updatedJob } = action;
-    return { ...state, data: updateItemWithId(job.id, updatedJob, state.data) };
-  },
-  throw(state, action) {
-    const { meta: { job } } = action;
-    return { ...state, data: updateItemWithId(job.id, job, state.data) };
-  },
-};
-
 const fetchCode = {
   next(state, action) {
     const { meta: { job }, payload: { code } } = action;
@@ -168,10 +164,14 @@ const fetchCode = {
 };
 
 const setActive = {
-  next(state, { payload: { id, value } }) {
+  next(state, { payload: { events } }) {
     if (state.sync) {
       const data = state.data.slice();
-      const newData = updateItemWithId(id, { active: value, _updated: true }, data);
+      let newData = data;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(dt.id, { active: dt.value, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -184,16 +184,16 @@ const setActive = {
 };
 
 const setEnabled = {
-  next(state, { payload: { id, value } }) {
-    if (state.sync) {
-      const data = state.data.slice();
-      const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+  next(state, { payload: { events } }) {
+    const data = state.data.slice();
+    const updatedData = setUpdatedToNull(data);
+    let newData = updatedData;
 
-      return { ...state, ...{ data: newData } };
-    }
+    events.forEach(dt => {
+      newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+    });
 
-    return state;
+    return { ...state, ...{ data: newData } };
   },
   throw(state, action) {
     return Object.assign({}, state, {
@@ -251,44 +251,42 @@ const instanceUpdateDone = {
 };
 
 const addInstance = {
-  next(state, { payload: { data: { jobid, job_instanceid, name, version }, started } }) {
+  next(state, { payload: { events } }) {
     const data = state.data.slice();
-    const job = data.find(d => d.id === jobid);
+    const updatedData = setUpdatedToNull(data);
+    let newData = updatedData;
 
-    if (job) {
-      let newData;
-      const updatedData = setUpdatedToNull(data);
+    events.forEach(dt => {
+      const job = newData.find(d => d.id === dt.data.jobid);
 
       if (job.results && job.results.sync) {
         const resultData = job.results.data.slice();
         const updatedResultData = setUpdatedToNull(resultData);
         const newResultData = [...updatedResultData, {
-          jobid,
-          job_instanceid,
-          id: job_instanceid,
-          name,
-          version,
-          started,
+          jobid: dt.data.jobid,
+          job_instanceid: dt.data.job_instanceid,
+          id: dt.data.job_instanceid,
+          name: dt.data.name,
+          version: dt.data.version,
+          started: dt.started,
           jobstatus: 'IN-PROGRESS',
           _updated: true,
         }];
 
-        newData = updateItemWithId(jobid, {
+        newData = updateItemWithId(dt.data.jobid, {
           results: { ...job.results, ...{ data: newResultData } },
-        }, updatedData);
+        }, newData);
       } else {
         const progressCount = job['IN-PROGRESS'] ? job['IN-PROGRESS'] + 1 : 1;
 
-        newData = updateItemWithId(jobid, {
+        newData = updateItemWithId(dt.data.jobid, {
           _updated: true,
           'IN-PROGRESS': progressCount,
-        }, updatedData);
+        }, newData);
       }
+    });
 
-      return { ...state, ...{ data: newData } };
-    }
-
-    return state;
+    return { ...state, ...{ data: newData } };
   },
   throw(state, action) {
     return Object.assign({}, state, {
@@ -300,13 +298,14 @@ const addInstance = {
 };
 
 const modifyInstance = {
-  next(state, { payload: { data: { jobid, job_instanceid, status }, modified } }) {
+  next(state, { payload: { events } }) {
     const data = state.data.slice();
-    const job = data.find(d => d.id === jobid);
+    const updatedData = setUpdatedToNull(data);
+    let newData = updatedData;
 
-    if (job) {
-      let newData;
-      const updatedData = setUpdatedToNull(data);
+    events.forEach(dt => {
+      const { data: { jobid, job_instanceid, status }, modified } = dt;
+      const job = newData.find(d => d.id === jobid);
 
       if (job.results && job.results.sync) {
         const instances = job.results.data.slice();
@@ -319,7 +318,7 @@ const modifyInstance = {
 
         newData = updateItemWithId(jobid, {
           results: { ...job.results, ...{ data: resultsData } },
-        }, updatedData);
+        }, newData);
       } else {
         const progressCount = !job['IN-PROGRESS'] || job['IN-PROGRESS'] - 1 < 0 ?
           0 : job['IN-PROGRESS'] - 1;
@@ -329,13 +328,11 @@ const modifyInstance = {
           _updated: true,
           'IN-PROGRESS': progressCount,
           [status]: statusCount,
-        }, updatedData);
+        }, newData);
       }
+    });
 
-      return { ...state, ...{ data: newData } };
-    }
-
-    return state;
+    return { ...state, ...{ data: newData } };
   },
   throw(state, action) {
     return Object.assign({}, state, {
@@ -347,16 +344,22 @@ const modifyInstance = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { data } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const job = stateData.find((s) => s.id === parseInt(data.id, 10));
-      const alerts = [...job.alerts, data];
-      const newData = updateItemWithId(data.id, {
-        alerts,
-        has_alerts: true,
-        _updated: true,
-      }, stateData);
+      const updatedData = setUpdatedToNull(stateData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const job = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const alerts = [...job.alerts, dt];
+
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: true,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -373,19 +376,24 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { id, alertid } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const job = stateData.find((s) => s.id === parseInt(id, 10));
-      const alerts = [...job.alerts];
+      const updatedData = setUpdatedToNull(stateData);
+      let newData = updatedData;
 
-      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+      events.forEach(dt => {
+        const job = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const alerts = [...job.alerts];
 
-      const newData = updateItemWithId(id, {
-        alerts,
-        has_alerts: !(alerts.length === 0),
-        _updated: true,
-      }, stateData);
+        remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
+
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: !(alerts.length === 0),
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -401,13 +409,95 @@ const clearAlert = {
   },
 };
 
+const selectJob = {
+  next(state = initialState, { payload: { id } }) {
+    return select(state, id);
+  },
+};
+
+const selectAllJobs = {
+  next(state = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneJobs = {
+  next(state = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state = initialState) {
+    return selectInvert(state);
+  },
+};
+
+const unsync = {
+  next() {
+    return initialState;
+  },
+};
+
+const jobsAction = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const reschedule = {
+  next(state = initialState, {
+    payload: {
+      minute,
+      hour,
+      day,
+      month,
+      wday,
+      id,
+    },
+  }
+) {
+    const data = updateItemWithId(id, {
+      minute,
+      hour,
+      day,
+      month,
+      wday,
+    }, [...state.data]);
+
+    return { ...state, ...{ data } };
+  },
+};
+
+const activate = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const expire = {
+  next(state = initialState, { payload: { id, date, error } }) {
+    const data = [...state.data];
+    let newData;
+
+    if (error) {
+      newData = updateItemWithId(id, { expiry_date: null }, data);
+    } else if (date) {
+      newData = updateItemWithId(id, { expiry_date: date }, data);
+    } else {
+      return state;
+    }
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
   fetchResults as FETCHRESULTS,
   startFetchingResults as STARTFETCHINGRESULTS,
   clearResults as CLEARRESULTS,
-  setExpirationDate as SETEXPIRATIONDATE,
   fetchCode as FETCHCODE,
   setActive as SETACTIVE,
   setEnabled as SETENABLED,
@@ -417,4 +507,13 @@ export {
   modifyInstance as MODIFYINSTANCE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  selectJob as SELECT,
+  selectAllJobs as SELECTALL,
+  selectNoneJobs as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  unsync as UNSYNC,
+  jobsAction as ACTION,
+  expire as EXPIRE,
+  reschedule as RESCHEDULE,
+  activate as ACTIVATE,
 };

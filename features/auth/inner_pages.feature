@@ -19,4 +19,4 @@ Feature: Tests user redirects
     Given Auth not required
     And I am anonymous user
     And I am on "workflows" listing
-    Then I should see a loader
+    Then I should see a preloader

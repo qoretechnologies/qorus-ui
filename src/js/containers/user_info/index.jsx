@@ -11,6 +11,7 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
   if (noauth) {
     return (
       <Control
+        big
         className="btn navbar-btn btn-inverse user"
         icon="user"
         label={user.name}

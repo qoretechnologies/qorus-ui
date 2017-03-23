@@ -1,172 +1,165 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import { connect } from 'react-redux';
 
-import Dropdown, { Control as DControl, Item } from 'components/dropdown';
-import { Control } from 'components/controls';
-import { ModalExpiry, ModalReschedule } from './modals';
+import { Controls, Control as Button } from '../../components/controls';
+import withModal from '../../hocomponents/modal';
+import actions from '../../store/api/actions';
+import RescheduleModal from './modals/reschedule';
+import SetExpiryModal from './modals/expiry';
 
-import actions from 'store/api/actions';
+type Props = {
+  handleEnableClick: Function,
+  handleActivateClick: Function,
+  handleResetClick: Function,
+  handleRunClick: Function,
+  handleScheduleClick: Function,
+  handleExpiryClick: Function,
+  enabled?: boolean,
+  active?: boolean,
+  action: Function,
+  schedule: Function,
+  activate: Function,
+  setExpiry: Function,
+  id: number,
+  openModal: Function,
+  closeModal: Function,
+  minute: string,
+  hour: string,
+  day: string,
+  month: string,
+  week: string,
+  scheduleOnly?: boolean,
+  schedText: string,
+};
 
-
-@compose(
-  onlyUpdateForKeys(['job', 'active', 'enabled']),
-  connect(
-    () => ({}),
-    actions.jobs
-  ),
-)
-export default class ServiceControls extends Component {
-  static propTypes = {
-    job: PropTypes.object,
-    enabled: PropTypes.bool,
-    active: PropTypes.bool,
-    id: PropTypes.number,
-  };
-
-  static contextTypes = {
-    openModal: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-    this._modal = null;
-  }
-
-  dispatchAction(action) {
-    this.props[action](this.props.job);
-  }
-
-  handleEnable = () => {
-    this.dispatchAction('enable');
-  };
-
-  handleDisable = () => {
-    this.dispatchAction('disable');
-  };
-
-  handleActivate = () => {
-    this.dispatchAction('activate');
-  };
-
-  handleDeactivate = () => {
-    this.dispatchAction('deactivate');
-  };
-
-  handleReset = () => {
-    this.dispatchAction('reset');
-  };
-
-  handleRun = (event) => {
-    event.preventDefault();
-    this.dispatchAction('run');
-  };
-
-  handleExpiration= (event) => {
-    event.preventDefault();
-    this.openModal(ModalExpiry, this.props.job);
-  };
-
-  handleReschedule = (event) => {
-    event.preventDefault();
-    this.openModal(ModalReschedule, this.props.job);
-  };
-
-  /**
-   * Opens modal dialog to manage particular error.
-   *
-   * @param {ReactComponent} Modal Component
-   * @param {Object} job
-   */
-  openModal = (Modal, job) => {
-    this._modal = (
-      <Modal
-        job={job}
-        onClose={this.closeModal}
+const ServiceControls: Function = ({
+  handleEnableClick,
+  handleActivateClick,
+  handleResetClick,
+  handleRunClick,
+  handleScheduleClick,
+  handleExpiryClick,
+  active,
+  enabled,
+  scheduleOnly,
+  schedText,
+}: Props): React.Element<any> => (
+  scheduleOnly ?
+    <div>
+      <span>{schedText}</span>
+      {' '}
+      <Button
+        label="Reschedule"
+        icon="clock-o"
+        btnStyle="default"
+        onClick={handleScheduleClick}
       />
-    );
+    </div> :
+    <Controls grouped>
+      <Button
+        title={enabled ? 'Disable' : 'Enable'}
+        icon="power-off"
+        btnStyle={enabled ? 'success' : 'danger'}
+        onClick={handleEnableClick}
+      />
+      <Button
+        title={active ? 'Deactivate' : 'Activate'}
+        icon={active ? 'check' : 'ban'}
+        btnStyle={active ? 'success' : 'danger'}
+        onClick={handleActivateClick}
+      />
+      <Button
+        title="Reset"
+        icon="refresh"
+        btnStyle="warning"
+        onClick={handleResetClick}
+      />
+      <Button
+        title="Run"
+        icon="play"
+        btnStyle="default"
+        onClick={handleRunClick}
+      />
+      <Button
+        title="Reschedule"
+        icon="clock-o"
+        btnStyle="default"
+        onClick={handleScheduleClick}
+      />
+      <Button
+        title="Set expiry"
+        icon="tag"
+        btnStyle="default"
+        onClick={handleExpiryClick}
+      />
+    </Controls>
+);
 
-    this.context.openModal(this._modal);
-  };
-
-  /**
-   * Closes currently open modal dialog.
-   */
-  closeModal = () => {
-    this.context.closeModal(this._modal);
-    this._modal = null;
-  };
-
-  render() {
-    return (
-      <div className="btn-controls">
-        {this.props.enabled && (
-          <Control
-            id={`job-${this.props.id}-enabled`}
-            title="Disable"
-            icon="power-off"
-            btnStyle="success"
-            action={this.handleDisable}
-          />
-        )}
-        {!this.props.enabled && (
-          <Control
-            id={`job-${this.props.id}-disabled`}
-            title="Enable"
-            icon="power-off"
-            btnStyle="danger"
-            action={this.handleEnable}
-          />
-        )}
-        {this.props.active && (
-          <Control
-            id={`job-${this.props.id}-active`}
-            title="Deactivate"
-            icon="check"
-            btnStyle="success"
-            className="job-set-inactive"
-            action={this.handleDeactivate}
-          />
-        )}
-        {!this.props.active && (
-          <Control
-            id={`job-${this.props.id}-unactive`}
-            title="Activate"
-            icon="ban"
-            btnStyle="danger"
-            className="job-set-active"
-            action={this.handleActivate}
-          />
-        )}
-        <Dropdown id={`job-${this.props.id}`}>
-          <DControl id={`job-${this.props.id}-dropdown-control`} />
-          <Item
-            action={this.handleRun}
-            icon="play"
-            title="Run"
-            className="run-job"
-          />
-          <Item
-            action={this.handleReschedule}
-            icon="clock-o"
-            title="Reschedule"
-            className="reshedule-job"
-          />
-          <Item
-            action={this.handleReset}
-            icon="refresh"
-            title="Reset"
-            className="refresh-job"
-          />
-          <Item
-            action={this.handleExpiration}
-            icon="tag"
-            title="Set expiration"
-            className="set-expiraction"
-          />
-        </Dropdown>
-      </div>
-    );
-  }
-}
+export default compose(
+  connect(
+    null,
+    {
+      action: actions.jobs.jobsAction,
+      schedule: actions.jobs.reschedule,
+      setExpiry: actions.jobs.expire,
+      activate: actions.jobs.activate,
+    }
+  ),
+  withModal(),
+  withHandlers({
+    handleEnableClick: ({ enabled, action, id }: Props): Function => (): void => {
+      action(enabled ? 'disable' : 'enable', id);
+    },
+    handleActivateClick: ({ active, activate, id }: Props): Function => (): void => {
+      activate(id, active);
+    },
+    handleRunClick: ({ action, id }: Props): Function => (): void => {
+      action('run', id);
+    },
+    handleResetClick: ({ action, id }: Props): Function => (): void => {
+      action('reset', id);
+    },
+    handleScheduleClick: ({
+      schedule,
+      openModal,
+      closeModal,
+      id,
+      minute,
+      hour,
+      day,
+      month,
+      week,
+    }: Props): Function => (): void => {
+      openModal(
+        <RescheduleModal
+          onClose={closeModal}
+          action={schedule}
+          id={id}
+          minute={minute}
+          hour={hour}
+          day={day}
+          month={month}
+          week={week}
+        />
+      );
+    },
+    handleExpiryClick: ({ setExpiry, openModal, closeModal, id }: Props): Function => (): void => {
+      openModal(
+        <SetExpiryModal
+          onClose={closeModal}
+          action={setExpiry}
+          id={id}
+        />
+      );
+    },
+  }),
+  pure([
+    'enabled',
+    'active',
+    'id',
+  ])
+)(ServiceControls);

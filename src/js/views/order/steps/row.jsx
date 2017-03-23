@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import { ORDER_STATES } from '../../../constants/orders';
+import { ALL_ORDER_STATES } from '../../../constants/orders';
+import { Tbody, Tr, Td } from '../../../components/new_table';
 
 import Date from 'components/date';
 
@@ -37,33 +38,33 @@ export default class extends Component {
     if (this.props.stepdata.steps.length === 1) return undefined;
 
     const { name, status } = this.props.stepdata;
-    const { label } = ORDER_STATES.find(o => o.name === this.props.stepdata.status);
+    const { label } = ALL_ORDER_STATES.find(o => o.name === this.props.stepdata.status);
 
     return (
-      <tr onClick={this.handleRowClick}>
-        <td>
+      <Tr onClick={this.handleRowClick}>
+        <Td>
           {this.state.expand && (
             <i className="fa fa-minus-circle" />
           )}
           {!this.state.expand && (
             <i className="fa fa-plus-circle" />
           )}
-        </td>
-        <td>
-            <span className={`label label-${label}`}>
+        </Td>
+        <Td>
+            <span className={`label status-${label}`}>
               { status }
             </span>
-        </td>
-        <td className="name">{ name }</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+        </Td>
+        <Td className="name">{ name }</Td>
+        <Td />
+        <Td />
+        <Td />
+        <Td />
+        <Td />
+        <Td />
+        <Td />
+        <Td />
+      </Tr>
     );
   }
 
@@ -73,40 +74,40 @@ export default class extends Component {
     if (!this.state.expand && count !== 1) return undefined;
 
     return this.props.stepdata.steps.map((step, index) => {
-      const { label } = ORDER_STATES.find(o => o.name === step.stepstatus);
+      const { label } = ALL_ORDER_STATES.find(o => o.name === step.stepstatus);
 
       return (
-        <tr key={index}>
-          <td>{ count === 1 ? '' : '|' }</td>
-          <td>
-            <span className={`label label-${label}`}>
+        <Tr key={index}>
+          <Td>{ count === 1 ? '' : '|' }</Td>
+          <Td>
+            <span className={`label status-${label}`}>
               { step.stepstatus }
             </span>
-          </td>
-          <td className="name">{ step.stepname }</td>
-          <td className="text">{ step.error_type }</td>
-          <td className="text">{ step.custom_status }</td>
-          <td>{ step.ind }</td>
-          <td>{ step.retries }</td>
-          <td>{ this.renderSkip(step.skip) }</td>
-          <td>
+          </Td>
+          <Td className="name">{ step.stepname }</Td>
+          <Td className="text">{ step.error_type }</Td>
+          <Td className="text">{ step.custom_status }</Td>
+          <Td>{ step.ind }</Td>
+          <Td>{ step.retries }</Td>
+          <Td>{ this.renderSkip(step.skip) }</Td>
+          <Td>
             <Date date={step.started} />
-          </td>
-          <td>
+          </Td>
+          <Td>
             <Date date={step.completed} />
-          </td>
-          <td>{ step.subworkflow_instanceid }</td>
-        </tr>
+          </Td>
+          <Td>{ step.subworkflow_instanceid }</Td>
+        </Tr>
       );
     });
   }
 
   render() {
     return (
-      <tbody>
+      <Tbody>
         { this.renderFirstRow() }
         { this.renderRows() }
-      </tbody>
+      </Tbody>
     );
   }
 }

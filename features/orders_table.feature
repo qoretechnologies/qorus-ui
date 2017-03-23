@@ -1,16 +1,5 @@
 Feature: Orders table tests
 
-  Scenario: Table is sorted by started by default
-    Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
-    And "orders" get loaded
-    Then orders are sorted by "Started" "desc"
-
-  Scenario: Table gets sorted by workflow status
-    Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
-    And "orders" get loaded
-    When I click on the "Status" column header
-    Then orders are sorted by "Status" "desc"
-
   Scenario: Blocking single workflow from actions
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     And "orders" get loaded
@@ -40,8 +29,3 @@ Feature: Orders table tests
     And "orders" get loaded
     When I "retry" an order with "RETRY" status
     Then there should be "1" order with "RETRYING" status
-
-
-
-
-

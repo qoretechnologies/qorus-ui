@@ -5,9 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
-import withSort from '../../hocomponents/sort';
 import Icon from '../../components/icon';
-import { sortDefaults } from '../../constants/sort';
 import Row from './row';
 import actions from '../../store/api/actions';
 
@@ -22,8 +20,8 @@ type Props = {
   date: string,
   select: Function,
   updateDone: Function,
-  setAutostart: Function,
   expanded: boolean,
+  canLoadMore: boolean,
 };
 
 const WorkflowsTable: Function = ({
@@ -37,10 +35,19 @@ const WorkflowsTable: Function = ({
   date,
   select,
   updateDone,
-  setAutostart,
   expanded,
+  canLoadMore,
 }: Props): React.Element<any> => (
-  <Table striped hover condensed>
+  <Table
+    striped
+    hover
+    condensed
+    fixed
+    className="resource-table"
+    marginBottom={canLoadMore ? 40 : 0}
+    // Another Firefox hack, jesus
+    key={new Date()}
+  >
     <Thead>
       <Tr
         sortData={sortData}
@@ -49,24 +56,24 @@ const WorkflowsTable: Function = ({
         <Th className="narrow" />
         <Th className="narrow">-</Th>
         <Th className="narrow">Actions</Th>
-        <Th className="col-autostart" name="autostart">Autostart</Th>
+        <Th className="medium" name="autostart">Autostart</Th>
         <Th className="narrow" name="has_alerts">
           <Icon icon="warning" />
         </Th>
         <Th className="narrow" name="exec_count">Execs</Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
-        <Th className="narrow" name="version">Version</Th>
+        <Th className="normal" name="version">Version</Th>
         { states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}
-            className="narrow"
+            className={expanded ? 'narrow' : 'medium'}
             name={!expanded ? `GROUPED_${state.name}` : state.name}
           >{ state.short }</Th>
         ))}
-        <Th className="narrow">TOTAL</Th>
+        <Th className="medium" name="TOTAL">TOTAL</Th>
         { deprecated && (
-          <Th className="narrow">Deprecated</Th>
+          <Th className="medium" name="deprecated">Deprecated</Th>
         )}
       </Tr>
     </Thead>
@@ -79,7 +86,6 @@ const WorkflowsTable: Function = ({
           date={date}
           select={select}
           updateDone={updateDone}
-          setAutostart={setAutostart}
           states={states}
           showDeprecated={deprecated}
           expanded={expanded}
@@ -94,12 +100,10 @@ export default compose(
   connect(
     () => ({}),
     {
-      setAutostart: actions.workflows.setAutostart,
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
     }
   ),
-  withSort('workflows', 'collection', sortDefaults.workflows),
   pure([
     'sortData',
     'expanded',

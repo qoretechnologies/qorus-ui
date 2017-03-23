@@ -72,16 +72,19 @@ export default class Order extends Component {
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     const { id } = this.props.params;
 
-    const order = await this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    this.fetch(id);
+  }
 
-    this.props.dispatch(
-      actions.workflows.fetch({}, order.payload.workflowid)
-    );
+  componentWillReceiveProps(nextProps: Object) {
+    const { id } = this.props.params;
+    const { id: nextId } = nextProps.params;
+
+    if (parseInt(id, 10) !== parseInt(nextId, 10)) {
+      this.fetch(nextId);
+    }
   }
 
   componentWillUnmount() {
@@ -91,6 +94,24 @@ export default class Order extends Component {
 
     this.props.dispatch(
       actions.workflows.unsync()
+    );
+  }
+
+  fetch: Function = async (id: number): void => {
+    this.props.dispatch(
+      actions.orders.unsync()
+    );
+
+    this.props.dispatch(
+      actions.workflows.unsync()
+    );
+
+    const order = await this.props.dispatch(
+      actions.orders.fetch({}, id)
+    );
+
+    this.props.dispatch(
+      actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
     );
   }
 
@@ -125,20 +146,20 @@ export default class Order extends Component {
         </div>
         <div className="row tab-pane">
           <div className="col-xs-12">
-            {React.Children.map(
+            {React.cloneElement(
               this.props.children,
-              child => React.cloneElement(
-                child,
-                { createElement: (Comp, props) => (
-                  <Comp {...{
-                    ...props,
-                    order: this.props.order,
-                    workflow: this.props.workflow,
-                    dispatch: this.props.dispatch,
-                  }}
+              {
+                createElement: (Comp, props) => (
+                  <Comp
+                    {...{
+                      ...props,
+                      order: this.props.order,
+                      workflow: this.props.workflow,
+                      dispatch: this.props.dispatch,
+                    }}
                   />
-                ) }
-              )
+                ),
+              }
             )}
           </div>
         </div>

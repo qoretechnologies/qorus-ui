@@ -21,21 +21,25 @@
 
   &__box {
     &:not(.diagram__box--start) .link {
-      font-family: FontAwesome;
-      font-size: 18px;
+      font-size: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      fill: #337ab7;
+      text-decoration: underline;
+    }
+
+    &.clickable {
       cursor: pointer;
     }
 
     > rect,
-    > ellipse { /* [4] */
-      fill: #fff;
-      stroke: rgba(0, 0, 0, .2);
+    > ellipse {
+      stroke: #666;
+      stroke-width: 1;
     }
 
     > text { /* [5] */
-      fill: #000;
-
-      font-size: 16px;
+      font-size: 10px;
       font-weight: bold;
 
       text-anchor: middle;
@@ -78,7 +82,8 @@
       fill: #9ec251;
     }
 
-    &--info > rect {
+    &--info > rect,
+    &--async > rect {
       fill: #75abc6;
     }
 

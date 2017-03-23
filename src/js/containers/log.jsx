@@ -4,15 +4,11 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
-import includes from 'lodash/includes';
-import flowRight from 'lodash/flowRight';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import websocket from '../hocomponents/websocket';
-import search from '../hocomponents/search';
 import * as actions from '../store/log/actions';
-import { querySelector } from '../selectors';
 import Log from '../components/log';
 import { DEFAULTSTATE, LABELS } from '../constants/log';
 
@@ -21,30 +17,11 @@ const dataSelector: Function = (
   props: Object
 ): Object => state.log.data[props.url] || DEFAULTSTATE;
 
-const filterMessages: Function = (
-  query: string
-): Function => (
-  messages: Array<string>
-): Array<string> => (
-  query ? messages.filter((m:string) => includes(m, query)) : messages
-);
-
-const messagesSelector: Function = createSelector(
-  [
-    dataSelector,
-    querySelector('logQuery'),
-  ], (data, query) => flowRight(
-    filterMessages(query)
-  )(data.messages)
-);
-
 const containerSelector: Function = createSelector(
   [
-    messagesSelector,
-    querySelector('logQuery'),
-  ], (messages, query) => ({
+    dataSelector,
+  ], ({ messages }) => ({
     messages,
-    query,
   })
 );
 
@@ -96,6 +73,5 @@ export default compose(
         this.props.calculateHeight();
       });
     },
-  }),
-  search('logQuery')
+  })
 )(Log);

@@ -1,277 +1,148 @@
-import React, { Component, PropTypes } from 'react';
-
-// utils
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import withProps from 'recompose/withProps';
+import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flowRight } from 'lodash';
-import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import { setTitle } from '../../helpers/document';
+import actions from '../../store/api/actions';
+import { querySelector, resourceSelector } from '../../selectors';
+import { findBy } from '../../helpers/search';
+import withSort from '../../hocomponents/sort';
+import loadMore from '../../hocomponents/loadMore';
+import patch from '../../hocomponents/patchFuncArgs';
+import sync from '../../hocomponents/sync';
+import selectable from '../../hocomponents/selectable';
+import withCSV from '../../hocomponents/csv';
 import { sortDefaults } from '../../constants/sort';
-
-// data
-import actions from 'store/api/actions';
-import sort from '../../hocomponents/sort';
-
-// components
-import Loader from 'components/loader';
-import { Control as Button } from 'components/controls';
-
-// partials
 import GroupsToolbar from './toolbar';
 import GroupsTable from './table';
 import GroupsDetail from './detail';
+import { Control } from '../../components/controls';
 
-import { findBy } from '../../helpers/search';
-
-const filterSearch = (search) => (groups) =>
-  findBy(['name', 'description'], search, groups);
-
-const groupsSelector = state => {
-  const groups = state.api.groups;
-  const updatedData = groups.data.map(d => {
-    const newData = d;
-
-    newData.workflows_count = newData.workflows.length;
-    newData.jobs_count = newData.jobs.length;
-    newData.services_count = newData.services.length;
-    newData.vmaps_count = newData.vmaps.length;
-    newData.roles_count = newData.roles.length;
-    newData.mappers_count = newData.mappers.length;
-
-    return newData;
-  });
-
-  return { ...groups, ...{ data: updatedData } };
+type Props = {
+  sortData: Object,
+  onSortChange: Function,
+  groups: Array<Object>,
+  selected: string,
+  selectedIds: Array<number>,
+  onCSVClick: Function,
+  location: Object,
+  group?: Object,
+  canLoadMore: boolean,
+  handleLoadMore: Function,
+  limit: number,
 };
 
-const searchSelector = (state, props) => props.location.query.q;
+const GroupsView: Function = ({
+  selected,
+  selectedIds,
+  onCSVClick,
+  location,
+  groups,
+  sortData,
+  onSortChange,
+  group,
+  limit,
+  canLoadMore,
+  handleLoadMore,
+}: Props): React.Element<any> => (group ? (
+  <GroupsDetail
+    {...group}
+  />
+) : (
+  <div>
+    <GroupsToolbar
+      selected={selected}
+      selectedIds={selectedIds}
+      onCSVClick={onCSVClick}
+      location={location}
+    />
+    <GroupsTable
+      collection={groups}
+      sortData={sortData}
+      onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
+    />
+    { canLoadMore && (
+      <Control
+        label={`Load ${limit} more...`}
+        btnStyle="success"
+        big
+        onClick={handleLoadMore}
+      />
+    )}
+  </div>
+));
 
-const collectionSelector = createSelector(
+const filterGroups: Function = (search: string) => (groups: Array<Object>): Array<Object> => (
+  findBy(['name', 'description'], search, groups)
+);
+
+const transformGroups: Function = (groups: Array<Object>): Array<Object> => (
+  groups.map((group: Object): Object => (
+    { ...group, ...{
+      workflows_count: group.workflows.length,
+      jobs_count: group.jobs.length,
+      services_count: group.services.length,
+      vmaps_count: group.vmaps.length,
+      roles_count: group.roles.length,
+      mappers_count: group.mappers.length,
+    } }
+  ))
+);
+
+const groupsSelector: Function = createSelector(
   [
-    searchSelector,
-    groupsSelector,
-  ],
-  (search, groups) => flowRight(
-    filterSearch(search),
+    resourceSelector('groups'),
+    querySelector('search'),
+  ], (groups: Object, search: string) => compose(
+    filterGroups(search),
+    transformGroups
   )(groups.data)
 );
 
-const viewSelector = createSelector(
+const selector: Function = createSelector(
   [
+    resourceSelector('groups'),
+    querySelector('group'),
     groupsSelector,
-    collectionSelector,
-  ],
-  (groups, collection) => ({
-    sync: groups.sync,
-    loading: groups.loading,
-    collection,
+  ], (meta: Object, group: string, groups: Array<Object>): Object => ({
+    meta,
+    groups,
+    group,
   })
 );
 
-@compose(
-  connect(viewSelector),
-  sort(
+export default compose(
+  connect(
+    selector,
+    {
+      load: actions.groups.fetch,
+    }
+  ),
+  withSort('groups', 'groups', sortDefaults.groups),
+  loadMore('groups', 'groups', true, 50),
+  withProps({
+    fetchParams: { no_synthetic: true },
+  }),
+  patch('load', ['fetchParams']),
+  sync('meta'),
+  mapProps(({ group, groups, ...rest }): Props => ({
+    group: group ? groups.find((grp: Object): boolean => grp.name === group) : null,
+    groups,
+    ...rest,
+  })),
+  selectable('groups'),
+  withCSV('groups', 'groups'),
+  pure([
+    'group',
     'groups',
-    'collection',
-    sortDefaults.groups
-  )
-)
-export default class Workflows extends Component {
-  static propTypes = {
-    dispatch: PropTypes.func,
-    instanceKey: PropTypes.string,
-    collection: PropTypes.array,
-    sync: PropTypes.bool,
-    loading: PropTypes.bool,
-    sortData: PropTypes.object,
-    onSortChange: PropTypes.func,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    location: PropTypes.object,
-    onFilterClick: PropTypes.func,
-    filterFn: PropTypes.func,
-    onSearchChange: PropTypes.func,
-    clearSelection: PropTypes.func,
-    onDataFilterChange: PropTypes.func,
-    setSelectedData: PropTypes.func,
-    onBatchAction: PropTypes.func,
-    selectedData: PropTypes.object,
-    selected: PropTypes.string,
-    onAllClick: PropTypes.func,
-    onNoneClick: PropTypes.func,
-    onInvertClick: PropTypes.func,
-    onCSVClick: PropTypes.func,
-    offset: PropTypes.number,
-    limit: PropTypes.number,
-  };
-
-  static defaultProps = {
-    limit: 100,
-    offset: 0,
-  };
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-    getTitle: PropTypes.func.isRequired,
-  };
-
-  static childContextTypes = {
-    location: PropTypes.object,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    dispatch: PropTypes.func,
-  };
-
-  getChildContext() {
-    return {
-      location: this.props.location,
-      params: this.props.params,
-      route: this.props.route,
-      dispatch: this.props.dispatch,
-    };
-  }
-
-  componentWillMount() {
-    const offset = this.props.offset;
-    const limit = this.props.limit;
-
-    this.setState({
-      limit,
-      offset,
-      fetchMore: false,
-      sortBy: 'enabled',
-      sortByKey: 1,
-      historySortBy: 'name',
-      historySortByKey: -1,
-    });
-
-    this.fetchData(this.props, { limit, offset, fetchMore: false });
-  }
-
-  componentDidMount() {
-    setTitle(`Groups | ${this.context.getTitle()}`);
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.offset !== nextState.offset) {
-      this.fetchData(nextProps, nextState);
-    }
-  }
-
-  componentDidUpdate() {
-    setTitle(`Groups | ${this.context.getTitle()}`);
-  }
-
-  /**
-   * Fetches the orders based on workflowid and
-   * the date provided
-   */
-  fetchData(props, state) {
-    props.dispatch(
-      actions.groups.fetch({
-        offset: state.offset,
-        limit: state.limit,
-        fetchMore: state.fetchMore,
-        no_synthetic: 1,
-      })
-    );
-  }
-
-  /**
-   * Handles the batch action calls like
-   * enabling, disabling, reseting etc
-   * of multiple workflows
-   *
-   * @param {String} type
-   */
-  handleBatchAction = (type) => {
-    let selectedData = [];
-
-    Object.keys(this.props.selectedData).forEach(w => {
-      if (this.props.selectedData[w]) {
-        selectedData.push(w);
-      }
-    });
-
-    selectedData = selectedData.map(s => (
-      this.props.collection.find(c => c.id === parseInt(s, 10)).name
-    ));
-
-    this.props.clearSelection();
-    this.props.dispatch(
-      actions.groups[`${type}Batch`](selectedData)
-    );
-  };
-
-  handleCSVClick = () => {
-    this.props.onCSVClick(this.props.collection, 'groups');
-  };
-
-  handleLoadMoreClick = () => {
-    const offset = this.state.offset + this.props.limit;
-    const limit = this.state.limit;
-
-    this.setState({
-      offset,
-      limit,
-      fetchMore: true,
-    });
-  };
-
-  renderLoadMore() {
-    if (this.props.collection.length < (this.state.limit + this.state.offset)) return undefined;
-
-    return (
-      <Button
-        big
-        btnStyle="success"
-        label="Load more..."
-        action={this.handleLoadMoreClick}
-      />
-    );
-  }
-
-  render() {
-    if (!this.props.sync || this.props.loading) {
-      return <Loader />;
-    }
-
-    if (this.props.params.id) {
-      const groupName = this.props.params.id.toLowerCase();
-      const group = this.props.collection.find(c => c.name.toLowerCase() === groupName);
-      return (
-        <GroupsDetail group={group} />
-      );
-    }
-
-    return (
-      <div>
-        <GroupsToolbar
-          onFilterClick={this.props.onFilterClick}
-          onSearchUpdate={this.props.onSearchChange}
-          selected={this.props.selected}
-          defaultSearchValue={this.props.location.query.q}
-          params={this.props.params}
-          batchAction={this.handleBatchAction}
-          onAllClick={this.props.onAllClick}
-          onNoneClick={this.props.onNoneClick}
-          onInvertClick={this.props.onInvertClick}
-          onCSVClick={this.handleCSVClick}
-        />
-        <div className="table--flex">
-          <GroupsTable
-            initialFilter={this.props.filterFn}
-            onDataFilterChange={this.props.onDataFilterChange}
-            setSelectedData={this.props.setSelectedData}
-            selectedData={this.props.selectedData}
-            onSortChange={this.props.onSortChange}
-            sortData={this.props.sortData}
-            collection={this.props.collection}
-          />
-          { this.renderLoadMore() }
-        </div>
-      </div>
-    );
-  }
-}
+    'sortData',
+    'selected',
+    'selectedIds',
+    'canLoadMore',
+  ])
+)(GroupsView);

@@ -47,9 +47,9 @@ const findElementByValue = (browser, selector, text) => browser.queryAll(selecto
 
 const instanceColumns = {
   job: {
-    'in-progress': 11,
-    error: 10,
-    complete: 9,
+    'in-progress': 12,
+    error: 11,
+    complete: 10,
   },
   workflow: {
     ready: 9,
@@ -59,8 +59,8 @@ const instanceColumns = {
 
 const nameColumns = {
   workflow: 7,
-  service: 6,
-  job: 4,
+  service: 7,
+  job: 5,
 };
 
 const alertColums = {
@@ -110,6 +110,9 @@ module.exports = function commonSteps() {
     return this.browser.visit(`/${name}`);
   });
 
+  this.Then(/^I should see a preloader$/, async function() {
+    this.browser.assert.element('.preloader');
+  });
 
   this.Then(/^I should see a loader$/, async function() {
     await this.waitForElement('.root__center > section');
@@ -164,12 +167,7 @@ module.exports = function commonSteps() {
       queryAll(cmpRows).
       find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
 
-    await this.browser.pressButton(row.cells[1].childNodes[0]);
-
-    this.detail = {
-      id: findTableRowId(this.browser, name, parseInt(nameCell, 10)),
-      name,
-    };
+    this.browser.pressButton(row.cells[1].childNodes[0]);
   });
 
   // TODO: Why is this "pane" in table??
@@ -188,14 +186,7 @@ module.exports = function commonSteps() {
   this.Then(/^I should see "([^"]*)" details tab$/, async function(name) {
     await this.waitForElement('.pane article');
 
-    this.browser.assert.text(
-      '.pane article h3',
-      new RegExp(`^${this.detail.name}\\b`)
-    );
-    this.browser.assert.text(
-      '.pane article div[class$="__tabs"] > ul.nav > li.active',
-      'Detail'
-    );
+    this.browser.assert.element('.pane');
   });
 
 
@@ -239,24 +230,24 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^all of the "([^"]*)" are selected$/, async function (wf) {
-    this.browser.assert.hasClass('td.narrow.checker > i', 'fa-check-square-o');
+    this.browser.assert.hasClass('td.checker > i', 'fa-check-square-o');
   });
 
   this.When(/^I select one "([^"]*)"$/, function (wf) {
-    this.browser.click('td.narrow > i.fa-square-o:first-of-type');
+    this.browser.click('td.checker > i.fa-square-o:first-of-type');
   });
 
   this.When(/^I deselect all "([^"]*)"$/, function (wf) {
-    this.browser.click('td.narrow > i.fa-check-square-o');
+    this.browser.click('td.checker > i.fa-check-square-o');
   });
 
   this.Then(/^no "([^"]*)" are selected$/, function (wf) {
-    this.browser.assert.hasClass('td.narrow.checker > i', 'fa-square-o');
+    this.browser.assert.hasClass('td.checker > i', 'fa-square-o');
     this.browser.assert.hasClass('#selection > i', 'fa-square-o');
   });
 
   this.Then(/^"([^"]*)" "([^"]*)" are selected$/, function (count, type) {
-    this.browser.assert.elements('td.narrow.checker > i.fa-check-square-o', parseInt(count, 10));
+    this.browser.assert.elements('td.checker > i.fa-check-square-o', parseInt(count, 10));
   });
 
   this.When(/^I click the "([^"]*)" button inside "([^"]*)" dropdown$/, async function(button, dropdown) {
@@ -279,11 +270,12 @@ module.exports = function commonSteps() {
 
   this.Then(/^"([^"]*)" "([^"]*)" are shown$/, async function(workflows, type) {
     await this.waitForChange(4000);
+
     this.browser.assert.elements(`${mainSection} tbody > tr`, parseInt(workflows, 10));
   });
 
   this.When(/^I select "([^"]*)" "([^"]*)"$/, async function (count, type) {
-    const rows = this.browser.queryAll('td.narrow.checker > i.fa-square-o');
+    const rows = this.browser.queryAll('td.checker > i.fa-square-o');
 
     for (let i = 0; i <= count - 1; i++) {
       this.browser.click(rows[i]);
@@ -291,19 +283,21 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^there are "([^"]*)" "([^"]*)" "([^"]*)"$/, async function(count, type, data) {
-    let el;
+    let el = '.this.is.a.non.existent.element';
     let css;
 
     if (type === 'disabled' || type === 'enabled') {
       css = type === 'disabled' ? 'danger' : 'success';
-      el = `td.narrow .btn-${css} i.fa-power-off`;
+      el = `td .btn-${css} i.fa-power-off`;
     } else if (type === 'loaded' || type === 'unloaded') {
       css = type === 'loaded' ? ' .btn-success' : '';
       const icon = type === 'loaded' ? 'check' : 'remove';
-      el = `td.narrow${css} i.fa-${icon}`;
+      el = `td${css} i.fa-${icon}`;
     } else if (type === 'active' || type === 'inactive') {
-      css = type === 'active' ? ' .job-set-inactive' : ' .job-set-active';
-      el = `td.narrow${css}`;
+      css = type === 'active' ? ' i.fa-check' : 'i.fa-ban';
+      el = `td${css}`;
+    } else if (type === 'autostart') {
+      el = 'td button i.fa.fa-pause';
     }
 
     await this.waitForChange(1000);
@@ -354,6 +348,12 @@ module.exports = function commonSteps() {
     return this.browser.pressButton(`form.${formClass} button[type=submit]`);
   });
 
+  this.Then(/^I see invalid user text$/, async function() {
+    const el = findElementByText(this.browser, 'div', 'Invalid user or password');
+
+    return this.browser.assert.element(el);
+  });
+
   this.Then(/^I see "([^"]*)" alert$/, async function(alertType) {
     const elementName = `.alert-${alertType}`;
     await this.waitForElement(elementName);
@@ -366,9 +366,12 @@ module.exports = function commonSteps() {
   });
 
   this.Then(/^I see "([^"]*)" "([^"]*)" items$/, async function(count, selector) {
-    await this.waitForElement(selector);
-    console.log(parseInt(count, 10));
-    this.browser.assert.elements(selector, { exactly: parseInt(count, 10) });
+    if (parseInt(count, 10) === 0) {
+      this.browser.assert.elements(selector, { exactly: 0 });
+    } else {
+      await this.waitForElement(selector);
+      this.browser.assert.elements(selector, { exactly: parseInt(count, 10) });
+    }
   });
 
   this.Then(/^I do not see "([^"]*)" item$/, async function(selector) {

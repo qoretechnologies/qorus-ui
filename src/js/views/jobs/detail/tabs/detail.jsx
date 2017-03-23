@@ -3,15 +3,26 @@ import React from 'react';
 import pure from 'recompose/compose';
 
 import Options from './options';
+import JobControls from '../../controls';
 import { Groups, Group } from '../../../../components/groups';
+import AlertsTable from '../../../../components/alerts_table';
 
 const DetailTab = ({ model }: { model: Object }) => (
   <div>
-    <div className="svc__desc">
-      <p className="text-muted">
-        <em>{model.description}</em>
-      </p>
+    <div>
+      <h4> Schedule </h4>
+      <JobControls
+        scheduleOnly
+        id={model.id}
+        schedText={model.sched_txt}
+        minute={model.minute}
+        hour={model.hour}
+        day={model.day}
+        month={model.month}
+        week={model.wday}
+      />
     </div>
+    <AlertsTable alerts={model.alerts} />
     <Groups>
       {
         (model.groups || []).map(g => (

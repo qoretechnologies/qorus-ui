@@ -37,7 +37,7 @@ const BOX_MIN_WIDTH = 250;
  *
  * It an approximate width of letter "n".
  */
-const BOX_CHARACTER_WIDTH = 10;
+// const BOX_CHARACTER_WIDTH = 10;
 
 /**
  * Ration between width and height.
@@ -84,7 +84,7 @@ const DIAGRAM_MIN_COLUMNS = 3;
 export default class StepsTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
-    order: PropTypes.object.isRequired,
+    order: PropTypes.object,
     onStepClick: PropTypes.func,
   };
 
@@ -93,13 +93,26 @@ export default class StepsTab extends Component {
     closeModal: PropTypes.func.isRequired,
   };
 
+  state: {
+    tooltip?: string,
+    left: number,
+    top: number,
+    width: number,
+    height: number,
+  } = {
+    tooltip: null,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+  };
+
   /**
    * Opens modal with detailed information about clicked step.
    *
    * @param {number} stepId
    */
   onBoxClick = (stepId) => () => {
-    // Given step is expected to have info
     this._modal = (
       <StepModal
         id={stepId}
@@ -379,10 +392,7 @@ export default class StepsTab extends Component {
    * @see BOX_CHARACTER_WIDTH
    */
   getBoxWidth() {
-    return Math.max(
-      BOX_MIN_WIDTH,
-      this.getMaxTextWidth() * BOX_CHARACTER_WIDTH
-    );
+    return BOX_MIN_WIDTH;
   }
 
 
@@ -508,7 +518,9 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    */
   getBoxTopCoord(colIdx) {
-    return this.getBoxHorizontalCenter(colIdx) - this.getBoxWidth() / 2;
+    const top = this.getBoxHorizontalCenter(colIdx);
+
+    return top;
   }
 
 
@@ -521,7 +533,9 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    */
   getBoxLeftCoord(rowIdx) {
-    return this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
+    const left = this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
+
+    return left;
   }
 
 
@@ -586,6 +600,7 @@ export default class StepsTab extends Component {
       y: this.getBoxHeight() / 2,
       style: {
         mask: `url('#${this.getStepDomId(stepId)}')`,
+        pointerEvents: 'none',
       },
     };
   }
@@ -607,10 +622,10 @@ export default class StepsTab extends Component {
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform(colIdx, rowIdx) {
+  getBoxTransform(colIdx, rowIdx, margin = 0) {
     return 'translate(' +
-      `${this.getBoxTopCoord(colIdx)} ` +
-      `${this.getBoxLeftCoord(rowIdx)}` +
+      `${this.getBoxTopCoord(colIdx) - margin} ` +
+      `${this.getBoxLeftCoord(rowIdx) + margin}` +
       ')';
   }
 
@@ -664,14 +679,14 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderStartBox(stepId, colIdx, row, rowIdx) {
-    const instances = this.props.order.StepInstances ?
+    const instances = this.props.order && this.props.order.StepInstances ?
       groupInstances(this.props.order.StepInstances) : {};
     const css = Object.keys(instances).some(i => instances[i].status === 'ERROR')
-      ? 'error' : 'start';
+      ? 'error' : 'normal';
 
     return (
       <g
-        className={`diagram__box diagram__box--${css}`}
+        className={`diagram__box status-${css}-diagram`}
         transform={this.getBoxTransform(colIdx, rowIdx)}
       >
         <ellipse {...this.getStartParams()} />
@@ -705,27 +720,6 @@ export default class StepsTab extends Component {
     );
   }
 
-  renderInfoIcon(id) {
-    const name = this.getStepName(id);
-    const instances = this.props.order.StepInstances ?
-      groupInstances(this.props.order.StepInstances) : {};
-
-    if (!instances[name]) return undefined;
-
-    const handleStepClick = this.handleStepClick(name);
-
-    return (
-      <text
-        {...this.getIconParams(1)}
-        className="link"
-        onClick={handleStepClick}
-      >
-        &#xf05a;
-      </text>
-    );
-  }
-
-
   /**
    * Returns group element for a general step.
    *
@@ -746,38 +740,108 @@ export default class StepsTab extends Component {
    * @see getTextParams
    */
   renderDefaultBox(stepId, colIdx, row, rowIdx) {
-    const onClick = this.onBoxClick(stepId);
-    const type = this.getStepInfo(stepId) ?
-      this.getStepInfo(stepId).steptype :
-      '';
+    const onCodeClick = this.onBoxClick(stepId);
+    const handleMouseOver = (event) => {
+      event.persist();
+      event.stopPropagation();
 
+      if (event.target.tagName === 'rect') {
+        const { left, top, width, height } = event.target.getBoundingClientRect();
+        const tooltip = this.props.workflow.stepinfo.find(step => step.stepid === stepId);
+
+        this.setState({
+          tooltip: tooltip ? tooltip.desc : null,
+          left,
+          top,
+          width,
+          height,
+        });
+      }
+    };
+
+    const handleMouseOut = () => {
+      this.setState({
+        tooltip: null,
+      });
+    };
+
+    const stepInfo = this.getStepInfo(stepId);
+    const type = stepInfo ? stepInfo.steptype : '';
     const name = this.getStepName(stepId);
-    const instances = this.props.order.StepInstances ?
-      groupInstances(this.props.order.StepInstances) : {};
-    const css = instances[name] ?
-        instances[name].status.toLowerCase() : 'normal';
+    let css = type.toLowerCase();
+    let onBoxClick;
+    let instances;
+    let arrayStep = [];
+
+    if (this.props.order) {
+      instances = this.props.order.StepInstances ?
+        groupInstances(this.props.order.StepInstances) : {};
+      css = instances[name] ?
+          instances[name].status.toLowerCase() : 'normal';
+      onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
+
+      if (stepInfo.arraytype !== 'NONE' && instances[name]) {
+        arrayStep = instances[name].steps;
+      }
+    }
 
     return (
-      <g
-        className={classNames({
-          diagram__box: true,
-          [`diagram__box--${css}`]: type,
-        })}
-        transform={this.getBoxTransform(colIdx, rowIdx)}
-      >
-        <rect {...this.getDefaultParams()} />
-        <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
-          {this.getStepFullname(stepId)}
-        </text>
-        { this.renderInfoIcon(stepId) }
-        <text
-          {...this.getIconParams(0)}
-          className="link"
-          onClick={onClick}
+      <svg>
+        {stepInfo.arraytype !== 'NONE' && (
+          <svg>
+            <g
+              className={classNames({
+                diagram__box: true,
+                'status-normal-diagram': true,
+              })}
+              transform={this.getBoxTransform(colIdx, rowIdx, 8)}
+            >
+              <rect {...this.getDefaultParams()} />
+            </g>
+            <g
+              className={classNames({
+                diagram__box: true,
+                'status-normal-diagram': true,
+              })}
+              transform={this.getBoxTransform(colIdx, rowIdx, 4)}
+            >
+              <rect {...this.getDefaultParams()} />
+            </g>
+          </svg>
+        )}
+        <g
+          className={classNames({
+            diagram__box: true,
+            [`status-${css}-diagram`]: css,
+            clickable: instances && instances[name],
+          })}
+          transform={this.getBoxTransform(colIdx, rowIdx)}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+          onClick={onBoxClick}
         >
-          &#xf121;
-        </text>
-      </g>
+          <rect {...this.getDefaultParams()} />
+          <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
+            {this.getStepFullname(stepId)}
+          </text>
+          {stepInfo.arraytype !== 'NONE' && (
+            <text
+              x={15}
+              y={13}
+            >
+              [{arrayStep.length}]
+            </text>
+          )}
+          <text
+            x={225}
+            y={13}
+            className="link"
+            onClick={onCodeClick}
+          >
+            CODE
+          </text>
+        </g>
+      </svg>
     );
   }
 
@@ -840,10 +904,10 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   renderPath(start, end) {
-    const startX = this.getBoxHorizontalCenter(start.colIdx);
+    const startX = this.getBoxHorizontalCenter(start.colIdx) + (this.getBoxWidth() / 2);
     const startY = this.getBoxVerticalCenter(start.rowIdx);
 
-    const endX = this.getBoxHorizontalCenter(end.colIdx);
+    const endX = this.getBoxHorizontalCenter(end.colIdx) + (this.getBoxWidth() / 2);
     const endY = this.getBoxVerticalCenter(end.rowIdx);
 
     const joint =
@@ -919,24 +983,49 @@ export default class StepsTab extends Component {
     );
   }
 
-
   /**
    * Returns element for this component.
    *
    * @return {ReactElement}
    */
   render() {
+    const { tooltip, left, top, width, height } = this.state;
+    const nodes = graph(this.getStepDeps());
+
+    const diaWidth = Math.max(3, nodes.get(ROOT_STEP_ID).width) * (this.getBoxWidth() + BOX_MARGIN);
+
     return (
-      <svg
-        viewBox={`0 0 ${this.getDiagramWidth()} ${this.getDiagramHeight()}`}
-        className="diagram"
+      <div
+        ref={this.wrapperRef}
+        className="diagram-inner"
+        style={{
+          width: diaWidth,
+        }}
       >
-        <defs>
-          {this.renderMasks()}
-        </defs>
-        {this.renderPaths()}
-        {this.renderBoxes()}
-      </svg>
+        { tooltip && (
+          <div
+            className="svg-tooltip"
+            style={{
+              width,
+              left,
+              top: top + height + 10,
+            }}
+          >
+            <div className="svg-tooltip-arrow" />
+            <p><span> Description: </span> { tooltip }</p>
+          </div>
+        )}
+        <svg
+          viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
+          className="diagram"
+        >
+          <defs>
+            {this.renderMasks()}
+          </defs>
+          {this.renderPaths()}
+          {this.renderBoxes()}
+        </svg>
+      </div>
     );
   }
 }

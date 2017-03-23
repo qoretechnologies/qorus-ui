@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react';
 import classNames from 'classnames';
+import pure from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   icon: string,
@@ -15,4 +16,4 @@ const Icon: Function = ({ icon, className, tooltip }: Props): React.Element<any>
   />
 );
 
-export default Icon;
+export default pure(['icon', 'className', 'tooltip'])(Icon);

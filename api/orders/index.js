@@ -227,17 +227,21 @@ module.exports = () => {
     res.status(item ? 200 : 404).json(item);
   });
 
+  router.get('/:id/StepInstances', (req, res) => {
+    res.json([]);
+  });
+
   router.put('/:id', (req, res) => {
     const order = data.find(o => findOrder(req.params.id, o));
     let steps;
 
-    switch (req.body.action) {
+    switch (req.query.action) {
       case 'cancel':
       case 'uncancel':
       case 'block':
       case 'unblock':
       case 'retry':
-        order.workflowstatus = req.body.workflowstatus;
+        order.workflowstatus = req.query.action.toUpperCase();
         break;
       case 'schedule':
         order.workflowstatus = req.body.workflowstatus;
@@ -264,7 +268,31 @@ module.exports = () => {
         break;
     }
 
-    res.json(order);
+    if (req.body.action) {
+      switch (req.body.action) {
+        case 'staticData':
+        case 'dynamicData':
+        case 'updateKeys': {
+          const key = req.body.action === 'updateKeys' ? 'keys' : req.body.action.toLowerCase();
+
+          order[key] = key === 'keys' ? req.body.orderkeys : req.body.newdata;
+          break;
+        }
+        default:
+          if (config.env !== 'test') {
+            process.stderr.write(`Unknown action ${req.body.action}.\n`);
+          }
+          break;
+      }
+    }
+
+    setTimeout(() => {
+      if (req.params.id === '4000') {
+        res.status(409).json({ err: true, desc: 'There was an error' });
+      } else {
+        res.json('OK');
+      }
+    }, 1000);
   });
 
   /**
@@ -275,49 +303,49 @@ module.exports = () => {
   router.put('/', (req, res) => {
     const action = req.query.action;
     const ids = req.query.ids.split(',');
-    let result = [];
 
     switch (action) {
       case 'block':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'BLOCKING';
-          return item;
         });
         break;
       case 'retry':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'RETRYING';
-          return item;
         });
         break;
       case 'cancel':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'CANCELING';
-          return item;
         });
         break;
       case 'unblock':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'UNBLOCKING';
-          return item;
         });
         break;
       case 'uncancel':
-        result = ids.map(id => {
+        ids.forEach(id => {
           const item = data.find(w => findOrder(id, w));
           item.workflowstatus = 'UNCANCELING';
-          return item;
         });
         break;
       default:
         break;
     }
 
-    res.json(result);
+    const retrn = {};
+
+    ids.forEach(id => {
+      retrn[id] = parseInt(id, 10) === 4000 ? 'Error: there was an error' : { success: true };
+    });
+
+    res.json(retrn);
   });
 
   router.post('/:id', (req, res) => {

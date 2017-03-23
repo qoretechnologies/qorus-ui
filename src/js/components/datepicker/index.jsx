@@ -16,6 +16,7 @@ type Props = {
   date: string,
   onApplyDate: (date: string) => void,
   futureOnly?: boolean,
+  noButtons?: boolean,
   applyOnBlur?: boolean,
   placeholder?: string,
   className?: string,
@@ -71,9 +72,18 @@ export default class DatePicker extends Component {
   };
 
   setActiveDate: Function = (activeDate: Object): void => {
-    this.setState({
-      activeDate,
-    });
+    const { hours, minutes } = this.state;
+    const { futureOnly } = this.props;
+    const potentialDate = activeDate;
+
+    potentialDate.minutes(minutes);
+    potentialDate.hours(hours);
+
+    if (!futureOnly || moment().isSameOrBefore(potentialDate)) {
+      this.setState({
+        activeDate,
+      });
+    }
   };
 
   applyDate: Function = (date: string): void => {
@@ -133,6 +143,18 @@ export default class DatePicker extends Component {
     this.applyDate(DATES.ALL);
   };
 
+  handleWeekClick: Function = (): void => {
+    this.applyDate(DATES.WEEK);
+  };
+
+  handleMonthClick: Function = (): void => {
+    this.applyDate(DATES.MONTH);
+  };
+
+  handleThirtyClick: Function = (): void => {
+    this.applyDate(DATES.THIRTY);
+  };
+
   handleNowClick: Function = (): void => {
     this.applyDate(DATES.NOW);
   };
@@ -190,7 +212,7 @@ export default class DatePicker extends Component {
   }
 
   renderControls(): ?React.Element<Controls> {
-    if (this.props.futureOnly) return null;
+    if (this.props.futureOnly || this.props.noButtons) return null;
 
     return (
       <Controls grouped noControls>
@@ -203,16 +225,28 @@ export default class DatePicker extends Component {
         <Dropdown id="date-selection">
           <DropdownControl btnStyle="default" />
           <DropdownItem
-            title="24H"
-            action={this.handle24hClick}
+            title="Now"
+            action={this.handleNowClick}
           />
           <DropdownItem
             title="Today"
             action={this.handleTodayClick}
           />
           <DropdownItem
-            title="Now"
-            action={this.handleNowClick}
+            title="24H"
+            action={this.handle24hClick}
+          />
+          <DropdownItem
+            title="Week"
+            action={this.handleWeekClick}
+          />
+          <DropdownItem
+            title="This month"
+            action={this.handleMonthClick}
+          />
+          <DropdownItem
+            title="30 days"
+            action={this.handleThirtyClick}
           />
         </Dropdown>
       </Controls>

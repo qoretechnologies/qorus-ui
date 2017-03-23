@@ -132,6 +132,43 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
 
         expect(wrapper.find(Item).first().props().marked).to.eql(true);
       });
+
+      it('fires a callback when the dropdown is toggled off', () => {
+        const action = chai.spy();
+        const wrapper = mount(
+          <Dropdown
+            show
+            onHide={action}
+          >
+            <Control>
+              Click me
+            </Control>
+          </Dropdown>
+        );
+
+        wrapper.find(Control).first().simulate('click');
+
+        expect(action).to.have.been.called();
+      });
+
+      it('fires a callback when an item is selected', () => {
+        const action = chai.spy();
+        const wrapper = mount(
+          <Dropdown
+            show
+            onHide={action}
+          >
+            <Item
+              action={() => true}
+              title="Item"
+            />
+          </Dropdown>
+        );
+
+        wrapper.find('span').first().simulate('click');
+
+        expect(action).to.have.been.called();
+      });
     });
 
     describe('Multi select dropdown', () => {

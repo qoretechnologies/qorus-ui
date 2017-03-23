@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Row, Td } from '../../../components/table';
+import { Tr, Td } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
 import DateComponent from '../../../components/date';
 import { getDump, removeDump } from '../../../store/api/resources/valuemaps/actions';
@@ -35,7 +35,7 @@ export default class ValuemapRow extends Component {
     }
   }
 
-  handleRowClick: Function = (): void => {
+  handleDetailClick: Function = (): void => {
     this.props.openPane(this.props.data.id);
   };
 
@@ -57,12 +57,19 @@ export default class ValuemapRow extends Component {
     const { data } = this.props;
 
     return (
-      <Row onClick={this.handleRowClick}>
+      <Tr>
         <Td className="name">{ data.name }</Td>
+        <Td className="narrow">
+          <Button
+            btnStyle="success"
+            label="Detail"
+            action={this.handleDetailClick}
+          />
+        </Td>
         <Td className="text">{ data.description }</Td>
         <Td className="text">{ data.author }</Td>
         <Td><code>{ data.valuetype }</code></Td>
-        <Td>{ data.mapsize }</Td>
+        <Td className="narrow">{ data.mapsize }</Td>
         <Td>
           <DateComponent date={data.created} />
         </Td>
@@ -85,7 +92,7 @@ export default class ValuemapRow extends Component {
             />
           )}
         </Td>
-      </Row>
+      </Tr>
     );
   }
 }

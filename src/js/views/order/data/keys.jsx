@@ -5,11 +5,11 @@ export default function KeysView(props) {
   return (
     <TreeView
       data="keys"
-      params={props.params}
+      order={props.order}
     />
   );
 }
 
 KeysView.propTypes = {
-  params: PropTypes.object,
+  order: PropTypes.object,
 };

@@ -5,11 +5,11 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
 type Props = {
-  resource: string,
+  workflow: Object,
 }
 
 const LogTab: Function = (props: Props): React.Element<any> => (
-  <LogContainer {...props} />
+  <LogContainer resource={`workflows/${props.workflow.id}`} {...props} />
 );
 
 export default compose(

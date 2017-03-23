@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
@@ -12,17 +12,20 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
   describe('Orders: ', () => {
     it('adds a new note', () => {
       const store = createStore(
-        api,
+        combineReducers({ api }),
         {
-          orders: {
-            data: [
-              {
-                id: 1,
-                note_count: 0,
-                notes: [],
-              },
-            ],
-            sync: true,
+          api: {
+            orders: {
+              data: [
+                {
+                  id: 1,
+                  note_count: 0,
+                  notes: [],
+                  HierarchyInfo: {},
+                },
+              ],
+              sync: true,
+            },
           },
         },
         applyMiddleware(
@@ -61,7 +64,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
     it('adds a new order', (done) => {
       const checkMiddleware = str => next => action => {
         const result = next(action);
-        const orders = str.getState().orders.data;
+        const orders = str.getState().api.orders.data;
 
         if (action.type === 'ORDERS_ADDORDER') {
           expect(orders).to.have.length(1);
@@ -78,11 +81,23 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
       };
 
       const store = createStore(
-        api,
+        combineReducers({ api }),
         {
-          orders: {
-            data: [],
-            sync: true,
+          api: {
+            orders: {
+              data: [],
+              sync: true,
+              offset: 0,
+              limit: 50,
+            },
+            workflows: {
+              data: [
+                {
+                  id: 3,
+                },
+              ],
+              sync: true,
+            },
           },
         },
         applyMiddleware(
@@ -111,54 +126,50 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
       );
     });
 
-    it('modifies an order', (done) => {
-      const checkMiddleware = str => next => action => {
-        const result = next(action);
-        const orders = str.getState().orders.data;
-
-        if (action.type === 'ORDERS_MODIFYORDER') {
-          expect(orders).to.have.length(1);
-          expect(orders[0].workflowstatus).to.eql('ERROR');
-          expect(orders[0].modified).to.eql('Then');
-          expect(orders[0]._updated).to.eql(true);
-
-          done();
-        }
-
-        return result;
-      };
-
+    it('modifies an order', () => {
       const store = createStore(
-        api,
+        combineReducers({ api }),
         {
-          orders: {
-            data: [],
-            sync: true,
+          api: {
+            orders: {
+              data: [
+                {
+                  id: 123,
+                  workflowid: 3,
+                  workflow_instanceid: 123,
+                  name: 'TEST WORKFLOW',
+                  workflowstatus: 'RETRY',
+                  version: '1.0',
+                  HierarchyInfo: {},
+                },
+              ],
+              sync: true,
+              offset: 0,
+              limit: 50,
+            },
+            workflows: {
+              data: [
+                {
+                  id: 3,
+                },
+              ],
+            },
           },
         },
         applyMiddleware(
           thunk,
           promise,
-          checkMiddleware
         )
       );
 
-      store.dispatch(
-        events.message(
-          'test',
-          JSON.stringify([{
-            eventstr: 'WORKFLOW_DATA_SUBMITTED',
-            time: 'Now',
-            info: {
-              workflowid: 3,
-              workflow_instanceid: 123,
-              name: 'TEST WORKFLOW',
-              status: 'RETRY',
-              version: '1.0',
-            },
-          }])
-        )
-      );
+      store.subscribe(() => {
+        const orders = store.getState().api.orders.data;
+
+        expect(orders).to.have.length(1);
+        expect(orders[0].workflowstatus).to.eql('ERROR');
+        expect(orders[0].modified).to.eql('Then');
+        expect(orders[0]._updated).to.eql(true);
+      });
 
       store.dispatch(
         events.message(
@@ -172,6 +183,7 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
                 new: 'ERROR',
               },
               workflow_instanceid: 123,
+              workflowid: 3,
             },
           }])
         )
@@ -180,14 +192,17 @@ describe('Orders apievents from store/apievents & store/api/resources/orders', (
 
     it('sets _updated to null', () => {
       const store = createStore(
-        api,
+        combineReducers({ api }),
         {
-          orders: {
-            data: [{
-              id: 123,
-              _updated: true,
-            }],
-            sync: true,
+          api: {
+            orders: {
+              data: [{
+                id: 123,
+                _updated: true,
+                HierarchyInfo: {},
+              }],
+              sync: true,
+            },
           },
         },
         applyMiddleware(

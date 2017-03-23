@@ -5,11 +5,11 @@ export default function StaticView(props) {
   return (
     <TreeView
       data="staticdata"
-      params={props.params}
+      order={props.order}
     />
   );
 }
 
 StaticView.propTypes = {
-  params: PropTypes.object,
+  order: PropTypes.object,
 };

@@ -150,19 +150,34 @@ export function createResourceReducers(
       };
     });
 
-    const inState = resource === 'errors' ?
-    {
-      global: {
+    let initState = iniState;
+
+    if (resource === 'errors') {
+      initState = {
+        global: {
+          data: [],
+          loading: false,
+          sync: false,
+        },
+        workflow: {
+          data: [],
+          loading: false,
+          sync: false,
+        },
+      };
+    } else if (resource === 'orders') {
+      initState = {
         data: [],
-        loading: false,
         sync: false,
-      },
-      workflow: {
-        data: [],
         loading: false,
-        sync: false,
-      },
-    } : Object.assign({}, iniState, resourceOrigin.initialState);
+        offset: 0,
+        limit: 50,
+        sort: 'started',
+        sortDir: true,
+      };
+    }
+
+    const inState = Object.assign({}, initState, resourceOrigin.initialState);
 
     reducers[resource] = handleActions(handlers, inState);
   });

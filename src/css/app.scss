@@ -6,6 +6,18 @@
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
+$status-green: #418e22;
+$status-light-green: lighten($status-green, 30);
+$status-red: #d11f1f;
+$status-light-red: lighten($status-red, 30);
+$status-yellow: #e5d957;
+$status-light-yellow: lighten($status-yellow, 30);
+$status-orange: #f29a3c;
+$status-light-orange: lighten($status-orange, 20);
+$status-blue: #3197e0;
+$status-light-blue: lighten($status-blue, 30);
+$status-gray: #696969;
+$status-light-gray: lighten($status-gray, 30);
 
 @import './buttons';
 @import './tables';
@@ -37,6 +49,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import '../js/components/notifications/style';
 @import '../js/components/code/style';
 @import '../js/components/search/style';
+@import '../js/components/new_table/style';
 @import '../js/containers/mappers/diagram/style';
 
 @import './not-supported';
@@ -51,6 +64,7 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 @import './job';
 @import './jobs';
 @import './alerts';
+@import './auth';
 
 
 
@@ -113,4 +127,53 @@ pre.line-numbers {
 
 .resource-selector {
   float: left;
+}
+
+p.text-component {
+  cursor: zoom-in;
+}
+
+div.text-component {
+  cursor: zoom-out;
+}
+
+
+.main-loading-text {
+  margin-top: 150px;
+  font-family: 'Nunito';
+}
+
+.default-wrapper {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f3f3f3+50,ededed+51,ffffff+100;White+Gloss+%232 */
+  background: rgb(255,255,255); /* Old browsers */
+  background: -moz-linear-gradient(-45deg, rgba(255,255,255,1) 0%, rgba(243,243,243,1) 50%, rgba(237,237,237,1) 51%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(237,237,237,1) 51%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(237,237,237,1) 51%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+svg.preloader {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  margin: auto;
+}
+
+.preloader-rect {
+  fill: none;
+  stroke-width: 8px;
+  stroke: #9ccb3b;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 50%;
+
+  animation: movedash 1.5s forwards 0s infinite;
+}
+
+@keyframes movedash {
+  to {
+    stroke-dashoffset: 250%;
+  }
+}
+
+.preloader-text {
+  font-family: 'Orbitron';
 }

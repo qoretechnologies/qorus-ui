@@ -37,10 +37,10 @@ const ErrorsModal: Function = ({
       >{ data.error || 'Add new error' }</Modal.Header>
       <Modal.Body>
         <div className="form-group">
-          <label htmlFor="errors_modal_type" className="col-sm-4 control-label"> Type </label>
+          <label htmlFor="errors_modal_type" className="col-sm-4 control-label"> Error Code </label>
           <div className="col-sm-6">
             <input
-              id="erros_modal_type"
+              id="errors_modal_type"
               type="text"
               required="required"
               className="form-control"
@@ -68,12 +68,14 @@ const ErrorsModal: Function = ({
             className="col-sm-4 control-label"
           > Severity </label>
           <div className="col-sm-6">
-            <input
-              id="erros_modal_severity"
-              type="text"
+            <select
+              id="errors_modal_severity"
               className="form-control"
               {...severity}
-            />
+            >
+              <option value="WARNING"> WARNING </option>
+              <option value="MAJOR"> MAJOR </option>
+            </select>
           </div>
         </div>
         <div className="form-group">
@@ -83,27 +85,29 @@ const ErrorsModal: Function = ({
           > Retry flag </label>
           <div className="col-sm-6">
             <input
-              id="erros_modal_retry"
+              id="errors_modal_retry"
               type="checkbox"
               value={retry_flag && retry_flag.checked || false}
               {...retry_flag}
             />
           </div>
         </div>
-        <div className="form-group">
-          <label
-            htmlFor="errors_modal_delay"
-            className="col-sm-4 control-label"
-          > Retry delay (secs) </label>
-          <div className="col-sm-6">
-            <input
-              id="erros_modal_delay"
-              type="text"
-              className="form-control"
-              {...retry_delay_secs}
-            />
+        { retry_flag && retry_flag.checked && (
+          <div className="form-group">
+            <label
+              htmlFor="errors_modal_delay"
+              className="col-sm-4 control-label"
+            > Retry delay (secs) </label>
+            <div className="col-sm-6">
+              <input
+                id="erros_modal_delay"
+                type="text"
+                className="form-control"
+                {...retry_delay_secs}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <div className="form-group">
           <label
             htmlFor="errors_modal_bus"

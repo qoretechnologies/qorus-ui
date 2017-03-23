@@ -1,52 +1,45 @@
-import React, { Component, PropTypes } from 'react';
-import { Control } from 'components/controls';
-import { pureRender } from 'components/utils';
-import actions from 'store/api/actions';
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
+import { connect } from 'react-redux';
 
-@pureRender
-export default class GroupControls extends Component {
-  static propTypes = {
-    group: PropTypes.object,
-  };
+import { Controls, Control as Button } from '../../components/controls';
+import actions from '../../store/api/actions';
 
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
+type Props = {
+  enabled: boolean,
+  name: string,
+  action: Function,
+  handleEnableClick: Function,
+};
 
-  dispatchAction(action) {
-    this.context.dispatch(
-      actions.groups[action](this.props.group)
-    );
-  }
+const GroupsControls: Function = ({
+  enabled,
+  handleEnableClick,
+}: Props): React.Element<any> => (
+  <Controls>
+    <Button
+      title={enabled ? 'Disable' : 'Enable'}
+      icon="power-off"
+      btnStyle={enabled ? 'success' : 'danger'}
+      onClick={handleEnableClick}
+    />
+  </Controls>
+);
 
-  handleEnable = () => {
-    this.dispatchAction('enable');
-  };
-
-  handleDisable = () => {
-    this.dispatchAction('disable');
-  };
-
-  render() {
-    return (
-      <div className="btn-controls">
-        {this.props.group.enabled && (
-          <Control
-            title="Disable"
-            icon="power-off"
-            btnStyle="success"
-            action={this.handleDisable}
-          />
-        )}
-        {!this.props.group.enabled && (
-          <Control
-            title="Enable"
-            icon="power-off"
-            btnStyle="danger"
-            action={this.handleEnable}
-          />
-        )}
-      </div>
-    );
-  }
-}
+export default compose(
+  connect(
+    null,
+    {
+      action: actions.groups.groupAction,
+    }
+  ),
+  withHandlers({
+    handleEnableClick: ({ enabled, name, action }: Props): Function => (): void => {
+      action(name, !enabled);
+    },
+  }),
+  pure(['enabled'])
+)(GroupsControls);

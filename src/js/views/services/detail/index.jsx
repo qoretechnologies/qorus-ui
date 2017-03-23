@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import Tabs, { Pane } from 'components/tabs';
 import DetailPane from 'components/pane';
 import ServicesHeader from './header';
-import { DetailTab, MethodsTab } from './tabs';
-import AlertsTable from '../../../components/alerts_table';
+import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
@@ -14,39 +13,29 @@ import actions from 'store/api/actions';
 @connect(
   (state, props) => ({
     service: state.api.services.data.find((service) => service.id === parseInt(props.paneId, 10)),
-  })
+  }), {
+    load: actions.services.fetchLibSources,
+  }
 )
 export default class ServicesDetail extends Component {
   static propTypes = {
-    service: PropTypes.object.isRequired,
+    service: PropTypes.object,
     systemOptions: PropTypes.array.isRequired,
     paneTab: PropTypes.string,
     paneId: PropTypes.string,
     onClose: PropTypes.func,
     location: PropTypes.object,
-    dispatch: PropTypes.func,
     changePaneTab: PropTypes.func,
+    width: PropTypes.number,
+    onResize: PropTypes.func,
   };
 
   componentWillMount() {
-    this.setState({ lastModelId: null });
-    this.loadDetailedDataIfChanged(this.props);
+    this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.loadDetailedDataIfChanged(nextProps);
-  }
-
-  loadDetailedDataIfChanged(props) {
-    if (this.state && this.state.lastModelId === props.service.id) {
-      return;
-    }
-
-    this.setState({ lastModelId: props.service.id });
-
-    this.props.dispatch(
-      actions.services.fetchLibSources(props.service)
-    );
+  handlePaneClose = () => {
+    this.props.onClose(['logQuery']);
   }
 
   getHeight: Function = (): number => {
@@ -65,8 +54,9 @@ export default class ServicesDetail extends Component {
 
     return (
       <DetailPane
-        width={550}
-        onClose={this.props.onClose}
+        width={this.props.width || 550}
+        onClose={this.handlePaneClose}
+        onResize={this.props.onResize}
       >
         <article>
           <ServicesHeader service={service} />
@@ -96,8 +86,11 @@ export default class ServicesDetail extends Component {
             <Pane name="Mappers">
               <MappersTable mappers={service.mappers} />
             </Pane>
-            <Pane name="Alerts">
-              <AlertsTable alerts={service.alerts} />
+            <Pane name="Resources">
+              <ResourceTab
+                resources={service.resources}
+                resourceFiles={service.resource_files}
+              />
             </Pane>
           </Tabs>
         </article>

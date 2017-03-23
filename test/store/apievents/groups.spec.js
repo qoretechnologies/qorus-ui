@@ -1,32 +1,34 @@
 import { expect } from 'chai';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 
 import { getItem } from '../../utils';
 import api from '../../../src/js/store/api';
 import * as events from '../../../src/js/store/apievents/actions';
-import { updateDone } from '../../../src/js/store/api/resources/groups/actions/specials';
+import { updateDone } from '../../../src/js/store/api/resources/groups/actions';
 
 describe('Groups apievents from store/api/apievents & store/api/resources/groups', () => {
   let store;
 
   beforeEach(() => {
     store = createStore(
-      api,
+      combineReducers({ api }),
       {
-        groups: {
-          data: [
-            {
-              name: 'testgroup',
-              enabled: true,
-            },
-            {
-              name: 'anothergroup',
-              enabled: false,
-            },
-          ],
-          sync: true,
+        api: {
+          groups: {
+            data: [
+              {
+                name: 'testgroup',
+                enabled: true,
+              },
+              {
+                name: 'anothergroup',
+                enabled: false,
+              },
+            ],
+            sync: true,
+          },
         },
       },
       applyMiddleware(

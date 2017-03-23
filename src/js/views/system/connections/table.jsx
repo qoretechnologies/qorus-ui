@@ -1,23 +1,26 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
-
+import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
-import classNames from 'classnames';
+import pure from 'recompose/onlyUpdateForKeys';
+import mapProps from 'recompose/mapProps';
 
-import Table, { Cell, Section, Row } from '../../../components/table';
-import { Controls, Control as Button } from '../../../components/controls';
-import AutoComponent from '../../../components/autocomponent';
-import ModalPing from './modals/ping';
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
 import checkNoData from '../../../hocomponents/check-no-data';
 import Icon from '../../../components/icon';
-
 import actions from '../../../store/api/actions';
-import { browserHistory } from 'react-router';
+import withSort from '../../../hocomponents/sort';
+import withLoadMore from '../../../hocomponents/loadMore';
+import { sortDefaults } from '../../../constants/sort';
+import { resourceSelector } from '../../../selectors';
+import withPane from '../../../hocomponents/pane';
+import ConnectionPane from './pane';
+import ConnectionRow from './row';
+import { Control as Button } from '../../../components/controls';
 
 const CONN_MAP: Object = {
   datasources: 'DATASOURCE',
@@ -25,250 +28,135 @@ const CONN_MAP: Object = {
   qorus: 'REMOTE',
 };
 
-const remotesSel: Function = (state: Object): Object => state.api.remotes;
+type Props = {
+  location: Object,
+  load: Function,
+  remotes: Array<Object>,
+  updateDone: Function,
+  handleHighlightEnd: Function,
+  paneId: string,
+  openPane: Function,
+  sortData: Object,
+  onSortChange: Function,
+  params: Object,
+  type: string,
+  canLoadMore?: boolean,
+  handleLoadMore: Function,
+  openModal: Function,
+  closeModal: Function,
+};
+
 const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
   state.api.remotes.data.filter(a =>
     (a.conntype.toLowerCase() === CONN_MAP[props.params.type].toLowerCase())
   )
 );
 
-const activeRowId: Function = (state: Object, props: Object): string => props.params.id;
-
 const viewSelector: Function = createSelector(
   [
-    remotesSel,
+    resourceSelector('remotes'),
     remotesSelector,
-    activeRowId,
   ],
-  (remotes, alerts, rowId) => ({
+  (meta, remotes) => ({
+    meta,
     remotes,
-    collection: alerts,
-    activeRowId: rowId,
   })
 );
 
-class Connections extends Component {
-  static defaultProps = {
-    activeRowId: null,
-  };
+const ConnectionTable: Function = ({
+  sortData,
+  onSortChange,
+  paneId,
+  openPane,
+  remotes,
+  type,
+  canLoadMore,
+  handleLoadMore,
+}: Props): React.Element<any> => (
+  <div>
+    <div className="row">
+      <div className="col-lg-12">
 
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-  };
-
-  props: {
-    activeRowId: string,
-    route: Object,
-    children: any,
-    location: Object,
-    params: Object,
-    load: Function,
-    collection: Array<any>,
-    updateDone: Function,
-  };
-
-  componentWillMount() {
-    this._renderHeadings = this.renderHeadings.bind(this);
-    this._renderHeadingRow = this.renderHeadingRow.bind(this);
-    this._renderRows = this.renderRows.bind(this);
-    this._renderCells = this.renderCells.bind(this);
-  }
-
-  _renderHeadings: ?Function = null;
-  _renderHeadingRow: ?Function = null;
-  _renderRows: ?Function = null;
-  _renderCells: ?Function = null;
-  _modal: ?React.Element<any> = null;
-
-  activateRow: Function= (modelId: number): Function => (ev: EventHandler): void => {
-    if (ev.defaultPrevented) return;
-
-    const shouldDeactivate: boolean = modelId === this.props.activeRowId;
-
-    const urlChunks: Array<any> = this.props.location.pathname.split('/');
-    const url: string = urlChunks.length === 5 ?
-      urlChunks.slice(0, 4).join('/') :
-      urlChunks.join('/');
-
-    if (shouldDeactivate) {
-      browserHistory.push(url);
-    } else {
-      browserHistory.push(`${url}/${modelId}`);
-    }
-  };
-
-  handleOpenModal: Function = (model: Object): Function => (ev: EventHandler): void => {
-    ev.preventDefault();
-
-    this.openModal(model);
-  };
-
-  openModal: Function = (model: Object): void => {
-    this._modal = (
-      <ModalPing
-        model={model}
-        onClose={this.handlecloseModal}
-        type={this.props.params.type}
-      />
-    );
-
-    this.context.openModal(this._modal);
-  };
-
-  handlecloseModal: Function = (): void => {
-    this.context.closeModal(this._modal);
-    this._modal = null;
-  };
-
-  handleHighlightEnd: Function = (name: string): Function => (): void => {
-    this.props.updateDone(name);
-  };
-
-  *renderHeadings(): Generator<*, *, *> {
-    yield (
-      <Cell tag="th" className="narrow">Up</Cell>
-    );
-
-    yield (
-      <Cell tag="th" className="narrow">
-        <i className="fa fa-exclamation-triangle" />
-      </Cell>
-    );
-
-    yield (
-      <Cell tag="th" className="name">Name</Cell>
-    );
-
-    yield (
-      <Cell tag="th" className="desc"> URL </Cell>
-    );
-
-    yield (
-      <Cell tag="th" className="desc">Description</Cell>
-    );
-
-    yield (
-      <Cell tag="th" />
-    );
-  }
-
-  *renderCells({ model }: { model: Object }): Generator<*, *, *> {
-    yield (
-      <Cell className="narrow">
-        <AutoComponent>
-          { model.up }
-        </AutoComponent>
-      </Cell>
-    );
-
-    yield (
-      <Cell className="narrow">
-        {model.alerts.length > 0 &&
-          <Controls>
-            <Button
-              icon="warning"
-              btnStyle="danger"
-              title="Connection has an alert"
-            />
-          </Controls>
-        }
-      </Cell>
-    );
-
-    yield (
-      <Cell className="name nowrap">{ model.name }</Cell>
-    );
-
-    yield (
-      <Cell className="text">{ model.url || '-' }</Cell>
-    );
-
-    yield (
-      <Cell className="align-left nowrap">{ model.desc }</Cell>
-    );
-
-    yield (
-      <Cell className="nowrap align-right">
-        <button
-          className="btn btn-success btn-xs"
-          onClick={this.handleOpenModal(model)}
-          title="Ping connection"
-        >
-           <Icon icon="exchange" /> Ping
-        </button>
-      </Cell>
-    );
-  }
-
-  *renderHeadingRow(): Generator<*, *, *> {
-    yield (
-      <Row cells={this._renderHeadings} />
-    );
-  }
-
-  *renderRows(
-    { activeId, collection }: { activeId: number, collection: Object }
-  ): Generator<*, *, *> {
-    for (const model of collection) {
-      yield (
-        <Row
-          key={model.name}
-          data={{ model }}
-          cells={this._renderCells}
-          onClick={this.activateRow(model.name)}
-          highlight={model._updated}
-          onHighlightEnd={this.handleHighlightEnd(model.name)}
-          className={classNames({
-            info: model.id === activeId,
-          })}
-        />
-      );
-    }
-  }
-
-  render() {
-    const data: Object = {
-      activeId: this.props.params.id,
-      collection: this.props.collection,
-    };
-
-    return (
-      <div className="tab-pane active">
-        <Table
-          data={ data }
-          className="table table-condensed table-fixed table-striped table--data table--align-left"
-        >
-          <Section type="head" rows={this._renderHeadingRow} />
-          <Section type="body" data={ data } rows={this._renderRows} />
-        </Table>
-        { this.props.children }
       </div>
-    );
-  }
-}
-
-Connections.propTypes = {
-  activeRowId: PropTypes.string,
-  route: PropTypes.object,
-  children: PropTypes.node,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  load: PropTypes.func.isRequired,
-  collection: PropTypes.array,
-  updateDone: PropTypes.func,
-};
+    </div>
+    <Table
+      fixed
+      hover
+      striped
+      key={type}
+      marginBottom={canLoadMore ? 40 : 0}
+    >
+      <Thead>
+        <Tr
+          sortData={sortData}
+          onSortChange={onSortChange}
+        >
+          <Th className="narrow" name="up">Up</Th>
+          <Th className="narrow">-</Th>
+          <Th className="tiny">
+            <Icon icon="exclamation-triangle" />
+          </Th>
+          <Th className="name" name="name">Name</Th>
+          {type === 'datasources' ? (
+            <Th className="text">Options</Th>
+          ) : (
+            <Th className="text" name="url">URL</Th>
+          )}
+          <Th className="text" name="desc">Description</Th>
+          <Th className="normal">-</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {remotes.map((remote: Object): React.Element<any> => (
+          <ConnectionRow
+            key={`connection_${remote.name}`}
+            isActive={remote.id === paneId}
+            hasAlerts={remote.alerts.length > 0}
+            openPane={openPane}
+            remoteType={type}
+            {...remote}
+          />
+        ))}
+      </Tbody>
+    </Table>
+    {canLoadMore && (
+      <Button
+        label="Load 30 more..."
+        btnStyle="success"
+        onClick={handleLoadMore}
+        big
+      />
+    )}
+  </div>
+);
 
 export default compose(
   connect(
     viewSelector,
     {
       load: actions.remotes.fetch,
-      updateDone: actions.remotes.updateDone,
     }
   ),
   defaultProps({ query: { action: 'all' } }),
+  mapProps(({ params, ...rest }: Props): Props => ({
+    type: params.type,
+    params,
+    ...rest,
+  })),
   patch('load', ['query']),
-  sync('remotes'),
-  checkNoData(({ collection }: { collection: Array<Object> }): number => collection.length)
-)(Connections);
+  sync('meta'),
+  checkNoData(({ remotes }: { remotes: Array<Object> }): number => remotes.length),
+  withSort(
+    ({ type }: Props): string => type,
+    'remotes',
+    sortDefaults.remote
+  ),
+  withLoadMore('remotes', 'remotes', true, 50),
+  withPane(ConnectionPane, ['type'], null, 'connections'),
+  pure([
+    'location',
+    'remotes',
+    'paneId',
+    'sortData',
+  ])
+)(ConnectionTable);

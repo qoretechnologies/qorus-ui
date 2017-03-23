@@ -1,86 +1,52 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 import Row from './row';
 import { groupInstances } from '../../../helpers/orders';
-import actions from '../../../store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
+import { Table, Thead, Tr, Th } from '../../../components/new_table';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
+type Props = {
+  order: Object,
+  steps: Object,
+};
+
+const StepsTable: Function = ({
+  steps,
+}: Props): React.Element<Table> => (
+  <Table condensed hover>
+    <Thead>
+      <Tr>
+        <Th className="narrow">-</Th>
+        <Th className="narrow">Status</Th>
+        <Th className="name">Name</Th>
+        <Th>Error Type</Th>
+        <Th>Custom Status</Th>
+        <Th className="narrow">Ind</Th>
+        <Th className="narrow">Retries</Th>
+        <Th className="narrow">Skip</Th>
+        <Th>Started</Th>
+        <Th>Completed</Th>
+        <Th>SubWFL IID</Th>
+      </Tr>
+    </Thead>
+    {Object.keys(steps).map((step: string, index: number): React.Element<Row> => (
+      <Row stepdata={steps[step]} key={index} />
+    ))}
+  </Table>
 );
 
-const selector = createSelector(
-  [
-    orderSelector,
-  ], (order) => ({
+export default compose(
+  mapProps(({ order, ...rest }: Props): Props => ({
     steps: order.StepInstances,
-    errors: order.ErrorInstances,
     order,
-  })
-);
-
-@compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
-  checkNoData((props) => props.steps && Object.keys(props.steps).length)
-)
-export default class StepsView extends Component {
-  static propTypes = {
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
-    steps: PropTypes.array,
-    errors: PropTypes.array,
-    order: PropTypes.object,
-  };
-
-  componentDidMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-  }
-
-  renderTableBody() {
-    const data = groupInstances(this.props.steps);
-
-    return Object.keys(data).map((d, index) => (
-        <Row stepdata={data[d]} key={index} />
-      )
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <table
-          className="table table-striped table-condensed table-hover table-fixed table--data"
-        >
-          <thead>
-            <tr>
-              <th className="narrow"></th>
-              <th className="narrow">Status</th>
-              <th className="narrow">Name</th>
-              <th>Error Type</th>
-              <th>Custom Status</th>
-              <th className="narrow">Ind</th>
-              <th className="narrow">Retries</th>
-              <th className="narrow">Skip</th>
-              <th>Started</th>
-              <th>Completed</th>
-              <th>SubWFL IID</th>
-            </tr>
-          </thead>
-          { this.renderTableBody() }
-        </table>
-      </div>
-    );
-  }
-}
+    ...rest,
+  })),
+  mapProps(({ steps, ...rest }: Props): Props => ({
+    steps: steps && steps.length ? groupInstances(steps) : {},
+    ...rest,
+  })),
+  checkNoData(({ steps }: Object): boolean => steps && Object.keys(steps).length)
+)(StepsTable);

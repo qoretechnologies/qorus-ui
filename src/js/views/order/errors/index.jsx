@@ -8,14 +8,9 @@ import { Control as Button } from 'components/controls';
 import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import CSVModal from './csv';
 import { sortTable, generateCSV } from 'helpers/table';
-import actions from 'store/api/actions';
 import checkNoData from '../../../hocomponents/check-no-data';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
+const orderSelector = (state, props) => props.order;
 
 const transformErrors = order => {
   if (!order.ErrorInstances) return null;
@@ -48,18 +43,11 @@ const selector = createSelector(
 );
 
 @compose(
-  connect(
-    selector,
-    {
-      fetch: actions.orders.fetch,
-    }
-  ),
+  connect(selector),
   checkNoData((props) => props.errors && props.errors.length)
 )
 export default class ErrorsView extends Component {
   static propTypes = {
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
     errors: PropTypes.array,
     steps: PropTypes.array,
     order: PropTypes.object,
@@ -72,10 +60,6 @@ export default class ErrorsView extends Component {
   };
 
   componentWillMount() {
-    const { id } = this.props.params;
-
-    this.props.fetch({}, id);
-
     this.setState({
       limit: 10,
     });

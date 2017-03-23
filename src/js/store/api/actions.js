@@ -19,6 +19,7 @@ import * as rolesActions from './resources/roles/actions';
 import * as permsActions from './resources/perms/actions';
 import * as currentUserActions from './resources/currentUser/actions';
 import * as valuemapsActions from './resources/valuemaps/actions';
+import * as extensionsActions from './resources/extensions/actions';
 
 import {
   combineResourceActions,
@@ -109,15 +110,14 @@ Object.assign(actions.props, propActions);
 
 Object.assign(actions.valuemaps, valuemapsActions);
 
+Object.assign(actions.extensions, extensionsActions);
+
 Object.keys(orderActions.delegates).forEach(a => {
   actions.orders[a] = orderActions.delegates[a](actions);
 });
 Object.assign(actions.orders, orderActions.specials);
 
-Object.keys(groupsActions.delegates).forEach(a => {
-  actions.groups[a] = groupsActions.delegates[a](actions);
-});
-Object.assign(actions.groups, groupsActions.specials);
+Object.assign(actions.groups, groupsActions);
 
 Object.assign(actions.errors, errorActions);
 
@@ -127,11 +127,6 @@ Object.keys(serviceActions.delegates).forEach(a => {
 Object.assign(actions.services, serviceActions.specials);
 
 actions.jobs = { ...actions.jobs, ...jobActions.specials };
-
-Object.keys(jobActions.delegates).forEach(a => {
-  actions.jobs[a] = jobActions.delegates[a](actions);
-});
-
 
 Object.keys(optionActions.delegates).forEach(a => {
   actions.systemOptions[a] = optionActions.delegates[a](actions);

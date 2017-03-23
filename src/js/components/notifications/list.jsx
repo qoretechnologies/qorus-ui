@@ -1,6 +1,8 @@
 /* @flow */
 import React from 'react';
+import { Link } from 'react-router';
 
+import { getAlertObjectLink } from '../../helpers/system';
 import { Control } from '../controls';
 import DateComponent from '../date';
 
@@ -22,25 +24,28 @@ class NotificationList extends React.Component {
     const { title, className, notifications } = this.props;
 
     return (
-      <div className={className}>
-        <h4>{title}</h4>
-        <div className="clear-button-place">
+      <div className={`${className} notifications-group`}>
+        <h4 className="notifications-header">
+          {title}
           <Control
-            btnStyle="primary"
-            className="btn-block clear-button"
+            btnStyle="danger"
+            className="clear-button pull-right"
             onClick={this.clear}
             stopPropagation
-            big
-          >
-            clear
-          </Control>
-        </div>
+            label="Clear"
+          />
+        </h4>
         {notifications.map(item => (
           <div
             key={`notification_${item.alertid}`}
             className="notification"
           >
-            <h5>{item.alert}</h5>
+            <Link
+              to={getAlertObjectLink(item.type, { name: item.name, id: item.id })}
+              title={item.object}
+            >
+              {item.object}
+            </Link>
             <div>
               <strong>Date:</strong>
               {' '}

@@ -7,11 +7,10 @@ import { createSelector } from 'reselect';
 import actions from '../../../store/api/actions';
 import DetailPane from '../../../components/pane';
 import Tabs, { Pane } from '../../../components/tabs';
-import AlertsTab from '../../../components/alerts_table';
 import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import Code from '../../../components/code';
-import StepsTab from './steps_tab';
+import StepsTab from '../../order/diagram/graph';
 import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
@@ -58,6 +57,8 @@ export default class WorkflowsDetail extends Component {
     location: Object,
     loadErrors: Function,
     load: Function,
+    onResize: Function,
+    width: number,
   };
 
   componentWillMount() {
@@ -78,6 +79,17 @@ export default class WorkflowsDetail extends Component {
     this.props.onClose(['globalErrQuery', 'workflowErrQuery']);
   };
 
+  diagramRef = (el: Object) => {
+    if (el) {
+      const copy = el;
+      copy.scrollLeft = el.scrollWidth;
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
+  }
+
   render() {
     const { workflow, systemOptions, paneTab } =
       this.props;
@@ -86,8 +98,9 @@ export default class WorkflowsDetail extends Component {
 
     return (
       <DetailPane
-        width={600}
+        width={this.props.width || 600}
         onClose={this.handleClose}
+        onResize={this.props.onResize}
       >
         <article>
           <WorkflowsHeader workflow={workflow} />
@@ -105,17 +118,25 @@ export default class WorkflowsDetail extends Component {
                 heightUpdater={this.getHeight}
               />
             </Pane>
-            <Pane name="Steps">
-              <StepsTab workflow={workflow} />
+            <Pane
+              name="Steps"
+
+            >
+              <div
+                style={{
+                  height: '100%',
+                  overflow: 'auto',
+                }}
+                ref={this.diagramRef}
+              >
+                <StepsTab workflow={workflow} />
+              </div>
             </Pane>
             <Pane name="Log">
               <LogTab
                 resource={`workflows/${workflow.id}`}
                 location={this.props.location}
               />
-            </Pane>
-            <Pane name="Alerts">
-              <AlertsTab alerts={workflow.alerts} />
             </Pane>
             <Pane name="Errors">
               <ErrorsTab location={this.props.location} workflow={workflow} />

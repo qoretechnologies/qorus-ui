@@ -21,15 +21,6 @@ Feature: Tests various websocket apievents
     And I wait some time
     Then I should see 2 table row with alerts
 
-  @no-impl
-  Scenario: Ongoing alert cleared updates workflow
-    Given I am on "workflows" listing
-    And "workflows" get loaded
-    And I send a ws request for "ALERT_ONGOING_RAISED_WORKFLOW"
-    When I send a ws request for "ALERT_ONGOING_CLEARED_WORKFLOW"
-    And I wait some time
-    Then I should see 1 table row with alerts
-
   Scenario: Ongoing alert cleared updates service
     Given I am on "services" listing
     And "services" get loaded
@@ -60,7 +51,7 @@ Feature: Tests various websocket apievents
     And I wait some time
     Then I should see 2 table row with alerts
 
-  Scenario: Ongoing alert raised updates jobs
+  Scenario: Ongoing alert raised updates remotes
     Given I am on "system/remote/datasources" listing
     And "datasources" get loaded
     When I send a ws request for "ALERT_ONGOING_RAISED_DATASOURCE"
@@ -102,6 +93,12 @@ Feature: Tests various websocket apievents
     When I send a ws request for "SERVICE_START"
     Then there are "1" "unloaded" "services"
 
+  Scenario: Changes service autostart
+    Given I am on "services" listing
+    And "services" get loaded
+    And I send a ws request for "SERVICE_AUTOSTART_CHANGE"
+    Then there are "1" "autostart" "services"
+
   Scenario: Starts a workflow
     Given I am on "workflows" listing
     And "workflows" get loaded
@@ -122,19 +119,19 @@ Feature: Tests various websocket apievents
     Then the "ARRAYTEST" "workflow" has "1" "ready" instances
 
   Scenario: Adds new order instance
-    Given I am on "workflow/14/list/All/all" listing
+    Given I am on "workflow/14/list?date=all" listing
     And "orders" get loaded
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     Then "13" "orders" are shown
 
   Scenario: Does not add new order instance to wrong workflow
-    Given I am on "workflow/132/list/All/all" listing
+    Given I am on "workflow/132/list?date=all" listing
     And "orders" get loaded
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     Then "1" "orders" are shown
-
+  
   Scenario: Modifies existing order instance
-    Given I am on "workflow/14/list/All/all" listing
+    Given I am on "workflow/14/list?date=all" listing
     And "orders" get loaded
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     And I send a ws request for "WORKFLOW_STATUS_CHANGED"
@@ -200,7 +197,7 @@ Feature: Tests various websocket apievents
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=false"
     Then there are "2" "disabled" "groups"
 
-  Scenario: Group is disabled
+  Scenario: Group is enabled
     Given I am on "groups" listing
     And "groups" get loaded
     When I send a ws request for "GROUP_STATUS_CHANGED" event with "enabled=false"

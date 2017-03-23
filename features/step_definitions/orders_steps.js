@@ -29,13 +29,8 @@ module.exports = function orderSteps() {
   this.Then(/^I should see workflow detail page$/, async function() {
     await this.changes();
 
-    const url = this.browser.location.href.split('/');
-
-    expect(url).to.be.an('array');
-    expect(url[3]).to.equal('workflow');
-    expect(url[4]).to.equal('14');
-    expect(url[5]).to.equal('list');
-    expect(url[6]).to.equal('All');
+    this.browser.assert.url({ pathname: '/workflow/14/list' });
+    this.browser.assert.url({ query: { date: '24h' } });
   });
 
   this.Given(/^I am on "([^"]*)" with "([^"]*)" states and "([^"]*)" dates$/, async function(workflow, state, date) {

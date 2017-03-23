@@ -10,6 +10,7 @@ type Props = {
   onSortChange?: Function,
   highlight?: boolean,
   onHighlightEnd?: Function,
+  onClick?: Function,
 }
 
 @updateOnlyForKeys([
@@ -24,8 +25,12 @@ export default class Row extends Component {
   state: {
     highlight: ?boolean,
   } = {
-    highlight: this.props.highlight,
+    highlight: false,
   };
+
+  componentDidMount() {
+    this.startHighlight(this.props.highlight);
+  }
 
   componentWillReceiveProps(nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
@@ -39,8 +44,7 @@ export default class Row extends Component {
   _highlightTimeout = null;
 
   startHighlight: Function = (highlight: boolean): void => {
-    if (highlight) {
-      clearTimeout(this._highlightTimeout);
+    if (highlight && !this._highlightTimeout) {
       this._highlightTimeout = setTimeout(this.stopHighlight, 2500);
 
       this.setState({
@@ -67,10 +71,15 @@ export default class Row extends Component {
       sortData,
       onSortChange,
     } = this.props;
-    const css = classNames({ 'row-highlight': this.state.highlight }, className);
+    const { highlight } = this.state;
 
     return (
-      <tr className={css}>
+      <tr
+        className={classNames({
+          'row-highlight': highlight,
+        }, className)}
+        onClick={this.props.onClick}
+      >
         { sortData && onSortChange ? (
           React.Children.map(children, (child: any, key) => (
             child ? React.cloneElement(child, { key, sortData, onSortChange }) : undefined

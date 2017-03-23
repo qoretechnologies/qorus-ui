@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import Navigation from 'components/navigation';
 import Topbar from 'components/topbar';
 import Footer from 'components/footer';
+import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
 
 import actions from 'store/api/actions';
@@ -170,6 +171,12 @@ export default class Root extends Component {
    * @return {ReactElement}
    */
   render() {
+    const { currentUser, info } = this.props;
+
+    if (!currentUser.sync || !info.sync) {
+      return <Preloader />;
+    }
+
     return (
       <div className="root">
         <Topbar

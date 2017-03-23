@@ -88,14 +88,17 @@ module.exports = () => {
   });
 
   router.put('/:username', (req, res) => {
-    const username = req.params.username;
-    const { roles, name } = req.body;
-    const user = data.find(u => u.username === username);
+    if (req.body.storage) {
+      res.json('OK');
+    } else {
+      const username = req.params.username;
+      const user = data.find(u => u.username === username);
+      const { roles, name } = req.body;
 
-    user.name = name;
-    user.roles = roles;
-
-    res.json(user);
+      user.name = name;
+      user.roles = roles;
+      res.json(user);
+    }
   });
 
   return router;

@@ -15,7 +15,7 @@ Feature: Tests login page
     When I type "fake" in "login" input
     And I type "1234" in "password" input
     And I submit "loginForm" form
-    Then I see "warning" alert
+    Then I see invalid user text
 
   Scenario: Submit right credentials
     Given I am anonymous user
@@ -25,11 +25,3 @@ Feature: Tests login page
     And I submit "loginForm" form
     Then the URL changes to "/system/dashboard/ongoing"
     And "token" exists in localStorage
-
-  Scenario: Submit right credentials and redirect to next page
-    Given I am anonymous user
-    And I am on "login?next=/workflows" page
-    When I type "admin" in "login" input
-    And I type "admin" in "password" input
-    And I submit "loginForm" form
-    Then the URL changes to "/workflows"

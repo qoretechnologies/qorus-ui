@@ -1,89 +1,123 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
 import { Link } from 'react-router';
 
+import withBackHandler from '../../hocomponents/withBackHandler';
 import WorkflowControls from '../workflows/controls';
-import AutoStart from '../../components/autostart';
+import WorkflowAutostart from '../workflows/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
+import Alert from '../../components/alert';
+import Icon from '../../components/icon';
+import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../constants/orders';
 
-import { ORDER_STATES } from '../../constants/orders';
-import actions from 'store/api/actions';
+type Props = {
+  id: number,
+  enabled: boolean,
+  autostart: number,
+  execCount: number,
+  exec_count: number,
+  name: string,
+  version: string,
+  groups: Array<Object>,
+  has_alerts: boolean,
+  alerts: Array<Object>,
+  onBackClick: Function,
+  setAutostart: Function,
+  date: string,
+};
 
-export default class DetailHeader extends Component {
-  static propTypes = {
-    data: PropTypes.object,
-    date: PropTypes.string,
-  };
-
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
-
-  setAutostart = (context, value) => {
-    this.context.dispatch(
-      actions.workflows.setAutostart(context, value)
-    );
-  };
-
-  renderBadges = () => ORDER_STATES.map((o, k) => (
-      this.props.data[o.name] > 0 ?
-        <Badge
-          key={k}
-          label={o.label}
-          val={`${o.short}: ${this.props.data[o.name]}`}
-        /> :
-        undefined
-    ));
-
-  renderGroups = () => this.props.data.groups.map((g, k) => (
-      <Group
-        key={k}
-        name={g.name}
-        size={g.size}
-      />
-    ));
-
-  render() {
-    return (
-      <div className="workflow-header">
-        <div className="row">
-          <div className="col-xs-12">
-            <h3 className="detail-title pull-left">
-              <Link
-                to={`/workflows?date=${this.props.date}`}
-              >
-                <i className="fa fa-angle-left" />
-              </Link>
-              {' '}
-              {this.props.data.name}
-              {' '}
-              <small>{this.props.data.version}</small>
-              {' '}
-              <small>({this.props.data.id})</small>
-            </h3>
-            <div className="pull-right">
-              <WorkflowControls workflow={this.props.data} />
-              <AutoStart
-                context={this.props.data}
-                autostart={this.props.data.autostart}
-                execCount={this.props.data.exec_count}
-                inc={this.setAutostart}
-                dec={this.setAutostart}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="row status-row">
-          <div className="col-xs-12 states">
-            {this.renderBadges()}
-          </div>
-        </div>
-        <div className="row status-row">
-          <div className="col-xs-12 groups">
-            {this.renderGroups()}
-          </div>
+const WorkflowHeader: Function = ({
+  id,
+  enabled,
+  autostart,
+  exec_count: execCount,
+  name,
+  version,
+  groups,
+  has_alerts: hasAlerts,
+  alerts,
+  onBackClick,
+  date,
+  ...rest
+}: Props): React.Element<any> => (
+  <div className="workflow-header">
+    <div className="row">
+      <div className="col-xs-12">
+        <h3 className="detail-title pull-left">
+          <a href="#" onClick={onBackClick}>
+            <Icon icon="angle-left" />
+          </a>
+          {' '}
+          {name}
+          {' '}
+          <small>{version}</small>
+          {' '}
+          <small>({id})</small>
+        </h3>
+        <div className="pull-right">
+          <WorkflowControls
+            id={id}
+            enabled={enabled}
+          />
+          <WorkflowAutostart
+            id={id}
+            autostart={autostart}
+            execCount={execCount}
+            withExec
+          />
         </div>
       </div>
-    );
-  }
-}
+    </div>
+    <div className="row status-row">
+      <div className="col-xs-12 states">
+        {ORDER_STATES.map((o, k) => (
+          rest[o.name] > 0 ?
+            <Badge
+              key={k}
+              className={`status-${o.label}`}
+              val={`${o.short}: ${rest[o.name]}`}
+            /> :
+            undefined
+        ))}
+      </div>
+    </div>
+    <div className="row status-row">
+      <div className="col-xs-12 groups">
+        {groups.map((g, k) => (
+          <Group
+            key={k}
+            name={g.name}
+            size={g.size}
+          />
+        ))}
+      </div>
+    </div>
+    { hasAlerts && (
+      <Alert bsStyle="danger">
+        <i className="fa fa-warning" />
+        <strong> Warning: </strong> this workflow has alerts raised against it
+        that may prevent it from operating properly.
+        {' '}
+        <Link to={`/workflows?date=${date}&paneId=${id}`}>
+          View alerts ({alerts.length}).
+        </Link>
+      </Alert>
+    )}
+  </div>
+);
+
+export default compose(
+  withBackHandler(),
+  pure([
+    ...ORDER_STATES_ARRAY,
+    'alerts',
+    'has_alerts',
+    'enabled',
+    'autostart',
+    'exec_count',
+    '_updated',
+  ])
+)(WorkflowHeader);

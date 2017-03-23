@@ -39,12 +39,11 @@ describe('Table, Sections, Row and Cell from components/table', () => {
 
     it('renders table with predefined classes', () => {
       const wrapper = mount(
-        <Table hover condensed striped fixed />
+        <Table hover condensed striped />
       );
 
       expect(wrapper.find('table').hasClass('table-hover')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-striped')).to.eql(true);
-      expect(wrapper.find('table').hasClass('table-fixed')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-condensed')).to.eql(true);
     });
 
@@ -58,13 +57,33 @@ describe('Table, Sections, Row and Cell from components/table', () => {
       expect(wrapper.find('table').hasClass('table-hover')).to.eql(true);
       expect(wrapper.find('table').hasClass('table-custom')).to.eql(true);
     });
+
+    it('renders table with fixed header and auto height', () => {
+      const wrapper = mount(
+        <Table fixed hover striped className="table-custom">
+          <Thead />
+          <Tbody />
+          <Tfooter />
+        </Table>
+      );
+
+      expect(wrapper.find('div')).to.have.length(4);
+      expect(wrapper.find('tbody').first().props().style.height).to.eql('auto');
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table--data')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-hover')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-custom')).to.eql(true);
+      expect(wrapper.find('.table-body-wrapper table').hasClass('table-striped')).to.eql(true);
+    });
   });
 
   describe('Tbody, Thead and Tfooter', () => {
     it('renders sections', () => {
       const wrapper = mount(
         <Table>
-          <Thead />
+          <Thead>
+            <tr />
+          </Thead>
           <Tbody />
           <Tfooter />
         </Table>
@@ -214,6 +233,7 @@ describe('Table, Sections, Row and Cell from components/table', () => {
       expect(wrapper.find('th').first().hasClass('sort')).to.eql(true);
       expect(wrapper.find('th').first().hasClass('custom-class')).to.eql(true);
       expect(wrapper.find('th').first().hasClass('sort-desc')).to.eql(true);
+      expect(wrapper.find('th').first().hasClass('has-sort')).to.eql(true);
     });
 
     it('runs the provided functions when clicked', () => {

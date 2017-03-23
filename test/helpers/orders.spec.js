@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { canSkip } from '../../src/js/helpers/orders';
+import { canSkip, formatCount } from '../../src/js/helpers/orders';
 
-describe('{ canSkip } from helpers/orders', () => {
+describe('canSkip, formatCount from helpers/orders', () => {
   describe('canSkip', () => {
     it('returns true when the step has type ASYNC has ERROR ' +
       'status and hasnt been skipped yet', () => {
@@ -63,6 +63,38 @@ describe('{ canSkip } from helpers/orders', () => {
       const result = canSkip(step);
 
       expect(result).to.equal(false);
+    });
+  });
+
+  describe('formatCount', () => {
+    it('returns the given number unchanged', () => {
+      const num = formatCount(10);
+
+      expect(num).to.eql(10);
+    });
+
+    it('returns ceiled number below 100000', () => {
+      const num = formatCount(11578);
+
+      expect(num).to.eql('12k');
+    });
+
+    it('returns floored number below 100000', () => {
+      const num = formatCount(11365);
+
+      expect(num).to.eql('11k');
+    });
+
+    it('returns ceiled number above 100000', () => {
+      const num = formatCount(149776);
+
+      expect(num).to.eql('150k');
+    });
+
+    it('returns floored number above 100000', () => {
+      const num = formatCount(173499);
+
+      expect(num).to.eql('173k');
     });
   });
 });

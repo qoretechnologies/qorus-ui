@@ -48,7 +48,7 @@ const Code: Function = ({
 
 export default compose(
   withState('height', 'setHeight', 'auto'),
-  withState('selected', 'setSelected', null),
+  withState('selected', 'setSelected', ({ selected }) => selected || null),
   mapProps(({ heightUpdater, setHeight, setSelected, ...rest }): Object => ({
     calculateHeight: () => setHeight((height: string | number) => (
       heightUpdater ? heightUpdater() : height
@@ -63,14 +63,10 @@ export default compose(
     componentWillMount() {
       this.props.calculateHeight();
 
-      window.addEventListener('resize', () => {
-        this.props.calculateHeight();
-      });
+      window.addEventListener('resize', this.props.calculateHeight);
     },
     componentWillUnmount() {
-      window.removeEventListener('resize', () => {
-        this.props.calculateHeight();
-      });
+      window.removeEventListener('resize', this.props.calculateHeight);
     },
   })
 )(Code);

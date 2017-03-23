@@ -13,6 +13,16 @@ const unSync: Object = {
   },
 };
 
+const updateStorage: Object = {
+  next(state: Object = initialState, { payload: { storage } }: Object): Object {
+    const data: Object = { ...state.data, ...{ storage } };
+
+    return { ...state, ...{ data } };
+  },
+};
+
+
 export {
   unSync as UNSYNCCURRENTUSER,
+  updateStorage as UPDATESTORAGE,
 };

@@ -1,9 +1,10 @@
 import { createAction } from 'redux-actions';
 import queryString from 'query-string';
-
+import isArray from 'lodash/isArray';
 
 import { fetchJson, fetchText, fetchData } from '../../../utils';
 import settings from '../../../../../settings';
+import { error } from '../../../../ui/bubbles/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
 
@@ -108,42 +109,6 @@ const clearResults = createAction(
   ({ id: modelId }) => ({ modelId })
 );
 
-const setExpirationDatePayload = async (job, date, optimistic) => {
-  if (optimistic) {
-    return { ...job, expiry_date: date };
-  }
-
-  const updatedInfo = await fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/jobs/${job.id}`,
-    {
-      body: JSON.stringify({
-        date,
-        action: 'setExpiry',
-      }),
-    }
-  );
-
-  return { ...job, ...updatedInfo };
-};
-
-const setExpirationDateMeta = (job, date, optimistic = false) => ({
-  job,
-  date,
-  optimistic,
-});
-
-const setExpirationDateAction = createAction(
-  'JOBS_SETEXPIRATIONDATE',
-  setExpirationDatePayload,
-  setExpirationDateMeta
-);
-
-const setExpirationDate = (job, date) => dispatch => {
-  dispatch(setExpirationDateAction(job, date, true));
-  dispatch(setExpirationDateAction(job, date));
-};
-
 const fetchCodePayload = async (job) => ({
   code: await fetchText('GET', `${settings.REST_BASE_URL}/jobs/${job.id}/code`),
 });
@@ -152,12 +117,12 @@ const fetchCodeMeta = (job) => ({ job });
 const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
 const setActive = createAction(
   'JOBS_SETACTIVE',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
 );
 
 const setEnabled = createAction(
   'JOBS_SETENABLED',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
 );
 
 const updateDone = createAction(
@@ -172,23 +137,132 @@ const instanceUpdateDone = createAction(
 
 const addInstance = createAction(
   'JOBS_ADDINSTANCE',
-  (data, started) => ({ data, started })
+  (events) => ({ events })
 );
 
 const modifyInstance = createAction(
   'JOBS_MODIFYINSTANCE',
-  (data, modified) => ({ data, modified })
+  (events) => ({ events })
 );
 
 const addAlert = createAction(
   'JOBS_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'JOBS_CLEARALERT',
-  (id, alertid) => ({ id, alertid })
+  (events) => ({ events })
 );
+
+const select = createAction(
+  'JOBS_SELECT',
+  (id) => ({ id })
+);
+
+const jobActionCall = createAction(
+  'JOBS_ACTION',
+  async (action, ids, dispatch) => {
+    const id = isArray(ids) ? ids.join(',') : ids;
+    const url = `${settings.REST_BASE_URL}/jobs?ids=${id}&action=${action}`;
+    const result = await fetchJson('PUT', url, null, true);
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {};
+  }
+);
+
+const jobsAction = (action, ids) => dispatch => {
+  dispatch(jobActionCall(action, ids, dispatch));
+};
+
+const expireAction = createAction(
+  'JOBS_EXPIRE',
+  async (id, date, optimistic, dispatch) => {
+    if (optimistic) return { id, date };
+
+    const result = await fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`,
+      null,
+      true
+    );
+
+    if (result.err) {
+      dispatch(error(result.desc));
+
+      return { error: true, id };
+    }
+
+    return {};
+  }
+);
+
+const expire = (id, date) => dispatch => {
+  dispatch(expireAction(id, date, false, dispatch));
+  dispatch(expireAction(id, date, true, dispatch));
+};
+
+const rescheduleAction = createAction(
+  'JOBS_RESCHEDULE',
+  async (id, {
+    minute,
+    hour,
+    day,
+    month,
+    wday,
+  }, dispatch) => {
+    const cron = `${minute} ${hour} ${day} ${month} ${wday}`;
+    const url = `${settings.REST_BASE_URL}/jobs/${id}?action=schedule&schedule=${cron}`;
+
+    const result = await fetchJson('PUT', url, null, true);
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {
+      id,
+      minute,
+      hour,
+      day,
+      month,
+      wday,
+    };
+  }
+);
+
+const reschedule = (id, cron) => dispatch => {
+  rescheduleAction(id, cron, dispatch);
+};
+
+const activateAction = createAction(
+  'JOBS_ACTIVATE',
+  async (id, active, dispatch) => {
+    const url = `${settings.REST_BASE_URL}/jobs/${id}?action=setActive&active=${!active}`;
+
+    const result = await fetchJson('PUT', url, null, true);
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {};
+  }
+);
+
+const activate = (id, active) => dispatch => {
+  activateAction(id, active, dispatch);
+};
+
+
+const selectAll = createAction('JOBS_SELECTALL');
+const selectNone = createAction('JOBS_SELECTNONE');
+const selectInvert = createAction('JOBS_SELECTINVERT');
+const unsync = createAction('JOBS_UNSYNC');
 
 export {
   setOptions,
@@ -196,7 +270,6 @@ export {
   fetchResults,
   clearResults,
   startFetchingResults,
-  setExpirationDate,
   fetchCode,
   setActive,
   setEnabled,
@@ -206,4 +279,15 @@ export {
   instanceUpdateDone,
   addAlert,
   clearAlert,
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+  unsync,
+  jobsAction,
+  expire,
+  reschedule,
+  rescheduleAction,
+  activate,
+  expireAction,
 };

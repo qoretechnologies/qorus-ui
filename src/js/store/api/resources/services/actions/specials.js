@@ -1,9 +1,9 @@
 import { createAction } from 'redux-actions';
-
+import isArray from 'lodash/isArray';
 
 import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
-
+import { error } from '../../../../ui/bubbles/actions';
 
 function setOptionsPayload(service, name, value) {
   return fetchJson(
@@ -32,15 +32,15 @@ const setOptions = createAction(
 );
 
 
-function fetchLibSourcesPayload(service) {
+function fetchLibSourcesPayload(id) {
   return fetchJson(
     'GET',
-    `${settings.REST_BASE_URL}/services/${service.id}?lib_source=true&method_source=true`
+    `${settings.REST_BASE_URL}/services/${id}?lib_source=true&method_source=true`
   );
 }
 
-function fetchLibSourcesMeta(service) {
-  return { serviceId: service.id };
+function fetchLibSourcesMeta(serviceId) {
+  return { serviceId };
 }
 
 const fetchLibSources = createAction(
@@ -68,12 +68,17 @@ const fetchMethodSources = createAction(
 
 const setStatus = createAction(
   'SERVICES_SETSTATUS',
-  (serviceid, status) => ({ serviceid, status })
+  (events) => ({ events })
 );
 
 const setEnabled = createAction(
   'SERVICES_SETENABLED',
-  (id, value) => ({ id, value })
+  (events) => ({ events })
+);
+
+const setAutostart = createAction(
+  'SERVICES_SETAUTOSTART',
+  (events) => ({ events })
 );
 
 const updateDone = createAction(
@@ -83,13 +88,45 @@ const updateDone = createAction(
 
 const addAlert = createAction(
   'SERVICES_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'SERVICES_CLEARALERT',
-  (id, alertid) => ({ id, alertid })
+  (events) => ({ events })
 );
+
+const select = createAction(
+  'SERVICES_SELECT',
+  (id) => ({ id })
+);
+
+const selectAll = createAction('SERVICES_SELECTALL');
+const selectNone = createAction('SERVICES_SELECTNONE');
+const selectInvert = createAction('SERVICES_SELECTINVERT');
+
+const serviceActionCall = createAction(
+  'SERVICES_ACTION',
+  async (action, ids, autostart, dispatch) => {
+    const id = isArray(ids) ? ids.join(',') : ids;
+    const url = action === 'autostart' ?
+      `${settings.REST_BASE_URL}/services/${id}?action=setAutostart&autostart=${!autostart}` :
+      `${settings.REST_BASE_URL}/services?ids=${id}&action=${action}`;
+    const result = await fetchJson('PUT', url, null, true);
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {};
+  }
+);
+
+const serviceAction = (action, ids, autostart) => dispatch => {
+  serviceActionCall(action, ids, autostart, dispatch);
+};
+
+const unsync = createAction('SERVICES_UNSYNC');
 
 export {
   setOptions,
@@ -97,7 +134,14 @@ export {
   fetchMethodSources,
   setStatus,
   setEnabled,
+  setAutostart,
   updateDone,
   addAlert,
   clearAlert,
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+  serviceAction,
+  unsync,
 };

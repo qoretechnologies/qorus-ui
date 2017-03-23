@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
 import Checkbox from '../../components/checkbox';
@@ -11,7 +12,9 @@ import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import Icon from '../../components/icon';
-import AutoStart from '../../components/autostart';
+import AutoStart from './autostart';
+import { ORDER_STATES_ARRAY } from '../../constants/orders';
+import { formatCount } from '../../helpers/orders';
 
 type Props = {
   isActive?: boolean,
@@ -24,7 +27,6 @@ type Props = {
   handleAutostartChange: Function,
   handleWarningClick: Function,
   updateDone: Function,
-  setAutostart: Function,
   id: number,
   _selected: boolean,
   _updated: boolean,
@@ -46,7 +48,6 @@ const TableRow: Function = ({
   handleCheckboxClick,
   handleDetailClick,
   handleHighlightEnd,
-  handleAutostartChange,
   handleWarningClick,
   id,
   _selected,
@@ -64,7 +65,10 @@ const TableRow: Function = ({
   ...rest
 }: Props): React.Element<any> => (
   <Tr
-    className={isActive ? 'info' : ''}
+    className={classNames({
+      info: isActive,
+      'row-alert': hasAlerts,
+    })}
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
   >
@@ -91,13 +95,12 @@ const TableRow: Function = ({
     <Td
       key="autostart"
       name="autostart"
-      className="narrow"
+      className="medium"
     >
       <AutoStart
+        id={id}
         autostart={autostart}
         execCount={execs}
-        onIncrementClick={handleAutostartChange}
-        onDecrementClick={handleAutostartChange}
       />
     </Td>
     <Td className="narrow">
@@ -117,34 +120,38 @@ const TableRow: Function = ({
     <Td className="name">
       <Link
         className="resource-name-link"
-        to={`/workflow/${id}/list/All/${date}`}
+        to={`/workflow/${id}?date=${date}`}
+        title={name}
       >
         { name }
       </Link>
     </Td>
-    <Td className="narrow">{ version }</Td>
-      {states.map((state: Object, index: number): React.Element<Td> => {
-        const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
-        const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
+    <Td className="normal text">{ version }</Td>
+    {states.map((state: Object, index: number): React.Element<Td> => {
+      const title = !expanded ? rest[`GROUPED_${state.name}_STATES`]: state.title;
+      const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
 
-        return (
-          <Td key={`wf_state_${index}`} className="narrow">
-            <Link
-              className="workflow-status-link"
-              to={`/workflow/${id}/list/${title}/${date}`}
-            >
-              <Badge label={state.label} val={value} />
-            </Link>
-          </Td>
-        );
-      })}
-    <Td className="narrow">
-      <Link to={`/workflow/${id}/list/All/${date}`}>
+      return (
+        <Td key={`wf_state_${index}`} className={expanded ? 'narrow' : 'medium'}>
+          <Link
+            className="workflow-status-link"
+            to={`/workflow/${id}?filter=${title}&date=${date}`}
+          >
+            <Badge
+              className={`status-${state.label}`}
+              val={formatCount(value)}
+            />
+          </Link>
+        </Td>
+      );
+    })}
+    <Td className="medium">
+      <Link to={`/workflow/${id}?date=${date}`}>
         { rest.TOTAL }
       </Link>
     </Td>
     { showDeprecated && (
-      <Td className="narrow">
+      <Td className="medium">
         <Icon icon={deprecated ? 'flag' : 'flag-o'} />
       </Td>
     )}
@@ -162,11 +169,8 @@ export default compose(
     handleDetailClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id);
     },
-    handleAutostartChange: ({ setAutostart, id }: Props): Function => (value: number): void => {
-      setAutostart(id, value);
-    },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id, 'alerts');
+      openPane(id, 'detail');
     },
   }),
   pure([
@@ -181,5 +185,7 @@ export default compose(
     'showDeprecated',
     'deprecated',
     'expanded',
+    'TOTAL',
+    ...ORDER_STATES_ARRAY,
   ])
 )(TableRow);

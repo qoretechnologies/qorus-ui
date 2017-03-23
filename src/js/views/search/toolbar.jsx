@@ -1,108 +1,124 @@
-import React, { Component, PropTypes } from 'react';
-import { omit, debounce } from 'lodash';
+// @flow
+import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import debounce from 'lodash/debounce';
+import omit from 'lodash/omit';
 import moment from 'moment';
 
-import { Control as Button } from 'components/controls';
-import Toolbar from 'components/toolbar';
-import DatePicker from '../../components/datepicker';
+import Toolbar from '../../components/toolbar';
+import Datepicker from '../../components/datepicker';
+import { Controls, Control as Button } from '../../components/controls';
+import Dropdown, { Item, Control } from '../../components/dropdown';
+import { ORDER_STATES } from '../../constants/orders';
+import { formatDate } from '../../helpers/date';
 import { DATE_FORMATS } from '../../constants/dates';
 
+type Props = {
+  mindateQuery: string,
+  changeMindateQuery: Function,
+  maxdateQuery: string,
+  changeMaxdateQuery: Function,
+  filterQuery: string,
+  changeFilterQuery: Function,
+  idsQuery: string,
+  changeIdsQuery: Function,
+  keynameQuery: string,
+  changeKeynameQuery: Function,
+  keyvalueQuery: string,
+  changeKeyvalueQuery: Function,
+  changeAllQuery: Function,
+  defaultDate: string,
+};
+
+@pure([
+  'mindateQuery',
+  'maxdateQuery',
+  'filterQuery',
+  'keyvalueQuery',
+  'keynameQuery',
+  'idsQuery',
+])
 export default class SearchToolbar extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func,
-    ids: PropTypes.string,
-    keyvalue: PropTypes.string,
-    keyname: PropTypes.string,
-    status: PropTypes.string,
-    date: PropTypes.string,
-    maxmodified: PropTypes.string,
-    onCSVClick: PropTypes.func,
+  props: Props;
+
+  state: {
+    mindate: string,
+    maxdate: string,
+    filter: string,
+    ids: string,
+    keyname: string,
+    keyvalue: string,
+    showAdvanced: boolean,
+  } = {
+    mindate: this.props.mindateQuery,
+    maxdate: this.props.maxdateQuery,
+    filter: this.props.filterQuery,
+    ids: this.props.idsQuery,
+    keyname: this.props.keynameQuery,
+    keyvalue: this.props.keyvalueQuery,
+    showAdvanced: !!(this.props.filterQuery || this.props.maxdateQuery),
   };
 
-  componentWillMount() {
-    this.delayedSearch = debounce((data) => {
-      this.props.onSubmit(data);
-    }, 280);
-
-    this.setState({
-      datetype: 'Modified',
-    });
-
-    this.setUp(this.props, {});
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.ids !== nextProps.ids ||
-        this.props.keyvalue !== nextProps.keyvalue ||
-        this.props.keyname !== nextProps.keyname ||
-        this.props.status !== nextProps.status ||
-        this.props.maxmodified !== nextProps.maxmodified ||
-        this.props.date !== nextProps.date) {
-      this.setUp(nextProps, this.state);
+  componentDidUpdate(prevProps: Object, prevState: Object) {
+    if (omit(prevState, ['showAdvanced']) !== omit(this.state, ['showAdvanced'])) {
+      this._delayedSearch(omit(this.state, ['showAdvanced']));
     }
   }
 
-  setUp = (props, state) => {
-    const date = !props.date || props.date === '' ?
-      moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
-      props.date;
+  _delayedSearch: Function = debounce((data: Object) => {
+    this.props.changeAllQuery(data);
+  }, 280);
 
+  handleAdvancedClick: Function = (): void => {
+    if (this.state.showAdvanced) {
+      this.setState({
+        maxdate: '',
+        filter: '',
+        showAdvanced: false,
+      });
+    } else {
+      this.setState({
+        showAdvanced: true,
+      });
+    }
+  };
+
+  handleClearClick: Function = (): void => {
     this.setState({
-      ids: props.ids,
-      keyvalue: props.keyvalue,
-      keyname: props.keyname,
-      status: props.status,
-      date,
-      maxmodified: props.maxmodified,
-      advanced: state.advanced ||
-                props.status ||
-                props.maxmodified,
+      mindate: this.props.defaultDate,
+      maxdate: '',
+      filter: '',
+      ids: '',
+      keyname: '',
+      keyvalue: '',
     });
   };
 
-  handleInputChange = (type) => (event) => {
-    const state = {
-      [type]: type === 'date' || type === 'maxmodified' ? event : event.target.value,
-    };
+  handleMinDateChange: Function = (mindate: string): void => {
+    const date = formatDate(mindate);
 
-    this.setState(state);
-    this.delayedSearch(omit(Object.assign({}, this.state, state), ['advanced', 'datetype']));
+    this.setState({ mindate: moment(date).format(DATE_FORMATS.URL_FORMAT) });
   };
 
-  handleSwitchClick = () => {
-    this.setState({
-      advanced: !this.state.advanced,
-    });
+  handleMaxDateChange: Function = (maxdate: string): void => {
+    this.setState({ maxdate });
   };
 
-  renderAdvanced() {
-    if (!this.state.advanced) return undefined;
+  handleFilterChange: Function = (value: Array<string>): void => {
+    this.setState({ filter: value[0] === 'All' ? '' : value.join(',') });
+  };
 
-    return (
-      <div className="form-group">
-        <div className="pull-left">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Status..."
-            onChange={this.handleInputChange('status')}
-            value={this.state.status || ''}
-            id="status"
-          />
-        </div>
-        <div className="pull-left">
-          <DatePicker
-            placeholder="Max date..."
-            date={this.state.maxmodified}
-            onApplyDate={this.handleInputChange('maxmodified')}
-            applyOnBlur
-            futureOnly
-            id="maxdate"
-          />
-        </div>
-      </div>
-    );
-  }
+  handleIdsChange: Function = (event: EventHandler): void => {
+    this.setState({ ids: event.target.value });
+  };
+
+  handleKeynameChange: Function = (event: EventHandler): void => {
+    this.setState({ keyname: event.target.value });
+  };
+
+  handleKeyvalueChange: Function = (event: EventHandler): void => {
+    this.setState({ keyvalue: event.target.value });
+  };
 
   render() {
     return (
@@ -111,62 +127,92 @@ export default class SearchToolbar extends Component {
           <div className="form-group search-toolbar">
             <div className="pull-left">
               <input
-                className="form-control"
+                className="form-control search-input"
                 type="text"
                 placeholder="Instance ID..."
-                onChange={this.handleInputChange('ids')}
+                onChange={this.handleIdsChange}
                 value={this.state.ids || ''}
                 id="instance-id"
               />
             </div>
             <div className="pull-left">
               <input
-                className="form-control"
+                className="form-control search-input"
                 type="text"
                 placeholder="Keyname"
-                onChange={this.handleInputChange('keyname')}
+                onChange={this.handleKeynameChange}
                 value={this.state.keyname || ''}
                 id="keyname"
               />
             </div>
             <div className="pull-left">
               <input
-                className="form-control"
+                className="form-control search-input"
                 type="text"
                 placeholder="Keyvalue"
-                onChange={this.handleInputChange('keyvalue')}
+                onChange={this.handleKeyvalueChange}
                 value={this.state.keyvalue || ''}
                 id="keyvalue"
               />
             </div>
             <div className="pull-left">
-              <DatePicker
+              <Datepicker
                 placeholder="Min date..."
-                date={this.state.date}
-                onApplyDate={this.handleInputChange('date')}
+                date={this.state.mindate}
+                onApplyDate={this.handleMinDateChange}
                 applyOnBlur
-                futureOnly
                 id="mindate"
               />
             </div>
+            {this.state.showAdvanced && (
+              <div className="pull-left">
+                <Datepicker
+                  placeholder="Max date..."
+                  date={this.state.maxdate}
+                  onApplyDate={this.handleMaxDateChange}
+                  applyOnBlur
+                  noButtons
+                  id="maxdate"
+                />
+              </div>
+            )}
+            {this.state.showAdvanced && (
+              <Dropdown
+                id="filters"
+                multi
+                def="All"
+                onSubmit={this.handleFilterChange}
+                selected={!this.state.filter || this.state.filter === '' ?
+                  ['All'] :
+                  this.state.filter.split(',')
+                }
+              >
+                <Control />
+                <Item title="All" />
+                {ORDER_STATES.map((o, k) => (
+                  <Item key={k} title={o.title} />
+                ))}
+              </Dropdown>
+            )}
           </div>
-          { this.renderAdvanced() }
         </div>
         <div className="pull-right">
-          <Button
-            label="Advanced search"
-            icon={this.state.advanced ? 'check-square-o' : 'square-o'}
-            btnStyle={this.state.advanced ? 'success' : 'default'}
-            big
-            action={this.handleSwitchClick}
-          />
-          <Button
-            label="CSV"
-            icon="copy"
-            btnStyle="default"
-            big
-            action={this.props.onCSVClick}
-          />
+          <Controls noControls grouped>
+            <Button
+              label="Advanced search"
+              icon={this.state.showAdvanced ? 'check-square-o' : 'square-o'}
+              btnStyle={this.state.showAdvanced ? 'success' : 'default'}
+              big
+              action={this.handleAdvancedClick}
+            />
+            <Button
+              label="Clear"
+              icon="remove"
+              btnStyle="default"
+              big
+              action={this.handleClearClick}
+            />
+          </Controls>
         </div>
       </Toolbar>
     );

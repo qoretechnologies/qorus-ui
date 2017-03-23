@@ -5,6 +5,7 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import lifecycle from 'recompose/lifecycle';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import ResultsTable from './table';
 import ResultsToolbar from './toolbar';
@@ -13,18 +14,22 @@ import LoadMore from '../../../../components/load_more';
 import getRouterContext from '../../../../hocomponents/get-router-context';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import actions from '../../../../store/api/actions';
+import queryControl from '../../../../hocomponents/queryControl';
+import Detail from './detail';
 
 const JobResults = ({
   job,
   location,
-  children,
   onLoadMore,
+  jobQuery,
+  changeJobQuery,
 }: {
   job: Object,
   jobResult: Object,
   location: Object,
-  children:? any,
   onLoadMore: Function,
+  jobQuery: string | number,
+  changeJobQuery: Function,
 }) => (
   <div className="job-results">
     <ResultsToolbar {...{ location, job }} />
@@ -33,10 +38,17 @@ const JobResults = ({
         results={job.results}
         location={location}
         searchQuery={location.query.q}
+        changeJobQuery={changeJobQuery}
+        jobQuery={jobQuery}
       />
       <LoadMore dataObject={job.results} onLoadMore={onLoadMore} />
+      { jobQuery && jobQuery !== '' ? (
+        <Detail
+          location={location}
+          changeJobQuery={changeJobQuery}
+        />
+      ) : null }
     </div>
-    {children}
   </div>
 );
 
@@ -93,4 +105,11 @@ export default compose(
   fetchOnMount,
   fetchOnQueryParamsUpdate,
   addLoadMoreHandler,
+  queryControl('job'),
+  pure([
+    'job',
+    'jobQuery',
+    'location',
+    'children',
+  ])
 )(JobResults);

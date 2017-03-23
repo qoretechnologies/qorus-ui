@@ -1,33 +1,39 @@
+import union from 'lodash/union';
+
 export const ORDER_STATES = [
-  { name: 'COMPLETE', short: 'C', label: 'success', title: 'Complete' },
+  { name: 'COMPLETE', short: 'C', label: 'complete', title: 'Complete' },
   { name: 'READY', short: 'Y', label: 'ready', title: 'Ready' },
-  { name: 'SCHEDULED', short: 'S', label: 'info', title: 'Scheduled' },
-  { name: 'INCOMPLETE', short: 'N', label: 'info', title: 'Incomplete' },
+  { name: 'SCHEDULED', short: 'S', label: 'scheduled', title: 'Scheduled' },
+  { name: 'INCOMPLETE', short: 'N', label: 'incomplete', title: 'Incomplete' },
   { name: 'EVENT-WAITING', short: 'V', label: 'waiting', title: 'Event-Waiting' },
   { name: 'ASYNC-WAITING', short: 'A', label: 'waiting', title: 'Async-Waiting' },
   { name: 'WAITING', short: 'W', label: 'waiting', title: 'Waiting' },
-  { name: 'RETRY', short: 'R', label: 'danger', title: 'Retry' },
-  { name: 'ERROR', short: 'E', label: 'danger', title: 'Error' },
-  { name: 'IN-PROGRESS', short: 'I', label: 'warning', title: 'In-Progress' },
+  { name: 'RETRY', short: 'R', label: 'retry', title: 'Retry' },
+  { name: 'ERROR', short: 'E', label: 'error', title: 'Error' },
+  { name: 'IN-PROGRESS', short: 'I', label: 'in-progress', title: 'In-Progress' },
   { name: 'CANCELED', short: 'X', label: 'canceled', title: 'Canceled' },
-  { name: 'BLOCKED', short: 'B', label: 'gray', title: 'Blocked' },
+  { name: 'BLOCKED', short: 'B', label: 'blocked', title: 'Blocked' },
 ];
 
+export const ORDER_STATES_ARRAY = ORDER_STATES.map((order) => order.name);
+
 export const GROUPED_ORDER_STATES = [
-  { name: 'READY/SCHD', short: 'READY/SCHD', label: 'info', title: 'Ready / Scheduled' },
+  { name: 'READY/SCHD', short: 'READY/SCHD', label: 'ready', title: 'Ready / Scheduled' },
   { name: 'RUN/WAIT', short: 'RUN/WAIT', label: 'waiting', title: 'Run / Wait' },
-  { name: 'ERR/BLOCK', short: 'ERR/BLOCK', label: 'danger', title: 'Error / Blocked' },
-  { name: 'CANCELED', short: 'CANCELED', label: 'gray', title: 'Canceled' },
-  { name: 'COMPLETE', short: 'COMPLETE', label: 'success', title: 'Complete' },
+  { name: 'ERR/BLOCK', short: 'ERR/BLOCK', label: 'error', title: 'Error / Blocked' },
+  { name: 'CANCELED', short: 'CANCELED', label: 'canceled', title: 'Canceled' },
+  { name: 'COMPLETE', short: 'COMPLETE', label: 'complete', title: 'Complete' },
 ];
 
 export const CUSTOM_ORDER_STATES = [
-  { name: 'UNBLOCKING', label: 'gray', title: 'Unblocking' },
-  { name: 'BLOCKING', label: 'gray', title: 'Blocking' },
-  { name: 'CANCELING', label: 'gray', title: 'Canceling' },
-  { name: 'UNCANCELING', label: 'gray', title: 'Uncanceling' },
-  { name: 'RETRYING', label: 'gray', title: 'Retrying' },
+  { name: 'UNBLOCKING', label: 'blocked', title: 'Unblocking' },
+  { name: 'BLOCKING', label: 'blocked', title: 'Blocking' },
+  { name: 'CANCELING', label: 'blocked', title: 'Canceling' },
+  { name: 'UNCANCELING', label: 'blocked', title: 'Uncanceling' },
+  { name: 'RETRYING', label: 'blocked', title: 'Retrying' },
 ];
+
+export const ALL_ORDER_STATES = union(ORDER_STATES, CUSTOM_ORDER_STATES);
 
 export const ORDER_ACTIONS = {
   ALL: [
@@ -66,11 +72,11 @@ export const DATASETS = {
 };
 
 export const DOUGH_LABELS = {
-  'READY/SCHD': '#aded9b',
-  'RUN/WAIT': '#e5c737',
-  'ERR/BLOCK': '#B94A49',
-  CANCELED: '#f2dede',
-  COMPLETE: '#9ccb3b',
+  'READY/SCHD': '#8ddc6d',
+  'RUN/WAIT': '#e5d957',
+  'ERR/BLOCK': '#d11f1f',
+  CANCELED: '#f09999',
+  COMPLETE: '#418e22',
 };
 
 export const ORDER_GROUPS = {
@@ -103,4 +109,3 @@ export const STATUS_PRIORITY = [
   'IN-PROGRESS',
   'ERROR',
 ];
-

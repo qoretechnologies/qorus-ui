@@ -5,8 +5,8 @@ import pure from 'recompose/pure';
 type Props = {
   item: Object,
   type: string,
-  inputMap: Array<Object>,
-  outputMap: Array<Object>,
+  inputMap: Object,
+  outputMap: Object,
   rectWidth: number,
   inputOffsetY: number,
   outputOffsetY: number,
@@ -35,10 +35,8 @@ const DiagramConnection: Function = ({
 }: Props): ?React.Element<any> => {
   const polySize = 5;
   const [[outputValue, inputValue]] = Object.entries(item);
-  const inputPosition = inputMap.find((obj) => obj.name === inputValue);
-  const outputPosition = outputMap.find((obj) => obj.name === outputValue);
-
-  if (!inputPosition || !outputPosition) return null;
+  const inputPosition = inputMap[inputValue];
+  const outputPosition = outputMap[outputValue];
 
   switch (type) {
     case 'line':
@@ -48,12 +46,12 @@ const DiagramConnection: Function = ({
           key={`${inputValue}_to_${outputValue}`}
           x1={rectWidth + (polySize - 1)}
           y1={
-            inputOffsetY + (headerHeight + inputPosition.position *
+            inputOffsetY + (headerHeight + inputPosition *
             (rectHeight + paddingElements) + rectHeight / 2)
           }
           x2={svgWidth + offsetX - (rectWidth * 2.5) - polySize}
           y2={
-            outputOffsetY + (headerHeight + outputPosition.position *
+            outputOffsetY + (headerHeight + outputPosition *
             (rectHeight + paddingElements) + rectHeight / 2)
           }
           stroke={lineColor}
@@ -63,7 +61,7 @@ const DiagramConnection: Function = ({
       const x = type === 'input-arrow' ?
         rectWidth :
         (svgWidth + offsetX - (rectWidth * 2.5) - polySize);
-      const pos = type === 'input-arrow' ? inputPosition.position : outputPosition.position;
+      const pos = type === 'input-arrow' ? inputPosition : outputPosition;
 
       return (
         <svg

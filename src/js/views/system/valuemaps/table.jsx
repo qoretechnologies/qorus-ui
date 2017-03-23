@@ -5,7 +5,7 @@ import compose from 'recompose/compose';
 import sort from '../../../hocomponents/sort';
 import checkNoData from '../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../constants/sort';
-import Table, { Section, Row, Th } from '../../../components/table';
+import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
 import ValueRow from './row';
 
 type Props = {
@@ -21,20 +21,21 @@ const ValuemapsTable: Function = ({
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
-  <Table className="table table--data table-condensed table-striped">
-    <Section type="head">
-      <Row>
-        <Th {...{ sortData, onSortChange }} name="name">Name</Th>
-        <Th {...{ sortData, onSortChange }} name="desc">Description</Th>
-        <Th {...{ sortData, onSortChange }} name="author">Author</Th>
-        <Th {...{ sortData, onSortChange }} name="valuetype">Type</Th>
-        <Th {...{ sortData, onSortChange }} name="mapsize">Size</Th>
-        <Th {...{ sortData, onSortChange }} name="created">Created</Th>
-        <Th {...{ sortData, onSortChange }} name="modified">Modified</Th>
+  <Table striped condensed>
+    <Thead>
+      <Tr {...{ sortData, onSortChange }}>
+        <Th name="name" className="name">Name</Th>
+        <Th className="narrow">Detail</Th>
+        <Th name="desc">Description</Th>
+        <Th name="author">Author</Th>
+        <Th name="valuetype">Type</Th>
+        <Th name="mapsize" className="narrow">Size</Th>
+        <Th name="created">Created</Th>
+        <Th name="modified">Modified</Th>
         <Th>Dump</Th>
-      </Row>
-    </Section>
-    <Section type="body">
+      </Tr>
+    </Thead>
+    <Tbody>
       {collection.map((valuemap: Object): React.Element<any> => (
         <ValueRow
           data={valuemap}
@@ -42,7 +43,7 @@ const ValuemapsTable: Function = ({
           openPane={openPane}
         />
       ))}
-    </Section>
+    </Tbody>
   </Table>
 );
 

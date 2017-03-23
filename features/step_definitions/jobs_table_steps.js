@@ -39,7 +39,7 @@ module.exports = function jobsTableSteps() {
     this.browser.assert.elements(th, 1);
 
     tableData.forEach((row, index) => {
-      this.browser.assert.text(row.cells[4], sorted[index].name);
+      this.browser.assert.text(row.cells[5], sorted[index].name);
     });
   });
 

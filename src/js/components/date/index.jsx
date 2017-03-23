@@ -5,7 +5,7 @@ import moment from 'moment';
 import { DATE_FORMATS } from '../../constants/dates';
 
 type Props = {
-  date: number | string,
+  date?: number | string,
   format?: string,
 }
 

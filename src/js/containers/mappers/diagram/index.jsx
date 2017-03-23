@@ -5,7 +5,7 @@ import pure from 'recompose/pure';
 import mapProps from 'recompose/mapProps';
 import withProps from 'recompose/withProps';
 import withState from 'recompose/withState';
-import includes from 'lodash/includes';
+// import includes from 'lodash/includes';
 
 import Header from './header';
 import SelectableLabel from './selectable-label';
@@ -13,7 +13,7 @@ import FieldDetail from './field-detail';
 import Detail from './detail';
 import Tooltip from './tooltip';
 import Connection from './connection';
-import { formatFieldSource } from '../../../helpers/mapper';
+// import { formatFieldSource } from '../../../helpers/mapper';
 
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
   Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
@@ -25,7 +25,14 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
       return { [key]: matching[1] };
     }
 
-    if (inputs[key]) return { [key]: key };
+    if (inputs[key]) {
+      const seq = /^\("sequence":+"(\w+)"/;
+      const con = /^\("constant":+"(\w+)"/;
+
+      if (!str.match(seq) && !str.match(con)) {
+        return { [key]: key };
+      }
+    }
 
     return null;
   }).filter(item => item)
@@ -117,21 +124,21 @@ export const Diagramm = ({
           headerHeight={headerHeight}
         />
 
-        {inputMap.map((inp) => (
+        {Object.entries(inputMap).map(([name, position]) => (
           <SelectableLabel
-            key={`input_${inp.name}`}
+            key={`input_${name}`}
             x={0}
             y={
-              inputOffsetY + (headerHeight + parseInt(inp.position, 10) *
+              inputOffsetY + (headerHeight + parseInt(position, 10) *
               (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
             height={rectHeight}
             textColor={rectTextColor}
-            details={opts.input[inp.name]}
+            details={opts.input[name]}
             background={
-              selectedInput === inp.name || hasRelation(relations, inp.name, selectedOutput) ?
+              selectedInput === name || hasRelation(relations, name, selectedOutput) ?
               rectSelectedBackgroundColor :
               rectBackgroundColor
             }
@@ -141,26 +148,25 @@ export const Diagramm = ({
             relations={relations}
             fieldType="input"
           >
-            {inp.name}
+            {name}
           </SelectableLabel>
         ))}
 
-        {outputMap.map((out, index) => (
+        {Object.entries(outputMap).map(([name, position]) => (
           <SelectableLabel
-            key={`output_${out.name}`}
+            key={`output_${name}`}
             x={svgWidth + offsetX - (rectWidth * 2.5)}
             y={
-              outputOffsetY + (headerHeight + parseInt(
-                out.position || out.position === 0 ? out.position : index, 10
-              ) * (rectHeight + paddingElements))
+              outputOffsetY + (headerHeight + parseInt(position, 10) *
+              (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
             height={rectHeight}
             textColor={rectTextColor}
-            details={opts.output[out.name]}
+            details={opts.output[name]}
             background={
-              selectedOutput === out.name || hasRelation(relations, selectedInput, out.name) ?
+              selectedOutput === name || hasRelation(relations, selectedInput, name) ?
               rectSelectedBackgroundColor :
               rectBackgroundColor
             }
@@ -170,16 +176,16 @@ export const Diagramm = ({
             relations={relations}
             fieldType="output"
           >
-            {out.name}
+            {name}
           </SelectableLabel>
         ))}
 
-        {outputMap.map((out, index) => (
+        {Object.entries(outputMap).map(([name, position]) => (
           <foreignObject
-            key={out.name}
+            key={name}
             x={svgWidth + offsetX - (rectWidth * 1.5)}
             y={
-              outputOffsetY + (headerHeight + parseInt(index, 10) *
+              outputOffsetY + (headerHeight + parseInt(position, 10) *
               (rectHeight + paddingElements))
             }
             width={rectWidth}
@@ -187,9 +193,9 @@ export const Diagramm = ({
             style={{ overflow: 'hidden' }}
           >
             <FieldDetail
-              name={out.name}
+              name={name}
               onShowAll={handleDetailSelection}
-              fieldSource={mapper.field_source[out.name]}
+              fieldSource={mapper.field_source[name]}
             />
           </foreignObject>
         ))}
@@ -275,7 +281,7 @@ const PADDING_ELEMENTS = 5;
 const RECT_HEIGHT = 45;
 const RECT_WIDTH = 200;
 
-const getNewPosition = (position, output) => {
+/* const getNewPosition = (position, output) => {
   let result = position;
 
   // eslint-disable-next-line
@@ -343,12 +349,6 @@ const getOutputFieldsMap = (source, relations, inputs, fieldSources) => (
   })
 );
 
-const getRelationsData = mapProps(props => ({
-  ...props,
-  relations: getRelations(props.mapper.field_source, props.mapper.opts.input),
-  opts: props.mapper.opts,
-}));
-
 const getInputMap = mapProps(props => ({
   ...props,
   inputMap: getInputFieldsMap(
@@ -364,13 +364,34 @@ const getOutputMap = mapProps(props => ({
     props.relations,
     props.inputMap,
     props.mapper.field_source,
-  ),
+  );
 }));
 
 const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
   inputCount: inputMap.length,
   outputCount: outputMap.length,
   elementCount: Math.max(inputMap.length, outputMap.length),
+}));
+
+*/
+
+const getFieldsMap = (source) => Object
+  .keys(source)
+  .map((item, idx) => [item, idx])
+  .reduce((prev, current) => ({ ...prev, [current[0]]: current[1] }), {});
+
+const getRelationsData = mapProps(props => ({
+  ...props,
+  inputMap: getFieldsMap(props.mapper.opts.input),
+  outputMap: getFieldsMap(props.mapper.opts.output),
+  relations: getRelations(props.mapper.field_source, props.mapper.opts.input),
+  opts: props.mapper.opts,
+}));
+
+const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
+  inputCount: Object.keys(inputMap).length,
+  outputCount: Object.keys(outputMap).length,
+  elementCount: Math.max(Object.keys(inputMap).length, Object.keys(outputMap).length),
 }));
 
 const appendDiagramParams = compose(
@@ -426,8 +447,6 @@ const toggleTooltip = compose(
 export default compose(
   pure,
   getRelationsData,
-  getInputMap,
-  getOutputMap,
   appendMaxElementCount,
   appendDiagramParams,
   addInputSelection,

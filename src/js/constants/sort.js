@@ -91,4 +91,8 @@ export const sortDefaults = {
     sortBy: 'enabled',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  remote: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };

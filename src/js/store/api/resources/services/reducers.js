@@ -1,6 +1,14 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 
+import {
+  select,
+  selectAll,
+  selectNone,
+  selectInvert,
+} from '../../../../helpers/resources';
+
+
 const initialState = { data: [], sync: false, loading: false };
 
 /**
@@ -116,10 +124,14 @@ const fetchMethodSources = {
 };
 
 const setStatus = {
-  next(state = initialState, { payload: { serviceid, status } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const data = state.data.slice();
-      const newData = updateItemWithId(serviceid, { status, _updated: true }, data);
+      let newData = data;
+
+      events.forEach(({ id, status }) => {
+        newData = updateItemWithId(id, { status, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -136,11 +148,40 @@ const setStatus = {
 };
 
 const setEnabled = {
-  next(state, { payload: { id, value } }) {
+  next(state, { payload: { events } }) {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithId(id, { enabled: value, _updated: true }, updatedData);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state, action) {
+    return Object.assign({}, state, {
+      sync: false,
+      loading: false,
+      error: action.payload,
+    });
+  },
+};
+
+const setAutostart = {
+  next(state, { payload: { events } }) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(dt.id, { autostart: dt.autostart, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -177,16 +218,20 @@ const updateDone = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { data } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const service = stateData.find((s) => s.id === parseInt(data.id, 10));
-      const alerts = [...service.alerts, data];
-      const newData = updateItemWithId(data.id, {
-        alerts,
-        has_alerts: true,
-        _updated: true,
-      }, stateData);
+      let newData = stateData;
+
+      events.forEach(dt => {
+        const service = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const alerts = [...service.alerts, dt];
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: true,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -203,19 +248,23 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { id, alertid } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const service = stateData.find((s) => s.id === parseInt(id, 10));
-      const alerts = [...service.alerts];
+      let newData = stateData;
 
-      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+      events.forEach(dt => {
+        const service = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const alerts = [...service.alerts];
 
-      const newData = updateItemWithId(id, {
-        alerts,
-        has_alerts: !(alerts.length === 0),
-        _updated: true,
-      }, stateData);
+        remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
+
+        newData = updateItemWithId(dt.id, {
+          alerts,
+          has_alerts: !(alerts.length === 0),
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -231,6 +280,42 @@ const clearAlert = {
   },
 };
 
+const selectService = {
+  next(state = initialState, { payload: { id } }) {
+    return select(state, id);
+  },
+};
+
+const selectAllServices = {
+  next(state = initialState) {
+    return selectAll(state);
+  },
+};
+
+const selectNoneServices = {
+  next(state = initialState) {
+    return selectNone(state);
+  },
+};
+
+const invertSelection = {
+  next(state = initialState) {
+    return selectInvert(state);
+  },
+};
+
+const serviceAction = {
+  next(state = initialState) {
+    return state;
+  },
+};
+
+const unsync = {
+  next() {
+    return initialState;
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -240,4 +325,11 @@ export {
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  selectService as SELECT,
+  selectAllServices as SELECTALL,
+  selectNoneServices as SELECTNONE,
+  invertSelection as SELECTINVERT,
+  setAutostart as SETAUTOSTART,
+  serviceAction as ACTION,
+  unsync as UNSYNC,
 };

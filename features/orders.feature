@@ -15,13 +15,14 @@ Feature: Workflow details and orders listing
     Given I am on "ARRAYTEST" with "TOTAL" states and "All" dates
     Then "12" "orders" are shown
 
+
   Scenario: Accessing workflow detail with all states and 2016-06-06 dates
     Given I am on "ARRAYTEST" with "TOTAL" states and "2016-06-06 00:00:00" dates
-    Then "2" "orders" are shown
+    Then the complete URL changes to "/workflow/14/list?date=20160606000000"
 
   Scenario: Accessing workflow details with COMPLETE state and all dates
     Given I am on "ARRAYTEST" with "COMPLETE" states and "All" dates
-    Then "1" "orders" are shown
+    Then the complete URL changes to "/workflow/14/list?date=all&filter=Complete"
 
   Scenario: Header data are shown
     Given I am on "ARRAYTEST" with "TOTAL" states and "default" dates
@@ -37,5 +38,3 @@ Feature: Workflow details and orders listing
     Then I should see the performance content
     When I click the "Info" tab
     Then I should see the info content
-
-

@@ -143,7 +143,7 @@ module.exports = function orderTableSteps() {
     const tableData = this.browser.queryAll(`${selectors.mainSection} tbody > tr`);
     const th = findElementByText(
       this.browser,
-      `${selectors.mainSection} thead th.sort.sort-${dir}`,
+      `thead > th.sort.sort-${dir}`,
       header
     );
     const sortData = {

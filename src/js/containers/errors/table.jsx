@@ -2,7 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 
-import Table, { Section, Row, Th } from '../../components/table';
+import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import withSort from '../../hocomponents/sort';
 import checkData from '../../hocomponents/check-no-data';
 import ErrorRow from './row';
@@ -16,6 +16,8 @@ type Props = {
   onEditClick: Function,
   onDeleteClick: Function,
   sortData: Object,
+  height: string | number,
+  fixed: boolean,
 }
 
 const ErrorsTable: Function = ({
@@ -26,24 +28,35 @@ const ErrorsTable: Function = ({
   sortData,
   onEditClick,
   onDeleteClick,
+  height,
+  fixed,
 }: Props): React.Element<any> => (
-  <Table className="table table-striped table-condensed table-fixed table--data">
-    <Section type="head">
-      <Row>
-        <Th name="error" { ...{ onSortChange, sortData } }>Error</Th>
+  <Table
+    striped
+    condensed
+    fixed={fixed}
+    height={height}
+  >
+    <Thead>
+      <Tr
+        sortData={sortData}
+        onSortChange={onSortChange}
+      >
+        <Th name="error">Error</Th>
         { !compact && (
-          <Th name="description" { ...{ onSortChange, sortData } }>Description</Th>
+          <Th name="description">Description</Th>
         )}
-        <Th name="severity" { ...{ onSortChange, sortData } }>Severity</Th>
-        <Th name="retry_flag" { ...{ onSortChange, sortData } }>Retry</Th>
-        <Th name="retry_delay_secs" { ...{ onSortChange, sortData } }>Delay</Th>
-        <Th name="business_flag" { ...{ onSortChange, sortData } }>Bus. Flag</Th>
+        <Th className="medium" name="severity">Severity</Th>
+        <Th className="narrow" name="retry_flag">Retry</Th>
+        <Th className="narrow" name="retry_delay_secs">Delay</Th>
+        <Th className="medium" name="business_flag">Bus. Flag</Th>
         { type === 'workflow' && (
-          <Th name="manually_updated" { ...{ onSortChange, sortData } }>Updated</Th>
+          <Th className="medium" name="manually_updated">Updated</Th>
         )}
-        <Th>-</Th>
-      </Row>
-    </Section>
+        <Th className="medium">-</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
       { data.map((error: Object, index: number): React.Element<ErrorRow> => (
         <ErrorRow
           key={index}
@@ -54,6 +67,7 @@ const ErrorsTable: Function = ({
           onDeleteClick={onDeleteClick}
         />
       ))}
+    </Tbody>
   </Table>
 );
 

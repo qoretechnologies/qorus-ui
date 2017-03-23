@@ -1,0 +1,139 @@
+table.text-table {
+  th, td {
+    text-align: left !important;
+    padding: 5px !important;
+  }
+
+  th {
+    background-color: darken(#fff, 5);
+  }
+}
+
+/**
+ * Editable cell had two states:
+ *
+ * - ready state (only editable class)
+ * - editor state (both editable and editor classes)
+ *
+ * 1. The cell is interactive.
+ * 2. There is a pencil icon floating on the right to indicate
+ *    editability. It is hidden in editor state.
+ * 3. In editor state, the cell is highlighted and fully occupied by
+ *    text input. The input is shrinked.
+ */
+td.editable {
+  cursor: pointer; /* [1] */
+  vertical-align: middle;
+  white-space: nowrap;
+
+  & { /* [2] */
+    position: relative;
+    padding-right: 20px;
+
+    &::after {
+      content: "\f040";
+      font-size: $font-size-small;
+
+      position: absolute;
+      top: 10%;
+      right: 5px;
+
+      color: #cacaca;
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: inherit;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    &:hover::after {
+      color: #000;
+    }
+
+    &.editor::after {
+      content: "";
+      display: none;
+    }
+  }
+
+
+  &.editor { /* [3] */
+    background-color: #d9edf7;
+    color: #3a87ad;
+    outline: 1px solid #bce8f1;
+    outline-offset: -1px;
+
+    &.invalid {
+      background-color: pink;
+    }
+
+    input {
+      width: 80%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+
+      background-color: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      outline: 0;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    button[type=submit] {
+      width: 20%;
+    }
+  }
+}
+
+th.sort {
+  background: lighten(#9ccb3b, 37);
+
+  &:after {
+    font-family: FontAwesome;
+    font-size: 120%;
+    margin-left: .4em;
+  }
+
+  &.sort-asc:after {
+    content: "\f106";
+    margin-top: .3em;
+  }
+
+  &.sort-desc:after {
+    content: "\f107";
+  }
+}
+
+th.history-sort {
+  background: lighten(#9ccb3b, 43);
+
+  &:after {
+    font-family: FontAwesome;
+    font-size: 120%;
+    margin-left: .4em;
+    opacity: .4;
+  }
+
+  &.history-sort-asc:after {
+    content: "\f106";
+    margin-top: .3em;
+  }
+
+  &.history-sort-desc:after {
+    content: "\f107";
+  }
+}
+
+th.has-sort:hover {
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.fixed-table tr {
+  height: 26px;
+}

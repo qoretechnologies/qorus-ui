@@ -17,11 +17,15 @@ const pingRemote = {
 };
 
 const connectionChange = {
-  next(state: Object = initialState, { payload: { name, up } }): Object {
+  next(state: Object = initialState, { payload: { events } }): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
-      const newData = updateItemWithName(name, { up, _updated: true }, updatedData);
+      let newData = updatedData;
+
+      events.forEach((dt: Object) => {
+        newData = updateItemWithName(dt.name, { up: dt.up, _updated: true }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -54,16 +58,20 @@ const updateDone = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { data } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const remote = stateData.find((r) => r.id === data.id && r.conntype === data.type);
-      const alerts = [...remote.alerts, data];
-      const newData = updateItemWithName(data.id, {
-        alerts,
-        has_alerts: true,
-        _updated: true,
-      }, stateData);
+      let newData = stateData;
+
+      events.forEach(dt => {
+        const remote = newData.find((r) => r.id === dt.id && r.conntype === dt.type);
+        const alerts = [...remote.alerts, dt];
+        newData = updateItemWithName(dt.id, {
+          alerts,
+          has_alerts: true,
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }
@@ -80,19 +88,23 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { id, type, alertid } }) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
-      const remote = stateData.find((r) => r.id === id && r.conntype === type);
-      const alerts = [...remote.alerts];
+      let newData = stateData;
 
-      remove(alerts, alert => alert.alertid === parseInt(alertid, 10));
+      events.forEach(dt => {
+        const remote = newData.find((r) => r.id === dt.id && r.conntype === dt.type);
+        const alerts = [...remote.alerts];
 
-      const newData = updateItemWithName(id, {
-        alerts,
-        has_alerts: !(alerts.length === 0),
-        _updated: true,
-      }, stateData);
+        remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
+
+        newData = updateItemWithName(dt.id, {
+          alerts,
+          has_alerts: !(alerts.length === 0),
+          _updated: true,
+        }, newData);
+      });
 
       return { ...state, ...{ data: newData } };
     }

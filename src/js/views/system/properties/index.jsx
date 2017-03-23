@@ -7,7 +7,7 @@ import { includes, flowRight } from 'lodash';
 
 import actions from '../../../store/api/actions';
 import Prop from './prop';
-import Search from '../../../components/search';
+import Search from '../../../containers/search';
 import Modal from './modal';
 import PermButton from './perm_control';
 import sync from '../../../hocomponents/sync';
@@ -97,6 +97,7 @@ export default class PropertiesView extends Component {
         onClose={this.props.closeModal}
         onSubmit={onSubmit}
         data={data}
+        collection={this.props.collection}
       />
     );
   };
@@ -147,6 +148,7 @@ export default class PropertiesView extends Component {
           <Search
             onSearchUpdate={this.props.onSearchChange}
             defaultValue={this.props.query}
+            resource="properties"
           />
         </div>
         { this.renderProperties() }

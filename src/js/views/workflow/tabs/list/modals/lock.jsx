@@ -1,49 +1,23 @@
-import React, { Component, PropTypes } from 'react';
-import Modal from 'components/modal';
-import { Control as Button } from 'components/controls';
+// @flow
+import React, { Component } from 'react';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import Modal from '../../../../../components/modal';
+import { Control as Button } from '../../../../../components/controls';
 
-import actions from 'store/api/actions';
-
-@connect(
-  null,
-  dispatch => bindActionCreators({
-    lock: actions.orders.lock,
-    unlock: actions.orders.unlock,
-  }, dispatch)
-)
 export default class extends Component {
-  static propTypes = {
-    onClose: PropTypes.func,
-    lock: PropTypes.func,
-    unlock: PropTypes.func,
-    data: PropTypes.object,
-    label: PropTypes.string,
-    username: PropTypes.string,
-  };
-
-  componentWillMount() {
-    this.setState({
-      value: '',
-    });
-  }
-
-  handleTextChange = (event) => {
-    this.setState({
-      value: event.target.value,
-    });
+  props: {
+    onClose: Function,
+    id: number,
+    lock: Function,
+    username: string,
+    locked: boolean,
   };
 
   handleLockClick = () => {
-    if (this.props.data.operator_lock) {
-      this.props.unlock(this.props.data, this.state.value, this.props.username);
-    } else {
-      this.props.lock(this.props.data, this.state.value, this.props.username);
-    }
+    const { lock, id, username, locked, onClose } = this.props;
 
-    this.props.onClose();
+    lock(id, username, this.refs.text.value, locked ? 'unlock' : 'lock');
+    onClose();
   };
 
   render() {
@@ -57,10 +31,9 @@ export default class extends Component {
         </Modal.Header>
         <Modal.Body>
           <textarea
+            ref="text"
             rows="12"
             className="form-control"
-            onChange={this.handleTextChange}
-            value={this.state.value}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -73,7 +46,7 @@ export default class extends Component {
             />
             <Button
               big
-              label={this.props.label}
+              label="Save"
               action={this.handleLockClick}
               btnStyle="success"
             />

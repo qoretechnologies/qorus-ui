@@ -2,8 +2,11 @@
 import React, { PropTypes } from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import omit from 'lodash/omit';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 
 import { changeQuery } from '../helpers/router';
+import actions from '../store/api/actions';
 
 /**
  * A high-order component that provides a side panel
@@ -16,6 +19,7 @@ export default (
   Pane: ReactClass<*>,
   propNames: ?Array<string>,
   defaultTab: ?string,
+  resource: ?string,
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   class ComponentWithPanel extends React.Component {
     static contextTypes = {
@@ -23,7 +27,11 @@ export default (
     };
 
     props: {
+      storage: Object,
+      storePaneSize: Function,
       location: Object,
+      username: string,
+      width?: number,
     };
 
     handleClose: Function = (omitQueries: Array<String> = []): void => {
@@ -57,14 +65,29 @@ export default (
       );
     };
 
+    handlePaneSizeChange: Function = (width: number): void => {
+      if (resource) {
+        const { query: { paneId } } = this.props.location;
+
+        this.props.storePaneSize(
+          resource,
+          paneId,
+          width,
+          this.props.username
+        );
+      }
+    };
+
     renderPane() {
-      const { query } = this.props.location;
+      const { storage, location: { query }, width } = this.props;
 
       if (!query || !query.paneId) return undefined;
 
       const props: Object = propNames ? propNames.reduce((obj, cur) => (
         Object.assign(obj, { [cur]: this.props[cur] })
       ), {}) : {};
+
+      const newWidth: ?number = storage[resource] ? storage[resource][query.paneId] : width;
 
       return (
         <Pane
@@ -73,6 +96,8 @@ export default (
           changePaneTab={this.handleTabChange}
           paneId={query.paneId}
           paneTab={query.paneTab}
+          onResize={this.handlePaneSizeChange}
+          width={newWidth}
         />
       );
     }
@@ -96,6 +121,15 @@ export default (
 
   ComponentWithPanel.displayName = wrapDisplayName(Component, 'hasPane');
 
-  return ComponentWithPanel;
+  return compose(
+    connect(
+      (state: Object) => ({
+        username: state.api.currentUser.data.username,
+        storage: state.api.currentUser.data.storage || {},
+      }),
+      {
+        storePaneSize: actions.currentUser.storePaneSize,
+      }
+    )
+  )(ComponentWithPanel);
 };
-

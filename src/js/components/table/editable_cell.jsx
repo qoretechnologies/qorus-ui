@@ -22,6 +22,7 @@ export default class EditableCell extends Component {
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number,
+      React.PropTypes.bool,
     ]),
     startEdit: PropTypes.bool,
     onSave: PropTypes.func,
@@ -264,7 +265,7 @@ export default class EditableCell extends Component {
             />
           </form>
         ) : (
-          <span>{this.state.value}</span>
+          <span>{this.state.value.toString()}</span>
         )}
       </td>
     );

@@ -41,7 +41,7 @@ describe("AutoStart from 'components/autostart'", () => {
     expect(Array.from(els[1].classList)).not.to.include('btn-default');
   });
 
-  it('calls dec(context, autostart - 1) when minus button is clicked', () => {
+  it('does not go to negative', () => {
     const dec = chai.spy();
     const comp = TestUtils.renderIntoDocument(
       <AutoStart autostart={0} onDecrementClick={dec} />
@@ -50,7 +50,7 @@ describe("AutoStart from 'components/autostart'", () => {
     const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
     TestUtils.Simulate.click(els[0]);
 
-    expect(dec).to.have.been.called.with(-1);
+    expect(dec).to.have.not.been.called();
   });
 
   it('calls inc(context, autostart + 1) when plus button is clicked', () => {
@@ -63,5 +63,19 @@ describe("AutoStart from 'components/autostart'", () => {
     TestUtils.Simulate.click(els[2]);
 
     expect(inc).to.have.been.called.with(1);
+  });
+
+  it('renders button with execs', () => {
+    const comp = TestUtils.renderIntoDocument(
+      <AutoStart
+        autostart={0}
+        execCount={10}
+        withExec
+      />
+    );
+
+    const els = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'button');
+
+    expect(els[1].textContent).to.eql('0 / Execs: 10');
   });
 });

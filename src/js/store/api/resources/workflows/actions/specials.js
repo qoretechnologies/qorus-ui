@@ -54,12 +54,12 @@ const fetchLibSources = createAction(
 
 const setExecCount = createAction(
   'WORKFLOWS_SETEXECCOUNT',
-  (workflowid, value) => ({ workflowid, value })
+  (events) => ({ events })
 );
 
 const setEnabled = createAction(
   'WORKFLOWS_SETENABLED',
-  (workflowid, value, update) => ({ workflowid, value, update })
+  (events) => ({ events })
 );
 
 const unselectAll = createAction('WORKFLOWS_UNSELECTALL');
@@ -71,22 +71,22 @@ const updateDone = createAction(
 
 const addOrder = createAction(
   'WORKFLOWS_ADDORDER',
-  (id, status) => ({ id, status })
+  (events) => ({ events })
 );
 
 const modifyOrder = createAction(
   'WORKFLOWS_MODIFYORDER',
-  (id, oldStatus, newStatus) => ({ id, oldStatus, newStatus })
+  (events) => ({ events })
 );
 
 const addAlert = createAction(
   'WORKFLOWS_ADDALERT',
-  (data) => ({ data })
+  (events) => ({ events })
 );
 
 const clearAlert = createAction(
   'WORKFLOWS_CLEARALERT',
-  (id, alertid) => ({ id, alertid })
+  (events) => ({ events })
 );
 
 const select = createAction(
