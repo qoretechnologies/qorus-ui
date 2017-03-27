@@ -55,14 +55,13 @@ const storeSortChange: Function = (
 
 const storePaneSize: Function = (
   type: string,
-  id: number,
   width: number,
   username: Object
 ): Function => (dispatch: Function, getState: Function): void => {
   const storage = getState().api.currentUser.data.storage || {};
 
   storage[type] = storage[type] || {};
-  storage[type][id] = width;
+  storage[type].paneSize = width;
 
   dispatch(updateStorage(storage, username));
 };

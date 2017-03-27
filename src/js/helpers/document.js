@@ -11,7 +11,7 @@ const getControlChar: Function = (): string => (
   getPlatform() === 'MacIntel' ? '⌘' : 'CTRL'
 );
 
-function getCookie(cname: string) {
+const getCookie: Function = (cname: string) => {
   const name = `${cname}=`;
   const decodedCookie = decodeURIComponent(document.cookie);
   const ca = decodedCookie.split(';');
@@ -25,8 +25,9 @@ function getCookie(cname: string) {
       return c.substring(name.length, c.length);
     }
   }
-  return '';
-}
+
+  return null;
+};
 
 export {
   setTitle,

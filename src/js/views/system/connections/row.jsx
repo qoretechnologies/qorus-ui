@@ -13,6 +13,7 @@ import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
+import ManageModal from './modals/manage';
 
 type Props = {
   name: string,
@@ -22,6 +23,7 @@ type Props = {
   handleHighlightEnd: Function,
   handleDetailClick: Function,
   handlePingClick: Function,
+  handleEditClick: Function,
   updateDone: Function,
   type: string,
   remoteType: string,
@@ -43,6 +45,7 @@ const ConnectionRow: Function = ({
   handleHighlightEnd,
   handleDetailClick,
   handlePingClick,
+  handleEditClick,
   up,
   name,
   safe_url: safeUrl,
@@ -68,6 +71,15 @@ const ConnectionRow: Function = ({
         btnStyle="success"
         onClick={handleDetailClick}
       />
+    </Td>
+    <Td className="narrow">
+      <Controls grouped>
+        <Button
+          icon="edit"
+          btnStyle="warning"
+          onClick={handleEditClick}
+        />
+      </Controls>
     </Td>
     <Td className="tiny">
       {hasAlerts && (
@@ -131,11 +143,25 @@ export default compose(
         />
       );
     },
+    handleEditClick: ({ openModal, closeModal, ...rest }: Props): Function => (): void => {
+      openModal(
+        <ManageModal
+          onClose={closeModal}
+          originalName={rest.name}
+          edit
+          {...rest}
+        />
+      );
+    },
   }),
   pure([
     'hasAlerts',
     'isActive',
     '_updated',
     'up',
+    'options',
+    'desc',
+    'safe_url',
+    'url',
   ])
 )(ConnectionRow);
