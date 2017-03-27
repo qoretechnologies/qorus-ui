@@ -147,6 +147,7 @@ export default compose(
       openModal(
         <ManageModal
           onClose={closeModal}
+          originalName={rest.name}
           edit
           {...rest}
         />
@@ -158,5 +159,9 @@ export default compose(
     'isActive',
     '_updated',
     'up',
+    'options',
+    'desc',
+    'safe_url',
+    'url',
   ])
 )(ConnectionRow);

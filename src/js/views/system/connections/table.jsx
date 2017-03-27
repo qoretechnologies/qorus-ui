@@ -6,27 +6,28 @@ import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
 
 import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
-import checkNoData from '../../../hocomponents/check-no-data';
 import Icon from '../../../components/icon';
 import actions from '../../../store/api/actions';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
 import { sortDefaults } from '../../../constants/sort';
-import { resourceSelector } from '../../../selectors';
+import { resourceSelector, querySelector } from '../../../selectors';
 import withPane from '../../../hocomponents/pane';
+import withModal from '../../../hocomponents/modal';
 import ConnectionPane from './pane';
 import ConnectionRow from './row';
+import ManageModal from './modals/manage';
 import { Control as Button } from '../../../components/controls';
-
-const CONN_MAP: Object = {
-  datasources: 'DATASOURCE',
-  user: 'USER-CONNECTION',
-  qorus: 'REMOTE',
-};
+import Toolbar from '../../../components/toolbar';
+import { CONN_MAP } from '../../../constants/remotes';
+import Search from '../../../containers/search';
+import queryControl from '../../../hocomponents/queryControl';
+import { findBy } from '../../../helpers/search';
 
 type Props = {
   location: Object,
@@ -42,8 +43,12 @@ type Props = {
   type: string,
   canLoadMore?: boolean,
   handleLoadMore: Function,
+  handleAddClick: Function,
   openModal: Function,
   closeModal: Function,
+  manage: Function,
+  searchQuery: ?string,
+  changeSearchQuery: Function,
 };
 
 const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
@@ -52,10 +57,24 @@ const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
   )
 );
 
+
+const filterRemotes: Function = (query: string): Function => (remotes: Array<Object>) => (
+  findBy(
+    ['name', 'url', 'desc', 'options', 'type', 'status', 'user', 'db', 'pass'],
+    query,
+    remotes
+  )
+);
+
+const filteredRemotes: Function = createSelector(
+  [remotesSelector, querySelector('search')],
+  (remotes: Array<Object>, query: ?string): Array<Object> => filterRemotes(query)(remotes)
+);
+
 const viewSelector: Function = createSelector(
   [
     resourceSelector('remotes'),
-    remotesSelector,
+    filteredRemotes,
   ],
   (meta, remotes) => ({
     meta,
@@ -72,13 +91,27 @@ const ConnectionTable: Function = ({
   type,
   canLoadMore,
   handleLoadMore,
+  handleAddClick,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> => (
-  <div>
-    <div className="row">
-      <div className="col-lg-12">
-
-      </div>
-    </div>
+  <div className="tab-pane active">
+    <Toolbar>
+      {type !== 'qorus' && (
+        <Button
+          big
+          onClick={handleAddClick}
+          btnStyle="success"
+          icon="plus"
+          label="Add new"
+        />
+      )}
+      <Search
+        onSearchUpdate={changeSearchQuery}
+        defaultValue={searchQuery}
+        resource={type}
+      />
+    </Toolbar>
     <Table
       fixed
       hover
@@ -93,6 +126,7 @@ const ConnectionTable: Function = ({
         >
           <Th className="narrow" name="up">Up</Th>
           <Th className="narrow">-</Th>
+          <Th className="narrow">Edit</Th>
           <Th className="tiny">
             <Icon icon="exclamation-triangle" />
           </Th>
@@ -110,7 +144,7 @@ const ConnectionTable: Function = ({
         {remotes.map((remote: Object): React.Element<any> => (
           <ConnectionRow
             key={`connection_${remote.name}`}
-            isActive={remote.id === paneId}
+            isActive={remote.name === paneId}
             hasAlerts={remote.alerts.length > 0}
             openPane={openPane}
             remoteType={type}
@@ -137,7 +171,7 @@ export default compose(
       load: actions.remotes.fetch,
     }
   ),
-  defaultProps({ query: { action: 'all' } }),
+  defaultProps({ query: { action: 'all', with_passwords: true } }),
   mapProps(({ params, ...rest }: Props): Props => ({
     type: params.type,
     params,
@@ -145,7 +179,6 @@ export default compose(
   })),
   patch('load', ['query']),
   sync('meta'),
-  checkNoData(({ remotes }: { remotes: Array<Object> }): number => remotes.length),
   withSort(
     ({ type }: Props): string => type,
     'remotes',
@@ -153,6 +186,18 @@ export default compose(
   ),
   withLoadMore('remotes', 'remotes', true, 50),
   withPane(ConnectionPane, ['type'], null, 'connections'),
+  withModal(),
+  withHandlers({
+    handleAddClick: ({ openModal, closeModal, type }: Props): Function => () => {
+      openModal(
+        <ManageModal
+          onClose={closeModal}
+          remoteType={type}
+        />
+      );
+    },
+  }),
+  queryControl('search'),
   pure([
     'location',
     'remotes',
