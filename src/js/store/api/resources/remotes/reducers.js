@@ -1,6 +1,8 @@
 import { updateItemWithName, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 
+import { CONN_MAP } from '../../../../constants/remotes';
+
 const initialState = {
   data: [],
   loading: false,
@@ -120,10 +122,64 @@ const clearAlert = {
   },
 };
 
+const manageConnection = {
+  next(
+    state: Object = initialState,
+    { payload: { remoteType, data, name, error } }: Object
+  ): Object {
+    let newData = [...state.data];
+
+    if (error && !name) {
+      remove(newData, (conn: Object) => conn.name === data.name);
+    } else if (name) {
+      newData = updateItemWithName(name, data, newData);
+    } else {
+      const findRemote = newData.find((remote: Object): boolean => (
+        remote.name === data.name && remote.conntype === CONN_MAP[remoteType]
+      ));
+
+      if (!findRemote) {
+        let desc;
+
+        if (remoteType === 'user') {
+          desc = data.desc;
+        } else {
+          const options = JSON.stringify(data.options).replace(/"/g, '').replace(/:/g, '=');
+          desc = `${data.type}:${data.user}@${data.db}`;
+          desc += data.charset ? `(${data.charset})` : '';
+          desc += data.host ? `%${data.host}` : '';
+          desc += data.port ? `:${data.host}` : '';
+          desc += options;
+        }
+
+        newData = [
+          ...newData,
+          {
+            ...data,
+            ...{
+              conntype: CONN_MAP[remoteType],
+              alerts: [],
+              up: false,
+              desc,
+              opts: remoteType === 'user' ? data.options : null,
+            },
+          },
+        ];
+      }
+    }
+
+    return { ...state, ...{ data: newData } };
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
+  manageConnection as MANAGECONNECTION,
 };

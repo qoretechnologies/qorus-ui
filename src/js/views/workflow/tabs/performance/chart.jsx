@@ -90,7 +90,7 @@ export default class ChartView extends Component {
     return (
       <div className="chart-view">
         <Editable
-          text={this.props.days > 1 ? `Last ${this.state.days} days` : 'Last 24 hours'}
+          text={this.state.days > 1 ? `Last ${this.state.days} days` : 'Last 24 hours'}
           value={this.state.days}
           onSubmit={this.handleEditableSubmit}
           errorChecker={this.errorChecker}

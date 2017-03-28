@@ -55,7 +55,7 @@ describe('pane from hocomponents/pane', () => {
             data: {
               storage: {
                 rbac: {
-                  testPane: 2000,
+                  paneSize: 2000,
                 },
               },
               username: 'admin',
@@ -338,7 +338,7 @@ describe('pane from hocomponents/pane', () => {
     expect(wrapper.find(Pane).props().width).to.eql(2000);
 
     store.subscribe(() => {
-      expect(store.getState().api.currentUser.data.storage.rbac.testPane).to.eql(1345);
+      expect(store.getState().api.currentUser.data.storage.rbac.paneSize).to.eql(1345);
     });
 
     wrapper.find(Pane).props().onResize(1345);
@@ -370,7 +370,7 @@ describe('pane from hocomponents/pane', () => {
     expect(wrapper.find(Pane).props().width).to.eql(400);
 
     store.subscribe(() => {
-      expect(store.getState().api.currentUser.data.storage.workflows.testPane).to.eql(600);
+      expect(store.getState().api.currentUser.data.storage.workflows.paneSize).to.eql(600);
     });
 
     wrapper.find(Pane).props().onResize(600);

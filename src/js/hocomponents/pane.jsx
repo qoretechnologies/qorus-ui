@@ -67,11 +67,8 @@ export default (
 
     handlePaneSizeChange: Function = (width: number): void => {
       if (resource) {
-        const { query: { paneId } } = this.props.location;
-
         this.props.storePaneSize(
           resource,
-          paneId,
           width,
           this.props.username
         );
@@ -87,7 +84,7 @@ export default (
         Object.assign(obj, { [cur]: this.props[cur] })
       ), {}) : {};
 
-      const newWidth: ?number = storage[resource] ? storage[resource][query.paneId] : width;
+      const newWidth: ?number = storage[resource] ? storage[resource].paneSize : width;
 
       return (
         <Pane
