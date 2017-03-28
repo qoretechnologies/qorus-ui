@@ -81,6 +81,21 @@ const manageConnectionCall: Function = createAction(
   }
 );
 
+const deleteConnection: Function = createAction(
+  'REMOTES_DELETECONNECTION',
+  (remoteType: string, name: string): Object => {
+    fetchJson(
+      'DELETE',
+      `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`
+    );
+
+    return {
+      remoteType,
+      name,
+    };
+  }
+);
+
 const manageConnection: Function = (
   remoteType: string,
   data: Object,
@@ -97,4 +112,5 @@ export {
   addAlert,
   clearAlert,
   manageConnection,
+  deleteConnection,
 };

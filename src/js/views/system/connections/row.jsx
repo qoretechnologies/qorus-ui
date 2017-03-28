@@ -13,7 +13,6 @@ import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
-import ManageModal from './modals/manage';
 
 type Props = {
   name: string,
@@ -23,19 +22,20 @@ type Props = {
   handleHighlightEnd: Function,
   handleDetailClick: Function,
   handlePingClick: Function,
-  handleEditClick: Function,
+  handleDeleteClick: Function,
   updateDone: Function,
   type: string,
   remoteType: string,
   openModal: Function,
   closeModal: Function,
   openPane: Function,
+  deleteConnection: Function,
   up?: boolean,
-  name: string,
   safe_url?: string,
   url?: string,
   desc?: string,
   options: Object,
+  canDelete: boolean,
 };
 
 const ConnectionRow: Function = ({
@@ -45,7 +45,7 @@ const ConnectionRow: Function = ({
   handleHighlightEnd,
   handleDetailClick,
   handlePingClick,
-  handleEditClick,
+  handleDeleteClick,
   up,
   name,
   safe_url: safeUrl,
@@ -53,6 +53,7 @@ const ConnectionRow: Function = ({
   desc,
   remoteType,
   options,
+  canDelete,
 }: Props): React.Element<any> => (
   <Tr
     className={classnames({
@@ -72,15 +73,17 @@ const ConnectionRow: Function = ({
         onClick={handleDetailClick}
       />
     </Td>
-    <Td className="narrow">
-      <Controls grouped>
-        <Button
-          icon="edit"
-          btnStyle="warning"
-          onClick={handleEditClick}
-        />
-      </Controls>
-    </Td>
+    {canDelete && (
+      <Td className="narrow">
+        <Controls grouped>
+          <Button
+            icon="times"
+            btnStyle="danger"
+            onClick={handleDeleteClick}
+          />
+        </Controls>
+      </Td>
+    )}
     <Td className="tiny">
       {hasAlerts && (
         <Controls>
@@ -124,6 +127,7 @@ export default compose(
     null,
     {
       updateDone: actions.remotes.updateDone,
+      deleteConnection: actions.remotes.deleteConnection,
     }
   ),
   withModal(),
@@ -143,15 +147,8 @@ export default compose(
         />
       );
     },
-    handleEditClick: ({ openModal, closeModal, ...rest }: Props): Function => (): void => {
-      openModal(
-        <ManageModal
-          onClose={closeModal}
-          originalName={rest.name}
-          edit
-          {...rest}
-        />
-      );
+    handleDeleteClick: ({ deleteConnection, name, remoteType }: Props): Function => (): void => {
+      deleteConnection(remoteType, name);
     },
   }),
   pure([

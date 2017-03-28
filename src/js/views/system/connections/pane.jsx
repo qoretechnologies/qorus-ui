@@ -1,22 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { capitalize } from 'lodash';
+import { capitalize, includes } from 'lodash';
 
 import Pane from '../../../components/pane';
-import Table, { Section, Row, Cell } from '../../../components/table';
+import { Table, Tbody, Tr, Td, EditableCell } from '../../../components/new_table';
 import AutoComponent from '../../../components/autocomponent';
+import actions from '../../../store/api/actions';
+import Alert from '../../../components/alert';
 
 const remoteSelector = (state, props) => (
   state.api.remotes.data.find(a => a.name === props.paneId)
 );
 
 const attrsSelector = (state, props) => {
-  const type = props.type;
+  const { remoteType } = props;
   let attrs;
+  let editable = [];
 
-  switch (type) {
+  switch (remoteType) {
     case 'datasources': {
       attrs = [
         'conntype',
@@ -27,7 +29,23 @@ const attrsSelector = (state, props) => {
         'last_check',
         'type',
         'user',
+        'pass',
         'db',
+        'charset',
+        'port',
+        'host',
+        'options',
+      ];
+
+      editable = [
+        'type',
+        'user',
+        'pass',
+        'db',
+        'charset',
+        'port',
+        'host',
+        'options',
       ];
 
       break;
@@ -50,13 +68,25 @@ const attrsSelector = (state, props) => {
         'status',
         'last_check',
         'type',
+        'opts',
+        'desc',
+        'url',
+      ];
+
+      editable = [
+        'desc',
+        'url',
+        'opts',
       ];
 
       break;
     }
   }
 
-  return attrs;
+  return {
+    attrs,
+    editable,
+  };
 };
 
 const viewSelector = createSelector(
@@ -66,70 +96,84 @@ const viewSelector = createSelector(
   ],
   (remote, attrs) => ({
     remote,
-    attrs,
+    attrs: attrs.attrs,
+    editable: attrs.editable,
   })
 );
 
-@connect(viewSelector)
+@connect(
+  viewSelector,
+  {
+    onSave: actions.remotes.manageConnection,
+  }
+)
 export default class ConnectionsPane extends Component {
   static propTypes = {
     remote: PropTypes.object.isRequired,
     onClose: PropTypes.func,
     attrs: PropTypes.array,
+    editable: PropTypes.array,
     type: PropTypes.string,
     width: PropTypes.number,
     onResize: PropTypes.func,
+    onSave: PropTypes.func,
+    remoteType: PropTypes.string,
+    canEdit: PropTypes.bool,
   };
 
-  static contextTypes = {
-    router: React.PropTypes.object,
+  state: {
+    error: ?string,
+  } = {
+    error: null,
   };
 
-  componentWillMount() {
-    this._renderCells = ::this.renderCells;
-    this._renderRows = ::this.renderRows;
-  }
-
-  getData() {
+  getData: Function = () => {
     const data = [];
 
     for (const attr of this.props.attrs) {
-      data.push({ attr, value: this.props.remote[attr] });
+      data.push({
+        attr,
+        value: this.props.remote[attr],
+        editable: includes(this.props.editable, attr),
+      });
     }
 
     return data;
   }
 
-  /**
-   * Yields cells with capitalized attribute name and its value.
-   *
-   * @param {string} attr
-   * @param {*} value
-   * @return {Generator<ReactElement>}
-   * @see renderValue
-   */
-  *renderCells({ attr, value }) {
-    yield (
-      <Cell tag="th">{capitalize(attr)}</Cell>
-    );
+  handleEditSave: Function = (attr: string) => (value: any) => {
+    const { onSave, remoteType } = this.props;
+    const data = { ...this.props.remote, ...{ [attr]: value } };
+    const optsKey = remoteType === 'user' ? 'opts' : 'options';
 
-    yield (
-      <Cell><AutoComponent>{ value }</AutoComponent></Cell>
-    );
-  }
+    try {
+      if (value !== '' && (attr === 'options' || attr === 'opts')) {
+        JSON.parse(data[optsKey]);
+      }
+    } catch (e) {
+      this.setState({
+        error: 'The "options" value must be in valid JSON string format!',
+      });
+    } finally {
+      if (value !== '' && (attr === 'options' || attr === 'opts')) {
+        data[optsKey] = JSON.parse(data[optsKey]);
+      }
 
-  /**
-   * Yields rows for table body.
-   *
-   * @param {Array<AttrValuePair>} data
-   * @return {Generator<ReactElement>}
-   * @see renderCells
-   */
-  *renderRows(data) {
-    for (const attr of data) {
-      yield (
-        <Row data={attr} cells={this._renderCells} />
-      );
+      let proceed = true;
+
+      Object.keys(data[optsKey]).forEach((key: string): Object => {
+        proceed = typeof data[optsKey][key] === 'object' ?
+          false :
+          proceed;
+      });
+
+      if (!proceed) {
+        this.setState({
+          error: 'The "options" object is invalid. It cannot be nested.',
+        });
+      } else if (onSave) {
+        onSave(remoteType, data, this.props.remote.name);
+      }
     }
   }
 
@@ -141,8 +185,29 @@ export default class ConnectionsPane extends Component {
         onResize={this.props.onResize}
       >
         <h3>{ this.props.remote.name } detail</h3>
-        <Table data={ this.getData() } className="table table-stripped table-condensed">
-          <Section type="body" data={this.getData()} rows={this._renderRows} />
+        {this.state.error && (
+          <Alert bsStyle="danger">{this.state.error}</Alert>
+        )}
+        <Table striped>
+          <Tbody>
+            {this.getData().map((val: Object, key: number): React.Element<any> => (
+              <Tr key={key}>
+                <Td className="name">{capitalize(val.attr)}</Td>
+                {val.editable && this.props.canEdit ? (
+                  <EditableCell
+                    value={
+                      val.value !== '' && (val.attr === 'options' || val.attr === 'opts') ?
+                      JSON.stringify(val.value) :
+                      val.value
+                    }
+                    onSave={this.handleEditSave(val.attr)}
+                  />
+                ) : (
+                  <Td><AutoComponent>{val.value}</AutoComponent></Td>
+                )}
+              </Tr>
+            ))}
+          </Tbody>
         </Table>
       </Pane>
     );
