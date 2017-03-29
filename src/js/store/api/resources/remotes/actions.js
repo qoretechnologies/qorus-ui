@@ -81,17 +81,24 @@ const manageConnectionCall: Function = createAction(
   }
 );
 
-const deleteConnection: Function = createAction(
+const deleteConnectionAction: Function = createAction(
   'REMOTES_DELETECONNECTION',
-  (remoteType: string, name: string): Object => {
-    fetchJson(
+  async (remoteType: string, name: string, dispatch): Object => {
+    const response = await fetchJson(
       'DELETE',
-      `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`
+      `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
+      null,
+      true
     );
+
+    if (response.err) {
+      dispatch(error(response.desc));
+    }
 
     return {
       remoteType,
       name,
+      error: !!response.err,
     };
   }
 );
@@ -103,6 +110,13 @@ const manageConnection: Function = (
 ): Function => (dispatch: Function): void => {
   dispatch(manageConnectionCall(remoteType, data, name));
   dispatch(manageConnectionCall(remoteType, data, name, dispatch));
+};
+
+const deleteConnection: Function = (
+  remoteType: string,
+  name: string,
+): Function => (dispatch: Function): void => {
+  dispatch(deleteConnectionAction(remoteType, name, dispatch));
 };
 
 export {

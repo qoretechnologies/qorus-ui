@@ -30,6 +30,7 @@ export default class EditableCell extends Component {
     min: PropTypes.number,
     max: PropTypes.number,
     showControl: PropTypes.bool,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
@@ -230,7 +231,7 @@ export default class EditableCell extends Component {
     return (
       <td
         {...props}
-        className={classNames({
+        className={classNames(this.props.className, {
           editable: true,
           editor: this.canEdit(),
         })}

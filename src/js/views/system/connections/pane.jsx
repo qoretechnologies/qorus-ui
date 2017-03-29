@@ -195,6 +195,7 @@ export default class ConnectionsPane extends Component {
                 <Td className="name">{capitalize(val.attr)}</Td>
                 {val.editable && this.props.canEdit ? (
                   <EditableCell
+                    className="text"
                     value={
                       val.value !== '' && (val.attr === 'options' || val.attr === 'opts') ?
                       JSON.stringify(val.value) :
@@ -203,7 +204,7 @@ export default class ConnectionsPane extends Component {
                     onSave={this.handleEditSave(val.attr)}
                   />
                 ) : (
-                  <Td><AutoComponent>{val.value}</AutoComponent></Td>
+                  <Td className="text"><AutoComponent>{val.value}</AutoComponent></Td>
                 )}
               </Tr>
             ))}

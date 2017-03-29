@@ -164,13 +164,15 @@ const manageConnection = {
 const deleteConnection = {
   next(
     state: Object = initialState,
-    { payload: { remoteType, name } }: Object
+    { payload: { remoteType, name, error } }: Object
   ): Object {
     const data = [...state.data];
 
-    remove(data, (remote: Object): boolean => (
-      remote.name === name && remote.conntype === CONN_MAP[remoteType]
-    ));
+    if (!error) {
+      remove(data, (remote: Object): boolean => (
+        remote.name === name && remote.conntype === CONN_MAP[remoteType]
+      ));
+    }
 
     return { ...state, ...{ data } };
   },
