@@ -130,7 +130,12 @@ function checkResponse(res, currentPath) {
     browserHistory.push(`/login?next=${pathname}`);
   }
 
-  if (res.status === 409 || res.status === 400 || res.status >= 500 && res.status < 600) {
+  if (
+    res.status === 409 ||
+    res.status === 400 ||
+    res.status === 405 ||
+    res.status >= 500 && res.status < 600
+  ) {
     const error = new Error();
     error.res = res;
     throw error;

@@ -81,6 +81,28 @@ const manageConnectionCall: Function = createAction(
   }
 );
 
+const deleteConnectionAction: Function = createAction(
+  'REMOTES_DELETECONNECTION',
+  async (remoteType: string, name: string, dispatch): Object => {
+    const response = await fetchJson(
+      'DELETE',
+      `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
+      null,
+      true
+    );
+
+    if (response.err) {
+      dispatch(error(response.desc));
+    }
+
+    return {
+      remoteType,
+      name,
+      error: !!response.err,
+    };
+  }
+);
+
 const manageConnection: Function = (
   remoteType: string,
   data: Object,
@@ -90,6 +112,13 @@ const manageConnection: Function = (
   dispatch(manageConnectionCall(remoteType, data, name, dispatch));
 };
 
+const deleteConnection: Function = (
+  remoteType: string,
+  name: string,
+): Function => (dispatch: Function): void => {
+  dispatch(deleteConnectionAction(remoteType, name, dispatch));
+};
+
 export {
   pingRemote,
   connectionChange,
@@ -97,4 +126,5 @@ export {
   addAlert,
   clearAlert,
   manageConnection,
+  deleteConnection,
 };

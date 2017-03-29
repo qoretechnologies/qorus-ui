@@ -56,7 +56,9 @@ class ManageModal extends Component {
     ), {});
 
     try {
-      JSON.parse(data.options);
+      if (data.options !== '') {
+        JSON.parse(data.options);
+      }
     } catch (e) {
       this.setState({
         error: 'The "options" value must be in valid JSON string format!',
@@ -69,7 +71,9 @@ class ManageModal extends Component {
       if (exists && !edit) {
         this.setState({ error: `A ${remoteType} with this name already exists.` });
       } else {
-        data.options = JSON.parse(data.options);
+        if (data.options !== '') {
+          data.options = JSON.parse(data.options);
+        }
 
         let proceed = true;
 
