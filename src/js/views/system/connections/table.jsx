@@ -24,10 +24,16 @@ import ConnectionRow from './row';
 import ManageModal from './modals/manage';
 import { Control as Button } from '../../../components/controls';
 import Toolbar from '../../../components/toolbar';
-import { CONN_MAP } from '../../../constants/remotes';
+import {
+  CONN_MAP,
+  ADD_PERMS_MAP,
+  DELETE_PERMS_MAP,
+  EDIT_PERMS_MAP,
+} from '../../../constants/remotes';
 import Search from '../../../containers/search';
 import queryControl from '../../../hocomponents/queryControl';
 import { findBy } from '../../../helpers/search';
+import { hasPermission } from '../../../helpers/user';
 
 type Props = {
   location: Object,
@@ -49,6 +55,10 @@ type Props = {
   manage: Function,
   searchQuery: ?string,
   changeSearchQuery: Function,
+  perms: Array<string>,
+  canDelete: boolean,
+  canAdd: boolean,
+  canEdit: boolean,
 };
 
 const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
@@ -75,9 +85,11 @@ const viewSelector: Function = createSelector(
   [
     resourceSelector('remotes'),
     filteredRemotes,
+    resourceSelector('currentUser'),
   ],
-  (meta, remotes) => ({
+  (meta, remotes, currentUser) => ({
     meta,
+    perms: currentUser.data.permissions,
     remotes,
   })
 );
@@ -94,10 +106,12 @@ const ConnectionTable: Function = ({
   handleAddClick,
   searchQuery,
   changeSearchQuery,
+  canDelete,
+  canAdd,
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <Toolbar>
-      {type !== 'qorus' && (
+      {canAdd && (
         <Button
           big
           onClick={handleAddClick}
@@ -114,7 +128,6 @@ const ConnectionTable: Function = ({
     </Toolbar>
     <Table
       fixed
-      hover
       striped
       key={type}
       marginBottom={canLoadMore ? 40 : 0}
@@ -126,7 +139,9 @@ const ConnectionTable: Function = ({
         >
           <Th className="narrow" name="up">Up</Th>
           <Th className="narrow">-</Th>
-          <Th className="narrow">Edit</Th>
+          {canDelete && (
+            <Th className="narrow">Delete</Th>
+          )}
           <Th className="tiny">
             <Icon icon="exclamation-triangle" />
           </Th>
@@ -148,6 +163,7 @@ const ConnectionTable: Function = ({
             hasAlerts={remote.alerts.length > 0}
             openPane={openPane}
             remoteType={type}
+            canDelete={canDelete}
             {...remote}
           />
         ))}
@@ -172,8 +188,13 @@ export default compose(
     }
   ),
   defaultProps({ query: { action: 'all', with_passwords: true } }),
-  mapProps(({ params, ...rest }: Props): Props => ({
+  mapProps(({ params, perms, ...rest }: Props): Props => ({
     type: params.type,
+    remoteType: params.type,
+    canDelete: hasPermission(perms, DELETE_PERMS_MAP[params.type], 'or'),
+    canAdd: hasPermission(perms, ADD_PERMS_MAP[params.type], 'or'),
+    canEdit: hasPermission(perms, EDIT_PERMS_MAP[params.type], 'or'),
+    perms,
     params,
     ...rest,
   })),
@@ -185,7 +206,7 @@ export default compose(
     sortDefaults.remote
   ),
   withLoadMore('remotes', 'remotes', true, 50),
-  withPane(ConnectionPane, ['type'], null, 'connections'),
+  withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
   withModal(),
   withHandlers({
     handleAddClick: ({ openModal, closeModal, type }: Props): Function => () => {
