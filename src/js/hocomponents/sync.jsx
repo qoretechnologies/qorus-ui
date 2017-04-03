@@ -15,7 +15,7 @@ import showIfLoaded from './show-if-loaded';
 export default (
   propName: string,
   showLoader : boolean = true,
-  loadFunc : ? Function = null,
+  loadFunc : ?string = null,
   bigLoader: boolean = false,
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   const LoadComponent = showLoader ? showIfLoaded(propName, bigLoader)(Component) : Component;
