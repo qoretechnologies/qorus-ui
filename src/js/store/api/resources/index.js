@@ -197,4 +197,11 @@ export default [
     url: `${settings.REST_BASE_URL}/valuemaps`,
     transform: item => item,
   },
+  {
+    name: 'orderErrors',
+    url: `${settings.REST_BASE_URL}/orders?action=listErrors`,
+    transform: _.flowRight(
+      normalizeId('workflow_instanceid'),
+    ),
+  },
 ];

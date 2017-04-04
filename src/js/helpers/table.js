@@ -88,6 +88,13 @@ const CSVheaders = {
     started: 'Started',
     modified: 'Modified',
   },
+  orderErrors: {
+    workflow_instanceid: 'ID',
+    workflowstatus: 'Status',
+    error: 'Error',
+    retry: 'Retry',
+    business_error: 'Bus.Err.',
+  },
   test: {  // only test data
     a: 'A',
     b: 'B',

@@ -20,6 +20,7 @@ import * as permsActions from './resources/perms/actions';
 import * as currentUserActions from './resources/currentUser/actions';
 import * as valuemapsActions from './resources/valuemaps/actions';
 import * as extensionsActions from './resources/extensions/actions';
+import * as orderErrorsActions from './resources/orderErrors/actions';
 
 import {
   combineResourceActions,
@@ -111,6 +112,8 @@ Object.assign(actions.props, propActions);
 Object.assign(actions.valuemaps, valuemapsActions);
 
 Object.assign(actions.extensions, extensionsActions);
+
+Object.assign(actions.orderErrors, orderErrorsActions);
 
 Object.keys(orderActions.delegates).forEach(a => {
   actions.orders[a] = orderActions.delegates[a](actions);

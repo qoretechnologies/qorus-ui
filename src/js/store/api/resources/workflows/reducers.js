@@ -367,6 +367,12 @@ const unsync = {
   },
 };
 
+const fetchList = {
+  next(state = initialState, { payload: { result } }) {
+    return { ...state, ...{ data: result, sync: true, loading: false } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -387,4 +393,5 @@ export {
   setAutostart as SETAUTOSTART,
   unselectAll as UNSELECTALL,
   setDeprecated as TOGGLEDEPRECATED,
+  fetchList as FETCHLIST,
 };

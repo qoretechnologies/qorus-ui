@@ -112,6 +112,18 @@ const toggleEnabledAction = createAction(
   }
 );
 
+const fetchList = createAction(
+  'WORKFLOWS_FETCHLIST',
+  async () => {
+    const result = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/workflows?list=1`
+    );
+
+    return { result };
+  }
+);
+
 const reset = createAction(
   'WORKFLOWS_RESETCALL',
   (ids) => {
@@ -191,4 +203,5 @@ export {
   setAutostart,
   toggleStart,
   toggleDeprecated,
+  fetchList,
 };

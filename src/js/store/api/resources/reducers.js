@@ -15,3 +15,4 @@ export * as groups from './groups/reducers';
 export * as orders from './orders/reducers';
 export * as valuemaps from './valuemaps/reducers';
 export * as extensions from './extensions/reducers';
+export * as orderErrors from './orderErrors/reducers';
