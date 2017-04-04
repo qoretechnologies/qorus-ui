@@ -91,11 +91,19 @@ export const sortDefaults = {
     historySortBy: 'name',
     historySortByKey: { ignoreCase: true, direction: 1 },
   },
+  valuemapsCompact: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
   valuemapsValues: {
     sortBy: 'enabled',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
   remote: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  mappers: {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },

@@ -8,6 +8,7 @@ import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
+import Valuemaps from '../../../containers/valuemaps';
 import actions from 'store/api/actions';
 
 @connect(
@@ -32,6 +33,12 @@ export default class ServicesDetail extends Component {
 
   componentWillMount() {
     this.props.load(this.props.paneId);
+  }
+
+  componentWillReceiveProps(nextProps: Object) {
+    if (this.props.paneId !== nextProps.paneId) {
+      this.props.load(nextProps.paneId);
+    }
   }
 
   handlePaneClose = () => {
@@ -85,6 +92,9 @@ export default class ServicesDetail extends Component {
             </Pane>
             <Pane name="Mappers">
               <MappersTable mappers={service.mappers} />
+            </Pane>
+            <Pane name="Valuemaps">
+              <Valuemaps vmaps={service.vmaps} />
             </Pane>
             <Pane name="Resources">
               <ResourceTab
