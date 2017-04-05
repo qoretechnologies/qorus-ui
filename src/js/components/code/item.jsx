@@ -13,7 +13,7 @@ type Props = {
 
 let Item: Function = ({ item, onClick, selected, type }: Props): React.Element<any> => {
   const handleClick: Function = (): void => {
-    onClick(`${type} - ${item.name}`, item.body, type, item.id);
+    onClick(`${type} - ${item.name}`, item.body, type, item.id, item);
   };
 
   const isSelected: boolean = selected === `${type} - ${item.name}`;

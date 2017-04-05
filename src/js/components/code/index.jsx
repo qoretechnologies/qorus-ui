@@ -4,9 +4,11 @@ import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import lifecycle from 'recompose/lifecycle';
+import capitalize from 'lodash/capitalize';
 
 import Section from './section';
 import SourceCode from '../../components/source_code';
+import InfoTable from '../../components/info_table';
 
 type Props = {
   data: Object,
@@ -36,7 +38,25 @@ const Code: Function = ({
     <div className="code-source">
       { selected && (
         <div>
-          <h5>{ selected.name }</h5>
+          {selected.item ? (
+            <h5>
+              {`${capitalize(selected.name)}
+              ${selected.item.version ? `v${selected.item.version}` : ''}
+              ${selected.item.id ? `(${selected.item.id})` : ''}`}
+            </h5>
+          ) : (
+            <h5>{capitalize(selected.name)}</h5>
+          )}
+          {selected.item && (
+            <InfoTable
+              object={selected.item}
+              pick={
+                selected.item.tags && Object.keys(selected.item.tags).length ?
+                ['author', 'offset', 'source', 'description', 'tags'] :
+                ['author', 'offset', 'source', 'description']
+              }
+            />
+          )}
           <SourceCode height={typeof height === 'number' ? height - 35 : height}>
             { selected.code }
           </SourceCode>
@@ -53,9 +73,16 @@ export default compose(
     calculateHeight: () => setHeight((height: string | number) => (
       heightUpdater ? heightUpdater() : height
     )),
-    onItemClick: (name: string, code: string) => setSelected(() => ({
+    onItemClick: (
+      name: string,
+      code: string,
+      type: string,
+      id: number,
+      item: Object,
+    ) => setSelected(() => ({
       name,
       code,
+      item,
     })),
     ...rest,
   })),

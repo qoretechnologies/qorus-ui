@@ -103,9 +103,11 @@ export default class InfoTable extends Component {
    */
   *renderRows(data: Object): Generator<*, *, *> {
     for (const attr of data) {
-      yield (
-        <Row data={attr} cells={this.renderCells} />
-      );
+      if (attr.value) {
+        yield (
+          <Row data={attr} cells={this.renderCells} />
+        );
+      }
     }
   }
 
