@@ -122,6 +122,9 @@ export default class StepModal extends Component {
                     /* eslint-enable quote-props */
                     description: func.description,
                     source: func.source,
+                    author: func.author,
+                    tags: func.tags && Object.keys(func.tags).length ? func.tags : undefined,
+                    offset: func.offset,
                   }}
                 />
                 <SourceCode lineOffset={parseInt(func.offset, 10)}>

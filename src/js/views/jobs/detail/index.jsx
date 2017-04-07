@@ -10,6 +10,7 @@ import mapProps from 'recompose/mapProps';
 import Header from './header';
 import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
+import Valuemaps from '../../../containers/valuemaps';
 import Tabs, { Pane } from '../../../components/tabs';
 import DetailPane from '../../../components/pane';
 import Code from '../../../components/code';
@@ -78,6 +79,9 @@ const Detail = ({
         </Pane>
         <Pane name="Mappers">
           <MappersTable mappers={model.mappers} />
+        </Pane>
+        <Pane name="Valuemaps">
+          <Valuemaps vmaps={model.vmaps} />
         </Pane>
       </Tabs>
     </article>
