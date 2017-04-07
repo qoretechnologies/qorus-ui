@@ -11,6 +11,7 @@ import Dropdown, { Item, Control } from '../../../components/dropdown';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
 import { DATE_FORMATS } from '../../../constants/dates';
+import HistoryModal from '../modals/history';
 
 type Props = {
   mindateQuery: string,
@@ -32,6 +33,11 @@ type Props = {
   changeAllQuery: Function,
   defaultDate: string,
   workflows: Array<string>,
+  allQuery: string,
+  username: string,
+  openModal: Function,
+  closeModal: Function,
+  saveSearch: Function,
 };
 
 @pure([
@@ -68,6 +74,21 @@ export default class SearchToolbar extends Component {
     busErr: this.props.busErrQuery,
   };
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (this.props !== nextProps) {
+      this.setState({
+        mindate: nextProps.mindateQuery,
+        maxdate: nextProps.maxdateQuery,
+        filter: nextProps.filterQuery,
+        ids: nextProps.idsQuery,
+        name: nextProps.nameQuery,
+        error: nextProps.errorQuery,
+        retry: nextProps.retryQuery,
+        busErr: nextProps.busErrQuery,
+      });
+    }
+  }
+
   componentDidUpdate() {
     this._delayedSearch(this.state);
   }
@@ -75,6 +96,23 @@ export default class SearchToolbar extends Component {
   _delayedSearch: Function = debounce((data: Object) => {
     this.props.changeAllQuery(data);
   }, 280);
+
+  handleHistoryClick: Function = (): void => {
+    this.props.openModal(
+      <HistoryModal
+        type="errorSearch"
+        onClose={this.props.closeModal}
+      />
+    );
+  };
+
+  handleSaveClick: Function = (): void => {
+    this.props.saveSearch(
+      'errorSearch',
+      this.props.allQuery,
+      this.props.username,
+    );
+  };
 
   handleClearClick: Function = (): void => {
     this.setState({
@@ -116,11 +154,11 @@ export default class SearchToolbar extends Component {
   };
 
   handleRetryChange: Function = (): void => {
-    this.setState({ retry: this.state.retry === '' ? 'true' : '' });
+    this.setState({ retry: !this.state.retry || this.state.retry === '' ? 'true' : '' });
   };
 
   handleBuserrChange: Function = (): void => {
-    this.setState({ busErr: this.state.busErr === '' ? 'true' : '' });
+    this.setState({ busErr: !this.state.busErr || this.state.busErr === '' ? 'true' : '' });
   };
 
   render() {
@@ -221,6 +259,20 @@ export default class SearchToolbar extends Component {
         </div>
         <div className="pull-right">
           <Controls noControls grouped>
+            <Button
+              label="Save search"
+              icon="save"
+              btnStyle="success"
+              big
+              action={this.handleSaveClick}
+            />
+            <Button
+              label="Show history"
+              icon="history"
+              btnStyle="default"
+              big
+              action={this.handleHistoryClick}
+            />
             <Button
               label="Clear"
               icon="remove"

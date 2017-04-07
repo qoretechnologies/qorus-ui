@@ -4,11 +4,14 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import OrdersView from '../../workflow/tabs/list';
 import queryControl from '../../../hocomponents/queryControl';
 import { DATE_FORMATS } from '../../../constants/dates';
 import SearchToolbar from './toolbar';
+import actions from '../../../store/api/actions';
+import withModal from '../../../hocomponents/modal';
 
 type Props = {
   location: Object,
@@ -27,6 +30,11 @@ type Props = {
   changeKeyvalueQuery: Function,
   changeAllQuery: Function,
   defaultDate: string,
+  saveSearch: Function,
+  allQuery: string,
+  username: string,
+  openModal: Function,
+  closeModal: Function,
 };
 
 const SearchView: Function = ({
@@ -52,6 +60,14 @@ const SearchView: Function = ({
 );
 
 export default compose(
+  connect(
+    (state: Object): Object => ({
+      username: state.api.currentUser.data.username,
+    }),
+    {
+      saveSearch: actions.currentUser.storeSearch,
+    }
+  ),
   queryControl('mindate'),
   queryControl('maxdate'),
   queryControl('filter'),
@@ -100,5 +116,6 @@ export default compose(
     'filterQuery',
     'location',
     'searchData',
-  ])
+  ]),
+  withModal(),
 )(SearchView);
