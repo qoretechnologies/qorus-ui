@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import capitalize from 'lodash/capitalize';
 
 import actions from '../../store/api/actions';
 import Toolbar from '../../components/toolbar';
@@ -10,6 +11,7 @@ import Loader from '../../components/loader';
 import Search from '../../components/search';
 import CodeSection from '../../components/code/section';
 import SourceCode from '../../components/source_code';
+import InfoTable from '../../components/info_table';
 import search from '../../hocomponents/search';
 import { querySelector, resourceSelector } from '../../selectors';
 import { findBy } from '../../helpers/search';
@@ -201,7 +203,19 @@ export default class LibraryView extends Component {
     return (
       <div className="code-source">
         <div>
-          <h5>{ name }</h5>
+          <h5>
+            {`${capitalize(name)}
+            ${item.version ? `v${item.version}` : ''}
+            ${item.id ? `(${item.id})` : ''}`}
+          </h5>
+          <InfoTable
+            object={item}
+            pick={
+              item.tags && Object.keys(item.tags).length ?
+              ['author', 'offset', 'source', 'description', 'tags'] :
+              ['author', 'offset', 'source', 'description']
+            }
+          />
           <SourceCode height={height - 35}>
             { item.body }
           </SourceCode>

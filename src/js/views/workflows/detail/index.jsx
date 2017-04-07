@@ -15,6 +15,7 @@ import LogTab from './log_tab';
 import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
 import MappersTable from '../../../containers/mappers';
+import Valuemaps from '../../../containers/valuemaps';
 
 const workflowSelector: Function = (state: Object, props: Object): Object => (
   state.api.workflows.data.find((wf: Object) => wf.id === parseInt(props.paneId, 10))
@@ -64,6 +65,12 @@ export default class WorkflowsDetail extends Component {
   componentWillMount() {
     this.props.load(this.props.paneId);
     this.props.loadErrors(`workflow/${this.props.paneId}`);
+  }
+
+  componentWillReceiveProps(nextProps: Object) {
+    if (this.props.paneId !== nextProps.paneId) {
+      this.props.load(nextProps.paneId);
+    }
   }
 
   getHeight: Function = (): number => {
@@ -143,6 +150,9 @@ export default class WorkflowsDetail extends Component {
             </Pane>
             <Pane name="Mappers">
               <MappersTable mappers={workflow.mappers} />
+            </Pane>
+            <Pane name="Valuemaps">
+              <Valuemaps vmaps={workflow.vmaps} />
             </Pane>
             <Pane name="Info">
               <InfoTab workflow={workflow} />
