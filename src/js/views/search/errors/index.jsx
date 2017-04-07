@@ -10,6 +10,7 @@ import OrdersView from './table';
 import queryControl from '../../../hocomponents/queryControl';
 import sync from '../../../hocomponents/sync';
 import unsync from '../../../hocomponents/unsync';
+import withModal from '../../../hocomponents/modal';
 import { DATE_FORMATS } from '../../../constants/dates';
 import SearchToolbar from './toolbar';
 import actions from '../../../store/api/actions';
@@ -36,6 +37,11 @@ type Props = {
   changeAllQuery: Function,
   defaultDate: string,
   workflows: Array<string>,
+  saveSearch: Function,
+  allQuery: string,
+  username: string,
+  openModal: Function,
+  closeModal: Function,
 };
 
 const SearchView: Function = ({
@@ -65,10 +71,12 @@ export default compose(
     (state: Object) => ({
       meta: state.api.workflows,
       workflows: state.api.workflows.data,
+      username: state.api.currentUser.data.username,
     }),
     {
       load: actions.workflows.fetchList,
       unsync: actions.workflows.unsync,
+      saveSearch: actions.currentUser.storeSearch,
     }
   ),
   sync('meta'),
@@ -132,5 +140,6 @@ export default compose(
     'searchData',
     'workflows',
   ]),
+  withModal(),
   unsync()
 )(SearchView);

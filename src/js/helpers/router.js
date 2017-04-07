@@ -52,9 +52,10 @@ const changeQuery = (
   router: Object,
   location: Object,
   change: Object,
+  merge: bool = true,
 ) => {
   const { pathname, query } = location;
-  const newQuery = Object.assign(query, change);
+  const newQuery = merge ? Object.assign(query, change) : change;
 
   router.push({
     pathname,

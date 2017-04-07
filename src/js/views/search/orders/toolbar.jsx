@@ -12,6 +12,7 @@ import Dropdown, { Item, Control } from '../../../components/dropdown';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
 import { DATE_FORMATS } from '../../../constants/dates';
+import HistoryModal from '../modals/history';
 
 type Props = {
   mindateQuery: string,
@@ -27,7 +28,12 @@ type Props = {
   keyvalueQuery: string,
   changeKeyvalueQuery: Function,
   changeAllQuery: Function,
+  allQuery: string,
   defaultDate: string,
+  saveSearch: Function,
+  username: string,
+  openModal: Function,
+  closeModal: Function,
 };
 
 @pure([
@@ -59,6 +65,20 @@ export default class SearchToolbar extends Component {
     showAdvanced: !!(this.props.filterQuery || this.props.maxdateQuery),
   };
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (this.props !== nextProps) {
+      this.setState({
+        mindate: nextProps.mindateQuery,
+        maxdate: nextProps.maxdateQuery,
+        filter: nextProps.filterQuery,
+        ids: nextProps.idsQuery,
+        keyname: nextProps.keynameQuery,
+        keyvalue: nextProps.keyvalueQuery,
+        showAdvanced: !!(nextProps.filterQuery || nextProps.maxdateQuery),
+      });
+    }
+  }
+
   componentDidUpdate(prevProps: Object, prevState: Object) {
     if (omit(prevState, ['showAdvanced']) !== omit(this.state, ['showAdvanced'])) {
       this._delayedSearch(omit(this.state, ['showAdvanced']));
@@ -81,6 +101,23 @@ export default class SearchToolbar extends Component {
         showAdvanced: true,
       });
     }
+  };
+
+  handleHistoryClick: Function = (): void => {
+    this.props.openModal(
+      <HistoryModal
+        type="orderSearch"
+        onClose={this.props.closeModal}
+      />
+    );
+  };
+
+  handleSaveClick: Function = (): void => {
+    this.props.saveSearch(
+      'orderSearch',
+      this.props.allQuery,
+      this.props.username,
+    );
   };
 
   handleClearClick: Function = (): void => {
@@ -199,11 +236,25 @@ export default class SearchToolbar extends Component {
         <div className="pull-right">
           <Controls noControls grouped>
             <Button
+              label="Save search"
+              icon="save"
+              btnStyle="success"
+              big
+              action={this.handleSaveClick}
+            />
+            <Button
               label="Advanced search"
               icon={this.state.showAdvanced ? 'check-square-o' : 'square-o'}
               btnStyle={this.state.showAdvanced ? 'success' : 'default'}
               big
               action={this.handleAdvancedClick}
+            />
+            <Button
+              label="Show history"
+              icon="history"
+              btnStyle="default"
+              big
+              action={this.handleHistoryClick}
             />
             <Button
               label="Clear"

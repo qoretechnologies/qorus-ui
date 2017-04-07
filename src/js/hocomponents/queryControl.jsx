@@ -35,6 +35,7 @@ export default (
           this.context.router,
           location,
           value,
+          false
         );
       } else {
         const query = this.getQueryName(queryName);
@@ -58,7 +59,7 @@ export default (
       const func: Function = customFunc || this.handleQueryChange;
       const location: Object = this.getLocation();
       const qName: string = !queryName ? 'all' : this.getQueryName(queryName);
-      const query: string = location.query[qName];
+      const query: string = !queryName ? JSON.stringify(location.query) : location.query[qName];
       const newProps = {
         ...{
           [`${qName}Query`]: query,
