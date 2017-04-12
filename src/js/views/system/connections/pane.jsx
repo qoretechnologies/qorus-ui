@@ -8,6 +8,7 @@ import { Table, Tbody, Tr, Td, EditableCell } from '../../../components/new_tabl
 import AutoComponent from '../../../components/autocomponent';
 import actions from '../../../store/api/actions';
 import Alert from '../../../components/alert';
+import Options from './options';
 
 const remoteSelector = (state, props) => (
   state.api.remotes.data.find(a => a.name === props.paneId)
@@ -123,8 +124,10 @@ export default class ConnectionsPane extends Component {
 
   state: {
     error: ?string,
+    options: ?string,
   } = {
     error: null,
+    options: null,
   };
 
   getData: Function = () => {
@@ -143,11 +146,15 @@ export default class ConnectionsPane extends Component {
 
   handleEditSave: Function = (attr: string) => (value: any) => {
     const { onSave, remoteType } = this.props;
-    const data = { ...this.props.remote, ...{ [attr]: value } };
     const optsKey = remoteType === 'user' ? 'opts' : 'options';
+    const val = (value === '' || value === '{}') && (attr === 'options' || attr === 'opts') ?
+      null :
+      value;
+
+    const data = { ...this.props.remote, ...{ [attr]: val } };
 
     try {
-      if (value !== '' && (attr === 'options' || attr === 'opts')) {
+      if (val && val !== '' && (attr === 'options' || attr === 'opts')) {
         JSON.parse(data[optsKey]);
       }
     } catch (e) {
@@ -155,17 +162,17 @@ export default class ConnectionsPane extends Component {
         error: 'The "options" value must be in valid JSON string format!',
       });
     } finally {
-      if (value !== '' && (attr === 'options' || attr === 'opts')) {
-        data[optsKey] = JSON.parse(data[optsKey]);
-      }
-
       let proceed = true;
 
-      Object.keys(data[optsKey]).forEach((key: string): Object => {
-        proceed = typeof data[optsKey][key] === 'object' ?
-          false :
-          proceed;
-      });
+      if (val && val !== '' && (attr === 'options' || attr === 'opts')) {
+        data[optsKey] = JSON.parse(data[optsKey]);
+
+        Object.keys(data[optsKey]).forEach((key: string): Object => {
+          proceed = typeof data[optsKey][key] === 'object' ?
+            false :
+            proceed;
+        });
+      }
 
       if (!proceed) {
         this.setState({
@@ -193,18 +200,24 @@ export default class ConnectionsPane extends Component {
             {this.getData().map((val: Object, key: number): React.Element<any> => (
               <Tr key={key}>
                 <Td className="name">{capitalize(val.attr)}</Td>
-                {val.editable && this.props.canEdit ? (
+                {val.editable && this.props.canEdit &&
+                  val.attr !== 'options' && val.attr !== 'opts'? (
                   <EditableCell
                     className="text"
-                    value={
-                      val.value !== '' && (val.attr === 'options' || val.attr === 'opts') ?
-                      JSON.stringify(val.value) :
-                      val.value
-                    }
+                    value={val.value}
                     onSave={this.handleEditSave(val.attr)}
                   />
                 ) : (
-                  <Td className="text"><AutoComponent>{val.value}</AutoComponent></Td>
+                  <Td className="text">
+                    {(val.attr === 'options' || val.attr === 'opts') ? (
+                      <Options
+                        data={val.value}
+                        onSave={this.handleEditSave(val.attr)}
+                      />
+                    ) : (
+                      <AutoComponent>{val.value}</AutoComponent>
+                    )}
+                  </Td>
                 )}
               </Tr>
             ))}

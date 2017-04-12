@@ -6,6 +6,7 @@ import Alert from '../../../../components/alert';
 import { Controls, Control as Button } from '../../../../components/controls';
 import actions from '../../../../store/api/actions';
 import { CONN_MAP } from '../../../../constants/remotes';
+import Options from '../options';
 
 type Props = {
   onClose: Function,
@@ -43,8 +44,10 @@ class ManageModal extends Component {
 
   state: {
     error: ?string,
+    options: ?string,
   } = {
     error: null,
+    options: '',
   };
 
   handleFormSubmit: Function = (event: EventHandler): void => {
@@ -55,8 +58,12 @@ class ManageModal extends Component {
       { ...cur, ...{ [ref]: this.refs[ref].value } }
     ), {});
 
+    data.options = this.state.options === '' || this.state.options === '{}' ?
+      null :
+      this.state.options;
+
     try {
-      if (data.options !== '') {
+      if (data.options && data.options !== '') {
         JSON.parse(data.options);
       }
     } catch (e) {
@@ -71,17 +78,17 @@ class ManageModal extends Component {
       if (exists && !edit) {
         this.setState({ error: `A ${remoteType} with this name already exists.` });
       } else {
-        if (data.options !== '') {
-          data.options = JSON.parse(data.options);
-        }
-
         let proceed = true;
 
-        Object.keys(data.options).forEach((key: string): Object => {
-          proceed = typeof data.options[key] === 'object' ?
-            false :
-            proceed;
-        });
+        if (data.options && data.options !== '') {
+          data.options = JSON.parse(data.options);
+
+          Object.keys(data.options).forEach((key: string): Object => {
+            proceed = typeof data.options[key] === 'object' ?
+              false :
+              proceed;
+          });
+        }
 
         if (!proceed) {
           this.setState({
@@ -94,6 +101,10 @@ class ManageModal extends Component {
       }
     }
   }
+
+  handleOptionsSave: Function = (options: Object) => {
+    this.setState({ options });
+  };
 
   render() {
     const {
@@ -178,12 +189,9 @@ class ManageModal extends Component {
                 <div className="form-group">
                   <label className="col-lg-4 control-label" htmlFor="options">Options *</label>
                   <div className="col-lg-6">
-                    <textarea
-                      name="options"
-                      id="options"
-                      className="form-control"
-                      defaultValue={JSON.stringify(opts, null, 2)}
-                      ref="options"
+                    <Options
+                      data={opts}
+                      onSave={this.handleOptionsSave}
                     />
                   </div>
                 </div>
@@ -310,12 +318,9 @@ class ManageModal extends Component {
                 <div className="form-group">
                   <label className="col-lg-4 control-label" htmlFor="options">Options </label>
                   <div className="col-lg-6">
-                    <textarea
-                      name="options"
-                      id="options"
-                      className="form-control"
-                      defaultValue={JSON.stringify(options, null, 2)}
-                      ref="options"
+                    <Options
+                      data={options}
+                      onSave={this.handleOptionsSave}
                     />
                   </div>
                 </div>
