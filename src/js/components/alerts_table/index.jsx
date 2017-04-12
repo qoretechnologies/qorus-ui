@@ -2,11 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => (
+const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => console.log(alerts) || (
   <div>
     <h4> Alerts </h4>
     {alerts.length ? alerts.map(item => (
-      <div key={`alert_${item.id}`} className="job-alert alerts-item">
+      <div key={`alert_${item.alertid}`} className="job-alert alerts-item">
         <Link to={`/system/alerts/${item.alerttype.toLowerCase()}?paneId=${item.type}:${item.id}`}>
           {item.alert}
         </Link>
