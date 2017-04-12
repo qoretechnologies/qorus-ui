@@ -3,6 +3,7 @@ import { isBoolean, startsWith, isObject } from 'lodash';
 import moment from 'moment';
 import DateComponent from '../date';
 import Icon from '../icon';
+import Text from '../text';
 
 /* eslint-disable */
 const DURATION_PTR: any = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
@@ -60,9 +61,7 @@ export default function AutoComponent(props: { children: any }) {
       comp = <DateComponent date={ props.children } />;
     } else {
       comp = (
-        <span>
-          { humanizeDuration(props.children) }
-        </span>
+        <Text text={humanizeDuration(props.children)} />
       );
     }
   } else if (isObject(props.children)) {
@@ -72,7 +71,7 @@ export default function AutoComponent(props: { children: any }) {
   }
 
   return (
-    <span>{ comp }</span>
+    <Text text={comp} />
   );
 }
 
