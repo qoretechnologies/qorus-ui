@@ -1,8 +1,9 @@
 /* @flow */
 import React from 'react';
 import { Link } from 'react-router';
+import pure from 'recompose/onlyUpdateForKeys';
 
-const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => console.log(alerts) || (
+const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => (
   <div>
     <h4> Alerts </h4>
     {alerts.length ? alerts.map(item => (
@@ -19,4 +20,4 @@ const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => console.log(alerts)
   </div>
 );
 
-export default AlertsTab;
+export default pure(['alerts'])(AlertsTab);
