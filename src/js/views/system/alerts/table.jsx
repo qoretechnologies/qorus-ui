@@ -52,7 +52,7 @@ const AlertsTable: Function = ({
       fixed
       hover
       striped
-      marginBottom={canLoadMore ? 40 : 0}
+      marginBottom={canLoadMore ? 60 : 0}
       key={type}
     >
       <Thead>

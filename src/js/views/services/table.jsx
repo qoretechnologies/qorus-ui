@@ -36,7 +36,7 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 40 : 0}
+    marginBottom={canLoadMore ? 60 : 0}
   >
     <Thead>
       <Tr

@@ -44,7 +44,7 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 40 : 0}
+    marginBottom={canLoadMore ? 60 : 0}
     // Another Firefox hack, jesus
     key={new Date()}
   >
