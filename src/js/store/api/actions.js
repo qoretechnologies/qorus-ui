@@ -124,16 +124,14 @@ Object.assign(actions.groups, groupsActions);
 
 Object.assign(actions.errors, errorActions);
 
+Object.assign(actions.systemOptions, optionActions);
+
 Object.keys(serviceActions.delegates).forEach(a => {
   actions.services[a] = serviceActions.delegates[a](actions);
 });
 Object.assign(actions.services, serviceActions.specials);
 
 actions.jobs = { ...actions.jobs, ...jobActions.specials };
-
-Object.keys(optionActions.delegates).forEach(a => {
-  actions.systemOptions[a] = optionActions.delegates[a](actions);
-});
 
 Object.keys(authActions).forEach(a => {
   actions.auth[a] = authActions[a](actions);
