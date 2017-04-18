@@ -238,6 +238,6 @@ describe('Notification from \'components/notifications\'', () => {
 
     expect(wrapper.find('.ongoing')).to.have.length(0);
     expect(wrapper.find('.transient')).to.have.length(0);
-    expect(wrapper.find('.no-notifications')).to.have.length(1);
+    expect(wrapper.find('.notifications-header')).to.have.length(1);
   });
 });
