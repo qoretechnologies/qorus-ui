@@ -52,10 +52,10 @@ export default function AutoComponent(props: { children: any }) {
 
   if (isBoolean(props.children)) {
     if (props.children) {
-      comp = <Icon icon="check-circle" className="text-success" />;
-    } else {
-      comp = <Icon icon="minus-circle" className="text-danger" />;
+      return <Icon icon="check-circle" className="text-success" />;
     }
+
+    return <Icon icon="minus-circle" className="text-danger" />;
   } else if (isDate(props.children)) {
     if (!props.children.match(DURATION_PTR)) {
       comp = <DateComponent date={ props.children } />;
