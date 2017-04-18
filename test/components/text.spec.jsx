@@ -31,7 +31,7 @@ class CompWithContext extends Component {
 }
 
 
-describe.only('Text from "component/text"', () => {
+describe('Text from "component/text"', () => {
   it('renders the text', () => {
     const wrapper = mount(
       <CompWithContext>
