@@ -31,7 +31,7 @@ class CompWithContext extends Component {
 }
 
 
-describe('Text from "component/text"', () => {
+describe.only('Text from "component/text"', () => {
   it('renders the text', () => {
     const wrapper = mount(
       <CompWithContext>
@@ -68,6 +68,20 @@ describe('Text from "component/text"', () => {
     wrapper.find('p').first().simulate('click');
 
     expect(action).to.have.been.called();
+  });
+
+  it('stringifies objects', () => {
+    const wrapper = mount(
+      <CompWithContext>
+        <Text
+          text={{
+            hello: "it's me",
+          }}
+        />
+      </CompWithContext>
+    );
+
+    expect(wrapper.find('p').first().text()).to.eql('{"hello":"it\'s me"}');
   });
 
   it('does not show a modul when noPopup prop passed, instead changes to div, and back', () => {

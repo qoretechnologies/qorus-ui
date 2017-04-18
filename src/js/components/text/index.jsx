@@ -4,12 +4,13 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import pure from 'recompose/onlyUpdateForKeys';
+import mapProps from 'recompose/mapProps';
 
 import withModal from '../../hocomponents/modal';
 import Modal from '../modal';
 
 type Props = {
-  text: string,
+  text?: string,
   popup?: boolean,
   placeholder?: string,
   handleClick: Function,
@@ -23,7 +24,6 @@ const Text: Function = ({
   text,
   expanded,
   handleClick,
-  placeholder,
 }: Props): React.Element<any> => (
   expanded ?
     <div
@@ -33,17 +33,25 @@ const Text: Function = ({
       {text}
     </div> :
     <p
-      title={placeholder || text}
+      title={text}
       onClick={handleClick}
       className="text-component"
     >
-      {placeholder || text}
+      {text}
     </p>
 );
 
 export default compose(
   withState('expanded', 'setExpand', false),
   withModal(),
+  mapProps(({ text, placeholder, ...rest }: Props): Props => ({
+    text: placeholder || text,
+    ...rest,
+  })),
+  mapProps(({ text, ...rest }: Props): Props => ({
+    text: typeof text === 'object' ? JSON.stringify(text) : text,
+    ...rest,
+  })),
   withHandlers({
     handleClick: ({
       text,
