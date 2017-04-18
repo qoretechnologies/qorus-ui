@@ -65,7 +65,7 @@ export default function AutoComponent(props: { children: any }) {
       );
     }
   } else if (isObject(props.children)) {
-    comp = <pre>{JSON.stringify(props.children, null, COMPLEX_VALUE_INDENT)}</pre>;
+    return <pre>{JSON.stringify(props.children, null, COMPLEX_VALUE_INDENT)}</pre>;
   } else {
     comp = props.children;
   }
