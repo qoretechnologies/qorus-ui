@@ -1,6 +1,8 @@
 /* @flow */
 import React from 'react';
-import Table, { Section, Row, Cell } from '../../../components/table';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
 import CacheRow from './row';
 
@@ -35,22 +37,22 @@ const SQLCacheTable: Function = (
         </div>
       </div>
       { Object.keys(data).length > 0 && (
-        <Table className="table table--data table-condensed table-striped">
-          <Section type="head">
-            <Row>
-              <Cell tag="th" className="name">
+        <Table condensed striped>
+          <Thead>
+            <Tr>
+              <Th className="name">
                 Name
-              </Cell>
-              <Cell tag="th" className="narrow">
+              </Th>
+              <Th className="narrow">
                 Count
-              </Cell>
-              <Cell tag="th">
+              </Th>
+              <Th>
                 Created
-              </Cell>
-              <Cell tag="th" />
-            </Row>
-          </Section>
-          <Section type="body">
+              </Th>
+              <Th />
+            </Tr>
+          </Thead>
+          <Tbody>
             { Object.keys(data).map((cache, index) => (
               <CacheRow
                 key={index}
@@ -61,11 +63,11 @@ const SQLCacheTable: Function = (
                 onClick={onSingleClick}
               />
             ))}
-          </Section>
+          </Tbody>
         </Table>
       )}
       { Object.keys(data).length <= 0 && (
-        <p> No data </p>
+        <p className="no-data"> No data </p>
       )}
     </div>
   );

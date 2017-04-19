@@ -1,6 +1,8 @@
 /* @flow */
 import React from 'react';
-import { Row, Cell } from '../../../components/table';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import { Tr, Td } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
 import DateComponent from '../../../components/date';
 
@@ -20,26 +22,26 @@ const SQLCacheRow: Function = (
   };
 
   return (
-    <Row>
-      <Cell className="name">
+    <Tr>
+      <Td className="name">
         { name }
-      </Cell>
-      <Cell className="narrow">
+      </Td>
+      <Td className="narrow">
         { count }
-      </Cell>
-      <Cell>
+      </Td>
+      <Td>
         <DateComponent date={created} format="YYYY-MM-DD HH:mm:ss" />
-      </Cell>
-      <Cell className="narrow">
+      </Td>
+      <Td className="narrow">
         <Button
           label="Clear"
           icon="trash-o"
           btnStyle="danger"
           action={handleClick}
         />
-      </Cell>
-    </Row>
+      </Td>
+    </Tr>
   );
 };
 
-export default SQLCacheRow;
+export default pure(['name'])(SQLCacheRow);
