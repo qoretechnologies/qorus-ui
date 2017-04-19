@@ -1,39 +1,98 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 
+import withModal from '../../hocomponents/modal';
+import { HELP_DATA } from '../../constants/help';
+import Modal from '../../components/modal';
 
-/**
- * Display info about Qorus instance and useful links.
- *
- * @param {!{ info: !Object }} props
- * @return {!ReactElement}
- */
-export default function Footer(props: { info: Object }) {
+type Props = {
+  info: Object,
+  path: string,
+  openModal: Function,
+  closeModal: Function,
+  onClose: Function,
+  helpData: Object,
+};
+
+const HelpModal: Function = ({
+  onClose,
+  helpData,
+  path,
+}: Props): React.Element<any> => (
+  <Modal>
+    <Modal.Header titleId="help" onClose={onClose}>
+      Help for "{path.replace('/', '')}" page
+    </Modal.Header>
+    <Modal.Body>
+      {helpData.overview && (
+        <p className="lead">{helpData.overview}</p>
+      )}
+      {Object.keys(helpData.data).map((header: string): React.Element<any> => (
+        <div key={header}>
+          <h4>{header}</h4>
+          <p>{helpData.data[header]}</p>
+        </div>
+      ))}
+    </Modal.Body>
+  </Modal>
+);
+
+const Footer: Function = ({
+  info,
+  path,
+  openModal,
+  closeModal,
+}: Props) => {
+  const helpItem = Object.keys(HELP_DATA).find((res: string): boolean => (
+    path.startsWith(res)
+  ));
+
+  const handleHelpClick = () => {
+    if (helpItem) {
+      openModal(
+        <HelpModal
+          onClose={closeModal}
+          helpData={HELP_DATA[helpItem]}
+          path={path}
+        />
+      );
+    }
+  };
+
   return (
     <footer>
       <div className="container-fluid">
         <p className="text-right text-muted">
           {'Qorus Integration Engine '}
-          {props.info && props.info['omq-schema'] && (
-            <small>{`(Schema: ${props.info['omq-schema']})`}</small>
+          {info['omq-schema'] && (
+            <small>{`(Schema: ${info['omq-schema']})`}</small>
           )}
-          {props.info && props.info['omq-schema'] && ' '}
-          {props.info && props.info['omq-version'] && (
+          {info['omq-schema'] && ' '}
+          {info['omq-version'] && (
             <small>
               {'(Version: '}
-              {props.info['omq-version']}
-              {props.info['omq-build'] && `.${props.info['omq-build']}`}
+              {info['omq-version']}
+              {info['omq-build'] && `.${info['omq-build']}`}
               {')'}
             </small>
           )}
-          {props.info && props.info['omq-version'] && ' '}
+          {info['omq-version'] && ' '}
           &copy;
           {' '}
           <a href="http://qoretechnologies.com">Qore Technologies</a>
+          {helpItem && (
+            <span>
+              {' | '}
+              <a onClick={handleHelpClick} href="#">
+                Help
+              </a>
+            </span>
+          )}
           {' | '}
           <a
-            href={'http://bugs.qoretechnologies.com/' +
-                  'projects/webapp-interface/issues/new'}
+            href={'http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'}
           >
             Report Bug
           </a>
@@ -41,8 +100,12 @@ export default function Footer(props: { info: Object }) {
       </div>
     </footer>
   );
-}
-
-Footer.propTypes = {
-  info: PropTypes.object,
 };
+
+export default compose(
+  withModal(),
+  pure([
+    'info',
+    'location',
+  ])
+)(Footer);

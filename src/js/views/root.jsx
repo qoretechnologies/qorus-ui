@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 
 import Navigation from 'components/navigation';
 import Topbar from 'components/topbar';
-import Footer from 'components/footer';
+import Footer from '../components/footer';
 import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
 
@@ -195,7 +195,10 @@ export default class Root extends Component {
             </div>
           </section>
         </div>
-        <Footer info={this.props.info.data} />
+        <Footer
+          path={this.props.location.pathname}
+          info={this.props.info.data}
+        />
         <ModalManager ref={this.refModal} />
       </div>
     );
