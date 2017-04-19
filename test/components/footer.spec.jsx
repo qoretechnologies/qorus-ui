@@ -1,12 +1,31 @@
-import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import React, { PropTypes, Component } from 'react';
 import { expect } from 'chai';
-
-import * as shallow from '../shallow';
-
+import { mount } from 'enzyme';
 
 import Footer from '../../src/js/components/footer';
 
+class CompWithContext extends Component {
+  static childContextTypes = {
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+  };
+
+  props: {
+    children?: any,
+    openModal: Function,
+  };
+
+  getChildContext() {
+    return {
+      openModal: this.props.openModal,
+      closeModal: () => true,
+    };
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
 
 describe("Footer from 'components/footer'", () => {
   it('displays schema, version and build if passed', () => {
@@ -16,17 +35,15 @@ describe("Footer from 'components/footer'", () => {
       'omq-build': 'test',
     };
 
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
-      <Footer info={info} />
+    const wrapper = mount(
+      <CompWithContext>
+        <Footer info={info} />
+      </CompWithContext>
     );
-    const result = renderer.getRenderOutput();
 
-    const els = shallow.filterTree(result, el => (
-      el.type === 'small'
-    ));
+    const els = wrapper.find('small');
 
-    expect(els[0].props.children).to.eql('(Schema: test@test)');
-    expect(els[1].props.children.join('')).to.eql('(Version: 1.test)');
+    expect(els.first().props().children).to.eql('(Schema: test@test)');
+    expect(els.last().props().children.join('')).to.eql('(Version: 1.test)');
   });
 });
