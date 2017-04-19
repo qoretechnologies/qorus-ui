@@ -122,7 +122,8 @@ table.table--data {
       line-height: floor($font-size-extra-small * 1.1);
     }
 
-    > tbody tr:first-of-type td {
+    > tbody tr:first-of-type td,
+    > tbody tr:first-of-type th {
       border-top: 0 !important;
     }
   }

@@ -1,99 +1,96 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React from 'react';
 
-import Table, { Section, Row, Cell } from 'components/table';
+import { Table, Tbody, Tr, Td, Th } from '../../../components/new_table';
 import PermButton from './perm_control';
-import { Controls } from 'components/controls';
+import { Controls } from '../../../components/controls';
 
-export default class Property extends Component {
-  static propTypes = {
-    data: PropTypes.object,
-    title: PropTypes.string,
-    perms: PropTypes.array,
-    onDelete: PropTypes.func,
-    onEdit: PropTypes.func,
+type Props = {
+  data: Object,
+  title: string,
+  perms: Array<Object>,
+  onDelete: Function,
+  onEdit: Function,
+}
+
+const Property: Function = ({
+  data,
+  title,
+  perms,
+  onDelete,
+  onEdit,
+}: Props): React.Element<any> => {
+  const handlePropDeleteClick = (): void => {
+    onDelete({ domain: title });
   };
 
-  handlePropDeleteClick = () => {
-    this.props.onDelete({ domain: this.props.title });
+  const handleKeyDeleteClick = (key: string): Function => (): void => {
+    onDelete({ domain: title, key });
   };
 
-  handleKeyDeleteClick = key => () => {
-    this.props.onDelete({ domain: this.props.title, key });
-  };
-
-  handleEditClick = (key, value) => () => (
-    this.props.onEdit(null, { domain: this.props.title, key, value })
+  const handleEditClick = (key: string, value: string): Function => (): void => (
+    onEdit(null, { domain: title, key, value })
   );
 
-  renderControls(key, value) {
-    const { title, perms } = this.props;
+  return (
+    <div className="container-fluid">
+      <h4>
+        { title }
+        { title !== 'omq' && (
+          <div className="pull-right">
+            <Controls grouped>
+              <PermButton
+                perms={perms}
+                reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
+                icon="times"
+                btnStyle="danger"
+                onClick={handlePropDeleteClick}
+                title="Remove permission group"
+              />
+            </Controls>
+          </div>
+        )}
+      </h4>
+      <Table
+        condensed
+        striped
+        className="props-table"
+      >
+        <Tbody>
+          {Object.keys(data).map((d, key) => (
+            <Tr key={key}>
+              <Th className="name">{ d }</Th>
+              <Td className="text">
+                { typeof data[d] === 'string' ? data[d] : JSON.stringify(data[d]) }
+              </Td>
+              <Td>
+                {title !== 'omq' && (
+                  <Controls grouped>
+                    <PermButton
+                      perms={perms}
+                      reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
+                      icon="pencil"
+                      btnStyle="warning"
+                      onClick={handleEditClick(d, data[d])}
+                      title="Edit permission"
+                    />
+                    <PermButton
+                      perms={perms}
+                      reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
+                      icon="times"
+                      btnStyle="danger"
+                      onClick={handleKeyDeleteClick(d)}
+                      title="Remove permission"
+                    />
+                  </Controls>
+                )}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </div>
+  );
+};
 
-    if (title === 'omq') return null;
-
-    return (
-      <Controls grouped>
-        <PermButton
-          perms={perms}
-          reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
-          icon="pencil"
-          btnStyle="warning"
-          onClick={this.handleEditClick(key, value)}
-          title="Edit permission"
-        />
-        <PermButton
-          perms={perms}
-          reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
-          icon="times"
-          btnStyle="danger"
-          onClick={this.handleKeyDeleteClick(key)}
-          title="Remove permission"
-        />
-      </Controls>
-    );
-  }
-
-  renderRows() {
-    const { data } = this.props;
-
-    return Object.keys(data).map((d, key) => (
-      <Row key={key}>
-        <Cell tag="th">{ d }</Cell>
-        <Cell>
-          { typeof data[d] === 'string' ? data[d] : JSON.stringify(data[d]) }
-        </Cell>
-        <Cell>{ this.renderControls(d, data[d]) }</Cell>
-      </Row>
-    ));
-  }
-
-  render() {
-    const { title, perms } = this.props;
-
-    return (
-      <div className="container-fluid">
-        <h4>
-          { title }
-          { title !== 'omq' && (
-            <div className="pull-right">
-              <Controls grouped>
-                <PermButton
-                  perms={perms}
-                  reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
-                  icon="times"
-                  btnStyle="danger"
-                  onClick={this.handlePropDeleteClick}
-                  title="Remove permission group"
-                />
-              </Controls>
-            </div>
-          )}
-        </h4>
-        <Table className="table table-condensed table-striped props-table">
-          <Section type="body">
-            { this.renderRows() }
-          </Section>
-        </Table>
-      </div>
-    );
-  }
-}
+export default Property;

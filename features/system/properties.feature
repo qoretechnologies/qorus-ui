@@ -28,6 +28,3 @@ Feature: Tests contents of the system/properties tab
     And properties get loaded
     When I type "true" in the search input
     And there are "1" props with "2" keys
-
-
-
