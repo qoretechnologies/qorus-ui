@@ -1,6 +1,5 @@
 /* @flow */
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 
 import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
