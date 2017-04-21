@@ -11,6 +11,7 @@ import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
 import withModal from '../../hocomponents/modal';
 import withSearch from '../../hocomponents/search';
+import unsync from '../../hocomponents/unsync';
 import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
 import Search from '../../containers/search';
@@ -86,7 +87,6 @@ const ErrorsContainer: Function = ({
         { title && (
           <h4 className="pull-left">{ title }</h4>
         )}
-
         <Search
           onSearchUpdate={onSearchChange}
           defaultValue={query}
@@ -160,6 +160,14 @@ export default compose(
       unsync: actions.errors.unsync,
     }
   ),
+  defaultProps({
+    id: 'omit',
+  }),
+  patch('load', ['type', 'id']),
+  sync('meta'),
+  withModal(),
+  withSearch((props: Object) => `${props.type}ErrQuery`),
+  unsync(),
   pure([
     'query',
     'errors',
@@ -168,16 +176,4 @@ export default compose(
     'fixed',
     'height',
   ]),
-  defaultProps({
-    id: 'omit',
-  }),
-  patch('load', ['type', 'id']),
-  sync('meta'),
-  withModal(),
-  withSearch((props: Object) => `${props.type}ErrQuery`),
-  lifecycle({
-    componentWillUnmount() {
-      this.props.unsync();
-    },
-  })
 )(ErrorsContainer);
