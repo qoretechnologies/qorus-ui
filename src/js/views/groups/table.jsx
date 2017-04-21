@@ -32,6 +32,7 @@ const GroupsTable: Function = ({
     striped
     className="resource-table"
     marginBottom={canLoadMore ? 60 : 0}
+    key={collection.length}
   >
     <Thead>
       <Tr

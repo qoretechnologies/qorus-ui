@@ -33,7 +33,7 @@ const UsersTable: Function = (
     consensed
     striped
     fixed
-    key="users_table"
+    key={`users_table-${collection.length}`}
   >
     <Thead>
       <Tr {...{ onSortChange, sortData } }>

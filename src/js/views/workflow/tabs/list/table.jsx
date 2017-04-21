@@ -36,7 +36,7 @@ const WorkflowTable: Function = ({
     fixed
     className="resource-table"
     marginBottom={canLoadMore ? 60 : 0}
-    key={new Date()}
+    key={collection.length}
   >
     <Thead>
       <Tr

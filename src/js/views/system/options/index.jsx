@@ -51,6 +51,7 @@ const OptionsView: Function = ({
         fixed
         condensed
         striped
+        key={collection.length}
       >
         <Thead>
           <Tr

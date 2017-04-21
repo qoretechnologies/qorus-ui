@@ -31,6 +31,7 @@ const ResultTable = ({
     striped
     className="resource-table"
     marginBottom={60}
+    key={data.length}
   >
     <Thead>
       <Tr

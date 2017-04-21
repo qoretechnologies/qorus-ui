@@ -2,7 +2,6 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
-import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';

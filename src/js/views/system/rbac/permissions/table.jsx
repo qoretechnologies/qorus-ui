@@ -30,7 +30,7 @@ const PermsTable: Function = (
     striped
     condensed
     fixed
-    key="perms_table"
+    key={`perms_table-${collection.length}`}
   >
     <Thead>
       <Tr {...{ onSortChange, sortData } }>

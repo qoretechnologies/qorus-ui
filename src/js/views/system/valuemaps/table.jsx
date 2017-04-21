@@ -21,7 +21,12 @@ const ValuemapsTable: Function = ({
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
-  <Table striped condensed>
+  <Table
+    striped
+    condensed
+    fixed
+    key={collection.length}
+  >
     <Thead>
       <Tr {...{ sortData, onSortChange }}>
         <Th name="name" className="name">Name</Th>

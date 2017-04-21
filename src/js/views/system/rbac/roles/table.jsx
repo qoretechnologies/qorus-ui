@@ -31,7 +31,7 @@ const RolesTable: Function = ({
     striped
     condensed
     fixed
-    key="roles_table"
+    key={`roles_table-${collection.length}`}
   >
     <Thead>
       <Tr {...{ onSortChange, sortData } }>
