@@ -1,10 +1,13 @@
 /* @flow */
 import React from 'react';
-import RolesRow from './row';
-import Table, { Section, Row, Cell } from '../../../../components/table';
-import sort from '../../../../hocomponents/sort';
-import { sortDefaults } from '../../../../constants/sort';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import RolesRow from './row';
+import { Table, Tbody, Thead, Tr, Th } from '../../../../components/new_table';
+import sort from '../../../../hocomponents/sort';
+import check from '../../../../hocomponents/check-no-data';
+import { sortDefaults } from '../../../../constants/sort';
 
 type Props = {
   collection: Array<Object>,
@@ -18,46 +21,40 @@ type Props = {
   sortData: Object,
 }
 
-const RolesTable: Function = (
-  { collection,
-    onSortChange,
-    sortData,
-    ...other
-  }: Props
-): React.Element<Table> => (
-  <Table className="table table--data table-striped table-condensed">
-    <Section type="head">
-      <Row>
-        <Cell tag="th"> Actions </Cell>
-        <Cell
-          tag="th"
-          name="role"
-          {...{ onSortChange, sortData } }
-        > Name </Cell>
-        <Cell
-          tag="th"
-          name="provider"
-          {...{ onSortChange, sortData } }
-        > Provider </Cell>
-        <Cell
-          tag="th"
-          name="desc"
-          {...{ onSortChange, sortData } }
-        > Description </Cell>
-      </Row>
-    </Section>
-    <Section type="body">
-      { collection.map((role, index) => (
+const RolesTable: Function = ({
+  collection,
+  onSortChange,
+  sortData,
+  ...rest
+}: Props): React.Element<Table> => (
+  <Table
+    striped
+    condensed
+    fixed
+    key="roles_table"
+  >
+    <Thead>
+      <Tr {...{ onSortChange, sortData } }>
+        <Th className="medium">Actions</Th>
+        <Th className="name" name="role">Name</Th>
+        <Th className="text" name="provider">Provider</Th>
+        <Th className="text" name="desc">Description</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      { collection.map((role: Object, index: number): React.Element<RolesRow> => (
         <RolesRow
           key={index}
           model={role}
-          {...other}
+          {...rest}
         />
       ))}
-    </Section>
+    </Tbody>
   </Table>
 );
 
 export default compose(
-  sort('rbacroles', 'collection', sortDefaults.rbacRoles)
+  check(({ collection }): boolean => collection && collection.length),
+  sort('rbacroles', 'collection', sortDefaults.rbacRoles),
+  pure(['collection', 'sortData'])
 )(RolesTable);

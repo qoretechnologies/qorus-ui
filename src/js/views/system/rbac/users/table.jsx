@@ -1,11 +1,13 @@
 /* @flow */
 import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import UsersRow from './row';
-import Table, { Section, Row, Cell } from '../../../../components/table';
+import { Table, Tbody, Thead, Tr, Th } from '../../../../components/new_table';
 import sort from '../../../../hocomponents/sort';
+import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
-import compose from 'recompose/compose';
 
 type Props = {
   collection: Array<Object>,
@@ -27,25 +29,22 @@ const UsersTable: Function = (
     sortData,
   }: Props
 ): React.Element<Table> => (
-  <Table className="table table--data table-striped table-condensed">
-    <Section type="head">
-      <Row>
-        <Cell tag="th">Actions</Cell>
-        <Cell
-          tag="th"
-          name="name"
-          {...{ onSortChange, sortData } }
-        > Name </Cell>
-        <Cell
-          tag="th"
-          name="username"
-          {...{ onSortChange, sortData } }
-        > Username </Cell>
-        <Cell tag="th"> Roles </Cell>
-      </Row>
-    </Section>
-    <Section type="body">
-      { collection.map((user, index) => (
+  <Table
+    consensed
+    striped
+    fixed
+    key="users_table"
+  >
+    <Thead>
+      <Tr {...{ onSortChange, sortData } }>
+        <Th className="narrow">Actions</Th>
+        <Th className="name" name="name">Name</Th>
+        <Th className="text big" name="username">Username</Th>
+        <Th className="text">Roles</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      { collection.map((user: Object, index: number): React.Element<any> => (
         <UsersRow
           key={index}
           model={user}
@@ -55,10 +54,12 @@ const UsersTable: Function = (
           onDeleteClick={onDeleteClick}
         />
       ))}
-    </Section>
+    </Tbody>
   </Table>
 );
 
 export default compose(
-  sort('rbacusers', 'collection', sortDefaults.rbacUsers)
+  check(({ collection }): boolean => collection && collection.length),
+  sort('rbacusers', 'collection', sortDefaults.rbacUsers),
+  pure(['sortData', 'collection'])
 )(UsersTable);

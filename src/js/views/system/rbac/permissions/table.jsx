@@ -1,10 +1,13 @@
 /* @flow */
 import React from 'react';
-import PermsRow from './row';
-import Table, { Section, Row, Cell } from '../../../../components/table';
-import sort from '../../../../hocomponents/sort';
-import { sortDefaults } from '../../../../constants/sort';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import PermsRow from './row';
+import { Table, Tbody, Thead, Tr, Th } from '../../../../components/new_table';
+import sort from '../../../../hocomponents/sort';
+import check from '../../../../hocomponents/check-no-data';
+import { sortDefaults } from '../../../../constants/sort';
 
 type Props = {
   collection: Array<Object>,
@@ -20,42 +23,40 @@ const PermsTable: Function = (
   { collection,
     onSortChange,
     sortData,
-    ...other
+    ...rest
   }: Props
 ): React.Element<Table> => (
-  <Table className="table table--data table-striped table-condensed">
-    <Section type="head">
-      <Row>
-        <Cell tag="th"> Actions </Cell>
-        <Cell
-          tag="th"
-          name="permission_type"
-          {...{ onSortChange, sortData } }
-        > Type </Cell>
-        <Cell
-          tag="th"
-          name="name"
-          {...{ onSortChange, sortData } }
-        > Name </Cell>
-        <Cell
-          tag="th"
-          name="desc"
-          {...{ onSortChange, sortData } }
-        > Description </Cell>
-      </Row>
-    </Section>
-    <Section type="body">
-      { collection.map((role, index) => (
+  <Table
+    striped
+    condensed
+    fixed
+    key="perms_table"
+  >
+    <Thead>
+      <Tr {...{ onSortChange, sortData } }>
+        <Th className="narrow"> Actions </Th>
+        <Th className="text normal" name="permission_type">Type</Th>
+        <Th className="name" name="name">Name</Th>
+        <Th className="text" name="desc">Description</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      { collection.map((role: Object, index: number): React.Element<PermsRow> => (
         <PermsRow
           key={index}
           model={role}
-          {...other}
+          {...rest}
         />
       ))}
-    </Section>
+    </Tbody>
   </Table>
 );
 
 export default compose(
-  sort('rbacperms', 'collection', sortDefaults.rbacPerms)
+  check(({ collection }): boolean => collection && collection.length),
+  sort('rbacperms', 'collection', sortDefaults.rbacPerms),
+  pure([
+    'sortData',
+    'collection',
+  ])
 )(PermsTable);
