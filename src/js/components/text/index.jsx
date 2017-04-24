@@ -8,9 +8,10 @@ import mapProps from 'recompose/mapProps';
 
 import withModal from '../../hocomponents/modal';
 import Modal from '../modal';
+import Tree from '../tree';
 
 type Props = {
-  text?: string,
+  text: any,
   popup?: boolean,
   placeholder?: string,
   handleClick: Function,
@@ -18,38 +19,47 @@ type Props = {
   closeModal: Function,
   setExpand: Function,
   expanded?: boolean,
+  renderTree?: boolean,
 };
 
 const Text: Function = ({
   text,
   expanded,
   handleClick,
-}: Props): React.Element<any> => (
-  expanded ?
-    <div
-      className="text-component"
-      onClick={handleClick}
-    >
-      {text}
-    </div> :
+  placeholder,
+}: Props): React.Element<any> => {
+  if (!placeholder && typeof text === 'object') {
+    return text;
+  } else if (expanded) {
+    return (
+      <div
+        className="text-component"
+        onClick={handleClick}
+      >
+        {text}
+      </div>
+    );
+  }
+
+  return (
     <p
-      title={text}
+      title={placeholder || text}
       onClick={handleClick}
       className="text-component"
     >
-      {text}
+      {placeholder || text}
     </p>
-);
+  );
+};
 
 export default compose(
   withState('expanded', 'setExpand', false),
   withModal(),
-  mapProps(({ text, placeholder, ...rest }: Props): Props => ({
-    text: placeholder || text,
-    ...rest,
-  })),
-  mapProps(({ text, ...rest }: Props): Props => ({
-    text: typeof text === 'object' ? JSON.stringify(text) : text,
+  mapProps(({ text, renderTree, ...rest }: Props): Props => ({
+    // eslint-disable-next-line
+    text: typeof text === 'object' ? (
+      renderTree ? <Tree data={text} /> : JSON.stringify(text)
+    ) : text,
     ...rest,
   })),
   withHandlers({
