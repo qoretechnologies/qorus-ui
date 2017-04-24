@@ -200,7 +200,7 @@ export default class extends Component {
               <textarea
                 ref="value"
                 id="value"
-                defaultValue={data ? JSON.stringify(data.value) : ''}
+                defaultValue={data ? JSON.stringify(data.value, null, 2) : ''}
                 className="form-control"
               />
             </div>

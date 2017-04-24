@@ -4,6 +4,7 @@ import React from 'react';
 import { Table, Tbody, Tr, Td, Th } from '../../../components/new_table';
 import PermButton from './perm_control';
 import { Controls } from '../../../components/controls';
+import Text from '../../../components/text';
 
 type Props = {
   data: Object,
@@ -61,7 +62,7 @@ const Property: Function = ({
             <Tr key={key}>
               <Th className="name">{ d }</Th>
               <Td className="text">
-                { typeof data[d] === 'string' ? data[d] : JSON.stringify(data[d]) }
+                <Text text={data[d]} renderTree />
               </Td>
               <Td>
                 {title !== 'omq' && (
