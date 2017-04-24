@@ -56,6 +56,29 @@ const alertTypeToResource: Object = {
   },
 };
 
+const interfaceTypeToResource: Object = {
+  WORKFLOW: {
+    resource: 'workflows',
+    uses: 'workflowid',
+    query: 'paneId',
+  },
+  SERVICE: {
+    resource: 'services',
+    uses: 'serviceid',
+    query: 'paneId',
+  },
+  JOB: {
+    resource: 'jobs',
+    uses: 'jobid',
+    query: 'paneId',
+  },
+  user: {
+    resource: 'services',
+    uses: 'serviceid',
+    query: 'paneId',
+  },
+};
+
 const getAlertObjectLink: Function = (type: string, data: Object): string => {
   const res = alertTypeToResource[type];
 
@@ -63,8 +86,16 @@ const getAlertObjectLink: Function = (type: string, data: Object): string => {
   return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}${res.suffix || ''}`;
 };
 
+const getDependencyObjectLink: Function = (type: string, data: Object): string => {
+  const res = interfaceTypeToResource[type];
+
+  // eslint-disable-next-line
+  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}`;
+};
+
 export {
   statusHealth,
   utf8ToB64,
   getAlertObjectLink,
+  getDependencyObjectLink,
 };
