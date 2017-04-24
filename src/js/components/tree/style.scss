@@ -5,14 +5,28 @@
   span {
     font-weight: bold;
 
-    &.expand:before {
+    &.data-control {
+      display: inline-block;
+      padding-left: 20px;
+      margin-left: -20px;
+      cursor: pointer;
+    }
+
+    &.data-control:before {
       font-family: FontAwesome;
-      content: "\f147";
       display: table;
       color: red;
       left: 10px;
       position: absolute;
       top: 7px;
+    }
+
+    &.data-control.expand:before {
+      content: "\f196";
+    }
+
+    &.data-control.clps:before {
+      content: "\f147";
     }
   }
 
@@ -28,7 +42,7 @@
       border-left: 0;
     }
 
-    span:not(.expand):before {
+    span:not(.data-control):before {
       content: '';
       display: table;
       position: absolute;
@@ -39,7 +53,7 @@
       left: 0;
     }
 
-    &:last-child > span:not(.expand):after {
+    &:last-child > span:not(.data-control):after {
       content: '';
       display: table;
       position: absolute;

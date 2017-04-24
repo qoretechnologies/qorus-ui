@@ -45,12 +45,22 @@ export default class Tree extends Component {
     });
   };
 
-  renderTree(data, top) {
+  renderTree(data, top, k) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-top': top,
         last: typeof data[key] !== 'object' || data[key] === null,
       });
+
+      const stateKey = k ? `${k}_${key}` : key;
+      const isObject = typeof data[key] === 'object' && data[key] !== null;
+      const isExpandable = typeof data[key] !== 'object' || this.state[stateKey];
+
+      const handleClick = () => {
+        this.setState({
+          [stateKey]: !this.state[stateKey],
+        });
+      };
 
       return (
         <div
@@ -58,18 +68,22 @@ export default class Tree extends Component {
           className={wrapperClass}
         >
           <span
-            className={typeof data[key] === 'object' && data[key] !== null ?
-              'expand' :
-              ''
+            onClick={handleClick}
+            className={classNames({
+              'data-control': isObject,
+              expand: isObject && !isExpandable,
+              clps: isObject && isExpandable,
+            })
             }
           >
             {key}:
           </span>
           {' '}
-          {typeof data[key] === 'object' && data[key] !== null ?
-            this.renderTree(data[key], false) :
-            data[key]
-          }
+          {isExpandable && (
+             isObject ?
+              this.renderTree(data[key], false, stateKey) :
+              data[key]
+          )}
         </div>
       );
     });

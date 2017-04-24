@@ -1,6 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
+import { mount } from 'enzyme';
 
 import Tree from '../../src/js/components/tree';
 import { Controls } from '../../src/js/components/controls';
@@ -32,19 +33,35 @@ describe("Tree from 'components/tree'", () => {
     const spans = TestUtils.scryRenderedDOMComponentsWithTag(comp, 'span');
     const treeTop = TestUtils.scryRenderedDOMComponentsWithClass(comp, 'tree-top');
 
-    expect(expands).to.have.length(4);
-    expect(spans).to.have.length(10);
+    expect(expands).to.have.length(1);
+    expect(spans).to.have.length(2);
     expect(treeTop).to.have.length(2);
-    expect(spans[0].textContent).to.equal('account:');
-    expect(spans[1].textContent).to.equal('user:');
-    expect(spans[2].textContent).to.equal('name:');
-    expect(spans[3].textContent).to.equal('first:');
-    expect(spans[4].textContent).to.equal('last:');
-    expect(spans[5].textContent).to.equal('address:');
-    expect(spans[6].textContent).to.equal('city:');
-    expect(spans[7].textContent).to.equal('age:');
-    expect(spans[8].textContent).to.equal('admin:');
-    expect(spans[9].textContent).to.equal('value:');
+  });
+
+  it('expands the tree on click', () => {
+    const wrapper = mount(
+      <Tree data={data} />
+    );
+
+    wrapper.find('.expand').first().simulate('click');
+
+    expect(wrapper.find('.clps')).to.have.length(1);
+    expect(wrapper.find('.expand')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(4);
+    expect(wrapper.find('.tree-top')).to.have.length(2);
+  });
+
+  it('collapses the tree on click', () => {
+    const wrapper = mount(
+      <Tree data={data} />
+    );
+
+    wrapper.find('.expand').first().simulate('click');
+    wrapper.find('.clps').first().simulate('click');
+
+    expect(wrapper.find('.expand')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(2);
+    expect(wrapper.find('.tree-top')).to.have.length(2);
   });
 
   it('renders the button with default text', () => {
