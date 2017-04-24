@@ -13,6 +13,7 @@ export default class Tree extends Component {
     ]),
     withEdit: PropTypes.bool,
     onUpdateClick: PropTypes.func,
+    noControls: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -122,33 +123,35 @@ export default class Tree extends Component {
 
     return (
       <div>
-        <div className="pull-right">
-          <Controls noControls grouped>
-            <Button
-              className="button--copy"
-              label="Tree view"
-              btnStyle="info"
-              disabled={this.state.mode === 'normal'}
-              action={this.handleTreeClick}
-            />
-            <Button
-              className="button--copy"
-              label="Copy view"
-              btnStyle="info"
-              disabled={this.state.mode === 'copy'}
-              action={this.handleCopyClick}
-            />
-            { withEdit && (
+        {!this.props.noControls && (
+          <div className="pull-right">
+            <Controls noControls grouped>
               <Button
                 className="button--copy"
-                label="Edit mode"
+                label="Tree view"
                 btnStyle="info"
-                disabled={this.state.mode === 'edit'}
-                action={this.handleEditClick}
+                disabled={this.state.mode === 'normal'}
+                action={this.handleTreeClick}
               />
-            )}
-          </Controls>
-        </div>
+              <Button
+                className="button--copy"
+                label="Copy view"
+                btnStyle="info"
+                disabled={this.state.mode === 'copy'}
+                action={this.handleCopyClick}
+              />
+              { withEdit && (
+                <Button
+                  className="button--copy"
+                  label="Edit mode"
+                  btnStyle="info"
+                  disabled={this.state.mode === 'edit'}
+                  action={this.handleEditClick}
+                />
+              )}
+            </Controls>
+          </div>
+        )}
         {this.state.mode === 'normal' &&
           <div className="tree-wrapper pull-left" ref="tree">
             { this.renderTree(this.props.data, true) }

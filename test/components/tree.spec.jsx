@@ -64,6 +64,14 @@ describe("Tree from 'components/tree'", () => {
     expect(wrapper.find('.tree-top')).to.have.length(2);
   });
 
+  it('does not render controls', () => {
+    const wrapper = mount(
+      <Tree data={data} noControls />
+    );
+
+    expect(wrapper.find('.pull-right')).to.have.length(0);
+  });
+
   it('renders the button with default text', () => {
     const renderer = TestUtils.createRenderer();
 

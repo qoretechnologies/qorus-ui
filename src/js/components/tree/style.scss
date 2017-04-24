@@ -33,6 +33,7 @@
   div {
     padding: 5px 0 5px 30px;
     position: relative;
+    word-break: break-all;
   }
 
   div:not(.tree-top) {
