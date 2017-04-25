@@ -78,9 +78,9 @@ class SQLCache extends Component {
 
     return (
       <div className="tab-pane active">
-        <Toolbar>
+        <Toolbar sticky>
           <Button
-            btnStyle="default"
+            btnStyle="danger"
             label="Clear All"
             icon="trash-o"
             big

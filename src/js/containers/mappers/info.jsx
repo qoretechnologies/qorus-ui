@@ -12,25 +12,28 @@ import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
 import InfoTable from '../../components/info_table';
+import Toolbar from '../../components/toolbar';
 
 const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Function }) => {
   if (!mapper) return <Loader />;
 
   return (
     <div>
-      <h3 className="mapper-header">
-        <a href="#" onClick={onBackClick}>
-          <i className="fa fa-angle-left" />
-        </a>
-        {' '}
-        { mapper.name }
-        {' '}
-        <small>({ mapper.version })</small>
-      </h3>
-      <p className="mapper-subtitle">{ mapper.desc }</p>
-      <p className="mapper-desc">
-        <span> Type </span>: { mapper.type }
-      </p>
+      <Toolbar sticky>
+        <h3 className="mapper-header">
+          <a href="#" onClick={onBackClick}>
+            <i className="fa fa-angle-left" />
+          </a>
+          {' '}
+          { mapper.name }
+          {' '}
+          <small>({ mapper.version })</small>
+        </h3>
+        <p className="mapper-subtitle">{ mapper.desc }</p>
+        <p className="mapper-desc">
+          <span> Type </span>: { mapper.type }
+        </p>
+      </Toolbar>
       <p className="mapper-desc">
         <span> Options </span>:
       </p>

@@ -239,7 +239,7 @@ export default class OCMDView extends Component {
 
     return (
       <div>
-        <Toolbar>
+        <Toolbar sticky>
           <div className="row">
             <div className="col-sm-12">
               <Controls noControls grouped>
