@@ -64,14 +64,12 @@ export default function AutoComponent(props: { children: any }) {
         <Text text={humanizeDuration(props.children)} />
       );
     }
-  } else if (isObject(props.children)) {
-    return <pre>{JSON.stringify(props.children, null, COMPLEX_VALUE_INDENT)}</pre>;
   } else {
     comp = props.children;
   }
 
   return (
-    <Text text={comp} />
+    <Text text={comp} renderTree />
   );
 }
 
