@@ -15,6 +15,7 @@ import Text from '../../../components/text';
 import { Control as Button } from '../../../components/controls';
 import Icon from '../../../components/icon';
 import { hasPermission } from '../../../helpers/user';
+import { typeToString } from '../../../helpers/system';
 
 type Props = {
   setOption: Function,
@@ -25,7 +26,8 @@ type Props = {
   workflow: ?string,
   service: ?string,
   job: ?string,
-  default: ?any,
+  default?: any,
+  def: ?any,
   value: ?any,
   openModal: Function,
   closeModal: Function,
@@ -39,8 +41,8 @@ const OptionRow: Function = ({
   workflow,
   service,
   job,
-  default: def,
-  value,
+  stringDef,
+  stringVal,
   handleEditClick,
   canEdit,
 }: Props): React.Element<any> => (
@@ -74,10 +76,10 @@ const OptionRow: Function = ({
       />
     </Td>
     <Td className="text">
-      <Text text={def} />
+      <Text text={stringDef} renderTree />
     </Td>
     <Td className="text">
-      <Text text={value} />
+      <Text text={stringVal} renderTree />
     </Td>
     <Td className="narrow">
       {canEdit && (
@@ -100,8 +102,12 @@ export default compose(
       setOption: actions.systemOptions.setOption,
     }
   ),
-  mapProps(({ permissions, status, ...rest }: Props): Props => ({
+  mapProps(({ permissions, status, default: def, value, ...rest }: Props): Props => ({
+    stringDef: typeToString(def),
+    stringVal: typeToString(value),
     canEdit: status === 'unlocked' && hasPermission(permissions, 'OPTION-CONTROL'),
+    def,
+    value,
     status,
     permissions,
     ...rest,
