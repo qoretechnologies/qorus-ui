@@ -93,9 +93,22 @@ const getDependencyObjectLink: Function = (type: string, data: Object): string =
   return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}`;
 };
 
+const typeToString: Function = (val: any): any => {
+  if (typeof val === 'undefined') {
+    return 'undefined';
+  } else if (val === null) {
+    return 'null';
+  } else if (typeof val === 'boolean') {
+    return val ? 'true' : 'false';
+  }
+
+  return val;
+};
+
 export {
   statusHealth,
   utf8ToB64,
   getAlertObjectLink,
   getDependencyObjectLink,
+  typeToString,
 };
