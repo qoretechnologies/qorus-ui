@@ -46,11 +46,34 @@ export default class Tree extends Component {
     });
   };
 
+  handleExpandClick = () => {
+    const st = Object.keys(this.props.data).reduce((nw: Object, cur: string) => ({
+      ...nw,
+      ...{
+        [cur]: true,
+      },
+    }), {});
+
+    this.setState(st);
+  };
+
+  handleCollapseClick = () => {
+    const st = Object.keys(this.props.data).reduce((nw: Object, cur: string) => ({
+      ...nw,
+      ...{
+        [cur]: false,
+      },
+    }), {});
+
+    this.setState(st);
+  };
+
   renderTree(data, top, k) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-top': top,
         last: typeof data[key] !== 'object' || data[key] === null,
+        nopad: !this.isDeep(),
       });
 
       const stateKey = k ? `${k}_${key}` : key;
@@ -77,7 +100,7 @@ export default class Tree extends Component {
             })
             }
           >
-            {key}:
+            {isObject ? key : `${key}:`}
           </span>
           {' '}
           {isExpandable && (
@@ -116,6 +139,12 @@ export default class Tree extends Component {
     });
   }
 
+  isDeep = () => (
+    Object.keys(this.props.data).some((key: string): boolean => (
+      typeof this.props.data[key] === 'object'
+    ))
+  );
+
   render() {
     const { data, withEdit } = this.props;
 
@@ -123,37 +152,59 @@ export default class Tree extends Component {
 
     return (
       <div>
-        {!this.props.noControls && (
-          <div className="pull-right">
-            <Controls noControls grouped>
-              <Button
-                className="button--copy"
-                label="Tree view"
-                btnStyle="info"
-                disabled={this.state.mode === 'normal'}
-                action={this.handleTreeClick}
-              />
-              <Button
-                className="button--copy"
-                label="Copy view"
-                btnStyle="info"
-                disabled={this.state.mode === 'copy'}
-                action={this.handleCopyClick}
-              />
-              { withEdit && (
-                <Button
-                  className="button--copy"
-                  label="Edit mode"
-                  btnStyle="info"
-                  disabled={this.state.mode === 'edit'}
-                  action={this.handleEditClick}
-                />
-              )}
-            </Controls>
+        <div className="row">
+          <div className="col-lg-12">
+            {this.isDeep() && (
+              <div className="pull-left">
+                <Controls noControls grouped>
+                  <Button
+                    className="button--expand"
+                    label="Expand all"
+                    btnStyle="info"
+                    action={this.handleExpandClick}
+                  />
+                  <Button
+                    className="button--collapse"
+                    label="Collapse all"
+                    btnStyle="info"
+                    action={this.handleCollapseClick}
+                  />
+                </Controls>
+              </div>
+            )}
+            {!this.props.noControls && (
+              <div className="pull-right">
+                <Controls noControls grouped>
+                  <Button
+                    className="button--copy"
+                    label="Tree view"
+                    btnStyle="info"
+                    disabled={this.state.mode === 'normal'}
+                    action={this.handleTreeClick}
+                  />
+                  <Button
+                    className="button--copy"
+                    label="Copy view"
+                    btnStyle="info"
+                    disabled={this.state.mode === 'copy'}
+                    action={this.handleCopyClick}
+                  />
+                  { withEdit && (
+                    <Button
+                      className="button--copy"
+                      label="Edit mode"
+                      btnStyle="info"
+                      disabled={this.state.mode === 'edit'}
+                      action={this.handleEditClick}
+                    />
+                  )}
+                </Controls>
+              </div>
+            )}
           </div>
-        )}
+        </div>
         {this.state.mode === 'normal' &&
-          <div className="tree-wrapper pull-left" ref="tree">
+          <div className="tree-wrapper" ref="tree">
             { this.renderTree(this.props.data, true) }
           </div>
         }

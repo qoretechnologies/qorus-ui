@@ -16,7 +16,7 @@
       font-family: FontAwesome;
       display: table;
       color: red;
-      left: 10px;
+      left: 0;
       position: absolute;
       top: 7px;
     }
@@ -31,13 +31,20 @@
   }
 
   div {
-    padding: 5px 0 5px 30px;
+    padding: 5px 0 5px 20px;
     position: relative;
     word-break: break-all;
+
+    &.nopad {
+      padding-left: 0;
+    }
   }
 
   div:not(.tree-top) {
-    border-left: 1px dotted red;
+    &.last {
+      margin-left: 6px;
+      border-left: 1px dotted red;
+    }
 
     &.last:last-child {
       border-left: 0;
@@ -47,7 +54,7 @@
       content: '';
       display: table;
       position: absolute;
-      width: 25px;
+      width: 15px;
       height: 1px;
       border-top: 1px dotted red;
       top: 15px;
@@ -65,10 +72,4 @@
       border-left: 1px dotted red;
     }
   }
-}
-
-.button--copy {
-  position: absolute;
-  right: 25px;
-  top: 10px;
 }

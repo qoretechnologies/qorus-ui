@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import { mount } from 'enzyme';
 
 import Tree from '../../src/js/components/tree';
-import { Controls } from '../../src/js/components/controls';
 
 const data = {
   account: {
@@ -72,17 +71,45 @@ describe("Tree from 'components/tree'", () => {
     expect(wrapper.find('.pull-right')).to.have.length(0);
   });
 
-  it('renders the button with default text', () => {
-    const renderer = TestUtils.createRenderer();
-
-    renderer.render(
+  it('renders the expand/collapse buttons', () => {
+    const wrapper = mount(
       <Tree data={data} />
     );
 
-    const result = renderer.getRenderOutput();
+    expect(wrapper.find('.btn-group')).to.have.length(2);
+  });
 
-    expect(result.props.children[0].type).to.equal('div');
-    expect(result.props.children[0].props.className).to.equal('pull-right');
-    expect(result.props.children[0].props.children.type).to.equal(Controls);
+  it('renders simple data without the expand controlas and padding', () => {
+    const wrapper = mount(
+      <Tree data={{ a: 'b', c: 'd' }} />
+    );
+
+    expect(wrapper.find('.btn-group')).to.have.length(1);
+    expect(wrapper.find('.nopad')).to.have.length(2);
+  });
+
+  it('expands all top data when expand all is clicked', () => {
+    const wrapper = mount(
+      <Tree data={data} />
+    );
+
+    wrapper.find('.button--expand').first().simulate('click');
+
+    expect(wrapper.find('.clps')).to.have.length(1);
+    expect(wrapper.find('.expand')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(4);
+    expect(wrapper.find('.tree-top')).to.have.length(2);
+  });
+
+  it('collapses all top data when collapse all is clicked', () => {
+    const wrapper = mount(
+      <Tree data={data} />
+    );
+
+    wrapper.find('.button--collapse').first().simulate('click');
+
+    expect(wrapper.find('.expand')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(2);
+    expect(wrapper.find('.tree-top')).to.have.length(2);
   });
 });
