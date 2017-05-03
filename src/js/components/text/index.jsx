@@ -28,7 +28,7 @@ const Text: Function = ({
   handleClick,
   placeholder,
 }: Props): React.Element<any> => {
-  if (!placeholder && typeof text === 'object') {
+  if (!placeholder && text && typeof text === 'object') {
     return text;
   } else if (expanded) {
     return (
@@ -36,7 +36,7 @@ const Text: Function = ({
         className="text-component"
         onClick={handleClick}
       >
-        {text}
+        {text.toString()}
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default compose(
   withModal(),
   mapProps(({ text, renderTree, ...rest }: Props): Props => ({
     // eslint-disable-next-line
-    text: typeof text === 'object' ? (
+    text: text && typeof text === 'object' ? (
       renderTree ? <Tree data={text} /> : JSON.stringify(text)
     ) : text,
     ...rest,
