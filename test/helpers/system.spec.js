@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getAlertObjectLink, typeToString } from '../../src/js/helpers/system';
 
 describe("{ getAlertObjectLink, typeToString } from 'helpers/search'", () => {
-  describe("getAlertObjectLink", () => {
+  describe('getAlertObjectLink', () => {
     it('returns a correct url chunk using id', () => {
       const url = getAlertObjectLink('SERVICE', { id: 20, name: 'Irellevant' });
 

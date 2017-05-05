@@ -33,6 +33,8 @@ type Props = {
   closeModal: Function,
   permissions: Array<string>,
   canEdit: boolean,
+  stringDef: ?any,
+  stringVal: ?any,
 };
 
 const OptionRow: Function = ({
