@@ -29,12 +29,11 @@ const SQLCacheRow: Function = (
       <Td className="narrow">
         { count }
       </Td>
-      <Td>
+      <Td className="big">
         <DateComponent date={created} format="YYYY-MM-DD HH:mm:ss" />
       </Td>
       <Td className="narrow">
         <Button
-          label="Clear"
           icon="trash-o"
           btnStyle="danger"
           action={handleClick}

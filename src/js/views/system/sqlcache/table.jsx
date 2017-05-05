@@ -1,8 +1,13 @@
 /* @flow */
 import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
 
 import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
+import Icon from '../../../components/icon';
 import CacheRow from './row';
 
 type Props = {
@@ -10,32 +15,40 @@ type Props = {
   data: Object,
   onClick: Function,
   onSingleClick: Function,
-}
+  expanded: boolean,
+  handleExpandClick: Function,
+  setExpanded: Function,
+};
 
 const SQLCacheTable: Function = (
-  { name, data, onClick, onSingleClick }: Props
+  { name, data, onClick, onSingleClick, expanded, handleExpandClick }: Props
 ): React.Element<any> => {
   const handleClick: Function = (): void => {
     onClick(name);
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <div className="row">
-        <div className="pull-left">
-          <h4>{ name }</h4>
-        </div>
-        <div className="pull-right">
-          <Button
-            btnStyle="danger"
-            big
-            label="Clear datasource"
-            icon="trash-o"
-            action={handleClick}
-          />
+        <div className="col-lg-12">
+          <div className="pull-left">
+            <h4 onClick={handleExpandClick} className="cpointer">
+              <Icon icon={expanded ? 'minus-square-o' : 'plus-square-o'} />
+              {' '}
+              { name }
+            </h4>
+          </div>
+          <div className="pull-right">
+            <Button
+              btnStyle="danger"
+              label="Clear datasource"
+              icon="trash-o"
+              action={handleClick}
+            />
+          </div>
         </div>
       </div>
-      { Object.keys(data).length > 0 && (
+      { Object.keys(data).length > 0 && expanded ? (
         <Table condensed striped>
           <Thead>
             <Tr>
@@ -45,10 +58,10 @@ const SQLCacheTable: Function = (
               <Th className="narrow">
                 Count
               </Th>
-              <Th>
+              <Th className="big">
                 Created
               </Th>
-              <Th />
+              <Th className="narrow"> Actions </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -64,7 +77,7 @@ const SQLCacheTable: Function = (
             ))}
           </Tbody>
         </Table>
-      )}
+      ) : null}
       { Object.keys(data).length <= 0 && (
         <p className="no-data"> No data </p>
       )}
@@ -72,4 +85,15 @@ const SQLCacheTable: Function = (
   );
 };
 
-export default SQLCacheTable;
+export default compose(
+  withState('expanded', 'setExpanded', true),
+  withHandlers({
+    handleExpandClick: ({ expanded, setExpanded }: Props): Function => (): void => {
+      setExpanded(() => !expanded);
+    },
+  }),
+  pure([
+    'expanded',
+    'data',
+  ])
+)(SQLCacheTable);
