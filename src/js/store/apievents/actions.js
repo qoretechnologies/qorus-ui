@@ -3,12 +3,11 @@ import startsWith from 'lodash/startsWith';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
-import * as workflows from '../api/resources/workflows/actions';
+import * as workflows from '../api/resources/workflows/actions/specials';
 import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
 import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
-import actions from '../api/actions';
 import { pipeline } from '../../helpers/apievents';
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -184,7 +183,7 @@ const handleEvent = (url, data, dispatch, state) => {
               dispatch
             );
           } else {
-            dispatch(actions.services.addNew(info.serviceid));
+            dispatch(services.addNew(info.serviceid));
           }
         }
         break;
@@ -229,7 +228,7 @@ const handleEvent = (url, data, dispatch, state) => {
               dispatch
             );
           } else {
-            dispatch(actions.workflows.addNew(info.workflowid));
+            dispatch(workflows.addNew(info.workflowid));
           }
         }
         break;
@@ -372,7 +371,7 @@ const handleEvent = (url, data, dispatch, state) => {
             dispatch
           );
         } else {
-          dispatch(actions.jobs.addNew(info.jobid));
+          dispatch(jobs.addNew(info.jobid));
         }
 
         break;
