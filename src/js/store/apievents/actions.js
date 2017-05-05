@@ -3,11 +3,12 @@ import startsWith from 'lodash/startsWith';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
-import * as workflows from '../api/resources/workflows/actions/specials';
+import * as workflows from '../api/resources/workflows/actions';
 import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
 import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
+import actions from '../api/actions';
 import { pipeline } from '../../helpers/apievents';
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -170,15 +171,21 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'SERVICE_START':
         if (state.api.services.sync) {
-          pipeline(
-            eventstr,
-            services.setStatus,
-            {
-              id: info.serviceid,
-              status: 'loaded',
-            },
-            dispatch
-          );
+          const service = state.api.services.data.find(srv => srv.id === info.serviceid);
+
+          if (service) {
+            pipeline(
+              eventstr,
+              services.setStatus,
+              {
+                id: info.serviceid,
+                status: 'loaded',
+              },
+              dispatch
+            );
+          } else {
+            dispatch(actions.services.addNew(info.serviceid));
+          }
         }
         break;
       case 'SERVICE_AUTOSTART_CHANGE':
@@ -209,15 +216,21 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'WORKFLOW_START':
         if (state.api.workflows.sync) {
-          pipeline(
-            eventstr,
-            workflows.setExecCount,
-            {
-              id: info.workflowid,
-              value: 1,
-            },
-            dispatch
-          );
+          const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+
+          if (workflow) {
+            pipeline(
+              eventstr,
+              workflows.setExecCount,
+              {
+                id: info.workflowid,
+                value: 1,
+              },
+              dispatch
+            );
+          } else {
+            dispatch(actions.workflows.addNew(info.workflowid));
+          }
         }
         break;
       case 'WORKFLOW_DATA_SUBMITTED': {
@@ -358,6 +371,8 @@ const handleEvent = (url, data, dispatch, state) => {
             { id: info.jobid, value: true },
             dispatch
           );
+        } else {
+          dispatch(actions.jobs.addNew(info.jobid));
         }
 
         break;

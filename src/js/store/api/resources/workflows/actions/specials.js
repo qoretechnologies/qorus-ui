@@ -52,6 +52,18 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
+const addNew = createAction(
+  'WORKFLOWS_ADDNEW',
+  async (id) => {
+    const wf = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/workflows/${id}`
+    );
+
+    return { wf };
+  }
+);
+
 const setExecCount = createAction(
   'WORKFLOWS_SETEXECCOUNT',
   (events) => ({ events })
@@ -204,4 +216,5 @@ export {
   toggleStart,
   toggleDeprecated,
   fetchList,
+  addNew,
 };

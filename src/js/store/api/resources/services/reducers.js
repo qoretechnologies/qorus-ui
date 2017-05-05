@@ -1,4 +1,5 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import { normalizeId, normalizeName } from '../utils';
 import remove from 'lodash/remove';
 
 import {
@@ -120,6 +121,21 @@ const fetchMethodSources = {
       loading: false,
       error: action.payload,
     });
+  },
+};
+
+const addNew = {
+  next(state = initialState, { payload: { srv } }) {
+    if (state.sync) {
+      const data = [...state.data, {
+        ...normalizeName(normalizeId('serviceid', srv)),
+        ...{ _updated: true },
+      }];
+
+      return { ...state, ...{ data } };
+    }
+
+    return state;
   },
 };
 
@@ -332,4 +348,5 @@ export {
   setAutostart as SETAUTOSTART,
   serviceAction as ACTION,
   unsync as UNSYNC,
+  addNew as ADDNEW,
 };

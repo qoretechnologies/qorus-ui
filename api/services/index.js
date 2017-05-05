@@ -13,7 +13,11 @@ module.exports = () => {
 
   const router = new express.Router();
 
-  router.get('/', (req, res) => setTimeout(() => res.json(data), 200));
+  router.get('/', (req, res) => setTimeout(() => {
+    const dt = data.filter(d => d.WS_TEST_ONLY !== true);
+
+    res.json(dt);
+  }, 200));
   router.get('/:id', (req, res) => {
     const item = data.find(d => findService(req.params.id, d));
     res.status(item ? 200 : 404).json(item);
