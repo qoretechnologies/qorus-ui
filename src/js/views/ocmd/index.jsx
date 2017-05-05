@@ -9,6 +9,7 @@ import Loader from '../../components/loader';
 import { Controls, Control as Button } from '../../components/controls';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import Tree from '../../components/tree';
+import Container from '../../components/container';
 
 type Props = {
   sync: boolean,
@@ -239,7 +240,7 @@ export default class OCMDView extends Component {
 
     return (
       <div>
-        <Toolbar sticky>
+        <Toolbar>
           <div className="row">
             <div className="col-sm-12">
               <Controls noControls grouped>
@@ -289,16 +290,18 @@ export default class OCMDView extends Component {
             </div>
           </div>
         </Toolbar>
-        <div className="row ocmd-output">
-          <div className="col-sm-12">
-            { this.state.lastCommand && (
-              <h4>Showing output for: { this.state.lastCommand }</h4>
-            )}
-            { this.state.output && (
-              <pre>{ this.renderOutput() }</pre>
-            )}
+        <Container>
+          <div className="row ocmd-output">
+            <div className="col-sm-12">
+              { this.state.lastCommand && (
+                <h4>Showing output for: { this.state.lastCommand }</h4>
+              )}
+              { this.state.output && (
+                <pre>{ this.renderOutput() }</pre>
+              )}
+            </div>
           </div>
-        </div>
+        </Container>
       </div>
     );
   }

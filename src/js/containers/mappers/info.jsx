@@ -12,47 +12,47 @@ import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
 import InfoTable from '../../components/info_table';
-import Toolbar from '../../components/toolbar';
+import Container from '../../components/container';
 
 const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Function }) => {
   if (!mapper) return <Loader />;
 
   return (
     <div>
-      <Toolbar sticky>
-        <h3 className="mapper-header">
-          <a href="#" onClick={onBackClick}>
-            <i className="fa fa-angle-left" />
-          </a>
-          {' '}
-          { mapper.name }
-          {' '}
-          <small>({ mapper.version })</small>
-        </h3>
-        <p className="mapper-subtitle">{ mapper.desc }</p>
-        <p className="mapper-desc">
-          <span> Type </span>: { mapper.type }
-        </p>
-      </Toolbar>
+      <h3 className="mapper-header">
+        <a href="#" onClick={onBackClick}>
+          <i className="fa fa-angle-left" />
+        </a>
+        {' '}
+        { mapper.name }
+        {' '}
+        <small>({ mapper.version })</small>
+      </h3>
+      <p className="mapper-subtitle">{ mapper.desc }</p>
       <p className="mapper-desc">
-        <span> Options </span>:
+        <span> Type </span>: { mapper.type }
       </p>
-      <div className="row mapper-opts">
-        <div className="col-lg-4">
-          <InfoTable object={mapper.opts} omit={['input', 'output', 'name']} />
-        </div>
-      </div>
-      <div className="view-content">
-        { !mapper.valid && (
-          <div className="mapper-error-msg">
-            <h5> Warning: This mapper contains an error and might not be rendered correctly </h5>
-            <Alert bsStyle="danger">
-              { mapper.error }
-            </Alert>
+      <Container>
+        <p className="mapper-desc">
+          <span> Options </span>:
+        </p>
+        <div className="row mapper-opts">
+          <div className="col-lg-4">
+            <InfoTable object={mapper.opts} omit={['input', 'output', 'name']} />
           </div>
-        )}
-        <MapperDiagram mapper={mapper} />
+        </div>
+        <div className="view-content">
+          { !mapper.valid && (
+            <div className="mapper-error-msg">
+              <h5> Warning: This mapper contains an error and might not be rendered correctly </h5>
+              <Alert bsStyle="danger">
+                { mapper.error }
+              </Alert>
+            </div>
+          )}
+          <MapperDiagram mapper={mapper} />
       </div>
+      </Container>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { flowRight, pickBy, includes } from 'lodash';
 
 import Toolbar from '../../../components/toolbar';
+import Container from '../../../components/container';
 import Search from '../../../containers/search';
 import { Control as Button } from '../../../components/controls';
 import search from '../../../hocomponents/search';
@@ -78,7 +79,7 @@ class SQLCache extends Component {
 
     return (
       <div className="tab-pane active">
-        <Toolbar sticky>
+        <Toolbar>
           <Button
             btnStyle="danger"
             label="Clear All"
@@ -92,7 +93,7 @@ class SQLCache extends Component {
             resource="sqlcache"
           />
         </Toolbar>
-        <div>
+        <Container>
           { colLength > 0 && (
             Object.keys(this.props.collection).map((col, index) => (
               <Table
@@ -107,7 +108,7 @@ class SQLCache extends Component {
           { colLength <= 0 && (
             <p> No data </p>
           )}
-        </div>
+        </Container>
       </div>
     );
   }

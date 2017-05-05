@@ -14,6 +14,7 @@ import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
 import Toolbar from '../../../components/toolbar';
+import Container from '../../../components/container';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
 const querySelector: Function = (state: Object, props: Object): Object => props.location.query.q;
@@ -135,7 +136,7 @@ export default class PropertiesView extends Component {
   render() {
     return (
       <div className="tab-pane active">
-        <Toolbar sticky>
+        <Toolbar>
           <PermButton
             perms={this.props.user.data.permissions}
             reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
@@ -152,7 +153,9 @@ export default class PropertiesView extends Component {
             resource="properties"
           />
         </Toolbar>
-        { this.renderProperties() }
+        <Container>
+          { this.renderProperties() }
+        </Container>
       </div>
     );
   }
