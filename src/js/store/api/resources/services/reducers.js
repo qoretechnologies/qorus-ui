@@ -129,7 +129,7 @@ const addNew = {
     if (state.sync) {
       const data = [...state.data, {
         ...normalizeName(normalizeId('serviceid', srv)),
-        ...{ _updated: true },
+        ...{ _updated: true, desc: srv.description },
       }];
 
       return { ...state, ...{ data } };
