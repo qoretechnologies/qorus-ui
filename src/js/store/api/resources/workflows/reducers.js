@@ -1,4 +1,5 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import { normalizeId } from '../utils';
 import remove from 'lodash/remove';
 import includes from 'lodash/includes';
 
@@ -101,6 +102,18 @@ const fetchLibSources = {
       loading: false,
       error: action.payload,
     });
+  },
+};
+
+const addNew = {
+  next(state = initialState, { payload: { wf } }) {
+    if (state.sync) {
+      const data = [...state.data, { ...normalizeId('workflowid', wf), ...{ _updated: true } }];
+
+      return { ...state, ...{ data } };
+    }
+
+    return state;
   },
 };
 
@@ -394,4 +407,5 @@ export {
   unselectAll as UNSELECTALL,
   setDeprecated as TOGGLEDEPRECATED,
   fetchList as FETCHLIST,
+  addNew as ADDNEW,
 };

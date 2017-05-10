@@ -66,6 +66,18 @@ const fetchMethodSources = createAction(
   fetchMethodSourcesMeta
 );
 
+const addNew = createAction(
+  'SERVICES_ADDNEW',
+  async (id) => {
+    const srv = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/services/${id}`
+    );
+
+    return { srv };
+  }
+);
+
 const setStatus = createAction(
   'SERVICES_SETSTATUS',
   (events) => ({ events })
@@ -144,4 +156,5 @@ export {
   selectInvert,
   serviceAction,
   unsync,
+  addNew,
 };

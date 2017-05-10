@@ -2,7 +2,6 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import withProps from 'recompose/withProps';
-import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -104,10 +103,19 @@ const groupsSelector: Function = createSelector(
   )(groups.data)
 );
 
-const selector: Function = createSelector(
+const groupSelector: Function = createSelector(
   [
     resourceSelector('groups'),
     querySelector('group'),
+  ], (groups: Object, group: ?string) => (
+    group ? groups.data.find((grp: Object): boolean => grp.name === group) : null
+  )
+);
+
+const selector: Function = createSelector(
+  [
+    resourceSelector('groups'),
+    groupSelector,
     groupsSelector,
   ], (meta: Object, group: string, groups: Array<Object>): Object => ({
     meta,
@@ -130,11 +138,6 @@ export default compose(
   }),
   patch('load', ['fetchParams']),
   sync('meta'),
-  mapProps(({ group, groups, ...rest }): Props => ({
-    group: group ? groups.find((grp: Object): boolean => grp.name === group) : null,
-    groups,
-    ...rest,
-  })),
   selectable('groups'),
   withCSV('groups', 'groups'),
   pure([

@@ -6,8 +6,8 @@ import Dropdown, { Control as DToggle, Item as DItem } from '../../../components
 
 export default class OptionModal extends Component {
   props: {
-    onSaveClick: Function,
-    onCloseClick: Function,
+    onSave: Function,
+    onClose: Function,
     model: Object,
   };
 
@@ -32,7 +32,7 @@ export default class OptionModal extends Component {
   handleFormSubmit: Function = (event: EventHandler): void => {
     event.preventDefault();
 
-    this.props.onSaveClick(this.props.model, this.state.value);
+    this.props.onSave(this.props.model.name, this.state.value);
   };
 
   renderValue() {
@@ -84,14 +84,14 @@ export default class OptionModal extends Component {
   }
 
   render() {
-    const { model, onCloseClick } = this.props;
+    const { model, onClose } = this.props;
 
     return (
       <form onSubmit={this.handleFormSubmit}>
         <Modal hasFooter>
           <Modal.Header
             titleId="option"
-            onClose={onCloseClick}
+            onClose={onClose}
           >
             { model.name }
           </Modal.Header>

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { capitalize, includes } from 'lodash';
+import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
 import { Table, Tbody, Tr, Td, EditableCell } from '../../../components/new_table';
@@ -9,6 +10,8 @@ import AutoComponent from '../../../components/autocomponent';
 import actions from '../../../store/api/actions';
 import Alert from '../../../components/alert';
 import Options from './options';
+import { getDependencyObjectLink } from '../../../helpers/system';
+import AlertsTable from '../../../components/alerts_table';
 
 const remoteSelector = (state, props) => (
   state.api.remotes.data.find(a => a.name === props.paneId)
@@ -185,6 +188,8 @@ export default class ConnectionsPane extends Component {
   }
 
   render() {
+    const { deps, alerts } = this.props.remote;
+
     return (
       <Pane
         width={this.props.width || 400}
@@ -223,6 +228,25 @@ export default class ConnectionsPane extends Component {
             ))}
           </Tbody>
         </Table>
+        <AlertsTable alerts={alerts} />
+        <h4> Dependencies </h4>
+        {deps && deps.length ? (
+          <Table striped condensed>
+            <Tbody>
+              {deps.map((dep: Object, index: number): React.Element<any> => (
+                <Tr key={index}>
+                  <Td className="name">
+                    <Link to={getDependencyObjectLink(dep.type, dep)}>
+                      {dep.desc}
+                    </Link>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        ) : (
+          <p className="no-data"> No data </p>
+        )}
       </Pane>
     );
   }

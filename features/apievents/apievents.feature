@@ -93,6 +93,12 @@ Feature: Tests various websocket apievents
     When I send a ws request for "SERVICE_START"
     Then there are "1" "unloaded" "services"
 
+  Scenario: Starts a new service
+    Given I am on "services" listing
+    And "services" get loaded
+    When I send a ws request for "SERVICE_START_NEW"
+    Then "4" "services" are shown
+
   Scenario: Changes service autostart
     Given I am on "services" listing
     And "services" get loaded
@@ -104,6 +110,12 @@ Feature: Tests various websocket apievents
     And "workflows" get loaded
     When I send a ws request for "WORKFLOW_START"
     Then the "ARRAYTEST" workflow has "4" execs
+
+  Scenario: Starts a new workflow
+    Given I am on "workflows" listing
+    And "workflows" get loaded
+    When I send a ws request for "WORKFLOW_START_NEW"
+    Then "6" "workflows" are shown
 
   Scenario: Stops a workflow
     Given I am on "workflows" listing
@@ -129,7 +141,7 @@ Feature: Tests various websocket apievents
     And "orders" get loaded
     And I send a ws request for "WORKFLOW_DATA_SUBMITTED"
     Then "1" "orders" are shown
-  
+
   Scenario: Modifies existing order instance
     Given I am on "workflow/14/list?date=all" listing
     And "orders" get loaded
@@ -142,6 +154,12 @@ Feature: Tests various websocket apievents
     And "jobs" get loaded
     And I send a ws request for "JOB_START"
     Then there are "4" "active" "jobs"
+
+  Scenario: Starts a new job
+    Given I am on "jobs" listing
+    And "jobs" get loaded
+    When I send a ws request for "JOB_START_NEW"
+    Then "5" "jobs" are shown
 
   Scenario: Deactivates a job
     Given I am on "jobs" listing

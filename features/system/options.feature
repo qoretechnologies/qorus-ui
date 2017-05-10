@@ -16,4 +16,3 @@ Feature: Tests the system/options view
     And I am on "system/options" listing
     And "options" get loaded
     Then I cannot edit any options
-

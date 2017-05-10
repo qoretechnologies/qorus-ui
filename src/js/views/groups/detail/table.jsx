@@ -29,7 +29,7 @@ const GroupDetailTable: Function = ({ data, columns, type }: Props): React.Eleme
             val = <Link to={`/workflow/${item.workflowid}`}> { name } </Link>;
             break;
           case 'Jobs':
-            val = <Link to={`/jobs/${item.jobid}`}> { name } </Link>;
+            val = <Link to={`/job/${item.jobid}`}> { name } </Link>;
             break;
           case 'Roles':
             val = item;

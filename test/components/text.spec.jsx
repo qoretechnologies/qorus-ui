@@ -70,6 +70,35 @@ describe('Text from "component/text"', () => {
     expect(action).to.have.been.called();
   });
 
+  it('stringifies objects', () => {
+    const wrapper = mount(
+      <CompWithContext>
+        <Text
+          text={{
+            hello: "it's me",
+          }}
+        />
+      </CompWithContext>
+    );
+
+    expect(wrapper.find('p').first().text()).to.eql('{"hello":"it\'s me"}');
+  });
+
+  it('renders object as Tree', () => {
+    const wrapper = mount(
+      <CompWithContext>
+        <Text
+          text={{
+            hello: "it's me",
+          }}
+          renderTree
+        />
+      </CompWithContext>
+    );
+
+    expect(wrapper.find('Tree')).to.have.length(1);
+  });
+
   it('does not show a modul when noPopup prop passed, instead changes to div, and back', () => {
     const action = chai.spy();
     const wrapper = mount(

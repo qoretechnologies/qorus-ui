@@ -184,6 +184,14 @@ module.exports = () => {
           },
         });
         break;
+      case 'SERVICE_START_NEW':
+        send({
+          eventstr: 'SERVICE_START',
+          info: {
+            serviceid: 999,
+          },
+        });
+        break;
       case 'SERVICE_AUTOSTART_CHANGE':
         send({
           eventstr,
@@ -202,12 +210,28 @@ module.exports = () => {
           },
         });
         break;
+      case 'WORKFLOW_START_NEW':
+        send({
+          eventstr: 'WORKFLOW_START',
+          info: {
+            workflowid: 999,
+          },
+        });
+        break;
       case 'JOB_START':
       case 'JOB_STOP':
         send({
           eventstr,
           info: {
             jobid: 250,
+          },
+        });
+        break;
+      case 'JOB_START_NEW':
+        send({
+          eventstr: 'JOB_START',
+          info: {
+            jobid: 999,
           },
         });
         break;

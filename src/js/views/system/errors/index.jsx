@@ -13,6 +13,7 @@ const ErrorsView: Function = ({ location }: Props): React.Element<any> => (
       title="Global errors"
       type="global"
       location={location}
+      fixed
     />
   </div>
 );

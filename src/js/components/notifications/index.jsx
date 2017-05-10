@@ -68,7 +68,9 @@ class NotificationPanel extends React.Component {
             <NotificationList
               title="Ongoing"
               type="ONGOING"
-              className="ongoing"
+              className={
+                `ongoing ${transientNotifications.length === 0 ? 'full-grp' : ''}`
+              }
               clearNotifications={clearNotifications}
               notifications={ongoingNotifications}
             />
@@ -77,7 +79,9 @@ class NotificationPanel extends React.Component {
             <NotificationList
               title="Transient"
               type="TRANSIENT"
-              className="transient"
+              className={
+                `transient ${ongoingNotifications.length === 0 ? 'full-grp' : ''}`
+              }
               clearNotifications={clearNotifications}
               notifications={transientNotifications}
             />
@@ -89,7 +93,9 @@ class NotificationPanel extends React.Component {
     if (this.state.isOpen && notificationList.length === 0) {
       panel = (
         <div className="notification-list">
-          <h4 className="no-notifications">No notifications</h4>
+          <div className="full-grp notifications-group">
+            <h4 className="notifications-header">No notifications</h4>
+          </div>
         </div>
       );
     }

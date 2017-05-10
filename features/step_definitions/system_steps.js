@@ -2,14 +2,14 @@ import { findTableRow, findElementByText, findTableRowId } from './common_steps'
 
 module.exports = function systemSteps() {
   this.Then(/^properties get loaded$/, async function() {
-    await this.waitForElement('.props-table');
+    await this.waitForElement('table');
 
-    this.browser.assert.elements('.props-table', 2);
+    this.browser.assert.elements('table', 2);
   });
 
   this.Then(/^there are "([^"]*)" props with "([^"]*)" keys$/, async function(props, rows) {
-    this.browser.assert.elements('.props-table', parseInt(props, 10));
-    this.browser.assert.elements('.props-table tr', parseInt(rows, 10));
+    this.browser.assert.elements('table', parseInt(props, 10));
+    this.browser.assert.elements('table > tbody > tr', parseInt(rows, 10));
   });
 
   this.Then(/^chart gets loaded$/, async function() {
@@ -118,5 +118,11 @@ module.exports = function systemSteps() {
 
     this.browser.assert.text(time, when);
     this.browser.assert.text(alert, alertId);
+  });
+
+  this.When(/^I click on the "([^"]*)" header$/, async function(name) {
+    const el = findElementByText(this.browser, 'h4', ` ${name}`);
+
+    this.browser.click(el);
   });
 };

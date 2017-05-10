@@ -56,18 +56,4 @@ describe("InfoTable from 'components/info_table'", () => {
     expect(table.tBodies[0].rows[0].cells[1].textContent).
       to.equal('display this');
   });
-
-
-  it('complex values are wrapped in `pre` tag', () => {
-    const comp = TestUtils.renderIntoDocument(
-      <InfoTable object={{ complex: { foo: 'bar' } }} />
-    );
-
-    const table = TestUtils.findRenderedDOMComponentWithTag(comp, 'table');
-
-    expect(table.tBodies[0].rows[0].cells[1].firstElementChild.children[0].tagName).
-      to.equal('PRE');
-    expect(table.tBodies[0].rows[0].cells[1].firstElementChild.textContent).
-      to.equal('{\n    "foo": "bar"\n}');
-  });
 });

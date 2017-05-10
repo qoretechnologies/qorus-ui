@@ -39,7 +39,7 @@ export default class DetailTab extends Component {
               <Group
                 key={g.name}
                 name={g.name}
-                url={`/groups/${g.name}`}
+                url={`/groups?group=${g.name}`}
                 size={g.size}
                 disabled={!g.enabled}
               />

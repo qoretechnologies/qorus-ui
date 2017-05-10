@@ -36,6 +36,7 @@ const ErrorsTable: Function = ({
     condensed
     fixed={fixed}
     height={height}
+    key={data.length}
   >
     <Thead>
       <Tr

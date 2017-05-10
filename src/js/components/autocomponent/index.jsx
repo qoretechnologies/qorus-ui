@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { isBoolean, startsWith, isObject } from 'lodash';
+import { isBoolean, startsWith } from 'lodash';
 import moment from 'moment';
 import DateComponent from '../date';
 import Icon from '../icon';
@@ -8,11 +8,6 @@ import Text from '../text';
 /* eslint-disable */
 const DURATION_PTR: any = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
 /* eslint-enable */
-
-/**
- * Indent value for stringified complex values.
- */
-const COMPLEX_VALUE_INDENT: number = 4;
 
 function humanizeDuration(dur: string): string {
   const groups: Array<number> = DURATION_PTR.exec(dur);
@@ -52,10 +47,10 @@ export default function AutoComponent(props: { children: any }) {
 
   if (isBoolean(props.children)) {
     if (props.children) {
-      comp = <Icon icon="check-circle" className="text-success" />;
-    } else {
-      comp = <Icon icon="minus-circle" className="text-danger" />;
+      return <Icon icon="check-circle" className="text-success" />;
     }
+
+    return <Icon icon="minus-circle" className="text-danger" />;
   } else if (isDate(props.children)) {
     if (!props.children.match(DURATION_PTR)) {
       comp = <DateComponent date={ props.children } />;
@@ -64,14 +59,12 @@ export default function AutoComponent(props: { children: any }) {
         <Text text={humanizeDuration(props.children)} />
       );
     }
-  } else if (isObject(props.children)) {
-    comp = <pre>{JSON.stringify(props.children, null, COMPLEX_VALUE_INDENT)}</pre>;
   } else {
     comp = props.children;
   }
 
   return (
-    <Text text={comp} />
+    <Text text={comp} renderTree />
   );
 }
 
