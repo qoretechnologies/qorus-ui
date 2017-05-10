@@ -182,7 +182,7 @@ const handleEvent = (url, data, dispatch, state) => {
               },
               dispatch
             );
-          } else {
+          } else if (state.api.services.sync) {
             dispatch(services.addNew(info.serviceid));
           }
         }
@@ -227,7 +227,7 @@ const handleEvent = (url, data, dispatch, state) => {
               },
               dispatch
             );
-          } else {
+          } else if (state.api.workflows.sync) {
             dispatch(workflows.addNew(info.workflowid));
           }
         }
@@ -370,7 +370,7 @@ const handleEvent = (url, data, dispatch, state) => {
             { id: info.jobid, value: true },
             dispatch
           );
-        } else {
+        } else if (state.api.jobs.sync) {
           dispatch(jobs.addNew(info.jobid));
         }
 
