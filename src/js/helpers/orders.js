@@ -47,9 +47,11 @@ const canSkip = (step) => {
     ) && !skip && steptype !== 'SUBWORKFLOW';
 };
 
-const formatCount = (num) => (
-  num < 10000 ? num : `${Math.round(num / 1000)}k`
-);
+const formatCount = (num) => {
+  if (!num) return 0;
+
+  return num < 10000 ? num : `${Math.round(num / 1000)}k`;
+};
 
 export {
   getActionData,

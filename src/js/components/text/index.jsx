@@ -4,12 +4,14 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import pure from 'recompose/onlyUpdateForKeys';
+import mapProps from 'recompose/mapProps';
 
 import withModal from '../../hocomponents/modal';
 import Modal from '../modal';
+import Tree from '../tree';
 
 type Props = {
-  text: string,
+  text: any,
   popup?: boolean,
   placeholder?: string,
   handleClick: Function,
@@ -17,6 +19,7 @@ type Props = {
   closeModal: Function,
   setExpand: Function,
   expanded?: boolean,
+  renderTree?: boolean,
 };
 
 const Text: Function = ({
@@ -24,14 +27,21 @@ const Text: Function = ({
   expanded,
   handleClick,
   placeholder,
-}: Props): React.Element<any> => (
-  expanded ?
-    <div
-      className="text-component"
-      onClick={handleClick}
-    >
-      {text}
-    </div> :
+}: Props): React.Element<any> => {
+  if (!placeholder && text && typeof text === 'object') {
+    return text;
+  } else if (expanded) {
+    return (
+      <div
+        className="text-component"
+        onClick={handleClick}
+      >
+        {text.toString()}
+      </div>
+    );
+  }
+
+  return (
     <p
       title={placeholder || text}
       onClick={handleClick}
@@ -39,11 +49,19 @@ const Text: Function = ({
     >
       {placeholder || text}
     </p>
-);
+  );
+};
 
 export default compose(
   withState('expanded', 'setExpand', false),
   withModal(),
+  mapProps(({ text, renderTree, ...rest }: Props): Props => ({
+    // eslint-disable-next-line
+    text: text && typeof text === 'object' ? (
+      renderTree ? <Tree data={text} /> : JSON.stringify(text)
+    ) : text,
+    ...rest,
+  })),
   withHandlers({
     handleClick: ({
       text,

@@ -13,6 +13,8 @@ import PermButton from './perm_control';
 import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
+import Toolbar from '../../../components/toolbar';
+import Container from '../../../components/container';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
 const querySelector: Function = (state: Object, props: Object): Object => props.location.query.q;
@@ -134,7 +136,7 @@ export default class PropertiesView extends Component {
   render() {
     return (
       <div className="tab-pane active">
-        <div className="container-fluid">
+        <Toolbar>
           <PermButton
             perms={this.props.user.data.permissions}
             reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
@@ -150,8 +152,10 @@ export default class PropertiesView extends Component {
             defaultValue={this.props.query}
             resource="properties"
           />
-        </div>
-        { this.renderProperties() }
+        </Toolbar>
+        <Container>
+          { this.renderProperties() }
+        </Container>
       </div>
     );
   }

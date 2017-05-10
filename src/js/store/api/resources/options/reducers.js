@@ -1,24 +1,15 @@
-import { updateItemWithId } from '../../utils';
-
+import { updateItemWithName } from '../../utils';
 
 const initialState = { data: [], sync: false, loading: false };
 
-
 const setOption = {
-  next(state = initialState, action) {
+  next(state = initialState, { payload: { option, value } }) {
     return Object.assign({}, state, {
-      data: updateItemWithId(
-        action.meta.modelId,
-        action.payload,
+      data: updateItemWithName(
+        option,
+        { value },
         state.data
       ),
-    });
-  },
-  throw(state = initialState, action) {
-    return Object.assign({}, state, {
-      sync: false,
-      loading: false,
-      error: action.payload,
     });
   },
 };

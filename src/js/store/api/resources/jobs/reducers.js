@@ -2,6 +2,7 @@ import _ from 'lodash';
 import remove from 'lodash/remove';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import { normalizeId } from '../utils';
 import {
   select,
   selectAll,
@@ -101,6 +102,18 @@ const startFetchingResults = {
     };
   },
   throw(state) { return state; },
+};
+
+const addNew = {
+  next(state = initialState, { payload: { job } }) {
+    if (state.sync) {
+      const data = [...state.data, { ...normalizeId('jobid', job), ...{ _updated: true } }];
+
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
 };
 
 const fetchResults = {
@@ -516,4 +529,5 @@ export {
   expire as EXPIRE,
   reschedule as RESCHEDULE,
   activate as ACTIVATE,
+  addNew as ADDNEW,
 };

@@ -1,4 +1,7 @@
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import Controls from '../controls';
 
 const Header: Function = ({ model }: Object) => (
   <div className="row pane__header">
@@ -7,14 +10,17 @@ const Header: Function = ({ model }: Object) => (
         <span className="selectable">
           {model.normalizedName}
         </span>
-      </h3>
-      <div className="svc__desc pull-left">
-        <p className="text-muted">
-          <em>{model.description}</em>
+        <p>
+          <small>
+            <em>{model.description}</em>
+          </small>
         </p>
-      </div>
+        <div>
+          <Controls {...model} />
+        </div>
+      </h3>
     </div>
   </div>
 );
 
-export default Header;
+export default pure(['model'])(Header);

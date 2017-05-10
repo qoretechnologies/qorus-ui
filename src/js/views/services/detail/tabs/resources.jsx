@@ -4,7 +4,6 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import { Table, Tbody, Thead, Tr, Th, Td } from '../../../../components/new_table';
 import Text from '../../../../components/text';
-import Tree from '../../../../components/tree';
 
 type Props = {
   resources: Object,
@@ -20,6 +19,7 @@ const ResourceTable: Function = ({
     {resources ? (
       <Table
         fixed
+        condensed
         striped
       >
         <Thead>
@@ -45,9 +45,10 @@ const ResourceTable: Function = ({
               <Td className="text">
                 <a>
                   <Text
-                    placeholder="View info"
                     popup
-                    text={<Tree data={resources[resource].info} />}
+                    placeholder="Show info"
+                    text={resources[resource].info}
+                    renderTree
                   />
                 </a>
               </Td>
@@ -62,6 +63,7 @@ const ResourceTable: Function = ({
     {resourceFiles && resourceFiles.length > 0 ? (
       <Table
         fixed
+        condensed
         striped
       >
         <Thead>

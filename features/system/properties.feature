@@ -29,5 +29,15 @@ Feature: Tests contents of the system/properties tab
     When I type "true" in the search input
     And there are "1" props with "2" keys
 
+  Scenario: Prop is collapsed
+    Given I am on "system/props" listing
+    And properties get loaded
+    When I click on the "sepl" header
+    And there are "1" props with "3" keys
 
-
+  Scenario: All props are collapsed
+    Given I am on "system/props" listing
+    And properties get loaded
+    When I click on the "sepl" header
+    When I click on the "omq" header
+    And there are "0" props with "0" keys

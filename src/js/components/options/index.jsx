@@ -137,7 +137,7 @@ export default class Options extends Component {
     const handleCancel = () => this.cancelOptionEdit(opt);
     yield (
       <EditableCell
-        value={opt.value}
+        value={opt.value || ''}
         startEdit={opt === this.state.lastOption}
         onSave={handleSave}
         onCancel={handleCancel}

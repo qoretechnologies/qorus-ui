@@ -1,7 +1,13 @@
 /* @flow */
 import React from 'react';
-import Table, { Section, Row, Cell } from '../../../components/table';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
+
+import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
+import Icon from '../../../components/icon';
 import CacheRow from './row';
 
 type Props = {
@@ -9,48 +15,56 @@ type Props = {
   data: Object,
   onClick: Function,
   onSingleClick: Function,
-}
+  expanded: boolean,
+  handleExpandClick: Function,
+  setExpanded: Function,
+};
 
 const SQLCacheTable: Function = (
-  { name, data, onClick, onSingleClick }: Props
+  { name, data, onClick, onSingleClick, expanded, handleExpandClick }: Props
 ): React.Element<any> => {
   const handleClick: Function = (): void => {
     onClick(name);
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <div className="row">
-        <div className="pull-left">
-          <h4>{ name }</h4>
-        </div>
-        <div className="pull-right">
-          <Button
-            btnStyle="danger"
-            big
-            label="Clear datasource"
-            icon="trash-o"
-            action={handleClick}
-          />
+        <div className="col-lg-12">
+          <div className="pull-left">
+            <h4 onClick={handleExpandClick} className="cpointer">
+              <Icon icon={expanded ? 'minus-square-o' : 'plus-square-o'} />
+              {' '}
+              { name }
+            </h4>
+          </div>
+          <div className="pull-right">
+            <Button
+              btnStyle="danger"
+              label="Clear datasource"
+              icon="trash-o"
+              action={handleClick}
+            />
+          </div>
         </div>
       </div>
-      { Object.keys(data).length > 0 && (
-        <Table className="table table--data table-condensed table-striped">
-          <Section type="head">
-            <Row>
-              <Cell tag="th" className="name">
+      { Object.keys(data).length > 0 && expanded ? (
+        <Table condensed striped>
+          <Thead>
+            <Tr>
+              <Th className="name">
                 Name
-              </Cell>
-              <Cell tag="th" className="narrow">
+              </Th>
+              <Th className="narrow">
                 Count
-              </Cell>
-              <Cell tag="th">
+              </Th>
+              <Th className="big">
                 Created
-              </Cell>
-              <Cell tag="th" />
-            </Row>
-          </Section>
-          <Section type="body">
+              </Th>
+              <Th className="narrow"> Actions </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             { Object.keys(data).map((cache, index) => (
               <CacheRow
                 key={index}
@@ -61,14 +75,25 @@ const SQLCacheTable: Function = (
                 onClick={onSingleClick}
               />
             ))}
-          </Section>
+          </Tbody>
         </Table>
-      )}
+      ) : null}
       { Object.keys(data).length <= 0 && (
-        <p> No data </p>
+        <p className="no-data"> No data </p>
       )}
     </div>
   );
 };
 
-export default SQLCacheTable;
+export default compose(
+  withState('expanded', 'setExpanded', true),
+  withHandlers({
+    handleExpandClick: ({ expanded, setExpanded }: Props): Function => (): void => {
+      setExpanded(() => !expanded);
+    },
+  }),
+  pure([
+    'expanded',
+    'data',
+  ])
+)(SQLCacheTable);

@@ -5,41 +5,63 @@
   span {
     font-weight: bold;
 
-    &.expand:before {
+    &.data-control {
+      display: inline-block;
+      padding-left: 20px;
+      margin-left: -20px;
+      cursor: pointer;
+    }
+
+    &.data-control:before {
       font-family: FontAwesome;
-      content: "\f147";
       display: table;
       color: red;
-      left: 10px;
+      left: 0;
       position: absolute;
       top: 7px;
+    }
+
+    &.data-control.expand:before {
+      content: "\f196";
+    }
+
+    &.data-control.clps:before {
+      content: "\f147";
     }
   }
 
   div {
-    padding: 5px 0 5px 30px;
+    padding: 5px 0 5px 20px;
     position: relative;
+    word-break: break-all;
+
+    &.nopad {
+      padding-left: 0;
+    }
   }
 
   div:not(.tree-top) {
-    border-left: 1px dotted red;
+    &.last {
+      margin-left: 6px;
+      border-left: 1px dotted red;
+    }
 
     &.last:last-child {
       border-left: 0;
     }
 
-    span:not(.expand):before {
+    span:not(.data-control):before {
       content: '';
       display: table;
       position: absolute;
-      width: 25px;
+      width: 15px;
       height: 1px;
       border-top: 1px dotted red;
       top: 15px;
       left: 0;
     }
 
-    &:last-child > span:not(.expand):after {
+    &:last-child > span:not(.data-control):after {
       content: '';
       display: table;
       position: absolute;
@@ -50,10 +72,4 @@
       border-left: 1px dotted red;
     }
   }
-}
-
-.button--copy {
-  position: absolute;
-  right: 25px;
-  top: 10px;
 }

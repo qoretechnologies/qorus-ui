@@ -64,7 +64,7 @@ class Section extends Component {
       const mb: number = marginBottom || marginBottom === 0 ?
         marginBottom :
         this.props.marginBottom;
-      const height: number = winHeight - top - 40 - mb;
+      const height: number = winHeight - top - 60 - mb;
       const h = typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
       if (h > height) {

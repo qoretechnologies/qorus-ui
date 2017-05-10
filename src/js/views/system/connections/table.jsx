@@ -129,7 +129,7 @@ const ConnectionTable: Function = ({
     <Table
       fixed
       striped
-      key={type}
+      key={`${type}-${remotes.length}`}
       marginBottom={canLoadMore ? 40 : 0}
     >
       <Thead>

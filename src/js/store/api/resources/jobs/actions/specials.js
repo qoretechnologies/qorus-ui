@@ -79,6 +79,17 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
+const addNew = createAction(
+  'JOBS_ADDNEW',
+  async (id) => {
+    const job = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/jobs/${id}`
+    );
+
+    return { job };
+  }
+);
 
 const fetchResultsPayload = baseUrl => (model, query, offset = 0, limit = 50) => fetchJson(
   'GET', `${baseUrl}/${model.id}/results?${queryString.stringify({ ...query, limit, offset })}`
@@ -290,4 +301,5 @@ export {
   rescheduleAction,
   activate,
   expireAction,
+  addNew,
 };

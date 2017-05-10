@@ -24,21 +24,23 @@ const Option: Function = ({
   };
 
   return (
-    <div>
+    <div className="conn-options-item">
       "{objKey}": "{value}"
       {' '}
-      <Controls grouped>
-        <Button
-          icon="edit"
-          btnStyle="warning"
-          onClick={handleEditClick}
-        />
-        <Button
-          icon="times"
-          btnStyle="danger"
-          onClick={handleDeleteClick}
-        />
-      </Controls>
+      <div className="pull-right">
+        <Controls grouped>
+          <Button
+            icon="edit"
+            btnStyle="warning"
+            onClick={handleEditClick}
+          />
+          <Button
+            icon="times"
+            btnStyle="danger"
+            onClick={handleDeleteClick}
+          />
+        </Controls>
+      </div>
     </div>
   );
 };

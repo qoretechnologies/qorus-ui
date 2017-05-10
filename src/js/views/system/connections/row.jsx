@@ -101,7 +101,7 @@ const ConnectionRow: Function = ({
     </Td>
     {remoteType === 'datasources' ? (
       <Td className="text">
-        <Text text={JSON.stringify(options)} />
+        <Text text={options} />
       </Td>
     ) : (
       <Td className="text">

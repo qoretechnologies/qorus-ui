@@ -147,7 +147,7 @@ const TableRow: Function = ({
     })}
     <Td className="medium">
       <Link to={`/workflow/${id}?date=${date}`}>
-        { rest.TOTAL }
+        { rest.TOTAL || 0 }
       </Link>
     </Td>
     { showDeprecated && (

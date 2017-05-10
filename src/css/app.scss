@@ -51,6 +51,7 @@ $status-light-gray: lighten($status-gray, 30);
 @import '../js/components/search/style';
 @import '../js/components/new_table/style';
 @import '../js/containers/mappers/diagram/style';
+@import '../js/components/container/style';
 
 @import './not-supported';
 @import './root';
@@ -177,4 +178,12 @@ svg.preloader {
 
 .preloader-text {
   font-family: 'Orbitron';
+}
+
+.conn-options-item {
+  line-height: 2;
+}
+
+.cpointer {
+  cursor: pointer;
 }
