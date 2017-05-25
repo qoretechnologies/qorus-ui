@@ -204,4 +204,8 @@ export default [
       normalizeId('workflow_instanceid'),
     ),
   },
+  {
+    name: 'releases',
+    url: `${settings.REST_BASE_URL}/releases?with_components=1`,
+  },
 ];

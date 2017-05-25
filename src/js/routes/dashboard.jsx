@@ -38,6 +38,7 @@ const DashboardRoutes = (): React.Element<any> => (
       <Route path="permissions" component={System.RBAC.Permissions} />
     </Route>
     <Route path="errors" component={System.Errors} />
+    <Route path="releases" component={System.Releases} />
   </Route>
 );
 

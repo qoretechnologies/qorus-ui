@@ -11,6 +11,7 @@ type Props = {
   onKeyUp: (event: Object) => void,
   onInputClick: (event: Object) => void,
   id?: string,
+  name?: string,
 }
 
 const Input = (props: Props) => (
@@ -32,6 +33,7 @@ const Input = (props: Props) => (
         onClick={props.onInputClick}
         placeholder={props.placeholder}
         id={props.id}
+        name={props.name}
       />
     </div>
   </div>

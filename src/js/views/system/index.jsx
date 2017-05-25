@@ -13,6 +13,7 @@ import SqlCache from './sqlcache';
 import Properties from './properties';
 import Rbac from './rbac';
 import Valuemaps from './valuemaps';
+import Releases from './releases';
 
 type Props = {
   location: Object,
@@ -34,6 +35,7 @@ const System: Function = ({ location, children }: Props): React.Element<any> => 
       <NavLink to="./logs">Logs</NavLink>
       <NavLink to="./rbac">RBAC</NavLink>
       <NavLink to="./errors">Errors</NavLink>
+      <NavLink to="./releases">Releases</NavLink>
     </Nav>
     <div className="tab-content">
       {React.Children.map(children, (child: React.Element<any>) => (
@@ -55,5 +57,6 @@ System.Info = SystemInfoTable;
 System.Logs = Logs;
 System.Errors = Errors;
 System.Valuemaps = Valuemaps;
+System.Releases = Releases;
 
 export default System;
