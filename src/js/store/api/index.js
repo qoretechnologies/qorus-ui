@@ -175,6 +175,16 @@ export function createResourceReducers(
         sort: 'started',
         sortDir: true,
       };
+    } else if (resource === 'releases') {
+      initState = {
+        data: [],
+        sync: false,
+        loading: false,
+        offset: 0,
+        limit: 50,
+        sort: 'Name',
+        sortDir: 'Descending',
+      };
     }
 
     const inState = Object.assign({}, initState, resourceOrigin.initialState);

@@ -1,9 +1,4 @@
 'use strict';
-
-/**
- * @module api/system
- */
-
 import { updateProps, deleteProps } from '../../src/js/store/api/resources/props/helper';
 import { getExtensions } from '../extensions/data';
 

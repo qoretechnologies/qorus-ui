@@ -36,6 +36,7 @@ module.exports = () => {
   router.use('/perms', require('./perms')());
   router.use('/mappers', require('./mappers')());
   router.use('/valuemaps', require('./valuemaps')());
+  router.use('/releases', require('./releases')());
 
   return router;
 };
