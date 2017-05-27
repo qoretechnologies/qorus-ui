@@ -17,3 +17,4 @@ export * as valuemaps from './valuemaps/reducers';
 export * as extensions from './extensions/reducers';
 export * as orderErrors from './orderErrors/reducers';
 export * as systemOptions from './options/reducers';
+export * as releases from './releases/reducers';

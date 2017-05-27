@@ -13,7 +13,7 @@ import Picker from './picker';
 import Calendar from './calendar';
 
 type Props = {
-  date: string,
+  date: ?string,
   onApplyDate: (date: string) => void,
   futureOnly?: boolean,
   noButtons?: boolean,
@@ -21,6 +21,7 @@ type Props = {
   placeholder?: string,
   className?: string,
   id?: string,
+  name?: string,
 }
 
 export default class DatePicker extends Component {
@@ -265,6 +266,7 @@ export default class DatePicker extends Component {
             onInputClick={this.showDatepicker}
             placeholder={this.props.placeholder}
             id={this.props.id}
+            name={this.props.name}
           />
         </div>
         {this.renderControls()}
