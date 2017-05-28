@@ -5,6 +5,7 @@ import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import lifecycle from 'recompose/lifecycle';
 import capitalize from 'lodash/capitalize';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import Section from './section';
 import SourceCode from '../../components/source_code';
@@ -95,5 +96,10 @@ export default compose(
     componentWillUnmount() {
       window.removeEventListener('resize', this.props.calculateHeight);
     },
-  })
+  }),
+  pure([
+    'height',
+    'data',
+    'selected',
+  ])
 )(Code);

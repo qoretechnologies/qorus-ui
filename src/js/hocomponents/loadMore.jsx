@@ -6,6 +6,7 @@ import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import isArray from 'lodash/isArray';
 
 import actions from '../store/api/actions';
 
@@ -23,17 +24,24 @@ export default (
     limit: number,
     offsetLimit: number,
     handleLoadMore: Function,
+    length: number,
   };
 
-  const WrappedComponent: Function = (props: Props): React.Element<any> => (
-    <div>
-      <Component
-        {...props}
-        canLoadMore={props.offsetLimit <= props[collectionProp].length}
-        handleLoadMore={props.handleLoadMore}
-      />
-    </div>
-  );
+  const WrappedComponent: Function = (props: Props): React.Element<any> => {
+    const length = isArray(props[collectionProp]) ?
+      props[collectionProp].length :
+      Object.keys(props[collectionProp]).length;
+
+    return (
+      <div>
+        <Component
+          {...props}
+          canLoadMore={props.offsetLimit <= length}
+          handleLoadMore={props.handleLoadMore}
+        />
+      </div>
+    );
+  };
 
   return compose(
     connect(

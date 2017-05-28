@@ -3,7 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
-import pure from 'recompose/pure';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import CodeItem from './item';
 
@@ -51,10 +51,14 @@ const CodeSection: Function = ({
 );
 
 export default compose(
-  pure,
   withState('open', 'toggler', true),
   mapProps(({ toggler, ...rest }) => ({
     onToggleClick: () => toggler((open: boolean): boolean => !open),
     ...rest,
   })),
+  pure([
+    'open',
+    'items',
+    'selected',
+  ])
 )(CodeSection);

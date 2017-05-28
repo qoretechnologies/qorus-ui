@@ -65,7 +65,7 @@ describe('CsvExport from \'components/csv_export\'', () => {
       }
     );
 
-    wrapper.find('Control').simulate('click');
+    wrapper.find('button').simulate('click');
 
     expect(wrapper.find('.modal')).to.have.length(1);
   });
@@ -80,7 +80,7 @@ describe('CsvExport from \'components/csv_export\'', () => {
       }
     );
 
-    wrapper.find('Control').simulate('click');
+    wrapper.find('button').simulate('click');
 
     wrapper.find('button.close').simulate('click');
 

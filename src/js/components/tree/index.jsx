@@ -151,7 +151,7 @@ export default class Tree extends Component {
     if (!data || !Object.keys(data).length) return <p className="no-data"> No data </p>;
 
     return (
-      <div>
+      <div className="tree-component">
         <div className="row">
           <div className="col-lg-12">
             {this.isDeep() && (

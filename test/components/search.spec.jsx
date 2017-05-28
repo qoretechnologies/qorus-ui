@@ -97,7 +97,7 @@ describe("Search from 'components/search'", () => {
 
       expect(wrapper.find('input').first().props().value).to.eql('Hello');
 
-      wrapper.find('Control').first().simulate('click');
+      wrapper.find('button').first().simulate('click');
 
       expect(wrapper.find('input').first().props().value).to.eql('');
       expect(action).to.have.been.called().with('');
