@@ -1,63 +1,58 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import classNames from 'classnames';
+import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import lifecycle from 'recompose/lifecycle';
+
 import { CHECKBOX_CLASSES } from '../../constants/checkbox';
-import { pureRender } from '../utils';
 
-@pureRender
-export default class Checkbox extends Component {
-  props: {
-    checked: string,
-    action: () => void,
-  };
-
-  state: {
-    checked: string,
-  };
-
-  state = {
-    checked: this.props.checked,
-  };
-
-  componentWillReceiveProps(next: Object) {
-    if (this.props.checked !== next.checked) {
-      this.setState({
-        checked: next.checked,
-      });
-    }
-  }
-
-  /**
-   * Checks / Unchecks the checkbox based on state
-   * Stops further propagation
-   * Runs provided function from the props.action
-   */
-  handleClick = (event: Object) => {
-    event.preventDefault();
-    const checked: string = (this.state.checked: string) === 'CHECKED' ? 'UNCHECKED' : 'CHECKED';
-
-    this.setState({
-      checked,
-    });
-
-    if (this.props.action) {
-      this.props.action(event);
-    }
-  };
-
-  render() {
-    const className: string = classNames('fa', CHECKBOX_CLASSES[this.state.checked]);
-
-    return (
-      <i
-        className={className}
-        onClick={this.handleClick}
-      />
-    );
-  }
-}
-
-Checkbox.propTypes = {
-  checked: PropTypes.string,
-  action: PropTypes.func,
+type Props = {
+  checked: string,
+  checkedState: string,
+  action: Function,
+  handleClick: Function,
+  setChecked: Function,
+  className: string,
 };
+
+const Checkbox: Function = ({
+  className,
+  handleClick,
+}: Props): React.Element<any> => (
+  <i
+    className={className}
+    onClick={handleClick}
+  />
+);
+
+export default compose(
+  withState('checkedState', 'setChecked', ({ checked }: Props): string => checked),
+  mapProps(({ checkedState, ...rest }: Props): Props => ({
+    className: classNames('fa', CHECKBOX_CLASSES[checkedState]),
+    checkedState,
+    ...rest,
+  })),
+  withHandlers({
+    handleClick: ({ action, setChecked }: Props): Function => (event: Object): void => {
+      event.preventDefault();
+
+      setChecked((checked: string) => (
+        checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED'
+      ));
+
+      if (action) action(event);
+    },
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (this.props.checked !== nextProps.checked) {
+        this.props.setChecked(() => nextProps.checked);
+      }
+    },
+  }),
+  pure(['checked', 'checkedState'])
+)(Checkbox);

@@ -1,10 +1,11 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
-const BubbleList = ({ children }: { children?: ReactClass<*> }) => (
+const BubbleList = ({ children }: { children?: any }): React.Element<any> => (
   <div className="bubbles">
     {children}
   </div>
 );
 
-export default BubbleList;
+export default pure(['children'])(BubbleList);
