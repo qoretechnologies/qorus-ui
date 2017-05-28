@@ -1,34 +1,7 @@
 import { createAction } from 'redux-actions';
 import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
-
-const addOptimistic: Function = (prop: Object) => ({ prop });
-const addPropCall: Function = (prop: Object): Promise<*> => (
-  fetchJson(
-    'POST',
-    `${settings.REST_BASE_URL}/system/props/${prop.domain}/${prop.key}`,
-    {
-      body: JSON.stringify({
-        parse_args: prop.value,
-      }),
-    }
-  )
-);
-
-const updateOptimistic: Function = (prop: Object) => ({ prop });
-const updatePropCall: Function = (prop: Object): Promise<*> => (
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/system/props/${prop.domain}/${prop.origKey || prop.key}`,
-    {
-      body: JSON.stringify({
-        action: 'set',
-        key: prop.key,
-        parse_args: prop.value,
-      }),
-    }
-  )
-);
+import { error } from '../../../ui/bubbles/actions';
 
 const removeOptimistic: Function = (prop: Object) => ({ prop });
 const removePropCall: Function = (prop: Object): Promise<*> => {
@@ -41,23 +14,28 @@ const removePropCall: Function = (prop: Object): Promise<*> => {
 };
 
 const addCall = createAction(
-  'PROPS_ADDPROP',
-  addPropCall,
-);
+  'PROPS_MANAGEPROP',
+  async (prop: Object, dispatch: Function) => {
+    if (dispatch) {
+      const res = await fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/system/props/${prop.domain}/${prop.origKey || prop.key}`,
+        {
+          body: JSON.stringify({
+            action: 'set',
+            key: prop.key,
+            args: prop.value,
+          }),
+        }
+      );
 
-const addOptimisticCall = createAction(
-  'PROPS_ADDPROPOPTIMISTIC',
-  addOptimistic,
-);
+      if (res.err) {
+        dispatch(error(res.desc));
+      }
+    }
 
-const updateCall = createAction(
-  'PROPS_UPDATEPROP',
-  updatePropCall,
-);
-
-const updateOptimisticCall = createAction(
-  'PROPS_UPDATEPROPOPTIMISTIC',
-  updateOptimistic,
+    return { prop };
+  }
 );
 
 const removeCall = createAction(
@@ -70,14 +48,9 @@ const removeOptimisticCall = createAction(
   removeOptimistic,
 );
 
-const addProp: Function = (prop: Object) => (dispatch: Function): Promise<*> => {
+const manageProp: Function = (prop: Object): Function => (dispatch: Function): Promise<*> => {
+  dispatch(addCall(prop, dispatch));
   dispatch(addCall(prop));
-  dispatch(addOptimisticCall(prop));
-};
-
-const updateProp: Function = (prop: Object) => (dispatch: Function): Promise<*> => {
-  dispatch(updateCall(prop));
-  dispatch(updateOptimisticCall(prop));
 };
 
 const removeProp: Function = (prop: Object) => (dispatch: Function): Promise<*> => {
@@ -90,8 +63,7 @@ const updatePropOptimistic: Function = () => () => true;
 const removePropOptimistic: Function = () => () => true;
 
 export {
-  addProp,
-  updateProp,
+  manageProp,
   removeProp,
   addPropOptimistic,
   updatePropOptimistic,

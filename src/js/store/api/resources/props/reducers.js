@@ -15,18 +15,11 @@ const defaultReducer = {
   },
 };
 
-const addPropOptimistic = {
+const manageProp = {
   next(state: Object = initialState, action: Object) {
-    return Object.assign({}, state, { data: updateProps(state.data, action.payload.prop) });
-  },
-  throw(state: Object = initialState) {
-    return state;
-  },
-};
+    const data = { ...state.data };
 
-const updatePropOptimistic = {
-  next(state: Object = initialState, action: Object) {
-    return Object.assign({}, state, { data: updateProps(state.data, action.payload.prop) });
+    return { ...state, ...{ data: updateProps(data, action.payload.prop) } };
   },
   throw(state: Object = initialState) {
     return state;
@@ -42,15 +35,10 @@ const removePropOptimistic = {
   },
 };
 
-const addProp = defaultReducer;
-const updateProp = defaultReducer;
 const removeProp = defaultReducer;
 
 export {
-  addPropOptimistic as ADDPROPOPTIMISTIC,
-  updatePropOptimistic as UPDATEPROPOPTIMISTIC,
   removePropOptimistic as REMOVEPROPOPTIMISTIC,
-  addProp as ADDPROP,
-  updateProp as UPDATEPROP,
+  manageProp as MANAGEPROP,
   removeProp as REMOVEPROP,
 };
