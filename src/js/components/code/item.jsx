@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 import classNames from 'classnames';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -71,4 +72,8 @@ const CodeItem: Function = ({ item, onClick, selected, type }: Props): React.Ele
   );
 };
 
-export default (CodeItem);
+export default pure([
+  'type',
+  'item',
+  'selected',
+])(CodeItem);

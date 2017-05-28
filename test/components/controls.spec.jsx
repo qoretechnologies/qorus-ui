@@ -16,135 +16,74 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
   describe('Control', () => {
     it('renders icon in button', () => {
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" />
       );
 
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-      expect(Array.from(el.classList)).to.include('btn');
-      expect(Array.from(el.firstChild.classList)).to.include('fa');
-      expect(Array.from(el.firstChild.classList)).to.include('fa-refresh');
+      expect(control.find('button')).to.have.length(1);
+      expect(control.find('i').hasClass('fa')).to.eql(true);
+      expect(control.find('i').hasClass('fa-refresh')).to.eql(true);
     });
 
 
     it('applies button style', () => {
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" btnStyle="primary" />
       );
 
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-
-      expect(Array.from(el.classList)).to.include('btn-primary');
+      expect(control.find('button').hasClass('btn-primary')).to.eql(true);
     });
 
 
     it('shows title as button title', () => {
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" title="Restart" />
       );
 
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-
-      expect(el.title).to.equal('Restart');
+      expect(control.getDOMNode()).to.have.property('title');
     });
 
 
     it('shows label as button text after the icon', () => {
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" label="Restart" />
       );
 
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-
-      expect(el.textContent).to.equal(' Restart');
+      expect(control.find('button').text()).to.equal(' Restart');
     });
 
 
     it('handles action on click', () => {
       const action = chai.spy();
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" action={action} />
       );
 
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-      TestUtils.Simulate.click(el);
-
+      control.find('button').simulate('click');
 
       expect(action).to.have.been.called();
     });
 
     it('set disabled button', () => {
-      const control = TestUtils.renderIntoDocument(
+      const control = mount(
         <Control icon="refresh" disabled />
       );
 
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-
-      expect(el.disabled).to.be.true();
-    });
-
-    it('sets the buttons type', () => {
-      const control = TestUtils.renderIntoDocument(
-        <Control type="submit" />
-      );
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-      expect(el.type).to.equal('submit');
-    });
-
-    it('sets the buttons style', () => {
-      const control = TestUtils.renderIntoDocument(
-        <Control css={{ color: '#fff' }} />
-      );
-
-      const el = TestUtils.findRenderedDOMComponentWithTag(control, 'button');
-
-      expect(el.style.color).to.equal('rgb(255, 255, 255)');
+      expect(control.getDOMNode()).to.have.property('disabled');
     });
   });
 
 
   describe('Controls', () => {
     it('conveniently groups Control instances together', () => {
-      const controls = TestUtils.renderIntoDocument(
+      const controls = mount(
         <Controls>
           <Control icon="power-off" />
           <Control icon="refresh" />
         </Controls>
       );
 
-
-      const comps = TestUtils.scryRenderedComponentsWithType(controls, Control);
-
-
-      expect(comps).to.have.length(2);
-    });
-
-
-    it('can override Control props via controls prop', () => {
-      const controls = TestUtils.renderIntoDocument(
-        <Controls controls={[{}, { icon: 'times' }]}>
-          <Control icon="power-off" />
-          <Control icon="refresh" />
-        </Controls>
-      );
-
-
-      const comps = TestUtils.scryRenderedComponentsWithType(controls, Control);
-
-
-      expect(comps[1].props.icon).to.equal('times');
+      expect(controls.find('button')).to.have.length(2);
     });
 
 

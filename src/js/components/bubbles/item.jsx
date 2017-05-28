@@ -1,17 +1,16 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
-const Bubble = (
-  {
+const Bubble = ({
     type,
     children,
     onClick: handleClick,
-  }: {
-    type: 'success' | 'warning' | 'error',
-    children?: string,
-    onClick: Function,
-  }
-) => (
+}: {
+  type: 'success' | 'warning' | 'error',
+  children?: string,
+  onClick: Function,
+}): React.Element<any> => (
   <div
     className={`bubble ${type}`}
     onClick={handleClick}
@@ -20,4 +19,4 @@ const Bubble = (
   </div>
 );
 
-export default Bubble;
+export default pure(['type', 'children'])(Bubble);

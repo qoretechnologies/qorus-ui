@@ -1,9 +1,12 @@
-import React, { PropTypes } from 'react';
-import { isBoolean, startsWith } from 'lodash';
+// @flow
+import React from 'react';
+import isBoolean from 'lodash/isBoolean';
+import startsWith from 'lodash/startsWith';
 import moment from 'moment';
 import DateComponent from '../date';
 import Icon from '../icon';
 import Text from '../text';
+import pure from 'recompose/onlyUpdateForKeys';
 
 /* eslint-disable */
 const DURATION_PTR: any = /^([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2}).([\d]{2})([\d]{4})Z$/;
@@ -38,40 +41,34 @@ function isDate(val: string): boolean {
     startsWith(val, '0000-00-00');
 }
 
-export default function AutoComponent(props: { children: any }) {
+const AutoComponent: Function = ({ children }: { children: any }) => {
   let comp;
 
-  if (props.children === null || props.children === 'undefined') {
+  if (children === null || children === 'undefined') {
     return null;
   }
 
-  if (isBoolean(props.children)) {
-    if (props.children) {
+  if (isBoolean(children)) {
+    if (children) {
       return <Icon icon="check-circle" className="text-success" />;
     }
 
     return <Icon icon="minus-circle" className="text-danger" />;
-  } else if (isDate(props.children)) {
-    if (!props.children.match(DURATION_PTR)) {
-      comp = <DateComponent date={ props.children } />;
+  } else if (isDate(children)) {
+    if (!children.match(DURATION_PTR)) {
+      comp = <DateComponent date={ children } />;
     } else {
       comp = (
-        <Text text={humanizeDuration(props.children)} />
+        <Text text={humanizeDuration(children)} />
       );
     }
   } else {
-    comp = props.children;
+    comp = children;
   }
 
   return (
     <Text text={comp} renderTree />
   );
-}
-
-AutoComponent.defaultProps = {
-  children: null,
 };
 
-AutoComponent.propTypes = {
-  children: PropTypes.any,
-};
+export default pure(['children'])(AutoComponent);

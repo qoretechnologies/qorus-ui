@@ -1,91 +1,95 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
-
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import mapProps from 'recompose/mapProps';
 import classNames from 'classnames';
-import { pureRender } from '../utils';
 
-/**
- * Control button component.
- */
-@pureRender
-export default class Control extends Component {
-  props: {
-    title?: string,
-    label?: string,
-    btnStyle: string,
-    icon?: string,
-    action?: () => void,
-    onClick?: () => void,
-    stopPropagation?: boolean,
-    disabled?: boolean,
-    big?: boolean,
-    type?: string,
-    css?: Object,
-    id?: string,
-    className?: string,
-    children?: React.Element<*> | Array<React.Element<*>>,
-  };
-
-  /**
-   * Calls `action` prop if set.
-   *
-   */
-  handleClick = (event: Object): void => {
-    const action = this.props.action || this.props.onClick;
-    if (!action) return;
-
-    event.preventDefault();
-
-    if (this.props.stopPropagation) {
-      event.stopPropagation();
-    }
-
-    action(event);
-  };
-
-  renderIcon(): ?React.Element<any> {
-    if (!this.props.icon) return null;
-
-    return <i className={classNames(['fa', `fa-${this.props.icon}`])} />;
-  }
-
-  /**
-   * Returns element for this component.
-   */
-  render(): React.Element<any> {
-    const className: string = classNames(this.props.className, {
-      btn: true,
-      'btn-xs': !this.props.big,
-      [`btn-${this.props.btnStyle}`]: this.props.btnStyle,
-    });
-
-    return (
-      <button
-        id={this.props.id}
-        className={className}
-        title={this.props.title}
-        onClick={this.handleClick}
-        disabled={this.props.disabled}
-        type={this.props.type}
-        style={this.props.css}
-      >
-        {this.renderIcon()}
-        {this.props.label ? ` ${this.props.label}` : ''}
-        {this.props.children}
-      </button>
-    );
-  }
+type Props = {
+  title?: string,
+  label?: string,
+  btnStyle: string,
+  icon?: string,
+  action?: () => void,
+  handleClick?: () => void,
+  onClick?: () => void,
+  stopPropagation?: boolean,
+  disabled?: boolean,
+  big?: boolean,
+  type?: string,
+  css?: Object,
+  id?: string,
+  className?: string,
+  children?: React.Element<*> | Array<React.Element<*>>,
 }
 
-Control.propTypes = {
-  title: PropTypes.string,
-  label: PropTypes.string,
-  btnStyle: PropTypes.string,
-  icon: PropTypes.string,
-  action: PropTypes.func,
-  disabled: PropTypes.bool,
-  big: PropTypes.bool,
-  type: PropTypes.string,
-  css: PropTypes.object,
-  className: PropTypes.string,
-};
+const Control: Function = ({
+  id,
+  className,
+  title,
+  handleClick,
+  disabled,
+  type,
+  css,
+  icon,
+  label,
+  children,
+}: Props): React.Element<any> => (
+  <button
+    id={id}
+    className={className}
+    title={title}
+    onClick={handleClick}
+    disabled={disabled}
+    type={type}
+    style={css}
+  >
+    {icon && (
+      <i className={classNames(['fa', `fa-${icon}`])} />
+    )}
+    {label ? ` ${label}` : ''}
+    {children}
+  </button>
+);
+
+export default compose(
+  mapProps(({ className, big, btnStyle, ...rest }: Props): Props => ({
+    className: classNames(className, {
+      btn: true,
+      'btn-xs': !big,
+      [`btn-${btnStyle}`]: btnStyle,
+    }),
+    big,
+    btnStyle,
+    ...rest,
+  })),
+  withHandlers({
+    handleClick: ({
+      action,
+      onClick,
+      stopPropagation,
+    }: Props): Function => (event: Object): void => {
+      const act: ?Function = action || onClick;
+
+      if (stopPropagation) event.stopPropagation();
+
+      if (act) {
+        event.preventDefault();
+        act(event);
+      }
+    },
+  }),
+  pure([
+    'className',
+    'title',
+    'disabled',
+    'type',
+    'style',
+    'icon',
+    'label',
+    'children',
+    'big',
+    'btnStyle',
+  ])
+)(Control);

@@ -101,7 +101,7 @@ const ConnectionRow: Function = ({
     </Td>
     {remoteType === 'datasources' ? (
       <Td className="text">
-        <Text text={options} />
+        <Text text={options} renderTree />
       </Td>
     ) : (
       <Td className="text">

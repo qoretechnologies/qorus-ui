@@ -2,11 +2,16 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
+import pure from 'recompose/onlyUpdateForKeys';
 
-import { pureRender } from '../../components/utils';
 import { getMaxValue, getStepSize, scaleData, getUnit } from '../../helpers/chart';
 
-@pureRender
+@pure([
+  'width',
+  'height',
+  'labels',
+  'datasets',
+])
 export default class ChartComponent extends Component {
   static defaultProps = {
     width: 400,

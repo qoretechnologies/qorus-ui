@@ -4,7 +4,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   children?: any,
-
+  marginBottom?: number,
 };
 
 @pure(['children'])
@@ -41,7 +41,8 @@ export default class Container extends Component {
     if (this._el) {
       const { top } = this._el.getBoundingClientRect();
       const winHeight: number = window.innerHeight;
-      const height: number = winHeight - top - 60;
+      const mb: number = this.props.marginBottom || 0;
+      const height: number = winHeight - top - 60 - mb;
 
       this.setState({
         height,

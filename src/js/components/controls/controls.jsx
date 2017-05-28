@@ -1,9 +1,13 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
-
-import Control from './control';
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 import classNames from 'classnames';
-import { pureRender } from '../utils';
+
+type Props = {
+  grouped?: boolean,
+  children: Array<React.Element<any>>,
+  noControls?: boolean,
+};
 
 /**
  * Container component for {@link Control} components.
@@ -12,48 +16,23 @@ import { pureRender } from '../utils';
  * `controls` prop. This prop is an array of props objects in the same
  * order as child components.
  */
-@pureRender
-export default class Controls extends Component {
-  static defaultProps = {
-    grouped: false,
-    controls: [],
-  };
+const Controls: Function = ({
+  grouped: grouped = false,
+  children,
+  noControls,
+}: Props): React.Element<any> => (
+  <div
+    className={classNames({
+      'btn-controls': !noControls,
+      'btn-group': grouped,
+    })}
+  >
+    {children}
+  </div>
+);
 
-  props: {
-    grouped?: boolean,
-    controls: Array<React.Element<Control>>,
-    children: Array<React.Element<any>>,
-    noControls?: boolean,
-  };
-
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
-  render() {
-    return (
-      <div
-        className={classNames({
-          'btn-controls': !this.props.noControls,
-          'btn-group': this.props.grouped,
-        })}
-      >
-        {React.Children.map(this.props.children, (c, i): ?React.Element<any> => {
-          if (!c) return c;
-
-          return (
-            <c.type {...c.props} {...this.props.controls[i]} />
-          );
-        })}
-      </div>
-    );
-  }
-}
-
-Controls.propTypes = {
-  grouped: PropTypes.bool,
-  controls: PropTypes.array,
-  children: PropTypes.node,
-  noControls: PropTypes.bool,
-};
+export default pure([
+  'grouped',
+  'children',
+  'noControls',
+])(Controls);

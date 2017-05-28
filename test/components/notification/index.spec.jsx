@@ -84,10 +84,11 @@ describe('Notification from \'components/notifications\'', () => {
 
     const wrapper = mount(<NotificationPanel {...{ alerts }} />);
 
-    expect(wrapper.find('Badge')).to.have.length(1);
+    expect(wrapper.find('.badge')).to.have.length(1);
 
-    const badgeProps = wrapper.find('Badge').first().props();
-    expect(badgeProps.val).to.be.equals('4');
+    const badgeProps = wrapper.find('.badge').first().props();
+
+    expect(badgeProps.children).to.be.equals('4');
   });
 
   it('open panel', () => {
