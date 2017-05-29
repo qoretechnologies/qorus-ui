@@ -69,8 +69,7 @@ const viewSelector = createSelector(
     viewSelector,
     {
       load: actions.props.fetch,
-      addProp: actions.props.addProp,
-      updateProp: actions.props.updateProp,
+      manageProp: actions.props.manageProp,
       removeProp: actions.props.removeProp,
     }
   ),
@@ -84,8 +83,7 @@ export default class PropertiesView extends Component {
     user: PropTypes.object,
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
-    addProp: PropTypes.func,
-    updateProp: PropTypes.func,
+    manageProp: PropTypes.func,
     removeProp: PropTypes.func,
     query: PropTypes.string,
     onSearchChange: PropTypes.func,
@@ -105,11 +103,11 @@ export default class PropertiesView extends Component {
   };
 
   handleAddFormSubmit = (data: Object) => {
-    this.props.addProp(data);
+    this.props.manageProp(data);
   };
 
   handleEditFormSubmit = (data: Object) => {
-    this.props.updateProp(data);
+    this.props.manageProp(data);
   };
 
   handleDeleteClick = (prop: Object) => {

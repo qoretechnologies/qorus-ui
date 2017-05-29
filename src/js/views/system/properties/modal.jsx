@@ -86,14 +86,21 @@ export default class extends Component {
     event.preventDefault();
 
     const { domain, key, value } = this.refs;
+    let val = value.value;
 
-    this.props.onSubmit({
-      domain: domain.value,
-      key: key.value,
-      value: value.value,
-    });
+    try {
+      val = JSON.parse(value.value);
+    } catch (e) {
+      val = value.value;
+    } finally {
+      this.props.onSubmit({
+        domain: domain.value,
+        key: key.value,
+        value: val,
+      });
 
-    this.props.onClose();
+      this.props.onClose();
+    }
   };
 
   getDomainList: Function = (value: string): Array<string> => (
@@ -104,7 +111,7 @@ export default class extends Component {
 
   getKeyList: Function = (value: string): Array<string> => (
     Object.keys(this.props.collection[this.state.domain]).filter((key: string): boolean => (
-      includes(key, value)
+      value ? includes(key, value) : true
     ))
   );
 
@@ -168,8 +175,8 @@ export default class extends Component {
               />
             </div>
             <label htmlFor="key"> Key </label>
-            <div className={`form-group ${!data ? 'input-group' : ''}`}>
-              { !data && (
+            <div className={`form-group ${(!data || !data.key) ? 'input-group' : ''}`}>
+              {(!data || !data.key) && (
                 <div className="input-group-btn">
                   <Dropdown
                     id="props"
@@ -184,7 +191,7 @@ export default class extends Component {
                 </div>
               )}
               <input
-                readOnly={data}
+                readOnly={data && data.key}
                 ref="key"
                 type="text"
                 id="key"
@@ -200,7 +207,7 @@ export default class extends Component {
               <textarea
                 ref="value"
                 id="value"
-                defaultValue={data ? JSON.stringify(data.value, null, 2) : ''}
+                defaultValue={data ? JSON.stringify(data.value) : ''}
                 className="form-control"
               />
             </div>
@@ -213,6 +220,7 @@ export default class extends Component {
                   big
                   btnStyle="default"
                   action={this.props.onClose}
+                  type="button"
                 />
                 <Control
                   type="submit"
