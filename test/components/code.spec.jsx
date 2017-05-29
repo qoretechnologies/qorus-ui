@@ -41,9 +41,9 @@ describe('Code from "components/code"', () => {
       />
     );
 
-    expect(wrapper.find('lifecycle(Code)').props().selected.name)
+    expect(wrapper.props().selected.name)
       .to.eql('firstArray - Function');
-    expect(wrapper.find('lifecycle(Code)').props().selected.code)
+    expect(wrapper.props().selected.code)
       .to.eql('const hello=2;');
     expect(wrapper.find('.code-item').first().props().className)
       .to.eql('code-item selected');
@@ -55,7 +55,7 @@ describe('Code from "components/code"', () => {
       <Code data={{}} />
     );
 
-    expect(wrapper.find('lifecycle(Code)').first().props().height).to.eql('auto');
+    expect(wrapper.find('onlyUpdateForKeys(Code)').first().props().height).to.eql('auto');
   });
 
   it('toggles the section when name clicked', () => {
@@ -77,7 +77,7 @@ describe('Code from "components/code"', () => {
       <Code data={{}} heightUpdater={() => 40} />
     );
 
-    expect(wrapper.find('lifecycle(Code)').first().props().height).to.eql(40);
+    expect(wrapper.find('onlyUpdateForKeys(Code)').first().props().height).to.eql(40);
   });
 
   it('renders the data correctly', () => {
@@ -97,9 +97,9 @@ describe('Code from "components/code"', () => {
 
     wrapper.find('.code-item').first().simulate('click');
 
-    expect(wrapper.find('lifecycle(Code)').props().selected.name)
+    expect(wrapper.find('onlyUpdateForKeys(Code)').props().selected.name)
       .to.eql('firstArray - Function');
-    expect(wrapper.find('lifecycle(Code)').props().selected.code)
+    expect(wrapper.find('onlyUpdateForKeys(Code)').props().selected.code)
       .to.eql('const hello=2;');
     expect(wrapper.find('.code-item').first().props().className)
       .to.eql('code-item selected');

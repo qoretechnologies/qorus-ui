@@ -121,10 +121,9 @@ export default class StepModal extends Component {
                       ` (${func.function_instanceid})`,
                     /* eslint-enable quote-props */
                     description: func.description,
-                    source: func.source,
+                    source: `${func.source}:${func.offset}`,
                     author: func.author,
                     tags: func.tags && Object.keys(func.tags).length ? func.tags : undefined,
-                    offset: func.offset,
                   }}
                 />
                 <SourceCode lineOffset={parseInt(func.offset, 10)}>
@@ -132,7 +131,13 @@ export default class StepModal extends Component {
                 </SourceCode>
               </Pane>
               <Pane name="Function Info">
-                <InfoTable object={func} omit={['body', 'type']} />
+                <InfoTable
+                  object={{
+                    ..._.omit(func, 'offset'),
+                    source: `${func.source}:${func.offset}`,
+                  }}
+                  omit={['body', 'type']}
+                />
               </Pane>
             </Tabs>
           </Pane>

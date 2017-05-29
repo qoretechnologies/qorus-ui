@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
@@ -11,48 +11,37 @@ describe("Checkbox from 'components/checkbox'", () => {
   });
 
   it('renders unchecked checkbox', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
+    const wrapper = mount(
       <Checkbox checked="UNCHECKED" />
     );
-    const result = renderer.getRenderOutput();
 
-    expect(result.type).to.equal('i');
-    expect(result.props.className).to.equal('fa fa-square-o');
+    expect(wrapper.find('i')).to.have.length(1);
+    expect(wrapper.find('i').first().props().className).to.equal('fa fa-square-o');
   });
 
   it('renders half-checked checkbox', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
+    const wrapper = mount(
       <Checkbox checked="HALFCHECKED" />
     );
-    const result = renderer.getRenderOutput();
 
-    expect(result.type).to.equal('i');
-    expect(result.props.className).to.equal('fa fa-minus-square-o');
+    expect(wrapper.find('i').first().props().className).to.equal('fa fa-minus-square-o');
   });
 
   it('renders checked chechbox', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
+    const wrapper = mount(
       <Checkbox checked="CHECKED" />
     );
-    const result = renderer.getRenderOutput();
 
-    expect(result.type).to.equal('i');
-    expect(result.props.className).to.equal('fa fa-check-square-o');
+    expect(wrapper.find('i').first().props().className).to.equal('fa fa-check-square-o');
   });
 
   it('changes the checkbox on click', () => {
-    const renderer = TestUtils.createRenderer();
-    renderer.render(
+    const wrapper = mount(
       <Checkbox checked="UNCHECKED" />
     );
-    let result = renderer.getRenderOutput();
 
-    result.props.onClick({ preventDefault: () => {} });
-    result = renderer.getRenderOutput();
+    wrapper.find('i').first().simulate('click');
 
-    expect(result.props.className).to.equal('fa fa-check-square-o');
+    expect(wrapper.find('i').first().props().className).to.equal('fa fa-check-square-o');
   });
 });
