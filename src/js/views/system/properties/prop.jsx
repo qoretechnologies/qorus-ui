@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
-import pure from 'recompose/onlyUpdateForKeys';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 
@@ -39,9 +38,13 @@ const Property: Function = ({
     onDelete({ domain: title, key });
   };
 
-  const handleEditClick = (key: string, value: string): Function => (): void => (
-    onEdit(null, { domain: title, key, value })
-  );
+  const handleEditClick = (key: string, value: string): Function => (): void => {
+    onEdit(null, { domain: title, key, value });
+  };
+
+  const handlePropAddClick = (): void => {
+    onEdit(null, { domain: title });
+  };
 
   return (
     <div>
@@ -56,15 +59,26 @@ const Property: Function = ({
           </div>
           { title !== 'omq' && (
             <div className="pull-right">
-              <PermButton
-                label="Remove group"
-                perms={perms}
-                reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
-                icon="times"
-                btnStyle="danger"
-                onClick={handlePropDeleteClick}
-                title="Remove permission group"
-              />
+              <Controls grouped noControls>
+                <PermButton
+                  label="Add property"
+                  perms={perms}
+                  reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
+                  icon="plus"
+                  btnStyle="success"
+                  onClick={handlePropAddClick}
+                  title="Add permission to this group"
+                />
+                <PermButton
+                  label="Remove group"
+                  perms={perms}
+                  reqPerms={['SERVER-CONTROL', 'DELETE-PROPERTY']}
+                  icon="times"
+                  btnStyle="danger"
+                  onClick={handlePropDeleteClick}
+                  title="Remove permission group"
+                />
+              </Controls>
             </div>
           )}
         </div>
@@ -126,9 +140,4 @@ export default compose(
       setExpanded(() => !expanded);
     },
   }),
-  pure([
-    'expanded',
-    'data',
-    'perms',
-  ])
 )(Property);
