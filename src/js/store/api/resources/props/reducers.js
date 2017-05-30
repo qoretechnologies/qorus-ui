@@ -16,10 +16,12 @@ const defaultReducer = {
 };
 
 const manageProp = {
-  next(state: Object = initialState, action: Object) {
+  next(state: Object = initialState, { payload: { prop } }) {
+    if (prop.domain === 'omq') return state;
+
     const data = { ...state.data };
 
-    return { ...state, ...{ data: updateProps(data, action.payload.prop) } };
+    return { ...state, ...{ data: updateProps(data, prop) } };
   },
   throw(state: Object = initialState) {
     return state;
