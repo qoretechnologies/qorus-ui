@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import { includes, flowRight } from 'lodash';
+import { includes, flowRight, omit } from 'lodash';
 
 import actions from '../../../store/api/actions';
 import Prop from './prop';
@@ -91,13 +91,14 @@ export default class PropertiesView extends Component {
 
   handleAddClick = (event: EventHandler, data: Object) => {
     const onSubmit = data ? this.handleEditFormSubmit : this.handleAddFormSubmit;
+    const collection = omit(this.props.collection, 'omq');
 
     this.props.openModal(
       <Modal
         onClose={this.props.closeModal}
         onSubmit={onSubmit}
         data={data}
-        collection={this.props.collection}
+        collection={collection}
       />
     );
   };
