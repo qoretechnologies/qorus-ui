@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
-import omit from 'lodash/omit';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import lifecycle from 'recompose/lifecycle';
@@ -75,22 +74,30 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
           components = fileCopy.components.reduce((newComps: Object, curComp: Object): Object => {
             const compCopy: Object = { ...curComp };
 
+            const createdComp: string = moment(compCopy.created).format('YYYY-MM-DD HH:mm:ss');
+            const updatedComp: string = moment(compCopy.updated).format('YYYY-MM-DD HH:mm:ss');
+
             return {
               ...newComps,
               ...{
-                [compCopy.component]: {
-                  ...compCopy,
+                [`${compCopy.component} v${compCopy.version} (${compCopy.id})`]: {
+                  Timestamps: `Created: ${createdComp} Updated: ${updatedComp}`,
+                  Info: `${compCopy.hash_type} - ${compCopy.hash}`,
                 },
               },
             };
           }, {});
         }
 
+        const createdFile: string = moment(fileCopy.created).format('YYYY-MM-DD HH:mm:ss');
+        const updatedFile: string = moment(fileCopy.updated).format('YYYY-MM-DD HH:mm:ss');
+
         return {
           ...newFiles,
           ...{
             [fileCopy.name]: {
-              ...omit(fileCopy, 'components'),
+              Timestamps: `Created: ${createdFile} Updated: ${updatedFile}`,
+              Info: `${fileCopy.type} - ${fileCopy.hash_type} - ${fileCopy.hash}`,
               ...components,
             },
           },
@@ -98,11 +105,15 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
       }, {});
     }
 
+    const created: string = moment(copy.created).format('YYYY-MM-DD HH:mm:ss');
+    const updated: string = moment(copy.updated).format('YYYY-MM-DD HH:mm:ss');
+
     return {
       ...newData,
       ...{
-        [`${moment(copy.created).format('YYYY-MM-DD HH:mm:ss')} - ${copy.name}`]: {
-          ...omit(copy, 'files'),
+        [`[${created}] ${copy.name}`]: {
+          Timestamps: `Created: ${created} Updated: ${updated}`,
+          Description: copy.description,
           ...files,
         },
       },
