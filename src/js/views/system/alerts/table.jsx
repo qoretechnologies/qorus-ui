@@ -48,39 +48,43 @@ const AlertsTable: Function = ({
 }: Props): React.Element<any> => (
   <div>
     <AlertsToolbar location={location} />
-    <Table
-      fixed
-      hover
-      striped
-      marginBottom={canLoadMore ? 60 : 0}
-      key={`${type}-${alerts.length}`}
-    >
-      <Thead>
-        <Tr
-          sortData={sortData}
-          onSortChange={onSortChange}
-        >
-          <Th className="tiny">
-            <Icon icon="warning" />
-          </Th>
-          <Th className="narrow">-</Th>
-          <Th className="text" name="type">Type</Th>
-          <Th className="text" name="alert">Alert</Th>
-          <Th className="name" name="object">Object</Th>
-          <Th className="big" name="when">When</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {alerts.map((alert: Object): React.Element<any> => (
-          <AlertRow
-            key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
-            openPane={openPane}
-            isActive={paneId === `${alert.type}:${alert.id}`}
-            {...alert}
-          />
-        ))}
-      </Tbody>
-    </Table>
+    {alerts.length ? (
+      <Table
+        fixed
+        hover
+        striped
+        marginBottom={canLoadMore ? 60 : 0}
+        key={`${type}-${alerts.length}`}
+      >
+        <Thead>
+          <Tr
+            sortData={sortData}
+            onSortChange={onSortChange}
+          >
+            <Th className="tiny">
+              <Icon icon="warning" />
+            </Th>
+            <Th className="narrow">-</Th>
+            <Th className="text big" name="type">Type</Th>
+            <Th className="text alerts-large" name="alert">Alert</Th>
+            <Th className="name" name="object">Object</Th>
+            <Th className="big" name="when">When</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {alerts.map((alert: Object): React.Element<any> => (
+            <AlertRow
+              key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
+              openPane={openPane}
+              isActive={paneId === `${alert.type}:${alert.id}`}
+              {...alert}
+            />
+          ))}
+        </Tbody>
+      </Table>
+    ) : (
+      <p className="no-data"> No data </p>
+    )}
     {canLoadMore && (
       <Button
         label="Load 50 more..."
