@@ -51,7 +51,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
     it('renders the Datepicker input with the "all" date', () => {
       const wrapper = mount(<Datepicker date="all" />);
       const { inputDate } = wrapper.find('withHandlers(Input)').props();
-      const date = moment('19700101000000').format('YYYY-MM-DD HH:mm:ss');
+      const date = moment('19700101').format('YYYY-MM-DD HH:mm:ss');
 
       expect(inputDate).to.equal(date);
     });
