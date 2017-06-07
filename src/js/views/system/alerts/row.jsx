@@ -57,10 +57,10 @@ const AlertRow: Function = ({
         onClick={handleDetailClick}
       />
     </Td>
-    <Td className="text">
+    <Td className="big text">
       <Text text={type} />
     </Td>
-    <Td className="text">
+    <Td className="alerts-large text">
       <Text text={alert} />
     </Td>
     <Td className="name">

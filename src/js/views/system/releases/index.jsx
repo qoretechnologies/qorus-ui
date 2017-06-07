@@ -113,7 +113,6 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
       ...{
         [`[${created}] ${copy.name}`]: {
           Timestamps: `Created: ${created} Updated: ${updated}`,
-          Description: copy.description,
           ...files,
         },
       },
