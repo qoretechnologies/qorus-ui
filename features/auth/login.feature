@@ -15,6 +15,7 @@ Feature: Tests login page
     When I type "fake" in "login" input
     And I type "1234" in "password" input
     And I submit "loginForm" form
+    And I wait some time
     Then I see invalid user text
 
   Scenario: Submit right credentials
