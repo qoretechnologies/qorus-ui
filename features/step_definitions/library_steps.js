@@ -19,7 +19,7 @@ module.exports = function searchSteps() {
   });
 
   this.Then(/^I see the source code$/, async function() {
-    this.browser.assert.text('.code-source h5', 'Constants - TestConstants1');
+    this.browser.assert.text('.code-source h5', 'Constants - testconstants1 v1.0 (1)');
     this.browser.assert.text('code', 'const t1 = 1;');
   });
 

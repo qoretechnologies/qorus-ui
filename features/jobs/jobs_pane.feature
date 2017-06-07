@@ -2,7 +2,6 @@ Feature: Jobs pane
   Scenario: See no options
     Given I am on "jobs?date=24h&paneId=33" page
     When "jobs" get loaded
-    Then I see ".svc__desc" item
     And I see ".options" item
     And I see ".groups" item
 
@@ -29,12 +28,12 @@ Feature: Jobs pane
     Given I am on "jobs?date=24h&paneId=33" page
     When "jobs" get loaded
     And I click on ".group" item
-    Then the URL changes to "/groups/anothertest"
+    Then the complete URL changes to "/groups?group=anothertest"
 
   Scenario: Alert tab show alerts
     Given I am on "jobs?date=24h&paneId=110&paneTab=detail" page
     When "jobs" get loaded
-    Then I see "2" ".job-alert" items
+    Then I see "1" ".job-alert" items
 
   Scenario: Job detail displays the code item
     Given I am on "jobs?date=all&paneId=33&paneTab=code" page

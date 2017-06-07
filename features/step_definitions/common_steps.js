@@ -345,7 +345,7 @@ module.exports = function commonSteps() {
   });
 
   this.When(/^I submit "([^"]*)" form$/, async function(formClass) {
-    return this.browser.pressButton(`form.${formClass} button[type=submit]`);
+    return this.browser.click(`form.${formClass} button[type=submit]`);
   });
 
   this.Then(/^I see invalid user text$/, async function() {
