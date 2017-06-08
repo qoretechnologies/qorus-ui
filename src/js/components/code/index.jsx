@@ -4,25 +4,31 @@ import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import lifecycle from 'recompose/lifecycle';
-import capitalize from 'lodash/capitalize';
 import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 
 import Section from './section';
-import SourceCode from '../../components/source_code';
-import InfoTable from '../../components/info_table';
+import CodeTab from './code';
+import ReleasesTab from '../../views/system/releases';
+import Tabs, { Pane } from '../tabs';
 
 type Props = {
   data: Object,
   height: string | number,
+  heightUpdated: Function,
   selected: Object,
   onItemClick: Function,
+  handleItemClick: Function,
+  setSelected: Function,
+  location: Object,
 };
 
 const Code: Function = ({
   data,
   height,
-  onItemClick,
+  handleItemClick,
   selected,
+  location,
 }: Props): React.Element<any> => (
   <div className="code">
     <div className="code-list" style={{ height }}>
@@ -31,37 +37,29 @@ const Code: Function = ({
           key={index}
           name={name}
           items={data[name]}
-          onItemClick={onItemClick}
+          onItemClick={handleItemClick}
           selected={selected}
         />
       ))}
     </div>
     <div className="code-source">
       { selected && (
-        <div>
-          {selected.item ? (
-            <h5>
-              {`${capitalize(selected.name)}
-              ${selected.item.version ? `v${selected.item.version}` : ''}
-              ${selected.item.id ? `(${selected.item.id})` : ''}`}
-            </h5>
-          ) : (
-            <h5>{capitalize(selected.name)}</h5>
-          )}
-          {selected.item && (
-            <InfoTable
-              object={selected.item}
-              pick={
-                selected.item.tags && Object.keys(selected.item.tags).length ?
-                ['author', 'offset', 'source', 'description', 'tags'] :
-                ['author', 'offset', 'source', 'description']
-              }
+        <Tabs active="code">
+          <Pane name="Code">
+            <CodeTab
+              selected={selected}
+              height={height}
             />
-          )}
-          <SourceCode height={typeof height === 'number' ? height - 35 : height}>
-            { selected.code }
-          </SourceCode>
-        </div>
+          </Pane>
+          <Pane name="Releases">
+            <ReleasesTab
+              component={selected.item.name}
+              location={location}
+              key={selected.item.name}
+              compact
+            />
+          </Pane>
+        </Tabs>
       )}
     </div>
   </div>
@@ -70,36 +68,68 @@ const Code: Function = ({
 export default compose(
   withState('height', 'setHeight', 'auto'),
   withState('selected', 'setSelected', ({ selected }) => selected || null),
-  mapProps(({ heightUpdater, setHeight, setSelected, ...rest }): Object => ({
+  mapProps(({ heightUpdater, setHeight, ...rest }): Object => ({
     calculateHeight: () => setHeight((height: string | number) => (
       heightUpdater ? heightUpdater() : height
     )),
-    onItemClick: (
+    ...rest,
+  })),
+  withHandlers({
+    handleItemClick: ({ setSelected, onItemClick }: Props): Function => (
       name: string,
       code: string,
       type: string,
       id: number,
       item: Object,
-    ) => setSelected(() => ({
-      name,
-      code,
-      item,
-    })),
-    ...rest,
-  })),
+    ): void => {
+      if (onItemClick && !code) {
+        onItemClick(name, code, type, id);
+        setSelected(() => ({
+          name,
+          code,
+          item,
+          type,
+          id,
+          loading: true,
+        }));
+      } else {
+        setSelected(() => ({
+          name,
+          code,
+          item,
+        }));
+      }
+    },
+  }),
   lifecycle({
     componentWillMount() {
       this.props.calculateHeight();
 
       window.addEventListener('resize', this.props.calculateHeight);
     },
+    componentWillReceiveProps(nextProps) {
+      if (this.props.data !== nextProps.data) {
+        this.props.setSelected((selected) => {
+          if (!selected || !nextProps.data[selected.type]) return null;
+
+          const item = nextProps.data[selected.type].find((itm: Object) => itm.id === selected.id);
+
+          return {
+            name: selected.name,
+            code: item.body,
+            item,
+            loading: false,
+          };
+        });
+      }
+    },
     componentWillUnmount() {
       window.removeEventListener('resize', this.props.calculateHeight);
     },
   }),
   pure([
-    'height',
     'data',
     'selected',
+    'height',
   ])
 )(Code);

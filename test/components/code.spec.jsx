@@ -36,6 +36,9 @@ describe('Code from "components/code"', () => {
         selected={{
           name: 'firstArray - Function',
           code: 'const hello=2;',
+          item: {
+            name: 'firstArray',
+          },
         }}
         data={data}
       />
