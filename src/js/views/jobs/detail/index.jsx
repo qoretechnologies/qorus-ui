@@ -63,9 +63,13 @@ const Detail = ({
               selected={{
                 name: `code - ${lib.code[0].name}`,
                 code: lib.code[0].body,
+                item: {
+                  name: lib.code[0].name,
+                },
               }}
               data={lib || {}}
               heightUpdater={getHeight}
+              location={location}
             />
           ) : (
             <Loader />

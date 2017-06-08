@@ -123,6 +123,7 @@ export default class WorkflowsDetail extends Component {
               <Code
                 data={workflow.lib}
                 heightUpdater={this.getHeight}
+                location={this.props.location}
               />
             </Pane>
             <Pane
