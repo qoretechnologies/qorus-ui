@@ -10,6 +10,7 @@ import moment from 'moment';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
 import loadMore from '../../../hocomponents/loadMore';
+import unsync from '../../../hocomponents/unsync';
 import actions from '../../../store/api/actions';
 import { resourceSelector, querySelector } from '../../../selectors';
 import Tree from '../../../components/tree';
@@ -30,6 +31,7 @@ type Props = {
   limit: number,
   sort: string,
   sortDir: boolean,
+  compact: boolean,
 };
 
 const Releases: Function = ({
@@ -38,11 +40,13 @@ const Releases: Function = ({
   handleLoadMore,
   sort,
   sortDir,
+  compact,
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <ReleasesToolbar
       sort={sort}
       sortDir={sortDir}
+      compact={compact}
     />
     <Container marginBottom={30}>
       <Tree data={data} />
@@ -146,12 +150,20 @@ const releaseSelector: Function = createSelector(
   )(releases.data)
 );
 
+const componentSelector = (state: Object, {
+  compact,
+  location,
+  component,
+}: Object): string => (
+  compact ? component : location.query.component
+);
+
 const viewSelector: Function = createSelector(
   [
     resourceSelector('releases'),
     releaseSelector,
     querySelector('fileName'),
-    querySelector('component'),
+    componentSelector,
     querySelector('maxdate'),
     querySelector('mindate'),
   ],
@@ -180,6 +192,7 @@ export default compose(
     {
       load: actions.releases.fetchReleases,
       fetch: actions.releases.fetchReleases,
+      unsync: actions.releases.unsync,
     }
   ),
   loadMore('data', 'releases'),
@@ -228,6 +241,7 @@ export default compose(
       }
     },
   }),
+  unsync(),
   pure([
     'data',
     'fileName',

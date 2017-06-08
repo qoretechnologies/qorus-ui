@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import mapProps from 'recompose/mapProps';
 
 import Tabs, { Pane } from 'components/tabs';
 import DetailPane from 'components/pane';
@@ -18,6 +19,11 @@ import actions from 'store/api/actions';
     load: actions.services.fetchLibSources,
   }
 )
+@mapProps(({ service, ...rest }: Object): Object => ({
+  data: service.lib ? Object.assign(service.lib, { methods: service.methods }) : {},
+  service,
+  ...rest,
+}))
 export default class ServicesDetail extends Component {
   static propTypes = {
     service: PropTypes.object,
@@ -29,6 +35,7 @@ export default class ServicesDetail extends Component {
     changePaneTab: PropTypes.func,
     width: PropTypes.number,
     onResize: PropTypes.func,
+    data: PropTypes.object,
   };
 
   componentWillMount() {
@@ -77,8 +84,9 @@ export default class ServicesDetail extends Component {
             </Pane>
             <Pane name="Code">
               <Code
-                data={{ ...service.lib, ...{ methods: service.methods } } || {}}
+                data={this.props.data}
                 heightUpdater={this.getHeight}
+                location={this.props.location}
               />
             </Pane>
             <Pane name="Methods">

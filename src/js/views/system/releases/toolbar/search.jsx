@@ -16,6 +16,8 @@ type Props = {
   maxdateQuery: ?string,
   mindateQuery: ?string,
   changeAllQuery: Function,
+  compact: boolean,
+  component: ?string,
 };
 
 class ReleasesSearch extends Component {
