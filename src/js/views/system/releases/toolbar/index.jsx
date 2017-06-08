@@ -12,6 +12,7 @@ import SearchBar from './search';
 
 type Props = {
   sort: string,
+  compact: boolean,
   sortDir: boolean,
   changeSort: Function,
   changeSortDir: Function,
@@ -24,6 +25,7 @@ const ReleasesToolbar: Function = ({
   sortDir,
   handleSortChange,
   handleSortDirChange,
+  compact,
 }: Props): React.Element<any> => (
   <Toolbar>
     <div className="pull-left">
@@ -50,7 +52,9 @@ const ReleasesToolbar: Function = ({
         />
       </Dropdown>
     </div>
-    <SearchBar />
+    {!compact && (
+      <SearchBar />
+    )}
   </Toolbar>
 );
 

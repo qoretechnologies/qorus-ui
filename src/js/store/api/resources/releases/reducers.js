@@ -38,9 +38,24 @@ const changeSortDir: Object = {
   },
 };
 
+const unsync = {
+  next() {
+    return {
+      data: [],
+      sync: false,
+      loading: false,
+      offset: 0,
+      limit: 50,
+      sort: 'Name',
+      sortDir: 'Descending',
+    };
+  },
+};
+
 export {
   fetchReleases as FETCHRELEASES,
   changeOffset as CHANGEOFFSET,
   changeSort as CHANGESORT,
   changeSortDir as CHANGESORTDIR,
+  unsync as UNSYNC,
 };

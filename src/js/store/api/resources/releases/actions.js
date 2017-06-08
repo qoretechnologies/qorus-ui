@@ -69,9 +69,14 @@ const changeSortDir: Function = createAction(
   )
 );
 
+const unsync: Function = createAction(
+  'RELEASES_UNSYNC',
+);
+
 export {
   fetchReleases,
   changeOffset,
   changeSort,
   changeSortDir,
+  unsync,
 };
