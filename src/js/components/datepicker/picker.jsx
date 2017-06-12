@@ -2,7 +2,14 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
+import pure from 'recompose/onlyUpdateForKeys';
 
+@pure([
+  'minutes',
+  'hours',
+  'children',
+  'futureOnly',
+])
 export default class Picker extends Component {
   props: {
     minutes: string | number,
