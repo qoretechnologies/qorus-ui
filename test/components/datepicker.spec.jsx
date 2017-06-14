@@ -1,14 +1,13 @@
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
+import moment from 'moment';
+
 import Datepicker from '../../src/js/components/datepicker';
 import Input from '../../src/js/components/datepicker/input';
 import Calendar from '../../src/js/components/datepicker/calendar';
 import Picker from '../../src/js/components/datepicker/picker';
-import { mount } from 'enzyme';
-
-import moment from 'moment';
 
 describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
   before(() => {
@@ -18,65 +17,61 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
   describe('Datepicker', () => {
     it('renders the Datepicker input with default date', () => {
       const wrapper = mount(<Datepicker date="24h" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = moment().add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker input with week date', () => {
       const wrapper = mount(<Datepicker date="week" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = moment().add(-1, 'weeks').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker input with month date', () => {
       const wrapper = mount(<Datepicker date="month" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = moment().startOf('month').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker input with 30 days date', () => {
       const wrapper = mount(<Datepicker date="thirty" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = moment().add(-30, 'days').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker input with the "all" date', () => {
       const wrapper = mount(<Datepicker date="all" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = moment('19700101').format('YYYY-MM-DD HH:mm:ss');
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker input with provided date', () => {
       const wrapper = mount(<Datepicker date="19880809123456" />);
-      const { inputDate } = wrapper.find('withHandlers(Input)').props();
+      const { value } = wrapper.find('input').props();
       const date = '1988-08-09 12:34:56';
 
-      expect(inputDate).to.equal(date);
+      expect(value).to.equal(date);
     });
 
     it('renders the Datepicker without the selection buttons', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Datepicker
           futureOnly
           date="19880809123456"
         />
       );
-      const result = renderer.getRenderOutput();
 
-      expect(result.props.children).to.have.length(3);
-      expect(result.props.children[1]).to.equal(null);
-      expect(result.props.children[2]).to.equal(null);
+      expect(wrapper.find('button')).to.have.length(0);
     });
   });
 
@@ -130,28 +125,23 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
 
   describe('Picker', () => {
     it('renders the picker with the calendar', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Picker />
       );
-      const result = renderer.getRenderOutput();
 
-      expect(result.type).to.equal('div');
-      expect(result.props.className).to.equal('datepicker');
+      expect(wrapper.find('div').first().hasClass('datepicker')).to.eq(true);
     });
 
     it('renders hour and minute inputs with the provided date data', () => {
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Picker
           hours="10"
           minutes="20"
         />
       );
-      const result = renderer.getRenderOutput();
 
-      expect(result.props.children[1].props.children.props.children[1].props.value).to.equal('10');
-      expect(result.props.children[1].props.children.props.children[3].props.value).to.equal('20');
+      expect(wrapper.find('input').first().props().value).to.equal('10');
+      expect(wrapper.find('input').last().props().value).to.equal('20');
     });
 
     it('runs the provided functions', () => {
@@ -161,9 +151,7 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
       const onApplyClick = chai.spy();
       const onMinutesChange = chai.spy();
       const onHoursChange = chai.spy();
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Picker
           onAllClick={onAllClick}
           on24hClick={on24hClick}
@@ -173,45 +161,43 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
           onHoursChange={onHoursChange}
         />
       );
-      const result = renderer.getRenderOutput();
 
-      result.props.children[2].props.children[0].props.action();
-      result.props.children[2].props.children[1].props.action();
-      result.props.children[1].props.children.props.children[4].props.children.props.action();
-      result.props.children[3].props.onClick();
-      result.props.children[1].props.children.props.children[3].props.onChange();
-      result.props.children[1].props.children.props.children[1].props.onChange();
+      // Reset
+      wrapper.find('.btn-xs').first().simulate('click');
+      // 24h
+      wrapper.find('.btn-xs').at(1).simulate('click');
+      // All
+      wrapper.find('.btn-xs').at(2).simulate('click');
+      // Apply
+      wrapper.find('.btn-xs').last().simulate('click');
+
 
       expect(on24hClick).to.have.been.called();
       expect(onAllClick).to.have.been.called();
       expect(onResetClick).to.have.been.called();
       expect(onApplyClick).to.have.been.called();
-      expect(onMinutesChange).to.have.been.called();
-      expect(onHoursChange).to.have.been.called();
     });
   });
 
   describe('Calendar', () => {
     it('renders the calendar', () => {
       const date = moment();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Calendar
           date={date}
           activeDate={date}
         />
       );
-      const result = renderer.getRenderOutput();
 
-      expect(result.type).to.equal('table');
+      expect(wrapper.name()).to.equal('onlyUpdateForKeys(Calendar)');
+      expect(wrapper.find('table')).to.have.length(1);
     });
 
     it('runs the provided functions', () => {
       const setDate = chai.spy();
       const setActiveDate = chai.spy();
       const date = moment();
-      const renderer = TestUtils.createRenderer();
-      renderer.render(
+      const wrapper = mount(
         <Calendar
           date={date}
           activeDate={date}
@@ -219,10 +205,9 @@ describe("Datepicker, Input, Calendar from 'components/datepicker'", () => {
           setActiveDate={setActiveDate}
         />
       );
-      const result = renderer.getRenderOutput();
 
-      result.props.children[1].props.children[0].props.children[0].props.onClick();
-      result.props.children[0].props.children[0].props.children[0].props.onClick();
+      wrapper.find('td').first().simulate('click');
+      wrapper.find('th').first().simulate('click');
 
       expect(setActiveDate).to.have.been.called();
       expect(setDate).to.have.been.called();

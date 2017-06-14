@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
+import pure from 'recompose/onlyUpdateForKeys';
 
 const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   const res: Object = {};
@@ -19,6 +20,10 @@ const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   return _.toArray(res);
 };
 
+@pure([
+  'date',
+  'activeDate',
+])
 export default class Calendar extends Component {
   props: {
     date: Object,
