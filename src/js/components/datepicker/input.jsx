@@ -1,6 +1,8 @@
 /* @flow */
 import React from 'react';
 import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
 
 type Props = {
   placeholder?: string,
@@ -47,4 +49,9 @@ const addKeyUpHandler = withHandlers({
   },
 });
 
-export default addKeyUpHandler(Input);
+export default compose(
+  addKeyUpHandler,
+  pure([
+    'inputDate',
+  ])
+)(Input);

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
 import classNames from 'classnames';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
@@ -24,6 +25,11 @@ type Props = {
   name?: string,
 }
 
+@pure([
+  'date',
+  'futureOnly',
+  'className',
+])
 export default class DatePicker extends Component {
   props: Props;
 
