@@ -5,9 +5,9 @@ import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import Toolbar from '../../../../components/toolbar';
-import actions from '../../../../store/api/actions';
-import Dropdown, { Control, Item } from '../../../../components/dropdown';
+import Toolbar from '../../../components/toolbar';
+import actions from '../../../store/api/actions';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 import SearchBar from './search';
 
 type Props = {

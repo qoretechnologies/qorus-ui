@@ -5,10 +5,10 @@ import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 
-import queryControl from '../../../../hocomponents/queryControl';
-import Datepicker from '../../../../components/datepicker';
-import { formatDate } from '../../../../helpers/date';
-import { DATE_FORMATS } from '../../../../constants/dates';
+import queryControl from '../../../hocomponents/queryControl';
+import Datepicker from '../../../components/datepicker';
+import { formatDate } from '../../../helpers/date';
+import { DATE_FORMATS } from '../../../constants/dates';
 
 type Props = {
   fileNameQuery: ?string,

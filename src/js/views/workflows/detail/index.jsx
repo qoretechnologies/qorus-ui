@@ -16,6 +16,7 @@ import ErrorsTab from './errors_tab';
 import InfoTab from './info_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
+import Releases from '../../../containers/releases';
 
 const workflowSelector: Function = (state: Object, props: Object): Object => (
   state.api.workflows.data.find((wf: Object) => wf.id === parseInt(props.paneId, 10))
@@ -154,6 +155,14 @@ export default class WorkflowsDetail extends Component {
             </Pane>
             <Pane name="Valuemaps">
               <Valuemaps vmaps={workflow.vmaps} />
+            </Pane>
+            <Pane name="Releases">
+              <Releases
+                component={workflow.name}
+                compact
+                location={this.props.location}
+                key={workflow.name}
+              />
             </Pane>
             <Pane name="Info">
               <InfoTab workflow={workflow} />

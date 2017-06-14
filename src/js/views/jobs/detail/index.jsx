@@ -11,6 +11,7 @@ import Header from './header';
 import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
+import Releases from '../../../containers/releases';
 import Tabs, { Pane } from '../../../components/tabs';
 import DetailPane from '../../../components/pane';
 import Code from '../../../components/code';
@@ -86,6 +87,14 @@ const Detail = ({
         </Pane>
         <Pane name="Valuemaps">
           <Valuemaps vmaps={model.vmaps} />
+        </Pane>
+        <Pane name="Releases">
+          <Releases
+            component={model.name}
+            compact
+            key={model.name}
+            location={location}
+          />
         </Pane>
       </Tabs>
     </article>
