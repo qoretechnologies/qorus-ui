@@ -111,7 +111,7 @@ export default class ServicesDetail extends Component {
                 resourceFiles={service.resource_files}
               />
             </Pane>
-            <Pane name="Resources">
+            <Pane name="Releases">
               <Releases
                 component={service.name}
                 compact
