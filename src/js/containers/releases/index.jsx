@@ -7,17 +7,17 @@ import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
 
-import sync from '../../../hocomponents/sync';
-import patch from '../../../hocomponents/patchFuncArgs';
-import loadMore from '../../../hocomponents/loadMore';
-import unsync from '../../../hocomponents/unsync';
-import actions from '../../../store/api/actions';
-import { resourceSelector, querySelector } from '../../../selectors';
-import Tree from '../../../components/tree';
-import Container from '../../../components/container';
+import sync from '../../hocomponents/sync';
+import patch from '../../hocomponents/patchFuncArgs';
+import loadMore from '../../hocomponents/loadMore';
+import unsync from '../../hocomponents/unsync';
+import actions from '../../store/api/actions';
+import { resourceSelector, querySelector } from '../../selectors';
+import Tree from '../../components/tree';
+import Container from '../../components/container';
 import ReleasesToolbar from './toolbar';
-import { Control as Button } from '../../../components/controls';
-import { sortTable } from '../../../helpers/table';
+import { Control as Button } from '../../components/controls';
+import { sortTable } from '../../helpers/table';
 
 type Props = {
   data: Object,
