@@ -11,10 +11,20 @@ import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
+import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
 import Container from '../../components/container';
+import Releases from '../releases';
 
-const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Function }) => {
+const MapperInfo = ({
+  mapper,
+  onBackClick,
+  location,
+}: {
+  mapper: Object,
+  onBackClick: Function,
+  location: Object,
+}) => {
   if (!mapper) return <Loader />;
 
   return (
@@ -41,17 +51,31 @@ const MapperInfo = ({ mapper, onBackClick }: { mapper: Object, onBackClick: Func
             <InfoTable object={mapper.opts} omit={['input', 'output', 'name']} />
           </div>
         </div>
-        <div className="view-content">
-          { !mapper.valid && (
-            <div className="mapper-error-msg">
-              <h5> Warning: This mapper contains an error and might not be rendered correctly </h5>
-              <Alert bsStyle="danger">
-                { mapper.error }
-              </Alert>
+        <Tabs active="diagram" type="pills">
+          <Pane name="Diagram">
+            <div className="view-content">
+              { !mapper.valid && (
+                <div className="mapper-error-msg">
+                  <h5>
+                    Warning: This mapper contains an error and might not be rendered correctly
+                  </h5>
+                  <Alert bsStyle="danger">
+                    { mapper.error }
+                  </Alert>
+                </div>
+              )}
+              <MapperDiagram mapper={mapper} />
             </div>
-          )}
-          <MapperDiagram mapper={mapper} />
-      </div>
+          </Pane>
+          <Pane name="Releases">
+            <Releases
+              component={mapper.name}
+              location={location}
+              key={mapper.name}
+              compact
+            />
+          </Pane>
+        </Tabs>
       </Container>
     </div>
   );

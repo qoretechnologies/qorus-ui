@@ -10,6 +10,7 @@ import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
+import Releases from '../../../containers/releases';
 import actions from 'store/api/actions';
 
 @connect(
@@ -108,6 +109,14 @@ export default class ServicesDetail extends Component {
               <ResourceTab
                 resources={service.resources}
                 resourceFiles={service.resource_files}
+              />
+            </Pane>
+            <Pane name="Resources">
+              <Releases
+                component={service.name}
+                compact
+                key={service.name}
+                location={this.props.location}
               />
             </Pane>
           </Tabs>

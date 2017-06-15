@@ -13,7 +13,7 @@ import SqlCache from './sqlcache';
 import Properties from './properties';
 import Rbac from './rbac';
 import Valuemaps from './valuemaps';
-import Releases from './releases';
+import Releases from '../../containers/releases';
 
 type Props = {
   location: Object,

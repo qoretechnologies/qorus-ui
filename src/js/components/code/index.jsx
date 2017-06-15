@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers';
 
 import Section from './section';
 import CodeTab from './code';
-import ReleasesTab from '../../views/system/releases';
+import ReleasesTab from '../../containers/releases';
 import Tabs, { Pane } from '../tabs';
 
 type Props = {
@@ -42,9 +42,10 @@ const Code: Function = ({
         />
       ))}
     </div>
+    { selected && (
     <div className="code-source">
-      { selected && (
-        <Tabs active="code">
+      {selected.type && (selected.type !== 'code' && selected.type !== 'methods') ? (
+        <Tabs active="code" type="pills">
           <Pane name="Code">
             <CodeTab
               selected={selected}
@@ -60,8 +61,14 @@ const Code: Function = ({
             />
           </Pane>
         </Tabs>
+      ) : (
+        <CodeTab
+          selected={selected}
+          height={height}
+        />
       )}
     </div>
+    )}
   </div>
 );
 
@@ -97,6 +104,7 @@ export default compose(
           name,
           code,
           item,
+          type,
         }));
       }
     },
@@ -114,12 +122,17 @@ export default compose(
 
           const item = nextProps.data[selected.type].find((itm: Object) => itm.id === selected.id);
 
-          return {
-            name: selected.name,
-            code: item.body,
-            item,
-            loading: false,
-          };
+          if (item) {
+            return {
+              name: selected.name,
+              code: item.body,
+              item,
+              type: selected.type,
+              loading: false,
+            };
+          }
+
+          return selected;
         });
       }
     },

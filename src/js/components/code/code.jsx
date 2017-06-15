@@ -26,7 +26,7 @@ const CodeTab: Function = ({
     ) : (
       <h5>{capitalize(selected.name)}</h5>
     )}
-    {selected.item && (
+    {(selected.item && (selected.type !== 'code')) && (
       <InfoTable
         object={{
           author: selected.item.author,
