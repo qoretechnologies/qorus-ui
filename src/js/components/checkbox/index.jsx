@@ -38,7 +38,9 @@ export default compose(
   })),
   withHandlers({
     handleClick: ({ action, setChecked }: Props): Function => (event: Object): void => {
+      event.persist();
       event.preventDefault();
+      event.stopPropagation();
 
       setChecked((checked: string) => (
         checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED'
