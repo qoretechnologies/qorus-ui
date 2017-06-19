@@ -45,6 +45,7 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   limit: number,
+  isTablet: boolean,
 };
 
 const JobsView: Function = ({
@@ -61,6 +62,7 @@ const JobsView: Function = ({
   handleLoadMore,
   sortData,
   onSortChange,
+  isTablet,
 }: Props): React.Element<any> => (
   <div>
     <JobsToolbar
@@ -77,6 +79,7 @@ const JobsView: Function = ({
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
+      isTablet={isTablet}
     />
     { canLoadMore && (
       <Control
@@ -104,17 +107,21 @@ const collectionSelector: Function = createSelector(
   ], (jobs, search) => filterSearch(search)(jobs.data)
 );
 
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
 const selector: Function = createSelector(
   [
     resourceSelector('jobs'),
     resourceSelector('systemOptions'),
     collectionSelector,
     querySelector('date'),
-  ], (meta, systemOptions, jobs, date) => ({
+    settingsSelector,
+  ], (meta, systemOptions, jobs, date, settings) => ({
     meta,
     systemOptions,
     jobs,
     date,
+    isTablet: settings.tablet,
   })
 );
 
@@ -156,6 +163,7 @@ export default compose(
     [
       'systemOptions',
       'location',
+      'isTablet',
     ],
     'detail',
     'jobs'
@@ -170,6 +178,7 @@ export default compose(
     'selectedIds',
     'paneId',
     'canLoadMore',
+    'isTablet',
   ]),
   unsync()
 )(JobsView);

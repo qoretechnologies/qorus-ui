@@ -30,6 +30,7 @@ const Detail = ({
   lib,
   width,
   onResize,
+  isTablet,
 }: {
   location: Object,
   paneTab: string,
@@ -41,6 +42,7 @@ const Detail = ({
   lib: Object,
   width: number,
   onResize: Function,
+  isTablet: boolean,
 }): React.Element<*> => (
   <DetailPane
     name="jobs-detail-pane"
@@ -56,7 +58,7 @@ const Detail = ({
         tabChange={changePaneTab}
       >
         <Pane name="Detail">
-          <DetailTab model={model} />
+          <DetailTab model={model} isTablet={isTablet} />
         </Pane>
         <Pane name="Code">
           {model.code ? (

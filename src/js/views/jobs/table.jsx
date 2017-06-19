@@ -21,6 +21,7 @@ type Props = {
   select: Function,
   updateDone: Function,
   canLoadMore: boolean,
+  isTablet: boolean,
 };
 
 const JobsTable: Function = ({
@@ -34,6 +35,7 @@ const JobsTable: Function = ({
   select,
   updateDone,
   canLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -41,7 +43,7 @@ const JobsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 60 : 0}
+    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
@@ -51,20 +53,32 @@ const JobsTable: Function = ({
       >
         <Th className="tiny checker">-</Th>
         <Th className="narrow">-</Th>
-        <Th className="big">Actions</Th>
+        {!isTablet && (
+          <Th className="big">Actions</Th>
+        )}
         <Th className="narrow" name="has_alerts">
           <Icon icon="warning" />
         </Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
-        <Th className="normal" name="version">Version</Th>
+        <Th className="normal text" name="version">Version</Th>
         <Th className="big" name="last_executed">Last</Th>
         <Th className="big" name="next">Next</Th>
-        <Th className="big" name="expiry_date">Expiry Date</Th>
-        <Th className="normal" name="COMPLETE">Complete</Th>
-        <Th className="normal" name="ERROR">Error</Th>
-        <Th className="normal" name="IN-PROGRESS">In progress</Th>
-        <Th className="normal" name="CRASHED">Crashed</Th>
+        {!isTablet && (
+          <Th className="big" name="expiry_date">Expiry Date</Th>
+        )}
+        <Th className={isTablet ? 'narrow' : 'normal'} name="COMPLETE" title="Complete">
+          {isTablet ? 'CMP' : 'Complete'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'normal'} name="ERROR" title="Error">
+          {isTablet ? 'ERR' : 'Error'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'normal'} name="IN-PROGRESS" title="In Progress">
+          {isTablet ? 'PRG' : 'In Progress'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'normal'} name="CRASHED" title="Crashed">
+          {isTablet ? 'CSH' : 'Crashed'}
+        </Th>
       </Tr>
     </Thead>
     <Tbody>
@@ -78,6 +92,7 @@ const JobsTable: Function = ({
           select={select}
           updateDone={updateDone}
           PROGRESS={job['IN-PROGRESS']}
+          isTablet={isTablet}
           {...job}
         />
       ))}
@@ -99,5 +114,6 @@ export default compose(
     'collection',
     'paneId',
     'date',
+    'isTablet',
   ])
 )(JobsTable);

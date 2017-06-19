@@ -13,6 +13,7 @@ import JobControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import DetailButton from '../../components/detail_button';
+import { formatCount } from '../../helpers/orders';
 
 type Props = {
   openPane: Function,
@@ -47,6 +48,7 @@ type Props = {
   day: string,
   month: string,
   wday: string,
+  isTablet: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -76,6 +78,7 @@ const ServiceRow: Function = ({
   day,
   month,
   wday,
+  isTablet,
 }: Props): React.Element<any> => (
   <Tr
     highlight={_updated}
@@ -96,18 +99,20 @@ const ServiceRow: Function = ({
     <Td className="narrow">
       <DetailButton active={isActive} onClick={handleDetailClick} />
     </Td>
-    <Td className="big">
-      <JobControls
-        enabled={enabled}
-        active={active}
-        id={id}
-        minute={minute}
-        hour={hour}
-        day={day}
-        month={month}
-        week={wday}
-      />
-    </Td>
+    {!isTablet && (
+      <Td className="big">
+        <JobControls
+          enabled={enabled}
+          active={active}
+          id={id}
+          minute={minute}
+          hour={hour}
+          day={day}
+          month={month}
+          week={wday}
+        />
+      </Td>
+    )}
     <Td className="narrow">
       { hasAlerts && (
         <Controls>
@@ -137,46 +142,48 @@ const ServiceRow: Function = ({
     <Td className="big">
       <Date date={next} />
     </Td>
-    <Td className="big">
-      <Date date={expiry} />
-    </Td>
-    <Td className="normal">
+    {!isTablet && (
+      <Td className="big">
+        <Date date={expiry} />
+      </Td>
+    )}
+    <Td className={isTablet ? 'narrow' : 'normal'}>
       <Link
         to={`/job/${id}?date=${date}&filter=complete`}
       >
         <Badge
           className="status-complete"
-          val={COMPLETE || 0}
+          val={formatCount(COMPLETE) || 0}
         />
       </Link>
     </Td>
-    <Td className="normal">
+    <Td className={isTablet ? 'narrow' : 'normal'}>
       <Link
         to={`/job/${id}?date=${date}&filter=error`}
       >
         <Badge
           className="status-error"
-          val={ERROR || 0}
+          val={formatCount(ERROR) || 0}
         />
       </Link>
     </Td>
-    <Td className="normal">
+    <Td className={isTablet ? 'narrow' : 'normal'}>
       <Link
         to={`/job/${id}?date=${date}&filter=in-progress`}
       >
         <Badge
           className="status-in-progress"
-          val={PROGRESS || 0}
+          val={formatCount(PROGRESS) || 0}
         />
       </Link>
     </Td>
-    <Td className="normal">
+    <Td className={isTablet ? 'narrow' : 'normal'}>
       <Link
         to={`/job/${id}?date=${date}&filter=crashed`}
       >
         <Badge
           className="status-canceled"
-          val={CRASHED || 0}
+          val={formatCount(CRASHED) || 0}
         />
       </Link>
     </Td>
@@ -222,5 +229,6 @@ export default compose(
     'ERROR',
     'PROGRESS',
     'CRASHED',
+    'isTablet',
   ])
 )(ServiceRow);
