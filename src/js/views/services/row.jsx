@@ -155,5 +155,6 @@ export default compose(
     'has_alerts',
     '_selected',
     '_updated',
+    'isTablet',
   ])
 )(ServiceRow);
