@@ -36,6 +36,7 @@ type Props = {
   enabled: boolean,
   autostart: boolean,
   status: string,
+  isTablet: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -57,6 +58,7 @@ const ServiceRow: Function = ({
   enabled,
   autostart,
   status,
+  isTablet,
 }: Props): React.Element<any> => (
   <Tr
     highlight={_updated}
@@ -86,14 +88,16 @@ const ServiceRow: Function = ({
         tooltip={type === 'system' ? 'System' : 'User'}
       />
     </Td>
-    <Td className="medium">
-      <ServiceControls
-        id={id}
-        enabled={enabled}
-        autostart={autostart}
-        status={status}
-      />
-    </Td>
+    {!isTablet && (
+      <Td className="medium">
+        <ServiceControls
+          id={id}
+          enabled={enabled}
+          autostart={autostart}
+          status={status}
+        />
+      </Td>
+    )}
     <Td className="narrow">{ threads }</Td>
     <Td className="tiny">
       { hasAlerts && (

@@ -20,6 +20,7 @@ type Props = {
   select: Function,
   updateDone: Function,
   canLoadMore: boolean,
+  isTablet: boolean,
 };
 
 const ServicesTable: Function = ({
@@ -32,6 +33,7 @@ const ServicesTable: Function = ({
   select,
   updateDone,
   canLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -39,7 +41,7 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 60 : 0}
+    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
@@ -50,7 +52,9 @@ const ServicesTable: Function = ({
         <Th className="tiny">-</Th>
         <Th className="narrow">-</Th>
         <Th className="narrow" name="type">Type</Th>
-        <Th className="medium">Actions</Th>
+        {!isTablet && (
+          <Th className="medium">Actions</Th>
+        )}
         <Th className="narrow" name="threads">Threads</Th>
         <Th className="tiny" name="has_alerts">
           <Icon icon="warning" />
@@ -70,6 +74,7 @@ const ServicesTable: Function = ({
           closePane={closePane}
           select={select}
           updateDone={updateDone}
+          isTablet={isTablet}
           {...service}
         />
       ))}

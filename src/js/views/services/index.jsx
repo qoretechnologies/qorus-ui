@@ -33,6 +33,7 @@ type Props = {
   openPane: Function,
   closePane: Function,
   canLoadMore: boolean,
+  isTablet: boolean,
   handleLoadMore: Function,
   limit: number,
 };
@@ -51,6 +52,7 @@ const Services: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <div>
     <ServicesToolbar
@@ -67,6 +69,7 @@ const Services: Function = ({
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
+      isTablet={isTablet}
     />
     { canLoadMore && (
       <Control
@@ -98,15 +101,19 @@ const systemOptionsSelector: Function = (state: Object): Array<Object> => (
   state.api.systemOptions.data.filter((option: Object): boolean => option.service)
 );
 
+const settingsSelector: Function = (state: Object): Object => state.ui.settings
+
 const selector: Function = createSelector(
   [
     servicesSelector,
     systemOptionsSelector,
     resourceSelector('services'),
-  ], (services, systemOptions, meta) => ({
+    settingsSelector,
+  ], (services, systemOptions, meta, settings) => ({
     services,
     systemOptions,
     meta,
+    isTablet: settings.tablet,
   })
 );
 
@@ -139,6 +146,7 @@ export default compose(
     'selectedIds',
     'paneId',
     'canLoadMore',
+    'isTablet',
   ]),
   unsync()
 )(Services);
