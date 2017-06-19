@@ -2,7 +2,7 @@ import React from 'react';
 
 import Code from 'components/code';
 
-const LibraryView = ({ workflow }: { workflow: Object }) => {
+const LibraryView = ({ workflow, location }: { workflow: Object, location: Object }) => {
   const getHeight: Function = (): number => {
     const navbar = document.querySelector('.navbar').clientHeight;
     const header = document.querySelector('.order-header').clientHeight;
@@ -18,6 +18,7 @@ const LibraryView = ({ workflow }: { workflow: Object }) => {
       <Code
         data={workflow.lib}
         heightUpdater={getHeight}
+        location={location}
       />
     </div>
   );
