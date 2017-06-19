@@ -54,6 +54,8 @@ const ServiceRow: Function = ({
   <Tr
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
+    className={_selected ? 'row-selected' : ''}
+    onClick={handleCheckboxClick}
   >
     <Td className="tiny checker">
       <Checkbox

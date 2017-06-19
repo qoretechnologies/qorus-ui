@@ -12,6 +12,7 @@ import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import Icon from '../../components/icon';
+import DetailButton from '../../components/detail_button';
 import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
 import { formatCount } from '../../helpers/orders';
@@ -20,6 +21,7 @@ type Props = {
   isActive?: boolean,
   date: string,
   openPane: Function,
+  closePane: Function,
   select: Function,
   handleCheckboxClick: Function,
   handleHighlightEnd: Function,
@@ -68,22 +70,22 @@ const TableRow: Function = ({
     className={classNames({
       info: isActive,
       'row-alert': hasAlerts,
+      'row-selected': _selected,
     })}
+    onClick={handleCheckboxClick}
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
   >
-    <Td key="checkbox" className="narrow checker">
+    <Td key="checkbox" className="tiny checker">
       <Checkbox
         action={handleCheckboxClick}
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
     <Td key="detail" className="narrow">
-      <Button
-        label="Detail"
-        btnStyle="success"
+      <DetailButton
         onClick={handleDetailClick}
-        title="Open detail pane"
+        active={isActive}
       />
     </Td>
     <Td key="controls" className="narrow">
@@ -103,7 +105,7 @@ const TableRow: Function = ({
         execCount={execs}
       />
     </Td>
-    <Td className="narrow">
+    <Td className="tiny">
       { hasAlerts && (
         <Controls>
           <Button
@@ -166,8 +168,17 @@ export default compose(
     handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
       updateDone(id);
     },
-    handleDetailClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id);
+    handleDetailClick: ({
+      openPane,
+      id,
+      closePane,
+      isActive,
+    }: Props): Function => (): void => {
+      if (isActive) {
+        closePane(['globalErrQuery', 'workflowErrQuery']);
+      } else {
+        openPane(id);
+      }
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id, 'detail');

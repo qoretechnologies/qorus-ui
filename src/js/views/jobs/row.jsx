@@ -12,9 +12,11 @@ import Date from '../../components/date';
 import JobControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
+import DetailButton from '../../components/detail_button';
 
 type Props = {
   openPane: Function,
+  closePane: Function,
   isActive?: boolean,
   updateDone: Function,
   select: Function,
@@ -81,7 +83,9 @@ const ServiceRow: Function = ({
     className={classnames({
       info: isActive,
       'row-alert': hasAlerts,
+      'row-selected': _selected,
     })}
+    onClick={handleCheckboxClick}
   >
     <Td className="tiny checker">
       <Checkbox
@@ -90,12 +94,7 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <Button
-        label="Detail"
-        btnStyle="success"
-        onClick={handleDetailClick}
-        title="Open detail pane"
-      />
+      <DetailButton active={isActive} onClick={handleDetailClick} />
     </Td>
     <Td className="big">
       <JobControls
@@ -192,8 +191,17 @@ export default compose(
     handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
       updateDone(id);
     },
-    handleDetailClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id);
+    handleDetailClick: ({
+      openPane,
+      id,
+      closePane,
+      isActive,
+    }: Props): Function => (): void => {
+      if (isActive) {
+        closePane();
+      } else {
+        openPane(id);
+      }
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id, 'detail');

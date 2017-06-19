@@ -64,6 +64,8 @@ const TableRow: Function = ({
   <Tr
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
+    className={_selected ? 'row-selected' : ''}
+    onClick={handleCheckboxClick}
   >
     <Td key="checkbox" className="tiny checker">
       <Checkbox

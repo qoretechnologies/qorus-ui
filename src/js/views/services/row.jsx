@@ -9,11 +9,13 @@ import { Tr, Td } from '../../components/new_table';
 import Icon from '../../components/icon';
 import Text from '../../components/text';
 import Checkbox from '../../components/checkbox';
+import DetailButton from '../../components/detail_button';
 import ServiceControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 
 type Props = {
   openPane: Function,
+  closePane: Function,
   isActive?: boolean,
   updateDone: Function,
   select: Function,
@@ -62,7 +64,9 @@ const ServiceRow: Function = ({
     className={classnames({
       info: isActive,
       'row-alert': hasAlerts,
+      'row-selected': _selected,
     })}
+    onClick={handleCheckboxClick}
   >
     <Td className="tiny checker">
       <Checkbox
@@ -71,11 +75,9 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <Button
-        label="Detail"
-        btnStyle="success"
+      <DetailButton
         onClick={handleDetailClick}
-        title="Open detail pane"
+        active={isActive}
       />
     </Td>
     <Td className="narrow">
@@ -93,7 +95,7 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">{ threads }</Td>
-    <Td className="narrow">
+    <Td className="tiny">
       { hasAlerts && (
         <Controls>
           <Button
@@ -109,7 +111,7 @@ const ServiceRow: Function = ({
     <Td className="name">
       <p title={name}>{ normalizedName }</p>
     </Td>
-    <Td className="medium text">{ version }</Td>
+    <Td className="normal text">{ version }</Td>
     <Td className="text">
       <Text text={desc} />
     </Td>
@@ -124,8 +126,17 @@ export default compose(
     handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
       updateDone(id);
     },
-    handleDetailClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id);
+    handleDetailClick: ({
+      openPane,
+      id,
+      isActive,
+      closePane,
+    }: Props): Function => (): void => {
+      if (isActive) {
+        closePane();
+      } else {
+        openPane(id);
+      }
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id, 'detail');

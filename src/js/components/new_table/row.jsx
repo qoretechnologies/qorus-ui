@@ -70,6 +70,7 @@ export default class Row extends Component {
       className,
       sortData,
       onSortChange,
+      onClick,
     } = this.props;
     const { highlight } = this.state;
 
@@ -78,7 +79,7 @@ export default class Row extends Component {
         className={classNames({
           'row-highlight': highlight,
         }, className)}
-        onClick={this.props.onClick}
+        onClick={onClick}
       >
         { sortData && onSortChange ? (
           React.Children.map(children, (child: any, key) => (
