@@ -1,20 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import debounce from 'lodash/debounce';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import Navigation from 'components/navigation';
 import Topbar from 'components/topbar';
 import Footer from '../components/footer';
 import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
-
 import actions from 'store/api/actions';
-
+import { settings } from '../store/ui/actions';
 
 const systemSelector = (state) => state.api.system;
 const currentUserSelector = (state) => state.api.currentUser;
 const menuSelector = (state) => state.menu;
-
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -22,22 +22,40 @@ const menuSelector = (state) => state.menu;
  * It also provides modal dialog via React's context mechanism. It is
  * expected that this component is at the top component hierarchy.
  */
-@connect(createSelector(
-  systemSelector,
-  currentUserSelector,
-  menuSelector,
-  (info, currentUser, menu) => ({
-    info,
-    currentUser,
-    menu,
-  })
-))
+@connect(
+  createSelector(
+    systemSelector,
+    currentUserSelector,
+    menuSelector,
+    (info, currentUser, menu) => ({
+      info,
+      currentUser,
+      menu,
+    }),
+  ),
+  {
+    saveDimensions: settings.saveDimensions,
+    fetchSystem: actions.system.fetch,
+    fetchSystemOptions: actions.systemOptions.fetch,
+    fetchCurrentUser: actions.currentUser.fetch,
+  }
+)
+@pure([
+  'info',
+  'currentUser',
+  'menu',
+  'location',
+  'children',
+])
 export default class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
     menu: PropTypes.object,
     info: PropTypes.object,
-    dispatch: PropTypes.func,
+    fetchSystem: PropTypes.func,
+    saveDimensions: PropTypes.func,
+    fetchSystemOptions: PropTypes.func,
+    fetchCurrentUser: PropTypes.func,
     location: PropTypes.object,
     currentUser: PropTypes.object,
   };
@@ -103,6 +121,18 @@ export default class Root extends Component {
    */
   componentDidMount() {
     this.setTitle();
+
+    this.props.saveDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    window.addEventListener('resize', () => {
+      this.delayedResize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    });
   }
 
 
@@ -115,6 +145,9 @@ export default class Root extends Component {
     this.setTitle();
   }
 
+  delayedResize: Function = debounce((data: Object): void => {
+    this.props.saveDimensions(data);
+  }, 200);
 
   /**
    * Sets document title from system information.
@@ -149,9 +182,9 @@ export default class Root extends Component {
    * Fetches data used here or by child components.
    */
   fetchGlobalData() {
-    this.props.dispatch(actions.system.fetch());
-    this.props.dispatch(actions.systemOptions.fetch());
-    this.props.dispatch(actions.currentUser.fetch());
+    this.props.fetchSystem();
+    this.props.fetchSystemOptions();
+    this.props.fetchCurrentUser();
   }
 
 
