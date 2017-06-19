@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import Icon from '../../components/icon';
+import checkData from '../../hocomponents/check-no-data';
 import Row from './row';
 import actions from '../../store/api/actions';
 
@@ -17,6 +18,7 @@ type Props = {
   collection: Array<Object>,
   paneId?: number,
   openPane: Function,
+  closePane: Function,
   date: string,
   select: Function,
   updateDone: Function,
@@ -32,6 +34,7 @@ const WorkflowsTable: Function = ({
   collection,
   paneId,
   openPane,
+  closePane,
   date,
   select,
   updateDone,
@@ -53,17 +56,17 @@ const WorkflowsTable: Function = ({
         sortData={sortData}
         onSortChange={onSortChange}
       >
-        <Th className="narrow" />
+        <Th className="tiny" />
         <Th className="narrow">-</Th>
         <Th className="narrow">Actions</Th>
         <Th className="medium" name="autostart">Autostart</Th>
-        <Th className="narrow" name="has_alerts">
+        <Th className="tiny" name="has_alerts">
           <Icon icon="warning" />
         </Th>
         <Th className="narrow" name="exec_count">Execs</Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
-        <Th className="normal" name="version">Version</Th>
+        <Th className="normal text" name="version">Version</Th>
         { states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}
@@ -83,6 +86,7 @@ const WorkflowsTable: Function = ({
           key={`worfkflow_${workflow.id}`}
           isActive={workflow.id === parseInt(paneId, 10)}
           openPane={openPane}
+          closePane={closePane}
           date={date}
           select={select}
           updateDone={updateDone}
@@ -104,6 +108,7 @@ export default compose(
       select: actions.workflows.select,
     }
   ),
+  checkData(({ collection }: Props): boolean => collection && collection.length > 0),
   pure([
     'sortData',
     'expanded',

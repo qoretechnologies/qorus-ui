@@ -38,6 +38,7 @@ type Props = {
   onCSVClick: Function,
   paneId: string | number,
   openPane: Function,
+  closePane: Function,
   selectedIds: Array<number>,
   sortData: Object,
   onSortChange: Function,
@@ -52,6 +53,7 @@ const JobsView: Function = ({
   onCSVClick,
   jobs,
   openPane,
+  closePane,
   paneId,
   date,
   limit,
@@ -69,6 +71,7 @@ const JobsView: Function = ({
     <JobsTable
       collection={jobs}
       openPane={openPane}
+      closePane={closePane}
       paneId={paneId}
       date={date}
       sortData={sortData}

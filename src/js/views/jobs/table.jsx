@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
+import checkData from '../../hocomponents/check-no-data';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import Icon from '../../components/icon';
@@ -15,6 +16,7 @@ type Props = {
   collection: Array<Object>,
   paneId?: number,
   openPane: Function,
+  closePane: Function,
   date: string,
   select: Function,
   updateDone: Function,
@@ -27,6 +29,7 @@ const JobsTable: Function = ({
   collection,
   paneId,
   openPane,
+  closePane,
   date,
   select,
   updateDone,
@@ -70,6 +73,7 @@ const JobsTable: Function = ({
           key={`job_${job.id}`}
           isActive={job.id === parseInt(paneId, 10)}
           openPane={openPane}
+          closePane={closePane}
           date={date}
           select={select}
           updateDone={updateDone}
@@ -89,6 +93,7 @@ export default compose(
       select: actions.jobs.select,
     }
   ),
+  checkData(({ collection }: Props): boolean => collection && collection.length > 0),
   pure([
     'sortData',
     'collection',

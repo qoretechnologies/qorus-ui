@@ -122,6 +122,7 @@ type Props = {
   onCSVClick: Function,
   paneId: string | number,
   openPane: Function,
+  closePane: Function,
   fetch: Function,
   deprecated: boolean,
   selectedIds: Array<number>,
@@ -154,6 +155,7 @@ const Workflows: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  closePane,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -168,6 +170,7 @@ const Workflows: Function = ({
       collection={workflows}
       paneId={paneId}
       openPane={openPane}
+      closePane={closePane}
       states={expanded ? ORDER_STATES : GROUPED_ORDER_STATES}
       expanded={expanded}
       deprecated={deprecated}

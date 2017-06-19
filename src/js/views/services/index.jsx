@@ -31,6 +31,7 @@ type Props = {
   services: Array<Object>,
   paneId: number | string,
   openPane: Function,
+  closePane: Function,
   canLoadMore: boolean,
   handleLoadMore: Function,
   limit: number,
@@ -41,6 +42,7 @@ const Services: Function = ({
   selectedIds,
   onCSVClick,
   openPane,
+  closePane,
   paneId,
   services,
   location,
@@ -61,6 +63,7 @@ const Services: Function = ({
       collection={services}
       paneId={paneId}
       openPane={openPane}
+      closePane={closePane}
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
