@@ -19,6 +19,7 @@ type Props = {
   unselectAll: Function,
   reset: Function,
   selectedIds: Array<number>,
+  isTablet: boolean,
 }
 
 const ToolbarActions: Function = ({
@@ -29,6 +30,7 @@ const ToolbarActions: Function = ({
   unselectAll,
   reset,
   selectedIds,
+  isTablet,
 }: Props): ?React.Element<any> => {
   if (!show) {
     return null;
@@ -68,6 +70,54 @@ const ToolbarActions: Function = ({
     toggleDeprecated(selectedIds, false);
     unselectAll();
   };
+
+  if (isTablet) {
+    return (
+      <div
+        className="btn-group pull-left"
+        id="selection-actions"
+      >
+        <Dropdown id="hidden">
+          <DropdownControl> With selected: </DropdownControl>
+          <DropdownItem
+            title="Start"
+            icon="rocket"
+            action={handleStartClick}
+          />
+          <DropdownItem
+            title="Enable"
+            icon="power-off"
+            action={handleEnableClick}
+          />
+          <DropdownItem
+            title="Disable"
+            icon="ban"
+            action={handleDisableClick}
+          />
+          <DropdownItem
+            title="Reset"
+            icon="refresh"
+            action={handleResetClick}
+          />
+          <DropdownItem
+            title="Stop"
+            icon="ban"
+            action={handleStopClick}
+          />
+          <DropdownItem
+            title="Set deprecated"
+            icon="flag"
+            action={handleSetDeprecatedClick}
+          />
+          <DropdownItem
+            title="Unset deprecated"
+            icon="flag-o"
+            action={handleUnsetDeprecatedClick}
+          />
+        </Dropdown>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -136,5 +186,6 @@ export default compose(
   pure([
     'show',
     'selectedIds',
+    'isTablet',
   ]),
 )(ToolbarActions);

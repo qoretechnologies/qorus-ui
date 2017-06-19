@@ -24,6 +24,7 @@ type Props = {
   updateDone: Function,
   expanded: boolean,
   canLoadMore: boolean,
+  isTablet: boolean,
 };
 
 const WorkflowsTable: Function = ({
@@ -40,6 +41,7 @@ const WorkflowsTable: Function = ({
   updateDone,
   expanded,
   canLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -47,7 +49,7 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 60 : 0}
+    marginBottom={canLoadMore ? 20 : 0}
     // Another Firefox hack, jesus
     key={collection.length}
   >
@@ -58,7 +60,9 @@ const WorkflowsTable: Function = ({
       >
         <Th className="tiny" />
         <Th className="narrow">-</Th>
-        <Th className="narrow">Actions</Th>
+        {!isTablet && (
+          <Th className="narrow">Actions</Th>
+        )}
         <Th className="medium" name="autostart">Autostart</Th>
         <Th className="tiny" name="has_alerts">
           <Icon icon="warning" />
@@ -70,11 +74,12 @@ const WorkflowsTable: Function = ({
         { states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}
-            className={expanded ? 'narrow' : 'medium'}
+            className={expanded || isTablet ? 'narrow' : 'medium'}
             name={!expanded ? `GROUPED_${state.name}` : state.name}
+            title={state.title}
           >{ state.short }</Th>
         ))}
-        <Th className="medium" name="TOTAL">TOTAL</Th>
+        <Th className="narrow" name="TOTAL">All</Th>
         { deprecated && (
           <Th className="medium" name="deprecated">Deprecated</Th>
         )}
@@ -93,6 +98,7 @@ const WorkflowsTable: Function = ({
           states={states}
           showDeprecated={deprecated}
           expanded={expanded}
+          isTablet={isTablet}
           {...workflow}
         />
       ))}
@@ -102,7 +108,7 @@ const WorkflowsTable: Function = ({
 
 export default compose(
   connect(
-    () => ({}),
+    null,
     {
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
@@ -116,5 +122,6 @@ export default compose(
     'deprecated',
     'paneId',
     'date',
+    'isTablet',
   ])
 )(WorkflowsTable);

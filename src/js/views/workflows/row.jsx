@@ -42,6 +42,7 @@ type Props = {
   expanded: boolean,
   deprecated: boolean,
   showDeprecated: boolean,
+  isTablet: boolean,
 }
 
 const TableRow: Function = ({
@@ -64,6 +65,7 @@ const TableRow: Function = ({
   expanded,
   deprecated,
   showDeprecated,
+  isTablet,
   ...rest
 }: Props): React.Element<any> => (
   <Tr
@@ -88,12 +90,14 @@ const TableRow: Function = ({
         active={isActive}
       />
     </Td>
-    <Td key="controls" className="narrow">
-      <WorkflowControls
-        id={id}
-        enabled={enabled}
-      />
-    </Td>
+    {!isTablet && (
+      <Td key="controls" className="narrow">
+        <WorkflowControls
+          id={id}
+          enabled={enabled}
+        />
+      </Td>
+    )}
     <Td
       key="autostart"
       name="autostart"
@@ -134,7 +138,7 @@ const TableRow: Function = ({
       const value = !expanded ? rest[`GROUPED_${state.name}`] : rest[state.name];
 
       return (
-        <Td key={`wf_state_${index}`} className={expanded ? 'narrow' : 'medium'}>
+        <Td key={`wf_state_${index}`} className={expanded || isTablet ? 'narrow' : 'medium'}>
           <Link
             className="workflow-status-link"
             to={`/workflow/${id}?filter=${title}&date=${date}`}
@@ -147,9 +151,9 @@ const TableRow: Function = ({
         </Td>
       );
     })}
-    <Td className="medium">
+    <Td className="narrow">
       <Link to={`/workflow/${id}?date=${date}`}>
-        { rest.TOTAL || 0 }
+        { formatCount(rest.TOTAL) || 0 }
       </Link>
     </Td>
     { showDeprecated && (
@@ -197,6 +201,7 @@ export default compose(
     'deprecated',
     'expanded',
     'TOTAL',
+    'isTablet',
     ...ORDER_STATES_ARRAY,
   ])
 )(TableRow);

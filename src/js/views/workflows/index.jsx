@@ -22,7 +22,13 @@ import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 import { DATES } from '../../constants/dates';
-import { ORDER_STATES, ORDER_GROUPS, GROUPED_ORDER_STATES } from '../../constants/orders';
+import {
+  ORDER_STATES,
+  ORDER_GROUPS,
+  ORDER_GROUPS_COMPACT,
+  GROUPED_ORDER_STATES,
+  GROUPED_ORDER_STATES_COMPACT,
+} from '../../constants/orders';
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
 import { querySelector, resourceSelector } from '../../selectors';
@@ -64,14 +70,18 @@ const systemOptionsSelector: Function = (state: Object): Array<Object> => (
   state.api.systemOptions.data.filter((opt: Object): boolean => opt.workflow)
 );
 
-const groupStatuses: Function = (): Function => (workflows: Array<Object>): Array<Object> => (
+const groupStatuses: Function = (
+  isTablet: boolean
+): Function => (workflows: Array<Object>): Array<Object> => (
   workflows.map((workflow: Object): Object => {
     const newWf: Object = { ...workflow };
-    Object.keys(ORDER_GROUPS).forEach((group: string): void => {
-      newWf[`GROUPED_${group}`] = ORDER_GROUPS[group].reduce((cnt, cur) => (
+    const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
+
+    Object.keys(obj).forEach((group: string): void => {
+      newWf[`GROUPED_${group}`] = obj[group].reduce((cnt, cur) => (
         cnt + workflow[cur]
       ), 0);
-      newWf[`GROUPED_${group}_STATES`] = ORDER_GROUPS[group].map((orderGrp) => (
+      newWf[`GROUPED_${group}_STATES`] = obj[group].map((orderGrp) => (
         ORDER_STATES.find((grp) => grp.name === orderGrp).title)
       ).join(',');
     });
@@ -80,6 +90,8 @@ const groupStatuses: Function = (): Function => (workflows: Array<Object>): Arra
   })
 );
 
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
 const collectionSelector: Function = createSelector(
   [
     querySelector('search'),
@@ -87,13 +99,14 @@ const collectionSelector: Function = createSelector(
     querySelector('latest'),
     querySelector('deprecated'),
     resourceSelector('workflows'),
+    settingsSelector,
   ],
-  (search, running, latest, deprecated, workflows) => flowRight(
+  (search, running, latest, deprecated, workflows, settings) => flowRight(
     filterLastVersion(latest),
     filterRunning(running),
     filterSearch(search),
     filterDeprecated(deprecated),
-    groupStatuses(),
+    groupStatuses(settings.tablet),
   )(workflows.data)
 );
 
@@ -104,13 +117,15 @@ const viewSelector = createSelector(
     systemOptionsSelector,
     querySelector('deprecated'),
     querySelector('date'),
+    settingsSelector,
   ],
-  (workflows, collection, systemOptions, deprecated, date) => ({
+  (workflows, collection, systemOptions, deprecated, date, settings) => ({
     meta: workflows,
     workflows: collection,
     systemOptions,
     deprecated: deprecated === 'true',
     date,
+    isTablet: settings.tablet,
   })
 );
 
@@ -136,6 +151,8 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   limit: number,
+  isTablet: boolean,
+  groupedStates: Object,
 };
 
 const Workflows: Function = ({
@@ -156,6 +173,8 @@ const Workflows: Function = ({
   canLoadMore,
   handleLoadMore,
   closePane,
+  isTablet,
+  groupedStates,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -165,19 +184,21 @@ const Workflows: Function = ({
       onToggleStatesClick={handleExpandClick}
       location={location}
       selectedIds={selectedIds}
+      isTablet={isTablet}
     />
     <WorkflowsTable
       collection={workflows}
       paneId={paneId}
       openPane={openPane}
       closePane={closePane}
-      states={expanded ? ORDER_STATES : GROUPED_ORDER_STATES}
+      states={expanded ? ORDER_STATES : groupedStates}
       expanded={expanded}
       deprecated={deprecated}
       date={date}
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
+      isTablet={isTablet}
     />
     { canLoadMore && (
       <Control
@@ -215,8 +236,10 @@ export default compose(
   patch('load', ['fetchParams']),
   sync('meta'),
   withState('expanded', 'toggleExpand', false),
-  mapProps(({ toggleExpand, ...rest }: Props) => ({
+  mapProps(({ toggleExpand, isTablet, ...rest }: Props) => ({
     onToggleExpand: (): Function => toggleExpand((val: boolean): boolean => !val),
+    groupedStates: isTablet ? GROUPED_ORDER_STATES_COMPACT : GROUPED_ORDER_STATES,
+    isTablet,
     ...rest,
   })),
   withHandlers({
@@ -258,6 +281,7 @@ export default compose(
     'deprecated',
     'date',
     'canLoadMore',
+    'isTablet',
   ]),
   unsync()
 )(Workflows);

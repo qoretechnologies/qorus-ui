@@ -14,6 +14,7 @@ type Props = {
   changeLatestQuery: Function,
   deprecatedQuery: string,
   changeDeprecatedQuery: Function,
+  isTablet: boolean,
 }
 
 const ToolbarFilters: Function = ({
@@ -23,33 +24,55 @@ const ToolbarFilters: Function = ({
   changeLatestQuery,
   deprecatedQuery,
   changeDeprecatedQuery,
+  isTablet,
 }: Props): React.Element<any> => (
-  <Controls grouped noControls>
-    <Button
-      label="Running"
-      big
-      action={changeRunningQuery}
-      icon={runningQuery ? 'check-square-o' : 'square-o'}
-      btnStyle={runningQuery ? 'success' : 'default'}
-    />
-    <Button
-      label="Last version"
-      big
-      action={changeLatestQuery}
-      icon={latestQuery ? 'check-square-o' : 'square-o'}
-      btnStyle={latestQuery ? 'success' : 'default'}
-    />
-    <Dropdown id="deprecated">
+  isTablet ?
+    <Dropdown id="filters">
       <DControl
-        btnStyle={deprecatedQuery ? 'success' : 'default'}
+        btnStyle={deprecatedQuery || runningQuery || latestQuery ? 'success' : 'default'}
+      > Filters </DControl>
+      <Item
+        title="Running"
+        icon={runningQuery ? 'check-square-o' : 'square-o'}
+        action={changeRunningQuery}
+      />
+      <Item
+        title="Last version"
+        icon={latestQuery ? 'check-square-o' : 'square-o'}
+        action={changeLatestQuery}
       />
       <Item
         title="Deprecated"
         icon={deprecatedQuery ? 'check-square-o' : 'square-o'}
         action={changeDeprecatedQuery}
       />
-    </Dropdown>
-  </Controls>
+    </Dropdown> :
+    <Controls grouped noControls>
+      <Button
+        label="Running"
+        big
+        action={changeRunningQuery}
+        icon={runningQuery ? 'check-square-o' : 'square-o'}
+        btnStyle={runningQuery ? 'success' : 'default'}
+      />
+      <Button
+        label="Last version"
+        big
+        action={changeLatestQuery}
+        icon={latestQuery ? 'check-square-o' : 'square-o'}
+        btnStyle={latestQuery ? 'success' : 'default'}
+      />
+      <Dropdown id="deprecated">
+        <DControl
+          btnStyle={deprecatedQuery ? 'success' : 'default'}
+        />
+        <Item
+          title="Deprecated"
+          icon={deprecatedQuery ? 'check-square-o' : 'square-o'}
+          action={changeDeprecatedQuery}
+        />
+      </Dropdown>
+    </Controls>
 );
 
 export default compose(
@@ -60,5 +83,6 @@ export default compose(
     'runningQuery',
     'latestQuery',
     'deprecatedQuery',
+    'isTablet',
   ])
 )(ToolbarFilters);
