@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import Navigation from 'components/navigation';
-import Topbar from 'components/topbar';
+import Topbar from '../components/topbar';
 import Footer from '../components/footer';
 import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
@@ -15,6 +15,7 @@ import { settings } from '../store/ui/actions';
 const systemSelector = (state) => state.api.system;
 const currentUserSelector = (state) => state.api.currentUser;
 const menuSelector = (state) => state.menu;
+const settingsSelector = (state) => state.ui.settings;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -26,11 +27,13 @@ const menuSelector = (state) => state.menu;
   createSelector(
     systemSelector,
     currentUserSelector,
+    settingsSelector,
     menuSelector,
-    (info, currentUser, menu) => ({
+    (info, currentUser, stngs, menu) => ({
       info,
       currentUser,
       menu,
+      isTablet: stngs.tablet,
     }),
   ),
   {
@@ -46,6 +49,7 @@ const menuSelector = (state) => state.menu;
   'menu',
   'location',
   'children',
+  'isTablet',
 ])
 export default class Root extends Component {
   static propTypes = {
@@ -58,6 +62,7 @@ export default class Root extends Component {
     fetchCurrentUser: PropTypes.func,
     location: PropTypes.object,
     currentUser: PropTypes.object,
+    isTablet: PropTypes.bool,
   };
 
 
@@ -79,6 +84,12 @@ export default class Root extends Component {
     this._modal = null;
     this._defaultTitle = '';
   }
+
+  state: {
+    showMenu: boolean,
+  } = {
+    showMenu: this.props.isTablet,
+  };
 
 
   /**
@@ -135,6 +146,11 @@ export default class Root extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps: Object): void {
+    if (!nextProps.isTablet) {
+      this.showMenu();
+    }
+  }
 
   /**
    * Sets document title.
@@ -148,6 +164,24 @@ export default class Root extends Component {
   delayedResize: Function = debounce((data: Object): void => {
     this.props.saveDimensions(data);
   }, 200);
+
+  hideMenu: Function = () => {
+    this.setMenu(false);
+  };
+
+  showMenu: Function = () => {
+    this.setMenu(true);
+  };
+
+  toggleMenu: Function = () => {
+    this.setMenu(!this.state.showMenu);
+  };
+
+  setMenu: Function = (showMenu: bool) => {
+    this.setState({
+      showMenu,
+    });
+  };
 
   /**
    * Sets document title from system information.
@@ -215,13 +249,18 @@ export default class Root extends Component {
         <Topbar
           info={this.props.info.data}
           currentUser={this.props.currentUser.data}
+          onMenuToggle={this.toggleMenu}
+          isTablet={this.props.isTablet}
+          showMenu={this.state.showMenu}
         />
         <div className="root__center">
-          <Navigation
-            location={this.props.location}
-            mainItems={this.props.menu.mainItems}
-            extraItems={[]}
-          />
+          {this.state.showMenu && (
+            <Navigation
+              location={this.props.location}
+              mainItems={this.props.menu.mainItems}
+              extraItems={[]}
+            />
+          )}
           <section>
             <div className="container-fluid" id="content-wrapper">
               {this.props.children}
