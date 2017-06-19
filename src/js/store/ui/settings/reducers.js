@@ -5,6 +5,7 @@ import { ACTIONS } from '../../../constants/settings';
 const initialState: Object = {
   width: null,
   height: null,
+  tablet: false,
 };
 
 export default handleActions({
