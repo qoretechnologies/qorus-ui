@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import Row from './row';
+import Icon from '../../components/icon';
 
 type Props = {
   sortData: Object,
@@ -15,6 +16,7 @@ type Props = {
   select: Function,
   updateDone: Function,
   canLoadMore: boolean,
+  isTablet: boolean,
 };
 
 const GroupsTable: Function = ({
@@ -24,6 +26,7 @@ const GroupsTable: Function = ({
   select,
   updateDone,
   canLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -31,7 +34,7 @@ const GroupsTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 60 : 0}
+    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
@@ -40,16 +43,30 @@ const GroupsTable: Function = ({
         onSortChange={onSortChange}
       >
         <Th className="tiny">-</Th>
-        <Th className="medium" name="enabled">Enabled</Th>
+        <Th className="narrow" name="enabled">
+          <Icon icon="power-off" />
+        </Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
         <Th name="description">Description</Th>
-        <Th className="medium" name="workflows_count"> Workflows </Th>
-        <Th className="medium" name="services_count"> Services </Th>
-        <Th className="medium" name="jobs_count"> Jobs </Th>
-        <Th className="medium" name="vmaps_count"> Vmaps </Th>
-        <Th className="medium" name="roles_count"> Roles </Th>
-        <Th className="medium" name="mappers_count"> Mappers </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="workflows_count" title="Workflows">
+          {isTablet ? 'W' : 'Workflows'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="services_count" title="Services">
+          {isTablet ? 'S' : 'Services'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="jobs_count" title="Jobs">
+          {isTablet ? 'J' : 'Jobs'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="vmaps_count" title="Vmaps">
+          {isTablet ? 'V' : 'Vmaps'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="roles_count" title="Roles">
+          {isTablet ? 'R' : 'Roles'}
+        </Th>
+        <Th className={isTablet ? 'narrow' : 'medium'} name="mappers_count" title="Mappers">
+          {isTablet ? 'M' : 'Mappers'}
+        </Th>
       </Tr>
     </Thead>
     <Tbody>
@@ -58,6 +75,7 @@ const GroupsTable: Function = ({
           key={`group_${group.id}`}
           select={select}
           updateDone={updateDone}
+          isTablet={isTablet}
           {...group}
         />
       ))}

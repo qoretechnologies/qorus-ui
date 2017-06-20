@@ -3,8 +3,8 @@ import { expect } from 'chai';
 
 module.exports = function orderDetailSteps() {
   this.Given(/^I click on the "([^"]*)" order$/, async function(order) {
-    const row = findTableRow(this.browser, order, 5);
-    const el = row.cells[5].children[0];
+    const row = findTableRow(this.browser, order, 1);
+    const el = row.cells[1].children[0];
 
     return this.browser.click(el);
   });

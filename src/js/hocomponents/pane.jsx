@@ -107,6 +107,7 @@ export default (
           <Component
             {...this.props}
             openPane={this.handleOpen}
+            closePane={this.handleClose}
             paneId={query.paneId}
             paneTab={query.paneTab}
           />

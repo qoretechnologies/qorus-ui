@@ -23,6 +23,7 @@ type Props = {
   expanded: boolean,
   onToggleStatesClick: Function,
   location: Object,
+  isTablet: boolean,
 };
 
 const WorkflowsToolbar: Function = ({
@@ -36,31 +37,38 @@ const WorkflowsToolbar: Function = ({
   expanded,
   onToggleStatesClick,
   location,
+  isTablet,
 }: Props): React.Element<any> => (
   <Toolbar>
     <Selector selected={selected} />
     <Actions
       selectedIds={selectedIds}
       show={selected !== 'none'}
+      isTablet={isTablet}
     />
     <Datepicker
       date={dateQuery || '24h'}
       onApplyDate={changeDateQuery}
       className="toolbar-item"
     />
-    <Filters location={location} />
+    <Filters
+      location={location}
+      isTablet={isTablet}
+    />
     <Button
       label="CSV"
       btnStyle="default"
       big
       action={onCSVClick}
     />
-    <Button
-      label={expanded ? 'Collapse states' : 'Expand states'}
-      btnStyle={expanded ? 'success' : 'default'}
-      big
-      action={onToggleStatesClick}
-    />
+    {!isTablet && (
+      <Button
+        label={expanded ? 'Collapse states' : 'Expand states'}
+        btnStyle={expanded ? 'success' : 'default'}
+        big
+        action={onToggleStatesClick}
+      />
+    )}
     <Search
       defaultValue={searchQuery}
       onSearchUpdate={changeSearchQuery}

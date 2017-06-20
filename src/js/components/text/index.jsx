@@ -69,7 +69,9 @@ export default compose(
       closeModal,
       setExpand,
       popup,
-    }: Props): Function => (): void => {
+    }: Props): Function => (event: Object): void => {
+      event.stopPropagation();
+
       if (popup) {
         openModal(
           <Modal>

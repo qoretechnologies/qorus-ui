@@ -6,10 +6,17 @@ import Options from './options';
 import JobControls from '../../controls';
 import { Groups, Group } from '../../../../components/groups';
 import AlertsTable from '../../../../components/alerts_table';
+import Date from '../../../../components/date';
 
-const DetailTab = ({ model }: { model: Object }) => (
+const DetailTab = ({ model, isTablet }: Object) => (
   <div>
     <div>
+      {(isTablet && model.expiry_date) && (
+        <div>
+          <h4> Expiry date </h4>
+          <Date date={model.expiry_date} />
+        </div>
+      )}
       <h4> Schedule </h4>
       <JobControls
         scheduleOnly

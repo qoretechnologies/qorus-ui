@@ -39,6 +39,7 @@ type Props = {
   note_count: number,
   workflowstatus: string,
   label: string,
+  isTablet: boolean,
 }
 
 const TableRow: Function = ({
@@ -60,10 +61,13 @@ const TableRow: Function = ({
   note_count: noteCnt,
   workflowstatus,
   label,
+  isTablet,
 }: Props): React.Element<any> => (
   <Tr
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
+    className={_selected ? 'row-selected' : ''}
+    onClick={handleCheckboxClick}
   >
     <Td key="checkbox" className="tiny checker">
       <Checkbox
@@ -80,13 +84,15 @@ const TableRow: Function = ({
         {id}
       </Link>
     </Td>
-    <Td className="medium">
-      <OrderControls
-        id={id}
-        workflowstatus={workflowstatus}
-        compact
-      />
-    </Td>
+    {!isTablet && (
+      <Td className="medium">
+        <OrderControls
+          id={id}
+          workflowstatus={workflowstatus}
+          compact
+        />
+      </Td>
+    )}
     <Td className="medium">
       <span className={`label status-${label}`}>{workflowstatus}</span>
     </Td>
@@ -99,12 +105,16 @@ const TableRow: Function = ({
     <Td className="big">
       <Date date={completed} />
     </Td>
-    <Td className="big">
-      <Date date={modified} />
-    </Td>
-    <Td className="big">
-      <Date date={scheduled} />
-    </Td>
+    {!isTablet && (
+      <Td className="big">
+        <Date date={modified} />
+      </Td>
+    )}
+    {!isTablet && (
+      <Td className="big">
+        <Date date={scheduled} />
+      </Td>
+    )}
     <Td className="narrow">{errCnt}</Td>
     <Td className="narrow">{warnCnt}</Td>
     <Td className="medium">
@@ -147,5 +157,6 @@ export default compose(
     'completed',
     'modified',
     'scheduled',
+    'isTablet',
   ])
 )(TableRow);

@@ -32,7 +32,7 @@
   height: 100%;
 
   &__center {
-    min-width: 1600px;
+    min-width: 1024px;
     position: relative; /* [5] */
 
     display: -ms-flexbox;
@@ -71,6 +71,20 @@
       padding-top: $padding-large-vertical; /* [3] */
     }
   }
+}
+
+.menu-btn {
+  color: #fff;
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  padding: 9px 10px;
+  margin-top: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  //border-color: #333;
 }
 
 /**

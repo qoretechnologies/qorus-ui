@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import Date from '../../../../../components/date';
 import Auto from '../../../../../components/autocomponent';
 import Text from '../../../../../components/text';
-import InfoTable from '../../../../../components/info_table';
 import Table, { Th, Td, Row, Section } from '../../../../../components/table';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
 
@@ -45,13 +44,7 @@ const ErrorTable = ({ errors = [] }: { errors: Array<Object> }) => (
           </Row>,
           item.info && <Row key={`error_info_${item.job_errorid}`}>
             <Td className="error-info" colspan={6}>
-              {typeof item.info === 'string' ? (
-                item.info
-              ) : (
-                <a>
-                  <Text placeholder="Show info" text={<InfoTable object={item.info} />} popup />
-                </a>
-              )}
+              <Text text={item.info} renderTree />
             </Td>
           </Row>,
         ])

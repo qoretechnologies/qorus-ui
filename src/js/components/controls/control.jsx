@@ -72,7 +72,7 @@ export default compose(
     }: Props): Function => (event: Object): void => {
       const act: ?Function = action || onClick;
 
-      if (stopPropagation) event.stopPropagation();
+      if (!stopPropagation) event.stopPropagation();
 
       if (act) {
         event.preventDefault();

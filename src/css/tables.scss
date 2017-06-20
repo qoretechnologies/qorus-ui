@@ -22,6 +22,10 @@ table.table--data {
     background-color: lighten($status-light-red, 20);
   }
 
+  tr.row-selected {
+    background-color: lightyellow;
+  }
+
   tr.row-hidden {
     visibility: hidden;
   }
@@ -202,6 +206,7 @@ div.table-wrapper {
   height: auto;
   overflow: auto;
   margin: 10px 0;
+  clear: both;
 }
 
 div.table-body-wrapper,

@@ -25,6 +25,14 @@ export const GROUPED_ORDER_STATES = [
   { name: 'COMPLETE', short: 'COMPLETE', label: 'complete', title: 'Complete' },
 ];
 
+export const GROUPED_ORDER_STATES_COMPACT = [
+  { name: 'R/S', short: 'R/S', label: 'ready', title: 'Ready / Scheduled' },
+  { name: 'R/W', short: 'R/W', label: 'waiting', title: 'Run / Wait' },
+  { name: 'E/B', short: 'E/B', label: 'error', title: 'Error / Blocked' },
+  { name: 'CNC', short: 'CNC', label: 'canceled', title: 'Canceled' },
+  { name: 'CMP', short: 'CMP', label: 'complete', title: 'Complete' },
+];
+
 export const CUSTOM_ORDER_STATES = [
   { name: 'UNBLOCKING', label: 'blocked', title: 'Unblocking' },
   { name: 'BLOCKING', label: 'blocked', title: 'Blocking' },
@@ -98,6 +106,27 @@ export const ORDER_GROUPS = {
   ],
   CANCELED: ['CANCELED'],
   COMPLETE: ['COMPLETE'],
+};
+
+export const ORDER_GROUPS_COMPACT = {
+  'R/S': [
+    'READY',
+    'SCHEDULED',
+  ],
+  'R/W': [
+    'IN-PROGRESS',
+    'ASYNC-WAITING',
+    'WAITING',
+    'EVENT-WAITING',
+    'RETRY',
+    'INCOMPLETE',
+  ],
+  'E/B': [
+    'ERROR',
+    'BLOCKED',
+  ],
+  CNC: ['CANCELED'],
+  CMP: ['COMPLETE'],
 };
 
 export const STATUS_PRIORITY = [

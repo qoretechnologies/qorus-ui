@@ -12,5 +12,3 @@ Feature: Tests contents of the system/dashboard tab
     When I click the "Transient" tab
     Then the URL changes to "/system/dashboard/transient"
     And "1" "alerts" are shown
-
-

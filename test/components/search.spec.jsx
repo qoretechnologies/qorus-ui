@@ -114,7 +114,7 @@ describe("Search from 'components/search'", () => {
 
       const result = renderer.getRenderOutput();
 
-      expect(result.props.className).to.equal('col-lg-3 ');
+      expect(result.props.className).to.equal('col-sm-3 ');
     });
 
     it('renders a history button if the searches are provided', () => {

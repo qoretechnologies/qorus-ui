@@ -10,9 +10,10 @@ type Props = {
   job: Object,
   lib: Object,
   heightUpdater: Function,
-}
+  location: Object,
+};
 
-const JobCode: Function = ({ lib, heightUpdater }: Props): React.Element<any> => (
+const JobCode: Function = ({ lib, heightUpdater, location }: Props): React.Element<any> => (
   <Code
     selected={{
       name: `code - ${lib.code[0].name}`,
@@ -20,6 +21,7 @@ const JobCode: Function = ({ lib, heightUpdater }: Props): React.Element<any> =>
     }}
     data={lib || {}}
     heightUpdater={heightUpdater}
+    location={location}
   />
 );
 

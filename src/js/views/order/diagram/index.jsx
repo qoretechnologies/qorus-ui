@@ -16,6 +16,7 @@ export default class DiagramView extends Component {
     workflow: PropTypes.object,
     params: PropTypes.object,
     dispatch: PropTypes.func,
+    isTablet: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -121,7 +122,7 @@ export default class DiagramView extends Component {
             data={this.props.order.keys}
           />
           <h4> Hierarchy </h4>
-          <Hierarchy order={this.props.order} compact />
+          <Hierarchy order={this.props.order} compact isTablet={this.props.isTablet} />
           { this.renderStepDetails() }
         </div>
         { this.renderErrorPane() }

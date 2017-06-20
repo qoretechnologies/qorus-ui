@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { Tr, Td } from '../../components/new_table';
 import Checkbox from '../../components/checkbox';
+import Text from '../../components/text';
 import Controls from './controls';
 import actions from '../../store/api/actions';
 import queryControl from '../../hocomponents/queryControl';
@@ -32,6 +33,7 @@ type Props = {
   action: Function,
   name: string,
   description: string,
+  isTablet: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -50,10 +52,13 @@ const ServiceRow: Function = ({
   roles_count: rolesCount,
   mappers_count: mappersCount,
   handleNameClick,
+  isTablet,
 }: Props): React.Element<any> => (
   <Tr
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
+    className={_selected ? 'row-selected' : ''}
+    onClick={handleCheckboxClick}
   >
     <Td className="tiny checker">
       <Checkbox
@@ -61,7 +66,7 @@ const ServiceRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    <Td className="medium">
+    <Td className="narrow">
       <Controls
         enabled={enabled}
         name={name}
@@ -78,14 +83,14 @@ const ServiceRow: Function = ({
       </a>
     </Td>
     <Td className="text">
-      <p title={description}>{ description }</p>
+      <Text text={description} />
     </Td>
-    <Td className="medium">{workflowsCount}</Td>
-    <Td className="medium">{servicesCount}</Td>
-    <Td className="medium">{jobsCount}</Td>
-    <Td className="medium">{vmapsCount}</Td>
-    <Td className="medium">{rolesCount}</Td>
-    <Td className="medium">{mappersCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{workflowsCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{servicesCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{jobsCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{vmapsCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{rolesCount}</Td>
+    <Td className={isTablet ? 'narrow' : 'medium'}>{mappersCount}</Td>
   </Tr>
 );
 
@@ -117,5 +122,6 @@ export default compose(
     'enabled',
     '_selected',
     '_updated',
+    'isTablet',
   ])
 )(ServiceRow);

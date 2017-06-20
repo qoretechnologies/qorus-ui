@@ -110,7 +110,7 @@ export default class Search extends Component {
       <form
         onSubmit={this.handleFormSubmit}
         id="search-form"
-        className={`col-lg-3 ${this.props.pullLeft ? '' : 'pull-right'}`}
+        className={`col-sm-3 ${this.props.pullLeft ? '' : 'pull-right'}`}
       >
         <div className="input-group">
           {(searches && searches.length) && (
