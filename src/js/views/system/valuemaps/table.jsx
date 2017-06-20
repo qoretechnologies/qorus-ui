@@ -27,7 +27,7 @@ const ValuemapsTable: Function = ({
   onSortChange,
   isTablet,
   paneId,
-}: Props): React.Element<any> => console.log(paneId) || (
+}: Props): React.Element<any> => (
   <Table
     striped
     condensed

@@ -101,7 +101,7 @@ const systemOptionsSelector: Function = (state: Object): Array<Object> => (
   state.api.systemOptions.data.filter((option: Object): boolean => option.service)
 );
 
-const settingsSelector: Function = (state: Object): Object => state.ui.settings
+const settingsSelector: Function = (state: Object): Object => state.ui.settings;
 
 const selector: Function = createSelector(
   [
