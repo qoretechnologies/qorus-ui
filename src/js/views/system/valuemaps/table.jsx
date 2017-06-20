@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import sort from '../../../hocomponents/sort';
 import checkNoData from '../../../hocomponents/check-no-data';
@@ -11,16 +12,22 @@ import ValueRow from './row';
 type Props = {
   collection: Array<Object>,
   openPane: Function,
+  closePane: Function,
   sortData: Object,
   onSortChange: Function,
+  isTablet: boolean,
+  paneId: number,
 }
 
 const ValuemapsTable: Function = ({
   collection,
   openPane,
+  closePane,
   sortData,
   onSortChange,
-}: Props): React.Element<any> => (
+  isTablet,
+  paneId,
+}: Props): React.Element<any> => console.log(paneId) || (
   <Table
     striped
     condensed
@@ -33,11 +40,15 @@ const ValuemapsTable: Function = ({
         <Th className="narrow">Detail</Th>
         <Th name="desc">Description</Th>
         <Th name="author">Author</Th>
-        <Th name="valuetype">Type</Th>
+        <Th name="valuetype" className="medium">Type</Th>
         <Th name="mapsize" className="narrow">Size</Th>
-        <Th name="created">Created</Th>
-        <Th name="modified">Modified</Th>
-        <Th>Dump</Th>
+        {!isTablet && (
+          <Th name="created">Created</Th>
+        )}
+        {!isTablet && (
+          <Th name="modified">Modified</Th>
+        )}
+        <Th className="narrow">Dump</Th>
       </Tr>
     </Thead>
     <Tbody>
@@ -46,6 +57,9 @@ const ValuemapsTable: Function = ({
           data={valuemap}
           key={`valuemap_${valuemap.id}`}
           openPane={openPane}
+          closePane={closePane}
+          isTablet={isTablet}
+          isActive={parseInt(paneId, 10) === valuemap.id}
         />
       ))}
     </Tbody>
@@ -58,5 +72,10 @@ export default compose(
     'collection',
     sortDefaults.valuemaps,
   ),
-  checkNoData(({ collection }) => collection.length)
+  checkNoData(({ collection }) => collection.length),
+  pure([
+    'collection',
+    'sortData',
+    'isTablet',
+  ])
 )(ValuemapsTable);

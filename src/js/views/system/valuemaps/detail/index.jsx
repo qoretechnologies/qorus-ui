@@ -10,6 +10,7 @@ import mapProps from 'recompose/mapProps';
 import Pane from '../../../../components/pane';
 import Search from '../../../../components/search';
 import Autocomponent from '../../../../components/autocomponent';
+import Date from '../../../../components/Date';
 import { Control as Button } from '../../../../components/controls';
 import search from '../../../../hocomponents/search';
 import Table from './table';
@@ -29,6 +30,7 @@ type Props = {
   location: Object,
   width: number,
   onResize: Function,
+  isTablet: boolean,
 }
 
 const ValuemapsPane: Function = ({
@@ -43,6 +45,7 @@ const ValuemapsPane: Function = ({
   location,
   width,
   onResize,
+  isTablet,
 }: Props): React.Element<any> => (
   <Pane
     name="valuemaps"
@@ -52,6 +55,13 @@ const ValuemapsPane: Function = ({
   >
     <h3>{valuemap.name}</h3>
     <p>{valuemap.description}</p>
+    {isTablet && (
+      <p>
+        Created: <Date date={valuemap.created} />
+        {' | '}
+        Modified: <Date date={valuemap.modified} />
+      </p>
+    )}
     <p>
       Type: <code>{valuemap.valuetype}</code>
       {' | '}

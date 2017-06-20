@@ -7,12 +7,16 @@ import { Control as Button } from '../../../components/controls';
 import DateComponent from '../../../components/date';
 import { getDump, removeDump } from '../../../store/api/resources/valuemaps/actions';
 import { utf8ToB64 } from '../../../helpers/system';
+import DetailButton from '../../../components/detail_button';
 
 type Props = {
   openPane: Function,
+  closePane: Function,
   dump?: Function,
   remove?: Function,
   data: Object,
+  isTablet: boolean,
+  isActive: boolean,
 }
 
 @connect(
@@ -36,7 +40,11 @@ export default class ValuemapRow extends Component {
   }
 
   handleDetailClick: Function = (): void => {
-    this.props.openPane(this.props.data.id);
+    if (this.props.isActive) {
+      this.props.closePane();
+    } else {
+      this.props.openPane(this.props.data.id);
+    }
   };
 
   handleDumpClick: Function = (event: EventHandler): void => {
@@ -54,31 +62,33 @@ export default class ValuemapRow extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, isTablet, isActive } = this.props;
 
     return (
       <Tr>
         <Td className="name">{ data.name }</Td>
         <Td className="narrow">
-          <Button
-            btnStyle="success"
-            label="Detail"
-            action={this.handleDetailClick}
+          <DetailButton
+            active={isActive}
+            onClick={this.handleDetailClick}
           />
         </Td>
         <Td className="text">{ data.description }</Td>
         <Td className="text">{ data.author }</Td>
-        <Td><code>{ data.valuetype }</code></Td>
+        <Td className="medium"><code>{ data.valuetype }</code></Td>
         <Td className="narrow">{ data.mapsize }</Td>
-        <Td>
-          <DateComponent date={data.created} />
-        </Td>
-        <Td>
-          <DateComponent date={data.modified} />
-        </Td>
-        <Td>
+        {!isTablet && (
+          <Td>
+            <DateComponent date={data.created} />
+          </Td>
+        )}
+        {!isTablet && (
+          <Td>
+            <DateComponent date={data.modified} />
+          </Td>
+        )}
+        <Td className="narrow">
           <Button
-            label="Dump to file"
             icon="download"
             btnStyle="success"
             onClick={this.handleDumpClick}
