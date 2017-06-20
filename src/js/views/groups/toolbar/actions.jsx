@@ -15,7 +15,8 @@ type Props = {
   handleEnableClick: Function,
   handleDisableClick: Function,
   handleBatchAction: Function,
-}
+  groups: Array<Object>,
+};
 
 const ToolbarActions: Function = ({
   handleEnableClick,
@@ -44,7 +45,9 @@ const ToolbarActions: Function = ({
 
 export default compose(
   connect(
-    () => ({}),
+    (state: Object): Object => ({
+      groups: state.api.groups.data,
+    }),
     {
       action: actions.groups.groupAction,
       selectNone: actions.groups.selectNone,
@@ -55,10 +58,17 @@ export default compose(
       selectedIds,
       action,
       selectNone,
+      groups,
     }: Props): Function => (
       type: string
     ): void => {
-      action(selectedIds, type);
+      const selected: Array<string> = selectedIds.reduce((cur, nxt): Array<string> => {
+        const group = groups.find((grp: Object) => grp.id === nxt);
+
+        return group ? [...cur, group.name] : cur;
+      }, []);
+
+      action(selected, type);
       selectNone();
     },
   }),
