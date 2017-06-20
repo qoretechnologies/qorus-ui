@@ -10,7 +10,7 @@ import mapProps from 'recompose/mapProps';
 import Pane from '../../../../components/pane';
 import Search from '../../../../components/search';
 import Autocomponent from '../../../../components/autocomponent';
-import Date from '../../../../components/Date';
+import Date from '../../../../components/date';
 import { Control as Button } from '../../../../components/controls';
 import search from '../../../../hocomponents/search';
 import Table from './table';
