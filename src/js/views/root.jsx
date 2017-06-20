@@ -133,14 +133,18 @@ export default class Root extends Component {
   componentDidMount() {
     this.setTitle();
 
+    // All tests were written for non-responsive sizes
+    // ZombieJS automatically sets the innerWidth to 1024
+    const width = process.env.TESTINST ? 1600 : window.innerWidth;
+
     this.props.saveDimensions({
-      width: window.innerWidth,
+      width,
       height: window.innerHeight,
     });
 
     window.addEventListener('resize', () => {
       this.delayedResize({
-        width: window.innerWidth,
+        width,
         height: window.innerHeight,
       });
     });
