@@ -36,16 +36,19 @@ const workflowSelector = (state, props) => {
 };
 
 const userSelector = state => state.api.currentUser.data;
+const settingsSelector = (state: Object): Object => state.ui.settings;
 
 const selector = createSelector(
   [
     orderSelector,
     userSelector,
     workflowSelector,
-  ], (order, user, workflow) => ({
+    settingsSelector,
+  ], (order, user, workflow, settings) => ({
     order,
     user,
     workflow,
+    isTablet: settings.tablet,
   })
 );
 
@@ -60,6 +63,7 @@ export default class Order extends Component {
     location: PropTypes.object,
     children: PropTypes.node,
     user: PropTypes.object,
+    isTablet: PropTypes.bool,
   };
 
   static childContextTypes = {
@@ -156,6 +160,7 @@ export default class Order extends Component {
                       order: this.props.order,
                       workflow: this.props.workflow,
                       dispatch: this.props.dispatch,
+                      isTablet: this.props.isTablet,
                     }}
                   />
                 ),

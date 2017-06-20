@@ -44,6 +44,7 @@ type Props = {
   sortData: Object,
   onSortChange: Function,
   filter: string,
+  isTablet: boolean,
 };
 
 const WorkflowOrders: Function = ({
@@ -59,6 +60,7 @@ const WorkflowOrders: Function = ({
   handleLoadMore,
   sortData,
   onSortChange,
+  isTablet,
 }: Props): React.Element<any> => (
   <div>
     <Toolbar
@@ -67,6 +69,7 @@ const WorkflowOrders: Function = ({
       onCSVClick={onCSVClick}
       location={location}
       searchPage={searchPage}
+      isTablet={isTablet}
     />
     <Table
       collection={orders}
@@ -74,6 +77,7 @@ const WorkflowOrders: Function = ({
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
+      isTablet={isTablet}
     />
     { canLoadMore && (
       <Control
@@ -101,19 +105,23 @@ const collectionSelector: Function = createSelector(
   )(orders.data)
 );
 
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
 const viewSelector: Function = createSelector(
   [
     resourceSelector('orders'),
     collectionSelector,
     resourceSelector('currentUser'),
     querySelector('filter'),
-  ], (meta, orders, user, filter) => ({
+    settingsSelector,
+  ], (meta, orders, user, filter, settings) => ({
     meta,
     sort: meta.sort,
     sortDir: meta.sortDir,
     orders,
     user,
     filter,
+    isTablet: settings.tablet,
   })
 );
 
@@ -206,6 +214,7 @@ export default compose(
     'limit',
     'sort',
     'sortDir',
+    'isTablet',
   ]),
   unsync(),
 )(WorkflowOrders);

@@ -8,7 +8,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { Tr, Td } from '../../../../components/new_table';
 import Date from '../../../../components/date';
 import actions from '../../../../store/api/actions';
-import { Control } from '../../../../components/controls';
+import DetailButton from '../../../../components/detail_button';
 
 type Props = {
   id: number,
@@ -43,11 +43,9 @@ const JobInstanceRow: Function = ({
   >
     <Td className="big">{instanceId}</Td>
     <Td className="narrow">
-      <Control
-        label="Detail"
-        btnStyle="success"
+      <DetailButton
         onClick={handleDetailClick}
-        title="Open detail"
+        active={active}
       />
     </Td>
     <Td className="medium">
@@ -69,8 +67,16 @@ export default compose(
     }
   ),
   withHandlers({
-    handleDetailClick: ({ changeJobQuery, job_instanceid }: Props): Function => (): void => {
-      changeJobQuery(job_instanceid);
+    handleDetailClick: ({
+      changeJobQuery,
+      job_instanceid,
+      active,
+    }: Props): Function => (): void => {
+      if (active) {
+        changeJobQuery();
+      } else {
+        changeJobQuery(job_instanceid);
+      }
     },
     handleUpdateDone: ({ updateDone, id, job_instanceid }: Props): Function => (): void => {
       updateDone(id, job_instanceid);

@@ -1,20 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import debounce from 'lodash/debounce';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import Navigation from 'components/navigation';
-import Topbar from 'components/topbar';
+import Topbar from '../components/topbar';
 import Footer from '../components/footer';
 import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
-
 import actions from 'store/api/actions';
-
+import { settings } from '../store/ui/actions';
 
 const systemSelector = (state) => state.api.system;
 const currentUserSelector = (state) => state.api.currentUser;
 const menuSelector = (state) => state.menu;
-
+const settingsSelector = (state) => state.ui.settings;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -22,24 +23,46 @@ const menuSelector = (state) => state.menu;
  * It also provides modal dialog via React's context mechanism. It is
  * expected that this component is at the top component hierarchy.
  */
-@connect(createSelector(
-  systemSelector,
-  currentUserSelector,
-  menuSelector,
-  (info, currentUser, menu) => ({
-    info,
-    currentUser,
-    menu,
-  })
-))
+@connect(
+  createSelector(
+    systemSelector,
+    currentUserSelector,
+    settingsSelector,
+    menuSelector,
+    (info, currentUser, stngs, menu) => ({
+      info,
+      currentUser,
+      menu,
+      isTablet: stngs.tablet,
+    }),
+  ),
+  {
+    saveDimensions: settings.saveDimensions,
+    fetchSystem: actions.system.fetch,
+    fetchSystemOptions: actions.systemOptions.fetch,
+    fetchCurrentUser: actions.currentUser.fetch,
+  }
+)
+@pure([
+  'info',
+  'currentUser',
+  'menu',
+  'location',
+  'children',
+  'isTablet',
+])
 export default class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
     menu: PropTypes.object,
     info: PropTypes.object,
-    dispatch: PropTypes.func,
+    fetchSystem: PropTypes.func,
+    saveDimensions: PropTypes.func,
+    fetchSystemOptions: PropTypes.func,
+    fetchCurrentUser: PropTypes.func,
     location: PropTypes.object,
     currentUser: PropTypes.object,
+    isTablet: PropTypes.bool,
   };
 
 
@@ -61,6 +84,12 @@ export default class Root extends Component {
     this._modal = null;
     this._defaultTitle = '';
   }
+
+  state: {
+    showMenu: boolean,
+  } = {
+    showMenu: this.props.isTablet,
+  };
 
 
   /**
@@ -103,8 +132,29 @@ export default class Root extends Component {
    */
   componentDidMount() {
     this.setTitle();
+
+    // All tests were written for non-responsive sizes
+    // ZombieJS automatically sets the innerWidth to 1024
+    const width = process.env.TESTINST ? 1600 : window.innerWidth;
+
+    this.props.saveDimensions({
+      width,
+      height: window.innerHeight,
+    });
+
+    window.addEventListener('resize', () => {
+      this.delayedResize({
+        width,
+        height: window.innerHeight,
+      });
+    });
   }
 
+  componentWillReceiveProps(nextProps: Object): void {
+    if (!nextProps.isTablet) {
+      this.showMenu();
+    }
+  }
 
   /**
    * Sets document title.
@@ -115,6 +165,27 @@ export default class Root extends Component {
     this.setTitle();
   }
 
+  delayedResize: Function = debounce((data: Object): void => {
+    this.props.saveDimensions(data);
+  }, 200);
+
+  hideMenu: Function = () => {
+    this.setMenu(false);
+  };
+
+  showMenu: Function = () => {
+    this.setMenu(true);
+  };
+
+  toggleMenu: Function = () => {
+    this.setMenu(!this.state.showMenu);
+  };
+
+  setMenu: Function = (showMenu: bool) => {
+    this.setState({
+      showMenu,
+    });
+  };
 
   /**
    * Sets document title from system information.
@@ -149,9 +220,9 @@ export default class Root extends Component {
    * Fetches data used here or by child components.
    */
   fetchGlobalData() {
-    this.props.dispatch(actions.system.fetch());
-    this.props.dispatch(actions.systemOptions.fetch());
-    this.props.dispatch(actions.currentUser.fetch());
+    this.props.fetchSystem();
+    this.props.fetchSystemOptions();
+    this.props.fetchCurrentUser();
   }
 
 
@@ -182,13 +253,18 @@ export default class Root extends Component {
         <Topbar
           info={this.props.info.data}
           currentUser={this.props.currentUser.data}
+          onMenuToggle={this.toggleMenu}
+          isTablet={this.props.isTablet}
+          showMenu={this.state.showMenu}
         />
         <div className="root__center">
-          <Navigation
-            location={this.props.location}
-            mainItems={this.props.menu.mainItems}
-            extraItems={[]}
-          />
+          {this.state.showMenu && (
+            <Navigation
+              location={this.props.location}
+              mainItems={this.props.menu.mainItems}
+              extraItems={[]}
+            />
+          )}
           <section>
             <div className="container-fluid" id="content-wrapper">
               {this.props.children}

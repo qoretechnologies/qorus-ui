@@ -33,6 +33,7 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   limit: number,
+  isTablet: boolean,
 };
 
 const GroupsView: Function = ({
@@ -47,6 +48,7 @@ const GroupsView: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (group ? (
   <GroupsDetail
     {...group}
@@ -64,6 +66,7 @@ const GroupsView: Function = ({
       sortData={sortData}
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
+      isTablet={isTablet}
     />
     { canLoadMore && (
       <Control
@@ -112,15 +115,19 @@ const groupSelector: Function = createSelector(
   )
 );
 
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
 const selector: Function = createSelector(
   [
     resourceSelector('groups'),
     groupSelector,
     groupsSelector,
-  ], (meta: Object, group: string, groups: Array<Object>): Object => ({
+    settingsSelector,
+  ], (meta: Object, group: string, groups: Array<Object>, settings): Object => ({
     meta,
     groups,
     group,
+    isTablet: settings.tablet,
   })
 );
 
@@ -147,5 +154,6 @@ export default compose(
     'selected',
     'selectedIds',
     'canLoadMore',
+    'isTablet',
   ])
 )(GroupsView);

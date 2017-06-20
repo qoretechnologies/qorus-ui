@@ -6,6 +6,7 @@ import UserInfo from '../../containers/user_info';
 import NotificationPanel from '../../containers/system/alerts';
 import { LocalHealth, RemoteHealth } from '../../containers/health';
 import { Control as Button } from '../../components/controls';
+import Icon from '../../components/icon';
 
 /**
  * Display info about Qorus instance and logged in user.
@@ -15,6 +16,9 @@ export default class Topbar extends Component {
   static propTypes = {
     info: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
+    isTablet: PropTypes.bool,
+    onMenuToggle: PropTypes.func,
+    showMenu: PropTypes.bool,
   };
 
   /**
@@ -46,6 +50,19 @@ export default class Topbar extends Component {
       <nav className="navbar navbar-inverse navbar-fixed-top topbar">
         <div className="container-fluid">
           <div className="navbar-header">
+            {this.props.isTablet && (
+              <div className="pull-left">
+                <Button
+                  onClick={this.props.onMenuToggle}
+                  big
+                  className="menu-btn"
+                >
+                  <Icon
+                    icon={this.props.showMenu ? 'arrow-circle-o-left' : 'arrow-circle-o-right'}
+                  />
+                </Button>
+              </div>
+            )}
             <button
               type="button"
               className={classNames({
@@ -64,7 +81,6 @@ export default class Topbar extends Component {
               {this.props.info['instance-key']}
             </div>
           </div>
-
           <div
             className={classNames({
               'navbar-collapse': true,

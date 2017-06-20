@@ -106,7 +106,7 @@ export default class Tree extends Component {
           {isExpandable && (
              isObject ?
               this.renderTree(data[key], false, stateKey) :
-              data[key]
+              data[key].toString()
           )}
         </div>
       );

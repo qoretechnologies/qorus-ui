@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import { findBy } from '../../../helpers/search';
 import sync from '../../../hocomponents/sync';
@@ -20,6 +21,9 @@ type Props = {
   defaultSearchValue: string,
   collection: Array<Object>,
   openPane: Function,
+  closePane: Function,
+  isTablet: boolean,
+  paneId: number,
 }
 
 const ValueMaps: Function = ({
@@ -27,6 +31,9 @@ const ValueMaps: Function = ({
   defaultSearchValue,
   collection,
   openPane,
+  closePane,
+  isTablet,
+  paneId,
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <Toolbar>
@@ -39,6 +46,9 @@ const ValueMaps: Function = ({
     <Table
       collection={collection}
       openPane={openPane}
+      closePane={closePane}
+      isTablet={isTablet}
+      paneId={paneId}
     />
   </div>
 );
@@ -55,15 +65,19 @@ const dataSelector: Function = createSelector(
   (valuemaps, query) => filterData(query)(valuemaps.data)
 );
 
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
 const state = createSelector(
   [
     dataSelector,
     resourceSelector('valuemaps'),
     querySelector('q'),
-  ], (collection, valuemaps, query) => ({
+    settingsSelector,
+  ], (collection, valuemaps, query, settings) => ({
     collection,
     valuemaps,
     query,
+    isTablet: settings.tablet,
   })
 );
 
@@ -76,5 +90,10 @@ export default compose(
   ),
   sync('valuemaps'),
   search(),
-  withPane(Pane, ['valuemaps', 'location'], null, 'valuemaps'),
+  withPane(Pane, ['valuemaps', 'location', 'isTablet'], null, 'valuemaps'),
+  pure([
+    'collection',
+    'isTablet',
+    'location',
+  ])
 )(ValueMaps);

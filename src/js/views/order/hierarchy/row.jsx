@@ -14,6 +14,7 @@ type Props = {
   item: Object,
   id: number,
   compact: boolean,
+  isTablet: boolean,
   label: string,
 };
 
@@ -22,6 +23,7 @@ const HierarchyRow: Function = ({
   id,
   compact,
   label,
+  isTablet,
 }: Props): React.Element<any> => (
   <Tr>
     <Td className="normal">
@@ -29,17 +31,19 @@ const HierarchyRow: Function = ({
         {id}
       </Link>
     </Td>
-    <Td className="name">
-      <Link
-        to={`/order/${id}/24h`}
-        className="resource-name-link"
-        title={item.name}
-      >
-        {[...Array(item.hierarchy_level)].map((): string => ('--'))}
-        {' '}
-        {item.name}
-      </Link>
-    </Td>
+    {!isTablet && (
+      <Td className="name">
+        <Link
+          to={`/order/${id}/24h`}
+          className="resource-name-link"
+          title={item.name}
+        >
+          {[...Array(item.hierarchy_level)].map((): string => ('--'))}
+          {' '}
+          {item.name}
+        </Link>
+      </Td>
+    )}
     <Td className="medium">
       <span className={`label status-${label}`}>
         {item.workflowstatus}
@@ -50,7 +54,7 @@ const HierarchyRow: Function = ({
     </Td>
     <Td className="narrow">{item.error_count}</Td>
     <Td className="narrow">{item.priority}</Td>
-    { !compact && (
+    {(!compact && !isTablet) && (
       <Td className="big">
         <Date date={item.scheduled} />
       </Td>
@@ -87,5 +91,5 @@ export default compose(
     item,
     ...rest,
   })),
-  pure(['item'])
+  pure(['item', 'isTablet'])
 )(HierarchyRow);

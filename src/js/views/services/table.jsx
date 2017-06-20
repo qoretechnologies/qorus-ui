@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
+import checkData from '../../hocomponents/check-no-data';
 
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
@@ -15,9 +16,11 @@ type Props = {
   collection: Array<Object>,
   paneId: string | number,
   openPane: Function,
+  closePane: Function,
   select: Function,
   updateDone: Function,
   canLoadMore: boolean,
+  isTablet: boolean,
 };
 
 const ServicesTable: Function = ({
@@ -26,9 +29,11 @@ const ServicesTable: Function = ({
   collection,
   paneId,
   openPane,
+  closePane,
   select,
   updateDone,
   canLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -36,7 +41,7 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 60 : 0}
+    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
@@ -47,14 +52,16 @@ const ServicesTable: Function = ({
         <Th className="tiny">-</Th>
         <Th className="narrow">-</Th>
         <Th className="narrow" name="type">Type</Th>
-        <Th className="medium">Actions</Th>
+        {!isTablet && (
+          <Th className="medium">Actions</Th>
+        )}
         <Th className="narrow" name="threads">Threads</Th>
-        <Th className="narrow" name="has_alerts">
+        <Th className="tiny" name="has_alerts">
           <Icon icon="warning" />
         </Th>
         <Th className="narrow" name="id">ID</Th>
         <Th className="name" name="name">Name</Th>
-        <Th className="medium" name="version">Version</Th>
+        <Th className="normal text" name="version">Version</Th>
         <Th name="desc">Description</Th>
       </Tr>
     </Thead>
@@ -64,8 +71,10 @@ const ServicesTable: Function = ({
           key={`service_${service.id}`}
           isActive={service.id === parseInt(paneId, 10)}
           openPane={openPane}
+          closePane={closePane}
           select={select}
           updateDone={updateDone}
+          isTablet={isTablet}
           {...service}
         />
       ))}
@@ -81,6 +90,7 @@ export default compose(
       select: actions.services.select,
     }
   ),
+  checkData(({ collection }: Props): boolean => collection && collection.length > 0),
   pure([
     'collection',
     'sortData',

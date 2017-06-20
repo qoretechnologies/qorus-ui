@@ -71,6 +71,7 @@ $status-light-gray: lighten($status-gray, 30);
 
 html, body, .app, .app__wrap, .container-fluid {
   height: 100%;
+  font-size: $font-size-base - 1;
 }
 
 

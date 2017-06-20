@@ -50,7 +50,7 @@ const canSkip = (step) => {
 const formatCount = (num) => {
   if (!num) return 0;
 
-  return num < 10000 ? num : `${Math.round(num / 1000)}k`;
+  return num < 1000 ? num : `${Math.round(num / 1000)}k`;
 };
 
 export {

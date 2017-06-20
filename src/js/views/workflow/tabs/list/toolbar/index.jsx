@@ -22,6 +22,7 @@ type Props = {
   onCSVClick: Function,
   location: Object,
   searchPage?: boolean,
+  isTablet: boolean,
 };
 
 const OrdersToolbar: Function = ({
@@ -34,11 +35,12 @@ const OrdersToolbar: Function = ({
   onCSVClick,
   location,
   searchPage,
+  isTablet,
 }: Props): React.Element<any> => (
   <Toolbar sticky>
     <Selector selected={selected} />
     { selected !== 'none' && (
-      <Actions selectedIds={selectedIds} />
+      <Actions isTablet={isTablet} selectedIds={selectedIds} />
     )}
     { !searchPage && (
       <Datepicker
@@ -74,5 +76,6 @@ export default compose(
     'selectedIds',
     'searchQuery',
     'dateQuery',
+    'isTablet',
   ])
 )(OrdersToolbar);

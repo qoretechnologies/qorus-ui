@@ -20,6 +20,7 @@ type Props = {
   handleExpandClick: Function,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  isTablet: boolean,
 };
 
 const HierarchyTable: Function = ({
@@ -28,6 +29,7 @@ const HierarchyTable: Function = ({
   compact,
   canLoadMore,
   handleLoadMore,
+  isTablet,
 }: Props): React.Element<any> => (
   <div>
     <Table
@@ -39,12 +41,14 @@ const HierarchyTable: Function = ({
       <Thead>
         <Tr>
           <Th className="normal">ID</Th>
-          <Th className="name">Workflow</Th>
+          {!isTablet && (
+            <Th className="name">Workflow</Th>
+          )}
           <Th className="medium">Status</Th>
           <Th className="narrow">Bus.Err.</Th>
           <Th className="narrow">Errors</Th>
           <Th className="narrow">Priority</Th>
-          { !compact && (
+          { (!compact && !isTablet) && (
             <Th className="big">Scheduled</Th>
           )}
           { !compact && (
@@ -74,6 +78,7 @@ const HierarchyTable: Function = ({
               compact={compact}
               item={item}
               hasParent={parentId}
+              isTablet={isTablet}
             />
           );
         })}
@@ -98,5 +103,5 @@ export default compose(
   })),
   checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
   withLoadMore('hierarchyKeys', null, true, 50),
-  pure(['hierarchy', 'hierarchyKeys', 'canLoadMore'])
+  pure(['hierarchy', 'hierarchyKeys', 'canLoadMore', 'isTablet'])
 )(HierarchyTable);

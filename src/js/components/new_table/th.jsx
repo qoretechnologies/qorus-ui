@@ -17,6 +17,7 @@ type Props = {
   onSortChange?: Function,
   onClick?: Function,
   sortData?: Object,
+  title?: string,
 }
 
 const Th: Function = ({
@@ -26,6 +27,7 @@ const Th: Function = ({
   handleClick,
   className,
   name,
+  title,
 }: Props) => (
   <th
     className={
@@ -40,6 +42,7 @@ const Th: Function = ({
       }, className)
     }
     onClick={handleClick}
+    title={title}
   >
     { children }
   </th>

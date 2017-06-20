@@ -165,7 +165,7 @@ module.exports = function commonSteps() {
     await this.waitForElement(cmpTable);
     const row = this.browser.
       queryAll(cmpRows).
-      find(r => r.cells[parseInt(nameCell, 10)].textContent === name) || null;
+      find(r => (r.cells[parseInt(nameCell, 10)].textContent === name)) || null;
 
     this.browser.pressButton(row.cells[1].childNodes[0]);
   });
