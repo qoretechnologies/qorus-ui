@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 import classNames from 'classnames';
 
 const Label = (
@@ -15,4 +16,4 @@ const Label = (
   </span>
 );
 
-export default Label;
+export default pure(['style', 'children'])(Label);

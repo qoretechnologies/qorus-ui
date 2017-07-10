@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
 const CenterWrapper: Function = (
   { children }: { children: Array<ReactClass<*>> }
@@ -7,4 +8,4 @@ const CenterWrapper: Function = (
   <div className="center-wrapper">{children}</div>
 );
 
-export default CenterWrapper;
+export default pure(['children'])(CenterWrapper);

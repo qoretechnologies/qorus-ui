@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 
@@ -41,16 +40,6 @@ describe("{ Group, Groups } from 'components/groups'", () => {
       const el = TestUtils.findRenderedDOMComponentWithClass(comp, 'group');
 
       expect(Array.from(el.firstChild.classList)).not.to.include('label-info');
-    });
-
-    it('links to group detail', () => {
-      const comp = TestUtils.renderIntoDocument(
-        <Group name="Test Group" url="/test-group" />
-      );
-
-      const linkComp = TestUtils.findRenderedComponentWithType(comp, Link);
-
-      expect(linkComp.props.to).to.equal('/test-group');
     });
   });
 

@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
 
 const HealthItem = ({
@@ -21,4 +22,4 @@ const HealthItem = ({
   </tr>
 );
 
-export default HealthItem;
+export default pure(['title', 'children', 'link'])(HealthItem);

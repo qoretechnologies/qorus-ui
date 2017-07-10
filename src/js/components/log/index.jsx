@@ -1,11 +1,16 @@
 /* @flow */
 import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import Toolbar from '../toolbar';
 import { Controls, Control as Button } from '../controls';
 import { getControlChar } from '../../helpers/document';
 import Icon from '../../components/icon';
 
+@pure([
+  'messages',
+  'height',
+])
 export default class LogComponent extends Component {
   props: {
     messages: Array<string>,
