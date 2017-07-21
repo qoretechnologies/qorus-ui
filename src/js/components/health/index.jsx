@@ -1,9 +1,10 @@
 /* @flow */
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import HealthItem from './item';
 
-const Health = (
+let Health = (
   {
     title,
     className,
@@ -23,6 +24,8 @@ const Health = (
     </table>
   </div>
 );
+
+Health = pure(['title', 'className', 'children'])(Health);
 
 export {
   Health,

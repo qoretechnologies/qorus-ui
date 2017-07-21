@@ -1,8 +1,8 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Control as Button } from '../controls';
 import classNames from 'classnames';
-import { pureRender } from '../utils';
+import pure from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   onSubmit?: () => void,
@@ -12,7 +12,11 @@ type Props = {
   errorChecker?: () => boolean,
 }
 
-@pureRender
+@pure([
+  'text',
+  'value',
+  'type',
+])
 export default class Editable extends Component {
   props: Props;
 
@@ -113,14 +117,3 @@ export default class Editable extends Component {
     );
   }
 }
-
-Editable.propTypes = {
-  onSubmit: PropTypes.func,
-  text: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  type: PropTypes.string,
-  errorChecker: PropTypes.func,
-};

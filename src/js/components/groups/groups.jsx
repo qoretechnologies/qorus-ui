@@ -1,22 +1,12 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
+const Groups: Function = ({ children }: { children: any }): React.Element<any> => (
+  <div className="groups">
+    <h4>Groups</h4>
+    {children}
+  </div>
+);
 
-/**
- * Wrapper for Group elements.
- *
- * @param {!{ children: Array<!ReactElement> }} props
- * @return {!ReactElement}
- */
-export default function Groups(props: { children: any }): React.Element<any> {
-  return (
-    <div className="groups">
-      <h4>Groups</h4>
-      {props.children}
-    </div>
-  );
-}
-
-Groups.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element),
-};
+export default pure(['childen'])(Groups);
