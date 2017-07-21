@@ -1,10 +1,9 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
 import Editable from '../../src/js/components/editable';
-import { Control as Button } from '../../src/js/components/controls';
 
 describe("Editable from 'components/editable'", () => {
   before(() => {
@@ -13,46 +12,31 @@ describe("Editable from 'components/editable'", () => {
 
   describe('Date', () => {
     it('renders the header with the provided text prop', () => {
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable text="Hello" />
       );
 
-      const result = renderer.getRenderOutput();
-
-      expect(result.type).to.equal('h3');
-      expect(result.props.children).to.equal('Hello');
+      expect(wrapper.find('h3').length).to.equal(1);
+      expect(wrapper.find('h3').text()).to.equal('Hello');
     });
 
     it('renders an input with 2 buttons and the text when the header is clicked', () => {
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="Another hello"
         />
       );
 
-      let result = renderer.getRenderOutput();
+      wrapper.find('h3').simulate('click');
 
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      expect(result.type).to.equal('form');
-      expect(result.props.children.type).to.equal('div');
-      expect(result.props.children.props.children[0].type).to.equal('input');
-      expect(result.props.children.props.children[0].props.defaultValue).to.equal('Another hello');
-      expect(result.props.children.props.children[1].props.children[0].type).to.equal(Button);
-      expect(result.props.children.props.children[1].props.children[1].type).to.equal(Button);
+      expect(wrapper.find('form').length).to.equal(1);
+      expect(wrapper.find('input').length).to.equal(1);
+      expect(wrapper.find('button').length).to.equal(2);
     });
 
     it('renders an input with the provided type', () => {
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="2"
@@ -60,43 +44,28 @@ describe("Editable from 'components/editable'", () => {
         />
       );
 
-      let result = renderer.getRenderOutput();
+      wrapper.find('h3').simulate('click');
 
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      expect(result.props.children.props.children[0].props.type).to.equal('number');
+      expect(wrapper.find('input[type="number"]').length).to.equal(1);
     });
 
     it('renders the text again when cancel is clicked', () => {
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="Hello"
         />
       );
 
-      let result = renderer.getRenderOutput();
+      wrapper.find('h3').simulate('click');
+      wrapper.find('button').last().simulate('click');
 
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      result.props.children.props.children[1].props.children[1].props.action();
-
-      result = renderer.getRenderOutput();
-
-      expect(result.type).to.equal('h3');
+      expect(wrapper.find('h3').length).to.equal(1);
     });
 
     it('runs the provided function when submitted', () => {
       const action = chai.spy();
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="Hello"
@@ -104,14 +73,9 @@ describe("Editable from 'components/editable'", () => {
         />
       );
 
-      let result = renderer.getRenderOutput();
-
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      result.props.children.props.children[0].props.onChange({ target: { value: 'Its me' } });
-      result.props.onSubmit({ preventDefault: () => true });
+      wrapper.find('h3').simulate('click');
+      wrapper.find('input').simulate('change', { target: { value: 'Its me' } });
+      wrapper.find('form').simulate('submit');
 
       expect(action).to.have.been.called().with('Its me');
     });
@@ -119,9 +83,7 @@ describe("Editable from 'components/editable'", () => {
     it('doesnt run the provided function when the error checker fails', () => {
       const action = chai.spy();
       const errorChecker = (value) => value < 10;
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="Hello"
@@ -130,29 +92,18 @@ describe("Editable from 'components/editable'", () => {
         />
       );
 
-      let result = renderer.getRenderOutput();
-
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      result.props.children.props.children[0].props.onChange({ target: { value: 11 } });
-      result.props.onSubmit({ preventDefault: () => true });
-
-      result = renderer.getRenderOutput();
+      wrapper.find('h3').simulate('click');
+      wrapper.find('input').simulate('change', { target: { value: 11 } });
+      wrapper.find('form').simulate('submit');
 
       expect(action).to.have.not.been.called();
-      expect(
-        result.props.children.props.children[0].props.className
-      ).to.equal('form-control form-error');
+      expect(wrapper.find('input').first().hasClass('form-error')).to.equal(true);
     });
 
     it('runs the provided function when the error checker succeeds', () => {
       const action = chai.spy();
       const errorChecker = (value) => value < 10;
-      const renderer = TestUtils.createRenderer();
-
-      renderer.render(
+      const wrapper = mount(
         <Editable
           text="Hello"
           value="Hello"
@@ -161,14 +112,9 @@ describe("Editable from 'components/editable'", () => {
         />
       );
 
-      let result = renderer.getRenderOutput();
-
-      result.props.onClick();
-
-      result = renderer.getRenderOutput();
-
-      result.props.children.props.children[0].props.onChange({ target: { value: 5 } });
-      result.props.onSubmit({ preventDefault: () => true });
+      wrapper.find('h3').simulate('click');
+      wrapper.find('input').simulate('change', { target: { value: 5 } });
+      wrapper.find('form').simulate('submit');
 
       expect(action).to.have.been.called().with(5);
     });
