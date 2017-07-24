@@ -7,6 +7,7 @@ import {
   selectAll,
   selectNone,
   selectInvert,
+  selectAlerts,
 } from '../../../../helpers/resources';
 
 
@@ -320,6 +321,12 @@ const invertSelection = {
   },
 };
 
+const selectWithAlerts = {
+  next(state = initialState) {
+    return selectAlerts(state);
+  },
+};
+
 const serviceAction = {
   next(state = initialState) {
     return state;
@@ -349,4 +356,5 @@ export {
   serviceAction as ACTION,
   unsync as UNSYNC,
   addNew as ADDNEW,
+  selectWithAlerts as SELECTALERTS,
 };
