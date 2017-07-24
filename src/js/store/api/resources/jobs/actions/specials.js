@@ -273,6 +273,7 @@ const activate = (id, active) => dispatch => {
 const selectAll = createAction('JOBS_SELECTALL');
 const selectNone = createAction('JOBS_SELECTNONE');
 const selectInvert = createAction('JOBS_SELECTINVERT');
+const selectAlerts = createAction('JOBS_SELECTALERTS');
 const unsync = createAction('JOBS_UNSYNC');
 
 export {
@@ -302,4 +303,5 @@ export {
   activate,
   expireAction,
   addNew,
+  selectAlerts,
 };

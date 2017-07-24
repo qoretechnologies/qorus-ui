@@ -16,6 +16,7 @@ type Props = {
   selectInvert: Function,
   selectRunning: Function,
   selectStopped: Function,
+  selectAlerts: Function,
 };
 
 const ToolbarSelector: Function = ({
@@ -25,6 +26,7 @@ const ToolbarSelector: Function = ({
   selectInvert,
   selectRunning,
   selectStopped,
+  selectAlerts,
 }: Props): React.Element<any> => (
   <Dropdown
     id="selection"
@@ -57,6 +59,10 @@ const ToolbarSelector: Function = ({
       action={selectStopped}
       title="Stopped"
     />
+    <Item
+      action={selectAlerts}
+      title="With alerts"
+    />
   </Dropdown>
 );
 
@@ -69,6 +75,7 @@ export default compose(
       selectInvert: actions.workflows.selectInvert,
       selectRunning: actions.workflows.selectRunning,
       selectStopped: actions.workflows.selectStopped,
+      selectAlerts: actions.workflows.selectStopped,
     }
   ),
   pure(['selected'])
