@@ -6,7 +6,7 @@ const location = window && window.location ? window.location : {
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 
 export default {
-  REST_BASE_URL: '/api',
+  REST_BASE_URL: '/api/v2',
   WS_BASE_URL: `${wsProtocol}//${location.host}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
