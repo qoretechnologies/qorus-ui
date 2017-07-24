@@ -16,6 +16,7 @@ import patch from '../../hocomponents/patchFuncArgs';
 import selectable from '../../hocomponents/selectable';
 import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
+import withInfoBar from '../../hocomponents/withInfoBar';
 import loadMore from '../../hocomponents/loadMore';
 import actions from '../../store/api/actions';
 import WorkflowsToolbar from './toolbar';
@@ -119,7 +120,14 @@ const viewSelector = createSelector(
     querySelector('date'),
     settingsSelector,
   ],
-  (workflows, collection, systemOptions, deprecated, date, settings) => ({
+  (
+    workflows,
+    collection,
+    systemOptions,
+    deprecated,
+    date,
+    settings,
+  ): Object => ({
     meta: workflows,
     workflows: collection,
     systemOptions,
@@ -153,6 +161,9 @@ type Props = {
   limit: number,
   isTablet: boolean,
   groupedStates: Object,
+  infoTotalCount: number,
+  infoEnabled: number,
+  infoWithAlerts: number,
 };
 
 const Workflows: Function = ({
@@ -175,6 +186,9 @@ const Workflows: Function = ({
   closePane,
   isTablet,
   groupedStates,
+  infoEnabled,
+  infoTotalCount,
+  infoWithAlerts,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -185,6 +199,10 @@ const Workflows: Function = ({
       location={location}
       selectedIds={selectedIds}
       isTablet={isTablet}
+      collectionCount={workflows.length}
+      collectionTotal={infoTotalCount}
+      withAlertsCount={infoWithAlerts}
+      enabledCount={infoEnabled}
     />
     <WorkflowsTable
       collection={workflows}
@@ -221,6 +239,7 @@ export default compose(
       unselectAll: actions.workflows.unselectAll,
     }
   ),
+  withInfoBar('workflows'),
   withSort('workflows', 'workflows', sortDefaults.workflows),
   loadMore('workflows', 'workflows', true, 50),
   mapProps(({ date, ...rest }: Props): Object => ({
@@ -282,6 +301,7 @@ export default compose(
     'date',
     'canLoadMore',
     'isTablet',
+    'withAlertsCount',
   ]),
   unsync()
 )(Workflows);

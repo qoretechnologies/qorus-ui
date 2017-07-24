@@ -12,6 +12,7 @@ import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import withCSV from '../../hocomponents/csv';
 import unsync from '../../hocomponents/unsync';
+import withInfoBar from '../../hocomponents/withInfoBar';
 import selectable from '../../hocomponents/selectable';
 import ServicesDetail from './detail';
 import ServicesToolbar from './toolbar';
@@ -36,6 +37,9 @@ type Props = {
   isTablet: boolean,
   handleLoadMore: Function,
   limit: number,
+  infoTotalCount: number,
+  infoEnabled: number,
+  infoWithAlerts: number,
 };
 
 const Services: Function = ({
@@ -53,6 +57,9 @@ const Services: Function = ({
   canLoadMore,
   handleLoadMore,
   isTablet,
+  infoEnabled,
+  infoTotalCount,
+  infoWithAlerts,
 }: Props): React.Element<any> => (
   <div>
     <ServicesToolbar
@@ -60,6 +67,10 @@ const Services: Function = ({
       selectedIds={selectedIds}
       onCSVClick={onCSVClick}
       location={location}
+      collectionCount={services.length}
+      collectionTotal={infoTotalCount}
+      withAlertsCount={infoWithAlerts}
+      enabledCount={infoEnabled}
     />
     <ServicesTable
       collection={services}
@@ -125,6 +136,7 @@ export default compose(
       unsync: actions.services.unsync,
     }
   ),
+  withInfoBar('services'),
   withSort('services', 'services', sortDefaults.services),
   loadMore('services', 'services', true, 50),
   sync('meta'),
