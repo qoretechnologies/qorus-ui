@@ -25,6 +25,7 @@ export default (
     offsetLimit: number,
     handleLoadMore: Function,
     length: number,
+    total: number,
   };
 
   const WrappedComponent: Function = (props: Props): React.Element<any> => {
@@ -38,6 +39,7 @@ export default (
           {...props}
           canLoadMore={props.offsetLimit <= length}
           handleLoadMore={props.handleLoadMore}
+          loadMoreTotal={props.total}
         />
       </div>
     );
@@ -70,6 +72,7 @@ export default (
     mapProps(({ offsetLimit, ...rest }: Props) => ({
       offsetLimit,
       ...rest,
+      total: rest[collectionProp].length,
       [collectionProp]: local ? rest[collectionProp].slice(0, offsetLimit): rest[collectionProp],
     })),
     withHandlers({

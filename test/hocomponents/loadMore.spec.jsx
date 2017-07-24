@@ -137,6 +137,7 @@ describe('loadMore from hocomponents/loadMore', () => {
       expect(wrapper.find(ActualComp).props().changeOffset).to.be.a('function');
       expect(wrapper.find(ActualComp).props().handleLoadMore).to.be.a('function');
       expect(wrapper.find(ActualComp).props().offset).to.eql(0);
+      expect(wrapper.find(ActualComp).props().loadMoreTotal).to.eql(50);
       expect(wrapper.find('p')).to.have.length(50);
     });
 
