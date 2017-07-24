@@ -8,6 +8,7 @@ import {
   selectAll,
   selectNone,
   selectInvert,
+  selectAlerts,
 } from '../../../../helpers/resources';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -312,6 +313,12 @@ const invertSelection = {
   },
 };
 
+const selectWithAlerts = {
+  next(state = initialState) {
+    return selectAlerts(state);
+  },
+};
+
 const selectRunning = {
   next(state = initialState) {
     const data = [...state.data];
@@ -403,6 +410,7 @@ export {
   invertSelection as SELECTINVERT,
   selectRunning as SELECTRUNNING,
   selectStopped as SELECTSTOPPED,
+  selectWithAlerts as SELECTALERTS,
   setAutostart as SETAUTOSTART,
   unselectAll as UNSELECTALL,
   setDeprecated as TOGGLEDEPRECATED,

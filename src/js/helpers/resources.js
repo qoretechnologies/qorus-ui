@@ -55,10 +55,18 @@ const selectInvert: Function = (state: Object): Object => {
   return { ...state, ...{ data: newData } };
 };
 
+const selectAlerts: Function = (state: Object): Object => {
+  const data = [...state.data];
+  const newData = data.map(w => ({ ...w, ...{ _selected: w.has_alerts } }));
+
+  return { ...state, ...{ data: newData } };
+};
+
 export {
   selectedType,
   select,
   selectAll,
   selectNone,
   selectInvert,
+  selectAlerts,
 };
