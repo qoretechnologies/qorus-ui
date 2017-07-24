@@ -8,6 +8,7 @@ import Selector from './selectors';
 import Actions from './actions';
 import Search from '../../../containers/search';
 import { Control as Button } from '../../../components/controls';
+import { InfoBar, InfoBarItem } from '../../../components/infobar';
 import queryControl from '../../../hocomponents/queryControl';
 
 type Props = {
@@ -17,6 +18,10 @@ type Props = {
   searchQuery: string,
   changeSearchQuery: Function,
   location: Object,
+  collectionCount: number,
+  collectionTotal: number,
+  withAlertsCount: number,
+  enabledCount: number,
 };
 
 const GroupsToolbar: Function = ({
@@ -25,24 +30,42 @@ const GroupsToolbar: Function = ({
   searchQuery,
   changeSearchQuery,
   onCSVClick,
+  collectionCount,
+  collectionTotal,
+  withAlertsCount,
+  enabledCount,
 }: Props): React.Element<any> => (
-  <Toolbar>
-    <Selector selected={selected} />
-    { selected !== 'none' && (
-      <Actions selectedIds={selectedIds} />
+  <div>
+    <Toolbar>
+      <Selector selected={selected} />
+      { selected !== 'none' && (
+        <Actions selectedIds={selectedIds} />
+      )}
+      <Button
+        label="CSV"
+        btnStyle="default"
+        big
+        action={onCSVClick}
+      />
+      <Search
+        defaultValue={searchQuery}
+        onSearchUpdate={changeSearchQuery}
+        resource="groups"
+      />
+    </Toolbar>
+    {collectionCount > 0 && (
+      <InfoBar>
+        {(selectedIds.length > 0) && (
+          <InfoBarItem icon="check" style="success">{ selectedIds.length }</InfoBarItem>
+        )}
+        <InfoBarItem icon="eye" style="info">
+          { collectionCount } of { collectionTotal }
+        </InfoBarItem>
+        <InfoBarItem icon="warning" style="danger">{ withAlertsCount }</InfoBarItem>
+        <InfoBarItem icon="power-off" style="success">{ enabledCount }</InfoBarItem>
+      </InfoBar>
     )}
-    <Button
-      label="CSV"
-      btnStyle="default"
-      big
-      action={onCSVClick}
-    />
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-      resource="groups"
-    />
-  </Toolbar>
+  </div>
 );
 
 export default compose(

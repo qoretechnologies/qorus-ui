@@ -3,8 +3,8 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
-import checkData from '../../hocomponents/check-no-data';
 
+import checkData from '../../hocomponents/check-no-data';
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
 import Icon from '../../components/icon';

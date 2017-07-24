@@ -25,6 +25,7 @@ import { Control } from '../../components/controls';
 import { sortDefaults } from '../../constants/sort';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
+import withInfoBar from '../../hocomponents/withInfoBar';
 
 type Props = {
   jobs: Array<Object>,
@@ -46,6 +47,9 @@ type Props = {
   handleLoadMore: Function,
   limit: number,
   isTablet: boolean,
+  infoTotalCount: number,
+  infoEnabled: number,
+  infoWithAlerts: number,
 };
 
 const JobsView: Function = ({
@@ -63,12 +67,19 @@ const JobsView: Function = ({
   sortData,
   onSortChange,
   isTablet,
+  infoEnabled,
+  infoTotalCount,
+  infoWithAlerts,
 }: Props): React.Element<any> => (
   <div>
     <JobsToolbar
       selected={selected}
       selectedIds={selectedIds}
       onCSVClick={onCSVClick}
+      collectionCount={jobs.length}
+      collectionTotal={infoTotalCount}
+      withAlertsCount={infoWithAlerts}
+      enabledCount={infoEnabled}
     />
     <JobsTable
       collection={jobs}
@@ -135,6 +146,7 @@ export default compose(
       selectNone: actions.jobs.selectNone,
     }
   ),
+  withInfoBar('jobs'),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
   mapProps(({ date, ...rest }: Props): Object => ({
