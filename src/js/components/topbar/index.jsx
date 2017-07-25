@@ -7,11 +7,46 @@ import NotificationPanel from '../../containers/system/alerts';
 import { LocalHealth, RemoteHealth } from '../../containers/health';
 import { Control as Button } from '../../components/controls';
 import Icon from '../../components/icon';
+import Modal from '../../components/modal';
+import settings from '../../settings';
+import withModal from '../../hocomponents/modal';
+
+const WarningModal: Function = ({ onClose }: Object): React.Element<any> => {
+  const handleClick: Function = () => {
+    const { host, pathname } = window.location;
+    window.location.href = `https://${host}${pathname}`;
+  };
+
+  return (
+    <Modal>
+      <Modal.Header
+        titleId="warningModal"
+        onClose={onClose}
+      > Unsecure connection </Modal.Header>
+      <Modal.Body>
+        <p>
+          You are currently using this site via unsecure connection.
+          Some functionality requiring secure connection will not be available.
+        </p>
+        <p>
+          <Button
+            big
+            btnStyle="success"
+            onClick={handleClick}
+          >
+            Switch to secure
+          </Button>
+        </p>
+      </Modal.Body>
+    </Modal>
+  );
+};
 
 /**
  * Display info about Qorus instance and logged in user.
  */
 @pureRender
+@withModal()
 export default class Topbar extends Component {
   static propTypes = {
     info: PropTypes.object.isRequired,
@@ -19,6 +54,8 @@ export default class Topbar extends Component {
     isTablet: PropTypes.bool,
     onMenuToggle: PropTypes.func,
     showMenu: PropTypes.bool,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
   };
 
   /**
@@ -34,6 +71,12 @@ export default class Topbar extends Component {
   handleExpand = () => {
     this.setState({ expanded: !this.state.expanded });
   };
+
+  handleWarningClick = () => {
+    this.props.openModal(
+      <WarningModal onClose={this.props.closeModal} />
+    );
+  }
 
   /**
    * Returns element for this component.
@@ -72,8 +115,15 @@ export default class Topbar extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <div className="navbar-brand h2 topbar__instance">
+            <div
+              className="navbar-brand h2 topbar__instance"
+              onClick={settings.PROTOCOL === 'http:' ? this.handleWarningClick : null}
+            >
               {this.props.info['instance-key']}
+              {' '}
+              {settings.PROTOCOL === 'http:' && (
+                <Icon icon="warning" className="text-danger" />
+              )}
             </div>
           </div>
           <div

@@ -13,4 +13,5 @@ export default {
     'Content-Type': 'application/json',
   },
   NOTIFICATION_TIMEOUT: 5000,
+  PROTOCOL: location.protocol,
 };
