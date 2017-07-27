@@ -99,6 +99,22 @@ describe('loadMore from hocomponents/loadMore', () => {
       expect(wrapper.find(ActualComp).props().offsetLimit).to.eql(6);
     });
 
+    it('displays all data when the load all button is clicked', () => {
+      const Comp = loadMore('items', 'workflows', true, 3)(ActualComp);
+      const wrapper = mount(
+        <Provider store={store}>
+          <Comp items={getItems()} />
+        </Provider>
+      );
+
+      wrapper.find(ActualComp).props().handleLoadAll();
+
+      expect(wrapper.find('p')).to.have.length(10);
+      expect(wrapper.find(ActualComp).props().localOffset).to.eql(10);
+      expect(wrapper.find(ActualComp).props().offsetLimit).to.eql(13);
+      expect(wrapper.find(ActualComp).props().canLoadMore).to.eql(false);
+    });
+
     it('load more is hidden when all data are displayed', () => {
       const Comp = loadMore('items', 'workflows', true, 3)(ActualComp);
       const wrapper = mount(

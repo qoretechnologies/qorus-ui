@@ -21,7 +21,7 @@ import { findBy } from '../../helpers/search';
 import JobsDetail from './detail';
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
-import { Control } from '../../components/controls';
+import { Controls, Control } from '../../components/controls';
 import { sortDefaults } from '../../constants/sort';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
@@ -45,6 +45,7 @@ type Props = {
   onSortChange: Function,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  handleLoadAll: Function,
   limit: number,
   isTablet: boolean,
   infoTotalCount: number,
@@ -64,6 +65,7 @@ const JobsView: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
   sortData,
   onSortChange,
   isTablet,
@@ -93,12 +95,20 @@ const JobsView: Function = ({
       isTablet={isTablet}
     />
     { canLoadMore && (
-      <Control
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+      <Controls grouped noControls>
+        <Control
+          label={`Show ${limit} more...`}
+          btnStyle="success"
+          big
+          onClick={handleLoadMore}
+        />
+        <Control
+          label="Show all"
+          btnStyle="warning"
+          big
+          onClick={handleLoadAll}
+        />
+      </Controls>
     )}
   </div>
 );

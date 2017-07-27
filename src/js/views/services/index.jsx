@@ -20,7 +20,7 @@ import ServicesTable from './table';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
 import { sortDefaults } from '../../constants/sort';
-import { Control } from '../../components/controls';
+import { Controls, Control } from '../../components/controls';
 
 type Props = {
   sortData: Object,
@@ -36,6 +36,7 @@ type Props = {
   canLoadMore: boolean,
   isTablet: boolean,
   handleLoadMore: Function,
+  handleLoadAll: Function,
   limit: number,
   infoTotalCount: number,
   infoEnabled: number,
@@ -56,6 +57,7 @@ const Services: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
   isTablet,
   infoEnabled,
   infoTotalCount,
@@ -83,12 +85,20 @@ const Services: Function = ({
       isTablet={isTablet}
     />
     { canLoadMore && (
-      <Control
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+      <Controls grouped noControls>
+        <Control
+          label={`Show ${limit} more...`}
+          btnStyle="success"
+          big
+          onClick={handleLoadMore}
+        />
+        <Control
+          label="Show all"
+          btnStyle="warning"
+          big
+          onClick={handleLoadAll}
+        />
+      </Controls>
     )}
   </div>
 );

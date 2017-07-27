@@ -26,7 +26,7 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => {
       <Modal.Body>
         <p>
           You are currently using this site via unsecure connection.
-          Some functionality requiring secure connection will not be available.
+          Some functionality requiring a secure connection will not be available.
         </p>
         <p>
           <Button

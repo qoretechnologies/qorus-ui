@@ -35,7 +35,7 @@ import { findBy } from '../../helpers/search';
 import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
-import { Control } from '../../components/controls';
+import { Controls, Control } from '../../components/controls';
 
 const filterSearch: Function = (search: string): Function =>
   (workflows: Array<Object>): Array<Object> => (
@@ -158,6 +158,7 @@ type Props = {
   onSortChange: Function,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  handleLoadAll: Function,
   limit: number,
   isTablet: boolean,
   groupedStates: Object,
@@ -183,6 +184,7 @@ const Workflows: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
   closePane,
   isTablet,
   groupedStates,
@@ -219,12 +221,20 @@ const Workflows: Function = ({
       isTablet={isTablet}
     />
     { canLoadMore && (
-      <Control
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+      <Controls grouped noControls>
+        <Control
+          label={`Show ${limit} more...`}
+          btnStyle="success"
+          big
+          onClick={handleLoadMore}
+        />
+        <Control
+          label="Show all"
+          btnStyle="warning"
+          big
+          onClick={handleLoadAll}
+        />
+      </Controls>
     )}
   </div>
 );
