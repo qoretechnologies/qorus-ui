@@ -24,6 +24,7 @@ export default (
     limit: number,
     offsetLimit: number,
     handleLoadMore: Function,
+    handleLoadAll: Function,
     length: number,
     total: number,
   };
@@ -39,6 +40,7 @@ export default (
           {...props}
           canLoadMore={props.offsetLimit <= length}
           handleLoadMore={props.handleLoadMore}
+          handleLoadAll={props.handleLoadAll}
           loadMoreTotal={props.total}
         />
       </div>
@@ -57,7 +59,11 @@ export default (
     ),
     withState('localOffset', 'setLocalOffset', 0),
     mapProps(({ localOffset, setLocalOffset, offset, limit, ...rest }: Props) => ({
-      changeLocalOffset: (): Function => setLocalOffset((offs: number) => offs + localLimit),
+      changeLocalOffset: (loadAll: boolean): Function => (
+        setLocalOffset((offs: number) => (
+          loadAll ? rest[collectionProp].length : offs + localLimit
+        ))
+      ),
       offset: local ? localOffset : offset,
       limit: local ? localLimit : limit,
       localOffset,
@@ -81,6 +87,11 @@ export default (
           changeLocalOffset();
         } else {
           changeOffset();
+        }
+      },
+      handleLoadAll: ({ changeLocalOffset }): Function => (): void => {
+        if (local) {
+          changeLocalOffset(true);
         }
       },
     }),
