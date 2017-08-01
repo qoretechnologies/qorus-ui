@@ -26,6 +26,9 @@
   "manual_autostart": false,
   "max_instances": null,
   "external_order_instanceid": null,
+  "sensitive_data": {
+    "rodne_cislo": "1234"
+  },
   "staticdata": {
     "account": {
       "name": {

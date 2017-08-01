@@ -7,6 +7,7 @@ import Data from '../views/order/data';
 import {
   StaticView,
   DynamicView,
+  SensitiveView,
   KeysView,
 } from '../views/order/data';
 
@@ -22,6 +23,7 @@ const OrderRoutes = (): React.Element<any> => (
       <IndexRedirect to="static" />
       <Route path="static" component={StaticView} />
       <Route path="dynamic" component={DynamicView} />
+      <Route path="sensitive" component={SensitiveView} />
       <Route path="keys" component={KeysView} />
     </Route>
     <Route path="errors" component={Order.Errors} />

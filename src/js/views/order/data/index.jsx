@@ -3,6 +3,7 @@ import Nav, { NavLink } from 'components/navlink';
 
 import StaticView from './static';
 import DynamicView from './dynamic';
+import SensitiveView from './sensitive';
 import KeysView from './keys';
 
 type Props = {
@@ -19,6 +20,7 @@ const DataView = ({ location, order, children }: Props) => (
     >
       <NavLink to="./static">Static</NavLink>
       <NavLink to="./dynamic">Dynamic</NavLink>
+      <NavLink to="./sensitive">Sensitive</NavLink>
       <NavLink to="./keys">Keys</NavLink>
     </Nav>
     <div className="row tab-pane">
@@ -47,4 +49,5 @@ export {
   StaticView,
   DynamicView,
   KeysView,
+  SensitiveView,
 };
