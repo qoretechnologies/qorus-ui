@@ -21,7 +21,20 @@
   img {
     padding: 0 10px 0 0;
     vertical-align: text-bottom;
+    width: 48px;
   }
+
+  .reg {
+    font-size: 15px;
+    vertical-align: top;
+  }
+}
+
+.qore-small-logo {
+  padding: 0 10px 0 0;
+  vertical-align: text-bottom;
+  width: 35px;
+  display: inline !important;
 }
 
 .login-wrapper {

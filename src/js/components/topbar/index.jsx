@@ -10,6 +10,7 @@ import Icon from '../../components/icon';
 import Modal from '../../components/modal';
 import settings from '../../settings';
 import withModal from '../../hocomponents/modal';
+import logo from '../../../img/qore_logo.png';
 
 const WarningModal: Function = ({ onClose }: Object): React.Element<any> => {
   const handleClick: Function = () => {
@@ -119,6 +120,7 @@ export default class Topbar extends Component {
               className="navbar-brand h2 topbar__instance"
               onClick={settings.PROTOCOL === 'http:' ? this.handleWarningClick : null}
             >
+              <img src={logo} className="qore-small-logo" />
               {this.props.info['instance-key']}
               {' '}
               {settings.PROTOCOL === 'http:' && (
