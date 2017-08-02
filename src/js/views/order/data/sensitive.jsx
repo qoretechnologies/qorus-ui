@@ -62,10 +62,11 @@ export default compose(
       perms: state.api.currentUser.data.permissions,
     })
   ),
-  mapProps(({ perms }: Props): Props => ({
+  mapProps(({ perms, ...rest }: Props): Props => ({
     isSecure: settings.PROTOCOL === 'https:',
     hasPerms: hasPermission(perms, ['READ-SENSITIVE-DATA', 'SENSITIVE-DATA-CONTROL'], 'or'),
     perms,
+    ...rest,
   })),
   pure(['order', 'perms', 'isSecure', 'hasPerms'])
 )(SensitiveView);

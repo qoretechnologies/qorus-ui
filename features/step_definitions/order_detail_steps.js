@@ -48,8 +48,16 @@ module.exports = function orderDetailSteps() {
     const el = findElementByText(this.browser, '.tab-pane .nav-pills li.active', data);
 
     this.browser.assert.element(el);
-    this.browser.assert.element('.tree-wrapper');
+    this.browser.assert.elements('.tree-wrapper', 0);
     this.browser.assert.elements('.button--copy', 3);
+  });
+
+  this.Then(/^I should not see the "([^"]*)" data$/, async function(data) {
+    const el = findElementByText(this.browser, '.tab-pane .nav-pills li.active', data);
+
+    this.browser.assert.element(el);
+    this.browser.assert.elements('.tree-wrapper', 0);
+    this.browser.assert.elements('.tab-pane .alert-danger', 1);
   });
 
   this.When(/^I replace the data in the textarea$/, async function() {
