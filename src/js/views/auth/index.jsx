@@ -39,7 +39,7 @@ const Login: Function = ({
         <div className="login-wrapper">
           <h1 className="login-header">
             <img src={logo} />
-            Qorus Integration Engine
+            Qorus Integration Engine <span className="small reg">&reg;</span>
             <p className="login-instance-wrapper">
               <span> {info['instance-key']} </span>
             </p>
