@@ -12,36 +12,20 @@ import settings from '../../settings';
 import withModal from '../../hocomponents/modal';
 import logo from '../../../img/qore_logo.png';
 
-const WarningModal: Function = ({ onClose }: Object): React.Element<any> => {
-  const handleClick: Function = () => {
-    const { host, pathname } = window.location;
-    window.location.href = `https://${host}${pathname}`;
-  };
-
-  return (
-    <Modal>
-      <Modal.Header
-        titleId="warningModal"
-        onClose={onClose}
-      > Unsecure connection </Modal.Header>
-      <Modal.Body>
-        <p>
-          You are currently using this site via unsecure connection.
-          Some functionality requiring a secure connection will not be available.
-        </p>
-        <p>
-          <Button
-            big
-            btnStyle="success"
-            onClick={handleClick}
-          >
-            Switch to secure
-          </Button>
-        </p>
-      </Modal.Body>
-    </Modal>
-  );
-};
+const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
+  <Modal>
+    <Modal.Header
+      titleId="warningModal"
+      onClose={onClose}
+    > Unsecure connection </Modal.Header>
+    <Modal.Body>
+      <p>
+        You are currently using this site via unsecure connection.
+        Some functionality requiring a secure connection will not be available.
+      </p>
+    </Modal.Body>
+  </Modal>
+);
 
 /**
  * Display info about Qorus instance and logged in user.

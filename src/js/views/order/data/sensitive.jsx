@@ -35,14 +35,11 @@ const SensitiveView: Function = ({ order, isSecure, hasPerms }: Props) => {
       </Alert>
     );
   } else if (!isSecure) {
-    const { host, pathname } = window.location;
-    const href = `https://${host}${pathname}`;
-
     return (
       <Alert bsStyle="danger">
         <Icon icon="warning" />
         {' '}
-        Your connection is not secure. <a href={href}> Switch to secure </a>
+        Your connection is not secure.
       </Alert>
     );
   }
