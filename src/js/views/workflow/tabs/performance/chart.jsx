@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import settings from '../../../../settings';
+import { fetchJson } from 'store/api/utils';
+import moment from 'moment';
+import qs from 'qs';
+
 
 import Loader from '../../../../components/loader';
 import Chart from '../../../../components/chart';
 import Editable from '../../../../components/editable';
-
 import { createLineDatasets, createDoughDatasets } from '../../../../helpers/chart';
-
-import { fetchJson } from 'store/api/utils';
-import moment from 'moment';
-import qs from 'qs';
 
 export default class ChartView extends Component {
   static propTypes = {
@@ -53,7 +53,7 @@ export default class ChartView extends Component {
     const queryString = qs.stringify(query);
     const lineData = await fetchJson(
       'GET',
-      `/api/orders?action=processingSummary&${queryString}`
+      `${settings.REST_BASE_URL}/orders?action=processingSummary&${queryString}`
     );
 
     const line = createLineDatasets(lineData, days);
@@ -64,9 +64,11 @@ export default class ChartView extends Component {
     };
 
     if (this.props.workflow) {
+      const { workflowid } = this.props.workflow;
+      const minDate = encodeURIComponent(query.minDate);
       const doughData = await fetchJson(
         'GET',
-        `/api/workflows/${this.props.workflow.workflowid}?date=${encodeURIComponent(query.minDate)}`
+        `${settings.REST_BASE_URL}/workflows/${workflowid}?date=${minDate}`
       );
 
       const dough = createDoughDatasets(doughData, days);
