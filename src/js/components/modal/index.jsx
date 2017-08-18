@@ -16,7 +16,7 @@ type Props = {
   size: string,
   hasFooter?: boolean,
   height?: number,
-  onResizeStop: Function,
+  onResizeStop?: Function,
 };
 
 /**
