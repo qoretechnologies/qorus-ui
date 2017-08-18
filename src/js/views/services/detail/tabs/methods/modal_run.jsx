@@ -84,19 +84,21 @@ export default class ModalRun extends Component {
   };
 
   handleModalResize = () => {
-    const { height: formHeight } = document.
-      querySelectorAll('.method-form')[0].getBoundingClientRect();
-    const { height: bodyHeight } = document.
-      querySelectorAll('.modal-body')[0].getBoundingClientRect();
-    const difference = bodyHeight - formHeight;
+    if (this._request && this._response) {
+      const { height: formHeight } = document.
+        querySelectorAll('.method-form')[0].getBoundingClientRect();
+      const { height: bodyHeight } = document.
+        querySelectorAll('.modal-body')[0].getBoundingClientRect();
+      const difference = bodyHeight - formHeight;
 
-    const { height: requestHeight } = this._request.getBoundingClientRect();
-    const { height: responseHeight } = this._response.getBoundingClientRect();
+      const { height: requestHeight } = this._request.getBoundingClientRect();
+      const { height: responseHeight } = this._response.getBoundingClientRect();
 
-    this.setState({
-      requestHeight: requestHeight + (difference / 2) - 70,
-      responseHeight: responseHeight + (difference / 2) - 70,
-    });
+      this.setState({
+        requestHeight: requestHeight + (difference / 2) - 70,
+        responseHeight: responseHeight + (difference / 2) - 70,
+      });
+    }
   }
 
   requestRef = (s) => {
@@ -115,8 +117,7 @@ export default class ModalRun extends Component {
       <select
         name="method"
         id="method"
-        defaultValue={method.name}
-        value={activeMethod.name}
+        value={activeMethod ? activeMethod.name : method.name}
         onChange={this.handleMethodChange}
         ref={this.selectRef}
         className="form-control"
@@ -196,7 +197,7 @@ export default class ModalRun extends Component {
                         readOnly
                         rows="5"
                         ref={this.respRef}
-                        value={ (response) ? yaml.dump(response) : null}
+                        value={ (response) ? yaml.dump(response) : ''}
                         style={{
                           height: this.state.responseHeight || 'auto',
                         }}
@@ -210,7 +211,7 @@ export default class ModalRun extends Component {
                         placeholder="Response"
                         readOnly
                         rows="5"
-                        value={ (response) ? JSON.stringify(response, null, 4) : null}
+                        value={ (response) ? JSON.stringify(response, null, 4) : ''}
                         style={{
                           height: this.state.responseHeight || 'auto',
                         }}
