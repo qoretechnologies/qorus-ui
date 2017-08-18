@@ -16,6 +16,7 @@ type Props = {
   size: string,
   hasFooter?: boolean,
   height?: number,
+  onResizeStop: Function,
 };
 
 /**
@@ -106,11 +107,11 @@ export default class Modal extends Component {
           <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
             {this.props.children}
           </div>
-          <ResizeHandle left />
-          <ResizeHandle right />
-          <ResizeHandle bottom />
-          <ResizeHandle left bottom />
-          <ResizeHandle right bottom />
+          <ResizeHandle left onStop={this.props.onResizeStop} />
+          <ResizeHandle right onStop={this.props.onResizeStop} />
+          <ResizeHandle bottom onStop={this.props.onResizeStop} />
+          <ResizeHandle left bottom onStop={this.props.onResizeStop} />
+          <ResizeHandle right bottom onStop={this.props.onResizeStop} />
         </div>
       </div>
     );
