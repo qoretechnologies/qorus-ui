@@ -4,7 +4,7 @@ import Modal from 'components/modal';
 import Loader from 'components/loader';
 import Tabs, { Pane } from 'components/tabs';
 import InfoTable from 'components/info_table';
-import SourceCode from 'components/source_code';
+import SourceCode from '../../../components/source_code';
 
 import actions from 'store/api/actions';
 
@@ -46,6 +46,12 @@ export default class StepModal extends Component {
     fetchStep: PropTypes.func.isRequired,
   };
 
+  state: {
+    sourceHeight: number,
+  } = {
+    sourceHeight: 200,
+  };
+
   /**
    * Fetches detailed information about step.
    */
@@ -63,6 +69,18 @@ export default class StepModal extends Component {
       nextProps.fetchStep(nextProps.id);
     }
   }
+
+  handleModalResize = () => {
+    const { height: formHeight } = document.
+      querySelectorAll('.modal-body table')[0].getBoundingClientRect();
+    const { height: bodyHeight } = document.
+      querySelectorAll('.modal-body')[0].getBoundingClientRect();
+    const difference = bodyHeight - formHeight;
+
+    this.setState({
+      sourceHeight: difference - 215,
+    });
+  };
 
   /**
    * Returns modal header with step name, version, ID and type.
@@ -95,7 +113,6 @@ export default class StepModal extends Component {
     );
   }
 
-
   /**
    * Returns modal with detailed information about step.
    *
@@ -126,7 +143,10 @@ export default class StepModal extends Component {
                     tags: func.tags && Object.keys(func.tags).length ? func.tags : undefined,
                   }}
                 />
-                <SourceCode lineOffset={parseInt(func.offset, 10)}>
+                <SourceCode
+                  height={this.state.sourceHeight}
+                  lineOffset={parseInt(func.offset, 10)}
+                >
                   {func.body}
                 </SourceCode>
               </Pane>
@@ -170,7 +190,7 @@ export default class StepModal extends Component {
    */
   render() {
     return (
-      <Modal>
+      <Modal onResizeStop={this.handleModalResize} >
         {this.renderHeader(this.props.step ? this.props.step : this.props)}
         <Modal.Body>
           {this.props.step ? this.renderBody() : this.renderLoader()}
