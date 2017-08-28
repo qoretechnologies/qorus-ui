@@ -99,7 +99,7 @@ export default class ModalRun extends Component {
         responseHeight: responseHeight + (difference / 2) - 70,
       });
     }
-  }
+  };
 
   requestRef = (s) => {
     this._request = s;
