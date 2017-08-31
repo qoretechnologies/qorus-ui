@@ -141,9 +141,12 @@ div.text-component {
   word-wrap: break-word;
 }
 
-
 .main-loading-text {
   margin-top: 150px;
+}
+
+.main-error-text,
+.main-loading-text {
   font-family: 'Nunito';
 }
 
