@@ -90,8 +90,6 @@ export default class ModalRun extends Component {
       querySelectorAll('.modal-body')[0].getBoundingClientRect();
     const difference = bodyHeight - formHeight;
 
-    console.log(bodyHeight);
-
     const { height: requestHeight } = this._request.getBoundingClientRect();
     const { height: responseHeight } = this._response.getBoundingClientRect();
 
