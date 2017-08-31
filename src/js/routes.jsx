@@ -26,8 +26,8 @@ import jobsRoutes from './routes/jobs';
 import jobRoutes from './routes/job';
 import searchRoutes from './routes/search';
 import groupsRoutes from './routes/groups';
+import ErrorView from './error';
 import * as events from './store/apievents/actions';
-
 
 class AppInfo extends React.Component {
 
@@ -67,44 +67,67 @@ class AppInfo extends React.Component {
   };
 
   render() {
-    return (
-      <Router
-        {...this.props.routerProps}
-        render={applyMiddleware(useRelativeLinks())}
-        key={Math.random()}
-      >
-        <Route
-          path="/"
-          component={Root}
-          onEnter={this.requireAuthenticated}
+    if (this.props.info.error) {
+      return (
+        <Router
+          {...this.props.routerProps}
+          render={applyMiddleware(useRelativeLinks())}
+          key={Math.random()}
         >
-          <IndexRedirect to="/system/dashboard" />
-          { dashboardRoutes() }
-          { workflowsRoutes() }
-          { workflowRoutes() }
-          { orderRoutes() }
-          { servicesRoutes() }
-          { jobsRoutes() }
-          { jobRoutes() }
-          { searchRoutes() }
-          { groupsRoutes() }
-          <Route path="ocmd" component={Ocmd} />
-          <Route path="mappers/:id" component={Mapper} />
-          <Route path="library" component={Library} />
-          <Route path="extensions" component={Extensions} />
-          <Route path="extension/:name" component={ExtensionDetail} />
-        </Route>
-        <Route
-          path="/login"
-          component={Login}
-          onEnter={this.requireAnonymous}
-        />
-        <Route
-          path="/logout"
-          onEnter={this.logout}
-        />
-      </Router>
-    );
+          <Route
+            path="/error"
+            component={ErrorView}
+          />
+        </Router>
+      );
+    }
+
+    if (this.props.info.sync) {
+      return (
+        <Router
+          {...this.props.routerProps}
+          render={applyMiddleware(useRelativeLinks())}
+          key={Math.random()}
+        >
+          <Route
+            path="/"
+            component={Root}
+            onEnter={this.requireAuthenticated}
+          >
+            <IndexRedirect to="/system/dashboard" />
+            { dashboardRoutes() }
+            { workflowsRoutes() }
+            { workflowRoutes() }
+            { orderRoutes() }
+            { servicesRoutes() }
+            { jobsRoutes() }
+            { jobRoutes() }
+            { searchRoutes() }
+            { groupsRoutes() }
+            <Route path="ocmd" component={Ocmd} />
+            <Route path="mappers/:id" component={Mapper} />
+            <Route path="library" component={Library} />
+            <Route path="extensions" component={Extensions} />
+            <Route path="extension/:name" component={ExtensionDetail} />
+          </Route>
+          <Route
+            path="/login"
+            component={Login}
+            onEnter={this.requireAnonymous}
+          />
+          <Route
+            path="/logout"
+            onEnter={this.logout}
+          />
+          <Route
+            path="/error"
+            component={ErrorView}
+          />
+        </Router>
+      );
+    }
+
+    return null;
   }
 }
 AppInfo.propTypes = {
@@ -122,13 +145,15 @@ export default compose(
       load: actions.info.fetch,
       logout: actions.logout.logout,
       message: events.message,
+      close: events.disconnect,
     }
   ),
   defaultProps({
     url: 'apievents',
   }),
+  sync('info', false, null, true),
   websocket({
     onMessage: 'message',
-  }, false, false, false),
-  sync('info', true, null, true)
+    onClose: 'close',
+  }, false, false, false)
 )(AppInfo);
