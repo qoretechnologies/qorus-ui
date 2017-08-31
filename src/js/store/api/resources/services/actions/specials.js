@@ -116,6 +116,7 @@ const select = createAction(
 const selectAll = createAction('SERVICES_SELECTALL');
 const selectNone = createAction('SERVICES_SELECTNONE');
 const selectInvert = createAction('SERVICES_SELECTINVERT');
+const selectAlerts = createAction('SERVICES_SELECTALERTS');
 
 const serviceActionCall = createAction(
   'SERVICES_ACTION',
@@ -157,4 +158,5 @@ export {
   serviceAction,
   unsync,
   addNew,
+  selectAlerts,
 };

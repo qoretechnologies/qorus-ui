@@ -14,6 +14,7 @@ type Props = {
   selectAll: Function,
   selectNone: Function,
   selectInvert: Function,
+  selectAlerts: Function,
 };
 
 const ToolbarSelector: Function = ({
@@ -21,6 +22,7 @@ const ToolbarSelector: Function = ({
   selectAll,
   selectNone,
   selectInvert,
+  selectAlerts,
 }: Props): React.Element<any> => (
   <Dropdown
     id="selection"
@@ -45,6 +47,10 @@ const ToolbarSelector: Function = ({
       action={selectInvert}
       title="Invert"
     />
+    <Item
+      action={selectAlerts}
+      title="With alerts"
+    />
   </Dropdown>
 );
 
@@ -55,6 +61,7 @@ export default compose(
       selectAll: actions.jobs.selectAll,
       selectNone: actions.jobs.selectNone,
       selectInvert: actions.jobs.selectInvert,
+      selectAlerts: actions.jobs.selectAlerts,
     }
   ),
   pure(['selected'])

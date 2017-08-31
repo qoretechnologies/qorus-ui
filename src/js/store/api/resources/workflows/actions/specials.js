@@ -111,6 +111,7 @@ const selectNone = createAction('WORKFLOWS_SELECTNONE');
 const selectInvert = createAction('WORKFLOWS_SELECTINVERT');
 const selectRunning = createAction('WORKFLOWS_SELECTRUNNING');
 const selectStopped = createAction('WORKFLOWS_SELECTSTOPPED');
+const selectAlerts = createAction('WORKFLOWS_SELECTALERTS');
 
 const toggleEnabledAction = createAction(
   'WORKFLOWS_ENABLECALL',
@@ -210,6 +211,7 @@ export {
   selectInvert,
   selectRunning,
   selectStopped,
+  selectAlerts,
   toggleEnabled,
   reset,
   setAutostart,

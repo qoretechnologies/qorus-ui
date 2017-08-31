@@ -8,6 +8,7 @@ import {
   selectAll,
   selectNone,
   selectInvert,
+  selectAlerts,
 } from '../../../../helpers/resources';
 
 
@@ -446,6 +447,12 @@ const invertSelection = {
   },
 };
 
+const selectWithAlerts = {
+  next(state = initialState) {
+    return selectAlerts(state);
+  },
+};
+
 const unsync = {
   next() {
     return initialState;
@@ -530,4 +537,5 @@ export {
   reschedule as RESCHEDULE,
   activate as ACTIVATE,
   addNew as ADDNEW,
+  selectWithAlerts as SELECTALERTS,
 };
