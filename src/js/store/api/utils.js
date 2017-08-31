@@ -123,7 +123,7 @@ function getRestHeaders() {
  * @param {Object} res
  * @param {string} currentPath
  */
-function checkResponse(res, currentPath) {
+function checkResponse(res, currentPath, redirectOnError = true) {
   const pathname = window.location.pathname;
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
@@ -134,11 +134,15 @@ function checkResponse(res, currentPath) {
     res.status === 409 ||
     res.status === 400 ||
     res.status === 405 ||
-    res.status >= 500 && res.status < 600
+    res.status > 500 && res.status < 600
   ) {
     const error = new Error();
     error.res = res;
     throw error;
+  } else if (res.status === 500) {
+    if (!redirectOnError) return;
+
+    browserHistory.push(`/error?next=${pathname}`);
   }
 }
 
@@ -155,7 +159,7 @@ function checkResponse(res, currentPath) {
  * @return {Object}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchData(method, url, opts, dontCheck) {
+export async function fetchData(method, url, opts, dontCheck, redirectOnError) {
   const currentPath = window.location.pathname;
   const res = await fetch(
     url,
@@ -166,18 +170,24 @@ export async function fetchData(method, url, opts, dontCheck) {
   );
 
   if (!dontCheck) {
-    checkResponse(res, currentPath);
+    checkResponse(res, currentPath, redirectOnError);
   }
 
   return res;
 }
 
-export async function fetchJson(method, url, opts = {}, dontCheck) {
-  const res = await fetchData(method, url, opts, dontCheck);
+export async function fetchJson(method, url, opts = {}, dontCheck, redirectOnError) {
+  const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   return res.json();
 }
 
-export async function fetchText(method, url, opts, dontCheck) {
-  const res = await fetchData(method, url, opts, dontCheck);
+export async function fetchText(method, url, opts, dontCheck, redirectOnError) {
+  const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   return res.text();
+}
+
+export async function fetchResponse(method, url, opts, dontCheck, redirectOnError) {
+  const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
+
+  return res;
 }

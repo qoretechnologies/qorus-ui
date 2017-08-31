@@ -48,6 +48,19 @@
   box-shadow: rgba(0, 0, 0, .3) 0px 1px 6px, rgba(0, 0, 0, .3) 0px 1px 4px;
 }
 
+.error-wrapper {
+  color: #fff;
+  padding: 15px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#590000+0,c93838+100&0.75+0,0.98+100 */
+  background: -moz-linear-gradient(-45deg, rgba(89,0,0,0.75) 0%, rgba(201,56,56,0.98) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, rgba(89,0,0,0.75) 0%,rgba(201,56,56,0.98) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, rgba(89,0,0,0.75) 0%,rgba(201,56,56,0.98) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf590000', endColorstr='#fac93838',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, .3) 0px 1px 6px, rgba(0, 0, 0, .3) 0px 1px 4px;
+  text-shadow: -1px -1px rgb(97, 21, 21);
+}
+
 .login-footer {
   height: 45px;
   padding: 0 20px;
