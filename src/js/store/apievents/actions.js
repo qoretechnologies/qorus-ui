@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import startsWith from 'lodash/startsWith';
+import { browserHistory } from 'react-router';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
@@ -524,6 +525,13 @@ const message = (url, data) => (dispatch, getState) => {
   dispatch(messageAction(url, data, dispatch, getState()));
 };
 
+const disconnect = () => () => {
+  const { pathname } = window.location;
+
+  browserHistory.push(`/error?next=${pathname}`);
+};
+
 export {
   message,
+  disconnect,
 };

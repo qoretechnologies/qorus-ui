@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 
 import showIfLoaded from './show-if-loaded';
 
-
 /**
  * Returns high order component that need to sync data.
  * if props[propName] doesn't synced or loaded then call load action.
