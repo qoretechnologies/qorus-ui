@@ -8,6 +8,7 @@ import Search from '../../../containers/search';
 import Datepicker from '../../../components/datepicker';
 import queryControl from '../../../hocomponents/queryControl';
 import { Control as Button } from '../../../components/controls';
+import { InfoBar, InfoBarItem } from '../../../components/infobar';
 import Actions from './actions';
 import Selector from './selector';
 
@@ -19,6 +20,10 @@ type Props = {
   dateQuery: string,
   changeDateQuery: Function,
   onCSVClick: Function,
+  collectionCount: number,
+  collectionTotal: number,
+  withAlertsCount: number,
+  enabledCount: number,
 };
 
 const JobsToolbar: Function = ({
@@ -29,29 +34,47 @@ const JobsToolbar: Function = ({
   dateQuery,
   changeDateQuery,
   onCSVClick,
+  collectionCount,
+  collectionTotal,
+  withAlertsCount,
+  enabledCount,
 }: Props): React.Element<any> => (
-  <Toolbar>
-    <Selector selected={selected} />
-    { selected !== 'none' && (
-      <Actions selectedIds={selectedIds} />
+  <div>
+    <Toolbar>
+      <Selector selected={selected} />
+      { selected !== 'none' && (
+        <Actions selectedIds={selectedIds} />
+      )}
+      <Datepicker
+        date={dateQuery || '24h'}
+        onApplyDate={changeDateQuery}
+        className="toolbar-item"
+      />
+      <Button
+        label="CSV"
+        btnStyle="default"
+        big
+        action={onCSVClick}
+      />
+      <Search
+        defaultValue={searchQuery}
+        onSearchUpdate={changeSearchQuery}
+        resource="jobs"
+      />
+    </Toolbar>
+    {collectionCount > 0 && (
+      <InfoBar>
+        {(selectedIds.length > 0) && (
+          <InfoBarItem icon="check" style="success">{ selectedIds.length }</InfoBarItem>
+        )}
+        <InfoBarItem icon="eye" style="info">
+          { collectionCount } of { collectionTotal }
+        </InfoBarItem>
+        <InfoBarItem icon="warning" style="danger">{ withAlertsCount }</InfoBarItem>
+        <InfoBarItem icon="power-off" style="success">{ enabledCount }</InfoBarItem>
+      </InfoBar>
     )}
-    <Datepicker
-      date={dateQuery || '24h'}
-      onApplyDate={changeDateQuery}
-      className="toolbar-item"
-    />
-    <Button
-      label="CSV"
-      btnStyle="default"
-      big
-      action={onCSVClick}
-    />
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-      resource="jobs"
-    />
-  </Toolbar>
+  </div>
 );
 
 export default compose(

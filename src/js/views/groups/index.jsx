@@ -15,6 +15,7 @@ import patch from '../../hocomponents/patchFuncArgs';
 import sync from '../../hocomponents/sync';
 import selectable from '../../hocomponents/selectable';
 import withCSV from '../../hocomponents/csv';
+import withInfoBar from '../../hocomponents/withInfoBar';
 import { sortDefaults } from '../../constants/sort';
 import GroupsToolbar from './toolbar';
 import GroupsTable from './table';
@@ -34,6 +35,9 @@ type Props = {
   handleLoadMore: Function,
   limit: number,
   isTablet: boolean,
+  infoTotalCount: number,
+  infoEnabled: number,
+  infoWithAlerts: number,
 };
 
 const GroupsView: Function = ({
@@ -49,6 +53,9 @@ const GroupsView: Function = ({
   canLoadMore,
   handleLoadMore,
   isTablet,
+  infoEnabled,
+  infoTotalCount,
+  infoWithAlerts,
 }: Props): React.Element<any> => (group ? (
   <GroupsDetail
     {...group}
@@ -60,6 +67,10 @@ const GroupsView: Function = ({
       selectedIds={selectedIds}
       onCSVClick={onCSVClick}
       location={location}
+      collectionCount={groups.length}
+      collectionTotal={infoTotalCount}
+      withAlertsCount={infoWithAlerts}
+      enabledCount={infoEnabled}
     />
     <GroupsTable
       collection={groups}
@@ -138,6 +149,7 @@ export default compose(
       load: actions.groups.fetch,
     }
   ),
+  withInfoBar('groups'),
   withSort('groups', 'groups', sortDefaults.groups),
   loadMore('groups', 'groups', true, 50),
   withProps({
