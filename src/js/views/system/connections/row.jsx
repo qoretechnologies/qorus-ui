@@ -8,11 +8,12 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import { Tr, Td } from '../../../components/new_table';
 import { Controls, Control as Button } from '../../../components/controls';
-import Autocomponent from '../../../components/autocomponent';
+import DetailButton from '../../../components/detail_button';
 import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
+import Badge from '../../../components/badge';
 
 type Props = {
   name: string,
@@ -29,6 +30,7 @@ type Props = {
   openModal: Function,
   closeModal: Function,
   openPane: Function,
+  closePane: Function,
   deleteConnection: Function,
   up?: boolean,
   safe_url?: string,
@@ -63,14 +65,17 @@ const ConnectionRow: Function = ({
     highlight={_updated}
     handleHighlightEnd={handleHighlightEnd}
   >
-    <Td className="narrow">
-      <Autocomponent>{up}</Autocomponent>
+    <Td
+      className={
+        classnames('normal', up ? 'positive-background' : 'negative-background')
+      }
+    >
+      <Badge val={up ? 'UP' : 'DOWN'} label={up ? 'success' : 'danger'} />
     </Td>
     <Td className="narrow">
-      <Button
-        label="Detail"
-        btnStyle="success"
+      <DetailButton
         onClick={handleDetailClick}
+        active={isActive}
       />
     </Td>
     {canDelete && (
@@ -135,8 +140,12 @@ export default compose(
     handleHighlightEnd: ({ name, updateDone }: Props): Function => (): void => {
       updateDone(name);
     },
-    handleDetailClick: ({ name, openPane }: Props): Function => (): void => {
-      openPane(name);
+    handleDetailClick: ({ name, openPane, isActive, closePane }: Props): Function => (): void => {
+      if (isActive) {
+        closePane();
+      } else {
+        openPane(name);
+      }
     },
     handlePingClick: ({ name, remoteType, openModal, closeModal }: Props): Function => (): void => {
       openModal(
