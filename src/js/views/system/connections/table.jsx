@@ -43,6 +43,7 @@ type Props = {
   handleHighlightEnd: Function,
   paneId: string,
   openPane: Function,
+  closePane: Function,
   sortData: Object,
   onSortChange: Function,
   params: Object,
@@ -99,6 +100,7 @@ const ConnectionTable: Function = ({
   onSortChange,
   paneId,
   openPane,
+  closePane,
   remotes,
   type,
   canLoadMore,
@@ -137,7 +139,7 @@ const ConnectionTable: Function = ({
           sortData={sortData}
           onSortChange={onSortChange}
         >
-          <Th className="narrow" name="up">Up</Th>
+          <Th className="normal" name="up">Status</Th>
           <Th className="narrow">-</Th>
           {canDelete && (
             <Th className="narrow">Delete</Th>
@@ -162,6 +164,7 @@ const ConnectionTable: Function = ({
             isActive={remote.name === paneId}
             hasAlerts={remote.alerts.length > 0}
             openPane={openPane}
+            closePane={closePane}
             remoteType={type}
             canDelete={canDelete}
             {...remote}

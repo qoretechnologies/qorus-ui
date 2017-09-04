@@ -192,3 +192,11 @@ svg.preloader {
 .cpointer {
   cursor: pointer;
 }
+
+.positive-background {
+  background-color: $status-light-green;
+}
+
+.negative-background {
+  background-color: $status-light-red;
+}
