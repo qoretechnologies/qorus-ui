@@ -128,6 +128,8 @@ export default class PropertiesView extends Component {
         key={key}
         onDelete={this.handleDeleteClick}
         onEdit={this.handleAddClick}
+        openModal={this.props.openModal}
+        closeModal={this.props.closeModal}
       />
     ));
   }

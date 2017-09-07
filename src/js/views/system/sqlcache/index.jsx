@@ -7,10 +7,12 @@ import { flowRight, pickBy, includes } from 'lodash';
 
 import Toolbar from '../../../components/toolbar';
 import Container from '../../../components/container';
+import ConfirmDialog from '../../../components/confirm_dialog';
 import Search from '../../../containers/search';
 import { Control as Button } from '../../../components/controls';
 import search from '../../../hocomponents/search';
 import sync from '../../../hocomponents/sync';
+import withModal from '../../../hocomponents/modal';
 import Table from './table';
 
 import actions from '../../../store/api/actions';
@@ -58,19 +60,57 @@ class SQLCache extends Component {
     collection: Object,
     query: ?string,
     onSearchChange: Function,
-    clearCache: Function
+    clearCache: Function,
+    openModal: Function,
+    closeModal: Function,
   };
 
   handleClearAllClick: Function = (): void => {
-    this.props.clearCache();
+    const confirmFunc: Function = (): void => {
+      this.props.clearCache();
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={confirmFunc}
+      >
+        Are you sure you want to clear <strong>all</strong> cache?
+      </ConfirmDialog>
+    );
   };
 
   handleClearDatasourceClick: Function = (datasource): void => {
-    this.props.clearCache(datasource);
+    const confirmFunc: Function = (): void => {
+      this.props.clearCache(datasource);
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={confirmFunc}
+      >
+        Are you sure you want to clear cache of datasource <strong>{datasource}</strong>?
+      </ConfirmDialog>
+    );
   };
 
   handleClearSingleClick: Function = (datasource, name): void => {
-    this.props.clearCache(datasource, name);
+    const confirmFunc: Function = (): void => {
+      this.props.clearCache(datasource, name);
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={confirmFunc}
+      >
+        Are you sure you want to clear cache <strong>{name}</strong> of datasource {datasource}?
+      </ConfirmDialog>
+    );
   };
 
   render() {
@@ -123,5 +163,6 @@ export default compose(
     }
   ),
   search(),
-  sync('sqlcache')
+  sync('sqlcache'),
+  withModal()
 )(SQLCache);

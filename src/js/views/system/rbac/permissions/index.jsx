@@ -10,6 +10,7 @@ import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
+import ConfirmDialog from '../../../../components/confirm_dialog';
 import AddButton from '../add_button';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
@@ -123,7 +124,19 @@ export default class RBACPerms extends Component {
   };
 
   handleRemovePermClick: Function = (name): void => {
-    this.props.removePerm(name);
+    const handleConfirm: Function = (): void => {
+      this.props.removePerm(name);
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={handleConfirm}
+      >
+        Are you sure you want to delete the permission <strong>{name}</strong>?
+      </ConfirmDialog>
+    );
   };
 
   render() {
