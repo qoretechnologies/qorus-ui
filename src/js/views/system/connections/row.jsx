@@ -14,6 +14,7 @@ import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
 import Badge from '../../../components/badge';
+import ConfirmDialog from '../../../components/confirm_dialog';
 
 type Props = {
   name: string,
@@ -156,8 +157,26 @@ export default compose(
         />
       );
     },
-    handleDeleteClick: ({ deleteConnection, name, remoteType }: Props): Function => (): void => {
-      deleteConnection(remoteType, name);
+    handleDeleteClick: ({
+      deleteConnection,
+      name,
+      remoteType,
+      openModal,
+      closeModal,
+    }: Props): Function => (): void => {
+      const handleConfirm: Function = (): void => {
+        deleteConnection(remoteType, name);
+        closeModal();
+      };
+
+      openModal(
+        <ConfirmDialog
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          Are you sure you want to delete the {remoteType} <strong>{name}</strong> ?
+        </ConfirmDialog>
+      );
     },
   }),
   pure([

@@ -15,6 +15,7 @@ import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
 import Search from '../../containers/search';
 import Toolbar from '../../components/toolbar';
+import ConfirmDialog from '../../components/confirm_dialog';
 import { Control as Button } from '../../components/controls';
 import Table from './table';
 import ErrorModal from './modal';
@@ -77,7 +78,19 @@ const ErrorsContainer: Function = ({
   };
 
   const handleDeleteClick: Function = (name) => {
-    removeError(type, id, name);
+    const handleConfirm = (): void => {
+      removeError(type, id, name);
+      closeModal();
+    };
+
+    openModal(
+      <ConfirmDialog
+        onClose={closeModal}
+        onConfirm={handleConfirm}
+      >
+        Are you sure you want to remove the error <strong>{name}</strong>?
+      </ConfirmDialog>
+    );
   };
 
   return (

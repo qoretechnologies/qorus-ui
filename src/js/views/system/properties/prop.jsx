@@ -9,6 +9,7 @@ import PermButton from './perm_control';
 import { Controls } from '../../../components/controls';
 import Text from '../../../components/text';
 import Icon from '../../../components/icon';
+import ConfirmDialog from '../../../components/confirm_dialog';
 
 type Props = {
   data: Object,
@@ -19,6 +20,8 @@ type Props = {
   expanded: boolean,
   setExpanded: Function,
   handleExpandClick: Function,
+  openModal: Function,
+  closeModal: Function,
 }
 
 const Property: Function = ({
@@ -29,13 +32,39 @@ const Property: Function = ({
   onEdit,
   expanded,
   handleExpandClick,
+  openModal,
+  closeModal,
 }: Props): React.Element<any> => {
   const handlePropDeleteClick = (): void => {
-    onDelete({ domain: title });
+    const confirmFunc = () => {
+      onDelete({ domain: title });
+      closeModal();
+    };
+
+    openModal(
+      <ConfirmDialog
+        onClose={closeModal}
+        onConfirm={confirmFunc}
+      >
+        Are you sure you want to delete the property group <strong>{title}</strong>
+      </ConfirmDialog>
+    );
   };
 
   const handleKeyDeleteClick = (key: string): Function => (): void => {
-    onDelete({ domain: title, key });
+    const confirmFunc = () => {
+      onDelete({ domain: title, key });
+      closeModal();
+    };
+
+    openModal(
+      <ConfirmDialog
+        onClose={closeModal}
+        onConfirm={confirmFunc}
+      >
+        Are you sure you want to delete the property key <strong>{key}</strong>
+      </ConfirmDialog>
+    );
   };
 
   const handleEditClick = (key: string, value: string): Function => (): void => {
