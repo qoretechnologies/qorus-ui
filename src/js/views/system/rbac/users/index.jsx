@@ -10,6 +10,7 @@ import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
+import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
 import Modal from './modal';
@@ -128,7 +129,19 @@ export default class RBACUsers extends Component {
   };
 
   handleRemoveUserClick: Function = (username): void => {
-    this.props.removeUser(username);
+    const handleConfirm: Function = (): void => {
+      this.props.removeUser(username);
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={handleConfirm}
+      >
+        Are you sure you want to delete the user <strong>{username}</strong>?
+      </ConfirmDialog>
+    );
   };
 
   render() {

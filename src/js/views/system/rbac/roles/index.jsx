@@ -10,6 +10,7 @@ import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
+import ConfirmDialog from '../../../../components/confirm_dialog';
 import AddButton from '../add_button';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
@@ -147,7 +148,19 @@ export default class RBACRoles extends Component {
   };
 
   handleRemoveRoleClick: Function = (role): void => {
-    this.props.removeRole(role);
+    const handleConfirm: Function = (): void => {
+      this.props.removeRole(role);
+      this.props.closeModal();
+    };
+
+    this.props.openModal(
+      <ConfirmDialog
+        onClose={this.props.closeModal}
+        onConfirm={handleConfirm}
+      >
+        Are you sure you want to delete the role <strong>{role}</strong>?
+      </ConfirmDialog>
+    );
   };
 
   render() {
