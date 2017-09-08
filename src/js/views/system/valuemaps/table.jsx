@@ -36,8 +36,9 @@ const ValuemapsTable: Function = ({
   >
     <Thead>
       <Tr {...{ sortData, onSortChange }}>
-        <Th name="name" className="name">Name</Th>
+        <Th className="tiny"> - </Th>
         <Th className="narrow">Detail</Th>
+        <Th name="name" className="name">Name</Th>
         <Th name="desc">Description</Th>
         <Th name="author">Author</Th>
         <Th name="valuetype" className="medium">Type</Th>
