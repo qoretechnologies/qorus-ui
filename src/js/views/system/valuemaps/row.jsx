@@ -66,13 +66,14 @@ export default class ValuemapRow extends Component {
 
     return (
       <Tr>
-        <Td className="name">{ data.name }</Td>
+        <Td className="tiny"> - </Td>
         <Td className="narrow">
           <DetailButton
             active={isActive}
             onClick={this.handleDetailClick}
           />
         </Td>
+        <Td className="name">{ data.name }</Td>
         <Td className="text">{ data.description }</Td>
         <Td className="text">{ data.author }</Td>
         <Td className="medium"><code>{ data.valuetype }</code></Td>
