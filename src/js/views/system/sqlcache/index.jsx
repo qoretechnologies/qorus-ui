@@ -140,6 +140,7 @@ class SQLCache extends Component {
                 key={index}
                 name={col}
                 data={this.props.collection[col].tables}
+                dataLen={Object.keys(this.props.collection[col].tables)}
                 onClick={this.handleClearDatasourceClick}
                 onSingleClick={this.handleClearSingleClick}
               />
