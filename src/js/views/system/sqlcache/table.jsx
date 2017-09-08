@@ -13,6 +13,7 @@ import CacheRow from './row';
 type Props = {
   name: string,
   data: Object,
+  dataLen: number,
   onClick: Function,
   onSingleClick: Function,
   expanded: boolean,
@@ -94,6 +95,6 @@ export default compose(
   }),
   pure([
     'expanded',
-    'data',
+    'dataLen',
   ])
 )(SQLCacheTable);
