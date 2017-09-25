@@ -269,6 +269,37 @@ const activate = (id, active) => dispatch => {
   activateAction(id, active, dispatch);
 };
 
+const setSLAJob = createAction(
+  'JOBS_SETSLAJOB',
+  (job, sla): Object => {
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`,
+      null,
+      true
+    );
+
+    return {};
+  }
+);
+
+const removeSLAJob = createAction(
+  'JOBS_REMOVESLAJOB',
+  (job, sla): Object => {
+    const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
+    const args = `action=removeJob&job=${job}`;
+
+    fetchJson(
+      'PUT',
+      url + args,
+      null,
+      true
+    );
+
+    return {};
+  }
+);
+
 
 const selectAll = createAction('JOBS_SELECTALL');
 const selectNone = createAction('JOBS_SELECTNONE');
@@ -304,4 +335,6 @@ export {
   expireAction,
   addNew,
   selectAlerts,
+  setSLAJob,
+  removeSLAJob,
 };

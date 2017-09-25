@@ -185,6 +185,16 @@ export function createResourceReducers(
         sort: 'Name',
         sortDir: 'Descending',
       };
+    } else if (resource === 'slaevents') {
+      initState = {
+        data: [],
+        sync: false,
+        loading: false,
+        offset: 0,
+        limit: 50,
+        sort: 'sla_eventid',
+        sortDir: true,
+      };
     }
 
     const inState = Object.assign({}, initState, resourceOrigin.initialState);

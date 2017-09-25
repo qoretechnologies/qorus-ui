@@ -18,3 +18,6 @@ export * as extensions from './extensions/reducers';
 export * as orderErrors from './orderErrors/reducers';
 export * as systemOptions from './options/reducers';
 export * as releases from './releases/reducers';
+export * as slas from './slas/reducers';
+export * as slaevents from './slas/events/reducers';
+export * as slaperf from './slas/perf/reducers';

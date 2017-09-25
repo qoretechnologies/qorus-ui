@@ -107,4 +107,16 @@ export const sortDefaults = {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  slas: {
+    sortBy: 'slaid',
+    sortByKey: { ignoreCase: true, direction: -1 },
+  },
+  slaevents: {
+    sortBy: 'sla_eventid',
+    sortByKey: { ignoreCase: true, direction: -1 },
+  },
+  slamethods: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };

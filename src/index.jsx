@@ -26,7 +26,7 @@ if (isSupported(window.navigator.userAgent)) {
   );
 
   // Hot Module Replacement API
-  if (module.hot && !process.env.TESTINST) {
+  /* if (module.hot && !process.env.TESTINST) {
     module.hot.decline('./js/routes.jsx');
     module.hot.accept('./js/app', () => {
       const NextApp = require('./js/app').default;
@@ -37,7 +37,7 @@ if (isSupported(window.navigator.userAgent)) {
         document.body.firstElementChild
       );
     });
-  }
+  }*/
 } else {
   const notSupported = document.getElementById('not-supported');
   notSupported.style.display = 'block';
