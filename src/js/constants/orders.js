@@ -79,6 +79,21 @@ export const DATASETS = {
   minprocessing: 'rgba(181,181,169,1)',
 };
 
+export const SLADATASETS = {
+  maxprocessing: {
+    background: 'rgba(193, 9, 9, 1)',
+    label: 'Max',
+  },
+  avgprocessing: {
+    background: 'rgb(234, 189, 28)',
+    label: 'Average',
+  },
+  minprocessing: {
+    background: 'rgb(75, 173, 32)',
+    label: 'Min',
+  },
+};
+
 export const DOUGH_LABELS = {
   'READY/SCHD': '#8ddc6d',
   'RUN/WAIT': '#e5d957',
