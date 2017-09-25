@@ -1,16 +1,20 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import { getMaxValue, getStepSize, scaleData, getUnit } from '../../helpers/chart';
+import {
+  getMaxValue, getStepSize, scaleData, getUnit, getFormattedValue,
+} from '../../helpers/chart';
 
 @pure([
   'width',
   'height',
   'labels',
   'datasets',
+  'xAxisLabel',
+  'yAxisLabel',
 ])
 export default class ChartComponent extends Component {
   static defaultProps = {
@@ -18,6 +22,7 @@ export default class ChartComponent extends Component {
     height: 200,
     type: 'line',
     beginAtZero: true,
+    isTime: true,
   };
 
   props: {
@@ -30,6 +35,8 @@ export default class ChartComponent extends Component {
     yAxisLabel: string,
     xAxisLabel: string,
     beginAtZero: boolean,
+    unit?: string,
+    isTime: boolean,
   };
 
   state: {
@@ -55,8 +62,14 @@ export default class ChartComponent extends Component {
       chart.data.datasets = datasets;
 
       if (nextProps.type === 'line') {
-        chart.options.scales.yAxes[0].ticks.callback = (val) => val + unit;
+        chart.options.scales.yAxes[0].ticks.callback = (val) => (
+          getFormattedValue(val, datasets) + unit
+        );
         chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
+        chart.options.scales.xAxes[0].scaleLabel.labelString = nextProps.xAxisLabel;
+        chart.options.tooltips.callbacks.label = (item) => (
+          getFormattedValue(item.yLabel, nextProps.datasets) + unit
+        );
       }
 
       chart.update();
@@ -64,7 +77,7 @@ export default class ChartComponent extends Component {
   }
 
   getOptionsData(data: Array<Object>): Object {
-    const unit: string = getUnit(getMaxValue(data));
+    const unit: string = this.props.unit || getUnit(getMaxValue(data));
     const stepSize: number = getStepSize(data);
 
     return {
@@ -81,6 +94,7 @@ export default class ChartComponent extends Component {
         display: false,
       },
       animation: false,
+      maintainAspectRatio: false,
     };
 
     switch (this.props.type) {
@@ -91,7 +105,7 @@ export default class ChartComponent extends Component {
             mode: 'label',
             callbacks: {
               label(item) {
-                return Math.round(item.yLabel);
+                return getFormattedValue(item.yLabel, data) + unit;
               },
             },
           },
@@ -100,7 +114,7 @@ export default class ChartComponent extends Component {
               ticks: {
                 min: 0,
                 stepSize,
-                callback: (val) => val + unit,
+                callback: (val) => getFormattedValue(val, data) + unit,
               },
               scaleLabel: {
                 display: true,
@@ -123,7 +137,7 @@ export default class ChartComponent extends Component {
   renderChart: Function = (props: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.chart);
     const options: Object = this.getOptions(props.datasets);
-    const datasets: Array<Object> = scaleData(props.datasets);
+    const datasets: Array<Object> = scaleData(props.datasets, this.props.isTime);
     const chart: Object = new Chart(el, {
       type: props.type,
       data: {
@@ -187,15 +201,3 @@ export default class ChartComponent extends Component {
     );
   }
 }
-
-ChartComponent.propTypes = {
-  id: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  type: PropTypes.string,
-  labels: PropTypes.array,
-  datasets: PropTypes.arrayOf(PropTypes.object),
-  yAxisLabel: PropTypes.string,
-  xAxisLabel: PropTypes.string,
-  beginAtZero: PropTypes.bool,
-};
