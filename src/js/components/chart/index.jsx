@@ -36,7 +36,7 @@ export default class ChartComponent extends Component {
     xAxisLabel: string,
     beginAtZero: boolean,
     unit?: string,
-    isTime: boolean,
+    isNotTime?: boolean,
   };
 
   state: {
@@ -56,7 +56,7 @@ export default class ChartComponent extends Component {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
       const datasets = nextProps.type === 'line' ?
-        scaleData(nextProps.datasets) : nextProps.datasets;
+        scaleData(nextProps.datasets, nextProps.isNotTime) : nextProps.datasets;
 
       chart.data.labels = nextProps.labels;
       chart.data.datasets = datasets;
@@ -137,7 +137,7 @@ export default class ChartComponent extends Component {
   renderChart: Function = (props: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.chart);
     const options: Object = this.getOptions(props.datasets);
-    const datasets: Array<Object> = scaleData(props.datasets, this.props.isTime);
+    const datasets: Array<Object> = scaleData(props.datasets, this.props.isNotTime);
     const chart: Object = new Chart(el, {
       type: props.type,
       data: {

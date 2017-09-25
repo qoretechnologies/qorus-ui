@@ -34,8 +34,8 @@ const getStepSize = (data) => {
   return maxValue === 0 ? 1 : Math.round(maxValue / 4);
 };
 
-const scaleData = (data, isTime) => {
-  if (!isTime) return data;
+const scaleData = (data, isNotTime) => {
+  if (isNotTime) return data;
 
   const maxValue = getMaxValue(data);
 

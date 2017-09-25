@@ -84,7 +84,7 @@ const SLAPerf: Function = ({
           height={350}
           yAxisLabel="Number of events"
           unit={' '}
-          isTime={false}
+          isNotTime
           xAxisLabel={capitalize(rest.groupingQuery) || 'Hourly'}
           labels={countChartData.labels}
           datasets={countChartData.data}
