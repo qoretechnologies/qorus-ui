@@ -5,7 +5,10 @@ export default function MethodsTab(props) {
   return (
     <div>
       <div className="svc__methods">
-        <MethodsTable service={ props.service } />
+        <MethodsTable
+          service={props.service}
+          methods={props.service.methods}
+        />
       </div>
     </div>
   );
