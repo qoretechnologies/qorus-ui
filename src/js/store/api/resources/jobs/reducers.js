@@ -495,6 +495,18 @@ const activate = {
   },
 };
 
+const setSLAJob = {
+  next(state) {
+    return state;
+  },
+};
+
+const removeSLAJob = {
+  next(state) {
+    return state;
+  },
+};
+
 const expire = {
   next(state = initialState, { payload: { id, date, error } }) {
     const data = [...state.data];
@@ -538,4 +550,6 @@ export {
   activate as ACTIVATE,
   addNew as ADDNEW,
   selectWithAlerts as SELECTALERTS,
+  setSLAJob as SETSLAJOB,
+  removeSLAJob as REMOVESLAJOB,
 };

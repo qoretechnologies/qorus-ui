@@ -135,6 +135,33 @@ const serviceActionCall = createAction(
   }
 );
 
+const setSLAMethod = createAction(
+  'SERVICES_SETMETHOD',
+  (service, method, sla): Object => {
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/slas/${sla}?action=setMethod&service=${service}&method=${method}`,
+      null,
+      true
+    );
+  }
+);
+
+const removeSLAMethod = createAction(
+  'SERVICES_REMOVEMETHOD',
+  (service, method, sla): Object => {
+    const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
+    const args = `action=removeMethod&service=${service}&method=${method}`;
+
+    fetchJson(
+      'PUT',
+      url+args,
+      null,
+      true
+    );
+  }
+);
+
 const serviceAction = (action, ids, autostart) => dispatch => {
   serviceActionCall(action, ids, autostart, dispatch);
 };
@@ -159,4 +186,6 @@ export {
   unsync,
   addNew,
   selectAlerts,
+  setSLAMethod,
+  removeSLAMethod,
 };
