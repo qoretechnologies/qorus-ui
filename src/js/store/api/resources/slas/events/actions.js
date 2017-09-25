@@ -2,7 +2,6 @@ import { createAction } from 'redux-actions';
 
 import { fetchJson } from '../../../utils';
 import settings from '../../../../../settings';
-import { error, success } from '../../../../ui/bubbles/actions';
 
 const fetchEvents = createAction(
   'SLAEVENTS_FETCHEVENTS',

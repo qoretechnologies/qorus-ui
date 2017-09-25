@@ -21,8 +21,6 @@ const changeOffset: Object = {
   next(state: Object = {}, { payload: { newOffset } }: Object): Object {
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
-    console.log(offset);
-
     return { ...state, ...{ offset } };
   },
 };

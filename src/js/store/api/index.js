@@ -197,8 +197,6 @@ export function createResourceReducers(
       };
     }
 
-    console.log(resource);
-
     const inState = Object.assign({}, initState, resourceOrigin.initialState);
 
     reducers[resource] = handleActions(handlers, inState);

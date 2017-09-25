@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 
 import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
-import { error, success } from '../../../ui/bubbles/actions';
+import { error } from '../../../ui/bubbles/actions';
 
 const removeSla: Function = createAction(
   'SLAS_REMOVESLA',
