@@ -1,6 +1,6 @@
 import { ORDER_GROUPS } from '../constants/orders';
-import { max, flatten, range, values } from 'lodash';
-import { DATASETS, DOUGH_LABELS } from '../constants/orders';
+import { max, flatten, range, values, round } from 'lodash';
+import { DATASETS, SLADATASETS, DOUGH_LABELS } from '../constants/orders';
 import moment from 'moment';
 
 const groupOrders = (data) => {
@@ -34,7 +34,9 @@ const getStepSize = (data) => {
   return maxValue === 0 ? 1 : Math.round(maxValue / 4);
 };
 
-const scaleData = (data) => {
+const scaleData = (data, isTime) => {
+  if (!isTime) return data;
+
   const maxValue = getMaxValue(data);
 
   return data.map(dataset => {
@@ -92,6 +94,54 @@ const createLineDatasets = (data, days) => {
   };
 };
 
+const createPerfLineDatasets = (data, type, countChart) => {
+  const labels = data.map(datum => datum.grouping);
+  const dt = [];
+
+  labels.forEach(l => {
+    const m = data.find(d => d.grouping === l);
+
+    if (countChart) {
+      dt.count = dt.count || {
+        data: [],
+        label: 'Count',
+        backgroundColor: 'rgba(244, 66, 113, 1)',
+        borderColor: 'rgba(244, 66, 113, 1)',
+        fill: false,
+      };
+
+      if (m) {
+        dt.count.data.push(m.count);
+      } else {
+        dt.count.data.push(0);
+      }
+    } else {
+      Object.keys(SLADATASETS).forEach(ds => {
+        dt[ds] = dt[ds] || {
+          data: [],
+          label: SLADATASETS[ds].label,
+          backgroundColor: SLADATASETS[ds].background,
+          borderColor: SLADATASETS[ds].background,
+          fill: false,
+        };
+
+        if (m) {
+          const val = m[ds];
+
+          dt[ds].data.push(val);
+        } else {
+          dt[ds].data.push(0);
+        }
+      });
+    }
+  });
+
+  return {
+    labels,
+    data: values(dt),
+  };
+};
+
 const createDoughDatasets = (data) => {
   const labels = Object.keys(DOUGH_LABELS);
   const dt = [{
@@ -110,9 +160,22 @@ const getUnit = (val) => {
     return 'h';
   } else if (val >= 60) {
     return 'm';
+  } else if (val < 0.1) {
+    return 'ms';
   }
 
   return 's';
+};
+
+const getFormattedValue: Function = (val: number, data) => {
+  let value: number = val;
+  const maxValue: number = getMaxValue(data);
+
+  if (maxValue < 1) {
+    value *= 1000;
+  }
+
+  return round(value, 2);
 };
 
 export {
@@ -121,6 +184,8 @@ export {
   getStepSize,
   scaleData,
   createLineDatasets,
+  createPerfLineDatasets,
   createDoughDatasets,
   getUnit,
+  getFormattedValue,
 };
