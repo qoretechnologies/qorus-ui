@@ -3,6 +3,10 @@ import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 
 import System from '../views/system';
+import Sla from '../views/system/slas/detail';
+import SlaEvents from '../views/system/slas/detail/events';
+import SlaSources from '../views/system/slas/detail/methods';
+import SlaPerf from '../views/system/slas/detail/perf';
 
 const DashboardRoutes = (): React.Element<any> => (
   <Route path="/system" component={System}>
@@ -23,6 +27,13 @@ const DashboardRoutes = (): React.Element<any> => (
       <Route path=":type" component={System.Connections.Table} />
     </Route>
     <Route path="props" component={System.Properties} />
+    <Route path="slas" component={System.Slas} />
+    <Route path="sla/:id" component={Sla}>
+      <IndexRedirect to="events" />
+      <Route path="events" component={SlaEvents} />
+      <Route path="sources" component={SlaSources} />
+      <Route path="perf" component={SlaPerf} />
+    </Route>
     <Route path="values" component={System.Valuemaps} />
     <Route path="sqlcache" component={System.SqlCache} />
     <Route path="http" component={System.HttpServices} />

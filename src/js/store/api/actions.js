@@ -22,6 +22,9 @@ import * as valuemapsActions from './resources/valuemaps/actions';
 import * as extensionsActions from './resources/extensions/actions';
 import * as orderErrorsActions from './resources/orderErrors/actions';
 import * as releasesActions from './resources/releases/actions';
+import * as slasActions from './resources/slas/actions';
+import * as slaEventsActions from './resources/slas/events/actions';
+import * as slaPerfActions from './resources/slas/perf/actions';
 
 import {
   combineResourceActions,
@@ -117,6 +120,12 @@ Object.assign(actions.extensions, extensionsActions);
 Object.assign(actions.orderErrors, orderErrorsActions);
 
 Object.assign(actions.releases, releasesActions);
+
+Object.assign(actions.slas, slasActions);
+
+Object.assign(actions.slaevents, slaEventsActions);
+
+Object.assign(actions.slaperf, slaPerfActions);
 
 Object.keys(orderActions.delegates).forEach(a => {
   actions.orders[a] = orderActions.delegates[a](actions);

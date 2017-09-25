@@ -208,4 +208,16 @@ export default [
     name: 'releases',
     url: `${settings.REST_BASE_URL}/releases?with_components=1`,
   },
+  {
+    name: 'slas',
+    url: `${settings.REST_BASE_URL}/slas`,
+  },
+  {
+    name: 'slaevents',
+    url: `${settings.REST_BASE_URL}/slas`,
+  },
+  {
+    name: 'slaperf',
+    url: `${settings.REST_BASE_URL}/slas`,
+  },
 ];
