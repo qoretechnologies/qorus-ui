@@ -34,7 +34,8 @@ const SQLCacheRow: Function = (
       </Td>
       <Td className="narrow">
         <Button
-          icon="trash-o"
+          title="Clear SQL cache entry"
+          label="Clear"
           btnStyle="danger"
           action={handleClick}
         />
