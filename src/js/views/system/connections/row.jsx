@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Link } from 'react-router';
 
 import { Tr, Td } from '../../../components/new_table';
 import { Controls, Control as Button } from '../../../components/controls';
@@ -111,7 +112,9 @@ const ConnectionRow: Function = ({
       </Td>
     ) : (
       <Td className="text">
-        <Text text={safeUrl || url} />
+        <p title={safeUrl || url}>
+          <Link className="resource-link" to={safeUrl || url}>{safeUrl || url}</Link>
+        </p>
       </Td>
     )}
     <Td className="text">
