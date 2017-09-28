@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import { Link } from 'react-router';
 
 import { Table, Thead, Tbody, Tr, Th, Td } from '../../../../../components/new_table';
 import Autocomponent from '../../../../../components/autocomponent';
@@ -48,21 +49,35 @@ const SLAEventsTable: Function = ({
       </Tr>
     </Thead>
     <Tbody>
-      {collection.map((event: Object): React.Element<any> => (
-        <Tr key={event.sla_eventid}>
-          <Td className="narrow">{event.sla_eventid}</Td>
-          <Td className="text">{event.err}</Td>
-          <Td className="text">{event.errdesc}</Td>
-          <Td className="text">{event.producer}</Td>
-          <Td className="big">
+      {collection.map((event: Object): React.Element<any> => {
+        const producerSplit = event.producer.split(' ');
+        const producerType = producerSplit[0] === 'job' ? 'job' : 'services';
+        const producerId = producerSplit[producerSplit.length - 1];
+        const producerResourceId = producerSplit[3].replace('(', '').replace(')', '');
+        const producerUrl = producerType === 'job' ? (
+          `/job/${producerResourceId}/results?job=${producerId}`
+        ) : (
+          `/services?paneId=${producerResourceId}`
+        );
+
+        return (
+          <Tr key={event.sla_eventid}>
+            <Td className="narrow">{event.sla_eventid}</Td>
+            <Td className="text">{event.err}</Td>
+            <Td className="text">{event.errdesc}</Td>
+            <Td className="text">
+              <Link to={producerUrl}>{event.producer}</Link>
+            </Td>
+            <Td className="big">
               <Date date={event.created} />
-          </Td>
-          <Td className="tiny">
-            <Autocomponent>{event.success}</Autocomponent>
-          </Td>
-          <Td className="text">{event.value}</Td>
-        </Tr>
-      ))}
+            </Td>
+            <Td className="tiny">
+              <Autocomponent>{event.success}</Autocomponent>
+            </Td>
+            <Td className="text">{event.value}</Td>
+          </Tr>
+        );
+      })}
     </Tbody>
   </Table>
 );
