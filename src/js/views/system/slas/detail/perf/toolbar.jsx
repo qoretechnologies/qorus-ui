@@ -52,7 +52,7 @@ export default class SearchToolbar extends Component {
     grouping: string,
     success: string,
   } = {
-    minDate: this.props.minDateQuery,
+    minDate: this.props.minDateQuery || this.props.defaultDate,
     maxDate: this.props.maxDateQuery,
     err: this.props.errQuery,
     errDesc: this.props.errDescQuery,
@@ -64,7 +64,7 @@ export default class SearchToolbar extends Component {
   componentWillReceiveProps(nextProps: Props) {
     if (this.props !== nextProps) {
       this.setState({
-        minDate: nextProps.minDateQuery,
+        minDate: nextProps.minDateQuery || this.props.defaultDate,
         maxDate: nextProps.maxDateQuery,
         err: nextProps.errQuery,
         errDesc: nextProps.errDescQuery,
