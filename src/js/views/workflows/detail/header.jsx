@@ -30,6 +30,11 @@ export default class WorkflowsHeader extends Component {
             <span className="selectable">
               {this.props.workflow.normalizedName}
             </span>
+            <p>
+              <small>
+                <em>{this.props.workflow.description}</em>
+              </small>
+            </p>
           </h3>
         </div>
         <div className="col-xs-12 pane__controls">

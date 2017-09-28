@@ -11,6 +11,7 @@ import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
+import Author from '../../components/author';
 import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
 import Container from '../../components/container';
@@ -39,6 +40,7 @@ const MapperInfo = ({
         <small>({ mapper.version })</small>
       </h3>
       <p className="mapper-subtitle">{ mapper.desc }</p>
+      <Author model={mapper} />
       <p className="mapper-desc">
         <span> Type </span>: { mapper.type }
       </p>

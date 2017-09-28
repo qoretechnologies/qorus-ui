@@ -4,6 +4,7 @@ import Options from '../../../components/options';
 import { connect } from 'react-redux';
 
 import AlertsTab from '../../../components/alerts_table';
+import Author from '../../../components/author';
 import actions from 'store/api/actions';
 
 @connect(
@@ -30,6 +31,7 @@ export default class DetailTab extends Component {
   render() {
     return (
       <div>
+        <Author model={this.props.workflow} />
         <AlertsTab alerts={this.props.workflow.alerts} />
         <Groups>
           {

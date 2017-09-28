@@ -118,7 +118,7 @@ export default class WorkflowsDetail extends Component {
             tabChange={this.props.changePaneTab}
           >
             <Pane name="Detail">
-              <DetailTab workflow={workflow} systemOptions={systemOptions} />
+              <DetailTab key={workflow.name} workflow={workflow} systemOptions={systemOptions} />
             </Pane>
             <Pane name="Code">
               <Code

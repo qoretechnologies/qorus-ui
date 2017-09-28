@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { Groups, Group } from 'components/groups';
+import Author from 'components/author';
 import Options from 'components/options';
 import actions from 'store/api/actions';
 import AlertsTable from '../../../../components/alerts_table';
@@ -27,11 +28,7 @@ export default class DetailTab extends Component {
   render() {
     return (
       <div>
-        <div className="svc__desc">
-          <p className="text-muted">
-            <em>{this.props.service.desc}</em>
-          </p>
-        </div>
+        <Author model={this.props.service} />
         <AlertsTable alerts={this.props.service.alerts} />
         <Groups>
           {
