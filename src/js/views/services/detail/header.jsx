@@ -9,6 +9,11 @@ function ServicesHeader(props) {
           <span className="selectable">
             {props.service.normalizedName}
           </span>
+          <p>
+            <small>
+              <em>{props.service.desc}</em>
+            </small>
+          </p>
         </h3>
       </div>
       <div className="col-xs-12 pane__controls">

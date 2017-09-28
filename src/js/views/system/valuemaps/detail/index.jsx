@@ -12,6 +12,7 @@ import Search from '../../../../components/search';
 import Autocomponent from '../../../../components/autocomponent';
 import Date from '../../../../components/date';
 import { Control as Button } from '../../../../components/controls';
+import Author from '../../../../components/author';
 import search from '../../../../hocomponents/search';
 import Table from './table';
 import AddValue from './add';
@@ -67,6 +68,7 @@ const ValuemapsPane: Function = ({
       {' | '}
       Throws exception: <Autocomponent>{valuemap.throws_exception}</Autocomponent>
     </p>
+    <Author model={valuemap} />
     <Search
       onSearchUpdate={onSearchChange}
       defaultValue={defaultSearchValue}

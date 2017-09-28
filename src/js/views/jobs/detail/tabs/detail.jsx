@@ -11,6 +11,7 @@ import { Groups, Group } from '../../../../components/groups';
 import AlertsTable from '../../../../components/alerts_table';
 import Date from '../../../../components/date';
 import SLAControl from '../../../../components/sla_control';
+import Author from '../../../../components/author';
 import { resourceSelector } from '../../../../selectors';
 import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
@@ -34,6 +35,7 @@ const DetailTab = ({
   slas,
 }: Props) => (
   <div>
+    <Author model={model} />
     <div>
       {(isTablet && model.expiry_date) && (
         <div>

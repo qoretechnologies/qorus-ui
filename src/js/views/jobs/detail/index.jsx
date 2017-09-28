@@ -58,7 +58,7 @@ const Detail = ({
         tabChange={changePaneTab}
       >
         <Pane name="Detail">
-          <DetailTab model={model} isTablet={isTablet} />
+          <DetailTab key={model.name} model={model} isTablet={isTablet} />
         </Pane>
         <Pane name="Code">
           {model.code ? (

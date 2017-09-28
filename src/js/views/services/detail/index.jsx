@@ -81,7 +81,7 @@ export default class ServicesDetail extends Component {
             tabChange={this.props.changePaneTab}
           >
             <Pane name="Detail">
-              <DetailTab service={service} systemOptions={systemOptions} />
+              <DetailTab key={service.name} service={service} systemOptions={systemOptions} />
             </Pane>
             <Pane name="Code">
               <Code
