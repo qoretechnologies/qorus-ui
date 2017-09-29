@@ -160,7 +160,7 @@ const getUnit = (val) => {
     return 'h';
   } else if (val >= 60) {
     return 'm';
-  } else if (val < 0.1) {
+  } else if (val < 1) {
     return 'ms';
   }
 
