@@ -9,6 +9,7 @@ import Datepicker from '../../../../../components/datepicker';
 import { Controls, Control as Button } from '../../../../../components/controls';
 import Dropdown, { Control as DropdownToggle, Item } from '../../../../../components/dropdown';
 import { formatDate } from '../../../../../helpers/date';
+import { transformSuccess } from '../../../../../helpers/slas';
 import { DATE_FORMATS } from '../../../../../constants/dates';
 
 type Props = {
@@ -58,7 +59,7 @@ export default class SearchToolbar extends Component {
     errDesc: this.props.errDescQuery,
     producer: this.props.producerQuery,
     grouping: this.props.groupingQuery || 'hourly',
-    success: this.props.successQuery || '0',
+    success: transformSuccess(this.props.successQuery),
   };
 
   componentWillReceiveProps(nextProps: Props) {
@@ -70,7 +71,7 @@ export default class SearchToolbar extends Component {
         errDesc: nextProps.errDescQuery,
         producer: nextProps.producerQuery,
         grouping: nextProps.groupingQuery,
-        success: nextProps.successQuery,
+        success: transformSuccess(nextProps.successQuery),
       });
     }
   }
@@ -82,7 +83,9 @@ export default class SearchToolbar extends Component {
   }
 
   _delayedSearch: Function = debounce((data: Object) => {
-    this.props.changeAllQuery(data);
+    const dt: Object = { ...data, ...{ success: transformSuccess(data.success) } };
+
+    this.props.changeAllQuery(dt);
   }, 280);
 
   handleClearClick: Function = (): void => {
@@ -93,7 +96,7 @@ export default class SearchToolbar extends Component {
       errDesc: '',
       producer: '',
       grouping: 'hourly',
-      success: '0',
+      success: transformSuccess(''),
     });
   };
 
@@ -123,8 +126,8 @@ export default class SearchToolbar extends Component {
     this.setState({ grouping: value });
   };
 
-  handleSuccessClick: Function = (): void => {
-    this.setState({ success: this.state.success === '0' ? '1' : '0' });
+  handleSuccessChange: Function = (event: EventHandler, value: string): void => {
+    this.setState({ success: value });
   };
 
   render() {
@@ -134,7 +137,7 @@ export default class SearchToolbar extends Component {
           <div className="form-group search-toolbar">
             <div className="pull-left">
               <Dropdown>
-                <DropdownToggle>{this.state.grouping}</DropdownToggle>
+                <DropdownToggle>Grouping: {this.state.grouping}</DropdownToggle>
                 <Item title="hourly" action={this.handleGroupingChange} />
                 <Item title="daily" action={this.handleGroupingChange} />
                 <Item title="monthly" action={this.handleGroupingChange} />
@@ -191,13 +194,12 @@ export default class SearchToolbar extends Component {
               />
             </div>
             <div className="pull-left">
-              <Button
-                label="Success"
-                icon={this.state.success === '1' ? 'check-square-o' : 'square-o'}
-                btnStyle={this.state.success === '1' ? 'info' : 'default'}
-                onClick={this.handleSuccessClick}
-                big
-              />
+              <Dropdown>
+                <DropdownToggle>Success: {this.state.success}</DropdownToggle>
+                <Item title="All" action={this.handleSuccessChange} />
+                <Item title="Yes" action={this.handleSuccessChange} />
+                <Item title="No" action={this.handleSuccessChange} />
+              </Dropdown>
             </div>
           </div>
         </div>
