@@ -13,10 +13,10 @@ const fetchPerfData = createAction(
       `mindate=${searchData.minDate || '19700101'}&` +
       `maxdate=${searchData.maxDate || '29991231'}&` +
       `err=${searchData.err || ''}&` +
-      `errDesc=${searchData.errDesc || ''}&` +
+      `errdesc=${searchData.errDesc || ''}&` +
       `producer=${searchData.producer || ''}&` +
       `grouping=${searchData.grouping || 'hourly'}&` +
-      `success=${searchData.success || 0}&`;
+      `success=${searchData.success}`;
 
     const perf: Array<Object> = await fetchJson(
       'GET',
