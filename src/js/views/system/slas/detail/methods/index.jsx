@@ -84,7 +84,7 @@ const normalizeMethods: Function = (): Function => (methods: Array<Object>): Arr
 
     if (mapped.serviceid) {
       mapped.id = mapped.serviceid;
-      mapped.name = `${mapped.service_name}`;
+      mapped.name = `${mapped.service_name}.${mapped.method_name}()`;
       mapped.type = 'Service';
       mapped.resource = 'services';
     } else {
