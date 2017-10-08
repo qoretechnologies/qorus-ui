@@ -78,7 +78,7 @@ export default class ChartComponent extends Component {
 
   getOptionsData(data: Array<Object>): Object {
     const unit: string = this.props.unit || getUnit(getMaxValue(data));
-    const stepSize: number = getStepSize(data);
+    const stepSize: number = getStepSize(data, this.props.isNotTime);
 
     return {
       unit,

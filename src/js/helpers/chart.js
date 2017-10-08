@@ -20,14 +20,10 @@ const getMaxValue = (data) => {
   return max(flatten(dataset), (set) => set);
 };
 
-const getStepSize = (data) => {
+const getStepSize = (data, isNotTime) => {
   let maxValue = getMaxValue(data);
 
-  if (maxValue > 60) {
-    maxValue /= 60;
-  }
-
-  if (maxValue > 60) {
+  if (!isNotTime && maxValue > 60) {
     maxValue /= 60;
   }
 
@@ -94,14 +90,14 @@ const createLineDatasets = (data, days) => {
   };
 };
 
-const createPerfLineDatasets = (data, type, countChart) => {
+const createPerfLineDatasets = (data, type, chartType) => {
   const labels = data.map(datum => datum.grouping);
   const dt = [];
 
   labels.forEach(l => {
     const m = data.find(d => d.grouping === l);
 
-    if (countChart) {
+    if (chartType === 'count') {
       dt.count = dt.count || {
         data: [],
         label: 'Count',
@@ -114,6 +110,20 @@ const createPerfLineDatasets = (data, type, countChart) => {
         dt.count.data.push(m.count);
       } else {
         dt.count.data.push(0);
+      }
+    } else if (chartType === 'success') {
+      dt.success = dt.success || {
+        data: [],
+        label: 'Success rate',
+        backgroundColor: 'rgb(74, 186, 214)',
+        borderColor: 'rgb(74, 186, 214)',
+        fill: false,
+      };
+
+      if (m) {
+        dt.success.data.push(m.successratio * 100);
+      } else {
+        dt.success.data.push(0);
       }
     } else {
       Object.keys(SLADATASETS).forEach(ds => {
