@@ -66,7 +66,7 @@ const ErrorRow: Function = ({
     </Tr>
     {stateExpand && (
       <Tr>
-        <Td colspan={5} className="text">
+        <Td colspan={5} className="text wrap">
           <p>{info || 'No info'}</p>
         </Td>
         <Td className="narrow">

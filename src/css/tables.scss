@@ -62,6 +62,12 @@ table.table--data {
         &.nowrap {
           white-space: nowrap;
         }
+
+        &.wrap {
+          p {
+            white-space: normal;
+          }
+        }
       }
     }
   }
