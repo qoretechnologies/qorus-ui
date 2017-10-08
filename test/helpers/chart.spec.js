@@ -68,7 +68,7 @@ describe('Helpers from helpers/table', () => {
 
       const stepSize = getStepSize(data);
 
-      expect(stepSize).to.equal(1);
+      expect(stepSize).to.equal(42);
     });
   });
 

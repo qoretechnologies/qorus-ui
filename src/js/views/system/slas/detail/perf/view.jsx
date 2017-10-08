@@ -12,6 +12,7 @@ import actions from '../../../../../store/api/actions';
 import patch from '../../../../../hocomponents/patchFuncArgs';
 import sync from '../../../../../hocomponents/sync';
 import Chart from '../../../../../components/chart';
+import Container from '../../../../../components/container';
 import { createPerfLineDatasets } from '../../../../../helpers/chart';
 
 type Props = {
@@ -30,15 +31,17 @@ type Props = {
   width: number,
   collection: Array<Object>,
   groupingQuery: string,
+  successChartData: Object,
 };
 
 const PerfView: Function = ({
   chartData,
   countChartData,
+  successChartData,
   width,
   ...rest
 }: Props): React.Element<any> => (
-  <div>
+  <Container>
     <div className="chart-view">
       <Chart
         type="line"
@@ -65,7 +68,21 @@ const PerfView: Function = ({
         datasets={countChartData.data}
       />
     </div>
-  </div>
+    <div className="chart-view">
+      <Chart
+        type="line"
+        id="success"
+        width={width}
+        height={350}
+        yAxisLabel="Percentage %"
+        unit="%"
+        isNotTime
+        xAxisLabel={capitalize(rest.groupingQuery) || 'Hourly'}
+        labels={successChartData.labels}
+        datasets={successChartData.data}
+      />
+    </div>
+  </Container>
 );
 
 const viewSelector: Function = createSelector(
@@ -119,10 +136,11 @@ export default compose(
   }),
   mapProps(({ collection, groupingQuery, settings, ...rest }: Props): Props => ({
     chartData: createPerfLineDatasets(collection, groupingQuery || 'hourly'),
-    countChartData: createPerfLineDatasets(collection, groupingQuery || 'hourly', true),
+    countChartData: createPerfLineDatasets(collection, groupingQuery || 'hourly', 'count'),
+    successChartData: createPerfLineDatasets(collection, groupingQuery || 'hourly', 'success'),
     collection,
     groupingQuery,
-    width: settings.width - 230,
+    width: settings.width - 260,
     settings,
     ...rest,
   })),
