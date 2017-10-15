@@ -1,4 +1,5 @@
 import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 
 import Table, { Section, Row, Cell } from 'components/table';
 
@@ -14,12 +15,16 @@ const DiagramKeysTable: Function = ({ data }: { data?: Object }): React.Element<
       </Section>
       <Section type="body">
         { data ? (
-          Object.keys(data).map((d, key) => (
-            <Row key={key}>
-              <Cell>{ d }</Cell>
-              <Cell>{ data[d] }</Cell>
-            </Row>
-          ))
+          Object.keys(data).map((d, key) => {
+            const val: string = typeof data[d] === 'object' ? data[d].join(', ') : data[d];
+
+            return (
+              <Row key={key}>
+                <Cell>{ d }</Cell>
+                <Cell>{ val }</Cell>
+              </Row>
+            );
+          })
         ) : (
           <Row>
             <Cell colspan={2}> No data </Cell>
@@ -30,4 +35,4 @@ const DiagramKeysTable: Function = ({ data }: { data?: Object }): React.Element<
   </div>
 );
 
-export default DiagramKeysTable;
+export default pure(['data'])(DiagramKeysTable);
