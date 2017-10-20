@@ -42,6 +42,7 @@ type Props = {
   label: string,
   isTablet: boolean,
   searchPage?: boolean,
+  workflowid: number,
 }
 
 const TableRow: Function = ({
@@ -63,7 +64,7 @@ const TableRow: Function = ({
   operator_lock: operLock,
   note_count: noteCnt,
   workflowstatus,
-  workflowid: wfid,
+  workflowid,
   label,
   isTablet,
   searchPage,
