@@ -78,6 +78,7 @@ const WorkflowOrders: Function = ({
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
       isTablet={isTablet}
+      searchPage={searchPage}
     />
     { canLoadMore && (
       <Control

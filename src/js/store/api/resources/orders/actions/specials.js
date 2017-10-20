@@ -19,14 +19,16 @@ const fetchOrders = createAction(
     sort: string,
     searchData: Object,
   ): Object => {
-    let url;
-    const status = !filter || filter === 'filter' ? '' : filter;
+    let url: string;
+    const status: string = !filter || filter === 'filter' ? '' : filter;
+    const maxDate: string = searchData.maxDate || '29991231';
+    const sendDate: boolean = !(searchData.ids || searchData.keyValue);
 
     if (!id || id === 'id') {
       url = `${settings.REST_BASE_URL}/orders?` +
       `ids=${searchData.ids || ''}&` +
-      `date=${searchData.minDate}&` +
-      `maxmodified=${searchData.maxDate || '29991231'}&` +
+      `date=${!sendDate ? '' : searchData.minDate}&` +
+      `maxmodified=${!sendDate ? '' : maxDate}&` +
       `keyname=${searchData.keyName || ''}&` +
       `keyvalue=${searchData.keyValue || ''}&` +
       `status=${status}&` +
