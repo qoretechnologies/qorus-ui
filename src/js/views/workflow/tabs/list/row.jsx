@@ -29,6 +29,7 @@ type Props = {
   business_error: boolean,
   normalizedName: string,
   name: string,
+  normalizedName: string,
   started: string,
   completed: string,
   modified: string,
@@ -40,6 +41,7 @@ type Props = {
   workflowstatus: string,
   label: string,
   isTablet: boolean,
+  searchPage?: boolean,
 }
 
 const TableRow: Function = ({
@@ -51,6 +53,7 @@ const TableRow: Function = ({
   _updated,
   business_error: busErr,
   name,
+  normalizedName,
   started,
   completed,
   modified,
@@ -60,8 +63,10 @@ const TableRow: Function = ({
   operator_lock: operLock,
   note_count: noteCnt,
   workflowstatus,
+  workflowid: wfid,
   label,
   isTablet,
+  searchPage,
 }: Props): React.Element<any> => (
   <Tr
     onHighlightEnd={handleHighlightEnd}
@@ -75,6 +80,17 @@ const TableRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
+    {(!isTablet && searchPage) && (
+      <Td className="name">
+        <Link
+          to={`/workflow/${wfid}?date=${date}`}
+          className="resource-name-link"
+          title={normalizedName}
+        >
+          {normalizedName}
+        </Link>
+      </Td>
+    )}
     <Td className="medium">
       <Link
         to={`/order/${id}/${date}`}
