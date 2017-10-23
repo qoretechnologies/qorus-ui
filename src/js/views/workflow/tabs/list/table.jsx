@@ -21,6 +21,7 @@ type Props = {
   updateDone: Function,
   canLoadMore: boolean,
   isTablet: boolean,
+  searchPage?: boolean,
 };
 
 const WorkflowTable: Function = ({
@@ -31,6 +32,7 @@ const WorkflowTable: Function = ({
   handleHeaderClick,
   canLoadMore,
   isTablet,
+  searchPage,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -46,6 +48,9 @@ const WorkflowTable: Function = ({
         onSortChange={onSortChange}
       >
         <Th className="tiny"> - </Th>
+        {(!isTablet && searchPage) && (
+          <Th className="name"> Worfklow </Th>
+        )}
         <Th className="medium"> ID </Th>
         {!isTablet && (
           <Th className="medium"> Actions </Th>
@@ -72,6 +77,7 @@ const WorkflowTable: Function = ({
           key={`order_${order.workflow_instanceid}`}
           date={date}
           isTablet={isTablet}
+          searchPage={searchPage}
           {...order}
         />
       ))}
@@ -97,5 +103,6 @@ export default compose(
     'collection',
     'date',
     'isTablet',
+    'searchPage',
   ])
 )(WorkflowTable);
