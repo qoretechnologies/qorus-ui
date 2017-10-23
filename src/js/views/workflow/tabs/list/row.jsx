@@ -84,7 +84,7 @@ const TableRow: Function = ({
     {(!isTablet && searchPage) && (
       <Td className="name">
         <Link
-          to={`/workflow/${wfid}?date=${date}`}
+          to={`/workflow/${workflowid}?date=${date}`}
           className="resource-name-link"
           title={normalizedName}
         >
