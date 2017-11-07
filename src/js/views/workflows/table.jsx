@@ -4,8 +4,9 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
+import { Table, Thead, Tbody, Tr, Th, Td, Tfooter } from '../../components/new_table';
 import Icon from '../../components/icon';
+import Badge from '../../components/badge';
 import checkData from '../../hocomponents/check-no-data';
 import Row from './row';
 import actions from '../../store/api/actions';
@@ -25,6 +26,7 @@ type Props = {
   expanded: boolean,
   canLoadMore: boolean,
   isTablet: boolean,
+  totalInstances: Object,
 };
 
 const WorkflowsTable: Function = ({
@@ -42,6 +44,7 @@ const WorkflowsTable: Function = ({
   expanded,
   canLoadMore,
   isTablet,
+  totalInstances,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -103,6 +106,31 @@ const WorkflowsTable: Function = ({
         />
       ))}
     </Tbody>
+    <Tfooter>
+      <Tr>
+        <Td colspan={9}>-</Td>
+        {states.map((state: Object): React.Element<Td> => {
+          const value = !expanded ?
+            totalInstances[`GROUPED_${state.name}`] :
+            totalInstances[state.name];
+
+          return (
+            <Td
+              key={`header_${state.name}`}
+              className={expanded || isTablet ? 'narrow' : 'medium'}
+              name={!expanded ? `GROUPED_${state.name}` : state.name}
+              title={state.title}
+            >
+              <Badge
+                className={`status-${state.label}`}
+                val={value}
+              />
+            </Td>
+          );
+        })}
+        <Td className="narrow" name="TOTAL">{totalInstances.total}</Td>
+      </Tr>
+    </Tfooter>
   </Table>
 );
 
@@ -123,5 +151,6 @@ export default compose(
     'paneId',
     'date',
     'isTablet',
+    'totalInstances',
   ])
 )(WorkflowsTable);
