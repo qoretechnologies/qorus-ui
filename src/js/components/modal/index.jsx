@@ -1,6 +1,7 @@
 /* @flow */
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import Draggable from 'react-draggable';
 
 import ResizeHandle from '../resize/handle';
 import Header from './header';
@@ -11,7 +12,7 @@ import Manager from './manager';
 import { pureRender } from '../utils';
 
 type Props = {
-  children?: any,
+  children: any,
   onMount?: Function,
   size: string,
   hasFooter?: boolean,
@@ -33,11 +34,24 @@ export default class Modal extends Component {
   static Body = null;
 
   props: Props;
+  state: {
+    height: ?number,
+  } = {
+    height: this.props.height || null,
+  }
 
   componentDidMount(): void {
     if (this.props.onMount) {
       this.props.onMount();
     }
+
+    if (this.state.height !== 'auto') {
+      this.resizeBody();
+    }
+  }
+
+  componentDidUpdate() {
+    this.resizeBody();
   }
 
   _modal = null;
@@ -68,6 +82,14 @@ export default class Modal extends Component {
     ))[0] || null;
   }
 
+  handleStop: Function = (width: number, height: number) => {
+    if (this.props.onResizeStop) this.props.onResizeStop();
+
+    this.setState({
+      height,
+    });
+  }
+
   /**
    * Stores modal reference for later.
    *
@@ -77,6 +99,25 @@ export default class Modal extends Component {
     this._modal = el;
   };
 
+  calculateHeight: Function = (): ?number => {
+    const headerHeight: number = document.querySelectorAll('.modal-header')[0].offsetHeight;
+
+    if (this.props.hasFooter) {
+      const footerHeight: number = document.querySelectorAll('.modal-footer')[0].offsetHeight;
+
+      return this.state.height ? this.state.height - (headerHeight + footerHeight) : null;
+    }
+
+    return this.state.height ? this.state.height - headerHeight : null;
+  }
+
+  resizeBody: Function = (): void => {
+    const body = document.querySelectorAll('.modal-body')[0];
+    const height = this.calculateHeight();
+
+    body.style.height = `${height}px`;
+  }
+
   /**
    * Renders necessary elements around modal pane's content.
    *
@@ -84,36 +125,41 @@ export default class Modal extends Component {
    */
   render(): React.Element<any> {
     return (
-      <div
-        ref={this.refModal}
-        className="modal fade in"
-        style={{ display: 'block' }}
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
-        onMouseDown={this.onEscape}
+      <Draggable
+        handle=".handle"
+        bounds={{ top: 0 }}
       >
         <div
-          className={classNames({
-            'modal-dialog': true,
-            'modal-lg': this.props.size === 'lg',
-            'modal-sm': this.props.size === 'sm',
-          })}
-          role="document"
-          style={{
-            height: this.props.height ? `${this.props.height}px` : 'auto',
-          }}
+          ref={this.refModal}
+          className="modal fade in"
+          style={{ display: 'block' }}
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
+          onMouseDown={this.onEscape}
         >
-          <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
-            {this.props.children}
+          <div
+            className={classNames({
+              'modal-dialog': true,
+              'modal-lg': this.props.size === 'lg',
+              'modal-sm': this.props.size === 'sm',
+            })}
+            role="document"
+            style={{
+              height: this.state.height ? `${this.state.height}px` : 'auto',
+            }}
+          >
+            <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
+              {this.props.children}
+            </div>
+            <ResizeHandle left onStop={this.handleStop} />
+            <ResizeHandle right onStop={this.handleStop} />
+            <ResizeHandle bottom onStop={this.handleStop} />
+            <ResizeHandle left bottom onStop={this.handleStop} />
+            <ResizeHandle right bottom onStop={this.handleStop} />
           </div>
-          <ResizeHandle left onStop={this.props.onResizeStop} />
-          <ResizeHandle right onStop={this.props.onResizeStop} />
-          <ResizeHandle bottom onStop={this.props.onResizeStop} />
-          <ResizeHandle left bottom onStop={this.props.onResizeStop} />
-          <ResizeHandle right bottom onStop={this.props.onResizeStop} />
         </div>
-      </div>
+      </Draggable>
     );
   }
 }

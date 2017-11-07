@@ -3,6 +3,9 @@
  *
  * 1. Just allow textarea resing only vertically.
  */
+.handle {
+  cursor: move;
+}
 .modal textarea {
   resize: vertical; /* [1] */
 }
@@ -12,7 +15,6 @@
 }
 
 .modal-content.has-footer .modal-body {
-  bottom: 64px;
   padding-bottom: 74px;
 }
 
