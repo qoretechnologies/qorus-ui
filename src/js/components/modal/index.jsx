@@ -11,15 +11,6 @@ import Manager from './manager';
 
 import { pureRender } from '../utils';
 
-type Props = {
-  children: any,
-  onMount?: Function,
-  size: string,
-  hasFooter?: boolean,
-  height?: number,
-  onResizeStop?: Function,
-};
-
 /**
  * Modal pane component.
  */
@@ -33,7 +24,7 @@ export default class Modal extends Component {
   static Header = null;
   static Body = null;
 
-  props: Props;
+  props: any;
   state: {
     height: ?number,
   } = {
@@ -100,22 +91,30 @@ export default class Modal extends Component {
   };
 
   calculateHeight: Function = (): ?number => {
-    const headerHeight: number = document.querySelectorAll('.modal-header')[0].offsetHeight;
+    const header: Object = document.querySelectorAll('.modal-header')[0];
 
-    if (this.props.hasFooter) {
-      const footerHeight: number = document.querySelectorAll('.modal-footer')[0].offsetHeight;
+    if (header) {
+      const headerHeight: number = header.offsetHeight;
+      if (this.props.hasFooter) {
+        const footerHeight: number = document.querySelectorAll('.modal-footer')[0].offsetHeight;
 
-      return this.state.height ? this.state.height - (headerHeight + footerHeight) : null;
+        return this.state.height ? this.state.height - (headerHeight + footerHeight) : null;
+      }
+
+      return this.state.height ? this.state.height - headerHeight : null;
     }
 
-    return this.state.height ? this.state.height - headerHeight : null;
+    return null;
   }
 
   resizeBody: Function = (): void => {
     const body = document.querySelectorAll('.modal-body')[0];
-    const height = this.calculateHeight();
 
-    body.style.height = `${height}px`;
+    if (body) {
+      const height = this.calculateHeight();
+
+      body.style.height = `${height}px`;
+    }
   }
 
   /**
