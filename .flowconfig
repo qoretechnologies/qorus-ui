@@ -1,6 +1,7 @@
 [ignore]
 .*/node_modules/fbjs
 .*/node_modules/react-event-listener
+.*/node_modules/react-draggable/lib
 
 [include]
 

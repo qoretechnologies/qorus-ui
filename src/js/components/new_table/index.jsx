@@ -1,6 +1,8 @@
 /* @flow */
 import React from 'react';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import classnames from 'classnames';
 
 import { Thead, Tbody, Tfooter } from './section';
@@ -18,7 +20,8 @@ type Props = {
   hover?: boolean,
   fixed?: boolean,
   height?: string | number,
-  marginBottom?: number
+  marginBottom?: number,
+  hasFooter?: boolean,
 }
 
 let Table: Function = ({
@@ -31,6 +34,7 @@ let Table: Function = ({
   className,
   height,
   marginBottom,
+  hasFooter,
 }: Props): React.Element<any> => (
   fixed ?
     <div
@@ -45,6 +49,7 @@ let Table: Function = ({
           bordered,
           className,
           height,
+          hasFooter,
           marginBottom: marginBottom || 0,
         })
       ))}
@@ -70,12 +75,21 @@ let Table: Function = ({
     </table>
 );
 
-Table = updateOnlyForKeys([
-  'children',
-  'className',
-  'marginBottom',
-  'height',
-])(Table);
+Table = compose(
+  mapProps(({ children, ...rest }: Props): Props => ({
+    hasFooter: React.Children.toArray(children).some((child: Object): boolean => (
+      child.type.displayName === 'Tfoot'
+    )),
+    children,
+    ...rest,
+  })),
+  updateOnlyForKeys([
+    'children',
+    'className',
+    'marginBottom',
+    'height',
+  ])
+)(Table);
 
 export {
   Table,

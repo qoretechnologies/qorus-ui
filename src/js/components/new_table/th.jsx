@@ -28,6 +28,7 @@ const Th: Function = ({
   className,
   name,
   title,
+  colspan,
 }: Props) => (
   <th
     className={
@@ -43,6 +44,7 @@ const Th: Function = ({
     }
     onClick={handleClick}
     title={title}
+    colSpan={colspan}
   >
     { children }
   </th>

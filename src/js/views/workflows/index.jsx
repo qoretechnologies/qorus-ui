@@ -32,6 +32,7 @@ import {
 } from '../../constants/orders';
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
+import { formatCount } from '../../helpers/orders';
 import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
@@ -91,6 +92,41 @@ const groupStatuses: Function = (
   })
 );
 
+const countInstances: Function = (
+  isTablet: boolean
+): Function => (
+  workflows: Array<Object>
+): Object => {
+  const count: Object = { total: 0 };
+  const addCount: Function = (group, addPrefix) => {
+    const grp = addPrefix ? `GROUPED_${group}` : group;
+
+    if (!count[grp]) count[grp] = 0;
+
+    workflows.forEach((workflow: Object): void => {
+      count[grp] += workflow[grp];
+    });
+
+    if (addPrefix) count.total += count[grp];
+
+    count[grp] = formatCount(count[grp]);
+  };
+
+  if (isTablet) {
+    Object.keys(ORDER_GROUPS_COMPACT).forEach(group => addCount(group, true));
+  } else {
+    Object.keys(ORDER_GROUPS).forEach((group) => addCount(group, true));
+  }
+
+  ORDER_STATES.forEach((state: Object): void => {
+    addCount(state.name);
+  });
+
+  count.total = formatCount(count.total);
+
+  return count;
+};
+
 const settingsSelector = (state: Object): Object => state.ui.settings;
 
 const collectionSelector: Function = createSelector(
@@ -111,6 +147,14 @@ const collectionSelector: Function = createSelector(
   )(workflows.data)
 );
 
+const totalInstancesSelector: Function = createSelector(
+  [
+    collectionSelector,
+    settingsSelector,
+  ],
+  (workflows, settings) => countInstances(settings.tablet)(workflows)
+);
+
 const viewSelector = createSelector(
   [
     resourceSelector('workflows'),
@@ -119,6 +163,7 @@ const viewSelector = createSelector(
     querySelector('deprecated'),
     querySelector('date'),
     settingsSelector,
+    totalInstancesSelector,
   ],
   (
     workflows,
@@ -127,6 +172,7 @@ const viewSelector = createSelector(
     deprecated,
     date,
     settings,
+    totalInstances,
   ): Object => ({
     meta: workflows,
     workflows: collection,
@@ -134,6 +180,7 @@ const viewSelector = createSelector(
     deprecated: deprecated === 'true',
     date,
     isTablet: settings.tablet,
+    totalInstances,
   })
 );
 
@@ -165,6 +212,7 @@ type Props = {
   infoTotalCount: number,
   infoEnabled: number,
   infoWithAlerts: number,
+  totalInstances: Object,
 };
 
 const Workflows: Function = ({
@@ -191,6 +239,7 @@ const Workflows: Function = ({
   infoEnabled,
   infoTotalCount,
   infoWithAlerts,
+  totalInstances,
 }: Props): React.Element<any> => (
   <div>
     <WorkflowsToolbar
@@ -219,6 +268,7 @@ const Workflows: Function = ({
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
       isTablet={isTablet}
+      totalInstances={totalInstances}
     />
     { canLoadMore && (
       <Controls grouped noControls>
@@ -312,6 +362,7 @@ export default compose(
     'canLoadMore',
     'isTablet',
     'withAlertsCount',
+    'totalInstances',
   ]),
   unsync()
 )(Workflows);

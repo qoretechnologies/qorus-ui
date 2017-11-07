@@ -22,7 +22,7 @@ type Props = {
  */
 export default function Header(props: Props) {
   return (
-    <div className="modal-header">
+    <div className="modal-header handle">
       {props.onClose && (
         <button
           type="button"

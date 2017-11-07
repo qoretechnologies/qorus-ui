@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import mapProps from 'recompose/mapProps';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
+import setDisplayName from 'recompose/setDisplayName';
+import compose from 'recompose/compose';
 import classNames from 'classnames';
 
 type Props = {
@@ -155,9 +157,20 @@ Section = updateOnlyForKeys([
   'height',
 ])(Section);
 
-const Thead = mapProps((props: Object) => ({ ...props, type: 'header', Tag: 'thead' }))(Section);
-const Tbody = mapProps((props: Object) => ({ ...props, type: 'body', Tag: 'tbody' }))(Section);
-const Tfooter = mapProps((props: Object) => ({ ...props, type: 'footer', Tag: 'tfoot' }))(Section);
+const Thead = compose(
+  setDisplayName('Thead'),
+  mapProps((props: Object) => ({ ...props, type: 'header', Tag: 'thead' }))
+)(Section);
+
+const Tbody = compose(
+  setDisplayName('Tbody'),
+  mapProps((props: Object) => ({ ...props, type: 'body', Tag: 'tbody' }))
+)(Section);
+
+const Tfooter = compose(
+  setDisplayName('Tfoot'),
+  mapProps((props: Object) => ({ ...props, type: 'footer', Tag: 'tfoot' }))
+)(Section);
 
 export {
   Thead,
