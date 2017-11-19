@@ -1,12 +1,12 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
 
 @pureRender
 export default class Item extends Component {
   props: {
-    title: string | number,
+    title: any,
     icon?: string,
     action: () => void,
     hideDropdown?: () => void,
@@ -97,17 +97,3 @@ export default class Item extends Component {
     );
   }
 }
-
-Item.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  className: PropTypes.string,
-  icon: PropTypes.string,
-  action: PropTypes.func,
-  hideDropdown: PropTypes.func,
-  multi: PropTypes.bool,
-  selected: PropTypes.bool,
-  toggleItem: PropTypes.func,
-};

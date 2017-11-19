@@ -103,7 +103,7 @@ class NotificationPanel extends React.Component {
     return (
       <div
         ref="panel"
-        className="notification-panel nav-btn-tooltip"
+        className="notification-panel btn-group"
       >
         <Control
           icon="bell"

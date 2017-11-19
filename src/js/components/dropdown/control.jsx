@@ -6,12 +6,16 @@ type Props = {
   children?: React.Element<any>,
   btnStyle: string,
   small?: boolean,
-  noCaret?: boolean
+  noCaret?: boolean,
 }
 
-export default function Control(
-  { children, small = false, btnStyle = 'default', noCaret = false, ...other }: Props
-) {
+export default function Control({
+  children,
+  small = false,
+  btnStyle = 'default',
+  noCaret = false,
+  ...other,
+}: Props) {
   return (
     <button
       className={classNames('btn',

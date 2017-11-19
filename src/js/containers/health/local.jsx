@@ -3,28 +3,59 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import shouldUpdate from 'recompose/shouldUpdate';
+import withHandlers from 'recompose/withHandlers';
+import { browserHistory } from 'react-router';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
-import { Control } from '../../components/controls';
-import Dialog from '../../components/dialog';
-import LocalInfo from './local_info';
 import { statusHealth } from '../../helpers/system';
+import Dropdown, { Control, Item } from '../../components/dropdown';
+import Icon from '../../components/icon';
+import Label from '../../components/label';
 
-const LocalHealth = ({ health }: { health: Object }) => (
-  <Dialog
-    className="nav-btn-tooltip"
-    mainElement={
-      <Control
-        big
-        className={`btn navbar-btn btn-${statusHealth(health.data.health)} local-health-dropdown`}
-        btnStyle={statusHealth(health.data.health)}
-        icon="stethoscope"
-      />
-    }
-  >
-    <LocalInfo {...{ health }} />
-  </Dialog>
+const LocalHealth = ({
+  health,
+  handleOngoingClick,
+  handleTransientClick,
+}: {
+  health: Object,
+  handleOngoingClick: Function,
+  handleTransientClick: Function,
+}) => (
+  <Dropdown>
+    <Control
+      noCaret
+      className={`btn navbar-btn btn-${statusHealth(health.data.health)} local-health-dropdown`}
+      btnStyle={statusHealth(health.data.health)}
+    >
+      <Icon icon="stethoscope" />
+    </Control>
+    <Item
+      title={
+        <span>
+          Status -
+          {' '}
+          <Label style={statusHealth(health.data.health)}>{health.data.health}</Label>
+        </span>
+      }
+    />
+    <Item
+      title={
+        <span>
+          Ongoing - {health.data.ongoing}
+        </span>
+      }
+      action={handleOngoingClick}
+    />
+    <Item
+      title={
+        <span>
+          Transient - {health.data.transient}
+        </span>
+      }
+      action={handleTransientClick}
+    />
+  </Dropdown>
 );
 
 export default compose(
@@ -41,5 +72,13 @@ export default compose(
       return syncData !== nextSync || loading !== nextLoading;
     }
   ),
+  withHandlers({
+    handleOngoingClick: (): Function => (): void => {
+      browserHistory.push('/system/alerts/ongoing');
+    },
+    handleTransientClick: (): Function => (): void => {
+      browserHistory.push('/system/alerts/transient');
+    },
+  }),
   sync('health', false)
 )(LocalHealth);
