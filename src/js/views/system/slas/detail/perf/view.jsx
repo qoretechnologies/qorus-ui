@@ -39,7 +39,7 @@ const PerfView: Function = ({
   countChartData,
   successChartData,
   width,
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <Container>
     <div className="chart-view">

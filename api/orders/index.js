@@ -233,7 +233,6 @@ module.exports = () => {
 
   router.put('/:id', (req, res) => {
     const order = data.find(o => findOrder(req.params.id, o));
-    let steps;
 
     switch (req.query.action) {
       case 'cancel':
@@ -257,9 +256,7 @@ module.exports = () => {
         Object.assign(order, unlockOrder(order, req.body.note, req.body.username));
         break;
       case 'skipStep':
-        steps = skipIndexes(order, req.body.stepid, req.body.ind);
-
-        order.StepInstances = steps;
+        order.StepInstances = skipIndexes(order, req.body.stepid, req.body.ind);
         break;
       default:
         if (config.env !== 'test') {

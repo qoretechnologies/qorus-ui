@@ -130,7 +130,7 @@ export default compose(
       openModal,
       closeModal,
       handleOptionSave,
-      ...rest
+      ...rest,
     }: Props): Function => (): void => {
       openModal(
         <OptionModal

@@ -66,7 +66,7 @@ const TableRow: Function = ({
   deprecated,
   showDeprecated,
   isTablet,
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <Tr
     className={classNames({

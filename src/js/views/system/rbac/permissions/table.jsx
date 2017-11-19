@@ -23,7 +23,7 @@ const PermsTable: Function = (
   { collection,
     onSortChange,
     sortData,
-    ...rest
+    ...rest,
   }: Props
 ): React.Element<Table> => (
   <Table

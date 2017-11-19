@@ -41,7 +41,7 @@ const WorkflowHeader: Function = ({
   alerts,
   onBackClick,
   date,
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <div className="workflow-header">
     <div className="row">
