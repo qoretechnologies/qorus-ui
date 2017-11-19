@@ -31,7 +31,7 @@ type Props = {
 };
 
 const SLAEvents: Function = ({
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <EventsToolbar {...rest} />
@@ -52,7 +52,7 @@ export default compose(
     errQuery,
     errDescQuery,
     producerQuery,
-    ...rest
+    ...rest,
   }: Props): Props => ({
     defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
     searchData: {

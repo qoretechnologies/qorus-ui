@@ -25,7 +25,7 @@ const RolesTable: Function = ({
   collection,
   onSortChange,
   sortData,
-  ...rest
+  ...rest,
 }: Props): React.Element<Table> => (
   <Table
     striped

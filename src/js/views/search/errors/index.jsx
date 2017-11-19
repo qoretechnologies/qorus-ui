@@ -48,7 +48,7 @@ const SearchView: Function = ({
   location,
   mindateQuery,
   searchData,
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <SearchToolbar
@@ -105,7 +105,7 @@ export default compose(
     errorQuery,
     retryQuery,
     busErrQuery,
-    ...rest
+    ...rest,
   }): Props => ({
     searchData: {
       minDate: mindateQuery,

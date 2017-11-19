@@ -22,7 +22,7 @@ type Props = {
 
 const SearchContainer: Function = ({
   handleSearchUpdate,
-  ...rest
+  ...rest,
 }: Props): React.Element<any> => (
   <Search
     {...rest}

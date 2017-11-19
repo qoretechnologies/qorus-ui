@@ -55,7 +55,7 @@ const groupAction = {
 };
 
 const selectGroup = {
-  next(state: Object = initialState, { payload: { id } }: { payload: Object, id: string}) {
+  next(state: Object = initialState, { payload: { id } }: { payload: Object, id: string }) {
     return select(state, id);
   },
 };

@@ -280,16 +280,13 @@ const orderAction: Object = {
     if (result) {
       Object.keys(result).forEach((res: string): void => {
         if (typeof result[res] === 'string') {
-          let workflowstatus;
           const ord = newData.find((order: Object): boolean => (
             order.id === parseInt(res, 10)
           ));
 
-          if (ord) workflowstatus = ord._originalStatus;
-
           newData = updateItemWithId(
             parseInt(res, 10),
-            { workflowstatus },
+            { workflowstatus: ord ? ord._originalStatus : null },
             newData
           );
         }
