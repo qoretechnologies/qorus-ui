@@ -6,23 +6,41 @@ import shouldUpdate from 'recompose/shouldUpdate';
 
 import sync from '../../hocomponents/sync';
 import actions from '../../store/api/actions';
-import RemoteInfo from './remote_info';
-import { Control } from '../../components/controls';
-import Dialog from '../../components/dialog';
+import Dropdown, { Control, Item } from '../../components/dropdown';
+import Icon from '../../components/icon';
+import Label from '../../components/label';
+import { statusHealth } from '../../helpers/system';
 
-const RemoteHealth = ({ health }: { health: Object }) => (
-  <Dialog
-    className="nav-btn-tooltip"
-    mainElement={
-      <Control
-        big
-        className="btn navbar-btn btn-inverse remote-health-dropdown"
-        icon="sitemap"
-      />
-    }
+const RemoteHealth = ({
+  health,
+}: {
+  health: Object,
+}) => (
+  <Dropdown
+    disabled={!health.data.remote}
   >
-    <RemoteInfo {...{ health }} />
-  </Dialog>
+    <Control
+      noCaret
+      className="btn navbar-btn btn-inverse"
+    >
+      <Icon icon="sitemap" />
+    </Control>
+    {health.data.remote && health.data.remote.map((
+      remote: Object,
+      index: number
+    ): React.Element<any> => (
+      <Item
+        key={index}
+        title={
+          <span>
+            {remote.name} -
+            {' '}
+            <Label style={statusHealth(remote.health)}>{remote.health}</Label>
+          </span>
+        }
+      />
+    ))}
+  </Dropdown>
 );
 
 export default compose(

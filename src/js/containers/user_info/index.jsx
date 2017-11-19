@@ -1,16 +1,26 @@
 /* @flow */
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import withHandlers from 'recompose/withHandlers';
+import { browserHistory } from 'react-router';
+import compose from 'recompose/compose';
 
-import { Control } from '../../components/controls';
-import Dialog from '../../components/dialog';
+import { Control as Button } from '../../components/controls';
+import Dropdown, { Control, Item } from '../../components/dropdown';
+import Icon from '../../components/icon';
 
-
-export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) => {
+export const UserInfo = ({
+  user,
+  noauth,
+  handleLogoutClick,
+}: {
+  user: Object,
+  noauth: boolean,
+  handleLogoutClick: Function,
+}) => {
   if (noauth) {
     return (
-      <Control
+      <Button
         big
         className="btn navbar-btn btn-inverse user"
         icon="user"
@@ -20,27 +30,32 @@ export const UserInfo = ({ user, noauth }: { user: Object, noauth: boolean }) =>
   }
 
   return (
-    <Dialog
-      className="nav-btn-tooltip"
-      mainElement={
-        <Control
-          big
-          className="btn navbar-btn btn-inverse user-dropdown"
-          icon="user"
-          label={user.name}
-        />
-      }
-    >
-      <Link to="/logout" className="btn btn-danger logout">
-        <i className="fa fa-sign-out" />
-        Logout
-      </Link>
-    </Dialog>
+    <Dropdown>
+      <Control
+        noCaret
+        className="btn navbar-btn btn-inverse"
+      >
+        <Icon icon="user" />
+        {' '}
+        {user.name}
+      </Control>
+      <Item
+        title="Logout"
+        action={handleLogoutClick}
+      />
+    </Dropdown>
   );
 };
 
-export default connect(
-  state => ({
-    noauth: state.api.info.data.noauth,
+export default compose(
+  connect(
+    state => ({
+      noauth: state.api.info.data.noauth,
+    })
+  ),
+  withHandlers({
+    handleLogoutClick: () => () => {
+      browserHistory.push('/logout');
+    },
   })
 )(UserInfo);
