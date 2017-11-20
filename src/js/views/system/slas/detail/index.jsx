@@ -6,8 +6,10 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import moment from 'moment';
+import { Link } from 'react-router';
 
 import Nav, { NavLink } from '../../../../components/navlink';
+import Icon from '../../../../components/icon';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import sync from '../../../../hocomponents/sync';
 import unsync from '../../../../hocomponents/unsync';
@@ -38,6 +40,10 @@ const SLADetail: Function = ({
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
     <h3 className="detail-title">
+      <Link to="/system/slas" >
+        <Icon icon="angle-left" />
+      </Link>
+      {' '}
       {sla.name}
       {' '}
       <small>({sla.slaid})</small>
