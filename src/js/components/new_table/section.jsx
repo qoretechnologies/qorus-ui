@@ -17,6 +17,7 @@ type Props = {
   fixed?: boolean,
   Tag: string,
   marginBottom: number,
+  hasFooter: boolean,
 };
 
 class Section extends Component {
@@ -66,7 +67,8 @@ class Section extends Component {
       const mb: number = marginBottom || marginBottom === 0 ?
         marginBottom :
         this.props.marginBottom;
-      const height: number = winHeight - top - 60 - mb;
+      const footer: number = this.props.hasFooter ? 22 : 0;
+      const height: number = winHeight - top - 60 - mb - footer;
       const h = typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
       if (h > height) {
