@@ -456,6 +456,24 @@ const updateStepInstances: Object = {
   },
 };
 
+const fetchYamlData: Object = {
+  next(
+    state: Object,
+    { payload: { id, yamlData } }: {
+      payload: Object,
+      id: number,
+      yamlData: string,
+    }
+  ): Object {
+    const data = updateItemWithId(id, {
+      yamlData,
+    }, [...state.data]);
+
+    return { ...state, ...{ data } };
+  },
+};
+
+
 const updateData: Object = {
   next(state: Object): Object {
     return state;
@@ -492,4 +510,5 @@ export {
   setPriority as SETPRIORITY,
   updateStepInstances as UPDATESTEPINSTANCES,
   updateData as UPDATEDATA,
+  fetchYamlData as FETCHYAMLACTION,
 };

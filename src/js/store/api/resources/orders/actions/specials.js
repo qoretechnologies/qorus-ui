@@ -2,7 +2,7 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson } from '../../../utils';
+import { fetchJson, fetchYaml } from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
 
@@ -173,7 +173,10 @@ const orderAction: Function = createAction(
       }
     });
 
-    return { ids: id, result };
+    return {
+      ids: id,
+      result,
+    };
   }
 );
 
@@ -321,23 +324,81 @@ const updateData: Function = createAction(
   'ORDERS_UPDATEDATA',
   (
     type: string,
-    newData: Object,
-    id: number
+    newdata: string,
+    id: number,
+    skey: string,
+    svalue: string,
   ): void => {
-    const key: string = type === 'updateKeys' ? 'orderkeys' : 'newdata';
-
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}`,
-      {
-        body: JSON.stringify({
-          action: type,
-          [key]: newData,
-        }),
-      }
-    );
+    if (type === 'Keys') {
+      fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/orders/${id}?action=updateKeys`,
+        {
+          body: JSON.stringify({
+            orderkeys: JSON.parse(newdata),
+          }),
+        },
+      );
+    } else if (type === 'Sensitive') {
+      fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
+        {
+          body: JSON.stringify({
+            skey,
+            svalue,
+            data: newdata,
+          }),
+        },
+      );
+    } else {
+      fetchYaml(
+        'PUT',
+        `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
+        {
+          body: JSON.stringify({
+            newdata,
+          }),
+        },
+      );
+    }
   }
 );
+
+const fetchYamlAction: Function = createAction(
+  'ORDERS_FETCHYAMLACTION',
+  async (
+    type: string,
+    id: number,
+    dispatch: Function,
+  ): Object => {
+    const result: Object = await fetchYaml(
+      'GET',
+      `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
+      null,
+      false,
+      true,
+      true,
+    );
+
+    if (result.err) {
+      dispatch(error(result.desc));
+    }
+
+    return {
+      type,
+      id,
+      yamlData: result,
+    };
+  }
+);
+
+const fetchYamlData: Function = (
+  type: string,
+  id: number
+): Function => (dispatch: Function): void => {
+  dispatch(fetchYamlAction(type, id, dispatch));
+};
 
 const unsync = createAction('ORDERS_UNSYNC');
 
@@ -368,4 +429,6 @@ export {
   setPriority,
   priorityAction,
   updateStepInstances,
+  fetchYamlData,
+  fetchYamlAction,
 };

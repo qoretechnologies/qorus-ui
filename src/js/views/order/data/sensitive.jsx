@@ -4,6 +4,9 @@ import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
+
+import actions from '../../../store/api/actions';
 import settings from '../../../settings';
 import { hasPermission } from '../../../helpers/user';
 import Alert from '../../../components/alert';
@@ -14,14 +17,22 @@ type Props = {
   perms: Array<string>,
   isSecure: boolean,
   hasPerms: boolean,
+  handleEditClick: Function,
 }
 
-const SensitiveView: Function = ({ order, isSecure, hasPerms }: Props) => {
+const SensitiveView: Function = ({
+  order,
+  isSecure,
+  hasPerms,
+  handleEditClick,
+}: Props) => {
   if (isSecure && hasPerms) {
     return (
       <TreeView
         data="sensitive_data"
         order={order}
+        onEditClick={handleEditClick}
+        editableKeys
       />
     );
   }
@@ -57,7 +68,10 @@ export default compose(
   connect(
     (state: Object): Object => ({
       perms: state.api.currentUser.data.permissions,
-    })
+    }),
+    {
+      fetchYamlData: actions.orders.fetchYamlData,
+    }
   ),
   mapProps(({ perms, ...rest }: Props): Props => ({
     isSecure: settings.PROTOCOL === 'https:',
@@ -65,5 +79,10 @@ export default compose(
     perms,
     ...rest,
   })),
+  withHandlers({
+    handleEditClick: ({ fetchYamlData, params }): Function => (): void => {
+      fetchYamlData('Sensitive', params.id);
+    },
+  }),
   pure(['order', 'perms', 'isSecure', 'hasPerms'])
 )(SensitiveView);

@@ -6,6 +6,7 @@ export default function KeysView(props) {
     <TreeView
       data="keys"
       order={props.order}
+      withEdit
     />
   );
 }
