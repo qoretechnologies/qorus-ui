@@ -92,7 +92,7 @@ export default class Tree extends Component {
     this.setState(st);
   };
 
-  renderTree(data, top, k) {
+  renderTree(data, top, k, topKey) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-top': top,
@@ -115,8 +115,8 @@ export default class Tree extends Component {
         this.props.openModal(
           <EditModal
             onClose={this.props.closeModal}
-            skey={key}
-            svalue={sValue}
+            skey={topKey}
+            svalue={key}
             id={this.props.id}
           />
         );
@@ -138,7 +138,7 @@ export default class Tree extends Component {
           >
             {isObject ? key : `${key}:`}
           </span>
-          {this.props.editableKeys && top && (
+          {this.props.editableKeys && topKey && (
             <span onClick={handleEditClick}>
               {' '}
               <Icon icon="pencil" tooltip="Edit data" />
@@ -147,7 +147,7 @@ export default class Tree extends Component {
           {' '}
           {isExpandable && (
              isObject ?
-              this.renderTree(data[key], false, stateKey) :
+              this.renderTree(data[key], false, stateKey, top ? key : null) :
               data[key].toString()
           )}
         </div>
