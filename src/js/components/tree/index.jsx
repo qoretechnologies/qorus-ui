@@ -103,7 +103,6 @@ export default class Tree extends Component {
       const stateKey = k ? `${k}_${key}` : key;
       const isObject = typeof data[key] === 'object' && data[key] !== null;
       const isExpandable = typeof data[key] !== 'object' || this.state[stateKey];
-      const sValue = typeof data[key] === 'object' ? Object.keys(data[key])[0] : data[key];
 
       const handleClick = () => {
         this.setState({
