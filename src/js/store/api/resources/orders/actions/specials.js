@@ -365,6 +365,35 @@ const updateData: Function = createAction(
   }
 );
 
+const updateSensitiveData: Function = createAction(
+  'ORDERS_UPDATESENSITIVEDATA',
+  (
+    newdata: string,
+    id: number,
+    skey: string,
+    svalue: string,
+  ): Object => {
+    fetchJson(
+      'PUT',
+      `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
+      {
+        body: JSON.stringify({
+          skey,
+          svalue,
+          data: newdata,
+        }),
+      },
+    );
+
+    return {
+      newdata,
+      id,
+      skey,
+      svalue,
+    };
+  }
+);
+
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
   async (
@@ -431,4 +460,5 @@ export {
   updateStepInstances,
   fetchYamlData,
   fetchYamlAction,
+  updateSensitiveData,
 };

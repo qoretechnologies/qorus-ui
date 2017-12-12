@@ -110,10 +110,18 @@ export default class Tree extends Component {
         });
       };
 
+      const handleEditDone = () => {
+        this.setState({
+          [stateKey]: false,
+        });
+
+        this.props.closeModal();
+      };
+
       const handleEditClick = () => {
         this.props.openModal(
           <EditModal
-            onClose={this.props.closeModal}
+            onClose={handleEditDone}
             skey={topKey}
             svalue={key}
             id={this.props.id}

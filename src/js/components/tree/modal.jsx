@@ -13,13 +13,13 @@ type Props = {
   skey: string,
   svalue: string,
   id: number,
-  updateData: Function,
+  updateSensitiveData: Function,
 };
 
 @connect(
   null,
   {
-    updateData: actions.orders.updateData,
+    updateSensitiveData: actions.orders.updateSensitiveData,
   }
 )
 export default class SenstiveYamlEditModal extends Component {
@@ -48,8 +48,7 @@ export default class SenstiveYamlEditModal extends Component {
   }
 
   handleSaveClick: Function = (): void => {
-    this.props.updateData(
-      'Sensitive',
+    this.props.updateSensitiveData(
       this.refs.data.value,
       this.props.id,
       this.props.skey,

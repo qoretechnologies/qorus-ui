@@ -1,5 +1,6 @@
 /* @flow */
 import isArray from 'lodash/isArray';
+import jsYaml from 'js-yaml';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
 import { normalizeName } from '../utils';
@@ -474,6 +475,29 @@ const fetchYamlData: Object = {
 };
 
 
+const updateSensitiveData: Object = {
+  next(
+    state: Object,
+    {
+      payload: {
+        newdata,
+        id,
+        skey,
+        svalue,
+      },
+    }
+  ): Object {
+    const data: Array<Object> = [...state.data];
+    const { sensitive_data: sensitiveData } = data.find((datum: Object): bool => datum.id === id);
+
+    sensitiveData[skey][svalue].data = jsYaml.safeLoad(newdata);
+
+    const updatedData: Object = updateItemWithId(id, { sensitive_data: sensitiveData }, data);
+
+    return { ...state, ...{ updatedData } };
+  },
+};
+
 const updateData: Object = {
   next(state: Object): Object {
     return state;
@@ -510,5 +534,6 @@ export {
   setPriority as SETPRIORITY,
   updateStepInstances as UPDATESTEPINSTANCES,
   updateData as UPDATEDATA,
+  updateSensitiveData as UPDATESENSITIVEDATA,
   fetchYamlData as FETCHYAMLACTION,
 };
