@@ -488,13 +488,19 @@ const updateSensitiveData: Object = {
     }
   ): Object {
     const data: Array<Object> = [...state.data];
-    const { sensitive_data: sensitiveData } = data.find((datum: Object): bool => datum.id === id);
+    const order = data.find((datum: Object): bool => datum.id === id);
 
-    sensitiveData[skey][svalue].data = jsYaml.safeLoad(newdata);
+    if (order) {
+      const sensitiveData = order.sensitive_data;
 
-    const updatedData: Object = updateItemWithId(id, { sensitive_data: sensitiveData }, data);
+      sensitiveData[skey][svalue].data = jsYaml.safeLoad(newdata);
 
-    return { ...state, ...{ updatedData } };
+      const updatedData: Object = updateItemWithId(id, { sensitive_data: sensitiveData }, data);
+
+      return { ...state, ...{ updatedData } };
+    }
+
+    return state;
   },
 };
 
