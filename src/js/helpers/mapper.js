@@ -5,7 +5,12 @@ import trimEnd from 'lodash/trimEnd';
 const formatFieldSource: Function = (fieldSource: string): Object => {
   let newSource = fieldSource;
   newSource = trimStart(newSource, '(');
-  newSource = trimEnd(newSource, ')');
+  newSource = trimEnd(newSource, ') ');
+
+  if (newSource.indexOf('runtime') !== -1) {
+    newSource = trimStart(newSource, '{');
+    newSource = trimEnd(newSource, '}');
+  }
 
   // Check if there is any code in the fieldsource
   const code = newSource.substring(
@@ -15,6 +20,11 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
 
   // Pull it out if there is
   if (code !== '') {
+    if (newSource.startsWith('{')) {
+      newSource = trimStart(newSource, '{');
+      newSource = trimEnd(newSource, '{');
+    }
+
     newSource = newSource.replace(code, '');
   }
 
@@ -26,7 +36,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
 
   const data = sourceArray.map((attr) => {
     if (attr === '' || attr === ' ') {
-      if (code !== '') {
+      if (code !== '' && code !== '{}') {
         return {
           key: 'code',
           value: 'Click to view code',
