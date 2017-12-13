@@ -1,15 +1,40 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import TreeView from './tree';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import withHandlers from 'recompose/withHandlers';
+import pure from 'recompose/onlyUpdateForKeys';
 
-export default function DynamicView(props) {
-  return (
+import actions from '../../../store/api/actions';
+
+const DynamicView: Function = ({
+  order,
+  handleEditClick,
+}: {
+    order: Object,
+    handleEditClick: Function,
+  }): React.Element<any> => (
     <TreeView
       data="dynamicdata"
-      order={props.order}
+      order={order}
+      onEditClick={handleEditClick}
+      customEdit
+      withEdit
     />
   );
-}
 
-DynamicView.propTypes = {
-  order: PropTypes.object,
-};
+export default compose(
+  connect(
+    null,
+    {
+      fetchYamlData: actions.orders.fetchYamlData,
+    }
+  ),
+  withHandlers({
+    handleEditClick: ({ fetchYamlData, params }): Function => (): void => {
+      fetchYamlData('Dynamic', params.id);
+    },
+  }),
+  pure(['order'])
+)(DynamicView);

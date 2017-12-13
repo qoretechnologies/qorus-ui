@@ -12,6 +12,10 @@ export default {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
+  YAML_REST_HEADERS: {
+    Accept: 'application/x-yaml',
+    'Content-Type': 'application/x-yaml',
+  },
   NOTIFICATION_TIMEOUT: 5000,
   PROTOCOL: location.protocol,
 };

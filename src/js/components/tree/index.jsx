@@ -4,7 +4,11 @@ import classNames from 'classnames';
 
 import { Controls, Control as Button } from '../controls';
 import Alert from '../alert';
+import Icon from '../icon';
+import withModal from '../../hocomponents/modal';
+import EditModal from './modal';
 
+@withModal()
 export default class Tree extends Component {
   static propTypes = {
     data: PropTypes.oneOfType([
@@ -14,12 +18,28 @@ export default class Tree extends Component {
     withEdit: PropTypes.bool,
     onUpdateClick: PropTypes.func,
     noControls: PropTypes.bool,
+    forceEdit: PropTypes.bool,
+    customEditData: PropTypes.string,
+    customEdit: PropTypes.bool,
+    onEditClick: PropTypes.func,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    id: PropTypes.number,
+    editableKeys: PropTypes.bool,
   };
 
   componentWillMount() {
     this.setState({
       mode: 'normal',
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.forceEdit) {
+      this.setState({
+        mode: 'edit',
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -35,6 +55,10 @@ export default class Tree extends Component {
   };
 
   handleEditClick = () => {
+    if (this.props.onEditClick) {
+      this.props.onEditClick();
+    }
+
     this.setState({
       mode: 'edit',
     });
@@ -68,7 +92,7 @@ export default class Tree extends Component {
     this.setState(st);
   };
 
-  renderTree(data, top, k) {
+  renderTree(data, top, k, topKey) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-top': top,
@@ -84,6 +108,25 @@ export default class Tree extends Component {
         this.setState({
           [stateKey]: !this.state[stateKey],
         });
+      };
+
+      const handleEditDone = () => {
+        this.setState({
+          [stateKey]: false,
+        });
+
+        this.props.closeModal();
+      };
+
+      const handleEditClick = () => {
+        this.props.openModal(
+          <EditModal
+            onClose={handleEditDone}
+            skey={topKey}
+            svalue={key}
+            id={this.props.id}
+          />
+        );
       };
 
       return (
@@ -102,10 +145,16 @@ export default class Tree extends Component {
           >
             {isObject ? key : `${key}:`}
           </span>
+          {this.props.editableKeys && topKey && (
+            <span onClick={handleEditClick}>
+              {' '}
+              <Icon icon="pencil" tooltip="Edit data" />
+            </span>
+          )}
           {' '}
           {isExpandable && (
              isObject ?
-              this.renderTree(data[key], false, stateKey) :
+              this.renderTree(data[key], false, stateKey, top ? key : null) :
               data[key].toString()
           )}
         </div>
@@ -129,6 +178,14 @@ export default class Tree extends Component {
   }
 
   renderEdit(data) {
+    if (this.props.customEdit) {
+      if (this.props.customEditData) {
+        return JSON.parse(this.props.customEditData);
+      }
+
+      return 'Loading data...';
+    }
+
     return JSON.stringify(data, null, 4);
   }
 
@@ -189,7 +246,7 @@ export default class Tree extends Component {
                     disabled={this.state.mode === 'copy'}
                     action={this.handleCopyClick}
                   />
-                  { withEdit && (
+                  {withEdit && (
                     <Button
                       className="button--copy"
                       label="Edit mode"
@@ -221,6 +278,7 @@ export default class Tree extends Component {
         {this.state.mode === 'edit' &&
           <div>
             <textarea
+              key={this.props.customEditData}
               ref="editedData"
               id="tree-content"
               className="form-control"

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import { browserHistory } from 'react-router';
 
-
 import settings from '../../settings';
 
 
@@ -101,8 +100,8 @@ export function createApiActions(actions) {
  *
  * @return {*}  headers for request
  */
-function getRestHeaders() {
-  let headers = settings.DEFAULT_REST_HEADERS;
+function getRestHeaders(yaml) {
+  let headers = yaml ? settings.YAML_REST_HEADERS : settings.DEFAULT_REST_HEADERS;
 
   const token = window.localStorage.getItem('token');
 
@@ -159,13 +158,13 @@ function checkResponse(res, currentPath, redirectOnError = true) {
  * @return {Object}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchData(method, url, opts, dontCheck, redirectOnError) {
+export async function fetchData(method, url, opts, dontCheck, redirectOnError, yaml) {
   const currentPath = window.location.pathname;
   const res = await fetch(
     url,
     Object.assign({
       method,
-      headers: getRestHeaders(),
+      headers: getRestHeaders(yaml),
     }, opts)
   );
 
@@ -179,6 +178,12 @@ export async function fetchData(method, url, opts, dontCheck, redirectOnError) {
 export async function fetchJson(method, url, opts = {}, dontCheck, redirectOnError) {
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   return res.json();
+}
+
+export async function fetchYaml(method, url, opts = {}, dontCheck, redirectOnError, yaml) {
+  const res = await fetchData(method, url, opts, dontCheck, redirectOnError, yaml);
+
+  return res.text();
 }
 
 export async function fetchText(method, url, opts, dontCheck, redirectOnError) {
