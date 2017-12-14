@@ -18,18 +18,21 @@ import Connection from './connection';
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
   Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
     const str = value.replace(/ /g, '');
-    const regex = /^\("name":+"(\w+)"/;
+    const regex = /^\("name":+"([-.\w]+)"/;
     const matching = str.match(regex);
 
     if (matching) {
-      return { [key]: matching[1] };
+      const match = matching[1].indexOf('.') !== -1 ? matching[1].split('.') : [matching[1]];
+
+      return { [key]: match[0] };
     }
 
     if (inputs[key]) {
       const seq = /^\("sequence":+"(\w+)"/;
       const con = /^\("constant":+"(\w+)"/;
+      const run = /^\("runtime":+"(\w+)"/;
 
-      if (!str.match(seq) && !str.match(con)) {
+      if (!str.match(seq) && !str.match(con) && !str.match(run)) {
         return { [key]: key };
       }
     }
@@ -280,100 +283,6 @@ const HEADER_HEIGHT = 40;
 const PADDING_ELEMENTS = 5;
 const RECT_HEIGHT = 45;
 const RECT_WIDTH = 200;
-
-/* const getNewPosition = (position, output) => {
-  let result = position;
-
-  // eslint-disable-next-line
-  while (output.find(obj => obj.position === result)) {
-    result = result + 1;
-  }
-
-  return result;
-};
-
-const getInputFieldsMap = (source, relations) => (
-  Object
-    .keys(source)
-    .map((item, idx) => [item, idx])
-    .reduce((prev, current) => {
-      const hasRel = relations.map((rel: Object) => {
-        const entries = Object.entries(rel)[0];
-
-        if (entries[0] === current[0] || entries[1] === current[0]) {
-          return entries[0];
-        }
-
-        return null;
-      }).filter(itm => itm);
-
-      return ([...prev, {
-        name: current[0],
-        relation: hasRel.length ? hasRel : null,
-      }]);
-    }, [])
-    .sort(a => (a.relation ? -1 : 1))
-    .map((item, idx) => ({ ...item, position: idx }))
-);
-
-const getOutputFieldsMap = (source, relations, inputs, fieldSources) => (
-  Object
-  .keys(source)
-  .map((item, idx) => [item, idx])
-  .reduce((prev, current) => {
-    const hasRel = inputs.find(obj => (
-      includes(obj.relation, current[0])
-    ));
-
-    const { data, code }= formatFieldSource(fieldSources[current[0]]);
-    const hasData = data.length > 0 || code !== '';
-
-    return ([...prev, {
-      name: current[0],
-      position: hasRel ?
-        getNewPosition(hasRel.position, prev) : null,
-      relation: hasRel || null,
-      hasData,
-    }]);
-  }, [])
-  .sort(a => {
-    if (a.position || a.position === 0) {
-      return -1;
-    }
-
-    if (a.hasData) {
-      return 0;
-    }
-
-    return 1;
-  })
-);
-
-const getInputMap = mapProps(props => ({
-  ...props,
-  inputMap: getInputFieldsMap(
-    props.mapper.opts.input,
-    props.relations,
-  ),
-}));
-
-const getOutputMap = mapProps(props => ({
-  ...props,
-  outputMap: getOutputFieldsMap(
-    props.mapper.opts.output,
-    props.relations,
-    props.inputMap,
-    props.mapper.field_source,
-  );
-}));
-
-const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
-  inputCount: inputMap.length,
-  outputCount: outputMap.length,
-  elementCount: Math.max(inputMap.length, outputMap.length),
-}));
-
-*/
 
 const getFieldsMap = (source) => Object
   .keys(source)
