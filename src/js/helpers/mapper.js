@@ -7,7 +7,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
   newSource = trimStart(newSource, '(');
   newSource = trimEnd(newSource, ') ');
 
-  if (newSource.indexOf('runtime') !== -1) {
+  if (newSource.indexOf('runtime') !== -1 && newSource !== '{}' && newSource !== '{},') {
     newSource = trimStart(newSource, '{');
     newSource = trimEnd(newSource, '}');
   }
@@ -19,7 +19,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
   );
 
   // Pull it out if there is
-  if (code !== '') {
+  if (code !== '' && code !== '{}') {
     if (newSource.startsWith('{')) {
       newSource = trimStart(newSource, '{');
       newSource = trimEnd(newSource, '{');
@@ -35,7 +35,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
   const sourceArray = newSource.split(',');
 
   const data = sourceArray.map((attr) => {
-    if (attr === '' || attr === ' ') {
+    if (attr === '' || attr === ' ' || attr === '{}') {
       if (code !== '' && code !== '{}') {
         return {
           key: 'code',
