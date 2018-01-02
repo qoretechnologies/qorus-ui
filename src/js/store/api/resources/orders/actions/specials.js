@@ -21,10 +21,11 @@ const fetchOrders = createAction(
   ): Object => {
     let url: string;
     const status: string = !filter || filter === 'filter' ? '' : filter;
-    const maxDate: string = searchData.maxDate || '29991231';
-    const sendDate: boolean = !(searchData.ids || searchData.keyValue);
 
     if (!id || id === 'id') {
+      const maxDate: string = searchData.maxDate || '29991231';
+      const sendDate: boolean = !(searchData.ids || searchData.keyValue);
+
       url = `${settings.REST_BASE_URL}/orders?` +
       `ids=${searchData.ids || ''}&` +
       `date=${!sendDate ? '' : searchData.minDate}&` +

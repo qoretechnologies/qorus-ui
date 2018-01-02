@@ -17,10 +17,10 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
     <Modal.Header
       titleId="warningModal"
       onClose={onClose}
-    > Unsecure connection </Modal.Header>
+    > Insecure connection </Modal.Header>
     <Modal.Body>
       <p>
-        You are currently using this site via unsecure connection.
+        You are currently using this site via an insecure connection.
         Some functionality requiring a secure connection will not be available.
       </p>
     </Modal.Body>
