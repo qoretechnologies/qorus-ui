@@ -10,14 +10,19 @@ import Dropdown, { Control, Item } from 'components/dropdown';
 import Alert from '../../components/alert';
 import { pureRender } from '../../components/utils';
 import Icon from '../../components/icon';
+import queryControl from '../../hocomponents/queryControl';
 
 @pureRender
+@queryControl('target')
+@queryControl('prevQuery')
 export default class OrderHeader extends Component {
   static propTypes = {
     data: PropTypes.object,
     workflow: PropTypes.object,
     username: PropTypes.string,
     linkDate: PropTypes.string,
+    targetQuery: PropTypes.string,
+    prevQueryQuery: PropTypes.string,
   };
 
   static contextTypes = {
@@ -103,14 +108,21 @@ export default class OrderHeader extends Component {
   }
 
   render() {
+    const backQueriesObj = JSON.parse(JSON.parse(this.props.prevQueryQuery));
+    const backQueriesStr = Object.keys(backQueriesObj).reduce((cur, next, index) => {
+      const last = index === Object.keys(backQueriesObj).length - 1;
+
+      return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
+    }, `${this.props.targetQuery}?`);
+
     return (
       <div className="order-header">
         <div className="row">
           <div className="col-xs-12">
             <h3 className="detail-title pull-left">
-              <a href="#" onClick={this.handleBackClick}>
+              <Link to={backQueriesStr}>
                 <Icon icon="angle-left" />
-              </a>
+              </Link>
               {' '}
               { this.renderIcon() }
               {' '}

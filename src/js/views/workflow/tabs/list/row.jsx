@@ -14,6 +14,7 @@ import OrderControls from './controls';
 import Date from '../../../../components/date';
 import AutoComp from '../../../../components/autocomponent';
 import { ALL_ORDER_STATES } from '../../../../constants/orders';
+import queryControl from '../../../../hocomponents/queryControl';
 import Lock from './lock';
 
 type Props = {
@@ -43,6 +44,8 @@ type Props = {
   isTablet: boolean,
   searchPage?: boolean,
   workflowid: number,
+  allQuery: Object,
+  target: string,
 }
 
 const TableRow: Function = ({
@@ -68,6 +71,8 @@ const TableRow: Function = ({
   label,
   isTablet,
   searchPage,
+  allQuery,
+  target
 }: Props): React.Element<any> => (
   <Tr
     onHighlightEnd={handleHighlightEnd}
@@ -94,7 +99,7 @@ const TableRow: Function = ({
     )}
     <Td className="medium">
       <Link
-        to={`/order/${id}/${date}`}
+        to={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(allQuery)}`}
         className="resource-name-link"
         title={name}
       >
@@ -154,6 +159,9 @@ export default compose(
       state.name === workflowstatus
     )).label,
     workflowstatus,
+    target: rest.searchPage ?
+      '/search/orders' :
+      `/workflow/${rest.workflowid}/list`,
     ...rest,
   })),
   withHandlers({
@@ -164,6 +172,7 @@ export default compose(
       updateDone(id);
     },
   }),
+  queryControl(),
   pure([
     'date',
     '_selected',
