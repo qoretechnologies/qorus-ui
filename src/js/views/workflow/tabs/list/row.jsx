@@ -72,7 +72,7 @@ const TableRow: Function = ({
   isTablet,
   searchPage,
   allQuery,
-  target
+  target,
 }: Props): React.Element<any> => (
   <Tr
     onHighlightEnd={handleHighlightEnd}
