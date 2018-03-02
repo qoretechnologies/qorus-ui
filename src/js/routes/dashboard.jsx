@@ -50,6 +50,7 @@ const DashboardRoutes = (): React.Element<any> => (
     </Route>
     <Route path="errors" component={System.Errors} />
     <Route path="releases" component={System.Releases} />
+    <Route path="cluster" component={System.Cluster} />
   </Route>
 );
 

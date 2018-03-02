@@ -1,17 +1,16 @@
 /* @flow */
 import classNames from 'classnames';
 
-const statusHealth: Function = (health: string): string => (
+const statusHealth: Function = (health: string): string =>
   classNames({
     danger: health === 'RED',
     success: health === 'GREEN',
-    warning: health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
-  })
-);
+    warning:
+      health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
+  });
 
-const utf8ToB64: Function = (str: string): string => (
-  window.btoa(encodeURIComponent(str))
-);
+const utf8ToB64: Function = (str: string): string =>
+  window.btoa(encodeURIComponent(str));
 
 const alertTypeToResource: Object = {
   WORKFLOW: {
@@ -83,14 +82,21 @@ const getAlertObjectLink: Function = (type: string, data: Object): string => {
   const res = alertTypeToResource[type];
 
   // eslint-disable-next-line
-  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}${res.suffix || ''}`;
+  return `/${res.resource}${
+    res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`
+  }${res.suffix || ''}`;
 };
 
-const getDependencyObjectLink: Function = (type: string, data: Object): string => {
+const getDependencyObjectLink: Function = (
+  type: string,
+  data: Object
+): string => {
   const res = interfaceTypeToResource[type];
 
   // eslint-disable-next-line
-  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}`;
+  return `/${res.resource}${
+    res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`
+  }`;
 };
 
 const typeToString: Function = (val: any): any => {
@@ -105,10 +111,21 @@ const typeToString: Function = (val: any): any => {
   return val;
 };
 
+const getProcessObjectLink: Function = (process: Object) => {
+  if (process.type === 'qdsp') {
+    return `/system/remote/datasources?paneId=${process.client_id}`;
+  } else if (process.type === 'qwf') {
+    return `/workflows?paneId=${process.wfid}&paneTab=details`;
+  }
+
+  return null;
+};
+
 export {
   statusHealth,
   utf8ToB64,
   getAlertObjectLink,
   getDependencyObjectLink,
   typeToString,
+  getProcessObjectLink,
 };

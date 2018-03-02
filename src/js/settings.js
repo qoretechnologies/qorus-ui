@@ -6,7 +6,8 @@ const location = window && window.location ? window.location : {
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 
 export default {
-  REST_BASE_URL: process.env.TESTINST || process.env.NODE_ENV === 'dev_fix' ? '/api' : '/api/v2',
+  // eslint-disable-next-line
+  REST_BASE_URL: process.env.TESTINST || process.env.NODE_ENV === 'dev_fix' ? '/api' : '/api/latest',
   WS_BASE_URL: `${wsProtocol}//${location.host}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',

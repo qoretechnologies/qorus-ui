@@ -21,3 +21,4 @@ export * as releases from './releases/reducers';
 export * as slas from './slas/reducers';
 export * as slaevents from './slas/events/reducers';
 export * as slaperf from './slas/perf/reducers';
+export * as system from './system/reducers';

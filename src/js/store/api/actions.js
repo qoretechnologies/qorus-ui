@@ -25,6 +25,7 @@ import * as releasesActions from './resources/releases/actions';
 import * as slasActions from './resources/slas/actions';
 import * as slaEventsActions from './resources/slas/events/actions';
 import * as slaPerfActions from './resources/slas/perf/actions';
+import * as systemActions from './resources/system/actions';
 
 import {
   combineResourceActions,
@@ -49,43 +50,32 @@ export const DEFAULT_ACTIONS = {
         newUrl = `${newUrl}?${query}`;
       }
 
-      return fetchJson(
-          'GET',
-          newUrl,
-          params
-      );
+      return fetchJson('GET', newUrl, params);
     },
     meta: (params, id) => ({ params, id }),
   },
   ACTION: {
-    action: url => (params, id, urlParams) => fetchJson(
-      'PUT',
-      id ? `${url}/${id}` : `${url}/${urlParams || ''}`,
-      params
-    ),
+    action: url => (params, id, urlParams) =>
+      fetchJson(
+        'PUT',
+        id ? `${url}/${id}` : `${url}/${urlParams || ''}`,
+        params
+      ),
     meta: (params, id) => ({ params, id }),
   },
   BATCH_ACTION: {
-    action: url => (action, ids, query = '', params, key = 'ids') => fetchJson(
-      'PUT',
-      `${url}?action=${action}&${key}=${ids}&${query}`,
-    ),
+    action: url => (action, ids, query = '', params, key = 'ids') =>
+      fetchJson('PUT', `${url}?action=${action}&${key}=${ids}&${query}`),
     meta: (action, ids, query, params) => ({ action, ids, query, params }),
   },
   UPDATE: {
-    action: url => (params, id) => fetchJson(
-      'POST',
-      id ? `${url}/${id}` : url,
-      params
-    ),
+    action: url => (params, id) =>
+      fetchJson('POST', id ? `${url}/${id}` : url, params),
     meta: (params, id) => ({ params, id }),
   },
   REMOVE: {
-    action: url => (params, id, urlParams) => fetchJson(
-      'DELETE',
-      id ? `${url}/${id}` : `${url}/${urlParams}`,
-      params
-    ),
+    action: url => (params, id, urlParams) =>
+      fetchJson('DELETE', id ? `${url}/${id}` : `${url}/${urlParams}`, params),
     meta: (params, id) => ({ params, id }),
   },
 };
@@ -93,7 +83,7 @@ export const DEFAULT_ACTIONS = {
 const actions = createApiActions(
   combineResourceActions(
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),
-    createResourceActions(RESOURCES),
+    createResourceActions(RESOURCES)
   )
 );
 
@@ -120,6 +110,8 @@ Object.assign(actions.extensions, extensionsActions);
 Object.assign(actions.orderErrors, orderErrorsActions);
 
 Object.assign(actions.releases, releasesActions);
+
+Object.assign(actions.system, systemActions);
 
 Object.assign(actions.slas, slasActions);
 

@@ -11,7 +11,6 @@ import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
 import settings from '../../../settings';
 
-
 export default [
   {
     name: 'workflows',
@@ -27,10 +26,7 @@ export default [
   {
     name: 'steps',
     url: `${settings.REST_BASE_URL}/steps`,
-    transform: _.flowRight(
-      normalizeName,
-      normalizeId('stepid')
-    ),
+    transform: _.flowRight(normalizeName, normalizeId('stepid')),
   },
   {
     name: 'errors',
@@ -45,9 +41,7 @@ export default [
   {
     name: 'systemOptions',
     url: `${settings.REST_BASE_URL}/system/options`,
-    transform: _.flowRight(
-      normalizeId('name'),
-    ),
+    transform: _.flowRight(normalizeId('name')),
   },
   {
     name: 'users',
@@ -81,23 +75,19 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('jobid'),
-      checkAlerts,
+      checkAlerts
       // extendDefaults(servicesDefaults)
     ),
   },
   {
     name: 'orders',
     url: `${settings.REST_BASE_URL}/orders`,
-    transform: _.flowRight(
-      normalizeId('workflow_instanceid'),
-    ),
+    transform: _.flowRight(normalizeId('workflow_instanceid')),
   },
   {
     name: 'alerts',
     url: `${settings.REST_BASE_URL}/system/alerts`,
-    transform: _.flowRight(
-      normalizeId('alertid'),
-    ),
+    transform: _.flowRight(normalizeId('alertid')),
   },
   {
     name: 'health',
@@ -117,9 +107,7 @@ export default [
   {
     name: 'remotes',
     url: `${settings.REST_BASE_URL}/remote`,
-    transform: _.flowRight(
-      normalizeId('name'),
-    ),
+    transform: _.flowRight(normalizeId('name')),
   },
   {
     name: 'userhttp',
@@ -134,23 +122,17 @@ export default [
   {
     name: 'classes',
     url: `${settings.REST_BASE_URL}/classes`,
-    transform: _.flowRight(
-      normalizeId('classid'),
-    ),
+    transform: _.flowRight(normalizeId('classid')),
   },
   {
     name: 'constants',
     url: `${settings.REST_BASE_URL}/constants`,
-    transform: _.flowRight(
-      normalizeId('constantid'),
-    ),
+    transform: _.flowRight(normalizeId('constantid')),
   },
   {
     name: 'functions',
     url: `${settings.REST_BASE_URL}/functions`,
-    transform: _.flowRight(
-      normalizeId('function_instanceid'),
-    ),
+    transform: _.flowRight(normalizeId('function_instanceid')),
   },
   {
     name: 'ocmd',
@@ -200,9 +182,7 @@ export default [
   {
     name: 'orderErrors',
     url: `${settings.REST_BASE_URL}/orders?action=listErrors`,
-    transform: _.flowRight(
-      normalizeId('workflow_instanceid'),
-    ),
+    transform: _.flowRight(normalizeId('workflow_instanceid')),
   },
   {
     name: 'releases',

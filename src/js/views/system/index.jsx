@@ -15,6 +15,7 @@ import Rbac from './rbac';
 import Valuemaps from './valuemaps';
 import Releases from '../../containers/releases';
 import Slas from './slas';
+import Cluster from './cluster';
 
 type Props = {
   location: Object,
@@ -26,6 +27,7 @@ const System: Function = ({ location, children }: Props): React.Element<any> => 
     <Nav path={location.pathname}>
       <NavLink to="./dashboard">Dashboard</NavLink>
       <NavLink to="./alerts">Alerts</NavLink>
+      <NavLink to="./cluster">Cluster</NavLink>
       <NavLink to="./options">Options</NavLink>
       <NavLink to="./remote">Connections</NavLink>
       <NavLink to="./props">Properties</NavLink>
@@ -61,5 +63,6 @@ System.Errors = Errors;
 System.Valuemaps = Valuemaps;
 System.Releases = Releases;
 System.Slas = Slas;
+System.Cluster = Cluster;
 
 export default System;

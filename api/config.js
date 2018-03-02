@@ -21,7 +21,7 @@ module.exports = {
   env: process.env.NODE_ENV || 'development',
   restProxy: isRestOverride,
   restBaseUrl: process.env.REST_BASE_URL ||
-    `${apiProto}://${apiHost}:${apiPort}/api/v2`,
+    `${apiProto}://${apiHost}:${apiPort}/api/latest`,
   extensionProxy: isApiOverride && `${apiProto}://${apiHost}:${apiPort}/UIExtension`,
   dbProxy: isApiOverride && `${apiProto}://${apiHost}:${apiPort}/db`,
   wsProxy: isWsOverride,

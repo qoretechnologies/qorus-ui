@@ -9,6 +9,7 @@ import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
 import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
+import * as system from '../api/resources/system/actions';
 import { pipeline } from '../../helpers/apievents';
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -18,6 +19,21 @@ const handleEvent = (url, data, dispatch, state) => {
     const { info, eventstr } = d;
 
     switch (eventstr) {
+      case 'PROCESS_STARTED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.addProcess, info, dispatch);
+        }
+        break;
+      case 'PROCESS_MEMORY_CHANGED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.processMemoryChanged, info, dispatch);
+        }
+        break;
+      case 'PROCESS_STOPPED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.removeProcess, info, dispatch);
+        }
+        break;
       case 'ALERT_ONGOING_RAISED':
         switch (info.type) {
           case 'WORKFLOW':
@@ -131,12 +147,7 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         if (state.api.alerts.sync) {
-          pipeline(
-            eventstr,
-            alerts.cleared,
-            { id: info.alertid },
-            dispatch
-          );
+          pipeline(eventstr, alerts.cleared, { id: info.alertid }, dispatch);
         }
 
         break;
@@ -171,7 +182,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'SERVICE_START':
         if (state.api.services.sync) {
-          const service = state.api.services.data.find(srv => srv.id === info.serviceid);
+          const service = state.api.services.data.find(
+            srv => srv.id === info.serviceid
+          );
 
           if (service) {
             pipeline(
@@ -216,7 +229,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'WORKFLOW_START':
         if (state.api.workflows.sync) {
-          const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+          const workflow = state.api.workflows.data.find(
+            wf => wf.id === info.workflowid
+          );
 
           if (workflow) {
             pipeline(
@@ -238,14 +253,18 @@ const handleEvent = (url, data, dispatch, state) => {
           const ordersCount = state.api.orders.data.length;
           const currentOrder = state.api.orders.data[0];
 
-          if (ordersCount === 1 &&
+          if (
+            ordersCount === 1 &&
             currentOrder.HierarchyInfo &&
-            currentOrder.HierarchyInfo[info.parent_workflow_instanceid]) {
+            currentOrder.HierarchyInfo[info.parent_workflow_instanceid]
+          ) {
             dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
           }
         }
 
-        const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+        const workflow = state.api.workflows.data.find(
+          wf => wf.id === info.workflowid
+        );
 
         if (state.api.orders.sync && workflow) {
           // Add new orders only if we aren't on the order page detail
@@ -274,18 +293,22 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'WORKFLOW_STATUS_CHANGED': {
-        const workflow = state.api.workflows.data.find(wf => wf.id === info.workflowid);
+        const workflow = state.api.workflows.data.find(
+          wf => wf.id === info.workflowid
+        );
 
         if (state.api.orders.sync) {
-          const order = state.api.orders.data.find(ord => (
-            ord.workflow_instanceid === info.workflow_instanceid
-          ));
+          const order = state.api.orders.data.find(
+            ord => ord.workflow_instanceid === info.workflow_instanceid
+          );
           const ordersCount = state.api.orders.data.length;
           const currentOrder = state.api.orders.data[0];
 
-          if (ordersCount === 1 &&
+          if (
+            ordersCount === 1 &&
             currentOrder.HierarchyInfo &&
-            currentOrder.HierarchyInfo[info.workflow_instanceid]) {
+            currentOrder.HierarchyInfo[info.workflow_instanceid]
+          ) {
             dispatch(orders.updateHierarchy(currentOrder.workflow_instanceid));
           }
 
@@ -341,7 +364,9 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       case 'WORKFLOW_DATA_UPDATED': {
-        const order = state.api.orders.data.find(ord => ord.id === info.workflow_instanceid);
+        const order = state.api.orders.data.find(
+          ord => ord.id === info.workflow_instanceid
+        );
 
         if (order && state.api.orders.sync) {
           dispatch(orders.fetchData(info.workflow_instanceid, info.datatype));
@@ -349,7 +374,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_STOP': {
-        const job = state.api.jobs.data.find(jb => jb.id === parseInt(info.jobid, 10));
+        const job = state.api.jobs.data.find(
+          jb => jb.id === parseInt(info.jobid, 10)
+        );
 
         if (job) {
           pipeline(
@@ -362,7 +389,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_START': {
-        const job = state.api.jobs.data.find(jb => jb.id === parseInt(info.jobid, 10));
+        const job = state.api.jobs.data.find(
+          jb => jb.id === parseInt(info.jobid, 10)
+        );
 
         if (job) {
           pipeline(
@@ -439,9 +468,9 @@ const handleEvent = (url, data, dispatch, state) => {
         if (info.synthetic) {
           switch (info.type) {
             case 'workflow': {
-              const workflow = state.api.workflows.data.find((wf) => (
-                wf.id === parseInt(info.id, 10)
-              ));
+              const workflow = state.api.workflows.data.find(
+                wf => wf.id === parseInt(info.id, 10)
+              );
 
               if (workflow) {
                 pipeline(
@@ -457,9 +486,9 @@ const handleEvent = (url, data, dispatch, state) => {
               break;
             }
             case 'service': {
-              const service = state.api.services.data.find((srv) => (
-                srv.id === parseInt(info.id, 10)
-              ));
+              const service = state.api.services.data.find(
+                srv => srv.id === parseInt(info.id, 10)
+              );
 
               if (service) {
                 pipeline(
@@ -475,9 +504,9 @@ const handleEvent = (url, data, dispatch, state) => {
               break;
             }
             case 'job': {
-              const job = state.api.jobs.data.find((jb) => (
-                jb.id === parseInt(info.id, 10)
-              ));
+              const job = state.api.jobs.data.find(
+                jb => jb.id === parseInt(info.id, 10)
+              );
 
               if (job) {
                 pipeline(
@@ -516,10 +545,7 @@ const handleEvent = (url, data, dispatch, state) => {
   });
 };
 
-const messageAction = createAction(
-  'APIEVENTS_MESSAGE',
-  handleEvent,
-);
+const messageAction = createAction('APIEVENTS_MESSAGE', handleEvent);
 
 const message = (url, data) => (dispatch, getState) => {
   dispatch(messageAction(url, data, dispatch, getState()));
@@ -531,7 +557,4 @@ const disconnect = () => () => {
   browserHistory.push(`/error?next=${pathname}`);
 };
 
-export {
-  message,
-  disconnect,
-};
+export { message, disconnect };
