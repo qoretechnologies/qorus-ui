@@ -18,7 +18,7 @@ type Props = {
   sortData: Object,
   height: string | number,
   fixed: boolean,
-}
+};
 
 const ErrorsTable: Function = ({
   data,
@@ -31,34 +31,33 @@ const ErrorsTable: Function = ({
   height,
   fixed,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    condensed
-    fixed={fixed}
-    height={height}
-    key={data.length}
-  >
+  <Table striped condensed fixed={fixed} height={height} key={data.length}>
     <Thead>
-      <Tr
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
+      <Tr sortData={sortData} onSortChange={onSortChange}>
         <Th name="error">Error</Th>
-        { !compact && (
-          <Th name="description">Description</Th>
-        )}
-        <Th className="medium" name="severity">Severity</Th>
-        <Th className="narrow" name="retry_flag">Retry</Th>
-        <Th className="narrow" name="retry_delay_secs">Delay</Th>
-        <Th className="medium" name="business_flag">Bus. Flag</Th>
-        { type === 'workflow' && (
-          <Th className="medium" name="manually_updated">Updated</Th>
+        {!compact && <Th name="description">Description</Th>}
+        <Th className="medium" name="severity">
+          Severity
+        </Th>
+        <Th className="medium" name="status">
+          Status
+        </Th>
+        <Th className="narrow" name="retry_delay_secs">
+          Delay
+        </Th>
+        <Th className="medium" name="business_flag">
+          Bus. Flag
+        </Th>
+        {type === 'workflow' && (
+          <Th className="medium" name="manually_updated">
+            Updated
+          </Th>
         )}
         <Th className="medium">-</Th>
       </Tr>
     </Thead>
     <Tbody>
-      { data.map((error: Object, index: number): React.Element<ErrorRow> => (
+      {data.map((error: Object, index: number): React.Element<ErrorRow> => (
         <ErrorRow
           key={index}
           data={error}

@@ -12,7 +12,7 @@ type Props = {
   type: string,
   onEditClick: Function,
   onDeleteClick: Function,
-}
+};
 
 const ErrorsRow: Function = ({
   data,
@@ -31,23 +31,25 @@ const ErrorsRow: Function = ({
 
   return (
     <Tr>
-      <Td className="name"><p>{ data.error }</p></Td>
-      { !compact && (
+      <Td className="name">
+        <p>{data.error}</p>
+      </Td>
+      {!compact && (
         <Td className="text">
           <Text text={data.description} />
         </Td>
       )}
-      <Td className="medium">{ data.severity }</Td>
-      <Td className="narrow">
-        <Auto>{ data.retry_flag }</Auto>
-      </Td>
-      <Td className="narrow">{ data.retry_delay_secs }</Td>
+      <Td className="medium">{data.severity}</Td>
       <Td className="medium">
-        <Auto>{ data.business_flag }</Auto>
+        <Auto>{data.status}</Auto>
       </Td>
-      { type === 'workflow' && (
+      <Td className="narrow">{data.retry_delay_secs}</Td>
+      <Td className="medium">
+        <Auto>{data.business_flag}</Auto>
+      </Td>
+      {type === 'workflow' && (
         <Td className="medium">
-          <Auto>{ data.manually_updated }</Auto>
+          <Auto>{data.manually_updated}</Auto>
         </Td>
       )}
       <Td className="medium">
