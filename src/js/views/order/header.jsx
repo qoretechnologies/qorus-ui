@@ -30,7 +30,7 @@ export default class OrderHeader extends Component {
     closeModal: PropTypes.func,
   };
 
-  handleLockClick = (model) => () => {
+  handleLockClick = model => () => {
     const label = model.operator_lock ? 'Unlock' : 'Lock';
 
     this._modal = (
@@ -45,12 +45,9 @@ export default class OrderHeader extends Component {
     this.context.openModal(this._modal);
   };
 
-  handleScheduleClick = (order) => {
+  handleScheduleClick = order => {
     this._modal = (
-      <Reschedule
-        data={order}
-        onClose={this.handleModalCloseClick}
-      />
+      <Reschedule data={order} onClose={this.handleModalCloseClick} />
     );
 
     this.context.openModal(this._modal);
@@ -67,18 +64,13 @@ export default class OrderHeader extends Component {
     const locked = data.operator_lock || '';
     const title = data.operator_lock ? 'Unlock' : 'Lock';
     const style = data.operator_lock ? 'danger' : 'success';
-    const disabled = data.operator_lock && data.operator_lock !== this.props.username;
+    const disabled =
+      data.operator_lock && data.operator_lock !== this.props.username;
 
     return (
       <Dropdown>
-        <Control
-          disabled={disabled}
-          small
-          btnStyle={style}
-        >
-          <i className={`fa fa-${icon}`} />
-          {' '}
-          { locked }
+        <Control disabled={disabled} small btnStyle={style}>
+          <i className={`fa fa-${icon}`} /> {locked}
         </Control>
         <Item
           icon={itemIcon}
@@ -89,7 +81,7 @@ export default class OrderHeader extends Component {
     );
   }
 
-  handleBackClick = (ev) => {
+  handleBackClick = ev => {
     ev.preventDefault();
 
     history.go(-1);
@@ -97,23 +89,27 @@ export default class OrderHeader extends Component {
 
   renderIcon() {
     if (this.props.workflow.enabled) {
-      return (
-        <i className="fa fa-check-circle icon-success" />
-      );
+      return <i className="fa fa-check-circle icon-success" />;
     }
 
-    return (
-      <i className="fa fa-times-circle icon-danger" />
-    );
+    return <i className="fa fa-times-circle icon-danger" />;
   }
 
   render() {
-    const backQueriesObj = JSON.parse(JSON.parse(this.props.prevQueryQuery));
-    const backQueriesStr = Object.keys(backQueriesObj).reduce((cur, next, index) => {
-      const last = index === Object.keys(backQueriesObj).length - 1;
+    const { prevQueryQuery, targetQuery, workflow } = this.props;
+    const target = targetQuery || `/workflow/${workflow.id}/list`;
 
-      return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
-    }, `${this.props.targetQuery}?`);
+    const backQueriesObj = prevQueryQuery
+      ? JSON.parse(JSON.parse(this.props.prevQueryQuery))
+      : {};
+    const backQueriesStr = Object.keys(backQueriesObj).reduce(
+      (cur, next, index) => {
+        const last = index === Object.keys(backQueriesObj).length - 1;
+
+        return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
+      },
+      `${target}?`
+    );
 
     return (
       <div className="order-header">
@@ -122,16 +118,11 @@ export default class OrderHeader extends Component {
             <h3 className="detail-title pull-left">
               <Link to={backQueriesStr}>
                 <Icon icon="angle-left" />
-              </Link>
-              {' '}
-              { this.renderIcon() }
-              {' '}
-              {this.props.data.name}
+              </Link>{' '}
+              {this.renderIcon()} {this.props.data.name}
               <small>
                 {' '}
-                {this.props.data.version}
-                {' '}
-                ({this.props.data.id})
+                {this.props.data.version} ({this.props.data.id})
               </small>
             </h3>
             <div className="order-actions pull-right">
@@ -144,8 +135,7 @@ export default class OrderHeader extends Component {
                 autostart={this.props.workflow.autostart}
                 execCount={this.props.workflow.exec_count}
                 withExec
-              />
-              {' '}
+              />{' '}
               <OrderControls
                 id={this.props.data.id}
                 workflowstatus={this.props.data.workflowstatus}
@@ -157,13 +147,16 @@ export default class OrderHeader extends Component {
             </div>
           </div>
         </div>
-        { this.props.workflow.has_alerts && (
+        {this.props.workflow.has_alerts && (
           <Alert bsStyle="danger">
             <i className="fa fa-warning" />
-            <strong> Warning: </strong> the parent workflow has alerts raised against it
-            that may prevent it from operating properly.
-            {' '}
-            <Link to={`/workflows?date=${this.props.linkDate}&paneId=${this.props.workflow.id}`}>
+            <strong> Warning: </strong> the parent workflow has alerts raised
+            against it that may prevent it from operating properly.{' '}
+            <Link
+              to={`/workflows?date=${this.props.linkDate}&paneId=${
+                this.props.workflow.id
+              }`}
+            >
               View alerts ({this.props.workflow.alerts.length}).
             </Link>
           </Alert>
