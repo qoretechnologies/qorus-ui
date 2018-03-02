@@ -13,7 +13,7 @@ const removeProcess: Function = createAction(
 
 const processMemoryChanged: Function = createAction(
   'SYSTEM_PROCESSMEMORYCHANGED',
-  (events: Array<Object>): Object => console.log(events) || { events }
+  (events: Array<Object>): Object => ({ events })
 );
 
 const updateDone = createAction('WORKFLOWS_UPDATEDONE', id => ({ id }));

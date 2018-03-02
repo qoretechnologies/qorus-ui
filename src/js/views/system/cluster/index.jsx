@@ -12,25 +12,24 @@ type Props = {
 const ClusterView: Function = ({
   nodes,
   processes,
-}: Props): React.Element<any> =>
-  console.log('updated node') || (
-    <div className="tab-pane active">
-      {Object.keys(nodes).map((node: string): any => {
-        const list: Array<Object> = Object.keys(processes).reduce(
-          (cur, process: string) => {
-            const obj = { ...processes[process], id: process };
+}: Props): React.Element<any> => (
+  <div className="tab-pane active">
+    {Object.keys(nodes).map((node: string): any => {
+      const list: Array<Object> = Object.keys(processes).reduce(
+        (cur, process: string) => {
+          const obj = { ...processes[process], id: process };
 
-            return [...cur, obj];
-          },
-          []
-        );
+          return [...cur, obj];
+        },
+        []
+      );
 
-        return (
-          <Node key={node} node={node} processes={list} memory={nodes[node]} />
-        );
-      })}
-    </div>
-  );
+      return (
+        <Node key={node} node={node} processes={list} memory={nodes[node]} />
+      );
+    })}
+  </div>
+);
 
 export default compose(
   connect((state: Object): Object => ({
