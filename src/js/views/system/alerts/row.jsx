@@ -1,18 +1,18 @@
 // @flow
-import React from "react";
-import compose from "recompose/compose";
-import pure from "recompose/onlyUpdateForKeys";
-import withHandlers from "recompose/withHandlers";
-import { connect } from "react-redux";
-import { Link } from "react-router";
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
-import { Tr, Td } from "../../../components/new_table";
-import Text from "../../../components/text";
-import Date from "../../../components/date";
-import Icon from "../../../components/icon";
-import { Control as Button } from "../../../components/controls";
-import { getAlertObjectLink } from "../../../helpers/system";
-import actions from "../../../store/api/actions";
+import { Tr, Td } from '../../../components/new_table';
+import Text from '../../../components/text';
+import Date from '../../../components/date';
+import Icon from '../../../components/icon';
+import { Control as Button } from '../../../components/controls';
+import { getAlertObjectLink } from '../../../helpers/system';
+import actions from '../../../store/api/actions';
 
 type Props = {
   alertid: number,
@@ -27,7 +27,7 @@ type Props = {
   alert: string,
   object: string,
   when: string,
-  name: string
+  name: string,
 };
 
 const AlertRow: Function = ({
@@ -40,11 +40,11 @@ const AlertRow: Function = ({
   when,
   name,
   _updated,
-  isActive
+  isActive,
 }: Props): React.Element<any> =>
   console.log(when) || (
     <Tr
-      className={isActive ? "info" : ""}
+      className={isActive ? 'info' : ''}
       highlight={_updated}
       onHighlightEnd={handleHighlightEnd}
     >
@@ -77,22 +77,22 @@ const AlertRow: Function = ({
 
 export default compose(
   connect(null, {
-    updateDone: actions.alerts.updateDone
+    updateDone: actions.alerts.updateDone,
   }),
   withHandlers({
     handleHighlightEnd: ({
       alertid,
-      updateDone
+      updateDone,
     }: Props): Function => (): void => {
       updateDone(alertid);
     },
     handleDetailClick: ({
       type,
       id,
-      openPane
+      openPane,
     }: Props): Function => (): void => {
       openPane(`${type}:${id}`);
-    }
+    },
   }),
-  pure(["isActive", "_updated"])
+  pure(['isActive', '_updated'])
 )(AlertRow);
