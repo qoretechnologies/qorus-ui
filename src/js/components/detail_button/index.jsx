@@ -9,7 +9,10 @@ type Props = {
   onClick: Function,
 };
 
-const DetailButton: Function = ({ active, onClick }: Props): React.Element<any> => (
+const DetailButton: Function = ({
+  active,
+  onClick,
+}: Props): React.Element<any> => (
   <Control
     label={active ? 'Close' : 'Detail'}
     btnStyle={active ? 'danger' : 'success'}

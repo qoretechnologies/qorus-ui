@@ -3,7 +3,8 @@ const addProcess = {
     const data = { ...state.data };
     const processes = { ...data.processes };
     const newProcesses = events.reduce(
-      (cur, event) => ({ ...processes, ...{ [event.id]: event } }),
+      (cur, event) =>
+        event.status === 0 ? cur : { ...processes, ...{ [event.id]: event } },
       processes
     );
 
@@ -35,7 +36,14 @@ const processMemoryChanged = {
 
     events.forEach(event => {
       data.cluster_memory[event.node] = event.node_priv;
-      processes[event.id] = { ...event, ...{ _updated: true } };
+
+      console.log(event.status_string);
+
+      if (event.status_string === 'IDLE') {
+        delete processes[event.id];
+      } else {
+        processes[event.id] = { ...event, ...{ _updated: true } };
+      }
     });
 
     const newData = { ...data, ...{ processes } };

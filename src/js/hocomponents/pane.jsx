@@ -19,7 +19,7 @@ export default (
   Pane: ReactClass<*>,
   propNames: ?Array<string>,
   defaultTab: ?string,
-  resource: ?string,
+  resource: ?string
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   class ComponentWithPanel extends React.Component {
     static contextTypes = {
@@ -35,8 +35,15 @@ export default (
     };
 
     handleClose: Function = (omitQueries: Array<String> = []): void => {
-      const { query, pathname }: { query: Object, pathname: string } = this.props.location;
-      const newQuery: Object = omit(query, ['paneTab', 'paneId', ...omitQueries]);
+      const {
+        query,
+        pathname,
+      }: { query: Object, pathname: string } = this.props.location;
+      const newQuery: Object = omit(query, [
+        'paneTab',
+        'paneId',
+        ...omitQueries,
+      ]);
 
       this.context.router.push({
         pathname,
@@ -48,30 +55,18 @@ export default (
       const defTab = openOnTab || defaultTab;
       const query = defTab ? { paneId, paneTab: defTab } : { paneId };
 
-      changeQuery(
-        this.context.router,
-        this.props.location,
-        query,
-      );
+      changeQuery(this.context.router, this.props.location, query);
     };
 
     handleTabChange: Function = (paneTab: number | string): void => {
-      changeQuery(
-        this.context.router,
-        this.props.location,
-        {
-          paneTab,
-        }
-      );
+      changeQuery(this.context.router, this.props.location, {
+        paneTab,
+      });
     };
 
     handlePaneSizeChange: Function = (width: number): void => {
       if (resource) {
-        this.props.storePaneSize(
-          resource,
-          width,
-          this.props.username
-        );
+        this.props.storePaneSize(resource, width, this.props.username);
       }
     };
 
@@ -80,11 +75,16 @@ export default (
 
       if (!query || !query.paneId) return undefined;
 
-      const props: Object = propNames ? propNames.reduce((obj, cur) => (
-        Object.assign(obj, { [cur]: this.props[cur] })
-      ), {}) : {};
+      const props: Object = propNames
+        ? propNames.reduce(
+            (obj, cur) => Object.assign(obj, { [cur]: this.props[cur] }),
+            {}
+          )
+        : {};
 
-      const newWidth: ?number = storage[resource] ? storage[resource].paneSize : width;
+      const newWidth: ?number = storage[resource]
+        ? storage[resource].paneSize
+        : width;
 
       return (
         <Pane
@@ -111,7 +111,7 @@ export default (
             paneId={query.paneId}
             paneTab={query.paneTab}
           />
-          { this.renderPane() }
+          {this.renderPane()}
         </div>
       );
     }

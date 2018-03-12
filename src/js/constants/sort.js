@@ -5,7 +5,6 @@ export default keyMirror({
   INIT_SORT: null,
 });
 
-
 export const sortDefaults = {
   orders: {
     sortBy: 'started',
@@ -117,6 +116,10 @@ export const sortDefaults = {
   },
   slamethods: {
     sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  nodes: {
+    sortBy: 'client_id',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
 };
