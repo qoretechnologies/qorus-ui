@@ -17,33 +17,29 @@ import InfoTab from './info_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
+import InfoTable from '../../../components/info_table/index';
 
-const workflowSelector: Function = (state: Object, props: Object): Object => (
-  state.api.workflows.data.find((wf: Object) => wf.id === parseInt(props.paneId, 10))
-);
+const workflowSelector: Function = (state: Object, props: Object): Object =>
+  state.api.workflows.data.find(
+    (wf: Object) => wf.id === parseInt(props.paneId, 10)
+  );
 
-const errorSelector: Function = (state: Object): Array<Object> => (
-  state.api.errors
-);
+const errorSelector: Function = (state: Object): Array<Object> =>
+  state.api.errors;
 
 const selector = createSelector(
-  [
-    workflowSelector,
-    errorSelector,
-  ], (workflow, errors) => ({
+  [workflowSelector, errorSelector],
+  (workflow, errors) => ({
     workflow,
     errors,
   })
 );
 
 @compose(
-  connect(
-    selector,
-    {
-      load: actions.workflows.fetchLibSources,
-      loadErrors: actions.errors.fetch,
-    }
-  ),
+  connect(selector, {
+    load: actions.workflows.fetchLibSources,
+    loadErrors: actions.errors.fetch,
+  })
 )
 export default class WorkflowsDetail extends Component {
   props: {
@@ -76,8 +72,10 @@ export default class WorkflowsDetail extends Component {
 
   getHeight: Function = (): number => {
     const navbar = document.querySelector('.navbar').clientHeight;
-    const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
-    const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
+    const paneHeader = document.querySelector('.pane__content .pane__header')
+      .clientHeight;
+    const panetabs = document.querySelector('.pane__content .nav-tabs')
+      .clientHeight;
     const top = navbar + paneHeader + panetabs + 20;
 
     return window.innerHeight - top;
@@ -96,11 +94,10 @@ export default class WorkflowsDetail extends Component {
 
       copy.scrollLeft = middle;
     }
-  }
+  };
 
   render() {
-    const { workflow, systemOptions, paneTab } =
-      this.props;
+    const { workflow, systemOptions, paneTab } = this.props;
 
     if (!workflow) return null;
 
@@ -118,7 +115,11 @@ export default class WorkflowsDetail extends Component {
             tabChange={this.props.changePaneTab}
           >
             <Pane name="Detail">
-              <DetailTab key={workflow.name} workflow={workflow} systemOptions={systemOptions} />
+              <DetailTab
+                key={workflow.name}
+                workflow={workflow}
+                systemOptions={systemOptions}
+              />
             </Pane>
             <Pane name="Code">
               <Code
@@ -127,10 +128,7 @@ export default class WorkflowsDetail extends Component {
                 location={this.props.location}
               />
             </Pane>
-            <Pane
-              name="Steps"
-
-            >
+            <Pane name="Steps">
               <div
                 style={{
                   height: '100%',
@@ -164,6 +162,21 @@ export default class WorkflowsDetail extends Component {
                 key={workflow.name}
               />
             </Pane>
+            {workflow && workflow.process ? (
+              <Pane name="Process">
+                <InfoTable
+                  object={{
+                    ...workflow.process,
+                    ...{ memory: workflow.process.priv_str },
+                  }}
+                  omit={['priv', 'rss', 'vsz', 'priv_str']}
+                />
+              </Pane>
+            ) : (
+              <Pane name="Process">
+                <p> This workflow is not running under a remote process </p>
+              </Pane>
+            )}
             <Pane name="Info">
               <InfoTab workflow={workflow} />
             </Pane>

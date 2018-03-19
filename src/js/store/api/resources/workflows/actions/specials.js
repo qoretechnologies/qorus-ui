@@ -30,7 +30,6 @@ const setOptions = createAction(
   setOptionsMeta
 );
 
-
 function fetchLibSourcesPayload(workflow) {
   const id = typeof workflow === 'object' ? workflow.id : workflow;
 
@@ -52,59 +51,41 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
-const addNew = createAction(
-  'WORKFLOWS_ADDNEW',
-  async (id) => {
-    const wf = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/workflows/${id}`
-    );
+const addNew = createAction('WORKFLOWS_ADDNEW', async id => {
+  const wf = await fetchJson(
+    'GET',
+    `${settings.REST_BASE_URL}/workflows/${id}`
+  );
 
-    return { wf };
-  }
-);
+  return { wf };
+});
 
-const setExecCount = createAction(
-  'WORKFLOWS_SETEXECCOUNT',
-  (events) => ({ events })
-);
+const setExecCount = createAction('WORKFLOWS_SETEXECCOUNT', events => ({
+  events,
+}));
 
-const setEnabled = createAction(
-  'WORKFLOWS_SETENABLED',
-  (events) => ({ events })
-);
+const setEnabled = createAction('WORKFLOWS_SETENABLED', events => ({ events }));
 
 const unselectAll = createAction('WORKFLOWS_UNSELECTALL');
 
-const updateDone = createAction(
-  'WORKFLOWS_UPDATEDONE',
-  (id) => ({ id })
+const updateDone = createAction('WORKFLOWS_UPDATEDONE', id => ({ id }));
+
+const addOrder = createAction('WORKFLOWS_ADDORDER', events => ({ events }));
+
+const modifyOrder = createAction('WORKFLOWS_MODIFYORDER', events => ({
+  events,
+}));
+
+const addAlert = createAction('WORKFLOWS_ADDALERT', events => ({ events }));
+
+const clearAlert = createAction('WORKFLOWS_CLEARALERT', events => ({ events }));
+
+const processMemoryChanged = createAction(
+  'WORKFLOWS_PROCESSMEMORYCHANGED',
+  events => ({ events })
 );
 
-const addOrder = createAction(
-  'WORKFLOWS_ADDORDER',
-  (events) => ({ events })
-);
-
-const modifyOrder = createAction(
-  'WORKFLOWS_MODIFYORDER',
-  (events) => ({ events })
-);
-
-const addAlert = createAction(
-  'WORKFLOWS_ADDALERT',
-  (events) => ({ events })
-);
-
-const clearAlert = createAction(
-  'WORKFLOWS_CLEARALERT',
-  (events) => ({ events })
-);
-
-const select = createAction(
-  'WORKFLOWS_SELECT',
-  (id) => ({ id })
-);
+const select = createAction('WORKFLOWS_SELECT', id => ({ id }));
 
 const selectAll = createAction('WORKFLOWS_SELECTALL');
 const selectNone = createAction('WORKFLOWS_SELECTNONE');
@@ -120,46 +101,39 @@ const toggleEnabledAction = createAction(
 
     fetchJson(
       'PUT',
-      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${value ? 'enable' : 'disable'}`
+      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${
+        value ? 'enable' : 'disable'
+      }`
     );
   }
 );
 
-const fetchList = createAction(
-  'WORKFLOWS_FETCHLIST',
-  async () => {
-    const result = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/workflows?list=1`
-    );
+const fetchList = createAction('WORKFLOWS_FETCHLIST', async () => {
+  const result = await fetchJson(
+    'GET',
+    `${settings.REST_BASE_URL}/workflows?list=1`
+  );
 
-    return { result };
-  }
-);
+  return { result };
+});
 
-const reset = createAction(
-  'WORKFLOWS_RESETCALL',
-  (ids) => {
-    const id = isArray(ids) ? ids.join(',') : ids;
+const reset = createAction('WORKFLOWS_RESETCALL', ids => {
+  const id = isArray(ids) ? ids.join(',') : ids;
 
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reset`
-    );
-  }
-);
+  fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reset`
+  );
+});
 
-const toggleStart = createAction(
-  'WORKFLOWS_STARTCALL',
-  (ids, type) => {
-    const id = isArray(ids) ? ids.join(',') : ids;
+const toggleStart = createAction('WORKFLOWS_STARTCALL', (ids, type) => {
+  const id = isArray(ids) ? ids.join(',') : ids;
 
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${type}`
-    );
-  }
-);
+  fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${type}`
+  );
+});
 
 const toggleDeprecated = createAction(
   'WORKFLOWS_TOGGLEDEPRECATED',
@@ -168,26 +142,27 @@ const toggleDeprecated = createAction(
 
     fetchJson(
       'PUT',
-      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=setDeprecated&deprecated=${value}`
+      `${
+        settings.REST_BASE_URL
+      }/workflows?ids=${id}&action=setDeprecated&deprecated=${value}`
     );
 
     return { ids, value };
   }
 );
 
-const setAutostart = createAction(
-  'WORKFLOWS_SETAUTOSTART',
-  (id, value) => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/workflows/${id}?action=setAutostart&autostart=${value}`
-    );
+const setAutostart = createAction('WORKFLOWS_SETAUTOSTART', (id, value) => {
+  fetchJson(
+    'PUT',
+    `${
+      settings.REST_BASE_URL
+    }/workflows/${id}?action=setAutostart&autostart=${value}`
+  );
 
-    return { id, value };
-  }
-);
+  return { id, value };
+});
 
-const toggleEnabled = (id, value) => (dispatch) => {
+const toggleEnabled = (id, value) => dispatch => {
   dispatch(toggleEnabledAction(id, value));
 };
 
@@ -219,4 +194,5 @@ export {
   toggleDeprecated,
   fetchList,
   addNew,
+  processMemoryChanged,
 };

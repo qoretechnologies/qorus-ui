@@ -35,13 +35,8 @@ function getDataWithOption(data, workflowId, name, value) {
     options.splice(optIdx, 1);
   }
 
-  return updateItemWithId(
-    workflow.id,
-    { options },
-    data
-  );
+  return updateItemWithId(workflow.id, { options }, data);
 }
-
 
 /**
  * Finds an option in workflow data.
@@ -56,7 +51,6 @@ function findOption(data, workflowId, name) {
 
   return workflow ? workflow.options.find(o => o.name === name) : null;
 }
-
 
 const setOptions = {
   next(state = initialState, action) {
@@ -86,7 +80,6 @@ const setOptions = {
   },
 };
 
-
 const fetchLibSources = {
   next(state = initialState, action) {
     return Object.assign({}, state, {
@@ -109,7 +102,10 @@ const fetchLibSources = {
 const addNew = {
   next(state = initialState, { payload: { wf } }) {
     if (state.sync) {
-      const data = [...state.data, { ...normalizeId('workflowid', wf), ...{ _updated: true } }];
+      const data = [
+        ...state.data,
+        { ...normalizeId('workflowid', wf), ...{ _updated: true } },
+      ];
 
       return { ...state, ...{ data } };
     }
@@ -127,7 +123,10 @@ const setExecCount = {
 
       events.forEach(dt => {
         const workflow = newData.find(d => d.id === dt.id);
-        const execCount = workflow.exec_count + dt.value < 0 ? 0 : workflow.exec_count + dt.value;
+        const execCount =
+          workflow.exec_count + dt.value < 0
+            ? 0
+            : workflow.exec_count + dt.value;
         newData = updateItemWithId(
           dt.id,
           { exec_count: execCount, _updated: true },
@@ -150,7 +149,11 @@ const setEnabled = {
       let newData = updatedData;
 
       events.forEach(dt => {
-        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          { enabled: dt.enabled, _updated: true },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -163,17 +166,20 @@ const setEnabled = {
 const unselectAll = {
   next(state) {
     const data = [...state.data];
-    const newData = data.map(w => (
-      w._selected ? ({
-        ...w,
-        ...{ _selected: false },
-      }) : w)
+    const newData = data.map(
+      // eslint-disable-next-line
+      w =>
+        w._selected
+          ? {
+            ...w,
+            ...{ _selected: false },
+          }
+          : w
     );
 
     return { ...state, ...{ data: newData } };
   },
 };
-
 
 const updateDone = {
   next(state, { payload: { id } }) {
@@ -200,11 +206,15 @@ const addOrder = {
         const newStatus = workflow[dt.status] + 1;
         const newTotal = workflow.TOTAL + 1;
 
-        newData = updateItemWithId(dt.id, {
-          [dt.status]: newStatus,
-          TOTAL: newTotal,
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            [dt.status]: newStatus,
+            TOTAL: newTotal,
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -223,13 +233,18 @@ const modifyOrder = {
 
       events.forEach(dt => {
         const workflow = newData.find(d => d.id === dt.id);
-        const statusBefore = workflow[dt.old] - 1 < 0 ? 0 : workflow[dt.old] - 1;
+        const statusBefore =
+          workflow[dt.old] - 1 < 0 ? 0 : workflow[dt.old] - 1;
         const status = workflow[dt.new] + 1;
-        newData = updateItemWithId(dt.id, {
-          [dt.old]: statusBefore,
-          [dt.new]: status,
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            [dt.old]: statusBefore,
+            [dt.new]: status,
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -247,13 +262,17 @@ const addAlert = {
       let newData = updatedData;
 
       events.forEach(dt => {
-        const workflow = newData.find((w) => w.id === parseInt(dt.id, 10));
+        const workflow = newData.find(w => w.id === parseInt(dt.id, 10));
         const alerts = [...workflow.alerts, dt];
-        newData = updateItemWithId(dt.id, {
-          alerts,
-          has_alerts: true,
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            alerts,
+            has_alerts: true,
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -270,16 +289,20 @@ const clearAlert = {
       let newData = stateData;
 
       events.forEach(dt => {
-        const workflow = newData.find((w) => w.id === parseInt(dt.id, 10));
+        const workflow = newData.find(w => w.id === parseInt(dt.id, 10));
         const alerts = [...workflow.alerts];
 
         remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
 
-        newData = updateItemWithId(dt.id, {
-          alerts,
-          has_alerts: !(alerts.length === 0),
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            alerts,
+            has_alerts: !(alerts.length === 0),
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -360,7 +383,7 @@ const selectStopped = {
 const setDeprecated = {
   next(state = initialState, { payload: { ids, value } }) {
     const data = [...state.data];
-    const newData = data.map((w) => {
+    const newData = data.map(w => {
       if (includes(ids, w.id)) {
         return { ...w, ...{ deprecated: value } };
       }
