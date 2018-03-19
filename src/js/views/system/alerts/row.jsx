@@ -41,39 +41,38 @@ const AlertRow: Function = ({
   name,
   _updated,
   isActive,
-}: Props): React.Element<any> =>
-  console.log(when) || (
-    <Tr
-      className={isActive ? 'info' : ''}
-      highlight={_updated}
-      onHighlightEnd={handleHighlightEnd}
-    >
-      <Td className="tiny">
-        <Icon icon="warning" />
-      </Td>
-      <Td className="narrow">
-        <Button label="Detail" btnStyle="success" onClick={handleDetailClick} />
-      </Td>
-      <Td className="big text">
-        <Text text={type} />
-      </Td>
-      <Td className="alerts-large text">
-        <Text text={alert} />
-      </Td>
-      <Td className="name">
-        <Link
-          className="resource-name-link"
-          to={getAlertObjectLink(type, { name, id })}
-          title={object}
-        >
-          {object}
-        </Link>
-      </Td>
-      <Td className="big">
-        <Date date={when} />
-      </Td>
-    </Tr>
-  );
+}: Props): React.Element<any> => (
+  <Tr
+    className={isActive ? 'info' : ''}
+    highlight={_updated}
+    onHighlightEnd={handleHighlightEnd}
+  >
+    <Td className="tiny">
+      <Icon icon="warning" />
+    </Td>
+    <Td className="narrow">
+      <Button label="Detail" btnStyle="success" onClick={handleDetailClick} />
+    </Td>
+    <Td className="big text">
+      <Text text={type} />
+    </Td>
+    <Td className="alerts-large text">
+      <Text text={alert} />
+    </Td>
+    <Td className="name">
+      <Link
+        className="resource-name-link"
+        to={getAlertObjectLink(type, { name, id })}
+        title={object}
+      >
+        {object}
+      </Link>
+    </Td>
+    <Td className="big">
+      <Date date={when} />
+    </Td>
+  </Tr>
+);
 
 export default compose(
   connect(null, {
