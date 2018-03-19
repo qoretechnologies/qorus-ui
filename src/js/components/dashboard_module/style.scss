@@ -1,0 +1,102 @@
+.dashboard-module {
+  min-height: 100px;
+  border: 1px solid darken(#fff, 5);
+  width: 49%;
+  box-shadow: 1px 1px 7px -4px rgba(0, 0, 0, 0.2);
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 2px 2px 8px -4px rgba(0, 0, 0, 0.3);
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .subtitle {
+    font-family: 'Nunito';
+    font-size: 14px;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(darken(#fff, 6), 0.4);
+    height: 40px;
+    clear: both;
+    cursor: pointer;
+
+    .fa {
+      margin: 0 3px;
+    }
+
+    .badge {
+      vertical-align: baseline;
+    }
+  }
+
+  .title {
+    font-family: 'Nunito';
+    font-size: 16px;
+    padding: 10px;
+    color: #fff;
+    margin-bottom: 0;
+
+    &.blue {
+      background-color: #22a7f0;
+      border-bottom: 1px solid rgba(darken(#22a7f0, 15), 0.4);
+    }
+
+    &.crimson {
+      background-color: #c93756;
+      border-bottom: 1px solid rgba(darken(#c93756, 15), 0.4);
+    }
+
+    &.iris {
+      background-color: #763568;
+      border-bottom: 1px solid rgba(darken(#763568, 15), 0.4);
+    }
+
+    &.green {
+      background-color: #26a65b;
+      border-bottom: 1px solid rgba(darken(#26a65b, 15), 0.4);
+    }
+
+    &.yellow {
+      background-color: #e2b13c;
+      border-bottom: 1px solid rgba(darken(#e2b13c, 15), 0.4);
+    }
+
+    &.stone {
+      background-color: #6c7a89;
+      border-bottom: 1px solid rgba(darken(#6c7a89, 15), 0.4);
+    }
+
+    &.orange {
+      background-color: #f9690e;
+      border-bottom: 1px solid rgba(darken(#f9690e, 15), 0.4);
+    }
+
+    &.sky {
+      background-color: #4d8fac;
+      border-bottom: 1px solid rgba(darken(#4d8fac, 15), 0.4);
+    }
+
+    &.purple {
+      background-color: #875f9a;
+      border-bottom: 1px solid rgba(darken(#875f9a, 15), 0.4);
+    }
+  }
+}
+
+.dashboard-module-item {
+  font-family: 'Nunito';
+  font-size: 14px;
+  color: #333;
+  display: inline;
+}
+
+.separator {
+  font-size: 6px;
+  vertical-align: middle;
+  margin: 0 4px;
+}

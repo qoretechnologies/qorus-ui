@@ -11,10 +11,7 @@ import SlaPerf from '../views/system/slas/detail/perf';
 const DashboardRoutes = (): React.Element<any> => (
   <Route path="/system" component={System}>
     <IndexRedirect to="dashboard" />
-    <Route path="dashboard" component={System.Dashboard}>
-      <IndexRedirect to="ongoing" />
-      <Route path=":type" component={System.Alerts.Table} />
-    </Route>
+    <Route path="dashboard" component={System.Dashboard} />
     <Route path="alerts" component={System.Alerts}>
       <IndexRedirect to="ongoing" />
       <Route path=":type" component={System.Alerts.Table}>

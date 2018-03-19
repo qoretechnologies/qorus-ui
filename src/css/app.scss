@@ -1,8 +1,7 @@
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
 
 @import '../../node_modules/prismjs/themes/prism-okaidia';
 @import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
-
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
@@ -52,6 +51,7 @@ $status-light-gray: lighten($status-gray, 30);
 @import '../js/containers/mappers/diagram/style';
 @import '../js/components/container/style';
 @import '../js/components/infobar/style';
+@import '../js/components/dashboard_module/style';
 
 @import './not-supported';
 @import './root';
@@ -67,13 +67,14 @@ $status-light-gray: lighten($status-gray, 30);
 @import './alerts';
 @import './auth';
 
-
-
-html, body, .app, .app__wrap, .container-fluid {
+html,
+body,
+.app,
+.app__wrap,
+.container-fluid {
   height: 100%;
   font-size: $font-size-base - 1;
 }
-
 
 .form-horizontal {
   /**
@@ -83,10 +84,10 @@ html, body, .app, .app__wrap, .container-fluid {
    * Bootstrap shift both types of controls by 20px to the left which
    * is undesirable in horizontal forms.
    */
-  .radio input[type="radio"],
-  .radio-inline input[type="radio"],
-  .checkbox input[type="checkbox"],
-  .checkbox-inline input[type="checkbox"] {
+  .radio input[type='radio'],
+  .radio-inline input[type='radio'],
+  .checkbox input[type='checkbox'],
+  .checkbox-inline input[type='checkbox'] {
     margin-left: 0;
   }
 }
@@ -150,17 +151,38 @@ div.text-component {
 }
 
 .default-wrapper {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f3f3f3+50,ededed+51,ffffff+100;White+Gloss+%232 */
-  background: rgb(255,255,255); /* Old browsers */
-  background: -moz-linear-gradient(-45deg, rgba(255,255,255,1) 0%, rgba(243,243,243,1) 50%, rgba(237,237,237,1) 51%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(-45deg, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(237,237,237,1) 51%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(237,237,237,1) 51%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f3f3f3+50,ededed+51,ffffff+100;White+Gloss+%232 */
+  background: rgb(255, 255, 255); /* Old browsers */
+  background: -moz-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(243, 243, 243, 1) 50%,
+    rgba(237, 237, 237, 1) 51%,
+    rgba(255, 255, 255, 1) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(243, 243, 243, 1) 50%,
+    rgba(237, 237, 237, 1) 51%,
+    rgba(255, 255, 255, 1) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(243, 243, 243, 1) 50%,
+    rgba(237, 237, 237, 1) 51%,
+    rgba(255, 255, 255, 1) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 svg.preloader {
   position: absolute;
-  left: 0; right: 0; top: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   margin: auto;
 }
 
@@ -198,4 +220,24 @@ svg.preloader {
 
 .negative-background {
   background-color: $status-light-red;
+}
+
+.dashboard-title {
+  font-family: 'Nunito';
+  font-size: 25px;
+  text-align: center;
+  width: 100%;
+
+  &:not(.with-subtitle) {
+    margin-bottom: 30px;
+  }
+}
+
+.dashboard-subtitle {
+  font-family: 'Nunito';
+  font-size: 18px;
+  margin-bottom: 30px;
+  text-align: center;
+  width: 100%;
+  color: #555;
 }
