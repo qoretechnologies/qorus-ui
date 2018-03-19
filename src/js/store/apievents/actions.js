@@ -37,12 +37,14 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'ALERT_ONGOING_RAISED':
         switch (info.type) {
           case 'WORKFLOW':
-            pipeline(
-              `${eventstr}_ITEMINCREMENT`,
-              system.incrementItems,
-              { type: 'workflow_alert', alert: true, alertType: 'ongoing' },
-              dispatch
-            );
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                { type: 'workflow_alert', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
             if (state.api.workflows.sync) {
               pipeline(
                 `${eventstr}_WORKFLOW`,
