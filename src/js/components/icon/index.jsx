@@ -7,12 +7,21 @@ type Props = {
   icon: string,
   className: string,
   tooltip: string,
-}
+  fontSize: number,
+};
 
-const Icon: Function = ({ icon, className, tooltip }: Props): React.Element<any> => (
+const Icon: Function = ({
+  icon,
+  className,
+  tooltip,
+  fontSize,
+}: Props): React.Element<any> => (
   <i
     className={classNames('fa', icon ? `fa-${icon}` : '', className)}
     title={tooltip}
+    style={{
+      fontSize: fontSize || null,
+    }}
   />
 );
 
