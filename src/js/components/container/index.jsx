@@ -5,6 +5,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 type Props = {
   children?: any,
   marginBottom?: number,
+  className?: string,
+  width?: number,
 };
 
 @pure(['children'])
@@ -35,7 +37,7 @@ export default class Container extends Component {
     if (el) {
       this._el = el;
     }
-  }
+  };
 
   handleResize: Function = () => {
     if (this._el) {
@@ -48,18 +50,22 @@ export default class Container extends Component {
         height,
       });
     }
-  }
+  };
 
   render() {
+    const { className, children, width } = this.props;
+    const { height } = this.state;
+
     return (
       <div
         ref={this.handleRef}
-        className="container-resizable"
+        className={`container-resizable ${className || ''}`}
         style={{
-          height: this.state.height,
+          height,
+          width: width || '100%',
         }}
       >
-        {this.props.children}
+        {children}
       </div>
     );
   }
