@@ -55,8 +55,6 @@ const incrementItems = {
     const data = { ...state.data };
 
     events.forEach(event => {
-      console.log('incrementing', event);
-
       if (event.alert) {
         data['alert-summary'][event.alertType] =
           data['alert-summary'][event.alertType] + 1;
