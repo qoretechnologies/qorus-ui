@@ -9,6 +9,7 @@ type Props = {
   label: string,
   title?: string,
   className?: string,
+  bypass: boolean,
 };
 
 const Badge: Function = ({
@@ -17,25 +18,29 @@ const Badge: Function = ({
   label,
   title,
   className,
+  bypass,
 }: Props): React.Element<any> => {
   const renderValue: Function = () => (
     <span
       title={title}
-      className={classNames({
-        badge: val || false,
-        [`alert-${label}`]: label && val || false,
-      }, val ? className : '')}
+      className={classNames(
+        {
+          badge: val || bypass || false,
+          [`alert-${label}`]: (label && (val || bypass)) || false,
+        },
+        val || bypass ? className : ''
+      )}
     >
       {val}
     </span>
   );
 
-  return (
-    url ? (
-      <a title={title} href={url}>{renderValue()}</a>
-    ) : (
-      renderValue()
-    )
+  return url ? (
+    <a title={title} href={url}>
+      {renderValue()}
+    </a>
+  ) : (
+    renderValue()
   );
 };
 
