@@ -37,8 +37,6 @@ const processMemoryChanged = {
     events.forEach(event => {
       data.cluster_memory[event.node] = event.node_priv;
 
-      console.log(event.status_string);
-
       if (event.status_string === 'IDLE') {
         delete processes[event.id];
       } else {
@@ -49,6 +47,24 @@ const processMemoryChanged = {
     const newData = { ...data, ...{ processes } };
 
     return { ...state, ...{ data: newData } };
+  },
+};
+
+const incrementItems = {
+  next(state: Object, { payload: { events } }) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      console.log('incrementing', event);
+
+      if (event.alert) {
+        data['alert-summary'][event.alertType] =
+          data['alert-summary'][event.alertType] + 1;
+      }
+      data[event.type] = data[event.type] + 1;
+    });
+
+    return { ...state, ...{ data } };
   },
 };
 
@@ -70,4 +86,5 @@ export {
   removeProcess as REMOVEPROCESS,
   processMemoryChanged as PROCESSMEMORYCHANGED,
   updateDone as UPDATEDONE,
+  incrementItems as INCREMENTITEMS,
 };

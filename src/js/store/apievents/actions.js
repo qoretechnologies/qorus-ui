@@ -37,6 +37,12 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'ALERT_ONGOING_RAISED':
         switch (info.type) {
           case 'WORKFLOW':
+            pipeline(
+              `${eventstr}_ITEMINCREMENT`,
+              system.incrementItems,
+              { type: 'workflow_alert', alert: true, alertType: 'ongoing' },
+              dispatch
+            );
             if (state.api.workflows.sync) {
               pipeline(
                 `${eventstr}_WORKFLOW`,
@@ -54,6 +60,12 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                { type: 'service_alert', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
             }
             break;
           case 'JOB':
@@ -64,16 +76,62 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                { type: 'job_alert', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
             }
             break;
           case 'REMOTE':
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                { type: 'remote_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
+            break;
           case 'DATASOURCE':
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.addAlert,
+                { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                {
+                  type: 'datasource_alerts',
+                  alert: true,
+                  alertType: 'ongoing',
+                },
+                dispatch
+              );
+            }
+            break;
           case 'USER-CONNECTION':
             if (state.api.remotes.sync) {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.addAlert,
                 { ...info, ...{ alerttype: 'ONGOING' } },
+                dispatch
+              );
+              pipeline(
+                `${eventstr}_ITEMINCREMENT`,
+                system.incrementItems,
+                { type: 'user_alerts', alert: true, alertType: 'ongoing' },
                 dispatch
               );
             }

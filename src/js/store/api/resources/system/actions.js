@@ -16,6 +16,17 @@ const processMemoryChanged: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
-const updateDone = createAction('WORKFLOWS_UPDATEDONE', id => ({ id }));
+const incrementItems: Function = createAction(
+  'SYSTEM_INCREMENTITEMS',
+  (events: Array<Object>): Object => ({ events })
+);
 
-export { addProcess, processMemoryChanged, removeProcess, updateDone };
+const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
+
+export {
+  addProcess,
+  processMemoryChanged,
+  removeProcess,
+  updateDone,
+  incrementItems,
+};
