@@ -85,7 +85,7 @@ const WorkflowsToolbar: Function = ({
         resource="workflows"
       />
     </Toolbar>
-    {collectionCount !== 0 && (
+    {(collectionCount !== 0) && (
       <InfoBar>
         {(selectedIds.length > 0) && (
           <InfoBarItem icon="check" style="success">{ selectedIds.length }</InfoBarItem>
