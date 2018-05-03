@@ -113,7 +113,7 @@ export default class Search extends Component {
         className={`col-sm-3 ${this.props.pullLeft ? '' : 'pull-right'}`}
       >
         <div className="input-group">
-          {(searches && searches.length) && (
+          {(searches && searches.length !== 0) && (
             <div className="input-group-btn">
               <Dropdown
                 show={this.state.history}

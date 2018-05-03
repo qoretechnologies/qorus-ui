@@ -8,6 +8,7 @@ import Author from '../../../components/author';
 import Icon from '../../../components/icon';
 import Badge from '../../../components/badge';
 import actions from 'store/api/actions';
+import { ORDER_STATES } from '../../../constants/orders';
 
 @connect(null, {
   setOptions: actions.workflows.setOptions,
@@ -46,6 +47,14 @@ export default class DetailTab extends Component {
             <Badge val={workflow.process.priv_str} bypass label="info" />
           </div>
         )}
+        <h4> Instances </h4>
+        {ORDER_STATES.map((o, k) => (
+            <Badge
+              key={k}
+              className={`status-${o.label}`}
+              val={`${o.short}: ${workflow[o.name]}`}
+            />
+        ))}
         <Groups>
           {(workflow.groups || []).map(g => (
             <Group
