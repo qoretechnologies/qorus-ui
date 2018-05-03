@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import AlertsTab from '../../../components/alerts_table';
 import Author from '../../../components/author';
 import actions from 'store/api/actions';
+import Badge from '../../../components/badge';
+import { ORDER_STATES } from '../../../constants/orders';
 
 @connect(
   null,
@@ -33,6 +35,14 @@ export default class DetailTab extends Component {
       <div>
         <Author model={this.props.workflow} />
         <AlertsTab alerts={this.props.workflow.alerts} />
+        <h4> Instances </h4>
+        {ORDER_STATES.map((o, k) => (
+            <Badge
+              key={k}
+              className={`status-${o.label}`}
+              val={`${o.short}: ${this.props.workflow[o.name]}`}
+            />
+        ))}
         <Groups>
           {
             (this.props.workflow.groups || []).map(g => (

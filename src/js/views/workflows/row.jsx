@@ -146,6 +146,7 @@ const TableRow: Function = ({
             <Badge
               className={`status-${state.label}`}
               val={formatCount(value)}
+              title={value}
             />
           </Link>
         </Td>

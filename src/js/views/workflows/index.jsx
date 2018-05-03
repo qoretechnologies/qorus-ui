@@ -343,6 +343,7 @@ export default compose(
       'systemOptions',
       'globalErrors',
       'location',
+      'fetchParams',
     ],
     'detail',
     'workflows'
