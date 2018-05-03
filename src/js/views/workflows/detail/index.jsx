@@ -61,16 +61,17 @@ export default class WorkflowsDetail extends Component {
     load: Function,
     onResize: Function,
     width: number,
+    fetchParams: Object,
   };
 
   componentWillMount() {
-    this.props.load(this.props.paneId);
+    this.props.load(this.props.paneId, this.props.fetchParams.date);
     this.props.loadErrors(`workflow/${this.props.paneId}`);
   }
 
   componentWillReceiveProps(nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId) {
-      this.props.load(nextProps.paneId);
+      this.props.load(nextProps.paneId, this.props.fetchParams.date);
     }
   }
 

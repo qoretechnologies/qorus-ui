@@ -31,12 +31,12 @@ const setOptions = createAction(
 );
 
 
-function fetchLibSourcesPayload(workflow) {
+function fetchLibSourcesPayload(workflow, date) {
   const id = typeof workflow === 'object' ? workflow.id : workflow;
 
   return fetchJson(
     'GET',
-    `${settings.REST_BASE_URL}/workflows/${id}?lib_source=true`
+    `${settings.REST_BASE_URL}/workflows/${id}?lib_source=true&date=${date}`
   );
 }
 
