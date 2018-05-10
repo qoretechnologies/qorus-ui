@@ -160,7 +160,7 @@ describe('Table, Sections, Row and Cell from components/table', () => {
       expect(onSortAction).to.have.been.called().with({ sortBy: 'anotherTest' });
     });
 
-    it('runs the handleHighlightEnd function after 2500ms', function onDone(done) {
+    /* it('runs the handleHighlightEnd function after 2500ms', function onDone(done) {
       this.timeout(2600);
       const func = chai.spy();
       const wrapper = mount(
@@ -175,7 +175,7 @@ describe('Table, Sections, Row and Cell from components/table', () => {
         expect(func).to.have.been.called();
         done();
       }, 2500);
-    });
+    }); */
   });
 
   describe('Th', () => {
