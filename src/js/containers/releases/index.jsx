@@ -79,7 +79,7 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
             const compCopy: Object = { ...curComp };
 
             const createdComp: string = moment(compCopy.created).format('YYYY-MM-DD HH:mm:ss');
-            const updatedComp: string = moment(compCopy.updated).format('YYYY-MM-DD HH:mm:ss');
+            const updatedComp: string = moment(compCopy.modified).format('YYYY-MM-DD HH:mm:ss');
 
             return {
               ...newComps,
@@ -94,7 +94,7 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
         }
 
         const createdFile: string = moment(fileCopy.created).format('YYYY-MM-DD HH:mm:ss');
-        const updatedFile: string = moment(fileCopy.updated).format('YYYY-MM-DD HH:mm:ss');
+        const updatedFile: string = moment(fileCopy.modified).format('YYYY-MM-DD HH:mm:ss');
 
         return {
           ...newFiles,
@@ -110,7 +110,7 @@ const formatReleases: Function = (): Function => (data: Array<Object>): Object =
     }
 
     const created: string = moment(copy.created).format('YYYY-MM-DD HH:mm:ss');
-    const updated: string = moment(copy.updated).format('YYYY-MM-DD HH:mm:ss');
+    const updated: string = moment(copy.modified).format('YYYY-MM-DD HH:mm:ss');
 
     return {
       ...newData,

@@ -112,13 +112,16 @@ const typeToString: Function = (val: any): any => {
 };
 
 const getProcessObjectLink: Function = (process: Object) => {
-  if (process.type === 'qdsp') {
-    return `/system/remote/datasources?paneId=${process.client_id}`;
-  } else if (process.type === 'qwf') {
-    return `/workflows?paneId=${process.wfid}&paneTab=details`;
+  switch (process.type) {
+    case 'qdsp':
+      return `/system/remote/datasources?paneId=${process.client_id}`;
+    case 'qwf':
+      return `/workflows?paneId=${process.wfid}&paneTab=details`;
+    case 'qsvc':
+      return `/services?paneId=${process.svcid}&paneTab=details`;
+    default:
+      return '#';
   }
-
-  return null;
 };
 
 export {
