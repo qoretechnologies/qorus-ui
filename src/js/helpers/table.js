@@ -31,6 +31,7 @@ const CSVheaders = {
   orders: {
     status: 'Status',
     business_error: 'Bus. Err.',
+    workflow_instanceid: 'ID',
     name: 'Order',
     started: 'Started',
     completed: 'Completed',
