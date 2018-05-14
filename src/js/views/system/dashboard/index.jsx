@@ -164,23 +164,28 @@ export default class Dashboard extends Component {
                   />
                 </DashboardItem>
               </DashboardSection>
-              {health.data.remote.map((remote: Object) => (
-                <div>
-                  <DashboardSection icon="external-link" link={remote.url}>
-                    {remote.name} <Icon icon="circle" className="separator" />{' '}
-                    key / status
-                    <DashboardItem>
-                      <Badge val={remote['instance-key']} label="info" bypass />{' '}
-                      /{' '}
-                      <Badge
-                        val={remote.health}
-                        label={statusHealth(remote.health)}
-                        bypass
-                      />
-                    </DashboardItem>
-                  </DashboardSection>
-                </div>
-              ))}
+              {health.data.remote &&
+                health.data.remote.map((remote: Object) => (
+                  <div>
+                    <DashboardSection icon="external-link" link={remote.url}>
+                      {remote.name} <Icon icon="circle" className="separator" />{' '}
+                      key / status
+                      <DashboardItem>
+                        <Badge
+                          val={remote['instance-key']}
+                          label="info"
+                          bypass
+                        />{' '}
+                        /{' '}
+                        <Badge
+                          val={remote.health}
+                          label={statusHealth(remote.health)}
+                          bypass
+                        />
+                      </DashboardItem>
+                    </DashboardSection>
+                  </div>
+                ))}
             </DashboardModule>
             <DashboardModule title="Connections" titleStyle="orange">
               <DashboardSection
