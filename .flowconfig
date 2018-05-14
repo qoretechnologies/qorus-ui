@@ -2,11 +2,14 @@
 .*/node_modules/fbjs
 .*/node_modules/react-event-listener
 .*/node_modules/react-draggable/lib
+.*/node_modules/styled-components/.*
 
 [include]
 
 [libs]
 declarations/
+flow/
+styled-components
 
 [options]
 esproposal.decorators=ignore
@@ -14,3 +17,4 @@ esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
 suppress_type=$FlowIssue
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
+module.system=haste
