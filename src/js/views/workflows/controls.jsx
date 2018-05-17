@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Controls, Control as Button } from '../../components/controls';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
+import { Controls, Control } from '../../components/controls';
 import actions from '../../store/api/actions';
 
 type Props = {
@@ -22,39 +23,38 @@ const WorkflowControls: Function = ({
   handleToggleEnabledClick,
   handleResetClick,
 }: Props): React.Element<any> => (
-  <Controls grouped>
+  <ButtonGroup>
     <Button
-      title={enabled ? 'Disable' : 'Enable'}
-      icon="power-off"
-      btnStyle={enabled ? 'success' : 'danger'}
+      iconName="power"
+      intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleToggleEnabledClick}
+      className="pt-small"
     />
     <Button
-      title="Reset"
-      icon="refresh"
-      btnStyle="warning"
+      iconName="refresh"
+      intent={Intent.PRIMARY}
       onClick={handleResetClick}
+      className="pt-small"
     />
-  </Controls>
+  </ButtonGroup>
 );
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      toggleEnabled: actions.workflows.toggleEnabled,
-      reset: actions.workflows.reset,
-    }
-  ),
+  connect(() => ({}), {
+    toggleEnabled: actions.workflows.toggleEnabled,
+    reset: actions.workflows.reset,
+  }),
   withHandlers({
-    handleToggleEnabledClick: ({ toggleEnabled, id, enabled }: Props): Function => (): void => {
+    handleToggleEnabledClick: ({
+      toggleEnabled,
+      id,
+      enabled,
+    }: Props): Function => (): void => {
       toggleEnabled(id, !enabled);
     },
     handleResetClick: ({ reset, id }: Props): Function => (): void => {
       reset(id);
     },
   }),
-  pure([
-    'enabled',
-  ])
+  pure(['enabled'])
 )(WorkflowControls);

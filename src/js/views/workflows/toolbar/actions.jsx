@@ -3,12 +3,23 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
+import {
+  ButtonGroup,
+  Button,
+  Popover,
+  Menu,
+  MenuItem,
+  Intent,
+  Position,
+  MenuDivider,
+  Tooltip,
+} from '@blueprintjs/core';
 
 import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
 } from '../../../components/dropdown';
-import { Control as Button } from '../../../components/controls';
+import { Control } from '../../../components/controls';
 import actions from '../../../store/api/actions';
 
 type Props = {
@@ -20,7 +31,7 @@ type Props = {
   reset: Function,
   selectedIds: Array<number>,
   isTablet: boolean,
-}
+};
 
 const ToolbarActions: Function = ({
   show,
@@ -73,119 +84,101 @@ const ToolbarActions: Function = ({
 
   if (isTablet) {
     return (
-      <div
-        className="btn-group pull-left"
-        id="selection-actions"
-      >
-        <Dropdown id="hidden">
-          <DropdownControl> With selected: </DropdownControl>
-          <DropdownItem
-            title="Start"
-            icon="rocket"
-            action={handleStartClick}
-          />
-          <DropdownItem
-            title="Enable"
-            icon="power-off"
-            action={handleEnableClick}
-          />
-          <DropdownItem
-            title="Disable"
-            icon="ban"
-            action={handleDisableClick}
-          />
-          <DropdownItem
-            title="Reset"
-            icon="refresh"
-            action={handleResetClick}
-          />
-          <DropdownItem
-            title="Stop"
-            icon="ban"
-            action={handleStopClick}
-          />
-          <DropdownItem
-            title="Set deprecated"
-            icon="flag"
-            action={handleSetDeprecatedClick}
-          />
-          <DropdownItem
-            title="Unset deprecated"
-            icon="flag-o"
-            action={handleUnsetDeprecatedClick}
-          />
-        </Dropdown>
-      </div>
+      <ButtonGroup>
+        <Button text="With selected: " intent={Intent.PRIMARY} />
+        <Popover
+          position={Position.BOTTOM}
+          content={
+            <Menu>
+              <MenuItem text="Start" onClick={handleStartClick} />
+              <MenuDivider />
+              <MenuItem text="Enable" onClick={handleEnableClick} />
+              <MenuItem text="Disable" onClick={handleDisableClick} />
+              <MenuDivider />
+              <MenuItem text="Reset" onClick={handleResetClick} />
+              <MenuItem text="Stop" onClick={handleStopClick} />
+              <MenuDivider />
+              <MenuItem
+                text="Set deprecated"
+                onClick={handleSetDeprecatedClick}
+              />
+              <MenuItem
+                text="Unset deprecated"
+                onClick={handleUnsetDeprecatedClick}
+              />
+            </Menu>
+          }
+        >
+          <Button iconName="caret-down" intent={Intent.PRIMARY} />
+        </Popover>
+      </ButtonGroup>
     );
   }
 
   return (
-    <div
-      className="btn-group pull-left"
-      id="selection-actions"
-    >
+    <ButtonGroup>
+      <Tooltip content="Enable selected workflows" position={Position.BOTTOM}>
+        <Button
+          text="Enable"
+          iconName="power"
+          intent={Intent.SUCCESS}
+          onClick={handleEnableClick}
+        />
+      </Tooltip>
       <Button
-        label="Enable"
-        icon="power-off"
-        big
-        btnStyle="default"
-        onClick={handleEnableClick}
-      />
-      <Button
-        label="Disable"
-        icon="ban"
-        big
-        btnStyle="default"
+        text="Disable"
+        icon="disable"
+        intent={Intent.DANGER}
         onClick={handleDisableClick}
       />
       <Button
-        label="Reset"
-        icon="refresh"
-        big
-        btnStyle="default"
+        text="Reset"
+        iconName="refresh"
+        intent={Intent.PRIMARY}
         onClick={handleResetClick}
       />
-      <Dropdown id="hidden">
-        <DropdownControl />
-        <DropdownItem
-          title="Start"
-          icon="rocket"
-          action={handleStartClick}
-        />
-        <DropdownItem
-          title="Stop"
-          icon="ban"
-          action={handleStopClick}
-        />
-        <DropdownItem
-          title="Set deprecated"
-          icon="flag"
-          action={handleSetDeprecatedClick}
-        />
-        <DropdownItem
-          title="Unset deprecated"
-          icon="flag-o"
-          action={handleUnsetDeprecatedClick}
-        />
-      </Dropdown>
-    </div>
+      <Popover
+        position={Position.BOTTOM}
+        content={
+          <Menu>
+            <MenuItem
+              text="Start"
+              iconName="airplane"
+              onClick={handleStartClick}
+              intent={Intent.SUCCESS}
+            />
+            <MenuItem
+              text="Stop"
+              iconName="disable"
+              onClick={handleStopClick}
+              intent={Intent.DANGER}
+            />
+            <MenuItem
+              text="Set deprecated"
+              iconName="flag"
+              onClick={handleSetDeprecatedClick}
+            />
+            <MenuItem
+              text="Unset deprecated"
+              iconName="cross"
+              onClick={handleUnsetDeprecatedClick}
+            />
+          </Menu>
+        }
+      >
+        <Button iconName="caret-down" intent={Intent.PRIMARY} />
+      </Popover>
+    </ButtonGroup>
   );
 };
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      toggleEnabled: actions.workflows.toggleEnabled,
-      toggleStart: actions.workflows.toggleStart,
-      toggleDeprecated: actions.workflows.toggleDeprecated,
-      reset: actions.workflows.reset,
-      unselectAll: actions.workflows.unselectAll,
-    }
-  ),
-  pure([
-    'show',
-    'selectedIds',
-    'isTablet',
-  ]),
+  connect(() => ({}), {
+    toggleEnabled: actions.workflows.toggleEnabled,
+    toggleStart: actions.workflows.toggleStart,
+    toggleDeprecated: actions.workflows.toggleDeprecated,
+    reset: actions.workflows.reset,
+    unselectAll: actions.workflows.unselectAll,
+  }),
+  pure(['show', 'selectedIds', 'isTablet'])
 )(ToolbarActions);

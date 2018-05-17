@@ -2,10 +2,17 @@
 import React, { Component } from 'react';
 import { pureRender } from '../utils';
 import { debounce, includes } from 'lodash';
-
-import { Control as Button } from '../controls';
-import Icon from '../icon';
-import Dropdown, { Item, Control } from '../dropdown';
+import {
+  ButtonGroup,
+  Button,
+  Popover,
+  Menu,
+  MenuItem,
+  Intent,
+  Position,
+  InputGroup,
+  ControlGroup,
+} from '@blueprintjs/core';
 
 @pureRender
 export default class Search extends Component {
@@ -48,9 +55,11 @@ export default class Search extends Component {
     event.persist();
 
     const { value } = event.target;
-    const hit = this.props.searches ? this.props.searches.filter((qry: string): boolean => (
-      includes(qry, value) && value !== qry
-    )) : false;
+    const hit = this.props.searches
+      ? this.props.searches.filter(
+          (qry: string): boolean => includes(qry, value) && value !== qry
+        )
+      : false;
 
     this.setState({
       query: value,
@@ -78,30 +87,33 @@ export default class Search extends Component {
     this.props.onSearchUpdate('');
   };
 
-  handleHistoryClick: Function = (event: EventHandler, query: string): void => {
+  handleHistoryClick: Function = (event: EventHandler): void => {
+    const query = event.target.textContent;
+
     this.setState({
       query,
       history: false,
     });
 
     this.delayedSearch(query);
-  }
+  };
 
   renderHistoryItems: Function = (): ?Array<React.Element<any>> => {
     if (!this.props.searches) return null;
 
-    const searches: Array<string> = this.props.searches.filter((qry: string): boolean => (
-      includes(qry, this.state.query) && this.state.query !== qry
-    ));
+    const searches: Array<string> = this.props.searches.filter(
+      (qry: string): boolean =>
+        includes(qry, this.state.query) && this.state.query !== qry
+    );
 
     return searches.map((qry: string, index: number): React.Element<any> => (
-      <Item
+      <MenuItem
         key={`${qry}_${index}`}
-        title={qry}
-        action={this.handleHistoryClick}
+        text={qry}
+        onClick={this.handleHistoryClick}
       />
     ));
-  }
+  };
 
   render() {
     const { searches } = this.props;
@@ -109,46 +121,36 @@ export default class Search extends Component {
     return (
       <form
         onSubmit={this.handleFormSubmit}
-        id="search-form"
-        className={`col-sm-3 ${this.props.pullLeft ? '' : 'pull-right'}`}
+        className={`${this.props.pullLeft ? '' : 'pull-right'}`}
       >
-        <div className="input-group">
-          {(searches && searches.length !== 0) && (
-            <div className="input-group-btn">
-              <Dropdown
-                show={this.state.history}
+        <ControlGroup>
+          {searches &&
+            searches.length !== 0 && (
+              <Popover
+                position={Position.BOTTOM}
+                content={<Menu>{this.renderHistoryItems()}</Menu>}
               >
-                <Control>
-                  <Icon icon="history" />
-                </Control>
-                {this.renderHistoryItems()}
-              </Dropdown>
-            </div>
-          )}
-          <input
+                <Button intent={Intent.PRIMARY} iconName="history" />
+              </Popover>
+            )}
+          <InputGroup
             ref="input"
             type="text"
             id="search"
-            className="form-control"
             onChange={this.handleInputChange}
             value={this.state.query}
             autoComplete="off"
+            intent={Intent.PRIMARY}
+            placeholder="Search..."
           />
-          <div className="input-group-btn">
-            <Button
-              type="button"
-              big
-              icon="times"
-              onClick={this.handleClearClick}
-            />
-            <Button
-              type="submit"
-              icon="search"
-              btnStyle="default"
-              big
-            />
-          </div>
-        </div>
+          <Button
+            type="button"
+            iconName="cross"
+            intent={Intent.PRIMARY}
+            onClick={this.handleClearClick}
+          />
+          <Button type="submit" iconName="search" intent={Intent.PRIMARY} />
+        </ControlGroup>
       </form>
     );
   }

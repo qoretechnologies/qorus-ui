@@ -5,6 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import classNames from 'classnames';
+import { Button } from '@blueprintjs/core';
 
 type Props = {
   title?: string,
@@ -22,7 +23,7 @@ type Props = {
   id?: string,
   className?: string,
   children?: React.Element<*> | Array<React.Element<*>>,
-}
+};
 
 const Control: Function = ({
   id,
@@ -45,9 +46,7 @@ const Control: Function = ({
     type={type}
     style={css}
   >
-    {icon && (
-      <i className={classNames(['fa', `fa-${icon}`])} />
-    )}
+    {icon && <i className={classNames(['fa', `fa-${icon}`])} />}
     {label ? ` ${label}` : ''}
     {children}
   </button>
@@ -65,11 +64,9 @@ export default compose(
     ...rest,
   })),
   withHandlers({
-    handleClick: ({
-      action,
-      onClick,
-      stopPropagation,
-    }: Props): Function => (event: Object): void => {
+    handleClick: ({ action, onClick, stopPropagation }: Props): Function => (
+      event: Object
+    ): void => {
       const act: ?Function = action || onClick;
 
       if (!stopPropagation) event.stopPropagation();

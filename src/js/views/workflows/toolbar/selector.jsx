@@ -3,10 +3,18 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
+import {
+  Popover,
+  Button,
+  Position,
+  Menu,
+  MenuItem,
+  Intent,
+  MenuDivider,
+  ButtonGroup,
+  Tooltip,
+} from '@blueprintjs/core';
 
-import Dropdown, { Item, Control } from '../../../components/dropdown';
-import Checkbox from '../../../components/checkbox';
-import { CHECKBOX_STATES } from '../../../constants/checkbox';
 import actions from '../../../store/api/actions';
 
 type Props = {
@@ -17,6 +25,7 @@ type Props = {
   selectRunning: Function,
   selectStopped: Function,
   selectAlerts: Function,
+  selectedCount?: number,
 };
 
 const ToolbarSelector: Function = ({
@@ -27,56 +36,51 @@ const ToolbarSelector: Function = ({
   selectRunning,
   selectStopped,
   selectAlerts,
+  selectedCount,
 }: Props): React.Element<any> => (
-  <Dropdown
-    id="selection"
-    className="pull-left"
-  >
-    <Control>
-      <Checkbox
-        action={selected === 'none' || selected === 'some' ? selectAll : selectNone}
-        checked={CHECKBOX_STATES[selected]}
+  <Tooltip content="Select workflows" position={Position.RIGHT}>
+    <ButtonGroup>
+      <Button
+        intent={Intent.PRIMARY}
+        iconName={
+          selected === 'all'
+            ? 'selection'
+            : selected === 'some'
+              ? 'remove'
+              : 'circle'
+        }
+        onClick={selectInvert}
+        text={selectedCount || ''}
       />
-      {' '}
-    </Control>
-    <Item
-      action={selectAll}
-      title="All"
-    />
-    <Item
-      action={selectNone}
-      title="None"
-    />
-    <Item
-      action={selectInvert}
-      title="Invert"
-    />
-    <Item
-      action={selectRunning}
-      title="Running"
-    />
-    <Item
-      action={selectStopped}
-      title="Stopped"
-    />
-    <Item
-      action={selectAlerts}
-      title="With alerts"
-    />
-  </Dropdown>
+      <Popover
+        content={
+          <Menu>
+            <MenuItem text="All" onClick={selectAll} />
+            <MenuItem text="None" onClick={selectNone} />
+            <MenuItem text="Invert" onClick={selectInvert} />
+            <MenuDivider />
+            <MenuItem text="Running" onClick={selectRunning} />
+            <MenuItem text="Stopped" onClick={selectStopped} />
+            <MenuDivider />
+            <MenuItem text="With alerts" onClick={selectAlerts} />
+          </Menu>
+        }
+        position={Position.BOTTOM}
+      >
+        <Button intent={Intent.PRIMARY} iconName="caret-down" />
+      </Popover>
+    </ButtonGroup>
+  </Tooltip>
 );
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      selectAll: actions.workflows.selectAll,
-      selectNone: actions.workflows.selectNone,
-      selectInvert: actions.workflows.selectInvert,
-      selectRunning: actions.workflows.selectRunning,
-      selectStopped: actions.workflows.selectStopped,
-      selectAlerts: actions.workflows.selectStopped,
-    }
-  ),
-  pure(['selected'])
+  connect(() => ({}), {
+    selectAll: actions.workflows.selectAll,
+    selectNone: actions.workflows.selectNone,
+    selectInvert: actions.workflows.selectInvert,
+    selectRunning: actions.workflows.selectRunning,
+    selectStopped: actions.workflows.selectStopped,
+    selectAlerts: actions.workflows.selectStopped,
+  }),
+  pure(['selected', 'selectedCount'])
 )(ToolbarSelector);

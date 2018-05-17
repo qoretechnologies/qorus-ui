@@ -1,5 +1,15 @@
+td,
+td *,
+th,
+th * {
+  vertical-align: middle !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
 table.text-table {
-  th, td {
+  th,
+  td {
     text-align: left !important;
     padding: 5px !important;
   }
@@ -26,12 +36,13 @@ td.editable {
   vertical-align: middle;
   white-space: nowrap;
 
-  & { /* [2] */
+  & {
+    /* [2] */
     position: relative;
     padding-right: 20px;
 
     &::after {
-      content: "\f040";
+      content: '\f040';
       font-size: $font-size-small;
 
       position: absolute;
@@ -51,13 +62,13 @@ td.editable {
     }
 
     &.editor::after {
-      content: "";
+      content: '';
       display: none;
     }
   }
 
-
-  &.editor { /* [3] */
+  &.editor {
+    /* [3] */
     background-color: #d9edf7;
     color: #3a87ad;
     outline: 1px solid #bce8f1;
@@ -84,7 +95,7 @@ td.editable {
       }
     }
 
-    button[type=submit] {
+    button[type='submit'] {
       width: 20%;
     }
   }
@@ -96,16 +107,16 @@ th.sort {
   &:after {
     font-family: FontAwesome;
     font-size: 120%;
-    margin-left: .4em;
+    margin-left: 0.4em;
   }
 
   &.sort-asc:after {
-    content: "\f106";
-    margin-top: .3em;
+    content: '\f106';
+    margin-top: 0.3em;
   }
 
   &.sort-desc:after {
-    content: "\f107";
+    content: '\f107';
   }
 }
 
@@ -115,17 +126,17 @@ th.history-sort {
   &:after {
     font-family: FontAwesome;
     font-size: 120%;
-    margin-left: .4em;
-    opacity: .4;
+    margin-left: 0.4em;
+    opacity: 0.4;
   }
 
   &.history-sort-asc:after {
-    content: "\f106";
-    margin-top: .3em;
+    content: '\f106';
+    margin-top: 0.3em;
   }
 
   &.history-sort-desc:after {
-    content: "\f107";
+    content: '\f107';
   }
 }
 

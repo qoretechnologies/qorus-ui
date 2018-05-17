@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import { Controls, Control } from '../controls';
 
@@ -24,46 +25,52 @@ const AutoStart = ({
   handleDecrementClick,
   withExec,
 }: Props): React.Element<any> => (
-  <div className="autostart">
-    <Controls noControls grouped>
-      <Control
-        title="Decrease"
-        icon="minus"
-        action={handleDecrementClick}
-      />
-      <button
-        className={classNames({
-          autostart__change: true,
-          btn: true,
-          'btn-xs': true,
-          'btn-success': parseInt(autostart, 10) === parseInt(execCount, 10) &&
-            autostart && autostart > 0,
-        })}
-      >
-        { !withExec ? autostart : `${autostart} / Execs: ${execCount}` }
-      </button>
-      <Control
-        title="Increase"
-        icon="plus"
-        action={handleIncrementClick}
-      />
-    </Controls>
-  </div>
+  <ButtonGroup>
+    <Button
+      iconName="small-minus"
+      onClick={handleDecrementClick}
+      intent={Intent.NONE}
+      className="pt-small"
+    />
+    <Button
+      text={!withExec ? autostart : `${autostart} / Execs: ${execCount}`}
+      intent={
+        parseInt(autostart, 10) === parseInt(execCount, 10) &&
+        autostart &&
+        autostart > 0
+          ? Intent.SUCCESS
+          : Intent.NONE
+      }
+      className="pt-small"
+    />
+    <Button
+      iconName="small-plus"
+      onClick={handleIncrementClick}
+      className="pt-small"
+    />
+  </ButtonGroup>
 );
 
 export default compose(
   withHandlers({
-    handleIncrementClick: ({ onIncrementClick, autostart }: Props): Function => (): void => {
+    handleIncrementClick: ({
+      onIncrementClick,
+      autostart,
+    }: Props): Function => (e): void => {
+      e.stopPropagation();
+
       onIncrementClick(autostart + 1);
     },
-    handleDecrementClick: ({ onDecrementClick, autostart }: Props): Function => (): void => {
+    handleDecrementClick: ({
+      onDecrementClick,
+      autostart,
+    }: Props): Function => (e): void => {
+      e.stopPropagation();
+
       if (autostart - 1 >= 0) {
         onDecrementClick(autostart - 1);
       }
     },
   }),
-  pure([
-    'autostart',
-    'execCount',
-  ])
+  pure(['autostart', 'execCount'])
 )(AutoStart);

@@ -4,11 +4,23 @@ import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
 import classNames from 'classnames';
 import pure from 'recompose/onlyUpdateForKeys';
+import {
+  ControlGroup,
+  Popover,
+  Position,
+  Intent,
+  Button,
+  Menu,
+  MenuItem,
+} from '@blueprintjs/core';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
 import { Controls, Control } from '../controls';
-import Dropdown, { Control as DropdownControl, Item as DropdownItem } from '../dropdown';
+import Dropdown, {
+  Control as DropdownControl,
+  Item as DropdownItem,
+} from '../dropdown';
 import Input from './input';
 import Picker from './picker';
 import Calendar from './calendar';
@@ -23,13 +35,9 @@ type Props = {
   className?: string,
   id?: string,
   name?: string,
-}
+};
 
-@pure([
-  'date',
-  'futureOnly',
-  'className',
-])
+@pure(['date', 'futureOnly', 'className'])
 export default class DatePicker extends Component {
   props: Props;
 
@@ -58,7 +66,9 @@ export default class DatePicker extends Component {
     this.hideDatepicker();
 
     const date: Object = props.date ? formatDate(props.date) : moment();
-    const inputDate: string = props.date ? date.format(DATE_FORMATS.DISPLAY) : '';
+    const inputDate: string = props.date
+      ? date.format(DATE_FORMATS.DISPLAY)
+      : '';
 
     this.setState({
       date,
@@ -231,53 +241,60 @@ export default class DatePicker extends Component {
         />
         <Dropdown id="date-selection">
           <DropdownControl btnStyle="default" />
-          <DropdownItem
-            title="Now"
-            action={this.handleNowClick}
-          />
-          <DropdownItem
-            title="Today"
-            action={this.handleTodayClick}
-          />
-          <DropdownItem
-            title="24H"
-            action={this.handle24hClick}
-          />
-          <DropdownItem
-            title="Week"
-            action={this.handleWeekClick}
-          />
-          <DropdownItem
-            title="This month"
-            action={this.handleMonthClick}
-          />
-          <DropdownItem
-            title="30 days"
-            action={this.handleThirtyClick}
-          />
+          <DropdownItem title="Now" action={this.handleNowClick} />
+          <DropdownItem title="Today" action={this.handleTodayClick} />
+          <DropdownItem title="24H" action={this.handle24hClick} />
+          <DropdownItem title="Week" action={this.handleWeekClick} />
+          <DropdownItem title="This month" action={this.handleMonthClick} />
+          <DropdownItem title="30 days" action={this.handleThirtyClick} />
         </Dropdown>
       </Controls>
     );
   }
 
   render(): React.Element<any> {
+    const { futureOnly, noButtons } = this.props;
+
     return (
-      <div className={classNames(this.props.className, 'datepicker-wrapper')}>
-        <div className="input-group date-controls">
-          <Input
-            onApplyDate={this.handleApplyDate}
-            applyOnBlur={this.props.applyOnBlur}
-            onInputChange={this.handleInputChange}
-            inputDate={this.state.inputDate}
-            onInputClick={this.showDatepicker}
-            placeholder={this.props.placeholder}
-            id={this.props.id}
-            name={this.props.name}
-          />
-        </div>
-        {this.renderControls()}
+      <ControlGroup className="vab">
+        <Input
+          onApplyDate={this.handleApplyDate}
+          applyOnBlur={this.props.applyOnBlur}
+          onInputChange={this.handleInputChange}
+          inputDate={this.state.inputDate}
+          onInputClick={this.showDatepicker}
+          placeholder={this.props.placeholder}
+          id={this.props.id}
+          name={this.props.name}
+        />
+        {!futureOnly &&
+          !noButtons && (
+            <Button
+              text="All"
+              onClick={this.handleAllClick}
+              intent={Intent.PRIMARY}
+            />
+          )}
+        {!futureOnly &&
+          !noButtons && (
+            <Popover
+              position={Position.BOTTOM}
+              content={
+                <Menu>
+                  <MenuItem text="Now" onClick={this.handleNowClick} />
+                  <MenuItem text="Today" onClick={this.handleTodayClick} />
+                  <MenuItem text="24h" onClick={this.handle24hClick} />
+                  <MenuItem text="Week" onClick={this.handleWeekClick} />
+                  <MenuItem text="This month" onClick={this.handleMonthClick} />
+                  <MenuItem text="30 days" onClick={this.handleThirtyClick} />
+                </Menu>
+              }
+            >
+              <Button iconName="caret-down" intent={Intent.PRIMARY} />
+            </Popover>
+          )}
         {this.renderDatepicker()}
-      </div>
+      </ControlGroup>
     );
   }
 }

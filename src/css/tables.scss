@@ -14,8 +14,12 @@
  * 6. Table head cells have smaller font.
  */
 table.table--data {
+  tr {
+    transition: all 0.15s linear;
+  }
+
   tr.row-highlight {
-    background-color: #deffdf !important;
+    background-color: lighten($qore-green, 45);
   }
 
   tr.row-alert {
@@ -23,7 +27,7 @@ table.table--data {
   }
 
   tr.row-selected {
-    background-color: lightyellow;
+    background-color: lighten(#2965cc, 48);
   }
 
   tr.row-hidden {
@@ -31,7 +35,8 @@ table.table--data {
   }
 
   td {
-    p, span {
+    p,
+    span {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -40,22 +45,32 @@ table.table--data {
   }
 
   thead th {
-    border-bottom: 1px solid #ddd !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  > tfoot tr td {
+    border-right: 0 !important;
+    border-top: 1px solid #eee !important;
   }
 
   > thead,
   > tbody,
   > tfoot {
     > tr {
-      > th, > td {
+      > th,
+      > td {
         text-align: center; /* [2] */
 
-        &.name { /* [2] */
+        &.name {
+          /* [2] */
           font-weight: 500;
           text-align: left;
         }
 
-        &.desc, &.text { /* [2] */
+        &.desc,
+        &.text {
+          /* [2] */
           text-align: left;
         }
 
@@ -75,7 +90,9 @@ table.table--data {
   > thead,
   > tfoot {
     > tr {
-      > th, > td { /* [1] */
+      > th,
+      > td {
+        /* [1] */
         border-right: 1px solid $table-border-color;
 
         &:last-child {
@@ -90,7 +107,8 @@ table.table--data {
     > tbody,
     > tfoot {
       > tr {
-        > th, > td {
+        > th,
+        > td {
           padding-top: $padding-xs-vertical;
           padding-bottom: $padding-xs-vertical;
 
@@ -98,31 +116,38 @@ table.table--data {
             width: 25px;
           }
 
-          &.narrow { /* [4] */
+          &.narrow {
+            /* [4] */
             width: 50px;
           }
 
-          &.normal { /* [4] */
+          &.normal {
+            /* [4] */
             width: 75px;
           }
 
-          &.medium { /* [4] */
+          &.medium {
+            /* [4] */
             width: 100px;
           }
 
-          &.big { /* [4] */
+          &.big {
+            /* [4] */
             width: 150px;
           }
 
-          &.large { /* [4] */
+          &.large {
+            /* [4] */
             width: 200px;
           }
 
-          &.alerts-large { /* [4] */
+          &.alerts-large {
+            /* [4] */
             width: 250px;
           }
 
-          &.name { /* [5] */
+          &.name {
+            /* [5] */
             padding-left: $padding-xs-horizontal;
             padding-right: $padding-xs-horizontal;
           }
@@ -130,7 +155,8 @@ table.table--data {
       }
     }
 
-    > thead { /* [6] */
+    > thead {
+      /* [6] */
       font-size: $font-size-extra-small;
       line-height: floor($font-size-extra-small * 1.1);
     }
@@ -150,7 +176,6 @@ table.table--data {
   }
 }
 
-
 /**
  * Table with smaller padding on cells.
  */
@@ -160,7 +185,8 @@ table.table--small {
     > tbody,
     > tfoot {
       > tr {
-        > th, > td {
+        > th,
+        > td {
           padding: $padding-xs-vertical $padding-xs-horizontal;
           vertical-align: middle;
         }
@@ -174,7 +200,8 @@ table {
   > tbody,
   > tfoot {
     > tr {
-      > th, > td {
+      > th,
+      > td {
         &.align-right {
           text-align: right;
         }
@@ -197,7 +224,8 @@ table.table--centered {
   > tbody,
   > tfoot {
     > tr {
-      > th, td {
+      > th,
+      td {
         text-align: center;
       }
     }
@@ -227,7 +255,6 @@ table.table-header {
   width: 100%;
   margin-bottom: 0;
 }
-
 
 .props-table {
   margin-left: 10%;

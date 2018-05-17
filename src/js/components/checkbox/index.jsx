@@ -7,6 +7,7 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
+import { Icon } from '@blueprintjs/core';
 
 import { CHECKBOX_CLASSES } from '../../constants/checkbox';
 
@@ -23,28 +24,31 @@ const Checkbox: Function = ({
   className,
   handleClick,
 }: Props): React.Element<any> => (
-  <i
-    className={className}
-    onClick={handleClick}
-  />
+  <Icon iconName={className} onClick={handleClick} iconSize={10} />
 );
 
 export default compose(
-  withState('checkedState', 'setChecked', ({ checked }: Props): string => checked),
+  withState(
+    'checkedState',
+    'setChecked',
+    ({ checked }: Props): string => checked
+  ),
   mapProps(({ checkedState, ...rest }: Props): Props => ({
-    className: classNames('fa', CHECKBOX_CLASSES[checkedState]),
+    className: classNames(CHECKBOX_CLASSES[checkedState]),
     checkedState,
     ...rest,
   })),
   withHandlers({
-    handleClick: ({ action, setChecked }: Props): Function => (event: Object): void => {
+    handleClick: ({ action, setChecked }: Props): Function => (
+      event: Object
+    ): void => {
       event.persist();
       event.preventDefault();
       event.stopPropagation();
 
-      setChecked((checked: string) => (
-        checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED'
-      ));
+      setChecked(
+        (checked: string) => (checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED')
+      );
 
       if (action) action(event);
     },

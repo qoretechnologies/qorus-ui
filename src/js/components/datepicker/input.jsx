@@ -3,6 +3,7 @@ import React from 'react';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
+import { InputGroup, Intent } from '@blueprintjs/core';
 
 type Props = {
   placeholder?: string,
@@ -14,44 +15,32 @@ type Props = {
   onInputClick: (event: Object) => void,
   id?: string,
   name?: string,
-}
+};
 
 const Input = (props: Props) => (
-  <div className="datepicker-group">
-    <div className="input-group">
-        <span
-          className="input-group-addon"
-          onClick={props.onInputClick}
-        >
-          <i className="fa fa-calendar" />
-        </span>
-      <input
-        type="text"
-        className="form-control"
-        onBlur={props.applyOnBlur? props.onApplyDate: null}
-        value={props.inputDate}
-        onChange={props.onInputChange}
-        onKeyUp={props.onKeyUp}
-        onClick={props.onInputClick}
-        placeholder={props.placeholder}
-        id={props.id}
-        name={props.name}
-      />
-    </div>
-  </div>
+  <InputGroup
+    leftIconName="calendar"
+    type="text"
+    intent={Intent.PRIMARY}
+    onBlur={props.applyOnBlur ? props.onApplyDate : null}
+    value={props.inputDate}
+    onChange={props.onInputChange}
+    onKeyUp={props.onKeyUp}
+    onClick={props.onInputClick}
+    placeholder={props.placeholder}
+    id={props.id}
+    name={props.name}
+  />
 );
 
 const addKeyUpHandler = withHandlers({
-  onKeyUp: ({ onApplyDate }: { onApplyDate: Function }): Function => (e: Object) => {
+  onKeyUp: ({ onApplyDate }: { onApplyDate: Function }): Function => (
+    e: Object
+  ) => {
     if (e.keyCode === 13) {
       onApplyDate();
     }
   },
 });
 
-export default compose(
-  addKeyUpHandler,
-  pure([
-    'inputDate',
-  ])
-)(Input);
+export default compose(addKeyUpHandler, pure(['inputDate']))(Input);

@@ -2,10 +2,22 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import {
+  ButtonGroup,
+  Button,
+  Popover,
+  Intent,
+  Position,
+  Menu,
+  MenuItem,
+} from '@blueprintjs/core';
 
 import queryControl from '../../../hocomponents/queryControl';
-import Dropdown, { Item, Control as DControl } from '../../../components/dropdown';
-import { Control as Button, Controls } from '../../../components/controls';
+import Dropdown, {
+  Item,
+  Control as DControl,
+} from '../../../components/dropdown';
+import { Control, Controls } from '../../../components/controls';
 
 type Props = {
   runningQuery: string,
@@ -15,7 +27,7 @@ type Props = {
   deprecatedQuery: string,
   changeDeprecatedQuery: Function,
   isTablet: boolean,
-}
+};
 
 const ToolbarFilters: Function = ({
   runningQuery,
@@ -25,64 +37,80 @@ const ToolbarFilters: Function = ({
   deprecatedQuery,
   changeDeprecatedQuery,
   isTablet,
-}: Props): React.Element<any> => (
-  isTablet ?
-    <Dropdown id="filters">
-      <DControl
-        btnStyle={deprecatedQuery || runningQuery || latestQuery ? 'success' : 'default'}
-      > Filters </DControl>
-      <Item
-        title="Running"
-        icon={runningQuery ? 'check-square-o' : 'square-o'}
-        action={changeRunningQuery}
-      />
-      <Item
-        title="Last version"
-        icon={latestQuery ? 'check-square-o' : 'square-o'}
-        action={changeLatestQuery}
-      />
-      <Item
-        title="Deprecated"
-        icon={deprecatedQuery ? 'check-square-o' : 'square-o'}
-        action={changeDeprecatedQuery}
-      />
-    </Dropdown> :
-    <Controls grouped noControls>
-      <Button
-        label="Running"
-        big
-        action={changeRunningQuery}
-        icon={runningQuery ? 'check-square-o' : 'square-o'}
-        btnStyle={runningQuery ? 'success' : 'default'}
-      />
-      <Button
-        label="Last version"
-        big
-        action={changeLatestQuery}
-        icon={latestQuery ? 'check-square-o' : 'square-o'}
-        btnStyle={latestQuery ? 'success' : 'default'}
-      />
-      <Dropdown id="deprecated">
-        <DControl
-          btnStyle={deprecatedQuery ? 'success' : 'default'}
+}: Props): React.Element<any> =>
+  isTablet ? (
+    <ButtonGroup>
+      <Popover
+        position={Position.BOTTOM}
+        content={
+          <Menu>
+            <MenuItem
+              text="Running"
+              iconName={runningQuery ? 'selection' : 'circle'}
+              onClick={changeRunningQuery}
+            />
+            <MenuItem
+              text="Latest"
+              iconName={latestQuery ? 'selection' : 'circle'}
+              onClick={changeLatestQuery}
+            />
+            <MenuItem
+              text="Deprecated"
+              iconName={deprecatedQuery ? 'selection' : 'circle'}
+              onClick={changeDeprecatedQuery}
+            />
+          </Menu>
+        }
+      >
+        <Button
+          iconName="filter-list"
+          text="Filter"
+          rightIconName="caret-down"
+          intent={
+            deprecatedQuery || runningQuery || latestQuery
+              ? Intent.SUCCESS
+              : Intent.PRIMARY
+          }
         />
-        <Item
-          title="Deprecated"
-          icon={deprecatedQuery ? 'check-square-o' : 'square-o'}
-          action={changeDeprecatedQuery}
+      </Popover>
+    </ButtonGroup>
+  ) : (
+    <ButtonGroup>
+      <Button
+        text="Running"
+        onClick={changeRunningQuery}
+        iconName={runningQuery ? 'selection' : 'circle'}
+        intent={runningQuery ? Intent.SUCCESS : Intent.PRIMARY}
+      />
+      <Button
+        text="Last version"
+        onClick={changeLatestQuery}
+        iconName={latestQuery ? 'selection' : 'circle'}
+        intent={latestQuery ? Intent.SUCCESS : Intent.PRIMARY}
+      />
+      <Popover
+        position={Position.BOTTOM}
+        content={
+          <Menu>
+            <MenuItem
+              text="Deprecated"
+              iconName={deprecatedQuery ? 'selection' : 'circle'}
+              onClick={changeDeprecatedQuery}
+            />
+          </Menu>
+        }
+      >
+        <Button
+          iconName="caret-down"
+          intent={deprecatedQuery ? Intent.SUCCESS : Intent.PRIMARY}
         />
-      </Dropdown>
-    </Controls>
-);
+      </Popover>
+    </ButtonGroup>
+  );
 
 export default compose(
   queryControl('running', null, true),
   queryControl('latest', null, true),
   queryControl('deprecated', null, true),
-  pure([
-    'runningQuery',
-    'latestQuery',
-    'deprecatedQuery',
-    'isTablet',
-  ])
+  pure(['runningQuery', 'latestQuery', 'deprecatedQuery', 'isTablet'])
 )(ToolbarFilters);

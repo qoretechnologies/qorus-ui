@@ -5,6 +5,8 @@
 
 $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
+$qore-green: #7fba27;
+
 $status-green: #418e22;
 $status-light-green: lighten($status-green, 30);
 $status-red: #d11f1f;
@@ -52,6 +54,7 @@ $status-light-gray: lighten($status-gray, 30);
 @import '../js/components/container/style';
 @import '../js/components/infobar/style';
 @import '../js/components/dashboard_module/style';
+@import '../js/components/box/style';
 
 @import './not-supported';
 @import './root';
@@ -73,7 +76,23 @@ body,
 .app__wrap,
 .container-fluid {
   height: 100%;
-  font-size: $font-size-base - 1;
+  font-size: $font-size-base - 2 !important;
+  font-family: 'Roboto';
+}
+
+.app,
+.app_wrap {
+  background-color: #eee;
+}
+
+.pt-button,
+.pt-input,
+.pt-button[class*='pt-icon-']:before {
+  font-size: 12px;
+}
+
+.pt-button.pt-intent-success {
+  background-color: $qore-green;
 }
 
 .form-horizontal {
@@ -240,4 +259,10 @@ svg.preloader {
   text-align: center;
   width: 100%;
   color: #555;
+}
+
+.vab {
+  vertical-align: bottom;
+  display: inline-flex;
+  transform: translateZ(initial);
 }

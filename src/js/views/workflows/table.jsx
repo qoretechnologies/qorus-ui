@@ -4,7 +4,15 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
-import { Table, Thead, Tbody, Tr, Th, Td, Tfooter } from '../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Tfooter,
+} from '../../components/new_table';
 import Icon from '../../components/icon';
 import Badge from '../../components/badge';
 import checkData from '../../hocomponents/check-no-data';
@@ -52,39 +60,50 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 20 : 0}
+    marginBottom={canLoadMore ? 30 : 0}
     // Another Firefox hack, jesus
     key={collection.length}
   >
     <Thead>
-      <Tr
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
+      <Tr sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny" />
         <Th className="narrow">-</Th>
-        {!isTablet && (
-          <Th className="narrow">Actions</Th>
-        )}
-        <Th className="medium" name="autostart">Autostart</Th>
+        {!isTablet && <Th className="narrow">Actions</Th>}
+        <Th className="medium" name="autostart">
+          Autostart
+        </Th>
         <Th className="tiny" name="has_alerts">
           <Icon icon="warning" />
         </Th>
-        <Th className="narrow" name="exec_count">Execs</Th>
-        <Th className="narrow" name="id">ID</Th>
-        <Th className="name" name="name">Name</Th>
-        <Th className="normal text" name="version">Version</Th>
-        { states.map((state: Object): React.Element<Th> => (
+        <Th className="narrow" name="exec_count">
+          Execs
+        </Th>
+        <Th className="narrow" name="id">
+          ID
+        </Th>
+        <Th className="name" name="name">
+          Name
+        </Th>
+        <Th className="normal text" name="version">
+          Version
+        </Th>
+        {states.map((state: Object): React.Element<Th> => (
           <Th
             key={`header_${state.name}`}
             className={expanded || isTablet ? 'narrow' : 'medium'}
             name={!expanded ? `GROUPED_${state.name}` : state.name}
             title={state.title}
-          >{ state.short }</Th>
+          >
+            {state.short}
+          </Th>
         ))}
-        <Th className="narrow" name="TOTAL">All</Th>
-        { deprecated && (
-          <Th className="medium" name="deprecated">Deprecated</Th>
+        <Th className="narrow" name="TOTAL">
+          All
+        </Th>
+        {deprecated && (
+          <Th className="medium" name="deprecated">
+            Deprecated
+          </Th>
         )}
       </Tr>
     </Thead>
@@ -110,9 +129,9 @@ const WorkflowsTable: Function = ({
       <Tr>
         <Td colspan={9}>-</Td>
         {states.map((state: Object): React.Element<Td> => {
-          const value = !expanded ?
-            totalInstances[`GROUPED_${state.name}`] :
-            totalInstances[state.name];
+          const value = !expanded
+            ? totalInstances[`GROUPED_${state.name}`]
+            : totalInstances[state.name];
 
           return (
             <Td
@@ -121,28 +140,26 @@ const WorkflowsTable: Function = ({
               name={!expanded ? `GROUPED_${state.name}` : state.name}
               title={state.title}
             >
-              <Badge
-                className={`status-${state.label}`}
-                val={value}
-              />
+              <Badge className={`status-${state.label}`} val={value} />
             </Td>
           );
         })}
-        <Td className="narrow" name="TOTAL">{totalInstances.total}</Td>
+        <Td className="narrow" name="TOTAL">
+          {totalInstances.total}
+        </Td>
       </Tr>
     </Tfooter>
   </Table>
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      updateDone: actions.workflows.updateDone,
-      select: actions.workflows.select,
-    }
+  connect(null, {
+    updateDone: actions.workflows.updateDone,
+    select: actions.workflows.select,
+  }),
+  checkData(
+    ({ collection }: Props): boolean => collection && collection.length > 0
   ),
-  checkData(({ collection }: Props): boolean => collection && collection.length > 0),
   pure([
     'sortData',
     'expanded',

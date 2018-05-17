@@ -1,7 +1,7 @@
 export const CHECKBOX_CLASSES = {
-  UNCHECKED: 'fa-square-o',
-  HALFCHECKED: 'fa-minus-square-o',
-  CHECKED: 'fa-check-square-o',
+  UNCHECKED: 'circle',
+  HALFCHECKED: 'remove',
+  CHECKED: 'selection',
 };
 
 export const CHECKBOX_STATES = {

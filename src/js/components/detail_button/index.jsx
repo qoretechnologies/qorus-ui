@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Button, Intent } from '@blueprintjs/core';
 
 import { Control } from '../controls';
 
@@ -13,11 +14,11 @@ const DetailButton: Function = ({
   active,
   onClick,
 }: Props): React.Element<any> => (
-  <Control
-    label={active ? 'Close' : 'Detail'}
-    btnStyle={active ? 'danger' : 'success'}
+  <Button
+    text={active ? 'Close' : 'Detail'}
+    intent={active ? Intent.WARNING : Intent.PRIMARY}
     onClick={onClick}
-    title={active ? 'Close detail pane' : 'Open detail pane'}
+    className="pt-small"
   />
 );
 

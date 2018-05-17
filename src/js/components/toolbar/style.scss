@@ -1,7 +1,6 @@
 .toolbar {
   position: relative;
   margin: 0 0 5px 0;
-  min-height: 45px;
 
   &.sticky {
     position: fixed;
@@ -14,6 +13,6 @@
     left: 74px;
     background-color: #fff;
     z-index: 200;
-    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, .3);
+    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.3);
   }
 }

@@ -7,6 +7,14 @@ import Routes from './routes';
 import Notifications from './containers/bubbles';
 import Preloader from './components/preloader';
 
+require('normalize.css/normalize.css');
+require('@blueprintjs/core/dist/blueprint.css');
+require('@blueprintjs/core/resources/icons/icons-16.eot');
+require('@blueprintjs/core/resources/icons/icons-16.ttf');
+require('@blueprintjs/core/resources/icons/icons-16.woff');
+require('@blueprintjs/core/resources/icons/icons-20.eot');
+require('@blueprintjs/core/resources/icons/icons-20.ttf');
+require('@blueprintjs/core/resources/icons/icons-20.woff');
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
 require('../css/app.scss');
@@ -29,7 +37,6 @@ export default class App extends Component {
     }).isRequired,
   };
 
-
   /**
    * Initializes component.
    *
@@ -48,7 +55,6 @@ export default class App extends Component {
     this.setupTestIntrumentation();
   }
 
-
   /**
    * Initializes store and DevTools.
    *
@@ -59,7 +65,6 @@ export default class App extends Component {
     this.setupStore();
     this.setupDevTools();
   }
-
 
   /**
    * Returns props for the router element.
@@ -82,7 +87,6 @@ export default class App extends Component {
 
     return props;
   }
-
 
   /**
    * Mounts lifecycle methods in test to notify of DOM changes.
@@ -108,7 +112,6 @@ export default class App extends Component {
     this.componentWillUnmount = didUpdate;
   }
 
-
   /**
    * Asynchronously loads store.
    *
@@ -120,7 +123,6 @@ export default class App extends Component {
     this.setState({ store: null });
     setupStore(this.props.env.NODE_ENV).then(store => this.setState({ store }));
   }
-
 
   /**
    * Asynchronously loads DevTools.
@@ -136,20 +138,21 @@ export default class App extends Component {
         break;
       default:
         this.setState({ devToolsReady: false });
-        require.ensure([
-          'components/dev_tools',
-        ], require => {
-          const DevTools = require('components/dev_tools').default;
+        require.ensure(
+          ['components/dev_tools'],
+          require => {
+            const DevTools = require('components/dev_tools').default;
 
-          this.setState({
-            devToolsReady: true,
-            DevTools,
-          });
-        }, 'devtools');
+            this.setState({
+              devToolsReady: true,
+              DevTools,
+            });
+          },
+          'devtools'
+        );
         break;
     }
   }
-
 
   /**
    * Dispatches custom event on document.
@@ -170,9 +173,7 @@ export default class App extends Component {
    * @return {ReactElement}
    */
   renderEmpty() {
-    return (
-      <Preloader />
-    );
+    return <Preloader />;
   }
 
   /**
@@ -181,14 +182,16 @@ export default class App extends Component {
    * @return {ReactElement}
    */
   renderDevTools() {
-    if (!this.props.env.DEVTOOLS || !this.state.devToolsReady ||
-        !this.state.DevTools) return null;
+    if (
+      !this.props.env.DEVTOOLS ||
+      !this.state.devToolsReady ||
+      !this.state.DevTools
+    )
+      return null;
 
     const { DevTools } = this.state;
 
-    return (
-      <DevTools />
-    );
+    return <DevTools />;
   }
 
   /**
