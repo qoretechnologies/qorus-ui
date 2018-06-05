@@ -6,31 +6,25 @@ import { buildSorting } from '../../../../helpers/table';
 import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
 
-const unSyncCurrentUser: Function = createAction(
-  'CURRENTUSER_UNSYNCCURRENTUSER',
-);
+const unSyncCurrentUser: Function = createAction('CURRENTUSER_UNSYNCCURRENTUSER');
 
 const updateStorage: Function = createAction(
   'CURRENTUSER_UPDATESTORAGE',
   (storage: Object, username: string): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/users/${username}`,
-      {
-        body: JSON.stringify({
-          storage,
-        }),
-      }
-    );
+    fetchJson('PUT', `${settings.REST_BASE_URL}/users/${username}`, {
+      body: JSON.stringify({
+        storage,
+      }),
+    });
 
     return { storage };
   }
 );
 
-const storeSortChange: Function = (
-  table: string,
-  sortData: Object
-): Function => (dispatch: Function, getState: Function): void => {
+const storeSortChange: Function = (table: string, sortData: Object): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
   const {
     ui: { sort },
     api: {
@@ -53,11 +47,10 @@ const storeSortChange: Function = (
   dispatch(updateStorage(storage, username));
 };
 
-const storePaneSize: Function = (
-  type: string,
-  width: number,
-  username: Object
-): Function => (dispatch: Function, getState: Function): void => {
+const storePaneSize: Function = (type: string, width: number, username: Object): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
   const storage = getState().api.currentUser.data.storage || {};
 
   storage[type] = storage[type] || {};
@@ -66,17 +59,16 @@ const storePaneSize: Function = (
   dispatch(updateStorage(storage, username));
 };
 
-const storeSearch: Function = (
-  type: string,
-  query: string,
-  username: Object
-): Function => (dispatch: Function, getState: Function): void => {
+const storeSearch: Function = (type: string, query: string, username: Object): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
   const storage = getState().api.currentUser.data.storage || {};
 
   storage[type] = storage[type] || {};
   storage[type].searches = storage[type].searches || [];
 
-  if (!includes(storage[type].searches, query) && query.length > 2) {
+  if (!includes(storage[type].searches, query) && query.length > 2 && query.length < 255) {
     storage[type].searches.unshift(query);
 
     if (storage[type].searches.length > 15) {
@@ -87,11 +79,4 @@ const storeSearch: Function = (
   }
 };
 
-
-export {
-  unSyncCurrentUser,
-  updateStorage,
-  storeSortChange,
-  storePaneSize,
-  storeSearch,
-};
+export { unSyncCurrentUser, updateStorage, storeSortChange, storePaneSize, storeSearch };
