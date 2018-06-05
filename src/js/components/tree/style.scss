@@ -1,6 +1,9 @@
 /**
 * Wrapper for the tree view in the order detail data tab
 */
+
+$color: #a9a9a9;
+
 .tree-wrapper {
   span {
     font-weight: bold;
@@ -15,18 +18,18 @@
     &.data-control:before {
       font-family: FontAwesome;
       display: table;
-      color: red;
+      color: $color;
       left: 0;
       position: absolute;
       top: 7px;
     }
 
     &.data-control.expand:before {
-      content: "\f196";
+      content: '\f196';
     }
 
     &.data-control.clps:before {
-      content: "\f147";
+      content: '\f147';
     }
   }
 
@@ -43,7 +46,7 @@
   div:not(.tree-top) {
     &.last {
       margin-left: 6px;
-      border-left: 1px dotted red;
+      border-left: 1px dotted $color;
     }
 
     &.last:last-child {
@@ -56,7 +59,7 @@
       position: absolute;
       width: 15px;
       height: 1px;
-      border-top: 1px dotted red;
+      border-top: 1px dotted $color;
       top: 15px;
       left: 0;
     }
@@ -69,7 +72,7 @@
       height: 15px;
       left: 0;
       top: 0;
-      border-left: 1px dotted red;
+      border-left: 1px dotted $color;
     }
   }
 }

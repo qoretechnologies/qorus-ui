@@ -1,6 +1,11 @@
 .toolbar {
   position: relative;
   margin: 0;
+  overflow: hidden;
+
+  &.with-margin {
+    margin-bottom: 10px;
+  }
 
   &.sticky {
     position: fixed;

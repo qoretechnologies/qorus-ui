@@ -42,12 +42,8 @@ const Releases: Function = ({
   sortDir,
   compact,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <ReleasesToolbar
-      sort={sort}
-      sortDir={sortDir}
-      compact={compact}
-    />
+  <div>
+    <ReleasesToolbar sort={sort} sortDir={sortDir} compact={compact} />
     <Container marginBottom={30}>
       <Tree data={data} />
     </Container>
@@ -62,101 +58,122 @@ const Releases: Function = ({
   </div>
 );
 
-const formatReleases: Function = (): Function => (data: Array<Object>): Object => {
+const formatReleases: Function = (): Function => (
+  data: Array<Object>
+): Object => {
   if (!data.length) return {};
 
-  const res: Object = data.reduce((newData: Object, current: Object): Object => {
-    const copy: Object = { ...current };
-    let files: ?Object = null;
+  const res: Object = data.reduce(
+    (newData: Object, current: Object): Object => {
+      const copy: Object = { ...current };
+      let files: ?Object = null;
 
-    if (copy.files && copy.files.length) {
-      files = copy.files.reduce((newFiles: Object, curFile: Object): Object => {
-        const fileCopy: Object = { ...curFile };
-        let components: ?Object = null;
+      if (copy.files && copy.files.length) {
+        files = copy.files.reduce(
+          (newFiles: Object, curFile: Object): Object => {
+            const fileCopy: Object = { ...curFile };
+            let components: ?Object = null;
 
-        if (fileCopy.components && fileCopy.components.length) {
-          components = fileCopy.components.reduce((newComps: Object, curComp: Object): Object => {
-            const compCopy: Object = { ...curComp };
+            if (fileCopy.components && fileCopy.components.length) {
+              components = fileCopy.components.reduce(
+                (newComps: Object, curComp: Object): Object => {
+                  const compCopy: Object = { ...curComp };
 
-            const createdComp: string = moment(compCopy.created).format('YYYY-MM-DD HH:mm:ss');
-            const updatedComp: string = moment(compCopy.modified).format('YYYY-MM-DD HH:mm:ss');
+                  const createdComp: string = moment(compCopy.created).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  );
+                  const updatedComp: string = moment(compCopy.modified).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  );
+
+                  return {
+                    ...newComps,
+                    ...{
+                      [`${compCopy.component} v${compCopy.version} (${
+                        compCopy.id
+                      })`]: {
+                        Timestamps: `Created: ${createdComp} Updated: ${updatedComp}`,
+                        Info: `${compCopy.hash_type} - ${compCopy.hash}`,
+                      },
+                    },
+                  };
+                },
+                {}
+              );
+            }
+
+            const createdFile: string = moment(fileCopy.created).format(
+              'YYYY-MM-DD HH:mm:ss'
+            );
+            const updatedFile: string = moment(fileCopy.modified).format(
+              'YYYY-MM-DD HH:mm:ss'
+            );
 
             return {
-              ...newComps,
+              ...newFiles,
               ...{
-                [`${compCopy.component} v${compCopy.version} (${compCopy.id})`]: {
-                  Timestamps: `Created: ${createdComp} Updated: ${updatedComp}`,
-                  Info: `${compCopy.hash_type} - ${compCopy.hash}`,
+                [fileCopy.name]: {
+                  Timestamps: `Created: ${createdFile} Updated: ${updatedFile}`,
+                  Info: `${fileCopy.type} - ${fileCopy.hash_type} - ${
+                    fileCopy.hash
+                  }`,
+                  ...components,
                 },
               },
             };
-          }, {});
-        }
-
-        const createdFile: string = moment(fileCopy.created).format('YYYY-MM-DD HH:mm:ss');
-        const updatedFile: string = moment(fileCopy.modified).format('YYYY-MM-DD HH:mm:ss');
-
-        return {
-          ...newFiles,
-          ...{
-            [fileCopy.name]: {
-              Timestamps: `Created: ${createdFile} Updated: ${updatedFile}`,
-              Info: `${fileCopy.type} - ${fileCopy.hash_type} - ${fileCopy.hash}`,
-              ...components,
-            },
           },
-        };
-      }, {});
-    }
+          {}
+        );
+      }
 
-    const created: string = moment(copy.created).format('YYYY-MM-DD HH:mm:ss');
-    const updated: string = moment(copy.modified).format('YYYY-MM-DD HH:mm:ss');
+      const created: string = moment(copy.created).format(
+        'YYYY-MM-DD HH:mm:ss'
+      );
+      const updated: string = moment(copy.modified).format(
+        'YYYY-MM-DD HH:mm:ss'
+      );
 
-    return {
-      ...newData,
-      ...{
-        [`[${created}] ${copy.name}`]: {
-          Timestamps: `Created: ${created} Updated: ${updated}`,
-          ...files,
+      return {
+        ...newData,
+        ...{
+          [`[${created}] ${copy.name}`]: {
+            Timestamps: `Created: ${created} Updated: ${updated}`,
+            ...files,
+          },
         },
-      },
-    };
-  }, {});
+      };
+    },
+    {}
+  );
 
   return res;
 };
 
-const sortReleases: Function = (
-  sort: string,
-  sortDir: string
-): Function => (data: Array<Object>): Array<Object> => (
-  data.length ?
-    sortTable(data, {
+const sortReleases: Function = (sort: string, sortDir: string): Function => (
+  data: Array<Object>
+): Array<Object> =>
+  data.length
+    ? sortTable(data, {
       sortBy: sort === 'Date' ? 'created' : sort.toLowerCase(),
       sortByKey: {
         direction: sortDir === 'Ascending' ? 1 : -1,
         ignoreCase: true,
       },
-    }) :
-    []
-);
+    })
+    : [];
 
 const releaseSelector: Function = createSelector(
-  [
-    resourceSelector('releases'),
-  ], (releases: Object) => compose(
-    formatReleases(),
-    sortReleases(releases.sort, releases.sortDir),
-  )(releases.data)
+  [resourceSelector('releases')],
+  (releases: Object) =>
+    compose(formatReleases(), sortReleases(releases.sort, releases.sortDir))(
+      releases.data
+    )
 );
 
-const componentSelector = (state: Object, {
-  compact,
-  location,
-  component,
-}: Object): string => (
-  compact ? component : location.query.component
-);
+const componentSelector = (
+  state: Object,
+  { compact, location, component }: Object
+): string => (compact ? component : location.query.component);
 
 const viewSelector: Function = createSelector(
   [
@@ -173,7 +190,7 @@ const viewSelector: Function = createSelector(
     fileName: ?string,
     component: ?string,
     maxdate: ?string,
-    mindate: ?string,
+    mindate: ?string
   ): Object => ({
     meta: releases,
     data,
@@ -187,14 +204,11 @@ const viewSelector: Function = createSelector(
 );
 
 export default compose(
-  connect(
-    viewSelector,
-    {
-      load: actions.releases.fetchReleases,
-      fetch: actions.releases.fetchReleases,
-      unsync: actions.releases.unsync,
-    }
-  ),
+  connect(viewSelector, {
+    load: actions.releases.fetchReleases,
+    fetch: actions.releases.fetchReleases,
+    unsync: actions.releases.unsync,
+  }),
   loadMore('data', 'releases'),
   patch('load', [
     'fileName',
@@ -218,9 +232,13 @@ export default compose(
         changeOffset,
       } = this.props;
 
-      if ((mindate !== nextProps.mindate || maxdate !== nextProps.maxdate ||
-      fileName !== nextProps.fileName || component !== nextProps.component)
-      && nextProps.offset !== 0) {
+      if (
+        (mindate !== nextProps.mindate ||
+          maxdate !== nextProps.maxdate ||
+          fileName !== nextProps.fileName ||
+          component !== nextProps.component) &&
+        nextProps.offset !== 0
+      ) {
         changeOffset(0);
       } else if (
         fileName !== nextProps.fileName ||
@@ -236,7 +254,7 @@ export default compose(
           nextProps.mindate,
           nextProps.limit,
           nextProps.offset,
-          nextProps.offset !== 0,
+          nextProps.offset !== 0
         );
       }
     },

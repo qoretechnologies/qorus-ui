@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { Button, Intent } from '@blueprintjs/core';
 
 import SystemOptions from './system_options';
 import Table, { Section, Row, Cell } from '../table';
 import EditableCell from '../table/editable_cell';
-import { Control } from '../controls';
 import { pureRender } from '../utils';
 
 /**
@@ -60,7 +60,9 @@ export default class Options extends Component {
    */
   getModelOptions() {
     const { model: { options = [] } = {} } = this.props;
-    return this.state.lastOption ? options.concat(this.state.lastOption) : options || [];
+    return this.state.lastOption
+      ? options.concat(this.state.lastOption)
+      : options || [];
   }
 
   /**
@@ -69,14 +71,12 @@ export default class Options extends Component {
    * @return {array}
    */
   getUnusedSystemOptions() {
-    const { systemOptions = [], model: { options = [] } = {} } =this.props;
+    const { systemOptions = [], model: { options = [] } = {} } = this.props;
     const opts = options || [];
 
-    return systemOptions.filter(sysOpt => (
-      opts.findIndex(mdlOpt => (
-        mdlOpt.name === sysOpt.name
-      )) < 0
-    ));
+    return systemOptions.filter(
+      sysOpt => opts.findIndex(mdlOpt => mdlOpt.name === sysOpt.name) < 0
+    );
   }
 
   /**
@@ -93,14 +93,14 @@ export default class Options extends Component {
     if (opt === this.state.lastOption) {
       this.setState({ lastOptionSet: true });
     }
-  }
+  };
 
   /**
    * Caches option so it can be edited without setting.
    *
    * @param {object} opt
    */
-  addOption = (opt) => {
+  addOption = opt => {
     this.setState({
       lastOption: opt,
       lastOptionSet: false,
@@ -150,12 +150,12 @@ export default class Options extends Component {
     const handleDelete = () => this.props.onDelete(opt);
     yield (
       <Cell>
-        <Control
+        <Button
           title="Remove"
-          btnStyle="danger"
-          className="remove-option"
-          icon="times"
-          action={handleDelete}
+          intent={Intent.DANGER}
+          className="remove-option pt-small"
+          iconName="cross"
+          onClick={handleDelete}
         />
       </Cell>
     );
@@ -175,7 +175,6 @@ export default class Options extends Component {
       );
     }
   }
-
 
   /**
    * Yields table sections.
@@ -200,7 +199,6 @@ export default class Options extends Component {
     );
   }
 
-
   /**
    * Returns element for this component.
    *
@@ -211,9 +209,7 @@ export default class Options extends Component {
       <div className="options">
         <h4>Options</h4>
         <div>
-          {!this.getModelOptions().length && (
-            <p>No options found.</p>
-          )}
+          {!this.getModelOptions().length && <p>No options found.</p>}
           {!!this.getModelOptions().length && (
             <Table
               data={this.getModelOptions()}

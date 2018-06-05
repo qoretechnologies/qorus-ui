@@ -1,8 +1,7 @@
-
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
-import { Controls, Control as Button } from '../controls';
 import Alert from '../alert';
 import Icon from '../icon';
 import withModal from '../../hocomponents/modal';
@@ -11,10 +10,7 @@ import EditModal from './modal';
 @withModal()
 export default class Tree extends Component {
   static propTypes = {
-    data: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array,
-    ]),
+    data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     withEdit: PropTypes.bool,
     onUpdateClick: PropTypes.func,
     noControls: PropTypes.bool,
@@ -71,23 +67,29 @@ export default class Tree extends Component {
   };
 
   handleExpandClick = () => {
-    const st = Object.keys(this.props.data).reduce((nw: Object, cur: string) => ({
-      ...nw,
-      ...{
-        [cur]: true,
-      },
-    }), {});
+    const st = Object.keys(this.props.data).reduce(
+      (nw: Object, cur: string) => ({
+        ...nw,
+        ...{
+          [cur]: true,
+        },
+      }),
+      {}
+    );
 
     this.setState(st);
   };
 
   handleCollapseClick = () => {
-    const st = Object.keys(this.props.data).reduce((nw: Object, cur: string) => ({
-      ...nw,
-      ...{
-        [cur]: false,
-      },
-    }), {});
+    const st = Object.keys(this.props.data).reduce(
+      (nw: Object, cur: string) => ({
+        ...nw,
+        ...{
+          [cur]: false,
+        },
+      }),
+      {}
+    );
 
     this.setState(st);
   };
@@ -102,7 +104,8 @@ export default class Tree extends Component {
 
       const stateKey = k ? `${k}_${key}` : key;
       const isObject = typeof data[key] === 'object' && data[key] !== null;
-      const isExpandable = typeof data[key] !== 'object' || this.state[stateKey];
+      const isExpandable =
+        typeof data[key] !== 'object' || this.state[stateKey];
 
       const handleClick = () => {
         this.setState({
@@ -130,33 +133,28 @@ export default class Tree extends Component {
       };
 
       return (
-        <div
-          key={index}
-          className={wrapperClass}
-        >
+        <div key={index} className={wrapperClass}>
           <span
             onClick={handleClick}
             className={classNames({
               'data-control': isObject,
               expand: isObject && !isExpandable,
               clps: isObject && isExpandable,
-            })
-            }
+            })}
           >
             {isObject ? key : `${key}:`}
           </span>
-          {this.props.editableKeys && topKey && (
-            <span onClick={handleEditClick}>
-              {' '}
-              <Icon icon="pencil" tooltip="Edit data" />
-            </span>
-          )}
-          {' '}
-          {isExpandable && (
-             isObject ?
-              this.renderTree(data[key], false, stateKey, top ? key : null) :
-              data[key].toString()
-          )}
+          {this.props.editableKeys &&
+            topKey && (
+              <span onClick={handleEditClick}>
+                {' '}
+                <Icon icon="pencil" tooltip="Edit data" />
+              </span>
+            )}{' '}
+          {isExpandable &&
+            (isObject
+              ? this.renderTree(data[key], false, stateKey, top ? key : null)
+              : data[key].toString())}
         </div>
       );
     });
@@ -194,18 +192,18 @@ export default class Tree extends Component {
     this.setState({
       mode: 'normal',
     });
-  }
+  };
 
-  isDeep = () => (
-    Object.keys(this.props.data).some((key: string): boolean => (
-      typeof this.props.data[key] === 'object'
-    ))
-  );
+  isDeep = () =>
+    Object.keys(this.props.data).some(
+      (key: string): boolean => typeof this.props.data[key] === 'object'
+    );
 
   render() {
     const { data, withEdit } = this.props;
 
-    if (!data || !Object.keys(data).length) return <p className="no-data"> No data </p>;
+    if (!data || !Object.keys(data).length)
+      return <p className="no-data"> No data </p>;
 
     return (
       <div className="tree-component">
@@ -213,59 +211,54 @@ export default class Tree extends Component {
           <div className="col-lg-12">
             {this.isDeep() && (
               <div className="pull-left">
-                <Controls noControls grouped>
+                <ButtonGroup>
                   <Button
-                    className="button--expand"
-                    label="Expand all"
-                    btnStyle="info"
-                    action={this.handleExpandClick}
+                    className="button--expand pt-small"
+                    text="Expand all"
+                    onClick={this.handleExpandClick}
                   />
                   <Button
-                    className="button--collapse"
-                    label="Collapse all"
-                    btnStyle="info"
-                    action={this.handleCollapseClick}
+                    className="button--collapse pt-small"
+                    text="Collapse all"
+                    onClick={this.handleCollapseClick}
                   />
-                </Controls>
+                </ButtonGroup>
               </div>
             )}
             {!this.props.noControls && (
               <div className="pull-right">
-                <Controls noControls grouped>
+                <ButtonGroup>
                   <Button
-                    className="button--copy"
-                    label="Tree view"
-                    btnStyle="info"
+                    className="button--copy pt-small"
+                    text="Tree view"
                     disabled={this.state.mode === 'normal'}
-                    action={this.handleTreeClick}
+                    onClick={this.handleTreeClick}
                   />
                   <Button
-                    className="button--copy"
-                    label="Copy view"
-                    btnStyle="info"
+                    className="button--copy pt-small"
+                    text="Copy view"
                     disabled={this.state.mode === 'copy'}
-                    action={this.handleCopyClick}
+                    onClick={this.handleCopyClick}
                   />
                   {withEdit && (
                     <Button
-                      className="button--copy"
-                      label="Edit mode"
-                      btnStyle="info"
+                      className="button--copy pt-small"
+                      text="Edit mode"
                       disabled={this.state.mode === 'edit'}
-                      action={this.handleEditClick}
+                      onClick={this.handleEditClick}
                     />
                   )}
-                </Controls>
+                </ButtonGroup>
               </div>
             )}
           </div>
         </div>
-        {this.state.mode === 'normal' &&
+        {this.state.mode === 'normal' && (
           <div className="tree-wrapper" ref="tree">
-            { this.renderTree(this.props.data, true) }
+            {this.renderTree(this.props.data, true)}
           </div>
-        }
-        {this.state.mode === 'copy' &&
+        )}
+        {this.state.mode === 'copy' && (
           <textarea
             id="tree-content"
             className="form-control"
@@ -274,8 +267,8 @@ export default class Tree extends Component {
             cols="50"
             readOnly
           />
-        }
-        {this.state.mode === 'edit' &&
+        )}
+        {this.state.mode === 'edit' && (
           <div>
             <textarea
               key={this.props.customEditData}
@@ -287,19 +280,16 @@ export default class Tree extends Component {
               cols="50"
             />
             <Alert bsStyle="warning">
-              <strong>Warning!</strong>
-              {' '}
-              Posting new staticdata replaces original content and it can be
-              fatal for business processing.
+              <strong>Warning!</strong> Posting new staticdata replaces original
+              content and it can be fatal for business processing.
             </Alert>
             <Button
-              big
-              label="Update data"
-              btnStyle="success"
-              action={this.handleUpdateClick}
+              text="Update data"
+              intent={Intent.PRIMARY}
+              onClick={this.handleUpdateClick}
             />
           </div>
-        }
+        )}
       </div>
     );
   }

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { NonIdealState } from '@blueprintjs/core';
 
 import actions from '../../../store/api/actions';
 import DetailPane from '../../../components/pane';
 import Tabs, { Pane } from '../../../components/tabs';
-import WorkflowsHeader from './header';
 import DetailTab from './detail_tab';
 import Code from '../../../components/code';
 import StepsTab from '../../order/diagram/graph';
@@ -18,6 +18,7 @@ import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
 import InfoTable from '../../../components/info_table/index';
+import Box from '../../../components/box';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -72,14 +73,11 @@ export default class WorkflowsDetail extends Component {
   }
 
   getHeight: Function = (): number => {
-    const navbar = document.querySelector('.navbar').clientHeight;
-    const paneHeader = document.querySelector('.pane__content .pane__header')
-      .clientHeight;
-    const panetabs = document.querySelector('.pane__content .nav-tabs')
-      .clientHeight;
-    const top = navbar + paneHeader + panetabs + 20;
+    const { top } = document
+      .querySelector('.pane__content .container-resizable')
+      .getBoundingClientRect();
 
-    return window.innerHeight - top;
+    return window.innerHeight - top - 60;
   };
 
   handleClose: Function = (): void => {
@@ -107,13 +105,13 @@ export default class WorkflowsDetail extends Component {
         width={this.props.width || 600}
         onClose={this.handleClose}
         onResize={this.props.onResize}
+        title={workflow.normalizedName}
       >
-        <article>
-          <WorkflowsHeader workflow={workflow} />
+        <Box top>
           <Tabs
-            className="pane__tabs"
             active={paneTab}
-            tabChange={this.props.changePaneTab}
+            id="workflowsPaneNav"
+            onChange={this.props.changePaneTab}
           >
             <Pane name="Detail">
               <DetailTab
@@ -175,14 +173,18 @@ export default class WorkflowsDetail extends Component {
               </Pane>
             ) : (
               <Pane name="Process">
-                <p> This workflow is not running under a remote process </p>
+                <NonIdealState
+                  title="Process unavailable"
+                  description="This workflow is not running under a process"
+                  visual="warning-sign"
+                />
               </Pane>
             )}
             <Pane name="Info">
               <InfoTab workflow={workflow} />
             </Pane>
           </Tabs>
-        </article>
+        </Box>
       </DetailPane>
     );
   }

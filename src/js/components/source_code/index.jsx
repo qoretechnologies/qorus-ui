@@ -5,10 +5,8 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-qore';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
-
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-
 
 /**
  * Source code uses Prism to format text.
@@ -26,6 +24,7 @@ export default class SourceCode extends Component {
     lineOffset: PropTypes.number,
     children: PropTypes.string,
     height: PropTypes.number,
+    handleRef: PropTypes.func,
   };
 
   static defaultProps = {
@@ -62,7 +61,7 @@ export default class SourceCode extends Component {
    */
   render() {
     return (
-      <div className="source-code">
+      <div className="source-code" ref={this.props.handleRef}>
         <button
           type="button"
           className={classNames({
@@ -73,11 +72,9 @@ export default class SourceCode extends Component {
             'source-code__wrap-toggle': true,
           })}
           onClick={this.toggleWrapLines}
-          title={this.state.wrapLines ?
-                 'Disable line wrap' :
-                 'Wrap lines'}
+          title={this.state.wrapLines ? 'Disable line wrap' : 'Wrap lines'}
         >
-          <i className="fa fa-outdent"></i>
+          <i className="fa fa-outdent" />
         </button>
         <pre
           className={classNames({
@@ -90,10 +87,7 @@ export default class SourceCode extends Component {
             maxHeight: this.props.height || 'auto',
           }}
         >
-          <code
-            className="language-qore"
-            ref={this.bindCodeRef}
-          >
+          <code className="language-qore" ref={this.bindCodeRef}>
             {this.props.children}
           </code>
         </pre>

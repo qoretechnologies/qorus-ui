@@ -6,6 +6,8 @@ class Toolbar extends Component {
   static propTypes = {
     children: PropTypes.any,
     sticky: PropTypes.bool,
+    className: PropTypes.string,
+    marginBottom: PropTypes.bool,
   };
 
   state: {
@@ -18,18 +20,16 @@ class Toolbar extends Component {
     if (this.props.sticky) {
       this._start = this.refs.toolbar.getBoundingClientRect().top;
 
-      document.querySelector('.root__center>section').addEventListener(
-        'scroll',
-        this.handleScrolling
-      );
+      document
+        .querySelector('.root__center>section')
+        .addEventListener('scroll', this.handleScrolling);
     }
   }
 
   componentWillUnmount() {
-    document.querySelector('.root__center>section').removeEventListener(
-      'scroll',
-      this.handleScrolling)
-    ;
+    document
+      .querySelector('.root__center>section')
+      .removeEventListener('scroll', this.handleScrolling);
   }
 
   _start: number = 0;
@@ -51,12 +51,11 @@ class Toolbar extends Component {
       <div
         ref="toolbar"
         id="workflows-toolbar"
-        className={`toolbar ${this.state.sticky ? 'sticky' : ''}`}
+        className={`${this.props.className} ${this.props.marginBottom &&
+          'with-margin'} toolbar ${this.state.sticky ? 'sticky' : ''}`}
         role="toolbar"
       >
-        <div className="workflows-toolbar">
-          {this.props.children}
-        </div>
+        <div className="workflows-toolbar">{this.props.children}</div>
       </div>
     );
   }

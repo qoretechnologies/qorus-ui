@@ -9,7 +9,7 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { ButtonGroup, Button, Intent, Breadcrumb } from '@blueprintjs/core';
 
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
@@ -18,6 +18,7 @@ import selectable from '../../hocomponents/selectable';
 import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
 import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import loadMore from '../../hocomponents/loadMore';
 import actions from '../../store/api/actions';
@@ -243,14 +244,9 @@ const Workflows: Function = ({
   totalInstances,
 }: Props): React.Element<any> => (
   <div style={{ height: '100%' }}>
-    <ul className="pt-breadcrumbs">
-      <li>
-        <a className="pt-breadcrumbs-collapsed" href="#" />
-      </li>
-      <li>
-        <span className="pt-breadcrumb pt-breadcrumb-current">Workflows</span>
-      </li>
-    </ul>
+    <Breadcrumbs>
+      <Crumb active> Workflows </Crumb>
+    </Breadcrumbs>
     <Box top>
       <WorkflowsToolbar
         selected={selected}

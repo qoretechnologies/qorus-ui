@@ -5,6 +5,7 @@ import defaultProps from 'recompose/defaultProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Button, Intent } from '@blueprintjs/core';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -16,7 +17,6 @@ import actions from '../../store/api/actions';
 import Search from '../../containers/search';
 import Toolbar from '../../components/toolbar';
 import ConfirmDialog from '../../components/confirm_dialog';
-import { Control as Button } from '../../components/controls';
 import Table from './table';
 import ErrorModal from './modal';
 
@@ -34,7 +34,7 @@ type Props = {
   id: string | number,
   fixed: boolean,
   height: string | number,
-}
+};
 
 const ErrorsContainer: Function = ({
   onSearchChange,
@@ -73,21 +73,18 @@ const ErrorsContainer: Function = ({
     });
   };
 
-  const handleEditClick: Function = (data) => {
+  const handleEditClick: Function = data => {
     handleModalOpen(data);
   };
 
-  const handleDeleteClick: Function = (name) => {
+  const handleDeleteClick: Function = name => {
     const handleConfirm = (): void => {
       removeError(type, id, name);
       closeModal();
     };
 
     openModal(
-      <ConfirmDialog
-        onClose={closeModal}
-        onConfirm={handleConfirm}
-      >
+      <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
         Are you sure you want to remove the error <strong>{name}</strong>?
       </ConfirmDialog>
     );
@@ -95,27 +92,25 @@ const ErrorsContainer: Function = ({
 
   return (
     <div>
-      <Toolbar>
-        { title && (
-          <h4 className="pull-left">{ title }</h4>
-        )}
+      <Toolbar marginBottom>
+        {title && <h4 className="pull-left">{title}</h4>}
         <Search
           onSearchUpdate={onSearchChange}
           defaultValue={query}
           resource={`${type}Errors`}
         />
       </Toolbar>
-      <Toolbar>
+      <Toolbar marginBottom>
         <Button
           className="pull-left"
-          label="Add error"
-          icon="plus"
+          text="Add error"
+          iconName="plus"
           onClick={handleCreateClick}
-          btnStyle="success"
-          big
+          intent={Intent.PRIMARY}
         />
       </Toolbar>
       <Table
+        className="clear"
         type={type}
         data={errors}
         compact={compact}
@@ -128,50 +123,40 @@ const ErrorsContainer: Function = ({
   );
 };
 
-const metaSelector: Function = (state: Object, props: Object): Object => (
-  {
-    data: state.api.errors[props.type].data,
-    sync: state.api.errors[props.type].sync,
-    loading: state.api.errors[props.type].loading,
-  }
-);
+const metaSelector: Function = (state: Object, props: Object): Object => ({
+  data: state.api.errors[props.type].data,
+  sync: state.api.errors[props.type].sync,
+  loading: state.api.errors[props.type].loading,
+});
 
-const querySelector: Function = (state: Object, props: Object): string => (
-  props.location.query[`${props.type}ErrQuery`]
-);
+const querySelector: Function = (state: Object, props: Object): string =>
+  props.location.query[`${props.type}ErrQuery`];
 
-const filterErrors: Function = (query: string): Function =>
-  (collection: Array<Object>): Array<Object> => (
-    findBy(['error', 'severity', 'type', 'description'], query, collection)
-  );
+const filterErrors: Function = (query: string): Function => (
+  collection: Array<Object>
+): Array<Object> =>
+  findBy(['error', 'severity', 'type', 'description'], query, collection);
 
 const errorsSelector: Function = createSelector(
-  [
-    metaSelector,
-    querySelector,
-  ], (meta: Object, query: string): Array<Object> => filterErrors(query)(meta.data)
+  [metaSelector, querySelector],
+  (meta: Object, query: string): Array<Object> => filterErrors(query)(meta.data)
 );
 
 const selector: Function = createSelector(
-  [
-    metaSelector,
-    errorsSelector,
-  ], (meta: Object, errors: Array<Object>): Object => ({
+  [metaSelector, errorsSelector],
+  (meta: Object, errors: Array<Object>): Object => ({
     meta,
     errors,
   })
 );
 
 export default compose(
-  connect(
-    selector,
-    {
-      load: actions.errors.fetch,
-      createOrUpdate: actions.errors.createOrUpdate,
-      removeError: actions.errors.removeError,
-      unsync: actions.errors.unsync,
-    }
-  ),
+  connect(selector, {
+    load: actions.errors.fetch,
+    createOrUpdate: actions.errors.createOrUpdate,
+    removeError: actions.errors.removeError,
+    unsync: actions.errors.unsync,
+  }),
   defaultProps({
     id: 'omit',
   }),
@@ -180,12 +165,5 @@ export default compose(
   withModal(),
   withSearch((props: Object) => `${props.type}ErrQuery`),
   unsync(),
-  pure([
-    'query',
-    'errors',
-    'compact',
-    'id',
-    'fixed',
-    'height',
-  ]),
+  pure(['query', 'errors', 'compact', 'id', 'fixed', 'height'])
 )(ErrorsContainer);

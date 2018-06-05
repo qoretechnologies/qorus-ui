@@ -21,6 +21,8 @@ $status-light-blue: lighten($status-blue, 30);
 $status-gray: #696969;
 $status-light-gray: lighten($status-gray, 30);
 
+$bgcolor: #eee;
+
 @import './buttons';
 @import './tables';
 
@@ -83,7 +85,7 @@ body,
 
 .app,
 .app_wrap {
-  background-color: #eee;
+  background-color: $bgcolor;
 }
 
 .pt-button,
@@ -181,7 +183,8 @@ pre.line-numbers {
   width: 50% !important;
 }
 
-.view-content {
+.view-content,
+.clear {
   clear: both;
 }
 
@@ -324,4 +327,8 @@ svg.preloader {
   vertical-align: bottom;
   display: inline-flex;
   transform: translateZ(initial);
+}
+
+pre {
+  margin: 0 !important;
 }

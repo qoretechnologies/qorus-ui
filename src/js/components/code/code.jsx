@@ -12,38 +12,90 @@ type Props = {
   height: any,
 };
 
-const CodeTab: Function = ({
-  selected,
-  height,
-}: Props): React.Element<any> => (
-  <div>
-    {selected.item ? (
-      <h5>
-        {`${capitalize(selected.name)}
+class CodeTab extends React.Component {
+  props: Props;
+
+  state: {
+    height: any,
+  } = {
+    height: this.props.height || 'auto',
+  };
+
+  componentWillMount() {
+    window.addEventListener('resize', this.recalculateSize);
+  }
+
+  componentDidMount() {
+    this.recalculateSize();
+  }
+
+  componentDidUpdate() {
+    this.recalculateSize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.recalculateSize);
+  }
+
+  el: any;
+
+  handleRef: Function = (el): void => {
+    if (!this.el) {
+      console.log(el);
+
+      this.el = el;
+
+      this.recalculateSize();
+    }
+  };
+
+  recalculateSize: Function = (): void => {
+    if (this.el) {
+      const { top } = this.el.getBoundingClientRect();
+
+      this.setState({
+        height: window.innerHeight - top - 60,
+      });
+    }
+  };
+
+  render() {
+    const { selected } = this.props;
+    const { height } = this.state;
+
+    return (
+      <div>
+        {selected.item ? (
+          <h5>
+            {`${capitalize(selected.name)}
         ${selected.item.version ? `v${selected.item.version}` : ''}
         ${selected.item.id ? `(${selected.item.id})` : ''}`}
-      </h5>
-    ) : (
-      <h5>{capitalize(selected.name)}</h5>
-    )}
-    {(selected.item && (selected.type !== 'code')) && (
-      <InfoTable
-        object={{
-          author: selected.item.author,
-          source: `${selected.item.source}:${selected.item.offset || ''}`,
-          description: selected.item.description,
-          tags: selected.item.tags && Object.keys(selected.item.tags).length,
-        }}
-      />
-    )}
-    { selected.loading ? (
-      <Loader />
-    ) : (
-      <SourceCode height={typeof height === 'number' ? height - 35 : height}>
-        { selected.code }
-      </SourceCode>
-    )}
-  </div>
-);
+          </h5>
+        ) : (
+          <h5>{capitalize(selected.name)}</h5>
+        )}
+        {selected.item &&
+          selected.type !== 'code' && (
+            <InfoTable
+              object={{
+                author: selected.item.author,
+                source: `${selected.item.source}:${selected.item.offset || ''}`,
+                description: selected.item.description,
+                tags:
+                  selected.item.tags && Object.keys(selected.item.tags).length,
+              }}
+            />
+          )}
+        {selected.loading ? (
+          <Loader />
+        ) : (
+          <SourceCode handleRef={this.handleRef} height={height}>
+            {selected.code}
+          </SourceCode>
+        )}
+      </div>
+    );
+  }
+}
 
 export default pure(['selected', 'height'])(CodeTab);

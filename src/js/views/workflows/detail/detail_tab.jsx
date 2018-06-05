@@ -10,14 +10,19 @@ import Badge from '../../../components/badge';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
 
+import AutoStart from '../../../components/autostart';
+import WorkflowsControls from '../controls';
+
 @connect(null, {
   setOptions: actions.workflows.setOptions,
+  setAutostart: actions.workflows.setAutostart,
 })
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
     setOptions: PropTypes.func.isRequired,
+    setAutostart: PropTypes.func.isRequired,
   };
 
   setOption = opt => {
@@ -28,11 +33,30 @@ export default class DetailTab extends Component {
     this.setOption(Object.assign({}, opt, { value: '' }));
   };
 
+  handleAutostartChange = value => {
+    this.props.setAutostart(this.props.workflow.id, value);
+  };
+
   render() {
     const { workflow, systemOptions } = this.props;
 
     return (
       <div>
+        <h4> Controls </h4>
+        <div className="pane__controls">
+          <WorkflowsControls
+            id={this.props.workflow.id}
+            enabled={this.props.workflow.enabled}
+          />{' '}
+          <AutoStart
+            autostart={this.props.workflow.autostart}
+            execCount={this.props.workflow.exec_count}
+            onIncrementClick={this.handleAutostartChange}
+            onDecrementClick={this.handleAutostartChange}
+          />
+        </div>
+        <h4> Description </h4>
+        <p>{workflow.description}</p>
         <Author model={workflow} />
         <AlertsTab alerts={workflow.alerts} />
         {workflow.process && (
@@ -49,11 +73,11 @@ export default class DetailTab extends Component {
         )}
         <h4> Instances </h4>
         {ORDER_STATES.map((o, k) => (
-            <Badge
-              key={k}
-              className={`status-${o.label}`}
-              val={`${o.short}: ${workflow[o.name]}`}
-            />
+          <Badge
+            key={k}
+            className={`status-${o.label}`}
+            val={`${o.short}: ${workflow[o.name]}`}
+          />
         ))}
         <Groups>
           {(workflow.groups || []).map(g => (

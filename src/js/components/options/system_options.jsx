@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-
+import { Button, Intent } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
-
 
 /**
  * Drop-down component with a button to add options.
@@ -14,14 +13,12 @@ export default class SystemOptions extends Component {
     onAdd: PropTypes.func.isRequired,
   };
 
-
   /**
    * Sets up state with default edit flag and no selected option.
    */
   componentWillMount() {
     this.setState({ edit: false, selected: null });
   }
-
 
   /**
    * Changes selected option.
@@ -30,12 +27,11 @@ export default class SystemOptions extends Component {
    */
   onChange(ev) {
     this.setState({
-      selected: this.props.options.find(opt => (
-        opt.name === ev.currentTarget.value
-      )),
+      selected: this.props.options.find(
+        opt => opt.name === ev.currentTarget.value
+      ),
     });
   }
-
 
   /**
    * Start editing by showing options to add.
@@ -44,14 +40,12 @@ export default class SystemOptions extends Component {
     this.setState({ edit: true, selected: this.props.options[0] });
   }
 
-
   /**
    * Cancels editing by hiding options to add.
    */
   cancel() {
     this.setState({ edit: false, selected: null });
   }
-
 
   /**
    * Adds new option by calling `onAdd` prop.
@@ -64,7 +58,6 @@ export default class SystemOptions extends Component {
     this.props.onAdd(this.state.selected);
     this.setState({ edit: false, selected: null });
   }
-
 
   /**
    * Returns a form to select new option to add.
@@ -80,31 +73,28 @@ export default class SystemOptions extends Component {
           onChange={::this.onChange}
         >
           {this.props.options.map(opt => (
-            <option
-              key={opt.name}
-              value={opt.name}
-            >
+            <option key={opt.name} value={opt.name}>
               {opt.name}
             </option>
           ))}
         </select>
-        <button
+        <Button
           type="submit"
-          className="btn btn-success btn-sm"
-        >
-          <i className="fa fa-plus" /> Add
-        </button>
-        <button
+          intent={Intent.PRIMARY}
+          className="pt-small"
+          iconName="plus"
+          text="Submit"
+        />
+        <Button
           type="button"
-          className="btn btn-danger btn-sm"
+          className="pt-small"
           onClick={::this.cancel}
-        >
-          <i className="fa fa-times" /> Cancel
-        </button>
+          iconName="cross"
+          text="Cancel"
+        />
       </form>
     );
   }
-
 
   /**
    * Returns a button to add new option.
@@ -113,16 +103,15 @@ export default class SystemOptions extends Component {
    */
   renderButton() {
     return (
-      <button
-        className="btn btn-success btn-sm"
+      <Button
+        intent={Intent.PRIMARY}
         onClick={::this.start}
         disabled={!this.props.options.length}
-      >
-        <i className="fa fa-plus" /> Add option
-      </button>
+        text="Add option"
+        iconName="plus"
+      />
     );
   }
-
 
   /**
    * Returns element for this component.

@@ -1,41 +1,45 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Button, Intent } from '@blueprintjs/core';
 
 import ResizeHandle from '../resize/handle';
-import Icon from '../icon';
+import { Breadcrumbs, Crumb } from '../breadcrumbs';
 
 type Props = {
   width?: number,
   onClose: Function,
   children: any,
   onResize?: Function,
+  title?: string,
 };
 
-const Pane: Function = ({ width, onClose, children, onResize }: Props) => (
-  <div
-    className="pane right"
-    style={{ width }}
-  >
-    <button
-      type="button"
-      className="btn btn-xs btn-inverse pane__close"
-      onClick={onClose}
-    >
-      <Icon icon="times-circle" /> Close
-    </button>
-    <div className="pane__content">
-      {children}
+const Pane: Function = ({
+  width,
+  onClose,
+  children,
+  onResize,
+  title,
+}: Props) => (
+  <div className="pane right" style={{ width }}>
+    <div className="pane-header">
+      {title && (
+        <Breadcrumbs>
+          <Crumb active>{title}</Crumb>
+        </Breadcrumbs>
+      )}
+      <div className="pull-right">
+        <Button
+          text="Close"
+          iconName="cross"
+          onClick={onClose}
+          className="pt-small"
+        />
+      </div>
     </div>
-    <ResizeHandle
-      onStop={onResize}
-      left
-      min={{ width: 400 }}
-    />
+    <div className="pane__content">{children}</div>
+    <ResizeHandle onStop={onResize} left min={{ width: 400 }} />
   </div>
 );
 
-export default pure([
-  'width',
-  'children',
-])(Pane);
+export default pure(['width', 'children'])(Pane);

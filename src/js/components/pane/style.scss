@@ -1,8 +1,7 @@
-$zindex-pane: 1022;
+$zindex-pane: 19;
 $pane-padding: $panel-body-padding;
-$pane-bg-color: rgba(245, 245, 245, .9);
+$pane-bg-color: rgba(245, 245, 245, 0.9);
 $pane-font-color: #000;
-
 
 /**
  * Pane hovers over the rest of the page.
@@ -24,39 +23,38 @@ $pane-font-color: #000;
 .pane {
   position: absolute; /* [1] */
   top: 0; /* [1] */
-  bottom: 0; /* [1] */
+  bottom: 27px; /* [1] */
   z-index: $zindex-pane; /* [1] */
 
   max-width: 80%; /* [2] */
 
   overflow-y: auto; /* [3] */
 
-  background-color: $pane-bg-color;
-  color: $pane-font-color;
-  -webkit-box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
-     -moz-box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
-          box-shadow: 0 0 10px 10px rgba(0, 0, 0, .2); /* [4] */
+  background-color: $bgcolor;
+  -webkit-box-shadow: -10px 0 10px -10px rgba(0, 0, 0, 0.2); /* [4] */
+  -moz-box-shadow: -10px 0 10px -10px rgba(0, 0, 0, 0.2); /* [4] */
+  box-shadow: -10px 0 10px -10px rgba(0, 0, 0, 0.2); /* [4] */
 
-  &.right { /* [5] */
+  &.right {
+    /* [5] */
     right: 0;
   }
 
-  &__close { /* [6] */
-    position: absolute;
-    top: $pane-padding;
-    right: $pane-padding;
-    z-index: $zindex-pane + 1;
+  .pane-header {
+    padding: 10px 15px;
   }
 
   &__content {
+    clear: both;
     padding-left: $pane-padding; /* [7] */
     padding-right: $pane-padding; /* [7] */
-    height: 100%; /* [8] */
   }
 
-
-  .nav-tabs > li.active { /* [9] */
-    > a, > a:hover, > a:focus {
+  .nav-tabs > li.active {
+    /* [9] */
+    > a,
+    > a:hover,
+    > a:focus {
       /**
        * Cannot use transpanret border color because tab content are
        * has it's own border and they overlap. So we the same color as

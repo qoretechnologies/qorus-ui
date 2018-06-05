@@ -27,57 +27,41 @@ const ReleasesToolbar: Function = ({
   handleSortDirChange,
   compact,
 }: Props): React.Element<any> => (
-  <Toolbar>
+  <Toolbar marginBottom>
     <div className="pull-left">
       <Dropdown id="release-sort">
         <Control> Sort by: {sort}</Control>
-        <Item
-          title="Name"
-          action={handleSortChange}
-        />
-        <Item
-          title="Date"
-          action={handleSortChange}
-        />
+        <Item title="Name" action={handleSortChange} />
+        <Item title="Date" action={handleSortChange} />
       </Dropdown>
       <Dropdown id="release-sortDir">
         <Control> Sort direction: {sortDir}</Control>
-        <Item
-          title="Descending"
-          action={handleSortDirChange}
-        />
-        <Item
-          title="Ascending"
-          action={handleSortDirChange}
-        />
+        <Item title="Descending" action={handleSortDirChange} />
+        <Item title="Ascending" action={handleSortDirChange} />
       </Dropdown>
     </div>
-    {!compact && (
-      <SearchBar />
-    )}
+    {!compact && <SearchBar />}
   </Toolbar>
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      changeSort: actions.releases.changeSort,
-      changeSortDir: actions.releases.changeSortDir,
-    }
-  ),
+  connect(null, {
+    changeSort: actions.releases.changeSort,
+    changeSortDir: actions.releases.changeSortDir,
+  }),
   withHandlers({
-    handleSortChange: ({ changeSort }: Props): Function => (event: Object, value: string): void => {
+    handleSortChange: ({ changeSort }: Props): Function => (
+      event: Object,
+      value: string
+    ): void => {
       changeSort(value);
     },
-    handleSortDirChange: ({
-      changeSortDir,
-    }: Props): Function => (event: Object, value: string): void => {
+    handleSortDirChange: ({ changeSortDir }: Props): Function => (
+      event: Object,
+      value: string
+    ): void => {
       changeSortDir(value);
     },
   }),
-  pure([
-    'sort',
-    'sortDir',
-  ])
+  pure(['sort', 'sortDir'])
 )(ReleasesToolbar);
