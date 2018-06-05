@@ -216,6 +216,7 @@ export default class ConnectionsPane extends Component {
                   <Td className="text">
                     {(val.attr === 'options' || val.attr === 'opts') ? (
                       <Options
+                        key={this.props.remote.name}
                         data={val.value}
                         onSave={this.handleEditSave(val.attr)}
                       />
