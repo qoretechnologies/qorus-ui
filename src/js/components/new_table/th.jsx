@@ -18,7 +18,8 @@ type Props = {
   onClick?: Function,
   sortData?: Object,
   title?: string,
-}
+  fixed?: boolean,
+};
 
 const Th: Function = ({
   children,
@@ -29,26 +30,49 @@ const Th: Function = ({
   name,
   title,
   colspan,
-}: Props) => (
-  <th
-    className={
-      classNames({
-        sort: direction,
-        'history-sort': historyDirection,
-        'has-sort': name,
-        'sort-asc': direction && direction > 0,
-        'sort-desc': direction && direction < 0,
-        'history-sort-asc': historyDirection && historyDirection > 0,
-        'history-sort-desc': historyDirection && historyDirection < 0,
-      }, className)
-    }
-    onClick={handleClick}
-    title={title}
-    colSpan={colspan}
-  >
-    { children }
-  </th>
-);
+  fixed,
+}: Props) =>
+  fixed ? (
+    <div
+      className={classNames(
+        {
+          sort: direction,
+          'history-sort': historyDirection,
+          'has-sort': name,
+          'sort-asc': direction && direction > 0,
+          'sort-desc': direction && direction < 0,
+          'history-sort-asc': historyDirection && historyDirection > 0,
+          'history-sort-desc': historyDirection && historyDirection < 0,
+        },
+        className,
+        'fixed-table-header'
+      )}
+      onClick={handleClick}
+      title={title}
+    >
+      {children}
+    </div>
+  ) : (
+    <th
+      className={classNames(
+        {
+          sort: direction,
+          'history-sort': historyDirection,
+          'has-sort': name,
+          'sort-asc': direction && direction > 0,
+          'sort-desc': direction && direction < 0,
+          'history-sort-asc': historyDirection && historyDirection > 0,
+          'history-sort-desc': historyDirection && historyDirection < 0,
+        },
+        className
+      )}
+      onClick={handleClick}
+      title={title}
+      colSpan={colspan}
+    >
+      {children}
+    </th>
+  );
 
 export default compose(
   withHandlers({
@@ -60,17 +84,16 @@ export default compose(
     },
   }),
   mapProps(({ sortData, name, ...rest }: Props) => ({
-    direction: sortData && sortData.sortBy === name ? sortData.sortByKey.direction : null,
-    historyDirection: sortData && sortData.historySortBy && sortData.historySortBy === name ?
-      sortData.historySortByKey.direction :
-      null,
+    direction:
+      sortData && sortData.sortBy === name
+        ? sortData.sortByKey.direction
+        : null,
+    historyDirection:
+      sortData && sortData.historySortBy && sortData.historySortBy === name
+        ? sortData.historySortByKey.direction
+        : null,
     name,
     ...rest,
   })),
-  updateOnlyForKeys([
-    'children',
-    'className',
-    'direction',
-    'historyDirection',
-  ])
+  updateOnlyForKeys(['children', 'className', 'direction', 'historyDirection'])
 )(Th);

@@ -58,18 +58,23 @@ class Section extends Component {
 
       this.adjustHeight(height);
     }
-  }
+  };
 
-  adjustHeight: Function = (initHeight: ?number, marginBottom: ?number): void => {
+  adjustHeight: Function = (
+    initHeight: ?number,
+    marginBottom: ?number
+  ): void => {
     if (this._el) {
       const { top } = this._el.getBoundingClientRect();
       const winHeight = window.innerHeight;
-      const mb: number = marginBottom || marginBottom === 0 ?
-        marginBottom :
-        this.props.marginBottom;
+      const mb: number =
+        marginBottom || marginBottom === 0
+          ? marginBottom
+          : this.props.marginBottom;
       const footer: number = this.props.hasFooter ? 22 : 0;
       const height: number = winHeight - top - 60 - mb - footer;
-      const h = typeof initHeight === 'number' ? initHeight : this.state.initHeight;
+      const h =
+        typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
       if (h > height) {
         this.setState({
@@ -77,32 +82,27 @@ class Section extends Component {
         });
       }
     }
-  }
+  };
 
   render() {
-    const { type, hover, striped, children, className, fixed, Tag, bordered } = this.props;
+    const {
+      type,
+      hover,
+      striped,
+      children,
+      className,
+      fixed,
+      Tag,
+      bordered,
+    } = this.props;
     const { height } = this.state;
 
     if (!fixed) {
-      return (
-        <Tag>
-          { children }
-        </Tag>
-      );
+      return <Tag>{children}</Tag>;
     }
 
     if (type === 'header') {
-      return (
-        <div className="table-header-wrapper">
-          <table
-            className="table table-condensed table--data table-header"
-          >
-            <thead>
-              { children }
-            </thead>
-          </table>
-        </div>
-      );
+      return <div className="table-header-wrapper">{children}</div>;
     }
 
     if (type === 'body') {
@@ -115,49 +115,34 @@ class Section extends Component {
           }}
         >
           <table
-            className={
-              classNames(
-                'table table-condensed table--data table-body',
-                {
-                  'table-hover': hover,
-                  'table-striped': striped,
-                  'table-bordered': bordered,
-                  'fixed-table': true,
-                },
-                className
-              )
-            }
+            className={classNames(
+              'table table-condensed table--data table-body',
+              {
+                'table-hover': hover,
+                'table-striped': striped,
+                'table-bordered': bordered,
+                'fixed-table': true,
+              },
+              className
+            )}
           >
             <tbody
               style={{
                 height,
               }}
             >
-              { children }
+              {children}
             </tbody>
           </table>
         </div>
       );
     }
 
-    return (
-      <div className="table-header-wrapper">
-        <table
-          className="table table-condensed table--data table-header"
-        >
-          <tfoot>
-            { children }
-          </tfoot>
-        </table>
-      </div>
-    );
+    return <div className="table-footer-wrapper">{children}</div>;
   }
 }
 
-Section = updateOnlyForKeys([
-  'children',
-  'height',
-])(Section);
+Section = updateOnlyForKeys(['children', 'height'])(Section);
 
 const Thead = compose(
   setDisplayName('Thead'),
@@ -174,8 +159,4 @@ const Tfooter = compose(
   mapProps((props: Object) => ({ ...props, type: 'footer', Tag: 'tfoot' }))
 )(Section);
 
-export {
-  Thead,
-  Tbody,
-  Tfooter,
-};
+export { Thead, Tbody, Tfooter };

@@ -11,24 +11,22 @@ import Preloader from '../components/preloader';
  * @param {string} propName
  * @return {Function} - High order component
  */
-export default (
-  propName: string,
-  bigLoader: boolean = false,
-): Function => (
+export default (propName: string, bigLoader: boolean = false): Function => (
   Component: ReactClass<*>
 ): ReactClass<*> => {
-  const WrappedComponent : ReactClass<*> = showIfPassed(
-    props => props[propName] && props[propName].sync && !props[propName].loading,
+  const WrappedComponent: ReactClass<*> = showIfPassed(
+    props =>
+      props[propName] && props[propName].sync && !props[propName].loading,
     bigLoader ? <Preloader /> : <Loader />
-  )(
-    Component
-  );
+  )(Component);
 
   WrappedComponent.propTypes = {
     [propName]: PropTypes.object,
   };
 
-  WrappedComponent.displayName = `showIfLoaded(${propName})(${Component.displayName})`;
+  WrappedComponent.displayName = `showIfLoaded(${propName})(${
+    Component.displayName
+  })`;
 
   return WrappedComponent;
 };

@@ -4,6 +4,15 @@ import Item from './item';
 import CustomItem from './custom_item';
 import Control from './control';
 import { Control as Button } from '../controls';
+import {
+  Menu,
+  MenuItem,
+  Popover,
+  Position,
+  Intent,
+  Button as Btn,
+  ButtonGroup,
+} from '@blueprintjs/core';
 
 import classNames from 'classnames';
 import { pureRender } from '../utils';
@@ -15,6 +24,7 @@ type Props = {
   multi?: boolean,
   def?: string,
   selectedIcon?: string,
+  deselectedIcon?: string,
   onSubmit?: () => void,
   onSelect?: () => Array<string>,
   submitLabel?: string,
@@ -28,7 +38,8 @@ type Props = {
 @pureRender
 export default class Dropdown extends Component {
   static defaultProps = {
-    selectedIcon: 'check-square-o',
+    selectedIcon: 'selection',
+    deselectedIcon: 'circle',
     submitLabel: 'Filter',
   };
 
@@ -71,20 +82,13 @@ export default class Dropdown extends Component {
     }
   }
 
-  componentDidUpdate(): void {
-    document.removeEventListener('click', this.handleOutsideClick);
-    document.removeEventListener('keyup', this.handleMarkedChange);
-
-    if (this.state.showDropdown) {
-      document.addEventListener('click', this.handleOutsideClick);
-      document.addEventListener('keyup', this.handleMarkedChange);
-    }
-  }
-
   componentWillUnmount(): void {
-    document.removeEventListener('click', this.handleOutsideClick);
     document.removeEventListener('keyup', this.handleMarkedChange);
   }
+
+  handleOpen: Function = () => {
+    document.addEventListener('keyup', this.handleMarkedChange);
+  };
 
   getToggleTitle: Function = (children: any): ?string => {
     if (this.props.multi) {
@@ -94,7 +98,9 @@ export default class Dropdown extends Component {
         return children || 'Please select';
       }
 
-      return selected.length > 3 ? `${selected.length} selected` : selected.join(', ');
+      return selected.length > 3
+        ? `${selected.length} selected`
+        : selected.join(', ');
     }
 
     if (children) {
@@ -120,7 +126,10 @@ export default class Dropdown extends Component {
       selected = xor([item], selected);
     }
 
-    if (!selected.length || (item === this.props.def && !includes(this.state.selected, item))) {
+    if (
+      !selected.length ||
+      (item === this.props.def && !includes(this.state.selected, item))
+    ) {
       selected = this.props.def ? [this.props.def] : [];
     }
 
@@ -215,16 +224,8 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   renderDropdown(): ?React.Element<any> {
-    if (this.state.showDropdown && !this.props.disabled) {
-      return (
-        <ul
-          className={classNames('dropdown-menu', 'above', 'show')}
-          id={`${this.props.id}-dropdown`}
-          ref="dropdown"
-        >
-          { this.renderDropdownList() }
-        </ul>
-      );
+    if (!this.props.disabled) {
+      return <Menu>{this.renderDropdownList()}</Menu>;
     }
 
     return null;
@@ -241,9 +242,13 @@ export default class Dropdown extends Component {
       let selected: boolean = false;
       let icon: ?string = c.props.icon;
 
-      if (includes(this.state.selected, c.props.title)) {
-        selected = true;
-        icon = this.props.selectedIcon;
+      if (this.props.multi) {
+        if (includes(this.state.selected, c.props.title)) {
+          selected = true;
+          icon = this.props.selectedIcon;
+        } else {
+          icon = this.props.deselectedIcon;
+        }
       }
 
       return (
@@ -261,7 +266,7 @@ export default class Dropdown extends Component {
   }
 
   renderDropdownControl(): ?React.Element<any> {
-    return React.Children.map(this.props.children, (c) => {
+    return React.Children.map(this.props.children, c => {
       if (!c || c.type !== Control) return undefined;
 
       return (
@@ -281,11 +286,10 @@ export default class Dropdown extends Component {
   renderSubmit(): ?React.Element<Button> {
     if (this.props.multi && this.props.onSubmit) {
       return (
-        <Button
-          big
-          btnStyle="info"
-          label={this.props.submitLabel}
-          action={this.handleSubmit}
+        <Btn
+          intent={Intent.PRIMARY}
+          text={this.props.submitLabel}
+          onClick={this.handleSubmit}
         />
       );
     }
@@ -295,11 +299,16 @@ export default class Dropdown extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className={classNames('btn-group', this.props.className)}>
-        {this.renderDropdownControl()}
-        {this.renderDropdown()}
+      <ButtonGroup className={this.props.className}>
+        <Popover
+          position={Position.BOTTOM}
+          content={this.renderDropdown()}
+          popoverDidOpen={this.handleOpen}
+        >
+          {this.renderDropdownControl()}
+        </Popover>
         {this.renderSubmit()}
-      </div>
+      </ButtonGroup>
     );
   }
 }
@@ -317,8 +326,4 @@ Dropdown.propTypes = {
   onHide: PropTypes.func,
 };
 
-export {
-  Item,
-  CustomItem,
-  Control,
-};
+export { Item, CustomItem, Control };

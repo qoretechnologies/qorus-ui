@@ -72,11 +72,11 @@ const WorkflowsToolbar: Function = ({
       />{' '}
       <Filters location={location} isTablet={isTablet} />{' '}
       <ButtonGroup>
-        <Button text="CSV" intent={Intent.PRIMARY} big onClick={onCSVClick} />
+        <Button text="CSV" onClick={onCSVClick} />
         {!isTablet && (
           <Button
             text={expanded ? 'Collapse states' : 'Expand states'}
-            intent={expanded ? Intent.SUCCESS : Intent.PRIMARY}
+            intent={expanded && Intent.PRIMARY}
             onClick={onToggleStatesClick}
           />
         )}
@@ -85,13 +85,11 @@ const WorkflowsToolbar: Function = ({
         content={
           <Menu>
             <MenuItem
-              intent={Intent.DANGER}
               iconName="warning-sign"
               text="Workflows with alert"
               label={withAlertsCount}
             />
             <MenuItem
-              intent={Intent.SUCCESS}
               iconName="power"
               text="Enabled workflows"
               label={enabledCount}
@@ -101,7 +99,7 @@ const WorkflowsToolbar: Function = ({
         position={Position.BOTTOM}
       >
         <ButtonGroup>
-          <Button iconName="info-sign" intent={Intent.PRIMARY} />
+          <Button iconName="info-sign" />
         </ButtonGroup>
       </Popover>
       <Search

@@ -41,7 +41,6 @@ const ToolbarSelector: Function = ({
   <Tooltip content="Select workflows" position={Position.RIGHT}>
     <ButtonGroup>
       <Button
-        intent={Intent.PRIMARY}
         iconName={
           selected === 'all'
             ? 'selection'
@@ -67,7 +66,7 @@ const ToolbarSelector: Function = ({
         }
         position={Position.BOTTOM}
       >
-        <Button intent={Intent.PRIMARY} iconName="caret-down" />
+        <Button iconName="caret-down" />
       </Popover>
     </ButtonGroup>
   </Tooltip>

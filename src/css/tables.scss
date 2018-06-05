@@ -13,6 +13,76 @@
  *    tucked to the side.
  * 6. Table head cells have smaller font.
  */
+
+.fixed-table-header {
+  font-weight: 400;
+  text-align: center; /* [2] */
+
+  &.name {
+    /* [2] */
+    font-weight: 500;
+    text-align: left;
+  }
+
+  &.desc,
+  &.text {
+    /* [2] */
+    text-align: left;
+  }
+
+  &.nowrap {
+    white-space: nowrap;
+  }
+
+  &.wrap {
+    p {
+      white-space: normal;
+    }
+  }
+
+  padding: $padding-xs-vertical 5px $padding-xs-vertical 5px;
+
+  &.tiny {
+    width: 25px;
+  }
+
+  &.narrow {
+    /* [4] */
+    width: 50px;
+  }
+
+  &.normal {
+    /* [4] */
+    width: 75px;
+  }
+
+  &.medium {
+    /* [4] */
+    width: 100px;
+  }
+
+  &.big {
+    /* [4] */
+    width: 150px;
+  }
+
+  &.large {
+    /* [4] */
+    width: 200px;
+  }
+
+  &.alerts-large {
+    /* [4] */
+    width: 250px;
+  }
+
+  &.name {
+    /* [5] */
+    padding-left: $padding-xs-horizontal;
+    padding-right: $padding-xs-horizontal;
+  }
+}
+
 table.table--data {
   tr {
     transition: all 0.15s linear;
@@ -44,7 +114,8 @@ table.table--data {
     }
   }
 
-  thead th {
+  thead th,
+  div.fixed-table-header {
     border-right: 0 !important;
     border-bottom: 1px solid #eee !important;
   }
@@ -242,8 +313,7 @@ div.table-wrapper {
   clear: both;
 }
 
-div.table-body-wrapper,
-div.table-header-wrapper {
+div.table-body-wrapper {
   overflow-x: hidden;
   overflow-y: scroll;
   width: 100%;

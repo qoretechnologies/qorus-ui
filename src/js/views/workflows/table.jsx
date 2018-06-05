@@ -12,6 +12,7 @@ import {
   Th,
   Td,
   Tfooter,
+  FixedRow,
 } from '../../components/new_table';
 import Icon from '../../components/icon';
 import Badge from '../../components/badge';
@@ -65,7 +66,7 @@ const WorkflowsTable: Function = ({
     key={collection.length}
   >
     <Thead>
-      <Tr sortData={sortData} onSortChange={onSortChange}>
+      <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny" />
         <Th className="narrow">-</Th>
         {!isTablet && <Th className="narrow">Actions</Th>}
@@ -105,11 +106,12 @@ const WorkflowsTable: Function = ({
             Deprecated
           </Th>
         )}
-      </Tr>
+      </FixedRow>
     </Thead>
     <Tbody>
-      {collection.map((workflow: Object): React.Element<Row> => (
+      {collection.map((workflow: Object, index: number): React.Element<Row> => (
         <Row
+          first={index === 0}
           key={`worfkflow_${workflow.id}`}
           isActive={workflow.id === parseInt(paneId, 10)}
           openPane={openPane}
@@ -126,28 +128,36 @@ const WorkflowsTable: Function = ({
       ))}
     </Tbody>
     <Tfooter>
-      <Tr>
-        <Td colspan={9}>-</Td>
-        {states.map((state: Object): React.Element<Td> => {
+      <FixedRow>
+        {!isTablet && <Th />}
+        <Th />
+        <Th />
+        <Th />
+        <Th />
+        <Th />
+        <Th />
+        <Th />
+        <Th />
+        {states.map((state: Object): React.Element<Th> => {
           const value = !expanded
             ? totalInstances[`GROUPED_${state.name}`]
             : totalInstances[state.name];
 
           return (
-            <Td
+            <Th
               key={`header_${state.name}`}
               className={expanded || isTablet ? 'narrow' : 'medium'}
               name={!expanded ? `GROUPED_${state.name}` : state.name}
               title={state.title}
             >
               <Badge className={`status-${state.label}`} val={value} />
-            </Td>
+            </Th>
           );
         })}
-        <Td className="narrow" name="TOTAL">
+        <Th className="narrow" name="TOTAL">
           {totalInstances.total}
-        </Td>
-      </Tr>
+        </Th>
+      </FixedRow>
     </Tfooter>
   </Table>
 );

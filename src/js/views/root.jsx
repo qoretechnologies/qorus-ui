@@ -6,16 +6,19 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import Navigation from 'components/navigation';
 import Topbar from '../components/topbar';
+import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
 import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
 import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
+import logo from '../../img/qore_logo.png';
+import appSettings from '../settings';
 
-const systemSelector = (state) => state.api.system;
-const currentUserSelector = (state) => state.api.currentUser;
-const menuSelector = (state) => state.menu;
-const settingsSelector = (state) => state.ui.settings;
+const systemSelector = state => state.api.system;
+const currentUserSelector = state => state.api.currentUser;
+const menuSelector = state => state.menu;
+const settingsSelector = state => state.ui.settings;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -34,7 +37,7 @@ const settingsSelector = (state) => state.ui.settings;
       currentUser,
       menu,
       isTablet: stngs.tablet,
-    }),
+    })
   ),
   {
     saveDimensions: settings.saveDimensions,
@@ -43,14 +46,7 @@ const settingsSelector = (state) => state.ui.settings;
     fetchCurrentUser: actions.currentUser.fetch,
   }
 )
-@pure([
-  'info',
-  'currentUser',
-  'menu',
-  'location',
-  'children',
-  'isTablet',
-])
+@pure(['info', 'currentUser', 'menu', 'location', 'children', 'isTablet'])
 export default class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -64,7 +60,6 @@ export default class Root extends Component {
     currentUser: PropTypes.object,
     isTablet: PropTypes.bool,
   };
-
 
   static childContextTypes = {
     openModal: PropTypes.func,
@@ -86,11 +81,10 @@ export default class Root extends Component {
   }
 
   state: {
-    showMenu: boolean,
+    menuCollapsed: boolean,
   } = {
-    showMenu: this.props.isTablet,
+    menuCollapsed: this.props.isTablet,
   };
-
 
   /**
    * Provides modal control function and title.
@@ -112,7 +106,6 @@ export default class Root extends Component {
     };
   }
 
-
   /**
    * Sets default document title and fetches global data.
    *
@@ -122,7 +115,6 @@ export default class Root extends Component {
     this._defaultTitle = document.title;
     this.fetchGlobalData();
   }
-
 
   /**
    * Sets computed document title.
@@ -153,8 +145,8 @@ export default class Root extends Component {
   }
 
   componentWillReceiveProps(nextProps: Object): void {
-    if (!nextProps.isTablet) {
-      this.showMenu();
+    if (this.props.isTablet !== nextProps.isTablet) {
+      this.setMenu(nextProps.isTablet);
     }
   }
 
@@ -172,20 +164,20 @@ export default class Root extends Component {
   }, 200);
 
   hideMenu: Function = () => {
-    this.setMenu(false);
-  };
-
-  showMenu: Function = () => {
     this.setMenu(true);
   };
 
-  toggleMenu: Function = () => {
-    this.setMenu(!this.state.showMenu);
+  showMenu: Function = () => {
+    this.setMenu(false);
   };
 
-  setMenu: Function = (showMenu: bool) => {
+  toggleMenu: Function = () => {
+    this.setMenu(!this.state.menuCollapsed);
+  };
+
+  setMenu: Function = (menuCollapsed: boolean) => {
     this.setState({
-      showMenu,
+      menuCollapsed,
     });
   };
 
@@ -211,12 +203,11 @@ export default class Root extends Component {
    * @return {string}
    */
   titleFromInfo() {
-    return this.props.info.sync ?
-      (`${this.props.info.data['instance-key']} | ` +
-       `${this.props.info.data['omq-version']}`) :
-      this._defaultTitle;
+    return this.props.info.sync
+      ? `${this.props.info.data['instance-key']} | ` +
+          `${this.props.info.data['omq-version']}`
+      : this._defaultTitle;
   }
-
 
   /**
    * Fetches data used here or by child components.
@@ -227,16 +218,14 @@ export default class Root extends Component {
     this.props.fetchCurrentUser();
   }
 
-
   /**
    * Stores ref to modal manager to provide control via context.
    *
    * @param {ModalManager} modal
    */
-  refModal = (modal) => {
+  refModal = modal => {
     this._modal = modal;
   };
-
 
   /**
    * Returns element for this component.
@@ -250,23 +239,16 @@ export default class Root extends Component {
       return <Preloader />;
     }
 
+    console.log(this.state.menuCollapsed);
+
     return (
       <div className="root">
-        <Topbar
-          info={this.props.info.data}
-          currentUser={this.props.currentUser.data}
-          onMenuToggle={this.toggleMenu}
-          isTablet={this.props.isTablet}
-          showMenu={this.state.showMenu}
-        />
+        <Topbar info={this.props.info} />
         <div className="root__center">
-          {this.state.showMenu && (
-            <Navigation
-              location={this.props.location}
-              mainItems={this.props.menu.mainItems}
-              extraItems={[]}
-            />
-          )}
+          <Sidebar
+            menuCollapsed={this.state.menuCollapsed}
+            toggleMenu={this.toggleMenu}
+          />
           <section>
             <div className="container-fluid" id="content-wrapper">
               {this.props.children}

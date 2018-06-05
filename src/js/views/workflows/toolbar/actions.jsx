@@ -85,7 +85,7 @@ const ToolbarActions: Function = ({
   if (isTablet) {
     return (
       <ButtonGroup>
-        <Button text="With selected: " intent={Intent.PRIMARY} />
+        <Button text="With selected: " />
         <Popover
           position={Position.BOTTOM}
           content={
@@ -109,7 +109,7 @@ const ToolbarActions: Function = ({
             </Menu>
           }
         >
-          <Button iconName="caret-down" intent={Intent.PRIMARY} />
+          <Button iconName="caret-down" />
         </Popover>
       </ButtonGroup>
     );
@@ -117,26 +117,19 @@ const ToolbarActions: Function = ({
 
   return (
     <ButtonGroup>
-      <Tooltip content="Enable selected workflows" position={Position.BOTTOM}>
-        <Button
-          text="Enable"
-          iconName="power"
-          intent={Intent.SUCCESS}
-          onClick={handleEnableClick}
-        />
-      </Tooltip>
+      <Button
+        text="Enable"
+        iconName="power"
+        intent={Intent.SUCCESS}
+        onClick={handleEnableClick}
+      />
       <Button
         text="Disable"
         icon="disable"
         intent={Intent.DANGER}
         onClick={handleDisableClick}
       />
-      <Button
-        text="Reset"
-        iconName="refresh"
-        intent={Intent.PRIMARY}
-        onClick={handleResetClick}
-      />
+      <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
       <Popover
         position={Position.BOTTOM}
         content={
@@ -166,7 +159,7 @@ const ToolbarActions: Function = ({
           </Menu>
         }
       >
-        <Button iconName="caret-down" intent={Intent.PRIMARY} />
+        <Button iconName="caret-down" />
       </Popover>
     </ButtonGroup>
   );

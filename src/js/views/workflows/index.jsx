@@ -55,13 +55,13 @@ const filterLastVersion: Function = (latest: string): Function => (
   latest && latest !== ''
     ? workflows.filter(w => {
       for (const workflow of workflows) {
-          if (
+        if (
             w.name === workflow.name &&
             parseFloat(w.version) < parseFloat(workflow.version)
           ) {
             return false;
           }
-        }
+      }
 
       return true;
     })
@@ -242,7 +242,7 @@ const Workflows: Function = ({
   infoWithAlerts,
   totalInstances,
 }: Props): React.Element<any> => (
-  <div>
+  <div style={{ height: '100%' }}>
     <ul className="pt-breadcrumbs">
       <li>
         <a className="pt-breadcrumbs-collapsed" href="#" />

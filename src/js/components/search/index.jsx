@@ -130,7 +130,7 @@ export default class Search extends Component {
                 position={Position.BOTTOM}
                 content={<Menu>{this.renderHistoryItems()}</Menu>}
               >
-                <Button intent={Intent.PRIMARY} iconName="history" />
+                <Button iconName="history" />
               </Popover>
             )}
           <InputGroup
@@ -140,16 +140,14 @@ export default class Search extends Component {
             onChange={this.handleInputChange}
             value={this.state.query}
             autoComplete="off"
-            intent={Intent.PRIMARY}
             placeholder="Search..."
           />
           <Button
             type="button"
             iconName="cross"
-            intent={Intent.PRIMARY}
             onClick={this.handleClearClick}
           />
-          <Button type="submit" iconName="search" intent={Intent.PRIMARY} />
+          <Button type="submit" iconName="search" />
         </ControlGroup>
       </form>
     );

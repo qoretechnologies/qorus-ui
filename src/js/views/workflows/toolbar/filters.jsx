@@ -40,6 +40,13 @@ const ToolbarFilters: Function = ({
 }: Props): React.Element<any> =>
   isTablet ? (
     <ButtonGroup>
+      <Button
+        iconName="filter-list"
+        text="Filter"
+        intent={
+          deprecatedQuery || runningQuery || (latestQuery && Intent.PRIMARY)
+        }
+      />
       <Popover
         position={Position.BOTTOM}
         content={
@@ -63,13 +70,9 @@ const ToolbarFilters: Function = ({
         }
       >
         <Button
-          iconName="filter-list"
-          text="Filter"
-          rightIconName="caret-down"
+          iconName="caret-down"
           intent={
-            deprecatedQuery || runningQuery || latestQuery
-              ? Intent.SUCCESS
-              : Intent.PRIMARY
+            deprecatedQuery || runningQuery || (latestQuery && Intent.PRIMARY)
           }
         />
       </Popover>
@@ -80,13 +83,13 @@ const ToolbarFilters: Function = ({
         text="Running"
         onClick={changeRunningQuery}
         iconName={runningQuery ? 'selection' : 'circle'}
-        intent={runningQuery ? Intent.SUCCESS : Intent.PRIMARY}
+        intent={runningQuery && Intent.PRIMARY}
       />
       <Button
         text="Last version"
         onClick={changeLatestQuery}
         iconName={latestQuery ? 'selection' : 'circle'}
-        intent={latestQuery ? Intent.SUCCESS : Intent.PRIMARY}
+        intent={latestQuery && Intent.PRIMARY}
       />
       <Popover
         position={Position.BOTTOM}
@@ -102,7 +105,7 @@ const ToolbarFilters: Function = ({
       >
         <Button
           iconName="caret-down"
-          intent={deprecatedQuery ? Intent.SUCCESS : Intent.PRIMARY}
+          intent={deprecatedQuery && Intent.PRIMARY}
         />
       </Popover>
     </ButtonGroup>

@@ -50,7 +50,8 @@
 
     margin-top: $navbar-height; /* [1], [4] */
 
-    > nav, > section {
+    > nav,
+    > section {
       margin-bottom: $footer-height; /* [2], [4] */
     }
 
@@ -91,9 +92,17 @@
 * Basic set of colours for FA icons
 */
 .icon-danger {
-  color: #B94A49;
+  color: #b94a49;
 }
 
 .icon-success {
   color: #5cb85c;
+}
+
+.pt-menu-header h6 {
+  font-size: 15px !important;
+}
+
+#content-wrapper div:first-child {
+  // height: 100%;
 }

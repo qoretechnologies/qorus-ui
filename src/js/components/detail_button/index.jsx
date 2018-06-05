@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Button, Intent } from '@blueprintjs/core';
-
-import { Control } from '../controls';
+import { Button, Intent, Tooltip, Position } from '@blueprintjs/core';
 
 type Props = {
   active: boolean,
@@ -14,12 +12,18 @@ const DetailButton: Function = ({
   active,
   onClick,
 }: Props): React.Element<any> => (
-  <Button
-    text={active ? 'Close' : 'Detail'}
-    intent={active ? Intent.WARNING : Intent.PRIMARY}
-    onClick={onClick}
-    className="pt-small"
-  />
+  <Tooltip
+    content="Opens pane with detailed view"
+    position={Position.TOP}
+    useSmartPositioning
+  >
+    <Button
+      text={active ? 'Close' : 'Detail'}
+      intent={active && Intent.PRIMARY}
+      onClick={onClick}
+      className="pt-small"
+    />
+  </Tooltip>
 );
 
 export default pure(['active'])(DetailButton);

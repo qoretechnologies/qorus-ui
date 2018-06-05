@@ -204,28 +204,6 @@ export default class DatePicker extends Component {
 
   renderDatepicker(): ?React.Element<any> {
     if (!this.state.showDatepicker) return null;
-
-    return (
-      <Picker
-        minutes={this.state.minutes}
-        hours={this.state.hours}
-        onAllClick={this.handleAllClick}
-        on24hClick={this.handle24hClick}
-        onApplyClick={this.handleApplyClick}
-        onResetClick={this.handleResetClick}
-        onMinutesChange={this.handleMinutesChange}
-        onHoursChange={this.handleHoursChange}
-        hideDatepicker={this.hideDatepicker}
-        futureOnly={this.props.futureOnly}
-      >
-        <Calendar
-          date={this.state.date}
-          setDate={this.setDate}
-          activeDate={this.state.activeDate}
-          setActiveDate={this.setActiveDate}
-        />
-      </Picker>
-    );
   }
 
   renderControls(): ?React.Element<Controls> {
@@ -257,24 +235,45 @@ export default class DatePicker extends Component {
 
     return (
       <ControlGroup className="vab">
-        <Input
-          onApplyDate={this.handleApplyDate}
-          applyOnBlur={this.props.applyOnBlur}
-          onInputChange={this.handleInputChange}
-          inputDate={this.state.inputDate}
-          onInputClick={this.showDatepicker}
-          placeholder={this.props.placeholder}
-          id={this.props.id}
-          name={this.props.name}
-        />
+        <Popover
+          isOpen={this.state.showDatepicker}
+          position={Position.BOTTOM}
+          content={
+            <Picker
+              minutes={this.state.minutes}
+              hours={this.state.hours}
+              onAllClick={this.handleAllClick}
+              on24hClick={this.handle24hClick}
+              onApplyClick={this.handleApplyClick}
+              onResetClick={this.handleResetClick}
+              onMinutesChange={this.handleMinutesChange}
+              onHoursChange={this.handleHoursChange}
+              hideDatepicker={this.hideDatepicker}
+              futureOnly={this.props.futureOnly}
+            >
+              <Calendar
+                date={this.state.date}
+                setDate={this.setDate}
+                activeDate={this.state.activeDate}
+                setActiveDate={this.setActiveDate}
+              />
+            </Picker>
+          }
+        >
+          <Input
+            onApplyDate={this.handleApplyDate}
+            applyOnBlur={this.props.applyOnBlur}
+            onInputChange={this.handleInputChange}
+            inputDate={this.state.inputDate}
+            onInputClick={this.showDatepicker}
+            placeholder={this.props.placeholder}
+            id={this.props.id}
+            name={this.props.name}
+          />
+        </Popover>
+
         {!futureOnly &&
-          !noButtons && (
-            <Button
-              text="All"
-              onClick={this.handleAllClick}
-              intent={Intent.PRIMARY}
-            />
-          )}
+          !noButtons && <Button text="All" onClick={this.handleAllClick} />}
         {!futureOnly &&
           !noButtons && (
             <Popover
@@ -290,7 +289,7 @@ export default class DatePicker extends Component {
                 </Menu>
               }
             >
-              <Button iconName="caret-down" intent={Intent.PRIMARY} />
+              <Button iconName="caret-down" />
             </Popover>
           )}
         {this.renderDatepicker()}

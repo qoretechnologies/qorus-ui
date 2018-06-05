@@ -2,9 +2,21 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 
-const Groups: Function = ({ children }: { children: any }): React.Element<any> => (
+const Groups: Function = ({
+  children,
+  small,
+}: {
+  children: any,
+  small?: boolean,
+}): React.Element<any> => (
   <div className="groups">
-    <h4>Groups</h4>
+    {small ? (
+      <p>
+        <strong>Groups</strong>
+      </p>
+    ) : (
+      <h4>Groups</h4>
+    )}
     {children}
   </div>
 );

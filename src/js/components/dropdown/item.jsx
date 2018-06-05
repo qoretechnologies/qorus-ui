@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
+import { MenuItem, Intent } from '@blueprintjs/core';
 
 @pureRender
 export default class Item extends Component {
@@ -76,24 +77,23 @@ export default class Item extends Component {
   }
 
   render(): React.Element<any> {
-    const { className = '', selected, title, marked } = this.props;
-    const cls = classNames({
-      active: selected,
-      marked,
-      [className]: className,
-    });
+    const { className = '', selected, title, marked, multi } = this.props;
+    let intent = this.props.intent;
+
+    if (marked) {
+      intent = Intent.WARNING;
+    } else if (selected) {
+      intent = Intent.PRIMARY;
+    }
 
     return (
-      <li className={cls}>
-        <span
-          className="dropdown-item"
-          onClick={this.handleClick}
-        >
-          {this.renderIcon()}
-          {' '}
-          {title}
-        </span>
-      </li>
+      <MenuItem
+        shouldDismissPopover={!multi}
+        text={title}
+        iconName={this.props.icon}
+        onClick={this.handleClick}
+        intent={intent}
+      />
     );
   }
 }

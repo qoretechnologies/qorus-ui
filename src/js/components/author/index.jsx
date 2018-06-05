@@ -7,15 +7,26 @@ import Icon from '../icon';
 type Props = {
   model: Object,
   author: string,
+  small?: boolean,
 };
 
-const Author: Function = ({ model: { author } }: Props): ?React.Element<any> => (
-  author ?
+const Author: Function = ({
+  model: { author },
+  small,
+}: Props): ?React.Element<any> =>
+  author ? (
     <div>
-      <h4>Author</h4>
-      <p><Icon icon="user" /> {author}</p>
-    </div> :
-    null
-);
+      {small ? (
+        <p>
+          <strong>Author</strong>
+        </p>
+      ) : (
+        <h4>Author</h4>
+      )}
+      <p>
+        <Icon icon="user" /> {author}
+      </p>
+    </div>
+  ) : null;
 
 export default pure(['author'])(Author);

@@ -7,6 +7,7 @@ import classnames from 'classnames';
 
 import { Thead, Tbody, Tfooter } from './section';
 import Tr from './row';
+import FixedRow from './fixed_row';
 import Th from './th';
 import Td from './td';
 import EditableCell from './editable_cell';
@@ -22,7 +23,7 @@ type Props = {
   height?: string | number,
   marginBottom?: number,
   hasFooter?: boolean,
-}
+};
 
 let Table: Function = ({
   children,
@@ -35,12 +36,10 @@ let Table: Function = ({
   height,
   marginBottom,
   hasFooter,
-}: Props): React.Element<any> => (
-  fixed ?
-    <div
-      className="table-wrapper"
-    >
-      {React.Children.map(children, (child: Object): React.Element<any> => (
+}: Props): React.Element<any> =>
+  fixed ? (
+    <div className="table-wrapper">
+      {React.Children.map(children, (child: Object): React.Element<any> =>
         React.cloneElement(child, {
           fixed,
           striped,
@@ -52,52 +51,37 @@ let Table: Function = ({
           hasFooter,
           marginBottom: marginBottom || 0,
         })
-      ))}
-    </div> :
+      )}
+    </div>
+  ) : (
     <table
-      className={
-        classnames(
-          'table',
-          'table--data',
-          {
-            'table-striped': striped,
-            'table-condensed': condensed,
-            'table-hover': hover,
-            'table-bordered': bordered,
-          },
-          className
-        )
-      }
+      className={classnames(
+        'table',
+        'table--data',
+        {
+          'table-striped': striped,
+          'table-condensed': condensed,
+          'table-hover': hover,
+          'table-bordered': bordered,
+        },
+        className
+      )}
     >
-      {React.Children.map(children, (child: Object): React.Element<any> => (
+      {React.Children.map(children, (child: Object): React.Element<any> =>
         React.cloneElement(child, { fixed })
-      ))}
+      )}
     </table>
-);
+  );
 
 Table = compose(
   mapProps(({ children, ...rest }: Props): Props => ({
-    hasFooter: React.Children.toArray(children).some((child: Object): boolean => (
-      child.type.displayName === 'Tfoot'
-    )),
+    hasFooter: React.Children.toArray(children).some(
+      (child: Object): boolean => child.type.displayName === 'Tfoot'
+    ),
     children,
     ...rest,
   })),
-  updateOnlyForKeys([
-    'children',
-    'className',
-    'marginBottom',
-    'height',
-  ])
+  updateOnlyForKeys(['children', 'className', 'marginBottom', 'height'])
 )(Table);
 
-export {
-  Table,
-  Thead,
-  Tbody,
-  Tfooter,
-  Tr,
-  Th,
-  Td,
-  EditableCell,
-};
+export { Table, Thead, Tbody, Tfooter, Tr, Th, Td, EditableCell, FixedRow };

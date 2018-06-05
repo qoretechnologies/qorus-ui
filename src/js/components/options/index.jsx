@@ -70,8 +70,10 @@ export default class Options extends Component {
    */
   getUnusedSystemOptions() {
     const { systemOptions = [], model: { options = [] } = {} } =this.props;
+    const opts = options || [];
+
     return systemOptions.filter(sysOpt => (
-      options.findIndex(mdlOpt => (
+      opts.findIndex(mdlOpt => (
         mdlOpt.name === sysOpt.name
       )) < 0
     ));

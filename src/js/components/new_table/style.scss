@@ -1,3 +1,4 @@
+.fixed-table-header,
 td,
 td *,
 th,
@@ -8,6 +9,7 @@ th * {
 }
 
 table.text-table {
+  span,
   th,
   td {
     text-align: left !important;
@@ -101,8 +103,9 @@ td.editable {
   }
 }
 
+div.sort,
 th.sort {
-  background: lighten(#9ccb3b, 37);
+  background: lighten($qore-purple, 55);
 
   &:after {
     font-family: FontAwesome;
@@ -120,8 +123,9 @@ th.sort {
   }
 }
 
+div.history-sort,
 th.history-sort {
-  background: lighten(#9ccb3b, 43);
+  background: lighten($qore-purple, 58);
 
   &:after {
     font-family: FontAwesome;
@@ -140,6 +144,7 @@ th.history-sort {
   }
 }
 
+div.has-sort:hover,
 th.has-sort:hover {
   background-color: #f4f4f4;
   cursor: pointer;
@@ -147,4 +152,8 @@ th.has-sort:hover {
 
 .fixed-table tr {
   height: 26px;
+}
+
+.fixed-table-header {
+  display: inline-block;
 }

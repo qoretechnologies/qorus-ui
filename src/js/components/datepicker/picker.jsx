@@ -4,12 +4,7 @@ import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
 import pure from 'recompose/onlyUpdateForKeys';
 
-@pure([
-  'minutes',
-  'hours',
-  'children',
-  'futureOnly',
-])
+@pure(['minutes', 'hours', 'children', 'futureOnly'])
 export default class Picker extends Component {
   props: {
     minutes: string | number,
@@ -64,7 +59,7 @@ export default class Picker extends Component {
   render(): React.Element<any> {
     return (
       <div className="datepicker" ref="datepicker">
-        { this.props.children }
+        {this.props.children}
         <div className="hours row-fluid">
           <div className="input-group input-group-sm">
             <div className="input-group-addon">
@@ -98,11 +93,12 @@ export default class Picker extends Component {
             </div>
           </div>
         </div>
-        { this.renderControls() }
+        {this.renderControls()}
         <button
           className="btn btn-primary btn-xs pull-right"
           onClick={this.props.onApplyClick}
-        >Apply
+        >
+          Apply
         </button>
       </div>
     );
@@ -110,14 +106,8 @@ export default class Picker extends Component {
 }
 
 Picker.propTypes = {
-  minutes: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  hours: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  minutes: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hours: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onAllClick: PropTypes.func,
   onApplyClick: PropTypes.func,
   on24hClick: PropTypes.func,

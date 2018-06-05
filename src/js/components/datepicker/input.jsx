@@ -21,7 +21,6 @@ const Input = (props: Props) => (
   <InputGroup
     leftIconName="calendar"
     type="text"
-    intent={Intent.PRIMARY}
     onBlur={props.applyOnBlur ? props.onApplyDate : null}
     value={props.inputDate}
     onChange={props.onInputChange}

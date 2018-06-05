@@ -1,6 +1,7 @@
 /* @flow */
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
 
 type Props = {
   children?: React.Element<any>,
@@ -11,25 +12,21 @@ type Props = {
 
 export default function Control({
   children,
-  small = false,
+  small,
   btnStyle = 'default',
-  noCaret = false,
+  noCaret,
   ...other,
 }: Props) {
   return (
-    <button
-      className={classNames('btn',
-       small ? 'btn-xs' : '',
-       `btn-${btnStyle}`,
-       'dropdown-toggle'
+    <Button
+      className={classNames(
+       small ? 'pt-small' : '',
       )}
+      intent={Intent.PRIMARY}
       type="button"
-      {...other}
-    >
-      { children }
-      { !noCaret ? ' ' : null }
-      { !noCaret ? <span className="fa fa-caret-down" /> : null }
-    </button>
+      text={children}
+      rightIconName={!noCaret && 'caret-down'}
+    />
   );
 }
 
