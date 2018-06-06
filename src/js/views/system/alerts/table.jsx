@@ -5,9 +5,15 @@ import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import mapProps from 'recompose/mapProps';
+import { Callout } from '@blueprintjs/core';
 
-import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import {
+  Table,
+  Tbody,
+  Thead,
+  Th,
+  FixedRow,
+} from '../../../components/new_table';
 import { Control as Button } from '../../../components/controls';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
@@ -16,10 +22,13 @@ import withPane from '../../../hocomponents/pane';
 import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
-import { querySelector, paramSelector, resourceSelector } from '../../../selectors';
+import {
+  querySelector,
+  paramSelector,
+  resourceSelector,
+} from '../../../selectors';
 import AlertsPane from './pane';
 import AlertRow from './row';
-import AlertsToolbar from './toolbar';
 import Icon from '../../../components/icon';
 
 type Props = {
@@ -33,7 +42,7 @@ type Props = {
   openPane: Function,
   paneId: string,
   location: Object,
-}
+};
 
 const AlertsTable: Function = ({
   sortData,
@@ -43,11 +52,9 @@ const AlertsTable: Function = ({
   handleLoadMore,
   openPane,
   paneId,
-  location,
   type,
 }: Props): React.Element<any> => (
   <div>
-    <AlertsToolbar location={location} />
     {alerts.length ? (
       <Table
         fixed
@@ -55,35 +62,48 @@ const AlertsTable: Function = ({
         striped
         marginBottom={canLoadMore ? 60 : 0}
         key={`${type}-${alerts.length}`}
+        height={400}
+        className="clear"
       >
         <Thead>
-          <Tr
-            sortData={sortData}
-            onSortChange={onSortChange}
-          >
+          <FixedRow sortData={sortData} onSortChange={onSortChange}>
             <Th className="tiny">
               <Icon icon="warning" />
             </Th>
             <Th className="narrow">-</Th>
-            <Th className="text big" name="type">Type</Th>
-            <Th className="text alerts-large" name="alert">Alert</Th>
-            <Th className="name" name="object">Object</Th>
-            <Th className="big" name="when">When</Th>
-          </Tr>
+            <Th className="text big" name="type">
+              Type
+            </Th>
+            <Th className="text alerts-large" name="alert">
+              Alert
+            </Th>
+            <Th className="name" name="object">
+              Object
+            </Th>
+            <Th className="big" name="when">
+              When
+            </Th>
+          </FixedRow>
         </Thead>
         <Tbody>
-          {alerts.map((alert: Object): React.Element<any> => (
-            <AlertRow
-              key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
-              openPane={openPane}
-              isActive={paneId === `${alert.type}:${alert.id}`}
-              {...alert}
-            />
-          ))}
+          {alerts.map(
+            (alert: Object, index: number): React.Element<any> => (
+              <AlertRow
+                first={index === 0}
+                key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
+                openPane={openPane}
+                isActive={paneId === `${alert.type}:${alert.id}`}
+                {...alert}
+              />
+            )
+          )}
         </Tbody>
       </Table>
     ) : (
-      <p className="no-data"> No data </p>
+      <Callout iconName="warning-sign" title="No data">
+        {' '}
+        There are no data to be displayed.{' '}
+      </Callout>
     )}
     {canLoadMore && (
       <Button
@@ -96,36 +116,32 @@ const AlertsTable: Function = ({
   </div>
 );
 
-const filterCollection: Function = (
-  type: string
-): Function => (alerts: Array<Object>): Array<Object> => (
-  alerts.filter((alert: Object): boolean => alert.alerttype.toLowerCase() === type)
-);
+const filterCollection: Function = (type: string): Function => (
+  alerts: Array<Object>
+): Array<Object> =>
+  alerts.filter(
+    (alert: Object): boolean => alert.alerttype.toLowerCase() === type
+  );
 
-const searchCollection: Function = (
-  query: string
-): Function => (
+const searchCollection: Function = (query: string): Function => (
   collection: Array<Object>
-): Array<Object> => (
-  findBy(['alerttype', 'alert', 'name'], query, collection)
-);
+): Array<Object> => findBy(['alerttype', 'alert', 'name'], query, collection);
 
 const collectionSelector = createSelector(
   [
     resourceSelector('alerts'),
-    paramSelector('type'),
-    querySelector('search'),
-  ], (alerts, type, search) => flowRight(
-    filterCollection(type),
-    searchCollection(search)
-  )(alerts.data)
+    (state, props) => props.type,
+    (state, props) => props.location.query[`${props.type}Search`],
+  ],
+  (alerts, type, search) =>
+    flowRight(
+      filterCollection(type),
+      searchCollection(search)
+    )(alerts.data)
 );
 
 const viewSelector = createSelector(
-  [
-    resourceSelector('alerts'),
-    collectionSelector,
-  ],
+  [resourceSelector('alerts'), collectionSelector],
   (meta, alerts) => ({
     meta,
     alerts,
@@ -139,22 +155,9 @@ export default compose(
       load: actions.alerts.fetch,
     }
   ),
-  mapProps(({ params, ...rest }: Props): Props => ({
-    type: params.type,
-    params,
-    ...rest,
-  })),
-  withSort(
-    ({ type }: Props): string => type,
-    'alerts',
-    sortDefaults.alerts
-  ),
+  withSort(({ type }: Props): string => type, 'alerts', sortDefaults.alerts),
   withLoadMore('alerts', 'alerts', true, 50),
   sync('meta'),
   withPane(AlertsPane, null, null, 'alerts'),
-  pure([
-    'alerts',
-    'location',
-    'paneId',
-  ])
+  pure(['alerts', 'location', 'paneId'])
 )(AlertsTable);

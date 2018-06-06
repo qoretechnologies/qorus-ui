@@ -5,13 +5,21 @@ import Crumb from './crumb';
 
 type Props = {
   children?: any,
+  collapsed?: boolean,
+  onClick?: Function,
 };
 
-const Breadcrumbs: Function = ({ children }: Props): React.Element<any> => (
-  <ul className="pt-breadcrumbs">
-    <li>
-      <span className="pt-breadcrumbs-collapsed" />
-    </li>
+const Breadcrumbs: Function = ({
+  children,
+  collapsed: collapsed = true,
+  onClick,
+}: Props): React.Element<any> => (
+  <ul className="pt-breadcrumbs pull-left">
+    {collapsed && (
+      <li onClick={onClick}>
+        <span className="pt-breadcrumbs-collapsed" />
+      </li>
+    )}
     {children}
   </ul>
 );

@@ -9,6 +9,7 @@ import Toolbar from '../../../components/toolbar';
 import actions from '../../../store/api/actions';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import SearchBar from './search';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 
 type Props = {
   sort: string,
@@ -28,12 +29,15 @@ const ReleasesToolbar: Function = ({
   compact,
 }: Props): React.Element<any> => (
   <Toolbar marginBottom>
-    <div className="pull-left">
+    <Breadcrumbs>
+      <Crumb> Releases </Crumb>
+    </Breadcrumbs>
+    <div className="pull-left clear">
       <Dropdown id="release-sort">
         <Control> Sort by: {sort}</Control>
         <Item title="Name" action={handleSortChange} />
         <Item title="Date" action={handleSortChange} />
-      </Dropdown>
+      </Dropdown>{' '}
       <Dropdown id="release-sortDir">
         <Control> Sort direction: {sortDir}</Control>
         <Item title="Descending" action={handleSortDirChange} />
@@ -45,10 +49,13 @@ const ReleasesToolbar: Function = ({
 );
 
 export default compose(
-  connect(null, {
-    changeSort: actions.releases.changeSort,
-    changeSortDir: actions.releases.changeSortDir,
-  }),
+  connect(
+    null,
+    {
+      changeSort: actions.releases.changeSort,
+      changeSortDir: actions.releases.changeSortDir,
+    }
+  ),
   withHandlers({
     handleSortChange: ({ changeSort }: Props): Function => (
       event: Object,

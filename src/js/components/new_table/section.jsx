@@ -111,7 +111,7 @@ class Section extends Component {
           ref={this.handleRef}
           className="table-body-wrapper"
           style={{
-            height,
+            maxHeight: height,
           }}
         >
           <table
@@ -128,7 +128,7 @@ class Section extends Component {
           >
             <tbody
               style={{
-                height,
+                maxHeight: height,
               }}
             >
               {children}

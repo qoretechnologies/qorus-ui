@@ -1,24 +1,33 @@
 // @flow
 import React from 'react';
 
-import Nav, { NavLink } from '../../../components/navlink';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import AlertsTable from './table';
+import AlertsToolbar from './toolbar';
 
 type Props = {
   location: Object,
-  children: any,
 };
 
-const Alerts: Function = ({ location, children }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <Nav
-      path={location.pathname}
-      type="nav-pills"
-    >
-      <NavLink to="./ongoing">Ongoing</NavLink>
-      <NavLink to="./transient">Transient</NavLink>
-    </Nav>
-    { React.cloneElement(children, { location }) }
+const Alerts: Function = ({ location }: Props): React.Element<any> => (
+  <div>
+    <Breadcrumbs>
+      <Crumb> Alerts </Crumb>
+      <Crumb active> Ongoing </Crumb>
+    </Breadcrumbs>
+    <AlertsToolbar type="ongoing" location={location} />
+    <Box noPadding>
+      <AlertsTable location={location} type="ongoing" />
+    </Box>
+    <Breadcrumbs>
+      <Crumb> Alerts </Crumb>
+      <Crumb active> Transient </Crumb>
+    </Breadcrumbs>
+    <AlertsToolbar type="transient" location={location} />
+    <Box noPadding>
+      <AlertsTable location={location} type="transient" />
+    </Box>
   </div>
 );
 

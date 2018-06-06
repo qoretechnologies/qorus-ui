@@ -12,14 +12,17 @@ export default class NavLink extends RelativeLink {
   };
 
   render() {
+    console.log(this.props.to, this.props.path);
+
     const props = omit(this.props, 'path');
 
     return (
       <li
-        role="presentation"
-        className={ isActive(this.state.to, this.props.path) ? 'active' : '' }
+        role="tab"
+        className="pt-tab"
+        aria-selected={isActive(this.props.to, this.props.path)}
       >
-        <RelativeLink {...props} activeClassName="active" />
+        {this.props.to}
       </li>
     );
   }

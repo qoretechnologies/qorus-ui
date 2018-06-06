@@ -4,29 +4,37 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 import { includes, flowRight, omit } from 'lodash';
+import { Button, Intent } from '@blueprintjs/core';
 
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import actions from '../../../store/api/actions';
 import Prop from './prop';
 import Search from '../../../containers/search';
 import Modal from './modal';
-import PermButton from './perm_control';
 import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
 import Toolbar from '../../../components/toolbar';
 import Container from '../../../components/container';
+import Box from '../../../components/box';
+import { hasPermission } from '../../../helpers/user';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
-const querySelector: Function = (state: Object, props: Object): Object => props.location.query.q;
-const filterData = (query: string): Function => (collection: Object): Object => {
+const querySelector: Function = (state: Object, props: Object): Object =>
+  props.location.query.q;
+const filterData = (query: string): Function => (
+  collection: Object
+): Object => {
   if (!query) return collection;
 
   return Object.keys(collection).reduce((n, k) => {
-    const obj = Object.keys(collection[k]).reduce((deep, deepkey) => (
-      includes(deepkey, query) || includes(collection[k][deepkey], query) ?
-        Object.assign(deep, { [deepkey]: collection[k][deepkey] }) :
-        deep
-    ), {});
+    const obj = Object.keys(collection[k]).reduce(
+      (deep, deepkey) =>
+        includes(deepkey, query) || includes(collection[k][deepkey], query)
+          ? Object.assign(deep, { [deepkey]: collection[k][deepkey] })
+          : deep,
+      {}
+    );
 
     if (Object.keys(obj).length) {
       return Object.assign(n, { [k]: obj });
@@ -41,12 +49,8 @@ const filterData = (query: string): Function => (collection: Object): Object => 
 };
 
 const collectionSelector = createSelector(
-  [
-    dataSelector,
-    querySelector,
-  ], (properties, query) => flowRight(
-    filterData(query)
-  )(properties.data)
+  [dataSelector, querySelector],
+  (properties, query) => flowRight(filterData(query))(properties.data)
 );
 
 const viewSelector = createSelector(
@@ -90,7 +94,9 @@ export default class PropertiesView extends Component {
   };
 
   handleAddClick = (event: EventHandler, data: Object) => {
-    const onSubmit = data ? this.handleEditFormSubmit : this.handleAddFormSubmit;
+    const onSubmit = data
+      ? this.handleEditFormSubmit
+      : this.handleAddFormSubmit;
     const collection = omit(this.props.collection, 'omq');
 
     this.props.openModal(
@@ -121,42 +127,48 @@ export default class PropertiesView extends Component {
     if (!Object.keys(collection).length) return null;
 
     return Object.keys(collection).map((p, key) => (
-      <Prop
-        data={collection[p]}
-        title={p}
-        perms={user.data.permissions}
-        key={key}
-        onDelete={this.handleDeleteClick}
-        onEdit={this.handleAddClick}
-        openModal={this.props.openModal}
-        closeModal={this.props.closeModal}
-      />
+      <Box top={key === 0}>
+        <Prop
+          data={collection[p]}
+          title={p}
+          perms={user.data.permissions}
+          key={key}
+          onDelete={this.handleDeleteClick}
+          onEdit={this.handleAddClick}
+          openModal={this.props.openModal}
+          closeModal={this.props.closeModal}
+        />
+      </Box>
     ));
   }
 
   render() {
     return (
-      <div className="tab-pane active">
-        <Toolbar>
-          <PermButton
-            perms={this.props.user.data.permissions}
-            reqPerms={['SERVER-CONTROL', 'SET-PROPERTY']}
-            label="Add property"
-            big
-            btnStyle="success"
-            icon="plus"
-            className="pull-left"
-            onClick={this.handleAddClick}
-          />
+      <div>
+        <Toolbar marginBottom>
+          <Breadcrumbs>
+            <Crumb> Properties </Crumb>
+          </Breadcrumbs>
           <Search
             onSearchUpdate={this.props.onSearchChange}
             defaultValue={this.props.query}
             resource="properties"
-          />
+          />{' '}
+          {hasPermission(
+            this.props.user.data.permissions,
+            ['SERVER-CONTROL', 'SET-PROPERTY'],
+            'or'
+          ) && (
+            <Button
+              text="Add property"
+              intent={Intent.PRIMARY}
+              iconName="add"
+              className="pull-right"
+              onClick={this.handleAddClick}
+            />
+          )}{' '}
         </Toolbar>
-        <Container>
-          { this.renderProperties() }
-        </Container>
+        <Container>{this.renderProperties()}</Container>
       </div>
     );
   }

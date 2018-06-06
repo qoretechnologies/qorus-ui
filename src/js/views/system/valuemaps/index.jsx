@@ -12,6 +12,8 @@ import withPane from '../../../hocomponents/pane';
 import { resourceSelector, querySelector } from '../../../selectors';
 import actions from '../../../store/api/actions';
 import Toolbar from '../../../components/toolbar';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
 import Table from './table';
 import Pane from './detail';
@@ -24,7 +26,7 @@ type Props = {
   closePane: Function,
   isTablet: boolean,
   paneId: number,
-}
+};
 
 const ValueMaps: Function = ({
   onSearchChange,
@@ -35,33 +37,36 @@ const ValueMaps: Function = ({
   isTablet,
   paneId,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <Toolbar>
+  <div>
+    <Toolbar marginBottom>
+      <Breadcrumbs>
+        <Crumb>Valuemaps</Crumb>
+      </Breadcrumbs>
       <Search
         onSearchUpdate={onSearchChange}
         defaultValue={defaultSearchValue}
         resource="valuemaps"
       />
     </Toolbar>
-    <Table
-      collection={collection}
-      openPane={openPane}
-      closePane={closePane}
-      isTablet={isTablet}
-      paneId={paneId}
-    />
+    <Box top noPadding>
+      <Table
+        collection={collection}
+        openPane={openPane}
+        closePane={closePane}
+        isTablet={isTablet}
+        paneId={paneId}
+      />
+    </Box>
   </div>
 );
 
-const filterData = (query: string): Function => (collection: Array<Object>): Array<Object> => (
-  findBy(['name', 'desc', 'author', 'valuetype'], query, collection)
-);
+const filterData = (query: string): Function => (
+  collection: Array<Object>
+): Array<Object> =>
+  findBy(['name', 'desc', 'author', 'valuetype'], query, collection);
 
 const dataSelector: Function = createSelector(
-  [
-    resourceSelector('valuemaps'),
-    querySelector('q'),
-  ],
+  [resourceSelector('valuemaps'), querySelector('q')],
   (valuemaps, query) => filterData(query)(valuemaps.data)
 );
 
@@ -73,7 +78,8 @@ const state = createSelector(
     resourceSelector('valuemaps'),
     querySelector('q'),
     settingsSelector,
-  ], (collection, valuemaps, query, settings) => ({
+  ],
+  (collection, valuemaps, query, settings) => ({
     collection,
     valuemaps,
     query,
@@ -91,9 +97,5 @@ export default compose(
   sync('valuemaps'),
   search(),
   withPane(Pane, ['valuemaps', 'location', 'isTablet'], null, 'valuemaps'),
-  pure([
-    'collection',
-    'isTablet',
-    'location',
-  ])
+  pure(['collection', 'isTablet', 'location'])
 )(ValueMaps);

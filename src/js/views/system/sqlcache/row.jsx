@@ -1,9 +1,9 @@
 /* @flow */
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Button, Intent } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../components/new_table';
-import { Control as Button } from '../../../components/controls';
 import DateComponent from '../../../components/date';
 
 type Props = {
@@ -12,32 +12,32 @@ type Props = {
   count: number,
   created: string,
   onClick: Function,
-}
+};
 
-const SQLCacheRow: Function = (
-  { name, datasource, count, created, onClick }: Props
-): React.Element<any> => {
+const SQLCacheRow: Function = ({
+  name,
+  datasource,
+  count,
+  created,
+  onClick,
+}: Props): React.Element<any> => {
   const handleClick: Function = (): void => {
     onClick(datasource, name);
   };
 
   return (
     <Tr>
-      <Td className="name">
-        { name }
-      </Td>
-      <Td className="narrow">
-        { count }
-      </Td>
+      <Td className="name">{name}</Td>
+      <Td className="narrow">{count}</Td>
       <Td className="big">
         <DateComponent date={created} format="YYYY-MM-DD HH:mm:ss" />
       </Td>
       <Td className="narrow">
         <Button
-          title="Clear SQL cache entry"
-          label="Clear"
-          btnStyle="danger"
-          action={handleClick}
+          intent={Intent.DANGER}
+          text="Clear"
+          onClick={handleClick}
+          className="pt-small"
         />
       </Td>
     </Tr>

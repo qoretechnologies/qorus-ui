@@ -1,31 +1,32 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
-import pure from 'recompose/onlyUpdateForKeys';
+import capitalize from 'lodash/capitalize';
 
 import Search from '../../../containers/search';
 import Toolbar from '../../../components/toolbar';
 import queryControl from '../../../hocomponents/queryControl';
 
 type Props = {
+  type: string,
   searchQuery: string,
   changeSearchQuery: Function,
 };
 
 const AlertsToolbar: Function = ({
-  searchQuery,
-  changeSearchQuery,
-}: Props): React.Element<any> => (
-  <Toolbar>
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-      resource="alerts"
-    />
-  </Toolbar>
-);
+  type,
+  ...rest
+}: Props): React.Element<any> =>
+  console.log(rest) || (
+    <Toolbar>
+      <Search
+        defaultValue={rest[`${type}SearchQuery`]}
+        onSearchUpdate={rest[`change${capitalize(type)}searchQuery`]}
+        resource="alerts"
+      />
+    </Toolbar>
+  );
 
-export default compose(
-  queryControl('search'),
-  pure(['searchQuery'])
-)(AlertsToolbar);
+export default compose(queryControl(({ type }) => `${type}Search`))(
+  AlertsToolbar
+);

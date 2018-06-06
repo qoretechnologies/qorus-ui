@@ -81,7 +81,7 @@ const TableRow: Function = ({
   <Tr
     first={first}
     className={classNames({
-      info: isActive,
+      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
     })}
@@ -184,34 +184,36 @@ const TableRow: Function = ({
       </Popover>
     </Td>
     <Td className="normal text">{version}</Td>
-    {states.map((state: Object, index: number): React.Element<Td> => {
-      const title = !expanded
-        ? rest[`GROUPED_${state.name}_STATES`]
-        : state.title;
-      const value = !expanded
-        ? rest[`GROUPED_${state.name}`]
-        : rest[state.name];
+    {states.map(
+      (state: Object, index: number): React.Element<Td> => {
+        const title = !expanded
+          ? rest[`GROUPED_${state.name}_STATES`]
+          : state.title;
+        const value = !expanded
+          ? rest[`GROUPED_${state.name}`]
+          : rest[state.name];
 
-      return (
-        <Td
-          key={`wf_state_${index}`}
-          className={expanded || isTablet ? 'narrow' : 'medium'}
-        >
-          <Tooltip content={value} position={Position.TOP}>
-            <Link
-              className="workflow-status-link"
-              to={`/workflow/${id}?filter=${title}&date=${date}`}
-            >
-              <Badge
-                className={`status-${state.label}`}
-                val={formatCount(value)}
-                title={value}
-              />
-            </Link>
-          </Tooltip>
-        </Td>
-      );
-    })}
+        return (
+          <Td
+            key={`wf_state_${index}`}
+            className={expanded || isTablet ? 'narrow' : 'medium'}
+          >
+            <Tooltip content={value} position={Position.TOP}>
+              <Link
+                className="workflow-status-link"
+                to={`/workflow/${id}?filter=${title}&date=${date}`}
+              >
+                <Badge
+                  className={`status-${state.label}`}
+                  val={formatCount(value)}
+                  title={value}
+                />
+              </Link>
+            </Tooltip>
+          </Td>
+        );
+      }
+    )}
     <Td className="narrow">
       <Tooltip content={formatCount(rest.TOTAL) || 0} position={Position.TOP}>
         <Link to={`/workflow/${id}?date=${date}`}>

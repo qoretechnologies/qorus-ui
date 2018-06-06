@@ -22,29 +22,15 @@ type Props = {
   children: any,
 };
 
-const System: Function = ({ location, children }: Props): React.Element<any> => (
+const System: Function = ({
+  location,
+  children,
+}: Props): React.Element<any> => (
   <div>
-    <Nav path={location.pathname}>
-      <NavLink to="./dashboard">Dashboard</NavLink>
-      <NavLink to="./alerts">Alerts</NavLink>
-      <NavLink to="./cluster">Cluster</NavLink>
-      <NavLink to="./options">Options</NavLink>
-      <NavLink to="./remote">Connections</NavLink>
-      <NavLink to="./props">Properties</NavLink>
-      <NavLink to="./slas">SLAs</NavLink>
-      <NavLink to="./values">Valuemaps</NavLink>
-      <NavLink to="./sqlcache">SQL cache</NavLink>
-      <NavLink to="./http">Http Services</NavLink>
-      <NavLink to="./info">Info</NavLink>
-      <NavLink to="./logs">Logs</NavLink>
-      <NavLink to="./rbac">RBAC</NavLink>
-      <NavLink to="./errors">Errors</NavLink>
-      <NavLink to="./releases">Releases</NavLink>
-    </Nav>
-    <div className="tab-content">
-      {React.Children.map(children, (child: React.Element<any>) => (
+    <div>
+      {React.Children.map(children, (child: React.Element<any>) =>
         React.cloneElement(child, { location })
-      ))}
+      )}
     </div>
   </div>
 );

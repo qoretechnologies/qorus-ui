@@ -7,6 +7,7 @@ type Props = {
   children?: any,
   text?: string,
   active?: boolean,
+  iconName?: string,
 };
 
 const Crumb: Function = ({
@@ -15,6 +16,7 @@ const Crumb: Function = ({
   text,
   children,
   active,
+  iconName,
 }: Props): React.Element<any> => (
   <li>
     {link ? (

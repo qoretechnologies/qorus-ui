@@ -28,6 +28,7 @@ type Props = {
   object: string,
   when: string,
   name: string,
+  first: boolean,
 };
 
 const AlertRow: Function = ({
@@ -41,8 +42,10 @@ const AlertRow: Function = ({
   name,
   _updated,
   isActive,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     className={isActive ? 'info' : ''}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
@@ -75,9 +78,12 @@ const AlertRow: Function = ({
 );
 
 export default compose(
-  connect(null, {
-    updateDone: actions.alerts.updateDone,
-  }),
+  connect(
+    null,
+    {
+      updateDone: actions.alerts.updateDone,
+    }
+  ),
   withHandlers({
     handleHighlightEnd: ({
       alertid,

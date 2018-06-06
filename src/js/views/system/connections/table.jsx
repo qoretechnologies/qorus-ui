@@ -7,8 +7,16 @@ import defaultProps from 'recompose/defaultProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
+import { withRouter } from 'react-router';
+import { Button, Intent } from '@blueprintjs/core';
 
-import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import {
+  Table,
+  Tbody,
+  Thead,
+  FixedRow,
+  Th,
+} from '../../../components/new_table';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
 import Icon from '../../../components/icon';
@@ -22,7 +30,6 @@ import withModal from '../../../hocomponents/modal';
 import ConnectionPane from './pane';
 import ConnectionRow from './row';
 import ManageModal from './modals/manage';
-import { Control as Button } from '../../../components/controls';
 import Toolbar from '../../../components/toolbar';
 import {
   CONN_MAP,
@@ -62,24 +69,24 @@ type Props = {
   canEdit: boolean,
 };
 
-const remotesSelector: Function = (state: Object, props: Object): Array<*> => (
-  state.api.remotes.data.filter(a =>
-    (a.conntype.toLowerCase() === CONN_MAP[props.params.type].toLowerCase())
-  )
-);
+const remotesSelector: Function = (state: Object, props: Object): Array<*> =>
+  state.api.remotes.data.filter(
+    a => a.conntype.toLowerCase() === CONN_MAP[props.type].toLowerCase()
+  );
 
-
-const filterRemotes: Function = (query: string): Function => (remotes: Array<Object>) => (
+const filterRemotes: Function = (query: string): Function => (
+  remotes: Array<Object>
+) =>
   findBy(
     ['name', 'url', 'desc', 'options', 'type', 'status', 'user', 'db', 'pass'],
     query,
     remotes
-  )
-);
+  );
 
 const filteredRemotes: Function = createSelector(
   [remotesSelector, querySelector('search')],
-  (remotes: Array<Object>, query: ?string): Array<Object> => filterRemotes(query)(remotes)
+  (remotes: Array<Object>, query: ?string): Array<Object> =>
+    filterRemotes(query)(remotes)
 );
 
 const viewSelector: Function = createSelector(
@@ -111,15 +118,14 @@ const ConnectionTable: Function = ({
   canDelete,
   canAdd,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <Toolbar>
+  <div>
+    <Toolbar marginBottom>
       {canAdd && (
         <Button
-          big
           onClick={handleAddClick}
-          btnStyle="success"
-          icon="plus"
-          label="Add new"
+          intent={Intent.PRIMARY}
+          iconName="add"
+          text="Add new"
         />
       )}
       <Search
@@ -135,41 +141,47 @@ const ConnectionTable: Function = ({
       marginBottom={canLoadMore ? 40 : 0}
     >
       <Thead>
-        <Tr
-          sortData={sortData}
-          onSortChange={onSortChange}
-        >
-          <Th className="normal" name="up">Status</Th>
+        <FixedRow sortData={sortData} onSortChange={onSortChange}>
+          <Th className="normal" name="up">
+            Status
+          </Th>
           <Th className="narrow">-</Th>
-          {canDelete && (
-            <Th className="narrow">Delete</Th>
-          )}
+          {canDelete && <Th className="narrow">Delete</Th>}
           <Th className="tiny">
             <Icon icon="exclamation-triangle" />
           </Th>
-          <Th className="name" name="name">Name</Th>
+          <Th className="name" name="name">
+            Name
+          </Th>
           {type === 'datasources' ? (
             <Th className="text">Options</Th>
           ) : (
-            <Th className="text" name="url">URL</Th>
+            <Th className="text" name="url">
+              URL
+            </Th>
           )}
-          <Th className="text" name="desc">Description</Th>
+          <Th className="text" name="desc">
+            Description
+          </Th>
           <Th className="normal">-</Th>
-        </Tr>
+        </FixedRow>
       </Thead>
       <Tbody>
-        {remotes.map((remote: Object): React.Element<any> => (
-          <ConnectionRow
-            key={`connection_${remote.name}`}
-            isActive={remote.name === paneId}
-            hasAlerts={remote.alerts.length > 0}
-            openPane={openPane}
-            closePane={closePane}
-            remoteType={type}
-            canDelete={canDelete}
-            {...remote}
-          />
-        ))}
+        {remotes.map(
+          (remote: Object, index: number): React.Element<any> => (
+            <ConnectionRow
+              first={index === 0}
+              key={`connection_${remote.name}`}
+              isActive={remote.name === paneId}
+              hasAlerts={remote.alerts.length > 0}
+              openPane={openPane}
+              closePane={closePane}
+              remoteType={type}
+              canDelete={canDelete}
+              {...remote}
+            />
+          )
+        )}
       </Tbody>
     </Table>
     {canLoadMore && (
@@ -184,6 +196,7 @@ const ConnectionTable: Function = ({
 );
 
 export default compose(
+  withRouter,
   connect(
     viewSelector,
     {
@@ -191,41 +204,32 @@ export default compose(
     }
   ),
   defaultProps({ query: { action: 'all', with_passwords: true } }),
-  mapProps(({ params, perms, ...rest }: Props): Props => ({
-    type: params.type,
-    remoteType: params.type,
-    canDelete: hasPermission(perms, DELETE_PERMS_MAP[params.type], 'or'),
-    canAdd: hasPermission(perms, ADD_PERMS_MAP[params.type], 'or'),
-    canEdit: hasPermission(perms, EDIT_PERMS_MAP[params.type], 'or'),
-    perms,
-    params,
-    ...rest,
-  })),
+  mapProps(
+    ({ type, perms, ...rest }: Props): Props => ({
+      remoteType: type,
+      canDelete: hasPermission(perms, DELETE_PERMS_MAP[type], 'or'),
+      canAdd: hasPermission(perms, ADD_PERMS_MAP[type], 'or'),
+      canEdit: hasPermission(perms, EDIT_PERMS_MAP[type], 'or'),
+      perms,
+      type,
+      ...rest,
+    })
+  ),
   patch('load', ['query']),
   sync('meta'),
-  withSort(
-    ({ type }: Props): string => type,
-    'remotes',
-    sortDefaults.remote
-  ),
+  withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
   withLoadMore('remotes', 'remotes', true, 50),
   withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
   withModal(),
   withHandlers({
-    handleAddClick: ({ openModal, closeModal, type }: Props): Function => () => {
-      openModal(
-        <ManageModal
-          onClose={closeModal}
-          remoteType={type}
-        />
-      );
+    handleAddClick: ({
+      openModal,
+      closeModal,
+      type,
+    }: Props): Function => () => {
+      openModal(<ManageModal onClose={closeModal} remoteType={type} />);
     },
   }),
   queryControl('search'),
-  pure([
-    'location',
-    'remotes',
-    'paneId',
-    'sortData',
-  ])
+  pure(['location', 'remotes', 'paneId', 'sortData'])
 )(ConnectionTable);

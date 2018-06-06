@@ -5,17 +5,24 @@ import { capitalize, includes } from 'lodash';
 import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
-import { Table, Tbody, Tr, Td, EditableCell } from '../../../components/new_table';
+import {
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  EditableCell,
+} from '../../../components/new_table';
 import AutoComponent from '../../../components/autocomponent';
+import Box from '../../../components/box';
+import NoData from '../../../components/nodata';
 import actions from '../../../store/api/actions';
 import Alert from '../../../components/alert';
 import Options from './options';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
 
-const remoteSelector = (state, props) => (
-  state.api.remotes.data.find(a => a.name === props.paneId)
-);
+const remoteSelector = (state, props) =>
+  state.api.remotes.data.find(a => a.name === props.paneId);
 
 const attrsSelector = (state, props) => {
   const { remoteType } = props;
@@ -55,12 +62,7 @@ const attrsSelector = (state, props) => {
       break;
     }
     case 'qorus': {
-      attrs = [
-        'conntype',
-        'up',
-        'monitor',
-        'status',
-      ];
+      attrs = ['conntype', 'up', 'monitor', 'status'];
 
       break;
     }
@@ -77,11 +79,7 @@ const attrsSelector = (state, props) => {
         'url',
       ];
 
-      editable = [
-        'desc',
-        'url',
-        'opts',
-      ];
+      editable = ['desc', 'url', 'opts'];
 
       break;
     }
@@ -94,10 +92,7 @@ const attrsSelector = (state, props) => {
 };
 
 const viewSelector = createSelector(
-  [
-    remoteSelector,
-    attrsSelector,
-  ],
+  [remoteSelector, attrsSelector],
   (remote, attrs) => ({
     remote,
     attrs: attrs.attrs,
@@ -145,14 +140,16 @@ export default class ConnectionsPane extends Component {
     }
 
     return data;
-  }
+  };
 
   handleEditSave: Function = (attr: string) => (value: any) => {
     const { onSave, remoteType } = this.props;
     const optsKey = remoteType === 'user' ? 'opts' : 'options';
-    const val = (value === '' || value === '{}') && (attr === 'options' || attr === 'opts') ?
-      null :
-      value;
+    const val =
+      (value === '' || value === '{}') &&
+      (attr === 'options' || attr === 'opts')
+        ? null
+        : value;
 
     const data = { ...this.props.remote, ...{ [attr]: val } };
 
@@ -170,11 +167,11 @@ export default class ConnectionsPane extends Component {
       if (val && val !== '' && (attr === 'options' || attr === 'opts')) {
         data[optsKey] = JSON.parse(data[optsKey]);
 
-        Object.keys(data[optsKey]).forEach((key: string): Object => {
-          proceed = typeof data[optsKey][key] === 'object' ?
-            false :
-            proceed;
-        });
+        Object.keys(data[optsKey]).forEach(
+          (key: string): Object => {
+            proceed = typeof data[optsKey][key] === 'object' ? false : proceed;
+          }
+        );
       }
 
       if (!proceed) {
@@ -185,7 +182,7 @@ export default class ConnectionsPane extends Component {
         onSave(remoteType, data, this.props.remote.name);
       }
     }
-  }
+  };
 
   render() {
     const { deps, alerts } = this.props.remote;
@@ -195,58 +192,64 @@ export default class ConnectionsPane extends Component {
         width={this.props.width || 400}
         onClose={this.props.onClose}
         onResize={this.props.onResize}
+        title={`${this.props.remote.name} detail`}
       >
-        <h3>{ this.props.remote.name } detail</h3>
-        {this.state.error && (
-          <Alert bsStyle="danger">{this.state.error}</Alert>
-        )}
-        <Table striped>
-          <Tbody>
-            {this.getData().map((val: Object, key: number): React.Element<any> => (
-              <Tr key={key}>
-                <Td className="name">{capitalize(val.attr)}</Td>
-                {val.editable && this.props.canEdit &&
-                  val.attr !== 'options' && val.attr !== 'opts'? (
-                  <EditableCell
-                    className="text"
-                    value={val.value}
-                    onSave={this.handleEditSave(val.attr)}
-                  />
-                ) : (
-                  <Td className="text">
-                    {(val.attr === 'options' || val.attr === 'opts') ? (
-                      <Options
-                        data={val.value}
+        {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
+        <Box top>
+          <Table striped>
+            <Tbody>
+              {this.getData().map(
+                (val: Object, key: number): React.Element<any> => (
+                  <Tr key={key}>
+                    <Td className="name">{capitalize(val.attr)}</Td>
+                    {val.editable &&
+                    this.props.canEdit &&
+                    val.attr !== 'options' &&
+                    val.attr !== 'opts' ? (
+                      <EditableCell
+                        className="text"
+                        value={val.value}
                         onSave={this.handleEditSave(val.attr)}
                       />
                     ) : (
-                      <AutoComponent>{val.value}</AutoComponent>
+                      <Td className="text">
+                        {val.attr === 'options' || val.attr === 'opts' ? (
+                          <Options
+                            data={val.value}
+                            onSave={this.handleEditSave(val.attr)}
+                          />
+                        ) : (
+                          <AutoComponent>{val.value}</AutoComponent>
+                        )}
+                      </Td>
                     )}
-                  </Td>
-                )}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-        <AlertsTable alerts={alerts} />
-        <h4> Dependencies </h4>
-        {deps && deps.length ? (
-          <Table striped condensed>
-            <Tbody>
-              {deps.map((dep: Object, index: number): React.Element<any> => (
-                <Tr key={index}>
-                  <Td className="name">
-                    <Link to={getDependencyObjectLink(dep.type, dep)}>
-                      {dep.desc}
-                    </Link>
-                  </Td>
-                </Tr>
-              ))}
+                  </Tr>
+                )
+              )}
             </Tbody>
           </Table>
-        ) : (
-          <p className="no-data"> No data </p>
-        )}
+          <AlertsTable alerts={alerts} />
+          <h4> Dependencies </h4>
+          {deps && deps.length ? (
+            <Table striped condensed>
+              <Tbody>
+                {deps.map(
+                  (dep: Object, index: number): React.Element<any> => (
+                    <Tr key={index}>
+                      <Td className="name">
+                        <Link to={getDependencyObjectLink(dep.type, dep)}>
+                          {dep.desc}
+                        </Link>
+                      </Td>
+                    </Tr>
+                  )
+                )}
+              </Tbody>
+            </Table>
+          ) : (
+            <NoData />
+          )}
+        </Box>
       </Pane>
     );
   }

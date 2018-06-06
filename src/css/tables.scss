@@ -14,6 +14,8 @@
  * 6. Table head cells have smaller font.
  */
 
+$padding-xs-vertical: 2px;
+
 .fixed-table-header {
   font-weight: 400;
   text-align: center; /* [2] */
@@ -43,7 +45,7 @@
   padding: $padding-xs-vertical 5px $padding-xs-vertical 5px;
 
   &.tiny {
-    width: 25px;
+    width: 34px;
   }
 
   &.narrow {
@@ -84,6 +86,8 @@
 }
 
 table.table--data {
+  margin-bottom: 0 !important;
+
   tr {
     transition: all 0.15s linear;
   }
@@ -98,6 +102,10 @@ table.table--data {
 
   tr.row-selected {
     background-color: lighten(#2965cc, 48);
+  }
+
+  tr.row-active {
+    background-color: lighten($qore-purple, 58);
   }
 
   tr.row-hidden {
@@ -117,7 +125,6 @@ table.table--data {
   thead th,
   div.fixed-table-header {
     border-right: 0 !important;
-    border-bottom: 1px solid #eee !important;
   }
 
   > tfoot tr td {
@@ -184,7 +191,7 @@ table.table--data {
           padding-bottom: $padding-xs-vertical;
 
           &.tiny {
-            width: 25px;
+            width: 34px;
           }
 
           &.narrow {
@@ -309,13 +316,12 @@ table.table--centered {
 div.table-wrapper {
   height: auto;
   overflow: auto;
-  margin: 10px 0;
   clear: both;
 }
 
 div.table-body-wrapper {
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 100%;
 }
 

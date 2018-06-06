@@ -105,12 +105,10 @@ td.editable {
 
 div.sort,
 th.sort {
-  background: lighten($qore-purple, 55);
-
   &:after {
     font-family: FontAwesome;
-    font-size: 120%;
     margin-left: 0.4em;
+    color: $qore-purple;
   }
 
   &.sort-asc:after {
@@ -125,13 +123,11 @@ th.sort {
 
 div.history-sort,
 th.history-sort {
-  background: lighten($qore-purple, 58);
-
   &:after {
     font-family: FontAwesome;
-    font-size: 120%;
     margin-left: 0.4em;
     opacity: 0.4;
+    color: $qore-purple;
   }
 
   &.history-sort-asc:after {

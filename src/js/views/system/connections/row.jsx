@@ -6,9 +6,9 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
+import { Button, Intent, Tag } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../components/new_table';
-import { Controls, Control as Button } from '../../../components/controls';
 import DetailButton from '../../../components/detail_button';
 import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
@@ -40,6 +40,7 @@ type Props = {
   desc?: string,
   options: Object,
   canDelete: boolean,
+  first: boolean,
 };
 
 const ConnectionRow: Function = ({
@@ -58,49 +59,43 @@ const ConnectionRow: Function = ({
   remoteType,
   options,
   canDelete,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     className={classnames({
-      info: isActive,
+      'row-active': isActive,
       'row-alert': hasAlerts,
     })}
     highlight={_updated}
     handleHighlightEnd={handleHighlightEnd}
   >
-    <Td
-      className={
-        classnames('normal', up ? 'positive-background' : 'negative-background')
-      }
-    >
-      <Badge val={up ? 'UP' : 'DOWN'} label={up ? 'success' : 'danger'} />
+    <Td className={classnames('normal')}>
+      <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="pt-minimal">
+        {up ? 'UP' : 'DOWN'}
+      </Tag>
     </Td>
     <Td className="narrow">
-      <DetailButton
-        onClick={handleDetailClick}
-        active={isActive}
-      />
+      <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
     {canDelete && (
       <Td className="narrow">
-        <Controls grouped>
-          <Button
-            icon="times"
-            btnStyle="danger"
-            onClick={handleDeleteClick}
-          />
-        </Controls>
+        <Button
+          iconName="cross"
+          intent={Intent.DANGER}
+          onClick={handleDeleteClick}
+          className="pt-small"
+        />
       </Td>
     )}
     <Td className="tiny">
       {hasAlerts && (
-        <Controls>
-          <Button
-            title="Show alerts"
-            icon="warning"
-            btnStyle="danger"
-            onClick={handleDetailClick}
-          />
-        </Controls>
+        <Button
+          iconName="warning-sign"
+          intent={Intent.DANGER}
+          onClick={handleDetailClick}
+          className="pt-small"
+        />
       )}
     </Td>
     <Td className="name">
@@ -113,7 +108,9 @@ const ConnectionRow: Function = ({
     ) : (
       <Td className="text">
         <p title={safeUrl || url}>
-          <Link className="resource-link" to={safeUrl || url}>{safeUrl || url}</Link>
+          <Link className="resource-link" to={safeUrl || url}>
+            {safeUrl || url}
+          </Link>
         </p>
       </Td>
     )}
@@ -122,10 +119,10 @@ const ConnectionRow: Function = ({
     </Td>
     <Td className="normal">
       <Button
-        label="Ping"
-        icon="exchange"
-        btnStyle="success"
+        text="Ping"
+        iconName="exchange"
         onClick={handlePingClick}
+        className="pt-small"
       />
     </Td>
   </Tr>
@@ -144,20 +141,26 @@ export default compose(
     handleHighlightEnd: ({ name, updateDone }: Props): Function => (): void => {
       updateDone(name);
     },
-    handleDetailClick: ({ name, openPane, isActive, closePane }: Props): Function => (): void => {
+    handleDetailClick: ({
+      name,
+      openPane,
+      isActive,
+      closePane,
+    }: Props): Function => (): void => {
       if (isActive) {
         closePane();
       } else {
         openPane(name);
       }
     },
-    handlePingClick: ({ name, remoteType, openModal, closeModal }: Props): Function => (): void => {
+    handlePingClick: ({
+      name,
+      remoteType,
+      openModal,
+      closeModal,
+    }: Props): Function => (): void => {
       openModal(
-        <PingModal
-          name={name}
-          onClose={closeModal}
-          type={remoteType}
-        />
+        <PingModal name={name} onClose={closeModal} type={remoteType} />
       );
     },
     handleDeleteClick: ({
@@ -173,11 +176,9 @@ export default compose(
       };
 
       openModal(
-        <ConfirmDialog
-          onClose={closeModal}
-          onConfirm={handleConfirm}
-        >
-          Are you sure you want to delete the {remoteType} <strong>{name}</strong> ?
+        <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
+          Are you sure you want to delete the {remoteType}{' '}
+          <strong>{name}</strong> ?
         </ConfirmDialog>
       );
     },

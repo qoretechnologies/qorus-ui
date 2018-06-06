@@ -22,7 +22,7 @@ const menu = {
     { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
     { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
     { name: 'Options', icon: 'cog', link: '/system/options' },
-    { name: 'Connections', icon: 'left-join', link: '/system/connections' },
+    { name: 'Connections', icon: 'left-join', link: '/system/remote' },
     { name: 'Properties', icon: 'properties', link: '/system/props' },
     { name: 'SLAs', icon: 'time', link: '/system/slas' },
     { name: 'Valuemaps', icon: 'map', link: '/system/values' },

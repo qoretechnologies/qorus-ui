@@ -1,11 +1,14 @@
 /* @flow */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../components/new_table';
-import { Control as Button } from '../../../components/controls';
 import DateComponent from '../../../components/date';
-import { getDump, removeDump } from '../../../store/api/resources/valuemaps/actions';
+import {
+  getDump,
+  removeDump,
+} from '../../../store/api/resources/valuemaps/actions';
 import { utf8ToB64 } from '../../../helpers/system';
 import DetailButton from '../../../components/detail_button';
 
@@ -17,7 +20,8 @@ type Props = {
   data: Object,
   isTablet: boolean,
   isActive: boolean,
-}
+  first: boolean,
+};
 
 @connect(
   () => ({}),
@@ -62,22 +66,21 @@ export default class ValuemapRow extends Component {
   };
 
   render() {
-    const { data, isTablet, isActive } = this.props;
+    const { data, isTablet, isActive, first } = this.props;
 
     return (
-      <Tr>
+      <Tr first={first}>
         <Td className="tiny"> - </Td>
         <Td className="narrow">
-          <DetailButton
-            active={isActive}
-            onClick={this.handleDetailClick}
-          />
+          <DetailButton active={isActive} onClick={this.handleDetailClick} />
         </Td>
-        <Td className="name">{ data.name }</Td>
-        <Td className="text">{ data.description }</Td>
-        <Td className="text">{ data.author }</Td>
-        <Td className="medium"><code>{ data.valuetype }</code></Td>
-        <Td className="narrow">{ data.mapsize }</Td>
+        <Td className="name">{data.name}</Td>
+        <Td className="text">{data.description}</Td>
+        <Td className="text">{data.author}</Td>
+        <Td className="medium">
+          <code>{data.valuetype}</code>
+        </Td>
+        <Td className="narrow">{data.mapsize}</Td>
         {!isTablet && (
           <Td>
             <DateComponent date={data.created} />
@@ -90,9 +93,9 @@ export default class ValuemapRow extends Component {
         )}
         <Td className="narrow">
           <Button
-            icon="download"
-            btnStyle="success"
+            iconName="download"
             onClick={this.handleDumpClick}
+            className="pt-small"
           />
           {data.dump && (
             <a

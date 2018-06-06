@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
+import { Button, Intent } from '@blueprintjs/core';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -15,8 +16,8 @@ import actions from '../../store/api/actions';
 import { resourceSelector, querySelector } from '../../selectors';
 import Tree from '../../components/tree';
 import Container from '../../components/container';
+import Box from '../../components/box';
 import ReleasesToolbar from './toolbar';
-import { Control as Button } from '../../components/controls';
 import { sortTable } from '../../helpers/table';
 
 type Props = {
@@ -44,14 +45,15 @@ const Releases: Function = ({
 }: Props): React.Element<any> => (
   <div>
     <ReleasesToolbar sort={sort} sortDir={sortDir} compact={compact} />
-    <Container marginBottom={30}>
-      <Tree data={data} />
-    </Container>
+    <Box>
+      <Container marginBottom={10}>
+        <Tree data={data} />
+      </Container>
+    </Box>
     {canLoadMore && (
       <Button
-        big
-        label="Load more..."
-        btnStyle="success"
+        text="Load more..."
+        intent={Intent.PRIMARY}
         onClick={handleLoadMore}
       />
     )}
@@ -165,9 +167,10 @@ const sortReleases: Function = (sort: string, sortDir: string): Function => (
 const releaseSelector: Function = createSelector(
   [resourceSelector('releases')],
   (releases: Object) =>
-    compose(formatReleases(), sortReleases(releases.sort, releases.sortDir))(
-      releases.data
-    )
+    compose(
+      formatReleases(),
+      sortReleases(releases.sort, releases.sortDir)
+    )(releases.data)
 );
 
 const componentSelector = (
@@ -204,11 +207,14 @@ const viewSelector: Function = createSelector(
 );
 
 export default compose(
-  connect(viewSelector, {
-    load: actions.releases.fetchReleases,
-    fetch: actions.releases.fetchReleases,
-    unsync: actions.releases.unsync,
-  }),
+  connect(
+    viewSelector,
+    {
+      load: actions.releases.fetchReleases,
+      fetch: actions.releases.fetchReleases,
+      unsync: actions.releases.unsync,
+    }
+  ),
   loadMore('data', 'releases'),
   patch('load', [
     'fileName',

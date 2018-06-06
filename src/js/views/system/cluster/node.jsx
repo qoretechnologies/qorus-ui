@@ -6,9 +6,12 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import round from 'lodash/round';
 import mapProps from 'recompose/mapProps';
+import { Tag, Intent } from '@blueprintjs/core';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
 import Icon from '../../../components/icon';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Box from '../../../components/box';
 import { getProcessObjectLink } from '../../../helpers/system';
 import ProcessRow from './row';
 import withSort from '../../../hocomponents/sort';
@@ -42,17 +45,22 @@ const ClusterNode: Function = ({
   closePane,
   paneId,
 }: Props): React.Element<any> => (
-  <div>
-    <h4 onClick={handleExpandClick}>
-      <Icon icon={`${expanded ? 'minus' : 'plus'}-square-o`} /> {node}
-    </h4>
+  <Box>
+    <Breadcrumbs onClick={handleExpandClick}>
+      <Crumb active={expanded} iconName="cross">
+        {node}
+      </Crumb>
+    </Breadcrumbs>
+
     {expanded && (
       <div>
-        <h5> Hostname: {hostname}</h5>
-        <p>
-          <strong>Node memory:</strong> {round(memory * 0.00000095367432, 2)}{' '}
-          MiB | <strong># of processes:</strong> {processes.length}
-        </p>
+        <div className="clear" style={{ padding: '10px 0' }}>
+          <Tag className="pt-minimal">Hostname: {hostname}</Tag>{' '}
+          <Tag className="pt-minimal">
+            Node memory: {round(memory * 0.00000095367432, 2)} MiB
+          </Tag>{' '}
+          <Tag className="pt-minimal"># of processes: {processes.length}</Tag>
+        </div>
         <Table condensed striped>
           <Thead>
             <Tr sortData={sortData} onSortChange={onSortChange}>
@@ -84,30 +92,34 @@ const ClusterNode: Function = ({
             </Tr>
           </Thead>
           <Tbody>
-            {processes.map((process: Object): React.Element<any> => (
-              <ProcessRow
-                openPane={openPane}
-                closePane={closePane}
-                isActive={process.id === paneId}
-                key={process.id}
-                {...process}
-                link={getProcessObjectLink(process)}
-              />
-            ))}
+            {processes.map(
+              (process: Object): React.Element<any> => (
+                <ProcessRow
+                  openPane={openPane}
+                  closePane={closePane}
+                  isActive={process.id === paneId}
+                  key={process.id}
+                  {...process}
+                  link={getProcessObjectLink(process)}
+                />
+              )
+            )}
           </Tbody>
         </Table>
       </div>
     )}
-  </div>
+  </Box>
 );
 
 export default compose(
   withState('expanded', 'toggleExpand', true),
-  mapProps(({ processes, ...rest }: Props): Props => ({
-    hostname: processes[0].host,
-    processes,
-    ...rest,
-  })),
+  mapProps(
+    ({ processes, ...rest }: Props): Props => ({
+      hostname: processes[0].host,
+      processes,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleExpandClick: ({ toggleExpand }: Props): Function => () => {
       toggleExpand((expanded): boolean => !expanded);

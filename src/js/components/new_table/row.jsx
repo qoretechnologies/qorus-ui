@@ -87,14 +87,31 @@ export default class Row extends Component {
       const { width: rowWidth } = ref.getBoundingClientRect();
 
       headerWrapper[0].setAttribute('style', `width: ${rowWidth}px !important`);
-      footerWrapper[0].setAttribute('style', `width: ${rowWidth}px !important`);
 
-      bodyCells.forEach((cell: any, index: number): void => {
-        const { width } = cell.getBoundingClientRect();
+      if (footerWrapper.length) {
+        footerWrapper[0].setAttribute(
+          'style',
+          `width: ${rowWidth}px !important`
+        );
+      }
 
-        headCells[index].setAttribute('style', `width: ${width}px !important`);
-        footCells[index].setAttribute('style', `width: ${width}px !important`);
-      });
+      bodyCells.forEach(
+        (cell: any, index: number): void => {
+          const { width } = cell.getBoundingClientRect();
+
+          headCells[index].setAttribute(
+            'style',
+            `width: ${width}px !important`
+          );
+
+          if (footCells.length) {
+            footCells[index].setAttribute(
+              'style',
+              `width: ${width}px !important`
+            );
+          }
+        }
+      );
 
       this._resizeTimeout = null;
     }, 500);

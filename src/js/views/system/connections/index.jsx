@@ -1,37 +1,60 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import capitalize from 'lodash/capitalize';
 
-import Nav, { NavLink } from '../../../components/navlink';
-
+import Tabs, { Pane } from '../../../components/tabs';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import queryControl from '../../../hocomponents/queryControl';
 import ConnectionsTable from './table';
-import ConnectionsPane from './pane';
 
 type Props = {
-  children: any,
-  route: Object,
-}
-
-export default function Connections(props: Props, context: Object): React.Element<any> {
-  return (
-    <div className="tab-pane active">
-      <Nav
-        path={context.location.pathname}
-        type="nav-pills"
-      >
-        <NavLink to="./datasources">Datasources</NavLink>
-        <NavLink to="./qorus">Qorus</NavLink>
-        <NavLink to="./user">User</NavLink>
-      </Nav>
-      { props.children }
-    </div>
-  );
-}
-
-Connections.contextTypes = {
-  router: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  getTitle: PropTypes.func.isRequired,
+  tabQuery?: string,
+  changeTabQuery: Function,
+  handleTabChange: Function,
+  location: Object,
 };
 
-Connections.Table = ConnectionsTable;
-Connections.Pane = ConnectionsPane;
+const Connections: Function = ({
+  tabQuery: tabQuery = 'datasources',
+  handleTabChange,
+  location,
+}: Props): React.Element<any> => (
+  <div>
+    <Breadcrumbs>
+      <Crumb> Connections </Crumb>
+      <Crumb active>{capitalize(tabQuery)}</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs
+        active={tabQuery}
+        id="connections"
+        onChange={handleTabChange}
+        noContainer
+      >
+        <Pane name="Datasources">
+          <ConnectionsTable type="datasources" location={location} />
+        </Pane>
+        <Pane name="Qorus">
+          <ConnectionsTable type="qorus" location={location} />
+        </Pane>
+        <Pane name="User">
+          <ConnectionsTable type="user" location={location} />
+        </Pane>
+      </Tabs>
+    </Box>
+  </div>
+);
+
+export default compose(
+  queryControl('tab'),
+  withHandlers({
+    handleTabChange: ({ changeTabQuery }: Props): Function => (
+      tabId: string
+    ): void => {
+      changeTabQuery(tabId);
+    },
+  })
+)(Connections);

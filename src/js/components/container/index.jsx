@@ -44,7 +44,7 @@ export default class Container extends Component {
       const { top } = this._el.getBoundingClientRect();
       const winHeight: number = window.innerHeight;
       const mb: number = this.props.marginBottom || 0;
-      const height: number = winHeight - top - 60 - mb;
+      const height: number = winHeight - top - 40 - mb;
 
       this.setState({
         height,
@@ -61,7 +61,7 @@ export default class Container extends Component {
         ref={this.handleRef}
         className={`container-resizable ${className || ''}`}
         style={{
-          height,
+          maxHeight: height,
           width: width || '100%',
         }}
       >

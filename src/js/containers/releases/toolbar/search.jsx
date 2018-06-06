@@ -33,7 +33,7 @@ class ReleasesSearch extends Component {
     component: this.props.componentQuery,
     maxdate: this.props.maxdateQuery,
     mindate: this.props.mindateQuery,
-  }
+  };
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.props !== nextProps) {
@@ -60,13 +60,13 @@ class ReleasesSearch extends Component {
     this.setState({
       fileName: event.target.value,
     });
-  }
+  };
 
   handleCompChange: Function = (event: Object): void => {
     this.setState({
       component: event.target.value,
     });
-  }
+  };
 
   handleMaxdateChange: Function = (date: string): void => {
     if (date && date !== '') {
@@ -80,7 +80,7 @@ class ReleasesSearch extends Component {
         maxdate: '',
       });
     }
-  }
+  };
 
   handleMindateChange: Function = (date: string): void => {
     if (date && date !== '') {
@@ -94,15 +94,15 @@ class ReleasesSearch extends Component {
         mindate: '',
       });
     }
-  }
+  };
 
   render() {
     return (
       <div className="pull-right">
         <div className="form-group search-toolbar">
-          <div className="pull-left">
+          <div className="pull-left pt-control-group">
             <input
-              className="form-control search-input"
+              className="pt-input search-input"
               type="text"
               placeholder="File name..."
               onChange={this.handleFileChange}
@@ -110,10 +110,8 @@ class ReleasesSearch extends Component {
               id="filename"
               name="filename"
             />
-          </div>
-          <div className="pull-left">
             <input
-              className="form-control search-input"
+              className="pt-input search-input"
               type="text"
               placeholder="Component..."
               onChange={this.handleCompChange}
@@ -155,10 +153,5 @@ export default compose(
   queryControl('component'),
   queryControl('maxdate'),
   queryControl('mindate'),
-  pure([
-    'fileNameQuery',
-    'componentQuery',
-    'maxdateQuery',
-    'mindateQuery',
-  ])
+  pure(['fileNameQuery', 'componentQuery', 'maxdateQuery', 'mindateQuery'])
 )(ReleasesSearch);

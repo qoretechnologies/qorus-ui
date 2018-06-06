@@ -19,10 +19,7 @@ const DashboardRoutes = (): React.Element<any> => (
       </Route>
     </Route>
     <Route path="options" component={System.Options} />
-    <Route path="remote" component={System.Connections}>
-      <IndexRedirect to="datasources" />
-      <Route path=":type" component={System.Connections.Table} />
-    </Route>
+    <Route path="remote" component={System.Connections} />
     <Route path="props" component={System.Properties} />
     <Route path="slas" component={System.Slas} />
     <Route path="sla/:id" component={Sla}>

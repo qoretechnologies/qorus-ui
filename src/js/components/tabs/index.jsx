@@ -7,11 +7,11 @@ import Pane from './pane';
 type Props = {
   children?: any,
   active?: string,
-  activeTab: string,
   id?: string,
   className: string,
   onChange: Function,
   vertical?: boolean,
+  noContainer?: boolean,
 };
 
 class Tabs extends React.Component {
@@ -41,7 +41,7 @@ class Tabs extends React.Component {
   };
 
   render() {
-    const { children, id, className, vertical } = this.props;
+    const { children, id, className, vertical, noContainer } = this.props;
     const { active } = this.state;
 
     return (
@@ -57,7 +57,13 @@ class Tabs extends React.Component {
           <Tab2
             id={child.props.name.toLowerCase()}
             title={child.props.name}
-            panel={<Container>{child.props.children}</Container>}
+            panel={
+              noContainer ? (
+                child.props.children
+              ) : (
+                <Container>{child.props.children}</Container>
+              )
+            }
           />
         ))}
       </Tabs2>
