@@ -61,7 +61,7 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 30 : 0}
+    marginBottom={canLoadMore ? 45 : 0}
     // Another Firefox hack, jesus
     key={collection.length}
   >
@@ -88,16 +88,18 @@ const WorkflowsTable: Function = ({
         <Th className="normal text" name="version">
           Version
         </Th>
-        {states.map((state: Object): React.Element<Th> => (
-          <Th
-            key={`header_${state.name}`}
-            className={expanded || isTablet ? 'narrow' : 'medium'}
-            name={!expanded ? `GROUPED_${state.name}` : state.name}
-            title={state.title}
-          >
-            {state.short}
-          </Th>
-        ))}
+        {states.map(
+          (state: Object): React.Element<Th> => (
+            <Th
+              key={`header_${state.name}`}
+              className={expanded || isTablet ? 'narrow' : 'medium'}
+              name={!expanded ? `GROUPED_${state.name}` : state.name}
+              title={state.title}
+            >
+              {state.short}
+            </Th>
+          )
+        )}
         <Th className="narrow" name="TOTAL">
           All
         </Th>
@@ -109,23 +111,25 @@ const WorkflowsTable: Function = ({
       </FixedRow>
     </Thead>
     <Tbody>
-      {collection.map((workflow: Object, index: number): React.Element<Row> => (
-        <Row
-          first={index === 0}
-          key={`worfkflow_${workflow.id}`}
-          isActive={workflow.id === parseInt(paneId, 10)}
-          openPane={openPane}
-          closePane={closePane}
-          date={date}
-          select={select}
-          updateDone={updateDone}
-          states={states}
-          showDeprecated={deprecated}
-          expanded={expanded}
-          isTablet={isTablet}
-          {...workflow}
-        />
-      ))}
+      {collection.map(
+        (workflow: Object, index: number): React.Element<Row> => (
+          <Row
+            first={index === 0}
+            key={`worfkflow_${workflow.id}`}
+            isActive={workflow.id === parseInt(paneId, 10)}
+            openPane={openPane}
+            closePane={closePane}
+            date={date}
+            select={select}
+            updateDone={updateDone}
+            states={states}
+            showDeprecated={deprecated}
+            expanded={expanded}
+            isTablet={isTablet}
+            {...workflow}
+          />
+        )
+      )}
     </Tbody>
     <Tfooter>
       <FixedRow>
@@ -138,22 +142,24 @@ const WorkflowsTable: Function = ({
         <Th />
         <Th />
         <Th />
-        {states.map((state: Object): React.Element<Th> => {
-          const value = !expanded
-            ? totalInstances[`GROUPED_${state.name}`]
-            : totalInstances[state.name];
+        {states.map(
+          (state: Object): React.Element<Th> => {
+            const value = !expanded
+              ? totalInstances[`GROUPED_${state.name}`]
+              : totalInstances[state.name];
 
-          return (
-            <Th
-              key={`header_${state.name}`}
-              className={expanded || isTablet ? 'narrow' : 'medium'}
-              name={!expanded ? `GROUPED_${state.name}` : state.name}
-              title={state.title}
-            >
-              <Badge className={`status-${state.label}`} val={value} />
-            </Th>
-          );
-        })}
+            return (
+              <Th
+                key={`header_${state.name}`}
+                className={expanded || isTablet ? 'narrow' : 'medium'}
+                name={!expanded ? `GROUPED_${state.name}` : state.name}
+                title={state.title}
+              >
+                <Badge className={`status-${state.label}`} val={value} />
+              </Th>
+            );
+          }
+        )}
         <Th className="narrow" name="TOTAL">
           {totalInstances.total}
         </Th>
@@ -163,10 +169,13 @@ const WorkflowsTable: Function = ({
 );
 
 export default compose(
-  connect(null, {
-    updateDone: actions.workflows.updateDone,
-    select: actions.workflows.select,
-  }),
+  connect(
+    null,
+    {
+      updateDone: actions.workflows.updateDone,
+      select: actions.workflows.select,
+    }
+  ),
   checkData(
     ({ collection }: Props): boolean => collection && collection.length > 0
   ),

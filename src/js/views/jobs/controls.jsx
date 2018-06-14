@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
-import { Controls, Control as Button } from '../../components/controls';
 import withModal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
 import RescheduleModal from './modals/reschedule';
@@ -47,57 +47,59 @@ const ServiceControls: Function = ({
   enabled,
   scheduleOnly,
   schedText,
-}: Props): React.Element<any> => (
-  scheduleOnly ?
+}: Props): React.Element<any> =>
+  scheduleOnly ? (
     <div>
-      <span>{schedText}</span>
-      {' '}
+      <span>{schedText}</span>{' '}
       <Button
-        label="Reschedule"
-        icon="clock-o"
-        btnStyle="default"
+        text="Reschedule"
+        iconName="time"
         onClick={handleScheduleClick}
+        className="pt-small"
       />
-    </div> :
-    <Controls grouped>
+    </div>
+  ) : (
+    <ButtonGroup>
       <Button
         title={enabled ? 'Disable' : 'Enable'}
-        icon="power-off"
-        btnStyle={enabled ? 'success' : 'danger'}
+        iconName="power"
+        intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleEnableClick}
+        className="pt-small"
       />
       <Button
         title={active ? 'Deactivate' : 'Activate'}
-        icon={active ? 'check' : 'ban'}
-        btnStyle={active ? 'success' : 'danger'}
+        iconName={active ? 'small-tick' : 'remove'}
+        intent={active ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleActivateClick}
+        className="pt-small"
       />
       <Button
         title="Reset"
-        icon="refresh"
-        btnStyle="warning"
+        iconName="refresh"
         onClick={handleResetClick}
+        className="pt-small"
       />
       <Button
         title="Run"
-        icon="play"
-        btnStyle="default"
+        iconName="play"
         onClick={handleRunClick}
+        className="pt-small"
       />
       <Button
         title="Reschedule"
-        icon="clock-o"
-        btnStyle="default"
+        iconName="time"
         onClick={handleScheduleClick}
+        className="pt-small"
       />
       <Button
         title="Set expiry"
-        icon="tag"
-        btnStyle="default"
+        iconName="tag"
         onClick={handleExpiryClick}
+        className="pt-small"
       />
-    </Controls>
-);
+    </ButtonGroup>
+  );
 
 export default compose(
   connect(
@@ -111,10 +113,18 @@ export default compose(
   ),
   withModal(),
   withHandlers({
-    handleEnableClick: ({ enabled, action, id }: Props): Function => (): void => {
+    handleEnableClick: ({
+      enabled,
+      action,
+      id,
+    }: Props): Function => (): void => {
       action(enabled ? 'disable' : 'enable', id);
     },
-    handleActivateClick: ({ active, activate, id }: Props): Function => (): void => {
+    handleActivateClick: ({
+      active,
+      activate,
+      id,
+    }: Props): Function => (): void => {
       activate(id, active);
     },
     handleRunClick: ({ action, id }: Props): Function => (): void => {
@@ -147,19 +157,16 @@ export default compose(
         />
       );
     },
-    handleExpiryClick: ({ setExpiry, openModal, closeModal, id }: Props): Function => (): void => {
+    handleExpiryClick: ({
+      setExpiry,
+      openModal,
+      closeModal,
+      id,
+    }: Props): Function => (): void => {
       openModal(
-        <SetExpiryModal
-          onClose={closeModal}
-          action={setExpiry}
-          id={id}
-        />
+        <SetExpiryModal onClose={closeModal} action={setExpiry} id={id} />
       );
     },
   }),
-  pure([
-    'enabled',
-    'active',
-    'id',
-  ])
+  pure(['enabled', 'active', 'id'])
 )(ServiceControls);

@@ -2,23 +2,15 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 
+import PaneItem from '../pane_item';
+
 const Groups: Function = ({
   children,
-  small,
 }: {
   children: any,
-  small?: boolean,
-}): React.Element<any> => (
-  <div className="groups">
-    {small ? (
-      <p>
-        <strong>Groups</strong>
-      </p>
-    ) : (
-      <h4>Groups</h4>
-    )}
-    {children}
-  </div>
-);
+}): React.Element<any> =>
+  React.Children.count(children) !== 0 && (
+    <PaneItem title="Groups">{children}</PaneItem>
+  );
 
 export default pure(['childen'])(Groups);

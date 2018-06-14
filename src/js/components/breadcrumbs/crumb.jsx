@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { Link } from 'react-router';
 
 type Props = {
   link?: string,
@@ -20,14 +21,14 @@ const Crumb: Function = ({
 }: Props): React.Element<any> => (
   <li>
     {link ? (
-      <a
+      <Link
         className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${
           active ? 'pt-breadcrumb-current' : ''
         }`}
-        href={link}
+        to={link}
       >
         {text || children}
-      </a>
+      </Link>
     ) : (
       <span
         className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${

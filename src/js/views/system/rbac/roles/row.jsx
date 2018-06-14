@@ -3,9 +3,9 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../../components/new_table';
-import { Controls, Control } from '../../../../components/controls';
 import Text from '../../../../components/text';
 
 type Props = {
@@ -19,7 +19,8 @@ type Props = {
   canEdit: boolean,
   canDelete: boolean,
   canCreate: boolean,
-}
+  first: boolean,
+};
 
 const RolesRow: Function = ({
   model,
@@ -29,36 +30,9 @@ const RolesRow: Function = ({
   canEdit,
   canDelete,
   canCreate,
+  first,
 }: Props): React.Element<any> => (
-  <Tr>
-    <Td className="medium">
-      <Controls grouped>
-        { canEdit && (
-          <Control
-            icon="edit"
-            btnStyle="warning"
-            action={handleEditClick}
-            title="Edit role"
-          />
-        )}
-        { canDelete && (
-          <Control
-            icon="close"
-            btnStyle="danger"
-            action={handleDeleteClick}
-            title="Remove role"
-          />
-        )}
-        { canCreate && (
-          <Control
-            icon="copy"
-            btnStyle="success"
-            action={handleCloneClick}
-            title="Duplicate role"
-          />
-        )}
-      </Controls>
-    </Td>
+  <Tr first={first}>
     <Td className="name">
       <Text text={model.role} />
     </Td>
@@ -68,6 +42,35 @@ const RolesRow: Function = ({
     <Td className="text">
       <Text text={model.desc} />
     </Td>
+    <Td className="text medium">
+      <ButtonGroup>
+        {canCreate && (
+          <Button
+            iconName="duplicate"
+            onClick={handleCloneClick}
+            title="Duplicate role"
+            className="pt-small"
+          />
+        )}
+        {canEdit && (
+          <Button
+            iconName="edit"
+            onClick={handleEditClick}
+            title="Edit role"
+            className="pt-small"
+          />
+        )}
+        {canDelete && (
+          <Button
+            iconName="cross"
+            intent={Intent.DANGER}
+            onClick={handleDeleteClick}
+            title="Remove role"
+            className="pt-small"
+          />
+        )}
+      </ButtonGroup>
+    </Td>
   </Tr>
 );
 
@@ -76,17 +79,18 @@ export default compose(
     handleEditClick: ({ model, onEditClick }: Props): Function => (): void => {
       onEditClick(model);
     },
-    handleDeleteClick: ({ model, onDeleteClick }: Props): Function => (): void => {
+    handleDeleteClick: ({
+      model,
+      onDeleteClick,
+    }: Props): Function => (): void => {
       onDeleteClick(model.role);
     },
-    handleCloneClick: ({ model, onCloneClick }: Props): Function => (): void => {
+    handleCloneClick: ({
+      model,
+      onCloneClick,
+    }: Props): Function => (): void => {
       onCloneClick(model);
     },
   }),
-  pure([
-    'model',
-    'canEdit',
-    'canDelete',
-    'canCreate',
-  ])
+  pure(['model', 'canEdit', 'canDelete', 'canCreate'])
 )(RolesRow);

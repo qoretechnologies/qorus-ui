@@ -5,6 +5,8 @@ import SystemOptions from './system_options';
 import Table, { Section, Row, Cell } from '../table';
 import EditableCell from '../table/editable_cell';
 import { pureRender } from '../utils';
+import PaneItem from '../pane_item';
+import NoData from '../nodata';
 
 /**
  * Editable key-value table component.
@@ -206,23 +208,20 @@ export default class Options extends Component {
    */
   render() {
     return (
-      <div className="options">
-        <h4>Options</h4>
-        <div>
-          {!this.getModelOptions().length && <p>No options found.</p>}
-          {!!this.getModelOptions().length && (
-            <Table
-              data={this.getModelOptions()}
-              sections={this.renderTableSections}
-              className="table table-condensed table-striped table--small"
-            />
-          )}
-          <SystemOptions
-            options={this.getUnusedSystemOptions()}
-            onAdd={this.addOption}
+      <PaneItem title="Options">
+        {!this.getModelOptions().length && <NoData />}
+        {!!this.getModelOptions().length && (
+          <Table
+            data={this.getModelOptions()}
+            sections={this.renderTableSections}
+            className="table table-condensed table-striped table--small"
           />
-        </div>
-      </div>
+        )}
+        <SystemOptions
+          options={this.getUnusedSystemOptions()}
+          onAdd={this.addOption}
+        />
+      </PaneItem>
     );
   }
 }

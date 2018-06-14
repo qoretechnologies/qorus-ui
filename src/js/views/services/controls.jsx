@@ -5,8 +5,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
-import { Controls, Control as Button } from '../../components/controls';
 import actions from '../../store/api/actions';
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   status: string,
   action: Function,
   id: number,
-}
+};
 
 const ServiceControls: Function = ({
   handleEnableClick,
@@ -31,32 +31,34 @@ const ServiceControls: Function = ({
   enabled,
   autostart,
 }: Props): React.Element<any> => (
-  <Controls grouped>
+  <ButtonGroup>
     <Button
       title={enabled ? 'Disable' : 'Enable'}
-      icon="power-off"
-      btnStyle={enabled ? 'success' : 'danger'}
+      iconName="power"
+      intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
+      className="pt-small"
     />
     <Button
       title={autostart ? 'Disable autostart' : 'Enable autostart'}
-      icon={autostart ? 'pause' : 'play'}
-      btnStyle={autostart ? 'success' : 'default'}
+      iconName={autostart ? 'pause' : 'play'}
+      intent={autostart && Intent.PRIMARY}
       onClick={handleAutostartClick}
+      className="pt-small"
     />
     <Button
       title={loaded ? 'Unload' : 'Load'}
-      icon={loaded ? 'check' : 'remove'}
-      btnStyle={loaded ? 'success' : 'default'}
+      iconName={loaded ? 'small-tick' : 'remove'}
       onClick={handleLoadClick}
+      className="pt-small"
     />
     <Button
       title="Reset"
-      icon="refresh"
-      btnStyle="warning"
+      iconName="refresh"
       onClick={handleResetClick}
+      className="pt-small"
     />
-  </Controls>
+  </ButtonGroup>
 );
 
 export default compose(
@@ -66,15 +68,25 @@ export default compose(
       action: actions.services.serviceAction,
     }
   ),
-  mapProps(({ status, ...rest }: Props): Object => ({
-    loaded: status !== 'unloaded',
-    ...rest,
-  })),
+  mapProps(
+    ({ status, ...rest }: Props): Object => ({
+      loaded: status !== 'unloaded',
+      ...rest,
+    })
+  ),
   withHandlers({
-    handleEnableClick: ({ enabled, action, id }: Props): Function => (): void => {
+    handleEnableClick: ({
+      enabled,
+      action,
+      id,
+    }: Props): Function => (): void => {
       action(enabled ? 'disable' : 'enable', id);
     },
-    handleAutostartClick: ({ autostart, action, id }: Props): Function => (): void => {
+    handleAutostartClick: ({
+      autostart,
+      action,
+      id,
+    }: Props): Function => (): void => {
       action('autostart', id, autostart);
     },
     handleLoadClick: ({ loaded, action, id }: Props): Function => (): void => {
@@ -84,9 +96,5 @@ export default compose(
       action('reset', id);
     },
   }),
-  pure([
-    'enabled',
-    'loaded',
-    'autostart',
-  ])
+  pure(['enabled', 'loaded', 'autostart'])
 )(ServiceControls);

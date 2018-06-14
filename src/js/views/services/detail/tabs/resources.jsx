@@ -4,6 +4,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import { Table, Tbody, Thead, Tr, Th, Td } from '../../../../components/new_table';
 import Text from '../../../../components/text';
+import NoData from '../../../../components/nodata';
 
 type Props = {
   resources: Object,
@@ -57,7 +58,7 @@ const ResourceTable: Function = ({
         </Tbody>
       </Table>
     ): (
-      <p className="no-data"> No data </p>
+      <NoData />
     )}
     <h4> Resource files </h4>
     {resourceFiles && resourceFiles.length > 0 ? (
@@ -84,7 +85,7 @@ const ResourceTable: Function = ({
         </Tbody>
       </Table>
     ): (
-      <p className="no-data"> No data </p>
+      <NoData />
     )}
   </div>
 );

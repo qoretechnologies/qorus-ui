@@ -93,15 +93,27 @@ table.table--data {
   }
 
   tr.row-highlight {
-    background-color: lighten($qore-green, 45);
+    background-color: lighten($qore-green, 48);
+
+    &:nth-of-type(odd) {
+      background-color: lighten($qore-green, 40);
+    }
   }
 
   tr.row-alert {
     background-color: lighten($status-light-red, 20);
+
+    &:nth-of-type(odd) {
+      background-color: lighten($status-light-red, 25);
+    }
   }
 
   tr.row-selected {
     background-color: lighten(#2965cc, 48);
+
+    &:nth-of-type(odd) {
+      background-color: lighten(#2965cc, 40);
+    }
   }
 
   tr.row-active {

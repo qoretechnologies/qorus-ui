@@ -49,6 +49,7 @@ type Props = {
   month: string,
   wday: string,
   isTablet: boolean,
+  first: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -79,12 +80,14 @@ const ServiceRow: Function = ({
   month,
   wday,
   isTablet,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
-      info: isActive,
+      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
     })}
@@ -114,7 +117,7 @@ const ServiceRow: Function = ({
       </Td>
     )}
     <Td className="narrow">
-      { hasAlerts && (
+      {hasAlerts && (
         <Controls>
           <Button
             icon="warning"
@@ -148,29 +151,17 @@ const ServiceRow: Function = ({
       </Td>
     )}
     <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link
-        to={`/job/${id}?date=${date}&filter=complete`}
-      >
-        <Badge
-          className="status-complete"
-          val={formatCount(COMPLETE) || 0}
-        />
+      <Link to={`/job/${id}?date=${date}&filter=complete`}>
+        <Badge className="status-complete" val={formatCount(COMPLETE) || 0} />
       </Link>
     </Td>
     <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link
-        to={`/job/${id}?date=${date}&filter=error`}
-      >
-        <Badge
-          className="status-error"
-          val={formatCount(ERROR) || 0}
-        />
+      <Link to={`/job/${id}?date=${date}&filter=error`}>
+        <Badge className="status-error" val={formatCount(ERROR) || 0} />
       </Link>
     </Td>
     <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link
-        to={`/job/${id}?date=${date}&filter=in-progress`}
-      >
+      <Link to={`/job/${id}?date=${date}&filter=in-progress`}>
         <Badge
           className="status-in-progress"
           val={formatCount(PROGRESS) || 0}
@@ -178,13 +169,8 @@ const ServiceRow: Function = ({
       </Link>
     </Td>
     <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link
-        to={`/job/${id}?date=${date}&filter=crashed`}
-      >
-        <Badge
-          className="status-canceled"
-          val={formatCount(CRASHED) || 0}
-        />
+      <Link to={`/job/${id}?date=${date}&filter=crashed`}>
+        <Badge className="status-canceled" val={formatCount(CRASHED) || 0} />
       </Link>
     </Td>
   </Tr>

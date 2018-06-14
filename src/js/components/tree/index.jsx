@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import Alert from '../alert';
+import NoData from '../nodata';
 import Icon from '../icon';
 import withModal from '../../hocomponents/modal';
 import EditModal from './modal';
@@ -202,8 +203,9 @@ export default class Tree extends Component {
   render() {
     const { data, withEdit } = this.props;
 
-    if (!data || !Object.keys(data).length)
-      return <p className="no-data"> No data </p>;
+    if (!data || !Object.keys(data).length) {
+      return <NoData />;
+    }
 
     return (
       <div className="tree-component">

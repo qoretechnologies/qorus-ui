@@ -4,7 +4,7 @@ import mapProps from 'recompose/mapProps';
 
 import Tabs, { Pane } from 'components/tabs';
 import DetailPane from 'components/pane';
-import ServicesHeader from './header';
+import Box from 'components/box';
 import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from 'components/code';
 import LogTab from '../../workflows/detail/log_tab';
@@ -15,16 +15,23 @@ import actions from 'store/api/actions';
 
 @connect(
   (state, props) => ({
-    service: state.api.services.data.find((service) => service.id === parseInt(props.paneId, 10)),
-  }), {
+    service: state.api.services.data.find(
+      service => service.id === parseInt(props.paneId, 10)
+    ),
+  }),
+  {
     load: actions.services.fetchLibSources,
   }
 )
-@mapProps(({ service, ...rest }: Object): Object => ({
-  data: service.lib ? Object.assign(service.lib, { methods: service.methods }) : {},
-  service,
-  ...rest,
-}))
+@mapProps(
+  ({ service, ...rest }: Object): Object => ({
+    data: service.lib
+      ? Object.assign(service.lib, { methods: service.methods })
+      : {},
+    service,
+    ...rest,
+  })
+)
 export default class ServicesDetail extends Component {
   static propTypes = {
     service: PropTypes.object,
@@ -51,15 +58,14 @@ export default class ServicesDetail extends Component {
 
   handlePaneClose = () => {
     this.props.onClose(['logQuery']);
-  }
+  };
 
   getHeight: Function = (): number => {
-    const navbar = document.querySelector('.navbar').clientHeight;
-    const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
-    const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
-    const top = navbar + paneHeader + panetabs + 20;
+    const { top } = document
+      .querySelector('.pane__content .container-resizable')
+      .getBoundingClientRect();
 
-    return window.innerHeight - top;
+    return window.innerHeight - top - 60;
   };
 
   render() {
@@ -72,16 +78,20 @@ export default class ServicesDetail extends Component {
         width={this.props.width || 550}
         onClose={this.handlePaneClose}
         onResize={this.props.onResize}
+        title={this.props.service.normalizedName}
       >
-        <article>
-          <ServicesHeader service={service} />
+        <Box top>
           <Tabs
-            className="pane__tabs"
+            id="servicePane"
             active={paneTab}
-            tabChange={this.props.changePaneTab}
+            onChange={this.props.changePaneTab}
           >
             <Pane name="Detail">
-              <DetailTab key={service.name} service={service} systemOptions={systemOptions} />
+              <DetailTab
+                key={service.name}
+                service={service}
+                systemOptions={systemOptions}
+              />
             </Pane>
             <Pane name="Code">
               <Code
@@ -120,7 +130,7 @@ export default class ServicesDetail extends Component {
               />
             </Pane>
           </Tabs>
-        </article>
+        </Box>
       </DetailPane>
     );
   }

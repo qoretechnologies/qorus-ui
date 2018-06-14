@@ -15,6 +15,7 @@ type Props = {
   selectNone: Function,
   selectInvert: Function,
   selectAlerts: Function,
+  selectedCount?: number,
 };
 
 const ToolbarSelector: Function = ({
@@ -23,34 +24,22 @@ const ToolbarSelector: Function = ({
   selectNone,
   selectAlerts,
   selectInvert,
+  selectedCount,
 }: Props): React.Element<any> => (
-  <Dropdown
-    id="selection"
-    className="pull-left"
-  >
+  <Dropdown id="selection" className="pull-left">
     <Control>
       <Checkbox
-        action={selected === 'none' || selected === 'some' ? selectAll : selectNone}
+        action={
+          selected === 'none' || selected === 'some' ? selectAll : selectNone
+        }
         checked={CHECKBOX_STATES[selected]}
-      />
-      {' '}
+      />{' '}
+      {selectedCount || ''}
     </Control>
-    <Item
-      action={selectAll}
-      title="All"
-    />
-    <Item
-      action={selectNone}
-      title="None"
-    />
-    <Item
-      action={selectInvert}
-      title="Invert"
-    />
-    <Item
-      action={selectAlerts}
-      title="With alerts"
-    />
+    <Item action={selectAll} title="All" />
+    <Item action={selectNone} title="None" />
+    <Item action={selectInvert} title="Invert" />
+    <Item action={selectAlerts} title="With alerts" />
   </Dropdown>
 );
 
@@ -64,5 +53,5 @@ export default compose(
       selectAlerts: actions.services.selectAlerts,
     }
   ),
-  pure(['selected'])
+  pure(['selected', 'selectedCount'])
 )(ToolbarSelector);

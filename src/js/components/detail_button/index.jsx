@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
 import { Button, Intent, Tooltip, Position } from '@blueprintjs/core';
+import withHandlers from 'recompose/withHandlers';
 
 type Props = {
   active: boolean,
@@ -26,4 +28,17 @@ const DetailButton: Function = ({
   </Tooltip>
 );
 
-export default pure(['active'])(DetailButton);
+export default compose(
+  withHandlers({
+    handleClick: ({ onClick }: Props): Function => (e: Object): void => {
+      if (e) {
+        e.stopPropagation();
+      }
+
+      if (onClick) {
+        onClick();
+      }
+    },
+  }),
+  pure(['active'])
+)(DetailButton);

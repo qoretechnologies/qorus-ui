@@ -19,6 +19,8 @@ import Toolbar from '../../components/toolbar';
 import ConfirmDialog from '../../components/confirm_dialog';
 import Table from './table';
 import ErrorModal from './modal';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Box from '../../components/box';
 
 type Props = {
   onSearchChange: Function,
@@ -92,33 +94,50 @@ const ErrorsContainer: Function = ({
 
   return (
     <div>
-      <Toolbar marginBottom>
-        {title && <h4 className="pull-left">{title}</h4>}
+      <Toolbar mb mt>
+        {title && (
+          <Breadcrumbs collapsed={!compact}>
+            <Crumb>{title}</Crumb>
+          </Breadcrumbs>
+        )}
         <Search
           onSearchUpdate={onSearchChange}
           defaultValue={query}
           resource={`${type}Errors`}
         />
-      </Toolbar>
-      <Toolbar marginBottom>
         <Button
-          className="pull-left"
+          className="pull-right"
           text="Add error"
           iconName="plus"
           onClick={handleCreateClick}
           intent={Intent.PRIMARY}
         />
       </Toolbar>
-      <Table
-        className="clear"
-        type={type}
-        data={errors}
-        compact={compact}
-        onEditClick={handleEditClick}
-        onDeleteClick={handleDeleteClick}
-        fixed={fixed}
-        height={height}
-      />
+      {compact ? (
+        <Table
+          className="clear"
+          type={type}
+          data={errors}
+          compact={compact}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDeleteClick}
+          fixed={fixed}
+          height={height}
+        />
+      ) : (
+        <Box top noPadding>
+          <Table
+            className="clear"
+            type={type}
+            data={errors}
+            compact={compact}
+            onEditClick={handleEditClick}
+            onDeleteClick={handleDeleteClick}
+            fixed={fixed}
+            height={height}
+          />
+        </Box>
+      )}
     </div>
   );
 };
@@ -151,12 +170,15 @@ const selector: Function = createSelector(
 );
 
 export default compose(
-  connect(selector, {
-    load: actions.errors.fetch,
-    createOrUpdate: actions.errors.createOrUpdate,
-    removeError: actions.errors.removeError,
-    unsync: actions.errors.unsync,
-  }),
+  connect(
+    selector,
+    {
+      load: actions.errors.fetch,
+      createOrUpdate: actions.errors.createOrUpdate,
+      removeError: actions.errors.removeError,
+      unsync: actions.errors.unsync,
+    }
+  ),
   defaultProps({
     id: 'omit',
   }),

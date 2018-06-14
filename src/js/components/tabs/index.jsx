@@ -61,7 +61,7 @@ class Tabs extends React.Component {
               noContainer ? (
                 child.props.children
               ) : (
-                <Container>{child.props.children}</Container>
+                <Container fill>{child.props.children}</Container>
               )
             }
           />

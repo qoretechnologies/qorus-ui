@@ -4,7 +4,13 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import UsersRow from './row';
-import { Table, Tbody, Thead, Tr, Th } from '../../../../components/new_table';
+import {
+  Table,
+  Tbody,
+  Thead,
+  FixedRow,
+  Th,
+} from '../../../../components/new_table';
 import sort from '../../../../hocomponents/sort';
 import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
@@ -17,43 +23,44 @@ type Props = {
   onSortChange: Function,
   sortData: Object,
   canDelete: boolean,
-}
+};
 
-const UsersTable: Function = (
-  { collection,
-    onEditClick,
-    onDeleteClick,
-    canEdit,
-    canDelete,
-    onSortChange,
-    sortData,
-  }: Props
-): React.Element<Table> => (
-  <Table
-    consensed
-    striped
-    fixed
-    key={`users_table-${collection.length}`}
-  >
+const UsersTable: Function = ({
+  collection,
+  onEditClick,
+  onDeleteClick,
+  canEdit,
+  canDelete,
+  onSortChange,
+  sortData,
+}: Props): React.Element<Table> => (
+  <Table consensed striped fixed key={`users_table-${collection.length}`}>
     <Thead>
-      <Tr {...{ onSortChange, sortData } }>
-        <Th className="narrow">Actions</Th>
-        <Th className="name" name="name">Name</Th>
-        <Th className="text big" name="username">Username</Th>
+      <FixedRow {...{ onSortChange, sortData }}>
+        <Th className="name" name="name">
+          Name
+        </Th>
+        <Th className="text big" name="username">
+          Username
+        </Th>
         <Th className="text">Roles</Th>
-      </Tr>
+        <Th className="text narrow">Actions</Th>
+      </FixedRow>
     </Thead>
     <Tbody>
-      { collection.map((user: Object, index: number): React.Element<any> => (
-        <UsersRow
-          key={index}
-          model={user}
-          canEdit={canEdit}
-          canDelete={canDelete}
-          onEditClick={onEditClick}
-          onDeleteClick={onDeleteClick}
-        />
-      ))}
+      {collection.map(
+        (user: Object, index: number): React.Element<any> => (
+          <UsersRow
+            first={index === 0}
+            key={index}
+            model={user}
+            canEdit={canEdit}
+            canDelete={canDelete}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+          />
+        )
+      )}
     </Tbody>
   </Table>
 );

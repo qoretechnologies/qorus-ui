@@ -7,13 +7,13 @@ import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 
-import Header from './header';
 import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
 import Tabs, { Pane } from '../../../components/tabs';
 import DetailPane from '../../../components/pane';
+import Box from '../../../components/box';
 import Code from '../../../components/code';
 import Loader from '../../../components/loader';
 import actions from '../../../store/api/actions';
@@ -49,14 +49,10 @@ const Detail = ({
     width={width || 550}
     onResize={onResize}
     onClose={onClose}
+    title={model.normalizedName}
   >
-    <article>
-      <Header model={model} />
-      <Tabs
-        className="pane__tabs"
-        active={paneTab}
-        tabChange={changePaneTab}
-      >
+    <Box top>
+      <Tabs id="jobsPane" active={paneTab} onChange={changePaneTab}>
         <Pane name="Detail">
           <DetailTab key={model.name} model={model} isTablet={isTablet} />
         </Pane>
@@ -79,10 +75,7 @@ const Detail = ({
           )}
         </Pane>
         <Pane name="Log">
-          <LogTab
-            resource={`jobs/${model.id}`}
-            location={location}
-          />
+          <LogTab resource={`jobs/${model.id}`} location={location} />
         </Pane>
         <Pane name="Mappers">
           <MappersTable mappers={model.mappers} />
@@ -99,7 +92,7 @@ const Detail = ({
           />
         </Pane>
       </Tabs>
-    </article>
+    </Box>
   </DetailPane>
 );
 
@@ -123,8 +116,8 @@ export default compose(
   connect(
     (state: Object, props: Object): Object => ({
       jobsLoaded: state.api.jobs.sync,
-      model: state.api.jobs.data.find((job: Object): boolean => (
-        job.id === parseInt(props.paneId, 10))
+      model: state.api.jobs.data.find(
+        (job: Object): boolean => job.id === parseInt(props.paneId, 10)
       ),
     }),
     {
@@ -135,28 +128,29 @@ export default compose(
   show((props: Object) => props.jobsLoaded),
   pure,
   fetchLibSourceOnMountAndOnChange,
-  mapProps((props: Object): Object => ({
-    ...props,
-    lib: {
-      ...{
-        code: [
-          {
-            name: 'Job code',
-            body: props.model.code,
-          },
-        ],
+  mapProps(
+    (props: Object): Object => ({
+      ...props,
+      lib: {
+        ...{
+          code: [
+            {
+              name: 'Job code',
+              body: props.model.code,
+            },
+          ],
+        },
+        ...props.model.lib,
       },
-      ...props.model.lib,
-    },
-  })),
+    })
+  ),
   withHandlers({
     getHeight: (): Function => (): number => {
-      const navbar = document.querySelector('.navbar').clientHeight;
-      const paneHeader = document.querySelector('.pane__content .pane__header').clientHeight;
-      const panetabs = document.querySelector('.pane__content .nav-tabs').clientHeight;
-      const top = navbar + paneHeader + panetabs + 20;
+      const { top } = document
+        .querySelector('.pane__content .container-resizable')
+        .getBoundingClientRect();
 
-      return window.innerHeight - top;
+      return window.innerHeight - top - 60;
     },
   })
 )(Detail);

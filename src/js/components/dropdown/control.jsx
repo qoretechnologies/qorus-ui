@@ -8,25 +8,24 @@ type Props = {
   btnStyle: string,
   small?: boolean,
   noCaret?: boolean,
-}
+};
 
-export default function Control({
-  children,
-  small,
-  btnStyle = 'default',
-  noCaret,
-  ...other,
-}: Props) {
+export default function Control({ children, small, noCaret }: Props) {
   return (
-    <Button
-      className={classNames(
-       small ? 'pt-small' : '',
+    <ButtonGroup>
+      <Button
+        className={classNames(small ? 'pt-small' : '')}
+        type="button"
+        text={children}
+      />
+      {!noCaret && (
+        <Button
+          className={classNames(small ? 'pt-small' : '')}
+          iconName="caret-down"
+          type="button"
+        />
       )}
-      intent={Intent.PRIMARY}
-      type="button"
-      text={children}
-      rightIconName={!noCaret && 'caret-down'}
-    />
+    </ButtonGroup>
   );
 }
 

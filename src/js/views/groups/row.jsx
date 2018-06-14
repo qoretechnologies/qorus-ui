@@ -34,6 +34,7 @@ type Props = {
   name: string,
   description: string,
   isTablet: boolean,
+  first: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -53,8 +54,10 @@ const ServiceRow: Function = ({
   mappers_count: mappersCount,
   handleNameClick,
   isTablet,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={_selected ? 'row-selected' : ''}
@@ -67,18 +70,11 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <Controls
-        enabled={enabled}
-        name={name}
-      />
+      <Controls enabled={enabled} name={name} />
     </Td>
     <Td className="narrow">{id}</Td>
     <Td className="name">
-      <a
-        className="resource-name-link"
-        onClick={handleNameClick}
-        title={name}
-      >
+      <a className="resource-name-link" onClick={handleNameClick} title={name}>
         {name}
       </a>
     </Td>
@@ -103,10 +99,9 @@ export default compose(
   ),
   queryControl('group'),
   withHandlers({
-    handleNameClick: ({
-      changeGroupQuery,
-      name,
-    }: Props): Function => (event: EventHandler): void => {
+    handleNameClick: ({ changeGroupQuery, name }: Props): Function => (
+      event: EventHandler
+    ): void => {
       event.preventDefault();
 
       changeGroupQuery(name);
@@ -118,10 +113,5 @@ export default compose(
       updateDone(name);
     },
   }),
-  pure([
-    'enabled',
-    '_selected',
-    '_updated',
-    'isTablet',
-  ])
+  pure(['enabled', '_selected', '_updated', 'isTablet'])
 )(ServiceRow);

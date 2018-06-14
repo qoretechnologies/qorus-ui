@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Button, Intent } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 
 import ResizeHandle from '../resize/handle';
 import { Breadcrumbs, Crumb } from '../breadcrumbs';

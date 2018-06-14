@@ -40,6 +40,7 @@ type Props = {
   canLoadMore?: boolean,
   handleLoadMore: Function,
   openPane: Function,
+  closePane: Function,
   paneId: string,
   location: Object,
 };
@@ -51,6 +52,7 @@ const AlertsTable: Function = ({
   canLoadMore,
   handleLoadMore,
   openPane,
+  closePane,
   paneId,
   type,
 }: Props): React.Element<any> => (
@@ -92,6 +94,7 @@ const AlertsTable: Function = ({
                 first={index === 0}
                 key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
                 openPane={openPane}
+                closePane={closePane}
                 isActive={paneId === `${alert.type}:${alert.id}`}
                 {...alert}
               />
@@ -101,8 +104,7 @@ const AlertsTable: Function = ({
       </Table>
     ) : (
       <Callout iconName="warning-sign" title="No data">
-        {' '}
-        There are no data to be displayed.{' '}
+        There are no data to be displayed.
       </Callout>
     )}
     {canLoadMore && (

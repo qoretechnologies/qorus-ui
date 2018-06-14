@@ -55,7 +55,9 @@ export default class LogComponent extends Component {
   setScroll: Function = () => {
     if (this.state.autoScroll && this.scroll) {
       setTimeout(() => {
-        this.scroll.scrollTop = this.scroll.scrollHeight;
+        if (this.scroll) {
+          this.scroll.scrollTop = this.scroll.scrollHeight;
+        }
       }, 150);
     }
   };

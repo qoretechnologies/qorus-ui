@@ -9,7 +9,7 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { ButtonGroup, Button, Intent, Breadcrumb } from '@blueprintjs/core';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
@@ -81,22 +81,28 @@ const systemOptionsSelector: Function = (state: Object): Array<Object> =>
 const groupStatuses: Function = (isTablet: boolean): Function => (
   workflows: Array<Object>
 ): Array<Object> =>
-  workflows.map((workflow: Object): Object => {
-    const newWf: Object = { ...workflow };
-    const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
+  workflows.map(
+    (workflow: Object): Object => {
+      const newWf: Object = { ...workflow };
+      const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
 
-    Object.keys(obj).forEach((group: string): void => {
-      newWf[`GROUPED_${group}`] = obj[group].reduce(
-        (cnt, cur) => cnt + workflow[cur],
-        0
+      Object.keys(obj).forEach(
+        (group: string): void => {
+          newWf[`GROUPED_${group}`] = obj[group].reduce(
+            (cnt, cur) => cnt + workflow[cur],
+            0
+          );
+          newWf[`GROUPED_${group}_STATES`] = obj[group]
+            .map(
+              orderGrp => ORDER_STATES.find(grp => grp.name === orderGrp).title
+            )
+            .join(',');
+        }
       );
-      newWf[`GROUPED_${group}_STATES`] = obj[group]
-        .map(orderGrp => ORDER_STATES.find(grp => grp.name === orderGrp).title)
-        .join(',');
-    });
 
-    return newWf;
-  });
+      return newWf;
+    }
+  );
 
 const countInstances: Function = (isTablet: boolean): Function => (
   workflows: Array<Object>
@@ -107,9 +113,11 @@ const countInstances: Function = (isTablet: boolean): Function => (
 
     if (!count[grp]) count[grp] = 0;
 
-    workflows.forEach((workflow: Object): void => {
-      count[grp] += workflow[grp];
-    });
+    workflows.forEach(
+      (workflow: Object): void => {
+        count[grp] += workflow[grp];
+      }
+    );
 
     if (addPrefix) count.total += count[grp];
 
@@ -122,9 +130,11 @@ const countInstances: Function = (isTablet: boolean): Function => (
     Object.keys(ORDER_GROUPS).forEach(group => addCount(group, true));
   }
 
-  ORDER_STATES.forEach((state: Object): void => {
-    addCount(state.name);
-  });
+  ORDER_STATES.forEach(
+    (state: Object): void => {
+      addCount(state.name);
+    }
+  );
 
   count.total = formatCount(count.total);
 
@@ -243,7 +253,7 @@ const Workflows: Function = ({
   infoWithAlerts,
   totalInstances,
 }: Props): React.Element<any> => (
-  <div style={{ height: '100%' }}>
+  <div>
     <Breadcrumbs>
       <Crumb active> Workflows </Crumb>
     </Breadcrumbs>
@@ -302,25 +312,32 @@ const Workflows: Function = ({
 );
 
 export default compose(
-  connect(viewSelector, {
-    load: actions.workflows.fetch,
-    fetch: actions.workflows.fetch,
-    unsync: actions.workflows.unsync,
-    unselectAll: actions.workflows.unselectAll,
-  }),
+  connect(
+    viewSelector,
+    {
+      load: actions.workflows.fetch,
+      fetch: actions.workflows.fetch,
+      unsync: actions.workflows.unsync,
+      unselectAll: actions.workflows.unselectAll,
+    }
+  ),
   withInfoBar('workflows'),
   withSort('workflows', 'workflows', sortDefaults.workflows),
   loadMore('workflows', 'workflows', true, 50),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    date: date || DATES.PREV_DAY,
-    ...rest,
-  })),
-  mapProps(({ date, deprecated, ...rest }: Props): Object => ({
-    fetchParams: { deprecated, date: formatDate(date).format() },
-    date,
-    deprecated,
-    ...rest,
-  })),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, deprecated, ...rest }: Props): Object => ({
+      fetchParams: { deprecated, date: formatDate(date).format() },
+      date,
+      deprecated,
+      ...rest,
+    })
+  ),
   patch('load', ['fetchParams']),
   sync('meta'),
   withState('expanded', 'toggleExpand', false),

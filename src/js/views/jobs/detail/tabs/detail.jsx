@@ -16,6 +16,7 @@ import { resourceSelector } from '../../../../selectors';
 import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 import { hasPermission } from '../../../../helpers/user';
+import PaneItem from '../../../../components/pane_item';
 
 type Props = {
   model: Object,
@@ -24,7 +25,7 @@ type Props = {
   perms: Object,
   slas: Array<Object>,
   isTablet: boolean,
-}
+};
 
 const DetailTab = ({
   model,
@@ -36,14 +37,13 @@ const DetailTab = ({
 }: Props) => (
   <div>
     <Author model={model} />
-    <div>
-      {(isTablet && model.expiry_date) && (
-        <div>
-          <h4> Expiry date </h4>
+    {isTablet &&
+      model.expiry_date && (
+        <PaneItem title="Expiry date">
           <Date date={model.expiry_date} />
-        </div>
+        </PaneItem>
       )}
-      <h4> Schedule </h4>
+    <PaneItem title="Schedule">
       <JobControls
         scheduleOnly
         id={model.id}
@@ -54,9 +54,8 @@ const DetailTab = ({
         month={model.month}
         week={model.wday}
       />
-    </div>
-    <div>
-      <h4> SLA </h4>
+    </PaneItem>
+    <PaneItem title="SLA">
       <SLAControl
         model={model}
         setSla={setSla}
@@ -65,30 +64,26 @@ const DetailTab = ({
         canModify={hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or')}
         type="job"
       />
-    </div>
+    </PaneItem>
     <AlertsTable alerts={model.alerts} />
     <Groups>
-      {
-        (model.groups || []).map(g => (
-          <Group
-            key={g.name}
-            name={g.name}
-            url={`/groups?group=${g.name}`}
-            size={g.size}
-            disabled={!g.enabled}
-          />
-        ))
-      }
+      {(model.groups || []).map(g => (
+        <Group
+          key={g.name}
+          name={g.name}
+          url={`/groups?group=${g.name}`}
+          size={g.size}
+          disabled={!g.enabled}
+        />
+      ))}
     </Groups>
     <Options model={model} />
   </div>
 );
 
 const viewSelector = createSelector(
-  [
-    resourceSelector('slas'),
-    resourceSelector('currentUser'),
-  ], (meta, user) => ({
+  [resourceSelector('slas'), resourceSelector('currentUser')],
+  (meta, user) => ({
     meta,
     slas: meta.data,
     perms: user.data.permissions,
@@ -105,8 +100,5 @@ export default compose(
     }
   ),
   sync('meta'),
-  pure([
-    'model',
-    'isTablet',
-  ])
+  pure(['model', 'isTablet'])
 )(DetailTab);

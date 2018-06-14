@@ -25,15 +25,15 @@
     margin-top: 10px;
 
     &.success {
-      background: #03C9A9;
+      background: #03c9a9;
     }
 
     &.warning {
-      background: #F7CA18;
+      background: #f7ca18;
     }
 
     &.error {
-      background: #F64747;
+      background: #f64747;
     }
   }
 }
@@ -54,8 +54,7 @@
 
 .bubble-appear.bubble-appear-active {
   opacity: 1;
-  margin-top: 0;
-  transition: all 400ms cubic-bezier(0.230, 1.000, 0.320, 1.000);
+  transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .bubble-leave {

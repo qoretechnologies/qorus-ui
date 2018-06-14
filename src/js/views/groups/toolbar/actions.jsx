@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button } from '@blueprintjs/core';
 
-import { Control as Button } from '../../../components/controls';
 import actions from '../../../store/api/actions';
 
 type Props = {
@@ -22,25 +22,10 @@ const ToolbarActions: Function = ({
   handleEnableClick,
   handleDisableClick,
 }: Props): ?React.Element<any> => (
-  <div
-    className="btn-group pull-left"
-    id="selection-actions"
-  >
-    <Button
-      label="Enable"
-      icon="power-off"
-      big
-      btnStyle="default"
-      onClick={handleEnableClick}
-    />
-    <Button
-      label="Disable"
-      icon="ban"
-      big
-      btnStyle="default"
-      onClick={handleDisableClick}
-    />
-  </div>
+  <ButtonGroup>
+    <Button text="Enable" iconName="power" onClick={handleEnableClick} />
+    <Button text="Disable" iconName="remove" onClick={handleDisableClick} />
+  </ButtonGroup>
 );
 
 export default compose(
@@ -59,10 +44,10 @@ export default compose(
       action,
       selectNone,
       groups,
-    }: Props): Function => (
-      type: string
-    ): void => {
-      const selected: Array<string> = selectedIds.reduce((cur, nxt): Array<string> => {
+    }: Props): Function => (type: string): void => {
+      const selected: Array<string> = selectedIds.reduce((cur, nxt): Array<
+        string
+      > => {
         const group = groups.find((grp: Object) => grp.id === nxt);
 
         return group ? [...cur, group.name] : cur;
@@ -76,9 +61,11 @@ export default compose(
     handleEnableClick: ({ handleBatchAction }: Props): Function => (): void => {
       handleBatchAction(true);
     },
-    handleDisableClick: ({ handleBatchAction }: Props): Function => (): void => {
+    handleDisableClick: ({
+      handleBatchAction,
+    }: Props): Function => (): void => {
       handleBatchAction(false);
     },
   }),
-  pure(['selectedIds']),
+  pure(['selectedIds'])
 )(ToolbarActions);

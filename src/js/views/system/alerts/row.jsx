@@ -10,7 +10,7 @@ import { Tr, Td } from '../../../components/new_table';
 import Text from '../../../components/text';
 import Date from '../../../components/date';
 import Icon from '../../../components/icon';
-import { Control as Button } from '../../../components/controls';
+import DetailButton from '../../../components/detail_button';
 import { getAlertObjectLink } from '../../../helpers/system';
 import actions from '../../../store/api/actions';
 
@@ -29,6 +29,7 @@ type Props = {
   when: string,
   name: string,
   first: boolean,
+  closePane: Function,
 };
 
 const AlertRow: Function = ({
@@ -46,7 +47,7 @@ const AlertRow: Function = ({
 }: Props): React.Element<any> => (
   <Tr
     first={first}
-    className={isActive ? 'info' : ''}
+    className={isActive ? 'row-active' : ''}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
   >
@@ -54,7 +55,7 @@ const AlertRow: Function = ({
       <Icon icon="warning" />
     </Td>
     <Td className="narrow">
-      <Button label="Detail" btnStyle="success" onClick={handleDetailClick} />
+      <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
     <Td className="big text">
       <Text text={type} />
@@ -95,8 +96,14 @@ export default compose(
       type,
       id,
       openPane,
+      closePane,
+      isActive,
     }: Props): Function => (): void => {
-      openPane(`${type}:${id}`);
+      if (isActive) {
+        closePane();
+      } else {
+        openPane(`${type}:${id}`);
+      }
     },
   }),
   pure(['isActive', '_updated'])

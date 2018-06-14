@@ -8,6 +8,8 @@ class Toolbar extends Component {
     sticky: PropTypes.bool,
     className: PropTypes.string,
     marginBottom: PropTypes.bool,
+    mb: PropTypes.bool,
+    mt: PropTypes.bool,
   };
 
   state: {
@@ -47,15 +49,18 @@ class Toolbar extends Component {
   };
 
   render() {
+    const { className, marginBottom, mb, mt, sticky, children } = this.props;
     return (
       <div
         ref="toolbar"
         id="workflows-toolbar"
-        className={`${this.props.className} ${this.props.marginBottom &&
-          'with-margin'} toolbar ${this.state.sticky ? 'sticky' : ''}`}
+        className={`${className} ${(marginBottom || mb) &&
+          'margin-bottom'} ${mt && 'margin-top'} toolbar ${
+          sticky ? 'sticky' : ''
+        }`}
         role="toolbar"
       >
-        <div className="workflows-toolbar">{this.props.children}</div>
+        <div className="workflows-toolbar">{children}</div>
       </div>
     );
   }

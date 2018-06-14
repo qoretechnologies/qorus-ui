@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
+import { Button, Intent } from '@blueprintjs/core';
 
 import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
@@ -11,7 +12,6 @@ import modal from '../../../../hocomponents/modal';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
-import AddButton from '../add_button';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
 import Modal from './modal';
@@ -19,29 +19,23 @@ import Table from './table';
 
 import actions from '../../../../store/api/actions';
 
-const currentUserSelector: Function = (state: Object): Object => state.api.currentUser;
+const currentUserSelector: Function = (state: Object): Object =>
+  state.api.currentUser;
 const rolesSelector: Function = (state: Object): Object => state.api.roles;
-const querySelector: Function = (state: Object, props: Object): ?string => props.location.query.q;
-const filterData: Function = (query: ?string): Function => (collection: Array<*>) => (
-  findBy(['role', 'provider', 'desc'], query, collection)
-);
+const querySelector: Function = (state: Object, props: Object): ?string =>
+  props.location.query.q;
+const filterData: Function = (query: ?string): Function => (
+  collection: Array<*>
+) => findBy(['role', 'provider', 'desc'], query, collection);
 
 const collectionSelector: Function = createSelector(
-  [
-    rolesSelector,
-    querySelector,
-  ], (collection, query) => flowRight(
-    filterData(query)
-  )(collection.data)
+  [rolesSelector, querySelector],
+  (collection, query) => flowRight(filterData(query))(collection.data)
 );
 
 const viewSelector: Function = createSelector(
-  [
-    currentUserSelector,
-    rolesSelector,
-    querySelector,
-    collectionSelector,
-  ], (currentUser, roles, query, collection) => ({
+  [currentUserSelector, rolesSelector, querySelector, collectionSelector],
+  (currentUser, roles, query, collection) => ({
     user: currentUser.data,
     roles,
     query,
@@ -61,10 +55,10 @@ const viewSelector: Function = createSelector(
   ),
   search(),
   modal(),
-  sync('roles', true, 'loadRoles'),
+  sync('roles', true, 'loadRoles')
 )
 export default class RBACRoles extends Component {
-  props:{
+  props: {
     onSearchChange: Function,
     query: string,
     rolesModel: Array<*>,
@@ -119,14 +113,9 @@ export default class RBACRoles extends Component {
     role: string,
     desc: string,
     perms: Array<string>,
-    groups: Array<string>,
+    groups: Array<string>
   ): Promise<*> => {
-    await this.props.createRole(
-      role,
-      desc,
-      perms,
-      groups,
-    );
+    await this.props.createRole(role, desc, perms, groups);
 
     this.props.closeModal();
   };
@@ -135,14 +124,9 @@ export default class RBACRoles extends Component {
     role: string,
     desc: string,
     perms: Array<string>,
-    groups: Array<string>,
+    groups: Array<string>
   ): Promise<*> => {
-    await this.props.updateRole(
-      role,
-      desc,
-      perms,
-      groups
-    );
+    await this.props.updateRole(role, desc, perms, groups);
 
     this.props.closeModal();
   };
@@ -154,10 +138,7 @@ export default class RBACRoles extends Component {
     };
 
     this.props.openModal(
-      <ConfirmDialog
-        onClose={this.props.closeModal}
-        onConfirm={handleConfirm}
-      >
+      <ConfirmDialog onClose={this.props.closeModal} onConfirm={handleConfirm}>
         Are you sure you want to delete the role <strong>{role}</strong>?
       </ConfirmDialog>
     );
@@ -165,38 +146,50 @@ export default class RBACRoles extends Component {
 
   render() {
     const { permissions } = this.props.user;
-    const canEdit = hasPermission(permissions, ['USER-CONTROL', 'MODIFY-ROLE'], 'or');
-    const canDelete = hasPermission(permissions, ['USER-CONTROL', 'DELETE-ROLE'], 'or');
-    const canCreate = hasPermission(permissions, ['USER-CONTROL', 'ADD-ROLE'], 'or');
+    const canEdit = hasPermission(
+      permissions,
+      ['USER-CONTROL', 'MODIFY-ROLE'],
+      'or'
+    );
+    const canDelete = hasPermission(
+      permissions,
+      ['USER-CONTROL', 'DELETE-ROLE'],
+      'or'
+    );
+    const canCreate = hasPermission(
+      permissions,
+      ['USER-CONTROL', 'ADD-ROLE'],
+      'or'
+    );
 
     return (
-      <div className="tab-content">
-        <div className="tab-pane active">
-          <Toolbar>
+      <div>
+        <Toolbar marginBottom>
+          {hasPermission(permissions, ['USER-CONTROL', 'ADD-ROLE'], 'or') && (
             <div className="pull-left">
-              <AddButton
-                perms={permissions}
-                reqPerms={['USER-CONTROL', 'ADD-ROLE']}
-                title="Add role"
+              <Button
+                text="Add role"
+                iconName="plus"
+                intent={Intent.PRIMARY}
                 onClick={this.handleAddRoleClick}
               />
             </div>
-            <Search
-              onSearchUpdate={this.props.onSearchChange}
-              defaultValue={this.props.query}
-              resource="rbacroles"
-            />
-          </Toolbar>
-          <Table
-            collection={this.props.rolesModel}
-            onDeleteClick={this.handleRemoveRoleClick}
-            onEditClick={this.handleEditRoleClick}
-            onCloneClick={this.handleCloneRoleClick}
-            canEdit={canEdit}
-            canDelete={canDelete}
-            canCreate={canCreate}
+          )}
+          <Search
+            onSearchUpdate={this.props.onSearchChange}
+            defaultValue={this.props.query}
+            resource="rbacroles"
           />
-        </div>
+        </Toolbar>
+        <Table
+          collection={this.props.rolesModel}
+          onDeleteClick={this.handleRemoveRoleClick}
+          onEditClick={this.handleEditRoleClick}
+          onCloneClick={this.handleCloneRoleClick}
+          canEdit={canEdit}
+          canDelete={canDelete}
+          canCreate={canCreate}
+        />
       </div>
     );
   }

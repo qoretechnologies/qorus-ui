@@ -32,12 +32,8 @@ const Slas: Function = ({
   create,
   perms,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <SLAToolbar
-      location={location}
-      onCreate={create}
-      perms={perms}
-    />
+  <div>
+    <SLAToolbar location={location} onCreate={create} perms={perms} />
     <SLATable
       sortData={sortData}
       collection={collection}
@@ -47,19 +43,14 @@ const Slas: Function = ({
   </div>
 );
 
-const filterSearch: Function = (search: string): Function =>
-  (slas: Array<Object>): Array<Object> => (
-    findBy(['name', 'description', 'type'], search, slas)
-  );
+const filterSearch: Function = (search: string): Function => (
+  slas: Array<Object>
+): Array<Object> => findBy(['name', 'description', 'type'], search, slas);
 
 const collectionSelector: Function = createSelector(
-  [
-    querySelector('search'),
-    resourceSelector('slas'),
-  ],
-  (search: string, slas: Object): Array<Object> => (
+  [querySelector('search'), resourceSelector('slas')],
+  (search: string, slas: Object): Array<Object> =>
     filterSearch(search)(slas.data)
-  )
 );
 
 const viewSelector: Function = createSelector(
@@ -68,11 +59,7 @@ const viewSelector: Function = createSelector(
     resourceSelector('currentUser'),
     collectionSelector,
   ],
-  (
-    slas,
-    user,
-    collection
-  ): Object => ({
+  (slas, user, collection): Object => ({
     meta: slas,
     perms: user.data.permissions,
     collection,
@@ -90,10 +77,6 @@ export default compose(
   ),
   withSort('slas', 'collection', sortDefaults.slas),
   sync('meta'),
-  pure([
-    'collection',
-    'location',
-    'sortData',
-  ]),
+  pure(['collection', 'location', 'sortData']),
   unsync()
 )(Slas);

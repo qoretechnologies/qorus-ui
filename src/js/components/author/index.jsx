@@ -3,30 +3,18 @@ import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import Icon from '../icon';
+import PaneItem from '../pane_item';
 
 type Props = {
   model: Object,
   author: string,
-  small?: boolean,
 };
 
-const Author: Function = ({
-  model: { author },
-  small,
-}: Props): ?React.Element<any> =>
+const Author: Function = ({ model: { author } }: Props): ?React.Element<any> =>
   author ? (
-    <div>
-      {small ? (
-        <p>
-          <strong>Author</strong>
-        </p>
-      ) : (
-        <h4>Author</h4>
-      )}
-      <p>
-        <Icon icon="user" /> {author}
-      </p>
-    </div>
+    <PaneItem title="Author">
+      <Icon icon="user" /> {author}
+    </PaneItem>
   ) : null;
 
 export default pure(['author'])(Author);

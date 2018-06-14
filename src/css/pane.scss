@@ -5,7 +5,6 @@
 @import './pane/errors';
 @import './pane/job';
 
-
 /**
  * Pane detail is structured as this:
  *
@@ -35,13 +34,15 @@
 
   height: 100%; /* [1] */
 
-  > .pane__header { /* [2] */
+  > .pane__header {
+    /* [2] */
     -ms-flex: initial;
     -webkit-flex: initial;
     flex: initial;
   }
 
-  > .pane__tabs { /* [3] */
+  > .pane__tabs {
+    /* [3] */
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -54,20 +55,23 @@
     flex: auto;
     overflow: hidden;
 
-    > .nav { /* [4] */
+    > .nav {
+      /* [4] */
       -ms-flex: initial;
       -webkit-flex: initial;
       flex: initial;
     }
 
-    > .tab-content { /* [5] */
+    > .tab-content {
+      /* [5] */
       position: relative;
       -ms-flex: auto;
       -webkit-flex: auto;
       flex: auto;
       overflow: hidden;
 
-      > .tab-pane { /* [6] */
+      > .tab-pane {
+        /* [6] */
         position: absolute;
         top: 0;
         right: 0;
@@ -83,5 +87,17 @@
   .alert-pane-object {
     font-weight: bold;
     line-height: 3;
+  }
+}
+
+.pane-item {
+  margin-bottom: 15px;
+
+  h5.pane-item-title {
+    margin: 0;
+    padding-bottom: 3px;
+    border-bottom: 3px solid #eee;
+    display: inline-block;
+    margin-bottom: 5px;
   }
 }

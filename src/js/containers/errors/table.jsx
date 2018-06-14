@@ -1,8 +1,16 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  FixedRow,
+  Th,
+} from '../../components/new_table';
 import withSort from '../../hocomponents/sort';
 import checkData from '../../hocomponents/check-no-data';
 import ErrorRow from './row';
@@ -18,6 +26,7 @@ type Props = {
   sortData: Object,
   height: string | number,
   fixed: boolean,
+  RowComponent: any,
 };
 
 const ErrorsTable: Function = ({
@@ -30,10 +39,11 @@ const ErrorsTable: Function = ({
   onDeleteClick,
   height,
   fixed,
+  RowComponent,
 }: Props): React.Element<any> => (
   <Table striped condensed fixed={fixed} height={height} key={data.length}>
     <Thead>
-      <Tr sortData={sortData} onSortChange={onSortChange}>
+      <RowComponent sortData={sortData} onSortChange={onSortChange}>
         <Th name="error">Error</Th>
         {!compact && <Th name="description">Description</Th>}
         <Th className="medium" name="severity">
@@ -54,25 +64,34 @@ const ErrorsTable: Function = ({
           </Th>
         )}
         <Th className="medium">-</Th>
-      </Tr>
+      </RowComponent>
     </Thead>
     <Tbody>
-      {data.map((error: Object, index: number): React.Element<ErrorRow> => (
-        <ErrorRow
-          key={index}
-          data={error}
-          compact={compact}
-          type={type}
-          onEditClick={onEditClick}
-          onDeleteClick={onDeleteClick}
-        />
-      ))}
+      {data.map(
+        (error: Object, index: number): React.Element<ErrorRow> => (
+          <ErrorRow
+            key={index}
+            data={error}
+            compact={compact}
+            type={type}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+          />
+        )
+      )}
     </Tbody>
   </Table>
 );
 
 export default compose(
   checkData((props: Object) => props.data.length > 0),
+  mapProps(
+    ({ fixed, ...rest }: Props): Props => ({
+      RowComponent: fixed ? FixedRow : Tr,
+      fixed,
+      ...rest,
+    })
+  ),
   withSort(
     (props: Object): string => `${props.type}Errors`,
     'data',

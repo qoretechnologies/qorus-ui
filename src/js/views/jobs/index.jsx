@@ -6,6 +6,7 @@ import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import sync from '../../hocomponents/sync';
 import withPane from '../../hocomponents/pane';
@@ -21,11 +22,12 @@ import { findBy } from '../../helpers/search';
 import JobsDetail from './detail';
 import JobsToolbar from './toolbar';
 import JobsTable from './table';
-import { Controls, Control } from '../../components/controls';
+import Box from '../../components/box';
 import { sortDefaults } from '../../constants/sort';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
 import withInfoBar from '../../hocomponents/withInfoBar';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 type Props = {
   jobs: Array<Object>,
@@ -74,58 +76,62 @@ const JobsView: Function = ({
   infoWithAlerts,
 }: Props): React.Element<any> => (
   <div>
-    <JobsToolbar
-      selected={selected}
-      selectedIds={selectedIds}
-      onCSVClick={onCSVClick}
-      collectionCount={jobs.length}
-      collectionTotal={infoTotalCount}
-      withAlertsCount={infoWithAlerts}
-      enabledCount={infoEnabled}
-    />
-    <JobsTable
-      collection={jobs}
-      openPane={openPane}
-      closePane={closePane}
-      paneId={paneId}
-      date={date}
-      sortData={sortData}
-      onSortChange={onSortChange}
-      canLoadMore={canLoadMore}
-      isTablet={isTablet}
-    />
-    { canLoadMore && (
-      <Controls grouped noControls>
-        <Control
-          label={`Show ${limit} more...`}
-          btnStyle="success"
-          big
+    <Breadcrumbs>
+      <Crumb>Jobs</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <JobsToolbar
+        selected={selected}
+        selectedIds={selectedIds}
+        onCSVClick={onCSVClick}
+        collectionCount={jobs.length}
+        collectionTotal={infoTotalCount}
+        withAlertsCount={infoWithAlerts}
+        enabledCount={infoEnabled}
+      />
+    </Box>
+    <Box noPadding>
+      <JobsTable
+        collection={jobs}
+        openPane={openPane}
+        closePane={closePane}
+        paneId={paneId}
+        date={date}
+        sortData={sortData}
+        onSortChange={onSortChange}
+        canLoadMore={canLoadMore}
+        isTablet={isTablet}
+      />
+    </Box>
+    {canLoadMore && (
+      <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
+        <Button
+          text={`Showing ${jobs.length} of ${infoTotalCount}`}
+          intent={Intent.NONE}
+          className="pt-minimal"
+        />
+        <Button
+          text={`Show ${limit} more...`}
+          intent={Intent.PRIMARY}
           onClick={handleLoadMore}
         />
-        <Control
-          label="Show all"
-          btnStyle="warning"
-          big
+        <Button
+          text="Show all"
+          intent={Intent.PRIMARY}
           onClick={handleLoadAll}
         />
-      </Controls>
+      </ButtonGroup>
     )}
   </div>
 );
 
-const filterSearch: Function = (
-  search: string
-): Function => (
+const filterSearch: Function = (search: string): Function => (
   jobs: Array<Object>
-): Array<Object> => (
-  findBy('name', search, jobs)
-);
+): Array<Object> => findBy('name', search, jobs);
 
 const collectionSelector: Function = createSelector(
-  [
-    resourceSelector('jobs'),
-    querySelector('search'),
-  ], (jobs, search) => filterSearch(search)(jobs.data)
+  [resourceSelector('jobs'), querySelector('search')],
+  (jobs, search) => filterSearch(search)(jobs.data)
 );
 
 const settingsSelector = (state: Object): Object => state.ui.settings;
@@ -137,7 +143,8 @@ const selector: Function = createSelector(
     collectionSelector,
     querySelector('date'),
     settingsSelector,
-  ], (meta, systemOptions, jobs, date, settings) => ({
+  ],
+  (meta, systemOptions, jobs, date, settings) => ({
     meta,
     systemOptions,
     jobs,
@@ -159,15 +166,19 @@ export default compose(
   withInfoBar('jobs'),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    date: date || DATES.PREV_DAY,
-    ...rest,
-  })),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    fetchParams: { date: formatDate(date).format() },
-    date,
-    ...rest,
-  })),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { date: formatDate(date).format() },
+      date,
+      ...rest,
+    })
+  ),
   patch('load', ['fetchParams']),
   sync('meta'),
   lifecycle({
@@ -182,11 +193,7 @@ export default compose(
   }),
   withPane(
     JobsDetail,
-    [
-      'systemOptions',
-      'location',
-      'isTablet',
-    ],
+    ['systemOptions', 'location', 'isTablet'],
     'detail',
     'jobs'
   ),

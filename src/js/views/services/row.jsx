@@ -37,6 +37,7 @@ type Props = {
   autostart: boolean,
   status: string,
   isTablet: boolean,
+  first: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -59,12 +60,14 @@ const ServiceRow: Function = ({
   autostart,
   status,
   isTablet,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
-      info: isActive,
+      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
     })}
@@ -77,10 +80,7 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <DetailButton
-        onClick={handleDetailClick}
-        active={isActive}
-      />
+      <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
     <Td className="narrow">
       <Icon
@@ -98,9 +98,9 @@ const ServiceRow: Function = ({
         />
       </Td>
     )}
-    <Td className="narrow">{ threads }</Td>
+    <Td className="narrow">{threads}</Td>
     <Td className="tiny">
-      { hasAlerts && (
+      {hasAlerts && (
         <Controls>
           <Button
             icon="warning"
@@ -111,11 +111,11 @@ const ServiceRow: Function = ({
         </Controls>
       )}
     </Td>
-    <Td className="narrow">{ id }</Td>
+    <Td className="narrow">{id}</Td>
     <Td className="name">
-      <p title={name}>{ normalizedName }</p>
+      <p title={name}>{normalizedName}</p>
     </Td>
-    <Td className="normal text">{ version }</Td>
+    <Td className="normal text">{version}</Td>
     <Td className="text">
       <Text text={desc} />
     </Td>

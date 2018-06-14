@@ -7,6 +7,7 @@ type Props = {
   marginBottom?: number,
   className?: string,
   width?: number,
+  fill?: boolean,
 };
 
 @pure(['children'])
@@ -44,7 +45,7 @@ export default class Container extends Component {
       const { top } = this._el.getBoundingClientRect();
       const winHeight: number = window.innerHeight;
       const mb: number = this.props.marginBottom || 0;
-      const height: number = winHeight - top - 40 - mb;
+      const height: number = winHeight - top - 55 - mb;
 
       this.setState({
         height,
@@ -53,7 +54,7 @@ export default class Container extends Component {
   };
 
   render() {
-    const { className, children, width } = this.props;
+    const { className, children, width, fill } = this.props;
     const { height } = this.state;
 
     return (
@@ -61,7 +62,7 @@ export default class Container extends Component {
         ref={this.handleRef}
         className={`container-resizable ${className || ''}`}
         style={{
-          maxHeight: height,
+          [fill ? 'height' : 'maxHeight']: height,
           width: width || '100%',
         }}
       >

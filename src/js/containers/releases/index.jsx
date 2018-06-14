@@ -45,11 +45,15 @@ const Releases: Function = ({
 }: Props): React.Element<any> => (
   <div>
     <ReleasesToolbar sort={sort} sortDir={sortDir} compact={compact} />
+    {compact ? (
+      <Tree data={data} />
+    ) : (
     <Box>
       <Container marginBottom={10}>
         <Tree data={data} />
       </Container>
     </Box>
+    )}
     {canLoadMore && (
       <Button
         text="Load more..."

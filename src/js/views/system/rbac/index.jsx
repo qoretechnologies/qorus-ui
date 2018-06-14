@@ -1,38 +1,61 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import compose from 'recompose/compose';
 
-import Nav, { NavLink } from '../../../components/navlink';
+import Tabs, { Pane } from '../../../components/tabs';
 import Users from './users';
 import Roles from './roles';
 import Permissions from './permissions';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Box from '../../../components/box';
+import queryControl from '../../../hocomponents/queryControl';
+import withHandlers from 'recompose/withHandlers';
 
 type Props = {
-  children: any,
-  route: Object,
-}
-
-export default function RBAC(props: Props, context: Object): React.Element<any> {
-  return (
-    <div className="tab-pane active">
-      <Nav
-        path={context.location.pathname}
-        type="nav-pills"
-      >
-        <NavLink to="./users">Users</NavLink>
-        <NavLink to="./roles">Roles</NavLink>
-        <NavLink to="./permissions">Permissions</NavLink>
-      </Nav>
-      { props.children }
-    </div>
-  );
-}
-
-RBAC.contextTypes = {
-  router: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  getTitle: PropTypes.func.isRequired,
+  tabQuery?: string,
+  changeTabQuery: Function,
+  handleTabChange: Function,
+  location: Object,
 };
 
-RBAC.Users = Users;
-RBAC.Roles = Roles;
-RBAC.Permissions = Permissions;
+const RBAC: Function = ({
+  tabQuery: tabQuery = 'users',
+  handleTabChange,
+  location,
+}: Props): React.Element<any> => (
+  <div>
+    <Breadcrumbs>
+      <Crumb>RBAC</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs
+        active={tabQuery}
+        id="rbac"
+        onChange={handleTabChange}
+        noContainer
+        vertical
+      >
+        <Pane name="Users">
+          <Users location={location} />
+        </Pane>
+        <Pane name="Roles">
+          <Roles location={location} />
+        </Pane>
+        <Pane name="Permissions">
+          <Permissions location={location} />
+        </Pane>
+      </Tabs>
+    </Box>
+  </div>
+);
+
+export default compose(
+  queryControl('tab'),
+  withHandlers({
+    handleTabChange: ({ changeTabQuery }: Props): Function => (
+      tabId: string
+    ): void => {
+      changeTabQuery(tabId);
+    },
+  })
+)(RBAC);

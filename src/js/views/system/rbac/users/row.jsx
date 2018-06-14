@@ -3,10 +3,10 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../../components/new_table';
 import Badge from '../../../../components/badge';
-import { Controls, Control } from '../../../../components/controls';
 import Text from '../../../../components/text';
 
 type Props = {
@@ -17,7 +17,8 @@ type Props = {
   canDelete: boolean,
   onDeleteClick: Function,
   handleDeleteClick: Function,
-}
+  first: boolean,
+};
 
 const UsersRow: Function = ({
   model,
@@ -25,40 +26,38 @@ const UsersRow: Function = ({
   handleDeleteClick,
   canEdit,
   canDelete,
+  first,
 }: Props): React.Element<any> => (
-  <Tr>
-    <Td className="narrow">
-      <Controls grouped>
-        { canEdit && (
-          <Control
-            icon="edit"
-            btnStyle="warning"
-            action={handleEditClick}
-            title="Edit user"
-          />
-        )}
-        { canDelete && (
-          <Control
-            icon="close"
-            btnStyle="danger"
-            action={handleDeleteClick}
-            title="Remove user"
-          />
-        )}
-      </Controls>
-    </Td>
+  <Tr first={first}>
     <Td className="name">{model.name}</Td>
     <Td className="text big">
       <Text text={model.username} />
     </Td>
     <Td className="text">
-      { model.roles.map((role, index) => (
-        <Badge
-          key={index}
-          val={role}
-          label="info"
-        />
+      {model.roles.map((role, index) => (
+        <Badge key={index} val={role} label="info" />
       ))}
+    </Td>
+    <Td className="narrow">
+      <ButtonGroup>
+        {canEdit && (
+          <Button
+            iconName="edit"
+            onClick={handleEditClick}
+            title="Edit user"
+            className="pt-small"
+          />
+        )}
+        {canDelete && (
+          <Button
+            iconName="cross"
+            intent={Intent.DANGER}
+            onClick={handleDeleteClick}
+            title="Remove user"
+            className="pt-small"
+          />
+        )}
+      </ButtonGroup>
     </Td>
   </Tr>
 );
@@ -68,7 +67,10 @@ export default compose(
     handleEditClick: ({ model, onEditClick }: Props): Function => (): void => {
       onEditClick(model);
     },
-    handleDeleteClick: ({ model, onDeleteClick }: Props): Function => (): void => {
+    handleDeleteClick: ({
+      model,
+      onDeleteClick,
+    }: Props): Function => (): void => {
       onDeleteClick(model.username);
     },
   }),

@@ -33,6 +33,7 @@ const Connections: Function = ({
         id="connections"
         onChange={handleTabChange}
         noContainer
+        vertical
       >
         <Pane name="Datasources">
           <ConnectionsTable type="datasources" location={location} />

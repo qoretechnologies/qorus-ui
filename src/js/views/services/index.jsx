@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import { querySelector, resourceSelector } from '../../selectors';
 import actions from '../../store/api/actions';
@@ -21,6 +22,8 @@ import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
 import { sortDefaults } from '../../constants/sort';
 import { Controls, Control } from '../../components/controls';
+import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 type Props = {
   sortData: Object,
@@ -64,63 +67,68 @@ const Services: Function = ({
   infoWithAlerts,
 }: Props): React.Element<any> => (
   <div>
-    <ServicesToolbar
-      selected={selected}
-      selectedIds={selectedIds}
-      onCSVClick={onCSVClick}
-      location={location}
-      collectionCount={services.length}
-      collectionTotal={infoTotalCount}
-      withAlertsCount={infoWithAlerts}
-      enabledCount={infoEnabled}
-    />
-    <ServicesTable
-      collection={services}
-      paneId={paneId}
-      openPane={openPane}
-      closePane={closePane}
-      sortData={sortData}
-      onSortChange={onSortChange}
-      canLoadMore={canLoadMore}
-      isTablet={isTablet}
-    />
-    { canLoadMore && (
-      <Controls grouped noControls>
-        <Control
-          label={`Show ${limit} more...`}
-          btnStyle="success"
-          big
-          onClick={handleLoadMore}
-        />
-        <Control
-          label="Show all"
-          btnStyle="warning"
-          big
-          onClick={handleLoadAll}
-        />
-      </Controls>
-    )}
+    <Breadcrumbs>
+      <Crumb>Services</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <ServicesToolbar
+        selected={selected}
+        selectedIds={selectedIds}
+        onCSVClick={onCSVClick}
+        location={location}
+        collectionCount={services.length}
+        collectionTotal={infoTotalCount}
+        withAlertsCount={infoWithAlerts}
+        enabledCount={infoEnabled}
+      />
+    </Box>
+    <Box noPadding>
+      <ServicesTable
+        collection={services}
+        paneId={paneId}
+        openPane={openPane}
+        closePane={closePane}
+        sortData={sortData}
+        onSortChange={onSortChange}
+        canLoadMore={canLoadMore}
+        isTablet={isTablet}
+      />
+      {canLoadMore && (
+        <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
+          <Button
+            text={`Showing ${services.length} of ${infoTotalCount}`}
+            intent={Intent.NONE}
+            className="pt-minimal"
+          />
+          <Button
+            text={`Show ${limit} more...`}
+            intent={Intent.PRIMARY}
+            onClick={handleLoadMore}
+          />
+          <Button
+            text="Show all"
+            intent={Intent.PRIMARY}
+            onClick={handleLoadAll}
+          />
+        </ButtonGroup>
+      )}
+    </Box>
   </div>
 );
 
-const filterSearch: Function = (
-  search: string
-): Function => (
+const filterSearch: Function = (search: string): Function => (
   services: Array<Object>
-): Array<Object> => (
-  findBy('name', search, services)
-);
+): Array<Object> => findBy('name', search, services);
 
 const servicesSelector: Function = createSelector(
-  [
-    resourceSelector('services'),
-    querySelector('search'),
-  ], (services, search) => filterSearch(search)(services.data)
+  [resourceSelector('services'), querySelector('search')],
+  (services, search) => filterSearch(search)(services.data)
 );
 
-const systemOptionsSelector: Function = (state: Object): Array<Object> => (
-  state.api.systemOptions.data.filter((option: Object): boolean => option.service)
-);
+const systemOptionsSelector: Function = (state: Object): Array<Object> =>
+  state.api.systemOptions.data.filter(
+    (option: Object): boolean => option.service
+  );
 
 const settingsSelector: Function = (state: Object): Object => state.ui.settings;
 
@@ -130,7 +138,8 @@ const selector: Function = createSelector(
     systemOptionsSelector,
     resourceSelector('services'),
     settingsSelector,
-  ], (services, systemOptions, meta, settings) => ({
+  ],
+  (services, systemOptions, meta, settings) => ({
     services,
     systemOptions,
     meta,
@@ -150,15 +159,7 @@ export default compose(
   withSort('services', 'services', sortDefaults.services),
   loadMore('services', 'services', true, 50),
   sync('meta'),
-  withPane(
-    ServicesDetail,
-    [
-      'systemOptions',
-      'location',
-    ],
-    'detail',
-    'services'
-  ),
+  withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),
   withCSV('services', 'services'),
   pure([

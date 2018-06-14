@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button } from '@blueprintjs/core';
 
-import { Control as Button } from '../../../components/controls';
 import actions from '../../../store/api/actions';
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   handleLoadClick: Function,
   handleUnloadClick: Function,
   handleResetClick: Function,
-}
+};
 
 const ToolbarActions: Function = ({
   handleEnableClick,
@@ -27,46 +27,13 @@ const ToolbarActions: Function = ({
   handleUnloadClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
-  <div
-    className="btn-group pull-left"
-    id="selection-actions"
-  >
-    <Button
-      label="Enable"
-      icon="power-off"
-      big
-      btnStyle="default"
-      onClick={handleEnableClick}
-    />
-    <Button
-      label="Disable"
-      icon="ban"
-      big
-      btnStyle="default"
-      onClick={handleDisableClick}
-    />
-    <Button
-      label="Load"
-      icon="check"
-      big
-      btnStyle="default"
-      onClick={handleLoadClick}
-    />
-    <Button
-      label="Unload"
-      icon="times"
-      big
-      btnStyle="default"
-      onClick={handleUnloadClick}
-    />
-    <Button
-      label="Reset"
-      icon="refresh"
-      big
-      btnStyle="default"
-      onClick={handleResetClick}
-    />
-  </div>
+  <ButtonGroup>
+    <Button text="Enable" iconName="power" onClick={handleEnableClick} />
+    <Button text="Disable" iconName="remove" onClick={handleDisableClick} />
+    <Button text="Load" iconName="small-tick" onClick={handleLoadClick} />
+    <Button text="Unload" iconName="cross" onClick={handleUnloadClick} />
+    <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
+  </ButtonGroup>
 );
 
 export default compose(
@@ -82,9 +49,7 @@ export default compose(
       selectedIds,
       action,
       selectNone,
-    }: Props): Function => (
-      actionType: string
-    ): void => {
+    }: Props): Function => (actionType: string): void => {
       action(actionType, selectedIds);
       selectNone();
     },
@@ -93,7 +58,9 @@ export default compose(
     handleEnableClick: ({ handleBatchAction }: Props): Function => (): void => {
       handleBatchAction('enable');
     },
-    handleDisableClick: ({ handleBatchAction }: Props): Function => (): void => {
+    handleDisableClick: ({
+      handleBatchAction,
+    }: Props): Function => (): void => {
       handleBatchAction('disable');
     },
     handleRunClick: ({ handleBatchAction }: Props): Function => (): void => {
@@ -103,5 +70,5 @@ export default compose(
       handleBatchAction('reset');
     },
   }),
-  pure(['selectedIds']),
+  pure(['selectedIds'])
 )(ToolbarActions);

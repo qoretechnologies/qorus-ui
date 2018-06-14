@@ -1,36 +1,65 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 
 import Nav, { NavLink } from '../../../components/navlink';
 
-import LogView from './log';
+import LogContainer from '../../../containers/log';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Tabs, { Pane } from '../../../components/tabs';
+import Box from '../../../components/box';
+import queryControl from '../../../hocomponents/queryControl';
 
-export default function Logs(props, context) {
-  return (
-    <div className="tab-pane active">
-        <Nav
-          path={context.location.pathname}
-          type="nav-pills"
-        >
-          <NavLink to="./system">System</NavLink>
-          <NavLink to="./http">Http</NavLink>
-          <NavLink to="./audit">Audit</NavLink>
-          <NavLink to="./alert">Alert</NavLink>
-          <NavLink to="./mon">Monitor</NavLink>
-        </Nav>
-        { props.children }
-    </div>
-  );
-}
-
-Logs.propTypes = {
-  children: PropTypes.node.isRequired,
-  route: PropTypes.object,
+type Props = {
+  tabQuery?: string,
+  changeTabQuery: Function,
+  handleTabChange: Function,
+  location: Object,
 };
 
-Logs.contextTypes = {
-  router: PropTypes.object.isRequired,
-  getTitle: PropTypes.func.isRequired,
-  location: PropTypes.object.isRequired,
-};
+const Log: Function = ({
+  handleTabChange,
+  tabQuery: tabQuery = 'system',
+}: Props) => (
+  <div>
+    <Breadcrumbs>
+      <Crumb>Logs</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs
+        active={tabQuery}
+        id="logs"
+        onChange={handleTabChange}
+        noContainer
+        vertical
+      >
+        <Pane name="System">
+          <LogContainer resource="system" />
+        </Pane>
+        <Pane name="Http">
+          <LogContainer resource="http" />
+        </Pane>
+        <Pane name="Audit">
+          <LogContainer resource="audit" />
+        </Pane>
+        <Pane name="Alert">
+          <LogContainer resource="alert" />
+        </Pane>
+        <Pane name="Monitor">
+          <LogContainer resource="monitor" />
+        </Pane>
+      </Tabs>
+    </Box>
+  </div>
+);
 
-Logs.Log = LogView;
+export default compose(
+  queryControl('tab'),
+  withHandlers({
+    handleTabChange: ({ changeTabQuery }: Props): Function => (
+      tabId: string
+    ): void => {
+      changeTabQuery(tabId);
+    },
+  })
+)(Log);

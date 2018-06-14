@@ -32,16 +32,8 @@ const DashboardRoutes = (): React.Element<any> => (
     <Route path="sqlcache" component={System.SqlCache} />
     <Route path="http" component={System.HttpServices} />
     <Route path="info" component={System.Info} />
-    <Route path="logs" component={System.Logs}>
-      <IndexRedirect to="system" />
-      <Route path=":log" component={System.Logs.Log} />
-    </Route>
-    <Route path="rbac" component={System.RBAC}>
-      <IndexRedirect to="users" />
-      <Route path="users" component={System.RBAC.Users} />
-      <Route path="roles" component={System.RBAC.Roles} />
-      <Route path="permissions" component={System.RBAC.Permissions} />
-    </Route>
+    <Route path="logs" component={System.Logs} />
+    <Route path="rbac" component={System.RBAC} />
     <Route path="errors" component={System.Errors} />
     <Route path="releases" component={System.Releases} />
     <Route path="cluster" component={System.Cluster} />
