@@ -12,6 +12,7 @@ import { DATE_FORMATS } from '../../../constants/dates';
 import SearchToolbar from './toolbar';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
+import Box from '../../../components/box';
 
 type Props = {
   location: Object,
@@ -41,21 +42,16 @@ const SearchView: Function = ({
   location,
   mindateQuery,
   searchData,
-  ...rest,
+  ...rest
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <SearchToolbar
-      mindateQuery={mindateQuery}
-      {...rest}
+  <div>
+    <SearchToolbar mindateQuery={mindateQuery} {...rest} />
+    <OrdersView
+      location={location}
+      linkDate={mindateQuery}
+      searchData={searchData}
+      searchPage
     />
-    <div className="view-content">
-      <OrdersView
-        location={location}
-        linkDate={mindateQuery}
-        searchData={searchData}
-        searchPage
-      />
-    </div>
   </div>
 );
 
@@ -75,38 +71,47 @@ export default compose(
   queryControl('keyname'),
   queryControl('keyvalue'),
   queryControl(),
-  mapProps(({ mindateQuery, ...rest }): Props => ({
-    defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
-    mindateQuery: !mindateQuery || mindateQuery === '' ?
-      moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
+  mapProps(
+    ({ mindateQuery, ...rest }): Props => ({
+      defaultDate: moment()
+        .add(-1, 'weeks')
+        .format(DATE_FORMATS.URL_FORMAT),
+      mindateQuery:
+        !mindateQuery || mindateQuery === ''
+          ? moment()
+              .add(-1, 'weeks')
+              .format(DATE_FORMATS.URL_FORMAT)
+          : mindateQuery,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({
       mindateQuery,
-    ...rest,
-  })),
-  mapProps(({
-    mindateQuery,
-    maxdateQuery,
-    filterQuery,
-    idsQuery,
-    keynameQuery,
-    keyvalueQuery,
-    ...rest,
-  }): Props => ({
-    searchData: {
-      minDate: mindateQuery,
-      maxDate: maxdateQuery,
-      ids: idsQuery,
-      keyName: keynameQuery,
-      keyValue: keyvalueQuery,
-      filter: filterQuery,
-    },
-    mindateQuery,
-    maxdateQuery,
-    filterQuery,
-    idsQuery,
-    keynameQuery,
-    keyvalueQuery,
-    ...rest,
-  })),
+      maxdateQuery,
+      filterQuery,
+      idsQuery,
+      keynameQuery,
+      keyvalueQuery,
+      ...rest
+    }): Props => ({
+      searchData: {
+        minDate: mindateQuery,
+        maxDate: maxdateQuery,
+        ids: idsQuery,
+        keyName: keynameQuery,
+        keyValue: keyvalueQuery,
+        filter: filterQuery,
+      },
+      mindateQuery,
+      maxdateQuery,
+      filterQuery,
+      idsQuery,
+      keynameQuery,
+      keyvalueQuery,
+      ...rest,
+    })
+  ),
   pure([
     'mindateQuery',
     'maxdateQuery',
@@ -117,5 +122,5 @@ export default compose(
     'location',
     'searchData',
   ]),
-  withModal(),
+  withModal()
 )(SearchView);

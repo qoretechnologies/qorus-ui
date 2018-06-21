@@ -22,29 +22,18 @@ const ToolbarSelector: Function = ({
   selectNone,
   selectInvert,
 }: Props): React.Element<any> => (
-  <Dropdown
-    id="selection"
-    className="pull-left"
-  >
+  <Dropdown id="selection">
     <Control>
       <Checkbox
-        action={selected === 'none' || selected === 'some' ? selectAll : selectNone}
+        action={
+          selected === 'none' || selected === 'some' ? selectAll : selectNone
+        }
         checked={CHECKBOX_STATES[selected]}
-      />
-      {' '}
+      />{' '}
     </Control>
-    <Item
-      action={selectAll}
-      title="All"
-    />
-    <Item
-      action={selectNone}
-      title="None"
-    />
-    <Item
-      action={selectInvert}
-      title="Invert"
-    />
+    <Item action={selectAll} title="All" />
+    <Item action={selectNone} title="None" />
+    <Item action={selectInvert} title="Invert" />
   </Dropdown>
 );
 

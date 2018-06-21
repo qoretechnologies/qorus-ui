@@ -36,7 +36,7 @@ const GroupsToolbar: Function = ({
   enabledCount,
 }: Props): React.Element<any> => (
   <Toolbar>
-    <Selector selected={selected} />
+    <Selector selected={selected} selectedCount={selectedIds.length} />
     {selected !== 'none' && <Actions selectedIds={selectedIds} />}
     <Button text="CSV" onClick={onCSVClick} />
     {collectionCount > 0 && (

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
+import Toolbar from '../toolbar';
 
 /**
  * Drop-down component with a button to add options.
@@ -119,6 +120,10 @@ export default class SystemOptions extends Component {
    * @return {ReactElement}
    */
   render() {
-    return this.state.edit ? this.renderOptions() : this.renderButton();
+    return (
+      <Toolbar mt>
+        {this.state.edit ? this.renderOptions() : this.renderButton()}
+      </Toolbar>
+    );
   }
 }

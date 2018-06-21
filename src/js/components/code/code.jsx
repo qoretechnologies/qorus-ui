@@ -41,8 +41,6 @@ class CodeTab extends React.Component {
 
   handleRef: Function = (el): void => {
     if (!this.el) {
-      console.log(el);
-
       this.el = el;
 
       this.recalculateSize();

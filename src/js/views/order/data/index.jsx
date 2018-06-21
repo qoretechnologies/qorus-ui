@@ -1,53 +1,36 @@
 import React from 'react';
-import Nav, { NavLink } from 'components/navlink';
 
+import Box from 'components/box';
 import StaticView from './static';
 import DynamicView from './dynamic';
 import SensitiveView from './sensitive';
 import KeysView from './keys';
+import Tabs, { Pane } from '../../../components/tabs';
 
 type Props = {
   location: Object,
   order: Object,
-  children: any,
 };
 
-const DataView = ({ location, order, children }: Props) => (
-  <div>
-    <Nav
-      path={ location.pathname }
-      type="nav-pills"
-    >
-      <NavLink to="./static">Static</NavLink>
-      <NavLink to="./dynamic">Dynamic</NavLink>
-      <NavLink to="./sensitive">Sensitive</NavLink>
-      <NavLink to="./keys">Keys</NavLink>
-    </Nav>
-    <div className="row tab-pane">
-      <div className="col-xs-12">
-        {React.cloneElement(
-          children,
-          {
-            createElement: (Comp, props) => (
-              <Comp
-                {...{
-                  ...props,
-                  order,
-                }}
-              />
-            ),
-          }
-        )}
-      </div>
-    </div>
-  </div>
+const DataView = (props: Props) => (
+  <Box>
+    <Tabs id="orderDataTabs" active="static" vertical noContainer>
+      <Pane name="Static">
+        <StaticView {...props} />
+      </Pane>
+      <Pane name="Dynamic">
+        <DynamicView {...props} />
+      </Pane>
+      <Pane name="Sensitive">
+        <SensitiveView {...props} />
+      </Pane>
+      <Pane name="Keys">
+        <KeysView {...props} />
+      </Pane>
+    </Tabs>
+  </Box>
 );
 
 export default DataView;
 
-export {
-  StaticView,
-  DynamicView,
-  KeysView,
-  SensitiveView,
-};
+export { StaticView, DynamicView, KeysView, SensitiveView };

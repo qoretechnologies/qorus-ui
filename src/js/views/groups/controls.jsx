@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
-import { Controls, Control as Button } from '../../components/controls';
 import actions from '../../store/api/actions';
 
 type Props = {
@@ -19,14 +19,15 @@ const GroupsControls: Function = ({
   enabled,
   handleEnableClick,
 }: Props): React.Element<any> => (
-  <Controls>
+  <ButtonGroup>
     <Button
       title={enabled ? 'Disable' : 'Enable'}
-      icon="power-off"
-      btnStyle={enabled ? 'success' : 'danger'}
+      iconName="power"
+      intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
+      className="pt-small"
     />
-  </Controls>
+  </ButtonGroup>
 );
 
 export default compose(
@@ -37,7 +38,11 @@ export default compose(
     }
   ),
   withHandlers({
-    handleEnableClick: ({ enabled, name, action }: Props): Function => (): void => {
+    handleEnableClick: ({
+      enabled,
+      name,
+      action,
+    }: Props): Function => (): void => {
       action(name, !enabled);
     },
   }),

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Masonry from 'react-masonry-layout';
 
 import actions from 'store/api/actions';
 import Loader from 'components/loader';
@@ -9,6 +10,9 @@ import Hierarchy from '../hierarchy/';
 import StepDetails from './step_details';
 import Errors from './errors';
 import Resize from 'components/resize/handle';
+import PaneItem from '../../../components/pane_item';
+import Box from '../../../components/box';
+import NoData from '../../../components/nodata';
 
 export default class DiagramView extends Component {
   static propTypes = {
@@ -26,7 +30,7 @@ export default class DiagramView extends Component {
     });
   }
 
-  handleStepClick = (step) => {
+  handleStepClick = step => {
     this.setState({
       step,
     });
@@ -44,19 +48,7 @@ export default class DiagramView extends Component {
     );
   };
 
-  renderStepDetails() {
-    if (!this.state.step) return undefined;
-
-    return (
-      <StepDetails
-        step={this.state.step}
-        instances={this.props.order.StepInstances}
-        onSkipSubmit={this.handleSkipSubmit}
-      />
-    );
-  }
-
-  diagramRef = (el) => {
+  diagramRef = el => {
     if (el) {
       const copy = el;
       copy.scrollLeft = el.scrollWidth;
@@ -65,7 +57,7 @@ export default class DiagramView extends Component {
 
       copy.scrollLeft = middle;
     }
-  }
+  };
 
   renderErrorPane() {
     if (!this.props.order.ErrorInstances) return undefined;
@@ -73,27 +65,17 @@ export default class DiagramView extends Component {
     let errors = this.props.order.ErrorInstances;
 
     if (this.state.step) {
-      const stepId = this.props.order.StepInstances.find(s => (
-        s.stepname === this.state.step
-      )).stepid;
+      const stepId = this.props.order.StepInstances.find(
+        s => s.stepname === this.state.step
+      ).stepid;
 
-      errors = errors.filter(e => (
-        e.stepid === stepId
-      ));
+      errors = errors.filter(e => e.stepid === stepId);
     }
 
     return (
-      <div className="error-pane fixed">
-        <Resize
-          top
-          min={{ height: 200 }}
-          onStop={this.handleResizeStop}
-        />
-        <Errors
-          data={errors}
-          paneSize={this.state.paneSize}
-        />
-      </div>
+      <Box column={2} noTransition top>
+        <Errors data={errors} paneSize={this.state.paneSize} />
+      </Box>
     );
   }
 
@@ -101,32 +83,51 @@ export default class DiagramView extends Component {
     if (!this.props.workflow) return <Loader />;
 
     return (
-      <div
-        ref="wrapper"
-        className="diagram-wrapper"
-        style={{ paddingBottom: this.state.paneSize }}
+      <Masonry
+        id="order-masonry"
+        sizes={[{ columns: 2, gutter: 15 }]}
+        infiniteScrollDisabled
+        key={this.state.step}
       >
-        <div
-          className="pull-left diagram-view"
-          ref={this.diagramRef}
-        >
-          <Graph
-            workflow={this.props.workflow}
-            order={this.props.order}
-            onStepClick={this.handleStepClick}
-          />
-        </div>
-        <div className="pull-right order-info-view">
+        <Box column={2} noTransition top style={{ overflowX: 'auto' }}>
+          <PaneItem title="Steps graph">
+            <Graph
+              workflow={this.props.workflow}
+              order={this.props.order}
+              onStepClick={this.handleStepClick}
+            />
+          </PaneItem>
+        </Box>
+        <Box column={2} noTransition top>
           <Info {...this.props.order} />
-          <Keys
-            data={this.props.order.keys}
-          />
-          <h4> Hierarchy </h4>
-          <Hierarchy order={this.props.order} compact isTablet={this.props.isTablet} />
-          { this.renderStepDetails() }
-        </div>
-        { this.renderErrorPane() }
-      </div>
+        </Box>
+        <Box column={2} noTransition top>
+          <Keys data={this.props.order.keys} />
+        </Box>
+        <Box column={2} noTransition top>
+          <PaneItem title="Hierarchy">
+            <Hierarchy
+              order={this.props.order}
+              compact
+              isTablet={this.props.isTablet}
+            />
+          </PaneItem>
+        </Box>
+        <Box column={2} noTransition top>
+          <PaneItem title="Step details">
+            {this.state.step ? (
+              <StepDetails
+                step={this.state.step}
+                instances={this.props.order.StepInstances}
+                onSkipSubmit={this.handleSkipSubmit}
+              />
+            ) : (
+              <NoData />
+            )}
+          </PaneItem>
+        </Box>
+        {this.renderErrorPane()}
+      </Masonry>
     );
   }
 }

@@ -17,7 +17,6 @@ const Crumb: Function = ({
   text,
   children,
   active,
-  iconName,
 }: Props): React.Element<any> => (
   <li>
     {link ? (

@@ -3,10 +3,16 @@ import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
+import {
+  ButtonGroup,
+  Button,
+  Intent,
+  ControlGroup,
+  InputGroup,
+} from '@blueprintjs/core';
 
 import Toolbar from '../../../components/toolbar';
 import Datepicker from '../../../components/datepicker';
-import { Controls, Control as Button } from '../../../components/controls';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
@@ -99,10 +105,7 @@ export default class SearchToolbar extends Component {
 
   handleHistoryClick: Function = (): void => {
     this.props.openModal(
-      <HistoryModal
-        type="errorSearch"
-        onClose={this.props.closeModal}
-      />
+      <HistoryModal type="errorSearch" onClose={this.props.closeModal} />
     );
   };
 
@@ -110,7 +113,7 @@ export default class SearchToolbar extends Component {
     this.props.saveSearch(
       'errorSearch',
       this.props.allQuery,
-      this.props.username,
+      this.props.username
     );
   };
 
@@ -154,133 +157,109 @@ export default class SearchToolbar extends Component {
   };
 
   handleRetryChange: Function = (): void => {
-    this.setState({ retry: !this.state.retry || this.state.retry === '' ? 'true' : '' });
+    this.setState({
+      retry: !this.state.retry || this.state.retry === '' ? 'true' : '',
+    });
   };
 
   handleBuserrChange: Function = (): void => {
-    this.setState({ busErr: !this.state.busErr || this.state.busErr === '' ? 'true' : '' });
+    this.setState({
+      busErr: !this.state.busErr || this.state.busErr === '' ? 'true' : '',
+    });
   };
 
   render() {
     return (
       <Toolbar>
         <div className="pull-left">
-          <div className="form-group search-toolbar">
-            <div className="pull-left">
-              <Dropdown
-                id="ids"
-                multi
-                onSubmit={this.handleIdsChange}
-                selected={!this.state.ids || this.state.ids === '' ?
-                  [] :
-                  this.state.ids.split(',')
-                }
-              >
-                <Control />
-                {this.props.workflows.map((o, k) => (
-                  <Item key={k} title={o} />
-                ))}
-              </Dropdown>
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Name"
-                onChange={this.handleNameChange}
-                value={this.state.name || ''}
-                id="name"
-              />
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Error"
-                onChange={this.handleErrorChange}
-                value={this.state.error || ''}
-                id="error"
-              />
-            </div>
-            <div className="pull-left">
-              <Datepicker
-                placeholder="Min date..."
-                date={this.state.mindate}
-                onApplyDate={this.handleMinDateChange}
-                applyOnBlur
-                id="mindate"
-              />
-            </div>
-            <div className="pull-left">
-              <Datepicker
-                placeholder="Max date..."
-                date={this.state.maxdate}
-                onApplyDate={this.handleMaxDateChange}
-                applyOnBlur
-                noButtons
-                id="maxdate"
-              />
-            </div>
+          <ControlGroup>
+            <Dropdown
+              id="ids"
+              multi
+              onSubmit={this.handleIdsChange}
+              selected={
+                !this.state.ids || this.state.ids === ''
+                  ? []
+                  : this.state.ids.split(',')
+              }
+            >
+              <Control />
+              {this.props.workflows.map((o, k) => <Item key={k} title={o} />)}
+            </Dropdown>
+            <InputGroup
+              type="text"
+              placeholder="Name"
+              onChange={this.handleNameChange}
+              value={this.state.name || ''}
+              id="name"
+            />
+            <InputGroup
+              type="text"
+              placeholder="Error"
+              onChange={this.handleErrorChange}
+              value={this.state.error || ''}
+              id="error"
+            />
+            <Datepicker
+              placeholder="Min date..."
+              date={this.state.mindate}
+              onApplyDate={this.handleMinDateChange}
+              applyOnBlur
+              id="mindate"
+            />
+            <Datepicker
+              placeholder="Max date..."
+              date={this.state.maxdate}
+              onApplyDate={this.handleMaxDateChange}
+              applyOnBlur
+              noButtons
+              id="maxdate"
+            />
+
             <Dropdown
               id="filters"
               multi
               def="All"
               onSubmit={this.handleFilterChange}
-              selected={!this.state.filter || this.state.filter === '' ?
-                ['All'] :
-                this.state.filter.split(',')
+              selected={
+                !this.state.filter || this.state.filter === ''
+                  ? ['All']
+                  : this.state.filter.split(',')
               }
             >
               <Control />
               <Item title="All" />
-              {ORDER_STATES.map((o, k) => (
-                <Item key={k} title={o.title} />
-              ))}
+              {ORDER_STATES.map((o, k) => <Item key={k} title={o.title} />)}
             </Dropdown>
-            <div className="pull-left">
-              <Controls noControls grouped>
-                <Button
-                  label="Retry"
-                  btnStyle={this.state.retry ? 'success' : 'default'}
-                  icon={this.state.retry ? 'check-square-o' : 'square-o'}
-                  big
-                  action={this.handleRetryChange}
-                />
-                <Button
-                  label="Bus. Err."
-                  btnStyle={this.state.busErr ? 'success' : 'default'}
-                  icon={this.state.busErr ? 'check-square-o' : 'square-o'}
-                  big
-                  action={this.handleBuserrChange}
-                />
-              </Controls>
-            </div>
-          </div>
+            <Button
+              text="Retry"
+              intent={this.state.retry && Intent.PRIMARY}
+              iconName={this.state.retry ? 'selection' : 'circle'}
+              onClick={this.handleRetryChange}
+            />
+            <Button
+              text="Bus. Err."
+              intent={this.state.busErr && Intent.PRIMARY}
+              icon={this.state.busErr ? 'selection' : 'circle'}
+              onClick={this.handleBuserrChange}
+            />
+          </ControlGroup>
         </div>
         <div className="pull-right">
-          <Controls noControls grouped>
-            <Button
-              label="Save search"
-              icon="save"
-              btnStyle="success"
-              big
+          <Dropdown id="searchErrorOthers">
+            <Control> More </Control>
+            <Item
+              title="Save search"
+              icon="floppy-disk"
               action={this.handleSaveClick}
             />
-            <Button
-              label="Show history"
+            <Item
+              title="Show history"
               icon="history"
-              btnStyle="default"
-              big
               action={this.handleHistoryClick}
             />
-            <Button
-              label="Clear"
-              icon="remove"
-              btnStyle="default"
-              big
-              action={this.handleClearClick}
-            />
-          </Controls>
+            <Item title="Clear" icon="remove" action={this.handleClearClick} />
+          </Dropdown>
         </div>
       </Toolbar>
     );

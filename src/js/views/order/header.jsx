@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { Callout, Intent } from '@blueprintjs/core';
 
 import OrderControls from '../workflow/tabs/list/controls';
 import WorkflowControls from '../workflows/controls';
@@ -11,6 +12,7 @@ import Alert from '../../components/alert';
 import { pureRender } from '../../components/utils';
 import Icon from '../../components/icon';
 import queryControl from '../../hocomponents/queryControl';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 @pureRender
 @queryControl('target')
@@ -113,45 +115,47 @@ export default class OrderHeader extends Component {
 
     return (
       <div className="order-header">
-        <div className="row">
-          <div className="col-xs-12">
-            <h3 className="detail-title pull-left">
-              <Link to={backQueriesStr}>
-                <Icon icon="angle-left" />
-              </Link>{' '}
-              {this.renderIcon()} {this.props.data.name}
-              <small>
-                {' '}
-                {this.props.data.version} ({this.props.data.id})
-              </small>
-            </h3>
-            <div className="order-actions pull-right">
-              <WorkflowControls
-                id={this.props.workflow.id}
-                enabled={this.props.workflow.enabled}
-              />
-              <WorkflowAutostart
-                id={this.props.workflow.id}
-                autostart={this.props.workflow.autostart}
-                execCount={this.props.workflow.exec_count}
-                withExec
-              />{' '}
-              <OrderControls
-                id={this.props.data.id}
-                workflowstatus={this.props.data.workflowstatus}
-              />
-              <Lock
-                id={this.props.data.id}
-                lock={this.props.data.operator_lock}
-              />
-            </div>
-          </div>
+        <Breadcrumbs>
+          <Crumb link="/workflows">Workflows</Crumb>
+          <Crumb link={backQueriesStr}>
+            {this.props.data.name}
+            <small>
+              {' '}
+              v{this.props.workflow.version} ({this.props.workflow.id})
+            </small>
+          </Crumb>
+          <Crumb>
+            {this.renderIcon()} ORDER{' '}
+            <small>
+              {this.props.data.id} v{this.props.data.version}
+            </small>
+          </Crumb>
+        </Breadcrumbs>
+        <div className="order-actions pull-right">
+          <WorkflowControls
+            id={this.props.workflow.id}
+            enabled={this.props.workflow.enabled}
+          />
+          <WorkflowAutostart
+            id={this.props.workflow.id}
+            autostart={this.props.workflow.autostart}
+            execCount={this.props.workflow.exec_count}
+            withExec
+          />{' '}
+          <OrderControls
+            id={this.props.data.id}
+            workflowstatus={this.props.data.workflowstatus}
+          />
+          <Lock id={this.props.data.id} lock={this.props.data.operator_lock} />
         </div>
         {this.props.workflow.has_alerts && (
-          <Alert bsStyle="danger">
-            <i className="fa fa-warning" />
-            <strong> Warning: </strong> the parent workflow has alerts raised
-            against it that may prevent it from operating properly.{' '}
+          <Callout
+            intent={Intent.DANGER}
+            icon="warning-sign"
+            title="Workflow with alerts"
+          >
+            the parent workflow has alerts raised against it that may prevent it
+            from operating properly.{' '}
             <Link
               to={`/workflows?date=${this.props.linkDate}&paneId=${
                 this.props.workflow.id
@@ -159,7 +163,7 @@ export default class OrderHeader extends Component {
             >
               View alerts ({this.props.workflow.alerts.length}).
             </Link>
-          </Alert>
+          </Callout>
         )}
       </div>
     );

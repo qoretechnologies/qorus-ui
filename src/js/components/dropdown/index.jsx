@@ -3,18 +3,14 @@ import ReactDOM from 'react-dom';
 import Item from './item';
 import CustomItem from './custom_item';
 import Control from './control';
-import { Control as Button } from '../controls';
 import {
   Menu,
-  MenuItem,
   Popover,
   Position,
-  Intent,
   Button as Btn,
   ButtonGroup,
 } from '@blueprintjs/core';
 
-import classNames from 'classnames';
 import { pureRender } from '../utils';
 import { includes, remove, xor } from 'lodash';
 
@@ -283,15 +279,9 @@ export default class Dropdown extends Component {
     });
   }
 
-  renderSubmit(): ?React.Element<Button> {
+  renderSubmit(): ?React.Element<Btn> {
     if (this.props.multi && this.props.onSubmit) {
-      return (
-        <Btn
-          intent={Intent.PRIMARY}
-          text={this.props.submitLabel}
-          onClick={this.handleSubmit}
-        />
-      );
+      return <Btn text={this.props.submitLabel} onClick={this.handleSubmit} />;
     }
 
     return undefined;

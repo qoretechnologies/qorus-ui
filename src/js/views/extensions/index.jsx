@@ -7,23 +7,26 @@ import _ from 'lodash';
 
 import ExtensionList from './list';
 import Tabs, { Pane } from '../../components/tabs';
+import Box from '../../components/box';
 import actions from '../../store/api/actions';
 import sync from '../../hocomponents/sync';
 import unsync from '../../hocomponents/unsync';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
-  <div className="extensions">
-    <h1>Extensions</h1>
-    <Tabs>
-      {Object.keys(extensions).map(item => (
-        <Pane
-          key={`extension_group_${item.toLowerCase()}`}
-          name={item}
-        >
-          <ExtensionList extensions={extensions[item]} />
-        </Pane>
-      ))}
-    </Tabs>
+  <div>
+    <Breadcrumbs>
+      <Crumb>Extensions</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs active={Object.keys(extensions)[0]} id="extensionsTabs">
+        {Object.keys(extensions).map(item => (
+          <Pane key={`extension_group_${item.toLowerCase()}`} name={item}>
+            <ExtensionList extensions={extensions[item]} />
+          </Pane>
+        ))}
+      </Tabs>
+    </Box>
   </div>
 );
 
@@ -42,5 +45,5 @@ export default compose(
   ),
   sync('extensions'),
   groupExtensions,
-  unsync(),
+  unsync()
 )(Extensions);

@@ -52,10 +52,14 @@ const changeQuery = (
   router: Object,
   location: Object,
   change: Object,
-  merge: bool = true,
+  merge: boolean = true
 ) => {
   const { pathname, query } = location;
-  const newQuery = merge ? Object.assign(query, change) : change;
+  let newQuery = merge ? Object.assign(query, change) : change;
+
+  if (!merge && query.tab && !change.tab) {
+    newQuery = { ...newQuery, ...{ tab: query.tab } };
+  }
 
   router.push({
     pathname,
@@ -65,9 +69,4 @@ const changeQuery = (
 
 const isActive = (to, location) => location.startsWith(to);
 
-export {
-  routes,
-  goTo,
-  isActive,
-  changeQuery,
-};
+export { routes, goTo, isActive, changeQuery };

@@ -9,6 +9,7 @@ type Props = {
   noTransition: boolean,
   children: any,
   column: number,
+  style?: Object,
 };
 
 const Box: Function = ({
@@ -17,6 +18,7 @@ const Box: Function = ({
   top,
   column,
   noTransition,
+  style,
 }: Props): React.Element<any> =>
   noTransition ? (
     <div
@@ -24,7 +26,8 @@ const Box: Function = ({
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
-        width: column ? `${100 / (column + column * 0.04)}%` : 'initial',
+        width: column ? `${100 / column - 0.3 * column}%` : 'initial',
+        ...style,
       }}
     >
       {children}
@@ -44,6 +47,7 @@ const Box: Function = ({
           padding: noPadding ? 0 : null,
           marginTop: top ? 0 : null,
           width: column ? `${100 / (column + column * 0.1)}%` : 'initial',
+          ...style,
         }}
       >
         {children}

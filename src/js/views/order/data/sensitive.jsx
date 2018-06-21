@@ -18,7 +18,7 @@ type Props = {
   isSecure: boolean,
   hasPerms: boolean,
   handleEditClick: Function,
-}
+};
 
 const SensitiveView: Function = ({
   order,
@@ -40,26 +40,22 @@ const SensitiveView: Function = ({
   if (!isSecure && !hasPerms) {
     return (
       <Alert bsStyle="danger">
-        <Icon icon="warning" />
-        {' '}
-        Your connection is not secure and you do not have the needed permission to view this.
+        <Icon icon="warning" /> Your connection is not secure and you do not
+        have the needed permission to view this.
       </Alert>
     );
   } else if (!isSecure) {
     return (
       <Alert bsStyle="danger">
-        <Icon icon="warning" />
-        {' '}
-        Your connection is not secure.
+        <Icon icon="warning" /> Your connection is not secure.
       </Alert>
     );
   }
 
   return (
     <Alert bsStyle="danger">
-      <Icon icon="warning" />
-      {' '}
-      You do not have the needed permission to view this.
+      <Icon icon="warning" /> You do not have the needed permission to view
+      this.
     </Alert>
   );
 };
@@ -73,15 +69,21 @@ export default compose(
       fetchYamlData: actions.orders.fetchYamlData,
     }
   ),
-  mapProps(({ perms, ...rest }: Props): Props => ({
-    isSecure: settings.PROTOCOL === 'https:',
-    hasPerms: hasPermission(perms, ['READ-SENSITIVE-DATA', 'SENSITIVE-DATA-CONTROL'], 'or'),
-    perms,
-    ...rest,
-  })),
+  mapProps(
+    ({ perms, ...rest }: Props): Props => ({
+      isSecure: settings.PROTOCOL === 'https:',
+      hasPerms: hasPermission(
+        perms,
+        ['READ-SENSITIVE-DATA', 'SENSITIVE-DATA-CONTROL'],
+        'or'
+      ),
+      perms,
+      ...rest,
+    })
+  ),
   withHandlers({
-    handleEditClick: ({ fetchYamlData, params }): Function => (): void => {
-      fetchYamlData('Sensitive', params.id);
+    handleEditClick: ({ fetchYamlData, order }): Function => (): void => {
+      fetchYamlData('Sensitive', order.id);
     },
   }),
   pure(['order', 'perms', 'isSecure', 'hasPerms'])

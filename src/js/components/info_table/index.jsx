@@ -6,22 +6,7 @@ import Table, { Section, Row, Cell } from '../table';
 import AutoComponent from '../autocomponent';
 
 import _ from 'lodash';
-import { pureRender } from '../utils';
 
-/**
- * Object with attribute name and value.
- *
- * @typedef {{ attr: string, value: * }} AttrValuePair
- */
-
-/**
- * Two-column table with name and value in each column.
- *
- * Name-value pairs are retrived by iterating over `object`
- * prop. Optionally, it is possible to either omit or pick particular
- * object properties by listen them either in `omit` or `pick` prop.
- */
-@pureRender
 export default class InfoTable extends Component {
   props: {
     object: Object,

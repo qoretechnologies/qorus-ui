@@ -8,14 +8,27 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import sync from '../../hocomponents/sync';
+import withTabs from '../../hocomponents/withTabs';
 import unsync from '../../hocomponents/unsync';
 import patch from '../../hocomponents/patchFuncArgs';
-import { querySelector, resourceSelector, paramSelector } from '../../selectors';
+import {
+  querySelector,
+  resourceSelector,
+  paramSelector,
+} from '../../selectors';
 import actions from '../../store/api/actions';
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
 import Header from './header';
-import Nav, { NavLink } from '../../components/navlink';
+import Box from '../../components/box';
+import Tabs, { Pane } from '../../components/tabs';
+
+import List from './tabs/list';
+import Performance from './tabs/performance';
+import Log from './tabs/log';
+import Code from './tabs/code';
+import Info from './tabs/info';
+import Mappers from './tabs/mappers';
 
 type Props = {
   workflow: Object,
@@ -27,60 +40,55 @@ type Props = {
   fetch: Function,
   location: Object,
   children: any,
+  handleTabChange: Function,
+  tabQuery: string,
 };
 
 const Workflow: Function = ({
   workflow,
   date,
   location,
-  children,
   linkDate,
+  handleTabChange,
+  tabQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Header
-      {...workflow}
-      date={date}
-    />
-    <div className="row">
-      <div className="col-xs-12">
-        <Nav path={location.pathname}>
-          <NavLink to="./list">Orders</NavLink>
-          <NavLink to="./performance">Performance</NavLink>
-          <NavLink to="./log">Log</NavLink>
-          <NavLink to="./code">Code</NavLink>
-          <NavLink to="./info">Info</NavLink>
-          <NavLink to="./mappers">Mappers</NavLink>
-        </Nav>
-      </div>
-    </div>
-    <div className="row tab-pane">
-      <div className="col-xs-12">
-        {React.cloneElement(
-          children,
-          {
-            createElement: (Comp, props) => (
-              <Comp
-                {...{
-                  ...props,
-                  workflow,
-                  date,
-                  linkDate,
-                  location,
-                }}
-              />
-            ),
-          }
-        )}
-      </div>
-    </div>
+    <Header {...workflow} date={date} />
+    <Box>
+      <Tabs
+        active={tabQuery}
+        id="workflowOrder"
+        onChange={handleTabChange}
+        noContainer
+      >
+        <Pane name="List">
+          <List {...{ workflow, date, location, linkDate }} />
+        </Pane>
+        <Pane name="Performance">
+          <Performance {...{ workflow, date, location, linkDate }} />
+        </Pane>
+        <Pane name="Log">
+          <Log {...{ workflow, date, location, linkDate }} />
+        </Pane>
+        <Pane name="Code">
+          <Code {...{ workflow, date, location, linkDate }} />
+        </Pane>
+        <Pane name="Info">
+          <Info {...{ workflow, date, location, linkDate }} />
+        </Pane>
+        <Pane name="Mappers">
+          <Mappers {...{ workflow, date, location, linkDate }} />
+        </Pane>
+      </Tabs>
+    </Box>
   </div>
 );
 
-const workflowSelector: Function = (state: Object, props: Object): Object => (
-  state.api.workflows.data.find((workflow: Object) => (
-    parseInt(props.params.id, 10) === parseInt(workflow.id, 10)
-  ))
-);
+const workflowSelector: Function = (state: Object, props: Object): Object =>
+  state.api.workflows.data.find(
+    (workflow: Object) =>
+      parseInt(props.params.id, 10) === parseInt(workflow.id, 10)
+  );
 
 const selector: Object = createSelector(
   [
@@ -88,7 +96,8 @@ const selector: Object = createSelector(
     workflowSelector,
     querySelector('date'),
     paramSelector('id'),
-  ], (meta, workflow, date, id) => ({
+  ],
+  (meta, workflow, date, id) => ({
     meta,
     workflow,
     date,
@@ -106,16 +115,20 @@ export default compose(
       unselectAll: actions.orders.unselectAll,
     }
   ),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    date: date || DATES.PREV_DAY,
-    ...rest,
-  })),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    fetchParams: { lib_source: true, date: formatDate(date).format() },
-    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-    date,
-    ...rest,
-  })),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
+  ),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
@@ -128,11 +141,7 @@ export default compose(
       }
     },
   }),
-  pure([
-    'workflow',
-    'date',
-    'id',
-    'location',
-  ]),
+  withTabs('list'),
+  pure(['workflow', 'date', 'id', 'location']),
   unsync()
 )(Workflow);

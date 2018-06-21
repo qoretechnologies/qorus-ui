@@ -12,17 +12,17 @@ const DynamicView: Function = ({
   order,
   handleEditClick,
 }: {
-    order: Object,
-    handleEditClick: Function,
-  }): React.Element<any> => (
-    <TreeView
-      data="dynamicdata"
-      order={order}
-      onEditClick={handleEditClick}
-      customEdit
-      withEdit
-    />
-  );
+  order: Object,
+  handleEditClick: Function,
+}): React.Element<any> => (
+  <TreeView
+    data="dynamicdata"
+    order={order}
+    onEditClick={handleEditClick}
+    customEdit
+    withEdit
+  />
+);
 
 export default compose(
   connect(
@@ -32,8 +32,8 @@ export default compose(
     }
   ),
   withHandlers({
-    handleEditClick: ({ fetchYamlData, params }): Function => (): void => {
-      fetchYamlData('Dynamic', params.id);
+    handleEditClick: ({ fetchYamlData, order }): Function => (): void => {
+      fetchYamlData('Dynamic', order.id);
     },
   }),
   pure(['order'])

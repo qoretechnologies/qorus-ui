@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs2, Tab2 } from '@blueprintjs/core';
+import classNames from 'classnames';
 
 import Container from '../container';
 import Pane from './pane';
@@ -12,6 +13,7 @@ type Props = {
   onChange: Function,
   vertical?: boolean,
   noContainer?: boolean,
+  boxed?: boolean,
 };
 
 class Tabs extends React.Component {
@@ -46,7 +48,9 @@ class Tabs extends React.Component {
 
     return (
       <Tabs2
-        className={className}
+        className={classNames(className, {
+          ['boxed-tabs']: this.props.boxed,
+        })}
         selectedTabId={active.toLowerCase()}
         id={id}
         onChange={this.handleChange}

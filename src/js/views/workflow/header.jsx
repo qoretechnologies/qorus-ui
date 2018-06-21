@@ -3,6 +3,7 @@ import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import { Link } from 'react-router';
+import { Callout, Intent } from '@blueprintjs/core';
 
 import withBackHandler from '../../hocomponents/withBackHandler';
 import WorkflowControls from '../workflows/controls';
@@ -10,8 +11,9 @@ import WorkflowAutostart from '../workflows/autostart';
 import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
 import Alert from '../../components/alert';
-import Icon from '../../components/icon';
+import Box from '../../components/box';
 import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../constants/orders';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 type Props = {
   id: number,
@@ -41,70 +43,56 @@ const WorkflowHeader: Function = ({
   alerts,
   onBackClick,
   date,
-  ...rest,
+  ...rest
 }: Props): React.Element<any> => (
-  <div className="workflow-header">
-    <div className="row">
-      <div className="col-xs-12">
-        <h3 className="detail-title pull-left">
-          <a href="#" onClick={onBackClick}>
-            <Icon icon="angle-left" />
-          </a>
-          {' '}
-          {name}
-          {' '}
-          <small>{version}</small>
-          {' '}
-          <small>({id})</small>
-        </h3>
-        <div className="pull-right">
-          <WorkflowControls
-            id={id}
-            enabled={enabled}
-          />
-          <WorkflowAutostart
-            id={id}
-            autostart={autostart}
-            execCount={execCount}
-            withExec
-          />
-        </div>
-      </div>
+  <div>
+    <Breadcrumbs>
+      <Crumb link="/workflows"> Workflows </Crumb>
+      <Crumb>{rest.normalizedName}</Crumb>
+    </Breadcrumbs>
+    <div className="pull-right">
+      <WorkflowControls id={id} enabled={enabled} />{' '}
+      <WorkflowAutostart
+        id={id}
+        autostart={autostart}
+        execCount={execCount}
+        withExec
+      />
     </div>
-    <div className="row status-row">
-      <div className="col-xs-12 states">
-        {ORDER_STATES.map((o, k) => (
-          rest[o.name] > 0 ?
-            <Badge
-              key={k}
-              className={`status-${o.label}`}
-              val={`${o.short}: ${rest[o.name]}`}
-            /> :
-            undefined
-        ))}
+    <Box top>
+      <div className="status-row">
+        {ORDER_STATES.map(
+          (o, k) =>
+            rest[o.name] > 0 ? (
+              <Badge
+                key={k}
+                className={`status-${o.label}`}
+                val={`${o.short}: ${rest[o.name]}`}
+              />
+            ) : (
+              undefined
+            )
+        )}
       </div>
-    </div>
-    <div className="row status-row">
-      <div className="col-xs-12 groups">
-        {groups.map((g, k) => (
-          <Group
-            key={k}
-            name={g.name}
-            size={g.size}
-          />
-        ))}
+      <div className="status-row">
+        {groups.map((g, k) => <Group key={k} name={g.name} size={g.size} />)}
       </div>
-    </div>
-    { hasAlerts && (
-      <Alert bsStyle="danger">
-        <i className="fa fa-warning" />
-        <strong> Warning: </strong> this workflow has alerts raised against it
-        that may prevent it from operating properly.
-        {' '}
-        <Link to={`/workflows?date=${date}&paneId=${id}`}>
-          View alerts ({alerts.length}).
-        </Link>
-      </Alert>
+    </Box>
+
+    {hasAlerts && (
+      <Box noPadding>
+        <Callout
+          intent={Intent.DANGER}
+          title="Workflow with errors"
+          iconName="warning-sign"
+        >
+          This workflow has alerts raised against it that may prevent it from
+          operating properly.{' '}
+          <Link to={`/workflows?date=${date}&paneId=${id}`}>
+            View alerts ({alerts.length}).
+          </Link>
+        </Callout>
+      </Box>
     )}
   </div>
 );

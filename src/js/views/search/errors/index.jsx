@@ -48,21 +48,16 @@ const SearchView: Function = ({
   location,
   mindateQuery,
   searchData,
-  ...rest,
+  ...rest
 }: Props): React.Element<any> => (
   <div className="tab-pane active">
-    <SearchToolbar
-      mindateQuery={mindateQuery}
-      {...rest}
+    <SearchToolbar mindateQuery={mindateQuery} {...rest} />
+    <OrdersView
+      location={location}
+      linkDate={mindateQuery}
+      searchData={searchData}
+      searchPage
     />
-    <div className="view-content">
-      <OrdersView
-        location={location}
-        linkDate={mindateQuery}
-        searchData={searchData}
-        searchPage
-      />
-    </div>
   </div>
 );
 
@@ -89,44 +84,53 @@ export default compose(
   queryControl('retry'),
   queryControl('busErr'),
   queryControl(),
-  mapProps(({ mindateQuery, ...rest }): Props => ({
-    defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
-    mindateQuery: !mindateQuery || mindateQuery === '' ?
-      moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
+  mapProps(
+    ({ mindateQuery, ...rest }): Props => ({
+      defaultDate: moment()
+        .add(-1, 'weeks')
+        .format(DATE_FORMATS.URL_FORMAT),
+      mindateQuery:
+        !mindateQuery || mindateQuery === ''
+          ? moment()
+              .add(-1, 'weeks')
+              .format(DATE_FORMATS.URL_FORMAT)
+          : mindateQuery,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({
       mindateQuery,
-    ...rest,
-  })),
-  mapProps(({
-    mindateQuery,
-    maxdateQuery,
-    filterQuery,
-    idsQuery,
-    nameQuery,
-    errorQuery,
-    retryQuery,
-    busErrQuery,
-    ...rest,
-  }): Props => ({
-    searchData: {
-      minDate: mindateQuery,
-      maxDate: maxdateQuery,
-      ids: idsQuery,
-      name: nameQuery,
-      error: errorQuery,
-      filter: filterQuery,
-      retry: retryQuery,
-      busErr: busErrQuery,
-    },
-    mindateQuery,
-    maxdateQuery,
-    filterQuery,
-    idsQuery,
-    nameQuery,
-    errorQuery,
-    retryQuery,
-    busErrQuery,
-    ...rest,
-  })),
+      maxdateQuery,
+      filterQuery,
+      idsQuery,
+      nameQuery,
+      errorQuery,
+      retryQuery,
+      busErrQuery,
+      ...rest
+    }): Props => ({
+      searchData: {
+        minDate: mindateQuery,
+        maxDate: maxdateQuery,
+        ids: idsQuery,
+        name: nameQuery,
+        error: errorQuery,
+        filter: filterQuery,
+        retry: retryQuery,
+        busErr: busErrQuery,
+      },
+      mindateQuery,
+      maxdateQuery,
+      filterQuery,
+      idsQuery,
+      nameQuery,
+      errorQuery,
+      retryQuery,
+      busErrQuery,
+      ...rest,
+    })
+  ),
   pure([
     'mindateQuery',
     'maxdateQuery',

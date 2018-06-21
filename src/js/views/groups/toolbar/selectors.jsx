@@ -14,6 +14,7 @@ type Props = {
   selectAll: Function,
   selectNone: Function,
   selectInvert: Function,
+  selectedCount: number,
 };
 
 const ToolbarSelector: Function = ({
@@ -21,30 +22,21 @@ const ToolbarSelector: Function = ({
   selectAll,
   selectNone,
   selectInvert,
+  selectedCount,
 }: Props): React.Element<any> => (
-  <Dropdown
-    id="selection"
-    className="pull-left"
-  >
+  <Dropdown id="selection" className="pull-left">
     <Control>
       <Checkbox
-        action={selected === 'none' || selected === 'some' ? selectAll : selectNone}
+        action={
+          selected === 'none' || selected === 'some' ? selectAll : selectNone
+        }
         checked={CHECKBOX_STATES[selected]}
       />
-      {' '}
+      {selectedCount || ''}
     </Control>
-    <Item
-      action={selectAll}
-      title="All"
-    />
-    <Item
-      action={selectNone}
-      title="None"
-    />
-    <Item
-      action={selectInvert}
-      title="Invert"
-    />
+    <Item action={selectAll} title="All" />
+    <Item action={selectNone} title="None" />
+    <Item action={selectInvert} title="Invert" />
   </Dropdown>
 );
 
@@ -57,5 +49,5 @@ export default compose(
       selectInvert: actions.groups.selectInvert,
     }
   ),
-  pure(['selected'])
+  pure(['selected', 'selectedCount'])
 )(ToolbarSelector);

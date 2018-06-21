@@ -4,10 +4,16 @@ import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
 import moment from 'moment';
+import {
+  ControlGroup,
+  InputGroup,
+  ButtonGroup,
+  Button,
+  Intent,
+} from '@blueprintjs/core';
 
 import Toolbar from '../../../components/toolbar';
 import Datepicker from '../../../components/datepicker';
-import { Controls, Control as Button } from '../../../components/controls';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
@@ -80,7 +86,9 @@ export default class SearchToolbar extends Component {
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    if (omit(prevState, ['showAdvanced']) !== omit(this.state, ['showAdvanced'])) {
+    if (
+      omit(prevState, ['showAdvanced']) !== omit(this.state, ['showAdvanced'])
+    ) {
       this._delayedSearch(omit(this.state, ['showAdvanced']));
     }
   }
@@ -105,10 +113,7 @@ export default class SearchToolbar extends Component {
 
   handleHistoryClick: Function = (): void => {
     this.props.openModal(
-      <HistoryModal
-        type="orderSearch"
-        onClose={this.props.closeModal}
-      />
+      <HistoryModal type="orderSearch" onClose={this.props.closeModal} />
     );
   };
 
@@ -116,7 +121,7 @@ export default class SearchToolbar extends Component {
     this.props.saveSearch(
       'orderSearch',
       this.props.allQuery,
-      this.props.username,
+      this.props.username
     );
   };
 
@@ -159,59 +164,46 @@ export default class SearchToolbar extends Component {
 
   render() {
     return (
-      <Toolbar>
+      <Toolbar mb>
         <div className="pull-left">
-          <div className="form-group search-toolbar">
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Instance ID..."
-                onChange={this.handleIdsChange}
-                value={this.state.ids || ''}
-                id="instance-id"
-              />
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Keyname"
-                onChange={this.handleKeynameChange}
-                value={this.state.keyname || ''}
-                id="keyname"
-              />
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Keyvalue"
-                onChange={this.handleKeyvalueChange}
-                value={this.state.keyvalue || ''}
-                id="keyvalue"
-              />
-            </div>
-            <div className="pull-left">
-              <Datepicker
-                placeholder="Min date..."
-                date={this.state.mindate}
-                onApplyDate={this.handleMinDateChange}
-                applyOnBlur
-                id="mindate"
-              />
-            </div>
+          <ControlGroup>
+            <InputGroup
+              type="text"
+              placeholder="Instance ID..."
+              onChange={this.handleIdsChange}
+              value={this.state.ids || ''}
+              id="instance-id"
+            />
+            <InputGroup
+              type="text"
+              placeholder="Keyname"
+              onChange={this.handleKeynameChange}
+              value={this.state.keyname || ''}
+              id="keyname"
+            />
+            <InputGroup
+              type="text"
+              placeholder="Keyvalue"
+              onChange={this.handleKeyvalueChange}
+              value={this.state.keyvalue || ''}
+              id="keyvalue"
+            />
+            <Datepicker
+              placeholder="Min date..."
+              date={this.state.mindate}
+              onApplyDate={this.handleMinDateChange}
+              applyOnBlur
+              id="mindate"
+            />
             {this.state.showAdvanced && (
-              <div className="pull-left">
-                <Datepicker
-                  placeholder="Max date..."
-                  date={this.state.maxdate}
-                  onApplyDate={this.handleMaxDateChange}
-                  applyOnBlur
-                  noButtons
-                  id="maxdate"
-                />
-              </div>
+              <Datepicker
+                placeholder="Max date..."
+                date={this.state.maxdate}
+                onApplyDate={this.handleMaxDateChange}
+                applyOnBlur
+                noButtons
+                id="maxdate"
+              />
             )}
             {this.state.showAdvanced && (
               <Dropdown
@@ -219,51 +211,43 @@ export default class SearchToolbar extends Component {
                 multi
                 def="All"
                 onSubmit={this.handleFilterChange}
-                selected={!this.state.filter || this.state.filter === '' ?
-                  ['All'] :
-                  this.state.filter.split(',')
+                selected={
+                  !this.state.filter || this.state.filter === ''
+                    ? ['All']
+                    : this.state.filter.split(',')
                 }
               >
                 <Control />
                 <Item title="All" />
-                {ORDER_STATES.map((o, k) => (
-                  <Item key={k} title={o.title} />
-                ))}
+                {ORDER_STATES.map((o, k) => <Item key={k} title={o.title} />)}
               </Dropdown>
             )}
-          </div>
+          </ControlGroup>
         </div>
         <div className="pull-right">
-          <Controls noControls grouped>
+          <ButtonGroup>
             <Button
-              label="Save search"
-              icon="save"
-              btnStyle="success"
-              big
-              action={this.handleSaveClick}
+              text="Save search"
+              iconName="floppy-disk"
+              onClick={this.handleSaveClick}
             />
             <Button
-              label="Advanced search"
-              icon={this.state.showAdvanced ? 'check-square-o' : 'square-o'}
-              btnStyle={this.state.showAdvanced ? 'success' : 'default'}
-              big
-              action={this.handleAdvancedClick}
+              text="Advanced search"
+              iconName={this.state.showAdvanced ? 'selection' : 'circle'}
+              intent={this.state.showAdvanced && Intent.PRIMARY}
+              onClick={this.handleAdvancedClick}
             />
             <Button
-              label="Show history"
-              icon="history"
-              btnStyle="default"
-              big
-              action={this.handleHistoryClick}
+              text="Show history"
+              iconName="history"
+              onClick={this.handleHistoryClick}
             />
             <Button
-              label="Clear"
-              icon="remove"
-              btnStyle="default"
-              big
-              action={this.handleClearClick}
+              text="Clear"
+              iconName="cross"
+              onClick={this.handleClearClick}
             />
-          </Controls>
+          </ButtonGroup>
         </div>
       </Toolbar>
     );

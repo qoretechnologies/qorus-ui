@@ -6,7 +6,8 @@ import actions from 'store/api/actions';
 
 import Header from './header';
 import Loader from 'components/loader';
-import Nav, { NavLink } from 'components/navlink';
+import Box from 'components/box';
+import withTabs from '../../hocomponents/withTabs';
 
 import StepsView from './steps';
 import DataView from './data';
@@ -18,33 +19,32 @@ import HierarchyView from './hierarchy';
 import AuditView from './audit';
 import CodeView from './code';
 import DiagramView from './diagram';
+import Tabs, { Pane } from '../../components/tabs';
 
-const orderSelector = (state, props) => (
-  state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  ))
-);
+const orderSelector = (state, props) =>
+  state.api.orders.data.find(
+    w => parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
+  );
 
 const workflowSelector = (state, props) => {
-  const workflow = state.api.orders.data.find(w => (
-    parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
-  )) || null;
+  const workflow =
+    state.api.orders.data.find(
+      w => parseInt(props.params.id, 10) === parseInt(w.workflow_instanceid, 10)
+    ) || null;
 
-  return workflow ? state.api.workflows.data.find(w => (
-    parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
-  )) : null;
+  return workflow
+    ? state.api.workflows.data.find(
+        w => parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
+      )
+    : null;
 };
 
 const userSelector = state => state.api.currentUser.data;
 const settingsSelector = (state: Object): Object => state.ui.settings;
 
 const selector = createSelector(
-  [
-    orderSelector,
-    userSelector,
-    workflowSelector,
-    settingsSelector,
-  ], (order, user, workflow, settings) => ({
+  [orderSelector, userSelector, workflowSelector, settingsSelector],
+  (order, user, workflow, settings) => ({
     order,
     user,
     workflow,
@@ -53,6 +53,7 @@ const selector = createSelector(
 );
 
 @connect(selector)
+@withTabs('diagram')
 export default class Order extends Component {
   static propTypes = {
     order: PropTypes.object,
@@ -64,6 +65,8 @@ export default class Order extends Component {
     children: PropTypes.node,
     user: PropTypes.object,
     isTablet: PropTypes.bool,
+    tabQuery: PropTypes.string,
+    handleTabChange: PropTypes.func,
   };
 
   static childContextTypes = {
@@ -92,32 +95,22 @@ export default class Order extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(
-      actions.orders.unsync()
-    );
+    this.props.dispatch(actions.orders.unsync());
 
-    this.props.dispatch(
-      actions.workflows.unsync()
-    );
+    this.props.dispatch(actions.workflows.unsync());
   }
 
   fetch: Function = async (id: number): void => {
-    this.props.dispatch(
-      actions.orders.unsync()
-    );
+    this.props.dispatch(actions.orders.unsync());
 
-    this.props.dispatch(
-      actions.workflows.unsync()
-    );
+    this.props.dispatch(actions.workflows.unsync());
 
-    const order = await this.props.dispatch(
-      actions.orders.fetch({}, id)
-    );
+    const order = await this.props.dispatch(actions.orders.fetch({}, id));
 
     this.props.dispatch(
       actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
     );
-  }
+  };
 
   render() {
     if (!this.props.workflow) {
@@ -132,42 +125,115 @@ export default class Order extends Component {
           linkDate={this.props.params.date}
           username={this.props.user.username}
         />
-        <div className="row">
-          <div className="col-xs-12">
-            <Nav path={this.props.location.pathname}>
-              <NavLink to="./diagram">Diagram</NavLink>
-              <NavLink to="./steps">Steps</NavLink>
-              <NavLink to="./data">Data</NavLink>
-              <NavLink to="./errors">Errors</NavLink>
-              <NavLink to="./hierarchy">Hierarchy</NavLink>
-              <NavLink to="./audit">Audit</NavLink>
-              <NavLink to="./info">Info</NavLink>
-              <NavLink to="./notes">Notes</NavLink>
-              <NavLink to="./log">Log</NavLink>
-              <NavLink to="./code">Code</NavLink>
-            </Nav>
-          </div>
-        </div>
-        <div className="row tab-pane">
-          <div className="col-xs-12">
-            {React.cloneElement(
-              this.props.children,
-              {
-                createElement: (Comp, props) => (
-                  <Comp
-                    {...{
-                      ...props,
-                      order: this.props.order,
-                      workflow: this.props.workflow,
-                      dispatch: this.props.dispatch,
-                      isTablet: this.props.isTablet,
-                    }}
-                  />
-                ),
-              }
-            )}
-          </div>
-        </div>
+        <Tabs
+          active={this.props.tabQuery}
+          id="orderData"
+          onChange={this.props.handleTabChange}
+          noContainer
+          boxed
+        >
+          <Pane name="Diagram">
+            <DiagramView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Steps">
+            <StepsView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Data">
+            <DataView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Errors">
+            <ErrorsView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Hierarchy">
+            <HierarchyView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Audit">
+            <AuditView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Info">
+            <InfoView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Notes">
+            <NotesView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+                params: this.props.params,
+              }}
+            />
+          </Pane>
+          <Pane name="Log">
+            <LogView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+          <Pane name="Code">
+            <CodeView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </Pane>
+        </Tabs>
       </div>
     );
   }

@@ -6,6 +6,7 @@ import ErrorsTable from './table';
 import ErrorsToolbar from './toolbar';
 import CSVModal from '../../errors/csv';
 import { pureRender } from 'components/utils';
+import PaneItem from '../../../../components/pane_item';
 
 import { generateCSV, sortTable } from 'helpers/table';
 
@@ -13,10 +14,6 @@ import { generateCSV, sortTable } from 'helpers/table';
 export default class DiagramErrors extends Component {
   static propTypes = {
     data: PropTypes.array,
-    paneSize: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
   };
 
   static contextTypes = {
@@ -40,9 +37,9 @@ export default class DiagramErrors extends Component {
   }
 
   filter(errors, severity) {
-    const data = errors.filter(d => (
-      includes(severity, d.severity) || includes(severity, 'ALL')
-    ));
+    const data = errors.filter(
+      d => includes(severity, d.severity) || includes(severity, 'ALL')
+    );
 
     this.setState({
       data,
@@ -50,7 +47,7 @@ export default class DiagramErrors extends Component {
     });
   }
 
-  handleDropdownSubmit = (severity) => {
+  handleDropdownSubmit = severity => {
     this.filter(this.props.data, severity);
   };
 
@@ -65,13 +62,16 @@ export default class DiagramErrors extends Component {
   };
 
   handleCopyLastClick = () => {
-    const sorted = sortTable(this.props.data, { sortBy: 'created', sortByKey: { direction: -1 } });
+    const sorted = sortTable(this.props.data, {
+      sortBy: 'created',
+      sortByKey: { direction: -1 },
+    });
     const data = this.stringifyError(sorted[0]);
 
     this.openCSVModal(data);
   };
 
-  openCSVModal = (data) => {
+  openCSVModal = data => {
     this._modal = (
       <CSVModal
         onMount={this.context.selectModalText}
@@ -87,13 +87,15 @@ export default class DiagramErrors extends Component {
     this.context.closeModal(this._modal);
   };
 
-  stringifyError: Function = (data: Object): string => Object.keys(data).reduce((str, key) => (
-    `${str}${key}: ${data[key]}\r\n`
-  ), '');
+  stringifyError: Function = (data: Object): string =>
+    Object.keys(data).reduce(
+      (str, key) => `${str}${key}: ${data[key]}\r\n`,
+      ''
+    );
 
   render() {
     return (
-      <div className="col-xs-12 error-pane-inner">
+      <PaneItem title="Errors">
         <ErrorsToolbar
           data={this.props.data}
           showDetail={this.state.showDetail}
@@ -103,17 +105,12 @@ export default class DiagramErrors extends Component {
           onSubmit={this.handleDropdownSubmit}
           onCopyErrorClick={this.handleCopyLastClick}
         />
-        <div
-          className="error-pane-table"
-          style={{ height: parseInt(this.props.paneSize, 10) - 70 }}
-        >
-          <ErrorsTable
-            data={this.state.data}
-            expand={this.state.showDetail}
-            onModalMount={this.context.selectModalText}
-          />
-        </div>
-      </div>
+        <ErrorsTable
+          data={this.state.data}
+          expand={this.state.showDetail}
+          onModalMount={this.context.selectModalText}
+        />
+      </PaneItem>
     );
   }
 }

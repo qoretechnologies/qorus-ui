@@ -1,30 +1,46 @@
 // @flow
 import React from 'react';
+import capitalize from 'lodash/capitalize';
 
-import Nav, { NavLink } from '../../components/navlink';
 import Orders from './orders';
 import Errors from './errors';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Tabs, { Pane } from '../../components/tabs';
+import Box from '../../components/box';
+import withTabs from '../../hocomponents/withTabs';
 
 type Props = {
   location: Object,
-  children: any,
+  tabQuery: string,
+  handleTabChange: Function,
 };
 
-const Search: Function = ({ location, children }: Props): React.Element<any> => (
+const Search: Function = ({
+  location,
+  tabQuery,
+  handleTabChange,
+}: Props): React.Element<any> => (
   <div>
-    <Nav path={location.pathname}>
-      <NavLink to="./orders">Orders</NavLink>
-      <NavLink to="./errors">Errors</NavLink>
-    </Nav>
-    <div className="tab-content">
-      {React.Children.map(children, (child: React.Element<any>) => (
-        React.cloneElement(child, { location })
-      ))}
-    </div>
+    <Breadcrumbs>
+      <Crumb>Search</Crumb>
+      <Crumb>{capitalize(tabQuery)}</Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs
+        active={tabQuery}
+        id="search"
+        onChange={handleTabChange}
+        noContainer
+      >
+        <Pane name="Orders">
+          <Orders location={location} />
+        </Pane>
+        <Pane name="Errors">
+          <Errors location={location} />
+        </Pane>
+      </Tabs>
+    </Box>
   </div>
 );
 
-Search.Orders = Orders;
-Search.Errors = Errors;
-
-export default Search;
+export default withTabs('orders')(Search);

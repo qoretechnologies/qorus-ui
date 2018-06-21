@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button } from '@blueprintjs/core';
 
-import { Control as Button } from '../../../../../components/controls';
 import actions from '../../../../../store/api/actions';
 import Dropdown, {
   Item as DropdownItem,
@@ -23,7 +23,7 @@ type Props = {
   handleCancelClick: Function,
   handleUncancelClick: Function,
   isTablet: boolean,
-}
+};
 
 const ToolbarActions: Function = ({
   handleRetryClick,
@@ -32,19 +32,12 @@ const ToolbarActions: Function = ({
   handleCancelClick,
   handleUncancelClick,
   isTablet,
-}: Props): ?React.Element<any> => (
-  isTablet ?
-    <div
-      className="btn-group pull-left"
-      id="selection-actions"
-    >
+}: Props): ?React.Element<any> =>
+  isTablet ? (
+    <ButtonGroup>
       <Dropdown id="hidden">
         <DropdownControl> With selected: </DropdownControl>
-        <DropdownItem
-          title="Retry"
-          icon="refresh"
-          action={handleRetryClick}
-        />
+        <DropdownItem title="Retry" icon="refresh" action={handleRetryClick} />
         <DropdownItem
           title="Block"
           icon="minus-circle"
@@ -66,48 +59,26 @@ const ToolbarActions: Function = ({
           action={handleUncancelClick}
         />
       </Dropdown>
-    </div> :
-    <div
-      className="btn-group pull-left"
-      id="selection-actions"
-    >
+    </ButtonGroup>
+  ) : (
+    <ButtonGroup>
+      <Button text="Retry" iconName="refresh" onClick={handleRetryClick} />
+      <Button text="Block" iconName="disable" onClick={handleBlockClick} />
       <Button
-        label="Retry"
-        icon="refresh"
-        big
-        btnStyle="default"
-        onClick={handleRetryClick}
-      />
-      <Button
-        label="Block"
-        icon="minus-circle"
-        big
-        btnStyle="default"
-        onClick={handleBlockClick}
-      />
-      <Button
-        label="Unblock"
-        icon="check-circle"
+        text="Unblock"
+        iconName="endorsed"
         big
         btnStyle="default"
         onClick={handleUnblockClick}
       />
+      <Button text="Cancel" iconName="remove" onClick={handleCancelClick} />
       <Button
-        label="Cancel"
-        icon="times-circle"
-        big
-        btnStyle="default"
-        onClick={handleCancelClick}
-      />
-      <Button
-        label="Uncancel"
-        icon="refresh"
-        big
-        btnStyle="default"
+        text="Uncancel"
+        iconName="refresh"
         onClick={handleUncancelClick}
       />
-    </div>
-);
+    </ButtonGroup>
+  );
 
 export default compose(
   connect(
@@ -122,9 +93,7 @@ export default compose(
       selectedIds,
       orderAction,
       unselectAll,
-    }: Props): Function => (
-      actionType: string
-    ): void => {
+    }: Props): Function => (actionType: string): void => {
       orderAction(actionType, selectedIds);
       unselectAll();
     },
@@ -136,18 +105,19 @@ export default compose(
     handleBlockClick: ({ handleBatchAction }: Props): Function => (): void => {
       handleBatchAction('block');
     },
-    handleUnblockClick: ({ handleBatchAction }: Props): Function => (): void => {
+    handleUnblockClick: ({
+      handleBatchAction,
+    }: Props): Function => (): void => {
       handleBatchAction('unblock');
     },
     handleCancelClick: ({ handleBatchAction }: Props): Function => (): void => {
       handleBatchAction('cancel');
     },
-    handleUncancelClick: ({ handleBatchAction }: Props): Function => (): void => {
+    handleUncancelClick: ({
+      handleBatchAction,
+    }: Props): Function => (): void => {
       handleBatchAction('uncancel');
     },
   }),
-  pure([
-    'selectedIds',
-    'isTablet',
-  ]),
+  pure(['selectedIds', 'isTablet'])
 )(ToolbarActions);

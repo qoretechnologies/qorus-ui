@@ -20,7 +20,8 @@ type Props = {
   label: string,
   error: string,
   retry?: number,
-}
+  first?: boolean,
+};
 
 const TableRow: Function = ({
   id,
@@ -30,14 +31,11 @@ const TableRow: Function = ({
   workflowstatus,
   label,
   retry,
+  first,
 }: Props): React.Element<any> => (
-  <Tr>
+  <Tr first={first}>
     <Td className="medium">
-      <Link
-        to={`/order/${id}/24h`}
-        className="resource-name-link"
-        title={name}
-      >
+      <Link to={`/order/${id}/24h`} className="resource-name-link" title={name}>
         {id}
       </Link>
     </Td>
@@ -57,12 +55,14 @@ const TableRow: Function = ({
 );
 
 export default compose(
-  mapProps(({ workflowstatus, ...rest }): Props => ({
-    label: ALL_ORDER_STATES.find((state: Object): boolean => (
-      state.name === workflowstatus
-    )).label,
-    workflowstatus,
-    ...rest,
-  })),
+  mapProps(
+    ({ workflowstatus, ...rest }): Props => ({
+      label: ALL_ORDER_STATES.find(
+        (state: Object): boolean => state.name === workflowstatus
+      ).label,
+      workflowstatus,
+      ...rest,
+    })
+  ),
   pure(['workflowstatus'])
 )(TableRow);

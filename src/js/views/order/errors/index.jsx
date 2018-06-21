@@ -2,10 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import { Button, ButtonGroup } from '@blueprintjs/core';
 
 import ErrorsTable from './table';
-import { Control as Button } from 'components/controls';
-import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
+import Box from 'components/box';
+import Dropdown, {
+  Control as DropdownToggle,
+  Item as DropdownItem,
+} from 'components/dropdown';
 import CSVModal from './csv';
 import { sortTable, generateCSV } from 'helpers/table';
 import checkNoData from '../../../hocomponents/check-no-data';
@@ -19,23 +23,21 @@ const transformErrors = order => {
     const copy = e;
     copy.id = index;
     copy.error_type = e.business_error ? 'Business' : 'Other';
-    copy.step_name = order.StepInstances.find(s => s.stepid === e.stepid).stepname;
+    copy.step_name = order.StepInstances.find(
+      s => s.stepid === e.stepid
+    ).stepname;
 
     return copy;
   });
 };
 
-const errorSelector = createSelector(
-  [
-    orderSelector,
-  ], (order) => transformErrors(order)
+const errorSelector = createSelector([orderSelector], order =>
+  transformErrors(order)
 );
 
 const selector = createSelector(
-  [
-    errorSelector,
-    orderSelector,
-  ], (errors, order) => ({
+  [errorSelector, orderSelector],
+  (errors, order) => ({
     errors,
     steps: order.StepInstances,
     order,
@@ -44,7 +46,7 @@ const selector = createSelector(
 
 @compose(
   connect(selector),
-  checkNoData((props) => props.errors && props.errors.length)
+  checkNoData(props => props.errors && props.errors.length)
 )
 export default class ErrorsView extends Component {
   static propTypes = {
@@ -106,69 +108,29 @@ export default class ErrorsView extends Component {
       errors = errors.slice(0, this.state.limit);
     }
 
-    return (
-      <ErrorsTable
-        collection={errors}
-        steps={this.props.steps}
-      />
-    );
+    return <ErrorsTable collection={errors} steps={this.props.steps} />;
   }
 
   render() {
     return (
-      <div>
-        <div className="col-xs-3 pull-right">
-          <div className="input-group">
-            <input
-              className="form-control"
-              readOnly
-              value="Showing:"
-            />
-            <div className="input-group-btn">
-              <Dropdown id="show">
-                <DropdownToggle>
-                  {this.state.limit}
-                </DropdownToggle>
-                <DropdownItem
-                  title="10"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="25"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="50"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="100"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="500"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="1000"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="All"
-                  action={this.handleItemClick}
-                />
-              </Dropdown>
-              <Button
-                label="CSV"
-                big
-                btnStyle="default"
-                action={this.handleCSVClick}
-              />
-            </div>
-          </div>
+      <Box>
+        <div className="pull-right">
+          <Dropdown id="show">
+            <DropdownToggle>Showing: {this.state.limit}</DropdownToggle>
+            <DropdownItem title="10" action={this.handleItemClick} />
+            <DropdownItem title="25" action={this.handleItemClick} />
+            <DropdownItem title="50" action={this.handleItemClick} />
+            <DropdownItem title="100" action={this.handleItemClick} />
+            <DropdownItem title="500" action={this.handleItemClick} />
+            <DropdownItem title="1000" action={this.handleItemClick} />
+            <DropdownItem title="All" action={this.handleItemClick} />
+          </Dropdown>{' '}
+          <ButtonGroup>
+            <Button text="CSV" onClick={this.handleCSVClick} />
+          </ButtonGroup>
         </div>
-        { this.renderTable() }
-      </div>
+        {this.renderTable()}
+      </Box>
     );
   }
 }

@@ -1,26 +1,27 @@
 import React from 'react';
 
 import Code from 'components/code';
+import Box from 'components/box';
 
-const LibraryView = ({ workflow, location }: { workflow: Object, location: Object }) => {
+const LibraryView = ({
+  workflow,
+  location,
+}: {
+  workflow: Object,
+  location: Object,
+}) => {
   const getHeight: Function = (): number => {
-    const navbar = document.querySelector('.navbar').clientHeight;
-    const header = document.querySelector('.order-header').clientHeight;
-    const tabs = document.querySelector('#content-wrapper .nav-tabs').clientHeight;
-    const footer = document.querySelector('footer').clientHeight;
-    const top = navbar + header + tabs + footer + 40;
+    const { top } = document
+      .querySelector('.code-list')
+      .getBoundingClientRect();
 
-    return window.innerHeight - top;
+    return window.innerHeight - top - 60;
   };
 
   return (
-    <div className="workflow-detail-tabs">
-      <Code
-        data={workflow.lib}
-        heightUpdater={getHeight}
-        location={location}
-      />
-    </div>
+    <Box>
+      <Code data={workflow.lib} heightUpdater={getHeight} location={location} />
+    </Box>
   );
 };
 

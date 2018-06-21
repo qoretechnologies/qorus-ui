@@ -5,22 +5,52 @@ export const ORDER_STATES = [
   { name: 'READY', short: 'Y', label: 'ready', title: 'Ready' },
   { name: 'SCHEDULED', short: 'S', label: 'scheduled', title: 'Scheduled' },
   { name: 'INCOMPLETE', short: 'N', label: 'incomplete', title: 'Incomplete' },
-  { name: 'EVENT-WAITING', short: 'V', label: 'waiting', title: 'Event-Waiting' },
-  { name: 'ASYNC-WAITING', short: 'A', label: 'waiting', title: 'Async-Waiting' },
+  {
+    name: 'EVENT-WAITING',
+    short: 'V',
+    label: 'waiting',
+    title: 'Event-Waiting',
+  },
+  {
+    name: 'ASYNC-WAITING',
+    short: 'A',
+    label: 'waiting',
+    title: 'Async-Waiting',
+  },
   { name: 'WAITING', short: 'W', label: 'waiting', title: 'Waiting' },
   { name: 'RETRY', short: 'R', label: 'retry', title: 'Retry' },
   { name: 'ERROR', short: 'E', label: 'error', title: 'Error' },
-  { name: 'IN-PROGRESS', short: 'I', label: 'in-progress', title: 'In-Progress' },
+  {
+    name: 'IN-PROGRESS',
+    short: 'I',
+    label: 'in-progress',
+    title: 'In-Progress',
+  },
   { name: 'CANCELED', short: 'X', label: 'canceled', title: 'Canceled' },
   { name: 'BLOCKED', short: 'B', label: 'blocked', title: 'Blocked' },
 ];
 
-export const ORDER_STATES_ARRAY = ORDER_STATES.map((order) => order.name);
+export const ORDER_STATES_ARRAY = ORDER_STATES.map(order => order.name);
 
 export const GROUPED_ORDER_STATES = [
-  { name: 'READY/SCHD', short: 'READY/SCHD', label: 'ready', title: 'Ready / Scheduled' },
-  { name: 'RUN/WAIT', short: 'RUN/WAIT', label: 'waiting', title: 'Run / Wait' },
-  { name: 'ERR/BLOCK', short: 'ERR/BLOCK', label: 'error', title: 'Error / Blocked' },
+  {
+    name: 'READY/SCHD',
+    short: 'READY/SCHD',
+    label: 'ready',
+    title: 'Ready / Scheduled',
+  },
+  {
+    name: 'RUN/WAIT',
+    short: 'RUN/WAIT',
+    label: 'waiting',
+    title: 'Run / Wait',
+  },
+  {
+    name: 'ERR/BLOCK',
+    short: 'ERR/BLOCK',
+    label: 'error',
+    title: 'Error / Blocked',
+  },
   { name: 'CANCELED', short: 'CANCELED', label: 'canceled', title: 'Canceled' },
   { name: 'COMPLETE', short: 'COMPLETE', label: 'complete', title: 'Complete' },
 ];
@@ -45,12 +75,12 @@ export const ALL_ORDER_STATES = union(ORDER_STATES, CUSTOM_ORDER_STATES);
 
 export const ORDER_ACTIONS = {
   ALL: [
-    { name: 'Block', action: 'block', icon: 'minus-circle', style: 'black' },
-    { name: 'Unblock', action: 'unblock', icon: 'check-circle', style: 'gray' },
-    { name: 'Cancel', action: 'cancel', icon: 'times-circle', style: 'danger' },
-    { name: 'Uncancel', action: 'uncancel', icon: 'times-circle', style: 'warning' },
+    { name: 'Block', action: 'block', icon: 'disable', style: 'black' },
+    { name: 'Unblock', action: 'unblock', icon: 'endorsed', style: 'gray' },
+    { name: 'Cancel', action: 'cancel', icon: 'remove', style: 'danger' },
+    { name: 'Uncancel', action: 'uncancel', icon: 'refresh', style: 'warning' },
     { name: 'Retry', action: 'retry', icon: 'refresh', style: 'success' },
-    { name: 'Schedule', action: 'schedule', icon: 'clock-o', style: 'info' },
+    { name: 'Schedule', action: 'schedule', icon: 'time', style: 'info' },
   ],
   BLOCKED: ['unblock'],
   CANCELED: ['uncancel'],
@@ -103,10 +133,7 @@ export const DOUGH_LABELS = {
 };
 
 export const ORDER_GROUPS = {
-  'READY/SCHD': [
-    'READY',
-    'SCHEDULED',
-  ],
+  'READY/SCHD': ['READY', 'SCHEDULED'],
   'RUN/WAIT': [
     'IN-PROGRESS',
     'ASYNC-WAITING',
@@ -115,19 +142,13 @@ export const ORDER_GROUPS = {
     'RETRY',
     'INCOMPLETE',
   ],
-  'ERR/BLOCK': [
-    'ERROR',
-    'BLOCKED',
-  ],
+  'ERR/BLOCK': ['ERROR', 'BLOCKED'],
   CANCELED: ['CANCELED'],
   COMPLETE: ['COMPLETE'],
 };
 
 export const ORDER_GROUPS_COMPACT = {
-  'R/S': [
-    'READY',
-    'SCHEDULED',
-  ],
+  'R/S': ['READY', 'SCHEDULED'],
   'R/W': [
     'IN-PROGRESS',
     'ASYNC-WAITING',
@@ -136,10 +157,7 @@ export const ORDER_GROUPS_COMPACT = {
     'RETRY',
     'INCOMPLETE',
   ],
-  'E/B': [
-    'ERROR',
-    'BLOCKED',
-  ],
+  'E/B': ['ERROR', 'BLOCKED'],
   CNC: ['CANCELED'],
   CMP: ['COMPLETE'],
 };

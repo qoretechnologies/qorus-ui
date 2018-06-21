@@ -27,32 +27,34 @@ const DiagramErrorsTable: Function = ({
   sortData,
   onModalMount,
 }: Props): React.Element<Table> => (
-  <Table
-    bordered
-    condensed
-  >
+  <Table hover condensed striped>
     <Thead>
-      <Tr
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
-        <Th name="severity" className="narrow">-</Th>
+      <Tr sortData={sortData} onSortChange={onSortChange}>
+        <Th name="severity" className="narrow">
+          -
+        </Th>
         <Th name="severity">Severity</Th>
-        <Th name="error" className="name">Error</Th>
+        <Th name="error" className="name">
+          Error
+        </Th>
         <Th name="created">Created</Th>
-        <Th name="error_desc" className="text">Description</Th>
+        <Th name="error_desc" className="text">
+          Description
+        </Th>
         <Th name="business_error">Bus.Err.</Th>
       </Tr>
     </Thead>
-    {data.map((error: Object, key: number): React.Element<ErrorsRow> => (
-      <ErrorsRow
-        key={`${key}_${error.error_instanceid}`}
-        expand={expand}
-        data={error}
-        onModalMount={onModalMount}
-        {...error}
-      />
-    ))}
+    {data.map(
+      (error: Object, key: number): React.Element<ErrorsRow> => (
+        <ErrorsRow
+          key={`${key}_${error.error_instanceid}`}
+          expand={expand}
+          data={error}
+          onModalMount={onModalMount}
+          {...error}
+        />
+      )
+    )}
   </Table>
 );
 
@@ -65,24 +67,26 @@ export default compose(
       direction: -1,
     },
   }),
-  mapProps(({ sortData, setSortData, data, ...rest }: Props): Props => ({
-    onSortChange: ({ sortBy }: Object): Function => setSortData((currentSort: Object): Object => ({
-      sortBy,
-      sortByKey: {
-        ignoreCase: true,
-        direction: currentSort.sortBy === sortBy ?
-          currentSort.sortByKey.direction * -1 :
-          currentSort.sortByKey.direction,
-      },
-    })),
-    data: sortTable(data, sortData),
-    sortData,
-    setSortData,
-    ...rest,
-  })),
-  pure([
-    'data',
-    'sortData',
-    'expand',
-  ])
+  mapProps(
+    ({ sortData, setSortData, data, ...rest }: Props): Props => ({
+      onSortChange: ({ sortBy }: Object): Function =>
+        setSortData(
+          (currentSort: Object): Object => ({
+            sortBy,
+            sortByKey: {
+              ignoreCase: true,
+              direction:
+                currentSort.sortBy === sortBy
+                  ? currentSort.sortByKey.direction * -1
+                  : currentSort.sortByKey.direction,
+            },
+          })
+        ),
+      data: sortTable(data, sortData),
+      sortData,
+      setSortData,
+      ...rest,
+    })
+  ),
+  pure(['data', 'sortData', 'expand'])
 )(DiagramErrorsTable);

@@ -32,8 +32,8 @@ export default compose(
     }
   ),
   withHandlers({
-    handleEditClick: ({ fetchYamlData, params }): Function => (): void => {
-      fetchYamlData('Static', params.id);
+    handleEditClick: ({ fetchYamlData, order }): Function => (): void => {
+      fetchYamlData('Static', order.id);
     },
   }),
   pure(['order'])

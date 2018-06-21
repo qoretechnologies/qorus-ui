@@ -9,7 +9,12 @@ import Autocomponent from 'components/autocomponent';
 
 import { pureRender } from 'components/utils';
 
-import { getStatusLabel, groupInstances, canSkip } from '../../../helpers/orders';
+import {
+  getStatusLabel,
+  groupInstances,
+  canSkip,
+} from '../../../helpers/orders';
+import Toolbar from '../../../components/toolbar';
 
 @pureRender
 export default class StepDetailTable extends Component {
@@ -30,8 +35,10 @@ export default class StepDetailTable extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.step !== nextProps.step ||
-      this.props.instances !== nextProps.instances) {
+    if (
+      this.props.step !== nextProps.step ||
+      this.props.instances !== nextProps.instances
+    ) {
       this.setup(nextProps);
     }
   }
@@ -74,7 +81,7 @@ export default class StepDetailTable extends Component {
     this.context.closeModal(this._modal);
   };
 
-  handleDropdownItemClick = (ind) => () => {
+  handleDropdownItemClick = ind => () => {
     this.setState({
       currentStep: this.state.steps.find(s => s.ind === ind),
     });
@@ -94,13 +101,11 @@ export default class StepDetailTable extends Component {
     if (this.state.steps.length === 1) return undefined;
 
     return (
-      <Dropdown
-        id="steps"
-      >
+      <Dropdown id="steps">
         <Control>
           {`${this.state.currentStep.ind} - ${this.state.currentStep.stepname}`}
         </Control>
-        { this.renderDropdownItems() }
+        {this.renderDropdownItems()}
       </Dropdown>
     );
   }
@@ -110,17 +115,16 @@ export default class StepDetailTable extends Component {
 
     return (
       <div>
-        <h4> Step Details </h4>
-        { this.renderDropdown() }
-        <Table className="table table-bordered table-condensed">
+        <Toolbar mb>{this.renderDropdown()}</Toolbar>
+        <Table className="table table-bordered table--data text-table table-condensed">
           <Section type="body">
             <Row>
               <Cell tag="th"> Name </Cell>
-              <Cell colspan={3}>{ data.stepname }</Cell>
+              <Cell colspan={3}>{data.stepname}</Cell>
             </Row>
             <Row>
               <Cell tag="th"> Type </Cell>
-              <Cell colspan={3}>{ data.steptype }</Cell>
+              <Cell colspan={3}>{data.steptype}</Cell>
             </Row>
             <Row>
               <Cell tag="th"> Started </Cell>
@@ -129,11 +133,8 @@ export default class StepDetailTable extends Component {
               </Cell>
               <Cell tag="th"> Skipped </Cell>
               <Cell>
-                <Autocomponent>
-                  { data.skip }
-                </Autocomponent>
-                {' '}
-                { canSkip(data) && (
+                <Autocomponent>{data.skip}</Autocomponent>{' '}
+                {canSkip(data) && (
                   <Button
                     icon="pencil"
                     action={this.handleSkipClick}
@@ -148,17 +149,19 @@ export default class StepDetailTable extends Component {
                 <Date date={data.completed} />
               </Cell>
               <Cell tag="th"> Subwfl </Cell>
-              <Cell>{ data.subworkflow_id }</Cell>
+              <Cell>{data.subworkflow_id}</Cell>
             </Row>
             <Row>
               <Cell tag="th"> Status </Cell>
               <Cell>
-                <span className={`label label-${getStatusLabel(data.stepstatus)}`}>
-                  { data.stepstatus }
+                <span
+                  className={`label label-${getStatusLabel(data.stepstatus)}`}
+                >
+                  {data.stepstatus}
                 </span>
               </Cell>
               <Cell tag="th"> Ind </Cell>
-              <Cell>{ data.ind}</Cell>
+              <Cell>{data.ind}</Cell>
             </Row>
           </Section>
         </Table>

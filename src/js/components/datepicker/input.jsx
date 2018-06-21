@@ -3,7 +3,7 @@ import React from 'react';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
-import { InputGroup, Intent } from '@blueprintjs/core';
+import { InputGroup } from '@blueprintjs/core';
 
 type Props = {
   placeholder?: string,
@@ -42,4 +42,7 @@ const addKeyUpHandler = withHandlers({
   },
 });
 
-export default compose(addKeyUpHandler, pure(['inputDate']))(Input);
+export default compose(
+  addKeyUpHandler,
+  pure(['inputDate'])
+)(Input);

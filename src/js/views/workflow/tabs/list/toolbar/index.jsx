@@ -2,12 +2,12 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Button } from '@blueprintjs/core';
 
 import Toolbar from '../../../../../components/toolbar';
 import Search from '../../../../../containers/search';
 import Datepicker from '../../../../../components/datepicker';
 import queryControl from '../../../../../hocomponents/queryControl';
-import { Control as Button } from '../../../../../components/controls';
 import Actions from './actions';
 import Selector from './selector';
 import Filters from './filters';
@@ -37,28 +37,24 @@ const OrdersToolbar: Function = ({
   searchPage,
   isTablet,
 }: Props): React.Element<any> => (
-  <Toolbar sticky>
-    <Selector selected={selected} />
-    { selected !== 'none' && (
+  <Toolbar mb>
+    <Selector selected={selected} />{' '}
+    {selected !== 'none' && (
       <Actions isTablet={isTablet} selectedIds={selectedIds} />
     )}
-    { !searchPage && (
+    {!searchPage && ' '}
+    {!searchPage && (
       <Datepicker
         date={dateQuery || '24h'}
         onApplyDate={changeDateQuery}
         className="toolbar-item"
       />
     )}
-    { !searchPage && (
-      <Filters location={location} />
-    )}
-    <Button
-      label="CSV"
-      btnStyle="default"
-      big
-      action={onCSVClick}
-    />
-    { !searchPage && (
+    {!searchPage && ' '}
+    {!searchPage && <Filters location={location} />}
+    {!searchPage && ' '}
+    <Button text="CSV" onClick={onCSVClick} />
+    {!searchPage && (
       <Search
         defaultValue={searchQuery}
         onSearchUpdate={changeSearchQuery}
@@ -71,11 +67,5 @@ const OrdersToolbar: Function = ({
 export default compose(
   queryControl('search'),
   queryControl('date'),
-  pure([
-    'selected',
-    'selectedIds',
-    'searchQuery',
-    'dateQuery',
-    'isTablet',
-  ])
+  pure(['selected', 'selectedIds', 'searchQuery', 'dateQuery', 'isTablet'])
 )(OrdersToolbar);

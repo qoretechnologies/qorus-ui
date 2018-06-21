@@ -60,7 +60,7 @@ class Toolbar extends Component {
         }`}
         role="toolbar"
       >
-        <div className="workflows-toolbar">{children}</div>
+        {children}
       </div>
     );
   }

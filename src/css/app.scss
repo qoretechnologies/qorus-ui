@@ -135,6 +135,11 @@ body,
   color: #fff !important;
 }
 
+.pt-popover-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
 .block {
   display: block !important;
 }

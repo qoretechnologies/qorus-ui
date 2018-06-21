@@ -46,7 +46,8 @@ type Props = {
   workflowid: number,
   allQuery: Object,
   target: string,
-}
+  first: boolean,
+};
 
 const TableRow: Function = ({
   date,
@@ -73,8 +74,10 @@ const TableRow: Function = ({
   searchPage,
   allQuery,
   target,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
     className={_selected ? 'row-selected' : ''}
@@ -86,20 +89,23 @@ const TableRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    {(!isTablet && searchPage) && (
-      <Td className="name">
-        <Link
-          to={`/workflow/${workflowid}?date=${date}`}
-          className="resource-name-link"
-          title={normalizedName}
-        >
-          {normalizedName}
-        </Link>
-      </Td>
-    )}
+    {!isTablet &&
+      searchPage && (
+        <Td className="name">
+          <Link
+            to={`/workflow/${workflowid}?date=${date}`}
+            className="resource-name-link"
+            title={normalizedName}
+          >
+            {normalizedName}
+          </Link>
+        </Td>
+      )}
     <Td className="medium">
       <Link
-        to={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(allQuery)}`}
+        to={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(
+          allQuery
+        )}`}
         className="resource-name-link"
         title={name}
       >
@@ -108,11 +114,7 @@ const TableRow: Function = ({
     </Td>
     {!isTablet && (
       <Td className="medium">
-        <OrderControls
-          id={id}
-          workflowstatus={workflowstatus}
-          compact
-        />
+        <OrderControls id={id} workflowstatus={workflowstatus} compact />
       </Td>
     )}
     <Td className="medium">
@@ -127,16 +129,6 @@ const TableRow: Function = ({
     <Td className="big">
       <Date date={completed} />
     </Td>
-    {!isTablet && (
-      <Td className="big">
-        <Date date={modified} />
-      </Td>
-    )}
-    {!isTablet && (
-      <Td className="big">
-        <Date date={scheduled} />
-      </Td>
-    )}
     <Td className="narrow">{errCnt}</Td>
     <Td className="narrow">{warnCnt}</Td>
     <Td className="medium">
@@ -154,16 +146,18 @@ export default compose(
       updateDone: actions.orders.updateDone,
     }
   ),
-  mapProps(({ workflowstatus, ...rest }): Props => ({
-    label: ALL_ORDER_STATES.find((state: Object): boolean => (
-      state.name === workflowstatus
-    )).label,
-    workflowstatus,
-    target: rest.searchPage ?
-      '/search/orders' :
-      `/workflow/${rest.workflowid}/list`,
-    ...rest,
-  })),
+  mapProps(
+    ({ workflowstatus, ...rest }): Props => ({
+      label: ALL_ORDER_STATES.find(
+        (state: Object): boolean => state.name === workflowstatus
+      ).label,
+      workflowstatus,
+      target: rest.searchPage
+        ? '/search/orders'
+        : `/workflow/${rest.workflowid}/list`,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
       select(id);

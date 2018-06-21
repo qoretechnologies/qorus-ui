@@ -6,8 +6,8 @@ import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import includes from 'lodash/includes';
+import { ButtonGroup, Button } from '@blueprintjs/core';
 
-import { Control, Controls } from '../../../../components/controls';
 import withModal from '../../../../hocomponents/modal';
 import actions from '../../../../store/api/actions';
 import { ORDER_ACTIONS } from '../../../../constants/orders';
@@ -30,35 +30,30 @@ type ControlProps = {
   onActionClick: Function,
   compact: boolean,
   availableActions: Array<string>,
-}
+};
 
 const ActionButton: Function = ({
   action,
   onActionClick,
   compact,
   availableActions,
-}: ControlProps): React.Element<Control> => {
-  const {
-    style,
-    name,
-    action: actionName,
-    icon,
-  } = ORDER_ACTIONS.ALL.find((item: Object): boolean => (
-    item.action === action
-  ));
+}: ControlProps): React.Element<Button> => {
+  const { name, action: actionName, icon } = ORDER_ACTIONS.ALL.find(
+    (item: Object): boolean => item.action === action
+  );
   const disabled: boolean = !includes(availableActions, action);
   const handleClick: Function = (): void => {
     onActionClick(actionName);
   };
 
   return (
-    <Control
-      btnStyle={disabled ? 'default' : style}
-      label={compact ? null : actionName.toUpperCase()}
+    <Button
+      text={compact ? null : actionName.toUpperCase()}
       disabled={disabled}
       title={name}
-      icon={icon}
-      action={handleClick}
+      iconName={icon}
+      className="pt-small"
+      onClick={handleClick}
     />
   );
 };
@@ -69,7 +64,7 @@ const OrderControls: Function = ({
   compact,
   availableActions,
 }: Props): React.Element<any> => (
-  <Controls noControls grouped>
+  <ButtonGroup>
     <ActionButton
       action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
       onActionClick={handleActionClick}
@@ -94,7 +89,7 @@ const OrderControls: Function = ({
       compact={compact}
       availableActions={availableActions}
     />
-  </Controls>
+  </ButtonGroup>
 );
 
 export default compose(
@@ -106,11 +101,13 @@ export default compose(
     }
   ),
   withModal(),
-  mapProps(({ workflowstatus, ...rest }): Object => ({
-    availableActions: ORDER_ACTIONS[workflowstatus],
-    workflowstatus,
-    ...rest,
-  })),
+  mapProps(
+    ({ workflowstatus, ...rest }): Object => ({
+      availableActions: ORDER_ACTIONS[workflowstatus],
+      workflowstatus,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleActionClick: ({
       action,

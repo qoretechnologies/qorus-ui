@@ -8,37 +8,34 @@ import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import actions from '../../store/api/actions';
-import Toolbar from '../../components/toolbar';
+import Box from '../../components/box';
 import Search from '../../components/search';
 import sync from '../../hocomponents/sync';
 import Code from '../../components/code';
 import queryControl from '../../hocomponents/queryControl';
 import { querySelector, resourceSelector } from '../../selectors';
 import { findBy } from '../../helpers/search';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Toolbar from '../../components/toolbar';
 
-const filterCollection: Function = (query: string, collection: Array<Object>): Array<Object> => (
-  findBy(['name', 'version'], query, collection)
-);
+const filterCollection: Function = (
+  query: string,
+  collection: Array<Object>
+): Array<Object> => findBy(['name', 'version'], query, collection);
 
 const functionsSelector = createSelector(
-  [
-    resourceSelector('functions'),
-    querySelector('q'),
-  ], (collection, query) => filterCollection(query, collection.data)
+  [resourceSelector('functions'), querySelector('q')],
+  (collection, query) => filterCollection(query, collection.data)
 );
 
 const classesSelector = createSelector(
-  [
-    resourceSelector('classes'),
-    querySelector('q'),
-  ], (collection, query) => filterCollection(query, collection.data)
+  [resourceSelector('classes'), querySelector('q')],
+  (collection, query) => filterCollection(query, collection.data)
 );
 
 const constantsSelector = createSelector(
-  [
-    resourceSelector('constants'),
-    querySelector('q'),
-  ], (collection, query) => filterCollection(query, collection.data)
+  [resourceSelector('constants'), querySelector('q')],
+  (collection, query) => filterCollection(query, collection.data)
 );
 
 const viewSelector = createSelector(
@@ -49,7 +46,8 @@ const viewSelector = createSelector(
     classesSelector,
     resourceSelector('constants'),
     constantsSelector,
-  ], (
+  ],
+  (
     metaFunctions,
     functions,
     metaClasses,
@@ -91,15 +89,14 @@ const LibraryView: Function = ({
   classes,
   constants,
 }: Props): React.Element<any> => (
-  <div className="library-view__wrapper">
-    <Toolbar>
-      <Search
-        pullLeft
-        onSearchUpdate={changeQQuery}
-        defaultValue={qQuery}
-      />
+  <div>
+    <Breadcrumbs>
+      <Crumb>Library</Crumb>
+    </Breadcrumbs>
+    <Toolbar mb>
+      <Search onSearchUpdate={changeQQuery} defaultValue={qQuery} />
     </Toolbar>
-    <div className="code">
+    <Box top>
       <Code
         data={{
           functions,
@@ -110,7 +107,7 @@ const LibraryView: Function = ({
         onItemClick={handleRowClick}
         location={location}
       />
-    </div>
+    </Box>
   </div>
 );
 
@@ -129,10 +126,11 @@ export default compose(
   queryControl('q'),
   withHandlers({
     handleHeight: (): Function => (): number => {
-      const content = document.querySelector('#content-wrapper').clientHeight;
-      const toolbar = document.querySelector('#workflows-toolbar').clientHeight;
+      const { top } = document
+        .querySelector('.code-list')
+        .getBoundingClientRect();
 
-      return content - (toolbar + 20);
+      return window.innerHeight - top - 60;
     },
     handleRowClick: (props: Props): Function => (
       name: string,
@@ -147,11 +145,5 @@ export default compose(
       }
     },
   }),
-  pure([
-    'functions',
-    'classes',
-    'constants',
-    'qQuery',
-    'location',
-  ])
+  pure(['functions', 'classes', 'constants', 'qQuery', 'location'])
 )(LibraryView);

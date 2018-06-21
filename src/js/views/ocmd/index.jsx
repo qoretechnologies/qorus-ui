@@ -3,10 +3,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { includes, isArray, isObject, size } from 'lodash';
+import {
+  ControlGroup,
+  InputGroup,
+  ButtonGroup,
+  Button,
+} from '@blueprintjs/core';
 
 import Toolbar from '../../components/toolbar';
+import Box from '../../components/box';
 import Loader from '../../components/loader';
-import { Controls, Control as Button } from '../../components/controls';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import Tree from '../../components/tree';
 import Container from '../../components/container';
@@ -16,17 +22,16 @@ type Props = {
   loading: boolean,
   collection: Object,
   dispatch: Function,
-}
-
+};
 
 import actions from '../../store/api/actions';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 const ocmdSelector: Function = (state: Object): Object => state.api.ocmd;
 
 const viewSelector: Function = createSelector(
-  [
-    ocmdSelector,
-  ], (ocmd: Object) => ({
+  [ocmdSelector],
+  (ocmd: Object) => ({
     collection: ocmd.data,
     loading: ocmd.loading,
     sync: ocmd.sync,
@@ -88,7 +93,8 @@ export default class OCMDView extends Component {
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    if (size(prevState.collection) === 0 && this.refs.command) this.refs.command.focus();
+    if (size(prevState.collection) === 0 && this.refs.command)
+      this.refs.command.focus();
   }
 
   handleDropdownItemClick: Function = (event: Object, value: string): void => {
@@ -103,9 +109,8 @@ export default class OCMDView extends Component {
   handleInputChange: Function = (event: EventHandler): void => {
     const { value }: { value: string } = event.target;
     const showDropdown: boolean = !(value === '');
-    const historySelected: number = value === ''
-      ? size(this.state.history)
-      : this.state.historySelected;
+    const historySelected: number =
+      value === '' ? size(this.state.history) : this.state.historySelected;
     const filtered: Object = {};
 
     Object.keys(this.state.collection).forEach(c => {
@@ -123,7 +128,10 @@ export default class OCMDView extends Component {
   };
 
   handleInputKeyPress: Function = (event: KeyboardEvent): void => {
-    if (this.state.history.length && (event.which === 38 || event.which === 40)) {
+    if (
+      this.state.history.length &&
+      (event.which === 38 || event.which === 40)
+    ) {
       const { history } = this.state;
       let { historySelected } = this.state;
       const { which }: { which: number } = event;
@@ -185,17 +193,21 @@ export default class OCMDView extends Component {
   };
 
   renderCommands: Function = (): Array<React.Element<Item>> => {
-    const data: Object = size(this.state.filtered) !== 0 ?
-      this.state.filtered : this.state.collection;
+    const data: Object =
+      size(this.state.filtered) !== 0
+        ? this.state.filtered
+        : this.state.collection;
 
-    return Object.keys(data).map((c, index):React.Element<Item> => (
-      <Item
-        key={index}
-        title={c}
-        action={this.handleDropdownItemClick}
-        selected={this.state.value === c}
-      />
-    ));
+    return Object.keys(data).map(
+      (c, index): React.Element<Item> => (
+        <Item
+          key={index}
+          title={c}
+          action={this.handleDropdownItemClick}
+          selected={this.state.value === c}
+        />
+      )
+    );
   };
 
   renderInfo: Function = (): ?React.Element<any> => {
@@ -206,7 +218,7 @@ export default class OCMDView extends Component {
     return (
       <p className="command-info">
         <strong>Command description: </strong>
-        <em>{ this.state.collection[value].description }</em>
+        <em>{this.state.collection[value].description}</em>
       </p>
     );
   };
@@ -216,23 +228,15 @@ export default class OCMDView extends Component {
 
     if (isObject(output)) {
       if (output.err) {
-        return (
-          <span className="command-error">Error: { output.desc }</span>
-        );
+        return <span className="command-error">Error: {output.desc}</span>;
       }
 
-      return (
-        <Tree data={output} />
-      );
+      return <Tree data={output} />;
     } else if (isArray(output)) {
-      return output.map((o, index) => (
-        <Tree key={index} data={o} />
-      ));
+      return output.map((o, index) => <Tree key={index} data={o} />);
     }
 
-    return (
-      <span className="alert alert-info"> { output } </span>
-    );
+    return <span className="alert alert-info"> {output} </span>;
   };
 
   render() {
@@ -240,68 +244,53 @@ export default class OCMDView extends Component {
 
     return (
       <div>
-        <Toolbar>
-          <div className="row">
-            <div className="col-sm-12">
-              <Controls noControls grouped>
-                <Dropdown
-                  id="ocmd"
-                  show={this.state.showDropdown}
-                >
+        <Breadcrumbs>
+          <Crumb>OCMD</Crumb>
+        </Breadcrumbs>
+        <Box top>
+          <Toolbar>
+            <form onSubmit={this.handleFormSubmit}>
+              <ControlGroup className="pt-fill">
+                <Dropdown id="ocmd" show={this.state.showDropdown}>
                   <Control btnStyle="info"> Command list </Control>
-                  { this.renderCommands() }
+                  {this.renderCommands()}
                 </Dropdown>
-                <form
-                  className="pull-left ocmd"
-                  onSubmit={this.handleFormSubmit}
-                >
-                  <input
-                    type="text"
-                    className="form-control ocmd-input"
-                    name="ocmd-command"
-                    onChange={this.handleInputChange}
-                    onKeyDown={this.handleInputKeyPress}
-                    placeholder="Type or select command..."
-                    value={this.state.value}
-                    ref="command"
-                    autoComplete="off"
-                  />
-                  <input
-                    type="text"
-                    className="form-control ocmd-input"
-                    name="ocmd-args"
-                    ref="args"
-                    onChange={this.handleArgsChange}
-                    placeholder="Arguments..."
-                    value={this.state.args}
-                    autoComplete="off"
-                  />
-                  <Button
-                    type="submit"
-                    css={{ display: 'none' }}
-                  />
-                </form>
-              </Controls>
+
+                <InputGroup
+                  type="text"
+                  name="ocmd-command"
+                  onChange={this.handleInputChange}
+                  onKeyDown={this.handleInputKeyPress}
+                  placeholder="Type or select command..."
+                  value={this.state.value}
+                  ref="command"
+                  autoComplete="off"
+                />
+                <InputGroup
+                  type="text"
+                  name="ocmd-args"
+                  ref="args"
+                  onChange={this.handleArgsChange}
+                  placeholder="Arguments..."
+                  value={this.state.args}
+                  autoComplete="off"
+                />
+              </ControlGroup>
+              <Button type="submit" style={{ display: 'none' }} />
+            </form>
+            <div className="row">
+              <div className="col-sm-12">{this.renderInfo()}</div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
-              { this.renderInfo() }
-            </div>
-          </div>
-        </Toolbar>
-        <Container>
-          <div className="row ocmd-output">
-            <div className="col-sm-12">
-              { this.state.lastCommand && (
-                <h4>Showing output for: { this.state.lastCommand }</h4>
-              )}
-              { this.state.output && (
-                <pre>{ this.renderOutput() }</pre>
-              )}
-            </div>
-          </div>
-        </Container>
+          </Toolbar>
+        </Box>
+        <Box>
+          <Container>
+            {this.state.lastCommand && (
+              <h4>Showing output for: {this.state.lastCommand}</h4>
+            )}
+            {this.state.output && this.renderOutput()}
+          </Container>
+        </Box>
       </div>
     );
   }

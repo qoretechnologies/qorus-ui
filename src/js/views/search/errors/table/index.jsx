@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
+import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
 
 import actions from '../../../../store/api/actions';
 import { querySelector, resourceSelector } from '../../../../selectors';
@@ -18,7 +19,6 @@ import withSort from '../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../constants/sort';
 import Toolbar from './toolbar';
 import Table from './table';
-import { Control } from '../../../../components/controls';
 
 type Props = {
   onCSVClick: Function,
@@ -59,13 +59,19 @@ const WorkflowOrders: Function = ({
       onSortChange={onSortChange}
       canLoadMore={canLoadMore}
     />
-    { canLoadMore && (
-      <Control
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+    {canLoadMore && (
+      <ButtonGroup style={{ padding: '15px 0 0 0' }}>
+        <Button
+          text={`Showing ${orderErrors.length}`}
+          intent={Intent.NONE}
+          className="pt-minimal"
+        />
+        <Button
+          text={`load ${limit} more...`}
+          intent={Intent.PRIMARY}
+          onClick={handleLoadMore}
+        />
+      </ButtonGroup>
     )}
   </div>
 );
@@ -75,7 +81,8 @@ const viewSelector: Function = createSelector(
     resourceSelector('orderErrors'),
     resourceSelector('currentUser'),
     querySelector('filter'),
-  ], (meta, orders, user, filter) => ({
+  ],
+  (meta, orders, user, filter) => ({
     meta,
     orderErrors: meta.data,
     user,
@@ -95,26 +102,13 @@ export default compose(
   ),
   withSort('orderErrors', 'orderErrors', sortDefaults.orderErrors),
   loadMore('orderErrors', 'orderErrors'),
-  patch('load', [
-    false,
-    'offset',
-    'filter',
-    'limit',
-    'searchData',
-  ]),
+  patch('load', [false, 'offset', 'filter', 'limit', 'searchData']),
   sync('meta'),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
-      const {
-        filter,
-        fetch,
-        offset,
-        changeOffset,
-        searchData,
-      } = this.props;
+      const { filter, fetch, offset, changeOffset, searchData } = this.props;
 
-      if ((searchData !== nextProps.searchData)
-      && nextProps.offset !== 0) {
+      if (searchData !== nextProps.searchData && nextProps.offset !== 0) {
         changeOffset(0);
       } else if (
         filter !== nextProps.filter ||
@@ -126,7 +120,7 @@ export default compose(
           nextProps.offset,
           nextProps.filter,
           nextProps.limit,
-          nextProps.searchData,
+          nextProps.searchData
         );
       }
     },

@@ -3,11 +3,18 @@ import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
+import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import checkNoData from '../../../hocomponents/check-no-data';
 import withLoadMore from '../../../hocomponents/loadMore';
-import { Control as Button } from '../../../components/controls';
-import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import Box from '../../../components/box';
+import {
+  Table,
+  Tbody,
+  Thead,
+  FixedRow,
+  Th,
+} from '../../../components/new_table';
 import HierarchyRow from './row';
 
 type Props = {
@@ -20,7 +27,9 @@ type Props = {
   handleExpandClick: Function,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  handleLoadAll: Function,
   isTablet: boolean,
+  loadMoreTotal: number,
 };
 
 const HierarchyTable: Function = ({
@@ -29,78 +38,79 @@ const HierarchyTable: Function = ({
   compact,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
   isTablet,
+  loadMoreTotal,
 }: Props): React.Element<any> => (
-  <div>
-    <Table
-      fixed
-      hover
-      condensed
-      striped
-    >
+  <Box noPadding>
+    <Table fixed hover condensed striped>
       <Thead>
-        <Tr>
+        <FixedRow>
           <Th className="normal">ID</Th>
-          {!isTablet && (
-            <Th className="name">Workflow</Th>
-          )}
+          {!isTablet && <Th className="name">Workflow</Th>}
           <Th className="medium">Status</Th>
           <Th className="narrow">Bus.Err.</Th>
           <Th className="narrow">Errors</Th>
           <Th className="narrow">Priority</Th>
-          { (!compact && !isTablet) && (
-            <Th className="big">Scheduled</Th>
-          )}
-          { !compact && (
-            <Th className="big">Started</Th>
-          )}
+          {!compact && !isTablet && <Th className="big">Scheduled</Th>}
+          {!compact && <Th className="big">Started</Th>}
           <Th className="big">Completed</Th>
-          { !compact && (
-            <Th className="narrow">Sub WF</Th>
-          )}
-          { !compact && (
-            <Th className="narrow">Sync</Th>
-          )}
-          { !compact && (
-            <Th className="medium">Warnings</Th>
-          )}
-        </Tr>
+          {!compact && <Th className="narrow">Sub WF</Th>}
+          {!compact && <Th className="narrow">Sync</Th>}
+          {!compact && <Th className="medium">Warnings</Th>}
+        </FixedRow>
       </Thead>
       <Tbody>
-        {hierarchyKeys.map((id: string | number): ?React.Element<any> => {
-          const item: Object = hierarchy[id];
-          const parentId: ?number = item.parent_workflow_instanceid;
+        {hierarchyKeys.map(
+          (id: string | number, index: number): ?React.Element<any> => {
+            const item: Object = hierarchy[id];
+            const parentId: ?number = item.parent_workflow_instanceid;
 
-          return (
-            <HierarchyRow
-              key={id}
-              id={item.workflow_instanceid}
-              compact={compact}
-              item={item}
-              hasParent={parentId}
-              isTablet={isTablet}
-            />
-          );
-        })}
+            return (
+              <HierarchyRow
+                key={id}
+                first={index === 0}
+                id={item.workflow_instanceid}
+                compact={compact}
+                item={item}
+                hasParent={parentId}
+                isTablet={isTablet}
+              />
+            );
+          }
+        )}
       </Tbody>
     </Table>
-    { canLoadMore && (
-      <Button
-        action={handleLoadMore}
-        big
-        btnStyle="success"
-        label="Load 50 more..."
-      />
+    {canLoadMore && (
+      <ButtonGroup style={{ padding: '15px' }}>
+        <Button
+          text={`Showing ${hierarchyKeys.length} of ${loadMoreTotal}`}
+          intent={Intent.NONE}
+          className="pt-minimal"
+        />
+        <Button
+          text={'Show 50 more...'}
+          intent={Intent.PRIMARY}
+          onClick={handleLoadMore}
+        />
+        <Button
+          text="Show all"
+          intent={Intent.PRIMARY}
+          onClick={handleLoadAll}
+        />
+      </ButtonGroup>
     )}
-  </div>
+  </Box>
 );
 
 export default compose(
-  mapProps(({ order, ...rest }: Props): Object => ({
-    hierarchy: order.HierarchyInfo,
-    hierarchyKeys: Object.keys(order.HierarchyInfo),
-    ...rest,
-  })),
+  mapProps(
+    ({ order, ...rest }: Props): Object => ({
+      hierarchy: order.HierarchyInfo,
+      hierarchyKeys: Object.keys(order.HierarchyInfo),
+      ...rest,
+    })
+  ),
   checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
   withLoadMore('hierarchyKeys', null, true, 50),
   pure(['hierarchy', 'hierarchyKeys', 'canLoadMore', 'isTablet'])

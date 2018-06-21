@@ -8,6 +8,7 @@ import flowRight from 'lodash/flowRight';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
+import { ButtonGroup, Intent, Button } from '@blueprintjs/core';
 
 import actions from '../../../../store/api/actions';
 import { querySelector, resourceSelector } from '../../../../selectors';
@@ -22,7 +23,6 @@ import withSort from '../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../constants/sort';
 import Toolbar from './toolbar';
 import Table from './table';
-import { Control } from '../../../../components/controls';
 
 type Props = {
   date: string,
@@ -80,30 +80,31 @@ const WorkflowOrders: Function = ({
       isTablet={isTablet}
       searchPage={searchPage}
     />
-    { canLoadMore && (
-      <Control
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+    {canLoadMore && (
+      <ButtonGroup style={{ padding: '15px 0 0 0' }}>
+        <Button
+          text={`Showing ${orders.length}`}
+          intent={Intent.NONE}
+          className="pt-minimal"
+        />
+        <Button
+          text={`Load ${limit} more...`}
+          intent={Intent.PRIMARY}
+          onClick={handleLoadMore}
+        />
+      </ButtonGroup>
     )}
   </div>
 );
 
-const filterSearch: Function = (
-  search: string
-): Function => (orders: Array<Object>): Array<Object> => (
-  findBy(['id', 'workflowstatus'], search, orders)
-);
+const filterSearch: Function = (search: string): Function => (
+  orders: Array<Object>
+): Array<Object> => findBy(['id', 'workflowstatus'], search, orders);
 
 const collectionSelector: Function = createSelector(
-  [
-    querySelector('search'),
-    resourceSelector('orders'),
-  ], (search: string, orders: Object) => flowRight(
-    filterSearch(search)
-  )(orders.data)
+  [querySelector('search'), resourceSelector('orders')],
+  (search: string, orders: Object) =>
+    flowRight(filterSearch(search))(orders.data)
 );
 
 const settingsSelector = (state: Object): Object => state.ui.settings;
@@ -115,7 +116,8 @@ const viewSelector: Function = createSelector(
     resourceSelector('currentUser'),
     querySelector('filter'),
     settingsSelector,
-  ], (meta, orders, user, filter, settings) => ({
+  ],
+  (meta, orders, user, filter, settings) => ({
     meta,
     sort: meta.sort,
     sortDir: meta.sortDir,
@@ -138,11 +140,13 @@ export default compose(
   ),
   withSort('orders', 'orders', sortDefaults.orders),
   loadMore('orders', 'orders'),
-  mapProps(({ workflow, ...rest }: Props): Object => ({
-    id: workflow ? workflow.id : null,
-    workflow,
-    ...rest,
-  })),
+  mapProps(
+    ({ workflow, ...rest }: Props): Object => ({
+      id: workflow ? workflow.id : null,
+      workflow,
+      ...rest,
+    })
+  ),
   patch('load', [
     'id',
     false,
@@ -170,8 +174,10 @@ export default compose(
         searchData,
       } = this.props;
 
-      if ((date !== nextProps.date || searchData !== nextProps.searchData)
-      && nextProps.offset !== 0) {
+      if (
+        (date !== nextProps.date || searchData !== nextProps.searchData) &&
+        nextProps.offset !== 0
+      ) {
         changeOffset(0);
       } else if (
         date !== nextProps.date ||
@@ -190,7 +196,7 @@ export default compose(
           nextProps.limit,
           nextProps.sortDir,
           nextProps.sort,
-          nextProps.searchData,
+          nextProps.searchData
         );
         unselectAll();
       }
@@ -217,5 +223,5 @@ export default compose(
     'sortDir',
     'isTablet',
   ]),
-  unsync(),
+  unsync()
 )(WorkflowOrders);
