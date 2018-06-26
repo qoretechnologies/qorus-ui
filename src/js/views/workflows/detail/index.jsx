@@ -37,10 +37,13 @@ const selector = createSelector(
 );
 
 @compose(
-  connect(selector, {
-    load: actions.workflows.fetchLibSources,
-    loadErrors: actions.errors.fetch,
-  })
+  connect(
+    selector,
+    {
+      load: actions.workflows.fetchLibSources,
+      loadErrors: actions.errors.fetch,
+    }
+  )
 )
 export default class WorkflowsDetail extends Component {
   props: {
@@ -97,6 +100,8 @@ export default class WorkflowsDetail extends Component {
 
   render() {
     const { workflow, systemOptions, paneTab } = this.props;
+
+    console.log('PANE TAB', paneTab);
 
     if (!workflow) return null;
 

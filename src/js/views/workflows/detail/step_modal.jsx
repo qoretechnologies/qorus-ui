@@ -14,9 +14,13 @@ import { bindActionCreators } from 'redux';
 
 @connect(
   (state, props) => ({ step: state.api.steps.data[props.id] }),
-  dispatch => bindActionCreators({
-    fetchStep: actions.steps.fetch,
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        fetchStep: actions.steps.fetch,
+      },
+      dispatch
+    )
 )
 export default class StepModal extends Component {
   static propTypes = {
@@ -71,14 +75,16 @@ export default class StepModal extends Component {
   }
 
   handleModalResize = () => {
-    const { height: formHeight } = document.
-      querySelectorAll('.modal-body table')[0].getBoundingClientRect();
-    const { height: bodyHeight } = document.
-      querySelectorAll('.modal-body')[0].getBoundingClientRect();
+    const { height: formHeight } = document
+      .querySelectorAll('.pt-dialog-body table')[0]
+      .getBoundingClientRect();
+    const { height: bodyHeight } = document
+      .querySelectorAll('.pt-dialog-body')[0]
+      .getBoundingClientRect();
     const difference = bodyHeight - formHeight;
 
     this.setState({
-      sourceHeight: difference - 215,
+      sourceHeight: difference,
     });
   };
 
@@ -95,20 +101,14 @@ export default class StepModal extends Component {
    */
   renderHeader({ name, version, patch, steptype }) {
     return (
-      <Modal.Header
-        titleId="stepTableModalLabel"
-        onClose={this.props.onClose}
-      >
+      <Modal.Header titleId="stepTableModalLabel" onClose={this.props.onClose}>
         {`${name} `}
         <small>
           {`v${version}`}
           {patch && `.${patch}`}
           {` (${this.props.id})`}
-        </small>
-        {' '}
-        <span className="label label-default">
-          {steptype}
-        </span>
+        </small>{' '}
+        <span className="label label-default">{steptype}</span>
       </Modal.Header>
     );
   }
@@ -125,51 +125,65 @@ export default class StepModal extends Component {
    */
   renderBody() {
     return (
-      <Tabs className="step-info">
-        {this.props.step.functions.map(func => (
-          <Pane key={func.type} name={_.capitalize(func.type)}>
-            <Tabs className="step-info__func" type="pills">
-              <Pane name="Code">
-                <InfoTable
-                  object={{
-                    /* eslint-disable quote-props */
-                    'function': `${func.name} v${func.version}` +
-                      `${func.patch ? `.${func.patch}` : ''}` +
-                      ` (${func.function_instanceid})`,
-                    /* eslint-enable quote-props */
-                    description: func.description,
-                    source: `${func.source}:${func.offset}`,
-                    author: func.author,
-                    tags: func.tags && Object.keys(func.tags).length ? func.tags : undefined,
-                  }}
-                />
-                <SourceCode
-                  height={this.state.sourceHeight}
-                  lineOffset={parseInt(func.offset, 10)}
-                >
-                  {func.body}
-                </SourceCode>
-              </Pane>
-              <Pane name="Function Info">
-                <InfoTable
-                  object={{
-                    ..._.omit(func, 'offset'),
-                    source: `${func.source}:${func.offset}`,
-                  }}
-                  omit={['body', 'type']}
-                />
-              </Pane>
-            </Tabs>
-          </Pane>
-        )).concat(
-          <Pane key="step-info" name="Step Info">
-            <InfoTable object={this.props.step} omit={['functions']} />
-          </Pane>
-        )}
+      <Tabs
+        className="step-info"
+        active={this.props.step.functions[0].type}
+        noContainer
+      >
+        {this.props.step.functions
+          .map(func => (
+            <Pane key={func.type} name={_.capitalize(func.type)}>
+              <Tabs
+                className="step-info__func"
+                type="pills"
+                active="code"
+                noContainer
+              >
+                <Pane name="Code">
+                  <InfoTable
+                    object={{
+                      /* eslint-disable quote-props */
+                      'function name':
+                        `${func.name} v${func.version}` +
+                        `${func.patch ? `.${func.patch}` : ''}` +
+                        ` (${func.function_instanceid})`,
+                      /* eslint-enable quote-props */
+                      description: func.description,
+                      source: `${func.source}:${func.offset}`,
+                      author: func.author,
+                      tags:
+                        func.tags && Object.keys(func.tags).length
+                          ? func.tags
+                          : undefined,
+                    }}
+                  />
+                  <SourceCode
+                    height={this.state.sourceHeight}
+                    lineOffset={parseInt(func.offset, 10)}
+                  >
+                    {func.body}
+                  </SourceCode>
+                </Pane>
+                <Pane name="Function Info">
+                  <InfoTable
+                    object={{
+                      ..._.omit(func, 'offset'),
+                      source: `${func.source}:${func.offset}`,
+                    }}
+                    omit={['body', 'type']}
+                  />
+                </Pane>
+              </Tabs>
+            </Pane>
+          ))
+          .concat(
+            <Pane key="step-info" name="Step Info">
+              <InfoTable object={this.props.step} omit={['functions']} />
+            </Pane>
+          )}
       </Tabs>
     );
   }
-
 
   /**
    * Returns loader if step information are not available.
@@ -177,11 +191,8 @@ export default class StepModal extends Component {
    * @return {ReactElement}
    */
   renderLoader() {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
-
 
   /**
    * Returns element for this component.
@@ -190,7 +201,7 @@ export default class StepModal extends Component {
    */
   render() {
     return (
-      <Modal onResizeStop={this.handleModalResize} >
+      <Modal onResizeStop={this.handleModalResize}>
         {this.renderHeader(this.props.step ? this.props.step : this.props)}
         <Modal.Body>
           {this.props.step ? this.renderBody() : this.renderLoader()}

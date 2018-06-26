@@ -14,25 +14,30 @@
   height: 100%;
 }
 
-.modal-content.has-footer .modal-body {
-  padding-bottom: 74px;
+.pt-dialog.has-footer .pt-dialg-body {
+  margin-bottom: 40px;
 }
 
-.modal-body {
+.pt-overlay.pt-overlay-open.pt-overlay-scroll-container {
+  z-index: 25 !important;
+}
+
+.pt-dialog-body {
   top: 0px;
-  margin-top: 56px;
-  padding-top: 15px;
+  margin: 0;
+  margin-top: 40px;
+  padding: 15px 15px 0 15px;
   bottom: 0;
-  padding-bottom: 15px;
   left: 0;
   right: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   height: 100%;
   max-height: 88vh;
 }
 
-.modal-header{
+.pt-dialog-header {
   position: fixed;
   left: 1px;
   right: 1px;
@@ -41,12 +46,12 @@
   background-color: #fff;
 }
 
-.modal-footer {
+.pt-dialog-footer {
   position: fixed;
   left: 1px;
   right: 1px;
-  bottom: 0;
-  background-color: #fff;
+  bottom: 15px;
+  margin-top: 15px;
 }
 
 .modal-dialog {

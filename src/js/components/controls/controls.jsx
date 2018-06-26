@@ -1,12 +1,10 @@
 /* @flow */
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import classNames from 'classnames';
+import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
-  grouped?: boolean,
   children: Array<React.Element<any>>,
-  noControls?: boolean,
 };
 
 /**
@@ -17,22 +15,10 @@ type Props = {
  * order as child components.
  */
 const Controls: Function = ({
-  grouped: grouped = false,
   children,
-  noControls,
+  ...rest
 }: Props): React.Element<any> => (
-  <div
-    className={classNames({
-      'btn-controls': !noControls,
-      'btn-group': grouped,
-    })}
-  >
-    {children}
-  </div>
+  <ButtonGroup {...rest}>{children}</ButtonGroup>
 );
 
-export default pure([
-  'grouped',
-  'children',
-  'noControls',
-])(Controls);
+export default pure(['children'])(Controls);

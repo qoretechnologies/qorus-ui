@@ -5,7 +5,15 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import classNames from 'classnames';
-import { Button } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
+
+const intentTransform = {
+  success: Intent.SUCCESS,
+  danger: Intent.DANGER,
+  info: Intent.PRIMARY,
+  default: null,
+  warning: Intent.WARNING,
+};
 
 type Props = {
   title?: string,
@@ -36,8 +44,9 @@ const Control: Function = ({
   icon,
   label,
   children,
+  btnStyle,
 }: Props): React.Element<any> => (
-  <button
+  <Button
     id={id}
     className={className}
     title={title}
@@ -45,24 +54,22 @@ const Control: Function = ({
     disabled={disabled}
     type={type}
     style={css}
-  >
-    {icon && <i className={classNames(['fa', `fa-${icon}`])} />}
-    {label ? ` ${label}` : ''}
-    {children}
-  </button>
+    iconName={icon}
+    text={label || children}
+    intent={intentTransform[btnStyle]}
+  />
 );
 
 export default compose(
-  mapProps(({ className, big, btnStyle, ...rest }: Props): Props => ({
-    className: classNames(className, {
-      btn: true,
-      'btn-xs': !big,
-      [`btn-${btnStyle}`]: btnStyle,
-    }),
-    big,
-    btnStyle,
-    ...rest,
-  })),
+  mapProps(
+    ({ className, big, ...rest }: Props): Props => ({
+      className: classNames(className, {
+        'pt-small': !big,
+      }),
+      big,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleClick: ({ action, onClick, stopPropagation }: Props): Function => (
       event: Object

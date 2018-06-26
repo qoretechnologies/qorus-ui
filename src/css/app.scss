@@ -83,6 +83,11 @@ body,
   font-family: 'Roboto', 'Arial';
 }
 
+*:focus,
+*:active {
+  outline: none !important;
+}
+
 .app,
 .app_wrap {
   background-color: $bgcolor;

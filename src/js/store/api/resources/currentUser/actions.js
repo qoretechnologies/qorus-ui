@@ -7,21 +7,17 @@ import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
 
 const unSyncCurrentUser: Function = createAction(
-  'CURRENTUSER_UNSYNCCURRENTUSER',
+  'CURRENTUSER_UNSYNCCURRENTUSER'
 );
 
 const updateStorage: Function = createAction(
   'CURRENTUSER_UPDATESTORAGE',
   (storage: Object, username: string): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/users/${username}`,
-      {
-        body: JSON.stringify({
-          storage,
-        }),
-      }
-    );
+    fetchJson('PUT', `${settings.REST_BASE_URL}/users/${username}`, {
+      body: JSON.stringify({
+        storage,
+      }),
+    });
 
     return { storage };
   }
@@ -87,6 +83,16 @@ const storeSearch: Function = (
   }
 };
 
+const storeLocale: Function = (locale: string): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
+  const { storage: storage = {}, username } = getState().api.currentUser.data;
+
+  storage.locale = locale;
+
+  dispatch(updateStorage(storage, username));
+};
 
 export {
   unSyncCurrentUser,
@@ -94,4 +100,5 @@ export {
   storeSortChange,
   storePaneSize,
   storeSearch,
+  storeLocale,
 };

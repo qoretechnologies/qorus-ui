@@ -48,9 +48,9 @@ export default class Manager extends Component {
    */
   componentWillUpdate(nextProps: Object, nextState: Object): void {
     if (nextState.modal) {
-      document.body.classList.add('modal-open');
+      document.body.classList.add('pt-overlay-open');
     } else {
-      document.body.classList.remove('modal-open');
+      document.body.classList.remove('pt-overlay-open');
     }
 
     if (nextState.modal && !this._globalKeyUp) {
@@ -62,7 +62,6 @@ export default class Manager extends Component {
     }
   }
 
-
   /**
    * Removes global `keyup` listener and `modal-open` class from body.
    */
@@ -72,7 +71,7 @@ export default class Manager extends Component {
       this._globalKeyUp = null;
     }
 
-    document.body.classList.remove('modal-open');
+    document.body.classList.remove('pt-overlay-open');
 
     this._modals = null;
   }
@@ -192,9 +191,18 @@ export default class Manager extends Component {
     if (!this.state.modal) return null;
 
     return (
-      <div className="modal-root" ref={this.refRoot}>
-        {this.state.modal}
-        {this.state.modal && <div className="modal-backdrop fade in" />}
+      <div className="pt-portal">
+        <div
+          className="pt-overlay pt-overlay-open pt-overlay-scroll-container"
+          ref={this.refRoot}
+          style={{
+            zIndex: '25 !important',
+            height: '20px !important',
+          }}
+        >
+          {this.state.modal}
+        </div>
+        {this.state.modal && <div className="pt-overlay-backdrop" />}
       </div>
     );
   }

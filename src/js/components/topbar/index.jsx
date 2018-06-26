@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import {
   Navbar,
@@ -14,11 +15,13 @@ import {
   MenuItem,
   Tooltip,
 } from '@blueprintjs/core';
+import map from 'lodash/map';
 
-import { pureRender } from '../utils';
 import Modal from '../../components/modal';
 import withModal from '../../hocomponents/modal';
 import logo from '../../../img/qore_logo.png';
+import actions from '../../store/api/actions';
+import { LANGS } from '../../intl/messages';
 
 const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
   <Modal>
@@ -38,7 +41,12 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
 /**
  * Display info about Qorus instance and logged in user.
  */
-@pureRender
+@connect(
+  null,
+  {
+    storeLocale: actions.currentUser.storeLocale,
+  }
+)
 @withModal()
 export default class Topbar extends Component {
   static propTypes = {
@@ -49,6 +57,7 @@ export default class Topbar extends Component {
     showMenu: PropTypes.bool,
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
+    locale: PropTypes.string,
   };
 
   /**
@@ -75,6 +84,8 @@ export default class Topbar extends Component {
    * @return {ReactElement}
    */
   render() {
+    const [countryCode, locale] = this.props.locale.split('-');
+
     return (
       <Navbar className="pt-fixed-top pt-dark">
         <NavbarGroup>
@@ -103,6 +114,41 @@ export default class Topbar extends Component {
                 text="Qorus administrator"
                 rightIconName="caret-down"
               />
+            </ButtonGroup>
+          </Popover>
+          <Popover
+            position={Position.BOTTOM_RIGHT}
+            content={
+              <Menu>
+                {map(
+                  LANGS,
+                  (loc, lang) =>
+                    countryCode !== lang && (
+                      <MenuItem
+                        text={lang}
+                        label={
+                          <img
+                            src={`http://www.countryflags.io/${lang.toLowerCase()}/flat/16.png`}
+                          />
+                        }
+                        onClick={() => this.props.storeLocale(loc)}
+                      />
+                    )
+                )}
+                <MenuItem
+                  text="Use browser locale"
+                  onClick={() => this.props.storeLocale()}
+                />
+              </Menu>
+            }
+          >
+            <ButtonGroup minimal>
+              <Button>
+                <img
+                  src={`http://www.countryflags.io/${locale.toLowerCase()}/flat/16.png`}
+                />{' '}
+                {locale}
+              </Button>
             </ButtonGroup>
           </Popover>
           <NavbarDivider />

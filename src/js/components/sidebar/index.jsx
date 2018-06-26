@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import { browserHistory } from 'react-router';
 import {
   Intent,
   Menu,
@@ -10,6 +12,8 @@ import {
   Position,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
+import withHandlers from 'recompose/withHandlers';
+import compose from 'recompose/compose';
 
 type Props = {
   menuCollapsed?: boolean,
@@ -18,19 +22,19 @@ type Props = {
 
 const menu = {
   System: [
-    { name: 'Dashboard', icon: 'timeline-bar-chart', link: '/' },
-    { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
-    { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
-    { name: 'Options', icon: 'cog', link: '/system/options' },
-    { name: 'Connections', icon: 'left-join', link: '/system/remote' },
-    { name: 'Properties', icon: 'properties', link: '/system/props' },
-    { name: 'SLAs', icon: 'time', link: '/system/slas' },
-    { name: 'Valuemaps', icon: 'map', link: '/system/values' },
-    { name: 'SQL Cache', icon: 'database', link: '/system/sqlcache' },
-    { name: 'HTTP Services', icon: 'home', link: '/system/http' },
-    { name: 'Releases', icon: 'git-push', link: '/system/releases' },
+    { name: 'system.dashboard', icon: 'timeline-bar-chart', link: '/' },
+    { name: 'system.alerts', icon: 'warning-sign', link: '/system/alerts' },
+    { name: 'system.cluster', icon: 'heat-grid', link: '/system/cluster' },
+    { name: 'system.options', icon: 'cog', link: '/system/options' },
+    { name: 'system.connections', icon: 'left-join', link: '/system/remote' },
+    { name: 'system.properties', icon: 'properties', link: '/system/props' },
+    { name: 'system.slas', icon: 'time', link: '/system/slas' },
+    { name: 'system.valuemaps', icon: 'map', link: '/system/values' },
+    { name: 'system.cache', icon: 'database', link: '/system/sqlcache' },
+    { name: 'system.httpserv', icon: 'home', link: '/system/http' },
+    { name: 'system.releases', icon: 'git-push', link: '/system/releases' },
     {
-      name: 'Other',
+      name: 'system.other',
       icon: 'more',
       submenu: [
         { name: 'Info', icon: 'info-sign', link: '/system/info' },
@@ -54,9 +58,40 @@ const menu = {
   ],
 };
 
+let MenuElement: Function = ({
+  icon,
+  name,
+  submenu,
+  link,
+  menuCollapsed,
+  intl: { formatMessage },
+  handleClick,
+}) => (
+  <MenuItem
+    iconName={icon}
+    onClick={handleClick}
+    text={!menuCollapsed && formatMessage({ id: name })}
+  >
+    {submenu &&
+      submenu.map(item => (
+        <MenuElement icon={item.icon} link={item.link} name={item.name} />
+      ))}
+  </MenuItem>
+);
+
+MenuElement = compose(
+  injectIntl,
+  withHandlers({
+    handleClick: ({ link }): Function => (): void => {
+      browserHistory.push(link);
+    },
+  })
+)(MenuElement);
+
 const Sidebar: Function = ({
   menuCollapsed,
   toggleMenu,
+  intl: { formatMessage },
 }: Props): React.Element<any> => (
   <div className="pt-dark">
     <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
@@ -71,27 +106,24 @@ const Sidebar: Function = ({
             ({ name, icon, link, submenu }) =>
               menuCollapsed ? (
                 <Tooltip
-                  content={name}
+                  content={formatMessage({ id: name })}
                   position={submenu ? Position.BOTTOM : Position.RIGHT}
                 >
-                  <MenuItem iconName={icon} href={link}>
-                    {submenu &&
-                      submenu.map(item => (
-                        <MenuItem iconName={item.icon} href={item.link} />
-                      ))}
-                  </MenuItem>
+                  <MenuElement
+                    icon={icon}
+                    link={link}
+                    name={name}
+                    submenu={submenu}
+                    menuCollapsed
+                  />
                 </Tooltip>
               ) : (
-                <MenuItem text={name} iconName={icon} href={link}>
-                  {submenu &&
-                    submenu.map(item => (
-                      <MenuItem
-                        text={item.name}
-                        iconName={item.icon}
-                        href={item.link}
-                      />
-                    ))}
-                </MenuItem>
+                <MenuElement
+                  icon={icon}
+                  link={link}
+                  name={name}
+                  submenu={submenu}
+                />
               )
           )}
           <MenuDivider />
@@ -111,4 +143,4 @@ const Sidebar: Function = ({
   </div>
 );
 
-export default Sidebar;
+export default injectIntl(Sidebar);

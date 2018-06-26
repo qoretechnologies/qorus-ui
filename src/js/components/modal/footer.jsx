@@ -9,8 +9,8 @@ import React, { PropTypes } from 'react';
  */
 export default function Footer(props: { children: any }) {
   return (
-    <div className="modal-footer">
-      {props.children}
+    <div className="pt-dialog-footer">
+      <div className="pt-dialog-footer-actions">{props.children}</div>
     </div>
   );
 }

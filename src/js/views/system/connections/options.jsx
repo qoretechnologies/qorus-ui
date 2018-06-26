@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 
 import { Controls, Control as Button } from '../../../components/controls';
 
@@ -25,20 +26,11 @@ const Option: Function = ({
 
   return (
     <div className="conn-options-item">
-      "{objKey}": "{value}"
-      {' '}
+      "{objKey}": "{value}"{' '}
       <div className="pull-right">
         <Controls grouped>
-          <Button
-            icon="edit"
-            btnStyle="warning"
-            onClick={handleEditClick}
-          />
-          <Button
-            icon="times"
-            btnStyle="danger"
-            onClick={handleDeleteClick}
-          />
+          <Button icon="edit" btnStyle="warning" onClick={handleEditClick} />
+          <Button icon="cross" btnStyle="danger" onClick={handleDeleteClick} />
         </Controls>
       </div>
     </div>
@@ -60,11 +52,11 @@ export default class ConnectionOptions extends Component {
 
   handleKeyChange: Function = (ev: EventHandler): void => {
     this.changeData('key', ev.target.value);
-  }
+  };
 
   handleValueChange: Function = (ev: EventHandler): void => {
     this.changeData('value', ev.target.value);
-  }
+  };
 
   handleOptionSave: Function = () => {
     const { options, key, value } = this.state;
@@ -80,7 +72,7 @@ export default class ConnectionOptions extends Component {
 
       this.props.onSave(JSON.stringify(options));
     }
-  }
+  };
 
   handleDelete: Function = (key: string) => {
     const { options } = this.state;
@@ -89,13 +81,13 @@ export default class ConnectionOptions extends Component {
 
     this.setState({ options });
     this.props.onSave(JSON.stringify(options));
-  }
+  };
 
   changeData: Function = (item: string, value: string): void => {
-    if ((item && item !== '') && (value && value !== '')) {
+    if (item && item !== '' && (value && value !== '')) {
       this.setState({ [item]: value });
     }
-  }
+  };
 
   render() {
     const opts: Array<string> = Object.keys(this.state.options);
@@ -107,48 +99,43 @@ export default class ConnectionOptions extends Component {
             <div className="col-sm-12">
               <pre>
                 {'{'}
-                {opts.map((opt: string): React.Element<any> => (
-                  <Option
-                    key={opt}
-                    objKey={opt}
-                    value={this.state.options[opt]}
-                    onEdit={this.changeData}
-                    onDelete={this.handleDelete}
-                  />
-                ))}
+                {opts.map(
+                  (opt: string): React.Element<any> => (
+                    <Option
+                      key={opt}
+                      objKey={opt}
+                      value={this.state.options[opt]}
+                      onEdit={this.changeData}
+                      onDelete={this.handleDelete}
+                    />
+                  )
+                )}
                 {'}'}
               </pre>
             </div>
           </div>
         )}
-        <div className="row">
-          <div className="col-sm-5">
-            <input
-              placeholder="Key..."
-              type="text"
-              value={this.state.key}
-              onChange={this.handleKeyChange}
-              className="form-control"
-            />
-          </div>
-          <div className="col-sm-5">
-            <input
-              placeholder="Value..."
-              type="text"
-              value={this.state.value}
-              onChange={this.handleValueChange}
-              className="form-control"
-            />
-          </div>
-          <div className="col-sm-2">
-            <Button
-              btnStyle="success"
-              icon="save"
-              big
-              onClick={this.handleOptionSave}
-            />
-          </div>
-        </div>
+        <ControlGroup fill>
+          <InputGroup
+            placeholder="Key..."
+            type="text"
+            value={this.state.key}
+            onChange={this.handleKeyChange}
+          />
+          <InputGroup
+            placeholder="Value..."
+            type="text"
+            value={this.state.value}
+            onChange={this.handleValueChange}
+          />
+          <Button
+            btnStyle="success"
+            icon="small-tick"
+            big
+            className="pt-fixed"
+            onClick={this.handleOptionSave}
+          />
+        </ControlGroup>
       </div>
     );
   }

@@ -29,7 +29,7 @@ export default class Modal extends Component {
     height: ?number,
   } = {
     height: this.props.height || null,
-  }
+  };
 
   componentDidMount(): void {
     if (this.props.onMount) {
@@ -56,8 +56,11 @@ export default class Modal extends Component {
    * @param {Event} ev
    */
   onEscape: Function = (ev: SyntheticEvent): void => {
-    if (ev.target === this._modal &&
-        this.getHeader() && this.getHeader().props.onClose) {
+    if (
+      ev.target === this._modal &&
+      this.getHeader() &&
+      this.getHeader().props.onClose
+    ) {
       this.getHeader().props.onClose();
     }
   };
@@ -68,9 +71,11 @@ export default class Modal extends Component {
    * @return {Header|null}
    */
   getHeader(): React.Element<any> {
-    return React.Children.toArray(this.props.children).filter(c => (
-      c.type === Header
-    ))[0] || null;
+    return (
+      React.Children.toArray(this.props.children).filter(
+        c => c.type === Header
+      )[0] || null
+    );
   }
 
   handleStop: Function = (width: number, height: number) => {
@@ -79,7 +84,7 @@ export default class Modal extends Component {
     this.setState({
       height,
     });
-  }
+  };
 
   /**
    * Stores modal reference for later.
@@ -91,31 +96,34 @@ export default class Modal extends Component {
   };
 
   calculateHeight: Function = (): ?number => {
-    const header: Object = document.querySelectorAll('.modal-header')[0];
+    const header: Object = document.querySelectorAll('.pt-dialog-header')[0];
 
     if (header) {
       const headerHeight: number = header.offsetHeight;
       if (this.props.hasFooter) {
-        const footerHeight: number = document.querySelectorAll('.modal-footer')[0].offsetHeight;
+        const footerHeight: number =
+          document.querySelectorAll('.pt-dialog-footer')[0].offsetHeight + 15;
 
-        return this.state.height ? this.state.height - (headerHeight + footerHeight) : null;
+        return this.state.height
+          ? this.state.height - (headerHeight + footerHeight)
+          : null;
       }
 
       return this.state.height ? this.state.height - headerHeight : null;
     }
 
     return null;
-  }
+  };
 
   resizeBody: Function = (): void => {
-    const body = document.querySelectorAll('.modal-body')[0];
+    const body = document.querySelectorAll('.pt-dialog-body')[0];
 
     if (body) {
       const height = this.calculateHeight();
 
       body.style.height = `${height}px`;
     }
-  }
+  };
 
   /**
    * Renders necessary elements around modal pane's content.
@@ -124,41 +132,32 @@ export default class Modal extends Component {
    */
   render(): React.Element<any> {
     return (
-      <Draggable
-        handle=".handle"
-        bounds={{ top: 0 }}
+      <div
+        className="pt-dialog-container"
+        ref={this.refModal}
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
+        onMouseDown={this.onEscape}
       >
-        <div
-          ref={this.refModal}
-          className="modal fade in"
-          style={{ display: 'block' }}
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
-          onMouseDown={this.onEscape}
-        >
+        <Draggable handle=".handle">
           <div
-            className={classNames({
-              'modal-dialog': true,
-              'modal-lg': this.props.size === 'lg',
-              'modal-sm': this.props.size === 'sm',
-            })}
+            className="pt-dialog"
             role="document"
             style={{
               height: this.state.height ? `${this.state.height}px` : 'auto',
+              position: 'relative !important',
             }}
           >
-            <div className={`modal-content ${this.props.hasFooter ? 'has-footer' : ''}`}>
-              {this.props.children}
-            </div>
+            {this.props.children}
             <ResizeHandle left onStop={this.handleStop} />
             <ResizeHandle right onStop={this.handleStop} />
             <ResizeHandle bottom onStop={this.handleStop} />
             <ResizeHandle left bottom onStop={this.handleStop} />
             <ResizeHandle right bottom onStop={this.handleStop} />
           </div>
-        </div>
-      </Draggable>
+        </Draggable>
+      </div>
     );
   }
 }
@@ -167,6 +166,4 @@ Modal.Header = Header;
 Modal.Body = Body;
 Modal.Footer = Footer;
 
-export {
-  Manager,
-};
+export { Manager };

@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash/debounce';
 import pure from 'recompose/onlyUpdateForKeys';
+import { IntlProvider, addLocaleData } from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import cs from 'react-intl/locale-data/cs';
+import de from 'react-intl/locale-data/de';
 
 import Navigation from 'components/navigation';
 import Topbar from '../components/topbar';
@@ -14,6 +18,9 @@ import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
 import logo from '../../img/qore_logo.png';
 import appSettings from '../settings';
+import messages from '../intl/messages';
+
+addLocaleData([...en, ...cs, ...de]);
 
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
@@ -234,33 +241,35 @@ export default class Root extends Component {
    */
   render() {
     const { currentUser, info } = this.props;
+    const locale =
+      (currentUser.sync && currentUser.data.storage.locale) || navigator.locale;
 
     if (!currentUser.sync || !info.sync) {
       return <Preloader />;
     }
 
-    console.log(this.state.menuCollapsed);
-
     return (
-      <div className="root">
-        <Topbar info={this.props.info} />
-        <div className="root__center">
-          <Sidebar
-            menuCollapsed={this.state.menuCollapsed}
-            toggleMenu={this.toggleMenu}
+      <IntlProvider locale={locale} messages={messages(locale)}>
+        <div className="root">
+          <Topbar info={this.props.info} locale={locale} />
+          <div className="root__center">
+            <Sidebar
+              menuCollapsed={this.state.menuCollapsed}
+              toggleMenu={this.toggleMenu}
+            />
+            <section>
+              <div className="container-fluid" id="content-wrapper">
+                {this.props.children}
+              </div>
+            </section>
+          </div>
+          <Footer
+            path={this.props.location.pathname}
+            info={this.props.info.data}
           />
-          <section>
-            <div className="container-fluid" id="content-wrapper">
-              {this.props.children}
-            </div>
-          </section>
+          <ModalManager ref={this.refModal} />
         </div>
-        <Footer
-          path={this.props.location.pathname}
-          info={this.props.info.data}
-        />
-        <ModalManager ref={this.refModal} />
-      </div>
+      </IntlProvider>
     );
   }
 }

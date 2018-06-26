@@ -8,11 +8,7 @@ import React, { PropTypes } from 'react';
  * @return {!ReactElement}
  */
 export default function Body(props: { children: any }) {
-  return (
-    <div className="modal-body">
-      {props.children}
-    </div>
-  );
+  return <div className="pt-dialog-body">{props.children}</div>;
 }
 
 Body.propTypes = {

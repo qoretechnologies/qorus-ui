@@ -64,57 +64,66 @@ export default class Row extends Component {
   };
 
   recalculateSizes: Function = (): void => {
-    if (this._resizeTimeout) {
-      this._resizeTimeout = null;
+    if (this.props.first) {
+      if (this._resizeTimeout) {
+        this._resizeTimeout = null;
 
-      clearTimeout(this._resizeTimeout);
-    }
+        clearTimeout(this._resizeTimeout);
+      }
 
-    this._resizeTimeout = setTimeout(() => {
-      const ref = this._el;
-      const node = findDOMNode(ref);
-      const bodyCells = Array.from(node.cells);
-      const parent =
-        node.parentElement.parentElement.parentElement.parentElement;
-      const headCells = parent.querySelectorAll(
-        '.table-header-wrapper .fixed-table-header'
-      );
-      const footCells = parent.querySelectorAll(
-        '.table-footer-wrapper .fixed-table-header'
-      );
-      const headerWrapper = parent.querySelectorAll('div.table-header-wrapper');
-      const footerWrapper = parent.querySelectorAll('div.table-footer-wrapper');
-      const { width: rowWidth } = ref.getBoundingClientRect();
+      this._resizeTimeout = setTimeout(() => {
+        const ref = this._el;
+        const node = findDOMNode(ref);
+        const bodyCells = Array.from(node.cells);
+        const parent =
+          node.parentElement.parentElement.parentElement.parentElement;
+        const headCells = parent.querySelectorAll(
+          '.table-header-wrapper .fixed-table-header'
+        );
+        const footCells = parent.querySelectorAll(
+          '.table-footer-wrapper .fixed-table-header'
+        );
+        const headerWrapper = parent.querySelectorAll(
+          'div.table-header-wrapper'
+        );
+        const footerWrapper = parent.querySelectorAll(
+          'div.table-footer-wrapper'
+        );
+        const { width: rowWidth } = ref.getBoundingClientRect();
 
-      headerWrapper[0].setAttribute('style', `width: ${rowWidth}px !important`);
-
-      if (footerWrapper.length) {
-        footerWrapper[0].setAttribute(
+        headerWrapper[0].setAttribute(
           'style',
           `width: ${rowWidth}px !important`
         );
-      }
 
-      bodyCells.forEach(
-        (cell: any, index: number): void => {
-          const { width } = cell.getBoundingClientRect();
-
-          headCells[index].setAttribute(
+        if (footerWrapper.length) {
+          footerWrapper[0].setAttribute(
             'style',
-            `width: ${width}px !important`
+            `width: ${rowWidth}px !important`
           );
+        }
 
-          if (footCells.length) {
-            footCells[index].setAttribute(
+        bodyCells.forEach(
+          (cell: any, index: number): void => {
+            const { width } = cell.getBoundingClientRect();
+
+            headCells[index].setAttribute(
               'style',
               `width: ${width}px !important`
             );
-          }
-        }
-      );
 
-      this._resizeTimeout = null;
-    }, 500);
+            if (footCells.length) {
+              footCells[index].setAttribute(
+                'style',
+                `width: ${width}px !important`
+              );
+            }
+          }
+        );
+
+        this._resizeTimeout = null;
+      }, 500);
+    }
   };
 
   startHighlight: Function = (highlight: boolean): void => {
