@@ -22,6 +22,7 @@ import withModal from '../../hocomponents/modal';
 import logo from '../../../img/qore_logo.png';
 import actions from '../../store/api/actions';
 import { LANGS } from '../../intl/messages';
+import Sidebar from '../sidebar';
 
 const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
   <Modal>
@@ -88,6 +89,18 @@ export default class Topbar extends Component {
 
     return (
       <Navbar className="pt-fixed-top pt-dark">
+        {this.props.isTablet && (
+          <NavbarGroup>
+            <Popover
+              position={Position.BOTTOM_LEFT}
+              content={<Sidebar menuCollapsed={false} />}
+            >
+              <ButtonGroup minimal>
+                <Button iconName="menu" />{' '}
+              </ButtonGroup>
+            </Popover>
+          </NavbarGroup>
+        )}
         <NavbarGroup>
           <NavbarHeading className="nunito">
             <img src={logo} className="qore-small-logo" /> Qorus Integration

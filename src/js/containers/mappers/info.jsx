@@ -16,6 +16,8 @@ import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
 import Container from '../../components/container';
 import Releases from '../releases';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Box from '../../components/box';
 
 const MapperInfo = ({
   mapper,
@@ -30,40 +32,42 @@ const MapperInfo = ({
 
   return (
     <div>
-      <h3 className="mapper-header">
-        <a href="#" onClick={onBackClick}>
-          <i className="fa fa-angle-left" />
-        </a>
-        {' '}
-        { mapper.name }
-        {' '}
-        <small>({ mapper.version })</small>
-      </h3>
-      <p className="mapper-subtitle">{ mapper.desc }</p>
-      <Author model={mapper} />
-      <p className="mapper-desc">
-        <span> Type </span>: { mapper.type }
-      </p>
-      <Container>
+      <Breadcrumbs>
+        <Crumb>
+          {mapper.name} <small>({mapper.version})</small>
+        </Crumb>
+      </Breadcrumbs>
+      <Box top>
+        <p className="mapper-subtitle">{mapper.desc}</p>
+        <Author model={mapper} />
+        <p className="mapper-desc">
+          <span> Type </span>: {mapper.type}
+        </p>
+
         <p className="mapper-desc">
           <span> Options </span>:
         </p>
         <div className="row mapper-opts">
           <div className="col-lg-4">
-            <InfoTable object={mapper.opts} omit={['input', 'output', 'name']} />
+            <InfoTable
+              object={mapper.opts}
+              omit={['input', 'output', 'name']}
+            />
           </div>
         </div>
+      </Box>
+
+      <Box>
         <Tabs active="diagram" type="pills">
           <Pane name="Diagram">
             <div className="view-content">
-              { !mapper.valid && (
+              {!mapper.valid && (
                 <div className="mapper-error-msg">
                   <h5>
-                    Warning: This mapper contains an error and might not be rendered correctly
+                    Warning: This mapper contains an error and might not be
+                    rendered correctly
                   </h5>
-                  <Alert bsStyle="danger">
-                    { mapper.error }
-                  </Alert>
+                  <Alert bsStyle="danger">{mapper.error}</Alert>
                 </div>
               )}
               <MapperDiagram mapper={mapper} />
@@ -78,15 +82,14 @@ const MapperInfo = ({
             />
           </Pane>
         </Tabs>
-      </Container>
+      </Box>
     </div>
   );
 };
 
 const metaSelector = (state: Object): Object => state.api.mappers;
-const stateSelector = (state, { mapperId }) => (
-  state.api.mappers.data.find(item => item.mapperid === parseInt(mapperId, 10))
-);
+const stateSelector = (state, { mapperId }) =>
+  state.api.mappers.data.find(item => item.mapperid === parseInt(mapperId, 10));
 
 const mapperInfoSelector = createSelector(
   stateSelector,

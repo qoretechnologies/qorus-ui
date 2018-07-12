@@ -17,9 +17,6 @@ const DashboardModule: Function = ({
   icon,
 }: Props): React.Element<any> => (
   <div className="dashboard-module">
-    <p className={`title ${titleStyle}`}>
-      {icon && <Icon icon={icon} />} {title}
-    </p>
     <div className="content">{children}</div>
   </div>
 );

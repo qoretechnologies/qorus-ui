@@ -10,7 +10,6 @@
 
     console.log('New event');
     information.textContent = 'it works! ' + ++this.counter;
-
   });
 })();
 /* eslint-enable */

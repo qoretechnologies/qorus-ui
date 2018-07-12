@@ -240,7 +240,7 @@ export default class Root extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { currentUser, info } = this.props;
+    const { currentUser, info, isTablet } = this.props;
     const locale =
       (currentUser.sync && currentUser.data.storage.locale) || navigator.locale;
 
@@ -251,12 +251,14 @@ export default class Root extends Component {
     return (
       <IntlProvider locale={locale} messages={messages(locale)}>
         <div className="root">
-          <Topbar info={this.props.info} locale={locale} />
+          <Topbar info={this.props.info} locale={locale} isTablet={isTablet} />
           <div className="root__center">
-            <Sidebar
-              menuCollapsed={this.state.menuCollapsed}
-              toggleMenu={this.toggleMenu}
-            />
+            {!isTablet && (
+              <Sidebar
+                menuCollapsed={this.state.menuCollapsed}
+                toggleMenu={this.toggleMenu}
+              />
+            )}
             <section>
               <div className="container-fluid" id="content-wrapper">
                 {this.props.children}

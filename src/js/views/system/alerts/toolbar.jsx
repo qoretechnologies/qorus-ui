@@ -16,16 +16,15 @@ type Props = {
 const AlertsToolbar: Function = ({
   type,
   ...rest
-}: Props): React.Element<any> =>
-  console.log(rest) || (
-    <Toolbar mt>
-      <Search
-        defaultValue={rest[`${type}SearchQuery`]}
-        onSearchUpdate={rest[`change${capitalize(type)}searchQuery`]}
-        resource="alerts"
-      />
-    </Toolbar>
-  );
+}: Props): React.Element<any> => (
+  <Toolbar mt>
+    <Search
+      defaultValue={rest[`${type}SearchQuery`]}
+      onSearchUpdate={rest[`change${capitalize(type)}searchQuery`]}
+      resource="alerts"
+    />
+  </Toolbar>
+);
 
 export default compose(queryControl(({ type }) => `${type}Search`))(
   AlertsToolbar

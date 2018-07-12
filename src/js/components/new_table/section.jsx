@@ -120,7 +120,7 @@ class Section extends Component {
               {
                 'table-hover': hover,
                 'table-striped': striped,
-                'table-bordered': bordered,
+                'table-bordered-our': bordered,
                 'fixed-table': true,
               },
               className

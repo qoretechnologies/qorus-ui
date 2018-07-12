@@ -171,3 +171,9 @@ export const STATUS_PRIORITY = [
   'IN-PROGRESS',
   'ERROR',
 ];
+
+export const ORDER_STATS_LEGEND = {
+  A: 'Recovered automatically',
+  C: 'Complete',
+  M: 'Recovered manually',
+};

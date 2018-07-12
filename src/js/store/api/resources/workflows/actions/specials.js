@@ -79,6 +79,9 @@ const modifyOrder = createAction('WORKFLOWS_MODIFYORDER', events => ({
 const addAlert = createAction('WORKFLOWS_ADDALERT', events => ({ events }));
 
 const clearAlert = createAction('WORKFLOWS_CLEARALERT', events => ({ events }));
+const updateStats = createAction('WORKFLOWS_UPDATESTATS', events => ({
+  events,
+}));
 
 const processMemoryChanged = createAction(
   'WORKFLOWS_PROCESSMEMORYCHANGED',
@@ -195,4 +198,5 @@ export {
   fetchList,
   addNew,
   processMemoryChanged,
+  updateStats,
 };

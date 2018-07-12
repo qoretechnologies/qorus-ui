@@ -12,7 +12,11 @@ import DashboardItem from '../../../components/dashboard_module/item';
 import DashboardSection from '../../../components/dashboard_module/section';
 import Badge from '../../../components/badge';
 import Icon from '../../../components/icon';
+import PaneItem from '../../../components/pane_item';
+import Tabs, { Pane } from '../../../components/tabs';
 import { statusHealth } from '../../../helpers/system';
+import ChartComponent from '../../../components/chart';
+import { CenterWrapper } from '../../../components/layout';
 
 const viewSelector = createSelector(
   [state => state.api.health, state => state.api.system, state => state.ui],
@@ -50,15 +54,15 @@ export default class Dashboard extends Component {
 
     return (
       <div className="tab-pane active">
-        <Container>
-          <Masonry
-            id="dashboard-masonry"
-            sizes={[{ columns: 2, gutter: 20 }]}
-            style={{ margin: '0 auto' }}
-            infiniteScrollDisabled
-            key={width}
-          >
-            <DashboardModule title="Cluster" titleStyle="green">
+        <Masonry
+          id="dashboard-masonry"
+          sizes={[{ columns: 2, gutter: 20 }]}
+          style={{ margin: '0 auto' }}
+          infiniteScrollDisabled
+          key={width}
+        >
+          <DashboardModule titleStyle="green">
+            <PaneItem title="Cluster">
               <DashboardSection>
                 <DashboardItem left>
                   Total Memory:{' '}
@@ -109,8 +113,10 @@ export default class Dashboard extends Component {
                   </div>
                 );
               })}
-            </DashboardModule>
-            <DashboardModule title="Interfaces" titleStyle="blue">
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="Intefaces">
               <DashboardSection link="/workflows" icon="sitemap">
                 Workflows <Icon icon="circle" className="separator" /> total /
                 alerts
@@ -134,8 +140,10 @@ export default class Dashboard extends Component {
                   <Badge val={system.job_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-            </DashboardModule>
-            <DashboardModule title="System overview" titleStyle="crimson">
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="System Overview">
               <DashboardSection link="/system/alerts">
                 <DashboardItem left>
                   Key:{' '}
@@ -186,8 +194,10 @@ export default class Dashboard extends Component {
                     </DashboardSection>
                   </div>
                 ))}
-            </DashboardModule>
-            <DashboardModule title="Connections" titleStyle="orange">
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="Connections">
               <DashboardSection
                 link="/system/remote/qorus"
                 icon="external-link"
@@ -215,9 +225,225 @@ export default class Dashboard extends Component {
                   <Badge val={system.user_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-            </DashboardModule>
-          </Masonry>
-        </Container>
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="Global order stats - number of orders">
+              <Tabs active="1 hour band" noContainer>
+                <Pane name="1 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            system.order_stats[0].l.find(
+                              dt => dt.disposition === 'A'
+                            ).count,
+                            system.order_stats[0].l.find(
+                              dt => dt.disposition === 'M'
+                            ).count,
+                            system.order_stats[0].l.find(
+                              dt => dt.disposition === 'C'
+                            ).count,
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+                <Pane name="4 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            system.order_stats[1].l.find(
+                              dt => dt.disposition === 'A'
+                            ).count,
+                            system.order_stats[1].l.find(
+                              dt => dt.disposition === 'M'
+                            ).count,
+                            system.order_stats[1].l.find(
+                              dt => dt.disposition === 'C'
+                            ).count,
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+                <Pane name="24 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            system.order_stats[2].l.find(
+                              dt => dt.disposition === 'A'
+                            ).count,
+                            system.order_stats[2].l.find(
+                              dt => dt.disposition === 'M'
+                            ).count,
+                            system.order_stats[2].l.find(
+                              dt => dt.disposition === 'C'
+                            ).count,
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+              </Tabs>
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="Global order stats - percentage">
+              <Tabs active="1 hour band" noContainer>
+                <Pane name="1 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            Math.round(
+                              system.order_stats[0].l.find(
+                                dt => dt.disposition === 'A'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[0].l.find(
+                                dt => dt.disposition === 'M'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[0].l.find(
+                                dt => dt.disposition === 'C'
+                              ).pct
+                            ),
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+                <Pane name="4 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            Math.round(
+                              system.order_stats[1].l.find(
+                                dt => dt.disposition === 'A'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[1].l.find(
+                                dt => dt.disposition === 'M'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[1].l.find(
+                                dt => dt.disposition === 'C'
+                              ).pct
+                            ),
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+                <Pane name="24 hour band">
+                  <CenterWrapper>
+                    <ChartComponent
+                      width={190}
+                      height={190}
+                      isNotTime
+                      type="doughnut"
+                      labels={[
+                        'Recovered automatically',
+                        'Recovered manually',
+                        'Completed w/o errors',
+                      ]}
+                      datasets={[
+                        {
+                          data: [
+                            Math.round(
+                              system.order_stats[2].l.find(
+                                dt => dt.disposition === 'A'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[2].l.find(
+                                dt => dt.disposition === 'M'
+                              ).pct
+                            ),
+                            Math.round(
+                              system.order_stats[2].l.find(
+                                dt => dt.disposition === 'C'
+                              ).pct
+                            ),
+                          ],
+                          backgroundColor: ['#FFB366', '#FF7373', '#7fba27'],
+                        },
+                      ]}
+                    />
+                  </CenterWrapper>
+                </Pane>
+              </Tabs>
+            </PaneItem>
+          </DashboardModule>
+        </Masonry>
       </div>
     );
   }

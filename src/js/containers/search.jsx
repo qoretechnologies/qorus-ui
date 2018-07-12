@@ -22,12 +22,9 @@ type Props = {
 
 const SearchContainer: Function = ({
   handleSearchUpdate,
-  ...rest,
+  ...rest
 }: Props): React.Element<any> => (
-  <Search
-    {...rest}
-    onSearchUpdate={handleSearchUpdate}
-  />
+  <Search {...rest} onSearchUpdate={handleSearchUpdate} />
 );
 
 export default compose(
@@ -41,7 +38,7 @@ export default compose(
     }
   ),
   mapProps(({ storage, resource, ...rest }: Props) => ({
-    searches: storage[resource] && storage[resource].searches || null,
+    searches: (storage[resource] && storage[resource].searches) || null,
     resource,
     ...rest,
   })),
@@ -59,10 +56,5 @@ export default compose(
       onSearchUpdate(query);
     },
   }),
-  pure([
-    'pullLeft',
-    'defaultValue',
-    'storage',
-    'searches',
-  ])
+  pure(['pullLeft', 'defaultValue', 'storage', 'searches'])
 )(SearchContainer);

@@ -9,14 +9,18 @@ import Icon from '../../../components/icon';
 import Badge from '../../../components/badge';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
+import PaneItem from '../../../components/pane_item';
 
 import AutoStart from '../../../components/autostart';
 import WorkflowsControls from '../controls';
 
-@connect(null, {
-  setOptions: actions.workflows.setOptions,
-  setAutostart: actions.workflows.setAutostart,
-})
+@connect(
+  null,
+  {
+    setOptions: actions.workflows.setOptions,
+    setAutostart: actions.workflows.setAutostart,
+  }
+)
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
@@ -42,21 +46,24 @@ export default class DetailTab extends Component {
 
     return (
       <div>
-        <h4> Controls </h4>
-        <div className="pane__controls">
-          <WorkflowsControls
-            id={this.props.workflow.id}
-            enabled={this.props.workflow.enabled}
-          />{' '}
-          <AutoStart
-            autostart={this.props.workflow.autostart}
-            execCount={this.props.workflow.exec_count}
-            onIncrementClick={this.handleAutostartChange}
-            onDecrementClick={this.handleAutostartChange}
-          />
-        </div>
-        <h4> Description </h4>
-        <p>{workflow.description}</p>
+        <PaneItem title="Controls">
+          <div className="pane__controls">
+            <WorkflowsControls
+              id={this.props.workflow.id}
+              enabled={this.props.workflow.enabled}
+            />{' '}
+            <AutoStart
+              autostart={this.props.workflow.autostart}
+              execCount={this.props.workflow.exec_count}
+              onIncrementClick={this.handleAutostartChange}
+              onDecrementClick={this.handleAutostartChange}
+            />
+          </div>
+        </PaneItem>
+        <PaneItem title="SLA Threshold">{workflow.sla_threshold}s</PaneItem>
+        <PaneItem title="Description">
+          <p>{workflow.description}</p>
+        </PaneItem>
         <Author model={workflow} />
         <AlertsTab alerts={workflow.alerts} />
         {workflow.process && (
@@ -71,14 +78,15 @@ export default class DetailTab extends Component {
             <Badge val={workflow.process.priv_str} bypass label="info" />
           </div>
         )}
-        <h4> Instances </h4>
-        {ORDER_STATES.map((o, k) => (
-          <Badge
-            key={k}
-            className={`status-${o.label}`}
-            val={`${o.short}: ${workflow[o.name]}`}
-          />
-        ))}
+        <PaneItem title="Instances">
+          {ORDER_STATES.map((o, k) => (
+            <Badge
+              key={k}
+              className={`status-${o.label}`}
+              val={`${o.short}: ${workflow[o.name]}`}
+            />
+          ))}
+        </PaneItem>
         <Groups>
           {(workflow.groups || []).map(g => (
             <Group

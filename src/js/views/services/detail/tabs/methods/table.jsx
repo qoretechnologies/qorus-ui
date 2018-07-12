@@ -5,7 +5,13 @@ import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+} from '../../../../../components/new_table';
 import Icon from '../../../../../components/icon';
 import sync from '../../../../../hocomponents/sync';
 import actions from '../../../../../store/api/actions';
@@ -33,36 +39,40 @@ const MethodsTable: Function = ({
     <Thead>
       <Tr>
         <Th className="name">Name</Th>
-        <Th className="tiny"><Icon icon="lock" /></Th>
-        <Th className="tiny"><Icon icon="cog" /></Th>
-        <Th className="tiny"><Icon icon="pencil" /></Th>
+        <Th className="tiny">
+          <Icon icon="lock" />
+        </Th>
+        <Th className="tiny">
+          <Icon icon="cog" />
+        </Th>
+        <Th className="tiny">
+          <Icon icon="pencil" />
+        </Th>
         <Th className="normal">Actions</Th>
         <Th className="text">SLA</Th>
       </Tr>
     </Thead>
     <Tbody>
-      {methods.map((method: Object): React.Element<any> => (
-        <SLARow
-          key={method.service_methodid}
-          service={service}
-          slas={slas}
-          method={method}
-          perms={perms}
-          setMethod={setMethod}
-          removeMethod={removeMethod}
-        />
-      ))}
+      {methods.map(
+        (method: Object): React.Element<any> => (
+          <SLARow
+            key={method.service_methodid}
+            service={service}
+            slas={slas}
+            method={method}
+            perms={perms}
+            setMethod={setMethod}
+            removeMethod={removeMethod}
+          />
+        )
+      )}
     </Tbody>
   </Table>
 );
 
-// console.log(acitons.services);
-
 const viewSelector: Function = createSelector(
-  [
-    resourceSelector('slas'),
-    resourceSelector('currentUser'),
-  ], (meta: Object, user: Object): Object => ({
+  [resourceSelector('slas'), resourceSelector('currentUser')],
+  (meta: Object, user: Object): Object => ({
     meta,
     slas: meta.data,
     perms: user.data.permissions,
@@ -79,10 +89,5 @@ export default compose(
     }
   ),
   sync('meta'),
-  pure([
-    'methods',
-    'slas',
-    'service',
-    'perms',
-  ])
+  pure(['methods', 'slas', 'service', 'perms'])
 )(MethodsTable);

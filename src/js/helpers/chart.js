@@ -3,21 +3,23 @@ import { max, flatten, range, values, round } from 'lodash';
 import { DATASETS, SLADATASETS, DOUGH_LABELS } from '../constants/orders';
 import moment from 'moment';
 
-const groupOrders = (data) => {
+const groupOrders = data => {
   let result = Object.keys(ORDER_GROUPS);
 
-  result = result.map(o => ORDER_GROUPS[o].reduce((total, g) => {
-    const v = data[g] || 0;
-    return total + v;
-  }, 0));
+  result = result.map(o =>
+    ORDER_GROUPS[o].reduce((total, g) => {
+      const v = data[g] || 0;
+      return total + v;
+    }, 0)
+  );
 
   return result;
 };
 
-const getMaxValue = (data) => {
+const getMaxValue = data => {
   const dataset = data.map(d => d.data);
 
-  return max(flatten(dataset), (set) => set);
+  return max(flatten(dataset), set => set);
 };
 
 const getStepSize = (data, isNotTime) => {
@@ -59,7 +61,11 @@ const createLineDatasets = (data, days) => {
   const type = days > 1 ? 'days' : 'hours';
   const format = days > 1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH';
 
-  let labels = rng.map(r => moment().add(-r, type).format(format));
+  let labels = rng.map(r =>
+    moment()
+      .add(-r, type)
+      .format(format)
+  );
   const dt = [];
 
   labels.forEach(l => {
@@ -152,12 +158,14 @@ const createPerfLineDatasets = (data, type, chartType) => {
   };
 };
 
-const createDoughDatasets = (data) => {
+const createDoughDatasets = data => {
   const labels = Object.keys(DOUGH_LABELS);
-  const dt = [{
-    data: groupOrders(data),
-    backgroundColor: values(DOUGH_LABELS),
-  }];
+  const dt = [
+    {
+      data: groupOrders(data),
+      backgroundColor: values(DOUGH_LABELS),
+    },
+  ];
 
   return {
     labels,
@@ -165,7 +173,7 @@ const createDoughDatasets = (data) => {
   };
 };
 
-const getUnit = (val) => {
+const getUnit = val => {
   if (val >= 3600) {
     return 'h';
   } else if (val >= 60) {

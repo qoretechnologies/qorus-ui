@@ -1,14 +1,12 @@
 .dashboard-module {
-  min-height: 100px;
-  border: 1px solid darken(#fff, 5);
+  background-color: white;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 3px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
+  clear: both;
+  overflow: hidden;
   width: 49%;
-  box-shadow: 1px 1px 7px -4px rgba(0, 0, 0, 0.2);
-  transition: all 200ms ease-in-out;
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 2px 2px 8px -4px rgba(0, 0, 0, 0.3);
-  }
 
   .content {
     width: 100%;
@@ -18,7 +16,7 @@
     font-family: 'Nunito';
     font-size: 14px;
     color: #333;
-    padding: 10px;
+    padding: 10px 0;
     margin-bottom: 0;
     border-bottom: 1px solid rgba(darken(#fff, 6), 0.4);
     height: 40px;
@@ -35,7 +33,6 @@
   }
 
   .title {
-    font-family: 'Nunito';
     font-size: 16px;
     padding: 10px;
     color: #fff;
@@ -89,8 +86,7 @@
 }
 
 .dashboard-module-item {
-  font-family: 'Nunito';
-  font-size: 14px;
+  font-size: 12px;
   color: #333;
   display: inline;
 }

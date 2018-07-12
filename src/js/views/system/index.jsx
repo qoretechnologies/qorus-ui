@@ -16,6 +16,7 @@ import Valuemaps from './valuemaps';
 import Releases from '../../containers/releases';
 import Slas from './slas';
 import Cluster from './cluster';
+import OrderStats from './order_stats';
 
 type Props = {
   location: Object,
@@ -50,5 +51,6 @@ System.Valuemaps = Valuemaps;
 System.Releases = Releases;
 System.Slas = Slas;
 System.Cluster = Cluster;
+System.OrderStats = OrderStats;
 
 export default System;

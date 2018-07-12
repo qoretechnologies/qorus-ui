@@ -12,6 +12,7 @@ export default {
     'system.httpserv': 'HTTP Services',
     'system.releases': 'Releases',
     'system.other': 'Other',
+    'system.orderStats': 'Order Stats',
   },
   'cs-CZ': {
     'system.dashboard': 'Nastenka',
@@ -26,6 +27,7 @@ export default {
     'system.httpserv': 'HTTP Servisy',
     'system.releases': 'Verze',
     'system.other': 'Ostatni',
+    'system.orderStats': 'Statistiky objednavek',
   },
   'de-DE': {
     'system.dashboard': 'Instrumententafel',
@@ -40,5 +42,6 @@ export default {
     'system.httpserv': 'HTTP Dienstleistungen',
     'system.releases': 'Freigabe',
     'system.other': 'Andere',
+    'system.orderStats': 'Order Stats',
   },
 };

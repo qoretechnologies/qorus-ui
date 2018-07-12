@@ -100,7 +100,12 @@ const fetchLibSources = {
 };
 
 const addNew = {
-  next(state = initialState, { payload: { wf } }) {
+  next(
+    state = initialState,
+    {
+      payload: { wf },
+    }
+  ) {
     if (state.sync) {
       const data = [
         ...state.data,
@@ -115,7 +120,12 @@ const addNew = {
 };
 
 const setExecCount = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
@@ -142,7 +152,12 @@ const setExecCount = {
 };
 
 const setEnabled = {
-  next(state, { payload: { events } }) {
+  next(
+    state,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
@@ -163,6 +178,33 @@ const setEnabled = {
   },
 };
 
+const updateStats = {
+  next(
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(
+          parseInt(dt.tag, 10),
+          { order_stats: dt.bands },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
 const unselectAll = {
   next(state) {
     const data = [...state.data];
@@ -171,9 +213,9 @@ const unselectAll = {
       w =>
         w._selected
           ? {
-            ...w,
-            ...{ _selected: false },
-          }
+              ...w,
+              ...{ _selected: false },
+            }
           : w
     );
 
@@ -182,7 +224,12 @@ const unselectAll = {
 };
 
 const updateDone = {
-  next(state, { payload: { id } }) {
+  next(
+    state,
+    {
+      payload: { id },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const newData = updateItemWithId(id, { _updated: null }, data);
@@ -195,7 +242,12 @@ const updateDone = {
 };
 
 const addOrder = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
@@ -225,7 +277,12 @@ const addOrder = {
 };
 
 const modifyOrder = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
@@ -255,7 +312,12 @@ const modifyOrder = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       const updatedData = setUpdatedToNull(stateData);
@@ -283,7 +345,12 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
@@ -313,7 +380,12 @@ const clearAlert = {
 };
 
 const selectWorkflow = {
-  next(state = initialState, { payload: { id } }) {
+  next(
+    state = initialState,
+    {
+      payload: { id },
+    }
+  ) {
     return select(state, id);
   },
 };
@@ -381,7 +453,12 @@ const selectStopped = {
 };
 
 const setDeprecated = {
-  next(state = initialState, { payload: { ids, value } }) {
+  next(
+    state = initialState,
+    {
+      payload: { ids, value },
+    }
+  ) {
     const data = [...state.data];
     const newData = data.map(w => {
       if (includes(ids, w.id)) {
@@ -396,7 +473,12 @@ const setDeprecated = {
 };
 
 const setAutostart = {
-  next(state = initialState, { payload: { id, value } }) {
+  next(
+    state = initialState,
+    {
+      payload: { id, value },
+    }
+  ) {
     const stateData = [...state.data];
     const newData = updateItemWithId(id, { autostart: value }, stateData);
 
@@ -411,7 +493,12 @@ const unsync = {
 };
 
 const fetchList = {
-  next(state = initialState, { payload: { result } }) {
+  next(
+    state = initialState,
+    {
+      payload: { result },
+    }
+  ) {
     return { ...state, ...{ data: result, sync: true, loading: false } };
   },
 };
@@ -439,4 +526,5 @@ export {
   setDeprecated as TOGGLEDEPRECATED,
   fetchList as FETCHLIST,
   addNew as ADDNEW,
+  updateStats as UPDATESTATS,
 };

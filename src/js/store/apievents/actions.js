@@ -19,6 +19,27 @@ const handleEvent = (url, data, dispatch, state) => {
     const { info, eventstr } = d;
 
     switch (eventstr) {
+      case 'WORKFLOW_STATS_UPDATED':
+        if (info.tag === 'global') {
+          if (state.api.system.sync) {
+            pipeline(eventstr, system.updateStats, info, dispatch);
+          }
+        } else {
+          if (
+            state.api.workflows.sync &&
+            state.api.workflows.data.find(
+              (workflow: Object) => workflow.id === parseInt(info.tag, 10)
+            )
+          ) {
+            pipeline(
+              `${eventstr}_WORKFLOW`,
+              workflows.updateStats,
+              info,
+              dispatch
+            );
+          }
+        }
+        break;
       case 'PROCESS_STARTED':
         if (state.api.system.sync) {
           pipeline(eventstr, system.addProcess, info, dispatch);

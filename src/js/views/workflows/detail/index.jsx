@@ -19,6 +19,7 @@ import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
 import InfoTable from '../../../components/info_table/index';
 import Box from '../../../components/box';
+import StatsTab from './stats';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -100,8 +101,6 @@ export default class WorkflowsDetail extends Component {
 
   render() {
     const { workflow, systemOptions, paneTab } = this.props;
-
-    console.log('PANE TAB', paneTab);
 
     if (!workflow) return null;
 
@@ -185,6 +184,9 @@ export default class WorkflowsDetail extends Component {
                 />
               </Pane>
             )}
+            <Pane name="Order stats">
+              <StatsTab orderStats={workflow.order_stats} />
+            </Pane>
             <Pane name="Info">
               <InfoTab workflow={workflow} />
             </Pane>

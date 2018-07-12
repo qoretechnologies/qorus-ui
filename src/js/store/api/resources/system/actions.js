@@ -21,6 +21,11 @@ const incrementItems: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
+const updateStats: Function = createAction(
+  'SYSTEM_UPDATESTATS',
+  (events: Array<Object>): Object => ({ events })
+);
+
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 export {
@@ -29,4 +34,5 @@ export {
   removeProcess,
   updateDone,
   incrementItems,
+  updateStats,
 };

@@ -1,5 +1,10 @@
 const addProcess = {
-  next(state: Object, { payload: { events } }) {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
     const data = { ...state.data };
     const processes = { ...data.processes };
     const newProcesses = events.reduce(
@@ -15,7 +20,12 @@ const addProcess = {
 };
 
 const removeProcess = {
-  next(state: Object, { payload: { events } }) {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -30,7 +40,12 @@ const removeProcess = {
 };
 
 const processMemoryChanged = {
-  next(state: Object, { payload: { events } }) {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -51,7 +66,12 @@ const processMemoryChanged = {
 };
 
 const incrementItems = {
-  next(state: Object, { payload: { events } }) {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
     const data = { ...state.data };
 
     events.forEach(event => {
@@ -67,7 +87,12 @@ const incrementItems = {
 };
 
 const updateDone = {
-  next(state: Object, { payload: { id } }) {
+  next(
+    state: Object,
+    {
+      payload: { id },
+    }
+  ) {
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -79,10 +104,28 @@ const updateDone = {
   },
 };
 
+const updateStats = {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      data.order_stats = event.bands;
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
 export {
   addProcess as ADDPROCESS,
   removeProcess as REMOVEPROCESS,
   processMemoryChanged as PROCESSMEMORYCHANGED,
   updateDone as UPDATEDONE,
   incrementItems as INCREMENTITEMS,
+  updateStats as UPDATESTATS,
 };

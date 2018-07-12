@@ -39,18 +39,20 @@ let Table: Function = ({
 }: Props): React.Element<any> =>
   fixed ? (
     <div className="table-wrapper">
-      {React.Children.map(children, (child: Object): React.Element<any> =>
-        React.cloneElement(child, {
-          fixed,
-          striped,
-          hover,
-          condensed,
-          bordered,
-          className,
-          height,
-          hasFooter,
-          marginBottom: marginBottom || 0,
-        })
+      {React.Children.map(
+        children,
+        (child: Object): React.Element<any> =>
+          React.cloneElement(child, {
+            fixed,
+            striped,
+            hover,
+            condensed,
+            bordered,
+            className,
+            height,
+            hasFooter,
+            marginBottom: marginBottom || 0,
+          })
       )}
     </div>
   ) : (
@@ -62,25 +64,29 @@ let Table: Function = ({
           'table-striped': striped,
           'table-condensed': condensed,
           'table-hover': hover,
-          'table-bordered': bordered,
+          'table-bordered-our': bordered,
         },
         className
       )}
     >
-      {React.Children.map(children, (child: Object): React.Element<any> =>
-        React.cloneElement(child, { fixed })
+      {React.Children.map(
+        children,
+        (child: Object): React.Element<any> =>
+          React.cloneElement(child, { fixed })
       )}
     </table>
   );
 
 Table = compose(
-  mapProps(({ children, ...rest }: Props): Props => ({
-    hasFooter: React.Children.toArray(children).some(
-      (child: Object): boolean => child.type.displayName === 'Tfoot'
-    ),
-    children,
-    ...rest,
-  })),
+  mapProps(
+    ({ children, ...rest }: Props): Props => ({
+      hasFooter: React.Children.toArray(children).some(
+        (child: Object): boolean => child.type.displayName === 'Tfoot'
+      ),
+      children,
+      ...rest,
+    })
+  ),
   updateOnlyForKeys(['children', 'className', 'marginBottom', 'height'])
 )(Table);
 

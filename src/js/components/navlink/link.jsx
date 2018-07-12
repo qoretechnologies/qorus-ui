@@ -12,10 +12,6 @@ export default class NavLink extends RelativeLink {
   };
 
   render() {
-    console.log(this.props.to, this.props.path);
-
-    const props = omit(this.props, 'path');
-
     return (
       <li
         role="tab"
