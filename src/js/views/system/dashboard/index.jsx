@@ -18,6 +18,7 @@ import Tabs, { Pane } from '../../../components/tabs';
 import { statusHealth } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
 import { CenterWrapper } from '../../../components/layout';
+import { getStatsData } from '../../../helpers/chart';
 
 const viewSelector = createSelector(
   [
@@ -112,7 +113,7 @@ export default class Dashboard extends Component {
               >
                 {system.order_stats.map(stats => (
                   <Pane name={replace(stats.label, /_/g, ' ')}>
-                    {stats.l.length &&
+                    {stats.l.length > 0 &&
                     stats.l.every(stat => stat.count !== 0) ? (
                       <CenterWrapper>
                         <ChartComponent
@@ -161,7 +162,7 @@ export default class Dashboard extends Component {
               >
                 {system.order_stats.map(stats => (
                   <Pane name={replace(stats.label, /_/g, ' ')}>
-                    {stats.sla.length ? (
+                    {stats.sla.length > 0 ? (
                       <CenterWrapper>
                         <ChartComponent
                           width={190}
@@ -172,13 +173,8 @@ export default class Dashboard extends Component {
                           datasets={[
                             {
                               data: [
-                                Math.round(
-                                  stats.sla.find(dt => dt.in_sla).count
-                                ),
-                                Math.round(
-                                  stats.sla.find(dt => dt.in_sla === false)
-                                    .count
-                                ),
+                                Math.round(getStatsData(true, stats)),
+                                Math.round(getStatsData(false, stats)),
                               ],
                               backgroundColor: ['#7fba27', '#FF7373'],
                             },

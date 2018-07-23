@@ -17,19 +17,18 @@ const Icon: Function = ({
   className,
   tooltip,
   fontSize,
-}: Props): React.Element<any> =>
-  console.log(icon, iconName) || (
-    <i
-      className={classNames(
-        'fa',
-        icon || iconName ? `fa-${iconName || icon}` : '',
-        className
-      )}
-      title={tooltip}
-      style={{
-        fontSize: fontSize || null,
-      }}
-    />
-  );
+}: Props): React.Element<any> => (
+  <i
+    className={classNames(
+      'fa',
+      icon || iconName ? `fa-${iconName || icon}` : '',
+      className
+    )}
+    title={tooltip}
+    style={{
+      fontSize: fontSize || null,
+    }}
+  />
+);
 
 export default pure(['icon', 'className', 'tooltip'])(Icon);
