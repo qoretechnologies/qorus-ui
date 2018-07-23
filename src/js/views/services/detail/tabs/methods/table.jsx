@@ -40,13 +40,13 @@ const MethodsTable: Function = ({
       <Tr>
         <Th className="name">Name</Th>
         <Th className="tiny">
-          <Icon icon="lock" />
+          <Icon iconName="lock" />
         </Th>
         <Th className="tiny">
-          <Icon icon="cog" />
+          <Icon iconName="cog" />
         </Th>
         <Th className="tiny">
-          <Icon icon="pencil" />
+          <Icon iconName="pencil" />
         </Th>
         <Th className="normal">Actions</Th>
         <Th className="text">SLA</Th>

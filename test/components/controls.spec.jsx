@@ -17,7 +17,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
   describe('Control', () => {
     it('renders icon in button', () => {
       const control = mount(
-        <Control icon="refresh" />
+        <Control iconName="refresh" />
       );
 
       expect(control.find('button')).to.have.length(1);
@@ -28,7 +28,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('applies button style', () => {
       const control = mount(
-        <Control icon="refresh" btnStyle="primary" />
+        <Control iconName="refresh" btnStyle="primary" />
       );
 
       expect(control.find('button').hasClass('btn-primary')).to.eql(true);
@@ -37,7 +37,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('shows title as button title', () => {
       const control = mount(
-        <Control icon="refresh" title="Restart" />
+        <Control iconName="refresh" title="Restart" />
       );
 
       expect(control.getDOMNode()).to.have.property('title');
@@ -46,7 +46,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('shows label as button text after the icon', () => {
       const control = mount(
-        <Control icon="refresh" label="Restart" />
+        <Control iconName="refresh" label="Restart" />
       );
 
       expect(control.find('button').text()).to.equal(' Restart');
@@ -56,7 +56,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('handles action on click', () => {
       const action = chai.spy();
       const control = mount(
-        <Control icon="refresh" action={action} />
+        <Control iconName="refresh" action={action} />
       );
 
       control.find('button').simulate('click');
@@ -66,7 +66,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
 
     it('set disabled button', () => {
       const control = mount(
-        <Control icon="refresh" disabled />
+        <Control iconName="refresh" disabled />
       );
 
       expect(control.getDOMNode()).to.have.property('disabled');
@@ -78,8 +78,8 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('conveniently groups Control instances together', () => {
       const controls = mount(
         <Controls>
-          <Control icon="power-off" />
-          <Control icon="refresh" />
+          <Control iconName="power-off" />
+          <Control iconName="refresh" />
         </Controls>
       );
 
@@ -90,7 +90,7 @@ describe("{ Control, Controls } from 'components/controls'", () => {
     it('applies Bootstrap btn-group when grouped', () => {
       const controls = TestUtils.renderIntoDocument(
         <Controls grouped>
-          <Control icon="power-off" />
+          <Control iconName="power-off" />
         </Controls>
       );
 

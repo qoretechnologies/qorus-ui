@@ -7,7 +7,7 @@ import Icon from '../../src/js/components/icon';
 describe('Icon from components/icon', () => {
   it('renders the Icon with the correct glyph', () => {
     const Component = mount(
-      <Icon icon="remove" />
+      <Icon iconName="remove" />
     );
 
     expect(Component.find('i').hasClass('fa')).to.eql(true);
@@ -16,7 +16,7 @@ describe('Icon from components/icon', () => {
 
   it('renders the Icon with custom classnames', () => {
     const Component = mount(
-      <Icon icon="remove" className="test" />
+      <Icon iconName="remove" className="test" />
     );
 
     expect(Component.find('i').hasClass('fa')).to.eql(true);

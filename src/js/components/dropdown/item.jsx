@@ -93,7 +93,7 @@ export default class Item extends Component {
       <MenuItem
         shouldDismissPopover={!multi}
         text={title}
-        icon={this.props.icon}
+        iconName={this.props.icon}
         onClick={this.handleClick}
         intent={intent}
       />

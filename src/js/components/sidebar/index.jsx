@@ -72,13 +72,13 @@ let MenuElement: Function = ({
   handleClick,
 }) => (
   <MenuItem
-    icon={icon}
+    iconName={icon}
     onClick={handleClick}
     text={!menuCollapsed && formatMessage({ id: name })}
   >
     {submenu &&
       submenu.map(item => (
-        <MenuElement icon={item.icon} link={item.link} name={item.name} />
+        <MenuElement iconName={item.icon} link={item.link} name={item.name} />
       ))}
   </MenuItem>
 );
@@ -101,7 +101,7 @@ const MenuWrapper: Function = ({
     {map(menu, (values: Object, key: string) => (
       <div>
         {!menuCollapsed && (
-          <li className="bp3-menu-header">
+          <li className="pt-menu-header">
             <h6>{key}</h6>
           </li>
         )}
@@ -113,7 +113,7 @@ const MenuWrapper: Function = ({
                 position={submenu ? Position.BOTTOM : Position.RIGHT}
               >
                 <MenuElement
-                  icon={icon}
+                  iconName={icon}
                   link={link}
                   name={name}
                   submenu={submenu}
@@ -122,7 +122,7 @@ const MenuWrapper: Function = ({
               </Tooltip>
             ) : (
               <MenuElement
-                icon={icon}
+                iconName={icon}
                 link={link}
                 name={name}
                 submenu={submenu}
@@ -133,11 +133,11 @@ const MenuWrapper: Function = ({
       </div>
     ))}
     {menuCollapsed ? (
-      <MenuItem icon="menu-open" onClick={toggleMenu} />
+      <MenuItem iconName="menu-open" onClick={toggleMenu} />
     ) : (
       <MenuItem
-        icon="menu"
-        label={<Icon icon="caret-left" />}
+        iconName="menu"
+        label={<Icon iconName="caret-left" />}
         text="Collapse"
         onClick={toggleMenu}
       />
@@ -153,7 +153,7 @@ const Sidebar: Function = ({
   isTablet ? (
     <MenuWrapper {...rest} />
   ) : (
-    <div className={light ? '' : 'bp3-dark'}>
+    <div className={light ? '' : 'pt-dark'}>
       <MenuWrapper {...rest} />
     </div>
   );

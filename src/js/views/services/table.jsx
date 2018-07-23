@@ -56,7 +56,7 @@ const ServicesTable: Function = ({
           Threads
         </Th>
         <Th className="tiny" name="has_alerts">
-          <Icon icon="warning" />
+          <Icon iconName="warning" />
         </Th>
         <Th className="narrow" name="id">
           ID

@@ -93,9 +93,9 @@ export default class ValuemapRow extends Component {
         )}
         <Td className="narrow">
           <Button
-            icon="download"
+            iconName="download"
             onClick={this.handleDumpClick}
-            className="bp3-small"
+            className="pt-small"
           />
           {data.dump && (
             <a

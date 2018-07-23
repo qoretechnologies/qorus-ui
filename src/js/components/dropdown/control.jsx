@@ -22,16 +22,16 @@ export default function Control({
   return (
     <ButtonGroup>
       <Button
-        className={classNames(small ? 'bp3-small' : '')}
+        className={classNames(small ? 'pt-small' : '')}
         type="button"
         text={children}
         intent={intent}
-        icon={icon}
+        iconName={icon}
       />
       {!noCaret && (
         <Button
-          className={classNames(small ? 'bp3-small' : '')}
-          icon="caret-down"
+          className={classNames(small ? 'pt-small' : '')}
+          iconName="caret-down"
           type="button"
           intent={intent}
         />

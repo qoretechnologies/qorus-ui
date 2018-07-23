@@ -24,7 +24,7 @@ const Checkbox: Function = ({
   className,
   handleClick,
 }: Props): React.Element<any> => (
-  <Icon icon={className} onClick={handleClick} iconSize={10} />
+  <Icon iconName={className} onClick={handleClick} iconSize={10} />
 );
 
 export default compose(

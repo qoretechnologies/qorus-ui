@@ -164,7 +164,7 @@ export default class SearchToolbar extends Component {
           <Controls noControls grouped>
             <Button
               label="Clear"
-              icon="remove"
+              iconName="remove"
               btnStyle="default"
               big
               action={this.handleClearClick}

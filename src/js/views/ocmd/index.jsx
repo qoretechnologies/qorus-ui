@@ -250,7 +250,7 @@ export default class OCMDView extends Component {
         <Box top>
           <Toolbar>
             <form onSubmit={this.handleFormSubmit}>
-              <ControlGroup className="bp3-fill">
+              <ControlGroup className="pt-fill">
                 <Dropdown id="ocmd" show={this.state.showDropdown}>
                   <Control btnStyle="info"> Command list </Control>
                   {this.renderCommands()}

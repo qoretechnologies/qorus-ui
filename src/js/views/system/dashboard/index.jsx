@@ -198,12 +198,12 @@ export default class Dashboard extends Component {
                     val={`${round(clusterMemory * 0.00000095367432, 2)} MiB`}
                     label="info"
                   />{' '}
-                  <Icon icon="circle" className="separator" /> Processes:{' '}
+                  <Icon iconName="circle" className="separator" /> Processes:{' '}
                   <Badge
                     val={Object.keys(system.processes).length}
                     label="info"
                   />{' '}
-                  <Icon icon="circle" className="separator" /> Nodes:{' '}
+                  <Icon iconName="circle" className="separator" /> Nodes:{' '}
                   <Badge
                     val={Object.keys(system.cluster_memory).length}
                     label="info"
@@ -228,13 +228,13 @@ export default class Dashboard extends Component {
                   <div>
                     <DashboardSection
                       link="/system/cluster"
-                      icon="hdd-o"
+                      iconName="hdd-o"
                       title={system.processes[processName].host}
                     >
                       {node}
                       <DashboardItem>
                         Memory: <Badge val={`${memory} MiB`} label="info" />{' '}
-                        <Icon icon="circle" className="separator" />
+                        <Icon iconName="circle" className="separator" />
                         Processes: <Badge val={processes} label="info" />
                       </DashboardItem>
                     </DashboardSection>
@@ -245,24 +245,24 @@ export default class Dashboard extends Component {
           </DashboardModule>
           <DashboardModule>
             <PaneItem title="Intefaces">
-              <DashboardSection link="/workflows" icon="sitemap">
-                Workflows <Icon icon="circle" className="separator" /> total /
+              <DashboardSection link="/workflows" iconName="sitemap">
+                Workflows <Icon iconName="circle" className="separator" /> total /
                 alerts
                 <DashboardItem>
                   <Badge val={system.workflow_total} label="info" bypass /> /{' '}
                   <Badge val={system.workflow_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-              <DashboardSection link="/services" icon="list">
-                Services <Icon icon="circle" className="separator" /> total /
+              <DashboardSection link="/services" iconName="list">
+                Services <Icon iconName="circle" className="separator" /> total /
                 alerts
                 <DashboardItem>
                   <Badge val={system.service_total} label="info" bypass /> /{' '}
                   <Badge val={system.service_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-              <DashboardSection link="/jobs" icon="calendar-o">
-                Jobs <Icon icon="circle" className="separator" /> total / alerts
+              <DashboardSection link="/jobs" iconName="calendar-o">
+                Jobs <Icon iconName="circle" className="separator" /> total / alerts
                 <DashboardItem>
                   <Badge val={system.job_total} label="info" bypass /> /{' '}
                   <Badge val={system.job_alerts} label="danger" bypass />
@@ -280,13 +280,13 @@ export default class Dashboard extends Component {
                     label="info"
                     bypass
                   />{' '}
-                  <Icon icon="circle" className="separator" /> Health:{' '}
+                  <Icon iconName="circle" className="separator" /> Health:{' '}
                   <Badge
                     val={health.data.health}
                     label={statusHealth(health.data.health)}
                     bypass
                   />
-                  <Icon icon="circle" className="separator" /> Alerts:{' '}
+                  <Icon iconName="circle" className="separator" /> Alerts:{' '}
                   <Badge
                     val={`${system['alert-summary'].ongoing} ongoing`}
                     label="danger"
@@ -303,8 +303,8 @@ export default class Dashboard extends Component {
               {health.data.remote &&
                 health.data.remote.map((remote: Object) => (
                   <div>
-                    <DashboardSection icon="external-link" link={remote.url}>
-                      {remote.name} <Icon icon="circle" className="separator" />{' '}
+                    <DashboardSection iconName="external-link" link={remote.url}>
+                      {remote.name} <Icon iconName="circle" className="separator" />{' '}
                       key / status
                       <DashboardItem>
                         <Badge
@@ -328,25 +328,25 @@ export default class Dashboard extends Component {
             <PaneItem title="Connections">
               <DashboardSection
                 link="/system/remote/qorus"
-                icon="external-link"
+                iconName="external-link"
               >
-                Qorus <Icon icon="circle" className="separator" /> total /
+                Qorus <Icon iconName="circle" className="separator" /> total /
                 alerts
                 <DashboardItem>
                   <Badge val={system.remote_total} label="info" bypass /> /{' '}
                   <Badge val={system.remote_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-              <DashboardSection link="/system/remote" icon="database">
-                Datasource <Icon icon="circle" className="separator" /> total /
+              <DashboardSection link="/system/remote" iconName="database">
+                Datasource <Icon iconName="circle" className="separator" /> total /
                 alerts
                 <DashboardItem>
                   <Badge val={system.datasource_total} label="info" bypass /> /{' '}
                   <Badge val={system.datasource_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
-              <DashboardSection link="/system/remote/user" icon="users">
-                Users <Icon icon="circle" className="separator" /> total /
+              <DashboardSection link="/system/remote/user" iconName="users">
+                Users <Icon iconName="circle" className="separator" /> total /
                 alerts
                 <DashboardItem>
                   <Badge val={system.user_total} label="info" bypass /> /{' '}

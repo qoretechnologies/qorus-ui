@@ -41,7 +41,7 @@ const SLAToolbar: Function = ({
     {hasPermission(perms, ['CREATE-SLA', 'SLA-CONTROL'], 'or') && (
       <Button
         intent={Intent.PRIMARY}
-        icon="plus"
+        iconName="plus"
         text="Add new"
         onClick={handleAddClick}
         className="pull-right"

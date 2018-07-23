@@ -155,8 +155,8 @@ export default class Options extends Component {
         <Button
           title="Remove"
           intent={Intent.DANGER}
-          className="remove-option bp3-small"
-          icon="cross"
+          className="remove-option pt-small"
+          iconName="cross"
           onClick={handleDelete}
         />
       </Cell>

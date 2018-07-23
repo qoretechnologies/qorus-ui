@@ -32,10 +32,10 @@ export default function DiagramErrorsToolbar(props: Props) {
       <ButtonGroup>
         <Button
           text="Copy last error"
-          icon="copy"
+          iconName="copy"
           onClick={props.onCopyErrorClick}
         />
-        <Button text="CSV" icon="copy" onClick={props.onCSVClick} />
+        <Button text="CSV" iconName="copy" onClick={props.onCSVClick} />
       </ButtonGroup>
     </Toolbar>
   );

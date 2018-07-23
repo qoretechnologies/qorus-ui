@@ -42,19 +42,19 @@ const UsersRow: Function = ({
       <ButtonGroup>
         {canEdit && (
           <Button
-            icon="edit"
+            iconName="edit"
             onClick={handleEditClick}
             title="Edit user"
-            className="bp3-small"
+            className="pt-small"
           />
         )}
         {canDelete && (
           <Button
-            icon="cross"
+            iconName="cross"
             intent={Intent.DANGER}
             onClick={handleDeleteClick}
             title="Remove user"
-            className="bp3-small"
+            className="pt-small"
           />
         )}
       </ButtonGroup>

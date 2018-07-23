@@ -51,7 +51,7 @@ const OptionRow: Function = ({
 }: Props): React.Element<any> => (
   <Tr first={first}>
     <Td className="narrow">
-      <Icon icon={status === 'locked' ? 'lock' : 'unlock'} />
+      <Icon iconName={status === 'locked' ? 'lock' : 'unlock'} />
     </Td>
     <Td className="name">
       <Text text={name} />
@@ -59,19 +59,19 @@ const OptionRow: Function = ({
     <Td className="big">
       <Tag
         title="Workflow"
-        className="bp3-minimal bp3-round"
+        className="pt-minimal pt-round"
         intent={workflow ? Intent.PRIMARY : Intent.NONE}
       >
         W
       </Tag>{' '}
       <Tag
-        className="bp3-minimal bp3-round"
+        className="pt-minimal pt-round"
         intent={service ? Intent.PRIMARY : Intent.NONE}
       >
         S
       </Tag>{' '}
       <Tag
-        className="bp3-minimal bp3-round"
+        className="pt-minimal pt-round"
         intent={job ? Intent.PRIMARY : Intent.NONE}
       >
         J
@@ -85,7 +85,7 @@ const OptionRow: Function = ({
     </Td>
     <Td className="narrow">
       {canEdit && (
-        <Button icon="edit" onClick={handleEditClick} className="bp3-small" />
+        <Button iconName="edit" onClick={handleEditClick} className="pt-small" />
       )}
     </Td>
   </Tr>

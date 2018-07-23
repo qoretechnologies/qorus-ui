@@ -124,7 +124,7 @@ const ConnectionTable: Function = ({
         <Button
           onClick={handleAddClick}
           intent={Intent.PRIMARY}
-          icon="add"
+          iconName="add"
           text="Add new"
         />
       )}
@@ -148,7 +148,7 @@ const ConnectionTable: Function = ({
           <Th className="narrow">-</Th>
           {canDelete && <Th className="narrow">Delete</Th>}
           <Th className="tiny">
-            <Icon icon="exclamation-triangle" />
+            <Icon iconName="exclamation-triangle" />
           </Th>
           <Th className="name" name="name">
             Name

@@ -36,10 +36,10 @@ const AutoStart = ({
         useSmartPositioning
       >
         <Button
-          icon="small-minus"
+          iconName="small-minus"
           onClick={handleDecrementClick}
           intent={Intent.NONE}
-          className="bp3-small"
+          className="pt-small"
         />
       </Tooltip>
       <Tooltip content="Autostart" position={Position.TOP} useSmartPositioning>
@@ -56,7 +56,7 @@ const AutoStart = ({
               ? Intent.SUCCESS
               : Intent.NONE
           }
-          className="bp3-small"
+          className="pt-small"
         />
       </Tooltip>
       <Tooltip
@@ -65,9 +65,9 @@ const AutoStart = ({
         useSmartPositioning
       >
         <Button
-          icon="small-plus"
+          iconName="small-plus"
           onClick={handleIncrementClick}
-          className="bp3-small"
+          className="pt-small"
         />
       </Tooltip>
     </ButtonGroup>

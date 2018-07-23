@@ -41,7 +41,7 @@ const SLADetail: Function = ({
   <div className="tab-pane active">
     <h3 className="detail-title">
       <Link to="/system/slas" >
-        <Icon icon="angle-left" />
+        <Icon iconName="angle-left" />
       </Link>
       {' '}
       {sla.name}

@@ -12,7 +12,7 @@ const JobHeader = ({ job, handleBackClick }: Props) => (
     <div className="col-xs-12">
       <h3 className="detail-title pull-left">
         <a href="#" onClick={handleBackClick} className="go-back">
-          <Icon icon="angle-left" />
+          <Icon iconName="angle-left" />
         </a>
         {' '}
         {job.name}

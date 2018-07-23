@@ -35,10 +35,10 @@ const WorkflowControls: Function = ({
       useSmartPositioning
     >
       <Button
-        icon="power"
+        iconName="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleToggleEnabledClick}
-        className="bp3-small"
+        className="pt-small"
       />
     </Tooltip>
     <Tooltip
@@ -47,10 +47,10 @@ const WorkflowControls: Function = ({
       useSmartPositioning
     >
       <Button
-        icon="refresh"
+        iconName="refresh"
         intent={Intent.PRIMARY}
         onClick={handleResetClick}
-        className="bp3-small"
+        className="pt-small"
       />
     </Tooltip>
   </ButtonGroup>

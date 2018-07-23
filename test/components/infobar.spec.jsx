@@ -21,7 +21,7 @@ describe('InfoBar, InfoBarItem from "components/infobar"', () => {
   describe('InfoBarItem', () => {
     it('displays the item with icon and style', () => {
       const wrapper = mount(
-        <InfoBarItem icon="warning" style="danger">Danger</InfoBarItem>
+        <InfoBarItem iconName="warning" style="danger">Danger</InfoBarItem>
       );
 
       expect(wrapper.find('span').text()).to.eql(' Danger');

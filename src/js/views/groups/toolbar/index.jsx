@@ -44,24 +44,24 @@ const GroupsToolbar: Function = ({
         content={
           <InfoBar>
             {selectedIds.length > 0 && (
-              <InfoBarItem icon="check" style="success">
+              <InfoBarItem iconName="check" style="success">
                 {selectedIds.length}
               </InfoBarItem>
             )}
-            <InfoBarItem icon="eye" style="info">
+            <InfoBarItem iconName="eye" style="info">
               {collectionCount} of {collectionTotal}
             </InfoBarItem>
-            <InfoBarItem icon="warning" style="danger">
+            <InfoBarItem iconName="warning" style="danger">
               {withAlertsCount}
             </InfoBarItem>
-            <InfoBarItem icon="power-off" style="success">
+            <InfoBarItem iconName="power-off" style="success">
               {enabledCount}
             </InfoBarItem>
           </InfoBar>
         }
         position={Position.BOTTOM}
       >
-        <Button icon="info-sign" className="bp3-minimal" />
+        <Button iconName="info-sign" className="pt-minimal" />
       </Popover>
     )}
     <Search

@@ -93,7 +93,7 @@ export default class Topbar extends Component {
     const [countryCode, locale] = this.props.locale.split('-');
 
     return (
-      <Navbar className={`bp3-fixed-top ${light ? '' : 'bp3-dark'} topbar`}>
+      <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
         {this.props.isTablet && (
           <NavbarGroup>
             <Popover
@@ -101,7 +101,7 @@ export default class Topbar extends Component {
               content={<Sidebar menuCollapsed={false} />}
             >
               <ButtonGroup minimal>
-                <Button icon="menu" />{' '}
+                <Button iconName="menu" />{' '}
               </ButtonGroup>
             </Popover>
           </NavbarGroup>
@@ -120,7 +120,7 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  icon="log-out"
+                  iconName="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
@@ -128,9 +128,9 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button
-                icon="user"
+                iconName="user"
                 text="Qorus administrator"
-                rightIcon="caret-down"
+                rightIconName="caret-down"
               />
             </ButtonGroup>
           </Popover>
@@ -176,7 +176,7 @@ export default class Topbar extends Component {
             position={Position.LEFT}
           >
             <ButtonGroup minimal>
-              <Button icon="warning-sign" intent={Intent.DANGER} />
+              <Button iconName="warning-sign" intent={Intent.DANGER} />
             </ButtonGroup>
           </Tooltip>
           <Popover
@@ -185,14 +185,14 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  icon="log-out"
+                  iconName="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
             }
           >
             <ButtonGroup minimal>
-              <Button icon="build" intent={Intent.WARNING} />
+              <Button iconName="build" intent={Intent.WARNING} />
             </ButtonGroup>
           </Popover>
           <Popover
@@ -201,21 +201,21 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  icon="log-out"
+                  iconName="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
             }
           >
             <ButtonGroup minimal>
-              <Button icon="share" />
+              <Button iconName="share" />
             </ButtonGroup>
           </Popover>
           <ButtonGroup minimal>
-            <Button icon="notifications" />
+            <Button iconName="notifications" />
           </ButtonGroup>
           <ButtonGroup minimal>
-            <Button icon={light ? 'moon' : 'flash'} onClick={onThemeClick} />
+            <Button iconName={light ? 'moon' : 'flash'} onClick={onThemeClick} />
           </ButtonGroup>
         </NavbarGroup>
       </Navbar>

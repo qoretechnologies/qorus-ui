@@ -18,7 +18,7 @@ const AddButton: Function = ({ onClick, title }: Props): React.Element<any> => (
     action={onClick}
     btnStyle="success"
     label={title}
-    icon="plus"
+    iconName="plus"
   />
 );
 

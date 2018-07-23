@@ -21,8 +21,8 @@ const Crumb: Function = ({
   <li>
     {link ? (
       <Link
-        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
-          active ? 'bp3-breadcrumb-current' : ''
+        className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${
+          active ? 'pt-breadcrumb-current' : ''
         }`}
         to={link}
       >
@@ -30,8 +30,8 @@ const Crumb: Function = ({
       </Link>
     ) : (
       <span
-        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
-          active ? 'bp3-breadcrumb-current' : ''
+        className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${
+          active ? 'pt-breadcrumb-current' : ''
         }`}
       >
         {text || children}

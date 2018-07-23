@@ -49,7 +49,7 @@ const AddValue: Function = ({
       />
       <div className="input-group-btn">
         <Button
-          icon="power-off"
+          iconName="power-off"
           big
           btnStyle={enabled ? 'success' : 'default'}
           type="button"

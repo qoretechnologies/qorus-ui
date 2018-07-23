@@ -149,7 +149,7 @@ export default class Tree extends Component {
             topKey && (
               <span onClick={handleEditClick}>
                 {' '}
-                <Icon icon="pencil" tooltip="Edit data" />
+                <Icon iconName="pencil" tooltip="Edit data" />
               </span>
             )}{' '}
           {isExpandable &&
@@ -215,12 +215,12 @@ export default class Tree extends Component {
               <div className="pull-left">
                 <ButtonGroup>
                   <Button
-                    className="button--expand bp3-small"
+                    className="button--expand pt-small"
                     text="Expand all"
                     onClick={this.handleExpandClick}
                   />
                   <Button
-                    className="button--collapse bp3-small"
+                    className="button--collapse pt-small"
                     text="Collapse all"
                     onClick={this.handleCollapseClick}
                   />
@@ -231,20 +231,20 @@ export default class Tree extends Component {
               <div className="pull-right">
                 <ButtonGroup>
                   <Button
-                    className="button--copy bp3-small"
+                    className="button--copy pt-small"
                     text="Tree view"
                     disabled={this.state.mode === 'normal'}
                     onClick={this.handleTreeClick}
                   />
                   <Button
-                    className="button--copy bp3-small"
+                    className="button--copy pt-small"
                     text="Copy view"
                     disabled={this.state.mode === 'copy'}
                     onClick={this.handleCopyClick}
                   />
                   {withEdit && (
                     <Button
-                      className="button--copy bp3-small"
+                      className="button--copy pt-small"
                       text="Edit mode"
                       disabled={this.state.mode === 'edit'}
                       onClick={this.handleEditClick}

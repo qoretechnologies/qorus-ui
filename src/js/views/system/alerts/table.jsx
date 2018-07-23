@@ -70,7 +70,7 @@ const AlertsTable: Function = ({
         <Thead>
           <FixedRow sortData={sortData} onSortChange={onSortChange}>
             <Th className="tiny">
-              <Icon icon="warning" />
+              <Icon iconName="warning" />
             </Th>
             <Th className="narrow">-</Th>
             <Th className="text big" name="type">
@@ -103,7 +103,7 @@ const AlertsTable: Function = ({
         </Tbody>
       </Table>
     ) : (
-      <Callout icon="warning-sign" title="No data">
+      <Callout iconName="warning-sign" title="No data">
         There are no data to be displayed.
       </Callout>
     )}

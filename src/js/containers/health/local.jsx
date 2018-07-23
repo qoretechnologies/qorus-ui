@@ -28,7 +28,7 @@ const LocalHealth = ({
       className={`btn navbar-btn btn-${statusHealth(health.data.health)} local-health-dropdown`}
       btnStyle={statusHealth(health.data.health)}
     >
-      <Icon icon="stethoscope" />
+      <Icon iconName="stethoscope" />
     </Control>
     <Item
       title={

@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Group: Function = ({ name, size }: Props): React.Element<any> => (
-  <Tag intent={Intent.PRIMARY} className="bp3-miminal">
+  <Tag intent={Intent.PRIMARY} className="pt-miminal">
     {name} {size}
   </Tag>
 );

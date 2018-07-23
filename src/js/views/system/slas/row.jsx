@@ -54,7 +54,7 @@ const SLARow: Function = ({
       <Td className="narrow">
         <Controls grouped>
           <Button
-            icon="times"
+            iconName="times"
             btnStyle="danger"
             onClick={handleDeleteClick}
           />

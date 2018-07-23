@@ -70,11 +70,11 @@ export default class DetailTab extends Component {
           <div>
             <h4>Process summary</h4>
             Node: <Badge val={workflow.process.node} bypass label="info" />{' '}
-            <Icon icon="circle" className="separator" /> PID:{' '}
+            <Icon iconName="circle" className="separator" /> PID:{' '}
             <Badge val={workflow.process.pid} bypass label="info" />{' '}
-            <Icon icon="circle" className="separator" /> Status:{' '}
+            <Icon iconName="circle" className="separator" /> Status:{' '}
             <Badge val={workflow.process.status} bypass label="info" />{' '}
-            <Icon icon="circle" className="separator" /> Memory:{' '}
+            <Icon iconName="circle" className="separator" /> Memory:{' '}
             <Badge val={workflow.process.priv_str} bypass label="info" />
           </div>
         )}

@@ -52,7 +52,7 @@ const JobsTable: Function = ({
         <Th className="narrow">-</Th>
         {!isTablet && <Th className="big">Actions</Th>}
         <Th className="narrow" name="has_alerts">
-          <Icon icon="warning" />
+          <Icon iconName="warning" />
         </Th>
         <Th className="narrow" name="id">
           ID

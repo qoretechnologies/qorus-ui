@@ -47,7 +47,7 @@ const ClusterNode: Function = ({
 }: Props): React.Element<any> => (
   <Box>
     <Breadcrumbs onClick={handleExpandClick}>
-      <Crumb active={expanded} icon="cross">
+      <Crumb active={expanded} iconName="cross">
         {node}
       </Crumb>
     </Breadcrumbs>
@@ -55,11 +55,11 @@ const ClusterNode: Function = ({
     {expanded && (
       <div>
         <div className="clear" style={{ padding: '10px 0' }}>
-          <Tag className="bp3-minimal">Hostname: {hostname}</Tag>{' '}
-          <Tag className="bp3-minimal">
+          <Tag className="pt-minimal">Hostname: {hostname}</Tag>{' '}
+          <Tag className="pt-minimal">
             Node memory: {round(memory * 0.00000095367432, 2)} MiB
           </Tag>{' '}
-          <Tag className="bp3-minimal"># of processes: {processes.length}</Tag>
+          <Tag className="pt-minimal"># of processes: {processes.length}</Tag>
         </div>
         <Table condensed striped>
           <Thead>

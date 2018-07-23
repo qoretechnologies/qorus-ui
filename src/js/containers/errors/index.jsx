@@ -108,7 +108,7 @@ const ErrorsContainer: Function = ({
         <Button
           className="pull-right"
           text="Add error"
-          icon="plus"
+          iconName="plus"
           onClick={handleCreateClick}
           intent={Intent.PRIMARY}
         />

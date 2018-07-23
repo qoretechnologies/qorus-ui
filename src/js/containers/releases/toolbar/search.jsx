@@ -100,9 +100,9 @@ class ReleasesSearch extends Component {
     return (
       <div className="pull-right">
         <div className="form-group search-toolbar">
-          <div className="pull-left bp3-control-group">
+          <div className="pull-left pt-control-group">
             <input
-              className="bp3-input search-input"
+              className="pt-input search-input"
               type="text"
               placeholder="File name..."
               onChange={this.handleFileChange}
@@ -111,7 +111,7 @@ class ReleasesSearch extends Component {
               name="filename"
             />
             <input
-              className="bp3-input search-input"
+              className="pt-input search-input"
               type="text"
               placeholder="Component..."
               onChange={this.handleCompChange}

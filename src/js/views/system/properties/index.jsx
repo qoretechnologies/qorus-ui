@@ -162,7 +162,7 @@ export default class PropertiesView extends Component {
             <Button
               text="Add property"
               intent={Intent.PRIMARY}
-              icon="add"
+              iconName="add"
               className="pull-right"
               onClick={this.handleAddClick}
             />

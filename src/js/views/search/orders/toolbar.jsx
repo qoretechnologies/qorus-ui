@@ -228,21 +228,21 @@ export default class SearchToolbar extends Component {
           <ButtonGroup>
             <Button
               text="Save search"
-              icon="floppy-disk"
+              iconName="floppy-disk"
               onClick={this.handleSaveClick}
             />
             <Button
               text="Advanced search"
-              icon={this.state.showAdvanced ? 'selection' : 'circle'}
+              iconName={this.state.showAdvanced ? 'selection' : 'circle'}
               intent={this.state.showAdvanced ? Intent.PRIMARY : Intent.NONE}
               onClick={this.handleAdvancedClick}
             />
             <Button
               text="Show history"
-              icon="history"
+              iconName="history"
               onClick={this.handleHistoryClick}
             />
-            <Button text="Clear" icon="cross" onClick={this.handleClearClick} />
+            <Button text="Clear" iconName="cross" onClick={this.handleClearClick} />
           </ButtonGroup>
         </div>
       </Toolbar>

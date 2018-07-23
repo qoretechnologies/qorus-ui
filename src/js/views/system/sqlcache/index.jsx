@@ -124,7 +124,7 @@ class SQLCache extends Component {
           <Button
             intent={Intent.DANGER}
             text="Clear All"
-            icon="trash"
+            iconName="trash"
             action={this.handleClearAllClick}
             className="pull-right"
           />

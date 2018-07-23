@@ -20,6 +20,7 @@ type Props = {
   label?: string,
   btnStyle: string,
   icon?: string,
+  iconName?: string,
   action?: () => void,
   handleClick?: () => void,
   onClick?: () => void,
@@ -42,6 +43,7 @@ const Control: Function = ({
   type,
   css,
   icon,
+  iconName,
   label,
   children,
   btnStyle,
@@ -54,7 +56,7 @@ const Control: Function = ({
     disabled={disabled}
     type={type}
     style={css}
-    icon={icon}
+    iconName={icon || iconName}
     text={label || children}
     intent={intentTransform[btnStyle]}
   />
@@ -64,7 +66,7 @@ export default compose(
   mapProps(
     ({ className, big, ...rest }: Props): Props => ({
       className: classNames(className, {
-        'bp3-small': !big,
+        'pt-small': !big,
       }),
       big,
       ...rest,

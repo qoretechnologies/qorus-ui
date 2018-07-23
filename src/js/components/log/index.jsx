@@ -90,15 +90,15 @@ export default class LogComponent extends Component {
             <ButtonGroup>
               <Button
                 text="Autoscroll"
-                icon={this.state.autoScroll ? 'selection' : 'circle'}
+                iconName={this.state.autoScroll ? 'selection' : 'circle'}
                 intent={this.state.autoScroll ? Intent.PRIMARY : Intent.NONE}
                 onClick={this.setAutoScroll}
               />
-              <Button text="Clear" icon="cross" onClick={onClearClick} />
+              <Button text="Clear" iconName="cross" onClick={onClearClick} />
             </ButtonGroup>
           </div>
           <p className="pull-right log-search">
-            <Icon icon="info-circle" /> Use{' '}
+            <Icon iconName="info-circle" /> Use{' '}
             <strong>"{getControlChar()} + f"</strong> to search the log
           </p>
         </Toolbar>

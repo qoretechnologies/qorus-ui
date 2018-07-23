@@ -24,10 +24,10 @@ const AutoComponent: Function = ({ children }: { children: any }) => {
 
   if (isBoolean(children)) {
     if (children) {
-      return <Icon icon="check-circle" className="text-success" />;
+      return <Icon iconName="check-circle" className="text-success" />;
     }
 
-    return <Icon icon="minus-circle" className="text-danger" />;
+    return <Icon iconName="minus-circle" className="text-danger" />;
   } else if (isDate(children)) {
     comp = moment(children).format(DATE_FORMATS.DISPLAY);
   } else {

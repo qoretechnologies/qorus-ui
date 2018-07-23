@@ -106,7 +106,7 @@ class NotificationPanel extends React.Component {
         className="notification-panel btn-group"
       >
         <Control
-          icon="bell"
+          iconName="bell"
           btnStyle="inverse"
           onClick={this.handleClick}
           className="notification-button"

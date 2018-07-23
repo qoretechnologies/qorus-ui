@@ -47,7 +47,7 @@ export default class Navigation extends Component {
       active={this.isActiveItem(item)}
       url={item.url}
       name={item.name}
-      icon={item.icon}
+      iconName={item.icon}
     />
   );
 

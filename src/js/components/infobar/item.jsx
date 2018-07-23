@@ -6,16 +6,24 @@ import Icon from '../icon';
 
 type Props = {
   icon: string,
+  iconName?: string,
   children: any,
   style: string,
 };
 
-const InfobarItem: Function = ({ icon, children, style }: Props): React.Element<any> => (
+const InfobarItem: Function = ({
+  icon,
+  iconName,
+  children,
+  style,
+}: Props): React.Element<any> => (
   <span className="infobar-item">
-    {icon && (
-      <Icon icon={icon} className={style ? `text-${style}` : ''} />
-    )}
-    {' '}
+    {(icon || iconName) && (
+      <Icon
+        iconName={icon || iconName}
+        className={style ? `text-${style}` : ''}
+      />
+    )}{' '}
     {children}
   </span>
 );

@@ -52,7 +52,7 @@ const AlertRow: Function = ({
     onHighlightEnd={handleHighlightEnd}
   >
     <Td className="tiny">
-      <Icon icon="warning" />
+      <Icon iconName="warning" />
     </Td>
     <Td className="narrow">
       <DetailButton onClick={handleDetailClick} active={isActive} />

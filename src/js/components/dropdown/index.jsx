@@ -255,7 +255,7 @@ export default class Dropdown extends Component {
           toggleItem={this.toggleItem}
           hideDropdown={this.hideToggle}
           multi={this.props.multi}
-          icon={icon}
+          iconName={icon}
         />
       );
     });

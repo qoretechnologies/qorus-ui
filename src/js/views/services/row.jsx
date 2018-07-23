@@ -84,7 +84,7 @@ const ServiceRow: Function = ({
     </Td>
     <Td className="narrow">
       <Icon
-        icon={type === 'system' ? 'cog' : 'user'}
+        iconName={type === 'system' ? 'cog' : 'user'}
         tooltip={type === 'system' ? 'System' : 'User'}
       />
     </Td>
@@ -103,7 +103,7 @@ const ServiceRow: Function = ({
       {hasAlerts && (
         <Controls>
           <Button
-            icon="warning"
+            iconName="warning"
             btnStyle="danger"
             onClick={handleWarningClick}
             title="Show alerts"

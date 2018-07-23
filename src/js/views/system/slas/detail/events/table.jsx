@@ -43,7 +43,7 @@ const SLAEventsTable: Function = ({
         <Th className="text" name="producer" onClick={handleHeaderClick}>Producer</Th>
         <Th className="big" name="created" onClick={handleHeaderClick}>Created</Th>
         <Th className="tiny" name="success" onClick={handleHeaderClick}>
-          <Icon icon="check" />
+          <Icon iconName="check" />
         </Th>
         <Th className="text" name="value" onClick={handleHeaderClick}>Value</Th>
       </Tr>

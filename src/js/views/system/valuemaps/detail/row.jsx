@@ -41,13 +41,13 @@ const RowDetail: Function = ({
       <Td>
         <Controls grouped>
           <Button
-            icon="power-off"
+            iconName="power-off"
             btnStyle={enabled ? 'success' : 'danger'}
             onClick={handleEnableClick}
             title={enabled ? 'Disable' : 'Enable'}
           />
           <Button
-            icon="times"
+            iconName="times"
             btnStyle="danger"
             onClick={handleRemoveClick}
             title="Remove value"

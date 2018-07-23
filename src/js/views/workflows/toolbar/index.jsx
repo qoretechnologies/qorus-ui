@@ -81,12 +81,12 @@ const WorkflowsToolbar: Function = ({
         content={
           <Menu>
             <MenuItem
-              icon="warning-sign"
+              iconName="warning-sign"
               text="Workflows with alert"
               label={withAlertsCount}
             />
             <MenuItem
-              icon="power"
+              iconName="power"
               text="Enabled workflows"
               label={enabledCount}
             />
@@ -95,7 +95,7 @@ const WorkflowsToolbar: Function = ({
         position={Position.BOTTOM}
       >
         <ButtonGroup>
-          <Button icon="info-sign" />
+          <Button iconName="info-sign" />
         </ButtonGroup>
       </Popover>
       <Search

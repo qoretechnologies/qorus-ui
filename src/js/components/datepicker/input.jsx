@@ -19,7 +19,7 @@ type Props = {
 
 const Input = (props: Props) => (
   <InputGroup
-    leftIcon="calendar"
+    lefticonName="calendar"
     type="text"
     onBlur={props.applyOnBlur ? props.onApplyDate : null}
     value={props.inputDate}

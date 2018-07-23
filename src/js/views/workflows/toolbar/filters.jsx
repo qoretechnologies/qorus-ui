@@ -34,24 +34,24 @@ const ToolbarFilters: Function = ({
             ? Intent.PRIMARY
             : Intent.NONE
         }
-        icon="filter-list"
+        iconName="filter-list"
       >
         {' '}
         Filter
       </Control>
       <Item
         title="Running"
-        icon={runningQuery ? 'selection' : 'circle'}
+        iconName={runningQuery ? 'selection' : 'circle'}
         onClick={changeRunningQuery}
       />
       <Item
         title="Latest"
-        icon={latestQuery ? 'selection' : 'circle'}
+        iconName={latestQuery ? 'selection' : 'circle'}
         onClick={changeLatestQuery}
       />
       <Item
         title="Deprecated"
-        icon={deprecatedQuery ? 'selection' : 'circle'}
+        iconName={deprecatedQuery ? 'selection' : 'circle'}
         onClick={changeDeprecatedQuery}
       />
     </Dropdown>
@@ -60,22 +60,22 @@ const ToolbarFilters: Function = ({
       <Button
         text="Running"
         onClick={changeRunningQuery}
-        icon={runningQuery ? 'selection' : 'circle'}
+        iconName={runningQuery ? 'selection' : 'circle'}
         intent={runningQuery ? Intent.PRIMARY : Intent.NONE}
       />
       <Button
         text="Last version"
         onClick={changeLatestQuery}
-        icon={latestQuery ? 'selection' : 'circle'}
+        iconName={latestQuery ? 'selection' : 'circle'}
         intent={latestQuery ? Intent.PRIMARY : Intent.NONE}
       />
       <Dropdown>
         <Control intent={deprecatedQuery ? Intent.PRIMARY : Intent.NONE}>
-          <Icon icon="caret-down" />
+          <Icon iconName="caret-down" />
         </Control>
         <Item
           title="Deprecated"
-          icon={deprecatedQuery ? 'selection' : 'circle'}
+          iconName={deprecatedQuery ? 'selection' : 'circle'}
           onClick={changeDeprecatedQuery}
         />
       </Dropdown>

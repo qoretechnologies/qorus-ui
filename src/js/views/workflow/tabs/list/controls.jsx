@@ -51,8 +51,8 @@ const ActionButton: Function = ({
       text={compact ? null : actionName.toUpperCase()}
       disabled={disabled}
       title={name}
-      icon={icon}
-      className="bp3-small"
+      iconName={icon}
+      className="pt-small"
       onClick={handleClick}
     />
   );

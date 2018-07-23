@@ -85,10 +85,10 @@ const Property: Function = ({
             {hasPermission(perms, ['SERVER-CONTROL', 'SET-PROPERTY'], 'or') && (
               <Button
                 text="Add property"
-                icon="add"
+                iconName="add"
                 intent={Intent.PRIMARY}
                 onClick={handlePropAddClick}
-                className="bp3-small"
+                className="pt-small"
               />
             )}
             {hasPermission(
@@ -98,9 +98,9 @@ const Property: Function = ({
             ) && (
               <Button
                 text="Remove group"
-                icon="cross"
+                iconName="cross"
                 onClick={handlePropDeleteClick}
-                className="bp3-small"
+                className="pt-small"
               />
             )}
           </ButtonGroup>
@@ -131,9 +131,9 @@ const Property: Function = ({
                         'or'
                       ) && (
                         <Button
-                          icon="edit"
+                          iconName="edit"
                           onClick={handleEditClick(d, data[d])}
-                          className="bp3-small"
+                          className="pt-small"
                         />
                       )}
                       {hasPermission(
@@ -142,9 +142,9 @@ const Property: Function = ({
                         'or'
                       ) && (
                         <Button
-                          icon="cross"
+                          iconName="cross"
                           onClick={handleKeyDeleteClick(d)}
-                          className="bp3-small"
+                          className="pt-small"
                         />
                       )}
                     </ButtonGroup>

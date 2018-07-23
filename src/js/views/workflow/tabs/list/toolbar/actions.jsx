@@ -37,44 +37,44 @@ const ToolbarActions: Function = ({
     <ButtonGroup>
       <Dropdown id="hidden">
         <DropdownControl> With selected: </DropdownControl>
-        <DropdownItem title="Retry" icon="refresh" action={handleRetryClick} />
+        <DropdownItem title="Retry" iconName="refresh" action={handleRetryClick} />
         <DropdownItem
           title="Block"
-          icon="minus-circle"
+          iconName="minus-circle"
           action={handleBlockClick}
         />
         <DropdownItem
           title="Unblock"
-          icon="check-circle"
+          iconName="check-circle"
           action={handleUnblockClick}
         />
         <DropdownItem
           title="Cancel"
-          icon="times-circle"
+          iconName="times-circle"
           action={handleCancelClick}
         />
         <DropdownItem
           title="Uncancel"
-          icon="refresh"
+          iconName="refresh"
           action={handleUncancelClick}
         />
       </Dropdown>
     </ButtonGroup>
   ) : (
     <ButtonGroup>
-      <Button text="Retry" icon="refresh" onClick={handleRetryClick} />
-      <Button text="Block" icon="disable" onClick={handleBlockClick} />
+      <Button text="Retry" iconName="refresh" onClick={handleRetryClick} />
+      <Button text="Block" iconName="disable" onClick={handleBlockClick} />
       <Button
         text="Unblock"
-        icon="endorsed"
+        iconName="endorsed"
         big
         btnStyle="default"
         onClick={handleUnblockClick}
       />
-      <Button text="Cancel" icon="remove" onClick={handleCancelClick} />
+      <Button text="Cancel" iconName="remove" onClick={handleCancelClick} />
       <Button
         text="Uncancel"
-        icon="refresh"
+        iconName="refresh"
         onClick={handleUncancelClick}
       />
     </ButtonGroup>

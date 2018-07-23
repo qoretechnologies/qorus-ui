@@ -181,7 +181,7 @@ export default class ErrorsTable extends Component {
           {onClone && (
             <Control
               title="Override"
-              icon="copy"
+              iconName="copy"
               btnStyle="warning"
               action={onClone}
             />
@@ -189,7 +189,7 @@ export default class ErrorsTable extends Component {
           {onUpdate && (
             <Control
               title="Edit"
-              icon="pencil-square-o"
+              iconName="pencil-square-o"
               btnStyle="warning"
               action={onUpdate}
             />
@@ -197,7 +197,7 @@ export default class ErrorsTable extends Component {
           {onRemove && (
             <Control
               title="Remove"
-              icon="times"
+              iconName="times"
               btnStyle="danger"
               action={onRemove}
             />

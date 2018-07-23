@@ -72,7 +72,7 @@ const ErrorRow: Function = ({
         <Td className="narrow">
           <Button
             label="Copy"
-            icon="copy"
+            iconName="copy"
             btnStyle="success"
             onClick={handleCopyClick}
           />

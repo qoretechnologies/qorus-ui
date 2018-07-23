@@ -13,7 +13,7 @@ type Props = {
 const Author: Function = ({ model: { author } }: Props): ?React.Element<any> =>
   author ? (
     <PaneItem title="Author">
-      <Icon icon="user" /> {author}
+      <Icon iconName="user" /> {author}
     </PaneItem>
   ) : null;
 

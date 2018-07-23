@@ -34,29 +34,29 @@ const ServiceControls: Function = ({
   <ButtonGroup>
     <Button
       title={enabled ? 'Disable' : 'Enable'}
-      icon="power"
+      iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
-      className="bp3-small"
+      className="pt-small"
     />
     <Button
       title={autostart ? 'Disable autostart' : 'Enable autostart'}
-      icon={autostart ? 'pause' : 'play'}
+      iconName={autostart ? 'pause' : 'play'}
       intent={autostart ? Intent.PRIMARY : Intent.NONE}
       onClick={handleAutostartClick}
-      className="bp3-small"
+      className="pt-small"
     />
     <Button
       title={loaded ? 'Unload' : 'Load'}
-      icon={loaded ? 'small-tick' : 'remove'}
+      iconName={loaded ? 'small-tick' : 'remove'}
       onClick={handleLoadClick}
-      className="bp3-small"
+      className="pt-small"
     />
     <Button
       title="Reset"
-      icon="refresh"
+      iconName="refresh"
       onClick={handleResetClick}
-      className="bp3-small"
+      className="pt-small"
     />
   </ButtonGroup>
 );

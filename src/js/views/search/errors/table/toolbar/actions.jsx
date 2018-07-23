@@ -33,35 +33,35 @@ const ToolbarActions: Function = ({
   >
     <Button
       label="Retry"
-      icon="refresh"
+      iconName="refresh"
       big
       btnStyle="default"
       onClick={handleRetryClick}
     />
     <Button
       label="Block"
-      icon="minus-circle"
+      iconName="minus-circle"
       big
       btnStyle="default"
       onClick={handleBlockClick}
     />
     <Button
       label="Unblock"
-      icon="check-circle"
+      iconName="check-circle"
       big
       btnStyle="default"
       onClick={handleUnblockClick}
     />
     <Button
       label="Cancel"
-      icon="times-circle"
+      iconName="times-circle"
       big
       btnStyle="default"
       onClick={handleCancelClick}
     />
     <Button
       label="Uncancel"
-      icon="refresh"
+      iconName="refresh"
       big
       btnStyle="default"
       onClick={handleUncancelClick}

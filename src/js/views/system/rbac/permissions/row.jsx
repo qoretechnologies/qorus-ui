@@ -41,20 +41,20 @@ const PermsRow: Function = ({
         {canEdit &&
           model.permission_type !== 'SYSTEM' && (
             <Button
-              icon="edit"
+              iconName="edit"
               onClick={handleEditClick}
               title="Edit permission"
-              className="bp3-small"
+              className="pt-small"
             />
           )}
         {canDelete &&
           model.permission_type !== 'SYSTEM' && (
             <Button
-              icon="cross"
+              iconName="cross"
               intent={Intent.DANGER}
               onClick={handleDeleteClick}
               title="Remove permission"
-              className="bp3-small"
+              className="pt-small"
             />
           )}
       </ButtonGroup>

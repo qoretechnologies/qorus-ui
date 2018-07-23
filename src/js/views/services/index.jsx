@@ -98,7 +98,7 @@ const Services: Function = ({
           <Button
             text={`Showing ${services.length} of ${infoTotalCount}`}
             intent={Intent.NONE}
-            className="bp3-minimal"
+            className="pt-minimal"
           />
           <Button
             text={`Show ${limit} more...`}

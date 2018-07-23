@@ -110,7 +110,7 @@ const TableRow: Function = ({
       {hasAlerts && (
         <Controls>
           <Button
-            icon="warning"
+            iconName="warning"
             btnStyle="danger"
             onClick={handleWarningClick}
             title="Show alerts"
@@ -159,11 +159,11 @@ const TableRow: Function = ({
               <div>
                 <h4>Process summary</h4>
                 Node: <Badge val={rest.process.node} bypass label="info" />{' '}
-                <Icon icon="circle" className="separator" /> PID:{' '}
+                <Icon iconName="circle" className="separator" /> PID:{' '}
                 <Badge val={rest.process.pid} bypass label="info" />{' '}
-                <Icon icon="circle" className="separator" /> Status:{' '}
+                <Icon iconName="circle" className="separator" /> Status:{' '}
                 <Badge val={rest.process.status} bypass label="info" />{' '}
-                <Icon icon="circle" className="separator" /> Memory:{' '}
+                <Icon iconName="circle" className="separator" /> Memory:{' '}
                 <Badge val={rest.process.priv_str} bypass label="info" />
               </div>
             )}
@@ -223,7 +223,7 @@ const TableRow: Function = ({
     </Td>
     {showDeprecated && (
       <Td className="medium">
-        <Icon icon={deprecated ? 'flag' : 'flag-o'} />
+        <Icon iconName={deprecated ? 'flag' : 'flag-o'} />
       </Td>
     )}
   </Tr>

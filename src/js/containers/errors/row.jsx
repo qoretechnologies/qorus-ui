@@ -57,13 +57,13 @@ const ErrorsRow: Function = ({
           <Button
             onClick={handleEditClick}
             btnStyle="warning"
-            icon="edit"
+            iconName="edit"
             title="Edit error"
           />
           <Button
             onClick={handleDeleteClick}
             btnStyle="danger"
-            icon="times"
+            iconName="times"
             title="Remove error"
           />
         </Controls>

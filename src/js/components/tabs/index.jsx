@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs as Tabs2, Tab as Tab2 } from '@blueprintjs/core';
+import { Tabs2, Tab2 } from '@blueprintjs/core';
 import classNames from 'classnames';
 
 import Container from '../container';

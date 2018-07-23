@@ -15,7 +15,7 @@ export default class NavLink extends RelativeLink {
     return (
       <li
         role="tab"
-        className="bp3-tab"
+        className="pt-tab"
         aria-selected={isActive(this.props.to, this.props.path)}
       >
         {this.props.to}

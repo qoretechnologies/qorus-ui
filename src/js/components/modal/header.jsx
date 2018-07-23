@@ -22,10 +22,10 @@ type Props = {
  */
 export default function Header(props: Props) {
   return (
-    <div className="bp3-dialog-header handle">
-      <span className="bp3-icon-large bp3-icon-inbox" />
+    <div className="pt-dialog-header handle">
+      <span className="pt-icon-large pt-icon-inbox" />
       {props.children && (
-        <h5 className="bp3-dialog-header-title" id={props.titleId}>
+        <h5 className="pt-dialog-header-title" id={props.titleId}>
           {props.children}
         </h5>
       )}
@@ -33,7 +33,7 @@ export default function Header(props: Props) {
       {props.onClose && (
         <button
           aria-label="Close"
-          className="bp3-dialog-close-button bp3-icon-small-cross"
+          className="pt-dialog-close-button pt-icon-small-cross"
           onClick={props.onClose}
         />
       )}

@@ -30,7 +30,7 @@ describe("Dropdown, { Item, Control } from 'components/dropdown'", () => {
       renderer.render(
         <Item
           title="All"
-          icon="power-off"
+          iconName="power-off"
         />
       );
       const result = renderer.getRenderOutput();

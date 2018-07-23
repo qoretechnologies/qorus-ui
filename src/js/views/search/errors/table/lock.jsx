@@ -32,12 +32,12 @@ const OrderLock: Function = ({
       small
       btnStyle={lock ? 'danger' : 'success'}
     >
-      <Icon icon={lock ? 'lock' : 'unlock'} />
+      <Icon iconName={lock ? 'lock' : 'unlock'} />
       {' '}
       { lock || '' }
     </Control>
     <Item
-      icon={lock ? 'unlock' : 'lock'}
+      iconName={lock ? 'unlock' : 'lock'}
       title={lock ? 'Unlock' : 'Lock'}
       action={handleLockClick}
     />

@@ -53,50 +53,50 @@ const ServiceControls: Function = ({
       <span>{schedText}</span>{' '}
       <Button
         text="Reschedule"
-        icon="time"
+        iconName="time"
         onClick={handleScheduleClick}
-        className="bp3-small"
+        className="pt-small"
       />
     </div>
   ) : (
     <ButtonGroup>
       <Button
         title={enabled ? 'Disable' : 'Enable'}
-        icon="power"
+        iconName="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleEnableClick}
-        className="bp3-small"
+        className="pt-small"
       />
       <Button
         title={active ? 'Deactivate' : 'Activate'}
-        icon={active ? 'small-tick' : 'remove'}
+        iconName={active ? 'small-tick' : 'remove'}
         intent={active ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleActivateClick}
-        className="bp3-small"
+        className="pt-small"
       />
       <Button
         title="Reset"
-        icon="refresh"
+        iconName="refresh"
         onClick={handleResetClick}
-        className="bp3-small"
+        className="pt-small"
       />
       <Button
         title="Run"
-        icon="play"
+        iconName="play"
         onClick={handleRunClick}
-        className="bp3-small"
+        className="pt-small"
       />
       <Button
         title="Reschedule"
-        icon="time"
+        iconName="time"
         onClick={handleScheduleClick}
-        className="bp3-small"
+        className="pt-small"
       />
       <Button
         title="Set expiry"
-        icon="tag"
+        iconName="tag"
         onClick={handleExpiryClick}
-        className="bp3-small"
+        className="pt-small"
       />
     </ButtonGroup>
   );

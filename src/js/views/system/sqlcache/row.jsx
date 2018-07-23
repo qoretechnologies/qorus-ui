@@ -37,7 +37,7 @@ const SQLCacheRow: Function = ({
           intent={Intent.DANGER}
           text="Clear"
           onClick={handleClick}
-          className="bp3-small"
+          className="pt-small"
         />
       </Td>
     </Tr>

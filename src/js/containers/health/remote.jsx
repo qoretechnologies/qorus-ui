@@ -23,7 +23,7 @@ const RemoteHealth = ({
       noCaret
       className="btn navbar-btn btn-inverse"
     >
-      <Icon icon="sitemap" />
+      <Icon iconName="sitemap" />
     </Control>
     {health.data.remote && health.data.remote.map((
       remote: Object,

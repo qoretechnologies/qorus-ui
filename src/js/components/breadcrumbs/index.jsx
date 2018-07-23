@@ -16,10 +16,10 @@ const Breadcrumbs: Function = ({
   onClick,
   noFloat,
 }: Props): React.Element<any> => (
-  <ul className={`bp3-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
+  <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
     {collapsed && (
       <li onClick={onClick}>
-        <span className="bp3-breadcrumbs-collapsed" />
+        <span className="pt-breadcrumbs-collapsed" />
       </li>
     )}
     {children}

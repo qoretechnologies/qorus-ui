@@ -22,10 +22,10 @@ const GroupsControls: Function = ({
   <ButtonGroup>
     <Button
       title={enabled ? 'Disable' : 'Enable'}
-      icon="power"
+      iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
-      className="bp3-small"
+      className="pt-small"
     />
   </ButtonGroup>
 );

@@ -50,12 +50,12 @@ const MethodsRow: Function = ({
     <Td className="normal">
       <Controls grouped>
         <Button
-          icon="play"
+          iconName="play"
           btnStyle="success"
           onClick={handleRunClick}
         />
         <Button
-          icon="code"
+          iconName="code"
           btnStyle="inverse"
           onClick={handleCodeClick}
         />

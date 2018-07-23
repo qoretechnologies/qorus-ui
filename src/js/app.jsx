@@ -8,8 +8,13 @@ import Notifications from './containers/bubbles';
 import Preloader from './components/preloader';
 
 require('normalize.css/normalize.css');
-require('@blueprintjs/core/lib/css/blueprint.css');
-require('@blueprintjs/icons/lib/css/blueprint-icons.css');
+require('@blueprintjs/core/dist/blueprint.css');
+require('@blueprintjs/core/resources/icons/icons-16.eot');
+require('@blueprintjs/core/resources/icons/icons-16.ttf');
+require('@blueprintjs/core/resources/icons/icons-16.woff');
+require('@blueprintjs/core/resources/icons/icons-20.eot');
+require('@blueprintjs/core/resources/icons/icons-20.ttf');
+require('@blueprintjs/core/resources/icons/icons-20.woff');
 require('bootstrap-loader');
 require('font-awesome-webpack!../font-awesome.config.js');
 require('../css/app.scss');

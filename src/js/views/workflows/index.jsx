@@ -293,7 +293,7 @@ const Workflows: Function = ({
           <Button
             text={`Showing ${workflows.length} of ${infoTotalCount}`}
             intent={Intent.NONE}
-            className="bp3-minimal"
+            className="pt-minimal"
           />
           <Button
             text={`Show ${limit} more...`}

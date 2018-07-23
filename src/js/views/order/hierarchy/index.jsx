@@ -86,7 +86,7 @@ const HierarchyTable: Function = ({
         <Button
           text={`Showing ${hierarchyKeys.length} of ${loadMoreTotal}`}
           intent={Intent.NONE}
-          className="bp3-minimal"
+          className="pt-minimal"
         />
         <Button
           text={'Show 50 more...'}

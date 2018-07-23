@@ -75,7 +75,7 @@ export default class OrderHeader extends Component {
           <i className={`fa fa-${icon}`} /> {locked}
         </Control>
         <Item
-          icon={itemIcon}
+          iconName={itemIcon}
           title={title}
           action={this.handleLockClick(data)}
         />
@@ -151,7 +151,7 @@ export default class OrderHeader extends Component {
         {this.props.workflow.has_alerts && (
           <Callout
             intent={Intent.DANGER}
-            icon="warning-sign"
+            iconName="warning-sign"
             title="Workflow with alerts"
           >
             the parent workflow has alerts raised against it that may prevent it

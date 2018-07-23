@@ -120,7 +120,7 @@ const ServiceRow: Function = ({
       {hasAlerts && (
         <Controls>
           <Button
-            icon="warning"
+            iconName="warning"
             btnStyle="danger"
             onClick={handleWarningClick}
             title="Show alerts"

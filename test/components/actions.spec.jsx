@@ -17,7 +17,7 @@ describe("{ Actions } from 'components/toolbar'", () => {
       <Actions>
         <Button
           label="Enable"
-          icon="icon"
+          iconName="icon"
         />
       </Actions>
     );

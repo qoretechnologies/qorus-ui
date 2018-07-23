@@ -82,15 +82,15 @@ export default class SystemOptions extends Component {
         <Button
           type="submit"
           intent={Intent.PRIMARY}
-          className="bp3-small"
-          icon="plus"
+          className="pt-small"
+          iconName="plus"
           text="Submit"
         />
         <Button
           type="button"
-          className="bp3-small"
+          className="pt-small"
           onClick={::this.cancel}
-          icon="cross"
+          iconName="cross"
           text="Cancel"
         />
       </form>
@@ -109,7 +109,7 @@ export default class SystemOptions extends Component {
         onClick={::this.start}
         disabled={!this.props.options.length}
         text="Add option"
-        icon="plus"
+        iconName="plus"
       />
     );
   }

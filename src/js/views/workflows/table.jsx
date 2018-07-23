@@ -74,7 +74,7 @@ const WorkflowsTable: Function = ({
           Autostart
         </Th>
         <Th className="tiny" name="has_alerts">
-          <Icon icon="warning" />
+          <Icon iconName="warning" />
         </Th>
         <Th className="narrow" name="exec_count">
           Execs

@@ -89,7 +89,7 @@ export default class NotesView extends Component {
         {this.state.error && (
           <Callout
             intent={Intent.DANGER}
-            icon="warning-sign"
+            iconName="warning-sign"
             title="Note too short"
           >
             Please type at least 3 characters
@@ -108,7 +108,7 @@ export default class NotesView extends Component {
             <Button
               type="submit"
               text="Add note"
-              icon="add"
+              iconName="add"
               intent={Intent.PRIMARY}
             />
           </Toolbar>

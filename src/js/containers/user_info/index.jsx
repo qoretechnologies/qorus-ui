@@ -23,7 +23,7 @@ export const UserInfo = ({
       <Button
         big
         className="btn navbar-btn btn-inverse user"
-        icon="user"
+        iconName="user"
         label={user.name}
       />
     );
@@ -35,7 +35,7 @@ export const UserInfo = ({
         noCaret
         className="btn navbar-btn btn-inverse"
       >
-        <Icon icon="user" />
+        <Icon iconName="user" />
         {' '}
         {user.name}
       </Control>

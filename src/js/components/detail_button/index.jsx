@@ -23,7 +23,7 @@ const DetailButton: Function = ({
       text={active ? 'Close' : 'Detail'}
       intent={active ? Intent.PRIMARY : Intent.NONE}
       onClick={onClick}
-      className="bp3-small"
+      className="pt-small"
     />
   </Tooltip>
 );

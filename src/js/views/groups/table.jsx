@@ -41,7 +41,7 @@ const GroupsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny">-</Th>
         <Th className="narrow" name="enabled">
-          <Icon icon="power-off" />
+          <Icon iconName="power-off" />
         </Th>
         <Th className="narrow" name="id">
           ID

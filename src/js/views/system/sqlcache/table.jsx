@@ -42,9 +42,9 @@ const SQLCacheTable: Function = ({
         <Button
           intent={Intent.DANGER}
           text="Clear datasource"
-          icon="trash"
+          iconName="trash"
           onClick={handleClick}
-          className="bp3-small"
+          className="pt-small"
         />
       </div>
 

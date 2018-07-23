@@ -29,8 +29,8 @@ const Option: Function = ({
       "{objKey}": "{value}"{' '}
       <div className="pull-right">
         <Controls grouped>
-          <Button icon="edit" btnStyle="warning" onClick={handleEditClick} />
-          <Button icon="cross" btnStyle="danger" onClick={handleDeleteClick} />
+          <Button iconName="edit" btnStyle="warning" onClick={handleEditClick} />
+          <Button iconName="cross" btnStyle="danger" onClick={handleDeleteClick} />
         </Controls>
       </div>
     </div>
@@ -130,9 +130,9 @@ export default class ConnectionOptions extends Component {
           />
           <Button
             btnStyle="success"
-            icon="small-tick"
+            iconName="small-tick"
             big
-            className="bp3-fixed"
+            className="pt-fixed"
             onClick={this.handleOptionSave}
           />
         </ControlGroup>

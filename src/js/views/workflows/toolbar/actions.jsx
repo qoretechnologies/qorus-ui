@@ -109,7 +109,7 @@ const ToolbarActions: Function = ({
             </Menu>
           }
         >
-          <Button icon="caret-down" />
+          <Button iconName="caret-down" />
         </Popover>
       </ButtonGroup>
     );
@@ -119,47 +119,47 @@ const ToolbarActions: Function = ({
     <ButtonGroup>
       <Button
         text="Enable"
-        icon="power"
+        iconName="power"
         intent={Intent.SUCCESS}
         onClick={handleEnableClick}
       />
       <Button
         text="Disable"
-        icon="disable"
+        iconName="disable"
         intent={Intent.DANGER}
         onClick={handleDisableClick}
       />
-      <Button text="Reset" icon="refresh" onClick={handleResetClick} />
+      <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
       <Popover
         position={Position.BOTTOM}
         content={
           <Menu>
             <MenuItem
               text="Start"
-              icon="airplane"
+              iconName="airplane"
               onClick={handleStartClick}
               intent={Intent.SUCCESS}
             />
             <MenuItem
               text="Stop"
-              icon="disable"
+              iconName="disable"
               onClick={handleStopClick}
               intent={Intent.DANGER}
             />
             <MenuItem
               text="Set deprecated"
-              icon="flag"
+              iconName="flag"
               onClick={handleSetDeprecatedClick}
             />
             <MenuItem
               text="Unset deprecated"
-              icon="cross"
+              iconName="cross"
               onClick={handleUnsetDeprecatedClick}
             />
           </Menu>
         }
       >
-        <Button icon="caret-down" />
+        <Button iconName="caret-down" />
       </Popover>
     </ButtonGroup>
   );

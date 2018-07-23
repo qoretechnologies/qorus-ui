@@ -289,7 +289,7 @@ export default class DatePicker extends Component {
                 </Menu>
               }
             >
-              <Button icon="caret-down" />
+              <Button iconName="caret-down" />
             </Popover>
           )}
         {this.renderDatepicker()}

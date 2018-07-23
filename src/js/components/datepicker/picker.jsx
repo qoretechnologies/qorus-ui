@@ -86,7 +86,7 @@ export default class Picker extends Component {
             />
             <div className="input-group-btn">
               <Control
-                icon="times"
+                iconName="times"
                 btnStyle="danger"
                 action={this.props.onResetClick}
               />

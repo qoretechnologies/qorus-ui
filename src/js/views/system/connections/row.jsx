@@ -71,7 +71,7 @@ const ConnectionRow: Function = ({
     handleHighlightEnd={handleHighlightEnd}
   >
     <Td className={classnames('normal')}>
-      <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="bp3-minimal">
+      <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="pt-minimal">
         {up ? 'UP' : 'DOWN'}
       </Tag>
     </Td>
@@ -81,20 +81,20 @@ const ConnectionRow: Function = ({
     {canDelete && (
       <Td className="narrow">
         <Button
-          icon="cross"
+          iconName="cross"
           intent={Intent.DANGER}
           onClick={handleDeleteClick}
-          className="bp3-small"
+          className="pt-small"
         />
       </Td>
     )}
     <Td className="tiny">
       {hasAlerts && (
         <Button
-          icon="warning-sign"
+          iconName="warning-sign"
           intent={Intent.DANGER}
           onClick={handleDetailClick}
-          className="bp3-small"
+          className="pt-small"
         />
       )}
     </Td>
@@ -120,9 +120,9 @@ const ConnectionRow: Function = ({
     <Td className="normal">
       <Button
         text="Ping"
-        icon="exchange"
+        iconName="exchange"
         onClick={handlePingClick}
-        className="bp3-small"
+        className="pt-small"
       />
     </Td>
   </Tr>

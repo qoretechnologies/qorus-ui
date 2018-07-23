@@ -25,7 +25,7 @@ const ResultDetail = ({
       <div className="pull-right">
         <Control
           btnStyle="inverse"
-          icon="close"
+          iconName="close"
           onClick={handleCloseClick}
           label="close"
           className="close-result-item"
