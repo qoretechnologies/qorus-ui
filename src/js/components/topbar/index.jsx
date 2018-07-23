@@ -39,6 +39,19 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
   </Modal>
 );
 
+export type Props = {
+  info: Object,
+  currentUser: Object,
+  isTablet?: boolean,
+  onMenuToggle: () => void,
+  showMenu?: boolean,
+  openModal: Function,
+  closeModal: Function,
+  locale: string,
+  light: boolean,
+  onThemeClick: Function,
+};
+
 /**
  * Display info about Qorus instance and logged in user.
  */
@@ -50,16 +63,7 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
 )
 @withModal()
 export default class Topbar extends Component {
-  static propTypes = {
-    info: PropTypes.object.isRequired,
-    currentUser: PropTypes.object.isRequired,
-    isTablet: PropTypes.bool,
-    onMenuToggle: PropTypes.func,
-    showMenu: PropTypes.bool,
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    locale: PropTypes.string,
-  };
+  props: Props;
 
   /**
    * Sets up default expanded state to false.
@@ -85,10 +89,11 @@ export default class Topbar extends Component {
    * @return {ReactElement}
    */
   render() {
+    const { light, onThemeClick } = this.props;
     const [countryCode, locale] = this.props.locale.split('-');
 
     return (
-      <Navbar className="pt-fixed-top pt-dark">
+      <Navbar className={`bp3-fixed-top ${light ? '' : 'bp3-dark'} topbar`}>
         {this.props.isTablet && (
           <NavbarGroup>
             <Popover
@@ -96,7 +101,7 @@ export default class Topbar extends Component {
               content={<Sidebar menuCollapsed={false} />}
             >
               <ButtonGroup minimal>
-                <Button iconName="menu" />{' '}
+                <Button icon="menu" />{' '}
               </ButtonGroup>
             </Popover>
           </NavbarGroup>
@@ -115,7 +120,7 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  iconName="log-out"
+                  icon="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
@@ -123,9 +128,9 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button
-                iconName="user"
+                icon="user"
                 text="Qorus administrator"
-                rightIconName="caret-down"
+                rightIcon="caret-down"
               />
             </ButtonGroup>
           </Popover>
@@ -171,7 +176,7 @@ export default class Topbar extends Component {
             position={Position.LEFT}
           >
             <ButtonGroup minimal>
-              <Button iconName="warning-sign" intent={Intent.DANGER} />
+              <Button icon="warning-sign" intent={Intent.DANGER} />
             </ButtonGroup>
           </Tooltip>
           <Popover
@@ -180,14 +185,14 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  iconName="log-out"
+                  icon="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
             }
           >
             <ButtonGroup minimal>
-              <Button iconName="build" intent={Intent.WARNING} />
+              <Button icon="build" intent={Intent.WARNING} />
             </ButtonGroup>
           </Popover>
           <Popover
@@ -196,18 +201,21 @@ export default class Topbar extends Component {
               <Menu>
                 <MenuItem
                   text="Logout"
-                  iconName="log-out"
+                  icon="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
             }
           >
             <ButtonGroup minimal>
-              <Button iconName="share" />
+              <Button icon="share" />
             </ButtonGroup>
           </Popover>
           <ButtonGroup minimal>
-            <Button iconName="notifications" />
+            <Button icon="notifications" />
+          </ButtonGroup>
+          <ButtonGroup minimal>
+            <Button icon={light ? 'moon' : 'flash'} onClick={onThemeClick} />
           </ButtonGroup>
         </NavbarGroup>
       </Navbar>

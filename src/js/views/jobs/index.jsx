@@ -108,7 +108,7 @@ const JobsView: Function = ({
         <Button
           text={`Showing ${jobs.length} of ${infoTotalCount}`}
           intent={Intent.NONE}
-          className="pt-minimal"
+          className="bp3-minimal"
         />
         <Button
           text={`Show ${limit} more...`}

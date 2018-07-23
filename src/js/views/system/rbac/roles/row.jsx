@@ -46,27 +46,27 @@ const RolesRow: Function = ({
       <ButtonGroup>
         {canCreate && (
           <Button
-            iconName="duplicate"
+            icon="duplicate"
             onClick={handleCloneClick}
             title="Duplicate role"
-            className="pt-small"
+            className="bp3-small"
           />
         )}
         {canEdit && (
           <Button
-            iconName="edit"
+            icon="edit"
             onClick={handleEditClick}
             title="Edit role"
-            className="pt-small"
+            className="bp3-small"
           />
         )}
         {canDelete && (
           <Button
-            iconName="cross"
+            icon="cross"
             intent={Intent.DANGER}
             onClick={handleDeleteClick}
             title="Remove role"
-            className="pt-small"
+            className="bp3-small"
           />
         )}
       </ButtonGroup>

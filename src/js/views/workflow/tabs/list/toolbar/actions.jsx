@@ -62,19 +62,19 @@ const ToolbarActions: Function = ({
     </ButtonGroup>
   ) : (
     <ButtonGroup>
-      <Button text="Retry" iconName="refresh" onClick={handleRetryClick} />
-      <Button text="Block" iconName="disable" onClick={handleBlockClick} />
+      <Button text="Retry" icon="refresh" onClick={handleRetryClick} />
+      <Button text="Block" icon="disable" onClick={handleBlockClick} />
       <Button
         text="Unblock"
-        iconName="endorsed"
+        icon="endorsed"
         big
         btnStyle="default"
         onClick={handleUnblockClick}
       />
-      <Button text="Cancel" iconName="remove" onClick={handleCancelClick} />
+      <Button text="Cancel" icon="remove" onClick={handleCancelClick} />
       <Button
         text="Uncancel"
-        iconName="refresh"
+        icon="refresh"
         onClick={handleUncancelClick}
       />
     </ButtonGroup>

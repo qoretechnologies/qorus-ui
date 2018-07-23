@@ -124,7 +124,7 @@ const ConnectionTable: Function = ({
         <Button
           onClick={handleAddClick}
           intent={Intent.PRIMARY}
-          iconName="add"
+          icon="add"
           text="Add new"
         />
       )}

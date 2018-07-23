@@ -31,9 +31,9 @@ const Pane: Function = ({
       <div className="pull-right">
         <Button
           text="Close"
-          iconName="cross"
+          icon="cross"
           onClick={onClose}
-          className="pt-small"
+          className="bp3-small"
         />
       </div>
     </div>

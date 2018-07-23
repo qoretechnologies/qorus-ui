@@ -132,7 +132,7 @@ export default class ConnectionOptions extends Component {
             btnStyle="success"
             icon="small-tick"
             big
-            className="pt-fixed"
+            className="bp3-fixed"
             onClick={this.handleOptionSave}
           />
         </ControlGroup>

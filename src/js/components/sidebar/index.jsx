@@ -3,7 +3,6 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { browserHistory } from 'react-router';
 import {
-  Intent,
   Menu,
   MenuItem,
   MenuDivider,
@@ -34,18 +33,18 @@ const menu = {
     { name: 'system.connections', icon: 'left-join', link: '/system/remote' },
     { name: 'system.properties', icon: 'properties', link: '/system/props' },
     { name: 'system.slas', icon: 'time', link: '/system/slas' },
-    { name: 'system.valuemaps', icon: 'map', link: '/system/values' },
-    { name: 'system.cache', icon: 'database', link: '/system/sqlcache' },
-    { name: 'system.httpserv', icon: 'home', link: '/system/http' },
     { name: 'system.releases', icon: 'git-push', link: '/system/releases' },
     {
-      name: 'system.other',
+      name: 'system.more',
       icon: 'more',
       submenu: [
         { name: 'Info', icon: 'info-sign', link: '/system/info' },
         { name: 'Logs', icon: 'comparison', link: '/system/logs' },
         { name: 'RBAC', icon: 'people', link: '/system/rbac' },
         { name: 'Errors', icon: 'error', link: '/system/errors' },
+        { name: 'system.cache', icon: 'database', link: '/system/sqlcache' },
+        { name: 'system.httpserv', icon: 'home', link: '/system/http' },
+        { name: 'system.valuemaps', icon: 'map', link: '/system/values' },
       ],
     },
   ],
@@ -73,7 +72,7 @@ let MenuElement: Function = ({
   handleClick,
 }) => (
   <MenuItem
-    iconName={icon}
+    icon={icon}
     onClick={handleClick}
     text={!menuCollapsed && formatMessage({ id: name })}
   >
@@ -97,12 +96,12 @@ const MenuWrapper: Function = ({
   menuCollapsed,
   toggleMenu,
   intl: { formatMessage },
-}) => (
+}: Props) => (
   <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
     {map(menu, (values: Object, key: string) => (
       <div>
         {!menuCollapsed && (
-          <li className="pt-menu-header">
+          <li className="bp3-menu-header">
             <h6>{key}</h6>
           </li>
         )}
@@ -134,11 +133,11 @@ const MenuWrapper: Function = ({
       </div>
     ))}
     {menuCollapsed ? (
-      <MenuItem iconName="menu-open" onClick={toggleMenu} />
+      <MenuItem icon="menu-open" onClick={toggleMenu} />
     ) : (
       <MenuItem
-        iconName="menu"
-        label={<Icon iconName="caret-left" />}
+        icon="menu"
+        label={<Icon icon="caret-left" />}
         text="Collapse"
         onClick={toggleMenu}
       />
@@ -146,11 +145,15 @@ const MenuWrapper: Function = ({
   </Menu>
 );
 
-const Sidebar: Function = ({ isTablet, ...rest }: Props): React.Element<any> =>
+const Sidebar: Function = ({
+  isTablet,
+  light,
+  ...rest
+}: Props): React.Element<any> =>
   isTablet ? (
     <MenuWrapper {...rest} />
   ) : (
-    <div className="pt-dark">
+    <div className={light ? '' : 'bp3-dark'}>
       <MenuWrapper {...rest} />
     </div>
   );

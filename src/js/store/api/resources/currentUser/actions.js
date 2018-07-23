@@ -94,6 +94,28 @@ const storeLocale: Function = (locale: string): Function => (
   dispatch(updateStorage(storage, username));
 };
 
+const storeSidebar: Function = (sidebarOpen: boolean): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
+  const { storage: storage = {}, username } = getState().api.currentUser.data;
+
+  storage.sidebarOpen = sidebarOpen;
+
+  dispatch(updateStorage(storage, username));
+};
+
+const storeTheme: Function = (theme: string): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
+  const { storage: storage = {}, username } = getState().api.currentUser.data;
+
+  storage.theme = theme;
+
+  dispatch(updateStorage(storage, username));
+};
+
 export {
   unSyncCurrentUser,
   updateStorage,
@@ -101,4 +123,6 @@ export {
   storePaneSize,
   storeSearch,
   storeLocale,
+  storeSidebar,
+  storeTheme,
 };

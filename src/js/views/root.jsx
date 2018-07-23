@@ -7,6 +7,7 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';
 import de from 'react-intl/locale-data/de';
+import mapProps from 'recompose/mapProps';
 
 import Navigation from 'components/navigation';
 import Topbar from '../components/topbar';
@@ -51,9 +52,26 @@ const settingsSelector = state => state.ui.settings;
     fetchSystem: actions.system.fetch,
     fetchSystemOptions: actions.systemOptions.fetch,
     fetchCurrentUser: actions.currentUser.fetch,
+    storeSidebar: actions.currentUser.storeSidebar,
+    storeTheme: actions.currentUser.storeTheme,
   }
 )
-@pure(['info', 'currentUser', 'menu', 'location', 'children', 'isTablet'])
+@mapProps(
+  ({ currentUser, ...rest }): Object => ({
+    sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
+    currentUser,
+    ...rest,
+  })
+)
+@pure([
+  'info',
+  'currentUser',
+  'menu',
+  'location',
+  'children',
+  'isTablet',
+  'sidebarOpen',
+])
 export default class Root extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -66,6 +84,8 @@ export default class Root extends Component {
     location: PropTypes.object,
     currentUser: PropTypes.object,
     isTablet: PropTypes.bool,
+    sidebarOpen: PropTypes.bool,
+    storeSidebar: PropTypes.func,
   };
 
   static childContextTypes = {
@@ -86,12 +106,6 @@ export default class Root extends Component {
     this._modal = null;
     this._defaultTitle = '';
   }
-
-  state: {
-    menuCollapsed: boolean,
-  } = {
-    menuCollapsed: this.props.isTablet,
-  };
 
   /**
    * Provides modal control function and title.
@@ -151,12 +165,6 @@ export default class Root extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps: Object): void {
-    if (this.props.isTablet !== nextProps.isTablet) {
-      this.setMenu(nextProps.isTablet);
-    }
-  }
-
   /**
    * Sets document title.
    *
@@ -179,13 +187,11 @@ export default class Root extends Component {
   };
 
   toggleMenu: Function = () => {
-    this.setMenu(!this.state.menuCollapsed);
+    this.setMenu(!this.props.sidebarOpen);
   };
 
   setMenu: Function = (menuCollapsed: boolean) => {
-    this.setState({
-      menuCollapsed,
-    });
+    this.props.storeSidebar(menuCollapsed);
   };
 
   /**
@@ -234,6 +240,15 @@ export default class Root extends Component {
     this._modal = modal;
   };
 
+  onThemeChange: Function = (): void => {
+    const { currentUser, storeTheme } = this.props;
+    const theme = currentUser.sync
+      ? currentUser.data.storage.theme || 'dark'
+      : 'dark';
+
+    storeTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   /**
    * Returns element for this component.
    *
@@ -243,6 +258,8 @@ export default class Root extends Component {
     const { currentUser, info, isTablet } = this.props;
     const locale =
       (currentUser.sync && currentUser.data.storage.locale) || navigator.locale;
+    const isLightTheme =
+      currentUser.sync && currentUser.data.storage.theme === 'light';
 
     if (!currentUser.sync || !info.sync) {
       return <Preloader />;
@@ -251,11 +268,18 @@ export default class Root extends Component {
     return (
       <IntlProvider locale={locale} messages={messages(locale)}>
         <div className="root">
-          <Topbar info={this.props.info} locale={locale} isTablet={isTablet} />
+          <Topbar
+            info={this.props.info}
+            locale={locale}
+            isTablet={isTablet}
+            light={isLightTheme}
+            onThemeClick={this.onThemeChange}
+          />
           <div className="root__center">
             {!isTablet && (
               <Sidebar
-                menuCollapsed={this.state.menuCollapsed}
+                light={isLightTheme}
+                menuCollapsed={this.props.sidebarOpen}
                 toggleMenu={this.toggleMenu}
               />
             )}

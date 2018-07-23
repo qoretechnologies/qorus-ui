@@ -169,7 +169,7 @@ export default class RBACRoles extends Component {
             <div className="pull-left">
               <Button
                 text="Add role"
-                iconName="plus"
+                icon="plus"
                 intent={Intent.PRIMARY}
                 onClick={this.handleAddRoleClick}
               />

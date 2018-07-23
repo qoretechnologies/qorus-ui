@@ -5,7 +5,7 @@ import { Callout } from '@blueprintjs/core';
 type Props = {};
 
 const NoData: Function = ({ }: Props): React.Element<any> => (
-  <Callout iconName="warning-sign" title="No data" />
+  <Callout icon="warning-sign" title="No data" />
 );
 
 export default NoData;

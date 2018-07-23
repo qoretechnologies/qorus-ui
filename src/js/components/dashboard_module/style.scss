@@ -1,3 +1,11 @@
+.masonryTriple .dashboard-module {
+  width: 32%;
+}
+
+.masonryDouble .dashboard-module {
+  width: 49%;
+}
+
 .dashboard-module {
   background-color: white;
   padding: 15px;
@@ -6,15 +14,12 @@
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
   clear: both;
   overflow: hidden;
-  width: 49%;
 
   .content {
     width: 100%;
   }
 
   .subtitle {
-    font-family: 'Nunito';
-    font-size: 14px;
     color: #333;
     padding: 10px 0;
     margin-bottom: 0;

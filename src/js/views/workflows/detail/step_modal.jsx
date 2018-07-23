@@ -76,10 +76,10 @@ export default class StepModal extends Component {
 
   handleModalResize = () => {
     const { height: formHeight } = document
-      .querySelectorAll('.pt-dialog-body table')[0]
+      .querySelectorAll('.bp3-dialog-body table')[0]
       .getBoundingClientRect();
     const { height: bodyHeight } = document
-      .querySelectorAll('.pt-dialog-body')[0]
+      .querySelectorAll('.bp3-dialog-body')[0]
       .getBoundingClientRect();
     const difference = bodyHeight - formHeight;
 

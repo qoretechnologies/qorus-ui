@@ -12,7 +12,6 @@ import {
   Position,
 } from '@blueprintjs/core';
 
-import { Controls, Control } from '../../components/controls';
 import actions from '../../store/api/actions';
 
 type Props = {
@@ -36,10 +35,10 @@ const WorkflowControls: Function = ({
       useSmartPositioning
     >
       <Button
-        iconName="power"
+        icon="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleToggleEnabledClick}
-        className="pt-small"
+        className="bp3-small"
       />
     </Tooltip>
     <Tooltip
@@ -48,20 +47,23 @@ const WorkflowControls: Function = ({
       useSmartPositioning
     >
       <Button
-        iconName="refresh"
+        icon="refresh"
         intent={Intent.PRIMARY}
         onClick={handleResetClick}
-        className="pt-small"
+        className="bp3-small"
       />
     </Tooltip>
   </ButtonGroup>
 );
 
 export default compose(
-  connect(() => ({}), {
-    toggleEnabled: actions.workflows.toggleEnabled,
-    reset: actions.workflows.reset,
-  }),
+  connect(
+    () => ({}),
+    {
+      toggleEnabled: actions.workflows.toggleEnabled,
+      reset: actions.workflows.reset,
+    }
+  ),
   withHandlers({
     handleToggleEnabledClick: ({
       toggleEnabled,

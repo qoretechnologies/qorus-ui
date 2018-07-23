@@ -26,17 +26,17 @@ const StatsTab: Function = ({ orderStats }: Props): any =>
                     {replace(label, /_/g, ' ')}
                   </span>
                   <Tag
-                    className="pt-minimal"
+                    className="bp3-minimal"
                     intent={sla[0].in_sla ? Intent.SUCCESS : Intent.DANGER}
                   >
                     In SLA:{' '}
-                    <Icon iconName={sla[0].in_sla ? 'small-tick' : 'cross'} />
+                    <Icon icon={sla[0].in_sla ? 'small-tick' : 'cross'} />
                   </Tag>{' '}
-                  <Tag className="pt-minimal">
+                  <Tag className="bp3-minimal">
                     Count: {Math.round(sla[0].count)}
                   </Tag>{' '}
                   <Tag
-                    className="pt-minimal"
+                    className="bp3-minimal"
                     intent={orderStatsPctColor(sla[0].pct)}
                   >
                     Percentage: {Math.round(sla[0].pct)}%
@@ -67,7 +67,7 @@ const StatsTab: Function = ({ orderStats }: Props): any =>
                       <ProgressBar
                         intent={orderStatsPctColor(data.pct)}
                         value={Math.round(data.pct) / 100}
-                        className="pt-no-animation"
+                        className="bp3-no-animation"
                       />
                     </Td>
                   </Tr>

@@ -8,7 +8,7 @@ type Props = {
   children?: any,
   text?: string,
   active?: boolean,
-  iconName?: string,
+  icon?: string,
 };
 
 const Crumb: Function = ({
@@ -21,8 +21,8 @@ const Crumb: Function = ({
   <li>
     {link ? (
       <Link
-        className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${
-          active ? 'pt-breadcrumb-current' : ''
+        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
+          active ? 'bp3-breadcrumb-current' : ''
         }`}
         to={link}
       >
@@ -30,8 +30,8 @@ const Crumb: Function = ({
       </Link>
     ) : (
       <span
-        className={`pt-breadcrumb ${disabled ? 'pt-disabled' : ''} ${
-          active ? 'pt-breadcrumb-current' : ''
+        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
+          active ? 'bp3-breadcrumb-current' : ''
         }`}
       >
         {text || children}

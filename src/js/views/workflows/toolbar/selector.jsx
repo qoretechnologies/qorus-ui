@@ -41,7 +41,7 @@ const ToolbarSelector: Function = ({
   <Tooltip content="Select workflows" position={Position.RIGHT}>
     <ButtonGroup>
       <Button
-        iconName={
+        icon={
           selected === 'all'
             ? 'selection'
             : selected === 'some'
@@ -66,7 +66,7 @@ const ToolbarSelector: Function = ({
         }
         position={Position.BOTTOM}
       >
-        <Button iconName="caret-down" />
+        <Button icon="caret-down" />
       </Popover>
     </ButtonGroup>
   </Tooltip>

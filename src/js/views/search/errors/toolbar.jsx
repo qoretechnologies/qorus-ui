@@ -233,13 +233,13 @@ export default class SearchToolbar extends Component {
             </Dropdown>
             <Button
               text="Retry"
-              intent={this.state.retry && Intent.PRIMARY}
-              iconName={this.state.retry ? 'selection' : 'circle'}
+              intent={this.state.retry ? Intent.PRIMARY : Intent.NONE}
+              icon={this.state.retry ? 'selection' : 'circle'}
               onClick={this.handleRetryChange}
             />
             <Button
               text="Bus. Err."
-              intent={this.state.busErr && Intent.PRIMARY}
+              intent={this.state.busErr ? Intent.PRIMARY : Intent.NONE}
               icon={this.state.busErr ? 'selection' : 'circle'}
               onClick={this.handleBuserrChange}
             />

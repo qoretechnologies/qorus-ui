@@ -11,7 +11,7 @@ export default {
     'system.cache': 'Cache',
     'system.httpserv': 'HTTP Services',
     'system.releases': 'Releases',
-    'system.other': 'Other',
+    'system.more': 'More',
     'system.orderStats': 'Order Stats',
   },
   'cs-CZ': {
@@ -26,7 +26,7 @@ export default {
     'system.cache': 'Cache',
     'system.httpserv': 'HTTP Servisy',
     'system.releases': 'Verze',
-    'system.other': 'Ostatni',
+    'system.more': 'Vice',
     'system.orderStats': 'Statistiky objednavek',
   },
   'de-DE': {
@@ -41,7 +41,7 @@ export default {
     'system.cache': 'Zwischenspeicher',
     'system.httpserv': 'HTTP Dienstleistungen',
     'system.releases': 'Freigabe',
-    'system.other': 'Andere',
+    'system.more': 'Andere',
     'system.orderStats': 'Order Stats',
   },
 };

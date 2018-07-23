@@ -86,8 +86,8 @@ const ValuemapsPane: Function = ({
         <Button
           text={adding ? 'Cancel' : 'Add value'}
           onClick={onAddClick}
-          iconName={adding ? 'cross' : 'plus'}
-          intent={!adding && Intent.PRIMARY}
+          icon={adding ? 'cross' : 'plus'}
+          intent={!adding ? Intent.PRIMARY : Intent.NONE}
         />
         {adding && <AddValue id={paneId} add={onSaveClick} />}
       </Container>

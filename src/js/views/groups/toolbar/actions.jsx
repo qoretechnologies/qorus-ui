@@ -23,8 +23,8 @@ const ToolbarActions: Function = ({
   handleDisableClick,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
-    <Button text="Enable" iconName="power" onClick={handleEnableClick} />
-    <Button text="Disable" iconName="remove" onClick={handleDisableClick} />
+    <Button text="Enable" icon="power" onClick={handleEnableClick} />
+    <Button text="Disable" icon="remove" onClick={handleDisableClick} />
   </ButtonGroup>
 );
 

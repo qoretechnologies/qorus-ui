@@ -28,11 +28,11 @@ const ToolbarActions: Function = ({
   handleResetClick,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
-    <Button text="Enable" iconName="power-off" onClick={handleEnableClick} />
-    <Button text="Disable" iconName="ban" onClick={handleDisableClick} />
-    <Button text="Load" iconName="check" onClick={handleLoadClick} />
-    <Button text="Unload" iconName="times" onClick={handleUnloadClick} />
-    <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
+    <Button text="Enable" icon="power-off" onClick={handleEnableClick} />
+    <Button text="Disable" icon="ban" onClick={handleDisableClick} />
+    <Button text="Load" icon="check" onClick={handleLoadClick} />
+    <Button text="Unload" icon="times" onClick={handleUnloadClick} />
+    <Button text="Reset" icon="refresh" onClick={handleResetClick} />
   </ButtonGroup>
 );
 

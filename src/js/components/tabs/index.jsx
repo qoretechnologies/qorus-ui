@@ -1,9 +1,10 @@
 import React from 'react';
-import { Tabs2, Tab2 } from '@blueprintjs/core';
+import { Tabs as Tabs2, Tab as Tab2 } from '@blueprintjs/core';
 import classNames from 'classnames';
 
 import Container from '../container';
 import Pane from './pane';
+import pure from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   children?: any,
@@ -11,11 +12,13 @@ type Props = {
   id?: string,
   className: string,
   onChange: Function,
+  onChangeEnd?: Function,
   vertical?: boolean,
   noContainer?: boolean,
   boxed?: boolean,
 };
 
+@pure(['children', 'active', 'vertical', 'noContainer'])
 class Tabs extends React.Component {
   props: Props;
   state: {
@@ -39,6 +42,10 @@ class Tabs extends React.Component {
       this.setState({
         active: tabId,
       });
+    }
+
+    if (this.props.onChangeEnd) {
+      this.props.onChangeEnd(tabId);
     }
   };
 

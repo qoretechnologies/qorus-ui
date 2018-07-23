@@ -84,7 +84,7 @@ const WorkflowHeader: Function = ({
         <Callout
           intent={Intent.DANGER}
           title="Workflow with errors"
-          iconName="warning-sign"
+          icon="warning-sign"
         >
           This workflow has alerts raised against it that may prevent it from
           operating properly.{' '}

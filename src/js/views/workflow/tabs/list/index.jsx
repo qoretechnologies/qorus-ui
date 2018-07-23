@@ -85,7 +85,7 @@ const WorkflowOrders: Function = ({
         <Button
           text={`Showing ${orders.length}`}
           intent={Intent.NONE}
-          className="pt-minimal"
+          className="bp3-minimal"
         />
         <Button
           text={`Load ${limit} more...`}

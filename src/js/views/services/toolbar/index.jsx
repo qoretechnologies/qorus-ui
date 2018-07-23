@@ -61,7 +61,7 @@ const ServicesToolbar: Function = ({
         }
         position={Position.BOTTOM}
       >
-        <Button iconName="info-sign" className="pt-minimal" />
+        <Button icon="info-sign" className="bp3-minimal" />
       </Popover>
     )}
     <Search

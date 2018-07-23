@@ -16,11 +16,9 @@ import Toolbar from '../../../components/toolbar';
 import Search from '../../../containers/search';
 import Datepicker from '../../../components/datepicker';
 import queryControl from '../../../hocomponents/queryControl';
-import { Control } from '../../../components/controls';
 import Actions from './actions';
 import Selector from './selector';
 import Filters from './filters';
-import { InfoBar, InfoBarItem } from '../../../components/infobar';
 
 type Props = {
   selected: string,
@@ -52,8 +50,6 @@ const WorkflowsToolbar: Function = ({
   onToggleStatesClick,
   location,
   isTablet,
-  collectionCount,
-  collectionTotal,
   withAlertsCount,
   enabledCount,
 }: Props): React.Element<any> => (
@@ -76,7 +72,7 @@ const WorkflowsToolbar: Function = ({
         {!isTablet && (
           <Button
             text={expanded ? 'Collapse states' : 'Expand states'}
-            intent={expanded && Intent.PRIMARY}
+            intent={expanded ? Intent.PRIMARY : Intent.NONE}
             onClick={onToggleStatesClick}
           />
         )}
@@ -85,12 +81,12 @@ const WorkflowsToolbar: Function = ({
         content={
           <Menu>
             <MenuItem
-              iconName="warning-sign"
+              icon="warning-sign"
               text="Workflows with alert"
               label={withAlertsCount}
             />
             <MenuItem
-              iconName="power"
+              icon="power"
               text="Enabled workflows"
               label={enabledCount}
             />
@@ -99,7 +95,7 @@ const WorkflowsToolbar: Function = ({
         position={Position.BOTTOM}
       >
         <ButtonGroup>
-          <Button iconName="info-sign" />
+          <Button icon="info-sign" />
         </ButtonGroup>
       </Popover>
       <Search

@@ -147,7 +147,7 @@ export default class RBACPerms extends Component {
           ) && (
             <div className="pull-left">
               <Button
-                iconName="plus"
+                icon="plus"
                 intent={Intent.PRIMARY}
                 text="Add permission"
                 onClick={this.handleAddPermClick}

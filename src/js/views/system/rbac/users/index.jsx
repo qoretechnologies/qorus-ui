@@ -146,7 +146,7 @@ export default class RBACUsers extends Component {
             <div className="pull-left">
               <Button
                 text="Add user"
-                iconName="plus"
+                icon="plus"
                 intent={Intent.PRIMARY}
                 onClick={this.handleAddUserClick}
               />

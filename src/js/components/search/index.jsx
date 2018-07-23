@@ -130,7 +130,7 @@ export default class Search extends Component {
                 position={Position.BOTTOM}
                 content={<Menu>{this.renderHistoryItems()}</Menu>}
               >
-                <Button iconName="history" />
+                <Button icon="history" />
               </Popover>
             )}
           <InputGroup
@@ -144,10 +144,10 @@ export default class Search extends Component {
           />
           <Button
             type="button"
-            iconName="cross"
+            icon="cross"
             onClick={this.handleClearClick}
           />
-          <Button type="submit" iconName="search" />
+          <Button type="submit" icon="search" />
         </ControlGroup>
       </form>
     );

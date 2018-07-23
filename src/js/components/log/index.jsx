@@ -90,11 +90,11 @@ export default class LogComponent extends Component {
             <ButtonGroup>
               <Button
                 text="Autoscroll"
-                iconName={this.state.autoScroll ? 'selection' : 'circle'}
-                intent={this.state.autoScroll && Intent.PRIMARY}
+                icon={this.state.autoScroll ? 'selection' : 'circle'}
+                intent={this.state.autoScroll ? Intent.PRIMARY : Intent.NONE}
                 onClick={this.setAutoScroll}
               />
-              <Button text="Clear" iconName="cross" onClick={onClearClick} />
+              <Button text="Clear" icon="cross" onClick={onClearClick} />
             </ButtonGroup>
           </div>
           <p className="pull-right log-search">

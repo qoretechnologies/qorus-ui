@@ -103,7 +103,7 @@ const AlertsTable: Function = ({
         </Tbody>
       </Table>
     ) : (
-      <Callout iconName="warning-sign" title="No data">
+      <Callout icon="warning-sign" title="No data">
         There are no data to be displayed.
       </Callout>
     )}

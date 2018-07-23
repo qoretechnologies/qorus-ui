@@ -55,17 +55,17 @@ const filterLastVersion: Function = (latest: string): Function => (
 ): Array<Object> =>
   latest && latest !== ''
     ? workflows.filter(w => {
-      for (const workflow of workflows) {
-        if (
+        for (const workflow of workflows) {
+          if (
             w.name === workflow.name &&
             parseFloat(w.version) < parseFloat(workflow.version)
           ) {
             return false;
           }
-      }
+        }
 
-      return true;
-    })
+        return true;
+      })
     : workflows;
 
 const filterDeprecated: Function = (deprecated: string): Function => (
@@ -293,7 +293,7 @@ const Workflows: Function = ({
           <Button
             text={`Showing ${workflows.length} of ${infoTotalCount}`}
             intent={Intent.NONE}
-            className="pt-minimal"
+            className="bp3-minimal"
           />
           <Button
             text={`Show ${limit} more...`}

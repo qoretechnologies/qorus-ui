@@ -10,6 +10,7 @@ export default class Item extends Component {
     title: any,
     icon?: string,
     action: () => void,
+    onClick: () => void,
     hideDropdown?: () => void,
     multi?: boolean,
     selected?: boolean,
@@ -53,8 +54,10 @@ export default class Item extends Component {
   };
 
   action: Function = (event: EventHandler): void => {
-    if (this.props.action && event) {
-      this.props.action(event, this.props.title);
+    const act = this.props.action || this.props.onClick;
+
+    if (act && event) {
+      act(event, this.props.title);
     }
 
     if (!this.props.multi) {
@@ -90,7 +93,7 @@ export default class Item extends Component {
       <MenuItem
         shouldDismissPopover={!multi}
         text={title}
-        iconName={this.props.icon}
+        icon={this.props.icon}
         onClick={this.handleClick}
         intent={intent}
       />
