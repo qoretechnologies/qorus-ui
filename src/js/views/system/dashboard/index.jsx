@@ -80,10 +80,14 @@ export default class Dashboard extends Component {
       0
     );
     const sidebarOpen =
-      currentUser.sync && currentUser.data.storage.sidebarOpen;
+      currentUser.sync && currentUser.data.storage.sidebarOpen
+        ? currentUser.data.storage.sidebarOpen
+        : false;
+
     const masonryKey = `${width}_${this.state.ordersTab}_${
       this.state.slaTab
     }_${sidebarOpen.toString()}`;
+
     const sizes =
       width > 1400
         ? [{ columns: 3, gutter: 20 }]
@@ -246,23 +250,24 @@ export default class Dashboard extends Component {
           <DashboardModule>
             <PaneItem title="Intefaces">
               <DashboardSection link="/workflows" iconName="sitemap">
-                Workflows <Icon iconName="circle" className="separator" /> total /
-                alerts
+                Workflows <Icon iconName="circle" className="separator" /> total
+                / alerts
                 <DashboardItem>
                   <Badge val={system.workflow_total} label="info" bypass /> /{' '}
                   <Badge val={system.workflow_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
               <DashboardSection link="/services" iconName="list">
-                Services <Icon iconName="circle" className="separator" /> total /
-                alerts
+                Services <Icon iconName="circle" className="separator" /> total
+                / alerts
                 <DashboardItem>
                   <Badge val={system.service_total} label="info" bypass /> /{' '}
                   <Badge val={system.service_alerts} label="danger" bypass />
                 </DashboardItem>
               </DashboardSection>
               <DashboardSection link="/jobs" iconName="calendar-o">
-                Jobs <Icon iconName="circle" className="separator" /> total / alerts
+                Jobs <Icon iconName="circle" className="separator" /> total /
+                alerts
                 <DashboardItem>
                   <Badge val={system.job_total} label="info" bypass /> /{' '}
                   <Badge val={system.job_alerts} label="danger" bypass />
@@ -303,9 +308,13 @@ export default class Dashboard extends Component {
               {health.data.remote &&
                 health.data.remote.map((remote: Object) => (
                   <div>
-                    <DashboardSection iconName="external-link" link={remote.url}>
-                      {remote.name} <Icon iconName="circle" className="separator" />{' '}
-                      key / status
+                    <DashboardSection
+                      iconName="external-link"
+                      link={remote.url}
+                    >
+                      {remote.name}{' '}
+                      <Icon iconName="circle" className="separator" /> key /
+                      status
                       <DashboardItem>
                         <Badge
                           val={remote['instance-key']}
@@ -338,8 +347,8 @@ export default class Dashboard extends Component {
                 </DashboardItem>
               </DashboardSection>
               <DashboardSection link="/system/remote" iconName="database">
-                Datasource <Icon iconName="circle" className="separator" /> total /
-                alerts
+                Datasource <Icon iconName="circle" className="separator" />{' '}
+                total / alerts
                 <DashboardItem>
                   <Badge val={system.datasource_total} label="info" bypass /> /{' '}
                   <Badge val={system.datasource_alerts} label="danger" bypass />
