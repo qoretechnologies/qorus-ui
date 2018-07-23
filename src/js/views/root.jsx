@@ -257,7 +257,10 @@ export default class Root extends Component {
   render() {
     const { currentUser, info, isTablet } = this.props;
     const locale =
-      (currentUser.sync && currentUser.data.storage.locale) || navigator.locale;
+      currentUser.sync && currentUser.data.storage.locale
+        ? currentUser.data.storage.locale
+        : navigator.locale;
+
     const isLightTheme =
       currentUser.sync && currentUser.data.storage.theme === 'light';
 
