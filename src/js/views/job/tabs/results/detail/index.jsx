@@ -24,11 +24,9 @@ const ResultDetail = ({
     <div className="inner">
       <div className="pull-right">
         <Control
-          btnStyle="inverse"
-          iconName="close"
+          iconName="cross"
+          className="pt-minimal"
           onClick={handleCloseClick}
-          label="close"
-          className="close-result-item"
         />
       </div>
       {result && <ResultData result={result} />}
@@ -37,9 +35,15 @@ const ResultDetail = ({
 );
 
 const jobResultSelector = (state, props) => {
-  const { location: { query: { job } } } = props;
+  const {
+    location: {
+      query: { job },
+    },
+  } = props;
   const jobInstanceId = parseInt(job, 10);
-  const result = state.api.jobresults.data.find(item => item.job_instanceid === jobInstanceId);
+  const result = state.api.jobresults.data.find(
+    item => item.job_instanceid === jobInstanceId
+  );
   return { result };
 };
 
@@ -49,7 +53,8 @@ const prepareRequestParams = mapProps((props: Object) => ({
   instanceId: props.location.query.job,
 }));
 
-const loadOnMount = lifecycle({ // TODO: use sync with force in future
+const loadOnMount = lifecycle({
+  // TODO: use sync with force in future
   componentDidMount() {
     this.props.load();
   },

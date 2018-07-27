@@ -110,7 +110,7 @@ const TableRow: Function = ({
       {hasAlerts && (
         <Controls>
           <Button
-            iconName="warning"
+            iconName="warning-sign"
             btnStyle="danger"
             onClick={handleWarningClick}
             title="Show alerts"

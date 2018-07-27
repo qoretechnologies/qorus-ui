@@ -9,7 +9,6 @@ import cs from 'react-intl/locale-data/cs';
 import de from 'react-intl/locale-data/de';
 import mapProps from 'recompose/mapProps';
 
-import Navigation from 'components/navigation';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
@@ -17,8 +16,6 @@ import Preloader from '../components/preloader';
 import { Manager as ModalManager } from '../components/modal';
 import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
-import logo from '../../img/qore_logo.png';
-import appSettings from '../settings';
 import messages from '../intl/messages';
 
 addLocaleData([...en, ...cs, ...de]);
@@ -27,6 +24,7 @@ const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
 const menuSelector = state => state.menu;
 const settingsSelector = state => state.ui.settings;
+const healthSelector = state => state.api.health;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -40,11 +38,13 @@ const settingsSelector = state => state.ui.settings;
     currentUserSelector,
     settingsSelector,
     menuSelector,
-    (info, currentUser, stngs, menu) => ({
+    healthSelector,
+    (info, currentUser, stngs, menu, health) => ({
       info,
       currentUser,
       menu,
       isTablet: stngs.tablet,
+      health,
     })
   ),
   {
@@ -54,6 +54,7 @@ const settingsSelector = state => state.ui.settings;
     fetchCurrentUser: actions.currentUser.fetch,
     storeSidebar: actions.currentUser.storeSidebar,
     storeTheme: actions.currentUser.storeTheme,
+    fetchHealth: actions.health.fetch,
   }
 )
 @mapProps(
@@ -83,9 +84,11 @@ export default class Root extends Component {
     fetchCurrentUser: PropTypes.func,
     location: PropTypes.object,
     currentUser: PropTypes.object,
+    health: PropTypes.object,
     isTablet: PropTypes.bool,
     sidebarOpen: PropTypes.bool,
     storeSidebar: PropTypes.func,
+    fetchHealth: PropTypes.func,
   };
 
   static childContextTypes = {
@@ -229,6 +232,7 @@ export default class Root extends Component {
     this.props.fetchSystem();
     this.props.fetchSystemOptions();
     this.props.fetchCurrentUser();
+    this.props.fetchHealth();
   }
 
   /**
@@ -255,7 +259,7 @@ export default class Root extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { currentUser, info, isTablet } = this.props;
+    const { currentUser, info, isTablet, health } = this.props;
     const locale =
       currentUser.sync && currentUser.data.storage.locale
         ? currentUser.data.storage.locale
@@ -266,7 +270,7 @@ export default class Root extends Component {
     const isLightTheme =
       currentUser.sync && currentUser.data.storage.theme === 'light';
 
-    if (!currentUser.sync || !info.sync) {
+    if (!currentUser.sync || !info.sync || !health.sync) {
       return <Preloader />;
     }
 
@@ -275,6 +279,7 @@ export default class Root extends Component {
         <div className="root">
           <Topbar
             info={this.props.info}
+            health={this.props.health}
             locale={locale}
             isTablet={isTablet}
             light={isLightTheme}

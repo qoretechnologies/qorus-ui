@@ -7,7 +7,7 @@ import Tabs, { Pane } from '../../../../../components/tabs';
 import Tree from '../../../../../components/tree';
 
 const ResultData = ({ result }: { result: Object }) => (
-  <Tabs>
+  <Tabs active="info" noContainer>
     <Pane name="Info">
       <Tree data={result.info} />
     </Pane>

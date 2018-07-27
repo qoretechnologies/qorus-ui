@@ -5,7 +5,13 @@ import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import { findBy } from '../../../../helpers/search';
-import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  FixedRow,
+  Th,
+} from '../../../../components/new_table';
 import InstanceRow from './row';
 import sort from '../../../../hocomponents/sort';
 import showIfPassed from '../../../../hocomponents/show-if-passed';
@@ -34,31 +40,40 @@ const ResultTable = ({
     key={data.length}
   >
     <Thead>
-      <Tr
-        onSortChange={onSortChange}
-        sortData={sortData}
-      >
-        <Th name="job_instanceid" className="big">ID</Th>
+      <FixedRow onSortChange={onSortChange} sortData={sortData}>
+        <Th name="job_instanceid" className="normal">
+          ID
+        </Th>
         <Th className="narrow">Detail</Th>
-        <Th name="jobstatus" className="medium">Status</Th>
-        <Th name="started" className="big">Started</Th>
-        <Th name="modified" className="big">Modified</Th>
-        <Th name="completed" className="big">Completed</Th>
-      </Tr>
+        <Th name="jobstatus" className="medium">
+          Status
+        </Th>
+        <Th name="started" className="big">
+          Started
+        </Th>
+        <Th name="modified" className="big">
+          Modified
+        </Th>
+        <Th name="completed" className="big">
+          Completed
+        </Th>
+      </FixedRow>
     </Thead>
     <Tbody>
-      {data.map((item: Object): React.Element<InstanceRow> => (
-        <InstanceRow
-          key={`item_${item.job_instanceid}`}
-          active={item.job_instanceid === parseInt(jobQuery, 10)}
-          changeJobQuery={changeJobQuery}
-          {...item}
-        />
-      ))}
+      {data.map(
+        (item: Object, idx: number): React.Element<InstanceRow> => (
+          <InstanceRow
+            first={idx === 0}
+            key={`item_${item.job_instanceid}`}
+            active={item.job_instanceid === parseInt(jobQuery, 10)}
+            changeJobQuery={changeJobQuery}
+            {...item}
+          />
+        )
+      )}
     </Tbody>
   </Table>
 );
-
 
 const hideWhileLoading = showIfPassed(({ results }) => results && results.data);
 
@@ -67,7 +82,8 @@ const filterResults = mapProps(props => ({
   data: findBy(
     ['job_instanceid', 'name'],
     props.searchQuery,
-    props.results.data),
+    props.results.data
+  ),
 }));
 
 const showNoData = showIfPassed(
@@ -80,9 +96,5 @@ export default compose(
   filterResults,
   showNoData,
   sort('job-results', 'data', sortDefaults.jobResults),
-  pure([
-    'jobQuery',
-    'sortData',
-    'data',
-  ])
+  pure(['jobQuery', 'sortData', 'data'])
 )(ResultTable);

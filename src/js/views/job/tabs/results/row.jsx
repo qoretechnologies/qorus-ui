@@ -23,6 +23,7 @@ type Props = {
   updateDone: Function,
   changeJobQuery: Function,
   active: boolean,
+  first: boolean,
 };
 
 const JobInstanceRow: Function = ({
@@ -35,27 +36,32 @@ const JobInstanceRow: Function = ({
   modified,
   completed,
   active,
+  first,
 }: Props): React.Element<any> => (
   <Tr
+    first={first}
     highlight={_updated}
     onHighlightEnd={handleUpdateDone}
-    className={active ? 'info' : ''}
+    className={active ? 'row-active' : ''}
   >
-    <Td className="big">{instanceId}</Td>
+    <Td className="normal">{instanceId}</Td>
     <Td className="narrow">
-      <DetailButton
-        onClick={handleDetailClick}
-        active={active}
-      />
+      <DetailButton onClick={handleDetailClick} active={active} />
     </Td>
     <Td className="medium">
       <span className={`label status-${jobstatus.toLowerCase()}`}>
         {jobstatus}
       </span>
     </Td>
-    <Td className="big"><Date date={started} /></Td>
-    <Td className="big"><Date date={modified} /></Td>
-    <Td className="big"><Date date={completed} /></Td>
+    <Td className="big">
+      <Date date={started} />
+    </Td>
+    <Td className="big">
+      <Date date={modified} />
+    </Td>
+    <Td className="big">
+      <Date date={completed} />
+    </Td>
   </Tr>
 );
 
@@ -78,15 +84,13 @@ export default compose(
         changeJobQuery(job_instanceid);
       }
     },
-    handleUpdateDone: ({ updateDone, id, job_instanceid }: Props): Function => (): void => {
+    handleUpdateDone: ({
+      updateDone,
+      id,
+      job_instanceid,
+    }: Props): Function => (): void => {
       updateDone(id, job_instanceid);
     },
   }),
-  pure([
-    '_updated',
-    'jobstatus',
-    'modified',
-    'completed',
-    'active',
-  ])
+  pure(['_updated', 'jobstatus', 'modified', 'completed', 'active'])
 )(JobInstanceRow);

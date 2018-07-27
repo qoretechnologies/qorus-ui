@@ -200,8 +200,6 @@ const getStatsData: Function = (inSla: boolean, data: any): any => {
   if (inSla) {
     const val = data.sla.find(datum => datum.in_sla);
 
-    console.log(val);
-
     return val ? val.count : 0;
   } else {
     const val = data.sla.find(datum => datum.in_sla === false);

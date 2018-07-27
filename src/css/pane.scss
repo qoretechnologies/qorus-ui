@@ -91,7 +91,9 @@
 }
 
 .pane-item {
-  margin-bottom: 15px;
+  &:not(:first-of-type) {
+    margin-top: 15px;
+  }
 
   h5.pane-item-title {
     margin: 0;

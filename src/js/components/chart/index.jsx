@@ -5,17 +5,14 @@ import Chart from 'chart.js';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import {
-  getMaxValue, getStepSize, scaleData, getUnit, getFormattedValue,
+  getMaxValue,
+  getStepSize,
+  scaleData,
+  getUnit,
+  getFormattedValue,
 } from '../../helpers/chart';
 
-@pure([
-  'width',
-  'height',
-  'labels',
-  'datasets',
-  'xAxisLabel',
-  'yAxisLabel',
-])
+@pure(['width', 'height', 'labels', 'datasets', 'xAxisLabel', 'yAxisLabel'])
 export default class ChartComponent extends Component {
   static defaultProps = {
     width: 400,
@@ -55,21 +52,22 @@ export default class ChartComponent extends Component {
     if (this.props.labels !== nextProps.labels) {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
-      const datasets = nextProps.type === 'line' ?
-        scaleData(nextProps.datasets, nextProps.isNotTime) : nextProps.datasets;
+      const datasets =
+        nextProps.type === 'line'
+          ? scaleData(nextProps.datasets, nextProps.isNotTime)
+          : nextProps.datasets;
 
       chart.data.labels = nextProps.labels;
       chart.data.datasets = datasets;
 
       if (nextProps.type === 'line') {
-        chart.options.scales.yAxes[0].ticks.callback = (val) => (
-          getFormattedValue(val, datasets) + unit
-        );
+        chart.options.scales.yAxes[0].ticks.callback = val =>
+          getFormattedValue(val, datasets) + unit;
         chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
-        chart.options.scales.xAxes[0].scaleLabel.labelString = nextProps.xAxisLabel;
-        chart.options.tooltips.callbacks.label = (item) => (
-          getFormattedValue(item.yLabel, nextProps.datasets) + unit
-        );
+        chart.options.scales.xAxes[0].scaleLabel.labelString =
+          nextProps.xAxisLabel;
+        chart.options.tooltips.callbacks.label = item =>
+          getFormattedValue(item.yLabel, nextProps.datasets) + unit;
       }
 
       chart.update();
@@ -110,34 +108,41 @@ export default class ChartComponent extends Component {
             },
           },
           scales: {
-            yAxes: [{
-              ticks: {
-                min: 0,
-                stepSize,
-                callback: (val) => getFormattedValue(val, data) + unit,
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  stepSize,
+                  callback: val => getFormattedValue(val, data) + unit,
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: this.props.yAxisLabel,
+                },
               },
-              scaleLabel: {
-                display: true,
-                labelString: this.props.yAxisLabel,
+            ],
+            xAxes: [
+              {
+                scaleLabel: {
+                  display: true,
+                  labelString: this.props.xAxisLabel,
+                },
               },
-            }],
-            xAxes: [{
-              scaleLabel: {
-                display: true,
-                labelString: this.props.xAxisLabel,
-              },
-            }],
+            ],
           },
         });
       case 'doughnut':
-        return options;
+        return { ...options, ...{ cutoutPercentage: 0 } };
     }
   }
 
   renderChart: Function = (props: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.chart);
     const options: Object = this.getOptions(props.datasets);
-    const datasets: Array<Object> = scaleData(props.datasets, this.props.isNotTime);
+    const datasets: Array<Object> = scaleData(
+      props.datasets,
+      this.props.isNotTime
+    );
     const chart: Object = new Chart(el, {
       type: props.type,
       data: {
@@ -162,7 +167,7 @@ export default class ChartComponent extends Component {
               className="color-box"
               style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
             />
-            { d.label }
+            {d.label}
           </li>
         ));
       case 'doughnut':
@@ -170,9 +175,12 @@ export default class ChartComponent extends Component {
           <li className="chart-legend" key={key}>
             <span
               className="color-box"
-              style={{ backgroundColor: this.props.datasets[0].backgroundColor[key] || '#d7d7d7' }}
+              style={{
+                backgroundColor:
+                  this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
+              }}
             />
-            { `${d} (${this.props.datasets[0].data[key]})` }
+            {`${d} (${this.props.datasets[0].data[key]})`}
           </li>
         ));
     }
@@ -180,11 +188,9 @@ export default class ChartComponent extends Component {
 
   render(): React.Element<any> {
     return (
-      <div
-        className="chart-wrapper"
-      >
+      <div className="chart-wrapper">
         <div
-          className="chart-box pull-left"
+          className="chart-box"
           style={{ width: this.props.width, height: this.props.height }}
         >
           <canvas
@@ -194,9 +200,7 @@ export default class ChartComponent extends Component {
             height={this.props.height}
           />
         </div>
-        <ul className="chart-legend pull-right">
-          { this.renderLegend() }
-        </ul>
+        <ul className="chart-legend">{this.renderLegend()}</ul>
       </div>
     );
   }

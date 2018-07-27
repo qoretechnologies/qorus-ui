@@ -28,11 +28,11 @@ const ResultsToolbar = ({
   onSearchChange: Function,
   onApplyJobFilter: Function,
 }) => (
-  <Toolbar>
+  <Toolbar mb>
     <DatePicker className="toolbar-item" {...{ date, onApplyDate }} />
     <ResultsFilter {...{ jobFilter, onApplyJobFilter }} />
     <CsvExport
-      collection={job.results && job.results.data || []}
+      collection={(job.results && job.results.data) || []}
       type="jobResults"
     />
     <Search
@@ -43,12 +43,8 @@ const ResultsToolbar = ({
   </Toolbar>
 );
 
-const toolbar = (name: string, path: string): Function => compose(
-    ...[
-      applyDate,
-      applyJobFilter,
-    ].map(func => func(name, path))
-);
+const toolbar = (name: string, path: string): Function =>
+  compose(...[applyDate, applyJobFilter].map(func => func(name, path)));
 
 export default compose(
   toolbar('job', 'job/(:id)/results'),

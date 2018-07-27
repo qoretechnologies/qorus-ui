@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import {
@@ -14,8 +14,14 @@ import {
   Menu,
   MenuItem,
   Tooltip,
+  Icon,
+  MenuDivider,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
+
+import de from '../../../img/country_flags/de.png';
+import gb from '../../../img/country_flags/gb.png';
+import cz from '../../../img/country_flags/cz.png';
 
 import Modal from '../../components/modal';
 import withModal from '../../hocomponents/modal';
@@ -23,6 +29,14 @@ import logo from '../../../img/qore_logo.png';
 import actions from '../../store/api/actions';
 import { LANGS } from '../../intl/messages';
 import Sidebar from '../sidebar';
+import settings from '../../settings';
+import { HEALTH_KEYS } from '../../constants/dashboard';
+
+const flags: Object = {
+  de,
+  gb,
+  cz,
+};
 
 const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
   <Modal>
@@ -41,6 +55,7 @@ const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
 
 export type Props = {
   info: Object,
+  health: Object,
   currentUser: Object,
   isTablet?: boolean,
   onMenuToggle: () => void,
@@ -89,8 +104,14 @@ export default class Topbar extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { light, onThemeClick } = this.props;
+    const {
+      light,
+      onThemeClick,
+      health: { data },
+    } = this.props;
     const [countryCode, locale] = this.props.locale.split('-');
+
+    console.log(data);
 
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
@@ -143,12 +164,9 @@ export default class Topbar extends Component {
                   (loc, lang) =>
                     countryCode !== lang && (
                       <MenuItem
+                        key={lang}
                         text={lang}
-                        label={
-                          <img
-                            src={`http://www.countryflags.io/${lang.toLowerCase()}/flat/16.png`}
-                          />
-                        }
+                        label={<img src={flags[lang.toLowerCase()]} />}
                         onClick={() => this.props.storeLocale(loc)}
                       />
                     )
@@ -162,32 +180,33 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button>
-                <img
-                  src={`http://www.countryflags.io/${locale.toLowerCase()}/flat/16.png`}
-                />{' '}
-                {locale}
+                <img src={flags[locale.toLowerCase()]} /> {locale}
               </Button>
             </ButtonGroup>
           </Popover>
           <NavbarDivider />
-          <Tooltip
-            intent={Intent.DANGER}
-            content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
-            position={Position.LEFT}
-          >
-            <ButtonGroup minimal>
-              <Button iconName="warning-sign" intent={Intent.DANGER} />
-            </ButtonGroup>
-          </Tooltip>
+          {settings.PROTOCOL === 'http' && (
+            <Tooltip
+              intent={Intent.DANGER}
+              content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
+              position={Position.LEFT}
+            >
+              <ButtonGroup minimal>
+                <Button iconName="warning-sign" intent={Intent.DANGER} />
+              </ButtonGroup>
+            </Tooltip>
+          )}
           <Popover
             position={Position.BOTTOM_RIGHT}
             content={
               <Menu>
+                <MenuDivider title="System health" />
                 <MenuItem
-                  text="Logout"
-                  iconName="log-out"
-                  onClick={() => browserHistory.push('/logout')}
+                  text={`Status: ${data.health}`}
+                  intent={HEALTH_KEYS[data.health]}
                 />
+                <MenuItem text="Ongoing alerts" label={data.ongoing} />
+                <MenuItem text="Transient alerts" label={data.transient} />
               </Menu>
             }
           >
@@ -199,11 +218,14 @@ export default class Topbar extends Component {
             position={Position.BOTTOM_RIGHT}
             content={
               <Menu>
-                <MenuItem
-                  text="Logout"
-                  iconName="log-out"
-                  onClick={() => browserHistory.push('/logout')}
-                />
+                <MenuDivider title="Remotes" />
+                {data.remote.map((remote: Object) => (
+                  <MenuItem
+                    key={remote.name}
+                    text={`${remote.name} - ${remote.health}`}
+                    intent={HEALTH_KEYS[remote.health]}
+                  />
+                ))}
               </Menu>
             }
           >
@@ -215,7 +237,10 @@ export default class Topbar extends Component {
             <Button iconName="notifications" />
           </ButtonGroup>
           <ButtonGroup minimal>
-            <Button iconName={light ? 'moon' : 'flash'} onClick={onThemeClick} />
+            <Button
+              iconName={light ? 'moon' : 'flash'}
+              onClick={onThemeClick}
+            />
           </ButtonGroup>
         </NavbarGroup>
       </Navbar>

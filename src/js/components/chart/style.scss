@@ -4,7 +4,6 @@
 .chart-wrapper {
   display: inline-block;
   position: relative;
-  margin-top: 30px;
   width: auto;
 
   &:not(:first-of-type) {
@@ -23,11 +22,19 @@
   margin: 0 0 10px 0;
   overflow: hidden;
   position: relative;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /**
 * Generates the legend for the chart
 */
+ul.chart-legend {
+  display: inline-block;
+  padding-left: 15px;
+  vertical-align: middle;
+}
+
 ul.chart-legend,
 ul.chart-legend li {
   list-style: none;

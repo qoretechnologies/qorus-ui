@@ -27,51 +27,50 @@ const AutoStart = ({
   handleIncrementClick,
   handleDecrementClick,
   withExec,
-}: Props): React.Element<any> =>
-  console.log(autostart) || (
-    <ButtonGroup>
-      <Tooltip
-        content="Decrement autostart"
-        position={Position.TOP}
-        useSmartPositioning
-      >
-        <Button
-          iconName="small-minus"
-          onClick={handleDecrementClick}
-          intent={Intent.NONE}
-          className="pt-small"
-        />
-      </Tooltip>
-      <Tooltip content="Autostart" position={Position.TOP} useSmartPositioning>
-        <Button
-          text={
-            !withExec
-              ? autostart.toString()
-              : `${autostart} / Execs: ${execCount}`
-          }
-          intent={
-            parseInt(autostart, 10) === parseInt(execCount, 10) &&
-            autostart &&
-            autostart > 0
-              ? Intent.SUCCESS
-              : Intent.NONE
-          }
-          className="pt-small"
-        />
-      </Tooltip>
-      <Tooltip
-        content="Increment autostart"
-        position={Position.TOP}
-        useSmartPositioning
-      >
-        <Button
-          iconName="small-plus"
-          onClick={handleIncrementClick}
-          className="pt-small"
-        />
-      </Tooltip>
-    </ButtonGroup>
-  );
+}: Props): React.Element<any> => (
+  <ButtonGroup>
+    <Tooltip
+      content="Decrement autostart"
+      position={Position.TOP}
+      useSmartPositioning
+    >
+      <Button
+        iconName="small-minus"
+        onClick={handleDecrementClick}
+        intent={Intent.NONE}
+        className="pt-small"
+      />
+    </Tooltip>
+    <Tooltip content="Autostart" position={Position.TOP} useSmartPositioning>
+      <Button
+        text={
+          !withExec
+            ? autostart.toString()
+            : `${autostart} / Execs: ${execCount}`
+        }
+        intent={
+          parseInt(autostart, 10) === parseInt(execCount, 10) &&
+          autostart &&
+          autostart > 0
+            ? Intent.SUCCESS
+            : Intent.NONE
+        }
+        className="pt-small"
+      />
+    </Tooltip>
+    <Tooltip
+      content="Increment autostart"
+      position={Position.TOP}
+      useSmartPositioning
+    >
+      <Button
+        iconName="small-plus"
+        onClick={handleIncrementClick}
+        className="pt-small"
+      />
+    </Tooltip>
+  </ButtonGroup>
+);
 
 export default compose(
   withHandlers({

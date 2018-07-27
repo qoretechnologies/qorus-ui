@@ -63,7 +63,7 @@ const menu = {
 };
 
 let MenuElement: Function = ({
-  icon,
+  iconName,
   name,
   submenu,
   link,
@@ -72,7 +72,7 @@ let MenuElement: Function = ({
   handleClick,
 }) => (
   <MenuItem
-    iconName={icon}
+    iconName={iconName}
     onClick={handleClick}
     text={!menuCollapsed && formatMessage({ id: name })}
   >
@@ -99,7 +99,7 @@ const MenuWrapper: Function = ({
 }: Props) => (
   <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
     {map(menu, (values: Object, key: string) => (
-      <div>
+      <div key={key}>
         {!menuCollapsed && (
           <li className="pt-menu-header">
             <h6>{key}</h6>
@@ -109,6 +109,7 @@ const MenuWrapper: Function = ({
           ({ name, icon, link, submenu }) =>
             menuCollapsed ? (
               <Tooltip
+                key={name}
                 content={formatMessage({ id: name })}
                 position={submenu ? Position.BOTTOM : Position.RIGHT}
               >
@@ -122,6 +123,7 @@ const MenuWrapper: Function = ({
               </Tooltip>
             ) : (
               <MenuElement
+                key={name}
                 iconName={icon}
                 link={link}
                 name={name}

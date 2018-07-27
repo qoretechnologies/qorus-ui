@@ -90,7 +90,7 @@ export default class Dashboard extends Component {
     }_${sidebarOpen.toString()}`;
 
     const sizes =
-      width > 1400
+      width > 1200
         ? [{ columns: 3, gutter: 20 }]
         : [{ columns: 2, gutter: 20 }];
 
@@ -101,94 +101,98 @@ export default class Dashboard extends Component {
           sizes={sizes}
           style={{ margin: '0 auto' }}
           infiniteScrollDisabled
-          className={`masonry${width > 1400 ? 'Triple' : 'Double'}`}
+          className={`masonry${width > 1200 ? 'Triple' : 'Double'}`}
           key={masonryKey}
         >
-          <DashboardModule>
-            <PaneItem title="Global order stats - number of orders">
-              <Tabs
-                active={this.state.ordersTab}
-                noContainer
-                onChange={this.handleOrdersTabChange}
-              >
-                {system.order_stats.map(stats => (
-                  <Pane name={replace(stats.label, /_/g, ' ')}>
-                    {stats.l.length > 0 &&
-                    stats.l.every(stat => stat.count !== 0) ? (
-                      <CenterWrapper>
-                        <ChartComponent
-                          width={190}
-                          height={190}
-                          isNotTime
-                          type="doughnut"
-                          labels={[
-                            'Recovered automatically',
-                            'Recovered manually',
-                            'Completed w/o errors',
-                          ]}
-                          datasets={[
-                            {
-                              data: [
-                                stats.l.find(dt => dt.disposition === 'A')
-                                  .count,
-                                stats.l.find(dt => dt.disposition === 'M')
-                                  .count,
-                                stats.l.find(dt => dt.disposition === 'C')
-                                  .count,
-                              ],
-                              backgroundColor: [
-                                '#FFB366',
-                                '#FF7373',
-                                '#7fba27',
-                              ],
-                            },
-                          ]}
-                        />
-                      </CenterWrapper>
-                    ) : (
-                      <NoData />
-                    )}
-                  </Pane>
-                ))}
-              </Tabs>
-            </PaneItem>
-          </DashboardModule>
-          <DashboardModule>
-            <PaneItem title="Global order stats - SLA">
-              <Tabs
-                active={this.state.slaTab}
-                noContainer
-                onChange={this.handleSlaTabChange}
-              >
-                {system.order_stats.map(stats => (
-                  <Pane name={replace(stats.label, /_/g, ' ')}>
-                    {stats.sla.length > 0 ? (
-                      <CenterWrapper>
-                        <ChartComponent
-                          width={190}
-                          height={190}
-                          isNotTime
-                          type="doughnut"
-                          labels={['In SLA', 'Out of SLA']}
-                          datasets={[
-                            {
-                              data: [
-                                Math.round(getStatsData(true, stats)),
-                                Math.round(getStatsData(false, stats)),
-                              ],
-                              backgroundColor: ['#7fba27', '#FF7373'],
-                            },
-                          ]}
-                        />
-                      </CenterWrapper>
-                    ) : (
-                      <NoData />
-                    )}
-                  </Pane>
-                ))}
-              </Tabs>
-            </PaneItem>
-          </DashboardModule>
+          {system.order_stats && (
+            <DashboardModule>
+              <PaneItem title="Global order stats - number of orders">
+                <Tabs
+                  active={this.state.ordersTab}
+                  noContainer
+                  onChange={this.handleOrdersTabChange}
+                >
+                  {system.order_stats.map(stats => (
+                    <Pane name={replace(stats.label, /_/g, ' ')}>
+                      {stats.l.length > 0 &&
+                      stats.l.every(stat => stat.count !== 0) ? (
+                        <CenterWrapper>
+                          <ChartComponent
+                            width={150}
+                            height={150}
+                            isNotTime
+                            type="doughnut"
+                            labels={[
+                              'Recovered automatically',
+                              'Recovered manually',
+                              'Completed w/o errors',
+                            ]}
+                            datasets={[
+                              {
+                                data: [
+                                  stats.l.find(dt => dt.disposition === 'A')
+                                    .count,
+                                  stats.l.find(dt => dt.disposition === 'M')
+                                    .count,
+                                  stats.l.find(dt => dt.disposition === 'C')
+                                    .count,
+                                ],
+                                backgroundColor: [
+                                  '#FFB366',
+                                  '#FF7373',
+                                  '#7fba27',
+                                ],
+                              },
+                            ]}
+                          />
+                        </CenterWrapper>
+                      ) : (
+                        <NoData />
+                      )}
+                    </Pane>
+                  ))}
+                </Tabs>
+              </PaneItem>
+            </DashboardModule>
+          )}
+          {system.order_stats && (
+            <DashboardModule>
+              <PaneItem title="Global order stats - SLA">
+                <Tabs
+                  active={this.state.slaTab}
+                  noContainer
+                  onChange={this.handleSlaTabChange}
+                >
+                  {system.order_stats.map(stats => (
+                    <Pane name={replace(stats.label, /_/g, ' ')}>
+                      {stats.sla.length > 0 ? (
+                        <CenterWrapper>
+                          <ChartComponent
+                            width={150}
+                            height={150}
+                            isNotTime
+                            type="doughnut"
+                            labels={['In SLA', 'Out of SLA']}
+                            datasets={[
+                              {
+                                data: [
+                                  Math.round(getStatsData(true, stats)),
+                                  Math.round(getStatsData(false, stats)),
+                                ],
+                                backgroundColor: ['#7fba27', '#FF7373'],
+                              },
+                            ]}
+                          />
+                        </CenterWrapper>
+                      ) : (
+                        <NoData />
+                      )}
+                    </Pane>
+                  ))}
+                </Tabs>
+              </PaneItem>
+            </DashboardModule>
+          )}
           <DashboardModule titleStyle="green">
             <PaneItem title="Cluster">
               <DashboardSection>
@@ -244,31 +248,42 @@ export default class Dashboard extends Component {
             </PaneItem>
           </DashboardModule>
           <DashboardModule>
-            <PaneItem title="Intefaces">
-              <DashboardSection link="/workflows" iconName="sitemap">
-                Workflows <Icon iconName="circle" className="separator" /> total
-                / alerts
-                <DashboardItem>
-                  <Badge val={system.workflow_total} label="info" bypass /> /{' '}
-                  <Badge val={system.workflow_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
-              <DashboardSection link="/services" iconName="list">
-                Services <Icon iconName="circle" className="separator" /> total
-                / alerts
-                <DashboardItem>
-                  <Badge val={system.service_total} label="info" bypass /> /{' '}
-                  <Badge val={system.service_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
-              <DashboardSection link="/jobs" iconName="calendar-o">
-                Jobs <Icon iconName="circle" className="separator" /> total /
-                alerts
-                <DashboardItem>
-                  <Badge val={system.job_total} label="info" bypass /> /{' '}
-                  <Badge val={system.job_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
+            <PaneItem title="Interfaces">
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> Workflows </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">{system.workflow_total}</div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">
+                    {system.workflow_alerts}
+                  </div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> Services </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">{system.service_total}</div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">{system.service_alerts}</div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> Jobs </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">{system.job_total}</div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">{system.job_alerts}</div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
             </PaneItem>
           </DashboardModule>
           <DashboardModule>
@@ -331,33 +346,43 @@ export default class Dashboard extends Component {
           </DashboardModule>
           <DashboardModule>
             <PaneItem title="Connections">
-              <DashboardSection
-                link="/system/remote/qorus"
-                iconName="external-link"
-              >
-                Qorus <Icon iconName="circle" className="separator" /> total /
-                alerts
-                <DashboardItem>
-                  <Badge val={system.remote_total} label="info" bypass /> /{' '}
-                  <Badge val={system.remote_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
-              <DashboardSection link="/system/remote" iconName="database">
-                Datasource <Icon iconName="circle" className="separator" />{' '}
-                total / alerts
-                <DashboardItem>
-                  <Badge val={system.datasource_total} label="info" bypass /> /{' '}
-                  <Badge val={system.datasource_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
-              <DashboardSection link="/system/remote/user" iconName="users">
-                Users <Icon iconName="circle" className="separator" /> total /
-                alerts
-                <DashboardItem>
-                  <Badge val={system.user_total} label="info" bypass /> /{' '}
-                  <Badge val={system.user_alerts} label="danger" bypass />
-                </DashboardItem>
-              </DashboardSection>
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> Qorus </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">{system.remote_total}</div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">{system.remote_alerts}</div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> Datasource </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">
+                    {system.datasource_total}
+                  </div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">
+                    {system.datasource_alerts}
+                  </div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
+              <div className="dashboard-data-module">
+                <div className="dashboard-data-title"> User </div>
+                <div className="dashboard-data-top">
+                  <div className="db-data-content">{system.user_total}</div>
+                  <div className="db-data-label"> total </div>
+                </div>
+                <div className="dashboard-data-bottom">
+                  <div className="db-data-content">{system.user_alerts}</div>
+                  <div className="db-data-label"> with alerts </div>
+                </div>
+              </div>
             </PaneItem>
           </DashboardModule>
         </Masonry>

@@ -101,3 +101,59 @@
   vertical-align: middle;
   margin: 0 4px;
 }
+
+.dashboard-data-module {
+  width: 30%;
+  height: 150px;
+  float: left;
+
+  &:not(:nth-child(3n)) {
+    margin-right: 5%;
+  }
+
+  .dashboard-data-title {
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    text-align: center;
+    color: #fff;
+    background-color: #8e44ad;
+  }
+
+  .dashboard-data-top {
+    height: 62px;
+    width: 100%;
+    background-color: #9b59b6;
+    border-bottom: 1px solid darken(#9b59b6, 5);
+  }
+
+  .dashboard-data-bottom {
+    height: 62px;
+    width: 100%;
+    background-color: #ff7979;
+    border-top: 1px solid darken(#ff7979, 4);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .dashboard-data-top,
+  .dashboard-data-bottom {
+    .db-data-content {
+      line-height: 40px;
+      font-size: 25px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .db-data-label {
+      line-height: 22px;
+      font-size: 11px;
+      color: #fff;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'Nunito';
+    }
+  }
+}
