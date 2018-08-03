@@ -1,9 +1,10 @@
 /* @flow */
 import classNames from 'classnames';
+import round from 'lodash/round';
 
 const statusHealth: Function = (health: string): string =>
   classNames({
-    danger: health === 'RED',
+    danger: health === 'RED' || health === 'ERROR',
     success: health === 'GREEN',
     warning:
       health === 'YELLOW' || health === 'UNKNOWN' || health === 'UNREACHABLE',
@@ -124,6 +125,18 @@ const getProcessObjectLink: Function = (process: Object) => {
   }
 };
 
+const calculateMemory: Function = (memory: number, unit: string): string => {
+  let mem = memory;
+
+  if (mem > 1000) {
+    mem = unit ? mem / 1024 : mem * 0.00000095367432;
+
+    return calculateMemory(mem, unit ? 'GiB' : 'MiB');
+  }
+
+  return `${round(mem, 2)} ${unit}`;
+};
+
 export {
   statusHealth,
   utf8ToB64,
@@ -131,4 +144,5 @@ export {
   getDependencyObjectLink,
   typeToString,
   getProcessObjectLink,
+  calculateMemory,
 };

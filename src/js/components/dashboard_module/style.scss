@@ -9,7 +9,7 @@
 .dashboard-module {
   background-color: white;
   padding: 15px;
-  margin-top: 15px;
+  // margin-top: 15px;
   border-radius: 3px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
   clear: both;
@@ -102,6 +102,189 @@
   margin: 0 4px;
 }
 
+.dashboard-module-overview {
+  width: 47.5%;
+  height: 100px;
+  float: left;
+
+  &:first-child {
+    margin-right: 5%;
+  }
+
+  .overview-module {
+    background-color: #40739e;
+
+    &.warning {
+      background-color: lighten(#d99e0b, 5);
+    }
+
+    &.none {
+      background-color: #cccccc;
+    }
+
+    &.danger {
+      background-color: #d13913;
+    }
+
+    &.success {
+      background-color: $qore-green;
+    }
+  }
+
+  .module {
+    height: 50%;
+    width: 100%;
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    div:first-child {
+      height: 30px;
+      line-height: 30px;
+      font-size: 20px;
+      color: #fff;
+      text-align: center;
+    }
+
+    div:last-child {
+      height: 20px;
+      line-height: 20px;
+      font-size: 11px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #fff;
+      font-family: 'Nunito';
+    }
+  }
+}
+
+.dashboard-module-wide {
+  clear: both;
+  margin-top: 10px;
+  width: 100%;
+  height: 76px;
+
+  .dashboard-data-title {
+    padding: 0 10px;
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: #fff;
+    background-color: #40739e;
+
+    &.warning {
+      background-color: #d99e0b;
+    }
+
+    &.danger {
+      background-color: #d13913;
+    }
+
+    &.success {
+      background-color: $qore-green;
+    }
+  }
+
+  > .bottom {
+    width: 100%;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    height: 50px;
+    background-color: lighten(#40739e, 5);
+
+    &.warning {
+      background-color: lighten(#d99e0b, 5);
+
+      .module:first-child {
+        border-right: 1px solid #d99e0b;
+      }
+    }
+
+    &.danger {
+      background-color: lighten(#d13913, 5);
+
+      .module:first-child {
+        border-right: 1px solid #d13913;
+      }
+    }
+
+    &.success {
+      background-color: $qore-green;
+
+      .module:first-child {
+        border-right: 1px solid darken($qore-green, 5);
+      }
+    }
+
+    .module {
+      width: 50%;
+      height: 100%;
+      float: left;
+
+      &:first-child {
+        border-right: 1px solid #40739e;
+      }
+
+      .top {
+        height: 30px;
+        line-height: 30px;
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+      }
+
+      > .bottom {
+        height: 20px;
+        line-height: 20px;
+        font-size: 11px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #fff;
+        font-family: 'Nunito';
+      }
+    }
+  }
+}
+
+.dashboard-module-small {
+  width: 30%;
+  height: 50px;
+  float: left;
+  border-radius: 4px;
+  background-color: #40739e;
+
+  .top {
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+  }
+
+  .bottom {
+    height: 20px;
+    line-height: 20px;
+    font-size: 11px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    font-family: 'Nunito';
+  }
+
+  &:not(:nth-child(3n)) {
+    margin-right: 5%;
+  }
+}
+
 .dashboard-data-module {
   width: 30%;
   height: 150px;
@@ -132,10 +315,15 @@
   .dashboard-data-bottom {
     height: 62px;
     width: 100%;
-    background-color: #ff7979;
-    border-top: 1px solid darken(#ff7979, 4);
+    background-color: #cccccc;
+    border-top: 1px solid darken(#cccccc, 4);
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+
+    &.has-alerts {
+      border-top: 1px solid darken(#d13913, 4);
+      background-color: #d13913;
+    }
   }
 
   .dashboard-data-top,
@@ -156,4 +344,8 @@
       font-family: 'Nunito';
     }
   }
+}
+
+.module-wrapper {
+  overflow: hidden;
 }

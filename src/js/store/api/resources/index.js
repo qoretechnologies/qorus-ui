@@ -6,6 +6,7 @@ import {
   normalizeName,
   checkAlerts,
   normalizeWorkflowLib,
+  findMissingBand,
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
@@ -26,7 +27,10 @@ export default [
   {
     name: 'steps',
     url: `${settings.REST_BASE_URL}/steps`,
-    transform: _.flowRight(normalizeName, normalizeId('stepid')),
+    transform: _.flowRight(
+      normalizeName,
+      normalizeId('stepid')
+    ),
   },
   {
     name: 'errors',
@@ -36,7 +40,75 @@ export default [
     name: 'system',
     url: `${settings.REST_BASE_URL}/system`,
     initialState: { data: {} },
-    transform: item => item,
+    transform: item => {
+      if (!item.order_stats) {
+        return {
+          ...item,
+          ...{
+            order_stats: [
+              {
+                l: [
+                  { disposition: 'A', count: 0, pct: 0 },
+                  { disposition: 'M', count: 0, pct: 0 },
+                  { disposition: 'C', count: 0, pct: 0 },
+                ],
+                label: '1_hour_band',
+                sla: [],
+              },
+              {
+                l: [
+                  { disposition: 'A', count: 0, pct: 0 },
+                  { disposition: 'M', count: 0, pct: 0 },
+                  { disposition: 'C', count: 0, pct: 0 },
+                ],
+                label: '4_hour_band',
+                sla: [],
+              },
+              {
+                l: [
+                  { disposition: 'A', count: 0, pct: 0 },
+                  { disposition: 'M', count: 0, pct: 0 },
+                  { disposition: 'C', count: 0, pct: 0 },
+                ],
+                label: '24_hour_band',
+                sla: [],
+              },
+            ],
+          },
+        };
+      }
+
+      const missingBands: ?Array<string> = findMissingBand(item.order_stats);
+
+      if (missingBands.length !== 0) {
+        item.order_stats = [
+          ...item.order_stats,
+          ...missingBands.map(label => ({
+            l: [
+              { disposition: 'A', count: 0, pct: 0 },
+              { disposition: 'M', count: 0, pct: 0 },
+              { disposition: 'C', count: 0, pct: 0 },
+            ],
+            label,
+            sla: [],
+          })),
+        ];
+
+        item.order_stats.sort((a, b) => {
+          if (parseInt(a.label, 10) < parseInt(b.label, 10)) {
+            return -1;
+          }
+
+          if (parseInt(a.label, 10) > parseInt(b.label, 10)) {
+            return 1;
+          }
+
+          return 0;
+        });
+      }
+
+      return item;
+    },
   },
   {
     name: 'systemOptions',

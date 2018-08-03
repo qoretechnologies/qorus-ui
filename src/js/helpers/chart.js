@@ -196,7 +196,7 @@ const getFormattedValue: Function = (val: number, data) => {
   return round(value, 2);
 };
 
-const getStatsData: Function = (inSla: boolean, data: any): any => {
+const getStatsCount: Function = (inSla: boolean, data: any): any => {
   if (inSla) {
     const val = data.sla.find(datum => datum.in_sla);
 
@@ -205,6 +205,18 @@ const getStatsData: Function = (inSla: boolean, data: any): any => {
     const val = data.sla.find(datum => datum.in_sla === false);
 
     return val ? val.count : 0;
+  }
+};
+
+const getStatsPct: Function = (inSla: boolean, data: any): any => {
+  if (inSla) {
+    const val = data.sla.find(datum => datum.in_sla);
+
+    return val ? val.pct : 0;
+  } else {
+    const val = data.sla.find(datum => datum.in_sla === false);
+
+    return val ? val.pct : 0;
   }
 };
 
@@ -218,5 +230,6 @@ export {
   createDoughDatasets,
   getUnit,
   getFormattedValue,
-  getStatsData,
+  getStatsCount,
+  getStatsPct,
 };

@@ -31,8 +31,9 @@ export function createResourceReducers(
 
     Object.keys(actions[resource]).forEach(actn => {
       const name = `${resource}_${actn}`.toUpperCase();
-      const isSpecialReducer = (specialReducers[resource] &&
-          specialReducers[resource][actn.toUpperCase()]);
+      const isSpecialReducer =
+        specialReducers[resource] &&
+        specialReducers[resource][actn.toUpperCase()];
 
       handlers[name] = {
         next(state, action) {
@@ -40,19 +41,19 @@ export function createResourceReducers(
 
           if (action.payload) {
             if (resourceOrigin && resourceOrigin.transform) {
-              data = (isArray(action.payload)) ?
-                action.payload.map(resourceOrigin.transform) :
-                resourceOrigin.transform(action.payload);
+              data = isArray(action.payload)
+                ? action.payload.map(resourceOrigin.transform)
+                : resourceOrigin.transform(action.payload);
             } else {
               data = action.payload;
             }
           }
 
           if (isSpecialReducer) {
-            return (
-              specialReducers[resource][actn.toUpperCase()]
-                .next(state, { ...action, payload: data })
-            );
+            return specialReducers[resource][actn.toUpperCase()].next(state, {
+              ...action,
+              payload: data,
+            });
           }
 
           if (action.meta) {
@@ -67,21 +68,13 @@ export function createResourceReducers(
 
               if (typeof action.meta.id === 'string') {
                 return assignIn({}, state, {
-                  data: updateItemWithName(
-                    action.meta.id,
-                    data,
-                    state.data,
-                  ),
+                  data: updateItemWithName(action.meta.id, data, state.data),
                   sync: true,
                 });
               }
 
               return assignIn({}, state, {
-                data: updateItemWithId(
-                  action.meta.id,
-                  data,
-                  state.data,
-                ),
+                data: updateItemWithId(action.meta.id, data, state.data),
                 sync: true,
               });
             }
@@ -117,7 +110,11 @@ export function createResourceReducers(
               data = state.data.slice().concat(data);
             }
 
-            if (action.meta.params && action.meta.params.update && action.meta.params.update.data) {
+            if (
+              action.meta.params &&
+              action.meta.params.update &&
+              action.meta.params.update.data
+            ) {
               data = Object.assign(data, action.meta.params.update.data);
             }
           }
@@ -132,11 +129,13 @@ export function createResourceReducers(
           };
         },
         throw(state, action) {
-          if (isSpecialReducer &&
-              specialReducers[resource][actn.toUpperCase()].throw) {
-            return (
-              specialReducers[resource][actn.toUpperCase()]
-                .throw(state, action)
+          if (
+            isSpecialReducer &&
+            specialReducers[resource][actn.toUpperCase()].throw
+          ) {
+            return specialReducers[resource][actn.toUpperCase()].throw(
+              state,
+              action
             );
           }
 
@@ -204,6 +203,5 @@ export function createResourceReducers(
 
   return reducers;
 }
-
 
 export default combineReducers(createResourceReducers(ACTIONS, RESOURCES));

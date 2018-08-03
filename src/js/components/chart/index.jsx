@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 import pure from 'recompose/onlyUpdateForKeys';
 
+import { CenterWrapper } from '../layout';
+
 import {
   getMaxValue,
   getStepSize,
@@ -11,8 +13,17 @@ import {
   getUnit,
   getFormattedValue,
 } from '../../helpers/chart';
+import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
 
-@pure(['width', 'height', 'labels', 'datasets', 'xAxisLabel', 'yAxisLabel'])
+@pure([
+  'width',
+  'height',
+  'labels',
+  'datasets',
+  'xAxisLabel',
+  'yAxisLabel',
+  'unit',
+])
 export default class ChartComponent extends Component {
   static defaultProps = {
     width: 400,
@@ -34,6 +45,8 @@ export default class ChartComponent extends Component {
     beginAtZero: boolean,
     unit?: string,
     isNotTime?: boolean,
+    empty?: boolean,
+    title?: string,
   };
 
   state: {
@@ -45,32 +58,36 @@ export default class ChartComponent extends Component {
   };
 
   componentDidMount() {
-    this.renderChart(this.props);
+    if (!this.props.empty) {
+      this.renderChart(this.props);
+    }
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    if (this.props.labels !== nextProps.labels) {
-      const chart = this.state.chart;
-      const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
-      const datasets =
-        nextProps.type === 'line'
-          ? scaleData(nextProps.datasets, nextProps.isNotTime)
-          : nextProps.datasets;
+    if (!this.props.empty) {
+      if (this.props.labels !== nextProps.labels) {
+        const chart = this.state.chart;
+        const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
+        const datasets =
+          nextProps.type === 'line'
+            ? scaleData(nextProps.datasets, nextProps.isNotTime)
+            : nextProps.datasets;
 
-      chart.data.labels = nextProps.labels;
-      chart.data.datasets = datasets;
+        chart.data.labels = nextProps.labels;
+        chart.data.datasets = datasets;
 
-      if (nextProps.type === 'line') {
-        chart.options.scales.yAxes[0].ticks.callback = val =>
-          getFormattedValue(val, datasets) + unit;
-        chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
-        chart.options.scales.xAxes[0].scaleLabel.labelString =
-          nextProps.xAxisLabel;
-        chart.options.tooltips.callbacks.label = item =>
-          getFormattedValue(item.yLabel, nextProps.datasets) + unit;
+        if (nextProps.type === 'line') {
+          chart.options.scales.yAxes[0].ticks.callback = val =>
+            getFormattedValue(val, datasets) + unit;
+          chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
+          chart.options.scales.xAxes[0].scaleLabel.labelString =
+            nextProps.xAxisLabel;
+          chart.options.tooltips.callbacks.label = item =>
+            getFormattedValue(item.yLabel, nextProps.datasets) + unit;
+        }
+
+        chart.update();
       }
-
-      chart.update();
     }
   }
 
@@ -132,7 +149,12 @@ export default class ChartComponent extends Component {
           },
         });
       case 'doughnut':
-        return { ...options, ...{ cutoutPercentage: 0 } };
+        return {
+          ...options,
+          ...{
+            cutoutPercentage: 0,
+          },
+        };
     }
   }
 
@@ -176,11 +198,14 @@ export default class ChartComponent extends Component {
             <span
               className="color-box"
               style={{
-                backgroundColor:
-                  this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
+                backgroundColor: this.props.empty
+                  ? '#eeeeee'
+                  : this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
               }}
             />
-            {`${d} (${this.props.datasets[0].data[key]})`}
+            {`${d} (${this.props.datasets[0].data[key]}${
+              this.props.unit ? this.props.unit : ''
+            })`}
           </li>
         ));
     }
@@ -189,18 +214,27 @@ export default class ChartComponent extends Component {
   render(): React.Element<any> {
     return (
       <div className="chart-wrapper">
+        {this.props.title && <h5>{this.props.title}</h5>}
         <div
           className="chart-box"
           style={{ width: this.props.width, height: this.props.height }}
         >
-          <canvas
-            ref="chart"
-            id={this.props.id}
-            width={this.props.width}
-            height={this.props.height}
-          />
+          {this.props.empty && this.props.type === 'doughnut' ? (
+            <div className="pie-chart-placeholder">
+              <NonIdealState title="No data" visual="warning-sign" />
+            </div>
+          ) : (
+            <canvas
+              ref="chart"
+              id={this.props.id}
+              width={this.props.width}
+              height={this.props.height}
+            />
+          )}
         </div>
-        <ul className="chart-legend">{this.renderLegend()}</ul>
+        <CenterWrapper>
+          <ul className="chart-legend">{this.renderLegend()}</ul>
+        </CenterWrapper>
       </div>
     );
   }

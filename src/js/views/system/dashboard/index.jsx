@@ -11,14 +11,14 @@ import DashboardModule from '../../../components/dashboard_module/index';
 import DashboardItem from '../../../components/dashboard_module/item';
 import DashboardSection from '../../../components/dashboard_module/section';
 import Badge from '../../../components/badge';
-import NoData from '../../../components/nodata';
 import Icon from '../../../components/icon';
 import PaneItem from '../../../components/pane_item';
 import Tabs, { Pane } from '../../../components/tabs';
-import { statusHealth } from '../../../helpers/system';
+import { statusHealth, calculateMemory } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
-import { CenterWrapper } from '../../../components/layout';
-import { getStatsData } from '../../../helpers/chart';
+
+import { getStatsCount, getStatsPct } from '../../../helpers/chart';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 
 const viewSelector = createSelector(
   [
@@ -49,26 +49,20 @@ export default class Dashboard extends Component {
   };
 
   state: {
-    ordersTab: string,
-    slaTab: string,
+    chartTab: string,
   } = {
-    ordersTab: '1 hour band',
-    slaTab: '1 hour band',
+    chartTab: '1 hour band',
   };
 
   componentWillMount() {
     this.props.dispatch(actions.health.fetch());
   }
 
-  handleOrdersTabChange: Function = (ordersTab: string): void => {
-    this.setState({
-      ordersTab,
-    });
-  };
+  handleChartTabChange: Function = (event: any, chartTab: string): void => {
+    console.log(chartTab);
 
-  handleSlaTabChange: Function = (slaTab: string): void => {
     this.setState({
-      slaTab,
+      chartTab,
     });
   };
 
@@ -85,8 +79,8 @@ export default class Dashboard extends Component {
         ? currentUser.data.storage.sidebarOpen
         : false;
 
-    const masonryKey = `${width}_${this.state.ordersTab}_${
-      this.state.slaTab
+    const masonryKey = `${width}_${
+      this.state.chartTab
     }_${sidebarOpen.toString()}`;
 
     const sizes =
@@ -106,118 +100,118 @@ export default class Dashboard extends Component {
         >
           {system.order_stats && (
             <DashboardModule>
-              <PaneItem title="Global order stats - number of orders">
-                <Tabs
-                  active={this.state.ordersTab}
-                  noContainer
-                  onChange={this.handleOrdersTabChange}
-                >
-                  {system.order_stats.map(stats => (
-                    <Pane name={replace(stats.label, /_/g, ' ')}>
-                      {stats.l.length > 0 &&
-                      stats.l.every(stat => stat.count !== 0) ? (
-                        <CenterWrapper>
-                          <ChartComponent
-                            width={150}
-                            height={150}
-                            isNotTime
-                            type="doughnut"
-                            labels={[
-                              'Recovered automatically',
-                              'Recovered manually',
-                              'Completed w/o errors',
-                            ]}
-                            datasets={[
-                              {
-                                data: [
-                                  stats.l.find(dt => dt.disposition === 'A')
-                                    .count,
-                                  stats.l.find(dt => dt.disposition === 'M')
-                                    .count,
-                                  stats.l.find(dt => dt.disposition === 'C')
-                                    .count,
-                                ],
-                                backgroundColor: [
-                                  '#FFB366',
-                                  '#FF7373',
-                                  '#7fba27',
-                                ],
-                              },
-                            ]}
-                          />
-                        </CenterWrapper>
-                      ) : (
-                        <NoData />
-                      )}
-                    </Pane>
-                  ))}
-                </Tabs>
-              </PaneItem>
-            </DashboardModule>
-          )}
-          {system.order_stats && (
-            <DashboardModule>
-              <PaneItem title="Global order stats - SLA">
-                <Tabs
-                  active={this.state.slaTab}
-                  noContainer
-                  onChange={this.handleSlaTabChange}
-                >
-                  {system.order_stats.map(stats => (
-                    <Pane name={replace(stats.label, /_/g, ' ')}>
-                      {stats.sla.length > 0 ? (
-                        <CenterWrapper>
-                          <ChartComponent
-                            width={150}
-                            height={150}
-                            isNotTime
-                            type="doughnut"
-                            labels={['In SLA', 'Out of SLA']}
-                            datasets={[
-                              {
-                                data: [
-                                  Math.round(getStatsData(true, stats)),
-                                  Math.round(getStatsData(false, stats)),
-                                ],
-                                backgroundColor: ['#7fba27', '#FF7373'],
-                              },
-                            ]}
-                          />
-                        </CenterWrapper>
-                      ) : (
-                        <NoData />
-                      )}
-                    </Pane>
-                  ))}
-                </Tabs>
+              <PaneItem
+                title="Global order stats"
+                label={
+                  <Dropdown>
+                    <Control small>{this.state.chartTab}</Control>
+                    <Item
+                      title="1 hour band"
+                      action={this.handleChartTabChange}
+                    />
+                    <Item
+                      title="4 hour band"
+                      action={this.handleChartTabChange}
+                    />
+                    <Item
+                      title="24 hour band"
+                      action={this.handleChartTabChange}
+                    />
+                  </Dropdown>
+                }
+              >
+                {system.order_stats.map(
+                  stats =>
+                    stats.label.replace(/_/g, ' ') === this.state.chartTab && (
+                      <div>
+                        <ChartComponent
+                          title="# of stats"
+                          width={150}
+                          height={150}
+                          isNotTime
+                          type="doughnut"
+                          empty={stats.l.every(stat => stat.count === 0)}
+                          labels={[
+                            `Recovered automatically (${
+                              stats.l.find(dt => dt.disposition === 'A').pct
+                            }%)`,
+                            `Recovered manually (${
+                              stats.l.find(dt => dt.disposition === 'M').pct
+                            }%)`,
+                            `Completed w/o errors (${
+                              stats.l.find(dt => dt.disposition === 'C').pct
+                            }%)`,
+                          ]}
+                          datasets={[
+                            {
+                              data: [
+                                stats.l.find(dt => dt.disposition === 'A')
+                                  .count,
+                                stats.l.find(dt => dt.disposition === 'M')
+                                  .count,
+                                stats.l.find(dt => dt.disposition === 'C')
+                                  .count,
+                              ],
+                              backgroundColor: [
+                                '#FFB366',
+                                '#FF7373',
+                                '#7fba27',
+                              ],
+                            },
+                          ]}
+                        />
+                        <ChartComponent
+                          title="SLA stats"
+                          width={150}
+                          height={150}
+                          isNotTime
+                          type="doughnut"
+                          empty={stats.sla.length === 0}
+                          labels={[
+                            `In SLA (${Math.round(getStatsPct(true, stats))}%)`,
+                            `Out of SLA (${Math.round(
+                              getStatsCount(false, stats)
+                            )}%)`,
+                          ]}
+                          datasets={[
+                            {
+                              data: [
+                                Math.round(getStatsCount(true, stats)),
+                                Math.round(getStatsCount(false, stats)),
+                              ],
+                              backgroundColor: ['#7fba27', '#FF7373'],
+                            },
+                          ]}
+                        />
+                      </div>
+                    )
+                )}
               </PaneItem>
             </DashboardModule>
           )}
           <DashboardModule titleStyle="green">
             <PaneItem title="Cluster">
-              <DashboardSection>
-                <DashboardItem left>
-                  Total Memory:{' '}
-                  <Badge
-                    val={`${round(clusterMemory * 0.00000095367432, 2)} MiB`}
-                    label="info"
-                  />{' '}
-                  <Icon iconName="circle" className="separator" /> Processes:{' '}
-                  <Badge
-                    val={Object.keys(system.processes).length}
-                    label="info"
-                  />{' '}
-                  <Icon iconName="circle" className="separator" /> Nodes:{' '}
-                  <Badge
-                    val={Object.keys(system.cluster_memory).length}
-                    label="info"
-                  />
-                </DashboardItem>
-              </DashboardSection>
+              <div className="module-wrapper">
+                <div className="dashboard-module-small">
+                  <div className="top">{calculateMemory(clusterMemory)}</div>
+                  <div className="bottom">Memory</div>
+                </div>
+                <div className="dashboard-module-small">
+                  <div className="top">
+                    {Object.keys(system.cluster_memory).length}
+                  </div>
+                  <div className="bottom">Node(s)</div>
+                </div>
+                <div className="dashboard-module-small">
+                  <div className="top">
+                    {Object.keys(system.processes).length}
+                  </div>
+                  <div className="bottom">Processes</div>
+                </div>
+              </div>
               {Object.keys(system.cluster_memory).map((node: string) => {
-                const memory: string = round(
-                  system.cluster_memory[node] * 0.00000095367432,
-                  2
+                const memory: string = calculateMemory(
+                  system.cluster_memory[node]
                 );
 
                 const processName = Object.keys(system.processes).find(
@@ -229,19 +223,20 @@ export default class Dashboard extends Component {
                 ).length;
 
                 return (
-                  <div>
-                    <DashboardSection
-                      link="/system/cluster"
-                      iconName="hdd-o"
-                      title={system.processes[processName].host}
-                    >
-                      {node}
-                      <DashboardItem>
-                        Memory: <Badge val={`${memory} MiB`} label="info" />{' '}
-                        <Icon iconName="circle" className="separator" />
-                        Processes: <Badge val={processes} label="info" />
-                      </DashboardItem>
-                    </DashboardSection>
+                  <div className="dashboard-module-wide">
+                    <div className="dashboard-data-title">
+                      {system.processes[processName].node}
+                    </div>
+                    <div className="bottom">
+                      <div className="module">
+                        <div className="top">{memory}</div>
+                        <div className="bottom">Memory</div>
+                      </div>
+                      <div className="module">
+                        <div className="top">{processes}</div>
+                        <div className="bottom">Processes</div>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
@@ -255,7 +250,11 @@ export default class Dashboard extends Component {
                   <div className="db-data-content">{system.workflow_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.workflow_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">
                     {system.workflow_alerts}
                   </div>
@@ -268,7 +267,11 @@ export default class Dashboard extends Component {
                   <div className="db-data-content">{system.service_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.service_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">{system.service_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
@@ -279,7 +282,11 @@ export default class Dashboard extends Component {
                   <div className="db-data-content">{system.job_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.job_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">{system.job_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
@@ -287,61 +294,65 @@ export default class Dashboard extends Component {
             </PaneItem>
           </DashboardModule>
           <DashboardModule>
-            <PaneItem title="System Overview">
-              <DashboardSection link="/system/alerts">
-                <DashboardItem left>
-                  Key:{' '}
-                  <Badge
-                    val={health.data['instance-key']}
-                    label="info"
-                    bypass
-                  />{' '}
-                  <Icon iconName="circle" className="separator" /> Health:{' '}
-                  <Badge
-                    val={health.data.health}
-                    label={statusHealth(health.data.health)}
-                    bypass
-                  />
-                  <Icon iconName="circle" className="separator" /> Alerts:{' '}
-                  <Badge
-                    val={`${system['alert-summary'].ongoing} ongoing`}
-                    label="danger"
-                    bypass
-                  />{' '}
-                  /{' '}
-                  <Badge
-                    val={`${system['alert-summary'].transient} transient`}
-                    label="danger"
-                    bypass
-                  />
-                </DashboardItem>
-              </DashboardSection>
+            <PaneItem title="Remote instances">
               {health.data.remote &&
                 health.data.remote.map((remote: Object) => (
-                  <div>
-                    <DashboardSection
-                      iconName="external-link"
-                      link={remote.url}
+                  <div className="dashboard-module-wide">
+                    <div
+                      className={`dashboard-data-title ${statusHealth(
+                        remote.health
+                      )}`}
                     >
-                      {remote.name}{' '}
-                      <Icon iconName="circle" className="separator" /> key /
-                      status
-                      <DashboardItem>
-                        <Badge
-                          val={remote['instance-key']}
-                          label="info"
-                          bypass
-                        />{' '}
-                        /{' '}
-                        <Badge
-                          val={remote.health}
-                          label={statusHealth(remote.health)}
-                          bypass
-                        />
-                      </DashboardItem>
-                    </DashboardSection>
+                      {remote.name}
+                    </div>
+                    <div className={`bottom ${statusHealth(remote.health)}`}>
+                      <div className="module">
+                        <div className="top">{remote['instance-key']}</div>
+                        <div className="bottom">key</div>
+                      </div>
+                      <div className="module">
+                        <div className="top">{remote.health}</div>
+                        <div className="bottom">health</div>
+                      </div>
+                    </div>
                   </div>
                 ))}
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="System overview">
+              <div className="dashboard-module-overview">
+                <div className="module overview-module">
+                  <div>{health.data['instance-key']}</div>
+                  <div>instance</div>
+                </div>
+                <div
+                  className={`module overview-module ${statusHealth(
+                    health.data.health
+                  )}`}
+                >
+                  <div>{health.data.health}</div>
+                  <div>health</div>
+                </div>
+              </div>
+              <div className="dashboard-module-overview">
+                <div
+                  className={`module overview-module ${
+                    system['alert-summary'].ongoing !== 0 ? 'danger' : 'none'
+                  }`}
+                >
+                  <div>{system['alert-summary'].ongoing}</div>
+                  <div>ongoing alerts</div>
+                </div>
+                <div
+                  className={`module overview-module ${
+                    system['alert-summary'].transient !== 0 ? 'danger' : 'none'
+                  }`}
+                >
+                  <div>{system['alert-summary'].transient}</div>
+                  <div>transient alerts</div>
+                </div>
+              </div>
             </PaneItem>
           </DashboardModule>
           <DashboardModule>
@@ -352,7 +363,11 @@ export default class Dashboard extends Component {
                   <div className="db-data-content">{system.remote_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.remote_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">{system.remote_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
@@ -365,7 +380,11 @@ export default class Dashboard extends Component {
                   </div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.datasource_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">
                     {system.datasource_alerts}
                   </div>
@@ -378,7 +397,11 @@ export default class Dashboard extends Component {
                   <div className="db-data-content">{system.user_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
-                <div className="dashboard-data-bottom">
+                <div
+                  className={`dashboard-data-bottom ${
+                    system.user_alerts ? 'has-alerts' : ''
+                  }`}
+                >
                   <div className="db-data-content">{system.user_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
