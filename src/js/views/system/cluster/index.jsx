@@ -3,15 +3,14 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
-import round from 'lodash/round';
 import { Tag } from '@blueprintjs/core';
 
 import Node from './node';
 import ClusterPane from './pane';
-import { InfoBar, InfoBarItem } from '../../../components/infobar/index';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Box from '../../../components/box';
 import withPane from '../../../hocomponents/pane';
+import { calculateMemory } from '../../../helpers/system';
 
 type Props = {
   nodes: Object,
@@ -37,7 +36,7 @@ const ClusterView: Function = ({
     <Box top>
       <Tag>Nodes: {Object.keys(nodes).length}</Tag>{' '}
       <Tag>Processes: {Object.keys(processes).length}</Tag>{' '}
-      <Tag>Cluster memory: {round(nodesMemory * 0.00000095367432, 2)} MiB</Tag>
+      <Tag>Cluster memory: {calculateMemory(nodesMemory)}</Tag>
     </Box>
     {Object.keys(nodes).map(
       (node: string): any => {
@@ -58,7 +57,7 @@ const ClusterView: Function = ({
             key={node}
             node={node}
             processes={list}
-            memory={nodes[node]}
+            memory={nodes[node].node_priv}
           />
         );
       }
@@ -76,7 +75,8 @@ export default compose(
   mapProps(
     ({ nodes, ...rest }: Props): Props => ({
       nodesMemory: Object.keys(nodes).reduce(
-        (cur, node): number => cur + nodes[node],
+        (cur, node): number =>
+          console.log(nodes, node) || cur + nodes[node].node_priv,
         0
       ),
       nodes,

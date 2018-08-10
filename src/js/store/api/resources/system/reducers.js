@@ -50,7 +50,17 @@ const processMemoryChanged = {
     const processes = { ...data.processes };
 
     events.forEach(event => {
-      data.cluster_memory[event.node] = event.node_priv;
+      data.cluster_memory[event.node].node_priv = event.node_priv;
+      data.cluster_memory[event.node].node_priv_str = event.node_priv_str;
+      data.cluster_memory[event.node].history.push({
+        node_priv: event.node_priv,
+        node_priv_str: event.node_priv_str,
+        timestamp: new Date(),
+      });
+
+      if (data.cluster_memory[event.node].history.length > 10) {
+        data.cluster_memory[event.node].history.shift();
+      }
 
       if (event.status_string === 'IDLE') {
         delete processes[event.id];

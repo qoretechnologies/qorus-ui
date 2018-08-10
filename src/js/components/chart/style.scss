@@ -4,8 +4,12 @@
 .chart-wrapper {
   display: inline-block;
   position: relative;
-  width: 50%;
-  float: left;
+  width: 100%;
+
+  &.pie {
+    width: 50%;
+    float: left;
+  }
 
   h5 {
     text-align: center;

@@ -23,6 +23,10 @@ import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
   'xAxisLabel',
   'yAxisLabel',
   'unit',
+  'stepSize',
+  'yMax',
+  'yMin',
+  'empty',
 ])
 export default class ChartComponent extends Component {
   static defaultProps = {
@@ -35,7 +39,7 @@ export default class ChartComponent extends Component {
 
   props: {
     id: string,
-    width: number,
+    width: number | string,
     height: number,
     type: string,
     labels: Array<any>,
@@ -47,6 +51,11 @@ export default class ChartComponent extends Component {
     isNotTime?: boolean,
     empty?: boolean,
     title?: string,
+    stepSize?: number,
+    yMax?: number,
+    yMin?: number,
+    legendHandlers?: Array<Function>,
+    onClick?: Function,
   };
 
   state: {
@@ -93,7 +102,8 @@ export default class ChartComponent extends Component {
 
   getOptionsData(data: Array<Object>): Object {
     const unit: string = this.props.unit || getUnit(getMaxValue(data));
-    const stepSize: number = getStepSize(data, this.props.isNotTime);
+    const stepSize: number =
+      this.props.stepSize || getStepSize(data, this.props.isNotTime);
 
     return {
       unit,
@@ -103,6 +113,10 @@ export default class ChartComponent extends Component {
 
   getOptions(data: Array<Object>) {
     const { stepSize, unit } = this.getOptionsData(data);
+    const { yMin, yMax } = this.props;
+    const min = yMin ? yMin - yMin / 10 : 0;
+    const max = yMax ? yMax + yMax / 10 : null;
+
     // stepSize: number, unit: string
     const options: Object = {
       legend: {
@@ -127,13 +141,22 @@ export default class ChartComponent extends Component {
           scales: {
             yAxes: [
               {
-                ticks: {
-                  min: 0,
-                  stepSize,
-                  callback: val => getFormattedValue(val, data) + unit,
-                },
+                ticks: max
+                  ? {
+                      min,
+                      max,
+                      stepSize,
+                      callback: val => getFormattedValue(val, data) + unit,
+                      fontSize: 10,
+                    }
+                  : {
+                      min,
+                      stepSize,
+                      callback: val => getFormattedValue(val, data) + unit,
+                      fontSize: 10,
+                    },
                 scaleLabel: {
-                  display: true,
+                  display: !!this.props.yAxisLabel,
                   labelString: this.props.yAxisLabel,
                 },
               },
@@ -141,8 +164,11 @@ export default class ChartComponent extends Component {
             xAxes: [
               {
                 scaleLabel: {
-                  display: true,
+                  display: !!this.props.xAxisLabel,
                   labelString: this.props.xAxisLabel,
+                },
+                ticks: {
+                  fontSize: 10,
                 },
               },
             ],
@@ -184,7 +210,15 @@ export default class ChartComponent extends Component {
       case 'line':
       default:
         return this.props.datasets.map((d, key) => (
-          <li className="chart-legend" key={key}>
+          <li
+            className="chart-legend"
+            key={key}
+            onClick={
+              this.props.datasets[0].data[key] !== 0 &&
+              this.props.legendHandlers &&
+              this.props.legendHandlers[key]
+            }
+          >
             <span
               className="color-box"
               style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
@@ -194,7 +228,15 @@ export default class ChartComponent extends Component {
         ));
       case 'doughnut':
         return this.props.labels.map((d, key) => (
-          <li className="chart-legend" key={key}>
+          <li
+            className="chart-legend"
+            key={key}
+            onClick={
+              this.props.datasets[0].data[key] !== 0 &&
+              this.props.legendHandlers &&
+              this.props.legendHandlers[key]
+            }
+          >
             <span
               className="color-box"
               style={{
@@ -213,11 +255,16 @@ export default class ChartComponent extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className="chart-wrapper">
+      <div
+        className={`chart-wrapper ${
+          this.props.type === 'doughnut' ? 'pie' : ''
+        }`}
+      >
         {this.props.title && <h5>{this.props.title}</h5>}
         <div
           className="chart-box"
           style={{ width: this.props.width, height: this.props.height }}
+          onClick={!this.props.empty && this.props.onClick}
         >
           {this.props.empty && this.props.type === 'doughnut' ? (
             <div className="pie-chart-placeholder">

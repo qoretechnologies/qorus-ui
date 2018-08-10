@@ -71,6 +71,9 @@ const orderStatsPctColor = (val: number): string => {
   return Intent.SUCCESS;
 };
 
+const orderStatsPct = (workflowCount: number, totalCount: number): number =>
+  Math.round((workflowCount / totalCount) * 100);
+
 export {
   getActionData,
   getStatusLabel,
@@ -78,4 +81,5 @@ export {
   canSkip,
   formatCount,
   orderStatsPctColor,
+  orderStatsPct,
 };

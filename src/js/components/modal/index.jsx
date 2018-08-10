@@ -145,6 +145,7 @@ export default class Modal extends Component {
             className="pt-dialog"
             role="document"
             style={{
+              width: this.props.width,
               height: this.state.height ? `${this.state.height}px` : 'auto',
               position: 'relative !important',
             }}

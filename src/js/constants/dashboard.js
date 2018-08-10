@@ -8,4 +8,10 @@ const HEALTH_KEYS = {
   GREEN: Intent.SUCCESS,
 };
 
-export { HEALTH_KEYS };
+const DISPOSITIONS = {
+  A: 'Recovered automatically',
+  M: 'Recovered manually',
+  C: 'Completed w/o errors',
+};
+
+export { HEALTH_KEYS, DISPOSITIONS };

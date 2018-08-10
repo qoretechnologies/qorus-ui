@@ -125,16 +125,20 @@ const getProcessObjectLink: Function = (process: Object) => {
   }
 };
 
-const calculateMemory: Function = (memory: number, unit: string): string => {
+const calculateMemory: Function = (
+  memory: number,
+  unit: string,
+  returnUnit: boolean = true
+): string => {
   let mem = memory;
 
   if (mem > 1000) {
     mem = unit ? mem / 1024 : mem * 0.00000095367432;
 
-    return calculateMemory(mem, unit ? 'GiB' : 'MiB');
+    return calculateMemory(mem, unit ? 'GiB' : 'MiB', returnUnit);
   }
 
-  return `${round(mem, 2)} ${unit}`;
+  return `${round(mem, 2)} ${returnUnit ? unit : ''}`;
 };
 
 export {

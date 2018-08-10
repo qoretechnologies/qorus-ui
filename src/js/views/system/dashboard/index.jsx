@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import round from 'lodash/round';
 import Masonry from 'react-masonry-layout';
-import replace from 'lodash/replace';
+import map from 'lodash/map';
+import moment from 'moment';
 
 import Loader from '../../../components/loader';
 import actions from 'store/api/actions';
 import DashboardModule from '../../../components/dashboard_module/index';
-import DashboardItem from '../../../components/dashboard_module/item';
-import DashboardSection from '../../../components/dashboard_module/section';
-import Badge from '../../../components/badge';
-import Icon from '../../../components/icon';
 import PaneItem from '../../../components/pane_item';
-import Tabs, { Pane } from '../../../components/tabs';
 import { statusHealth, calculateMemory } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
-
 import { getStatsCount, getStatsPct } from '../../../helpers/chart';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
+import withModal from '../../../hocomponents/modal';
+import StatsModal from './statsModal';
+import SLAModal from './slaModal';
+import GlobalModal from './globalModal';
+import { DISPOSITIONS } from '../../../constants/dashboard';
 
 const viewSelector = createSelector(
   [
@@ -36,6 +35,7 @@ const viewSelector = createSelector(
 );
 
 @connect(viewSelector)
+@withModal()
 export default class Dashboard extends Component {
   props: {
     children: any,
@@ -46,12 +46,16 @@ export default class Dashboard extends Component {
     system: Object,
     width: number,
     currentUser: Object,
+    openModal: Function,
+    closeModal: Function,
   };
 
   state: {
     chartTab: string,
+    nodeTab: string,
   } = {
     chartTab: '1 hour band',
+    nodeTab: Object.keys(this.props.system.cluster_memory)[0],
   };
 
   componentWillMount() {
@@ -59,10 +63,14 @@ export default class Dashboard extends Component {
   }
 
   handleChartTabChange: Function = (event: any, chartTab: string): void => {
-    console.log(chartTab);
-
     this.setState({
       chartTab,
+    });
+  };
+
+  handleNodeTabChange: Function = (event: any, nodeTab: string): void => {
+    this.setState({
+      nodeTab,
     });
   };
 
@@ -71,7 +79,7 @@ export default class Dashboard extends Component {
 
     const { system, health, width, currentUser } = this.props;
     const clusterMemory = Object.keys(system.cluster_memory).reduce(
-      (cur, node: string) => cur + system.cluster_memory[node],
+      (cur, node: string) => cur + system.cluster_memory[node].node_priv,
       0
     );
     const sidebarOpen =
@@ -87,6 +95,44 @@ export default class Dashboard extends Component {
       width > 1200
         ? [{ columns: 3, gutter: 20 }]
         : [{ columns: 2, gutter: 20 }];
+
+    const currentNodeData = system.cluster_memory[this.state.nodeTab];
+    const history = [...currentNodeData.history].reverse();
+
+    // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
+    // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
+
+    const flattenedHistory = history.map(
+      (hist: Object): number =>
+        parseFloat(calculateMemory(hist.node_priv, null, false), 10)
+    );
+    const historyMax = Math.max(...flattenedHistory);
+    let memoryLimitChart;
+    const totalRamInt = parseFloat(
+      calculateMemory(currentNodeData.node_ram, null, false),
+      10
+    );
+
+    // The highest memory value is larger than the node total RAM
+    if (historyMax > totalRamInt) {
+      memoryLimitChart = {
+        data: [...Array(12)].map(() => totalRamInt),
+        backgroundColor: '#FF7373',
+        borderColor: '#FF7373',
+        fill: false,
+        label: 'Total node memory',
+      };
+    }
+
+    const nodeChart = {
+      data: history.map(
+        (hist: Object): number => calculateMemory(hist.node_priv, null, false)
+      ),
+      label: this.state.nodeTab,
+      backgroundColor: '#9b59b6',
+      borderColor: '#9b59b6',
+      fill: false,
+    };
 
     return (
       <div className="tab-pane active">
@@ -126,32 +172,48 @@ export default class Dashboard extends Component {
                       <div>
                         <ChartComponent
                           title="# of stats"
+                          onClick={() => {
+                            this.props.openModal(
+                              <GlobalModal
+                                onClose={this.props.closeModal}
+                                text="Global chart data"
+                                band={this.state.chartTab}
+                              />
+                            );
+                          }}
                           width={150}
                           height={150}
                           isNotTime
                           type="doughnut"
                           empty={stats.l.every(stat => stat.count === 0)}
-                          labels={[
-                            `Recovered automatically (${
-                              stats.l.find(dt => dt.disposition === 'A').pct
-                            }%)`,
-                            `Recovered manually (${
-                              stats.l.find(dt => dt.disposition === 'M').pct
-                            }%)`,
-                            `Completed w/o errors (${
-                              stats.l.find(dt => dt.disposition === 'C').pct
-                            }%)`,
-                          ]}
+                          legendHandlers={map(
+                            DISPOSITIONS,
+                            (label, disp) => () => {
+                              this.props.openModal(
+                                <StatsModal
+                                  onClose={this.props.closeModal}
+                                  disposition={disp}
+                                  text={label}
+                                  band={this.state.chartTab}
+                                />
+                              );
+                            }
+                          )}
+                          labels={map(
+                            DISPOSITIONS,
+                            (label, disp) =>
+                              `${label} (${Math.round(
+                                stats.l.find(dt => dt.disposition === disp).pct
+                              )}%)`
+                          )}
                           datasets={[
                             {
-                              data: [
-                                stats.l.find(dt => dt.disposition === 'A')
-                                  .count,
-                                stats.l.find(dt => dt.disposition === 'M')
-                                  .count,
-                                stats.l.find(dt => dt.disposition === 'C')
-                                  .count,
-                              ],
+                              data: map(
+                                DISPOSITIONS,
+                                (label, disp) =>
+                                  stats.l.find(dt => dt.disposition === disp)
+                                    .count
+                              ),
                               backgroundColor: [
                                 '#FFB366',
                                 '#FF7373',
@@ -167,6 +229,27 @@ export default class Dashboard extends Component {
                           isNotTime
                           type="doughnut"
                           empty={stats.sla.length === 0}
+                          legendHandlers={[
+                            () => {
+                              this.props.openModal(
+                                <SLAModal
+                                  onClose={this.props.closeModal}
+                                  in_sla
+                                  text="In SLA"
+                                  band={this.state.chartTab}
+                                />
+                              );
+                            },
+                            () => {
+                              this.props.openModal(
+                                <SLAModal
+                                  onClose={this.props.closeModal}
+                                  text="Out of SLA"
+                                  band={this.state.chartTab}
+                                />
+                              );
+                            },
+                          ]}
                           labels={[
                             `In SLA (${Math.round(getStatsPct(true, stats))}%)`,
                             `Out of SLA (${Math.round(
@@ -211,7 +294,7 @@ export default class Dashboard extends Component {
               </div>
               {Object.keys(system.cluster_memory).map((node: string) => {
                 const memory: string = calculateMemory(
-                  system.cluster_memory[node]
+                  system.cluster_memory[node].node_priv
                 );
 
                 const processName = Object.keys(system.processes).find(
@@ -240,6 +323,40 @@ export default class Dashboard extends Component {
                   </div>
                 );
               })}
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem
+              title="Node memory progression"
+              label={
+                <Dropdown>
+                  <Control small>{this.state.nodeTab}</Control>
+                  {map(system.cluster_memory, node => (
+                    <Item title={node} action={this.handleNodeTabChange} />
+                  ))}
+                </Dropdown>
+              }
+            >
+              <ChartComponent
+                title={`${this.state.nodeTab} (${calculateMemory(
+                  currentNodeData.node_ram
+                )} total RAM)`}
+                width="100%"
+                height={150}
+                isNotTime
+                yAxisLabel="Memory used"
+                stepSize={(historyMax + historyMax / 10) / 3}
+                unit=" GiB"
+                yMax={Math.max(...flattenedHistory)}
+                yMin={Math.min(...flattenedHistory)}
+                empty={currentNodeData.history.length === 0}
+                labels={history.map(
+                  (hist: Object): string => moment(hist.timestamp).fromNow(true)
+                )}
+                datasets={
+                  memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]
+                }
+              />
             </PaneItem>
           </DashboardModule>
           <DashboardModule>

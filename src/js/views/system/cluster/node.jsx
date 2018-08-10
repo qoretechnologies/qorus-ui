@@ -4,15 +4,13 @@ import withState from 'recompose/withState';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import round from 'lodash/round';
 import mapProps from 'recompose/mapProps';
-import { Tag, Intent } from '@blueprintjs/core';
+import { Tag } from '@blueprintjs/core';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
-import Icon from '../../../components/icon';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Box from '../../../components/box';
-import { getProcessObjectLink } from '../../../helpers/system';
+import { getProcessObjectLink, calculateMemory } from '../../../helpers/system';
 import ProcessRow from './row';
 import withSort from '../../../hocomponents/sort';
 import { sortDefaults } from '../../../constants/sort';
@@ -57,7 +55,7 @@ const ClusterNode: Function = ({
         <div className="clear" style={{ padding: '10px 0' }}>
           <Tag className="pt-minimal">Hostname: {hostname}</Tag>{' '}
           <Tag className="pt-minimal">
-            Node memory: {round(memory * 0.00000095367432, 2)} MiB
+            Node memory: {calculateMemory(memory)}
           </Tag>{' '}
           <Tag className="pt-minimal"># of processes: {processes.length}</Tag>
         </div>

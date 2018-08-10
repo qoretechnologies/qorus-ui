@@ -122,4 +122,8 @@ export const sortDefaults = {
     sortBy: 'client_id',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  orderStatsModal: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };
