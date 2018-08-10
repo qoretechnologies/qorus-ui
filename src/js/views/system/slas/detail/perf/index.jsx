@@ -31,10 +31,8 @@ type Props = {
   defaultDate: string,
 };
 
-const SLAPerf: Function = ({
-  ...rest,
-}: Props): React.Element<any> => (
-  <div className="tab-pane active">
+const SLAPerf: Function = ({ ...rest }: Props): React.Element<any> => (
+  <div>
     <EventsToolbar {...rest} />
     <PerfView {...rest} />
   </div>
@@ -49,37 +47,44 @@ export default compose(
   queryControl('grouping'),
   queryControl('success'),
   queryControl(),
-  mapProps(({
-    minDateQuery,
-    maxDateQuery,
-    errQuery,
-    errDescQuery,
-    producerQuery,
-    groupingQuery,
-    successQuery,
-    ...rest,
-  }: Props): Props => ({
-    defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
-    searchData: {
-      minDate: !minDateQuery || minDateQuery === '' ?
-        moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
-        minDateQuery,
-      maxDate: maxDateQuery,
-      err: errQuery,
-      errDesc: errDescQuery,
-      producer: producerQuery,
-      grouping: groupingQuery,
-      success: successQuery,
-    },
-    minDateQuery,
-    maxDateQuery,
-    errQuery,
-    errDescQuery,
-    producerQuery,
-    groupingQuery,
-    successQuery,
-    ...rest,
-  })),
+  mapProps(
+    ({
+      minDateQuery,
+      maxDateQuery,
+      errQuery,
+      errDescQuery,
+      producerQuery,
+      groupingQuery,
+      successQuery,
+      ...rest
+    }: Props): Props => ({
+      defaultDate: moment()
+        .add(-1, 'weeks')
+        .format(DATE_FORMATS.URL_FORMAT),
+      searchData: {
+        minDate:
+          !minDateQuery || minDateQuery === ''
+            ? moment()
+                .add(-1, 'weeks')
+                .format(DATE_FORMATS.URL_FORMAT)
+            : minDateQuery,
+        maxDate: maxDateQuery,
+        err: errQuery,
+        errDesc: errDescQuery,
+        producer: producerQuery,
+        grouping: groupingQuery,
+        success: successQuery,
+      },
+      minDateQuery,
+      maxDateQuery,
+      errQuery,
+      errDescQuery,
+      producerQuery,
+      groupingQuery,
+      successQuery,
+      ...rest,
+    })
+  ),
   pure([
     'minDateQuery',
     'maxDateQuery',

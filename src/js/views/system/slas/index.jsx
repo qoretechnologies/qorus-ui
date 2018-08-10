@@ -9,6 +9,7 @@ import SLAToolbar from './toolbar';
 import SLATable from './table';
 import sync from '../../../hocomponents/sync';
 import withSort from '../../../hocomponents/sort';
+import Box from '../../../components/box';
 import unsync from '../../../hocomponents/unsync';
 import actions from '../../../store/api/actions';
 import { resourceSelector, querySelector } from '../../../selectors';
@@ -34,12 +35,14 @@ const Slas: Function = ({
 }: Props): React.Element<any> => (
   <div>
     <SLAToolbar location={location} onCreate={create} perms={perms} />
-    <SLATable
-      sortData={sortData}
-      collection={collection}
-      onSortChange={onSortChange}
-      perms={perms}
-    />
+    <Box noPadding>
+      <SLATable
+        sortData={sortData}
+        collection={collection}
+        onSortChange={onSortChange}
+        perms={perms}
+      />
+    </Box>
   </div>
 );
 

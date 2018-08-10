@@ -6,11 +6,21 @@ import moment from 'moment';
 
 import Toolbar from '../../../../../components/toolbar';
 import Datepicker from '../../../../../components/datepicker';
-import { Controls, Control as Button } from '../../../../../components/controls';
-import Dropdown, { Control as DropdownToggle, Item } from '../../../../../components/dropdown';
+import {
+  Controls,
+  Control as Button,
+} from '../../../../../components/controls';
+import Dropdown, {
+  Control as DropdownToggle,
+  Item,
+} from '../../../../../components/dropdown';
 import { formatDate } from '../../../../../helpers/date';
 import { transformSuccess } from '../../../../../helpers/slas';
 import { DATE_FORMATS } from '../../../../../constants/dates';
+import {
+  InputGroup,
+  ControlGroup,
+} from '../../../../../../../node_modules/@blueprintjs/core';
 
 type Props = {
   minDateQuery: string,
@@ -83,7 +93,10 @@ export default class SearchToolbar extends Component {
   }
 
   _delayedSearch: Function = debounce((data: Object) => {
-    const dt: Object = { ...data, ...{ success: transformSuccess(data.success) } };
+    const dt: Object = {
+      ...data,
+      ...{ success: transformSuccess(data.success) },
+    };
 
     this.props.changeAllQuery(dt);
   }, 280);
@@ -122,86 +135,75 @@ export default class SearchToolbar extends Component {
     this.setState({ producer: event.target.value });
   };
 
-  handleGroupingChange: Function = (event: EventHandler, value: string): void => {
+  handleGroupingChange: Function = (
+    event: EventHandler,
+    value: string
+  ): void => {
     this.setState({ grouping: value });
   };
 
-  handleSuccessChange: Function = (event: EventHandler, value: string): void => {
+  handleSuccessChange: Function = (
+    event: EventHandler,
+    value: string
+  ): void => {
     this.setState({ success: value });
   };
 
   render() {
     return (
-      <Toolbar>
+      <Toolbar mb>
         <div className="pull-left">
-          <div className="form-group search-toolbar">
-            <div className="pull-left">
-              <Dropdown>
-                <DropdownToggle>Grouping: {this.state.grouping}</DropdownToggle>
-                <Item title="hourly" action={this.handleGroupingChange} />
-                <Item title="daily" action={this.handleGroupingChange} />
-                <Item title="monthly" action={this.handleGroupingChange} />
-                <Item title="yearly" action={this.handleGroupingChange} />
-              </Dropdown>
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Error..."
-                onChange={this.handleErrChange}
-                value={this.state.err || ''}
-                id="error"
-              />
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Error desc..."
-                onChange={this.handleErrDescChange}
-                value={this.state.errDesc || ''}
-                id="errDesc"
-              />
-            </div>
-            <div className="pull-left">
-              <input
-                className="form-control search-input"
-                type="text"
-                placeholder="Producer..."
-                onChange={this.handleProducerChange}
-                value={this.state.producer || ''}
-                id="producer"
-              />
-            </div>
-            <div className="pull-left">
-              <Datepicker
-                placeholder="Min date..."
-                date={this.state.minDate}
-                onApplyDate={this.handleMinDateChange}
-                applyOnBlur
-                id="mindate"
-              />
-            </div>
-            <div className="pull-left">
-              <Datepicker
-                placeholder="Max date..."
-                date={this.state.maxDate}
-                onApplyDate={this.handleMaxDateChange}
-                applyOnBlur
-                noButtons
-                id="maxdate"
-              />
-            </div>
-            <div className="pull-left">
-              <Dropdown>
-                <DropdownToggle>Success: {this.state.success}</DropdownToggle>
-                <Item title="All" action={this.handleSuccessChange} />
-                <Item title="Yes" action={this.handleSuccessChange} />
-                <Item title="No" action={this.handleSuccessChange} />
-              </Dropdown>
-            </div>
-          </div>
+          <ControlGroup>
+            <Dropdown>
+              <DropdownToggle>Grouping: {this.state.grouping}</DropdownToggle>
+              <Item title="hourly" action={this.handleGroupingChange} />
+              <Item title="daily" action={this.handleGroupingChange} />
+              <Item title="monthly" action={this.handleGroupingChange} />
+              <Item title="yearly" action={this.handleGroupingChange} />
+            </Dropdown>
+            <InputGroup
+              type="text"
+              placeholder="Error..."
+              onChange={this.handleErrChange}
+              value={this.state.err || ''}
+              id="error"
+            />
+            <InputGroup
+              type="text"
+              placeholder="Error desc..."
+              onChange={this.handleErrDescChange}
+              value={this.state.errDesc || ''}
+              id="errDesc"
+            />
+            <InputGroup
+              type="text"
+              placeholder="Producer..."
+              onChange={this.handleProducerChange}
+              value={this.state.producer || ''}
+              id="producer"
+            />
+            <Datepicker
+              placeholder="Min date..."
+              date={this.state.minDate}
+              onApplyDate={this.handleMinDateChange}
+              applyOnBlur
+              id="mindate"
+            />
+            <Datepicker
+              placeholder="Max date..."
+              date={this.state.maxDate}
+              onApplyDate={this.handleMaxDateChange}
+              applyOnBlur
+              noButtons
+              id="maxdate"
+            />
+            <Dropdown>
+              <DropdownToggle>Success: {this.state.success}</DropdownToggle>
+              <Item title="All" action={this.handleSuccessChange} />
+              <Item title="Yes" action={this.handleSuccessChange} />
+              <Item title="No" action={this.handleSuccessChange} />
+            </Dropdown>
+          </ControlGroup>
         </div>
         <div className="pull-right">
           <Controls noControls grouped>

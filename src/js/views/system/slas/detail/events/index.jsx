@@ -30,10 +30,8 @@ type Props = {
   defaultDate: string,
 };
 
-const SLAEvents: Function = ({
-  ...rest,
-}: Props): React.Element<any> => (
-  <div className="tab-pane active">
+const SLAEvents: Function = ({ ...rest }: Props): React.Element<any> => (
+  <div>
     <EventsToolbar {...rest} />
     <EventsView {...rest} />
   </div>
@@ -46,36 +44,38 @@ export default compose(
   queryControl('errDesc'),
   queryControl('producer'),
   queryControl(),
-  mapProps(({
-    minDateQuery,
-    maxDateQuery,
-    errQuery,
-    errDescQuery,
-    producerQuery,
-    ...rest,
-  }: Props): Props => ({
-    defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
-    searchData: {
-      minDate: !minDateQuery || minDateQuery === '' ?
-        moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
-        minDateQuery,
-      maxDate: maxDateQuery,
-      err: errQuery,
-      errDesc: errDescQuery,
-      producer: producerQuery,
-    },
-    minDateQuery,
-    maxDateQuery,
-    errQuery,
-    errDescQuery,
-    producerQuery,
-    fetchParams: null,
-    ...rest,
-  })),
-  pure([
-    'searchData',
-    'allQuery',
-    'collection',
-    'location',
-  ]),
+  mapProps(
+    ({
+      minDateQuery,
+      maxDateQuery,
+      errQuery,
+      errDescQuery,
+      producerQuery,
+      ...rest
+    }: Props): Props => ({
+      defaultDate: moment()
+        .add(-1, 'weeks')
+        .format(DATE_FORMATS.URL_FORMAT),
+      searchData: {
+        minDate:
+          !minDateQuery || minDateQuery === ''
+            ? moment()
+                .add(-1, 'weeks')
+                .format(DATE_FORMATS.URL_FORMAT)
+            : minDateQuery,
+        maxDate: maxDateQuery,
+        err: errQuery,
+        errDesc: errDescQuery,
+        producer: producerQuery,
+      },
+      minDateQuery,
+      maxDateQuery,
+      errQuery,
+      errDescQuery,
+      producerQuery,
+      fetchParams: null,
+      ...rest,
+    })
+  ),
+  pure(['searchData', 'allQuery', 'collection', 'location'])
 )(SLAEvents);

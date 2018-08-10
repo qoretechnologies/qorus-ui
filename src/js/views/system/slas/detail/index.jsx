@@ -6,10 +6,8 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import moment from 'moment';
-import { Link } from 'react-router';
 
-import Nav, { NavLink } from '../../../../components/navlink';
-import Icon from '../../../../components/icon';
+import Box from '../../../../components/box';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import sync from '../../../../hocomponents/sync';
 import unsync from '../../../../hocomponents/unsync';
@@ -17,6 +15,13 @@ import actions from '../../../../store/api/actions';
 import queryControl from '../../../../hocomponents/queryControl';
 import { resourceSelector } from '../../../../selectors';
 import { DATE_FORMATS } from '../../../../constants/dates';
+import { Crumb, Breadcrumbs } from '../../../../components/breadcrumbs';
+import Tabs, { Pane } from '../../../../components/tabs';
+
+import Events from './events';
+import Sources from './methods';
+import Perf from './perf';
+import withTabs from '../../../../hocomponents/withTabs';
 
 type Props = {
   location: Object,
@@ -28,60 +33,64 @@ type Props = {
   maxDate: string,
   minDateQuery?: string,
   maxDateQuery?: string,
+  tabQuery?: string,
+  handleTabChange: Function,
 };
 
 const SLADetail: Function = ({
   location,
-  children,
   params,
   sla,
   minDate,
   maxDate,
+  tabQuery,
+  handleTabChange,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <h3 className="detail-title">
-      <Link to="/system/slas" >
-        <Icon iconName="angle-left" />
-      </Link>
-      {' '}
-      {sla.name}
-      {' '}
-      <small>({sla.slaid})</small>
-      {' '}
-      <small>"{sla.description}"</small>
-    </h3>
-    <Nav
-      path={location.pathname}
-      type="nav-pills"
-    >
-      <NavLink to={`./events?minDate=${minDate}&maxDate=${maxDate}`}>Events</NavLink>
-      <NavLink to={`./sources?minDate=${minDate}&maxDate=${maxDate}`}>Event Sources</NavLink>
-      <NavLink to={`./perf?minDate=${minDate}&maxDate=${maxDate}`}>Performance</NavLink>
-    </Nav>
-    <div className="tab-content">
-      {React.cloneElement(
-        children,
-        {
-          createElement: (Comp, props) => (
-            <Comp
-              {...{
-                ...props,
-                location,
-                params,
-                sla,
-              }}
-            />
-          ),
-        }
-      )}
-    </div>
+  <div>
+    <Breadcrumbs>
+      <Crumb link="/system/slas"> SLAs </Crumb>
+      <Crumb>
+        {sla.name} <small>({sla.slaid})</small>{' '}
+        <small>"{sla.description}"</small>
+      </Crumb>
+    </Breadcrumbs>
+    <Box top>
+      <Tabs active={tabQuery} onChange={handleTabChange} noContainer>
+        <Pane name="Events">
+          <Events
+            location={location}
+            params={params}
+            sla={sla}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        </Pane>
+        <Pane name="Sources">
+          <Sources
+            location={location}
+            params={params}
+            sla={sla}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        </Pane>
+        <Pane name="Perf">
+          <Perf
+            location={location}
+            params={params}
+            sla={sla}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        </Pane>
+      </Tabs>
+    </Box>
   </div>
 );
 
 const viewSelector: Function = createSelector(
-  [
-    resourceSelector('slas'),
-  ], (meta: Object): Object => ({
+  [resourceSelector('slas')],
+  (meta: Object): Object => ({
     meta,
     data: meta.data,
   })
@@ -97,22 +106,26 @@ export default compose(
   ),
   queryControl('minDate'),
   queryControl('maxDate'),
-  mapProps(({ params, data, minDateQuery, maxDateQuery, ...rest }: Props): Props => ({
-    id: params.id,
-    params,
-    fetchParams: null,
-    sla: data.length ? data[0] : {},
-    data,
-    minDate: !minDateQuery || minDateQuery === '' ?
-      moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT) :
-      minDateQuery,
-    maxDate: !maxDateQuery || maxDateQuery === '' ?
-      '' :
-      maxDateQuery,
-    ...rest,
-  })),
+  mapProps(
+    ({ params, data, minDateQuery, maxDateQuery, ...rest }: Props): Props => ({
+      id: params.id,
+      params,
+      fetchParams: null,
+      sla: data.length ? data[0] : {},
+      data,
+      minDate:
+        !minDateQuery || minDateQuery === ''
+          ? moment()
+              .add(-1, 'weeks')
+              .format(DATE_FORMATS.URL_FORMAT)
+          : minDateQuery,
+      maxDate: !maxDateQuery || maxDateQuery === '' ? '' : maxDateQuery,
+      ...rest,
+    })
+  ),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
+  withTabs('events'),
   pure(['location', 'children']),
-  unsync(),
+  unsync()
 )(SLADetail);

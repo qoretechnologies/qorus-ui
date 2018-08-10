@@ -3,7 +3,13 @@ import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  FixedRow,
+  Th,
+} from '../../../components/new_table';
 import checkData from '../../../hocomponents/check-no-data';
 import withModal from '../../../hocomponents/modal';
 import SLARow from './row';
@@ -34,38 +40,45 @@ const SLATable: Function = ({
     key={collection.length}
   >
     <Thead>
-      <Tr
-        sortData={sortData}
-        onSortChange={onSortChange}
-      >
-        <Th className="narrow" name="slaid">ID</Th>
-        <Th className="text" name="name">Name</Th>
-        <Th className="text" name="description">Description</Th>
-        <Th className="text" name="type">Units</Th>
+      <FixedRow sortData={sortData} onSortChange={onSortChange}>
+        <Th className="narrow" name="slaid">
+          ID
+        </Th>
+        <Th className="text" name="name">
+          Name
+        </Th>
+        <Th className="text" name="description">
+          Description
+        </Th>
+        <Th className="text" name="type">
+          Units
+        </Th>
         {hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or') && (
           <Th className="narrow">Actions</Th>
         )}
-      </Tr>
+      </FixedRow>
     </Thead>
     <Tbody>
-      {collection.map((sla: Object): React.Element<any> => (
-        <SLARow
-          perms={perms}
-          key={sla.slaid}
-          openModal={openModal}
-          closeModal={closeModal}
-          {...sla}
-        />
-      ))}
+      {collection.map(
+        (sla: Object, idx: number): React.Element<any> => (
+          <SLARow
+            first={idx === 0}
+            perms={perms}
+            key={sla.slaid}
+            openModal={openModal}
+            closeModal={closeModal}
+            {...sla}
+          />
+        )
+      )}
     </Tbody>
   </Table>
 );
 
 export default compose(
-  checkData(({ collection }: Props): boolean => collection && collection.length > 0),
+  checkData(
+    ({ collection }: Props): boolean => collection && collection.length > 0
+  ),
   withModal(),
-  pure([
-    'sortData',
-    'collection',
-  ])
+  pure(['sortData', 'collection'])
 )(SLATable);

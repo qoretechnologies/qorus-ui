@@ -11,7 +11,15 @@ import { querySelector } from '../../../../../selectors';
 import queryControl from '../../../../../hocomponents/queryControl';
 import withSort from '../../../../../hocomponents/sort';
 import Search from '../../../../../containers/search';
-import { Table, Thead, Tbody, Tr, Th, Td } from '../../../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  FixedRow,
+} from '../../../../../components/new_table';
 import Toolbar from '../../../../../components/toolbar';
 import { sortDefaults } from '../../../../../constants/sort';
 
@@ -31,7 +39,7 @@ const SLAMethods: Function = ({
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
+  <div>
     <Toolbar>
       <Search
         onSearchUpdate={changeSearchQuery}
@@ -39,33 +47,45 @@ const SLAMethods: Function = ({
         resource="sla_methods"
       />
     </Toolbar>
-    {(methods && methods.length > 0) ? (
-      <Table
-        fixed
-        condensed
-        striped
-      >
+    {methods && methods.length > 0 ? (
+      <Table fixed condensed striped>
         <Thead>
-          <Tr { ...{ sortData, onSortChange } }>
-            <Th className="narrow" name="id"> ID </Th>
-            <Th className="name" name="name"> Name </Th>
-            <Th className="text normal" name="type"> Type </Th>
-          </Tr>
+          <FixedRow {...{ sortData, onSortChange }}>
+            <Th className="narrow" name="id">
+              {' '}
+              ID{' '}
+            </Th>
+            <Th className="name" name="name">
+              {' '}
+              Name{' '}
+            </Th>
+            <Th className="text normal" name="type">
+              {' '}
+              Type{' '}
+            </Th>
+          </FixedRow>
         </Thead>
         <Tbody>
-          {methods.map(({ id, resource, type, name }: Object): React.Element<any> => (
-            <Tr key={`${type}${id}`}>
-              <Td className="narrow">{id}</Td>
-              <Td className="name">
-                <Link
-                  to={`/${resource}?paneId=${id}&paneTab=${type === 'job' ? 'detail' : 'methods'}`}
-                >
-                  {name} ({id})
-                </Link>
-              </Td>
-              <Td className="text normal">{type}</Td>
-            </Tr>
-          ))}
+          {methods.map(
+            (
+              { id, resource, type, name }: Object,
+              idx: number
+            ): React.Element<any> => (
+              <Tr key={`${type}${id}`} first={idx === 0}>
+                <Td className="narrow">{id}</Td>
+                <Td className="name">
+                  <Link
+                    to={`/${resource}?paneId=${id}&paneTab=${
+                      type === 'job' ? 'detail' : 'methods'
+                    }`}
+                  >
+                    {name} ({id})
+                  </Link>
+                </Td>
+                <Td className="text normal">{type}</Td>
+              </Tr>
+            )
+          )}
         </Tbody>
       </Table>
     ) : (
@@ -74,48 +94,52 @@ const SLAMethods: Function = ({
   </div>
 );
 
-const selectMethods: Function = (state: Object, { sla }: Props): Array<Object> => (
-  [...sla.methods || [], ...sla.jobs || []]
-);
+const selectMethods: Function = (
+  state: Object,
+  { sla }: Props
+): Array<Object> => [...(sla.methods || []), ...(sla.jobs || [])];
 
-const normalizeMethods: Function = (): Function => (methods: Array<Object>): Array<Object> => (
-  methods.map((method: Object): Object => {
-    const mapped: Object = { ...method };
+const normalizeMethods: Function = (): Function => (
+  methods: Array<Object>
+): Array<Object> =>
+  methods.map(
+    (method: Object): Object => {
+      const mapped: Object = { ...method };
 
-    if (mapped.serviceid) {
-      mapped.id = mapped.serviceid;
-      mapped.name = `${mapped.service_name}.${mapped.method_name}()`;
-      mapped.type = 'Service';
-      mapped.resource = 'services';
-    } else {
-      mapped.id = mapped.jobid;
-      mapped.type = 'Job';
-      mapped.resource = 'jobs';
+      if (mapped.serviceid) {
+        mapped.id = mapped.serviceid;
+        mapped.name = `${mapped.service_name}.${mapped.method_name}()`;
+        mapped.type = 'Service';
+        mapped.resource = 'services';
+      } else {
+        mapped.id = mapped.jobid;
+        mapped.type = 'Job';
+        mapped.resource = 'jobs';
+      }
+
+      return mapped;
     }
-
-    return mapped;
-  })
-);
+  );
 
 const filterMethods: Function = (search: string): Function => (
   methods: Array<Object>
-): Array<Object> => (
-  findBy(['name', 'type', 'id'], search, methods)
+): Array<Object> => findBy(['name', 'type', 'id'], search, methods);
+
+const methodsSelector: Function = createSelector(
+  [querySelector('search'), selectMethods],
+  (search: string, methods: Array<Object>): Object =>
+    compose(
+      normalizeMethods(),
+      filterMethods(search)
+    )(methods)
 );
 
-const methodsSelector: Function = createSelector([
-  querySelector('search'),
-  selectMethods,
-], (search: string, methods: Array<Object>): Object => compose(
-  normalizeMethods(),
-  filterMethods(search)
-)(methods));
-
-const viewSelector: Function = createSelector([
-  methodsSelector,
-], (methods: Array<Object>): Object => ({
-  methods,
-}));
+const viewSelector: Function = createSelector(
+  [methodsSelector],
+  (methods: Array<Object>): Object => ({
+    methods,
+  })
+);
 
 export default compose(
   connect(viewSelector),

@@ -23,6 +23,7 @@ type Props = {
   remove: Function,
   handleDeleteClick: Function,
   perms: Array<string>,
+  first?: boolean,
 };
 
 const SLARow: Function = ({
@@ -32,8 +33,9 @@ const SLARow: Function = ({
   units,
   handleDeleteClick,
   perms,
+  first,
 }: Props): React.Element<any> => (
-  <Tr key={slaid}>
+  <Tr key={slaid} first={first}>
     <Td className="narrow">{slaid}</Td>
     <Td className="text">
       <Link
@@ -54,7 +56,7 @@ const SLARow: Function = ({
       <Td className="narrow">
         <Controls grouped>
           <Button
-            iconName="times"
+            iconName="cross"
             btnStyle="danger"
             onClick={handleDeleteClick}
           />
@@ -85,19 +87,11 @@ export default compose(
       };
 
       openModal(
-        <ConfirmDialog
-          onClose={closeModal}
-          onConfirm={handleConfirm}
-        >
-         Are you sure you want to remove the {name} SLA?
+        <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
+          Are you sure you want to remove the {name} SLA?
         </ConfirmDialog>
       );
     },
   }),
-  pure([
-    'slaid',
-    'name',
-    'description',
-    'units',
-  ])
+  pure(['slaid', 'name', 'description', 'units'])
 )(SLARow);
