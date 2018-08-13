@@ -55,7 +55,7 @@ export default class Dashboard extends Component {
     nodeTab: string,
   } = {
     chartTab: '1 hour band',
-    nodeTab: Object.keys(this.props.system.cluster_memory)[0],
+    nodeTab: Object.keys(this.props.system.cluster_info)[0],
   };
 
   componentWillMount() {
@@ -78,8 +78,8 @@ export default class Dashboard extends Component {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, width, currentUser } = this.props;
-    const clusterMemory = Object.keys(system.cluster_memory).reduce(
-      (cur, node: string) => cur + system.cluster_memory[node].node_priv,
+    const clusterMemory = Object.keys(system.cluster_info).reduce(
+      (cur, node: string) => cur + system.cluster_info[node].node_priv,
       0
     );
     const sidebarOpen =
@@ -96,8 +96,9 @@ export default class Dashboard extends Component {
         ? [{ columns: 3, gutter: 20 }]
         : [{ columns: 2, gutter: 20 }];
 
-    const currentNodeData = system.cluster_memory[this.state.nodeTab];
-    const history = [...currentNodeData.history].reverse();
+    const currentNodeData = system.cluster_info[this.state.nodeTab];
+    const history = [...currentNodeData.mem_history];
+    const procHistory = [...currentNodeData.process_history];
 
     // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
     // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
@@ -127,6 +128,16 @@ export default class Dashboard extends Component {
     const nodeChart = {
       data: history.map(
         (hist: Object): number => calculateMemory(hist.node_priv, null, false)
+      ),
+      label: this.state.nodeTab,
+      backgroundColor: '#9b59b6',
+      borderColor: '#9b59b6',
+      fill: false,
+    };
+
+    const nodeProcChart = {
+      data: procHistory.map(
+        (hist: Object): number => calculateMemory(hist.count, null, false)
       ),
       label: this.state.nodeTab,
       backgroundColor: '#9b59b6',
@@ -281,7 +292,7 @@ export default class Dashboard extends Component {
                 </div>
                 <div className="dashboard-module-small">
                   <div className="top">
-                    {Object.keys(system.cluster_memory).length}
+                    {Object.keys(system.cluster_info).length}
                   </div>
                   <div className="bottom">Node(s)</div>
                 </div>
@@ -292,9 +303,9 @@ export default class Dashboard extends Component {
                   <div className="bottom">Processes</div>
                 </div>
               </div>
-              {Object.keys(system.cluster_memory).map((node: string) => {
+              {Object.keys(system.cluster_info).map((node: string) => {
                 const memory: string = calculateMemory(
-                  system.cluster_memory[node].node_priv
+                  system.cluster_info[node].node_priv
                 );
 
                 const processName = Object.keys(system.processes).find(
@@ -331,7 +342,7 @@ export default class Dashboard extends Component {
               label={
                 <Dropdown>
                   <Control small>{this.state.nodeTab}</Control>
-                  {map(system.cluster_memory, node => (
+                  {map(system.cluster_info, node => (
                     <Item title={node} action={this.handleNodeTabChange} />
                   ))}
                 </Dropdown>
@@ -349,13 +360,30 @@ export default class Dashboard extends Component {
                 unit=" GiB"
                 yMax={Math.max(...flattenedHistory)}
                 yMin={Math.min(...flattenedHistory)}
-                empty={currentNodeData.history.length === 0}
+                empty={currentNodeData.mem_history.length === 0}
                 labels={history.map(
                   (hist: Object): string => moment(hist.timestamp).fromNow(true)
                 )}
                 datasets={
                   memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]
                 }
+              />
+            </PaneItem>
+            <PaneItem title="Node processes progression">
+              <ChartComponent
+                title={`${this.state.nodeTab} (${
+                  currentNodeData.process_count
+                } processes)`}
+                width="100%"
+                height={150}
+                isNotTime
+                yAxisLabel="# of processes"
+                unit=" "
+                empty={procHistory.length === 0}
+                labels={procHistory.map(
+                  (hist: Object): string => moment(hist.timestamp).fromNow(true)
+                )}
+                datasets={[nodeProcChart]}
               />
             </PaneItem>
           </DashboardModule>

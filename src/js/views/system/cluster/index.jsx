@@ -68,7 +68,7 @@ const ClusterView: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      nodes: state.api.system.data.cluster_memory,
+      nodes: state.api.system.data.cluster_info,
       processes: state.api.system.data.processes,
     })
   ),
