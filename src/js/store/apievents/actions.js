@@ -19,6 +19,16 @@ const handleEvent = (url, data, dispatch, state) => {
     const { info, eventstr } = d;
 
     switch (eventstr) {
+      case 'NODE_INFO':
+        if (state.api.system.sync) {
+          pipeline(
+            eventstr,
+            system.updateNodeInfo,
+            { ...info, timestamp: d.time },
+            dispatch
+          );
+        }
+        break;
       case 'WORKFLOW_STATS_UPDATED':
         if (info.tag === 'global') {
           if (state.api.system.sync) {

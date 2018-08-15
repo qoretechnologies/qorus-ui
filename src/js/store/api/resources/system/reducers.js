@@ -52,15 +52,6 @@ const processMemoryChanged = {
     events.forEach(event => {
       data.cluster_info[event.node].node_priv = event.node_priv;
       data.cluster_info[event.node].node_priv_str = event.node_priv_str;
-      data.cluster_info[event.node].mem_history.push({
-        node_priv: event.node_priv,
-        node_priv_str: event.node_priv_str,
-        timestamp: new Date(),
-      });
-
-      if (data.cluster_info[event.node].mem_history.length > 10) {
-        data.cluster_info[event.node].mem_history.shift();
-      }
 
       if (event.status_string === 'IDLE') {
         delete processes[event.id];
@@ -131,6 +122,40 @@ const updateStats = {
   },
 };
 
+const updateNodeInfo = {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      data.cluster_info[event.name].mem_history.push({
+        node_priv: event.node_priv,
+        node_priv_str: event.node_priv_str,
+        timestamp: event.timestamp,
+      });
+
+      if (data.cluster_info[event.name].mem_history.length > 60) {
+        data.cluster_info[event.name].mem_history.shift();
+      }
+
+      data.cluster_info[event.name].process_history.push({
+        count: event.processes,
+        timestamp: event.timestamp,
+      });
+
+      if (data.cluster_info[event.name].process_history.length > 60) {
+        data.cluster_info[event.name].process_history.shift();
+      }
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
 export {
   addProcess as ADDPROCESS,
   removeProcess as REMOVEPROCESS,
@@ -138,4 +163,5 @@ export {
   updateDone as UPDATEDONE,
   incrementItems as INCREMENTITEMS,
   updateStats as UPDATESTATS,
+  updateNodeInfo as UPDATENODEINFO,
 };

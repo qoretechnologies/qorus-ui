@@ -75,8 +75,7 @@ export default compose(
   mapProps(
     ({ nodes, ...rest }: Props): Props => ({
       nodesMemory: Object.keys(nodes).reduce(
-        (cur, node): number =>
-          console.log(nodes, node) || cur + nodes[node].node_priv,
+        (cur, node): number => cur + nodes[node].node_priv,
         0
       ),
       nodes,

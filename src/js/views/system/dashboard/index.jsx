@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Masonry from 'react-masonry-layout';
 import map from 'lodash/map';
+import takeRight from 'lodash/takeRight';
 import moment from 'moment';
 
 import Loader from '../../../components/loader';
@@ -97,8 +98,8 @@ export default class Dashboard extends Component {
         : [{ columns: 2, gutter: 20 }];
 
     const currentNodeData = system.cluster_info[this.state.nodeTab];
-    const history = [...currentNodeData.mem_history];
-    const procHistory = [...currentNodeData.process_history];
+    const history = takeRight([...currentNodeData.mem_history], 15);
+    const procHistory = takeRight([...currentNodeData.process_history], 15);
 
     // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
     // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
@@ -108,21 +109,23 @@ export default class Dashboard extends Component {
         parseFloat(calculateMemory(hist.node_priv, null, false), 10)
     );
     const historyMax = Math.max(...flattenedHistory);
-    let memoryLimitChart;
     const totalRamInt = parseFloat(
       calculateMemory(currentNodeData.node_ram, null, false),
       10
     );
+    let yMax = totalRamInt;
+
+    const memoryLimitChart = {
+      data: [...Array(15)].map(() => totalRamInt),
+      backgroundColor: '#FF7373',
+      borderColor: '#FF7373',
+      fill: false,
+      label: 'Total node memory',
+    };
 
     // The highest memory value is larger than the node total RAM
     if (historyMax > totalRamInt) {
-      memoryLimitChart = {
-        data: [...Array(12)].map(() => totalRamInt),
-        backgroundColor: '#FF7373',
-        borderColor: '#FF7373',
-        fill: false,
-        label: 'Total node memory',
-      };
+      yMax = historyMax;
     }
 
     const nodeChart = {
@@ -356,13 +359,15 @@ export default class Dashboard extends Component {
                 height={150}
                 isNotTime
                 yAxisLabel="Memory used"
-                stepSize={(historyMax + historyMax / 10) / 3}
+                stepSize={(yMax + yMax / 10) / 3}
                 unit=" GiB"
-                yMax={Math.max(...flattenedHistory)}
+                yMax={yMax}
                 yMin={Math.min(...flattenedHistory)}
                 empty={currentNodeData.mem_history.length === 0}
                 labels={history.map(
-                  (hist: Object): string => moment(hist.timestamp).fromNow(true)
+                  (hist: Object): string =>
+                    console.log(hist.timestamp) ||
+                    moment(hist.timestamp).fromNow()
                 )}
                 datasets={
                   memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]
@@ -379,6 +384,7 @@ export default class Dashboard extends Component {
                 isNotTime
                 yAxisLabel="# of processes"
                 unit=" "
+                stepSize={20}
                 empty={procHistory.length === 0}
                 labels={procHistory.map(
                   (hist: Object): string => moment(hist.timestamp).fromNow(true)

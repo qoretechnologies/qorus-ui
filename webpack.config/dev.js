@@ -1,8 +1,6 @@
 'use strict';
 
-
 const compilerConfig = require('./compiler');
-
 
 module.exports = function devConfig() {
   const config = compilerConfig();
@@ -10,7 +8,7 @@ module.exports = function devConfig() {
   return {
     contentBase: config.context,
     inline: true,
-    hot: process.env.NODE_ENV !== 'test',
+    hot: false,
     host: process.env.HOST || 'localhost',
     port: parseInt(process.env.PORT, 10) || 3000,
     historyApiFallback: true,

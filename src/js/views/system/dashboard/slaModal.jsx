@@ -101,30 +101,29 @@ export default compose(
     })
   ),
   mapProps(
-    ({ workflows, in_sla, band, ...rest }: Props): Props =>
-      console.log(workflows) || {
-        workflows: workflows.filter(({ order_stats }) => {
-          const currentBand: ?Object = order_stats.find(
-            (stat: Object): boolean => stat.label === band.replace(/ /g, '_')
-          );
+    ({ workflows, in_sla, band, ...rest }: Props): Props => ({
+      workflows: workflows.filter(({ order_stats }) => {
+        const currentBand: ?Object = order_stats.find(
+          (stat: Object): boolean => stat.label === band.replace(/ /g, '_')
+        );
 
-          if (!currentBand) {
-            return false;
-          }
-
-          const sla: ?Object = currentBand.sla.find(
-            (slaData: Object): boolean => slaData.in_sla === in_sla
-          );
-
-          if (sla && sla.count !== 0) {
-            return true;
-          }
-
+        if (!currentBand) {
           return false;
-        }),
-        in_sla,
-        band,
-        ...rest,
-      }
+        }
+
+        const sla: ?Object = currentBand.sla.find(
+          (slaData: Object): boolean => slaData.in_sla === in_sla
+        );
+
+        if (sla && sla.count !== 0) {
+          return true;
+        }
+
+        return false;
+      }),
+      in_sla,
+      band,
+      ...rest,
+    })
   )
 )(StatsModal);

@@ -3,40 +3,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { Control } from '../controls';
-import Badge from '../badge';
 import NotificationList from './list';
+import ResizeHandle from '../resize/handle';
+import Box from '../box';
 
+type Props = {
+  alerts: Object,
+  clearNotifications: Function,
+  isOpen?: boolean,
+};
 
 class NotificationPanel extends React.Component {
   static defaultProps = {
-    alerts: { data: [] },
-  }
+    alerts: { data: [], isOpen: false },
+  };
 
-  props: {
-    alerts: Object,
-    clearNotifications: Function,
-  }
+  props: Props;
 
   state: {
     isOpen: boolean,
-  }
+  };
 
   state = {
-    isOpen: false,
-  }
+    isOpen: this.props.isOpen,
+  };
 
-  componentDidUpdate() {
-    if (this.state.isOpen) {
-      window.addEventListener('click', this.handleOutsideClick);
-    } else {
-      window.removeEventListener('click', this.handleOutsideClick);
+  componentWillReceiveProps(newProps: Props) {
+    if (this.state.isOpen !== newProps.isOpen) {
+      this.setState({ isOpen: newProps.isOpen });
     }
   }
 
   handleClick = () => {
     this.setState({ isOpen: !this.state.isOpen });
-  }
+  };
 
   handleOutsideClick = (event: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.panel);
@@ -49,9 +49,11 @@ class NotificationPanel extends React.Component {
   };
 
   render() {
-    const { clearNotifications, alerts: { data = [] } } = this.props;
+    const {
+      clearNotifications,
+      alerts: { data = [] },
+    } = this.props;
     const notificationList = data.filter(item => !item._read);
-    const listLength = notificationList.length;
     let panel = null;
 
     if (this.state.isOpen && notificationList.length > 0) {
@@ -63,67 +65,62 @@ class NotificationPanel extends React.Component {
       );
 
       panel = (
-        <div className="notification-list">
-          {ongoingNotifications.length > 0 ? (
-            <NotificationList
-              title="Ongoing"
-              type="ONGOING"
-              className={
-                `ongoing ${transientNotifications.length === 0 ? 'full-grp' : ''}`
-              }
-              clearNotifications={clearNotifications}
-              notifications={ongoingNotifications}
-            />
-          ) : null}
-          {transientNotifications.length > 0 ? (
-            <NotificationList
-              title="Transient"
-              type="TRANSIENT"
-              className={
-                `transient ${ongoingNotifications.length === 0 ? 'full-grp' : ''}`
-              }
-              clearNotifications={clearNotifications}
-              notifications={transientNotifications}
-            />
-          ) : null}
+        <div className="pane right notifications-list">
+          <div className="pane__content">
+            <Box>
+              {ongoingNotifications.length > 0 ? (
+                <NotificationList
+                  title="Ongoing"
+                  type="ONGOING"
+                  className={`ongoing ${
+                    transientNotifications.length === 0 ? 'full-grp' : ''
+                  }`}
+                  clearNotifications={clearNotifications}
+                  notifications={ongoingNotifications}
+                />
+              ) : null}
+              {transientNotifications.length > 0 ? (
+                <NotificationList
+                  title="Transient"
+                  type="TRANSIENT"
+                  className={`transient ${
+                    ongoingNotifications.length === 0 ? 'full-grp' : ''
+                  }`}
+                  clearNotifications={clearNotifications}
+                  notifications={transientNotifications}
+                />
+              ) : null}
+            </Box>
+          </div>
+          <ResizeHandle left min={{ width: 400 }} />
         </div>
       );
     }
 
     if (this.state.isOpen && notificationList.length === 0) {
       panel = (
-        <div className="notification-list">
-          <div className="full-grp notifications-group">
-            <h4 className="notifications-header">No notifications</h4>
+        <div className="pane right notifications-list">
+          <div className="pane__content">
+            <Box>
+              <div className="full-grp notifications-group">
+                <h5 className="notifications-header">No notifications</h5>
+              </div>
+            </Box>
           </div>
+          <ResizeHandle left min={{ width: 400 }} />
         </div>
       );
     }
 
     return (
-      <div
-        ref="panel"
-        className="notification-panel btn-group"
+      <ReactCSSTransitionGroup
+        transitionName="notification-list"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}
+        component="div"
       >
-        <Control
-          iconName="bell"
-          btnStyle="inverse"
-          onClick={this.handleClick}
-          className="notification-button"
-          big
-        >
-          {' '}
-          { listLength > 0 ? <Badge label="danger" val={listLength.toString()} /> : null }
-        </Control>
-        <ReactCSSTransitionGroup
-          transitionName="notification-list"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-          component="div"
-        >
-          {panel}
-        </ReactCSSTransitionGroup>
-      </div>
+        {panel}
+      </ReactCSSTransitionGroup>
     );
   }
 }

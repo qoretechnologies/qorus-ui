@@ -26,6 +26,11 @@ const updateStats: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
+const updateNodeInfo: Function = createAction(
+  'SYSTEM_UPDATENODEINFO',
+  (events: Array<Object>): Object => ({ events })
+);
+
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 export {
@@ -35,4 +40,5 @@ export {
   updateDone,
   incrementItems,
   updateStats,
+  updateNodeInfo,
 };

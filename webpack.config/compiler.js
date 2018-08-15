@@ -9,7 +9,7 @@ module.exports = function compilerConfig() {
   return {
     context: `${root}/src`,
     entry: {
-      qorus: ['react-hot-loader/patch', `${root}/src/index.jsx`],
+      qorus: [`${root}/src/index.jsx`],
     },
     output: {
       path: `${root}/dist`,
@@ -38,17 +38,13 @@ module.exports = function compilerConfig() {
         },
         {
           test: /\.css$/,
-          loader: ExtractTextPlugin.extract(
-            'style', 'css?sourceMap&minimize'
-          ),
+          loader: ExtractTextPlugin.extract('style', 'css?sourceMap&minimize'),
         },
         {
           test: /\.scss$/,
           loader: ExtractTextPlugin.extract(
             'style',
-            '' +
-              'css?sourceMap!' +
-              'sass?sourceMap&outputStyle=compressed'
+            '' + 'css?sourceMap!' + 'sass?sourceMap&outputStyle=compressed'
           ),
         },
         {
@@ -69,10 +65,7 @@ module.exports = function compilerConfig() {
         },
         {
           test: require.resolve('whatwg-fetch'),
-          loaders: [
-            'imports?this=>global',
-            'exports?global.fetch',
-          ],
+          loaders: ['imports?this=>global', 'exports?global.fetch'],
         },
       ],
     },

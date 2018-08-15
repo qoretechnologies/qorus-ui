@@ -121,6 +121,8 @@ export function createResourceReducers(
 
           data = data || [];
 
+          console.log('SUCC');
+
           return {
             ...state,
             data,
@@ -138,6 +140,8 @@ export function createResourceReducers(
               action
             );
           }
+
+          console.log('FAIL');
 
           return {
             ...state,

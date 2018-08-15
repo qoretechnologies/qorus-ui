@@ -8,6 +8,7 @@ import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';
 import de from 'react-intl/locale-data/de';
 import mapProps from 'recompose/mapProps';
+import moment from 'moment';
 
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -17,8 +18,27 @@ import { Manager as ModalManager } from '../components/modal';
 import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
+import NotificationPanel from '../containers/system/alerts';
 
 addLocaleData([...en, ...cs, ...de]);
+moment.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: '%ds',
+    ss: '%ds',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: 'a day',
+    dd: '%d days',
+    M: 'a month',
+    MM: '%d months',
+    y: 'a year',
+    yy: '%d years',
+  },
+});
 
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
@@ -96,6 +116,12 @@ export default class Root extends Component {
     closeModal: PropTypes.func,
     getTitle: PropTypes.func,
     selectModalText: PropTypes.func,
+  };
+
+  state: {
+    notificationsOpen: boolean,
+  } = {
+    notificationsOpen: false,
   };
 
   /**
@@ -197,6 +223,10 @@ export default class Root extends Component {
     this.props.storeSidebar(menuCollapsed);
   };
 
+  handleNotificationsClick: Function = () => {
+    this.setState({ notificationsOpen: !this.state.notificationsOpen });
+  };
+
   /**
    * Sets document title from system information.
    *
@@ -284,6 +314,7 @@ export default class Root extends Component {
             isTablet={isTablet}
             light={isLightTheme}
             onThemeClick={this.onThemeChange}
+            onNotificationClick={this.handleNotificationsClick}
           />
           <div className="root__center">
             {!isTablet && (
@@ -296,6 +327,7 @@ export default class Root extends Component {
             <section>
               <div className="container-fluid" id="content-wrapper">
                 {this.props.children}
+                <NotificationPanel isOpen={this.state.notificationsOpen} />
               </div>
             </section>
           </div>

@@ -14,7 +14,6 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  Icon,
   MenuDivider,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
@@ -38,21 +37,6 @@ const flags: Object = {
   cz,
 };
 
-const WarningModal: Function = ({ onClose }: Object): React.Element<any> => (
-  <Modal>
-    <Modal.Header titleId="warningModal" onClose={onClose}>
-      {' '}
-      Insecure connection{' '}
-    </Modal.Header>
-    <Modal.Body>
-      <p>
-        You are currently using this site via an insecure connection. Some
-        functionality requiring a secure connection will not be available.
-      </p>
-    </Modal.Body>
-  </Modal>
-);
-
 export type Props = {
   info: Object,
   health: Object,
@@ -65,6 +49,8 @@ export type Props = {
   locale: string,
   light: boolean,
   onThemeClick: Function,
+  onNotificationClick: Function,
+  storeLocale: Function,
 };
 
 /**
@@ -94,10 +80,6 @@ export default class Topbar extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
 
-  handleWarningClick = () => {
-    this.props.openModal(<WarningModal onClose={this.props.closeModal} />);
-  };
-
   /**
    * Returns element for this component.
    *
@@ -110,8 +92,6 @@ export default class Topbar extends Component {
       health: { data },
     } = this.props;
     const [countryCode, locale] = this.props.locale.split('-');
-
-    console.log(data);
 
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
@@ -234,7 +214,10 @@ export default class Topbar extends Component {
             </ButtonGroup>
           </Popover>
           <ButtonGroup minimal>
-            <Button iconName="notifications" />
+            <Button
+              iconName="notifications"
+              onClick={this.props.onNotificationClick}
+            />
           </ButtonGroup>
           <ButtonGroup minimal>
             <Button
