@@ -217,7 +217,10 @@ export default class Dashboard extends Component {
                             DISPOSITIONS,
                             (label, disp) =>
                               `${label} (${Math.round(
-                                stats.l.find(dt => dt.disposition === disp).pct
+                                stats.l.find(dt => dt.disposition === disp)
+                                  ? stats.l.find(dt => dt.disposition === disp)
+                                      .pct
+                                  : 0
                               )}%)`
                           )}
                           datasets={[
@@ -226,7 +229,10 @@ export default class Dashboard extends Component {
                                 DISPOSITIONS,
                                 (label, disp) =>
                                   stats.l.find(dt => dt.disposition === disp)
-                                    .count
+                                    ? stats.l.find(
+                                        dt => dt.disposition === disp
+                                      ).count
+                                    : 0
                               ),
                               backgroundColor: [
                                 '#FFB366',

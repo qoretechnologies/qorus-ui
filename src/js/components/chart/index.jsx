@@ -67,36 +67,32 @@ export default class ChartComponent extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.empty) {
-      this.renderChart(this.props);
-    }
+    this.renderChart(this.props);
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    if (!this.props.empty) {
-      if (this.props.labels !== nextProps.labels) {
-        const chart = this.state.chart;
-        const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
-        const datasets =
-          nextProps.type === 'line'
-            ? scaleData(nextProps.datasets, nextProps.isNotTime)
-            : nextProps.datasets;
+    if (this.props.labels !== nextProps.labels) {
+      const chart = this.state.chart;
+      const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
+      const datasets =
+        nextProps.type === 'line'
+          ? scaleData(nextProps.datasets, nextProps.isNotTime)
+          : nextProps.datasets;
 
-        chart.data.labels = nextProps.labels;
-        chart.data.datasets = datasets;
+      chart.data.labels = nextProps.labels;
+      chart.data.datasets = datasets;
 
-        if (nextProps.type === 'line') {
-          chart.options.scales.yAxes[0].ticks.callback = val =>
-            getFormattedValue(val, datasets) + unit;
-          chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
-          chart.options.scales.xAxes[0].scaleLabel.labelString =
-            nextProps.xAxisLabel;
-          chart.options.tooltips.callbacks.label = item =>
-            getFormattedValue(item.yLabel, nextProps.datasets) + unit;
-        }
-
-        chart.update();
+      if (nextProps.type === 'line') {
+        chart.options.scales.yAxes[0].ticks.callback = val =>
+          getFormattedValue(val, datasets) + unit;
+        chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
+        chart.options.scales.xAxes[0].scaleLabel.labelString =
+          nextProps.xAxisLabel;
+        chart.options.tooltips.callbacks.label = item =>
+          getFormattedValue(item.yLabel, nextProps.datasets) + unit;
       }
+
+      chart.update();
     }
   }
 
@@ -266,18 +262,24 @@ export default class ChartComponent extends Component {
           style={{ width: this.props.width, height: this.props.height }}
           onClick={!this.props.empty && this.props.onClick}
         >
-          {this.props.empty && this.props.type === 'doughnut' ? (
-            <div className="pie-chart-placeholder">
-              <NonIdealState title="No data" visual="warning-sign" />
-            </div>
-          ) : (
-            <canvas
-              ref="chart"
-              id={this.props.id}
-              width={this.props.width}
-              height={this.props.height}
-            />
-          )}
+          {this.props.empty &&
+            this.props.type === 'doughnut' && (
+              <div className="pie-chart-placeholder">
+                <NonIdealState title="No data" visual="warning-sign" />
+              </div>
+            )}
+          <canvas
+            style={{
+              display:
+                this.props.empty && this.props.type === 'doughnut'
+                  ? 'none'
+                  : 'initial',
+            }}
+            ref="chart"
+            id={this.props.id}
+            width={this.props.width}
+            height={this.props.height}
+          />
         </div>
         <CenterWrapper>
           <ul className="chart-legend">{this.renderLegend()}</ul>
