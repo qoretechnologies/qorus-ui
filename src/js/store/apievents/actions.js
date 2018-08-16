@@ -72,7 +72,7 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
-                { type: 'workflow_alert', alert: true, alertType: 'ongoing' },
+                { type: 'workflow_alerts', alert: true, alertType: 'ongoing' },
                 dispatch
               );
             }
@@ -93,10 +93,12 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+            }
+            if (state.api.system.sync) {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
-                { type: 'service_alert', alert: true, alertType: 'ongoing' },
+                { type: 'service_alerts', alert: true, alertType: 'ongoing' },
                 dispatch
               );
             }
@@ -109,10 +111,12 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+            }
+            if (state.api.system.sync) {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
-                { type: 'job_alert', alert: true, alertType: 'ongoing' },
+                { type: 'job_alerts', alert: true, alertType: 'ongoing' },
                 dispatch
               );
             }
@@ -125,6 +129,8 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+            }
+            if (state.api.system.sync) {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
@@ -141,6 +147,8 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+            }
+            if (state.api.system.sync) {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
@@ -161,6 +169,8 @@ const handleEvent = (url, data, dispatch, state) => {
                 { ...info, ...{ alerttype: 'ONGOING' } },
                 dispatch
               );
+            }
+            if (state.api.system.sync) {
               pipeline(
                 `${eventstr}_ITEMINCREMENT`,
                 system.incrementItems,
@@ -192,6 +202,14 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'ALERT_ONGOING_CLEARED':
         switch (info.type) {
           case 'WORKFLOW':
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                { type: 'workflow_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
             if (state.api.workflows.sync) {
               pipeline(
                 `${eventstr}_WORKFLOW`,
@@ -202,6 +220,14 @@ const handleEvent = (url, data, dispatch, state) => {
             }
             break;
           case 'SERVICE':
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                { type: 'service_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
             if (state.api.services.sync) {
               pipeline(
                 `${eventstr}_SERVICE`,
@@ -212,6 +238,14 @@ const handleEvent = (url, data, dispatch, state) => {
             }
             break;
           case 'JOB':
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                { type: 'job_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
             if (state.api.jobs.sync) {
               pipeline(
                 `${eventstr}_JOB`,
@@ -222,13 +256,59 @@ const handleEvent = (url, data, dispatch, state) => {
             }
             break;
           case 'REMOTE':
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.clearAlert,
+                { id: info.id, alertid: info.alertid, type: info.type },
+                dispatch
+              );
+            }
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                { type: 'remote_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
+            break;
           case 'USER-CONNECTION':
+            if (state.api.remotes.sync) {
+              pipeline(
+                `${eventstr}_REMOTE`,
+                remotes.clearAlert,
+                { id: info.id, alertid: info.alertid, type: info.type },
+                dispatch
+              );
+            }
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                { type: 'user_alerts', alert: true, alertType: 'ongoing' },
+                dispatch
+              );
+            }
+            break;
           case 'DATASOURCE':
             if (state.api.remotes.sync) {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
                 { id: info.id, alertid: info.alertid, type: info.type },
+                dispatch
+              );
+            }
+            if (state.api.system.sync) {
+              pipeline(
+                `${eventstr}_ITEMDECREMENT`,
+                system.decrementItems,
+                {
+                  type: 'datasource_alerts',
+                  alert: true,
+                  alertType: 'ongoing',
+                },
                 dispatch
               );
             }
@@ -253,6 +333,17 @@ const handleEvent = (url, data, dispatch, state) => {
                 when: d.time,
                 alerttype: 'TRANSIENT',
               },
+            },
+            dispatch
+          );
+        }
+        if (state.api.system.sync) {
+          pipeline(
+            `${eventstr}_ITEMINCREMENT`,
+            system.incrementItems,
+            {
+              alert: true,
+              alertType: 'transient',
             },
             dispatch
           );

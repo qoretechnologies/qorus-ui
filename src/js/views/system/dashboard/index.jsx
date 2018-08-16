@@ -365,9 +365,7 @@ export default class Dashboard extends Component {
                 yMin={Math.min(...flattenedHistory)}
                 empty={currentNodeData.mem_history.length === 0}
                 labels={history.map(
-                  (hist: Object): string =>
-                    console.log(hist.timestamp) ||
-                    moment(hist.timestamp).fromNow()
+                  (hist: Object): string => moment(hist.timestamp).fromNow()
                 )}
                 datasets={
                   memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]

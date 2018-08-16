@@ -80,7 +80,34 @@ const incrementItems = {
         data['alert-summary'][event.alertType] =
           data['alert-summary'][event.alertType] + 1;
       }
-      data[event.type] = data[event.type] + 1;
+
+      if (event.type) {
+        data[event.type] = data[event.type] + 1;
+      }
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
+const decrementItems = {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      if (event.alert) {
+        data['alert-summary'][event.alertType] =
+          data['alert-summary'][event.alertType] - 1;
+      }
+
+      if (event.type) {
+        data[event.type] = data[event.type] - 1;
+      }
     });
 
     return { ...state, ...{ data } };
@@ -162,6 +189,7 @@ export {
   processMemoryChanged as PROCESSMEMORYCHANGED,
   updateDone as UPDATEDONE,
   incrementItems as INCREMENTITEMS,
+  decrementItems as DECREMENTITEMS,
   updateStats as UPDATESTATS,
   updateNodeInfo as UPDATENODEINFO,
 };

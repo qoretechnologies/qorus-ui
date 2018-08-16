@@ -21,6 +21,11 @@ const incrementItems: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
+const decrementItems: Function = createAction(
+  'SYSTEM_DECREMENTITEMS',
+  (events: Array<Object>): Object => ({ events })
+);
+
 const updateStats: Function = createAction(
   'SYSTEM_UPDATESTATS',
   (events: Array<Object>): Object => ({ events })
@@ -39,6 +44,7 @@ export {
   removeProcess,
   updateDone,
   incrementItems,
+  decrementItems,
   updateStats,
   updateNodeInfo,
 };
