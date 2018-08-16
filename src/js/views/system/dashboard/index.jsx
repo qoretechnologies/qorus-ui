@@ -185,7 +185,7 @@ export default class Dashboard extends Component {
                     stats.label.replace(/_/g, ' ') === this.state.chartTab && (
                       <div key={stats.label}>
                         <ChartComponent
-                          title="# of stats"
+                          title="Workflow Disposition"
                           onClick={() => {
                             this.props.openModal(
                               <GlobalModal
@@ -237,7 +237,7 @@ export default class Dashboard extends Component {
                           ]}
                         />
                         <ChartComponent
-                          title="SLA stats"
+                          title="SLA Stats"
                           width={150}
                           height={150}
                           isNotTime
