@@ -22,13 +22,10 @@ import withPane from '../../../hocomponents/pane';
 import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
-import {
-  querySelector,
-  paramSelector,
-  resourceSelector,
-} from '../../../selectors';
+import { resourceSelector } from '../../../selectors';
 import AlertsPane from './pane';
 import AlertRow from './row';
+import AlertsToolbar from './toolbar';
 import Icon from '../../../components/icon';
 
 type Props = {
@@ -55,8 +52,10 @@ const AlertsTable: Function = ({
   closePane,
   paneId,
   type,
+  location,
 }: Props): React.Element<any> => (
   <div>
+    <AlertsToolbar type={type} location={location} />
     {alerts.length ? (
       <Table
         fixed

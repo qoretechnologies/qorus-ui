@@ -22,6 +22,7 @@ import {
 } from '../../../../../components/new_table';
 import Toolbar from '../../../../../components/toolbar';
 import { sortDefaults } from '../../../../../constants/sort';
+import NoData from '../../../../../components/nodata';
 
 type Props = {
   sla: Object,
@@ -89,7 +90,7 @@ const SLAMethods: Function = ({
         </Tbody>
       </Table>
     ) : (
-      <p className="no-data"> No data </p>
+      <NoData />
     )}
   </div>
 );

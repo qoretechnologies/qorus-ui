@@ -17,6 +17,7 @@ import unsync from '../../../../../hocomponents/unsync';
 import { Control as Button } from '../../../../../components/controls';
 import { sortDefaults } from '../../../../../constants/sort';
 import EventsTable from './table';
+import NoData from '../../../../../components/nodata';
 
 type Props = {
   location: Object,
@@ -44,12 +45,16 @@ const EventsView: Function = ({
   collection,
 }: Props): React.Element<any> => (
   <div>
-    <EventsTable
-      sortData={sortData}
-      onSortChange={onSortChange}
-      collection={collection}
-      canLoadMore={canLoadMore}
-    />
+    {collection.length ? (
+      <EventsTable
+        sortData={sortData}
+        onSortChange={onSortChange}
+        collection={collection}
+        canLoadMore={canLoadMore}
+      />
+    ) : (
+      <NoData />
+    )}
     {canLoadMore && (
       <Button
         label={`Load ${limit} more...`}
@@ -62,9 +67,8 @@ const EventsView: Function = ({
 );
 
 const viewSelector: Function = createSelector(
-  [
-    resourceSelector('slaevents'),
-  ], (meta: Object): Object => ({
+  [resourceSelector('slaevents')],
+  (meta: Object): Object => ({
     meta,
     collection: meta.data,
     sort: meta.sort,
@@ -81,11 +85,13 @@ export default compose(
       unsync: actions.slaevents.unsync,
     }
   ),
-  mapProps(({ params, ...rest }: Props): Props => ({
-    id: params.id,
-    params,
-    ...rest,
-  })),
+  mapProps(
+    ({ params, ...rest }: Props): Props => ({
+      id: params.id,
+      params,
+      ...rest,
+    })
+  ),
   withSort('slaevents', 'collection', sortDefaults.slaevents),
   loadMore('collection', 'slaevents'),
   patch('load', [
@@ -100,13 +106,23 @@ export default compose(
   sync('meta'),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
-      const { sort, sortDir, id, changeOffset, offset, searchData, fetch } = this.props;
+      const {
+        sort,
+        sortDir,
+        id,
+        changeOffset,
+        offset,
+        searchData,
+        fetch,
+      } = this.props;
 
-      if ((searchData.err !== nextProps.searchData.err ||
-        searchData.errDesc !== nextProps.searchData.errDesc ||
-        searchData.producer !== nextProps.searchData.producer ||
-        searchData.minDate !== nextProps.searchData.minDate ||
-        searchData.maxDate !== nextProps.searchData.maxDate) && nextProps.offset !== 0
+      if (
+        (searchData.err !== nextProps.searchData.err ||
+          searchData.errDesc !== nextProps.searchData.errDesc ||
+          searchData.producer !== nextProps.searchData.producer ||
+          searchData.minDate !== nextProps.searchData.minDate ||
+          searchData.maxDate !== nextProps.searchData.maxDate) &&
+        nextProps.offset !== 0
       ) {
         changeOffset(0);
       } else if (
@@ -141,5 +157,5 @@ export default compose(
     'sortDir',
     'collection',
     'id',
-  ]),
+  ])
 )(EventsView);

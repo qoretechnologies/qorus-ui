@@ -21,6 +21,7 @@ import Alert from '../../../components/alert';
 import Options from './options';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
+import PaneItem from '../../../components/pane_item';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -198,59 +199,62 @@ export default class ConnectionsPane extends Component {
         {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
         <Box top>
           <Container fill>
-            <Table striped>
-              <Tbody>
-                {this.getData().map(
-                  (val: Object, key: number): React.Element<any> => (
-                    <Tr key={key}>
-                      <Td className="name">{capitalize(val.attr)}</Td>
-                      {val.editable &&
-                      this.props.canEdit &&
-                      val.attr !== 'options' &&
-                      val.attr !== 'opts' ? (
-                        <EditableCell
-                          className="text"
-                          value={val.value}
-                          onSave={this.handleEditSave(val.attr)}
-                        />
-                      ) : (
-                        <Td className="text">
-                          {val.attr === 'options' || val.attr === 'opts' ? (
-                            <Options
-                              data={val.value}
-                              onSave={this.handleEditSave(val.attr)}
-                            />
-                          ) : (
-                            <AutoComponent>{val.value}</AutoComponent>
-                          )}
-                        </Td>
-                      )}
-                    </Tr>
-                  )
-                )}
-              </Tbody>
-            </Table>
-            <AlertsTable alerts={alerts} />
-            <h4> Dependencies </h4>
-            {deps && deps.length ? (
-              <Table striped condensed>
+            <PaneItem title="Overview">
+              <Table striped>
                 <Tbody>
-                  {deps.map(
-                    (dep: Object, index: number): React.Element<any> => (
-                      <Tr key={index}>
-                        <Td className="name">
-                          <Link to={getDependencyObjectLink(dep.type, dep)}>
-                            {dep.desc}
-                          </Link>
-                        </Td>
+                  {this.getData().map(
+                    (val: Object, key: number): React.Element<any> => (
+                      <Tr key={key}>
+                        <Td className="name">{capitalize(val.attr)}</Td>
+                        {val.editable &&
+                        this.props.canEdit &&
+                        val.attr !== 'options' &&
+                        val.attr !== 'opts' ? (
+                          <EditableCell
+                            className="text"
+                            value={val.value}
+                            onSave={this.handleEditSave(val.attr)}
+                          />
+                        ) : (
+                          <Td className="text">
+                            {val.attr === 'options' || val.attr === 'opts' ? (
+                              <Options
+                                data={val.value}
+                                onSave={this.handleEditSave(val.attr)}
+                              />
+                            ) : (
+                              <AutoComponent>{val.value}</AutoComponent>
+                            )}
+                          </Td>
+                        )}
                       </Tr>
                     )
                   )}
                 </Tbody>
               </Table>
-            ) : (
-              <NoData />
-            )}
+            </PaneItem>
+            <AlertsTable alerts={alerts} />
+            <PaneItem title="Dependencies">
+              {deps && deps.length ? (
+                <Table striped condensed>
+                  <Tbody>
+                    {deps.map(
+                      (dep: Object, index: number): React.Element<any> => (
+                        <Tr key={index}>
+                          <Td className="name">
+                            <Link to={getDependencyObjectLink(dep.type, dep)}>
+                              {dep.desc}
+                            </Link>
+                          </Td>
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              ) : (
+                <NoData />
+              )}
+            </PaneItem>
           </Container>
         </Box>
       </Pane>

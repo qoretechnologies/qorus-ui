@@ -17,7 +17,7 @@ const AlertsToolbar: Function = ({
   type,
   ...rest
 }: Props): React.Element<any> => (
-  <Toolbar mt>
+  <Toolbar mb>
     <Search
       defaultValue={rest[`${type}SearchQuery`]}
       onSearchUpdate={rest[`change${capitalize(type)}searchQuery`]}

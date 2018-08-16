@@ -12,7 +12,12 @@ import DashboardModule from '../../../components/dashboard_module/index';
 import PaneItem from '../../../components/pane_item';
 import { statusHealth, calculateMemory } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
-import { getStatsCount, getStatsPct } from '../../../helpers/chart';
+import {
+  getStatsCount,
+  getStatsPct,
+  prepareHistory,
+  formatChartTime,
+} from '../../../helpers/chart';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import withModal from '../../../hocomponents/modal';
 import StatsModal from './statsModal';
@@ -98,12 +103,8 @@ export default class Dashboard extends Component {
         : [{ columns: 2, gutter: 20 }];
 
     const currentNodeData = system.cluster_info[this.state.nodeTab];
-    const history = takeRight([...currentNodeData.mem_history], 15);
-    const procHistory = takeRight([...currentNodeData.process_history], 15);
-
-    // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
-    // history.push({ node_priv: 134902136832 * 1.4, timestamp: new Date() });
-
+    const history = prepareHistory(currentNodeData.mem_history);
+    const procHistory = prepareHistory(currentNodeData.process_history);
     const flattenedHistory = history.map(
       (hist: Object): number =>
         parseFloat(calculateMemory(hist.node_priv, null, false), 10)
@@ -121,6 +122,8 @@ export default class Dashboard extends Component {
       borderColor: '#FF7373',
       fill: false,
       label: 'Total node memory',
+      pointRadius: 0,
+      borderWidth: 1,
     };
 
     // The highest memory value is larger than the node total RAM
@@ -273,7 +276,7 @@ export default class Dashboard extends Component {
                           labels={[
                             `In SLA (${Math.round(getStatsPct(true, stats))}%)`,
                             `Out of SLA (${Math.round(
-                              getStatsCount(false, stats)
+                              getStatsPct(false, stats)
                             )}%)`,
                           ]}
                           datasets={[
@@ -372,10 +375,9 @@ export default class Dashboard extends Component {
                 stepSize={(yMax + yMax / 10) / 3}
                 unit=" GiB"
                 yMax={yMax}
-                yMin={Math.min(...flattenedHistory)}
                 empty={currentNodeData.mem_history.length === 0}
                 labels={history.map(
-                  (hist: Object): string => moment(hist.timestamp).fromNow()
+                  (hist: Object): string => formatChartTime(hist.timestamp)
                 )}
                 datasets={
                   memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]
@@ -395,7 +397,7 @@ export default class Dashboard extends Component {
                 stepSize={20}
                 empty={procHistory.length === 0}
                 labels={procHistory.map(
-                  (hist: Object): string => moment(hist.timestamp).fromNow(true)
+                  (hist: Object): string => formatChartTime(hist.timestamp)
                 )}
                 datasets={[nodeProcChart]}
               />

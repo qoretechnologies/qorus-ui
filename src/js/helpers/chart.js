@@ -1,5 +1,5 @@
 import { ORDER_GROUPS } from '../constants/orders';
-import { max, flatten, range, values, round } from 'lodash';
+import { max, flatten, range, values, round, takeRight } from 'lodash';
 import { DATASETS, SLADATASETS, DOUGH_LABELS } from '../constants/orders';
 import moment from 'moment';
 
@@ -220,6 +220,46 @@ const getStatsPct: Function = (inSla: boolean, data: any): any => {
   }
 };
 
+const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
+  let newHistory = takeRight([...history], 15);
+
+  newHistory = newHistory.map(
+    (hist: Object, idx: number): Object => {
+      const newHist = { ...hist };
+
+      if (idx === 0) {
+        return newHist;
+      }
+
+      if (idx % 3 !== 0) {
+        newHist.timestamp = null;
+      }
+
+      return newHist;
+    }
+  );
+
+  if (newHistory.length < 15) {
+    const sub = 15 - newHistory.length;
+
+    newHistory = [...Array(sub)]
+      .map(() => ({ node_priv: undefined, timestamp: null }))
+      .concat(newHistory);
+  }
+
+  return newHistory;
+};
+
+const formatChartTime: Function = (timestamp: string): string => {
+  if (timestamp) {
+    const seconds: string = moment(timestamp).diff(moment(), 's');
+
+    return `${seconds.toString().replace('-', '')}s`;
+  }
+
+  return '';
+};
+
 export {
   groupOrders,
   getMaxValue,
@@ -232,4 +272,6 @@ export {
   getFormattedValue,
   getStatsCount,
   getStatsPct,
+  prepareHistory,
+  formatChartTime,
 };

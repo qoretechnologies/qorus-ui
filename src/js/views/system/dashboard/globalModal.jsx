@@ -24,6 +24,7 @@ type Props = {
   totalOrderStats: number,
   sortData: Object,
   onSortChange: Function,
+  orderStats: Array<Object>,
 };
 
 const StatsModal: Function = ({
@@ -62,10 +63,9 @@ const StatsModal: Function = ({
                   </Link>
                 </Td>
                 <Td>
-                  {workflow.completed} ({orderStatsPct(
-                    workflow.completed,
-                    totalOrderStats
-                  )}%)
+                  {workflow.completed} (
+                  {orderStatsPct(workflow.completed, totalOrderStats)}
+                  %)
                   <ProgressBar
                     intent={orderStatsPctColor(
                       orderStatsPct(workflow.completed, totalOrderStats)
@@ -77,10 +77,9 @@ const StatsModal: Function = ({
                   />
                 </Td>
                 <Td>
-                  {workflow.automatically} ({orderStatsPct(
-                    workflow.automatically,
-                    totalOrderStats
-                  )}%)
+                  {workflow.automatically} (
+                  {orderStatsPct(workflow.automatically, totalOrderStats)}
+                  %)
                   <ProgressBar
                     intent={orderStatsPctColor(
                       orderStatsPct(workflow.automatically, totalOrderStats)
@@ -93,10 +92,9 @@ const StatsModal: Function = ({
                   />
                 </Td>
                 <Td>
-                  {workflow.manually} ({orderStatsPct(
-                    workflow.manually,
-                    totalOrderStats
-                  )}%)
+                  {workflow.manually} (
+                  {orderStatsPct(workflow.manually, totalOrderStats)}
+                  %)
                   <ProgressBar
                     intent={orderStatsPctColor(
                       orderStatsPct(workflow.manually, totalOrderStats)

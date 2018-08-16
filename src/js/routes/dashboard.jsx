@@ -12,22 +12,12 @@ const DashboardRoutes = (): React.Element<any> => (
   <Route path="/system" component={System}>
     <IndexRedirect to="dashboard" />
     <Route path="dashboard" component={System.Dashboard} />
-    <Route path="alerts" component={System.Alerts}>
-      <IndexRedirect to="ongoing" />
-      <Route path=":type" component={System.Alerts.Table}>
-        <Route path=":id" component={System.Alerts.Pane} />
-      </Route>
-    </Route>
+    <Route path="alerts" component={System.Alerts} />
     <Route path="options" component={System.Options} />
     <Route path="remote" component={System.Connections} />
     <Route path="props" component={System.Properties} />
     <Route path="slas" component={System.Slas} />
-    <Route path="sla/:id" component={Sla}>
-      <IndexRedirect to="events" />
-      <Route path="events" component={SlaEvents} />
-      <Route path="sources" component={SlaSources} />
-      <Route path="perf" component={SlaPerf} />
-    </Route>
+    <Route path="sla/:id" component={Sla} />
     <Route path="values" component={System.Valuemaps} />
     <Route path="sqlcache" component={System.SqlCache} />
     <Route path="http" component={System.HttpServices} />

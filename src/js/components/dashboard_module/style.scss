@@ -112,7 +112,7 @@
   }
 
   .overview-module {
-    background-color: #40739e;
+    background-color: #aaaaaa;
 
     &.warning {
       background-color: lighten(#d99e0b, 5);
@@ -179,7 +179,7 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     color: #fff;
-    background-color: #40739e;
+    background-color: #aaaaaa;
 
     &.warning {
       background-color: #d99e0b;
@@ -199,7 +199,7 @@
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     height: 50px;
-    background-color: lighten(#40739e, 5);
+    background-color: lighten(#aaaaaa, 10);
 
     &.warning {
       background-color: lighten(#d99e0b, 5);
@@ -231,7 +231,7 @@
       float: left;
 
       &:first-child {
-        border-right: 1px solid #40739e;
+        border-right: 1px solid #aaaaaa;
       }
 
       .top {
@@ -260,7 +260,7 @@
   height: 50px;
   float: left;
   border-radius: 4px;
-  background-color: #40739e;
+  background-color: #aaaaaa;
 
   .top {
     height: 30px;
@@ -302,21 +302,21 @@
     border-top-right-radius: 4px;
     text-align: center;
     color: #fff;
-    background-color: #8e44ad;
+    background-color: #aaaaaa;
   }
 
   .dashboard-data-top {
     height: 62px;
     width: 100%;
-    background-color: #9b59b6;
-    border-bottom: 1px solid darken(#9b59b6, 5);
+    background-color: lighten(#aaaaaa, 10);
+    border-bottom: 1px solid darken(#aaaaaa, 5);
   }
 
   .dashboard-data-bottom {
     height: 62px;
     width: 100%;
-    background-color: #cccccc;
-    border-top: 1px solid darken(#cccccc, 4);
+    background-color: $qore-green;
+    border-top: 1px solid darken($qore-green, 4);
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
