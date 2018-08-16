@@ -106,27 +106,32 @@
   width: 47.5%;
   height: 100px;
   float: left;
+  color: #333;
 
   &:first-child {
     margin-right: 5%;
   }
 
   .overview-module {
-    background-color: #aaaaaa;
+    background-color: #dddddd;
 
     &.warning {
+      color: #fff;
       background-color: lighten(#d99e0b, 5);
     }
 
     &.none {
+      color: #333;
       background-color: #cccccc;
     }
 
     &.danger {
+      color: #fff;
       background-color: #d13913;
     }
 
     &.success {
+      color: #fff;
       background-color: $qore-green;
     }
   }
@@ -149,7 +154,6 @@
       height: 30px;
       line-height: 30px;
       font-size: 20px;
-      color: #fff;
       text-align: center;
     }
 
@@ -159,7 +163,6 @@
       font-size: 11px;
       text-align: center;
       text-transform: uppercase;
-      color: #fff;
       font-family: 'Nunito';
     }
   }
@@ -178,18 +181,21 @@
     line-height: 26px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    color: #fff;
-    background-color: #aaaaaa;
+    color: #333;
+    background-color: #dddddd;
 
     &.warning {
+      color: #fff;
       background-color: #d99e0b;
     }
 
     &.danger {
+      color: #fff;
       background-color: #d13913;
     }
 
     &.success {
+      color: #fff;
       background-color: $qore-green;
     }
   }
@@ -199,9 +205,11 @@
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     height: 50px;
-    background-color: lighten(#aaaaaa, 10);
+    color: #333;
+    background-color: lighten(#dddddd, 5);
 
     &.warning {
+      color: #fff;
       background-color: lighten(#d99e0b, 5);
 
       .module:first-child {
@@ -210,6 +218,7 @@
     }
 
     &.danger {
+      color: #fff;
       background-color: lighten(#d13913, 5);
 
       .module:first-child {
@@ -218,6 +227,7 @@
     }
 
     &.success {
+      color: #fff;
       background-color: lighten($qore-green, 5);
 
       .module:first-child {
@@ -231,14 +241,13 @@
       float: left;
 
       &:first-child {
-        border-right: 1px solid #aaaaaa;
+        border-right: 1px solid #dddddd;
       }
 
       .top {
         height: 30px;
         line-height: 30px;
         font-size: 20px;
-        color: #fff;
         text-align: center;
       }
 
@@ -248,7 +257,6 @@
         font-size: 11px;
         text-align: center;
         text-transform: uppercase;
-        color: #fff;
         font-family: 'Nunito';
       }
     }
@@ -260,13 +268,13 @@
   height: 50px;
   float: left;
   border-radius: 4px;
-  background-color: #aaaaaa;
+  color: #333;
+  background-color: #dddddd;
 
   .top {
     height: 30px;
     line-height: 30px;
     font-size: 20px;
-    color: #fff;
     text-align: center;
   }
 
@@ -276,7 +284,6 @@
     font-size: 11px;
     text-align: center;
     text-transform: uppercase;
-    color: #fff;
     font-family: 'Nunito';
   }
 
@@ -301,15 +308,16 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     text-align: center;
-    color: #fff;
-    background-color: #aaaaaa;
+    color: #333;
+    background-color: #dddddd;
   }
 
   .dashboard-data-top {
     height: 62px;
     width: 100%;
-    background-color: lighten(#aaaaaa, 10);
-    border-bottom: 1px solid darken(#aaaaaa, 5);
+    color: #333;
+    background-color: lighten(#dddddd, 5);
+    border-bottom: 1px solid darken(#dddddd, 5);
   }
 
   .dashboard-data-bottom {
@@ -319,6 +327,7 @@
     border-top: 1px solid darken($qore-green, 4);
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+    color: #fff;
 
     &.has-alerts {
       border-top: 1px solid darken(#d13913, 4);
@@ -331,14 +340,12 @@
     .db-data-content {
       line-height: 40px;
       font-size: 25px;
-      color: #fff;
       text-align: center;
     }
 
     .db-data-label {
       line-height: 22px;
       font-size: 11px;
-      color: #fff;
       text-align: center;
       text-transform: uppercase;
       font-family: 'Nunito';

@@ -251,7 +251,9 @@ export default class Dashboard extends Component {
                           height={150}
                           isNotTime
                           type="doughnut"
-                          empty={stats.sla.length === 0}
+                          empty={stats.sla.every(
+                            (sla: Object) => sla.pct === 0
+                          )}
                           legendHandlers={[
                             () => {
                               this.props.openModal(
@@ -295,7 +297,7 @@ export default class Dashboard extends Component {
               </PaneItem>
             </DashboardModule>
           )}
-          <DashboardModule titleStyle="green">
+          <DashboardModule>
             <PaneItem title="Cluster">
               <div className="module-wrapper">
                 <div className="dashboard-module-small">
@@ -507,7 +509,9 @@ export default class Dashboard extends Component {
                 </div>
                 <div
                   className={`module overview-module ${
-                    system['alert-summary'].transient !== 0 ? 'danger' : 'none'
+                    system['alert-summary'].transient !== 0
+                      ? 'danger'
+                      : 'success'
                   }`}
                 >
                   <div>{system['alert-summary'].transient}</div>
