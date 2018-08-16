@@ -183,7 +183,7 @@ export default class Dashboard extends Component {
                 {system.order_stats.map(
                   stats =>
                     stats.label.replace(/_/g, ' ') === this.state.chartTab && (
-                      <div>
+                      <div key={stats.label}>
                         <ChartComponent
                           title="# of stats"
                           onClick={() => {
@@ -320,7 +320,7 @@ export default class Dashboard extends Component {
                 ).length;
 
                 return (
-                  <div className="dashboard-module-wide">
+                  <div className="dashboard-module-wide" key={node}>
                     <div className="dashboard-data-title">
                       {system.processes[processName].node}
                     </div>
@@ -346,7 +346,11 @@ export default class Dashboard extends Component {
                 <Dropdown>
                   <Control small>{this.state.nodeTab}</Control>
                   {map(system.cluster_info, node => (
-                    <Item title={node} action={this.handleNodeTabChange} />
+                    <Item
+                      key={node}
+                      title={node}
+                      action={this.handleNodeTabChange}
+                    />
                   ))}
                 </Dropdown>
               }
@@ -446,7 +450,7 @@ export default class Dashboard extends Component {
             <PaneItem title="Remote instances">
               {health.data.remote &&
                 health.data.remote.map((remote: Object) => (
-                  <div className="dashboard-module-wide">
+                  <div className="dashboard-module-wide" key={remote.name}>
                     <div
                       className={`dashboard-data-title ${statusHealth(
                         remote.health

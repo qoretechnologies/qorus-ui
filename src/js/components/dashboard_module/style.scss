@@ -218,7 +218,7 @@
     }
 
     &.success {
-      background-color: $qore-green;
+      background-color: lighten($qore-green, 5);
 
       .module:first-child {
         border-right: 1px solid darken($qore-green, 5);

@@ -21,30 +21,30 @@ type Props = {
 
 const menu = {
   System: [
-    { name: 'system.dashboard', icon: 'timeline-bar-chart', link: '/' },
-    { name: 'system.alerts', icon: 'warning-sign', link: '/system/alerts' },
-    { name: 'system.cluster', icon: 'heat-grid', link: '/system/cluster' },
+    { name: 'Dashboard', icon: 'timeline-bar-chart', link: '/' },
+    { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
+    { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
     {
-      name: 'system.orderStats',
+      name: 'Order Stats',
       icon: 'vertical-bar-chart-asc',
       link: '/system/orderStats',
     },
-    { name: 'system.options', icon: 'cog', link: '/system/options' },
-    { name: 'system.connections', icon: 'left-join', link: '/system/remote' },
-    { name: 'system.properties', icon: 'properties', link: '/system/props' },
-    { name: 'system.slas', icon: 'time', link: '/system/slas' },
-    { name: 'system.releases', icon: 'git-push', link: '/system/releases' },
+    { name: 'Options', icon: 'cog', link: '/system/options' },
+    { name: 'Connections', icon: 'left-join', link: '/system/remote' },
+    { name: 'Properties', icon: 'properties', link: '/system/props' },
+    { name: 'SLAs', icon: 'time', link: '/system/slas' },
+    { name: 'Releases', icon: 'git-push', link: '/system/releases' },
     {
-      name: 'system.more',
+      name: 'More',
       icon: 'more',
       submenu: [
         { name: 'Info', icon: 'info-sign', link: '/system/info' },
         { name: 'Logs', icon: 'comparison', link: '/system/logs' },
         { name: 'RBAC', icon: 'people', link: '/system/rbac' },
         { name: 'Errors', icon: 'error', link: '/system/errors' },
-        { name: 'system.cache', icon: 'database', link: '/system/sqlcache' },
-        { name: 'system.httpserv', icon: 'home', link: '/system/http' },
-        { name: 'system.valuemaps', icon: 'map', link: '/system/values' },
+        { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
+        { name: 'HTTP Services', icon: 'home', link: '/system/http' },
+        { name: 'Valuemaps', icon: 'map', link: '/system/values' },
       ],
     },
   ],
@@ -74,11 +74,16 @@ let MenuElement: Function = ({
   <MenuItem
     iconName={iconName}
     onClick={handleClick}
-    text={!menuCollapsed && formatMessage({ id: name })}
+    text={!menuCollapsed && name}
   >
     {submenu &&
       submenu.map(item => (
-        <MenuElement iconName={item.icon} link={item.link} name={item.name} />
+        <MenuElement
+          key={item.name}
+          iconName={item.icon}
+          link={item.link}
+          name={item.name}
+        />
       ))}
   </MenuItem>
 );
@@ -110,7 +115,7 @@ const MenuWrapper: Function = ({
             menuCollapsed ? (
               <Tooltip
                 key={name}
-                content={formatMessage({ id: name })}
+                content={name}
                 position={submenu ? Position.BOTTOM : Position.RIGHT}
               >
                 <MenuElement
