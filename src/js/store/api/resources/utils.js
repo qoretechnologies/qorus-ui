@@ -46,3 +46,9 @@ export const findMissingBand: Function = (
 
   return missing;
 };
+
+export const addHasAlerts = curry(item => {
+  const { alerts } = item;
+
+  return { ...item, ...{ has_alerts: alerts.length !== 0 } };
+});

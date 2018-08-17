@@ -7,7 +7,7 @@ const addProcess: Function = createAction(
 );
 
 const removeProcess: Function = createAction(
-  'SYSTEM_ADDPROCESS',
+  'SYSTEM_REMOVEPROCESS',
   (events: Array<Object>): Object => ({ events })
 );
 

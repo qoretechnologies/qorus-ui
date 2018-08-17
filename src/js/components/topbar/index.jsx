@@ -21,8 +21,8 @@ import map from 'lodash/map';
 import de from '../../../img/country_flags/de.png';
 import gb from '../../../img/country_flags/gb.png';
 import cz from '../../../img/country_flags/cz.png';
+import en from '../../../img/country_flags/us.png';
 
-import Modal from '../../components/modal';
 import withModal from '../../hocomponents/modal';
 import logo from '../../../img/qore_logo.png';
 import actions from '../../store/api/actions';
@@ -32,9 +32,10 @@ import settings from '../../settings';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 
 const flags: Object = {
-  de,
-  gb,
-  cz,
+  'cs-CZ': cz,
+  'en-GB': gb,
+  'en-US': en,
+  'de-DE': de,
 };
 
 export type Props = {
@@ -146,7 +147,7 @@ export default class Topbar extends Component {
                       <MenuItem
                         key={lang}
                         text={lang}
-                        label={<img src={flags[lang.toLowerCase()]} />}
+                        label={<img src={flags[loc]} />}
                         onClick={() => this.props.storeLocale(loc)}
                       />
                     )
@@ -160,7 +161,8 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button>
-                <img src={flags[locale.toLowerCase()]} /> {locale}
+                <img src={flags[this.props.locale]} />{' '}
+                {countryCode.toUpperCase()}
               </Button>
             </ButtonGroup>
           </Popover>
@@ -194,25 +196,27 @@ export default class Topbar extends Component {
               <Button iconName="build" intent={Intent.WARNING} />
             </ButtonGroup>
           </Popover>
-          <Popover
-            position={Position.BOTTOM_RIGHT}
-            content={
-              <Menu>
-                <MenuDivider title="Remotes" />
-                {data.remote.map((remote: Object) => (
-                  <MenuItem
-                    key={remote.name}
-                    text={`${remote.name} - ${remote.health}`}
-                    intent={HEALTH_KEYS[remote.health]}
-                  />
-                ))}
-              </Menu>
-            }
-          >
-            <ButtonGroup minimal>
-              <Button iconName="share" />
-            </ButtonGroup>
-          </Popover>
+          {data.remote.length !== 0 && (
+            <Popover
+              position={Position.BOTTOM_RIGHT}
+              content={
+                <Menu>
+                  <MenuDivider title="Remotes" />
+                  {data.remote.map((remote: Object) => (
+                    <MenuItem
+                      key={remote.name}
+                      text={`${remote.name} - ${remote.health}`}
+                      intent={HEALTH_KEYS[remote.health]}
+                    />
+                  ))}
+                </Menu>
+              }
+            >
+              <ButtonGroup minimal>
+                <Button iconName="share" />
+              </ButtonGroup>
+            </Popover>
+          )}
           <ButtonGroup minimal>
             <Button
               iconName="notifications"

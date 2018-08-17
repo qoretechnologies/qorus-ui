@@ -295,7 +295,7 @@ export default class Root extends Component {
         ? currentUser.data.storage.locale
         : navigator.locale
           ? navigator.locale
-          : 'en-GB';
+          : 'en-US';
 
     const isLightTheme =
       currentUser.sync && currentUser.data.storage.theme === 'light';

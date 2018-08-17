@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Masonry from 'react-masonry-layout';
 import map from 'lodash/map';
-import takeRight from 'lodash/takeRight';
-import moment from 'moment';
+import { browserHistory } from 'react-router';
 
 import Loader from '../../../components/loader';
 import actions from 'store/api/actions';
@@ -78,6 +77,10 @@ export default class Dashboard extends Component {
     this.setState({
       nodeTab,
     });
+  };
+
+  handleModuleClick: Function = (url: string): void => {
+    browserHistory.push(url);
   };
 
   render() {
@@ -164,7 +167,7 @@ export default class Dashboard extends Component {
           {system.order_stats && (
             <DashboardModule>
               <PaneItem
-                title="Global order stats"
+                title="Global Order Stats"
                 label={
                   <Dropdown>
                     <Control small>{this.state.chartTab}</Control>
@@ -238,7 +241,7 @@ export default class Dashboard extends Component {
                                     : 0
                               ),
                               backgroundColor: [
-                                '#FFB366',
+                                '#81358a',
                                 '#FF7373',
                                 '#7fba27',
                               ],
@@ -254,27 +257,16 @@ export default class Dashboard extends Component {
                           empty={stats.sla.every(
                             (sla: Object) => sla.pct === 0
                           )}
-                          legendHandlers={[
-                            () => {
-                              this.props.openModal(
-                                <SLAModal
-                                  onClose={this.props.closeModal}
-                                  in_sla
-                                  text="In SLA"
-                                  band={this.state.chartTab}
-                                />
-                              );
-                            },
-                            () => {
-                              this.props.openModal(
-                                <SLAModal
-                                  onClose={this.props.closeModal}
-                                  text="Out of SLA"
-                                  band={this.state.chartTab}
-                                />
-                              );
-                            },
-                          ]}
+                          onClick={() => {
+                            this.props.openModal(
+                              <SLAModal
+                                onClose={this.props.closeModal}
+                                in_sla
+                                text="In SLA"
+                                band={this.state.chartTab}
+                              />
+                            );
+                          }}
                           labels={[
                             `In SLA (${Math.round(getStatsPct(true, stats))}%)`,
                             `Out of SLA (${Math.round(
@@ -331,7 +323,11 @@ export default class Dashboard extends Component {
                 ).length;
 
                 return (
-                  <div className="dashboard-module-wide" key={node}>
+                  <div
+                    className="dashboard-module-wide has-link"
+                    key={node}
+                    onClick={() => this.handleModuleClick('/system/cluster')}
+                  >
                     <div className="dashboard-data-title">
                       {system.processes[processName].node}
                     </div>
@@ -352,7 +348,7 @@ export default class Dashboard extends Component {
           </DashboardModule>
           <DashboardModule>
             <PaneItem
-              title="Node memory progression"
+              title="Node Memory Progression"
               label={
                 <Dropdown>
                   <Control small>{this.state.nodeTab}</Control>
@@ -386,7 +382,7 @@ export default class Dashboard extends Component {
                 }
               />
             </PaneItem>
-            <PaneItem title="Node processes progression">
+            <PaneItem title="Node Processes History">
               <ChartComponent
                 title={`${this.state.nodeTab} (${
                   currentNodeData.process_count
@@ -407,9 +403,18 @@ export default class Dashboard extends Component {
           </DashboardModule>
           <DashboardModule>
             <PaneItem title="Interfaces">
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> Workflows </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() => this.handleModuleClick('/workflows')}
+                >
+                  {' '}
+                  Workflows{' '}
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() => this.handleModuleClick('/workflows')}
+                >
                   <div className="db-data-content">{system.workflow_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
@@ -417,6 +422,9 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.workflow_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick('/workflows?search=has_alerts:true')
+                  }
                 >
                   <div className="db-data-content">
                     {system.workflow_alerts}
@@ -424,9 +432,18 @@ export default class Dashboard extends Component {
                   <div className="db-data-label"> with alerts </div>
                 </div>
               </div>
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> Services </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() => this.handleModuleClick('/services')}
+                >
+                  {' '}
+                  Services{' '}
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() => this.handleModuleClick('/services')}
+                >
                   <div className="db-data-content">{system.service_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
@@ -434,14 +451,26 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.service_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick('/services?search=has_alerts:true')
+                  }
                 >
                   <div className="db-data-content">{system.service_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
               </div>
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> Jobs </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() => this.handleModuleClick('/jobs')}
+                >
+                  {' '}
+                  Jobs{' '}
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() => this.handleModuleClick('/jobs')}
+                >
                   <div className="db-data-content">{system.job_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
@@ -449,6 +478,9 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.job_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick('/jobs?search=has_alerts:true')
+                  }
                 >
                   <div className="db-data-content">{system.job_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
@@ -456,11 +488,15 @@ export default class Dashboard extends Component {
               </div>
             </PaneItem>
           </DashboardModule>
-          <DashboardModule>
-            <PaneItem title="Remote instances">
-              {health.data.remote &&
-                health.data.remote.map((remote: Object) => (
-                  <div className="dashboard-module-wide" key={remote.name}>
+          {health.data.remote && (
+            <DashboardModule>
+              <PaneItem title="Remote Instances">
+                {health.data.remote.map((remote: Object) => (
+                  <div
+                    className="dashboard-module-wide has-link"
+                    key={remote.name}
+                    onClick={() => this.handleModuleClick(remote.url)}
+                  >
                     <div
                       className={`dashboard-data-title ${statusHealth(
                         remote.health
@@ -480,10 +516,11 @@ export default class Dashboard extends Component {
                     </div>
                   </div>
                 ))}
-            </PaneItem>
-          </DashboardModule>
+              </PaneItem>
+            </DashboardModule>
+          )}
           <DashboardModule>
-            <PaneItem title="System overview">
+            <PaneItem title="System Overview">
               <div className="dashboard-module-overview">
                 <div className="module overview-module">
                   <div>{health.data['instance-key']}</div>
@@ -502,7 +539,8 @@ export default class Dashboard extends Component {
                 <div
                   className={`module overview-module ${
                     system['alert-summary'].ongoing !== 0 ? 'danger' : 'none'
-                  }`}
+                  } has-link`}
+                  onClick={() => this.handleModuleClick('/system/alerts')}
                 >
                   <div>{system['alert-summary'].ongoing}</div>
                   <div>ongoing alerts</div>
@@ -512,7 +550,10 @@ export default class Dashboard extends Component {
                     system['alert-summary'].transient !== 0
                       ? 'danger'
                       : 'success'
-                  }`}
+                  } has-link`}
+                  onClick={() =>
+                    this.handleModuleClick('/system/alerts?tab=transient')
+                  }
                 >
                   <div>{system['alert-summary'].transient}</div>
                   <div>transient alerts</div>
@@ -522,9 +563,21 @@ export default class Dashboard extends Component {
           </DashboardModule>
           <DashboardModule>
             <PaneItem title="Connections">
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> Qorus </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() =>
+                    this.handleModuleClick('/system/remote?tab=qorus')
+                  }
+                >
+                  Qorus
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() =>
+                    this.handleModuleClick('/system/remote?tab=qorus')
+                  }
+                >
                   <div className="db-data-content">{system.remote_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
@@ -532,14 +585,27 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.remote_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick(
+                      '/system/remote?tab=qorus&search=has_alerts:true'
+                    )
+                  }
                 >
                   <div className="db-data-content">{system.remote_alerts}</div>
                   <div className="db-data-label"> with alerts </div>
                 </div>
               </div>
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> Datasource </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() => this.handleModuleClick('/system/remote')}
+                >
+                  Datasource
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() => this.handleModuleClick('/system/remote')}
+                >
                   <div className="db-data-content">
                     {system.datasource_total}
                   </div>
@@ -549,6 +615,11 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.datasource_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick(
+                      '/system/remote?search=has_alerts:true'
+                    )
+                  }
                 >
                   <div className="db-data-content">
                     {system.datasource_alerts}
@@ -556,9 +627,21 @@ export default class Dashboard extends Component {
                   <div className="db-data-label"> with alerts </div>
                 </div>
               </div>
-              <div className="dashboard-data-module">
-                <div className="dashboard-data-title"> User </div>
-                <div className="dashboard-data-top">
+              <div className="dashboard-data-module has-link">
+                <div
+                  className="dashboard-data-title"
+                  onClick={() =>
+                    this.handleModuleClick('/system/remote?tab=user')
+                  }
+                >
+                  User
+                </div>
+                <div
+                  className="dashboard-data-top"
+                  onClick={() =>
+                    this.handleModuleClick('/system/remote?tab=user')
+                  }
+                >
                   <div className="db-data-content">{system.user_total}</div>
                   <div className="db-data-label"> total </div>
                 </div>
@@ -566,6 +649,11 @@ export default class Dashboard extends Component {
                   className={`dashboard-data-bottom ${
                     system.user_alerts ? 'has-alerts' : ''
                   }`}
+                  onClick={() =>
+                    this.handleModuleClick(
+                      '/system/remote?tab=user&search=has_alerts:true'
+                    )
+                  }
                 >
                   <div className="db-data-content">{system.user_alerts}</div>
                   <div className="db-data-label"> with alerts </div>

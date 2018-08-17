@@ -7,6 +7,7 @@ import {
   checkAlerts,
   normalizeWorkflowLib,
   findMissingBand,
+  addHasAlerts,
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
@@ -137,7 +138,7 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('serviceid'),
-      checkAlerts,
+      addHasAlerts,
       extendDefaults(servicesDefaults)
     ),
   },
@@ -147,8 +148,7 @@ export default [
     transform: _.flowRight(
       normalizeName,
       normalizeId('jobid'),
-      checkAlerts
-      // extendDefaults(servicesDefaults)
+      addHasAlerts
     ),
   },
   {
@@ -179,7 +179,10 @@ export default [
   {
     name: 'remotes',
     url: `${settings.REST_BASE_URL}/remote`,
-    transform: _.flowRight(normalizeId('name')),
+    transform: _.flowRight(
+      normalizeId('name'),
+      addHasAlerts
+    ),
   },
   {
     name: 'userhttp',

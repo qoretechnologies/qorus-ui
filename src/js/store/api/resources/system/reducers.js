@@ -174,6 +174,8 @@ const updateNodeInfo = {
         timestamp: event.timestamp,
       });
 
+      data.cluster_info[event.name].process_count = event.processes;
+
       if (data.cluster_info[event.name].process_history.length > 60) {
         data.cluster_info[event.name].process_history.shift();
       }

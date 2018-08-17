@@ -10,8 +10,25 @@
 const findBy = (keys, query, collection) => {
   if (query === undefined || query === '') return collection;
 
-  const keysArray = typeof keys === 'string' ? [keys] : keys;
-  const q = query.toString().split(' ').join('|');
+  let keysArray;
+  let q;
+
+  // Check if colon is present, means to search by a certain key!
+  if (query.indexOf(':') !== -1) {
+    const qSplit = query.split(':');
+    keysArray = [qSplit[0]];
+    q = qSplit[1]
+      .toString()
+      .split(' ')
+      .join('|');
+  } else {
+    keysArray = typeof keys === 'string' ? [keys] : keys;
+    q = query
+      .toString()
+      .split(' ')
+      .join('|');
+  }
+
   const regex = new RegExp(q, 'i');
 
   return collection.filter(c => {
@@ -25,6 +42,4 @@ const findBy = (keys, query, collection) => {
   });
 };
 
-export {
-  findBy,
-};
+export { findBy };

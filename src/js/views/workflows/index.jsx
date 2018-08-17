@@ -39,7 +39,6 @@ import { formatCount } from '../../helpers/orders';
 import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
-import { Controls, Control } from '../../components/controls';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
