@@ -196,27 +196,28 @@ export default class Topbar extends Component {
               <Button iconName="build" intent={Intent.WARNING} />
             </ButtonGroup>
           </Popover>
-          {data.remote.length !== 0 && (
-            <Popover
-              position={Position.BOTTOM_RIGHT}
-              content={
-                <Menu>
-                  <MenuDivider title="Remotes" />
-                  {data.remote.map((remote: Object) => (
-                    <MenuItem
-                      key={remote.name}
-                      text={`${remote.name} - ${remote.health}`}
-                      intent={HEALTH_KEYS[remote.health]}
-                    />
-                  ))}
-                </Menu>
-              }
-            >
-              <ButtonGroup minimal>
-                <Button iconName="share" />
-              </ButtonGroup>
-            </Popover>
-          )}
+          {data.remote &&
+            data.remote.length !== 0 && (
+              <Popover
+                position={Position.BOTTOM_RIGHT}
+                content={
+                  <Menu>
+                    <MenuDivider title="Remotes" />
+                    {data.remote.map((remote: Object) => (
+                      <MenuItem
+                        key={remote.name}
+                        text={`${remote.name} - ${remote.health}`}
+                        intent={HEALTH_KEYS[remote.health]}
+                      />
+                    ))}
+                  </Menu>
+                }
+              >
+                <ButtonGroup minimal>
+                  <Button iconName="share" />
+                </ButtonGroup>
+              </Popover>
+            )}
           <ButtonGroup minimal>
             <Button
               iconName="notifications"
