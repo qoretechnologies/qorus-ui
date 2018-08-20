@@ -128,7 +128,8 @@ const getProcessObjectLink: Function = (process: Object) => {
 const calculateMemory: Function = (
   memory: number,
   unit: string,
-  returnUnit: boolean = true
+  returnUnit: boolean = true,
+  returnNumber: boolean = true
 ): string => {
   let mem = memory;
 
@@ -138,7 +139,7 @@ const calculateMemory: Function = (
     return calculateMemory(mem, unit ? 'GiB' : 'MiB', returnUnit);
   }
 
-  return `${round(mem, 2)} ${returnUnit ? unit : ''}`;
+  return `${returnNumber ? round(mem, 2) : ''} ${returnUnit ? unit : ''}`;
 };
 
 export {

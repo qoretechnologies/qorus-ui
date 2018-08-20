@@ -21,7 +21,7 @@ import Dropdown, { Control, Item } from '../../../components/dropdown';
 import withModal from '../../../hocomponents/modal';
 import StatsModal from './statsModal';
 import SLAModal from './slaModal';
-import GlobalModal from './globalModal';
+import GlobalModal from './modals/global';
 import { DISPOSITIONS } from '../../../constants/dashboard';
 
 const viewSelector = createSelector(
