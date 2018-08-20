@@ -23,6 +23,7 @@ import StatsModal from './statsModal';
 import SLAModal from './slaModal';
 import GlobalModal from './modals/global';
 import { DISPOSITIONS } from '../../../constants/dashboard';
+import DispositionChart from '../../../components/disposition_chart';
 
 const viewSelector = createSelector(
   [
@@ -189,101 +190,42 @@ export default class Dashboard extends Component {
                 {system.order_stats.map(
                   stats =>
                     stats.label.replace(/_/g, ' ') === this.state.chartTab && (
-                      <div key={stats.label}>
-                        <ChartComponent
-                          title="Workflow Disposition"
-                          onClick={() => {
+                      <DispositionChart
+                        key={stats.label}
+                        stats={stats}
+                        onDispositionChartClick={() => {
+                          this.props.openModal(
+                            <GlobalModal
+                              onClose={this.props.closeModal}
+                              text="Global chart data"
+                              band={this.state.chartTab}
+                            />
+                          );
+                        }}
+                        dispositionLegendHandlers={map(
+                          DISPOSITIONS,
+                          (label, disp) => () => {
                             this.props.openModal(
-                              <GlobalModal
+                              <StatsModal
                                 onClose={this.props.closeModal}
-                                text="Global chart data"
+                                disposition={disp}
+                                text={label}
                                 band={this.state.chartTab}
                               />
                             );
-                          }}
-                          width={150}
-                          height={150}
-                          isNotTime
-                          type="doughnut"
-                          empty={stats.l.every(stat => stat.count === 0)}
-                          legendHandlers={map(
-                            DISPOSITIONS,
-                            (label, disp) => () => {
-                              this.props.openModal(
-                                <StatsModal
-                                  onClose={this.props.closeModal}
-                                  disposition={disp}
-                                  text={label}
-                                  band={this.state.chartTab}
-                                />
-                              );
-                            }
-                          )}
-                          labels={map(
-                            DISPOSITIONS,
-                            (label, disp) =>
-                              `${label} (${Math.round(
-                                stats.l.find(dt => dt.disposition === disp)
-                                  ? stats.l.find(dt => dt.disposition === disp)
-                                      .pct
-                                  : 0
-                              )}%)`
-                          )}
-                          datasets={[
-                            {
-                              data: map(
-                                DISPOSITIONS,
-                                (label, disp) =>
-                                  stats.l.find(dt => dt.disposition === disp)
-                                    ? stats.l.find(
-                                        dt => dt.disposition === disp
-                                      ).count
-                                    : 0
-                              ),
-                              backgroundColor: [
-                                '#81358a',
-                                '#FF7373',
-                                '#7fba27',
-                              ],
-                            },
-                          ]}
-                        />
-                        <ChartComponent
-                          title="SLA Stats"
-                          width={150}
-                          height={150}
-                          isNotTime
-                          type="doughnut"
-                          empty={stats.sla.every(
-                            (sla: Object) => sla.pct === 0
-                          )}
-                          onClick={() => {
-                            this.props.openModal(
-                              <SLAModal
-                                onClose={this.props.closeModal}
-                                in_sla
-                                text="In SLA"
-                                band={this.state.chartTab}
-                              />
-                            );
-                          }}
-                          labels={[
-                            `In SLA (${Math.round(getStatsPct(true, stats))}%)`,
-                            `Out of SLA (${Math.round(
-                              getStatsPct(false, stats)
-                            )}%)`,
-                          ]}
-                          datasets={[
-                            {
-                              data: [
-                                Math.round(getStatsCount(true, stats)),
-                                Math.round(getStatsCount(false, stats)),
-                              ],
-                              backgroundColor: ['#7fba27', '#FF7373'],
-                            },
-                          ]}
-                        />
-                      </div>
+                          }
+                        )}
+                        onSLAChartClick={() => {
+                          this.props.openModal(
+                            <SLAModal
+                              onClose={this.props.closeModal}
+                              in_sla
+                              text="In SLA"
+                              band={this.state.chartTab}
+                            />
+                          );
+                        }}
+                      />
                     )
                 )}
               </PaneItem>

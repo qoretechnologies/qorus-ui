@@ -11,6 +11,7 @@ import {
   orderStatsPctColor,
   orderStatsPctColorDisp,
 } from '../../../helpers/orders';
+import DispositionChart from '../../../components/disposition_chart';
 
 type Props = {
   orderStats: Array<Object>,
@@ -50,6 +51,7 @@ const StatsTab: Function = ({ orderStats }: Props): any =>
               )
             }
           >
+            <DispositionChart stats={{ ...{ label, l, sla } }} />
             <Table condensed striped bordered>
               <Thead>
                 <Tr>
