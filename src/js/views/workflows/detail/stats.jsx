@@ -7,7 +7,10 @@ import replace from 'lodash/replace';
 import { Td } from '../../../components/table';
 import PaneItem from '../../../components/pane_item';
 import { ORDER_STATS_LEGEND } from '../../../constants/orders';
-import { orderStatsPctColor } from '../../../helpers/orders';
+import {
+  orderStatsPctColor,
+  orderStatsPctColorDisp,
+} from '../../../helpers/orders';
 
 type Props = {
   orderStats: Array<Object>,
@@ -65,9 +68,11 @@ const StatsTab: Function = ({ orderStats }: Props): any =>
                     <Td>
                       {Math.round(data.pct)}%{' '}
                       <ProgressBar
-                        intent={orderStatsPctColor(data.pct)}
+                        intent={orderStatsPctColorDisp(data.disposition)}
                         value={Math.round(data.pct) / 100}
-                        className="pt-no-animation"
+                        className={`pt-no-animation ${
+                          data.disposition === 'A' ? 'progress-bar-auto' : ''
+                        }`}
                       />
                     </Td>
                   </Tr>

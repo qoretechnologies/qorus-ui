@@ -18,7 +18,7 @@ import actions from '../../../store/api/actions';
 import sync from '../../../hocomponents/sync';
 import mapProps from '../../../../../node_modules/recompose/mapProps';
 import { ProgressBar } from '../../../../../node_modules/@blueprintjs/core';
-import { orderStatsPctColor } from '../../../helpers/orders';
+import { orderStatsPctColorDisp } from '../../../helpers/orders';
 import Box from '../../../components/box';
 import unsync from '../../../hocomponents/unsync';
 
@@ -36,7 +36,6 @@ const StatsModal: Function = ({
   band,
   workflows,
   disposition,
-  totalOrderStats,
 }: Props) => (
   <Modal width={700}>
     <Modal.Header title="statsmodal" onClose={onClose}>
@@ -76,9 +75,11 @@ const StatsModal: Function = ({
                   <Td className="big">
                     {Math.round(pct)}%{' '}
                     <ProgressBar
-                      intent={orderStatsPctColor(pct)}
+                      intent={orderStatsPctColorDisp(disposition)}
                       value={Math.round(pct) / 100}
-                      className="pt-no-animation"
+                      className={`pt-no-animation ${
+                        disposition === 'A' ? 'progress-bar-auto' : ''
+                      }`}
                     />
                   </Td>
                 </Tr>

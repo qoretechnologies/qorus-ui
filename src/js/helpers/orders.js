@@ -71,6 +71,16 @@ const orderStatsPctColor = (val: number): string => {
   return Intent.SUCCESS;
 };
 
+const orderStatsPctColorDisp = (disp: string): ?string => {
+  if (disp === 'M') {
+    return Intent.DANGER;
+  } else if (disp === 'C') {
+    return Intent.SUCCESS;
+  }
+
+  return null;
+};
+
 const orderStatsPct = (workflowCount: number, totalCount: number): number =>
   Math.round((workflowCount / totalCount) * 100);
 
@@ -81,5 +91,6 @@ export {
   canSkip,
   formatCount,
   orderStatsPctColor,
+  orderStatsPctColorDisp,
   orderStatsPct,
 };
