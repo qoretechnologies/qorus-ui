@@ -20,14 +20,23 @@ const pingRemote = {
 };
 
 const connectionChange = {
-  next(state: Object = initialState, { payload: { events } }): Object {
+  next(
+    state: Object = initialState,
+    {
+      payload: { events },
+    }
+  ): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        newData = updateItemWithName(dt.name, { up: dt.up, _updated: true }, newData);
+        newData = updateItemWithName(
+          dt.name,
+          { up: dt.up, _updated: true },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -41,7 +50,12 @@ const connectionChange = {
 };
 
 const updateDone = {
-  next(state, { payload: { name } }) {
+  next(
+    state,
+    {
+      payload: { name },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const connection = data.find(d => d.name === name);
@@ -61,21 +75,32 @@ const updateDone = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
 
       events.forEach(dt => {
-        const remote = newData.find((r) => r.id === dt.id && r.conntype === dt.type);
+        const remote = newData.find(
+          r => r.id === dt.id && r.conntype === dt.type
+        );
 
         if (remote) {
           const alerts = [...remote.alerts, dt];
-          newData = updateItemWithName(dt.id, {
-            alerts,
-            has_alerts: true,
-            _updated: true,
-          }, newData);
+          newData = updateItemWithName(
+            dt.id,
+            {
+              alerts,
+              has_alerts: true,
+              _updated: true,
+            },
+            newData
+          );
         }
       });
 
@@ -94,24 +119,35 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
 
       events.forEach(dt => {
-        const remote = newData.find((r) => r.id === dt.id && r.conntype === dt.type);
+        const remote = newData.find(
+          r => r.id === dt.id && r.conntype === dt.type
+        );
 
         if (remote) {
           const alerts = [...remote.alerts];
 
           remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
 
-          newData = updateItemWithName(dt.id, {
-            alerts,
-            has_alerts: !(alerts.length === 0),
-            _updated: true,
-          }, newData);
+          newData = updateItemWithName(
+            dt.id,
+            {
+              alerts,
+              has_alerts: !(alerts.length === 0),
+              _updated: true,
+            },
+            newData
+          );
         }
       });
 
@@ -132,7 +168,9 @@ const clearAlert = {
 const manageConnection = {
   next(
     state: Object = initialState,
-    { payload: { remoteType, data, name, error } }: Object
+    {
+      payload: { remoteType, data, name, error },
+    }: Object
   ): Object {
     let newData = [...state.data];
 
@@ -143,9 +181,10 @@ const manageConnection = {
 
       newData = updateItemWithName(name, hashData, newData);
     } else {
-      const findRemote = newData.find((remote: Object): boolean => (
-        remote.name === data.name && remote.conntype === CONN_MAP[remoteType]
-      ));
+      const findRemote = newData.find(
+        (remote: Object): boolean =>
+          remote.name === data.name && remote.conntype === CONN_MAP[remoteType]
+      );
 
       if (!findRemote) {
         const hashData = buildRemoteHash(remoteType, data);
@@ -164,14 +203,18 @@ const manageConnection = {
 const deleteConnection = {
   next(
     state: Object = initialState,
-    { payload: { remoteType, name, error } }: Object
+    {
+      payload: { remoteType, name, error },
+    }: Object
   ): Object {
     const data = [...state.data];
 
     if (!error) {
-      remove(data, (remote: Object): boolean => (
-        remote.name === name && remote.conntype === CONN_MAP[remoteType]
-      ));
+      remove(
+        data,
+        (remote: Object): boolean =>
+          remote.name === name && remote.conntype === CONN_MAP[remoteType]
+      );
     }
 
     return { ...state, ...{ data } };

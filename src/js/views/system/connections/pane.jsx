@@ -22,76 +22,10 @@ import Options from './options';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
 import PaneItem from '../../../components/pane_item';
+import { attrsSelector } from '../../../helpers/remotes';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
-
-const attrsSelector = (state, props) => {
-  const { remoteType } = props;
-  let attrs;
-  let editable = [];
-
-  switch (remoteType) {
-    case 'datasources': {
-      attrs = [
-        'conntype',
-        'locked',
-        'up',
-        'monitor',
-        'status',
-        'last_check',
-        'type',
-        'user',
-        'pass',
-        'db',
-        'charset',
-        'port',
-        'host',
-        'options',
-      ];
-
-      editable = [
-        'type',
-        'user',
-        'pass',
-        'db',
-        'charset',
-        'port',
-        'host',
-        'options',
-      ];
-
-      break;
-    }
-    case 'qorus': {
-      attrs = ['conntype', 'up', 'monitor', 'status'];
-
-      break;
-    }
-    default: {
-      attrs = [
-        'conntype',
-        'up',
-        'monitor',
-        'status',
-        'last_check',
-        'type',
-        'opts',
-        'desc',
-        'url',
-      ];
-
-      editable = ['desc', 'url', 'opts'];
-
-      break;
-    }
-  }
-
-  return {
-    attrs,
-    editable,
-  };
-};
 
 const viewSelector = createSelector(
   [remoteSelector, attrsSelector],

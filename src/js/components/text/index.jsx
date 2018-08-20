@@ -32,10 +32,7 @@ const Text: Function = ({
     return text;
   } else if (expanded) {
     return (
-      <div
-        className="text-component"
-        onClick={handleClick}
-      >
+      <div className="text-component" onClick={handleClick}>
         {text.toString()}
       </div>
     );
@@ -53,15 +50,24 @@ const Text: Function = ({
 };
 
 export default compose(
-  withState('expanded', 'setExpand', false),
+  withState('expanded', 'setExpand', true),
   withModal(),
-  mapProps(({ text, renderTree, ...rest }: Props): Props => ({
-    // eslint-disable-next-line
-    text: text && typeof text === 'object' ? (
-      renderTree ? <Tree data={text} /> : JSON.stringify(text)
-    ) : text,
-    ...rest,
-  })),
+  mapProps(
+    ({ text, renderTree, ...rest }: Props): Props => ({
+      // eslint-disable-next-line
+      text:
+        text && typeof text === 'object' ? (
+          renderTree ? (
+            <Tree data={text} />
+          ) : (
+            JSON.stringify(text)
+          )
+        ) : (
+          text
+        ),
+      ...rest,
+    })
+  ),
   withHandlers({
     handleClick: ({
       text,
@@ -75,10 +81,7 @@ export default compose(
       if (popup) {
         openModal(
           <Modal>
-            <Modal.Header
-              titleId="text-popup"
-              onClose={closeModal}
-            />
+            <Modal.Header titleId="text-popup" onClose={closeModal} />
             <Modal.Body>
               <div>{text}</div>
             </Modal.Body>
