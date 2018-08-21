@@ -126,4 +126,8 @@ export const sortDefaults = {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  orderSLAModal: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };

@@ -20,7 +20,7 @@ import {
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import withModal from '../../../hocomponents/modal';
 import StatsModal from './statsModal';
-import SLAModal from './slaModal';
+import SLAModal from './modals/sla';
 import GlobalModal from './modals/global';
 import { DISPOSITIONS } from '../../../constants/dashboard';
 import DispositionChart from '../../../components/disposition_chart';

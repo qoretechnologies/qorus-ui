@@ -352,3 +352,7 @@ pre {
 .pt-progress-bar.progress-bar-auto .pt-progress-meter {
   background-color: $qore-purple;
 }
+
+.pt-progress-bar.pt-intent-success .pt-progress-meter {
+  background-color: $qore-green;
+}
