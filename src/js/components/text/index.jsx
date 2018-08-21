@@ -50,7 +50,7 @@ const Text: Function = ({
 };
 
 export default compose(
-  withState('expanded', 'setExpand', true),
+  withState('expanded', 'setExpand', false),
   withModal(),
   mapProps(
     ({ text, renderTree, ...rest }: Props): Props => ({
