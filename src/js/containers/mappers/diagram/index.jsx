@@ -15,31 +15,37 @@ import Tooltip from './tooltip';
 import Connection from './connection';
 // import { formatFieldSource } from '../../../helpers/mapper';
 
-const getRelations = (fieldSource: Object, inputs: Object): Array<Object> => (
-  Object.entries(fieldSource).map(([key, value]: [string, any]): any => {
-    const str = value.replace(/ /g, '');
-    const regex = /^\("name":+"([-.\w]+)"/;
-    const matching = str.match(regex);
+const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
+  Object.entries(fieldSource)
+    .map(
+      ([key, value]: [string, any]): any => {
+        const str = value.replace(/ /g, '');
+        const regex = /^\("name":+"([-.\w]+)"/;
+        const matching = str.match(regex);
 
-    if (matching) {
-      const match = matching[1].indexOf('.') !== -1 ? matching[1].split('.') : [matching[1]];
+        if (matching) {
+          const match =
+            matching[1].indexOf('.') !== -1
+              ? matching[1].split('.')
+              : [matching[1]];
 
-      return { [key]: match[0] };
-    }
+          return { [key]: match[0] };
+        }
 
-    if (inputs[key]) {
-      const seq = /^\("sequence":+"(\w+)"/;
-      const con = /^\("constant":+"(\w+)"/;
-      const run = /^\("runtime":+"(\w+)"/;
+        if (inputs[key]) {
+          const seq = /^\("sequence":+"(\w+)"/;
+          const con = /^\("constant":+"(\w+)"/;
+          const run = /^\("runtime":+"(\w+)"/;
 
-      if (!str.match(seq) && !str.match(con) && !str.match(run)) {
-        return { [key]: key };
+          if (!str.match(seq) && !str.match(con) && !str.match(run)) {
+            return { [key]: key };
+          }
+        }
+
+        return null;
       }
-    }
-
-    return null;
-  }).filter(item => item)
-);
+    )
+    .filter(item => item);
 
 function hasRelation(array, input, output) {
   return !!array.find(item => {
@@ -47,7 +53,6 @@ function hasRelation(array, input, output) {
     return inputValue === input && outputValue === output;
   });
 }
-
 
 export const Diagramm = ({
   id,
@@ -132,8 +137,9 @@ export const Diagramm = ({
             key={`input_${name}`}
             x={0}
             y={
-              inputOffsetY + (headerHeight + parseInt(position, 10) *
-              (rectHeight + paddingElements))
+              inputOffsetY +
+              (headerHeight +
+                parseInt(position, 10) * (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
@@ -141,9 +147,10 @@ export const Diagramm = ({
             textColor={rectTextColor}
             details={opts.input[name]}
             background={
-              selectedInput === name || hasRelation(relations, name, selectedOutput) ?
-              rectSelectedBackgroundColor :
-              rectBackgroundColor
+              selectedInput === name ||
+              hasRelation(relations, name, selectedOutput)
+                ? rectSelectedBackgroundColor
+                : rectBackgroundColor
             }
             toggleTooltip={toggleTooltip}
             onInputSelected={handleInputSelected}
@@ -158,10 +165,11 @@ export const Diagramm = ({
         {Object.entries(outputMap).map(([name, position]) => (
           <SelectableLabel
             key={`output_${name}`}
-            x={svgWidth + offsetX - (rectWidth * 2.5)}
+            x={svgWidth + offsetX - rectWidth * 2.5}
             y={
-              outputOffsetY + (headerHeight + parseInt(position, 10) *
-              (rectHeight + paddingElements))
+              outputOffsetY +
+              (headerHeight +
+                parseInt(position, 10) * (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
@@ -169,9 +177,10 @@ export const Diagramm = ({
             textColor={rectTextColor}
             details={opts.output[name]}
             background={
-              selectedOutput === name || hasRelation(relations, selectedInput, name) ?
-              rectSelectedBackgroundColor :
-              rectBackgroundColor
+              selectedOutput === name ||
+              hasRelation(relations, selectedInput, name)
+                ? rectSelectedBackgroundColor
+                : rectBackgroundColor
             }
             toggleTooltip={toggleTooltip}
             onInputSelected={handleOutputSelected}
@@ -186,10 +195,11 @@ export const Diagramm = ({
         {Object.entries(outputMap).map(([name, position]) => (
           <foreignObject
             key={name}
-            x={svgWidth + offsetX - (rectWidth * 1.5)}
+            x={svgWidth + offsetX - rectWidth * 1.5}
             y={
-              outputOffsetY + (headerHeight + parseInt(position, 10) *
-              (rectHeight + paddingElements))
+              outputOffsetY +
+              (headerHeight +
+                parseInt(position, 10) * (rectHeight + paddingElements))
             }
             width={rectWidth}
             height={rectHeight}
@@ -267,10 +277,7 @@ export const Diagramm = ({
     </div>
     {selectedDetail && (
       <div className="mapper-detail" id="detail">
-        <Detail
-          data={selectedDetail}
-          onClose={handleDetailSelection}
-        />
+        <Detail data={selectedDetail} onClose={handleDetailSelection} />
       </div>
     )}
   </div>
@@ -284,15 +291,19 @@ const PADDING_ELEMENTS = 5;
 const RECT_HEIGHT = 45;
 const RECT_WIDTH = 200;
 
-const getFieldsMap = (source) => Object
-  .keys(source)
-  .map((item, idx) => [item, idx])
-  .reduce((prev, current) => ({ ...prev, [current[0]]: current[1] }), {});
+const getFieldsMap = source =>
+  Object.keys(source)
+    .map((item, idx) => [item, idx])
+    .reduce((prev, current) => ({ ...prev, [current[0]]: current[1] }), {});
 
 const getRelationsData = mapProps(props => ({
   ...props,
-  inputMap: getFieldsMap(props.mapper.opts.input),
-  outputMap: getFieldsMap(props.mapper.opts.output),
+  inputMap: props.mapper.opts.input
+    ? getFieldsMap(props.mapper.opts.input)
+    : [],
+  outputMap: props.mapper.opts.output
+    ? getFieldsMap(props.mapper.opts.output)
+    : [],
   relations: getRelations(props.mapper.field_source, props.mapper.opts.input),
   opts: props.mapper.opts,
 }));
@@ -300,7 +311,10 @@ const getRelationsData = mapProps(props => ({
 const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
   inputCount: Object.keys(inputMap).length,
   outputCount: Object.keys(outputMap).length,
-  elementCount: Math.max(Object.keys(inputMap).length, Object.keys(outputMap).length),
+  elementCount: Math.max(
+    Object.keys(inputMap).length,
+    Object.keys(outputMap).length
+  ),
 }));
 
 const appendDiagramParams = compose(
@@ -317,7 +331,10 @@ const appendDiagramParams = compose(
     rectTextColor: 'white',
     headerTextColor: 'black',
     lineColor: 'black',
-    svgHeight: elementCount * (RECT_HEIGHT + PADDING_ELEMENTS) + HEADER_HEIGHT + OFFSET_Y * 2,
+    svgHeight:
+      elementCount * (RECT_HEIGHT + PADDING_ELEMENTS) +
+      HEADER_HEIGHT +
+      OFFSET_Y * 2,
     inputOffsetY: 0,
     outputOffsetY: 0,
   }))
@@ -361,5 +378,5 @@ export default compose(
   addInputSelection,
   addOutputSelection,
   setDetail,
-  toggleTooltip,
+  toggleTooltip
 )(Diagramm);
