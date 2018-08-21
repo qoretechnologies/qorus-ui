@@ -82,7 +82,7 @@ const orderStatsPctColorDisp = (disp: string): ?string => {
 };
 
 const orderStatsPct = (workflowCount: number, totalCount: number): number =>
-  Math.round((workflowCount / totalCount) * 100);
+  totalCount === 0 ? 0 : Math.round((workflowCount / totalCount) * 100);
 
 export {
   getActionData,
