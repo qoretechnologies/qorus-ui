@@ -1,11 +1,9 @@
 .fixed-table-header,
 td,
-td *,
+td:first-child,
 th,
 th * {
   vertical-align: middle !important;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
 }
 
 table.text-table {

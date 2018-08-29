@@ -31,6 +31,7 @@ const Th: Function = ({
   title,
   colspan,
   fixed,
+  onClick,
 }: Props) =>
   fixed ? (
     <div
@@ -38,7 +39,7 @@ const Th: Function = ({
         {
           sort: direction,
           'history-sort': historyDirection,
-          'has-sort': name,
+          'has-sort': name || !!onClick,
           'sort-asc': direction && direction > 0,
           'sort-desc': direction && direction < 0,
           'history-sort-asc': historyDirection && historyDirection > 0,
@@ -58,7 +59,7 @@ const Th: Function = ({
         {
           sort: direction,
           'history-sort': historyDirection,
-          'has-sort': name,
+          'has-sort': name || !!onClick,
           'sort-asc': direction && direction > 0,
           'sort-desc': direction && direction < 0,
           'history-sort-asc': historyDirection && historyDirection > 0,
@@ -80,6 +81,8 @@ export default compose(
       if (name) {
         if (onSortChange) onSortChange({ sortBy: name });
         if (onClick) onClick(name);
+      } else {
+        if (onClick) onClick();
       }
     },
   }),

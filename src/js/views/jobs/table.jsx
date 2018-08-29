@@ -74,34 +74,7 @@ const JobsTable: Function = ({
             Expiry Date
           </Th>
         )}
-        <Th
-          className={isTablet ? 'narrow' : 'normal'}
-          name="COMPLETE"
-          title="Complete"
-        >
-          {isTablet ? 'CMP' : 'Complete'}
-        </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'normal'}
-          name="ERROR"
-          title="Error"
-        >
-          {isTablet ? 'ERR' : 'Error'}
-        </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'normal'}
-          name="IN-PROGRESS"
-          title="In Progress"
-        >
-          {isTablet ? 'PRG' : 'In Progress'}
-        </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'normal'}
-          name="CRASHED"
-          title="Crashed"
-        >
-          {isTablet ? 'CSH' : 'Crashed'}
-        </Th>
+        <Th className="big">Instances</Th>
       </FixedRow>
     </Thead>
     <Tbody>

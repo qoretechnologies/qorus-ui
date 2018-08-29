@@ -83,6 +83,11 @@ $padding-xs-vertical: 2px;
     width: 250px;
   }
 
+  &.huge {
+    /* [4] */
+    width: 320px;
+  }
+
   &.name {
     /* [5] */
     padding-left: $padding-xs-horizontal;
@@ -239,6 +244,10 @@ table.table--data {
           &.alerts-large {
             /* [4] */
             width: 250px;
+          }
+
+          &.huge {
+            width: 320px;
           }
 
           &.name {

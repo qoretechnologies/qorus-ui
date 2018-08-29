@@ -12,13 +12,17 @@ import { ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 
 import AutoStart from '../../../components/autostart';
+import { Control } from '../../../components/controls';
 import WorkflowsControls from '../controls';
+import InstancesChart from '../../../components/instances_chart';
+import { InputGroup, ControlGroup } from '@blueprintjs/core';
 
 @connect(
   null,
   {
     setOptions: actions.workflows.setOptions,
     setAutostart: actions.workflows.setAutostart,
+    setThreshold: actions.workflows.setThreshold,
   }
 )
 export default class DetailTab extends Component {
@@ -27,6 +31,13 @@ export default class DetailTab extends Component {
     systemOptions: PropTypes.array.isRequired,
     setOptions: PropTypes.func.isRequired,
     setAutostart: PropTypes.func.isRequired,
+    setThreshold: PropTypes.func.isRequired,
+  };
+
+  state: {
+    slaThreshold: string,
+  } = {
+    slaThreshold: this.props.workflow.sla_threshold,
   };
 
   setOption = opt => {
@@ -39,6 +50,16 @@ export default class DetailTab extends Component {
 
   handleAutostartChange = value => {
     this.props.setAutostart(this.props.workflow.id, value);
+  };
+
+  handleThresholdChange = event => {
+    this.setState({ slaThreshold: event.target.value });
+  };
+
+  handleSubmit: Function = e => {
+    e.preventDefault();
+
+    this.props.setThreshold(this.props.workflow.id, this.state.slaThreshold);
   };
 
   render() {
@@ -60,7 +81,18 @@ export default class DetailTab extends Component {
             />
           </div>
         </PaneItem>
-        <PaneItem title="SLA Threshold">{workflow.sla_threshold}s</PaneItem>
+        <PaneItem title="SLA Threshold">
+          <form onSubmit={this.handleSubmit}>
+            <ControlGroup>
+              <InputGroup
+                type="text"
+                value={`${this.state.slaThreshold}`}
+                onChange={this.handleThresholdChange}
+              />
+              <Control icon="floppy-disk" type="submit" big />
+            </ControlGroup>
+          </form>
+        </PaneItem>
         <PaneItem title="Description">
           <p>{workflow.description}</p>
         </PaneItem>
@@ -79,13 +111,11 @@ export default class DetailTab extends Component {
           </div>
         )}
         <PaneItem title="Instances">
-          {ORDER_STATES.map((o, k) => (
-            <Badge
-              key={k}
-              className={`status-${o.label}`}
-              val={`${o.short}: ${workflow[o.name]}`}
-            />
-          ))}
+          <InstancesChart
+            width="100%"
+            states={ORDER_STATES}
+            instances={workflow}
+          />
         </PaneItem>
         <Groups>
           {(workflow.groups || []).map(g => (

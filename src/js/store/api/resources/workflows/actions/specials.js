@@ -165,6 +165,26 @@ const setAutostart = createAction('WORKFLOWS_SETAUTOSTART', (id, value) => {
   return { id, value };
 });
 
+const setThreshold = createAction('WORKFLOWS_SETTHRESHOLD', (id, value) => {
+  fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/workflows/${id}?action=setSla&sla=${value}`
+  );
+
+  return { id, value };
+});
+
+const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value) => {
+  fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/workflows/${id}?action=setRemote&remote=${
+      value ? 1 : 0
+    }`
+  );
+
+  return { id, value };
+});
+
 const toggleEnabled = (id, value) => dispatch => {
   dispatch(toggleEnabledAction(id, value));
 };
@@ -199,4 +219,6 @@ export {
   addNew,
   processMemoryChanged,
   updateStats,
+  setThreshold,
+  setRemote,
 };

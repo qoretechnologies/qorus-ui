@@ -75,14 +75,14 @@ export default class ChartComponent extends Component {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
       const datasets =
-        nextProps.type === 'line'
+        nextProps.type === 'line' || nextProps.type === 'bar'
           ? scaleData(nextProps.datasets, nextProps.isNotTime)
           : nextProps.datasets;
 
       chart.data.labels = nextProps.labels;
       chart.data.datasets = datasets;
 
-      if (nextProps.type === 'line') {
+      if (nextProps.type === 'line' || nextProps.type === 'bar') {
         chart.options.scales.yAxes[0].ticks.callback = val =>
           getFormattedValue(val, datasets) + unit;
         chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
@@ -124,6 +124,7 @@ export default class ChartComponent extends Component {
 
     switch (this.props.type) {
       case 'line':
+      case 'bar':
       default:
         return Object.assign({}, options, {
           tooltips: {
@@ -203,6 +204,7 @@ export default class ChartComponent extends Component {
 
   renderLegend: Function = (): Array<React.Element<any>> => {
     switch (this.props.type) {
+      case 'bar':
       case 'line':
       default:
         return this.props.datasets.map((d, key) => (

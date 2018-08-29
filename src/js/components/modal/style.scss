@@ -19,7 +19,11 @@
 }
 
 .pt-overlay.pt-overlay-open.pt-overlay-scroll-container {
-  z-index: 25 !important;
+  z-index: 20 !important;
+}
+
+.pt-overlay-backdrop {
+  z-index: 19 !important;
 }
 
 .pt-dialog-body {

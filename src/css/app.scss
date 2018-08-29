@@ -7,6 +7,10 @@ $font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
 
 $qore-green: #7fba27;
 $qore-purple: #81358a;
+$qore-warning: #d99e0b;
+$qore-danger: #d13913;
+$qore-info: #2965cc;
+$qore-gray: #8a9ba8;
 
 $status-green: #418e22;
 $status-light-green: lighten($status-green, 30);
@@ -58,6 +62,7 @@ $bgcolor: #eee;
 @import '../js/components/infobar/style';
 @import '../js/components/dashboard_module/style';
 @import '../js/components/box/style';
+@import '../js/components/instances_bar/style';
 
 @import './not-supported';
 @import './root';

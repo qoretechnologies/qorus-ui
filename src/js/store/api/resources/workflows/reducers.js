@@ -486,6 +486,36 @@ const setAutostart = {
   },
 };
 
+const setThreshold = {
+  next(
+    state = initialState,
+    {
+      payload: { id, value },
+    }
+  ) {
+    const stateData = [...state.data];
+    const newData = updateItemWithId(id, { sla_threshold: value }, stateData);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const setRemote = {
+  next(
+    state = initialState,
+    {
+      payload: { id, value },
+    }
+  ) {
+    const stateData = [...state.data];
+    console.log(value);
+
+    const newData = updateItemWithId(id, { remote: value }, stateData);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return { ...initialState };
@@ -527,4 +557,6 @@ export {
   fetchList as FETCHLIST,
   addNew as ADDNEW,
   updateStats as UPDATESTATS,
+  setThreshold as SETTHRESHOLD,
+  setRemote as SETREMOTE,
 };

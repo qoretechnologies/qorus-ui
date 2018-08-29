@@ -1,4 +1,6 @@
 import { Intent } from '@blueprintjs/core';
+import maxBy from 'lodash/maxBy';
+import find from 'lodash/find';
 
 import {
   ORDER_ACTIONS,
@@ -7,6 +9,8 @@ import {
   STATUS_PRIORITY,
 } from '../constants/orders';
 import { indexOf } from 'lodash';
+
+const MIN_INSTANCEBAR_WIDTH = 13;
 
 const getActionData = (action, prop) => {
   const actionData = ORDER_ACTIONS.ALL.find(a => a.action === action);
@@ -61,6 +65,42 @@ const formatCount = num => {
   return num < 1000 ? num : `${Math.round(num / 1000)}k`;
 };
 
+const instancePctOfTotal: Function = (
+  instanceCount: number,
+  totalInstances: number
+): number => (instanceCount / totalInstances) * 100;
+
+const calculateInstanceBarWidths: Function = (
+  states: Array<Object>,
+  instances: Object,
+  totalInstances: number
+): Object => {
+  const statesWithWidths = states.map((state: Object) => ({
+    ...state,
+    ...{ width: instancePctOfTotal(instances[state.name], totalInstances) },
+  }));
+
+  const modifiedStates = statesWithWidths.reduce(
+    (cur: Array<Object>, next: Object) => {
+      const newCur: Array<Object> = [...cur];
+      const newNext: Object = find(newCur, state => state.name === next.name);
+
+      if (next.width < MIN_INSTANCEBAR_WIDTH && next.width > 0) {
+        const diff: number = MIN_INSTANCEBAR_WIDTH - next.width;
+        const max: Object = maxBy(statesWithWidths, 'width');
+
+        newNext.width = MIN_INSTANCEBAR_WIDTH;
+        max.width = max.width - diff;
+      }
+
+      return newCur;
+    },
+    statesWithWidths
+  );
+
+  return modifiedStates;
+};
+
 const orderStatsPctColor = (val: number): string => {
   if (val < 50) {
     return Intent.DANGER;
@@ -93,4 +133,6 @@ export {
   orderStatsPctColor,
   orderStatsPctColorDisp,
   orderStatsPct,
+  instancePctOfTotal,
+  calculateInstanceBarWidths,
 };

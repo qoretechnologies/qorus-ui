@@ -1,0 +1,93 @@
+.instances-bar-wrapper {
+  height: 8px;
+  width: 100%;
+  display: inline-block;
+
+  span {
+    display: inline;
+
+    &:first-child div {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+
+    &:last-child div {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+  }
+
+  .instances-bar {
+    height: 100%;
+    line-height: 8px;
+    display: inline-block;
+    color: #fff;
+    position: relative;
+
+    &.bar-none {
+      width: 100%;
+    }
+
+    .instance-bar-value {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%) scale(1.3);
+      padding: 3px;
+      top: 50%;
+      border-radius: 99px;
+      font-size: 10px;
+    }
+  }
+
+  .instances-bar,
+  .instance-bar-value {
+    &:not(.bar-none) {
+      cursor: pointer;
+    }
+
+    &.bar-complete {
+      background-color: $qore-green;
+    }
+
+    &.bar-ready {
+      background-color: $qore-purple;
+    }
+
+    &.bar-scheduled {
+      background-color: lighten($qore-purple, 5);
+    }
+
+    &.bar-waiting {
+      background-color: $qore-warning;
+    }
+
+    &.bar-in-progress {
+      background-color: darken($qore-warning, 5);
+    }
+
+    &.bar-retry {
+      background-color: lighten($qore-warning, 4);
+    }
+
+    &.bar-incomplete {
+      background-color: lighten($qore-warning, 8);
+    }
+
+    &.bar-canceled {
+      background-color: $qore-gray;
+    }
+
+    &.bar-error {
+      background-color: $qore-danger;
+    }
+
+    &.bar-blocked {
+      background-color: lighten($qore-danger, 10);
+    }
+
+    &.bar-none {
+      color: #888;
+      background-color: lighten($qore-gray, 30);
+    }
+  }
+}

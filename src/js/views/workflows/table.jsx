@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
 import {
@@ -17,7 +18,9 @@ import {
 import Icon from '../../components/icon';
 import Badge from '../../components/badge';
 import checkData from '../../hocomponents/check-no-data';
+import withModal from '../../hocomponents/modal';
 import Row from './row';
+import SortModal from './modals/sort_modal';
 import actions from '../../store/api/actions';
 
 type Props = {
@@ -36,6 +39,10 @@ type Props = {
   canLoadMore: boolean,
   isTablet: boolean,
   totalInstances: Object,
+  setRemote: Function,
+  openModal: Function,
+  closeModal: Function,
+  handleInstancesClick: Function,
 };
 
 const WorkflowsTable: Function = ({
@@ -54,6 +61,8 @@ const WorkflowsTable: Function = ({
   canLoadMore,
   isTablet,
   totalInstances,
+  setRemote,
+  handleInstancesClick,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -88,7 +97,10 @@ const WorkflowsTable: Function = ({
         <Th className="normal text" name="version">
           Version
         </Th>
-        {states.map(
+        <Th className="huge" onClick={handleInstancesClick}>
+          Instances
+        </Th>
+        {/* states.map(
           (state: Object): React.Element<Th> => (
             <Th
               key={`header_${state.name}`}
@@ -99,9 +111,14 @@ const WorkflowsTable: Function = ({
               {state.short}
             </Th>
           )
-        )}
+        ) */}
         <Th className="narrow" name="TOTAL">
           All
+        </Th>
+        <Th className="big">Disposition</Th>
+        <Th className="big">SLA</Th>
+        <Th className="narrow" name="remote">
+          Remote
         </Th>
         {deprecated && (
           <Th className="medium" name="deprecated">
@@ -126,45 +143,12 @@ const WorkflowsTable: Function = ({
             showDeprecated={deprecated}
             expanded={expanded}
             isTablet={isTablet}
+            setRemote={setRemote}
             {...workflow}
           />
         )
       )}
     </Tbody>
-    <Tfooter>
-      <FixedRow>
-        {!isTablet && <Th />}
-        <Th />
-        <Th />
-        <Th />
-        <Th />
-        <Th />
-        <Th />
-        <Th />
-        <Th />
-        {states.map(
-          (state: Object): React.Element<Th> => {
-            const value = !expanded
-              ? totalInstances[`GROUPED_${state.name}`]
-              : totalInstances[state.name];
-
-            return (
-              <Th
-                key={`header_${state.name}`}
-                className={expanded || isTablet ? 'narrow' : 'medium'}
-                name={!expanded ? `GROUPED_${state.name}` : state.name}
-                title={state.title}
-              >
-                <Badge className={`status-${state.label}`} val={value} />
-              </Th>
-            );
-          }
-        )}
-        <Th className="narrow" name="TOTAL">
-          {totalInstances.total}
-        </Th>
-      </FixedRow>
-    </Tfooter>
   </Table>
 );
 
@@ -174,11 +158,29 @@ export default compose(
     {
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
+      setRemote: actions.workflows.setRemote,
     }
   ),
   checkData(
     ({ collection }: Props): boolean => collection && collection.length > 0
   ),
+  withModal(),
+  withHandlers({
+    handleInstancesClick: ({
+      sortData,
+      onSortChange,
+      openModal,
+      closeModal,
+    }: Props): Function => (): void => {
+      openModal(
+        <SortModal
+          sortData={sortData}
+          onSortChange={onSortChange}
+          closeModal={closeModal}
+        />
+      );
+    },
+  }),
   pure([
     'sortData',
     'expanded',

@@ -14,6 +14,7 @@ import { Controls, Control as Button } from '../../components/controls';
 import Badge from '../../components/badge';
 import DetailButton from '../../components/detail_button';
 import { formatCount } from '../../helpers/orders';
+import InstancesBar from '../../components/instances_bar';
 
 type Props = {
   openPane: Function,
@@ -70,10 +71,10 @@ const ServiceRow: Function = ({
   last_executed: executed,
   next,
   expiry_date: expiry,
-  COMPLETE,
-  ERROR,
-  PROGRESS,
-  CRASHED,
+  COMPLETE: COMPLETE = 0,
+  ERROR: ERROR = 0,
+  PROGRESS: PROGRESS = 0,
+  CRASHED: CRASHED = 0,
   minute,
   hour,
   day,
@@ -150,28 +151,25 @@ const ServiceRow: Function = ({
         <Date date={expiry} />
       </Td>
     )}
-    <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link to={`/job/${id}?date=${date}&filter=complete`}>
-        <Badge className="status-complete" val={formatCount(COMPLETE) || 0} />
-      </Link>
-    </Td>
-    <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link to={`/job/${id}?date=${date}&filter=error`}>
-        <Badge className="status-error" val={formatCount(ERROR) || 0} />
-      </Link>
-    </Td>
-    <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link to={`/job/${id}?date=${date}&filter=in-progress`}>
-        <Badge
-          className="status-in-progress"
-          val={formatCount(PROGRESS) || 0}
-        />
-      </Link>
-    </Td>
-    <Td className={isTablet ? 'narrow' : 'normal'}>
-      <Link to={`/job/${id}?date=${date}&filter=crashed`}>
-        <Badge className="status-canceled" val={formatCount(CRASHED) || 0} />
-      </Link>
+    <Td className="huge">
+      <InstancesBar
+        states={[
+          { name: 'COMPLETE', label: 'complete', title: 'complete' },
+          { name: 'ERROR', label: 'error', title: 'error' },
+          { name: 'PROGRESS', label: 'waiting', title: 'in-progress' },
+          { name: 'CRASHED', label: 'blocked', title: 'crashed' },
+        ]}
+        instances={{
+          COMPLETE,
+          ERROR,
+          PROGRESS,
+          CRASHED,
+        }}
+        type="job"
+        totalInstances={COMPLETE + ERROR + PROGRESS + CRASHED}
+        id={id}
+        date={date}
+      />
     </Td>
   </Tr>
 );
