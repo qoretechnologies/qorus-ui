@@ -10,6 +10,9 @@ type Props = {
   totalInstances: number,
   id: number,
   date: string,
+  type: string,
+  showPct: boolean,
+  minWidth?: number,
 };
 
 const InstancesBar: Function = ({
@@ -19,10 +22,17 @@ const InstancesBar: Function = ({
   date,
   totalInstances,
   type: type = 'workflow',
+  showPct,
+  minWidth,
 }: Props): React.Element<any> => (
   <div className="instances-bar-wrapper">
     {totalInstances !== 0 ? (
-      calculateInstanceBarWidths(states, instances, totalInstances).map(
+      calculateInstanceBarWidths(
+        states,
+        instances,
+        totalInstances,
+        minWidth
+      ).map(
         (state: Object) =>
           instances[state.name] && instances[state.name] !== 0 ? (
             <Tooltip content={`${state.name} - ${instances[state.name]}`}>
@@ -35,7 +45,7 @@ const InstancesBar: Function = ({
                   }}
                 >
                   <div className={`instance-bar-value bar-${state.label}`}>
-                    {formatCount(instances[state.name])}
+                    {showPct ? state.pct : formatCount(instances[state.name])}
                   </div>
                 </div>
               </Link>

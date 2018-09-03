@@ -73,11 +73,15 @@ const instancePctOfTotal: Function = (
 const calculateInstanceBarWidths: Function = (
   states: Array<Object>,
   instances: Object,
-  totalInstances: number
+  totalInstances: number,
+  minWidth: number = MIN_INSTANCEBAR_WIDTH
 ): Object => {
   const statesWithWidths = states.map((state: Object) => ({
     ...state,
-    ...{ width: instancePctOfTotal(instances[state.name], totalInstances) },
+    ...{
+      width: instancePctOfTotal(instances[state.name], totalInstances),
+      pct: instancePctOfTotal(instances[state.name], totalInstances),
+    },
   }));
 
   const modifiedStates = statesWithWidths.reduce(
@@ -85,11 +89,11 @@ const calculateInstanceBarWidths: Function = (
       const newCur: Array<Object> = [...cur];
       const newNext: Object = find(newCur, state => state.name === next.name);
 
-      if (next.width < MIN_INSTANCEBAR_WIDTH && next.width > 0) {
-        const diff: number = MIN_INSTANCEBAR_WIDTH - next.width;
+      if (next.width < minWidth && next.width > 0) {
+        const diff: number = minWidth - next.width;
         const max: Object = maxBy(statesWithWidths, 'width');
 
-        newNext.width = MIN_INSTANCEBAR_WIDTH;
+        newNext.width = minWidth;
         max.width = max.width - diff;
       }
 

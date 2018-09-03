@@ -115,8 +115,8 @@ const WorkflowsTable: Function = ({
         <Th className="narrow" name="TOTAL">
           All
         </Th>
-        <Th className="big">Disposition</Th>
-        <Th className="big">SLA</Th>
+        <Th className="big">Disp. (%)</Th>
+        <Th className="big">SLA (%)</Th>
         <Th className="narrow" name="remote">
           Remote
         </Th>

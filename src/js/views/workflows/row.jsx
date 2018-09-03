@@ -201,6 +201,8 @@ const TableRow: Function = ({
           totalInstances={totalOrderStats}
           workflowId={id}
           date={date}
+          showPct
+          minWidth={25}
         />
       </Td>
       <Td className="big">
@@ -209,6 +211,8 @@ const TableRow: Function = ({
             { name: 'In SLA', label: 'complete' },
             { name: 'Out of SLA', label: 'error' },
           ]}
+          showPct
+          minWidth={25}
           instances={slaStats}
           totalInstances={totalSlaStats}
           workflowId={id}
