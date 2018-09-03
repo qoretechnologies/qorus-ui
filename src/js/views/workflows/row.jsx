@@ -218,7 +218,7 @@ const TableRow: Function = ({
       <Td className="narrow">
         <Controls>
           <Button
-            icon="small-tick"
+            icon={remote ? 'small-tick' : 'cross'}
             btnStyle={remote ? 'info' : 'default'}
             onClick={handleRemoteClick}
           />
