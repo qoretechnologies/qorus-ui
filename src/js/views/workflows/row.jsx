@@ -184,10 +184,8 @@ const TableRow: Function = ({
         />
       </Td>
       <Td className="narrow">
-        <Tooltip content={formatCount(rest.TOTAL) || 0} position={Position.TOP}>
-          <Link to={`/workflow/${id}?date=${date}`}>
-            {formatCount(rest.TOTAL) || 0}
-          </Link>
+        <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
+          <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
         </Tooltip>
       </Td>
       <Td className="big">
