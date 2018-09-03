@@ -106,13 +106,15 @@ export default class Search extends Component {
         includes(qry, this.state.query) && this.state.query !== qry
     );
 
-    return searches.map((qry: string, index: number): React.Element<any> => (
-      <MenuItem
-        key={`${qry}_${index}`}
-        text={qry}
-        onClick={this.handleHistoryClick}
-      />
-    ));
+    return searches.map(
+      (qry: string, index: number): React.Element<any> => (
+        <MenuItem
+          key={`${qry}_${index}`}
+          text={qry}
+          onClick={this.handleHistoryClick}
+        />
+      )
+    );
   };
 
   render() {
@@ -142,12 +144,14 @@ export default class Search extends Component {
             autoComplete="off"
             placeholder="Search..."
           />
-          <Button
-            type="button"
-            iconName="cross"
-            onClick={this.handleClearClick}
-          />
           <Button type="submit" iconName="search" />
+          {this.state.query && (
+            <Button
+              type="button"
+              iconName="cross"
+              onClick={this.handleClearClick}
+            />
+          )}
         </ControlGroup>
       </form>
     );
