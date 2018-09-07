@@ -38,6 +38,9 @@ type Props = {
   status: string,
   isTablet: boolean,
   first: boolean,
+  remote: ?boolean,
+  setRemote: Function,
+  handleRemoteClick: Function,
 };
 
 const ServiceRow: Function = ({
@@ -61,6 +64,8 @@ const ServiceRow: Function = ({
   status,
   isTablet,
   first,
+  remote,
+  handleRemoteClick,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -119,6 +124,17 @@ const ServiceRow: Function = ({
     <Td className="text">
       <Text text={desc} />
     </Td>
+    <Td className="narrow">
+      {type !== 'system' && (
+        <Controls>
+          <Button
+            icon={remote ? 'small-tick' : 'cross'}
+            btnStyle={remote ? 'info' : 'default'}
+            onClick={handleRemoteClick}
+          />
+        </Controls>
+      )}
+    </Td>
   </Tr>
 );
 
@@ -129,6 +145,13 @@ export default compose(
     },
     handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
       updateDone(id);
+    },
+    handleRemoteClick: ({
+      setRemote,
+      id,
+      remote,
+    }: Props): Function => (): void => {
+      setRemote(id, !remote);
     },
     handleDetailClick: ({
       openPane,

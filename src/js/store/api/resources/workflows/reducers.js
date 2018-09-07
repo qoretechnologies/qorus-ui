@@ -508,8 +508,6 @@ const setRemote = {
     }
   ) {
     const stateData = [...state.data];
-    console.log(value);
-
     const newData = updateItemWithId(id, { remote: value }, stateData);
 
     return { ...state, ...{ data: newData } };

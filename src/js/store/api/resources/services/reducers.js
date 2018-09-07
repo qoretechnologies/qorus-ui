@@ -10,7 +10,6 @@ import {
   selectAlerts,
 } from '../../../../helpers/resources';
 
-
 const initialState = { data: [], sync: false, loading: false };
 
 /**
@@ -35,13 +34,8 @@ function getDataWithOption(data, serviceId, name, value) {
     options.splice(optIdx, 1);
   }
 
-  return updateItemWithId(
-    service.id,
-    { options },
-    data
-  );
+  return updateItemWithId(service.id, { options }, data);
 }
-
 
 /**
  * Finds an option in service data.
@@ -56,7 +50,6 @@ function findOption(data, serviceId, name) {
 
   return service ? service.options.find(o => o.name === name) : null;
 }
-
 
 const setOptions = {
   next(state = initialState, action) {
@@ -86,15 +79,10 @@ const setOptions = {
   },
 };
 
-
 const fetchLibSources = {
   next(state = initialState, action) {
     return Object.assign({}, state, {
-      data: updateItemWithId(
-        action.meta.serviceId,
-        action.payload,
-        state.data
-      ),
+      data: updateItemWithId(action.meta.serviceId, action.payload, state.data),
     });
   },
   throw(state = initialState, action) {
@@ -109,11 +97,7 @@ const fetchLibSources = {
 const fetchMethodSources = {
   next(state = initialState, action) {
     return Object.assign({}, state, {
-      data: updateItemWithId(
-        action.meta.serviceId,
-        action.payload,
-        state.data
-      ),
+      data: updateItemWithId(action.meta.serviceId, action.payload, state.data),
     });
   },
   throw(state = initialState, action) {
@@ -126,12 +110,20 @@ const fetchMethodSources = {
 };
 
 const addNew = {
-  next(state = initialState, { payload: { srv } }) {
+  next(
+    state = initialState,
+    {
+      payload: { srv },
+    }
+  ) {
     if (state.sync) {
-      const data = [...state.data, {
-        ...normalizeName(normalizeId('serviceid', srv)),
-        ...{ _updated: true, desc: srv.description },
-      }];
+      const data = [
+        ...state.data,
+        {
+          ...normalizeName(normalizeId('serviceid', srv)),
+          ...{ _updated: true, desc: srv.description },
+        },
+      ];
 
       return { ...state, ...{ data } };
     }
@@ -141,7 +133,12 @@ const addNew = {
 };
 
 const setStatus = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       let newData = data;
@@ -165,14 +162,23 @@ const setStatus = {
 };
 
 const setEnabled = {
-  next(state, { payload: { events } }) {
+  next(
+    state,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach(dt => {
-        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          { enabled: dt.enabled, _updated: true },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -190,14 +196,23 @@ const setEnabled = {
 };
 
 const setAutostart = {
-  next(state, { payload: { events } }) {
+  next(
+    state,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach(dt => {
-        newData = updateItemWithId(dt.id, { autostart: dt.autostart, _updated: true }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          { autostart: dt.autostart, _updated: true },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -215,7 +230,12 @@ const setAutostart = {
 };
 
 const updateDone = {
-  next(state, { payload: { id } }) {
+  next(
+    state,
+    {
+      payload: { id },
+    }
+  ) {
     if (state.sync) {
       const data = state.data.slice();
       const newData = updateItemWithId(id, { _updated: null }, data);
@@ -235,19 +255,28 @@ const updateDone = {
 };
 
 const addAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
 
       events.forEach(dt => {
-        const service = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const service = newData.find(s => s.id === parseInt(dt.id, 10));
         const alerts = [...service.alerts, dt];
-        newData = updateItemWithId(dt.id, {
-          alerts,
-          has_alerts: true,
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            alerts,
+            has_alerts: true,
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -265,22 +294,31 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(state = initialState, { payload: { events } }) {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
 
       events.forEach(dt => {
-        const service = newData.find((s) => s.id === parseInt(dt.id, 10));
+        const service = newData.find(s => s.id === parseInt(dt.id, 10));
         const alerts = [...service.alerts];
 
         remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
 
-        newData = updateItemWithId(dt.id, {
-          alerts,
-          has_alerts: !(alerts.length === 0),
-          _updated: true,
-        }, newData);
+        newData = updateItemWithId(
+          dt.id,
+          {
+            alerts,
+            has_alerts: !(alerts.length === 0),
+            _updated: true,
+          },
+          newData
+        );
       });
 
       return { ...state, ...{ data: newData } };
@@ -298,7 +336,12 @@ const clearAlert = {
 };
 
 const selectService = {
-  next(state = initialState, { payload: { id } }) {
+  next(
+    state = initialState,
+    {
+      payload: { id },
+    }
+  ) {
     return select(state, id);
   },
 };
@@ -333,6 +376,20 @@ const serviceAction = {
   },
 };
 
+const setRemote = {
+  next(
+    state = initialState,
+    {
+      payload: { id, value },
+    }
+  ) {
+    const stateData = [...state.data];
+    const newData = updateItemWithId(id, { remote: value }, stateData);
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 const unsync = {
   next() {
     return initialState;
@@ -357,4 +414,5 @@ export {
   unsync as UNSYNC,
   addNew as ADDNEW,
   selectWithAlerts as SELECTALERTS,
+  setRemote as SETREMOTE,
 };

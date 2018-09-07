@@ -161,6 +161,17 @@ const serviceAction = (action, ids, autostart) => dispatch => {
   serviceActionCall(action, ids, autostart, dispatch);
 };
 
+const setRemote = createAction('SERVICES_SETREMOTE', (id, value) => {
+  fetchJson(
+    'PUT',
+    `${settings.REST_BASE_URL}/services/${id}?action=setRemote&remote=${
+      value ? 1 : 0
+    }`
+  );
+
+  return { id, value };
+});
+
 const unsync = createAction('SERVICES_UNSYNC');
 
 export {
@@ -183,4 +194,5 @@ export {
   selectAlerts,
   setSLAMethod,
   removeSLAMethod,
+  setRemote,
 };

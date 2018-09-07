@@ -266,29 +266,28 @@ export default compose(
     },
   }),
   mapProps(
-    ({ order_stats, ...rest }: Props): Props =>
-      console.log(order_stats) || {
-        orderStats: order_stats && {
-          completed: order_stats
-            .find(stat => stat.label === '24_hour_band')
-            .l.find(disp => disp.disposition === 'C').count,
-          automatically: order_stats
-            .find(stat => stat.label === '24_hour_band')
-            .l.find(disp => disp.disposition === 'A').count,
-          manually: order_stats
-            .find(stat => stat.label === '24_hour_band')
-            .l.find(disp => disp.disposition === 'M').count,
-        },
-        slaStats: order_stats && {
-          ['In SLA']: order_stats
-            .find(stat => stat.label === '24_hour_band')
-            .sla.find(sla => sla.in_sla).count,
-          ['Out of SLA']: order_stats
-            .find(stat => stat.label === '24_hour_band')
-            .sla.find(sla => sla.in_sla === false).count,
-        },
-        ...rest,
-      }
+    ({ order_stats, ...rest }: Props): Props => ({
+      orderStats: order_stats && {
+        completed: order_stats
+          .find(stat => stat.label === '24_hour_band')
+          .l.find(disp => disp.disposition === 'C').count,
+        automatically: order_stats
+          .find(stat => stat.label === '24_hour_band')
+          .l.find(disp => disp.disposition === 'A').count,
+        manually: order_stats
+          .find(stat => stat.label === '24_hour_band')
+          .l.find(disp => disp.disposition === 'M').count,
+      },
+      slaStats: order_stats && {
+        ['In SLA']: order_stats
+          .find(stat => stat.label === '24_hour_band')
+          .sla.find(sla => sla.in_sla).count,
+        ['Out of SLA']: order_stats
+          .find(stat => stat.label === '24_hour_band')
+          .sla.find(sla => sla.in_sla === false).count,
+      },
+      ...rest,
+    })
   ),
   mapProps(
     ({ orderStats, slaStats, ...rest }: Props): Props => ({
