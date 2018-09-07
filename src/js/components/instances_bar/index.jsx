@@ -45,7 +45,9 @@ const InstancesBar: Function = ({
                   }}
                 >
                   <div className={`instance-bar-value bar-${state.label}`}>
-                    {showPct ? state.pct : formatCount(instances[state.name])}
+                    {showPct
+                      ? Math.round(state.pct)
+                      : formatCount(instances[state.name])}
                   </div>
                 </div>
               </Link>
