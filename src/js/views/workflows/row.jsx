@@ -91,148 +91,145 @@ const TableRow: Function = ({
   slaStats,
   totalSlaStats,
   ...rest
-}: Props): React.Element<any> =>
-  console.log(orderStats) || (
-    <Tr
-      first={first}
-      className={classNames({
-        'row-active': isActive,
-        'row-alert': hasAlerts,
-        'row-selected': _selected,
-      })}
-      onClick={handleCheckboxClick}
-      onHighlightEnd={handleHighlightEnd}
-      highlight={_updated}
-    >
-      <Td key="checkbox" className="tiny checker">
-        <Checkbox
-          action={handleCheckboxClick}
-          checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-        />
+}: Props): React.Element<any> => (
+  <Tr
+    first={first}
+    className={classNames({
+      'row-active': isActive,
+      'row-alert': hasAlerts,
+      'row-selected': _selected,
+    })}
+    onClick={handleCheckboxClick}
+    onHighlightEnd={handleHighlightEnd}
+    highlight={_updated}
+  >
+    <Td key="checkbox" className="tiny checker">
+      <Checkbox
+        action={handleCheckboxClick}
+        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
+      />
+    </Td>
+    <Td key="detail" className="narrow">
+      <DetailButton onClick={handleDetailClick} active={isActive} />
+    </Td>
+    {!isTablet && (
+      <Td key="controls" className="narrow">
+        <WorkflowControls id={id} enabled={enabled} />
       </Td>
-      <Td key="detail" className="narrow">
-        <DetailButton onClick={handleDetailClick} active={isActive} />
-      </Td>
-      {!isTablet && (
-        <Td key="controls" className="narrow">
-          <WorkflowControls id={id} enabled={enabled} />
-        </Td>
-      )}
-      <Td key="autostart" name="autostart" className="medium">
-        <AutoStart id={id} autostart={autostart} execCount={execs} />
-      </Td>
-      <Td className="tiny">
-        {hasAlerts && (
-          <Controls>
-            <Button
-              iconName="warning-sign"
-              btnStyle="danger"
-              onClick={handleWarningClick}
-              title="Show alerts"
-            />
-          </Controls>
-        )}
-      </Td>
-      <Td className="narrow">{execs}</Td>
-      <Td className="narrow">{id}</Td>
-      <Td className="name">
-        <Popover
-          hoverOpenDelay={300}
-          content={
-            <Box top>
-              <PaneItem title={rest.normalizedName}>
-                {rest.description}
-              </PaneItem>
-              <PaneItem title="Instances">
-                <InstancesChart width={400} states={states} instances={rest} />
-              </PaneItem>
-              {rest.process && (
-                <PaneItem title="Process summary">
-                  Node: <Badge val={rest.process.node} bypass label="info" />{' '}
-                  <Icon iconName="circle" className="separator" /> PID:{' '}
-                  <Badge val={rest.process.pid} bypass label="info" />{' '}
-                  <Icon iconName="circle" className="separator" /> Status:{' '}
-                  <Badge val={rest.process.status} bypass label="info" />{' '}
-                  <Icon iconName="circle" className="separator" /> Memory:{' '}
-                  <Badge val={rest.process.priv_str} bypass label="info" />
-                </PaneItem>
-              )}
-            </Box>
-          }
-          interactionKind={PopoverInteractionKind.HOVER}
-          position={Position.TOP}
-          rootElementTag="div"
-          className="block"
-          useSmartPositioning
-        >
-          <Link
-            className="resource-name-link"
-            to={`/workflow/${id}?date=${date}`}
-          >
-            {name}
-          </Link>
-        </Popover>
-      </Td>
-      <Td className="normal text">{version}</Td>
-      <Td className="huge">
-        <InstancesBar
-          states={states}
-          instances={rest}
-          totalInstances={rest.TOTAL}
-          id={id}
-          date={date}
-        />
-      </Td>
-      <Td className="narrow">
-        <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
-          <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
-        </Tooltip>
-      </Td>
-      <Td className="big">
-        <InstancesBar
-          states={[
-            { name: 'completed', label: 'complete' },
-            { name: 'automatically', label: 'ready' },
-            { name: 'manually', label: 'error' },
-          ]}
-          instances={orderStats}
-          totalInstances={totalOrderStats}
-          workflowId={id}
-          date={date}
-          showPct
-          minWidth={25}
-        />
-      </Td>
-      <Td className="big">
-        <InstancesBar
-          states={[
-            { name: 'In SLA', label: 'complete' },
-            { name: 'Out of SLA', label: 'error' },
-          ]}
-          showPct
-          minWidth={25}
-          instances={slaStats}
-          totalInstances={totalSlaStats}
-          workflowId={id}
-          date={date}
-        />
-      </Td>
-      <Td className="narrow">
+    )}
+    <Td key="autostart" name="autostart" className="medium">
+      <AutoStart id={id} autostart={autostart} execCount={execs} />
+    </Td>
+    <Td className="tiny">
+      {hasAlerts && (
         <Controls>
           <Button
-            icon={remote ? 'small-tick' : 'cross'}
-            btnStyle={remote ? 'info' : 'default'}
-            onClick={handleRemoteClick}
+            iconName="warning-sign"
+            btnStyle="danger"
+            onClick={handleWarningClick}
+            title="Show alerts"
           />
         </Controls>
-      </Td>
-      {showDeprecated && (
-        <Td className="medium">
-          <Icon iconName={deprecated ? 'flag' : 'flag-o'} />
-        </Td>
       )}
-    </Tr>
-  );
+    </Td>
+    <Td className="narrow">{execs}</Td>
+    <Td className="narrow">{id}</Td>
+    <Td className="name">
+      <Popover
+        hoverOpenDelay={300}
+        content={
+          <Box top>
+            <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
+            <PaneItem title="Instances">
+              <InstancesChart width={400} states={states} instances={rest} />
+            </PaneItem>
+            {rest.process && (
+              <PaneItem title="Process summary">
+                Node: <Badge val={rest.process.node} bypass label="info" />{' '}
+                <Icon iconName="circle" className="separator" /> PID:{' '}
+                <Badge val={rest.process.pid} bypass label="info" />{' '}
+                <Icon iconName="circle" className="separator" /> Status:{' '}
+                <Badge val={rest.process.status} bypass label="info" />{' '}
+                <Icon iconName="circle" className="separator" /> Memory:{' '}
+                <Badge val={rest.process.priv_str} bypass label="info" />
+              </PaneItem>
+            )}
+          </Box>
+        }
+        interactionKind={PopoverInteractionKind.HOVER}
+        position={Position.TOP}
+        rootElementTag="div"
+        className="block"
+        useSmartPositioning
+      >
+        <Link
+          className="resource-name-link"
+          to={`/workflow/${id}?date=${date}`}
+        >
+          {name}
+        </Link>
+      </Popover>
+    </Td>
+    <Td className="normal text">{version}</Td>
+    <Td className="huge">
+      <InstancesBar
+        states={states}
+        instances={rest}
+        totalInstances={rest.TOTAL}
+        id={id}
+        date={date}
+      />
+    </Td>
+    <Td className="narrow">
+      <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
+        <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
+      </Tooltip>
+    </Td>
+    <Td className="big">
+      <InstancesBar
+        states={[
+          { name: 'completed', label: 'complete' },
+          { name: 'automatically', label: 'ready' },
+          { name: 'manually', label: 'error' },
+        ]}
+        instances={orderStats}
+        totalInstances={totalOrderStats}
+        workflowId={id}
+        date={date}
+        showPct
+        minWidth={25}
+      />
+    </Td>
+    <Td className="normal">
+      <InstancesBar
+        states={[
+          { name: 'In SLA', label: 'complete' },
+          { name: 'Out of SLA', label: 'error' },
+        ]}
+        showPct
+        minWidth={25}
+        instances={slaStats}
+        totalInstances={totalSlaStats}
+        workflowId={id}
+        date={date}
+      />
+    </Td>
+    <Td className="narrow">
+      <Controls>
+        <Button
+          icon={remote ? 'small-tick' : 'cross'}
+          btnStyle={remote ? 'info' : 'default'}
+          onClick={handleRemoteClick}
+        />
+      </Controls>
+    </Td>
+    {showDeprecated && (
+      <Td className="medium">
+        <Icon iconName={deprecated ? 'flag' : 'flag-o'} />
+      </Td>
+    )}
+  </Tr>
+);
 
 export default compose(
   withHandlers({
