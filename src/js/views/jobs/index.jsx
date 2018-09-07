@@ -53,6 +53,7 @@ type Props = {
   infoTotalCount: number,
   infoEnabled: number,
   infoWithAlerts: number,
+  user: Object,
 };
 
 const JobsView: Function = ({
@@ -140,16 +141,18 @@ const selector: Function = createSelector(
   [
     resourceSelector('jobs'),
     resourceSelector('systemOptions'),
+    resourceSelector('currentUser'),
     collectionSelector,
     querySelector('date'),
     settingsSelector,
   ],
-  (meta, systemOptions, jobs, date, settings) => ({
+  (meta, systemOptions, user, jobs, date, settings) => ({
     meta,
     systemOptions,
     jobs,
     date,
     isTablet: settings.tablet,
+    user,
   })
 );
 
@@ -167,8 +170,10 @@ export default compose(
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
   mapProps(
-    ({ date, ...rest }: Props): Object => ({
+    ({ date, isTablet, user, ...rest }: Props): Object => ({
+      isTablet: isTablet || user.data.storage.sidebarOpen,
       date: date || DATES.PREV_DAY,
+      user,
       ...rest,
     })
   ),

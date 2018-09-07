@@ -169,6 +169,7 @@ const totalInstancesSelector: Function = createSelector(
 const viewSelector = createSelector(
   [
     resourceSelector('workflows'),
+    resourceSelector('currentUser'),
     collectionSelector,
     systemOptionsSelector,
     querySelector('deprecated'),
@@ -178,6 +179,7 @@ const viewSelector = createSelector(
   ],
   (
     workflows,
+    user,
     collection,
     systemOptions,
     deprecated,
@@ -186,6 +188,7 @@ const viewSelector = createSelector(
     totalInstances
   ): Object => ({
     meta: workflows,
+    user,
     workflows: collection,
     systemOptions,
     deprecated: deprecated === 'true',
@@ -224,6 +227,7 @@ type Props = {
   infoEnabled: number,
   infoWithAlerts: number,
   totalInstances: Object,
+  user: Object,
 };
 
 const Workflows: Function = ({
@@ -324,8 +328,10 @@ export default compose(
   withSort('workflows', 'workflows', sortDefaults.workflows),
   loadMore('workflows', 'workflows', true, 50),
   mapProps(
-    ({ date, ...rest }: Props): Object => ({
+    ({ date, isTablet, user, ...rest }: Props): Object => ({
+      isTablet: isTablet || user.data.storage.sidebarOpen,
       date: date || DATES.PREV_DAY,
+      user,
       ...rest,
     })
   ),

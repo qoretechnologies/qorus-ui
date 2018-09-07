@@ -177,21 +177,8 @@ export default class Root extends Component {
 
     // All tests were written for non-responsive sizes
     // ZombieJS automatically sets the innerWidth to 1024
-    let width = process.env.TESTINST ? 1600 : window.innerWidth;
-
-    this.props.saveDimensions({
-      width,
-      height: window.innerHeight,
-    });
-
-    window.addEventListener('resize', () => {
-      width = process.env.TESTINST ? 1600 : window.innerWidth;
-
-      this.delayedResize({
-        width,
-        height: window.innerHeight,
-      });
-    });
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
   }
 
   /**
@@ -205,22 +192,31 @@ export default class Root extends Component {
 
   delayedResize: Function = debounce((data: Object): void => {
     this.props.saveDimensions(data);
-  }, 200);
+  }, 100);
+
+  handleResize: Function = () => {
+    const width = process.env.TESTINST ? 1600 : window.innerWidth;
+
+    this.props.saveDimensions({
+      width,
+      height: window.innerHeight,
+    });
+  };
 
   hideMenu: Function = () => {
-    this.setMenu(true);
+    this.setMenu(false);
   };
 
   showMenu: Function = () => {
-    this.setMenu(false);
+    this.setMenu(true);
   };
 
   toggleMenu: Function = () => {
     this.setMenu(!this.props.sidebarOpen);
   };
 
-  setMenu: Function = (menuCollapsed: boolean) => {
-    this.props.storeSidebar(menuCollapsed);
+  setMenu: Function = (sidebarOpen: boolean) => {
+    this.props.storeSidebar(sidebarOpen);
   };
 
   handleNotificationsClick: Function = () => {
@@ -320,7 +316,7 @@ export default class Root extends Component {
             {!isTablet && (
               <Sidebar
                 light={isLightTheme}
-                menuCollapsed={this.props.sidebarOpen}
+                menuCollapsed={!this.props.sidebarOpen}
                 toggleMenu={this.toggleMenu}
               />
             )}
