@@ -205,6 +205,9 @@ pre.line-numbers {
 
 .resource-name-link {
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .resource-selector {
