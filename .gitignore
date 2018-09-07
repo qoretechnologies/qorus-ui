@@ -16,3 +16,4 @@ TAGS
 
 npm-debug.log*
 /i.txt
+/rest.http

@@ -16,6 +16,7 @@ import { Control } from '../../../components/controls';
 import WorkflowsControls from '../controls';
 import InstancesChart from '../../../components/instances_chart';
 import { InputGroup, ControlGroup } from '@blueprintjs/core';
+import ProcessSummary from '../../../components/ProcessSummary';
 
 @connect(
   null,
@@ -98,18 +99,7 @@ export default class DetailTab extends Component {
         </PaneItem>
         <Author model={workflow} />
         <AlertsTab alerts={workflow.alerts} />
-        {workflow.process && (
-          <div>
-            <h4>Process summary</h4>
-            Node: <Badge val={workflow.process.node} bypass label="info" />{' '}
-            <Icon iconName="circle" className="separator" /> PID:{' '}
-            <Badge val={workflow.process.pid} bypass label="info" />{' '}
-            <Icon iconName="circle" className="separator" /> Status:{' '}
-            <Badge val={workflow.process.status} bypass label="info" />{' '}
-            <Icon iconName="circle" className="separator" /> Memory:{' '}
-            <Badge val={workflow.process.priv_str} bypass label="info" />
-          </div>
-        )}
+        <ProcessSummary process={workflow.process} />
         <PaneItem title="Instances">
           <InstancesChart
             width="100%"

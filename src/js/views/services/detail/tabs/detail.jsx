@@ -8,6 +8,7 @@ import actions from 'store/api/actions';
 import AlertsTable from '../../../../components/alerts_table';
 import PaneItem from '../../../../components/pane_item';
 import ServicesControls from '../../controls';
+import ProcessSummary from '../../../../components/ProcessSummary';
 
 @connect(
   () => ({}),
@@ -44,6 +45,7 @@ export default class DetailTab extends Component {
         <PaneItem title="Description">{service.desc}</PaneItem>
         <Author model={service} />
         <AlertsTable alerts={service.alerts} />
+        <ProcessSummary process={service.process} />
         <Groups>
           {(service.groups || []).map(g => (
             <Group
