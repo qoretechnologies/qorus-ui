@@ -283,9 +283,11 @@ export default class ChartComponent extends Component {
             height={this.props.height}
           />
         </div>
-        <CenterWrapper>
-          <ul className="chart-legend">{this.renderLegend()}</ul>
-        </CenterWrapper>
+        {this.props.type !== 'bar' && (
+          <CenterWrapper>
+            <ul className="chart-legend">{this.renderLegend()}</ul>
+          </CenterWrapper>
+        )}
       </div>
     );
   }

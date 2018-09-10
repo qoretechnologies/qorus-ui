@@ -26,6 +26,7 @@ import { ORDER_STATES_ARRAY, ORDER_STATES } from '../../constants/orders';
 import { formatCount } from '../../helpers/orders';
 import InstancesBar from '../../components/instances_bar';
 import InstancesChart from '../../components/instances_chart';
+import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
 
 type Props = {
@@ -140,20 +141,12 @@ const TableRow: Function = ({
         content={
           <Box top>
             <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
-            <PaneItem title="Instances">
-              <InstancesChart width={400} states={states} instances={rest} />
-            </PaneItem>
-            {rest.process && (
-              <PaneItem title="Process summary">
-                Node: <Badge val={rest.process.node} bypass label="info" />{' '}
-                <Icon iconName="circle" className="separator" /> PID:{' '}
-                <Badge val={rest.process.pid} bypass label="info" />{' '}
-                <Icon iconName="circle" className="separator" /> Status:{' '}
-                <Badge val={rest.process.status} bypass label="info" />{' '}
-                <Icon iconName="circle" className="separator" /> Memory:{' '}
-                <Badge val={rest.process.priv_str} bypass label="info" />
+            {rest.TOTAL > 0 && (
+              <PaneItem title="Instances">
+                <InstancesChart width={400} states={states} instances={rest} />
               </PaneItem>
             )}
+            <ProcessSummary process={rest.process} />
           </Box>
         }
         interactionKind={PopoverInteractionKind.HOVER}
