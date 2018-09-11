@@ -94,9 +94,11 @@ export default class DetailTab extends Component {
             </ControlGroup>
           </form>
         </PaneItem>
-        <PaneItem title="Description">
-          <p>{workflow.description}</p>
-        </PaneItem>
+        {workflow.description && (
+          <PaneItem title="Description">
+            <p>{workflow.description}</p>
+          </PaneItem>
+        )}
         <Author model={workflow} />
         <AlertsTab alerts={workflow.alerts} />
         <ProcessSummary process={workflow.process} />

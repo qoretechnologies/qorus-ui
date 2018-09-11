@@ -42,7 +42,9 @@ export default class DetailTab extends Component {
             id={service.id}
           />
         </PaneItem>
-        <PaneItem title="Description">{service.desc}</PaneItem>
+        {service.desc && (
+          <PaneItem title="Description">{service.desc}</PaneItem>
+        )}
         <Author model={service} />
         <AlertsTable alerts={service.alerts} />
         <ProcessSummary process={service.process} />
