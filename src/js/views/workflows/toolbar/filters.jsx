@@ -71,7 +71,7 @@ const ToolbarFilters: Function = ({
       />
       <Dropdown>
         <Control intent={deprecatedQuery ? Intent.PRIMARY : Intent.NONE}>
-          <Icon iconName="caret-down" />
+          More
         </Control>
         <Item
           title="Deprecated"

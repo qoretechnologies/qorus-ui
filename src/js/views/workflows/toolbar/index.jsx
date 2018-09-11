@@ -53,8 +53,8 @@ const WorkflowsToolbar: Function = ({
   withAlertsCount,
   enabledCount,
 }: Props): React.Element<any> => (
-  <div>
-    <Toolbar>
+  <Toolbar>
+    <div className="pull-left">
       <Selector selected={selected} selectedCount={selectedIds.length} />{' '}
       <Actions
         selectedIds={selectedIds}
@@ -98,13 +98,13 @@ const WorkflowsToolbar: Function = ({
           <Button iconName="info-sign" />
         </ButtonGroup>
       </Popover>
-      <Search
-        defaultValue={searchQuery}
-        onSearchUpdate={changeSearchQuery}
-        resource="workflows"
-      />
-    </Toolbar>
-  </div>
+    </div>
+    <Search
+      defaultValue={searchQuery}
+      onSearchUpdate={changeSearchQuery}
+      resource="workflows"
+    />
+  </Toolbar>
 );
 
 export default compose(

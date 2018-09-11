@@ -111,10 +111,10 @@ table.table--data {
   }
 
   tr.row-alert {
-    background-color: lighten($status-light-red, 20);
+    background-color: lighten($status-light-red, 15);
 
     &:nth-of-type(odd) {
-      background-color: lighten($status-light-red, 25);
+      background-color: lighten($status-light-red, 20);
     }
   }
 

@@ -9,6 +9,7 @@ import {
   Position,
   Button as Btn,
   ButtonGroup,
+  ControlGroup,
 } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
@@ -289,7 +290,7 @@ export default class Dropdown extends Component {
 
   render(): React.Element<any> {
     return (
-      <ButtonGroup className={this.props.className}>
+      <ButtonGroup className={`${this.props.className} qorus-dropdown`}>
         <Popover
           position={Position.BOTTOM}
           content={this.renderDropdown()}

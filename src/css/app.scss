@@ -364,3 +364,7 @@ pre {
 .pt-progress-bar.pt-intent-success .pt-progress-meter {
   background-color: $qore-green;
 }
+
+.pt-input-group {
+  border-radius: inherit;
+}
