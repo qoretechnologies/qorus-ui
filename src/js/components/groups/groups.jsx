@@ -8,7 +8,7 @@ const Groups: Function = ({
   children,
 }: {
   children: any,
-}): React.Element<any> =>
+}): React.Element<any> | any =>
   React.Children.count(children) !== 0 && (
     <PaneItem title="Groups">{children}</PaneItem>
   );

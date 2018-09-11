@@ -14,6 +14,8 @@ import Alert from '../../components/alert';
 import Box from '../../components/box';
 import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../constants/orders';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import InstancesBar from '../../components/instances_bar/index';
+import Toolbar from '../../components/toolbar/index';
 
 type Props = {
   id: number,
@@ -60,22 +62,19 @@ const WorkflowHeader: Function = ({
       />
     </div>
     <Box top>
+      <Toolbar mb>
+        <InstancesBar
+          states={ORDER_STATES}
+          instances={rest}
+          totalInstances={rest.TOTAL}
+          wrapperWidth={400}
+        />
+      </Toolbar>
+
       <div className="status-row">
-        {ORDER_STATES.map(
-          (o, k) =>
-            rest[o.name] > 0 ? (
-              <Badge
-                key={k}
-                className={`status-${o.label}`}
-                val={`${o.short}: ${rest[o.name]}`}
-              />
-            ) : (
-              undefined
-            )
-        )}
-      </div>
-      <div className="status-row">
-        {groups.map((g, k) => <Group key={k} name={g.name} size={g.size} />)}
+        {groups.map((g, k) => (
+          <Group key={k} name={g.name} size={g.size} />
+        ))}
       </div>
     </Box>
 
@@ -89,7 +88,8 @@ const WorkflowHeader: Function = ({
           This workflow has alerts raised against it that may prevent it from
           operating properly.{' '}
           <Link to={`/workflows?date=${date}&paneId=${id}`}>
-            View alerts ({alerts.length}).
+            View alerts ({alerts.length}
+            ).
           </Link>
         </Callout>
       </Box>

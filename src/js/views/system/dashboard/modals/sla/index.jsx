@@ -21,6 +21,7 @@ type Props = {
   totalOrderStats: number,
   onSortChange: Function,
   sortData: Object,
+  orderStats?: Object,
 };
 
 const StatsModal: Function = ({

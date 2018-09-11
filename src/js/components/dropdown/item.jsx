@@ -17,6 +17,7 @@ export default class Item extends Component {
     toggleItem?: () => void,
     className?: string,
     marked: number,
+    intent: ?string,
   };
 
   componentDidMount() {

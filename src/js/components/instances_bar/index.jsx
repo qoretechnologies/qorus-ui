@@ -24,8 +24,9 @@ const InstancesBar: Function = ({
   type: type = 'workflow',
   showPct,
   minWidth,
+  wrapperWidth: wrapperWidth = '100%',
 }: Props): React.Element<any> => (
-  <div className="instances-bar-wrapper">
+  <div className="instances-bar-wrapper" style={{ width: wrapperWidth }}>
     {totalInstances !== 0 ? (
       calculateInstanceBarWidths(
         states,

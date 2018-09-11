@@ -1,6 +1,5 @@
 .instances-bar-wrapper {
   height: 22px;
-  width: 100%;
   display: inline-block;
 
   span {
@@ -23,6 +22,7 @@
     display: inline-block;
     color: #fff;
     position: relative;
+    text-align: center;
 
     &.bar-none {
       width: 100%;

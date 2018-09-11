@@ -17,6 +17,8 @@ import compose from 'recompose/compose';
 type Props = {
   menuCollapsed?: boolean,
   toggleMenu: Function,
+  isTablet: boolean,
+  light?: boolean,
 };
 
 const menu = {

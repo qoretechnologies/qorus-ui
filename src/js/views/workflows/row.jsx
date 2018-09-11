@@ -62,6 +62,8 @@ type Props = {
   order_stats?: Object,
   orderStats?: Object,
   slaStats?: Object,
+  totalOrderStats: number,
+  totalSlaStats: number,
 };
 
 const TableRow: Function = ({
