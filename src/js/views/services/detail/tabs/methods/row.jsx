@@ -7,7 +7,10 @@ import mapProps from 'recompose/mapProps';
 
 import { Tr, Td } from '../../../../../components/new_table';
 import Autocomponent from '../../../../../components/autocomponent';
-import { Controls, Control as Button } from '../../../../../components/controls';
+import {
+  Controls,
+  Control as Button,
+} from '../../../../../components/controls';
 import SLAControl from '../../../../../components/sla_control';
 import withModal from '../../../../../hocomponents/modal';
 import ModalRun from './modal_run';
@@ -42,23 +45,21 @@ const MethodsRow: Function = ({
   setMethod,
   removeMethod,
 }: Props): React.Element<any> => (
-  <Tr>
+  <Tr title={method.description}>
     <Td className="name">{method.name}</Td>
-    <Td className="tiny"><Autocomponent>{method.locktype}</Autocomponent></Td>
-    <Td className="tiny"><Autocomponent>{method.internal}</Autocomponent></Td>
-    <Td className="tiny"><Autocomponent>{method.write}</Autocomponent></Td>
+    <Td className="tiny">
+      <Autocomponent>{method.locktype}</Autocomponent>
+    </Td>
+    <Td className="tiny">
+      <Autocomponent>{method.internal}</Autocomponent>
+    </Td>
+    <Td className="tiny">
+      <Autocomponent>{method.write}</Autocomponent>
+    </Td>
     <Td className="normal">
       <Controls grouped>
-        <Button
-          iconName="play"
-          btnStyle="success"
-          onClick={handleRunClick}
-        />
-        <Button
-          iconName="code"
-          btnStyle="inverse"
-          onClick={handleCodeClick}
-        />
+        <Button iconName="play" btnStyle="success" onClick={handleRunClick} />
+        <Button iconName="code" btnStyle="inverse" onClick={handleCodeClick} />
       </Controls>
     </Td>
     <Td className="text">
@@ -77,36 +78,34 @@ const MethodsRow: Function = ({
 
 export default compose(
   withModal(),
-  mapProps(({ perms, ...rest }: Props): Props => ({
-    canModify: hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or'),
-    perms,
-    ...rest,
-  })),
+  mapProps(
+    ({ perms, ...rest }: Props): Props => ({
+      canModify: hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or'),
+      perms,
+      ...rest,
+    })
+  ),
   withHandlers({
-    handleRunClick: ({ openModal, closeModal, method, service }: Props): Function => (): void => {
+    handleRunClick: ({
+      openModal,
+      closeModal,
+      method,
+      service,
+    }: Props): Function => (): void => {
       openModal(
-        <ModalRun
-          method={method}
-          service={service}
-          onClose={closeModal}
-        />
+        <ModalRun method={method} service={service} onClose={closeModal} />
       );
     },
-    handleCodeClick: ({ openModal, closeModal, method, service }: Props): Function => (): void => {
+    handleCodeClick: ({
+      openModal,
+      closeModal,
+      method,
+      service,
+    }: Props): Function => (): void => {
       openModal(
-        <ModalCode
-          method={method}
-          service={service}
-          onClose={closeModal}
-        />
+        <ModalCode method={method} service={service} onClose={closeModal} />
       );
     },
-
   }),
-  pure([
-    'slas',
-    'slavalue',
-    'method',
-    'service',
-  ])
+  pure(['slas', 'slavalue', 'method', 'service'])
 )(MethodsRow);

@@ -13,6 +13,7 @@ type Props = {
   onHighlightEnd?: Function,
   onClick?: Function,
   first?: boolean,
+  title?: string,
 };
 
 @updateOnlyForKeys(['children', 'className', 'sortData', 'highlight', 'first'])
@@ -148,7 +149,14 @@ export default class Row extends Component {
   };
 
   render() {
-    const { children, className, sortData, onSortChange, onClick } = this.props;
+    const {
+      children,
+      className,
+      sortData,
+      onSortChange,
+      onClick,
+      title,
+    } = this.props;
     const { highlight } = this.state;
 
     return (
@@ -161,6 +169,7 @@ export default class Row extends Component {
         )}
         onClick={onClick}
         ref={this.handleRef}
+        title={title}
       >
         {sortData && onSortChange
           ? React.Children.map(
