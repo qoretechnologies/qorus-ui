@@ -48,7 +48,6 @@ const WorkflowControls: Function = ({
     >
       <Button
         iconName="refresh"
-        intent={Intent.PRIMARY}
         onClick={handleResetClick}
         className="pt-small"
       />
