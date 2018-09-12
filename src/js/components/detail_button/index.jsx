@@ -14,18 +14,12 @@ const DetailButton: Function = ({
   active,
   onClick,
 }: Props): React.Element<any> => (
-  <Tooltip
-    content="Opens pane with detailed view"
-    position={Position.TOP}
-    useSmartPositioning
-  >
-    <Button
-      text={active ? 'Close' : 'Detail'}
-      intent={active ? Intent.PRIMARY : Intent.NONE}
-      onClick={onClick}
-      className="pt-small"
-    />
-  </Tooltip>
+  <Button
+    text={active ? 'Close' : 'Detail'}
+    intent={active ? Intent.PRIMARY : Intent.NONE}
+    onClick={onClick}
+    className="pt-small"
+  />
 );
 
 export default compose(

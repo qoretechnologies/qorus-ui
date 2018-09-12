@@ -29,29 +29,17 @@ const WorkflowControls: Function = ({
   handleResetClick,
 }: Props): React.Element<any> => (
   <ButtonGroup>
-    <Tooltip
-      content={enabled ? 'Disable workflow' : 'Enable workflow'}
-      position={Position.TOP}
-      useSmartPositioning
-    >
-      <Button
-        iconName="power"
-        intent={enabled ? Intent.SUCCESS : Intent.DANGER}
-        onClick={handleToggleEnabledClick}
-        className="pt-small"
-      />
-    </Tooltip>
-    <Tooltip
-      content="Reset workflow"
-      position={Position.TOP}
-      useSmartPositioning
-    >
-      <Button
-        iconName="refresh"
-        onClick={handleResetClick}
-        className="pt-small"
-      />
-    </Tooltip>
+    <Button
+      iconName="power"
+      intent={enabled ? Intent.SUCCESS : Intent.DANGER}
+      onClick={handleToggleEnabledClick}
+      className="pt-small"
+    />
+    <Button
+      iconName="refresh"
+      onClick={handleResetClick}
+      className="pt-small"
+    />
   </ButtonGroup>
 );
 
