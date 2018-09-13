@@ -474,6 +474,26 @@ const handleEvent = (url, data, dispatch, state) => {
 
         break;
       }
+      case 'WORKFLOW_RECOVERED': {
+        const workflow = state.api.workflows.data.find(
+          wf => wf.id === info.workflowid
+        );
+
+        if (state.api.workflows.sync && workflow) {
+          pipeline(
+            eventstr,
+            workflows.fixOrders,
+            {
+              id: info.workflowid,
+              old: info.old_statuses,
+              new: info.new_status,
+            },
+            dispatch
+          );
+        }
+
+        break;
+      }
       case 'WORKFLOW_STATUS_CHANGED': {
         const workflow = state.api.workflows.data.find(
           wf => wf.id === info.workflowid

@@ -311,6 +311,55 @@ const modifyOrder = {
   },
 };
 
+const fixOrders = {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow = newData.find(d => d.id === dt.id);
+
+        // * Set all the statuses to 0 and create an object
+        const statusesBefore = dt.old.map((status: string) => ({
+          [status]: 0,
+        }));
+
+        // * Count the values of the old statuses to be added to the new status
+        const oldStatusCount: number = dt.old.reduce(
+          (cur: number, status: string): number => {
+            return cur + workflow[status];
+          },
+          0
+        );
+
+        // * Add the sum of all the old statuses to the new status
+        const newStatus = workflow[dt.new] + oldStatusCount;
+
+        newData = updateItemWithId(
+          dt.id,
+          {
+            ...statusesBefore,
+            [dt.new]: newStatus,
+            _updated: true,
+          },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
 const addAlert = {
   next(
     state = initialState,
@@ -557,4 +606,5 @@ export {
   updateStats as UPDATESTATS,
   setThreshold as SETTHRESHOLD,
   setRemote as SETREMOTE,
+  fixOrders as FIXORDERS,
 };

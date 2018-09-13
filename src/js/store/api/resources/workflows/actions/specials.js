@@ -76,6 +76,10 @@ const modifyOrder = createAction('WORKFLOWS_MODIFYORDER', events => ({
   events,
 }));
 
+const fixOrders = createAction('WORKFLOWS_FIXORDERS', events => ({
+  events,
+}));
+
 const addAlert = createAction('WORKFLOWS_ADDALERT', events => ({ events }));
 
 const clearAlert = createAction('WORKFLOWS_CLEARALERT', events => ({ events }));
@@ -221,4 +225,5 @@ export {
   updateStats,
   setThreshold,
   setRemote,
+  fixOrders,
 };
