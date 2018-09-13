@@ -290,14 +290,22 @@ const modifyOrder = {
 
       events.forEach(dt => {
         const workflow = newData.find(d => d.id === dt.id);
+        const isStatusOlder = workflow[dt.old] - 1 < 0;
         const statusBefore =
           workflow[dt.old] - 1 < 0 ? 0 : workflow[dt.old] - 1;
         const status = workflow[dt.new] + 1;
+        let total = workflow.TOTAL;
+
+        if (isStatusOlder) {
+          total = total + 1;
+        }
+
         newData = updateItemWithId(
           dt.id,
           {
             [dt.old]: statusBefore,
             [dt.new]: status,
+            TOTAL: total,
             _updated: true,
           },
           newData
