@@ -327,9 +327,13 @@ const fixOrders = {
         const workflow = newData.find(d => d.id === dt.id);
 
         // * Set all the statuses to 0 and create an object
-        const statusesBefore = dt.old.map((status: string) => ({
-          [status]: 0,
-        }));
+        const statusesBefore: Object = dt.old.reduce(
+          (cur: Object, status: string) => ({
+            ...cur,
+            [status]: 0,
+          }),
+          {}
+        );
 
         // * Count the values of the old statuses to be added to the new status
         const oldStatusCount: number = dt.old.reduce(
