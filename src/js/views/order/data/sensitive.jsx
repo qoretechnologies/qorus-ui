@@ -40,22 +40,17 @@ const SensitiveView: Function = ({
   if (!isSecure && !hasPerms) {
     return (
       <Alert bsStyle="danger">
-        <Icon iconName="warning" /> Your connection is not secure and you do not
-        have the needed permission to view this.
+        Your connection is not secure and you do not have the needed permission
+        to view this.
       </Alert>
     );
   } else if (!isSecure) {
-    return (
-      <Alert bsStyle="danger">
-        <Icon iconName="warning" /> Your connection is not secure.
-      </Alert>
-    );
+    return <Alert bsStyle="danger">Your connection is not secure.</Alert>;
   }
 
   return (
     <Alert bsStyle="danger">
-      <Icon iconName="warning" /> You do not have the needed permission to view
-      this.
+      You do not have the needed permission to view this.
     </Alert>
   );
 };

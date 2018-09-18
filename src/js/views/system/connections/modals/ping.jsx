@@ -38,7 +38,10 @@ export default class Ping extends Component {
 
   ping: Function = async (): Promise<*> => {
     if (this.props.pingRemote) {
-      const payload: Object = await this.props.pingRemote(this.props.name, this.props.type);
+      const payload: Object = await this.props.pingRemote(
+        this.props.name,
+        this.props.type
+      );
 
       this.setState({
         error: payload.error,
@@ -51,11 +54,7 @@ export default class Ping extends Component {
     if (!this.state.data) return <Loader />;
 
     if (this.state.error) {
-      return (
-        <Alert bsStyle="danger">
-          { this.state.data.desc }
-        </Alert>
-      );
+      return <Alert bsStyle="danger">{this.state.data.desc}</Alert>;
     }
 
     const { url, time, ok, info } = this.state.data;
@@ -65,26 +64,24 @@ export default class Ping extends Component {
         <Section type="body">
           <Row>
             <Cell tag="th"> URL </Cell>
-            <Cell>{ url }</Cell>
+            <Cell>{url}</Cell>
           </Row>
           <Row>
             <Cell tag="th"> Status </Cell>
             <Cell>
-              <AutoComponent>
-                { ok }
-              </AutoComponent>
+              <AutoComponent>{ok}</AutoComponent>
             </Cell>
           </Row>
           {!ok && (
             <Row>
               <Cell tag="th"> Error </Cell>
-              <Cell> { info } </Cell>
+              <Cell> {info} </Cell>
             </Row>
           )}
           {ok && (
             <Row>
               <Cell tag="th"> Response Time </Cell>
-              <Cell> { time } </Cell>
+              <Cell> {time} </Cell>
             </Row>
           )}
         </Section>
@@ -95,15 +92,10 @@ export default class Ping extends Component {
   render() {
     return (
       <Modal hasFooter>
-        <Modal.Header
-          titleId="ping"
-          onClose={this.props.onClose}
-        >
-          Pinging { this.props.name }
+        <Modal.Header titleId="ping" onClose={this.props.onClose}>
+          Pinging {this.props.name}
         </Modal.Header>
-        <Modal.Body>
-          { this.renderBody() }
-        </Modal.Body>
+        <Modal.Body>{this.renderBody()}</Modal.Body>
         <Modal.Footer>
           <Controls noControls grouped>
             <Button

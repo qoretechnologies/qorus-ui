@@ -156,8 +156,7 @@ export default class ModalRun extends Component {
         <Modal.Body>
           <div className="content">
             {error && (
-              <Alert bsStyle="danger">
-                <h4> Error occured </h4>
+              <Alert bsStyle="danger" title="Error occured">
                 {error}
               </Alert>
             )}
