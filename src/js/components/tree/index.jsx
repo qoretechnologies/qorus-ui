@@ -281,9 +281,9 @@ export default class Tree extends Component {
               rows="20"
               cols="50"
             />
-            <Alert bsStyle="warning">
-              <strong>Warning!</strong> Posting new staticdata replaces original
-              content and it can be fatal for business processing.
+            <Alert bsStyle="warning" title="Warning!">
+              Posting new staticdata replaces original content and it can be
+              fatal for business processing.
             </Alert>
             <Button
               text="Update data"

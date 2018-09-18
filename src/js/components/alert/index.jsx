@@ -1,20 +1,25 @@
 /* @flow */
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import classNames from 'classnames';
+import { Callout } from '@blueprintjs/core';
+import { getIntentFromBsStyle } from '../../constants/components';
 
 const Alert: Function = ({
   children,
   bsStyle,
+  title,
 }: {
-  children?: any,
-  bsStyle?: string
+  children: any,
+  bsStyle?: string,
+  title?: string,
 }): React.Element<any> => (
-  <div
-    className={classNames('alert', bsStyle ? `alert-${bsStyle}` : '')}
+  <Callout
+    intent={getIntentFromBsStyle(bsStyle)}
+    iconName="warning-sign"
+    title={title}
   >
     {children}
-  </div>
+  </Callout>
 );
 
-export default pure(['children', 'bsStyle'])(Alert);
+export default pure(['children', 'bsStyle', 'title'])(Alert);
