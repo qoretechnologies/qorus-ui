@@ -9,7 +9,11 @@ import Loader from '../../../components/loader';
 import actions from 'store/api/actions';
 import DashboardModule from '../../../components/dashboard_module/index';
 import PaneItem from '../../../components/pane_item';
-import { statusHealth, calculateMemory } from '../../../helpers/system';
+import {
+  statusHealth,
+  calculateMemory,
+  getSlicedRemotes,
+} from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
 import {
   getStatsCount,
@@ -40,28 +44,34 @@ const viewSelector = createSelector(
   })
 );
 
+type Props = {
+  children: any,
+  route?: Object,
+  health: Object,
+  dispatch: Function,
+  location: Object,
+  system: Object,
+  width: number,
+  currentUser: Object,
+  openModal: Function,
+  closeModal: Function,
+};
+
 @connect(viewSelector)
 @withModal()
 export default class Dashboard extends Component {
-  props: {
-    children: any,
-    route?: Object,
-    health: Object,
-    dispatch: Function,
-    location: Object,
-    system: Object,
-    width: number,
-    currentUser: Object,
-    openModal: Function,
-    closeModal: Function,
-  };
+  props: Props;
 
   state: {
     chartTab: string,
     nodeTab: string,
+    canLoadMoreRemotes: boolean,
   } = {
     chartTab: '1 hour band',
     nodeTab: Object.keys(this.props.system.cluster_info)[0],
+    remotes: getSlicedRemotes(this.props.health.data.remote),
+    canLoadMoreRemotes:
+      this.props.health.data.remote && this.props.health.data.remote.length > 5,
   };
 
   componentWillMount() {
@@ -84,10 +94,21 @@ export default class Dashboard extends Component {
     browserHistory.push(url);
   };
 
+  handleLoadMoreRemotesClick: Function = (): void => {
+    this.setState({
+      canLoadMoreRemotes: !this.state.canLoadMoreRemotes,
+      remotes: !this.state.canLoadMoreRemotes
+        ? getSlicedRemotes(this.props.health.data.remote)
+        : this.props.health.data.remote,
+    });
+  };
+
   render() {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, width, currentUser } = this.props;
+    const { remotes, canLoadMoreRemotes } = this.state;
+
     const clusterMemory = Object.keys(system.cluster_info).reduce(
       (cur, node: string) => cur + system.cluster_info[node].node_priv,
       0
@@ -99,7 +120,7 @@ export default class Dashboard extends Component {
 
     const masonryKey = `${width}_${
       this.state.chartTab
-    }_${sidebarOpen.toString()}`;
+    }_${sidebarOpen.toString()}_${canLoadMoreRemotes.toString()}`;
 
     const sizes =
       width > 1200
@@ -430,10 +451,10 @@ export default class Dashboard extends Component {
               </div>
             </PaneItem>
           </DashboardModule>
-          {health.data.remote && (
+          {remotes.length && (
             <DashboardModule>
               <PaneItem title="Remote Instances">
-                {health.data.remote.map((remote: Object) => (
+                {remotes.map((remote: Object) => (
                   <div
                     className="dashboard-module-wide has-link"
                     key={remote.name}
@@ -458,6 +479,22 @@ export default class Dashboard extends Component {
                     </div>
                   </div>
                 ))}
+                {canLoadMoreRemotes && (
+                  <div
+                    className="dashboard-data-loadmore"
+                    onClick={this.handleLoadMoreRemotesClick}
+                  >
+                    Show all
+                  </div>
+                )}
+                {!canLoadMoreRemotes && remotes.length > 5 ? (
+                  <div
+                    className="dashboard-data-loadmore"
+                    onClick={this.handleLoadMoreRemotesClick}
+                  >
+                    Show less
+                  </div>
+                ) : null}
               </PaneItem>
             </DashboardModule>
           )}
