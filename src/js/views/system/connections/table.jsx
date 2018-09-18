@@ -163,6 +163,7 @@ const ConnectionTable: Function = ({
           <Th className="text" name="desc">
             Description
           </Th>
+          {type === 'qorus' && <Th className="normal">Loopback</Th>}
           <Th className="normal">-</Th>
         </FixedRow>
       </Thead>
