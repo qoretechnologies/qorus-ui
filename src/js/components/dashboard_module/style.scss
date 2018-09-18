@@ -168,6 +168,17 @@
   }
 }
 
+.dashboard-data-loadmore {
+  width: 100%;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #eee;
+}
+
 .dashboard-module-wide {
   clear: both;
   margin-top: 10px;

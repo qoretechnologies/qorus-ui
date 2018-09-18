@@ -142,6 +142,16 @@ const calculateMemory: Function = (
   return `${returnNumber ? round(mem, 2) : ''} ${returnUnit ? unit : ''}`;
 };
 
+const getSlicedRemotes: Function = (remotes): ?Array<Object> => {
+  const remotesLen: number = remotes ? remotes.length : 0;
+
+  if (remotesLen < 1) {
+    return null;
+  }
+
+  return remotesLen > 5 ? remotes.slice(0, 5) : remotes;
+};
+
 export {
   statusHealth,
   utf8ToB64,
@@ -150,4 +160,5 @@ export {
   typeToString,
   getProcessObjectLink,
   calculateMemory,
+  getSlicedRemotes,
 };
