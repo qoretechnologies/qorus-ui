@@ -132,6 +132,26 @@ const updateDone = {
   },
 };
 
+const init = {
+  next(state: Object) {
+    const newState = { ...state };
+
+    newState.isOnDashboard = true;
+
+    return { ...newState };
+  },
+};
+
+const unsync = {
+  next(state: Object) {
+    const newState = { ...state };
+
+    newState.isOnDashboard = false;
+
+    return { ...newState };
+  },
+};
+
 const updateStats = {
   next(
     state: Object,
@@ -194,4 +214,6 @@ export {
   decrementItems as DECREMENTITEMS,
   updateStats as UPDATESTATS,
   updateNodeInfo as UPDATENODEINFO,
+  init as INIT,
+  unsync as UNSYNC,
 };
