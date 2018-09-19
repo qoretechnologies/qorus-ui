@@ -71,7 +71,7 @@ export default class ChartComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    if (this.props.labels !== nextProps.labels) {
+    if (this.props.labels !== nextProps.labels && this.state.chart.data) {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
       const datasets =

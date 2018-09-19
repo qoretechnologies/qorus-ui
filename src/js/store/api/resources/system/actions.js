@@ -1,6 +1,9 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 
+const init: Function = createAction('SYSTEM_INIT');
+const unsync: Function = createAction('SYSTEM_UNSYNC');
+
 const addProcess: Function = createAction(
   'SYSTEM_ADDPROCESS',
   (events: Array<Object>): Object => ({ events })
@@ -47,4 +50,6 @@ export {
   decrementItems,
   updateStats,
   updateNodeInfo,
+  init,
+  unsync,
 };

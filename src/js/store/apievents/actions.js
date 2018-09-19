@@ -20,7 +20,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
     switch (eventstr) {
       case 'NODE_INFO':
-        if (state.api.system.sync) {
+        if (state.api.system.sync && state.api.system.isOnDashboard) {
           pipeline(
             eventstr,
             system.updateNodeInfo,

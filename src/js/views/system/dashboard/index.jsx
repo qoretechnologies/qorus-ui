@@ -15,12 +15,7 @@ import {
   getSlicedRemotes,
 } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
-import {
-  getStatsCount,
-  getStatsPct,
-  prepareHistory,
-  formatChartTime,
-} from '../../../helpers/chart';
+import { prepareHistory, formatChartTime } from '../../../helpers/chart';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import withModal from '../../../hocomponents/modal';
 import StatsModal from './statsModal';
@@ -75,7 +70,13 @@ export default class Dashboard extends Component {
   };
 
   componentWillMount() {
+    this.props.dispatch(actions.system.fetch());
     this.props.dispatch(actions.health.fetch());
+    this.props.dispatch(actions.system.init());
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(actions.system.unsync());
   }
 
   handleChartTabChange: Function = (event: any, chartTab: string): void => {
