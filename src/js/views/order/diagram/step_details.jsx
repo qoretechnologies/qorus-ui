@@ -151,7 +151,7 @@ export default class StepDetailTable extends Component {
               <Cell tag="th"> Status </Cell>
               <Cell>
                 <span
-                  className={`label label-${getStatusLabel(data.stepstatus)}`}
+                  className={`label status-${data.stepstatus.toLowerCase()}`}
                 >
                   {data.stepstatus}
                 </span>
