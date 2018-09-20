@@ -169,6 +169,48 @@ const updateStats = {
   },
 };
 
+const healthChanged = {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      data.health.health = event.health;
+      data.health.ongoing = event.ongoing;
+      data.health.transient = event.transient;
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
+const remoteHealthChanged = {
+  next(
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const data = { ...state.data };
+
+    events.forEach(event => {
+      const remote = data.health.remote(
+        (rm: Object): boolean => rm.name === event.name
+      );
+
+      if (remote) {
+        remote.health = event.health;
+      }
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
 const updateNodeInfo = {
   next(
     state: Object,
@@ -216,4 +258,6 @@ export {
   updateNodeInfo as UPDATENODEINFO,
   init as INIT,
   unsync as UNSYNC,
+  healthChanged as HEALTHCHANGED,
+  remoteHealthChanged as REMOTEHEALTHCHANGED,
 };

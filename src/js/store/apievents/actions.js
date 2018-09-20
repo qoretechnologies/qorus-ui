@@ -666,6 +666,16 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'SYSTEM_HEALTH_CHANGED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.healthChanged, info, dispatch);
+        }
+        break;
+      case 'SYSTEM_REMOTE_HEALTH_CHANGED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.remoteHealthChanged, info, dispatch);
+        }
+        break;
       case 'GROUP_STATUS_CHANGED':
         if (info.synthetic) {
           switch (info.type) {

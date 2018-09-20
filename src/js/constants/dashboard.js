@@ -2,7 +2,8 @@ import { Intent } from '@blueprintjs/core';
 
 const HEALTH_KEYS = {
   YELLOW: Intent.WARNING,
-  UNREACHABLE: Intent.DANGER,
+  UNKNOWN: Intent.WARNING,
+  UNREACHABLE: Intent.NONE,
   RED: Intent.DANGER,
   ERROR: Intent.DANGER,
   GREEN: Intent.SUCCESS,
