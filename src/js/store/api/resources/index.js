@@ -130,7 +130,7 @@ export default [
     name: 'currentUser',
     url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
-    transform: item => item,
+    transform: item => (item.storage ? item : { ...item, ...{ storage: {} } }),
   },
   {
     name: 'services',
