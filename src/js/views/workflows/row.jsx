@@ -193,6 +193,7 @@ const TableRow: Function = ({
         date={date}
         showPct
         minWidth={25}
+        link={`/workflows?paneId=${id}&paneTab=order+stats`}
       />
     </Td>
     <Td className="normal">
@@ -207,6 +208,7 @@ const TableRow: Function = ({
         totalInstances={totalSlaStats}
         workflowId={id}
         date={date}
+        link={`/workflows?paneId=${id}&paneTab=order+stats`}
       />
     </Td>
     <Td className="narrow">
