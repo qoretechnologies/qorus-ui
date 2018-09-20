@@ -39,6 +39,16 @@ const updateNodeInfo: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
+const healthChanged: Function = createAction(
+  'SYSTEM_HEALTHCHANGED',
+  (events: Array<Object>): Object => ({ events })
+);
+
+const remoteHealthChanged: Function = createAction(
+  'SYSTEM_REMOTEHEALTHCHANGED',
+  (events: Array<Object>): Object => ({ events })
+);
+
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 export {
@@ -52,4 +62,6 @@ export {
   updateNodeInfo,
   init,
   unsync,
+  healthChanged,
+  remoteHealthChanged,
 };
