@@ -135,11 +135,7 @@ export default class StepDetailTable extends Component {
               <Cell>
                 <Autocomponent>{data.skip}</Autocomponent>{' '}
                 {canSkip(data) && (
-                  <Button
-                    iconName="pencil"
-                    action={this.handleSkipClick}
-                    btnStyle="success"
-                  />
+                  <Button iconName="edit" action={this.handleSkipClick} />
                 )}
               </Cell>
             </Row>

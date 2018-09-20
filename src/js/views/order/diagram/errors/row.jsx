@@ -50,7 +50,7 @@ const ErrorRow: Function = ({
       <Td className="narrow">
         <Button
           label={stateExpand ? 'Hide' : 'Detail'}
-          btnStyle={stateExpand ? 'danger' : 'success'}
+          btnStyle={stateExpand ? 'info' : 'none'}
           onClick={handleDetailClick}
         />
       </Td>
@@ -70,30 +70,26 @@ const ErrorRow: Function = ({
           <p>{info || 'No info'}</p>
         </Td>
         <Td className="narrow">
-          <Button
-            label="Copy"
-            iconName="copy"
-            btnStyle="success"
-            onClick={handleCopyClick}
-          />
+          <Button label="Copy" iconName="copy" onClick={handleCopyClick} />
         </Td>
       </Tr>
     )}
   </Tbody>
 );
 
-const stringifyError: Function = (data: Object): string => Object.keys(data).reduce((str, key) => (
-  `${str}${key}: ${data[key]}\r\n`
-), '');
+const stringifyError: Function = (data: Object): string =>
+  Object.keys(data).reduce((str, key) => `${str}${key}: ${data[key]}\r\n`, '');
 
 export default compose(
   withState('stateExpand', 'setExpand', ({ expand }: Props): boolean => expand),
-  mapProps(({ stateExpand, setExpand, ...rest }: Props): Props => ({
-    onDetailClick: (expand): Function => setExpand((): boolean => expand),
-    stateExpand,
-    setExpand,
-    ...rest,
-  })),
+  mapProps(
+    ({ stateExpand, setExpand, ...rest }: Props): Props => ({
+      onDetailClick: (expand): Function => setExpand((): boolean => expand),
+      stateExpand,
+      setExpand,
+      ...rest,
+    })
+  ),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
       if (this.props.expand !== nextProps.expand) {
@@ -103,7 +99,10 @@ export default compose(
   }),
   withModal(),
   withHandlers({
-    handleDetailClick: ({ stateExpand, onDetailClick }: Props): Function => (): void => {
+    handleDetailClick: ({
+      stateExpand,
+      onDetailClick,
+    }: Props): Function => (): void => {
       onDetailClick(!stateExpand);
     },
     handleCopyClick: ({
@@ -121,5 +120,5 @@ export default compose(
       );
     },
   }),
-  pure(['stateExpand']),
+  pure(['stateExpand'])
 )(ErrorRow);
