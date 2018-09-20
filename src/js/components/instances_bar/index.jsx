@@ -13,6 +13,8 @@ type Props = {
   type: string,
   showPct: boolean,
   minWidth?: number,
+  wrapperWidth: string | number,
+  link?: string,
 };
 
 const InstancesBar: Function = ({
@@ -25,6 +27,7 @@ const InstancesBar: Function = ({
   showPct,
   minWidth,
   wrapperWidth: wrapperWidth = '100%',
+  link,
 }: Props): React.Element<any> => (
   <div className="instances-bar-wrapper" style={{ width: wrapperWidth }}>
     {totalInstances !== 0 ? (
@@ -37,7 +40,9 @@ const InstancesBar: Function = ({
         (state: Object) =>
           instances[state.name] && instances[state.name] !== 0 ? (
             <Tooltip content={`${state.name} - ${instances[state.name]}`}>
-              <Link to={`/${type}/${id}?filter=${state.title}&date=${date}`}>
+              <Link
+                to={link || `/${type}/${id}?filter=${state.title}&date=${date}`}
+              >
                 <div
                   className={`instances-bar bar-${state.label}`}
                   key={state.name}
