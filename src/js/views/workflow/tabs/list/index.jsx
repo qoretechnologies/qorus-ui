@@ -97,14 +97,24 @@ const WorkflowOrders: Function = ({
   </div>
 );
 
+const filterOrders: Function = (id): Function => (
+  orders: Array<Object>
+): Array<Object> =>
+  orders.filter((order: Object): boolean => order.workflowid === id);
+
 const filterSearch: Function = (search: string): Function => (
   orders: Array<Object>
 ): Array<Object> => findBy(['id', 'workflowstatus'], search, orders);
 
+const idSelector: Function = (state, props) => props.workflow.id;
+
 const collectionSelector: Function = createSelector(
-  [querySelector('search'), resourceSelector('orders')],
-  (search: string, orders: Object) =>
-    flowRight(filterSearch(search))(orders.data)
+  [querySelector('search'), resourceSelector('orders'), idSelector],
+  (search: string, orders: Object, id: number) =>
+    flowRight(
+      filterSearch(search),
+      filterOrders(id)
+    )(orders.data)
 );
 
 const settingsSelector = (state: Object): Object => state.ui.settings;
