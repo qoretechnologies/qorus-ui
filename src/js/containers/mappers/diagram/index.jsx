@@ -13,6 +13,8 @@ import FieldDetail from './field-detail';
 import Detail from './detail';
 import Tooltip from './tooltip';
 import Connection from './connection';
+import modal from '../../../hocomponents/modal';
+import DetailModal from './modals/DetailModal';
 // import { formatFieldSource } from '../../../helpers/mapper';
 
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
@@ -275,11 +277,6 @@ export const Diagramm = ({
         ))}
       </svg>
     </div>
-    {selectedDetail && (
-      <div className="mapper-detail" id="detail">
-        <Detail data={selectedDetail} onClose={handleDetailSelection} />
-      </div>
-    )}
   </div>
 );
 
@@ -357,9 +354,10 @@ const addOutputSelection = compose(
 );
 
 const setDetail = compose(
-  withState('selectedDetail', 'setSelectedDetail', null),
-  withProps(({ setSelectedDetail }) => ({
-    handleDetailSelection: detail => setSelectedDetail(detail),
+  withProps(({ openModal, closeModal }) => ({
+    handleDetailSelection: detail => {
+      openModal(<DetailModal onClose={closeModal} detail={detail} />);
+    },
   }))
 );
 
@@ -371,12 +369,13 @@ const toggleTooltip = compose(
 );
 
 export default compose(
-  pure,
+  modal(),
   getRelationsData,
   appendMaxElementCount,
   appendDiagramParams,
   addInputSelection,
   addOutputSelection,
   setDetail,
-  toggleTooltip
+  toggleTooltip,
+  pure
 )(Diagramm);
