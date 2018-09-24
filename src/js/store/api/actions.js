@@ -17,6 +17,7 @@ import * as sqlcacheActions from './resources/sqlcache/actions';
 import * as usersActions from './resources/users/actions';
 import * as rolesActions from './resources/roles/actions';
 import * as permsActions from './resources/perms/actions';
+import * as healthActions from './resources/health/actions';
 import * as currentUserActions from './resources/currentUser/actions';
 import * as valuemapsActions from './resources/valuemaps/actions';
 import * as extensionsActions from './resources/extensions/actions';
@@ -104,6 +105,8 @@ Object.assign(actions.steps, stepActions);
 Object.assign(actions.props, propActions);
 
 Object.assign(actions.valuemaps, valuemapsActions);
+
+Object.assign(actions.health, healthActions);
 
 Object.assign(actions.extensions, extensionsActions);
 

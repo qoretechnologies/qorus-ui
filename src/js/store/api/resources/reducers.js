@@ -22,3 +22,4 @@ export * as slas from './slas/reducers';
 export * as slaevents from './slas/events/reducers';
 export * as slaperf from './slas/perf/reducers';
 export * as system from './system/reducers';
+export * as health from './health/reducers';

@@ -10,6 +10,7 @@ import * as jobs from '../api/resources/jobs/actions/specials';
 import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
 import * as system from '../api/resources/system/actions';
+import * as health from '../api/resources/health/actions';
 import { pipeline } from '../../helpers/apievents';
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -673,7 +674,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'SYSTEM_REMOTE_HEALTH_CHANGED':
         if (state.api.system.sync) {
-          pipeline(eventstr, system.remoteHealthChanged, info, dispatch);
+          pipeline(eventstr, health.remoteHealthChanged, info, dispatch);
         }
         break;
       case 'GROUP_STATUS_CHANGED':
