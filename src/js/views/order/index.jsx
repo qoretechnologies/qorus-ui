@@ -6,7 +6,6 @@ import actions from 'store/api/actions';
 
 import Header from './header';
 import Loader from 'components/loader';
-import Box from 'components/box';
 import withTabs from '../../hocomponents/withTabs';
 
 import StepsView from './steps';
@@ -20,6 +19,7 @@ import AuditView from './audit';
 import CodeView from './code';
 import DiagramView from './diagram';
 import Tabs, { Pane } from '../../components/tabs';
+import titleManager from '../../hocomponents/TitleManager';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -54,6 +54,7 @@ const selector = createSelector(
 
 @connect(selector)
 @withTabs('diagram')
+@titleManager(({ order }): string => order.name)
 export default class Order extends Component {
   static propTypes = {
     order: PropTypes.object,

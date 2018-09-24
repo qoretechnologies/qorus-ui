@@ -2,10 +2,11 @@
 import React from 'react';
 
 import ErrorsContainer from '../../../containers/errors';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   location: Object,
-}
+};
 
 const ErrorsView: Function = ({ location }: Props): React.Element<any> => (
   <div className="tab-pane active">
@@ -18,4 +19,4 @@ const ErrorsView: Function = ({ location }: Props): React.Element<any> => (
   </div>
 );
 
-export default ErrorsView;
+export default titleManager('Errors')(ErrorsView);

@@ -8,6 +8,7 @@ import InfoTable from '../../../components/info_table';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const SystemInfoTable: Function = ({ data }: { data: Object }) => (
   <div>
@@ -28,5 +29,6 @@ export default compose(
       data: state.api.system.data,
     })
   ),
+  titleManager('Info'),
   pure(['data'])
 )(SystemInfoTable);

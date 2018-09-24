@@ -19,6 +19,7 @@ import Loader from '../../../components/loader';
 import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
 import show from '../../../hocomponents/show-if-passed';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const Detail = ({
   location,
@@ -152,5 +153,6 @@ export default compose(
 
       return window.innerHeight - top - 60;
     },
-  })
+  }),
+  titleManager(({ model }): string => model.name, 'Jobs', 'prefix')
 )(Detail);

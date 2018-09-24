@@ -9,6 +9,8 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { withRouter } from 'react-router';
 import { Button, Intent } from '@blueprintjs/core';
+import titleManager from '../../../hocomponents/TitleManager';
+import capitalize from 'lodash/capitalize';
 
 import {
   Table,
@@ -232,5 +234,8 @@ export default compose(
     },
   }),
   queryControl('search'),
+  titleManager(
+    ({ remoteType }: Props): string => `${capitalize(remoteType)} connections`
+  ),
   pure(['location', 'remotes', 'paneId', 'sortData'])
 )(ConnectionTable);

@@ -22,13 +22,13 @@ import { formatDate } from '../../helpers/workflows';
 import Header from './header';
 import Box from '../../components/box';
 import Tabs, { Pane } from '../../components/tabs';
-
 import List from './tabs/list';
 import Performance from './tabs/performance';
 import Log from './tabs/log';
 import Code from './tabs/code';
 import Info from './tabs/info';
 import Mappers from './tabs/mappers';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   workflow: Object,
@@ -142,6 +142,7 @@ export default compose(
     },
   }),
   withTabs('list'),
+  titleManager(({ workflow }: Props): string => workflow.name),
   pure(['workflow', 'date', 'id', 'location']),
   unsync()
 )(Workflow);

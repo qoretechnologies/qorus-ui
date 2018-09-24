@@ -2,13 +2,12 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
-import Nav, { NavLink } from '../../../components/navlink';
-
 import LogContainer from '../../../containers/log';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Tabs, { Pane } from '../../../components/tabs';
 import Box from '../../../components/box';
 import queryControl from '../../../hocomponents/queryControl';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   tabQuery?: string,
@@ -61,5 +60,6 @@ export default compose(
     ): void => {
       changeTabQuery(tabId);
     },
-  })
+  }),
+  titleManager('Logs')
 )(Log);

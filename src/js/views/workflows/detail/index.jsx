@@ -20,6 +20,7 @@ import Releases from '../../../containers/releases';
 import InfoTable from '../../../components/info_table/index';
 import Box from '../../../components/box';
 import StatsTab from './stats';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -45,6 +46,11 @@ const selector = createSelector(
       loadErrors: actions.errors.fetch,
     }
   )
+)
+@titleManager(
+  (props: Object): string => props.workflow.normalizedName,
+  'Workflows',
+  'prefix'
 )
 export default class WorkflowsDetail extends Component {
   props: {

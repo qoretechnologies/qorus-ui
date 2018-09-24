@@ -7,6 +7,7 @@ import Masonry from 'react-masonry-layout';
 import DetailTable from './table';
 import Controls from '../controls';
 import Box from '../../../components/box';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   onBackClick: Function,
@@ -79,4 +80,7 @@ const GroupDetail: Function = ({
   </div>
 );
 
-export default compose(pure(['enabled']))(GroupDetail);
+export default compose(
+  titleManager(({ name }: Props): string => name, 'Groups', 'prefix'),
+  pure(['enabled'])
+)(GroupDetail);

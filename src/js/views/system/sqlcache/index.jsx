@@ -15,9 +15,9 @@ import search from '../../../hocomponents/search';
 import sync from '../../../hocomponents/sync';
 import withModal from '../../../hocomponents/modal';
 import Table from './table';
-
 import actions from '../../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
 const querySelector: Function = (state: Object, props: Object): ?string =>
@@ -160,5 +160,6 @@ export default compose(
   ),
   search(),
   sync('sqlcache'),
-  withModal()
+  withModal(),
+  titleManager('SQL Cache')
 )(SQLCache);

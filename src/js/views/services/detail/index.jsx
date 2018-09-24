@@ -12,6 +12,7 @@ import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
 import actions from 'store/api/actions';
+import titleManager from '../../../hocomponents/TitleManager';
 
 @connect(
   (state, props) => ({
@@ -32,6 +33,7 @@ import actions from 'store/api/actions';
     ...rest,
   })
 )
+@titleManager(({ service }): string => service.name, 'Services', 'prefix')
 export default class ServicesDetail extends Component {
   static propTypes = {
     service: PropTypes.object,

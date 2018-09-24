@@ -18,6 +18,7 @@ import Toolbar from '../../../components/toolbar';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
 import { hasPermission } from '../../../helpers/user';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
 const querySelector: Function = (state: Object, props: Object): Object =>
@@ -81,6 +82,7 @@ const viewSelector = createSelector(
   search(),
   sync('properties')
 )
+@titleManager('Properties')
 export default class PropertiesView extends Component {
   static propTypes = {
     collection: PropTypes.object,

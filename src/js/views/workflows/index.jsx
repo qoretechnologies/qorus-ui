@@ -39,6 +39,7 @@ import { formatCount } from '../../helpers/orders';
 import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
+import titleManager from '../../hocomponents/TitleManager';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -378,6 +379,7 @@ export default compose(
   ),
   selectable('workflows'),
   withCSV('workflows', 'workflows'),
+  titleManager('Workflows'),
   pure([
     'sortData',
     'expanded',
