@@ -8,9 +8,7 @@ import { Callout, Intent } from '@blueprintjs/core';
 import withBackHandler from '../../hocomponents/withBackHandler';
 import WorkflowControls from '../workflows/controls';
 import WorkflowAutostart from '../workflows/autostart';
-import Badge from '../../components/badge';
 import { Group } from '../../components/groups';
-import Alert from '../../components/alert';
 import Box from '../../components/box';
 import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../constants/orders';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
@@ -68,6 +66,8 @@ const WorkflowHeader: Function = ({
           instances={rest}
           totalInstances={rest.TOTAL}
           wrapperWidth={400}
+          id={id}
+          date={date}
         />
       </Toolbar>
 
