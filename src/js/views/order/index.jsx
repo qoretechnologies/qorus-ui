@@ -54,7 +54,7 @@ const selector = createSelector(
 
 @connect(selector)
 @withTabs('diagram')
-@titleManager(({ order }): string => order.name)
+@titleManager(({ order }): string => (order ? order.name : 'Order view'))
 export default class Order extends Component {
   static propTypes = {
     order: PropTypes.object,
