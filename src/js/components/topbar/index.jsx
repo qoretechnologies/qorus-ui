@@ -96,18 +96,6 @@ export default class Topbar extends Component {
 
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
-        {this.props.isTablet && (
-          <NavbarGroup>
-            <Popover
-              position={Position.BOTTOM_LEFT}
-              content={<Sidebar menuCollapsed={false} />}
-            >
-              <ButtonGroup minimal>
-                <Button iconName="menu" />{' '}
-              </ButtonGroup>
-            </Popover>
-          </NavbarGroup>
-        )}
         <NavbarGroup>
           <NavbarHeading className="nunito">
             <img src={logo} className="qore-small-logo" /> Qorus Integration
