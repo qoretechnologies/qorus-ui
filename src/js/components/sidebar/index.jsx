@@ -64,6 +64,49 @@ const menu = {
   ],
 };
 
+const tabletMenu = {
+  System: [
+    {
+      name: 'System',
+      icon: 'cog',
+      submenu: [
+        { name: 'Dashboard', icon: 'timeline-bar-chart', link: '/' },
+        { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
+        { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
+        {
+          name: 'Order Stats',
+          icon: 'vertical-bar-chart-asc',
+          link: '/system/orderStats',
+        },
+        { name: 'Options', icon: 'cog', link: '/system/options' },
+        { name: 'Connections', icon: 'left-join', link: '/system/remote' },
+        { name: 'Properties', icon: 'properties', link: '/system/props' },
+        { name: 'SLAs', icon: 'time', link: '/system/slas' },
+        { name: 'Releases', icon: 'git-push', link: '/system/releases' },
+        { name: 'Info', icon: 'info-sign', link: '/system/info' },
+        { name: 'Logs', icon: 'comparison', link: '/system/logs' },
+        { name: 'RBAC', icon: 'people', link: '/system/rbac' },
+        { name: 'Errors', icon: 'error', link: '/system/errors' },
+        { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
+        { name: 'HTTP Services', icon: 'home', link: '/system/http' },
+        { name: 'Valuemaps', icon: 'map', link: '/system/values' },
+      ],
+    },
+  ],
+  Interfaces: [
+    { name: 'Workflows', icon: 'exchange', link: '/workflows' },
+    { name: 'Services', icon: 'merge-links', link: '/services' },
+    { name: 'Jobs', icon: 'calendar', link: '/jobs' },
+    { name: 'Groups', icon: 'merge-links', link: '/groups' },
+  ],
+  Other: [
+    { name: 'Search', icon: 'search', link: '/search' },
+    { name: 'OCMD', icon: 'code', link: '/ocmd' },
+    { name: 'Library', icon: 'book', link: '/library' },
+    { name: 'Extensions', icon: 'layout', link: '/extensions' },
+  ],
+};
+
 let MenuElement: Function = ({
   iconName,
   name,
@@ -103,68 +146,67 @@ const MenuWrapper: Function = ({
   menuCollapsed,
   toggleMenu,
   intl: { formatMessage },
-}: Props) => (
-  <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
-    {map(menu, (values: Object, key: string) => (
-      <div key={key}>
-        {!menuCollapsed && (
-          <li className="pt-menu-header">
-            <h6>{key}</h6>
-          </li>
-        )}
-        {values.map(
-          ({ name, icon, link, submenu }) =>
-            menuCollapsed ? (
-              <Tooltip
-                key={name}
-                content={name}
-                position={submenu ? Position.BOTTOM : Position.RIGHT}
-              >
+  isTablet,
+}: Props) =>
+  console.log(isTablet) || (
+    <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
+      {map(isTablet ? tabletMenu : menu, (values: Object, key: string) => (
+        <div key={key}>
+          {!menuCollapsed && (
+            <li className="pt-menu-header">
+              <h6>{key}</h6>
+            </li>
+          )}
+          {values.map(
+            ({ name, icon, link, submenu }) =>
+              menuCollapsed ? (
+                <Tooltip
+                  key={name}
+                  content={name}
+                  position={submenu ? Position.BOTTOM : Position.RIGHT}
+                >
+                  <MenuElement
+                    iconName={icon}
+                    link={link}
+                    name={name}
+                    submenu={submenu}
+                    menuCollapsed
+                  />
+                </Tooltip>
+              ) : (
                 <MenuElement
+                  key={name}
                   iconName={icon}
                   link={link}
                   name={name}
                   submenu={submenu}
-                  menuCollapsed
                 />
-              </Tooltip>
-            ) : (
-              <MenuElement
-                key={name}
-                iconName={icon}
-                link={link}
-                name={name}
-                submenu={submenu}
-              />
-            )
-        )}
-        <MenuDivider />
-      </div>
-    ))}
-    {menuCollapsed ? (
-      <MenuItem iconName="menu-open" onClick={toggleMenu} />
-    ) : (
-      <MenuItem
-        iconName="menu"
-        label={<Icon iconName="caret-left" />}
-        text="Collapse"
-        onClick={toggleMenu}
-      />
-    )}
-  </Menu>
-);
+              )
+          )}
+          <MenuDivider />
+        </div>
+      ))}
+      {menuCollapsed ? (
+        <MenuItem iconName="menu-open" onClick={toggleMenu} />
+      ) : (
+        <MenuItem
+          iconName="menu"
+          label={<Icon iconName="caret-left" />}
+          text="Collapse"
+          onClick={toggleMenu}
+        />
+      )}
+    </Menu>
+  );
 
 const Sidebar: Function = ({
   isTablet,
   light,
   ...rest
-}: Props): React.Element<any> =>
-  isTablet ? (
-    <MenuWrapper {...rest} />
-  ) : (
-    <div className={light ? '' : 'pt-dark'}>
-      <MenuWrapper {...rest} />
-    </div>
-  );
+}: Props): React.Element<any> => (
+  <div className={light ? '' : 'pt-dark'}>
+    <MenuWrapper isTablet={isTablet} {...rest} />
+  </div>
+);
 
 export default injectIntl(Sidebar);

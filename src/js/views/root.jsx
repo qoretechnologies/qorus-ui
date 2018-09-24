@@ -293,13 +293,12 @@ export default class Root extends Component {
             onNotificationClick={this.handleNotificationsClick}
           />
           <div className="root__center">
-            {!isTablet && (
-              <Sidebar
-                light={isLightTheme}
-                menuCollapsed={!this.props.sidebarOpen}
-                toggleMenu={this.toggleMenu}
-              />
-            )}
+            <Sidebar
+              light={isLightTheme}
+              menuCollapsed={!this.props.sidebarOpen}
+              toggleMenu={this.toggleMenu}
+              isTablet={isTablet}
+            />
             <section>
               <div className="container-fluid" id="content-wrapper">
                 {this.props.children}
