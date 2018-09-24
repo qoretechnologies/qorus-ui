@@ -6,6 +6,7 @@ import compose from 'recompose/compose';
 
 import Pane from '../../../components/pane';
 import Tree from '../../../components/tree';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   onClose: Function,
@@ -34,19 +35,24 @@ const ClusterPane: Function = ({
 );
 
 export default compose(
-  mapProps(({ processes, paneId, ...rest }: Props): Props => ({
-    process: Object.keys(processes).find(
-      (process: string): boolean => processes[process].id === paneId
-    ),
-    processes,
-    paneId,
-    ...rest,
-  })),
-  mapProps(({ process, processes, ...rest }: Props): Props => ({
-    urls: process ? processes[process].urls : null,
-    processes,
-    process,
-    ...rest,
-  })),
+  mapProps(
+    ({ processes, paneId, ...rest }: Props): Props => ({
+      process: Object.keys(processes).find(
+        (process: string): boolean => processes[process].id === paneId
+      ),
+      processes,
+      paneId,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ process, processes, ...rest }: Props): Props => ({
+      urls: process ? processes[process].urls : null,
+      processes,
+      process,
+      ...rest,
+    })
+  ),
+  titleManager(({ process }: Props): string => process, 'Cluster', 'prefix'),
   pure(['processes', 'paneId'])
 )(ClusterPane);

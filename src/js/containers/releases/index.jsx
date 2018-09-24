@@ -19,6 +19,7 @@ import Container from '../../components/container';
 import Box from '../../components/box';
 import ReleasesToolbar from './toolbar';
 import { sortTable } from '../../helpers/table';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   data: Object,
@@ -48,11 +49,11 @@ const Releases: Function = ({
     {compact ? (
       <Tree data={data} />
     ) : (
-    <Box>
-      <Container marginBottom={10}>
-        <Tree data={data} />
-      </Container>
-    </Box>
+      <Box>
+        <Container marginBottom={10}>
+          <Tree data={data} />
+        </Container>
+      </Box>
     )}
     {canLoadMore && (
       <Button
@@ -160,12 +161,12 @@ const sortReleases: Function = (sort: string, sortDir: string): Function => (
 ): Array<Object> =>
   data.length
     ? sortTable(data, {
-      sortBy: sort === 'Date' ? 'created' : sort.toLowerCase(),
-      sortByKey: {
-        direction: sortDir === 'Ascending' ? 1 : -1,
-        ignoreCase: true,
-      },
-    })
+        sortBy: sort === 'Date' ? 'created' : sort.toLowerCase(),
+        sortByKey: {
+          direction: sortDir === 'Ascending' ? 1 : -1,
+          ignoreCase: true,
+        },
+      })
     : [];
 
 const releaseSelector: Function = createSelector(

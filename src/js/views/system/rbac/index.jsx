@@ -10,6 +10,7 @@ import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Box from '../../../components/box';
 import queryControl from '../../../hocomponents/queryControl';
 import withHandlers from 'recompose/withHandlers';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   tabQuery?: string,
@@ -57,5 +58,6 @@ export default compose(
     ): void => {
       changeTabQuery(tabId);
     },
-  })
+  }),
+  titleManager('RBAC')
 )(RBAC);

@@ -26,6 +26,7 @@ type Props = {
 
 import actions from '../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import titleManager from '../../hocomponents/TitleManager';
 
 const ocmdSelector: Function = (state: Object): Object => state.api.ocmd;
 
@@ -39,6 +40,7 @@ const viewSelector: Function = createSelector(
 );
 
 @connect(viewSelector)
+@titleManager('OCMD')
 export default class OCMDView extends Component {
   props: Props;
 

@@ -8,6 +8,8 @@ import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Tabs, { Pane } from '../../components/tabs';
 import Box from '../../components/box';
 import withTabs from '../../hocomponents/withTabs';
+import compose from 'recompose/compose';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   location: Object,
@@ -43,4 +45,7 @@ const Search: Function = ({
   </div>
 );
 
-export default withTabs('orders')(Search);
+export default compose(
+  withTabs('orders'),
+  titleManager('Search')
+)(Search);

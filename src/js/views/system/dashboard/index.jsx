@@ -23,6 +23,7 @@ import SLAModal from './modals/sla';
 import GlobalModal from './modals/global';
 import { DISPOSITIONS } from '../../../constants/dashboard';
 import DispositionChart from '../../../components/disposition_chart';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const viewSelector = createSelector(
   [
@@ -54,6 +55,7 @@ type Props = {
 
 @connect(viewSelector)
 @withModal()
+@titleManager('Dashboard')
 export default class Dashboard extends Component {
   props: Props;
 

@@ -166,28 +166,11 @@ export default class Root extends Component {
     this.fetchGlobalData();
   }
 
-  /**
-   * Sets computed document title.
-   *
-   * @see setTitle
-   * @see fetchGlobalData
-   */
   componentDidMount() {
-    this.setTitle();
-
     // All tests were written for non-responsive sizes
     // ZombieJS automatically sets the innerWidth to 1024
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
-  }
-
-  /**
-   * Sets document title.
-   *
-   * @see setTitle
-   */
-  componentDidUpdate() {
-    this.setTitle();
   }
 
   delayedResize: Function = debounce((data: Object): void => {
@@ -228,9 +211,6 @@ export default class Root extends Component {
    *
    * @see titleFromInfo
    */
-  setTitle() {
-    document.title = this.titleFromInfo();
-  }
 
   selectCSVContent = () => {
     document.getElementById('csv-text').select();

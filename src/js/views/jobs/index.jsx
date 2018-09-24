@@ -28,6 +28,7 @@ import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   jobs: Array<Object>,
@@ -204,6 +205,7 @@ export default compose(
   ),
   selectable('jobs'),
   withCSV('jobs', 'jobs'),
+  titleManager('Jobs'),
   pure([
     'jobs',
     'date',

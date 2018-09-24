@@ -12,6 +12,7 @@ import actions from '../../store/api/actions';
 import sync from '../../hocomponents/sync';
 import unsync from '../../hocomponents/unsync';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import titleManager from '../../hocomponents/TitleManager';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
   <div>
@@ -45,5 +46,6 @@ export default compose(
   ),
   sync('extensions'),
   groupExtensions,
+  titleManager('Extensions'),
   unsync()
 )(Extensions);

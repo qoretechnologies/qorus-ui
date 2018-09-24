@@ -23,6 +23,7 @@ import GroupsTable from './table';
 import GroupsDetail from './detail';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Box from '../../components/box';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   sortData: Object,
@@ -184,6 +185,7 @@ export default compose(
   sync('meta'),
   selectable('groups'),
   withCSV('groups', 'groups'),
+  titleManager('Groups'),
   pure([
     'group',
     'groups',

@@ -17,6 +17,7 @@ import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
 import Table from './table';
 import Pane from './detail';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   onSearchChange: Function,
@@ -97,5 +98,6 @@ export default compose(
   sync('valuemaps'),
   search(),
   withPane(Pane, ['valuemaps', 'location', 'isTablet'], null, 'valuemaps'),
+  titleManager('Valuemaps'),
   pure(['collection', 'isTablet', 'location'])
 )(ValueMaps);

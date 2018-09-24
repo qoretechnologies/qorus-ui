@@ -16,6 +16,7 @@ import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Controls from '../jobs/controls';
 import Tabs, { Pane } from '../../components/tabs';
 import withTabs from '../../hocomponents/withTabs';
+import titleManager from '../../hocomponents/TitleManager';
 
 const jobSelector = (state, props) => {
   const {
@@ -87,5 +88,6 @@ export default compose(
   ),
   patch('load', ['job']),
   sync('job'),
+  titleManager(({ job }): string => job.name),
   withTabs('list')
 )(JobPage);

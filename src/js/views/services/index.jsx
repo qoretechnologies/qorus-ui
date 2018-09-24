@@ -21,9 +21,9 @@ import ServicesTable from './table';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
 import { sortDefaults } from '../../constants/sort';
-import { Controls, Control } from '../../components/controls';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   sortData: Object,
@@ -162,6 +162,7 @@ export default compose(
   withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),
   withCSV('services', 'services'),
+  titleManager('Services'),
   pure([
     'services',
     'systemOptions',

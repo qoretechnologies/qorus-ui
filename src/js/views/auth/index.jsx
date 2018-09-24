@@ -13,6 +13,7 @@ import LoginForm from '../../containers/auth/form';
 import SystemInfo from '../../containers/system_info';
 import { auth } from '../../helpers/user';
 import logo from '../../../img/qore_logo.png';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   location: any,
@@ -22,10 +23,7 @@ type Props = {
   handleSubmit: Function,
 };
 
-const Login: Function = ({
-  info,
-  handleSubmit,
-}: Props): React.Element<any> => (
+const Login: Function = ({ info, handleSubmit }: Props): React.Element<any> => (
   <div className="full-background">
     <CenterWrapper>
       <Transition
@@ -72,5 +70,6 @@ export default compose(
       router.push(nextUrl);
     },
   }),
+  titleManager('Login'),
   pure(['location', 'info'])
 )(Login);

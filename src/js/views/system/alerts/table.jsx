@@ -27,6 +27,7 @@ import AlertsPane from './pane';
 import AlertRow from './row';
 import AlertsToolbar from './toolbar';
 import Icon from '../../../components/icon';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   type: string,
@@ -160,5 +161,6 @@ export default compose(
   withLoadMore('alerts', 'alerts', true, 50),
   sync('meta'),
   withPane(AlertsPane, null, null, 'alerts'),
+  titleManager(({ type }): string => `Alerts ${type}`),
   pure(['alerts', 'location', 'paneId'])
 )(AlertsTable);

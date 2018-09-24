@@ -17,6 +17,7 @@ import { querySelector, resourceSelector } from '../../selectors';
 import { findBy } from '../../helpers/search';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Toolbar from '../../components/toolbar';
+import titleManager from '../../hocomponents/TitleManager';
 
 const filterCollection: Function = (
   query: string,
@@ -145,5 +146,6 @@ export default compose(
       }
     },
   }),
+  titleManager('Library'),
   pure(['functions', 'classes', 'constants', 'qQuery', 'location'])
 )(LibraryView);

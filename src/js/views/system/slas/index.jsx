@@ -15,6 +15,7 @@ import actions from '../../../store/api/actions';
 import { resourceSelector, querySelector } from '../../../selectors';
 import { findBy } from '../../../helpers/search';
 import { sortDefaults } from '../../../constants/sort';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   location: Object,
@@ -81,5 +82,6 @@ export default compose(
   withSort('slas', 'collection', sortDefaults.slas),
   sync('meta'),
   pure(['collection', 'location', 'sortData']),
+  titleManager('SLAs'),
   unsync()
 )(Slas);

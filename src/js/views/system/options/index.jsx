@@ -24,6 +24,7 @@ import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
 import { querySelector, resourceSelector } from '../../../selectors';
 import OptionRow from './row';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   load: Function,
@@ -122,5 +123,6 @@ export default compose(
   ),
   sort('options', 'collection', sortDefaults.options),
   sync('options'),
-  queryControl('search')
+  queryControl('search'),
+  titleManager('Options')
 )(OptionsView);

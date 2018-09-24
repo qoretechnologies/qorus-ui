@@ -11,6 +11,7 @@ import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Box from '../../../components/box';
 import withPane from '../../../hocomponents/pane';
 import { calculateMemory } from '../../../helpers/system';
+import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   nodes: Object,
@@ -82,5 +83,6 @@ export default compose(
       ...rest,
     })
   ),
-  withPane(ClusterPane, ['processes'])
+  withPane(ClusterPane, ['processes']),
+  titleManager('Cluster')
 )(ClusterView);

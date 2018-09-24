@@ -7,6 +7,7 @@ import compose from 'recompose/compose';
 import Table, { Section, Cell, Row } from '../../../components/table';
 import actions from '../../../store/api/actions';
 import sync from '../../../hocomponents/sync';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const userHttpMetaSelector = (state: Object): Object => {
   if (state.api.userhttp) {
@@ -19,19 +20,16 @@ const userHttpMetaSelector = (state: Object): Object => {
   return { sync: false, loading: false };
 };
 
-const userHttpSelector = (state:Object): Array<Object> => state.api.userhttp.data;
+const userHttpSelector = (state: Object): Array<Object> =>
+  state.api.userhttp.data;
 
 const viewSelector = createSelector(
-  [
-    userHttpSelector,
-    userHttpMetaSelector,
-  ],
+  [userHttpSelector, userHttpMetaSelector],
   (userhttp: Array<Object>, meta: Object) => ({
     meta,
     collection: userhttp,
   })
 );
-
 
 @compose(
   connect(
@@ -40,6 +38,7 @@ const viewSelector = createSelector(
   ),
   sync('meta')
 )
+@titleManager('HTTP Services')
 export default class UserHttp extends Component {
   props: {
     collection: Object,
@@ -53,29 +52,27 @@ export default class UserHttp extends Component {
   _renderCells: any;
   _renderRows: any;
 
-
   *renderCells(row: Object): Generator<*, *, *> {
-    yield(
+    yield (
       <Cell>
-        <a href={ row.url } target="blank">{ row.title }</a>
+        <a href={row.url} target="blank">
+          {row.title}
+        </a>
       </Cell>
     );
 
-    yield(
+    yield (
       <Cell>
-        { row.service } {row.version} #{row.serviceid }
+        {row.service} {row.version} #{row.serviceid}
       </Cell>
     );
   }
 
   *renderRows(collection: Array<Object>): Generator<*, *, *> {
     for (const model of collection) {
+      // prettier-ignore
       yield (
-        <Row
-          key={model.url}
-          data={ model }
-          cells={this._renderCells}
-        />
+        <Row key={model.url} data={model} cells={this._renderCells} />
       );
     }
   }
@@ -87,11 +84,11 @@ export default class UserHttp extends Component {
     for (const group of groups) {
       yield (
         <div key={group}>
-          <h3>{ group }</h3>
+          <h3>{group}</h3>
           <Table className="table table-data table-striped table-condensed">
             <Section
               type="body"
-              data={ collection[group] }
+              data={collection[group]}
               rows={this._renderRows}
             />
           </Table>
@@ -104,16 +101,8 @@ export default class UserHttp extends Component {
     const { collection } = this.props;
 
     if (Object.keys(collection).length === 0) {
-      return (
-        <div>
-          No Http Services Available
-        </div>
-      );
+      return <div>No Http Services Available</div>;
     }
-    return (
-      <div>
-        { React.Children.toArray(this.renderTables()) }
-      </div>
-    );
+    return <div>{React.Children.toArray(this.renderTables())}</div>;
   }
 }
