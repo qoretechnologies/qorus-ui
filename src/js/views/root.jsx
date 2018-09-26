@@ -291,6 +291,7 @@ export default class Root extends Component {
             light={isLightTheme}
             onThemeClick={this.onThemeChange}
             onNotificationClick={this.handleNotificationsClick}
+            user={currentUser.data}
           />
           <div className="root__center">
             <Sidebar

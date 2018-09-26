@@ -27,7 +27,6 @@ import withModal from '../../hocomponents/modal';
 import logo from '../../../img/qore_logo.png';
 import actions from '../../store/api/actions';
 import { LANGS } from '../../intl/messages';
-import Sidebar from '../sidebar';
 import settings from '../../settings';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 
@@ -52,6 +51,7 @@ export type Props = {
   onThemeClick: Function,
   onNotificationClick: Function,
   storeLocale: Function,
+  user: Object,
 };
 
 /**
@@ -92,7 +92,7 @@ export default class Topbar extends Component {
       onThemeClick,
       health: { data },
     } = this.props;
-    const [countryCode, locale] = this.props.locale.split('-');
+    const [countryCode] = this.props.locale.split('-');
 
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
@@ -119,7 +119,7 @@ export default class Topbar extends Component {
             <ButtonGroup minimal>
               <Button
                 iconName="user"
-                text="Qorus administrator"
+                text={this.props.user.name}
                 rightIconName="caret-down"
               />
             </ButtonGroup>
