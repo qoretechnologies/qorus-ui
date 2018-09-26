@@ -13,6 +13,7 @@ import Resize from 'components/resize/handle';
 import PaneItem from '../../../components/pane_item';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
+import Container from '../../../components/container';
 
 export default class DiagramView extends Component {
   static propTypes = {
@@ -83,51 +84,53 @@ export default class DiagramView extends Component {
     if (!this.props.workflow) return <Loader />;
 
     return (
-      <Masonry
-        id="order-masonry"
-        sizes={[{ columns: 2, gutter: 15 }]}
-        infiniteScrollDisabled
-        key={this.state.step}
-      >
-        <Box column={2} noTransition top style={{ overflowX: 'auto' }}>
-          <PaneItem title="Steps graph">
-            <Graph
-              workflow={this.props.workflow}
-              order={this.props.order}
-              onStepClick={this.handleStepClick}
-            />
-          </PaneItem>
-        </Box>
-        <Box column={2} noTransition top>
-          <Info {...this.props.order} />
-        </Box>
-        <Box column={2} noTransition top>
-          <Keys data={this.props.order.keys} />
-        </Box>
-        <Box column={2} noTransition top>
-          <PaneItem title="Hierarchy">
-            <Hierarchy
-              order={this.props.order}
-              compact
-              isTablet={this.props.isTablet}
-            />
-          </PaneItem>
-        </Box>
-        <Box column={2} noTransition top>
-          <PaneItem title="Step details">
-            {this.state.step ? (
-              <StepDetails
-                step={this.state.step}
-                instances={this.props.order.StepInstances}
-                onSkipSubmit={this.handleSkipSubmit}
+      <Container>
+        <Masonry
+          id="order-masonry"
+          sizes={[{ columns: 2, gutter: 15 }]}
+          infiniteScrollDisabled
+          key={this.state.step}
+        >
+          <Box column={2} noTransition top style={{ overflowX: 'auto' }}>
+            <PaneItem title="Steps graph">
+              <Graph
+                workflow={this.props.workflow}
+                order={this.props.order}
+                onStepClick={this.handleStepClick}
               />
-            ) : (
-              <NoData />
-            )}
-          </PaneItem>
-        </Box>
-        {this.renderErrorPane()}
-      </Masonry>
+            </PaneItem>
+          </Box>
+          <Box column={2} noTransition top>
+            <Info {...this.props.order} />
+          </Box>
+          <Box column={2} noTransition top>
+            <Keys data={this.props.order.keys} />
+          </Box>
+          <Box column={2} noTransition top>
+            <PaneItem title="Hierarchy">
+              <Hierarchy
+                order={this.props.order}
+                compact
+                isTablet={this.props.isTablet}
+              />
+            </PaneItem>
+          </Box>
+          <Box column={2} noTransition top>
+            <PaneItem title="Step details">
+              {this.state.step ? (
+                <StepDetails
+                  step={this.state.step}
+                  instances={this.props.order.StepInstances}
+                  onSkipSubmit={this.handleSkipSubmit}
+                />
+              ) : (
+                <NoData />
+              )}
+            </PaneItem>
+          </Box>
+          {this.renderErrorPane()}
+        </Masonry>
+      </Container>
     );
   }
 }
