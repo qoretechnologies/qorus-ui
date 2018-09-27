@@ -116,6 +116,15 @@ const storeTheme: Function = (theme: string): Function => (
   dispatch(updateStorage(storage, username));
 };
 
+const clearStorage: Function = (): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
+  const { username } = getState().api.currentUser.data;
+
+  dispatch(updateStorage({}, username));
+};
+
 export {
   unSyncCurrentUser,
   updateStorage,
@@ -125,4 +134,5 @@ export {
   storeLocale,
   storeSidebar,
   storeTheme,
+  clearStorage,
 };

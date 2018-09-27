@@ -12,6 +12,7 @@ import Login from './views/auth';
 import Ocmd from './views/ocmd';
 import Mapper from './views/mapper';
 import Library from './views/library';
+import User from './views/user';
 import Extensions from './views/extensions';
 import ExtensionDetail from './views/extensions/detail';
 import sync from './hocomponents/sync';
@@ -30,20 +31,22 @@ import ErrorView from './error';
 import * as events from './store/apievents/actions';
 
 class AppInfo extends React.Component {
-
   /**
    * requireAnonymous - redirect to main page if user authenticated
    * @param  {*} nextState next router state
    * @param  {Function} replace change state function
    */
   requireAnonymous = (nextState, replace) => {
-    const { info: { data: { noauth } } } = this.props;
+    const {
+      info: {
+        data: { noauth },
+      },
+    } = this.props;
     const token = window.localStorage.getItem('token');
     if (token || noauth) {
       replace('/');
     }
   };
-
 
   /**
    * requireAuthenticated - redirect to login page is user isn't authenticated
@@ -74,10 +77,7 @@ class AppInfo extends React.Component {
           render={applyMiddleware(useRelativeLinks())}
           key={Math.random()}
         >
-          <Route
-            path="/error"
-            component={ErrorView}
-          />
+          <Route path="/error" component={ErrorView} />
         </Router>
       );
     }
@@ -89,22 +89,19 @@ class AppInfo extends React.Component {
           render={applyMiddleware(useRelativeLinks())}
           key={Math.random()}
         >
-          <Route
-            path="/"
-            component={Root}
-            onEnter={this.requireAuthenticated}
-          >
+          <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/system/dashboard" />
-            { dashboardRoutes() }
-            { workflowsRoutes() }
-            { workflowRoutes() }
-            { orderRoutes() }
-            { servicesRoutes() }
-            { jobsRoutes() }
-            { jobRoutes() }
-            { searchRoutes() }
-            { groupsRoutes() }
+            {dashboardRoutes()}
+            {workflowsRoutes()}
+            {workflowRoutes()}
+            {orderRoutes()}
+            {servicesRoutes()}
+            {jobsRoutes()}
+            {jobRoutes()}
+            {searchRoutes()}
+            {groupsRoutes()}
             <Route path="ocmd" component={Ocmd} />
+            <Route path="user" component={User} />
             <Route path="mappers/:id" component={Mapper} />
             <Route path="library" component={Library} />
             <Route path="extensions" component={Extensions} />
@@ -115,14 +112,8 @@ class AppInfo extends React.Component {
             component={Login}
             onEnter={this.requireAnonymous}
           />
-          <Route
-            path="/logout"
-            onEnter={this.logout}
-          />
-          <Route
-            path="/error"
-            component={ErrorView}
-          />
+          <Route path="/logout" onEnter={this.logout} />
+          <Route path="/error" component={ErrorView} />
         </Router>
       );
     }
@@ -152,8 +143,13 @@ export default compose(
     url: 'apievents',
   }),
   sync('info', false, null, true),
-  websocket({
-    onMessage: 'message',
-    onClose: 'close',
-  }, false, false, false)
+  websocket(
+    {
+      onMessage: 'message',
+      onClose: 'close',
+    },
+    false,
+    false,
+    false
+  )
 )(AppInfo);
