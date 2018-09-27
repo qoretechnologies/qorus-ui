@@ -36,43 +36,43 @@
     }
 
     &.bar-complete {
-      background-color: $qore-green;
+      background-color: $status-complete;
     }
 
     &.bar-ready {
-      background-color: $qore-purple;
+      background-color: $status-ready;
     }
 
     &.bar-scheduled {
-      background-color: lighten($qore-purple, 5);
+      background-color: $status-scheduled;
     }
 
     &.bar-waiting {
-      background-color: $qore-warning;
+      background-color: $status-waiting;
     }
 
     &.bar-in-progress {
-      background-color: darken($qore-warning, 5);
+      background-color: $status-in-progress;
     }
 
     &.bar-retry {
-      background-color: lighten($qore-warning, 4);
+      background-color: $status-retry;
     }
 
     &.bar-incomplete {
-      background-color: lighten($qore-warning, 8);
+      background-color: $status-incomplete;
     }
 
     &.bar-canceled {
-      background-color: $qore-gray;
+      background-color: $status-canceled;
     }
 
     &.bar-error {
-      background-color: $qore-danger;
+      background-color: $status-error;
     }
 
     &.bar-blocked {
-      background-color: lighten($qore-danger, 10);
+      background-color: $status-blocked;
     }
 
     &.bar-none {

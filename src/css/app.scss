@@ -11,10 +11,11 @@ $qore-warning: #d99e0b;
 $qore-danger: #d13913;
 $qore-info: #2965cc;
 $qore-gray: #8a9ba8;
+$qore-blue: #277fba;
 
 $status-complete: $qore-green;
-$status-ready: $qore-purple;
-$status-scheduled: lighten($qore-purple, 5);
+$status-ready: $qore-blue;
+$status-scheduled: lighten($qore-blue, 5);
 $status-waiting: $qore-warning;
 $status-in-progress: darken($qore-warning, 5);
 $status-retry: lighten($qore-warning, 4);
