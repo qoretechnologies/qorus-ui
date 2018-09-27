@@ -109,6 +109,11 @@ export default class Topbar extends Component {
             content={
               <Menu>
                 <MenuItem
+                  text="My profile"
+                  iconName="info-sign"
+                  onClick={() => browserHistory.push('/user')}
+                />
+                <MenuItem
                   text="Logout"
                   iconName="log-out"
                   onClick={() => browserHistory.push('/logout')}
