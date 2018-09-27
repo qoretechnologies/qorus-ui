@@ -10,6 +10,7 @@ import {
   selectInvert,
   selectAlerts,
 } from '../../../../helpers/resources';
+import { DEFAULTS } from '.';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -109,7 +110,11 @@ const addNew = {
     if (state.sync) {
       const data = [
         ...state.data,
-        { ...normalizeId('workflowid', wf), ...{ _updated: true } },
+        {
+          ...normalizeId('workflowid', wf),
+          ...{ _updated: true },
+          ...DEFAULTS,
+        },
       ];
 
       return { ...state, ...{ data } };
