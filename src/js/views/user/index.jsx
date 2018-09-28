@@ -13,6 +13,7 @@ import PaneItem from '../../components/pane_item';
 import NoData from '../../components/nodata';
 import Tree from '../../components/tree';
 import Container from '../../components/container';
+import Alert from '../../components/alert';
 
 const interfaces: Array<string> = [
   'roles',
@@ -59,6 +60,12 @@ const UserView: Function = ({
                   </span>
                 )
               )
+            ) : userData.has_default ? (
+              <Alert bsStyle="warning" iconName="info-sign">
+                {' '}
+                Member of DEFAULT group with no restrictions; all interfaces are
+                accessible
+              </Alert>
             ) : (
               <NoData />
             )}
