@@ -208,6 +208,7 @@ export default class App extends Component {
         <div className="app__wrap">
           <Notifications />
           <Routes routerProps={this.getRouterProps()} />
+          {/* this.renderDevTools() */}
         </div>
       </Provider>
     );

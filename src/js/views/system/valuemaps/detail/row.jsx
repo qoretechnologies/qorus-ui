@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
 
-import { Row, EditableCell, Td } from '../../../../components/table';
+import { Tr, EditableCell, Td } from '../../../../components/new_table';
 import { Controls, Control as Button } from '../../../../components/controls';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   name: string,
   onUpdate: Function,
   onRemoveClick: Function,
-}
+};
 
 const RowDetail: Function = ({
   data: { value, enabled },
@@ -32,13 +32,11 @@ const RowDetail: Function = ({
   };
 
   return (
-    <Row>
+    <Tr>
       <Td className="name">{name}</Td>
-      <EditableCell
-        value={value}
-        onSave={handleValueChange}
-      />
+      <EditableCell value={value} onSave={handleValueChange} />
       <Td>
+        // TODO: Fix the button icons
         <Controls grouped>
           <Button
             iconName="power-off"
@@ -54,7 +52,7 @@ const RowDetail: Function = ({
           />
         </Controls>
       </Td>
-    </Row>
+    </Tr>
   );
 };
 

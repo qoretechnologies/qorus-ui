@@ -14,10 +14,11 @@ type Props = {
   onClick?: Function,
   first?: boolean,
   title?: string,
+  key?: any,
 };
 
 @updateOnlyForKeys(['children', 'className', 'sortData', 'highlight', 'first'])
-export default class Row extends Component {
+export default class Tr extends Component {
   props: Props;
 
   state: {

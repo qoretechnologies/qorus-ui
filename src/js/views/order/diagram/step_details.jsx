@@ -1,19 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 
 import Skip from './skip';
-import Table, { Section, Row, Cell } from 'components/table';
+import { Table, Td, Th, Tr, Tbody, Thead } from 'components/new_table';
 import Date from 'components/date';
 import Dropdown, { Control, Item } from 'components/dropdown';
 import { Control as Button } from 'components/controls';
 import Autocomponent from 'components/autocomponent';
-
 import { pureRender } from 'components/utils';
-
-import {
-  getStatusLabel,
-  groupInstances,
-  canSkip,
-} from '../../../helpers/orders';
+import { groupInstances, canSkip } from '../../../helpers/orders';
 import Toolbar from '../../../components/toolbar';
 
 @pureRender
@@ -116,50 +110,51 @@ export default class StepDetailTable extends Component {
     return (
       <div>
         <Toolbar mb>{this.renderDropdown()}</Toolbar>
-        <Table className="table table-bordered table--data text-table table-condensed">
-          <Section type="body">
-            <Row>
-              <Cell tag="th"> Name </Cell>
-              <Cell colspan={3}>{data.stepname}</Cell>
-            </Row>
-            <Row>
-              <Cell tag="th"> Type </Cell>
-              <Cell colspan={3}>{data.steptype}</Cell>
-            </Row>
-            <Row>
-              <Cell tag="th"> Started </Cell>
-              <Cell>
+        // TODO: Add textTable as a property to the component
+        <Table condensed bordered className="text-table">
+          <Tbody>
+            <Tr>
+              <Th> Name </Th>
+              <Td colspan={3}>{data.stepname}</Td>
+            </Tr>
+            <Tr>
+              <Th> Type </Th>
+              <Td colspan={3}>{data.steptype}</Td>
+            </Tr>
+            <Tr>
+              <Th> Started </Th>
+              <Td>
                 <Date date={data.started} />
-              </Cell>
-              <Cell tag="th"> Skipped </Cell>
-              <Cell>
+              </Td>
+              <Th> Skipped </Th>
+              <Td>
                 <Autocomponent>{data.skip}</Autocomponent>{' '}
                 {canSkip(data) && (
                   <Button iconName="edit" action={this.handleSkipClick} />
                 )}
-              </Cell>
-            </Row>
-            <Row>
-              <Cell tag="th"> Completed </Cell>
-              <Cell>
+              </Td>
+            </Tr>
+            <Tr>
+              <Th> Completed </Th>
+              <Td>
                 <Date date={data.completed} />
-              </Cell>
-              <Cell tag="th"> Subwfl </Cell>
-              <Cell>{data.subworkflow_id}</Cell>
-            </Row>
-            <Row>
-              <Cell tag="th"> Status </Cell>
-              <Cell>
+              </Td>
+              <Th> Subwfl </Th>
+              <Td>{data.subworkflow_id}</Td>
+            </Tr>
+            <Tr>
+              <Th> Status </Th>
+              <Td>
                 <span
                   className={`label status-${data.stepstatus.toLowerCase()}`}
                 >
                   {data.stepstatus}
                 </span>
-              </Cell>
-              <Cell tag="th"> Ind </Cell>
-              <Cell>{data.ind}</Cell>
-            </Row>
-          </Section>
+              </Td>
+              <Th> Ind </Th>
+              <Td>{data.ind}</Td>
+            </Tr>
+          </Tbody>
         </Table>
       </div>
     );

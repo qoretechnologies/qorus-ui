@@ -1,57 +1,57 @@
 /* @flow */
 import React from 'react';
-import classNames from 'classnames';
 
 import Date from '../../../../../components/date';
 import Auto from '../../../../../components/autocomponent';
 import Text from '../../../../../components/text';
-import Table, { Th, Td, Row, Section } from '../../../../../components/table';
+import {
+  Table,
+  Th,
+  Td,
+  Tr,
+  Thead,
+  Tbody,
+} from '../../../../../components/new_table';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
 
-
 const ErrorTable = ({ errors = [] }: { errors: Array<Object> }) => (
-  <Table
-    className={classNames(
-      'table',
-      'table-stripped',
-      'table-condensed',
-      'table-bordered',
-      'table-fixed',
-      'table--data',
-      'job-result-detail-errors'
-    )}
-  >
-    <Section type="head">
-      <Row>
+  <Table striped condensed bordered>
+    <Thead>
+      <Tr>
         <Th>Id</Th>
         <Th>Severity</Th>
         <Th>Error</Th>
         <Th>Bus. Err</Th>
         <Th>Created</Th>
         <Th>Description</Th>
-      </Row>
-    </Section>
-    <Section type="body">
+      </Tr>
+    </Thead>
+    <Tbody>
       {errors
         .map(item => [
-          <Row key={`error_main_${item.job_errorid}`}>
+          <Tr key={`error_main_${item.job_errorid}`}>
             <Td>{item.job_errorid}</Td>
             <Td className="text">{item.severity}</Td>
             <Td className="name">{item.error}</Td>
-            <Td><Auto>{item.business_error}</Auto></Td>
-            <Td><Date date={item.created} /></Td>
-            <Td className="text">{item.description}</Td>
-          </Row>,
-          item.info && <Row key={`error_info_${item.job_errorid}`}>
-            <Td className="error-info" colspan={6}>
-              <Text text={item.info} renderTree />
+            <Td>
+              <Auto>{item.business_error}</Auto>
             </Td>
-          </Row>,
+            <Td>
+              <Date date={item.created} />
+            </Td>
+            <Td className="text">{item.description}</Td>
+          </Tr>,
+          item.info && (
+            <Tr key={`error_info_${item.job_errorid}`}>
+              <Td className="error-info" colspan={6}>
+                <Text text={item.info} renderTree />
+              </Td>
+            </Tr>
+          ),
         ])
         .reduce((a, b) => [...a, ...b], [])
-        .filter(item => item)
-      }
-    </Section>
+        .filter(item => item)}
+    </Tbody>
   </Table>
 );
 
