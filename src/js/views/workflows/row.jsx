@@ -184,7 +184,7 @@ const TableRow: Function = ({
       <InstancesBar
         states={[
           { name: 'completed', label: 'complete' },
-          { name: 'automatically', label: 'ready' },
+          { name: 'automatically', label: 'automatic' },
           { name: 'manually', label: 'error' },
         ]}
         instances={orderStats}
