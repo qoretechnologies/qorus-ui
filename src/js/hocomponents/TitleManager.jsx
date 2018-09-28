@@ -1,21 +1,19 @@
 // @flow
 import React from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import isFunction from 'lodash/isFunction';
 
 export default (
-  newTitle: string | ((props: Object) => string),
-  prevTitle: string,
-  position: 'suffix' | 'prefix'
+  newTitle: ((props: Object) => string) | string,
+  prevTitle: ?string = null,
+  position: ?'suffix' | 'prefix' = null
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   class WrappedComponent extends React.Component {
     _baseTitle: string = '| Qorus Integration Engine';
 
     componentDidMount() {
-      let changedTitle;
-      const newTitleSel = isFunction(newTitle)
-        ? newTitle(this.props)
-        : newTitle;
+      let changedTitle: ?string;
+      const newTitleSel =
+        typeof newTitle === 'function' ? newTitle(this.props) : newTitle;
 
       if (position) {
         if (position === 'suffix') {
