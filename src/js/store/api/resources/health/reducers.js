@@ -8,7 +8,7 @@ const changed = {
     const data = { ...state.data };
 
     events.forEach(event => {
-      const remote = data.remote(
+      const remote = data.remote.find(
         (rm: Object): boolean => rm.name === event.name
       );
 
