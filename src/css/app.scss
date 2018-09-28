@@ -13,6 +13,7 @@ $qore-info: #2965cc;
 $qore-gray: #8a9ba8;
 $qore-blue: #277fba;
 
+$status-automatic: $qore-purple;
 $status-complete: $qore-green;
 $status-ready: $qore-blue;
 $status-scheduled: lighten($qore-blue, 5);
@@ -42,7 +43,6 @@ $bgcolor: #eee;
 @import '../js/components/pane/style';
 @import '../js/components/resize/style';
 @import '../js/components/source_code/style';
-@import '../js/components/table/style';
 @import '../js/components/topbar/style';
 @import '../js/components/toolbar/style';
 @import '../js/components/datepicker/style';

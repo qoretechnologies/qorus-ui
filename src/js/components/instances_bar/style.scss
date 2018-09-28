@@ -39,6 +39,10 @@
       background-color: $status-complete;
     }
 
+    &.bar-automatic {
+      background-color: $status-automatic;
+    }
+
     &.bar-ready {
       background-color: $status-ready;
     }
