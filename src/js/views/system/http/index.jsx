@@ -1,13 +1,76 @@
 /* @flow */
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import map from 'lodash/map';
+import size from 'lodash/size';
 
-import Table, { Section, Cell, Row } from '../../../components/table';
+import { Table, Thead, Tbody, Tr, Th, Td } from '../../../components/new_table';
 import actions from '../../../store/api/actions';
 import sync from '../../../hocomponents/sync';
 import titleManager from '../../../hocomponents/TitleManager';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Box from '../../../components/box';
+import PaneItem from '../../../components/pane_item';
+import { Link } from 'react-router';
+import NoData from '../../../components/nodata';
+
+type Props = {
+  collection: Object,
+};
+
+const UserHttp: Function = ({ collection }: Props): any => (
+  <div>
+    <Breadcrumbs>
+      <Crumb> User HTTP Services </Crumb>
+    </Breadcrumbs>
+    {size(collection) ? (
+      map(
+        collection,
+        (
+          httpServices: Array<Object>,
+          groupName: string
+        ): React.Element<Box> => (
+          <Box>
+            <PaneItem title={groupName}>
+              <Table condensed striped hover>
+                <Thead>
+                  <Tr>
+                    <Th className="text name">Title</Th>
+                    <Th className="text">URL</Th>
+                    <Th className="text">Service</Th>
+                    <Th className="narrow">Version</Th>
+                    <Th className="narrow">ID</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {httpServices.map(
+                    (httpService: Object, idx: number): React.Element<any> => (
+                      <Tr key={idx}>
+                        <Td className="text name">{httpService.title}</Td>
+                        <Td className="text">
+                          <Link to={httpService.URL}>{httpService.url}</Link>
+                        </Td>
+                        <Td className="text">{httpService.service}</Td>
+                        <Td className="narrow">{httpService.version}</Td>
+                        <Td className="narrow">{httpService.serviceid}</Td>
+                      </Tr>
+                    )
+                  )}
+                </Tbody>
+              </Table>
+            </PaneItem>
+          </Box>
+        )
+      )
+    ) : (
+      <Box top noPadding>
+        <NoData />
+      </Box>
+    )}
+  </div>
+);
 
 const userHttpMetaSelector = (state: Object): Object => {
   if (state.api.userhttp) {
@@ -31,78 +94,11 @@ const viewSelector = createSelector(
   })
 );
 
-@compose(
+export default compose(
   connect(
     viewSelector,
     { load: actions.userhttp.fetch }
   ),
-  sync('meta')
-)
-@titleManager('HTTP Services')
-export default class UserHttp extends Component {
-  props: {
-    collection: Object,
-  };
-
-  componentWillMount() {
-    this._renderCells = this.renderCells.bind(this);
-    this._renderRows = this.renderRows.bind(this);
-  }
-
-  _renderCells: any;
-  _renderRows: any;
-
-  *renderCells(row: Object): Generator<*, *, *> {
-    yield (
-      <Cell>
-        <a href={row.url} target="blank">
-          {row.title}
-        </a>
-      </Cell>
-    );
-
-    yield (
-      <Cell>
-        {row.service} {row.version} #{row.serviceid}
-      </Cell>
-    );
-  }
-
-  *renderRows(collection: Array<Object>): Generator<*, *, *> {
-    for (const model of collection) {
-      // prettier-ignore
-      yield (
-        <Row key={model.url} data={model} cells={this._renderCells} />
-      );
-    }
-  }
-
-  *renderTables(): Generator<*, *, *> {
-    const collection = this.props.collection;
-    const groups = Object.keys(collection);
-
-    for (const group of groups) {
-      yield (
-        <div key={group}>
-          <h3>{group}</h3>
-          <Table className="table table-data table-striped table-condensed">
-            <Section
-              type="body"
-              data={collection[group]}
-              rows={this._renderRows}
-            />
-          </Table>
-        </div>
-      );
-    }
-  }
-
-  render() {
-    const { collection } = this.props;
-
-    if (Object.keys(collection).length === 0) {
-      return <div>No Http Services Available</div>;
-    }
-    return <div>{React.Children.toArray(this.renderTables())}</div>;
-  }
-}
+  sync('meta'),
+  titleManager('HTTP Services')
+)(UserHttp);

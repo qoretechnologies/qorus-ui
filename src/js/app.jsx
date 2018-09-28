@@ -187,8 +187,9 @@ export default class App extends Component {
       !this.props.env.DEVTOOLS ||
       !this.state.devToolsReady ||
       !this.state.DevTools
-    )
+    ) {
       return null;
+    }
 
     const { DevTools } = this.state;
 
