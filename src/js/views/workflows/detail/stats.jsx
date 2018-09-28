@@ -1,10 +1,9 @@
 import React from 'react';
 import { ProgressBar, Intent, Tag, Icon } from '@blueprintjs/core';
 
-import { Table, Thead, Tr, Th, Tbody } from '../../../components/new_table';
+import { Table, Thead, Tr, Th, Td, Tbody } from '../../../components/new_table';
 import NoData from '../../../components/nodata';
 import replace from 'lodash/replace';
-import { Td } from '../../../components/table';
 import PaneItem from '../../../components/pane_item';
 import { ORDER_STATS_LEGEND } from '../../../constants/orders';
 import {

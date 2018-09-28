@@ -4,7 +4,14 @@ import Modal from '../../../../components/modal';
 import Loader from '../../../../components/loader';
 import Alert from '../../../../components/alert';
 import AutoComponent from '../../../../components/autocomponent';
-import Table, { Section, Row, Cell } from '../../../../components/table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+} from '../../../../components/new_table';
 import { Controls, Control as Button } from '../../../../components/controls';
 
 import actions from '../../../../store/api/actions';
@@ -60,31 +67,31 @@ export default class Ping extends Component {
     const { url, time, ok, info } = this.state.data;
 
     return (
-      <Table className="table">
-        <Section type="body">
-          <Row>
-            <Cell tag="th"> URL </Cell>
-            <Cell>{url}</Cell>
-          </Row>
-          <Row>
-            <Cell tag="th"> Status </Cell>
-            <Cell>
+      <Table condensed bordered className="text-table">
+        <Tbody>
+          <Tr>
+            <Th> URL </Th>
+            <Td>{url}</Td>
+          </Tr>
+          <Tr>
+            <Th> Status </Th>
+            <Td>
               <AutoComponent>{ok}</AutoComponent>
-            </Cell>
-          </Row>
+            </Td>
+          </Tr>
           {!ok && (
-            <Row>
-              <Cell tag="th"> Error </Cell>
-              <Cell> {info} </Cell>
-            </Row>
+            <Tr>
+              <Th tag="th"> Error </Th>
+              <Td> {info} </Td>
+            </Tr>
           )}
           {ok && (
-            <Row>
-              <Cell tag="th"> Response Time </Cell>
-              <Cell> {time} </Cell>
-            </Row>
+            <Tr>
+              <Th> Response Time </Th>
+              <Td> {time} </Td>
+            </Tr>
           )}
-        </Section>
+        </Tbody>
       </Table>
     );
   }
