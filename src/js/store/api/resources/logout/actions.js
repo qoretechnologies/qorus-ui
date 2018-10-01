@@ -1,9 +1,17 @@
 /* @flow */
+import { createAction } from 'redux-actions';
+import { fetchJson } from '../../utils';
+import settings from '../../../../settings';
 
-export function logout(actions: any): Function {
-  return () => (dispatch: Function) => (
-    dispatch(actions.logout.update({
-      body: JSON.stringify({}),
-    }))
-  );
-}
+const logout = createAction(
+  'AUTH_LOGOUT',
+  (replace: Function): void => {
+    fetchJson('POST', `${settings.REST_BASE_URL}/logout`);
+
+    window.localStorage.removeItem('token');
+
+    replace('/login');
+  }
+);
+
+export { logout };
