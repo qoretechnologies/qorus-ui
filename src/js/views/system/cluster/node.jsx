@@ -43,7 +43,7 @@ const ClusterNode: Function = ({
   closePane,
   paneId,
 }: Props): React.Element<any> => (
-  <Box>
+  <div>
     <Breadcrumbs onClick={handleExpandClick}>
       <Crumb active={expanded} iconName="cross">
         {node}
@@ -106,7 +106,7 @@ const ClusterNode: Function = ({
         </Table>
       </div>
     )}
-  </Box>
+  </div>
 );
 
 export default compose(
