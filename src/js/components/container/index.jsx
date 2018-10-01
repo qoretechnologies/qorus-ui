@@ -11,7 +11,7 @@ type Props = {
 };
 
 @pure(['children'])
-export default class Container extends Component {
+class Container extends Component {
   props: Props;
 
   state: {
@@ -71,3 +71,5 @@ export default class Container extends Component {
     );
   }
 }
+
+export default Container;

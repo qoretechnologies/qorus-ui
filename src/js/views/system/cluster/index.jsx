@@ -12,6 +12,7 @@ import Box from '../../../components/box';
 import withPane from '../../../hocomponents/pane';
 import { calculateMemory } from '../../../helpers/system';
 import titleManager from '../../../hocomponents/TitleManager';
+import Container from '../../../components/container';
 
 type Props = {
   nodes: Object,
@@ -39,30 +40,35 @@ const ClusterView: Function = ({
       <Tag>Processes: {Object.keys(processes).length}</Tag>{' '}
       <Tag>Cluster memory: {calculateMemory(nodesMemory)}</Tag>
     </Box>
-    {Object.keys(nodes).map(
-      (node: string): any => {
-        const list: Array<Object> = Object.keys(processes).reduce(
-          (cur, process: string) => {
-            const obj = { ...processes[process], id: process };
 
-            return [...cur, obj];
-          },
-          []
-        );
+    <Box>
+      <Container>
+        {Object.keys(nodes).map(
+          (node: string): any => {
+            const list: Array<Object> = Object.keys(processes).reduce(
+              (cur, process: string) => {
+                const obj = { ...processes[process], id: process };
 
-        return (
-          <Node
-            openPane={openPane}
-            closePane={closePane}
-            paneId={paneId}
-            key={node}
-            node={node}
-            processes={list}
-            memory={nodes[node].node_priv}
-          />
-        );
-      }
-    )}
+                return [...cur, obj];
+              },
+              []
+            );
+
+            return (
+              <Node
+                openPane={openPane}
+                closePane={closePane}
+                paneId={paneId}
+                key={node}
+                node={node}
+                processes={list}
+                memory={nodes[node].node_priv}
+              />
+            );
+          }
+        )}
+      </Container>
+    </Box>
   </div>
 );
 
