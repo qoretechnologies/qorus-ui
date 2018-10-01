@@ -177,6 +177,7 @@ export default class Dashboard extends Component {
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
+      lineTension: 0,
     };
 
     const nodeInUseChart = {
@@ -190,18 +191,29 @@ export default class Dashboard extends Component {
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
+      lineTension: 0,
     };
 
     const nodeProcChart = {
-      data: procHistory.map(
-        (hist: Object): number => calculateMemory(hist.count, null, false)
-      ),
-      label: this.state.nodeTab,
+      data: procHistory.map((hist: Object): number => hist.count),
+      label: 'Running processes',
       backgroundColor: '#9b59b6',
       borderColor: '#9b59b6',
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
+      lineTension: 0,
+    };
+
+    const nodeCPUChart = {
+      data: history.map((hist: Object): number => round(hist.node_load_pct, 2)),
+      label: 'CPU load',
+      backgroundColor: '#9b59b6',
+      borderColor: '#9b59b6',
+      fill: false,
+      pointRadius: 1,
+      borderWidth: 3,
+      lineTension: 0,
     };
 
     return (
@@ -359,13 +371,16 @@ export default class Dashboard extends Component {
               label={
                 <Dropdown>
                   <Control small>{this.state.nodeTab}</Control>
-                  {map(system.cluster_info, node => (
-                    <Item
-                      key={node}
-                      title={node}
-                      action={this.handleNodeTabChange}
-                    />
-                  ))}
+                  {map(
+                    system.cluster_info,
+                    (nodeData: Object, nodeName: string) => (
+                      <Item
+                        key={nodeName}
+                        title={nodeName}
+                        action={this.handleNodeTabChange}
+                      />
+                    )
+                  )}
                 </Dropdown>
               }
             >
@@ -408,6 +423,65 @@ export default class Dashboard extends Component {
                 )}
                 datasets={[nodeProcChart]}
               />
+            </PaneItem>
+            <PaneItem title="Node CPU load">
+              <ChartComponent
+                title={`${this.state.nodeTab} (${
+                  currentNodeData.node_cpu_count
+                } CPUs)`}
+                width="100%"
+                height={150}
+                isNotTime
+                yAxisLabel="CPU load in %"
+                unit="%"
+                empty={currentNodeData.mem_history.length === 0}
+                labels={procHistory.map(
+                  (hist: Object): string => formatChartTime(hist.timestamp)
+                )}
+                datasets={[nodeCPUChart]}
+              />
+            </PaneItem>
+          </DashboardModule>
+          <DashboardModule>
+            <PaneItem title="System Overview">
+              <div className="dashboard-module-overview">
+                <div className="module overview-module">
+                  <div>{health.data['instance-key']}</div>
+                  <div>instance</div>
+                </div>
+                <div
+                  className={`module overview-module ${statusHealth(
+                    health.data.health
+                  )}`}
+                >
+                  <div>{health.data.health}</div>
+                  <div>health</div>
+                </div>
+              </div>
+              <div className="dashboard-module-overview">
+                <div
+                  className={`module overview-module ${
+                    system['alert-summary'].ongoing !== 0 ? 'danger' : 'none'
+                  } has-link`}
+                  onClick={() => this.handleModuleClick('/system/alerts')}
+                >
+                  <div>{system['alert-summary'].ongoing}</div>
+                  <div>ongoing alerts</div>
+                </div>
+                <div
+                  className={`module overview-module ${
+                    system['alert-summary'].transient !== 0
+                      ? 'danger'
+                      : 'success'
+                  } has-link`}
+                  onClick={() =>
+                    this.handleModuleClick('/system/alerts?tab=transient')
+                  }
+                >
+                  <div>{system['alert-summary'].transient}</div>
+                  <div>transient alerts</div>
+                </div>
+              </div>
             </PaneItem>
           </DashboardModule>
           <DashboardModule>
@@ -544,48 +618,6 @@ export default class Dashboard extends Component {
               </PaneItem>
             </DashboardModule>
           )}
-          <DashboardModule>
-            <PaneItem title="System Overview">
-              <div className="dashboard-module-overview">
-                <div className="module overview-module">
-                  <div>{health.data['instance-key']}</div>
-                  <div>instance</div>
-                </div>
-                <div
-                  className={`module overview-module ${statusHealth(
-                    health.data.health
-                  )}`}
-                >
-                  <div>{health.data.health}</div>
-                  <div>health</div>
-                </div>
-              </div>
-              <div className="dashboard-module-overview">
-                <div
-                  className={`module overview-module ${
-                    system['alert-summary'].ongoing !== 0 ? 'danger' : 'none'
-                  } has-link`}
-                  onClick={() => this.handleModuleClick('/system/alerts')}
-                >
-                  <div>{system['alert-summary'].ongoing}</div>
-                  <div>ongoing alerts</div>
-                </div>
-                <div
-                  className={`module overview-module ${
-                    system['alert-summary'].transient !== 0
-                      ? 'danger'
-                      : 'success'
-                  } has-link`}
-                  onClick={() =>
-                    this.handleModuleClick('/system/alerts?tab=transient')
-                  }
-                >
-                  <div>{system['alert-summary'].transient}</div>
-                  <div>transient alerts</div>
-                </div>
-              </div>
-            </PaneItem>
-          </DashboardModule>
           <DashboardModule>
             <PaneItem title="Connections">
               <div className="dashboard-data-module has-link">

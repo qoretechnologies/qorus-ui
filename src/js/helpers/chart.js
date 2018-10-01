@@ -246,6 +246,7 @@ const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
       .map(() => ({
         node_priv: undefined,
         node_ram_in_use: undefined,
+        node_load_pct: undefined,
         timestamp: null,
       }))
       .concat(newHistory);

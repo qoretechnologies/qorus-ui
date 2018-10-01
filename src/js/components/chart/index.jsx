@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Chart from 'chart.js';
 import pure from 'recompose/onlyUpdateForKeys';
+import round from 'lodash/round';
 
 import { CenterWrapper } from '../layout';
 
@@ -84,12 +85,12 @@ export default class ChartComponent extends Component {
 
       if (nextProps.type === 'line' || nextProps.type === 'bar') {
         chart.options.scales.yAxes[0].ticks.callback = val =>
-          getFormattedValue(val, datasets) + unit;
+          round(val, 2) + unit;
         chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
         chart.options.scales.xAxes[0].scaleLabel.labelString =
           nextProps.xAxisLabel;
         chart.options.tooltips.callbacks.label = item =>
-          getFormattedValue(item.yLabel, nextProps.datasets) + unit;
+          round(item.yLabel, 2) + unit;
       }
 
       chart.update();
@@ -131,7 +132,7 @@ export default class ChartComponent extends Component {
             mode: 'label',
             callbacks: {
               label(item) {
-                return getFormattedValue(item.yLabel, data) + unit;
+                return item.yLabel + unit;
               },
             },
           },
@@ -143,13 +144,13 @@ export default class ChartComponent extends Component {
                       min,
                       max,
                       stepSize,
-                      callback: val => getFormattedValue(val, data) + unit,
+                      callback: val => round(val, 2) + unit,
                       fontSize: 10,
                     }
                   : {
                       min,
                       stepSize,
-                      callback: val => getFormattedValue(val, data) + unit,
+                      callback: val => round(val, 2) + unit,
                       fontSize: 10,
                     },
                 scaleLabel: {
