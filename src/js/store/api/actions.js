@@ -144,9 +144,7 @@ Object.keys(authActions).forEach(a => {
   actions.auth[a] = authActions[a](actions);
 });
 
-Object.keys(logoutActions).forEach(a => {
-  actions.logout[a] = logoutActions[a](actions);
-});
+Object.assign(actions.logout, logoutActions);
 
 Object.keys(alertsActions).forEach(a => {
   actions.alerts[a] = alertsActions[a];

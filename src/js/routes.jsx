@@ -64,9 +64,8 @@ class AppInfo extends React.Component {
 
   logout = (nextState, replace) => {
     const { logout } = this.props;
-    window.localStorage.removeItem('token');
-    logout();
-    replace('/login');
+
+    logout(replace);
   };
 
   render() {
