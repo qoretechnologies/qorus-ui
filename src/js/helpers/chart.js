@@ -243,7 +243,11 @@ const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
     const sub = 15 - newHistory.length;
 
     newHistory = [...Array(sub)]
-      .map(() => ({ node_priv: undefined, timestamp: null }))
+      .map(() => ({
+        node_priv: undefined,
+        node_ram_in_use: undefined,
+        timestamp: null,
+      }))
       .concat(newHistory);
   }
 

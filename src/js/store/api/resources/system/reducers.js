@@ -51,7 +51,11 @@ const processMemoryChanged = {
 
     events.forEach(event => {
       data.cluster_info[event.node].node_priv = event.node_priv;
+      data.cluster_info[event.node].node_load_pct = event.node_load_pct;
+      data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
       data.cluster_info[event.node].node_priv_str = event.node_priv_str;
+      data.cluster_info[event.node].node_ram_in_use_str =
+        event.node_ram_in_use_str;
 
       if (event.status_string === 'IDLE') {
         delete processes[event.id];
@@ -223,6 +227,10 @@ const updateNodeInfo = {
     events.forEach(event => {
       data.cluster_info[event.name].mem_history.push({
         node_priv: event.node_priv,
+        node_ram_in_use: event.node_ram_in_use,
+        node_ram_in_use_str: event.node_ram_in_use_str,
+        node_load_pct: event.node_load_pct,
+        node_cpu_count: event.node_cpu_count,
         node_priv_str: event.node_priv_str,
         timestamp: event.timestamp,
       });
@@ -237,6 +245,7 @@ const updateNodeInfo = {
       });
 
       data.cluster_info[event.name].process_count = event.processes;
+      data.cluster_info[event.name].node_load_pct = event.node_load_pct;
 
       if (data.cluster_info[event.name].process_history.length > 60) {
         data.cluster_info[event.name].process_history.shift();
