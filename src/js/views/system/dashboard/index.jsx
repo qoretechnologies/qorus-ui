@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Masonry from 'react-masonry-layout';
 import map from 'lodash/map';
+import round from 'lodash/round';
 import { browserHistory } from 'react-router';
 
 import Loader from '../../../components/loader';
@@ -137,7 +138,12 @@ export default class Dashboard extends Component {
       (hist: Object): number =>
         parseFloat(calculateMemory(hist.node_priv, null, false), 10)
     );
+    const flattenedInUseHistory = history.map(
+      (hist: Object): number =>
+        parseFloat(calculateMemory(hist.node_ram_in_use, null, false), 10)
+    );
     const historyMax = Math.max(...flattenedHistory);
+    const inUseHistoryMax = Math.max(...flattenedInUseHistory);
     const totalRamInt = parseFloat(
       calculateMemory(currentNodeData.node_ram, null, false),
       10
@@ -149,7 +155,7 @@ export default class Dashboard extends Component {
       backgroundColor: '#FF7373',
       borderColor: '#FF7373',
       fill: false,
-      label: 'Total node memory',
+      label: 'Total node RAM',
       pointRadius: 0,
       borderWidth: 1,
     };
@@ -157,16 +163,33 @@ export default class Dashboard extends Component {
     // The highest memory value is larger than the node total RAM
     if (historyMax > totalRamInt) {
       yMax = historyMax;
+    } else if (inUseHistoryMax > totalRamInt) {
+      yMax = inUseHistoryMax;
     }
 
     const nodeChart = {
       data: history.map(
         (hist: Object): number => calculateMemory(hist.node_priv, null, false)
       ),
-      label: this.state.nodeTab,
+      label: 'RAM used by Qorus',
       backgroundColor: '#9b59b6',
       borderColor: '#9b59b6',
       fill: false,
+      pointRadius: 1,
+      borderWidth: 3,
+    };
+
+    const nodeInUseChart = {
+      data: history.map(
+        (hist: Object): number =>
+          calculateMemory(hist.node_ram_in_use, null, false)
+      ),
+      label: 'Total RAM used',
+      backgroundColor: '#277fba',
+      borderColor: '#277fba',
+      fill: false,
+      pointRadius: 1,
+      borderWidth: 3,
     };
 
     const nodeProcChart = {
@@ -177,6 +200,8 @@ export default class Dashboard extends Component {
       backgroundColor: '#9b59b6',
       borderColor: '#9b59b6',
       fill: false,
+      pointRadius: 1,
+      borderWidth: 3,
     };
 
     return (
@@ -280,6 +305,12 @@ export default class Dashboard extends Component {
                   system.cluster_info[node].node_priv
                 );
 
+                const memoryInUse: string = calculateMemory(
+                  system.cluster_info[node].node_ram_in_use
+                );
+
+                const loadPct: string = system.cluster_info[node].node_load_pct;
+
                 const processName = Object.keys(system.processes).find(
                   process => system.processes[process].node === node
                 );
@@ -300,11 +331,21 @@ export default class Dashboard extends Component {
                     <div className="bottom">
                       <div className="module">
                         <div className="top">{memory}</div>
-                        <div className="bottom">Memory</div>
+                        <div className="bottom">RAM used by Qorus</div>
                       </div>
                       <div className="module">
                         <div className="top">{processes}</div>
                         <div className="bottom">Processes</div>
+                      </div>
+                    </div>
+                    <div className="bottom">
+                      <div className="module">
+                        <div className="top">{memoryInUse}</div>
+                        <div className="bottom">Total RAM used</div>
+                      </div>
+                      <div className="module">
+                        <div className="top">{round(loadPct, 2)}%</div>
+                        <div className="bottom">CPU load</div>
                       </div>
                     </div>
                   </div>
@@ -344,7 +385,9 @@ export default class Dashboard extends Component {
                   (hist: Object): string => formatChartTime(hist.timestamp)
                 )}
                 datasets={
-                  memoryLimitChart ? [nodeChart, memoryLimitChart] : [nodeChart]
+                  memoryLimitChart
+                    ? [nodeChart, nodeInUseChart, memoryLimitChart]
+                    : [nodeChart, nodeInUseChart]
                 }
               />
             </PaneItem>

@@ -147,57 +147,56 @@ const MenuWrapper: Function = ({
   toggleMenu,
   intl: { formatMessage },
   isTablet,
-}: Props) =>
-  console.log(isTablet) || (
-    <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
-      {map(isTablet ? tabletMenu : menu, (values: Object, key: string) => (
-        <div key={key}>
-          {!menuCollapsed && (
-            <li className="pt-menu-header">
-              <h6>{key}</h6>
-            </li>
-          )}
-          {values.map(
-            ({ name, icon, link, submenu }) =>
-              menuCollapsed ? (
-                <Tooltip
-                  key={name}
-                  content={name}
-                  position={submenu ? Position.BOTTOM : Position.RIGHT}
-                >
-                  <MenuElement
-                    iconName={icon}
-                    link={link}
-                    name={name}
-                    submenu={submenu}
-                    menuCollapsed
-                  />
-                </Tooltip>
-              ) : (
+}: Props) => (
+  <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
+    {map(isTablet ? tabletMenu : menu, (values: Object, key: string) => (
+      <div key={key}>
+        {!menuCollapsed && (
+          <li className="pt-menu-header">
+            <h6>{key}</h6>
+          </li>
+        )}
+        {values.map(
+          ({ name, icon, link, submenu }) =>
+            menuCollapsed ? (
+              <Tooltip
+                key={name}
+                content={name}
+                position={submenu ? Position.BOTTOM : Position.RIGHT}
+              >
                 <MenuElement
-                  key={name}
                   iconName={icon}
                   link={link}
                   name={name}
                   submenu={submenu}
+                  menuCollapsed
                 />
-              )
-          )}
-          <MenuDivider />
-        </div>
-      ))}
-      {menuCollapsed ? (
-        <MenuItem iconName="menu-open" onClick={toggleMenu} />
-      ) : (
-        <MenuItem
-          iconName="menu"
-          label={<Icon iconName="caret-left" />}
-          text="Collapse"
-          onClick={toggleMenu}
-        />
-      )}
-    </Menu>
-  );
+              </Tooltip>
+            ) : (
+              <MenuElement
+                key={name}
+                iconName={icon}
+                link={link}
+                name={name}
+                submenu={submenu}
+              />
+            )
+        )}
+        <MenuDivider />
+      </div>
+    ))}
+    {menuCollapsed ? (
+      <MenuItem iconName="menu-open" onClick={toggleMenu} />
+    ) : (
+      <MenuItem
+        iconName="menu"
+        label={<Icon iconName="caret-left" />}
+        text="Collapse"
+        onClick={toggleMenu}
+      />
+    )}
+  </Menu>
+);
 
 const Sidebar: Function = ({
   isTablet,
