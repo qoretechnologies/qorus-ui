@@ -281,6 +281,65 @@ const addOrder = {
   },
 };
 
+const processOrderEvent = {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        if (dt.status) {
+          const workflow = newData.find(d => d.id === dt.id);
+          const newStatus = workflow[dt.status] + 1;
+          const newTotal = workflow.TOTAL + 1;
+
+          newData = updateItemWithId(
+            dt.id,
+            {
+              [dt.status]: newStatus,
+              TOTAL: newTotal,
+              _updated: true,
+            },
+            newData
+          );
+        } else {
+          const workflow = newData.find(d => d.id === dt.id);
+          const isStatusOlder = workflow[dt.old] - 1 < 0;
+          const statusBefore =
+            workflow[dt.old] - 1 < 0 ? 0 : workflow[dt.old] - 1;
+          const status = workflow[dt.new] + 1;
+          let total = workflow.TOTAL;
+
+          if (isStatusOlder) {
+            total = total + 1;
+          }
+
+          newData = updateItemWithId(
+            dt.id,
+            {
+              [dt.old]: statusBefore,
+              [dt.new]: status,
+              TOTAL: total,
+              _updated: true,
+            },
+            newData
+          );
+        }
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
 const modifyOrder = {
   next(
     state = initialState,
@@ -602,6 +661,7 @@ export {
   fetchLibSources as FETCHLIBSOURCES,
   setExecCount as SETEXECCOUNT,
   addOrder as ADDORDER,
+  processOrderEvent as PROCESSORDEREVENT,
   modifyOrder as MODIFYORDER,
   setEnabled as SETENABLED,
   updateDone as UPDATEDONE,
