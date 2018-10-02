@@ -124,7 +124,12 @@ export const Diagramm = ({
   <div className="mapper-wrapper">
     <Tooltip data={tooltip} />
     <div id={id} className="svg-diagram">
-      <svg height={svgHeight} width={svgWidth} id="mapper">
+      <svg
+        height={svgHeight}
+        width={svgWidth}
+        id="mapper"
+        style={{ margin: '0 auto' }}
+      >
         <Header
           textColor={headerTextColor}
           offsetX={offsetX}
