@@ -72,6 +72,11 @@ const updateDone = createAction('WORKFLOWS_UPDATEDONE', id => ({ id }));
 
 const addOrder = createAction('WORKFLOWS_ADDORDER', events => ({ events }));
 
+const processOrderEvent = createAction(
+  'WORKFLOWS_PROCESSORDEREVENT',
+  events => ({ events })
+);
+
 const modifyOrder = createAction('WORKFLOWS_MODIFYORDER', events => ({
   events,
 }));
@@ -203,6 +208,7 @@ export {
   unselectAll,
   updateDone,
   addOrder,
+  processOrderEvent,
   modifyOrder,
   addAlert,
   clearAlert,
