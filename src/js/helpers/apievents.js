@@ -6,18 +6,16 @@ const container: Object = {};
 const eventAction: Function = (
   ev: string,
   func: Function,
-  dispatch: Function,
-  purgeInt: boolean
+  dispatch: Function
 ): void => {
   if (container[ev].length) {
     dispatch(func(container[ev]));
     container[ev] = [];
 
-    if (purgeInt) {
-      clearInterval(intervals[ev]);
-      clearTimeout(timeOuts[ev]);
-      delete intervals[ev];
-    }
+    clearInterval(intervals[ev]);
+    clearTimeout(timeOuts[ev]);
+    delete intervals[ev];
+    delete timeOuts[ev];
   }
 };
 
@@ -32,10 +30,6 @@ const pipeline: Function = (
 
   container[ev].push(data);
 
-  if (process.env.TESTINST || global.it) {
-    eventAction(ev, func, dispatch, true);
-  }
-
   timeOuts[ev] = setTimeout(() => {
     eventAction(ev, func, dispatch, true);
   }, 200);
@@ -47,6 +41,4 @@ const pipeline: Function = (
   }
 };
 
-export {
-  pipeline,
-};
+export { pipeline };

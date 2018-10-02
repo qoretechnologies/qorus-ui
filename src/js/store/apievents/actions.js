@@ -463,8 +463,8 @@ const handleEvent = (url, data, dispatch, state) => {
 
         if (state.api.workflows.sync && workflow) {
           pipeline(
-            eventstr,
-            workflows.addOrder,
+            'WORKFLOW_PROCESS_ORDERS',
+            workflows.processOrderEvent,
             {
               id: info.workflowid,
               status: info.status,
@@ -540,8 +540,8 @@ const handleEvent = (url, data, dispatch, state) => {
 
         if (state.api.workflows.sync && workflow) {
           pipeline(
-            eventstr,
-            workflows.modifyOrder,
+            'WORKFLOW_PROCESS_ORDERS',
+            workflows.processOrderEvent,
             {
               id: info.workflowid,
               old: info.info.old,
