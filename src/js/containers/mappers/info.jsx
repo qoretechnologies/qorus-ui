@@ -6,6 +6,7 @@ import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import Masonry from 'react-masonry-layout';
 
 import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
@@ -38,26 +39,6 @@ const MapperInfo = ({
         </Crumb>
       </Breadcrumbs>
       <Box top>
-        <p className="mapper-subtitle">{mapper.desc}</p>
-        <Author model={mapper} />
-        <p className="mapper-desc">
-          <span> Type </span>: {mapper.type}
-        </p>
-
-        <p className="mapper-desc">
-          <span> Options </span>:
-        </p>
-        <div className="row mapper-opts">
-          <div className="col-lg-4">
-            <InfoTable
-              object={mapper.opts}
-              omit={['input', 'output', 'name']}
-            />
-          </div>
-        </div>
-      </Box>
-
-      <Box>
         <Tabs active="diagram" type="pills">
           <Pane name="Diagram">
             <div className="view-content">
@@ -71,6 +52,25 @@ const MapperInfo = ({
                 </div>
               )}
               <MapperDiagram mapper={mapper} />
+            </div>
+          </Pane>
+          <Pane name="Info">
+            <p className="mapper-subtitle">{mapper.desc}</p>
+            <Author model={mapper} />
+            <p className="mapper-desc">
+              <span> Type </span>: {mapper.type}
+            </p>
+
+            <p className="mapper-desc">
+              <span> Options </span>:
+            </p>
+            <div className="row mapper-opts">
+              <div className="col-lg-4">
+                <InfoTable
+                  object={mapper.opts}
+                  omit={['input', 'output', 'name']}
+                />
+              </div>
             </div>
           </Pane>
           <Pane name="Releases">
