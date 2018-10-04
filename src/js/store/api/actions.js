@@ -154,4 +154,10 @@ Object.keys(sqlcacheActions).forEach(a => {
   actions.sqlcache[a] = sqlcacheActions[a];
 });
 
+actions.system.withDispatchInjected = (action: Function, ...args) => (
+  dispatch: Function
+) => {
+  dispatch(action(...args, dispatch));
+};
+
 export default actions;
