@@ -8,5 +8,6 @@ export default keyMirror({
 export const statuses = keyMirror({
   SUCCESS: null,
   WARNING: null,
-  ERROR: null,
+  DANGER: null,
+  INFO: null,
 });

@@ -25,15 +25,15 @@
     margin-top: 10px;
 
     &.success {
-      background: #03c9a9;
+      background: $qore-green;
     }
 
     &.warning {
-      background: #f7ca18;
+      background: $qore-warning;
     }
 
     &.error {
-      background: #f64747;
+      background: $qore-danger;
     }
   }
 }

@@ -144,6 +144,14 @@ body,
   color: #fff !important;
 }
 
+.pt-toast {
+  font-size: 14px;
+
+  &.pt-intent-success {
+    background-color: $qore-green;
+  }
+}
+
 .pt-popover-content {
   max-height: 400px;
   overflow-y: auto;

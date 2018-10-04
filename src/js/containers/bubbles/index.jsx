@@ -11,28 +11,20 @@ export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {
     return null;
   }
   return (
-    <BubbleList>
-      <ReactCSSTransitionGroup
-        transitionName="bubble"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={300}
-        component="div"
-      >
-        {bubbleList.map(
-          item => (
-            <BubbleItem
-              key={`bubble_${item.id}`}
-              bubble={item}
-            />
-          )
-        )}
-      </ReactCSSTransitionGroup>
-    </BubbleList>
+    <div
+      className="
+        pt-toast-container pt-overlay pt-overlay-open pt-toast-container-top pt-toast-container-right
+      "
+    >
+      <span>
+        {bubbleList.map(item => (
+          <BubbleItem key={`bubble_${item.id}`} bubble={item} />
+        ))}
+      </span>
+    </div>
   );
 };
 
-export default connect(
-  state => ({
-    bubbleList: state.ui.bubbles.list || [],
-  })
-)(Bubbles);
+export default connect(state => ({
+  bubbleList: state.ui.bubbles.list || [],
+}))(Bubbles);
