@@ -14,6 +14,7 @@ import NoData from '../../components/nodata';
 import Tree from '../../components/tree';
 import Container from '../../components/container';
 import Alert from '../../components/alert';
+import { normalizeName } from '../../components/utils';
 
 const interfaces: Array<string> = [
   'roles',
@@ -25,6 +26,14 @@ const interfaces: Array<string> = [
   'vmaps',
   'mappers',
 ];
+
+const interfaceIds = {
+  workflows: 'workflowid',
+  services: 'serviceid',
+  jobs: 'jobid',
+  vmaps: 'id',
+  mappers: 'mapperid',
+};
 
 const UserView: Function = ({
   userData,
@@ -53,13 +62,21 @@ const UserView: Function = ({
         {interfaces.map((intrf: string) => (
           <PaneItem title={capitalize(intrf)}>
             {userData[intrf].length ? (
-              userData[intrf].map(
-                (datum: string): React.Element<Tag> => (
-                  <span>
-                    <Tag className="tag-with-margin">{datum}</Tag>{' '}
-                  </span>
+              userData[intrf]
+                .map((datum: string | Object) => {
+                  if (typeof datum === 'string') {
+                    return datum;
+                  }
+
+                  return normalizeName(datum, interfaceIds[intrf]);
+                })
+                .map(
+                  (datum: string): React.Element<Tag> => (
+                    <span>
+                      <Tag className="tag-with-margin">{datum}</Tag>{' '}
+                    </span>
+                  )
                 )
-              )
             ) : userData.has_default ? (
               <Alert bsStyle="warning" iconName="info-sign">
                 {' '}
