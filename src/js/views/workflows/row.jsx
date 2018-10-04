@@ -9,6 +9,7 @@ import {
   Tooltip,
   Position,
   Popover,
+  Icon,
   PopoverInteractionKind,
 } from '@blueprintjs/core';
 
@@ -18,12 +19,9 @@ import PaneItem from '../../components/pane_item';
 import Checkbox from '../../components/checkbox';
 import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
-import Badge from '../../components/badge';
-import Icon from '../../components/icon';
 import DetailButton from '../../components/detail_button';
 import AutoStart from './autostart';
-import { ORDER_STATES_ARRAY, ORDER_STATES } from '../../constants/orders';
-import { formatCount } from '../../helpers/orders';
+import { ORDER_STATES_ARRAY } from '../../constants/orders';
 import InstancesBar from '../../components/instances_bar';
 import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
@@ -222,7 +220,7 @@ const TableRow: Function = ({
     </Td>
     {showDeprecated && (
       <Td className="medium">
-        <Icon iconName={deprecated ? 'flag' : 'flag-o'} />
+        <Icon iconName={deprecated ? 'small-tick' : 'cross'} />
       </Td>
     )}
   </Tr>
