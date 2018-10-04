@@ -158,7 +158,6 @@ export default compose(
     {
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
-      setRemote: actions.workflows.setRemote,
     }
   ),
   checkData(

@@ -26,6 +26,8 @@ import InstancesBar from '../../components/instances_bar';
 import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
 
 type Props = {
   isActive?: boolean,
@@ -56,7 +58,7 @@ type Props = {
   first?: boolean,
   handleRemoteClick: Function,
   remote: boolean,
-  setRemote: Function,
+  dispatchAction: Function,
   order_stats?: Object,
   orderStats?: Object,
   slaStats?: Object,
@@ -227,6 +229,7 @@ const TableRow: Function = ({
 );
 
 export default compose(
+  withDispatch(),
   withHandlers({
     handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
       select(id);
@@ -250,11 +253,11 @@ export default compose(
       openPane(id, 'detail');
     },
     handleRemoteClick: ({
-      setRemote,
       id,
       remote,
+      dispatchAction,
     }: Props): Function => (): void => {
-      setRemote(id, !remote);
+      dispatchAction(actions.workflows.setRemote, id, !remote);
     },
   }),
   mapProps(
