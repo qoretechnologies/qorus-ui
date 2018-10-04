@@ -14,8 +14,8 @@ import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
-import Badge from '../../../components/badge';
 import ConfirmDialog from '../../../components/confirm_dialog';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 type Props = {
   name: string,
@@ -33,7 +33,7 @@ type Props = {
   closeModal: Function,
   openPane: Function,
   closePane: Function,
-  deleteConnection: Function,
+  dispatchAction: Function,
   up?: boolean,
   safe_url?: string,
   url?: string,
@@ -138,9 +138,9 @@ export default compose(
     null,
     {
       updateDone: actions.remotes.updateDone,
-      deleteConnection: actions.remotes.deleteConnection,
     }
   ),
+  withDispatch(),
   withModal(),
   withHandlers({
     handleHighlightEnd: ({ name, updateDone }: Props): Function => (): void => {
@@ -169,14 +169,14 @@ export default compose(
       );
     },
     handleDeleteClick: ({
-      deleteConnection,
+      dispatchAction,
       name,
       remoteType,
       openModal,
       closeModal,
     }: Props): Function => (): void => {
       const handleConfirm: Function = (): void => {
-        deleteConnection(remoteType, name);
+        dispatchAction(actions.remotes.deleteConnection, remoteType, name);
         closeModal();
       };
 

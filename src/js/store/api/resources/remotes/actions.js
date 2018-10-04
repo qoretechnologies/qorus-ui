@@ -2,7 +2,7 @@
 import { createAction } from 'redux-actions';
 import pickBy from 'lodash/pickBy';
 
-import { fetchJson } from '../../utils';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
 import { error } from '../../../ui/bubbles/actions';
 import { attrsSelector } from '../../../../helpers/remotes';
@@ -28,7 +28,7 @@ const addAlert = createAction('REMOTES_ADDALERT', events => ({ events }));
 
 const clearAlert = createAction('REMOTES_CLEARALERT', events => ({ events }));
 
-const manageConnectionCall: Function = createAction(
+const manageConnection: Function = createAction(
   'REMOTES_MANAGECONNECTION',
   async (
     remoteType: string,
@@ -49,28 +49,34 @@ const manageConnectionCall: Function = createAction(
     let newData = data;
 
     if (!name) {
-      response = await fetchJson(
-        'POST',
-        `${settings.REST_BASE_URL}/remote/${remoteType}`,
-        {
-          body: JSON.stringify(newData),
-        },
-        true
+      response = await fetchWithNotifications(
+        async () =>
+          await fetchJson(
+            'POST',
+            `${settings.REST_BASE_URL}/remote/${remoteType}`,
+            {
+              body: JSON.stringify(newData),
+            }
+          ),
+        `Creating ${data.name}...`,
+        `${data.name} successfuly created`,
+        dispatch
       );
     } else {
       newData = pickBy(data, (val, key) => editable.includes(key));
-      response = await fetchJson(
-        'PUT',
-        `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
-        {
-          body: JSON.stringify(newData),
-        },
-        true
+      response = await fetchWithNotifications(
+        async () =>
+          await fetchJson(
+            'PUT',
+            `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
+            {
+              body: JSON.stringify(newData),
+            }
+          ),
+        `Saving ${name}...`,
+        `${name} successfuly modified`,
+        dispatch
       );
-    }
-
-    if (response.err) {
-      dispatch(error(response.desc));
     }
 
     return {
@@ -82,19 +88,21 @@ const manageConnectionCall: Function = createAction(
   }
 );
 
-const deleteConnectionAction: Function = createAction(
+const deleteConnection: Function = createAction(
   'REMOTES_DELETECONNECTION',
   async (remoteType: string, name: string, dispatch): Object => {
-    const response = await fetchJson(
-      'DELETE',
-      `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
-      null,
-      true
+    const response = await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'DELETE',
+          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
+          null,
+          true
+        ),
+      `Deleting ${name}...`,
+      `${name} successfuly deleted`,
+      dispatch
     );
-
-    if (response.err) {
-      dispatch(error(response.desc));
-    }
 
     return {
       remoteType,
@@ -103,22 +111,6 @@ const deleteConnectionAction: Function = createAction(
     };
   }
 );
-
-const manageConnection: Function = (
-  remoteType: string,
-  data: Object,
-  name: string
-): Function => (dispatch: Function): void => {
-  dispatch(manageConnectionCall(remoteType, data, name));
-  dispatch(manageConnectionCall(remoteType, data, name, dispatch));
-};
-
-const deleteConnection: Function = (
-  remoteType: string,
-  name: string
-): Function => (dispatch: Function): void => {
-  dispatch(deleteConnectionAction(remoteType, name, dispatch));
-};
 
 export {
   pingRemote,

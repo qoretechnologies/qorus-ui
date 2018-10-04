@@ -23,6 +23,7 @@ import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
 import PaneItem from '../../../components/pane_item';
 import { attrsSelector } from '../../../helpers/remotes';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -36,12 +37,8 @@ const viewSelector = createSelector(
   })
 );
 
-@connect(
-  viewSelector,
-  {
-    onSave: actions.remotes.manageConnection,
-  }
-)
+@connect(viewSelector)
+@withDispatch()
 export default class ConnectionsPane extends Component {
   static propTypes = {
     remote: PropTypes.object.isRequired,
@@ -51,7 +48,7 @@ export default class ConnectionsPane extends Component {
     type: PropTypes.string,
     width: PropTypes.number,
     onResize: PropTypes.func,
-    onSave: PropTypes.func,
+    optimisticDispatch: PropTypes.func,
     remoteType: PropTypes.string,
     canEdit: PropTypes.bool,
   };
@@ -79,7 +76,7 @@ export default class ConnectionsPane extends Component {
   };
 
   handleEditSave: Function = (attr: string) => (value: any) => {
-    const { onSave, remoteType } = this.props;
+    const { optimisticDispatch, remoteType } = this.props;
     const optsKey = remoteType === 'user' ? 'opts' : 'options';
     const val =
       (value === '' || value === '{}') &&
@@ -114,8 +111,13 @@ export default class ConnectionsPane extends Component {
         this.setState({
           error: 'The "options" object is invalid. It cannot be nested.',
         });
-      } else if (onSave) {
-        onSave(remoteType, data, this.props.remote.name);
+      } else if (optimisticDispatch) {
+        optimisticDispatch(
+          actions.remotes.manageConnection,
+          remoteType,
+          data,
+          this.props.remote.name
+        );
       }
     }
   };
