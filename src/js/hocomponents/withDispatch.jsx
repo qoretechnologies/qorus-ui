@@ -5,5 +5,8 @@ import actions from '../store/api/actions';
 export default (): Function => (Component: ReactClass<*>): ReactClass<*> =>
   connect(
     null,
-    { dispatchAction: actions.system.withDispatchInjected }
+    {
+      dispatchAction: actions.system.withDispatchInjected,
+      optimisticDispatch: actions.system.withDispatchOptimisticInjected,
+    }
   )(Component);

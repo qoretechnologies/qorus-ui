@@ -160,4 +160,11 @@ actions.system.withDispatchInjected = (action: Function, ...args) => (
   dispatch(action(...args, dispatch));
 };
 
+actions.system.withDispatchOptimisticInjected = (action: Function, ...args) => (
+  dispatch: Function
+) => {
+  dispatch(action(...args));
+  dispatch(action(...args, dispatch));
+};
+
 export default actions;
