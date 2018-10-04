@@ -1,4 +1,6 @@
+// @flow
 import { curry, assignIn } from 'lodash';
+import { error, success } from '../../ui/bubbles/actions';
 
 export const normalizeId = curry((idAttribute, item) =>
   Object.assign({ id: item[idAttribute] }, item)
@@ -52,3 +54,16 @@ export const addHasAlerts = curry(item => {
 
   return { ...item, ...{ has_alerts: alerts && alerts.length !== 0 } };
 });
+
+export const processRESTResponse = (
+  resp: Object,
+  dispatch: Function,
+  successMsg: string,
+  notificationId: string | number
+): void => {
+  if (resp && resp.err) {
+    dispatch(error(resp.desc, notificationId));
+  } else if (successMsg) {
+    dispatch(success(successMsg, notificationId));
+  }
+};
