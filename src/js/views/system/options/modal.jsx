@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import Modal from '../../../components/modal';
 import { Controls, Control } from '../../../components/controls';
-import Dropdown, { Control as DToggle, Item as DItem } from '../../../components/dropdown';
+import Dropdown, {
+  Control as DToggle,
+  Item as DItem,
+} from '../../../components/dropdown';
 
 export default class OptionModal extends Component {
   props: {
@@ -12,7 +15,7 @@ export default class OptionModal extends Component {
   };
 
   state: {
-    value: string | number
+    value: string | number,
   } = {
     value: this.props.model.value || 'null',
   };
@@ -23,7 +26,10 @@ export default class OptionModal extends Component {
     });
   };
 
-  handleDropdownItemClick: Function = (event: EventHandler, value: any): void => {
+  handleDropdownItemClick: Function = (
+    event: EventHandler,
+    value: any
+  ): void => {
     this.setState({
       value,
     });
@@ -44,21 +50,23 @@ export default class OptionModal extends Component {
       case 'bool':
         return (
           <Dropdown id="option">
-            <DToggle>{ this.state.value.toString() }</DToggle>
-            <DItem
-              title="true"
-              action={this.handleDropdownItemClick}
-            />
-            <DItem
-              title="false"
-              action={this.handleDropdownItemClick}
-            />
+            <DToggle>{this.state.value.toString()}</DToggle>
+            <DItem title="true" action={this.handleDropdownItemClick} />
+            <DItem title="false" action={this.handleDropdownItemClick} />
           </Dropdown>
         );
       case 'integer':
         if (model.interval) {
-          min = model.interval[0] > model.interval[1] ? model.interval[1] : model.interval[0];
-          max = model.interval[1] > model.interval[0] ? model.interval[1] : model.interval[0];
+          min =
+            model.interval[0] > model.interval[1]
+              ? model.interval[1]
+              : model.interval[0];
+          max =
+            model.interval[1] === 'UNLIMITED'
+              ? Number.MAX_SAFE_INTEGER
+              : model.interval[1] > model.interval[0]
+                ? model.interval[1]
+                : model.interval[0];
         }
 
         return (
@@ -89,32 +97,24 @@ export default class OptionModal extends Component {
     return (
       <form onSubmit={this.handleFormSubmit}>
         <Modal hasFooter>
-          <Modal.Header
-            titleId="option"
-            onClose={onClose}
-          >
-            { model.name }
+          <Modal.Header titleId="option" onClose={onClose}>
+            {model.name}
           </Modal.Header>
           <Modal.Body>
             <h4> Description </h4>
-            <p>{ model.desc }</p>
+            <p>{model.desc}</p>
             <h4> Expects </h4>
-            <code>{ model.expects }</code>
+            <code>{model.expects}</code>
             <h4> Interval </h4>
-            <p>{ model.interval ? JSON.stringify(model.interval) : 'No data' }</p>
+            <p>{model.interval ? JSON.stringify(model.interval) : 'No data'}</p>
             <h4> Default Value </h4>
-            <code>{ model.default ? model.default.toString() : 'null' }</code>
-            <h4> Current  Value </h4>
-            { this.renderValue() }
+            <code>{model.default ? model.default.toString() : 'null'}</code>
+            <h4> Current Value </h4>
+            {this.renderValue()}
           </Modal.Body>
           <Modal.Footer>
             <Controls noControls grouped>
-              <Control
-                type="submit"
-                label="Save"
-                btnStyle="success"
-                big
-              />
+              <Control type="submit" label="Save" btnStyle="success" big />
             </Controls>
           </Modal.Footer>
         </Modal>
