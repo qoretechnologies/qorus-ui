@@ -65,6 +65,12 @@ export default class Tr extends Component {
     }
   };
 
+  handleClick: Function = (event: Object): void => {
+    if (this.props.onClick) {
+      this.props.onClick(event);
+    }
+  };
+
   recalculateSizes: Function = (): void => {
     if (this.props.first) {
       if (this._resizeTimeout) {
@@ -150,14 +156,7 @@ export default class Tr extends Component {
   };
 
   render() {
-    const {
-      children,
-      className,
-      sortData,
-      onSortChange,
-      onClick,
-      title,
-    } = this.props;
+    const { children, className, sortData, onSortChange, title } = this.props;
     const { highlight } = this.state;
 
     return (
@@ -168,7 +167,7 @@ export default class Tr extends Component {
           },
           className
         )}
-        onClick={onClick}
+        onClick={this.handleClick}
         ref={this.handleRef}
         title={title}
       >

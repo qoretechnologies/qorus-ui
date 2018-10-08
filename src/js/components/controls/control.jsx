@@ -32,6 +32,8 @@ type Props = {
   id?: string,
   className?: string,
   children?: React.Element<*> | Array<React.Element<*>>,
+  intent?: string,
+  text?: any,
 };
 
 const Control: Function = ({
@@ -42,11 +44,9 @@ const Control: Function = ({
   disabled,
   type,
   css,
-  icon,
   iconName,
-  label,
-  children,
-  btnStyle,
+  text,
+  intent,
 }: Props): React.Element<any> => (
   <Button
     id={id}
@@ -56,19 +56,34 @@ const Control: Function = ({
     disabled={disabled}
     type={type}
     style={css}
-    iconName={icon || iconName}
-    text={label || children}
-    intent={intentTransform[btnStyle]}
+    iconName={iconName}
+    text={text}
+    intent={intent}
   />
 );
 
 export default compose(
   mapProps(
-    ({ className, big, ...rest }: Props): Props => ({
+    ({
+      className,
+      big,
+      icon,
+      iconName,
+      text,
+      label,
+      children,
+      intent,
+      btnStyle,
+      ...rest
+    }: Props): Props => ({
       className: classNames(className, {
         'pt-small': !big,
       }),
       big,
+      iconName: icon || iconName,
+      text: text || label || children,
+      intent: intent || intent === 0 ? intent : intentTransform[btnStyle],
+      btnStyle,
       ...rest,
     })
   ),
@@ -97,5 +112,6 @@ export default compose(
     'children',
     'big',
     'btnStyle',
+    'intent',
   ])
 )(Control);

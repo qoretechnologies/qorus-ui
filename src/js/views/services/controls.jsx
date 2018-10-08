@@ -5,7 +5,12 @@ import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
+
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 import actions from '../../store/api/actions';
 

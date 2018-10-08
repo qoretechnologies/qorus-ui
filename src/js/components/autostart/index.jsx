@@ -3,13 +3,11 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Intent } from '@blueprintjs/core';
 import {
-  ButtonGroup,
-  Button,
-  Intent,
-  Tooltip,
-  Position,
-} from '@blueprintjs/core';
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 type Props = {
   autostart: number,
