@@ -4,15 +4,10 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import {
-  ButtonGroup,
-  Button,
-  Intent,
-  Tooltip,
-  Position,
-} from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 
 import actions from '../../store/api/actions';
+import { Controls, Control } from '../../components/controls';
 
 type Props = {
   id: number,
@@ -28,19 +23,19 @@ const WorkflowControls: Function = ({
   handleToggleEnabledClick,
   handleResetClick,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
-    <Button
+  <Controls>
+    <Control
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleToggleEnabledClick}
       className="pt-small"
     />
-    <Button
+    <Control
       iconName="refresh"
       onClick={handleResetClick}
       className="pt-small"
     />
-  </ButtonGroup>
+  </Controls>
 );
 
 export default compose(

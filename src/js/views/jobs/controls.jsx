@@ -4,7 +4,11 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 import withModal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
@@ -70,7 +74,7 @@ const ServiceControls: Function = ({
       <Button
         title={active ? 'Deactivate' : 'Activate'}
         iconName={active ? 'small-tick' : 'remove'}
-        intent={active ? Intent.SUCCESS : Intent.DANGER}
+        intent={active ? Intent.PRIMARY : Intent.NONE}
         onClick={handleActivateClick}
         className="pt-small"
       />
