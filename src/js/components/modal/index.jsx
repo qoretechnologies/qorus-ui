@@ -133,7 +133,9 @@ export default class Modal extends Component {
   render(): React.Element<any> {
     return (
       <div
-        className="pt-dialog-container"
+        className={`pt-dialog-container ${
+          this.props.hasFooter ? 'has-footer' : ''
+        }`}
         ref={this.refModal}
         tabIndex="-1"
         role="dialog"
