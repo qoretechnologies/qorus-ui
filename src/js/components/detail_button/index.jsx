@@ -2,22 +2,23 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
-import { Button, Intent, Tooltip, Position } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 import withHandlers from 'recompose/withHandlers';
 
 type Props = {
   active: boolean,
   onClick: Function,
+  handleClick: Function,
 };
 
 const DetailButton: Function = ({
   active,
-  onClick,
+  handleClick,
 }: Props): React.Element<any> => (
   <Button
     text={active ? 'Close' : 'Detail'}
     intent={active ? Intent.PRIMARY : Intent.NONE}
-    onClick={onClick}
+    onClick={handleClick}
     className="pt-small"
   />
 );
@@ -30,7 +31,7 @@ export default compose(
       }
 
       if (onClick) {
-        onClick();
+        onClick(e);
       }
     },
   }),

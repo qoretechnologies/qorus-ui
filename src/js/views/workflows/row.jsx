@@ -19,6 +19,7 @@ import PaneItem from '../../components/pane_item';
 import Checkbox from '../../components/checkbox';
 import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
+
 import DetailButton from '../../components/detail_button';
 import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';

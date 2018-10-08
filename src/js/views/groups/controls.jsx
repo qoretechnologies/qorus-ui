@@ -4,7 +4,11 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 import actions from '../../store/api/actions';
 
