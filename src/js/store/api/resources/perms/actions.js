@@ -1,115 +1,91 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-import { fetchJson } from '../../utils';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
 import { unSyncRoles } from '../roles/actions';
 import { unSyncUsers } from '../users/actions';
 import { unSyncCurrentUser } from '../currentUser/actions';
 import actions from '../../actions';
 
-const createOptimistic: Function = (name: string, desc: string) => ({ name, desc });
-const create: Function = (
-  name: string,
-  desc: string,
-): Object => (
-  fetchJson(
-    'POST',
-    `${settings.REST_BASE_URL}/perms/`,
-    {
-      body: JSON.stringify({
-        name,
-        desc,
-      }),
-    }
-  )
-);
-
-const removeOptimistic: Function = (name: string) => ({ name });
-const remove: Function = (name: string) => (
-  fetchJson(
-    'DELETE',
-    `${settings.REST_BASE_URL}/perms/${name}`,
-  )
-);
-
-const updateOptimistic: Function = (name: string, desc: string) => ({ name, desc });
-const update: Function = (
-  name: string, desc: string
-): Object => (
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/perms/${name}`,
-    {
-      body: JSON.stringify({
-        name,
-        desc,
-      }),
-    }
-  )
-);
-
-const createOptimisticCall: Function = createAction(
-  'PERMS_CREATEPERMOPTIMISTIC',
-  createOptimistic
-);
-
-const createCall: Function = createAction(
+const createPerm: Function = createAction(
   'PERMS_CREATEPERM',
-  create
+  async (name: string, desc: string, dispatch: Function): ?Object => {
+    if (dispatch) {
+      const res: Object = await fetchWithNotifications(
+        async () =>
+          await fetchJson('POST', `${settings.REST_BASE_URL}/perms/`, {
+            body: JSON.stringify({
+              name,
+              desc,
+            }),
+          }),
+        'Creating...',
+        'Successfuly created',
+        dispatch
+      );
+
+      if (!res.err) {
+        dispatch(unSyncRoles());
+        dispatch(unSyncUsers());
+        dispatch(unSyncCurrentUser());
+        dispatch(actions.currentUser.fetch());
+      }
+
+      return;
+    }
+
+    return { name, desc };
+  }
 );
 
-const createPerm: Function = (name: string, desc: string) => dispatch => {
-  dispatch(createCall(name, desc));
-  dispatch(createOptimisticCall(name, desc));
-  dispatch(unSyncRoles());
-  dispatch(unSyncUsers());
-  dispatch(unSyncCurrentUser());
-  dispatch(actions.currentUser.fetch());
-};
-
-const removeOptimisticCall: Function = createAction(
-  'PERMS_REMOVEPERMOPTIMISTIC',
-  removeOptimistic
-);
-
-const removeCall: Function = createAction(
+const removePerm: Function = createAction(
   'PERMS_REMOVEPERM',
-  remove
+  async (name: string, dispatch: Function) => {
+    if (dispatch) {
+      const res = await fetchWithNotifications(
+        async () =>
+          await fetchJson('DELETE', `${settings.REST_BASE_URL}/perms/${name}`),
+        'Deleting permission...',
+        'Deleted successfully',
+        dispatch
+      );
+
+      if (res.err) {
+        dispatch(unSyncRoles());
+        dispatch(unSyncUsers());
+        dispatch(unSyncCurrentUser());
+        dispatch(actions.currentUser.fetch());
+      }
+
+      return;
+    }
+
+    return { name };
+  }
 );
 
-const removePerm: Function = (name: string) => dispatch => {
-  dispatch(removeCall(name));
-  dispatch(removeOptimisticCall(name));
-  dispatch(unSyncRoles());
-  dispatch(unSyncUsers());
-  dispatch(unSyncCurrentUser());
-  dispatch(actions.currentUser.fetch());
-};
-
-const updateOptimisticCall: Function = createAction(
-  'PERMS_UPDATEPERMOPTIMISTIC',
-  updateOptimistic
-);
-
-const updateCall: Function = createAction(
+const updatePerm: Function = createAction(
   'PERMS_UPDATEPERM',
-  update
+  async (name: string, desc: string, dispatch: Function): ?Object => {
+    if (dispatch) {
+      await fetchWithNotifications(
+        async () =>
+          await fetchJson('PUT', `${settings.REST_BASE_URL}/perms/${name}`, {
+            body: JSON.stringify({
+              name,
+              desc,
+            }),
+          }),
+        'Updating...',
+        'Successfuly updated',
+        dispatch
+      );
+
+      return;
+    }
+
+    return { name, desc };
+  }
 );
 
-const updatePerm: Function = (name: string, desc: string) => dispatch => {
-  dispatch(updateCall(name, desc));
-  dispatch(updateOptimisticCall(name, desc));
-};
-
-const removePermOptimistic: Function = () => () => true;
-const createPermOptimistic: Function = () => () => true;
-const updatePermOptimistic: Function = () => () => true;
-
-export {
-  createPerm,
-  createPermOptimistic,
-  removePerm,
-  removePermOptimistic,
-  updatePerm,
-  updatePermOptimistic,
-};
+export { createPerm, removePerm, updatePerm };

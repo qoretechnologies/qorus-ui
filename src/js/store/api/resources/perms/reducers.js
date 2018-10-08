@@ -1,5 +1,6 @@
 import remove from 'lodash/remove';
 import RBAC from '../../../../constants/rbac';
+import { updateItemWithId } from '../../utils';
 
 const initialState: Object = {
   data: [],
@@ -7,75 +8,69 @@ const initialState: Object = {
   sync: false,
 };
 
-const defaultReducer = {
-  next(state: Object = initialState): Object {
-    return state;
-  },
-  throw(state: Object = initialState): Object {
-    return state;
-  },
-};
-
-const createPermOptimistic: Object = {
+const createPerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
-    const { name, desc } = action.payload;
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
+      const { name, desc } = action.payload;
 
-    data.push({
-      name,
-      desc,
-      permission_type: RBAC.PERMS_TYPE,
-    });
+      data.push({
+        name,
+        desc,
+        permission_type: RBAC.PERMS_TYPE,
+      });
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
 
-const createPerm: Object = defaultReducer;
-
-const removeOptimistic: Object = {
+const removePerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
 
-    remove(data, p => p.name === action.payload.name);
+      remove(data, p => p.name === action.payload.name);
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
 
-const removePerm: Object = defaultReducer;
-
-const updateOptimistic: Object = {
+const updatePerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const { name, desc } = action.payload;
-    const data: Array<Object> = state.data.slice();
-    const match: Object = data.find(p => p.name === name);
+    if (action.payload) {
+      const { name, desc } = action.payload;
+      let data: Array<Object> = state.data.slice();
 
-    Object.assign(match, {
-      desc,
-      permission_type: RBAC.PERMS_TYPE,
-    });
+      data = updateItemWithId(
+        name,
+        { desc, permission_type: RBAC.PERMS_TYPE },
+        data,
+        'name'
+      );
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
-
-const updatePerm: Object = defaultReducer;
 
 export {
   createPerm as CREATEPERM,
-  createPermOptimistic as CREATEPERMOPTIMISTIC,
-  removeOptimistic as REMOVEPERMOPTIMISTIC,
   removePerm as REMOVEPERM,
   updatePerm as UPDATEPERM,
-  updateOptimistic as UPDATEPERMOPTIMISTIC,
 };
