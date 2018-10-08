@@ -4,10 +4,10 @@ import { Link } from 'react-router';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
 
 import { Tr, Td } from '../../../components/new_table';
 import Text from '../../../components/text';
+import withDispatch from '../../../hocomponents/withDispatch';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import { Controls, Control as Button } from '../../../components/controls';
 import actions from '../../../store/api/actions';
@@ -20,7 +20,7 @@ type Props = {
   units?: string,
   openModal: Function,
   closeModal: Function,
-  remove: Function,
+  dispatchAction: Function,
   handleDeleteClick: Function,
   perms: Array<string>,
   first?: boolean,
@@ -67,22 +67,17 @@ const SLARow: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      remove: actions.slas.removeSla,
-    }
-  ),
+  withDispatch(),
   withHandlers({
     handleDeleteClick: ({
       openModal,
       closeModal,
       slaid,
-      remove,
+      dispatchAction,
       name,
     }: Props): Function => (): void => {
       const handleConfirm: Function = (): void => {
-        remove(slaid);
+        dispatchAction(actions.slas.remove, slaid);
         closeModal();
       };
 

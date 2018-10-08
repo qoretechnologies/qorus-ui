@@ -75,7 +75,6 @@ export default compose(
     viewSelector,
     {
       load: actions.slas.fetch,
-      create: actions.slas.create,
       unsync: actions.slas.unsync,
     }
   ),

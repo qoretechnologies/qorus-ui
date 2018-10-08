@@ -57,9 +57,8 @@ export default compose(
     handleAddClick: ({
       openModal,
       closeModal,
-      onCreate,
     }: Props): Function => (): void => {
-      openModal(<SLAModal onClose={closeModal} onSubmit={onCreate} />);
+      openModal(<SLAModal onClose={closeModal} />);
     },
   }),
   pure(['searchQuery'])
