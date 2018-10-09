@@ -9,14 +9,12 @@ type Props = {
 };
 
 const ErrorsView: Function = ({ location }: Props): React.Element<any> => (
-  <div className="tab-pane active">
-    <ErrorsContainer
-      title="Global errors"
-      type="global"
-      location={location}
-      fixed
-    />
-  </div>
+  <ErrorsContainer
+    title="Global errors"
+    type="global"
+    location={location}
+    fixed
+  />
 );
 
 export default titleManager('Errors')(ErrorsView);
