@@ -21,6 +21,7 @@ import { querySelector } from '../../../../selectors';
 import Box from '../../../../components/box';
 import Container from '../../../../components/container';
 import PaneItem from '../../../../components/pane_item';
+import withDispatch from '../../../../hocomponents/withDispatch';
 
 type Props = {
   onClose: Function,
@@ -100,12 +101,8 @@ const selector = createSelector([querySelector('values')], query => ({
 }));
 
 export default compose(
-  connect(
-    selector,
-    {
-      addAction: addValue,
-    }
-  ),
+  connect(selector),
+  withDispatch(),
   withState('adding', 'setAdding', false),
   mapProps(
     ({ setAdding, valuemaps, paneId, ...rest }): Object => ({
@@ -121,13 +118,13 @@ export default compose(
     onAddClick: ({ toggleAdding }): Function => (): void => {
       toggleAdding();
     },
-    onSaveClick: ({ toggleAdding, paneId, addAction }): Function => (
+    onSaveClick: ({ toggleAdding, paneId, dispatchAction }): Function => (
       key,
       value,
       enabled
     ): void => {
       toggleAdding();
-      addAction(paneId, key, value, enabled);
+      dispatchAction(addValue, paneId, key, value, enabled);
     },
   }),
   search('values')

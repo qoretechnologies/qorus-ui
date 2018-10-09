@@ -7,22 +7,11 @@ import includes from 'lodash/includes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-} from '../../../../components/new_table';
+import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
 import sync from '../../../../hocomponents/sync';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import { resourceSelector, querySelector } from '../../../../selectors';
-import {
-  fetchValues,
-  updateValue,
-  deleteValue,
-} from '../../../../store/api/resources/valuemaps/actions';
+import { fetchValues } from '../../../../store/api/resources/valuemaps/actions';
 import DetailRow from './row';
 
 type Props = {
@@ -34,12 +23,7 @@ type Props = {
   remove: Function,
 };
 
-const DetailTable: Function = ({
-  update,
-  remove,
-  paneId,
-  data,
-}: Props): React.Element<any> => (
+const DetailTable: Function = ({ paneId, data }: Props): React.Element<any> => (
   <Table condensed striped>
     <Thead>
       <Tr>
@@ -56,8 +40,6 @@ const DetailTable: Function = ({
             id={paneId}
             name={key}
             data={data[key]}
-            onUpdate={update}
-            onRemoveClick={remove}
           />
         )
       )}
@@ -109,8 +91,6 @@ export default compose(
     selector,
     {
       load: fetchValues,
-      update: updateValue,
-      remove: deleteValue,
     }
   ),
   lifecycle({
