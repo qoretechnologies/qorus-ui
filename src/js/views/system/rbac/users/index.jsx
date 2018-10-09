@@ -9,6 +9,7 @@ import { Button, Intent } from '@blueprintjs/core';
 import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
+import withDispatch from '../../../../hocomponents/withDispatch';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
@@ -47,11 +48,9 @@ const viewSelector: Function = createSelector(
     viewSelector,
     {
       load: actions.users.fetch,
-      createUser: actions.users.createUser,
-      removeUser: actions.users.removeUser,
-      updateUser: actions.users.updateUser,
     }
   ),
+  withDispatch(),
   search(),
   modal(),
   sync('users')
@@ -63,10 +62,8 @@ export default class RBACUsers extends Component {
     usersModel: Array<*>,
     user: Object,
     openModal: Function,
-    closeModal?: Function,
-    createUser: Function,
-    removeUser: Function,
-    updateUser: Function,
+    closeModal: Function,
+    optimisticDispatch: Function,
   };
 
   handleAddUserClick: Function = (): void => {
@@ -98,7 +95,13 @@ export default class RBACUsers extends Component {
     password: string,
     roles: Array<string>
   ): Promise<*> => {
-    await this.props.createUser(name, username, password, roles);
+    await this.props.optimisticDispatch(
+      actions.users.create,
+      name,
+      username,
+      password,
+      roles
+    );
 
     this.props.closeModal();
   };
@@ -108,14 +111,19 @@ export default class RBACUsers extends Component {
     username: string,
     roles: Array<string>
   ): Promise<*> => {
-    await this.props.updateUser(name, username, roles);
+    await this.props.optimisticDispatch(
+      actions.users.update,
+      name,
+      username,
+      roles
+    );
 
     this.props.closeModal();
   };
 
   handleRemoveUserClick: Function = (username): void => {
     const handleConfirm: Function = (): void => {
-      this.props.removeUser(username);
+      this.props.optimisticDispatch(actions.users.remove, username);
       this.props.closeModal();
     };
 
