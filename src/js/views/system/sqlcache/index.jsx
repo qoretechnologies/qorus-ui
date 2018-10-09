@@ -4,20 +4,23 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flowRight, pickBy, includes } from 'lodash';
-import { Button, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 
 import Toolbar from '../../../components/toolbar';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
+import NoData from '../../../components/nodata';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import Search from '../../../containers/search';
 import search from '../../../hocomponents/search';
+import withDispatch from '../../../hocomponents/withDispatch';
 import sync from '../../../hocomponents/sync';
 import withModal from '../../../hocomponents/modal';
 import Table from './table';
 import actions from '../../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import titleManager from '../../../hocomponents/TitleManager';
+import { Control as Button } from '../../../components/controls';
 
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
 const querySelector: Function = (state: Object, props: Object): ?string =>
@@ -60,16 +63,18 @@ class SQLCache extends Component {
     collection: Object,
     query: ?string,
     onSearchChange: Function,
-    clearCache: Function,
+    optimisticDispatch: Function,
     openModal: Function,
     closeModal: Function,
   };
 
   handleClearAllClick: Function = (): void => {
     const confirmFunc: Function = (): void => {
-      this.props.clearCache();
+      this.props.optimisticDispatch(actions.sqlcache.clearCache, null, null);
       this.props.closeModal();
     };
+
+    console.log('all');
 
     this.props.openModal(
       <ConfirmDialog onClose={this.props.closeModal} onConfirm={confirmFunc}>
@@ -80,7 +85,11 @@ class SQLCache extends Component {
 
   handleClearDatasourceClick: Function = (datasource): void => {
     const confirmFunc: Function = (): void => {
-      this.props.clearCache(datasource);
+      this.props.optimisticDispatch(
+        actions.sqlcache.clearCache,
+        datasource,
+        null
+      );
       this.props.closeModal();
     };
 
@@ -94,7 +103,11 @@ class SQLCache extends Component {
 
   handleClearSingleClick: Function = (datasource, name): void => {
     const confirmFunc: Function = (): void => {
-      this.props.clearCache(datasource, name);
+      this.props.optimisticDispatch(
+        actions.sqlcache.clearCache,
+        datasource,
+        name
+      );
       this.props.closeModal();
     };
 
@@ -125,12 +138,13 @@ class SQLCache extends Component {
             intent={Intent.DANGER}
             text="Clear All"
             iconName="trash"
-            action={this.handleClearAllClick}
+            onClick={this.handleClearAllClick}
             className="pull-right"
+            big
           />
         </Toolbar>
         <Container>
-          {colLength > 0 &&
+          {colLength > 0 ? (
             Object.keys(this.props.collection).map((col, index) => (
               <Box top={index === 0}>
                 <Table
@@ -142,8 +156,10 @@ class SQLCache extends Component {
                   onSingleClick={this.handleClearSingleClick}
                 />
               </Box>
-            ))}
-          {colLength <= 0 && <p> No data </p>}
+            ))
+          ) : (
+            <NoData />
+          )}
         </Container>
       </div>
     );
@@ -155,9 +171,9 @@ export default compose(
     viewSelector,
     {
       load: actions.sqlcache.fetch,
-      clearCache: actions.sqlcache.clearCache,
     }
   ),
+  withDispatch(),
   search(),
   sync('sqlcache'),
   withModal(),
