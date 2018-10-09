@@ -19,44 +19,69 @@ const initialState: Object = {
 const fetch: Object = {
   next(
     state: Object = initialState,
-    { payload: { errors, type } }: { payload: { errors: Object, type: string } }
+    {
+      payload: { errors, type },
+    }: { payload: { errors: Object, type: string } }
   ) {
-    return { ...state, ...{ [type]: { data: errors, sync: true, loading: false } } };
+    return {
+      ...state,
+      ...{ [type]: { data: errors, sync: true, loading: false } },
+    };
   },
 };
 
 const createOrUpdate: Object = {
   next(
     state: Object = initialState,
-    { payload: { id, data, type } }: { payload: { id: number, data: Object, type: string } }
+    {
+      payload: { id, data, type },
+    }: { payload: { id: number, data: Object, type: string } }
   ) {
-    const exists = state[type].data.find((obj: Object): boolean => obj.error === data.error);
-    let newData;
+    if (data) {
+      const exists = state[type].data.find(
+        (obj: Object): boolean => obj.error === data.error
+      );
+      let newData;
 
-    if (exists) {
-      const stateData = [...state[type].data];
+      if (exists) {
+        const stateData = [...state[type].data];
 
-      newData = updateItemWithName(data.error, { ...data }, stateData, 'error');
-    } else {
-      const dataObj = id && id !== 'omit' ? { ...data, ...{ workflowid: id } } : data;
+        newData = updateItemWithName(
+          data.error,
+          { ...data },
+          stateData,
+          'error'
+        );
+      } else {
+        const dataObj =
+          id && id !== 'omit' ? { ...data, ...{ workflowid: id } } : data;
 
-      newData = [...state[type].data, dataObj];
+        newData = [...state[type].data, dataObj];
+      }
+
+      return { ...state, ...{ [type]: { ...state[type], data: newData } } };
     }
 
-    return { ...state, ...{ [type]: { ...state[type], data: newData } } };
+    return state;
   },
 };
 
 const removeError: Object = {
   next(
     state: Object = initialState,
-    { payload: { name, type } }: { payload: { name: string, type: string } }
+    {
+      payload: { name, type },
+    }: { payload: { name: string, type: string } }
   ) {
-    const data = [...state[type].data];
+    if (name) {
+      const data = [...state[type].data];
 
-    remove(data, (error: Object) => error.error === name);
+      remove(data, (error: Object) => error.error === name);
 
-    return { ...state, ...{ [type]: { ...state[type], data } } };
+      return { ...state, ...{ [type]: { ...state[type], data } } };
+    }
+
+    return state;
   },
 };
 

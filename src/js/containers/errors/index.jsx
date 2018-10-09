@@ -12,6 +12,7 @@ import patch from '../../hocomponents/patchFuncArgs';
 import withModal from '../../hocomponents/modal';
 import withSearch from '../../hocomponents/search';
 import unsync from '../../hocomponents/unsync';
+import withDispatch from '../../hocomponents/withDispatch';
 import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
 import Search from '../../containers/search';
@@ -31,8 +32,7 @@ type Props = {
   type: string,
   openModal: Function,
   closeModal: Function,
-  createOrUpdate: Function,
-  removeError: Function,
+  optimisticDispatch: Function,
   id: string | number,
   fixed: boolean,
   height: string | number,
@@ -47,14 +47,13 @@ const ErrorsContainer: Function = ({
   type,
   openModal,
   closeModal,
-  createOrUpdate,
-  removeError,
+  optimisticDispatch,
   id,
   fixed,
   height,
 }: Props): React.Element<any> => {
   const handleFormSubmit: Function = (data: Object) => {
-    createOrUpdate(type, id, data);
+    optimisticDispatch(actions.errors.createOrUpdate, type, id, data);
     closeModal();
   };
 
@@ -81,7 +80,7 @@ const ErrorsContainer: Function = ({
 
   const handleDeleteClick: Function = name => {
     const handleConfirm = (): void => {
-      removeError(type, id, name);
+      optimisticDispatch(actions.errors.removeError, type, id, name);
       closeModal();
     };
 
@@ -174,8 +173,6 @@ export default compose(
     selector,
     {
       load: actions.errors.fetch,
-      createOrUpdate: actions.errors.createOrUpdate,
-      removeError: actions.errors.removeError,
       unsync: actions.errors.unsync,
     }
   ),
@@ -184,6 +181,7 @@ export default compose(
   }),
   patch('load', ['type', 'id']),
   sync('meta'),
+  withDispatch(),
   withModal(),
   withSearch((props: Object) => `${props.type}ErrQuery`),
   unsync(),
