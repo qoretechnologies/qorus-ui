@@ -4,14 +4,19 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
 
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import actions from '../../../store/api/actions';
+import withDispatch from '../../../hocomponents/withDispatch';
+import showIf from '../../../hocomponents/show-if-passed';
 
 type Props = {
   selectNone: Function,
   selectedIds: Array<number>,
-  action: Function,
+  dispatchAction: Function,
   handleBatchAction: Function,
   handleEnableClick: Function,
   handleDisableClick: Function,
@@ -28,29 +33,47 @@ const ToolbarActions: Function = ({
   handleResetClick,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
-    <Button text="Enable" iconName="power-off" onClick={handleEnableClick} />
-    <Button text="Disable" iconName="ban" onClick={handleDisableClick} />
-    <Button text="Load" iconName="check" onClick={handleLoadClick} />
-    <Button text="Unload" iconName="times" onClick={handleUnloadClick} />
-    <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
+    <Button
+      text="Enable"
+      btnStyle="success"
+      iconName="power"
+      onClick={handleEnableClick}
+      big
+    />
+    <Button
+      text="Disable"
+      btnStyle="danger"
+      iconName="power"
+      onClick={handleDisableClick}
+      big
+    />
+    <Button big text="Load" iconName="small-tick" onClick={handleLoadClick} />
+    <Button big text="Unload" iconName="cross" onClick={handleUnloadClick} />
+    <Button big text="Reset" iconName="refresh" onClick={handleResetClick} />
   </ButtonGroup>
 );
 
 export default compose(
   connect(
-    () => ({}),
+    null,
     {
-      action: actions.services.serviceAction,
       selectNone: actions.services.selectNone,
     }
   ),
+  showIf(({ show }) => show),
+  withDispatch(),
   withHandlers({
     handleBatchAction: ({
       selectedIds,
-      action,
+      dispatchAction,
       selectNone,
     }: Props): Function => (actionType: string): void => {
-      action(actionType, selectedIds);
+      dispatchAction(
+        actions.services.serviceAction,
+        actionType,
+        selectedIds,
+        null
+      );
       selectNone();
     },
   }),

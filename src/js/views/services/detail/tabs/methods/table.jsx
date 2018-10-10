@@ -84,8 +84,6 @@ export default compose(
     viewSelector,
     {
       load: actions.slas.fetch,
-      setMethod: actions.services.setSLAMethod,
-      removeMethod: actions.services.removeSLAMethod,
     }
   ),
   sync('meta'),

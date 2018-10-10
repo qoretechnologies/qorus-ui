@@ -4,15 +4,14 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
 import { Intent } from '@blueprintjs/core';
 
 import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
-
 import actions from '../../store/api/actions';
+import withDispatch from '../../hocomponents/withDispatch';
 
 type Props = {
   handleEnableClick: Function,
@@ -23,7 +22,7 @@ type Props = {
   loaded: boolean,
   autostart: boolean,
   status: string,
-  action: Function,
+  dispatchAction: Function,
   id: number,
 };
 
@@ -67,12 +66,7 @@ const ServiceControls: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      action: actions.services.serviceAction,
-    }
-  ),
+  withDispatch(),
   mapProps(
     ({ status, ...rest }: Props): Object => ({
       loaded: status !== 'unloaded',
@@ -82,23 +76,42 @@ export default compose(
   withHandlers({
     handleEnableClick: ({
       enabled,
-      action,
+      dispatchAction,
       id,
     }: Props): Function => (): void => {
-      action(enabled ? 'disable' : 'enable', id);
+      dispatchAction(
+        actions.services.serviceAction,
+        enabled ? 'disable' : 'enable',
+        id,
+        null
+      );
     },
     handleAutostartClick: ({
       autostart,
-      action,
+      dispatchAction,
       id,
     }: Props): Function => (): void => {
-      action('autostart', id, autostart);
+      dispatchAction(
+        actions.services.serviceAction,
+        'autostart',
+        id,
+        autostart
+      );
     },
-    handleLoadClick: ({ loaded, action, id }: Props): Function => (): void => {
-      action(loaded ? 'unload' : 'load', id);
+    handleLoadClick: ({
+      loaded,
+      dispatchAction,
+      id,
+    }: Props): Function => (): void => {
+      dispatchAction(
+        actions.services.serviceAction,
+        loaded ? 'unload' : 'load',
+        id,
+        null
+      );
     },
-    handleResetClick: ({ action, id }: Props): Function => (): void => {
-      action('reset', id);
+    handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
+      dispatchAction(actions.services.serviceAction, 'reset', id, null);
     },
   }),
   pure(['enabled', 'loaded', 'autostart'])
