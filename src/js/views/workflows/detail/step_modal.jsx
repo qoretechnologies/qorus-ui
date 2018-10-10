@@ -124,7 +124,55 @@ export default class StepModal extends Component {
    * @return {ReactElement}
    */
   renderBody() {
-    return (
+    const { step } = this.props;
+    const { class: classData } = step;
+
+    return classData ? (
+      <Tabs className="step-info" active="class" noContainer>
+        <Pane name="Class">
+          <Tabs active="code" noContainer>
+            <Pane name="Code">
+              <InfoTable
+                object={{
+                  /* eslint-disable quote-props */
+                  'function name':
+                    `${classData.name} v${classData.version}` +
+                    `${classData.patch ? `.${classData.patch}` : ''}` +
+                    ` (${classData.function_instanceid})`,
+                  /* eslint-enable quote-props */
+                  description: classData.description,
+                  source: `${classData.source}:${classData.offset}`,
+                  author: classData.author,
+                  tags:
+                    classData.tags && Object.keys(classData.tags).length
+                      ? classData.tags
+                      : undefined,
+                }}
+              />
+              <SourceCode
+                height={this.state.sourceHeight}
+                lineOffset={parseInt(classData.offset, 10)}
+                language={classData.language}
+              >
+                {classData.body}
+              </SourceCode>
+            </Pane>
+            <Pane name="Class Info">
+              <InfoTable
+                object={{
+                  ..._.omit(classData, 'offset'),
+                  source: `${classData.source}:${classData.offset}`,
+                }}
+                omit={['body', 'type', 'language_info']}
+              />
+            </Pane>
+          </Tabs>
+        </Pane>
+        <Pane name="Step Info">
+          <InfoTable object={step} omit={['class', 'functions']} />
+        </Pane>
+      </Tabs>
+    ) : (
       <Tabs
         className="step-info"
         active={this.props.step.functions[0].type}
