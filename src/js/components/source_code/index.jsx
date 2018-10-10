@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-qore';
+import 'prismjs/components/prism-java';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 import classNames from 'classnames';
@@ -25,6 +26,7 @@ export default class SourceCode extends Component {
     children: PropTypes.string,
     height: PropTypes.number,
     handleRef: PropTypes.func,
+    language: PropTypes.string,
   };
 
   static defaultProps = {
@@ -81,7 +83,8 @@ export default class SourceCode extends Component {
             'line-numbers': !this.state.wrapLines,
             'source-code__code': true,
             'source-code__code--wrap': this.state.wrapLines,
-            'language-qore': true,
+            'language-qore': this.props.language !== 'java8',
+            'language-java': this.props.language === 'java8',
           })}
           style={{
             maxHeight: this.props.height || 'auto',
