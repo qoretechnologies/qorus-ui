@@ -14,7 +14,6 @@ function shouldComponentUpdate(nextProps, nextState) {
   return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
 }
 
-
 /**
  * Provides `shouldComponentUpdate` with shallow equality check for
  * props and state changes.
@@ -47,9 +46,14 @@ export function pureRender(CompCls) {
 export const normalizeName = (item, idAttr = 'id') => {
   const { name, version, patch } = item;
   const id = item[idAttr];
-  const normalizedName = patch ?
-    `${name} v${version}.${patch} (${id})` :
-    `${name} v${version} (${id})`;
+
+  const versionString: string = version
+    ? ` v${version}${patch ? `.${patch}` : ''}`
+    : '';
+
+  const idString: string = id ? ` (${id})` : '';
+
+  const normalizedName = `${name}${versionString}${idString}`;
 
   return normalizedName;
 };
