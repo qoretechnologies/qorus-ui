@@ -13,6 +13,7 @@ import sync from '../../hocomponents/sync';
 import unsync from '../../hocomponents/unsync';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
+import NoDataIf from '../../components/NoDataIf';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
   <div>
@@ -20,13 +21,18 @@ const Extensions = ({ extensions }: { extensions: Object }) => (
       <Crumb>Extensions</Crumb>
     </Breadcrumbs>
     <Box top>
-      <Tabs active={Object.keys(extensions)[0]} id="extensionsTabs">
-        {Object.keys(extensions).map(item => (
-          <Pane key={`extension_group_${item.toLowerCase()}`} name={item}>
-            <ExtensionList extensions={extensions[item]} />
-          </Pane>
-        ))}
-      </Tabs>
+      <NoDataIf
+        condition={Object.keys(extensions).length === 0}
+        title="There are no extensions installed"
+      >
+        <Tabs active={Object.keys(extensions)[0]} id="extensionsTabs">
+          {Object.keys(extensions).map(item => (
+            <Pane key={`extension_group_${item.toLowerCase()}`} name={item}>
+              <ExtensionList extensions={extensions[item]} />
+            </Pane>
+          ))}
+        </Tabs>
+      </NoDataIf>
     </Box>
   </div>
 );
