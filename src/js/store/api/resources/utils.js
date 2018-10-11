@@ -4,6 +4,26 @@ export const normalizeId = curry((idAttribute, item) =>
   Object.assign({ id: item[idAttribute] }, item)
 );
 
+export const normalizeUnknownId = curry(item => {
+  if (item.classid) {
+    return normalizeId('classid', item);
+  }
+
+  if (item.stepid) {
+    return normalizeId('stepid', item);
+  }
+
+  if (item.constantid) {
+    return normalizeId('constantid', item);
+  }
+
+  if (item.function_instanceid) {
+    return normalizeId('function_instanceid', item);
+  }
+
+  return item;
+});
+
 export const extendDefaults = curry((defaults, item) =>
   assignIn({}, defaults, item)
 );
@@ -28,7 +48,11 @@ export const checkAlerts = curry(item => {
 export const normalizeWorkflowLib = curry(item => {
   const { lib, wffuncs, stepinfo } = item;
 
-  const newLib = Object.assign({}, { wffuncs, stepfuncs: stepinfo }, lib);
+  const newLib = Object.assign(
+    {},
+    { 'WF Functions': wffuncs, 'Step code': stepinfo },
+    lib
+  );
 
   return Object.assign({}, item, { lib: newLib });
 });
