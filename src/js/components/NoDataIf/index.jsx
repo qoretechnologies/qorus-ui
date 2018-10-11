@@ -13,6 +13,14 @@ const NoDataIf: Function = ({
   children,
   title,
 }: Props): React.Element<any> =>
-  !condition ? children : <NoData title={title} />;
+  !condition ? (
+    typeof children === 'function' ? (
+      children()
+    ) : (
+      children
+    )
+  ) : (
+    <NoData title={title} />
+  );
 
 export default onlyUpdateForKeys(['condition', 'children'])(NoDataIf);
