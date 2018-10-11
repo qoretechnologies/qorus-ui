@@ -1,22 +1,20 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
-import Table, { Section, Row, Cell } from '../table';
+import { Table, Tbody, Tr, Th, Td } from '../new_table';
 
 import AutoComponent from '../autocomponent';
 
 import _ from 'lodash';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
+@onlyUpdateForKeys(['object', 'omit', 'pick'])
 export default class InfoTable extends Component {
   props: {
     object: Object,
     omit?: Array<string | number>,
     pick?: Array<string | number>,
   };
-
-  renderRows = this.renderRows.bind(this);
-  renderTBody = this.renderTBody.bind(this);
-  renderCells = this.renderCells.bind(this);
 
   /**
    * Returns object attribute filter based on `omit` or `pick` props.
@@ -39,74 +37,12 @@ export default class InfoTable extends Component {
    * @see getAttrFilter
    */
   getData(): Array<Object> {
-    return Object.keys(this.props.object).
-      filter(this.getAttrFilter()).
-      map(attr => ({
+    return Object.keys(this.props.object)
+      .filter(this.getAttrFilter())
+      .map(attr => ({
         attr,
         value: this.props.object[attr],
       }));
-  }
-
-  /**
-   * Returns value representation.
-   *
-   * Complex value are wrapped in `pre` tag after being stringified
-   * with nice indentation.
-   *
-   * @param {*} value
-   * @return {ReactElement}
-   * @see COMPLEX_VALUE_INDENT
-   */
-  renderValue(value: any): React.Element<any> {
-    return <AutoComponent>{ value }</AutoComponent>;
-  }
-
-  /**
-   * Yields cells with capitalized attribute name and its value.
-   *
-   * @param {string} attr
-   * @param {*} value
-   * @return {Generator<ReactElement>}
-   * @see renderValue
-   */
-  *renderCells({ attr, value }: { attr: string, value: string }): Generator<*, *, *> {
-    yield (
-      <Cell tag="th">{_.capitalize(attr)}</Cell>
-    );
-
-    yield (
-      <Cell>{this.renderValue(value)}</Cell>
-    );
-  }
-
-  /**
-   * Yields rows for table body.
-   *
-   * @param {Array<AttrValuePair>} data
-   * @return {Generator<ReactElement>}
-   * @see renderCells
-   */
-  *renderRows(data: Object): Generator<*, *, *> {
-    for (const attr of data) {
-      if (attr.value) {
-        yield (
-          <Row data={attr} cells={this.renderCells} />
-        );
-      }
-    }
-  }
-
-  /**
-   * Yields table body section.
-   *
-   * @param {Array<AttrValuePair>} data
-   * @return {Generator<ReactElement>}
-   * @see renderRows
-   */
-  *renderTBody(data: Object): Generator<*, *, *> {
-    yield (
-      <Section type="body" data={data} rows={this.renderRows} />
-    );
   }
 
   /**
@@ -116,17 +52,20 @@ export default class InfoTable extends Component {
    */
   render(): React.Element<Table> {
     return (
-      <Table
-        data={this.getData()}
-        sections={this.renderTBody}
-        className="table table-condensed table-striped table--info"
-      />
+      <Table condensed striped info>
+        <Tbody>
+          {this.getData().map(
+            (datum: Object): React.Element<Tr> => (
+              <Tr>
+                <Th>{_.capitalize(datum.attr)}</Th>
+                <Td>
+                  <AutoComponent>{datum.value}</AutoComponent>
+                </Td>
+              </Tr>
+            )
+          )}
+        </Tbody>
+      </Table>
     );
   }
 }
-
-InfoTable.propTypes = {
-  object: PropTypes.object.isRequired,
-  omit: PropTypes.array,
-  pick: PropTypes.array,
-};

@@ -20,6 +20,7 @@ type Props = {
   bordered?: boolean,
   hover?: boolean,
   fixed?: boolean,
+  info?: boolean,
   height?: string | number,
   marginBottom?: number,
   hasFooter?: boolean,
@@ -36,6 +37,7 @@ let Table: Function = ({
   height,
   marginBottom,
   hasFooter,
+  info,
 }: Props): React.Element<any> =>
   fixed ? (
     <div className="table-wrapper">
@@ -59,12 +61,13 @@ let Table: Function = ({
     <table
       className={classnames(
         'table',
-        'table--data',
         {
+          'table--data': !info,
           'table-striped': striped,
           'table-condensed': condensed,
           'table-hover': hover,
           'table-bordered-our': bordered,
+          'table--info': info,
         },
         className
       )}
