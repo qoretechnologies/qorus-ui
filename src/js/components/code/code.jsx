@@ -77,7 +77,9 @@ class CodeTab extends React.Component {
             <InfoTable
               object={{
                 author: selected.item.author,
-                source: `${selected.item.source}:${selected.item.offset || ''}`,
+                source:
+                  selected.item.source &&
+                  `${selected.item.source}:${selected.item.offset || ''}`,
                 description: selected.item.description,
                 tags:
                   selected.item.tags && Object.keys(selected.item.tags).length,

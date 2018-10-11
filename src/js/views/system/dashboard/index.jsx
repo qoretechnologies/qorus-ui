@@ -111,7 +111,10 @@ export default class Dashboard extends Component {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, width, currentUser } = this.props;
-    const { remotes, canLoadMoreRemotes } = this.state;
+    let { remotes, canLoadMoreRemotes } = this.state;
+
+    remotes = remotes || [];
+    canLoadMoreRemotes = canLoadMoreRemotes || 'null';
 
     const clusterMemory = Object.keys(system.cluster_info).reduce(
       (cur, node: string) => cur + system.cluster_info[node].node_priv,
@@ -124,7 +127,9 @@ export default class Dashboard extends Component {
 
     const masonryKey = `${width}_${
       this.state.chartTab
-    }_${sidebarOpen.toString()}_${canLoadMoreRemotes.toString()}`;
+    }_${sidebarOpen.toString()}_${
+      canLoadMoreRemotes ? canLoadMoreRemotes.toString() : 'null'
+    }`;
 
     const sizes =
       width > 1200
