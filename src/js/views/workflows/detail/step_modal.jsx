@@ -5,6 +5,7 @@ import Loader from 'components/loader';
 import Tabs, { Pane } from 'components/tabs';
 import InfoTable from 'components/info_table';
 import SourceCode from '../../../components/source_code';
+import CodeAreaTitle from '../../../components/code/title';
 
 import actions from 'store/api/actions';
 
@@ -76,7 +77,7 @@ export default class StepModal extends Component {
 
   handleModalResize = () => {
     const { height: formHeight } = document
-      .querySelectorAll('.pt-dialog-body table')[0]
+      .querySelectorAll('.pt-dialog-body h5')[0]
       .getBoundingClientRect();
     const { height: bodyHeight } = document
       .querySelectorAll('.pt-dialog-body')[0]
@@ -128,45 +129,25 @@ export default class StepModal extends Component {
     const { class: classData } = step;
 
     return classData ? (
-      <Tabs className="step-info" active="class" noContainer>
-        <Pane name="Class">
-          <Tabs active="code" noContainer>
-            <Pane name="Code">
-              <InfoTable
-                object={{
-                  /* eslint-disable quote-props */
-                  'function name':
-                    `${classData.name} v${classData.version}` +
-                    `${classData.patch ? `.${classData.patch}` : ''}` +
-                    ` (${classData.function_instanceid})`,
-                  /* eslint-enable quote-props */
-                  description: classData.description,
-                  source: `${classData.source}:${classData.offset}`,
-                  author: classData.author,
-                  tags:
-                    classData.tags && Object.keys(classData.tags).length
-                      ? classData.tags
-                      : undefined,
-                }}
-              />
-              <SourceCode
-                height={this.state.sourceHeight}
-                lineOffset={parseInt(classData.offset, 10)}
-                language={classData.language}
-              >
-                {classData.body}
-              </SourceCode>
-            </Pane>
-            <Pane name="Class Info">
-              <InfoTable
-                object={{
-                  ..._.omit(classData, 'offset'),
-                  source: `${classData.source}:${classData.offset}`,
-                }}
-                omit={['body', 'type', 'language_info']}
-              />
-            </Pane>
-          </Tabs>
+      <Tabs className="step-info" active="code" noContainer>
+        <Pane name="Code">
+          <CodeAreaTitle item={classData} />
+          <SourceCode
+            height={this.state.sourceHeight}
+            lineOffset={parseInt(classData.offset, 10)}
+            language={classData.language}
+          >
+            {classData.body}
+          </SourceCode>
+        </Pane>
+        <Pane name="Class Info">
+          <InfoTable
+            object={{
+              ..._.omit(classData, 'offset'),
+              source: `${classData.source}:${classData.offset}`,
+            }}
+            omit={['body', 'type', 'language_info']}
+          />
         </Pane>
         <Pane name="Step Info">
           <InfoTable object={step} omit={['class', 'functions']} />

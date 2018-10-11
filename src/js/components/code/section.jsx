@@ -1,11 +1,11 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
-import withState from 'recompose/withState';
-import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import CodeItem from './item';
+import NoData from '../nodata';
+import ExpandableItem from '../ExpandableItem';
 
 type Props = {
   name: string,
@@ -14,51 +14,37 @@ type Props = {
   items: Array<Object>,
   onItemClick: Function,
   selected: Object,
-}
+};
 
 const CodeSection: Function = ({
   name,
-  onToggleClick,
-  open,
   items,
   onItemClick,
   selected,
 }: Props): React.Element<any> => (
-  <div className="code-section">
-    <h5 onClick={onToggleClick}>
-      <span className={`fa fa-${open ? 'minus' : 'plus'}-square-o`}></span> { name }
-    </h5>
-    { open && (
+  <ExpandableItem title={name.toUpperCase()} show={items.length > 0}>
+    {() => (
       <div className="code-section__list">
         <div className="code-section__inner">
-          { items.length ? (
-            items.map((item: Object, index: number): React.Element<any> => (
-              <CodeItem
-                type={name}
-                key={`${index}_${name}_${item.name}`}
-                item={item}
-                onClick={onItemClick}
-                selected={selected ? selected.name : null}
-              />
-            ))
+          {items.length ? (
+            items.map(
+              (item: Object, index: number): React.Element<any> => (
+                <CodeItem
+                  type={name}
+                  key={`${index}_${name}_${item.name}`}
+                  item={item}
+                  onClick={onItemClick}
+                  selected={selected ? selected.name : null}
+                />
+              )
+            )
           ) : (
-            <p> No data </p>
+            <NoData />
           )}
         </div>
       </div>
     )}
-  </div>
+  </ExpandableItem>
 );
 
-export default compose(
-  withState('open', 'toggler', true),
-  mapProps(({ toggler, ...rest }) => ({
-    onToggleClick: () => toggler((open: boolean): boolean => !open),
-    ...rest,
-  })),
-  pure([
-    'open',
-    'items',
-    'selected',
-  ])
-)(CodeSection);
+export default compose(pure(['open', 'items', 'selected']))(CodeSection);
