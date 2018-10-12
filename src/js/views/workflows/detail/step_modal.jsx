@@ -76,9 +76,16 @@ export default class StepModal extends Component {
   }
 
   handleModalResize = () => {
-    const { height: formHeight } = document
+    let { height: formHeight } = document
       .querySelectorAll('.pt-dialog-body h5')[0]
       .getBoundingClientRect();
+
+    if (!formHeight) {
+      formHeight = document
+        .querySelectorAll('.pt-dialog-body table')[0]
+        .getBoundingClientRect();
+    }
+
     const { height: bodyHeight } = document
       .querySelectorAll('.pt-dialog-body')[0]
       .getBoundingClientRect();
@@ -169,23 +176,7 @@ export default class StepModal extends Component {
                 noContainer
               >
                 <Pane name="Code">
-                  <InfoTable
-                    object={{
-                      /* eslint-disable quote-props */
-                      'function name':
-                        `${func.name} v${func.version}` +
-                        `${func.patch ? `.${func.patch}` : ''}` +
-                        ` (${func.function_instanceid})`,
-                      /* eslint-enable quote-props */
-                      description: func.description,
-                      source: `${func.source}:${func.offset}`,
-                      author: func.author,
-                      tags:
-                        func.tags && Object.keys(func.tags).length
-                          ? func.tags
-                          : undefined,
-                    }}
-                  />
+                  <CodeAreaTitle item={func} />
                   <SourceCode
                     height={this.state.sourceHeight}
                     lineOffset={parseInt(func.offset, 10)}
