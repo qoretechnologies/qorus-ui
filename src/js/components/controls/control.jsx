@@ -113,5 +113,6 @@ export default compose(
     'big',
     'btnStyle',
     'intent',
+    'iconName',
   ])
 )(Control);

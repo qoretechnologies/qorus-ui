@@ -64,19 +64,23 @@ class Tabs extends React.Component {
         renderActiveTabPanelOnly
         vertical={vertical}
       >
-        {React.Children.map(children, child => (
-          <Tab2
-            id={child.props.name.toLowerCase()}
-            title={child.props.name}
-            panel={
-              noContainer ? (
-                child.props.children
-              ) : (
-                <Container fill>{child.props.children}</Container>
-              )
-            }
-          />
-        ))}
+        {React.Children.map(
+          children,
+          child =>
+            child && (
+              <Tab2
+                id={child.props.name.toLowerCase()}
+                title={child.props.name}
+                panel={
+                  noContainer ? (
+                    child.props.children
+                  ) : (
+                    <Container fill>{child.props.children}</Container>
+                  )
+                }
+              />
+            )
+        )}
       </Tabs2>
     );
   }

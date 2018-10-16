@@ -63,6 +63,7 @@ $bgcolor: #eee;
 @import '../js/components/dashboard_module/style';
 @import '../js/components/box/style';
 @import '../js/components/instances_bar/style';
+@import '../js/components/ExpandableItem/style';
 
 @import './not-supported';
 @import './root';
@@ -384,4 +385,20 @@ pre {
 .heading {
   margin-top: 3px;
   margin-bottom: 20px;
+}
+
+p.header-detail {
+  font-weight: normal;
+  display: inline-block;
+  color: #555;
+}
+
+.pt-tab-panel {
+  margin-top: 10px !important;
+}
+
+.pt-tab-list {
+  box-shadow: inset 0 -3px 0 darken(#fff, 3);
+  line-height: 25px;
+  display: inline-flex;
 }

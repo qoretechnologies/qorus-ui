@@ -5,6 +5,7 @@ import Loader from 'components/loader';
 import Tabs, { Pane } from 'components/tabs';
 import InfoTable from 'components/info_table';
 import SourceCode from '../../../components/source_code';
+import CodeAreaTitle from '../../../components/code/title';
 
 import actions from 'store/api/actions';
 
@@ -75,9 +76,16 @@ export default class StepModal extends Component {
   }
 
   handleModalResize = () => {
-    const { height: formHeight } = document
-      .querySelectorAll('.pt-dialog-body table')[0]
+    let { height: formHeight } = document
+      .querySelectorAll('.pt-dialog-body h5')[0]
       .getBoundingClientRect();
+
+    if (!formHeight) {
+      formHeight = document
+        .querySelectorAll('.pt-dialog-body table')[0]
+        .getBoundingClientRect();
+    }
+
     const { height: bodyHeight } = document
       .querySelectorAll('.pt-dialog-body')[0]
       .getBoundingClientRect();
@@ -124,7 +132,35 @@ export default class StepModal extends Component {
    * @return {ReactElement}
    */
   renderBody() {
-    return (
+    const { step } = this.props;
+    const { class: classData } = step;
+
+    return classData ? (
+      <Tabs className="step-info" active="code" noContainer>
+        <Pane name="Code">
+          <CodeAreaTitle item={classData} />
+          <SourceCode
+            height={this.state.sourceHeight}
+            lineOffset={parseInt(classData.offset, 10)}
+            language={classData.language}
+          >
+            {classData.body}
+          </SourceCode>
+        </Pane>
+        <Pane name="Class Info">
+          <InfoTable
+            object={{
+              ..._.omit(classData, 'offset'),
+              source: `${classData.source}:${classData.offset}`,
+            }}
+            omit={['body', 'type', 'language_info']}
+          />
+        </Pane>
+        <Pane name="Step Info">
+          <InfoTable object={step} omit={['class', 'functions']} />
+        </Pane>
+      </Tabs>
+    ) : (
       <Tabs
         className="step-info"
         active={this.props.step.functions[0].type}
@@ -140,23 +176,7 @@ export default class StepModal extends Component {
                 noContainer
               >
                 <Pane name="Code">
-                  <InfoTable
-                    object={{
-                      /* eslint-disable quote-props */
-                      'function name':
-                        `${func.name} v${func.version}` +
-                        `${func.patch ? `.${func.patch}` : ''}` +
-                        ` (${func.function_instanceid})`,
-                      /* eslint-enable quote-props */
-                      description: func.description,
-                      source: `${func.source}:${func.offset}`,
-                      author: func.author,
-                      tags:
-                        func.tags && Object.keys(func.tags).length
-                          ? func.tags
-                          : undefined,
-                    }}
-                  />
+                  <CodeAreaTitle item={func} />
                   <SourceCode
                     height={this.state.sourceHeight}
                     lineOffset={parseInt(func.offset, 10)}

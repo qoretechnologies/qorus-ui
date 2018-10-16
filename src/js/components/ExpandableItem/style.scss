@@ -1,0 +1,39 @@
+.expandable-item {
+  .expandable-item_title {
+    color: $qore-cobalt;
+    cursor: pointer;
+
+    h5 {
+      display: inline-block;
+      margin: 0;
+    }
+
+    padding: 5px 8px 5px 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    background-color: lighten($qore-cobalt, 65);
+    border-radius: 5px;
+
+    &:hover {
+      transition: all linear 0.2s;
+      background-color: lighten($qore-cobalt, 55);
+    }
+  }
+
+  &:not(:first-child) {
+    .expandable-item_title {
+      margin-top: 10px;
+    }
+  }
+
+  &:first-child {
+    .expandable-item_title {
+      margin-top: 5px;
+    }
+  }
+
+  .expandable-item_content {
+    padding-left: 7px;
+    border-left: 3px solid lighten($qore-cobalt, 50);
+  }
+}
