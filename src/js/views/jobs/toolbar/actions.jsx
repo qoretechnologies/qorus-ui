@@ -4,53 +4,68 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button } from '@blueprintjs/core';
 
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import actions from '../../../store/api/actions';
+import withDispatch from '../../../hocomponents/withDispatch';
+import showIfPassed from '../../../hocomponents/show-if-passed';
 
 type Props = {
   selectNone: Function,
   selectedIds: Array<number>,
-  action: Function,
+  dispatchAction: Function,
   handleBatchAction: Function,
   handleEnableClick: Function,
   handleDisableClick: Function,
-  handleLoadClick: Function,
-  handleUnloadClick: Function,
+  handleRunClick: Function,
   handleResetClick: Function,
 };
 
 const ToolbarActions: Function = ({
   handleEnableClick,
   handleDisableClick,
-  handleLoadClick,
-  handleUnloadClick,
+  handleRunClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
-    <Button text="Enable" iconName="power" onClick={handleEnableClick} />
-    <Button text="Disable" iconName="remove" onClick={handleDisableClick} />
-    <Button text="Load" iconName="small-tick" onClick={handleLoadClick} />
-    <Button text="Unload" iconName="cross" onClick={handleUnloadClick} />
-    <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
+    <Button
+      text="Enable"
+      iconName="power"
+      btnStyle="success"
+      onClick={handleEnableClick}
+      big
+    />
+    <Button
+      text="Disable"
+      btnStyle="danger"
+      iconName="remove"
+      onClick={handleDisableClick}
+      big
+    />
+    <Button text="Load" iconName="play" onClick={handleRunClick} big />
+    <Button text="Reset" iconName="refresh" onClick={handleResetClick} big />
   </ButtonGroup>
 );
 
 export default compose(
+  showIfPassed(({ show }) => show),
   connect(
-    () => ({}),
+    null,
     {
-      action: actions.jobs.jobAction,
       selectNone: actions.jobs.selectNone,
     }
   ),
+  withDispatch(),
   withHandlers({
     handleBatchAction: ({
       selectedIds,
-      action,
+      dispatchAction,
       selectNone,
     }: Props): Function => (actionType: string): void => {
-      action(actionType, selectedIds);
+      dispatchAction(actions.jobs.jobsAction, actionType, selectedIds);
       selectNone();
     },
   }),

@@ -141,7 +141,7 @@ const reset = createAction('WORKFLOWS_RESETCALL', async (ids, dispatch) => {
     async () =>
       await fetchJson(
         'PUT',
-        `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reeset`
+        `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reset`
       ),
     `Reseting workflow(s) ${id}...`,
     `Workflow(s) ${id} reset`,
