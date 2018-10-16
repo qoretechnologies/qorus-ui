@@ -6,7 +6,6 @@ import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Masonry from 'react-masonry-layout';
 
 import MapperDiagram from './diagram/index';
 import actions from '../../store/api/actions';
@@ -15,14 +14,12 @@ import Alert from '../../components/alert';
 import Author from '../../components/author';
 import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
-import Container from '../../components/container';
 import Releases from '../releases';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Box from '../../components/box';
 
 const MapperInfo = ({
   mapper,
-  onBackClick,
   location,
 }: {
   mapper: Object,

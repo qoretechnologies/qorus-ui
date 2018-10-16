@@ -22,7 +22,7 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
     .map(
       ([key, value]: [string, any]): any => {
         const str = value.replace(/ /g, '');
-        const regex = /^\("name":+"([-.\w]+)"/;
+        const regex = /^[.({]"name":+"([-.\w]+)"/;
         const matching = str.match(regex);
 
         if (matching) {
@@ -34,7 +34,7 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
           return { [key]: match[0] };
         }
 
-        if (inputs[key]) {
+        if (inputs && inputs[key]) {
           const seq = /^\("sequence":+"(\w+)"/;
           const con = /^\("constant":+"(\w+)"/;
           const run = /^\("runtime":+"(\w+)"/;
