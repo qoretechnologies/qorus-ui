@@ -8,6 +8,7 @@ import moment from 'moment';
 import Modal from '../../../../../components/modal';
 import Datepicker from '../../../../../components/datepicker';
 import { DATE_FORMATS } from '../../../../../constants/dates';
+import actions from '../../../../../store/api/actions';
 
 type Props = {
   id: number,
@@ -22,33 +23,25 @@ const Schedule: Function = ({
   handleDateSelect,
 }: Props): React.Element<any> => (
   <Modal height={420}>
-    <Modal.Header
-      onClose={onClose}
-      titleId="reschedule-modal"
-    >
+    <Modal.Header onClose={onClose} titleId="reschedule-modal">
       Reschedule order
     </Modal.Header>
     <Modal.Body>
-      <Datepicker
-        date="now"
-        onApplyDate={handleDateSelect}
-        futureOnly
-      />
+      <Datepicker date="now" onApplyDate={handleDateSelect} futureOnly />
     </Modal.Body>
   </Modal>
 );
 
 export default compose(
   withHandlers({
-    handleDateSelect: ({
-      action,
-      id,
-      status,
-      onClose,
-    }: Props): Function => (date: Object): void => {
-      const formatedDate: string = moment(date, DATE_FORMATS.PROP).format(DATE_FORMATS.PROP);
+    handleDateSelect: ({ action, id, status, onClose }: Props): Function => (
+      date: Object
+    ): void => {
+      const formatedDate: string = moment(date, DATE_FORMATS.PROP).format(
+        DATE_FORMATS.PROP
+      );
 
-      action(id, formatedDate, status);
+      action(actions.orders.schedule, id, formatedDate, status);
       onClose();
     },
   }),

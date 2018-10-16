@@ -21,6 +21,7 @@ import AutoComponent from 'components/autocomponent';
 import actions from 'store/api/actions';
 import { ORDER_ACTIONS, ALL_ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 type Props = {
   setPriority: Function,
@@ -121,23 +122,24 @@ const DiagramInfoTable: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      setPriority: actions.orders.setPriority,
-      schedule: actions.orders.schedule,
-    }
-  ),
+  withDispatch(),
   withHandlers({
-    handleSchedule: ({ schedule, id, workflowstatus }: Props): Function => (
-      date: string
-    ): void => {
-      schedule(id, moment(date).format(), workflowstatus);
+    handleSchedule: ({
+      optimisticDispatch,
+      id,
+      workflowstatus,
+    }: Props): Function => (date: string): void => {
+      optimisticDispatch(
+        actions.orders.schedule,
+        id,
+        moment(date).format(),
+        workflowstatus
+      );
     },
-    handlePriorityChange: ({ id, setPriority }: Props): Function => (
+    handlePriorityChange: ({ id, optimisticDispatch }: Props): Function => (
       priority: number
     ): void => {
-      setPriority(id, priority);
+      optimisticDispatch(actions.orders.setPriority, id, priority);
     },
   }),
   mapProps(
