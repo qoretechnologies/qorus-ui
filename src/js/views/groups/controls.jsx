@@ -3,19 +3,19 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import { connect } from 'react-redux';
 import { Intent } from '@blueprintjs/core';
+
 import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
-
+import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 
 type Props = {
   enabled: boolean,
   name: string,
-  action: Function,
+  dispatchAction: Function,
   handleEnableClick: Function,
 };
 
@@ -35,19 +35,14 @@ const GroupsControls: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      action: actions.groups.groupAction,
-    }
-  ),
+  withDispatch(),
   withHandlers({
     handleEnableClick: ({
       enabled,
       name,
-      action,
+      dispatchAction,
     }: Props): Function => (): void => {
-      action(name, !enabled);
+      dispatchAction(actions.groups.groupAction, name, !enabled);
     },
   }),
   pure(['enabled'])
