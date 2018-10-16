@@ -168,46 +168,48 @@ const jobsAction = createAction(
   }
 );
 
-const expireAction = createAction(
-  'JOBS_EXPIRE',
-  async (id, date, optimistic, dispatch) => {
-    if (optimistic) return { id, date };
+const expire = createAction('JOBS_EXPIRE', async (id, date, dispatch) => {
+  if (!dispatch) return { id, date };
 
-    const result = await fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`,
-      null,
-      true
-    );
+  fetchWithNotifications(
+    async () =>
+      await fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
+      ),
+    `Executing expire on ${id}`,
+    `Expire change executed on ${id}`,
+    dispatch
+  );
 
-    if (result.err) {
-      dispatch(error(result.desc));
+  return { id, date };
+});
 
-      return { error: true, id };
-    }
-
-    return {};
-  }
-);
-
-const expire = (id, date) => dispatch => {
-  dispatch(expireAction(id, date, false, dispatch));
-  dispatch(expireAction(id, date, true, dispatch));
-};
-
-const rescheduleAction = createAction(
+const reschedule = createAction(
   'JOBS_RESCHEDULE',
   async (id, { minute, hour, day, month, wday }, dispatch) => {
+    if (!dispatch) {
+      return {
+        id,
+        minute,
+        hour,
+        day,
+        month,
+        wday,
+      };
+    }
+
     const cron = `${minute} ${hour} ${day} ${month} ${wday}`;
     const url = `${
       settings.REST_BASE_URL
     }/jobs/${id}?action=schedule&schedule=${cron}`;
 
-    const result = await fetchJson('PUT', url, null, true);
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
+    fetchWithNotifications(
+      async () => await fetchJson('PUT', url),
+      `Rescheduling job ${id}`,
+      `Job ${id} rescheduled`,
+      dispatch
+    );
 
     return {
       id,
@@ -220,54 +222,47 @@ const rescheduleAction = createAction(
   }
 );
 
-const reschedule = (id, cron) => dispatch => {
-  rescheduleAction(id, cron, dispatch);
-};
+const activate = createAction('JOBS_ACTIVATE', (id, active, dispatch) => {
+  const url = `${
+    settings.REST_BASE_URL
+  }/jobs/${id}?action=setActive&active=${!active}`;
 
-const activateAction = createAction(
-  'JOBS_ACTIVATE',
-  async (id, active, dispatch) => {
-    const url = `${
-      settings.REST_BASE_URL
-    }/jobs/${id}?action=setActive&active=${!active}`;
-
-    const result = await fetchJson('PUT', url, null, true);
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
-
-    return {};
-  }
-);
-
-const activate = (id, active) => dispatch => {
-  activateAction(id, active, dispatch);
-};
+  fetchWithNotifications(
+    async () => await fetchJson('PUT', url),
+    `Activating job ${id}`,
+    `Job ${id} activated`,
+    dispatch
+  );
+});
 
 const setSLAJob = createAction(
   'JOBS_SETSLAJOB',
-  (job, sla): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`,
-      null,
-      true
+  (job, sla, dispatch): Object => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`
+        ),
+      `Setting SLA for job ${job}`,
+      `SLA for job ${job} set`,
+      dispatch
     );
-
-    return {};
   }
 );
 
 const removeSLAJob = createAction(
   'JOBS_REMOVESLAJOB',
-  (job, sla): Object => {
+  (job, sla, dispatch): Object => {
     const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
     const args = `action=removeJob&job=${job}`;
 
-    fetchJson('PUT', url + args, null, true);
-
-    return {};
+    fetchWithNotifications(
+      async () => await fetchJson('PUT', url + args),
+      `Removing SLA from job ${job}`,
+      `SLA removed from job ${job}`,
+      dispatch
+    );
   }
 );
 
@@ -300,9 +295,7 @@ export {
   jobsAction,
   expire,
   reschedule,
-  rescheduleAction,
   activate,
-  expireAction,
   addNew,
   selectAlerts,
   setSLAJob,

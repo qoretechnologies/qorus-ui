@@ -17,11 +17,13 @@ import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 import { hasPermission } from '../../../../helpers/user';
 import PaneItem from '../../../../components/pane_item';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import withHandlers from 'recompose/withHandlers';
 
 type Props = {
   model: Object,
-  setSla: Function,
-  removeSla: Function,
+  handleSetSLAChange: Function,
+  handleRemoveSLAChange: Function,
   perms: Object,
   slas: Array<Object>,
   isTablet: boolean,
@@ -30,8 +32,8 @@ type Props = {
 const DetailTab = ({
   model,
   isTablet,
-  setSla,
-  removeSla,
+  handleSetSLAChange,
+  handleRemoveSLAChange,
   perms,
   slas,
 }: Props) => (
@@ -58,8 +60,8 @@ const DetailTab = ({
     <PaneItem title="SLA">
       <SLAControl
         model={model}
-        setSla={setSla}
-        removeSla={removeSla}
+        setSla={handleSetSLAChange}
+        removeSla={handleRemoveSLAChange}
         slas={slas}
         canModify={hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or')}
         type="job"
@@ -95,10 +97,24 @@ export default compose(
     viewSelector,
     {
       load: actions.slas.fetch,
-      setSla: actions.jobs.setSLAJob,
       removeSla: actions.jobs.removeSLAJob,
     }
   ),
+  withDispatch(),
+  withHandlers({
+    handleSetSLAChange: ({ dispatchAction }): Function => (
+      name: string,
+      value: string
+    ): void => {
+      dispatchAction(actions.jobs.setSLAJob, name, value);
+    },
+    handleRemoveSLAChange: ({ dispatchAction }): Function => (
+      name: string,
+      value: string
+    ): void => {
+      dispatchAction(actions.jobs.removeSLAJob, name, value);
+    },
+  }),
   sync('meta'),
   pure(['model', 'isTablet'])
 )(DetailTab);
