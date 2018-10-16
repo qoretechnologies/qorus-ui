@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import Modal from '../../../components/modal';
 
 import { Controls, Control as Button } from '../../../components/controls';
+import actions from '../../../store/api/actions';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 type Props = {
   onClose: Function,
-  onSubmit: Function,
+  optimisticDispatch: Function,
 };
 
+@withDispatch()
 export default class SLACreateModal extends Component {
   props: Props;
 
@@ -17,10 +20,11 @@ export default class SLACreateModal extends Component {
 
     const { form, name, desc } = this.refs;
 
-    this.props.onSubmit(
+    this.props.optimisticDispatch(
+      actions.slas.create,
       name.value,
       desc.value,
-      form.units.value,
+      form.units.value
     );
     this.props.onClose();
   };
@@ -33,15 +37,14 @@ export default class SLACreateModal extends Component {
         ref="form"
       >
         <Modal hasFooter>
-          <Modal.Header
-            titleId="slacreate"
-            onClose={this.props.onClose}
-          >
+          <Modal.Header titleId="slacreate" onClose={this.props.onClose}>
             Create new SLA
           </Modal.Header>
           <Modal.Body>
             <div className="form-group">
-              <label htmlFor="name" className="col-sm-4 control-label">Name *</label>
+              <label htmlFor="name" className="col-sm-4 control-label">
+                Name *
+              </label>
               <div className="col-sm-6">
                 <input
                   ref="name"
@@ -53,7 +56,9 @@ export default class SLACreateModal extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="desc" className="col-sm-4 control-label">Description *</label>
+              <label htmlFor="desc" className="col-sm-4 control-label">
+                Description *
+              </label>
               <div className="col-sm-6">
                 <input
                   ref="desc"
@@ -65,7 +70,9 @@ export default class SLACreateModal extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="type" className="col-sm-4 control-label">Units *</label>
+              <label htmlFor="type" className="col-sm-4 control-label">
+                Units *
+              </label>
               <div className="col-sm-6">
                 <label>
                   <input
@@ -73,19 +80,16 @@ export default class SLACreateModal extends Component {
                     type="radio"
                     value="seconds"
                     required="required"
-                  />
-                  {' '}
+                  />{' '}
                   Seconds
-                </label>
-                {' '}
+                </label>{' '}
                 <label>
                   <input
                     name="units"
                     type="radio"
                     value="other"
                     required="required"
-                  />
-                  {' '}
+                  />{' '}
                   Other
                 </label>
               </div>
@@ -100,12 +104,7 @@ export default class SLACreateModal extends Component {
                   btnStyle="default"
                   onClick={this.props.onClose}
                 />
-                <Button
-                  label="Submit"
-                  big
-                  btnStyle="success"
-                  type="submit"
-                />
+                <Button label="Submit" big btnStyle="success" type="submit" />
               </Controls>
             </div>
           </Modal.Footer>

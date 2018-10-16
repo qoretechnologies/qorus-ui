@@ -21,7 +21,6 @@ type Props = {
   updateDone: Function,
   canLoadMore: boolean,
   isTablet: boolean,
-  setRemote: Function,
 };
 
 const ServicesTable: Function = ({
@@ -35,7 +34,6 @@ const ServicesTable: Function = ({
   updateDone,
   canLoadMore,
   isTablet,
-  setRemote,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -87,7 +85,6 @@ const ServicesTable: Function = ({
             select={select}
             updateDone={updateDone}
             isTablet={isTablet}
-            setRemote={setRemote}
             {...service}
           />
         )
@@ -102,7 +99,6 @@ export default compose(
     {
       updateDone: actions.services.updateDone,
       select: actions.services.select,
-      setRemote: actions.services.setRemote,
     }
   ),
   checkData(

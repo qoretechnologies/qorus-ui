@@ -1,9 +1,13 @@
 import 'isomorphic-fetch';
 import _ from 'lodash';
+import omit from 'lodash/omit';
 import { createAction } from 'redux-actions';
 import { browserHistory } from 'react-router';
+import shortid from 'shortid';
 
 import settings from '../../settings';
+import { warning } from '../ui/bubbles/actions';
+import { processRESTResponse } from './resources/utils';
 
 export function updateItemWithId(id, props, data, idkey = 'id') {
   const parsedId = parseFloat(id, 10) || id;
@@ -122,23 +126,19 @@ function getRestHeaders(yaml) {
  * @param {Object} res
  * @param {string} currentPath
  */
-function checkResponse(res, currentPath, redirectOnError = true) {
+function checkResponse(
+  res,
+  currentPath,
+  redirectOnError = true,
+  notificationId
+) {
   const pathname = window.location.pathname;
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
     browserHistory.push(`/login?next=${pathname}`);
   }
 
-  if (
-    res.status === 409 ||
-    res.status === 400 ||
-    res.status === 405 ||
-    (res.status > 500 && res.status < 600)
-  ) {
-    const error = new Error();
-    error.res = res;
-    throw error;
-  } else if (res.status === 500) {
+  if (res.status === 500) {
     if (!redirectOnError) return;
 
     browserHistory.push(`/error?next=${pathname}`);
@@ -167,6 +167,7 @@ export async function fetchData(
   yaml
 ) {
   const currentPath = window.location.pathname;
+  const fetchOpts: Object = omit(opts, ['notificationId']);
   const res = await fetch(
     url,
     Object.assign(
@@ -174,12 +175,17 @@ export async function fetchData(
         method,
         headers: getRestHeaders(yaml),
       },
-      opts
+      fetchOpts
     )
   );
 
   if (!dontCheck) {
-    checkResponse(res, currentPath, redirectOnError);
+    checkResponse(
+      res,
+      currentPath,
+      redirectOnError,
+      opts && opts.notificationId
+    );
   }
 
   return res;
@@ -193,6 +199,14 @@ export async function fetchJson(
   redirectOnError
 ) {
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
+
+  if (res.status >= 500 && res.status <= 600) {
+    return {
+      err: true,
+      desc: await res.json(),
+    };
+  }
+
   return res.json();
 }
 
@@ -231,4 +245,27 @@ export async function fetchResponse(
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
 
   return res;
+}
+
+export async function fetchWithNotifications(
+  fetchFunc: Function,
+  notificationBefore: string,
+  notificationSuccess: string,
+  dispatch
+): any {
+  if (fetchFunc) {
+    const notificationId = shortid.generate();
+
+    if (notificationBefore) {
+      dispatch(warning(notificationBefore, notificationId));
+    }
+
+    const res: Object = await fetchFunc();
+
+    processRESTResponse(res, dispatch, notificationSuccess, notificationId);
+
+    return res;
+  }
+
+  return {};
 }

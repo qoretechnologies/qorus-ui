@@ -7,10 +7,11 @@ import { Controls, Control as Button } from '../../../../components/controls';
 import actions from '../../../../store/api/actions';
 import { CONN_MAP } from '../../../../constants/remotes';
 import Options from '../options';
+import withDispatch from '../../../../hocomponents/withDispatch';
 
 type Props = {
   onClose: Function,
-  onSave?: Function,
+  optimisticDispatch: Function,
   edit?: boolean,
   remoteType: string,
   originalName?: string,
@@ -31,14 +32,10 @@ type Props = {
   url?: string,
 };
 
-@connect(
-  (state: Object) => ({
-    remotes: state.api.remotes.data,
-  }),
-  {
-    onSave: actions.remotes.manageConnection,
-  }
-)
+@connect((state: Object) => ({
+  remotes: state.api.remotes.data,
+}))
+@withDispatch()
 class ManageModal extends Component {
   props: Props;
 
@@ -54,7 +51,7 @@ class ManageModal extends Component {
     event.preventDefault();
 
     const {
-      onSave,
+      optimisticDispatch,
       remoteType,
       originalName,
       remotes,
@@ -112,8 +109,13 @@ class ManageModal extends Component {
           this.setState({
             error: 'The "options" object is invalid. It cannot be nested.',
           });
-        } else if (onSave) {
-          onSave(remoteType, data, originalName);
+        } else {
+          optimisticDispatch(
+            actions.remotes.manageConnection,
+            remoteType,
+            data,
+            originalName
+          );
           onClose();
         }
       }

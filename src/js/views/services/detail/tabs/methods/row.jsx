@@ -16,6 +16,8 @@ import withModal from '../../../../../hocomponents/modal';
 import ModalRun from './modal_run';
 import ModalCode from './modal_code';
 import { hasPermission } from '../../../../../helpers/user';
+import actions from '../../../../../store/api/actions';
+import withDispatch from '../../../../../hocomponents/withDispatch';
 
 type Props = {
   method: Object,
@@ -30,8 +32,9 @@ type Props = {
   slas: Array<Object>,
   perms: Array<string>,
   canModify: boolean,
-  setMethod: Function,
-  removeMethod: Function,
+  handleSLAChange: Function,
+  dispatchAction: Function,
+  handleSLARemove: Function,
   handleRemoveMethodClick: Function,
 };
 
@@ -42,8 +45,8 @@ const MethodsRow: Function = ({
   slas,
   canModify,
   service,
-  setMethod,
-  removeMethod,
+  handleSLAChange,
+  handleSLARemove,
 }: Props): React.Element<any> => (
   <Tr title={method.description}>
     <Td className="name">{method.name}</Td>
@@ -63,20 +66,25 @@ const MethodsRow: Function = ({
       </Controls>
     </Td>
     <Td className="text">
-      <SLAControl
-        canModify={canModify}
-        slas={slas}
-        type="service"
-        model={service}
-        method={method}
-        setSla={setMethod}
-        removeSla={removeMethod}
-      />
+      {service.type === 'user' ? (
+        <SLAControl
+          canModify={canModify}
+          slas={slas}
+          type="service"
+          model={service}
+          method={method}
+          setSla={handleSLAChange}
+          removeSla={handleSLARemove}
+        />
+      ) : (
+        method.sla || '-'
+      )}
     </Td>
   </Tr>
 );
 
 export default compose(
+  withDispatch(),
   withModal(),
   mapProps(
     ({ perms, ...rest }: Props): Props => ({
@@ -104,6 +112,25 @@ export default compose(
     }: Props): Function => (): void => {
       openModal(
         <ModalCode method={method} service={service} onClose={closeModal} />
+      );
+    },
+    handleSLAChange: ({ dispatchAction }: Props): Function => (
+      modelName,
+      methodName,
+      sla
+    ): void => {
+      dispatchAction(actions.services.setSLAMethod, modelName, methodName, sla);
+    },
+    handleSLARemove: ({ dispatchAction }: Props): Function => (
+      modelName,
+      methodName,
+      sla
+    ): void => {
+      dispatchAction(
+        actions.services.removeSLAMethod,
+        modelName,
+        methodName,
+        sla
       );
     },
   }),

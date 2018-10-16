@@ -4,18 +4,20 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
-import { connect } from 'react-redux';
 import includes from 'lodash/includes';
-import { ButtonGroup, Button } from '@blueprintjs/core';
 
 import withModal from '../../../../hocomponents/modal';
 import actions from '../../../../store/api/actions';
 import { ORDER_ACTIONS } from '../../../../constants/orders';
 import Schedule from './modals/schedule';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../../components/controls';
 
 type Props = {
-  action: Function,
-  schedule: Function,
+  optimisticDispatch: Function,
   openModal: Function,
   closeModal: Function,
   workflowstatus: string,
@@ -93,13 +95,7 @@ const OrderControls: Function = ({
 );
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      action: actions.orders.action,
-      schedule: actions.orders.schedule,
-    }
-  ),
+  withDispatch(),
   withModal(),
   mapProps(
     ({ workflowstatus, ...rest }): Object => ({
@@ -110,24 +106,23 @@ export default compose(
   ),
   withHandlers({
     handleActionClick: ({
-      action,
+      optimisticDispatch,
       openModal,
       closeModal,
       id,
-      schedule,
       workflowstatus,
     }: Props): Function => (actionType: string): void => {
       if (actionType === 'schedule') {
         openModal(
           <Schedule
             onClose={closeModal}
-            action={schedule}
+            action={optimisticDispatch}
             id={id}
             status={workflowstatus}
           />
         );
       } else {
-        action(actionType, id);
+        optimisticDispatch(actions.orders.action, actionType, id);
       }
     },
   }),

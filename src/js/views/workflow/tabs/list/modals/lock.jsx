@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 import Modal from '../../../../../components/modal';
 import { Control as Button } from '../../../../../components/controls';
+import actions from '../../../../../store/api/actions';
 
 export default class extends Component {
   props: {
@@ -16,25 +17,24 @@ export default class extends Component {
   handleLockClick = () => {
     const { lock, id, username, locked, onClose } = this.props;
 
-    lock(id, username, this.refs.text.value, locked ? 'unlock' : 'lock');
+    lock(
+      actions.orders.lock,
+      id,
+      username,
+      this.refs.text.value,
+      locked ? 'unlock' : 'lock'
+    );
     onClose();
   };
 
   render() {
     return (
       <Modal hasFooter>
-        <Modal.Header
-          onClose={this.props.onClose}
-          titleId="lock-modal"
-        >
+        <Modal.Header onClose={this.props.onClose} titleId="lock-modal">
           Reason
         </Modal.Header>
         <Modal.Body>
-          <textarea
-            ref="text"
-            rows="12"
-            className="form-control"
-          />
+          <textarea ref="text" rows="12" className="form-control" />
         </Modal.Body>
         <Modal.Footer>
           <div className="pull-right">

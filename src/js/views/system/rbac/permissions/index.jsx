@@ -9,6 +9,7 @@ import { Button, Intent } from '@blueprintjs/core';
 import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
+import withDispatch from '../../../../hocomponents/withDispatch';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
@@ -48,11 +49,9 @@ const viewSelector: Function = createSelector(
     viewSelector,
     {
       load: actions.perms.fetch,
-      createPerm: actions.perms.createPerm,
-      updatePerm: actions.perms.updatePerm,
-      removePerm: actions.perms.removePerm,
     }
   ),
+  withDispatch(),
   search(),
   modal(),
   sync('perms')
@@ -64,9 +63,7 @@ export default class RBACPerms extends Component {
     permsModel: Array<*>,
     openModal: Function,
     closeModal: Function,
-    createPerm: Function,
-    updatePerm: Function,
-    removePerm: Function,
+    optimisticDispatch: Function,
     user: Object,
   };
 
@@ -97,7 +94,7 @@ export default class RBACPerms extends Component {
     name: string,
     desc: string
   ): Promise<*> => {
-    await this.props.createPerm(name, desc);
+    await this.props.optimisticDispatch(actions.perms.createPerm, name, desc);
 
     this.props.closeModal();
   };
@@ -106,14 +103,14 @@ export default class RBACPerms extends Component {
     name: string,
     desc: string
   ): Promise<*> => {
-    await this.props.updatePerm(name, desc);
+    await this.props.optimisticDispatch(actions.perms.updatePerm, name, desc);
 
     this.props.closeModal();
   };
 
   handleRemovePermClick: Function = (name): void => {
     const handleConfirm: Function = (): void => {
-      this.props.removePerm(name);
+      this.props.optimisticDispatch(actions.perms.removePerm, name);
       this.props.closeModal();
     };
 

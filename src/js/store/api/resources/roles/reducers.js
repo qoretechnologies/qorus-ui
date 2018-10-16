@@ -1,4 +1,5 @@
 import remove from 'lodash/remove';
+import { updateItemWithId } from '../../utils';
 
 const initialState: Object = {
   data: [],
@@ -6,70 +7,66 @@ const initialState: Object = {
   sync: false,
 };
 
-const defaultReducer = {
-  next(state: Object = initialState): Object {
-    return state;
-  },
-  throw(state: Object = initialState): Object {
-    return state;
-  },
-};
-
-const createRoleOptimistic: Object = {
+const create: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
-    const { role, desc, perms, groups } = action.payload;
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
+      const { role, desc, perms, groups } = action.payload;
 
-    data.push({
-      role,
-      desc,
-      permissions: perms,
-      groups,
-      provider: 'db',
-    });
+      data.push({
+        role,
+        desc,
+        permissions: perms,
+        groups,
+        provider: 'db',
+      });
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
 
-const removeRoleOptimistic: Object = {
+const removeRole: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
 
-    remove(data, r => r.role === action.payload.role);
+      remove(data, r => r.role === action.payload.role);
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
 
-const updateRoleOptimistic: Object = {
+const update: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const { role, desc, perms, groups } = action.payload;
-    const data: Array<Object> = state.data.slice();
-    const match: Object = data.find(r => r.role === role);
+    if (action.payload) {
+      const { role, desc, perms, groups } = action.payload;
+      let data: Array<Object> = state.data.slice();
 
-    Object.assign(match, {
-      desc,
-      permissions: perms,
-      groups,
-    });
+      data = updateItemWithId(
+        role,
+        { desc, permissions: perms, groups },
+        data,
+        'role'
+      );
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
-
-const createRole: Object = defaultReducer;
-const updateRole: Object = defaultReducer;
-const removeRole: Object = defaultReducer;
 
 const unSyncRoles: Object = {
   next(state: Object = initialState): Object {
@@ -81,11 +78,8 @@ const unSyncRoles: Object = {
 };
 
 export {
-  createRole as CREATEROLE,
-  createRoleOptimistic as CREATEROLEOPTIMISTIC,
-  removeRole as REMOVEROLE,
-  removeRoleOptimistic as REMOVEROLEOPTIMISTIC,
-  updateRole as UPDATEROLE,
-  updateRoleOptimistic as UPDATEROLEOPTIMISTIC,
+  create as CREATE,
+  removeRole as REMOVE,
+  update as UPDATE,
   unSyncRoles as UNSYNCROLES,
 };

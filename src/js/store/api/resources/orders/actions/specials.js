@@ -2,7 +2,7 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson, fetchYaml } from '../../../utils';
+import { fetchJson, fetchYaml, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
 
@@ -17,7 +17,7 @@ const fetchOrders = createAction(
     limit: number,
     sortDir: boolean,
     sort: string,
-    searchData: Object,
+    searchData: Object
   ): Object => {
     let url: string;
     const status: string = !filter || filter === 'filter' ? '' : filter;
@@ -26,49 +26,45 @@ const fetchOrders = createAction(
       const maxDate: string = searchData.maxDate || '29991231';
       const sendDate: boolean = !(searchData.ids || searchData.keyValue);
 
-      url = `${settings.REST_BASE_URL}/orders?` +
-      `ids=${searchData.ids || ''}&` +
-      `date=${!sendDate ? '' : searchData.minDate}&` +
-      `maxmodified=${!sendDate ? '' : maxDate}&` +
-      `keyname=${searchData.keyName || ''}&` +
-      `keyvalue=${searchData.keyValue || ''}&` +
-      `status=${status}&` +
-      `sort=${sort}&` +
-      `desc=${sortDir.toString()}&` +
-      `offset=${offset}&` +
-      `limit=${limit}`;
+      url =
+        `${settings.REST_BASE_URL}/orders?` +
+        `ids=${searchData.ids || ''}&` +
+        `date=${!sendDate ? '' : searchData.minDate}&` +
+        `maxmodified=${!sendDate ? '' : maxDate}&` +
+        `keyname=${searchData.keyName || ''}&` +
+        `keyvalue=${searchData.keyValue || ''}&` +
+        `status=${status}&` +
+        `sort=${sort}&` +
+        `desc=${sortDir.toString()}&` +
+        `offset=${offset}&` +
+        `limit=${limit}`;
     } else {
-      url = `${settings.REST_BASE_URL}/orders?` +
-      `workflowid=${id}&` +
-      `date=${date}&` +
-      `status=${status}&` +
-      `sort=${sort}&` +
-      `desc=${sortDir.toString()}&` +
-      `offset=${offset}&` +
-      `limit=${limit}`;
+      url =
+        `${settings.REST_BASE_URL}/orders?` +
+        `workflowid=${id}&` +
+        `date=${date}&` +
+        `status=${status}&` +
+        `sort=${sort}&` +
+        `desc=${sortDir.toString()}&` +
+        `offset=${offset}&` +
+        `limit=${limit}`;
     }
 
-    const orders: Array<Object> = await fetchJson(
-      'GET',
-      url,
-      null,
-      true
-    );
+    const orders: Array<Object> = await fetchJson('GET', url, null, true);
 
     return { orders, fetchMore };
   }
 );
 
-const changeOffset = createAction('ORDERS_CHANGEOFFSET', (newOffset: number): Object => (
-  { newOffset }
-));
-const changeServerSort = createAction('ORDERS_CHANGESERVERSORT', (sort: string): Object => (
-  { sort }
-));
-const select = createAction(
-  'ORDERS_SELECT',
-  (id: number) => ({ id })
+const changeOffset = createAction(
+  'ORDERS_CHANGEOFFSET',
+  (newOffset: number): Object => ({ newOffset })
 );
+const changeServerSort = createAction(
+  'ORDERS_CHANGESERVERSORT',
+  (sort: string): Object => ({ sort })
+);
+const select = createAction('ORDERS_SELECT', (id: number) => ({ id }));
 const selectAll = createAction('ORDERS_SELECTALL');
 const selectNone = createAction('ORDERS_SELECTNONE');
 const selectInvert = createAction('ORDERS_SELECTINVERT');
@@ -117,30 +113,27 @@ const updateStepInstances: Function = createAction(
   }
 );
 
-const updateErrors: Function = createAction(
-  'ORDERS_UPDATEERRORS',
-  async (id) => {
-    const errors = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`,
-      null,
-      true
-    );
+const updateErrors: Function = createAction('ORDERS_UPDATEERRORS', async id => {
+  const errors = await fetchJson(
+    'GET',
+    `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`,
+    null,
+    true
+  );
 
-    return { id, errors };
-  }
-);
+  return { id, errors };
+});
 
-const updateDone = createAction(
-  'ORDERS_UPDATEDONE',
-  (id: number) => ({ id })
-);
+const updateDone = createAction('ORDERS_UPDATEDONE', (id: number) => ({ id }));
 
 const fetchData = createAction(
   'ORDERS_FETCHDATA',
   async (id: number, type: string) => {
     const data = type === 'dynamic' ? 'dynamicdata' : type;
-    const newData = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/${data}`);
+    const newData = await fetchJson(
+      'GET',
+      `${settings.REST_BASE_URL}/orders/${id}/${data}`
+    );
 
     return {
       id,
@@ -150,29 +143,23 @@ const fetchData = createAction(
   }
 );
 
-const orderAction: Function = createAction(
+const action: Function = createAction(
   'ORDERS_ORDERACTION',
-  async (
-    actn: string,
-    id: any,
-    optimistic: boolean,
-    dispatch: Function
-  ): ?Object => {
-    if (optimistic) return { ids: id, action: actn };
+  async (actn: string, id: any, dispatch: Function): ?Object => {
+    if (!dispatch) return { ids: id, action: actn };
 
     const ids: string = isArray(id) ? id.join(',') : id;
-    const result = await fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders?ids=${ids}&action=${actn}`,
-      {},
-      true
-    );
 
-    Object.keys(result).forEach((res: string): void => {
-      if (typeof result[res] === 'string') {
-        dispatch(error(result[res]));
-      }
-    });
+    const result = await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/orders?ids=${ids}&action=${actn}`
+        ),
+      `Executing ${actn} for order(s) ${ids}`,
+      `${actn} executed on order(s) for ${ids}`,
+      dispatch
+    );
 
     return {
       ids: id,
@@ -181,96 +168,61 @@ const orderAction: Function = createAction(
   }
 );
 
-const scheduleAction: Function = createAction(
+const schedule: Function = createAction(
   'ORDERS_SCHEDULE',
   async (
     id: number,
     date: string,
-    optimistic: boolean,
     origStatus: string,
-    dispatch: Function,
+    dispatch: Function
   ): Object => {
-    if (optimistic) return { id, date };
+    if (!dispatch) return { id, date };
 
-    const result = await fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}?action=reschedule&date=${date}`,
-      {},
-      true
+    await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/orders/${id}?action=reschedule&date=${date}`
+        ),
+      `Rescheduling order ${id}`,
+      `Order ${id} rescheduled`,
+      dispatch
     );
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
 
     return {
       id,
       date,
       origStatus,
-      error: result.err,
     };
   }
 );
 
-const priorityAction: Function = createAction(
+const setPriority: Function = createAction(
   'ORDERS_SETPRIORITY',
-  async (
-    id: number,
-    priority: number,
-    optimistic: boolean,
-    dispatch: Function,
-  ): Object => {
-    if (optimistic) return { id, priority };
+  async (id: number, priority: number, dispatch: Function): Object => {
+    if (!dispatch) return { id, priority };
 
-    const result = await fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}?action=setPriority&priority=${priority}`,
-      {},
-      true
+    await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/orders/${id}?action=setPriority&priority=${priority}`
+        ),
+      `Setting priority for order ${id}`,
+      `Priority set for order ${id}`,
+      dispatch
     );
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
 
     return {
       id,
       priority,
-      error: result.err,
     };
   }
 );
-
-const action: Function = (
-  actn: string,
-  id: number,
-): Function => (
-  dispatch: Function
-): void => {
-  dispatch(orderAction(actn, id, true));
-  dispatch(orderAction(actn, id, false, dispatch));
-};
-
-const schedule: Function = (
-  id: number,
-  date: string,
-  origStatus: string,
-): Function => (
-  dispatch: Function
-): void => {
-  dispatch(scheduleAction(id, date, false, origStatus, dispatch));
-  dispatch(scheduleAction(id, date, true));
-};
-
-const setPriority: Function = (
-  id: number,
-  priority: string,
-): Function => (
-  dispatch: Function
-): void => {
-  dispatch(priorityAction(id, priority, false, dispatch));
-  dispatch(priorityAction(id, priority, true));
-};
 
 const lock: Function = createAction(
   'ORDERS_LOCK',
@@ -279,17 +231,20 @@ const lock: Function = createAction(
     username: string,
     note: string,
     type: string,
+    dispatch: Function
   ): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}`,
-      {
-        body: JSON.stringify({
-          action: type,
-          username,
-          note,
+    fetchWithNotifications(
+      async () =>
+        await fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${id}`, {
+          body: JSON.stringify({
+            action: type,
+            username,
+            note,
+          }),
         }),
-      }
+      `${type === 'lock' ? 'Locking' : 'Unlocking'} order ${id}`,
+      `Order ${id} ${type === 'lock' ? 'locked' : 'unlocked'}`,
+      dispatch
     );
 
     return { id, username, note, type };
@@ -302,19 +257,22 @@ const skipStep: Function = createAction(
     orderId: number,
     stepid: number,
     ind: string,
-    noretry: boolean
+    noretry: boolean,
+    dispatch: Function
   ): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${orderId}`,
-      {
-        body: JSON.stringify({
-          action: 'skipStep',
-          stepid,
-          ind,
-          noretry,
+    fetchWithNotifications(
+      async () =>
+        await fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${orderId}`, {
+          body: JSON.stringify({
+            action: 'skipStep',
+            stepid,
+            ind,
+            noretry,
+          }),
         }),
-      }
+      `Skipping step ${stepid} on order ${orderId}`,
+      `Step ${stepid} skipped successfuly on order ${orderId}`,
+      dispatch
     );
 
     return { orderId, stepid, ind };
@@ -328,7 +286,7 @@ const updateData: Function = createAction(
     newdata: string,
     id: number,
     skey: string,
-    svalue: string,
+    svalue: string
   ): void => {
     if (type === 'Keys') {
       fetchJson(
@@ -338,7 +296,7 @@ const updateData: Function = createAction(
           body: JSON.stringify({
             orderkeys: JSON.parse(newdata),
           }),
-        },
+        }
       );
     } else if (type === 'Sensitive') {
       fetchJson(
@@ -350,7 +308,7 @@ const updateData: Function = createAction(
             svalue,
             data: newdata,
           }),
-        },
+        }
       );
     } else {
       fetchYaml(
@@ -360,7 +318,7 @@ const updateData: Function = createAction(
           body: JSON.stringify({
             newdata,
           }),
-        },
+        }
       );
     }
   }
@@ -368,12 +326,7 @@ const updateData: Function = createAction(
 
 const updateSensitiveData: Function = createAction(
   'ORDERS_UPDATESENSITIVEDATA',
-  (
-    newdata: string,
-    id: number,
-    skey: string,
-    svalue: string,
-  ): Object => {
+  (newdata: string, id: number, skey: string, svalue: string): Object => {
     fetchJson(
       'PUT',
       `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
@@ -383,7 +336,7 @@ const updateSensitiveData: Function = createAction(
           svalue,
           data: newdata,
         }),
-      },
+      }
     );
 
     return {
@@ -397,18 +350,14 @@ const updateSensitiveData: Function = createAction(
 
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
-  async (
-    type: string,
-    id: number,
-    dispatch: Function,
-  ): Object => {
+  async (type: string, id: number, dispatch: Function): Object => {
     const result: Object = await fetchYaml(
       'GET',
       `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
       null,
       false,
       true,
-      true,
+      true
     );
 
     if (result.err) {
@@ -423,10 +372,9 @@ const fetchYamlAction: Function = createAction(
   }
 );
 
-const fetchYamlData: Function = (
-  type: string,
-  id: number
-): Function => (dispatch: Function): void => {
+const fetchYamlData: Function = (type: string, id: number): Function => (
+  dispatch: Function
+): void => {
   dispatch(fetchYamlAction(type, id, dispatch));
 };
 
@@ -441,10 +389,8 @@ export {
   updateData,
   unsync,
   action,
-  orderAction,
   skipStep,
   schedule,
-  scheduleAction,
   updateErrors,
   updateHierarchy,
   selectAll,
@@ -457,7 +403,6 @@ export {
   select,
   lock,
   setPriority,
-  priorityAction,
   updateStepInstances,
   fetchYamlData,
   fetchYamlAction,

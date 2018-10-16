@@ -7,6 +7,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { Intent } from '@blueprintjs/core';
 
 import actions from '../../store/api/actions';
+import withDispatch from '../../hocomponents/withDispatch';
 import { Controls, Control } from '../../components/controls';
 
 type Props = {
@@ -42,20 +43,20 @@ export default compose(
   connect(
     () => ({}),
     {
-      toggleEnabled: actions.workflows.toggleEnabled,
-      reset: actions.workflows.reset,
+      withDispatchInjected: actions.system.withDispatchInjected,
     }
   ),
+  withDispatch(),
   withHandlers({
     handleToggleEnabledClick: ({
-      toggleEnabled,
       id,
       enabled,
+      dispatchAction,
     }: Props): Function => (): void => {
-      toggleEnabled(id, !enabled);
+      dispatchAction(actions.workflows.toggleEnabled, id, !enabled);
     },
-    handleResetClick: ({ reset, id }: Props): Function => (): void => {
-      reset(id);
+    handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
+      dispatchAction(actions.workflows.reset, id);
     },
   }),
   pure(['enabled'])

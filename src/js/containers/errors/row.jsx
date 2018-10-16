@@ -12,6 +12,7 @@ type Props = {
   type: string,
   onEditClick: Function,
   onDeleteClick: Function,
+  first: boolean,
 };
 
 const ErrorsRow: Function = ({
@@ -20,6 +21,7 @@ const ErrorsRow: Function = ({
   type,
   onEditClick,
   onDeleteClick,
+  first,
 }: Props): React.Element<any> => {
   const handleEditClick: Function = () => {
     onEditClick(data);
@@ -30,7 +32,7 @@ const ErrorsRow: Function = ({
   };
 
   return (
-    <Tr>
+    <Tr first={first}>
       <Td className="name">
         <p>{data.error}</p>
       </Td>
@@ -56,14 +58,13 @@ const ErrorsRow: Function = ({
         <Controls grouped>
           <Button
             onClick={handleEditClick}
-            btnStyle="warning"
             iconName="edit"
             title="Edit error"
           />
           <Button
             onClick={handleDeleteClick}
             btnStyle="danger"
-            iconName="times"
+            iconName="cross"
             title="Remove error"
           />
         </Controls>

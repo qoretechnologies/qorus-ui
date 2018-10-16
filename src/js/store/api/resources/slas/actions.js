@@ -1,32 +1,33 @@
 // @flow
 import { createAction } from 'redux-actions';
 
-import { fetchJson } from '../../utils';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
-import { error } from '../../../ui/bubbles/actions';
 
-const removeSla: Function = createAction(
-  'SLAS_REMOVESLA',
-  (id: number): Object => {
-    fetchJson(
-      'DELETE',
-      `${settings.REST_BASE_URL}/slas/${id}`,
+const remove: Function = createAction(
+  'SLAS_REMOVE',
+  (id: number, dispatch: Function): Object => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson('DELETE', `${settings.REST_BASE_URL}/slas/${id}`),
+      'Deleting...',
+      'SLA deleted',
+      dispatch
     );
 
     return { id };
   }
 );
 
-const createSla: Function = createAction(
-  'SLAS_CREATESLA',
+const create: Function = createAction(
+  'SLAS_CREATE',
   async (
     name: string,
     description: string,
     units: string,
-    optimistic: boolean,
-    dispatch: Function,
+    dispatch: Function
   ): Object => {
-    if (optimistic) {
+    if (!dispatch) {
       return {
         name,
         description,
@@ -34,43 +35,24 @@ const createSla: Function = createAction(
       };
     }
 
-    const res = await fetchJson(
-      'POST',
-      `${settings.REST_BASE_URL}/slas/`,
-      {
-        body: JSON.stringify({
-          name,
-          description,
-          units,
+    const res = await fetchWithNotifications(
+      async () =>
+        await fetchJson('POST', `${settings.REST_BASE_URL}/slas/`, {
+          body: JSON.stringify({
+            name,
+            description,
+            units,
+          }),
         }),
-      },
-      true
+      'Creating new SLA...',
+      'SLA created',
+      dispatch
     );
 
-    if (res.err) {
-      dispatch(error(res.desc));
-
-      return { name, error: true };
-    }
-
-    return res;
+    return { name, ...res };
   }
 );
 
-const create = (
-  name: string,
-  desc: string,
-  type: string
-): Function => (dispatch: Function): void => {
-  dispatch(createSla(name, desc, type, true));
-  dispatch(createSla(name, desc, type, false, dispatch));
-};
-
 const unsync = createAction('SLAS_UNSYNC');
 
-export {
-  removeSla,
-  createSla,
-  create,
-  unsync,
-};
+export { remove, create, unsync };

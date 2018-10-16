@@ -11,11 +11,13 @@ import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
 } from '../../../../../components/dropdown';
+import showIfPassed from '../../../../../hocomponents/show-if-passed';
+import withDispatch from '../../../../../hocomponents/withDispatch';
 
 type Props = {
   unselectAll: Function,
   selectedIds: Array<number>,
-  orderAction: Function,
+  optimisticDispatch: Function,
   handleBatchAction: Function,
   handleRetryClick: Function,
   handleBlockClick: Function,
@@ -23,6 +25,7 @@ type Props = {
   handleCancelClick: Function,
   handleUncancelClick: Function,
   isTablet: boolean,
+  show: boolean,
 };
 
 const ToolbarActions: Function = ({
@@ -37,7 +40,11 @@ const ToolbarActions: Function = ({
     <ButtonGroup>
       <Dropdown id="hidden">
         <DropdownControl> With selected: </DropdownControl>
-        <DropdownItem title="Retry" iconName="refresh" action={handleRetryClick} />
+        <DropdownItem
+          title="Retry"
+          iconName="refresh"
+          action={handleRetryClick}
+        />
         <DropdownItem
           title="Block"
           iconName="minus-circle"
@@ -81,20 +88,21 @@ const ToolbarActions: Function = ({
   );
 
 export default compose(
+  showIfPassed(({ show }) => show),
   connect(
-    () => ({}),
+    null,
     {
-      orderAction: actions.orders.action,
       unselectAll: actions.orders.unselectAll,
     }
   ),
+  withDispatch(),
   withHandlers({
     handleBatchAction: ({
       selectedIds,
-      orderAction,
+      optimisticDispatch,
       unselectAll,
     }: Props): Function => (actionType: string): void => {
-      orderAction(actionType, selectedIds);
+      optimisticDispatch(actions.orders.action, actionType, selectedIds);
       unselectAll();
     },
   }),

@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson } from '../../../utils';
+import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
 
@@ -93,7 +93,7 @@ const selectNone = createAction('SERVICES_SELECTNONE');
 const selectInvert = createAction('SERVICES_SELECTINVERT');
 const selectAlerts = createAction('SERVICES_SELECTALERTS');
 
-const serviceActionCall = createAction(
+const serviceAction = createAction(
   'SERVICES_ACTION',
   async (action, ids, autostart, dispatch) => {
     const id = isArray(ids) ? ids.join(',') : ids;
@@ -103,74 +103,78 @@ const serviceActionCall = createAction(
             settings.REST_BASE_URL
           }/services/${id}?action=setAutostart&autostart=${!autostart}`
         : `${settings.REST_BASE_URL}/services?ids=${id}&action=${action}`;
-    const result = await fetchJson('PUT', url, null, true);
 
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
+    fetchWithNotifications(
+      async () => await fetchJson('PUT', url),
+      `Executing ${action} on ${id}...`,
+      `${action} successfuly executed on ${id}`,
+      dispatch
+    );
 
     return {};
   }
 );
 
-const setSLAMethodCall = createAction(
+const setSLAMethod = createAction(
   'SERVICES_SETMETHOD',
-  async (service, method, sla, dispatch): Object => {
-    const result = await fetchJson(
-      'PUT',
-      `${
-        settings.REST_BASE_URL
-      }/slas/${sla}?action=setMethod&service=${service}&method=${method}`,
-      null,
-      true
+  (service, method, sla, dispatch): Object => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/slas/${sla}?action=setMethod&service=${service}&method=${method}`
+        ),
+      'Setting SLA...',
+      'SLA successfuly set',
+      dispatch
     );
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
   }
 );
 
-const setSLAMethod: Function = (service, method, sla): Function => (
-  dispatch: Function
-): void => {
-  dispatch(setSLAMethodCall(service, method, sla, dispatch));
-};
-
-const removeSLAMethodCall = createAction(
+const removeSLAMethod = createAction(
   'SERVICES_REMOVEMETHOD',
   async (service, method, sla, dispatch): Object => {
     const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
     const args = `action=removeMethod&service=${service}&method=${method}`;
 
-    const result = await fetchJson('PUT', url + args, null, true);
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
+    fetchWithNotifications(
+      async () => await fetchJson('PUT', url + args),
+      'Removing SLA...',
+      'SLA successfuly removed',
+      dispatch
+    );
   }
 );
 
-const removeSLAMethod: Function = (service, method, sla): Function => (
-  dispatch: Function
-): void => {
-  dispatch(removeSLAMethodCall(service, method, sla, dispatch));
-};
+const setRemote = createAction(
+  'SERVICES_SETREMOTE',
+  async (id, value, dispatch) => {
+    if (!dispatch) {
+      return { id, value };
+    }
 
-const serviceAction = (action, ids, autostart) => dispatch => {
-  serviceActionCall(action, ids, autostart, dispatch);
-};
+    const result = await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/services/${id}?action=setRemote&remote=${
+            value ? 1 : 0
+          }`
+        ),
+      `Setting service as ${!value ? 'not' : ''} remote...`,
+      `Service set as ${!value ? 'not' : ''} remote`,
+      dispatch
+    );
 
-const setRemote = createAction('SERVICES_SETREMOTE', (id, value) => {
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/services/${id}?action=setRemote&remote=${
-      value ? 1 : 0
-    }`
-  );
+    if (result.err) {
+      return { id, value: !value };
+    }
 
-  return { id, value };
-});
+    return { id, value };
+  }
+);
 
 const unsync = createAction('SERVICES_UNSYNC');
 

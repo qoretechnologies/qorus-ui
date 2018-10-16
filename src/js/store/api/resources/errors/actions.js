@@ -1,7 +1,7 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 
-import { fetchJson } from '../../utils';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
 
 const fetch: Function = createAction(
@@ -9,7 +9,9 @@ const fetch: Function = createAction(
   async (type: string, id: number | string): Object => {
     const errors = await fetchJson(
       'GET',
-      `${settings.REST_BASE_URL}/errors/${type}${id && id !== 'omit' ? `/${id}` : ''}`
+      `${settings.REST_BASE_URL}/errors/${type}${
+        id && id !== 'omit' ? `/${id}` : ''
+      }`
     );
 
     return { type, errors };
@@ -18,40 +20,66 @@ const fetch: Function = createAction(
 
 const createOrUpdate: Function = createAction(
   'ERRORS_CREATEORUPDATE',
-  (type: string, id: number | string, data: Object): Object => {
-    const dt = type === 'workflow' ? { ...data, ...{ forceworfklow: true } } : data;
+  async (
+    type: string,
+    id: number | string,
+    data: Object,
+    dispatch: Function
+  ): ?Object => {
+    if (!dispatch) {
+      return { type, id, data };
+    }
 
-    fetchJson(
-      'POST',
-      `${settings.REST_BASE_URL}/errors/${type}${
-        id && id !== 'omit' ? `/${id}` : ''
-      }?action=createOrUpdate`,
-      { body: JSON.stringify(dt) }
+    const dt =
+      type === 'workflow' ? { ...data, ...{ forceworfklow: true } } : data;
+
+    await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'POST',
+          `${settings.REST_BASE_URL}/errors/${type}${
+            id && id !== 'omit' ? `/${id}` : ''
+          }?action=createOrUpdate`,
+          { body: JSON.stringify(dt) }
+        ),
+      'Saving changes...',
+      'Changes saved',
+      dispatch
     );
 
-    return { type, id, data };
+    return {};
   }
 );
 
 const removeError: Function = createAction(
   'ERRORS_REMOVE',
-  (type: string, id: number | string, name: string): Object => {
-    fetchJson(
-      'DELETE',
-      `${settings.REST_BASE_URL}/errors/${type}${
-        id && id !== 'omit' ? `/${id}` : ''
-        }/${name}`
+  async (
+    type: string,
+    id: number | string,
+    name: string,
+    dispatch: Function
+  ): ?Object => {
+    if (!dispatch) {
+      return { type, name };
+    }
+
+    await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'DELETE',
+          `${settings.REST_BASE_URL}/errors/${type}${
+            id && id !== 'omit' ? `/${id}` : ''
+          }/${name}`
+        ),
+      'Deleting error...',
+      'Error deleted',
+      dispatch
     );
 
-    return { type, name };
+    return {};
   }
 );
 
 const unsync: Function = createAction('ERRORS_UNSYNC');
 
-export {
-  fetch,
-  createOrUpdate,
-  removeError,
-  unsync,
-};
+export { fetch, createOrUpdate, removeError, unsync };

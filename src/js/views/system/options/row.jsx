@@ -10,14 +10,14 @@ import { Tag, Icon, Intent, Button } from '@blueprintjs/core';
 import { Tr, Td } from '../../../components/new_table';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
-import Badge from '../../../components/badge';
 import OptionModal from './modal';
 import Text from '../../../components/text';
 import { hasPermission } from '../../../helpers/user';
 import { typeToString } from '../../../helpers/system';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 type Props = {
-  setOption: Function,
+  dispatchAction: Function,
   handleEditClick: Function,
   handleOptionSave: Function,
   name: string,
@@ -85,7 +85,11 @@ const OptionRow: Function = ({
     </Td>
     <Td className="narrow">
       {canEdit && (
-        <Button iconName="edit" onClick={handleEditClick} className="pt-small" />
+        <Button
+          iconName="edit"
+          onClick={handleEditClick}
+          className="pt-small"
+        />
       )}
     </Td>
   </Tr>
@@ -95,11 +99,9 @@ export default compose(
   connect(
     (state: Object): Object => ({
       permissions: state.api.currentUser.data.permissions,
-    }),
-    {
-      setOption: actions.systemOptions.setOption,
-    }
+    })
   ),
+  withDispatch(),
   mapProps(
     ({ permissions, status, default: def, value, ...rest }: Props): Props => ({
       stringDef: typeToString(def),
@@ -115,11 +117,12 @@ export default compose(
   ),
   withModal(),
   withHandlers({
-    handleOptionSave: ({ setOption, closeModal, name }: Props): Function => (
-      model: Object,
-      value: any
-    ): void => {
-      setOption(name, value);
+    handleOptionSave: ({
+      dispatchAction,
+      closeModal,
+      name,
+    }: Props): Function => (model: Object, value: any): void => {
+      dispatchAction(actions.systemOptions.setOption, name, value);
       closeModal();
     },
   }),

@@ -9,19 +9,20 @@ import Graph from './graph';
 import Hierarchy from '../hierarchy/';
 import StepDetails from './step_details';
 import Errors from './errors';
-import Resize from 'components/resize/handle';
 import PaneItem from '../../../components/pane_item';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
 import Container from '../../../components/container';
+import withDispatch from '../../../hocomponents/withDispatch';
 
+@withDispatch()
 export default class DiagramView extends Component {
   static propTypes = {
     order: PropTypes.object,
     workflow: PropTypes.object,
     params: PropTypes.object,
-    dispatch: PropTypes.func,
     isTablet: PropTypes.bool,
+    dispatchAction: PropTypes.func,
   };
 
   componentWillMount() {
@@ -44,8 +45,12 @@ export default class DiagramView extends Component {
   };
 
   handleSkipSubmit = (step, value, noretry) => {
-    this.props.dispatch(
-      actions.orders.skipStep(this.props.order.id, step.stepid, value, noretry)
+    this.props.dispatchAction(
+      actions.orders.skipStep,
+      this.props.order.id,
+      step.stepid,
+      value,
+      noretry
     );
   };
 

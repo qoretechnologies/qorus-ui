@@ -70,6 +70,7 @@ const ErrorsTable: Function = ({
       {data.map(
         (error: Object, index: number): React.Element<ErrorRow> => (
           <ErrorRow
+            first={index === 0}
             key={index}
             data={error}
             compact={compact}

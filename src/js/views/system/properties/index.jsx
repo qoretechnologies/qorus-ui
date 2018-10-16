@@ -14,6 +14,7 @@ import Modal from './modal';
 import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
+import withDispatch from '../../../hocomponents/withDispatch';
 import Toolbar from '../../../components/toolbar';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
@@ -74,10 +75,9 @@ const viewSelector = createSelector(
     viewSelector,
     {
       load: actions.props.fetch,
-      manageProp: actions.props.manageProp,
-      removeProp: actions.props.removeProp,
     }
   ),
+  withDispatch(),
   modal(),
   search(),
   sync('properties')
@@ -89,10 +89,9 @@ export default class PropertiesView extends Component {
     user: PropTypes.object,
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
-    manageProp: PropTypes.func,
-    removeProp: PropTypes.func,
     query: PropTypes.string,
     onSearchChange: PropTypes.func,
+    optimisticDispatch: PropTypes.func,
   };
 
   handleAddClick = (event: EventHandler, data: Object) => {
@@ -112,15 +111,15 @@ export default class PropertiesView extends Component {
   };
 
   handleAddFormSubmit = (data: Object) => {
-    this.props.manageProp(data);
+    this.props.optimisticDispatch(actions.props.manageProp, data);
   };
 
   handleEditFormSubmit = (data: Object) => {
-    this.props.manageProp(data);
+    this.props.optimisticDispatch(actions.props.manageProp, data);
   };
 
   handleDeleteClick = (prop: Object) => {
-    this.props.removeProp(prop);
+    this.props.optimisticDispatch(actions.props.removeProp, prop);
   };
 
   renderProperties() {

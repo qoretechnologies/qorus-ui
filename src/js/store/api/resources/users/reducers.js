@@ -6,8 +6,21 @@ const initialState: Object = {
   sync: false,
 };
 
-const defaultReducer = {
-  next(state: Object = initialState): Object {
+const create: Object = {
+  next(state: Object = initialState, action: Object): Object {
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
+      const { username, name, pass, roles } = action.payload;
+
+      data.push({
+        username,
+        name,
+        pass,
+        roles,
+      });
+
+      return Object.assign({}, state, { data });
+    }
     return state;
   },
   throw(state: Object = initialState): Object {
@@ -15,50 +28,39 @@ const defaultReducer = {
   },
 };
 
-const createUserOptimistic: Object = {
+const removeRole: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
-    const { username, name, pass, roles } = action.payload;
+    if (action.payload) {
+      const data: Array<Object> = state.data.slice();
 
-    data.push({
-      username,
-      name,
-      pass,
-      roles,
-    });
+      remove(data, user => user.username === action.payload.username);
 
-    return Object.assign({}, state, { data });
+      return Object.assign({}, state, { data });
+    }
+
+    return state;
   },
   throw(state: Object = initialState): Object {
     return state;
   },
 };
 
-const removeUserOptimistic: Object = {
+const update: Object = {
   next(state: Object = initialState, action: Object): Object {
-    const data: Array<Object> = state.data.slice();
+    if (action.payload) {
+      const { username, name, roles } = action.payload;
+      const data: Array<Object> = state.data.slice();
+      const match: Object = data.find(user => user.username === username);
 
-    remove(data, user => user.username === action.payload.username);
+      Object.assign(match, {
+        name,
+        roles,
+      });
 
-    return Object.assign({}, state, { data });
-  },
-  throw(state: Object = initialState): Object {
+      return Object.assign({}, state, { data });
+    }
+
     return state;
-  },
-};
-
-const updateUserOptimistic: Object = {
-  next(state: Object = initialState, action: Object): Object {
-    const { username, name, roles } = action.payload;
-    const data: Array<Object> = state.data.slice();
-    const match: Object = data.find(user => user.username === username);
-
-    Object.assign(match, {
-      name,
-      roles,
-    });
-
-    return Object.assign({}, state, { data });
   },
   throw(state: Object = initialState): Object {
     return state;
@@ -74,16 +76,9 @@ const unSyncUsers: Object = {
   },
 };
 
-const createUser: Object = defaultReducer;
-const updateUser: Object = defaultReducer;
-const removeUser: Object = defaultReducer;
-
 export {
-  createUser as CREATEUSER,
-  createUserOptimistic as CREATEUSEROPTIMISTIC,
-  removeUser as REMOVEUSER,
-  removeUserOptimistic as REMOVEUSEROPTIMISTIC,
-  updateUser as UPDATEUSER,
-  updateUserOptimistic as UPDATEUSEROPTIMISTIC,
+  create as CREATE,
+  removeRole as REMOVE,
+  update as UPDATE,
   unSyncUsers as UNSYNCUSERS,
 };

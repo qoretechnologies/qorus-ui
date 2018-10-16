@@ -12,15 +12,10 @@ import {
   Intent,
   Position,
   MenuDivider,
-  Tooltip,
 } from '@blueprintjs/core';
 
-import Dropdown, {
-  Item as DropdownItem,
-  Control as DropdownControl,
-} from '../../../components/dropdown';
-import { Control } from '../../../components/controls';
 import actions from '../../../store/api/actions';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 type Props = {
   show: boolean,
@@ -31,6 +26,7 @@ type Props = {
   reset: Function,
   selectedIds: Array<number>,
   isTablet: boolean,
+  dispatchAction: Function,
 };
 
 const ToolbarActions: Function = ({
@@ -42,43 +38,44 @@ const ToolbarActions: Function = ({
   reset,
   selectedIds,
   isTablet,
+  dispatchAction,
 }: Props): ?React.Element<any> => {
   if (!show) {
     return null;
   }
 
   const handleEnableClick: Function = () => {
-    toggleEnabled(selectedIds, true);
+    dispatchAction(actions.workflows.toggleEnabled, selectedIds, true);
     unselectAll();
   };
 
   const handleDisableClick: Function = () => {
-    toggleEnabled(selectedIds, false);
+    dispatchAction(actions.workflows.toggleEnabled, selectedIds, false);
     unselectAll();
   };
 
   const handleResetClick: Function = () => {
-    reset(selectedIds);
+    dispatchAction(actions.workflows.reset, selectedIds);
     unselectAll();
   };
 
   const handleStartClick: Function = () => {
-    toggleStart(selectedIds, 'start');
+    dispatchAction(actions.workflows.toggleStart, selectedIds, 'start');
     unselectAll();
   };
 
   const handleStopClick: Function = () => {
-    toggleStart(selectedIds, 'stop');
+    dispatchAction(actions.workflows.toggleStart, selectedIds, 'stop');
     unselectAll();
   };
 
   const handleSetDeprecatedClick: Function = () => {
-    toggleDeprecated(selectedIds, true);
+    dispatchAction(actions.workflows.toggleDeprecated, selectedIds, true);
     unselectAll();
   };
 
   const handleUnsetDeprecatedClick: Function = () => {
-    toggleDeprecated(selectedIds, false);
+    dispatchAction(actions.workflows.toggleDeprecated, selectedIds, false);
     unselectAll();
   };
 
@@ -166,12 +163,12 @@ const ToolbarActions: Function = ({
 };
 
 export default compose(
-  connect(() => ({}), {
-    toggleEnabled: actions.workflows.toggleEnabled,
-    toggleStart: actions.workflows.toggleStart,
-    toggleDeprecated: actions.workflows.toggleDeprecated,
-    reset: actions.workflows.reset,
-    unselectAll: actions.workflows.unselectAll,
-  }),
+  connect(
+    () => ({}),
+    {
+      unselectAll: actions.workflows.unselectAll,
+    }
+  ),
+  withDispatch(),
   pure(['show', 'selectedIds', 'isTablet'])
 )(ToolbarActions);

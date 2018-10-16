@@ -1,13 +1,12 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
-import { fetchJson } from '../../../utils';
+import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
 
-const setEnabled: Function = createAction(
-  'GROUPS_SETENABLED',
-  (events) => ({ events })
-);
+const setEnabled: Function = createAction('GROUPS_SETENABLED', events => ({
+  events,
+}));
 
 const updateDone: Function = createAction(
   'GROUPS_UPDATEDONE',
@@ -16,15 +15,21 @@ const updateDone: Function = createAction(
 
 const groupAction: Function = createAction(
   'GROUPS_GROUPACTION',
-  (groups: any, action: string): Object => {
+  (groups: any, action: string, dispatch: Function): Object => {
     const grps = isArray(groups) ? groups.join(',') : groups;
 
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/groups?action=setStatus&enabled=${action}&groups=${grps}`
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/groups?action=setStatus&enabled=${action}&groups=${grps}`
+        ),
+      `${action ? 'Enabling' : 'Disabling'} group(s) ${grps}`,
+      `Group(s) ${grps} ${action ? 'enabled' : 'disabled'}`,
+      dispatch
     );
-
-    return {};
   }
 );
 

@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers';
 
 import Modal from '../../../components/modal';
 import { Controls, Control } from '../../../components/controls';
+import actions from '../../../store/api/actions';
 
 type Props = {
   id: number,
@@ -42,15 +43,10 @@ const Schedule: Function = ({
   week,
 }: Props): React.Element<any> => (
   <Modal hasFooter>
-    <Modal.Header
-      onClose={onClose}
-      titleId="reschedule-modal"
-    >
+    <Modal.Header onClose={onClose} titleId="reschedule-modal">
       Reschedule job
     </Modal.Header>
-    <form
-      onSubmit={handleFormSubmit}
-    >
+    <form onSubmit={handleFormSubmit}>
       <Modal.Body>
         <div className="row">
           <div className="col-lg-2 col-lg-offset-1"> Minute </div>
@@ -110,18 +106,8 @@ const Schedule: Function = ({
       <Modal.Footer>
         <div className="pull-right">
           <Controls noControls grouped>
-            <Control
-              label="Cancel"
-              big
-              btnStyle="default"
-              action={onClose}
-            />
-            <Control
-              type="submit"
-              big
-              label="Save"
-              btnStyle="success"
-            />
+            <Control label="Cancel" big btnStyle="default" action={onClose} />
+            <Control type="submit" big label="Save" btnStyle="success" />
           </Controls>
         </div>
       </Modal.Footer>
@@ -136,7 +122,10 @@ export default compose(
   withState('month', 'changeMonth', ({ month }) => month || ''),
   withState('week', 'changeWeek', ({ week }) => week || ''),
   withHandlers({
-    handleChange: (props: Props): Function => (type: string, event: Object): void => {
+    handleChange: (props: Props): Function => (
+      type: string,
+      event: Object
+    ): void => {
       const { value } = event.target;
       const fun = props[`change${type}`];
 
@@ -144,19 +133,29 @@ export default compose(
     },
   }),
   withHandlers({
-    handleMinuteChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+    handleMinuteChange: ({ handleChange }: Props): Function => (
+      event: EventHandler
+    ): void => {
       handleChange('Minute', event);
     },
-    handleHourChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+    handleHourChange: ({ handleChange }: Props): Function => (
+      event: EventHandler
+    ): void => {
       handleChange('Hour', event);
     },
-    handleDayChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+    handleDayChange: ({ handleChange }: Props): Function => (
+      event: EventHandler
+    ): void => {
       handleChange('Day', event);
     },
-    handleMonthChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+    handleMonthChange: ({ handleChange }: Props): Function => (
+      event: EventHandler
+    ): void => {
       handleChange('Month', event);
     },
-    handleWeekChange: ({ handleChange }: Props): Function => (event: EventHandler): void => {
+    handleWeekChange: ({ handleChange }: Props): Function => (
+      event: EventHandler
+    ): void => {
       handleChange('Week', event);
     },
     handleFormSubmit: ({
@@ -171,7 +170,7 @@ export default compose(
     }: Props): Function => (event: EventHandler): void => {
       event.preventDefault();
 
-      action(id, {
+      action(actions.jobs.reschedule, id, {
         minute,
         hour,
         day,
@@ -181,11 +180,5 @@ export default compose(
       onClose();
     },
   }),
-  pure([
-    'minute',
-    'hour',
-    'day',
-    'month',
-    'week',
-  ])
+  pure(['minute', 'hour', 'day', 'month', 'week'])
 )(Schedule);

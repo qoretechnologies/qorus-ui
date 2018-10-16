@@ -586,11 +586,17 @@ const setDeprecated = {
   ) {
     const data = [...state.data];
     const newData = data.map(w => {
+      let newWorkflow = w;
+
       if (includes(ids, w.id)) {
-        return { ...w, ...{ deprecated: value } };
+        newWorkflow = { ...w, ...{ deprecated: value } };
       }
 
-      return w;
+      if (includes(ids, w.id)) {
+        console.log(newWorkflow);
+      }
+
+      return newWorkflow;
     });
 
     return { ...state, ...{ data: newData } };

@@ -9,6 +9,7 @@ import { Button, Intent } from '@blueprintjs/core';
 import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
+import withDispatch from '../../../../hocomponents/withDispatch';
 import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
@@ -48,11 +49,9 @@ const viewSelector: Function = createSelector(
     viewSelector,
     {
       loadRoles: actions.roles.fetch,
-      createRole: actions.roles.createRole,
-      updateRole: actions.roles.updateRole,
-      removeRole: actions.roles.removeRole,
     }
   ),
+  withDispatch(),
   search(),
   modal(),
   sync('roles', true, 'loadRoles')
@@ -64,9 +63,7 @@ export default class RBACRoles extends Component {
     rolesModel: Array<*>,
     openModal: Function,
     closeModal: Function,
-    createRole: Function,
-    updateRole: Function,
-    removeRole: Function,
+    optimisticDispatch: Function,
     user: Object,
   };
 
@@ -115,7 +112,13 @@ export default class RBACRoles extends Component {
     perms: Array<string>,
     groups: Array<string>
   ): Promise<*> => {
-    await this.props.createRole(role, desc, perms, groups);
+    await this.props.optimisticDispatch(
+      actions.roles.create,
+      role,
+      desc,
+      perms,
+      groups
+    );
 
     this.props.closeModal();
   };
@@ -126,14 +129,20 @@ export default class RBACRoles extends Component {
     perms: Array<string>,
     groups: Array<string>
   ): Promise<*> => {
-    await this.props.updateRole(role, desc, perms, groups);
+    await this.props.optimisticDispatch(
+      actions.roles.update,
+      role,
+      desc,
+      perms,
+      groups
+    );
 
     this.props.closeModal();
   };
 
   handleRemoveRoleClick: Function = (role): void => {
     const handleConfirm: Function = (): void => {
-      this.props.removeRole(role);
+      this.props.optimisticDispatch(actions.roles.remove, role);
       this.props.closeModal();
     };
 

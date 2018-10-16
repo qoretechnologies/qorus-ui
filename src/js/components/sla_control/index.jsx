@@ -4,7 +4,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import compose from 'recompose/compose';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Button, Intent, ControlGroup } from '@blueprintjs/core';
 
 import Dropdown, { Control as Toggle, Item } from '../dropdown';
 import ConfirmDialog from '../confirm_dialog';
@@ -36,7 +36,7 @@ const SLAControl: Function = ({
 }: Props): React.Element<any> => {
   if (canModify) {
     return (
-      <ButtonGroup>
+      <ControlGroup>
         {slas.length > 0 ? (
           <Dropdown>
             <Toggle small>{slavalue || 'None'}</Toggle>
@@ -62,7 +62,7 @@ const SLAControl: Function = ({
               className="pt-small"
             />
           )}
-      </ButtonGroup>
+      </ControlGroup>
     );
   }
 

@@ -146,8 +146,16 @@ body,
   color: #fff !important;
 }
 
+.pt-toast {
+  font-size: 14px;
+
+  &.pt-intent-success {
+    background-color: $qore-green;
+  }
+}
+
 .pt-popover-content {
-  max-height: 400px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -389,8 +397,15 @@ p.header-detail {
   margin-top: 10px !important;
 }
 
-.pt-tab-list {
-  box-shadow: inset 0 -3px 0 darken(#fff, 3);
-  line-height: 25px;
-  display: inline-flex;
+.pt-tabs {
+  &:not(.boxed-tabs) {
+    .pt-tab-list {
+      display: inline-flex;
+    }
+  }
+
+  .pt-tab-list {
+    box-shadow: inset 0 -3px 0 darken(#fff, 3);
+    line-height: 25px;
+  }
 }

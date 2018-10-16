@@ -110,7 +110,6 @@ export default class StepDetailTable extends Component {
     return (
       <div>
         <Toolbar mb>{this.renderDropdown()}</Toolbar>
-        // TODO: Add textTable as a property to the component
         <Table condensed bordered className="text-table">
           <Tbody>
             <Tr>

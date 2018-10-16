@@ -11,28 +11,27 @@ import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 
-import AutoStart from '../../../components/autostart';
 import { Control } from '../../../components/controls';
 import WorkflowsControls from '../controls';
 import InstancesChart from '../../../components/instances_chart';
 import { InputGroup, ControlGroup } from '@blueprintjs/core';
 import ProcessSummary from '../../../components/ProcessSummary';
+import Autostart from '../autostart';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 @connect(
   null,
   {
     setOptions: actions.workflows.setOptions,
-    setAutostart: actions.workflows.setAutostart,
-    setThreshold: actions.workflows.setThreshold,
   }
 )
+@withDispatch()
 export default class DetailTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
     systemOptions: PropTypes.array.isRequired,
     setOptions: PropTypes.func.isRequired,
-    setAutostart: PropTypes.func.isRequired,
-    setThreshold: PropTypes.func.isRequired,
+    dispatchAction: PropTypes.func.isRequired,
   };
 
   state: {
@@ -49,10 +48,6 @@ export default class DetailTab extends Component {
     this.setOption(Object.assign({}, opt, { value: '' }));
   };
 
-  handleAutostartChange = value => {
-    this.props.setAutostart(this.props.workflow.id, value);
-  };
-
   handleThresholdChange = event => {
     this.setState({ slaThreshold: event.target.value });
   };
@@ -60,7 +55,13 @@ export default class DetailTab extends Component {
   handleSubmit: Function = e => {
     e.preventDefault();
 
-    this.props.setThreshold(this.props.workflow.id, this.state.slaThreshold);
+    const { dispatchAction, workflow } = this.props;
+
+    dispatchAction(
+      actions.workflows.setThreshold,
+      workflow.id,
+      this.state.slaThreshold
+    );
   };
 
   render() {
@@ -74,11 +75,11 @@ export default class DetailTab extends Component {
               id={this.props.workflow.id}
               enabled={this.props.workflow.enabled}
             />{' '}
-            <AutoStart
+            <Autostart
               autostart={this.props.workflow.autostart}
               execCount={this.props.workflow.exec_count}
-              onIncrementClick={this.handleAutostartChange}
-              onDecrementClick={this.handleAutostartChange}
+              id={this.props.workflow.id}
+              withExec
             />
           </div>
         </PaneItem>

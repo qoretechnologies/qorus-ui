@@ -12,6 +12,8 @@ import Checkbox from '../../components/checkbox';
 import DetailButton from '../../components/detail_button';
 import ServiceControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
 
 type Props = {
   openPane: Function,
@@ -39,7 +41,7 @@ type Props = {
   isTablet: boolean,
   first: boolean,
   remote: ?boolean,
-  setRemote: Function,
+  optimisticDispatch: Function,
   handleRemoteClick: Function,
 };
 
@@ -139,6 +141,7 @@ const ServiceRow: Function = ({
 );
 
 export default compose(
+  withDispatch(),
   withHandlers({
     handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
       select(id);
@@ -147,11 +150,11 @@ export default compose(
       updateDone(id);
     },
     handleRemoteClick: ({
-      setRemote,
+      optimisticDispatch,
       id,
       remote,
     }: Props): Function => (): void => {
-      setRemote(id, !remote);
+      optimisticDispatch(actions.services.setRemote, id, !remote);
     },
     handleDetailClick: ({
       openPane,

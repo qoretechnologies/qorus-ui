@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson } from '../../../utils';
+import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
 
 function setOptionsPayload(workflow, name, value) {
@@ -98,7 +98,6 @@ const processMemoryChanged = createAction(
 );
 
 const select = createAction('WORKFLOWS_SELECT', id => ({ id }));
-
 const selectAll = createAction('WORKFLOWS_SELECTALL');
 const selectNone = createAction('WORKFLOWS_SELECTNONE');
 const selectInvert = createAction('WORKFLOWS_SELECTINVERT');
@@ -106,16 +105,22 @@ const selectRunning = createAction('WORKFLOWS_SELECTRUNNING');
 const selectStopped = createAction('WORKFLOWS_SELECTSTOPPED');
 const selectAlerts = createAction('WORKFLOWS_SELECTALERTS');
 
-const toggleEnabledAction = createAction(
-  'WORKFLOWS_ENABLECALL',
-  (ids, value) => {
+const toggleEnabled = createAction(
+  'WORKFLOWS_ENABLE',
+  (ids, value, dispatch) => {
     const id = isArray(ids) ? ids.join(',') : ids;
 
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${
-        value ? 'enable' : 'disable'
-      }`
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${
+            value ? 'enable' : 'disable'
+          }`
+        ),
+      `Enabling workflow(s) ${id}...`,
+      `Workflow(s) ${id} ${value ? 'enabled' : 'disabled'}`,
+      dispatch
     );
   }
 );
@@ -129,74 +134,119 @@ const fetchList = createAction('WORKFLOWS_FETCHLIST', async () => {
   return { result };
 });
 
-const reset = createAction('WORKFLOWS_RESETCALL', ids => {
+const reset = createAction('WORKFLOWS_RESETCALL', async (ids, dispatch) => {
   const id = isArray(ids) ? ids.join(',') : ids;
 
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reset`
+  fetchWithNotifications(
+    async () =>
+      await fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/workflows?ids=${id}&action=reset`
+      ),
+    `Reseting workflow(s) ${id}...`,
+    `Workflow(s) ${id} reset`,
+    dispatch
   );
 });
 
-const toggleStart = createAction('WORKFLOWS_STARTCALL', (ids, type) => {
-  const id = isArray(ids) ? ids.join(',') : ids;
+const toggleStart = createAction(
+  'WORKFLOWS_STARTCALL',
+  (ids, type, dispatch) => {
+    const id = isArray(ids) ? ids.join(',') : ids;
 
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${type}`
-  );
-});
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/workflows?ids=${id}&action=${type}`
+        ),
+      `${type === 'stop' ? 'Stopping' : 'Starting'} workflow(s) ${id}...`,
+      `Workflow(s) ${id} ${type === 'stop' ? 'stopped' : 'started'}`,
+      dispatch
+    );
+  }
+);
 
 const toggleDeprecated = createAction(
   'WORKFLOWS_TOGGLEDEPRECATED',
-  (ids, value) => {
+  (ids, value, dispatch) => {
     const id = isArray(ids) ? ids.join(',') : ids;
 
-    fetchJson(
-      'PUT',
-      `${
-        settings.REST_BASE_URL
-      }/workflows?ids=${id}&action=setDeprecated&deprecated=${value}`
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/workflows?ids=${id}&action=setDeprecated&deprecated=${value}`
+        ),
+      `${value ? 'Setting' : 'Unsetting'} workflow(s) ${id} as deprecated...`,
+      `Workflow(s) ${id} ${value ? 'set' : 'unset'} as deprecated`,
+      dispatch
     );
 
     return { ids, value };
   }
 );
 
-const setAutostart = createAction('WORKFLOWS_SETAUTOSTART', (id, value) => {
-  fetchJson(
-    'PUT',
-    `${
-      settings.REST_BASE_URL
-    }/workflows/${id}?action=setAutostart&autostart=${value}`
+const setAutostart = createAction(
+  'WORKFLOWS_SETAUTOSTART',
+  (id, value, dispatch) => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${
+            settings.REST_BASE_URL
+          }/workflows/${id}?action=setAutostart&autostart=${value}`
+        ),
+      `${
+        value ? 'Setting' : 'Unsetting'
+      } workflow ${id} autostart to ${value}...`,
+      `Workflow ${id} autostart set to ${value}`,
+      dispatch
+    );
+
+    return { id, value };
+  }
+);
+
+const setThreshold = createAction(
+  'WORKFLOWS_SETTHRESHOLD',
+  (id, value, dispatch) => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/workflows/${id}?action=setSla&sla=${value}`
+        ),
+      `Setting workflow ${id} threshold to ${value}...`,
+      `Workflow ${id} threshold set to ${value}`,
+      dispatch
+    );
+
+    return { id, value };
+  }
+);
+
+const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value, dispatch) => {
+  const remoteStr: string = `${value ? 'remote' : 'not remote'}`;
+
+  fetchWithNotifications(
+    async () =>
+      await fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/workflows/${id}?action=setRemote&remote=${
+          value ? 1 : 0
+        }`
+      ),
+    `Setting workflow ${id} as ${remoteStr}...`,
+    `Workflow ${id} set to ${remoteStr}`,
+    dispatch
   );
 
   return { id, value };
 });
-
-const setThreshold = createAction('WORKFLOWS_SETTHRESHOLD', (id, value) => {
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/workflows/${id}?action=setSla&sla=${value}`
-  );
-
-  return { id, value };
-});
-
-const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value) => {
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/workflows/${id}?action=setRemote&remote=${
-      value ? 1 : 0
-    }`
-  );
-
-  return { id, value };
-});
-
-const toggleEnabled = (id, value) => dispatch => {
-  dispatch(toggleEnabledAction(id, value));
-};
 
 const unsync = createAction('WORKFLOWS_UNSYNC');
 

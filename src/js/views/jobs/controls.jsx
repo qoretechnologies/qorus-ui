@@ -14,6 +14,7 @@ import withModal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
 import RescheduleModal from './modals/reschedule';
 import SetExpiryModal from './modals/expiry';
+import withDispatch from '../../hocomponents/withDispatch';
 
 type Props = {
   handleEnableClick: Function,
@@ -24,10 +25,8 @@ type Props = {
   handleExpiryClick: Function,
   enabled?: boolean,
   active?: boolean,
-  action: Function,
-  schedule: Function,
-  activate: Function,
-  setExpiry: Function,
+  dispatchAction: Function,
+  optimisticDispatch: Function,
   id: number,
   openModal: Function,
   closeModal: Function,
@@ -109,36 +108,38 @@ export default compose(
   connect(
     null,
     {
-      action: actions.jobs.jobsAction,
-      schedule: actions.jobs.reschedule,
-      setExpiry: actions.jobs.expire,
       activate: actions.jobs.activate,
     }
   ),
+  withDispatch(),
   withModal(),
   withHandlers({
     handleEnableClick: ({
       enabled,
-      action,
+      dispatchAction,
       id,
     }: Props): Function => (): void => {
-      action(enabled ? 'disable' : 'enable', id);
+      dispatchAction(
+        actions.jobs.jobsAction,
+        enabled ? 'disable' : 'enable',
+        id
+      );
     },
     handleActivateClick: ({
       active,
-      activate,
+      dispatchAction,
       id,
     }: Props): Function => (): void => {
-      activate(id, active);
+      dispatchAction(actions.jobs.activate, id, active);
     },
-    handleRunClick: ({ action, id }: Props): Function => (): void => {
-      action('run', id);
+    handleRunClick: ({ dispatchAction, id }: Props): Function => (): void => {
+      dispatchAction(actions.jobs.jobsAction, 'run', id);
     },
-    handleResetClick: ({ action, id }: Props): Function => (): void => {
-      action('reset', id);
+    handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
+      dispatchAction(actions.jobs.jobsAction, 'reset', id);
     },
     handleScheduleClick: ({
-      schedule,
+      optimisticDispatch,
       openModal,
       closeModal,
       id,
@@ -151,7 +152,7 @@ export default compose(
       openModal(
         <RescheduleModal
           onClose={closeModal}
-          action={schedule}
+          action={optimisticDispatch}
           id={id}
           minute={minute}
           hour={hour}
@@ -162,13 +163,17 @@ export default compose(
       );
     },
     handleExpiryClick: ({
-      setExpiry,
+      optimisticDispatch,
       openModal,
       closeModal,
       id,
     }: Props): Function => (): void => {
       openModal(
-        <SetExpiryModal onClose={closeModal} action={setExpiry} id={id} />
+        <SetExpiryModal
+          onClose={closeModal}
+          action={optimisticDispatch}
+          id={id}
+        />
       );
     },
   }),

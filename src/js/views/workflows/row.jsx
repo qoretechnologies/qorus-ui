@@ -9,6 +9,7 @@ import {
   Tooltip,
   Position,
   Popover,
+  Icon,
   PopoverInteractionKind,
 } from '@blueprintjs/core';
 
@@ -18,7 +19,7 @@ import PaneItem from '../../components/pane_item';
 import Checkbox from '../../components/checkbox';
 import WorkflowControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
-import Icon from '../../components/icon';
+
 import DetailButton from '../../components/detail_button';
 import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
@@ -26,6 +27,8 @@ import InstancesBar from '../../components/instances_bar';
 import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
 
 type Props = {
   isActive?: boolean,
@@ -56,7 +59,7 @@ type Props = {
   first?: boolean,
   handleRemoteClick: Function,
   remote: boolean,
-  setRemote: Function,
+  dispatchAction: Function,
   order_stats?: Object,
   orderStats?: Object,
   slaStats?: Object,
@@ -220,13 +223,14 @@ const TableRow: Function = ({
     </Td>
     {showDeprecated && (
       <Td className="medium">
-        <Icon iconName={deprecated ? 'flag' : 'flag-o'} />
+        <Icon iconName={deprecated ? 'small-tick' : 'cross'} />
       </Td>
     )}
   </Tr>
 );
 
 export default compose(
+  withDispatch(),
   withHandlers({
     handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
       select(id);
@@ -250,11 +254,11 @@ export default compose(
       openPane(id, 'detail');
     },
     handleRemoteClick: ({
-      setRemote,
       id,
       remote,
+      dispatchAction,
     }: Props): Function => (): void => {
-      setRemote(id, !remote);
+      dispatchAction(actions.workflows.setRemote, id, !remote);
     },
   }),
   mapProps(

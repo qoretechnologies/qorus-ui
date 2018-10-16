@@ -6,7 +6,11 @@ import { default as actions, statuses } from '../../../constants/bubbles';
 
 export const sendBubble = createAction(
   actions.ADD_BUBBLE,
-  (type: string, message: string) => ({ type, message, id: shortid.generate() })
+  (type: string, message: string, id: any) => ({
+    type,
+    message,
+    id: id || shortid.generate(),
+  })
 );
 
 export const deleteBubble = createAction(
@@ -14,7 +18,11 @@ export const deleteBubble = createAction(
   (id: string) => id
 );
 
-
-export const success = (message: string) => sendBubble(statuses.SUCCESS, message);
-export const warning = (message: string) => sendBubble(statuses.WARNING, message);
-export const error = (message: string) => sendBubble(statuses.ERROR, message);
+export const success = (message: string, id: string | number) =>
+  sendBubble(statuses.SUCCESS, message, id);
+export const warning = (message: string, id: string | number) =>
+  sendBubble(statuses.WARNING, message, id);
+export const error = (message: string, id: string | number) =>
+  sendBubble(statuses.DANGER, message, id);
+export const info = (message: string, id: string | number) =>
+  sendBubble(statuses.INFO, message, id);

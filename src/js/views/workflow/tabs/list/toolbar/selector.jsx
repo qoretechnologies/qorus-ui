@@ -8,6 +8,7 @@ import Dropdown, { Item, Control } from '../../../../../components/dropdown';
 import Checkbox from '../../../../../components/checkbox';
 import { CHECKBOX_STATES } from '../../../../../constants/checkbox';
 import actions from '../../../../../store/api/actions';
+import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
   selected: string,
@@ -22,19 +23,21 @@ const ToolbarSelector: Function = ({
   selectNone,
   selectInvert,
 }: Props): React.Element<any> => (
-  <Dropdown id="selection">
-    <Control>
-      <Checkbox
-        action={
-          selected === 'none' || selected === 'some' ? selectAll : selectNone
-        }
-        checked={CHECKBOX_STATES[selected]}
-      />{' '}
-    </Control>
-    <Item action={selectAll} title="All" />
-    <Item action={selectNone} title="None" />
-    <Item action={selectInvert} title="Invert" />
-  </Dropdown>
+  <ButtonGroup>
+    <Dropdown id="selection">
+      <Control>
+        <Checkbox
+          action={
+            selected === 'none' || selected === 'some' ? selectAll : selectNone
+          }
+          checked={CHECKBOX_STATES[selected]}
+        />{' '}
+      </Control>
+      <Item action={selectAll} title="All" />
+      <Item action={selectNone} title="None" />
+      <Item action={selectInvert} title="Invert" />
+    </Dropdown>
+  </ButtonGroup>
 );
 
 export default compose(

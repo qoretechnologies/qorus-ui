@@ -9,7 +9,7 @@ import Dropdown, { Control, Item } from '../../../../components/dropdown';
 import Icon from '../../../../components/icon';
 import withModal from '../../../../hocomponents/modal';
 import Lock from './modals/lock';
-import actions from '../../../../store/api/actions';
+import withDispatch from '../../../../hocomponents/withDispatch';
 
 type Props = {
   lock?: string,
@@ -18,7 +18,7 @@ type Props = {
   openModal: Function,
   closeModal: Function,
   id: number,
-  lockFunc: Function,
+  dispatchAction: Function,
 };
 
 const OrderLock: Function = ({
@@ -32,9 +32,7 @@ const OrderLock: Function = ({
       small
       btnStyle={lock ? 'danger' : 'success'}
     >
-      <Icon iconName={lock ? 'lock' : 'unlock'} />
-      {' '}
-      { lock || '' }
+      <Icon iconName={lock ? 'lock' : 'unlock'} /> {lock || ''}
     </Control>
     <Item
       iconName={lock ? 'unlock' : 'lock'}
@@ -48,11 +46,9 @@ export default compose(
   connect(
     (state: Object): Object => ({
       username: state.api.currentUser.data.username,
-    }),
-    {
-      lockFunc: actions.orders.lock,
-    }
+    })
   ),
+  withDispatch(),
   withModal(),
   withHandlers({
     handleLockClick: ({
@@ -61,7 +57,7 @@ export default compose(
       lock,
       id,
       username,
-      lockFunc,
+      dispatchAction,
     }: Props): Function => (): void => {
       openModal(
         <Lock
@@ -69,7 +65,7 @@ export default compose(
           onClose={closeModal}
           id={id}
           username={username}
-          lock={lockFunc}
+          lock={dispatchAction}
         />
       );
     },
