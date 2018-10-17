@@ -4,6 +4,7 @@ import map from 'lodash/map';
 import ChartComponent from '../chart';
 import { getStatsCount, getStatsPct } from '../../helpers/chart';
 import { DISPOSITIONS } from '../../constants/dashboard';
+import { COLORS } from '../../constants/ui';
 
 type Props = {
   stats: Object,
@@ -48,7 +49,7 @@ const DispositionChart: Function = ({
                 ? stats.l.find(dt => dt.disposition === disp).count
                 : 0
           ),
-          backgroundColor: ['#81358a', '#FF7373', '#7fba27'],
+          backgroundColor: [COLORS.purple, COLORS.danger, COLORS.green],
         },
       ]}
     />
@@ -71,7 +72,7 @@ const DispositionChart: Function = ({
             Math.round(getStatsCount(true, stats)),
             Math.round(getStatsCount(false, stats)),
           ],
-          backgroundColor: ['#7fba27', '#FF7373'],
+          backgroundColor: [COLORS.green, COLORS.danger],
         },
       ]}
     />

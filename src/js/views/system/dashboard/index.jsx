@@ -25,6 +25,7 @@ import GlobalModal from './modals/global';
 import { DISPOSITIONS } from '../../../constants/dashboard';
 import DispositionChart from '../../../components/disposition_chart';
 import titleManager from '../../../hocomponents/TitleManager';
+import { COLORS } from '../../../constants/ui';
 
 const viewSelector = createSelector(
   [
@@ -157,8 +158,8 @@ export default class Dashboard extends Component {
 
     const memoryLimitChart = {
       data: [...Array(15)].map(() => totalRamInt),
-      backgroundColor: '#FF7373',
-      borderColor: '#FF7373',
+      backgroundColor: COLORS.danger,
+      borderColor: COLORS.danger,
       fill: false,
       label: 'Total node RAM',
       pointRadius: 0,
@@ -177,8 +178,8 @@ export default class Dashboard extends Component {
         (hist: Object): number => calculateMemory(hist.node_priv, null, false)
       ),
       label: 'RAM used by Qorus',
-      backgroundColor: '#9b59b6',
-      borderColor: '#9b59b6',
+      backgroundColor: COLORS.cobalt,
+      borderColor: COLORS.cobalt,
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
@@ -191,19 +192,19 @@ export default class Dashboard extends Component {
           calculateMemory(hist.node_ram_in_use, null, false)
       ),
       label: 'Total RAM used',
-      backgroundColor: '#277fba',
-      borderColor: '#277fba',
+      backgroundColor: COLORS.gray,
+      borderColor: COLORS.gray,
       fill: false,
       pointRadius: 1,
-      borderWidth: 3,
+      borderWidth: 2,
       lineTension: 0,
     };
 
     const nodeProcChart = {
       data: procHistory.map((hist: Object): number => hist.count),
       label: 'Running processes',
-      backgroundColor: '#9b59b6',
-      borderColor: '#9b59b6',
+      backgroundColor: COLORS.cobalt,
+      borderColor: COLORS.cobalt,
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
@@ -213,8 +214,8 @@ export default class Dashboard extends Component {
     const nodeCPUChart = {
       data: history.map((hist: Object): number => round(hist.node_load_pct, 2)),
       label: 'CPU load',
-      backgroundColor: '#9b59b6',
-      borderColor: '#9b59b6',
+      backgroundColor: COLORS.cobalt,
+      borderColor: COLORS.cobalt,
       fill: false,
       pointRadius: 1,
       borderWidth: 3,
