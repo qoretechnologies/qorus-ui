@@ -74,6 +74,7 @@ export default class DetailTab extends Component {
             <WorkflowsControls
               id={this.props.workflow.id}
               enabled={this.props.workflow.enabled}
+              remote={this.props.workflow.remote}
             />{' '}
             <Autostart
               autostart={this.props.workflow.autostart}

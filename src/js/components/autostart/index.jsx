@@ -3,11 +3,9 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Intent } from '@blueprintjs/core';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
+import { ButtonGroup } from '@blueprintjs/core';
+import { Control as Button } from '../../components/controls';
+import mapProps from 'recompose/mapProps';
 
 type Props = {
   autostart: number,
@@ -16,45 +14,52 @@ type Props = {
   handleIncrementClick: Function,
   onDecrementClick: Function,
   handleDecrementClick: Function,
-  withExec?: boolean,
+  btnStyle: string,
 };
 
 const AutoStart = ({
   autostart,
   execCount,
+  btnStyle,
   handleIncrementClick,
   handleDecrementClick,
-  withExec,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
+      title="Decrement autostart"
       iconName="small-minus"
       onClick={handleDecrementClick}
-      intent={Intent.NONE}
-      className="pt-small"
     />
+    <Button text={`${autostart} / ${execCount}`} btnStyle={btnStyle} />
     <Button
-      text={
-        !withExec ? autostart.toString() : `${autostart} / Execs: ${execCount}`
-      }
-      intent={
-        parseInt(autostart, 10) === parseInt(execCount, 10) &&
-        autostart &&
-        autostart > 0
-          ? Intent.SUCCESS
-          : Intent.NONE
-      }
-      className="pt-small"
-    />
-    <Button
+      title="Increment autostart"
       iconName="small-plus"
       onClick={handleIncrementClick}
-      className="pt-small"
     />
   </ButtonGroup>
 );
 
 export default compose(
+  mapProps(
+    ({ autostart, execCount, ...rest }: Props): Props => ({
+      autostart: autostart ? parseInt(autostart, 10) : 0,
+      execCount: execCount ? parseInt(execCount, 10) : 0,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ autostart, execCount, ...rest }: Props): Props => ({
+      btnStyle:
+        autostart === execCount && autostart > 0
+          ? 'success'
+          : autostart === 0 && execCount > 0
+            ? 'warning'
+            : '',
+      autostart,
+      execCount,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleIncrementClick: ({
       onIncrementClick,
