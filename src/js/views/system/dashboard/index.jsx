@@ -395,9 +395,8 @@ export default class Dashboard extends Component {
                   currentNodeData.node_ram
                 )} total RAM)`}
                 width="100%"
-                height={150}
+                height={115}
                 isNotTime
-                yAxisLabel="Memory used"
                 stepSize={(yMax + yMax / 10) / 3}
                 unit=" GiB"
                 yMax={yMax}
@@ -412,15 +411,30 @@ export default class Dashboard extends Component {
                 }
               />
             </PaneItem>
-            <PaneItem title="Node Processes History">
+            <PaneItem title="Node CPU load">
+              <ChartComponent
+                title={`${this.state.nodeTab} (${
+                  currentNodeData.node_cpu_count
+                } CPUs)`}
+                width="100%"
+                height={115}
+                isNotTime
+                unit="%"
+                empty={currentNodeData.mem_history.length === 0}
+                labels={procHistory.map(
+                  (hist: Object): string => formatChartTime(hist.timestamp)
+                )}
+                datasets={[nodeCPUChart]}
+              />
+            </PaneItem>
+            <PaneItem title="Node Process Count History">
               <ChartComponent
                 title={`${this.state.nodeTab} (${
                   currentNodeData.process_count
                 } processes)`}
                 width="100%"
-                height={150}
+                height={115}
                 isNotTime
-                yAxisLabel="# of processes"
                 unit=" "
                 stepSize={20}
                 empty={procHistory.length === 0}
@@ -428,23 +442,6 @@ export default class Dashboard extends Component {
                   (hist: Object): string => formatChartTime(hist.timestamp)
                 )}
                 datasets={[nodeProcChart]}
-              />
-            </PaneItem>
-            <PaneItem title="Node CPU load">
-              <ChartComponent
-                title={`${this.state.nodeTab} (${
-                  currentNodeData.node_cpu_count
-                } CPUs)`}
-                width="100%"
-                height={150}
-                isNotTime
-                yAxisLabel="CPU load in %"
-                unit="%"
-                empty={currentNodeData.mem_history.length === 0}
-                labels={procHistory.map(
-                  (hist: Object): string => formatChartTime(hist.timestamp)
-                )}
-                datasets={[nodeCPUChart]}
               />
             </PaneItem>
           </DashboardModule>
