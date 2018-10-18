@@ -162,11 +162,11 @@ const TableRow: Function = ({
           className="resource-name-link"
           to={`/workflow/${id}?date=${date}`}
         >
-          {name}
+          {name} v.
+          {version}
         </Link>
       </Popover>
     </Td>
-    <Td className="normal text">{version}</Td>
     <Td className="narrow">
       <Controls>
         <Button
