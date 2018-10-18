@@ -134,7 +134,6 @@ const TableRow: Function = ({
         </Controls>
       )}
     </Td>
-    <Td className="narrow">{execs}</Td>
     <Td className="narrow">{id}</Td>
     <Td className="name">
       <Popover
