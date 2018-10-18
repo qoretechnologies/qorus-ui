@@ -1,5 +1,6 @@
 .fixed-table-header,
 td,
+td *,
 td:first-child,
 th,
 th * {
@@ -150,4 +151,15 @@ th.has-sort:hover {
 
 .fixed-table-header {
   display: inline-block;
+}
+
+.toolbar-row {
+  .fixed-table-header {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+.separated-cell {
+  border-left: 1px solid $bgcolor;
 }

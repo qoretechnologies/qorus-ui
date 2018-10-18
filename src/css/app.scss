@@ -409,3 +409,8 @@ p.header-detail {
     line-height: 25px;
   }
 }
+
+.pt-breadcrumbs span,
+.pt-breadcrumbs li::after {
+  vertical-align: middle;
+}

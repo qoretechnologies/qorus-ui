@@ -5,6 +5,7 @@ import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
   children: Array<React.Element<any>>,
+  marginRight?: number,
 };
 
 /**
@@ -16,9 +17,12 @@ type Props = {
  */
 const Controls: Function = ({
   children,
+  marginRight,
   ...rest
 }: Props): React.Element<any> => (
-  <ButtonGroup {...rest}>{children}</ButtonGroup>
+  <ButtonGroup style={{ marginRight }} {...rest}>
+    {children}
+  </ButtonGroup>
 );
 
 export default pure(['children'])(Controls);

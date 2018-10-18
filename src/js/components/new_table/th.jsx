@@ -48,6 +48,7 @@ const Th: Function = ({
         className,
         'fixed-table-header'
       )}
+      data-colspan={colspan}
       onClick={handleClick}
       title={title}
     >
@@ -98,5 +99,11 @@ export default compose(
     name,
     ...rest,
   })),
-  updateOnlyForKeys(['children', 'className', 'direction', 'historyDirection'])
+  updateOnlyForKeys([
+    'children',
+    'className',
+    'direction',
+    'historyDirection',
+    'colspan',
+  ])
 )(Th);

@@ -45,6 +45,11 @@ export default class Tr extends Component {
     if (this.props.onHighlightEnd && this.props.highlight) {
       this.props.onHighlightEnd();
     }
+
+    window.removeEventListener('resize', this.recalculateSizes);
+    document
+      .querySelector('#content-wrapper')
+      .removeEventListener('resize', this.recalculateSizes);
   }
 
   _el: any;
@@ -85,8 +90,8 @@ export default class Tr extends Component {
         const bodyCells = Array.from(node.cells);
         const parent =
           node.parentElement.parentElement.parentElement.parentElement;
-        const headCells = parent.querySelectorAll(
-          '.table-header-wrapper .fixed-table-header'
+        const headers = parent.querySelectorAll(
+          '.table-header-wrapper .table-fixed-row'
         );
         const footCells = parent.querySelectorAll(
           '.table-footer-wrapper .fixed-table-header'
@@ -111,26 +116,57 @@ export default class Tr extends Component {
           );
         }
 
-        bodyCells.forEach(
-          (cell: any, index: number): void => {
-            const { width } = cell.getBoundingClientRect();
+        headers.forEach(
+          (header: any): void => {
+            const headCells = header.querySelectorAll('.fixed-table-header');
 
-            headCells[index].setAttribute(
-              'style',
-              `width: ${width}px !important`
+            // * this tells us if we need to increment the current index because of a colspan
+            let colspanIncrementer: number = 0;
+
+            headCells.forEach(
+              (cell: any, index: number): void => {
+                // * Create the current bodycell index by adding the index + any colspan
+                const newIndex: number = index + colspanIncrementer;
+                let { width } = bodyCells[newIndex].getBoundingClientRect();
+
+                // * Check if the cell has the data-colspan attr
+                // * If it has, it means we need to stretch the cell by the width
+                // * of the number of leading columns
+                let colspan: ?number = cell.getAttribute('data-colspan');
+
+                if (colspan) {
+                  colspan = parseInt(colspan, 10);
+                  // * Calculate the width of this cell by going through
+                  // * the forward cells to the length of the colspan
+                  width = bodyCells.reduce(
+                    (newWidth: number, bCell: any, idx: number): number => {
+                      if (idx >= newIndex && idx <= newIndex + colspan - 1) {
+                        return newWidth + bCell.getBoundingClientRect().width;
+                      }
+
+                      return newWidth + 0;
+                    },
+                    0
+                  );
+
+                  colspanIncrementer = colspanIncrementer + colspan - 1;
+                }
+
+                cell.setAttribute('style', `width: ${width}px !important`);
+
+                if (footCells.length) {
+                  footCells[index].setAttribute(
+                    'style',
+                    `width: ${width}px !important`
+                  );
+                }
+              }
             );
-
-            if (footCells.length) {
-              footCells[index].setAttribute(
-                'style',
-                `width: ${width}px !important`
-              );
-            }
           }
         );
 
         this._resizeTimeout = null;
-      }, 500);
+      }, 1500);
     }
   };
 

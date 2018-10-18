@@ -2,10 +2,11 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button, Intent, Icon } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 
 import queryControl from '../../../hocomponents/queryControl';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
+import { Controls, Control as Button } from '../../../components/controls';
 
 type Props = {
   runningQuery: string,
@@ -56,30 +57,29 @@ const ToolbarFilters: Function = ({
       />
     </Dropdown>
   ) : (
-    <ButtonGroup>
+    <Controls>
       <Button
         text="Running"
         onClick={changeRunningQuery}
         iconName={runningQuery ? 'selection' : 'circle'}
         intent={runningQuery ? Intent.PRIMARY : Intent.NONE}
+        big
       />
       <Button
         text="Last version"
         onClick={changeLatestQuery}
         iconName={latestQuery ? 'selection' : 'circle'}
         intent={latestQuery ? Intent.PRIMARY : Intent.NONE}
+        big
       />
-      <Dropdown>
-        <Control intent={deprecatedQuery ? Intent.PRIMARY : Intent.NONE}>
-          More
-        </Control>
-        <Item
-          title="Deprecated"
-          iconName={deprecatedQuery ? 'selection' : 'circle'}
-          onClick={changeDeprecatedQuery}
-        />
-      </Dropdown>
-    </ButtonGroup>
+      <Button
+        text="Deprecated"
+        onClick={changeDeprecatedQuery}
+        iconName={deprecatedQuery ? 'selection' : 'circle'}
+        intent={deprecatedQuery ? Intent.PRIMARY : Intent.NONE}
+        big
+      />
+    </Controls>
   );
 
 export default compose(

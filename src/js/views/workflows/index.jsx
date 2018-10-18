@@ -9,7 +9,7 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
@@ -18,11 +18,14 @@ import selectable from '../../hocomponents/selectable';
 import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
 import Box from '../../components/box';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import loadMore from '../../hocomponents/loadMore';
 import actions from '../../store/api/actions';
-import WorkflowsToolbar from './toolbar';
 import WorkflowsTable from './table';
 import WorkflowsDetail from './detail';
 import { DATES } from '../../constants/dates';
@@ -40,6 +43,11 @@ import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 import titleManager from '../../hocomponents/TitleManager';
+import Toolbar from '../../components/toolbar';
+import { CenterWrapper } from '../../components/layout';
+import Search from '../../containers/search';
+import queryControl from '../../hocomponents/queryControl';
+import LoadMore from '../../components/LoadMore';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -229,13 +237,14 @@ type Props = {
   infoWithAlerts: number,
   totalInstances: Object,
   user: Object,
+  searchQuery: string,
+  changeSearchQuery: Function,
 };
 
 const Workflows: Function = ({
   selected,
   onCSVClick,
   expanded,
-  handleExpandClick,
   location,
   selectedIds,
   workflows,
@@ -251,31 +260,31 @@ const Workflows: Function = ({
   handleLoadAll,
   closePane,
   isTablet,
-  groupedStates,
-  infoEnabled,
-  infoTotalCount,
-  infoWithAlerts,
   totalInstances,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb active> Workflows </Crumb>
-    </Breadcrumbs>
-    <Box top>
-      <WorkflowsToolbar
-        selected={selected}
-        onCSVClick={onCSVClick}
-        expanded={expanded}
-        onToggleStatesClick={handleExpandClick}
-        location={location}
-        selectedIds={selectedIds}
-        isTablet={isTablet}
-        collectionCount={workflows.length}
-        collectionTotal={infoTotalCount}
-        withAlertsCount={infoWithAlerts}
-        enabledCount={infoEnabled}
-      />
-    </Box>
+    <Toolbar>
+      <Breadcrumbs>
+        <Crumb active> Workflows </Crumb>
+      </Breadcrumbs>
+      <div className="pull-right">
+        <ButtonGroup marginRight={3}>
+          <Button
+            text="Export CSV"
+            iconName="export"
+            onClick={onCSVClick}
+            big
+          />
+        </ButtonGroup>{' '}
+        <Search
+          defaultValue={searchQuery}
+          onSearchUpdate={changeSearchQuery}
+          resource="workflows"
+        />
+      </div>
+    </Toolbar>
     <Box noPadding>
       <WorkflowsTable
         collection={workflows}
@@ -289,28 +298,15 @@ const Workflows: Function = ({
         sortData={sortData}
         onSortChange={onSortChange}
         canLoadMore={canLoadMore}
+        limit={limit}
+        handleLoadMore={handleLoadMore}
+        handleLoadAll={handleLoadAll}
         isTablet={isTablet}
         totalInstances={totalInstances}
+        selected={selected}
+        selectedIds={selectedIds}
+        location={location}
       />
-      {canLoadMore && (
-        <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
-          <Button
-            text={`Showing ${workflows.length} of ${infoTotalCount}`}
-            intent={Intent.NONE}
-            className="pt-minimal"
-          />
-          <Button
-            text={`Show ${limit} more...`}
-            intent={Intent.PRIMARY}
-            onClick={handleLoadMore}
-          />
-          <Button
-            text="Show all"
-            intent={Intent.PRIMARY}
-            onClick={handleLoadAll}
-          />
-        </ButtonGroup>
-      )}
     </Box>
   </div>
 );
@@ -380,6 +376,7 @@ export default compose(
   selectable('workflows'),
   withCSV('workflows', 'workflows'),
   titleManager('Workflows'),
+  queryControl('search'),
   pure([
     'sortData',
     'expanded',
