@@ -92,7 +92,7 @@ const WorkflowsTable: Function = ({
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={isTablet ? 8 : 9}>
+        <Th colspan={isTablet ? 7 : 8}>
           <div className="pull-left">
             <Selector selected={selected} selectedCount={selectedIds.length} />{' '}
             <Actions
@@ -134,7 +134,7 @@ const WorkflowsTable: Function = ({
         <Th className="narrow">
           <Icon iconName="list-detail-view" />
         </Th>
-        {!isTablet && <Th className="narrow">Actions</Th>}
+        {!isTablet && <Th className="normal">Actions</Th>}
         <Th className="medium" name="autostart">
           Autostart
         </Th>
@@ -149,9 +149,6 @@ const WorkflowsTable: Function = ({
         </Th>
         <Th className="name" name="name">
           Name
-        </Th>
-        <Th className="narrow" name="remote">
-          Remote
         </Th>
         {deprecated && (
           <Th className="medium" name="deprecated">

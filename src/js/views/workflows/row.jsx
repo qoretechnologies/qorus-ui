@@ -57,7 +57,6 @@ type Props = {
   showDeprecated: boolean,
   isTablet?: boolean,
   first?: boolean,
-  handleRemoteClick: Function,
   remote: boolean,
   dispatchAction: Function,
   order_stats?: Object,
@@ -88,7 +87,6 @@ const TableRow: Function = ({
   showDeprecated,
   isTablet,
   first,
-  handleRemoteClick,
   remote,
   orderStats,
   totalOrderStats,
@@ -117,8 +115,8 @@ const TableRow: Function = ({
       <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
     {!isTablet && (
-      <Td key="controls" className="narrow">
-        <WorkflowControls id={id} enabled={enabled} />
+      <Td key="controls" className="normal">
+        <WorkflowControls id={id} enabled={enabled} remote={remote} />
       </Td>
     )}
     <Td key="autostart" name="autostart" className="medium">
@@ -166,15 +164,6 @@ const TableRow: Function = ({
           {version}
         </Link>
       </Popover>
-    </Td>
-    <Td className="narrow">
-      <Controls>
-        <Button
-          icon={remote ? 'small-tick' : 'cross'}
-          btnStyle={remote ? 'info' : 'default'}
-          onClick={handleRemoteClick}
-        />
-      </Controls>
     </Td>
     {showDeprecated && (
       <Td className="medium">
@@ -252,13 +241,6 @@ export default compose(
     },
     handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
       openPane(id, 'detail');
-    },
-    handleRemoteClick: ({
-      id,
-      remote,
-      dispatchAction,
-    }: Props): Function => (): void => {
-      dispatchAction(actions.workflows.setRemote, id, !remote);
     },
   }),
   mapProps(
