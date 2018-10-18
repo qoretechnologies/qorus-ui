@@ -36,7 +36,7 @@ const WorkflowControls: Function = ({
     <Control title="Reset" iconName="refresh" onClick={handleResetClick} />
     <Control
       title="Remote"
-      icon={remote ? 'small-tick' : 'cross'}
+      icon="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
     />
