@@ -31,11 +31,7 @@ type Props = {
 
 const ToolbarActions: Function = ({
   show,
-  toggleEnabled,
-  toggleStart,
-  toggleDeprecated,
   unselectAll,
-  reset,
   selectedIds,
   isTablet,
   dispatchAction,
@@ -79,78 +75,27 @@ const ToolbarActions: Function = ({
     unselectAll();
   };
 
-  if (isTablet) {
-    return (
-      <ButtonGroup>
-        <Button text="With selected: " />
-        <Popover
-          position={Position.BOTTOM}
-          content={
-            <Menu>
-              <MenuItem text="Start" onClick={handleStartClick} />
-              <MenuDivider />
-              <MenuItem text="Enable" onClick={handleEnableClick} />
-              <MenuItem text="Disable" onClick={handleDisableClick} />
-              <MenuDivider />
-              <MenuItem text="Reset" onClick={handleResetClick} />
-              <MenuItem text="Stop" onClick={handleStopClick} />
-              <MenuDivider />
-              <MenuItem
-                text="Set deprecated"
-                onClick={handleSetDeprecatedClick}
-              />
-              <MenuItem
-                text="Unset deprecated"
-                onClick={handleUnsetDeprecatedClick}
-              />
-            </Menu>
-          }
-        >
-          <Button iconName="caret-down" />
-        </Popover>
-      </ButtonGroup>
-    );
-  }
-
   return (
     <ButtonGroup>
-      <Button
-        text="Enable"
-        iconName="power"
-        intent={Intent.SUCCESS}
-        onClick={handleEnableClick}
-      />
-      <Button
-        text="Disable"
-        iconName="disable"
-        intent={Intent.DANGER}
-        onClick={handleDisableClick}
-      />
-      <Button text="Reset" iconName="refresh" onClick={handleResetClick} />
+      <Button text="With selected: " />
       <Popover
         position={Position.BOTTOM}
         content={
           <Menu>
-            <MenuItem
-              text="Start"
-              iconName="airplane"
-              onClick={handleStartClick}
-              intent={Intent.SUCCESS}
-            />
-            <MenuItem
-              text="Stop"
-              iconName="disable"
-              onClick={handleStopClick}
-              intent={Intent.DANGER}
-            />
+            <MenuItem text="Start" onClick={handleStartClick} />
+            <MenuDivider />
+            <MenuItem text="Enable" onClick={handleEnableClick} />
+            <MenuItem text="Disable" onClick={handleDisableClick} />
+            <MenuDivider />
+            <MenuItem text="Reset" onClick={handleResetClick} />
+            <MenuItem text="Stop" onClick={handleStopClick} />
+            <MenuDivider />
             <MenuItem
               text="Set deprecated"
-              iconName="flag"
               onClick={handleSetDeprecatedClick}
             />
             <MenuItem
               text="Unset deprecated"
-              iconName="cross"
               onClick={handleUnsetDeprecatedClick}
             />
           </Menu>

@@ -2,13 +2,11 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
-import classNames from 'classnames';
 import pure from 'recompose/onlyUpdateForKeys';
 import {
   ControlGroup,
   Popover,
   Position,
-  Intent,
   Button,
   Menu,
   MenuItem,
@@ -235,6 +233,7 @@ export default class DatePicker extends Component {
 
     return (
       <ControlGroup className="vab">
+        <Button iconName="timeline-events" onClick={this.showDatepicker} />
         <Popover
           isOpen={this.state.showDatepicker}
           position={Position.BOTTOM}

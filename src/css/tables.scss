@@ -49,13 +49,18 @@ $padding-xs-vertical: 2px;
 
   padding: $padding-xs-vertical 5px $padding-xs-vertical 5px;
 
+  &.separator {
+    width: 1px !important;
+    border-right: 10px solid $bgcolor;
+  }
+
   &.tiny {
     width: 34px;
   }
 
   &.narrow {
     /* [4] */
-    width: 50px;
+    width: 55px;
   }
 
   &.normal {
@@ -212,13 +217,18 @@ table.table--data {
           padding-top: $padding-xs-vertical;
           padding-bottom: $padding-xs-vertical;
 
+          &.separator {
+            width: 3px;
+            background-color: $bgcolor !important;
+          }
+
           &.tiny {
             width: 34px;
           }
 
           &.narrow {
             /* [4] */
-            width: 50px;
+            width: 55px;
           }
 
           &.normal {

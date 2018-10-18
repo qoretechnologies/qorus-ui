@@ -167,7 +167,21 @@ const TableRow: Function = ({
       </Popover>
     </Td>
     <Td className="normal text">{version}</Td>
-    <Td className="huge">
+    <Td className="narrow">
+      <Controls>
+        <Button
+          icon={remote ? 'small-tick' : 'cross'}
+          btnStyle={remote ? 'info' : 'default'}
+          onClick={handleRemoteClick}
+        />
+      </Controls>
+    </Td>
+    {showDeprecated && (
+      <Td className="medium">
+        <Icon iconName={deprecated ? 'small-tick' : 'cross'} />
+      </Td>
+    )}
+    <Td className="huge separated-cell">
       <InstancesBar
         states={states}
         instances={rest}
@@ -181,7 +195,7 @@ const TableRow: Function = ({
         <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
       </Tooltip>
     </Td>
-    <Td className="big">
+    <Td className="big separated-cell">
       <InstancesBar
         states={[
           { name: 'completed', label: 'complete' },
@@ -212,20 +226,6 @@ const TableRow: Function = ({
         link={`/workflows?paneId=${id}&paneTab=order+stats`}
       />
     </Td>
-    <Td className="narrow">
-      <Controls>
-        <Button
-          icon={remote ? 'small-tick' : 'cross'}
-          btnStyle={remote ? 'info' : 'default'}
-          onClick={handleRemoteClick}
-        />
-      </Controls>
-    </Td>
-    {showDeprecated && (
-      <Td className="medium">
-        <Icon iconName={deprecated ? 'small-tick' : 'cross'} />
-      </Td>
-    )}
   </Tr>
 );
 

@@ -5,23 +5,20 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Tfooter,
-  FixedRow,
-} from '../../components/new_table';
-import Icon from '../../components/icon';
-import Badge from '../../components/badge';
+import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
 import checkData from '../../hocomponents/check-no-data';
 import withModal from '../../hocomponents/modal';
 import Row from './row';
 import SortModal from './modals/sort_modal';
 import actions from '../../store/api/actions';
+import queryControl from '../../hocomponents/queryControl';
+import DatePicker from '../../components/datepicker';
+import Selector from './toolbar/selector';
+import Actions from './toolbar/actions';
+import Filters from './toolbar/filters';
+import Dropdown, { Control, Item } from '../../components/dropdown';
+import LoadMore from '../../components/LoadMore';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   sortData: Object,
@@ -43,6 +40,17 @@ type Props = {
   openModal: Function,
   closeModal: Function,
   handleInstancesClick: Function,
+  dateQuery: string,
+  changeDateQuery: Function,
+  dispositionQuery: string,
+  changeDispositionQuery: Function,
+  handleDispositionChange: Function,
+  selected: string,
+  selectedIds: Array<number>,
+  location: Object,
+  handleLoadMore: Function,
+  handleLoadAll: Function,
+  limit: number,
 };
 
 const WorkflowsTable: Function = ({
@@ -60,9 +68,18 @@ const WorkflowsTable: Function = ({
   expanded,
   canLoadMore,
   isTablet,
-  totalInstances,
   setRemote,
   handleInstancesClick,
+  dateQuery,
+  changeDateQuery,
+  selected,
+  selectedIds,
+  location,
+  dispositionQuery,
+  handleDispositionChange,
+  limit,
+  handleLoadMore,
+  handleLoadAll,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -70,20 +87,59 @@ const WorkflowsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 45 : 0}
     // Another Firefox hack, jesus
     key={collection.length}
   >
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan={isTablet ? 9 : 10}>
+          <div className="pull-left">
+            <Selector selected={selected} selectedCount={selectedIds.length} />{' '}
+            <Actions
+              selectedIds={selectedIds}
+              show={selected !== 'none'}
+              isTablet={isTablet}
+            />{' '}
+            <Filters location={location} isTablet={isTablet} />{' '}
+          </div>
+          <div className="pull-right">
+            <LoadMore
+              limit={limit}
+              canLoadMore={canLoadMore}
+              handleLoadAll={handleLoadAll}
+              handleLoadMore={handleLoadMore}
+            />
+          </div>
+        </Th>
+        <Th className="separated-cell" colspan={2}>
+          <DatePicker
+            date={dateQuery || '24h'}
+            onApplyDate={changeDateQuery}
+            className="toolbar-item"
+          />
+        </Th>
+        <Th className="separated-cell" colspan={2}>
+          <Dropdown>
+            <Control icon="time">{dispositionQuery || '24 hour label'}</Control>
+            <Item title="1 hour label" onClick={handleDispositionChange} />
+            <Item title="4 hour label" onClick={handleDispositionChange} />
+            <Item title="24 hour label" onClick={handleDispositionChange} />
+          </Dropdown>
+        </Th>
+      </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny" />
-        <Th className="narrow">-</Th>
+        <Th className="tiny">
+          <Icon iconName="small-tick" />
+        </Th>
+        <Th className="narrow">
+          <Icon iconName="list-detail-view" />
+        </Th>
         {!isTablet && <Th className="narrow">Actions</Th>}
         <Th className="medium" name="autostart">
           Autostart
         </Th>
         <Th className="tiny" name="has_alerts">
-          <Icon iconName="warning" />
+          <Icon iconName="warning-sign" />
         </Th>
         <Th className="narrow" name="exec_count">
           Execs
@@ -97,26 +153,6 @@ const WorkflowsTable: Function = ({
         <Th className="normal text" name="version">
           Version
         </Th>
-        <Th className="huge" onClick={handleInstancesClick}>
-          Instances
-        </Th>
-        {/* states.map(
-          (state: Object): React.Element<Th> => (
-            <Th
-              key={`header_${state.name}`}
-              className={expanded || isTablet ? 'narrow' : 'medium'}
-              name={!expanded ? `GROUPED_${state.name}` : state.name}
-              title={state.title}
-            >
-              {state.short}
-            </Th>
-          )
-        ) */}
-        <Th className="narrow" name="TOTAL">
-          All
-        </Th>
-        <Th className="big">Disposition (%)</Th>
-        <Th className="normal">SLA (%)</Th>
         <Th className="narrow" name="remote">
           Remote
         </Th>
@@ -125,6 +161,14 @@ const WorkflowsTable: Function = ({
             Deprecated
           </Th>
         )}
+        <Th className="huge separated-cell" onClick={handleInstancesClick}>
+          Instances
+        </Th>
+        <Th className="narrow" name="TOTAL">
+          All
+        </Th>
+        <Th className="big separated-cell">Disposition (%)</Th>
+        <Th className="normal">SLA (%)</Th>
       </FixedRow>
     </Thead>
     <Tbody>
@@ -164,6 +208,7 @@ export default compose(
     ({ collection }: Props): boolean => collection && collection.length > 0
   ),
   withModal(),
+  queryControl('disposition'),
   withHandlers({
     handleInstancesClick: ({
       sortData,
@@ -179,7 +224,14 @@ export default compose(
         />
       );
     },
+    handleDispositionChange: ({ changeDispositionQuery }: Props): Function => (
+      event: EventHandler,
+      title: string
+    ): void => {
+      changeDispositionQuery(title);
+    },
   }),
+  queryControl('date'),
   pure([
     'sortData',
     'expanded',
@@ -189,5 +241,6 @@ export default compose(
     'date',
     'isTablet',
     'totalInstances',
+    'dateQuery',
   ])
 )(WorkflowsTable);
