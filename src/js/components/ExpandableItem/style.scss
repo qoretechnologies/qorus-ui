@@ -11,12 +11,12 @@
     padding: 5px 8px 5px 5px;
     margin-bottom: 5px;
     display: inline-block;
-    background-color: lighten($qore-cobalt, 65);
+    background-color: lighten($qore-cobalt, 50);
     border-radius: 5px;
 
     &:hover {
       transition: all linear 0.2s;
-      background-color: lighten($qore-cobalt, 55);
+      background-color: lighten($qore-cobalt, 45);
     }
   }
 

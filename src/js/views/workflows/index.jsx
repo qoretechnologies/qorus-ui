@@ -267,7 +267,7 @@ const Workflows: Function = ({
   <div>
     <Toolbar>
       <Breadcrumbs>
-        <Crumb active> Workflows </Crumb>
+        <Crumb> Workflows </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
         <ButtonGroup marginRight={3}>
