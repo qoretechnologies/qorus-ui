@@ -28,7 +28,6 @@ import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
 import withDispatch from '../../hocomponents/withDispatch';
-import actions from '../../store/api/actions';
 
 type Props = {
   isActive?: boolean,
