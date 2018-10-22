@@ -64,6 +64,8 @@ $bgcolor: #eee;
 @import '../js/components/box/style';
 @import '../js/components/instances_bar/style';
 @import '../js/components/ExpandableItem/style';
+@import '../js/components/breadcrumbs/style';
+@import '../js/components/Headbar/style';
 
 @import './not-supported';
 @import './root';
@@ -416,4 +418,13 @@ p.header-detail {
   &[class*='pt-icon-']:before {
     color: $qore-purple;
   }
+}
+
+.container-fluid {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.pt-navbar {
+  padding: 0 10px;
 }

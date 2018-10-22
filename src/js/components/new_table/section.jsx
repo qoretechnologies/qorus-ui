@@ -72,7 +72,7 @@ class Section extends Component {
           ? marginBottom
           : this.props.marginBottom;
       const footer: number = this.props.hasFooter ? 22 : 0;
-      const height: number = winHeight - top - 40 - mb - footer;
+      const height: number = winHeight - top - 37 - mb - footer;
       const h =
         typeof initHeight === 'number' ? initHeight : this.state.initHeight;
 
