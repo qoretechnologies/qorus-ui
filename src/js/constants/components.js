@@ -6,6 +6,7 @@ const intentTransform = {
   info: Intent.PRIMARY,
   default: null,
   warning: Intent.WARNING,
+  purple: 'purple',
 };
 
 const getIntentFromBsStyle = (bsStyle: string): string =>

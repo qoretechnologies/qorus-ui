@@ -45,6 +45,7 @@ const currentUserSelector = state => state.api.currentUser;
 const menuSelector = state => state.menu;
 const settingsSelector = state => state.ui.settings;
 const healthSelector = state => state.api.health;
+const optionsSelector = state => state.api.systemOptions;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -59,12 +60,14 @@ const healthSelector = state => state.api.health;
     settingsSelector,
     menuSelector,
     healthSelector,
-    (info, currentUser, stngs, menu, health) => ({
+    optionsSelector,
+    (info, currentUser, stngs, menu, health, options) => ({
       info,
       currentUser,
       menu,
       isTablet: stngs.tablet,
       health,
+      options,
     })
   ),
   {
@@ -109,6 +112,7 @@ export default class Root extends Component {
     sidebarOpen: PropTypes.bool,
     storeSidebar: PropTypes.func,
     fetchHealth: PropTypes.func,
+    options: PropTypes.array,
   };
 
   static childContextTypes = {
@@ -265,7 +269,7 @@ export default class Root extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { currentUser, info, isTablet, health } = this.props;
+    const { currentUser, info, isTablet, health, options } = this.props;
     const locale =
       currentUser.sync && currentUser.data.storage.locale
         ? currentUser.data.storage.locale
@@ -276,7 +280,7 @@ export default class Root extends Component {
     const isLightTheme =
       currentUser.sync && currentUser.data.storage.theme === 'light';
 
-    if (!currentUser.sync || !info.sync || !health.sync) {
+    if (!currentUser.sync || !info.sync || !health.sync || !options.sync) {
       return <Preloader />;
     }
 
