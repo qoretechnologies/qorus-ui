@@ -18,12 +18,16 @@ type Props = {
   handleLoadClick: Function,
   handleResetClick: Function,
   handleAutostartClick: Function,
+  handleRemoteClick: Function,
   enabled: boolean,
   loaded: boolean,
   autostart: boolean,
   status: string,
   dispatchAction: Function,
+  optimisticDispatch: Function,
   id: number,
+  remote: boolean,
+  type: string,
 };
 
 const ServiceControls: Function = ({
@@ -31,9 +35,12 @@ const ServiceControls: Function = ({
   handleLoadClick,
   handleResetClick,
   handleAutostartClick,
+  handleRemoteClick,
   loaded,
   enabled,
   autostart,
+  type,
+  remote,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
@@ -41,26 +48,26 @@ const ServiceControls: Function = ({
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
-      className="pt-small"
     />
     <Button
       title={autostart ? 'Disable autostart' : 'Enable autostart'}
       iconName={autostart ? 'pause' : 'play'}
       intent={autostart ? Intent.PRIMARY : Intent.NONE}
       onClick={handleAutostartClick}
-      className="pt-small"
     />
     <Button
       title={loaded ? 'Unload' : 'Load'}
-      iconName={loaded ? 'small-tick' : 'remove'}
+      iconName={loaded ? 'small-tick' : 'cross'}
+      intent={loaded ? Intent.PRIMARY : Intent.NONE}
       onClick={handleLoadClick}
-      className="pt-small"
     />
+    <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
     <Button
-      title="Reset"
-      iconName="refresh"
-      onClick={handleResetClick}
-      className="pt-small"
+      title="Remote"
+      iconName="globe"
+      intent={remote ? Intent.PRIMARY : Intent.NONE}
+      onClick={handleRemoteClick}
+      disabled={type === 'system'}
     />
   </ButtonGroup>
 );
@@ -109,6 +116,13 @@ export default compose(
         id,
         null
       );
+    },
+    handleRemoteClick: ({
+      optimisticDispatch,
+      id,
+      remote,
+    }: Props): Function => (): void => {
+      optimisticDispatch(actions.services.setRemote, id, !remote);
     },
     handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
       dispatchAction(actions.services.serviceAction, 'reset', id, null);

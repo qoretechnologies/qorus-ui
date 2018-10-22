@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
-import Icon from '../../components/icon';
 import Text from '../../components/text';
 import Checkbox from '../../components/checkbox';
 import DetailButton from '../../components/detail_button';
@@ -14,6 +13,7 @@ import ServiceControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   openPane: Function,
@@ -58,14 +58,12 @@ const ServiceRow: Function = ({
   id,
   normalizedName,
   name,
-  version,
   desc,
   enabled,
   autostart,
   status,
   first,
   remote,
-  handleRemoteClick,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -90,15 +88,17 @@ const ServiceRow: Function = ({
     <Td className="narrow">
       <Icon
         iconName={type === 'system' ? 'cog' : 'user'}
-        tooltip={type === 'system' ? 'System' : 'User'}
+        title={type === 'system' ? 'System' : 'User'}
       />
     </Td>
-    <Td className="medium">
+    <Td className="big">
       <ServiceControls
         id={id}
         enabled={enabled}
         autostart={autostart}
         status={status}
+        remote={remote}
+        type={type}
       />
     </Td>
     <Td className="narrow">{threads}</Td>
@@ -115,23 +115,11 @@ const ServiceRow: Function = ({
       )}
     </Td>
     <Td className="narrow">{id}</Td>
-    <Td className="name">
-      <p title={name}>{normalizedName}</p>
+    <Td className="name" title={name}>
+      {normalizedName}
     </Td>
-    <Td className="normal text">{version}</Td>
     <Td className="text">
       <Text text={desc} />
-    </Td>
-    <Td className="narrow">
-      {type !== 'system' && (
-        <Controls>
-          <Button
-            icon={remote ? 'small-tick' : 'cross'}
-            btnStyle={remote ? 'info' : 'default'}
-            onClick={handleRemoteClick}
-          />
-        </Controls>
-      )}
     </Td>
   </Tr>
 );
@@ -144,13 +132,6 @@ export default compose(
     },
     handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
       updateDone(id);
-    },
-    handleRemoteClick: ({
-      optimisticDispatch,
-      id,
-      remote,
-    }: Props): Function => (): void => {
-      optimisticDispatch(actions.services.setRemote, id, !remote);
     },
     handleDetailClick: ({
       openPane,
@@ -178,5 +159,6 @@ export default compose(
     '_selected',
     '_updated',
     'isTablet',
+    'remote',
   ])
 )(ServiceRow);

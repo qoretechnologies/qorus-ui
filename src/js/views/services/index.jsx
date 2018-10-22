@@ -141,7 +141,7 @@ export default compose(
   ),
   withInfoBar('services'),
   withSort('services', 'services', sortDefaults.services),
-  loadMore('services', 'services', true, 5),
+  loadMore('services', 'services', true, 50),
   sync('meta'),
   withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),

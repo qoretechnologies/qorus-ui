@@ -40,6 +40,8 @@ export default class DetailTab extends Component {
             enabled={service.enabled}
             autostart={service.autostart}
             id={service.id}
+            remote={service.remote}
+            type={service.type}
           />
         </PaneItem>
         {service.desc && (

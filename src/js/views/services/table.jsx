@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import checkData from '../../hocomponents/check-no-data';
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import Icon from '../../components/icon';
 import Row from './row';
 import Pull from '../../components/Pull';
 import Selector from './toolbar/selector';
 import Actions from './toolbar/actions';
 import LoadMore from '../../components/LoadMore';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   sortData: Object,
@@ -57,7 +57,7 @@ const ServicesTable: Function = ({
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={11}>
+        <Th colspan={9}>
           <Pull>
             <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
@@ -73,17 +73,21 @@ const ServicesTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny">-</Th>
-        <Th className="narrow">-</Th>
+        <Th className="tiny">
+          <Icon iconName="small-tick" />
+        </Th>
+        <Th className="narrow">
+          <Icon iconName="list-detail-view" />
+        </Th>
         <Th className="narrow" name="type">
           Type
         </Th>
-        <Th className="medium">Actions</Th>
+        <Th className="big">Actions</Th>
         <Th className="narrow" name="threads">
           Threads
         </Th>
         <Th className="tiny" name="has_alerts">
-          <Icon iconName="warning" />
+          <Icon iconName="warning-sign" />
         </Th>
         <Th className="narrow" name="id">
           ID
@@ -91,13 +95,7 @@ const ServicesTable: Function = ({
         <Th className="name" name="name">
           Name
         </Th>
-        <Th className="normal text" name="version">
-          Version
-        </Th>
         <Th name="desc">Description</Th>
-        <Th className="narrow" name="remote">
-          Remote
-        </Th>
       </FixedRow>
     </Thead>
     <Tbody>
