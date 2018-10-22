@@ -4,7 +4,6 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import { querySelector, resourceSelector } from '../../selectors';
 import actions from '../../store/api/actions';
@@ -16,7 +15,6 @@ import unsync from '../../hocomponents/unsync';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import selectable from '../../hocomponents/selectable';
 import ServicesDetail from './detail';
-import ServicesToolbar from './toolbar';
 import ServicesTable from './table';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';
@@ -24,6 +22,11 @@ import { sortDefaults } from '../../constants/sort';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
+import queryControl from '../../hocomponents/queryControl';
+import Search from '../../containers/search';
+import CsvControl from '../../components/CsvControl';
 
 type Props = {
   sortData: Object,
@@ -40,10 +43,8 @@ type Props = {
   isTablet: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
-  limit: number,
-  infoTotalCount: number,
-  infoEnabled: number,
-  infoWithAlerts: number,
+  searchQuery: string,
+  changeSearchQuery: Function,
 };
 
 const Services: Function = ({
@@ -54,36 +55,33 @@ const Services: Function = ({
   closePane,
   paneId,
   services,
-  location,
   sortData,
   onSortChange,
-  limit,
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
   isTablet,
-  infoEnabled,
-  infoTotalCount,
-  infoWithAlerts,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Services</Crumb>
-    </Breadcrumbs>
-    <Box top>
-      <ServicesToolbar
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active>Services</Crumb>
+      </Breadcrumbs>
+      <Pull right>
+        <CsvControl onClick={onCSVClick} />
+        <Search
+          defaultValue={searchQuery}
+          onSearchUpdate={changeSearchQuery}
+          resource="services"
+        />
+      </Pull>
+    </Headbar>
+    <Box top noPadding>
+      <ServicesTable
         selected={selected}
         selectedIds={selectedIds}
-        onCSVClick={onCSVClick}
-        location={location}
-        collectionCount={services.length}
-        collectionTotal={infoTotalCount}
-        withAlertsCount={infoWithAlerts}
-        enabledCount={infoEnabled}
-      />
-    </Box>
-    <Box noPadding>
-      <ServicesTable
         collection={services}
         paneId={paneId}
         openPane={openPane}
@@ -92,26 +90,9 @@ const Services: Function = ({
         onSortChange={onSortChange}
         canLoadMore={canLoadMore}
         isTablet={isTablet}
+        handleLoadMore={handleLoadMore}
+        handleLoadAll={handleLoadAll}
       />
-      {canLoadMore && (
-        <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
-          <Button
-            text={`Showing ${services.length} of ${infoTotalCount}`}
-            intent={Intent.NONE}
-            className="pt-minimal"
-          />
-          <Button
-            text={`Show ${limit} more...`}
-            intent={Intent.PRIMARY}
-            onClick={handleLoadMore}
-          />
-          <Button
-            text="Show all"
-            intent={Intent.PRIMARY}
-            onClick={handleLoadAll}
-          />
-        </ButtonGroup>
-      )}
     </Box>
   </div>
 );
@@ -163,6 +144,7 @@ export default compose(
   selectable('services'),
   withCSV('services', 'services'),
   titleManager('Services'),
+  queryControl('search'),
   pure([
     'services',
     'systemOptions',
@@ -171,6 +153,7 @@ export default compose(
     'paneId',
     'canLoadMore',
     'isTablet',
+    'searchQuery',
   ]),
   unsync()
 )(Services);

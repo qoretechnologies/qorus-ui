@@ -9,6 +9,10 @@ import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import Icon from '../../components/icon';
 import Row from './row';
+import Pull from '../../components/Pull';
+import Selector from './toolbar/selector';
+import Actions from './toolbar/actions';
+import LoadMore from '../../components/LoadMore';
 
 type Props = {
   sortData: Object,
@@ -20,7 +24,10 @@ type Props = {
   select: Function,
   updateDone: Function,
   canLoadMore: boolean,
-  isTablet: boolean,
+  selected: string,
+  selectedIds: Array<number>,
+  handleLoadMore: Function,
+  handleLoadAll: Function,
 };
 
 const ServicesTable: Function = ({
@@ -33,7 +40,10 @@ const ServicesTable: Function = ({
   select,
   updateDone,
   canLoadMore,
-  isTablet,
+  selected,
+  selectedIds,
+  handleLoadMore,
+  handleLoadAll,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -41,17 +51,31 @@ const ServicesTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 45 : 0}
     key={collection.length}
   >
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan={11}>
+          <Pull>
+            <Selector selected={selected} selectedCount={selectedIds.length} />
+            <Actions selectedIds={selectedIds} show={selected !== 'none'} />
+          </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              handleLoadMore={handleLoadMore}
+              handleLoadAll={handleLoadAll}
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny">-</Th>
         <Th className="narrow">-</Th>
         <Th className="narrow" name="type">
           Type
         </Th>
-        {!isTablet && <Th className="medium">Actions</Th>}
+        <Th className="medium">Actions</Th>
         <Th className="narrow" name="threads">
           Threads
         </Th>
@@ -84,7 +108,6 @@ const ServicesTable: Function = ({
             closePane={closePane}
             select={select}
             updateDone={updateDone}
-            isTablet={isTablet}
             {...service}
           />
         )

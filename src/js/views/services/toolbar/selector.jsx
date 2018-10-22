@@ -27,7 +27,7 @@ const ToolbarSelector: Function = ({
   selectInvert,
   selectedCount,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
+  <ButtonGroup marginRight={3}>
     <Dropdown id="selection" className="pull-left">
       <Control>
         <Checkbox

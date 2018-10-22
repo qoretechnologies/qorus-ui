@@ -38,7 +38,6 @@ type Props = {
   enabled: boolean,
   autostart: boolean,
   status: string,
-  isTablet: boolean,
   first: boolean,
   remote: ?boolean,
   optimisticDispatch: Function,
@@ -64,7 +63,6 @@ const ServiceRow: Function = ({
   enabled,
   autostart,
   status,
-  isTablet,
   first,
   remote,
   handleRemoteClick,
@@ -95,16 +93,14 @@ const ServiceRow: Function = ({
         tooltip={type === 'system' ? 'System' : 'User'}
       />
     </Td>
-    {!isTablet && (
-      <Td className="medium">
-        <ServiceControls
-          id={id}
-          enabled={enabled}
-          autostart={autostart}
-          status={status}
-        />
-      </Td>
-    )}
+    <Td className="medium">
+      <ServiceControls
+        id={id}
+        enabled={enabled}
+        autostart={autostart}
+        status={status}
+      />
+    </Td>
     <Td className="narrow">{threads}</Td>
     <Td className="tiny">
       {hasAlerts && (

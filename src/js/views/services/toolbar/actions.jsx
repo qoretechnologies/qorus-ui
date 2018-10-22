@@ -32,7 +32,7 @@ const ToolbarActions: Function = ({
   handleUnloadClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
-  <ButtonGroup>
+  <ButtonGroup marginRight={3}>
     <Button
       text="Enable"
       btnStyle="success"
