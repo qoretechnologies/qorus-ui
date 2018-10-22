@@ -45,6 +45,7 @@ type Props = {
   handleLoadAll: Function,
   searchQuery: string,
   changeSearchQuery: Function,
+  limit: number,
 };
 
 const Services: Function = ({
@@ -63,6 +64,7 @@ const Services: Function = ({
   isTablet,
   searchQuery,
   changeSearchQuery,
+  limit,
 }: Props): React.Element<any> => (
   <div>
     <Headbar>
@@ -92,6 +94,7 @@ const Services: Function = ({
         isTablet={isTablet}
         handleLoadMore={handleLoadMore}
         handleLoadAll={handleLoadAll}
+        limit={limit}
       />
     </Box>
   </div>
@@ -138,7 +141,7 @@ export default compose(
   ),
   withInfoBar('services'),
   withSort('services', 'services', sortDefaults.services),
-  loadMore('services', 'services', true, 50),
+  loadMore('services', 'services', true, 5),
   sync('meta'),
   withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),

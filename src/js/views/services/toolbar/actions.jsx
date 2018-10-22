@@ -12,6 +12,7 @@ import {
 import actions from '../../../store/api/actions';
 import withDispatch from '../../../hocomponents/withDispatch';
 import showIf from '../../../hocomponents/show-if-passed';
+import Dropdown, { Item, Control } from '../../../components/dropdown';
 
 type Props = {
   selectNone: Function,
@@ -32,25 +33,14 @@ const ToolbarActions: Function = ({
   handleUnloadClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
-  <ButtonGroup marginRight={3}>
-    <Button
-      text="Enable"
-      btnStyle="success"
-      iconName="power"
-      onClick={handleEnableClick}
-      big
-    />
-    <Button
-      text="Disable"
-      btnStyle="danger"
-      iconName="power"
-      onClick={handleDisableClick}
-      big
-    />
-    <Button big text="Load" iconName="small-tick" onClick={handleLoadClick} />
-    <Button big text="Unload" iconName="cross" onClick={handleUnloadClick} />
-    <Button big text="Reset" iconName="refresh" onClick={handleResetClick} />
-  </ButtonGroup>
+  <Dropdown>
+    <Control icon="cog">With selected</Control>
+    <Item title="Enable" onClick={handleEnableClick} />
+    <Item title="Disable" onClick={handleDisableClick} />
+    <Item title="Load" onClick={handleLoadClick} />
+    <Item title="Unload" onClick={handleUnloadClick} />
+    <Item title="Reset" onClick={handleResetClick} />
+  </Dropdown>
 );
 
 export default compose(

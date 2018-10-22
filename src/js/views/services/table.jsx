@@ -28,6 +28,7 @@ type Props = {
   selectedIds: Array<number>,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  limit: number,
 };
 
 const ServicesTable: Function = ({
@@ -44,6 +45,7 @@ const ServicesTable: Function = ({
   selectedIds,
   handleLoadMore,
   handleLoadAll,
+  limit,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -62,6 +64,7 @@ const ServicesTable: Function = ({
           </Pull>
           <Pull right>
             <LoadMore
+              limit={limit}
               canLoadMore={canLoadMore}
               handleLoadMore={handleLoadMore}
               handleLoadAll={handleLoadAll}

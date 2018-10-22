@@ -16,6 +16,7 @@ import {
 
 import actions from '../../../store/api/actions';
 import withDispatch from '../../../hocomponents/withDispatch';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 
 type Props = {
   show: boolean,
@@ -33,7 +34,6 @@ const ToolbarActions: Function = ({
   show,
   unselectAll,
   selectedIds,
-  isTablet,
   dispatchAction,
 }: Props): ?React.Element<any> => {
   if (!show) {
@@ -76,44 +76,26 @@ const ToolbarActions: Function = ({
   };
 
   return (
-    <ButtonGroup>
-      <Button text="With selected: " />
-      <Popover
-        position={Position.BOTTOM}
-        content={
-          <Menu>
-            <MenuItem text="Start" onClick={handleStartClick} />
-            <MenuDivider />
-            <MenuItem text="Enable" onClick={handleEnableClick} />
-            <MenuItem text="Disable" onClick={handleDisableClick} />
-            <MenuDivider />
-            <MenuItem text="Reset" onClick={handleResetClick} />
-            <MenuItem text="Stop" onClick={handleStopClick} />
-            <MenuDivider />
-            <MenuItem
-              text="Set deprecated"
-              onClick={handleSetDeprecatedClick}
-            />
-            <MenuItem
-              text="Unset deprecated"
-              onClick={handleUnsetDeprecatedClick}
-            />
-          </Menu>
-        }
-      >
-        <Button iconName="caret-down" />
-      </Popover>
-    </ButtonGroup>
+    <Dropdown>
+      <Control icon="cog">With selected</Control>
+      <Item title="Start" onClick={handleStartClick} />
+      <Item title="Enable" onClick={handleEnableClick} />
+      <Item title="Disable" onClick={handleDisableClick} />
+      <Item title="Reset" onClick={handleResetClick} />
+      <Item title="Stop" onClick={handleStopClick} />
+      <Item title="Set deprecated" onClick={handleSetDeprecatedClick} />
+      <Item title="Unset deprecated" onClick={handleUnsetDeprecatedClick} />
+    </Dropdown>
   );
 };
 
 export default compose(
   connect(
-    () => ({}),
+    null,
     {
       unselectAll: actions.workflows.unselectAll,
     }
   ),
   withDispatch(),
-  pure(['show', 'selectedIds', 'isTablet'])
+  pure(['show', 'selectedIds'])
 )(ToolbarActions);
