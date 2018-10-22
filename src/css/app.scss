@@ -409,3 +409,11 @@ p.header-detail {
     line-height: 25px;
   }
 }
+
+.pt-callout.pt-intent-purple {
+  background-color: lighten($qore-purple, 53);
+
+  &[class*='pt-icon-']:before {
+    color: $qore-purple;
+  }
+}

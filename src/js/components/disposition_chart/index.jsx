@@ -5,6 +5,10 @@ import ChartComponent from '../chart';
 import { getStatsCount, getStatsPct } from '../../helpers/chart';
 import { DISPOSITIONS } from '../../constants/dashboard';
 import { COLORS } from '../../constants/ui';
+import { Callout } from '@blueprintjs/core';
+import mapProps from 'recompose/mapProps';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
 
 type Props = {
   stats: Object,
@@ -12,6 +16,11 @@ type Props = {
   onSLAChartClick: Function,
   dispositionLegendHandlers: Array<Function>,
   slaLegendHandlers: Array<Function>,
+  autoRecoveriesCount: number,
+  statWithAutoRecoveries?: Object,
+  recoveryCurrency: string,
+  recoveryAmount: number,
+  options: Object,
 };
 
 const DispositionChart: Function = ({
@@ -20,8 +29,20 @@ const DispositionChart: Function = ({
   onSLAChartClick,
   dispositionLegendHandlers,
   slaLegendHandlers,
+  autoRecoveriesCount,
+  recoveryCurrency,
+  recoveryAmount,
 }: Props) => (
   <div key={stats.label}>
+    {autoRecoveriesCount > 0 && (
+      <Callout iconName="dollar" className="pt-intent-purple">
+        There are <strong>{autoRecoveriesCount}</strong> orders that were
+        recovered <strong>automatically</strong>, saving you a total of{' '}
+        <strong>
+          {recoveryAmount * autoRecoveriesCount} {recoveryCurrency}
+        </strong>
+      </Callout>
+    )}
     <ChartComponent
       title="Workflow Disposition"
       onClick={onDispositionChartClick}
@@ -79,4 +100,34 @@ const DispositionChart: Function = ({
   </div>
 );
 
-export default DispositionChart;
+export default compose(
+  connect(
+    (state: Object): Object => ({
+      options: state.api.systemOptions.data,
+    })
+  ),
+  mapProps(
+    ({ stats, options, ...rest }: Props): Props => ({
+      statWithAutoRecoveries: stats.l.find(
+        (stat: Object) => stat.count > 0 && stat.disposition === 'A'
+      ),
+      stats,
+      recoveryCurrency: options.find(
+        (option: Object): boolean => option.name === 'recovery-currency'
+      ).value,
+      recoveryAmount: options.find(
+        (option: Object): boolean => option.name === 'recovery-amount'
+      ).value,
+      options,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ statWithAutoRecoveries, ...rest }: Props): Props => ({
+      autoRecoveriesCount: statWithAutoRecoveries
+        ? statWithAutoRecoveries.count
+        : 0,
+      ...rest,
+    })
+  )
+)(DispositionChart);
