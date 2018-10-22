@@ -197,12 +197,9 @@ export default class Tr extends Component {
 
     return (
       <tr
-        className={classNames(
-          {
-            'row-highlight': highlight,
-          },
-          className
-        )}
+        className={classNames(className, {
+          'row-highlight': highlight,
+        })}
         onClick={this.handleClick}
         ref={this.handleRef}
         title={title}

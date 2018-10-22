@@ -96,9 +96,9 @@ const TableRow: Function = ({
   <Tr
     first={first}
     className={classNames({
-      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
+      'row-active': isActive,
     })}
     onClick={handleCheckboxClick}
     onHighlightEnd={handleHighlightEnd}

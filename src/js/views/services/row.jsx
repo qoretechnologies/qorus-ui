@@ -70,9 +70,9 @@ const ServiceRow: Function = ({
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
-      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
+      'row-active': isActive,
     })}
     onClick={handleCheckboxClick}
   >
