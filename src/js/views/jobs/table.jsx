@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import checkData from '../../hocomponents/check-no-data';
 
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import Icon from '../../components/icon';
 import Row from './row';
 import actions from '../../store/api/actions';
 import Pull from '../../components/Pull';
@@ -15,6 +14,7 @@ import Actions from './toolbar/actions';
 import LoadMore from '../../components/LoadMore';
 import queryControl from '../../hocomponents/queryControl';
 import DatePicker from '../../components/datepicker';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   sortData: Object,
@@ -86,11 +86,15 @@ const JobsTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny checker">-</Th>
-        <Th className="narrow">-</Th>
+        <Th className="tiny checker">
+          <Icon iconName="small-tick" />
+        </Th>
+        <Th className="narrow">
+          <Icon iconName="list-detail-view" />
+        </Th>
         <Th className="big">Actions</Th>
         <Th className="narrow" name="has_alerts">
-          <Icon iconName="warning" />
+          <Icon iconName="warning-sign" />
         </Th>
         <Th className="narrow" name="id">
           ID
@@ -99,13 +103,13 @@ const JobsTable: Function = ({
           Name
         </Th>
         <Th className="big" name="last_executed">
-          Last
+          <Icon iconName="time" /> Last run
         </Th>
         <Th className="big" name="next">
-          Next
+          <Icon iconName="time" /> Next run
         </Th>
         <Th className="big" name="expiry_date">
-          Expiry Date
+          <Icon iconName="calendar" /> Expiry Date
         </Th>
         <Th className="big separated-cell">Instances</Th>
       </FixedRow>
