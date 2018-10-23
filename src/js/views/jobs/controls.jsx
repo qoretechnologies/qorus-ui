@@ -37,6 +37,7 @@ type Props = {
   week: string,
   scheduleOnly?: boolean,
   schedText: string,
+  remote: boolean,
 };
 
 const ServiceControls: Function = ({
@@ -46,20 +47,17 @@ const ServiceControls: Function = ({
   handleRunClick,
   handleScheduleClick,
   handleExpiryClick,
+  // handleRemoteClick,
   active,
   enabled,
   scheduleOnly,
   schedText,
-}: Props): React.Element<any> =>
+}: // remote,
+Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
-      <Button
-        text="Reschedule"
-        iconName="time"
-        onClick={handleScheduleClick}
-        className="pt-small"
-      />
+      <Button text="Reschedule" iconName="time" onClick={handleScheduleClick} />
     </div>
   ) : (
     <ButtonGroup>
@@ -68,39 +66,21 @@ const ServiceControls: Function = ({
         iconName="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleEnableClick}
-        className="pt-small"
       />
       <Button
         title={active ? 'Deactivate' : 'Activate'}
-        iconName={active ? 'small-tick' : 'remove'}
+        iconName={active ? 'small-tick' : 'cross'}
         intent={active ? Intent.PRIMARY : Intent.NONE}
         onClick={handleActivateClick}
-        className="pt-small"
       />
-      <Button
-        title="Reset"
-        iconName="refresh"
-        onClick={handleResetClick}
-        className="pt-small"
-      />
-      <Button
-        title="Run"
-        iconName="play"
-        onClick={handleRunClick}
-        className="pt-small"
-      />
+      <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
+      <Button title="Run" iconName="play" onClick={handleRunClick} />
       <Button
         title="Reschedule"
         iconName="time"
         onClick={handleScheduleClick}
-        className="pt-small"
       />
-      <Button
-        title="Set expiry"
-        iconName="tag"
-        onClick={handleExpiryClick}
-        className="pt-small"
-      />
+      <Button title="Set expiry" iconName="tag" onClick={handleExpiryClick} />
     </ButtonGroup>
   );
 
@@ -137,6 +117,12 @@ export default compose(
     },
     handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
       dispatchAction(actions.jobs.jobsAction, 'reset', id);
+    },
+    handleRemoteClick: ({
+      dispatchAction,
+      id,
+    }: Props): Function => (): void => {
+      dispatchAction(actions.jobs.jobsAction, 'remote', id);
     },
     handleScheduleClick: ({
       optimisticDispatch,

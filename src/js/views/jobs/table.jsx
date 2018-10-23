@@ -63,12 +63,11 @@ const JobsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={10}>
+        <Th colspan={9}>
           <Pull>
             <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
@@ -89,7 +88,7 @@ const JobsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny checker">-</Th>
         <Th className="narrow">-</Th>
-        {!isTablet && <Th className="big">Actions</Th>}
+        <Th className="big">Actions</Th>
         <Th className="narrow" name="has_alerts">
           <Icon iconName="warning" />
         </Th>
@@ -98,9 +97,6 @@ const JobsTable: Function = ({
         </Th>
         <Th className="name" name="name">
           Name
-        </Th>
-        <Th className="normal text" name="version">
-          Version
         </Th>
         <Th className="big" name="last_executed">
           Last
