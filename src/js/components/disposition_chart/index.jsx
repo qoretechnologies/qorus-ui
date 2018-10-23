@@ -21,6 +21,7 @@ type Props = {
   recoveryCurrency: string,
   recoveryAmount: number,
   options: Object,
+  formatter: Object,
 };
 
 const DispositionChart: Function = ({
@@ -30,16 +31,16 @@ const DispositionChart: Function = ({
   dispositionLegendHandlers,
   slaLegendHandlers,
   autoRecoveriesCount,
-  recoveryCurrency,
   recoveryAmount,
+  formatter,
 }: Props) => (
   <div key={stats.label}>
     {autoRecoveriesCount > 0 && (
       <Callout iconName="dollar" className="pt-intent-purple">
-        There are <strong>{autoRecoveriesCount}</strong> orders that were
-        recovered <strong>automatically</strong>, saving you a total of{' '}
+        <strong>{autoRecoveriesCount}</strong> orders recovered automatically,
+        approx savings:{' '}
         <strong>
-          {recoveryAmount * autoRecoveriesCount} {recoveryCurrency}
+          {formatter.format(recoveryAmount * autoRecoveriesCount)}
         </strong>
       </Callout>
     )}
@@ -119,14 +120,20 @@ export default compose(
         (option: Object): boolean => option.name === 'recovery-amount'
       ).value,
       options,
+
       ...rest,
     })
   ),
   mapProps(
-    ({ statWithAutoRecoveries, ...rest }: Props): Props => ({
+    ({ statWithAutoRecoveries, recoveryCurrency, ...rest }: Props): Props => ({
       autoRecoveriesCount: statWithAutoRecoveries
         ? statWithAutoRecoveries.count
         : 0,
+      formatter: new Intl.NumberFormat(navigator.language, {
+        style: 'currency',
+        currency: recoveryCurrency,
+        minimumFractionDigits: 0,
+      }),
       ...rest,
     })
   )
