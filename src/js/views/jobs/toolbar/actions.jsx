@@ -5,13 +5,10 @@ import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../../components/controls';
 import actions from '../../../store/api/actions';
 import withDispatch from '../../../hocomponents/withDispatch';
 import showIfPassed from '../../../hocomponents/show-if-passed';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 
 type Props = {
   selectNone: Function,
@@ -30,24 +27,13 @@ const ToolbarActions: Function = ({
   handleRunClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
-  <ButtonGroup>
-    <Button
-      text="Enable"
-      iconName="power"
-      btnStyle="success"
-      onClick={handleEnableClick}
-      big
-    />
-    <Button
-      text="Disable"
-      btnStyle="danger"
-      iconName="remove"
-      onClick={handleDisableClick}
-      big
-    />
-    <Button text="Load" iconName="play" onClick={handleRunClick} big />
-    <Button text="Reset" iconName="refresh" onClick={handleResetClick} big />
-  </ButtonGroup>
+  <Dropdown>
+    <Control icon="cog">With selected</Control>
+    <Item title="Enable" icon="power" onClick={handleEnableClick} />
+    <Item title="Disable" icon="power" onClick={handleDisableClick} />
+    <Item title="Run" icon="play" onClick={handleRunClick} />
+    <Item title="Reset" icon="refresh" onClick={handleResetClick} />
+  </Dropdown>
 );
 
 export default compose(

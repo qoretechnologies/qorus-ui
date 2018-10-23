@@ -146,12 +146,10 @@ const ServiceRow: Function = ({
     <Td className="big">
       <Date date={next} />
     </Td>
-    {!isTablet && (
-      <Td className="big">
-        <Date date={expiry} />
-      </Td>
-    )}
-    <Td className="huge">
+    <Td className="big">
+      <Date date={expiry} />
+    </Td>
+    <Td className="huge separated-cell">
       <InstancesBar
         states={[
           { name: 'COMPLETE', label: 'complete', title: 'complete' },

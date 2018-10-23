@@ -40,48 +40,16 @@ const JobsToolbar: Function = ({
   enabledCount,
 }: Props): React.Element<any> => (
   <Toolbar>
-    <div className="pull-left">
-      <Selector selected={selected} />{' '}
-      <Actions selectedIds={selectedIds} show={selected !== 'none'} />{' '}
-      <Datepicker
-        date={dateQuery || '24h'}
-        onApplyDate={changeDateQuery}
-        className="toolbar-item"
-      />{' '}
-      <ButtonGroup>
-        <Button text="CSV" onClick={onCSVClick} />
-      </ButtonGroup>{' '}
-      {collectionCount > 0 && (
-        <Popover
-          content={
-            <InfoBar>
-              {selectedIds.length > 0 && (
-                <InfoBarItem iconName="check" style="success">
-                  {selectedIds.length}
-                </InfoBarItem>
-              )}
-              <InfoBarItem iconName="eye" style="info">
-                {collectionCount} of {collectionTotal}
-              </InfoBarItem>
-              <InfoBarItem iconName="warning" style="danger">
-                {withAlertsCount}
-              </InfoBarItem>
-              <InfoBarItem iconName="power-off" style="success">
-                {enabledCount}
-              </InfoBarItem>
-            </InfoBar>
-          }
-          position={Position.BOTTOM}
-        >
-          <Button iconName="info-sign" className="pt-minimal" />
-        </Popover>
-      )}
-    </div>
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-      resource="jobs"
-    />
+    <Selector selected={selected} />{' '}
+    <Actions selectedIds={selectedIds} show={selected !== 'none'} />{' '}
+    <Datepicker
+      date={dateQuery || '24h'}
+      onApplyDate={changeDateQuery}
+      className="toolbar-item"
+    />{' '}
+    <ButtonGroup>
+      <Button text="CSV" onClick={onCSVClick} />
+    </ButtonGroup>
   </Toolbar>
 );
 

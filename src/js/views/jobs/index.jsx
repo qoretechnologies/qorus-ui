@@ -29,6 +29,11 @@ import loadMore from '../../hocomponents/loadMore';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
+import Headbar from '../../components/Headbar';
+import queryControl from '../../hocomponents/queryControl';
+import Pull from '../../components/Pull';
+import CsvControl from '../../components/CsvControl';
+import Search from '../../containers/search';
 
 type Props = {
   jobs: Array<Object>,
@@ -55,6 +60,8 @@ type Props = {
   infoEnabled: number,
   infoWithAlerts: number,
   user: Object,
+  searchQuery: string,
+  changeSearchQuery: Function,
 };
 
 const JobsView: Function = ({
@@ -73,26 +80,24 @@ const JobsView: Function = ({
   sortData,
   onSortChange,
   isTablet,
-  infoEnabled,
-  infoTotalCount,
-  infoWithAlerts,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Jobs</Crumb>
-    </Breadcrumbs>
-    <Box top>
-      <JobsToolbar
-        selected={selected}
-        selectedIds={selectedIds}
-        onCSVClick={onCSVClick}
-        collectionCount={jobs.length}
-        collectionTotal={infoTotalCount}
-        withAlertsCount={infoWithAlerts}
-        enabledCount={infoEnabled}
-      />
-    </Box>
-    <Box noPadding>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active>Jobs</Crumb>
+      </Breadcrumbs>
+      <Pull right>
+        <CsvControl onClick={onCSVClick} />
+        <Search
+          defaultValue={searchQuery}
+          onSearchUpdate={changeSearchQuery}
+          resource="jobs"
+        />
+      </Pull>
+    </Headbar>
+    <Box top noPadding>
       <JobsTable
         collection={jobs}
         openPane={openPane}
@@ -103,27 +108,13 @@ const JobsView: Function = ({
         onSortChange={onSortChange}
         canLoadMore={canLoadMore}
         isTablet={isTablet}
+        limit={limit}
+        handleLoadAll={handleLoadAll}
+        handleLoadMore={handleLoadMore}
+        selected={selected}
+        selectedIds={selectedIds}
       />
     </Box>
-    {canLoadMore && (
-      <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
-        <Button
-          text={`Showing ${jobs.length} of ${infoTotalCount}`}
-          intent={Intent.NONE}
-          className="pt-minimal"
-        />
-        <Button
-          text={`Show ${limit} more...`}
-          intent={Intent.PRIMARY}
-          onClick={handleLoadMore}
-        />
-        <Button
-          text="Show all"
-          intent={Intent.PRIMARY}
-          onClick={handleLoadAll}
-        />
-      </ButtonGroup>
-    )}
   </div>
 );
 
@@ -167,7 +158,6 @@ export default compose(
       selectNone: actions.jobs.selectNone,
     }
   ),
-  withInfoBar('jobs'),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
   mapProps(
@@ -206,6 +196,7 @@ export default compose(
   selectable('jobs'),
   withCSV('jobs', 'jobs'),
   titleManager('Jobs'),
+  queryControl('search'),
   pure([
     'jobs',
     'date',
@@ -215,6 +206,7 @@ export default compose(
     'paneId',
     'canLoadMore',
     'isTablet',
+    'searchQuery',
   ]),
   unsync()
 )(JobsView);
