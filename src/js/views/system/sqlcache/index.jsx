@@ -74,8 +74,6 @@ class SQLCache extends Component {
       this.props.closeModal();
     };
 
-    console.log('all');
-
     this.props.openModal(
       <ConfirmDialog onClose={this.props.closeModal} onConfirm={confirmFunc}>
         Are you sure you want to clear <strong>all</strong> cache?

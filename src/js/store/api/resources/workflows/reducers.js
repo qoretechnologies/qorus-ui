@@ -592,10 +592,6 @@ const setDeprecated = {
         newWorkflow = { ...w, ...{ deprecated: value } };
       }
 
-      if (includes(ids, w.id)) {
-        console.log(newWorkflow);
-      }
-
       return newWorkflow;
     });
 
