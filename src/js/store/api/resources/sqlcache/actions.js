@@ -5,8 +5,6 @@ import settings from '../../../../settings';
 const clearCache = createAction(
   'SQLCACHE_CLEARCACHE',
   async (datasource, name, dispatch) => {
-    console.log(dispatch);
-
     if (!dispatch) {
       return {
         datasource,

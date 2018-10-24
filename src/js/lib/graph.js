@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-
 /**
  * Graph node with all its attributes and nodes above and below.
  *
@@ -36,7 +35,6 @@ import _ from 'lodash';
  * }} GraphNode
  */
 
-
 /**
  * Internal structure used by this module while processing graph
  * nodes.
@@ -50,7 +48,6 @@ import _ from 'lodash';
  * }} TempGraphNode
  */
 
-
 /**
  * Direction for node comparator.
  *
@@ -60,7 +57,6 @@ const Dir = {
   ASC: +1,
   DESC: -1,
 };
-
 
 /**
  * Returns node comparator.
@@ -75,7 +71,6 @@ function createComparator(dir) {
     return dir * (a.depth * a.weight - b.depth * b.weight);
   };
 }
-
 
 /**
  * Returns new dependency map with dependencies declared before used.
@@ -98,7 +93,6 @@ function normalize(deps) {
   }, new Map());
 }
 
-
 /**
  * Initializes node structure.
  *
@@ -114,7 +108,6 @@ function create(id) {
     weight: 1,
   };
 }
-
 
 /**
  * Adds cross-references below and above.
@@ -134,7 +127,6 @@ function add(above, below) {
   return [na, nb];
 }
 
-
 /**
  * Sets balanced depth on all nodes in the graph.
  *
@@ -149,35 +141,26 @@ function add(above, below) {
 function setBalancedDepth(nodes) {
   const balanced = new Map();
 
-  const nodesAboveEql = (n, tmp, bId) => (
+  const nodesAboveEql = (n, tmp, bId) =>
     n.above.length === tmp.get(bId).above.length &&
-    n.above.every((na, i) => na === tmp.get(bId).above[i])
-  );
-  const isKnown = (tmp, aId) => (
-    tmp.get(aId).below.some(bId => tmp.has(bId))
-  );
-  const nextDepth = (tmp, d, bId) => (
-    Math.max(d, tmp.get(bId).depth + 1)
-  );
+    n.above.every((na, i) => na === tmp.get(bId).above[i]);
+  const isKnown = (tmp, aId) => tmp.get(aId).below.some(bId => tmp.has(bId));
+  const nextDepth = (tmp, d, bId) => Math.max(d, tmp.get(bId).depth + 1);
 
   for (const [id, n] of nodes) {
     let depth;
 
-    const commonId = [...balanced.keys()].reverse().find(
-      nodesAboveEql.bind(null, n, balanced)
-    );
+    const commonId = [...balanced.keys()]
+      .reverse()
+      .find(nodesAboveEql.bind(null, n, balanced));
     depth = balanced.has(commonId) && balanced.get(commonId).depth;
 
     if (!depth && !n.above.some(isKnown.bind(null, balanced))) {
-      depth = n.above.reduce(
-        nextDepth.bind(null, balanced), 0
-      );
+      depth = n.above.reduce(nextDepth.bind(null, balanced), 0);
     }
 
     if (!depth) {
-      depth = [...balanced.keys()].reduce(
-        nextDepth.bind(null, balanced), 0
-      );
+      depth = [...balanced.keys()].reduce(nextDepth.bind(null, balanced), 0);
     }
 
     balanced.set(id, Object.assign({}, n, { depth }));
@@ -185,7 +168,6 @@ function setBalancedDepth(nodes) {
 
   return balanced;
 }
-
 
 /**
  * Tries to find reference node from nodes above.
@@ -201,7 +183,6 @@ function findRef(node) {
 
   return node.above[centerIdx] || null;
 }
-
 
 /**
  * Checks if given `node` is a reference node above for nodes `below`.
@@ -222,10 +203,8 @@ function findRef(node) {
  * @see setBalancedDepth
  */
 function isRef(node, nodesBelow) {
-  return nodesBelow.length > 0 &&
-    findRef(nodesBelow[0]) === node;
+  return nodesBelow.length > 0 && findRef(nodesBelow[0]) === node;
 }
-
 
 /**
  * Computes node width from nodes below it.
@@ -241,16 +220,13 @@ function isRef(node, nodesBelow) {
 function getWidth(node) {
   const width = Math.max(
     node.width,
-    node.below.
-      filter(isRef.bind(null, node)).
-      reduce((ws, nbs) => (
-        ws + nbs.reduce((w, nb) => w + nb.width, 0)
-      ), 0)
+    node.below
+      .filter(isRef.bind(null, node))
+      .reduce((ws, nbs) => ws + nbs.reduce((w, nb) => w + nb.width, 0), 0)
   );
 
   return width;
 }
-
 
 /**
  * Computes node's relative position to its reference node.
@@ -266,11 +242,8 @@ function getPosition(node) {
   const lvl = ref && ref.below.find(isRef.bind(null, ref));
   const pos = lvl && lvl.findIndex(nb => nb === node);
 
-  return ref ?
-    pos - (lvl.length - 1) / 2 :
-    0;
+  return ref ? pos - (lvl.length - 1) / 2 : 0;
 }
-
 
 /**
  * Sets balanced weight on all nodes in the graph.
@@ -296,7 +269,6 @@ function setBalancedWeight(nodes) {
   return new Map([...balanced.entries()].reverse());
 }
 
-
 /**
  * Sorts nodes so that the heaviest and deepest nodes in the center.
  *
@@ -311,7 +283,6 @@ function centerNodes(nodes) {
 
   return even.concat(odd.reverse());
 }
-
 
 /**
  * Sets balanced width and position on all nodes in the graph.
@@ -361,14 +332,11 @@ function setBalancedWidthAndPosition(nodes) {
     balanced.get(id).width = 1;
   }
 
-  const belowToExport = (tmp, bIds) => (
-    centerNodes(bIds.map(toExport.bind(null, tmp)))
-  );
+  const belowToExport = (tmp, bIds) =>
+    centerNodes(bIds.map(toExport.bind(null, tmp)));
 
   for (const n of balanced.values()) {
-    n.below = n.below.map(
-      belowToExport.bind(null, balanced)
-    );
+    n.below = n.below.map(belowToExport.bind(null, balanced));
   }
 
   for (const n of [...balanced.values()].reverse()) {
@@ -381,7 +349,6 @@ function setBalancedWidthAndPosition(nodes) {
 
   return balanced;
 }
-
 
 /**
  * Makes sure graph is balanced.
@@ -402,7 +369,6 @@ function balance(nodes) {
     setBalancedWidthAndPosition,
   ])(nodes);
 }
-
 
 /**
  * Returns root node of balanced directional graph.
