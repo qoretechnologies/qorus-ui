@@ -166,7 +166,7 @@ export default class Tr extends Component {
         );
 
         this._resizeTimeout = null;
-      }, 1500);
+      }, 300);
     }
   };
 
