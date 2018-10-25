@@ -13,6 +13,8 @@ import withPane from '../../../hocomponents/pane';
 import { calculateMemory } from '../../../helpers/system';
 import titleManager from '../../../hocomponents/TitleManager';
 import Container from '../../../components/container';
+import Headbar from '../../../components/Headbar';
+import Pull from '../../../components/Pull';
 
 type Props = {
   nodes: Object,
@@ -32,16 +34,22 @@ const ClusterView: Function = ({
   paneId,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb> Cluster </Crumb>
-    </Breadcrumbs>
-    <Box top>
-      <Tag>Nodes: {Object.keys(nodes).length}</Tag>{' '}
-      <Tag>Processes: {Object.keys(processes).length}</Tag>{' '}
-      <Tag>Cluster memory: {calculateMemory(nodesMemory)}</Tag>
-    </Box>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active> Cluster </Crumb>
+      </Breadcrumbs>
+      <Pull right>
+        <Tag className="pt-large">Nodes: {Object.keys(nodes).length}</Tag>{' '}
+        <Tag className="pt-large">
+          Processes: {Object.keys(processes).length}
+        </Tag>{' '}
+        <Tag className="pt-large">
+          Cluster memory: {calculateMemory(nodesMemory)}
+        </Tag>
+      </Pull>
+    </Headbar>
 
-    <Box>
+    <Box top>
       <Container>
         {Object.keys(nodes).map(
           (node: string): any => {
