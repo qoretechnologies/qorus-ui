@@ -2,7 +2,7 @@
 import React from 'react';
 
 import Box from '../../../components/box';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import AlertsTable from './table';
 import Tabs, { Pane } from '../../../components/tabs';
 import withTabs from '../../../hocomponents/withTabs';
@@ -13,6 +13,7 @@ import queryControl from '../../../hocomponents/queryControl';
 import capitalize from 'lodash/capitalize';
 import Search from '../../../containers/search';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 
 type Props = {
   location: Object,
@@ -30,7 +31,7 @@ const Alerts: Function = ({
     <Headbar>
       <Breadcrumbs>
         <Crumb> Alerts </Crumb>
-        <Crumb active> Ongoing </Crumb>
+        <CrumbTabs tabs={['Ongoing', 'Transient']} defaultTab="ongoing" />
       </Breadcrumbs>
       <Pull right>
         <Search
@@ -40,15 +41,15 @@ const Alerts: Function = ({
         />
       </Pull>
     </Headbar>
-    <Box top leftTopPaddingOnly>
-      <Tabs active={tabQuery} onChange={handleTabChange} noContainer vertical>
-        <Pane name="Ongoing">
+    <Box top noPadding>
+      <SimpleTabs activeTab={tabQuery}>
+        <SimpleTab name="ongoing">
           <AlertsTable location={location} type="ongoing" />
-        </Pane>
-        <Pane name="Transient">
+        </SimpleTab>
+        <SimpleTab name="transient">
           <AlertsTable location={location} type="transient" />
-        </Pane>
-      </Tabs>
+        </SimpleTab>
+      </SimpleTabs>
     </Box>
   </div>
 );

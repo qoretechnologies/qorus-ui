@@ -2,6 +2,7 @@
 import React from 'react';
 
 import Crumb from './crumb';
+import CrumbTabs from './tabs';
 
 type Props = {
   children?: any,
@@ -26,4 +27,4 @@ const Breadcrumbs: Function = ({
   </ul>
 );
 
-export { Breadcrumbs, Crumb };
+export { Breadcrumbs, Crumb, CrumbTabs };

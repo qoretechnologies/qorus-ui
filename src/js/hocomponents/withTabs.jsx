@@ -4,12 +4,18 @@ import queryControl from './queryControl';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 
-export default (defaultTab: string): Function => (Component: any): Function =>
+export default (defaultTab: string | Function): Function => (
+  Component: any
+): Function =>
   compose(
     queryControl('tab'),
     mapProps(
       ({ tabQuery, ...rest }: Object): Object => ({
-        tabQuery: tabQuery || defaultTab,
+        tabQuery: tabQuery
+          ? tabQuery
+          : typeof defaultTab === 'function'
+            ? defaultTab(rest)
+            : defaultTab,
         ...rest,
       })
     ),
