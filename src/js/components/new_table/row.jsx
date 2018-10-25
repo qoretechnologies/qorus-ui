@@ -135,7 +135,10 @@ export default class Tr extends Component {
                 let colspan: ?number = cell.getAttribute('data-colspan');
 
                 if (colspan) {
-                  colspan = parseInt(colspan, 10);
+                  colspan =
+                    colspan === 'full'
+                      ? bodyCells.length
+                      : parseInt(colspan, 10);
                   // * Calculate the width of this cell by going through
                   // * the forward cells to the length of the colspan
                   width = bodyCells.reduce(
