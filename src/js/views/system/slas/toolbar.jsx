@@ -3,15 +3,19 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { Button, Intent } from '@blueprintjs/core';
 
-import Toolbar from '../../../components/toolbar';
+import Headbar from '../../../components/Headbar';
 import Search from '../../../containers/search';
 import queryControl from '../../../hocomponents/queryControl';
 import withModal from '../../../hocomponents/modal';
 import SLAModal from './modal';
 import { hasPermission } from '../../../helpers/user';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Pull from '../../../components/Pull';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 
 type Props = {
   searchQuery?: string,
@@ -29,25 +33,27 @@ const SLAToolbar: Function = ({
   handleAddClick,
   perms,
 }: Props): React.Element<any> => (
-  <Toolbar marginBottom>
+  <Headbar>
     <Breadcrumbs>
-      <Crumb> SLAs </Crumb>
+      <Crumb active> SLAs </Crumb>
     </Breadcrumbs>
-    <Search
-      defaultValue={searchQuery}
-      onSearchUpdate={changeSearchQuery}
-      resource="slas"
-    />
-    {hasPermission(perms, ['CREATE-SLA', 'SLA-CONTROL'], 'or') && (
-      <Button
-        intent={Intent.PRIMARY}
-        iconName="plus"
-        text="Add new"
-        onClick={handleAddClick}
-        className="pull-right"
+    <Pull right>
+      <ButtonGroup marginRight={3}>
+        <Button
+          disabled={!hasPermission(perms, ['CREATE-SLA', 'SLA-CONTROL'], 'or')}
+          iconName="plus"
+          text="Add new"
+          onClick={handleAddClick}
+          big
+        />
+      </ButtonGroup>
+      <Search
+        defaultValue={searchQuery}
+        onSearchUpdate={changeSearchQuery}
+        resource="slas"
       />
-    )}
-  </Toolbar>
+    </Pull>
+  </Headbar>
 );
 
 export default compose(

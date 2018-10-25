@@ -8,6 +8,7 @@ import mapProps from 'recompose/mapProps';
 import moment from 'moment';
 
 import Box from '../../../../components/box';
+import Headbar from '../../../../components/Headbar';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import sync from '../../../../hocomponents/sync';
 import unsync from '../../../../hocomponents/unsync';
@@ -15,8 +16,12 @@ import actions from '../../../../store/api/actions';
 import queryControl from '../../../../hocomponents/queryControl';
 import { resourceSelector } from '../../../../selectors';
 import { DATE_FORMATS } from '../../../../constants/dates';
-import { Crumb, Breadcrumbs } from '../../../../components/breadcrumbs';
-import Tabs, { Pane } from '../../../../components/tabs';
+import {
+  Crumb,
+  Breadcrumbs,
+  CrumbTabs,
+} from '../../../../components/breadcrumbs';
+import { SimpleTabs, SimpleTab } from '../../../../components/SimpleTabs';
 
 import Events from './events';
 import Sources from './methods';
@@ -44,19 +49,23 @@ const SLADetail: Function = ({
   minDate,
   maxDate,
   tabQuery,
-  handleTabChange,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb link="/system/slas"> SLAs </Crumb>
-      <Crumb>
-        {sla.name} <small>({sla.slaid})</small>{' '}
-        <small>"{sla.description}"</small>
-      </Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb link="/system/slas"> SLAs </Crumb>
+        <Crumb>
+          {sla.name} <small>({sla.slaid})</small>
+        </Crumb>
+        <CrumbTabs
+          tabs={['Events', 'Sources', 'Performance']}
+          defaultTab="events"
+        />
+      </Breadcrumbs>
+    </Headbar>
     <Box top>
-      <Tabs active={tabQuery} onChange={handleTabChange} noContainer>
-        <Pane name="Events">
+      <SimpleTabs activeTab={tabQuery}>
+        <SimpleTab name="events">
           <Events
             location={location}
             params={params}
@@ -64,8 +73,8 @@ const SLADetail: Function = ({
             minDate={minDate}
             maxDate={maxDate}
           />
-        </Pane>
-        <Pane name="Sources">
+        </SimpleTab>
+        <SimpleTab name="sources">
           <Sources
             location={location}
             params={params}
@@ -73,8 +82,8 @@ const SLADetail: Function = ({
             minDate={minDate}
             maxDate={maxDate}
           />
-        </Pane>
-        <Pane name="Perf">
+        </SimpleTab>
+        <SimpleTab name="performance">
           <Perf
             location={location}
             params={params}
@@ -82,8 +91,8 @@ const SLADetail: Function = ({
             minDate={minDate}
             maxDate={maxDate}
           />
-        </Pane>
-      </Tabs>
+        </SimpleTab>
+      </SimpleTabs>
     </Box>
   </div>
 );

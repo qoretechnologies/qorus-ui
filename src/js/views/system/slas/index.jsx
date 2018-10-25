@@ -36,7 +36,7 @@ const Slas: Function = ({
 }: Props): React.Element<any> => (
   <div>
     <SLAToolbar location={location} onCreate={create} perms={perms} />
-    <Box noPadding>
+    <Box top noPadding>
       <SLATable
         sortData={sortData}
         collection={collection}
