@@ -14,6 +14,8 @@ import {
 import sort from '../../../../hocomponents/sort';
 import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
+import Pull from '../../../../components/Pull';
+import { Control as Button } from '../../../../components/controls';
 
 type Props = {
   collection: Array<Object>,
@@ -23,6 +25,8 @@ type Props = {
   onSortChange: Function,
   sortData: Object,
   canDelete: boolean,
+  onAddUserClick: Function,
+  canAdd: boolean,
 };
 
 const UsersTable: Function = ({
@@ -33,9 +37,24 @@ const UsersTable: Function = ({
   canDelete,
   onSortChange,
   sortData,
+  onAddUserClick,
+  canAdd,
 }: Props): React.Element<Table> => (
   <Table consensed striped fixed key={`users_table-${collection.length}`}>
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th collspan="full">
+          <Pull>
+            <Button
+              disabled={!canAdd}
+              text="Add user"
+              iconName="plus"
+              onClick={onAddUserClick}
+              big
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
         <Th className="name" name="name">
           Name

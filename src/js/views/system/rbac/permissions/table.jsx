@@ -14,6 +14,8 @@ import {
 import sort from '../../../../hocomponents/sort';
 import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
+import Pull from '../../../../components/Pull';
+import { Control as Button } from '../../../../components/controls';
 
 type Props = {
   collection: Array<Object>,
@@ -23,16 +25,33 @@ type Props = {
   canDelete: boolean,
   onSortChange: Function,
   sortData: Object,
+  canAdd: boolean,
+  onAddPermClick: Function,
 };
 
 const PermsTable: Function = ({
   collection,
   onSortChange,
   sortData,
+  canAdd,
+  onAddPermClick,
   ...rest
 }: Props): React.Element<Table> => (
   <Table striped condensed fixed key={`perms_table-${collection.length}`}>
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan="full">
+          <Pull>
+            <Button
+              disabled={!canAdd}
+              iconName="plus"
+              text="Add permission"
+              onClick={onAddPermClick}
+              big
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
         <Th className="text normal" name="permission_type">
           Type

@@ -24,7 +24,7 @@ const currentUserSelector: Function = (state: Object): Object =>
   state.api.currentUser;
 const permsSelector: Function = (state: Object): Object => state.api.perms;
 const querySelector: Function = (state: Object, props: Object): ?string =>
-  props.location.query.q;
+  props.location.query.search;
 const filterData: Function = (query: ?string): Function => (
   collection: Array<*>
 ) => findBy(['type', 'name', 'desc'], query, collection);
@@ -52,14 +52,11 @@ const viewSelector: Function = createSelector(
     }
   ),
   withDispatch(),
-  search(),
   modal(),
   sync('perms')
 )
 export default class RBACPerms extends Component {
   props: {
-    onSearchChange: Function,
-    query: string,
     permsModel: Array<*>,
     openModal: Function,
     closeModal: Function,
@@ -134,37 +131,22 @@ export default class RBACPerms extends Component {
       'or'
     );
 
+    const canAdd = hasPermission(
+      permissions,
+      ['USER-CONTROL', 'ADD-PERMISSION'],
+      'or'
+    );
+
     return (
-      <div>
-        <Toolbar marginBottom>
-          {hasPermission(
-            permissions,
-            ['USER-CONTROL', 'ADD-PERMISSION'],
-            'or'
-          ) && (
-            <div className="pull-left">
-              <Button
-                iconName="plus"
-                intent={Intent.PRIMARY}
-                text="Add permission"
-                onClick={this.handleAddPermClick}
-              />
-            </div>
-          )}
-          <Search
-            onSearchUpdate={this.props.onSearchChange}
-            defaultValue={this.props.query}
-            resource="rbacperms"
-          />
-        </Toolbar>
-        <Table
-          collection={this.props.permsModel}
-          onDeleteClick={this.handleRemovePermClick}
-          onEditClick={this.handleEditPermClick}
-          canEdit={canEdit}
-          canDelete={canDelete}
-        />
-      </div>
+      <Table
+        collection={this.props.permsModel}
+        onDeleteClick={this.handleRemovePermClick}
+        onEditClick={this.handleEditPermClick}
+        canEdit={canEdit}
+        canDelete={canDelete}
+        canAdd={canAdd}
+        onAddPermClick={this.handleAddPermClick}
+      />
     );
   }
 }

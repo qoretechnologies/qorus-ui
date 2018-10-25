@@ -4,14 +4,10 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
-import { Button, Intent } from '@blueprintjs/core';
 
-import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import withDispatch from '../../../../hocomponents/withDispatch';
-import Search from '../../../../containers/search';
-import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
@@ -24,7 +20,7 @@ const currentUserSelector: Function = (state: Object): Object =>
   state.api.currentUser;
 const rolesSelector: Function = (state: Object): Object => state.api.roles;
 const querySelector: Function = (state: Object, props: Object): ?string =>
-  props.location.query.q;
+  props.location.query.search;
 const filterData: Function = (query: ?string): Function => (
   collection: Array<*>
 ) => findBy(['role', 'provider', 'desc'], query, collection);
@@ -52,14 +48,11 @@ const viewSelector: Function = createSelector(
     }
   ),
   withDispatch(),
-  search(),
   modal(),
   sync('roles', true, 'loadRoles')
 )
 export default class RBACRoles extends Component {
   props: {
-    onSearchChange: Function,
-    query: string,
     rolesModel: Array<*>,
     openModal: Function,
     closeModal: Function,
@@ -172,34 +165,16 @@ export default class RBACRoles extends Component {
     );
 
     return (
-      <div>
-        <Toolbar marginBottom>
-          {hasPermission(permissions, ['USER-CONTROL', 'ADD-ROLE'], 'or') && (
-            <div className="pull-left">
-              <Button
-                text="Add role"
-                iconName="plus"
-                intent={Intent.PRIMARY}
-                onClick={this.handleAddRoleClick}
-              />
-            </div>
-          )}
-          <Search
-            onSearchUpdate={this.props.onSearchChange}
-            defaultValue={this.props.query}
-            resource="rbacroles"
-          />
-        </Toolbar>
-        <Table
-          collection={this.props.rolesModel}
-          onDeleteClick={this.handleRemoveRoleClick}
-          onEditClick={this.handleEditRoleClick}
-          onCloneClick={this.handleCloneRoleClick}
-          canEdit={canEdit}
-          canDelete={canDelete}
-          canCreate={canCreate}
-        />
-      </div>
+      <Table
+        collection={this.props.rolesModel}
+        onDeleteClick={this.handleRemoveRoleClick}
+        onEditClick={this.handleEditRoleClick}
+        onCloneClick={this.handleCloneRoleClick}
+        onAddRoleClick={this.handleAddRoleClick}
+        canEdit={canEdit}
+        canDelete={canDelete}
+        canCreate={canCreate}
+      />
     );
   }
 }
