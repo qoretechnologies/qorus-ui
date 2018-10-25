@@ -20,6 +20,8 @@ import Box from '../../components/box';
 import ReleasesToolbar from './toolbar';
 import { sortTable } from '../../helpers/table';
 import titleManager from '../../hocomponents/TitleManager';
+import Headbar from '../../components/Headbar';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 
 type Props = {
   data: Object,
@@ -45,11 +47,21 @@ const Releases: Function = ({
   compact,
 }: Props): React.Element<any> => (
   <div>
-    <ReleasesToolbar sort={sort} sortDir={sortDir} compact={compact} />
+    {!compact && (
+      <Headbar>
+        <Breadcrumbs>
+          <Crumb active>Releases</Crumb>
+        </Breadcrumbs>
+      </Headbar>
+    )}
     {compact ? (
-      <Tree data={data} />
+      <div>
+        <ReleasesToolbar sort={sort} sortDir={sortDir} compact />
+        <Tree data={data} />
+      </div>
     ) : (
-      <Box>
+      <Box top>
+        <ReleasesToolbar sort={sort} sortDir={sortDir} />
         <Container marginBottom={10}>
           <Tree data={data} />
         </Container>
