@@ -10,10 +10,7 @@ import * as actions from '../store/websockets/actions';
 import { DEFAULTSTATE } from '../constants/websockets';
 import Alert from '../components/alert';
 
-const connectionSelector: Function = (
-  state: Object,
-  props: Object
-): Object => {
+const connectionSelector: Function = (state: Object, props: Object): Object => {
   const { data } = state.ws;
 
   if (!data[props.url]) {
@@ -24,9 +21,8 @@ const connectionSelector: Function = (
 };
 
 const selector: Function = createSelector(
-  [
-    connectionSelector,
-  ], (conn: Object) => ({
+  [connectionSelector],
+  (conn: Object) => ({
     connected: conn.connected,
     loading: conn.loading,
     error: conn.error,
@@ -42,18 +38,13 @@ export default (
   funcs: Object,
   showLoading: boolean = true,
   showError: boolean = true,
-  showDisconnect: boolean = true,
-): Function => (
-  Component: ReactClass<*>
-): ReactClass<*> => {
+  showDisconnect: boolean = true
+): Function => (Component: ReactClass<*>): ReactClass<*> => {
   @compose(
-    reduxConnect(
-      selector,
-      {
-        connect: actions.connect,
-        disconnect: actions.disconnect,
-      }
-    )
+    reduxConnect(selector, {
+      connect: actions.connect,
+      disconnect: actions.disconnect,
+    })
   )
   class ComponentWithWebsocket extends React.Component {
     props: {
@@ -89,9 +80,7 @@ export default (
       return props[func] || func;
     };
 
-    handleConnect: Function = (
-      props: Object = this.props
-    ): Function => (
+    handleConnect: Function = (props: Object = this.props): Function => (
       resume: boolean = false
     ): void => {
       const { connected, loading, url, connect } = props;
@@ -104,14 +93,12 @@ export default (
           getFunc('onMessage'),
           getFunc('onError'),
           getFunc('onClose'),
-          getFunc('onPause'),
+          getFunc('onPause')
         );
       }
     };
 
-    handleDisconnect: Function = (
-      props: Object = this.props
-    ): Function => (
+    handleDisconnect: Function = (props: Object = this.props): Function => (
       pause: boolean = false
     ): void => {
       const { disconnect, connected, url } = props;
@@ -131,21 +118,15 @@ export default (
       const { connected, loading, paused, error } = this.props;
 
       if (error && showError) {
-        return (
-          <Alert bsStyle="danger">{ error }</Alert>
-        );
+        return <Alert bsStyle="danger">{error}</Alert>;
       }
 
       if (loading && showLoading) {
-        return (
-          <p> Establishing connection... </p>
-        );
+        return <Alert bsStyle="info"> Establishing connection... </Alert>;
       }
 
       if (!connected && !paused && showDisconnect) {
-        return (
-          <Alert bsStyle="warning"> Connection closed. </Alert>
-        );
+        return <Alert bsStyle="warning"> Connection closed. </Alert>;
       }
 
       const newProps = omit(this.props, [
@@ -172,4 +153,3 @@ export default (
 
   return ComponentWithWebsocket;
 };
-
