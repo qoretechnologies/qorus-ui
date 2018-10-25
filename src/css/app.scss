@@ -395,20 +395,22 @@ p.header-detail {
   color: #555;
 }
 
-.pt-tab-panel {
-  margin-top: 10px !important;
-}
-
 .pt-tabs {
+  &:not(.pt-vertical) {
+    .pt-tab-panel {
+      margin-top: 10px !important;
+    }
+
+    .pt-tab-list {
+      box-shadow: inset 0 -3px 0 darken(#fff, 3);
+      line-height: 25px;
+    }
+  }
+
   &:not(.boxed-tabs) {
     .pt-tab-list {
       display: inline-flex;
     }
-  }
-
-  .pt-tab-list {
-    box-shadow: inset 0 -3px 0 darken(#fff, 3);
-    line-height: 25px;
   }
 }
 
