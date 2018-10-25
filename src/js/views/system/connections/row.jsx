@@ -6,8 +6,12 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
-import { Button, Intent, Tag, Icon } from '@blueprintjs/core';
+import { Intent, Tag, Icon } from '@blueprintjs/core';
 
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import { Tr, Td } from '../../../components/new_table';
 import DetailButton from '../../../components/detail_button';
 import Text from '../../../components/text';
@@ -66,8 +70,8 @@ const ConnectionRow: Function = ({
   <Tr
     first={first}
     className={classnames({
-      'row-active': isActive,
       'row-alert': hasAlerts,
+      'row-active': isActive,
     })}
     highlight={_updated}
     handleHighlightEnd={handleHighlightEnd}
@@ -80,16 +84,19 @@ const ConnectionRow: Function = ({
     <Td className="narrow">
       <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
-    {canDelete && (
-      <Td className="narrow">
+
+    <Td className="narrow">
+      <ButtonGroup>
+        <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
         <Button
+          disabled={!canDelete}
           iconName="cross"
           intent={Intent.DANGER}
           onClick={handleDeleteClick}
-          className="pt-small"
         />
-      </Td>
-    )}
+      </ButtonGroup>
+    </Td>
+
     <Td className="tiny">
       {hasAlerts && (
         <Button
@@ -122,14 +129,6 @@ const ConnectionRow: Function = ({
     {remoteType === 'qorus' && (
       <Td className="normal">{loopback && <Icon iconName="small-tick" />}</Td>
     )}
-    <Td className="normal">
-      <Button
-        text="Ping"
-        iconName="exchange"
-        onClick={handlePingClick}
-        className="pt-small"
-      />
-    </Td>
   </Tr>
 );
 
