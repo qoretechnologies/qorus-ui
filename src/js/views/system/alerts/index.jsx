@@ -6,6 +6,13 @@ import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import AlertsTable from './table';
 import Tabs, { Pane } from '../../../components/tabs';
 import withTabs from '../../../hocomponents/withTabs';
+import Headbar from '../../../components/Headbar';
+import Pull from '../../../components/Pull';
+import compose from 'recompose/compose';
+import queryControl from '../../../hocomponents/queryControl';
+import capitalize from 'lodash/capitalize';
+import Search from '../../../containers/search';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   location: Object,
@@ -14,17 +21,27 @@ type Props = {
 };
 
 const Alerts: Function = ({
-  location,
   tabQuery,
   handleTabChange,
+  location,
+  ...rest
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb> Alerts </Crumb>
-      <Crumb active> Ongoing </Crumb>
-    </Breadcrumbs>
-    <Box top>
-      <Tabs active={tabQuery} onChange={handleTabChange} noContainer>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb> Alerts </Crumb>
+        <Crumb active> Ongoing </Crumb>
+      </Breadcrumbs>
+      <Pull right>
+        <Search
+          defaultValue={rest[`${tabQuery}SearchQuery`]}
+          onSearchUpdate={rest[`change${capitalize(tabQuery)}searchQuery`]}
+          resource="alerts"
+        />
+      </Pull>
+    </Headbar>
+    <Box top leftTopPaddingOnly>
+      <Tabs active={tabQuery} onChange={handleTabChange} noContainer vertical>
         <Pane name="Ongoing">
           <AlertsTable location={location} type="ongoing" />
         </Pane>
@@ -36,4 +53,7 @@ const Alerts: Function = ({
   </div>
 );
 
-export default withTabs('ongoing')(Alerts);
+export default compose(
+  withTabs('ongoing'),
+  queryControl(({ tabQuery }) => `${tabQuery}Search`)
+)(Alerts);

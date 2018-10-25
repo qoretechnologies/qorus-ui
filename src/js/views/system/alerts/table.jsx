@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Callout } from '@blueprintjs/core';
+import { Callout, Icon } from '@blueprintjs/core';
 
 import {
   Table,
@@ -25,9 +25,10 @@ import { findBy } from '../../../helpers/search';
 import { resourceSelector } from '../../../selectors';
 import AlertsPane from './pane';
 import AlertRow from './row';
-import AlertsToolbar from './toolbar';
-import Icon from '../../../components/icon';
+import NoDataIf from '../../../components/NoDataIf';
+import LoadMore from '../../../components/LoadMore';
 import titleManager from '../../../hocomponents/TitleManager';
+import Pull from '../../../components/Pull';
 
 type Props = {
   type: string,
@@ -37,10 +38,12 @@ type Props = {
   alerts: Array<Object>,
   canLoadMore?: boolean,
   handleLoadMore: Function,
+  handleLoadAll: Function,
   openPane: Function,
   closePane: Function,
   paneId: string,
   location: Object,
+  limit: number,
 };
 
 const AlertsTable: Function = ({
@@ -49,30 +52,41 @@ const AlertsTable: Function = ({
   alerts,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
   openPane,
   closePane,
   paneId,
   type,
-  location,
+  limit,
 }: Props): React.Element<any> => (
   <div>
-    <AlertsToolbar type={type} location={location} />
-    {alerts.length ? (
+    <NoDataIf condition={alerts.length === 0}>
       <Table
         fixed
         hover
         striped
-        marginBottom={canLoadMore ? 60 : 0}
         key={`${type}-${alerts.length}`}
-        height={400}
         className="clear"
       >
         <Thead>
+          {canLoadMore && (
+            <FixedRow className="toolbar-row">
+              <Th colspan={5}>
+                <Pull right>
+                  <LoadMore
+                    canLoadMore={canLoadMore}
+                    handleLoadMore={handleLoadMore}
+                    handleLoadAll={handleLoadAll}
+                    limit={limit}
+                  />
+                </Pull>
+              </Th>
+            </FixedRow>
+          )}
           <FixedRow sortData={sortData} onSortChange={onSortChange}>
-            <Th className="tiny">
-              <Icon iconName="warning" />
+            <Th className="narrow">
+              <Icon iconName="list-detail-view" />
             </Th>
-            <Th className="narrow">-</Th>
             <Th className="text big" name="type">
               Type
             </Th>
@@ -102,19 +116,7 @@ const AlertsTable: Function = ({
           )}
         </Tbody>
       </Table>
-    ) : (
-      <Callout iconName="warning-sign" title="No data">
-        There are no data to be displayed.
-      </Callout>
-    )}
-    {canLoadMore && (
-      <Button
-        label="Load 50 more..."
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
-    )}
+    </NoDataIf>
   </div>
 );
 
@@ -162,5 +164,5 @@ export default compose(
   sync('meta'),
   withPane(AlertsPane, null, null, 'alerts'),
   titleManager(({ type }): string => `Alerts ${type}`),
-  pure(['alerts', 'location', 'paneId'])
+  pure(['alerts', 'location', 'paneId', 'canLoadMore', 'sortData'])
 )(AlertsTable);

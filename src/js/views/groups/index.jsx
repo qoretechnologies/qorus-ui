@@ -81,7 +81,7 @@ const GroupsView: Function = ({
     <div>
       <Headbar>
         <Breadcrumbs>
-          <Crumb>Groups</Crumb>
+          <Crumb active>Groups</Crumb>
         </Breadcrumbs>
         <Pull right>
           <CsvControl onClick={onCSVClick} />
