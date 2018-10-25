@@ -15,6 +15,7 @@ import Box from '../../../components/box';
 import PaneItem from '../../../components/pane_item';
 import { Link } from 'react-router';
 import NoData from '../../../components/nodata';
+import Headbar from '../../../components/Headbar';
 
 type Props = {
   collection: Object,
@@ -22,9 +23,11 @@ type Props = {
 
 const UserHttp: Function = ({ collection }: Props): any => (
   <div>
-    <Breadcrumbs>
-      <Crumb> User HTTP Services </Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active> User HTTP Services </Crumb>
+      </Breadcrumbs>
+    </Headbar>
     {size(collection) ? (
       map(
         collection,
