@@ -3,16 +3,6 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
-import {
-  ButtonGroup,
-  Button,
-  Popover,
-  Menu,
-  MenuItem,
-  Intent,
-  Position,
-  MenuDivider,
-} from '@blueprintjs/core';
 
 import actions from '../../../store/api/actions';
 import withDispatch from '../../../hocomponents/withDispatch';
