@@ -3,17 +3,22 @@ import React from 'react';
 
 import StatsView from '../../views/workflows/detail/stats';
 import { connect } from 'react-redux';
-import NoData from '../../components/nodata';
+import NoDataIf from '../../components/NoDataIf';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Headbar from '../../components/Headbar';
 
 const OrderStats = ({ orderStats }: Object): any => (
   <div>
-    <Breadcrumbs>
-      <Crumb> Global order stats</Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active> Global order stats</Crumb>
+      </Breadcrumbs>
+    </Headbar>
     <Box top>
-      {orderStats ? <StatsView orderStats={orderStats} /> : <NoData />}
+      <NoDataIf condition={!orderStats}>
+        {() => <StatsView orderStats={orderStats} />}
+      </NoDataIf>
     </Box>
   </div>
 );
