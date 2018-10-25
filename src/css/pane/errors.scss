@@ -4,11 +4,6 @@
  * 1. Form search is floating right to the h4 heading so it needs be
  *    nicely vertically aligned.
  */
-#errors {
-  .form-search { /* [1] */
-    margin-top: ($line-height-computed / 2) - ceil(
-      $form-search-height -
-      ($headings-line-height * $font-size-h4)
-    );
-  }
+.errors-container-wrapper:not(:last-child) {
+  margin-bottom: 7px;
 }
