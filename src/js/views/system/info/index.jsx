@@ -7,14 +7,17 @@ import pure from 'recompose/onlyUpdateForKeys';
 import InfoTable from '../../../components/info_table';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
+import Headbar from '../../../components/Headbar';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import titleManager from '../../../hocomponents/TitleManager';
 
 const SystemInfoTable: Function = ({ data }: { data: Object }) => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Info</Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active>Info</Crumb>
+      </Breadcrumbs>
+    </Headbar>
     <Box noPadding top>
       <Container>
         <InfoTable object={data} />
