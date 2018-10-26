@@ -4,24 +4,27 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   title: string,
   active: boolean,
   onClick: Function,
   handleClick: Function,
+  compact: boolean,
 };
 
 const CrumbTab: Function = ({
   title,
   active,
   handleClick,
+  compact,
 }: Props): React.Element<any> => (
   <div
-    className={classnames('breadcrumb-tab', { active })}
+    className={classnames('breadcrumb-tab', { active, compact })}
     onClick={handleClick}
   >
-    {title}
+    {title} {compact && <Icon iconName="caret-down" />}
   </div>
 );
 
