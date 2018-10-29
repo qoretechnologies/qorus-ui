@@ -404,3 +404,13 @@ table.table-header {
     text-align: right;
   }
 }
+
+.tbody-empty-table {
+  tr {
+    background: #fff !important;
+    
+    td {
+      border: 0 !important;
+    }
+  }
+}
