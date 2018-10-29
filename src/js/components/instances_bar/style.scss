@@ -1,5 +1,23 @@
+$small-height: 22px;
+$big-height: 30px;
+
 .instances-bar-wrapper {
-  height: 22px;
+  &:not(.instances-bar-big) {
+    height: $small-height;
+
+    .instances-bar {
+      line-height: $small-height;
+    }
+  }
+
+  &.instances-bar-big {
+    height: $big-height;
+
+    .instances-bar {
+      line-height: $big-height;
+    }
+  }
+
   display: inline-block;
 
   span {
@@ -18,7 +36,6 @@
 
   .instances-bar {
     height: 100%;
-    line-height: 22px;
     display: inline-block;
     color: #fff;
     position: relative;

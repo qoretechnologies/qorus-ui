@@ -15,6 +15,7 @@ type Props = {
   minWidth?: number,
   wrapperWidth: string | number,
   link?: string,
+  big?: boolean,
 };
 
 const InstancesBar: Function = ({
@@ -28,8 +29,12 @@ const InstancesBar: Function = ({
   minWidth,
   wrapperWidth: wrapperWidth = '100%',
   link,
+  big,
 }: Props): React.Element<any> => (
-  <div className="instances-bar-wrapper" style={{ width: wrapperWidth }}>
+  <div
+    className={`instances-bar-wrapper ${big ? 'instances-bar-big' : ''}`}
+    style={{ width: wrapperWidth }}
+  >
     {totalInstances !== 0 ? (
       calculateInstanceBarWidths(
         states,
