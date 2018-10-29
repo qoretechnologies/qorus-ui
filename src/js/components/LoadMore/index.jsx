@@ -3,6 +3,8 @@ import React from 'react';
 import Toolbar from '../toolbar';
 import { Controls, Control } from '../controls';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 
 type Props = {
   canLoadMore: boolean,
@@ -14,26 +16,41 @@ type Props = {
 const LoadMore: Function = ({
   canLoadMore,
   limit,
-  handleLoadMore,
-  handleLoadAll,
+  onLoadMore,
+  onLoadAll,
 }: Props): React.Element<Toolbar> =>
   canLoadMore && (
     <Controls>
       <Control
         text={`Show ${limit} more...`}
         iconName="chevron-down"
-        onClick={handleLoadMore}
+        onClick={onLoadMore}
         big
       />
-      {handleLoadAll && (
+      {onLoadAll && (
         <Control
           text="Show all"
           iconName="double-chevron-down"
-          onClick={handleLoadAll}
+          onClick={onLoadAll}
           big
         />
       )}
     </Controls>
   );
 
-export default onlyUpdateForKeys(['limit', 'canLoadMore'])(LoadMore);
+export default compose(
+  mapProps(
+    ({
+      onLoadMore,
+      handleLoadMore,
+      onLoadAll,
+      handleLoadAll,
+      ...rest
+    }: Props): Props => ({
+      onLoadMore: onLoadMore || handleLoadMore,
+      onLoadAll: onLoadAll || handleLoadAll,
+      ...rest,
+    })
+  ),
+  onlyUpdateForKeys(['limit', 'canLoadMore'])
+)(LoadMore);
