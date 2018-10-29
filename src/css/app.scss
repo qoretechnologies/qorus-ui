@@ -434,3 +434,9 @@ p.header-detail {
 span.pt-icon-standard {
   font-size: 12px;
 }
+
+.pt-button-group {
+  &:not(:last-child) {
+    margin-right: 3px;
+  }
+}
