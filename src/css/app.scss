@@ -154,11 +154,6 @@ body,
   }
 }
 
-.pt-popover-content {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
 .block {
   display: block !important;
 }
@@ -411,6 +406,7 @@ p.header-detail {
 }
 
 .pt-callout.pt-intent-purple {
+  padding-right: 33px;
   background-color: lighten($qore-purple, 53);
 
   &[class*='pt-icon-']:before {

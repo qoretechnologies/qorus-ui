@@ -5,10 +5,11 @@ import ChartComponent from '../chart';
 import { getStatsCount, getStatsPct } from '../../helpers/chart';
 import { DISPOSITIONS } from '../../constants/dashboard';
 import { COLORS } from '../../constants/ui';
-import { Callout } from '@blueprintjs/core';
+import { Callout, Icon, Popover, Position, Intent } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 type Props = {
   stats: Object,
@@ -35,15 +36,97 @@ const DispositionChart: Function = ({
   formatter,
 }: Props) => (
   <div key={stats.label}>
-    {autoRecoveriesCount > 0 && (
-      <Callout iconName="dollar" className="pt-intent-purple">
-        <strong>{autoRecoveriesCount}</strong> orders recovered automatically,
-        approx savings:{' '}
-        <strong>
-          {formatter.format(recoveryAmount * autoRecoveriesCount)}
-        </strong>
-      </Callout>
-    )}
+    {autoRecoveriesCount > 0 &&
+      recoveryAmount !== 0 && (
+        <Callout iconName="dollar" className="pt-intent-purple">
+          Estimated savings due to automatic order recovery for{' '}
+          <strong>{autoRecoveriesCount}</strong> orders @{' '}
+          <strong>{formatter.format(recoveryAmount)}</strong> / order ={' '}
+          <strong>
+            {formatter.format(recoveryAmount * autoRecoveriesCount)}
+          </strong>
+          <div
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '10px',
+              cursor: 'pointer',
+              color: COLORS.purple,
+            }}
+          >
+            <Popover
+              isModal
+              position={Position.RIGHT_TOP}
+              useSmartPositioning
+              content={
+                <div style={{ width: '500px' }}>
+                  <Callout
+                    iconName="info-sign"
+                    title="Automatic recovery info"
+                    intent={Intent.PRIMARY}
+                  >
+                    <p>
+                      Estimated savings are calculated based on the following
+                      system options:{' '}
+                      <Link to="/system/options?search=recovery-amount">
+                        recovery-amount
+                      </Link>{' '}
+                      and{' '}
+                      <Link to="/system/options?search=recovery-currency">
+                        recovery-currency
+                      </Link>
+                      .
+                    </p>
+                    <p>
+                      Each of these options must be set for individual
+                      production environments based on the real costs of manual
+                      error handling of workflow orders that get an ERROR
+                      status.
+                    </p>
+                    <p>
+                      Estimated savings are calculated by multiplying{' '}
+                      <Link to="/system/options?search=recovery-amount">
+                        recovery-amount
+                      </Link>{' '}
+                      by the number of automatically-recovered workflow orders
+                      for the given time period and displayed in the currency
+                      provided by{' '}
+                      <Link to="/system/options?search=recovery-currency">
+                        recovery-currency
+                      </Link>{' '}
+                      and do not include the costs related to orders with an
+                      ERROR status requiring manual intervention. An accurate
+                      estimated savings amount can only be provided by ensuring
+                      that the{' '}
+                      <Link to="/system/options?search=recovery-amount">
+                        recovery-amount
+                      </Link>{' '}
+                      system option reflects real costs.
+                    </p>
+                    <p>
+                      The purpose of this information is to show the value of
+                      Qorus Integration Engine(R)’s automatic recovery of
+                      technical errors in orchestrated tasks or workflows in
+                      terms of real money saved by avoiding manual error
+                      handling.
+                    </p>
+                    <p>
+                      Should you not wish for this information to be displayed
+                      in the Qorus Integration Engine(R) UI, please set the{' '}
+                      <Link to="/system/options?search=recovery-amount">
+                        recovery-amount
+                      </Link>{' '}
+                      option to 0.
+                    </p>
+                  </Callout>
+                </div>
+              }
+            >
+              <Icon iconName="help" />
+            </Popover>
+          </div>
+        </Callout>
+      )}
     <ChartComponent
       title="Workflow Disposition"
       onClick={onDispositionChartClick}
