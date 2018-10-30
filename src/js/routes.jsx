@@ -20,7 +20,6 @@ import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
 import dashboardRoutes from './routes/dashboard';
 import workflowsRoutes from './routes/workflows';
-import workflowRoutes from './routes/workflow';
 import orderRoutes from './routes/order';
 import servicesRoutes from './routes/services';
 import jobsRoutes from './routes/jobs';
@@ -29,6 +28,8 @@ import searchRoutes from './routes/search';
 import groupsRoutes from './routes/groups';
 import ErrorView from './error';
 import * as events from './store/apievents/actions';
+
+import Workflow from './views/workflow';
 
 class AppInfo extends React.Component {
   /**
@@ -92,7 +93,7 @@ class AppInfo extends React.Component {
             <IndexRedirect to="/system/dashboard" />
             {dashboardRoutes()}
             {workflowsRoutes()}
-            {workflowRoutes()}
+            <Route path="workflow/:id" component={Workflow} />
             {orderRoutes()}
             {servicesRoutes()}
             {jobsRoutes()}
