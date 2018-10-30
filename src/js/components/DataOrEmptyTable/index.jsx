@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tbody, Tr, Td } from '../new_table';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { NonIdealState } from '@blueprintjs/core';
+import NoData from '../nodata';
 
 const DataOrEmptyTable: Function = ({
   cols,
@@ -15,24 +15,17 @@ const DataOrEmptyTable: Function = ({
 }): React.Element<Tbody> =>
   condition ? (
     <Tbody {...rest} className="tbody-empty-table">
-      <Tr first>
+      <Tr first className="placeholder-row">
         {[...Array(cols)].map(col => (
           <Td key={col} />
         ))}
       </Tr>
       <Tr>
         <Td colspan={cols}>
-          <NonIdealState
-            title="No data"
-            description="There are no data to display for the criteria you provided"
-            visual="search"
-          />
+          <div className="no-data-table-wrapper">
+            <NoData big />
+          </div>
         </Td>
-      </Tr>
-      <Tr>
-        {[...Array(cols)].map(col => (
-          <Td key={col} />
-        ))}
       </Tr>
     </Tbody>
   ) : (
