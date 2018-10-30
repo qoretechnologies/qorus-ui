@@ -10,12 +10,10 @@ type Props = {
   children: any,
   column: number,
   style?: Object,
-  leftTopPaddingOnly: boolean,
 };
 
 const Box: Function = ({
   noPadding,
-  leftTopPaddingOnly,
   children,
   top,
   column,
@@ -26,7 +24,7 @@ const Box: Function = ({
     <div
       className="white-box"
       style={{
-        padding: noPadding ? 0 : leftTopPaddingOnly ? '10px 0 0 10px' : null,
+        padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
         width: column ? `${100 / column - 0.3 * column}%` : 'initial',
         ...style,
@@ -46,7 +44,7 @@ const Box: Function = ({
       <div
         className="white-box"
         style={{
-          padding: noPadding ? 0 : leftTopPaddingOnly ? '10px 0 0 10px' : null,
+          padding: noPadding ? 0 : null,
           marginTop: top ? 0 : null,
           width: column ? `${100 / (column + column * 0.1)}%` : 'initial',
           ...style,
@@ -57,4 +55,4 @@ const Box: Function = ({
     </Transition>
   );
 
-export default pure(['noPadding', 'leftTopPaddingOnly', 'children'])(Box);
+export default pure(['noPadding', 'children', 'top'])(Box);
