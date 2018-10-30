@@ -4,9 +4,6 @@ import { Route, IndexRedirect } from 'react-router';
 
 import System from '../views/system';
 import Sla from '../views/system/slas/detail';
-import SlaEvents from '../views/system/slas/detail/events';
-import SlaSources from '../views/system/slas/detail/methods';
-import SlaPerf from '../views/system/slas/detail/perf';
 
 const DashboardRoutes = (): React.Element<any> => (
   <Route path="/system" component={System}>
