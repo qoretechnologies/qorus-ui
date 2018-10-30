@@ -28,7 +28,7 @@ const AutoStart = ({
   handleDecrementClick,
   big,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
+  <ButtonGroup marginRight={big ? 3 : 0}>
     <Button
       title="Decrement autostart"
       iconName="small-minus"

@@ -1,25 +1,22 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import ChartView from './chart';
+import Container from '../../../../components/container';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import Box from '../../../../components/box';
 
-export default function Performance(props) {
-  return (
-    <div>
-      <ChartView
-        workflow={props.workflow}
-        days={1}
-      />
-      <ChartView
-        workflow={props.workflow}
-        days={7}
-      />
-      <ChartView
-        workflow={props.workflow}
-        days={30}
-      />
-    </div>
-  );
-}
+const PerformanceTab: Function = ({
+  workflow,
+}: {
+  workflow: Object,
+}): React.Element<Container> => (
+  <Box top>
+    <Container>
+      <ChartView workflow={workflow} days={1} />
+      <ChartView workflow={workflow} days={7} />
+      <ChartView workflow={workflow} days={30} />
+    </Container>
+  </Box>
+);
 
-Performance.propTypes = {
-  workflow: PropTypes.object,
-};
+export default onlyUpdateForKeys(['workflow'])(PerformanceTab);

@@ -4,13 +4,13 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button } from '@blueprintjs/core';
 
 import actions from '../../../../../store/api/actions';
 import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
 } from '../../../../../components/dropdown';
+import { Controls as ButtonGroup } from '../../../../../components/controls';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
 import withDispatch from '../../../../../hocomponents/withDispatch';
 
@@ -34,58 +34,38 @@ const ToolbarActions: Function = ({
   handleUnblockClick,
   handleCancelClick,
   handleUncancelClick,
-  isTablet,
-}: Props): ?React.Element<any> =>
-  isTablet ? (
-    <ButtonGroup>
-      <Dropdown id="hidden">
-        <DropdownControl> With selected: </DropdownControl>
-        <DropdownItem
-          title="Retry"
-          iconName="refresh"
-          action={handleRetryClick}
-        />
-        <DropdownItem
-          title="Block"
-          iconName="minus-circle"
-          action={handleBlockClick}
-        />
-        <DropdownItem
-          title="Unblock"
-          iconName="check-circle"
-          action={handleUnblockClick}
-        />
-        <DropdownItem
-          title="Cancel"
-          iconName="times-circle"
-          action={handleCancelClick}
-        />
-        <DropdownItem
-          title="Uncancel"
-          iconName="refresh"
-          action={handleUncancelClick}
-        />
-      </Dropdown>
-    </ButtonGroup>
-  ) : (
-    <ButtonGroup>
-      <Button text="Retry" iconName="refresh" onClick={handleRetryClick} />
-      <Button text="Block" iconName="disable" onClick={handleBlockClick} />
-      <Button
-        text="Unblock"
-        iconName="endorsed"
-        big
-        btnStyle="default"
-        onClick={handleUnblockClick}
-      />
-      <Button text="Cancel" iconName="remove" onClick={handleCancelClick} />
-      <Button
-        text="Uncancel"
+}: Props): ?React.Element<any> => (
+  <ButtonGroup>
+    <Dropdown id="hidden">
+      <DropdownControl icon="cog">With selected</DropdownControl>
+      <DropdownItem
+        title="Retry"
         iconName="refresh"
-        onClick={handleUncancelClick}
+        action={handleRetryClick}
       />
-    </ButtonGroup>
-  );
+      <DropdownItem
+        title="Block"
+        iconName="minus-circle"
+        action={handleBlockClick}
+      />
+      <DropdownItem
+        title="Unblock"
+        iconName="check-circle"
+        action={handleUnblockClick}
+      />
+      <DropdownItem
+        title="Cancel"
+        iconName="times-circle"
+        action={handleCancelClick}
+      />
+      <DropdownItem
+        title="Uncancel"
+        iconName="refresh"
+        action={handleUncancelClick}
+      />
+    </Dropdown>
+  </ButtonGroup>
+);
 
 export default compose(
   showIfPassed(({ show }) => show),
@@ -127,5 +107,5 @@ export default compose(
       handleBatchAction('uncancel');
     },
   }),
-  pure(['selectedIds', 'isTablet'])
+  pure(['selectedIds'])
 )(ToolbarActions);

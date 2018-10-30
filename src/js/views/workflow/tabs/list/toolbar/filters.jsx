@@ -7,38 +7,41 @@ import pure from 'recompose/onlyUpdateForKeys';
 import queryControl from '../../../../../hocomponents/queryControl';
 import Dropdown, { Item, Control } from '../../../../../components/dropdown';
 import { ORDER_STATES } from '../../../../../constants/orders';
+import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
   filterQuery: string,
   changeFilterQuery: Function,
   handleFilterChange: Function,
-}
+};
 
 const ToolbarFilters: Function = ({
   filterQuery,
   handleFilterChange,
 }: Props): React.Element<any> => (
-  <Dropdown
-    id="filters"
-    multi
-    def="All"
-    onSubmit={handleFilterChange}
-    selected={filterQuery ? filterQuery.split(',') : ['All']}
-  >
-    <Control />
-    <Item title="All" />
-    {ORDER_STATES.map((o, k) => (
-      <Item key={k} title={o.title} />
-    ))}
-  </Dropdown>
+  <ButtonGroup>
+    <Dropdown
+      id="filters"
+      multi
+      def="All"
+      onSubmit={handleFilterChange}
+      selected={filterQuery ? filterQuery.split(',') : ['All']}
+    >
+      <Control />
+      <Item title="All" />
+      {ORDER_STATES.map((o, k) => (
+        <Item key={k} title={o.title} />
+      ))}
+    </Dropdown>
+  </ButtonGroup>
 );
 
 export default compose(
   queryControl('filter'),
   withHandlers({
-    handleFilterChange: ({
-      changeFilterQuery,
-    }: Props): Function => (filters: Array<string>): void => {
+    handleFilterChange: ({ changeFilterQuery }: Props): Function => (
+      filters: Array<string>
+    ): void => {
       if (filters[0] === 'All') {
         changeFilterQuery();
       } else {
@@ -46,7 +49,5 @@ export default compose(
       }
     },
   }),
-  pure([
-    'filterQuery',
-  ])
+  pure(['filterQuery'])
 )(ToolbarFilters);

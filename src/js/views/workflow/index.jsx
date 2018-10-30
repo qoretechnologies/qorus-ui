@@ -20,8 +20,7 @@ import actions from '../../store/api/actions';
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
 import Header from './header';
-import Box from '../../components/box';
-import Tabs, { Pane } from '../../components/tabs';
+import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import List from './tabs/list';
 import Performance from './tabs/performance';
 import Log from './tabs/log';
@@ -29,6 +28,7 @@ import Code from './tabs/code';
 import Info from './tabs/info';
 import Mappers from './tabs/mappers';
 import titleManager from '../../hocomponents/TitleManager';
+import queryControl from '../../hocomponents/queryControl';
 
 type Props = {
   workflow: Object,
@@ -40,8 +40,9 @@ type Props = {
   fetch: Function,
   location: Object,
   children: any,
-  handleTabChange: Function,
   tabQuery: string,
+  searchQuery: string,
+  changeSearchQuery: Function,
 };
 
 const Workflow: Function = ({
@@ -49,38 +50,40 @@ const Workflow: Function = ({
   date,
   location,
   linkDate,
-  handleTabChange,
   tabQuery,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Header {...workflow} date={date} />
-    <Box>
-      <Tabs
-        active={tabQuery}
-        id="workflowOrder"
-        onChange={handleTabChange}
-        noContainer
-      >
-        <Pane name="List">
-          <List {...{ workflow, date, location, linkDate }} />
-        </Pane>
-        <Pane name="Performance">
-          <Performance {...{ workflow, date, location, linkDate }} />
-        </Pane>
-        <Pane name="Log">
-          <Log {...{ workflow, date, location, linkDate }} />
-        </Pane>
-        <Pane name="Code">
-          <Code {...{ workflow, date, location, linkDate }} />
-        </Pane>
-        <Pane name="Info">
-          <Info {...{ workflow, date, location, linkDate }} />
-        </Pane>
-        <Pane name="Mappers">
-          <Mappers {...{ workflow, date, location, linkDate }} />
-        </Pane>
-      </Tabs>
-    </Box>
+    <Header
+      {...workflow}
+      date={date}
+      location={location}
+      onSearch={changeSearchQuery}
+      searchQuery={searchQuery}
+      tab={tabQuery}
+    />
+
+    <SimpleTabs activeTab={tabQuery}>
+      <SimpleTab name="orders">
+        <List {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="performance">
+        <Performance {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="log">
+        <Log {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="code">
+        <Code {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="info">
+        <Info {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="mappers">
+        <Mappers {...{ workflow, date, location, linkDate }} />
+      </SimpleTab>
+    </SimpleTabs>
   </div>
 );
 
@@ -141,8 +144,9 @@ export default compose(
       }
     },
   }),
-  withTabs('list'),
+  withTabs('orders'),
+  queryControl('search'),
   titleManager(({ workflow }: Props): string => workflow.name),
-  pure(['workflow', 'date', 'id', 'location']),
+  pure(['workflow', 'date', 'id', 'location', 'tabQuery']),
   unsync()
 )(Workflow);

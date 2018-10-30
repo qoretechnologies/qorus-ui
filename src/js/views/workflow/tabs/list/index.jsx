@@ -8,7 +8,6 @@ import flowRight from 'lodash/flowRight';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
-import { ButtonGroup, Intent, Button } from '@blueprintjs/core';
 
 import actions from '../../../../store/api/actions';
 import { querySelector, resourceSelector } from '../../../../selectors';
@@ -21,7 +20,7 @@ import withCSV from '../../../../hocomponents/csv';
 import loadMore from '../../../../hocomponents/loadMore';
 import withSort from '../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../constants/sort';
-import Toolbar from './toolbar';
+import Box from '../../../../components/box';
 import Table from './table';
 
 type Props = {
@@ -29,8 +28,8 @@ type Props = {
   linkDate: string,
   workflow?: Object,
   selected: string,
-  onCSVClick: Function,
   fetch: Function,
+  onCSVClick: Function,
   selectedIds: Array<number>,
   unselectAll: Function,
   location: Object,
@@ -50,7 +49,6 @@ type Props = {
 const WorkflowOrders: Function = ({
   selected,
   selectedIds,
-  onCSVClick,
   location,
   orders,
   linkDate,
@@ -61,16 +59,10 @@ const WorkflowOrders: Function = ({
   sortData,
   onSortChange,
   isTablet,
+  onCSVClick,
+  workflow,
 }: Props): React.Element<any> => (
-  <div>
-    <Toolbar
-      selected={selected}
-      selectedIds={selectedIds}
-      onCSVClick={onCSVClick}
-      location={location}
-      searchPage={searchPage}
-      isTablet={isTablet}
-    />
+  <Box top noPadding>
     <Table
       collection={orders}
       date={linkDate}
@@ -79,22 +71,15 @@ const WorkflowOrders: Function = ({
       canLoadMore={canLoadMore}
       isTablet={isTablet}
       searchPage={searchPage}
+      onCSVClick={onCSVClick}
+      workflow={workflow}
+      onLoadMore={handleLoadMore}
+      selected={selected}
+      selectedIds={selectedIds}
+      location={location}
+      limit={limit}
     />
-    {canLoadMore && (
-      <ButtonGroup style={{ padding: '15px 0 0 0' }}>
-        <Button
-          text={`Showing ${orders.length}`}
-          intent={Intent.NONE}
-          className="pt-minimal"
-        />
-        <Button
-          text={`Load ${limit} more...`}
-          intent={Intent.PRIMARY}
-          onClick={handleLoadMore}
-        />
-      </ButtonGroup>
-    )}
-  </div>
+  </Box>
 );
 
 const filterOrders: Function = (id): Function => (
@@ -235,6 +220,7 @@ export default compose(
     'sort',
     'sortDir',
     'isTablet',
+    'searchQuery',
   ]),
   unsync()
 )(WorkflowOrders);

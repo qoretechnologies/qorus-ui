@@ -68,9 +68,7 @@ const UserHttp: Function = ({ collection }: Props): any => (
         )
       )
     ) : (
-      <Box top noPadding>
-        <NoData />
-      </Box>
+      <NoData big inBox top />
     )}
   </div>
 );

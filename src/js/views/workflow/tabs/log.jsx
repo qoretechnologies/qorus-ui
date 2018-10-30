@@ -1,15 +1,19 @@
 /* @flow */
 import React from 'react';
+
 import LogContainer from '../../../containers/log';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+import Box from '../../../components/box';
 
 type Props = {
   workflow: Object,
-}
+};
 
 const LogTab: Function = (props: Props): React.Element<any> => (
-  <LogContainer resource={`workflows/${props.workflow.id}`} {...props} />
+  <Box top>
+    <LogContainer resource={`workflows/${props.workflow.id}`} {...props} />
+  </Box>
 );
 
 export default compose(
