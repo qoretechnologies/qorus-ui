@@ -295,6 +295,7 @@ export default class Dropdown extends Component {
           position={Position.BOTTOM}
           content={this.renderDropdown()}
           popoverDidOpen={this.handleOpen}
+          popoverClassName="popover-dropdown"
         >
           {this.renderDropdownControl()}
         </Popover>
