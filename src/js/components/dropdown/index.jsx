@@ -230,7 +230,7 @@ export default class Dropdown extends Component {
 
   renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c, index) => {
-      if (!c || (c.type !== Item && c.type !== CustomItem)) return null;
+      if (!c || c.type === Control) return null;
 
       if (c.type === CustomItem) {
         return c;
