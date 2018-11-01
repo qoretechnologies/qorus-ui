@@ -22,6 +22,7 @@ import actions from 'store/api/actions';
 import { ORDER_ACTIONS, ALL_ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 import withDispatch from '../../../hocomponents/withDispatch';
+import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
   setPriority: Function,
@@ -102,11 +103,13 @@ const DiagramInfoTable: Function = ({
           <Th> Scheduled </Th>
           <Td>
             {includes(ORDER_ACTIONS[workflowstatus], 'schedule') ? (
-              <Datepicker
-                date={scheduled}
-                onApplyDate={handleSchedule}
-                futureOnly
-              />
+              <ButtonGroup>
+                <Datepicker
+                  date={scheduled}
+                  onApplyDate={handleSchedule}
+                  futureOnly
+                />
+              </ButtonGroup>
             ) : (
               <Date date={scheduled} />
             )}

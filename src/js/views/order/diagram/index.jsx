@@ -65,7 +65,7 @@ export default class DiagramView extends Component {
     }
   };
 
-  renderErrorPane() {
+  renderErrorPane(top, columns) {
     if (!this.props.order.ErrorInstances) return undefined;
 
     let errors = this.props.order.ErrorInstances;
@@ -79,10 +79,57 @@ export default class DiagramView extends Component {
     }
 
     return (
-      <Box column={2} noTransition top>
+      <Box column={columns} noTransition top={top}>
         <Errors data={errors} paneSize={this.state.paneSize} />
       </Box>
     );
+  }
+
+  renderContent() {
+    const columns: number = this.props.isTablet ? 1 : 2;
+    const boxColumns: ?number = columns === 1 ? null : columns;
+    const top: boolean = !this.props.isTablet;
+
+    return [
+      <Box column={boxColumns} noTransition top style={{ overflowX: 'auto' }}>
+        <PaneItem title="Steps graph">
+          <Graph
+            workflow={this.props.workflow}
+            order={this.props.order}
+            onStepClick={this.handleStepClick}
+          />
+        </PaneItem>
+      </Box>,
+      <Box column={boxColumns} noTransition top={top}>
+        <Info {...this.props.order} />
+      </Box>,
+      <Box column={boxColumns} noTransition top={top}>
+        <Keys data={this.props.order.keys} />
+      </Box>,
+      <Box column={boxColumns} noTransition top={top}>
+        <PaneItem title="Hierarchy">
+          <Hierarchy
+            order={this.props.order}
+            compact
+            isTablet={this.props.isTablet}
+          />
+        </PaneItem>
+      </Box>,
+      <Box column={boxColumns} noTransition top={top}>
+        <PaneItem title="Step details">
+          {this.state.step ? (
+            <StepDetails
+              step={this.state.step}
+              instances={this.props.order.StepInstances}
+              onSkipSubmit={this.handleSkipSubmit}
+            />
+          ) : (
+            <NoData />
+          )}
+        </PaneItem>
+      </Box>,
+      this.renderErrorPane(top, columns),
+    ];
   }
 
   render() {
@@ -90,51 +137,18 @@ export default class DiagramView extends Component {
 
     return (
       <Container>
-        <Masonry
-          id="order-masonry"
-          sizes={[{ columns: 2, gutter: 15 }]}
-          infiniteScrollDisabled
-          key={this.state.step}
-        >
-          <Box column={2} noTransition top style={{ overflowX: 'auto' }}>
-            <PaneItem title="Steps graph">
-              <Graph
-                workflow={this.props.workflow}
-                order={this.props.order}
-                onStepClick={this.handleStepClick}
-              />
-            </PaneItem>
-          </Box>
-          <Box column={2} noTransition top>
-            <Info {...this.props.order} />
-          </Box>
-          <Box column={2} noTransition top>
-            <Keys data={this.props.order.keys} />
-          </Box>
-          <Box column={2} noTransition top>
-            <PaneItem title="Hierarchy">
-              <Hierarchy
-                order={this.props.order}
-                compact
-                isTablet={this.props.isTablet}
-              />
-            </PaneItem>
-          </Box>
-          <Box column={2} noTransition top>
-            <PaneItem title="Step details">
-              {this.state.step ? (
-                <StepDetails
-                  step={this.state.step}
-                  instances={this.props.order.StepInstances}
-                  onSkipSubmit={this.handleSkipSubmit}
-                />
-              ) : (
-                <NoData />
-              )}
-            </PaneItem>
-          </Box>
-          {this.renderErrorPane()}
-        </Masonry>
+        {!this.props.isTablet ? (
+          <Masonry
+            id="order-masonry"
+            sizes={[{ columns: 2, gutter: 15 }]}
+            infiniteScrollDisabled
+            key={this.state.step}
+          >
+            {this.renderContent()}
+          </Masonry>
+        ) : (
+          this.renderContent()
+        )}
       </Container>
     );
   }

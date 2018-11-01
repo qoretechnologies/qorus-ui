@@ -19,17 +19,19 @@ type Props = {
   closeModal: Function,
   id: number,
   dispatchAction: Function,
+  big?: boolean,
 };
 
 const OrderLock: Function = ({
   lock,
   username,
   handleLockClick,
+  big,
 }: Props): React.Element<any> => (
   <Dropdown>
     <Control
       disabled={lock && lock !== username}
-      small
+      small={!big}
       btnStyle={lock ? 'danger' : 'success'}
     >
       <Icon iconName={lock ? 'lock' : 'unlock'} /> {lock || ''}

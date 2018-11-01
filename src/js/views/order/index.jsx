@@ -18,7 +18,7 @@ import HierarchyView from './hierarchy';
 import AuditView from './audit';
 import CodeView from './code';
 import DiagramView from './diagram';
-import Tabs, { Pane } from '../../components/tabs';
+import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import titleManager from '../../hocomponents/TitleManager';
 
 const orderSelector = (state, props) =>
@@ -53,7 +53,7 @@ const selector = createSelector(
 );
 
 @connect(selector)
-@withTabs('diagram')
+@withTabs('overview')
 @titleManager(({ order }): string => (order ? order.name : 'Order view'))
 export default class Order extends Component {
   static propTypes = {
@@ -126,14 +126,8 @@ export default class Order extends Component {
           linkDate={this.props.params.date}
           username={this.props.user.username}
         />
-        <Tabs
-          active={this.props.tabQuery}
-          id="orderData"
-          onChange={this.props.handleTabChange}
-          noContainer
-          boxed
-        >
-          <Pane name="Diagram">
+        <SimpleTabs activeTab={this.props.tabQuery}>
+          <SimpleTab name="overview">
             <DiagramView
               {...{
                 order: this.props.order,
@@ -142,8 +136,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Steps">
+          </SimpleTab>
+          <SimpleTab name="steps">
             <StepsView
               {...{
                 order: this.props.order,
@@ -152,8 +146,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Data">
+          </SimpleTab>
+          <SimpleTab name="data">
             <DataView
               {...{
                 order: this.props.order,
@@ -162,8 +156,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Errors">
+          </SimpleTab>
+          <SimpleTab name="errors">
             <ErrorsView
               {...{
                 order: this.props.order,
@@ -172,8 +166,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Hierarchy">
+          </SimpleTab>
+          <SimpleTab name="hierarchy">
             <HierarchyView
               {...{
                 order: this.props.order,
@@ -182,8 +176,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Audit">
+          </SimpleTab>
+          <SimpleTab name="audit">
             <AuditView
               {...{
                 order: this.props.order,
@@ -192,18 +186,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Info">
-            <InfoView
-              {...{
-                order: this.props.order,
-                workflow: this.props.workflow,
-                dispatch: this.props.dispatch,
-                isTablet: this.props.isTablet,
-              }}
-            />
-          </Pane>
-          <Pane name="Notes">
+          </SimpleTab>
+          <SimpleTab name="notes">
             <NotesView
               {...{
                 order: this.props.order,
@@ -213,8 +197,8 @@ export default class Order extends Component {
                 params: this.props.params,
               }}
             />
-          </Pane>
-          <Pane name="Log">
+          </SimpleTab>
+          <SimpleTab name="log">
             <LogView
               {...{
                 order: this.props.order,
@@ -223,8 +207,8 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-          <Pane name="Code">
+          </SimpleTab>
+          <SimpleTab name="code">
             <CodeView
               {...{
                 order: this.props.order,
@@ -233,8 +217,18 @@ export default class Order extends Component {
                 isTablet: this.props.isTablet,
               }}
             />
-          </Pane>
-        </Tabs>
+          </SimpleTab>
+          <SimpleTab name="info">
+            <InfoView
+              {...{
+                order: this.props.order,
+                workflow: this.props.workflow,
+                dispatch: this.props.dispatch,
+                isTablet: this.props.isTablet,
+              }}
+            />
+          </SimpleTab>
+        </SimpleTabs>
       </div>
     );
   }

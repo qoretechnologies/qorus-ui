@@ -12,7 +12,6 @@ import { Tbody, Tr, Td } from '../../../../components/new_table';
 import Date from '../../../../components/date';
 import AutoComponent from '../../../../components/autocomponent';
 import withModal from '../../../../hocomponents/modal';
-import CSVModal from '../../errors/csv';
 
 type Props = {
   handleCopyClick: Function,
@@ -104,20 +103,6 @@ export default compose(
       onDetailClick,
     }: Props): Function => (): void => {
       onDetailClick(!stateExpand);
-    },
-    handleCopyClick: ({
-      openModal,
-      closeModal,
-      data,
-      onModalMount,
-    }: Props): Function => (): void => {
-      openModal(
-        <CSVModal
-          onClose={closeModal}
-          data={stringifyError(data)}
-          onMount={onModalMount}
-        />
-      );
     },
   }),
   pure(['stateExpand'])

@@ -19,7 +19,7 @@ const LibraryView = ({
   };
 
   return (
-    <Box>
+    <Box top>
       <Code data={workflow.lib} heightUpdater={getHeight} location={location} />
     </Box>
   );

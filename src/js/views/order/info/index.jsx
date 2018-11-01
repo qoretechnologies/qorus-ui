@@ -4,7 +4,7 @@ import Info from 'components/info_table';
 import Box from 'components/box';
 
 const InfoView = ({ order }: { order: Object }) => (
-  <Box noPadding>
+  <Box top noPadding>
     <Info
       object={order}
       pick={[

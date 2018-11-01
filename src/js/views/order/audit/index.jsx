@@ -4,25 +4,17 @@ import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 
 import AuditTable from './table';
-import Dropdown, { Control as DropdownToggle, Item as DropdownItem } from 'components/dropdown';
 import { sortTable } from 'helpers/table';
-import checkNoData from '../../../hocomponents/check-no-data';
+import Box from '../../../components/box';
 
 const orderSelector = (state, props) => props.order;
 
-const selector = createSelector(
-  [
-    orderSelector,
-  ], (order) => ({
-    audits: order.AuditEvents,
-    order,
-  })
-);
+const selector = createSelector([orderSelector], order => ({
+  audits: order.AuditEvents,
+  order,
+}));
 
-@compose(
-  connect(selector),
-  checkNoData((props) => props.audits && props.audits.length)
-)
+@compose(connect(selector))
 export default class ErrorsView extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -44,7 +36,9 @@ export default class ErrorsView extends Component {
   };
 
   renderTable() {
-    let audits = sortTable(this.props.audits, {
+    let audits = this.props.audits || [];
+
+    audits = sortTable(audits, {
       sortBy: 'created',
       sortByKey: {
         direction: -1,
@@ -65,59 +59,17 @@ export default class ErrorsView extends Component {
     return (
       <AuditTable
         collection={audits}
+        onItemClick={this.handleItemClick}
+        limit={this.state.limit}
       />
     );
   }
 
   render() {
     return (
-      <div>
-        <div className="col-xs-3 pull-right">
-          <div className="input-group">
-            <input
-              className="form-control"
-              readOnly
-              value="Showing:"
-            />
-            <div className="input-group-btn">
-              <Dropdown id="show">
-                <DropdownToggle>
-                  {this.state.limit}
-                </DropdownToggle>
-                <DropdownItem
-                  title="10"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="25"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="50"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="100"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="500"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="1000"
-                  action={this.handleItemClick}
-                />
-                <DropdownItem
-                  title="All"
-                  action={this.handleItemClick}
-                />
-              </Dropdown>
-            </div>
-          </div>
-        </div>
-        { this.renderTable() }
-      </div>
+      <Box top noPadding>
+        {this.renderTable()}
+      </Box>
     );
   }
 }

@@ -13,8 +13,8 @@ type Props = {
 };
 
 const DataView = (props: Props) => (
-  <Box>
-    <Tabs id="orderDataTabs" active="static" vertical noContainer>
+  <Box top>
+    <Tabs id="orderDataTabs" active="static" noContainer>
       <Pane name="Static">
         <StaticView {...props} />
       </Pane>

@@ -8,7 +8,7 @@ type Props = {
 };
 
 const CsvControl: Function = ({ onClick }: Props): React.Element<Controls> => (
-  <Controls marginRight={3}>
+  <Controls>
     <Control big text="Export CSV" iconName="export" onClick={onClick} />
   </Controls>
 );

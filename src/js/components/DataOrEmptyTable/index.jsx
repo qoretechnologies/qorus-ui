@@ -7,11 +7,13 @@ const DataOrEmptyTable: Function = ({
   cols,
   condition,
   children,
+  small,
   ...rest
 }: {
   cols: number,
   condition: boolean,
   children: Function,
+  small: boolean,
 }): React.Element<Tbody> =>
   condition ? (
     <Tbody {...rest} className="tbody-empty-table">
@@ -23,7 +25,7 @@ const DataOrEmptyTable: Function = ({
       <Tr>
         <Td colspan={cols}>
           <div className="no-data-table-wrapper">
-            <NoData big />
+            <NoData big={!small} />
           </div>
         </Td>
       </Tr>
