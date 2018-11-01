@@ -49,6 +49,7 @@ type Props = {
   changeDateQuery: Function,
   location: Object,
   limit: number,
+  children?: any,
 };
 
 const WorkflowTable: Function = ({
@@ -69,6 +70,7 @@ const WorkflowTable: Function = ({
   changeDateQuery,
   location,
   limit,
+  children,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -78,6 +80,13 @@ const WorkflowTable: Function = ({
     key={collection.length}
   >
     <Thead>
+      {children && (
+        <FixedRow className="toolbar-row">
+          <Th colspan="full">
+            <Pull>{children}</Pull>
+          </Th>
+        </FixedRow>
+      )}
       <FixedRow className="toolbar-row">
         <Th colspan="full">
           <Pull>

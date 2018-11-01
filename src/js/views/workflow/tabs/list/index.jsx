@@ -44,6 +44,7 @@ type Props = {
   onSortChange: Function,
   filter: string,
   isTablet: boolean,
+  children?: any,
 };
 
 const WorkflowOrders: Function = ({
@@ -61,6 +62,7 @@ const WorkflowOrders: Function = ({
   isTablet,
   onCSVClick,
   workflow,
+  children,
 }: Props): React.Element<any> => (
   <Box top noPadding>
     <Table
@@ -78,7 +80,9 @@ const WorkflowOrders: Function = ({
       selectedIds={selectedIds}
       location={location}
       limit={limit}
-    />
+    >
+      {children}
+    </Table>
   </Box>
 );
 
