@@ -6,7 +6,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
-import OrdersView from './table';
+import ErrorsTable from './table';
 import queryControl from '../../../hocomponents/queryControl';
 import sync from '../../../hocomponents/sync';
 import unsync from '../../../hocomponents/unsync';
@@ -50,15 +50,14 @@ const SearchView: Function = ({
   searchData,
   ...rest
 }: Props): React.Element<any> => (
-  <div className="tab-pane active">
+  <ErrorsTable
+    location={location}
+    linkDate={mindateQuery}
+    searchData={searchData}
+    searchPage
+  >
     <SearchToolbar mindateQuery={mindateQuery} {...rest} />
-    <OrdersView
-      location={location}
-      linkDate={mindateQuery}
-      searchData={searchData}
-      searchPage
-    />
-  </div>
+  </ErrorsTable>
 );
 
 export default compose(

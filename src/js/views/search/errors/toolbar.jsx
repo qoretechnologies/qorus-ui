@@ -3,13 +3,7 @@ import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import {
-  ButtonGroup,
-  Button,
-  Intent,
-  ControlGroup,
-  InputGroup,
-} from '@blueprintjs/core';
+import { Intent, ControlGroup, InputGroup } from '@blueprintjs/core';
 
 import Toolbar from '../../../components/toolbar';
 import Datepicker from '../../../components/datepicker';
@@ -17,7 +11,11 @@ import Dropdown, { Item, Control } from '../../../components/dropdown';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
 import { DATE_FORMATS } from '../../../constants/dates';
-import HistoryModal from '../modals/history';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
+import Pull from '../../../components/Pull';
 
 type Props = {
   mindateQuery: string,
@@ -103,20 +101,6 @@ export default class SearchToolbar extends Component {
     this.props.changeAllQuery(data);
   }, 280);
 
-  handleHistoryClick: Function = (): void => {
-    this.props.openModal(
-      <HistoryModal type="errorSearch" onClose={this.props.closeModal} />
-    );
-  };
-
-  handleSaveClick: Function = (): void => {
-    this.props.saveSearch(
-      'errorSearch',
-      this.props.allQuery,
-      this.props.username
-    );
-  };
-
   handleClearClick: Function = (): void => {
     this.setState({
       mindate: this.props.defaultDate,
@@ -170,22 +154,9 @@ export default class SearchToolbar extends Component {
 
   render() {
     return (
-      <Toolbar>
-        <div className="pull-left">
+      <Pull>
+        <ButtonGroup>
           <ControlGroup>
-            <Dropdown
-              id="ids"
-              multi
-              onSubmit={this.handleIdsChange}
-              selected={
-                !this.state.ids || this.state.ids === ''
-                  ? []
-                  : this.state.ids.split(',')
-              }
-            >
-              <Control />
-              {this.props.workflows.map((o, k) => <Item key={k} title={o} />)}
-            </Dropdown>
             <InputGroup
               type="text"
               placeholder="Name"
@@ -200,68 +171,88 @@ export default class SearchToolbar extends Component {
               value={this.state.error || ''}
               id="error"
             />
-            <Datepicker
-              placeholder="Min date..."
-              date={this.state.mindate}
-              onApplyDate={this.handleMinDateChange}
-              applyOnBlur
-              id="mindate"
-            />
-            <Datepicker
-              placeholder="Max date..."
-              date={this.state.maxdate}
-              onApplyDate={this.handleMaxDateChange}
-              applyOnBlur
-              noButtons
-              id="maxdate"
-            />
-
-            <Dropdown
-              id="filters"
-              multi
-              def="All"
-              onSubmit={this.handleFilterChange}
-              selected={
-                !this.state.filter || this.state.filter === ''
-                  ? ['All']
-                  : this.state.filter.split(',')
-              }
-            >
-              <Control />
-              <Item title="All" />
-              {ORDER_STATES.map((o, k) => <Item key={k} title={o.title} />)}
-            </Dropdown>
-            <Button
-              text="Retry"
-              intent={this.state.retry ? Intent.PRIMARY : Intent.NONE}
-              iconName={this.state.retry ? 'selection' : 'circle'}
-              onClick={this.handleRetryChange}
-            />
-            <Button
-              text="Bus. Err."
-              intent={this.state.busErr ? Intent.PRIMARY : Intent.NONE}
-              iconName={this.state.busErr ? 'selection' : 'circle'}
-              onClick={this.handleBuserrChange}
-            />
           </ControlGroup>
-        </div>
-        <div className="pull-right">
-          <Dropdown id="searchErrorOthers">
-            <Control> More </Control>
-            <Item
-              title="Save search"
-              iconName="floppy-disk"
-              action={this.handleSaveClick}
-            />
-            <Item
-              title="Show history"
-              iconName="history"
-              action={this.handleHistoryClick}
-            />
-            <Item title="Clear" iconName="remove" action={this.handleClearClick} />
+        </ButtonGroup>
+        <ButtonGroup>
+          <Datepicker
+            placeholder="Min date..."
+            date={this.state.mindate}
+            onApplyDate={this.handleMinDateChange}
+            applyOnBlur
+            id="mindate"
+          />
+        </ButtonGroup>
+        <ButtonGroup>
+          <Datepicker
+            placeholder="Max date..."
+            date={this.state.maxdate}
+            onApplyDate={this.handleMaxDateChange}
+            applyOnBlur
+            noButtons
+            id="maxdate"
+          />
+        </ButtonGroup>
+        <ButtonGroup>
+          <Dropdown
+            id="ids"
+            multi
+            onSubmit={this.handleIdsChange}
+            selected={
+              !this.state.ids || this.state.ids === ''
+                ? []
+                : this.state.ids.split(',')
+            }
+          >
+            <Control />
+            {this.props.workflows.map((o, k) => (
+              <Item key={k} title={o} />
+            ))}
           </Dropdown>
-        </div>
-      </Toolbar>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Dropdown
+            id="filters"
+            multi
+            def="All"
+            onSubmit={this.handleFilterChange}
+            selected={
+              !this.state.filter || this.state.filter === ''
+                ? ['All']
+                : this.state.filter.split(',')
+            }
+          >
+            <Control />
+            <Item title="All" />
+            {ORDER_STATES.map((o, k) => (
+              <Item key={k} title={o.title} />
+            ))}
+          </Dropdown>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button
+            text="Retry"
+            intent={this.state.retry ? Intent.PRIMARY : Intent.NONE}
+            iconName={this.state.retry ? 'selection' : 'circle'}
+            onClick={this.handleRetryChange}
+            big
+          />
+          <Button
+            text="Bus. Err."
+            intent={this.state.busErr ? Intent.PRIMARY : Intent.NONE}
+            iconName={this.state.busErr ? 'selection' : 'circle'}
+            onClick={this.handleBuserrChange}
+            big
+          />
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button
+            text="Clear"
+            iconName="cross"
+            onClick={this.handleClearClick}
+            big
+          />
+        </ButtonGroup>
+      </Pull>
     );
   }
 }

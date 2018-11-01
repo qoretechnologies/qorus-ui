@@ -9,9 +9,19 @@ import Modal from '../../../components/modal';
 import Text from '../../../components/text';
 import Date from '../../../components/date';
 import AutoComp from '../../../components/autocomponent';
-import { Table, Thead, Tbody, Tr, Th, Td } from '../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  FixedRow,
+  Tr,
+  Th,
+  Td,
+} from '../../../components/new_table';
 import queryControl from '../../../hocomponents/queryControl';
 import { Control as Button } from '../../../components/controls';
+import Box from '../../../components/box';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
   history: Array<string>,
@@ -19,7 +29,8 @@ type Props = {
   storage: Object,
   onClose: Function,
   data: string,
-  changeAllQuery: Function
+  changeAllQuery: Function,
+  first?: boolean,
 };
 
 let SearchHistoryRow: Function = ({
@@ -27,6 +38,7 @@ let SearchHistoryRow: Function = ({
   type,
   changeAllQuery,
   onClose,
+  first,
 }: Props): React.Element<any> => {
   const item: Object = JSON.parse(data);
   const handleClick: Function = () => {
@@ -35,19 +47,19 @@ let SearchHistoryRow: Function = ({
   };
 
   return (
-    <Tr>
+    <Tr first={first}>
       <Td className="text medium">
         <Text text={item.ids} />
       </Td>
       <Td className="text medium">
-        {type === 'orderSearch' ? (
+        {type === 'ordersSearch' ? (
           <Text text={item.keyname} />
         ) : (
           <Text text={item.name} />
         )}
       </Td>
       <Td className="text medium">
-        {type === 'orderSearch' ? (
+        {type === 'ordersSearch' ? (
           <Text text={item.keyvalue} />
         ) : (
           <Text text={item.error} />
@@ -59,12 +71,12 @@ let SearchHistoryRow: Function = ({
       <Td className="text big">
         <Date date={item.maxdate} />
       </Td>
-      {type !== 'orderSearch' && (
+      {type !== 'ordersSearch' && (
         <Td className="narrow">
           <AutoComp>{item.retry && item.retry !== ''}</AutoComp>
         </Td>
       )}
-      {type !== 'orderSearch' && (
+      {type !== 'ordersSearch' && (
         <Td className="narrow">
           <AutoComp>{item.busErr && item.busErr !== ''}</AutoComp>
         </Td>
@@ -73,11 +85,7 @@ let SearchHistoryRow: Function = ({
         <Text text={item.filter} />
       </Td>
       <Td className="narrow">
-        <Button
-          label="Apply"
-          btnStyle="success"
-          onClick={handleClick}
-        />
+        <Button label="Apply" btnStyle="success" onClick={handleClick} />
       </Td>
     </Tr>
   );
@@ -90,47 +98,52 @@ const SearchHistory: Function = ({
   type,
   onClose,
 }: Props): React.Element<any> => (
-  <Modal size="lg">
-    <Modal.Header
-      titleId="historysearch"
-      onClose={onClose}
-    >
+  <Modal size="lg" width="90vw">
+    <Modal.Header titleId="historysearch" onClose={onClose}>
       Search history
     </Modal.Header>
     <Modal.Body>
-      {history.length ? (
+      <Box top noPadding>
         <Table fixed condensed striped hover>
           <Thead>
-            <Tr>
+            <FixedRow>
               <Th className="text medium">IDs</Th>
-              <Th className="text medium">{type === 'orderSearch' ? 'Keyname' : 'Name'}</Th>
-              <Th className="text medium">{type === 'orderSearch' ? 'Keyvalue' : 'Error'}</Th>
-              <Th className="text big">Min. Date</Th>
-              <Th className="text big">Max. Date</Th>
-              {type !== 'orderSearch' && (
-                <Th className="narrow">Retry</Th>
-              )}
-              {type !== 'orderSearch' && (
-                <Th className="narrow">Bus. Err.</Th>
-              )}
+              <Th className="text medium">
+                {type === 'ordersSearch' ? 'Keyname' : 'Name'}
+              </Th>
+              <Th className="text medium">
+                {type === 'ordersSearch' ? 'Keyvalue' : 'Error'}
+              </Th>
+              <Th className="big">Min. Date</Th>
+              <Th className="big">Max. Date</Th>
+              {type !== 'ordersSearch' && <Th className="narrow">Retry</Th>}
+              {type !== 'ordersSearch' && <Th className="narrow">Bus. Err.</Th>}
               <Th className="text">Filters</Th>
               <Th className="narrow">-</Th>
-            </Tr>
+            </FixedRow>
           </Thead>
-          <Tbody>
-            {history.map((data: string, key: number): React.Element<any> => (
-              <SearchHistoryRow
-                key={key}
-                data={data}
-                type={type}
-                onClose={onClose}
-              />
-            ))}
-          </Tbody>
+          <DataOrEmptyTable
+            condition={history.length === 0}
+            cols={type === 'ordersSearch' ? 7 : 9}
+          >
+            {props => (
+              <Tbody {...props}>
+                {history.map(
+                  (data: string, key: number): React.Element<any> => (
+                    <SearchHistoryRow
+                      first={key === 0}
+                      key={key}
+                      data={data}
+                      type={type}
+                      onClose={onClose}
+                    />
+                  )
+                )}
+              </Tbody>
+            )}
+          </DataOrEmptyTable>
         </Table>
-      ) : (
-        <p className="no-data"> No data </p>
-      )}
+      </Box>
     </Modal.Body>
   </Modal>
 );
@@ -141,11 +154,14 @@ export default compose(
       storage: state.api.currentUser.data.storage,
     })
   ),
-  mapProps(({ storage, type, ...rest }: Props): Props => ({
-    history: storage[type] && storage[type].searches ? storage[type].searches : [],
-    storage,
-    type,
-    ...rest,
-  })),
+  mapProps(
+    ({ storage, type, ...rest }: Props): Props => ({
+      history:
+        storage[type] && storage[type].searches ? storage[type].searches : [],
+      storage,
+      type,
+      ...rest,
+    })
+  ),
   pure(['history'])
 )(SearchHistory);

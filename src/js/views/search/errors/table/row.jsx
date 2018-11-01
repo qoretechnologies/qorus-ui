@@ -42,7 +42,7 @@ const TableRow: Function = ({
     <Td className="medium">
       <span className={`label status-${label}`}>{workflowstatus}</span>
     </Td>
-    <Td className="text">
+    <Td className="text name">
       <Text text={error} />
     </Td>
     <Td className="narrow">
