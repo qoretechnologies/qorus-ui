@@ -3,6 +3,8 @@ import React from 'react';
 
 import Crumb from './crumb';
 import CrumbTabs from './tabs';
+import CollapsedCrumb from './collapsedCrumb';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   children?: any,
@@ -13,18 +15,15 @@ type Props = {
 
 const Breadcrumbs: Function = ({
   children,
-  collapsed: collapsed = true,
   onClick,
   noFloat,
 }: Props): React.Element<any> => (
   <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
-    {collapsed && (
-      <li onClick={onClick}>
-        <span className="pt-breadcrumbs-collapsed" />
-      </li>
-    )}
+    <li>
+      <Icon className="pt-breadcrumb" iconName="home" />
+    </li>
     {children}
   </ul>
 );
 
-export { Breadcrumbs, Crumb, CrumbTabs };
+export { Breadcrumbs, Crumb, CrumbTabs, CollapsedCrumb };
