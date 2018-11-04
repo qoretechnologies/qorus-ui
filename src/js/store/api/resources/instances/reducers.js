@@ -69,8 +69,15 @@ const changeServerSort: Object = {
   },
 };
 
+const unsync = {
+  next() {
+    return initialState;
+  },
+};
+
 export {
   fetchInstances as FETCHINSTANCES,
   changeOffset as CHANGEOFFSET,
   changeServerSort as CHANGESERVERSORT,
+  unsync as UNSYNC,
 };

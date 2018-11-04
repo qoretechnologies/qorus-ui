@@ -43,4 +43,6 @@ const changeServerSort = createAction(
   (sort: string): Object => ({ sort })
 );
 
-export { fetchInstances, changeOffset, changeServerSort };
+const unsync = createAction('INSTANCES_UNSYNC');
+
+export { fetchInstances, changeOffset, changeServerSort, unsync };

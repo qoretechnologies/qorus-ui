@@ -35,14 +35,11 @@ const JobCode: Function = ({
 export default compose(
   withHandlers({
     heightUpdater: (): Function => (): number => {
-      const navbar = document.querySelector('.navbar').clientHeight;
-      const footer = document.querySelector('footer').clientHeight;
-      const header = document.querySelector('.job-header').clientHeight;
-      const desc = document.querySelector('.job-description').clientHeight;
-      const tabs = document.querySelector('.nav-tabs').clientHeight;
-      const top = navbar + footer + header + desc + tabs + 40;
+      const { top } = document
+        .querySelector('.code-list')
+        .getBoundingClientRect();
 
-      return window.innerHeight - top;
+      return window.innerHeight - top - 60;
     },
   }),
   mapProps(

@@ -21,6 +21,7 @@ import withSort from '../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../constants/sort';
 import sync from '../../../../hocomponents/sync';
 import csv from '../../../../hocomponents/csv';
+import unsync from '../../../../hocomponents/unsync';
 
 type Props = {
   job: Object,
@@ -128,6 +129,7 @@ export default compose(
     {
       load: actions.instances.fetchInstances,
       fetch: actions.instances.fetchInstances,
+      unsync: actions.instances.unsync,
     }
   ),
   withSort('instances', 'instances', sortDefaults.instances),
@@ -187,6 +189,7 @@ export default compose(
   }),
   csv('instances', 'instances'),
   queryControl('job'),
+  unsync(),
   pure([
     'job',
     'jobQuery',

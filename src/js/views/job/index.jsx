@@ -30,6 +30,8 @@ import {
   paramSelector,
 } from '../../selectors';
 import lifecycle from 'recompose/lifecycle';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import unsync from '../../hocomponents/unsync';
 
 type Props = {
   job: Object,
@@ -110,6 +112,7 @@ export default compose(
     {
       load: actions.jobs.fetch,
       fetch: actions.jobs.fetch,
+      unsync: actions.jobs.unsync,
     }
   ),
   mapProps(
@@ -139,5 +142,7 @@ export default compose(
   }),
   titleManager(({ job }): string => job.name),
   queryControl('search'),
-  withTabs('instances')
+  withTabs('instances'),
+  unsync(),
+  onlyUpdateForKeys(['job', 'location', 'children'])
 )(JobPage);

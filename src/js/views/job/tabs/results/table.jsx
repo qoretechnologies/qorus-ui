@@ -55,7 +55,7 @@ const ResultTable = ({
   onCSVClick,
   dateQuery: dateQuery = '24h',
   changeDateQuery,
-  job: { COMPLETE = 0, ERROR, PROGRESS = 0, CRASHED = 0, id },
+  job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id },
 }: Props) => (
   <Table fixed condensed hover striped key={collection.length}>
     <Thead>
