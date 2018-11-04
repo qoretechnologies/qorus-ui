@@ -6,8 +6,8 @@ import { includes, isArray, isObject, size } from 'lodash';
 import {
   ControlGroup,
   InputGroup,
-  ButtonGroup,
   Button,
+  ButtonGroup,
 } from '@blueprintjs/core';
 
 import Toolbar from '../../components/toolbar';
@@ -16,6 +16,7 @@ import Loader from '../../components/loader';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import Tree from '../../components/tree';
 import Container from '../../components/container';
+import Headbar from '../../components/Headbar';
 
 type Props = {
   sync: boolean,
@@ -27,6 +28,8 @@ type Props = {
 import actions from '../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
+import Pull from '../../components/Pull';
+import Alert from '../../components/alert';
 
 const ocmdSelector: Function = (state: Object): Object => state.api.ocmd;
 
@@ -212,25 +215,16 @@ export default class OCMDView extends Component {
     );
   };
 
-  renderInfo: Function = (): ?React.Element<any> => {
-    const { value } = this.state;
-
-    if (!value || !this.state.collection[value]) return undefined;
-
-    return (
-      <p className="command-info">
-        <strong>Command description: </strong>
-        <em>{this.state.collection[value].description}</em>
-      </p>
-    );
-  };
-
   renderOutput: Function = (): React.Element<any> => {
     const { output } = this.state;
 
     if (isObject(output)) {
       if (output.err) {
-        return <span className="command-error">Error: {output.desc}</span>;
+        return (
+          <Alert bsStyle="danger" title="Error">
+            {output.desc}
+          </Alert>
+        );
       }
 
       return <Tree data={output} />;
@@ -246,46 +240,50 @@ export default class OCMDView extends Component {
 
     return (
       <div>
-        <Breadcrumbs>
-          <Crumb>OCMD</Crumb>
-        </Breadcrumbs>
-        <Box top>
-          <Toolbar>
+        <Headbar>
+          <Breadcrumbs>
+            <Crumb active>OCMD</Crumb>
+          </Breadcrumbs>
+          <Pull right>
             <form onSubmit={this.handleFormSubmit}>
-              <ControlGroup className="pt-fill">
-                <Dropdown id="ocmd" show={this.state.showDropdown}>
-                  <Control btnStyle="info"> Command list </Control>
-                  {this.renderCommands()}
+              <ButtonGroup>
+                <Dropdown show={this.state.showDropdown}>
+                  <Control icon="list">Command list</Control>
+                  {size(this.state.filtered) !== 0 || this.state.value === ''
+                    ? this.renderCommands()
+                    : null}
                 </Dropdown>
-
-                <InputGroup
-                  type="text"
-                  name="ocmd-command"
-                  onChange={this.handleInputChange}
-                  onKeyDown={this.handleInputKeyPress}
-                  placeholder="Type or select command..."
-                  value={this.state.value}
-                  ref="command"
-                  autoComplete="off"
-                />
-                <InputGroup
-                  type="text"
-                  name="ocmd-args"
-                  ref="args"
-                  onChange={this.handleArgsChange}
-                  placeholder="Arguments..."
-                  value={this.state.args}
-                  autoComplete="off"
-                />
-              </ControlGroup>
-              <Button type="submit" style={{ display: 'none' }} />
+              </ButtonGroup>
+              <ButtonGroup>
+                <ControlGroup className="vab">
+                  <InputGroup
+                    type="text"
+                    name="ocmd-command"
+                    onChange={this.handleInputChange}
+                    onKeyDown={this.handleInputKeyPress}
+                    placeholder="Type or select command..."
+                    value={this.state.value}
+                    ref="command"
+                    autoComplete="off"
+                    style={{ width: '250px' }}
+                  />
+                  <InputGroup
+                    type="text"
+                    name="ocmd-args"
+                    ref="args"
+                    onChange={this.handleArgsChange}
+                    placeholder="Arguments..."
+                    value={this.state.args}
+                    autoComplete="off"
+                    style={{ width: '250px' }}
+                  />
+                </ControlGroup>
+                <Button type="submit" style={{ display: 'none' }} />
+              </ButtonGroup>
             </form>
-            <div className="row">
-              <div className="col-sm-12">{this.renderInfo()}</div>
-            </div>
-          </Toolbar>
-        </Box>
-        <Box>
+          </Pull>
+        </Headbar>
+        <Box top>
           <Container>
             {this.state.lastCommand && (
               <h4>Showing output for: {this.state.lastCommand}</h4>
