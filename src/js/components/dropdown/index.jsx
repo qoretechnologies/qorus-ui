@@ -220,7 +220,10 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   renderDropdown(): ?React.Element<any> {
-    if (!this.props.disabled) {
+    if (
+      !this.props.disabled &&
+      React.Children.toArray(this.props.children).length > 1
+    ) {
       return <Menu>{this.renderDropdownList()}</Menu>;
     }
 
