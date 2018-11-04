@@ -6,7 +6,6 @@ import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import flowRight from 'lodash/flowRight';
 import lifecycle from 'recompose/lifecycle';
-import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
 
 import actions from '../../../../store/api/actions';
@@ -202,11 +201,6 @@ export default compose(
         );
         unselectAll();
       }
-    },
-  }),
-  withHandlers({
-    handleMoreClick: ({ changeOffset }: Props): Function => (): void => {
-      changeOffset();
     },
   }),
   selectable('orders'),

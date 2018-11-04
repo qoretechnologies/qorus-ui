@@ -5,6 +5,7 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 
 import Code from '../../../../components/code';
+import Box from '../../../../components/box';
 
 type Props = {
   job: Object,
@@ -13,16 +14,22 @@ type Props = {
   location: Object,
 };
 
-const JobCode: Function = ({ lib, heightUpdater, location }: Props): React.Element<any> => (
-  <Code
-    selected={{
-      name: `code - ${lib.code[0].name}`,
-      code: lib.code[0].body,
-    }}
-    data={lib || {}}
-    heightUpdater={heightUpdater}
-    location={location}
-  />
+const JobCode: Function = ({
+  lib,
+  heightUpdater,
+  location,
+}: Props): React.Element<any> => (
+  <Box top>
+    <Code
+      selected={{
+        name: `code - ${lib.code[0].name}`,
+        code: lib.code[0].body,
+      }}
+      data={lib || {}}
+      heightUpdater={heightUpdater}
+      location={location}
+    />
+  </Box>
 );
 
 export default compose(
@@ -38,18 +45,20 @@ export default compose(
       return window.innerHeight - top;
     },
   }),
-  mapProps((props: Object): Object => ({
-    ...props,
-    lib: {
-      ...{
-        code: [
-          {
-            name: 'Job code',
-            body: props.job.code,
-          },
-        ],
+  mapProps(
+    (props: Object): Object => ({
+      ...props,
+      lib: {
+        ...{
+          code: [
+            {
+              name: 'Job code',
+              body: props.job.code,
+            },
+          ],
+        },
+        ...props.job.lib,
       },
-      ...props.job.lib,
-    },
-  })),
+    })
+  )
 )(JobCode);

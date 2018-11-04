@@ -13,11 +13,13 @@ type Props = {
   filterQuery: string,
   changeFilterQuery: Function,
   handleFilterChange: Function,
+  items: Array<Object>,
 };
 
 const ToolbarFilters: Function = ({
   filterQuery,
   handleFilterChange,
+  items: items = ORDER_STATES,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Dropdown
@@ -29,7 +31,7 @@ const ToolbarFilters: Function = ({
     >
       <Control />
       <Item title="All" />
-      {ORDER_STATES.map((o, k) => (
+      {items.map((o, k) => (
         <Item key={k} title={o.title} />
       ))}
     </Dropdown>

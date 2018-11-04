@@ -164,7 +164,11 @@ export function createResourceReducers(
           sync: false,
         },
       };
-    } else if (resource === 'orders' || resource === 'orderErrors') {
+    } else if (
+      resource === 'orders' ||
+      resource === 'orderErrors' ||
+      resource === 'instances'
+    ) {
       initState = {
         data: [],
         sync: false,

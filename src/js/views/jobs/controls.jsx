@@ -38,9 +38,10 @@ type Props = {
   scheduleOnly?: boolean,
   schedText: string,
   remote: boolean,
+  big: boolean,
 };
 
-const ServiceControls: Function = ({
+const JobControls: Function = ({
   handleEnableClick,
   handleActivateClick,
   handleResetClick,
@@ -52,12 +53,18 @@ const ServiceControls: Function = ({
   enabled,
   scheduleOnly,
   schedText,
+  big,
 }: // remote,
 Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
-      <Button text="Reschedule" iconName="time" onClick={handleScheduleClick} />
+      <Button
+        text="Reschedule"
+        big={big}
+        iconName="time"
+        onClick={handleScheduleClick}
+      />
     </div>
   ) : (
     <ButtonGroup>
@@ -66,21 +73,34 @@ Props): React.Element<any> =>
         iconName="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleEnableClick}
+        big={big}
       />
       <Button
         title={active ? 'Deactivate' : 'Activate'}
         iconName={active ? 'small-tick' : 'cross'}
         intent={active ? Intent.PRIMARY : Intent.NONE}
         onClick={handleActivateClick}
+        big={big}
       />
-      <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
-      <Button title="Run" iconName="play" onClick={handleRunClick} />
+      <Button
+        title="Reset"
+        iconName="refresh"
+        big={big}
+        onClick={handleResetClick}
+      />
+      <Button title="Run" iconName="play" big={big} onClick={handleRunClick} />
       <Button
         title="Reschedule"
         iconName="time"
         onClick={handleScheduleClick}
+        big={big}
       />
-      <Button title="Set expiry" iconName="tag" onClick={handleExpiryClick} />
+      <Button
+        title="Set expiry"
+        iconName="tag"
+        onClick={handleExpiryClick}
+        big={big}
+      />
     </ButtonGroup>
   );
 
@@ -163,5 +183,5 @@ export default compose(
       );
     },
   }),
-  pure(['enabled', 'active', 'id'])
-)(ServiceControls);
+  pure(['enabled', 'active', 'id', 'big'])
+)(JobControls);

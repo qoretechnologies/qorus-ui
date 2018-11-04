@@ -27,6 +27,7 @@ import * as slasActions from './resources/slas/actions';
 import * as slaEventsActions from './resources/slas/events/actions';
 import * as slaPerfActions from './resources/slas/perf/actions';
 import * as systemActions from './resources/system/actions';
+import * as instancesActions from './resources/instances/actions';
 
 import {
   combineResourceActions,
@@ -93,6 +94,8 @@ Object.assign(actions.workflows, workflowActions.specials);
 Object.assign(actions.remotes, remoteActions);
 
 Object.assign(actions.users, usersActions);
+
+Object.assign(actions.instances, instancesActions);
 
 Object.assign(actions.currentUser, currentUserActions);
 

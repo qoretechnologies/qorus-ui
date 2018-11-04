@@ -196,6 +196,7 @@ export default compose(
     'sortData',
     'collection',
     'date',
+    'dateQuery',
     'isTablet',
     'searchPage',
     'selected',

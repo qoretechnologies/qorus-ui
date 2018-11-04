@@ -10,7 +10,13 @@ export const sortDefaults = {
     sortBy: 'started',
     sortByKey: { direction: -1, ignoreCase: true },
     historySortBy: 'workflowstatus',
-    historySortyByKey: { direction: 1, ignoreCase: true },
+    historySortByKey: { direction: 1, ignoreCase: true },
+  },
+  instances: {
+    sortBy: 'started',
+    sortByKey: { direction: -1, ignoreCase: true },
+    historySortBy: 'jobstatus',
+    historySortByKey: { direction: 1, ignoreCase: true },
   },
   orderErrors: {
     sortBy: 'id',

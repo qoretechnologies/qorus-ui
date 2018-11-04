@@ -3,12 +3,12 @@ import React from 'react';
 import withHandlers from 'recompose/withHandlers';
 
 import LogContainer from '../../../../containers/log';
+import Box from '../../../../components/box';
 
 const JobLog = ({ job, ...other }: { job: Object }) => (
-  <LogContainer
-    {...other}
-    resource={`jobs/${job.id}`}
-  />
+  <Box top>
+    <LogContainer {...other} resource={`jobs/${job.id}`} />
+  </Box>
 );
 
 export default withHandlers({
@@ -23,4 +23,3 @@ export default withHandlers({
     return window.innerHeight - top;
   },
 })(JobLog);
-

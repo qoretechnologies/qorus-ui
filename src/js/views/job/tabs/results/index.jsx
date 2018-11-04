@@ -3,113 +3,203 @@ import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import withHandlers from 'recompose/withHandlers';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
+import flowRight from 'lodash/flowRight';
 
-import ResultsTable from './table';
-import ResultsToolbar from './toolbar';
-import { formatDate } from '../../../../helpers/date';
-import LoadMore from '../../../../components/load_more';
-import getRouterContext from '../../../../hocomponents/get-router-context';
+import Table from './table';
+import Box from '../../../../components/box';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import actions from '../../../../store/api/actions';
 import queryControl from '../../../../hocomponents/queryControl';
 import Detail from './detail';
+import { findBy } from '../../../../helpers/search';
+import { createSelector } from 'reselect';
+import { querySelector, resourceSelector } from '../../../../selectors';
+import loadMore from '../../../../hocomponents/loadMore';
+import withSort from '../../../../hocomponents/sort';
+import { sortDefaults } from '../../../../constants/sort';
+import sync from '../../../../hocomponents/sync';
+import csv from '../../../../hocomponents/csv';
 
-const JobResults = ({
-  job,
-  location,
-  onLoadMore,
-  jobQuery,
-  changeJobQuery,
-}: {
+type Props = {
   job: Object,
-  jobResult: Object,
   location: Object,
   onLoadMore: Function,
   jobQuery: string | number,
   changeJobQuery: Function,
-}) => (
-  <div className="job-results">
-    <ResultsToolbar {...{ location, job }} />
-    <div className="job-results-table">
-      <ResultsTable
-        results={job.results}
+  instances: Array<Object>,
+  date: string,
+  limit: number,
+  canLoadMore: Function,
+  handleLoadMore: Function,
+  sortData: Object,
+  onSortChange: Function,
+  isTablet: boolean,
+  onCSVClick: Function,
+};
+
+const JobResults = ({
+  location,
+  jobQuery,
+  changeJobQuery,
+  instances,
+  date,
+  limit,
+  canLoadMore,
+  handleLoadMore,
+  sortData,
+  onSortChange,
+  isTablet,
+  onCSVClick,
+  job,
+}: Props) => (
+  <div>
+    <Box top noPadding>
+      <Table
+        collection={instances}
         location={location}
-        searchQuery={location.query.q}
         changeJobQuery={changeJobQuery}
         jobQuery={jobQuery}
+        date={date}
+        limit={limit}
+        canLoadMore={canLoadMore}
+        onLoadMore={handleLoadMore}
+        sortData={sortData}
+        onSortChange={onSortChange}
+        isTable={isTablet}
+        onCSVClick={onCSVClick}
+        job={job}
       />
-      <LoadMore dataObject={job.results} onLoadMore={onLoadMore} />
-      { jobQuery && jobQuery !== '' ? (
-        <Detail
-          location={location}
-          changeJobQuery={changeJobQuery}
-        />
-      ) : null }
-    </div>
+    </Box>
+    {jobQuery && jobQuery !== '' ? (
+      <Detail location={location} changeJobQuery={changeJobQuery} />
+    ) : null}
   </div>
 );
 
-const addUrlParams = mapProps((props:Object) => {
-  const { location: { query } } = props;
-  const { filter: status, date } = query;
-  const searchableDate = formatDate(date).format();
-  return {
-    ...props,
-    urlParams: {
-      statuses: status !== 'all' ? status : undefined,
-      date: searchableDate,
-    },
-  };
-});
+const filterInstances: Function = (id): Function => (
+  instances: Array<Object>
+): Array<Object> =>
+  id
+    ? instances.filter((instance: Object): boolean => instance.jobid === id)
+    : instances;
 
-const fetchOnMount = lifecycle({
-  componentWillMount() {
-    this.props.fetchResults();
-  },
-});
+const filterSearch: Function = (search: string): Function => (
+  instances: Array<Object>
+): Array<Object> => findBy(['id', 'jobstatus'], search, instances);
 
-const fetchOnQueryParamsUpdate = lifecycle({
-  componentWillReceiveProps(newProps) {
-    const { clearResults, fetchResults, location: { query: newQuery } } = newProps;
-    const { location: { query } } = this.props;
+const idSelector: Function = (state, props) =>
+  props.job ? props.job.id : null;
 
-    if (query.filter !== newQuery.filter || query.date !== newQuery.date) {
-      clearResults();
-      fetchResults();
-    }
-  },
-});
+const collectionSelector: Function = createSelector(
+  [querySelector('search'), resourceSelector('instances'), idSelector],
+  (search: string, instances: Object, id: number) =>
+    flowRight(
+      filterSearch(search),
+      filterInstances(id)
+    )(instances.data)
+);
 
-const addLoadMoreHandler = withHandlers({
-  onLoadMore: ({ job, fetchResults }: { job: Object, fetchResults: Function }) => () => {
-    const { offset, limit } = job.results;
-    fetchResults(offset + limit, limit);
-  },
-});
+const settingsSelector = (state: Object): Object => state.ui.settings;
+
+const viewSelector: Function = createSelector(
+  [
+    resourceSelector('instances'),
+    collectionSelector,
+    resourceSelector('currentUser'),
+    querySelector('filter'),
+    settingsSelector,
+  ],
+  (meta, instances, user, filter, settings) => ({
+    meta,
+    sort: meta.sort,
+    sortDir: meta.sortDir,
+    instances,
+    user,
+    filter,
+    isTablet: settings.tablet,
+  })
+);
 
 export default compose(
-  getRouterContext,
   connect(
-    () => ({}),
+    viewSelector,
     {
-      fetchResults: actions.jobs.fetchResults,
-      clearResults: actions.jobs.clearResults,
+      load: actions.instances.fetchInstances,
+      fetch: actions.instances.fetchInstances,
     }
   ),
-  addUrlParams,
-  patch('fetchResults', ['job', 'urlParams']),
-  patch('clearResults', ['job']),
-  fetchOnMount,
-  fetchOnQueryParamsUpdate,
-  addLoadMoreHandler,
+  withSort('instances', 'instances', sortDefaults.instances),
+  loadMore('instances', 'instances'),
+  mapProps(
+    ({ job, ...rest }: Props): Object => ({
+      id: job.id,
+      job,
+      ...rest,
+    })
+  ),
+  patch('load', [
+    'id',
+    false,
+    'offset',
+    'linkDate',
+    'filter',
+    'limit',
+    'sortDir',
+    'sort',
+  ]),
+  sync('meta'),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const {
+        id,
+        date,
+        filter,
+        fetch,
+        sort,
+        sortDir,
+        offset,
+        changeOffset,
+      } = this.props;
+
+      if (date !== nextProps.date && nextProps.offset !== 0) {
+        changeOffset(0);
+      } else if (
+        date !== nextProps.date ||
+        filter !== nextProps.filter ||
+        sort !== nextProps.sort ||
+        sortDir !== nextProps.sortDir ||
+        offset !== nextProps.offset
+      ) {
+        fetch(
+          id,
+          nextProps.offset !== 0,
+          nextProps.offset,
+          nextProps.linkDate,
+          nextProps.filter,
+          nextProps.limit,
+          nextProps.sortDir,
+          nextProps.sort
+        );
+      }
+    },
+  }),
+  csv('instances', 'instances'),
   queryControl('job'),
   pure([
     'job',
     'jobQuery',
     'location',
     'children',
+    'searchQuery',
+    'instances',
+    'sortData',
+    'date',
+    'linkDate',
+    'limit',
+    'sort',
+    'offset',
+    'sortDir',
   ])
 )(JobResults);

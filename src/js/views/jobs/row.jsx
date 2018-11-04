@@ -149,10 +149,10 @@ const ServiceRow: Function = ({
     <Td className="huge separated-cell">
       <InstancesBar
         states={[
-          { name: 'COMPLETE', label: 'complete', title: 'complete' },
-          { name: 'ERROR', label: 'error', title: 'error' },
-          { name: 'PROGRESS', label: 'waiting', title: 'in-progress' },
-          { name: 'CRASHED', label: 'blocked', title: 'crashed' },
+          { name: 'COMPLETE', label: 'complete', title: 'Complete' },
+          { name: 'ERROR', label: 'error', title: 'Error' },
+          { name: 'PROGRESS', label: 'waiting', title: 'In-progress' },
+          { name: 'CRASHED', label: 'blocked', title: 'Crashed' },
         ]}
         instances={{
           COMPLETE,

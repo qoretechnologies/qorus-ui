@@ -11,28 +11,45 @@ import actions from '../../../../../store/api/actions';
 import { Control } from '../../../../../components/controls';
 import Resize from '../../../../../components/resize/handle';
 import patch from '../../../../../hocomponents/patchFuncArgs';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import Headbar from '../../../../../components/Headbar';
+import Pull from '../../../../../components/Pull';
+import Box from '../../../../../components/box';
+import { Breadcrumbs, Crumb } from '../../../../../components/breadcrumbs';
+import Loader from '../../../../../components/loader';
 
 const ResultDetail = ({
   result,
   handleCloseClick,
+  sidebarOpen,
 }: {
   result: Object,
   handleCloseClick: Function,
-}) => (
-  <div className="job-result-info">
-    <Resize top />
-    <div className="inner">
-      <div className="pull-right">
-        <Control
-          iconName="cross"
-          className="pt-minimal"
-          onClick={handleCloseClick}
-        />
-      </div>
-      {result && <ResultData result={result} />}
+  sidebarOpen: boolean,
+}) => {
+  const renderResult: Function = () => [
+    <Headbar>
+      <Pull>
+        <Breadcrumbs>
+          <Crumb active>{result.job_instanceid}</Crumb>
+        </Breadcrumbs>
+      </Pull>
+      <Pull right>
+        <Control text="Close" iconName="cross" big onClick={handleCloseClick} />
+      </Pull>
+    </Headbar>,
+    <Box top>
+      <ResultData result={result} />
+    </Box>,
+  ];
+
+  return (
+    <div className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
+      <Resize top />
+      {result ? renderResult() : <Loader />}
     </div>
-  </div>
-);
+  );
+};
 
 const jobResultSelector = (state, props) => {
   const {
@@ -44,7 +61,9 @@ const jobResultSelector = (state, props) => {
   const result = state.api.jobresults.data.find(
     item => item.job_instanceid === jobInstanceId
   );
-  return { result };
+  const { sidebarOpen } = state.api.currentUser.data.storage;
+
+  return { result, sidebarOpen };
 };
 
 const prepareRequestParams = mapProps((props: Object) => ({
@@ -85,5 +104,6 @@ export default compose(
     handleCloseClick: ({ changeJobQuery }: Object) => (): void => {
       changeJobQuery('');
     },
-  })
+  }),
+  onlyUpdateForKeys(['result', 'sidebarOpen'])
 )(ResultDetail);
