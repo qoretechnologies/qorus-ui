@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
 import CustomItem from './custom_item';
@@ -9,7 +9,6 @@ import {
   Position,
   Button as Btn,
   ButtonGroup,
-  ControlGroup,
 } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
@@ -296,6 +295,10 @@ export default class Dropdown extends Component {
           content={this.renderDropdown()}
           popoverDidOpen={this.handleOpen}
           popoverClassName="popover-dropdown"
+          isOpen={this.state.showDropdown}
+          enforceFocus={false}
+          autoFocus={false}
+          onInteraction={inter => !inter && this.hideToggle()}
         >
           {this.renderDropdownControl()}
         </Popover>
@@ -304,18 +307,5 @@ export default class Dropdown extends Component {
     );
   }
 }
-
-Dropdown.propTypes = {
-  children: PropTypes.node,
-  id: PropTypes.string,
-  multi: PropTypes.bool,
-  def: PropTypes.string,
-  selectedIcon: PropTypes.string,
-  onSubmit: PropTypes.func,
-  submitLabel: PropTypes.string,
-  selected: PropTypes.array,
-  disabled: PropTypes.bool,
-  onHide: PropTypes.func,
-};
 
 export { Item, CustomItem, Control };
