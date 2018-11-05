@@ -1,7 +1,6 @@
 $footer-padding: $line-height-computed / 4;
 $footer-height: 2 * $footer-padding + $line-height-computed;
 
-
 /**
  * Special footer style.
  *
@@ -19,6 +18,8 @@ footer {
   white-space: nowrap; /* [3] */
   overflow-x: auto; /* [3] */
   overflow-y: hidden; /* [3] */
+
+  z-index: 19;
 
   p {
     margin: $footer-padding 0; /* [2] */
