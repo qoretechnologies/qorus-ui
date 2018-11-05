@@ -102,6 +102,17 @@ body,
   background-color: $bgcolor;
 }
 
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1;
+}
+
 .pt-button,
 .pt-input,
 .pt-button[class*='pt-icon-']:before {
