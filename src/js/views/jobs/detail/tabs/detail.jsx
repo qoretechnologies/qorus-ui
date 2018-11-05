@@ -11,7 +11,7 @@ import { Groups, Group } from '../../../../components/groups';
 import AlertsTable from '../../../../components/alerts_table';
 import Date from '../../../../components/date';
 import SLAControl from '../../../../components/sla_control';
-import Author from '../../../../components/author';
+import InfoHeader from '../../../../components/InfoHeader';
 import { resourceSelector } from '../../../../selectors';
 import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
@@ -38,7 +38,7 @@ const DetailTab = ({
   slas,
 }: Props) => (
   <div>
-    <Author model={model} />
+    <InfoHeader model={model} />
     {isTablet &&
       model.expiry_date && (
         <PaneItem title="Expiry date">
@@ -46,6 +46,16 @@ const DetailTab = ({
         </PaneItem>
       )}
     <PaneItem title="Schedule">
+      <JobControls
+        enabled={model.enabled}
+        active={model.active}
+        id={model.id}
+        minute={model.minute}
+        hour={model.hour}
+        day={model.day}
+        month={model.month}
+        week={model.wday}
+      />
       <JobControls
         scheduleOnly
         id={model.id}

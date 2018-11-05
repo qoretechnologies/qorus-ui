@@ -11,7 +11,7 @@ import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
-import Tabs, { Pane } from '../../../components/tabs';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import DetailPane from '../../../components/pane';
 import Box from '../../../components/box';
 import Code from '../../../components/code';
@@ -20,11 +20,11 @@ import actions from '../../../store/api/actions';
 import LogTab from '../../workflows/detail/log_tab';
 import show from '../../../hocomponents/show-if-passed';
 import titleManager from '../../../hocomponents/TitleManager';
+import Container from '../../../components/container';
 
 const Detail = ({
   location,
   paneTab,
-  changePaneTab,
   onClose,
   model,
   getHeight,
@@ -36,7 +36,6 @@ const Detail = ({
   location: Object,
   paneTab: string,
   model: Object,
-  changePaneTab: Function,
   onClose: Function,
   paneId: string | number,
   getHeight: Function,
@@ -46,53 +45,58 @@ const Detail = ({
   isTablet: boolean,
 }): React.Element<*> => (
   <DetailPane
-    name="jobs-detail-pane"
-    width={width || 550}
+    width={width || 600}
     onResize={onResize}
     onClose={onClose}
-    title={model.normalizedName}
+    title={`Job ${model.id}`}
+    tabs={{
+      tabs: ['Detail', 'Mappers', 'Valuemaps', 'Releases', 'Code', 'Log'],
+      queryIdentifier: 'paneTab',
+    }}
   >
     <Box top>
-      <Tabs id="jobsPane" active={paneTab} onChange={changePaneTab}>
-        <Pane name="Detail">
-          <DetailTab key={model.name} model={model} isTablet={isTablet} />
-        </Pane>
-        <Pane name="Code">
-          {model.code ? (
-            <Code
-              selected={{
-                name: `code - ${lib.code[0].name}`,
-                code: lib.code[0].body,
-                item: {
-                  name: lib.code[0].name,
-                },
-              }}
-              data={lib || {}}
-              heightUpdater={getHeight}
+      <Container fill>
+        <SimpleTabs activeTab={paneTab}>
+          <SimpleTab name="detail">
+            <DetailTab key={model.name} model={model} isTablet={isTablet} />
+          </SimpleTab>
+          <SimpleTab name="code">
+            {model.code ? (
+              <Code
+                selected={{
+                  name: `code - ${lib.code[0].name}`,
+                  code: lib.code[0].body,
+                  item: {
+                    name: lib.code[0].name,
+                  },
+                }}
+                data={lib || {}}
+                heightUpdater={getHeight}
+                location={location}
+              />
+            ) : (
+              <Loader />
+            )}
+          </SimpleTab>
+          <SimpleTab name="log">
+            <LogTab resource={`jobs/${model.id}`} location={location} />
+          </SimpleTab>
+          <SimpleTab name="mappers">
+            <MappersTable mappers={model.mappers} />
+          </SimpleTab>
+          <SimpleTab name="valuemaps">
+            <Valuemaps vmaps={model.vmaps} />
+          </SimpleTab>
+          <SimpleTab name="releases">
+            <Releases
+              component={model.name}
+              compact
+              key={model.name}
               location={location}
             />
-          ) : (
-            <Loader />
-          )}
-        </Pane>
-        <Pane name="Log">
-          <LogTab resource={`jobs/${model.id}`} location={location} />
-        </Pane>
-        <Pane name="Mappers">
-          <MappersTable mappers={model.mappers} />
-        </Pane>
-        <Pane name="Valuemaps">
-          <Valuemaps vmaps={model.vmaps} />
-        </Pane>
-        <Pane name="Releases">
-          <Releases
-            component={model.name}
-            compact
-            key={model.name}
-            location={location}
-          />
-        </Pane>
-      </Tabs>
+          </SimpleTab>
+        </SimpleTabs>
+      </Container>
     </Box>
   </DetailPane>
 );
