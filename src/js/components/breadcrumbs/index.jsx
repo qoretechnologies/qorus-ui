@@ -11,16 +11,18 @@ type Props = {
   collapsed?: boolean,
   onClick?: Function,
   noFloat?: boolean,
+  icon: string,
 };
 
 const Breadcrumbs: Function = ({
   children,
   onClick,
   noFloat,
+  icon: icon = 'home',
 }: Props): React.Element<any> => (
   <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
     <li>
-      <Icon className="pt-breadcrumb" iconName="home" />
+      <Icon className="pt-breadcrumb" iconName={icon} />
     </li>
     {children}
   </ul>

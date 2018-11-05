@@ -54,8 +54,12 @@
 
     &.active {
       background-color: lighten($qore-cobalt, 36);
-      font-weight: 600;
+      font-weight: 500;
       color: inherit;
     }
   }
+}
+
+.pt-breadcrumb-current {
+  font-weight: 500;
 }
