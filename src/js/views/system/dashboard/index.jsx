@@ -134,8 +134,8 @@ export default class Dashboard extends Component {
 
     const sizes =
       width > 1200
-        ? [{ columns: 3, gutter: 15 }]
-        : [{ columns: 2, gutter: 15 }];
+        ? [{ columns: 3, gutter: 10 }]
+        : [{ columns: 2, gutter: 10 }];
 
     const currentNodeData = system.cluster_info[this.state.nodeTab];
     const history = prepareHistory(currentNodeData.mem_history);
@@ -226,9 +226,8 @@ export default class Dashboard extends Component {
       <Masonry
         id="dashboard-masonry"
         sizes={sizes}
-        style={{ margin: '0 auto' }}
         infiniteScrollDisabled
-        className={`masonry${width > 1200 ? 'Triple' : 'Double'}`}
+        className={`masonry masonry${width > 1200 ? 'Triple' : 'Double'}`}
         key={masonryKey}
       >
         {system.order_stats && (

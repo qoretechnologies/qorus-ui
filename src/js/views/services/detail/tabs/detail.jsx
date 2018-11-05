@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { Groups, Group } from 'components/groups';
-import Author from 'components/author';
 import Options from '../../../../components/options';
 import actions from 'store/api/actions';
 import AlertsTable from '../../../../components/alerts_table';
 import PaneItem from '../../../../components/pane_item';
 import ServicesControls from '../../controls';
 import ProcessSummary from '../../../../components/ProcessSummary';
+import InfoHeader from '../../../../components/InfoHeader';
 
 @connect(
   () => ({}),
@@ -34,6 +34,7 @@ export default class DetailTab extends Component {
 
     return (
       <div>
+        <InfoHeader model={service} />
         <PaneItem title="Controls">
           <ServicesControls
             status={service.status}
@@ -44,10 +45,6 @@ export default class DetailTab extends Component {
             type={service.type}
           />
         </PaneItem>
-        {service.desc && (
-          <PaneItem title="Description">{service.desc}</PaneItem>
-        )}
-        <Author model={service} />
         <AlertsTable alerts={service.alerts} />
         <ProcessSummary process={service.process} />
         <Groups>

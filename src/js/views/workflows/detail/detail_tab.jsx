@@ -4,7 +4,6 @@ import Options from '../../../components/options';
 import { connect } from 'react-redux';
 
 import AlertsTab from '../../../components/alerts_table';
-import Author from '../../../components/author';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
