@@ -3,11 +3,11 @@
   bottom: 27px;
   left: 42px;
   right: 0;
-  z-index: 18;
+  z-index: 7;
   min-height: 200px;
   padding: 10px;
-  background-color: $bgcolor;
-  box-shadow: 0 -15px 10px -10px rgba(0, 0, 0, 0.2); /* [4] */
+  background-color: darken($bgcolor, 5);
+  box-shadow: 0 -2px 5px 2px rgba(#bbb, 0.9); /* [4] */
 
   &.sidebar-open {
     left: 180px;
