@@ -18,6 +18,8 @@ import { findBy } from '../../helpers/search';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Toolbar from '../../components/toolbar';
 import titleManager from '../../hocomponents/TitleManager';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
 
 const filterCollection: Function = (
   query: string,
@@ -91,12 +93,14 @@ const LibraryView: Function = ({
   constants,
 }: Props): React.Element<any> => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Library</Crumb>
-    </Breadcrumbs>
-    <Toolbar mb>
-      <Search onSearchUpdate={changeQQuery} defaultValue={qQuery} />
-    </Toolbar>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active>Library</Crumb>
+      </Breadcrumbs>
+      <Pull right>
+        <Search onSearchUpdate={changeQQuery} defaultValue={qQuery} />
+      </Pull>
+    </Headbar>
     <Box top>
       <Code
         data={{
