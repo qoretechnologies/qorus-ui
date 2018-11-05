@@ -11,14 +11,15 @@ import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 
 type Props = {
   tabs: Array<string>,
-  changeTabQuery: Function,
+  handleTabChange: Function,
   tabQuery?: string,
   compact?: boolean,
+  queryIdentifier?: string,
 };
 
 const CrumbTabs: Function = ({
   tabs,
-  changeTabQuery,
+  handleTabChange,
   tabQuery,
   compact,
 }: Props): React.Element<any> => (
@@ -37,7 +38,7 @@ const CrumbTabs: Function = ({
                   <MenuItem
                     key={tab}
                     text={tab}
-                    onClick={() => changeTabQuery(tab.toLowerCase())}
+                    onClick={() => handleTabChange(tab.toLowerCase())}
                   />
                 )
               )}
@@ -53,7 +54,7 @@ const CrumbTabs: Function = ({
             key={tab}
             active={tab.toLowerCase() === tabQuery}
             title={tab}
-            onClick={changeTabQuery}
+            onClick={handleTabChange}
           />
         )
       )
@@ -62,6 +63,9 @@ const CrumbTabs: Function = ({
 );
 
 export default compose(
-  withTabs(({ defaultTab, tabs }) => defaultTab || tabs[0].toLowerCase()),
+  withTabs(
+    ({ defaultTab, tabs }) => defaultTab || tabs[0].toLowerCase(),
+    ({ queryIdentifier }) => queryIdentifier || 'tab'
+  ),
   onlyUpdateForKeys(['tabQuery', 'tabs'])
 )(CrumbTabs);
