@@ -5,19 +5,19 @@ import { connect } from 'react-redux';
 
 import AlertsTab from '../../../components/alerts_table';
 import Author from '../../../components/author';
-import Icon from '../../../components/icon';
-import Badge from '../../../components/badge';
 import actions from 'store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 
-import { Control } from '../../../components/controls';
+import { Control, Controls as ButtonGroup } from '../../../components/controls';
 import WorkflowsControls from '../controls';
 import InstancesChart from '../../../components/instances_chart';
 import { InputGroup, ControlGroup } from '@blueprintjs/core';
 import ProcessSummary from '../../../components/ProcessSummary';
 import Autostart from '../autostart';
 import withDispatch from '../../../hocomponents/withDispatch';
+import InfoHeader from '../../../components/InfoHeader';
+import NoDataIf from '../../../components/NoDataIf';
 
 @connect(
   null,
@@ -69,47 +69,48 @@ export default class DetailTab extends Component {
 
     return (
       <div>
-        <PaneItem title="Controls">
-          <div className="pane__controls">
-            <WorkflowsControls
-              id={this.props.workflow.id}
-              enabled={this.props.workflow.enabled}
-              remote={this.props.workflow.remote}
-            />{' '}
-            <Autostart
-              autostart={this.props.workflow.autostart}
-              execCount={this.props.workflow.exec_count}
-              id={this.props.workflow.id}
-              withExec
-            />
-          </div>
+        <InfoHeader model={workflow} />
+        <PaneItem title="Actions, Autostart, SLA Threshold">
+          <WorkflowsControls
+            id={this.props.workflow.id}
+            enabled={this.props.workflow.enabled}
+            remote={this.props.workflow.remote}
+            big
+          />
+          <Autostart
+            autostart={this.props.workflow.autostart}
+            execCount={this.props.workflow.exec_count}
+            id={this.props.workflow.id}
+            withExec
+            big
+          />
+          <ButtonGroup>
+            <form onSubmit={this.handleSubmit}>
+              <ControlGroup>
+                <InputGroup
+                  type="text"
+                  value={`${this.state.slaThreshold}`}
+                  onChange={this.handleThresholdChange}
+                  className="pt-small"
+                  style={{ width: '50px' }}
+                />
+                <Control icon="floppy-disk" type="submit" big />
+              </ControlGroup>
+            </form>
+          </ButtonGroup>
         </PaneItem>
-        <PaneItem title="SLA Threshold">
-          <form onSubmit={this.handleSubmit}>
-            <ControlGroup>
-              <InputGroup
-                type="text"
-                value={`${this.state.slaThreshold}`}
-                onChange={this.handleThresholdChange}
-              />
-              <Control icon="floppy-disk" type="submit" big />
-            </ControlGroup>
-          </form>
-        </PaneItem>
-        {workflow.description && (
-          <PaneItem title="Description">
-            <p>{workflow.description}</p>
-          </PaneItem>
-        )}
-        <Author model={workflow} />
         <AlertsTab alerts={workflow.alerts} />
         <ProcessSummary process={workflow.process} />
         <PaneItem title="Instances">
-          <InstancesChart
-            width="100%"
-            states={ORDER_STATES}
-            instances={workflow}
-          />
+          <NoDataIf condition={workflow.TOTAL === 0}>
+            {() => (
+              <InstancesChart
+                width="100%"
+                states={ORDER_STATES}
+                instances={workflow}
+              />
+            )}
+          </NoDataIf>
         </PaneItem>
         <Groups>
           {(workflow.groups || []).map(g => (

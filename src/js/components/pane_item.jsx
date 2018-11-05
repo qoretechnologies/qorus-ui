@@ -17,7 +17,7 @@ const PaneItem: Function = ({
     {(title || label) && (
       <div className="pane-item-header">
         {title && <h5 className="pane-item-title">{title}</h5>}
-        {label && <div className="pull-right">{label}</div>}
+        {label && <div className="pull-right pane-item-label">{label}</div>}
       </div>
     )}
     <div>{children}</div>
